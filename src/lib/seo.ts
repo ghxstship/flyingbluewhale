@@ -15,7 +15,8 @@ export const SOCIAL_SAME_AS: readonly string[] = BRAND.socials.map((s) => s.href
  * who'd otherwise bounce on a perceived sales-call wall.
  */
 export const CANONICAL_CTAS = {
-  primary: { label: "Sign Up Free", href: "/signup" },
+  // WORLDS canon — one primary signup label across the entire funnel.
+  primary: { label: "Start building free", href: "/signup" },
   secondary: { label: "Book a Walkthrough", href: "/contact" },
 } as const;
 
@@ -30,7 +31,7 @@ export const SITE = {
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://atlvs.pro",
   tagline: "Production Runs On It.",
   description:
-    "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one single source of truth, every module. Pitch through wrap. RLS at the database. Built by operators.",
+    "Develop, build, operate, and experience live productions on one platform. ATLVS for producers, COMPVSS for crew, GVTEWAY for guests, LEG3ND for knowledge — one source of truth, pitch to strike.",
   /**
    * Social handle. Same string across every platform we live on; not a
    * Twitter/X handle — ATLVS does not run an X account. The Twitter Card
@@ -61,13 +62,34 @@ export const SITE = {
     "creative operations platform",
   ],
   apps: {
-    // Taglines are SEO/GEO comprehension copy (meta descriptions, OG cards,
-    // schema.org subProducts) — NOT branded chrome. Branded surfaces render
-    // the bare sub-brand name (ATLVS / GVTEWAY / COMPVSS) without "The X"
-    // descriptors. See feedback_brand_no_descriptors.md.
-    atlvs: { name: "ATLVS", tagline: "Production operations workspace — where the production lives", color: "#DC2626" },
-    gvteway: { name: "GVTEWAY", tagline: "Stakeholder portal — twelve personas, each their lane", color: "#2563EB" },
-    compvss: { name: "COMPVSS", tagline: "Offline-first field PWA — sub-100ms gate scan", color: "#D97706" },
+    // WORLDS canon — the locked app one-liners (kit voice.html §Canonical
+    // surface copy). Reused VERBATIM across en.json, the auth rail, and schema
+    // so answer engines see one identical sentence per app (GEO win, finding G2).
+    // Four apps — ATLVS · COMPVSS · GVTEWAY · LEG3ND.
+    atlvs: {
+      name: "ATLVS",
+      tagline:
+        "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command deck.",
+      color: "#FF2E88",
+    },
+    compvss: {
+      name: "COMPVSS",
+      tagline:
+        "Operate it in the field — scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't.",
+      color: "#E9A23B",
+    },
+    gvteway: {
+      name: "GVTEWAY",
+      tagline:
+        "Where the world is experienced — ticketing, portals, marketplace. Every persona, each their own way in.",
+      color: "#2563EB",
+    },
+    legend: {
+      name: "LEG3ND",
+      tagline:
+        "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine.",
+      color: "#E8500A",
+    },
   },
 } as const;
 
@@ -173,6 +195,8 @@ export function organizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: SITE.name,
+    // D2 — disambiguate the "ATLVS" brand entity from the common term.
+    alternateName: "ATLVS Technologies",
     legalName: "ATLVS Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/og/logo.png`,
@@ -194,8 +218,9 @@ export function organizationSchema() {
     },
     brand: [
       { "@type": "Brand", name: "ATLVS" },
-      { "@type": "Brand", name: "GVTEWAY" },
       { "@type": "Brand", name: "COMPVSS" },
+      { "@type": "Brand", name: "GVTEWAY" },
+      { "@type": "Brand", name: "LEG3ND" },
     ],
   };
 }
@@ -227,11 +252,9 @@ export function softwareApplicationSchema({
       priceCurrency: "USD",
       priceValidUntil: "2099-12-31",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "87",
-    },
+    // D1 — no hardcoded aggregateRating. There are no on-page reviews to back
+    // it, so emitting 4.9/87 risks a Google structured-data manual action.
+    // Re-add only when real reviews render on-page (wire reviewSchema then).
   };
 }
 

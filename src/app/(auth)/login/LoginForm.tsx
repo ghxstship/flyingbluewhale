@@ -24,7 +24,7 @@ export function LoginForm({ next }: { next?: string | null }) {
   return (
     <AuthShell
       title={t("auth.login.title", undefined, "Sign in")}
-      subtitle={t("auth.login.subtitle", undefined, "Welcome back. Pick up where you left off.")}
+      subtitle={t("auth.login.subtitle", undefined, "Welcome back. Your world's right where you left it.")}
       footer={
         <>
           {t("auth.login.noAccount", undefined, "Don't have an account?")}{" "}

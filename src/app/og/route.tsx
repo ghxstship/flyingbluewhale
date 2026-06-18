@@ -62,7 +62,7 @@ export async function GET(req: Request) {
           {BRAND.mark}
         </div>
         <div style={{ fontSize: 16, color: "#555", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
-          ATLVS · GVTEWAY · COMPVSS
+          ATLVS · COMPVSS · GVTEWAY · LEG3ND
         </div>
       </div>
     </div>,

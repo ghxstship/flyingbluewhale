@@ -23,8 +23,8 @@ export function SignupForm() {
 
   return (
     <AuthShell
-      title={t("auth.signup.title", undefined, "Create your account")}
-      subtitle={t("auth.signup.subtitle", undefined, "Free for Life on the Access tier. No credit card.")}
+      title={t("auth.signup.title", undefined, "Start building your world")}
+      subtitle={t("auth.signup.subtitle", undefined, "Free forever on the Access tier. No credit card. Be running in minutes.")}
       footer={
         <>
           {t("auth.signup.haveAccount", undefined, "Already have an account?")}{" "}
@@ -63,14 +63,8 @@ export function SignupForm() {
           hint={t("auth.signup.passwordHelp", undefined, "At least 8 characters")}
           error={state?.fieldErrors?.password}
         />
-        <Input
-          label={t("auth.signup.organization", undefined, "Organization")}
-          name="orgName"
-          placeholder={t("common.optional", undefined, "Optional")}
-          autoComplete="organization"
-          hint={t("auth.signup.organizationHelp", undefined, "You can create this later from settings.")}
-          error={state?.fieldErrors?.orgName}
-        />
+        {/* C7 — org capture deferred to /onboarding/org (which owns workspace
+            creation). Fewer fields on the highest-friction screen. */}
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <p className="text-[11px] leading-relaxed text-[var(--p-text-2)]">
           {t("auth.signup.tosPrefix", undefined, "By creating an account you agree to our")}{" "}

@@ -18,7 +18,7 @@ const DEFAULT_HIGHLIGHTS = [
   { icon: ShieldCheck, label: "RLS-backed multi-tenant security" },
   { icon: Zap, label: "Sub-100ms ticket scans, online and offline" },
   { icon: Globe, label: "Streaming AI grounded in your workspace" },
-  { icon: Sparkles, label: "One platform · ATLVS · GVTEWAY · COMPVSS" },
+  { icon: Sparkles, label: "One platform · ATLVS · COMPVSS · GVTEWAY · LEG3ND" },
 ];
 
 /**
@@ -40,10 +40,10 @@ export function AuthShell({
   rail?: AuthRailContent;
 }) {
   const productName = rail?.productName ?? "ATLVS Technologies";
-  const tagline = rail?.tagline ?? "The unified production platform.";
+  const tagline = rail?.tagline ?? "The engine behind new worlds.";
   const description =
     rail?.description ??
-    "One Postgres. One identity. Three shells — internal, external, mobile. Built for the ops teams behind festivals, tours, and corporate activations.";
+    "Develop, build, operate, and experience live productions on one platform. One record store, four connected apps — ATLVS, COMPVSS, GVTEWAY, LEG3ND. Built by the people who ship the shows.";
   const highlights = rail?.highlights ?? DEFAULT_HIGHLIGHTS;
   const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} ATLVS Technologies`;
   return (

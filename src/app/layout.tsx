@@ -107,14 +107,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: BRAND.legalName,
-    description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
+    description: "ATLVS · COMPVSS · GVTEWAY · LEG3ND — the engine behind new worlds.",
     siteName: BRAND.legalName,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: BRAND.legalName,
-    description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
+    description: "ATLVS · COMPVSS · GVTEWAY · LEG3ND — the engine behind new worlds.",
   },
   robots: { index: true, follow: true },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "ATLVS" },
@@ -181,8 +181,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           data={organization({
             name: BRAND.legalName,
             url: SITE.baseUrl,
-            description:
-              "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Production operations workspace, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",
+            description: SITE.description,
             logo: `${SITE.baseUrl}/og/logo.png`,
           })}
         />

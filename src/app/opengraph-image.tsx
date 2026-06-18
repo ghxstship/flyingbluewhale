@@ -116,11 +116,11 @@ export default async function OpenGraphImage() {
             lineHeight: 1.15,
           }}
         >
-          The platform for production.
+          The engine behind new worlds.
         </div>
         <div style={{ fontSize: "28px", color: INK_2, lineHeight: 1.4 }}>
-          ATLVS · COMPVSS · GVTEWAY — three apps, one single source of truth, built for festivals, tours, and live
-          productions.
+          ATLVS · COMPVSS · GVTEWAY · LEG3ND — develop, build, operate, and experience live productions on one source of
+          truth.
         </div>
       </div>
 

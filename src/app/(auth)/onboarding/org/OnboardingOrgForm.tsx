@@ -20,11 +20,11 @@ export function OnboardingOrgForm({ initialName = "", email }: { initialName?: s
 
   return (
     <AuthShell
-      title={t("auth.onboarding.title", undefined, "Name your workspace")}
+      title={t("auth.onboarding.title", undefined, "Name your world")}
       subtitle={t(
         "auth.onboarding.subtitle",
         { email },
-        `Signed in as ${email}. Just one more step — pick a workspace name and you're in.`,
+        `Signed in as ${email}. One more step — name the workspace your productions live in.`,
       )}
     >
       <form action={formAction} className="space-y-4" noValidate>
@@ -45,9 +45,13 @@ export function OnboardingOrgForm({ initialName = "", email }: { initialName?: s
             ? t("auth.onboarding.submitting", undefined, "Creating workspace")
             : t("auth.onboarding.submit", undefined, "Create workspace")}
         </Button>
+        {/* C8 — no leaked internal route in onboarding copy. */}
         <p className="text-[11px] leading-relaxed text-[var(--p-text-2)]">
-          {t("auth.onboarding.ownerNotePrefix", undefined, "You'll become the owner. You can invite teammates from")}{" "}
-          <code>/console/people/invites</code> {t("auth.onboarding.ownerNoteSuffix", undefined, "once you're in.")}
+          {t(
+            "auth.onboarding.ownerNote",
+            undefined,
+            "You'll become the owner. You can invite teammates from your team settings once you're in.",
+          )}
         </p>
       </form>
     </AuthShell>

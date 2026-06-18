@@ -21,7 +21,7 @@
   "signOut": "Sign Out",
   "signIn": "Sign in",
   "signUp": "Sign Up",
-  "startFree": "Start Free",
+  "startFree": "Start building free",
   "back": "Back",
   "next": "Next",
   "previous": "Previous",
@@ -190,7 +190,7 @@
   },
   "home": {
    "cta": {
-    "primary": "Start Free",
+    "primary": "Start building free",
     "secondary": "Book a Demo"
    }
   },
@@ -211,10 +211,10 @@
    "ctaTired": "Built for production teams done holding it together with gaff tape."
   },
   "cta": {
-   "startFree": "Start Free",
+   "startFree": "Start building free",
    "bookDemo": "Book a Demo",
    "viewDocs": "View the Docs",
-   "startFreeForLife": "Start Free for Life",
+   "startFreeForLife": "Start building free",
    "contactSales": "Contact Sales",
    "pitchStory": "Pitch a Story"
   },
@@ -292,7 +292,7 @@
     "cta": {
      "title": "ATLVS Is Open.",
      "subtitle": "Free forever for small teams. Per-org pricing the rest of the way up.",
-     "primaryLabel": "Sign Up Free",
+     "primaryLabel": "Start building free",
      "secondaryLabel": "Book a Walkthrough"
     }
    },
@@ -850,7 +850,7 @@
      "title": "Your Team, Here.",
      "body": "Shipping real shows on ATLVS Technologies? We're always looking to document new member stories. A short interview, anonymized numbers, your words.",
      "pitchCta": "Pitch a story",
-     "startCta": "Start free"
+     "startCta": "Start building free"
     },
     "cta": {
      "title": "Be the Next Story",
@@ -916,7 +916,7 @@
     "cta": {
      "title": "ATLVS Is Open.",
      "subtitle": "Free forever for small teams.",
-     "primaryLabel": "Sign Up Free",
+     "primaryLabel": "Start building free",
      "secondaryLabel": "Book a Walkthrough"
     }
    },
@@ -976,7 +976,7 @@
       "other": "Other"
      },
      "actions": {
-      "signupInstead": "Sign Up Free Instead",
+      "signupInstead": "Start building free",
       "submit": "Send to the Studio"
      }
     },
@@ -1050,7 +1050,7 @@
      "title": "Want To Be Profiled?",
      "subtitle": "Send a one-paragraph note about your upcoming event window and we'll talk about a partnership.",
      "primaryLabel": "Book a brief",
-     "secondaryLabel": "Sign Up Free"
+     "secondaryLabel": "Start building free"
     }
    },
    "demo-persona": {
@@ -1591,7 +1591,7 @@
     "operators": {
      "title": "For Operators",
      "body": "Publish your own RFQs, gigs, and casting calls — gated by your prequalification rules.",
-     "cta": "Sign Up Free"
+     "cta": "Start building free"
     },
     "rfqs": {
      "detail": {
@@ -1808,22 +1808,22 @@
      "ogImageTitle": "Run the show."
     },
     "hero": {
-     "eyebrow": "ATLVS Technologies",
-     "titleLine1": "EXPERIENCE",
-     "titleLine2": "PRODUCTION",
-     "subtitleLead": "Four apps, one single source of truth.",
-     "subtitleAtlvs": "runs the production.",
-     "subtitleCompvss": "runs the field.",
-     "subtitleGvteway": "runs the public interface & marketplace.",
-     "ctaPrimary": "Start Free",
-     "ctaSecondary": "Book a Walkthrough",
-     "disclaimer": "Free forever for small teams · No credit card required · Per-org pricing",
+     "eyebrow": "The engine behind new worlds",
+     "titleLine1": "Build worlds.",
+     "titleLine2": "Run them",
+     "subtitleLead": "Every show is a world someone steps into.",
+     "subtitleAtlvs": "develops and builds it,",
+     "subtitleCompvss": "operates it in the field,",
+     "subtitleGvteway": "is where guests experience it, and",
+     "ctaPrimary": "Start building free",
+     "ctaSecondary": "See it run",
+     "disclaimer": "Free forever on the Access tier · No credit card · Per-org pricing",
      "ecosystemLabel": "The ATLVS Ecosystem",
-     "titleLine3": "UNIFIED.",
-     "subtitleLegend": "is the knowledge base, LMS & resources. Pitch through wrap on one connected platform for live experiential production."
+     "titleLine3": "live.",
+     "subtitleLegend": "is the knowledge it's built on — one source of truth, pitch to strike."
     },
     "trustBar": {
-     "label": "Trusted by production teams behind"
+     "label": "The worlds these teams build run on ATLVS"
     },
     "threeApps": {
      "eyebrow": "The ATLVS Ecosystem",
@@ -1834,23 +1834,23 @@
     "products": {
      "atlvs": {
       "audience": "For producers · internal teams",
-      "tag": "Production & resource management",
-      "body": "Projects, RFIs, submittals, daily logs, advancing, finance, procurement, AI assistant. The producer's console — pitch through wrap."
+      "tag": "Develop · Build",
+      "body": "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command deck."
      },
      "compvss": {
       "audience": "For crew · vendors · talent",
-      "tag": "Workforce & field operations",
-      "body": "Scheduling, certifications, gate scan, shift clock-in, incidents, medical. Offline-first PWA. Sub-100ms scans on one-bar LTE."
+      "tag": "Operate",
+      "body": "Operate it in the field — scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't."
      },
      "gvteway": {
       "audience": "For guests · clients · partners",
-      "tag": "Ticketing & stakeholder portal",
-      "body": "Ticketing, proposals, twelve personas. Artists, vendors, clients, sponsors, guests — each their lane."
+      "tag": "Experience",
+      "body": "Where the world is experienced — ticketing, portals, marketplace. Every persona, each their own way in."
      },
      "legend": {
       "audience": "For knowledge · training · compliance",
-      "tag": "Knowledge, LMS & resources",
-      "body": "The Standard, courses & certifications, the priced catalog, signage library, and the XMCE compliance engine — on the XPMS 2.0 protocol."
+      "tag": "Knowledge",
+      "body": "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine."
      }
     },
     "industries": {
@@ -1896,48 +1896,14 @@
     },
     "lifecycle": {
      "eyebrow": "The 8-Phase Production Lifecycle",
-     "title": "Discovery to Strike on one timeline.",
+     "title": "Discovery to Close on one timeline.",
      "body": "Every production runs through the same eight phases. The schema follows the phases, the audit log follows the schema, and every approval gate blocks the next phase until the previous one closes.",
-     "phaseLabel": "Phase",
-     "phases": {
-      "discovery": {
-       "name": "Discovery",
-       "sub": "Consult · Scope"
-      },
-      "rd": {
-       "name": "R&D",
-       "sub": "Feasibility"
-      },
-      "design": {
-       "name": "Design",
-       "sub": "Direction"
-      },
-      "compliance": {
-       "name": "Compliance",
-       "sub": "Engineering · Safety"
-      },
-      "build": {
-       "name": "Build",
-       "sub": "Fabrication"
-      },
-      "operations": {
-       "name": "Operations",
-       "sub": "Logistics"
-      },
-      "activation": {
-       "name": "Activation",
-       "sub": "Showtime"
-      },
-      "strike": {
-       "name": "Strike",
-       "sub": "Settle · Wrap"
-      }
-     }
+     "phaseLabel": "Phase"
     },
     "difference": {
      "eyebrow": "Why ATLVS",
-     "title": "Not a CRM stitched to a PM tool.",
-     "body": "Most production-operations stacks bolt together a CRM, a project tool, a doc tool, and a ticketing integration. ATLVS Technologies owns the entire stack — every app built in-house, every record connected.",
+     "title": "Not a CRM bolted to a PM tool.",
+     "body": "One engine for the entire world — developed, built, operated, and experienced on a single record.",
      "edges": {
       "endToEnd": {
        "title": "End to End",
@@ -2040,7 +2006,7 @@
       },
       "pricing": {
        "q": "How does ATLVS pricing work?",
-       "a": "Per organization, not per seat. Free forever for solo operators and small teams. Crew opens up the team. Production unlocks every module plus multi-project. Festival is multi-org with SSO, custom DPA, and a 99.9% SLA. Full grid at /pricing."
+       "a": "ATLVS pricing is per organization, not per seat — free forever on the Access tier, no credit card. Crew opens up the team; Production unlocks every module plus multi-project; Festival is multi-org with SSO, custom DPA, and a 99.9% SLA. Full grid at /pricing."
       },
       "vendorPayouts": {
        "q": "How do vendor payouts work?",
@@ -2088,9 +2054,9 @@
     },
     "cta": {
      "eyebrow": "Get started",
-     "title": "Start running your production on ATLVS.",
+     "title": "Build your next world on ATLVS.",
      "body": "Free forever for small teams. Per-org pricing. No credit card to start.",
-     "ctaPrimary": "Sign Up Free",
+     "ctaPrimary": "Start building free",
      "ctaSecondary": "Book a Walkthrough"
     }
    },
@@ -2232,7 +2198,7 @@
        "upTo100Credentials": "Up to 100 portal credentials per project",
        "communitySupport": "Community support"
       },
-      "cta": "Sign Up Free"
+      "cta": "Start building free"
      },
      "crew": {
       "name": "Crew",
@@ -2410,7 +2376,7 @@
     "cta": {
      "title": "ATLVS Is Open.",
      "subtitle": "Sign up free — 30 seconds, no card. Free is free, forever.",
-     "primaryLabel": "Sign Up Free",
+     "primaryLabel": "Start building free",
      "secondaryLabel": "Book a Walkthrough"
     }
    },
@@ -2434,7 +2400,7 @@
      "titleLine1": "Experience Production,",
      "titleLine2": "Unified.",
      "subtitle": "The platform for live work. Pitch to wrap, one workspace. Four apps, one single source of truth — pre-pro through strike.",
-     "primaryCta": "Start Free",
+     "primaryCta": "Start building free",
      "secondaryCta": "Book a Walkthrough"
     },
     "apps": {
@@ -2472,7 +2438,7 @@
     "cta": {
      "title": "ATLVS Is Open.",
      "subtitle": "Free, forever, for small teams. Priced per organization, not per seat. No credit card required.",
-     "primaryLabel": "Start Free",
+     "primaryLabel": "Start building free",
      "secondaryLabel": "Book a Walkthrough"
     }
    },
@@ -2610,7 +2576,7 @@
      "hero": {
       "title": "Where the Production Lives.",
       "subtitle": "Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Forty-seven modules on one single source of truth.",
-      "ctaPrimary": "Sign Up Free",
+      "ctaPrimary": "Start building free",
       "ctaSecondary": "Book a Walkthrough",
       "ctaPricing": "Pricing →"
      },
@@ -2707,7 +2673,7 @@
      "cta": {
       "title": "ATLVS Is Open.",
       "subtitle": "Free forever for small teams. Per-org pricing the rest of the way up.",
-      "primaryLabel": "Sign Up Free",
+      "primaryLabel": "Start building free",
       "secondaryLabel": "Book a Walkthrough"
      }
     },
@@ -2730,7 +2696,7 @@
       "titleLine1": "Offline.",
       "titleLine2": "Sub-100ms.",
       "body": "Installs from the browser in one tap. Gate scan, shift clock-in, medic triage, incident, driver run, guard tour, warehouse, daily safety brief. Works on one-bar LTE.",
-      "primaryCta": "Sign Up Free",
+      "primaryCta": "Start building free",
       "secondaryCta": "Book a Walkthrough"
      },
      "modules": {
@@ -2802,7 +2768,7 @@
      "cta": {
       "title": "Open the Field App.",
       "subtitle": "Installs on any phone. No App Store. No fleet update. Ready in a tap.",
-      "primaryLabel": "Sign Up Free",
+      "primaryLabel": "Start building free",
       "secondaryLabel": "Book a Walkthrough"
      }
     },
@@ -2823,7 +2789,7 @@
      "hero": {
       "title": "Twelve Personas. Each Their Lane.",
       "body": "Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same project. Twelve scoped reads. RLS at the database.",
-      "ctaPrimary": "Sign Up Free",
+      "ctaPrimary": "Start building free",
       "ctaSecondary": "Book a Walkthrough"
      },
      "personas": {
@@ -2931,7 +2897,7 @@
      "cta": {
       "title": "Twelve Personas. One Source.",
       "subtitle": "Wired by default. Reskin if you want. Use it if you don't.",
-      "primaryLabel": "Sign Up Free",
+      "primaryLabel": "Start building free",
       "secondaryLabel": "Book a Walkthrough"
      }
     },
@@ -3044,7 +3010,7 @@
     },
     "cta": {
      "title": "ATLVS Is Open.",
-     "primaryLabel": "Sign Up Free",
+     "primaryLabel": "Start building free",
      "secondaryLabel": "Book a Walkthrough"
     }
    },
@@ -3937,7 +3903,7 @@
    "currentPerShow": "Current per show",
    "atlvsPerShow": "ATLVS per show",
    "ratio": "Stack ÷ ATLVS",
-   "signUpFree": "Sign up free"
+   "signUpFree": "Start building free"
   },
   "perDiemCalculator": {
    "presets": {
@@ -3997,7 +3963,7 @@
  "auth": {
   "login": {
    "title": "Sign in",
-   "subtitle": "Welcome back. Pick up where you left off.",
+   "subtitle": "Welcome back. Your world's right where you left it.",
    "email": "Email",
    "password": "Password",
    "rememberMe": "Remember me",
@@ -4011,8 +3977,8 @@
    "submitting": "Signing in…"
   },
   "signup": {
-   "title": "Create your account",
-   "subtitle": "Start free in under two minutes",
+   "title": "Start building your world",
+   "subtitle": "Free forever on the Access tier. No credit card. Be running in minutes.",
    "name": "Name",
    "email": "Work email",
    "password": "Password",
@@ -4130,14 +4096,16 @@
    "body": "That sign-in link is no longer valid or never existed. Pick a route below."
   },
   "onboarding": {
-   "title": "Name your workspace",
+   "title": "Name your world",
    "workspaceName": "Workspace name",
    "workspaceNamePlaceholder": "Acme Productions",
    "workspaceNameHint": "You can rename this later from Settings.",
    "submitting": "Creating workspace",
    "submit": "Create workspace",
    "ownerNotePrefix": "You'll become the owner. You can invite teammates from",
-   "ownerNoteSuffix": "once you're in."
+   "ownerNoteSuffix": "once you're in.",
+   "subtitle": "Signed in as {email}. One more step — name the workspace your productions live in.",
+   "ownerNote": "You'll become the owner. You can invite teammates from your team settings once you're in."
   },
   "sso": {
    "errorTitle": "Couldn't start SSO",

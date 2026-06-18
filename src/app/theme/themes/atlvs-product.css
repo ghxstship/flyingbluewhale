@@ -185,7 +185,7 @@
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
-  --p-accent-text: #c91463;
+  --p-accent-text: #bc105a;
   --p-accent-weak: rgba(255,46,136,.12);
   --p-accent-cta: #c91463;
   --p-accent-cta-contrast: #ffffff;
@@ -271,7 +271,7 @@
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --k-acc: #ff2e88;
-  --k-acc-text: #c91463;
+  --k-acc-text: #bc105a;
 }
 [data-ui="saas"][data-product="atlvs"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="atlvs"],

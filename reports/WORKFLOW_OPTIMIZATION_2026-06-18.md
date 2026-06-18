@@ -10,7 +10,7 @@
 > | **F-E** incidents split | Repointed nav "Incidents" → the canonical CRUD home (`operations/incidents`) | one obvious create/manage home |
 > | **F-F** prequalification drill-in (de-linked in SEA TRIAL) | Built the `[prequalId]` detail + restored `rowHref` | rows drillable again |
 >
-> Remaining DEEP/NESTED are **inherently record-nested** (`parent/[id]/child`) — addressed by the wayfinding stack (breadcrumbs + project switcher + ⌘K create), not by promotion. **Deferred (documented, not built):** a `sprints` detail view (manageable inline today) and a product confirm-intent pass on the by-design NO-CREATE/READ-ONLY surfaces (triaged in §F-F below). Gate: tsc · 738 tests · build all green.
+> Remaining DEEP/NESTED are **inherently record-nested** (`parent/[id]/child`) — addressed by the wayfinding stack (breadcrumbs + project switcher + ⌘K create), not by promotion. **The two previously-deferred items are now executed** — see the **Confirm-intent pass** appendix: the `sprints` "drill-in" was a false positive (it's a board, not a list→detail), and the NO-CREATE/READ-ONLY review found **one** real gap (a `finance/entities` edit), now built. Gate: tsc · 738 tests · build all green.
 
 **Date:** 2026-06-18 · **Scope:** business-logic / workflow friction across the route surface, focused on click-cost to execute CRUD for every dataset.
 **Method:** static route-graph analysis (`scripts/workflow-audit.mjs`) over `docs/ia/SITEMAP.md` + `src/app` + sibling `actions.ts`, cross-referenced with `src/lib/nav.ts` (what's directly clickable). **220 datasets** (resources with CRUD routes) analyzed across console / mobile / portal / `/me`. This is a *structural* audit (route depth + CRUD-verb presence + nav reachability), not a moderated usability test — treat "REVIEW-INTENT" flags as candidates, "CONFIRMED" as objective.
@@ -82,3 +82,40 @@ Record-scoped children that are deep by nature but lack wayfinding: `marketplace
 - Static route + action-grep analysis: **READ-ONLY** over-reports (misses inline/client/transition actions) and **NO-CREATE** includes intentional computed surfaces — both are REVIEW-INTENT, not defects. **DEEP/NESTED/⌘K-coverage are objective.**
 - Click counts are nav-graph estimates (group+item = 2), not instrumented; directional, not exact.
 - Re-run anytime: `node scripts/workflow-audit.mjs` → `docs/audits/workflow-audit.json`.
+
+---
+
+## Appendix · Confirm-intent pass (executed 2026-06-18)
+
+The static audit's CRUD-asymmetry flags were REVIEW-INTENT. I hardened the
+detector (`crudActions` now scans each dataset's full subtree — inline forms,
+kanban/board controls, status-transition / publish / approve actions — not just
+`/new` + `/edit` routes), then verified the residuals by hand.
+
+**Result of the hardened pass:**
+
+| Class | Before | After | Verdict |
+|---|---:|---:|---|
+| NO-CREATE (detail, no create) | 24 | **0** | all false positives — create exists inline / via a sibling flow. **No gaps.** |
+| READ-ONLY (detail, no update/delete) | 36 | 16 → **15** | 15 are read-only *by nature*; 1 real gap fixed (below). |
+| NO-DRILL-IN (list+create, no detail) | 25 | 24 | board / inline-managed surfaces — drill-in N/A. |
+
+**The 15 residual READ-ONLY are intentional read views** — confirmed by reading each:
+computed (`reports`, `workforce/forecast`), append-only logs (`ai/automations/[id]/runs`,
+`forms/[id]/submissions`, `me/submissions`), inbound (`email-inbox`), generated docs
+(`documents`, `workforce/call-sheets`), conversational (`assistant`), reference taxonomy
+(`xpms/classes`), read rollups (`agency/tours` = a tour P&L composed from its offers/legs/deals),
+explicit previews (`proposals/templates/[id]` — "Read-only preview" + "Use Template"),
+ops boards (`production/dispatch`, `m/ros`), and a rider view (`marketplace/talent/[id]/riders`,
+whose parent `talent` *is* fully editable).
+
+**Sprints "drill-in" (NO-DRILL-IN) — false positive, no build.** `…/projects/[id]/sprints`
+is a **board**: it `map`s each sprint to an inline KanbanBoard + BurndownChart + AddStoryForm.
+Every sprint is managed in place — a separate detail page would duplicate the board. Confirmed
+intentional; not built (building it would be a regression in UX).
+
+**One real gap — fixed.** `finance/entities` (`org_entities`: legal name, tax id, currency,
+ownership %, consolidation method/state, effective dates) had create + a rich detail but **no
+edit** — and these fields genuinely change. Built `…/finance/entities/[id]/edit` (+ `updateOrgEntity`
+action mirroring create's schema/validation, with a self-parent guard) and an **Edit** affordance on
+the detail. READ-ONLY for entities now clears.

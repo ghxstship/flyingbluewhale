@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1084 · **API route handlers:** 124 · **Distinct nav hrefs:** 461
+**Page routes:** 1085 · **API route handlers:** 124 · **Distinct nav hrefs:** 461
 
 ## Legend
 
@@ -25,13 +25,13 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 733 | 199 | 534 | 0 | 0 |
+| ATLVS — Operator Console | platformNav rail | 734 | 199 | 535 | 0 | 0 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 75 | 44 | 31 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 140 | 120 | 18 | 0 | 2 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 86 | 31 | 47 | 0 | 8 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1084** | **415** | **636** | **0** | **33** |
+| **TOTAL** | | **1085** | **415** | **637** | **0** | **33** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -83,7 +83,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/console`)
 
-733 routes — ● 199 nav · ○ 534 linked · ⚠ 0 orphan
+734 routes — ● 199 nav · ○ 535 linked · ⚠ 0 orphan
 
 <details><summary><code>accommodation</code> · 6 routes</summary>
 
@@ -331,7 +331,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>finance</code> · 54 routes</summary>
+<details><summary><code>finance</code> · 55 routes</summary>
 
 ○ `/console/finance`
 ● `/console/finance/ap-ocr`
@@ -347,6 +347,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/console/finance/cost-codes/new`
 ● `/console/finance/entities`
 ○ `/console/finance/entities/[id]`
+○ `/console/finance/entities/[id]/edit`
 ○ `/console/finance/entities/new`
 ● `/console/finance/expenses`
 ○ `/console/finance/expenses/[expenseId]`

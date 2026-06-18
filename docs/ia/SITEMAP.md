@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1083 · **API route handlers:** 124 · **Distinct nav hrefs:** 450
+**Page routes:** 1084 · **API route handlers:** 124 · **Distinct nav hrefs:** 461
 
 ## Legend
 
@@ -25,13 +25,13 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 732 | 188 | 544 | 0 | 0 |
+| ATLVS — Operator Console | platformNav rail | 733 | 199 | 534 | 0 | 0 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 75 | 44 | 31 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 140 | 120 | 18 | 0 | 2 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 86 | 31 | 47 | 0 | 8 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1083** | **404** | **646** | **0** | **33** |
+| **TOTAL** | | **1084** | **415** | **636** | **0** | **33** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -83,7 +83,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/console`)
 
-732 routes — ● 188 nav · ○ 544 linked · ⚠ 0 orphan
+733 routes — ● 199 nav · ○ 534 linked · ⚠ 0 orphan
 
 <details><summary><code>accommodation</code> · 6 routes</summary>
 
@@ -128,7 +128,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ○ `/console/agency`
 ○ `/console/agency/commissions`
-○ `/console/agency/roster`
+● `/console/agency/roster`
 ○ `/console/agency/roster/[agencyArtistId]`
 ● `/console/agency/tours`
 ○ `/console/agency/tours/[tourId]`
@@ -343,9 +343,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/console/finance/budgets/new`
 ○ `/console/finance/budgets/summary`
 ○ `/console/finance/consolidation`
-○ `/console/finance/cost-codes`
+● `/console/finance/cost-codes`
 ○ `/console/finance/cost-codes/new`
-○ `/console/finance/entities`
+● `/console/finance/entities`
 ○ `/console/finance/entities/[id]`
 ○ `/console/finance/entities/new`
 ● `/console/finance/expenses`
@@ -363,7 +363,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/console/finance/lien-waivers`
 ○ `/console/finance/lien-waivers/[id]`
 ○ `/console/finance/lien-waivers/new`
-○ `/console/finance/mileage`
+● `/console/finance/mileage`
 ○ `/console/finance/mileage/[mileageId]`
 ○ `/console/finance/mileage/[mileageId]/edit`
 ○ `/console/finance/mileage/new`
@@ -605,7 +605,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/console/operations/daily-log/[id]`
 ○ `/console/operations/daily-log/new`
 ○ `/console/operations/dispatch`
-○ `/console/operations/incidents`
+● `/console/operations/incidents`
 ○ `/console/operations/incidents/[incidentId]`
 ○ `/console/operations/incidents/[incidentId]/edit`
 ○ `/console/operations/incidents/new`
@@ -694,15 +694,16 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>procurement</code> · 42 routes</summary>
+<details><summary><code>procurement</code> · 43 routes</summary>
 
 ○ `/console/procurement`
 ○ `/console/procurement/catalog`
 ● `/console/procurement/itb`
-○ `/console/procurement/po-change-orders`
+● `/console/procurement/po-change-orders`
 ○ `/console/procurement/po-change-orders/[id]`
 ○ `/console/procurement/po-change-orders/new`
 ● `/console/procurement/prequalification`
+○ `/console/procurement/prequalification/[prequalId]`
 ○ `/console/procurement/prequalification/new`
 ○ `/console/procurement/prequalification/questionnaires`
 ○ `/console/procurement/prequalification/questionnaires/new`
@@ -735,7 +736,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/console/procurement/vendors/[vendorId]/scorecard`
 ○ `/console/procurement/vendors/[vendorId]/submittals`
 ○ `/console/procurement/vendors/new`
-○ `/console/procurement/wo-broadcasts`
+● `/console/procurement/wo-broadcasts`
 ○ `/console/procurement/wo-broadcasts/[broadcastId]`
 ○ `/console/procurement/wo-broadcasts/new`
 
@@ -893,15 +894,15 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/console/safety/crisis/[alertId]/edit`
 ○ `/console/safety/crisis/new`
 ○ `/console/safety/cyber-ir`
-○ `/console/safety/environmental`
+● `/console/safety/environmental`
 ○ `/console/safety/environmental/[eventId]`
 ○ `/console/safety/environmental/[eventId]/edit`
 ○ `/console/safety/environmental/new`
-○ `/console/safety/guard-tours`
+● `/console/safety/guard-tours`
 ○ `/console/safety/guard-tours/new`
 ● `/console/safety/incidents`
 ○ `/console/safety/incidents/[incidentId]`
-○ `/console/safety/major-incident`
+● `/console/safety/major-incident`
 ○ `/console/safety/major-incident/[eventId]`
 ○ `/console/safety/major-incident/[eventId]/edit`
 ○ `/console/safety/major-incident/new`
@@ -919,7 +920,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/console/safety/safeguarding/[reportId]`
 ○ `/console/safety/safeguarding/[reportId]/edit`
 ○ `/console/safety/safeguarding/new`
-○ `/console/safety/threats`
+● `/console/safety/threats`
 ○ `/console/safety/threats/new`
 
 </details>

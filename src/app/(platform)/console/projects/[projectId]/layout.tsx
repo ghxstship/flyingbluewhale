@@ -1,5 +1,6 @@
 import { RecordTabsProvider } from "@/components/ui/RecordTabsContext";
 import { PhaseStepper } from "@/components/xpms/PhaseStepper";
+import { ProjectSwitcher } from "@/components/console/ProjectSwitcher";
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
@@ -40,6 +41,18 @@ export default async function ProjectLayout({
     .maybeSingle();
   const currentPhase = (project?.xpms_phase ?? null) as XpmsPhase | null;
 
+  // Sibling projects for the switcher (F-B) — hop between shows without
+  // re-drilling through the Projects list. Newest-first, capped; Combobox
+  // search keeps a long portfolio usable.
+  const { data: siblings } = await supabase
+    .from("projects")
+    .select("id, name")
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(100);
+  const projects = ((siblings ?? []) as { id: string; name: string }[]).map((p) => ({ id: p.id, name: p.name }));
+
   // Schedule consolidates the prior Gantt + Calendar tabs into one domain
   // with `?view=timeline|calendar|list` (Linear / Asana / Notion pattern).
   // Tasks stays distinct — work items vs. scheduled events are different
@@ -74,6 +87,9 @@ export default async function ProjectLayout({
   ];
   return (
     <RecordTabsProvider tabs={tabs}>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <ProjectSwitcher projects={projects} currentId={projectId} />
+      </div>
       <PhaseStepper currentPhase={currentPhase} projectId={projectId} />
       {children}
     </RecordTabsProvider>

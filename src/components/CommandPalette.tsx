@@ -36,6 +36,7 @@ import {
   type PortalPersona,
 } from "@/lib/nav";
 import { navItemKey } from "@/lib/i18n/nav-label";
+import { CONSOLE_CREATE_ACTIONS } from "@/lib/console/create-actions.generated";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -182,29 +183,43 @@ export function CommandPalette({
           });
         }
       }
-      [
-        { key: "newProject", label: "New Project", href: "/console/projects/new", icon: Briefcase },
-        { key: "newClient", label: "New Client", href: "/console/clients/new", icon: Users },
-        { key: "newInvoice", label: "New Invoice", href: "/console/finance/invoices/new", icon: Receipt },
-        { key: "newPo", label: "New PO", href: "/console/procurement/purchase-orders/new", icon: FileText },
-        { key: "newProposal", label: "New Proposal", href: "/console/proposals/new", icon: FileText },
-        { key: "addEquipment", label: "Add Equipment", href: "/console/production/equipment/new", icon: Package },
-        {
-          key: "linkScanCode",
-          label: "Link Scan Code",
-          href: "/console/people/credentials/asset-linker",
-          icon: Ticket,
-        },
-      ].forEach((c) =>
+      // Create group — every static /console/**/new route, auto-derived from
+      // the route tree (workflow audit F-A, src/lib/console/create-actions.
+      // generated.ts). The six highest-traffic creates keep their hand-tuned
+      // i18n labels + icons; the long tail uses generated labels + a generic
+      // Plus icon so EVERY dataset is a 2-keystroke create regardless of nav
+      // depth. Project-scoped creates (need a picker) are intentionally excluded.
+      const curatedCreate: Record<string, { key: string; icon: typeof Briefcase }> = {
+        "/console/projects/new": { key: "newProject", icon: Briefcase },
+        "/console/clients/new": { key: "newClient", icon: Users },
+        "/console/finance/invoices/new": { key: "newInvoice", icon: Receipt },
+        "/console/procurement/purchase-orders/new": { key: "newPo", icon: FileText },
+        "/console/proposals/new": { key: "newProposal", icon: FileText },
+        "/console/production/equipment/new": { key: "addEquipment", icon: Package },
+      };
+      for (const c of CONSOLE_CREATE_ACTIONS) {
+        const cur = curatedCreate[c.href];
         list.push({
           id: `create-${c.href}`,
-          label: t(`commandPalette.actions.${c.key}`, undefined, c.label),
+          label: cur ? t(`commandPalette.actions.${cur.key}`, undefined, c.label) : c.label,
+          hint: t("commandPalette.hint.create", { group: c.group }, `Create · ${c.group}`),
           group: "Create",
-          icon: c.icon,
+          icon: cur?.icon ?? Plus,
           perform: () => goto(c.href),
           performAlt: () => gotoNewTab(c.href),
-        }),
-      );
+          keywords: ["new", "create", c.group.toLowerCase()],
+        });
+      }
+      // Scan-code linker — a create-shaped action that isn't a /new route.
+      list.push({
+        id: "create-asset-linker",
+        label: t("commandPalette.actions.linkScanCode", undefined, "Link Scan Code"),
+        hint: t("commandPalette.hint.create", { group: "People" }, "Create · People"),
+        group: "Create",
+        icon: Ticket,
+        perform: () => goto("/console/people/credentials/asset-linker"),
+        performAlt: () => gotoNewTab("/console/people/credentials/asset-linker"),
+      });
     } else if (scope === "portal" && portalSlug) {
       // Scope the index to the viewer's own persona when the chrome knows
       // it; operators previewing portals get every persona's routes for

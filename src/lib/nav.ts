@@ -360,6 +360,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
           { label: "Bookings", href: "/console/bookings", icon: "TrendingUp" },
           { label: "Tours", href: "/console/agency/tours", icon: "Route" },
+          { label: "Agency Roster", href: "/console/agency/roster", icon: "Users" },
           { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
           { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
           { label: "Inquiries", href: "/console/marketplace/inquiries", icon: "Inbox" },
@@ -398,7 +399,17 @@ export const platformNavDomain: NavGroup[] = [
         label: "Payables",
         items: [
           { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
+          { label: "Mileage", href: "/console/finance/mileage", icon: "Truck" },
           { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
+        ],
+      },
+      {
+        // Ledger setup — chart-of-accounts entities + cost-code reference.
+        // Promoted from hub-only links (workflow audit F-C).
+        label: "Ledger Setup",
+        items: [
+          { label: "Entities", href: "/console/finance/entities", icon: "Building2" },
+          { label: "Cost Codes", href: "/console/finance/cost-codes", icon: "ListOrdered" },
         ],
       },
       {
@@ -443,6 +454,8 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
           { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
+          { label: "PO Change Orders", href: "/console/procurement/po-change-orders", icon: "ArrowLeftRight" },
+          { label: "WO Broadcasts", href: "/console/procurement/wo-broadcasts", icon: "Send" },
           { label: "Contracts", href: "/console/contracts", icon: "ClipboardSignature" },
         ],
       },
@@ -515,10 +528,17 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Safety / Operational",
         items: [
-          { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
+          // F-E: point at the canonical CRUD home (kanban / new / detail), not
+          // the cross-domain read feed at /console/safety/incidents (which
+          // stays reachable via the safety module + cross-links).
+          { label: "Incidents", href: "/console/operations/incidents", icon: "Siren" },
+          { label: "Major Incident", href: "/console/safety/major-incident", icon: "Flame" },
           { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
           { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
           { label: "Safeguarding", href: "/console/safety/safeguarding", icon: "HeartHandshake" },
+          { label: "Guard Tours", href: "/console/safety/guard-tours", icon: "ShieldCheck" },
+          { label: "Environmental", href: "/console/safety/environmental", icon: "Leaf" },
+          { label: "Threats", href: "/console/safety/threats", icon: "ShieldAlert" },
         ],
       },
       {

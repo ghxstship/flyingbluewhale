@@ -2958,6 +2958,101 @@
      "title": "ATLVS Is Open.",
      "primaryLabel": "Start building free",
      "secondaryLabel": "Book a Walkthrough"
+    },
+    "legend": {
+     "meta": {
+      "title": "LEG3ND — Knowledge, LMS & Compliance",
+      "description": "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine. The knowledge layer of the ATLVS world engine, on the XPMS 2.0 protocol.",
+      "ogImageEyebrow": "LEG3ND",
+      "ogImageTitle": "The knowledge the world is built on."
+     },
+     "crumbs": {
+      "home": "Home",
+      "solutions": "Solutions"
+     },
+     "jsonLd": {
+      "description": "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine."
+     },
+     "hero": {
+      "title": "The knowledge the world is built on.",
+      "body": "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine. It is the knowledge layer of the ATLVS world engine — the Standard, the LMS, certifications, the priced catalog, and the compliance engine, all on the XPMS 2.0 protocol.",
+      "ctaPrimary": "Start building free",
+      "ctaSecondary": "Book a Walkthrough"
+     },
+     "pillars": {
+      "title": "One library. Every discipline.",
+      "body": "The reference layer every other app reads from — authored once, governed in one place, versioned like code.",
+      "standard": {
+       "title": "The Standard",
+       "body": "The canonical knowledge base — how the work is actually run, written down and searchable."
+      },
+      "courses": {
+       "title": "Courses & LMS",
+       "body": "Structured learning with lessons, quizzes, and completion tracking — onboarding to mastery."
+      },
+      "certifications": {
+       "title": "Certifications",
+       "body": "Issue, track, and expire credentials. The same certs gate scans in COMPVSS at the door."
+      },
+      "resources": {
+       "title": "Resources hub",
+       "body": "Templates, SOPs, and reference docs — one home, no more shared-drive archaeology."
+      },
+      "catalog": {
+       "title": "Catalog",
+       "body": "Priced atoms and URIDs — the costed building blocks estimates and procurement draw from."
+      },
+      "signage": {
+       "title": "Signage library",
+       "body": "ISO 7010, DOT-AIGA, and ISA pictograms — production-ready safety wayfinding, standardized."
+      },
+      "xmce": {
+       "title": "XMCE compliance engine",
+       "body": "Machine-checkable compliance — rules evaluated against the live record, not a binder."
+      },
+      "safety": {
+       "title": "Safety",
+       "body": "RAMS, briefings, and emergency response plans wired to the projects that depend on them."
+      }
+     },
+     "protocol": {
+      "eyebrow": "On the XPMS 2.0 protocol",
+      "title": "Knowledge that the rest of the world reads.",
+      "body": "LEG3ND isn’t a wiki bolted on the side. Certifications gate field scans. Catalog atoms price estimates. Compliance rules evaluate against live projects. The knowledge layer is wired into the same record store the whole platform runs on.",
+      "items": {
+       "standard": "The Standard — one canonical, versioned knowledge base",
+       "courses": "Courses & LMS with quizzes and completion badges",
+       "certifications": "Certifications that gate COMPVSS gate scans",
+       "catalog": "Priced catalog atoms feeding estimates & procurement",
+       "signage": "ISO 7010 / DOT-AIGA / ISA signage pictograms",
+       "xmce": "XMCE machine-checkable compliance against the live record"
+      }
+     },
+     "faq": {
+      "title": "LEG3ND · FAQ",
+      "q1": {
+       "q": "What is LEG3ND?",
+       "a": "The knowledge layer of the ATLVS platform — the Standard (knowledge base), Courses & LMS, Certifications, a Resources hub, a priced Catalog, the Signage library, the XMCE compliance engine, and Safety, all on the XPMS 2.0 protocol."
+      },
+      "q2": {
+       "q": "How is it different from a wiki or a separate LMS?",
+       "a": "It shares the same record store as the rest of the platform. Certifications gate field scans in COMPVSS, catalog atoms price estimates in ATLVS, and compliance rules evaluate against live projects — none of which a standalone wiki or LMS can do."
+      },
+      "q3": {
+       "q": "What is the signage library?",
+       "a": "A production-ready set of ISO 7010, DOT-AIGA, and ISA pictograms for safety wayfinding — standardized so every site speaks the same visual language."
+      },
+      "q4": {
+       "q": "What does the compliance engine check?",
+       "a": "XMCE evaluates machine-checkable rules against the live record rather than a static binder, so compliance status reflects the actual state of a project at any moment."
+      }
+     },
+     "cta": {
+      "title": "Build your next world on a shared body of knowledge.",
+      "subtitle": "Free forever on the Access tier. Per-org pricing the rest of the way up.",
+      "primaryLabel": "Start building free",
+      "secondaryLabel": "Book a Walkthrough"
+     }
     }
    },
    "status": {

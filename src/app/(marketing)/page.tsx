@@ -7,6 +7,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { JsonLd } from "@/components/marketing/JsonLd";
+import { ProductPreview } from "@/components/marketing/ProductPreview";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
@@ -378,6 +379,12 @@ export default async function Home() {
                 (readiness matrix, tablet breakpoint). min-w-0 lets the column
                 shrink to its track. */}
             <div className="hidden min-w-0 lg:block">
+              {/* C6 — real product imagery: a token-driven console illustration
+                  (not a screenshot) anchors the hero with a glimpse of the
+                  command deck. Themed to the ATLVS accent. */}
+              <div className="mb-4 overflow-hidden rounded-xl border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 shadow-[var(--p-elev-2)]">
+                <ProductPreview accent={PRODUCT_ACCENTS.atlvs} label="ATLVS · Console" />
+              </div>
               <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-2)]">
                 <div className="mb-3 text-[10px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
                   {t("marketing.pages.home.hero.ecosystemLabel")}

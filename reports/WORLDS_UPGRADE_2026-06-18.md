@@ -43,7 +43,9 @@ Executed 2026-06-18 (this change). tsc + lint + guard tests + production build a
 
 **Four-app parity fix (uncovered during D3):** the home (and the new es/pt) LEG3ND card linked `/solutions/legend`, which **404'd** — three of four apps had a solution page, LEG3ND did not. Built the real fourth page (`/solutions/legend`, Production-Orange accent, eight-pillar grid, XPMS-2.0 callout, FAQ, `productSchema`) and wired it into `nav.ts` (header megamenu + footer) with localized labels across all 7 catalogs. Sitemap regenerated. *(English copy for now; localizing the page body is the one honest follow-up, tracked with C6 imagery.)*
 
-## Remaining follow-ups (asset/localization, non-blocking)
+## Follow-ups — now complete
 
-- **C6** product screenshots — needs real assets.
-- Localize the `/solutions/legend` page body (currently English; nav labels are localized).
+- **C6 product imagery** — done. Built `ProductPreview.tsx`, a token-driven SVG console illustration (window chrome + sidebar + metric cards + bar chart, all `--p-*` tokens + a product accent — theme-aware, no raster asset, an honest illustration not a fake screenshot). Anchors the home hero's right column above the four-app ecosystem rail, themed to the ATLVS accent. Verified in the desktop preview.
+- **`/solutions/legend` localization** — done. Converted the page from inline English to catalog-driven (`marketing.pages.solutions.legend.*`, 51 keys) matching its three siblings, and transcreated the full namespace into all 6 locales (ar/de/es/fr/ja/pt) via per-language agents — World-Engine voice, brand tokens preserved, CTAs matched to each locale's canonical home label. Verified the page localizes per-`locale`-cookie (es/ja confirmed rendering) with zero key leaks. i18n parity 14,948 leaves.
+
+All WORLDS upgrade work (Parts A–E + follow-ups) is now complete.

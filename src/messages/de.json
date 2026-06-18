@@ -3052,6 +3052,101 @@
      "title": "ATLVS ist offen.",
      "primaryLabel": "Kostenlos loslegen",
      "secondaryLabel": "Walkthrough buchen"
+    },
+    "legend": {
+     "meta": {
+      "title": "LEG3ND — Wissen, LMS & Compliance",
+      "description": "Das Wissen, auf dem die Welt gebaut ist — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine. Die Wissensschicht der ATLVS World Engine, auf dem XPMS 2.0-Protokoll.",
+      "ogImageEyebrow": "LEG3ND",
+      "ogImageTitle": "Das Wissen, auf dem die Welt gebaut ist."
+     },
+     "crumbs": {
+      "home": "Start",
+      "solutions": "Lösungen"
+     },
+     "jsonLd": {
+      "description": "Das Wissen, auf dem die Welt gebaut ist — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine."
+     },
+     "hero": {
+      "title": "Das Wissen, auf dem die Welt gebaut ist.",
+      "body": "Das Wissen, auf dem die Welt gebaut ist — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine. Es ist die Wissensschicht der ATLVS World Engine — der Standard, das LMS, Zertifizierungen, der bepreiste Katalog und die Compliance-Engine, alles auf dem XPMS 2.0-Protokoll.",
+      "ctaPrimary": "Kostenlos loslegen",
+      "ctaSecondary": "Demo buchen"
+     },
+     "pillars": {
+      "title": "Eine Bibliothek. Jede Disziplin.",
+      "body": "Die Referenzschicht, aus der jede andere App liest — einmal verfasst, an einem Ort verwaltet, versioniert wie Code.",
+      "standard": {
+       "title": "Der Standard",
+       "body": "Die kanonische Wissensbasis — wie die Arbeit tatsächlich läuft, niedergeschrieben und durchsuchbar."
+      },
+      "courses": {
+       "title": "Kurse & LMS",
+       "body": "Strukturiertes Lernen mit Lektionen, Quizzes und Abschlussverfolgung — vom Onboarding bis zur Meisterschaft."
+      },
+      "certifications": {
+       "title": "Zertifizierungen",
+       "body": "Nachweise ausstellen, verfolgen und ablaufen lassen. Dieselben Zertifikate steuern Scans am Einlass in COMPVSS."
+      },
+      "resources": {
+       "title": "Ressourcen-Hub",
+       "body": "Vorlagen, SOPs und Referenzdokumente — ein Zuhause, keine Archäologie im geteilten Laufwerk mehr."
+      },
+      "catalog": {
+       "title": "Katalog",
+       "body": "Bepreiste Atome und URIDs — die kalkulierten Bausteine, aus denen Schätzungen und Beschaffung schöpfen."
+      },
+      "signage": {
+       "title": "Beschilderungs-Bibliothek",
+       "body": "ISO 7010-, DOT-AIGA- und ISA-Piktogramme — produktionsreife Sicherheits-Wegeführung, standardisiert."
+      },
+      "xmce": {
+       "title": "XMCE Compliance-Engine",
+       "body": "Maschinell prüfbare Compliance — Regeln, ausgewertet gegen den lebenden Datensatz, nicht gegen einen Ordner."
+      },
+      "safety": {
+       "title": "Sicherheit",
+       "body": "RAMS, Briefings und Notfallpläne, verdrahtet mit den Projekten, die von ihnen abhängen."
+      }
+     },
+     "protocol": {
+      "eyebrow": "Auf dem XPMS 2.0-Protokoll",
+      "title": "Wissen, das der Rest der Welt liest.",
+      "body": "LEG3ND ist kein Wiki, das an der Seite angeschraubt ist. Zertifizierungen steuern Feld-Scans. Katalog-Atome bepreisen Schätzungen. Compliance-Regeln werten gegen lebende Projekte aus. Die Wissensschicht ist verdrahtet mit demselben Datenspeicher, auf dem die gesamte Plattform läuft.",
+      "items": {
+       "standard": "Der Standard — eine kanonische, versionierte Wissensbasis",
+       "courses": "Kurse & LMS mit Quizzes und Abschluss-Badges",
+       "certifications": "Zertifizierungen, die COMPVSS-Einlass-Scans steuern",
+       "catalog": "Bepreiste Katalog-Atome, die Schätzungen & Beschaffung speisen",
+       "signage": "ISO 7010 / DOT-AIGA / ISA Beschilderungs-Piktogramme",
+       "xmce": "XMCE maschinell prüfbare Compliance gegen den lebenden Datensatz"
+      }
+     },
+     "faq": {
+      "title": "LEG3ND · FAQ",
+      "q1": {
+       "q": "Was ist LEG3ND?",
+       "a": "Die Wissensschicht der ATLVS-Plattform — der Standard (Wissensbasis), Kurse & LMS, Zertifizierungen, ein Ressourcen-Hub, ein bepreister Katalog, die Beschilderungs-Bibliothek, die XMCE Compliance-Engine und Sicherheit, alles auf dem XPMS 2.0-Protokoll."
+      },
+      "q2": {
+       "q": "Wie unterscheidet es sich von einem Wiki oder einem separaten LMS?",
+       "a": "Es teilt sich denselben Datenspeicher mit dem Rest der Plattform. Zertifizierungen steuern Feld-Scans in COMPVSS, Katalog-Atome bepreisen Schätzungen in ATLVS, und Compliance-Regeln werten gegen lebende Projekte aus — nichts davon kann ein eigenständiges Wiki oder LMS leisten."
+      },
+      "q3": {
+       "q": "Was ist die Beschilderungs-Bibliothek?",
+       "a": "Ein produktionsreifer Satz von ISO 7010-, DOT-AIGA- und ISA-Piktogrammen für Sicherheits-Wegeführung — standardisiert, damit jeder Standort dieselbe visuelle Sprache spricht."
+      },
+      "q4": {
+       "q": "Was prüft die Compliance-Engine?",
+       "a": "XMCE wertet maschinell prüfbare Regeln gegen den lebenden Datensatz aus statt gegen einen statischen Ordner, sodass der Compliance-Status den tatsächlichen Zustand eines Projekts in jedem Moment widerspiegelt."
+      }
+     },
+     "cta": {
+      "title": "Bauen Sie Ihre nächste Welt auf einem geteilten Wissensbestand.",
+      "subtitle": "Für immer kostenlos auf der Access-Stufe. Pro-Org-Preise auf dem ganzen Weg nach oben.",
+      "primaryLabel": "Kostenlos loslegen",
+      "secondaryLabel": "Demo buchen"
+     }
     }
    },
    "status": {

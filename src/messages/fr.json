@@ -3052,6 +3052,101 @@
      "title": "ATLVS Est Ouvert.",
      "primaryLabel": "Commencer à créer, gratuitement",
      "secondaryLabel": "Réserver une Démo"
+    },
+    "legend": {
+     "meta": {
+      "title": "LEG3ND — Savoir, LMS et conformité",
+      "description": "Le savoir sur lequel le monde se construit — la Standard, les cours, les certifications, le catalogue et le moteur de conformité. La couche de savoir du moteur de monde ATLVS, sur le protocole XPMS 2.0.",
+      "ogImageEyebrow": "LEG3ND",
+      "ogImageTitle": "Le savoir sur lequel le monde se construit."
+     },
+     "crumbs": {
+      "home": "Accueil",
+      "solutions": "Solutions"
+     },
+     "jsonLd": {
+      "description": "Le savoir sur lequel le monde se construit — la Standard, les cours, les certifications, le catalogue et le moteur de conformité."
+     },
+     "hero": {
+      "title": "Le savoir sur lequel le monde se construit.",
+      "body": "Le savoir sur lequel le monde se construit — la Standard, les cours, les certifications, le catalogue et le moteur de conformité. C’est la couche de savoir du moteur de monde ATLVS — la Standard, le LMS, les certifications, le catalogue chiffré et le moteur de conformité, le tout sur le protocole XPMS 2.0.",
+      "ctaPrimary": "Commencer à créer, gratuitement",
+      "ctaSecondary": "Réserver une démo"
+     },
+     "pillars": {
+      "title": "Une bibliothèque. Toutes les disciplines.",
+      "body": "La couche de référence que toutes les autres apps consultent — rédigée une fois, gouvernée en un seul endroit, versionnée comme du code.",
+      "standard": {
+       "title": "La Standard",
+       "body": "La base de connaissances canonique — comment le travail se mène vraiment, consigné et consultable."
+      },
+      "courses": {
+       "title": "Cours et LMS",
+       "body": "Un apprentissage structuré : leçons, quiz et suivi d’achèvement — de l’intégration à la maîtrise."
+      },
+      "certifications": {
+       "title": "Certifications",
+       "body": "Émettez, suivez et faites expirer les accréditations. Les mêmes certifications conditionnent les scans dans COMPVSS, à l’entrée."
+      },
+      "resources": {
+       "title": "Hub Ressources",
+       "body": "Modèles, SOPs et documents de référence — un seul foyer, fini l’archéologie des disques partagés."
+      },
+      "catalog": {
+       "title": "Catalogue",
+       "body": "Atomes chiffrés et URIDs — les briques costées dont s’alimentent les estimations et les achats."
+      },
+      "signage": {
+       "title": "Bibliothèque de signalétique",
+       "body": "Pictogrammes ISO 7010, DOT-AIGA et ISA — une signalétique de sécurité prête pour la production, normalisée."
+      },
+      "xmce": {
+       "title": "Moteur de conformité XMCE",
+       "body": "Une conformité vérifiable par la machine — des règles évaluées sur le dossier vivant, pas dans un classeur."
+      },
+      "safety": {
+       "title": "Sécurité",
+       "body": "RAMS, briefings et plans d’intervention d’urgence reliés aux projets qui en dépendent."
+      }
+     },
+     "protocol": {
+      "eyebrow": "Sur le protocole XPMS 2.0",
+      "title": "Un savoir que le reste du monde consulte.",
+      "body": "LEG3ND n’est pas un wiki greffé sur le côté. Les certifications conditionnent les scans terrain. Les atomes du catalogue chiffrent les estimations. Les règles de conformité s’évaluent sur les projets vivants. La couche de savoir est câblée dans le même magasin de données que celui où tourne toute la plateforme.",
+      "items": {
+       "standard": "La Standard — une base de connaissances canonique et versionnée",
+       "courses": "Cours et LMS avec quiz et badges d’achèvement",
+       "certifications": "Des certifications qui conditionnent les scans d’entrée COMPVSS",
+       "catalog": "Des atomes de catalogue chiffrés alimentant estimations et achats",
+       "signage": "Pictogrammes de signalétique ISO 7010 / DOT-AIGA / ISA",
+       "xmce": "Conformité XMCE vérifiable par la machine sur le dossier vivant"
+      }
+     },
+     "faq": {
+      "title": "LEG3ND · FAQ",
+      "q1": {
+       "q": "Qu’est-ce que LEG3ND ?",
+       "a": "La couche de savoir de la plateforme ATLVS — la Standard (base de connaissances), Cours et LMS, Certifications, un hub Ressources, un Catalogue chiffré, la bibliothèque de signalétique, le moteur de conformité XMCE et la Sécurité, le tout sur le protocole XPMS 2.0."
+      },
+      "q2": {
+       "q": "En quoi est-ce différent d’un wiki ou d’un LMS distinct ?",
+       "a": "Il partage le même magasin de données que le reste de la plateforme. Les certifications conditionnent les scans terrain dans COMPVSS, les atomes du catalogue chiffrent les estimations dans ATLVS et les règles de conformité s’évaluent sur les projets vivants — autant de choses qu’un wiki ou un LMS autonome ne peut pas faire."
+      },
+      "q3": {
+       "q": "Qu’est-ce que la bibliothèque de signalétique ?",
+       "a": "Un jeu prêt pour la production de pictogrammes ISO 7010, DOT-AIGA et ISA pour la signalétique de sécurité — normalisé pour que chaque site parle le même langage visuel."
+      },
+      "q4": {
+       "q": "Que vérifie le moteur de conformité ?",
+       "a": "XMCE évalue des règles vérifiables par la machine sur le dossier vivant plutôt que dans un classeur statique, si bien que l’état de conformité reflète l’état réel d’un projet à tout instant."
+      }
+     },
+     "cta": {
+      "title": "Bâtissez votre prochain monde sur un socle de savoir partagé.",
+      "subtitle": "Gratuit pour toujours sur le palier Access. Tarif par org pour tout le reste de la montée en puissance.",
+      "primaryLabel": "Commencer à créer, gratuitement",
+      "secondaryLabel": "Réserver une démo"
+     }
     }
    },
    "status": {

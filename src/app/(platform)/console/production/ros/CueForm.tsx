@@ -88,7 +88,10 @@ export function CueRow({ cue }: { cue: Cue }) {
   const buttons = NEXT_STATUS[cue.cue_state] ?? [];
   return (
     <tr>
-      <td className="font-mono text-xs">
+      {/* Time is rendered in the viewer's local timezone, which differs between
+          the server (UTC) and the client — suppress the expected hydration
+          text mismatch (was surfacing as React #418 on /console/production/ros). */}
+      <td className="font-mono text-xs" suppressHydrationWarning>
         {new Date(cue.scheduled_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
         {cue.duration_seconds ? ` · ${formatDuration(cue.duration_seconds)}` : ""}
       </td>

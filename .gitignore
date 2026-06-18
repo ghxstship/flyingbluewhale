@@ -24,3 +24,6 @@ e2e/.auth/
 # Each project is ~50MB+ of native tooling state; keep out of git.
 /ios/
 /android/
+
+# SEA TRIAL run artifacts (screenshots, results, saved auth sessions)
+docs/audits/evidence/sea-trial/

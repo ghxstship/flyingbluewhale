@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
@@ -68,7 +69,7 @@ export default async function NotificationsPage() {
               `${unread} unread of ${rows.length} recent`,
             )}
         {" · "}
-        <Link href="/me/notifications" className="text-[var(--p-accent)]">
+        <Link href={urlFor("personal", "/me/notifications")} className="text-[var(--p-accent)]">
           {t("m.notifications.settingsLink", undefined, "settings")}
         </Link>
       </p>

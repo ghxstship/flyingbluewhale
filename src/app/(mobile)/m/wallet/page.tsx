@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
@@ -159,7 +160,7 @@ export default async function WalletPage() {
       )}
 
       <div className="mt-8 border-t border-[var(--p-border)] pt-4">
-        <Link href="/me/profile" className="text-xs text-[var(--p-accent)]">
+        <Link href={urlFor("personal", "/me/profile")} className="text-xs text-[var(--p-accent)]">
           {t("m.wallet.openProfile", undefined, "Open profile →")}
         </Link>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
@@ -109,7 +110,7 @@ export default async function ApiSettingsPage() {
             <code className="font-mono">{`{ ok: false, error }`}</code>.
           </p>
           <p className="mt-3 text-xs">
-            <Link href="/api-docs" className="font-medium text-[var(--p-accent-text)] hover:underline">
+            <Link href={urlFor("marketing", "/api-docs")} className="font-medium text-[var(--p-accent-text)] hover:underline">
               {t("console.settings.api.reference", undefined, "Browse the full API reference →")}
             </Link>
           </p>

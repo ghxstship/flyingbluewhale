@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatFeeRange } from "@/lib/marketplace";
@@ -63,7 +64,7 @@ export default async function Page() {
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
             <li key={r.id} className="card-elevated p-4">
-              <Link href={`/marketplace/gigs/${r.public_slug}`} className="block">
+              <Link href={urlFor("marketing", `/marketplace/gigs/${r.public_slug}`)} className="block">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-semibold">{r.title}</span>
                   <span className="text-xs whitespace-nowrap text-[var(--color-text-secondary)]">

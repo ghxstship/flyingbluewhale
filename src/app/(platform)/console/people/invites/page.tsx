@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { urlFor } from "@/lib/urls";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -120,7 +121,7 @@ export default async function InvitesPage() {
                     </td>
                     <td className="text-[var(--p-text-2)]">{relTime(i.expires_at)}</td>
                     <td>
-                      <Button href={`/accept-invite/${i.token}`} variant="ghost" size="sm">
+                      <Button href={urlFor("marketing", `/accept-invite/${i.token}`)} variant="ghost" size="sm">
                         {t("console.people.invites.copyLink", undefined, "Copy Link")}
                       </Button>
                     </td>

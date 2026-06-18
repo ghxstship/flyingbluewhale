@@ -44,7 +44,9 @@ export default async function Page() {
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          rowHref={(r) => `/console/procurement/prequalification/questionnaires/${r.id}`}
+          /* No per-row detail route exists yet (only list/new). Rows were
+             linking to /questionnaires/[id], which 404s. Keep rows static
+             until the detail page is built. */
           emptyLabel={t("console.procurement.prequalification.questionnaires.empty", undefined, "No questionnaires")}
           emptyAction={
             <Button href="/console/procurement/prequalification/questionnaires/new" size="sm">

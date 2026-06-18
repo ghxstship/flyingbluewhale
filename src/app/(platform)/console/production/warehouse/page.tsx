@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
@@ -74,7 +75,7 @@ export default async function Page() {
       description: t("console.production.warehouse.tiles.availability.description", undefined, "7-day matrix"),
     },
     {
-      href: "/m/inventory/scan",
+      href: urlFor("mobile", "/inventory/scan"),
       label: t("console.production.warehouse.tiles.mobileScan.label", undefined, "Mobile Scan"),
       description: t(
         "console.production.warehouse.tiles.mobileScan.description",

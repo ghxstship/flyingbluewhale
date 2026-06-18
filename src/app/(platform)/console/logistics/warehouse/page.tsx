@@ -34,7 +34,7 @@ export default async function Page() {
       description: t("console.logistics.warehouse.tiles.availability.description", undefined, "7-day matrix"),
     },
     {
-      href: "/m/wms",
+      href: urlFor("mobile", "/wms"),
       label: t("console.logistics.warehouse.tiles.mobileScan.label", undefined, "Mobile Scan"),
       description: t(
         "console.logistics.warehouse.tiles.mobileScan.description",

@@ -115,9 +115,6 @@
    "dpa": "DPA",
    "sla": "SLA"
   },
-  "foo": {
-   "bar": "フーバー"
-  },
   "pin": "{name}をピン留め",
   "unpin": "{name}のピン留めを解除",
   "group": {
@@ -3077,7 +3074,7 @@
       "title": "ひとつのライブラリ。すべての領域へ。",
       "body": "他のすべてのアプリが参照するリファレンスレイヤー。一度オーサリングし、一箇所でガバナンスし、コードのようにバージョン管理する。",
       "standard": {
-       "title": "The Standard",
+       "title": "スタンダード",
        "body": "正規のナレッジベース。仕事が実際にどう回るのかを書き起こし、検索可能にする。"
       },
       "courses": {
@@ -3586,7 +3583,7 @@
     "whatItDoes": "何をするか。",
     "technicalAnchor": "技術アンカー",
     "modulesDepend": "これに依存するモジュール。",
-    "faqTitle": "{name} · FAQ",
+    "faqTitle": "{name}・よくある質問",
     "other": "その他の連携。",
     "cta": {
      "title": "ATLVS はオープン。",
@@ -3627,7 +3624,7 @@
     "whoRuns": "日々これを動かす人。",
     "restOfAtlvs": "ATLVS のその他の機能。",
     "restOfAtlvsSub": "ひとつのレコードストア。すべてのモジュールが同じ真実を読み取ります。",
-    "faqTitle": "{name} · FAQ",
+    "faqTitle": "{name}・よくある質問",
     "cta": {
      "runTitle": "次のショーで {name} を動かす。",
      "runSubtitle": "小規模チームはずっと無料。それ以上は組織単位の料金で。",
@@ -3672,7 +3669,7 @@
     },
     "outcomes": "成果",
     "modulesUsed": "使用モジュール",
-    "faqTitle": "{name} · FAQ",
+    "faqTitle": "{name}・よくある質問",
     "related": "関連業界"
    }
   },
@@ -3688,7 +3685,7 @@
     "painHeading": "あなたが回避し続けている痛み。",
     "modulesYouLive": "あなたが日常的に使うモジュール。",
     "industriesYouWork": "あなたが働く業界。",
-    "faqTitle": "{role} · FAQ",
+    "faqTitle": "{role}・よくある質問",
     "cta": {
      "runTitle": "{role} のワークフローを ATLVS で動かす。",
      "runSubtitle": "小規模チームは無料。それ以上は組織単位の料金で。"
@@ -3851,8 +3848,8 @@
      },
      "a3": {
       "title": "A3 · ヒーロー",
-      "sampleBefore": "Run the",
-      "samplePop": "show",
+      "sampleBefore": "ショーを",
+      "samplePop": "動かせ",
       "note": "1単語がプロダクトのアクセントを担い、見出しがそれ自体でブランドになる。カバー、マーケティング、スプラッシュ向け。"
      },
      "a4": {
@@ -3913,9 +3910,9 @@
      "heading": "アイコノグラフィー",
      "lead": {
       "before": "Phosphor Icons —",
-      "bold": "Bold",
+      "bold": "ボールド",
       "mid": "ウェイトはUIに、",
-      "fill": "Fill",
+      "fill": "フィル",
       "after": "はステータスシールと強調に。テキストと揃えるときは16〜20px、単独アクションは24px。単色で、継承する"
      }
     },
@@ -4560,9 +4557,9 @@
     "title": "まだスキャンがありません"
    },
    "result": {
-    "accepted": "accepted",
-    "duplicate": "duplicate",
-    "voided": "voided",
+    "accepted": "受理",
+    "duplicate": "重複",
+    "voided": "無効",
     "notFound": "not_found"
    },
    "manual": {
@@ -4885,7 +4882,7 @@
      "sub": "到着 / 出発"
     },
     "ros": {
-     "label": "Run of Show",
+     "label": "ラン・オブ・ショー",
      "sub": "キュー単位"
     },
     "guard": {
@@ -5218,7 +5215,7 @@
     "doneBadge": "完了"
    },
    "eyebrow": "モバイル",
-   "title": "Run of Show",
+   "title": "ラン・オブ・ショー",
    "noneToday": "本日予定のキューはありません。",
    "empty": {
     "title": "本日のキューなし"
@@ -6467,7 +6464,7 @@
      "budgetCents": "予算(セント)"
     },
     "placeholders": {
-     "name": "Spring launch · 2026",
+     "name": "春のローンチ・2026",
      "budgetCents": "500000 = $5,000"
     },
     "channel": {
@@ -6879,7 +6876,7 @@
      },
      "teamLabel": "チーム"
     },
-    "eyebrow": "Comms",
+    "eyebrow": "コミュニケーション",
     "title": "アナウンス",
     "configureSupabase": "Supabase を設定してください。",
     "subtitleOne": "アナウンス {count} 件",
@@ -6915,7 +6912,7 @@
      "audienceAdmins": "管理者",
      "goLiveImmediately": "即時公開"
     },
-    "eyebrow": "Comms",
+    "eyebrow": "コミュニケーション",
     "title": "投票",
     "configureSupabase": "Supabase を設定してください。",
     "subtitleOne": "投票 {count} 件",
@@ -6962,7 +6959,7 @@
      "anonymous": "匿名回答",
      "publishNow": "即時公開"
     },
-    "eyebrow": "Comms",
+    "eyebrow": "コミュニケーション",
     "title": "アンケート",
     "configureSupabase": "Supabase を設定してください。",
     "subtitleOne": "アンケート {count} 件",
@@ -11326,7 +11323,7 @@
     "questionnairesLabel": "質問票"
    },
    "purchaseOrders": {
-    "statusToast": "PO {status}",
+    "statusToast": "発注書 {status}",
     "cancelledToast": "POをキャンセルしました",
     "title": "発注書",
     "checklist": {
@@ -11945,7 +11942,7 @@
      "printHint": "印刷は⌘P",
      "qrAlt": "{name}のQRコード",
      "assetLabel": "アセット: {assetTag}",
-     "serialLabel": "SN: {serial}"
+     "serialLabel": "シリアル：{serial}"
     },
     "rentals": {
      "eyebrow": "機材",
@@ -15159,7 +15156,7 @@
      "effectiveRate": "実効レート"
     },
     "unit": {
-     "req": "req"
+     "req": "件"
     },
     "upsert": {
      "heading": "上書きを追加 / 更新",
@@ -15186,7 +15183,7 @@
     "resetLabel": "リセット",
     "resetTitle": "シーケンスをリセット",
     "editHeading": "編集 / プリシード",
-    "scopePlaceholder": "invoice",
+    "scopePlaceholder": "請求書",
     "scopeTitle": "小文字、数字、アンダースコア",
     "seedPlaceholder": "シード",
     "saveButton": "シーケンスを保存",
@@ -15445,7 +15442,7 @@
     "code": "コード",
     "shell": "シェル",
     "dimensions": "寸法",
-    "sqft": "sqft",
+    "sqft": "平方フィート",
     "orientation": "方位",
     "scale": "縮尺",
     "project": "プロジェクト",
@@ -15480,7 +15477,7 @@
     "uac": "UAC",
     "qty": "数量",
     "addPlacement": "+ 配置",
-    "uacAtom": "UAC Atom",
+    "uacAtom": "UAC アトム",
     "utilities": "ユーティリティ · §4.6",
     "drop": "ドロップ",
     "service": "サービス",
@@ -15506,7 +15503,7 @@
     "breadcrumb": "新規",
     "submit": "シートを作成",
     "section": {
-     "atomId": "Atom ID",
+     "atomId": "アトム ID",
      "sheet": "シート",
      "shell": "シェル",
      "preset": "プリセット",
@@ -15550,7 +15547,7 @@
    "issuedIfc": "発行済(IFC)",
    "emptyLabel": "サイトプランはまだありません",
    "columns": {
-    "atomId": "Atom ID",
+    "atomId": "アトム ID",
     "title": "タイトル",
     "type": "種別",
     "class": "クラス",
@@ -15848,7 +15845,7 @@
      "source": "ソース",
      "method": "算定方法"
     },
-    "scopeLabel": "Scope {scope}"
+    "scopeLabel": "スコープ {scope}"
    },
    "title": "サステナビリティ",
    "carbonLabel": "カーボン"
@@ -16418,7 +16415,7 @@
     "configureSupabase": "Supabaseを構成してください。",
     "cueSingular": "キュー",
     "cuePlural": "キュー",
-    "across": "across",
+    "across": "全体で",
     "daySingular": "日",
     "dayPlural": "日",
     "breadcrumbVenues": "会場",
@@ -16896,9 +16893,9 @@
       "state": "ステート"
      },
      "state": {
-      "draft": "draft",
-      "published": "published",
-      "locked": "locked"
+      "draft": "下書き",
+      "published": "公開済み",
+      "locked": "ロック済み"
      }
     },
     "detail": {
@@ -17376,7 +17373,7 @@
     },
     "standard": {
      "blurb": "ナレッジベース — 標準的な業務手法のリファレンス。",
-     "title": "The Standard"
+     "title": "スタンダード"
     }
    },
    "title": "ナレッジ"
@@ -18037,7 +18034,7 @@
    "dialog": {
     "title": "アカウントを削除しますか？",
     "descriptionSuffix": "を以下に入力してください。",
-    "placeholder": "delete my account",
+    "placeholder": "アカウントを削除",
     "ariaLabel": "確認フレーズを入力"
    },
    "eyebrow": "アカウント",
@@ -20431,7 +20428,7 @@
  "rootError": {
   "eyebrow": "エラー",
   "fallback": "予期しないエラーが発生しました。",
-  "ref": "ref: {digest}",
+  "ref": "参照：{digest}",
   "title": "問題が発生しました"
  },
  "shortcuts": {
@@ -21411,7 +21408,7 @@
    "subtitleWithDeadline": "{vendor} 宛 · 回答期限 {deadline}",
    "scope": "スコープ",
    "deliverablesRequested": "依頼する Deliverable",
-   "colDeliverable": "Deliverable",
+   "colDeliverable": "成果物",
    "colDescription": "内容",
    "colDue": "期日",
    "howToRespond": "回答方法"
@@ -21505,7 +21502,7 @@
    "vendorPackage": {
     "vendorEyebrow": "ベンダー",
     "deliverablesHeading": "Deliverable",
-    "colDeliverable": "Deliverable",
+    "colDeliverable": "成果物",
     "colDue": "期日",
     "colStatus": "ステータス"
    },

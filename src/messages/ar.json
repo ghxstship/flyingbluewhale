@@ -125,10 +125,7 @@
    "operations": "العمليات"
   },
   "unpin": "إلغاء تثبيت {name}",
-  "pin": "تثبيت {name}",
-  "foo": {
-   "bar": "فو بار"
-  }
+  "pin": "تثبيت {name}"
  },
  "marketing": {
   "header": {
@@ -5163,7 +5160,7 @@
     "colCh": "قناة",
     "colSource": "المصدر",
     "colMic": "ميكروفون/DI",
-    "colInsert": "Insert",
+    "colInsert": "إدراج",
     "colNote": "ملاحظة"
    },
    "stagePlot": {
@@ -13231,7 +13228,7 @@
     "questionnairesLabel": "الاستبيانات"
    },
    "purchaseOrders": {
-    "statusToast": "PO {status}",
+    "statusToast": "أمر الشراء {status}",
     "cancelledToast": "تم إلغاء PO",
     "title": "أوامر الشراء",
     "checklist": {

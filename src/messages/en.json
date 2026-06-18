@@ -125,10 +125,7 @@
    "sla": "SLA"
   },
   "unpin": "Unpin {name}",
-  "pin": "Pin {name}",
-  "foo": {
-   "bar": "Foo Bar"
-  }
+  "pin": "Pin {name}"
  },
  "marketing": {
   "header": {

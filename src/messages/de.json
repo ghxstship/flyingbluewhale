@@ -115,9 +115,6 @@
    "dpa": "DPA",
    "sla": "SLA"
   },
-  "foo": {
-   "bar": "Foo Bar"
-  },
   "pin": "{name} anheften",
   "unpin": "{name} lösen",
   "group": {
@@ -127,7 +124,7 @@
    "sales": "Vertrieb",
    "finance": "Finanzen",
    "procurement": "Beschaffung",
-   "operations": "Operations"
+   "operations": "Betrieb"
   }
  },
  "marketing": {
@@ -613,7 +610,7 @@
     },
     "chips": {
      "years": "14+ Jahre",
-     "experiences": "250+ Experiences",
+     "experiences": "250+ Erlebnisse",
      "memories": "5 Mio.+ Erinnerungen",
      "verticals": "3 Branchen",
      "destinations": "10 Destinationen"
@@ -869,7 +866,7 @@
      "ogTitle": "Was ausgeliefert wurde."
     },
     "kinds": {
-     "feature": "Feature",
+     "feature": "Funktion",
      "improvement": "Verbesserung",
      "security": "Sicherheit",
      "performance": "Performance"
@@ -1039,7 +1036,7 @@
     },
     "routes": {
      "walkthrough": {
-      "title": "Walkthrough",
+      "title": "Rundgang",
       "body": "Dreißig Minuten. Screen-Sharing von ATLVS, verdrahtet mit einer echten Produktion. Kein Deck.",
       "cta": "Termin sichern"
      },
@@ -1263,11 +1260,11 @@
     "metadata": {
      "title": "Features — Jedes Modul. Nativ.",
      "description": "Siebenundvierzig Module über vier Apps, die sich eine Datenbank teilen. ATLVS, COMPVSS, GVTEWAY, LEG3ND. KI, Finanzen, Beschaffung, Audit. Eine Quelle.",
-     "ogEyebrow": "Features",
+     "ogEyebrow": "Funktionen",
      "ogTitle": "Jedes Modul. Nativ."
     },
     "hero": {
-     "eyebrow": "Features",
+     "eyebrow": "Funktionen",
      "title": "Jedes Modul. Nativ.",
      "subtitle": "Siebenundvierzig Module über vier Apps. Eine Datenbank, eine Auth, ein Audit-Log. Keine Integrationssteuer."
     },
@@ -1429,7 +1426,7 @@
     },
     "channels": {
      "fieldGuide": {
-      "title": "Field Guide",
+      "title": "Feldhandbuch",
       "body": "Ausführliche Leitfäden für jede App — wie man eine Load-in-Woche führt, Advancing einrichtet, Stripe-Auszahlungen verdrahtet, Portal-Zugriffe konfiguriert.",
       "cta": "Field Guide öffnen"
      },
@@ -1973,7 +1970,7 @@
        "body": "Experiential Marketing, Pop-ups und Umgebungen, die konvertieren."
       },
       "immersiveExperiences": {
-       "title": "Immersive Experiences",
+       "title": "Immersive Erlebnisse",
        "body": "Narrative Installationen und Welten, die das Publikum betritt — ticketiert, getaktet, getrackt."
       },
       "sportingEvents": {
@@ -2141,7 +2138,7 @@
      "title": "Field Notes & Releases.",
      "posts": {
       "fieldNotes": {
-       "cat": "Field Notes",
+       "cat": "Feldnotizen",
        "title": "Wie der 8-Phasen-Lebenszyklus einen Build auf Kurs hält"
       },
       "release": {
@@ -2366,7 +2363,7 @@
       "custom": "Individuell"
      },
      "categories": {
-      "core": "Core",
+      "core": "Kern",
       "atlvs": "ATLVS",
       "gvteway": "GVTEWAY",
       "compvss": "COMPVSS",
@@ -2840,11 +2837,11 @@
        "body": "Tech Rider, Hospitality Rider, Input List, Stage Plot, Gästeliste, Zeitplan, Reise."
       },
       "vendor": {
-       "title": "Vendor",
+       "title": "Lieferant",
        "body": "Einreichungen, Pull List, POs, Rechnungen, COI- + W-9-Uploads, Schulungsnachweise."
       },
       "client": {
-       "title": "Client",
+       "title": "Kunde",
        "body": "Angebote direkt unterschrieben, Deliverables, Rechnungen per Karte/ACH, Nachrichten, Dateien."
       },
       "sponsor": {
@@ -2864,7 +2861,7 @@
        "body": "Meldungen, Rate Card, Trainingsstätten, Meetings, Cases, Transport, Unterkunft, Visum."
       },
       "media": {
-       "title": "Media",
+       "title": "Medien",
        "body": "MPC Rate Card, Unterkunft, Shuttles, Pressekonferenz-RSVP, Info-on-Demand."
       },
       "vip": {
@@ -2872,7 +2869,7 @@
        "body": "Eigene Fahrzeugflotte, Hotelkontingent, Reiseplan, Gästeliste, Paketzugang."
       },
       "volunteer": {
-       "title": "Volunteer",
+       "title": "Freiwillige",
        "body": "Bewerbung, Schulung, Schichtplan, Uniformausgabe, Door Pass."
       },
       "athlete": {
@@ -3542,8 +3539,8 @@
     "emptyBefore": "Es sind noch keine Partnerintegrationen öffentlich gelistet.",
     "emptyLink": "Sei der Erste.",
     "tier": {
-     "certified": "Certified",
-     "verified": "Verified"
+     "certified": "Zertifiziert",
+     "verified": "Verifiziert"
     },
     "by": "von {name}",
     "details": "Details"
@@ -3598,8 +3595,8 @@
     "meta": {
      "title": "{name} — ATLVS Partnerintegration"
     },
-    "ogCertified": "Certified Partner",
-    "ogVerified": "Verified Partner",
+    "ogCertified": "Zertifizierter Partner",
+    "ogVerified": "Verifizierter Partner",
     "eyebrow": "Partnerintegration",
     "capabilities": "Funktionen",
     "partnerSite": "Partner-Website",
@@ -3765,7 +3762,7 @@
      "heading": "Ein Zeichen, vier Akzente",
      "lead": "Jedes Produkt ist derselbe Waypoint auf seiner eigenen Akzentkachel — sofort eine Familie, sofort unverwechselbar.",
      "roleAtlvs": "Producer / Intern",
-     "roleCompvss": "Crew / Vendor / Talent",
+     "roleCompvss": "Crew / Lieferant / Talent",
      "roleGvteway": "Gast / Kunde",
      "inkTitle": "Ink",
      "roleInk": "Neutral / Suite",
@@ -3776,7 +3773,7 @@
      "heading": "Schutzraum & Nutzung",
      "lead": "Halte auf jeder Seite einen Rand von der halben Zeichenhöhe ein.",
      "do": "Do",
-     "dont": "Don't",
+     "dont": "Nicht",
      "doItems": {
       "1": "Färbe die Kachel im Produktakzent ein; halte den Stern weiß (oder Ink auf hell).",
       "2": "Halte den Schutzraum = ½ Zeichenhöhe.",
@@ -3851,8 +3848,8 @@
      },
      "a3": {
       "title": "A3 · Hero",
-      "sampleBefore": "Run the",
-      "samplePop": "show",
+      "sampleBefore": "Bring die",
+      "samplePop": "Show",
       "note": "Ein Wort nimmt den Produktakzent auf — Headlines branden sich selbst. Cover, Marketing, Splash."
      },
      "a4": {
@@ -3909,7 +3906,7 @@
      }
     },
     "icons": {
-     "eyebrow": "Foundations · Icons",
+     "eyebrow": "Grundlagen · Icons",
      "heading": "Ikonografie",
      "lead": {
       "before": "Phosphor Icons —",
@@ -3920,7 +3917,7 @@
      }
     },
     "footer": {
-     "tagline": "ATLVS Technologies · Foundations",
+     "tagline": "ATLVS Technologies · Grundlagen",
      "overview": "Überblick",
      "logoKit": "Logo-Kit"
     }
@@ -4548,7 +4545,7 @@
     "title": "Reviews",
     "untitled": "Unbenanntes Review"
    },
-   "title": "Producer Portal",
+   "title": "Producer-Portal",
    "tracker": {
     "configureSupabase": "Supabase konfigurieren.",
     "title": "Tracker",
@@ -4818,7 +4815,7 @@
    "visa": {
     "title": "Visa-Fälle",
     "eyebrow": "Portal · Athlet",
-    "breadcrumb": "Visa",
+    "breadcrumb": "Visum",
     "metric": {
      "approved": "Genehmigt",
      "inProgress": "In Bearbeitung",
@@ -5387,7 +5384,7 @@
     "eyebrow": "Portal · Delegation",
     "breadcrumbPortal": "Portal",
     "breadcrumbDelegation": "Delegation",
-    "breadcrumbVisa": "Visa",
+    "breadcrumbVisa": "Visum",
     "metric": {
      "approved": "Genehmigt",
      "lettersIssued": "Schreiben ausgestellt",
@@ -5470,7 +5467,7 @@
    },
    "persona": {
     "staff": "Produktion",
-    "crew": "Operations",
+    "crew": "Betrieb",
     "vendor": "Food & Beverage",
     "brandAmbassador": "Brand Ambassador",
     "sponsor": "Sponsoren",
@@ -5862,7 +5859,7 @@
     },
     "persona": {
      "staff": "Produktion",
-     "crew": "Operations",
+     "crew": "Betrieb",
      "vendor": "Food & Beverage",
      "brand_ambassador": "Brand Ambassador",
      "sponsor": "Sponsoren",
@@ -5905,11 +5902,11 @@
    },
    "gateway": {
     "artist": {
-     "label": "Artist",
+     "label": "Künstler",
      "desc": "Rider, Advancing, Zeitplan, Reise"
     },
     "vendor": {
-     "label": "Vendor",
+     "label": "Lieferant",
      "desc": "Einreichungen, POs, Rechnungen, Credentials"
     },
     "client": {
@@ -6014,7 +6011,7 @@
   "stakeholder": {
    "home": {
     "portfolioPnl": {
-     "title": "Portfolio & P&L"
+     "title": "Portfolio & GuV"
     },
     "portfolio": {
      "label": "Portfolio",
@@ -7123,7 +7120,7 @@
    "infoNote": "für Kontext,",
    "infoComment": "für Antworten und",
    "infoTag": "für reine Label-Einträge.",
-   "tasksLink": "Tasks"
+   "tasksLink": "Aufgaben"
   },
   "assistant": {
    "eyebrow": "KI",
@@ -7332,7 +7329,7 @@
      "create": "Settlement anlegen",
      "showDate": "Show-Datum",
      "revenue": "Umsatz",
-     "grossBoxOffice": "Gross Box Office",
+     "grossBoxOffice": "Brutto-Kasse",
      "paidAttendance": "Zahlende Besucher",
      "comps": "Comps",
      "walkouts": "Walkouts",
@@ -7568,7 +7565,7 @@
   },
   "captures": {
    "new": {
-    "eyebrow": "Field",
+    "eyebrow": "Feld",
     "title": "Reality Capture registrieren",
     "submit": "Capture registrieren",
     "name": "Name",
@@ -7591,7 +7588,7 @@
     },
     "sourceLabel": "Quelle"
    },
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Reality Captures",
    "configureSupabase": "Supabase konfigurieren.",
    "registerCapture": "+ Capture registrieren",
@@ -8468,9 +8465,9 @@
     "event_state": "Status"
    },
    "detail": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "breadcrumbs": {
-     "operations": "Operations",
+     "operations": "Betrieb",
      "events": "Events",
      "fallback": "Event"
     },
@@ -10182,7 +10179,7 @@
   },
   "locations": {
    "edit": {
-    "eyebrow": "Location",
+    "eyebrow": "Standort",
     "title": "{name} bearbeiten",
     "submit": "Änderungen speichern",
     "fields": {
@@ -10198,11 +10195,11 @@
     }
    },
    "detail": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "breadcrumb": {
-     "operations": "Operations",
-     "locations": "Locations",
-     "fallback": "Location"
+     "operations": "Betrieb",
+     "locations": "Standorte",
+     "fallback": "Standort"
     },
     "fields": {
      "address": "Adresse",
@@ -10222,12 +10219,12 @@
     "postcode": "Postleitzahl",
     "country": "Land",
     "notes": "Notizen",
-    "eyebrow": "Work",
+    "eyebrow": "Arbeit",
     "title": "Location hinzufügen"
    },
-   "title": "Locations",
+   "title": "Standorte",
    "configureSupabase": "Supabase konfigurieren.",
-   "eyebrow": "Work",
+   "eyebrow": "Arbeit",
    "subtitle": {
     "one": "{count} Location",
     "other": "{count} Locations"
@@ -10245,7 +10242,7 @@
     "searchPlaceholder": "Locations suchen…",
     "typeToSearch": "Tippen, um zu suchen…",
     "selectedLabel": "Ausgewählt:",
-    "eyebrow": "Locations",
+    "eyebrow": "Standorte",
     "title": "Location-Picker",
     "subtitle": "Async Typeahead — fügst Du in jedes Formular ein"
    }
@@ -10315,7 +10312,7 @@
      "col": {
       "kind": "Art",
       "flight": "Flug",
-      "carrier": "Carrier",
+      "carrier": "Spediteur",
       "scheduled": "Geplant",
       "actual": "Tatsächlich",
       "party": "Partei",
@@ -10398,9 +10395,9 @@
      "total30d": "Gesamt · 30 T"
     },
     "newService": "+ Neuer Service",
-    "title": "Services"
+    "title": "Dienstleistungen"
    },
-   "servicesLabel": "Services",
+   "servicesLabel": "Dienstleistungen",
    "warehouse": {
     "byStatus": "Nach Status",
     "drillIn": "Detailansicht",
@@ -10432,7 +10429,7 @@
      },
      "services": {
       "description": "Abfall- + Reinigungsanfragen",
-      "label": "Services"
+      "label": "Dienstleistungen"
      }
     },
     "title": "Lager"
@@ -10501,14 +10498,14 @@
       "venueType": "Venue-Typ",
       "performanceDate": "Auftrittsdatum",
       "slotLengthMin": "Slot (Min.)",
-      "deadline": "Deadline",
+      "deadline": "Frist",
       "feeMin": "Gage Min.",
       "feeMax": "Gage Max.",
       "currency": "Währung"
      },
      "kind": {
-      "talentCall": "Talent Call",
-      "audition": "Audition",
+      "talentCall": "Talent-Aufruf",
+      "audition": "Vorsprechen",
       "gig": "Gig",
       "rfq": "Öffentliche RFQ"
      }
@@ -10520,7 +10517,7 @@
      "performance": "Auftritt",
      "slotLength": "Slot-Länge",
      "feeBand": "Gagen-Band",
-     "deadline": "Deadline",
+     "deadline": "Frist",
      "tags": "Tags",
      "genres": "Genres",
      "trades": "Gewerke"
@@ -10533,7 +10530,7 @@
       "userLabel": "Nutzer:",
       "talentProfileLabel": "Talent-Profil:",
       "proposedFeeLabel": "Angebotene Gage:",
-      "scoreLabel": "Score:",
+      "scoreLabel": "Bewertung:",
       "internalNotes": "Interne Notizen",
       "moveSubmission": "Einreichung verschieben",
       "updateStatus": "Status aktualisieren",
@@ -10547,7 +10544,7 @@
       "submitted": "Eingereicht",
       "submitter": "Einreicher",
       "status": "Status",
-      "score": "Score",
+      "score": "Bewertung",
       "proposedFee": "Angebotene Gage",
       "note": "Notiz"
      }
@@ -10566,14 +10563,14 @@
       "venueType": "Venue-Typ",
       "performanceDate": "Auftrittsdatum",
       "slotMin": "Slot (Min.)",
-      "deadline": "Deadline",
+      "deadline": "Frist",
       "feeMin": "Gage Min.",
       "feeMax": "Gage Max.",
       "currency": "Währung"
      },
      "kind": {
-      "talentCall": "Talent Call",
-      "audition": "Audition",
+      "talentCall": "Talent-Aufruf",
+      "audition": "Vorsprechen",
       "gig": "Gig",
       "rfq": "Öffentliche RFQ"
      },
@@ -10582,8 +10579,8 @@
      }
     },
     "kind": {
-     "talentCall": "Talent Call",
-     "audition": "Audition",
+     "talentCall": "Talent-Aufruf",
+     "audition": "Vorsprechen",
      "gig": "Gig",
      "rfq": "Öffentliche RFQ"
     },
@@ -10594,7 +10591,7 @@
      "archived": "Archiviert"
     },
     "eyebrow": "Marketplace",
-    "title": "Open Calls",
+    "title": "Offene Aufrufe",
     "configureSupabase": "Supabase konfigurieren.",
     "newCall": "+ Neuer Call",
     "metric": {
@@ -10610,7 +10607,7 @@
      "kind": "Art",
      "region": "Region",
      "feeBand": "Gagen-Band",
-     "deadline": "Deadline",
+     "deadline": "Frist",
      "submissions": "Einreichungen",
      "status": "Status"
     }
@@ -10675,7 +10672,7 @@
    "configureSupabase": "Supabase konfigurieren.",
    "metrics": {
     "livePostings": "Live-Postings",
-    "openCalls": "Open Calls",
+    "openCalls": "Offene Aufrufe",
     "activeOffers": "Aktive Angebote",
     "newApplicants": "Neue Bewerber"
    },
@@ -10684,7 +10681,7 @@
      "title": "Stellenausschreibungen"
     },
     "calls": {
-     "title": "Open Calls"
+     "title": "Offene Aufrufe"
     },
     "talent": {
      "title": "Talent"
@@ -10696,7 +10693,7 @@
      "title": "RFQ-Marketplace"
     },
     "reviews": {
-     "title": "Reviews"
+     "title": "Bewertungen"
     },
     "inquiries": {
      "title": "Anfragen"
@@ -10719,9 +10716,9 @@
       "reelLabel": "Reel:",
       "proposedRateLabel": "Angebotener Tagessatz:",
       "reviewerNotesHeading": "Reviewer-Notizen",
-      "scoreLine": "Score: {score}",
+      "scoreLine": "Bewertung: {score}",
       "moveApplicantHeading": "Bewerber verschieben",
-      "stageLabel": "Stage",
+      "stageLabel": "Phase",
       "scoreInputLabel": "Score (0–100)",
       "reviewerNotesLabel": "Reviewer-Notizen",
       "phoneLabel": "Telefon:"
@@ -10732,8 +10729,8 @@
      "columns": {
       "applied": "Beworben",
       "applicant": "Bewerber",
-      "stage": "Stage",
-      "score": "Score",
+      "stage": "Phase",
+      "score": "Bewertung",
       "proposedRate": "Angebotener Tagessatz",
       "note": "Notiz"
      }
@@ -10762,10 +10759,10 @@
       "recurring": "Wiederkehrend"
      },
      "employment": {
-      "1099": "1099 Contractor",
-      "w2": "W-2 Crew",
+      "1099": "1099-Auftragnehmer",
+      "w2": "W-2-Crew",
       "contract": "Vertrag",
-      "volunteer": "Volunteer"
+      "volunteer": "Freiwillige"
      },
      "provided": {
       "legend": "Gestellt",
@@ -10816,10 +10813,10 @@
       "recurring": "Wiederkehrend"
      },
      "employment": {
-      "contractor1099": "1099 Contractor",
-      "w2Crew": "W-2 Crew",
+      "contractor1099": "1099-Auftragnehmer",
+      "w2Crew": "W-2-Crew",
       "contract": "Vertrag",
-      "volunteer": "Volunteer"
+      "volunteer": "Freiwillige"
      },
      "provided": {
       "legend": "Gestellt",
@@ -10847,7 +10844,7 @@
    },
    "reviews": {
     "eyebrow": "Marketplace",
-    "title": "Reviews",
+    "title": "Bewertungen",
     "configureSupabase": "Supabase konfigurieren.",
     "emptyLabel": "Noch keine Reviews",
     "col": {
@@ -10877,7 +10874,7 @@
      "eyebrow": "Marketplace · Talent",
      "title": "Bearbeiten · {actName}",
      "actName": "Act-Name",
-     "tagline": "Tagline",
+     "tagline": "Slogan",
      "bio": "Bio",
      "genreTags": "Genre-Tags (kommagetrennt)",
      "feeMin": "Gage Min.",
@@ -10935,7 +10932,7 @@
      "subtitle": "EPK anlegen. Veröffentlichen, wenn bereit.",
      "submit": "Profil speichern",
      "actName": "Act-Name",
-     "tagline": "Tagline",
+     "tagline": "Slogan",
      "bio": "Bio",
      "genreTags": "Genre-Tags (kommagetrennt)",
      "genreTagsPlaceholder": "indie-rock, post-punk",
@@ -10991,8 +10988,8 @@
   },
   "meetings": {
    "edit": {
-    "fallbackName": "Meeting",
-    "eyebrow": "Meeting",
+    "fallbackName": "Besprechung",
+    "eyebrow": "Besprechung",
     "title": "{name} bearbeiten",
     "submit": "Änderungen speichern",
     "fields": {
@@ -11046,23 +11043,23 @@
      "kickoff": "Kickoff",
      "oac": "Owner-Architect-Contractor (OAC)",
      "subMeeting": "Sub-Meeting",
-     "safety": "Safety",
-     "punchWalk": "Punch Walk",
-     "designReview": "Design Review",
+     "safety": "Sicherheit",
+     "punchWalk": "Punch-Walk",
+     "designReview": "Design-Review",
      "progress": "Fortschritt",
      "other": "Sonstiges"
     }
    },
    "eyebrow": "Koordination",
-   "title": "Meetings",
+   "title": "Besprechungen",
    "configureSupabase": "Supabase konfigurieren.",
    "kind": {
     "kickoff": "Kickoff",
     "oac": "OAC",
     "subMeeting": "Sub-Meeting",
-    "safety": "Safety",
-    "punchWalk": "Punch Walk",
-    "designReview": "Design Review",
+    "safety": "Sicherheit",
+    "punchWalk": "Punch-Walk",
+    "designReview": "Design-Review",
     "progress": "Fortschritt",
     "other": "Sonstiges"
    },
@@ -11102,7 +11099,7 @@
   "operations": {
    "dailyLog": {
     "detail": {
-     "eyebrow": "Operations",
+     "eyebrow": "Betrieb",
      "breadcrumb": "Tagesbericht",
      "weather": "Wetter",
      "manpower": "Personal",
@@ -11118,7 +11115,7 @@
      "previewUnavailable": "Vorschau nicht verfügbar"
     },
     "new": {
-     "eyebrow": "Operations",
+     "eyebrow": "Betrieb",
      "title": "Neuer Tagesbericht",
      "subtitle": "Ein Eintrag pro Projekt pro Tag.",
      "submit": "Bericht anlegen",
@@ -11130,7 +11127,7 @@
      "tempLowLabel": "Tiefsttemperatur (°F)",
      "notesLabel": "Notizen"
     },
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Tagesbericht",
     "configureSupabase": "Supabase konfigurieren.",
     "newLog": "+ Neuer Bericht",
@@ -11165,7 +11162,7 @@
     },
     "description": "Heute über Crews + Venues + Fahrzeuge"
    },
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "incidents": {
     "kanban": {
      "lane": {
@@ -11205,13 +11202,13 @@
      "eyebrow": "Operations · Vorfall"
     },
     "new": {
-     "eyebrow": "Operations",
+     "eyebrow": "Betrieb",
      "title": "Vorfall melden",
      "subtitle": "Sicherheits- + Beinahe-Unfall-Meldungen.",
      "breadcrumbLog": "Melden"
     },
     "breadcrumb": "Vorfälle",
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Vorfälle",
     "subtitle": "Vor Ort erfasste Sicherheits- + Beinahe-Unfall-Meldungen.",
     "logIncident": "Vorfall melden",
@@ -11226,10 +11223,10 @@
      "status": "Status"
     }
    },
-   "breadcrumb": "Operations",
+   "breadcrumb": "Betrieb",
    "lookAhead": {
     "dispatchFallback": "Disposition",
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Vorausschau — nächste 21 Tage",
     "empty": "Nichts in den nächsten 21 Tagen geplant."
    },
@@ -11259,7 +11256,7 @@
       "submit": "Als abgeschlossen markieren"
      }
     },
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Wartung",
     "configureSupabase": "Supabase konfigurieren.",
     "newSchedule": "+ Neuer Plan",
@@ -11290,7 +11287,7 @@
     },
     "description": "PPM- + Ausweis-Verlängerungs-Queue"
    },
-   "title": "Operations",
+   "title": "Betrieb",
    "serviceRequests": {
     "title": "Service-Anfragen",
     "description": "Triage mit SLAs"
@@ -11303,7 +11300,7 @@
    }
   },
   "ops": {
-   "title": "Operations",
+   "title": "Betrieb",
    "problems": "Probleme",
    "changes": "Änderungen",
    "integrations": "Integrationen",
@@ -11555,7 +11552,7 @@
     "columnNationality": "Nationalität",
     "columnStatus": "Status"
    },
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "title": "Teilnehmer"
   },
   "people": {
@@ -11678,7 +11675,7 @@
     "eyebrow": "Mitglied",
     "fallbackName": "Mitglied",
     "platformRole": "Plattform-Rolle",
-    "developer": "Developer"
+    "developer": "Entwickler"
    },
    "person": {
     "tabs": {
@@ -11831,10 +11828,10 @@
     },
     "eyebrowShort": "Personen",
     "titleShort": "Verträge",
-    "subtitleShort": "Master Services Agreements",
+    "subtitleShort": "Rahmen-Dienstleistungsverträge",
     "configureSupabase": "Supabase konfigurieren.",
     "eyebrow": "Personen · Verträge",
-    "title": "Master Services Agreements",
+    "title": "Rahmen-Dienstleistungsverträge",
     "newContract": "+ Neuer Vertrag",
     "emptyLabel": "Noch keine MSAs",
     "col": {
@@ -11862,12 +11859,12 @@
      },
      "classification": {
       "w2": "W-2 Angestellter",
-      "agency": "Agency Loan-Out",
+      "agency": "Agentur-Verleih",
       "intern": "Praktikant"
      },
      "compensation": {
       "legend": "Vergütung",
-      "rateCard": "Rate Card",
+      "rateCard": "Tarifkarte",
       "tbd": "(TBD)",
       "effective": "Effektive Vergütung",
       "tbdShort": "TBD",
@@ -11911,7 +11908,7 @@
      "copyAll": "Alles kopieren"
     },
     "lifecycle": {
-     "title": "Lifecycle",
+     "title": "Lebenszyklus",
      "markSent": "Als Gesendet Markieren — Öffentlichen Link Aktivieren",
      "msaRequired": "MSA Erforderlich Vor Dem Senden",
      "issueMsa": "MSA Ausstellen →",
@@ -11948,7 +11945,7 @@
      "role": "Rolle",
      "reportsTo": "Berichtet An",
      "venue": "Venue",
-     "rateCard": "Rate Card",
+     "rateCard": "Tarifkarte",
      "project": "Projekt",
      "signingAuthority": "Zeichnungsberechtigung",
      "activity": "Aktivität",
@@ -11956,10 +11953,10 @@
      "openAsDocument": "Dokument"
     },
     "eyebrow": "Personen",
-    "title": "Offer Letters",
+    "title": "Angebotsschreiben",
     "configureSupabase": "Supabase konfigurieren.",
-    "letterSingular": "Letter",
-    "letterPlural": "Letters",
+    "letterSingular": "Schreiben",
+    "letterPlural": "Schreiben",
     "acceptedLabel": "Angenommen",
     "draftLabel": "Entwurf",
     "emptyLabel": "Noch Keine Offer Letters",
@@ -11993,7 +11990,7 @@
     "newCustomRole": "Neue benutzerdefinierte Rolle",
     "slugLabel": "Slug",
     "slugHint": "Kleinbuchstaben, Bindestriche ok. Wird in API-Tokens verwendet.",
-    "labelLabel": "Label",
+    "labelLabel": "Bezeichnung",
     "descriptionLabel": "Beschreibung",
     "permissionsLabel": "Berechtigungen",
     "createRole": "Rolle Erstellen",
@@ -12002,10 +11999,10 @@
     "configureSupabase": "Supabase konfigurieren.",
     "col": {
      "role": "Rolle",
-     "tier": "Tier",
+     "tier": "Stufe",
      "capabilities": "Funktionen",
      "slug": "Slug",
-     "label": "Label",
+     "label": "Bezeichnung",
      "description": "Beschreibung",
      "permissions": "Berechtigungen"
     },
@@ -12082,7 +12079,7 @@
      "emptyLabel": "Keine Teams",
      "columnTeam": "Team",
      "columnDescription": "Beschreibung",
-     "columnMention": "Mention",
+     "columnMention": "Erwähnung",
      "columnUpdated": "Aktualisiert"
     },
     "footer": {
@@ -12093,7 +12090,7 @@
    }
   },
   "photos": {
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "title": "Projekt-Fotos",
    "photosLabel": "Fotos",
    "albumLabel": "Album",
@@ -12135,7 +12132,7 @@
    "deal": {
     "eyebrow": "Pipeline",
     "breadcrumbs": {
-     "sales": "Sales",
+     "sales": "Vertrieb",
      "pipeline": "Pipeline"
     },
     "metrics": {
@@ -12145,11 +12142,11 @@
      "source": "Quelle"
     },
     "account": {
-     "title": "Account",
+     "title": "Konto",
      "notLinked": "Nicht mit einem Account verknüpft."
     },
     "lifecycle": {
-     "title": "Lifecycle",
+     "title": "Lebenszyklus",
      "created": "Erstellt",
      "updated": "Aktualisiert",
      "closed": "Geschlossen"
@@ -12158,7 +12155,7 @@
      "title": "Aktivität"
     }
    },
-   "eyebrow": "Sales",
+   "eyebrow": "Vertrieb",
    "title": "Pipeline",
    "configureSupabase": "Supabase konfigurieren.",
    "subtitleDefault": "CRM-Deal-Pipeline nach Stage gruppiert",
@@ -12238,7 +12235,7 @@
      "sub": "Prüfungs-Workflow"
     },
     "sourcing": {
-     "label": "Sourcing",
+     "label": "Beschaffung",
      "sub": "Sourcing-Events"
     },
     "scorecards": {
@@ -12274,7 +12271,7 @@
      "sub": "Freigegebene Artikel"
     },
     "rateCard": {
-     "label": "Rate Card",
+     "label": "Tarifkarte",
      "sub": "Standardpreise"
     }
    },
@@ -12350,7 +12347,7 @@
     "col": {
      "vendor": "Lieferant",
      "questionnaire": "Fragebogen",
-     "score": "Score",
+     "score": "Bewertung",
      "expires": "Läuft ab",
      "status": "Status"
     },
@@ -12461,7 +12458,7 @@
      "eyebrow": "Beschaffung",
      "breadcrumbs": {
       "requisitions": "Anforderungen",
-      "leveling": "Leveling"
+      "leveling": "Angleichung"
      },
      "responseSingular": "Antwort",
      "responsePlural": "Antworten",
@@ -12648,7 +12645,7 @@
    },
    "sourcing": {
     "eyebrow": "Beschaffung",
-    "title": "Sourcing",
+    "title": "Beschaffung",
     "configureSupabase": "Supabase konfigurieren.",
     "requisitionSingular": "Anforderung",
     "requisitionPlural": "Anforderungen",
@@ -12730,7 +12727,7 @@
      "detail": {
       "fallbackTitle": "Fragebogen",
       "fallbackBreadcrumb": "Detail",
-      "scoreLabel": "Score",
+      "scoreLabel": "Bewertung",
       "completionLabel": "Fortschritt",
       "responsesHeading": "Antworten",
       "noText": "(kein Text)"
@@ -12742,7 +12739,7 @@
       "submitted": "Eingereicht",
       "approved": "Freigegeben",
       "status": "Status",
-      "score": "Score"
+      "score": "Bewertung"
      }
     },
     "title": "Lieferanten",
@@ -12982,7 +12979,7 @@
       "initial": "initial",
       "by": "von {who}"
      },
-     "lifecycle": "Lifecycle",
+     "lifecycle": "Lebenszyklus",
      "retireRemove": "Ausmustern & entfernen"
     },
     "maintenance": {
@@ -13098,7 +13095,7 @@
       "created": "Erstellt",
       "production_phase": "Status"
      },
-     "lifecycleBadge": "Lifecycle",
+     "lifecycleBadge": "Lebenszyklus",
      "deleteOrder": "Auftrag löschen",
      "phase": {
       "heading": "Produktionsphase",
@@ -13166,7 +13163,7 @@
      "fieldStarts": "Beginn",
      "fieldEnds": "Ende",
      "fieldRate": "Satz",
-     "lifecycle": "Lifecycle",
+     "lifecycle": "Lebenszyklus",
      "deleteRental": "Miete löschen",
      "pullSheet": "Pull-Sheet"
     },
@@ -13217,7 +13214,7 @@
    "ros": {
     "cueForm": {
      "scheduledAt": "Geplant für",
-     "label": "Label",
+     "label": "Bezeichnung",
      "labelPlaceholder": "z. B. Saallicht runter",
      "durationSec": "Dauer (Sek.)",
      "optional": "optional",
@@ -13245,7 +13242,7 @@
     "countOther": "{count} Cues",
     "col": {
      "time": "Zeit",
-     "lane": "Lane",
+     "lane": "Spur",
      "cue": "Cue",
      "status": "Status",
      "actions": "Aktionen",
@@ -13290,7 +13287,7 @@
       "assets": "Assets"
      }
     },
-    "title": "Warehouse",
+    "title": "Lager",
     "configureSupabase": "Supabase konfigurieren.",
     "tiles": {
      "inventory": {
@@ -13329,7 +13326,7 @@
     "subtitle": "Inventar, Build, Show-Systeme.",
     "sections": {
      "inventory": "Inventar",
-     "build": "Build",
+     "build": "Aufbau",
      "show": "Show"
     },
     "cards": {
@@ -13338,17 +13335,17 @@
      "equipmentUtil": "Equipment-Auslastung",
      "equipmentUtilDesc": "30/90-Tage-Rollup + Idle-Revenue",
      "avInventory": "AV-Inventar",
-     "rentals": "Rentals",
-     "fabrication": "Fabrication",
+     "rentals": "Mieten",
+     "fabrication": "Fertigung",
      "compounds": "Compounds",
-     "yard": "Yard",
-     "punchList": "Punch List",
+     "yard": "Hof",
+     "punchList": "Mängelliste",
      "realityCaptures": "Reality Captures",
      "photoLog": "Foto-Log",
      "warranties": "Garantien",
      "runOfShow": "Run of Show",
      "runOfShowDesc": "Cue-für-Cue-Timeline",
-     "liveDispatch": "Live Dispatch",
+     "liveDispatch": "Live-Dispatch",
      "productionLogistics": "Produktionslogistik"
     }
    }
@@ -13545,7 +13542,7 @@
     "scheduleReview": "+ Review planen",
     "title": "Programm-Reviews"
    },
-   "reviewsLabel": "Reviews",
+   "reviewsLabel": "Bewertungen",
    "risk": {
     "columns": {
      "due": "Fällig",
@@ -13701,7 +13698,7 @@
       "noCatalogSuffix": "zuerst.",
       "titleLabel": "Titel",
       "assignee": "Empfänger",
-      "deadline": "Deadline",
+      "deadline": "Frist",
       "notes": "Notizen (optional)"
      },
      "eyebrow": "Advancing",
@@ -13750,7 +13747,7 @@
      "type": "Typ",
      "status": "Status",
      "version": "v",
-     "deadline": "Deadline",
+     "deadline": "Frist",
      "updated": "Aktualisiert",
      "actions": "Aktionen"
     },
@@ -13775,7 +13772,7 @@
      "notes": "Notizen",
      "ticket": {
       "title": "Ticket-Details",
-      "tier": "Tier",
+      "tier": "Stufe",
       "zones": "Zonen (Komma)",
       "gates": "Gates (Komma)",
       "validFrom": "Gültig ab",
@@ -13809,7 +13806,7 @@
       "ground": "Boden",
       "rail": "Bahn",
       "sea": "See",
-      "carrier": "Carrier",
+      "carrier": "Spediteur",
       "confirmation": "Bestätigung",
       "from": "Von",
       "to": "Nach",
@@ -13915,7 +13912,7 @@
      "primaryVenue": "Primärer Veranstaltungsort",
      "budget": "Budget",
      "budgetHint": "Dollar. Als Integer-Cent gespeichert.",
-     "scope": "Scope",
+     "scope": "Umfang",
      "tourStructure": "Tour-Struktur",
      "productionStyle": "Produktionsstil",
      "description": "Beschreibung"
@@ -13935,7 +13932,7 @@
      "international": "International"
     },
     "tourStructure": {
-     "singleStop": "Single Stop",
+     "singleStop": "Einzelstopp",
      "multiStopSequential": "Multi-Stop Sequenziell",
      "simultaneousMultiCity": "Simultan Multi-City"
     },
@@ -13971,7 +13968,7 @@
      "margin": "Marge",
      "outstanding": "Offene Rechnungen",
      "expensesCommitted": "Ausgaben committed",
-     "posCommitted": "POs committed"
+     "posCommitted": "Zugesagte Bestellungen"
     },
     "marginPctSentence": "Dieses Projekt liegt bei {pct}% Marge gegenüber bezahltem Umsatz.",
     "budget": {
@@ -14055,12 +14052,12 @@
      "editGuideContent": "Guide-Inhalt bearbeiten",
      "persona": {
       "staff": "Produktion",
-      "crew": "Operations",
-      "vendor": "Food & Beverage",
-      "brand_ambassador": "Brand Ambassador",
+      "crew": "Betrieb",
+      "vendor": "Speisen & Getränke",
+      "brand_ambassador": "Markenbotschafter",
       "sponsor": "Sponsoren",
       "artist": "Talent",
-      "media_press": "Media & Press",
+      "media_press": "Medien & Presse",
       "client": "Kunde",
       "guest": "Gäste",
       "custom": "Temporärer Zugang"
@@ -14075,7 +14072,7 @@
     "statusLive": "Live",
     "statusDraft": "Entwurf",
     "statusNone": "Keine",
-    "customHeading": "Custom Guide",
+    "customHeading": "Individueller Guide",
     "startCustom": "Custom Guide starten"
    },
    "tabs": {
@@ -14133,7 +14130,7 @@
     "events": "Events",
     "budget": "Budget",
     "spent": "Ausgegeben",
-    "deliverables": "Deliverables"
+    "deliverables": "Liefergegenstände"
    },
    "detail": {
     "eyebrow": "Projekt",
@@ -14216,7 +14213,7 @@
      "end": "Ende"
     },
     "timeline": {
-     "title": "Timeline",
+     "title": "Zeitachse",
      "ariaLabel": "Projekt-Timeline",
      "today": "Heute",
      "lane": {
@@ -14261,7 +14258,7 @@
      "editMetadata": "Metadaten bearbeiten"
     },
     "eyebrowFallback": "Projekt",
-    "title": "Stage Plots",
+    "title": "Bühnenpläne",
     "breadcrumbProjects": "Projekte",
     "colName": "Name",
     "colDimensions": "Maße",
@@ -14323,7 +14320,7 @@
     },
     "tourStructure": "Tour-Struktur",
     "tour": {
-     "singleStop": "Single Stop",
+     "singleStop": "Einzelstopp",
      "multiStopSequential": "Multi-Stop Sequenziell",
      "simultaneousMultiCity": "Simultan Multi-City"
     },
@@ -14385,7 +14382,7 @@
      "groupLabelPlaceholder": "Gruppenbezeichnung",
      "collapse": "Lineage einklappen",
      "edit": "Lineage bearbeiten",
-     "label": "Lineage"
+     "label": "Herkunft"
     },
     "savedToast": "Angebot gespeichert · Version erhöht",
     "fields": {
@@ -14448,7 +14445,7 @@
      "signed": "Unterzeichnet",
      "proposal_state": "Status"
     },
-    "scope": "Scope",
+    "scope": "Umfang",
     "aiDraft": "KI-Entwurf",
     "aiDraftEmptyTitle": "Noch kein Entwurf",
     "aiDraftGenerated": "Generiert",
@@ -14467,12 +14464,12 @@
     "amount": "Betrag (USD)",
     "expires": "Läuft ab",
     "notes": "Notizen / Scope",
-    "eyebrow": "Sales",
+    "eyebrow": "Vertrieb",
     "prefilledFrom": "Vorausgefüllt aus „{name}“"
    },
    "title": "Angebote",
    "configureSupabase": "Supabase konfigurieren.",
-   "eyebrow": "Sales",
+   "eyebrow": "Vertrieb",
    "countOne": "{count} Angebot",
    "countOther": "{count} Angebote",
    "newAction": "+ Neues Angebot",
@@ -14494,7 +14491,7 @@
     "breadcrumb": {
      "templates": "Vorlagen"
     },
-    "eyebrow": "Sales",
+    "eyebrow": "Vertrieb",
     "title": "Angebotsvorlagen",
     "blankProposal": "+ Leeres Angebot",
     "empty": {
@@ -14503,7 +14500,7 @@
     },
     "col": {
      "name": "Name",
-     "scope": "Scope",
+     "scope": "Umfang",
      "blocks": "Blöcke",
      "source": "Quelle",
      "updated": "Aktualisiert"
@@ -14537,7 +14534,7 @@
     "showReadyGate": "Show-Ready-Gate"
    },
    "edit": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "subtitle": "Punch-Eintrag bearbeiten.",
     "itemBreadcrumb": "Eintrag",
     "submit": "Punch-Eintrag speichern"
@@ -14556,7 +14553,7 @@
     "showReadyGate": "Show-Ready-Gate"
    },
    "detail": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "breadcrumb": "Punch-Liste",
     "doorsGate": "Doors-Gate",
     "start": "Starten",
@@ -14591,7 +14588,7 @@
     "createButton": "Liste anlegen"
    },
    "new": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Neuer Punch-Eintrag",
     "subtitle": "Show-Ready-Lücke. Doors-Open bei Bedarf gaten.",
     "submit": "Eintrag anlegen",
@@ -14610,7 +14607,7 @@
     "unassignedOption": "— Nicht zugewiesen —",
     "gateLabel": "Doors-Open gaten, bis dieser Eintrag geschlossen ist"
    },
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "title": "Punch-Liste",
    "configureSupabase": "Supabase konfigurieren.",
    "titleFiltered": "Punch · {name}",
@@ -14644,7 +14641,7 @@
   },
   "rfis": {
    "edit": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "RFI bearbeiten",
     "subtitle": "RFI bearbeiten.",
     "rfiFallback": "RFI",
@@ -14663,7 +14660,7 @@
     "officialAnswer": "Offizielle Antwort"
    },
    "detail": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "breadcrumb": "RFIs",
     "closeRfi": "RFI schließen",
     "questionHeading": "Frage",
@@ -14673,7 +14670,7 @@
     "postAnswer": "Antwort posten"
    },
    "new": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Neue RFI",
     "subtitle": "Stelle dem Produktionsteam eine offizielle Frage.",
     "submit": "RFI öffnen",
@@ -14686,7 +14683,7 @@
     "priorityLabel": "Priorität",
     "dueByLabel": "Fällig am"
    },
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "title": "RFIs",
    "configureSupabase": "Supabase konfigurieren.",
    "subtitle": "Produktionsanfragen mit verbindlichen Antworten.",
@@ -14723,7 +14720,7 @@
    "col": {
     "project": "Projekt",
     "category": "Kategorie",
-    "score": "Score",
+    "score": "Bewertung",
     "trend7d": "Δ 7T",
     "trend30d": "Δ 30T",
     "severity": "Schweregrad",
@@ -14732,7 +14729,7 @@
   },
   "safety": {
    "bcdr": {
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "title": "BC / DR",
     "configureSupabase": "Supabase konfigurieren.",
     "tbd": "TBD",
@@ -14785,7 +14782,7 @@
      "cancelled": "Abgesagt"
     },
     "new": {
-     "eyebrow": "Safety",
+     "eyebrow": "Sicherheit",
      "title": "Briefing planen",
      "submit": "Planen",
      "topic": "Thema",
@@ -14793,7 +14790,7 @@
      "scheduledFor": "Geplant für",
      "notes": "Notizen"
     },
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "subtitle": "Toolbox-Talks vor der Schicht.",
     "scheduleAction": "+ Briefing planen",
     "metrics": {
@@ -14810,7 +14807,7 @@
      "status": "Status"
     }
    },
-   "title": "Safety",
+   "title": "Sicherheit",
    "crisis": {
     "edit": {
      "eyebrow": "Safety · Krise",
@@ -14861,8 +14858,8 @@
     }
    },
    "cyberIr": {
-    "eyebrow": "Safety",
-    "title": "Cyber Incident Response",
+    "eyebrow": "Sicherheit",
+    "title": "Reaktion auf Cybervorfälle",
     "configureSupabase": "Supabase konfigurieren.",
     "reportIncident": "+ Vorfall melden",
     "metricOpen": "Offen",
@@ -14934,7 +14931,7 @@
     "eyebrowWorkspace": "Workspace",
     "title": "Umweltereignisse",
     "configureSupabase": "Supabase konfigurieren.",
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "subtitleOne": "{count} Eintrag",
     "subtitleMany": "{count} Einträge",
     "logEvent": "+ Ereignis erfassen",
@@ -14948,7 +14945,7 @@
    },
    "guardTours": {
     "new": {
-     "eyebrow": "Safety",
+     "eyebrow": "Sicherheit",
      "title": "Neuer Wachgang",
      "submit": "Rundgang planen",
      "nameLabel": "Name",
@@ -14958,7 +14955,7 @@
      "venueNone": "— Keine / mehrere Venues —",
      "cadenceLabel": "Kadenz (Minuten)"
     },
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "title": "Wachgänge",
     "configureSupabase": "Supabase konfigurieren.",
     "scheduleTour": "+ Rundgang planen",
@@ -14975,7 +14972,7 @@
     }
    },
    "incidents": {
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "title": "Vorfälle",
     "configureSupabase": "Supabase konfigurieren.",
     "unifiedTitle": "Vorfälle (vereinheitlicht)",
@@ -15055,13 +15052,13 @@
      "statusLabel": "Status",
      "statusActivated": "Aktiviert",
      "statusOngoing": "Laufend",
-     "statusRecovery": "Recovery",
+     "statusRecovery": "Wiederherstellung",
      "statusClosed": "Geschlossen"
     },
     "eyebrowWorkspace": "Workspace",
     "title": "Großschadensereignisse",
     "configureSupabase": "Supabase konfigurieren.",
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "recordSingular": "Eintrag",
     "recordPlural": "Einträge",
     "activatePlan": "+ Plan aktivieren",
@@ -15109,7 +15106,7 @@
      "eyebrowWorkspace": "Workspace",
      "titleFallback": "Medizinische Einsätze",
      "configureSupabase": "Supabase konfigurieren.",
-     "eyebrow": "Medical",
+     "eyebrow": "Medizinisch",
      "title": "Einsätze",
      "recordSingular": "Eintrag",
      "recordPlural": "Einträge",
@@ -15122,8 +15119,8 @@
       "at": "Um"
      }
     },
-    "eyebrow": "Safety",
-    "title": "Medical",
+    "eyebrow": "Sicherheit",
+    "title": "Medizinisch",
     "configureSupabase": "Supabase konfigurieren.",
     "subtitle": "Einsätze · medizinischer Plan · Umwelt-Response",
     "newEncounter": "+ Einsatz",
@@ -15136,7 +15133,7 @@
     "sincePrefix": "seit",
     "drillIn": "Eintauchen",
     "plan": {
-     "eyebrow": "Safety",
+     "eyebrow": "Sicherheit",
      "title": "Medizinischer Plan",
      "configureSupabase": "Supabase konfigurieren.",
      "venueSingular": "Venue",
@@ -15158,7 +15155,7 @@
     }
    },
    "osha": {
-    "eyebrow": "Safety",
+    "eyebrow": "Sicherheit",
     "title": "OSHA 300 — {year}",
     "subtitle": "OSHA-meldepflichtige Vorfälle gemäß 29 CFR 1904.",
     "exportCsv": "300/300A/301 exportieren (CSV)",
@@ -15184,7 +15181,7 @@
    "medicalPlan": "Medizinischer Plan",
    "medicalEncounters": "Medizinische Einsätze",
    "crisisComms": "Krisenkommunikation",
-   "breadcrumb": "Safety",
+   "breadcrumb": "Sicherheit",
    "bcdrLabel": "BC/DR",
    "cyberIrLabel": "Cyber IR",
    "environmentalLabel": "Umwelt",
@@ -15350,7 +15347,7 @@
      "projectFallback": "Projekt",
      "title": "{name} · Gantt",
      "backToBaseline": "← Zurück zur Baseline",
-     "lookahead": "Lookahead",
+     "lookahead": "Vorausschau",
      "lookaheadFull": "Vollständig",
      "lookahead3w": "3 Wochen",
      "lookahead6w": "6 Wochen",
@@ -15393,7 +15390,7 @@
      }
     },
     "new": {
-     "eyebrow": "Operations",
+     "eyebrow": "Betrieb",
      "title": "Neue Schedule-Baseline",
      "submit": "Baseline anlegen",
      "nameLabel": "Name",
@@ -15401,7 +15398,7 @@
      "descriptionLabel": "Beschreibung",
      "projectLabel": "Projekt"
     },
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Schedule-Baselines",
     "configureSupabase": "Supabase konfigurieren.",
     "subtitleBaseline": "Baseline",
@@ -15420,9 +15417,9 @@
     "sourceNative": "Nativ",
     "colState": "Status"
    },
-   "title": "Schedule",
+   "title": "Zeitplan",
    "configureSupabase": "Supabase konfigurieren.",
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "masterTitle": "Master-Schedule",
    "subtitleOne": "{count} Event",
    "subtitleOther": "{count} Events",
@@ -15437,7 +15434,7 @@
    }
   },
   "services": {
-   "title": "Service Desk",
+   "title": "Service-Desk",
    "requests": {
     "title": "Anfragen",
     "detail": {
@@ -15482,7 +15479,7 @@
     "openRequest": "+ Anfrage eröffnen",
     "emptyLabel": "Keine Service-Anfragen",
     "columns": {
-     "severity": "Sev",
+     "severity": "Schwere",
      "category": "Kategorie",
      "summary": "Zusammenfassung",
      "status": "Status",
@@ -15683,7 +15680,7 @@
      "title": "{name} Bearbeiten",
      "kindLabel": "Art",
      "kind": {
-      "credential": "Credential",
+      "credential": "Akkreditierung",
       "catering": "Catering",
       "radio": "Funkgerät",
       "tool": "Werkzeug",
@@ -15721,7 +15718,7 @@
      "inventoryQtyLabel": "Bestandsmenge"
     },
     "kind": {
-     "credential": "Credential",
+     "credential": "Akkreditierung",
      "catering": "Catering",
      "radio": "Funkgerät",
      "tool": "Werkzeug",
@@ -15755,7 +15752,7 @@
     "auditLogRetentionLabel": "Audit-Log-Aufbewahrung (Tage)",
     "appLogRetentionLabel": "App-Log-Aufbewahrung (Tage)",
     "encryptionAtRestTitle": "Verschlüsselung im Ruhezustand",
-    "encryptionAtRestHint": "AES-256 via Supabase",
+    "encryptionAtRestHint": "AES-256 über Supabase",
     "dpaSignedTitle": "AVV unterzeichnet",
     "dpaSignedHint": "DSGVO-Auftragsverarbeitungsvertrag",
     "dataResidencyLabel": "Daten-Residenz",
@@ -15814,7 +15811,7 @@
     "colUpdated": "Aktualisiert",
     "editTemplate": "Vorlage bearbeiten",
     "namePlaceholder": "Angebot teilen",
-    "bodyHtml": "Body HTML",
+    "bodyHtml": "Body-HTML",
     "preview": "Vorschau",
     "body": "Body",
     "saveTemplate": "Vorlage speichern",
@@ -15860,7 +15857,7 @@
       "trigger": "+ Komitee",
       "title": "Neues Komitee",
       "name": "Name",
-      "charter": "Charter",
+      "charter": "Charta",
       "cadence": {
        "adHoc": "Ad hoc",
        "biweekly": "Zweiwöchentlich",
@@ -15892,7 +15889,7 @@
     "columns": {
      "name": "Name",
      "cadence": "Kadenz",
-     "charter": "Charter",
+     "charter": "Charta",
      "category": "Kategorie",
      "status": "Status",
      "nextReview": "Nächste Prüfung",
@@ -15912,7 +15909,7 @@
     "targets": {
      "crewMembers": "Crew-Roster",
      "tasks": "Projektaufgaben",
-     "vendors": "Vendors"
+     "vendors": "Lieferanten"
     },
     "projectIdLabel": "Projekt-ID",
     "projectIdPlaceholder": "uuid",
@@ -15925,7 +15922,7 @@
      "rowLabel": "Zeile {idx}"
     },
     "eyebrow": "Einstellungen",
-    "title": "Imports",
+    "title": "Importe",
     "configureSupabase": "Supabase konfigurieren.",
     "workspaceSettings": "Workspace-Einstellungen",
     "recentRuns": "Letzte Läufe",
@@ -16024,7 +16021,7 @@
     "available": "Verfügbar",
     "disconnect": "Trennen",
     "connect": "Verbinden",
-    "viaEnv": "via env",
+    "viaEnv": "über env",
     "submissions": {
      "detail": {
       "eyebrow": "Einreichungen",
@@ -16187,7 +16184,7 @@
      "label": "Single Sign-On"
     },
     "rateLimits": {
-     "label": "Rate Limits"
+     "label": "Rate-Limits"
     }
    },
    "title": "Workspace-Einstellungen",
@@ -16212,7 +16209,7 @@
     "configureSupabase": "Supabase konfigurieren.",
     "breadcrumb": {
      "settings": "Einstellungen",
-     "rateLimits": "Rate Limits"
+     "rateLimits": "Rate-Limits"
     },
     "column": {
      "bucket": "Bucket",
@@ -16392,7 +16389,7 @@
      "pickAtLeastOneEvent": "Mindestens ein Event auswählen",
      "createFailed": "Erstellung fehlgeschlagen",
      "endpointRegistered": "Endpunkt registriert",
-     "signingSecret": "Signing Secret",
+     "signingSecret": "Signing-Secret",
      "copiedToast": "Kopiert",
      "signaturePrefix": "Jede Zustellung trägt",
      "signatureWhere": "wobei",
@@ -16438,17 +16435,17 @@
     "lifecycle": "Lebenszyklus"
    },
    "edit": {
-    "eyebrow": "Creative · Site Plans",
+    "eyebrow": "Kreativ · Standortpläne",
     "title": "Bearbeiten · {ref}",
     "subtitle": "Atom-ID-Segmente sind nach Erstellung unveränderlich.",
     "breadcrumbs": {
-     "sitePlans": "Site Plans"
+     "sitePlans": "Standortpläne"
     },
     "submit": "Sheet speichern",
     "section": {
-     "sheet": "Sheet",
+     "sheet": "Blatt",
      "shell": "Shell",
-     "crossCuttingTags": "Cross-Cutting Tags · §11",
+     "crossCuttingTags": "Querschnitts-Tags · §11",
      "context": "Kontext"
     },
     "field": {
@@ -16495,11 +16492,11 @@
     "loading": "Sheet wird geladen…"
    },
    "detail": {
-    "eyebrow": "Creative · Site Plans",
-    "breadcrumb": "Site Plans",
+    "eyebrow": "Kreativ · Standortpläne",
+    "breadcrumb": "Standortpläne",
     "noAtomId": "— keine Atom-ID —",
     "revPrefix": "Rev {rev}",
-    "sheet": "Sheet",
+    "sheet": "Blatt",
     "xpmsClass": "XPMS-Klasse",
     "tier": "Tier",
     "tierValue": "Tier {tier}",
@@ -16522,7 +16519,7 @@
     "class": "Klasse",
     "notes": "Notizen",
     "addRegion": "+ Region",
-    "coldZonePlaceholder": "Cold Zone",
+    "coldZonePlaceholder": "Kaltzone",
     "bands": "Bänder · §6",
     "type": "Typ",
     "edge": "Kante",
@@ -16532,7 +16529,7 @@
     "stations": "Stationen",
     "band": "Band",
     "function": "Funktion",
-    "heads": "Heads",
+    "heads": "Köpfe",
     "addStation": "+ Station",
     "prepPlaceholder": "Prep",
     "position": "Position",
@@ -16563,13 +16560,13 @@
     "pins": "Pins"
    },
    "new": {
-    "eyebrow": "Creative · Site Plans",
+    "eyebrow": "Kreativ · Standortpläne",
     "title": "Neues Sheet",
     "breadcrumb": "Neu",
     "submit": "Sheet erstellen",
     "section": {
      "atomId": "Atom-ID",
-     "sheet": "Sheet",
+     "sheet": "Blatt",
      "shell": "Shell",
      "preset": "Preset",
      "context": "Kontext"
@@ -16598,12 +16595,12 @@
      "none": "— Keine —"
     }
    },
-   "breadcrumb": "Site Plans",
-   "eyebrow": "Creative",
-   "title": "Site Plans",
+   "breadcrumb": "Standortpläne",
+   "eyebrow": "Kreativ",
+   "title": "Standortpläne",
    "configureSupabase": "Supabase konfigurieren.",
-   "sheet": "Sheet",
-   "sheets": "Sheets",
+   "sheet": "Blatt",
+   "sheets": "Blätter",
    "issued": "Ausgegeben",
    "inReview": "In Prüfung",
    "draft": "Entwurf",
@@ -16646,7 +16643,7 @@
      "nrm2": "RICS NRM2 (UK)",
      "custom": "Individuell"
     },
-    "eyebrow": "Creative",
+    "eyebrow": "Kreativ",
     "title": "Neuer Spec-Abschnitt",
     "submit": "Abschnitt erstellen",
     "fields": {
@@ -16666,7 +16663,7 @@
      "division": "Freitext. Dient zur Gruppierung in der Abschnittsliste."
     }
    },
-   "eyebrow": "Creative",
+   "eyebrow": "Kreativ",
    "title": "Spezifikationen",
    "configureSupabase": "Supabase konfigurieren.",
    "section": "Abschnitt",
@@ -16711,7 +16708,7 @@
   },
   "submittals": {
    "edit": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Submittal bearbeiten",
     "subtitle": "Titel, Status, Lieferant und Ball In Court aktualisieren.",
     "breadcrumbs": {
@@ -16732,7 +16729,7 @@
    },
    "detail": {
     "noSpecSection": "Kein Spec-Abschnitt",
-    "eyebrow": "Procurement",
+    "eyebrow": "Beschaffung",
     "breadcrumb": "Submittals",
     "revisionRounds": "Revisionsrunden",
     "col": {
@@ -16752,7 +16749,7 @@
     "applyStamp": "Stempel anwenden"
    },
    "new": {
-    "eyebrow": "Procurement",
+    "eyebrow": "Beschaffung",
     "title": "Neues Submittal",
     "subtitle": "Registereintrag anlegen.",
     "fields": {
@@ -16764,7 +16761,7 @@
      "dueBy": "Fällig bis"
     }
    },
-   "eyebrow": "Procurement",
+   "eyebrow": "Beschaffung",
    "title": "Submittals",
    "configureSupabase": "Supabase konfigurieren.",
    "subtitle": "Lieferantenpakete mit Stempeln + Revisionsrunden.",
@@ -16861,7 +16858,7 @@
      }
     },
     "edit": {
-     "eyebrow": "Sustainability · Carbon",
+     "eyebrow": "Nachhaltigkeit · CO₂",
      "title": "Messung bearbeiten",
      "submit": "Änderungen speichern",
      "periodStart": "Zeitraum-Beginn",
@@ -16880,7 +16877,7 @@
      "eyebrow": "Sustainability · Kennzahl"
     },
     "new": {
-     "eyebrow": "Sustainability · Carbon",
+     "eyebrow": "Nachhaltigkeit · CO₂",
      "title": "Neue Messung",
      "submit": "Messung erfassen",
      "periodStart": "Zeitraum-Beginn",
@@ -16893,8 +16890,8 @@
      "source": "Quelle",
      "method": "Methode"
     },
-    "eyebrow": "Sustainability",
-    "title": "Carbon",
+    "eyebrow": "Nachhaltigkeit",
+    "title": "CO₂",
     "configureSupabase": "Supabase konfigurieren.",
     "recordMeasurement": "+ Messung erfassen",
     "metric": {
@@ -16912,7 +16909,7 @@
     },
     "scopeLabel": "Scope {scope}"
    },
-   "title": "Sustainability",
+   "title": "Nachhaltigkeit",
    "carbonLabel": "CO₂"
   },
   "takeoffs": {
@@ -17002,7 +16999,7 @@
      "todo": "Nicht begonnen",
      "inProgress": "In Arbeit",
      "blocked": "Blockiert",
-     "review": "Review",
+     "review": "Prüfung",
      "done": "Erledigt"
     },
     "emptyTitle": "Noch keine Aufgaben"
@@ -17136,7 +17133,7 @@
     "noRecipientsTitle": "Noch keine Empfänger"
    },
    "new": {
-    "eyebrow": "Operations",
+    "eyebrow": "Betrieb",
     "title": "Neues Transmittal",
     "submit": "Transmittal Anlegen",
     "subject": "Betreff",
@@ -17144,7 +17141,7 @@
     "responseDue": "Antwort Fällig",
     "bodyMarkdown": "Inhalt (Markdown)"
    },
-   "eyebrow": "Operations",
+   "eyebrow": "Betrieb",
    "title": "Transmittals",
    "configureSupabase": "Supabase konfigurieren.",
    "newTransmittal": "+ Neues Transmittal",
@@ -17488,9 +17485,9 @@
    },
    "vop": {
     "eyebrow": "Venue",
-    "title": "Venue Operations Plan",
+    "title": "Venue-Betriebsplan",
     "configureSupabase": "Supabase konfigurieren.",
-    "headerTitle": "{name} — Venue Operations Plan",
+    "headerTitle": "{name} — Venue-Betriebsplan",
     "headerSubtitle": "{approved}/{total} Abschnitte freigegeben",
     "breadcrumb": "VOP",
     "metrics": {
@@ -18266,7 +18263,7 @@
     "viewCodebookSection": "Codebook-Abschnitt ansehen →"
    },
    "codebook": {
-    "titleShort": "XTC Codebook",
+    "titleShort": "XTC-Codebook",
     "configureSupabase": "Supabase konfigurieren.",
     "title": "Codebook",
     "subtitle": "Klasse → Division → Section → Line.",
@@ -18277,7 +18274,7 @@
      "code": "Code",
      "class": "Klasse",
      "division": "Division",
-     "section": "Section",
+     "section": "Abschnitt",
      "line": "Position",
      "face": "Face"
     },
@@ -18318,7 +18315,7 @@
    "provenance": {
     "title": "Provenance-Graph",
     "configureSupabase": "Supabase konfigurieren.",
-    "eyebrow": "XPMS · Provenance",
+    "eyebrow": "XPMS · Provenienz",
     "subtitleOne": "{count} Kante",
     "subtitleOther": "{count} Kanten",
     "emptyLabel": "Noch keine Provenance-Kanten",
@@ -18353,7 +18350,7 @@
      "pipeline": "Pipeline & Partner",
      "hospitality": "Hospitality",
      "marketplace": "Marketplace",
-     "revenue": "Revenue"
+     "revenue": "Umsatz"
     },
     "cards": {
      "leads": "Leads",
@@ -18365,11 +18362,11 @@
      "hospitalityDesc": "Talent · Sponsoren · Athleten · Industry · Media & Presse · VVIP",
      "marketplace": "Marketplace",
      "marketplaceDesc": "Postings, Calls, Talent, Offers, Reviews",
-     "bookings": "Bookings",
+     "bookings": "Buchungen",
      "bookingsDesc": "Deals, Holds, Kalender, Settlements",
      "tours": "Touren",
      "talentRoster": "Talent-Roster",
-     "offers": "Offers",
+     "offers": "Angebote",
      "tickets": "Tickets",
      "analytics": "Analytics",
      "analyticsDesc": "Übergreifendes BI-Rollup"
@@ -18386,7 +18383,7 @@
    "colTrigger": "Trigger",
    "colPct": "%",
    "colAmount": "Betrag",
-   "colState": "State",
+   "colState": "Status",
    "colActions": "Aktionen",
    "empty": "Noch keine Draws geplant. Lege den 50 / 30 / 20-Default an oder füge unten einen eigenen Draw hinzu.",
    "drawn": "Gezogen",
@@ -18797,12 +18794,12 @@
     "notFound": "not_found"
    },
    "manual": {
-    "eyebrow": "Field",
+    "eyebrow": "Feld",
     "title": "Manuelle Suche",
     "subtitle": "Ticket-Code eingeben, wenn der QR unlesbar ist",
     "backToScanner": "Zurück zum Scanner →"
    },
-   "eyebrow": "Field Check-In",
+   "eyebrow": "Feld-Check-in",
    "title": "Tickets Scannen",
    "scan": {
     "eyebrow": "Scannen · {slug}",
@@ -18842,7 +18839,7 @@
    "clockOut": "Ausstempeln",
    "endBreak": "Pause beenden",
    "configureSupabase": "Supabase konfigurieren.",
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Check-in",
    "empty": {
     "title": "Heute Keine Schichten",
@@ -18862,7 +18859,7 @@
    "subtitle": "Geo-verifizierte Zeiterfassung"
   },
   "coc": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Chain of Custody",
    "actions": {
     "logIncident": "+ Vorfall erfassen",
@@ -18886,7 +18883,7 @@
    "mobileEyebrow": "Mobile"
   },
   "crew": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Heute",
    "subtitle": "Dein Call Sheet und deine Clock-Kontrollen",
    "clock": {
@@ -18899,7 +18896,7 @@
    }
   },
   "dailyLog": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Tagesprotokoll",
    "subtitle": "Schnellerfassung direkt vom Floor",
    "todaysLog": "Heutiges Protokoll — {date}",
@@ -19002,7 +18999,7 @@
   },
   "gate": {
    "configureSupabase": "Supabase konfigurieren.",
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Gate",
    "noScansYet": "Heute noch keine Scans.",
    "openScanner": "Scanner öffnen",
@@ -19058,7 +19055,7 @@
   },
   "guard": {
    "configureSupabase": "Supabase konfigurieren.",
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Guard",
    "noToursAssigned": "Dir sind keine Touren zugewiesen.",
    "empty": {
@@ -19075,7 +19072,7 @@
    }
   },
   "guide": {
-   "eyebrow": "Field Guide",
+   "eyebrow": "Feldhandbuch",
    "noActiveProject": {
     "title": "Kein aktives Projekt",
     "body": "Schau wieder rein, sobald du auf eine Show gebucht bist."
@@ -19209,7 +19206,7 @@
      "sub": "Alle Hinweise"
     }
    },
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Heute",
    "fab": {
     "scanTicket": "Ticket scannen"
@@ -19236,7 +19233,7 @@
   },
   "incident": {
    "new": {
-    "eyebrow": "Field",
+    "eyebrow": "Feld",
     "title": "Schnellmeldung",
     "openFullForm": "Vollformular öffnen",
     "summaryLabel": "Was ist passiert?",
@@ -19244,7 +19241,7 @@
     "subtitle": "Sicherheitsvorfall protokollieren — Admin und EHS-Lead werden sofort benachrichtigt.",
     "filing": "Wird gemeldet…"
    },
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Meine Vorfälle",
    "subtitle": "Von Dir gemeldete Vorfälle. {count} offen. Org-weite Queue unter",
    "quickFile": "Schnellmeldung (ein Feld)",
@@ -19254,7 +19251,7 @@
    }
   },
   "incidents": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Vorfall",
    "noneLast30": "Keine Vorfälle in den letzten 30 Tagen erfasst.",
    "summary": "{count} in den letzten 30 Tagen · {open} offen",
@@ -19286,7 +19283,7 @@
      "notFound": "nicht gefunden",
      "error": "Fehler"
     },
-    "eyebrow": "Field",
+    "eyebrow": "Feld",
     "title": "Inventar-Scan",
     "subtitle": "Asset-Tag scannen oder eintippen, um ein- / auszuchecken."
    }
@@ -19454,7 +19451,7 @@
      "repair": "Reparatur",
      "it": "IT",
      "hospitality": "Hospitality",
-     "security": "Security",
+     "security": "Sicherheit",
      "other": "Sonstiges"
     },
     "summary": {
@@ -19466,7 +19463,7 @@
      "placeholder": "Wo, was, wer ist betroffen"
     }
    },
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Service-Anfragen",
    "openCta": "+ Eröffnen",
    "subtitle": "Aktive Anfragen in der gesamten Org.",
@@ -19523,7 +19520,7 @@
     },
     "savePreferences": "Einstellungen Speichern"
    },
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Einstellungen",
    "language": {
     "title": "Sprache",
@@ -19565,7 +19562,7 @@
    "checkIn": "Einchecken",
    "swapShift": "Schicht tauschen",
    "swap": {
-    "eyebrow": "Field",
+    "eyebrow": "Feld",
     "title": "Schicht tauschen",
     "empty": {
      "title": "Keine anstehenden Schichten zum Tauschen",
@@ -19595,7 +19592,7 @@
    }
   },
   "tasks": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Meine Aufgaben",
    "empty": "Keine Aufgaben zugewiesen",
    "dueLabel": "Fällig {date}",
@@ -19664,7 +19661,7 @@
   },
   "wayfind": {
    "otherCluster": "Sonstige",
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Wegeleitung",
    "subtitle": "Wähle einen Veranstaltungsort, um Zonen, Gates und Meet-Points zu sehen.",
    "empty": {
@@ -19673,7 +19670,7 @@
    }
   },
   "wms": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Lager",
    "subtitle": "Pick, Einlagerung und Check-in/out per Scan.",
    "scanAsset": "Asset scannen",
@@ -19694,7 +19691,7 @@
    "pendingBadge": "{count} Ausstehend — Synct, Sobald Online"
   },
   "checkInSummary": {
-   "eyebrow": "Field",
+   "eyebrow": "Feld",
    "title": "Check-in-Zusammenfassung"
   }
  },
@@ -19815,7 +19812,7 @@
    "submit": "Profil Speichern",
    "fields": {
     "name": "Name",
-    "tagline": "Tagline",
+    "tagline": "Slogan",
     "bio": "Bio",
     "roles": "Rollen (kommagetrennt)",
     "unions": "Gewerkschaften",
@@ -19927,7 +19924,7 @@
   },
   "layout": {
    "groups": {
-    "account": "Account",
+    "account": "Konto",
     "activity": "Aktivität",
     "marketplace": "Marketplace"
    },
@@ -20125,7 +20122,7 @@
      "label": "Anzeigename"
     },
     "tagline": {
-     "label": "Tagline"
+     "label": "Slogan"
     },
     "bio": {
      "label": "Bio",
@@ -20363,7 +20360,7 @@
    "submit": "EPK speichern",
    "fields": {
     "actName": "Act-Name",
-    "tagline": "Tagline",
+    "tagline": "Slogan",
     "bio": "Bio",
     "genreTags": "Genre-Tags (kommagetrennt)",
     "feeMin": "Gage min.",
@@ -20422,7 +20419,7 @@
  },
  "offer": {
   "unlock": {
-   "title": "Engagement Letter",
+   "title": "Engagement-Letter",
    "submit": "Letter öffnen",
    "accessCode": "Zugangscode",
    "troublePrefix": "Probleme? Kontaktiere"
@@ -20590,7 +20587,7 @@
    "hintActive": "View · pro Tabelle auto-gespeichert; Klick setzt auf Defaults zurück",
    "hintIdle": "Gespeicherte View · pro Tabelle auto-gespeichert",
    "modified": "View · Geändert",
-   "label": "View",
+   "label": "Ansicht",
    "savedView": "Gespeicherte View",
    "defaultAutoSaved": "Default · Auto-Gespeichert",
    "resetToDefaults": "View Auf Defaults Zurücksetzen"
@@ -20675,14 +20672,14 @@
   "saveChanges": "Änderungen Speichern",
   "saveView": "View Speichern",
   "types": {
-   "grid": "Grid",
+   "grid": "Raster",
    "kanban": "Kanban",
    "calendar": "Kalender",
    "timeline": "Timeline",
-   "chart": "Chart",
+   "chart": "Diagramm",
    "map": "Karte",
    "gantt": "Gantt",
-   "card": "Card",
+   "card": "Karte",
    "form": "Formular"
   },
   "selector": {
@@ -20779,7 +20776,7 @@
    "street": "Straße und Hausnummer",
    "street2": "Apartment, Suite, Etage",
    "streetLabel": "Straße",
-   "street2Label": "Apt / Suite · Optional",
+   "street2Label": "Wohnung / Suite · Optional",
    "city": "Stadt",
    "region": "Bundesland / Region",
    "postalCode": "Postleitzahl",
@@ -20853,8 +20850,8 @@
    "empty": "{label}: leer",
    "noSteps": "Keine Schritte aufgezeichnet.",
    "unknownAction": "Unbekannt",
-   "input": "Input",
-   "output": "Output"
+   "input": "Eingabe",
+   "output": "Ausgabe"
   },
   "calendarView": {
    "mode": {
@@ -20888,7 +20885,7 @@
    "noLanesDesc": "Gib mindestens eine Lane an, um die Timeline zu rendern.",
    "timeline": "Timeline",
    "timelineZoom": "Timeline-Zoom",
-   "lane": "Lane",
+   "lane": "Spur",
    "noItems": "Keine Elemente im Zeitraum",
    "noItemsDesc": "Füge einen Record mit Start- und Enddatum hinzu, um die Timeline zu befüllen."
   },
@@ -20916,7 +20913,7 @@
    "progress": "Fortschritt",
    "actual": "Ist",
    "tasks": "Aufgaben",
-   "submittals": "Submittals",
+   "submittals": "Einreichungen",
    "colWbsAtom": "WBS / Atom",
    "actualDelta": "{amount} Ist",
    "remainingDelta": "{amount} verbleibend",
@@ -20932,7 +20929,7 @@
     "todo": "Zu Erledigen",
     "in_progress": "In Arbeit",
     "blocked": "Blockiert",
-    "review": "Review",
+    "review": "Prüfung",
     "done": "Erledigt"
    },
    "deliverableState": {
@@ -20946,7 +20943,7 @@
     "rejected": "Abgelehnt"
    },
    "tabTasks": "Aufgaben",
-   "tabSubmittals": "Submittals",
+   "tabSubmittals": "Einreichungen",
    "tabExpenses": "Ausgaben",
    "tabPos": "POs",
    "tabVariance": "Abweichung",
@@ -21194,7 +21191,7 @@
    "proposalNumber": "Angebots-Nr.",
    "status": "Status",
    "total": "Summe",
-   "deposit": "Deposit",
+   "deposit": "Anzahlung",
    "sent": "Gesendet",
    "expires": "Läuft ab",
    "notes": "Notizen",
@@ -21242,21 +21239,21 @@
     "title": "Pull Sheet",
     "subject": "Rental-Pull-Sheet",
     "eyebrow": "Rental · Pull Sheet",
-    "pageLabel": "Rental {number}",
+    "pageLabel": "Miete {number}",
     "colQty": "Menge",
     "colItem": "Artikel",
     "colSerial": "Seriennr.",
     "colNote": "Hinweis"
    },
    "signage": {
-    "signageWord": "Signage",
+    "signageWord": "Beschilderung",
     "gridLabel": "Signage-Grid",
     "countSubtitle": "{count} Signage-Standorte",
     "colLocation": "Standort",
     "colType": "Typ",
     "colSize": "Größe",
     "colInstall": "Installation",
-    "colStrike": "Strike",
+    "colStrike": "Abbau",
     "colNote": "Hinweis"
    }
   },
@@ -21285,18 +21282,18 @@
    "formGeneric": "Certified Payroll — {type}",
    "weekEndingShort": "WE",
    "weekEnding": "Wochenende am",
-   "statementOfCompliance": "Statement of Compliance",
+   "statementOfCompliance": "Konformitätserklärung",
    "projectContractor": "Projekt & Contractor",
    "project": "Projekt",
    "projectAddress": "Projektadresse",
-   "contractor": "Contractor",
+   "contractor": "Auftragnehmer",
    "contractorAddress": "Contractor-Adresse",
    "form": "Formular",
    "payPeriod": "Abrechnungszeitraum",
    "state": "Bundesstaat",
    "workerDetail": "Worker-Detail",
    "hoursColumnsNote": "Stundenspalten sind So / Mo / Di / Mi / Do / Fr / Sa. Beträge in USD.",
-   "colWorker": "Worker",
+   "colWorker": "Arbeitskraft",
    "colSsn": "SSN",
    "colClass": "Klasse",
    "colSun": "S",
@@ -21312,7 +21309,7 @@
    "colGross": "Brutto",
    "colNet": "Netto",
    "colHours": "Stunden",
-   "colFringes": "Fringes",
+   "colFringes": "Zusatzleistungen",
    "totals": "Summen",
    "attestIntroLead": "Ich,",
    "certifierNamePlaceholder": "[Name der zertifizierenden Person]",
@@ -21327,13 +21324,13 @@
    "notes": "Notizen"
   },
   "aiaPayApp": {
-   "title": "Pay Application #{number}",
+   "title": "Zahlungsantrag #{number}",
    "eyebrow": "Application & Certificate for Payment",
-   "appAbbrev": "App #{number}",
+   "appAbbrev": "Antrag #{number}",
    "projectContract": "Projekt & Vertrag",
    "project": "Projekt",
    "projectAddress": "Projektadresse",
-   "contractorVendor": "Contractor / Vendor",
+   "contractorVendor": "Auftragnehmer / Lieferant",
    "vendorAddress": "Vendor-Adresse",
    "contractPo": "Vertrag / PO",
    "formVersion": "Formularversion",
@@ -21348,7 +21345,7 @@
    "lineNetChangeByChangeOrders": "Nettoänderung durch Change Orders",
    "lineContractSumToDate": "Vertragssumme bis dato — Zeile 1 ± 2",
    "lineTotalCompletedStored": "Gesamt fertiggestellt & eingelagert bis dato",
-   "lineRetainage": "Retainage — {pct}",
+   "lineRetainage": "Einbehalt — {pct}",
    "lineTotalEarnedLessRetainage": "Gesamt verdient abzüglich Retainage — Zeile 4 − 5",
    "lineLessPreviousCertificates": "Abzüglich vorheriger Certificates for Payment",
    "lineCurrentPaymentDue": "Aktuell fällige Zahlung — Zeile 6 − 7",
@@ -21356,13 +21353,13 @@
    "contractorCertification": "Contractor-Zertifizierung",
    "contractorCertificationBody": "Der unterzeichnende Contractor bestätigt, dass nach bestem Wissen, Kenntnisstand und Überzeugung des Contractors die von dieser Application for Payment abgedeckte Arbeit gemäß den Vertragsdokumenten abgeschlossen wurde, dass alle Beträge vom Contractor für Arbeiten gezahlt wurden, für die vorherige Certificates for Payment ausgestellt und Zahlungen vom Owner erhalten wurden, und dass die hierin ausgewiesene aktuelle Zahlung nun fällig ist.",
    "submitted": "Eingereicht",
-   "architectCertificate": "Architect's Certificate",
+   "architectCertificate": "Architektenbescheinigung",
    "architectCertificateBody": "Gemäß den Vertragsdokumenten, auf Basis von Vor-Ort-Beobachtungen und den dieser Application zugrunde liegenden Daten, bestätigt der Architekt dem Owner, dass nach bestem Wissen, Kenntnisstand und Überzeugung des Architekten die Arbeit wie angegeben fortgeschritten ist, die Qualität der Arbeit den Vertragsdokumenten entspricht und der Contractor Anspruch auf Zahlung des ZERTIFIZIERTEN BETRAGS hat.",
    "amountCertified": "Zertifizierter Betrag",
    "architect": "Architekt",
    "certified": "Zertifiziert",
    "notes": "Notizen",
-   "scheduleOfValues": "Schedule of Values — Continuation Sheet",
+   "scheduleOfValues": "Schedule of Values — Fortsetzungsblatt",
    "columnsNote": "Spalten A–I gemäß AIA G703. Beträge in USD.",
    "colScheduled": "Geplant",
    "colPrior": "Vorher",
@@ -21370,7 +21367,7 @@
    "colStored": "Eingelagert",
    "colTotalAndPct": "Summe & %",
    "colBalance": "Rest",
-   "colRetainage": "Retainage",
+   "colRetainage": "Einbehalt",
    "colTotal": "Summe",
    "totals": "Summen"
   },
@@ -21409,9 +21406,9 @@
    "eyebrow": "Request for Proposal",
    "subtitle": "Für {vendor}",
    "subtitleWithDeadline": "Für {vendor} · Antworten fällig {deadline}",
-   "scope": "Scope",
+   "scope": "Umfang",
    "deliverablesRequested": "Angeforderte Deliverables",
-   "colDeliverable": "Deliverable",
+   "colDeliverable": "Leistung",
    "colDescription": "Beschreibung",
    "colDue": "Fällig",
    "howToRespond": "So Antwortest Du"
@@ -21438,7 +21435,7 @@
     "colCh": "Kanal",
     "colSource": "Quelle",
     "colMic": "Mikro/DI",
-    "colInsert": "Insert",
+    "colInsert": "Einschub",
     "colNote": "Hinweis"
    },
    "stagePlot": {
@@ -21447,7 +21444,7 @@
     "colElement": "Element",
     "colKind": "Art",
     "colPosition": "Position",
-    "colRot": "Rot"
+    "colRot": "Rot."
    },
    "crewList": {
     "heading": "Crew-Liste",
@@ -21503,9 +21500,9 @@
     "colNote": "Hinweis"
    },
    "vendorPackage": {
-    "vendorEyebrow": "Vendor",
-    "deliverablesHeading": "Deliverables",
-    "colDeliverable": "Deliverable",
+    "vendorEyebrow": "Lieferant",
+    "deliverablesHeading": "Leistungen",
+    "colDeliverable": "Leistung",
     "colDue": "Fällig",
     "colStatus": "Status"
    },
@@ -21513,7 +21510,7 @@
     "heading": "Safety- + Compliance-Checkliste",
     "colTopic": "Thema",
     "colRequirement": "Anforderung",
-    "colOwner": "Owner",
+    "colOwner": "Verantwortlich",
     "colStatus": "Status"
    },
    "commsPlan": {
@@ -21528,7 +21525,7 @@
     "colType": "Typ",
     "colSize": "Größe",
     "colInstall": "Installation",
-    "colStrike": "Strike",
+    "colStrike": "Abbau",
     "colNote": "Hinweis"
    },
    "generic": {
@@ -21658,7 +21655,7 @@
    "title": "Independent Contractor Master Services Agreement",
    "version": "Version {version}",
    "issued": "Ausgestellt {date}",
-   "contractor": "Contractor",
+   "contractor": "Auftragnehmer",
    "recitalsHeading": "Präambel",
    "relationshipHeading": "1. Verhältnis der Parteien",
    "termsHeading": "2. Bedingungen & Konditionen",
@@ -21696,7 +21693,7 @@
    "at": "unter",
    "engagementSummaryHeading": "1. Engagement-Zusammenfassung",
    "role": "Rolle",
-   "department": "Department",
+   "department": "Abteilung",
    "classification": "Klassifizierung",
    "reportsTo": "Berichtet An",
    "workLocation": "Arbeitsort",
@@ -21708,7 +21705,7 @@
    "serviceDayOne": "projizierter Einsatztag vor Ort.",
    "serviceDayOther": "projizierte Einsatztage vor Ort.",
    "compensationHeading": "2. Vergütung",
-   "basis": "Basis",
+   "basis": "Grundlage",
    "compensation": "Vergütung",
    "travelLodgingReimbursement": "Reise- + Unterkunftserstattung",
    "paymentSchedule": "Zahlungsplan",
@@ -21717,7 +21714,7 @@
    "travelProvided": "Reise gestellt / organisiert",
    "lodgingProvided": "Unterkunft gestellt",
    "mealsProvided": "Crew-Verpflegung an Call-Tagen",
-   "scopeHeading": "4. Scope of Work",
+   "scopeHeading": "4. Leistungsumfang",
    "scheduleHeading": "5. Arbeitszeitplan",
    "scheduleHint": "Meilensteine des Projekt-Produktionszeitplans. Termine und Aktivitäten können sich je nach Produktionslage ändern; über wesentliche Änderungen informieren wir dich über die üblichen Produktionskanäle.",
    "colDate": "Datum",
@@ -21750,10 +21747,10 @@
    "navOverview": "Übersicht",
    "navBuilds": "Builds",
    "navRetainer": "Retainer",
-   "navScope": "Scope",
+   "navScope": "Umfang",
    "navLifecycle": "Lifecycle",
    "navInvestment": "Investition",
-   "navAddons": "Add-Ons",
+   "navAddons": "Add-ons",
    "navSign": "Unterzeichnen",
    "sectionNavLabel": "Abschnittsnavigation",
    "heroEyebrow": "Pop-up-Activation-Programm · {window}",
@@ -21770,9 +21767,9 @@
    "overviewSub": "Drei Engagement-Vektoren, gebaut, um sich zu verstärken. Jede Activation zieht aus einem gestaffelten Build-Menü. Ein monatlicher Retainer — wähle einen von drei Tiers — hält dedizierte Studio-Kapazität hinter dem Programm. Add-Ons stapeln sich on demand auf beides.",
    "perActivation": "Pro Activation",
    "buildMenu": "Build-Menü",
-   "sizeSmall": "Small",
-   "sizeMedium": "Medium",
-   "sizeLarge": "Large",
+   "sizeSmall": "Klein",
+   "sizeMedium": "Mittel",
+   "sizeLarge": "Groß",
    "includes": "Beinhaltet",
    "includesValue": "Produktion · Fab · Installation · Strike",
    "retainer": "Retainer",
@@ -21805,7 +21802,7 @@
    "premiumExclusivesTitle": "Linien, Die Du Nirgendwo Sonst Findest.",
    "premiumExclusivesSub": "Vier Linien, die es nur im Premium-Tier gibt — nicht à la carte, nicht auf Elevated, nicht als Einmalkauf. Reserviert für Partner, die mit uns ein saisonprägendes Programm fahren.",
    "activationBuildsEyebrow": "Activation-Builds",
-   "activationBuildsTitle": "Small. Medium. Large.",
+   "activationBuildsTitle": "Klein. Mittel. Groß.",
    "activationBuildsSub": "Drei Build-Tiers, kalibriert für den Moment. Jeder Tier hält eine enge Spanne von Basis-Spec bis Top-Spec; größere architektonische und Retail-Moves werden separat über das Add-Ons-Menü angeboten.",
    "buildRange": "Build-Spanne",
    "precedent": "Präzedenz · {name}",
@@ -21814,7 +21811,7 @@
    "tierFootnotePrefix": "Größere architektonische Moves — Chemetal-Verkleidung, Container-Architektur, volles POS-Retail, Hospitality-Builds — werden separat angeboten über das",
    "addonsMenuLink": "Add-Ons-Menü",
    "tierFootnoteSuffix": "und auf den Tier gelegt, der zum Moment passt.",
-   "scopeEyebrow": "Scope of Work",
+   "scopeEyebrow": "Leistungsumfang",
    "scopeTitle": "Gezeichnet. Gebaut. Gedruckt. Installiert.",
    "scopeSub": "Elf Scope-Knoten, die jedes fabrizierte und gedruckte Element abdecken, plus die Produktionsleistungen, die es vom Shop zur Plaza und zurück bewegen. Der Tier definiert Breite und Finish — nicht, welche Knoten berührt werden.",
    "fabricationPrint": "Fabrication & Druck",
@@ -21832,16 +21829,16 @@
    "lifecycleTitle": "Vom Brief Bis Zum Strike.",
    "lifecycleSub": "Acht Phasen, identische Struktur über jede Activation. Die Runway skaliert mit dem Build-Tier — Small verdichtet auf fünf Wochen, Medium läuft neun, Large streckt sich auf dreizehn.",
    "milestones": "Meilensteine",
-   "deliverables": "Deliverables",
+   "deliverables": "Leistungen",
    "approvalGate": "Approval-Gate",
    "workbackEyebrow": "Workback-Schedule · {runway}",
    "workbackTitle": "Kalibriert Auf Das Activation-Datum.",
    "workbackSub": "Jede Deadline zählt vom Activation-Datum für einen {tier}-Build zurück. Schalte oben die Kadenz um, um zu sehen, wie Small, Medium und Large sich vergleichen.",
    "colPhase": "Phase",
    "colMilestone": "Meilenstein",
-   "colDeadline": "Deadline",
+   "colDeadline": "Frist",
    "investmentEyebrow": "Investitionsübersicht",
-   "investmentTitle": "Build Plus Retainer.",
+   "investmentTitle": "Build plus Retainer.",
    "investmentSub": "Die Gesamtinvestition des Programms skaliert mit deiner Activation-Kadenz und dem Retainer-Tier. Wähle Builds vom Menü, einen Retainer, der Studio-Kapazität hinter dem Programm hält, und lege die Upgrades dazu, die zum Moment passen. Jede Zahl deckt Produktion, Fabrication, Installation und Strike ab.",
    "perActivationBuild": "Build Pro Activation",
    "rangeBaseToTopSpec": "Spanne · Base- Bis Top-Spec",
@@ -21850,21 +21847,21 @@
    "monthlyAnnual": "Monatlich · Jährlich",
    "retainerNamePitch": "{name}-Retainer · {pitch}",
    "perMoSuffix": "/ Monat",
-   "addonsUpgrades": "Add-Ons & Upgrades",
+   "addonsUpgrades": "Add-ons & Upgrades",
    "addToAnyTier": "Zu Jedem Tier Hinzufügen",
    "menuItemsCount": "{count} Menüposten über 5 Kategorien",
    "addonsCategoriesBody": "Material & Finish · Funktionale Upgrades · Service-Overlays · Logistik · Dokumentation. Füge beliebig viele zu jedem Retainer oder jeder Activation hinzu.",
    "pricedByRequest": "Preis Auf Anfrage",
    "programInvestment": "Programm-Investition",
-   "retainerBuildAddons": "Retainer + Build + Add-Ons",
+   "retainerBuildAddons": "Retainer + Build + Add-ons",
    "investmentFootnote": "Jede Activation läuft unter ihrem eigenen unterzeichneten Sign-off, eingebettet in dieses Master-Agreement. Jeder Build-Tier hält eine enge Spanne von Base- bis Top-Spec, und Upgrades innerhalb dieser Spanne bleiben im Tier. Größere architektonische Moves werden separat über das Add-Ons-Menü angeboten.",
-   "addonsEyebrow": "Add-Ons & Upgrades",
+   "addonsEyebrow": "Add-ons & Upgrades",
    "addonsTitle": "Stapel Alles. Auf Alles.",
    "addonsSub": "Das volle Menü optionaler Upgrades — Material, Funktion, Service, Logistik und Dokumentation. Wähle jeden Posten, füge ihn jedem Retainer oder jedem Build hinzu. Preis auf Anfrage.",
    "itemsCount": "{count} Posten",
-   "appliesRetainerActivation": "Retainer + Activation",
+   "appliesRetainerActivation": "Retainer + Aktivierung",
    "appliesRetainer": "Retainer",
-   "appliesActivation": "Activation",
+   "appliesActivation": "Aktivierung",
    "minTier": "Min. Tier · {tier}",
    "activationDeposit": "Activation-Deposit",
    "depositDue": "Fällig bei schriftlicher Freigabe jedes Activation-Statement-of-Work.",
@@ -21942,7 +21939,7 @@
   "yes": "ja",
   "no": "nein",
   "requestBody": "Request-Body",
-  "responses": "Responses",
+  "responses": "Antworten",
   "footer": "OpenAPI 3.1 · {count} Pfade · Zur Request-Zeit aus registrierten Zod-Schemas generiert."
  }
 }

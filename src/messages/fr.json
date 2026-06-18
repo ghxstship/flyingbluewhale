@@ -91,7 +91,7 @@
  },
  "nav": {
   "product": "Produit",
-  "industries": "Industries",
+  "industries": "Secteurs",
   "pricing": "Tarifs",
   "community": "Communauté",
   "resources": "Ressources",
@@ -114,9 +114,6 @@
    "privacy": "Confidentialité",
    "dpa": "DPA",
    "sla": "SLA"
-  },
-  "foo": {
-   "bar": "Foo Bar"
   },
   "pin": "Épingler {name}",
   "unpin": "Détacher {name}",
@@ -257,7 +254,7 @@
      "festivalsTours": "Festivals et tournées",
      "immersive": "Immersif",
      "brandActivations": "Activations de marque",
-     "corporate": "Corporate",
+     "corporate": "Entreprise",
      "theatrical": "Théâtre",
      "broadcast": "Broadcast / TV / Cinéma"
     },
@@ -1048,7 +1045,7 @@
       "body": "Ligne directe vers un producteur. Un jour ouvré, souvent plus vite."
      },
      "concierge": {
-      "title": "Concierge",
+      "title": "Conciergerie",
       "body": "Pour les clients actuels — trié par formule. Festival bénéficie d'un SLA."
      },
      "partners": {
@@ -1070,7 +1067,7 @@
      "verticals": {
       "liveEvents": "Événements live / festivals",
       "touring": "Tournées / management d'artistes",
-      "corporate": "Corporate / activations",
+      "corporate": "Entreprise / activations",
       "fabrication": "Fabrication / atelier",
       "other": "Autre"
      },
@@ -3852,7 +3849,7 @@
      "a3": {
       "title": "A3 · Hero",
       "sampleBefore": "Faites tourner le",
-      "samplePop": "show",
+      "samplePop": "montrer",
       "note": "Un mot prend l'accent du produit — les titres s'auto-brandent. Couvertures, marketing, splash."
      },
      "a4": {
@@ -3880,7 +3877,7 @@
      "lead": "Une échelle froide et resserrée en trois paliers : repos → survol → popover et modale. Les ombres restent subtiles en clair et s'appuient sur les bordures en sombre.",
      "rest": "elev-1 · repos",
      "hover": "elev-2 · survol",
-     "overlay": "elev-3 · overlay"
+     "overlay": "elev-3 · superposition"
     },
     "motion": {
      "eyebrow": "Fondations · Mouvement",
@@ -3931,8 +3928,8 @@
    "heading": "Faites le calcul.",
    "intro": "Indiquez vos shows par an, l’effectif au pic et ce que votre stack éparpillée vous coûte par mois. On vous montre la dépense annuelle et le coût par show des deux côtés. Le calcul reste prudent — pas de taxe d’intégration, pas de dépassements à la place dans le décompte.",
    "showsPerYear": "Shows par an",
-   "showOne": "show",
-   "showMany": "shows",
+   "showOne": "date",
+   "showMany": "dates",
    "crewAtPeak": "Effectif au pic",
    "personOne": "personne",
    "personMany": "personnes",
@@ -4504,7 +4501,7 @@
     "bedSingular": "lit",
     "col": {
      "beds": "Lits",
-     "cluster": "Cluster",
+     "cluster": "Groupe",
      "handover": "Remise",
      "name": "Nom"
     },
@@ -4753,7 +4750,7 @@
     "pending": "En Attente",
     "emptyLabel": "Aucune commission suivie",
     "col": {
-     "show": "Show",
+     "show": "Date",
      "commission": "Commission",
      "artistPayout": "Versement Artiste",
      "status": "Statut",
@@ -4804,7 +4801,7 @@
     "subtitleOther": "{count} artistes actifs",
     "emptyLabel": "Aucun roster pour l'instant",
     "column": {
-     "act": "Act",
+     "act": "Artiste",
      "commission": "Commission",
      "exclusive": "Exclusif",
      "signed": "Signé"
@@ -4833,7 +4830,7 @@
      "submit": "Créer La Tournée",
      "fields": {
       "name": "Nom De La Tournée",
-      "talent": "Talent",
+      "talent": "Talents",
       "talentPlaceholder": "Sélectionner un act…",
       "agencyOptional": "Agence (optionnel)",
       "starts": "Début",
@@ -5051,7 +5048,7 @@
    },
    "title": "Annotations",
    "configureSupabase": "Configurer Supabase.",
-   "eyebrow": "Run",
+   "eyebrow": "Exécution",
    "col": {
     "severity": "Sévérité",
     "kind": "Type",
@@ -5259,7 +5256,7 @@
      "seatsCount": "{count} places",
      "ticketScaling": "Grille tarifaire",
      "noScalingDefined": "Aucune grille définie.",
-     "tierHeader": "Tier",
+     "tierHeader": "Niveau",
      "priceHeader": "Prix",
      "countHeader": "Quantité",
      "subtotalHeader": "Sous-total",
@@ -5285,7 +5282,7 @@
      "grossBoxOffice": "Recettes brutes (GBOR)",
      "paidAttendance": "Entrées payantes",
      "comps": "Invitations",
-     "walkouts": "Walkouts",
+     "walkouts": "Départs",
      "bar": "Bar",
      "merch": "Merch",
      "other": "Autre",
@@ -5301,7 +5298,7 @@
      "finalize": "Finaliser le Settlement"
     },
     "eyebrow": "Bookings",
-    "title": "Deal Tracker",
+    "title": "Suivi des deals",
     "configureSupabase": "Configurer Supabase.",
     "newDeal": "+ Nouveau Deal",
     "metric": {
@@ -5327,14 +5324,14 @@
      "eyebrow": "Bookings",
      "title": "Nouveau Hold",
      "configureSupabase": "Configurer Supabase.",
-     "subtitle": "Tier 1 = first refusal.",
+     "subtitle": "Niveau 1 = premier refus.",
      "submitLabel": "Poser le Hold",
-     "tierLabel": "Tier",
+     "tierLabel": "Niveau",
      "tier1": "Tier 1 (first refusal)",
-     "tier2": "Tier 2",
-     "tier3": "Tier 3",
-     "tier4": "Tier 4",
-     "tier5": "Tier 5",
+     "tier2": "Niveau 2",
+     "tier3": "Niveau 3",
+     "tier4": "Niveau 4",
+     "tier5": "Niveau 5",
      "labelLabel": "Libellé",
      "labelPlaceholder": "MMW26 mainstage",
      "startsLabel": "Début",
@@ -5344,17 +5341,17 @@
      "talentLabel": "Talent (facultatif)"
     },
     "eyebrow": "Bookings",
-    "title": "Holds",
+    "title": "Options",
     "configureSupabase": "Configurer Supabase.",
     "newHold": "+ Nouveau Hold",
     "emptyLabel": "Aucun hold",
     "col": {
-     "tier": "Tier",
+     "tier": "Niveau",
      "label": "Libellé",
      "starts": "Début",
      "ends": "Fin",
-     "autoRelease": "Auto-release",
-     "venue": "Venue"
+     "autoRelease": "Libération auto",
+     "venue": "Lieu"
     }
    },
    "eyebrow": "Bookings",
@@ -5371,16 +5368,16 @@
    },
    "tiles": {
     "deals": {
-     "title": "Deal Tracker"
+     "title": "Suivi des deals"
     },
     "holds": {
-     "title": "Holds"
+     "title": "Options"
     },
     "calendar": {
      "title": "Calendrier"
     },
     "settlements": {
-     "title": "Settlements"
+     "title": "Décomptes"
     },
     "tours": {
      "title": "Tournées",
@@ -5391,7 +5388,7 @@
      "blurb": "Annonces, présales, dates de mise en vente par show."
     },
     "insights": {
-     "title": "Insights"
+     "title": "Analyses"
     },
     "ticketing": {
      "title": "Billetterie"
@@ -5399,7 +5396,7 @@
    },
    "settlements": {
     "detail": {
-     "eyebrow": "Settlement",
+     "eyebrow": "Décompte",
      "draftReconciling": "Brouillon / réconciliation",
      "editOnDeal": "Modifier sur le Deal",
      "gbor": "GBOR",
@@ -5408,7 +5405,7 @@
      "revenue": "Recettes",
      "paidAttendance": "Entrées payantes",
      "comps": "Invitations",
-     "walkouts": "Walkouts",
+     "walkouts": "Départs",
      "bar": "Bar",
      "merch": "Merch",
      "other": "Autre",
@@ -5416,7 +5413,7 @@
      "salesTax": "Taxe de vente",
      "amusementTax": "Taxe de divertissement",
      "ccFees": "Frais CB",
-     "splits": "Splits",
+     "splits": "Répartitions",
      "artistPayout": "Versement artiste",
      "agentCommission": "Commission agent",
      "supportAct": "Première partie",
@@ -5434,7 +5431,7 @@
       "adjustment": "Ajustement",
       "tax": "Taxe",
       "fee": "Frais",
-      "split": "Split"
+      "split": "Répartition"
      },
      "placeholder": {
       "category": "Catégorie",
@@ -5443,7 +5440,7 @@
      "addLine": "Ajouter une ligne"
     },
     "eyebrow": "Bookings",
-    "title": "Settlements",
+    "title": "Décomptes",
     "configureSupabase": "Configurer Supabase.",
     "metric": {
      "totalGbor": "Total GBOR",
@@ -5484,7 +5481,7 @@
     },
     "channel": {
      "email": "E-mail",
-     "social": "Social",
+     "social": "Réseaux sociaux",
      "paid": "Payant",
      "owned": "Propriétaire",
      "earned": "Acquis",
@@ -5556,7 +5553,7 @@
     "project": "Projet",
     "source": "Source",
     "captured": "Capturé",
-    "panos": "Panos",
+    "panos": "Panoramas",
     "sqft": "Pi²",
     "state": "État"
    }
@@ -5654,8 +5651,8 @@
    "title": "Clients",
    "configureSupabase": "Configurer Supabase pour charger les clients.",
    "eyebrow": "Ventes",
-   "subtitleOne": "{count} Client",
-   "subtitleMany": "{count} Clients",
+   "subtitleOne": "{count} client",
+   "subtitleMany": "{count} clients",
    "newClient": "+ Nouveau Client",
    "columns": {
     "name": "Nom",
@@ -5732,7 +5729,7 @@
    },
    "licensing": {
     "eyebrow": "Commercial",
-    "title": "Licensing",
+    "title": "Licences",
     "configureSupabase": "Configurer Supabase.",
     "trademarkSingular": "Marque",
     "trademarkPlural": "Marques",
@@ -5763,7 +5760,7 @@
      "title": "Billetterie"
     },
     "licensing": {
-     "title": "Licensing"
+     "title": "Licences"
     },
     "brand": {
      "title": "Marque",
@@ -6035,7 +6032,7 @@
     "billing": "Facturation",
     "value": "Valeur",
     "paid": "Payé",
-    "retainage": "Ret %",
+    "retainage": "Ret. %",
     "state": "État"
    },
    "edit": {
@@ -6061,7 +6058,7 @@
   "dashboard": {
    "tabs": {
     "overview": "Vue d'ensemble",
-    "portfolio": "Portfolio",
+    "portfolio": "Portefeuille",
     "actionItems": "Actions à mener"
    },
    "title": "Espace de travail",
@@ -6602,7 +6599,7 @@
     },
     "title": "Budgets",
     "configureSupabase": "Configurer Supabase.",
-    "countSubtitle": "{count} Budgets",
+    "countSubtitle": "{count} budgets",
     "newBudget": "+ Nouveau budget",
     "col": {
      "name": "Nom",
@@ -6756,12 +6753,12 @@
     "configureSupabase": "Configurer Supabase.",
     "entitySingular": "Entité",
     "entityPlural": "Entités",
-    "active": "Active",
+    "active": "Actif",
     "baseCurrencySingular": "Devise de référence",
     "baseCurrencyPlural": "Devises de référence",
     "newEntity": "+ Nouvelle entité",
     "metricTotal": "Total",
-    "metricActive": "Active",
+    "metricActive": "Actif",
     "metricCurrencies": "Devises",
     "metricSubsidiaries": "Filiales",
     "emptyLabel": "Aucune entité juridique pour l'instant",
@@ -7643,7 +7640,7 @@
    "newBadge": "Nouveau"
   },
   "insights": {
-   "eyebrow": "Insights",
+   "eyebrow": "Analyses",
    "title": "Pool de Booking",
    "configureSupabase": "Configurer Supabase.",
    "subtitle": "Agrégats mensuels anonymisés par genre.",
@@ -7654,7 +7651,7 @@
    "columns": {
     "month": "Mois",
     "genre": "Genre",
-    "shows": "Shows",
+    "shows": "Dates",
     "avgGross": "Brut Moyen",
     "avgAttendance": "Affluence Moyenne",
     "avgArtistPayout": "Cachet Artiste Moyen"
@@ -7837,7 +7834,7 @@
     "moveTo": "Déplacer vers {stage}"
    },
    "activity": {
-    "eyebrow": "Lead",
+    "eyebrow": "Piste",
     "title": "Activité",
     "subtitle": "Piste d'audit pour ce lead.",
     "emptyLabel": "Aucune Activité",
@@ -7849,7 +7846,7 @@
     "systemActor": "système"
    },
    "edit": {
-    "eyebrow": "Lead",
+    "eyebrow": "Piste",
     "title": "Modifier {name}",
     "fields": {
      "name": "Nom",
@@ -7868,7 +7865,7 @@
      "activity": "Activité",
      "proposals": "Propositions"
     },
-    "eyebrow": "Lead",
+    "eyebrow": "Piste",
     "noEmail": "Aucun e-mail",
     "fields": {
      "stage": "Étape",
@@ -7879,7 +7876,7 @@
     "notesHeading": "Notes"
    },
    "proposals": {
-    "eyebrow": "Lead",
+    "eyebrow": "Piste",
     "title": "Propositions",
     "subtitle": "Propositions issues de ce lead.",
     "emptyLabel": "Aucune Proposition",
@@ -7901,12 +7898,12 @@
     "eyebrow": "Ventes",
     "title": "Nouveau Lead"
    },
-   "title": "Leads",
+   "title": "Pistes",
    "configureSupabase": "Configurer Supabase.",
    "eyebrow": "Ventes",
    "subtitle": {
-    "one": "{count} Lead",
-    "other": "{count} Leads"
+    "one": "{count} piste",
+    "other": "{count} pistes"
    },
    "newLead": "+ Nouveau Lead",
    "columns": {
@@ -8024,7 +8021,7 @@
      },
      "status": {
       "pending": "En Attente",
-      "active": "Active",
+      "active": "Actif",
       "opposed": "Contestée",
       "abandoned": "Abandonnée",
       "expired": "Expirée"
@@ -9781,10 +9778,10 @@
     },
     "eyebrowShort": "People",
     "titleShort": "Contrats",
-    "subtitleShort": "Master Services Agreements",
+    "subtitleShort": "Contrats-cadres de services",
     "configureSupabase": "Configurer Supabase.",
     "eyebrow": "People · Contrats",
-    "title": "Master Services Agreements",
+    "title": "Contrats-cadres de services",
     "newContract": "+ Nouveau Contrat",
     "emptyLabel": "Aucun MSA pour l'instant",
     "col": {
@@ -9945,7 +9942,7 @@
     "slugHint": "Minuscules, tirets autorisés. Utilisé dans les jetons API.",
     "labelLabel": "Libellé",
     "descriptionLabel": "Description",
-    "permissionsLabel": "Permissions",
+    "permissionsLabel": "Autorisations",
     "createRole": "Créer le Rôle",
     "eyebrow": "People",
     "title": "Matrice des Rôles",
@@ -9957,7 +9954,7 @@
      "slug": "Slug",
      "label": "Libellé",
      "description": "Description",
-     "permissions": "Permissions"
+     "permissions": "Autorisations"
     },
     "bypassNote": {
      "prefix": "Les ",
@@ -10760,7 +10757,7 @@
      "budget": "Budget",
      "invited": "Invités",
      "responded": "Ont Répondu",
-     "scope": "Scope",
+     "scope": "Périmètre",
      "awarded": "Attribué",
      "invitees": "Invités",
      "vendor": "Fournisseur",
@@ -10827,7 +10824,7 @@
    },
    "compounds": {
     "eyebrow": "Production",
-    "title": "Compounds",
+    "title": "Enceintes",
     "configureSupabase": "Configurer Supabase.",
     "compound": "compound",
     "compounds": "compounds",
@@ -10863,7 +10860,7 @@
      "manifestHeading": "Manifeste",
      "noPassengers": "Aucun passager sur ce trajet."
     },
-    "breadcrumb": "Dispatch",
+    "breadcrumb": "Répartition",
     "live": {
      "map": {
       "title": "Carte en Direct"
@@ -10882,7 +10879,7 @@
      }
     },
     "eyebrow": "Production",
-    "title": "Dispatch",
+    "title": "Répartition",
     "eventSingular": "Événement",
     "eventPlural": "Événements",
     "activeRentalSingular": "Location active",
@@ -11086,8 +11083,8 @@
     },
     "table": {
      "rental": "Location",
-     "loadOut": "Load-out",
-     "loadIn": "Load-in",
+     "loadOut": "Démontage",
+     "loadIn": "Montage",
      "rate": "Tarif",
      "notes": "Notes"
     }
@@ -11110,7 +11107,7 @@
      "breadcrumbRentals": "Locations",
      "endRentalNow": "Terminer la location maintenant",
      "fieldStatus": "Statut",
-     "statusActive": "active",
+     "statusActive": "actif",
      "statusScheduled": "planifiée",
      "statusEnded": "terminée",
      "fieldStarts": "Début",
@@ -11185,18 +11182,18 @@
      "laneLabel": "Voie"
     },
     "eyebrow": "Production",
-    "title": "Run of Show",
+    "title": "Déroulé du spectacle",
     "configureSupabase": "Configurer Supabase.",
     "subtitleOne": "{count} cue dans le plan du show",
     "subtitleOther": "{count} cues dans le plan du show",
     "addCue": "Ajouter un Cue",
     "empty": "Aucun cue pour l'instant — créez-en un ci-dessus.",
-    "countOne": "{count} cue",
-    "countOther": "{count} cues",
+    "countOne": "{count} top",
+    "countOther": "{count} tops",
     "col": {
      "time": "Heure",
-     "lane": "Lane",
-     "cue": "Cue",
+     "lane": "Piste",
+     "cue": "Top",
      "status": "Statut",
      "actions": "Actions",
      "cue_state": "Statut"
@@ -11279,8 +11276,8 @@
     "subtitle": "Inventaire, build, systèmes de show.",
     "sections": {
      "inventory": "Inventaire",
-     "build": "Build",
-     "show": "Show"
+     "build": "Construction",
+     "show": "Spectacle"
     },
     "cards": {
      "equipment": "Équipement",
@@ -11290,13 +11287,13 @@
      "avInventory": "Inventaire AV",
      "rentals": "Locations",
      "fabrication": "Fabrication",
-     "compounds": "Compounds",
+     "compounds": "Enceintes",
      "yard": "Dépôt",
      "punchList": "Liste de réserves",
      "realityCaptures": "Captures de réalité",
      "photoLog": "Journal photo",
      "warranties": "Garanties",
-     "runOfShow": "Run of Show",
+     "runOfShow": "Déroulé du spectacle",
      "runOfShowDesc": "Timeline cue par cue",
      "liveDispatch": "Dispatch live",
      "productionLogistics": "Logistique de production"
@@ -12030,7 +12027,7 @@
    },
    "tabs": {
     "overview": "Vue d'ensemble",
-    "tracker": "Tracker",
+    "tracker": "Suivi",
     "tasks": "Tâches",
     "schedule": "Planning",
     "files": "Fichiers",
@@ -12247,11 +12244,11 @@
     "colDue": "Échéance"
    },
    "tracker": {
-    "title": "Tracker",
+    "title": "Suivi",
     "atomSingular": "Atome",
     "atomPlural": "Atomes",
     "phase": "phase",
-    "breadcrumb": "Tracker",
+    "breadcrumb": "Suivi",
     "openCatalog": "Ouvrir le catalogue →"
    },
    "new": {
@@ -12492,7 +12489,7 @@
     "itemBreadcrumb": "Point",
     "submit": "Enregistrer le Point"
    },
-   "breadcrumb": "Punch List",
+   "breadcrumb": "Liste de réserves",
    "fields": {
     "title": "Titre",
     "description": "Description",
@@ -12507,7 +12504,7 @@
    },
    "detail": {
     "eyebrow": "Opérations",
-    "breadcrumb": "Punch List",
+    "breadcrumb": "Liste de réserves",
     "doorsGate": "Verrou Doors",
     "start": "Démarrer",
     "markReady": "Marquer Prêt",
@@ -12519,7 +12516,7 @@
    },
    "lists": {
     "eyebrow": "Opérations · Punch",
-    "title": "Punch Lists",
+    "title": "Listes de réserves",
     "configureSupabase": "Configurer Supabase.",
     "breadcrumb": "Listes",
     "allItems": "← Tous les Points",
@@ -12554,16 +12551,16 @@
      "vendor": "Fournisseur",
      "dueDate": "Date d'échéance",
      "sitePlan": "Plan du site",
-     "punchList": "Punch list"
+     "punchList": "Liste de réserves"
     },
     "selectPlaceholder": "Sélectionner…",
     "unassignedOption": "— Non assigné —",
     "gateLabel": "Verrouiller l'ouverture des portes jusqu'à clôture du point"
    },
    "eyebrow": "Opérations",
-   "title": "Punch List",
+   "title": "Liste de réserves",
    "configureSupabase": "Configurer Supabase.",
-   "titleFiltered": "Punch · {name}",
+   "titleFiltered": "Réserves · {name}",
    "subtitleFiltered": "Filtré sur une seule liste. Effacer pour tout voir.",
    "subtitle": "Check-list show-ready.",
    "clearFilter": "Effacer le Filtre",
@@ -13222,7 +13219,7 @@
    },
    "safeguardingLabel": "Protection",
    "threats": {
-    "activeLabel": "Active",
+    "activeLabel": "Actif",
     "col": {
      "classification": "Classification",
      "code": "Code",
@@ -13356,11 +13353,11 @@
     "configureSupabase": "Configurer Supabase.",
     "subtitleBaseline": "Référence",
     "subtitleBaselines": "Références",
-    "subtitleActive": "Active",
+    "subtitleActive": "Actif",
     "subtitleDraft": "Brouillon",
     "newBaseline": "+ Nouvelle Référence",
     "metricTotal": "Total",
-    "metricActive": "Active",
+    "metricActive": "Actif",
     "metricDraft": "Brouillon",
     "emptyLabel": "Aucune référence de planning",
     "colName": "Nom",
@@ -13538,7 +13535,7 @@
     "empty": "Aucune clé API pour l'instant.",
     "never": "Jamais",
     "revoked": "Révoquée",
-    "active": "Active",
+    "active": "Actif",
     "revoke": "Révoquer",
     "copyFailedToast": "Échec de la copie — sélectionnez la clé manuellement",
     "reference": "Parcourir la référence API complète →"
@@ -13578,8 +13575,8 @@
     "subtitle": "Facturation",
     "stripeNotConfigured": "Stripe n'est pas configuré.",
     "stripeNotConfiguredHintBefore": "Définissez",
-    "plan": "Plan",
-    "plansHeading": "Plans",
+    "plan": "Forfait",
+    "plansHeading": "Forfaits",
     "current": "Actuel",
     "recentInvoices": "Factures récentes",
     "viewAll": "Tout voir →",
@@ -13624,7 +13621,7 @@
     },
     "saveButton": "Enregistrer le branding",
     "eyebrow": "Paramètres",
-    "title": "Branding"
+    "title": "Image de marque"
    },
    "catalog": {
     "edit": {
@@ -14023,8 +14020,8 @@
      "connection": {
       "fallbackTitle": "Connexion",
       "neverSynced": "Jamais synchronisée",
-      "active": "active",
-      "inactive": "inactive",
+      "active": "actif",
+      "inactive": "inactif",
       "latestSnapshot": "Dernier Instantané",
       "sold": "Vendus",
       "gross": "Brut",
@@ -14055,9 +14052,9 @@
       "label": "Libellé",
       "eventId": "ID d'événement",
       "lastSync": "Dernière Synchro",
-      "active": "Active"
+      "active": "Actif"
      },
-     "statusActive": "active",
+     "statusActive": "actif",
      "statusOff": "désactivée"
     }
    },
@@ -14086,7 +14083,7 @@
     "linkTeams": "Équipes →",
     "linkRoles": "Rôles →",
     "workspaceHeading": "Paramètres de l'espace de travail",
-    "linkBranding": "Branding →",
+    "linkBranding": "Image de marque →",
     "linkDomains": "Domaines →",
     "linkBilling": "Facturation →",
     "linkIntegrations": "Intégrations →",
@@ -14120,7 +14117,7 @@
      "description": "Rétention, DPA, export de données"
     },
     "branding": {
-     "label": "Branding",
+     "label": "Image de marque",
      "description": "Apparence du portail et des e-mails"
     },
     "domains": {
@@ -14198,7 +14195,7 @@
     "resetLabel": "Réinitialiser",
     "resetTitle": "Réinitialiser la séquence",
     "editHeading": "Modifier / Pré-amorcer",
-    "scopePlaceholder": "invoice",
+    "scopePlaceholder": "facture",
     "scopeTitle": "Lettres minuscules, chiffres, tiret bas",
     "seedPlaceholder": "Amorce",
     "saveButton": "Enregistrer la Séquence",
@@ -14228,7 +14225,7 @@
      "allHours": "24/7"
     },
     "status": {
-     "active": "Active",
+     "active": "Actif",
      "paused": "Suspendue"
     },
     "upsert": {
@@ -14376,7 +14373,7 @@
      "failures": "Échecs"
     },
     "state": {
-     "active": "active",
+     "active": "actif",
      "paused": "suspendue"
     },
     "editAction": "Modifier →"
@@ -14484,21 +14481,21 @@
     "function": "Fonction",
     "heads": "Têtes",
     "addStation": "+ Poste",
-    "prepPlaceholder": "prep",
+    "prepPlaceholder": "prép.",
     "position": "Position",
-    "placements": "Placements · §4.5",
+    "placements": "Implantations · §4.5",
     "tag": "Tag",
     "station": "Poste",
     "uac": "UAC",
     "qty": "Qté",
-    "addPlacement": "+ Placement",
+    "addPlacement": "+ Implantation",
     "uacAtom": "Atome UAC",
     "utilities": "Utilités · §4.6",
-    "drop": "Drop",
+    "drop": "Point",
     "service": "Service",
     "loads": "Charges",
     "circuit": "Circuit",
-    "addDrop": "+ Drop",
+    "addDrop": "+ Point",
     "loadsComma": "Charges (virgule)",
     "adjacencies": "Adjacences · §4.7",
     "missingEdgesPrefix": "Bords manquants :",
@@ -14518,7 +14515,7 @@
     "breadcrumb": "Nouveau",
     "submit": "Créer la Feuille",
     "section": {
-     "atomId": "Atom ID",
+     "atomId": "ID d'atome",
      "sheet": "Feuille",
      "shell": "Coque",
      "preset": "Préréglage",
@@ -14562,7 +14559,7 @@
    "issuedIfc": "Émis (IFC)",
    "emptyLabel": "Aucun plan de site pour l'instant",
    "columns": {
-    "atomId": "Atom ID",
+    "atomId": "ID d'atome",
     "title": "Titre",
     "type": "Type",
     "class": "Classe",
@@ -14675,7 +14672,7 @@
      "project": "Projet",
      "specSection": "Section Spec",
      "vendor": "Fournisseur",
-     "ballInCourt": "Ball In Court",
+     "ballInCourt": "Responsable",
      "status": "Statut",
      "dueBy": "Échéance"
     }
@@ -14710,7 +14707,7 @@
      "project": "Projet",
      "specSection": "Section Spec",
      "vendor": "Fournisseur",
-     "ballInCourt": "Ball In Court",
+     "ballInCourt": "Responsable",
      "dueBy": "Échéance"
     }
    },
@@ -15203,7 +15200,7 @@
      "scheduledArriveLabel": "Arrivée Prévue"
     },
     "eyebrowWorkspace": "Espace de Travail",
-    "title": "Dispatch",
+    "title": "Répartition",
     "configureSupabase": "Configurer Supabase.",
     "eyebrow": "Transport",
     "runSingular": "Course",
@@ -15245,7 +15242,7 @@
    },
    "sections": {
     "dispatch": {
-     "title": "Dispatch"
+     "title": "Répartition"
     },
     "ad": {
      "title": "Arrivées & Départs"
@@ -15415,7 +15412,7 @@
     "build": "Construction",
     "zones": "Zones",
     "certifications": "Certifications",
-    "ros": "Run of Show",
+    "ros": "Déroulé du spectacle",
     "vop": "VOP",
     "handover": "Remise",
     "closeout": "Clôture"
@@ -15426,7 +15423,7 @@
    },
    "ros": {
     "eyebrow": "Site",
-    "title": "Run of Show",
+    "title": "Déroulé du spectacle",
     "configureSupabase": "Configurer Supabase.",
     "cueSingular": "top",
     "cuePlural": "tops",
@@ -15474,7 +15471,7 @@
     "kind": "Type",
     "kindCompetition": "Compétition",
     "kindTraining": "Entraînement",
-    "kindLiveSite": "Live site",
+    "kindLiveSite": "Site live",
     "kindIbc": "IBC",
     "kindMpc": "MPC",
     "kindVillage": "Village",
@@ -15898,8 +15895,8 @@
    },
    "rosters": {
     "edit": {
-     "fallbackName": "Roster",
-     "eyebrow": "Roster",
+     "fallbackName": "Effectif",
+     "eyebrow": "Effectif",
      "title": "Modifier {name}",
      "submit": "Enregistrer les Modifications",
      "fields": {
@@ -15939,7 +15936,7 @@
      }
     },
     "eyebrowFallback": "Espace de Travail",
-    "title": "Rosters",
+    "title": "Effectifs",
     "configureSupabase": "Configurer Supabase.",
     "eyebrow": "Effectifs",
     "subtitleOne": "{count} Fiche",
@@ -15981,7 +15978,7 @@
     "column": {
      "requester": "Demandeur",
      "target": "Cible",
-     "shift": "Shift",
+     "shift": "Quart",
      "role": "Rôle",
      "venue": "Site",
      "reason": "Motif",
@@ -16164,8 +16161,8 @@
     "emptyDescription": "Créez un roster + des shifts pour matérialiser les feuilles de service par personne.",
     "call": "Appel",
     "wrap": "Wrap",
-    "shiftOne": "{count} shift",
-    "shiftMany": "{count} shifts"
+    "shiftOne": "{count} quart",
+    "shiftMany": "{count} quarts"
    }
   },
   "xpms": {
@@ -17105,7 +17102,7 @@
      "sub": "Arrivée / départ"
     },
     "ros": {
-     "label": "Run of Show",
+     "label": "Conducteur",
      "sub": "Cue par cue"
     },
     "guard": {
@@ -17143,7 +17140,7 @@
      "sub": "Entrées du jour"
     },
     "punch": {
-     "label": "Punch List",
+     "label": "Liste de réserves",
      "sub": "Points en cours"
     },
     "incidents": {
@@ -17152,7 +17149,7 @@
     },
     "requests": {
      "label": "Demandes",
-     "sub": "Service desk"
+     "sub": "Centre de services"
     },
     "notifications": {
      "label": "Notifications",
@@ -17369,7 +17366,7 @@
   },
   "punch": {
    "eyebrow": "Terrain",
-   "title": "Punch List",
+   "title": "Liste de réserves",
    "noOpenItems": "Aucun élément ouvert ne vous est assigné.",
    "openCount": "{count} ouverts",
    "empty": {
@@ -17429,8 +17426,8 @@
    "show": {
     "configureSupabase": "Configurez Supabase.",
     "backToAll": "← Tous les tops",
-    "eyebrow": "Show",
-    "liveLabel": "Live",
+    "eyebrow": "Date",
+    "liveLabel": "En direct",
     "startedAt": "lancé {time}",
     "upcomingHeading": "À venir · {count}",
     "noMoreCues": "Plus aucun top en file.",
@@ -17438,7 +17435,7 @@
     "doneBadge": "Terminé"
    },
    "eyebrow": "Mobile",
-   "title": "Run of Show",
+   "title": "Conducteur",
    "noneToday": "Aucun top programmé aujourd'hui.",
    "empty": {
     "title": "Aucun Top Aujourd'hui"
@@ -17504,7 +17501,7 @@
    "greeting": "Bonjour, {name}.",
    "welcome": "Bienvenue.",
    "useBefore": "Utilisez",
-   "useLink": "check-in",
+   "useLink": "pointer",
    "useAfter": "pour pointer et prendre vos pauses.",
    "today": "Aujourd'hui",
    "noShiftToday": "Aucun Shift Aujourd'hui",
@@ -17583,7 +17580,7 @@
   },
   "tracker": {
    "configureSupabase": "Configurez Supabase.",
-   "title": "Tracker",
+   "title": "Suivi",
    "projectSingular": "projet",
    "projectPlural": "projets",
    "atomSingular": "atome",
@@ -17776,7 +17773,7 @@
     "reelUrl": "URL De La Reel"
    },
    "placeholders": {
-    "roles": "A1, A2, Lighting Programmer",
+    "roles": "A1, A2, Pupitreur lumière",
     "unions": "IATSE Local 500",
     "certifications": "ETCP Rigging, OSHA-30"
    },
@@ -18147,7 +18144,7 @@
     "gig": "Mission",
     "rfq": "RFQ",
     "talentCall": "Appel Talents",
-    "talent": "Talent",
+    "talent": "Talents",
     "crew": "Équipe",
     "vendor": "Fournisseur"
    },
@@ -18184,7 +18181,7 @@
     "lastUsed": "· dernière utilisation {when}",
     "removeAria": "Supprimer la passkey",
     "addButton": "Ajouter une passkey",
-    "title": "Passkeys",
+    "title": "Clés d'accès",
     "removeDialogTitle": "Supprimer la clé d'accès"
    },
    "eyebrow": "Compte",
@@ -18478,7 +18475,7 @@
     }
    },
    "catering": {
-    "title": "Catering",
+    "title": "Traiteur",
     "subtitle": "Rider hospitalité + notes diététiques",
     "empty": {
      "title": "Soumettez Votre Rider Catering"
@@ -18491,7 +18488,7 @@
      "label": "Advancing"
     },
     "catering": {
-     "label": "Catering",
+     "label": "Traiteur",
      "desc": "Repas, préférences alimentaires, loge"
     },
     "venue": {
@@ -19415,7 +19412,7 @@
     "crumb": {
      "portal": "Portail",
      "media": "Médias",
-     "info": "Info"
+     "info": "Infos"
     },
     "metric": {
      "documents": "Documents",
@@ -19692,7 +19689,7 @@
     "coPro": {
      "title": "Splits Co-Pro",
      "splits": {
-      "label": "Splits",
+      "label": "Répartitions",
       "desc": "Tête d'affiche + conditions walkout"
      },
      "settlements": {
@@ -19823,7 +19820,7 @@
     "title": "Messages",
     "thisProject": "ce projet",
     "emptyTitle": "Aucun Account Manager pour le Moment",
-    "accountManager": "Account Manager",
+    "accountManager": "Gestionnaire de compte",
     "openThread": "Ouvrir le Fil",
     "startThread": "Démarrer un Fil",
     "room": {
@@ -19849,7 +19846,7 @@
      "desc": "Propositions, livrables, factures, fichiers"
     },
     "sponsor": {
-     "label": "Sponsor",
+     "label": "Commanditaire",
      "desc": "Activations, ressources de marque, reporting"
     },
     "guest": {
@@ -19915,7 +19912,7 @@
     "attached": "joint"
    },
    "breadcrumb": {
-    "sponsor": "Sponsor"
+    "sponsor": "Commanditaire"
    },
    "home": {
     "title": "Portail Sponsor",
@@ -19929,12 +19926,12 @@
      "desc": "Téléchargez les ressources de marque"
     },
     "reporting": {
-     "label": "Reporting",
+     "label": "Rapports",
      "desc": "Impressions et engagement"
     }
    },
    "reporting": {
-    "title": "Reporting",
+    "title": "Rapports",
     "subtitle": "Métriques de fréquentation et d'activation",
     "empty": {
      "title": "Le Reporting Démarre Après le Premier Scan"
@@ -20047,7 +20044,7 @@
     "state": {
      "expired": "expirée",
      "expiring": "expire bientôt",
-     "active": "active"
+     "active": "actif"
     }
    },
    "equipmentPullList": {
@@ -20678,7 +20675,7 @@
    "grid": "Grille",
    "kanban": "Kanban",
    "calendar": "Calendrier",
-   "timeline": "Timeline",
+   "timeline": "Chronologie",
    "chart": "Graphique",
    "map": "Carte",
    "gantt": "Gantt",
@@ -20886,7 +20883,7 @@
    "resized": "{title} redimensionné",
    "noLanes": "Aucune voie",
    "noLanesDesc": "Fournissez au moins une voie pour afficher la timeline.",
-   "timeline": "Timeline",
+   "timeline": "Chronologie",
    "timelineZoom": "Zoom de la timeline",
    "lane": "Voie",
    "noItems": "Aucun élément dans la plage",
@@ -20894,7 +20891,7 @@
   },
   "mapView": {
    "tone": {
-    "info": "Info",
+    "info": "Infos",
     "warn": "Avertissement",
     "error": "Erreur",
     "success": "Succès",
@@ -21268,7 +21265,7 @@
    "venueAddress": "Adresse",
    "schedule": "Planning",
    "laborSchedule": "Planning de main-d'œuvre",
-   "crew": "Crew",
+   "crew": "Équipe",
    "laborRoster": "Roster de main-d'œuvre",
    "weather": "Météo",
    "colStart": "Début",
@@ -21424,7 +21421,7 @@
    "accent": "Accent",
    "legalFooter": "Pied de page légal",
    "typography": "Typographie",
-   "displaySample": "Display 24pt",
+   "displaySample": "Display 24 pt",
    "titleSample": "Titre 14pt",
    "bodySample": "Corps 11pt, interligne 1,45. Utilisez Helvetica pour l'interopérabilité des impressions terrain.",
    "usageRules": "Règles d'usage",
@@ -21438,7 +21435,7 @@
     "colCh": "Ca",
     "colSource": "Source",
     "colMic": "Micro/DI",
-    "colInsert": "Insert",
+    "colInsert": "Insertion",
     "colNote": "Note"
    },
    "stagePlot": {
@@ -21460,7 +21457,7 @@
    "guestList": {
     "heading": "Liste d'invités",
     "colName": "Nom",
-    "colTier": "Tier",
+    "colTier": "Catégorie",
     "colNote": "Note"
    },
    "equipmentPullList": {
@@ -21499,7 +21496,7 @@
     "colDay": "Jour",
     "colTime": "Heure",
     "colActivity": "Activité",
-    "colCrew": "Crew",
+    "colCrew": "Équipe",
     "colNote": "Note"
    },
    "vendorPackage": {
@@ -21556,7 +21553,7 @@
    "reasonPlaceholder": "ex. Conflit de calendrier — déjà réservé du 14 au 18 mai."
   },
   "offerCheckin": {
-   "title": "Check-in",
+   "title": "Enregistrement",
    "lockedPrefix": "Ouvrez d'abord votre lettre d'engagement pour débloquer le check-in —",
    "returnToLetter": "retourner à la lettre",
    "dayOneEyebrow": "Check-in du jour 1",
@@ -21644,7 +21641,7 @@
    "authorizeEyebrow": "Autoriser",
    "acceptHeading": "Accepter cette proposition",
    "yourNameLabel": "Votre nom",
-   "emailLabel": "Email",
+   "emailLabel": "E-mail",
    "titleRoleLabel": "Titre / rôle",
    "titleRolePlaceholder": "Fondateur, Producteur, COO…",
    "type": "Taper",
@@ -21722,7 +21719,7 @@
    "scheduleHint": "Jalons du planning de production du projet. Les dates et activités sont sujettes à révision selon les circonstances de production ; nous vous informerons de tout changement matériel par les canaux de production habituels.",
    "colDate": "Date",
    "colCall": "Appel",
-   "colWrap": "Wrap",
+   "colWrap": "Fin",
    "colMilestones": "Jalons",
    "onboardingHeading": "6. Checklist d'onboarding",
    "onboardingHint": "Une courte liste pour vous préparer. Essayez de la boucler sous 48 heures après acceptation pour que les accréditations puissent partir.",
@@ -21748,8 +21745,8 @@
   },
   "heatProposal": {
    "navOverview": "Vue d'ensemble",
-   "navBuilds": "Builds",
-   "navRetainer": "Retainer",
+   "navBuilds": "Montages",
+   "navRetainer": "Forfait",
    "navScope": "Périmètre",
    "navLifecycle": "Cycle de vie",
    "navInvestment": "Investissement",
@@ -21770,19 +21767,19 @@
    "overviewSub": "Trois vecteurs d'engagement, conçus pour se cumuler. Chaque activation puise dans un menu de builds à tiers. Un retainer mensuel — choisissez l'un des trois tiers — réserve une capacité de studio dédiée derrière le programme. Les add-ons s'empilent sur l'un comme l'autre, à la demande.",
    "perActivation": "Par activation",
    "buildMenu": "Menu de builds",
-   "sizeSmall": "Small",
-   "sizeMedium": "Medium",
-   "sizeLarge": "Large",
+   "sizeSmall": "Petit",
+   "sizeMedium": "Moyen",
+   "sizeLarge": "Grand",
    "includes": "Inclut",
    "includesValue": "Production · Fab · Installation · Démontage",
-   "retainer": "Retainer",
+   "retainer": "Forfait",
    "threeTiers": "Trois tiers",
    "tierBase": "Base",
-   "tierElevated": "Elevated",
+   "tierElevated": "Élevé",
    "tierPremium": "Premium",
    "perMonth": "{amount} / mois",
    "commitment": "Engagement",
-   "upgrades": "Upgrades",
+   "upgrades": "Améliorations",
    "optionalUpgrades": "Upgrades en option",
    "addonMenu": "Menu d'add-ons",
    "addonMenuValue": "{count} éléments · 5 catégories",
@@ -21795,7 +21792,7 @@
    "upsellSeeElevated": "Besoin de plus ? Voir Elevated →",
    "upsellSeePremium": "Besoin de plus ? Voir Premium →",
    "retainerTiersEyebrow": "Tiers de retainer",
-   "retainerTiersTitle": "Base. Elevated. Premium.",
+   "retainerTiersTitle": "Base. Élevé. Premium.",
    "retainerTiersSub": "Trois tiers de retainer, à l'échelle de votre cadence d'activation. Chaque tier s'appuie sur le précédent — Elevated inclut tout Base, et Premium inclut tout Elevated plus des lignes exclusives réservées au tier supérieur.",
    "monthly": "Mensuel",
    "perYear": "· {amount} / an",
@@ -21805,7 +21802,7 @@
    "premiumExclusivesTitle": "Des lignes introuvables ailleurs.",
    "premiumExclusivesSub": "Quatre lignes disponibles uniquement au tier Premium — pas à la carte, pas sur Elevated, pas en achat ponctuel. Réservées aux partenaires qui mènent avec nous un programme qui définit la saison.",
    "activationBuildsEyebrow": "Builds d'activation",
-   "activationBuildsTitle": "Small. Medium. Large.",
+   "activationBuildsTitle": "Petit. Moyen. Grand.",
    "activationBuildsSub": "Trois tiers de build, calibrés pour le moment. Chaque tier tient une fourchette serrée de la spec de base à la spec haute, les gestes architecturaux et retail plus larges étant chiffrés séparément depuis le menu d'add-ons.",
    "buildRange": "Fourchette de build",
    "precedent": "Précédent · {name}",
@@ -21862,8 +21859,8 @@
    "addonsTitle": "Empilez tout. Sur tout.",
    "addonsSub": "Le menu complet des upgrades en option — matériaux, fonctionnel, service, logistique et documentation. Choisissez n'importe quel élément, ajoutez-le à n'importe quel retainer ou build. Chiffré sur demande.",
    "itemsCount": "{count} éléments",
-   "appliesRetainerActivation": "Retainer + Activation",
-   "appliesRetainer": "Retainer",
+   "appliesRetainerActivation": "Forfait + Activation",
+   "appliesRetainer": "Forfait",
    "appliesActivation": "Activation",
    "minTier": "Tier min · {tier}",
    "activationDeposit": "Acompte d'activation",

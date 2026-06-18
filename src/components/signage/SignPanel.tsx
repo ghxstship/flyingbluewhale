@@ -59,20 +59,24 @@ export function SignPanel({
   return (
     <div
       className={className}
-      style={{
-        display: "inline-flex",
-        boxSizing: "border-box",
-        alignItems: "center",
-        gap,
-        padding: pad,
-        background: t.bg,
-        color: t.fg,
-        border: t.keyline ? `${Math.max(2, Math.round(H * 0.15))}px solid ${t.keyline}` : undefined,
-        borderRadius: radius,
-        fontFamily: "var(--sign-font)",
-        lineHeight: 1,
-        ...style,
-      }}
+      style={
+        {
+          display: "inline-flex",
+          boxSizing: "border-box",
+          alignItems: "center",
+          gap,
+          padding: pad,
+          background: t.bg,
+          color: t.fg,
+          // Two-color rule: the pictogram's counters paint the field, not white.
+          "--sign-knock": t.bg,
+          border: t.keyline ? `${Math.max(2, Math.round(H * 0.15))}px solid ${t.keyline}` : undefined,
+          borderRadius: radius,
+          fontFamily: "var(--sign-font)",
+          lineHeight: 1,
+          ...style,
+        } as CSSProperties
+      }
       {...rest}
     >
       {side === "start" && arrowEl}

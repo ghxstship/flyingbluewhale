@@ -79,6 +79,16 @@
   --sign-accent-field: var(--sign-c-brand);
   --sign-accent-legend: var(--sign-c-white);
 
+  /* TWO-COLOR RULE — the knockout channel. Real-world signage is exactly two
+     colors: a POSITIVE (the symbol, painted with currentColor = the tone's
+     legend) and a NEGATIVE (the field, AND the symbol's own counters/holes).
+     There is no third color: a counter is the field showing through, never
+     white. The pictogram sprite paints counters with this token; the
+     field-tone containers (PictogramPreview / SignPanel) set it to the tone's
+     field color. Default = the surface, so a field-less monochrome icon's
+     counters blend with the page rather than punching white. */
+  --sign-knock: var(--p-surface, #ffffff);
+
   /* Minimum legend/field contrast (ADA / ACRP 52). */
   --sign-min-contrast: 70%;
 

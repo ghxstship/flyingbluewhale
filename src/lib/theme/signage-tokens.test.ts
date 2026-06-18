@@ -76,6 +76,15 @@ describe("signage library — AIGA/DOT only", () => {
     }
   });
 
+  it("the sprite is strictly two-color — only currentColor + --sign-knock, no raw hex", () => {
+    // Two-color rule: POSITIVE = currentColor (legend), NEGATIVE = --sign-knock
+    // (field). No baked #000/#fff would survive theming or the field reveal.
+    const fills = [...SPRITE.matchAll(/(?:fill|stroke)="([^"]+)"/g)].map((m) => m[1] ?? "");
+    const offenders = fills.filter((v) => /#[0-9a-f]{3,6}/i.test(v) && !v.includes("var(--sign-knock"));
+    expect(offenders, `sprite has raw hex fills (breaks the two-color rule):\n${offenders.join("\n")}`).toEqual([]);
+    expect(SPRITE).toContain("var(--sign-knock");
+  });
+
   it("the sprite contains ZERO legacy p-* symbols and only aiga-* ids", () => {
     const ids = [...SPRITE.matchAll(/<symbol id="([^"]+)"/g)].map((m) => m[1] ?? "");
     expect(ids.length).toBe(60);

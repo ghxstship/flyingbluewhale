@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { SignIcon } from "@/components/signage/SignIcon";
 import {
   CATEGORY_TONE,
@@ -26,7 +27,16 @@ export function PictogramPreview({
   return (
     <span
       className="inline-flex items-center justify-center rounded-md"
-      style={{ width: size, height: size, background: signFieldVar(tone), color: signLegendVar(tone) }}
+      style={
+        {
+          width: size,
+          height: size,
+          background: signFieldVar(tone),
+          color: signLegendVar(tone),
+          // Two-color rule: the glyph's counters paint the field, not white.
+          "--sign-knock": signFieldVar(tone),
+        } as CSSProperties
+      }
     >
       <SignIcon name={pictogramSymbolId(sign)} size={Math.round(size * 0.72)} title={sign.name} />
     </span>

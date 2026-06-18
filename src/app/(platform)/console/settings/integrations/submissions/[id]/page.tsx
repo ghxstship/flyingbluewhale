@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -176,7 +177,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               undefined,
               "to now (verified + certified rows go public on the",
             )}{" "}
-            <Link href="/integrations/partners" className="underline">
+            <Link href={urlFor("marketing", "/integrations/partners")} className="underline">
               /integrations/partners
             </Link>{" "}
             {t("console.settings.integrations.submissions.detail.queueIntroEnd", undefined, "directory).")}

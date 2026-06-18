@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishTalentAction, unpublishTalentAction } from "../new/actions";
 
@@ -38,7 +39,7 @@ export function TalentVisibility({
             {publicHandle ? (
               <>
                 {t("console.marketplace.talent.visibility.publicUrl", undefined, "Public URL")}{" "}
-                <a className="font-mono text-[var(--p-accent)]" href={`/marketplace/talent/${publicHandle}`}>
+                <a className="font-mono text-[var(--p-accent)]" href={urlFor("marketing", `/marketplace/talent/${publicHandle}`)}>
                   /marketplace/talent/{publicHandle}
                 </a>
               </>

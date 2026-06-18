@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -199,11 +200,11 @@ export default async function Page() {
         />
         <p className="text-xs text-[var(--p-text-2)]">
           {t("console.settings.integrations.submissions.publicDirectoryLabel", undefined, "Public partner directory:")}{" "}
-          <Link href="/integrations/partners" className="underline">
+          <Link href={urlFor("marketing", "/integrations/partners")} className="underline">
             /integrations/partners
           </Link>
           . {t("console.settings.integrations.submissions.submissionFormLabel", undefined, "Submission form:")}{" "}
-          <Link href="/integrations/submit" className="underline">
+          <Link href={urlFor("marketing", "/integrations/submit")} className="underline">
             /integrations/submit
           </Link>
           .

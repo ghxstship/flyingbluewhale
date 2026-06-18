@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
 import { DataTable } from "@/components/DataTable";
@@ -77,7 +78,7 @@ export default async function ConsoleDashboard() {
             )}
             action={
               <div className="flex flex-wrap items-center gap-3">
-                <Button href="/me/organizations">
+                <Button href={urlFor("personal", "/me/organizations")}>
                   {t("console.dashboard.noOrg.createOrg", undefined, "Create Organization")}
                 </Button>
                 <Link href="/me" className="text-xs text-[var(--p-accent)]">

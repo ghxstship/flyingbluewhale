@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishCallAction, closeCallAction } from "../new/actions";
 
@@ -19,7 +20,7 @@ export function CallControls({ callId, status, publicSlug }: { callId: string; s
           </h2>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("console.marketplace.calls.controls.publicUrl", undefined, "Public URL")}{" "}
-            <a className="font-mono text-[var(--p-accent)]" href={`/marketplace/calls/${publicSlug}`}>
+            <a className="font-mono text-[var(--p-accent)]" href={urlFor("marketing", `/marketplace/calls/${publicSlug}`)}>
               /marketplace/calls/{publicSlug}
             </a>
           </p>

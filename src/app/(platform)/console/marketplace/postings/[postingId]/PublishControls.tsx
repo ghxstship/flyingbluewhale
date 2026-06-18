@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishPostingAction, closePostingAction } from "../new/actions";
 
@@ -30,7 +31,7 @@ export function PublishControls({
           </h2>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("console.marketplace.postings.publish.publicUrl", undefined, "Public URL")}{" "}
-            <a className="font-mono text-[var(--p-accent)]" href={`/marketplace/gigs/${publicSlug}`}>
+            <a className="font-mono text-[var(--p-accent)]" href={urlFor("marketing", `/marketplace/gigs/${publicSlug}`)}>
               /marketplace/gigs/{publicSlug}
             </a>
           </p>

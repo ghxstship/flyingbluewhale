@@ -291,7 +291,8 @@ function moduleBlocks(rows, stripBase) {
   return out;
 }
 
-const now = new Date().toISOString().slice(0, 10);
+// No volatile timestamp in the output — the drift guard (gen:sitemap:check /
+// sitemap.test.ts) must fire only on real route/nav changes, not date rollover.
 let md = `# SITEMAP — single source of truth
 
 > **GENERATED FILE — do not hand-edit.** Regenerate with
@@ -302,7 +303,7 @@ let md = `# SITEMAP — single source of truth
 >
 > Reconciliation strategy + backlog: \`docs/ia/SITEMAP_RECONCILIATION.md\`.
 
-**Generated:** ${now} · **Page routes:** ${pages.length} · **API route handlers:** ${apiFiles.length} · **Distinct nav hrefs:** ${navSet.size}
+**Page routes:** ${pages.length} · **API route handlers:** ${apiFiles.length} · **Distinct nav hrefs:** ${navSet.size}
 
 ## Legend
 

@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Generated:** 2026-06-17 · **Page routes:** 1083 · **API route handlers:** 124 · **Distinct nav hrefs:** 450
+**Page routes:** 1083 · **API route handlers:** 124 · **Distinct nav hrefs:** 450
 
 ## Legend
 

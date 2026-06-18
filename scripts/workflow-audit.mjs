@@ -53,23 +53,31 @@ function diskDir(routePath) {
   return null;
 }
 
-// Scan a resource's OWN action files (resource + /new + its single [param]
-// detail + that detail's /edit) for real create/update/delete verbs — so the
-// CRUD picture reflects inline actions, not just /edit routes. Bounded to the
-// resource so descendant sub-resources aren't miscredited.
-function crudActions(routePath, detailRoute, editRoute) {
+// All .ts/.tsx under a dir (recursive), for content scanning.
+function filesUnder(dir) {
+  if (!dir || !existsSync(dir)) return [];
+  return walk(dir).filter((f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f));
+}
+
+// Scan a dataset's surfaces for real create/update/delete capability — not just
+// /new + /edit ROUTES, but inline forms, kanban/board controls, and status-
+// transition / publish / approve actions anywhere in the resource's own dir,
+// its /new, and its [param] detail subtree. This collapses false positives
+// (board UIs like sprints, inline-managed lookup tables, transition-only
+// detail pages) so the residual flags are genuine candidates. Bounded to the
+// resource: the [param] detail subtree is scanned, but sibling nested
+// resources are not (they have their own audit row).
+function crudActions(routePath, detailRoute) {
   const verbs = { create: false, update: false, delete: false };
-  const dirs = [diskDir(routePath), diskDir(routePath + "/new"), detailRoute && diskDir(detailRoute), editRoute && diskDir(editRoute)].filter(Boolean);
-  for (const dir of dirs) {
-    for (const fn of ["actions.ts", "actions.tsx"]) {
-      const a = join(dir, fn);
-      if (!existsSync(a)) continue;
-      const s = readFileSync(a, "utf8");
-      if (/\.insert\(|create\w*\s*\(|Action.*[Cc]reate/.test(s)) verbs.create = true;
-      if (/\.update\(|update\w*\s*\(|move\w*Action|toggle\w*|publish\w*Action|set\w*Action/.test(s)) verbs.update = true;
-      if (/\.delete\(\)|delete\w*\s*\(|soft.?delete|deleted_at\s*[:=]|archive\w*\s*\(|void\w*\s*\(/i.test(s)) verbs.delete = true;
-    }
-  }
+  const dir = diskDir(routePath);
+  // resource dir (non-recursive — descendant resources excluded) + /new +
+  // the [param] detail subtree (recursive — transitions/edit live there).
+  const top = dir ? readdirSync(dir).map((n) => join(dir, n)).filter((f) => statSync(f).isFile() && /\.tsx?$/.test(f) && !/\.test\./.test(f)) : [];
+  const files = [...top, ...filesUnder(diskDir(routePath + "/new")), ...filesUnder(detailRoute && diskDir(detailRoute))];
+  const src = files.map((f) => readFileSync(f, "utf8")).join("\n");
+  if (/\.insert\(|create\w*\s*\(|<FormShell|useActionState|Add\w*Form|New\w*Form|action=\{create/i.test(src)) verbs.create = true;
+  if (/\.update\(|update\w*\s*\(|move\w*|toggle\w*|publish\w*|approve\w*|reject\w*|set\w*Action|transition|advance\w*|\bedit\b|Controls\b|Kanban/i.test(src)) verbs.update = true;
+  if (/\.delete\(\)|delete\w*\s*\(|soft.?delete|deleted_at\s*[:=]|archive\w*\s*\(|void\w*\s*\(|remove\w*Action/i.test(src)) verbs.delete = true;
   return verbs;
 }
 
@@ -109,7 +117,7 @@ for (const r of routes) {
   }
   const reachClicks = navHops === null ? null : 2 + navHops; // 2 to the nav item + hops into descendants
 
-  const verbs = crudActions(r, detail, edit);
+  const verbs = crudActions(r, detail);
   resources.set(r, {
     resource: r, shell, depth,
     list: pageDirs.has(r),

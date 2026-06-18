@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -74,6 +75,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         eyebrow={t("console.finance.entities.detail.eyebrow", undefined, "Finance · Entity")}
         title={e.legal_name}
         subtitle={`${e.short_code} · ${e.base_currency}${e.jurisdiction ? ` · ${e.jurisdiction}` : ""}`}
+        action={
+          <Button href={`/console/finance/entities/${e.id}/edit`} size="sm" variant="ghost">
+            {t("common.edit", undefined, "Edit")}
+          </Button>
+        }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">

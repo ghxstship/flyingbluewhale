@@ -51,7 +51,7 @@ export function NewAnnouncementForm({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.comms.announcements.new.roleBand", undefined, "Role Band")}
+              {t("console.comms.announcements.new.roleBandLabel", undefined, "Role Band")}
             </span>
             <select name="audience" className="ps-input focus-ring w-full" defaultValue="all">
               <option value="all">
@@ -71,7 +71,7 @@ export function NewAnnouncementForm({
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.comms.announcements.new.project", undefined, "Project")}
+              {t("console.comms.announcements.new.projectLabel", undefined, "Project")}
             </span>
             <select name="project_id" className="ps-input focus-ring w-full" defaultValue="">
               <option value="">
@@ -86,7 +86,7 @@ export function NewAnnouncementForm({
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.comms.announcements.new.team", undefined, "Team")}
+              {t("console.comms.announcements.new.teamLabel", undefined, "Team")}
             </span>
             <select name="team_id" className="ps-input focus-ring w-full" defaultValue="">
               <option value="">{t("console.comms.announcements.new.team.any", undefined, "Any team")}</option>

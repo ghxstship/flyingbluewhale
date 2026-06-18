@@ -51,7 +51,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
         subtitle={`${photos.length} ${t("console.photos.photosLabel", undefined, "photos")}${sp.album ? ` · ${t("console.photos.albumLabel", undefined, "album")} "${sp.album}"` : ""}`}
         action={
           <Button href="/console/photos/upload" size="sm">
-            {t("console.photos.upload", undefined, "+ Upload")}
+            {t("console.photos.uploadLabel", undefined, "+ Upload")}
           </Button>
         }
       />

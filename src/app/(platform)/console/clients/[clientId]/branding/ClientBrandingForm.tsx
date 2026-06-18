@@ -46,7 +46,7 @@ export function ClientBrandingForm({ initial }: { initial: Initial }) {
             name="logoUrl"
             scope="client"
             initialUrl={initial.logoUrl}
-            label={t("console.clients.branding.logoLabel", undefined, `${initial.clientName} logo`)}
+            label={t("console.clients.branding.logoLabel", { name: initial.clientName }, `${initial.clientName} logo`)}
           />
         </div>
       </section>

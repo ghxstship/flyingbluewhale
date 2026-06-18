@@ -69,7 +69,7 @@ export default async function Page() {
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.captures.new.source", undefined, "Source")}
+                {t("console.captures.new.sourceLabel", undefined, "Source")}
                 <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="source" required className={INPUT} defaultValue="openspace">

@@ -56,7 +56,7 @@ export default async function Page() {
         <FormShell action={addAvailabilityAction} submitLabel={t("common.add", undefined, "Add")}>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium">{t("me.availability.kind", undefined, "Kind")}</label>
+              <label className="text-xs font-medium">{t("me.availability.kindLabel", undefined, "Kind")}</label>
               <select name="kind" className="ps-input mt-1.5 w-full" defaultValue="hold">
                 <option value="hold">{t("me.availability.kind.hold", undefined, "Hold — Auto-release on TTL")}</option>
                 <option value="confirm">{t("me.availability.kind.confirm", undefined, "Confirm — Locked")}</option>

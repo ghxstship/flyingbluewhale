@@ -209,7 +209,7 @@ export function LetterEditor({
               </FormField>
               <FormField
                 name="compensation_basis"
-                label={t("console.people.offerLetters.editor.compensation.basis", undefined, "Compensation Basis")}
+                label={t("console.people.offerLetters.editor.compensation.basisLabel", undefined, "Compensation Basis")}
               >
                 <NativeSelect name="compensation_basis" defaultValue={raw.compensation_basis}>
                   <option value="per_day">

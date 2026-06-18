@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         }
         breadcrumbs={[
           { label: t("p.shared.portal", undefined, "Portal"), href: `/p/${slug}` },
-          { label: t("p.athlete.breadcrumb", undefined, "Athlete"), href: `/p/${slug}/athlete` },
+          { label: t("p.athlete.breadcrumbLabel", undefined, "Athlete"), href: `/p/${slug}/athlete` },
           { label: t("p.athlete.visa.breadcrumb", undefined, "Visa") },
         ]}
       />

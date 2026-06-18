@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             accent={upcomingShifts > 0}
           />
           <MetricCard
-            label={t("p.volunteer.metrics.status", undefined, "Status")}
+            label={t("p.volunteer.metrics.statusLabel", undefined, "Status")}
             value={
               me
                 ? t("p.volunteer.metrics.status.active", undefined, "Active")

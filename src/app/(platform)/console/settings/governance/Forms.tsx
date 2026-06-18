@@ -37,7 +37,7 @@ export function CommitteeForm() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.settings.governance.forms.committee.cadence", undefined, "Cadence")}
+              {t("console.settings.governance.forms.committee.cadenceLabel", undefined, "Cadence")}
             </label>
             <select name="cadence" defaultValue="monthly" className="ps-input mt-1.5 w-full">
               <option value="weekly">
@@ -99,7 +99,7 @@ export function PolicyForm() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.settings.governance.forms.policy.category", undefined, "Category")}
+              {t("console.settings.governance.forms.policy.categoryLabel", undefined, "Category")}
             </label>
             <select name="category" defaultValue="operations" className="ps-input mt-1.5 w-full">
               <option value="finance">

@@ -15,7 +15,7 @@ export default async function Page() {
             </div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/accommodation/village">
-            <div className="text-sm font-medium">{t("console.accommodation.village", undefined, "Village")}</div>
+            <div className="text-sm font-medium">{t("console.accommodation.villageLabel", undefined, "Village")}</div>
           </Link>
         </div>
       </div>

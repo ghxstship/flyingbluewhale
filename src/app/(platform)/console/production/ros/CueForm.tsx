@@ -23,7 +23,7 @@ export function CueForm() {
       />
       <div>
         <label className="text-xs font-medium text-[var(--p-text-2)]">
-          {t("console.production.ros.cueForm.lane", undefined, "Lane")}
+          {t("console.production.ros.cueForm.laneLabel", undefined, "Lane")}
         </label>
         <select name="lane" defaultValue="show" className="ps-input mt-1.5 w-full">
           <option value="show">{t("console.production.ros.cueForm.lane.show", undefined, "Show")}</option>

@@ -62,7 +62,7 @@ export default async function InvoicesPage() {
         }
         action={
           <Button href="/console/finance/invoices/new">
-            {t("console.finance.invoices.new", undefined, "+ New Invoice")}
+            {t("console.finance.invoices.newLabel", undefined, "+ New Invoice")}
           </Button>
         }
       />

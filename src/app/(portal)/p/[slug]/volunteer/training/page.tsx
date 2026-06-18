@@ -60,8 +60,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow={t("p.volunteer.training.eyebrow", undefined, "Portal · Volunteer")}
-        title={t("p.volunteer.training.title", undefined, "Training")}
+        eyebrow={t("p.volunteer.training.eyebrowLabel", undefined, "Portal · Volunteer")}
+        title={t("p.volunteer.training.titleLabel", undefined, "Training")}
         subtitle={t(
           required.length === 1 ? "p.volunteer.training.subtitle.one" : "p.volunteer.training.subtitle.other",
           { count: required.length },
@@ -83,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             value={fmt.number(required.length)}
           />
           <MetricCard
-            label={t("p.volunteer.training.metric.status", undefined, "Status")}
+            label={t("p.volunteer.training.metric.statusLabel", undefined, "Status")}
             value={t("p.volunteer.training.metric.status.open", undefined, "Open")}
             accent={required.length > 0}
           />

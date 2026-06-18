@@ -76,7 +76,7 @@ export default async function Page() {
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/inspections/templates" size="sm" variant="ghost">
-              {t("console.inspections.templates", undefined, "Templates")}
+              {t("console.inspections.templatesLabel", undefined, "Templates")}
             </Button>
             <Button href="/console/inspections/new" size="sm">
               {t("console.inspections.newInspection", undefined, "+ New Inspection")}

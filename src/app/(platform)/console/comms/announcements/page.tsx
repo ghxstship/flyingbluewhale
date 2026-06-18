@@ -60,7 +60,7 @@ export default async function AnnouncementsPage() {
         }
         action={
           <Button href="/console/comms/announcements/new" size="sm">
-            {t("console.comms.announcements.new", undefined, "+ New")}
+            {t("console.comms.announcements.newLabel", undefined, "+ New")}
           </Button>
         }
       />

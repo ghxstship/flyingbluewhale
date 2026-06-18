@@ -61,7 +61,7 @@ export default async function Page() {
         )}
         action={
           <Button href="/console/collaborate/docs/new" size="sm">
-            {t("console.collaborate.docs.new", undefined, "+ New Document")}
+            {t("console.collaborate.docs.newLabel", undefined, "+ New Document")}
           </Button>
         }
       />

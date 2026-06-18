@@ -81,7 +81,12 @@
     "home": "الرئيسية",
     "dash": "—",
     "untitled": "بدون عنوان",
-    "savedToast": "تم الحفظ"
+    "savedToast": "تم الحفظ",
+    "continue": "متابعة",
+    "accessDenied": {
+      "backToOverview": "العودة إلى النظرة العامة",
+      "title": "ليس لديك صلاحية الوصول"
+    }
   },
   "nav": {
     "product": "المنتج",
@@ -1765,6 +1770,30 @@
           "card": {
             "show": "العرض {date}",
             "closes": "يُغلق {date}"
+          },
+          "submit": {
+            "already": {
+              "browse": "تصفّح المزيد من الدعوات",
+              "cta": "عرض مشاركاتي",
+              "title": "تمت المشاركة بالفعل"
+            },
+            "breadcrumbs": {
+              "calls": "الدعوات المفتوحة",
+              "marketplace": "السوق",
+              "submit": "مشاركة"
+            },
+            "closed": {
+              "cta": "تصفّح الدعوات المفتوحة",
+              "title": "هذه الدعوة مغلقة"
+            },
+            "form": {
+              "links": "الروابط",
+              "pitch": "العرض التقديمي",
+              "submit": "المشاركة في هذه الدعوة"
+            },
+            "hero": {
+              "closesPrefix": "تُغلق"
+            }
           }
         },
         "crew": {
@@ -1882,7 +1911,8 @@
             },
             "cta": {
               "bid": "قدّم عرضًا على طلب التسعير هذا",
-              "signup": "بحاجة إلى حساب؟"
+              "signup": "بحاجة إلى حساب؟",
+              "expressInterest": "أبدِ اهتمامك"
             }
           },
           "meta": {
@@ -3169,6 +3199,53 @@
           "title": "ATLVS مُتاح الآن.",
           "subtitle": "مجاني، إلى الأبد، للفرق الصغيرة. تسعير لكل مؤسسة بعد ذلك صعودًا."
         }
+      },
+      "marketplace-gigs-apply": {
+        "already": {
+          "browse": "تصفّح المزيد من الأعمال",
+          "cta": "عرض طلباتي",
+          "title": "تم التقديم بالفعل"
+        },
+        "breadcrumbs": {
+          "apply": "تقديم",
+          "crewGigs": "أعمال الطاقم",
+          "marketplace": "السوق"
+        },
+        "closed": {
+          "cta": "تصفّح الأعمال المفتوحة",
+          "title": "هذا العمل مغلق"
+        },
+        "form": {
+          "coverNote": "رسالة التغطية",
+          "phone": "الهاتف",
+          "portfolioUrl": "رابط معرض الأعمال",
+          "submit": "إرسال الطلب"
+        },
+        "hero": {
+          "eyebrow": "تقديم",
+          "perDay": " / يوم"
+        }
+      },
+      "marketplace-inquire": {
+        "already": {
+          "back": "العودة إلى القائمة",
+          "cta": "عرض استفساراتي",
+          "title": "تم إرسال الاستفسار بالفعل"
+        },
+        "breadcrumbs": {
+          "inquire": "استفسار",
+          "marketplace": "السوق"
+        },
+        "form": {
+          "contactEmail": "البريد الإلكتروني للتواصل",
+          "contactPhone": "هاتف التواصل",
+          "eventDate": "تاريخ الفعالية",
+          "message": "الرسالة"
+        },
+        "gone": {
+          "cta": "العودة إلى السوق",
+          "title": "لم تعد هذه القائمة متاحة"
+        }
       }
     },
     "layout": {
@@ -4049,7 +4126,8 @@
       "pageSubtitle": "أدخل الرمز السداسي من تطبيق المصادقة للمتابعة."
     },
     "notFound": {
-      "title": "مسار المصادقة غير موجود."
+      "title": "مسار المصادقة غير موجود.",
+      "body": "رابط تسجيل الدخول هذا لم يعد صالحًا أو لم يكن موجودًا أصلًا. اختر مسارًا أدناه."
     },
     "onboarding": {
       "title": "سمِّ مساحة عملك",
@@ -4778,6 +4856,27 @@
       "submit": "إرسال",
       "selectPlaceholder": "اختر…",
       "fileHelp": "حتى 10 ميغابايت. صور أو PDF."
+    },
+    "configureSupabase": {
+      "description": "اضبط Supabase.",
+      "title": "اضبط Supabase"
+    },
+    "formView": {
+      "empty": "—",
+      "emptyDescription": "لا توجد حقول لعرضها في هذا السجل.",
+      "emptyTitle": "لا توجد حقول"
+    },
+    "galleryView": {
+      "emptyTitle": "لا شيء لعرضه",
+      "label": "المعرض",
+      "staticCard": "بطاقة ثابتة"
+    },
+    "treeView": {
+      "collapse": "طيّ {title}",
+      "emptyDescription": "تتداخل السجلات هنا وفق عناصرها الأصلية.",
+      "emptyTitle": "لا شيء لعرضه",
+      "expand": "توسيع {title}",
+      "label": "شجرة"
     }
   },
   "pdf": {
@@ -5565,7 +5664,10 @@
     "error": {
       "eyebrow": "خطأ",
       "title": "حدث خطأ ما",
-      "tryAgain": "حاول مجددًا"
+      "tryAgain": "حاول مجددًا",
+      "backHome": "العودة إلى الرئيسية",
+      "fallbackMessage": "حدث خطأ غير متوقع.",
+      "ref": "المرجع: {digest}"
     },
     "offline": {
       "queuedToast": "في الطابور — سيُزامَن عند الاتصال",
@@ -5725,7 +5827,8 @@
       },
       "scheduled": "مجدول",
       "acknowledgedAt": "تم الإقرار {time}",
-      "acknowledge": "أقرّ"
+      "acknowledge": "أقرّ",
+      "acknowledging": "جارٍ الإقرار…"
     },
     "checkInSummary": {
       "eyebrow": "الميدان",
@@ -5881,7 +5984,10 @@
       "selectProject": "اختر مشروعًا…",
       "weatherPlaceholder": "الطقس — مثل 78°F مشمس",
       "saveLog": "احفظ السجل",
-      "recent": "الأحدث"
+      "recent": "الأحدث",
+      "empty": {
+        "title": "لا توجد سجلات بعد"
+      }
     },
     "docs": {
       "download": {
@@ -6051,7 +6157,11 @@
     "inbox": {
       "room": {
         "directMessage": "رسالة مباشرة",
-        "messagePlaceholder": "رسالة"
+        "messagePlaceholder": "رسالة",
+        "emptyDescription": "ألقِ التحية لتبدأ المحادثة.",
+        "emptyTitle": "لا توجد رسائل بعد",
+        "loadOlder": "تحميل الأقدم",
+        "loadingOlder": "جارٍ التحميل…"
       },
       "configureSupabase": "اضبط إعداد Supabase.",
       "eyebrow": "الجوال",
@@ -6070,7 +6180,8 @@
         "openFullForm": "افتحه",
         "summaryLabel": "ماذا حدث؟",
         "fileNow": "قدّم الآن",
-        "subtitle": "سجّل مشكلة سلامة — يُخطر المشرف ومسؤول السلامة فورًا."
+        "subtitle": "سجّل مشكلة سلامة — يُخطر المشرف ومسؤول السلامة فورًا.",
+        "filing": "جارٍ التقديم…"
       },
       "eyebrow": "الميدان",
       "title": "حوادثي",
@@ -6222,7 +6333,14 @@
       "empty": {
         "title": "لا مسارات نشطة"
       },
-      "fallbackFlowName": "التأهيل"
+      "fallbackFlowName": "التأهيل",
+      "detail": {
+        "empty": {
+          "title": "لا توجد خطوات بعد"
+        }
+      },
+      "finishing": "جارٍ الإنهاء…",
+      "marking": "جارٍ الحفظ…"
     },
     "polls": {
       "title": "الاستفتاءات",
@@ -6403,7 +6521,12 @@
         "open": "مفتوح",
         "anonymous": "مجهول"
       },
-      "closesAt": "يُغلق {date}"
+      "closesAt": "يُغلق {date}",
+      "detail": {
+        "empty": {
+          "title": "لا توجد أسئلة بعد"
+        }
+      }
     },
     "tasks": {
       "eyebrow": "الميدان",
@@ -6423,7 +6546,10 @@
         "startsOn": "يبدأ في",
         "endsOn": "ينتهي في",
         "hoursRequested": "الساعات المطلوبة",
-        "reason": "السبب"
+        "reason": "السبب",
+        "empty": {
+          "title": "لا توجد سياسات إجازات"
+        }
       },
       "title": "الإجازات",
       "balancesHeading": "الأرصدة — {year}",
@@ -6560,7 +6686,11 @@
         "eyebrow": "طلب",
         "coverNote": "رسالة تعريفية",
         "proposedDayRate": "الأجر اليومي المقترح",
-        "resume": "السيرة الذاتية"
+        "resume": "السيرة الذاتية",
+        "review": {
+          "cta": "اكتب مراجعة",
+          "label": "تم الحجز والإنجاز؟"
+        }
       },
       "title": "طلباتي",
       "configureSupabase": "قم بتهيئة Supabase.",
@@ -6577,14 +6707,19 @@
       "eyebrow": "التوفر",
       "title": "تقويم الحجوزات",
       "addSlot": "إضافة فترة",
-      "kind": "النوع",
       "label": "التسمية",
       "labelPlaceholder": "تجهيز منصة MMW26",
       "starts": "يبدأ",
       "ends": "ينتهي",
       "allDay": "يوم كامل",
       "upcoming": "القادم",
-      "empty": "لا توجد فترات توفر بعد."
+      "empty": "لا توجد فترات توفر بعد.",
+      "kind": {
+        "block": "حظر — غير متاح",
+        "confirm": "تأكيد — مقفل",
+        "hold": "حجز — تحرير تلقائي عند انتهاء TTL"
+      },
+      "kindLabel": "النوع"
     },
     "crew": {
       "configureSupabase": "قم بتهيئة Supabase.",
@@ -6747,6 +6882,10 @@
       "title": "عروض الحجز",
       "empty": {
         "title": "لا توجد عروض بعد"
+      },
+      "actions": {
+        "accept": "قبول",
+        "decline": "رفض"
       }
     },
     "organizations": {
@@ -6952,7 +7091,23 @@
       "status": {
         "released": "منشور",
         "hidden": "مخفي — في انتظار الطرف الآخر"
-      }
+      },
+      "new": {
+        "cta": {
+          "applications": "طلباتي",
+          "back": "العودة إلى المراجعات",
+          "offers": "عروضي"
+        },
+        "eyebrow": "مراجعاتي",
+        "form": {
+          "body": "المراجعة",
+          "rating": "التقييم",
+          "submit": "نشر المراجعة"
+        },
+        "subjectPrefix": "تقييم",
+        "title": "اكتب مراجعة"
+      },
+      "writeCta": "اكتب مراجعة"
     },
     "savedSearches": {
       "eyebrow": "عمليات البحث المحفوظة",
@@ -7009,7 +7164,8 @@
         "lastUsed": "· آخر استخدام {when}",
         "removeAria": "إزالة مفتاح المرور",
         "addButton": "إضافة مفتاح مرور",
-        "title": "مفاتيح المرور"
+        "title": "مفاتيح المرور",
+        "removeDialogTitle": "إزالة مفتاح المرور"
       },
       "eyebrow": "الحساب",
       "title": "الأمان",
@@ -7077,7 +7233,11 @@
         "title": "المصادقة الثنائية",
         "requiredNote": "تشترط مؤسستك ذلك لدورك.",
         "recommendedNote": "موصى بها لكل من لديه صلاحية مسؤول.",
-        "backToSecurity": "العودة إلى الأمان"
+        "backToSecurity": "العودة إلى الأمان",
+        "confirm": {
+          "regenerateTitle": "توليد رموز جديدة",
+          "removeTitle": "إزالة المصادِق"
+        }
       }
     },
     "appearance": {
@@ -7118,7 +7278,11 @@
       "detail": {
         "eyebrow": "مشاركة",
         "coverNote": "رسالة تعريفية",
-        "proposedFee": "الأتعاب المقترحة"
+        "proposedFee": "الأتعاب المقترحة",
+        "review": {
+          "cta": "اكتب مراجعة",
+          "label": "تم التكليف والإنجاز؟"
+        }
       },
       "eyebrow": "مشاركاتي",
       "title": "المشاركات",
@@ -7170,6 +7334,17 @@
         "security": "الأمان",
         "home": "الرئيسية"
       }
+    },
+    "inquiries": {
+      "configureSupabase": "تهيئة Supabase.",
+      "empty": {
+        "action": "تصفّح السوق",
+        "title": "لا توجد استفسارات بعد"
+      },
+      "eyebrow": "استفساراتي",
+      "heading": "الاستفسارات",
+      "sentBanner": "تم إرسال الاستفسار. يراه المشغّل في وحدة التحكم الآن.",
+      "title": "استفساراتي"
     }
   },
   "console": {
@@ -7225,7 +7400,24 @@
       },
       "title": "الإقامة",
       "groupBlocks": "الحجوزات الجماعية",
-      "village": "القرية"
+      "village": {
+        "bedPlural": "أسرّة",
+        "bedSingular": "سرير",
+        "col": {
+          "beds": "الأسرّة",
+          "cluster": "المجمّع",
+          "handover": "التسليم",
+          "name": "الاسم"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "emptyLabel": "لا توجد قرى",
+        "eyebrow": "الإقامة",
+        "newVenue": "+ مكان جديد",
+        "title": "القرية",
+        "villagePlural": "قرى",
+        "villageSingular": "قرية"
+      },
+      "villageLabel": "القرية"
     },
     "accreditation": {
       "categories": {
@@ -7318,14 +7510,16 @@
         "emptyLabel": "لا توجد تغييرات اعتماد",
         "columnKind": "النوع",
         "columnStatus": "الحالة",
-        "columnRequested": "تاريخ الطلب"
+        "columnRequested": "تاريخ الطلب",
+        "change_state": {
+          "applied": "مُطبّق",
+          "approved": "معتمد",
+          "pending": "قيد الانتظار",
+          "rejected": "مرفوض"
+        }
       },
       "title": "الاعتماد",
-      "policy": "السياسة",
-      "zones": "المناطق",
-      "vetting": "التدقيق",
       "printQueue": "قائمة انتظار الطباعة",
-      "scans": "عمليات المسح",
       "print": {
         "eyebrowWorkspace": "مساحة العمل",
         "title": "قائمة انتظار الطباعة",
@@ -7347,7 +7541,84 @@
           "orgFallback": "المؤسسة",
           "validTo": "صالحة حتى"
         }
-      }
+      },
+      "categoriesLabel": "الفئات",
+      "changesLabel": "التغييرات",
+      "policy": {
+        "allowed": "مسموح",
+        "categoryPlural": "فئات",
+        "categorySingular": "فئة",
+        "configureSupabase": "اضبط Supabase.",
+        "coverageSuffix": "تغطية {coverage}%",
+        "emptyTitle": "تحتاج إلى فئات + مناطق أولًا",
+        "eyebrow": "الاعتماد",
+        "manageCategories": "إدارة الفئات",
+        "newCategory": "+ فئة جديدة",
+        "notAllowed": "غير مسموح",
+        "openVenues": "فتح الأماكن",
+        "title": "السياسة",
+        "zonePlural": "مناطق",
+        "zoneSingular": "منطقة",
+        "zoneVenueHeader": "المنطقة — المكان"
+      },
+      "policyLabel": "السياسة",
+      "scans": {
+        "columns": {
+          "at": "في",
+          "gate": "البوابة",
+          "reason": "السبب",
+          "result": "النتيجة"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "eyebrow": "مساحة العمل",
+        "subtitleOne": "{count} سجل",
+        "subtitleOther": "{count} سجل",
+        "title": "مسح البوابات"
+      },
+      "scansLabel": "عمليات المسح",
+      "vetting": {
+        "columns": {
+          "email": "البريد الإلكتروني",
+          "person": "الشخص",
+          "status": "الحالة",
+          "submitted": "تاريخ التقديم"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "detail": {
+          "configureSupabase": "اضبط Supabase.",
+          "eyebrow": "السجل",
+          "title": "السجل"
+        },
+        "edit": {
+          "email": "البريد الإلكتروني",
+          "eyebrow": "طلب الفحص",
+          "personName": "اسم الشخص",
+          "titleFallback": "تحرير طلب الفحص",
+          "titleWithName": "تحرير {name}",
+          "validFrom": "صالح من",
+          "validTo": "صالح حتى",
+          "vettingState": "حالة الفحص"
+        },
+        "emptyLabel": "لا توجد طلبات قيد الفحص",
+        "eyebrow": "مساحة العمل",
+        "subtitleOne": "{count} سجل",
+        "subtitleOther": "{count} سجل",
+        "title": "قائمة انتظار الفحص"
+      },
+      "vettingLabel": "الفحص",
+      "zones": {
+        "columns": {
+          "code": "الرمز",
+          "name": "الاسم",
+          "parent": "الأصل",
+          "venue": "المكان"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "emptyLabel": "لم تُعرَّف أي مناطق",
+        "eyebrow": "الاعتماد",
+        "title": "المناطق"
+      },
+      "zonesLabel": "المناطق"
     },
     "dashboard": {
       "tabs": {
@@ -7422,7 +7693,8 @@
           "show": "العرض",
           "commission": "العمولة",
           "artistPayout": "مستحقات الفنان",
-          "status": "الحالة"
+          "status": "الحالة",
+          "settlement_state": "الحالة"
         }
       },
       "eyebrow": "الوكالة",
@@ -7474,7 +7746,8 @@
           "exclusive": "حصري",
           "signed": "تاريخ التوقيع"
         },
-        "commissionDefault": "افتراضي"
+        "commissionDefault": "افتراضي",
+        "createFirst": "إضافة موهبة"
       },
       "tours": {
         "detail": {
@@ -7637,7 +7910,55 @@
       },
       "eyebrow": "الذكاء الاصطناعي",
       "title": "الذكاء الاصطناعي",
-      "subtitle": "الأتمتة وسير العمل المساعد."
+      "subtitle": "الأتمتة وسير العمل المساعد.",
+      "agents": {
+        "configureSupabase": "اضبط Supabase.",
+        "controls": {
+          "disable": "تعطيل",
+          "enable": "تفعيل"
+        },
+        "detail": {
+          "autoRefresh": "تحديث تلقائي",
+          "configureSupabase": "اضبط Supabase.",
+          "controlsHeading": "عناصر التحكم",
+          "createdAt": "تاريخ الإنشاء",
+          "createdBy": "أنشأه",
+          "disabled": "معطّل",
+          "enabled": "مفعّل",
+          "maxTokens": "أقصى عدد رموز",
+          "metricModel": "النموذج",
+          "metricOutput": "نوع المُخرَج",
+          "metricTarget": "الهدف",
+          "promptHeading": "قالب الموجّه",
+          "sourceEmpty": "لا شيء",
+          "sourceHeading": "أعمدة المصدر",
+          "titleFallback": "وكيل ميداني",
+          "updatedLabel": "محدّث"
+        },
+        "disabled": "معطّل",
+        "emptyTitle": "لا يوجد وكلاء ميدانيون بعد",
+        "enabled": "مفعّل",
+        "eyebrow": "الوكلاء الميدانيون",
+        "metricDisabled": "معطّل",
+        "metricEnabled": "مفعّل",
+        "metricTotal": "الإجمالي",
+        "new": {
+          "enabled": "مفعّل",
+          "eyebrow": "الوكلاء الميدانيون",
+          "outputType": "نوع المُخرَج",
+          "promptTemplate": "قالب الموجّه",
+          "sourceColumns": "أعمدة المصدر",
+          "submit": "إنشاء وكيل",
+          "targetColumn": "العمود الهدف",
+          "targetTable": "الجدول الهدف",
+          "title": "وكيل ميداني جديد"
+        },
+        "newAction": "+ وكيل جديد",
+        "subtitleAgentOne": "وكيل",
+        "subtitleAgentOther": "وكلاء",
+        "subtitleEnabled": "مفعّل",
+        "title": "الوكلاء الميدانيون"
+      }
     },
     "annotations": {
       "confirmedToast": "تم التأكيد",
@@ -7665,7 +7986,8 @@
         "metadata": "البيانات الوصفية",
         "repliesCount": "الردود — {count}",
         "noReplies": "لا توجد ردود بعد.",
-        "backToAll": "← العودة إلى جميع التعليقات التوضيحية"
+        "backToAll": "← العودة إلى جميع التعليقات التوضيحية",
+        "annotation_state": "الحالة"
       },
       "title": "التعليقات التوضيحية",
       "configureSupabase": "قم بتهيئة Supabase.",
@@ -7678,7 +8000,8 @@
         "status": "الحالة",
         "due": "الاستحقاق",
         "confirm": "التأكيد",
-        "created": "تاريخ الإنشاء"
+        "created": "تاريخ الإنشاء",
+        "annotation_state": "الحالة"
       },
       "confirmed": "مؤكد",
       "needed": "مطلوب",
@@ -7748,7 +8071,8 @@
           "targetUuid": "UUID الهدف",
           "note": "ملاحظة · اختياري"
         },
-        "addLink": "+ إضافة رابط"
+        "addLink": "+ إضافة رابط",
+        "edit": "تحرير"
       },
       "view": {
         "eyebrow": "عارض BIM",
@@ -7825,6 +8149,22 @@
         "size": "الحجم",
         "version": "الإصدار",
         "state": "الحالة"
+      },
+      "edit": {
+        "breadcrumbs": {
+          "bim": "BIM"
+        },
+        "eyebrow": "إبداعي · BIM",
+        "field": {
+          "discipline": "التخصص",
+          "name": "الاسم",
+          "project": "المشروع",
+          "sourceType": "نوع المصدر",
+          "storagePath": "مسار التخزين",
+          "versionLabel": "تسمية الإصدار"
+        },
+        "submit": "حفظ النموذج",
+        "title": "تحرير · {name}"
       }
     },
     "bookings": {
@@ -7919,7 +8259,8 @@
           "door": "نسبة الشباك %",
           "deposit": "العربون",
           "stage": "المرحلة"
-        }
+        },
+        "createFirst": "ابدأ صفقتك الأولى"
       },
       "holds": {
         "new": {
@@ -8058,7 +8399,8 @@
           "artistPayout": "مستحقات الفنان",
           "balanceDue": "الرصيد المستحق",
           "paidAtt": "الحضور المدفوع",
-          "status": "الحالة"
+          "status": "الحالة",
+          "settlement_state": "الحالة"
         }
       }
     },
@@ -8110,7 +8452,8 @@
         "kind": "النوع",
         "window": "النافذة الزمنية",
         "budget": "الميزانية",
-        "status": "الحالة"
+        "status": "الحالة",
+        "campaign_state": "الحالة"
       }
     },
     "captures": {
@@ -8121,12 +8464,22 @@
         "name": "الاسم",
         "namePlaceholder": "جولة غرفة الميكانيكا L3 — 2026-05-24",
         "project": "المشروع",
-        "source": "المصدر",
         "captureDate": "تاريخ الالتقاط",
         "panoramas": "الصور البانورامية — تقريبًا",
         "viewerUrl": "عنوان URL للعارض",
         "externalId": "المعرّف الخارجي — معرّف المهمة/المساحة لدى المورّد",
-        "notes": "ملاحظات"
+        "notes": "ملاحظات",
+        "source": {
+          "dronePhoto": "صورة درون",
+          "dronedeploy": "DroneDeploy",
+          "huddleCam": "HuddleCam",
+          "manual360": "يدوي 360°",
+          "matterport": "Matterport",
+          "openspace": "OpenSpace",
+          "satellite": "قمر صناعي",
+          "structionsite": "StructionSite"
+        },
+        "sourceLabel": "المصدر"
       },
       "eyebrow": "الميدان",
       "title": "الالتقاطات الواقعية",
@@ -8182,7 +8535,8 @@
           "overview": "نظرة عامة",
           "projects": "المشاريع",
           "proposals": "العروض",
-          "invoices": "الفواتير"
+          "invoices": "الفواتير",
+          "branding": "الهوية"
         },
         "eyebrow": "عميل",
         "noEmail": "لا يوجد بريد إلكتروني مسجل",
@@ -8197,7 +8551,8 @@
           "website": "الموقع الإلكتروني",
           "added": "تاريخ الإضافة"
         },
-        "notes": "ملاحظات"
+        "notes": "ملاحظات",
+        "newInvoice": "+ فاتورة جديدة"
       },
       "projects": {
         "eyebrow": "عميل",
@@ -8222,7 +8577,8 @@
           "status": "الحالة",
           "sent": "تاريخ الإرسال",
           "signed": "تاريخ التوقيع",
-          "amount": "المبلغ"
+          "amount": "المبلغ",
+          "proposal_state": "الحالة"
         }
       },
       "new": {
@@ -8247,6 +8603,29 @@
         "phone": "الهاتف",
         "website": "الموقع الإلكتروني",
         "added": "تاريخ الإضافة"
+      },
+      "branding": {
+        "accentLabel": "اللون المميّز",
+        "color": {
+          "title": "اللون"
+        },
+        "eyebrow": "العميل",
+        "foregroundLabel": "النص على اللون المميّز",
+        "identity": {
+          "title": "هوية العميل"
+        },
+        "logoLabel": "شعار {name}",
+        "preview": {
+          "sample": "عينة اللون المميّز الثانوي",
+          "title": "معاينة"
+        },
+        "saveButton": "حفظ هوية العميل",
+        "savedToast": "تم حفظ هوية العميل",
+        "secondaryLabel": "ثانوي",
+        "title": "الهوية"
+      },
+      "bulk": {
+        "delete": "حذف"
       }
     },
     "commercial": {
@@ -8343,7 +8722,8 @@
             "quantity": "الكمية",
             "delivered": "المسلَّم",
             "status": "الحالة",
-            "dueBy": "الاستحقاق بحلول"
+            "dueBy": "الاستحقاق بحلول",
+            "entitlement_state": "الحالة"
           }
         },
         "detail": {
@@ -8424,16 +8804,29 @@
           "title": "العنوان",
           "body": "النص",
           "audience": "الجمهور",
-          "roleBand": "فئة الدور",
-          "project": "المشروع",
-          "team": "الفريق",
           "pinToTop": "تثبيت في أعلى الموجز",
           "saving": "جارٍ الحفظ…",
           "saveDraft": "حفظ المسودة",
           "publishing": "جارٍ النشر…",
           "publishNow": "نشر الآن",
           "eyebrow": "الاتصالات · الإعلانات",
-          "configureSupabase": "قم بتهيئة Supabase."
+          "configureSupabase": "قم بتهيئة Supabase.",
+          "project": {
+            "any": "على مستوى المؤسسة · أي مشروع"
+          },
+          "projectLabel": "المشروع",
+          "roleBand": {
+            "admins": "المسؤولون",
+            "contractors": "المقاولون",
+            "crew": "الطاقم",
+            "everyone": "الجميع",
+            "vendors": "الموردون"
+          },
+          "roleBandLabel": "فئة الدور",
+          "team": {
+            "any": "أي فريق"
+          },
+          "teamLabel": "الفريق"
         },
         "eyebrow": "الاتصالات",
         "title": "الإعلانات",
@@ -8446,7 +8839,9 @@
           "state": "الحالة",
           "audience": "الجمهور",
           "pinned": "مثبّت"
-        }
+        },
+        "createFirst": "انشر إعلانك الأول",
+        "newLabel": "+ جديد"
       },
       "polls": {
         "detail": {
@@ -8578,6 +8973,25 @@
         "paid": "المدفوع",
         "retainage": "نسبة الاحتجاز",
         "state": "الحالة"
+      },
+      "edit": {
+        "title": "تحرير العقد"
+      },
+      "fields": {
+        "counterpartyEmail": "البريد الإلكتروني للطرف المقابل",
+        "currency": "العملة",
+        "description": "الوصف",
+        "end": "النهاية",
+        "notes": "ملاحظات",
+        "number": "الرقم",
+        "signed": "تاريخ التوقيع",
+        "start": "البداية"
+      },
+      "new": {
+        "numberPlaceholder": "يُولَّد تلقائيًا إذا تُرك فارغًا",
+        "submit": "إنشاء عقد",
+        "title": "العنوان",
+        "titlePlaceholder": "رعاية — MMW26"
       }
     },
     "dashboards": {
@@ -8657,7 +9071,9 @@
         "columnRev": "المراجعة — عند النشر",
         "columnDocState": "حالة المستند",
         "selectSheet": "اختر لوحة…",
-        "addSheet": "+ إضافة لوحة"
+        "addSheet": "+ إضافة لوحة",
+        "edit": "تحرير",
+        "noVersionsTitle": "لا توجد إصدارات بعد"
       },
       "new": {
         "eyebrow": "الإبداع",
@@ -8693,7 +9109,21 @@
         "sheets": "اللوحات",
         "state": "الحالة"
       },
-      "none": "— لا يوجد —"
+      "none": "— لا يوجد —",
+      "edit": {
+        "breadcrumbs": {
+          "drawings": "الرسومات"
+        },
+        "eyebrow": "إبداعي · الرسومات",
+        "fields": {
+          "description": "الوصف",
+          "discipline": "التخصص",
+          "name": "الاسم",
+          "project": "المشروع"
+        },
+        "submit": "حفظ مجموعة الأوراق",
+        "title": "تحرير · {name}"
+      }
     },
     "emailInbox": {
       "eyebrow": "مراسلات المشروع",
@@ -8713,7 +9143,22 @@
         "routedTo": "موجّه إلى"
       },
       "noSubject": "(بدون موضوع)",
-      "unrouted": "غير موجّه"
+      "unrouted": "غير موجّه",
+      "active": "نشط",
+      "addressNotes": "ملاحظات العنوان الوارد",
+      "body": "الرسالة",
+      "fields": {
+        "cc": "نسخة",
+        "inboundAddress": "العنوان الوارد",
+        "messageId": "معرّف الرسالة",
+        "processed": "تمت المعالجة",
+        "spamScore": "درجة البريد المزعج",
+        "thread": "السلسلة",
+        "to": "إلى"
+      },
+      "htmlOnly": "تحتوي هذه الرسالة على محتوى HTML فقط.",
+      "inactive": "غير نشط",
+      "openProject": "فتح المشروع"
     },
     "envelopes": {
       "target": {
@@ -8745,6 +9190,39 @@
         "signers": "الموقّعون",
         "sent": "تاريخ الإرسال",
         "state": "الحالة"
+      },
+      "detail": {
+        "body": "المتن",
+        "completed": "تاريخ الإكمال",
+        "expires": "تاريخ الانتهاء",
+        "noSigners": "لم يُسجَّل أي موقّعين بعد.",
+        "providerRef": "مرجع المزوّد",
+        "signersTitle": "الموقّعون",
+        "targetId": "مُعرّف الهدف"
+      },
+      "new": {
+        "body": "المتن / ملاحظات",
+        "expires": "تاريخ الانتهاء",
+        "eyebrow": "قانوني",
+        "noProject": "— لا يوجد مشروع —",
+        "subject": "الموضوع",
+        "submit": "إنشاء مظروف",
+        "targetId": "مُعرّف السجل الهدف",
+        "title": "مظروف توقيع إلكتروني جديد"
+      },
+      "provider": {
+        "adobeSign": "Adobe Sign",
+        "docusign": "DocuSign",
+        "hellosign": "HelloSign",
+        "manual": "يدوي",
+        "pandadoc": "PandaDoc"
+      },
+      "stateControls": {
+        "toast": {
+          "ok": "تم تحديث المظروف",
+          "voided": "تم إبطال المظروف"
+        },
+        "void": "إبطال"
       }
     },
     "estimates": {
@@ -8782,6 +9260,36 @@
         "subtotal": "المجموع الفرعي",
         "total": "الإجمالي",
         "state": "الحالة"
+      },
+      "detail": {
+        "breadcrumb": {
+          "creative": "إبداعي",
+          "estimates": "التقديرات"
+        },
+        "eyebrow": "إبداعي",
+        "field": {
+          "created": "تاريخ الإنشاء",
+          "markup": "هامش الربح",
+          "state": "الحالة",
+          "subtotal": "المجموع الفرعي",
+          "total": "الإجمالي مع هامش الربح",
+          "waste": "عامل الهدر"
+        },
+        "noProject": "لا يوجد مشروع مسجّل",
+        "notes": "ملاحظات"
+      },
+      "edit": {
+        "eyebrow": "إبداعي",
+        "fields": {
+          "defaultMarkupHint": "يُخزّن ككسر (0.07 = 7%).",
+          "defaultMarkupPct": "هامش الربح الافتراضي %",
+          "defaultWasteFactor": "عامل الهدر الافتراضي",
+          "name": "الاسم",
+          "notes": "ملاحظات",
+          "state": "الحالة"
+        },
+        "submit": "حفظ التغييرات",
+        "title": "تحرير {name}"
       }
     },
     "events": {
@@ -8798,7 +9306,8 @@
         "statusScheduled": "مجدول",
         "statusLive": "مباشر",
         "statusComplete": "مكتمل",
-        "statusCancelled": "ملغى"
+        "statusCancelled": "ملغى",
+        "event_state": "الحالة"
       },
       "detail": {
         "eyebrow": "العمليات",
@@ -8811,7 +9320,8 @@
           "status": "الحالة",
           "starts": "يبدأ",
           "ends": "ينتهي",
-          "description": "الوصف"
+          "description": "الوصف",
+          "event_state": "الحالة"
         }
       },
       "new": {
@@ -8838,7 +9348,11 @@
         "name": "الاسم",
         "starts": "يبدأ",
         "ends": "ينتهي",
-        "status": "الحالة"
+        "status": "الحالة",
+        "event_state": "الحالة"
+      },
+      "bulk": {
+        "cancel": "إلغاء"
       }
     },
     "finance": {
@@ -8874,6 +9388,29 @@
           "amount": "المبلغ",
           "confidence": "الثقة",
           "state": "الحالة"
+        },
+        "detail": {
+          "actionsHeading": "الإجراءات",
+          "allExtractions": "← كل الاستخراجات",
+          "confidence": "الثقة",
+          "dueDate": "الاستحقاق",
+          "errorHeading": "خطأ في الاستخراج",
+          "lineDescription": "الوصف",
+          "lineItems": "بنود السطور",
+          "lineQty": "الكمية",
+          "lineTotal": "الإجمالي",
+          "lineUnit": "الوحدة",
+          "matchedPo": "PO المطابق",
+          "matchedVendor": "المورّد المطابق",
+          "noLineItems": "لم تُستخرج بنود سطور.",
+          "notes": "ملاحظات",
+          "openInvoice": "فتح الفاتورة",
+          "poNumber": "رقم PO",
+          "promote": "الترقية إلى فاتورة",
+          "tax": "الضريبة",
+          "taxId": "الرقم الضريبي",
+          "untitled": "الاستخراج",
+          "viewFile": "عرض الملف"
         }
       },
       "budgets": {
@@ -8883,7 +9420,27 @@
           "submit": "حفظ التغييرات",
           "name": "الاسم",
           "category": "الفئة",
-          "amountCents": "المبلغ — بالسنتات"
+          "amountCents": "المبلغ — بالسنتات",
+          "activation": "التفعيل",
+          "amount": "الميزانية — USD",
+          "class": "الفئة",
+          "department": "القسم",
+          "discipline": "التخصص",
+          "event": "الفعالية",
+          "externalNotes": "ملاحظات خارجية",
+          "internalNotes": "ملاحظات داخلية",
+          "item": "البند",
+          "lineType": "نوع السطر",
+          "location": "الموقع",
+          "phase": "المرحلة (8 بوابات)",
+          "quantity": "الكمية",
+          "rate": "السعر — USD",
+          "rateHint": "التقدير = الكمية × السعر (يُحتسب بقاعدة البيانات)",
+          "status": "الحالة",
+          "team": "الفريق",
+          "tier": "المستوى",
+          "vendor": "المورّد",
+          "xyz": "XYZ — سلوك التكلفة"
         },
         "detail": {
           "title": "الميزانية",
@@ -8913,7 +9470,27 @@
           "amount": "المبلغ — بالدولار الأمريكي",
           "category": "الفئة",
           "eyebrow": "المالية",
-          "title": "ميزانية جديدة"
+          "title": "ميزانية جديدة",
+          "activation": "التفعيل",
+          "amountHint": "خط الأساس المعتمد",
+          "class": "الفئة",
+          "department": "القسم",
+          "discipline": "التخصص",
+          "event": "الفعالية",
+          "externalNotes": "ملاحظات خارجية",
+          "internalNotes": "ملاحظات داخلية",
+          "item": "البند",
+          "lineType": "نوع السطر",
+          "location": "الموقع",
+          "phase": "المرحلة (8 بوابات)",
+          "quantity": "الكمية",
+          "rate": "السعر — USD",
+          "rateHint": "التقدير = الكمية × السعر (يُحتسب بقاعدة البيانات)",
+          "status": "الحالة",
+          "team": "الفريق",
+          "tier": "المستوى",
+          "vendor": "المورّد",
+          "xyz": "XYZ — سلوك التكلفة"
         },
         "title": "الميزانيات",
         "configureSupabase": "قم بتهيئة Supabase.",
@@ -8924,7 +9501,9 @@
           "category": "الفئة",
           "spent": "المنفق",
           "budget": "الميزانية",
-          "utilization": "نسبة الاستخدام"
+          "utilization": "نسبة الاستخدام",
+          "actual": "الفعلي",
+          "department": "القسم"
         },
         "summary": {
           "eyebrow": "المالية",
@@ -8960,7 +9539,13 @@
             "finalLabel": "الرصيد النهائي",
             "finalTrigger": "المرحلة 8 · الإغلاق / القبول النهائي"
           }
-        }
+        },
+        "import": {
+          "eyebrow": "المالية",
+          "title": "استيراد الميزانية — CSV / TSV"
+        },
+        "importAction": "استيراد",
+        "summaryAction": "ملخص"
       },
       "eyebrow": "المالية",
       "consolidation": {
@@ -8990,7 +9575,9 @@
           "ownership": "الملكية"
         },
         "empty": {
-          "prefix": "لا توجد كيانات بعد. أنشئ كيانًا في"
+          "prefix": "لا توجد كيانات بعد. أنشئ كيانًا في",
+          "cta": "كيان جديد",
+          "title": "لا توجد كيانات بعد"
         }
       },
       "costCodes": {
@@ -9087,7 +9674,13 @@
           "currencyLabel": "العملة",
           "categoryLabel": "الفئة",
           "statusLabel": "الحالة",
-          "spentOnLabel": "تاريخ الإنفاق"
+          "spentOnLabel": "تاريخ الإنفاق",
+          "amountLabel": "المبلغ",
+          "departmentLabel": "القسم — XPMS",
+          "disciplineLabel": "التخصص",
+          "itemLabel": "البند",
+          "phaseLabel": "المرحلة (8 بوابات)",
+          "vendorLabel": "المورّد"
         },
         "status": {
           "pending": "قيد الانتظار",
@@ -9105,7 +9698,13 @@
             "currency": "العملة",
             "category": "الفئة",
             "spentOn": "تاريخ الإنفاق",
-            "receipt": "الإيصال"
+            "receipt": "الإيصال",
+            "department": "القسم",
+            "discipline": "التخصص",
+            "expense_state": "الحالة",
+            "item": "البند",
+            "phase": "المرحلة",
+            "vendor": "المورّد"
           },
           "receipt": {
             "attached": "مرفق",
@@ -9122,7 +9721,12 @@
           "categoryPlaceholder": "سفر، وجبات، معدات…",
           "projectOptional": "المشروع · اختياري",
           "noProject": "— بدون مشروع —",
-          "title": "تسجيل مصروف"
+          "title": "تسجيل مصروف",
+          "department": "القسم — XPMS",
+          "discipline": "التخصص",
+          "item": "البند",
+          "phase": "المرحلة (8 بوابات)",
+          "vendor": "المورّد"
         },
         "title": "المصروفات",
         "configureSupabase": "قم بتهيئة Supabase.",
@@ -9136,8 +9740,18 @@
           "category": "الفئة",
           "amount": "المبلغ",
           "status": "الحالة",
-          "date": "التاريخ"
-        }
+          "date": "التاريخ",
+          "department": "القسم",
+          "expense_state": "الحالة"
+        },
+        "expense_state": {
+          "approved": "معتمد",
+          "pending": "قيد الانتظار",
+          "reimbursed": "مُسترد",
+          "rejected": "مرفوض"
+        },
+        "newer": "← الأحدث",
+        "older": "الأقدم →"
       },
       "breadcrumb": "المالية",
       "forecasts": {
@@ -9207,7 +9821,16 @@
             "currency": "العملة",
             "issued": "تاريخ الإصدار",
             "due": "تاريخ الاستحقاق",
-            "notes": "ملاحظات"
+            "notes": "ملاحظات",
+            "amount": "المبلغ"
+          },
+          "lineItems": {
+            "add": "إضافة سطر",
+            "description": "الوصف",
+            "legend": "بنود السطور",
+            "quantity": "الكمية",
+            "remove": "إزالة السطر",
+            "unitPrice": "سعر الوحدة"
           }
         },
         "detail": {
@@ -9267,7 +9890,13 @@
           "status": "الحالة",
           "due": "تاريخ الاستحقاق",
           "created": "تاريخ الإنشاء"
-        }
+        },
+        "bulk": {
+          "void": "إبطال"
+        },
+        "downloadPdf": "PDF",
+        "newLabel": "+ فاتورة جديدة",
+        "openAsDocument": "مستند"
       },
       "lienWaivers": {
         "detail": {
@@ -9340,7 +9969,8 @@
           "miles": "الأميال",
           "rateCents": "المعدل — سنت/ميل",
           "loggedOn": "تاريخ التسجيل",
-          "notes": "ملاحظات"
+          "notes": "ملاحظات",
+          "rate": "السعر — لكل ميل"
         },
         "breadcrumb": "المسافات",
         "detail": {
@@ -9507,8 +10137,11 @@
           "state": "الولاية",
           "hours": "الساعات",
           "gross": "الإجمالي",
-          "runState": "الحالة"
-        }
+          "runState": "الحالة",
+          "export": "تصدير"
+        },
+        "exportPdf": "PDF",
+        "exportXml": "XML"
       },
       "periods": {
         "controls": {
@@ -9645,7 +10278,9 @@
           "duration": "المدة",
           "billable": "قابل للفوترة",
           "started": "بدأ"
-        }
+        },
+        "newer": "← الأحدث",
+        "older": "الأقدم →"
       },
       "treasury": {
         "title": "الخزينة",
@@ -9705,7 +10340,66 @@
           "overUnder": "زائد / ناقص"
         },
         "overPrefix": "زائد ",
-        "underPrefix": "ناقص "
+        "underPrefix": "ناقص ",
+        "new": {
+          "billedToDate": "المفوتر حتى تاريخه",
+          "bonded": "مضمون",
+          "changeOrders": "أوامر التغيير المعتمدة",
+          "contractAmount": "قيمة العقد",
+          "costsToDate": "التكاليف حتى تاريخه",
+          "etc": "التكلفة المقدّرة للإنجاز",
+          "notes": "ملاحظات",
+          "percentComplete": "نسبة الإنجاز",
+          "project": "المشروع",
+          "selectProject": "— اختر مشروعًا —",
+          "snapshotDate": "تاريخ اللقطة",
+          "submit": "إنشاء لقطة",
+          "suretyCarrier": "شركة الضمان",
+          "suretyPlaceholder": "مثال: Travelers Casualty & Surety",
+          "title": "لقطة WIP جديدة"
+        }
+      },
+      "timesheets": {
+        "awaitingReview": "بانتظار المراجعة",
+        "breadcrumb": "سجلات الدوام",
+        "columns": {
+          "amount": "المبلغ",
+          "hours": "الساعات",
+          "period": "الفترة",
+          "state": "الحالة",
+          "worker": "العامل"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "detail": {
+          "eyebrow": "المالية",
+          "fields": {
+            "amount": "المبلغ",
+            "billableHours": "الساعات القابلة للفوترة",
+            "created": "تاريخ الإنشاء",
+            "period": "الفترة",
+            "posted": "تاريخ الترحيل",
+            "state": "الحالة",
+            "totalHours": "إجمالي الساعات",
+            "worker": "العامل"
+          }
+        },
+        "emptyLabel": "لا توجد سجلات دوام بعد",
+        "eyebrow": "المالية",
+        "history": {
+          "empty": "لم تُسجّل أي قرارات بعد.",
+          "heading": "سجل الاعتماد"
+        },
+        "review": {
+          "decisionLabel": "القرار",
+          "heading": "مراجعة",
+          "locked": "سجل الدوام هذا في حالة لا تتطلب مراجعة معلّقة.",
+          "notesLabel": "ملاحظات (اختياري)",
+          "notesPlaceholder": "السبب أو السياق…",
+          "submit": "تسجيل القرار"
+        },
+        "title": "سجلات الدوام",
+        "total": "الإجمالي",
+        "unknownWorker": "—"
       }
     },
     "forms": {
@@ -9723,7 +10417,8 @@
           "description": "الوصف",
           "status": "الحالة",
           "schemaJson": "المخطط — JSON",
-          "schemaShapeLabel": "البنية:"
+          "schemaShapeLabel": "البنية:",
+          "form_state": "الحالة"
         }
       },
       "detail": {
@@ -9738,7 +10433,8 @@
         "publicResponseUrl": "رابط URL العام للردود",
         "openLink": "فتح ↗",
         "schemaHeading": "المخطط",
-        "noFields": "لم تُعرَّف حقول بعد. افتح المحرر لإضافة حقول."
+        "noFields": "لم تُعرَّف حقول بعد. افتح المحرر لإضافة حقول.",
+        "viewSubmissions": "الردود المُرسلة"
       },
       "new": {
         "eyebrow": "النماذج",
@@ -9759,7 +10455,31 @@
         "title": "العنوان",
         "slug": "المُعرّف",
         "status": "الحالة",
-        "updated": "آخر تحديث"
+        "updated": "آخر تحديث",
+        "form_state": "الحالة"
+      },
+      "submissions": {
+        "anonymous": "مجهول",
+        "backToForm": "العودة إلى النموذج",
+        "column": {
+          "email": "المُرسِل",
+          "submitted": "تاريخ الإرسال"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "countPlural": "{count} رد",
+        "countSingular": "{count} رد",
+        "detail": {
+          "answersHeading": "الإجابات",
+          "backToList": "كل الردود",
+          "configureSupabase": "اضبط Supabase.",
+          "metaHeading": "التفاصيل",
+          "noAnswers": "لم تُسجّل إجابات لهذا الرد.",
+          "submittedAt": "أُرسل في {date}",
+          "title": "الرد المُرسل",
+          "userAgent": "وكيل المستخدم"
+        },
+        "emptyLabel": "لا توجد ردود بعد",
+        "title": "الردود المُرسلة"
       }
     },
     "guides": {
@@ -9881,7 +10601,6 @@
       "title": "عمليات التفتيش",
       "configureSupabase": "قم بتهيئة Supabase.",
       "subtitle": "قوائم تحقق للسلامة والامتثال قائمة على القوالب.",
-      "templates": "القوالب",
       "newInspection": "+ تفتيش جديد",
       "metric": {
         "open": "مفتوح",
@@ -9896,7 +10615,61 @@
         "project": "المشروع",
         "scheduled": "مجدول",
         "status": "الحالة"
-      }
+      },
+      "templates": {
+        "breadcrumb": "القوالب",
+        "category": {
+          "ada": "ADA",
+          "custom": "مخصّص",
+          "electrical": "كهربائي",
+          "fire": "حريق",
+          "foh": "FOH",
+          "foodSafety": "سلامة الأغذية",
+          "medical": "طبي",
+          "rigging": "التعليق والرفع",
+          "security": "الأمن",
+          "sustainability": "الاستدامة"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "empty": {
+          "action": "+ أنشئ أول قالب",
+          "title": "لا توجد قوالب بعد"
+        },
+        "eyebrow": "السلامة",
+        "inactive": "غير نشط",
+        "itemCountOne": "{count} عنصر",
+        "new": {
+          "breadcrumb": {
+            "inspections": "عمليات التفتيش",
+            "new": "جديد",
+            "templates": "القوالب"
+          },
+          "category": {
+            "label": "الفئة"
+          },
+          "code": {
+            "label": "الرمز"
+          },
+          "description": {
+            "label": "الوصف"
+          },
+          "eyebrow": "السلامة",
+          "items": {
+            "label": "بنود قائمة التحقق"
+          },
+          "name": {
+            "label": "الاسم",
+            "placeholder": "جولة تفقّد التعليق قبل العرض"
+          },
+          "submit": "إنشاء قالب",
+          "title": "قالب تفتيش جديد"
+        },
+        "newTemplate": "+ قالب جديد",
+        "subtitleOne": "{count} قالب",
+        "subtitleOther": "{count} قالب",
+        "title": "قوالب التفتيش"
+      },
+      "templatesLabel": "القوالب"
     },
     "knowledge": {
       "eyebrow": "المعرفة",
@@ -9973,7 +10746,8 @@
           "phone": "الهاتف",
           "source": "المصدر",
           "estimatedValueCents": "القيمة التقديرية — بالسنتات",
-          "notes": "ملاحظات"
+          "notes": "ملاحظات",
+          "estimatedValue": "القيمة المقدّرة"
         },
         "stageHint": "تُدار انتقالات المرحلة من صفحة تفاصيل العميل المحتمل."
       },
@@ -10111,7 +10885,8 @@
           "statusAbandoned": "متروكة",
           "statusExpired": "منتهية",
           "registeredOn": "تاريخ التسجيل",
-          "expiresOn": "تنتهي في"
+          "expiresOn": "تنتهي في",
+          "trademark_state": "الحالة"
         },
         "mark": {
           "title": "سجل",
@@ -10239,7 +11014,9 @@
           }
         },
         "title": "الخصوصية",
-        "dataMap": "خريطة البيانات"
+        "dataMap": "خريطة البيانات",
+        "consentLabel": "الموافقة",
+        "dsarLabel": "DSAR"
       }
     },
     "locations": {
@@ -10331,7 +11108,8 @@
           "tag": "الوسم",
           "category": "الفئة",
           "dailyRate": "السعر اليومي",
-          "status": "الحالة"
+          "status": "الحالة",
+          "equipment_state": "الحالة"
         }
       },
       "freight": {
@@ -10344,7 +11122,8 @@
             "number": "الرقم",
             "status": "الحالة",
             "amountCents": "المبلغ — بالسنتات",
-            "currency": "العملة"
+            "currency": "العملة",
+            "po_state": "الحالة"
           }
         },
         "detail": {
@@ -10379,7 +11158,8 @@
             "scheduled": "المجدول",
             "actual": "الفعلي",
             "party": "الطرف",
-            "status": "الحالة"
+            "status": "الحالة",
+            "order_state": "الحالة"
           }
         },
         "orders": {
@@ -10390,8 +11170,6 @@
       },
       "title": "اللوجستيات",
       "rateCard": "بطاقة الأسعار",
-      "warehouse": "المستودع",
-      "services": "الخدمات",
       "ratecard": {
         "edit": {
           "fallbackName": "بند بطاقة الأسعار",
@@ -10437,7 +11215,68 @@
           "unitCents": "الوحدة بالسنت"
         }
       },
-      "eyebrow": "اللوجستيات"
+      "eyebrow": "اللوجستيات",
+      "dispositionLabel": "التصرّف",
+      "freightLabel": "الشحن",
+      "services": {
+        "columns": {
+          "category": "الفئة",
+          "opened": "تاريخ الفتح",
+          "request_state": "الحالة",
+          "severity": "الخطورة",
+          "summary": "الملخص"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "empty": {
+          "label": "لا توجد طلبات خدمات لوجستية"
+        },
+        "eyebrow": "اللوجستيات",
+        "metrics": {
+          "open": "مفتوح",
+          "slaBreached": "خرق SLA",
+          "total30d": "الإجمالي · 30 يومًا"
+        },
+        "newService": "+ خدمة جديدة",
+        "title": "الخدمات"
+      },
+      "servicesLabel": "الخدمات",
+      "warehouse": {
+        "byStatus": "حسب الحالة",
+        "drillIn": "تعمّق",
+        "metrics": {
+          "assets": "الأصول",
+          "inMaintenance": "قيد الصيانة",
+          "locations": "المواقع"
+        },
+        "mobileScanButton": "مسح بالجوال",
+        "subtitle": "FF&E + المركزي + تخزين الأماكن",
+        "tiles": {
+          "availability": {
+            "description": "مصفوفة 7 أيام",
+            "label": "التوفّر"
+          },
+          "disposition": {
+            "description": "المتقاعد + الصيانة",
+            "label": "التصرّف"
+          },
+          "equipment": {
+            "label": "المعدات"
+          },
+          "mobileScan": {
+            "label": "المسح بالجوال"
+          },
+          "rentals": {
+            "description": "سجل الحجز + التسليم",
+            "label": "الإيجارات"
+          },
+          "services": {
+            "description": "طلبات النفايات + التنظيف",
+            "label": "الخدمات"
+          }
+        },
+        "title": "المستودع"
+      },
+      "warehouseLabel": "المستودع"
     },
     "marketing": {
       "eyebrow": "التسويق",
@@ -10673,7 +11512,6 @@
       "eyebrow": "السوق",
       "title": "نظرة عامة",
       "configureSupabase": "قم بتهيئة Supabase.",
-      "settings": "الإعدادات",
       "metrics": {
         "livePostings": "الإعلانات النشطة",
         "openCalls": "الدعوات المفتوحة",
@@ -10698,6 +11536,9 @@
         },
         "reviews": {
           "title": "التقييمات"
+        },
+        "inquiries": {
+          "title": "الاستفسارات"
         }
       },
       "postings": {
@@ -10721,7 +11562,8 @@
             "moveApplicantHeading": "نقل المتقدم",
             "stageLabel": "المرحلة",
             "scoreInputLabel": "التقييم — من 0 إلى 100",
-            "reviewerNotesLabel": "ملاحظات المراجع"
+            "reviewerNotesLabel": "ملاحظات المراجع",
+            "phoneLabel": "الهاتف:"
           },
           "eyebrowPrefix": "السوق",
           "title": "المتقدمون",
@@ -10965,7 +11807,26 @@
         "verified": "موثّق",
         "public": "عام",
         "private": "خاص"
-      }
+      },
+      "inquiries": {
+        "close": "إغلاق",
+        "configureSupabase": "تهيئة Supabase.",
+        "empty": {
+          "title": "لا توجد استفسارات بعد"
+        },
+        "eyebrow": "السوق",
+        "markResponded": "وضع علامة تمّ الردّ",
+        "title": "الاستفسارات"
+      },
+      "settings": {
+        "configureSupabase": "تهيئة Supabase.",
+        "eyebrow": "السوق",
+        "submitLabel": "حفظ الإعدادات",
+        "takeRateLabel": "نسبة العمولة — bps",
+        "title": "الإعدادات",
+        "visibilityLegend": "الظهور"
+      },
+      "settingsLabel": "الإعدادات"
     },
     "meetings": {
       "edit": {
@@ -10978,7 +11839,8 @@
           "description": "الوصف",
           "startsAt": "يبدأ في",
           "endsAt": "ينتهي في",
-          "status": "الحالة"
+          "status": "الحالة",
+          "event_state": "الحالة"
         },
         "status": {
           "draft": "مسودة",
@@ -10986,12 +11848,20 @@
           "live": "جارٍ الآن",
           "complete": "مكتمل",
           "cancelled": "ملغى"
+        },
+        "event_state": {
+          "cancelled": "ملغى",
+          "complete": "مكتمل",
+          "draft": "مسودة",
+          "live": "مباشر",
+          "scheduled": "مجدول"
         }
       },
       "detail": {
         "title": "السجل",
         "configureSupabase": "قم بتهيئة Supabase.",
-        "eyebrow": "السجل"
+        "eyebrow": "السجل",
+        "huddle": "اجتماع سريع"
       },
       "new": {
         "eyebrow": "التنسيق",
@@ -11267,10 +12137,105 @@
     },
     "ops": {
       "title": "العمليات",
-      "toc": "مركز التحكم",
       "problems": "المشكلات",
       "changes": "التغييرات",
-      "integrations": "التكاملات"
+      "integrations": "التكاملات",
+      "toc": {
+        "changes": {
+          "col": {
+            "code": "الرمز",
+            "owner": "المالك",
+            "risk": "المخاطرة",
+            "status": "الحالة",
+            "title": "العنوان",
+            "type": "النوع",
+            "window": "النافذة"
+          },
+          "configureSupabase": "اضبط Supabase.",
+          "empty": {
+            "label": "لا توجد سجلات تغيير"
+          },
+          "eyebrow": "العمليات",
+          "metric": {
+            "emergency": "طارئ",
+            "failed": "فاشل",
+            "open": "مفتوح"
+          },
+          "new": {
+            "backoutPlanLabel": "خطة التراجع",
+            "codeLabel": "الرمز",
+            "descriptionLabel": "الوصف",
+            "eyebrow": "العمليات",
+            "impactLabel": "الأثر",
+            "levelHigh": "مرتفع",
+            "levelLow": "منخفض",
+            "levelMedium": "متوسط",
+            "plannedEndLabel": "النهاية المخطّطة",
+            "plannedStartLabel": "البداية المخطّطة",
+            "riskLabel": "المخاطرة",
+            "submit": "إنشاء تغيير",
+            "title": "سجل تغيير جديد",
+            "titleLabel": "العنوان",
+            "typeEmergency": "طارئ",
+            "typeLabel": "النوع",
+            "typeMajor": "كبير",
+            "typeNormal": "عادي",
+            "typeStandard": "قياسي — معتمد مسبقًا"
+          },
+          "newChange": "+ تغيير جديد",
+          "subtitle": {
+            "emergency": "طارئ",
+            "failed": "فاشل",
+            "open": "مفتوح",
+            "recordMany": "سجلات التغيير",
+            "recordOne": "سجل تغيير"
+          },
+          "title": "التغييرات"
+        },
+        "changesLabel": "التغييرات",
+        "problems": {
+          "col": {
+            "code": "الرمز",
+            "detected": "تاريخ الاكتشاف",
+            "owner": "المالك",
+            "priority": "الأولوية",
+            "status": "الحالة",
+            "title": "العنوان"
+          },
+          "configureSupabase": "اضبط Supabase.",
+          "emptyLabel": "لم تُسجّل أي مشكلات",
+          "eyebrow": "العمليات",
+          "knownErrorsLabel": "أخطاء معروفة",
+          "metric": {
+            "knownErrors": "الأخطاء المعروفة",
+            "open": "مفتوح",
+            "p1": "P1"
+          },
+          "new": {
+            "codeLabel": "الرمز",
+            "descriptionLabel": "الوصف",
+            "eyebrow": "العمليات",
+            "priorityLabel": "الأولوية",
+            "priorityP1": "P1 — حرج",
+            "priorityP2": "P2 — مرتفع",
+            "priorityP3": "P3 — متوسط",
+            "priorityP4": "P4 — منخفض",
+            "submit": "إنشاء مشكلة",
+            "title": "سجل مشكلة جديد",
+            "titleLabel": "العنوان",
+            "workaroundLabel": "حل بديل"
+          },
+          "newProblem": "+ مشكلة جديدة",
+          "openLabel": "مفتوح",
+          "p1Label": "P1",
+          "recordPlural": "سجلات مشكلات",
+          "recordSingular": "سجل مشكلة",
+          "title": "المشكلات"
+        },
+        "problemsLabel": "المشكلات",
+        "title": "TOC"
+      },
+      "tocLabel": "TOC"
     },
     "participants": {
       "delegations": {
@@ -11385,7 +12350,8 @@
           "statusSubmitted": "مقدَّم",
           "statusApproved": "موافَق عليه",
           "statusDenied": "مرفوض",
-          "statusExpedited": "مستعجل"
+          "statusExpedited": "مستعجل",
+          "case_state": "الحالة"
         },
         "detail": {
           "title": "السجل",
@@ -11524,7 +12490,8 @@
           "expires": "تاريخ الانتهاء"
         },
         "expired": "منتهي",
-        "daysShort": "{count} يوم"
+        "daysShort": "{count} يوم",
+        "scanCodeLinker": "ربط رموز المسح"
       },
       "documents": {
         "eyebrow": "الشخص",
@@ -11536,7 +12503,8 @@
           "status": "الحالة",
           "engagementStarts": "بداية التعاقد",
           "sent": "تاريخ الإرسال",
-          "accepted": "تاريخ القبول"
+          "accepted": "تاريخ القبول",
+          "letter_state": "الحالة"
         }
       },
       "edit": {
@@ -11664,11 +12632,14 @@
           "expires": "تاريخ الانتهاء",
           "link": "الرابط",
           "status": "الحالة",
-          "when": "الوقت"
+          "when": "الوقت",
+          "invite_state": "الحالة"
         },
         "projectFallback": "مشروع",
         "copyLink": "نسخ الرابط",
-        "history": "السجل التاريخي"
+        "history": "السجل التاريخي",
+        "persona": "شخصية البوابة · اختياري",
+        "personaAuto": "— اشتقاق من الدور —"
       },
       "msas": {
         "detail": {
@@ -11731,9 +12702,14 @@
             "legend": "الأجر",
             "rateCard": "بطاقة الأسعار",
             "tbd": "(يُحدد لاحقًا)",
-            "basis": "أساس الأجر",
             "effective": "الأجر الفعلي",
-            "tbdShort": "يُحدد لاحقًا"
+            "tbdShort": "يُحدد لاحقًا",
+            "basis": {
+              "hourly": "بالساعة",
+              "perShowDay": "لكل يوم عرض",
+              "tbd": "سيتم تأكيده"
+            },
+            "basisLabel": "أساس التعويض"
           },
           "engagement": {
             "travelIn": "سفر الوصول",
@@ -11809,7 +12785,8 @@
           "project": "المشروع",
           "signingAuthority": "صلاحية التوقيع",
           "activity": "النشاط",
-          "noActivity": "لا يوجد نشاط بعد."
+          "noActivity": "لا يوجد نشاط بعد.",
+          "openAsDocument": "مستند"
         },
         "eyebrow": "الأشخاص",
         "title": "خطابات العروض",
@@ -11907,10 +12884,12 @@
           "admin": "مسؤول"
         },
         "removeMember": {
-          "confirm": "هل تريد إزالة هذا العضو من الفريق؟"
+          "confirm": "هل تريد إزالة هذا العضو من الفريق؟",
+          "title": "إزالة عضو"
         },
         "deleteTeam": {
-          "action": "حذف الفريق"
+          "action": "حذف الفريق",
+          "title": "حذف الفريق"
         },
         "detail": {
           "eyebrow": "الأشخاص · الفرق",
@@ -11951,7 +12930,6 @@
       "title": "صور المشروع",
       "photosLabel": "صور",
       "albumLabel": "ألبوم",
-      "upload": "+ رفع",
       "metrics": {
         "photos": "الصور",
         "albums": "الألبومات",
@@ -11963,7 +12941,28 @@
       "empty": {
         "title": "لا توجد صور بعد"
       },
-      "unalbumed": "بدون ألبوم"
+      "unalbumed": "بدون ألبوم",
+      "upload": {
+        "albumHint": "تسمية تجميع اختيارية. اتركها فارغة للصور غير المصنّفة.",
+        "albumLabel": "الألبوم",
+        "breadcrumbs": {
+          "operations": "العمليات",
+          "photos": "الصور",
+          "upload": "الرفع"
+        },
+        "captionLabel": "التعليق",
+        "captionPlaceholder": "يُطبّق على كل صورة في هذه الدفعة",
+        "configureSupabase": "اضبط Supabase لرفع الصور.",
+        "eyebrow": "العمليات",
+        "photosLabel": "الصور",
+        "projectLabel": "المشروع",
+        "projectPlaceholder": "اختر مشروعًا",
+        "projectSearchPlaceholder": "ابحث في المشاريع…",
+        "submit": "رفع",
+        "title": "رفع الصور",
+        "tooBig": "ملف واحد أو أكثر يتجاوز 25 ميغابايت وسيُرفض."
+      },
+      "uploadLabel": "+ رفع"
     },
     "pipeline": {
       "deal": {
@@ -12024,7 +13023,8 @@
           "name": "الاسم",
           "assetTag": "وسم الأصل",
           "dailyRate": "السعر اليومي",
-          "status": "الحالة"
+          "status": "الحالة",
+          "equipment_state": "الحالة"
         }
       },
       "itb": {
@@ -12170,7 +13170,6 @@
         },
         "eyebrow": "المشتريات",
         "title": "التأهيل المسبق",
-        "questionnaires": "الاستبيانات",
         "inviteVendor": "+ دعوة مورّد",
         "metric": {
           "approved": "معتمد",
@@ -12188,7 +13187,38 @@
           "expires": "تاريخ الانتهاء",
           "status": "الحالة"
         },
-        "breadcrumb": "التأهيل المسبق"
+        "breadcrumb": "التأهيل المسبق",
+        "detail": {
+          "created": "أُنشئ",
+          "expires": "ينتهي",
+          "suffix": "التأهيل المسبق"
+        },
+        "questionnaires": {
+          "breadcrumb": "الاستبيانات",
+          "columns": {
+            "code": "الرمز",
+            "name": "الاسم",
+            "status": "الحالة"
+          },
+          "empty": "لا توجد استبيانات",
+          "new": {
+            "breadcrumb": {
+              "new": "جديد"
+            },
+            "eyebrow": "المشتريات",
+            "field": {
+              "code": "الرمز",
+              "description": "الوصف",
+              "name": "الاسم"
+            },
+            "title": "استبيان جديد"
+          },
+          "newAction": "+ استبيان جديد",
+          "statusActive": "نشط",
+          "statusArchived": "مؤرشف",
+          "title": "استبيانات التأهيل المسبق"
+        },
+        "questionnairesLabel": "الاستبيانات"
       },
       "purchaseOrders": {
         "statusToast": "PO {status}",
@@ -12216,7 +13246,8 @@
           "status": "الحالة",
           "amount": "المبلغ",
           "created": "تاريخ الإنشاء",
-          "updated": "آخر تحديث"
+          "updated": "آخر تحديث",
+          "po_state": "الحالة"
         },
         "new": {
           "submit": "إنشاء PO",
@@ -12236,7 +13267,8 @@
           "title": "العنوان",
           "amount": "المبلغ",
           "status": "الحالة",
-          "created": "تاريخ الإنشاء"
+          "created": "تاريخ الإنشاء",
+          "po_state": "الحالة"
         }
       },
       "requisitions": {
@@ -12248,7 +13280,8 @@
             "title": "العنوان",
             "description": "الوصف",
             "estimatedCents": "التقدير — سنتات",
-            "status": "الحالة"
+            "status": "الحالة",
+            "requisition_state": "الحالة"
           }
         },
         "leveling": {
@@ -12305,7 +13338,8 @@
           "title": "العنوان",
           "estimated": "التقدير",
           "status": "الحالة",
-          "created": "تاريخ الإنشاء"
+          "created": "تاريخ الإنشاء",
+          "requisition_state": "الحالة"
         }
       },
       "rfqs": {
@@ -12488,7 +13522,8 @@
           "pos": "أوامر PO",
           "submittals": "التقديمات",
           "prequalification": "التأهيل المسبق",
-          "scorecard": "بطاقة التقييم"
+          "scorecard": "بطاقة التقييم",
+          "onboarding": "الإعداد"
         },
         "detail": {
           "eyebrow": "المشتريات",
@@ -12520,7 +13555,8 @@
             "number": "الرقم",
             "title": "العنوان",
             "status": "الحالة",
-            "amount": "المبلغ"
+            "amount": "المبلغ",
+            "po_state": "الحالة"
           }
         },
         "prequalification": {
@@ -12564,7 +13600,8 @@
             "code": "الرمز",
             "title": "العنوان",
             "spec": "المواصفة",
-            "status": "الحالة"
+            "status": "الحالة",
+            "submittal_state": "الحالة"
           }
         },
         "new": {
@@ -12594,6 +13631,9 @@
         "w9": {
           "onFile": "في الملف",
           "missing": "مفقود"
+        },
+        "bulk": {
+          "delete": "حذف"
         }
       },
       "woBroadcasts": {
@@ -12664,7 +13704,8 @@
           "tag": "الوسم",
           "category": "الفئة",
           "serial": "الرقم التسلسلي",
-          "status": "الحالة"
+          "status": "الحالة",
+          "equipment_state": "الحالة"
         },
         "footnoteSuffix": ")."
       },
@@ -12766,7 +13807,8 @@
             "assetTag": "وسم الأصل",
             "serial": "الرقم التسلسلي",
             "dailyRate": "السعر اليومي",
-            "created": "تاريخ الإنشاء"
+            "created": "تاريخ الإنشاء",
+            "equipment_state": "الحالة"
           },
           "ledger": {
             "title": "سجل الحركة",
@@ -12836,7 +13878,8 @@
           "category": "الفئة",
           "assetTag": "وسم الأصل",
           "status": "الحالة",
-          "dailyRate": "السعر اليومي"
+          "dailyRate": "السعر اليومي",
+          "equipment_state": "الحالة"
         },
         "utilization": {
           "eyebrow": "الإنتاج",
@@ -12861,6 +13904,9 @@
             "util90d": "الاستخدام · 90 يومًا",
             "idleRev30d": "إيراد الخمول · 30 يومًا"
           }
+        },
+        "bulk": {
+          "delete": "حذف"
         }
       },
       "fabrication": {
@@ -12883,7 +13929,8 @@
           "fields": {
             "status": "الحالة",
             "due": "الاستحقاق",
-            "created": "تاريخ الإنشاء"
+            "created": "تاريخ الإنشاء",
+            "production_phase": "الحالة"
           },
           "lifecycleBadge": "دورة الحياة",
           "deleteOrder": "حذف الأمر",
@@ -12911,7 +13958,8 @@
         "col": {
           "title": "العنوان",
           "status": "الحالة",
-          "due": "الاستحقاق"
+          "due": "الاستحقاق",
+          "production_phase": "الحالة"
         }
       },
       "logistics": {
@@ -12953,7 +14001,8 @@
           "fieldEnds": "ينتهي",
           "fieldRate": "السعر",
           "lifecycle": "دورة الحياة",
-          "deleteRental": "حذف الإيجار"
+          "deleteRental": "حذف الإيجار",
+          "pullSheet": "ورقة السحب"
         },
         "availability": {
           "eyebrow": "الإنتاج · الإيجارات",
@@ -12965,7 +14014,8 @@
           },
           "col": {
             "asset": "الأصل",
-            "status": "الحالة"
+            "status": "الحالة",
+            "equipment_state": "الحالة"
           },
           "day": {
             "free": "متاح",
@@ -13001,13 +14051,22 @@
       "ros": {
         "cueForm": {
           "scheduledAt": "موعد الجدولة",
-          "lane": "المسار",
           "label": "التسمية",
           "labelPlaceholder": "مثال: إطفاء أضواء الصالة",
           "durationSec": "المدة — ثوانٍ",
           "optional": "اختياري",
           "description": "الوصف",
-          "addCue": "إضافة كيو"
+          "addCue": "إضافة كيو",
+          "lane": {
+            "audio": "الصوت",
+            "lights": "الإضاءة",
+            "safety": "السلامة",
+            "show": "العرض",
+            "talent": "المواهب",
+            "transport": "النقل",
+            "video": "الفيديو"
+          },
+          "laneLabel": "المسار"
         },
         "eyebrow": "الإنتاج",
         "title": "سير العرض",
@@ -13023,7 +14082,8 @@
           "lane": "المسار",
           "cue": "الكيو",
           "status": "الحالة",
-          "actions": "إجراءات"
+          "actions": "إجراءات",
+          "cue_state": "الحالة"
         }
       },
       "warehouse": {
@@ -13151,7 +14211,8 @@
             "description": "الوصف",
             "startsAt": "يبدأ في",
             "endsAt": "ينتهي في",
-            "status": "الحالة"
+            "status": "الحالة",
+            "event_state": "الحالة"
           },
           "status": {
             "draft": "مسودة",
@@ -13159,6 +14220,13 @@
             "live": "مباشرة",
             "complete": "مكتملة",
             "cancelled": "ملغاة"
+          },
+          "event_state": {
+            "cancelled": "ملغى",
+            "complete": "مكتمل",
+            "draft": "مسودة",
+            "live": "مباشر",
+            "scheduled": "مجدول"
           }
         },
         "detail": {
@@ -13180,14 +14248,259 @@
         }
       },
       "title": "البرامج",
-      "schedule": "الجدول الرئيسي",
-      "risk": "سجل المخاطر",
-      "reviews": "المراجعات",
-      "readiness": "الجاهزية",
-      "scope": "النطاق",
-      "sessions": "الجلسات",
-      "protocol": "البروتوكول",
-      "pressconf": "المؤتمرات الصحفية"
+      "casesLabel": "الحالات",
+      "ceremoniesLabel": "المراسم",
+      "eyebrow": "البرامج",
+      "metrics": {
+        "openRisks": "المخاطر المفتوحة",
+        "readiness": "تمارين الجاهزية",
+        "reviews": "مراجعات البرامج",
+        "scheduledEvents": "الفعاليات المجدولة"
+      },
+      "pressconf": {
+        "col": {
+          "briefing": "الإحاطة",
+          "ends": "ينتهي",
+          "project": "المشروع",
+          "starts": "يبدأ",
+          "status": "الحالة"
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "emptyLabel": "لا توجد مؤتمرات صحفية",
+        "eyebrow": "البرامج",
+        "newEvent": "+ فعالية جديدة",
+        "subtitleOne": "{count} مؤتمر صحفي",
+        "subtitleOther": "{count} مؤتمر صحفي",
+        "title": "المؤتمرات الصحفية"
+      },
+      "pressconfLabel": "المؤتمرات الصحفية",
+      "protocol": {
+        "configureSupabase": "تهيئة Supabase.",
+        "empty": {
+          "t3Runs": {
+            "action": "+ جدولة تشغيل",
+            "title": "لا توجد عمليات إرسال T3 مجدولة"
+          },
+          "vipCategories": {
+            "action": "فتح الفئات",
+            "title": "لا توجد فئات VIP محدّدة"
+          }
+        },
+        "eyebrow": "البرامج",
+        "metrics": {
+          "accommodationBlocks": "كتل الإقامة",
+          "t3Runs14d": "عمليات T3 · 14 يومًا",
+          "vipCategories": "فئات VIP"
+        },
+        "t3FleetHeading": "أسطول T3 — الأيام الـ 14 القادمة",
+        "title": "البروتوكول",
+        "vipCategoriesHeading": "فئات اعتماد VIP"
+      },
+      "protocolLabel": "البروتوكول",
+      "readiness": {
+        "columns": {
+          "kind": "النوع",
+          "name": "الاسم",
+          "scheduled": "مجدول"
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "detail": {
+          "configureSupabase": "تهيئة Supabase.",
+          "eyebrow": "السجل",
+          "title": "السجل"
+        },
+        "edit": {
+          "eyebrow": "تمرين الجاهزية",
+          "fallbackName": "تمرين الجاهزية",
+          "kindLabel": "النوع",
+          "nameLabel": "الاسم",
+          "scheduledAtLabel": "مجدول في",
+          "title": "تعديل {name}"
+        },
+        "emptyLabel": "لا توجد تمارين جاهزية",
+        "eyebrow": "البرامج",
+        "eyebrowWorkspace": "مساحة العمل",
+        "new": {
+          "eyebrow": "البرامج · الجاهزية",
+          "kind": "النوع",
+          "kindAar": "مراجعة ما بعد الإجراء",
+          "kindFullScale": "كامل النطاق",
+          "kindFunctional": "وظيفي",
+          "kindTabletop": "محاكاة مكتبية",
+          "kindWalkthrough": "جولة تفقدية",
+          "name": "الاسم",
+          "namePlaceholder": "مثل: تمرين إخلاء الملعب TTX",
+          "scheduledAt": "مجدول في",
+          "submit": "جدولة التمرين",
+          "title": "تمرين جديد"
+        },
+        "newExercise": "+ تمرين جديد",
+        "record": "السجل",
+        "records": "السجلات",
+        "title": "تمارين الجاهزية"
+      },
+      "readinessLabel": "الجاهزية",
+      "reviews": {
+        "columns": {
+          "scheduled": "مجدول",
+          "title": "العنوان"
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "detail": {
+          "configureSupabase": "تهيئة Supabase.",
+          "eyebrow": "السجل",
+          "title": "السجل"
+        },
+        "edit": {
+          "eyebrow": "مراجعة البرنامج",
+          "fallbackTitle": "مراجعة البرنامج",
+          "fields": {
+            "notes": "الملاحظات",
+            "scheduledAt": "مجدول في",
+            "title": "العنوان"
+          },
+          "title": "تعديل {title}"
+        },
+        "emptyLabel": "لا توجد مراجعات برامج",
+        "eyebrow": "البرامج",
+        "eyebrowWorkspace": "مساحة العمل",
+        "new": {
+          "eyebrow": "البرامج · المراجعات",
+          "fields": {
+            "notes": "الملاحظات",
+            "scheduledAt": "مجدول في",
+            "title": "العنوان"
+          },
+          "submit": "جدولة المراجعة",
+          "title": "مراجعة جديدة"
+        },
+        "record": "السجل",
+        "records": "السجلات",
+        "scheduleReview": "+ جدولة مراجعة",
+        "title": "مراجعات البرامج"
+      },
+      "reviewsLabel": "المراجعات",
+      "risk": {
+        "columns": {
+          "due": "الاستحقاق",
+          "kind": "النوع",
+          "matrix": "L × I",
+          "risk_state": "الحالة",
+          "score": "النتيجة",
+          "title": "العنوان"
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "detail": {
+          "configureSupabase": "تهيئة Supabase.",
+          "eyebrow": "السجل",
+          "title": "السجل"
+        },
+        "edit": {
+          "eyebrow": "المخاطر",
+          "fallbackTitle": "المخاطر",
+          "fields": {
+            "description": "الوصف",
+            "dueOn": "تاريخ الاستحقاق",
+            "impact": "التأثير",
+            "kind": "النوع",
+            "likelihood": "الاحتمالية",
+            "risk_state": "الحالة",
+            "title": "العنوان",
+            "treatment": "المعالجة"
+          },
+          "title": "تعديل {name}"
+        },
+        "eyebrow": "البرامج",
+        "heatmap": {
+          "empty": "لم تُسجَّل أي مخاطر بعد.",
+          "gridAria": "خريطة حرارية للمخاطر",
+          "legend": {
+            "high": "مرتفع",
+            "low": "منخفض",
+            "moderate": "متوسط",
+            "severe": "حاد"
+          },
+          "score": "النتيجة {score}",
+          "title": "خريطة حرارية للمخاطر"
+        },
+        "new": {
+          "eyebrow": "سجلّ المخاطر",
+          "fields": {
+            "category": "الفئة",
+            "description": "الوصف",
+            "title": "العنوان"
+          },
+          "submit": "إنشاء خطر",
+          "title": "خطر جديد"
+        },
+        "newRisk": "+ خطر جديد",
+        "subtitle": {
+          "one": "{count} سجل",
+          "other": "{count} سجل"
+        },
+        "title": "سجلّ المخاطر"
+      },
+      "riskLabel": "سجلّ المخاطر",
+      "schedule": {
+        "colEnds": "ينتهي",
+        "colEvent": "الفعالية",
+        "colProject": "المشروع",
+        "colStarts": "يبدأ",
+        "colStatus": "الحالة",
+        "configureSupabase": "تهيئة Supabase.",
+        "emptyLabel": "لا توجد فعاليات في النطاق",
+        "eventPlural": "الفعاليات",
+        "eventSingular": "الفعالية",
+        "eyebrow": "البرامج",
+        "live": "مباشر",
+        "metricLiveNow": "مباشر الآن",
+        "metricTotal": "الإجمالي",
+        "metricUpcoming": "القادمة",
+        "newEvent": "+ فعالية جديدة",
+        "title": "الجدول الرئيسي",
+        "upcoming": "القادمة"
+      },
+      "scheduleLabel": "الجدول الرئيسي",
+      "scope": {
+        "byDiscipline": "حسب التخصص",
+        "configureSupabase": "تهيئة Supabase.",
+        "disciplinePlural": "تخصصات",
+        "disciplineSingular": "تخصص",
+        "empty": {
+          "title": "لا توجد إدخالات مشاركين بعد"
+        },
+        "entryPlural": "إدخالات",
+        "entrySingular": "إدخال",
+        "eventPlural": "فعاليات",
+        "eventSingular": "فعالية",
+        "eyebrow": "البرامج",
+        "metrics": {
+          "approved": "معتمد",
+          "delegations": "الوفود",
+          "entries": "الإدخالات"
+        },
+        "newEntry": "+ إدخال جديد",
+        "participantPlural": "مشاركون",
+        "participantSingular": "مشارك",
+        "title": "نطاق البرنامج",
+        "unspecified": "غير محدد"
+      },
+      "scopeLabel": "النطاق",
+      "sessions": {
+        "col": {
+          "ends": "ينتهي",
+          "project": "المشروع",
+          "session": "الجلسة",
+          "starts": "يبدأ",
+          "status": "الحالة"
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "emptyLabel": "لا توجد جلسات",
+        "eyebrow": "البرامج",
+        "newEvent": "+ فعالية جديدة",
+        "title": "الجلسات"
+      },
+      "sessionsLabel": "الجلسات"
     },
     "projects": {
       "portfolio": {
@@ -13242,9 +14555,19 @@
             "party": "الطرف",
             "state": "الحالة",
             "due": "الاستحقاق",
-            "updated": "آخر تحديث"
+            "updated": "آخر تحديث",
+            "kind": "النوع"
           },
-          "untitled": "بلا عنوان"
+          "untitled": "بلا عنوان",
+          "bulk": {
+            "approve": "اعتماد",
+            "issue": "إصدار",
+            "void": "إبطال"
+          },
+          "view": {
+            "board": "لوحة",
+            "list": "قائمة"
+          }
         },
         "eyebrowFallback": "المشروع",
         "title": "الأدفانس",
@@ -13271,6 +14594,10 @@
         "activity": {
           "latestDeliverable": "أحدث نشاط للتسليمات",
           "project": "نشاط المشروع"
+        },
+        "tabs": {
+          "assignments": "التكليفات",
+          "docSpecs": "مواصفات المستندات"
         }
       },
       "assignments": {
@@ -13382,7 +14709,10 @@
           "primaryAction": "إجراء أساسي",
           "secondary": "ثانوي"
         },
-        "title": "العلامة"
+        "title": "العلامة",
+        "secondaryColor": {
+          "label": "اللون الثانوي"
+        }
       },
       "budget": {
         "eyebrowFallback": "المشروع",
@@ -13507,6 +14837,9 @@
           "title": "المصروفات",
           "allLink": "كل المصروفات ←",
           "emptyLabel": "لا مصروفات مسجلة"
+        },
+        "draws": {
+          "title": "جدول السحوبات"
         }
       },
       "guides": {
@@ -13519,7 +14852,8 @@
           "configLabel": "الإعدادات — JSON",
           "sectionsLabel": "الأقسام:",
           "saving": "جارٍ الحفظ…",
-          "saveButton": "حفظ الدليل"
+          "saveButton": "حفظ الدليل",
+          "invalidJson": "يجب أن يكون الإعداد بتنسيق JSON صالح — {detail}"
         },
         "access": {
           "issueTitle": "إصدار رمز جديد",
@@ -13564,7 +14898,8 @@
             "client": "العميل",
             "guest": "الضيوف",
             "custom": "وصول مؤقت"
-          }
+          },
+          "revokeDialogTitle": "إلغاء الرمز"
         },
         "persona": {
           "manageAccessCodes": "إدارة رموز الوصول"
@@ -13590,7 +14925,8 @@
         "members": "الأعضاء",
         "advancing": "الأدفانس",
         "guides": "الأدلة",
-        "sustainability": "الاستدامة"
+        "sustainability": "الاستدامة",
+        "sprints": "السباقات"
       },
       "members": {
         "addedToast": "تمت إضافة العضو",
@@ -13609,7 +14945,9 @@
         "subtitleOne": "{count} عضو مشروع",
         "emptyTitle": "لا أعضاء في المشروع",
         "colMember": "العضو",
-        "colRole": "الدور"
+        "colRole": "الدور",
+        "leaveDialogTitle": "مغادرة المشروع",
+        "removeDialogTitle": "إزالة عضو"
       },
       "breadcrumb": "المشاريع",
       "onboarding": {
@@ -13851,6 +15189,9 @@
         "start": "البداية",
         "end": "النهاية",
         "updated": "آخر تحديث"
+      },
+      "bulk": {
+        "archive": "أرشفة"
       }
     },
     "proposals": {
@@ -13916,7 +15257,14 @@
         "shareLinks": "روابط المشاركة",
         "revoked": "ملغى",
         "active": "نشط",
-        "viewsCount": "{count} مشاهدات"
+        "viewsCount": "{count} مشاهدات",
+        "brand": {
+          "accentLabel": "اللون المميّز",
+          "previewLabel": "معاينة",
+          "previewText": "لون العنوان المميّز",
+          "secondaryLabel": "ثانوي",
+          "title": "هوية العرض"
+        }
       },
       "detail": {
         "eyebrow": "العرض",
@@ -13931,9 +15279,14 @@
           "status": "الحالة",
           "amount": "المبلغ",
           "sent": "أُرسل",
-          "signed": "وُقِّع"
+          "signed": "وُقِّع",
+          "proposal_state": "الحالة"
         },
-        "scope": "النطاق"
+        "scope": "النطاق",
+        "aiDraft": "مسودة AI",
+        "aiDraftEmptyTitle": "لا توجد مسودة بعد",
+        "aiDraftGenerated": "تم التوليد",
+        "openAsDocument": "مستند"
       },
       "new": {
         "submit": "إنشاء عرض",
@@ -13962,7 +15315,8 @@
         "amount": "المبلغ",
         "status": "الحالة",
         "expires": "تاريخ الانتهاء",
-        "updated": "آخر تحديث"
+        "updated": "آخر تحديث",
+        "proposal_state": "الحالة"
       },
       "templates": {
         "preview": {
@@ -13996,6 +15350,12 @@
       },
       "breadcrumb": {
         "revenue": "الإيرادات"
+      },
+      "ai": {
+        "generateDraft": "توليد مسودة",
+        "generateError": "فشل توليد المسودة",
+        "generateSuccess": "تم توليد المسودة",
+        "generating": "جارٍ التوليد…"
       }
     },
     "punch": {
@@ -14113,7 +15473,8 @@
         "priority": "الأولوية",
         "status": "الحالة"
       },
-      "showReadyGate": "بوابة جاهزية العرض"
+      "showReadyGate": "بوابة جاهزية العرض",
+      "listsLabel": "القوائم"
     },
     "rfis": {
       "edit": {
@@ -14440,7 +15801,8 @@
           "name": "الاسم",
           "cadence": "الوتيرة",
           "nextRun": "التشغيل التالي",
-          "status": "الحالة"
+          "status": "الحالة",
+          "tour_state": "الحالة"
         },
         "cadence": {
           "adhoc": "حسب الحاجة"
@@ -14475,7 +15837,34 @@
           "location": "الموقع",
           "severity": "الخطورة",
           "status": "الحالة"
-        }
+        },
+        "detail": {
+          "breadcrumbs": {
+            "incidents": "الحوادث",
+            "safety": "السلامة"
+          },
+          "configureSupabase": "اضبط Supabase.",
+          "description": "الوصف",
+          "eyebrow": "السلامة · حادث",
+          "fields": {
+            "bodyPart": "الجزء المصاب",
+            "classification": "التصنيف",
+            "closed": "تاريخ الإغلاق",
+            "daysAway": "أيام الغياب",
+            "daysRestricted": "أيام التقييد",
+            "injurySource": "مصدر الإصابة",
+            "injuryType": "نوع الإصابة",
+            "location": "الموقع",
+            "occurred": "تاريخ الوقوع",
+            "recordable": "قابل للتسجيل",
+            "severity": "الخطورة",
+            "status": "الحالة"
+          },
+          "injury": "الإصابة",
+          "osha": "حفظ سجلات OSHA",
+          "title": "الحادث"
+        },
+        "reportFirst": "أبلغ عن حادث"
       },
       "majorIncident": {
         "edit": {
@@ -14626,13 +16015,160 @@
           "daysRestricted": "أيام مقيّدة"
         }
       },
-      "threats": "التهديدات",
-      "playbooks": "أدلة الإجراءات",
       "medicalPlan": "الخطة الطبية",
       "medicalEncounters": "الحالات الطبية",
       "crisisComms": "اتصالات الأزمات",
-      "safeguarding": "الحماية",
-      "breadcrumb": "السلامة"
+      "breadcrumb": "السلامة",
+      "bcdrLabel": "BC/DR",
+      "cyberIrLabel": "الاستجابة السيبرانية",
+      "environmentalLabel": "البيئي",
+      "guardToursLabel": "جولات الحراسة",
+      "incidentsLabel": "الحوادث",
+      "majorIncidentLabel": "حادث كبير",
+      "playbooks": {
+        "breadcrumb": "أدلة الإجراءات",
+        "byKind": "حسب النوع",
+        "col": {
+          "kind": "النوع",
+          "playbook_state": "الحالة",
+          "slug": "المُعرّف",
+          "title": "العنوان",
+          "updated": "آخر تحديث",
+          "version": "الإصدار"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "detail": {
+          "configureSupabase": "اضبط Supabase.",
+          "eyebrow": "دليل الإجراءات",
+          "title": "دليل الإجراءات"
+        },
+        "emptyLabel": "لم يُؤلَّف أي دليل إجراءات",
+        "eyebrow": "السلامة",
+        "new": {
+          "eyebrow": "السلامة",
+          "kind": {
+            "conops": "ConOps",
+            "crisis": "أزمة",
+            "general": "عام",
+            "onboarding": "التأهيل",
+            "safety": "السلامة"
+          },
+          "kindLabel": "النوع",
+          "slugLabel": "المُعرّف",
+          "submitLabel": "إنشاء دليل إجراءات",
+          "summaryLabel": "الملخص",
+          "title": "دليل إجراءات جديد",
+          "titleLabel": "العنوان",
+          "titlePlaceholder": "إخلاء الملعب A"
+        },
+        "newCta": "+ دليل إجراءات جديد",
+        "title": "أدلة الإجراءات"
+      },
+      "playbooksLabel": "أدلة الإجراءات",
+      "safeguarding": {
+        "columnFiled": "تاريخ التقديم",
+        "columnStatus": "الحالة",
+        "configureSupabase": "اضبط Supabase.",
+        "detail": {
+          "configureSupabase": "اضبط Supabase.",
+          "eyebrow": "السجل",
+          "title": "السجل"
+        },
+        "edit": {
+          "eyebrow": "تقرير الحماية",
+          "fallbackSubject": "تقرير حماية",
+          "narrative": "السرد",
+          "report_state": "الحالة",
+          "subjectReference": "مرجع الموضوع",
+          "title": "تحرير {subject}"
+        },
+        "emptyLabel": "لا توجد تقارير حماية",
+        "eyebrow": "السلامة",
+        "eyebrowWorkspace": "مساحة العمل",
+        "fileReport": "+ تقديم تقرير",
+        "new": {
+          "eyebrow": "السلامة · الحماية",
+          "narrativeLabel": "السرد",
+          "statusClosed": "مغلق",
+          "statusLabel": "الحالة",
+          "statusReceived": "مُستلم",
+          "statusReferred": "محال",
+          "statusTriage": "فرز",
+          "statusUnderReview": "قيد المراجعة",
+          "subjectRefLabel": "مرجع الموضوع",
+          "subjectRefPlaceholder": "مُعرّف باسم مستعار",
+          "submitLabel": "تقديم تقرير",
+          "title": "تقديم تقرير"
+        },
+        "recordPlural": "سجلات",
+        "recordSingular": "سجل",
+        "title": "تقارير الحماية"
+      },
+      "safeguardingLabel": "الحماية",
+      "threats": {
+        "activeLabel": "نشط",
+        "col": {
+          "classification": "التصنيف",
+          "code": "الرمز",
+          "likelihood": "الاحتمالية",
+          "severity": "الخطورة",
+          "threat_state": "الحالة",
+          "title": "العنوان",
+          "treatment": "المعالجة"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "criticalLabel": "حرج",
+        "emptyLabel": "لم تُسجّل أي تهديدات",
+        "entryPlural": "إدخالات",
+        "entrySingular": "إدخال",
+        "eyebrow": "السلامة",
+        "new": {
+          "classification": {
+            "confidential": "سرّي",
+            "internal": "داخلي",
+            "public": "عام",
+            "restricted": "مقيّد"
+          },
+          "eyebrow": "السلامة",
+          "fields": {
+            "classification": "التصنيف",
+            "code": "الرمز",
+            "description": "الوصف",
+            "likelihood": "الاحتمالية",
+            "severity": "الخطورة",
+            "title": "العنوان",
+            "treatment": "المعالجة"
+          },
+          "likelihood": {
+            "almostCertain": "شبه مؤكّد",
+            "likely": "مرجّح",
+            "possible": "ممكن",
+            "rare": "نادر",
+            "unlikely": "غير مرجّح"
+          },
+          "placeholders": {
+            "code": "THR-001",
+            "title": "عنوان قصير"
+          },
+          "severity": {
+            "critical": "حرج",
+            "high": "مرتفع",
+            "low": "منخفض",
+            "medium": "متوسط"
+          },
+          "submit": "إضافة تهديد",
+          "title": "تهديد جديد",
+          "treatment": {
+            "accept": "قبول",
+            "avoid": "تجنّب",
+            "mitigate": "تخفيف",
+            "transfer": "نقل"
+          }
+        },
+        "newThreat": "+ تهديد جديد",
+        "title": "سجل التهديدات"
+      },
+      "threatsLabel": "التهديدات"
     },
     "schedule": {
       "calendar": {
@@ -14654,7 +16190,8 @@
           "lookahead6w": "6 أسابيع",
           "showFloat": "إظهار الفائض الزمني",
           "chartAriaLabel": "مخطط جانت",
-          "today": "اليوم"
+          "today": "اليوم",
+          "emptyTitle": "لا توجد أنشطة بعد"
         },
         "import": {
           "importing": "جارٍ الاستيراد…",
@@ -14729,7 +16266,8 @@
         "name": "الاسم",
         "starts": "يبدأ",
         "ends": "ينتهي",
-        "status": "الحالة"
+        "status": "الحالة",
+        "event_state": "الحالة"
       }
     },
     "services": {
@@ -14782,7 +16320,8 @@
           "category": "الفئة",
           "summary": "الملخص",
           "status": "الحالة",
-          "opened": "فُتح"
+          "opened": "فُتح",
+          "request_state": "الحالة"
         }
       }
     },
@@ -14884,7 +16423,9 @@
         "never": "أبداً",
         "revoked": "مُلغى",
         "active": "نشط",
-        "revoke": "إلغاء"
+        "revoke": "إلغاء",
+        "copyFailedToast": "فشل النسخ — حدّد المفتاح يدويًا",
+        "reference": "تصفّح مرجع API الكامل →"
       },
       "eyebrow": "الإعدادات",
       "audit": {
@@ -14904,7 +16445,8 @@
         "title": "سجل التدقيق",
         "configureSupabase": "قم بإعداد Supabase.",
         "newer": "→ الأحدث",
-        "older": "الأقدم ←"
+        "older": "الأقدم ←",
+        "export": "تصدير"
       },
       "workspaceTitle": "إعدادات مساحة العمل",
       "billing": {
@@ -14948,7 +16490,9 @@
           "accentLabel": "لون التمييز",
           "pickAccentAria": "اختيار لون التمييز",
           "foregroundLabel": "نص على لون التمييز",
-          "pickForegroundAria": "اختيار لون النص"
+          "pickForegroundAria": "اختيار لون النص",
+          "pickSecondaryAria": "اختر اللون الثانوي",
+          "secondaryLabel": "اللون الثانوي"
         },
         "assets": {
           "title": "الأصول",
@@ -15037,7 +16581,8 @@
           "status": "الحالة"
         },
         "statusActive": "نشط",
-        "statusInactive": "غير نشط"
+        "statusInactive": "غير نشط",
+        "viewSwitcherAria": "عرض الكتالوج"
       },
       "compliance": {
         "savedToast": "تم حفظ إعدادات الامتثال",
@@ -15149,14 +16694,27 @@
             "trigger": "+ لجنة",
             "title": "لجنة جديدة",
             "name": "الاسم",
-            "cadence": "الوتيرة",
-            "charter": "الميثاق"
+            "charter": "الميثاق",
+            "cadence": {
+              "adHoc": "حسب الحاجة",
+              "biweekly": "كل أسبوعين",
+              "monthly": "شهري",
+              "weekly": "أسبوعي"
+            },
+            "cadenceLabel": "التواتر"
           },
           "policy": {
             "trigger": "+ سياسة",
             "title": "سياسة جديدة",
             "name": "الاسم",
-            "category": "الفئة"
+            "category": {
+              "data": "البيانات",
+              "finance": "المالية",
+              "hr": "HR",
+              "operations": "العمليات",
+              "safety": "السلامة"
+            },
+            "categoryLabel": "الفئة"
           }
         },
         "eyebrow": "الإعدادات",
@@ -15171,7 +16729,8 @@
           "charter": "الميثاق",
           "category": "الفئة",
           "status": "الحالة",
-          "nextReview": "المراجعة التالية"
+          "nextReview": "المراجعة التالية",
+          "policy_state": "الحالة"
         },
         "emptyCommittees": "لا توجد لجان بعد.",
         "policies": "السياسات",
@@ -15210,7 +16769,8 @@
           "imported": "المستورد",
           "failed": "الفاشل",
           "status": "الحالة",
-          "started": "وقت البدء"
+          "started": "وقت البدء",
+          "run_state": "الحالة"
         },
         "empty": "لا توجد عمليات استيراد بعد.",
         "columnReference": "مرجع الأعمدة"
@@ -15251,6 +16811,27 @@
             "tenant": "المستأجر",
             "lastSync": "آخر مزامنة",
             "state": "الحالة"
+          },
+          "detail": {
+            "connection": "الاتصال",
+            "created": "تاريخ الإنشاء",
+            "disconnect": "قطع الاتصال",
+            "displayName": "الاسم المعروض",
+            "eyebrow": "المحاسبة · {system}",
+            "lastError": "آخر خطأ",
+            "lastSyncLabel": "آخر مزامنة",
+            "neverSynced": "لم تتم المزامنة قط",
+            "state": "الحالة",
+            "syncNow": "زامن الآن",
+            "system": "النظام",
+            "tenant": "المستأجِر"
+          },
+          "new": {
+            "connect": "اتصال",
+            "contactToEnable": "تواصل للتفعيل",
+            "eyebrow": "الإعدادات · التكاملات",
+            "selfServe": "خدمة ذاتية",
+            "title": "ربط نظام المحاسبة"
           }
         },
         "marketplace": {
@@ -15888,7 +17469,8 @@
         "linkedRfisHeading": "طلبات RFI المرتبطة",
         "noRfisLinked": "لا توجد طلبات RFI مرتبطة بهذا القسم بعد.",
         "linkedSubmittalsHeading": "التقديمات المرتبطة",
-        "noSubmittalsLinked": "لا توجد تقديمات مرتبطة بهذا القسم بعد."
+        "noSubmittalsLinked": "لا توجد تقديمات مرتبطة بهذا القسم بعد.",
+        "edit": "تحرير"
       },
       "new": {
         "format": {
@@ -15943,6 +17525,22 @@
         "project": "المشروع",
         "format": "الصيغة",
         "state": "الحالة"
+      },
+      "edit": {
+        "breadcrumbs": {
+          "specs": "المواصفات"
+        },
+        "eyebrow": "إبداعي · المواصفات",
+        "fields": {
+          "bodyMarkdown": "المتن — Markdown",
+          "division": "الشعبة",
+          "format": "التنسيق",
+          "project": "المشروع",
+          "sectionNumber": "رقم القسم",
+          "title": "العنوان"
+        },
+        "submit": "حفظ القسم",
+        "subtitle": "تُدار حالة الإصدار/الإبطال من صفحة التفاصيل."
       }
     },
     "submittals": {
@@ -16079,7 +17677,8 @@
         "cadence": "الدورية",
         "started": "تاريخ البدء"
       },
-      "emptyLabel": "لا توجد اشتراكات بعد"
+      "emptyLabel": "لا توجد اشتراكات بعد",
+      "createFirst": "اشتراك جديد"
     },
     "sustainability": {
       "carbon": {
@@ -16147,7 +17746,8 @@
         },
         "scopeLabel": "النطاق {scope}"
       },
-      "title": "الاستدامة"
+      "title": "الاستدامة",
+      "carbonLabel": "الكربون"
     },
     "takeoffs": {
       "new": {
@@ -16185,6 +17785,49 @@
         "costCode": "رمز التكلفة",
         "items": "البنود",
         "quantity": "الكمية"
+      },
+      "detail": {
+        "breadcrumb": {
+          "creative": "إبداعي",
+          "takeoffs": "الحصر الكمّي"
+        },
+        "col": {
+          "geometry": "الهندسة",
+          "label": "التسمية",
+          "quantity": "الكمية"
+        },
+        "emptyDescription": "البنود المُحصاة ضمن هذا الحصر — الأعداد والأطوال والمساحات والأحجام — تتجمّع في الإجمالي أعلاه.",
+        "emptyLabel": "لا توجد قياسات بعد",
+        "eyebrow": "إبداعي",
+        "field": {
+          "added": "تاريخ الإضافة",
+          "costCode": "رمز التكلفة",
+          "project": "المشروع",
+          "sheet": "الورقة",
+          "unit": "الوحدة"
+        },
+        "measurements": "القياسات",
+        "metric": {
+          "calibration": "المعايرة (بوصة/قدم)",
+          "items": "القياسات",
+          "quantity": "إجمالي الكمية"
+        },
+        "noProject": "لا يوجد مشروع مسجّل",
+        "notes": "ملاحظات",
+        "uncalibrated": "غير مُعاير"
+      },
+      "edit": {
+        "eyebrow": "إبداعي",
+        "fields": {
+          "calibration": "المعايرة — بوصات لكل قدم",
+          "costCode": "رمز التكلفة · اختياري",
+          "name": "الاسم",
+          "notes": "ملاحظات",
+          "sheet": "الورقة · اختياري",
+          "unit": "الوحدة"
+        },
+        "submit": "حفظ التغييرات",
+        "title": "تحرير {name}"
       }
     },
     "tasks": {
@@ -16321,7 +17964,10 @@
         "userOption": "— مستخدم —",
         "vendorOption": "— مورّد —",
         "emailPlaceholder": "email@…",
-        "add": "+ إضافة"
+        "add": "+ إضافة",
+        "noItemsTitle": "لا توجد عناصر بعد",
+        "noRecipients": "أضف عنصرًا واحدًا على الأقل لتمكين الإرسال.",
+        "noRecipientsTitle": "لا يوجد مستلمون بعد"
       },
       "new": {
         "eyebrow": "العمليات",
@@ -16478,7 +18124,8 @@
         "vehicle": "المركبة",
         "totalRuns": "إجمالي المشاوير",
         "latestRun": "آخر مشوار",
-        "status": "الحالة"
+        "status": "الحالة",
+        "run_state": "الحالة"
       },
       "sections": {
         "dispatch": {
@@ -16514,6 +18161,12 @@
           "vehicle": "المركبة",
           "status": "الحالة"
         }
+      },
+      "metrics": {
+        "dispatch": "عمليات الإرسال",
+        "fleets": "الأساطيل",
+        "manifests": "بيانات A&D",
+        "vehicles": "المركبات"
       }
     },
     "venues": {
@@ -16736,7 +18389,8 @@
           "kind": "النوع",
           "capacity": "السعة"
         }
-      }
+      },
+      "createFirst": "أضف مكانك الأول"
     },
     "warranties": {
       "new": {
@@ -16895,6 +18549,19 @@
           "state": "الحالة",
           "duration": "المدة",
           "role": "الدور"
+        },
+        "createFirst": "أنشئ دورتك الأولى",
+        "edit": {
+          "crumb": "تحرير",
+          "eyebrow": "الدورة",
+          "fields": {
+            "duration": "المدة — بالدقائق",
+            "requiredForRole": "مطلوبة للدور",
+            "summary": "الملخص",
+            "title": "العنوان"
+          },
+          "submit": "حفظ التغييرات",
+          "title": "تحرير {title}"
         }
       },
       "deployment": {
@@ -17587,6 +19254,304 @@
       "pctPlaceholder": "50 أو 0.5",
       "sortOrder": "ترتيب الفرز",
       "addDraw": "إضافة دفعة"
+    },
+    "legend": {
+      "eyebrow": "LEG3ND",
+      "subtitle": "المعرفة · LMS · الموارد — على بروتوكول XPMS 2.0.",
+      "tiles": {
+        "catalog": {
+          "blurb": "الكتالوج الرئيسي للذرات المُسعّرة / URID.",
+          "title": "الكتالوج"
+        },
+        "certs": {
+          "blurb": "الاعتمادات والتراخيص وتتبّع انتهاء الصلاحية.",
+          "title": "الشهادات"
+        },
+        "courses": {
+          "blurb": "LMS — مسارات التدريب والدروس والاختبارات.",
+          "title": "الدورات"
+        },
+        "engine": {
+          "blurb": "XMCE — تأليف القواعد وتشغيل الفحوصات وفرز النتائج.",
+          "title": "محرّك الامتثال"
+        },
+        "resources": {
+          "blurb": "وثائق وروابط وقوالب ومراجع منتقاة.",
+          "title": "الموارد"
+        },
+        "safety": {
+          "blurb": "الحوادث والأزمات والطبيّات والحماية.",
+          "title": "السلامة"
+        },
+        "signage": {
+          "blurb": "مكتبة لافتات السلامة ISO 7010 / DOT-AIGA / ISA.",
+          "title": "اللافتات"
+        },
+        "standard": {
+          "blurb": "قاعدة المعرفة — المرجع المعتمد لطريقة عملنا.",
+          "title": "المعيار"
+        }
+      },
+      "title": "المعرفة"
+    },
+    "branding": {
+      "uploader": {
+        "label": "الشعار",
+        "none": "لا يوجد شعار",
+        "upload": "رفع الشعار",
+        "uploaded": "تم رفع الشعار",
+        "uploading": "جارٍ الرفع…",
+        "urlPlaceholder": "…أو الصق رابط HTTPS للشعار"
+      }
+    },
+    "collaborate": {
+      "docs": {
+        "columns": {
+          "state": "الحالة",
+          "title": "العنوان",
+          "updated": "آخر تحديث"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "detail": {
+          "configureSupabase": "اضبط Supabase.",
+          "eyebrow": "المستندات"
+        },
+        "emptyLabel": "لا توجد مستندات بعد",
+        "eyebrow": "التعاون",
+        "new": {
+          "eyebrow": "المستندات",
+          "stateLabel": "الحالة",
+          "title": "مستند جديد",
+          "titleLabel": "العنوان"
+        },
+        "newLabel": "+ مستند جديد",
+        "title": "المستندات"
+      }
+    },
+    "reservations": {
+      "columns": {
+        "guest": "الضيف",
+        "party": "المجموعة",
+        "reservedFor": "محجوز لـ",
+        "state": "الحالة",
+        "table": "الطاولة"
+      },
+      "detail": {
+        "advance": "تحديث الحالة",
+        "eyebrow": "الحجز",
+        "field": {
+          "created": "تاريخ الإنشاء",
+          "email": "البريد الإلكتروني",
+          "party": "حجم المجموعة",
+          "phone": "الهاتف",
+          "state": "الحالة",
+          "table": "الطاولة"
+        },
+        "lifecycle": "دورة الحياة",
+        "moveTo": "النقل إلى",
+        "notes": "ملاحظات",
+        "terminal": "هذا الحجز في حالة نهائية.",
+        "unassigned": "غير مُسند"
+      },
+      "emptyDescription": "احجز طاولة لضيف. تتبّع الحجز من محجوز ← مُجلَس ← مكتمل على مخطط الأرضية.",
+      "emptyLabel": "لا توجد حجوزات بعد",
+      "eyebrow": "عمليات المكان",
+      "floorPlan": "مخطط الأرضية",
+      "floorPlanEmpty": "لا توجد طاولات بعد. أضف طاولات لبناء مخطط الأرضية.",
+      "metrics": {
+        "active": "الجلسات النشطة",
+        "seated": "مُجلَس",
+        "tables": "الطاولات"
+      },
+      "new": {
+        "email": "البريد الإلكتروني للتواصل",
+        "eyebrow": "عمليات المكان",
+        "guest": "اسم الضيف",
+        "notes": "ملاحظات",
+        "party": "حجم المجموعة",
+        "phone": "هاتف التواصل",
+        "reservedFor": "محجوز لـ",
+        "submit": "إنشاء حجز",
+        "table": "الطاولة",
+        "tableUnassigned": "غير مُسند",
+        "title": "حجز جديد"
+      },
+      "newReservation": "+ حجز جديد",
+      "newTable": "+ طاولة جديدة",
+      "tables": {
+        "new": {
+          "eyebrow": "عمليات المكان",
+          "notes": "ملاحظات",
+          "seats": "المقاعد",
+          "state": "الحالة",
+          "submit": "إنشاء طاولة",
+          "tableNo": "رقم الطاولة",
+          "title": "طاولة جديدة",
+          "x": "إحداثي X لمخطط الأرضية (0–100)",
+          "y": "إحداثي Y لمخطط الأرضية (0–60)",
+          "zone": "المنطقة"
+        }
+      },
+      "title": "الحجوزات"
+    },
+    "boxOffice": {
+      "columns": {
+        "arrived": "وصل",
+        "created": "تاريخ الإنشاء",
+        "entries": "الإدخالات",
+        "expected": "المتوقع",
+        "name": "القائمة"
+      },
+      "detail": {
+        "addGuest": "إضافة ضيف",
+        "addSubmit": "إضافة إلى القائمة",
+        "allLists": "كل القوائم",
+        "eyebrow": "شباك التذاكر",
+        "fields": {
+          "guestName": "اسم الضيف",
+          "notes": "ملاحظات",
+          "plusOnes": "المرافقون"
+        },
+        "metrics": {
+          "arrived": "الحاضرون الواصلون",
+          "checkedIn": "سُجِّل دخوله",
+          "entries": "الإدخالات",
+          "expected": "الحاضرون المتوقعون"
+        }
+      },
+      "eyebrow": "GVTEWAY",
+      "metrics": {
+        "arrived": "وصل",
+        "checkedInEntries": "الإدخالات المُسجّلة",
+        "expected": "الحاضرون المتوقعون",
+        "lists": "قوائم الضيوف"
+      },
+      "new": {
+        "event": {
+          "none": "لا توجد فعالية"
+        },
+        "eyebrow": "شباك التذاكر",
+        "fields": {
+          "event": "الفعالية — اختياري",
+          "name": "اسم القائمة",
+          "notes": "ملاحظات"
+        },
+        "placeholders": {
+          "name": "VIP · ضيوف الفنانين · الصحافة"
+        },
+        "submit": "إنشاء قائمة",
+        "title": "قائمة ضيوف جديدة"
+      },
+      "newList": "+ قائمة ضيوف جديدة",
+      "roster": {
+        "checkIn": "تسجيل الدخول",
+        "code": "الرمز",
+        "deny": "رفض",
+        "door": "الباب",
+        "empty": "لا يوجد ضيوف بعد. أضف واحدًا أعلاه.",
+        "guest": "الضيف",
+        "heads": "الأشخاص",
+        "reset": "إعادة تعيين",
+        "state": "الحالة",
+        "title": "الكشف"
+      },
+      "scan": {
+        "hint": "امسح أو اكتب رمز الضيف لتسجيل دخوله.",
+        "placeholder": "GL-XXXXXX-XXXX",
+        "submit": "تسجيل الدخول",
+        "title": "مسح الباب"
+      },
+      "title": "شباك التذاكر"
+    },
+    "diary": {
+      "col": {
+        "space": "المساحة"
+      },
+      "detail": {
+        "breadcrumb": {
+          "diary": "مفكرة الفعاليات",
+          "sales": "المبيعات"
+        },
+        "eyebrow": "الحجز",
+        "field": {
+          "client": "العميل",
+          "created": "تاريخ الإنشاء",
+          "ends": "ينتهي",
+          "headcount": "عدد الحضور",
+          "project": "المشروع",
+          "space": "المساحة",
+          "starts": "يبدأ",
+          "window": "النافذة"
+        },
+        "noSpace": "المساحة",
+        "notes": "ملاحظات",
+        "transition": "نقل"
+      },
+      "edit": {
+        "eyebrow": "الحجز",
+        "submit": "حفظ الحجز",
+        "title": "تحرير الحجز"
+      },
+      "empty": {
+        "cta": "+ مساحة جديدة",
+        "title": "لا توجد مساحات بعد"
+      },
+      "eyebrow": "المبيعات",
+      "field": {
+        "client": "العميل (اختياري)",
+        "endsAt": "ينتهي في",
+        "headcount": "عدد الحضور",
+        "none": "— لا شيء —",
+        "notes": "ملاحظات",
+        "project": "المشروع (اختياري)",
+        "space": "المساحة",
+        "spacePlaceholder": "اختر مساحة…",
+        "startsAt": "يبدأ في",
+        "state": "الحالة",
+        "title": "العنوان"
+      },
+      "manageSpaces": "المساحات",
+      "new": {
+        "eyebrow": "المبيعات",
+        "noSpaces": {
+          "cta": "+ مساحة جديدة",
+          "title": "لا توجد مساحات بعد"
+        },
+        "submit": "إنشاء حجز",
+        "title": "حجز جديد"
+      },
+      "newBooking": "+ حجز جديد",
+      "next": "التالي →",
+      "prev": "← السابق",
+      "spaces": {
+        "breadcrumb": {
+          "diary": "مفكرة الفعاليات"
+        },
+        "col": {
+          "capacity": "السعة",
+          "name": "الاسم",
+          "state": "الحالة",
+          "venue": "المكان"
+        },
+        "eyebrow": "مفكرة الفعاليات",
+        "field": {
+          "capacity": "السعة",
+          "name": "الاسم",
+          "notes": "ملاحظات",
+          "state": "الحالة",
+          "venue": "المكان"
+        },
+        "new": {
+          "eyebrow": "مفكرة الفعاليات",
+          "submit": "إنشاء مساحة",
+          "title": "مساحة جديدة"
+        },
+        "newLabel": "+ مساحة جديدة",
+        "subtitle": "{count} مساحة",
+        "title": "المساحات"
+      },
+      "title": "مفكرة الفعاليات",
+      "today": "اليوم"
     }
   },
   "p": {
@@ -17674,7 +19639,8 @@
           "directMessage": "رسالة مباشرة",
           "subtitle": "محادثة مباشرة مع مدير حسابك لمشروع {projectName}.",
           "empty": "لا رسائل بعد. ألقِ التحية — سيصل إشعار إلى مدير حسابك.",
-          "messagePlaceholder": "رسالة"
+          "messagePlaceholder": "رسالة",
+          "emptyTitle": "لا توجد رسائل بعد"
         }
       },
       "gateway": {
@@ -17717,7 +19683,8 @@
         },
         "overdue": "متأخرة",
         "duePrefix": "تستحق {date}"
-      }
+      },
+      "eyebrowLabel": "البوابة"
     },
     "apply": {
       "changes": {
@@ -17936,7 +19903,8 @@
         },
         "badge": {
           "sla": "SLA"
-        }
+        },
+        "eyebrowLabel": "البوابة · الرياضي"
       },
       "safeguarding": {
         "eyebrowShort": "البوابة",
@@ -17996,7 +19964,8 @@
         "footer": {
           "suffix": "إذا لم يتقدم ملفك."
         }
-      }
+      },
+      "breadcrumbLabel": "الرياضي"
     },
     "client": {
       "deliverables": {
@@ -18028,7 +19997,8 @@
           "amount": "المبلغ",
           "status": "الحالة",
           "due": "الاستحقاق",
-          "pdf": "PDF"
+          "pdf": "PDF",
+          "invoice_state": "الحالة"
         },
         "download": "تنزيل"
       },
@@ -18227,7 +20197,8 @@
           "title": "العنوان",
           "amount": "المبلغ",
           "status": "الحالة",
-          "sent": "تاريخ الإرسال"
+          "sent": "تاريخ الإرسال",
+          "proposal_state": "الحالة"
         },
         "open": "فتح ←"
       },
@@ -18341,6 +20312,19 @@
           "billable": "قابل للفوترة",
           "notes": "ملاحظات"
         }
+      },
+      "timesheets": {
+        "col": {
+          "billable": "قابل للفوترة",
+          "hours": "الساعات",
+          "period": "الفترة",
+          "state": "الحالة"
+        },
+        "empty": {
+          "title": "لا توجد سجلات دوام بعد"
+        },
+        "subtitle": "سجلات دوامك وحالة اعتمادها لهذا المشروع",
+        "title": "سجلات الدوام"
       }
     },
     "delegation": {
@@ -18510,7 +20494,8 @@
         },
         "orders": {
           "heading": "الطلبات"
-        }
+        },
+        "eyebrowLabel": "البوابة · الوفد"
       },
       "transport": {
         "eyebrowShort": "البوابة",
@@ -18800,7 +20785,8 @@
         "rsvp": {
           "prefix": "لتأكيد الحضور، راسل",
           "suffix": "مع ذكر رقم اعتمادك واسم المؤتمر."
-        }
+        },
+        "eyebrowLabel": "البوابة · الإعلام"
       },
       "services": {
         "eyebrow": {
@@ -18821,7 +20807,8 @@
         },
         "catalog": {
           "heading": "الكتالوج"
-        }
+        },
+        "eyebrowLabel": "البوابة · الإعلام"
       },
       "transport": {
         "eyebrowShort": "البوابة",
@@ -18917,14 +20904,22 @@
           "impact": "الأثر",
           "owner": "المالك",
           "due": "الاستحقاق",
-          "status": "الحالة"
+          "status": "الحالة",
+          "risk_state": "الحالة"
         }
       },
       "readiness": {
         "tile": {
           "label": "الجاهزية",
           "desc": "قوائم تحقق بوابات المراحل"
-        }
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "detailOn": "مراجعة الجاهزية لكل مشروع في",
+        "empty": {
+          "title": "لا توجد مشاريع"
+        },
+        "subtitle": "قرار المضي/عدم المضي للمحفظة حسب بوابة دورة الحياة.",
+        "title": "الجاهزية"
       },
       "approvalsReviews": {
         "title": "الموافقات والمراجعات",
@@ -18934,7 +20929,14 @@
         "tile": {
           "label": "المراجعات",
           "desc": "استخلاص ما بعد العروض"
-        }
+        },
+        "configureSupabase": "تهيئة Supabase.",
+        "empty": {
+          "title": "لا توجد مراجعات مجدولة"
+        },
+        "subtitle": "مراجعات البوابات والمراجعات الرجعية ومتابعات المجلس.",
+        "title": "المراجعات",
+        "untitled": "مراجعة بلا عنوان"
       },
       "title": "بوابة المنتج",
       "tracker": {
@@ -18964,7 +20966,8 @@
           "showDate": "تاريخ العرض",
           "guarantee": "الضمان",
           "doorPct": "نسبة الباب %",
-          "status": "الحالة"
+          "status": "الحالة",
+          "talent_offer_state": "الحالة"
         }
       },
       "marketing": {
@@ -18979,7 +20982,8 @@
           "channel": "القناة",
           "dates": "التواريخ",
           "spend": "الإنفاق",
-          "status": "الحالة"
+          "status": "الحالة",
+          "campaign_state": "الحالة"
         }
       },
       "home": {
@@ -19150,6 +21154,56 @@
           "desc": "سجل للقراءة فقط"
         },
         "title": "بوابة أصحاب المصلحة"
+      },
+      "audit": {
+        "col": {
+          "action": "الإجراء",
+          "actor": "الفاعل",
+          "target": "الهدف",
+          "when": "متى"
+        },
+        "configureSupabase": "اضبط Supabase.",
+        "empty": {
+          "title": "لا توجد إدخالات تدقيق"
+        },
+        "subtitle": "كل إجراء مميّز، موثّق بالوقت. للقراءة فقط.",
+        "title": "سجل التدقيق"
+      },
+      "governance": {
+        "empty": {
+          "title": "لا توجد لجان بعد"
+        },
+        "subtitle": "اللجان والسياسات وبوابات الاعتماد.",
+        "title": "الحوكمة"
+      },
+      "pnl": {
+        "configureSupabase": "اضبط Supabase.",
+        "fullBreakdownOn": "التفصيل الكامل في",
+        "metrics": {
+          "budget": "الميزانية",
+          "margin": "الهامش",
+          "revenuePaid": "الإيرادات — المدفوعة",
+          "spent": "المُنفَق"
+        },
+        "noProject": {
+          "title": "لا يوجد مشروع"
+        },
+        "subtitle": "ملخص رئيسي لـ {projectName}.",
+        "title": "P&L"
+      },
+      "portfolio": {
+        "configureSupabase": "اضبط Supabase.",
+        "empty": {
+          "title": "لا توجد مشاريع"
+        },
+        "title": "المحفظة"
+      },
+      "sustainability": {
+        "empty": {
+          "title": "لا توجد تقارير ESG بعد"
+        },
+        "subtitle": "تقارير ESG + وضعية الاستدامة.",
+        "title": "الاستدامة"
       }
     },
     "vendor": {
@@ -19193,7 +21247,8 @@
           "amount": "المبلغ",
           "status": "الحالة",
           "issued": "تاريخ الإصدار",
-          "due": "الاستحقاق"
+          "due": "الاستحقاق",
+          "invoice_state": "الحالة"
         }
       },
       "home": {
@@ -19231,7 +21286,8 @@
           "title": "العنوان",
           "amount": "المبلغ",
           "status": "الحالة",
-          "created": "تاريخ الإنشاء"
+          "created": "تاريخ الإنشاء",
+          "po_state": "الحالة"
         }
       },
       "submissions": {
@@ -19274,7 +21330,8 @@
           "requiredCourses": "الدورات المطلوبة",
           "totalKbArticles": "إجمالي مقالات المعرفة",
           "lastUpdated": "آخر تحديث"
-        }
+        },
+        "eyebrowLabel": "البوابة"
       }
     },
     "vip": {
@@ -19375,7 +21432,9 @@
         "section": {
           "schedule": "الجدول"
         },
-        "empty": "لا رحلات T1 مجدولة. سينشرها الكونسيرج عند التأكيد."
+        "empty": "لا رحلات T1 مجدولة. سينشرها الكونسيرج عند التأكيد.",
+        "eyebrowLabel": "البوابة · VIP",
+        "titleLabel": "النقل"
       }
     },
     "volunteer": {
@@ -19446,8 +21505,12 @@
       },
       "metrics": {
         "upcomingShifts": "المناوبات القادمة",
-        "status": "الحالة",
-        "role": "الدور"
+        "role": "الدور",
+        "status": {
+          "active": "نشط",
+          "pending": "قيد الانتظار"
+        },
+        "statusLabel": "الحالة"
       },
       "notOnboarded": {
         "badge": "لم تتم التهيئة بعد"
@@ -19485,12 +21548,17 @@
         },
         "metric": {
           "required": "مطلوبة",
-          "status": "الحالة",
-          "lastUpdated": "آخر تحديث"
+          "lastUpdated": "آخر تحديث",
+          "status": {
+            "open": "مفتوح"
+          },
+          "statusLabel": "الحالة"
         },
         "requiredModules": {
           "heading": "الوحدات المطلوبة"
-        }
+        },
+        "eyebrowLabel": "البوابة · المتطوع",
+        "titleLabel": "التدريب"
       },
       "uniform": {
         "eyebrowShort": "البوابة",
@@ -19527,6 +21595,13 @@
           "slotLabel": "الموعد:"
         }
       }
+    },
+    "select": {
+      "contactSupport": "تواصل مع الدعم",
+      "emptyTitle": "لا توجد بوابات مشاريع بعد",
+      "eyebrow": "البوابة",
+      "subtitle": "اختر بوابة المشروع التي تريد فتحها.",
+      "title": "اختر مشروعًا"
     }
   },
   "rootError": {
@@ -19743,7 +21818,8 @@
     "chips": {
       "remove": "إزالة عامل تصفية {header} {value}",
       "clearAll": "مسح الكل"
-    }
+    },
+    "bulkFailed": "فشل الإجراء الجماعي"
   },
   "commandPalette": {
     "shortcut": "فتح لوحة الأوامر",
@@ -19766,7 +21842,8 @@
     "hint": {
       "settings": "الإعدادات · {group}",
       "tab": "تبويب",
-      "tool": "أداة"
+      "tool": "أداة",
+      "create": "إنشاء · {group}"
     },
     "actions": {
       "newProject": "مشروع جديد",
@@ -19783,7 +21860,8 @@
       "preferences": "التفضيلات",
       "lightMode": "التبديل إلى الوضع الفاتح",
       "darkMode": "التبديل إلى الوضع الداكن",
-      "signOut": "تسجيل الخروج"
+      "signOut": "تسجيل الخروج",
+      "linkScanCode": "ربط رمز المسح"
     }
   },
   "savedViews": {

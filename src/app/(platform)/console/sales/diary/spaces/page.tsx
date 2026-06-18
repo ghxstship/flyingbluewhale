@@ -42,7 +42,7 @@ export default async function SpacesPage() {
         ]}
         action={
           <Button href="/console/sales/diary/spaces/new" size="sm">
-            {t("console.diary.spaces.new", undefined, "+ New Space")}
+            {t("console.diary.spaces.newLabel", undefined, "+ New Space")}
           </Button>
         }
       />

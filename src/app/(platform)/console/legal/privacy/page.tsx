@@ -10,10 +10,10 @@ export default async function Page() {
       <div className="page-content">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Link className="surface hover-lift p-4" href="/console/legal/privacy/dsar">
-            <div className="text-sm font-medium">{t("console.legal.privacy.dsar", undefined, "DSAR")}</div>
+            <div className="text-sm font-medium">{t("console.legal.privacy.dsarLabel", undefined, "DSAR")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/legal/privacy/consent">
-            <div className="text-sm font-medium">{t("console.legal.privacy.consent", undefined, "Consent")}</div>
+            <div className="text-sm font-medium">{t("console.legal.privacy.consentLabel", undefined, "Consent")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/legal/privacy/datamap">
             <div className="text-sm font-medium">{t("console.legal.privacy.dataMap", undefined, "Data map")}</div>

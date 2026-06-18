@@ -81,7 +81,12 @@
     "tryAgain": "Réessayer",
     "untitled": "Sans titre",
     "update": "Mettre à jour",
-    "upload": "Téléverser"
+    "upload": "Téléverser",
+    "continue": "Continuer",
+    "accessDenied": {
+      "backToOverview": "Retour à la vue d'ensemble",
+      "title": "Vous n'avez pas accès"
+    }
   },
   "nav": {
     "product": "Produit",
@@ -1565,6 +1570,30 @@
           "card": {
             "show": "Représentation {date}",
             "closes": "Clôture {date}"
+          },
+          "submit": {
+            "already": {
+              "browse": "Parcourir plus d'appels",
+              "cta": "Voir mes soumissions",
+              "title": "Déjà soumis"
+            },
+            "breadcrumbs": {
+              "calls": "Appels ouverts",
+              "marketplace": "Place de marché",
+              "submit": "Soumettre"
+            },
+            "closed": {
+              "cta": "Parcourir les appels ouverts",
+              "title": "Cet appel est fermé"
+            },
+            "form": {
+              "links": "Liens",
+              "pitch": "Présentation",
+              "submit": "Soumettre à cet appel"
+            },
+            "hero": {
+              "closesPrefix": "Clôture"
+            }
           }
         },
         "crew": {
@@ -1682,7 +1711,8 @@
             },
             "cta": {
               "bid": "Soumissionner à cette RFQ",
-              "signup": "Besoin d'un compte ?"
+              "signup": "Besoin d'un compte ?",
+              "expressInterest": "Manifester son intérêt"
             }
           },
           "meta": {
@@ -3262,6 +3292,53 @@
           "title": "ATLVS Est Ouvert.",
           "subtitle": "Gratuit, pour toujours, pour les petites équipes. Tarification par organisation pour tout le reste."
         }
+      },
+      "marketplace-gigs-apply": {
+        "already": {
+          "browse": "Parcourir plus de missions",
+          "cta": "Voir mes candidatures",
+          "title": "Déjà candidaté"
+        },
+        "breadcrumbs": {
+          "apply": "Postuler",
+          "crewGigs": "Missions d'équipe",
+          "marketplace": "Place de marché"
+        },
+        "closed": {
+          "cta": "Parcourir les missions ouvertes",
+          "title": "Cette mission est fermée"
+        },
+        "form": {
+          "coverNote": "Lettre d'accompagnement",
+          "phone": "Téléphone",
+          "portfolioUrl": "URL du portfolio",
+          "submit": "Soumettre la candidature"
+        },
+        "hero": {
+          "eyebrow": "Postuler",
+          "perDay": " / jour"
+        }
+      },
+      "marketplace-inquire": {
+        "already": {
+          "back": "Retour à l'annonce",
+          "cta": "Voir mes demandes",
+          "title": "Demande déjà envoyée"
+        },
+        "breadcrumbs": {
+          "inquire": "Demander",
+          "marketplace": "Place de marché"
+        },
+        "form": {
+          "contactEmail": "Courriel de contact",
+          "contactPhone": "Téléphone de contact",
+          "eventDate": "Date de l'événement",
+          "message": "Message"
+        },
+        "gone": {
+          "cta": "Retour à la place de marché",
+          "title": "Cette annonce n'est plus disponible"
+        }
       }
     },
     "legal": {
@@ -4049,7 +4126,8 @@
       "pageSubtitle": "Saisissez le code à six chiffres de votre app d'authentification pour continuer."
     },
     "notFound": {
-      "title": "Chemin d'authentification introuvable."
+      "title": "Chemin d'authentification introuvable.",
+      "body": "Ce lien de connexion n'est plus valide ou n'a jamais existé. Choisissez une route ci-dessous."
     },
     "onboarding": {
       "title": "Nommez votre espace de travail",
@@ -4411,7 +4489,24 @@
       },
       "title": "Hébergement",
       "groupBlocks": "Blocs de groupe",
-      "village": "Village"
+      "village": {
+        "bedPlural": "lits",
+        "bedSingular": "lit",
+        "col": {
+          "beds": "Lits",
+          "cluster": "Cluster",
+          "handover": "Remise",
+          "name": "Nom"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "emptyLabel": "Aucun village",
+        "eyebrow": "Hébergement",
+        "newVenue": "+ Nouveau site",
+        "title": "Village",
+        "villagePlural": "villages",
+        "villageSingular": "village"
+      },
+      "villageLabel": "Village"
     },
     "accreditation": {
       "categories": {
@@ -4504,14 +4599,16 @@
         "emptyLabel": "Aucune modification d'accréditation",
         "columnKind": "Type",
         "columnStatus": "Statut",
-        "columnRequested": "Demandée"
+        "columnRequested": "Demandée",
+        "change_state": {
+          "applied": "appliqué",
+          "approved": "approuvé",
+          "pending": "en attente",
+          "rejected": "rejeté"
+        }
       },
       "title": "Accréditation",
-      "policy": "Politique",
-      "zones": "Zones",
-      "vetting": "Contrôle",
       "printQueue": "File d'impression",
-      "scans": "Scans",
       "print": {
         "eyebrowWorkspace": "Espace de Travail",
         "title": "File d'Impression",
@@ -4533,7 +4630,84 @@
           "orgFallback": "Org",
           "validTo": "Valide jusqu'au"
         }
-      }
+      },
+      "categoriesLabel": "Catégories",
+      "changesLabel": "Changements",
+      "policy": {
+        "allowed": "Autorisé",
+        "categoryPlural": "catégories",
+        "categorySingular": "catégorie",
+        "configureSupabase": "Configurer Supabase.",
+        "coverageSuffix": "{coverage}% de couverture",
+        "emptyTitle": "Catégories + zones requises d'abord",
+        "eyebrow": "Accréditation",
+        "manageCategories": "Gérer les catégories",
+        "newCategory": "+ Nouvelle catégorie",
+        "notAllowed": "Non autorisé",
+        "openVenues": "Ouvrir les sites",
+        "title": "Politique",
+        "zonePlural": "zones",
+        "zoneSingular": "zone",
+        "zoneVenueHeader": "Zone — Site"
+      },
+      "policyLabel": "Politique",
+      "scans": {
+        "columns": {
+          "at": "À",
+          "gate": "Porte",
+          "reason": "Motif",
+          "result": "Résultat"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "eyebrow": "Espace de travail",
+        "subtitleOne": "{count} enregistrement",
+        "subtitleOther": "{count} enregistrements",
+        "title": "Scans aux portes"
+      },
+      "scansLabel": "Scans",
+      "vetting": {
+        "columns": {
+          "email": "Courriel",
+          "person": "Personne",
+          "status": "Statut",
+          "submitted": "Soumis"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Enregistrement",
+          "title": "Enregistrement"
+        },
+        "edit": {
+          "email": "Courriel",
+          "eyebrow": "Demande de vérification",
+          "personName": "Nom de la personne",
+          "titleFallback": "Modifier la demande de vérification",
+          "titleWithName": "Modifier {name}",
+          "validFrom": "Valide du",
+          "validTo": "Valide au",
+          "vettingState": "État de vérification"
+        },
+        "emptyLabel": "Aucune demande en vérification",
+        "eyebrow": "Espace de travail",
+        "subtitleOne": "{count} enregistrement",
+        "subtitleOther": "{count} enregistrements",
+        "title": "File de vérification"
+      },
+      "vettingLabel": "Vérification",
+      "zones": {
+        "columns": {
+          "code": "Code",
+          "name": "Nom",
+          "parent": "Parent",
+          "venue": "Site"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "emptyLabel": "Aucune zone définie",
+        "eyebrow": "Accréditation",
+        "title": "Zones"
+      },
+      "zonesLabel": "Zones"
     },
     "actionItems": {
       "eyebrow": "Espace de travail",
@@ -4572,7 +4746,8 @@
           "show": "Show",
           "commission": "Commission",
           "artistPayout": "Versement Artiste",
-          "status": "Statut"
+          "status": "Statut",
+          "settlement_state": "Statut"
         }
       },
       "eyebrow": "Agence",
@@ -4624,7 +4799,8 @@
           "exclusive": "Exclusif",
           "signed": "Signé"
         },
-        "commissionDefault": "défaut"
+        "commissionDefault": "défaut",
+        "createFirst": "Ajouter un talent"
       },
       "tours": {
         "detail": {
@@ -4784,7 +4960,55 @@
       },
       "eyebrow": "IA",
       "title": "IA",
-      "subtitle": "Automatisations et workflows assistés."
+      "subtitle": "Automatisations et workflows assistés.",
+      "agents": {
+        "configureSupabase": "Configurer Supabase.",
+        "controls": {
+          "disable": "Désactiver",
+          "enable": "Activer"
+        },
+        "detail": {
+          "autoRefresh": "Actualisation auto",
+          "configureSupabase": "Configurer Supabase.",
+          "controlsHeading": "Contrôles",
+          "createdAt": "Créé",
+          "createdBy": "Créé par",
+          "disabled": "Désactivé",
+          "enabled": "Activé",
+          "maxTokens": "Tokens max",
+          "metricModel": "Modèle",
+          "metricOutput": "Type de sortie",
+          "metricTarget": "Cible",
+          "promptHeading": "Modèle de prompt",
+          "sourceEmpty": "Aucune",
+          "sourceHeading": "Colonnes source",
+          "titleFallback": "Agent de terrain",
+          "updatedLabel": "mis à jour"
+        },
+        "disabled": "Désactivé",
+        "emptyTitle": "Aucun agent de terrain pour l'instant",
+        "enabled": "Activé",
+        "eyebrow": "Agents de terrain",
+        "metricDisabled": "Désactivés",
+        "metricEnabled": "Activés",
+        "metricTotal": "Total",
+        "new": {
+          "enabled": "Activé",
+          "eyebrow": "Agents de terrain",
+          "outputType": "Type de sortie",
+          "promptTemplate": "Modèle de prompt",
+          "sourceColumns": "Colonnes source",
+          "submit": "Créer l'agent",
+          "targetColumn": "Colonne cible",
+          "targetTable": "Table cible",
+          "title": "Nouvel agent de terrain"
+        },
+        "newAction": "+ Nouvel agent",
+        "subtitleAgentOne": "agent",
+        "subtitleAgentOther": "agents",
+        "subtitleEnabled": "activés",
+        "title": "Agents de terrain"
+      }
     },
     "annotations": {
       "confirmedToast": "Confirmée",
@@ -4812,7 +5036,8 @@
         "metadata": "Métadonnées",
         "repliesCount": "Réponses ({count})",
         "noReplies": "Aucune réponse pour l'instant.",
-        "backToAll": "← Retour à toutes les annotations"
+        "backToAll": "← Retour à toutes les annotations",
+        "annotation_state": "Statut"
       },
       "title": "Annotations",
       "configureSupabase": "Configurer Supabase.",
@@ -4825,7 +5050,8 @@
         "status": "Statut",
         "due": "Échéance",
         "confirm": "Confirmer",
-        "created": "Créée"
+        "created": "Créée",
+        "annotation_state": "Statut"
       },
       "confirmed": "Confirmée",
       "needed": "Requise",
@@ -4895,7 +5121,8 @@
           "targetUuid": "UUID cible",
           "note": "Note (facultatif)"
         },
-        "addLink": "+ Ajouter un lien"
+        "addLink": "+ Ajouter un lien",
+        "edit": "Modifier"
       },
       "view": {
         "eyebrow": "Visionneuse BIM",
@@ -4972,6 +5199,22 @@
         "size": "Taille",
         "version": "Version",
         "state": "État"
+      },
+      "edit": {
+        "breadcrumbs": {
+          "bim": "BIM"
+        },
+        "eyebrow": "Création · BIM",
+        "field": {
+          "discipline": "Discipline",
+          "name": "Nom",
+          "project": "Projet",
+          "sourceType": "Type de source",
+          "storagePath": "Chemin de stockage",
+          "versionLabel": "Libellé de version"
+        },
+        "submit": "Enregistrer le modèle",
+        "title": "Modifier · {name}"
       }
     },
     "bookings": {
@@ -5066,7 +5309,8 @@
           "door": "% Door",
           "deposit": "Acompte",
           "stage": "Étape"
-        }
+        },
+        "createFirst": "Démarrer votre premier deal"
       },
       "holds": {
         "new": {
@@ -5205,7 +5449,8 @@
           "artistPayout": "Versement artiste",
           "balanceDue": "Solde dû",
           "paidAtt": "Entrées payantes",
-          "status": "Statut"
+          "status": "Statut",
+          "settlement_state": "Statut"
         }
       }
     },
@@ -5257,7 +5502,8 @@
         "kind": "Type",
         "window": "Fenêtre",
         "budget": "Budget",
-        "status": "Statut"
+        "status": "Statut",
+        "campaign_state": "Statut"
       }
     },
     "captures": {
@@ -5268,12 +5514,22 @@
         "name": "Nom",
         "namePlaceholder": "Visite local technique N3 — 2026-05-24",
         "project": "Projet",
-        "source": "Source",
         "captureDate": "Date de capture",
         "panoramas": "Panoramas (approx.)",
         "viewerUrl": "URL du visualiseur",
         "externalId": "Identifiant externe (ID job/espace du prestataire)",
-        "notes": "Notes"
+        "notes": "Notes",
+        "source": {
+          "dronePhoto": "Photo de drone",
+          "dronedeploy": "DroneDeploy",
+          "huddleCam": "HuddleCam",
+          "manual360": "360° manuel",
+          "matterport": "Matterport",
+          "openspace": "OpenSpace",
+          "satellite": "Satellite",
+          "structionsite": "StructionSite"
+        },
+        "sourceLabel": "Source"
       },
       "eyebrow": "Terrain",
       "title": "Captures du réel",
@@ -5329,7 +5585,8 @@
           "overview": "Aperçu",
           "projects": "Projets",
           "proposals": "Propositions",
-          "invoices": "Factures"
+          "invoices": "Factures",
+          "branding": "Marque"
         },
         "eyebrow": "Client",
         "noEmail": "Aucun e-mail au dossier",
@@ -5344,7 +5601,8 @@
           "website": "Site Web",
           "added": "Ajouté"
         },
-        "notes": "Notes"
+        "notes": "Notes",
+        "newInvoice": "+ Nouvelle facture"
       },
       "projects": {
         "eyebrow": "Client",
@@ -5369,7 +5627,8 @@
           "status": "Statut",
           "sent": "Envoyée",
           "signed": "Signée",
-          "amount": "Montant"
+          "amount": "Montant",
+          "proposal_state": "Statut"
         }
       },
       "new": {
@@ -5394,6 +5653,29 @@
         "phone": "Téléphone",
         "website": "Site Web",
         "added": "Ajouté"
+      },
+      "branding": {
+        "accentLabel": "Accent",
+        "color": {
+          "title": "Couleur"
+        },
+        "eyebrow": "Client",
+        "foregroundLabel": "Texte sur accent",
+        "identity": {
+          "title": "Identité du client"
+        },
+        "logoLabel": "Logo {name}",
+        "preview": {
+          "sample": "Échantillon d'accent secondaire",
+          "title": "Aperçu"
+        },
+        "saveButton": "Enregistrer la marque du client",
+        "savedToast": "Marque du client enregistrée",
+        "secondaryLabel": "Secondaire",
+        "title": "Marque"
+      },
+      "bulk": {
+        "delete": "Supprimer"
       }
     },
     "commercial": {
@@ -5490,7 +5772,8 @@
             "quantity": "Quantité",
             "delivered": "Livrés",
             "status": "Statut",
-            "dueBy": "Échéance"
+            "dueBy": "Échéance",
+            "entitlement_state": "Statut"
           }
         },
         "detail": {
@@ -5574,16 +5857,29 @@
           "title": "Titre",
           "body": "Corps",
           "audience": "Audience",
-          "roleBand": "Tranche De Rôle",
-          "project": "Projet",
-          "team": "Équipe",
           "pinToTop": "Épingler En Haut Du Fil",
           "saving": "Enregistrement…",
           "saveDraft": "Enregistrer Le Brouillon",
           "publishing": "Publication…",
           "publishNow": "Publier Maintenant",
           "eyebrow": "Comms · Annonces",
-          "configureSupabase": "Configurez Supabase."
+          "configureSupabase": "Configurez Supabase.",
+          "project": {
+            "any": "À l'échelle de l'org · Tout projet"
+          },
+          "projectLabel": "Projet",
+          "roleBand": {
+            "admins": "Admins",
+            "contractors": "Prestataires",
+            "crew": "Équipe",
+            "everyone": "Tout le monde",
+            "vendors": "Fournisseurs"
+          },
+          "roleBandLabel": "Groupe de rôles",
+          "team": {
+            "any": "Toute équipe"
+          },
+          "teamLabel": "Équipe"
         },
         "eyebrow": "Comms",
         "title": "Annonces",
@@ -5596,7 +5892,9 @@
           "state": "État",
           "audience": "Audience",
           "pinned": "Épinglée"
-        }
+        },
+        "createFirst": "Publier votre première annonce",
+        "newLabel": "+ Nouveau"
       },
       "polls": {
         "detail": {
@@ -5729,6 +6027,25 @@
         "paid": "Payé",
         "retainage": "Ret %",
         "state": "État"
+      },
+      "edit": {
+        "title": "Modifier le contrat"
+      },
+      "fields": {
+        "counterpartyEmail": "Courriel de la contrepartie",
+        "currency": "Devise",
+        "description": "Description",
+        "end": "Fin",
+        "notes": "Notes",
+        "number": "Numéro",
+        "signed": "Signé",
+        "start": "Début"
+      },
+      "new": {
+        "numberPlaceholder": "Généré automatiquement si vide",
+        "submit": "Créer le contrat",
+        "title": "Titre",
+        "titlePlaceholder": "Parrainage — MMW26"
       }
     },
     "dashboard": {
@@ -5844,7 +6161,9 @@
         "columnRev": "Rév. (à la publication)",
         "columnDocState": "État du document",
         "selectSheet": "Sélectionner un plan…",
-        "addSheet": "+ Ajouter un plan"
+        "addSheet": "+ Ajouter un plan",
+        "edit": "Modifier",
+        "noVersionsTitle": "Aucune version pour l'instant"
       },
       "new": {
         "eyebrow": "Création",
@@ -5880,7 +6199,21 @@
         "sheets": "Plans",
         "state": "État"
       },
-      "none": "— aucun —"
+      "none": "— aucun —",
+      "edit": {
+        "breadcrumbs": {
+          "drawings": "Plans"
+        },
+        "eyebrow": "Création · Plans",
+        "fields": {
+          "description": "Description",
+          "discipline": "Discipline",
+          "name": "Nom",
+          "project": "Projet"
+        },
+        "submit": "Enregistrer le jeu de plans",
+        "title": "Modifier · {name}"
+      }
     },
     "emailInbox": {
       "eyebrow": "Correspondance Projet",
@@ -5900,7 +6233,22 @@
         "routedTo": "Routé Vers"
       },
       "noSubject": "(sans objet)",
-      "unrouted": "Non Routé"
+      "unrouted": "Non Routé",
+      "active": "Actif",
+      "addressNotes": "Notes d'adresse entrante",
+      "body": "Message",
+      "fields": {
+        "cc": "Cc",
+        "inboundAddress": "Adresse entrante",
+        "messageId": "ID du message",
+        "processed": "Traité",
+        "spamScore": "Score de spam",
+        "thread": "Fil",
+        "to": "À"
+      },
+      "htmlOnly": "Ce message contient uniquement du contenu HTML.",
+      "inactive": "Inactif",
+      "openProject": "Ouvrir le projet"
     },
     "envelopes": {
       "target": {
@@ -5932,6 +6280,39 @@
         "signers": "Signataires",
         "sent": "Envoyée",
         "state": "État"
+      },
+      "detail": {
+        "body": "Corps",
+        "completed": "Terminé",
+        "expires": "Expire",
+        "noSigners": "Aucun signataire enregistré pour l'instant.",
+        "providerRef": "Réf. fournisseur",
+        "signersTitle": "Signataires",
+        "targetId": "ID cible"
+      },
+      "new": {
+        "body": "Corps / notes",
+        "expires": "Expire",
+        "eyebrow": "Juridique",
+        "noProject": "— Aucun projet —",
+        "subject": "Objet",
+        "submit": "Créer l'enveloppe",
+        "targetId": "ID de l'enregistrement cible",
+        "title": "Nouvelle enveloppe de signature électronique"
+      },
+      "provider": {
+        "adobeSign": "Adobe Sign",
+        "docusign": "DocuSign",
+        "hellosign": "HelloSign",
+        "manual": "Manuel",
+        "pandadoc": "PandaDoc"
+      },
+      "stateControls": {
+        "toast": {
+          "ok": "Enveloppe mise à jour",
+          "voided": "Enveloppe annulée"
+        },
+        "void": "Annuler"
       }
     },
     "error": {
@@ -5977,6 +6358,36 @@
         "subtotal": "Sous-total",
         "total": "Total",
         "state": "État"
+      },
+      "detail": {
+        "breadcrumb": {
+          "creative": "Création",
+          "estimates": "Devis"
+        },
+        "eyebrow": "Création",
+        "field": {
+          "created": "Créé",
+          "markup": "Marge",
+          "state": "État",
+          "subtotal": "Sous-total",
+          "total": "Total avec marge",
+          "waste": "Facteur de perte"
+        },
+        "noProject": "Aucun projet enregistré",
+        "notes": "Notes"
+      },
+      "edit": {
+        "eyebrow": "Création",
+        "fields": {
+          "defaultMarkupHint": "Stocké sous forme de fraction (0,07 = 7 %).",
+          "defaultMarkupPct": "Marge par défaut %",
+          "defaultWasteFactor": "Facteur de perte par défaut",
+          "name": "Nom",
+          "notes": "Notes",
+          "state": "État"
+        },
+        "submit": "Enregistrer les modifications",
+        "title": "Modifier {name}"
       }
     },
     "events": {
@@ -5993,7 +6404,8 @@
         "statusScheduled": "planifié",
         "statusLive": "en direct",
         "statusComplete": "terminé",
-        "statusCancelled": "annulé"
+        "statusCancelled": "annulé",
+        "event_state": "Statut"
       },
       "detail": {
         "eyebrow": "Opérations",
@@ -6006,7 +6418,8 @@
           "status": "Statut",
           "starts": "Début",
           "ends": "Fin",
-          "description": "Description"
+          "description": "Description",
+          "event_state": "Statut"
         }
       },
       "new": {
@@ -6033,7 +6446,11 @@
         "name": "Nom",
         "starts": "Début",
         "ends": "Fin",
-        "status": "Statut"
+        "status": "Statut",
+        "event_state": "Statut"
+      },
+      "bulk": {
+        "cancel": "Annuler"
       }
     },
     "finance": {
@@ -6069,6 +6486,29 @@
           "amount": "Montant",
           "confidence": "Conf.",
           "state": "État"
+        },
+        "detail": {
+          "actionsHeading": "Actions",
+          "allExtractions": "← Toutes les extractions",
+          "confidence": "confiance",
+          "dueDate": "Échéance",
+          "errorHeading": "Erreur d'extraction",
+          "lineDescription": "Description",
+          "lineItems": "Lignes",
+          "lineQty": "Qté",
+          "lineTotal": "Total",
+          "lineUnit": "Unité",
+          "matchedPo": "PO rapproché",
+          "matchedVendor": "Fournisseur rapproché",
+          "noLineItems": "Aucune ligne extraite.",
+          "notes": "Notes",
+          "openInvoice": "Ouvrir la facture",
+          "poNumber": "N° PO",
+          "promote": "Promouvoir en facture",
+          "tax": "Taxe",
+          "taxId": "N° fiscal",
+          "untitled": "Extraction",
+          "viewFile": "Voir le fichier"
         }
       },
       "budgets": {
@@ -6078,7 +6518,27 @@
           "submit": "Enregistrer les modifications",
           "name": "Nom",
           "category": "Catégorie",
-          "amountCents": "Montant (centimes)"
+          "amountCents": "Montant (centimes)",
+          "activation": "Activation",
+          "amount": "Budget — USD",
+          "class": "Classe",
+          "department": "Département",
+          "discipline": "Discipline",
+          "event": "Événement",
+          "externalNotes": "Notes externes",
+          "internalNotes": "Notes internes",
+          "item": "Article",
+          "lineType": "Type de ligne",
+          "location": "Lieu",
+          "phase": "Phase (8 portes)",
+          "quantity": "Quantité",
+          "rate": "Taux — USD",
+          "rateHint": "Estimation = Quantité × Taux (calculé par la BD)",
+          "status": "Statut",
+          "team": "Équipe",
+          "tier": "Niveau",
+          "vendor": "Fournisseur",
+          "xyz": "XYZ — Comportement des coûts"
         },
         "detail": {
           "title": "Budget",
@@ -6108,7 +6568,27 @@
           "amount": "Montant (USD)",
           "category": "Catégorie",
           "eyebrow": "Finance",
-          "title": "Nouveau budget"
+          "title": "Nouveau budget",
+          "activation": "Activation",
+          "amountHint": "La base de référence approuvée",
+          "class": "Classe",
+          "department": "Département",
+          "discipline": "Discipline",
+          "event": "Événement",
+          "externalNotes": "Notes externes",
+          "internalNotes": "Notes internes",
+          "item": "Article",
+          "lineType": "Type de ligne",
+          "location": "Lieu",
+          "phase": "Phase (8 portes)",
+          "quantity": "Quantité",
+          "rate": "Taux — USD",
+          "rateHint": "Estimation = Quantité × Taux (calculé par la BD)",
+          "status": "Statut",
+          "team": "Équipe",
+          "tier": "Niveau",
+          "vendor": "Fournisseur",
+          "xyz": "XYZ — Comportement des coûts"
         },
         "title": "Budgets",
         "configureSupabase": "Configurer Supabase.",
@@ -6119,7 +6599,9 @@
           "category": "Catégorie",
           "spent": "Dépensé",
           "budget": "Budget",
-          "utilization": "Utilisation"
+          "utilization": "Utilisation",
+          "actual": "Réel",
+          "department": "Département"
         },
         "summary": {
           "eyebrow": "Finance",
@@ -6155,7 +6637,13 @@
             "finalLabel": "Solde final",
             "finalTrigger": "Phase 8 · Close / réception finale"
           }
-        }
+        },
+        "import": {
+          "eyebrow": "Finance",
+          "title": "Importer un budget — CSV / TSV"
+        },
+        "importAction": "Importer",
+        "summaryAction": "Synthèse"
       },
       "eyebrow": "Finance",
       "consolidation": {
@@ -6185,7 +6673,9 @@
           "ownership": "Participation"
         },
         "empty": {
-          "prefix": "Aucune entité pour l'instant. Créez-en une dans"
+          "prefix": "Aucune entité pour l'instant. Créez-en une dans",
+          "cta": "Nouvelle entité",
+          "title": "Aucune entité pour l'instant"
         }
       },
       "costCodes": {
@@ -6282,7 +6772,13 @@
           "currencyLabel": "Devise",
           "categoryLabel": "Catégorie",
           "statusLabel": "Statut",
-          "spentOnLabel": "Dépensé le"
+          "spentOnLabel": "Dépensé le",
+          "amountLabel": "Montant",
+          "departmentLabel": "Département — XPMS",
+          "disciplineLabel": "Discipline",
+          "itemLabel": "Article",
+          "phaseLabel": "Phase (8 portes)",
+          "vendorLabel": "Fournisseur"
         },
         "status": {
           "pending": "en attente",
@@ -6300,7 +6796,13 @@
             "currency": "Devise",
             "category": "Catégorie",
             "spentOn": "Dépensé le",
-            "receipt": "Reçu"
+            "receipt": "Reçu",
+            "department": "Département",
+            "discipline": "Discipline",
+            "expense_state": "Statut",
+            "item": "Article",
+            "phase": "Phase",
+            "vendor": "Fournisseur"
           },
           "receipt": {
             "attached": "Joint",
@@ -6317,7 +6819,12 @@
           "categoryPlaceholder": "Déplacement, repas, équipement…",
           "projectOptional": "Projet (facultatif)",
           "noProject": "— Aucun projet —",
-          "title": "Enregistrer une dépense"
+          "title": "Enregistrer une dépense",
+          "department": "Département — XPMS",
+          "discipline": "Discipline",
+          "item": "Article",
+          "phase": "Phase (8 portes)",
+          "vendor": "Fournisseur"
         },
         "title": "Dépenses",
         "configureSupabase": "Configurer Supabase.",
@@ -6331,8 +6838,18 @@
           "category": "Catégorie",
           "amount": "Montant",
           "status": "Statut",
-          "date": "Date"
-        }
+          "date": "Date",
+          "department": "Département",
+          "expense_state": "Statut"
+        },
+        "expense_state": {
+          "approved": "approuvée",
+          "pending": "en attente",
+          "reimbursed": "remboursée",
+          "rejected": "rejetée"
+        },
+        "newer": "← Plus récentes",
+        "older": "Plus anciennes →"
       },
       "breadcrumb": "Finance",
       "forecasts": {
@@ -6402,7 +6919,16 @@
             "currency": "Devise",
             "issued": "Émise",
             "due": "Échéance",
-            "notes": "Notes"
+            "notes": "Notes",
+            "amount": "Montant"
+          },
+          "lineItems": {
+            "add": "Ajouter une ligne",
+            "description": "Description",
+            "legend": "Lignes",
+            "quantity": "Qté",
+            "remove": "Retirer la ligne",
+            "unitPrice": "Prix unitaire"
           }
         },
         "detail": {
@@ -6462,7 +6988,13 @@
           "status": "Statut",
           "due": "Échéance",
           "created": "Créée"
-        }
+        },
+        "bulk": {
+          "void": "Annuler"
+        },
+        "downloadPdf": "PDF",
+        "newLabel": "+ Nouvelle facture",
+        "openAsDocument": "Document"
       },
       "lienWaivers": {
         "detail": {
@@ -6535,7 +7067,8 @@
           "miles": "Miles",
           "rateCents": "Taux (centimes/mile)",
           "loggedOn": "Enregistré le",
-          "notes": "Notes"
+          "notes": "Notes",
+          "rate": "Taux — Par mile"
         },
         "breadcrumb": "Kilométrage",
         "detail": {
@@ -6702,8 +7235,11 @@
           "state": "État",
           "hours": "Heures",
           "gross": "Brut",
-          "runState": "État"
-        }
+          "runState": "État",
+          "export": "Exporter"
+        },
+        "exportPdf": "PDF",
+        "exportXml": "XML"
       },
       "periods": {
         "controls": {
@@ -6840,7 +7376,9 @@
           "duration": "Durée",
           "billable": "Facturable",
           "started": "Démarrée"
-        }
+        },
+        "newer": "← Plus récentes",
+        "older": "Plus anciennes →"
       },
       "treasury": {
         "title": "Trésorerie",
@@ -6900,7 +7438,66 @@
           "overUnder": "Sur / Sous"
         },
         "overPrefix": "Sur ",
-        "underPrefix": "Sous "
+        "underPrefix": "Sous ",
+        "new": {
+          "billedToDate": "Facturé à ce jour",
+          "bonded": "Cautionné",
+          "changeOrders": "Ordres de modification approuvés",
+          "contractAmount": "Montant du contrat",
+          "costsToDate": "Coûts à ce jour",
+          "etc": "Coût estimé pour achèvement",
+          "notes": "Notes",
+          "percentComplete": "Pourcentage d'avancement",
+          "project": "Projet",
+          "selectProject": "— Sélectionner un projet —",
+          "snapshotDate": "Date de l'instantané",
+          "submit": "Créer l'instantané",
+          "suretyCarrier": "Émetteur de la caution",
+          "suretyPlaceholder": "p. ex. Travelers Casualty & Surety",
+          "title": "Nouvel instantané WIP"
+        }
+      },
+      "timesheets": {
+        "awaitingReview": "En attente de revue",
+        "breadcrumb": "Feuilles de temps",
+        "columns": {
+          "amount": "Montant",
+          "hours": "Heures",
+          "period": "Période",
+          "state": "État",
+          "worker": "Travailleur"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "eyebrow": "Finance",
+          "fields": {
+            "amount": "Montant",
+            "billableHours": "Heures facturables",
+            "created": "Créée",
+            "period": "Période",
+            "posted": "Comptabilisée",
+            "state": "État",
+            "totalHours": "Heures totales",
+            "worker": "Travailleur"
+          }
+        },
+        "emptyLabel": "Aucune feuille de temps pour l'instant",
+        "eyebrow": "Finance",
+        "history": {
+          "empty": "Aucune décision enregistrée pour l'instant.",
+          "heading": "Historique d'approbation"
+        },
+        "review": {
+          "decisionLabel": "Décision",
+          "heading": "Revue",
+          "locked": "Cette feuille de temps est dans un état sans revue en attente.",
+          "notesLabel": "Notes (facultatif)",
+          "notesPlaceholder": "Motif ou contexte…",
+          "submit": "Enregistrer la décision"
+        },
+        "title": "Feuilles de temps",
+        "total": "Total",
+        "unknownWorker": "—"
       }
     },
     "forms": {
@@ -6918,7 +7515,8 @@
           "description": "Description",
           "status": "Statut",
           "schemaJson": "Schéma (JSON)",
-          "schemaShapeLabel": "Forme :"
+          "schemaShapeLabel": "Forme :",
+          "form_state": "Statut"
         }
       },
       "detail": {
@@ -6933,7 +7531,8 @@
         "publicResponseUrl": "URL publique de réponse",
         "openLink": "Ouvrir ↗",
         "schemaHeading": "Schéma",
-        "noFields": "Aucun champ défini. Ouvrez l'éditeur pour en ajouter."
+        "noFields": "Aucun champ défini. Ouvrez l'éditeur pour en ajouter.",
+        "viewSubmissions": "Soumissions"
       },
       "new": {
         "eyebrow": "Formulaires",
@@ -6954,7 +7553,31 @@
         "title": "Titre",
         "slug": "Slug",
         "status": "Statut",
-        "updated": "Mis à Jour"
+        "updated": "Mis à Jour",
+        "form_state": "Statut"
+      },
+      "submissions": {
+        "anonymous": "Anonyme",
+        "backToForm": "Retour au formulaire",
+        "column": {
+          "email": "Auteur",
+          "submitted": "Soumis"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "countPlural": "{count} réponses",
+        "countSingular": "{count} réponse",
+        "detail": {
+          "answersHeading": "Réponses",
+          "backToList": "Toutes les soumissions",
+          "configureSupabase": "Configurer Supabase.",
+          "metaHeading": "Détails",
+          "noAnswers": "Aucune réponse enregistrée pour cette soumission.",
+          "submittedAt": "soumis le {date}",
+          "title": "Soumission",
+          "userAgent": "Agent utilisateur"
+        },
+        "emptyLabel": "Aucune soumission pour l'instant",
+        "title": "Soumissions"
       }
     },
     "guides": {
@@ -7076,7 +7699,6 @@
       "title": "Inspections",
       "configureSupabase": "Configurez Supabase.",
       "subtitle": "Check-lists sécurité et conformité pilotées par modèles.",
-      "templates": "Modèles",
       "newInspection": "+ Nouvelle inspection",
       "metric": {
         "open": "Ouvertes",
@@ -7091,7 +7713,61 @@
         "project": "Projet",
         "scheduled": "Planifiée",
         "status": "Statut"
-      }
+      },
+      "templates": {
+        "breadcrumb": "Modèles",
+        "category": {
+          "ada": "ADA",
+          "custom": "Personnalisé",
+          "electrical": "Électrique",
+          "fire": "Incendie",
+          "foh": "FOH",
+          "foodSafety": "Sécurité alimentaire",
+          "medical": "Médical",
+          "rigging": "Accroche",
+          "security": "Sécurité",
+          "sustainability": "Durabilité"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "action": "+ Créer le premier modèle",
+          "title": "Aucun modèle pour l'instant"
+        },
+        "eyebrow": "Sécurité",
+        "inactive": "Inactif",
+        "itemCountOne": "{count} élément",
+        "new": {
+          "breadcrumb": {
+            "inspections": "Inspections",
+            "new": "Nouveau",
+            "templates": "Modèles"
+          },
+          "category": {
+            "label": "Catégorie"
+          },
+          "code": {
+            "label": "Code"
+          },
+          "description": {
+            "label": "Description"
+          },
+          "eyebrow": "Sécurité",
+          "items": {
+            "label": "Éléments de la liste de contrôle"
+          },
+          "name": {
+            "label": "Nom",
+            "placeholder": "Tournée d'accroche avant spectacle"
+          },
+          "submit": "Créer le modèle",
+          "title": "Nouveau modèle d'inspection"
+        },
+        "newTemplate": "+ Nouveau modèle",
+        "subtitleOne": "{count} modèle",
+        "subtitleOther": "{count} modèles",
+        "title": "Modèles d'inspection"
+      },
+      "templatesLabel": "Modèles"
     },
     "knowledge": {
       "eyebrow": "Base de connaissances",
@@ -7171,7 +7847,8 @@
           "phone": "Téléphone",
           "source": "Source",
           "estimatedValueCents": "Valeur Estimée (Centimes)",
-          "notes": "Notes"
+          "notes": "Notes",
+          "estimatedValue": "Valeur estimée"
         },
         "stageHint": "Les transitions d'étape se gèrent depuis le détail du lead."
       },
@@ -7309,7 +7986,8 @@
           "statusAbandoned": "abandonnée",
           "statusExpired": "expirée",
           "registeredOn": "Date d'Enregistrement",
-          "expiresOn": "Date d'Expiration"
+          "expiresOn": "Date d'Expiration",
+          "trademark_state": "Statut"
         },
         "mark": {
           "title": "Enregistrement",
@@ -7437,7 +8115,9 @@
           }
         },
         "title": "Vie Privée",
-        "dataMap": "Cartographie des données"
+        "dataMap": "Cartographie des données",
+        "consentLabel": "Consentement",
+        "dsarLabel": "DSAR"
       }
     },
     "locations": {
@@ -7529,7 +8209,8 @@
           "tag": "Étiquette",
           "category": "Catégorie",
           "dailyRate": "Tarif Journalier",
-          "status": "Statut"
+          "status": "Statut",
+          "equipment_state": "Statut"
         }
       },
       "freight": {
@@ -7542,7 +8223,8 @@
             "number": "Numéro",
             "status": "Statut",
             "amountCents": "Montant (centimes)",
-            "currency": "Devise"
+            "currency": "Devise",
+            "po_state": "Statut"
           }
         },
         "detail": {
@@ -7577,7 +8259,8 @@
             "scheduled": "Prévu",
             "actual": "Réel",
             "party": "Partie",
-            "status": "Statut"
+            "status": "Statut",
+            "order_state": "Statut"
           }
         },
         "orders": {
@@ -7588,8 +8271,6 @@
       },
       "title": "Logistique",
       "rateCard": "Tarif catalogue",
-      "warehouse": "Entrepôt",
-      "services": "Services",
       "ratecard": {
         "edit": {
           "fallbackName": "Article du tarif catalogue",
@@ -7635,7 +8316,68 @@
           "unitCents": "Unité ¢"
         }
       },
-      "eyebrow": "Logistique"
+      "eyebrow": "Logistique",
+      "dispositionLabel": "Disposition",
+      "freightLabel": "Fret",
+      "services": {
+        "columns": {
+          "category": "Catégorie",
+          "opened": "Ouvert",
+          "request_state": "Statut",
+          "severity": "Gravité",
+          "summary": "Résumé"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "label": "Aucune demande de service logistique"
+        },
+        "eyebrow": "Logistique",
+        "metrics": {
+          "open": "Ouvertes",
+          "slaBreached": "SLA dépassé",
+          "total30d": "Total · 30 j"
+        },
+        "newService": "+ Nouveau service",
+        "title": "Services"
+      },
+      "servicesLabel": "Services",
+      "warehouse": {
+        "byStatus": "Par statut",
+        "drillIn": "Explorer",
+        "metrics": {
+          "assets": "Actifs",
+          "inMaintenance": "En maintenance",
+          "locations": "Lieux"
+        },
+        "mobileScanButton": "Scan mobile",
+        "subtitle": "FF&E + central + entreposage de site",
+        "tiles": {
+          "availability": {
+            "description": "Matrice sur 7 jours",
+            "label": "Disponibilité"
+          },
+          "disposition": {
+            "description": "Retirés + maintenance",
+            "label": "Disposition"
+          },
+          "equipment": {
+            "label": "Équipement"
+          },
+          "mobileScan": {
+            "label": "Scan mobile"
+          },
+          "rentals": {
+            "description": "Registre de réservation + remise",
+            "label": "Locations"
+          },
+          "services": {
+            "description": "Demandes de déchets + nettoyage",
+            "label": "Services"
+          }
+        },
+        "title": "Entrepôt"
+      },
+      "warehouseLabel": "Entrepôt"
     },
     "marketing": {
       "eyebrow": "Marketing",
@@ -7871,7 +8613,6 @@
       "eyebrow": "Marketplace",
       "title": "Vue d'Ensemble",
       "configureSupabase": "Configurer Supabase.",
-      "settings": "Paramètres",
       "metrics": {
         "livePostings": "Annonces en Direct",
         "openCalls": "Appels Ouverts",
@@ -7896,6 +8637,9 @@
         },
         "reviews": {
           "title": "Avis"
+        },
+        "inquiries": {
+          "title": "Demandes"
         }
       },
       "postings": {
@@ -7919,7 +8663,8 @@
             "moveApplicantHeading": "Déplacer le candidat",
             "stageLabel": "Étape",
             "scoreInputLabel": "Score (0-100)",
-            "reviewerNotesLabel": "Notes du Réviseur"
+            "reviewerNotesLabel": "Notes du Réviseur",
+            "phoneLabel": "Téléphone :"
           },
           "eyebrowPrefix": "Marketplace",
           "title": "Candidats",
@@ -8163,7 +8908,26 @@
         "verified": "vérifié",
         "public": "public",
         "private": "privé"
-      }
+      },
+      "inquiries": {
+        "close": "Fermer",
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "title": "Aucune demande pour le moment"
+        },
+        "eyebrow": "Place de marché",
+        "markResponded": "Marquer comme répondu",
+        "title": "Demandes"
+      },
+      "settings": {
+        "configureSupabase": "Configurer Supabase.",
+        "eyebrow": "Place de marché",
+        "submitLabel": "Enregistrer les paramètres",
+        "takeRateLabel": "Taux de commission — bps",
+        "title": "Paramètres",
+        "visibilityLegend": "Visibilité"
+      },
+      "settingsLabel": "Paramètres"
     },
     "meetings": {
       "edit": {
@@ -8176,7 +8940,8 @@
           "description": "Description",
           "startsAt": "Début",
           "endsAt": "Fin",
-          "status": "Statut"
+          "status": "Statut",
+          "event_state": "Statut"
         },
         "status": {
           "draft": "brouillon",
@@ -8184,12 +8949,20 @@
           "live": "en direct",
           "complete": "terminée",
           "cancelled": "annulée"
+        },
+        "event_state": {
+          "cancelled": "annulé",
+          "complete": "terminé",
+          "draft": "brouillon",
+          "live": "en direct",
+          "scheduled": "planifié"
         }
       },
       "detail": {
         "title": "Compte rendu",
         "configureSupabase": "Configurer Supabase.",
-        "eyebrow": "Compte rendu"
+        "eyebrow": "Compte rendu",
+        "huddle": "Huddle"
       },
       "new": {
         "eyebrow": "Coordination",
@@ -8471,10 +9244,105 @@
     },
     "ops": {
       "title": "Opérations",
-      "toc": "Sommaire",
       "problems": "Incidents",
       "changes": "Changements",
-      "integrations": "Intégrations"
+      "integrations": "Intégrations",
+      "toc": {
+        "changes": {
+          "col": {
+            "code": "Code",
+            "owner": "Responsable",
+            "risk": "Risque",
+            "status": "Statut",
+            "title": "Titre",
+            "type": "Type",
+            "window": "Fenêtre"
+          },
+          "configureSupabase": "Configurer Supabase.",
+          "empty": {
+            "label": "Aucun enregistrement de changement"
+          },
+          "eyebrow": "Opérations",
+          "metric": {
+            "emergency": "Urgence",
+            "failed": "Échec",
+            "open": "Ouverts"
+          },
+          "new": {
+            "backoutPlanLabel": "Plan de repli",
+            "codeLabel": "Code",
+            "descriptionLabel": "Description",
+            "eyebrow": "Opérations",
+            "impactLabel": "Impact",
+            "levelHigh": "Élevé",
+            "levelLow": "Faible",
+            "levelMedium": "Moyen",
+            "plannedEndLabel": "Fin planifiée",
+            "plannedStartLabel": "Début planifié",
+            "riskLabel": "Risque",
+            "submit": "Créer le changement",
+            "title": "Nouvel enregistrement de changement",
+            "titleLabel": "Titre",
+            "typeEmergency": "Urgence",
+            "typeLabel": "Type",
+            "typeMajor": "Majeur",
+            "typeNormal": "Normal",
+            "typeStandard": "Standard — Pré-approuvé"
+          },
+          "newChange": "+ Nouveau changement",
+          "subtitle": {
+            "emergency": "Urgence",
+            "failed": "Échec",
+            "open": "Ouverts",
+            "recordMany": "Enregistrements de changement",
+            "recordOne": "Enregistrement de changement"
+          },
+          "title": "Changements"
+        },
+        "changesLabel": "Changements",
+        "problems": {
+          "col": {
+            "code": "Code",
+            "detected": "Détecté",
+            "owner": "Responsable",
+            "priority": "Priorité",
+            "status": "Statut",
+            "title": "Titre"
+          },
+          "configureSupabase": "Configurer Supabase.",
+          "emptyLabel": "Aucun problème enregistré",
+          "eyebrow": "Opérations",
+          "knownErrorsLabel": "erreurs connues",
+          "metric": {
+            "knownErrors": "Erreurs connues",
+            "open": "Ouverts",
+            "p1": "P1"
+          },
+          "new": {
+            "codeLabel": "Code",
+            "descriptionLabel": "Description",
+            "eyebrow": "Opérations",
+            "priorityLabel": "Priorité",
+            "priorityP1": "P1 — Critique",
+            "priorityP2": "P2 — Élevée",
+            "priorityP3": "P3 — Moyenne",
+            "priorityP4": "P4 — Faible",
+            "submit": "Créer le problème",
+            "title": "Nouvel enregistrement de problème",
+            "titleLabel": "Titre",
+            "workaroundLabel": "Solution de contournement"
+          },
+          "newProblem": "+ Nouveau problème",
+          "openLabel": "Ouverts",
+          "p1Label": "P1",
+          "recordPlural": "enregistrements de problème",
+          "recordSingular": "enregistrement de problème",
+          "title": "Problèmes"
+        },
+        "problemsLabel": "Problèmes",
+        "title": "TOC"
+      },
+      "tocLabel": "TOC"
     },
     "participants": {
       "delegations": {
@@ -8589,7 +9457,8 @@
           "statusSubmitted": "soumis",
           "statusApproved": "approuvé",
           "statusDenied": "refusé",
-          "statusExpedited": "expédié"
+          "statusExpedited": "expédié",
+          "case_state": "Statut"
         },
         "detail": {
           "title": "Fiche",
@@ -8728,7 +9597,8 @@
           "expires": "Expire"
         },
         "expired": "Expirée",
-        "daysShort": "{count}j"
+        "daysShort": "{count}j",
+        "scanCodeLinker": "Lieur de code de scan"
       },
       "documents": {
         "eyebrow": "Personne",
@@ -8740,7 +9610,8 @@
           "status": "Statut",
           "engagementStarts": "Début de l'Engagement",
           "sent": "Envoyée",
-          "accepted": "Acceptée"
+          "accepted": "Acceptée",
+          "letter_state": "Statut"
         }
       },
       "edit": {
@@ -8868,11 +9739,14 @@
           "expires": "Expire",
           "link": "Lien",
           "status": "Statut",
-          "when": "Quand"
+          "when": "Quand",
+          "invite_state": "Statut"
         },
         "projectFallback": "projet",
         "copyLink": "Copier le lien",
-        "history": "Historique"
+        "history": "Historique",
+        "persona": "Persona du portail · Facultatif",
+        "personaAuto": "— Dériver du rôle —"
       },
       "msas": {
         "detail": {
@@ -8935,9 +9809,14 @@
             "legend": "Rémunération",
             "rateCard": "Grille Tarifaire",
             "tbd": "(À Définir)",
-            "basis": "Base de Rémunération",
             "effective": "Rémunération effective",
-            "tbdShort": "À Définir"
+            "tbdShort": "À Définir",
+            "basis": {
+              "hourly": "Horaire",
+              "perShowDay": "Par jour de spectacle",
+              "tbd": "À confirmer"
+            },
+            "basisLabel": "Base de rémunération"
           },
           "engagement": {
             "travelIn": "Trajet Aller",
@@ -9013,7 +9892,8 @@
           "project": "Projet",
           "signingAuthority": "Autorité Signataire",
           "activity": "Activité",
-          "noActivity": "Aucune activité pour l'instant."
+          "noActivity": "Aucune activité pour l'instant.",
+          "openAsDocument": "Document"
         },
         "eyebrow": "People",
         "title": "Lettres d'Offre",
@@ -9111,10 +9991,12 @@
           "admin": "Admin"
         },
         "removeMember": {
-          "confirm": "Retirer ce membre de l'équipe ?"
+          "confirm": "Retirer ce membre de l'équipe ?",
+          "title": "Retirer le membre"
         },
         "deleteTeam": {
-          "action": "Supprimer l'Équipe"
+          "action": "Supprimer l'Équipe",
+          "title": "Supprimer l'équipe"
         },
         "detail": {
           "eyebrow": "People · Équipes",
@@ -9155,7 +10037,6 @@
       "title": "Photos du projet",
       "photosLabel": "photos",
       "albumLabel": "album",
-      "upload": "+ Téléverser",
       "metrics": {
         "photos": "Photos",
         "albums": "Albums",
@@ -9167,7 +10048,28 @@
       "empty": {
         "title": "Aucune photo pour l’instant"
       },
-      "unalbumed": "Sans album"
+      "unalbumed": "Sans album",
+      "upload": {
+        "albumHint": "Libellé de regroupement facultatif. Laisser vide pour sans album.",
+        "albumLabel": "Album",
+        "breadcrumbs": {
+          "operations": "Opérations",
+          "photos": "Photos",
+          "upload": "Téléverser"
+        },
+        "captionLabel": "Légende",
+        "captionPlaceholder": "Appliquée à chaque photo de ce lot",
+        "configureSupabase": "Configurer Supabase pour téléverser des photos.",
+        "eyebrow": "Opérations",
+        "photosLabel": "Photos",
+        "projectLabel": "Projet",
+        "projectPlaceholder": "Sélectionner un projet",
+        "projectSearchPlaceholder": "Rechercher des projets…",
+        "submit": "Téléverser",
+        "title": "Téléverser des photos",
+        "tooBig": "Un ou plusieurs fichiers dépassent 25 Mo et seront rejetés."
+      },
+      "uploadLabel": "+ Téléverser"
     },
     "pipeline": {
       "deal": {
@@ -9228,7 +10130,8 @@
           "name": "Nom",
           "assetTag": "Étiquette d'actif",
           "dailyRate": "Tarif journalier",
-          "status": "Statut"
+          "status": "Statut",
+          "equipment_state": "Statut"
         }
       },
       "itb": {
@@ -9374,7 +10277,6 @@
         },
         "eyebrow": "Approvisionnement",
         "title": "Préqualification",
-        "questionnaires": "Questionnaires",
         "inviteVendor": "+ Inviter un fournisseur",
         "metric": {
           "approved": "Approuvés",
@@ -9392,7 +10294,38 @@
           "expires": "Expire",
           "status": "Statut"
         },
-        "breadcrumb": "Préqualification"
+        "breadcrumb": "Préqualification",
+        "detail": {
+          "created": "Créé",
+          "expires": "Expire",
+          "suffix": "Préqualification"
+        },
+        "questionnaires": {
+          "breadcrumb": "Questionnaires",
+          "columns": {
+            "code": "Code",
+            "name": "Nom",
+            "status": "Statut"
+          },
+          "empty": "Aucun questionnaire",
+          "new": {
+            "breadcrumb": {
+              "new": "Nouveau"
+            },
+            "eyebrow": "Approvisionnement",
+            "field": {
+              "code": "Code",
+              "description": "Description",
+              "name": "Nom"
+            },
+            "title": "Nouveau questionnaire"
+          },
+          "newAction": "+ Nouveau questionnaire",
+          "statusActive": "actif",
+          "statusArchived": "archivé",
+          "title": "Questionnaires de préqualification"
+        },
+        "questionnairesLabel": "Questionnaires"
       },
       "purchaseOrders": {
         "statusToast": "BC {status}",
@@ -9420,7 +10353,8 @@
           "status": "Statut",
           "amount": "Montant",
           "created": "Créé",
-          "updated": "Mis à jour"
+          "updated": "Mis à jour",
+          "po_state": "Statut"
         },
         "new": {
           "submit": "Créer le BC",
@@ -9440,7 +10374,8 @@
           "title": "Titre",
           "amount": "Montant",
           "status": "Statut",
-          "created": "Créé"
+          "created": "Créé",
+          "po_state": "Statut"
         }
       },
       "requisitions": {
@@ -9452,7 +10387,8 @@
             "title": "Titre",
             "description": "Description",
             "estimatedCents": "Estimé (centimes)",
-            "status": "Statut"
+            "status": "Statut",
+            "requisition_state": "Statut"
           }
         },
         "leveling": {
@@ -9509,7 +10445,8 @@
           "title": "Titre",
           "estimated": "Estimé",
           "status": "Statut",
-          "created": "Créé"
+          "created": "Créé",
+          "requisition_state": "Statut"
         }
       },
       "rfqs": {
@@ -9692,7 +10629,8 @@
           "pos": "BC",
           "submittals": "Soumissions",
           "prequalification": "Préqualification",
-          "scorecard": "Tableau de Bord"
+          "scorecard": "Tableau de Bord",
+          "onboarding": "Intégration"
         },
         "detail": {
           "eyebrow": "Approvisionnement",
@@ -9724,7 +10662,8 @@
             "number": "Numéro",
             "title": "Titre",
             "status": "Statut",
-            "amount": "Montant"
+            "amount": "Montant",
+            "po_state": "Statut"
           }
         },
         "prequalification": {
@@ -9768,7 +10707,8 @@
             "code": "Code",
             "title": "Titre",
             "spec": "Spec",
-            "status": "Statut"
+            "status": "Statut",
+            "submittal_state": "Statut"
           }
         },
         "new": {
@@ -9798,6 +10738,9 @@
         "w9": {
           "onFile": "Au Dossier",
           "missing": "Manquant"
+        },
+        "bulk": {
+          "delete": "Supprimer"
         }
       },
       "woBroadcasts": {
@@ -9867,7 +10810,8 @@
           "tag": "Étiquette",
           "category": "Catégorie",
           "serial": "Numéro de Série",
-          "status": "Statut"
+          "status": "Statut",
+          "equipment_state": "Statut"
         },
         "footnoteSuffix": ")."
       },
@@ -9969,7 +10913,8 @@
             "assetTag": "Étiquette d'Actif",
             "serial": "Numéro de Série",
             "dailyRate": "Tarif Journalier",
-            "created": "Créé"
+            "created": "Créé",
+            "equipment_state": "Statut"
           },
           "ledger": {
             "title": "Registre des Mouvements",
@@ -10039,7 +10984,8 @@
           "category": "Catégorie",
           "assetTag": "Étiquette d'Actif",
           "status": "Statut",
-          "dailyRate": "Tarif Journalier"
+          "dailyRate": "Tarif Journalier",
+          "equipment_state": "Statut"
         },
         "utilization": {
           "eyebrow": "Production",
@@ -10064,6 +11010,9 @@
             "util90d": "Util. 90j",
             "idleRev30d": "Rev. Inactif 30j"
           }
+        },
+        "bulk": {
+          "delete": "Supprimer"
         }
       },
       "fabrication": {
@@ -10086,7 +11035,8 @@
           "fields": {
             "status": "Statut",
             "due": "Échéance",
-            "created": "Créé"
+            "created": "Créé",
+            "production_phase": "Statut"
           },
           "lifecycleBadge": "Cycle de Vie",
           "deleteOrder": "Supprimer l'Ordre",
@@ -10114,7 +11064,8 @@
         "col": {
           "title": "Titre",
           "status": "Statut",
-          "due": "Échéance"
+          "due": "Échéance",
+          "production_phase": "Statut"
         }
       },
       "logistics": {
@@ -10156,7 +11107,8 @@
           "fieldEnds": "Fin",
           "fieldRate": "Tarif",
           "lifecycle": "Cycle de Vie",
-          "deleteRental": "Supprimer la location"
+          "deleteRental": "Supprimer la location",
+          "pullSheet": "Feuille de prélèvement"
         },
         "availability": {
           "eyebrow": "Production · Locations",
@@ -10168,7 +11120,8 @@
           },
           "col": {
             "asset": "Actif",
-            "status": "Statut"
+            "status": "Statut",
+            "equipment_state": "Statut"
           },
           "day": {
             "free": "libre",
@@ -10204,13 +11157,22 @@
       "ros": {
         "cueForm": {
           "scheduledAt": "Planifié À",
-          "lane": "Lane",
           "label": "Libellé",
           "labelPlaceholder": "ex. Lumières salle baissées",
           "durationSec": "Durée (sec)",
           "optional": "optionnel",
           "description": "Description",
-          "addCue": "Ajouter un Cue"
+          "addCue": "Ajouter un Cue",
+          "lane": {
+            "audio": "Audio",
+            "lights": "Lumières",
+            "safety": "Sécurité",
+            "show": "Spectacle",
+            "talent": "Artistes",
+            "transport": "Transport",
+            "video": "Vidéo"
+          },
+          "laneLabel": "Voie"
         },
         "eyebrow": "Production",
         "title": "Run of Show",
@@ -10226,7 +11188,8 @@
           "lane": "Lane",
           "cue": "Cue",
           "status": "Statut",
-          "actions": "Actions"
+          "actions": "Actions",
+          "cue_state": "Statut"
         }
       },
       "warehouse": {
@@ -10354,7 +11317,8 @@
             "description": "Description",
             "startsAt": "Début",
             "endsAt": "Fin",
-            "status": "Statut"
+            "status": "Statut",
+            "event_state": "Statut"
           },
           "status": {
             "draft": "brouillon",
@@ -10362,6 +11326,13 @@
             "live": "en direct",
             "complete": "terminé",
             "cancelled": "annulé"
+          },
+          "event_state": {
+            "cancelled": "annulé",
+            "complete": "terminé",
+            "draft": "brouillon",
+            "live": "en direct",
+            "scheduled": "planifié"
           }
         },
         "detail": {
@@ -10383,14 +11354,259 @@
         }
       },
       "title": "Programmes",
-      "schedule": "Calendrier maître",
-      "risk": "Registre des risques",
-      "reviews": "Revues",
-      "readiness": "État de préparation",
-      "scope": "Périmètre",
-      "sessions": "Sessions",
-      "protocol": "Protocole",
-      "pressconf": "Conférences de presse"
+      "casesLabel": "Dossiers",
+      "ceremoniesLabel": "Cérémonies",
+      "eyebrow": "Programmes",
+      "metrics": {
+        "openRisks": "Risques ouverts",
+        "readiness": "Exercices de préparation",
+        "reviews": "Revues de programme",
+        "scheduledEvents": "Événements planifiés"
+      },
+      "pressconf": {
+        "col": {
+          "briefing": "Briefing",
+          "ends": "Fin",
+          "project": "Projet",
+          "starts": "Début",
+          "status": "Statut"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "emptyLabel": "Aucune conférence de presse",
+        "eyebrow": "Programmes",
+        "newEvent": "+ Nouvel événement",
+        "subtitleOne": "{count} conférence de presse",
+        "subtitleOther": "{count} conférences de presse",
+        "title": "Conférences de presse"
+      },
+      "pressconfLabel": "Conférences de presse",
+      "protocol": {
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "t3Runs": {
+            "action": "+ Planifier une tournée",
+            "title": "Aucune tournée de répartition T3 planifiée"
+          },
+          "vipCategories": {
+            "action": "Ouvrir les catégories",
+            "title": "Aucune catégorie VIP définie"
+          }
+        },
+        "eyebrow": "Programmes",
+        "metrics": {
+          "accommodationBlocks": "Blocs d'hébergement",
+          "t3Runs14d": "Tournées T3 · 14 j",
+          "vipCategories": "Catégories VIP"
+        },
+        "t3FleetHeading": "Flotte T3 — 14 prochains jours",
+        "title": "Protocole",
+        "vipCategoriesHeading": "Catégories d'accréditation VIP"
+      },
+      "protocolLabel": "Protocole",
+      "readiness": {
+        "columns": {
+          "kind": "Type",
+          "name": "Nom",
+          "scheduled": "Planifié"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Enregistrement",
+          "title": "Enregistrement"
+        },
+        "edit": {
+          "eyebrow": "Exercice de préparation",
+          "fallbackName": "Exercice de préparation",
+          "kindLabel": "Type",
+          "nameLabel": "Nom",
+          "scheduledAtLabel": "Planifié le",
+          "title": "Modifier {name}"
+        },
+        "emptyLabel": "Aucun exercice de préparation",
+        "eyebrow": "Programmes",
+        "eyebrowWorkspace": "Espace de travail",
+        "new": {
+          "eyebrow": "Programmes · Préparation",
+          "kind": "Type",
+          "kindAar": "Revue après action",
+          "kindFullScale": "Grandeur nature",
+          "kindFunctional": "Fonctionnel",
+          "kindTabletop": "Sur table",
+          "kindWalkthrough": "Répétition guidée",
+          "name": "Nom",
+          "namePlaceholder": "p. ex. TTX d'évacuation du stade",
+          "scheduledAt": "Planifié le",
+          "submit": "Planifier l'exercice",
+          "title": "Nouvel exercice"
+        },
+        "newExercise": "+ Nouvel exercice",
+        "record": "Enregistrement",
+        "records": "Enregistrements",
+        "title": "Exercices de préparation"
+      },
+      "readinessLabel": "Préparation",
+      "reviews": {
+        "columns": {
+          "scheduled": "Planifié",
+          "title": "Titre"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Enregistrement",
+          "title": "Enregistrement"
+        },
+        "edit": {
+          "eyebrow": "Revue de programme",
+          "fallbackTitle": "Revue de programme",
+          "fields": {
+            "notes": "Notes",
+            "scheduledAt": "Planifié le",
+            "title": "Titre"
+          },
+          "title": "Modifier {title}"
+        },
+        "emptyLabel": "Aucune revue de programme",
+        "eyebrow": "Programmes",
+        "eyebrowWorkspace": "Espace de travail",
+        "new": {
+          "eyebrow": "Programmes · Revues",
+          "fields": {
+            "notes": "Notes",
+            "scheduledAt": "Planifié le",
+            "title": "Titre"
+          },
+          "submit": "Planifier la revue",
+          "title": "Nouvelle revue"
+        },
+        "record": "Enregistrement",
+        "records": "Enregistrements",
+        "scheduleReview": "+ Planifier une revue",
+        "title": "Revues de programme"
+      },
+      "reviewsLabel": "Revues",
+      "risk": {
+        "columns": {
+          "due": "Échéance",
+          "kind": "Type",
+          "matrix": "L × I",
+          "risk_state": "Statut",
+          "score": "Score",
+          "title": "Titre"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Enregistrement",
+          "title": "Enregistrement"
+        },
+        "edit": {
+          "eyebrow": "Risque",
+          "fallbackTitle": "Risque",
+          "fields": {
+            "description": "Description",
+            "dueOn": "Échéance le",
+            "impact": "Impact",
+            "kind": "Type",
+            "likelihood": "Probabilité",
+            "risk_state": "Statut",
+            "title": "Titre",
+            "treatment": "Traitement"
+          },
+          "title": "Modifier {name}"
+        },
+        "eyebrow": "Programmes",
+        "heatmap": {
+          "empty": "Aucun risque enregistré pour le moment.",
+          "gridAria": "Carte thermique des risques",
+          "legend": {
+            "high": "Élevé",
+            "low": "Faible",
+            "moderate": "Modéré",
+            "severe": "Grave"
+          },
+          "score": "score {score}",
+          "title": "Carte thermique des risques"
+        },
+        "new": {
+          "eyebrow": "Registre des risques",
+          "fields": {
+            "category": "Catégorie",
+            "description": "Description",
+            "title": "Titre"
+          },
+          "submit": "Créer un risque",
+          "title": "Nouveau risque"
+        },
+        "newRisk": "+ Nouveau risque",
+        "subtitle": {
+          "one": "{count} enregistrement",
+          "other": "{count} enregistrements"
+        },
+        "title": "Registre des risques"
+      },
+      "riskLabel": "Registre des risques",
+      "schedule": {
+        "colEnds": "Fin",
+        "colEvent": "Événement",
+        "colProject": "Projet",
+        "colStarts": "Début",
+        "colStatus": "Statut",
+        "configureSupabase": "Configurer Supabase.",
+        "emptyLabel": "Aucun événement dans la fenêtre",
+        "eventPlural": "Événements",
+        "eventSingular": "Événement",
+        "eyebrow": "Programmes",
+        "live": "En direct",
+        "metricLiveNow": "En direct maintenant",
+        "metricTotal": "Total",
+        "metricUpcoming": "À venir",
+        "newEvent": "+ Nouvel événement",
+        "title": "Planning maître",
+        "upcoming": "À venir"
+      },
+      "scheduleLabel": "Planning maître",
+      "scope": {
+        "byDiscipline": "Par discipline",
+        "configureSupabase": "Configurer Supabase.",
+        "disciplinePlural": "disciplines",
+        "disciplineSingular": "discipline",
+        "empty": {
+          "title": "Aucune entrée de participant pour le moment"
+        },
+        "entryPlural": "entrées",
+        "entrySingular": "entrée",
+        "eventPlural": "événements",
+        "eventSingular": "événement",
+        "eyebrow": "Programmes",
+        "metrics": {
+          "approved": "Approuvé",
+          "delegations": "Délégations",
+          "entries": "Entrées"
+        },
+        "newEntry": "+ Nouvelle entrée",
+        "participantPlural": "participants",
+        "participantSingular": "participant",
+        "title": "Périmètre du programme",
+        "unspecified": "Non spécifié"
+      },
+      "scopeLabel": "Périmètre",
+      "sessions": {
+        "col": {
+          "ends": "Fin",
+          "project": "Projet",
+          "session": "Session",
+          "starts": "Début",
+          "status": "Statut"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "emptyLabel": "Aucune session",
+        "eyebrow": "Programmes",
+        "newEvent": "+ Nouvel événement",
+        "title": "Sessions"
+      },
+      "sessionsLabel": "Sessions"
     },
     "projects": {
       "portfolio": {
@@ -10445,9 +11661,19 @@
             "party": "Partie",
             "state": "État",
             "due": "Échéance",
-            "updated": "Mise à jour"
+            "updated": "Mise à jour",
+            "kind": "Type"
           },
-          "untitled": "Sans titre"
+          "untitled": "Sans titre",
+          "bulk": {
+            "approve": "Approuver",
+            "issue": "Émettre",
+            "void": "Annuler"
+          },
+          "view": {
+            "board": "Tableau",
+            "list": "Liste"
+          }
         },
         "eyebrowFallback": "Projet",
         "title": "Advancing",
@@ -10474,6 +11700,10 @@
         "activity": {
           "latestDeliverable": "Dernière activité des livrables",
           "project": "Activité du projet"
+        },
+        "tabs": {
+          "assignments": "Affectations",
+          "docSpecs": "Spécifications de doc"
         }
       },
       "assignments": {
@@ -10585,7 +11815,10 @@
           "primaryAction": "Action principale",
           "secondary": "Secondaire"
         },
-        "title": "Identité visuelle"
+        "title": "Identité visuelle",
+        "secondaryColor": {
+          "label": "Couleur secondaire"
+        }
       },
       "budget": {
         "eyebrowFallback": "Projet",
@@ -10710,6 +11943,9 @@
           "title": "Dépenses",
           "allLink": "Toutes les dépenses →",
           "emptyLabel": "Aucune dépense enregistrée"
+        },
+        "draws": {
+          "title": "Échéancier de décaissement"
         }
       },
       "guides": {
@@ -10722,7 +11958,8 @@
           "configLabel": "Config (JSON)",
           "sectionsLabel": "Sections :",
           "saving": "Enregistrement…",
-          "saveButton": "Enregistrer le guide"
+          "saveButton": "Enregistrer le guide",
+          "invalidJson": "La config doit être un JSON valide — {detail}"
         },
         "access": {
           "issueTitle": "Émettre un nouveau code",
@@ -10767,7 +12004,8 @@
             "client": "Client",
             "guest": "Invités",
             "custom": "Accès temporaire"
-          }
+          },
+          "revokeDialogTitle": "Révoquer le code"
         },
         "persona": {
           "manageAccessCodes": "Gérer les codes d'accès"
@@ -10793,7 +12031,8 @@
         "members": "Membres",
         "advancing": "Advancing",
         "guides": "Guides",
-        "sustainability": "Durabilité"
+        "sustainability": "Durabilité",
+        "sprints": "Sprints"
       },
       "members": {
         "addedToast": "Membre ajouté",
@@ -10812,7 +12051,9 @@
         "subtitleOne": "{count} membre du projet",
         "emptyTitle": "Aucun membre de projet",
         "colMember": "Membre",
-        "colRole": "Rôle"
+        "colRole": "Rôle",
+        "leaveDialogTitle": "Quitter le projet",
+        "removeDialogTitle": "Retirer le membre"
       },
       "breadcrumb": "Projets",
       "onboarding": {
@@ -11054,6 +12295,9 @@
         "start": "Début",
         "end": "Fin",
         "updated": "Mise à jour"
+      },
+      "bulk": {
+        "archive": "Archiver"
       }
     },
     "proposals": {
@@ -11119,7 +12363,14 @@
         "shareLinks": "Liens de partage",
         "revoked": "Révoqué",
         "active": "Actif",
-        "viewsCount": "{count} vues"
+        "viewsCount": "{count} vues",
+        "brand": {
+          "accentLabel": "Accent",
+          "previewLabel": "Aperçu",
+          "previewText": "Accent de titre",
+          "secondaryLabel": "Secondaire",
+          "title": "Marque de la proposition"
+        }
       },
       "detail": {
         "eyebrow": "Proposition",
@@ -11134,9 +12385,14 @@
           "status": "Statut",
           "amount": "Montant",
           "sent": "Envoyée",
-          "signed": "Signée"
+          "signed": "Signée",
+          "proposal_state": "Statut"
         },
-        "scope": "Périmètre"
+        "scope": "Périmètre",
+        "aiDraft": "Brouillon IA",
+        "aiDraftEmptyTitle": "Aucun brouillon pour l'instant",
+        "aiDraftGenerated": "Généré",
+        "openAsDocument": "Document"
       },
       "new": {
         "submit": "Créer la proposition",
@@ -11165,7 +12421,8 @@
         "amount": "Montant",
         "status": "Statut",
         "expires": "Expire le",
-        "updated": "Mise à jour"
+        "updated": "Mise à jour",
+        "proposal_state": "Statut"
       },
       "templates": {
         "preview": {
@@ -11199,6 +12456,12 @@
       },
       "breadcrumb": {
         "revenue": "Revenus"
+      },
+      "ai": {
+        "generateDraft": "Générer un brouillon",
+        "generateError": "Échec de la génération du brouillon",
+        "generateSuccess": "Brouillon généré",
+        "generating": "Génération…"
       }
     },
     "punch": {
@@ -11316,7 +12579,8 @@
         "priority": "Priorité",
         "status": "Statut"
       },
-      "showReadyGate": "Verrou Show-Ready"
+      "showReadyGate": "Verrou Show-Ready",
+      "listsLabel": "Listes"
     },
     "rfis": {
       "edit": {
@@ -11643,7 +12907,8 @@
           "name": "Nom",
           "cadence": "Cadence",
           "nextRun": "Prochaine exécution",
-          "status": "Statut"
+          "status": "Statut",
+          "tour_state": "Statut"
         },
         "cadence": {
           "adhoc": "ad hoc"
@@ -11678,7 +12943,34 @@
           "location": "Lieu",
           "severity": "Gravité",
           "status": "Statut"
-        }
+        },
+        "detail": {
+          "breadcrumbs": {
+            "incidents": "Incidents",
+            "safety": "Sécurité"
+          },
+          "configureSupabase": "Configurer Supabase.",
+          "description": "Description",
+          "eyebrow": "Sécurité · Incident",
+          "fields": {
+            "bodyPart": "Partie du corps",
+            "classification": "Classification",
+            "closed": "Clôturé",
+            "daysAway": "Jours d'absence",
+            "daysRestricted": "Jours en restriction",
+            "injurySource": "Source de la blessure",
+            "injuryType": "Type de blessure",
+            "location": "Lieu",
+            "occurred": "Survenu",
+            "recordable": "Enregistrable",
+            "severity": "Gravité",
+            "status": "Statut"
+          },
+          "injury": "Blessure",
+          "osha": "Tenue de registres OSHA",
+          "title": "Incident"
+        },
+        "reportFirst": "Signaler un incident"
       },
       "majorIncident": {
         "edit": {
@@ -11829,13 +13121,160 @@
           "daysRestricted": "Jours restr."
         }
       },
-      "threats": "Menaces",
-      "playbooks": "Playbooks",
       "medicalPlan": "Plan médical",
       "medicalEncounters": "Interventions médicales",
       "crisisComms": "Communication de crise",
-      "safeguarding": "Protection des personnes",
-      "breadcrumb": "Sécurité"
+      "breadcrumb": "Sécurité",
+      "bcdrLabel": "BC/DR",
+      "cyberIrLabel": "IR cyber",
+      "environmentalLabel": "Environnemental",
+      "guardToursLabel": "Rondes de garde",
+      "incidentsLabel": "Incidents",
+      "majorIncidentLabel": "Incident majeur",
+      "playbooks": {
+        "breadcrumb": "Playbooks",
+        "byKind": "Par type",
+        "col": {
+          "kind": "Type",
+          "playbook_state": "Statut",
+          "slug": "Slug",
+          "title": "Titre",
+          "updated": "Mis à jour",
+          "version": "Version"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Playbook",
+          "title": "Playbook"
+        },
+        "emptyLabel": "Aucun playbook rédigé",
+        "eyebrow": "Sécurité",
+        "new": {
+          "eyebrow": "Sécurité",
+          "kind": {
+            "conops": "ConOps",
+            "crisis": "Crise",
+            "general": "Général",
+            "onboarding": "Intégration",
+            "safety": "Sécurité"
+          },
+          "kindLabel": "Type",
+          "slugLabel": "Slug",
+          "submitLabel": "Créer le playbook",
+          "summaryLabel": "Résumé",
+          "title": "Nouveau playbook",
+          "titleLabel": "Titre",
+          "titlePlaceholder": "Évacuation du stade A"
+        },
+        "newCta": "+ Nouveau playbook",
+        "title": "Playbooks"
+      },
+      "playbooksLabel": "Playbooks",
+      "safeguarding": {
+        "columnFiled": "Déposé",
+        "columnStatus": "Statut",
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Enregistrement",
+          "title": "Enregistrement"
+        },
+        "edit": {
+          "eyebrow": "Rapport de protection",
+          "fallbackSubject": "Rapport de protection",
+          "narrative": "Récit",
+          "report_state": "Statut",
+          "subjectReference": "Référence du sujet",
+          "title": "Modifier {subject}"
+        },
+        "emptyLabel": "Aucun rapport de protection",
+        "eyebrow": "Sécurité",
+        "eyebrowWorkspace": "Espace de travail",
+        "fileReport": "+ Déposer un rapport",
+        "new": {
+          "eyebrow": "Sécurité · Protection",
+          "narrativeLabel": "Récit",
+          "statusClosed": "Clôturé",
+          "statusLabel": "Statut",
+          "statusReceived": "Reçu",
+          "statusReferred": "Transmis",
+          "statusTriage": "Triage",
+          "statusUnderReview": "En cours d'examen",
+          "subjectRefLabel": "Référence du sujet",
+          "subjectRefPlaceholder": "ID pseudonymisé",
+          "submitLabel": "Déposer le rapport",
+          "title": "Déposer un rapport"
+        },
+        "recordPlural": "Enregistrements",
+        "recordSingular": "Enregistrement",
+        "title": "Rapports de protection"
+      },
+      "safeguardingLabel": "Protection",
+      "threats": {
+        "activeLabel": "Active",
+        "col": {
+          "classification": "Classification",
+          "code": "Code",
+          "likelihood": "Probabilité",
+          "severity": "Gravité",
+          "threat_state": "Statut",
+          "title": "Titre",
+          "treatment": "Traitement"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "criticalLabel": "critique",
+        "emptyLabel": "Aucune menace consignée",
+        "entryPlural": "entrées",
+        "entrySingular": "entrée",
+        "eyebrow": "Sécurité",
+        "new": {
+          "classification": {
+            "confidential": "Confidentiel",
+            "internal": "Interne",
+            "public": "Public",
+            "restricted": "Restreint"
+          },
+          "eyebrow": "Sécurité",
+          "fields": {
+            "classification": "Classification",
+            "code": "Code",
+            "description": "Description",
+            "likelihood": "Probabilité",
+            "severity": "Gravité",
+            "title": "Titre",
+            "treatment": "Traitement"
+          },
+          "likelihood": {
+            "almostCertain": "Quasi certaine",
+            "likely": "Probable",
+            "possible": "Possible",
+            "rare": "Rare",
+            "unlikely": "Improbable"
+          },
+          "placeholders": {
+            "code": "THR-001",
+            "title": "Titre court"
+          },
+          "severity": {
+            "critical": "Critique",
+            "high": "Élevée",
+            "low": "Faible",
+            "medium": "Moyenne"
+          },
+          "submit": "Ajouter une menace",
+          "title": "Nouvelle menace",
+          "treatment": {
+            "accept": "Accepter",
+            "avoid": "Éviter",
+            "mitigate": "Atténuer",
+            "transfer": "Transférer"
+          }
+        },
+        "newThreat": "+ Nouvelle menace",
+        "title": "Registre des menaces"
+      },
+      "threatsLabel": "Menaces"
     },
     "schedule": {
       "calendar": {
@@ -11857,7 +13296,8 @@
           "lookahead6w": "6 semaines",
           "showFloat": "Afficher la Marge",
           "chartAriaLabel": "Diagramme de Gantt",
-          "today": "aujourd'hui"
+          "today": "aujourd'hui",
+          "emptyTitle": "Aucune activité pour le moment"
         },
         "import": {
           "importing": "Importation…",
@@ -11932,7 +13372,8 @@
         "name": "Nom",
         "starts": "Début",
         "ends": "Fin",
-        "status": "Statut"
+        "status": "Statut",
+        "event_state": "Statut"
       }
     },
     "services": {
@@ -11985,7 +13426,8 @@
           "category": "Catégorie",
           "summary": "Résumé",
           "status": "Statut",
-          "opened": "Ouverte"
+          "opened": "Ouverte",
+          "request_state": "Statut"
         }
       }
     },
@@ -12087,7 +13529,9 @@
         "never": "Jamais",
         "revoked": "Révoquée",
         "active": "Active",
-        "revoke": "Révoquer"
+        "revoke": "Révoquer",
+        "copyFailedToast": "Échec de la copie — sélectionnez la clé manuellement",
+        "reference": "Parcourir la référence API complète →"
       },
       "eyebrow": "Paramètres",
       "audit": {
@@ -12107,7 +13551,8 @@
         "title": "Journal d'Audit",
         "configureSupabase": "Configurez Supabase.",
         "newer": "← Plus récents",
-        "older": "Plus anciens →"
+        "older": "Plus anciens →",
+        "export": "Exporter"
       },
       "workspaceTitle": "Paramètres de l'Espace de Travail",
       "billing": {
@@ -12151,7 +13596,9 @@
           "accentLabel": "Couleur d'Accent",
           "pickAccentAria": "Choisir la couleur d'accent",
           "foregroundLabel": "Texte sur Accent",
-          "pickForegroundAria": "Choisir la couleur de premier plan"
+          "pickForegroundAria": "Choisir la couleur de premier plan",
+          "pickSecondaryAria": "Choisir la couleur secondaire",
+          "secondaryLabel": "Couleur secondaire"
         },
         "assets": {
           "title": "Ressources",
@@ -12240,7 +13687,8 @@
           "status": "Statut"
         },
         "statusActive": "Actif",
-        "statusInactive": "Inactif"
+        "statusInactive": "Inactif",
+        "viewSwitcherAria": "Vue du catalogue"
       },
       "compliance": {
         "savedToast": "Paramètres de conformité enregistrés",
@@ -12352,14 +13800,27 @@
             "trigger": "+ Comité",
             "title": "Nouveau comité",
             "name": "Nom",
-            "cadence": "Cadence",
-            "charter": "Charte"
+            "charter": "Charte",
+            "cadence": {
+              "adHoc": "Ad hoc",
+              "biweekly": "Bimensuel",
+              "monthly": "Mensuel",
+              "weekly": "Hebdomadaire"
+            },
+            "cadenceLabel": "Cadence"
           },
           "policy": {
             "trigger": "+ Politique",
             "title": "Nouvelle politique",
             "name": "Nom",
-            "category": "Catégorie"
+            "category": {
+              "data": "Données",
+              "finance": "Finance",
+              "hr": "RH",
+              "operations": "Opérations",
+              "safety": "Sécurité"
+            },
+            "categoryLabel": "Catégorie"
           }
         },
         "eyebrow": "Paramètres",
@@ -12374,7 +13835,8 @@
           "charter": "Charte",
           "category": "Catégorie",
           "status": "Statut",
-          "nextReview": "Prochaine revue"
+          "nextReview": "Prochaine revue",
+          "policy_state": "Statut"
         },
         "emptyCommittees": "Aucun comité pour l'instant.",
         "policies": "Politiques",
@@ -12413,7 +13875,8 @@
           "imported": "Importé",
           "failed": "Échec",
           "status": "Statut",
-          "started": "Démarré"
+          "started": "Démarré",
+          "run_state": "Statut"
         },
         "empty": "Aucun import pour l'instant.",
         "columnReference": "Référence des Colonnes"
@@ -12454,6 +13917,27 @@
             "tenant": "Locataire",
             "lastSync": "Dernière Synchro",
             "state": "État"
+          },
+          "detail": {
+            "connection": "Connexion",
+            "created": "Créée",
+            "disconnect": "Déconnecter",
+            "displayName": "Nom d'affichage",
+            "eyebrow": "Comptabilité · {system}",
+            "lastError": "Dernière erreur",
+            "lastSyncLabel": "Dernière synchro",
+            "neverSynced": "Jamais synchronisé",
+            "state": "État",
+            "syncNow": "Synchroniser maintenant",
+            "system": "Système",
+            "tenant": "Locataire"
+          },
+          "new": {
+            "connect": "Connecter",
+            "contactToEnable": "Contacter pour activer",
+            "eyebrow": "Paramètres · Intégrations",
+            "selfServe": "Libre-service",
+            "title": "Connecter un système comptable"
           }
         },
         "marketplace": {
@@ -13091,7 +14575,8 @@
         "linkedRfisHeading": "RFI liées",
         "noRfisLinked": "Aucune RFI liée à cette section pour le moment.",
         "linkedSubmittalsHeading": "Soumissions liées",
-        "noSubmittalsLinked": "Aucune soumission liée à cette section pour le moment."
+        "noSubmittalsLinked": "Aucune soumission liée à cette section pour le moment.",
+        "edit": "Modifier"
       },
       "new": {
         "format": {
@@ -13146,6 +14631,22 @@
         "project": "Projet",
         "format": "Format",
         "state": "État"
+      },
+      "edit": {
+        "breadcrumbs": {
+          "specs": "Spécifications"
+        },
+        "eyebrow": "Création · Spécifications",
+        "fields": {
+          "bodyMarkdown": "Corps — Markdown",
+          "division": "Division",
+          "format": "Format",
+          "project": "Projet",
+          "sectionNumber": "Numéro de section",
+          "title": "Titre"
+        },
+        "submit": "Enregistrer la section",
+        "subtitle": "L'état émis/remplacé est géré depuis la page de détail."
       }
     },
     "submittals": {
@@ -13282,7 +14783,8 @@
         "cadence": "Cadence",
         "started": "Démarré"
       },
-      "emptyLabel": "Aucun abonnement"
+      "emptyLabel": "Aucun abonnement",
+      "createFirst": "Nouvel abonnement"
     },
     "sustainability": {
       "carbon": {
@@ -13350,7 +14852,8 @@
         },
         "scopeLabel": "Scope {scope}"
       },
-      "title": "Durabilité"
+      "title": "Durabilité",
+      "carbonLabel": "Carbone"
     },
     "takeoffs": {
       "new": {
@@ -13388,6 +14891,49 @@
         "costCode": "Code de coût",
         "items": "Éléments",
         "quantity": "Quantité"
+      },
+      "detail": {
+        "breadcrumb": {
+          "creative": "Création",
+          "takeoffs": "Métrés"
+        },
+        "col": {
+          "geometry": "Géométrie",
+          "label": "Libellé",
+          "quantity": "Quantité"
+        },
+        "emptyDescription": "Les éléments saisis dans ce métré — comptages, longueurs, surfaces, volumes — s'agrègent dans le total ci-dessus.",
+        "emptyLabel": "Aucun relevé pour l'instant",
+        "eyebrow": "Création",
+        "field": {
+          "added": "Ajouté",
+          "costCode": "Code de coût",
+          "project": "Projet",
+          "sheet": "Plan",
+          "unit": "Unité"
+        },
+        "measurements": "Relevés",
+        "metric": {
+          "calibration": "Calibrage (po/pi)",
+          "items": "Relevés",
+          "quantity": "Quantité totale"
+        },
+        "noProject": "Aucun projet enregistré",
+        "notes": "Notes",
+        "uncalibrated": "Non calibré"
+      },
+      "edit": {
+        "eyebrow": "Création",
+        "fields": {
+          "calibration": "Calibrage — Pouces par pied",
+          "costCode": "Code de coût · Facultatif",
+          "name": "Nom",
+          "notes": "Notes",
+          "sheet": "Plan · Facultatif",
+          "unit": "Unité"
+        },
+        "submit": "Enregistrer les modifications",
+        "title": "Modifier {name}"
       }
     },
     "tasks": {
@@ -13524,7 +15070,10 @@
         "userOption": "— utilisateur —",
         "vendorOption": "— fournisseur —",
         "emailPlaceholder": "email@…",
-        "add": "+ Ajouter"
+        "add": "+ Ajouter",
+        "noItemsTitle": "Aucun élément pour le moment",
+        "noRecipients": "Ajoutez-en au moins un pour activer l'envoi.",
+        "noRecipientsTitle": "Aucun destinataire pour le moment"
       },
       "new": {
         "eyebrow": "Opérations",
@@ -13681,7 +15230,8 @@
         "vehicle": "Véhicule",
         "totalRuns": "Total des Courses",
         "latestRun": "Dernière Course",
-        "status": "Statut"
+        "status": "Statut",
+        "run_state": "Statut"
       },
       "sections": {
         "dispatch": {
@@ -13717,6 +15267,12 @@
           "vehicle": "Véhicule",
           "status": "Statut"
         }
+      },
+      "metrics": {
+        "dispatch": "Tournées de répartition",
+        "fleets": "Flottes",
+        "manifests": "Manifestes A&D",
+        "vehicles": "Véhicules"
       }
     },
     "venues": {
@@ -13939,7 +15495,8 @@
           "kind": "Type",
           "capacity": "Capacité"
         }
-      }
+      },
+      "createFirst": "Ajouter votre premier site"
     },
     "warranties": {
       "new": {
@@ -14098,6 +15655,19 @@
           "state": "État",
           "duration": "Durée",
           "role": "Rôle"
+        },
+        "createFirst": "Créer votre premier cours",
+        "edit": {
+          "crumb": "Modifier",
+          "eyebrow": "Cours",
+          "fields": {
+            "duration": "Durée — Minutes",
+            "requiredForRole": "Requis pour le rôle",
+            "summary": "Résumé",
+            "title": "Titre"
+          },
+          "submit": "Enregistrer les modifications",
+          "title": "Modifier {title}"
         }
       },
       "deployment": {
@@ -14773,6 +16343,304 @@
       "pctPlaceholder": "50 ou 0,5",
       "sortOrder": "Ordre de tri",
       "addDraw": "Ajouter le tirage"
+    },
+    "legend": {
+      "eyebrow": "LEG3ND",
+      "subtitle": "Connaissances · LMS · Ressources — sur le protocole XPMS 2.0.",
+      "tiles": {
+        "catalog": {
+          "blurb": "Le catalogue maître des atomes tarifés / URID.",
+          "title": "Catalogue"
+        },
+        "certs": {
+          "blurb": "Accréditations, certifications et suivi des expirations.",
+          "title": "Certifications"
+        },
+        "courses": {
+          "blurb": "LMS — parcours de formation, leçons et quiz.",
+          "title": "Cours"
+        },
+        "engine": {
+          "blurb": "XMCE — rédigez des règles, lancez des contrôles, triez les constats.",
+          "title": "Moteur de conformité"
+        },
+        "resources": {
+          "blurb": "Documents, liens, modèles et références sélectionnés.",
+          "title": "Ressources"
+        },
+        "safety": {
+          "blurb": "Incidents, crise, médical et protection.",
+          "title": "Sécurité"
+        },
+        "signage": {
+          "blurb": "Bibliothèque de panneaux de sécurité ISO 7010 / DOT-AIGA / ISA.",
+          "title": "Signalétique"
+        },
+        "standard": {
+          "blurb": "Base de connaissances — la référence canonique de nos méthodes de travail.",
+          "title": "Le Standard"
+        }
+      },
+      "title": "Connaissances"
+    },
+    "branding": {
+      "uploader": {
+        "label": "Logo",
+        "none": "Aucun logo",
+        "upload": "Téléverser un logo",
+        "uploaded": "Logo téléversé",
+        "uploading": "Téléversement…",
+        "urlPlaceholder": "…ou coller une URL HTTPS de logo"
+      }
+    },
+    "collaborate": {
+      "docs": {
+        "columns": {
+          "state": "État",
+          "title": "Titre",
+          "updated": "Mis à jour"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detail": {
+          "configureSupabase": "Configurer Supabase.",
+          "eyebrow": "Documents"
+        },
+        "emptyLabel": "Aucun document pour l'instant",
+        "eyebrow": "Collaborer",
+        "new": {
+          "eyebrow": "Documents",
+          "stateLabel": "État",
+          "title": "Nouveau document",
+          "titleLabel": "Titre"
+        },
+        "newLabel": "+ Nouveau document",
+        "title": "Documents"
+      }
+    },
+    "reservations": {
+      "columns": {
+        "guest": "Invité",
+        "party": "Groupe",
+        "reservedFor": "Réservé pour",
+        "state": "État",
+        "table": "Table"
+      },
+      "detail": {
+        "advance": "Mettre à jour l'état",
+        "eyebrow": "Réservation",
+        "field": {
+          "created": "Créée",
+          "email": "Courriel",
+          "party": "Taille du groupe",
+          "phone": "Téléphone",
+          "state": "État",
+          "table": "Table"
+        },
+        "lifecycle": "Cycle de vie",
+        "moveTo": "Déplacer vers",
+        "notes": "Notes",
+        "terminal": "Cette réservation est dans un état final.",
+        "unassigned": "Non attribuée"
+      },
+      "emptyDescription": "Réservez une table pour un invité. Suivez la réservation de réservée → installée → terminée sur le plan de salle.",
+      "emptyLabel": "Aucune réservation pour l'instant",
+      "eyebrow": "Ops de site",
+      "floorPlan": "Plan de salle",
+      "floorPlanEmpty": "Aucune table pour l'instant. Ajoutez des tables pour construire le plan de salle.",
+      "metrics": {
+        "active": "Couverts actifs",
+        "seated": "Installés",
+        "tables": "Tables"
+      },
+      "new": {
+        "email": "Courriel de contact",
+        "eyebrow": "Ops de site",
+        "guest": "Nom de l'invité",
+        "notes": "Notes",
+        "party": "Taille du groupe",
+        "phone": "Téléphone de contact",
+        "reservedFor": "Réservé pour",
+        "submit": "Créer la réservation",
+        "table": "Table",
+        "tableUnassigned": "Non attribuée",
+        "title": "Nouvelle réservation"
+      },
+      "newReservation": "+ Nouvelle réservation",
+      "newTable": "+ Nouvelle table",
+      "tables": {
+        "new": {
+          "eyebrow": "Ops de site",
+          "notes": "Notes",
+          "seats": "Places",
+          "state": "État",
+          "submit": "Créer la table",
+          "tableNo": "Numéro de table",
+          "title": "Nouvelle table",
+          "x": "Plan de salle X (0–100)",
+          "y": "Plan de salle Y (0–60)",
+          "zone": "Zone"
+        }
+      },
+      "title": "Réservations"
+    },
+    "boxOffice": {
+      "columns": {
+        "arrived": "Arrivés",
+        "created": "Créée",
+        "entries": "Entrées",
+        "expected": "Attendus",
+        "name": "Liste"
+      },
+      "detail": {
+        "addGuest": "Ajouter un invité",
+        "addSubmit": "Ajouter à la liste",
+        "allLists": "Toutes les listes",
+        "eyebrow": "Billetterie",
+        "fields": {
+          "guestName": "Nom de l'invité",
+          "notes": "Notes",
+          "plusOnes": "Accompagnants"
+        },
+        "metrics": {
+          "arrived": "Têtes arrivées",
+          "checkedIn": "Enregistrés",
+          "entries": "Entrées",
+          "expected": "Têtes attendues"
+        }
+      },
+      "eyebrow": "GVTEWAY",
+      "metrics": {
+        "arrived": "Arrivés",
+        "checkedInEntries": "Entrées enregistrées",
+        "expected": "Têtes attendues",
+        "lists": "Listes d'invités"
+      },
+      "new": {
+        "event": {
+          "none": "Aucun événement"
+        },
+        "eyebrow": "Billetterie",
+        "fields": {
+          "event": "Événement — Facultatif",
+          "name": "Nom de la liste",
+          "notes": "Notes"
+        },
+        "placeholders": {
+          "name": "VIP · Invitations artistes · Presse"
+        },
+        "submit": "Créer la liste",
+        "title": "Nouvelle liste d'invités"
+      },
+      "newList": "+ Nouvelle liste d'invités",
+      "roster": {
+        "checkIn": "Enregistrer",
+        "code": "Code",
+        "deny": "Refuser",
+        "door": "Porte",
+        "empty": "Aucun invité pour l'instant. Ajoutez-en un ci-dessus.",
+        "guest": "Invité",
+        "heads": "Têtes",
+        "reset": "Réinitialiser",
+        "state": "État",
+        "title": "Liste"
+      },
+      "scan": {
+        "hint": "Scannez ou saisissez un code d'invité pour l'enregistrer.",
+        "placeholder": "GL-XXXXXX-XXXX",
+        "submit": "Enregistrer",
+        "title": "Scan à la porte"
+      },
+      "title": "Billetterie"
+    },
+    "diary": {
+      "col": {
+        "space": "Espace"
+      },
+      "detail": {
+        "breadcrumb": {
+          "diary": "Agenda des événements",
+          "sales": "Ventes"
+        },
+        "eyebrow": "Réservation",
+        "field": {
+          "client": "Client",
+          "created": "Créée",
+          "ends": "Fin",
+          "headcount": "Effectif",
+          "project": "Projet",
+          "space": "Espace",
+          "starts": "Début",
+          "window": "Fenêtre"
+        },
+        "noSpace": "Espace",
+        "notes": "Notes",
+        "transition": "Déplacer"
+      },
+      "edit": {
+        "eyebrow": "Réservation",
+        "submit": "Enregistrer la réservation",
+        "title": "Modifier la réservation"
+      },
+      "empty": {
+        "cta": "+ Nouvel espace",
+        "title": "Aucun espace pour l'instant"
+      },
+      "eyebrow": "Ventes",
+      "field": {
+        "client": "Client (facultatif)",
+        "endsAt": "Se termine à",
+        "headcount": "Effectif",
+        "none": "— Aucun —",
+        "notes": "Notes",
+        "project": "Projet (facultatif)",
+        "space": "Espace",
+        "spacePlaceholder": "Sélectionner un espace…",
+        "startsAt": "Commence à",
+        "state": "État",
+        "title": "Titre"
+      },
+      "manageSpaces": "Espaces",
+      "new": {
+        "eyebrow": "Ventes",
+        "noSpaces": {
+          "cta": "+ Nouvel espace",
+          "title": "Aucun espace pour l'instant"
+        },
+        "submit": "Créer la réservation",
+        "title": "Nouvelle réservation"
+      },
+      "newBooking": "+ Nouvelle réservation",
+      "next": "Suivant →",
+      "prev": "← Précédent",
+      "spaces": {
+        "breadcrumb": {
+          "diary": "Agenda des événements"
+        },
+        "col": {
+          "capacity": "Capacité",
+          "name": "Nom",
+          "state": "État",
+          "venue": "Site"
+        },
+        "eyebrow": "Agenda des événements",
+        "field": {
+          "capacity": "Capacité",
+          "name": "Nom",
+          "notes": "Notes",
+          "state": "État",
+          "venue": "Site"
+        },
+        "new": {
+          "eyebrow": "Agenda des événements",
+          "submit": "Créer l'espace",
+          "title": "Nouvel espace"
+        },
+        "newLabel": "+ Nouvel espace",
+        "subtitle": "{count} espaces",
+        "title": "Espaces"
+      },
+      "title": "Agenda des événements",
+      "today": "Aujourd'hui"
     }
   },
   "formShell": {
@@ -14820,7 +16688,8 @@
       },
       "scheduled": "programmée",
       "acknowledgedAt": "Acquittée {time}",
-      "acknowledge": "Acquitter"
+      "acknowledge": "Acquitter",
+      "acknowledging": "Accusé de réception…"
     },
     "checkIn": {
       "announce": {
@@ -14977,7 +16846,10 @@
       "selectProject": "Sélectionner un projet…",
       "weatherPlaceholder": "Météo (ex. 26°C, ensoleillé)",
       "saveLog": "Enregistrer le journal",
-      "recent": "Récents"
+      "recent": "Récents",
+      "empty": {
+        "title": "Aucun journal pour le moment"
+      }
     },
     "directory": {
       "eyebrow": "Mobile",
@@ -15051,7 +16923,10 @@
     "error": {
       "eyebrow": "Erreur",
       "title": "Une Erreur Est Survenue",
-      "tryAgain": "Réessayer"
+      "tryAgain": "Réessayer",
+      "backHome": "Retour à l'accueil",
+      "fallbackMessage": "Une erreur inattendue s'est produite.",
+      "ref": "Réf. : {digest}"
     },
     "feed": {
       "eyebrow": "Mobile",
@@ -15283,7 +17158,11 @@
     "inbox": {
       "room": {
         "directMessage": "Message direct",
-        "messagePlaceholder": "Message"
+        "messagePlaceholder": "Message",
+        "emptyDescription": "Dites bonjour pour lancer la conversation.",
+        "emptyTitle": "Aucun message pour l'instant",
+        "loadOlder": "Charger les plus anciens",
+        "loadingOlder": "Chargement…"
       },
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "Mobile",
@@ -15302,7 +17181,8 @@
         "openFullForm": "Ouvrir",
         "summaryLabel": "Que s'est-il passé ?",
         "fileNow": "Déposer maintenant",
-        "subtitle": "Signalez un problème de sécurité — l'admin et le responsable EHS sont notifiés immédiatement."
+        "subtitle": "Signalez un problème de sécurité — l'admin et le responsable EHS sont notifiés immédiatement.",
+        "filing": "Dépôt…"
       },
       "eyebrow": "Terrain",
       "title": "Mes signalements",
@@ -15459,7 +17339,14 @@
       "empty": {
         "title": "Aucun parcours actif"
       },
-      "fallbackFlowName": "Intégration"
+      "fallbackFlowName": "Intégration",
+      "detail": {
+        "empty": {
+          "title": "Aucune étape pour l'instant"
+        }
+      },
+      "finishing": "Finalisation…",
+      "marking": "Enregistrement…"
     },
     "polls": {
       "title": "Sondages",
@@ -15640,7 +17527,12 @@
         "open": "Ouvert",
         "anonymous": "Anonyme"
       },
-      "closesAt": "clôture le {date}"
+      "closesAt": "clôture le {date}",
+      "detail": {
+        "empty": {
+          "title": "Aucune question pour l'instant"
+        }
+      }
     },
     "tasks": {
       "eyebrow": "Terrain",
@@ -15660,7 +17552,10 @@
         "startsOn": "Débute le",
         "endsOn": "Se termine le",
         "hoursRequested": "Heures demandées",
-        "reason": "Motif"
+        "reason": "Motif",
+        "empty": {
+          "title": "Aucune politique de congés"
+        }
       },
       "title": "Congés",
       "balancesHeading": "Soldes ({year})",
@@ -15760,7 +17655,11 @@
         "eyebrow": "Candidature",
         "coverNote": "Lettre de motivation",
         "proposedDayRate": "Tarif journalier proposé",
-        "resume": "CV"
+        "resume": "CV",
+        "review": {
+          "cta": "Rédiger un avis",
+          "label": "Engagé et finalisé ?"
+        }
       },
       "title": "Mes Candidatures",
       "configureSupabase": "Configurer Supabase.",
@@ -15777,14 +17676,19 @@
       "eyebrow": "Disponibilité",
       "title": "Calendrier de réservation",
       "addSlot": "Ajouter un créneau",
-      "kind": "Type",
       "label": "Libellé",
       "labelPlaceholder": "Montage scène MMW26",
       "starts": "Début",
       "ends": "Fin",
       "allDay": "Toute la journée",
       "upcoming": "À venir",
-      "empty": "Aucun créneau de disponibilité pour le moment."
+      "empty": "Aucun créneau de disponibilité pour le moment.",
+      "kind": {
+        "block": "Bloc — Indisponible",
+        "confirm": "Confirmer — Verrouillé",
+        "hold": "Réserve — Libération auto au TTL"
+      },
+      "kindLabel": "Type"
     },
     "cards": {
       "applications": {
@@ -16053,6 +17957,10 @@
       "title": "Offres de booking",
       "empty": {
         "title": "Aucune offre pour l'instant"
+      },
+      "actions": {
+        "accept": "Accepter",
+        "decline": "Refuser"
       }
     },
     "organizations": {
@@ -16193,7 +18101,23 @@
       "status": {
         "released": "publié",
         "hidden": "masqué — en attente de la contrepartie"
-      }
+      },
+      "new": {
+        "cta": {
+          "applications": "Mes candidatures",
+          "back": "Retour aux avis",
+          "offers": "Mes offres"
+        },
+        "eyebrow": "Mes avis",
+        "form": {
+          "body": "Avis",
+          "rating": "Note",
+          "submit": "Publier l'avis"
+        },
+        "subjectPrefix": "Évaluation de",
+        "title": "Rédiger un avis"
+      },
+      "writeCta": "Rédiger un avis"
     },
     "savedSearches": {
       "eyebrow": "Recherches enregistrées",
@@ -16250,7 +18174,8 @@
         "lastUsed": "· dernière utilisation {when}",
         "removeAria": "Supprimer la passkey",
         "addButton": "Ajouter une passkey",
-        "title": "Passkeys"
+        "title": "Passkeys",
+        "removeDialogTitle": "Supprimer la clé d'accès"
       },
       "eyebrow": "Compte",
       "title": "Sécurité",
@@ -16318,7 +18243,11 @@
         "title": "Authentification à Deux Facteurs",
         "requiredNote": "Votre organisation l'exige pour votre rôle.",
         "recommendedNote": "Recommandé pour toute personne ayant un accès admin.",
-        "backToSecurity": "Retour à la sécurité"
+        "backToSecurity": "Retour à la sécurité",
+        "confirm": {
+          "regenerateTitle": "Générer de nouveaux codes",
+          "removeTitle": "Supprimer l'authentificateur"
+        }
       }
     },
     "settings": {
@@ -16348,7 +18277,11 @@
       "detail": {
         "eyebrow": "Candidature",
         "coverNote": "Note d'accompagnement",
-        "proposedFee": "Cachet proposé"
+        "proposedFee": "Cachet proposé",
+        "review": {
+          "cta": "Rédiger un avis",
+          "label": "Attribué et finalisé ?"
+        }
       },
       "eyebrow": "Mes candidatures",
       "title": "Candidatures",
@@ -16391,6 +18324,17 @@
         "issued": "Émis",
         "redeemed": "Utilisé"
       }
+    },
+    "inquiries": {
+      "configureSupabase": "Configurer Supabase.",
+      "empty": {
+        "action": "Parcourir la place de marché",
+        "title": "Aucune demande pour le moment"
+      },
+      "eyebrow": "Mes demandes",
+      "heading": "Demandes",
+      "sentBanner": "Demande envoyée. L'opérateur la voit dans sa console dès maintenant.",
+      "title": "Mes demandes"
     }
   },
   "notFound": {
@@ -16642,7 +18586,8 @@
         },
         "badge": {
           "sla": "SLA"
-        }
+        },
+        "eyebrowLabel": "Portail · Athlète"
       },
       "safeguarding": {
         "eyebrowShort": "Portail",
@@ -16702,7 +18647,8 @@
         "footer": {
           "suffix": "si votre dossier n'avance pas."
         }
-      }
+      },
+      "breadcrumbLabel": "Athlète"
     },
     "client": {
       "deliverables": {
@@ -16734,7 +18680,8 @@
           "amount": "Montant",
           "status": "Statut",
           "due": "Échéance",
-          "pdf": "PDF"
+          "pdf": "PDF",
+          "invoice_state": "Statut"
         },
         "download": "Télécharger"
       },
@@ -16933,7 +18880,8 @@
           "title": "Titre",
           "amount": "Montant",
           "status": "Statut",
-          "sent": "Envoyée"
+          "sent": "Envoyée",
+          "proposal_state": "Statut"
         },
         "open": "Ouvrir →"
       },
@@ -17047,6 +18995,19 @@
           "billable": "Facturable",
           "notes": "Notes"
         }
+      },
+      "timesheets": {
+        "col": {
+          "billable": "Facturable",
+          "hours": "Heures",
+          "period": "Période",
+          "state": "État"
+        },
+        "empty": {
+          "title": "Aucune feuille de temps pour l'instant"
+        },
+        "subtitle": "Vos feuilles de temps et leur état d'approbation pour ce projet",
+        "title": "Feuilles de temps"
       }
     },
     "delegation": {
@@ -17216,7 +19177,8 @@
         },
         "orders": {
           "heading": "Commandes"
-        }
+        },
+        "eyebrowLabel": "Portail · Délégation"
       },
       "transport": {
         "eyebrowShort": "Portail",
@@ -17511,7 +19473,8 @@
         "rsvp": {
           "prefix": "Pour confirmer, écrivez à",
           "suffix": "avec votre numéro d'accréditation et le nom de la conférence."
-        }
+        },
+        "eyebrowLabel": "Portail · Média"
       },
       "services": {
         "eyebrow": {
@@ -17532,7 +19495,8 @@
         },
         "catalog": {
           "heading": "Catalogue"
-        }
+        },
+        "eyebrowLabel": "Portail · Média"
       },
       "transport": {
         "eyebrowShort": "Portail",
@@ -17632,14 +19596,22 @@
           "impact": "Impact",
           "owner": "Responsable",
           "due": "Échéance",
-          "status": "Statut"
+          "status": "Statut",
+          "risk_state": "Statut"
         }
       },
       "readiness": {
         "tile": {
           "label": "Préparation",
           "desc": "Checklists de phase-gate"
-        }
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "detailOn": "Revue de préparation par projet le",
+        "empty": {
+          "title": "Aucun projet"
+        },
+        "subtitle": "Décision go/no-go du portefeuille par jalon de cycle de vie.",
+        "title": "Préparation"
       },
       "approvalsReviews": {
         "title": "Approbations & Bilans",
@@ -17649,7 +19621,14 @@
         "tile": {
           "label": "Bilans",
           "desc": "Debriefs de show"
-        }
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "title": "Aucune revue planifiée"
+        },
+        "subtitle": "Revues de jalon, rétrospectives et points avec le comité.",
+        "title": "Revues",
+        "untitled": "Revue sans titre"
       },
       "title": "Portail producteur",
       "tracker": {
@@ -17679,7 +19658,8 @@
           "showDate": "Date Du Show",
           "guarantee": "Garantie",
           "doorPct": "% Entrées",
-          "status": "Statut"
+          "status": "Statut",
+          "talent_offer_state": "Statut"
         }
       },
       "marketing": {
@@ -17694,7 +19674,8 @@
           "channel": "Canal",
           "dates": "Dates",
           "spend": "Dépense",
-          "status": "Statut"
+          "status": "Statut",
+          "campaign_state": "Statut"
         }
       },
       "home": {
@@ -17840,7 +19821,8 @@
           "directMessage": "Message Direct",
           "subtitle": "Fil direct avec votre account manager pour {projectName}.",
           "empty": "Pas encore de messages. Dites bonjour — votre account manager sera notifié.",
-          "messagePlaceholder": "Message"
+          "messagePlaceholder": "Message",
+          "emptyTitle": "Aucun message pour l'instant"
         }
       },
       "gateway": {
@@ -17883,7 +19865,8 @@
         },
         "overdue": "En Retard",
         "duePrefix": "à rendre le {date}"
-      }
+      },
+      "eyebrowLabel": "Portail"
     },
     "sponsor": {
       "activations": {
@@ -17985,6 +19968,56 @@
           "desc": "Registre en lecture seule"
         },
         "title": "Portail Parties Prenantes"
+      },
+      "audit": {
+        "col": {
+          "action": "Action",
+          "actor": "Acteur",
+          "target": "Cible",
+          "when": "Quand"
+        },
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "title": "Aucune entrée d'audit"
+        },
+        "subtitle": "Chaque action privilégiée, horodatée. Lecture seule.",
+        "title": "Piste d'audit"
+      },
+      "governance": {
+        "empty": {
+          "title": "Aucun comité pour l'instant"
+        },
+        "subtitle": "Comités, politiques et portes d'approbation.",
+        "title": "Gouvernance"
+      },
+      "pnl": {
+        "configureSupabase": "Configurer Supabase.",
+        "fullBreakdownOn": "Détail complet le",
+        "metrics": {
+          "budget": "Budget",
+          "margin": "Marge",
+          "revenuePaid": "Revenu — Encaissé",
+          "spent": "Dépensé"
+        },
+        "noProject": {
+          "title": "Aucun projet"
+        },
+        "subtitle": "Synthèse de tête pour {projectName}.",
+        "title": "Compte de résultat"
+      },
+      "portfolio": {
+        "configureSupabase": "Configurer Supabase.",
+        "empty": {
+          "title": "Aucun projet"
+        },
+        "title": "Portefeuille"
+      },
+      "sustainability": {
+        "empty": {
+          "title": "Aucun reporting ESG pour l'instant"
+        },
+        "subtitle": "Reporting ESG + posture de durabilité.",
+        "title": "Durabilité"
       }
     },
     "vendor": {
@@ -18028,7 +20061,8 @@
           "amount": "Montant",
           "status": "Statut",
           "issued": "Émise le",
-          "due": "Échéance"
+          "due": "Échéance",
+          "invoice_state": "Statut"
         }
       },
       "home": {
@@ -18066,7 +20100,8 @@
           "title": "Titre",
           "amount": "Montant",
           "status": "Statut",
-          "created": "Créé le"
+          "created": "Créé le",
+          "po_state": "Statut"
         }
       },
       "submissions": {
@@ -18109,7 +20144,8 @@
           "requiredCourses": "Cours Requis",
           "totalKbArticles": "Articles KB au Total",
           "lastUpdated": "Dernière Mise à Jour"
-        }
+        },
+        "eyebrowLabel": "Portail"
       }
     },
     "vip": {
@@ -18210,7 +20246,9 @@
         "section": {
           "schedule": "Calendrier"
         },
-        "empty": "Aucun trajet T1 programmé. La conciergerie publiera à la confirmation."
+        "empty": "Aucun trajet T1 programmé. La conciergerie publiera à la confirmation.",
+        "eyebrowLabel": "Portail · VIP",
+        "titleLabel": "Transport"
       }
     },
     "volunteer": {
@@ -18281,8 +20319,12 @@
       },
       "metrics": {
         "upcomingShifts": "Prochains créneaux",
-        "status": "Statut",
-        "role": "Rôle"
+        "role": "Rôle",
+        "status": {
+          "active": "Actif",
+          "pending": "En attente"
+        },
+        "statusLabel": "Statut"
       },
       "notOnboarded": {
         "badge": "Onboarding non terminé"
@@ -18320,12 +20362,17 @@
         },
         "metric": {
           "required": "Requis",
-          "status": "Statut",
-          "lastUpdated": "Dernière mise à jour"
+          "lastUpdated": "Dernière mise à jour",
+          "status": {
+            "open": "Ouvert"
+          },
+          "statusLabel": "Statut"
         },
         "requiredModules": {
           "heading": "Modules requis"
-        }
+        },
+        "eyebrowLabel": "Portail · Bénévole",
+        "titleLabel": "Formation"
       },
       "uniform": {
         "eyebrowShort": "Portail",
@@ -18362,6 +20409,13 @@
           "slotLabel": "Créneau :"
         }
       }
+    },
+    "select": {
+      "contactSupport": "Contacter le support",
+      "emptyTitle": "Aucun portail de projet pour l'instant",
+      "eyebrow": "Portail",
+      "subtitle": "Choisissez le portail de projet que vous souhaitez ouvrir.",
+      "title": "Choisir un projet"
     }
   },
   "rootError": {
@@ -18534,7 +20588,8 @@
     "chips": {
       "remove": "Supprimer le filtre {header} {value}",
       "clearAll": "Tout effacer"
-    }
+    },
+    "bulkFailed": "Échec de l'action groupée"
   },
   "commandPalette": {
     "shortcut": "Ouvrir la palette de commandes",
@@ -18557,7 +20612,8 @@
     "hint": {
       "settings": "Paramètres · {group}",
       "tab": "Onglet",
-      "tool": "Outil"
+      "tool": "Outil",
+      "create": "Créer · {group}"
     },
     "actions": {
       "newProject": "Nouveau projet",
@@ -18574,7 +20630,8 @@
       "preferences": "Préférences",
       "lightMode": "Passer en mode clair",
       "darkMode": "Passer en mode sombre",
-      "signOut": "Se déconnecter"
+      "signOut": "Se déconnecter",
+      "linkScanCode": "Lier un code de scan"
     }
   },
   "savedViews": {
@@ -19074,6 +21131,27 @@
       "submit": "Envoyer",
       "selectPlaceholder": "Sélectionner…",
       "fileHelp": "Jusqu'à 10 Mo. Images ou PDF."
+    },
+    "configureSupabase": {
+      "description": "Configurer Supabase.",
+      "title": "Configurer Supabase"
+    },
+    "formView": {
+      "empty": "—",
+      "emptyDescription": "Cet enregistrement n'a aucun champ à afficher.",
+      "emptyTitle": "Aucun champ"
+    },
+    "galleryView": {
+      "emptyTitle": "Rien à afficher",
+      "label": "Galerie",
+      "staticCard": "Carte statique"
+    },
+    "treeView": {
+      "collapse": "Réduire {title}",
+      "emptyDescription": "Les enregistrements s'imbriquent ici selon leur parent.",
+      "emptyTitle": "Rien à afficher",
+      "expand": "Développer {title}",
+      "label": "Arborescence"
     }
   },
   "pdf": {

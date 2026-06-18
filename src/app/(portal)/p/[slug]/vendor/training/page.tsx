@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return (
       <>
         <ModuleHeader
-          eyebrow={t("p.vendor.training.eyebrow", undefined, "Portal")}
+          eyebrow={t("p.vendor.training.eyebrowLabel", undefined, "Portal")}
           title={t("p.vendor.training.titleShort", undefined, "Training")}
         />
         <div className="page-content">
@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow={t("p.vendor.training.eyebrow", undefined, "Portal")}
+        eyebrow={t("p.vendor.training.eyebrowLabel", undefined, "Portal")}
         title={t("p.vendor.training.title", undefined, "Training & compliance")}
         subtitle={
           courses.length === 1

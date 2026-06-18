@@ -72,7 +72,7 @@ export default async function Page() {
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/procurement/prequalification/questionnaires" size="sm" variant="ghost">
-              {t("console.procurement.prequalification.questionnaires", undefined, "Questionnaires")}
+              {t("console.procurement.prequalification.questionnairesLabel", undefined, "Questionnaires")}
             </Button>
             <Button href="/console/procurement/prequalification/new" size="sm">
               {t("console.procurement.prequalification.inviteVendor", undefined, "+ Invite vendor")}

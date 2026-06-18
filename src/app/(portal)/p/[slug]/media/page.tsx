@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     return (
       <>
         <ModuleHeader
-          eyebrow={t("p.shared.eyebrow", undefined, "Portal")}
+          eyebrow={t("p.shared.eyebrowLabel", undefined, "Portal")}
           title={t("p.media.title", undefined, "Media")}
         />
         <div className="page-content">
@@ -66,11 +66,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow={t("p.shared.eyebrow", undefined, "Portal")}
+        eyebrow={t("p.shared.eyebrowLabel", undefined, "Portal")}
         title={t("p.media.title", undefined, "Media")}
         subtitle={t("p.media.subtitle", undefined, "Working areas, services, and editorial info for accredited media")}
         breadcrumbs={[
-          { label: t("p.shared.eyebrow", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.shared.eyebrowLabel", undefined, "Portal"), href: `/p/${slug}` },
           { label: t("p.media.title", undefined, "Media") },
         ]}
       />

@@ -61,7 +61,7 @@ export default async function Page() {
         )}
         action={
           <Button href="/console/marketplace/settings" size="sm" variant="ghost">
-            {t("console.marketplace.settings", undefined, "Settings")}
+            {t("console.marketplace.settingsLabel", undefined, "Settings")}
           </Button>
         }
       />

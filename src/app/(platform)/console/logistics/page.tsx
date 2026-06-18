@@ -13,16 +13,16 @@ export default async function Page() {
             <div className="text-sm font-medium">{t("console.logistics.rateCard", undefined, "Rate card")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/logistics/freight">
-            <div className="text-sm font-medium">{t("console.logistics.freight", undefined, "Freight")}</div>
+            <div className="text-sm font-medium">{t("console.logistics.freightLabel", undefined, "Freight")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/logistics/warehouse">
-            <div className="text-sm font-medium">{t("console.logistics.warehouse", undefined, "Warehouse")}</div>
+            <div className="text-sm font-medium">{t("console.logistics.warehouseLabel", undefined, "Warehouse")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/logistics/services">
-            <div className="text-sm font-medium">{t("console.logistics.services", undefined, "Services")}</div>
+            <div className="text-sm font-medium">{t("console.logistics.servicesLabel", undefined, "Services")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/logistics/disposition">
-            <div className="text-sm font-medium">{t("console.logistics.disposition", undefined, "Disposition")}</div>
+            <div className="text-sm font-medium">{t("console.logistics.dispositionLabel", undefined, "Disposition")}</div>
           </Link>
         </div>
       </div>

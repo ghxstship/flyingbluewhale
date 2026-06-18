@@ -10,7 +10,7 @@ export default async function Page() {
       <div className="page-content">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Link className="surface hover-lift p-4" href="/console/sustainability/carbon">
-            <div className="text-sm font-medium">{t("console.sustainability.carbon", undefined, "Carbon")}</div>
+            <div className="text-sm font-medium">{t("console.sustainability.carbonLabel", undefined, "Carbon")}</div>
           </Link>
         </div>
       </div>

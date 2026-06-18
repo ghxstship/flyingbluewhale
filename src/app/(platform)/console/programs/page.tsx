@@ -85,34 +85,34 @@ export default async function Page() {
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Link className="surface hover-lift p-4" href="/console/programs/schedule">
-            <div className="text-sm font-medium">{t("console.programs.schedule", undefined, "Master schedule")}</div>
+            <div className="text-sm font-medium">{t("console.programs.scheduleLabel", undefined, "Master schedule")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/risk">
-            <div className="text-sm font-medium">{t("console.programs.risk", undefined, "Risk register")}</div>
+            <div className="text-sm font-medium">{t("console.programs.riskLabel", undefined, "Risk register")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/reviews">
-            <div className="text-sm font-medium">{t("console.programs.reviews", undefined, "Reviews")}</div>
+            <div className="text-sm font-medium">{t("console.programs.reviewsLabel", undefined, "Reviews")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/readiness">
-            <div className="text-sm font-medium">{t("console.programs.readiness", undefined, "Readiness")}</div>
+            <div className="text-sm font-medium">{t("console.programs.readinessLabel", undefined, "Readiness")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/scope">
-            <div className="text-sm font-medium">{t("console.programs.scope", undefined, "Scope")}</div>
+            <div className="text-sm font-medium">{t("console.programs.scopeLabel", undefined, "Scope")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/sessions">
-            <div className="text-sm font-medium">{t("console.programs.sessions", undefined, "Sessions")}</div>
+            <div className="text-sm font-medium">{t("console.programs.sessionsLabel", undefined, "Sessions")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/ceremonies">
-            <div className="text-sm font-medium">{t("console.programs.ceremonies", undefined, "Ceremonies")}</div>
+            <div className="text-sm font-medium">{t("console.programs.ceremoniesLabel", undefined, "Ceremonies")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/protocol">
-            <div className="text-sm font-medium">{t("console.programs.protocol", undefined, "Protocol")}</div>
+            <div className="text-sm font-medium">{t("console.programs.protocolLabel", undefined, "Protocol")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/pressconf">
-            <div className="text-sm font-medium">{t("console.programs.pressconf", undefined, "Press conferences")}</div>
+            <div className="text-sm font-medium">{t("console.programs.pressconfLabel", undefined, "Press conferences")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/programs/cases">
-            <div className="text-sm font-medium">{t("console.programs.cases", undefined, "Cases")}</div>
+            <div className="text-sm font-medium">{t("console.programs.casesLabel", undefined, "Cases")}</div>
           </Link>
         </div>
       </div>

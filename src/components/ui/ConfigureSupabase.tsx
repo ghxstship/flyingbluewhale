@@ -15,9 +15,9 @@ export async function ConfigureSupabase() {
   return (
     <div className="page-content">
       <EmptyState
-        title={t("common.configureSupabase.title", undefined, "Configure Supabase")}
+        title={t("components.configureSupabase.title", undefined, "Configure Supabase")}
         description={t(
-          "common.configureSupabase.description",
+          "components.configureSupabase.description",
           undefined,
           "Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local to load data.",
         )}

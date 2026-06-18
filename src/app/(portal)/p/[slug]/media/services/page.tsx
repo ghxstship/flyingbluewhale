@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow={t("p.media.services.eyebrow", undefined, "Portal · Media")}
+        eyebrow={t("p.media.services.eyebrowLabel", undefined, "Portal · Media")}
         title={t("p.media.services.title", undefined, "Media Services")}
         subtitle={
           items.length === 1

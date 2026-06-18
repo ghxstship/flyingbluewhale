@@ -102,7 +102,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/punch/lists" size="sm" variant="ghost">
-              {t("console.punch.lists", undefined, "Lists")}
+              {t("console.punch.listsLabel", undefined, "Lists")}
             </Button>
             {activeList && (
               <Button href="/console/punch" size="sm" variant="ghost">

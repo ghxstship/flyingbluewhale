@@ -10,22 +10,22 @@ export default async function Page() {
       <div className="page-content">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Link className="surface hover-lift p-4" href="/console/safety/threats">
-            <div className="text-sm font-medium">{t("console.safety.threats", undefined, "Threats")}</div>
+            <div className="text-sm font-medium">{t("console.safety.threatsLabel", undefined, "Threats")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/playbooks">
-            <div className="text-sm font-medium">{t("console.safety.playbooks", undefined, "Playbooks")}</div>
+            <div className="text-sm font-medium">{t("console.safety.playbooksLabel", undefined, "Playbooks")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/guard-tours">
-            <div className="text-sm font-medium">{t("console.safety.guardTours", undefined, "Guard tours")}</div>
+            <div className="text-sm font-medium">{t("console.safety.guardToursLabel", undefined, "Guard tours")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/incidents">
-            <div className="text-sm font-medium">{t("console.safety.incidents", undefined, "Incidents")}</div>
+            <div className="text-sm font-medium">{t("console.safety.incidentsLabel", undefined, "Incidents")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/major-incident">
-            <div className="text-sm font-medium">{t("console.safety.majorIncident", undefined, "Major incident")}</div>
+            <div className="text-sm font-medium">{t("console.safety.majorIncidentLabel", undefined, "Major incident")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/cyber-ir">
-            <div className="text-sm font-medium">{t("console.safety.cyberIr", undefined, "Cyber IR")}</div>
+            <div className="text-sm font-medium">{t("console.safety.cyberIrLabel", undefined, "Cyber IR")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/medical/plan">
             <div className="text-sm font-medium">{t("console.safety.medicalPlan", undefined, "Medical plan")}</div>
@@ -36,16 +36,16 @@ export default async function Page() {
             </div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/environmental">
-            <div className="text-sm font-medium">{t("console.safety.environmental", undefined, "Environmental")}</div>
+            <div className="text-sm font-medium">{t("console.safety.environmentalLabel", undefined, "Environmental")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/crisis">
             <div className="text-sm font-medium">{t("console.safety.crisisComms", undefined, "Crisis comms")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/safeguarding">
-            <div className="text-sm font-medium">{t("console.safety.safeguarding", undefined, "Safeguarding")}</div>
+            <div className="text-sm font-medium">{t("console.safety.safeguardingLabel", undefined, "Safeguarding")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/console/safety/bcdr">
-            <div className="text-sm font-medium">{t("console.safety.bcdr", undefined, "BC/DR")}</div>
+            <div className="text-sm font-medium">{t("console.safety.bcdrLabel", undefined, "BC/DR")}</div>
           </Link>
         </div>
       </div>

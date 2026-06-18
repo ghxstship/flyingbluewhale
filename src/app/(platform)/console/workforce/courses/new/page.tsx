@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { getRequestT } from "@/lib/i18n/request";
 import { createCourseAction } from "./actions";
+import { GenerateCourseButton } from "./GenerateCourseButton";
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -11,6 +12,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow={t("console.workforce.courses.new.eyebrow", undefined, "Training")}
         title={t("console.workforce.courses.new.title", undefined, "New Course")}
+        action={<GenerateCourseButton />}
       />
       <div className="page-content max-w-2xl">
         <FormShell

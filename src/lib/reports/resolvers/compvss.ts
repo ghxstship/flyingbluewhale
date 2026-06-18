@@ -231,6 +231,37 @@ const waste_diversion: MetricResolver = async () => null;
 /** energy_intensity (float) — energy per unit of activity. No energy data. Null. */
 const energy_intensity: MetricResolver = async () => null;
 
+// ===========================================================================
+// CREW RESPONSE & REMINDERS (Competitive Edge Drop v1 — Rentman 2025 parity)
+// ===========================================================================
+
+/** response_rate_crew (pct) — assignments that have moved past briefed/draft
+ *  (i.e., the party acknowledged / actioned) / total non-deleted assignments. */
+const response_rate_crew: MetricResolver = async (ctx) => {
+  const total = await countWhere(ctx, "assignments", { deleted_at: null });
+  if (!total) return null;
+  const { data, error } = await (ctx.db as unknown as AnyDB)
+    .from("assignments")
+    .select("fulfillment_state", { count: "exact", head: true })
+    .eq("org_id", ctx.orgId)
+    .is("deleted_at", null)
+    .not("fulfillment_state", "in", '("briefed","draft")');
+  if (error) return null;
+  const responded = data?.length !== undefined ? data.length : 0;
+  return (responded / total) * 100;
+};
+
+/** reminder_rate (int) — count of assignment reminders sent in the org.
+ *  Lower is better (crew self-manages; high count signals engagement issues). */
+const reminder_rate: MetricResolver = async (ctx) => {
+  const { count, error } = await (ctx.db as unknown as AnyDB)
+    .from("assignment_reminder_log")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", ctx.orgId);
+  if (error) return null;
+  return count ?? 0;
+};
+
 export const compvssResolvers: ResolverMap = {
   labor_fill_rate,
   overtime_pct,
@@ -250,4 +281,6 @@ export const compvssResolvers: ResolverMap = {
   turnaround_time,
   waste_diversion,
   energy_intensity,
+  response_rate_crew,
+  reminder_rate,
 };

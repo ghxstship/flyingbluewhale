@@ -220,6 +220,8 @@ export type ScanResult =
   | { result: "duplicate"; assignmentId: string; redeemedAt: string | null }
   | { result: "voided"; assignmentId: string }
   | { result: "expired"; assignmentId: string }
+  | { result: "before_window"; assignmentId: string; validFrom: string }
+  | { result: "after_window"; assignmentId: string; validUntil: string }
   | { result: "not_found" };
 
 /**
@@ -235,7 +237,7 @@ async function logScanEvent(
     org_id: string;
     actor_user_id: string;
     scan_code_id: string | null;
-    result: "accepted" | "duplicate" | "voided" | "not_found" | "expired" | "wrong_zone";
+    result: "accepted" | "duplicate" | "voided" | "not_found" | "expired" | "wrong_zone" | "before_window" | "after_window";
     location: { lat: number; lng: number; accuracy?: number } | null;
   },
 ): Promise<void> {
@@ -268,7 +270,7 @@ export async function scanAssignment(input: {
   // Active scan code lookup (partial unique index on (org_id, code) WHERE active).
   const { data: scanCode } = await supabase
     .from("assignment_scan_codes")
-    .select("id, assignment_id, active")
+    .select("id, assignment_id, active, valid_from, valid_until")
     .eq("org_id", input.orgId)
     .eq("code", input.code)
     .eq("active", true)
@@ -296,6 +298,38 @@ export async function scanAssignment(input: {
       return { result: "voided", assignmentId: anyCode.assignment_id };
     }
     return { result: "not_found" };
+  }
+
+  // Enforce check-in window (Competitive Edge Drop v1). If valid_from /
+  // valid_until are set on the scan code, reject scans outside the window.
+  // We log the attempt without redeeming the assignment so the gate operator
+  // has an audit trail of early-bird / late attempts.
+  const now = new Date();
+  const validFrom = scanCode.valid_from ? new Date(scanCode.valid_from as string) : null;
+  const validUntil = scanCode.valid_until ? new Date(scanCode.valid_until as string) : null;
+
+  if (validFrom && now < validFrom) {
+    await logScanEvent(supabase, {
+      assignment_id: scanCode.assignment_id,
+      org_id: input.orgId,
+      actor_user_id: input.scannerUserId,
+      scan_code_id: scanCode.id,
+      result: "before_window",
+      location: input.location ?? null,
+    });
+    return { result: "before_window", assignmentId: scanCode.assignment_id, validFrom: validFrom.toISOString() };
+  }
+
+  if (validUntil && now > validUntil) {
+    await logScanEvent(supabase, {
+      assignment_id: scanCode.assignment_id,
+      org_id: input.orgId,
+      actor_user_id: input.scannerUserId,
+      scan_code_id: scanCode.id,
+      result: "after_window",
+      location: input.location ?? null,
+    });
+    return { result: "after_window", assignmentId: scanCode.assignment_id, validUntil: validUntil.toISOString() };
   }
 
   // Read the parent assignment to evaluate validity.

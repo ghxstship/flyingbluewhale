@@ -276,6 +276,34 @@
         "staffing"
       ]
     },
+    "response_rate_crew": {
+      "app": "COMPVSS",
+      "label": "Crew Response Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 95,
+      "confidence": "PUBLISHED",
+      "formula": "assignments acknowledged (not in briefed/draft) / total issued assignments × 100",
+      "sources": [
+        "assignments"
+      ]
+    },
+    "reminder_rate": {
+      "app": "COMPVSS",
+      "label": "Reminder Rate",
+      "unit": "count",
+      "format": "int",
+      "grain": "event",
+      "direction": "down",
+      "target": 0,
+      "confidence": "PUBLISHED",
+      "formula": "reminder pushes sent / total assignments (lower = crew is self-managing)",
+      "sources": [
+        "assignment_reminder_log"
+      ]
+    },
     "no_show_rate_crew": {
       "app": "COMPVSS",
       "label": "Crew No-Show Rate",
@@ -909,6 +937,66 @@
         "projects"
       ]
     },
+    "revenue_pacing": {
+      "app": "ATLVS",
+      "label": "Revenue Pacing",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "up",
+      "target": 100,
+      "confidence": "PUBLISHED",
+      "formula": "YTD collected revenue / (annual target × elapsed year fraction) × 100",
+      "sources": [
+        "invoice",
+        "budget"
+      ]
+    },
+    "pipeline_velocity": {
+      "app": "ATLVS",
+      "label": "Pipeline Velocity",
+      "unit": "days",
+      "format": "days",
+      "grain": "period",
+      "direction": "down",
+      "target": 30,
+      "confidence": "PUBLISHED",
+      "formula": "avg days from lead created to proposal sent",
+      "sources": [
+        "leads",
+        "proposals"
+      ]
+    },
+    "revenue_pacing_gap": {
+      "app": "ATLVS",
+      "label": "Revenue Pacing Gap",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "down",
+      "target": 0,
+      "confidence": "PUBLISHED",
+      "formula": "YTD target − YTD actual (negative = ahead)",
+      "sources": [
+        "invoice",
+        "budget"
+      ]
+    },
+    "labor_cost_ratio": {
+      "app": "ATLVS",
+      "label": "Labor Cost Ratio",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "down",
+      "target": 35,
+      "confidence": "PUBLISHED",
+      "formula": "total labor cost / total revenue × 100",
+      "sources": [
+        "timesheets",
+        "invoice"
+      ]
+    },
     "maintenance_compliance": {
       "app": "COMPVSS",
       "label": "PM Compliance",
@@ -1252,6 +1340,34 @@
       ],
       "status": "preconfigured"
     },
+    "pacing": {
+      "app": "ATLVS",
+      "title": "Revenue Pacing & Forecast",
+      "cadence": "weekly",
+      "print": "Wide",
+      "kind": "revenue",
+      "metrics": [
+        "revenue_pacing",
+        "revenue_pacing_gap",
+        "pipeline_velocity",
+        "pipeline_value",
+        "backlog_value"
+      ],
+      "status": "preconfigured"
+    },
+    "labor_cost": {
+      "app": "ATLVS",
+      "title": "Labor Cost & Margin Analysis",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "financial",
+      "metrics": [
+        "labor_cost_ratio",
+        "gross_margin",
+        "billable_utilization"
+      ],
+      "status": "preconfigured"
+    },
     "winloss": {
       "app": "ATLVS",
       "title": "Proposal Win/Loss",
@@ -1346,7 +1462,8 @@
         "overtime_pct",
         "labor_cost_per_head",
         "no_show_rate_crew",
-        "cert_compliance"
+        "cert_compliance",
+        "response_rate_crew"
       ],
       "status": "template"
     },
@@ -1422,7 +1539,9 @@
       "metrics": [
         "no_show_rate_crew",
         "overtime_pct",
-        "labor_fill_rate"
+        "labor_fill_rate",
+        "response_rate_crew",
+        "reminder_rate"
       ],
       "status": "preconfigured"
     },

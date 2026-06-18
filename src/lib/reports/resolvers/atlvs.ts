@@ -314,6 +314,87 @@ const risk_exposure: MetricResolver = async (ctx) => {
   return exposureCents / 100;
 };
 
+// ===========================================================================
+// REVENUE PACING (Competitive Edge Drop v1 — Tripleseat Pace Reporting parity)
+// ===========================================================================
+
+/** YTD collected revenue as % of the pro-rated annual target.
+ *  Annual target is the sum of all active-year budget lines. We proxy the
+ *  YTD fraction as (day-of-year / 365). Returns null when no annual budget
+ *  exists. */
+const revenue_pacing: MetricResolver = async (ctx) => {
+  const inv = await rows(ctx, "invoices", "amount_cents,invoice_state,paid_at", {
+    eq: { invoice_state: "paid" },
+    isNull: ["deleted_at"],
+  });
+  const b = await rows(ctx, "budgets", "amount_cents");
+  if (!b || b.length === 0) return null;
+  const annualTarget = sum(b, "amount_cents");
+  if (annualTarget === 0) return null;
+  const now = new Date();
+  const dayOfYear = Math.ceil((now.getTime() - new Date(now.getFullYear(), 0, 1).getTime()) / DAY_MS);
+  const ytdTarget = annualTarget * (dayOfYear / 365);
+  if (ytdTarget === 0) return null;
+  const ytdRevenue = (inv ?? []).reduce((a, r) => a + num(r.amount_cents), 0);
+  return (ytdRevenue / ytdTarget) * 100;
+};
+
+/** Revenue pacing gap ($): YTD target minus YTD actual. Negative = ahead. */
+const revenue_pacing_gap: MetricResolver = async (ctx) => {
+  const inv = await rows(ctx, "invoices", "amount_cents,invoice_state", {
+    eq: { invoice_state: "paid" },
+    isNull: ["deleted_at"],
+  });
+  const b = await rows(ctx, "budgets", "amount_cents");
+  if (!b || b.length === 0) return null;
+  const annualTarget = sum(b, "amount_cents");
+  if (annualTarget === 0) return null;
+  const now = new Date();
+  const dayOfYear = Math.ceil((now.getTime() - new Date(now.getFullYear(), 0, 1).getTime()) / DAY_MS);
+  const ytdTarget = annualTarget * (dayOfYear / 365);
+  const ytdRevenue = (inv ?? []).reduce((a, r) => a + num(r.amount_cents), 0);
+  return (ytdTarget - ytdRevenue) / 100;
+};
+
+/** Pipeline velocity: avg days from lead created_at to first associated
+ *  proposal (proxied as proposal.created_at for leads that have one). */
+const pipeline_velocity: MetricResolver = async (ctx) => {
+  const leads = await rows(ctx, "leads", "id,created_at");
+  const props = await rows(ctx, "proposals", "lead_id,created_at", { isNull: ["deleted_at"] });
+  if (!leads || leads.length === 0 || !props || props.length === 0) return null;
+  const propByLead = new Map<string, string>();
+  for (const p of props) {
+    const lid = String(p.lead_id ?? "");
+    if (lid && !propByLead.has(lid)) propByLead.set(lid, String(p.created_at));
+  }
+  const spans: number[] = [];
+  for (const l of leads) {
+    const lid = String(l.id);
+    const propAt = propByLead.get(lid);
+    if (propAt && l.created_at) {
+      const d = daysBetween(String(l.created_at), propAt);
+      if (d >= 0 && d < 365) spans.push(d);
+    }
+  }
+  if (spans.length === 0) return null;
+  return spans.reduce((a, d) => a + d, 0) / spans.length;
+};
+
+/** Labor cost ratio (%): total timesheet labor cost / total paid revenue × 100.
+ *  Uses timesheets.total_amount_minor (cents) against paid invoices. */
+const labor_cost_ratio: MetricResolver = async (ctx) => {
+  const ts = await rows(ctx, "timesheets", "total_amount_minor");
+  const inv = await rows(ctx, "invoices", "amount_cents,invoice_state", {
+    eq: { invoice_state: "paid" },
+    isNull: ["deleted_at"],
+  });
+  if (!ts || ts.length === 0 || !inv || inv.length === 0) return null;
+  const laborCents = sum(ts, "total_amount_minor");
+  const revenueCents = sum(inv, "amount_cents");
+  if (revenueCents === 0) return null;
+  return (laborCents / revenueCents) * 100;
+};
+
 export const atlvsResolvers: ResolverMap = {
   on_time_delivery,
   milestone_completion,
@@ -336,4 +417,8 @@ export const atlvsResolvers: ResolverMap = {
   win_rate,
   vendor_otd,
   risk_exposure,
+  revenue_pacing,
+  revenue_pacing_gap,
+  pipeline_velocity,
+  labor_cost_ratio,
 };

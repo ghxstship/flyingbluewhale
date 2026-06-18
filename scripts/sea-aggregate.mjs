@@ -17,17 +17,22 @@ const shellOf = (u) =>
   : /atlvs\.pro\/(login|signup|forgot-password|reset-password|magic-link|mfa|sso|verify-email|onboarding|auth)/.test(u) ? "Auth"
   : "Marketing/public";
 
-const files = readdirSync(EVID).filter((f) => /^results-.*\.json$/.test(f));
+// Read the re-verify batch LAST so post-remediation results supersede the
+// original FAIL records for the routes that were fixed + re-checked.
+const files = readdirSync(EVID)
+  .filter((f) => /^results-.*\.json$/.test(f))
+  .sort((a, b) => (a.includes("reverify") ? 1 : 0) - (b.includes("reverify") ? 1 : 0));
 const byUrl = new Map();
+const original = new Map(); // first-seen status per URL (for before/after)
 for (const f of files) {
   const d = JSON.parse(readFileSync(join(EVID, f), "utf8"));
   for (const r of d.results) {
-    // Prefer the most-recent / worst record per URL.
-    const prev = byUrl.get(r.url);
-    if (!prev || (prev.status === "PASS" && r.status !== "PASS")) byUrl.set(r.url, r);
+    if (!original.has(r.url)) original.set(r.url, r.status);
+    byUrl.set(r.url, r); // latest-wins
   }
 }
 const all = [...byUrl.values()];
+const remediated = [...byUrl.values()].filter((r) => original.get(r.url) === "FAIL" && r.status !== "FAIL");
 
 // Manifest denominator: route count from SITEMAP.md (page routes on disk).
 const sm = readFileSync(join(ROOT, "docs/ia/SITEMAP.md"), "utf8");
@@ -64,7 +69,9 @@ console.log("Tally:", summary.tally);
 console.log("\nPer shell:");
 for (const [s, v] of Object.entries(shells)) console.log(`  ${s.padEnd(18)} total=${v.total} PASS=${v.PASS} WARN=${v.WARN} FAIL=${v.FAIL}`);
 console.log("\naxe violations by id:", axeIds);
-console.log(`\nFAIL: ${fails.length}`);
+console.log(`\nRemediated (was FAIL, now not): ${remediated.length}`);
+for (const r of remediated) console.log("  ✓", r.status, r.url);
+console.log(`\nFAIL (current): ${fails.length}`);
 for (const r of fails) console.log("  ", r.mainStatus, r.url, r.navErr || (r.consoleErrors[0] || "").slice(0, 80));
 console.log(`\nSlowest:`);
 for (const r of slow.slice(0, 8)) console.log("  ", r.loadMs + "ms", r.url);

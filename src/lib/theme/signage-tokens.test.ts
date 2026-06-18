@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { PICTOGRAMS, PICTOGRAM_IDS, isPictogramId } from "@/lib/signage_pictograms";
+import { CATEGORY_FALLBACK_SYMBOL, CATEGORY_TONE, SIGNAGE_CATEGORIES, SIGN_TONES } from "@/lib/legend_signage";
 
 /**
  * Signage token contract — guards that the LEG3ND wayfinding SSOT in
@@ -52,6 +54,61 @@ describe("signage token contract (tokens.json ↔ kit-signage.css)", () => {
     for (const tier of ["sm", "md", "lg", "xl"]) {
       expect(TOKENS.signage.legibility[tier], `tokens.json missing legibility.${tier}`).toBeTruthy();
       expect(cssN, `kit-signage.css missing --sign-cap-${tier}-px`).toContain(`--sign-cap-${tier}-px:`);
+    }
+  });
+});
+
+/**
+ * AIGA-only sweep — the legacy house `p-*` pictograms are retired; the library
+ * is exclusively the public-domain AIGA / U.S. DOT set, and every sign colors
+ * from its category's airport tone via the `--sign-*` tokens.
+ */
+describe("signage library — AIGA/DOT only", () => {
+  const SPRITE = readFileSync(join(ROOT, "public/brand/pictograms.svg"), "utf8");
+
+  it("the sprite is well-formed XML — no '--' inside a comment (would break external <use>)", () => {
+    // External `<use href="sprite.svg#id">` requires the sprite to be valid
+    // XML; a `--` inside a comment is illegal and makes every glyph fail to
+    // render (the HTML parser tolerates it, so it slips past inline previews).
+    const commentBodies = [...SPRITE.matchAll(/<!--([\s\S]*?)-->/g)].map((m) => m[1] ?? "");
+    for (const body of commentBodies) {
+      expect(body.includes("--"), `sprite comment contains illegal '--': ${body.trim().slice(0, 70)}`).toBe(false);
+    }
+  });
+
+  it("the sprite contains ZERO legacy p-* symbols and only aiga-* ids", () => {
+    const ids = [...SPRITE.matchAll(/<symbol id="([^"]+)"/g)].map((m) => m[1] ?? "");
+    expect(ids.length).toBe(60);
+    expect(ids.filter((id) => !id.startsWith("aiga-"))).toEqual([]);
+    expect(SPRITE).not.toMatch(/id="p-/);
+  });
+
+  it("the registry is AIGA-only and matches the sprite", () => {
+    const spriteIds = new Set([...SPRITE.matchAll(/<symbol id="([^"]+)"/g)].map((m) => m[1] ?? ""));
+    expect(PICTOGRAMS.length).toBe(60);
+    for (const p of PICTOGRAMS) {
+      expect(p.id.startsWith("aiga-"), `non-AIGA registry id: ${p.id}`).toBe(true);
+      expect(spriteIds.has(p.id), `registry id ${p.id} missing from sprite`).toBe(true);
+    }
+    // sprite ↔ registry are the same set
+    expect([...spriteIds].sort()).toEqual([...PICTOGRAM_IDS].sort());
+  });
+
+  it("every category fallback resolves to a real AIGA pictogram", () => {
+    for (const cat of SIGNAGE_CATEGORIES) {
+      const id = CATEGORY_FALLBACK_SYMBOL[cat]!;
+      expect(id.startsWith("aiga-"), `${cat} fallback not AIGA: ${id}`).toBe(true);
+      expect(isPictogramId(id), `${cat} fallback ${id} not in registry`).toBe(true);
+    }
+  });
+
+  it("every category maps to a canonical airport tone with field+legend tokens", () => {
+    for (const cat of SIGNAGE_CATEGORIES) {
+      const tone = CATEGORY_TONE[cat]!;
+      expect((SIGN_TONES as readonly string[]).includes(tone), `${cat} → unknown tone ${tone}`).toBe(true);
+      // the tone's field/legend tokens exist in the CSS layer
+      expect(cssN).toContain(`--sign-${tone}-field:`);
+      expect(cssN).toContain(`--sign-${tone}-legend:`);
     }
   });
 });

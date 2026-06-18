@@ -10,30 +10,19 @@ import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
+  CATEGORY_TONE,
   SIGNAGE_CATEGORY_LABELS,
   SIGNAGE_STANDARD_LABELS,
   placementTotals,
   pictogramSymbolId,
-  type SignageCategory,
   type SignageSign,
   type SignagePlacement,
 } from "@/lib/legend_signage";
-import { SignPanel, type SignTone } from "@/components/signage/SignPanel";
+import { SignPanel } from "@/components/signage/SignPanel";
 import { PictogramPreview } from "../PictogramPreview";
 import { deleteSign } from "../actions";
 
 export const dynamic = "force-dynamic";
-
-/** Map a sign's life-safety category onto its airport color-function tone. */
-const CATEGORY_TONE: Record<SignageCategory, SignTone> = {
-  prohibition: "prohibition",
-  warning: "caution",
-  mandatory: "mandatory",
-  safe_condition: "safety",
-  fire: "prohibition",
-  wayfinding: "directional",
-  accessibility: "information",
-};
 
 export default async function SignDetail({ params }: { params: Promise<{ signId: string }> }) {
   const { signId } = await params;

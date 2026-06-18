@@ -1,9 +1,9 @@
 // AUTO-GENERATED metadata for the signage pictogram sprite (public/brand/pictograms.svg).
 // The SVG art lives in the sprite; this is the addressable id → label/group index
 // powering pictogram pickers and `pictogram_key` validation. Do not hand-edit ids.
-// House `p-*` glyphs + the public-domain AIGA / U.S. DOT symbol-sign set.
+// The sole library is the public-domain AIGA / U.S. DOT symbol-sign set (60 signs).
 
-export type PictogramGroup = "arrows" | "baggage" | "circulation" | "concessions" | "facilities" | "regulatory" | "restrictions" | "restrooms" | "safety" | "services" | "transport" | "travel";
+export type PictogramGroup = "arrows" | "baggage" | "circulation" | "concessions" | "regulatory" | "restrooms" | "safety" | "services" | "transport" | "travel";
 
 export interface Pictogram {
   /** Sprite symbol id — use as `<use href="/brand/pictograms.svg#${id}">`. */
@@ -13,56 +13,6 @@ export interface Pictogram {
 }
 
 export const PICTOGRAMS: readonly Pictogram[] = [
-  {
-    "id": "p-arrow",
-    "label": "Arrow",
-    "group": "arrows"
-  },
-  {
-    "id": "p-firstaid",
-    "label": "First Aid",
-    "group": "safety"
-  },
-  {
-    "id": "p-info",
-    "label": "Information",
-    "group": "services"
-  },
-  {
-    "id": "p-noentry",
-    "label": "No Entry",
-    "group": "restrictions"
-  },
-  {
-    "id": "p-warning",
-    "label": "Warning",
-    "group": "safety"
-  },
-  {
-    "id": "p-fire",
-    "label": "Fire",
-    "group": "safety"
-  },
-  {
-    "id": "p-elevator",
-    "label": "Elevator",
-    "group": "facilities"
-  },
-  {
-    "id": "p-restroom",
-    "label": "Restroom",
-    "group": "facilities"
-  },
-  {
-    "id": "p-access",
-    "label": "Accessibility",
-    "group": "facilities"
-  },
-  {
-    "id": "p-exit",
-    "label": "Exit",
-    "group": "safety"
-  },
   {
     "id": "aiga-telephone",
     "label": "Telephone",

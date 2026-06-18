@@ -60,7 +60,6 @@ export default async function SignageLibraryPage() {
                 key={sign.id}
                 href={`/console/legend/signage/${sign.id}`}
                 className="surface hover-lift flex flex-col gap-3 rounded-lg p-4"
-                style={sign.colorway ? { color: colorwayTint(sign.colorway) } : undefined}
               >
                 <div className="flex items-start justify-between gap-2">
                   <PictogramPreview sign={sign} />
@@ -82,19 +81,4 @@ export default async function SignageLibraryPage() {
       </div>
     </>
   );
-}
-
-/**
- * Map a human colorway label to a theme token so the pictogram glyph
- * (which paints with currentColor) reads in the right safety hue while
- * staying within the token system — no raw hex. Falls back to the
- * default text token.
- */
-function colorwayTint(colorway: string): string {
-  const c = colorway.toLowerCase();
-  if (c.includes("green")) return "var(--p-success, var(--p-text-1))";
-  if (c.includes("red")) return "var(--p-danger, var(--p-text-1))";
-  if (c.includes("yellow") || c.includes("amber")) return "var(--p-warning, var(--p-text-1))";
-  if (c.includes("blue")) return "var(--p-info, var(--p-text-1))";
-  return "var(--p-text-1)";
 }

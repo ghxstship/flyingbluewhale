@@ -114,19 +114,60 @@ export function isSignageCategory(v: string): v is SignageCategory {
 }
 
 /**
- * Per-category fallback symbol id in `public/brand/pictograms.svg` —
- * used when a sign has no explicit pictogram_key. Keys map to real
- * `p-*` symbols present in the shared sprite.
+ * Per-category fallback symbol id in `public/brand/pictograms.svg` — used when
+ * a sign has no explicit pictogram_key. Values are ids in the sole pictogram
+ * library: the public-domain AIGA / U.S. DOT symbol-sign set (see
+ * `src/lib/signage_pictograms.ts`). The AIGA standard set has no generic
+ * warning, mandatory, or ISA-accessibility pictogram, so those categories fall
+ * back to the nearest available sign (no-entry / information).
  */
 export const CATEGORY_FALLBACK_SYMBOL: Record<SignageCategory, string> = {
-  prohibition: "p-noentry",
-  warning: "p-warning",
-  mandatory: "p-info",
-  safe_condition: "p-exit",
-  fire: "p-fire",
-  wayfinding: "p-arrow",
-  accessibility: "p-access",
+  prohibition: "aiga-no-entry",
+  warning: "aiga-no-entry",
+  mandatory: "aiga-information",
+  safe_condition: "aiga-exit",
+  fire: "aiga-fire-extinguisher",
+  wayfinding: "aiga-arrow-up",
+  accessibility: "aiga-information",
 };
+
+/**
+ * Airport color-function tones (ACRP 52 / AIGA-DOT / ISO 7010). The canonical
+ * vocabulary of the `--sign-*` token layer (src/app/theme/kit-signage.css) and
+ * the `<SignPanel>` tone prop.
+ */
+export const SIGN_TONES = [
+  "directional",
+  "identification",
+  "information",
+  "safety",
+  "mandatory",
+  "prohibition",
+  "caution",
+  "ink",
+  "accent",
+] as const;
+export type SignTone = (typeof SIGN_TONES)[number];
+
+/**
+ * Map a sign's life-safety category onto its airport color-function tone — the
+ * single source for how a sign is colored anywhere it appears (the library
+ * tile, the detail header, a full SignPanel). Drives the `--sign-{tone}-field`
+ * / `--sign-{tone}-legend` tokens.
+ */
+export const CATEGORY_TONE: Record<SignageCategory, SignTone> = {
+  prohibition: "prohibition",
+  warning: "caution",
+  mandatory: "mandatory",
+  safe_condition: "safety",
+  fire: "prohibition",
+  wayfinding: "directional",
+  accessibility: "information",
+};
+
+/** The function field/legend CSS custom properties for a tone. */
+export const signFieldVar = (tone: SignTone): string => `var(--sign-${tone}-field)`;
+export const signLegendVar = (tone: SignTone): string => `var(--sign-${tone}-legend)`;
 
 /**
  * Resolve the shared symbol id for a sign's pictogram, with a safe fallback

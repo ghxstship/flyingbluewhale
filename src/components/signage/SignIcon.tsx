@@ -3,12 +3,14 @@ import { getPictogram } from "@/lib/signage_pictograms";
 
 /**
  * SignIcon — a single wayfinding pictogram from the shared sprite at
- * `/brand/pictograms.svg`, rendered via `<use href="…#<id>">`. Covers both the
- * house `p-*` glyphs and the public-domain AIGA / U.S. DOT symbol-sign set.
+ * `/brand/pictograms.svg`, rendered via `<use href="…#<id>">`. The library is
+ * the public-domain AIGA / U.S. DOT symbol-sign set (all `aiga-*` ids).
  *
- * Monochrome: the sprite glyphs use `currentColor`, so the icon inherits `color`
- * from any ancestor (or the optional `color` prop). Every symbol is normalized
- * to a 48×48 box, so instances stay square and uniform.
+ * Monochrome: the `<svg>` carries `fill="currentColor"`, so the glyph paints in
+ * the inherited `color` (from any ancestor — e.g. a SignPanel field — or the
+ * optional `color` prop). External `<use>` needs this on the svg itself: most
+ * AIGA paths have no own fill and would otherwise default to black. Every
+ * symbol is normalized to a 48×48 box, so instances stay square and uniform.
  *
  * The low-level primitive: `PictogramPreview` (the sign-library tile) and
  * `SignPanel` (the full airport sign) both render through this — one render path.
@@ -22,7 +24,7 @@ export function SignIcon({
   style,
   ...rest
 }: {
-  /** Sprite symbol id, e.g. `aiga-toilets` or `p-exit`. */
+  /** Sprite symbol id, e.g. `aiga-toilets`. */
   name: string;
   size?: number;
   title?: string;
@@ -39,6 +41,7 @@ export function SignIcon({
       width={size}
       height={size}
       viewBox="0 0 48 48"
+      fill="currentColor"
       className={className}
       style={{ display: "block", ...(color ? { color } : {}), ...style }}
       {...rest}

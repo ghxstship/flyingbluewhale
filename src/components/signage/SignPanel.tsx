@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { signFieldVar, signLegendVar, type SignTone } from "@/lib/legend_signage";
 import { SignIcon } from "./SignIcon";
 
 /**
@@ -6,42 +7,16 @@ import { SignIcon } from "./SignIcon";
  * (ACRP 52 / FAA AC 150/5360-12F / AIGA-DOT / ISO 7010). A function-coded
  * colored field carries a pictogram, a legend, and an optional directional
  * arrow, proportioned to cap height H: clear-space 1H, pictogram 1.4H, arrow
- * 1H, gap 0.6H — the SEGD/AIGA anatomy. All colors resolve from the
- * `--sign-*` token layer (src/app/theme/kit-signage.css).
+ * 1H, gap 0.6H — the SEGD/AIGA anatomy. Tone is one of the canonical airport
+ * functions (`SignTone`); all colors resolve from the `--sign-*` token layer
+ * (src/app/theme/kit-signage.css).
  */
-export type SignTone =
-  | "directional"
-  | "identification"
-  | "information"
-  | "info"
-  | "safety"
-  | "mandatory"
-  | "prohibition"
-  | "danger"
-  | "caution"
-  | "ink"
-  | "accent"
-  | "white";
-
+export type { SignTone };
 export type SignSize = "sm" | "md" | "lg" | "xl";
 
-const SIGN_TONES: Record<SignTone, { bg: string; fg: string; keyline?: string }> = {
-  directional: { bg: "var(--sign-directional-field)", fg: "var(--sign-directional-legend)" },
-  identification: {
-    bg: "var(--sign-identification-field)",
-    fg: "var(--sign-identification-legend)",
-    keyline: "var(--sign-identification-keyline)",
-  },
-  information: { bg: "var(--sign-information-field)", fg: "var(--sign-information-legend)" },
-  info: { bg: "var(--sign-information-field)", fg: "var(--sign-information-legend)" },
-  safety: { bg: "var(--sign-safety-field)", fg: "var(--sign-safety-legend)" },
-  mandatory: { bg: "var(--sign-mandatory-field)", fg: "var(--sign-mandatory-legend)" },
-  prohibition: { bg: "var(--sign-prohibition-field)", fg: "var(--sign-prohibition-legend)" },
-  danger: { bg: "var(--sign-prohibition-field)", fg: "var(--sign-prohibition-legend)" },
-  caution: { bg: "var(--sign-caution-field)", fg: "var(--sign-caution-legend)" },
-  ink: { bg: "var(--sign-ink-field)", fg: "var(--sign-ink-legend)" },
-  accent: { bg: "var(--sign-accent-field)", fg: "var(--sign-accent-legend)" },
-  white: { bg: "#ffffff", fg: "#141414" },
+/** Identification is the one tone with a keyline (yellow-on-black + outline). */
+const KEYLINE: Partial<Record<SignTone, string>> = {
+  identification: "var(--sign-identification-keyline)",
 };
 
 /* Cap height H (px) per tier; the rest derive from the anatomy ratios. */
@@ -71,7 +46,7 @@ export function SignPanel({
   className?: string;
   style?: CSSProperties;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "style">) {
-  const t = SIGN_TONES[tone] ?? SIGN_TONES.ink;
+  const t = { bg: signFieldVar(tone), fg: signLegendVar(tone), keyline: KEYLINE[tone] };
   const H = SIGN_CAP[size] ?? SIGN_CAP.md;
   const pad = H; // clear-space ≥ 1 cap height
   const gap = Math.round(H * 0.6);

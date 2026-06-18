@@ -1,19 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
 
-  <!-- House pictograms (LEG3ND originals) -->
-  <symbol id="p-arrow" viewBox="0 0 48 48"><path d="M4 19 h22 v-8 l16 13 -16 13 v-8 H4 Z" fill="currentColor"></path></symbol>
-  <symbol id="p-firstaid" viewBox="0 0 48 48"><path d="M19 6 h10 v13 h13 v10 h-13 v13 h-10 v-13 H6 v-10 h13 Z" fill="currentColor"></path></symbol>
-  <symbol id="p-info" viewBox="0 0 48 48"><circle cx="24" cy="11" r="3.8" fill="currentColor"></circle><rect x="20.5" y="18" width="7" height="21" rx="2.6" fill="currentColor"></rect></symbol>
-  <symbol id="p-noentry" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18.5" fill="none" stroke="currentColor" stroke-width="5"></circle><rect x="11" y="21" width="26" height="6" rx="1.4" fill="currentColor"></rect></symbol>
-  <symbol id="p-warning" viewBox="0 0 48 48"><rect x="21" y="9" width="6" height="20" rx="2.6" fill="currentColor"></rect><circle cx="24" cy="37" r="3.7" fill="currentColor"></circle></symbol>
-  <symbol id="p-fire" viewBox="0 0 48 48"><path d="M26 5 c1 7 8 9 8 18 a10 10 0 0 1 -20 0 c0 -5 2 -7 4 -10 c0.5 2.5 2 3.5 3 4 c-1.5 -4 0 -8 5 -12 Z" fill="currentColor"></path></symbol>
-  <symbol id="p-elevator" viewBox="0 0 48 48"><rect x="9" y="6" width="30" height="36" rx="3.5" fill="none" stroke="currentColor" stroke-width="3.5"></rect><path d="M24 13 l5.5 8 h-11 Z" fill="currentColor"></path><path d="M24 35 l-5.5 -8 h11 Z" fill="currentColor"></path></symbol>
-  <symbol id="p-restroom" viewBox="0 0 48 48"><circle cx="16" cy="10" r="4.4" fill="currentColor"></circle><rect x="11.6" y="16" width="8.8" height="13.5" rx="3.4" fill="currentColor"></rect><rect x="12.6" y="28" width="3" height="11" rx="1.5" fill="currentColor"></rect><rect x="16.8" y="28" width="3" height="11" rx="1.5" fill="currentColor"></rect><circle cx="32" cy="10" r="4.4" fill="currentColor"></circle><path d="M32 15 l6.2 15 h-12.4 Z" fill="currentColor"></path><rect x="29.2" y="29" width="2.8" height="10" rx="1.4" fill="currentColor"></rect><rect x="33" y="29" width="2.8" height="10" rx="1.4" fill="currentColor"></rect></symbol>
-  <symbol id="p-access" viewBox="0 0 48 48"><circle cx="20" cy="9" r="4.2" fill="currentColor"></circle><path d="M17.5 15 l1.5 9 9 0" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="23" cy="31" r="9.2" fill="none" stroke="currentColor" stroke-width="3.2"></circle></symbol>
-  <symbol id="p-exit" viewBox="0 0 48 48"><circle cx="12" cy="9" r="4" fill="currentColor"></circle><rect x="7.8" y="15" width="8.4" height="13" rx="3.2" fill="currentColor"></rect><rect x="8.6" y="27" width="3" height="11" rx="1.5" fill="currentColor"></rect><rect x="12.8" y="27" width="3" height="11" rx="1.5" fill="currentColor"></rect><path d="M26 24 h12 m-5 -5 l5 5 -5 5" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></symbol>
-
-  <!-- AIGA / U.S. DOT Symbol Signs (public domain) — 60 wayfinding pictograms,
-       scaled+centered into a uniform 48×48 box, #000→currentColor for tinting. -->
+  <!-- AIGA / U.S. DOT Symbol Signs (public domain) — the sole wayfinding
+       pictogram library. 60 signs, each scaled+centered into a uniform 48x48
+       box, with #000 normalized to currentColor so they tint to the active
+       sign function color. -->
   <symbol id="aiga-telephone" viewBox="0 0 48 48"><g transform="translate(15.2826 0.0021) scale(0.1002)"><path transform="matrix(.1,0,0,-.1,0,479)" d="M1099.25 4775.25C875 4750 61.2344 4378.07 37.25 2460.25 12.5 440 875 15 1101.25 19.25V1354.25C915 1353.94 877.543 1556.68 835.25 1975.25 806.852 2251.79 798.641 2594.43 835.25 2935.25 860.52 3173.97 905 3407.23 1100.25 3407.25L1099.25 4775.25"></path>
 <path transform="matrix(.1,0,0,-.1,0,479)" d="M1581.25 17.25C1667.5 17.2305 1729.36 87.5 1729.25 166.25L1730.25 167.25C1730.25 167.25 1729.36 1206.87 1729.25 1207.25 1729.36 1290 1662.5 1355.04 1581.25 1355.25H1203.25V17.25C1203.25 17.25 1580.32 16.6484 1580.25 17.25H1581.25"></path>
 <path transform="matrix(.1,0,0,-.1,0,479)" d="M1581.25 3407.25C1667.5 3407.23 1729.36 3477.5 1729.25 3556.25L1730.25 3557.25C1730.25 3557.25 1729.36 4626.87 1729.25 4627.25 1729.36 4710 1662.5 4775.04 1581.25 4775.25H1203.25V3407.25C1203.25 3407.25 1580.32 3406.65 1580.25 3407.25H1581.25"></path></g></symbol>

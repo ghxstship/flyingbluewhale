@@ -528,7 +528,10 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Safety / Operational",
         items: [
-          { label: "Incidents", href: "/console/safety/incidents", icon: "Siren" },
+          // F-E: point at the canonical CRUD home (kanban / new / detail), not
+          // the cross-domain read feed at /console/safety/incidents (which
+          // stays reachable via the safety module + cross-links).
+          { label: "Incidents", href: "/console/operations/incidents", icon: "Siren" },
           { label: "Major Incident", href: "/console/safety/major-incident", icon: "Flame" },
           { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
           { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },

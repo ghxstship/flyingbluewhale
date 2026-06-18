@@ -98,9 +98,7 @@ export default async function Page() {
         </div>
         <DataTable<Row>
           rows={rows}
-          /* No per-row detail route exists yet (only list/new). Rows were
-             linking to /prequalification/[id], which 404s. Keep rows static
-             until the detail page is built. */
+          rowHref={(r) => `/console/procurement/prequalification/${r.id}`}
           emptyLabel={t("console.procurement.prequalification.empty.label", undefined, "No prequalifications yet")}
           emptyDescription={t(
             "console.procurement.prequalification.empty.description",

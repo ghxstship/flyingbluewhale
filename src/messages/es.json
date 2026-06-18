@@ -86,7 +86,8 @@
   "accessDenied": {
    "backToOverview": "Volver al resumen",
    "title": "No tienes acceso"
-  }
+  },
+  "lastUpdated": "Última actualización: {date}"
  },
  "nav": {
   "product": "Producto",
@@ -163,6 +164,10 @@
     "gvteway": {
      "label": "GVTEWAY — Invitados",
      "description": "Ticketing y portal de stakeholders"
+    },
+    "legend": {
+     "label": "LEG3ND — Conocimiento",
+     "description": "Conocimiento, LMS y cumplimiento"
     }
    },
    "industries": {
@@ -231,7 +236,8 @@
      "integrations": "Integraciones",
      "pricing": "Precios",
      "changelog": "Registro de cambios",
-     "roadmap": "Hoja de ruta"
+     "roadmap": "Hoja de ruta",
+     "legend": "LEG3ND"
     },
     "builtFor": {
      "heading": "Hecho para",
@@ -1916,7 +1922,8 @@
      "subtitleLegend": "es el conocimiento sobre el que se levanta: una única fuente de verdad, del primer pitch al desmontaje."
     },
     "trustBar": {
-     "label": "Los mundos que estos equipos construyen funcionan con ATLVS"
+     "label": "Los mundos que estos equipos construyen funcionan con ATLVS",
+     "seeWork": "Ver el trabajo →"
     },
     "threeApps": {
      "eyebrow": "El ecosistema ATLVS",
@@ -2084,7 +2091,9 @@
       "yearsExperience": "Años de experiencia",
       "productionsShipped": "Producciones entregadas",
       "guestsServed": "Asistentes atendidos"
-     }
+     },
+     "source": "Según el historial de producción de GHXSTSHIP Industries hasta 2026.",
+     "sourceLink": "Acerca de"
     },
     "faq": {
      "title": "Preguntas frecuentes.",
@@ -2471,68 +2480,6 @@
      "subtitle": "Regístrate gratis: 30 segundos, sin tarjeta. Gratis es gratis, para siempre.",
      "primaryLabel": "Empieza a construir gratis",
      "secondaryLabel": "Reserva una demostración"
-    }
-   },
-   "pt-BR": {
-    "metadata": {
-     "title": "ATLVS — Dirige el espectáculo",
-     "description": "La plataforma para la producción experiencial en vivo. Cuatro apps, una única fuente de verdad, un solo sistema de diseño — del pitch al wrap. RLS en la base de datos. Hecha por operadores.",
-     "keywords": {
-      "productionManagement": "software de gestión de producción",
-      "eventOperations": "plataforma de operaciones de eventos",
-      "festivalSoftware": "software para festivales",
-      "advancingSoftware": "software de advancing",
-      "liveEventProduction": "plataforma de producción de eventos en vivo"
-     },
-     "ogImageTitle": "Dirige el espectáculo."
-    },
-    "jsonLd": {
-     "description": "La plataforma para la producción experiencial en vivo."
-    },
-    "hero": {
-     "titleLine1": "Producción de experiencias,",
-     "titleLine2": "Unificada.",
-     "subtitle": "La plataforma para el trabajo en vivo. Del pitch al wrap, un solo espacio de trabajo. Cuatro apps, una única fuente de verdad — de la pre-pro al strike.",
-     "primaryCta": "Empieza a construir gratis",
-     "secondaryCta": "Agenda una demo"
-    },
-    "apps": {
-     "subtitle": "Un solo almacén de registros. Cuatro superficies afinadas. La misma verdad desde la oficina, el portal, el campo y el estándar.",
-     "atlvs": {
-      "body": "RFIs, submittals, partes diarios, punch, advancing, finanzas, compras, IA. Una sola barra lateral. Del pitch al wrap."
-     },
-     "gvteway": {
-      "body": "Doce perfiles. Cada uno en su propio carril. Los artistas ven riders. Los proveedores ven órdenes de compra. Los clientes ven propuestas."
-     },
-     "compvss": {
-      "body": "Sin conexión. Menos de 100 ms. Gate scan, control de horarios, incidentes, atención médica, brief diario. Funciona con una sola barra de LTE."
-     },
-     "seeMore": "Ver más"
-    },
-    "faq": {
-     "title": "Preguntas frecuentes",
-     "q1": {
-      "question": "¿Qué hace la plataforma?",
-      "answer": "Todos los módulos de las cuatro apps sobre un mismo almacén de registros compartido. ATLVS es la consola del operador: RFIs, submittals, partes diarios, punch, advancing, finanzas, compras, IA. GVTEWAY es la interfaz pública y el marketplace. COMPVSS es la PWA de campo offline-first: gate scan, control de horarios, incidentes, atención médica, brief diario de seguridad. LEG3ND es Conocimiento, LMS y Recursos sobre el protocolo XPMS 2.0, con el motor de cumplimiento XMCE."
-     },
-     "q2": {
-      "question": "¿Para quién es?",
-      "answer": "Equipos de producción que sacan adelante trabajo en vivo real. Festivales, residencias, giras, talleres de fabricación, activaciones de marca, recintos de broadcast, eventos privados. El esquema es general; el vocabulario es el tuyo."
-     },
-     "q3": {
-      "question": "¿Cómo funcionan los precios?",
-      "answer": "Por organización, no por asiento. Gratis para siempre para equipos pequeños. Sin tarjeta de crédito. Crew abre el equipo. Production desbloquea todos los módulos. Festival es multi-organización con SSO, un DPA personalizado y un SLA del 99,9%."
-     },
-     "q4": {
-      "question": "¿La app de campo realmente funciona sin conexión?",
-      "answer": "Sí. COMPVSS es una PWA offline-first. Escaneo, control de horarios, parte diario, registro de incidentes, registro médico — todo se encola localmente y se sincroniza cuando vuelve la señal. Probada en accesos con 15.000 asistentes."
-     }
-    },
-    "cta": {
-     "title": "ATLVS está abierta.",
-     "subtitle": "Gratis, para siempre, para equipos pequeños. Precio por organización, no por asiento. Sin tarjeta de crédito.",
-     "primaryLabel": "Empieza a construir gratis",
-     "secondaryLabel": "Agenda una demo"
     }
    },
    "roadmap": {

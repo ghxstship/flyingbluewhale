@@ -17,7 +17,16 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
-import { buildMetadata, faqSchema, breadcrumbSchema, CANONICAL_CTAS } from "@/lib/seo";
+import {
+  buildMetadata,
+  faqSchema,
+  breadcrumbSchema,
+  webPageSchema,
+  formatReviewedDate,
+  CONTENT_REVISED,
+  CANONICAL_CTAS,
+  SITE,
+} from "@/lib/seo";
 import { COMPARE, COMPARE_LIST } from "@/lib/compare";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -54,7 +63,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
   const { competitor } = await params;
   const c = COMPARE[competitor];
   if (!c) notFound();
-  const { t } = await getRequestT();
+  const { t, locale } = await getRequestT();
 
   const crumbs = [
     { label: t("marketing.pages.alternatives.competitor.crumbs.home"), href: "/" },
@@ -73,7 +82,17 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(c.faqs)]} />
+      <JsonLd
+        data={[
+          webPageSchema({
+            url: `${SITE.baseUrl}/alternatives/${c.slug}`,
+            name: t("marketing.pages.alternatives.competitor.hero.title", { competitor: c.competitor }),
+            description: c.blurb,
+          }),
+          breadcrumbSchema(crumbs),
+          faqSchema(c.faqs),
+        ]}
+      />
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
@@ -85,6 +104,9 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
         </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.alternatives.competitor.hero.body", { competitor: c.competitor })}
+        </p>
+        <p className="mt-5 text-xs text-[var(--p-text-2)]">
+          {t("common.lastUpdated", { date: formatReviewedDate(CONTENT_REVISED, locale) })}
         </p>
       </section>
 

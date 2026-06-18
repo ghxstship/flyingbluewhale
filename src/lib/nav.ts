@@ -1444,6 +1444,11 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
         href: "/solutions/gvteway",
         descriptionKey: "marketing.header.product.gvteway.description",
       },
+      {
+        labelKey: "marketing.header.product.legend.label",
+        href: "/solutions/legend",
+        descriptionKey: "marketing.header.product.legend.description",
+      },
     ],
   },
   {
@@ -1508,6 +1513,7 @@ export const marketingFooterGroups: MarketingNavGroup[] = [
       { labelKey: "marketing.layout.footer.product.atlvs", href: "/solutions/atlvs" },
       { labelKey: "marketing.layout.footer.product.gvteway", href: "/solutions/gvteway" },
       { labelKey: "marketing.layout.footer.product.compvss", href: "/solutions/compvss" },
+      { labelKey: "marketing.layout.footer.product.legend", href: "/solutions/legend" },
       { labelKey: "marketing.layout.footer.product.features", href: "/features" },
       { labelKey: "marketing.layout.footer.product.ai", href: "/ai" },
       { labelKey: "marketing.layout.footer.product.integrations", href: "/integrations" },

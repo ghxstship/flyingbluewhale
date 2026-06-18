@@ -95,6 +95,12 @@ export function AuthShell({
       {/* Form pane */}
       <main className="flex items-center justify-center px-6 py-12 sm:py-16">
         <div className="w-full max-w-sm">
+          {/* C2 — the persuasion rail is hidden below lg; carry one value line
+              above the form so the "why" survives the breakpoint. */}
+          <p className="mb-6 text-xs font-medium text-[var(--p-text-2)] lg:hidden">
+            <span className="font-semibold text-[var(--p-accent-text)]">{tagline}</span>{" "}
+            {highlights[0]?.label}
+          </p>
           <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
           {subtitle && <p className="mt-2 text-sm text-[var(--p-text-2)]">{subtitle}</p>}
           <div className="mt-8">{children}</div>

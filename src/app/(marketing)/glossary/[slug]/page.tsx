@@ -5,7 +5,15 @@ import { ArrowRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, breadcrumbSchema, definedTermSchema, SITE } from "@/lib/seo";
+import {
+  buildMetadata,
+  breadcrumbSchema,
+  definedTermSchema,
+  webPageSchema,
+  formatReviewedDate,
+  CONTENT_REVISED,
+  SITE,
+} from "@/lib/seo";
 import { GLOSSARY, GLOSSARY_BY_SLUG } from "@/lib/marketing/glossary";
 import { MODULES } from "@/lib/marketing/modules";
 import { getRequestT } from "@/lib/i18n/request";
@@ -44,7 +52,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
   const { slug } = await params;
   const entry = GLOSSARY_BY_SLUG[slug];
   if (!entry) notFound();
-  const { t } = await getRequestT();
+  const { t, locale } = await getRequestT();
 
   const crumbs = [
     { label: t("common.home", undefined, "Home"), href: "/" },
@@ -62,6 +70,11 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
             description: entry.long,
             url: `${SITE.baseUrl}/glossary/${entry.slug}`,
             inDefinedTermSet: `${SITE.baseUrl}/glossary`,
+          }),
+          webPageSchema({
+            url: `${SITE.baseUrl}/glossary/${entry.slug}`,
+            name: entry.term,
+            description: entry.short,
           }),
         ]}
       />
@@ -82,6 +95,9 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
           </p>
         ) : null}
         <p className="mt-6 text-lg leading-relaxed text-[var(--p-text-2)]">{entry.long}</p>
+        <p className="mt-6 text-xs text-[var(--p-text-2)]">
+          {t("common.lastUpdated", { date: formatReviewedDate(CONTENT_REVISED, locale) })}
+        </p>
       </article>
 
       {entry.modules && entry.modules.length > 0 ? (

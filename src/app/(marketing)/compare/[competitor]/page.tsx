@@ -9,7 +9,17 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
-import { buildMetadata, faqSchema, breadcrumbSchema, reviewSchema, CANONICAL_CTAS } from "@/lib/seo";
+import {
+  buildMetadata,
+  faqSchema,
+  breadcrumbSchema,
+  reviewSchema,
+  webPageSchema,
+  formatReviewedDate,
+  CONTENT_REVISED,
+  CANONICAL_CTAS,
+  SITE,
+} from "@/lib/seo";
 import { Button } from "@/components/ui/Button";
 import { COMPARE, COMPARE_LIST } from "@/lib/compare";
 import { getRequestT } from "@/lib/i18n/request";
@@ -51,7 +61,7 @@ function CellMark({ value, yesLabel, noLabel }: { value: string | boolean; yesLa
 
 export default async function CompareDetail({ params }: { params: Promise<{ competitor: string }> }) {
   const { competitor } = await params;
-  const { t } = await getRequestT();
+  const { t, locale } = await getRequestT();
   const c = COMPARE[competitor];
   if (!c) notFound();
 
@@ -65,6 +75,11 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
     <div>
       <JsonLd
         data={[
+          webPageSchema({
+            url: `${SITE.baseUrl}/compare/${c.slug}`,
+            name: `ATLVS Technologies vs. ${c.competitor}`,
+            description: c.blurb,
+          }),
           breadcrumbSchema(crumbs),
           faqSchema(c.faqs),
           ...(c.quote
@@ -95,6 +110,9 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
           <div className="eyebrow">{t("marketing.pages.compare.detail.bottomLine.eyebrow")}</div>
           <div className="mt-2 text-sm font-medium">{c.bottomLine}</div>
         </div>
+        <p className="mt-4 text-xs text-[var(--p-text-2)]">
+          {t("common.lastUpdated", { date: formatReviewedDate(CONTENT_REVISED, locale) })}
+        </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">

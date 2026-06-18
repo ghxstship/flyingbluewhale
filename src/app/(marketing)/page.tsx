@@ -357,6 +357,21 @@ export default async function Home() {
                 </Link>
               </div>
               <p className="mt-6 text-xs text-[var(--p-text-3)]">{t("marketing.pages.home.hero.disclaimer")}</p>
+              {/* C1 — the four-app story survives below lg, where the wide
+                  ecosystem rail is hidden. Compact 2-up, plain names (no
+                  letter-spaced Wordmark that overflows narrow tracks). */}
+              <div className="mt-8 grid grid-cols-2 gap-2.5 lg:hidden">
+                {PRODUCTS.map((p) => (
+                  <div key={p.slug} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-3">
+                    <div className="text-sm font-bold" style={{ color: p.textColor }}>
+                      {p.title}
+                    </div>
+                    <p className="mt-0.5 text-[11px] font-medium tracking-[0.06em] text-[var(--p-text-3)] uppercase">
+                      {p.tag}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
             {/* lg+ only — the Wordmark letter-row's min-content width (~228px)
                 cannot fit the 768px tablet column and overflowed the viewport
@@ -390,14 +405,24 @@ export default async function Home() {
           <p className="text-center text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-3)] uppercase">
             {t("marketing.pages.home.trustBar.label")}
           </p>
+          {/* C3 — receipts, not claims: each name deep-links to the proof,
+              and the band routes to /customers. (Grayscale brand logos land
+              when rights clear; the link makes it navigable today.) */}
           <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-sm font-bold tracking-[0.12em] text-[var(--p-text-1)] uppercase opacity-80">
-            <span>Red Bull</span>
-            <span>Heineken</span>
-            <span>Formula 1</span>
-            <span>Insomniac</span>
-            <span>Patrón</span>
-            <span>Polymarket</span>
+            {["Red Bull", "Heineken", "Formula 1", "Insomniac", "Patrón", "Polymarket"].map((name) => (
+              <Link key={name} href="/customers" className="transition-opacity hover:opacity-100">
+                {name}
+              </Link>
+            ))}
           </div>
+          <p className="mt-5 text-center">
+            <Link
+              href="/customers"
+              className="text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent-text)] uppercase hover:underline"
+            >
+              {t("marketing.pages.home.trustBar.seeWork", undefined, "See the work →")}
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -584,10 +609,12 @@ export default async function Home() {
               <span>{t("marketing.pages.home.projects.tableHeaders.title")}</span>
               <span>{t("marketing.pages.home.projects.tableHeaders.year")}</span>
             </div>
+            {/* C4 — proof is navigable, not a dead table. */}
             {PROJECTS.map((v) => (
-              <div
+              <Link
                 key={v.code}
-                className="grid grid-cols-[110px_1fr_70px] items-center gap-4 border-b border-[var(--p-border)] px-5 py-4 last:border-b-0"
+                href="/customers"
+                className="grid grid-cols-[110px_1fr_70px] items-center gap-4 border-b border-[var(--p-border)] px-5 py-4 transition-colors last:border-b-0 hover:bg-[var(--p-surface-2)]"
               >
                 <span className="font-mono text-xs font-semibold text-[var(--p-text-1)]">{v.code}</span>
                 <div>
@@ -595,7 +622,7 @@ export default async function Home() {
                   <div className="text-xs text-[var(--p-text-3)]">{v.sub}</div>
                 </div>
                 <span className="font-mono text-xs text-[var(--p-text-2)]">{v.year}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -618,6 +645,13 @@ export default async function Home() {
               </div>
             ))}
           </div>
+          {/* C4 — attribute the stats (no orphan numbers). */}
+          <p className="mt-4 text-center text-[11px] text-[var(--p-text-3)]">
+            {t("marketing.pages.home.stats.source", undefined, "From GHXSTSHIP Industries production history through 2026.")}{" "}
+            <Link href="/about" className="text-[var(--p-accent-text)] hover:underline">
+              {t("marketing.pages.home.stats.sourceLink", undefined, "About")}
+            </Link>
+          </p>
         </div>
       </section>
 

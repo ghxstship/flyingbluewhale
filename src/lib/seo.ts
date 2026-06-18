@@ -20,6 +20,28 @@ export const CANONICAL_CTAS = {
   secondary: { label: "Book a Walkthrough", href: "/contact" },
 } as const;
 
+/**
+ * Editorial-review provenance (E6 — WORLDS GEO). Evergreen marketing surfaces
+ * (comparisons, alternatives, glossary) carry no per-row publish date, so we
+ * stamp them with a single repo-level "content last reviewed" date — the day
+ * the copy was last editorially verified. Surfaced both visibly (a "Last
+ * updated" dateline) and in `webPageSchema().dateModified` so answer engines
+ * read a real freshness signal instead of inferring staleness. Bump this when
+ * an evergreen content pass lands; keep it ISO (YYYY-MM-DD) and truthful.
+ */
+export const CONTENT_REVISED = "2026-06-18";
+
+/** Localized long-date for a provenance dateline (e.g. "June 18, 2026"). */
+export function formatReviewedDate(iso: string = CONTENT_REVISED, locale = "en-US"): string {
+  // Parse as UTC midnight so the rendered day never shifts by timezone.
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString(locale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 // Locale SSOT lives in `src/lib/i18n/config.ts`. The cookie-based switcher
 // in `LocaleSwitcher.tsx` is the active path today. When /[locale] URL
 // routing lands, `buildMetadata.languages` already plumbs hreflang.
@@ -576,5 +598,34 @@ export function definedTermSchema({
     description,
     url,
     ...(inDefinedTermSet ? { inDefinedTermSet } : {}),
+  };
+}
+
+/**
+ * Minimal WebPage node carrying provenance (E6). Use on evergreen pages that
+ * have no Article/Product schema of their own to advertise a `dateModified`
+ * freshness signal. Defaults the revision date to the repo-level
+ * `CONTENT_REVISED` stamp.
+ */
+export function webPageSchema({
+  url,
+  name,
+  description,
+  dateModified = CONTENT_REVISED,
+}: {
+  url: string;
+  name: string;
+  description?: string;
+  dateModified?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": url,
+    url,
+    name,
+    ...(description ? { description } : {}),
+    dateModified,
+    isPartOf: { "@type": "WebSite", "@id": SITE.baseUrl },
   };
 }

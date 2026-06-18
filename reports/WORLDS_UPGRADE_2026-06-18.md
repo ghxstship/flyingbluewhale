@@ -21,11 +21,29 @@
 
 **Re-translation (surgical):** the **55** changed/new `en` keys re-translated into all 6 locales (ar/de/es/fr/ja/pt) via per-language transcreation agents — World Engine voice, brand names + `{email}` preserved, primary CTA consistent. Verified: full key parity (0 drift), no placeholder leaks.
 
-## Deferred — Parts C (structural UX), D3, E4/E5 (the handoff's PR-3/PR-4)
+## Done (deferred batch) — Parts C, D3, E4/E5/E6
 
-Larger frontend/content work, intentionally separate per the handoff's own 4-PR plan:
-- **C1** mobile hero ecosystem (build a stacked < lg layout) · **C2** auth-rail value line on mobile · **C3** trust bar = brand logos/links not text · **C4** clickable proof rows + stat sources · **C5** app-card accent emphasis · **C6** product imagery/screenshots.
-- **D3** `/[locale]` URL routing before hreflang promotion.
-- **E4** glossary expansion + `definedTermSchema` · **E5** `/compare` & `/alternatives` verdict + structured tables · **E6** `dateModified` provenance.
+Executed 2026-06-18 (this change). tsc + lint + guard tests + production build all green; sitemap 0 orphan / 0 dangling.
 
-These touch layout/components/assets/routing rather than copy SSOT; recommend as the next PR.
+**Part C (structural UX):**
+- **C1** mobile hero four-app grid (stacked 2×2 < lg) — verified at 390px.
+- **C2** auth-rail value line carried above the form on mobile (`AuthShell`) — verified.
+- **C3** trust bar is now clickable brand links → `/customers` + a "See the work →" link (`trustBar.seeWork`).
+- **C4** proof rows are clickable (`<Link>` → `/customers`) + a stats provenance footnote (`stats.source` / `stats.sourceLink`).
+- **C5** app-card accent band — already present (per-product top band + AA `textColor`); no change needed.
+- **C6** product imagery/screenshots — **asset-blocked.** No real product screenshots exist; empty placeholder frames would degrade the live site, so deferred until real assets land. (Honest no-op, not a silent skip.)
+
+**D3 (locale routing / hreflang):** investigated — `/es-ES` + `/pt-BR` are *real* distinct URLs, so the emitted hreflang (en/es/pt only) is honest, not premature; no scope-out needed. The two pages were **stale** (three apps, old CTA/voice) and contradicted WORLDS canon while live, so both were rewritten to the four-app World-Engine voice as symmetric self-contained inline localized pages (satisfying the user's "re-translate the entire codebase to match the new copy for all languages"). The now-dead `marketing.pages.pt-BR.*` catalog namespace (32 keys × 7 locales) was removed.
+
+**E4 (glossary `definedTermSchema`):** already wired (`definedTermSchema` + `inDefinedTermSet` on `/glossary/[slug]`). Added a `webPageSchema` provenance node alongside it.
+
+**E5 (`/compare` & `/alternatives` verdict + structured tables):** already strong — `/compare/[competitor]` carries a "bottom line" verdict, a structured feature-matrix `<table>`, balanced "when they win", `faqSchema`, and `reviewSchema`. No content gap; layered E6 provenance on top.
+
+**E6 (`dateModified` provenance):** new `CONTENT_REVISED` SSOT date + `formatReviewedDate()` + `webPageSchema()` in `seo.ts`; a localized "Last updated {date}" dateline (`common.lastUpdated`, all 7 locales) + a `webPageSchema` `dateModified` node now ship on `/compare/[competitor]`, `/alternatives/[competitor]`, and `/glossary/[slug]`.
+
+**Four-app parity fix (uncovered during D3):** the home (and the new es/pt) LEG3ND card linked `/solutions/legend`, which **404'd** — three of four apps had a solution page, LEG3ND did not. Built the real fourth page (`/solutions/legend`, Production-Orange accent, eight-pillar grid, XPMS-2.0 callout, FAQ, `productSchema`) and wired it into `nav.ts` (header megamenu + footer) with localized labels across all 7 catalogs. Sitemap regenerated. *(English copy for now; localizing the page body is the one honest follow-up, tracked with C6 imagery.)*
+
+## Remaining follow-ups (asset/localization, non-blocking)
+
+- **C6** product screenshots — needs real assets.
+- Localize the `/solutions/legend` page body (currently English; nav labels are localized).

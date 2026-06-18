@@ -13,13 +13,27 @@ import {
   SIGNAGE_CATEGORY_LABELS,
   SIGNAGE_STANDARD_LABELS,
   placementTotals,
+  pictogramSymbolId,
+  type SignageCategory,
   type SignageSign,
   type SignagePlacement,
 } from "@/lib/legend_signage";
+import { SignPanel, type SignTone } from "@/components/signage/SignPanel";
 import { PictogramPreview } from "../PictogramPreview";
 import { deleteSign } from "../actions";
 
 export const dynamic = "force-dynamic";
+
+/** Map a sign's life-safety category onto its airport color-function tone. */
+const CATEGORY_TONE: Record<SignageCategory, SignTone> = {
+  prohibition: "prohibition",
+  warning: "caution",
+  mandatory: "mandatory",
+  safe_condition: "safety",
+  fire: "prohibition",
+  wayfinding: "directional",
+  accessibility: "information",
+};
 
 export default async function SignDetail({ params }: { params: Promise<{ signId: string }> }) {
   const { signId } = await params;
@@ -90,6 +104,24 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
             <Field label="Installed">{totals.installed}</Field>
             <Field label="Removed">{totals.removed}</Field>
             <Field label="Added">{timeAgo(sign.created_at)}</Field>
+          </div>
+        </div>
+
+        <div className="surface p-5">
+          <h3 className="text-sm font-semibold">Wayfinding preview</h3>
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
+            Built to airport standards (ACRP 52 / AIGA-DOT / ISO 7010) — the {SIGNAGE_CATEGORY_LABELS[sign.category]}{" "}
+            color function, proportioned to cap height.
+          </p>
+          <div className="mt-4 flex flex-wrap items-end gap-4">
+            <SignPanel icon={pictogramSymbolId(sign)} label={sign.name} tone={CATEGORY_TONE[sign.category]} size="lg" />
+            <SignPanel
+              icon={pictogramSymbolId(sign)}
+              label={sign.name}
+              tone={CATEGORY_TONE[sign.category]}
+              size="md"
+              arrow="aiga-arrow-right"
+            />
           </div>
         </div>
 

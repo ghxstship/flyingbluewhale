@@ -11,6 +11,7 @@ import {
   SIGN_STATE_LABELS,
   type SignageSign,
 } from "@/lib/legend_signage";
+import { PICTOGRAMS } from "@/lib/signage_pictograms";
 import { createSignAction, type State } from "../actions";
 
 export function NewSignForm({
@@ -78,9 +79,17 @@ export function NewSignForm({
           name="pictogram_key"
           required
           maxLength={120}
-          placeholder="p-exit"
+          list="pictogram-ids"
+          placeholder="aiga-exit"
           defaultValue={sign?.pictogram_key ?? ""}
         />
+        <datalist id="pictogram-ids">
+          {PICTOGRAMS.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.label} · {p.group}
+            </option>
+          ))}
+        </datalist>
         <Input
           label="Colorway"
           name="colorway"

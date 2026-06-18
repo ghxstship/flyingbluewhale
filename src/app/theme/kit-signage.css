@@ -1,0 +1,133 @@
+/* ============================================================================
+   ATLVS · SIGNAGE MICRO BRAND KIT — airport wayfinding standards, encoded.
+   ----------------------------------------------------------------------------
+   The LEG3ND wayfinding token layer. Mirrors the published guidance the system
+   is built on:
+     • ACRP Report 52 — Wayfinding & Signing Guidelines for Airport Terminals
+       and Landside (TRB / National Academies, 2011)
+     • FAA AC 150/5360-12F — Airport Signing and Graphics
+     • AIGA / U.S. DOT Symbol Signs (the public-domain pictogram set)
+     • ISO 7010 safety-color conventions; SEGD wayfinding practice
+
+   SSOT: the canonical seed palette below is also documented in
+   `src/app/theme/tokens.json#signage`; `src/lib/theme/signage-tokens.test.ts`
+   guards that the two can't fork. Loaded after kit-reports.css from index.css.
+   Tokens are mode-agnostic and live on :root, so they resolve under any
+   product/mode theme.
+
+   Rendered by <SignIcon> / <SignPanel> (src/components/signage/) over the
+   pictogram sprite at public/brand/pictograms.svg.
+   ============================================================================ */
+
+:root {
+  /* ----------------------------------------------------------------------
+     0. SEED PALETTE — the wayfinding white-label surface (the ONLY place
+        signage colors are authored). Airport-standard defaults
+        (ACRP 52 / FAA / ISO 7010). Override these eight to re-skin
+        wayfinding (globally at :root, or scoped to a [data-brand] wrapper);
+        the function mapping in Tier 2 never moves.
+     ---------------------------------------------------------------------- */
+  --sign-c-yellow: #f2b000; /* direction / caution */
+  --sign-c-ink: #141414; /* dark field + legend */
+  --sign-c-blue: #0b5fa5; /* information / services */
+  --sign-c-green: #1e8a4c; /* safety / egress */
+  --sign-c-red: #c8102e; /* prohibition / fire */
+  --sign-c-mandatory: #1d4ed8; /* mandatory (ISO blue) */
+  --sign-c-white: #ffffff; /* light legend */
+  --sign-c-brand: var(--brand-legend); /* house accent (Production Orange) */
+
+  /* ----------------------------------------------------------------------
+     1. COLOR SYSTEM — function-coded sign field + legend pairs.
+        Airport convention: YELLOW=direction · BLACK/YELLOW=location ·
+        RED=mandatory/stop · BLUE=services & information · GREEN=egress/safety.
+        Each pair is a high-contrast field/legend couple per the ≥70% rule.
+        The semantics are fixed; the palette (above) is not.
+     ---------------------------------------------------------------------- */
+  /* Directional — "to gates / baggage / exit". Yellow field, black legend. */
+  --sign-directional-field: var(--sign-c-yellow);
+  --sign-directional-legend: var(--sign-c-ink);
+
+  /* Identification / location — "you are here", room & zone names.
+     Black field, yellow legend + yellow keyline. */
+  --sign-identification-field: var(--sign-c-ink);
+  --sign-identification-legend: var(--sign-c-yellow);
+  --sign-identification-keyline: var(--sign-c-yellow);
+
+  /* Information & passenger services — restrooms, info, food, amenities. */
+  --sign-information-field: var(--sign-c-blue);
+  --sign-information-legend: var(--sign-c-white);
+
+  /* Safety / egress — exit, first aid, assembly (ISO 7010 safe-condition). */
+  --sign-safety-field: var(--sign-c-green);
+  --sign-safety-legend: var(--sign-c-white);
+
+  /* Mandatory — must-do, e.g. crew PPE (ISO 7010 mandatory blue). */
+  --sign-mandatory-field: var(--sign-c-mandatory);
+  --sign-mandatory-legend: var(--sign-c-white);
+
+  /* Prohibition / fire equipment / restricted (ISO 7010 red). */
+  --sign-prohibition-field: var(--sign-c-red);
+  --sign-prohibition-legend: var(--sign-c-white);
+
+  /* Caution / warning (ISO 7010 warning yellow, black legend). */
+  --sign-caution-field: var(--sign-c-yellow);
+  --sign-caution-legend: var(--sign-c-ink);
+
+  /* Neutral ink (generic LEG3ND direction) + brand accent. */
+  --sign-ink-field: var(--sign-c-ink);
+  --sign-ink-legend: var(--sign-c-white);
+  --sign-accent-field: var(--sign-c-brand);
+  --sign-accent-legend: var(--sign-c-white);
+
+  /* Minimum legend/field contrast (ADA / ACRP 52). */
+  --sign-min-contrast: 70%;
+
+  /* ----------------------------------------------------------------------
+     2. LEGIBILITY SCALE — cap height ↔ viewing distance.
+        ~1 inch of cap height per 10 ft of max readable distance. Four tiers
+        map to the SignPanel sizes sm·md·lg·xl. Inch/ft values are the
+        real-world spec; --*-px are the on-screen rendering used by panels.
+     ---------------------------------------------------------------------- */
+  --sign-cap-sm: 1.5in;
+  --sign-dist-sm: 15ft;
+  --sign-cap-sm-px: 16px;
+  --sign-cap-md: 3in;
+  --sign-dist-md: 30ft;
+  --sign-cap-md-px: 24px;
+  --sign-cap-lg: 6in;
+  --sign-dist-lg: 60ft;
+  --sign-cap-lg-px: 34px;
+  --sign-cap-xl: 10in;
+  --sign-dist-xl: 100ft;
+  --sign-cap-xl-px: 48px;
+
+  /* ----------------------------------------------------------------------
+     3. ANATOMY — proportioned to cap height (H), the SEGD/AIGA way:
+        clear-space ≥ 1H · pictogram ≈ 1.4H · arrow ≈ 1H · gap ≈ 0.6H ·
+        keyline ≈ 0.15H. LEG3ND signs are soft-cornered, not square plates.
+     ---------------------------------------------------------------------- */
+  --sign-clearspace: 1;
+  --sign-symbol-ratio: 1.4;
+  --sign-arrow-ratio: 1;
+  --sign-gap-ratio: 0.6;
+  --sign-keyline-ratio: 0.15;
+  --sign-radius: 14px;
+
+  /* ----------------------------------------------------------------------
+     4. TYPOGRAPHY — the airport-signage face. Mixed case for word-shape
+        recognition (NOT all-caps); tracking opens at small sizes. The
+        licensed Frutiger/Airport face is NOT redistributed here — this
+        degrades to the LEG3ND `data-type="legend"` fallback stack until a
+        licensed face is mounted via @font-face in /fonts.
+     ---------------------------------------------------------------------- */
+  --sign-font: "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --sign-legend-weight: 600;
+  --sign-legend-case: none; /* mixed case — do not uppercase */
+  --sign-legend-tracking: 0.01em;
+  --sign-legend-tracking-sm: 0.02em;
+
+  /* ----------------------------------------------------------------------
+     5. MESSAGE DENSITY — cap destinations per panel (MUTCD/SEGD: 3–5 max).
+     ---------------------------------------------------------------------- */
+  --sign-max-destinations: 5;
+}

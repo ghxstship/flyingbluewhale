@@ -38,7 +38,8 @@ Six route groups, three of them are full shells with distinct layouts:
 
 - **Fonts (MONUMENT):** Anton (display) + Hanken Grotesk (body) + Space Mono (eyebrow/mono) + Jost (wordmark) via `next/font`.
 - **Tokens:** Defined in `src/app/globals.css` under `@theme inline`. Light/dark via `data-theme` on `<html>`. Brand overlay via `data-platform`.
-- **Primitives:** `Button`, `Input`, `Badge`, `Avatar`, `ProgressBar`, `ThemeToggle`, `Card`, `MetricCard`, `EmptyState`, `StatusBadge` in `src/components/ui/`.
+- **Primitives:** `Button`, `Input`, `Badge`, `Avatar`, `ProgressBar`, `ThemeToggle`, `Card`, `MetricCard`, `EmptyState`, `StatusBadge`, `Skeleton` (+ `SkeletonText`/`SkeletonTableRows`/`SkeletonCard`, the `.ps-skel` shimmer) in `src/components/ui/`. Charts in `src/components/charts/`: `ChartShell`, `Sparkline`, `BarChart` (the last two read the `--chart-*` ramp).
+- **Responsive + data-viz tokens (kit "(1)" upgrade):** breakpoint tokens `--bp-sm…2xl` + `--p-content-max` and the 8-color data-viz ramp `--chart-1…8` (+ `--chart-grid/axis/label` chrome) are hand-authored in `atlvs-product.css :root`, documented in `tokens.json#breakpoints`/`#chart`, and guarded by `src/lib/theme/dataviz-tokens.test.ts`. Mode-agnostic series; chrome derives from `--p-*`.
 - **Shell helpers:** `ModuleHeader`, `PlatformSidebar`, `PortalRail`, `MobileTabBar`, `AuthCard`, `MarketingHeader`, `PageSkeleton` in `src/components/Shell.tsx`. (`PageStub` was retired in the 2026-06-09 audit — new routes build real pages.)
 - **Utilities:** `.surface`, `.surface-raised`, `.surface-inset`, `.elevation-{1..4}`, `.hover-lift`, `.press-scale`, `.metric-grid`, `.data-table`, `.nav-item`, `.glass-nav`, `.skeleton`.
 

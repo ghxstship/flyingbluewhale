@@ -105,6 +105,32 @@
   --p-6: 24px;
   --p-8: 32px;
 
+  /* Responsive breakpoint tokens — mobile-first min-widths (sm phones · md
+     tablet · lg laptop · xl desktop · 2xl wide). Reference in matchMedia / JS;
+     product shells go single-column below md. Mirrored in tokens.json#breakpoints. */
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+  --p-content-max: 1200px; /* max content column width */
+
+  /* Data-viz categorical ramp — 8 distinguishable series colors, ordered for
+     adjacency contrast; -grid/-axis/-label are the chart chrome (mode-aware via
+     --p-* fallbacks). Mode-agnostic series; semantic up/down stay
+     --p-success/--p-danger. Mirrored in tokens.json#chart. */
+  --chart-1: #2563eb;
+  --chart-2: #e8500a;
+  --chart-3: #1f8a5b;
+  --chart-4: #f0b255;
+  --chart-5: #8b5cf6;
+  --chart-6: #ec4899;
+  --chart-7: #14b8a6;
+  --chart-8: #64748b;
+  --chart-grid: color-mix(in oklab, var(--p-border, #e4e7ec) 70%, transparent);
+  --chart-axis: var(--p-text-3, #656d7a);
+  --chart-label: var(--p-text-2, #5b6472);
+
   /* Elevation — 3-step (resting → hover → popover/modal). */
   --p-shadow-sm: 0 1px 2px rgba(16, 20, 30, 0.05);
   --p-shadow: 0 1px 2px rgba(16, 20, 30, 0.06), 0 2px 6px rgba(16, 20, 30, 0.05);

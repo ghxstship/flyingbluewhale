@@ -50,7 +50,7 @@ export const DialogContent = React.forwardRef<
       <DialogOverlay />
       <DialogPrimitive.Content
         ref={ref}
-        className={`surface-raised fixed top-1/2 left-1/2 z-50 w-full ${sizes[size]} data-[state=open]:animate-slide-up data-[state=closed]:animate-fade-out -translate-x-1/2 -translate-y-1/2 p-6 outline-none ${className}`}
+        className={`surface-raised fixed top-1/2 left-1/2 z-50 w-full ${sizes[size]} rounded-[var(--p-r-xl)] data-[state=open]:animate-slide-up data-[state=closed]:animate-fade-out -translate-x-1/2 -translate-y-1/2 p-6 outline-none ${className}`}
         {...props}
       >
         {children}

@@ -84,16 +84,28 @@ export function renderBrandRegion(tokens) {
   ].join("\n");
 }
 
-function surfaceBlock(selectors, s, mode) {
+/** Surface-token → neutral-ramp-step map (v7.0). Light is ordered
+ *  lightest→darkest, dark darkest→lightest, so only bg/surface differ by mode
+ *  (the page recedes from the card consistently in both). */
+const NEUTRAL_MAP = {
+  light: { bg: 50, surface: 0, "surface-2": 100, border: 200, "border-2": 300, "text-1": 1000, "text-2": 700, "text-3": 600 },
+  dark: { bg: 0, surface: 50, "surface-2": 100, border: 200, "border-2": 300, "text-1": 1000, "text-2": 700, "text-3": 600 },
+};
+const RAMP_STEPS = ["0", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"];
+
+function surfaceBlock(selectors, s, mode, ramp) {
+  const map = NEUTRAL_MAP[mode];
   return block(selectors, [
-    `--p-bg: ${lc(s.bg)};`,
-    `--p-surface: ${lc(s.surface)};`,
-    `--p-surface-2: ${lc(s["surface-2"])};`,
-    `--p-border: ${lc(s.border)};`,
-    `--p-border-2: ${lc(s["border-2"])};`,
-    `--p-text-1: ${lc(s["text-1"])};`,
-    `--p-text-2: ${lc(s["text-2"])};`,
-    `--p-text-3: ${lc(s["text-3"])};`,
+    // v7.0 — 12-step neutral ramp is the authoring seed; the surface tokens map onto it.
+    ...RAMP_STEPS.map((k) => `--p-neutral-${k}: ${lc(ramp[k])};`),
+    `--p-bg: var(--p-neutral-${map.bg});`,
+    `--p-surface: var(--p-neutral-${map.surface});`,
+    `--p-surface-2: var(--p-neutral-${map["surface-2"]});`,
+    `--p-border: var(--p-neutral-${map.border});`,
+    `--p-border-2: var(--p-neutral-${map["border-2"]});`,
+    `--p-text-1: var(--p-neutral-${map["text-1"]});`,
+    `--p-text-2: var(--p-neutral-${map["text-2"]});`,
+    `--p-text-3: var(--p-neutral-${map["text-3"]});`,
     `--p-accent-contrast: ${lc(s["accent-contrast"])};`,
     `--p-focus: var(--p-accent);`,
     `color-scheme: ${mode};`,
@@ -116,10 +128,10 @@ export function renderTokenRegion(tokens) {
   const acc = tokens.color.accent;
   const out = [];
 
-  out.push("/* ---------- Surfaces (light default + dark) ---------- */");
-  out.push(surfaceBlock(SEL.light, tokens.color.surface.light, "light"));
+  out.push("/* ---------- Neutral ramp + surfaces (light default + dark) ---------- */");
+  out.push(surfaceBlock(SEL.light, tokens.color.surface.light, "light", tokens.color.neutral.light));
   out.push("");
-  out.push(surfaceBlock(SEL.dark, tokens.color.surface.dark, "dark"));
+  out.push(surfaceBlock(SEL.dark, tokens.color.surface.dark, "dark", tokens.color.neutral.dark));
   out.push("");
   out.push("/* ---------- Per-product accent (reads data-product OR data-platform) ---------- */");
   for (const p of PRODUCTS) {

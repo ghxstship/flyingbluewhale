@@ -16,29 +16,31 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type AlertKind = "error" | "warning" | "info" | "success";
 
+// v7.0 — border/fill stay on the base semantic hue; the TEXT uses the AA
+// --p-{semantic}-text inks so small alert copy clears 4.5:1.
 const KIND_CLASS: Record<AlertKind, { border: string; bg: string; fg: string; Icon: typeof AlertCircle }> = {
   error: {
     border: "border-[color:var(--p-danger)]/40",
     bg: "bg-[color:var(--p-danger)]/10",
-    fg: "text-[color:var(--p-danger)]",
+    fg: "text-[color:var(--p-danger-text)]",
     Icon: AlertCircle,
   },
   warning: {
     border: "border-[color:var(--p-warning)]/40",
     bg: "bg-[color:var(--p-warning)]/10",
-    fg: "text-[color:var(--p-warning)]",
+    fg: "text-[color:var(--p-warning-text)]",
     Icon: AlertTriangle,
   },
   info: {
     border: "border-[color:var(--p-info)]/40",
     bg: "bg-[color:var(--p-info)]/10",
-    fg: "text-[color:var(--p-info)]",
+    fg: "text-[color:var(--p-info-text)]",
     Icon: Info,
   },
   success: {
     border: "border-[color:var(--p-success)]/40",
     bg: "bg-[color:var(--p-success)]/10",
-    fg: "text-[color:var(--p-success)]",
+    fg: "text-[color:var(--p-success-text)]",
     Icon: CheckCircle2,
   },
 };

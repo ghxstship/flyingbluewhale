@@ -26,12 +26,14 @@ export type StatusTone =
   | "error" // alias for danger — shared vocabulary with <Badge> / lib/tones (CN-8)
   | "muted"; // even lower contrast than neutral
 
+// v7.0 — tint fill stays on the base semantic hue; TEXT rides the AA
+// --p-{semantic}-text inks (the base hexes fail 4.5:1 as small chip text).
 const TONE_CLASS: Record<Exclude<StatusTone, "error">, string> = {
   neutral: "bg-[color-mix(in_srgb,var(--p-text-3)_10%,transparent)] text-[var(--p-text-3)]",
-  info: "bg-[color-mix(in_srgb,var(--p-info)_10%,transparent)] text-[var(--p-info)]",
-  success: "bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)] text-[var(--p-success)]",
-  warning: "bg-[color-mix(in_srgb,var(--p-warning)_10%,transparent)] text-[var(--p-warning)]",
-  danger: "bg-[color-mix(in_srgb,var(--p-danger)_10%,transparent)] text-[var(--p-danger)]",
+  info: "bg-[color-mix(in_srgb,var(--p-info)_10%,transparent)] text-[var(--p-info-text)]",
+  success: "bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)] text-[var(--p-success-text)]",
+  warning: "bg-[color-mix(in_srgb,var(--p-warning)_10%,transparent)] text-[var(--p-warning-text)]",
+  danger: "bg-[color-mix(in_srgb,var(--p-danger)_10%,transparent)] text-[var(--p-danger-text)]",
   muted: "bg-[var(--p-surface-2)] text-[var(--p-text-2)]",
 };
 

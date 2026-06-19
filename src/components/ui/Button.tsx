@@ -2,7 +2,7 @@ import type { ReactNode, ButtonHTMLAttributes } from "react";
 import Link from "next/link";
 import { Spinner } from "./Spinner";
 
-export type ButtonVariant = "primary" | "cta" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "cta" | "secondary" | "ghost" | "tertiary" | "link" | "danger";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 // Map this React API onto the kit's .ps-btn classes
@@ -17,6 +17,8 @@ const VARIANT_CLASS: Record<ButtonVariant, string> = {
   cta: "ps-btn ps-btn--cta",
   secondary: "ps-btn ps-btn--ghost",
   ghost: "ps-btn ps-btn--ghost",
+  tertiary: "ps-btn ps-btn--tertiary",
+  link: "ps-btn ps-btn--link",
   danger: "ps-btn ps-btn--danger",
 };
 

@@ -48,15 +48,15 @@ export function MetricCard({
         {icon}
       </div>
       <div
-        className={`mt-2 text-2xl font-semibold tracking-tight ${
-          accent ? "text-[var(--p-accent)]" : "text-[var(--p-text-1)]"
+        className={`mt-2 text-2xl font-extrabold tracking-tight tabular-nums ${
+          accent ? "text-[var(--p-accent-text)]" : "text-[var(--p-text-1)]"
         }`}
       >
         {value}
       </div>
       {delta && (
         <div
-          className={`mt-1 text-xs font-medium ${delta.positive ? "text-[var(--p-success)]" : "text-[var(--p-danger)]"}`}
+          className={`mt-1 text-xs font-medium ${delta.positive ? "text-[var(--p-success-text)]" : "text-[var(--p-danger-text)]"}`}
         >
           <span aria-hidden="true">{delta.positive ? "↑" : "↓"} </span>
           <span className="sr-only">{delta.positive ? "increased" : "decreased"} by </span>

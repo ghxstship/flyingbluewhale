@@ -33,13 +33,14 @@ export const SheetOverlay = React.forwardRef<
 
 type Side = "top" | "right" | "bottom" | "left";
 
+// v7.0 — sheets round their inner edge at --p-r-xl (the edge facing the content).
 const sideClasses: Record<Side, string> = {
-  top: "inset-x-0 top-0 border-b data-[state=open]:animate-slide-down-from-top data-[state=closed]:animate-slide-up-to-top",
+  top: "inset-x-0 top-0 rounded-b-[var(--p-r-xl)] border-b data-[state=open]:animate-slide-down-from-top data-[state=closed]:animate-slide-up-to-top",
   right:
-    "inset-y-0 end-0 h-full w-3/4 border-s sm:max-w-sm data-[state=open]:animate-slide-in-from-right data-[state=closed]:animate-slide-out-to-right",
+    "inset-y-0 end-0 h-full w-3/4 rounded-s-[var(--p-r-xl)] border-s sm:max-w-sm data-[state=open]:animate-slide-in-from-right data-[state=closed]:animate-slide-out-to-right",
   bottom:
-    "inset-x-0 bottom-0 border-t data-[state=open]:animate-slide-up-from-bottom data-[state=closed]:animate-slide-down-to-bottom",
-  left: "inset-y-0 start-0 h-full w-3/4 border-e sm:max-w-sm data-[state=open]:animate-slide-in-from-left data-[state=closed]:animate-slide-out-to-left",
+    "inset-x-0 bottom-0 rounded-t-[var(--p-r-xl)] border-t data-[state=open]:animate-slide-up-from-bottom data-[state=closed]:animate-slide-down-to-bottom",
+  left: "inset-y-0 start-0 h-full w-3/4 rounded-e-[var(--p-r-xl)] border-e sm:max-w-sm data-[state=open]:animate-slide-in-from-left data-[state=closed]:animate-slide-out-to-left",
 };
 
 export const SheetContent = React.forwardRef<

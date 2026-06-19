@@ -29,16 +29,19 @@ The kit's `--p-*` namespace is the single source of truth.
 
 | Token group                                                | Examples                                                                                  |
 | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Neutral ramp (v7.0 surface seed)                          | `--p-neutral-0` … `--p-neutral-1000` (12 steps, light + dark; surfaces map onto it)       |
 | Surface                                                    | `--p-bg` `--p-surface` `--p-surface-2` `--p-border` `--p-border-2`                        |
 | Text                                                       | `--p-text-1` `--p-text-2` `--p-text-3`                                                    |
 | Accent                                                     | `--p-accent` `--p-accent-hover` `--p-accent-text` `--p-accent-weak` `--p-accent-contrast` |
+| Accent ramp (v7.0, derived)                               | `--p-accent-50` … `--p-accent-900` (tint→surface / shade→text-1)                          |
 | Accent CTA (AA-safe filled buttons)                        | `--p-accent-cta` `--p-accent-cta-contrast`                                                |
-| Semantic                                                   | `--p-success` `--p-warning` `--p-danger` `--p-info`                                       |
-| Radii                                                      | `--p-r-sm` `--p-r` `--p-r-lg` `--p-r-pill`                                                |
-| Spacing (4px grid)                                         | `--p-1` … `--p-8`                                                                         |
-| Elevation                                                  | `--p-elev-1` `--p-elev-2` `--p-elev-3` `--p-shadow-sm` `--p-shadow-lg`                    |
+| Semantic (fills/dots/icons)                               | `--p-success` `--p-warning` `--p-danger` `--p-info`                                       |
+| Semantic text (v7.0, AA small-text inks)                  | `--p-success-text` `--p-warning-text` `--p-danger-text` `--p-info-text` (per mode)        |
+| Radii                                                      | `--p-r-sm` `--p-r` `--p-r-md` `--p-r-lg` `--p-r-xl` `--p-r-pill`                          |
+| Spacing (4px grid)                                         | `--p-0-5` `--p-1` … `--p-8` `--p-10` `--p-12` `--p-14` `--p-16` `--p-20` `--p-24`         |
+| Elevation                                                  | `--p-elev-xs` `--p-elev-1` `--p-elev-2` `--p-elev-3` `--p-elev-2xl` (+ `--p-shadow*` aliases) |
 | Motion                                                     | `--p-ease` `--motion-fast/normal/slow/hover/skeleton` `--ease-out/in/standard/hover`      |
-| Type                                                       | `--p-font` `--p-heading` `--p-mono` `--p-eyebrow` `--p-wordmark`                          |
+| Type                                                       | `--p-font` `--p-heading` `--p-mono` `--p-mono-data` `--p-eyebrow` `--p-wordmark` `--p-lh-*` `--p-tracking-*` |
 | Density (`--k-*`)                                          | `--k-ctl-py/px/fs` `--k-row-py/px` `--k-cell-fs` `--k-card-pad`                           |
 | Brand identity (mode-agnostic, for multi-product surfaces) | `--brand-atlvs` `--brand-compvss` `--brand-gvteway` (+ `-ink` text, `-on` contrast)       |
 
@@ -48,9 +51,10 @@ Tailwind v4 `@theme inline` (in `globals.css`) exposes a thin `--color-*` shim t
 
 Defined in `themes/atlvs-product.css`. The full set:
 
-- **Buttons** `.ps-btn` (+ `--ghost --soft --danger --icon --sm --lg`)
-- **Forms** `.ps-input` `.ps-inputgrp` `.ps-field` `.ps-label` `.ps-hint` (`--err`) `.ps-check` (`--radio`) `.ps-toggle` `.ps-seg` `.ps-slider`
-- **Badges + chips** `.ps-badge` (+ `--ok --warn --danger --info --neutral`) `.ps-chip` `.ps-tag` `.ps-dot` (+ `--ok --warn --danger --info --muted`)
+- **Buttons** `.ps-btn` (+ `--cta --ghost --soft --tertiary --link --danger --icon --sm --lg --loading`; mode-aware hover, built-in `:active` + `:focus-visible`)
+- **Forms** `.ps-input` (+ `--sm --lg`, explicit `:disabled`) `.ps-inputgrp` `.ps-field` `.ps-label` `.ps-hint` (`--err`) `.ps-check` (`--radio`) `.ps-toggle` `.ps-seg` `.ps-slider`
+- **Badges + chips** `.ps-badge` (+ `--ok --warn --danger --info --neutral --accent --sm`) `.ps-chip` (+ `--sm --selectable`) `.ps-tag` (+ `--sm`) `.ps-dot` (+ `--ok --warn --danger --info --muted`)
+- **Tables** `.ps-table` (+ `--sticky --zebra`; `.num` numeric cols, sortable `th[aria-sort]`)
 - **Avatars** `.ps-av` (+ `--sm --lg --sq --ghost`) `.ps-avstack`
 - **Nav** `.ps-tabs` `.ps-crumb` `.ps-page` `.ps-menu` (+ `.mi .sep .lbl`) `.ps-kbd`
 - **Data** `.ps-table` `.ps-progress` `.ps-meter` `.ps-stat` `.ps-steps`
@@ -68,7 +72,7 @@ The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES"
 | Surface                                   | Light                                 | Dark                                           |
 | ----------------------------------------- | ------------------------------------- | ---------------------------------------------- |
 | `--p-text-1` on `--p-bg`                  | `#181b23` on `#f7f8fa` → 16.0:1 (AAA) | `#f2f4f8` on `#111318` → 17.4:1 (AAA)          |
-| `--p-text-2` on `--p-surface`             | `#5b6472` on `#ffffff` → 7.3:1 (AAA)  | `#a6aebc` on `#1a1d24` → 9.4:1 (AAA)           |
+| `--p-text-2` on `--p-surface` (v7.0)      | `#4a5563` on `#ffffff` → 7.6:1 (AAA)  | `#aeb6c4` on `#1a1d24` → 8.3:1 (AAA)           |
 | `--p-text-3` on `--p-surface`             | `#656d7a` on `#ffffff` → 5.2:1 (AA)   | `#9098a4` on `#1a1d24` → 5.1:1 (AA)            |
 | white on `--p-accent-cta` (atlvs light)   | white on `#c91463` → 5.6:1 (AA)       | atlvs dark uses ink on `#ff4d9b` → 6.1:1 (AA)  |
 | white on `--p-accent-cta` (compvss light) | white on `#8a5a0f` → 5.9:1 (AA)       | compvss dark uses ink on `#f0b255` → kit canon |

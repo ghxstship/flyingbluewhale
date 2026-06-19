@@ -76,8 +76,22 @@
   --p-heading: var(--font-anton), "Anton", "Arial Narrow", var(--font-hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
   --p-heading-stretch: normal;
   --p-heading-weight: 400;
-  --p-heading-ls: 0.005em;
+  --p-heading-ls: -0.01em; /* v7.0 — tracking.heading (was 0.005em) */
   --p-display-case: uppercase;
+
+  /* Paired type metrics (Monument 2.0). Per-role line-height + tracking so
+     headings, body, and metrics each get their own rhythm instead of a blanket
+     1.04. Mirrored in tokens.json#type.lineHeight / #type.tracking. */
+  --p-lh-display: 0.98;
+  --p-lh-heading: 1.12;
+  --p-lh-snug: 1.3;
+  --p-lh-body: 1.55;
+  --p-lh-tight: 1.04;
+  --p-tracking-display: -0.02em;
+  --p-tracking-heading: -0.01em;
+  --p-tracking-body: 0;
+  --p-tracking-mono: 0.02em;
+  --p-tracking-eyebrow: 0.14em;
   /* Role-based casing tokens (v5.1). Components read these via text-transform
      so casing is theme-controlled, never hardcoded. */
   --p-case-eyebrow: uppercase; /* overlines / eyebrows / mono labels */
@@ -86,24 +100,38 @@
   --p-case-tablehead: uppercase; /* table headers */
   --p-case-body: none; /* body — as authored (sentence) */
   --p-mono: var(--font-space-mono), "Space Mono", ui-monospace, "SF Mono", monospace;
+  /* v7.0 functional-mono split — Space Mono stays the eyebrow/label voice;
+     IBM Plex Mono is the DATA face (record IDs, code, terminal, table cells). */
+  --p-mono-data: var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
   --p-eyebrow: var(--p-mono);
   --p-wordmark: var(--font-jost), "Jost", var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif;
   --p-casing: none;
 
-  /* Radii — productivity-tool friendly. */
+  /* Radii — productivity-tool friendly. v7.0 adds r-md (10px) + r-xl (16px);
+     modals/sheets ride r-xl. */
   --p-r-sm: 6px;
   --p-r: 8px;
+  --p-r-md: 10px;
   --p-r-lg: 12px;
+  --p-r-xl: 16px;
   --p-r-pill: 999px;
 
-  /* 4px-grid spacing. */
+  /* Completed 4px-grid spacing scale (v7.0). */
+  --p-0-5: 2px;
   --p-1: 4px;
   --p-2: 8px;
   --p-3: 12px;
   --p-4: 16px;
   --p-5: 20px;
   --p-6: 24px;
+  --p-7: 28px;
   --p-8: 32px;
+  --p-10: 40px;
+  --p-12: 48px;
+  --p-14: 56px;
+  --p-16: 64px;
+  --p-20: 80px;
+  --p-24: 96px;
 
   /* Responsive breakpoint tokens — mobile-first min-widths (sm phones · md
      tablet · lg laptop · xl desktop · 2xl wide). Reference in matchMedia / JS;
@@ -131,20 +159,30 @@
   --chart-axis: var(--p-text-3, #656d7a);
   --chart-label: var(--p-text-2, #5b6472);
 
-  /* Elevation — 3-step (resting → hover → popover/modal). */
-  --p-shadow-sm: 0 1px 2px rgba(16, 20, 30, 0.05);
-  --p-shadow: 0 1px 2px rgba(16, 20, 30, 0.06), 0 2px 6px rgba(16, 20, 30, 0.05);
-  --p-elev-1: 0 1px 2px rgba(16, 20, 30, 0.06);
+  /* Elevation — v7.0 5-step layered scale (elev-xs → elev-2xl), each pairing an
+     ambient (soft, wide) + a direct (tight, contact) shadow. The legacy
+     --p-shadow-sm / --p-shadow / --p-shadow-lg names are ALIASES of the scale.
+     Dark mode re-tunes --p-elev-1/2/3 below (neutral shadows vanish on dark).
+     Mirrored in tokens.json#elevation. */
+  --p-elev-xs: 0 1px 2px rgba(16, 20, 30, 0.06);
+  --p-elev-1: 0 1px 2px rgba(16, 20, 30, 0.05), 0 2px 6px rgba(16, 20, 30, 0.06);
   --p-elev-2: 0 2px 4px rgba(16, 20, 30, 0.06), 0 6px 16px rgba(16, 20, 30, 0.08);
   --p-elev-3: 0 8px 28px rgba(16, 20, 30, 0.14);
+  --p-elev-2xl: 0 12px 24px rgba(16, 20, 30, 0.12), 0 24px 56px rgba(16, 20, 30, 0.18);
+  /* Back-compat aliases — point the old names at the new scale. */
+  --p-shadow-sm: var(--p-elev-xs);
+  --p-shadow: var(--p-elev-1);
   --p-shadow-lg: var(--p-elev-3);
   --p-ease: 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
 
-  /* Semantic signals — mode-agnostic. */
+  /* Semantic signals — mode-agnostic fills/dots/icons. v7.0 retune: warning
+     (#e0a12b → #c8841a) off the COMPVSS amber, info (#3b82e0 → #2596c4) off the
+     GVTEWAY blue, so a warning chip never reads as a COMPVSS surface. Small
+     COLORED TEXT uses the AA --p-{semantic}-text inks (defined per mode below). */
   --p-success: #2fa968;
-  --p-warning: #e0a12b;
+  --p-warning: #c8841a;
   --p-danger: #e5484d;
-  --p-info: #3b82e0;
+  --p-info: #2596c4;
 
   /* Density token defaults (cozy). Overridden by [data-density="compact"]. */
   --p-on-strong: #fff;
@@ -171,19 +209,31 @@
    authored (not color-token-derived).
    ========================================================================== */
 /* @gen:tokens:start */
-/* ---------- Surfaces (light default + dark) ---------- */
+/* ---------- Neutral ramp + surfaces (light default + dark) ---------- */
 [data-ui="saas"],
 [data-ui="saas"][data-mode="light"],
 [data-theme="atlvs-product"],
 [data-mode="light"] [data-theme="atlvs-product"] {
-  --p-bg: #f7f8fa;
-  --p-surface: #ffffff;
-  --p-surface-2: #f1f3f6;
-  --p-border: #e4e7ec;
-  --p-border-2: #d3d8e0;
-  --p-text-1: #181b23;
-  --p-text-2: #5b6472;
-  --p-text-3: #656d7a;
+  --p-neutral-0: #ffffff;
+  --p-neutral-50: #f7f8fa;
+  --p-neutral-100: #f1f3f6;
+  --p-neutral-200: #e4e7ec;
+  --p-neutral-300: #d3d8e0;
+  --p-neutral-400: #b3bac6;
+  --p-neutral-500: #8b94a3;
+  --p-neutral-600: #656d7a;
+  --p-neutral-700: #4a5563;
+  --p-neutral-800: #343b47;
+  --p-neutral-900: #232932;
+  --p-neutral-1000: #181b23;
+  --p-bg: var(--p-neutral-50);
+  --p-surface: var(--p-neutral-0);
+  --p-surface-2: var(--p-neutral-100);
+  --p-border: var(--p-neutral-200);
+  --p-border-2: var(--p-neutral-300);
+  --p-text-1: var(--p-neutral-1000);
+  --p-text-2: var(--p-neutral-700);
+  --p-text-3: var(--p-neutral-600);
   --p-accent-contrast: #ffffff;
   --p-focus: var(--p-accent);
   color-scheme: light;
@@ -192,14 +242,26 @@
 [data-ui="saas"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"],
 [data-mode="dark"] [data-theme="atlvs-product"] {
-  --p-bg: #111318;
-  --p-surface: #1a1d24;
-  --p-surface-2: #232730;
-  --p-border: #2c313b;
-  --p-border-2: #3a404c;
-  --p-text-1: #f2f4f8;
-  --p-text-2: #a6aebc;
-  --p-text-3: #9098a4;
+  --p-neutral-0: #111318;
+  --p-neutral-50: #1a1d24;
+  --p-neutral-100: #232730;
+  --p-neutral-200: #2c313b;
+  --p-neutral-300: #3a404c;
+  --p-neutral-400: #4d5563;
+  --p-neutral-500: #6b7484;
+  --p-neutral-600: #9098a4;
+  --p-neutral-700: #aeb6c4;
+  --p-neutral-800: #cdd3dd;
+  --p-neutral-900: #e6e9ef;
+  --p-neutral-1000: #f2f4f8;
+  --p-bg: var(--p-neutral-0);
+  --p-surface: var(--p-neutral-50);
+  --p-surface-2: var(--p-neutral-100);
+  --p-border: var(--p-neutral-200);
+  --p-border-2: var(--p-neutral-300);
+  --p-text-1: var(--p-neutral-1000);
+  --p-text-2: var(--p-neutral-700);
+  --p-text-3: var(--p-neutral-600);
   --p-accent-contrast: #0e1014;
   --p-focus: var(--p-accent);
   color-scheme: dark;
@@ -340,6 +402,60 @@
 }
 /* @gen:tokens:end */
 
+/* ============================================================================
+   v7.0 DERIVED LAYER — accent ramp, semantic-text inks, button-hover filter,
+   dark-mode elevation. All hand-authored (color-token-derived via color-mix or
+   mode-scoped), so they live OUTSIDE the @gen markers.
+   ========================================================================== */
+
+/* §2 · Per-product accent RAMP — derived from the resolved --k-acc by tinting
+   toward --p-surface (50→400) and shading toward --p-text-1 (600→900); 500 is
+   the base accent. Mode-aware (surface/text-1 follow the mode). Reference named
+   steps for tint backgrounds / borders / pressed states instead of inline math. */
+[data-ui="saas"],
+[data-theme="atlvs-product"] {
+  --p-accent-50: color-mix(in oklab, var(--k-acc) 12%, var(--p-surface));
+  --p-accent-100: color-mix(in oklab, var(--k-acc) 20%, var(--p-surface));
+  --p-accent-200: color-mix(in oklab, var(--k-acc) 36%, var(--p-surface));
+  --p-accent-300: color-mix(in oklab, var(--k-acc) 56%, var(--p-surface));
+  --p-accent-400: color-mix(in oklab, var(--k-acc) 78%, var(--p-surface));
+  --p-accent-500: var(--k-acc);
+  --p-accent-600: color-mix(in oklab, var(--k-acc) 86%, var(--p-text-1));
+  --p-accent-700: color-mix(in oklab, var(--k-acc) 72%, var(--p-text-1));
+  --p-accent-800: color-mix(in oklab, var(--k-acc) 58%, var(--p-text-1));
+  --p-accent-900: color-mix(in oklab, var(--k-acc) 44%, var(--p-text-1));
+}
+
+/* §6 · Semantic-text inks + §7 button-hover filter — LIGHT scope. */
+[data-ui="saas"],
+[data-ui="saas"][data-mode="light"],
+[data-theme="atlvs-product"],
+[data-mode="light"] [data-theme="atlvs-product"] {
+  --p-success-text: #1f7d4d;
+  --p-warning-text: #92610f;
+  --p-danger-text: #c4322f;
+  --p-info-text: #1c6f96;
+  /* Filled-button hover — darken in light mode. */
+  --p-btn-hover-filter: brightness(0.92);
+}
+
+/* §6 · Semantic-text inks + §7 button-hover filter + §5 elevation — DARK scope. */
+[data-ui="saas"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"],
+[data-mode="dark"] [data-theme="atlvs-product"] {
+  --p-success-text: #45c585;
+  --p-warning-text: #e6b25a;
+  --p-danger-text: #f08a8d;
+  --p-info-text: #5cc0e8;
+  /* Filled-button hover — lighten in dark mode (darkening reads as "disabled"). */
+  --p-btn-hover-filter: brightness(1.12);
+  /* §5 · Dark elevation — neutral light-mode shadows are invisible on dark.
+     Stronger alpha + a 1px top inner highlight to read the lift. */
+  --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --p-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --p-elev-3: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
 [data-accent="soft"] {
   --p-accent: color-mix(in oklab, var(--k-acc) 74%, var(--p-surface) 26%);
   --p-accent-hover: color-mix(in oklab, var(--k-acc) 64%, var(--p-surface) 36%);
@@ -473,24 +589,32 @@
   border-color: var(--p-accent-cta);
 }
 
-/* SaaS headings — MONUMENT canon (kit v3). Anton, single black weight, no
-   width axis, a hair of tracking. Display headings render ALL-CAPS via
-   --p-display-case (Anton is a caps face) — authored case in source is
-   irrelevant. */
+/* SaaS headings — MONUMENT 2.0 (kit v7). ANTON CEILING: display + h1/h2 only.
+   Anton, single black weight, no width axis, ALL-CAPS via --p-display-case, on
+   the heading line-height. h3/h4 drop to Hanken Grotesk 700 sentence case
+   (below — Anton at small sizes is hard to read and over-shouts subsections). */
 [data-ui="saas"] h1,
 [data-ui="saas"] h2,
-[data-ui="saas"] h3,
-[data-ui="saas"] h4,
 [data-theme="atlvs-product"] h1,
-[data-theme="atlvs-product"] h2,
-[data-theme="atlvs-product"] h3,
-[data-theme="atlvs-product"] h4 {
+[data-theme="atlvs-product"] h2 {
   text-transform: var(--p-display-case, uppercase);
   font-family: var(--p-heading);
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
-  line-height: 1.04;
+  line-height: var(--p-lh-heading);
+  color: var(--p-text-1);
+}
+/* h3 / h4 — Hanken Grotesk 700, sentence case, snug leading. */
+[data-ui="saas"] h3,
+[data-ui="saas"] h4,
+[data-theme="atlvs-product"] h3,
+[data-theme="atlvs-product"] h4 {
+  font-family: var(--p-font);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: var(--p-tracking-body);
+  line-height: var(--p-lh-snug);
   color: var(--p-text-1);
 }
 
@@ -539,7 +663,18 @@
 }
 [data-ui="saas"] .ps-btn:hover,
 [data-theme="atlvs-product"] .ps-btn:hover {
-  filter: brightness(0.92);
+  /* v7.0 — mode-aware hover (darken light / lighten dark) via token. */
+  filter: var(--p-btn-hover-filter, brightness(0.92));
+}
+/* v7.0 — built-in press + focus ring on every .ps-btn. */
+[data-ui="saas"] .ps-btn:active,
+[data-theme="atlvs-product"] .ps-btn:active {
+  transform: translateY(0.5px) scale(0.985);
+}
+[data-ui="saas"] .ps-btn:focus-visible,
+[data-theme="atlvs-product"] .ps-btn:focus-visible {
+  outline: 2px solid var(--p-focus, var(--p-accent));
+  outline-offset: 2px;
 }
 [data-ui="saas"] .ps-btn--sm,
 [data-theme="atlvs-product"] .ps-btn--sm {
@@ -602,6 +737,61 @@
   cursor: not-allowed;
   filter: none;
 }
+/* v7.0 — tertiary: text-only, low-emphasis action (lighter than ghost). */
+[data-ui="saas"] .ps-btn--tertiary,
+[data-theme="atlvs-product"] .ps-btn--tertiary {
+  background-color: transparent;
+  color: var(--p-text-2);
+  border: 0;
+}
+[data-ui="saas"] .ps-btn--tertiary:hover,
+[data-theme="atlvs-product"] .ps-btn--tertiary:hover {
+  filter: none;
+  background-color: var(--p-surface-2);
+  color: var(--p-text-1);
+}
+/* v7.0 — link: inline accent-text action, no fill/padding. */
+[data-ui="saas"] .ps-btn--link,
+[data-theme="atlvs-product"] .ps-btn--link {
+  background-color: transparent;
+  color: var(--p-accent-text);
+  border: 0;
+  padding: 0;
+  height: auto;
+}
+[data-ui="saas"] .ps-btn--link:hover,
+[data-theme="atlvs-product"] .ps-btn--link:hover {
+  filter: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* v7.0 — loading: inert + spinner. Pair with aria-busy + disabled in markup. */
+[data-ui="saas"] .ps-btn--loading,
+[data-theme="atlvs-product"] .ps-btn--loading {
+  cursor: progress;
+  pointer-events: none;
+  position: relative;
+  color: transparent !important;
+}
+[data-ui="saas"] .ps-btn--loading::after,
+[data-theme="atlvs-product"] .ps-btn--loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 14px;
+  height: 14px;
+  border: 2px solid color-mix(in oklab, currentColor 30%, transparent);
+  border-top-color: var(--p-accent-cta-contrast, #fff);
+  border-radius: 50%;
+  animation: ps-spin 0.7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="saas"] .ps-btn--loading::after,
+  [data-theme="atlvs-product"] .ps-btn--loading::after {
+    animation-duration: 0s;
+  }
+}
 
 /* ---- input + group ---- */
 [data-ui="saas"] .ps-input,
@@ -624,6 +814,26 @@
   outline: none;
   border-color: var(--p-accent);
   box-shadow: 0 0 0 3px var(--p-accent-weak);
+}
+/* v7.0 — explicit disabled affordance (was relying on browser default). */
+[data-ui="saas"] .ps-input:disabled,
+[data-theme="atlvs-product"] .ps-input:disabled {
+  background: var(--p-surface-2);
+  color: var(--p-text-3);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+/* v7.0 — explicit size variants (independent of the density axis). */
+[data-ui="saas"] .ps-input--sm,
+[data-theme="atlvs-product"] .ps-input--sm {
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: var(--p-r-sm);
+}
+[data-ui="saas"] .ps-input--lg,
+[data-theme="atlvs-product"] .ps-input--lg {
+  padding: 12px 14px;
+  font-size: 15px;
 }
 [data-density="compact"] .ps-input {
   padding: 6px 10px;
@@ -882,6 +1092,38 @@
   color: var(--p-text-2);
   border: 1px solid var(--p-border);
 }
+/* v7.0 pill ROLES — Badge = status (read-only), Tag/chip = metadata
+   (often removable), selectable chip = interactive filter. Shared --sm sizing. */
+[data-ui="saas"] .ps-badge--sm,
+[data-ui="saas"] .ps-chip--sm,
+[data-ui="saas"] .ps-tag--sm,
+[data-theme="atlvs-product"] .ps-badge--sm,
+[data-theme="atlvs-product"] .ps-chip--sm,
+[data-theme="atlvs-product"] .ps-tag--sm {
+  font-size: 10px;
+  padding: 2px 7px;
+  gap: 4px;
+}
+/* Selectable chip — interactive filter toggle. Drive with aria-pressed; the
+   pressed state paints the accent tint. */
+[data-ui="saas"] .ps-chip--selectable,
+[data-theme="atlvs-product"] .ps-chip--selectable {
+  cursor: pointer;
+  background: var(--p-surface-2);
+  color: var(--p-text-2);
+  border: 1px solid var(--p-border);
+}
+[data-ui="saas"] .ps-chip--selectable:hover,
+[data-theme="atlvs-product"] .ps-chip--selectable:hover {
+  color: var(--p-text-1);
+  border-color: var(--p-border-2);
+}
+[data-ui="saas"] .ps-chip--selectable[aria-pressed="true"],
+[data-theme="atlvs-product"] .ps-chip--selectable[aria-pressed="true"] {
+  background: var(--p-accent-weak);
+  color: var(--p-accent-text);
+  border-color: color-mix(in oklab, var(--p-accent) 40%, var(--p-border));
+}
 [data-ui="saas"] .ps-badge,
 [data-theme="atlvs-product"] .ps-badge {
   display: inline-flex;
@@ -895,25 +1137,27 @@
   color: var(--p-accent-text);
   line-height: 1.4;
 }
+/* v7.0 — toned badges keep the semantic TINT fill but read their text from the
+   AA --p-{semantic}-text inks (the base semantic hexes fail 4.5:1 as small text). */
 [data-ui="saas"] .ps-badge--ok,
 [data-theme="atlvs-product"] .ps-badge--ok {
   background: color-mix(in oklab, var(--p-success) 16%, transparent);
-  color: var(--p-success);
+  color: var(--p-success-text);
 }
 [data-ui="saas"] .ps-badge--warn,
 [data-theme="atlvs-product"] .ps-badge--warn {
   background: color-mix(in oklab, var(--p-warning) 18%, transparent);
-  color: var(--p-warning);
+  color: var(--p-warning-text);
 }
 [data-ui="saas"] .ps-badge--danger,
 [data-theme="atlvs-product"] .ps-badge--danger {
   background: color-mix(in oklab, var(--p-danger) 15%, transparent);
-  color: var(--p-danger);
+  color: var(--p-danger-text);
 }
 [data-ui="saas"] .ps-badge--info,
 [data-theme="atlvs-product"] .ps-badge--info {
   background: color-mix(in oklab, var(--p-info) 15%, transparent);
-  color: var(--p-info);
+  color: var(--p-info-text);
 }
 [data-ui="saas"] .ps-badge--neutral,
 [data-theme="atlvs-product"] .ps-badge--neutral {
@@ -1025,11 +1269,13 @@
 }
 [data-ui="saas"] .ps-id,
 [data-theme="atlvs-product"] .ps-id {
-  font-family: var(--p-mono);
+  /* v7.0 — record IDs ride the DATA mono (IBM Plex Mono), not the Space Mono
+     eyebrow voice. */
+  font-family: var(--p-mono-data);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--p-accent-text);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--p-tracking-mono);
 }
 
 /* ---- tabs / breadcrumb / pagination ---- */
@@ -1225,6 +1471,62 @@
   color: var(--p-text-1);
   font-weight: 600;
 }
+/* v7.0 table upgrades — numeric columns, sticky head, sortable headers, zebra. */
+/* .num — right-aligned tabular figures (data face) for money / counts. */
+[data-ui="saas"] .ps-table .num,
+[data-theme="atlvs-product"] .ps-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--p-mono-data);
+}
+[data-ui="saas"] .ps-table th.num,
+[data-theme="atlvs-product"] .ps-table th.num {
+  text-align: right;
+}
+/* --sticky — pin the header on vertical scroll. */
+[data-ui="saas"] .ps-table--sticky thead th,
+[data-theme="atlvs-product"] .ps-table--sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+/* --zebra — alternating row tint for dense grids. */
+[data-ui="saas"] .ps-table--zebra tbody tr:nth-child(even) td,
+[data-theme="atlvs-product"] .ps-table--zebra tbody tr:nth-child(even) td {
+  background: color-mix(in oklab, var(--p-surface-2) 50%, transparent);
+}
+/* Sortable headers — a button-like th that exposes its direction via aria-sort
+   and a caret. th[aria-sort="ascending|descending|none"]. */
+[data-ui="saas"] .ps-table th[aria-sort],
+[data-theme="atlvs-product"] .ps-table th[aria-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+[data-ui="saas"] .ps-table th[aria-sort]:hover,
+[data-theme="atlvs-product"] .ps-table th[aria-sort]:hover {
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-table th[aria-sort]::after,
+[data-theme="atlvs-product"] .ps-table th[aria-sort]::after {
+  content: "";
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-inline-start: 6px;
+  vertical-align: middle;
+  border-inline: 3px solid transparent;
+  opacity: 0.3;
+}
+[data-ui="saas"] .ps-table th[aria-sort="ascending"]::after,
+[data-theme="atlvs-product"] .ps-table th[aria-sort="ascending"]::after {
+  border-bottom: 4px solid currentColor;
+  opacity: 1;
+}
+[data-ui="saas"] .ps-table th[aria-sort="descending"]::after,
+[data-theme="atlvs-product"] .ps-table th[aria-sort="descending"]::after {
+  border-top: 4px solid currentColor;
+  opacity: 1;
+}
 
 /* ---- progress / meter ---- */
 [data-ui="saas"] .ps-progress,
@@ -1346,19 +1648,19 @@
   color: var(--p-text-2);
   font-weight: 500;
 }
-/* A4 · Metrics — Anton (MONUMENT) with tabular figures. Numbers lock into
-   columns; dashboards and reports get the kit's full structural register. */
+/* A4 · Metrics — v7.0 Hanken Grotesk 800 with TABULAR figures. Anton ships no
+   tnum, so KPI grids misalign digit columns; the body face's tabular-nums locks
+   numbers into columns while the heavy weight keeps the structural register. */
 [data-ui="saas"] .ps-stat .v,
 [data-theme="atlvs-product"] .ps-stat .v {
-  font-family: var(--p-heading);
-  font-stretch: var(--p-heading-stretch);
-  font-weight: var(--p-heading-weight);
+  font-family: var(--p-font);
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: 30px;
   color: var(--p-text-1);
   margin-top: 6px;
-  letter-spacing: var(--p-heading-ls);
-  line-height: 1;
+  letter-spacing: var(--p-tracking-heading);
+  line-height: var(--p-lh-tight);
 }
 [data-ui="saas"] .ps-stat .d,
 [data-theme="atlvs-product"] .ps-stat .d {
@@ -1577,7 +1879,7 @@
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
   text-transform: var(--p-display-case, uppercase);
-  line-height: 1.04;
+  line-height: var(--p-lh-display);
   color: var(--p-text-1);
   margin: 0;
 }
@@ -1619,7 +1921,7 @@
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
-  line-height: 1.02;
+  line-height: var(--p-lh-display);
   color: var(--p-text-1);
   margin: 0;
   font-size: 30px;
@@ -1659,7 +1961,7 @@
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
   text-transform: var(--p-display-case, uppercase);
-  line-height: 1;
+  line-height: var(--p-lh-display);
   color: var(--p-text-1);
   margin: 0;
   text-wrap: balance;

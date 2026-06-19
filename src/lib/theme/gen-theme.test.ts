@@ -26,9 +26,13 @@ describe("Generated theme regions ↔ tokens.json (Move D1)", () => {
 
   it("the generated regions carry the canonical values (spot-check)", () => {
     const t = regionBody(theme, "tokens");
-    // The a11y text-3 fix + the LEG3ND CTA must be present in the generated CSS.
-    expect(t).toContain("--p-text-3: #656d7a");
-    expect(t).toContain("--p-text-3: #9098a4");
+    // v7.0 — surfaces map onto the 12-step neutral ramp; the a11y text-3 hex
+    // now lives on the ramp (step 600) and text-3 references it via var().
+    expect(t).toContain("--p-neutral-600: #656d7a"); // light tertiary text seed
+    expect(t).toContain("--p-neutral-600: #9098a4"); // dark tertiary text seed
+    expect(t).toContain("--p-text-3: var(--p-neutral-600)");
+    // text-2 darkened off step 700 for clearer hierarchy (v7.0).
+    expect(t).toContain("--p-neutral-700: #4a5563"); // light secondary text seed
     expect(t).toContain("--p-accent-cta: #b8430a"); // LEG3ND light CTA
     expect(t).not.toContain("#8c95a3"); // retired failing tertiary gray
   });

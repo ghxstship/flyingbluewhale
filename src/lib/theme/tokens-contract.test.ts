@@ -18,6 +18,7 @@ const TOKENS = JSON.parse(
 ) as {
   version: string;
   color: {
+    neutral: Record<"light" | "dark", Record<string, string>>;
     surface: Record<"light" | "dark", Record<string, string>>;
     accent: Record<string, Record<"light" | "dark", Record<string, string>>>;
   };
@@ -35,10 +36,26 @@ function declaredValues(prop: string): Set<string> {
 }
 
 describe("Token SSOT ↔ generated theme parity (Move D1)", () => {
-  it("surface text-3 (the a11y fix) is present in the generated theme", () => {
-    const text3 = declaredValues("text-3");
-    expect(text3.has(TOKENS.color.surface.light["text-3"]!.toLowerCase())).toBe(true);
-    expect(text3.has(TOKENS.color.surface.dark["text-3"]!.toLowerCase())).toBe(true);
+  it("the 12-step neutral ramp (v7.0 surface seed) is emitted whole in both modes", () => {
+    for (const mode of ["light", "dark"] as const) {
+      for (const [step, hex] of Object.entries(TOKENS.color.neutral[mode])) {
+        if (step.startsWith("_")) continue;
+        expect(
+          declaredValues(`neutral-${step}`).has(hex.toLowerCase()),
+          `neutral-${step} (${mode}) = ${hex} missing from the generated theme`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it("surfaces map onto the ramp — text-3 (a11y floor) + darkened text-2 resolve to their seed", () => {
+    // text-3 holds the AA floor at ramp step 600; text-2 darkened to step 700.
+    expect(declaredValues("neutral-600").has(TOKENS.color.surface.light["text-3"]!.toLowerCase())).toBe(true);
+    expect(declaredValues("neutral-600").has(TOKENS.color.surface.dark["text-3"]!.toLowerCase())).toBe(true);
+    expect(declaredValues("neutral-700").has(TOKENS.color.surface.light["text-2"]!.toLowerCase())).toBe(true);
+    expect(declaredValues("neutral-700").has(TOKENS.color.surface.dark["text-2"]!.toLowerCase())).toBe(true);
+    // Surface tokens reference the ramp via var(), not a forked literal.
+    expect(CSS.includes("--p-text-3: var(--p-neutral-600)")).toBe(true);
     // The retired failing value must NOT survive anywhere in the theme.
     expect(CSS.includes("#8c95a3"), "retired inaccessible text-3 #8C95A3 must not survive").toBe(false);
   });
@@ -71,7 +88,7 @@ describe("Token SSOT ↔ generated theme parity (Move D1)", () => {
     expect(declaredValues("accent-text").has("#b8430a")).toBe(true);
   });
 
-  it("tokens.json is stamped v6.4 (parity-certified)", () => {
-    expect(TOKENS.version).toBe("6.4");
+  it("tokens.json is stamped v7.0 (Monument 2.0)", () => {
+    expect(TOKENS.version).toBe("7.0");
   });
 });

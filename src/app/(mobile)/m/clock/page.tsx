@@ -78,8 +78,8 @@ export default async function CheckInPage() {
         <div className="surface mt-6 p-4 text-sm">
           {t(
             "m.clock.noWorkforceProfile",
-            { userId: session.userId },
-            "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your record to {userId}.",
+            undefined,
+            "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your crew record to your login.",
           )}
         </div>
       )}

@@ -7911,7 +7911,7 @@
      "archive": "Archivieren"
     },
     "new": {
-     "title": "Titel",
+     "title": "Neue Ankündigung",
      "body": "Text",
      "audience": "Zielgruppe",
      "pinToTop": "Oben Im Feed Anheften",
@@ -8101,7 +8101,7 @@
    "new": {
     "numberPlaceholder": "Automatisch generiert, wenn leer",
     "submit": "Vertrag erstellen",
-    "title": "Titel",
+    "title": "Neuer Vertrag",
     "titlePlaceholder": "Sponsoring — MMW26"
    }
   },
@@ -9024,7 +9024,7 @@
     "notes": "Notizen",
     "new": {
      "submit": "Rechnung Erstellen",
-     "title": "Titel",
+     "title": "Neue Rechnung",
      "titlePlaceholder": "Retainer Eventproduktion",
      "client": "Kunde",
      "noClient": "— Kein Kunde —",
@@ -12487,7 +12487,7 @@
     },
     "new": {
      "submit": "Anforderung erstellen",
-     "title": "Titel",
+     "title": "Neue Bestellanforderung",
      "description": "Beschreibung",
      "estimatedCost": "Geschätzte Kosten (USD)",
      "eyebrow": "Beschaffung"
@@ -13105,7 +13105,7 @@
     },
     "new": {
      "submit": "Auftrag erstellen",
-     "title": "Titel",
+     "title": "Neuer Fertigungsauftrag",
      "description": "Beschreibung",
      "due": "Fällig",
      "eyebrow": "Produktion"
@@ -14456,7 +14456,7 @@
     "templateLabel": "Vorlage",
     "block": "Block",
     "blocks": "Blöcke",
-    "title": "Titel",
+    "title": "Neues Angebot",
     "client": "Kunde",
     "noClient": "— Kein Kunde —",
     "project": "Projekt",
@@ -17033,7 +17033,7 @@
    },
    "new": {
     "submit": "Aufgabe erstellen",
-    "title": "Titel",
+    "title": "Neue Aufgabe",
     "description": "Beschreibung",
     "due": "Fällig",
     "priority": "Priorität",
@@ -18856,7 +18856,8 @@
     "clockOut": "Ausstempeln",
     "clockIn": "Einstempeln"
    },
-   "subtitle": "Geo-verifizierte Zeiterfassung"
+   "subtitle": "Geo-verifizierte Zeiterfassung",
+   "noWorkforceProfile": "Ihr Personalprofil ist noch nicht mit diesem Konto verknüpft. Bitten Sie Ihre:n Vorgesetzte:n, Ihren Crew-Datensatz mit Ihrem Login zu verbinden."
   },
   "coc": {
    "eyebrow": "Feld",

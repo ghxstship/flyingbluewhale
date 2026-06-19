@@ -5861,7 +5861,7 @@
      "archive": "Archiver"
     },
     "new": {
-     "title": "Titre",
+     "title": "Nouvelle annonce",
      "body": "Corps",
      "audience": "Audience",
      "pinToTop": "Épingler En Haut Du Fil",
@@ -6051,7 +6051,7 @@
    "new": {
     "numberPlaceholder": "Généré automatiquement si vide",
     "submit": "Créer le contrat",
-    "title": "Titre",
+    "title": "Nouveau contrat",
     "titlePlaceholder": "Parrainage — MMW26"
    }
   },
@@ -6974,7 +6974,7 @@
     "notes": "Notes",
     "new": {
      "submit": "Créer la facture",
-     "title": "Titre",
+     "title": "Nouvelle facture",
      "titlePlaceholder": "Acompte de production événementielle",
      "client": "Client",
      "noClient": "— Aucun client —",
@@ -10437,7 +10437,7 @@
     },
     "new": {
      "submit": "Créer la Réquisition",
-     "title": "Titre",
+     "title": "Nouvelle demande d'achat",
      "description": "Description",
      "estimatedCost": "Coût Estimé (USD)",
      "eyebrow": "Approvisionnement"
@@ -11055,7 +11055,7 @@
     },
     "new": {
      "submit": "Créer l'Ordre",
-     "title": "Titre",
+     "title": "Nouvel ordre de fabrication",
      "description": "Description",
      "due": "Échéance",
      "eyebrow": "Production"
@@ -12406,7 +12406,7 @@
     "templateLabel": "Modèle",
     "block": "bloc",
     "blocks": "blocs",
-    "title": "Titre",
+    "title": "Nouvelle proposition",
     "client": "Client",
     "noClient": "— Aucun client —",
     "project": "Projet",
@@ -14983,7 +14983,7 @@
    },
    "new": {
     "submit": "Créer la tâche",
-    "title": "Titre",
+    "title": "Nouvelle tâche",
     "description": "Description",
     "due": "Échéance",
     "priority": "Priorité",
@@ -16806,7 +16806,8 @@
     "clockOut": "Pointer en sortie",
     "clockIn": "Pointer en entrée"
    },
-   "subtitle": "Suivi du temps géo-vérifié"
+   "subtitle": "Suivi du temps géo-vérifié",
+   "noWorkforceProfile": "Votre profil personnel n'est pas encore lié à ce compte. Demandez à votre superviseur de relier votre fiche d'équipe à votre identifiant."
   },
   "coc": {
    "eyebrow": "Terrain",

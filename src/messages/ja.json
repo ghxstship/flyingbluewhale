@@ -4475,7 +4475,8 @@
     "clockOut": "退勤",
     "clockIn": "出勤"
    },
-   "subtitle": "位置情報認証付き勤怠管理"
+   "subtitle": "位置情報認証付き勤怠管理",
+   "noWorkforceProfile": "あなたのワークフォースプロファイルはまだこのアカウントにリンクされていません。スーパーバイザーにクルー記録をログインへ接続するよう依頼してください。"
   },
   "ad": {
    "eyebrow": "モバイル",
@@ -6849,7 +6850,7 @@
      "archive": "アーカイブ"
     },
     "new": {
-     "title": "タイトル",
+     "title": "新しいお知らせ",
      "body": "本文",
      "audience": "配信対象",
      "pinToTop": "フィード最上部に固定",
@@ -7039,7 +7040,7 @@
    "new": {
     "numberPlaceholder": "空欄の場合は自動生成",
     "submit": "契約を作成",
-    "title": "タイトル",
+    "title": "新しい契約",
     "titlePlaceholder": "スポンサーシップ — MMW26"
    }
   },
@@ -7962,7 +7963,7 @@
     "notes": "備考",
     "new": {
      "submit": "請求書を作成",
-     "title": "タイトル",
+     "title": "新しい請求書",
      "titlePlaceholder": "イベント制作リテイナー",
      "client": "クライアント",
      "noClient": "— クライアントなし —",
@@ -11425,7 +11426,7 @@
     },
     "new": {
      "submit": "購買依頼を作成",
-     "title": "タイトル",
+     "title": "新しい購買申請",
      "description": "説明",
      "estimatedCost": "見積金額(USD)",
      "eyebrow": "調達"
@@ -12043,7 +12044,7 @@
     },
     "new": {
      "submit": "オーダーを作成",
-     "title": "タイトル",
+     "title": "新しい製作オーダー",
      "description": "説明",
      "due": "期日",
      "eyebrow": "プロダクション"
@@ -13394,7 +13395,7 @@
     "templateLabel": "テンプレート",
     "block": "ブロック",
     "blocks": "ブロック",
-    "title": "タイトル",
+    "title": "新しい提案",
     "client": "クライアント",
     "noClient": "— クライアントなし —",
     "project": "プロジェクト",
@@ -15971,7 +15972,7 @@
    },
    "new": {
     "submit": "タスクを作成",
-    "title": "タイトル",
+    "title": "新しいタスク",
     "description": "説明",
     "due": "期限",
     "priority": "優先度",

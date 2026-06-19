@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { saveNotificationPrefs } from "./actions";
-import { CHANNELS, EVENTS } from "./constants";
+import { CHANNELS, EVENTS, EVENT_LABELS } from "./constants";
 
 export const dynamic = "force-dynamic";
 
@@ -87,7 +87,7 @@ export default async function NotificationsPrefs() {
               <tbody>
                 {EVENTS.map((e) => (
                   <tr key={e}>
-                    <td className="font-mono text-xs">{e}</td>
+                    <td className="text-sm font-medium">{EVENT_LABELS[e]}</td>
                     {CHANNELS.map((c) => (
                       <td key={c} className="text-center">
                         <input type="checkbox" name={`${e}__${c}`} defaultChecked={checked(e, c)} />

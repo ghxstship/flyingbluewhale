@@ -5861,7 +5861,7 @@
      "archive": "Archivar"
     },
     "new": {
-     "title": "Título",
+     "title": "Nuevo anuncio",
      "body": "Cuerpo",
      "audience": "Audiencia",
      "pinToTop": "Fijar Arriba Del Feed",
@@ -6051,7 +6051,7 @@
    "new": {
     "numberPlaceholder": "Se genera automáticamente si se deja en blanco",
     "submit": "Crear contrato",
-    "title": "Título",
+    "title": "Nuevo contrato",
     "titlePlaceholder": "Patrocinio — MMW26"
    }
   },
@@ -6974,7 +6974,7 @@
     "notes": "Notas",
     "new": {
      "submit": "Crear factura",
-     "title": "Título",
+     "title": "Nueva factura",
      "titlePlaceholder": "Anticipo de producción del evento",
      "client": "Cliente",
      "noClient": "— Sin cliente —",
@@ -10437,7 +10437,7 @@
     },
     "new": {
      "submit": "Crear Requisición",
-     "title": "Título",
+     "title": "Nueva requisición",
      "description": "Descripción",
      "estimatedCost": "Costo Estimado (USD)",
      "eyebrow": "Compras"
@@ -11055,7 +11055,7 @@
     },
     "new": {
      "submit": "Crear Orden",
-     "title": "Título",
+     "title": "Nueva orden de fabricación",
      "description": "Descripción",
      "due": "Vence",
      "eyebrow": "Producción"
@@ -12406,7 +12406,7 @@
     "templateLabel": "Plantilla",
     "block": "bloque",
     "blocks": "bloques",
-    "title": "Título",
+    "title": "Nueva propuesta",
     "client": "Cliente",
     "noClient": "— Sin cliente —",
     "project": "Proyecto",
@@ -14983,7 +14983,7 @@
    },
    "new": {
     "submit": "Crear Tarea",
-    "title": "Título",
+    "title": "Nueva tarea",
     "description": "Descripción",
     "due": "Vence",
     "priority": "Prioridad",
@@ -16838,7 +16838,8 @@
     "clockOut": "Fichar salida",
     "clockIn": "Fichar entrada"
    },
-   "subtitle": "Control horario geo-verificado"
+   "subtitle": "Control horario geo-verificado",
+   "noWorkforceProfile": "Tu perfil de personal aún no está vinculado a esta cuenta. Pídele a tu supervisor que conecte tu registro de equipo con tu acceso."
   },
   "coc": {
    "eyebrow": "Campo",

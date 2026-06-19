@@ -4719,7 +4719,8 @@
     "clockOut": "Clock out",
     "clockIn": "Clock in"
    },
-   "subtitle": "Geo-verified time tracking"
+   "subtitle": "Geo-verified time tracking",
+   "noWorkforceProfile": "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your crew record to your login."
   },
   "coc": {
    "eyebrow": "Field",
@@ -7578,7 +7579,7 @@
      "archive": "Archive"
     },
     "new": {
-     "title": "Title",
+     "title": "New Announcement",
      "body": "Body",
      "audience": "Audience",
      "pinToTop": "Pin To Top Of Feed",
@@ -7766,7 +7767,7 @@
    },
    "new": {
     "submit": "Create Contract",
-    "title": "Title",
+    "title": "New Contract",
     "titlePlaceholder": "Sponsorship — MMW26",
     "numberPlaceholder": "Auto-generated if blank"
    }
@@ -8646,7 +8647,7 @@
     "notes": "Notes",
     "new": {
      "submit": "Create Invoice",
-     "title": "Title",
+     "title": "New Invoice",
      "titlePlaceholder": "Event production retainer",
      "client": "Client",
      "noClient": "— No client —",
@@ -12100,7 +12101,7 @@
     },
     "new": {
      "submit": "Create Requisition",
-     "title": "Title",
+     "title": "New Requisition",
      "description": "Description",
      "estimatedCost": "Estimated Cost — USD",
      "eyebrow": "Procurement"
@@ -12719,7 +12720,7 @@
     },
     "new": {
      "submit": "Create Order",
-     "title": "Title",
+     "title": "New Fabrication Order",
      "description": "Description",
      "due": "Due",
      "eyebrow": "Production"
@@ -14070,7 +14071,7 @@
     "templateLabel": "Template",
     "block": "block",
     "blocks": "blocks",
-    "title": "Title",
+    "title": "New Proposal",
     "client": "Client",
     "noClient": "— No client —",
     "project": "Project",
@@ -16647,7 +16648,7 @@
    },
    "new": {
     "submit": "Create Task",
-    "title": "Title",
+    "title": "New Task",
     "description": "Description",
     "due": "Due",
     "priority": "Priority",

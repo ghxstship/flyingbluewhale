@@ -5861,7 +5861,7 @@
      "archive": "Arquivar"
     },
     "new": {
-     "title": "Título",
+     "title": "Novo anúncio",
      "body": "Corpo",
      "audience": "Audiência",
      "pinToTop": "Fixar no Topo do Feed",
@@ -6051,7 +6051,7 @@
    "new": {
     "numberPlaceholder": "Gerado automaticamente se em branco",
     "submit": "Criar Contrato",
-    "title": "Título",
+    "title": "Novo contrato",
     "titlePlaceholder": "Patrocínio — MMW26"
    }
   },
@@ -6974,7 +6974,7 @@
     "notes": "Notas",
     "new": {
      "submit": "Criar Nota Fiscal",
-     "title": "Título",
+     "title": "Nova fatura",
      "titlePlaceholder": "Adiantamento de produção de evento",
      "client": "Cliente",
      "noClient": "— Sem cliente —",
@@ -10437,7 +10437,7 @@
     },
     "new": {
      "submit": "Criar Requisição",
-     "title": "Título",
+     "title": "Nova requisição",
      "description": "Descrição",
      "estimatedCost": "Custo Estimado (USD)",
      "eyebrow": "Suprimentos"
@@ -11055,7 +11055,7 @@
     },
     "new": {
      "submit": "Criar Ordem",
-     "title": "Título",
+     "title": "Nova ordem de fabricação",
      "description": "Descrição",
      "due": "Prazo",
      "eyebrow": "Produção"
@@ -12406,7 +12406,7 @@
     "templateLabel": "Modelo",
     "block": "bloco",
     "blocks": "blocos",
-    "title": "Título",
+    "title": "Nova proposta",
     "client": "Cliente",
     "noClient": "— Sem cliente —",
     "project": "Projeto",
@@ -14983,7 +14983,7 @@
    },
    "new": {
     "submit": "Criar Tarefa",
-    "title": "Título",
+    "title": "Nova tarefa",
     "description": "Descrição",
     "due": "Prazo",
     "priority": "Prioridade",
@@ -16806,7 +16806,8 @@
     "clockOut": "Bater ponto de saída",
     "clockIn": "Bater ponto de entrada"
    },
-   "subtitle": "Controle de ponto com geoverificação"
+   "subtitle": "Controle de ponto com geoverificação",
+   "noWorkforceProfile": "Seu perfil de equipe ainda não está vinculado a esta conta. Peça ao seu supervisor para conectar seu registro de equipe ao seu login."
   },
   "coc": {
    "eyebrow": "Campo",

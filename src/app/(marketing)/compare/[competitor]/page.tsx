@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ competito
 }
 
 function CellMark({ value, yesLabel, noLabel }: { value: string | boolean; yesLabel: string; noLabel: string }) {
-  if (value === true) return <Check size={16} className="text-[var(--success)]" aria-label={yesLabel} />;
+  if (value === true) return <Check size={16} className="text-[var(--p-success)]" aria-label={yesLabel} />;
   if (value === false) return <X size={16} className="text-[var(--p-text-2)]" aria-label={noLabel} />;
   return (
     <span className="inline-flex items-center gap-1 text-xs text-[var(--p-text-2)]">

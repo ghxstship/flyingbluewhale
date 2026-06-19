@@ -387,6 +387,27 @@ describe("Design system — component primitive adoption", () => {
     expect(theme, "GVTEWAY accent-text must be #1d4ed8").toMatch(/#1d4ed8/i);
   });
 
+  it("no bare legacy color tokens — --success/--warning/--danger/--info must be --p-*", () => {
+    // The bare (--success / --warning / --danger / --info) namespace was deleted
+    // in the v6.4 alignment; only --p-* survives. A bare reference resolves to
+    // nothing — a silent colorless-rendering bug (e.g. status dots, checkmarks).
+    const BARE = /var\(\s*--(?:success|warning|danger|info)\s*\)/;
+    const scan = walk(SRC_DIR).filter((f) => /\.(tsx?|css)$/.test(f));
+    const offenders: string[] = [];
+    for (const file of scan) {
+      const rel = relative(REPO_ROOT, file);
+      if (rel === "src/app/design-system.test.ts") continue;
+      const lines = readFileSync(file, "utf8").split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (BARE.test(lines[i]!)) offenders.push(`${rel}:${i + 1}: ${lines[i]!.trim().slice(0, 120)}`);
+      }
+    }
+    expect(
+      offenders,
+      `Bare legacy color tokens found — use var(--p-success) / var(--p-warning) / var(--p-danger) / var(--p-info):\n${offenders.join("\n")}`,
+    ).toEqual([]);
+  });
+
   it("kit v5.1 — role-based --p-case-* casing tokens are defined + wired", () => {
     // v5.1 made casing token-controlled. The base block must define the role
     // tokens, and the consuming primitives must read them (never hardcode).

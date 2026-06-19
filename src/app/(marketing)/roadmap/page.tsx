@@ -120,7 +120,7 @@ const STATUS_LABEL_KEY: Record<RoadmapQuarter["status"], string> = {
 };
 
 const STATUS_COLOR: Record<RoadmapQuarter["status"], string> = {
-  in_flight: "var(--success)",
+  in_flight: "var(--p-success)",
   next: "var(--p-accent)",
   exploring: "var(--p-text-2)",
 };

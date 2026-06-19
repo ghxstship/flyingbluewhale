@@ -138,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           </div>
           {!totalsMatch && (
-            <div className="surface-inset mt-3 rounded-md border border-[var(--warning)] p-3 text-xs">
+            <div className="surface-inset mt-3 rounded-md border border-[var(--p-warning)] p-3 text-xs">
               <strong>{t("console.procurement.poChangeOrders.detail.headsUp", undefined, "Heads up:")}</strong>{" "}
               {t(
                 "console.procurement.poChangeOrders.detail.mismatchWarning",

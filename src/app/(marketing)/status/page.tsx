@@ -31,8 +31,8 @@ const SERVICES: ServiceRow[] = [
 ];
 
 const STATE_COLOR: Record<ServiceRow["state"], string> = {
-  operational: "var(--success)",
-  degraded: "var(--warning)",
+  operational: "var(--p-success)",
+  degraded: "var(--p-warning)",
   outage: "var(--p-danger)",
 };
 
@@ -61,7 +61,7 @@ export default async function StatusPage() {
         <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-1.5">
           <span
             className="inline-block h-2 w-2 rounded-full"
-            style={{ background: "var(--success)" }}
+            style={{ background: "var(--p-success)" }}
             aria-hidden="true"
           />
           <span className="text-xs font-medium">{t("marketing.pages.status.hero.badge")}</span>

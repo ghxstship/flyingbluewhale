@@ -149,7 +149,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
         </div>
 
         {!totalsMatch && (
-          <div className="surface-inset rounded-md border border-[var(--warning)] p-3 text-xs">
+          <div className="surface-inset rounded-md border border-[var(--p-warning)] p-3 text-xs">
             <strong>{t("console.procurement.rfqs.responses.detail.headsUp", undefined, "Heads up:")}</strong>{" "}
             {t(
               "console.procurement.rfqs.responses.detail.mismatch",

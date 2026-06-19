@@ -241,7 +241,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                 return (
                   <li
                     key={q.id}
-                    className={`surface-inset rounded-md p-3 ${missing && q.required ? "border border-[var(--warning)]" : ""}`}
+                    className={`surface-inset rounded-md p-3 ${missing && q.required ? "border border-[var(--p-warning)]" : ""}`}
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <div className="flex flex-wrap items-baseline gap-2">

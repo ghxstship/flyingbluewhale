@@ -2986,6 +2986,17 @@
        "2": "La cola offline se reproduce en orden",
        "3": "El call sheet de esta noche y el KBYG en el bolsillo"
       }
+     },
+     "legend": {
+      "tier": "CONOCIMIENTO",
+      "title": "El cuerpo de conocimiento",
+      "body": "El Standard, cursos, certificaciones, el catálogo con precios y el motor de cumplimiento, sobre el protocolo XPMS 2.0. El conocimiento sobre el que se construye el mundo.",
+      "bullets": {
+       "0": "El Standard — una base de conocimiento versionada",
+       "1": "Cursos y LMS con cuestionarios y certificaciones",
+       "2": "Certificaciones que controlan los escaneos en puerta",
+       "3": "Cumplimiento verificable por máquina XMCE"
+      }
      }
     },
     "industries": {

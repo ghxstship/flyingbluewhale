@@ -2986,6 +2986,17 @@
        "2": "La file hors ligne se rejoue dans l'ordre",
        "3": "La call sheet du soir + le KBYG en poche"
       }
+     },
+     "legend": {
+      "tier": "SAVOIR",
+      "title": "Le corpus de connaissances",
+      "body": "Le Standard, les cours, les certifications, le catalogue tarifé et le moteur de conformité — sur le protocole XPMS 2.0. Le savoir sur lequel le monde se construit.",
+      "bullets": {
+       "0": "Le Standard — une base de connaissances versionnée",
+       "1": "Cours & LMS avec quiz et certifications",
+       "2": "Des certifications qui conditionnent les scans sur le terrain",
+       "3": "Conformité vérifiable par machine XMCE"
+      }
      }
     },
     "industries": {

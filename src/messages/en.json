@@ -2892,6 +2892,17 @@
        "2": "Offline queue replays in order",
        "3": "Tonight's call sheet + KBYG in pocket"
       }
+     },
+     "legend": {
+      "tier": "KNOWLEDGE",
+      "title": "The body of knowledge",
+      "body": "The Standard, courses, certifications, the priced catalog, and the compliance engine — on the XPMS 2.0 protocol. The knowledge the world is built on.",
+      "bullets": {
+       "0": "The Standard — one versioned knowledge base",
+       "1": "Courses & LMS with quizzes + certifications",
+       "2": "Certifications that gate field gate-scans",
+       "3": "XMCE machine-checkable compliance"
+      }
      }
     },
     "industries": {

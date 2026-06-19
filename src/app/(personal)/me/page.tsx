@@ -64,10 +64,10 @@ export default async function MePage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="text-label text-[var(--p-text-3)]">
             {t("me.dashboard.eyebrow", undefined, "My dashboard")}
           </div>
-          <h1 className="text-display mt-1 text-3xl">{session.email}</h1>
+          <h1 className="mt-1 truncate text-xl font-semibold">{session.email}</h1>
         </div>
         <form action="/auth/signout" method="post">
           <button className="ps-btn ps-btn--ghost text-xs" type="submit">
@@ -78,7 +78,7 @@ export default async function MePage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="text-label text-[var(--p-text-3)]">
             {t("me.dashboard.role", undefined, "Role")}
           </div>
           <div className="mt-2">
@@ -86,7 +86,7 @@ export default async function MePage() {
           </div>
         </div>
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="text-label text-[var(--p-text-3)]">
             {t("me.dashboard.tier", undefined, "Tier")}
           </div>
           <div className="mt-2">
@@ -94,7 +94,7 @@ export default async function MePage() {
           </div>
         </div>
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="text-label text-[var(--p-text-3)]">
             {t("me.dashboard.organization", undefined, "Organization")}
           </div>
           <div className="text-mono mt-2 text-xs">
@@ -119,7 +119,7 @@ export default async function MePage() {
         </div>
       )}
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">
+      <h2 className="text-label mt-10 mb-3 text-[var(--p-text-3)]">
         {t("me.dashboard.marketplaceHeading", undefined, "Marketplace")}
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -165,7 +165,7 @@ export default async function MePage() {
         />
       </div>
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">
+      <h2 className="text-label mt-10 mb-3 text-[var(--p-text-3)]">
         {t("me.dashboard.accountHeading", undefined, "Account")}
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

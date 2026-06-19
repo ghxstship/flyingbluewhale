@@ -2986,6 +2986,17 @@
        "2": "Offline-Warteschlange spielt der Reihe nach nach",
        "3": "Heutiges Call Sheet + KBYG in der Tasche"
       }
+     },
+     "legend": {
+      "tier": "WISSEN",
+      "title": "Der Wissensbestand",
+      "body": "Der Standard, Kurse, Zertifizierungen, der bepreiste Katalog und die Compliance-Engine — auf dem XPMS-2.0-Protokoll. Das Wissen, auf dem die Welt gebaut ist.",
+      "bullets": {
+       "0": "Der Standard — eine versionierte Wissensbasis",
+       "1": "Kurse & LMS mit Quizzen und Zertifizierungen",
+       "2": "Zertifizierungen, die Gate-Scans im Feld freischalten",
+       "3": "XMCE — maschinenprüfbare Compliance"
+      }
      }
     },
     "industries": {

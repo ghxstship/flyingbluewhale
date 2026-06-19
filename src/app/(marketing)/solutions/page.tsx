@@ -80,6 +80,20 @@ export default async function SolutionsIndex() {
       ],
       href: "/solutions/compvss",
     },
+    {
+      slug: "legend",
+      name: "LEG3ND",
+      tier: t("marketing.pages.solutions.apps.legend.tier"),
+      title: t("marketing.pages.solutions.apps.legend.title"),
+      body: t("marketing.pages.solutions.apps.legend.body"),
+      bullets: [
+        t("marketing.pages.solutions.apps.legend.bullets.0"),
+        t("marketing.pages.solutions.apps.legend.bullets.1"),
+        t("marketing.pages.solutions.apps.legend.bullets.2"),
+        t("marketing.pages.solutions.apps.legend.bullets.3"),
+      ],
+      href: "/solutions/legend",
+    },
   ] as const;
 
   const INDUSTRIES = [
@@ -139,11 +153,12 @@ export default async function SolutionsIndex() {
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
         <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.apps.heading")}</h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {APPS.map((a) => (
             <Link
               key={a.slug}
               href={a.href}
+              data-theme="atlvs-product"
               data-platform={a.slug}
               className="surface hover-lift relative overflow-hidden p-7"
             >

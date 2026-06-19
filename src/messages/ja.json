@@ -9037,7 +9037,7 @@
    "subtitle": "IP、プライバシー、DSAR、同意、データマップ、保険。",
    "privacy": {
     "consent": {
-     "eyebrow": "ワークスペース",
+     "eyebrow": "法務",
      "title": "同意記録",
      "configureSupabase": "Supabase を設定してください。",
      "subtitleOne": "{count} 件",
@@ -14703,7 +14703,7 @@
     "eyebrow": "設定",
     "title": "コンプライアンス",
     "configureSupabase": "Supabaseを構成してください。",
-    "workspaceSettings": "ワークスペース設定",
+    "workspaceSettings": "コンプライアンス",
     "platformControls": "プラットフォーム制御",
     "columns": {
      "control": "コントロール",
@@ -14722,7 +14722,7 @@
     "eyebrow": "設定",
     "title": "ドメイン",
     "configureSupabase": "Supabaseを構成してください。",
-    "workspaceTitle": "ワークスペース設定",
+    "workspaceTitle": "ドメイン",
     "subtitle": "カスタムドメイン",
     "addDomain": "ドメインを追加",
     "sectionDomains": "ドメイン",
@@ -16469,7 +16469,7 @@
     "cluster": "クラスター",
     "capacity": "収容人数"
    },
-   "eyebrow": "ワークスペース",
+   "eyebrow": "会場",
    "configureSupabase": "Supabaseを構成してください。",
    "recordSingular": "レコード",
    "recordPlural": "レコード",
@@ -16483,7 +16483,7 @@
     "handover": "引渡し"
    },
    "training": {
-    "eyebrow": "ワークスペース",
+    "eyebrow": "会場",
     "title": "トレーニング会場",
     "configureSupabase": "Supabaseを構成してください。",
     "emptyLabel": "トレーニング会場はありません",

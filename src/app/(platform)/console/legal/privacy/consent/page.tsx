@@ -13,7 +13,7 @@ export default async function Page() {
     return (
       <>
         <ModuleHeader
-          eyebrow={t("console.legal.privacy.consent.eyebrow", undefined, "Workspace")}
+          eyebrow={t("console.legal.privacy.consent.eyebrow", undefined, "Legal")}
           title={t("console.legal.privacy.consent.title", undefined, "Consent Records")}
         />
         <div className="page-content">
@@ -32,7 +32,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.legal.privacy.consent.eyebrow", undefined, "Workspace")}
+        eyebrow={t("console.legal.privacy.consent.eyebrow", undefined, "Legal")}
         title={t("console.legal.privacy.consent.title", undefined, "Consent Records")}
         subtitle={
           rows.length === 1

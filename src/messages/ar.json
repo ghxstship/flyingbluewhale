@@ -10949,7 +10949,7 @@
    "subtitle": "الملكية الفكرية، الخصوصية، طلبات DSAR، الموافقات، خريطة البيانات، التأمين.",
    "privacy": {
     "consent": {
-     "eyebrow": "مساحة العمل",
+     "eyebrow": "الشؤون القانونية",
      "title": "سجلات الموافقة",
      "configureSupabase": "قم بتهيئة Supabase.",
      "subtitleOne": "{count} سجل",
@@ -16610,7 +16610,7 @@
     "eyebrow": "الإعدادات",
     "title": "الامتثال",
     "configureSupabase": "قم بإعداد Supabase.",
-    "workspaceSettings": "إعدادات مساحة العمل",
+    "workspaceSettings": "الامتثال",
     "platformControls": "ضوابط المنصة",
     "columns": {
      "control": "الضابط",
@@ -16629,7 +16629,7 @@
     "eyebrow": "الإعدادات",
     "title": "النطاقات",
     "configureSupabase": "قم بإعداد Supabase.",
-    "workspaceTitle": "إعدادات مساحة العمل",
+    "workspaceTitle": "النطاقات",
     "subtitle": "نطاقات مخصصة",
     "addDomain": "إضافة نطاق",
     "sectionDomains": "النطاقات",
@@ -18376,7 +18376,7 @@
     "cluster": "المجموعة",
     "capacity": "السعة"
    },
-   "eyebrow": "مساحة العمل",
+   "eyebrow": "الأماكن",
    "configureSupabase": "قم بإعداد Supabase.",
    "recordSingular": "سجل",
    "recordPlural": "سجلات",
@@ -18390,7 +18390,7 @@
     "handover": "التسليم"
    },
    "training": {
-    "eyebrow": "مساحة العمل",
+    "eyebrow": "الأماكن",
     "title": "أماكن التدريب",
     "configureSupabase": "قم بإعداد Supabase.",
     "emptyLabel": "لا توجد أماكن تدريب",

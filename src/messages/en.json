@@ -9719,7 +9719,7 @@
    "subtitle": "IP, privacy, DSAR, consent, data map, insurance.",
    "privacy": {
     "consent": {
-     "eyebrow": "Workspace",
+     "eyebrow": "Legal",
      "title": "Consent Records",
      "configureSupabase": "Configure Supabase.",
      "subtitleOne": "{count} Record",
@@ -15380,7 +15380,7 @@
     "eyebrow": "Settings",
     "title": "Compliance",
     "configureSupabase": "Configure Supabase.",
-    "workspaceSettings": "Workspace Settings",
+    "workspaceSettings": "Compliance",
     "platformControls": "Platform controls",
     "columns": {
      "control": "Control",
@@ -15399,7 +15399,7 @@
     "eyebrow": "Settings",
     "title": "Domains",
     "configureSupabase": "Configure Supabase.",
-    "workspaceTitle": "Workspace Settings",
+    "workspaceTitle": "Domains",
     "subtitle": "Custom domains",
     "addDomain": "Add a Domain",
     "sectionDomains": "Domains",
@@ -17146,7 +17146,7 @@
     "cluster": "Cluster",
     "capacity": "Capacity"
    },
-   "eyebrow": "Workspace",
+   "eyebrow": "Venues",
    "configureSupabase": "Configure Supabase.",
    "recordSingular": "Record",
    "recordPlural": "Records",
@@ -17160,7 +17160,7 @@
     "handover": "Handover"
    },
    "training": {
-    "eyebrow": "Workspace",
+    "eyebrow": "Venues",
     "title": "Training Venues",
     "configureSupabase": "Configure Supabase.",
     "emptyLabel": "No training venues",

@@ -14,7 +14,7 @@ export default async function Page() {
     return (
       <>
         <ModuleHeader
-          eyebrow={t("console.venues.eyebrow", undefined, "Workspace")}
+          eyebrow={t("console.venues.eyebrow", undefined, "Venues")}
           title={t("console.venues.title", undefined, "Venues")}
         />
         <div className="page-content">
@@ -29,7 +29,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.venues.eyebrow", undefined, "Workspace")}
+        eyebrow={t("console.venues.eyebrow", undefined, "Venues")}
         title={t("console.venues.title", undefined, "Venues")}
         subtitle={`${rows.length} ${rows.length === 1 ? t("console.venues.recordSingular", undefined, "Record") : t("console.venues.recordPlural", undefined, "Records")}`}
         action={

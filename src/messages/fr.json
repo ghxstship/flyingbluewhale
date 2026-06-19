@@ -8047,7 +8047,7 @@
    "subtitle": "PI, vie privée, DSAR, consentement, cartographie des données, assurance.",
    "privacy": {
     "consent": {
-     "eyebrow": "Espace de Travail",
+     "eyebrow": "Juridique",
      "title": "Registres de Consentement",
      "configureSupabase": "Configurer Supabase.",
      "subtitleOne": "{count} Enregistrement",
@@ -13713,7 +13713,7 @@
     "eyebrow": "Paramètres",
     "title": "Conformité",
     "configureSupabase": "Configurez Supabase.",
-    "workspaceSettings": "Paramètres de l'Espace de Travail",
+    "workspaceSettings": "Conformité",
     "platformControls": "Contrôles de plateforme",
     "columns": {
      "control": "Contrôle",
@@ -13732,7 +13732,7 @@
     "eyebrow": "Paramètres",
     "title": "Domaines",
     "configureSupabase": "Configurez Supabase.",
-    "workspaceTitle": "Paramètres de l'Espace de Travail",
+    "workspaceTitle": "Domaines",
     "subtitle": "Domaines personnalisés",
     "addDomain": "Ajouter un Domaine",
     "sectionDomains": "Domaines",
@@ -15479,7 +15479,7 @@
     "cluster": "Cluster",
     "capacity": "Capacité"
    },
-   "eyebrow": "Espace de travail",
+   "eyebrow": "Sites",
    "configureSupabase": "Configurer Supabase.",
    "recordSingular": "Fiche",
    "recordPlural": "Fiches",
@@ -15493,7 +15493,7 @@
     "handover": "Remise"
    },
    "training": {
-    "eyebrow": "Espace de travail",
+    "eyebrow": "Sites",
     "title": "Sites d'entraînement",
     "configureSupabase": "Configurer Supabase.",
     "emptyLabel": "Aucun site d'entraînement",

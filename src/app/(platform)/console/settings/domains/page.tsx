@@ -40,7 +40,7 @@ export default async function DomainsPage() {
     <>
       <ModuleHeader
         eyebrow={t("console.settings.domains.eyebrow", undefined, "Settings")}
-        title={t("console.settings.domains.workspaceTitle", undefined, "Workspace Settings")}
+        title={t("console.settings.domains.workspaceTitle", undefined, "Domains")}
         subtitle={t("console.settings.domains.subtitle", undefined, "Custom domains")}
       />
       <div className="page-content max-w-3xl space-y-5">

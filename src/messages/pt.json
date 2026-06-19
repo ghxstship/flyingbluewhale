@@ -8047,7 +8047,7 @@
    "subtitle": "IP, privacidade, DSAR, consentimento, mapa de dados, seguros.",
    "privacy": {
     "consent": {
-     "eyebrow": "Espaço de trabalho",
+     "eyebrow": "Jurídico",
      "title": "Registros de Consentimento",
      "configureSupabase": "Configure o Supabase.",
      "subtitleOne": "{count} Registro",
@@ -13713,7 +13713,7 @@
     "eyebrow": "Configurações",
     "title": "Conformidade",
     "configureSupabase": "Configure o Supabase.",
-    "workspaceSettings": "Configurações do Workspace",
+    "workspaceSettings": "Conformidade",
     "platformControls": "Controles da plataforma",
     "columns": {
      "control": "Controle",
@@ -13732,7 +13732,7 @@
     "eyebrow": "Configurações",
     "title": "Domínios",
     "configureSupabase": "Configure o Supabase.",
-    "workspaceTitle": "Configurações do Workspace",
+    "workspaceTitle": "Domínios",
     "subtitle": "Domínios personalizados",
     "addDomain": "Adicionar Domínio",
     "sectionDomains": "Domínios",
@@ -15479,7 +15479,7 @@
     "cluster": "Cluster",
     "capacity": "Capacidade"
    },
-   "eyebrow": "Espaço de trabalho",
+   "eyebrow": "Locais",
    "configureSupabase": "Configure o Supabase.",
    "recordSingular": "Registro",
    "recordPlural": "Registros",
@@ -15493,7 +15493,7 @@
     "handover": "Entrega"
    },
    "training": {
-    "eyebrow": "Espaço de trabalho",
+    "eyebrow": "Locais",
     "title": "Venues de Treinamento",
     "configureSupabase": "Configure o Supabase.",
     "emptyLabel": "Nenhum venue de treinamento",

@@ -548,7 +548,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
           { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
           { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
-          { label: "Code of Conduct", href: "/console/compliance/coc", icon: "FileSignature" },
+          { label: "Chain of Custody", href: "/console/compliance/coc", icon: "FileSignature" },
         ],
       },
       {

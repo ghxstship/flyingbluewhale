@@ -13,7 +13,7 @@ export default async function Page() {
     return (
       <>
         <ModuleHeader
-          eyebrow={t("console.venues.training.eyebrow", undefined, "Workspace")}
+          eyebrow={t("console.venues.training.eyebrow", undefined, "Venues")}
           title={t("console.venues.training.title", undefined, "Training Venues")}
         />
         <div className="page-content">
@@ -33,7 +33,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.venues.training.eyebrow", undefined, "Workspace")}
+        eyebrow={t("console.venues.training.eyebrow", undefined, "Venues")}
         title={t("console.venues.training.title", undefined, "Training Venues")}
         subtitle={t(
           "console.venues.training.recordCount",

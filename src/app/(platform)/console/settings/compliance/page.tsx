@@ -50,13 +50,13 @@ export default async function CompliancePage() {
     <>
       <ModuleHeader
         eyebrow={t("console.settings.compliance.eyebrow", undefined, "Settings")}
-        title={t("console.settings.compliance.workspaceSettings", undefined, "Workspace Settings")}
+        title={t("console.settings.compliance.workspaceSettings", undefined, "Compliance")}
         subtitle={t("console.settings.compliance.title", undefined, "Compliance")}
       />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">
-            {t("console.settings.compliance.workspaceSettings", undefined, "Workspace Settings")}
+            {t("console.settings.compliance.workspaceSettings", undefined, "Compliance")}
           </h3>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(

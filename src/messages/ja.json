@@ -5259,7 +5259,8 @@
    },
    "push": {
     "title": "プッシュ通知",
-    "managePreferences": "種別ごとの通知設定を管理 →"
+    "managePreferences": "種別ごとの通知設定を管理 →",
+    "missingVapid": "プッシュ通知はまだ設定されていません。管理者に有効化を依頼してください。"
    },
    "offline": {
     "title": "オフラインモード",
@@ -17656,7 +17657,8 @@
    },
    "density": {
     "label": "密度"
-   }
+   },
+   "intro": "ATLVS プロダクトキットがすべてのアプリ画面をテーマ設定します。モードと密度は自由に調整できます。"
   },
   "applications": {
    "detail": {

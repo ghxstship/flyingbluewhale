@@ -24,12 +24,9 @@ import { urlFor } from "@/lib/urls";
 import { getRequestT } from "@/lib/i18n/request";
 import { Wordmark } from "@/components/brand/Wordmark";
 
-// LEG3ND accent — Production Orange. No `data-platform="legend"` exists (LEG3ND
-// rides the type axis, not the platform overlay), so accents are inlined here
-// rather than routed through `--p-accent`, which would resolve to ATLVS pink.
-const LEGEND = "#E8500A";
-const LEGEND_TEXT = "#C2410C"; // AA-on-canvas variant for text/links.
-
+// LEG3ND accent (Production Orange) comes from the theme: the wrapper sets
+// `data-theme="atlvs-product" data-platform="legend"`, so `--p-accent*` resolve
+// to the LEG3ND ramp for this subtree — no inline hexes.
 const K = "marketing.pages.solutions.legend";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -74,7 +71,7 @@ export default async function LegendPage() {
   const protocolItems = ["standard", "courses", "certifications", "catalog", "signage", "xmce"] as const;
 
   return (
-    <div>
+    <div data-theme="atlvs-product" data-platform="legend">
       <JsonLd
         data={[
           productSchema({
@@ -88,8 +85,8 @@ export default async function LegendPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow">
-          <Wordmark word="LEG3ND" style={{ color: LEGEND_TEXT }} />
+        <div className="eyebrow eyebrow-accent">
+          <Wordmark word="LEG3ND" style={{ color: "var(--p-accent-text)" }} />
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{t(`${K}.hero.title`)}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t(`${K}.hero.body`)}</p>
@@ -121,7 +118,7 @@ export default async function LegendPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] uppercase" style={{ color: LEGEND_TEXT }}>
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
               {t(`${K}.protocol.eyebrow`)}
             </div>
             <h3 className="mt-3 text-3xl font-semibold tracking-tight">{t(`${K}.protocol.title`)}</h3>
@@ -130,7 +127,7 @@ export default async function LegendPage() {
           <ul className="space-y-3 text-sm">
             {protocolItems.map((item) => (
               <li key={item} className="flex items-start gap-2">
-                <CheckCircle2 size={16} className="mt-0.5" style={{ color: LEGEND }} />
+                <CheckCircle2 size={16} className="mt-0.5 text-[var(--p-accent)]" />
                 <span>{t(`${K}.protocol.items.${item}`)}</span>
               </li>
             ))}

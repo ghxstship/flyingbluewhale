@@ -22,7 +22,7 @@ export default async function AppearancePage() {
         {t(
           "me.appearance.intro",
           undefined,
-          "The platform ships a two-skin canon — the ATLVS product kit on every app surface and the cosmic GHXSTSHIP kit on the parent-company marketing page. Mode and density are yours to tune.",
+          "The ATLVS product kit themes every app surface. Mode and density are yours to tune.",
         )}
       </p>
 

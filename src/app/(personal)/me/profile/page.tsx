@@ -156,7 +156,6 @@ export default async function ProfilePage() {
       <div className="surface mt-6 p-6">
         <div className="flex items-baseline justify-between">
           <h2 className="text-sm font-semibold">{t("me.profile.public.title", undefined, "Public Profile")}</h2>
-          <span className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">user_profiles</span>
         </div>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(

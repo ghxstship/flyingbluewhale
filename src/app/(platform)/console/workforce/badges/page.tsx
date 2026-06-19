@@ -72,7 +72,11 @@ export default async function Page() {
             {
               key: "icon",
               header: "Icon",
-              render: (r) => <span className="font-mono text-base">{r.icon ?? "🏅"}</span>,
+              // icon holds an emoji; non-emoji values (e.g. a seed name like
+              // "star") fall back to a medal rather than rendering raw text.
+              render: (r) => (
+                <span className="text-base">{r.icon && /\p{Emoji}/u.test(r.icon) ? r.icon : "🏅"}</span>
+              ),
             },
             { key: "name", header: "Name", render: (r) => r.name },
             { key: "code", header: "Code", render: (r) => r.code, mono: true },

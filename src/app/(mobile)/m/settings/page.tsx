@@ -79,7 +79,7 @@ export default async function MobileSettings() {
                 {t(
                   "m.settings.push.missingVapid",
                   undefined,
-                  "Push requires NEXT_PUBLIC_VAPID_PUBLIC_KEY in env. Ask an admin to configure.",
+                  "Push notifications aren't set up yet. Ask an admin to enable them.",
                 )}
               </p>
             )}

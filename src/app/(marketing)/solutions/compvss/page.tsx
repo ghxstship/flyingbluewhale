@@ -42,7 +42,7 @@ export default async function CompvssPage() {
   ];
 
   return (
-    <div data-platform="compvss">
+    <div data-theme="atlvs-product" data-platform="compvss">
       <JsonLd
         data={[
           productSchema({

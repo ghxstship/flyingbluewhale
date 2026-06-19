@@ -5243,7 +5243,8 @@
    },
    "push": {
     "title": "Push Notifications",
-    "managePreferences": "Manage per-kind notification preferences →"
+    "managePreferences": "Manage per-kind notification preferences →",
+    "missingVapid": "Push notifications aren't set up yet. Ask an admin to enable them."
    },
    "offline": {
     "title": "Offline Mode",
@@ -6027,7 +6028,8 @@
    },
    "density": {
     "label": "Density"
-   }
+   },
+   "intro": "The ATLVS product kit themes every app surface. Mode and density are yours to tune."
   },
   "settings": {
    "title": "Settings",

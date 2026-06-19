@@ -43,7 +43,7 @@ export default async function GvtewayPage() {
   ];
 
   return (
-    <div data-platform="gvteway">
+    <div data-theme="atlvs-product" data-platform="gvteway">
       <JsonLd
         data={[
           productSchema({

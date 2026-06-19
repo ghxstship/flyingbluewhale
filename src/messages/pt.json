@@ -17479,7 +17479,8 @@
    },
    "push": {
     "title": "Notificações Push",
-    "managePreferences": "Gerenciar preferências de notificação por tipo →"
+    "managePreferences": "Gerenciar preferências de notificação por tipo →",
+    "missingVapid": "As notificações push ainda não estão configuradas. Peça a um administrador para ativá-las."
    },
    "offline": {
     "title": "Modo Offline",
@@ -17656,7 +17657,8 @@
    },
    "density": {
     "label": "Densidade"
-   }
+   },
+   "intro": "O kit de produto ATLVS estiliza todas as superfícies do app. Modo e densidade ficam a seu critério."
   },
   "applications": {
    "detail": {

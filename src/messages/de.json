@@ -19529,7 +19529,8 @@
    },
    "push": {
     "title": "Push-Benachrichtigungen",
-    "managePreferences": "Benachrichtigungseinstellungen pro Typ verwalten →"
+    "managePreferences": "Benachrichtigungseinstellungen pro Typ verwalten →",
+    "missingVapid": "Push-Benachrichtigungen sind noch nicht eingerichtet. Bitten Sie eine:n Administrator:in, sie zu aktivieren."
    },
    "offline": {
     "title": "Offline-Modus",
@@ -19706,7 +19707,8 @@
    },
    "density": {
     "label": "Dichte"
-   }
+   },
+   "intro": "Das ATLVS-Produktkit gestaltet jede App-Oberfläche. Modus und Dichte können Sie selbst einstellen."
   },
   "applications": {
    "detail": {

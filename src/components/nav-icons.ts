@@ -96,6 +96,7 @@ import {
   Wallet,
   Warehouse,
   Wrench,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import type { IconName } from "@/lib/nav";
@@ -193,4 +194,5 @@ export const NAV_ICONS: Record<IconName, LucideIcon> = {
   Wallet,
   Warehouse,
   Wrench,
+  Zap,
 };

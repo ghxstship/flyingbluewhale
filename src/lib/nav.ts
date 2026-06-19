@@ -113,7 +113,9 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Automations
+  | "Zap";
 
 export type NavItem = {
   label: string;
@@ -757,6 +759,8 @@ export const platformNavDomain: NavGroup[] = [
         label: "Time & Payroll",
         items: [
           { label: "Time", href: "/console/finance/time", icon: "Clock" },
+          { label: "Timesheets", href: "/console/finance/timesheets", icon: "ClipboardCheck" },
+          { label: "Timesheet Audit", href: "/console/finance/timesheets/audit", icon: "Sparkles" },
           { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
           { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
         ],
@@ -885,6 +889,28 @@ export const platformNavDomain: NavGroup[] = [
       },
     ],
   },
+  {
+    // KNOWLEDGE — the LEG3ND product (kit v5): The Standard / LMS / Resources /
+    // Catalog / Signage / XMCE engine / Safety.
+    label: "Knowledge",
+    items: [],
+    sections: [
+      {
+        label: "LEG3ND",
+        items: [
+          { label: "The Standard", href: "/console/knowledge", icon: "BookOpen" },
+          { label: "Courses", href: "/console/workforce/courses", icon: "GraduationCap" },
+          { label: "Training Paths", href: "/console/legend/paths", icon: "GraduationCap" },
+          { label: "Certifications", href: "/console/accreditation", icon: "BadgeCheck" },
+          { label: "Resources", href: "/console/legend/resources", icon: "FolderOpen" },
+          { label: "Catalog", href: "/console/settings/catalog", icon: "Spline" },
+          { label: "Signage", href: "/console/legend/signage", icon: "Map" },
+          { label: "Compliance Engine", href: "/console/legend/engine", icon: "ShieldCheck" },
+          { label: "Safety", href: "/console/safety/incidents", icon: "Siren" },
+        ],
+      },
+    ],
+  },
 ];
 
 /**
@@ -959,6 +985,7 @@ export const settingsNav: NavGroup[] = [
       { label: "Marketplace", href: "/console/settings/integrations/marketplace" },
       { label: "Ticketing", href: "/console/settings/integrations/ticketing" },
       { label: "Automations", href: "/console/ai/automations" },
+      { label: "Conditional Automations", href: "/console/settings/automations", icon: "Sparkles", minRole: "admin" },
       { label: "API", href: "/console/settings/api" },
       { label: "Webhooks", href: "/console/settings/webhooks" },
     ],

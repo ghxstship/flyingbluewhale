@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CheckInControls } from "./CheckInControls";
+import { ShiftPulseCard } from "@/components/compvss/ShiftPulseCard";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
@@ -136,6 +137,7 @@ export default async function CheckInPage() {
               <div className="mt-4">
                 <CheckInControls shiftId={s.id} attendance={s.attendance} />
               </div>
+              {s.attendance === "checked_out" && <ShiftPulseCard shiftId={s.id} />}
             </li>
           ))
         )}

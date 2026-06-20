@@ -57,7 +57,13 @@ export default async function DocumentPreviewPage({
           ← Document library
         </Link>
       </div>
-      <DocToolbar template={template} data={data} org={org} client={client} />
+      <DocToolbar
+        template={template}
+        data={data}
+        org={org}
+        client={client}
+        aiDraftEndpoint={docType === "proposal" ? "/api/v1/documents/proposal/ai-draft" : undefined}
+      />
     </div>
   );
 }

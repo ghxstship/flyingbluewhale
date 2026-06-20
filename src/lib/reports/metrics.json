@@ -1,6 +1,6 @@
 {
   "version": "6.3",
-  "note": "Canonical metric/KPI + report registry — single source of truth for the Reports & Analytics engine, the report templates (report-*.html), dashboard widgets, and OpenAPI /metrics + /reports endpoints. A metric definition is the contract: report templates bind <span class=\"mf\" data-path=\"metric.<id>.value\"> and dashboards read the same ids. Mirrors schemas.json conventions.",
+  "note": "Canonical metric/KPI + report registry \u2014 single source of truth for the Reports & Analytics engine, the report templates (report-*.html), dashboard widgets, and OpenAPI /metrics + /reports endpoints. A metric definition is the contract: report templates bind <span class=\"mf\" data-path=\"metric.<id>.value\"> and dashboards read the same ids. Mirrors schemas.json conventions.",
   "metricSchema": {
     "id": "snake_case unique key",
     "app": "ATLVS | COMPVSS | GVTEWAY | LEG3ND | ALL",
@@ -53,7 +53,7 @@
       "direction": "down",
       "target": 0,
       "confidence": "PUBLISHED",
-      "formula": "actual finish − baseline finish (per phase, summed)",
+      "formula": "actual finish \u2212 baseline finish (per phase, summed)",
       "sources": [
         "schedule"
       ]
@@ -67,7 +67,7 @@
       "direction": "down",
       "target": 0,
       "confidence": "PUBLISHED",
-      "formula": "(actual + committed − budget) / budget",
+      "formula": "(actual + committed \u2212 budget) / budget",
       "sources": [
         "budget"
       ]
@@ -81,7 +81,7 @@
       "direction": "up",
       "target": 32,
       "confidence": "PUBLISHED",
-      "formula": "(revenue − direct cost) / revenue",
+      "formula": "(revenue \u2212 direct cost) / revenue",
       "sources": [
         "budget",
         "invoice"
@@ -96,7 +96,7 @@
       "direction": "down",
       "target": null,
       "confidence": "MODELED",
-      "formula": "EAC − actuals to date",
+      "formula": "EAC \u2212 actuals to date",
       "sources": [
         "budget"
       ]
@@ -168,7 +168,7 @@
       "direction": "up",
       "target": null,
       "confidence": "MODELED",
-      "formula": "sum of open opportunity value × stage probability",
+      "formula": "sum of open opportunity value \u00d7 stage probability",
       "sources": [
         "sales"
       ]
@@ -210,7 +210,7 @@
       "direction": "up",
       "target": 90,
       "confidence": "MODELED",
-      "formula": "1 − |forecast − actual| / actual",
+      "formula": "1 \u2212 |forecast \u2212 actual| / actual",
       "sources": [
         "budget",
         "invoice"
@@ -225,7 +225,7 @@
       "direction": "up",
       "target": 70,
       "confidence": "MODELED",
-      "formula": "weighted 0–100 index of schedule, budget, scope & risk",
+      "formula": "weighted 0\u2013100 index of schedule, budget, scope & risk",
       "sources": [
         "projects",
         "schedule",
@@ -315,7 +315,7 @@
       "direction": "down",
       "target": 1,
       "confidence": "PUBLISHED",
-      "formula": "recordable incidents × 200,000 / hours worked",
+      "formula": "recordable incidents \u00d7 200,000 / hours worked",
       "sources": [
         "incident",
         "timesheet"
@@ -647,7 +647,7 @@
       "direction": "up",
       "target": null,
       "confidence": "MODELED",
-      "formula": "avg margin per customer × expected lifetime",
+      "formula": "avg margin per customer \u00d7 expected lifetime",
       "sources": [
         "order"
       ]
@@ -675,7 +675,7 @@
       "direction": "up",
       "target": 50,
       "confidence": "PUBLISHED",
-      "formula": "% promoters − % detractors",
+      "formula": "% promoters \u2212 % detractors",
       "sources": [
         "survey"
       ]
@@ -847,7 +847,7 @@
       "direction": "down",
       "target": 45,
       "confidence": "PUBLISHED",
-      "formula": "avg AR / revenue × period days",
+      "formula": "avg AR / revenue \u00d7 period days",
       "sources": [
         "invoice"
       ]
@@ -904,7 +904,7 @@
       "direction": "down",
       "target": null,
       "confidence": "MODELED",
-      "formula": "sum of open risk value × probability",
+      "formula": "sum of open risk value \u00d7 probability",
       "sources": [
         "projects"
       ]
@@ -1108,7 +1108,7 @@
       "direction": "up",
       "target": 4.5,
       "confidence": "PUBLISHED",
-      "formula": "mean post-course instructor rating (1–5)",
+      "formula": "mean post-course instructor rating (1\u20135)",
       "sources": [
         "survey",
         "syllabus"
@@ -1123,10 +1123,69 @@
       "direction": "down",
       "target": null,
       "confidence": "MODELED",
-      "formula": "avg days new hire → role-ready certification",
+      "formula": "avg days new hire \u2192 role-ready certification",
       "sources": [
         "transcript",
         "certificate"
+      ]
+    },
+    "shift_happiness_score": {
+      "app": "COMPVSS",
+      "label": "Shift Happiness Score",
+      "unit": "score",
+      "format": "score",
+      "grain": "shift",
+      "direction": "up",
+      "target": 4.0,
+      "confidence": "PUBLISHED",
+      "formula": "mean mood rating (1\u20135) across shift_feedback rows in period",
+      "sources": [
+        "shift_feedback"
+      ]
+    },
+    "crew_fatigue_index": {
+      "app": "COMPVSS",
+      "label": "Crew Fatigue Index",
+      "unit": "score",
+      "format": "score",
+      "grain": "shift",
+      "direction": "up",
+      "target": 3.5,
+      "confidence": "PUBLISHED",
+      "formula": "mean energy rating (1\u20135) across shift_feedback; lower = more fatigue",
+      "sources": [
+        "shift_feedback"
+      ]
+    },
+    "projected_labor_cost": {
+      "app": "COMPVSS",
+      "label": "Projected Labor Cost",
+      "unit": "$",
+      "format": "currency",
+      "grain": "event",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "sum(scheduled shifts \u00d7 hourly rate) for upcoming events",
+      "sources": [
+        "shifts",
+        "crew_members"
+      ]
+    },
+    "labor_revenue_ratio": {
+      "app": "COMPVSS",
+      "label": "Labor / Revenue Ratio",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "down",
+      "target": 35,
+      "confidence": "MODELED",
+      "formula": "projected_labor_cost / project.budget \u00d7 100",
+      "sources": [
+        "shifts",
+        "projects",
+        "budgets"
       ]
     }
   },
@@ -1720,6 +1779,34 @@
       "metrics": [
         "ceus_awarded",
         "active_certs"
+      ],
+      "status": "preconfigured"
+    },
+    "shift_pulse": {
+      "app": "COMPVSS",
+      "title": "Shift Pulse & Crew Wellbeing",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "workforce",
+      "metrics": [
+        "shift_happiness_score",
+        "crew_fatigue_index",
+        "no_show_rate_crew",
+        "labor_fill_rate"
+      ],
+      "status": "preconfigured"
+    },
+    "labor_forecast": {
+      "app": "COMPVSS",
+      "title": "Labor Cost Forecast",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "financial",
+      "metrics": [
+        "projected_labor_cost",
+        "labor_revenue_ratio",
+        "labor_cost_per_head",
+        "overtime_pct"
       ],
       "status": "preconfigured"
     }

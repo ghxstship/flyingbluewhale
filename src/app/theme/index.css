@@ -24,6 +24,12 @@
    FAA / AIGA-DOT / ISO 7010). Seeds + function map + legibility/anatomy scales
    for <SignIcon> / <SignPanel>. SSOT mirrored in tokens.json#signage. */
 @import "./kit-signage.css";
+/* COMPVSS mobile kit — component layer for the field PWA (scoped under
+   .mobile-shell). Ported from the COMPVSS Design System kit. */
+@import "./kit-mobile.css";
+/* COMPVSS mobile auth + onboarding flow — component layer scoped under
+   .compvss-onboarding. Loaded immediately after kit-mobile.css per the kit. */
+@import "./kit-onboarding.css";
 
 /*
  * SSR cold-start fallback — used only when no [data-theme] / [data-ui]

@@ -4,8 +4,9 @@ import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { mobileTabs } from "@/lib/nav";
-import { requireSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import CompvssOnboarding from "@/components/mobile/onboarding/CompvssOnboarding";
 
 /**
  * COMPVSS field shell — the offline-first venue/field workforce PWA, rebuilt to
@@ -14,13 +15,35 @@ import { createClient } from "@/lib/supabase/server";
  * persona-routed /m/[role] tab bars were retired with the role surfaces, so the
  * shell renders one tab set for every crew member.
  *
+ * Auth gate: an unauthenticated visitor gets the **kit's own auth + onboarding
+ * flow** (`CompvssOnboarding` — splash → sign up/in → verify → profile → join →
+ * permissions → welcome → Rose → assignment), NOT the web `(auth)` screens.
+ * Once a session exists the flow ends with a refresh and the app renders.
+ *
  * `data-platform="compvss"` narrows the neutral atlvs-product skin to the molten
  * brass amber accent; CTAs render amber bg + dark ink (`.ps-btn--cta`).
  */
 export default async function MobileLayout({ children }: { children: React.ReactNode }) {
-  // Outer guard for the whole shell — no session → /login. Sub-pages may guard
-  // again; this is the boundary.
-  const session = await requireSession();
+  const session = await getSession();
+
+  // No session → the COMPVSS kit onboarding owns the full screen (no chrome /
+  // tab bar). Same compvss skin so the molten accent + tokens apply.
+  if (!session) {
+    return (
+      <div
+        data-ui="saas"
+        data-theme="atlvs-product"
+        data-product="compvss"
+        data-platform="compvss"
+        className="page-shell mobile-shell"
+      >
+        <main id="main" tabIndex={-1}>
+          <CompvssOnboarding />
+        </main>
+      </div>
+    );
+  }
+
   const tenant = await resolveTenant();
   const supabase = await createClient();
   const switcherEntries = await resolveSwitcherEntries({

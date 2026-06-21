@@ -1,0 +1,463 @@
+/* COMPVSS mobile — Auth & Onboarding flow component layer.
+ * Ported from the kit prototype (compvss-mobile/auth.html <style>), 2026-06-21.
+ * Every selector is scoped under `.compvss-onboarding` (the flow's root
+ * wrapper) so it never leaks into the rest of the mobile shell. Prototype-shell
+ * chrome (html/body, .phone, .notch, .statusbar, .nav, the .phone .ps-btn--cta
+ * override) is intentionally dropped — that scaffolding belongs to the
+ * standalone prototype, not the real PWA. Uses only --p-* tokens; the literal
+ * inks (#1f0e03 dark CTA ink, #0c0e12 scan/QR fields, #fff knob) are the kit's
+ * fixed values and are kept verbatim. */
+
+.compvss-onboarding .scr {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 26px 28px;
+  position: relative;
+}
+.compvss-onboarding .scr.center {
+  justify-content: center;
+}
+
+.compvss-onboarding .wm {
+  font-family: var(--p-wordmark);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  font-size: 17px;
+}
+.compvss-onboarding .brandmark {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.compvss-onboarding .h1 {
+  font-family: var(--p-heading);
+  text-transform: uppercase;
+  font-size: 30px;
+  line-height: 1.02;
+  margin: 0 0 8px;
+}
+.compvss-onboarding .sub {
+  font-size: 14px;
+  color: var(--p-text-2);
+  line-height: 1.5;
+  margin: 0;
+}
+.compvss-onboarding .ey {
+  font-family: var(--p-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-accent-text);
+  margin-bottom: 10px;
+}
+.compvss-onboarding .field {
+  margin-bottom: 14px;
+}
+.compvss-onboarding .field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p-text-2);
+  margin-bottom: 6px;
+}
+.compvss-onboarding .field input,
+.compvss-onboarding .field select,
+.compvss-onboarding .field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--p-border);
+  border-radius: 12px;
+  padding: 13px 14px;
+  font-size: 15px;
+  background: var(--p-surface);
+  color: var(--p-text-1);
+  font-family: inherit;
+}
+.compvss-onboarding .field input:focus,
+.compvss-onboarding .field select:focus,
+.compvss-onboarding .field textarea:focus {
+  outline: none;
+  border-color: var(--p-accent);
+}
+.compvss-onboarding .inwrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.compvss-onboarding .inwrap .lead {
+  position: absolute;
+  left: 13px;
+  color: var(--p-text-3);
+  display: flex;
+}
+.compvss-onboarding .inwrap input {
+  padding-left: 40px;
+}
+.compvss-onboarding .row {
+  display: flex;
+  gap: 10px;
+}
+.compvss-onboarding .link {
+  color: var(--p-accent-text);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+}
+.compvss-onboarding .muted {
+  color: var(--p-text-3);
+  font-size: 12.5px;
+}
+.compvss-onboarding .sso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid var(--p-border);
+  border-radius: 12px;
+  background: var(--p-surface);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--p-text-1);
+}
+.compvss-onboarding .sso:disabled {
+  cursor: default;
+}
+.compvss-onboarding .divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--p-text-3);
+  font-size: 11px;
+  font-family: var(--p-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 16px 0;
+}
+.compvss-onboarding .divider::before,
+.compvss-onboarding .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--p-border);
+}
+.compvss-onboarding .otp {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 8px 0 4px;
+}
+.compvss-onboarding .otp .cell {
+  width: 48px;
+  height: 58px;
+  border-radius: 12px;
+  border: 1.5px solid var(--p-border);
+  background: var(--p-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--p-heading);
+  font-size: 26px;
+}
+.compvss-onboarding .otp .cell.on {
+  border-color: var(--p-accent);
+  color: var(--p-text-1);
+}
+.compvss-onboarding .otp .cell.cur {
+  border-color: var(--p-accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--p-accent) 22%, transparent);
+}
+.compvss-onboarding .toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--p-border);
+}
+.compvss-onboarding .toggle-row .ic {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in oklab, var(--p-accent) 14%, transparent);
+  color: var(--p-accent-text);
+}
+.compvss-onboarding .toggle-row .req {
+  font-family: var(--p-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--p-text-3);
+}
+.compvss-onboarding .sw {
+  width: 46px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--p-border);
+  position: relative;
+  cursor: pointer;
+  flex: none;
+  transition: background 0.15s;
+}
+.compvss-onboarding .sw[data-on] {
+  background: var(--p-success);
+}
+.compvss-onboarding .sw .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.15s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.compvss-onboarding .sw[data-on] .knob {
+  left: 21px;
+}
+.compvss-onboarding .card {
+  border: 1px solid var(--p-border);
+  border-radius: 16px;
+  padding: 16px;
+  background: var(--p-surface);
+}
+.compvss-onboarding .pill-step {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.compvss-onboarding .pill-step i {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--p-border);
+  flex: 1;
+}
+.compvss-onboarding .pill-step i.on {
+  background: var(--p-accent);
+}
+.compvss-onboarding .avatar-pick {
+  width: 96px;
+  height: 96px;
+  flex: none;
+  align-self: center;
+  border-radius: 50%;
+  background: var(--p-accent);
+  color: #1f0e03;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--p-mono);
+  font-weight: 700;
+  font-size: 28px;
+  margin: 0 auto 8px;
+  position: relative;
+}
+.compvss-onboarding .avatar-pick .cam {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--p-text-2);
+}
+.compvss-onboarding .scan-frame {
+  aspect-ratio: 1;
+  border-radius: 20px;
+  background: #0c0e12;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 4px 0 14px;
+}
+.compvss-onboarding .scan-frame .cnr {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--p-accent);
+}
+.compvss-onboarding .scan-frame .cnr.tl {
+  top: 22px;
+  left: 22px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 8px 0 0 0;
+}
+.compvss-onboarding .scan-frame .cnr.tr {
+  top: 22px;
+  right: 22px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 8px 0 0;
+}
+.compvss-onboarding .scan-frame .cnr.bl {
+  bottom: 22px;
+  left: 22px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 8px;
+}
+.compvss-onboarding .scan-frame .cnr.br {
+  bottom: 22px;
+  right: 22px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 8px 0;
+}
+.compvss-onboarding .codebox {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.compvss-onboarding .codebox input {
+  width: 100%;
+  text-align: center;
+  letter-spacing: 0.3em;
+  font-family: var(--p-mono);
+  font-size: 20px;
+  text-transform: uppercase;
+}
+.compvss-onboarding .danger-zone {
+  border: 1px solid color-mix(in oklab, var(--p-danger) 35%, var(--p-border));
+  border-radius: 16px;
+  padding: 4px 16px;
+  background: color-mix(in oklab, var(--p-danger) 5%, var(--p-surface));
+}
+.compvss-onboarding .acct-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--p-border);
+  cursor: pointer;
+}
+.compvss-onboarding .acct-row:last-child {
+  border-bottom: none;
+}
+.compvss-onboarding .acct-row .ic {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--p-bg);
+  border: 1px solid var(--p-border);
+  color: var(--p-text-2);
+}
+.compvss-onboarding .note {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  background: color-mix(in oklab, var(--p-info) 8%, var(--p-surface));
+  border: 1px solid color-mix(in oklab, var(--p-info) 28%, var(--p-border));
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 12.5px;
+  color: var(--p-text-2);
+  line-height: 1.5;
+}
+.compvss-onboarding .spacer {
+  flex: 1;
+}
+.compvss-onboarding .backbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 14px -2px;
+  color: var(--p-text-2);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ── Canonical motion: press feedback, entrance & flip — matches the main app ── */
+@media (prefers-reduced-motion: no-preference) {
+  .compvss-onboarding .scr {
+    animation: compvssOnbScrIn 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes compvssOnbScrIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .compvss-onboarding .sso,
+  .compvss-onboarding .backbtn,
+  .compvss-onboarding .acct-row,
+  .compvss-onboarding .ps-btn,
+  .compvss-onboarding .field input,
+  .compvss-onboarding .field select,
+  .compvss-onboarding .sw,
+  .compvss-onboarding .toggle-row .ic,
+  .compvss-onboarding .otp .cell {
+    transition:
+      transform 0.13s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.15s,
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .compvss-onboarding .sso:active,
+  .compvss-onboarding .acct-row:active,
+  .compvss-onboarding .ps-btn:active {
+    transform: scale(0.975);
+  }
+  .compvss-onboarding .backbtn:active {
+    transform: scale(0.92);
+  }
+  .compvss-onboarding .pill-step i {
+    transition: background 0.3s ease;
+  }
+  .compvss-onboarding .cardback {
+    animation: compvssOnbFaceIn 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes compvssOnbFaceIn {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .compvss-onboarding .otp .cell.cur {
+    animation: compvssOnbCellPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes compvssOnbCellPulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--p-accent) 22%, transparent);
+    }
+    50% {
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--p-accent) 6%, transparent);
+    }
+  }
+}

@@ -103,7 +103,7 @@ export default async function MobileAlertsPage() {
 
       {rows.length === 0 ? (
         <div className="item">
-          <div className="s">{t("m.alerts.empty", undefined, "All clear. No alerts right now.")}</div>
+          <div className="s">{t("m.alerts.emptyTitle", undefined, "All clear. No alerts right now.")}</div>
         </div>
       ) : (
         rows.map((a) => {

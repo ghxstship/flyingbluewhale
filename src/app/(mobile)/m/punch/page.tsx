@@ -69,7 +69,7 @@ export default async function PunchPage() {
       {entries.length === 0 ? (
         <EmptyState
           icon={<Clock size={28} aria-hidden="true" />}
-          title={t("m.punch.empty", undefined, "No Punches")}
+          title={t("m.punch.emptyTitle", undefined, "No Punches")}
           description={t("m.punch.emptyBody", undefined, "Punch in to start your shift.")}
         />
       ) : (

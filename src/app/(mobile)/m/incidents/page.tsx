@@ -71,7 +71,7 @@ export default async function IncidentsPage() {
       {incidents.length === 0 ? (
         <EmptyState
           icon={<ShieldCheck size={28} aria-hidden="true" />}
-          title={t("m.incidents.empty", undefined, "All Clear")}
+          title={t("m.incidents.emptyTitle", undefined, "All Clear")}
           description={t("m.incidents.emptyBody", undefined, "No incidents logged for this org yet.")}
         />
       ) : (

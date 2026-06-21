@@ -68,7 +68,7 @@ export default async function MyIncidentPage() {
       {rows.length === 0 ? (
         <EmptyState
           icon={<ShieldCheck size={28} aria-hidden="true" />}
-          title={t("m.incident.empty", undefined, "Nothing Filed")}
+          title={t("m.incident.emptyTitle", undefined, "Nothing Filed")}
           description={t("m.incident.emptyBody", undefined, "You haven't filed any incident reports.")}
         />
       ) : (

@@ -113,7 +113,7 @@ export default async function MobileNotificationsPage() {
 
       {rows.length === 0 ? (
         <div className="item">
-          <div className="s">{t("m.notifications.empty", undefined, "You're all caught up.")}</div>
+          <div className="s">{t("m.notifications.emptyTitle", undefined, "You're all caught up.")}</div>
         </div>
       ) : (
         rows.map((n) => (

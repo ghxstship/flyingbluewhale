@@ -12,7 +12,7 @@ export default function VendorSchedulePage() {
     <ScheduleSurface
       variant="portal"
       clockInHref="/m/clock"
-      swapHref="/m/shift/swap"
+      swapHref="/m/requests"
       eyebrowLabel="Vendor"
       titleLabel="Schedule"
     />

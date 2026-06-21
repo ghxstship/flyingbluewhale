@@ -74,7 +74,7 @@ export default async function MobileOnboardingPage() {
       {rows.length === 0 ? (
         <EmptyState
           icon={<GraduationCap size={28} aria-hidden="true" />}
-          title={t("m.onboarding.empty", undefined, "All Caught Up")}
+          title={t("m.onboarding.emptyTitle", undefined, "All Caught Up")}
           description={t("m.onboarding.emptyBody", undefined, "New-hire journeys assigned to you appear here.")}
         />
       ) : (

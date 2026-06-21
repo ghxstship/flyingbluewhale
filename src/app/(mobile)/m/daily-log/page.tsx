@@ -48,7 +48,7 @@ export default async function DailyLogPage() {
       {logs.length === 0 ? (
         <EmptyState
           icon={<NotebookPen size={28} aria-hidden="true" />}
-          title={t("m.dailyLog.empty", undefined, "No Logs Yet")}
+          title={t("m.dailyLog.emptyTitle", undefined, "No Logs Yet")}
           description={t("m.dailyLog.emptyBody", undefined, "Start the day's log with weather and notes.")}
         />
       ) : (
@@ -84,7 +84,7 @@ export default async function DailyLogPage() {
         })
       )}
 
-      <Link href="/m/daily-log/new" className="fab" aria-label={t("m.dailyLog.new", undefined, "New Log")}>
+      <Link href="/m/daily-log/new" className="fab" aria-label={t("m.dailyLog.newCta", undefined, "New Log")}>
         <KIcon name="Plus" size={22} />
       </Link>
     </div>

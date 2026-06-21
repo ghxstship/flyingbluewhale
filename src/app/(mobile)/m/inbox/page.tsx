@@ -131,7 +131,7 @@ export default async function InboxPage() {
 
       {rooms.length === 0 ? (
         <EmptyState
-          title={t("m.inbox.empty", undefined, "No Conversations")}
+          title={t("m.inbox.emptyTitle", undefined, "No Conversations")}
           description={t("m.inbox.emptyHint", undefined, "Channels and direct messages land here.")}
         />
       ) : (

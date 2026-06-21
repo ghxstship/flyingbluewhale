@@ -50,7 +50,7 @@ export default async function CocPage() {
       {events.length === 0 ? (
         <EmptyState
           icon={<ScanLine size={28} aria-hidden="true" />}
-          title={t("m.coc.empty", undefined, "No Custody Events")}
+          title={t("m.coc.emptyTitle", undefined, "No Custody Events")}
           description={t("m.coc.emptyBody", undefined, "Scans and asset handoffs will appear here as a timeline.")}
         />
       ) : (

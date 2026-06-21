@@ -81,7 +81,7 @@ export default async function HandoverPage() {
       {handovers.length === 0 ? (
         <EmptyState
           icon={<Repeat size={28} aria-hidden="true" />}
-          title={t("m.handover.empty", undefined, "No Handovers")}
+          title={t("m.handover.emptyTitle", undefined, "No Handovers")}
           description={t("m.handover.emptyBody", undefined, "Submit an end-of-shift handover to start the trail.")}
         />
       ) : (

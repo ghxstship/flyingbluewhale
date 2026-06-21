@@ -45,7 +45,7 @@ export async function createCueAction(_: State, fd: FormData): Promise<State> {
   });
   if (error) return actionFail(error.message, fd);
   revalidatePath("/console/production/ros");
-  revalidatePath("/m/ros");
+  revalidatePath("/m/schedule");
   return null;
 }
 
@@ -71,7 +71,7 @@ export async function setCueStatus(formData: FormData): Promise<void> {
     .eq("org_id", session.orgId);
   if (error) throw new Error(error.message);
   revalidatePath("/console/production/ros");
-  revalidatePath("/m/ros");
+  revalidatePath("/m/schedule");
 }
 
 export async function deleteCue(formData: FormData) {

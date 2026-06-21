@@ -104,7 +104,7 @@ export default async function MobileHome() {
     wUnread: t("m.home.w.unread", undefined, "Messages"),
     wUnreadSub: t("m.home.w.unreadSub", undefined, "Recent Activity"),
     quickActions: t("m.home.quickActions", undefined, "Quick Actions"),
-    upcoming: t("m.home.upcoming", undefined, "Upcoming"),
+    upcoming: t("m.home.upcomingLabel", undefined, "Upcoming"),
     viewAll: t("m.home.viewAll", undefined, "View All Upcoming Events"),
     noShift: t("m.home.noShift", undefined, "Nothing Scheduled"),
     noShiftBody: t("m.home.noShiftBody", undefined, "Your next call lands here."),

@@ -91,7 +91,7 @@ export default async function TimeOffPage() {
       {requests.length === 0 ? (
         <EmptyState
           icon={<CalendarOff size={28} aria-hidden="true" />}
-          title={t("m.timeOff.empty", undefined, "No Requests")}
+          title={t("m.timeOff.emptyTitle", undefined, "No Requests")}
           description={t("m.timeOff.emptyBody", undefined, "You haven't requested any time off.")}
         />
       ) : (
@@ -119,7 +119,7 @@ export default async function TimeOffPage() {
         })
       )}
 
-      <Link href="/m/time-off/new" className="fab" aria-label={t("m.timeOff.new", undefined, "Request Time Off")}>
+      <Link href="/m/time-off/new" className="fab" aria-label={t("m.timeOff.newCta", undefined, "Request Time Off")}>
         <KIcon name="Plus" size={22} />
       </Link>
     </div>

@@ -3,12 +3,13 @@
 /**
  * Native device permission requests for the COMPVSS mobile app.
  *
- * COMPVSS ships as a Capacitor PWA. Today these requests run against **web
- * platform APIs** (Geolocation, Notification, getUserMedia, Web Bluetooth /
- * Web NFC) which work inside the Capacitor WebView and in the browser PWA. At
- * native packaging time, each branch swaps to the matching Capacitor plugin
- * (`@capacitor/geolocation`, `@capacitor/push-notifications`, `@capacitor/camera`)
- * — see the `TODO(native)` markers below.
+ * COMPVSS ships as a Capacitor PWA. On a **native** shell each request goes
+ * through the matching Capacitor plugin (`@capacitor/geolocation`,
+ * `@capacitor/push-notifications`, `@capacitor/camera`) — dynamically imported
+ * so the web bundle never evaluates them. On the **web/PWA** the same calls fall
+ * back to the web platform APIs (Geolocation, Notification, getUserMedia, Web
+ * Bluetooth / Web NFC), which work inside the WebView and the browser. Bluetooth
+ * /NFC has no first-party Capacitor plugin, so it stays web-API only.
  *
  * This module is `"use client"`-safe: pure browser, no server imports, and the
  * only dependency beyond the DOM is an optional, guarded `@capacitor/core`
@@ -67,10 +68,13 @@ function hasNfc(): boolean {
  * user has granted them.
  */
 export function checkPermissionsSupport(): Record<PermissionKind, boolean> {
+  // On a native shell the Capacitor plugins back location/notifications/camera
+  // regardless of which web APIs the WebView exposes.
+  const native = isNativePlatform();
   return {
-    location: hasGeolocation(),
-    notifications: hasNotification(),
-    camera: hasMediaDevices(),
+    location: native || hasGeolocation(),
+    notifications: native || hasNotification(),
+    camera: native || hasMediaDevices(),
     bluetooth: hasBluetooth() || hasNfc(),
   };
 }
@@ -83,7 +87,15 @@ export function checkPermissionsSupport(): Record<PermissionKind, boolean> {
 export async function requestPermission(kind: PermissionKind): Promise<PermissionResult> {
   switch (kind) {
     case "location": {
-      // TODO(native): swap to @capacitor/geolocation `Geolocation.requestPermissions()` when the native build adds the plugin.
+      if (isNativePlatform()) {
+        try {
+          const { Geolocation } = await import("@capacitor/geolocation");
+          const s = await Geolocation.requestPermissions();
+          return { granted: s.location === "granted" || s.coarseLocation === "granted" };
+        } catch {
+          return { granted: false };
+        }
+      }
       if (!hasGeolocation()) return { granted: false, unavailable: true };
       try {
         return await new Promise<PermissionResult>((resolve) => {
@@ -103,7 +115,25 @@ export async function requestPermission(kind: PermissionKind): Promise<Permissio
     }
 
     case "notifications": {
-      // TODO(native): swap to @capacitor/push-notifications `PushNotifications.requestPermissions()` when the native build adds the plugin.
+      if (isNativePlatform()) {
+        try {
+          const { PushNotifications } = await import("@capacitor/push-notifications");
+          const s = await PushNotifications.requestPermissions();
+          if (s.receive === "granted") {
+            // Registering yields the device token via the 'registration' listener
+            // the push layer subscribes to; safe to call once permission is granted.
+            try {
+              await PushNotifications.register();
+            } catch {
+              /* registration is best-effort; permission is what we report */
+            }
+            return { granted: true };
+          }
+          return { granted: false };
+        } catch {
+          return { granted: false };
+        }
+      }
       if (!hasNotification()) return { granted: false, unavailable: true };
       try {
         const result = await Notification.requestPermission();
@@ -114,7 +144,15 @@ export async function requestPermission(kind: PermissionKind): Promise<Permissio
     }
 
     case "camera": {
-      // TODO(native): swap to @capacitor/camera `Camera.requestPermissions()` when the native build adds the plugin.
+      if (isNativePlatform()) {
+        try {
+          const { Camera } = await import("@capacitor/camera");
+          const s = await Camera.requestPermissions({ permissions: ["camera"] });
+          return { granted: s.camera === "granted" };
+        } catch {
+          return { granted: false };
+        }
+      }
       if (!hasMediaDevices()) return { granted: false, unavailable: true };
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });

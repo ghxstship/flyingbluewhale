@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useTransition, useState } from "react";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -28,6 +28,39 @@ export function NewAnnouncementForm({
 }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(createAnnouncementAction, null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const [aiPending, startAi] = useTransition();
+  const [aiError, setAiError] = useState<string | null>(null);
+
+  const enhanceBody = () => {
+    const currentBody = bodyRef.current?.value ?? "";
+    const titleEl = document.querySelector<HTMLInputElement>('[name="title"]');
+    const currentTitle = titleEl?.value ?? "";
+    const text = currentTitle ? `Title: ${currentTitle}\n\nBody:\n${currentBody}` : currentBody;
+    if (!text.trim()) return;
+    setAiError(null);
+    startAi(async () => {
+      try {
+        const res = await fetch("/api/v1/ai/enhance-text", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ text, context: "announcement" }),
+        });
+        const json = (await res.json()) as {
+          ok: boolean;
+          data?: { enhanced: string };
+          error?: { message: string };
+        };
+        if (!json.ok || !json.data) {
+          setAiError(json.error?.message ?? "Enhancement failed; try again.");
+          return;
+        }
+        if (bodyRef.current) bodyRef.current.value = json.data.enhanced;
+      } catch {
+        setAiError("Network error; try again.");
+      }
+    });
+  };
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
@@ -38,10 +71,23 @@ export function NewAnnouncementForm({
         maxLength={200}
       />
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs font-medium text-[var(--p-text-2)]">
-          {t("console.comms.announcements.new.body", undefined, "Body")}
-        </span>
-        <textarea name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full" />
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-[var(--p-text-2)]">
+            {t("console.comms.announcements.new.body", undefined, "Body")}
+          </span>
+          <button
+            type="button"
+            onClick={enhanceBody}
+            disabled={aiPending}
+            className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium text-[var(--p-accent)] hover:bg-[var(--p-surface-raised)] transition-colors disabled:opacity-50"
+            title="Rewrite with AI"
+          >
+            <span>✦</span>
+            {aiPending ? "Enhancing…" : "Enhance with AI"}
+          </button>
+        </div>
+        <textarea ref={bodyRef} name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full" />
+        {aiError && <p className="text-[11px] text-[var(--p-danger-text)]">{aiError}</p>}
       </label>
 
       <fieldset className="space-y-3 rounded-md border border-[var(--p-border)] p-3">

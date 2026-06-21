@@ -10,6 +10,7 @@ import { clampRateBps } from "@/lib/rates";
 const Schema = z.object({
   marketplace_enabled: z.string().optional(),
   marketplace_take_rate_bps: z.string().default("0"),
+  is_top_organizer: z.string().optional(),
 });
 
 export type State = {
@@ -36,6 +37,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
     .update({
       marketplace_enabled: parsed.data.marketplace_enabled === "on",
       marketplace_take_rate_bps: bps,
+      is_top_organizer: parsed.data.is_top_organizer === "on",
     })
     .eq("id", session.orgId)
     .select("id")

@@ -26,6 +26,7 @@ type Row = {
   rating_count: number;
   is_verified: boolean;
   year_founded: number | null;
+  is_top_organizer: boolean;
 };
 
 // React cache() memoizes per request, so generateMetadata and the page body
@@ -84,6 +85,11 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <h1 className="hed-2xl">{v.name}</h1>
           {v.is_verified && (
             <Badge variant="success">{t("marketing.pages.marketplace-vendors-detail.badges.verified")}</Badge>
+          )}
+          {v.is_top_organizer && (
+            <Badge variant="accent">
+              {t("marketing.pages.marketplace-vendors-detail.badges.topOrganizer", undefined, "Top Organizer")}
+            </Badge>
           )}
         </div>
         {v.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{v.tagline}</p>}

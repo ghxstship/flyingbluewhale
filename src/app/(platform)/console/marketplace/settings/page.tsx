@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 type Org = {
   marketplace_enabled: boolean;
   marketplace_take_rate_bps: number;
+  is_top_organizer: boolean;
 };
 
 export default async function Page() {
@@ -35,10 +36,10 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("orgs")
-    .select("marketplace_enabled, marketplace_take_rate_bps")
+    .select("marketplace_enabled, marketplace_take_rate_bps, is_top_organizer")
     .eq("id", session.orgId)
     .maybeSingle();
-  const org = (data ?? { marketplace_enabled: false, marketplace_take_rate_bps: 0 }) as Org;
+  const org = (data ?? { marketplace_enabled: false, marketplace_take_rate_bps: 0, is_top_organizer: false }) as Org;
 
   return (
     <>
@@ -93,6 +94,27 @@ export default async function Page() {
               "Basis points (1 bp = 0.01%). 0 = no platform fee. Max 5000 (50%).",
             )}
           </p>
+
+          <fieldset className="surface-inset flex flex-col gap-2 p-3">
+            <legend className="text-xs font-medium tracking-wide uppercase">
+              {t("console.marketplace.settings.trustLegend", undefined, "Trust & Credibility")}
+            </legend>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" name="is_top_organizer" defaultChecked={org.is_top_organizer} />
+              {t(
+                "console.marketplace.settings.topOrganizerLabel",
+                undefined,
+                "Display Top Organizer badge on public marketplace profiles",
+              )}
+            </label>
+            <p className="text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.marketplace.settings.topOrganizerHint",
+                undefined,
+                "Earned recognition shown on talent and vendor listing pages — signals consistent quality to buyers browsing the marketplace.",
+              )}
+            </p>
+          </fieldset>
         </FormShell>
       </div>
     </>

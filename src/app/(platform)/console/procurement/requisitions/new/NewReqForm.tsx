@@ -3,10 +3,13 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createReqAction } from "../actions";
+import { AiIntakePanel } from "./AiIntakePanel";
 
 export function NewReqForm() {
   const t = useT();
   return (
+    <div className="space-y-4">
+      <AiIntakePanel />
     <FormShell
       action={createReqAction}
       cancelHref="/console/procurement/requisitions"
@@ -26,5 +29,6 @@ export function NewReqForm() {
         step="0.01"
       />
     </FormShell>
+    </div>
   );
 }

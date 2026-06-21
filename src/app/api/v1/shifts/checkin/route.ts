@@ -27,6 +27,10 @@ const PostSchema = z.object({
   // desktop test) send neither — we record geofence_state='unknown'.
   lat: z.number().min(-90).max(90).optional(),
   lng: z.number().min(-180).max(180).optional(),
+  // Shift Pulse — optional end-of-shift morale signal captured at clock-out.
+  // Stored on the time_entry row; visible to admins in the workforce hub.
+  pulse_rating: z.number().int().min(1).max(5).optional(),
+  pulse_note: z.string().max(500).optional(),
 });
 
 type Attendance = "scheduled" | "checked_in" | "on_break" | "checked_out";
@@ -171,10 +175,15 @@ export async function POST(req: NextRequest) {
         .maybeSingle();
       if (open) {
         // duration_minutes is derived by the existing
-        // tg_compute_time_entry_duration trigger.
+        // tg_compute_time_entry_duration trigger. Persist the optional
+        // Shift Pulse morale signal if the user filled it in.
         await supabase
           .from("time_entries")
-          .update({ ended_at: nowIso })
+          .update({
+            ended_at: nowIso,
+            ...(input.pulse_rating != null ? { pulse_rating: input.pulse_rating } : {}),
+            ...(input.pulse_note ? { pulse_note: input.pulse_note } : {}),
+          })
           .eq("id", (open as { id: string }).id);
       }
     }

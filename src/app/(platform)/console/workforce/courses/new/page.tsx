@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { getRequestT } from "@/lib/i18n/request";
 import { createCourseAction } from "./actions";
+import { AiCourseGenerator } from "./AiCourseGenerator";
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -12,7 +13,8 @@ export default async function Page() {
         eyebrow={t("console.workforce.courses.new.eyebrow", undefined, "Training")}
         title={t("console.workforce.courses.new.title", undefined, "New Course")}
       />
-      <div className="page-content max-w-2xl">
+      <div className="page-content max-w-2xl space-y-4">
+        <AiCourseGenerator />
         <FormShell
           action={createCourseAction}
           cancelHref="/console/workforce/courses"

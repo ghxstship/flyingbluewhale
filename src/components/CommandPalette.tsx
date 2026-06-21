@@ -285,7 +285,7 @@ export function CommandPalette({
         label: t("commandPalette.actions.logMedical", undefined, "Log Medical Event"),
         group: "Create",
         icon: Ticket,
-        perform: () => goto("/m/medic/new"),
+        perform: () => goto("/m/incidents/new"),
       });
       list.push({
         id: "m-create-request",

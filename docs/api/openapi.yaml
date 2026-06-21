@@ -144,6 +144,121 @@ components:
           example: "sk_a1b2c3d4_x9YgQ8s-Q7QwY..."
           description: "Plaintext token. Returned ONLY once at creation — store it now."
 
+    MarketplaceListing:
+      type: object
+      required: [id, org_id, seller_user_id, title, currency, listing_state, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        org_id: { type: string, format: uuid }
+        seller_user_id: { type: string, format: uuid }
+        title: { type: string, example: "Shure SM58 (x4)" }
+        description: { type: string, nullable: true }
+        price_cents: { type: integer, nullable: true, example: 24000 }
+        currency: { type: string, example: "USD" }
+        item_condition: { type: string, nullable: true, enum: [new, like_new, used, for_parts] }
+        category: { type: string, nullable: true }
+        listing_state: { type: string, enum: [draft, active, sold, withdrawn] }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CreateMarketplaceListingRequest:
+      type: object
+      required: [title]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 200, example: "Shure SM58 (x4)" }
+        description: { type: string, maxLength: 8000 }
+        priceCents: { type: integer, minimum: 0, example: 24000 }
+        currency: { type: string, minLength: 3, maxLength: 3, example: "USD" }
+        itemCondition: { type: string, enum: [new, like_new, used, for_parts] }
+        category: { type: string, maxLength: 120 }
+        listingState: { type: string, enum: [draft, active, sold, withdrawn] }
+
+    Handover:
+      type: object
+      required: [id, org_id, post_state, summary, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        org_id: { type: string, format: uuid }
+        project_id: { type: string, format: uuid, nullable: true }
+        from_user_id: { type: string, format: uuid, nullable: true }
+        to_user_id: { type: string, format: uuid, nullable: true }
+        relief_label: { type: string, nullable: true }
+        post_state: { type: string, enum: [all_clear, watch_items, issues] }
+        summary: { type: string }
+        open_items: { type: string, nullable: true }
+        assets_passed: { type: string, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CreateHandoverRequest:
+      type: object
+      required: [summary]
+      properties:
+        projectId: { type: string, format: uuid }
+        reliefLabel: { type: string, maxLength: 200 }
+        postState: { type: string, enum: [all_clear, watch_items, issues], default: all_clear }
+        summary: { type: string, minLength: 1, maxLength: 8000 }
+        openItems: { type: string, maxLength: 8000 }
+        assetsPassed: { type: string, maxLength: 8000 }
+
+    ShiftNote:
+      type: object
+      required: [id, org_id, time_entry_id, body, as_manager, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        org_id: { type: string, format: uuid }
+        time_entry_id: { type: string, format: uuid }
+        author_id: { type: string, format: uuid, nullable: true }
+        body: { type: string }
+        as_manager: { type: boolean }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CreateShiftNoteRequest:
+      type: object
+      required: [timeEntryId, body]
+      properties:
+        timeEntryId: { type: string, format: uuid }
+        body: { type: string, minLength: 1, maxLength: 8000 }
+        asManager: { type: boolean, default: false }
+
+    TaskComment:
+      type: object
+      required: [id, task_id, body, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        task_id: { type: string, format: uuid }
+        author_id: { type: string, format: uuid, nullable: true }
+        body: { type: string }
+        mentions:
+          type: array
+          items: { type: string, format: uuid }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CreateTaskCommentRequest:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string, minLength: 1, maxLength: 8000 }
+        mentions:
+          type: array
+          maxItems: 50
+          items: { type: string, format: uuid }
+
+    TaskEvent:
+      type: object
+      required: [id, task_id, event_kind, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        task_id: { type: string, format: uuid }
+        event_kind: { type: string, enum: [created, state_change, assigned, comment, attachment, due_change] }
+        from_state: { type: string, nullable: true }
+        to_state: { type: string, nullable: true }
+        actor_id: { type: string, format: uuid, nullable: true }
+        body: { type: string, nullable: true }
+        created_at: { type: string, format: date-time }
+
   parameters:
     Cursor:
       name: cursor
@@ -605,6 +720,362 @@ paths:
 
   /api/v1/shifts/checkin:
     post: { summary: Record a shift check-in / check-out / break-start / break-end on COMPVSS. WF-197. }
+
+  /api/v1/marketplace-listings:
+    get:
+      summary: "List the org's gear marketplace listings (crew buy/sell/trade). Optional `?state=` filter. Scope: marketplace:read."
+      operationId: listMarketplaceListings
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/PageSize"
+        - name: state
+          in: query
+          required: false
+          schema: { type: string, enum: [draft, active, sold, withdrawn] }
+          description: Filter by listing_state.
+      responses:
+        "200":
+          description: Page of listings. `X-Total-Count` mirrors `data.totalCount`.
+          headers:
+            X-Total-Count: { schema: { type: integer } }
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          listings:
+                            type: array
+                            items: { $ref: "#/components/schemas/MarketplaceListing" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "Create a marketplace listing. Idempotent when `Idempotency-Key` is provided. Scope: marketplace:write."
+      operationId: createMarketplaceListing
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKeyHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateMarketplaceListingRequest" }
+      responses:
+        "201":
+          description: Listing created.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          listing: { $ref: "#/components/schemas/MarketplaceListing" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /api/v1/marketplace-listings/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: "Get a single marketplace listing. Scope: marketplace:read."
+      operationId: getMarketplaceListing
+      responses:
+        "200":
+          description: The listing.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          listing: { $ref: "#/components/schemas/MarketplaceListing" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      summary: "Update a listing's price, state, title, or description. Scope: marketplace:write."
+      operationId: updateMarketplaceListing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string, minLength: 1, maxLength: 200 }
+                description: { type: string, maxLength: 8000 }
+                priceCents: { type: integer, minimum: 0 }
+                listingState: { type: string, enum: [draft, active, sold, withdrawn] }
+      responses:
+        "200":
+          description: Updated listing.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          listing: { $ref: "#/components/schemas/MarketplaceListing" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      summary: "Soft-delete a marketplace listing. Scope: marketplace:write."
+      operationId: deleteMarketplaceListing
+      responses:
+        "200":
+          description: Listing soft-deleted.
+          content: { application/json: { schema: { $ref: "#/components/schemas/ApiOk" } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /api/v1/handovers:
+    get:
+      summary: "List shift/post handovers for the caller's org. Scope: handovers:read."
+      operationId: listHandovers
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/PageSize"
+      responses:
+        "200":
+          description: Page of handovers. `X-Total-Count` mirrors `data.totalCount`.
+          headers:
+            X-Total-Count: { schema: { type: integer } }
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          handovers:
+                            type: array
+                            items: { $ref: "#/components/schemas/Handover" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "File a shift/post handover. Idempotent when `Idempotency-Key` is provided. Scope: handovers:write."
+      operationId: createHandover
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKeyHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateHandoverRequest" }
+      responses:
+        "201":
+          description: Handover created.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          handover: { $ref: "#/components/schemas/Handover" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/v1/handovers/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: "Get a single handover. Scope: handovers:read."
+      operationId: getHandover
+      responses:
+        "200":
+          description: The handover.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          handover: { $ref: "#/components/schemas/Handover" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /api/v1/shift-notes:
+    get:
+      summary: "List shift notes hung off time entries. Optional `?timeEntryId=` filter. Scope: time:read."
+      operationId: listShiftNotes
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/PageSize"
+        - name: timeEntryId
+          in: query
+          required: false
+          schema: { type: string, format: uuid }
+          description: Filter to one time entry.
+      responses:
+        "200":
+          description: Page of shift notes. `X-Total-Count` mirrors `data.totalCount`.
+          headers:
+            X-Total-Count: { schema: { type: integer } }
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          shiftNotes:
+                            type: array
+                            items: { $ref: "#/components/schemas/ShiftNote" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "Add a note to a time entry. Idempotent when `Idempotency-Key` is provided. Scope: time:write."
+      operationId: createShiftNote
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKeyHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateShiftNoteRequest" }
+      responses:
+        "201":
+          description: Shift note created.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          shiftNote: { $ref: "#/components/schemas/ShiftNote" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /api/v1/tasks/{taskId}/comments:
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: "List comments on a task (org-scoped, oldest first). Scope: tasks:read."
+      operationId: listTaskComments
+      responses:
+        "200":
+          description: Task comments.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comments:
+                            type: array
+                            items: { $ref: "#/components/schemas/TaskComment" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    post:
+      summary: "Post a comment on a task; also writes a task_events row (event_kind=comment). Idempotent when `Idempotency-Key` is provided. Scope: tasks:write."
+      operationId: createTaskComment
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKeyHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateTaskCommentRequest" }
+      responses:
+        "201":
+          description: Comment created.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          comment: { $ref: "#/components/schemas/TaskComment" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /api/v1/tasks/{taskId}/events:
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      summary: "List the append-only activity journal for a task (oldest first). Scope: tasks:read."
+      operationId: listTaskEvents
+      responses:
+        "200":
+          description: Task events.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiOk"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          events:
+                            type: array
+                            items: { $ref: "#/components/schemas/TaskEvent" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/openapi.json:
     get: { summary: Public OpenAPI 3.1 spec (this document) — cacheable for 5 min on browsers, 10 min on the edge. }

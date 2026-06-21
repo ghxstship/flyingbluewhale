@@ -1,29 +1,29 @@
 import { notFound } from "next/navigation";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { markRoomRead } from "../actions";
 import { ChatRoom, type ChatMessage } from "./ChatRoom";
 
 export const dynamic = "force-dynamic";
 
-// Keep in sync with MESSAGES_PAGE_SIZE in ChatRoom.tsx.
 const PAGE_SIZE = 50;
 
+/**
+ * /m/inbox/[roomId] — COMPVSS chat thread. Server fetches the room (org-scoped),
+ * membership-gates with `notFound()`, marks the room read, and loads the latest
+ * page of messages. The interactive thread + composer live in the client
+ * `ChatRoom` island, which posts to the surviving `sendMessage` action and
+ * mounts `RealtimeRefresh` on `chat_messages` filtered to this room.
+ * Ref design: app.jsx 2085-2110.
+ */
 export default async function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
-  const { t } = await getRequestT();
-  if (!hasSupabase)
-    return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("m.common.configureSupabase", undefined, "Configure Supabase.")}
-      </div>
-    );
   const { roomId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
+  // Room must belong to the caller's org.
   const { data: room } = await supabase
     .from("chat_rooms")
     .select("id, name, room_kind")
@@ -33,47 +33,73 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
     .maybeSingle();
   if (!room) notFound();
 
-  // Newest page first — descending + limit, reversed in memory for display.
-  // Older history loads on demand via the "Load Older" cursor in <ChatRoom>.
+  // Membership gate — only members may read the thread.
+  const { data: member } = await supabase
+    .from("chat_room_members")
+    .select("room_id")
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!member) notFound();
+
+  // Newest page first — reversed in memory for chronological display.
   const { data: msgs } = await supabase
     .from("chat_messages")
     .select("id, author_id, body, created_at")
     .eq("room_id", roomId)
     .order("created_at", { ascending: false })
     .limit(PAGE_SIZE);
+  const messages = ((msgs ?? []) as ChatMessage[]).slice().reverse();
 
-  const latestPage = ((msgs ?? []) as ChatMessage[]).slice().reverse();
-  const hasOlder = (msgs ?? []).length === PAGE_SIZE;
+  // Mark the room read on render — keeps the inbox unread badge honest.
+  await supabase
+    .from("chat_room_members")
+    .update({ last_read_at: new Date().toISOString() })
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId);
 
-  // Mark room read on render — keeps the unread badge in sync without a
-  // separate client effect. Side-effect inside RSC is fine for idempotent
-  // touches.
-  await markRoomRead({ roomId });
+  const isChannel = (room.room_kind ?? "") === "channel";
+  const title = room.name ?? t("m.inbox.directMessage", undefined, "Direct Message");
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] flex-col">
-      <div className="border-b border-[var(--p-border)] px-4 pt-4 pb-3">
-        <h1 className="truncate text-base font-semibold">
-          {room.name ?? t("m.inbox.room.directMessage", undefined, "Direct message")}
-        </h1>
-        <p className="text-xs text-[var(--p-text-2)]">{room.room_kind}</p>
+    <div className="screen screen-anim">
+      <div className="chatview">
+        <a href="/m/inbox" className="backbtn">
+          {t("m.inbox.back", undefined, "Inbox")}
+        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+          {isChannel ? (
+            <span className="chan">#</span>
+          ) : (
+            <span className="avatar-sm">
+              {(title.split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("")) || "?"}
+            </span>
+          )}
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 16 }}>{title}</div>
+            <div className="s">
+              {isChannel
+                ? t("m.inbox.room.channel", undefined, "Channel")
+                : t("m.inbox.room.direct", undefined, "Direct Message")}
+            </div>
+          </div>
+        </div>
+
+        <ChatRoom
+          roomId={roomId}
+          userId={session.userId}
+          locale={fmt.settings.locale}
+          timezone={fmt.settings.timezone}
+          initialMessages={messages}
+          labels={{
+            placeholder: t("m.inbox.room.placeholder", undefined, "Message"),
+            send: t("common.send", undefined, "Send"),
+            today: t("m.inbox.room.today", undefined, "Today"),
+            empty: t("m.inbox.room.empty", undefined, "No Messages Yet"),
+            emptyHint: t("m.inbox.room.emptyHint", undefined, "Say hello to get things started."),
+          }}
+        />
       </div>
-      <ChatRoom
-        roomId={roomId}
-        userId={session.userId}
-        locale={fmt.settings.locale}
-        timezone={fmt.settings.timezone}
-        initialMessages={latestPage}
-        initialHasOlder={hasOlder}
-        emptyTitle={t("m.inbox.room.emptyTitle", undefined, "No Messages Yet")}
-        emptyDescription={t("m.inbox.room.emptyDescription", undefined, "Say hello to get things started.")}
-        labels={{
-          placeholder: t("m.inbox.room.messagePlaceholder", undefined, "Message"),
-          send: t("common.send", undefined, "Send"),
-          loadOlder: t("m.inbox.room.loadOlder", undefined, "Load Older"),
-          loadingOlder: t("m.inbox.room.loadingOlder", undefined, "Loading…"),
-        }}
-      />
     </div>
   );
 }

@@ -64,7 +64,7 @@ export async function awardBadge(fd: FormData): Promise<void> {
       actorId: session.userId,
       title: `${b.icon ?? "🏅"} ${b.name}`,
       body: parsed.data.note || "You earned a badge.",
-      href: "/m/kudos",
+      href: "/m/feed",
     });
   }
 

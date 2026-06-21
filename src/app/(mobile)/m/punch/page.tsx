@@ -1,122 +1,108 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { Clock } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { hasSupabase } from "@/lib/env";
-import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
-import { urlFor } from "@/lib/urls";
-import { toneFor } from "@/lib/tones";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon } from "@/components/mobile/kit";
+import { PunchControls } from "./PunchControls";
 
 export const dynamic = "force-dynamic";
 
-type TaskRow = {
+/**
+ * COMPVSS · Punch — a focused punch in/out surface backed by `time_entries`.
+ * Reuses the clock's `CheckInControls` timer + `clockIn`/`clockOut` actions
+ * (one open entry per user, server-enforced) and shows today's punches. The
+ * full timesheet history lives at /m/clock.
+ */
+type EntryRow = {
   id: string;
-  title: string;
-  description: string | null;
-  task_state: string;
-  priority: number;
-  due_at: string | null;
-  project: { name: string | null } | null;
+  started_at: string | null;
+  ended_at: string | null;
+  duration_minutes: number | null;
 };
 
-const PRIORITY_LABEL: Record<number, string> = {
-  1: "P1",
-  2: "P2",
-  3: "P3",
-};
-
-export default async function MobilePunchPage() {
-  const { t } = await getRequestT();
-  if (!hasSupabase) {
-    return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("common.configureSupabase", undefined, "Configure Supabase.")}
-      </div>
-    );
-  }
+export default async function PunchPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
-  const { data } = await supabase
-    .from("tasks")
-    .select("id, title, description, task_state, priority, due_at, project:project_id(name)")
+  const { data: openRow } = await supabase
+    .from("time_entries")
+    .select("id, started_at")
     .eq("org_id", session.orgId)
-    .eq("assigned_to", session.userId)
-    .neq("task_state", "done")
-    .order("priority", { ascending: true })
-    .order("due_at", { ascending: true })
-    .limit(50);
-  const rows = (data ?? []) as unknown as TaskRow[];
+    .eq("user_id", session.userId)
+    .is("ended_at", null)
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
 
-  const overdueCount = rows.filter(
-    (r) => r.due_at && new Date(r.due_at).getTime() < Date.now() - 24 * 60 * 60 * 1000,
-  ).length;
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const { data: today } = await supabase
+    .from("time_entries")
+    .select("id, started_at, ended_at, duration_minutes")
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .gte("started_at", startOfDay.toISOString())
+    .order("started_at", { ascending: false })
+    .limit(50);
+  const entries = (today ?? []) as EntryRow[];
+
+  const onClock = !!openRow;
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
-        {t("m.punch.eyebrow", undefined, "Field")}
+    <div className="screen screen-anim">
+      <div className="scr-eye">
+        {onClock ? t("m.punch.on", undefined, "On The Clock") : t("m.punch.off", undefined, "Off Shift")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.punch.title", undefined, "Punch List")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {rows.length === 0
-          ? t("m.punch.noOpenItems", undefined, "No open items assigned to you.")
-          : overdueCount
-            ? t(
-                "m.punch.openCountWithOverdue",
-                { count: rows.length, overdue: overdueCount },
-                `${rows.length} open · ${overdueCount} overdue`,
-              )
-            : t("m.punch.openCount", { count: rows.length }, `${rows.length} open`)}
-      </p>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.punch.title", undefined, "Punch")}
+      </h1>
 
-      <ul className="mt-6 space-y-2">
-        {rows.length === 0 ? (
-          <li>
-            <EmptyState
-              size="compact"
-              title={t("m.punch.empty.title", undefined, "Punch List Clear")}
-              description={t(
-                "m.punch.empty.description",
-                undefined,
-                "Open items assigned to you appear here. Visit Tasks on desktop to assign new ones.",
-              )}
-              action={
-                <Link href={urlFor("platform", "/tasks")} className="ps-btn ps-btn--ghost ps-btn--sm">
-                  {t("m.punch.empty.action", undefined, "Open Tasks")}
-                </Link>
-              }
-            />
-          </li>
-        ) : (
-          rows.map((r) => {
-            const overdue = r.due_at && new Date(r.due_at).getTime() < Date.now() - 24 * 60 * 60 * 1000;
-            return (
-              <li key={r.id} className="surface p-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm leading-snug font-semibold">{r.title}</div>
-                    {r.description && (
-                      <p className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.description}</p>
-                    )}
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      <Badge variant={toneFor(r.task_state)}>{toTitle(r.task_state)}</Badge>
-                      <Badge variant="muted">{PRIORITY_LABEL[r.priority] ?? `P${r.priority}`}</Badge>
-                      {r.project?.name && <Badge variant="muted">{r.project.name}</Badge>}
-                      {overdue && <Badge variant="error">{t("m.punch.overdue", undefined, "Overdue")}</Badge>}
-                      {r.due_at && !overdue && (
-                        <Badge variant="muted">{t("m.punch.due", { date: r.due_at }, `Due ${r.due_at}`)}</Badge>
-                      )}
-                    </div>
-                  </div>
+      <PunchControls openStartedAt={(openRow?.started_at as string | undefined) ?? null} />
+
+      <div className="sech" style={{ marginTop: 16 }}>
+        <h2>{t("m.punch.today", undefined, "Today's Punches")}</h2>
+      </div>
+      {entries.length === 0 ? (
+        <EmptyState
+          icon={<Clock size={28} aria-hidden="true" />}
+          title={t("m.punch.emptyTitle", undefined, "No Punches")}
+          description={t("m.punch.emptyBody", undefined, "Punch in to start your shift.")}
+        />
+      ) : (
+        entries.map((e) => {
+          const ended = e.ended_at;
+          const mins = e.duration_minutes;
+          const hrs = mins != null ? `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}` : null;
+          return (
+            <div className="item" key={e.id}>
+              <span className="bar" style={{ background: ended ? "var(--p-border)" : "var(--p-success)" }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="t">
+                  {e.started_at ? fmt.time(e.started_at) : "—"}
+                  {" – "}
+                  {ended ? fmt.time(ended) : t("m.punch.now", undefined, "now")}
                 </div>
-              </li>
-            );
-          })
-        )}
-      </ul>
+                <div className="s">{hrs ? `${hrs} ${t("m.punch.hrs", undefined, "hrs")}` : t("m.punch.open", undefined, "Open")}</div>
+              </div>
+              <span className={`ps-badge ps-badge--${ended ? "neutral" : "ok"}`} style={{ flex: "none" }}>
+                {ended ? t("m.punch.closed", undefined, "Closed") : t("m.punch.active", undefined, "Active")}
+              </span>
+            </div>
+          );
+        })
+      )}
+
+      <Link
+        href="/m/clock"
+        className="ps-btn ps-btn--secondary ps-btn--lg"
+        style={{ width: "100%", justifyContent: "center", marginTop: 16 }}
+      >
+        <KIcon name="History" size={16} /> {t("m.punch.fullClock", undefined, "Full Timesheet")}
+      </Link>
     </div>
   );
 }

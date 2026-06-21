@@ -1,27 +1,75 @@
-import { CheckInScanner } from "../../CheckInScanner";
-import { getRequestT } from "@/lib/i18n/request";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { CheckInScanner, type RecentScan } from "../../CheckInScanner";
 
 export const dynamic = "force-dynamic";
 
-export default async function ScanPage({ params }: { params: Promise<{ slug: string }> }) {
+/**
+ * /m/check-in/scan/[slug] — the field check-in scanner scoped to a gate / zone
+ * slug. Reuses `CheckInScanner` with the slug threaded through as gate context;
+ * the slug rides into the `scanCode` action via the hidden field.
+ */
+export default async function GateScanPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const session = await requireSession();
+  const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
+
+  const { data } = await supabase
+    .from("assignment_events")
+    .select("id, result, body, at")
+    .eq("org_id", session.orgId)
+    .eq("event_kind", "scan")
+    .order("at", { ascending: false })
+    .limit(8);
+
+  const recent: RecentScan[] = ((data ?? []) as Array<{
+    id: string;
+    result: string | null;
+    body: string | null;
+    at: string | null;
+  }>).map((r) => ({
+    id: r.id,
+    result: r.result ?? "accepted",
+    body: r.body,
+    at: r.at ? fmt.relative(r.at) : "",
+  }));
+
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("m.checkIn.scan.eyebrow", { slug }, `Scanning · ${slug}`)}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.checkIn.scan.title", undefined, "QR scan")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "m.checkIn.scan.hint",
-          undefined,
-          "Paste the scanned code below — camera integration drops on mobile clients.",
-        )}
-      </p>
-      <div className="mt-6">
-        <CheckInScanner />
-      </div>
+    <div className="screen screen-anim">
+      <CheckInScanner
+        gateSlug={slug}
+        recent={recent}
+        labels={{
+          eyebrow: t("m.checkin.gate.eyebrow", { slug }, `Gate · ${slug}`),
+          title: t("m.checkin.title", undefined, "Scan"),
+          access: t("m.checkin.access", undefined, "Access"),
+          asset: t("m.checkin.asset", undefined, "Asset"),
+          pos: t("m.checkin.pos", undefined, "POS"),
+          nfc: t("m.checkin.nfc", undefined, "NFC"),
+          rfid: t("m.checkin.rfid", undefined, "RFID / NFC"),
+          qr: t("m.checkin.qr", undefined, "QR Code"),
+          scanHintCamera: t("m.checkin.scanHintCamera", undefined, "Reads QR & barcodes automatically"),
+          scanHintAccess: t("m.checkin.scanHintAccess", undefined, "Scan the QR on the credential"),
+          enableCamera: t("m.checkin.enableCamera", undefined, "Enable Camera"),
+          cameraDenied: t("m.checkin.cameraDenied", undefined, "Camera Unavailable — Use Manual Entry"),
+          nfcHint: t("m.checkin.nfcHint", undefined, "Hold the RFID credential or fob near the reader"),
+          ctaAccess: t("m.checkin.ctaAccess", undefined, "Verify Credential"),
+          ctaAsset: t("m.checkin.ctaAsset", undefined, "Check Out / In"),
+          ctaPos: t("m.checkin.ctaPos", undefined, "Scan Product"),
+          ctaNfc: t("m.checkin.ctaNfc", undefined, "Tap To Read"),
+          manual: t("m.checkin.manual", undefined, "Enter Code Manually"),
+          manualLabel: t("m.checkin.manualLabel", undefined, "Code"),
+          manualPlaceholder: t("m.checkin.manualPlaceholder", undefined, "e.g. R7-014"),
+          batch: t("m.checkin.batch", undefined, "Batch Check-In"),
+          scanning: t("m.checkin.scanning", undefined, "Checking…"),
+          recentTitle: t("m.checkin.recentTitle", undefined, "Recent Activity"),
+          recentEmpty: t("m.checkin.recentEmpty", undefined, "No Scans Yet"),
+          logged: t("m.checkin.logged", undefined, "Logged"),
+        }}
+      />
     </div>
   );
 }

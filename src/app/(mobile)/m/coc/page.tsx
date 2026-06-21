@@ -1,129 +1,94 @@
-import Link from "next/link";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { ScanLine } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { urlFor } from "@/lib/urls";
+import { getRequestT } from "@/lib/i18n/request";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
-type AuditRow = {
+/**
+ * COMPVSS · Chain of Custody — a custody timeline for assets, read from
+ * `assignment_events` (scan + state_change kinds). Each event is one handoff,
+ * scan, or status move on an assignment; rendered newest-first as a `.tl`
+ * timeline. Empty state when nothing's been scanned/transitioned yet.
+ */
+type EventRow = {
   id: string;
-  action: string;
-  target_table: string | null;
-  target_id: string | null;
-  metadata: unknown;
-  at: string;
+  event_kind: string | null;
+  result: string | null;
+  from_state: string | null;
+  to_state: string | null;
+  body: string | null;
+  at: string | null;
+  assignment: { title: string | null; catalog_kind: string | null } | null;
 };
 
-const COC_TABLES = ["incidents", "incident_photos", "credentials", "evidence_uploads", "deliverables", "ticket_scans"];
-
-export default async function MobileCocPage() {
-  const { t } = await getRequestT();
-  if (!hasSupabase) {
-    return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("common.configureSupabase", undefined, "Configure Supabase.")}
-      </div>
-    );
-  }
+export default async function CocPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
-  const fmt = await getRequestFormatters();
-  const relativeTime = (iso: string): string => {
-    const ms = Date.now() - new Date(iso).getTime();
-    const min = Math.floor(ms / 60_000);
-    if (min < 1) return t("common.relativeTime.justNow", undefined, "just now");
-    if (min < 60) return `${min}m`;
-    const hr = Math.floor(min / 60);
-    if (hr < 24) return `${hr}h`;
-    const day = Math.floor(hr / 24);
-    if (day < 7) return `${day}d`;
-    return fmt.dateParts(iso, { month: "short", day: "numeric" });
-  };
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
-    .from("audit_log")
-    .select("id, action, target_table, target_id, metadata, at")
+    .from("assignment_events")
+    .select(
+      "id, event_kind, result, from_state, to_state, body, at, assignment:assignments(title, catalog_kind)",
+    )
     .eq("org_id", session.orgId)
-    .eq("actor_id", session.userId)
-    .in("target_table", COC_TABLES)
-    .gte("at", since)
+    .in("event_kind", ["scan", "state_change"])
     .order("at", { ascending: false })
-    .limit(20);
-  const rows = (data ?? []) as AuditRow[];
+    .limit(100);
+  const events = (data ?? []) as unknown as EventRow[];
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
-        {t("m.coc.eyebrow", undefined, "Field")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.coc.title", undefined, "Chain of Custody")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "m.coc.description",
-          undefined,
-          "Evidence + sample handover trail. Capture by uploading evidence on an incident, scan, or credential.",
-        )}
-      </p>
+    <div className="screen screen-anim">
+      <div className="scr-eye">{t("m.coc.eyebrow", undefined, "Assets")}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.coc.title", undefined, "Chain Of Custody")}
+      </h1>
 
-      <section className="mt-5 grid grid-cols-2 gap-2">
-        <Link href="/m/incidents/new" className="surface p-3 text-center text-sm font-medium">
-          {t("m.coc.actions.logIncident", undefined, "+ Log incident")}
-        </Link>
-        <Link href="/m/inventory/scan" className="surface p-3 text-center text-sm font-medium">
-          {t("m.coc.actions.scanAsset", undefined, "Scan asset")}
-        </Link>
-      </section>
-
-      <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          {t("m.coc.recent.heading", undefined, "My recent custody events")}
-        </h2>
-        <ul className="mt-3 space-y-2">
-          {rows.length === 0 ? (
-            <li>
-              <EmptyState
-                size="compact"
-                title={t("m.coc.empty.title", undefined, "Nothing in the Last 7 Days")}
-                description={t(
-                  "m.coc.empty.description",
-                  undefined,
-                  "Custody events you create are auto-logged into the audit trail and appear here.",
-                )}
-              />
-            </li>
-          ) : (
-            rows.map((r) => (
-              <li key={r.id} className="surface flex items-center justify-between p-3">
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-medium">{r.action.replace(/[._]/g, " ")}</div>
-                  {r.target_table && (
-                    <div className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
-                      {r.target_table}
-                      {r.target_id ? ` · ${r.target_id.slice(0, 8)}` : ""}
-                    </div>
-                  )}
+      {events.length === 0 ? (
+        <EmptyState
+          icon={<ScanLine size={28} aria-hidden="true" />}
+          title={t("m.coc.emptyTitle", undefined, "No Custody Events")}
+          description={t("m.coc.emptyBody", undefined, "Scans and asset handoffs will appear here as a timeline.")}
+        />
+      ) : (
+        <div className="tl">
+          {events.map((e) => {
+            const isScan = e.event_kind === "scan";
+            const title = e.assignment?.title ?? t("m.coc.asset", undefined, "Asset");
+            const detail = isScan
+              ? `${t("m.coc.scan", undefined, "Scan")} · ${e.result ?? "—"}`
+              : `${e.from_state ?? "—"} → ${e.to_state ?? "—"}`;
+            return (
+              <div className="tl-row" key={e.id}>
+                <span className="tdot" aria-hidden="true">
+                  <KIcon name={isScan ? "ScanLine" : "ArrowRight"} size={9} />
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ttxt">{title}</div>
+                  <div className="ttime">
+                    {detail}
+                    {e.assignment?.catalog_kind ? ` · ${e.assignment.catalog_kind}` : ""}
+                  </div>
+                  {e.body && <div className="hint">{e.body}</div>}
+                  <div className="ttime">
+                    {e.at
+                      ? new Date(e.at).toLocaleString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : ""}
+                  </div>
                 </div>
-                <div className="flex flex-none items-center gap-2">
-                  <Badge variant="muted">{t("m.coc.badge.audit", undefined, "Audit")}</Badge>
-                  <span className="font-mono text-xs text-[var(--p-text-2)]">{relativeTime(r.at)}</span>
-                </div>
-              </li>
-            ))
-          )}
-        </ul>
-        <p className="mt-4 text-xs text-[var(--p-text-2)]">
-          {t("m.coc.desktopPrompt", undefined, "Need the desktop view?")}{" "}
-          <Link href={urlFor("platform", "/compliance/coc")} className="text-[var(--p-accent)]">
-            {t("m.coc.desktopLink", undefined, "Open Chain of Custody")}
-          </Link>
-          .
-        </p>
-      </section>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

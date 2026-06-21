@@ -1,95 +1,110 @@
-import Link from "next/link";
-import { urlFor } from "@/lib/urls";
+import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { formatFeeRange } from "@/lib/marketplace";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatFeeRange } from "@/lib/marketplace";
+import { GigsView, type Gig } from "./GigsView";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Mobile open-gigs surface — crew on the road browse the same public
- * job board that lives at `/marketplace/gigs`, formatted for thumb reach.
- * Reads from the `public_job_board` view (anon GRANT SELECT). The
- * authenticated mobile shell still hits this view; RLS is irrelevant
- * because the view filters to `status='published'` upstream.
+ * /m/gigs — open roles across the org's job board, formatted for thumb reach.
+ * Reads published `job_postings`, dedupes against the caller's own
+ * `job_applications` (so already-applied gigs render the "Applied" pill), and
+ * hands plain rows to the surviving client `GigsView`. Apply routes through
+ * `applyToJob`. Design truth: prototype jobs tab (app.jsx 2236-2283).
  */
-type Row = {
-  id: string;
-  public_slug: string;
-  title: string;
-  role_taxonomy: string[];
-  region: string | null;
-  city: string | null;
-  country: string | null;
-  day_rate_min_cents: number | null;
-  day_rate_max_cents: number | null;
-  currency: string;
-  posting_type: string;
-  union_required: string[];
-  travel_paid: boolean;
-  lodging_provided: boolean;
-  applicant_count: number;
-  org_name: string;
+
+const EMPLOYMENT_LABEL: Record<string, string> = {
+  w2: "W-2",
+  "1099": "1099",
+  volunteer: "Volunteer",
+  contract: "Contract",
 };
 
-export default async function Page() {
+export default async function MobileGigsPage() {
   const { t } = await getRequestT();
-  let rows: Row[] = [];
-  if (hasSupabase) {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("public_job_board")
-      .select("*")
-      .order("published_at", { ascending: false })
-      .limit(40);
-    rows = (data ?? []) as Row[];
+  if (!hasSupabase) {
+    return (
+      <div className="screen screen-anim">
+        <div className="scr-eye">{t("m.gigs.eyebrow", undefined, "Marketplace")}</div>
+        <h1 className="scr-h">{t("m.gigs.title", undefined, "Jobs")}</h1>
+        <p className="form-intro">{t("common.configureSupabase", undefined, "Configure Supabase.")}</p>
+      </div>
+    );
   }
 
-  return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-label text-[var(--brand-color)]">{t("m.gigs.eyebrow", undefined, "Marketplace")}</div>
-      <h1 className="text-display mt-2 text-3xl">{t("m.gigs.title", undefined, "Open Gigs")}</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        {rows.length === 1
-          ? t("m.gigs.countOne", { count: rows.length }, `${rows.length} live gig across the network.`)
-          : t("m.gigs.countOther", { count: rows.length }, `${rows.length} live gigs across the network.`)}
-      </p>
+  const session = await requireSession();
+  const supabase = await createClient();
 
-      {rows.length === 0 ? (
-        <div className="card-elevated mt-6 p-6 text-sm text-[var(--color-text-secondary)]">
-          {t("m.gigs.empty", undefined, "No live gigs at the moment.")}
-        </div>
-      ) : (
-        <ul className="mt-6 space-y-2">
-          {rows.map((r) => (
-            <li key={r.id} className="card-elevated p-4">
-              <Link href={urlFor("marketing", `/marketplace/gigs/${r.public_slug}`)} className="block">
-                <div className="flex items-start justify-between gap-2">
-                  <span className="text-sm font-semibold">{r.title}</span>
-                  <span className="text-xs whitespace-nowrap text-[var(--color-text-secondary)]">
-                    {t(
-                      "m.gigs.perDay",
-                      { rate: formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency) },
-                      `${formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency)}/day`,
-                    )}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  {r.org_name}
-                  {r.city || r.region ? ` · ${[r.city, r.region].filter(Boolean).join(", ")}` : ""}
-                  {r.travel_paid ? ` · ${t("m.gigs.travelPaid", undefined, "travel paid")}` : ""}
-                </p>
-                {r.role_taxonomy.length > 0 && (
-                  <p className="mt-2 text-xs text-[var(--color-text-tertiary)]">
-                    {r.role_taxonomy.slice(0, 3).join(" · ")}
-                  </p>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+  const [{ data: postings }, { data: applications }] = await Promise.all([
+    supabase
+      .from("job_postings")
+      .select(
+        "id, title, employment_type, role_taxonomy, certs_required, region, city, day_rate_min_cents, day_rate_max_cents, currency, applicant_count, published_at, created_at",
+      )
+      .eq("org_id", session.orgId)
+      .eq("job_posting_phase", "published")
+      .is("deleted_at", null)
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .limit(60),
+    supabase
+      .from("job_applications")
+      .select("job_posting_id")
+      .eq("applicant_user_id", session.userId),
+  ]);
+
+  type PostingRow = {
+    id: string;
+    title: string;
+    employment_type: string;
+    role_taxonomy: string[];
+    certs_required: string[];
+    region: string | null;
+    city: string | null;
+    day_rate_min_cents: number | null;
+    day_rate_max_cents: number | null;
+    currency: string;
+    applicant_count: number;
+  };
+
+  const appliedSet = new Set(
+    ((applications ?? []) as Array<{ job_posting_id: string }>).map((a) => a.job_posting_id),
+  );
+
+  const gigs: Gig[] = ((postings ?? []) as PostingRow[]).map((p) => {
+    const place = [p.city, p.region].filter(Boolean).join(", ");
+    return {
+      id: p.id,
+      role: p.title,
+      org: place || t("m.gigs.network", undefined, "Network"),
+      logo: (p.title.trim()[0] ?? "G").toUpperCase(),
+      rate:
+        p.day_rate_min_cents != null || p.day_rate_max_cents != null
+          ? t(
+              "m.gigs.perDay",
+              { rate: formatFeeRange(p.day_rate_min_cents, p.day_rate_max_cents, p.currency) },
+              `${formatFeeRange(p.day_rate_min_cents, p.day_rate_max_cents, p.currency)}/day`,
+            )
+          : t("m.gigs.rateTbd", undefined, "Rate TBD"),
+      when: t("m.gigs.openNow", undefined, "Open now"),
+      certs: (p.certs_required ?? []).slice(0, 3),
+      tags: (p.role_taxonomy ?? []).slice(0, 3),
+      employmentType: EMPLOYMENT_LABEL[p.employment_type] ?? p.employment_type,
+      applicants: p.applicant_count ?? 0,
+      applied: appliedSet.has(p.id),
+    };
+  });
+
+  return (
+    <div className="screen screen-anim">
+      <div className="scr-eye">
+        {t("m.gigs.eyebrow", { count: gigs.length }, `${gigs.length} Open Roles`)}
+      </div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.gigs.title", undefined, "Jobs")}
+      </h1>
+      <GigsView gigs={gigs} />
     </div>
   );
 }

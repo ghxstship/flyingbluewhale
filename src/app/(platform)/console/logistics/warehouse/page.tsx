@@ -34,7 +34,7 @@ export default async function Page() {
       description: t("console.logistics.warehouse.tiles.availability.description", undefined, "7-day matrix"),
     },
     {
-      href: urlFor("mobile", "/wms"),
+      href: urlFor("mobile", "/inventory"),
       label: t("console.logistics.warehouse.tiles.mobileScan.label", undefined, "Mobile Scan"),
       description: t(
         "console.logistics.warehouse.tiles.mobileScan.description",
@@ -99,7 +99,7 @@ export default async function Page() {
         title={t("console.logistics.warehouse.title", undefined, "Warehouse")}
         subtitle={t("console.logistics.warehouse.subtitle", undefined, "FF&E + central + venue warehousing")}
         action={
-          <Button href={urlFor("mobile", "/wms")} size="sm">
+          <Button href={urlFor("mobile", "/inventory")} size="sm">
             {t("console.logistics.warehouse.mobileScanButton", undefined, "Mobile scan")}
           </Button>
         }

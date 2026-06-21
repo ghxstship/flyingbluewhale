@@ -1,42 +1,63 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { GraduationCap } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { getRequestT } from "@/lib/i18n/request";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * COMPVSS · Onboarding — the caller's new-hire flows, rebuilt to the kit.
+ * Reads `new_hire_assignments` (+ flow name) for this user; each card links to
+ * the `[assignmentId]` detail where steps are completed and the flow finalized.
+ */
 type Assignment = {
   id: string;
   flow_id: string;
-  assignment_phase: string;
-  assigned_at: string;
+  assignment_phase: string | null;
+  assigned_at: string | null;
   completed_at: string | null;
 };
 
-type Flow = { id: string; name: string; description: string | null };
+type Flow = { id: string; name: string | null; description: string | null };
+
+const PHASE_TONE: Record<string, string> = {
+  assigned: "warn",
+  in_progress: "info",
+  completed: "ok",
+  abandoned: "neutral",
+};
+
+const PHASE_LABEL: Record<string, string> = {
+  assigned: "To Do",
+  in_progress: "In Progress",
+  completed: "Done",
+  abandoned: "Abandoned",
+};
+
+const TONE_VAR: Record<string, string> = {
+  warn: "var(--p-warning)",
+  info: "var(--p-info)",
+  ok: "var(--p-success)",
+  neutral: "var(--p-border)",
+};
 
 export default async function MobileOnboardingPage() {
-  const { t } = await getRequestT();
-  if (!hasSupabase)
-    return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("common.configureSupabase", undefined, "Configure Supabase.")}
-      </div>
-    );
   const session = await requireSession();
   const supabase = await createClient();
-  const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
 
   const { data: assignments } = await supabase
     .from("new_hire_assignments")
     .select("id, flow_id, assignment_phase, assigned_at, completed_at")
+    .eq("org_id", session.orgId)
     .eq("assignee_id", session.userId)
-    .order("assigned_at", { ascending: false });
-
+    .order("assigned_at", { ascending: false })
+    .limit(100);
   const rows = (assignments ?? []) as Assignment[];
+
   const flowIds = rows.map((r) => r.flow_id);
   const { data: flows } = flowIds.length
     ? await supabase.from("new_hire_flows").select("id, name, description").in("id", flowIds)
@@ -44,60 +65,43 @@ export default async function MobileOnboardingPage() {
   const flowMap = new Map(((flows ?? []) as Flow[]).map((f) => [f.id, f]));
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("m.onboarding.eyebrow", undefined, "Mobile")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.onboarding.title", undefined, "Onboarding")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "m.onboarding.subtitle",
-          undefined,
-          "Read, sign, upload, complete. Your supervisor sees when each step finishes.",
-        )}
-      </p>
+    <div className="screen screen-anim">
+      <div className="scr-eye">{t("m.onboarding.eyebrow", undefined, "You")}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.onboarding.title", undefined, "Onboarding")}
+      </h1>
 
-      <ul className="mt-5 space-y-3">
-        {rows.length === 0 ? (
-          <li>
-            <EmptyState
-              size="compact"
-              title={t("m.onboarding.empty.title", undefined, "No Active Flows")}
-              description={t(
-                "m.onboarding.empty.description",
-                undefined,
-                "New-hire journeys assigned to you appear here.",
-              )}
-            />
-          </li>
-        ) : (
-          rows.map((a) => {
-            const flow = flowMap.get(a.flow_id);
-            const tone =
-              a.assignment_phase === "completed"
-                ? "success"
-                : a.assignment_phase === "abandoned"
-                  ? "muted"
-                  : a.assignment_phase === "in_progress"
-                    ? "info"
-                    : "warning";
-            return (
-              <li key={a.id}>
-                <Link href={`/m/onboarding/${a.id}`} className="surface block p-4">
-                  <div className="flex items-center justify-between">
-                    <Badge variant={tone}>{a.assignment_phase}</Badge>
-                    <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(a.assigned_at)}</span>
-                  </div>
-                  <h2 className="mt-2 text-sm font-semibold">
-                    {flow?.name ?? t("m.onboarding.fallbackFlowName", undefined, "Onboarding")}
-                  </h2>
-                  {flow?.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{flow.description}</p>}
-                </Link>
-              </li>
-            );
-          })
-        )}
-      </ul>
+      {rows.length === 0 ? (
+        <EmptyState
+          icon={<GraduationCap size={28} aria-hidden="true" />}
+          title={t("m.onboarding.emptyTitle", undefined, "All Caught Up")}
+          description={t("m.onboarding.emptyBody", undefined, "New-hire journeys assigned to you appear here.")}
+        />
+      ) : (
+        rows.map((a) => {
+          const phase = a.assignment_phase ?? "assigned";
+          const tone = PHASE_TONE[phase] ?? "neutral";
+          const flow = flowMap.get(a.flow_id);
+          return (
+            <Link href={`/m/onboarding/${a.id}`} key={a.id} className="item" style={{ textDecoration: "none" }}>
+              <span className="bar" style={{ background: TONE_VAR[tone] ?? "var(--p-accent)" }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="t">{flow?.name ?? t("m.onboarding.untitled", undefined, "Onboarding")}</div>
+                {flow?.description && <div className="s">{flow.description}</div>}
+                <div className="s">
+                  {a.assigned_at
+                    ? new Date(a.assigned_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : ""}
+                </div>
+              </div>
+              <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
+                {PHASE_LABEL[phase] ?? phase}
+              </span>
+              <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)", flex: "none" }} />
+            </Link>
+          );
+        })
+      )}
     </div>
   );
 }

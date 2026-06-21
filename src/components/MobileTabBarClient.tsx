@@ -5,18 +5,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
-  Inbox,
   Clock,
   Bell,
   User,
   QrCode,
   BookOpen,
-  CheckSquare,
-  Calendar,
-  Map,
-  ClipboardList,
   Siren,
   ShieldCheck,
+  CalendarDays,
+  ListChecks,
+  Package,
+  MessageSquare,
+  Menu,
 } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
@@ -24,36 +24,25 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
-  // ADR-0006 generic-default tab bar.
+  // COMPVSS kit tab model (rebuild 2026-06-21): Home · Calendar · Tasks ·
+  // Assets · Inbox · More.
   "/m": Home,
-  "/m/inbox": Inbox,
-  "/m/shift": Clock,
-  "/m/alerts": Bell,
+  "/m/schedule": CalendarDays,
+  "/m/tasks": ListChecks,
+  "/m/inventory": Package,
+  "/m/inbox": MessageSquare,
+  "/m/more": Menu,
+  // Secondary surfaces — reachable from /m/more and cmd-K (icons used when a
+  // surface appears in a bar/list that resolves through this map).
   "/m/settings": User,
-  // Retained mappings so legacy tab bar configs (and persona-routed
-  // variants from ADR-0009) render correctly.
   "/m/check-in": QrCode,
   "/m/guide": BookOpen,
-  "/m/tasks": CheckSquare,
-  // ADR-0009 per-role tab bar destinations. Role home routes
-  // (/m/performer, /m/crew, /m/admin) map to Home; specialist roles
-  // that have static surfaces (/m/driver, /m/medic, /m/guard) reuse
-  // existing icons for their primary verbs.
-  "/m/performer": Home,
-  "/m/crew": Home,
-  "/m/admin": Home,
-  "/m/driver": Map,
-  "/m/medic": ClipboardList,
-  "/m/medic/new": ClipboardList,
-  "/m/ad": Map,
-  "/m/guard": ShieldCheck,
-  "/m/gate": QrCode,
+  "/m/clock": Clock,
+  "/m/alerts": Bell,
+  "/m/notifications": Bell,
   "/m/incidents": Siren,
   "/m/incident": Siren,
-  "/m/wayfind": Map,
-  // Schedule lives on /m/shift for the existing surface — but the
-  // performer tab bar labels it "Schedule"; the same href works.
-  "/m/schedule": Calendar,
+  "/m/wallet": ShieldCheck,
 };
 
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {
@@ -73,7 +62,7 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
       className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--p-border)] bg-[var(--p-bg)]/95 backdrop-blur"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
-      <ul className="grid grid-cols-5">
+      <ul className="grid" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
         {items.map((i) => {
           const active = isRootHref(i.href)
             ? pathname === i.href

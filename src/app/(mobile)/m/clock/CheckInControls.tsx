@@ -1,132 +1,93 @@
 "use client";
 
-import { useTransition } from "react";
-import { toast } from "sonner";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { KIcon } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { clockIn, clockOut } from "./actions";
 
-type Action = "check_in" | "check_out" | "break_start" | "break_end";
-
-/** Browser geolocation as a Promise. Resolves null instead of rejecting
- * so a denied permission or missing API doesn't block the punch. */
-function tryGetPosition(): Promise<{ lat: number; lng: number } | null> {
-  if (typeof navigator === "undefined" || !navigator.geolocation) return Promise.resolve(null);
-  return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
-      (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
-      () => resolve(null),
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 30_000 },
-    );
-  });
+/** Format an elapsed millisecond span as HH:MM:SS. */
+function elapsed(fromIso: string | null): string {
+  if (!fromIso) return "00:00:00";
+  const ms = Math.max(0, Date.now() - new Date(fromIso).getTime());
+  const total = Math.floor(ms / 1000);
+  const h = String(Math.floor(total / 3600)).padStart(2, "0");
+  const m = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
+  const s = String(total % 60).padStart(2, "0");
+  return `${h}:${m}:${s}`;
 }
 
+/**
+ * The running time-clock face. Mirrors the kit `.te-clock` block: a live
+ * HH:MM:SS counter ticking from the open entry's `started_at`, a zone
+ * line, and a single clock-in / clock-out CTA wired to the surviving
+ * `clockIn` / `clockOut` server actions.
+ */
 export function CheckInControls({
-  shiftId,
-  attendance,
+  openSince,
+  zoneName,
 }: {
-  shiftId: string;
-  attendance: "scheduled" | "checked_in" | "on_break" | "checked_out" | "no_show";
+  openSince: string | null;
+  zoneName: string | null;
 }) {
-  const [pending, start] = useTransition();
-  const router = useRouter();
   const t = useT();
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [now, setNow] = useState(() => elapsed(openSince));
 
-  const submit = (action: Action, label: string) => {
+  const clockedIn = openSince != null;
+
+  // Tick the visible counter every second while on the clock.
+  useEffect(() => {
+    if (!openSince) {
+      setNow("00:00:00");
+      return;
+    }
+    setNow(elapsed(openSince));
+    const id = setInterval(() => setNow(elapsed(openSince)), 1000);
+    return () => clearInterval(id);
+  }, [openSince]);
+
+  const toggle = () => {
+    if (pending) return;
+    setError(null);
     start(async () => {
-      try {
-        // Capture GPS only for the clock_in/clock_out events. Break
-        // toggles don't need a position fix.
-        const needsGps = action === "check_in" || action === "check_out";
-        const pos = needsGps ? await tryGetPosition() : null;
-        const res = await fetch("/api/v1/shifts/checkin", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            shiftId,
-            action,
-            ...(pos ? { lat: pos.lat, lng: pos.lng } : {}),
-          }),
-        });
-        const json = (await res.json()) as {
-          ok: boolean;
-          queued?: boolean;
-          error?: { message: string };
-        };
-        if (!json.ok) {
-          toast.error(json.error?.message ?? t("m.clock.error.couldntUpdate", undefined, "Couldn't update"));
-          return;
-        }
-        // 202 from the service worker means the punch is queued for
-        // background sync. Surface this so the user knows their action
-        // landed (just not against the server yet).
-        if (json.queued) {
-          toast.info(t("m.clock.toast.queued", { label }, `${label} (queued — will sync when online)`));
-        } else {
-          toast.success(label);
-        }
-        router.refresh();
-      } catch (e) {
-        toast.error(e instanceof Error ? e.message : t("m.clock.error.network", undefined, "Network error"));
+      const res = clockedIn ? await clockOut() : await clockIn();
+      if (res?.error) {
+        setError(res.error);
+        return;
       }
+      router.refresh();
     });
   };
 
-  if (attendance === "checked_out") {
-    return <div className="text-xs text-[var(--p-text-2)]">{t("m.clock.shiftClosed", undefined, "Shift closed.")}</div>;
-  }
-
   return (
-    <div className="grid grid-cols-2 gap-2">
-      {attendance === "scheduled" && (
+    <div className="te-clock">
+      <div className="wl" style={{ justifyContent: "center" }}>
+        <KIcon name="MapPin" size={12} style={{ color: "var(--p-success)" }} />{" "}
+        {zoneName ?? t("m.clock.noZone", undefined, "No Zone Set")}
+      </div>
+      <div className="tcv">{now}</div>
+      {error && (
+        <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
+          {error}
+        </div>
+      )}
+      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
         <button
           type="button"
-          className="ps-btn col-span-2"
+          className={clockedIn ? "ps-btn ps-btn--danger ps-btn--lg" : "ps-btn ps-btn--cta ps-btn--lg"}
           disabled={pending}
-          onClick={() => submit("check_in", t("m.clock.toast.checkedIn", undefined, "Checked in"))}
+          onClick={toggle}
         >
-          {pending ? t("m.clock.working", undefined, "Working…") : t("m.clock.clockIn", undefined, "Clock in")}
+          {pending
+            ? t("m.clock.working", undefined, "Working…")
+            : clockedIn
+              ? t("m.clock.clockOut", undefined, "Clock Out")
+              : t("m.clock.clockIn", undefined, "Clock In")}
         </button>
-      )}
-      {attendance === "checked_in" && (
-        <>
-          <button
-            type="button"
-            className="ps-btn ps-btn--ghost"
-            disabled={pending}
-            onClick={() => submit("break_start", t("m.clock.toast.breakStarted", undefined, "Break started"))}
-          >
-            {t("m.clock.startBreak", undefined, "Start break")}
-          </button>
-          <button
-            type="button"
-            className="ps-btn ps-btn--danger"
-            disabled={pending}
-            onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
-          >
-            {t("m.clock.clockOut", undefined, "Clock out")}
-          </button>
-        </>
-      )}
-      {attendance === "on_break" && (
-        <>
-          <button
-            type="button"
-            className="ps-btn"
-            disabled={pending}
-            onClick={() => submit("break_end", t("m.clock.toast.backFromBreak", undefined, "Back from break"))}
-          >
-            {t("m.clock.endBreak", undefined, "End break")}
-          </button>
-          <button
-            type="button"
-            className="ps-btn ps-btn--danger"
-            disabled={pending}
-            onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
-          >
-            {t("m.clock.clockOut", undefined, "Clock out")}
-          </button>
-        </>
-      )}
+      </div>
     </div>
   );
 }

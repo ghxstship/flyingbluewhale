@@ -1,145 +1,211 @@
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { CheckInControls } from "./CheckInControls";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { toTitle } from "@/lib/format";
-import { toneFor } from "@/lib/tones";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { CheckInControls } from "./CheckInControls";
+import { ShiftNoteForm } from "./ShiftNoteForm";
 
 export const dynamic = "force-dynamic";
 
-type ShiftRow = {
+type EntryRow = {
   id: string;
-  starts_at: string;
-  ends_at: string;
-  attendance: "scheduled" | "checked_in" | "on_break" | "checked_out" | "no_show";
-  role: string | null;
-  checked_in_at: string | null;
-  checked_out_at: string | null;
-  venue: { name: string | null } | null;
+  started_at: string;
+  ended_at: string | null;
+  duration_minutes: number | null;
+  zone_id: string | null;
 };
 
-export default async function CheckInPage() {
+/**
+ * /m/clock — the personal time clock. Reads the caller's open entry (if
+ * any) to drive the running counter, the matching zone name, and recent
+ * history. The face + clock-in/out CTA is the client `CheckInControls`;
+ * each history row carries a `ShiftNoteForm` to log a note against it.
+ */
+export default async function MobileClockPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("m.clock.configureSupabase", undefined, "Configure Supabase.")}
+      <div className="screen screen-anim">
+        <div className="scr-eye">{t("m.clock.eyebrow", undefined, "Field")}</div>
+        <h1 className="scr-h">{t("m.clock.title", undefined, "Time Clock")}</h1>
+        <p className="form-intro">{t("m.clock.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
   }
+
   const session = await requireSession();
   const supabase = await createClient();
-
   const fmt = await getRequestFormatters();
-  // Look up the workforce_member row tied to the current user.
-  const { data: wfm } = await supabase
-    .from("workforce_members")
-    .select("id")
+
+  // The currently-open entry drives the running counter.
+  const { data: open } = await supabase
+    .from("time_entries")
+    .select("id, started_at, ended_at, duration_minutes, zone_id")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
+    .is("ended_at", null)
+    .order("started_at", { ascending: false })
+    .limit(1)
     .maybeSingle();
+  const openEntry = (open ?? null) as EntryRow | null;
 
-  let shifts: ShiftRow[] = [];
-  if (wfm?.id) {
-    // Today's window — anything starting before midnight tomorrow + ending after now.
-    const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-    const endOfNextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2).toISOString();
+  // Recent history (closed + open), newest first.
+  const { data: recent } = await supabase
+    .from("time_entries")
+    .select("id, started_at, ended_at, duration_minutes, zone_id")
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .order("started_at", { ascending: false })
+    .limit(20);
+  const history = (recent ?? []) as EntryRow[];
 
-    const { data } = await supabase
-      .from("shifts")
-      .select("id, starts_at, ends_at, attendance, role, checked_in_at, checked_out_at, venue:venue_id(name)")
+  // Resolve zone names for everything we'll show.
+  const zoneIds = Array.from(
+    new Set([openEntry?.zone_id, ...history.map((e) => e.zone_id)].filter(Boolean) as string[]),
+  );
+  const zoneMap = new Map<string, string>();
+  if (zoneIds.length) {
+    const { data: zones } = await supabase
+      .from("time_clock_zones")
+      .select("id, name")
       .eq("org_id", session.orgId)
-      .eq("workforce_member_id", wfm.id)
-      .gte("starts_at", startOfDay)
-      .lte("starts_at", endOfNextDay)
-      .order("starts_at", { ascending: true });
-    shifts = (data ?? []) as unknown as ShiftRow[];
+      .in("id", zoneIds);
+    for (const z of (zones ?? []) as Array<{ id: string; name: string | null }>) {
+      if (z.name) zoneMap.set(z.id, z.name);
+    }
+  }
+  const zoneNameFor = (id: string | null) => (id ? (zoneMap.get(id) ?? null) : null);
+
+  // Shift notes for the visible entries — real `shift_notes` rows, grouped
+  // by time entry, with author names hydrated from `users`.
+  type NoteRow = {
+    id: string;
+    time_entry_id: string;
+    author_id: string | null;
+    body: string;
+    as_manager: boolean;
+    created_at: string;
+  };
+  const entryIds = history.map((e) => e.id);
+  const notesByEntry = new Map<string, NoteRow[]>();
+  if (entryIds.length) {
+    const { data: notes } = await supabase
+      .from("shift_notes")
+      .select("id, time_entry_id, author_id, body, as_manager, created_at")
+      .eq("org_id", session.orgId)
+      .in("time_entry_id", entryIds)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
+    const noteRows = (notes ?? []) as NoteRow[];
+    const authorIds = Array.from(new Set(noteRows.map((n) => n.author_id).filter(Boolean) as string[]));
+    const authorMap = new Map<string, string>();
+    if (authorIds.length) {
+      const { data: users } = await supabase.from("users").select("id, name, email").in("id", authorIds);
+      for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+        authorMap.set(u.id, u.name ?? u.email ?? "");
+      }
+    }
+    for (const n of noteRows) {
+      const list = notesByEntry.get(n.time_entry_id) ?? [];
+      list.push(n);
+      notesByEntry.set(n.time_entry_id, list);
+    }
+    // attach resolved author name for render
+    for (const list of notesByEntry.values()) {
+      for (const n of list) {
+        (n as NoteRow & { authorName?: string }).authorName = n.author_id ? authorMap.get(n.author_id) ?? "" : "";
+      }
+    }
   }
 
+  const onShift = openEntry != null;
+
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("m.clock.eyebrow", undefined, "Field")}
+    <div className="screen screen-anim">
+      <div className="scr-eye">
+        {onShift ? t("m.clock.onClock", undefined, "On The Clock") : t("m.clock.offShift", undefined, "Off Shift")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.clock.title", undefined, "Check-in")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "m.clock.subtitle",
-          undefined,
-          "Today's shifts. Clock in when you arrive, take breaks as needed, clock out when you leave.",
-        )}
-      </p>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.clock.title", undefined, "Time Clock")}
+      </h1>
 
-      {!wfm && (
-        <div className="surface mt-6 p-4 text-sm">
-          {t(
-            "m.clock.noWorkforceProfile",
-            undefined,
-            "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your crew record to your login.",
-          )}
-        </div>
-      )}
+      <CheckInControls
+        openSince={openEntry?.started_at ?? null}
+        zoneName={zoneNameFor(openEntry?.zone_id ?? null)}
+      />
 
-      <ul className="mt-6 space-y-3">
-        {shifts.length === 0 ? (
-          <li>
-            <EmptyState
-              size="compact"
-              title={t("m.clock.empty.title", undefined, "No Shifts Today")}
-              description={t("m.clock.empty.description", undefined, "Check back when you're rostered.")}
-            />
-          </li>
-        ) : (
-          shifts.map((s) => (
-            <li key={s.id} className="surface p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-sm font-semibold">
-                    {s.venue?.name ?? t("m.clock.unassignedVenue", undefined, "Unassigned venue")}
-                  </div>
-                  <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
-                    {fmt.time(s.starts_at)}
+      <div className="sech">
+        <h2>{t("m.clock.recent", undefined, "Recent")}</h2>
+      </div>
+
+      {history.length === 0 ? (
+        <EmptyState
+          size="compact"
+          title={t("m.clock.empty.title", undefined, "No Entries Yet")}
+          description={t("m.clock.empty.body", undefined, "Clock in to start tracking your time.")}
+        />
+      ) : (
+        history.map((e) => {
+          const active = e.ended_at == null;
+          const hours = e.duration_minutes != null ? (e.duration_minutes / 60).toFixed(1) : null;
+          const zone = zoneNameFor(e.zone_id);
+          const label = `${fmt.date(e.started_at)} · ${fmt.time(e.started_at)}`;
+          return (
+            <div className="item" key={e.id} style={{ display: "block" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span className="bar" style={{ background: active ? "var(--p-success)" : "var(--p-border)" }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="t">{label}</div>
+                  <div className="s">
+                    {fmt.time(e.started_at)}
                     {" – "}
-                    {fmt.time(s.ends_at)}
-                    {s.role ? ` · ${s.role}` : ""}
+                    {e.ended_at ? fmt.time(e.ended_at) : t("m.clock.now", undefined, "now")}
+                    {zone ? ` · ${zone}` : ""}
+                    {hours ? ` · ${t("m.clock.hours", { hours }, `${hours} hrs`)}` : ""}
                   </div>
-                  {(s.checked_in_at || s.checked_out_at) && (
-                    <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">
-                      {s.checked_in_at && (
-                        <>
-                          {t("m.clock.inLabel", undefined, "In")}{" "}
-                          {fmt.dateParts(s.checked_in_at, {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </>
-                      )}
-                      {s.checked_in_at && s.checked_out_at && " · "}
-                      {s.checked_out_at && (
-                        <>
-                          {t("m.clock.outLabel", undefined, "Out")}{" "}
-                          {fmt.dateParts(s.checked_out_at, {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </>
-                      )}
-                    </div>
-                  )}
                 </div>
-                <Badge variant={toneFor(s.attendance)}>{toTitle(s.attendance)}</Badge>
+                <span className={`ps-badge ps-badge--${active ? "ok" : "neutral"}`}>
+                  {active ? t("m.clock.active", undefined, "Active") : t("m.clock.closed", undefined, "Closed")}
+                </span>
               </div>
-              <div className="mt-4">
-                <CheckInControls shiftId={s.id} attendance={s.attendance} />
+              {(() => {
+                const notes = notesByEntry.get(e.id) ?? [];
+                if (!notes.length) return null;
+                return (
+                  <div style={{ marginTop: 10 }}>
+                    {notes.map((n) => {
+                      const author = (n as { authorName?: string }).authorName || "";
+                      const meta = [
+                        author,
+                        n.as_manager ? t("m.clock.asManager", undefined, "As Manager") : null,
+                        `${fmt.date(n.created_at)} · ${fmt.time(n.created_at)}`,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ");
+                      return (
+                        <div className="item" key={n.id} style={{ alignItems: "flex-start" }}>
+                          <span
+                            className="bar"
+                            style={{ background: n.as_manager ? "var(--p-warning)" : "var(--p-border)" }}
+                          />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div className="t" style={{ whiteSpace: "pre-wrap" }}>{n.body}</div>
+                            <div className="s">{meta}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+              <div style={{ marginTop: 10 }}>
+                <ShiftNoteForm entryId={e.id} entryLabel={label} />
               </div>
-            </li>
-          ))
-        )}
-      </ul>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 }

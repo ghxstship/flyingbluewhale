@@ -46,7 +46,7 @@ export async function decideSwap(fd: FormData): Promise<void> {
       await sendPushTo(requestedBy, {
         title: `Shift Swap ${verb}`,
         body: `Your shift swap request was ${parsed.data.decision}.`,
-        url: "/m/shift",
+        url: "/m/requests",
         kind: "shift_swap",
         scope: "mobile",
         orgId: session.orgId,

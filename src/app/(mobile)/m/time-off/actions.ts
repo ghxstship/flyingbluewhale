@@ -1,95 +1,93 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
-import { log } from "@/lib/log";
-import { actionFail, formFail } from "@/lib/forms/fail";
+import { managerUserIds } from "@/lib/db/managers";
 
-const Schema = z
-  .object({
-    policy_id: z.string().uuid(),
-    starts_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Start date must be a valid date"),
-    ends_on: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "End date must be a valid date"),
-    hours_requested: z
-      .string()
-      .refine((v) => Number(v) > 0, "Hours must be positive")
-      .refine((v) => Number(v) <= 2000, "Hours requested is too large"),
-    reason: z.string().max(1000).optional().or(z.literal("")),
-  })
-  .refine((v) => v.starts_on <= v.ends_on, {
-    message: "End date must be on or after the start date",
-    path: ["ends_on"],
-  });
+export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
 
-export type State = {
-  error?: string;
-  fieldErrors?: Record<string, string>;
-  values?: Record<string, string>;
-} | null;
+const Input = z.object({
+  // kit timeoff form field ids
+  from: z.string().min(1, "Pick a start date."),
+  to: z.string().min(1, "Pick an end date."),
+  type: z.string().optional(),
+  notes: z.string().optional(),
+});
 
-export async function createTimeOffRequest(_prev: State, fd: FormData): Promise<State> {
+/** Map the kit type select → time_off_policies.policy_kind preference. */
+const KIND_HINT: Record<string, string> = {
+  Vacation: "vacation",
+  Sick: "sick",
+  Personal: "personal",
+  Unpaid: "unpaid",
+};
+
+/** Inclusive whole-day span × 8h — a reasonable default ask. */
+function hoursBetween(from: string, to: string): number {
+  const a = new Date(from + "T00:00:00");
+  const b = new Date(to + "T00:00:00");
+  const days = Math.max(1, Math.round((b.getTime() - a.getTime()) / 86_400_000) + 1);
+  return days * 8;
+}
+
+/**
+ * Request time off → inserts a `time_off_requests` row (initial request_state
+ * `pending`) against the best-matching org policy, then pings the manager band.
+ */
+export async function requestTimeOff(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return formFail(parsed.error, fd, parsed.error.issues[0]?.message);
+  const parsed = Input.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
+    return { error: "Please fix the errors below.", fieldErrors };
+  }
+  const v = parsed.data;
+  if (v.to < v.from) return { error: "End date must be on or after the start date.", fieldErrors: { to: "Invalid range" } };
+
   const supabase = await createClient();
 
-  // Cross-tenant guard on policy_id — RLS would block but the form-replay
-  // check here surfaces it before the insert.
-  const { data: policy } = await supabase
+  // Resolve a policy: prefer the kind hinted by the form's Type, else any
+  // active policy in the org.
+  const { data: policies } = await supabase
     .from("time_off_policies")
-    .select("id")
-    .eq("id", parsed.data.policy_id)
+    .select("id, policy_kind")
     .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (!policy) return actionFail("Time-off policy not found", fd);
+    .is("deleted_at", null);
+  const list = (policies ?? []) as Array<{ id: string; policy_kind: string | null }>;
+  if (list.length === 0) {
+    return { error: "No time-off policy is configured for your organization yet." };
+  }
+  const hint = KIND_HINT[v.type ?? ""] ?? "";
+  const policy = list.find((p) => p.policy_kind === hint) ?? list[0]!;
 
   const { error } = await supabase.from("time_off_requests").insert({
     org_id: session.orgId,
     user_id: session.userId,
-    policy_id: parsed.data.policy_id,
-    starts_on: parsed.data.starts_on,
-    ends_on: parsed.data.ends_on,
-    hours_requested: Number(parsed.data.hours_requested),
-    reason: parsed.data.reason || null,
+    policy_id: policy.id,
+    starts_on: v.from,
+    ends_on: v.to,
+    hours_requested: hoursBetween(v.from, v.to),
+    reason: v.notes || null,
+    request_state: "pending",
   });
-  if (error) return actionFail(`Could not submit time-off request: ${error.message}`, fd);
+  if (error) return { error: error.message };
 
-  // Tell the approvers — the console decision→requester direction was
-  // already wired, but submissions used to land silently and managers
-  // only found them by visiting /console/workforce/time-off.
-  // Best-effort: a notify failure never rolls back the request.
-  try {
-    if (isServiceClientAvailable()) {
-      const service = createServiceClient();
-      const { data: approvers } = await service
-        .from("memberships")
-        .select("user_id")
-        .eq("org_id", session.orgId)
-        .in("role", ["owner", "admin", "manager"])
-        .is("deleted_at", null);
-      const approverIds = ((approvers ?? []) as Array<{ user_id: string }>)
-        .map((a) => a.user_id)
-        .filter((id) => id !== session.userId);
-      if (approverIds.length > 0) {
-        await sendPushBulk(approverIds, {
-          title: "Time Off Requested",
-          body: `${parsed.data.starts_on} – ${parsed.data.ends_on}${parsed.data.reason ? ` · ${parsed.data.reason}` : ""}`,
-          url: "/console/workforce/time-off",
-          kind: "time_off",
-          scope: "platform",
-          orgId: session.orgId,
-        });
-      }
-    }
-  } catch (e) {
-    log.warn("time_off.request_notify_failed", { err: e instanceof Error ? e.message : String(e) });
+  const managers = await managerUserIds(session.orgId, session.userId);
+  if (managers.length) {
+    await sendPushBulk(managers, {
+      title: "Time Off Request",
+      body: `${v.from} – ${v.to}`,
+      url: "/console/workforce/time-off",
+      kind: "time_off",
+      scope: "all",
+      orgId: session.orgId,
+    });
   }
 
   revalidatePath("/m/time-off");
-  redirect("/m/time-off");
+  return null;
 }

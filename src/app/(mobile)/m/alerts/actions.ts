@@ -5,9 +5,15 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
-const Schema = z.object({ alertId: z.string().uuid() });
+/**
+ * /m/alerts write actions. acknowledgeAlert marks an org broadcast/alert
+ * notification as read for the caller by stamping `notifications.read_at`.
+ * Org-pinned so a member can't acknowledge another tenant's row.
+ */
 
 export type State = { error?: string } | null;
+
+const Schema = z.object({ alertId: z.string().uuid() });
 
 export async function acknowledgeAlert(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -15,35 +21,14 @@ export async function acknowledgeAlert(_prev: State, fd: FormData): Promise<Stat
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
-  // Cross-tenant FK guard on alert_id. Without this, a member of org A
-  // could acknowledge an alert from org B by passing its UUID, polluting
-  // org B's acknowledgement audit trail.
-  const { data: alert } = await supabase
-    .from("crisis_alerts")
-    .select("id")
+  const { error } = await supabase
+    .from("notifications")
+    .update({ read_at: new Date().toISOString() })
     .eq("id", parsed.data.alertId)
     .eq("org_id", session.orgId)
-    .maybeSingle();
-  if (!alert) return { error: "Alert not found" };
+    .is("read_at", null);
+  if (error) return { error: error.message };
 
-  // Upsert receipt for (alert_id, user_id) and stamp acknowledged_at.
-  const { error } = await (
-    supabase.from("crisis_alert_receipts") as unknown as {
-      upsert: (
-        p: Record<string, unknown>,
-        opts?: Record<string, unknown>,
-      ) => Promise<{ error: { message: string } | null }>;
-    }
-  ).upsert(
-    {
-      org_id: session.orgId,
-      alert_id: parsed.data.alertId,
-      user_id: session.userId,
-      acknowledged_at: new Date().toISOString(),
-    },
-    { onConflict: "alert_id,user_id" },
-  );
-  if (error) return { error: `Could not acknowledge alert: ${error.message}` };
   revalidatePath("/m/alerts");
   return null;
 }

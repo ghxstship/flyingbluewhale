@@ -4576,7 +4576,44 @@
    "title": "Today",
    "fab": {
     "scanTicket": "Scan Ticket"
-   }
+   },
+   "upcoming": {
+    "sub": "Upcoming Event"
+   },
+   "clock": {
+    "title": "Local Time",
+    "sub": "Clock In"
+   },
+   "copilot": {
+    "title": "Field Copilot",
+    "sub": "Ask · Report · Get Unstuck"
+   },
+   "widgets": "Today",
+   "w": {
+    "tasks": "Open Tasks",
+    "tasksSub": "Assigned To You",
+    "advances": "Assignments",
+    "advancesSub": "Across Every Show",
+    "unread": "Messages",
+    "unreadSub": "Recent Activity"
+   },
+   "quickActions": "Quick Actions",
+   "viewAll": "View All Upcoming Events",
+   "noShift": "Nothing Scheduled",
+   "noShiftBody": "Your next call lands here.",
+   "newSheet": "Create",
+   "newSheetBody": "What Do You Need?",
+   "qa": {
+    "report": "Report",
+    "scan": "Scan",
+    "clock": "Clock",
+    "advance": "Advances",
+    "approve": "Approve",
+    "expense": "Expense",
+    "swap": "Swap",
+    "invite": "Invite"
+   },
+   "upcomingLabel": "Upcoming"
   },
   "ad": {
    "eyebrow": "Mobile",
@@ -4596,7 +4633,8 @@
    "eyebrow": "Mobile",
    "title": "My Assignments",
    "empty": {
-    "title": "Nothing Assigned Yet"
+    "title": "Nothing Assigned Yet",
+    "body": "Gear, credentials and services assigned to you appear here."
    },
    "untitled": "Untitled",
    "projectFallback": "Project",
@@ -4604,6 +4642,32 @@
     "prompt": "Working a single show?",
     "link": "Open your shift",
     "suffix": "to see today's call."
+   },
+   "search": "Search Advances…",
+   "group": {
+    "none": "None",
+    "kind": "Type"
+   },
+   "sort": {
+    "deadline": "Due",
+    "kind": "Type",
+    "title": "Name"
+   },
+   "detail": {
+    "type": "Type",
+    "state": "State",
+    "project": "Project",
+    "qty": "Quantity",
+    "due": "Due",
+    "issued": "Issued",
+    "fulfilled": "Fulfilled",
+    "special": "Special Requests",
+    "purpose": "Operational Purpose",
+    "eyebrow": "Advance · Item",
+    "notes": "Notes"
+   },
+   "new": {
+    "submitting": "Submitting…"
    }
   },
   "alerts": {
@@ -4616,7 +4680,8 @@
    "scheduled": "scheduled",
    "acknowledgedAt": "Acknowledged {time}",
    "acknowledge": "Acknowledge",
-   "acknowledging": "Acknowledging…"
+   "acknowledging": "Acknowledging…",
+   "emptyTitle": "All clear. No alerts right now."
   },
   "checkInSummary": {
    "eyebrow": "Field",
@@ -4717,7 +4782,8 @@
    "title": "Check-in",
    "empty": {
     "title": "No Shifts Today",
-    "description": "Check back when you're rostered."
+    "description": "Check back when you're rostered.",
+    "body": "Clock in to start tracking your time."
    },
    "unassignedVenue": "Unassigned venue",
    "inLabel": "In",
@@ -4731,7 +4797,16 @@
     "clockIn": "Clock in"
    },
    "subtitle": "Geo-verified time tracking",
-   "noWorkforceProfile": "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your crew record to your login."
+   "noWorkforceProfile": "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your crew record to your login.",
+   "addNote": "Add Note",
+   "noZone": "No Zone Set",
+   "onClock": "On The Clock",
+   "offShift": "Off Shift",
+   "recent": "Recent",
+   "now": "now",
+   "hours": "{hours} hrs",
+   "active": "Active",
+   "closed": "Closed"
   },
   "coc": {
    "eyebrow": "Field",
@@ -4750,7 +4825,11 @@
     "audit": "Audit"
    },
    "desktopPrompt": "Need the desktop view?",
-   "desktopLink": "Open Chain of Custody"
+   "desktopLink": "Open Chain of Custody",
+   "emptyBody": "Scans and asset handoffs will appear here as a timeline.",
+   "asset": "Asset",
+   "scan": "Scan",
+   "emptyTitle": "No Custody Events"
   },
   "crew": {
    "eyebrow": "Field",
@@ -4776,7 +4855,30 @@
    "recent": "Recent",
    "empty": {
     "title": "No Logs Yet"
-   }
+   },
+   "back": "Daily Logs",
+   "new": {
+    "eyebrow": "Site",
+    "title": "New Daily Log",
+    "noProjects": "No Projects",
+    "noProjectsBody": "Daily logs attach to a project. Ask Ops to add one.",
+    "project": "Project",
+    "date": "Date",
+    "weather": "Weather",
+    "weatherPh": "e.g. Clear · light wind",
+    "high": "High °F",
+    "low": "Low °F",
+    "notes": "Notes",
+    "notesPh": "Headcounts, deliveries, blockers, incidents…",
+    "cancel": "Cancel",
+    "saving": "Saving…",
+    "submit": "Save Log"
+   },
+   "emptyBody": "Start the day's log with weather and notes.",
+   "untitled": "Untitled Log",
+   "noWeather": "No weather logged",
+   "emptyTitle": "No Logs Yet",
+   "newCta": "New Log"
   },
   "docs": {
    "download": {
@@ -4804,7 +4906,18 @@
    "title": "My Documents",
    "uploadCta": "+ Upload",
    "empty": {
-    "title": "No Documents"
+    "title": "No Documents",
+    "body": "Project documents you can access and your personal files land here."
+   },
+   "search": "Search Documents…",
+   "group": {
+    "none": "None",
+    "cat": "Category"
+   },
+   "sort": {
+    "name": "Name",
+    "cat": "Category",
+    "updated": "Updated"
    }
   },
   "driver": {
@@ -4892,7 +5005,18 @@
    "countOne": "{count} live gig across the network.",
    "countOther": "{count} live gigs across the network.",
    "empty": "No live gigs at the moment.",
-   "travelPaid": "travel paid"
+   "travelPaid": "travel paid",
+   "applied": "Applied",
+   "applying": "Applying…",
+   "apply": "Apply",
+   "search": "Search jobs…",
+   "postJob": "Post a job…",
+   "applicants": "{count} applied",
+   "noMatch": "Nothing matches your search.",
+   "network": "Network",
+   "perDay": "{rate}/day",
+   "rateTbd": "Rate TBD",
+   "openNow": "Open now"
   },
   "guard": {
    "configureSupabase": "Configure Supabase.",
@@ -4925,7 +5049,10 @@
    "downloadPdf": {
     "ariaLabel": "Download this guide as a PDF",
     "label": "Download PDF"
-   }
+   },
+   "title": "Guide",
+   "empty": "No Guide Yet",
+   "emptyBody": "The production team hasn't published a guide for your role yet."
   },
   "handover": {
    "eyebrow": "Mobile",
@@ -4936,7 +5063,12 @@
     "description": "Nothing pending today."
    },
    "capAbbrev": "cap",
-   "handedOver": "Handed over"
+   "handedOver": "Handed over",
+   "new": "New Handover",
+   "prior": "Recent Handovers",
+   "emptyBody": "Submit an end-of-shift handover to start the trail.",
+   "untitled": "Handover",
+   "emptyTitle": "No Handovers"
   },
   "common": {
    "configureSupabase": "Configure Supabase.",
@@ -4950,7 +5082,13 @@
     "emptyTitle": "No Messages Yet",
     "emptyDescription": "Say hello to get things started.",
     "loadOlder": "Load Older",
-    "loadingOlder": "Loading…"
+    "loadingOlder": "Loading…",
+    "channel": "Channel",
+    "direct": "Direct Message",
+    "placeholder": "Message",
+    "today": "Today",
+    "empty": "No Messages Yet",
+    "emptyHint": "Say hello to get things started."
    },
    "configureSupabase": "Configure Supabase.",
    "eyebrow": "Mobile",
@@ -4960,7 +5098,14 @@
     "title": "No Conversations"
    },
    "unreadBadge": "New",
-   "directMessage": "Direct message"
+   "directMessage": "Direct message",
+   "back": "Inbox",
+   "noMessages": "No messages yet",
+   "unread": "Unread",
+   "emptyHint": "Channels and direct messages land here.",
+   "channels": "Channels",
+   "directMessages": "Direct Messages",
+   "emptyTitle": "No Conversations"
   },
   "incident": {
    "new": {
@@ -4979,7 +5124,21 @@
    "fullReport": "Full report",
    "empty": {
     "title": "No Reports Yet"
-   }
+   },
+   "back": "My Incidents",
+   "quick": {
+    "eyebrow": "Express",
+    "title": "Quick File",
+    "intro": "One line. We'll route it to Ops and you can add detail later.",
+    "label": "What Happened",
+    "placeholder": "Describe the incident…",
+    "cancel": "Cancel",
+    "filing": "Filing…",
+    "submit": "File Incident"
+   },
+   "emptyBody": "You haven't filed any incident reports.",
+   "untitled": "Untitled Incident",
+   "emptyTitle": "Nothing Filed"
   },
   "incidents": {
    "eyebrow": "Field",
@@ -4990,7 +5149,12 @@
    "reportCta": "+ Report incident",
    "empty": {
     "title": "All Quiet"
-   }
+   },
+   "emptyBody": "No incidents logged for this org yet.",
+   "untitled": "Untitled Incident",
+   "photos": "photos",
+   "file": "File Report",
+   "emptyTitle": "All Clear"
   },
   "inventory": {
    "scan": {
@@ -5017,7 +5181,22 @@
     "eyebrow": "Field",
     "title": "Inventory Scan",
     "subtitle": "Scan or type an asset tag to check in / out."
-   }
+   },
+   "eyebrow": "On-Hand Catalog",
+   "title": "Assets",
+   "search": "Search assets…",
+   "empty": "No assets",
+   "emptyHint": "Nothing matches these filters.",
+   "units": "Units",
+   "colItem": "Item",
+   "colCategory": "Category",
+   "colCode": "Code",
+   "colQty": "On Hand",
+   "colCost": "Unit Cost",
+   "onHand": "on hand",
+   "tracked": "Tracked",
+   "untracked": "Untracked",
+   "scanCta": "Scan To Check Out / In"
   },
   "kudos": {
    "title": "Kudos",
@@ -5111,7 +5290,15 @@
    "settingsLink": "settings",
    "empty": {
     "title": "No Notifications"
-   }
+   },
+   "matrixHeading": "Delivery",
+   "channel": {
+    "push": "Push",
+    "email": "Email",
+    "text": "Text"
+   },
+   "recentHeading": "Recent",
+   "emptyTitle": "You're all caught up."
   },
   "onboarding": {
    "title": "Onboarding",
@@ -5127,9 +5314,13 @@
    "finishing": "Finishing…",
    "detail": {
     "empty": {
-     "title": "No Steps Yet"
+     "title": "No Steps Yet",
+     "description": "This onboarding flow has no steps. Check back once your admin publishes them."
     }
-   }
+   },
+   "emptyBody": "New-hire journeys assigned to you appear here.",
+   "untitled": "Onboarding",
+   "emptyTitle": "All Caught Up"
   },
   "polls": {
    "title": "Polls",
@@ -5150,7 +5341,20 @@
     "action": "Open Tasks"
    },
    "overdue": "Overdue",
-   "due": "Due {date}"
+   "due": "Due {date}",
+   "out": "Punch Out",
+   "in": "Punch In",
+   "on": "On The Clock",
+   "off": "Off Shift",
+   "today": "Today's Punches",
+   "emptyBody": "Punch in to start your shift.",
+   "now": "now",
+   "hrs": "hrs",
+   "open": "Open",
+   "closed": "Closed",
+   "active": "Active",
+   "fullClock": "Full Timesheet",
+   "emptyTitle": "No Punches"
   },
   "requests": {
    "detail": {
@@ -5195,7 +5399,35 @@
    "subtitle": "Active requests across the org.",
    "empty": {
     "title": "Nothing Open",
-    "description": "All quiet right now."
+    "description": "All quiet right now.",
+    "body": "Time-off and shift-swap requests appear here."
+   },
+   "chain": {
+    "submitter": "Submitter",
+    "submitted": "Submitted",
+    "reviewer": "Reviewer",
+    "managerPlus": "Manager+",
+    "reviewing": "Reviewing"
+   },
+   "approve": "Approve",
+   "decline": "Decline",
+   "search": "Search Approvals…",
+   "sort": {
+    "recent": "Recent",
+    "type": "Type"
+   },
+   "someone": "Someone",
+   "timeOff": {
+    "title": "Time Off"
+   },
+   "type": {
+    "timeOff": "Time Off",
+    "shiftSwap": "Shift Swap"
+   },
+   "hours": "{hours} hrs",
+   "swap": {
+    "toTitle": "Swap to {who}",
+    "title": "Shift Swap"
    }
   },
   "ros": {
@@ -5270,7 +5502,38 @@
     "title": "Location",
     "description": "Used for geo-verified clock in/out."
    },
-   "signOut": "Sign Out"
+   "signOut": "Sign Out",
+   "profile": {
+    "heading": "Profile",
+    "name": "Full Name",
+    "tagline": "Tagline",
+    "bio": "Bio"
+   },
+   "contact": {
+    "heading": "Contact",
+    "phone": "Mobile",
+    "email": "Work"
+   },
+   "certs": {
+    "heading": "Certifications",
+    "none": "No certifications on file."
+   },
+   "save": "Save",
+   "saved": "Saved.",
+   "appearance": {
+    "heading": "Appearance",
+    "theme": "Theme",
+    "density": "Density"
+   },
+   "account": {
+    "heading": "Account",
+    "pause": "Pause",
+    "pauseDesc": "Hide from scheduling. Keeps your records.",
+    "paused": "Paused",
+    "archive": "Archive",
+    "archiveDesc": "Request access revoke. Records preserved.",
+    "archived": "Requested"
+   }
   },
   "shift": {
    "eyebrow": "Mobile",
@@ -5326,8 +5589,57 @@
    "detail": {
     "back": "← Tasks",
     "dueLabel": "Due {date}",
-    "updateStatus": "Update Status"
-   }
+    "updateStatus": "Update Status",
+    "eyebrow": "Task",
+    "status": "Status",
+    "priority": "Priority",
+    "due": "Due",
+    "assignee": "Assignee",
+    "created": "Created",
+    "updated": "Updated",
+    "checklist": "Checklist",
+    "checklistEmpty": "No checklist items.",
+    "description": "Description",
+    "descriptionEmpty": "No description.",
+    "activity": "Activity",
+    "actCreated": "Task Created",
+    "actUpdated": "Last Updated",
+    "permWarn": "You don't have permission to change this task.",
+    "updatedToast": "Task Updated"
+   },
+   "unassigned": "Unassigned",
+   "noDue": "No Due Date",
+   "search": "Search Tasks…",
+   "emptyBody": "Nothing matches these filters.",
+   "group": {
+    "none": "None",
+    "status": "Status",
+    "priority": "Priority",
+    "assignee": "Assignee"
+   },
+   "sort": {
+    "due": "Due Time",
+    "priority": "Priority",
+    "name": "Name"
+   },
+   "filter": {
+    "status": "Status",
+    "showCompleted": "Show Completed"
+   },
+   "reset": "Reset Filters",
+   "state": {
+    "open": "Open",
+    "progress": "In Progress",
+    "blocked": "Blocked",
+    "review": "In Review",
+    "done": "Done"
+   },
+   "col": {
+    "task": "Task",
+    "due": "Due"
+   },
+   "noTasksInLane": "No tasks",
+   "swipeHint": "Swipe between lanes"
   },
   "timeOff": {
    "new": {
@@ -5353,7 +5665,13 @@
     "title": "No Requests",
     "description": "Your time-off requests will appear here."
    },
-   "timeOffFallback": "Time off"
+   "timeOffFallback": "Time off",
+   "eyebrow": "You",
+   "balance": "Balance",
+   "requests": "Your Requests",
+   "emptyBody": "You haven't requested any time off.",
+   "emptyTitle": "No Requests",
+   "newCta": "Request Time Off"
   },
   "tracker": {
    "configureSupabase": "Configure Supabase.",
@@ -5377,14 +5695,18 @@
    "title": "My Credential",
    "subtitle": "Show this screen at the gate. Keep it active until your shift ends.",
    "empty": {
-    "title": "No Issued Credential"
+    "title": "No Issued Credential",
+    "body": "Credential entitlements appear here once issued. Reach out to your admin."
    },
    "defaultCategoryCode": "ACC",
    "cardBarcode": "Card Barcode",
    "validFrom": "Valid From",
    "validTo": "Valid To",
    "otherCards": "Other Cards",
-   "openProfile": "Open profile →"
+   "openProfile": "Open profile →",
+   "credential": "Credential",
+   "accessTitle": "Access & Permissions",
+   "help": "Contact Admin For Help"
   },
   "wayfind": {
    "otherCluster": "Other",
@@ -5422,7 +5744,22 @@
    "peopleCount": "{count} people in your org",
    "empty": {
     "title": "No Members",
-    "description": "Org members appear here once added."
+    "description": "Org members appear here once added.",
+    "body": "Nobody on the roster matches."
+   },
+   "team": {
+    "crew": "Crew"
+   },
+   "status": {
+    "available": "Available",
+    "active": "Active",
+    "off": "Off Site"
+   },
+   "search": "Search crew, role, team…",
+   "action": {
+    "message": "Message",
+    "call": "Call",
+    "email": "Email"
    }
   },
   "feed": {
@@ -5435,7 +5772,210 @@
     "description": "Org announcements will appear here."
    },
    "pinned": "Pinned",
-   "markRead": "Mark Read"
+   "markRead": "Mark Read",
+   "composerPlaceholder": "Share an update…",
+   "post": "Post",
+   "comment": "Comment",
+   "share": "Share",
+   "tag": {
+    "kudos": "Kudos",
+    "update": "Update"
+   },
+   "announcerRole": "Announcement",
+   "memberRole": "Crew",
+   "ago": "{time} ago"
+  },
+  "schedule": {
+   "search": "Search Schedule…",
+   "empty": "Nothing Here",
+   "emptyBody": "No items match these filters.",
+   "emptyDay": "Nothing Scheduled",
+   "emptyDayBody": "No items on this day.",
+   "type": {
+    "shift": "Shift",
+    "meeting": "Meeting",
+    "training": "Training",
+    "ros": "Run of Show"
+   },
+   "group": {
+    "none": "None",
+    "type": "Type"
+   },
+   "sort": {
+    "time": "Time",
+    "name": "Name"
+   },
+   "filter": {
+    "type": "Type"
+   },
+   "reset": "Reset Filters",
+   "col": {
+    "event": "Event",
+    "type": "Type",
+    "time": "Time",
+    "detail": "Detail",
+    "status": "Status"
+   },
+   "eyebrow": "Today · {count} Events",
+   "title": "Calendar"
+  },
+  "checkin": {
+   "gate": {
+    "eyebrow": "Gate · {slug}"
+   },
+   "title": "Scan",
+   "access": "Access",
+   "asset": "Asset",
+   "pos": "POS",
+   "nfc": "NFC",
+   "rfid": "RFID / NFC",
+   "qr": "QR Code",
+   "scanHintCamera": "Reads QR & barcodes automatically",
+   "scanHintAccess": "Scan the QR on the credential",
+   "nfcHint": "Hold the RFID credential or fob near the reader",
+   "ctaAccess": "Verify Credential",
+   "ctaAsset": "Check Out / In",
+   "ctaPos": "Scan Product",
+   "ctaNfc": "Tap To Read",
+   "manual": "Enter Code Manually",
+   "manualLabel": "Code",
+   "manualPlaceholder": "e.g. R7-014",
+   "batch": "Batch Check-In",
+   "scanning": "Checking…",
+   "recentTitle": "Recent Activity",
+   "recentEmpty": "No Scans Yet",
+   "logged": "Logged",
+   "eyebrow": "{count} Recent Scans"
+  },
+  "checkinManual": {
+   "back": "Check-In",
+   "eyebrow": "Manual Entry",
+   "title": "Enter Code",
+   "hint": "Type a scan code or asset tag when the camera can't read it.",
+   "code": "Code",
+   "placeholder": "e.g. R7-014",
+   "scanning": "Checking…",
+   "cta": "Submit Code",
+   "logged": "Logged"
+  },
+  "batch": {
+   "back": "Check-In",
+   "of": "of",
+   "selected": "selected",
+   "title": "Batch Check-In",
+   "hint": "Select assigned gear to return in one pass.",
+   "empty": "Nothing to return",
+   "emptyHint": "You have no checked-out gear right now.",
+   "selectAll": "Select all",
+   "working": "Checking in…",
+   "cta": "Check In",
+   "ctaTail": "Selected",
+   "done": "asset(s) checked in."
+  },
+  "changelog": {
+   "eyebrow": "COMPVSS Field",
+   "title": "What's New",
+   "build": "COMPVSS Field · Build 2406.18"
+  },
+  "more": {
+   "title": "More",
+   "tools": "Tools",
+   "people": "People",
+   "network": "Network",
+   "account": "Account",
+   "eyebrow": "Workspace"
+  },
+  "activity": {
+   "count": "{n} Events",
+   "title": "Activity History",
+   "search": "Search Activity…",
+   "empty": "No Activity",
+   "emptyBody": "Nothing matches these filters."
+  },
+  "referrals": {
+   "step1": "Share",
+   "step1s": "Send your code or link",
+   "step2": "They Join",
+   "step2s": "Sign up to the ATLVS network",
+   "step3": "You Earn",
+   "step3s": "Points + cash when they're hired",
+   "eyebrow": "ATLVS Ecosystem",
+   "title": "Referrals & Rewards",
+   "balance": "Reward Balance",
+   "pts": "pts",
+   "tier": "Starter",
+   "next": "Refer crew to start earning rewards.",
+   "share": "Share",
+   "invite": "Invite",
+   "how": "How It Works",
+   "yours": "Your Referrals",
+   "empty": "No Referrals Yet",
+   "emptyBody": "Share your code — referrals and rewards show up here."
+  },
+  "catalog": {
+   "back": "More",
+   "title": "Catalog",
+   "search": "Search the catalog…",
+   "request": "Request",
+   "empty": "No items",
+   "emptyHint": "Nothing matches."
+  },
+  "emergency": {
+   "back": "Home",
+   "eyebrow": "Position",
+   "title": "Emergency Card",
+   "assembly": "Assembly Point",
+   "role": "Emergency Role",
+   "team": "Team",
+   "reportTo": "Report To",
+   "fire": "Fire Safety",
+   "evac": "Evacuate",
+   "shelter": "Shelter",
+   "codes": "Emergency Codes"
+  },
+  "companies": {
+   "unnamed": "Unnamed Vendor",
+   "general": "General",
+   "count": "{n} On Project",
+   "title": "Vendors",
+   "search": "Search Vendors, Trade, Scope…",
+   "empty": "No Vendors",
+   "emptyBody": "No organizations match.",
+   "call": "Call",
+   "email": "Email"
+  },
+  "connections": {
+   "unnamed": "Unnamed",
+   "crew": "Crew",
+   "count": "{n} Suggested",
+   "title": "My Connections",
+   "search": "Search By Name, Trade, Skill, Cert…",
+   "empty": "No People",
+   "emptyBody": "No other crew in this org yet — suggestions appear here as your network grows.",
+   "connect": "Connect",
+   "pending": "Pending",
+   "requestSent": "Request Sent"
+  },
+  "inventoryScan": {
+   "eyebrow": "Asset Tag",
+   "title": "Scan To Check Out / In",
+   "hint": "Point at an asset tag QR — reads automatically.",
+   "back": "Assets",
+   "manualLabel": "Asset Tag",
+   "manualPlaceholder": "e.g. R7-014",
+   "cta": "Resolve Tag",
+   "scanning": "Checking…",
+   "recentTitle": "Recent Activity",
+   "recentEmpty": "No Scans Yet",
+   "logged": "Logged"
+  },
+  "market": {
+   "listed": "Listing saved · pending marketplace launch",
+   "emptyTitle": "No Listings Yet",
+   "empty": "The crew marketplace is coming online. Be the first to list gear, tools, or apparel.",
+   "listItem": "List an Item",
+   "eyebrow": "Marketplace",
+   "title": "Marketplace"
   }
  },
  "me": {

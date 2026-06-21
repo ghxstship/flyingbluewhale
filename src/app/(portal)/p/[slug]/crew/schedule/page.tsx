@@ -12,7 +12,7 @@ export default function CrewSchedulePage() {
     <ScheduleSurface
       variant="portal"
       clockInHref="/m/clock"
-      swapHref="/m/shift/swap"
+      swapHref="/m/requests"
       eyebrowLabel="Crew"
       titleLabel="Schedule"
     />

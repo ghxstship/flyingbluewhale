@@ -1,188 +1,124 @@
-import { redirect } from "next/navigation";
-import { QrCode } from "lucide-react";
-import { FAB } from "@/components/mobile/FAB";
-import { getRequestT } from "@/lib/i18n/request";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { MOBILE_ROLES, type MobileRole } from "@/lib/nav";
-import { MobileHomeTabs } from "./MobileHomeTabs";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { HomeShell, type HomeData, type HomeLabels } from "./HomeShell";
+
+export const dynamic = "force-dynamic";
 
 /**
- * Mobile home — three-tab section (Today / Tools / Reports) replacing the
- * single 6-tile grid. Phase D of the WAYFINDER remediation: 17 mobile
- * routes were reachable only by deep link before; the Tools tab gives
- * every surface a tappable home and the cmd-K palette indexes the same
- * registry so keyboard-driven discovery matches.
- *
- * iOS HIG / Apple Maps pattern — five bottom-tab surfaces with section
- * grouping inside the active tab. Hick's-Law-respecting (6 primary tiles,
- * then scoped sub-grids on demand).
- *
- * ADR-0009 minimal grace-window: if the signed-in user has chosen a
- * `mobile_role` via `/m/settings/role`, hand them off to their
- * role-scoped home (`/m/[role]` for performer/crew/admin, or the
- * existing static surface for driver/medic/guard which already serve as
- * those roles' homes). Users who haven't picked a role keep the generic
- * Today/Tools/Reports view they had before. No proxy.ts middleware
- * required for this scaffold — the full URL migration (moving every
- * `/m/<surface>` under `/m/[role]/<surface>`) ships as its own PR.
+ * COMPVSS `/m` home — the field dashboard. Server component: fetches the real
+ * counts (open tasks assigned to me, my assignments, recent chat messages) and
+ * the next upcoming event, then hands plain data + translated labels to the
+ * `<HomeShell>` client island. Design ref: app.jsx 1663-1711.
  */
 export default async function MobileHome() {
   const { t } = await getRequestT();
-  if (hasSupabase) {
-    const session = await requireSession();
-    const supabase = await createClient();
-    const { data: prefRow } = await supabase
-      .from("user_preferences")
-      .select("ui_state")
-      .eq("user_id", session.userId)
-      .maybeSingle();
-    const uiState = (prefRow?.ui_state as { mobile_role?: MobileRole } | null) ?? null;
-    const chosen = uiState?.mobile_role;
-    if (chosen && MOBILE_ROLES.includes(chosen)) {
-      // driver/medic/guard already have static surfaces at /m/<role>;
-      // performer/crew/admin land on the dynamic /m/[role] home.
-      redirect(`/m/${chosen}`);
-    }
+
+  if (!hasSupabase) {
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
-  const today = [
-    {
-      href: "/m/check-in",
-      label: t("m.home.today.checkIn.label", undefined, "Check-in"),
-      sub: t("m.home.today.checkIn.sub", undefined, "Scan tickets"),
-    },
-    {
-      href: "/m/tasks",
-      label: t("m.home.today.tasks.label", undefined, "Tasks"),
-      sub: t("m.home.today.tasks.sub", undefined, "Today's queue"),
-    },
-    {
-      href: "/m/crew/clock",
-      label: t("m.home.today.clock.label", undefined, "Clock"),
-      sub: t("m.home.today.clock.sub", undefined, "In / out"),
-    },
-    {
-      href: "/m/inventory/scan",
-      label: t("m.home.today.inventory.label", undefined, "Inventory"),
-      sub: t("m.home.today.inventory.sub", undefined, "Equipment scan"),
-    },
-    {
-      href: "/m/incidents/new",
-      label: t("m.home.today.incident.label", undefined, "Incident"),
-      sub: t("m.home.today.incident.sub", undefined, "Safety report"),
-    },
-    {
-      href: "/m/settings",
-      label: t("m.home.today.settings.label", undefined, "Settings"),
-      sub: t("m.home.today.settings.sub", undefined, "Offline, perms"),
-    },
-  ];
 
-  const tools = [
-    {
-      href: "/m/gate",
-      label: t("m.home.tools.gate.label", undefined, "Gate Scan"),
-      sub: t("m.home.tools.gate.sub", undefined, "Door check-in"),
-    },
-    {
-      href: "/m/wallet",
-      label: t("m.home.tools.wallet.label", undefined, "Wallet"),
-      sub: t("m.home.tools.wallet.sub", undefined, "Pass + payouts"),
-    },
-    {
-      href: "/m/wms",
-      label: t("m.home.tools.wms.label", undefined, "Warehouse"),
-      sub: t("m.home.tools.wms.sub", undefined, "Stock moves"),
-    },
-    {
-      href: "/m/driver",
-      label: t("m.home.tools.driver.label", undefined, "Driver"),
-      sub: t("m.home.tools.driver.sub", undefined, "Run sheet"),
-    },
-    {
-      href: "/m/ad",
-      label: t("m.home.tools.ad.label", undefined, "A&D"),
-      sub: t("m.home.tools.ad.sub", undefined, "Arrival / departure"),
-    },
-    {
-      href: "/m/ros",
-      label: t("m.home.tools.ros.label", undefined, "Run of Show"),
-      sub: t("m.home.tools.ros.sub", undefined, "Cue-by-cue"),
-    },
-    {
-      href: "/m/guard",
-      label: t("m.home.tools.guard.label", undefined, "Guard"),
-      sub: t("m.home.tools.guard.sub", undefined, "Patrol log"),
-    },
-    {
-      href: "/m/safeguarding",
-      label: t("m.home.tools.safeguarding.label", undefined, "Safeguarding"),
-      sub: t("m.home.tools.safeguarding.sub", undefined, "Welfare"),
-    },
-    {
-      href: "/m/medic",
-      label: t("m.home.tools.medic.label", undefined, "Medic"),
-      sub: t("m.home.tools.medic.sub", undefined, "Patient log"),
-    },
-    {
-      href: "/m/coc",
-      label: t("m.home.tools.coc.label", undefined, "Chain of Custody"),
-      sub: t("m.home.tools.coc.sub", undefined, "Asset trail"),
-    },
-    {
-      href: "/m/handover",
-      label: t("m.home.tools.handover.label", undefined, "Handover"),
-      sub: t("m.home.tools.handover.sub", undefined, "Shift transfer"),
-    },
-    {
-      href: "/m/wayfind",
-      label: t("m.home.tools.wayfind.label", undefined, "Wayfind"),
-      sub: t("m.home.tools.wayfind.sub", undefined, "Site map"),
-    },
-    {
-      href: "/m/gigs",
-      label: t("m.home.tools.gigs.label", undefined, "Open Gigs"),
-      sub: t("m.home.tools.gigs.sub", undefined, "Find next work"),
-    },
-  ];
+  const session = await requireSession();
+  const supabase = await createClient();
+  const fmt = await getRequestFormatters();
+  const nowIso = new Date().toISOString();
 
-  const reports = [
-    {
-      href: "/m/daily-log",
-      label: t("m.home.reports.dailyLog.label", undefined, "Daily Log"),
-      sub: t("m.home.reports.dailyLog.sub", undefined, "Today's entries"),
-    },
-    {
-      href: "/m/punch",
-      label: t("m.home.reports.punch.label", undefined, "Punch List"),
-      sub: t("m.home.reports.punch.sub", undefined, "Open items"),
-    },
-    {
-      href: "/m/incidents",
-      label: t("m.home.reports.incidents.label", undefined, "Incidents"),
-      sub: t("m.home.reports.incidents.sub", undefined, "All reports"),
-    },
-    {
-      href: "/m/requests",
-      label: t("m.home.reports.requests.label", undefined, "Requests"),
-      sub: t("m.home.reports.requests.sub", undefined, "Service desk"),
-    },
-    {
-      href: "/m/notifications",
-      label: t("m.home.reports.notifications.label", undefined, "Notifications"),
-      sub: t("m.home.reports.notifications.sub", undefined, "All alerts"),
-    },
-  ];
+  // Open tasks assigned to me (anything not yet done).
+  const { count: openTasks } = await supabase
+    .from("tasks")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", session.orgId)
+    .eq("assigned_to", session.userId)
+    .neq("task_state", "done");
 
-  return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-label text-[var(--brand-color)]">{t("m.home.eyebrow", undefined, "Field")}</div>
-      <h1 className="text-display mt-2 text-3xl">{t("m.home.title", undefined, "Today")}</h1>
-      <MobileHomeTabs today={today} tools={tools} reports={reports} />
-      <FAB href="/m/check-in" label={t("m.home.fab.scanTicket", undefined, "Scan Ticket")}>
-        <QrCode size={22} />
-      </FAB>
-    </div>
-  );
+  // My assignments (advancing — tickets/credentials/etc.).
+  const { count: myAdvances } = await supabase
+    .from("assignments")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", session.orgId)
+    .eq("party_user_id", session.userId)
+    .is("deleted_at", null);
+
+  // Recent chat messages (last 7 days) as the "unread" proxy — no per-user
+  // read cursor join here; the inbox surface owns precise unread accounting.
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const { count: unread } = await supabase
+    .from("chat_messages")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", session.orgId)
+    .gte("created_at", sevenDaysAgo);
+
+  // Next upcoming event.
+  const { data: ev } = await supabase
+    .from("events")
+    .select("id, name, starts_at, event_state")
+    .eq("org_id", session.orgId)
+    .gte("starts_at", nowIso)
+    .order("starts_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  const nextShift: HomeData["nextShift"] = ev
+    ? {
+        id: ev.id,
+        name: ev.name,
+        time: new Date(ev.starts_at).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }),
+        day: fmt.date(ev.starts_at),
+        sub: t("m.home.upcoming.sub", undefined, "Upcoming Event"),
+      }
+    : null;
+
+  const data: HomeData = {
+    openTasks: openTasks ?? 0,
+    myAdvances: myAdvances ?? 0,
+    unread: unread ?? 0,
+    nextShift,
+  };
+
+  const greeting = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
+
+  const labels: HomeLabels = {
+    title: t("m.home.title", undefined, "Dashboard"),
+    clockTitle: t("m.home.clock.title", undefined, "Local Time"),
+    clockSub: t("m.home.clock.sub", undefined, "Clock In"),
+    copilotTitle: t("m.home.copilot.title", undefined, "Field Copilot"),
+    copilotSub: t("m.home.copilot.sub", undefined, "Ask · Report · Get Unstuck"),
+    widgets: t("m.home.widgets", undefined, "Today"),
+    wTasks: t("m.home.w.tasks", undefined, "Open Tasks"),
+    wTasksSub: t("m.home.w.tasksSub", undefined, "Assigned To You"),
+    wAdvances: t("m.home.w.advances", undefined, "Assignments"),
+    wAdvancesSub: t("m.home.w.advancesSub", undefined, "Across Every Show"),
+    wUnread: t("m.home.w.unread", undefined, "Messages"),
+    wUnreadSub: t("m.home.w.unreadSub", undefined, "Recent Activity"),
+    quickActions: t("m.home.quickActions", undefined, "Quick Actions"),
+    upcoming: t("m.home.upcomingLabel", undefined, "Upcoming"),
+    viewAll: t("m.home.viewAll", undefined, "View All Upcoming Events"),
+    noShift: t("m.home.noShift", undefined, "Nothing Scheduled"),
+    noShiftBody: t("m.home.noShiftBody", undefined, "Your next call lands here."),
+    newSheet: t("m.home.newSheet", undefined, "Create"),
+    newSheetBody: t("m.home.newSheetBody", undefined, "What Do You Need?"),
+    qaReport: t("m.home.qa.report", undefined, "Report"),
+    qaScan: t("m.home.qa.scan", undefined, "Scan"),
+    qaClock: t("m.home.qa.clock", undefined, "Clock"),
+    qaAdvance: t("m.home.qa.advance", undefined, "Advances"),
+    qaApprove: t("m.home.qa.approve", undefined, "Approve"),
+    qaExpense: t("m.home.qa.expense", undefined, "Expense"),
+    qaSwap: t("m.home.qa.swap", undefined, "Swap"),
+    qaInvite: t("m.home.qa.invite", undefined, "Invite"),
+  };
+
+  return <HomeShell data={data} greeting={greeting} labels={labels} />;
 }

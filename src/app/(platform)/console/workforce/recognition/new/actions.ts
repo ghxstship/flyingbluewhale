@@ -60,10 +60,10 @@ export async function createKudosFromConsole(fd: FormData): Promise<void> {
       actorId: session.userId,
       title: "You got kudos",
       body: parsed.data.message,
-      href: "/m/kudos",
+      href: "/m/feed",
     });
   }
 
   revalidatePath("/console/workforce/recognition");
-  revalidatePath("/m/kudos");
+  revalidatePath("/m/feed");
 }

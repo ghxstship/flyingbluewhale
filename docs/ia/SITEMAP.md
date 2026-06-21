@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1061 · **API route handlers:** 124 · **Distinct nav hrefs:** 433
+**Page routes:** 1061 · **API route handlers:** 131 · **Distinct nav hrefs:** 433
 
 ## Legend
 
@@ -2128,7 +2128,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 124 route handlers
+## API surface (`/api/v1`) — 131 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2268,6 +2268,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>/api/v1/handovers</code> · 2</summary>
+
+- `/api/v1/handovers`
+- `/api/v1/handovers/[id]`
+
+</details>
+
 <details><summary><code>/api/v1/health</code> · 3</summary>
 
 - `/api/v1/health`
@@ -2322,6 +2329,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>/api/v1/locations</code> · 1</summary>
 
 - `/api/v1/locations`
+
+</details>
+
+<details><summary><code>/api/v1/marketplace-listings</code> · 2</summary>
+
+- `/api/v1/marketplace-listings`
+- `/api/v1/marketplace-listings/[id]`
 
 </details>
 
@@ -2444,6 +2458,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>/api/v1/shift-notes</code> · 1</summary>
+
+- `/api/v1/shift-notes`
+
+</details>
+
 <details><summary><code>/api/v1/shifts</code> · 1</summary>
 
 - `/api/v1/shifts/checkin`
@@ -2468,6 +2488,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 - `/api/v1/stripe/checkout`
 - `/api/v1/stripe/connect/onboarding`
 - `/api/v1/stripe/portal`
+
+</details>
+
+<details><summary><code>/api/v1/tasks</code> · 2</summary>
+
+- `/api/v1/tasks/[taskId]/comments`
+- `/api/v1/tasks/[taskId]/events`
 
 </details>
 

@@ -80,12 +80,12 @@ export default async function MobileSettingsPage() {
     theme: t("m.settings.appearance.theme", undefined, "Theme"),
     density: t("m.settings.appearance.density", undefined, "Density"),
     account: t("m.settings.account.heading", undefined, "Account"),
-    pause: t("m.settings.account.pause", undefined, "Pause"),
-    pauseDesc: t("m.settings.account.pauseDesc", undefined, "Hide from scheduling. Keeps your records."),
-    paused: t("m.settings.account.paused", undefined, "Paused"),
-    archive: t("m.settings.account.archive", undefined, "Archive"),
-    archiveDesc: t("m.settings.account.archiveDesc", undefined, "Request access revoke. Records preserved."),
-    archived: t("m.settings.account.archived", undefined, "Requested"),
+    accountStatus: t("m.settings.account.status", undefined, "Account Status"),
+    accountStatusDesc: t(
+      "m.settings.account.statusDesc",
+      undefined,
+      "Pause or archive · reversible pause, records preserved",
+    ),
     signOut: t("m.settings.signOut", undefined, "Sign Out"),
   };
 

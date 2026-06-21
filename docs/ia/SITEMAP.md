@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1060 · **API route handlers:** 124 · **Distinct nav hrefs:** 433
+**Page routes:** 1061 · **API route handlers:** 124 · **Distinct nav hrefs:** 433
 
 ## Legend
 
@@ -26,12 +26,12 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 734 | 199 | 535 | 0 | 0 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 49 | 35 | 13 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 50 | 35 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 140 | 120 | 18 | 0 | 2 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 87 | 32 | 47 | 0 | 8 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1060** | **407** | **619** | **0** | **34** |
+| **TOTAL** | | **1061** | **407** | **619** | **0** | **35** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -48,7 +48,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (34) — intentional non-nav, with reasons
+## · Exempt routes (35) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -77,6 +77,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/verify-email` | prefix | Auth email verification. |
 | `/onboarding` | prefix | Post-signup org onboarding flow. |
 | `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
+| `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
 
 ---
 
@@ -1207,7 +1208,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-49 routes — ● 35 nav · ○ 13 linked · ⚠ 0 orphan
+50 routes — ● 35 nav · ○ 13 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1396,9 +1397,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>settings</code> · 1 route</summary>
+<details><summary><code>settings</code> · 2 routes</summary>
 
 ● `/m/settings`
+· `/m/settings/account`
 
 </details>
 

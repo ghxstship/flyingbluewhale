@@ -1,10 +1,10 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState } from "react";
 import { KIcon } from "@/components/mobile/kit";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { DensityToggle } from "@/components/ui/DensityToggle";
-import { archiveAccount, pauseAccount, saveProfile, type State } from "./actions";
+import { saveProfile, type State } from "./actions";
 
 export type ProfileData = {
   name: string;
@@ -31,21 +31,13 @@ type Labels = {
   theme: string;
   density: string;
   account: string;
-  pause: string;
-  pauseDesc: string;
-  paused: string;
-  archive: string;
-  archiveDesc: string;
-  archived: string;
+  accountStatus: string;
+  accountStatusDesc: string;
   signOut: string;
 };
 
 export function SettingsView({ data, labels }: { data: ProfileData; labels: Labels }) {
   const [state, formAction, pending] = useActionState<State, FormData>(saveProfile, null);
-  const [pausePending, startPause] = useTransition();
-  const [archivePending, startArchive] = useTransition();
-  const [paused, setPaused] = useState(false);
-  const [archived, setArchived] = useState(false);
 
   return (
     <>
@@ -155,48 +147,18 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
         <DensityToggle />
       </div>
 
-      {/* ── Account — pause / archive (server-action stubs) ── */}
+      {/* ── Account — links to the dedicated pause / archive lifecycle screen ── */}
       <div className="sech">
         <h2>{labels.account}</h2>
       </div>
-      <div className="item">
-        <KIcon name="PauseCircle" size={18} style={{ color: "var(--p-text-2)" }} />
+      <a className="item tap" href="/m/settings/account" style={{ cursor: "pointer" }}>
+        <KIcon name="UserCog" size={18} style={{ color: "var(--p-text-2)" }} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="t">{labels.pause}</div>
-          <div className="s">{labels.pauseDesc}</div>
+          <div className="t">{labels.accountStatus}</div>
+          <div className="s">{labels.accountStatusDesc}</div>
         </div>
-        <button type="button"
-          className="ps-btn ps-btn--secondary ps-btn--sm"
-          disabled={pausePending || paused}
-          onClick={() =>
-            startPause(async () => {
-              const res = await pauseAccount();
-              if (!res?.error) setPaused(true);
-            })
-          }
-        >
-          {paused ? labels.paused : labels.pause}
-        </button>
-      </div>
-      <div className="item">
-        <KIcon name="Archive" size={18} style={{ color: "var(--p-text-2)" }} />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="t">{labels.archive}</div>
-          <div className="s">{labels.archiveDesc}</div>
-        </div>
-        <button type="button"
-          className="ps-btn ps-btn--secondary ps-btn--sm"
-          disabled={archivePending || archived}
-          onClick={() =>
-            startArchive(async () => {
-              const res = await archiveAccount();
-              if (!res?.error) setArchived(true);
-            })
-          }
-        >
-          {archived ? labels.archived : labels.archive}
-        </button>
-      </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
+      </a>
 
       {/* ── Sign out — canonical /auth/signout POST ── */}
       <form action="/auth/signout" method="post">

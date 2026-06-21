@@ -1,120 +1,137 @@
-import Link from "next/link";
-import { urlFor } from "@/lib/urls";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { KIcon } from "@/components/mobile/kit";
+import { NotifMatrix, type MatrixState } from "./NotifMatrix";
 
 export const dynamic = "force-dynamic";
 
-type NotificationRow = {
-  id: string;
-  kind: string;
-  title: string;
-  body: string | null;
-  href: string | null;
-  created_at: string;
-  read_at: string | null;
-};
+/**
+ * /m/notifications — per-channel notification preference matrix + a recent
+ * activity list. The matrix reads `notification_preferences.matrix` (jsonb,
+ * keyed `[category][channel] = boolean`) and persists single-cell toggles via
+ * the surviving `toggleNotifPref` action. Below it, recent `notifications`
+ * render as tone-coded rows.
+ *
+ * Design truth: prototype settings notif-matrix (app.jsx 3306-3704).
+ */
 
-export default async function NotificationsPage() {
+const CATEGORIES = ["Shifts", "Assignments", "Reviews", "Messages", "Announcements"];
+const CHANNELS = ["push", "email", "text"];
+
+function relativeTime(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime();
+  const min = Math.floor(ms / 60_000);
+  if (min < 1) return "now";
+  if (min < 60) return `${min}m`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h`;
+  const day = Math.floor(hr / 24);
+  if (day < 7) return `${day}d`;
+  return `${Math.floor(day / 7)}w`;
+}
+
+export default async function MobileNotificationsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      <div className="screen screen-anim">
+        <div className="scr-eye">{t("m.notifications.eyebrow", undefined, "Settings")}</div>
+        <h1 className="scr-h">{t("m.notifications.title", undefined, "Notifications")}</h1>
+        <p className="form-intro">{t("common.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
   }
+
   const session = await requireSession();
   const supabase = await createClient();
-  const fmt = await getRequestFormatters();
-  const relativeTime = (iso: string): string => {
-    const ms = Date.now() - new Date(iso).getTime();
-    const min = Math.floor(ms / 60_000);
-    if (min < 1) return t("common.time.justNow", undefined, "just now");
-    if (min < 60) return t("common.time.minutesShort", { n: min }, `${min}m`);
-    const hr = Math.floor(min / 60);
-    if (hr < 24) return t("common.time.hoursShort", { n: hr }, `${hr}h`);
-    const day = Math.floor(hr / 24);
-    if (day < 7) return t("common.time.daysShort", { n: day }, `${day}d`);
-    return fmt.dateParts(iso, { month: "short", day: "numeric" });
+
+  const [{ data: prefs }, { data: recent }] = await Promise.all([
+    supabase
+      .from("notification_preferences")
+      .select("matrix")
+      .eq("user_id", session.userId)
+      .maybeSingle(),
+    supabase
+      .from("notifications")
+      .select("id, kind, title, body, created_at, read_at")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(20),
+  ]);
+
+  // Seed the matrix UI with the persisted prefs, defaulting any missing cell
+  // to a sensible on/off (push on, email/text off) so the grid is never empty.
+  const stored = (prefs?.matrix as Record<string, Record<string, boolean>> | null) ?? {};
+  const initial: MatrixState = {};
+  for (const cat of CATEGORIES) {
+    initial[cat] = {};
+    for (const ch of CHANNELS) {
+      initial[cat][ch] = stored[cat]?.[ch] ?? ch === "push";
+    }
+  }
+
+  type NotifRow = {
+    id: string;
+    kind: string;
+    title: string;
+    body: string | null;
+    created_at: string;
+    read_at: string | null;
   };
-  const { data } = await supabase
-    .from("notifications")
-    .select("id, kind, title, body, href, created_at, read_at")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })
-    .limit(50);
-  const rows = (data ?? []) as NotificationRow[];
+  const rows = (recent ?? []) as NotifRow[];
   const unread = rows.filter((n) => n.read_at == null).length;
 
-  return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("m.notifications.eyebrow", undefined, "Mobile")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.notifications.title", undefined, "Notifications")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {rows.length === 0
-          ? t("m.notifications.allCaughtUp", undefined, "All caught up.")
-          : t(
-              "m.notifications.unreadOfRecent",
-              { unread, total: rows.length },
-              `${unread} unread of ${rows.length} recent`,
-            )}
-        {" · "}
-        <Link href={urlFor("personal", "/me/notifications")} className="text-[var(--p-accent)]">
-          {t("m.notifications.settingsLink", undefined, "settings")}
-        </Link>
-      </p>
+  const labels = {
+    heading: t("m.notifications.matrixHeading", undefined, "Delivery"),
+    push: t("m.notifications.channel.push", undefined, "Push"),
+    email: t("m.notifications.channel.email", undefined, "Email"),
+    text: t("m.notifications.channel.text", undefined, "Text"),
+  };
 
-      <ul className="mt-5 space-y-2">
-        {rows.length === 0 ? (
-          <li>
-            <EmptyState
-              size="compact"
-              title={t("m.notifications.empty.title", undefined, "No Notifications")}
-              description={t(
-                "m.notifications.empty.description",
-                undefined,
-                "You're all caught up. New notifications will appear here.",
-              )}
-            />
-          </li>
-        ) : (
-          rows.map((n) => {
-            const inner = (
-              <div className={`surface flex items-start gap-3 p-4 ${n.read_at ? "opacity-70" : ""}`}>
-                <div className="mt-1 flex-none">
-                  <span
-                    className={`block h-2 w-2 rounded-full ${n.read_at ? "bg-[var(--p-text-2)]" : "bg-[var(--p-accent)]"}`}
-                    aria-hidden
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="text-sm leading-snug font-medium">{n.title}</div>
-                    <span className="flex-none font-mono text-xs text-[var(--p-text-2)]">
-                      {relativeTime(n.created_at)}
-                    </span>
-                  </div>
-                  {n.body && <p className="mt-1 text-xs text-[var(--p-text-2)]">{n.body}</p>}
-                  <div className="mt-2">
-                    <Badge variant="muted">{toTitle(n.kind)}</Badge>
-                  </div>
-                </div>
-              </div>
-            );
-            return <li key={n.id}>{n.href ? <Link href={n.href}>{inner}</Link> : inner}</li>;
-          })
+  return (
+    <div className="screen screen-anim">
+      <div className="scr-eye">
+        {t("m.notifications.eyebrow", { count: unread }, `${unread} New`)}
+      </div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.notifications.title", undefined, "Notifications")}
+      </h1>
+
+      <NotifMatrix categories={CATEGORIES} channels={CHANNELS} initial={initial} labels={labels} />
+
+      <div className="sech">
+        <h2>{t("m.notifications.recentHeading", undefined, "Recent")}</h2>
+        {rows.length > 0 && (
+          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--p-text-3)" }}>{rows.length}</span>
         )}
-      </ul>
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="item">
+          <div className="s">{t("m.notifications.empty", undefined, "You're all caught up.")}</div>
+        </div>
+      ) : (
+        rows.map((n) => (
+          <div className="item" key={n.id} style={{ opacity: n.read_at ? 0.65 : 1 }}>
+            <span
+              className="bar"
+              style={{ background: n.read_at ? "var(--p-text-3)" : "var(--p-accent)" }}
+            />
+            <KIcon name="Bell" size={18} style={{ color: "var(--p-text-2)" }} />
+            <div style={{ minWidth: 0 }}>
+              <div className="t">{n.title}</div>
+              <div className="s">{n.body || toTitle(n.kind)}</div>
+            </div>
+            <span className="sp" />
+            <span className="time">{relativeTime(n.created_at)}</span>
+          </div>
+        ))
+      )}
     </div>
   );
 }

@@ -207,6 +207,8 @@ const EXEMPT = [
   { path: "/sso", type: "prefix", reason: "Auth SSO entry." },
   { path: "/verify-email", type: "prefix", reason: "Auth email verification." },
   { path: "/onboarding", type: "prefix", reason: "Post-signup org onboarding flow." },
+  // COMPVSS settings sub-page — reached from the More/Settings surface, not a primary tab.
+  { path: "/m/changelog", type: "exact", reason: "COMPVSS What's New — reached from Settings, not a nav tab." },
 ];
 const isExempt = (route) =>
   EXEMPT.some((e) => (e.type === "exact" ? route === e.path : route === e.path || route.startsWith(e.path + "/")));

@@ -1,250 +1,152 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { useAnnounce } from "@/components/ui/LiveRegion";
-import { haptic } from "@/lib/haptics";
-import { toTitle } from "@/lib/format";
-import { useT } from "@/lib/i18n/LocaleProvider";
-import { usePendingCount } from "@/lib/offline/queue-status";
+import { useActionState, useState } from "react";
+import Link from "next/link";
+import { KIcon } from "@/components/mobile/kit";
+import { scanCode, type ScanState } from "./actions";
 
-type Entry = {
+export type RecentScan = {
+  id: string;
+  result: string;
+  body: string | null;
   at: string;
-  tag: string;
-  name: string | null;
-  previous: string | null;
-  status: string | null;
-  result: "ok" | "not_found" | "error" | "queued";
-  error?: string;
 };
 
-export function InventoryScanner() {
-  const t = useT();
-  const [tag, setTag] = useState("");
-  const [log, setLog] = useState<Entry[]>([]);
-  const [pending, startTransition] = useTransition();
-  const announce = useAnnounce();
-  const { count: pendingCount, refresh: refreshPending } = usePendingCount("/api/v1/equipment/scan");
+export type InventoryScanLabels = {
+  eyebrow: string;
+  title: string;
+  hint: string;
+  back: string;
+  manualLabel: string;
+  manualPlaceholder: string;
+  cta: string;
+  scanning: string;
+  recentTitle: string;
+  recentEmpty: string;
+  logged: string;
+};
 
-  function submit(raw: string, action: "toggle" | "check_in" | "check_out" = "toggle") {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
-    startTransition(async () => {
-      try {
-        const res = await fetch("/api/v1/equipment/scan", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ assetTag: trimmed, action }),
-        });
-        const body = await res.json().catch(() => ({}));
-        if (!res.ok || !body.ok) {
-          setLog((l) =>
-            [
-              {
-                at: new Date().toISOString(),
-                tag: trimmed,
-                name: null,
-                previous: null,
-                status: null,
-                result: "error" as const,
-                error: body?.error?.message ?? `HTTP ${res.status}`,
-              },
-              ...l,
-            ].slice(0, 50),
-          );
-          toast.error(body?.error?.message ?? t("m.inventory.scan.toast.failed", undefined, "Scan failed"));
-          haptic("error");
-          return;
-        }
-        if (body.queued) {
-          // Service worker queued the scan offline — it will replay on
-          // reconnect. Distinct state: the toggle hasn't landed yet.
-          haptic("warning");
-          const msg = t("m.offline.queuedToast", undefined, "Queued — will sync when online");
-          announce(msg, "polite");
-          toast.info(msg);
-          setLog((l) =>
-            [
-              {
-                at: new Date().toISOString(),
-                tag: trimmed,
-                name: null,
-                previous: null,
-                status: null,
-                result: "queued" as const,
-              },
-              ...l,
-            ].slice(0, 50),
-          );
-          setTag("");
-          return;
-        }
-        const data = body.data as {
-          result: string;
-          name?: string;
-          assetTag?: string;
-          previousStatus?: string;
-          status?: string;
-        };
-        if (data.result === "not_found") {
-          setLog((l) =>
-            [
-              {
-                at: new Date().toISOString(),
-                tag: trimmed,
-                name: null,
-                previous: null,
-                status: null,
-                result: "not_found" as const,
-              },
-              ...l,
-            ].slice(0, 50),
-          );
-          announce(t("m.inventory.scan.announce.notFound", undefined, "Asset not found"), "assertive");
-          toast.error(t("m.inventory.scan.toast.notFound", undefined, "No equipment with that tag"));
-          haptic("error");
-        } else {
-          setLog((l) =>
-            [
-              {
-                at: new Date().toISOString(),
-                tag: trimmed,
-                name: data.name ?? null,
-                previous: data.previousStatus ?? null,
-                status: data.status ?? null,
-                result: "ok" as const,
-              },
-              ...l,
-            ].slice(0, 50),
-          );
-          announce(
-            t(
-              "m.inventory.scan.announce.statusChanged",
-              { name: data.name ?? "", status: data.status ?? "" },
-              `${data.name} is now ${data.status}`,
-            ),
-            "polite",
-          );
-          toast.success(`${data.name} → ${data.status}`);
-          haptic("success");
-        }
-        setTag("");
-      } catch (err) {
-        setLog((l) =>
-          [
-            {
-              at: new Date().toISOString(),
-              tag: trimmed,
-              name: null,
-              previous: null,
-              status: null,
-              result: "error" as const,
-              error: (err as Error).message,
-            },
-            ...l,
-          ].slice(0, 50),
-        );
-        toast.error((err as Error).message);
-      } finally {
-        refreshPending();
-      }
-    });
-  }
+const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
+  accepted: "ok",
+  duplicate: "warn",
+  expired: "warn",
+  wrong_zone: "warn",
+  voided: "danger",
+  not_found: "neutral",
+};
+
+/**
+ * COMPVSS inventory scanner. Kit `.scanframe` reticle plus a manual asset-tag
+ * entry form, both resolving through the surviving `scanCode` action (which
+ * journals via `scanAssignment`). Recent activity is server-fetched scan events.
+ */
+export function InventoryScanner({
+  recent,
+  labels,
+}: {
+  recent: RecentScan[];
+  labels: InventoryScanLabels;
+}) {
+  const [code, setCode] = useState("");
+  const [state, formAction, pending] = useActionState<ScanState, FormData>(scanCode, null);
 
   return (
-    <div className="space-y-4">
-      {pendingCount > 0 && (
-        <div className="card-elevated p-3 text-center">
-          <Badge variant="warning">
-            {t("m.offline.pendingBadge", { count: pendingCount }, `${pendingCount} Pending — Will Sync When Online`)}
-          </Badge>
+    <>
+      <Link href="/m/inventory" className="backbtn">
+        <KIcon name="ChevronLeft" size={17} /> {labels.back}
+      </Link>
+      <div className="scr-eye">{labels.eyebrow}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {labels.title}
+      </h1>
+
+      <div className="scanframe">
+        <div className="reticle">
+          <span className="cnr tl" />
+          <span className="cnr tr" />
+          <span className="cnr bl" />
+          <span className="cnr br" />
+          <span className="laser" />
         </div>
-      )}
-      <form
-        className="card-elevated space-y-3 p-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          submit(tag);
-        }}
-      >
-        <label className="text-label text-[var(--color-text-tertiary)]">
-          {t("m.inventory.scan.assetTag", undefined, "Asset Tag")}
-        </label>
-        <input
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-          inputMode="text"
-          autoFocus
-          autoCapitalize="characters"
-          autoCorrect="off"
-          spellCheck={false}
-          placeholder={t("m.inventory.scan.placeholder", undefined, "Scan or type")}
-          className="ps-input w-full font-mono text-lg tracking-wider"
-        />
-        <div className="flex gap-2">
-          <Button type="submit" size="lg" className="flex-1" disabled={pending || !tag}>
-            {pending
-              ? t("common.processing", undefined, "Processing…")
-              : t("m.inventory.scan.toggle", undefined, "Toggle")}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            size="lg"
-            disabled={pending || !tag}
-            onClick={() => submit(tag, "check_in")}
-          >
-            {t("m.inventory.scan.checkIn", undefined, "Check in")}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            size="lg"
-            disabled={pending || !tag}
-            onClick={() => submit(tag, "check_out")}
-          >
-            {t("m.inventory.scan.checkOut", undefined, "Check out")}
-          </Button>
+      </div>
+      <div className="scanhint">
+        <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {labels.hint}
+      </div>
+
+      <form action={formAction}>
+        <div className="fld" style={{ marginTop: 6 }}>
+          <label className="wl" htmlFor="code">
+            {labels.manualLabel}
+          </label>
+          <input
+            id="code"
+            name="code"
+            className="ps-input"
+            autoComplete="off"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder={labels.manualPlaceholder}
+            style={{ fontFamily: "var(--p-mono)" }}
+          />
         </div>
+        <button
+          type="submit"
+          className="ps-btn ps-btn--cta ps-btn--lg"
+          style={{ width: "100%", justifyContent: "center", marginTop: 12 }}
+          disabled={pending}
+        >
+          <KIcon name="ScanLine" size={16} /> {pending ? labels.scanning : labels.cta}
+        </button>
       </form>
 
-      <div className="card-elevated">
-        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">
-          {t("m.inventory.scan.recent", undefined, "Recent")}
+      {state && state.ok && (
+        <div className="item" style={{ marginTop: 14 }}>
+          <span className={`ps-badge ps-badge--${RESULT_TONE[state.result.result] ?? "neutral"}`}>
+            {state.result.result}
+          </span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t">{("title" in state.result && state.result.title) || labels.logged}</div>
+          </div>
         </div>
-        {log.length === 0 ? (
-          <EmptyState size="compact" title={t("m.inventory.scan.empty.title", undefined, "No Scans Yet")} />
-        ) : (
-          <ul>
-            {log.map((e, i) => (
-              <li
-                key={i}
-                className="text-mono flex items-center justify-between border-b border-[var(--color-border-subtle)] px-4 py-2 text-xs"
-              >
-                <span className="font-mono text-[var(--color-text-primary)]">{e.tag}</span>
-                <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
-                  {e.name && <span className="text-[var(--color-text-secondary)]">{e.name}</span>}
-                  {e.result === "ok" && e.status && (
-                    <Badge variant={e.status === "available" ? "success" : "brand"}>{toTitle(e.status)}</Badge>
-                  )}
-                  {e.result === "not_found" && (
-                    <Badge variant="muted">{t("m.inventory.scan.badge.notFound", undefined, "not found")}</Badge>
-                  )}
-                  {e.result === "queued" && (
-                    <Badge variant="warning">{t("m.offline.queuedBadge", undefined, "Queued")}</Badge>
-                  )}
-                  {e.result === "error" && (
-                    <Badge variant="error">{e.error ?? t("m.inventory.scan.badge.error", undefined, "error")}</Badge>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+      )}
+      {state && !state.ok && (
+        <div className="import-note" style={{ marginTop: 14 }}>
+          <KIcon name="TriangleAlert" size={15} style={{ color: "var(--p-danger)" }} />
+          <span style={{ fontSize: 12 }}>{state.error}</span>
+        </div>
+      )}
+
+      <div className="sech">
+        <h2>{labels.recentTitle}</h2>
       </div>
-    </div>
+      {recent.length === 0 ? (
+        <div className="hint" style={{ padding: "12px 4px" }}>
+          {labels.recentEmpty}
+        </div>
+      ) : (
+        recent.map((s) => {
+          const tone = RESULT_TONE[s.result] ?? "neutral";
+          return (
+            <div className="item" key={s.id}>
+              <span
+                className="bar"
+                style={{
+                  background: `var(--p-${tone === "warn" ? "warning" : tone === "danger" ? "danger" : tone === "ok" ? "success" : "border"})`,
+                }}
+              />
+              <KIcon name="Package" size={18} style={{ color: "var(--p-text-2)" }} />
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div className="t">{s.body ?? s.result}</div>
+                <div className="s">
+                  {s.result}
+                  {s.at ? ` · ${s.at}` : ""}
+                </div>
+              </div>
+              <span className={`ps-badge ps-badge--${tone}`}>{s.result}</span>
+            </div>
+          );
+        })
+      )}
+    </>
   );
 }

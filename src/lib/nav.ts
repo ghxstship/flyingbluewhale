@@ -1137,12 +1137,17 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
  * Persona-routed tab bars (ADR-0009, deferred) will customize per role
  * for security / driver / medic / admin without changing this default.
  */
+// COMPVSS kit tab model (design kit rebuild 2026-06-21): the field app's primary
+// bar is Home · Calendar · Tasks · Assets · Inbox, then More. Replaced the prior
+// Home·Inbox·Shift·Alerts·Me deskless default. Icons resolve via the
+// MobileTabBar ICONS map (keyed by href).
 export const mobileTabs: NavItem[] = [
   { label: "Home", href: "/m" },
+  { label: "Calendar", href: "/m/schedule" },
+  { label: "Tasks", href: "/m/tasks" },
+  { label: "Assets", href: "/m/inventory" },
   { label: "Inbox", href: "/m/inbox" },
-  { label: "Shift", href: "/m/shift" },
-  { label: "Alerts", href: "/m/alerts" },
-  { label: "Me", href: "/m/settings" },
+  { label: "More", href: "/m/more" },
 ];
 
 /**
@@ -1156,57 +1161,45 @@ export const mobileTabs: NavItem[] = [
  * scanner. Labels rewritten so operators can tell them apart at a
  * glance without having to remember which dash spelling does what.
  */
+// COMPVSS kit More-hub surfaces (rebuild 2026-06-21). Every secondary
+// destination reachable from the More tab (/m/more), the org/project switcher,
+// and the cmd-K palette — grouped Tools · People · Network · Account. Title Case
+// labels; middot `·` only inside headers, never here.
 export const mobileSurfaces: NavItem[] = [
-  // Field-ops surfaces (existing).
-  { label: "Gate Scan", href: "/m/gate" },
-  { label: "Wallet", href: "/m/wallet" },
-  { label: "Shift", href: "/m/shift" },
-  { label: "Clock In", href: "/m/clock" },
-  { label: "Meal Credit", href: "/m/checkin" },
-  { label: "Ticket Scan", href: "/m/check-in" },
-  { label: "Incident", href: "/m/incidents" },
-  { label: "Medic", href: "/m/medic" },
-  { label: "Safeguarding", href: "/m/safeguarding" },
-  { label: "Alerts", href: "/m/alerts" },
-  { label: "Driver", href: "/m/driver" },
-  { label: "A&D", href: "/m/ad" },
-  { label: "Run of Show", href: "/m/ros" },
-  { label: "Guard", href: "/m/guard" },
-  { label: "Warehouse", href: "/m/wms" },
-  { label: "Punch", href: "/m/punch" },
-  { label: "Daily Log", href: "/m/daily-log" },
-  { label: "Handover", href: "/m/handover" },
-  { label: "Requests", href: "/m/requests" },
-  { label: "Chain of Custody", href: "/m/coc" },
-  { label: "Wayfind", href: "/m/wayfind" },
-  { label: "Open Gigs", href: "/m/gigs" },
-  // Connecteam-parity surfaces (0046).
-  { label: "Updates", href: "/m/feed" },
-  { label: "Inbox", href: "/m/inbox" },
-  { label: "Learning", href: "/m/learning" },
-  { label: "Time Off", href: "/m/time-off" },
-  { label: "Kudos", href: "/m/kudos" },
-  { label: "Polls", href: "/m/polls" },
-  { label: "Surveys", href: "/m/surveys" },
-  { label: "My Docs", href: "/m/docs" },
-  { label: "Directory", href: "/m/directory" },
-  { label: "Onboarding", href: "/m/onboarding" },
-  { label: "Advancing", href: "/m/advances" },
-  { label: "Tracker", href: "/m/tracker" },
-  // Surfaces previously missing from the drawer (sitemap reconciliation
-  // 2026-06-17). "Calendar" is the read-only events calendar (distinct from
-  // "Shift", the workforce roster). "My Incidents" is the filer's own queue
-  // (distinct from "Incident" → /m/incidents, the org queue). Adding Guide +
-  // My Incidents here also resolves the ROLE_PRIORITY_HREFS refs that were
-  // silently dropped because the surface wasn't registered.
-  { label: "Calendar", href: "/m/schedule" },
-  { label: "Tasks", href: "/m/tasks" },
-  { label: "Guide", href: "/m/guide" },
-  { label: "My Incidents", href: "/m/incident" },
+  // Tools.
+  { label: "Catalog", href: "/m/catalog" },
+  { label: "Inventory", href: "/m/inventory" },
   { label: "Inventory Scan", href: "/m/inventory/scan" },
-  // Personal notification inbox (distinct from "Alerts" → /m/alerts, the org
-  // broadcast feed). Previously reachable only from a home-screen card.
+  { label: "Scan", href: "/m/check-in" },
+  { label: "Advancing", href: "/m/advances" },
+  { label: "Time", href: "/m/clock" },
+  { label: "Requests", href: "/m/requests" },
+  { label: "Documents", href: "/m/docs" },
+  { label: "Handover", href: "/m/handover" },
+  { label: "Daily Log", href: "/m/daily-log" },
+  { label: "Punch", href: "/m/punch" },
+  { label: "Chain of Custody", href: "/m/coc" },
+  { label: "Incidents", href: "/m/incidents" },
+  { label: "My Incidents", href: "/m/incident" },
+  { label: "Guide", href: "/m/guide" },
+  // People.
+  { label: "Team Roster", href: "/m/directory" },
+  { label: "Vendors", href: "/m/directory/companies" },
+  { label: "Connections", href: "/m/connections" },
+  // Network.
+  { label: "Community", href: "/m/feed" },
+  { label: "Jobs", href: "/m/gigs" },
+  { label: "Marketplace", href: "/m/market" },
+  // Account / credential.
+  { label: "Wallet", href: "/m/wallet" },
+  { label: "Time Off", href: "/m/time-off" },
+  { label: "Activity History", href: "/m/activity" },
+  { label: "Referrals & Rewards", href: "/m/referrals" },
+  { label: "Emergency", href: "/m/emergency" },
+  { label: "Alerts", href: "/m/alerts" },
   { label: "Notifications", href: "/m/notifications" },
+  { label: "Onboarding", href: "/m/onboarding" },
+  { label: "Settings", href: "/m/settings" },
 ];
 
 /**
@@ -1220,15 +1213,18 @@ export const mobileSurfaces: NavItem[] = [
  * static order from `mobileSurfaces`. The same export remains the
  * source of truth for the full surface list.
  */
+// COMPVSS kit rebuild (2026-06-21): retuned to reference only surviving kit
+// surfaces (the role-era surfaces — gate/driver/medic/ros/wms/learning/kudos/
+// surveys — were deleted). All hrefs here must exist in `mobileSurfaces`.
 const PHASE_PRIORITY_HREFS: Record<string, string[]> = {
-  discovery: ["/m/directory", "/m/feed", "/m/inbox"],
-  concept: ["/m/feed", "/m/inbox", "/m/directory"],
-  development: ["/m/feed", "/m/inbox", "/m/learning", "/m/docs"],
-  advance: ["/m/onboarding", "/m/advances", "/m/learning", "/m/docs", "/m/directory"],
-  build: ["/m/punch", "/m/daily-log", "/m/driver", "/m/handover", "/m/coc", "/m/wms"],
-  show: ["/m/gate", "/m/incidents", "/m/ros", "/m/medic", "/m/clock", "/m/alerts"],
-  strike: ["/m/punch", "/m/daily-log", "/m/handover", "/m/coc", "/m/wms"],
-  wrap: ["/m/time-off", "/m/kudos", "/m/onboarding", "/m/feed", "/m/surveys"],
+  discovery: ["/m/directory", "/m/feed"],
+  concept: ["/m/feed", "/m/directory"],
+  development: ["/m/feed", "/m/docs"],
+  advance: ["/m/onboarding", "/m/advances", "/m/docs", "/m/directory"],
+  build: ["/m/punch", "/m/daily-log", "/m/handover", "/m/coc"],
+  show: ["/m/check-in", "/m/incidents", "/m/clock", "/m/alerts"],
+  strike: ["/m/punch", "/m/daily-log", "/m/handover", "/m/coc"],
+  wrap: ["/m/time-off", "/m/onboarding", "/m/feed"],
 };
 
 export function mobileSurfacesForPhase(phase?: string): NavItem[] {
@@ -1295,49 +1291,18 @@ export function mapSessionToMobileRole(role: string | null, persona: string | nu
 // canonical URLs that map to thin re-exports under /m/[role]/<surface>.
 // Role-specific surfaces (gate, driver, medic, guard) still use static
 // paths because those pages are their role's home — not duplicated.
+// COMPVSS kit rebuild (2026-06-21): the persona-routed /m/[role] tab bars were
+// retired with the role surfaces (driver/medic/guard/etc.). Every role now
+// resolves to the single crew-kit tab model (`mobileTabs`). The MobileRole type
+// + this map are kept so external consumers (sitemap generator, nav tests)
+// still compile; the layout renders `mobileTabs` directly and ignores role.
 export const ROLE_TABS: Record<MobileRole, NavItem[]> = {
-  performer: [
-    { label: "Home", href: "/m/performer" },
-    { label: "Schedule", href: "/m/performer/shift" },
-    { label: "Inbox", href: "/m/performer/inbox" },
-    { label: "Alerts", href: "/m/performer/alerts" },
-    { label: "Me", href: "/m/performer/settings" },
-  ],
-  crew: [
-    { label: "Home", href: "/m/crew" },
-    { label: "Shift", href: "/m/crew/shift" },
-    { label: "Inbox", href: "/m/crew/inbox" },
-    { label: "Alerts", href: "/m/crew/alerts" },
-    { label: "Me", href: "/m/crew/settings" },
-  ],
-  driver: [
-    { label: "Home", href: "/m/driver" },
-    { label: "Runs", href: "/m/ad" },
-    { label: "Wayfind", href: "/m/wayfind" },
-    { label: "Alerts", href: "/m/driver/alerts" },
-    { label: "Me", href: "/m/driver/settings" },
-  ],
-  medic: [
-    { label: "Home", href: "/m/medic" },
-    { label: "Log", href: "/m/medic/new" },
-    { label: "Queue", href: "/m/incidents" },
-    { label: "Alerts", href: "/m/medic/alerts" },
-    { label: "Me", href: "/m/medic/settings" },
-  ],
-  guard: [
-    { label: "Home", href: "/m/guard" },
-    { label: "Gate", href: "/m/gate" },
-    { label: "Incident", href: "/m/incidents" },
-    { label: "Alerts", href: "/m/guard/alerts" },
-    { label: "Me", href: "/m/guard/settings" },
-  ],
-  admin: [
-    { label: "Home", href: "/m/admin" },
-    { label: "Inbox", href: "/m/admin/inbox" },
-    { label: "Shift", href: "/m/admin/shift" },
-    { label: "Alerts", href: "/m/admin/alerts" },
-    { label: "Me", href: "/m/admin/settings" },
-  ],
+  performer: mobileTabs,
+  crew: mobileTabs,
+  driver: mobileTabs,
+  medic: mobileTabs,
+  guard: mobileTabs,
+  admin: mobileTabs,
 };
 
 export function roleTabs(role: MobileRole): NavItem[] {
@@ -1353,12 +1318,16 @@ export function roleTabs(role: MobileRole): NavItem[] {
  * Admin gets no role-priority (they touch every surface, so the
  * existing phase ordering is correct for them).
  */
+// COMPVSS kit rebuild (2026-06-21): the persona-routed role surfaces were
+// retired, so per-role drawer priorities collapse to none — the Tools drawer
+// orders by XPMS phase alone (see PHASE_PRIORITY_HREFS). Kept as an export so
+// `mobileSurfacesForRole` and external consumers still resolve.
 const ROLE_PRIORITY_HREFS: Record<MobileRole, string[]> = {
-  performer: ["/m/shift", "/m/advances", "/m/feed", "/m/guide", "/m/inbox"],
-  crew: ["/m/shift", "/m/clock", "/m/ros", "/m/daily-log", "/m/punch", "/m/time-off", "/m/feed"],
-  driver: ["/m/driver", "/m/wayfind", "/m/ad", "/m/alerts", "/m/handover"],
-  medic: ["/m/medic", "/m/alerts", "/m/safeguarding", "/m/incidents"],
-  guard: ["/m/gate", "/m/incidents", "/m/incident", "/m/wallet", "/m/guard", "/m/alerts"],
+  performer: [],
+  crew: [],
+  driver: [],
+  medic: [],
+  guard: [],
   admin: [],
 };
 

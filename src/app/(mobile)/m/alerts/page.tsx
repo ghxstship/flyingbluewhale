@@ -1,126 +1,135 @@
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { AcknowledgeButton } from "./AcknowledgeButton";
-import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { KIcon } from "@/components/mobile/kit";
+import { AcknowledgeButton } from "./AcknowledgeButton";
 
 export const dynamic = "force-dynamic";
 
-type AlertRow = {
-  id: string;
-  title: string;
-  body: string;
-  severity: string;
-  sent_at: string | null;
-  scheduled_at: string | null;
+/**
+ * /m/alerts — org broadcast & alert notifications, tone-coded with a leading
+ * color bar (kit `.bar`). Reads `notifications` for the caller's org (own +
+ * org-wide broadcasts where user_id is null), most urgent first. Each unread
+ * row carries an Acknowledge button that stamps `notifications.read_at`.
+ *
+ * Design truth: prototype alerts tab (app.jsx 2443-2495). Rebuilt from scratch
+ * (this route was fully reverted with no surviving siblings).
+ */
+
+// Alert-flavoured kinds map onto a tone (warn = urgent, ok = approvals,
+// info = updates, neutral = general). Everything else falls to neutral.
+const KIND_TONE: Record<string, "warn" | "ok" | "info" | "neutral"> = {
+  alert: "warn",
+  emergency: "warn",
+  crisis: "warn",
+  incident: "warn",
+  approval: "ok",
+  assignment_state: "ok",
+  announcement: "info",
+  assignment: "info",
+  assignment_scan: "info",
 };
 
-const SEVERITY_TONE: Record<string, "error" | "warning" | "info" | "muted"> = {
-  critical: "error",
-  emergency: "error",
-  major: "error",
-  warning: "warning",
-  watch: "warning",
-  advisory: "info",
-  info: "info",
+const TONE_VAR: Record<string, string> = {
+  warn: "var(--p-warning)",
+  ok: "var(--p-success)",
+  info: "var(--p-info)",
+  neutral: "var(--p-text-3)",
 };
 
-export default async function AlertsPage() {
+const TONE_ICON: Record<string, string> = {
+  warn: "TriangleAlert",
+  ok: "CircleCheck",
+  info: "Info",
+  neutral: "Bell",
+};
+
+function relativeTime(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime();
+  const min = Math.floor(ms / 60_000);
+  if (min < 1) return "now";
+  if (min < 60) return `${min}m`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h`;
+  const day = Math.floor(hr / 24);
+  if (day < 7) return `${day}d`;
+  return `${Math.floor(day / 7)}w`;
+}
+
+export default async function MobileAlertsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      <div className="screen screen-anim">
+        <div className="scr-eye">{t("m.alerts.eyebrow", undefined, "Alerts")}</div>
+        <h1 className="scr-h">{t("m.alerts.title", undefined, "Notifications")}</h1>
+        <p className="form-intro">{t("common.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
   }
+
   const session = await requireSession();
   const supabase = await createClient();
 
-  const fmt = await getRequestFormatters();
-  const cutoff = new Date(Date.now() - 14 * 86_400_000).toISOString();
-  const [{ data: alerts }, { data: receipts }] = await Promise.all([
-    supabase
-      .from("crisis_alerts")
-      .select("id, title, body, severity, sent_at, scheduled_at")
-      .eq("org_id", session.orgId)
-      .or(`sent_at.gte.${cutoff},scheduled_at.gte.${cutoff}`)
-      .order("sent_at", { ascending: false, nullsFirst: false })
-      .limit(50),
-    supabase
-      .from("crisis_alert_receipts")
-      .select("alert_id, acknowledged_at")
-      .eq("org_id", session.orgId)
-      .eq("user_id", session.userId),
-  ]);
+  // Own notifications + org-wide broadcasts (user_id null), org-pinned.
+  const { data } = await supabase
+    .from("notifications")
+    .select("id, kind, title, body, created_at, read_at, user_id")
+    .eq("org_id", session.orgId)
+    .or(`user_id.eq.${session.userId},user_id.is.null`)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(60);
 
-  const ackMap = new Map<string, string | null>();
-  for (const r of (receipts ?? []) as Array<{ alert_id: string; acknowledged_at: string | null }>) {
-    ackMap.set(r.alert_id, r.acknowledged_at);
-  }
-  const rows = (alerts ?? []) as AlertRow[];
-  const unacked = rows.filter((a) => !ackMap.get(a.id)).length;
+  type AlertRow = {
+    id: string;
+    kind: string;
+    title: string;
+    body: string | null;
+    created_at: string;
+    read_at: string | null;
+  };
+  const rows = (data ?? []) as AlertRow[];
+  const unread = rows.filter((a) => a.read_at == null).length;
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
-        {t("m.alerts.eyebrow", undefined, "Mobile")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.alerts.title", undefined, "Alerts")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {rows.length === 0
-          ? t("m.alerts.noneActive", undefined, "No active alerts.")
-          : t(
-              "m.alerts.countSummary",
-              { unacked, total: rows.length },
-              `${unacked} unacknowledged of ${rows.length} active`,
-            )}
-      </p>
+    <div className="screen screen-anim">
+      <div className="scr-eye">{t("m.alerts.eyebrow", { count: unread }, `${unread} New`)}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.alerts.title", undefined, "Notifications")}
+      </h1>
 
-      <ul className="mt-5 space-y-3">
-        {rows.length === 0 ? (
-          <li>
-            <EmptyState
-              size="compact"
-              title={t("m.alerts.empty.title", undefined, "No Active Alerts")}
-              description={t(
-                "m.alerts.empty.description",
-                undefined,
-                "Crisis notifications appear here when activated.",
+      {rows.length === 0 ? (
+        <div className="item">
+          <div className="s">{t("m.alerts.empty", undefined, "All clear. No alerts right now.")}</div>
+        </div>
+      ) : (
+        rows.map((a) => {
+          const tone = KIND_TONE[a.kind] ?? "neutral";
+          const color = TONE_VAR[tone] ?? "var(--p-text-3)";
+          const iconName = TONE_ICON[tone] ?? "Bell";
+          return (
+            <div className="item" key={a.id} style={{ display: "block", opacity: a.read_at ? 0.65 : 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span className="bar" style={{ background: color }} />
+                <KIcon name={iconName} size={18} style={{ color }} />
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div className="t">{a.title}</div>
+                  <div className="s">{a.body || toTitle(a.kind)}</div>
+                </div>
+                <span className="time">{relativeTime(a.created_at)}</span>
+              </div>
+              {a.read_at == null && (
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
+                  <AcknowledgeButton alertId={a.id} />
+                </div>
               )}
-            />
-          </li>
-        ) : (
-          rows.map((a) => {
-            const ack = ackMap.get(a.id);
-            const tone = SEVERITY_TONE[a.severity.toLowerCase()] ?? "muted";
-            return (
-              <li key={a.id} className={`surface p-4 ${ack ? "opacity-60" : ""}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <Badge variant={tone}>{toTitle(a.severity)}</Badge>
-                  <span className="font-mono text-xs text-[var(--p-text-2)]">
-                    {a.sent_at ? fmt.time(a.sent_at) : t("m.alerts.scheduled", undefined, "scheduled")}
-                  </span>
-                </div>
-                <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
-                <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{a.body}</p>
-                <div className="mt-3 flex items-center justify-end gap-2">
-                  {ack ? (
-                    <span className="text-xs text-[var(--p-text-2)]">
-                      {t("m.alerts.acknowledgedAt", { time: fmt.time(ack) }, `Acknowledged ${fmt.time(ack)}`)}
-                    </span>
-                  ) : (
-                    <AcknowledgeButton alertId={a.id} />
-                  )}
-                </div>
-              </li>
-            );
-          })
-        )}
-      </ul>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 }

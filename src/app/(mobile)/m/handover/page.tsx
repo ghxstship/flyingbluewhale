@@ -1,130 +1,117 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { Repeat } from "lucide-react";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
-import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { toTitle } from "@/lib/format";
-import { urlFor } from "@/lib/urls";
+import { createClient } from "@/lib/supabase/server";
+import { getRequestT } from "@/lib/i18n/request";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon } from "@/components/mobile/kit";
+import { HANDOVER_MARKER } from "./shared";
 
 export const dynamic = "force-dynamic";
 
-type VenueRow = {
-  id: string;
-  name: string;
-  cluster: string | null;
-  capacity: number | null;
-  handover_state:
-    | "not_started"
-    | "in_progress"
-    | "ready_for_handover"
-    | "handed_over"
-    | "complete"
-    | "closed_out"
-    | string;
+/**
+ * COMPVSS · Shift Handover — end-of-shift report passing status, open items and
+ * assets to the next crew. No dedicated table: handovers are persisted as
+ * marked notes on `daily_logs` (see actions.ts). This page lists prior
+ * handovers parsed back out of those notes and links to the new-handover form.
+ */
+type LogRow = { id: string; log_date: string | null; notes: string | null };
+
+type Handover = { key: string; date: string | null; line: string; body: string };
+
+const STATUS_TONE: Record<string, string> = {
+  "All Clear": "ok",
+  "Watch Items": "warn",
+  Issues: "danger",
 };
 
-const HANDOVER_TONE: Record<string, "muted" | "info" | "warning" | "success"> = {
-  not_started: "muted",
-  in_progress: "info",
-  ready_for_handover: "warning",
-  handed_over: "success",
-  complete: "success",
-  closed_out: "success",
+const TONE_VAR: Record<string, string> = {
+  ok: "var(--p-success)",
+  warn: "var(--p-warning)",
+  danger: "var(--p-danger)",
+  neutral: "var(--p-border)",
 };
 
-export default async function MobileHandoverPage() {
-  const { t } = await getRequestT();
-  if (!hasSupabase) {
-    return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("common.configureSupabase", undefined, "Configure Supabase.")}
-      </div>
-    );
+/** Pull the marked handover blocks out of a daily_logs notes field. */
+function parseHandovers(rows: LogRow[]): Handover[] {
+  const out: Handover[] = [];
+  for (const r of rows) {
+    const notes = r.notes ?? "";
+    if (!notes.includes(HANDOVER_MARKER)) continue;
+    const blocks = notes.split("\n\n").filter((b) => b.includes(HANDOVER_MARKER));
+    blocks.forEach((b, i) => {
+      const linesArr = b.split("\n");
+      const header = (linesArr[0] ?? "").replace(HANDOVER_MARKER, "").trim();
+      out.push({ key: `${r.id}-${i}`, date: r.log_date, line: header, body: linesArr.slice(1).join("\n") });
+    });
   }
-  const session = await requireSession();
-  const fmt = await getRequestFormatters();
-  const venues = (await listOrgScoped("venues", session.orgId, {
-    orderBy: "name",
-    ascending: true,
-    limit: 200,
-  })) as VenueRow[];
+  return out;
+}
 
-  // Bucket: needs walk (not_started + in_progress + ready_for_handover) vs done
-  const open = venues.filter((v) => !["handed_over", "complete", "closed_out"].includes(v.handover_state));
-  const done = venues.filter((v) => ["handed_over", "complete", "closed_out"].includes(v.handover_state));
+export default async function HandoverPage() {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("daily_logs")
+    .select("id, log_date, notes")
+    .eq("org_id", session.orgId)
+    .order("log_date", { ascending: false })
+    .limit(60);
+  const handovers = parseHandovers((data ?? []) as LogRow[]);
+  const { t } = await getRequestT();
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("m.handover.eyebrow", undefined, "Mobile")}
+    <div className="screen screen-anim">
+      <div className="scr-eye">{t("m.handover.eyebrow", undefined, "Shift")}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.handover.title", undefined, "Handover")}
+      </h1>
+
+      <Link
+        href="/m/handover/new"
+        className="ps-btn ps-btn--cta ps-btn--lg"
+        style={{ width: "100%", justifyContent: "center", marginBottom: 16 }}
+      >
+        <KIcon name="Repeat" size={16} /> {t("m.handover.new", undefined, "New Handover")}
+      </Link>
+
+      <div className="sech">
+        <h2>{t("m.handover.prior", undefined, "Recent Handovers")}</h2>
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.handover.title", undefined, "Handover")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "m.handover.description",
-          undefined,
-          "Commissioning walks per venue. Tap into a venue on the desktop to mark its handover state.",
-        )}
-      </p>
-
-      <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          {t("m.handover.needsWalk", undefined, "Needs walk")} · {open.length}
-        </h2>
-        <ul className="mt-3 space-y-2">
-          {open.length === 0 ? (
-            <li>
-              <EmptyState
-                size="compact"
-                title={t("m.handover.empty.title", undefined, "All Venues Handed Over")}
-                description={t("m.handover.empty.description", undefined, "Nothing pending today.")}
-              />
-            </li>
-          ) : (
-            open.map((v) => (
-              <li key={v.id}>
-                <Link
-                  href={urlFor("platform", `/venues/${v.id}`)}
-                  className="surface flex items-center justify-between p-4"
-                >
-                  <div>
-                    <div className="text-sm font-semibold">{v.name}</div>
-                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
-                      {v.cluster ?? "—"} · {t("m.handover.capAbbrev", undefined, "cap")}{" "}
-                      {v.capacity != null ? fmt.number(v.capacity) : "—"}
-                    </div>
-                  </div>
-                  <Badge variant={HANDOVER_TONE[v.handover_state] ?? "muted"}>{toTitle(v.handover_state)}</Badge>
-                </Link>
-              </li>
-            ))
-          )}
-        </ul>
-      </section>
-
-      {done.length > 0 && (
-        <section className="mt-6">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-            {t("m.handover.handedOver", undefined, "Handed over")} · {done.length}
-          </h2>
-          <ul className="mt-3 space-y-2">
-            {done.map((v) => (
-              <li key={v.id}>
-                <Link
-                  href={urlFor("platform", `/venues/${v.id}`)}
-                  className="surface flex items-center justify-between p-3 opacity-70"
-                >
-                  <div className="text-sm">
-                    <div className="font-medium">{v.name}</div>
-                  </div>
-                  <Badge variant="success">{toTitle(v.handover_state)}</Badge>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+      {handovers.length === 0 ? (
+        <EmptyState
+          icon={<Repeat size={28} aria-hidden="true" />}
+          title={t("m.handover.empty", undefined, "No Handovers")}
+          description={t("m.handover.emptyBody", undefined, "Submit an end-of-shift handover to start the trail.")}
+        />
+      ) : (
+        handovers.map((h) => {
+          const statusKey = h.line.split(" —")[0] ?? "";
+          const tone = STATUS_TONE[statusKey] ?? "neutral";
+          return (
+            <div className="item" key={h.key} style={{ alignItems: "flex-start" }}>
+              <span className="bar" style={{ background: TONE_VAR[tone] ?? "var(--p-accent)" }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="t">{h.line || t("m.handover.untitled", undefined, "Handover")}</div>
+                <div className="s" style={{ whiteSpace: "pre-wrap" }}>
+                  {h.body}
+                </div>
+                <div className="hint">
+                  {h.date
+                    ? new Date(h.date + "T00:00:00").toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : ""}
+                </div>
+              </div>
+              <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
+                {statusKey || "—"}
+              </span>
+            </div>
+          );
+        })
       )}
     </div>
   );

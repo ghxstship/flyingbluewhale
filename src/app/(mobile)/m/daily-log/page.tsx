@@ -1,126 +1,92 @@
 import Link from "next/link";
-import { ModuleHeader } from "@/components/Shell";
-import { FormShell } from "@/components/FormShell";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { NotebookPen } from "lucide-react";
 import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
-import { hasSupabase } from "@/lib/env";
-import { quickCreateDailyLog } from "./actions";
-import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { urlFor } from "@/lib/urls";
+import { listOrgScoped } from "@/lib/db/resource";
+import { getRequestT } from "@/lib/i18n/request";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+/**
+ * COMPVSS · Daily Logs — the org's per-day site logs (weather + notes). Reads
+ * `daily_logs` org-scoped; the FAB routes to the new-log form which upserts a
+ * row keyed by (project, date).
+ */
+type LogRow = {
+  id: string;
+  log_date: string | null;
+  weather_summary: string | null;
+  weather_temp_high_f: number | null;
+  weather_temp_low_f: number | null;
+  notes: string | null;
+  log_state: string | null;
+};
 
-export default async function Page() {
-  if (!hasSupabase) return null;
+const STATE_TONE: Record<string, string> = {
+  draft: "neutral",
+  submitted: "info",
+  approved: "ok",
+};
+
+export default async function DailyLogPage() {
   const session = await requireSession();
-  const supabase = await createClient();
-
-  const fmt = await getRequestFormatters();
+  const rows = (await listOrgScoped("daily_logs", session.orgId)) as unknown as LogRow[];
   const { t } = await getRequestT();
-  const fmtDate = (d: string): string =>
-    fmt.dateParts(d + "T00:00:00", { weekday: "short", month: "short", day: "numeric" });
-  const today = new Date().toISOString().slice(0, 10);
 
-  const [{ data: projects }, { data: recent }] = await Promise.all([
-    supabase
-      .from("projects")
-      .select("id, name")
-      .eq("org_id", session.orgId)
-      .in("log_state", ["active", "draft"])
-      .order("name"),
-    supabase
-      .from("daily_logs")
-      .select("id, log_date, log_state, project:project_id(name)")
-      .eq("org_id", session.orgId)
-      .order("log_date", { ascending: false })
-      .limit(7),
-  ]);
-
-  const recentRows = (recent ?? []) as Array<{
-    id: string;
-    log_date: string;
-    log_state: string;
-    project: { name: string | null } | null;
-  }>;
+  const logs = rows
+    .slice()
+    .sort((a, b) => String(b.log_date ?? "").localeCompare(String(a.log_date ?? "")));
 
   return (
-    <>
-      <ModuleHeader
-        eyebrow={t("m.dailyLog.eyebrow", undefined, "Field")}
-        title={t("m.dailyLog.title", undefined, "Daily Log")}
-        subtitle={t("m.dailyLog.subtitle", undefined, "Quick capture from the floor")}
-      />
-      <div className="page-content space-y-4">
-        <FormShell
-          action={quickCreateDailyLog}
-          submitLabel={t("m.dailyLog.saveLog", undefined, "Save Log")}
-          className="surface space-y-3 p-4"
-        >
-          <h3 className="text-sm font-semibold">
-            {t("m.dailyLog.todaysLog", { date: fmtDate(today) }, "Today's log — {date}")}
-          </h3>
-          <select name="project_id" required className={INPUT}>
-            <option value="">{t("m.dailyLog.selectProject", undefined, "Select a project…")}</option>
-            {(projects ?? []).map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-          <input
-            name="weather_summary"
-            placeholder={t("m.dailyLog.weatherPlaceholder", undefined, "Weather — e.g. 78°F, Sunny")}
-            className={INPUT}
-          />
-          <textarea
-            name="notes"
-            rows={4}
-            placeholder={t(
-              "m.dailyLog.notesPlaceholder",
-              undefined,
-              "Quick narrative — milestones, blockers, deliveries…",
-            )}
-            className={INPUT}
-          />
-          <input type="hidden" name="log_date" value={today} />
-        </FormShell>
+    <div className="screen screen-anim">
+      <div className="scr-eye">{t("m.dailyLog.eyebrow", undefined, "Site")}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.dailyLog.title", undefined, "Daily Logs")}
+      </h1>
 
-        <section className="surface p-3">
-          <h3 className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
-            {t("m.dailyLog.recent", undefined, "Recent")}
-          </h3>
-          {recentRows.length === 0 ? (
-            <EmptyState
-              size="compact"
-              title={t("m.dailyLog.empty.title", undefined, "No Logs Yet")}
-              description={t(
-                "m.dailyLog.empty.description",
-                undefined,
-                "Logs you file appear here for quick reopening.",
-              )}
-            />
-          ) : (
-            <ul className="mt-2 space-y-1.5">
-              {recentRows.map((r) => (
-                <li key={r.id}>
-                  <Link
-                    href={urlFor("platform", `/operations/daily-log/${r.id}`)}
-                    className="surface-inset flex items-center justify-between p-2 text-sm"
-                  >
-                    <span>
-                      {fmtDate(r.log_date)} · {r.project?.name ?? "—"}
-                    </span>
-                    <span className="text-xs text-[var(--p-text-2)]">{r.log_state}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-    </>
+      {logs.length === 0 ? (
+        <EmptyState
+          icon={<NotebookPen size={28} aria-hidden="true" />}
+          title={t("m.dailyLog.empty", undefined, "No Logs Yet")}
+          description={t("m.dailyLog.emptyBody", undefined, "Start the day's log with weather and notes.")}
+        />
+      ) : (
+        logs.map((r) => {
+          const tone = STATE_TONE[r.log_state ?? ""] ?? "neutral";
+          const temps =
+            r.weather_temp_high_f != null || r.weather_temp_low_f != null
+              ? `${r.weather_temp_high_f ?? "—"}° / ${r.weather_temp_low_f ?? "—"}°`
+              : null;
+          return (
+            <div className="item" key={r.id}>
+              <span className="bar" style={{ background: "var(--p-info)" }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="t">
+                  {r.log_date
+                    ? new Date(r.log_date + "T00:00:00").toLocaleDateString("en-US", {
+                        weekday: "short",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : t("m.dailyLog.untitled", undefined, "Untitled Log")}
+                </div>
+                <div className="s">
+                  {[r.weather_summary, temps].filter(Boolean).join(" · ") ||
+                    (r.notes ? r.notes.slice(0, 60) : t("m.dailyLog.noWeather", undefined, "No weather logged"))}
+                </div>
+              </div>
+              <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
+                {r.log_state ?? "—"}
+              </span>
+            </div>
+          );
+        })
+      )}
+
+      <Link href="/m/daily-log/new" className="fab" aria-label={t("m.dailyLog.new", undefined, "New Log")}>
+        <KIcon name="Plus" size={22} />
+      </Link>
+    </div>
   );
 }

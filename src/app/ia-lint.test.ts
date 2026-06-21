@@ -122,6 +122,16 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/crew/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/talent/[handle]/page.tsx",
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
+    // COMPVSS kit (rebuild 2026-06-21): these server pages hold the empty-state
+    // copy only as i18n fallback LABELS handed to the kit client renderer
+    // (CheckInScanner / ChatRoom / ScheduleView / InventoryScanner), which owns
+    // and renders the zero-state — the same hand-off the `emptyLabel=` strip
+    // above exempts, just passed as a labels object rather than a JSX prop.
+    "src/app/(mobile)/m/check-in/page.tsx",
+    "src/app/(mobile)/m/check-in/scan/[slug]/page.tsx",
+    "src/app/(mobile)/m/inbox/[roomId]/page.tsx",
+    "src/app/(mobile)/m/inventory/scan/page.tsx",
+    "src/app/(mobile)/m/schedule/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

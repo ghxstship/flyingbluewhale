@@ -1,37 +1,10 @@
+import { requireSession } from "@/lib/auth";
 import { QuickFileForm } from "./QuickFileForm";
-import Link from "next/link";
-import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-/**
- * /m/incident/new — express incident intake. One field: tap, type a
- * sentence, submit. Designed for one-thumb filing while a crew member
- * is still on the floor. The full multi-field form (severity, body
- * part, photos, OSHA classification) lives at /m/incidents/new.
- */
-
-export default async function QuickFilePage() {
-  const { t } = await getRequestT();
-  return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
-        {t("m.incident.new.eyebrow", undefined, "Field")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.new.title", undefined, "Quick File")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "m.incident.new.description",
-          undefined,
-          "Just describe what happened. We'll log it as a minor open incident — your supervisor will follow up to fill in severity, location, and photos. Need the full form?",
-        )}{" "}
-        <Link className="underline" href="/m/incidents/new">
-          {t("m.incident.new.openFullForm", undefined, "Open it")}
-        </Link>
-        .
-      </p>
-
-      <QuickFileForm />
-    </div>
-  );
+/** COMPVSS · Express incident quick-file. Server guard → client one-field form. */
+export default async function NewQuickIncidentPage() {
+  await requireSession();
+  return <QuickFileForm />;
 }

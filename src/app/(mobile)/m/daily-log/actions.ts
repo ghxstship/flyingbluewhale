@@ -1,78 +1,68 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { actionFail } from "@/lib/forms/fail";
 
-const Schema = z.object({
-  project_id: z.string().uuid(),
-  log_date: z.string(),
-  weather_summary: z.string().max(200).optional(),
-  notes: z.string().max(4000).optional(),
+export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+
+const Input = z.object({
+  projectId: z.string().uuid("Pick a project."),
+  log_date: z.string().min(1, "Pick a date."),
+  weather_summary: z.string().optional(),
+  weather_temp_high_f: z.string().optional(),
+  weather_temp_low_f: z.string().optional(),
+  notes: z.string().optional(),
 });
 
-export type State = { error?: string; values?: Record<string, string> } | null;
+function num(v: string | undefined): number | null {
+  if (v == null || v.trim() === "") return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
 
-export async function quickCreateDailyLog(_prev: State, fd: FormData): Promise<State> {
+/**
+ * Upsert a daily log for (project, date). Org-scoped; new rows seed
+ * log_state `draft`. Re-submitting the same day overwrites the weather/notes
+ * via the (org_id, project_id, log_date) unique key.
+ */
+export async function saveDailyLog(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return actionFail(parsed.error.issues[0]?.message ?? "Invalid input", fd);
-  const supabase = await createClient();
+  const parsed = Input.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
+    return { error: "Please fix the errors below.", fieldErrors };
+  }
+  const v = parsed.data;
 
-  // Cross-tenant FK guard: confirm the submitted project_id belongs
-  // to the caller's org before we insert. RLS on daily_logs gates by
-  // is_org_member(org_id), but the FK on project_id only validates
-  // existence — without this check a user could attach a daily-log
-  // row to another org's project_id while still claiming their own
-  // org_id, leaving a dangling cross-org reference.
-  const { data: project } = await supabase
+  // Verify the project belongs to the caller's org.
+  const supabase = await createClient();
+  const { data: proj } = await supabase
     .from("projects")
     .select("id")
-    .eq("id", parsed.data.project_id)
+    .eq("id", v.projectId)
     .eq("org_id", session.orgId)
-    .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return actionFail("Project not found in your organization", fd);
+  if (!proj) return { error: "That project is not in your organization." };
 
-  // Upsert by (org_id, project_id, log_date) — idempotent so a foreman
-  // re-submitting at end of shift doesn't create duplicates.
-  const { data: existing } = await supabase
-    .from("daily_logs")
-    .select("id")
-    .eq("org_id", session.orgId)
-    .eq("project_id", parsed.data.project_id)
-    .eq("log_date", parsed.data.log_date)
-    .maybeSingle();
-
-  if (existing) {
-    const { error: updateError } = await supabase
-      .from("daily_logs")
-      .update({
-        weather_summary: parsed.data.weather_summary || null,
-        notes: parsed.data.notes || null,
-      } as never)
-      .eq("id", existing.id);
-    if (updateError) return actionFail(`Could not update daily log: ${updateError.message}`, fd);
-    revalidatePath("/m/daily-log");
-    redirect(`/console/operations/daily-log/${existing.id}`);
-  }
-
-  const { data, error } = await supabase
-    .from("daily_logs")
-    .insert({
+  const { error } = await supabase.from("daily_logs").upsert(
+    {
       org_id: session.orgId,
-      project_id: parsed.data.project_id,
-      log_date: parsed.data.log_date,
-      weather_summary: parsed.data.weather_summary || null,
-      notes: parsed.data.notes || null,
+      project_id: v.projectId,
+      log_date: v.log_date,
+      weather_summary: v.weather_summary || null,
+      weather_temp_high_f: num(v.weather_temp_high_f),
+      weather_temp_low_f: num(v.weather_temp_low_f),
+      notes: v.notes || null,
+      log_state: "draft",
       created_by: session.userId,
-    } as never)
-    .select("id")
-    .single();
-  if (error) return actionFail(`Could not create daily log: ${error.message}`, fd);
+    },
+    { onConflict: "org_id,project_id,log_date" },
+  );
+  if (error) return { error: error.message };
+
   revalidatePath("/m/daily-log");
-  redirect(`/console/operations/daily-log/${data.id}`);
+  return null;
 }

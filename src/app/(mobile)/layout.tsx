@@ -3,13 +3,23 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
-import { mobileTabs, MOBILE_ROLES, ROLE_TABS, type MobileRole } from "@/lib/nav";
+import { mobileTabs } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * COMPVSS field shell — the offline-first venue/field workforce PWA, rebuilt to
+ * the COMPVSS Design System kit (2026-06-21). The bottom bar is the kit's
+ * Home · Calendar · Tasks · Assets · Inbox · More model (`mobileTabs`); the
+ * persona-routed /m/[role] tab bars were retired with the role surfaces, so the
+ * shell renders one tab set for every crew member.
+ *
+ * `data-platform="compvss"` narrows the neutral atlvs-product skin to the molten
+ * brass amber accent; CTAs render amber bg + dark ink (`.ps-btn--cta`).
+ */
 export default async function MobileLayout({ children }: { children: React.ReactNode }) {
-  // Protect the entire compvss shell — no session → redirect to /login.
-  // Individual sub-pages may call requireSession() too; this is the outer guard.
+  // Outer guard for the whole shell — no session → /login. Sub-pages may guard
+  // again; this is the boundary.
   const session = await requireSession();
   const tenant = await resolveTenant();
   const supabase = await createClient();
@@ -19,25 +29,9 @@ export default async function MobileLayout({ children }: { children: React.React
     role: session.role,
     currentPortalSlug: null,
   });
-  // ADR-0009 — pick the role-tuned tab bar if the user has chosen a
-  // mobile role via /m/settings/role. Otherwise serve the ADR-0006
-  // generic deskless default (Home · Inbox · Shift · Alerts · Me).
-  const { data: prefRow } = await supabase
-    .from("user_preferences")
-    .select("ui_state")
-    .eq("user_id", session.userId)
-    .maybeSingle();
-  const uiState = (prefRow?.ui_state as { mobile_role?: MobileRole } | null) ?? null;
-  const chosenRole = uiState?.mobile_role;
-  const tabs = chosenRole && MOBILE_ROLES.includes(chosenRole) ? ROLE_TABS[chosenRole] : mobileTabs;
+
   return (
     <TenantShell tenant={tenant}>
-      {/*
-       * Theme lock — per v2 GHXSTSHIP handoff: SaaS shells (mobile/COMPVSS
-       * included) paint with the neutral atlvs-product skin regardless of
-       * the user's cosmic-marketing cookie pref.
-       * data-platform="compvss" narrows the accent to brass amber.
-       */}
       <div
         data-ui="saas"
         data-theme="atlvs-product"
@@ -46,10 +40,8 @@ export default async function MobileLayout({ children }: { children: React.React
         className="page-shell mobile-shell"
       >
         <ConnectivityBanner />
-        {/* ADR-0007: slim 44px chrome for mobile. Bottom tab bar still
-            owns primary nav; this band hosts the app switcher + bell +
-            messages + avatar so the user can cross shells without
-            digging into Me. */}
+        {/* Slim mobile chrome: app switcher + bell + messages + avatar. The
+            org/project switcher re-scopes the data layer. */}
         <WorkspaceChrome
           shell="mobile"
           workspaceLabel={tenant.orgName}
@@ -60,7 +52,7 @@ export default async function MobileLayout({ children }: { children: React.React
         <main id="main" tabIndex={-1} className="animate-fade-in">
           {children}
         </main>
-        <MobileTabBar items={tabs} />
+        <MobileTabBar items={mobileTabs} />
         <CommandPalette scope="mobile" />
       </div>
     </TenantShell>

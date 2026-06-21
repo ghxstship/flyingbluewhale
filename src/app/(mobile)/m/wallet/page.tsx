@@ -1,169 +1,123 @@
-import Link from "next/link";
-import { urlFor } from "@/lib/urls";
-import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { WalletView, type CredentialEntry } from "./WalletView";
 
 export const dynamic = "force-dynamic";
 
-type AccreditationRow = {
-  id: string;
-  person_name: string;
-  card_barcode: string | null;
-  state: "vetting" | "approved" | "issued" | "denied" | "revoked" | string;
-  valid_from: string | null;
-  valid_to: string | null;
-  category: { code: string | null; name: string | null; color: string | null } | null;
-  delegation: { name: string | null; code: string | null } | null;
-};
+/**
+ * /m/wallet — the COMPVSS Rose pass + the holder's credential entitlements.
+ * Reads the caller's `assignments` (catalog_kind='credential'), enriches each
+ * with `credential_assignment_details` (access level + expiry), and seeds the
+ * rotating gate token off their first active `assignment_scan_codes` code.
+ *
+ * The surviving client `WalletView` renders the kit `RoseCard` (props
+ * `{compact?, onClick}` only — no passBase) and a `RotatingQR base={passBase}`.
+ * Design truth: prototype pass (app.jsx 2496-2526).
+ */
 
-export default async function WalletPage() {
+export default async function MobileWalletPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
-        {t("m.wallet.configureSupabase", undefined, "Configure Supabase.")}
+      <div className="screen screen-anim">
+        <div className="scr-eye">{t("m.wallet.eyebrow", undefined, "Credential")}</div>
+        <h1 className="scr-h">{t("m.wallet.title", undefined, "The COMPVSS Rose")}</h1>
+        <p className="form-intro">{t("common.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
   }
+
   const session = await requireSession();
   const supabase = await createClient();
-  const { data: user } = await supabase
-    .from("users")
-    .select("id, name, email, avatar_url")
-    .eq("id", session.userId)
-    .maybeSingle();
 
-  const { data } = await supabase
-    .from("accreditations")
-    .select(
-      "id, person_name, card_barcode, state, valid_from, valid_to, " +
-        "category:category_id(code, name, color), " +
-        "delegation:delegation_id(name, code)",
-    )
+  const { data: assignments } = await supabase
+    .from("assignments")
+    .select("id, title, fulfillment_state, catalog_item_id")
     .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .order("issued_at", { ascending: false })
-    .limit(10);
-  const cards = (data ?? []) as unknown as AccreditationRow[];
+    .eq("party_user_id", session.userId)
+    .eq("catalog_kind", "credential")
+    .is("deleted_at", null)
+    .order("updated_at", { ascending: false })
+    .limit(50);
 
-  const issued = cards.filter((c) => c.state === "issued");
-  const others = cards.filter((c) => c.state !== "issued");
+  type AssignmentRow = {
+    id: string;
+    title: string | null;
+    fulfillment_state: string;
+    catalog_item_id: string;
+  };
+  const rows = (assignments ?? []) as AssignmentRow[];
+  const assignmentIds = rows.map((r) => r.id);
+  const catalogIds = Array.from(new Set(rows.map((r) => r.catalog_item_id)));
+
+  // Resolve detail siblings + catalog names + an active scan code in parallel.
+  const [{ data: details }, { data: catalog }, { data: codes }] = await Promise.all([
+    assignmentIds.length
+      ? supabase
+          .from("credential_assignment_details")
+          .select("assignment_id, access_level, expires_on")
+          .in("assignment_id", assignmentIds)
+      : Promise.resolve({ data: [] as unknown[] }),
+    catalogIds.length
+      ? supabase.from("master_catalog_items").select("id, name").in("id", catalogIds)
+      : Promise.resolve({ data: [] as unknown[] }),
+    assignmentIds.length
+      ? supabase
+          .from("assignment_scan_codes")
+          .select("assignment_id, code")
+          .in("assignment_id", assignmentIds)
+          .eq("active", true)
+          .limit(1)
+      : Promise.resolve({ data: [] as unknown[] }),
+  ]);
+
+  const detailMap = new Map<string, { accessLevel: string | null; expiresOn: string | null }>();
+  for (const d of (details ?? []) as Array<{
+    assignment_id: string;
+    access_level: string | null;
+    expires_on: string | null;
+  }>) {
+    detailMap.set(d.assignment_id, { accessLevel: d.access_level, expiresOn: d.expires_on });
+  }
+  const catalogMap = new Map<string, string>();
+  for (const ci of (catalog ?? []) as Array<{ id: string; name: string }>) {
+    catalogMap.set(ci.id, ci.name);
+  }
+  const activeCode = ((codes ?? []) as Array<{ code: string }>)[0]?.code ?? null;
+
+  const credentials: CredentialEntry[] = rows.map((r) => {
+    const d = detailMap.get(r.id);
+    return {
+      id: r.id,
+      title: r.title ?? catalogMap.get(r.catalog_item_id) ?? t("m.wallet.credential", undefined, "Credential"),
+      state: r.fulfillment_state,
+      accessLevel: d?.accessLevel ?? null,
+      expiresOn: d?.expiresOn ?? null,
+    };
+  });
+
+  const passBase = `COMPVSS:${activeCode ?? session.userId.slice(0, 8).toUpperCase()}`;
+
+  const labels = {
+    accessTitle: t("m.wallet.accessTitle", undefined, "Access & Permissions"),
+    emptyTitle: t("m.wallet.empty.title", undefined, "No Credentials"),
+    emptyBody: t(
+      "m.wallet.empty.body",
+      undefined,
+      "Credential entitlements appear here once issued. Reach out to your admin.",
+    ),
+    help: t("m.wallet.help", undefined, "Contact Admin For Help"),
+  };
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("m.wallet.eyebrow", undefined, "Mobile")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.wallet.title", undefined, "My Credential")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t("m.wallet.subtitle", undefined, "Show this screen at the gate. Keep it active until your shift ends.")}
-      </p>
-
-      {issued.length === 0 ? (
-        <div className="mt-6">
-          <EmptyState
-            size="compact"
-            title={t("m.wallet.empty.title", undefined, "No Issued Credential")}
-            description={
-              cards.length === 0
-                ? t(
-                    "m.wallet.empty.noAccreditation",
-                    undefined,
-                    "You don't have an accreditation in this workspace yet. Reach out to your delegation contact.",
-                  )
-                : t(
-                    "m.wallet.empty.inVetting",
-                    undefined,
-                    "Your application is in vetting. You'll see the card here once it's approved + issued.",
-                  )
-            }
-          />
-        </div>
-      ) : (
-        <ul className="mt-6 space-y-4">
-          {issued.map((c) => (
-            <li
-              key={c.id}
-              className="surface p-5"
-              style={c.category?.color ? { ["--brand-color" as string]: c.category.color } : undefined}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-xs font-semibold tracking-[0.2em] text-[var(--brand-color,var(--p-accent))] uppercase">
-                    {c.category?.code ?? t("m.wallet.defaultCategoryCode", undefined, "ACC")}
-                  </div>
-                  <div className="mt-1 text-xl leading-snug font-semibold">{c.person_name}</div>
-                  <div className="font-mono text-xs text-[var(--p-text-2)]">
-                    {c.delegation
-                      ? c.delegation.code
-                        ? `${c.delegation.code} · ${c.delegation.name}`
-                        : c.delegation.name
-                      : (user?.email ?? "")}
-                  </div>
-                </div>
-                {c.category?.name && <Badge variant="brand">{c.category.name}</Badge>}
-              </div>
-              {c.card_barcode && (
-                <div className="surface-inset mt-4 rounded-md p-4 text-center">
-                  <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
-                    {t("m.wallet.cardBarcode", undefined, "Card Barcode")}
-                  </div>
-                  <div className="mt-1.5 font-mono text-base tracking-wider">{c.card_barcode}</div>
-                </div>
-              )}
-              <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-                <div>
-                  <div className="text-[var(--p-text-2)]">{t("m.wallet.validFrom", undefined, "Valid From")}</div>
-                  <div className="mt-0.5 font-mono">{c.valid_from?.slice(0, 10) ?? "—"}</div>
-                </div>
-                <div>
-                  <div className="text-[var(--p-text-2)]">{t("m.wallet.validTo", undefined, "Valid To")}</div>
-                  <div className="mt-0.5 font-mono">{c.valid_to?.slice(0, 10) ?? "—"}</div>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {others.length > 0 && (
-        <section className="mt-8">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-            {t("m.wallet.otherCards", undefined, "Other Cards")}
-          </h2>
-          <ul className="mt-3 space-y-2">
-            {others.map((c) => (
-              <li key={c.id} className="surface flex items-center justify-between p-3">
-                <div className="text-sm">
-                  <div className="font-medium">{c.person_name}</div>
-                  <div className="font-mono text-xs text-[var(--p-text-2)]">{c.category?.code ?? "—"}</div>
-                </div>
-                <Badge
-                  variant={
-                    c.state === "approved"
-                      ? "success"
-                      : c.state === "denied" || c.state === "revoked"
-                        ? "error"
-                        : "muted"
-                  }
-                >
-                  {t(`m.wallet.state.${c.state}`, undefined, c.state)}
-                </Badge>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <div className="mt-8 border-t border-[var(--p-border)] pt-4">
-        <Link href={urlFor("personal", "/me/profile")} className="text-xs text-[var(--p-accent)]">
-          {t("m.wallet.openProfile", undefined, "Open profile →")}
-        </Link>
-      </div>
+    <div className="screen screen-anim">
+      <div className="scr-eye">{t("m.wallet.eyebrow", undefined, "Active Credential")}</div>
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {t("m.wallet.title", undefined, "The COMPVSS Rose")}
+      </h1>
+      <WalletView credentials={credentials} passBase={passBase} labels={labels} />
     </div>
   );
 }

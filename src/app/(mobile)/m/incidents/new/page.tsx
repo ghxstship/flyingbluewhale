@@ -1,34 +1,42 @@
-export const dynamic = "force-dynamic";
+"use client";
 
-import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
-import { IncidentForm } from "@/components/incidents/IncidentForm";
-import { getRequestT } from "@/lib/i18n/request";
+import { useRouter } from "next/navigation";
+import { useTransition, useState } from "react";
+import { FormScreen, type FormDef } from "@/components/mobile/kit";
+import { fileIncident } from "../actions";
 
-export default async function IncidentNew() {
-  const session = await requireSession();
-  const supabase = await createClient();
-  const { t } = await getRequestT();
+/**
+ * COMPVSS · File Incident — thin client wrapper around the kit `incident`
+ * FormScreen. On submit it serialises the kit values into FormData and calls
+ * the `fileIncident` server action, then routes back to the queue.
+ */
+export default function NewIncidentPage() {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-  const { data: projects } = await supabase
-    .from("projects")
-    .select("id, name")
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .order("name");
+  function onSubmit(_def: FormDef, vals: Record<string, unknown>) {
+    if (pending) return;
+    const fd = new FormData();
+    for (const [k, val] of Object.entries(vals)) {
+      if (val == null) continue;
+      fd.set(k, typeof val === "boolean" ? (val ? "1" : "") : String(val));
+    }
+    startTransition(async () => {
+      const res = await fileIncident(null, fd);
+      if (res?.error) {
+        setError(res.error);
+        return;
+      }
+      router.push("/m/incidents");
+      router.refresh();
+    });
+  }
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
-        {t("m.incident.new.eyebrow", undefined, "Field")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.new.title", undefined, "Incident Report")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t("m.incident.new.subtitle", undefined, "Log a safety issue — admin and EHS lead are notified immediately.")}
-      </p>
-      <div className="mt-6">
-        <IncidentForm projects={projects ?? []} returnHref="/m" />
-      </div>
+    <div className="screen screen-anim">
+      {error && <div className="ps-alert ps-alert--danger" style={{ marginBottom: 12 }}>{error}</div>}
+      <FormScreen formId="incident" onClose={() => history.back()} onSubmit={onSubmit} />
     </div>
   );
 }

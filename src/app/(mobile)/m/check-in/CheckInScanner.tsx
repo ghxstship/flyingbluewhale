@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
+import { requestPermission } from "@/lib/native/permissions";
 import { scanCode, type CheckInState } from "./actions";
 
 export type RecentScan = {
@@ -23,6 +24,8 @@ export type CheckInLabels = {
   qr: string;
   scanHintCamera: string;
   scanHintAccess: string;
+  enableCamera?: string;
+  cameraDenied?: string;
   nfcHint: string;
   ctaAccess: string;
   ctaAsset: string;
@@ -128,15 +131,10 @@ export function CheckInScanner({
         </>
       ) : (
         <>
-          <div className="scanframe">
-            <div className="reticle">
-              <span className="cnr tl" />
-              <span className="cnr tr" />
-              <span className="cnr bl" />
-              <span className="cnr br" />
-              <span className="laser" />
-            </div>
-          </div>
+          <CameraReticle
+            enableLabel={labels.enableCamera ?? "Enable Camera"}
+            deniedLabel={labels.cameraDenied ?? "Camera Unavailable — Use Manual Entry"}
+          />
           <div className="scanhint">
             <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {scanHint}
           </div>
@@ -232,5 +230,78 @@ export function CheckInScanner({
         })
       )}
     </>
+  );
+}
+
+/**
+ * Live camera reticle. Before grant, shows the static reticle with an "Enable
+ * Camera" affordance; on grant, lights the frame with a `getUserMedia` preview.
+ * The stream is torn down on unmount. Manual entry (below) stays available
+ * regardless — this only lights the frame where camera access is granted.
+ */
+function CameraReticle({ enableLabel, deniedLabel }: { enableLabel: string; deniedLabel: string }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const [state, setState] = useState<"idle" | "requesting" | "live" | "denied">("idle");
+
+  const stop = () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+  };
+
+  useEffect(() => stop, []);
+
+  const enable = async () => {
+    setState("requesting");
+    const res = await requestPermission("camera");
+    if (!res.granted) {
+      setState("denied");
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play().catch(() => {});
+      }
+      setState("live");
+    } catch {
+      setState("denied");
+    }
+  };
+
+  return (
+    <div className="scanframe" style={{ position: "relative", overflow: "hidden" }}>
+      {state === "live" && (
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          autoPlay
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      )}
+      <div className="reticle">
+        <span className="cnr tl" />
+        <span className="cnr tr" />
+        <span className="cnr bl" />
+        <span className="cnr br" />
+        <span className="laser" />
+      </div>
+      {state !== "live" && (
+        <button
+          type="button"
+          className="ps-btn ps-btn--cta"
+          onClick={enable}
+          disabled={state === "requesting"}
+          style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}
+        >
+          <KIcon name="Camera" size={16} /> {state === "denied" ? deniedLabel : enableLabel}
+        </button>
+      )}
+    </div>
   );
 }

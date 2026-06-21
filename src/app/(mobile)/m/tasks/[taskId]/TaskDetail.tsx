@@ -2,14 +2,14 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { RecordDetail } from "@/components/mobile/kit";
+import { RecordDetail, KIcon } from "@/components/mobile/kit";
 import {
   NEXT_TASK_STATES,
   TASK_STATES,
   stateTone,
   type TaskState,
 } from "../_shared";
-import { setTaskState } from "./actions";
+import { addTaskComment, setTaskState } from "./actions";
 
 type DetailTask = {
   id: string;
@@ -21,6 +21,26 @@ type DetailTask = {
   assignee: string;
   created: string;
   updated: string;
+};
+
+export type CommentItem = {
+  who: string;
+  time: string;
+  text: string;
+  mentions: string[];
+};
+
+export type AttachmentItem = {
+  id: string;
+  name: string;
+  kind: "photo" | "file";
+};
+
+export type EventItem = {
+  id: string;
+  icon: string;
+  txt: string;
+  time: string;
 };
 
 type Labels = {
@@ -36,11 +56,12 @@ type Labels = {
   stateBlocked: string;
   stateReview: string;
   stateDone: string;
-  checklist: string;
-  checklistEmpty: string;
+  photos: string;
+  photosEmpty: string;
   description: string;
   descriptionEmpty: string;
   activity: string;
+  activityEmpty: string;
   actCreated: string;
   actUpdated: string;
   permWarn: string;
@@ -51,10 +72,16 @@ export function TaskDetail({
   task,
   canTransition,
   labels,
+  comments,
+  events,
+  attachments,
 }: {
   task: DetailTask;
   canTransition: boolean;
   labels: Labels;
+  comments: CommentItem[];
+  events: EventItem[];
+  attachments: AttachmentItem[];
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -86,6 +113,25 @@ export function TaskDetail({
         return;
       }
       setState(next);
+      router.refresh();
+    });
+  };
+
+  // The composer posts to the real `task_comments` table; mentions arrive as
+  // display names — we map them back nowhere here (server stores the names the
+  // user picked is not what we want), so we forward only names the kit knows.
+  const onComment = (text: string, _tagged: string[]) => {
+    if (pending) return;
+    setErr(null);
+    startTransition(async () => {
+      // mentions are display names from the kit picker; we don't have user ids
+      // client-side, so persist with an empty mentions[] (the body carries the
+      // @name text). A richer mention resolver can wire ids later.
+      const res = await addTaskComment(task.id, text, []);
+      if (res?.error) {
+        setErr(res.error);
+        return;
+      }
       router.refresh();
     });
   };
@@ -124,6 +170,38 @@ export function TaskDetail({
     </>
   );
 
+  // Photo / file thumbs — real `task_attachments` rows. Upload arrives later;
+  // for now we list what exists.
+  const photosNode =
+    attachments.length === 0 ? (
+      <div className="s" style={{ color: "var(--p-text-3)" }}>{labels.photosEmpty}</div>
+    ) : (
+      <div className="gal-grid" style={{ marginTop: 4 }}>
+        {attachments.map((a) => (
+          <div
+            key={a.id}
+            className="surface-inset"
+            style={{
+              aspectRatio: "1 / 1",
+              borderRadius: "var(--p-r-md)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 6,
+              padding: 8,
+              textAlign: "center",
+            }}
+          >
+            <KIcon name={a.kind === "file" ? "FileText" : "Image"} size={20} />
+            <div className="s" style={{ fontSize: 10, wordBreak: "break-word" }}>{a.name}</div>
+          </div>
+        ))}
+      </div>
+    );
+
+  const timeline = events.map((e) => ({ icon: e.icon, txt: e.txt, time: e.time }));
+
   return (
     <RecordDetail
       eyebrow={labels.eyebrow}
@@ -142,23 +220,14 @@ export function TaskDetail({
           h: labels.description,
           text: task.description || labels.descriptionEmpty,
         },
-        {
-          h: labels.checklist,
-          text: labels.checklistEmpty,
-        },
-        {
-          h: labels.activity,
-          timeline: [
-            { icon: "Plus", txt: labels.actCreated, time: task.created },
-            { icon: "Pencil", txt: labels.actUpdated, time: task.updated },
-          ],
-        },
+        { h: labels.photos, node: photosNode },
+        timeline.length
+          ? { h: labels.activity, timeline }
+          : { h: labels.activity, text: labels.activityEmpty },
       ]}
-      comments={[]}
+      comments={comments}
       people={[]}
-      onComment={() => {
-        /* No task_comments table — composer is a stub until one exists. */
-      }}
+      onComment={onComment}
       onClose={() => router.push("/m/tasks")}
     />
   );

@@ -6,9 +6,21 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
-import { HANDOVER_MARKER } from "./shared";
 
 export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+
+/** Map the kit `status` seg labels → the `handovers.post_state` enum. */
+const POST_STATE: Record<string, "all_clear" | "watch_items" | "issues"> = {
+  "All Clear": "all_clear",
+  "Watch Items": "watch_items",
+  Issues: "issues",
+};
+
+const STATE_LABEL: Record<string, string> = {
+  all_clear: "All Clear",
+  watch_items: "Watch Items",
+  issues: "Issues",
+};
 
 const Input = z.object({
   // kit handover form field ids
@@ -21,9 +33,10 @@ const Input = z.object({
 });
 
 /**
- * Submit a shift handover. There is no dedicated handover table — the handover
- * is persisted as a marked note on today's `daily_logs` row for the chosen
- * project (appended, append-only style), then the manager band is notified.
+ * Submit a shift handover into the dedicated 3NF `handovers` table
+ * (org_id, project_id, from_user_id, post_state, summary, open_items,
+ * assets_passed). RLS enforces `from_user_id = auth.uid()`, so we set it to
+ * the session user. The manager band is then push-notified.
  */
 export async function submitHandover(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -37,6 +50,7 @@ export async function submitHandover(_prev: State, fd: FormData): Promise<State>
   const supabase = await createClient();
 
   // Resolve the project: caller-supplied (validated) or the org's most recent.
+  // Optional on the handovers table, but we attach one when available.
   let projectId = v.projectId ?? null;
   if (projectId) {
     const { data: proj } = await supabase
@@ -57,48 +71,26 @@ export async function submitHandover(_prev: State, fd: FormData): Promise<State>
       .maybeSingle();
     projectId = (proj as { id: string } | null)?.id ?? null;
   }
-  if (!projectId) return { error: "No project available to log a handover against." };
 
-  const today = new Date().toISOString().slice(0, 10);
-  const lines = [
-    `${HANDOVER_MARKER} ${v.status ?? "All Clear"} — handed to ${v.relief ?? "next crew"}`,
-    `Summary: ${v.summary}`,
-    v.open ? `Open items: ${v.open}` : null,
-    v.assets ? `Assets/keys passed: ${v.assets}` : null,
-    `— ${session.email} @ ${new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}`,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const postState = POST_STATE[v.status ?? "All Clear"] ?? "all_clear";
 
-  // Read any existing note for today so we append rather than clobber.
-  const { data: existing } = await supabase
-    .from("daily_logs")
-    .select("id, notes")
-    .eq("org_id", session.orgId)
-    .eq("project_id", projectId)
-    .eq("log_date", today)
-    .maybeSingle();
-  const prevNotes = (existing as { notes: string | null } | null)?.notes ?? "";
-  const notes = prevNotes ? `${prevNotes}\n\n${lines}` : lines;
-
-  const { error } = await supabase.from("daily_logs").upsert(
-    {
-      org_id: session.orgId,
-      project_id: projectId,
-      log_date: today,
-      notes,
-      log_state: "draft",
-      created_by: session.userId,
-    },
-    { onConflict: "org_id,project_id,log_date" },
-  );
+  const { error } = await supabase.from("handovers").insert({
+    org_id: session.orgId,
+    project_id: projectId,
+    from_user_id: session.userId,
+    relief_label: v.relief ?? null,
+    post_state: postState,
+    summary: v.summary,
+    open_items: v.open ?? null,
+    assets_passed: v.assets ?? null,
+  });
   if (error) return { error: error.message };
 
   const managers = await managerUserIds(session.orgId, session.userId);
   if (managers.length) {
     await sendPushBulk(managers, {
       title: "Shift Handover Submitted",
-      body: `${v.status ?? "All Clear"} · ${v.summary.slice(0, 80)}`,
+      body: `${STATE_LABEL[postState]} · ${v.summary.slice(0, 80)}`,
       url: "/m/handover",
       kind: "announcement",
       scope: "mobile",

@@ -1,181 +1,239 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ActionBar, DataTable, KIcon } from "@/components/mobile/kit";
-import type { ViewMode } from "@/components/mobile/kit";
+import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  removeConnection,
+  requestConnection,
+  respondConnection,
+} from "./actions";
 
-export type Connection = {
+export type ConnectionRow = {
   id: string;
+  userId: string;
   name: string;
   av: string;
   role: string;
-  region: string;
+  state: string;
+};
+
+export type Suggestion = {
+  userId: string;
+  name: string;
+  av: string;
+  role: string;
   tags: string[];
-  mutual: number;
-  status: "connected" | "pending" | "connect";
 };
 
 type Labels = {
   search: string;
+  sectionNetwork: string;
+  sectionPending: string;
+  sectionSuggestions: string;
   emptyTitle: string;
   emptyBody: string;
   connect: string;
-  pending: string;
+  accept: string;
+  decline: string;
+  remove: string;
   requestSent: string;
+  connected: string;
 };
 
 export function ConnectionsView({
-  connections,
+  network,
+  pending,
+  suggestions,
   labels,
 }: {
-  connections: Connection[];
+  network: ConnectionRow[];
+  pending: ConnectionRow[];
+  suggestions: Suggestion[];
   labels: Labels;
 }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
-  const [view, setView] = useState<ViewMode>("list");
-  const [sort, setSort] = useState("mutual");
-  const [tags, setTags] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [pendingTx, startTx] = useTransition();
   const [sent, setSent] = useState<Set<string>>(new Set());
+  const [error, setError] = useState<string | null>(null);
 
-  const allTags = useMemo(() => [...new Set(connections.flatMap((c) => c.tags))], [connections]);
+  const matches = (s: string) => !query || s.toLowerCase().includes(query.toLowerCase());
 
-  const items = useMemo(() => {
-    return connections
-      .filter((c) => tags.size === 0 || c.tags.some((t) => tags.has(t)))
-      .filter(
-        (c) =>
-          !query ||
-          (c.name + " " + c.role + " " + c.region + " " + c.tags.join(" "))
-            .toLowerCase()
-            .includes(query.toLowerCase()),
-      )
-      .sort((a, b) => (sort === "name" ? a.name.localeCompare(b.name) : b.mutual - a.mutual));
-  }, [connections, tags, query, sort]);
+  const fNetwork = useMemo(
+    () => network.filter((c) => matches(`${c.name} ${c.role}`)),
+    [network, query],
+  );
+  const fPending = useMemo(
+    () => pending.filter((c) => matches(`${c.name} ${c.role}`)),
+    [pending, query],
+  );
+  const fSuggestions = useMemo(
+    () =>
+      suggestions
+        .filter((c) => !sent.has(c.userId))
+        .filter((c) => matches(`${c.name} ${c.role} ${c.tags.join(" ")}`)),
+    [suggestions, query, sent],
+  );
+
+  const run = (action: () => Promise<{ error?: string } | null>) => {
+    setError(null);
+    startTx(async () => {
+      const res = await action();
+      if (res?.error) setError(res.error);
+      else router.refresh();
+    });
+  };
+
+  const fd = (entries: Record<string, string>) => {
+    const f = new FormData();
+    for (const [k, v] of Object.entries(entries)) f.set(k, v);
+    return f;
+  };
+
+  const onConnect = (userId: string) => {
+    setSent((s) => new Set(s).add(userId));
+    run(() => requestConnection(null, fd({ addresseeUserId: userId })));
+  };
+
+  const empty = !fNetwork.length && !fPending.length && !fSuggestions.length;
 
   return (
     <>
-      <ActionBar
-        k="cn"
-        query={query}
-        setQuery={setQuery}
-        placeholder={labels.search}
-        view={view}
-        setView={setView}
-        views={["list", "gallery", "table"]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["mutual", "Mutual"],
-          ["name", "Name"],
-        ]}
-        filterActive={tags.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <>
-            <div className="wl" style={{ marginBottom: 8 }}>
-              Trade · Skill · Cert
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 10 }}>
-              {allTags.map((tg) => (
+      <div className="searchbar" style={{ marginBottom: 12 }}>
+        <KIcon name="Search" size={16} style={{ color: "var(--p-text-3)" }} />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={labels.search}
+          aria-label={labels.search}
+        />
+      </div>
+
+      {error && (
+        <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
+          {error}
+        </div>
+      )}
+
+      {fPending.length > 0 && (
+        <>
+          <div className="sech">
+            <h2>
+              {labels.sectionPending} · {fPending.length}
+            </h2>
+          </div>
+          {fPending.map((c) => (
+            <div className="item" key={c.id} style={{ display: "block" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span className="avatar-sm" style={{ width: 44, height: 44, fontSize: 14 }}>
+                  {c.av}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="t">{c.name}</div>
+                  <div className="s">{c.role}</div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
                 <button
                   type="button"
-                  key={tg}
-                  className={`chip ${tags.has(tg) ? "on" : ""}`}
-                  onClick={() =>
-                    setTags((p) => {
-                      const n = new Set(p);
-                      n.has(tg) ? n.delete(tg) : n.add(tg);
-                      return n;
-                    })
-                  }
+                  className="ps-btn ps-btn--cta ps-btn--sm"
+                  disabled={pendingTx}
+                  style={{ flex: 1, justifyContent: "center" }}
+                  onClick={() => run(() => respondConnection(null, fd({ id: c.id, accept: "true" })))}
                 >
-                  {tg}
+                  <KIcon name="Check" size={14} /> {labels.accept}
                 </button>
-              ))}
-            </div>
-            <button type="button"
-              className="pill"
-              style={{ width: "100%", justifyContent: "center", marginTop: 4 }}
-              onClick={() => setTags(new Set())}
-            >
-              Reset Filters
-            </button>
-          </>
-        }
-      />
-
-      {view === "gallery" ? (
-        <div className="gal-grid">
-          {items.map((c) => (
-            <div className="gal-card" key={c.id}>
-              <span className="gal-av">{c.av}</span>
-              <div className="t" style={{ fontSize: 12.5, textAlign: "center", marginTop: 8 }}>
-                {c.name}
-              </div>
-              <div className="s" style={{ fontSize: 10.5, textAlign: "center" }}>
-                {c.role}
+                <button
+                  type="button"
+                  className="ps-btn ps-btn--secondary ps-btn--sm"
+                  disabled={pendingTx}
+                  style={{ flex: 1, justifyContent: "center" }}
+                  onClick={() => run(() => respondConnection(null, fd({ id: c.id, accept: "false" })))}
+                >
+                  {labels.decline}
+                </button>
               </div>
             </div>
           ))}
-        </div>
-      ) : view === "table" ? (
-        <DataTable
-          fields={[
-            { id: "name", label: "Name", type: "text", get: (x: Connection) => x.name },
-            { id: "role", label: "Role", type: "text", get: (x: Connection) => x.role },
-            {
-              id: "status",
-              label: "Status",
-              type: "text",
-              get: (x: Connection) => (sent.has(x.id) ? "Requested" : x.status),
-            },
-          ]}
-          items={items}
-        />
-      ) : (
-        items.map((c) => (
-          <div className="item tap" key={c.id} style={{ display: "block" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span className="avatar-sm" style={{ width: 44, height: 44, fontSize: 14 }}>
-                {c.av}
-              </span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{c.name}</div>
-                <div className="s">
-                  {c.role}
-                  {c.region ? ` · ${c.region}` : ""}
-                </div>
-              </div>
-              {c.status === "pending" || sent.has(c.id) ? (
-                <span className="ps-badge ps-badge--warn">
-                  {sent.has(c.id) ? labels.requestSent : labels.pending}
+        </>
+      )}
+
+      {fNetwork.length > 0 && (
+        <>
+          <div className="sech">
+            <h2>
+              {labels.sectionNetwork} · {fNetwork.length}
+            </h2>
+          </div>
+          {fNetwork.map((c) => (
+            <div className="item" key={c.id} style={{ display: "block" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span className="avatar-sm" style={{ width: 44, height: 44, fontSize: 14 }}>
+                  {c.av}
                 </span>
-              ) : (
-                <button type="button"
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="t">{c.name}</div>
+                  <div className="s">{c.role}</div>
+                </div>
+                <span className="ps-badge ps-badge--ok">{labels.connected}</span>
+                <button
+                  type="button"
+                  className="iconbtn"
+                  aria-label={labels.remove}
+                  disabled={pendingTx}
+                  onClick={() => run(() => removeConnection(null, fd({ id: c.id })))}
+                >
+                  <KIcon name="X" size={15} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {fSuggestions.length > 0 && (
+        <>
+          <div className="sech">
+            <h2>
+              {labels.sectionSuggestions} · {fSuggestions.length}
+            </h2>
+          </div>
+          {fSuggestions.map((c) => (
+            <div className="item" key={c.userId} style={{ display: "block" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span className="avatar-sm" style={{ width: 44, height: 44, fontSize: 14 }}>
+                  {c.av}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="t">{c.name}</div>
+                  <div className="s">{c.role}</div>
+                </div>
+                <button
+                  type="button"
                   className="ps-btn ps-btn--cta ps-btn--sm"
-                  onClick={() => setSent((s) => new Set(s).add(c.id))}
+                  disabled={pendingTx}
+                  onClick={() => onConnect(c.userId)}
                 >
                   <KIcon name="UserPlus" size={14} /> {labels.connect}
                 </button>
+              </div>
+              {c.tags.length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
+                  {c.tags.map((tg) => (
+                    <span className="tag-chip" key={tg}>
+                      {tg}
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
-            {c.tags.length > 0 && (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                {c.tags.map((tg) => (
-                  <span className="tag-chip" key={tg}>
-                    {tg}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        ))
+          ))}
+        </>
       )}
 
-      {!items.length && <EmptyState title={labels.emptyTitle} description={labels.emptyBody} />}
+      {empty && <EmptyState title={labels.emptyTitle} description={labels.emptyBody} />}
     </>
   );
 }

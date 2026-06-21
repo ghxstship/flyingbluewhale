@@ -132,6 +132,8 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(mobile)/m/inbox/[roomId]/page.tsx",
     "src/app/(mobile)/m/inventory/scan/page.tsx",
     "src/app/(mobile)/m/schedule/page.tsx",
+    "src/app/(mobile)/m/market/page.tsx",
+    "src/app/(mobile)/m/tasks/[taskId]/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

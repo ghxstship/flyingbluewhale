@@ -46,6 +46,8 @@ export default async function InventoryScanPage() {
           title: t("m.inventoryScan.title", undefined, "Scan To Check Out / In"),
           hint: t("m.inventoryScan.hint", undefined, "Point at an asset tag QR — reads automatically."),
           back: t("m.inventoryScan.back", undefined, "Assets"),
+          enableCamera: t("m.inventoryScan.enableCamera", undefined, "Enable Camera"),
+          cameraDenied: t("m.inventoryScan.cameraDenied", undefined, "Camera Unavailable — Use Manual Entry"),
           manualLabel: t("m.inventoryScan.manualLabel", undefined, "Asset Tag"),
           manualPlaceholder: t("m.inventoryScan.manualPlaceholder", undefined, "e.g. R7-014"),
           cta: t("m.inventoryScan.cta", undefined, "Resolve Tag"),

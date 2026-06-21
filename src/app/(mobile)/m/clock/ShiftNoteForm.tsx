@@ -23,8 +23,9 @@ export function ShiftNoteForm({ entryId, entryLabel }: { entryId: string; entryL
     if (pending) return;
     setError(null);
     const note = String(vals.note ?? "");
+    const asManager = String(vals.author ?? "You") === "As Manager";
     startTransition(async () => {
-      const res = await addShiftNote(entryId, note);
+      const res = await addShiftNote(entryId, note, asManager);
       if (res?.error) {
         setError(res.error);
         return;

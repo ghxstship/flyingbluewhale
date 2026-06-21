@@ -75,32 +75,37 @@ export async function clockOut(): Promise<State> {
 }
 
 /**
- * Attach a shift note to a time entry. Stored on the entry's description
- * (there is no dedicated shift-note table). Both the worker and managers
- * may log a note for the record.
+ * Attach a shift note to a time entry. Persisted to the dedicated 3NF
+ * `shift_notes` table (org_id, time_entry_id, author_id, body, as_manager).
+ * RLS enforces `author_id = auth.uid()`, so we set it to the session user.
+ * Both the worker and managers may log a note for the record.
  */
-export async function addShiftNote(entryId: string, note: string): Promise<State> {
+export async function addShiftNote(
+  entryId: string,
+  note: string,
+  asManager = false,
+): Promise<State> {
   const session = await requireSession();
-  if (!note.trim()) return { error: "Note is required." };
+  const body = note.trim();
+  if (!body) return { error: "Note is required." };
   const supabase = await createClient();
 
+  // Re-scope: the time entry must be in the caller's org.
   const { data: entry } = await supabase
     .from("time_entries")
-    .select("id, description")
+    .select("id")
     .eq("id", entryId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!entry) return { error: "Time entry not found." };
 
-  const prior = (entry.description as string | null) ?? "";
-  const stamped = `${new Date().toISOString()} — ${note.trim()}`;
-  const next = prior ? `${prior}\n${stamped}` : stamped;
-
-  const { error } = await supabase
-    .from("time_entries")
-    .update({ description: next })
-    .eq("id", entryId)
-    .eq("org_id", session.orgId);
+  const { error } = await supabase.from("shift_notes").insert({
+    org_id: session.orgId,
+    time_entry_id: entryId,
+    author_id: session.userId,
+    body,
+    as_manager: asManager,
+  });
   if (error) {
     log.error("m.clock.shift_note_failed", { err: error.message });
     return { error: error.message };

@@ -14,6 +14,13 @@ import {
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { CatalogKind } from "@/lib/db/assignments";
 
+export type AssetUnit = {
+  tag: string;
+  status: string;
+  holder: string;
+  tone: "ok" | "warn" | "danger" | "info" | "accent" | "neutral";
+};
+
 export type InventoryItem = {
   id: string;
   kind: CatalogKind;
@@ -22,6 +29,8 @@ export type InventoryItem = {
   code: string | null;
   unitCostCents: number | null;
   qty: number | null;
+  // Real per-instance chain-of-custody rows from `assets` (empty if none).
+  units: AssetUnit[];
 };
 
 export type InventoryLabels = {
@@ -40,6 +49,8 @@ export type InventoryLabels = {
   onHand: string;
   tracked: string;
   untracked: string;
+  serialized: string;
+  available: string;
 };
 
 function money(cents: number | null): string {
@@ -104,16 +115,22 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
   const row = (x: InventoryItem) => {
     const open = expanded === x.id;
     const tone = qtyTone(x.qty);
-    // Per-instance ItemUnits expansion: synthesize the on-hand instances from
-    // inventory_qty (the catalog has no per-serial table — units are derived).
-    const units =
-      x.qty != null && x.qty > 0
-        ? Array.from({ length: Math.min(x.qty, 12) }, (_, i) => ({
-            tag: `${x.code ?? x.cat.slice(0, 3).toUpperCase()}-${String(i + 1).padStart(3, "0")}`,
-            status: labels.tracked,
-            holder: x.cat,
-            tone: "ok" as const,
-          }))
+    // Prefer REAL per-instance chain-of-custody from the `assets` table. When a
+    // catalog row has no asset instances, fall back to an available-count
+    // summary derived from inventory_qty — labeled as the available count, not
+    // fabricated serial numbers.
+    const hasRealUnits = x.units.length > 0;
+    const units = hasRealUnits
+      ? x.units
+      : x.qty != null && x.qty > 0
+        ? [
+            {
+              tag: `${x.qty} ${labels.available}`,
+              status: labels.tracked,
+              holder: x.cat,
+              tone: "ok" as const,
+            },
+          ]
         : [];
     return (
       <div key={x.id}>
@@ -140,7 +157,9 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
         </div>
         {open && units.length > 0 && (
           <div style={{ padding: "4px 4px 10px" }}>
-            <div className="wl" style={{ marginBottom: 6 }}>{labels.units}</div>
+            <div className="wl" style={{ marginBottom: 6 }}>
+              {hasRealUnits ? labels.serialized : labels.units}
+            </div>
             <ItemUnits units={units} onToast={() => {}} />
           </div>
         )}

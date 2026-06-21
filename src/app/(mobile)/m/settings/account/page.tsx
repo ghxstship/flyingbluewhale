@@ -13,17 +13,11 @@ export const dynamic = "force-dynamic";
  * mutes notifications); Archive is a self-serve REQUEST that preserves records
  * and anonymizes the profile — an admin completes the access revoke.
  *
- * State lives on `user_preferences.ui_state.account` (no `account_state`
- * column). See ./actions.ts for the full contract.
+ * State lives on the real `user_account_status` table (account_state ∈
+ * active/paused/archived). See ./actions.ts for the full contract.
  *
  * Design truth: kit auth.jsx — the account / pause / archive screens.
  */
-
-type AccountUiState = {
-  paused?: boolean;
-  paused_at?: string;
-  archive_requested_at?: string;
-};
 
 export default async function MobileAccountPage() {
   const { t } = await getRequestT();
@@ -41,14 +35,17 @@ export default async function MobileAccountPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
-  const [{ data: user }, { data: prefs }] = await Promise.all([
+  const [{ data: user }, { data: account }] = await Promise.all([
     supabase.from("users").select("name, email").eq("id", session.userId).maybeSingle(),
-    supabase.from("user_preferences").select("ui_state").eq("user_id", session.userId).maybeSingle(),
+    supabase
+      .from("user_account_status")
+      .select("account_state, archive_requested_at")
+      .eq("user_id", session.userId)
+      .maybeSingle(),
   ]);
 
   const u = (user as { name: string | null; email: string } | null) ?? null;
-  const ui = (prefs?.ui_state as Record<string, unknown> | null) ?? {};
-  const account = ((ui.account as AccountUiState | undefined) ?? {}) as AccountUiState;
+  const accountState = account?.account_state ?? "active";
 
   const name = u?.name ?? session.email ?? "";
   const email = u?.email ?? session.email ?? "";
@@ -99,8 +96,10 @@ export default async function MobileAccountPage() {
       </div>
 
       <AccountActions
-        initialPaused={account.paused === true}
-        initialArchiveRequested={typeof account.archive_requested_at === "string"}
+        initialPaused={accountState === "paused"}
+        initialArchiveRequested={
+          accountState === "archived" || typeof account?.archive_requested_at === "string"
+        }
       />
     </div>
   );

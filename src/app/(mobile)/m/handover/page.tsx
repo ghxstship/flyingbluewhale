@@ -2,27 +2,33 @@ import Link from "next/link";
 import { Repeat } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
-import { HANDOVER_MARKER } from "./shared";
 
 export const dynamic = "force-dynamic";
 
 /**
  * COMPVSS · Shift Handover — end-of-shift report passing status, open items and
- * assets to the next crew. No dedicated table: handovers are persisted as
- * marked notes on `daily_logs` (see actions.ts). This page lists prior
- * handovers parsed back out of those notes and links to the new-handover form.
+ * assets to the next crew. Reads the dedicated 3NF `handovers` table
+ * (org-scoped, newest first) and links to the new-handover form.
  */
-type LogRow = { id: string; log_date: string | null; notes: string | null };
+type HandoverRow = {
+  id: string;
+  from_user_id: string | null;
+  to_user_id: string | null;
+  relief_label: string | null;
+  post_state: string;
+  summary: string;
+  open_items: string | null;
+  assets_passed: string | null;
+  created_at: string;
+};
 
-type Handover = { key: string; date: string | null; line: string; body: string };
-
-const STATUS_TONE: Record<string, string> = {
-  "All Clear": "ok",
-  "Watch Items": "warn",
-  Issues: "danger",
+const STATE_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
+  all_clear: "ok",
+  watch_items: "warn",
+  issues: "danger",
 };
 
 const TONE_VAR: Record<string, string> = {
@@ -32,33 +38,36 @@ const TONE_VAR: Record<string, string> = {
   neutral: "var(--p-border)",
 };
 
-/** Pull the marked handover blocks out of a daily_logs notes field. */
-function parseHandovers(rows: LogRow[]): Handover[] {
-  const out: Handover[] = [];
-  for (const r of rows) {
-    const notes = r.notes ?? "";
-    if (!notes.includes(HANDOVER_MARKER)) continue;
-    const blocks = notes.split("\n\n").filter((b) => b.includes(HANDOVER_MARKER));
-    blocks.forEach((b, i) => {
-      const linesArr = b.split("\n");
-      const header = (linesArr[0] ?? "").replace(HANDOVER_MARKER, "").trim();
-      out.push({ key: `${r.id}-${i}`, date: r.log_date, line: header, body: linesArr.slice(1).join("\n") });
-    });
-  }
-  return out;
-}
-
 export default async function HandoverPage() {
   const session = await requireSession();
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("daily_logs")
-    .select("id, log_date, notes")
-    .eq("org_id", session.orgId)
-    .order("log_date", { ascending: false })
-    .limit(60);
-  const handovers = parseHandovers((data ?? []) as LogRow[]);
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
+
+  const { data } = await supabase
+    .from("handovers")
+    .select("id, from_user_id, to_user_id, relief_label, post_state, summary, open_items, assets_passed, created_at")
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(60);
+  const handovers = (data ?? []) as HandoverRow[];
+
+  // Resolve who handed off each report.
+  const userIds = Array.from(new Set(handovers.map((h) => h.from_user_id).filter(Boolean) as string[]));
+  const nameMap = new Map<string, string>();
+  if (userIds.length) {
+    const { data: users } = await supabase.from("users").select("id, name, email").in("id", userIds);
+    for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+      nameMap.set(u.id, u.name ?? u.email ?? "");
+    }
+  }
+
+  const STATE_LABEL: Record<string, string> = {
+    all_clear: t("m.handover.state.allClear", undefined, "All Clear"),
+    watch_items: t("m.handover.state.watchItems", undefined, "Watch Items"),
+    issues: t("m.handover.state.issues", undefined, "Issues"),
+  };
 
   return (
     <div className="screen screen-anim">
@@ -86,28 +95,34 @@ export default async function HandoverPage() {
         />
       ) : (
         handovers.map((h) => {
-          const statusKey = h.line.split(" —")[0] ?? "";
-          const tone = STATUS_TONE[statusKey] ?? "neutral";
+          const tone = STATE_TONE[h.post_state] ?? "neutral";
+          const stateLabel = STATE_LABEL[h.post_state] ?? h.post_state;
+          const author = h.from_user_id ? nameMap.get(h.from_user_id) ?? "" : "";
+          const relief = h.relief_label
+            ? t("m.handover.handedTo", { relief: h.relief_label }, `Handed To ${h.relief_label}`)
+            : "";
+          const meta = [author, relief, `${fmt.date(h.created_at)} · ${fmt.time(h.created_at)}`]
+            .filter(Boolean)
+            .join(" · ");
           return (
-            <div className="item" key={h.key} style={{ alignItems: "flex-start" }}>
+            <div className="item" key={h.id} style={{ alignItems: "flex-start" }}>
               <span className="bar" style={{ background: TONE_VAR[tone] ?? "var(--p-accent)" }} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{h.line || t("m.handover.untitled", undefined, "Handover")}</div>
-                <div className="s" style={{ whiteSpace: "pre-wrap" }}>
-                  {h.body}
-                </div>
-                <div className="hint">
-                  {h.date
-                    ? new Date(h.date + "T00:00:00").toLocaleDateString("en-US", {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : ""}
-                </div>
+                <div className="t" style={{ whiteSpace: "pre-wrap" }}>{h.summary}</div>
+                {h.open_items ? (
+                  <div className="s" style={{ whiteSpace: "pre-wrap", marginTop: 2 }}>
+                    {t("m.handover.openItems", undefined, "Open Items")}: {h.open_items}
+                  </div>
+                ) : null}
+                {h.assets_passed ? (
+                  <div className="s" style={{ whiteSpace: "pre-wrap", marginTop: 2 }}>
+                    {t("m.handover.assets", undefined, "Assets / Keys")}: {h.assets_passed}
+                  </div>
+                ) : null}
+                <div className="hint" style={{ marginTop: 4 }}>{meta}</div>
               </div>
               <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
-                {statusKey || "—"}
+                {stateLabel}
               </span>
             </div>
           );

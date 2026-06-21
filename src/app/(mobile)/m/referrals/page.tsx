@@ -1,26 +1,51 @@
-import { ChevronLeft, Gift, Send, Share2, Ticket, UserCheck, UserPlus } from "lucide-react";
+import { ChevronLeft, Gift, Send, Ticket, UserCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getOrCreateReferral } from "./actions";
+import { ReferralInvite } from "./ReferralInvite";
 
 export const dynamic = "force-dynamic";
 
+// Tier progression thresholds (points → next tier ceiling) for the hero bar.
+const TIER_CEILING: Record<string, number> = { bronze: 100, silver: 500, gold: 1500, platinum: 1500 };
+const INVITE_STATE_TONE: Record<string, string> = {
+  invited: "ps-badge--neutral",
+  joined: "ps-badge--info",
+  hired: "ps-badge--ok",
+};
+const INVITE_STATE_LABEL: Record<string, string> = {
+  invited: "Invited",
+  joined: "Joined",
+  hired: "Hired",
+};
+
 /**
- * /m/referrals — Referrals & Rewards.
- *
- * COMPVSS kit `tab==="referrals"` + REFERRAL (design truth app.jsx 2751-2797,
- * 845-853). There is NO referral/affiliate table in the schema, so this is
- * honest: the hero + "How It Works" render as a static program explainer keyed
- * to the signed-in user's handle, the share/invite CTAs are present, and the
- * referral list shows a tasteful empty state instead of fabricated entries.
+ * /m/referrals — Referrals & Rewards. Backed by the real `referral_codes`
+ * (one row per user, get-or-created on load) + `referral_invitations` tables.
+ * The hero shows the user's code/points/tier; the list renders real
+ * invitations; "Invite" posts through `sendReferralInvite` (owner column set
+ * to the session user so RLS WITH CHECK passes).
  */
 export default async function ReferralsPage() {
   const session = await requireSession();
+  const supabase = await createClient();
   const { t } = await getRequestT();
 
-  // Derive a stable, real referral code from the user id (no backing table).
-  const code = `ATLVS-${session.userId.slice(0, 4).toUpperCase()}`;
-  const link = `atlvs.pro/r/${session.userId.slice(0, 8)}`;
+  const ref = await getOrCreateReferral();
+  const link = `atlvs.pro/r/${ref.code.toLowerCase()}`;
+
+  const { data: invites } = await supabase
+    .from("referral_invitations")
+    .select("id, invitee_contact, invite_state, reward_points, created_at")
+    .eq("referrer_user_id", session.userId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  const invitations = invites ?? [];
+  const ceiling = TIER_CEILING[ref.tier] ?? 100;
+  const pct = Math.max(0, Math.min(100, Math.round((ref.points / ceiling) * 100)));
 
   const steps: Array<[string, string, React.ReactNode]> = [
     [
@@ -56,26 +81,25 @@ export default async function ReferralsPage() {
             <div className="es-k" style={{ color: "rgba(255,255,255,.6)" }}>
               {t("m.referrals.balance", undefined, "Reward Balance")}
             </div>
-            <div
-              style={{
-                fontFamily: "var(--p-heading)",
-                fontSize: 30,
-                lineHeight: 1,
-                marginTop: 3,
-              }}
-            >
-              0 {t("m.referrals.pts", undefined, "pts")}
+            <div style={{ fontFamily: "var(--p-heading)", fontSize: 30, lineHeight: 1, marginTop: 3 }}>
+              {ref.points} {t("m.referrals.pts", undefined, "pts")}
             </div>
           </div>
-          <span className="ps-badge ps-badge--neutral">
-            {t("m.referrals.tier", undefined, "Starter")}
+          <span className="ps-badge ps-badge--neutral" style={{ textTransform: "capitalize" }}>
+            {ref.tier}
           </span>
         </div>
         <div className="rh-bar">
-          <span style={{ width: "0%" }} />
+          <span style={{ width: `${pct}%` }} />
         </div>
         <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
-          {t("m.referrals.next", undefined, "Refer crew to start earning rewards.")}
+          {ref.points > 0
+            ? t(
+                "m.referrals.toNext",
+                { left: Math.max(0, ceiling - ref.points) },
+                `${Math.max(0, ceiling - ref.points)} pts to next tier`,
+              )
+            : t("m.referrals.next", undefined, "Refer crew to start earning rewards.")}
         </div>
       </div>
 
@@ -85,20 +109,13 @@ export default async function ReferralsPage() {
         </span>
         <div style={{ flex: 1 }}>
           <div className="t" style={{ fontFamily: "var(--p-mono)", letterSpacing: "0.1em" }}>
-            {code}
+            {ref.code}
           </div>
           <div className="s">{link}</div>
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 10, margin: "2px 0 6px" }}>
-        <button type="button" className="ps-btn ps-btn--cta" style={{ flex: 1, justifyContent: "center" }}>
-          <Share2 size={16} /> {t("m.referrals.share", undefined, "Share")}
-        </button>
-        <button type="button" className="ps-btn ps-btn--secondary" style={{ flex: 1, justifyContent: "center" }}>
-          <UserPlus size={16} /> {t("m.referrals.invite", undefined, "Invite")}
-        </button>
-      </div>
+      <ReferralInvite shareLabel={t("m.referrals.share", undefined, "Share")} />
 
       <div className="sech">
         <h2>{t("m.referrals.how", undefined, "How It Works")}</h2>
@@ -120,17 +137,42 @@ export default async function ReferralsPage() {
       </div>
 
       <div className="sech">
-        <h2>{t("m.referrals.yours", undefined, "Your Referrals")}</h2>
+        <h2>
+          {t("m.referrals.yours", undefined, "Your Referrals")}
+          {invitations.length > 0 ? ` · ${invitations.length}` : ""}
+        </h2>
       </div>
-      <EmptyState
-        size="compact"
-        title={t("m.referrals.empty", undefined, "No Referrals Yet")}
-        description={t(
-          "m.referrals.emptyBody",
-          undefined,
-          "Share your code — referrals and rewards show up here.",
-        )}
-      />
+      {invitations.length === 0 ? (
+        <EmptyState
+          size="compact"
+          title={t("m.referrals.empty", undefined, "No Referrals Yet")}
+          description={t(
+            "m.referrals.emptyBody",
+            undefined,
+            "Share your code — referrals and rewards show up here.",
+          )}
+        />
+      ) : (
+        invitations.map((inv) => (
+          <div className="item" key={inv.id} style={{ alignItems: "center" }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="t">{inv.invitee_contact}</div>
+              {inv.reward_points > 0 && (
+                <div className="s">
+                  +{inv.reward_points} {t("m.referrals.pts", undefined, "pts")}
+                </div>
+              )}
+            </div>
+            <span className={`ps-badge ${INVITE_STATE_TONE[inv.invite_state] ?? "ps-badge--neutral"}`}>
+              {t(
+                `m.referrals.state.${inv.invite_state}`,
+                undefined,
+                INVITE_STATE_LABEL[inv.invite_state] ?? inv.invite_state,
+              )}
+            </span>
+          </div>
+        ))
+      )}
     </div>
   );
 }

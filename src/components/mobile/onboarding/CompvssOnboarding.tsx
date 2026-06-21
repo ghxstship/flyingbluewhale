@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useEffect,
   useState,
   useTransition,
   type CSSProperties,
@@ -10,6 +11,11 @@ import {
 import { useRouter } from "next/navigation";
 import { KIcon, QR } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import {
+  requestPermission,
+  checkPermissionsSupport,
+  type PermissionKind,
+} from "@/lib/native/permissions";
 import {
   signUpAction,
   verifyOtpAction,
@@ -195,8 +201,13 @@ const Steps = ({ n, of }: { n: number; of: number }) => (
   </div>
 );
 
-const Toggle = ({ on, set }: { on: boolean; set: (v: boolean) => void }) => (
-  <div className="sw" data-on={on ? "1" : undefined} onClick={() => set(!on)}>
+const Toggle = ({ on, set, disabled }: { on: boolean; set: (v: boolean) => void; disabled?: boolean }) => (
+  <div
+    className="sw"
+    data-on={on ? "1" : undefined}
+    onClick={disabled ? undefined : () => set(!on)}
+    style={disabled ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+  >
     <span className="knob" />
   </div>
 );
@@ -251,11 +262,46 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
   // permissions
   const [language, setLanguage] = useState("en");
   const [perms, setPerms] = useState<Perms>({
+    location: false,
+    notifications: false,
+    camera: false,
+    bluetooth: false,
+  });
+  // Feature-detected availability (set on first render in the browser) — drives
+  // the "Unavailable on this device" hint. Empty (all true-ish) on the server.
+  const [permsSupport, setPermsSupport] = useState<Record<PermissionKind, boolean>>({
     location: true,
     notifications: true,
     camera: true,
-    bluetooth: false,
+    bluetooth: true,
   });
+  // Which permission is mid-request (disables its toggle while the OS prompt is up).
+  const [permsBusy, setPermsBusy] = useState<PermissionKind | null>(null);
+
+  useEffect(() => {
+    setPermsSupport(checkPermissionsSupport());
+  }, []);
+
+  // Toggle a permission. Turning ON fires the real platform request and only
+  // sticks if granted; turning OFF just clears the local flag.
+  const onTogglePerm = (kind: PermissionKind, next: boolean) => {
+    if (!next) {
+      setPerms((p) => ({ ...p, [kind]: false }));
+      return;
+    }
+    if (!permsSupport[kind]) return; // unavailable — no-op
+    setPermsBusy(kind);
+    void requestPermission(kind)
+      .then((res) => {
+        if (res.unavailable) {
+          setPermsSupport((s) => ({ ...s, [kind]: false }));
+          setPerms((p) => ({ ...p, [kind]: false }));
+        } else {
+          setPerms((p) => ({ ...p, [kind]: res.granted }));
+        }
+      })
+      .finally(() => setPermsBusy(null));
+  };
 
   // profile
   const [fullProfile, setFullProfile] = useState(false);
@@ -374,7 +420,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
   const onSavePermissions = () =>
     startTransition(async () => {
       setErr(undefined);
-      // TODO(native): request matching Capacitor OS permissions per enabled toggle.
+      // `perms` already reflects real, OS-granted booleans (see onTogglePerm).
       const res = await savePermissionsAction({ language, perms });
       if (res.error) {
         setErr(res.error);
@@ -824,23 +870,32 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                 ["camera", "Camera", t("m.onboarding.permissions.camera", undefined, "Camera"), t("m.onboarding.permissions.cameraSub", undefined, "Scan QR credentials, assets & site documents"), t("m.onboarding.permissions.recommended", undefined, "Recommended")],
                 ["bluetooth", "Bluetooth", t("m.onboarding.permissions.bluetooth", undefined, "Bluetooth / NFC"), t("m.onboarding.permissions.bluetoothSub", undefined, "Tap RFID credentials & readers"), t("m.onboarding.permissions.optional", undefined, "Optional")],
               ] as Array<[keyof Perms, string, string, string, string]>
-            ).map(([k, ic, title, sub, req]) => (
-              <div className="toggle-row" key={k}>
-                <span className="ic">
-                  <KIcon name={ic} size={19} />
-                </span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14.5 }}>{title}</div>
-                  <div className="muted" style={{ marginTop: 2 }}>
-                    {sub}
+            ).map(([k, ic, title, sub, req]) => {
+              const unavailable = !permsSupport[k];
+              return (
+                <div className="toggle-row" key={k} style={unavailable ? { opacity: 0.55 } : undefined}>
+                  <span className="ic">
+                    <KIcon name={ic} size={19} />
+                  </span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14.5 }}>{title}</div>
+                    <div className="muted" style={{ marginTop: 2 }}>
+                      {sub}
+                    </div>
+                    <div className="req" style={{ marginTop: 3 }}>
+                      {unavailable
+                        ? t("m.onboarding.permissions.unavailable", undefined, "Unavailable on This Device")
+                        : req}
+                    </div>
                   </div>
-                  <div className="req" style={{ marginTop: 3 }}>
-                    {req}
-                  </div>
+                  <Toggle
+                    on={perms[k]}
+                    disabled={unavailable || permsBusy === k}
+                    set={(v) => onTogglePerm(k, v)}
+                  />
                 </div>
-                <Toggle on={perms[k]} set={(v) => setPerms((p) => ({ ...p, [k]: v }))} />
-              </div>
-            ))}
+              );
+            })}
             <ErrLine msg={err} />
             <div className="spacer" />
             {cta(t("m.onboarding.permissions.cta", undefined, "Continue"), onSavePermissions, { marginTop: 16 })}

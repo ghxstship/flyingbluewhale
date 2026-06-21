@@ -52,6 +52,8 @@ export default async function CheckInPage() {
           qr: t("m.checkin.qr", undefined, "QR Code"),
           scanHintCamera: t("m.checkin.scanHintCamera", undefined, "Reads QR & barcodes automatically"),
           scanHintAccess: t("m.checkin.scanHintAccess", undefined, "Scan the QR on the credential"),
+          enableCamera: t("m.checkin.enableCamera", undefined, "Enable Camera"),
+          cameraDenied: t("m.checkin.cameraDenied", undefined, "Camera Unavailable — Use Manual Entry"),
           nfcHint: t("m.checkin.nfcHint", undefined, "Hold the RFID credential or fob near the reader"),
           ctaAccess: t("m.checkin.ctaAccess", undefined, "Verify Credential"),
           ctaAsset: t("m.checkin.ctaAsset", undefined, "Check Out / In"),

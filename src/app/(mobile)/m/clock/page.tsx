@@ -77,6 +77,48 @@ export default async function MobileClockPage() {
   }
   const zoneNameFor = (id: string | null) => (id ? (zoneMap.get(id) ?? null) : null);
 
+  // Shift notes for the visible entries — real `shift_notes` rows, grouped
+  // by time entry, with author names hydrated from `users`.
+  type NoteRow = {
+    id: string;
+    time_entry_id: string;
+    author_id: string | null;
+    body: string;
+    as_manager: boolean;
+    created_at: string;
+  };
+  const entryIds = history.map((e) => e.id);
+  const notesByEntry = new Map<string, NoteRow[]>();
+  if (entryIds.length) {
+    const { data: notes } = await supabase
+      .from("shift_notes")
+      .select("id, time_entry_id, author_id, body, as_manager, created_at")
+      .eq("org_id", session.orgId)
+      .in("time_entry_id", entryIds)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true });
+    const noteRows = (notes ?? []) as NoteRow[];
+    const authorIds = Array.from(new Set(noteRows.map((n) => n.author_id).filter(Boolean) as string[]));
+    const authorMap = new Map<string, string>();
+    if (authorIds.length) {
+      const { data: users } = await supabase.from("users").select("id, name, email").in("id", authorIds);
+      for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+        authorMap.set(u.id, u.name ?? u.email ?? "");
+      }
+    }
+    for (const n of noteRows) {
+      const list = notesByEntry.get(n.time_entry_id) ?? [];
+      list.push(n);
+      notesByEntry.set(n.time_entry_id, list);
+    }
+    // attach resolved author name for render
+    for (const list of notesByEntry.values()) {
+      for (const n of list) {
+        (n as NoteRow & { authorName?: string }).authorName = n.author_id ? authorMap.get(n.author_id) ?? "" : "";
+      }
+    }
+  }
+
   const onShift = openEntry != null;
 
   return (
@@ -127,6 +169,36 @@ export default async function MobileClockPage() {
                   {active ? t("m.clock.active", undefined, "Active") : t("m.clock.closed", undefined, "Closed")}
                 </span>
               </div>
+              {(() => {
+                const notes = notesByEntry.get(e.id) ?? [];
+                if (!notes.length) return null;
+                return (
+                  <div style={{ marginTop: 10 }}>
+                    {notes.map((n) => {
+                      const author = (n as { authorName?: string }).authorName || "";
+                      const meta = [
+                        author,
+                        n.as_manager ? t("m.clock.asManager", undefined, "As Manager") : null,
+                        `${fmt.date(n.created_at)} · ${fmt.time(n.created_at)}`,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ");
+                      return (
+                        <div className="item" key={n.id} style={{ alignItems: "flex-start" }}>
+                          <span
+                            className="bar"
+                            style={{ background: n.as_manager ? "var(--p-warning)" : "var(--p-border)" }}
+                          />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div className="t" style={{ whiteSpace: "pre-wrap" }}>{n.body}</div>
+                            <div className="s">{meta}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
               <div style={{ marginTop: 10 }}>
                 <ShiftNoteForm entryId={e.id} entryLabel={label} />
               </div>

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { urlFor } from "@/lib/urls";
 import type { Json } from "@/lib/supabase/database.types";
+import { saveProfileData, type EmergencyContactInput } from "@/lib/profile/write";
 
 /**
  * COMPVSS mobile auth + onboarding server actions.
@@ -167,8 +168,15 @@ export async function oauthUrlAction(provider: Provider): Promise<OAuthResult> {
   return { url: data.url };
 }
 
-/** Persist profile basics. Writes name → users; display_name / public_handle /
- * bio / links → user_profiles. Tolerates missing optional fields. */
+/**
+ * Persist the kit onboarding profile into the real 3NF tables via
+ * `saveProfileData`. The kit profile form (CompvssOnboarding.tsx) posts these
+ * FormData fields: display_name, username, phone, linkedin, spotify, instagram,
+ * website, pronouns, title, bio, city, emergency_1/_phone, emergency_2/_phone,
+ * dietary, home_airport, dob, passport, visas, known_traveler, loyalty,
+ * size_shirt/_pants/_shoe/_glove, certifications, skills. The canonical display
+ * name is also written to `users.name`.
+ */
 export async function saveProfileAction(fd: FormData): Promise<SaveResult> {
   const session = await requireSession();
   const supabase = await createClient();
@@ -179,18 +187,17 @@ export async function saveProfileAction(fd: FormData): Promise<SaveResult> {
     const t = v.trim();
     return t.length ? t : undefined;
   };
+  /** Split a "A · B · C" / comma list into trimmed tokens. */
+  const list = (k: string): string[] => {
+    const v = str(k);
+    if (!v) return [];
+    return v
+      .split(/[·,;\n]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  };
 
   const displayName = str("display_name") ?? str("name");
-  const username = str("username");
-  const bio = str("bio");
-
-  // Optional contact / social links → user_profiles.links jsonb (no dedicated
-  // columns exist for phone/linkedin/spotify/instagram/website).
-  const links: Record<string, string> = {};
-  for (const key of ["phone", "linkedin", "spotify", "instagram", "website"] as const) {
-    const v = str(key);
-    if (v) links[key] = v;
-  }
 
   // users.name (the canonical identity name).
   if (displayName) {
@@ -201,34 +208,54 @@ export async function saveProfileAction(fd: FormData): Promise<SaveResult> {
     if (uErr) return { error: uErr.message };
   }
 
-  // user_profiles — upsert the portable crew identity. `links` is merged with
-  // any existing value so a partial save doesn't blow away prior links.
-  const { data: existingProfile } = await supabase
-    .from("user_profiles")
-    .select("links")
-    .eq("user_id", session.userId)
-    .maybeSingle();
-  const existingLinks =
-    (existingProfile?.links as Record<string, string> | null | undefined) ?? {};
-  const mergedLinks = { ...existingLinks, ...links } as Json;
+  // Emergency contacts — "Name · relation" + phone, two slots in the kit.
+  const emergencyContacts: EmergencyContactInput[] = [];
+  for (const [i, base] of (["emergency_1", "emergency_2"] as const).entries()) {
+    const raw = str(base);
+    if (!raw) continue;
+    const [name, relationship] = raw.split("·").map((s) => s.trim());
+    emergencyContacts.push({
+      name: name || raw,
+      relationship: relationship || null,
+      phone: str(`${base}_phone`) ?? null,
+      priority: i + 1,
+    });
+  }
 
-  const profileRow: Record<string, unknown> = {
-    user_id: session.userId,
-    links: mergedLinks,
-  };
-  if (displayName) profileRow.display_name = displayName;
-  if (username) profileRow.public_handle = username;
-  if (bio) profileRow.bio = bio;
-
-  const { error: pErr } = await (
-    supabase.from("user_profiles") as unknown as {
-      upsert: (
-        p: Record<string, unknown>,
-        opts?: Record<string, unknown>,
-      ) => Promise<{ error: { message: string } | null }>;
-    }
-  ).upsert(profileRow, { onConflict: "user_id" });
-  if (pErr) return { error: pErr.message };
+  const res = await saveProfileData(supabase, session.userId, {
+    displayName: displayName ?? undefined,
+    publicHandle: str("username"),
+    bio: str("bio"),
+    pronouns: str("pronouns"),
+    roleTitle: str("title"),
+    dietaryRestrictions: str("dietary"),
+    phone: str("phone"),
+    locationCity: str("city"),
+    social: {
+      linkedin: str("linkedin") ?? "",
+      spotify: str("spotify") ?? "",
+      instagram: str("instagram") ?? "",
+      website: str("website") ?? "",
+    },
+    emergencyContacts,
+    travel: {
+      homeAirport: str("home_airport"),
+      dateOfBirth: str("dob"),
+      passportNumber: str("passport"),
+      knownTravelerNumber: str("known_traveler"),
+      visas: str("visas"),
+      loyaltyPrograms: str("loyalty"),
+    },
+    uniform: {
+      shirt: str("size_shirt"),
+      pants: str("size_pants"),
+      shoe: str("size_shoe"),
+      glove: str("size_glove"),
+    },
+    certifications: list("certifications").map((name) => ({ name })),
+    skills: list("skills"),
+  });
+  if (res) return { error: res.error };
 
   // Ensure a user_preferences row exists so later steps can append ui_state.
   await upsertPreferences(session.userId, {});
@@ -311,20 +338,44 @@ export async function savePermissionsAction(input: {
 
   // TODO(native): when wrapped in Capacitor, request the matching OS
   // permissions here (Geolocation, Push, Camera, Bluetooth/NFC) for each
-  // enabled toggle. For now we persist the intended state only.
-  const res = await upsertPreferences(session.userId, {
-    locale: parsed.data.language,
-    uiPatch: { permissions: parsed.data.perms },
-  });
-  return res;
+  // enabled toggle. We persist the granted state + a requested-at stamp for
+  // each toggle into the real `user_app_permissions` table.
+  const { language, perms } = parsed.data;
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+  const { error: permErr } = await supabase.from("user_app_permissions").upsert(
+    {
+      user_id: session.userId,
+      language,
+      location_granted: perms.location,
+      notifications_granted: perms.notifications,
+      camera_granted: perms.camera,
+      bluetooth_granted: perms.bluetooth,
+      location_requested_at: now,
+      notifications_requested_at: now,
+      camera_requested_at: now,
+      bluetooth_requested_at: now,
+    },
+    { onConflict: "user_id" },
+  );
+  if (permErr) return { error: permErr.message };
+
+  // Keep the chosen UI language on user_preferences.locale (the i18n source).
+  return upsertPreferences(session.userId, { locale: language });
 }
 
-/** Mark onboarding complete and revalidate the field shell. */
+/** Mark onboarding complete (user_account_status.onboarded_at) and revalidate
+ * the field shell. account_state defaults to 'active' on first insert. */
 export async function completeOnboardingAction(): Promise<SaveResult> {
   const session = await requireSession();
-  const res = await upsertPreferences(session.userId, { uiPatch: { onboarded: true } });
+  const supabase = await createClient();
+  const { error } = await supabase.from("user_account_status").upsert(
+    { user_id: session.userId, account_state: "active", onboarded_at: new Date().toISOString() },
+    { onConflict: "user_id" },
+  );
+  if (error) return { error: error.message };
   revalidatePath("/m");
-  return res;
+  return { ok: true };
 }
 
 // ── helpers ──────────────────────────────────────────────────────────────────

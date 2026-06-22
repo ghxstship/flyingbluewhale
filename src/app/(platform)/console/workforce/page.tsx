@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -6,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { ClockedInWidget } from "./ClockedInWidget";
 
 type Row = {
   id: string;
@@ -128,6 +130,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
         }
       />
       <div className="page-content space-y-5">
+        <Suspense>
+          <ClockedInWidget />
+        </Suspense>
         <div
           role="tablist"
           aria-label={t("console.workforce.filterAriaLabel", undefined, "Filter by workforce kind")}

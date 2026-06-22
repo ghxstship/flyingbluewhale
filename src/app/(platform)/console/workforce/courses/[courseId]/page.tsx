@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { addLesson, addQuizQuestion, publishCourse, assignCourse, setCompletionBadge, deleteCourse } from "./actions";
+import { AICourseGenPanel } from "./AICourseGenPanel";
 import { DeleteForm } from "@/components/DeleteForm";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -170,9 +171,12 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
         </section>
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">
-            {t("console.workforce.courses.detail.lessons.title", undefined, "Lessons")}
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold">
+              {t("console.workforce.courses.detail.lessons.title", undefined, "Lessons")}
+            </h2>
+            <AICourseGenPanel courseId={c.id} />
+          </div>
           <ol className="mt-3 space-y-2">
             {lessonList.map((l) => (
               <li key={l.id} className="rounded-md border border-[var(--p-border)] p-3">

@@ -4,6 +4,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { MetricCard } from "@/components/ui/MetricCard";
 import { DataTable } from "@/components/DataTable";
 import { RouteTabs } from "@/components/ui/RouteTabs";
 import { requireSession } from "@/lib/auth";
@@ -83,6 +84,28 @@ export default async function Page({
     listProjectAssignments(session.orgId, projectId),
     countProjectAssignments(session.orgId, projectId),
   ]);
+
+  // Scan analytics — aggregate assignment_events of kind "scan" for this
+  // project's assignments. Bizzabo Klik parity: real-time gate activity metrics.
+  type ScanEventRow = { result: string };
+  const assignmentIds = rows.map((r) => r.id);
+  let scanTotals: Record<string, number> = {};
+  if (assignmentIds.length > 0) {
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { data: scanEvents } = await supabase
+      .from("assignment_events")
+      .select("result")
+      .eq("org_id", session.orgId)
+      .eq("event_kind", "scan")
+      .in("assignment_id", assignmentIds)
+      .gte("created_at", since);
+    for (const e of ((scanEvents ?? []) as ScanEventRow[])) {
+      if (e.result) scanTotals[e.result] = (scanTotals[e.result] ?? 0) + 1;
+    }
+  }
+  const totalScans = Object.values(scanTotals).reduce((s, n) => s + n, 0);
+  const acceptedScans = scanTotals["accepted"] ?? 0;
+  const rejectedScans = totalScans - acceptedScans;
 
   // Hydrate party names across all three kinds in parallel.
   const userIds = Array.from(new Set(rows.filter((r) => r.party_user_id).map((r) => r.party_user_id!)));
@@ -170,6 +193,32 @@ export default async function Page({
           ]}
           className="border-b border-[var(--p-border)]"
         />
+        {/* Scan Activity — real-time gate scan metrics (Bizzabo Klik parity).
+            Pulls from assignment_events[kind=scan] for the last 30 days.
+            Only shown when there are scan-capable assignments on this project. */}
+        {totalScans > 0 && (
+          <div>
+            <div className="text-[10px] font-mono text-[var(--p-text-3)] uppercase tracking-wider mb-2">
+              {t("console.projects.advancing.assignments.scanActivity", undefined, "Scan Activity — Last 30 Days")}
+            </div>
+            <div className="metric-grid-3">
+              <MetricCard
+                label={t("console.projects.advancing.assignments.metrics.totalScans", undefined, "Total Scans")}
+                value={String(totalScans)}
+                accent
+              />
+              <MetricCard
+                label={t("console.projects.advancing.assignments.metrics.accepted", undefined, "Accepted")}
+                value={String(acceptedScans)}
+              />
+              <MetricCard
+                label={t("console.projects.advancing.assignments.metrics.rejected", undefined, "Rejected")}
+                value={String(rejectedScans)}
+              />
+            </div>
+          </div>
+        )}
+
         {/* List ⇄ Board view toggle. Board groups by fulfillment_state and
             drag-transitions through the same NEXT_FULFILLMENT_STATES guard. */}
         <div className="flex justify-end">

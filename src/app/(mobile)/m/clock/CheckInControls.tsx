@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { KIcon } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { clockIn, clockOut } from "./actions";
+import { ShiftPulseForm } from "./ShiftPulseForm";
 
 /** Format an elapsed millisecond span as HH:MM:SS. */
 function elapsed(fromIso: string | null): string {
@@ -35,6 +36,7 @@ export function CheckInControls({
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [now, setNow] = useState(() => elapsed(openSince));
+  const [pulseEntryId, setPulseEntryId] = useState<string | null>(null);
 
   const clockedIn = openSince != null;
 
@@ -58,36 +60,45 @@ export function CheckInControls({
         setError(res.error);
         return;
       }
+      if (clockedIn && res?.entryId) {
+        setPulseEntryId(res.entryId);
+      }
       router.refresh();
     });
   };
 
   return (
-    <div className="te-clock">
-      <div className="wl" style={{ justifyContent: "center" }}>
-        <KIcon name="MapPin" size={12} style={{ color: "var(--p-success)" }} />{" "}
-        {zoneName ?? t("m.clock.noZone", undefined, "No Zone Set")}
-      </div>
-      <div className="tcv">{now}</div>
-      {error && (
-        <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
-          {error}
+    <>
+      <div className="te-clock">
+        <div className="wl" style={{ justifyContent: "center" }}>
+          <KIcon name="MapPin" size={12} style={{ color: "var(--p-success)" }} />{" "}
+          {zoneName ?? t("m.clock.noZone", undefined, "No Zone Set")}
         </div>
-      )}
-      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-        <button
-          type="button"
-          className={clockedIn ? "ps-btn ps-btn--danger ps-btn--lg" : "ps-btn ps-btn--cta ps-btn--lg"}
-          disabled={pending}
-          onClick={toggle}
-        >
-          {pending
-            ? t("m.clock.working", undefined, "Working…")
-            : clockedIn
-              ? t("m.clock.clockOut", undefined, "Clock Out")
-              : t("m.clock.clockIn", undefined, "Clock In")}
-        </button>
+        <div className="tcv">{now}</div>
+        {error && (
+          <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
+            {error}
+          </div>
+        )}
+        <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+          <button
+            type="button"
+            className={clockedIn ? "ps-btn ps-btn--danger ps-btn--lg" : "ps-btn ps-btn--cta ps-btn--lg"}
+            disabled={pending}
+            onClick={toggle}
+          >
+            {pending
+              ? t("m.clock.working", undefined, "Working…")
+              : clockedIn
+                ? t("m.clock.clockOut", undefined, "Clock Out")
+                : t("m.clock.clockIn", undefined, "Clock In")}
+          </button>
+        </div>
       </div>
-    </div>
+
+      {pulseEntryId && (
+        <ShiftPulseForm entryId={pulseEntryId} onDone={() => setPulseEntryId(null)} />
+      )}
+    </>
   );
 }

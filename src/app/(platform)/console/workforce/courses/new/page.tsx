@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { getRequestT } from "@/lib/i18n/request";
 import { createCourseAction } from "./actions";
+import { GenerateCoursePanel } from "./GenerateCoursePanel";
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -12,7 +13,7 @@ export default async function Page() {
         eyebrow={t("console.workforce.courses.new.eyebrow", undefined, "Training")}
         title={t("console.workforce.courses.new.title", undefined, "New Course")}
       />
-      <div className="page-content max-w-2xl">
+      <div className="page-content max-w-2xl space-y-8">
         <FormShell
           action={createCourseAction}
           cancelHref="/console/workforce/courses"
@@ -48,6 +49,33 @@ export default async function Page() {
             maxLength={80}
           />
         </FormShell>
+
+        <div className="relative">
+          <div className="absolute inset-x-0 top-0 flex items-center">
+            <div className="w-full border-t border-[var(--p-border)]" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-[var(--p-bg)] px-3 text-xs text-[var(--p-text-3)]">
+              {t("console.workforce.courses.new.orGenerateWithAI", undefined, "or generate with AI")}
+            </span>
+          </div>
+        </div>
+
+        <div className="surface rounded-xl p-5">
+          <div className="mb-3">
+            <div className="text-[10px] font-mono text-[var(--p-text-3)] uppercase tracking-wider mb-0.5">
+              {t("console.workforce.courses.new.aiCourseCreator", undefined, "AI Course Creator")}
+            </div>
+            <p className="text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.workforce.courses.new.aiCourseCreatorHint",
+                undefined,
+                "Describe your topic and we'll generate a full course — lessons and quiz — in seconds.",
+              )}
+            </p>
+          </div>
+          <GenerateCoursePanel />
+        </div>
       </div>
     </>
   );

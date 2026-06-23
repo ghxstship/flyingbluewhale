@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
 
-export type State = { error?: string; ok?: boolean } | null;
+export type State = { error?: string; ok?: boolean; entryId?: string } | null;
 
 /**
  * Open a time entry for the signed-in user. No-op if one is already open
@@ -71,6 +71,47 @@ export async function clockOut(): Promise<State> {
     return { error: error.message };
   }
   revalidatePath("/m/clock");
+  return { ok: true, entryId: open.id as string };
+}
+
+/**
+ * Submit end-of-shift feedback (Shift Pulse). One row per time entry;
+ * duplicate submissions are rejected by the UNIQUE constraint on time_entry_id.
+ * Mood 1–5 (1 = rough, 5 = great); highlights and blockers are optional text.
+ */
+export async function submitShiftPulse(
+  entryId: string,
+  mood: number,
+  highlights: string,
+  blockers: string,
+): Promise<State> {
+  const session = await requireSession();
+  if (mood < 1 || mood > 5 || !Number.isInteger(mood)) return { error: "Invalid mood value." };
+
+  const supabase = await createClient();
+
+  const { data: entry } = await supabase
+    .from("time_entries")
+    .select("id")
+    .eq("id", entryId)
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!entry) return { error: "Time entry not found." };
+
+  const { error } = await supabase.from("shift_feedback").insert({
+    org_id: session.orgId,
+    time_entry_id: entryId,
+    created_by: session.userId,
+    mood,
+    highlights: highlights.trim() || null,
+    blockers: blockers.trim() || null,
+  });
+  if (error) {
+    if (error.code === "23505") return { error: "You've already submitted feedback for this shift." };
+    log.error("m.clock.shift_pulse_failed", { err: error.message });
+    return { error: error.message };
+  }
   return { ok: true };
 }
 

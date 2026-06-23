@@ -68,3 +68,10 @@ export type { GanttViewProps, GanttLane, GanttItem, GanttZoom } from "./GanttVie
 export { DataViewSwitcher } from "./DataViewSwitcher";
 export { resolveDataView } from "./resolveDataView";
 export type { DataViewKind } from "./DataViewKind";
+
+// Phase 3.8 — DataView (the ONE canonical collection wrapper). Composes the
+// view toggle + DataTableInteractive (table) + KanbanBoard/GalleryView +
+// a right-Sheet row-peek drawer. New list pages mount this instead of
+// hand-wiring search/filter/bulk/peek per page.
+export { DataView } from "./DataView";
+export type { DataViewProps, DataViewPeek, DataViewBoard, DataViewGallery } from "./DataView";

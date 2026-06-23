@@ -116,7 +116,7 @@ export default async function ApiDocsPage() {
             {t("apiDocs.downloadOpenApi", undefined, "Download OpenAPI 3.1 · JSON")}
           </a>
           <a
-            href="/console/settings/api"
+            href="/studio/settings/api"
             className="rounded-md border border-[var(--p-border)] px-3 py-2 hover:bg-[var(--p-surface-2)]"
           >
             {t("apiDocs.manageApiKeys", undefined, "Manage API keys")}

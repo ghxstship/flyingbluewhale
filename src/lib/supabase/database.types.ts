@@ -680,6 +680,134 @@ export type Database = {
           },
         ]
       }
+      achievement_awards: {
+        Row: {
+          achievement_id: string
+          awarded_at: string
+          id: string
+          note: string | null
+          org_id: string
+          source: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          awarded_at?: string
+          id?: string
+          note?: string | null
+          org_id: string
+          source?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          awarded_at?: string
+          id?: string
+          note?: string | null
+          org_id?: string
+          source?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievement_awards_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "achievement_awards_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      achievements: {
+        Row: {
+          achievement_state: string
+          code: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          icon_key: string | null
+          id: string
+          name: string
+          org_id: string
+          points: number
+          tone: string
+          updated_at: string
+        }
+        Insert: {
+          achievement_state?: string
+          code: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          icon_key?: string | null
+          id?: string
+          name: string
+          org_id: string
+          points?: number
+          tone?: string
+          updated_at?: string
+        }
+        Update: {
+          achievement_state?: string
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          icon_key?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          points?: number
+          tone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievements_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      activity: {
+        Row: {
+          actor_id: string
+          created_at: string
+          id: string
+          object_kind: string
+          object_ref: string
+          verb: string
+        }
+        Insert: {
+          actor_id: string
+          created_at?: string
+          id?: string
+          object_kind: string
+          object_ref: string
+          verb: string
+        }
+        Update: {
+          actor_id?: string
+          created_at?: string
+          id?: string
+          object_kind?: string
+          object_ref?: string
+          verb?: string
+        }
+        Relationships: []
+      }
       activity_categories: {
         Row: {
           active: boolean
@@ -2007,6 +2135,178 @@ export type Database = {
             columns: ["policy_id"]
             isOneToOne: false
             referencedRelation: "approval_policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_attempts: {
+        Row: {
+          answers: Json
+          assessment_id: string
+          attempt_state: string
+          id: string
+          org_id: string
+          passed: boolean
+          score_pct: number
+          started_at: string
+          submitted_at: string | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          assessment_id: string
+          attempt_state?: string
+          id?: string
+          org_id: string
+          passed?: boolean
+          score_pct?: number
+          started_at?: string
+          submitted_at?: string | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          assessment_id?: string
+          attempt_state?: string
+          id?: string
+          org_id?: string
+          passed?: boolean
+          score_pct?: number
+          started_at?: string
+          submitted_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_attempts_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_attempts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessment_questions: {
+        Row: {
+          assessment_id: string
+          correct_index: number
+          created_at: string
+          id: string
+          options: Json
+          org_id: string
+          points: number
+          prompt: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          assessment_id: string
+          correct_index?: number
+          created_at?: string
+          id?: string
+          options?: Json
+          org_id: string
+          points?: number
+          prompt: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          assessment_id?: string
+          correct_index?: number
+          created_at?: string
+          id?: string
+          options?: Json
+          org_id?: string
+          points?: number
+          prompt?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_questions_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_questions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessments: {
+        Row: {
+          assessment_state: string
+          course_id: string | null
+          created_at: string
+          deleted_at: string | null
+          id: string
+          lesson_id: string | null
+          max_attempts: number | null
+          org_id: string
+          pass_pct: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_state?: string
+          course_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          max_attempts?: number | null
+          org_id: string
+          pass_pct?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_state?: string
+          course_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          max_attempts?: number | null
+          org_id?: string
+          pass_pct?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessments_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -4436,6 +4736,127 @@ export type Database = {
           },
         ]
       }
+      certification_holders: {
+        Row: {
+          accreditation_state: string
+          certification_id: string
+          created_at: string
+          expires_on: string | null
+          id: string
+          issued_at: string
+          last_recert_at: string | null
+          next_recert_due: string | null
+          org_id: string
+          source_course_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accreditation_state?: string
+          certification_id: string
+          created_at?: string
+          expires_on?: string | null
+          id?: string
+          issued_at?: string
+          last_recert_at?: string | null
+          next_recert_due?: string | null
+          org_id: string
+          source_course_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accreditation_state?: string
+          certification_id?: string
+          created_at?: string
+          expires_on?: string | null
+          id?: string
+          issued_at?: string
+          last_recert_at?: string | null
+          next_recert_due?: string | null
+          org_id?: string
+          source_course_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certification_holders_certification_id_fkey"
+            columns: ["certification_id"]
+            isOneToOne: false
+            referencedRelation: "legend_certifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certification_holders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certification_holders_source_course_id_fkey"
+            columns: ["source_course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      certification_recerts: {
+        Row: {
+          decided_at: string | null
+          decided_by: string | null
+          evidence_url: string | null
+          holder_id: string
+          id: string
+          note: string | null
+          org_id: string
+          recert_state: string
+          submitted_at: string
+          user_id: string
+        }
+        Insert: {
+          decided_at?: string | null
+          decided_by?: string | null
+          evidence_url?: string | null
+          holder_id: string
+          id?: string
+          note?: string | null
+          org_id: string
+          recert_state?: string
+          submitted_at?: string
+          user_id: string
+        }
+        Update: {
+          decided_at?: string | null
+          decided_by?: string | null
+          evidence_url?: string | null
+          holder_id?: string
+          id?: string
+          note?: string | null
+          org_id?: string
+          recert_state?: string
+          submitted_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certification_recerts_holder_id_fkey"
+            columns: ["holder_id"]
+            isOneToOne: false
+            referencedRelation: "certification_holders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certification_recerts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certifications: {
         Row: {
           category: string | null
@@ -5216,6 +5637,152 @@ export type Database = {
           },
         ]
       }
+      community_comments: {
+        Row: {
+          author_id: string | null
+          body_html: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          org_id: string
+          post_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body_html?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          post_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body_html?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          post_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_comments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          author_id: string | null
+          body_html: string
+          category: string
+          comment_count: number
+          created_at: string
+          deleted_at: string | null
+          id: string
+          like_count: number
+          org_id: string
+          pinned: boolean
+          post_state: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body_html?: string
+          category?: string
+          comment_count?: number
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          like_count?: number
+          org_id: string
+          pinned?: boolean
+          post_state?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body_html?: string
+          category?: string
+          comment_count?: number
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          like_count?: number
+          org_id?: string
+          pinned?: boolean
+          post_state?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          org_id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          org_id: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          org_id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_reactions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_addenda: {
         Row: {
           body: string
@@ -5606,6 +6173,8 @@ export type Database = {
           ip: unknown
           org_id: string
           routing_order: number
+          sign_token: string | null
+          signature_image: string | null
           signed_at: string | null
           signed_name: string | null
           signed_title: string | null
@@ -5623,6 +6192,8 @@ export type Database = {
           ip?: unknown
           org_id: string
           routing_order?: number
+          sign_token?: string | null
+          signature_image?: string | null
           signed_at?: string | null
           signed_name?: string | null
           signed_title?: string | null
@@ -5640,6 +6211,8 @@ export type Database = {
           ip?: unknown
           org_id?: string
           routing_order?: number
+          sign_token?: string | null
+          signature_image?: string | null
           signed_at?: string | null
           signed_name?: string | null
           signed_title?: string | null
@@ -6905,6 +7478,57 @@ export type Database = {
           },
         ]
       }
+      course_enrollments: {
+        Row: {
+          completed_at: string | null
+          course_id: string
+          created_at: string
+          enrollment_state: string
+          id: string
+          org_id: string
+          progress_pct: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          course_id: string
+          created_at?: string
+          enrollment_state?: string
+          id?: string
+          org_id: string
+          progress_pct?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          course_id?: string
+          created_at?: string
+          enrollment_state?: string
+          id?: string
+          org_id?: string
+          progress_pct?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_enrollments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_lessons: {
         Row: {
           body: string | null
@@ -6939,6 +7563,51 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_modules: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          org_id: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          org_id: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_modules_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -7147,6 +7816,163 @@ export type Database = {
           },
           {
             foreignKeyName: "credentials_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_ledger: {
+        Row: {
+          created_at: string
+          delta: number
+          id: string
+          org_id: string
+          reason: string
+          ref_id: string | null
+          ref_kind: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          delta: number
+          id?: string
+          org_id: string
+          reason: string
+          ref_id?: string | null
+          ref_kind?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          delta?: number
+          id?: string
+          org_id?: string
+          reason?: string
+          ref_id?: string | null
+          ref_kind?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_ledger_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_orders: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          credit_product_id: string
+          credits: number
+          currency: string
+          id: string
+          order_state: string
+          org_id: string
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          credit_product_id: string
+          credits: number
+          currency?: string
+          id?: string
+          order_state?: string
+          org_id: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          credit_product_id?: string
+          credits?: number
+          currency?: string
+          id?: string
+          order_state?: string
+          org_id?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_orders_credit_product_id_fkey"
+            columns: ["credit_product_id"]
+            isOneToOne: false
+            referencedRelation: "credit_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_products: {
+        Row: {
+          created_at: string
+          credits: number
+          currency: string
+          deleted_at: string | null
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          price_cents: number
+          product_state: string
+          sku: string
+          stripe_price_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          credits: number
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          price_cents: number
+          product_state?: string
+          sku: string
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          price_cents?: number
+          product_state?: string
+          sku?: string
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_products_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -8592,6 +9418,7 @@ export type Database = {
       deliverables: {
         Row: {
           atom_id: string | null
+          cell_owner_id: string | null
           closed_at: string | null
           closed_by: string | null
           created_at: string
@@ -8620,6 +9447,7 @@ export type Database = {
         }
         Insert: {
           atom_id?: string | null
+          cell_owner_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
@@ -8648,6 +9476,7 @@ export type Database = {
         }
         Update: {
           atom_id?: string | null
+          cell_owner_id?: string | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
@@ -9966,6 +10795,75 @@ export type Database = {
           },
         ]
       }
+      event_listings: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          ends_at: string | null
+          event_id: string | null
+          hero_image: string | null
+          id: string
+          listing_state: string
+          org_id: string
+          slug: string
+          starts_at: string | null
+          summary: string | null
+          title: string
+          updated_at: string
+          venue_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ends_at?: string | null
+          event_id?: string | null
+          hero_image?: string | null
+          id?: string
+          listing_state?: string
+          org_id: string
+          slug: string
+          starts_at?: string | null
+          summary?: string | null
+          title: string
+          updated_at?: string
+          venue_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ends_at?: string | null
+          event_id?: string | null
+          hero_image?: string | null
+          id?: string
+          listing_state?: string
+          org_id?: string
+          slug?: string
+          starts_at?: string | null
+          summary?: string | null
+          title?: string
+          updated_at?: string
+          venue_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_listings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_listings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_milestones: {
         Row: {
           created_at: string
@@ -10120,6 +11018,72 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_ticket_types: {
+        Row: {
+          created_at: string
+          currency: string
+          deleted_at: string | null
+          description: string | null
+          event_listing_id: string
+          id: string
+          name: string
+          org_id: string
+          price_cents: number
+          quantity_sold: number
+          quantity_total: number
+          sales_state: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          event_listing_id: string
+          id?: string
+          name: string
+          org_id: string
+          price_cents?: number
+          quantity_sold?: number
+          quantity_total?: number
+          sales_state?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          event_listing_id?: string
+          id?: string
+          name?: string
+          org_id?: string
+          price_cents?: number
+          quantity_sold?: number
+          quantity_total?: number
+          sales_state?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ticket_types_event_listing_id_fkey"
+            columns: ["event_listing_id"]
+            isOneToOne: false
+            referencedRelation: "event_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ticket_types_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -10881,6 +11845,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      follow: {
+        Row: {
+          created_at: string
+          followee_id: string
+          follower_id: string
+        }
+        Insert: {
+          created_at?: string
+          followee_id: string
+          follower_id: string
+        }
+        Update: {
+          created_at?: string
+          followee_id?: string
+          follower_id?: string
+        }
+        Relationships: []
       }
       form_defs: {
         Row: {
@@ -14833,6 +15815,510 @@ export type Database = {
           },
         ]
       }
+      legend_certifications: {
+        Row: {
+          certification_state: string
+          code: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          recert_window_days: number
+          updated_at: string
+          validity_months: number | null
+        }
+        Insert: {
+          certification_state?: string
+          code: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          recert_window_days?: number
+          updated_at?: string
+          validity_months?: number | null
+        }
+        Update: {
+          certification_state?: string
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          recert_window_days?: number
+          updated_at?: string
+          validity_months?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_certifications_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legend_course_reviews: {
+        Row: {
+          body: string | null
+          course_id: string
+          created_at: string
+          id: string
+          org_id: string
+          rating: number
+          review_state: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          course_id: string
+          created_at?: string
+          id?: string
+          org_id: string
+          rating: number
+          review_state?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          course_id?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          rating?: number
+          review_state?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_course_reviews_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legend_course_reviews_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legend_courses: {
+        Row: {
+          course_state: string
+          cover_path: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          grants_certification_id: string | null
+          id: string
+          org_id: string
+          points_reward: number
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_state?: string
+          cover_path?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          grants_certification_id?: string | null
+          id?: string
+          org_id: string
+          points_reward?: number
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_state?: string
+          cover_path?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          grants_certification_id?: string | null
+          id?: string
+          org_id?: string
+          points_reward?: number
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_courses_grants_certification_fk"
+            columns: ["grants_certification_id"]
+            isOneToOne: false
+            referencedRelation: "legend_certifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legend_courses_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legend_crew_members: {
+        Row: {
+          created_at: string
+          crew_id: string
+          crew_role: string
+          id: string
+          org_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          crew_id: string
+          crew_role?: string
+          id?: string
+          org_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          crew_id?: string
+          crew_role?: string
+          id?: string
+          org_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_crew_members_crew_id_fkey"
+            columns: ["crew_id"]
+            isOneToOne: false
+            referencedRelation: "legend_crews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legend_crew_members_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legend_crews: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          crew_state: string
+          deleted_at: string | null
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          crew_state?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          crew_state?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_crews_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legend_live_sessions: {
+        Row: {
+          capacity: number | null
+          course_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          duration_minutes: number
+          host_id: string | null
+          host_name: string | null
+          id: string
+          join_url: string | null
+          kind: string
+          location: string | null
+          org_id: string
+          session_state: string
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          course_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          duration_minutes?: number
+          host_id?: string | null
+          host_name?: string | null
+          id?: string
+          join_url?: string | null
+          kind?: string
+          location?: string | null
+          org_id: string
+          session_state?: string
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          course_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          duration_minutes?: number
+          host_id?: string | null
+          host_name?: string | null
+          id?: string
+          join_url?: string | null
+          kind?: string
+          location?: string | null
+          org_id?: string
+          session_state?: string
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_live_sessions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legend_live_sessions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legend_session_registrations: {
+        Row: {
+          created_at: string
+          id: string
+          org_id: string
+          registration_state: string
+          session_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          org_id: string
+          registration_state?: string
+          session_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          org_id?: string
+          registration_state?: string
+          session_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legend_session_registrations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legend_session_registrations_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "legend_live_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_progress: {
+        Row: {
+          completed_at: string | null
+          enrollment_id: string
+          id: string
+          lesson_id: string
+          org_id: string
+          position_seconds: number
+          progress_state: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          enrollment_id: string
+          id?: string
+          lesson_id: string
+          org_id: string
+          position_seconds?: number
+          progress_state?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          enrollment_id?: string
+          id?: string
+          lesson_id?: string
+          org_id?: string
+          position_seconds?: number
+          progress_state?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "course_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_progress_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          body_html: string | null
+          course_id: string
+          created_at: string
+          deleted_at: string | null
+          duration_seconds: number
+          id: string
+          kind: string
+          lesson_state: string
+          media_url: string | null
+          module_id: string | null
+          org_id: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body_html?: string | null
+          course_id: string
+          created_at?: string
+          deleted_at?: string | null
+          duration_seconds?: number
+          id?: string
+          kind?: string
+          lesson_state?: string
+          media_url?: string | null
+          module_id?: string | null
+          org_id: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string | null
+          course_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          duration_seconds?: number
+          id?: string
+          kind?: string
+          lesson_state?: string
+          media_url?: string | null
+          module_id?: string | null
+          org_id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "legend_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lien_waivers: {
         Row: {
           amount: number
@@ -14952,6 +16438,118 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      linked_pass: {
+        Row: {
+          connection_id: string | null
+          created_at: string
+          event_at: string | null
+          event_name: string
+          id: string
+          pass_state: string
+          qr_ref: string | null
+          seat: string | null
+          tier: string | null
+          user_id: string
+          venue_name: string | null
+        }
+        Insert: {
+          connection_id?: string | null
+          created_at?: string
+          event_at?: string | null
+          event_name: string
+          id?: string
+          pass_state?: string
+          qr_ref?: string | null
+          seat?: string | null
+          tier?: string | null
+          user_id: string
+          venue_name?: string | null
+        }
+        Update: {
+          connection_id?: string | null
+          created_at?: string
+          event_at?: string | null
+          event_name?: string
+          id?: string
+          pass_state?: string
+          qr_ref?: string | null
+          seat?: string | null
+          tier?: string | null
+          user_id?: string
+          venue_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "linked_pass_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "provider_connection"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      list: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          slug: string
+          visibility: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          slug: string
+          visibility?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          slug?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      list_item: {
+        Row: {
+          created_at: string
+          id: string
+          item_kind: string
+          item_ref: string
+          list_id: string
+          position: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_kind: string
+          item_ref: string
+          list_id: string
+          position?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_kind?: string
+          item_ref?: string
+          list_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_item_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "list"
             referencedColumns: ["id"]
           },
         ]
@@ -15129,6 +16727,47 @@ export type Database = {
             columns: ["roommate_assignment_id"]
             isOneToOne: false
             referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loyalty_tiers: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          org_id: string
+          sort_order: number
+          threshold: number
+          tone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          org_id: string
+          sort_order?: number
+          threshold?: number
+          tone?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          org_id?: string
+          sort_order?: number
+          threshold?: number
+          tone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_tiers_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -16503,6 +18142,50 @@ export type Database = {
           },
         ]
       }
+      notes: {
+        Row: {
+          body_html: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          note_state: string
+          org_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body_html?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          note_state?: string
+          org_id: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          note_state?: string
+          org_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_deliveries: {
         Row: {
           attempts: number
@@ -17248,6 +18931,79 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onsite_order: {
+        Row: {
+          created_at: string
+          id: string
+          items: Json
+          order_state: string
+          project_id: string | null
+          total_cents: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          items?: Json
+          order_state?: string
+          project_id?: string | null
+          total_cents?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          items?: Json
+          order_state?: string
+          project_id?: string | null
+          total_cents?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onsite_order_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      onsite_points: {
+        Row: {
+          created_at: string
+          id: string
+          points: number
+          project_id: string | null
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points?: number
+          project_id?: string | null
+          reason: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points?: number
+          project_id?: string | null
+          reason?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onsite_points_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -18159,6 +19915,7 @@ export type Database = {
           default_timezone: string
           id: string
           insights_opt_in: boolean
+          is_top_organizer: boolean
           logo_url: string | null
           marketplace_enabled: boolean
           marketplace_settings: Json
@@ -18182,6 +19939,7 @@ export type Database = {
           default_timezone?: string
           id?: string
           insights_opt_in?: boolean
+          is_top_organizer?: boolean
           logo_url?: string | null
           marketplace_enabled?: boolean
           marketplace_settings?: Json
@@ -18205,6 +19963,7 @@ export type Database = {
           default_timezone?: string
           id?: string
           insights_opt_in?: boolean
+          is_top_organizer?: boolean
           logo_url?: string | null
           marketplace_enabled?: boolean
           marketplace_settings?: Json
@@ -19886,6 +21645,50 @@ export type Database = {
           },
         ]
       }
+      points_ledger: {
+        Row: {
+          created_at: string
+          id: string
+          org_id: string
+          points: number
+          reason: string
+          ref_id: string | null
+          ref_kind: string | null
+          source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          org_id: string
+          points: number
+          reason: string
+          ref_id?: string | null
+          ref_kind?: string | null
+          source?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          org_id?: string
+          points?: number
+          reason?: string
+          ref_id?: string | null
+          ref_kind?: string | null
+          source?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "points_ledger_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       policy_evaluation_log: {
         Row: {
           action: string
@@ -20086,6 +21889,38 @@ export type Database = {
           },
         ]
       }
+      post: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          scene_id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          id?: string
+          scene_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          scene_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_scene_id_fkey"
+            columns: ["scene_id"]
+            isOneToOne: false
+            referencedRelation: "scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_mortems: {
         Row: {
           conducted_at: string | null
@@ -20225,6 +22060,32 @@ export type Database = {
             columns: ["questionnaire_id"]
             isOneToOne: false
             referencedRelation: "prequalification_questionnaires"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      presence: {
+        Row: {
+          updated_at: string
+          user_id: string
+          venue_zone_id: string | null
+        }
+        Insert: {
+          updated_at?: string
+          user_id: string
+          venue_zone_id?: string | null
+        }
+        Update: {
+          updated_at?: string
+          user_id?: string
+          venue_zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "presence_venue_zone_id_fkey"
+            columns: ["venue_zone_id"]
+            isOneToOne: false
+            referencedRelation: "venue_zones"
             referencedColumns: ["id"]
           },
         ]
@@ -21924,6 +23785,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      provider_connection: {
+        Row: {
+          created_at: string
+          id: string
+          last_synced: string | null
+          provider: string
+          sync_state: string
+          token_ref: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_synced?: string | null
+          provider: string
+          sync_state?: string
+          token_ref?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_synced?: string | null
+          provider?: string
+          sync_state?: string
+          token_ref?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       punch_items: {
         Row: {
@@ -23662,6 +25553,135 @@ export type Database = {
           },
         ]
       }
+      revenue_orders: {
+        Row: {
+          buyer_email: string | null
+          buyer_name: string | null
+          checkout_session_id: string | null
+          created_at: string
+          currency: string
+          deleted_at: string | null
+          event_listing_id: string | null
+          id: string
+          order_source: string
+          order_state: string
+          org_id: string
+          placed_at: string
+          reference: string
+          subtotal_cents: number
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          buyer_email?: string | null
+          buyer_name?: string | null
+          checkout_session_id?: string | null
+          created_at?: string
+          currency?: string
+          deleted_at?: string | null
+          event_listing_id?: string | null
+          id?: string
+          order_source: string
+          order_state?: string
+          org_id: string
+          placed_at?: string
+          reference: string
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          buyer_email?: string | null
+          buyer_name?: string | null
+          checkout_session_id?: string | null
+          created_at?: string
+          currency?: string
+          deleted_at?: string | null
+          event_listing_id?: string | null
+          id?: string
+          order_source?: string
+          order_state?: string
+          org_id?: string
+          placed_at?: string
+          reference?: string
+          subtotal_cents?: number
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revenue_orders_event_listing_id_fkey"
+            columns: ["event_listing_id"]
+            isOneToOne: false
+            referencedRelation: "event_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revenue_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      revenue_transactions: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string
+          id: string
+          occurred_at: string
+          order_id: string | null
+          org_id: string
+          processor: string
+          processor_ref: string | null
+          txn_kind: string
+          txn_state: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          currency?: string
+          id?: string
+          occurred_at?: string
+          order_id?: string | null
+          org_id: string
+          processor?: string
+          processor_ref?: string | null
+          txn_kind: string
+          txn_state?: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          occurred_at?: string
+          order_id?: string | null
+          org_id?: string
+          processor?: string
+          processor_ref?: string | null
+          txn_kind?: string
+          txn_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revenue_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "revenue_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revenue_transactions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           body: string | null
@@ -24928,6 +26948,98 @@ export type Database = {
         }
         Relationships: []
       }
+      scene: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+          scene_state: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          scene_state?: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          scene_state?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      scene_event: {
+        Row: {
+          created_at: string
+          project_id: string
+          scene_id: string
+        }
+        Insert: {
+          created_at?: string
+          project_id: string
+          scene_id: string
+        }
+        Update: {
+          created_at?: string
+          project_id?: string
+          scene_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scene_event_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scene_event_scene_id_fkey"
+            columns: ["scene_id"]
+            isOneToOne: false
+            referencedRelation: "scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scene_member: {
+        Row: {
+          created_at: string
+          member_role: string
+          scene_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          member_role?: string
+          scene_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          member_role?: string
+          scene_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scene_member_scene_id_fkey"
+            columns: ["scene_id"]
+            isOneToOne: false
+            referencedRelation: "scene"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       schedule_activities: {
         Row: {
           baseline_id: string
@@ -25600,6 +27712,44 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      set_time: {
+        Row: {
+          created_at: string
+          ends_at: string | null
+          id: string
+          performer: string
+          project_id: string | null
+          stage: string
+          starts_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          performer: string
+          project_id?: string | null
+          stage: string
+          starts_at: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          performer?: string
+          project_id?: string | null
+          stage?: string
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "set_time_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -29918,6 +32068,7 @@ export type Database = {
           created_by: string | null
           description: string | null
           due_at: string | null
+          effort: number | null
           id: string
           org_id: string
           priority: number
@@ -29933,6 +32084,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           due_at?: string | null
+          effort?: number | null
           id?: string
           org_id: string
           priority?: number
@@ -29948,6 +32100,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           due_at?: string | null
+          effort?: number | null
           id?: string
           org_id?: string
           priority?: number
@@ -30538,10 +32691,13 @@ export type Database = {
           id: string
           org_id: string
           project_id: string | null
+          pulse_note: string | null
+          pulse_rating: number | null
           punch_lat: number | null
           punch_lng: number | null
           rate_cents: number | null
           shift_id: string | null
+          shift_tags: string[]
           started_at: string
           timesheet_id: string | null
           updated_at: string
@@ -30562,10 +32718,13 @@ export type Database = {
           id?: string
           org_id: string
           project_id?: string | null
+          pulse_note?: string | null
+          pulse_rating?: number | null
           punch_lat?: number | null
           punch_lng?: number | null
           rate_cents?: number | null
           shift_id?: string | null
+          shift_tags?: string[]
           started_at: string
           timesheet_id?: string | null
           updated_at?: string
@@ -30586,10 +32745,13 @@ export type Database = {
           id?: string
           org_id?: string
           project_id?: string | null
+          pulse_note?: string | null
+          pulse_rating?: number | null
           punch_lat?: number | null
           punch_lng?: number | null
           rate_cents?: number | null
           shift_id?: string | null
+          shift_tags?: string[]
           started_at?: string
           timesheet_id?: string | null
           updated_at?: string
@@ -33350,6 +35512,57 @@ export type Database = {
           },
         ]
       }
+      venue_menu_item: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_available: boolean
+          name: string
+          org_id: string
+          price_cents: number
+          project_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_available?: boolean
+          name: string
+          org_id: string
+          price_cents?: number
+          project_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_available?: boolean
+          name?: string
+          org_id?: string
+          price_cents?: number
+          project_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_menu_item_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_menu_item_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       venue_tables: {
         Row: {
           created_at: string
@@ -33793,6 +36006,101 @@ export type Database = {
             columns: ["delegation_id"]
             isOneToOne: false
             referencedRelation: "delegations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voucher_redemptions: {
+        Row: {
+          credits: number
+          id: string
+          org_id: string
+          redeemed_at: string
+          user_id: string
+          voucher_id: string
+        }
+        Insert: {
+          credits: number
+          id?: string
+          org_id: string
+          redeemed_at?: string
+          user_id: string
+          voucher_id: string
+        }
+        Update: {
+          credits?: number
+          id?: string
+          org_id?: string
+          redeemed_at?: string
+          user_id?: string
+          voucher_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voucher_redemptions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "voucher_redemptions_voucher_id_fkey"
+            columns: ["voucher_id"]
+            isOneToOne: false
+            referencedRelation: "vouchers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vouchers: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          credits: number
+          deleted_at: string | null
+          expires_on: string | null
+          id: string
+          max_redemptions: number
+          org_id: string
+          redeemed_count: number
+          updated_at: string
+          voucher_state: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          credits: number
+          deleted_at?: string | null
+          expires_on?: string | null
+          id?: string
+          max_redemptions?: number
+          org_id: string
+          redeemed_count?: number
+          updated_at?: string
+          voucher_state?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          credits?: number
+          deleted_at?: string | null
+          expires_on?: string | null
+          id?: string
+          max_redemptions?: number
+          org_id?: string
+          redeemed_count?: number
+          updated_at?: string
+          voucher_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vouchers_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -36996,6 +39304,7 @@ export type Database = {
           genre_tags: string[] | null
           hero_url: string | null
           id: string | null
+          is_top_organizer: boolean | null
           is_verified: boolean | null
           monthly_listeners: number | null
           photo_url: string | null
@@ -37006,48 +39315,6 @@ export type Database = {
           travel_radius_km: number | null
           video_reel_url: string | null
         }
-        Insert: {
-          act_name?: string | null
-          bio?: string | null
-          created_at?: string | null
-          currency?: string | null
-          fee_max_cents?: number | null
-          fee_min_cents?: number | null
-          follower_count?: number | null
-          genre_tags?: string[] | null
-          hero_url?: string | null
-          id?: string | null
-          is_verified?: never
-          monthly_listeners?: number | null
-          photo_url?: string | null
-          public_handle?: string | null
-          rating_avg?: number | null
-          rating_count?: number | null
-          tagline?: string | null
-          travel_radius_km?: number | null
-          video_reel_url?: string | null
-        }
-        Update: {
-          act_name?: string | null
-          bio?: string | null
-          created_at?: string | null
-          currency?: string | null
-          fee_max_cents?: number | null
-          fee_min_cents?: number | null
-          follower_count?: number | null
-          genre_tags?: string[] | null
-          hero_url?: string | null
-          id?: string | null
-          is_verified?: never
-          monthly_listeners?: number | null
-          photo_url?: string | null
-          public_handle?: string | null
-          rating_avg?: number | null
-          rating_count?: number | null
-          tagline?: string | null
-          travel_radius_km?: number | null
-          video_reel_url?: string | null
-        }
         Relationships: []
       }
       public_vendor_directory: {
@@ -37056,6 +39323,7 @@ export type Database = {
           created_at: string | null
           hero_url: string | null
           id: string | null
+          is_top_organizer: boolean | null
           is_verified: boolean | null
           logo_url: string | null
           name: string | null
@@ -37067,40 +39335,6 @@ export type Database = {
           trade_categories: string[] | null
           website_url: string | null
           year_founded: number | null
-        }
-        Insert: {
-          bio?: string | null
-          created_at?: string | null
-          hero_url?: string | null
-          id?: string | null
-          is_verified?: never
-          logo_url?: string | null
-          name?: string | null
-          public_handle?: string | null
-          rating_avg?: number | null
-          rating_count?: number | null
-          regions?: string[] | null
-          tagline?: string | null
-          trade_categories?: string[] | null
-          website_url?: string | null
-          year_founded?: number | null
-        }
-        Update: {
-          bio?: string | null
-          created_at?: string | null
-          hero_url?: string | null
-          id?: string | null
-          is_verified?: never
-          logo_url?: string | null
-          name?: string | null
-          public_handle?: string | null
-          rating_avg?: number | null
-          rating_count?: number | null
-          regions?: string[] | null
-          tagline?: string | null
-          trade_categories?: string[] | null
-          website_url?: string | null
-          year_founded?: number | null
         }
         Relationships: []
       }
@@ -37814,6 +40048,10 @@ export type Database = {
         Returns: number
       }
       auth_team_ids: { Args: never; Returns: string[] }
+      award_onsite_points: {
+        Args: { p_project_id?: string; p_reason: string }
+        Returns: undefined
+      }
       can_record: {
         Args: { p_id: string; p_op: string; p_table: string }
         Returns: boolean

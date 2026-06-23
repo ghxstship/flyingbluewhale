@@ -18,7 +18,7 @@ import { SITE } from "@/lib/seo";
  * Contract (see docs/ia/02-navigation-redesign.md §3.7):
  *   - Renders a visible chevron-separated trail.
  *   - Emits schema.org `BreadcrumbList` JSON-LD so Google sitelinks
- *     pick up nested pages under /console, /p/{slug}, and marketing.
+ *     pick up nested pages under /studio, /p/{slug}, and marketing.
  *   - Truncation: > 4 links collapse the middle entries into a
  *     three-dot label so the current page always stays visible.
  *   - `aria-current="page"` on the last entry; the last entry is

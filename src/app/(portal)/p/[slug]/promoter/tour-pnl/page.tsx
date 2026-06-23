@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
  * view. The portal user usually wants the rolled-up margin number, not
  * the line-item drill-down, so we show a high-level CTA back to the
  * promoter dashboard P&L + settlements rather than duplicating the
- * full /console reports here.
+ * full /studio reports here.
  */
 
 export default async function PromoterTourPnL({ params }: { params: Promise<{ slug: string }> }) {

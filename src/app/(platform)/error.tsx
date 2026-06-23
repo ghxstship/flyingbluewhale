@@ -33,7 +33,7 @@ export default function ConsoleError({ error, reset }: { error: Error & { digest
           </p>
           <div className="mt-4 flex gap-2">
             <Button onClick={() => reset()}>{t("console.error.tryAgain", undefined, "Try Again")}</Button>
-            <Button href="/console" variant="secondary">
+            <Button href="/studio" variant="secondary">
               {t("console.error.backToWorkspace", undefined, "Back to Workspace")}
             </Button>
           </div>

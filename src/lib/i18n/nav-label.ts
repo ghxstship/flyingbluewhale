@@ -4,7 +4,7 @@
  * sidebars don't have to be touched whenever a label is added.
  *
  * Pattern:
- *   navItemKey({ href: "/console/projects" })  →  "nav.console.projects"
+ *   navItemKey({ href: "/studio/projects" })  →  "nav.console.projects"
  *   navItemKey({ href: "/p/[slug]/artist/advancing" })
  *                                              →  "nav.p.artist.advancing"
  *   navGroupKey({ label: "0 EXECUTIVE" })      →  "nav.group.0-executive"

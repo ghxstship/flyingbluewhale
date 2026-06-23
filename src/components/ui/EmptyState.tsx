@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Inbox } from "lucide-react";
+import { Inbox, WifiOff } from "lucide-react";
 
 /**
  * <EmptyState> — canonical blank slate across every shell.
@@ -10,6 +10,12 @@ import { Inbox } from "lucide-react";
  * `size="compact"` is the inline variant for section-level empties
  * (e.g. "no proposals yet" inside a detail tab) — keeps visual
  * consistency without dominating the card it lives in.
+ *
+ * `variant="offline"` is the COMPVSS field-PWA zero state: when a list
+ * can't load because the device is offline it swaps the default glyph to
+ * a WifiOff icon so the user reads "not loaded yet, will sync" rather
+ * than "nothing here". Queued optimistic writes are surfaced separately
+ * by <SyncBanner>.
  */
 export function EmptyState({
   title,
@@ -19,6 +25,7 @@ export function EmptyState({
   icon,
   illustration,
   size = "default",
+  variant = "default",
 }: {
   title: string;
   description?: string;
@@ -27,7 +34,9 @@ export function EmptyState({
   icon?: ReactNode;
   illustration?: ReactNode;
   size?: "default" | "compact";
+  variant?: "default" | "offline";
 }) {
+  const fallbackIcon = variant === "offline" ? <WifiOff size={32} /> : <Inbox size={32} />;
   if (size === "compact") {
     return (
       <div className="flex flex-col items-center justify-center gap-1 p-5 text-center">
@@ -50,7 +59,7 @@ export function EmptyState({
         </div>
       ) : (
         <div aria-hidden="true" className="text-[var(--p-text-2)]">
-          {icon ?? <Inbox size={32} />}
+          {icon ?? fallbackIcon}
         </div>
       )}
       <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{title}</h3>

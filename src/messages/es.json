@@ -182,7 +182,7 @@
     },
     "docs": {
      "label": "Documentación",
-     "description": "Referencia de la plataforma y API"
+     "description": "Referencia del ecosistema y API"
     },
     "changelog": {
      "label": "Changelog",
@@ -302,7 +302,7 @@
     },
     "brand": {
      "homeAriaLabel": "ATLVS Technologies — inicio",
-     "tagline": "La plataforma para la producción. Cuatro apps, una sola fuente de verdad."
+     "tagline": "El ecosistema para la producción. Cuatro apps, una sola fuente de verdad."
     },
     "social": {
      "twitter": "Twitter",
@@ -318,7 +318,7 @@
    "about": {
     "meta": {
      "title": "Acerca de — El Estudio",
-     "description": "ATLVS Technologies construye la plataforma para la producción. ATLVS, GVTEWAY, COMPVSS, LEG3ND — cuatro apps, una sola fuente de verdad. Creada por operadores que han dirigido la sala.",
+     "description": "ATLVS Technologies construye el ecosistema para la producción. ATLVS, GVTEWAY, COMPVSS, LEG3ND — cuatro apps, una sola fuente de verdad. Creada por operadores que han dirigido la sala.",
      "ogImageEyebrow": "El Estudio",
      "ogImageTitle": "Hecho por quienes dirigen el show."
     },
@@ -329,7 +329,7 @@
     "hero": {
      "eyebrow": "El Estudio",
      "title": "Hecho por quienes dirigen el show.",
-     "lead": "ATLVS Technologies construye la plataforma para la producción. Cada módulo nació al abrir una hoja de cálculo por tercera vez y decir \"por qué esto no está en la plataforma\".",
+     "lead": "ATLVS Technologies construye el ecosistema para la producción. Cada módulo nació al abrir una hoja de cálculo por tercera vez y decir \"por qué esto no está en el ecosistema\".",
      "subLead": "Cuatro apps. Una sola fuente de verdad. Cuarenta y siete módulos. Llevamos cada versión a producciones reales el fin de semana previo a su lanzamiento. El trabajo decide qué se queda."
     },
     "principles": {
@@ -375,12 +375,12 @@
      },
      "firstProduction": {
       "title": "Primera producción lanzada",
-      "body": "Dotamos de personal y escaneamos un show de 2.000 personas de principio a fin en la plataforma. El escenario se cayó. La plataforma no."
+      "body": "Dotamos de personal y escaneamos un show de 2.000 personas de principio a fin en el ecosistema. El escenario se cayó. El ecosistema no."
      }
     },
     "studio": {
      "heading": "Quién la construye.",
-     "body": "ATLVS es un estudio de producción y tecnología. Hemos dotado de personal residencias, giras, lanzamientos privados, programas de galería, activaciones de marca. Creamos software para cada uno de ellos. La plataforma es una década de instinto en el campo, comprimida en un solo espacio de trabajo.",
+     "body": "ATLVS es un estudio de producción y tecnología. Hemos dotado de personal residencias, giras, lanzamientos privados, programas de galería, activaciones de marca. Creamos software para cada uno de ellos. El ecosistema es una década de instinto en el campo, comprimida en un solo espacio de trabajo.",
      "joinLink": "Únete al estudio",
      "talkLink": "Habla con el estudio",
      "githubLink": "GitHub"
@@ -475,7 +475,7 @@
      },
      "training": {
       "q": "¿Entrenan con nuestros datos?",
-      "a": "No. No entrenamos modelos. Somos una plataforma de producción que ejecuta Anthropic Claude por debajo — tus conversaciones permanecen en tu tenant, tus registros siguen siendo tuyos."
+      "a": "No. No entrenamos modelos. Somos un ecosistema de producción que ejecuta Anthropic Claude por debajo — tus conversaciones permanecen en tu tenant, tus registros siguen siendo tuyos."
      },
      "model": {
       "q": "¿Qué modelo usa?",
@@ -656,7 +656,7 @@
      "appDashboard": {
       "title": "Dashboard de la app",
       "body": "Shell conmutable entre las cuatro apps.",
-      "meta": "/console"
+      "meta": "/studio"
      },
      "bridgeKit1": {
       "title": "Console Kit I",
@@ -690,7 +690,7 @@
      "atlvsProductKit": {
       "title": "Kit de producto ATLVS",
       "body": "Tema SaaS neutro claro/oscuro: dashboard, pantallas, acento por producto. El sistema de consola Monument.",
-      "meta": "/console"
+      "meta": "/studio"
      },
      "saasDashboard": {
       "title": "Dashboard SaaS",
@@ -778,7 +778,7 @@
    "careers": {
     "metadata": {
      "title": "Empleo — Crea para la producción",
-     "description": "Somos un estudio pequeño que desarrolla la plataforma que opera la producción experiencial en vivo. Cada vacante entrega trabajo que aterriza en shows reales — medido en cargas de equipo superadas, no en puntos de historia consumidos.",
+     "description": "Somos un estudio pequeño que desarrolla el ecosistema que opera la producción experiencial en vivo. Cada vacante entrega trabajo que aterriza en shows reales — medido en cargas de equipo superadas, no en puntos de historia consumidos.",
      "ogEyebrow": "Empleo",
      "ogTitle": "Crea para la producción."
     },
@@ -789,7 +789,7 @@
     "hero": {
      "eyebrow": "Empleo",
      "title": "Crea para la producción.",
-     "body": "Estamos construyendo la plataforma que la producción experiencial en vivo ha necesitado durante quince años: cuatro apps sobre una única fuente de verdad que operan el escritorio del productor, el teléfono del equipo y el portal del invitado desde el mismo registro. Estudio pequeño, propiedad profunda, shows reales."
+     "body": "Estamos construyendo el ecosistema que la producción experiencial en vivo ha necesitado durante quince años: cuatro apps sobre una única fuente de verdad que operan el escritorio del productor, el teléfono del equipo y el portal del invitado desde el mismo registro. Estudio pequeño, propiedad profunda, shows reales."
     },
     "values": {
      "heading": "Cómo formamos equipo",
@@ -807,7 +807,7 @@
      },
      "brandFirst": {
       "title": "Ingeniería con la marca primero",
-      "body": "La plataforma se lee como una revista. Brutal donde debe serlo, con aire donde puede. El código viene después."
+      "body": "El ecosistema se lee como una revista. Brutal donde debe serlo, con aire donde puede. El código viene después."
      },
      "distributed": {
       "title": "Distribuidos por defecto",
@@ -1088,7 +1088,7 @@
      },
      "producer": {
       "q": "¿Podemos hablar con un productor, no con un vendedor?",
-      "a": "Agendaremos una llamada con alguien del estudio que ha manejado producciones en la plataforma. Marca la casilla en el formulario."
+      "a": "Agendaremos una llamada con alguien del estudio que ha manejado producciones en el ecosistema. Marca la casilla en el formulario."
      },
      "location": {
       "q": "¿Dónde están ubicados?",
@@ -1180,9 +1180,9 @@
    "demo": {
     "metadata": {
      "title": "Reserva un recorrido — Conectado a una producción real",
-     "description": "Habla con el estudio. Recorre la plataforma sobre una producción en vivo. Sin la gimnasia de las llamadas de ventas: operadores hablando con operadores.",
+     "description": "Habla con el estudio. Recorre el ecosistema sobre una producción en vivo. Sin la gimnasia de las llamadas de ventas: operadores hablando con operadores.",
      "ogImageEyebrow": "Demostración",
-     "ogImageTitle": "Recorre la plataforma."
+     "ogImageTitle": "Recorre el ecosistema."
     },
     "breadcrumbs": {
      "home": "Inicio",
@@ -1190,23 +1190,23 @@
     },
     "hero": {
      "eyebrow": "Demostración",
-     "title": "Recorre la plataforma.",
+     "title": "Recorre el ecosistema.",
      "subtitle": "Cuarenta minutos, conectados a una producción en vivo. Elige el recorrido que encaje con tu sala, o regístrate gratis primero y trae tus preguntas después."
     },
     "personas": {
      "title": "Recorridos por operación.",
-     "subtitle": "Cada variante ajusta el recorrido a tu trabajo. Una plataforma, distinto punto de partida.",
+     "subtitle": "Cada variante ajusta el recorrido a tu trabajo. Un ecosistema, distinto punto de partida.",
      "cta": "Reservar este recorrido"
     },
     "faqs": {
      "title": "Preguntas frecuentes",
      "walkthrough": {
       "q": "¿Qué pasa en un recorrido?",
-      "a": "Cuarenta minutos. Abrimos la plataforma conectada a una producción en vivo: la canónica es MMW26 Hialeah. Tú nos dices qué necesita tu show y te mostramos el cableado que lo hace funcionar. Sin presentación de diapositivas."
+      "a": "Cuarenta minutos. Abrimos el ecosistema conectado a una producción en vivo: la canónica es MMW26 Hialeah. Tú nos dices qué necesita tu show y te mostramos el cableado que lo hace funcionar. Sin presentación de diapositivas."
      },
      "salesCall": {
       "q": "¿Es una llamada de ventas?",
-      "a": "No. Es un recorrido. Las conversaciones de ventas suceden si tú quieres; la mayoría de los equipos abre el plan gratuito y empieza primero dentro de la plataforma."
+      "a": "No. Es un recorrido. Las conversaciones de ventas suceden si tú quieres; la mayoría de los equipos abre el plan gratuito y empieza primero dentro del ecosistema."
      },
      "tryWithoutCall": {
       "q": "¿Puedo probarlo sin una llamada?",
@@ -1221,13 +1221,13 @@
    "docs": {
     "meta": {
      "title": "Documentación — Arquitectura, API, CMS de Guías, Autenticación",
-     "description": "Referencia técnica de la plataforma de ATLVS Technologies: arquitectura, integraciones, el CMS de Guías y el modelo de autenticación. Los detalles a fondo para los equipos que los quieren.",
+     "description": "Referencia técnica del ecosistema de ATLVS Technologies: arquitectura, integraciones, el CMS de Guías y el modelo de autenticación. Los detalles a fondo para los equipos que los quieren.",
      "ogEyebrow": "Documentación",
-     "ogTitle": "Cómo funciona la plataforma"
+     "ogTitle": "Cómo funciona el ecosistema"
     },
     "eyebrow": "Documentación",
     "hero": {
-     "title": "Cómo funciona la plataforma"
+     "title": "Cómo funciona el ecosistema"
     },
     "sections": {
      "architecture": {
@@ -1681,7 +1681,7 @@
      },
      "store": {
       "title": "Tienda",
-      "blurb": "Compra merch oficial, equipamiento y productos de evento de productores de toda la plataforma."
+      "blurb": "Compra merch oficial, equipamiento y productos de evento de productores de todo el ecosistema."
      }
     },
     "operators": {
@@ -1900,23 +1900,23 @@
    "home": {
     "metadata": {
      "title": "ATLVS — Software de gestión de producción para experiencias en vivo",
-     "description": "ATLVS Technologies — software de gestión de producción, operaciones de equipos, venta de entradas y conocimiento creado para eventos en vivo. Cuatro apps, una sola fuente de verdad: ATLVS para productores, COMPVSS para el equipo de campo, GVTEWAY para el público, LEG3ND para el conocimiento. Del pitch al wrap en una sola plataforma.",
+     "description": "ATLVS Technologies — software de gestión de producción, operaciones de equipos, venta de entradas y conocimiento creado para eventos en vivo. Cuatro apps, una sola fuente de verdad: ATLVS para productores, COMPVSS para el equipo de campo, GVTEWAY para el público, LEG3ND para el conocimiento. Del pitch al wrap en un solo ecosistema.",
      "ogImageTitle": "Dirige el show."
     },
     "hero": {
-     "eyebrow": "El motor que da vida a nuevos mundos",
-     "titleLine1": "Crea mundos.",
-     "titleLine2": "Hazlos vivir",
-     "subtitleLead": "Cada show es un mundo en el que alguien entra.",
-     "subtitleAtlvs": "lo desarrolla y lo construye,",
-     "subtitleCompvss": "lo opera sobre el terreno,",
-     "subtitleGvteway": "es donde el público lo vive, y",
+     "eyebrow": "Del pitch al caso de estudio",
+     "titleLine1": "El ecosistema del",
+     "titleLine2": "constructor de",
+     "subtitleLead": "El sistema operativo modular para producciones experienciales y no convencionales.",
+     "subtitleAtlvs": "comanda el puente,",
+     "subtitleCompvss": "trabaja el terreno,",
+     "subtitleGvteway": "abre las puertas, y",
      "ctaPrimary": "Empieza a construir gratis",
      "ctaSecondary": "Míralo en acción",
      "disclaimer": "Gratis para siempre en el plan Access · Sin tarjeta · Precio por organización",
      "ecosystemLabel": "El ecosistema ATLVS",
-     "titleLine3": "en vivo.",
-     "subtitleLegend": "es el conocimiento sobre el que se levanta: una única fuente de verdad, del primer pitch al desmontaje."
+     "titleLine3": "mundos.",
+     "subtitleLegend": "mantiene el estándar."
     },
     "trustBar": {
      "label": "Los mundos que estos equipos construyen funcionan con ATLVS",
@@ -1925,7 +1925,7 @@
     "threeApps": {
      "eyebrow": "El ecosistema ATLVS",
      "title": "Cuatro apps, una sola fuente de verdad.",
-     "body": "ATLVS Technologies entrega cuatro productos conectados sobre un mismo almacén de registros. Adopta uno o ejecuta la plataforma completa: cada registro fluye entre la consola del productor, la PWA de campo, el marketplace público y el hub de conocimiento.",
+     "body": "ATLVS Technologies entrega cuatro productos conectados sobre un mismo almacén de registros. Adopta uno o ejecuta el ecosistema completo: cada registro fluye entre la consola del productor, la PWA de campo, el marketplace público y el hub de conocimiento.",
      "readMore": "Leer más →"
     },
     "products": {
@@ -1953,7 +1953,7 @@
     "industries": {
      "eyebrow": "Creado para",
      "title": "Equipos de producción que hacen trabajo real.",
-     "body": "El esquema es genérico. El vocabulario es específico. Elige el tipo de producción que entregas y la plataforma habla tu idioma desde el primer día.",
+     "body": "El esquema es genérico. El vocabulario es específico. Elige el tipo de producción que entregas y el ecosistema habla tu idioma desde el primer día.",
      "footnote": "Hospitality, eventos corporativos y privados también —",
      "footnoteLink": "ver todas las soluciones →",
      "items": {
@@ -2022,11 +2022,11 @@
     "adopt": {
      "eyebrow": "Adóptalo a tu manera",
      "title": "Empieza donde estás.",
-     "body": "Ejecuta toda la plataforma de principio a fin, toma una sola app o elige exactamente los módulos que tu alcance necesita. La misma base de datos en todos los casos.",
+     "body": "Ejecuta todo el ecosistema de principio a fin, toma una sola app o elige exactamente los módulos que tu alcance necesita. La misma base de datos en todos los casos.",
      "pricingLink": "Ver la tabla de precios →",
      "tiers": {
       "fullPlatform": {
-       "name": "Plataforma completa",
+       "name": "Ecosistema completo",
        "tag": "Las ocho fases",
        "body": "Cada fase del ciclo de producción, del pitch al wrap: un espacio de trabajo, una sola fuente de verdad, responsabilidad total."
       },
@@ -2097,10 +2097,10 @@
      "items": {
       "whatIsAtlvs": {
        "q": "¿Qué es ATLVS Technologies?",
-       "a": "ATLVS Technologies es la plataforma detrás de la producción experiencial en vivo. Cuatro apps conectadas sobre un único almacén de datos: ATLVS para productores (proyectos, RFI, advancing, finanzas, compras, IA), COMPVSS para el equipo de campo (programación, certificaciones, escaneo de acceso, incidentes), GVTEWAY para asistentes y stakeholders (venta de entradas, propuestas, doce personas) y LEG3ND para conocimiento, LMS y recursos. El mismo registro en las cuatro, del pitch al wrap."
+       "a": "ATLVS Technologies es el ecosistema detrás de la producción experiencial en vivo. Cuatro apps conectadas sobre un único almacén de datos: ATLVS para productores (proyectos, RFI, advancing, finanzas, compras, IA), COMPVSS para el equipo de campo (programación, certificaciones, escaneo de acceso, incidentes), GVTEWAY para asistentes y stakeholders (venta de entradas, propuestas, doce personas) y LEG3ND para conocimiento, LMS y recursos. El mismo registro en las cuatro, del pitch al wrap."
       },
       "whoIsItFor": {
-       "q": "¿Para quién es la plataforma ATLVS?",
+       "q": "¿Para quién es el ecosistema ATLVS?",
        "a": "Equipos de producción que ejecutan trabajo real en vivo. Festivales, residencias, giras, talleres de fabricación, activaciones de marca, compounds de transmisión, eventos privados. El esquema es genérico; el vocabulario es específico. Si tu organización tiene un load-in, un manifiesto, proveedores y un wrap — encaja."
       },
       "pricing": {
@@ -2162,7 +2162,7 @@
    "partners": {
     "metadata": {
      "title": "Socios — Consultores de producción + Socios de implementación",
-     "description": "Consultores de producción formados en ATLVS que migran, configuran y dejan a los equipos a punto en la plataforma. El directorio de socios abre en el primer trimestre.",
+     "description": "Consultores de producción formados en ATLVS que migran, configuran y dejan a los equipos a punto en el ecosistema. El directorio de socios abre en el primer trimestre.",
      "ogImageEyebrow": "Socios",
      "ogImageTitle": "Implementación + Consultoría."
     },
@@ -2173,7 +2173,7 @@
     "hero": {
      "eyebrow": "Socios",
      "title": "Implementación + Consultoría.",
-     "body": "Consultores de producción formados en ATLVS que migran, configuran y dejan a los equipos a punto en la plataforma. El directorio de socios abre en el primer trimestre con perfiles verificados, portafolios de proyectos y tarifarios.",
+     "body": "Consultores de producción formados en ATLVS que migran, configuran y dejan a los equipos a punto en el ecosistema. El directorio de socios abre en el primer trimestre con perfiles verificados, portafolios de proyectos y tarifarios.",
      "primaryCta": "Postula al programa de socios"
     },
     "tracks": {
@@ -2245,7 +2245,7 @@
      },
      "categories": {
       "label": "Categorías",
-      "value": "Producción de experiencias · operaciones de eventos en vivo · plataforma de advancing"
+      "value": "Producción de experiencias · operaciones de eventos en vivo · ecosistema de advancing"
      },
      "subProducts": {
       "label": "Subproductos",
@@ -3120,7 +3120,7 @@
      "protocol": {
       "eyebrow": "Sobre el protocolo XPMS 2.0",
       "title": "Conocimiento que lee el resto del mundo.",
-      "body": "LEG3ND no es una wiki pegada al margen. Las certificaciones controlan los escaneos en campo. Los átomos del catálogo ponen precio a las estimaciones. Las reglas de cumplimiento se evalúan contra proyectos vivos. La capa de conocimiento está cableada al mismo almacén de registros sobre el que funciona toda la plataforma.",
+      "body": "LEG3ND no es una wiki pegada al margen. Las certificaciones controlan los escaneos en campo. Los átomos del catálogo ponen precio a las estimaciones. Las reglas de cumplimiento se evalúan contra proyectos vivos. La capa de conocimiento está cableada al mismo almacén de registros sobre el que funciona todo el ecosistema.",
       "items": {
        "standard": "El Standard — una base de conocimiento canónica y versionada",
        "courses": "Cursos y LMS con cuestionarios e insignias de finalización",
@@ -3134,11 +3134,11 @@
       "title": "LEG3ND · Preguntas frecuentes",
       "q1": {
        "q": "¿Qué es LEG3ND?",
-       "a": "La capa de conocimiento de la plataforma ATLVS — el Standard (base de conocimiento), Cursos y LMS, Certificaciones, un centro de recursos, un catálogo con precios, la biblioteca de señalética, el motor de cumplimiento XMCE y Seguridad, todo sobre el protocolo XPMS 2.0."
+       "a": "La capa de conocimiento del ecosistema ATLVS — el Standard (base de conocimiento), Cursos y LMS, Certificaciones, un centro de recursos, un catálogo con precios, la biblioteca de señalética, el motor de cumplimiento XMCE y Seguridad, todo sobre el protocolo XPMS 2.0."
       },
       "q2": {
        "q": "¿En qué se diferencia de una wiki o un LMS independiente?",
-       "a": "Comparte el mismo almacén de registros que el resto de la plataforma. Las certificaciones controlan los escaneos en campo en COMPVSS, los átomos del catálogo ponen precio a las estimaciones en ATLVS, y las reglas de cumplimiento se evalúan contra proyectos vivos — nada de lo cual puede hacer una wiki o un LMS aislado."
+       "a": "Comparte el mismo almacén de registros que el resto del ecosistema. Las certificaciones controlan los escaneos en campo en COMPVSS, los átomos del catálogo ponen precio a las estimaciones en ATLVS, y las reglas de cumplimiento se evalúan contra proyectos vivos — nada de lo cual puede hacer una wiki o un LMS aislado."
       },
       "q3": {
        "q": "¿Qué es la biblioteca de señalética?",
@@ -3159,10 +3159,10 @@
    },
    "status": {
     "meta": {
-     "title": "Estado — Disponibilidad de la plataforma + historial de incidencias",
-     "description": "Estado de la plataforma en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete a las alertas de incidencias.",
+     "title": "Estado — Disponibilidad del ecosistema + historial de incidencias",
+     "description": "Estado del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete a las alertas de incidencias.",
      "ogEyebrow": "Estado",
-     "ogTitle": "Salud de la plataforma."
+     "ogTitle": "Salud del ecosistema."
     },
     "breadcrumbs": {
      "home": "Inicio",
@@ -3171,7 +3171,7 @@
     "hero": {
      "eyebrow": "Estado",
      "title": "Todos los sistemas operativos.",
-     "body": "Salud de la plataforma en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete para recibir alertas de incidencias por correo o webhook.",
+     "body": "Salud del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete para recibir alertas de incidencias por correo o webhook.",
      "badge": "Todos los sistemas operativos · últimos 30 días"
     },
     "services": {
@@ -3213,7 +3213,7 @@
     "hero": {
      "eyebrow": "Hecho para",
      "title": "El rol que diriges.",
-     "body": "Una plataforma, ocho roles de producción. Cada uno recibe los módulos en los que vive día a día, los flujos de trabajo que se mueven primero y las preguntas que los operadores hacen de verdad. La misma columna vertebral, distinto punto de partida."
+     "body": "Un ecosistema, ocho roles de producción. Cada uno recibe los módulos en los que vive día a día, los flujos de trabajo que se mueven primero y las preguntas que los operadores hacen de verdad. La misma columna vertebral, distinto punto de partida."
     },
     "cards": {
      "cta": "Mira si encaja"
@@ -3383,7 +3383,7 @@
     "lastUpdated": "Última actualización: {date}",
     "acceptance": {
      "heading": "1. Aceptación de los Términos",
-     "body": "Al acceder o usar la plataforma de ATLVS Technologies aceptas estos Términos. Si no estás de acuerdo, no uses el Servicio."
+     "body": "Al acceder o usar el ecosistema de ATLVS Technologies aceptas estos Términos. Si no estás de acuerdo, no uses el Servicio."
     },
     "accounts": {
      "heading": "2. Cuentas",
@@ -21063,7 +21063,7 @@
    "filterLabel": "Filtrar Plantillas",
    "loading": "Cargando plantillas…",
    "platformTemplate": "Plantilla de plataforma",
-   "emptyNone": "Aún no hay plantillas. Crea una desde /console/settings/templates.",
+   "emptyNone": "Aún no hay plantillas. Crea una desde /studio/settings/templates.",
    "emptyNoMatch": "Ninguna plantilla coincide con “{query}”."
   },
   "portalPrivacyPanel": {

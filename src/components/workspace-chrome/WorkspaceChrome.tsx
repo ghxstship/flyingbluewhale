@@ -93,7 +93,7 @@ export function WorkspaceChrome({
 export function defaultSwitcherEntries(role: string | null, currentPortalSlug: string | null): AppSwitcherEntry[] {
   const entries: AppSwitcherEntry[] = [];
   if (role) {
-    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/console") });
+    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/studio") });
   }
   if (role && role !== "viewer") {
     entries.push({
@@ -142,7 +142,7 @@ export async function resolveSwitcherEntries(opts: {
   const { supabase, userId, role, currentPortalSlug } = opts;
   const entries: AppSwitcherEntry[] = [];
   if (role) {
-    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/console") });
+    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/studio") });
   }
   let hasPortal = false;
   try {

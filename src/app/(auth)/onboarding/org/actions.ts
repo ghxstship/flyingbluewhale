@@ -43,6 +43,6 @@ export async function createOrgAction(_: FormState, formData: FormData): Promise
     return { error: `Couldn't create workspace: ${error.message}` };
   }
 
-  // /auth/resolve will now find the fresh owner membership and route to /console.
+  // /auth/resolve will now find the fresh owner membership and route to /studio.
   redirect("/auth/resolve");
 }

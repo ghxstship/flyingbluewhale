@@ -91,7 +91,7 @@ async function postHandler(req: NextRequest) {
             input.severity === "critical"
               ? "CRITICAL — review immediately"
               : `Severity: ${input.severity}${input.location ? ` · ${input.location}` : ""}`,
-          href: `/console/operations/incidents/${data.id}`,
+          href: `/studio/operations/incidents/${data.id}`,
           data: { incidentId: data.id, severity: input.severity, projectId: input.projectId },
         });
       } catch (e) {

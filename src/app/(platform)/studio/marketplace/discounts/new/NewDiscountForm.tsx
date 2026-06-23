@@ -1,0 +1,70 @@
+"use client";
+
+import { FormShell } from "@/components/FormShell";
+import { Input } from "@/components/ui/Input";
+import {
+  DISCOUNT_KINDS,
+  DISCOUNT_KIND_LABELS,
+  DISCOUNT_STATES,
+  DISCOUNT_STATE_LABELS,
+} from "@/lib/discounts_promoters";
+import { createDiscountAction } from "../actions";
+
+export function NewDiscountForm() {
+  return (
+    <FormShell action={createDiscountAction} cancelHref="/studio/marketplace/discounts" submitLabel="Create Code">
+      <Input label="Code" name="code" required maxLength={60} placeholder="SUMMER25" className="font-mono" />
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">Kind</label>
+          <select id="kind" name="kind" defaultValue="percent" className="ps-input mt-1.5 w-full">
+            {DISCOUNT_KINDS.map((k) => (
+              <option key={k} value={k}>
+                {DISCOUNT_KIND_LABELS[k]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Input
+          label="Value"
+          name="value"
+          type="number"
+          min={0}
+          required
+          hint="Percent: basis points (1000 = 10%). Fixed: cents off (500 = $5.00)."
+        />
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Input
+          label="Max redemptions"
+          name="max_redemptions"
+          type="number"
+          min={0}
+          hint="Leave blank for unlimited."
+        />
+        <div>
+          <label htmlFor="discount_state" className="text-xs font-medium text-[var(--p-text-2)]">State</label>
+          <select id="discount_state" name="discount_state" defaultValue="active" className="ps-input mt-1.5 w-full">
+            {DISCOUNT_STATES.map((s) => (
+              <option key={s} value={s}>
+                {DISCOUNT_STATE_LABELS[s]}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Input label="Starts at" name="starts_at" type="datetime-local" />
+        <Input label="Ends at" name="ends_at" type="datetime-local" />
+      </div>
+
+      <div>
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+      </div>
+    </FormShell>
+  );
+}

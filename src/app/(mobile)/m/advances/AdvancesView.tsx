@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ActionBar, GroupedList, KIcon, TogRow } from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
@@ -95,6 +95,19 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
   const [kinds, setKinds] = useState<Set<string>>(new Set());
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [online, setOnline] = useState(true);
+
+  useEffect(() => {
+    setOnline(navigator.onLine);
+    const on = () => setOnline(true);
+    const off = () => setOnline(false);
+    window.addEventListener("online", on);
+    window.addEventListener("offline", off);
+    return () => {
+      window.removeEventListener("online", on);
+      window.removeEventListener("offline", off);
+    };
+  }, []);
 
   const kindList = useMemo(() => Array.from(new Set(rows.map((r) => r.catalogKind))).sort(), [rows]);
 
@@ -182,11 +195,19 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
       />
 
       {filtered.length === 0 ? (
-        <EmptyState
-          size="compact"
-          title={t("m.advances.empty.title", undefined, "No Advances")}
-          description={t("m.advances.empty.body", undefined, "Gear, credentials and services assigned to you appear here.")}
-        />
+        rows.length === 0 && !online ? (
+          <EmptyState
+            variant="offline"
+            title={t("m.advances.offline.title", undefined, "You're offline")}
+            description={t("m.advances.offline.body", undefined, "Your advances will load — and any changes will sync — once you're back online.")}
+          />
+        ) : (
+          <EmptyState
+            size="compact"
+            title={t("m.advances.empty.title", undefined, "No Advances")}
+            description={t("m.advances.empty.body", undefined, "Gear, credentials and services assigned to you appear here.")}
+          />
+        )
       ) : group === "kind" ? (
         <GroupedList
           skey="adv"

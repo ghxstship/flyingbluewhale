@@ -30,6 +30,11 @@
 /* COMPVSS mobile auth + onboarding flow — component layer scoped under
    .compvss-onboarding. Loaded immediately after kit-mobile.css per the kit. */
 @import "./kit-onboarding.css";
+/* v7.1 platform contracts — forced-colors (HCM focus restoration),
+   prefers-contrast firming, the print floor, and RTL/logical-property
+   readiness. Ported from the kit tokens/base.css; loaded last so its
+   environment media queries layer over every component surface. */
+@import "./kit-platform.css";
 
 /*
  * SSR cold-start fallback — used only when no [data-theme] / [data-ui]

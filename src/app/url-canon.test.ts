@@ -8,7 +8,7 @@ import { join, relative } from "node:path";
  * Per CLAUDE.md (`Conventions › Cross-shell URLs`):
  *   "Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode
  *   `https://...atlvs.pro` and never concat `NEXT_PUBLIC_APP_URL` with
- *   `/console`/`/p`/`/m`."
+ *   `/studio`/`/p`/`/m`."
  *
  * The single source of truth for the apex base URL is `SITE.baseUrl` in
  * `src/lib/seo.ts`. Every other call site that needs an absolute apex URL
@@ -54,10 +54,10 @@ const ALLOW_FALLBACK_PATTERN = new Set<string>([
 /**
  * Cross-shell raw-href guard.
  *
- * A raw `href="/console/..."` rendered inside the portal/mobile shells (or a
+ * A raw `href="/studio/..."` rendered inside the portal/mobile shells (or a
  * raw `href="/p/..."` / `href="/m/..."` inside the platform shell) 404s in
  * subdomain mode: `internalPathFor` prefixes non-matching paths, so
- * `/console/x` on the portal host becomes `/p/console/x`. Cross-shell links
+ * `/studio/x` on the portal host becomes `/p/studio/x`. Cross-shell links
  * MUST go through `urlFor(shell, path)` from `@/lib/urls`.
  *
  * Same-shell links (e.g. `/m/...` inside `(mobile)`) are fine — the prefix
@@ -69,13 +69,16 @@ const CROSS_SHELL_SCANS: Array<{
   foreignPrefixes: string[];
 }> = [
   // Portal pages must not raw-link into the console or mobile shells.
-  { group: "src/app/(portal)", foreignPrefixes: ["/console", "/m"] },
+  { group: "src/app/(portal)", foreignPrefixes: ["/studio", "/m"] },
   // Mobile pages must not raw-link into the console or portal shells.
-  { group: "src/app/(mobile)", foreignPrefixes: ["/console", "/p"] },
+  { group: "src/app/(mobile)", foreignPrefixes: ["/studio", "/p"] },
   // Platform pages must not raw-link into the portal or mobile shells.
+  // (/legend is an allowed deep-link target — the Knowledge rail links into it.)
   { group: "src/app/(platform)", foreignPrefixes: ["/p", "/m"] },
+  // LEG3ND shell pages must not raw-link into console / portal / mobile.
+  { group: "src/app/(legend)", foreignPrefixes: ["/studio", "/p", "/m"] },
   // Personal (/me) lives on the apex — every shell prefix is foreign.
-  { group: "src/app/(personal)", foreignPrefixes: ["/console", "/p", "/m"] },
+  { group: "src/app/(personal)", foreignPrefixes: ["/studio", "/p", "/m"] },
 ];
 
 const ALLOW_RAW_CROSS_SHELL_HREF = new Set<string>([]);
@@ -84,9 +87,9 @@ const ALLOW_RAW_CROSS_SHELL_HREF = new Set<string>([]);
 function rawHrefPatterns(prefix: string): RegExp[] {
   const p = prefix.replace(/\//g, "\\/");
   return [
-    // href="/console" · href="/console/..." · href="/p/..." etc.
+    // href="/studio" · href="/studio/..." · href="/p/..." etc.
     new RegExp(`href="${p}(?:\\/|")`),
-    // href={`/console/${id}`} template-literal form.
+    // href={`/studio/${id}`} template-literal form.
     new RegExp(`href=\\{\`${p}(?:\\/|\\$|\`)`),
   ];
 }

@@ -98,18 +98,18 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     // 1-line "No X yet" inside their own surface). Migrating to <EmptyState
     // size="compact"> would be a visual change inside dense detail layouts;
     // the canonical zero-state primitive is reserved for page-level voids.
-    "src/app/(platform)/console/annotations/[id]/page.tsx",
-    "src/app/(platform)/console/people/offer-letters/[id]/page.tsx",
-    "src/app/(platform)/console/procurement/rfqs/[rfqId]/page.tsx",
+    "src/app/(platform)/studio/annotations/[id]/page.tsx",
+    "src/app/(platform)/studio/people/offer-letters/[id]/page.tsx",
+    "src/app/(platform)/studio/procurement/rfqs/[rfqId]/page.tsx",
     // Advancing assignment detail renders inline empties inside the
     // Comments + Activity sub-cards (orphan-dataset exposure, 2026-05).
-    "src/app/(platform)/console/projects/[projectId]/advancing/assignments/[deliverableId]/page.tsx",
-    "src/app/(platform)/console/production/ros/page.tsx",
-    "src/app/(platform)/console/services/requests/[requestId]/page.tsx",
-    "src/app/(platform)/console/settings/billing/page.tsx",
-    "src/app/(platform)/console/settings/governance/page.tsx",
-    "src/app/(platform)/console/settings/imports/page.tsx",
-    "src/app/(platform)/console/site-plans/[id]/page.tsx",
+    "src/app/(platform)/studio/projects/[projectId]/advancing/assignments/[deliverableId]/page.tsx",
+    "src/app/(platform)/studio/production/ros/page.tsx",
+    "src/app/(platform)/studio/services/requests/[requestId]/page.tsx",
+    "src/app/(platform)/studio/settings/billing/page.tsx",
+    "src/app/(platform)/studio/settings/governance/page.tsx",
+    "src/app/(platform)/studio/settings/imports/page.tsx",
+    "src/app/(platform)/studio/site-plans/[id]/page.tsx",
     "src/app/(portal)/p/[slug]/apply/page.tsx",
     "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/activity/page.tsx",
     "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/files/page.tsx",
@@ -134,6 +134,11 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(mobile)/m/schedule/page.tsx",
     "src/app/(mobile)/m/market/page.tsx",
     "src/app/(mobile)/m/tasks/[taskId]/page.tsx",
+    // Access-control monitor (kit v7 §3): the server page holds "No scans yet"
+    // only as an i18n fallback LABEL handed to the <AccessControlScanner> client
+    // renderer, which owns and renders the recent-scans zero-state — same
+    // labels-object hand-off as the COMPVSS kit pages above.
+    "src/app/(platform)/studio/access-control/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

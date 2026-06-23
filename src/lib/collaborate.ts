@@ -2,7 +2,7 @@
  * Collaborate — block documents (deferred item F4).
  *
  * Pure, non-server module: enum tuples, label maps, and shared types for the
- * `/console/collaborate/docs` block-document editor. Imported by both server
+ * `/studio/collaborate/docs` block-document editor. Imported by both server
  * actions and client islands, so it MUST NOT `import "server-only"`.
  *
  * Storage: `public.collab_docs` (see migration PENDING_collaborate_docs.sql).

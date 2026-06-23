@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
+import { Accordion } from "@/components/ui/Accordion";
 import { CTASection } from "@/components/marketing/CTASection";
 import { PricingCalculator } from "@/components/marketing/PricingCalculator";
 import { buildMetadata, faqSchema } from "@/lib/seo";
@@ -649,6 +650,53 @@ export default async function PricingPage() {
       </section>
 
       <FAQSection title={t("marketing.pages.pricing.faqs.title")} faqs={faqs} />
+
+      <section className="mx-auto max-w-3xl px-6 py-12">
+        <h2 className="mb-4 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          {t("marketing.pages.pricing.billingFaq.title", undefined, "Billing & plans")}
+        </h2>
+        <Accordion
+          items={[
+            {
+              title: t(
+                "marketing.pages.pricing.billingFaq.q1.title",
+                undefined,
+                "Can I change plans at any time?",
+              ),
+              content: t(
+                "marketing.pages.pricing.billingFaq.q1.content",
+                undefined,
+                "Yes. Upgrade or downgrade whenever you like — changes are prorated to the day, and your data carries across every tier.",
+              ),
+            },
+            {
+              title: t(
+                "marketing.pages.pricing.billingFaq.q2.title",
+                undefined,
+                "Do you offer annual billing?",
+              ),
+              content: t(
+                "marketing.pages.pricing.billingFaq.q2.content",
+                undefined,
+                "Annual billing is available on every paid tier and discounts the monthly rate. Switch the toggle above to see annual pricing.",
+              ),
+            },
+            {
+              title: t(
+                "marketing.pages.pricing.billingFaq.q3.title",
+                undefined,
+                "What happens when an event wraps?",
+              ),
+              content: t(
+                "marketing.pages.pricing.billingFaq.q3.content",
+                undefined,
+                "Nothing disappears. Completed projects move to your archive and stay fully readable; you only pay for active seats.",
+              ),
+            },
+          ]}
+          defaultOpen={[0]}
+        />
+      </section>
 
       <CTASection
         title={t("marketing.pages.pricing.cta.title")}

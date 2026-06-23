@@ -17,6 +17,7 @@ import {
   Package,
   MessageSquare,
   Menu,
+  Radio,
 } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
@@ -29,6 +30,7 @@ const ICONS: Record<string, typeof Home> = {
   "/m": Home,
   "/m/schedule": CalendarDays,
   "/m/tasks": ListChecks,
+  "/m/onsite": Radio,
   "/m/inventory": Package,
   "/m/inbox": MessageSquare,
   "/m/more": Menu,

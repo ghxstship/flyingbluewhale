@@ -248,7 +248,7 @@ function WorkspaceMenu({
       <DropdownMenuSeparator />
       <DropdownMenuItem
         onSelect={() => {
-          window.location.href = "/console/settings/organization";
+          window.location.href = "/studio/settings/organization";
         }}
         className="flex items-center gap-2 text-[var(--p-text-2)]"
       >

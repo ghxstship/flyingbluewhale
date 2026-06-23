@@ -89,6 +89,6 @@ export async function submitPartnerIntegration(_: State, fd: FormData): Promise<
   });
   if (error) return actionFail(error.message, fd);
 
-  revalidatePath("/console/settings/integrations/submissions");
+  revalidatePath("/studio/settings/integrations/submissions");
   redirect("/integrations/submit/thanks");
 }

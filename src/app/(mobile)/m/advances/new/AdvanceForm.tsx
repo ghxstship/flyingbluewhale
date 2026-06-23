@@ -12,11 +12,12 @@ import { requestAdvance } from "../actions";
  * values, serializes to FormData and calls the `requestAdvance` server
  * action, then navigates back to the advances list on success.
  */
-export function AdvanceForm() {
+export function AdvanceForm({ initial }: { initial?: Record<string, unknown> }) {
   const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const prefilled = !!initial && Object.keys(initial).length > 0;
 
   const close = () => router.push("/m/advances");
 
@@ -45,7 +46,12 @@ export function AdvanceForm() {
           {error}
         </div>
       )}
-      <FormScreen formId="advance" onClose={close} onSubmit={submit} />
+      {prefilled && (
+        <p className="hint" style={{ marginBottom: 8 }}>
+          {t("m.advances.new.prefilled", undefined, "Prefilled from your last request — edit anything that's changed.")}
+        </p>
+      )}
+      <FormScreen formId="advance" initial={initial} onClose={close} onSubmit={submit} />
       {pending && (
         <p className="hint" style={{ marginTop: 8 }}>
           {t("m.advances.new.submitting", undefined, "Submitting…")}

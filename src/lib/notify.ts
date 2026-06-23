@@ -20,7 +20,7 @@ import { emitDomainEvent } from "./automations/dispatch";
  *     eventType: "invoice.paid",
  *     title: "Invoice #0042 paid",
  *     body: "$12,450 from Acme Productions",
- *     href: `/console/finance/invoices/${invoiceId}`,
+ *     href: `/studio/finance/invoices/${invoiceId}`,
  *     data: { invoiceId, amountCents: 1245000 },
  *   });
  */

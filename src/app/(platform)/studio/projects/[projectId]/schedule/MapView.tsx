@@ -1,0 +1,61 @@
+"use client";
+
+import Link from "next/link";
+import { MapPin } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
+
+export type MapPin = {
+  id: string;
+  name: string;
+  locationName: string | null;
+  when: string;
+};
+
+/**
+ * Location-grouped event list (placeholder for a real map renderer).
+ * Renders each unique location_id as a card with the events anchored there.
+ * Upgrade path: swap the card list for a Mapbox/Leaflet renderer once we
+ * add a venue lat/lng surface.
+ */
+export function MapView({ pins }: { pins: MapPin[] }) {
+  const t = useT();
+  if (pins.length === 0) {
+    return (
+      <div className="surface p-6 text-sm text-[var(--p-text-2)]">
+        {t("console.projects.schedule.map.emptyPrefix", undefined, "No Events Carry A Location Yet. Set ")}
+        <strong>location_id</strong>
+        {t("console.projects.schedule.map.emptySuffix", undefined, " on an event to map it.")}
+      </div>
+    );
+  }
+  const byLocation = new Map<string, MapPin[]>();
+  for (const p of pins) {
+    const k = p.locationName ?? t("console.projects.schedule.map.unassigned", undefined, "Unassigned");
+    const list = byLocation.get(k) ?? [];
+    list.push(p);
+    byLocation.set(k, list);
+  }
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from(byLocation.entries()).map(([loc, items]) => (
+        <div key={loc} className="surface rounded-md p-4">
+          <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
+            <MapPin size={14} className="text-[var(--p-accent)]" aria-hidden />
+            {loc}
+            <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">{items.length}</span>
+          </div>
+          <ul className="space-y-1.5">
+            {items.map((it) => (
+              <li key={it.id}>
+                <Link href={`/studio/events/${it.id}`} className="block text-xs hover:underline">
+                  <span className="font-medium">{it.name}</span>{" "}
+                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">{it.when}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}

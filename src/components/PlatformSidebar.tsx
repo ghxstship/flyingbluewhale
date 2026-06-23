@@ -265,13 +265,16 @@ export function PlatformSidebar({
             //  active-route group force-opens so the user can never lose
             //  their current page from the nav.
             const groupItems = itemsOf(g);
-            const hasActive = groupItems.some((i) => matchRoute(pathname ?? "", i.href).isActive);
+            const hasActive =
+              groupItems.some((i) => matchRoute(pathname ?? "", i.href).isActive) ||
+              (!!g.href && matchRoute(pathname ?? "", g.href).isActive);
             const userExpanded = expandedGroups.includes(g.label);
             const isOpen = collapsed ? false : Boolean(query) || hasActive || userExpanded;
             return (
               <SidebarGroup
                 key={g.label}
                 label={g.label}
+                href={g.href}
                 items={g.items}
                 sections={g.sections}
                 pathname={pathname}
@@ -369,6 +372,7 @@ export function PlatformSidebar({
 
 function SidebarGroup({
   label,
+  href,
   items,
   sections,
   pathname,
@@ -379,6 +383,9 @@ function SidebarGroup({
   onToggleGroup,
 }: {
   label: string;
+  /** When set, the group header label is a hub link (ADR-0011 navigable
+   *  group). A separate chevron handles collapse; the label routes here. */
+  href?: string;
   items: NavItem[];
   /** Optional sub-grouping (Linear/Notion pattern). When present, `items` is
    *  ignored and the group renders each section's label + items in order. */
@@ -399,24 +406,61 @@ function SidebarGroup({
   const groupLabelDisplay = t(navGroupKey({ label }), undefined, label);
   const headerId = `sidebar-group-${label.toLowerCase().replace(/\s+/g, "-")}`;
   const useSections = sections && sections.length > 0;
+  const headerActive = !!href && matchRoute(pathname ?? "", href).isActive;
+  const headerClass =
+    "group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface)] hover:text-[var(--p-text-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+  const chevron = (
+    <ChevronDown
+      size={10}
+      aria-hidden="true"
+      className={`shrink-0 transition-transform duration-[var(--motion-fast)] ease-[var(--ease-hover)] ${isOpen ? "" : "-rotate-90"}`}
+    />
+  );
   return (
     <div className="mb-3">
       {!collapsed &&
-        (onToggleGroup ? (
+        // ADR-0011 navigable group: when the group carries a hub `href`, the
+        // label is a Link (routes to the module hub) and the chevron is a
+        // separate collapse control. This is what lets echo leaves drop
+        // without orphaning the hub. Groups without `href` keep the prior
+        // toggle-button (or static label when force-open) behaviour.
+        (href ? (
+          <div className={headerClass}>
+            <Link
+              href={href}
+              prefetch={false}
+              id={headerId}
+              aria-current={headerActive ? "page" : undefined}
+              className={`min-w-0 flex-1 truncate text-start ${headerActive ? "text-[var(--p-text-1)]" : ""}`}
+            >
+              {groupLabelDisplay}
+            </Link>
+            {onToggleGroup ? (
+              <button
+                type="button"
+                onClick={() => onToggleGroup(label)}
+                aria-expanded={isOpen}
+                aria-controls={`${headerId}-items`}
+                aria-label={t("shell.sidebar.toggleGroup", { name: groupLabelDisplay }, `Toggle ${groupLabelDisplay}`)}
+                className="shrink-0 rounded p-0.5 hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+              >
+                {chevron}
+              </button>
+            ) : (
+              chevron
+            )}
+          </div>
+        ) : onToggleGroup ? (
           <button
             type="button"
             id={headerId}
             onClick={() => onToggleGroup(label)}
             aria-expanded={isOpen}
             aria-controls={`${headerId}-items`}
-            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface)] hover:text-[var(--p-text-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+            className={headerClass}
           >
             <span className="truncate">{groupLabelDisplay}</span>
-            <ChevronDown
-              size={10}
-              aria-hidden="true"
-              className={`shrink-0 transition-transform duration-[var(--motion-fast)] ease-[var(--ease-hover)] ${isOpen ? "" : "-rotate-90"}`}
-            />
+            {chevron}
           </button>
         ) : (
           <div id={headerId} className="px-2 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">

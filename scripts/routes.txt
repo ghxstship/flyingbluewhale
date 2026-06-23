@@ -37,150 +37,150 @@
 (personal)/me/organizations/page.tsx|Organizations|Memberships and switcher
 
 # PLATFORM — dashboard
-(platform)/console/page.tsx|Console|Operations dashboard
-(platform)/console/command/page.tsx|Command palette|Global search and actions
+(platform)/studio/page.tsx|Console|Operations dashboard
+(platform)/studio/command/page.tsx|Command palette|Global search and actions
 
 # PLATFORM — work
-(platform)/console/projects/page.tsx|Projects|All projects
-(platform)/console/projects/new/page.tsx|New project|
-(platform)/console/projects/[projectId]/page.tsx|Project|
-(platform)/console/projects/[projectId]/overview/page.tsx|Overview|
-(platform)/console/projects/[projectId]/tasks/page.tsx|Tasks|
-(platform)/console/projects/[projectId]/gantt/page.tsx|Gantt|
-(platform)/console/projects/[projectId]/roadmap/page.tsx|Roadmap|
-(platform)/console/projects/[projectId]/files/page.tsx|Files|
-(platform)/console/projects/[projectId]/calendar/page.tsx|Calendar|
-(platform)/console/projects/[projectId]/budget/page.tsx|Budget|
-(platform)/console/projects/[projectId]/crew/page.tsx|Crew|
-(platform)/console/projects/[projectId]/advancing/page.tsx|Advancing|Internal view of portal advancing
-(platform)/console/projects/[projectId]/portal-preview/page.tsx|Portal preview|Preview external portal as role
-(platform)/console/tasks/page.tsx|Tasks|All tasks
-(platform)/console/tasks/new/page.tsx|New task|
-(platform)/console/tasks/[taskId]/page.tsx|Task|
-(platform)/console/schedule/page.tsx|Schedule|Master schedule with RRULE and ICS export
-(platform)/console/events/page.tsx|Events|
-(platform)/console/events/new/page.tsx|New event|
-(platform)/console/events/[eventId]/page.tsx|Event|
-(platform)/console/locations/page.tsx|Locations|Canonical locations DB
-(platform)/console/locations/new/page.tsx|New location|
-(platform)/console/locations/[locationId]/page.tsx|Location|
-(platform)/console/locations/picker/page.tsx|Location picker|Typeahead with map preview
+(platform)/studio/projects/page.tsx|Projects|All projects
+(platform)/studio/projects/new/page.tsx|New project|
+(platform)/studio/projects/[projectId]/page.tsx|Project|
+(platform)/studio/projects/[projectId]/overview/page.tsx|Overview|
+(platform)/studio/projects/[projectId]/tasks/page.tsx|Tasks|
+(platform)/studio/projects/[projectId]/gantt/page.tsx|Gantt|
+(platform)/studio/projects/[projectId]/roadmap/page.tsx|Roadmap|
+(platform)/studio/projects/[projectId]/files/page.tsx|Files|
+(platform)/studio/projects/[projectId]/calendar/page.tsx|Calendar|
+(platform)/studio/projects/[projectId]/budget/page.tsx|Budget|
+(platform)/studio/projects/[projectId]/crew/page.tsx|Crew|
+(platform)/studio/projects/[projectId]/advancing/page.tsx|Advancing|Internal view of portal advancing
+(platform)/studio/projects/[projectId]/portal-preview/page.tsx|Portal preview|Preview external portal as role
+(platform)/studio/tasks/page.tsx|Tasks|All tasks
+(platform)/studio/tasks/new/page.tsx|New task|
+(platform)/studio/tasks/[taskId]/page.tsx|Task|
+(platform)/studio/schedule/page.tsx|Schedule|Master schedule with RRULE and ICS export
+(platform)/studio/events/page.tsx|Events|
+(platform)/studio/events/new/page.tsx|New event|
+(platform)/studio/events/[eventId]/page.tsx|Event|
+(platform)/studio/locations/page.tsx|Locations|Canonical locations DB
+(platform)/studio/locations/new/page.tsx|New location|
+(platform)/studio/locations/[locationId]/page.tsx|Location|
+(platform)/studio/locations/picker/page.tsx|Location picker|Typeahead with map preview
 
 # PLATFORM — sales / CRM
-(platform)/console/pipeline/page.tsx|Pipeline|Kanban by stage
-(platform)/console/pipeline/[dealId]/page.tsx|Deal|
-(platform)/console/leads/page.tsx|Leads|
-(platform)/console/leads/new/page.tsx|New lead|
-(platform)/console/leads/[leadId]/page.tsx|Lead|
-(platform)/console/clients/page.tsx|Clients|
-(platform)/console/clients/new/page.tsx|New client|
-(platform)/console/clients/[clientId]/page.tsx|Client|
-(platform)/console/proposals/page.tsx|Proposals|
-(platform)/console/proposals/new/page.tsx|New proposal|
-(platform)/console/proposals/[proposalId]/page.tsx|Proposal|
-(platform)/console/proposals/templates/page.tsx|Proposal templates|
-(platform)/console/campaigns/page.tsx|Campaigns|
+(platform)/studio/pipeline/page.tsx|Pipeline|Kanban by stage
+(platform)/studio/pipeline/[dealId]/page.tsx|Deal|
+(platform)/studio/leads/page.tsx|Leads|
+(platform)/studio/leads/new/page.tsx|New lead|
+(platform)/studio/leads/[leadId]/page.tsx|Lead|
+(platform)/studio/clients/page.tsx|Clients|
+(platform)/studio/clients/new/page.tsx|New client|
+(platform)/studio/clients/[clientId]/page.tsx|Client|
+(platform)/studio/proposals/page.tsx|Proposals|
+(platform)/studio/proposals/new/page.tsx|New proposal|
+(platform)/studio/proposals/[proposalId]/page.tsx|Proposal|
+(platform)/studio/proposals/templates/page.tsx|Proposal templates|
+(platform)/studio/campaigns/page.tsx|Campaigns|
 
 # PLATFORM — finance
-(platform)/console/finance/page.tsx|Finance|Cash, AR, AP, budget roll-up
-(platform)/console/finance/invoices/page.tsx|Invoices|
-(platform)/console/finance/invoices/new/page.tsx|New invoice|
-(platform)/console/finance/invoices/[invoiceId]/page.tsx|Invoice|
-(platform)/console/finance/expenses/page.tsx|Expenses|
-(platform)/console/finance/expenses/new/page.tsx|New expense|
-(platform)/console/finance/expenses/[expenseId]/page.tsx|Expense|
-(platform)/console/finance/budgets/page.tsx|Budgets|
-(platform)/console/finance/budgets/new/page.tsx|New budget|
-(platform)/console/finance/budgets/[budgetId]/page.tsx|Budget|
-(platform)/console/finance/time/page.tsx|Time tracking|
-(platform)/console/finance/time/new/page.tsx|New time entry|
-(platform)/console/finance/time/[entryId]/page.tsx|Time entry|
-(platform)/console/finance/mileage/page.tsx|Mileage|
-(platform)/console/finance/mileage/new/page.tsx|New mileage|
-(platform)/console/finance/mileage/[mileageId]/page.tsx|Mileage|
-(platform)/console/finance/advances/page.tsx|Advances|
-(platform)/console/finance/advances/new/page.tsx|Request advance|
-(platform)/console/finance/advances/[advanceId]/page.tsx|Advance|
-(platform)/console/finance/payouts/page.tsx|Payouts|Stripe Connect
-(platform)/console/finance/reports/page.tsx|Reports|P&L, cash flow, project profitability
+(platform)/studio/finance/page.tsx|Finance|Cash, AR, AP, budget roll-up
+(platform)/studio/finance/invoices/page.tsx|Invoices|
+(platform)/studio/finance/invoices/new/page.tsx|New invoice|
+(platform)/studio/finance/invoices/[invoiceId]/page.tsx|Invoice|
+(platform)/studio/finance/expenses/page.tsx|Expenses|
+(platform)/studio/finance/expenses/new/page.tsx|New expense|
+(platform)/studio/finance/expenses/[expenseId]/page.tsx|Expense|
+(platform)/studio/finance/budgets/page.tsx|Budgets|
+(platform)/studio/finance/budgets/new/page.tsx|New budget|
+(platform)/studio/finance/budgets/[budgetId]/page.tsx|Budget|
+(platform)/studio/finance/time/page.tsx|Time tracking|
+(platform)/studio/finance/time/new/page.tsx|New time entry|
+(platform)/studio/finance/time/[entryId]/page.tsx|Time entry|
+(platform)/studio/finance/mileage/page.tsx|Mileage|
+(platform)/studio/finance/mileage/new/page.tsx|New mileage|
+(platform)/studio/finance/mileage/[mileageId]/page.tsx|Mileage|
+(platform)/studio/finance/advances/page.tsx|Advances|
+(platform)/studio/finance/advances/new/page.tsx|Request advance|
+(platform)/studio/finance/advances/[advanceId]/page.tsx|Advance|
+(platform)/studio/finance/payouts/page.tsx|Payouts|Stripe Connect
+(platform)/studio/finance/reports/page.tsx|Reports|P&L, cash flow, project profitability
 
 # PLATFORM — procurement
-(platform)/console/procurement/page.tsx|Procurement|
-(platform)/console/procurement/requisitions/page.tsx|Requisitions|
-(platform)/console/procurement/requisitions/new/page.tsx|New requisition|
-(platform)/console/procurement/requisitions/[reqId]/page.tsx|Requisition|
-(platform)/console/procurement/purchase-orders/page.tsx|Purchase orders|
-(platform)/console/procurement/purchase-orders/new/page.tsx|New PO|
-(platform)/console/procurement/purchase-orders/[poId]/page.tsx|PO|
-(platform)/console/procurement/vendors/page.tsx|Vendors|
-(platform)/console/procurement/vendors/new/page.tsx|New vendor|
-(platform)/console/procurement/vendors/[vendorId]/page.tsx|Vendor|
-(platform)/console/procurement/rfqs/page.tsx|RFQs|
-(platform)/console/procurement/rfqs/new/page.tsx|New RFQ|
-(platform)/console/procurement/rfqs/[rfqId]/page.tsx|RFQ|
-(platform)/console/procurement/catalog/page.tsx|Catalog|Approved item catalog
+(platform)/studio/procurement/page.tsx|Procurement|
+(platform)/studio/procurement/requisitions/page.tsx|Requisitions|
+(platform)/studio/procurement/requisitions/new/page.tsx|New requisition|
+(platform)/studio/procurement/requisitions/[reqId]/page.tsx|Requisition|
+(platform)/studio/procurement/purchase-orders/page.tsx|Purchase orders|
+(platform)/studio/procurement/purchase-orders/new/page.tsx|New PO|
+(platform)/studio/procurement/purchase-orders/[poId]/page.tsx|PO|
+(platform)/studio/procurement/vendors/page.tsx|Vendors|
+(platform)/studio/procurement/vendors/new/page.tsx|New vendor|
+(platform)/studio/procurement/vendors/[vendorId]/page.tsx|Vendor|
+(platform)/studio/procurement/rfqs/page.tsx|RFQs|
+(platform)/studio/procurement/rfqs/new/page.tsx|New RFQ|
+(platform)/studio/procurement/rfqs/[rfqId]/page.tsx|RFQ|
+(platform)/studio/procurement/catalog/page.tsx|Catalog|Approved item catalog
 
 # PLATFORM — production
-(platform)/console/production/fabrication/page.tsx|Fabrication|
-(platform)/console/production/fabrication/new/page.tsx|New fab order|
-(platform)/console/production/fabrication/[orderId]/page.tsx|Fab order|
-(platform)/console/production/dispatch/page.tsx|Dispatch|
-(platform)/console/production/dispatch/live/page.tsx|Live dispatch|
-(platform)/console/production/dispatch/[dispatchId]/page.tsx|Dispatch|
-(platform)/console/production/rentals/page.tsx|Rentals|
-(platform)/console/production/rentals/availability/page.tsx|Rental availability|
-(platform)/console/production/rentals/new/page.tsx|New rental|
-(platform)/console/production/rentals/[rentalId]/page.tsx|Rental|
-(platform)/console/production/equipment/page.tsx|Equipment|
-(platform)/console/production/equipment/new/page.tsx|New equipment|
-(platform)/console/production/equipment/[equipmentId]/page.tsx|Equipment|
-(platform)/console/production/warehouse/page.tsx|Warehouse|
-(platform)/console/production/warehouse/inventory/page.tsx|Inventory|
-(platform)/console/production/warehouse/locations/page.tsx|Warehouse locations|
-(platform)/console/production/logistics/page.tsx|Logistics|
+(platform)/studio/production/fabrication/page.tsx|Fabrication|
+(platform)/studio/production/fabrication/new/page.tsx|New fab order|
+(platform)/studio/production/fabrication/[orderId]/page.tsx|Fab order|
+(platform)/studio/production/dispatch/page.tsx|Dispatch|
+(platform)/studio/production/dispatch/live/page.tsx|Live dispatch|
+(platform)/studio/production/dispatch/[dispatchId]/page.tsx|Dispatch|
+(platform)/studio/production/rentals/page.tsx|Rentals|
+(platform)/studio/production/rentals/availability/page.tsx|Rental availability|
+(platform)/studio/production/rentals/new/page.tsx|New rental|
+(platform)/studio/production/rentals/[rentalId]/page.tsx|Rental|
+(platform)/studio/production/equipment/page.tsx|Equipment|
+(platform)/studio/production/equipment/new/page.tsx|New equipment|
+(platform)/studio/production/equipment/[equipmentId]/page.tsx|Equipment|
+(platform)/studio/production/warehouse/page.tsx|Warehouse|
+(platform)/studio/production/warehouse/inventory/page.tsx|Inventory|
+(platform)/studio/production/warehouse/locations/page.tsx|Warehouse locations|
+(platform)/studio/production/logistics/page.tsx|Logistics|
 
 # PLATFORM — people
-(platform)/console/people/page.tsx|Directory|
-(platform)/console/people/[personId]/page.tsx|Person|
-(platform)/console/people/crew/page.tsx|Crew|Roster and scheduling
-(platform)/console/people/crew/[crewId]/page.tsx|Crew member|
-(platform)/console/people/credentials/page.tsx|Credentials|Certs and assets
-(platform)/console/people/credentials/asset-linker/page.tsx|Asset linker|
-(platform)/console/people/roles/page.tsx|Roles|Permission matrix
-(platform)/console/people/invites/page.tsx|Invites|Pending invites
+(platform)/studio/people/page.tsx|Directory|
+(platform)/studio/people/[personId]/page.tsx|Person|
+(platform)/studio/people/crew/page.tsx|Crew|Roster and scheduling
+(platform)/studio/people/crew/[crewId]/page.tsx|Crew member|
+(platform)/studio/people/credentials/page.tsx|Credentials|Certs and assets
+(platform)/studio/people/credentials/asset-linker/page.tsx|Asset linker|
+(platform)/studio/people/roles/page.tsx|Roles|Permission matrix
+(platform)/studio/people/invites/page.tsx|Invites|Pending invites
 
 # PLATFORM — AI
-(platform)/console/ai/page.tsx|AI|Hub
-(platform)/console/ai/assistant/page.tsx|AI assistant|
-(platform)/console/ai/assistant/[conversationId]/page.tsx|Conversation|
-(platform)/console/ai/drafting/page.tsx|AI drafting|Document workspace
-(platform)/console/ai/automations/page.tsx|Automations|
-(platform)/console/ai/automations/new/page.tsx|New automation|
-(platform)/console/ai/automations/[automationId]/page.tsx|Automation|
-(platform)/console/ai/agents/page.tsx|Agents|Long-running managed agents
+(platform)/studio/ai/page.tsx|AI|Hub
+(platform)/studio/ai/assistant/page.tsx|AI assistant|
+(platform)/studio/ai/assistant/[conversationId]/page.tsx|Conversation|
+(platform)/studio/ai/drafting/page.tsx|AI drafting|Document workspace
+(platform)/studio/ai/automations/page.tsx|Automations|
+(platform)/studio/ai/automations/new/page.tsx|New automation|
+(platform)/studio/ai/automations/[automationId]/page.tsx|Automation|
+(platform)/studio/ai/agents/page.tsx|Agents|Long-running managed agents
 
 # PLATFORM — collab
-(platform)/console/inbox/page.tsx|Inbox|Unified messages and mentions
-(platform)/console/files/page.tsx|Files|Global file browser
-(platform)/console/forms/page.tsx|Forms|
-(platform)/console/forms/new/page.tsx|New form|
-(platform)/console/forms/[formId]/page.tsx|Form|
+(platform)/studio/inbox/page.tsx|Inbox|Unified messages and mentions
+(platform)/studio/files/page.tsx|Files|Global file browser
+(platform)/studio/forms/page.tsx|Forms|
+(platform)/studio/forms/new/page.tsx|New form|
+(platform)/studio/forms/[formId]/page.tsx|Form|
 
 # PLATFORM — settings
-(platform)/console/settings/page.tsx|Settings|
-(platform)/console/settings/organization/page.tsx|Organization|
-(platform)/console/settings/billing/page.tsx|Billing|Subscription and payment methods
-(platform)/console/settings/integrations/page.tsx|Integrations|
-(platform)/console/settings/integrations/marketplace/page.tsx|Marketplace|
-(platform)/console/settings/integrations/[integrationId]/page.tsx|Integration|
-(platform)/console/settings/api/page.tsx|API|Keys, rate limits
-(platform)/console/settings/webhooks/page.tsx|Webhooks|
-(platform)/console/settings/webhooks/new/page.tsx|New webhook|
-(platform)/console/settings/webhooks/[webhookId]/page.tsx|Webhook|
-(platform)/console/settings/audit/page.tsx|Audit log|
-(platform)/console/settings/compliance/page.tsx|Compliance|Retention, DPA, exports
-(platform)/console/settings/branding/page.tsx|Branding|Portal and email branding
-(platform)/console/settings/domains/page.tsx|Domains|Custom domains for portals
+(platform)/studio/settings/page.tsx|Settings|
+(platform)/studio/settings/organization/page.tsx|Organization|
+(platform)/studio/settings/billing/page.tsx|Billing|Subscription and payment methods
+(platform)/studio/settings/integrations/page.tsx|Integrations|
+(platform)/studio/settings/integrations/marketplace/page.tsx|Marketplace|
+(platform)/studio/settings/integrations/[integrationId]/page.tsx|Integration|
+(platform)/studio/settings/api/page.tsx|API|Keys, rate limits
+(platform)/studio/settings/webhooks/page.tsx|Webhooks|
+(platform)/studio/settings/webhooks/new/page.tsx|New webhook|
+(platform)/studio/settings/webhooks/[webhookId]/page.tsx|Webhook|
+(platform)/studio/settings/audit/page.tsx|Audit log|
+(platform)/studio/settings/compliance/page.tsx|Compliance|Retention, DPA, exports
+(platform)/studio/settings/branding/page.tsx|Branding|Portal and email branding
+(platform)/studio/settings/domains/page.tsx|Domains|Custom domains for portals
 
 # PORTAL — gateway
 (portal)/p/[slug]/page.tsx|Gateway|Auth-resolves persona
@@ -233,8 +233,6 @@
 (mobile)/m/check-in/page.tsx|Check-in|Scanner home
 (mobile)/m/check-in/scan/[slug]/page.tsx|Scan ticket|QR scan UI
 (mobile)/m/check-in/manual/page.tsx|Manual lookup|
-(mobile)/m/crew/page.tsx|Today|Call sheet
-(mobile)/m/crew/clock/page.tsx|Clock|Geo-verified clock in/out
 (mobile)/m/tasks/page.tsx|Tasks|Offline queue
 (mobile)/m/inventory/scan/page.tsx|Inventory scan|Equipment scan in/out
 (mobile)/m/incidents/new/page.tsx|Incident|Safety report
@@ -245,184 +243,184 @@
 # ════════════════════════════════════════════════════════════════════════
 
 # ATLVS — Programs (WF-004, 005, 006, 024, 028, 029, 150, 151, 152, 154, 260, 261)
-(platform)/console/programs/page.tsx|Programs|Master schedule, risk, readiness
-(platform)/console/programs/schedule/page.tsx|Master schedule|Gantt with dependencies and baselines
-(platform)/console/programs/risk/page.tsx|Risk register|RAID log across the portfolio
-(platform)/console/programs/risk/new/page.tsx|New risk|
-(platform)/console/programs/risk/[riskId]/page.tsx|Risk|
-(platform)/console/programs/reviews/page.tsx|Reviews|Program review cadence
-(platform)/console/programs/reviews/[reviewId]/page.tsx|Review|
-(platform)/console/programs/readiness/page.tsx|Readiness exercises|TTX and full-scale exercises
-(platform)/console/programs/readiness/[exerciseId]/page.tsx|Exercise|
-(platform)/console/programs/scope/page.tsx|Program scope|Disciplines, events, quotas
-(platform)/console/programs/sessions/page.tsx|Sessions|Heat, round, medal session
-(platform)/console/programs/ceremonies/page.tsx|Ceremonies|Opening, closing, victory, mixed zone
-(platform)/console/programs/ceremonies/[ceremonyId]/page.tsx|Ceremony|
-(platform)/console/programs/protocol/page.tsx|Protocol|VIP itinerary and dignitary rules
-(platform)/console/programs/pressconf/page.tsx|Press conferences|Schedule and booking
-(platform)/console/programs/cases/page.tsx|Cases|Protests and appeals
+(platform)/studio/programs/page.tsx|Programs|Master schedule, risk, readiness
+(platform)/studio/programs/schedule/page.tsx|Master schedule|Gantt with dependencies and baselines
+(platform)/studio/programs/risk/page.tsx|Risk register|RAID log across the portfolio
+(platform)/studio/programs/risk/new/page.tsx|New risk|
+(platform)/studio/programs/risk/[riskId]/page.tsx|Risk|
+(platform)/studio/programs/reviews/page.tsx|Reviews|Program review cadence
+(platform)/studio/programs/reviews/[reviewId]/page.tsx|Review|
+(platform)/studio/programs/readiness/page.tsx|Readiness exercises|TTX and full-scale exercises
+(platform)/studio/programs/readiness/[exerciseId]/page.tsx|Exercise|
+(platform)/studio/programs/scope/page.tsx|Program scope|Disciplines, events, quotas
+(platform)/studio/programs/sessions/page.tsx|Sessions|Heat, round, medal session
+(platform)/studio/programs/ceremonies/page.tsx|Ceremonies|Opening, closing, victory, mixed zone
+(platform)/studio/programs/ceremonies/[ceremonyId]/page.tsx|Ceremony|
+(platform)/studio/programs/protocol/page.tsx|Protocol|VIP itinerary and dignitary rules
+(platform)/studio/programs/pressconf/page.tsx|Press conferences|Schedule and booking
+(platform)/studio/programs/cases/page.tsx|Cases|Protests and appeals
 
 # ATLVS — Venues (WF-010, 011, 012, 013, 014, 015, 017, 018)
-(platform)/console/venues/page.tsx|Venues|Portfolio, clusters, zones
-(platform)/console/venues/new/page.tsx|New venue|
-(platform)/console/venues/[venueId]/page.tsx|Venue|
-(platform)/console/venues/[venueId]/zones/page.tsx|Zones|Venue zones and precincts
-(platform)/console/venues/[venueId]/design/page.tsx|Design|Overlay spec and revisions
-(platform)/console/venues/[venueId]/build/page.tsx|Build|Construction oversight
-(platform)/console/venues/[venueId]/handover/page.tsx|Handover|Commissioning and takeover
-(platform)/console/venues/[venueId]/certifications/page.tsx|Certifications|FOP homologation and permits
-(platform)/console/venues/[venueId]/vop/page.tsx|VOP|Venue Operations Plan
-(platform)/console/venues/[venueId]/ros/page.tsx|Run of Show|Daily BOD and EOD
-(platform)/console/venues/[venueId]/closeout/page.tsx|Closeout|Demob and reinstatement
+(platform)/studio/venues/page.tsx|Venues|Portfolio, clusters, zones
+(platform)/studio/venues/new/page.tsx|New venue|
+(platform)/studio/venues/[venueId]/page.tsx|Venue|
+(platform)/studio/venues/[venueId]/zones/page.tsx|Zones|Venue zones and precincts
+(platform)/studio/venues/[venueId]/design/page.tsx|Design|Overlay spec and revisions
+(platform)/studio/venues/[venueId]/build/page.tsx|Build|Construction oversight
+(platform)/studio/venues/[venueId]/handover/page.tsx|Handover|Commissioning and takeover
+(platform)/studio/venues/[venueId]/certifications/page.tsx|Certifications|FOP homologation and permits
+(platform)/studio/venues/[venueId]/vop/page.tsx|VOP|Venue Operations Plan
+(platform)/studio/venues/[venueId]/ros/page.tsx|Run of Show|Daily BOD and EOD
+(platform)/studio/venues/[venueId]/closeout/page.tsx|Closeout|Demob and reinstatement
 
 # ATLVS — Accreditation (WF-050, 051, 052, 053, 054)
-(platform)/console/accreditation/page.tsx|Accreditation|Policy, vetting, print, scans
-(platform)/console/accreditation/policy/page.tsx|Policy|Categories and zone matrix
-(platform)/console/accreditation/categories/page.tsx|Categories|
-(platform)/console/accreditation/zones/page.tsx|Zones|Zone definitions and privileges
-(platform)/console/accreditation/vetting/page.tsx|Vetting queue|Background check status
-(platform)/console/accreditation/vetting/[applicationId]/page.tsx|Application|
-(platform)/console/accreditation/print/page.tsx|Print queue|Card production
-(platform)/console/accreditation/scans/page.tsx|Scans|Gate access log
-(platform)/console/accreditation/changes/page.tsx|Changes|Upgrades, revocations, replacements
-(platform)/console/accreditation/changes/[changeId]/page.tsx|Change|
+(platform)/studio/accreditation/page.tsx|Accreditation|Policy, vetting, print, scans
+(platform)/studio/accreditation/policy/page.tsx|Policy|Categories and zone matrix
+(platform)/studio/accreditation/categories/page.tsx|Categories|
+(platform)/studio/accreditation/zones/page.tsx|Zones|Zone definitions and privileges
+(platform)/studio/accreditation/vetting/page.tsx|Vetting queue|Background check status
+(platform)/studio/accreditation/vetting/[applicationId]/page.tsx|Application|
+(platform)/studio/accreditation/print/page.tsx|Print queue|Card production
+(platform)/studio/accreditation/scans/page.tsx|Scans|Gate access log
+(platform)/studio/accreditation/changes/page.tsx|Changes|Upgrades, revocations, replacements
+(platform)/studio/accreditation/changes/[changeId]/page.tsx|Change|
 
 # ATLVS — Workforce (WF-016, 190, 191, 192, 193, 194, 195, 196, 197, 082)
-(platform)/console/workforce/page.tsx|Workforce|Plan, roster, services
-(platform)/console/workforce/planning/page.tsx|Planning|FTE strategy and headcount
-(platform)/console/workforce/deployment/page.tsx|Deployment|By venue, zone, shift
-(platform)/console/workforce/staff/page.tsx|Paid staff|Applicant pipeline and onboarding
-(platform)/console/workforce/staff/[staffId]/page.tsx|Staff member|
-(platform)/console/workforce/volunteers/page.tsx|Volunteers|Program pipeline
-(platform)/console/workforce/volunteers/[volunteerId]/page.tsx|Volunteer|
-(platform)/console/workforce/contractors/page.tsx|Contractors|Vendor personnel
-(platform)/console/workforce/contractors/[contractorId]/page.tsx|Contractor|
-(platform)/console/workforce/uniforms/page.tsx|Uniforms|Distribution and rate card
-(platform)/console/workforce/services/page.tsx|Services|Meals, breaks, amenities
-(platform)/console/workforce/training/page.tsx|Training|Catalog and assignment
-(platform)/console/workforce/training/[courseId]/page.tsx|Course|
-(platform)/console/workforce/rosters/page.tsx|Rosters|Shift engine
-(platform)/console/workforce/rosters/[rosterId]/page.tsx|Roster|
-(platform)/console/workforce/housing/page.tsx|Housing|Workforce billeting
+(platform)/studio/workforce/page.tsx|Workforce|Plan, roster, services
+(platform)/studio/workforce/planning/page.tsx|Planning|FTE strategy and headcount
+(platform)/studio/workforce/deployment/page.tsx|Deployment|By venue, zone, shift
+(platform)/studio/workforce/staff/page.tsx|Paid staff|Applicant pipeline and onboarding
+(platform)/studio/workforce/staff/[staffId]/page.tsx|Staff member|
+(platform)/studio/workforce/volunteers/page.tsx|Volunteers|Program pipeline
+(platform)/studio/workforce/volunteers/[volunteerId]/page.tsx|Volunteer|
+(platform)/studio/workforce/contractors/page.tsx|Contractors|Vendor personnel
+(platform)/studio/workforce/contractors/[contractorId]/page.tsx|Contractor|
+(platform)/studio/workforce/uniforms/page.tsx|Uniforms|Distribution and rate card
+(platform)/studio/workforce/services/page.tsx|Services|Meals, breaks, amenities
+(platform)/studio/workforce/training/page.tsx|Training|Catalog and assignment
+(platform)/studio/workforce/training/[courseId]/page.tsx|Course|
+(platform)/studio/workforce/rosters/page.tsx|Rosters|Shift engine
+(platform)/studio/workforce/rosters/[rosterId]/page.tsx|Roster|
+(platform)/studio/workforce/housing/page.tsx|Housing|Workforce billeting
 
 # ATLVS — Safety & Incidents (WF-060, 061, 062, 064, 065, 090, 092, 094, 142, 241, 252, 035)
-(platform)/console/safety/page.tsx|Safety|Threats, incidents, crisis
-(platform)/console/safety/threats/page.tsx|Threats|Intelligence register
-(platform)/console/safety/playbooks/page.tsx|Playbooks|ConOps library
-(platform)/console/safety/guard-tours/page.tsx|Guard tours|Patrol plans and logs
-(platform)/console/safety/incidents/page.tsx|Incidents|Unified security + cyber
-(platform)/console/safety/major-incident/page.tsx|Major incident|Crisis mode
-(platform)/console/safety/major-incident/[eventId]/page.tsx|Incident event|War room
-(platform)/console/safety/cyber-ir/page.tsx|Cyber IR|Contain, eradicate, recover
-(platform)/console/safety/medical/page.tsx|Medical|Plans and encounters
-(platform)/console/safety/medical/plan/page.tsx|Medical plan|
-(platform)/console/safety/medical/encounters/page.tsx|Encounters|PHI-scoped
-(platform)/console/safety/environmental/page.tsx|Environmental|Heat, air, weather
-(platform)/console/safety/crisis/page.tsx|Crisis comms|Mass-notify
-(platform)/console/safety/crisis/new/page.tsx|New alert|
-(platform)/console/safety/safeguarding/page.tsx|Safeguarding|Confidential reports
-(platform)/console/safety/safeguarding/[reportId]/page.tsx|Safeguarding report|
-(platform)/console/safety/bcdr/page.tsx|BC/DR|Runbooks and exercises
+(platform)/studio/safety/page.tsx|Safety|Threats, incidents, crisis
+(platform)/studio/safety/threats/page.tsx|Threats|Intelligence register
+(platform)/studio/safety/playbooks/page.tsx|Playbooks|ConOps library
+(platform)/studio/safety/guard-tours/page.tsx|Guard tours|Patrol plans and logs
+(platform)/studio/safety/incidents/page.tsx|Incidents|Unified security + cyber
+(platform)/studio/safety/major-incident/page.tsx|Major incident|Crisis mode
+(platform)/studio/safety/major-incident/[eventId]/page.tsx|Incident event|War room
+(platform)/studio/safety/cyber-ir/page.tsx|Cyber IR|Contain, eradicate, recover
+(platform)/studio/safety/medical/page.tsx|Medical|Plans and encounters
+(platform)/studio/safety/medical/plan/page.tsx|Medical plan|
+(platform)/studio/safety/medical/encounters/page.tsx|Encounters|PHI-scoped
+(platform)/studio/safety/environmental/page.tsx|Environmental|Heat, air, weather
+(platform)/studio/safety/crisis/page.tsx|Crisis comms|Mass-notify
+(platform)/studio/safety/crisis/new/page.tsx|New alert|
+(platform)/studio/safety/safeguarding/page.tsx|Safeguarding|Confidential reports
+(platform)/studio/safety/safeguarding/[reportId]/page.tsx|Safeguarding report|
+(platform)/studio/safety/bcdr/page.tsx|BC/DR|Runbooks and exercises
 
 # ATLVS — Transport (WF-031, 071, 072, 073, 074, 076)
-(platform)/console/transport/page.tsx|Transport|Dispatch and A&D
-(platform)/console/transport/dispatch/page.tsx|Dispatch|T1 T2 T3 fleets
-(platform)/console/transport/dispatch/[runId]/page.tsx|Run|
-(platform)/console/transport/ad/page.tsx|Arrivals & departures|Flight feed and ground ops
-(platform)/console/transport/ad/[manifestId]/page.tsx|Manifest|
-(platform)/console/transport/workforce/page.tsx|Workforce shuttles|Shift-linked routes
-(platform)/console/transport/fleets/page.tsx|Fleets|Vehicles and drivers
+(platform)/studio/transport/page.tsx|Transport|Dispatch and A&D
+(platform)/studio/transport/dispatch/page.tsx|Dispatch|T1 T2 T3 fleets
+(platform)/studio/transport/dispatch/[runId]/page.tsx|Run|
+(platform)/studio/transport/ad/page.tsx|Arrivals & departures|Flight feed and ground ops
+(platform)/studio/transport/ad/[manifestId]/page.tsx|Manifest|
+(platform)/studio/transport/workforce/page.tsx|Workforce shuttles|Shift-linked routes
+(platform)/studio/transport/fleets/page.tsx|Fleets|Vehicles and drivers
 
 # ATLVS — Accommodation (WF-030, 080, 081)
-(platform)/console/accommodation/page.tsx|Accommodation|Hotel program
-(platform)/console/accommodation/blocks/page.tsx|Group blocks|OF hotel program
-(platform)/console/accommodation/blocks/[blockId]/page.tsx|Block|
-(platform)/console/accommodation/village/page.tsx|Village|Residential zone
+(platform)/studio/accommodation/page.tsx|Accommodation|Hotel program
+(platform)/studio/accommodation/blocks/page.tsx|Group blocks|OF hotel program
+(platform)/studio/accommodation/blocks/[blockId]/page.tsx|Block|
+(platform)/studio/accommodation/village/page.tsx|Village|Residential zone
 
 # ATLVS — Participants (WF-021, 040, 256)
-(platform)/console/participants/page.tsx|Participants|Delegations and entries
-(platform)/console/participants/delegations/page.tsx|Delegations|Stakeholder accounts
-(platform)/console/participants/delegations/[delegationId]/page.tsx|Delegation|
-(platform)/console/participants/entries/page.tsx|Entries|Submission registry
-(platform)/console/participants/visa/page.tsx|Visa|Letter of invite and status
-(platform)/console/participants/visa/[caseId]/page.tsx|Visa case|
+(platform)/studio/participants/page.tsx|Participants|Delegations and entries
+(platform)/studio/participants/delegations/page.tsx|Delegations|Stakeholder accounts
+(platform)/studio/participants/delegations/[delegationId]/page.tsx|Delegation|
+(platform)/studio/participants/entries/page.tsx|Entries|Submission registry
+(platform)/studio/participants/visa/page.tsx|Visa|Letter of invite and status
+(platform)/studio/participants/visa/[caseId]/page.tsx|Visa case|
 
 # ATLVS — Commercial (WF-170-176, 183)
-(platform)/console/commercial/page.tsx|Commercial|Sponsors, tickets, brand
-(platform)/console/commercial/sponsors/page.tsx|Sponsors|Entitlement management
-(platform)/console/commercial/sponsors/[sponsorId]/page.tsx|Sponsor|
-(platform)/console/commercial/hospitality/page.tsx|Hospitality|Packages and guests
-(platform)/console/commercial/hospitality/[packageId]/page.tsx|Package|
-(platform)/console/commercial/tickets/page.tsx|Ticketing|Pricing and allocation
-(platform)/console/commercial/tickets/[ticketTypeId]/page.tsx|Ticket type|
-(platform)/console/commercial/licensing/page.tsx|Licensing|Royalty and merchandise
-(platform)/console/commercial/brand/page.tsx|Brand|Look of Games and kit
+(platform)/studio/commercial/page.tsx|Commercial|Sponsors, tickets, brand
+(platform)/studio/commercial/sponsors/page.tsx|Sponsors|Entitlement management
+(platform)/studio/commercial/sponsors/[sponsorId]/page.tsx|Sponsor|
+(platform)/studio/commercial/hospitality/page.tsx|Hospitality|Packages and guests
+(platform)/studio/commercial/hospitality/[packageId]/page.tsx|Package|
+(platform)/studio/commercial/tickets/page.tsx|Ticketing|Pricing and allocation
+(platform)/studio/commercial/tickets/[ticketTypeId]/page.tsx|Ticket type|
+(platform)/studio/commercial/licensing/page.tsx|Licensing|Royalty and merchandise
+(platform)/studio/commercial/brand/page.tsx|Brand|Look of Games and kit
 
 # ATLVS — Logistics (WF-200, 201, 202, 203, 212)
-(platform)/console/logistics/page.tsx|Logistics|Rate card, freight, warehouse
-(platform)/console/logistics/ratecard/page.tsx|Rate card|Shared catalog engine
-(platform)/console/logistics/ratecard/[itemId]/page.tsx|Catalog item|
-(platform)/console/logistics/freight/page.tsx|Freight|Customs and bonded
-(platform)/console/logistics/freight/[shipmentId]/page.tsx|Shipment|
-(platform)/console/logistics/warehouse/page.tsx|Warehouse|FF&E WMS
-(platform)/console/logistics/services/page.tsx|Services|Waste and cleaning
-(platform)/console/logistics/disposition/page.tsx|Disposition|Circularity and reuse
+(platform)/studio/logistics/page.tsx|Logistics|Rate card, freight, warehouse
+(platform)/studio/logistics/ratecard/page.tsx|Rate card|Shared catalog engine
+(platform)/studio/logistics/ratecard/[itemId]/page.tsx|Catalog item|
+(platform)/studio/logistics/freight/page.tsx|Freight|Customs and bonded
+(platform)/studio/logistics/freight/[shipmentId]/page.tsx|Shipment|
+(platform)/studio/logistics/warehouse/page.tsx|Warehouse|FF&E WMS
+(platform)/studio/logistics/services/page.tsx|Services|Waste and cleaning
+(platform)/studio/logistics/disposition/page.tsx|Disposition|Circularity and reuse
 
 # ATLVS — Production expand (WF-113, 114, 135)
-(platform)/console/production/compounds/page.tsx|Compounds|Broadcast compounds and cable plant
-(platform)/console/production/av/page.tsx|AV systems|Scoreboards and sound
-(platform)/console/production/ros/page.tsx|Run of show|Cue authoring
+(platform)/studio/production/compounds/page.tsx|Compounds|Broadcast compounds and cable plant
+(platform)/studio/production/av/page.tsx|AV systems|Scoreboards and sound
+(platform)/studio/production/ros/page.tsx|Run of show|Cue authoring
 
 # ATLVS — Integrations / TOC (WF-131, 134)
-(platform)/console/integrations/page.tsx|Integrations|Connector registry
-(platform)/console/integrations/[connectorId]/page.tsx|Connector|
-(platform)/console/ops/page.tsx|Operations|TOC and ITIL
-(platform)/console/ops/toc/page.tsx|TOC|Incident, problem, change
-(platform)/console/ops/toc/problems/page.tsx|Problems|
-(platform)/console/ops/toc/changes/page.tsx|Changes|
+(platform)/studio/integrations/page.tsx|Integrations|Connector registry
+(platform)/studio/integrations/[connectorId]/page.tsx|Connector|
+(platform)/studio/ops/page.tsx|Operations|TOC and ITIL
+(platform)/studio/ops/toc/page.tsx|TOC|Incident, problem, change
+(platform)/studio/ops/toc/problems/page.tsx|Problems|
+(platform)/studio/ops/toc/changes/page.tsx|Changes|
 
 # ATLVS — Legal & Privacy (WF-230, 232, 240)
-(platform)/console/legal/page.tsx|Legal|IP, privacy, insurance
-(platform)/console/legal/ip/page.tsx|IP|Trademark register
-(platform)/console/legal/ip/[markId]/page.tsx|Mark|
-(platform)/console/legal/privacy/page.tsx|Privacy|DSAR queue and consent
-(platform)/console/legal/privacy/dsar/page.tsx|DSAR|Data subject requests
-(platform)/console/legal/privacy/dsar/[requestId]/page.tsx|DSAR request|
-(platform)/console/legal/privacy/consent/page.tsx|Consent|Registry
-(platform)/console/legal/privacy/datamap/page.tsx|Data map|
-(platform)/console/legal/insurance/page.tsx|Insurance|Policies and claims
+(platform)/studio/legal/page.tsx|Legal|IP, privacy, insurance
+(platform)/studio/legal/ip/page.tsx|IP|Trademark register
+(platform)/studio/legal/ip/[markId]/page.tsx|Mark|
+(platform)/studio/legal/privacy/page.tsx|Privacy|DSAR queue and consent
+(platform)/studio/legal/privacy/dsar/page.tsx|DSAR|Data subject requests
+(platform)/studio/legal/privacy/dsar/[requestId]/page.tsx|DSAR request|
+(platform)/studio/legal/privacy/consent/page.tsx|Consent|Registry
+(platform)/studio/legal/privacy/datamap/page.tsx|Data map|
+(platform)/studio/legal/insurance/page.tsx|Insurance|Policies and claims
 
 # ATLVS — Comms (WF-250, 251, 252)
-(platform)/console/comms/page.tsx|Comms|Campaigns
-(platform)/console/comms/internal/page.tsx|Internal comms|Workforce campaigns
-(platform)/console/comms/internal/new/page.tsx|New campaign|
-(platform)/console/comms/external/page.tsx|External PR|Media list
+(platform)/studio/comms/page.tsx|Comms|Campaigns
+(platform)/studio/comms/internal/page.tsx|Internal comms|Workforce campaigns
+(platform)/studio/comms/internal/new/page.tsx|New campaign|
+(platform)/studio/comms/external/page.tsx|External PR|Media list
 
 # ATLVS — Sustainability (WF-210, 211)
-(platform)/console/sustainability/page.tsx|Sustainability|Strategy and reporting
-(platform)/console/sustainability/carbon/page.tsx|Carbon|Footprint and offsets
+(platform)/studio/sustainability/page.tsx|Sustainability|Strategy and reporting
+(platform)/studio/sustainability/carbon/page.tsx|Carbon|Footprint and offsets
 
 # ATLVS — Knowledge Base (WF-261)
-(platform)/console/kb/page.tsx|Knowledge base|OGKM-style capture
-(platform)/console/kb/[articleId]/page.tsx|Article|
+(platform)/studio/kb/page.tsx|Knowledge base|OGKM-style capture
+(platform)/studio/kb/[articleId]/page.tsx|Article|
 
 # ATLVS — Governance (WF-002)
-(platform)/console/settings/governance/page.tsx|Governance|Board, committees, officers
+(platform)/studio/settings/governance/page.tsx|Governance|Board, committees, officers
 
 # ATLVS — Meetings (WF-042, 043)
-(platform)/console/meetings/page.tsx|Meetings|Technical and CdM
-(platform)/console/meetings/[meetingId]/page.tsx|Meeting|
+(platform)/studio/meetings/page.tsx|Meetings|Technical and CdM
+(platform)/studio/meetings/[meetingId]/page.tsx|Meeting|
 
 # ATLVS — Rate card shortcut for delegation (WF-041)
-(platform)/console/ratecard/page.tsx|Rate card (admin)|Delegation orders
+(platform)/studio/ratecard/page.tsx|Rate card (admin)|Delegation orders
 
 # ATLVS — Services desk (WF-032)
-(platform)/console/services/page.tsx|Service desk|Resident and participant requests
-(platform)/console/services/requests/page.tsx|Requests|
-(platform)/console/services/requests/[requestId]/page.tsx|Request|
+(platform)/studio/services/page.tsx|Service desk|Resident and participant requests
+(platform)/studio/services/requests/page.tsx|Requests|
+(platform)/studio/services/requests/[requestId]/page.tsx|Request|
 
 # ATLVS — Training venues (WF-033)
-(platform)/console/venues/training/page.tsx|Training venues|Bookable
+(platform)/studio/venues/training/page.tsx|Training venues|Bookable
 
 # ════════════════════════════════════════════════════════════════════════
 # GVTEWAY — new personas: delegation, media, vip, volunteer, athlete
@@ -486,44 +484,28 @@
 # COMPVSS — mobile ops PWA
 # ════════════════════════════════════════════════════════════════════════
 
-(mobile)/m/gate/page.tsx|Gate|Accreditation + ticket scanner
-(mobile)/m/gate/scan/page.tsx|Scan|Camera QR scan
 (mobile)/m/wallet/page.tsx|Wallet|My credential
-(mobile)/m/shift/page.tsx|Shift|Today's shift
-(mobile)/m/shift/swap/page.tsx|Swap shift|
-(mobile)/m/checkin/page.tsx|Check-in|Clock and meal credit
 (mobile)/m/incident/page.tsx|Incident|Field intake
 (mobile)/m/incident/new/page.tsx|New incident|
-(mobile)/m/medic/page.tsx|Medic|Triage
-(mobile)/m/medic/new/page.tsx|New encounter|
-(mobile)/m/safeguarding/page.tsx|Safeguarding|Confidential report
 (mobile)/m/alerts/page.tsx|Alerts|Crisis notifications
-(mobile)/m/driver/page.tsx|Driver|Manifest
-(mobile)/m/driver/run/[runId]/page.tsx|Run|
-(mobile)/m/ad/page.tsx|A&D|Airport ground ops
-(mobile)/m/ros/page.tsx|Run of show|Live cues
-(mobile)/m/ros/[showId]/page.tsx|Show|
-(mobile)/m/guard/page.tsx|Guard|Tour log
-(mobile)/m/wms/page.tsx|Warehouse|Pick and put-away
 (mobile)/m/punch/page.tsx|Punch list|Inspection
 (mobile)/m/handover/page.tsx|Handover|Walk and sign
 (mobile)/m/requests/page.tsx|Requests|Cleaning and waste
 (mobile)/m/coc/page.tsx|Chain of custody|Sample and evidence
-(mobile)/m/wayfind/page.tsx|Wayfind|Indoor map
 (mobile)/m/notifications/page.tsx|Notifications|
 
 # Chain of custody (WF-101) — generic COC for doping/evidence
-(platform)/console/compliance/coc/page.tsx|Chain of custody|Sample and evidence tracking
+(platform)/studio/compliance/coc/page.tsx|Chain of custody|Sample and evidence tracking
 
 # Finance extensions — multi-currency + variance
-(platform)/console/finance/treasury/page.tsx|Treasury|Multi-currency positions and FX rates
+(platform)/studio/finance/treasury/page.tsx|Treasury|Multi-currency positions and FX rates
 
 # Procurement extensions
-(platform)/console/procurement/sourcing/page.tsx|Sourcing|RFQ and contract-linked sourcing events
-(platform)/console/procurement/scorecards/page.tsx|Supplier scorecards|SLA and KPI performance tracking
+(platform)/studio/procurement/sourcing/page.tsx|Sourcing|RFQ and contract-linked sourcing events
+(platform)/studio/procurement/scorecards/page.tsx|Supplier scorecards|SLA and KPI performance tracking
 
 # Operations hub (pre-Olympic incidents landing)
-(platform)/console/operations/page.tsx|Operations|Legacy incidents view
+(platform)/studio/operations/page.tsx|Operations|Legacy incidents view
 
 # Privacy self-service for remaining portal personas
 (portal)/p/[slug]/artist/privacy/page.tsx|Privacy|DSAR self-service
@@ -535,45 +517,45 @@
 # ════════════════════════════════════════════════════════════════════════
 
 # CONSOLE — marketplace hub
-(platform)/console/marketplace/page.tsx|Marketplace|Public RFQs, gigs, talent calls, offers
-(platform)/console/marketplace/settings/page.tsx|Marketplace settings|Take rate, public org profile, verification
+(platform)/studio/marketplace/page.tsx|Marketplace|Public RFQs, gigs, talent calls, offers
+(platform)/studio/marketplace/settings/page.tsx|Marketplace settings|Take rate, public org profile, verification
 
 # CONSOLE — job board (employer ATS)
-(platform)/console/marketplace/postings/page.tsx|Job postings|Public crew job board listings
-(platform)/console/marketplace/postings/new/page.tsx|New posting|
-(platform)/console/marketplace/postings/[postingId]/page.tsx|Posting|Detail + ATS pipeline
-(platform)/console/marketplace/postings/[postingId]/edit/page.tsx|Edit posting|
-(platform)/console/marketplace/postings/[postingId]/applicants/page.tsx|Applicants|ATS pipeline
-(platform)/console/marketplace/postings/[postingId]/applicants/[applicationId]/page.tsx|Application|
+(platform)/studio/marketplace/postings/page.tsx|Job postings|Public crew job board listings
+(platform)/studio/marketplace/postings/new/page.tsx|New posting|
+(platform)/studio/marketplace/postings/[postingId]/page.tsx|Posting|Detail + ATS pipeline
+(platform)/studio/marketplace/postings/[postingId]/edit/page.tsx|Edit posting|
+(platform)/studio/marketplace/postings/[postingId]/applicants/page.tsx|Applicants|ATS pipeline
+(platform)/studio/marketplace/postings/[postingId]/applicants/[applicationId]/page.tsx|Application|
 
 # CONSOLE — open calls (talent + RFP-public)
-(platform)/console/marketplace/calls/page.tsx|Open calls|Casting calls and open RFPs
-(platform)/console/marketplace/calls/new/page.tsx|New call|
-(platform)/console/marketplace/calls/[callId]/page.tsx|Call|Detail + submissions
-(platform)/console/marketplace/calls/[callId]/edit/page.tsx|Edit call|
-(platform)/console/marketplace/calls/[callId]/submissions/page.tsx|Submissions|
-(platform)/console/marketplace/calls/[callId]/submissions/[submissionId]/page.tsx|Submission|
+(platform)/studio/marketplace/calls/page.tsx|Open calls|Casting calls and open RFPs
+(platform)/studio/marketplace/calls/new/page.tsx|New call|
+(platform)/studio/marketplace/calls/[callId]/page.tsx|Call|Detail + submissions
+(platform)/studio/marketplace/calls/[callId]/edit/page.tsx|Edit call|
+(platform)/studio/marketplace/calls/[callId]/submissions/page.tsx|Submissions|
+(platform)/studio/marketplace/calls/[callId]/submissions/[submissionId]/page.tsx|Submission|
 
 # CONSOLE — talent roster + EPK + riders (org-managed)
-(platform)/console/marketplace/talent/page.tsx|Talent|Org-managed talent roster
-(platform)/console/marketplace/talent/new/page.tsx|New talent|
-(platform)/console/marketplace/talent/[talentId]/page.tsx|Talent profile|EPK detail
-(platform)/console/marketplace/talent/[talentId]/edit/page.tsx|Edit talent|
-(platform)/console/marketplace/talent/[talentId]/riders/page.tsx|Riders|Tech, hospitality, input list
-(platform)/console/marketplace/talent/[talentId]/riders/new/page.tsx|New rider|
-(platform)/console/marketplace/talent/[talentId]/riders/[riderId]/page.tsx|Rider|
+(platform)/studio/marketplace/talent/page.tsx|Talent|Org-managed talent roster
+(platform)/studio/marketplace/talent/new/page.tsx|New talent|
+(platform)/studio/marketplace/talent/[talentId]/page.tsx|Talent profile|EPK detail
+(platform)/studio/marketplace/talent/[talentId]/edit/page.tsx|Edit talent|
+(platform)/studio/marketplace/talent/[talentId]/riders/page.tsx|Riders|Tech, hospitality, input list
+(platform)/studio/marketplace/talent/[talentId]/riders/new/page.tsx|New rider|
+(platform)/studio/marketplace/talent/[talentId]/riders/[riderId]/page.tsx|Rider|
 
 # CONSOLE — offers (talent booking)
-(platform)/console/marketplace/offers/page.tsx|Offers|Talent offers and counter-offers
-(platform)/console/marketplace/offers/new/page.tsx|New offer|
-(platform)/console/marketplace/offers/[offerId]/page.tsx|Offer|
+(platform)/studio/marketplace/offers/page.tsx|Offers|Talent offers and counter-offers
+(platform)/studio/marketplace/offers/new/page.tsx|New offer|
+(platform)/studio/marketplace/offers/[offerId]/page.tsx|Offer|
 
 # CONSOLE — reviews moderation
-(platform)/console/marketplace/reviews/page.tsx|Reviews|Bidirectional review log + moderation
+(platform)/studio/marketplace/reviews/page.tsx|Reviews|Bidirectional review log + moderation
 
 # CONSOLE — RFQ marketplace publish workflow
-(platform)/console/procurement/rfqs/[rfqId]/publish/page.tsx|Publish RFQ|Set visibility, gating, deadline
-(platform)/console/procurement/rfqs/[rfqId]/responses/page.tsx|Responses|Bid responses (incl. external)
+(platform)/studio/procurement/rfqs/[rfqId]/publish/page.tsx|Publish RFQ|Set visibility, gating, deadline
+(platform)/studio/procurement/rfqs/[rfqId]/responses/page.tsx|Responses|Bid responses (incl. external)
 
 # MARKETING — public marketplace discovery
 (marketing)/marketplace/page.tsx|Marketplace|Public RFQs, gigs, talent calls, talent, crew, vendors
@@ -608,35 +590,35 @@
 # ════════════════════════════════════════════════════════════════════════
 
 # CONSOLE — Bookings
-(platform)/console/bookings/page.tsx|Bookings|Pipeline + holds + settlement
-(platform)/console/bookings/deals/page.tsx|Deal Tracker|All deals across the pipeline
-(platform)/console/bookings/deals/[offerId]/page.tsx|Deal|Detail with break-even, co-pro, expenses
-(platform)/console/bookings/deals/[offerId]/settlement/page.tsx|Settlement|Post-show reconciliation
-(platform)/console/bookings/holds/page.tsx|Holds|Multi-tier hold calendar
-(platform)/console/bookings/holds/new/page.tsx|New hold|
-(platform)/console/bookings/calendar/page.tsx|Calendar|Holds + confirms + milestones unified
-(platform)/console/bookings/settlements/page.tsx|Settlements|All settlements
+(platform)/studio/bookings/page.tsx|Bookings|Pipeline + holds + settlement
+(platform)/studio/bookings/deals/page.tsx|Deal Tracker|All deals across the pipeline
+(platform)/studio/bookings/deals/[offerId]/page.tsx|Deal|Detail with break-even, co-pro, expenses
+(platform)/studio/bookings/deals/[offerId]/settlement/page.tsx|Settlement|Post-show reconciliation
+(platform)/studio/bookings/holds/page.tsx|Holds|Multi-tier hold calendar
+(platform)/studio/bookings/holds/new/page.tsx|New hold|
+(platform)/studio/bookings/calendar/page.tsx|Calendar|Holds + confirms + milestones unified
+(platform)/studio/bookings/settlements/page.tsx|Settlements|All settlements
 
 # CONSOLE — Agency
-(platform)/console/agency/page.tsx|Agency|Roster + tours + commissions
-(platform)/console/agency/roster/page.tsx|Roster|Active artist roster
-(platform)/console/agency/roster/[agencyArtistId]/page.tsx|Roster entry|
-(platform)/console/agency/tours/page.tsx|Tours|Multi-date tour P&L
-(platform)/console/agency/tours/new/page.tsx|New tour|
-(platform)/console/agency/tours/[tourId]/page.tsx|Tour|P&L roll-up + leg list
-(platform)/console/agency/commissions/page.tsx|Commissions|Per-period commission report
+(platform)/studio/agency/page.tsx|Agency|Roster + tours + commissions
+(platform)/studio/agency/roster/page.tsx|Roster|Active artist roster
+(platform)/studio/agency/roster/[agencyArtistId]/page.tsx|Roster entry|
+(platform)/studio/agency/tours/page.tsx|Tours|Multi-date tour P&L
+(platform)/studio/agency/tours/new/page.tsx|New tour|
+(platform)/studio/agency/tours/[tourId]/page.tsx|Tour|P&L roll-up + leg list
+(platform)/studio/agency/commissions/page.tsx|Commissions|Per-period commission report
 
 # CONSOLE — Marketing milestones
-(platform)/console/marketing/page.tsx|Marketing|Milestones + on-sales
-(platform)/console/marketing/onsales/page.tsx|On-sales|Upcoming on-sale dates
-(platform)/console/marketing/calendar/page.tsx|Marketing calendar|Announce, presale, on-sale
+(platform)/studio/marketing/page.tsx|Marketing|Milestones + on-sales
+(platform)/studio/marketing/onsales/page.tsx|On-sales|Upcoming on-sale dates
+(platform)/studio/marketing/calendar/page.tsx|Marketing calendar|Announce, presale, on-sale
 
 # CONSOLE — Insights
-(platform)/console/insights/page.tsx|Insights|Booking pool aggregates (opt-in)
+(platform)/studio/insights/page.tsx|Insights|Booking pool aggregates (opt-in)
 
 # CONSOLE — Settings: ticketing
-(platform)/console/settings/integrations/ticketing/page.tsx|Ticketing|Etix, DICE, Tixr, Eventbrite, AXS connections
-(platform)/console/settings/integrations/ticketing/new/page.tsx|New connection|
+(platform)/studio/settings/integrations/ticketing/page.tsx|Ticketing|Etix, DICE, Tixr, Eventbrite, AXS connections
+(platform)/studio/settings/integrations/ticketing/new/page.tsx|New connection|
 
 # MARKETING — agencies directory + event calendar
 (marketing)/marketplace/agencies/page.tsx|Agency directory|Public booking agencies

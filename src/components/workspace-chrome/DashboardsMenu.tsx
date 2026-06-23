@@ -8,7 +8,7 @@ import * as Popover from "@radix-ui/react-popover";
 /**
  * ATLVS-only Dashboards menu (ADR-0006 / ADR-0007).
  *
- * Surfaces the user's saved dashboards from `/console/dashboards` as a
+ * Surfaces the user's saved dashboards from `/studio/dashboards` as a
  * top-bar dropdown so they're never more than one click away. ADR-0006
  * pulled Dashboards out of the sidebar (was 9 TECHNOLOGY → Dashboards)
  * because the user's saved dashboards are workspace chrome — they
@@ -54,7 +54,7 @@ export function DashboardsMenu({ entries }: { entries: DashboardEntry[] }) {
             </div>
           )}
           <div className="my-1 border-t border-[var(--p-border)]" />
-          <Link href="/console/dashboards" className="block rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]">
+          <Link href="/studio/dashboards" className="block rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]">
             All dashboards →
           </Link>
         </Popover.Content>

@@ -13,7 +13,7 @@ describe("extractPortalSlug", () => {
   });
 
   it("returns null for non-/p paths", () => {
-    expect(extractPortalSlug("/console/projects")).toBeNull();
+    expect(extractPortalSlug("/studio/projects")).toBeNull();
     expect(extractPortalSlug("/m/check-in")).toBeNull();
     expect(extractPortalSlug("/login")).toBeNull();
     expect(extractPortalSlug("/")).toBeNull();

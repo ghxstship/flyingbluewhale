@@ -146,7 +146,7 @@ export async function getSession(): Promise<Session | null> {
     // pre-migration rows or memberships that opted not to set it. The
     // demo-only fallback to "guest" only fires when persona is *unset* —
     // an explicit persona on a seeded demo-org membership is honored so
-    // dev/test workflows can land in /console, /p, or /m as configured.
+    // dev/test workflows can land in /studio, /p, or /m as configured.
     persona: chosen.persona ?? (isGuest ? "guest" : personaForRole(chosen.role)),
   };
 }
@@ -200,10 +200,10 @@ export function personaForRole(role: PlatformRole): Persona {
   return role;
 }
 
-export function resolveShell(persona: Persona): "/console" | "/p" | "/m" | "/me" {
+export function resolveShell(persona: Persona): "/studio" | "/p" | "/m" | "/me" {
   // Persona → shell mapping. Drives /auth/resolve auto-routing on login.
   //
-  //   /console — operator personas (owner/admin/manager + collaborator,
+  //   /studio — operator personas (owner/admin/manager + collaborator,
   //              the co-producer with project-write authority).
   //   /p       — portal personas (client receives proposals; contractor
   //              vendor-side workflows).
@@ -217,7 +217,7 @@ export function resolveShell(persona: Persona): "/console" | "/p" | "/m" | "/me"
     case "admin":
     case "manager":
     case "collaborator":
-      return "/console";
+      return "/studio";
     case "client":
     case "contractor":
       return "/p";

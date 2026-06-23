@@ -119,8 +119,8 @@ export default async function AuthResolvePage({
   // to its shell so subdomain mode emits the right host.
   const rawNext = sp.next ?? "";
   if (rawNext.startsWith("/") && !rawNext.startsWith("//") && !rawNext.includes("\\") && rawNext.length <= 512) {
-    const nextTarget = rawNext.startsWith("/console")
-      ? urlFor("platform", rawNext.slice("/console".length) || "/")
+    const nextTarget = rawNext.startsWith("/studio")
+      ? urlFor("platform", rawNext.slice("/studio".length) || "/")
       : rawNext === "/p" || rawNext.startsWith("/p/")
         ? urlFor("portal", rawNext.slice("/p".length) || "/")
         : rawNext === "/m" || rawNext.startsWith("/m/")

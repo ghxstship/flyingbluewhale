@@ -1,8 +1,14 @@
 import { notFound } from "next/navigation";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
-import { getAssignment, CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
+import {
+  getAssignment,
+  CATALOG_KIND_LABEL_SINGULAR,
+  NEXT_FULFILLMENT_STATES,
+  type CatalogKind,
+  type FulfillmentState,
+} from "@/lib/db/assignments";
 import { AdvanceDetail, type AdvanceDetailData } from "./AdvanceDetail";
 
 export const dynamic = "force-dynamic";
@@ -43,8 +49,10 @@ export default async function AdvanceDetailPage({ params }: { params: Promise<{ 
   const session = await requireSession();
   const a = await getAssignment(session.orgId, assignmentId);
   if (!a) notFound();
-  // Defense-in-depth: only the party themselves view their advance here.
-  if (a.party_user_id !== session.userId) notFound();
+  // The holder views their own advance; a manager+ can also open any org
+  // advance to drive its fulfillment (the kit "Assign Assets" flow).
+  const canManage = isManagerPlus(session);
+  if (a.party_user_id !== session.userId && !canManage) notFound();
 
   const fmt = await getRequestFormatters();
   const supabase = await createClient();
@@ -73,5 +81,9 @@ export default async function AdvanceDetailPage({ params }: { params: Promise<{ 
     purpose: typeof extra.purpose === "string" ? extra.purpose : null,
   };
 
-  return <AdvanceDetail data={data} />;
+  // Manager fulfillment: the legal next states from the current one.
+  const nextStates =
+    canManage ? (NEXT_FULFILLMENT_STATES[a.fulfillment_state as FulfillmentState] ?? []) : [];
+
+  return <AdvanceDetail data={data} canManage={canManage} nextStates={nextStates} />;
 }

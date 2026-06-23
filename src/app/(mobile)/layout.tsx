@@ -1,6 +1,7 @@
 import { MobileTabBar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
+import { SyncBanner } from "@/components/mobile/SyncBanner";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { mobileTabs } from "@/lib/nav";
@@ -35,9 +36,9 @@ export default async function MobileLayout({ children }: { children: React.React
         data-theme="atlvs-product"
         data-product="compvss"
         data-platform="compvss"
-        className="page-shell mobile-shell"
+        className="page-shell mobile-shell compvss-onboarding-shell"
       >
-        <main id="main" tabIndex={-1}>
+        <main id="main" tabIndex={-1} className="compvss-onboarding-main">
           <CompvssOnboarding />
         </main>
       </div>
@@ -63,6 +64,7 @@ export default async function MobileLayout({ children }: { children: React.React
         className="page-shell mobile-shell"
       >
         <ConnectivityBanner />
+        <SyncBanner />
         {/* Slim mobile chrome: app switcher + bell + messages + avatar. The
             org/project switcher re-scopes the data layer. */}
         <WorkspaceChrome

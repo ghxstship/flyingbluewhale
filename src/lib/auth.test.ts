@@ -24,10 +24,10 @@ describe("personaForRole", () => {
 });
 
 describe("resolveShell", () => {
-  it("operator personas route to /console (owner/admin/manager)", () => {
-    expect(resolveShell("owner")).toBe("/console");
-    expect(resolveShell("admin")).toBe("/console");
-    expect(resolveShell("manager")).toBe("/console");
+  it("operator personas route to /studio (owner/admin/manager)", () => {
+    expect(resolveShell("owner")).toBe("/studio");
+    expect(resolveShell("admin")).toBe("/studio");
+    expect(resolveShell("manager")).toBe("/studio");
   });
   it("contributor personas route to /me (member/guest/visitor)", () => {
     // member is an applicant/contributor (talent, crew, vendor candidate),
@@ -36,10 +36,10 @@ describe("resolveShell", () => {
     expect(resolveShell("guest")).toBe("/me");
     expect(resolveShell("visitor")).toBe("/me");
   });
-  it("operator-adjacent personas route to /console (collaborator)", () => {
+  it("operator-adjacent personas route to /studio (collaborator)", () => {
     // collaborator is the co-producer persona — has project-write authority
-    // even though they're not an admin. Their workflow is in /console.
-    expect(resolveShell("collaborator")).toBe("/console");
+    // even though they're not an admin. Their workflow is in /studio.
+    expect(resolveShell("collaborator")).toBe("/studio");
   });
   it("portal personas route to /p (client receives proposals; contractor vendor-side)", () => {
     expect(resolveShell("client")).toBe("/p");

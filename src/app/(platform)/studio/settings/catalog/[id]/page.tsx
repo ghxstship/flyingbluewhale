@@ -1,0 +1,135 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ModuleHeader } from "@/components/Shell";
+import { Badge } from "@/components/ui/Badge";
+import { buttonVariants } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
+import { toggleActive, deleteItem } from "./actions";
+
+export const dynamic = "force-dynamic";
+
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.settings.catalog.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
+  const { id } = await params;
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const { data } = await supabase
+    .from("master_catalog_items")
+    .select("id, kind, code, name, description, unit_cost_cents, currency, inventory_qty, active, created_at")
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!data) notFound();
+  const item = data as {
+    id: string;
+    kind: string;
+    code: string;
+    name: string;
+    description: string | null;
+    unit_cost_cents: number | null;
+    currency: string | null;
+    inventory_qty: number | null;
+    active: boolean;
+    created_at: string;
+  };
+
+  // Roll-up: how many active assignments reference this catalog item.
+  const { count: usageCount } = await supabase
+    .from("assignments")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", session.orgId)
+    .eq("catalog_item_id", item.id)
+    .is("deleted_at", null);
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow={t("console.settings.catalog.detail.eyebrow", undefined, "Catalog")}
+        title={item.name}
+        subtitle={
+          <span className="flex flex-wrap items-center gap-2">
+            <Badge variant="muted">{toTitle(item.kind)}</Badge>
+            <Badge variant={item.active ? "success" : "muted"}>
+              {item.active
+                ? t("console.settings.catalog.detail.statusActive", undefined, "Active")
+                : t("console.settings.catalog.detail.statusInactive", undefined, "Inactive")}
+            </Badge>
+            <span className="font-mono text-xs">{item.code}</span>
+            <span className="font-mono text-xs">
+              {t(
+                "console.settings.catalog.detail.assignmentsCount",
+                { count: usageCount ?? 0 },
+                `${usageCount ?? 0} assignments`,
+              )}
+            </span>
+          </span>
+        }
+        action={
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/studio/settings/catalog/${item.id}/edit`}
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
+              {t("common.edit", undefined, "Edit")}
+            </Link>
+            <form action={toggleActive}>
+              <input type="hidden" name="id" value={item.id} />
+              <input type="hidden" name="next" value={item.active ? "false" : "true"} />
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
+                {item.active
+                  ? t("console.settings.catalog.detail.deactivate", undefined, "Deactivate")
+                  : t("console.settings.catalog.detail.reactivate", undefined, "Reactivate")}
+              </button>
+            </form>
+            <DeleteForm
+              action={deleteItem.bind(null, item.id)}
+              confirm={t(
+                "console.settings.catalog.detail.deleteConfirm",
+                undefined,
+                "Soft-delete this catalog item? Existing assignments keep their catalog_item_id; new assignments can't pick it.",
+              )}
+              undo={{ table: "master_catalog_items", id: item.id, redirectTo: "/studio/settings/catalog" }}
+            />
+          </div>
+        }
+      />
+      <div className="page-content max-w-2xl space-y-3">
+        {item.description && <section className="surface p-4 text-sm whitespace-pre-wrap">{item.description}</section>}
+        <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
+          <div>
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+              {t("console.settings.catalog.detail.unitCost", undefined, "Unit Cost")}
+            </div>
+            <div className="mt-1 font-mono">
+              {item.unit_cost_cents != null
+                ? (item.unit_cost_cents / 100).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: item.currency ?? "USD",
+                  })
+                : "—"}
+            </div>
+          </div>
+          <div>
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+              {t("console.settings.catalog.detail.inventory", undefined, "Inventory")}
+            </div>
+            <div className="mt-1 font-mono">{item.inventory_qty ?? "—"}</div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}

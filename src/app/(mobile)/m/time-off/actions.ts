@@ -81,7 +81,7 @@ export async function requestTimeOff(_prev: State, fd: FormData): Promise<State>
     await sendPushBulk(managers, {
       title: "Time Off Request",
       body: `${v.from} – ${v.to}`,
-      url: "/console/workforce/time-off",
+      url: "/studio/workforce/time-off",
       kind: "time_off",
       scope: "all",
       orgId: session.orgId,

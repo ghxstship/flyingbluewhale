@@ -1,0 +1,2543 @@
+{
+  "meta": {
+    "title": "ATLVS Ecosystem — Information Architecture",
+    "version": "1.0.0",
+    "source": "Generated from src/lib/nav.ts + the src/app route tree. Do not hand-edit — run `npm run gen:ia-map`.",
+    "note": "Single source of truth for the LEG3ND Architecture reference. Any platform-level nav/route change regenerates this file and the interactive map re-renders from it.",
+    "addressing": "Subdomain is the canonical public boundary; routeGroup is the internal route-group name the host-rewrite middleware maps onto (and the path-prefix fallback for preview deploys). Production URLs never double the prefix."
+  },
+  "archetypes": {
+    "SHELL": {
+      "name": "Global chrome",
+      "desc": "Wraps every page in a shell.",
+      "components": [
+        "AppShell",
+        "AppSwitcher",
+        "Sidebar",
+        "Breadcrumb",
+        "CommandPalette",
+        "Menu",
+        "Avatar",
+        "ToastProvider",
+        "Tooltip",
+        "Banner",
+        "Skeleton"
+      ]
+    },
+    "DASH": {
+      "name": "Dashboard / hub",
+      "desc": "KPI tiles, charts, activity.",
+      "components": [
+        "StatCard",
+        "Card",
+        "BarChart",
+        "LineChart",
+        "DonutChart",
+        "Sparkline",
+        "ActivityTimeline",
+        "ProgressBar",
+        "EmptyState",
+        "SkeletonCard",
+        "Badge",
+        "Tag",
+        "Button",
+        "CoordinateMatrix"
+      ]
+    },
+    "LIST": {
+      "name": "List / index",
+      "desc": "Filterable, sortable, paginated table.",
+      "components": [
+        "FilterBar",
+        "DataTable",
+        "Pagination",
+        "BulkActionBar",
+        "ExportMenu",
+        "Menu",
+        "Badge",
+        "Tag",
+        "Button",
+        "EmptyState",
+        "SkeletonTableRows"
+      ]
+    },
+    "REC": {
+      "name": "Detail / record",
+      "desc": "Record header, tabs, status, activity.",
+      "components": [
+        "RecordHeader",
+        "Tabs",
+        "Badge",
+        "Tag",
+        "ActivityTimeline",
+        "ApprovalBar",
+        "Steps",
+        "Avatar",
+        "Menu",
+        "ConfirmDialog",
+        "Button"
+      ]
+    },
+    "FORM": {
+      "name": "Create / edit",
+      "desc": "Field-driven form with validation + uploads.",
+      "components": [
+        "FormPanel",
+        "Field",
+        "Input",
+        "Textarea",
+        "Select",
+        "Combobox",
+        "Checkbox",
+        "RadioGroup",
+        "Switch",
+        "UploadZone",
+        "Banner",
+        "Spinner",
+        "Button"
+      ]
+    },
+    "BOARD": {
+      "name": "Kanban / pipeline",
+      "desc": "Draggable columns of cards.",
+      "components": [
+        "KanbanBoard",
+        "Card",
+        "Badge",
+        "Tag",
+        "Avatar",
+        "FilterBar",
+        "Menu",
+        "EmptyState"
+      ]
+    },
+    "CAL": {
+      "name": "Calendar / schedule",
+      "desc": "Month/week/day + timeline.",
+      "components": [
+        "Calendar",
+        "GanttChart",
+        "SegmentedControl",
+        "Tabs",
+        "Badge",
+        "Tag",
+        "Menu",
+        "Button"
+      ]
+    },
+    "RPT": {
+      "name": "Report / analytics",
+      "desc": "Viz-heavy parametric report.",
+      "components": [
+        "StatCard",
+        "BarChart",
+        "LineChart",
+        "AreaChart",
+        "DonutChart",
+        "Sparkline",
+        "DataTable",
+        "ProgressBar",
+        "SegmentedControl",
+        "ExportMenu",
+        "Button",
+        "CoordinateMatrix"
+      ]
+    },
+    "DOC": {
+      "name": "Document / editor",
+      "desc": "Authored doc, drawing, viewer, e-sign.",
+      "components": [
+        "RecordHeader",
+        "Tabs",
+        "Breadcrumb",
+        "RichTextEditor",
+        "FileViewer",
+        "SignaturePad",
+        "ActivityTimeline",
+        "UploadZone",
+        "ShareSheet",
+        "Menu",
+        "Button"
+      ]
+    },
+    "COMM": {
+      "name": "Messages / inbox",
+      "desc": "Threads, chat, announcements.",
+      "components": [
+        "ChatBubble",
+        "Avatar",
+        "Badge",
+        "Banner",
+        "Field",
+        "Input",
+        "Menu",
+        "EmptyState",
+        "Button"
+      ]
+    },
+    "AUTH": {
+      "name": "Auth",
+      "desc": "Split card: login, signup, invite.",
+      "components": [
+        "AuthCard",
+        "Field",
+        "Input",
+        "Checkbox",
+        "Banner",
+        "Spinner",
+        "Button"
+      ]
+    },
+    "MKTG": {
+      "name": "Marketing / landing",
+      "desc": "Hero, features, pricing, FAQ.",
+      "components": [
+        "PlanCard",
+        "MediaCard",
+        "Card",
+        "Accordion",
+        "Tag",
+        "Badge",
+        "Banner",
+        "Avatar",
+        "Button"
+      ]
+    },
+    "SHOP": {
+      "name": "Marketplace / store",
+      "desc": "Listing grid, detail, cart, checkout.",
+      "components": [
+        "ProductTile",
+        "MediaCard",
+        "FilterBar",
+        "Pagination",
+        "RatingScale",
+        "ReviewCard",
+        "OrderTracker",
+        "TicketCard",
+        "QRCode",
+        "Tag",
+        "Badge",
+        "Avatar",
+        "Button"
+      ]
+    },
+    "LMS": {
+      "name": "Course / knowledge",
+      "desc": "Lessons, progress, quiz, article.",
+      "components": [
+        "MediaPlayer",
+        "QuizQuestion",
+        "Steps",
+        "ProgressBar",
+        "MediaCard",
+        "AchievementBadge",
+        "RatingScale",
+        "SignIcon",
+        "SignPanel",
+        "Tabs",
+        "Card",
+        "Button"
+      ]
+    },
+    "FIELD": {
+      "name": "Field surface",
+      "desc": "Single-task mobile screen.",
+      "components": [
+        "ScanCapture",
+        "Button",
+        "Barcode",
+        "QRCode",
+        "UploadZone",
+        "OrderTracker",
+        "SignaturePad",
+        "ConfirmDialog",
+        "Banner",
+        "Spinner",
+        "Toast",
+        "OnboardingStepper"
+      ]
+    },
+    "SET": {
+      "name": "Settings",
+      "desc": "2-col admin.",
+      "components": [
+        "Sidebar",
+        "Field",
+        "Input",
+        "Select",
+        "Switch",
+        "Checkbox",
+        "PermissionMatrix",
+        "RoleSelect",
+        "RoleBadge",
+        "InviteRow",
+        "ExportMenu",
+        "ImportPanel",
+        "ConfirmDialog",
+        "Banner",
+        "Button"
+      ]
+    }
+  },
+  "newComponents": [
+    "LineChart",
+    "AreaChart",
+    "DonutChart",
+    "Calendar",
+    "GanttChart",
+    "KanbanBoard",
+    "RichTextEditor",
+    "SignaturePad",
+    "FileViewer",
+    "ScanCapture",
+    "FloorPlan",
+    "MediaPlayer",
+    "QuizQuestion",
+    "Accordion",
+    "AppSwitcher",
+    "CoordinateMatrix",
+    "Coordinate"
+  ],
+  "shells": [
+    {
+      "id": "atlvs",
+      "name": "ATLVS",
+      "descriptor": "Operator console — ERP × CRM × PM",
+      "kind": "product",
+      "color": "#FF2E88",
+      "host": "app.atlvs.pro",
+      "routeGroup": "/studio",
+      "groups": [
+        {
+          "label": "Dashboard",
+          "routes": [
+            {
+              "path": "/studio",
+              "arch": [
+                "SHELL"
+              ]
+            },
+            {
+              "path": "/studio/dashboards",
+              "arch": [
+                "RPT",
+                "BOARD"
+              ]
+            },
+            {
+              "path": "/studio/reports",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
+              "path": "/studio/goals",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
+              "path": "/studio/position",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assistant",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/notifications/inbox",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/inbox",
+              "arch": [
+                "COMM"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Projects",
+          "routes": [
+            {
+              "path": "/studio/projects",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/programs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/venues",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/proposals",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/documents",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/proposals/templates",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/templates",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/site-plans",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/drawings",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/specs",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/bim",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/takeoffs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/estimates",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/programs/risk",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/risk",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/programs/readiness",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/programs/reviews",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Production",
+          "routes": [
+            {
+              "path": "/studio/production",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/equipment",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/equipment/utilization",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/av",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/rentals",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/fabrication",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/compounds",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/warehouse",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/punch",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/captures",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/photos",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/warranties",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/ros",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/dispatch/live",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/logistics",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "People",
+          "routes": [
+            {
+              "path": "/studio/people",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/people/teams",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/people/msas",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/people/offer-letters",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/participants/delegations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/participants/visa",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/accreditation",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/rosters",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/training",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/learn",
+              "arch": [
+                "LMS"
+              ]
+            },
+            {
+              "path": "/studio/knowledge",
+              "arch": [
+                "LMS"
+              ]
+            },
+            {
+              "path": "/studio/workforce/onboarding",
+              "arch": [
+                "BOARD",
+                "AUTH"
+              ]
+            },
+            {
+              "path": "/studio/workforce/time-off",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/shift-swaps",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/recognition",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/badges",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/forecast",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Commerce",
+          "routes": [
+            {
+              "path": "/studio/sales",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/pipeline",
+              "arch": [
+                "BOARD"
+              ]
+            },
+            {
+              "path": "/studio/leads",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/clients",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/commercial/sponsors",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketing",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/campaigns",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/sales/diary",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/sales/beos",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/commercial/hospitality",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/commercial/hospitality?audience=guest",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/bookings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/agency/tours",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/agency/roster",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/talent",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/offers",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/inquiries",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/box-office",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/discounts",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/revenue/orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/revenue/transactions",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/insights",
+              "arch": [
+                "RPT"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Finance",
+          "routes": [
+            {
+              "path": "/studio/finance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/invoices",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/pay-apps",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/lien-waivers",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/envelopes",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/finance/ap-ocr",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/expenses",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/mileage",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/payouts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/entities",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/cost-codes",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/budgets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/wip",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/forecasts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/periods",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/reports",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
+              "path": "/studio/finance/time",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/timesheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/payroll",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/subscriptions",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Procurement",
+          "routes": [
+            {
+              "path": "/studio/procurement",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/vendors",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/prequalification",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/sourcing",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/rfqs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/itb",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/requisitions",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/purchase-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/po-change-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/wo-broadcasts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/contracts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/ratecard",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/submittals",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/settings/catalog",
+              "arch": [
+                "SET",
+                "SHOP"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Coordination",
+          "routes": [
+            {
+              "path": "/studio/operations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/schedule",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/calendar",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/schedule/baselines",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/operations/look-ahead",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/tasks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/daily-log",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/action-items",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/annotations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/forms",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/guides",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/reservations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/sustainability",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Logistics",
+          "routes": [
+            {
+              "path": "/studio/logistics",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/transport",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/transport/dispatch",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/freight",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/warehouse",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/disposition",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/services",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/accommodation",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Safety",
+          "routes": [
+            {
+              "path": "/studio/safety",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/incidents",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/major-incident",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/crisis",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/medical",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/safeguarding",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/guard-tours",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/access-control",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/environmental",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/threats",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/inspections",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/safety/osha",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/briefings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/playbooks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/compliance/coc",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Messages",
+          "routes": [
+            {
+              "path": "/studio/events",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/meetings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/meetings/notes",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/comms/announcements",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/comms/polls",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/comms/surveys",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/collaborate/whiteboards",
+              "arch": [
+                "BOARD"
+              ]
+            },
+            {
+              "path": "/studio/transmittals",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/email-inbox",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/rfis",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/services/requests",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/ops/toc",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Collaborate",
+          "routes": [
+            {
+              "path": "/studio/collaborate/docs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/collaborate/sheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/notes",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/board",
+              "arch": [
+                "BOARD"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Settings",
+          "routes": [
+            {
+              "path": "/studio/settings/organization",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/branding",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/domains",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/email-templates",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/locations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/settings",
+              "arch": [
+                "SET",
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/people/roles",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/people/invites",
+              "arch": [
+                "AUTH"
+              ]
+            },
+            {
+              "path": "/studio/settings/account-managers",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/governance",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/time-clock-zones",
+              "arch": [
+                "SET",
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/xpms",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/atoms",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/classes",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/codebook",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/phases",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/tiers",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/provenance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/xpms/variance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/settings/billing",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/exports",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/imports",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/import",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/trash",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/settings/usage",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/integrations",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/integrations/marketplace",
+              "arch": [
+                "SET",
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/settings/integrations/ticketing",
+              "arch": [
+                "SET",
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/ai/automations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/ai/agents",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/ai/corpus",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/settings/api",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/webhooks",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/audit",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/compliance",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/reviews",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/legal/privacy",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/legal/privacy/dsar",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/legal/privacy/consent",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/legal/privacy/datamap",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/legal/ip",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/legal/insurance",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gvteway",
+      "name": "GVTEWAY",
+      "descriptor": "Public interface & marketplace",
+      "kind": "product",
+      "color": "#2563EB",
+      "host": "gateway.atlvs.pro",
+      "routeGroup": "/p",
+      "groups": [
+        {
+          "label": "GVTEWAY",
+          "routes": [
+            {
+              "path": "/p/discover",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/community",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/scenes",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/lists",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/saved",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/account",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/welcome",
+              "arch": [
+                "AUTH"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Portal personas (/p/[slug]/<persona>)",
+          "routes": [
+            {
+              "path": "/p/[slug]/promoter",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/producer",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/stakeholder",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/artist",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/athlete",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/delegation",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/client",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/sponsor",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/media",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/vendor",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/crew",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/volunteer",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/hospitality",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/guest",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/p/[slug]/vip",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compvss",
+      "name": "COMPVSS",
+      "descriptor": "Site & venue field ops",
+      "kind": "product",
+      "color": "#E9A23B",
+      "host": "compass.atlvs.pro",
+      "routeGroup": "/m",
+      "groups": [
+        {
+          "label": "Tabs",
+          "routes": [
+            {
+              "path": "/m",
+              "arch": [
+                "SHELL"
+              ]
+            },
+            {
+              "path": "/m/schedule",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/m/tasks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/onsite",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/inventory",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/inbox",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/m/more",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Surfaces",
+          "routes": [
+            {
+              "path": "/m/catalog",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/m/inventory",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/inventory/scan",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/check-in",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/scan",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/advances",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/clock",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/requests",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/docs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/handover",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/daily-log",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/punch",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/m/coc",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/incidents",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/incident",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/guide",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/directory",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/directory/companies",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/connections",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/feed",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/gigs",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/m/market",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/wallet",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/time-off",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/profile",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/activity",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/referrals",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/emergency",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/alerts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/notifications",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/onboarding",
+              "arch": [
+                "BOARD",
+                "AUTH"
+              ]
+            },
+            {
+              "path": "/m/settings",
+              "arch": [
+                "SET"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "legend",
+      "name": "LEG3ND",
+      "descriptor": "Knowledge · LMS · XPMS 2.0",
+      "kind": "product",
+      "color": "#E8500A",
+      "host": "legend.atlvs.pro",
+      "routeGroup": "/legend",
+      "groups": [
+        {
+          "label": "Learn",
+          "routes": [
+            {
+              "path": "/legend/path",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/my-learning",
+              "arch": [
+                "LMS"
+              ]
+            },
+            {
+              "path": "/legend/learn",
+              "arch": [
+                "LMS"
+              ]
+            },
+            {
+              "path": "/legend/live",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/progress",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/certifications",
+              "arch": [
+                "LMS"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Community",
+          "routes": [
+            {
+              "path": "/legend/community",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/community/members",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/crew",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Compete",
+          "routes": [
+            {
+              "path": "/legend/leaderboard",
+              "arch": [
+                "BOARD"
+              ]
+            },
+            {
+              "path": "/legend/badges",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/store",
+              "arch": [
+                "SHOP"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Manage",
+          "routes": [
+            {
+              "path": "/legend/console",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/engine",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/compliance",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Knowledge",
+          "routes": [
+            {
+              "path": "/legend",
+              "arch": [
+                "SHELL"
+              ]
+            },
+            {
+              "path": "/legend/resources",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/signage",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/legend/for-institutions",
+              "arch": [
+                "MKTG"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Account",
+          "routes": [
+            {
+              "path": "/legend/profile",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/architecture",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "descriptor": "Public site & positioning",
+      "kind": "surface",
+      "color": "#181B23",
+      "host": "atlvs.pro",
+      "routeGroup": "/",
+      "groups": [
+        {
+          "label": "Product",
+          "routes": [
+            {
+              "path": "/features",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/atlvs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/compvss",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/gvteway",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/legend",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Product",
+          "routes": [
+            {
+              "path": "/solutions/live-events",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/solutions/concerts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/festivals-tours",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/immersive-experiences",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/brand-activations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/corporate-events",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/solutions/theatrical-performances",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/solutions/broadcast-tv-film",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Product",
+          "routes": [
+            {
+              "path": "/blog",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/guides",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/docs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/changelog",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Primary",
+          "routes": [
+            {
+              "path": "/marketplace",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/events",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/pricing",
+              "arch": [
+                "MKTG"
+              ]
+            },
+            {
+              "path": "/community",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "auth",
+      "name": "Auth",
+      "descriptor": "Login · signup · invites",
+      "kind": "surface",
+      "color": "#181B23",
+      "host": "atlvs.pro",
+      "routeGroup": "/auth",
+      "groups": [
+        {
+          "label": "Entry",
+          "routes": [
+            {
+              "path": "/login",
+              "arch": [
+                "AUTH"
+              ]
+            },
+            {
+              "path": "/signup",
+              "arch": [
+                "DOC",
+                "AUTH"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "name": "Personal",
+      "descriptor": "Any authed user — /me",
+      "kind": "surface",
+      "color": "#181B23",
+      "host": "atlvs.pro",
+      "routeGroup": "/me",
+      "groups": [
+        {
+          "label": "Account",
+          "routes": [
+            {
+              "path": "/me/profile",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/preferences",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/settings",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/me/privacy",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/security",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/organizations",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Account",
+          "routes": [
+            {
+              "path": "/me",
+              "arch": [
+                "SHELL"
+              ]
+            },
+            {
+              "path": "/me/notifications",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/tickets",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/me/reviews",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Account",
+          "routes": [
+            {
+              "path": "/me/talent",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/applications",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/submissions",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/inquiries",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/offers",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/availability",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/saved-searches",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/me/crew",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -13,7 +13,7 @@ export default async function ConsoleNotFound() {
       />
       <div className="page-content">
         <div className="surface p-6">
-          <Button href="/console">{t("console.notFound.backToWorkspace", undefined, "Back to Workspace")}</Button>
+          <Button href="/studio">{t("console.notFound.backToWorkspace", undefined, "Back to Workspace")}</Button>
         </div>
       </div>
     </>

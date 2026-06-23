@@ -6,7 +6,7 @@ import { withAuth } from "@/lib/auth";
  * account. Returns a stable, human-readable identity blob that Zapier
  * displays in the connection list ("Connected as Julian @ ATLVS Demo").
  *
- * Auth is a Bearer PAT minted at /console/settings/api. Failure returns
+ * Auth is a Bearer PAT minted at /studio/settings/api. Failure returns
  * 401 via `withAuth`, which Zapier maps to "credentials are invalid".
  */
 export const dynamic = "force-dynamic";

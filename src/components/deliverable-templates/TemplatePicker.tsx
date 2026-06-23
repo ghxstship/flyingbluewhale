@@ -134,7 +134,7 @@ export function TemplatePicker({
                   ? t(
                       "components.templatePicker.emptyNone",
                       undefined,
-                      "No templates yet. Create one from /console/settings/templates.",
+                      "No templates yet. Create one from /studio/settings/templates.",
                     )
                   : t("components.templatePicker.emptyNoMatch", { query }, "No templates match “{query}”.")}
               </div>

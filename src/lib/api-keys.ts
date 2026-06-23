@@ -9,7 +9,7 @@ import type { PlatformRole, Tier } from "./supabase/types";
  * Org-scoped programmatic access tokens.
  *
  * Token format: `sk_<8-char-prefix>_<43-char-secret>` — same format the
- * console UI at /console/settings/api/actions.ts mints. We re-derive both
+ * console UI at /studio/settings/api/actions.ts mints. We re-derive both
  * the prefix and the hash here so an external caller (CI bot, partner
  * integration) can authenticate the token they were given.
  *

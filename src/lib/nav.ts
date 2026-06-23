@@ -94,6 +94,8 @@ export type IconName =
   | "ChartBar"
   // Reference
   | "BookOpen"
+  | "Bookmark"
+  | "User"
   | "Atlas"
   | "Bot"
   | "Sparkles"
@@ -116,7 +118,10 @@ export type IconName =
   // Sales pipeline
   | "GitBranch"
   // Collaborate (F5 — whiteboards)
-  | "Presentation";
+  | "Presentation"
+  // GVTEWAY consumer nav
+  | "List"
+  | "UserCircle";
 
 export type NavItem = {
   label: string;
@@ -139,7 +144,15 @@ export type NavItem = {
  * the group renderer ignores `items` and walks sections instead.
  */
 export type NavSection = { label: string; items: NavItem[] };
-export type NavGroup = { label: string; items: NavItem[]; sections?: NavSection[] };
+/**
+ * A top-level sidebar group. When `href` is set the group header doubles as a
+ * navigable hub link (Linear/Notion pattern) — clicking the label routes to the
+ * module hub while a dedicated chevron toggles collapse. This is what lets us
+ * drop "echo" leaves (an item whose href equals the group hub) without
+ * orphaning the hub route (ADR-0011 §"No echo items"). Groups without a hub
+ * page (e.g. Commerce, Messages) omit `href` and keep a toggle-only header.
+ */
+export type NavGroup = { label: string; href?: string; items: NavItem[]; sections?: NavSection[] };
 
 /** Rank order for NavItem.minRole filtering. Owner/admin share the top tier. */
 const ROLE_RANK: Record<string, number> = { owner: 3, admin: 3, manager: 2 };
@@ -172,73 +185,79 @@ export function filterNavByRole(groups: NavGroup[], role: string | null | undefi
  *
  * URL preservation: grouping and labels are the only nav concern; every
  * console route keeps its existing URL. The "Guest Hospitality" entry
- * is renamed "Guest Experience" (same URL `/console/commercial/hospitality`,
+ * is renamed "Guest Experience" (same URL `/studio/commercial/hospitality`,
  * tabbed internally by hosted persona for Sales-side Hospitality and
  * by audience filter for Operations-side Guest Experience).
  *
  * Pipeline drops as a sidebar entry — it survives as the default kanban
- * view on `/console/leads` (ADR-0006 §"Resolved decisions" #1).
+ * view on `/studio/leads` (ADR-0006 §"Resolved decisions" #1).
  */
 export const platformNavDomain: NavGroup[] = [
   {
-    // Workspace chrome — not a domain group; the rail's top tile.
+    // Workspace chrome — not a domain group; the rail's top tile. The header
+    // links the console home (was the "Overview" echo leaf — dropped per
+    // ADR-0011 §"No echo items"; the navigable header is the hub).
     label: "Dashboard",
+    href: "/studio",
     items: [
-      { label: "Overview", href: "/console", icon: "LayoutDashboard" },
-      { label: "Dashboards", href: "/console/dashboards", icon: "BarChart3" },
-      { label: "Reports", href: "/console/reports", icon: "ChartBar" },
-      { label: "Goals", href: "/console/goals", icon: "Crosshair" },
-      { label: "Assistant", href: "/console/assistant", icon: "Bot" },
+      { label: "Dashboards", href: "/studio/dashboards", icon: "BarChart3" },
+      { label: "Reports", href: "/studio/reports", icon: "ChartBar" },
+      { label: "Goals", href: "/studio/goals", icon: "Crosshair" },
+      // §9 coordinate lens — portfolio class × phase. An analytical lens (a nav
+      // ITEM, never a top-level group); the sidebar stays domain-noun.
+      { label: "Position", href: "/studio/position", icon: "Compass" },
+      { label: "Assistant", href: "/studio/assistant", icon: "Bot" },
       { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
-      { label: "Threads", href: "/console/inbox", icon: "MessageSquare" },
+      { label: "Threads", href: "/studio/inbox", icon: "MessageSquare" },
     ],
   },
   {
     // PROJECTS — Portfolio, Authoring, Design, Estimating, Governance.
-    // From XPMS classes 0 (Strategy) + 1 (Creative).
+    // From XPMS classes 0 (Strategy) + 1 (Creative). The header links the
+    // Projects hub (was the "Projects" echo leaf — dropped per ADR-0011).
     label: "Projects",
+    href: "/studio/projects",
     items: [],
     sections: [
       {
         label: "Portfolio",
         items: [
-          { label: "Projects", href: "/console/projects", icon: "FolderOpen" },
-          { label: "Programs", href: "/console/programs", icon: "Layers" },
-          { label: "Venues", href: "/console/venues", icon: "Building2" },
+          { label: "Programs", href: "/studio/programs", icon: "Layers" },
+          { label: "Venues", href: "/studio/venues", icon: "Building2" },
         ],
       },
       {
         label: "Authoring",
         items: [
-          { label: "Proposals", href: "/console/proposals", icon: "FileText" },
-          { label: "Documents", href: "/console/documents", icon: "FileStack" },
-          { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
-          { label: "Project Templates", href: "/console/templates", icon: "Files" },
+          { label: "Proposals", href: "/studio/proposals", icon: "FileText" },
+          { label: "Documents", href: "/studio/documents", icon: "FileStack" },
+          { label: "Proposal Templates", href: "/studio/proposals/templates", icon: "Files" },
+          { label: "Project Templates", href: "/studio/templates", icon: "Files" },
         ],
       },
       {
         label: "Design",
         items: [
-          { label: "Site Plans", href: "/console/site-plans", icon: "Map" },
-          { label: "Drawings", href: "/console/drawings", icon: "Files" },
-          { label: "Specifications", href: "/console/specs", icon: "BookOpen" },
-          { label: "BIM Models", href: "/console/bim", icon: "Network" },
+          { label: "Site Plans", href: "/studio/site-plans", icon: "Map" },
+          { label: "Drawings", href: "/studio/drawings", icon: "Files" },
+          { label: "Specifications", href: "/studio/specs", icon: "BookOpen" },
+          { label: "BIM Models", href: "/studio/bim", icon: "Network" },
         ],
       },
       {
         label: "Estimating",
         items: [
-          { label: "Takeoffs", href: "/console/takeoffs", icon: "Crosshair" },
-          { label: "Estimates", href: "/console/estimates", icon: "Coins" },
+          { label: "Takeoffs", href: "/studio/takeoffs", icon: "Crosshair" },
+          { label: "Estimates", href: "/studio/estimates", icon: "Coins" },
         ],
       },
       {
         label: "Governance",
         items: [
-          { label: "Risk Register", href: "/console/programs/risk", icon: "AlertTriangle" },
-          { label: "Risk Scores", href: "/console/risk", icon: "ShieldAlert" },
-          { label: "Readiness", href: "/console/programs/readiness", icon: "ShieldCheck" },
-          { label: "Reviews", href: "/console/programs/reviews", icon: "ClipboardCheck" },
+          { label: "Risk Register", href: "/studio/programs/risk", icon: "AlertTriangle" },
+          { label: "Risk Scores", href: "/studio/risk", icon: "ShieldAlert" },
+          { label: "Readiness", href: "/studio/programs/readiness", icon: "ShieldCheck" },
+          { label: "Reviews", href: "/studio/programs/reviews", icon: "ClipboardCheck" },
         ],
       },
     ],
@@ -246,134 +265,161 @@ export const platformNavDomain: NavGroup[] = [
   {
     // PRODUCTION — Inventory, Build, Show. The technical envelope gets
     // its own front door (lifecycle-proposal regression fix).
-    // From XPMS classes 4 (Build) + 5 (Production).
+    // From XPMS classes 4 (Build) + 5 (Production). Header links the hub.
     label: "Production",
+    href: "/studio/production",
     items: [],
     sections: [
       {
         label: "Inventory",
         items: [
-          { label: "Equipment", href: "/console/production/equipment", icon: "Wrench" },
-          { label: "Equipment Utilization", href: "/console/production/equipment/utilization", icon: "BarChart3" },
-          { label: "AV Inventory", href: "/console/production/av", icon: "Speaker" },
-          { label: "Rentals", href: "/console/production/rentals", icon: "ArrowLeftRight" },
+          { label: "Equipment", href: "/studio/production/equipment", icon: "Wrench" },
+          { label: "Equipment Utilization", href: "/studio/production/equipment/utilization", icon: "BarChart3" },
+          { label: "AV Inventory", href: "/studio/production/av", icon: "Speaker" },
+          { label: "Rentals", href: "/studio/production/rentals", icon: "ArrowLeftRight" },
         ],
       },
       {
         label: "Build",
         items: [
-          { label: "Fabrication", href: "/console/production/fabrication", icon: "Hammer" },
-          { label: "Compounds", href: "/console/production/compounds", icon: "Tent" },
-          { label: "Yard", href: "/console/production/warehouse", icon: "Network" },
-          { label: "Punch List", href: "/console/punch", icon: "ClipboardList" },
-          { label: "Reality Captures", href: "/console/captures", icon: "Telescope" },
-          { label: "Photo Log", href: "/console/photos", icon: "Telescope" },
-          { label: "Warranties", href: "/console/warranties", icon: "ShieldCheck" },
+          { label: "Fabrication", href: "/studio/production/fabrication", icon: "Hammer" },
+          { label: "Compounds", href: "/studio/production/compounds", icon: "Tent" },
+          { label: "Yard", href: "/studio/production/warehouse", icon: "Network" },
+          { label: "Punch List", href: "/studio/punch", icon: "ClipboardList" },
+          { label: "Reality Captures", href: "/studio/captures", icon: "Telescope" },
+          { label: "Photo Log", href: "/studio/photos", icon: "Telescope" },
+          { label: "Warranties", href: "/studio/warranties", icon: "ShieldCheck" },
         ],
       },
       {
         label: "Show",
         items: [
-          { label: "Run of Show", href: "/console/production/ros", icon: "Play" },
-          { label: "Live Dispatch", href: "/console/production/dispatch/live", icon: "Radio" },
-          { label: "Production Logistics", href: "/console/production/logistics", icon: "Crosshair" },
+          { label: "Run of Show", href: "/studio/production/ros", icon: "Play" },
+          { label: "Live Dispatch", href: "/studio/production/dispatch/live", icon: "Radio" },
+          { label: "Production Logistics", href: "/studio/production/logistics", icon: "Crosshair" },
         ],
       },
     ],
   },
   {
-    // WORKFORCE — Directory, Engagement, Development, Time & Recognition.
-    // From XPMS class 6 (Workforce + Engagement).
-    label: "Workforce",
+    // PEOPLE — Directory, Engagement, Development, Time & Recognition.
+    // Renamed from "Workforce" per ADR-0011 (the domain noun is People; the
+    // Workforce directory + courses + accreditation live under it).
+    label: "People",
+    href: "/studio/people",
     items: [],
     sections: [
       {
         label: "Directory",
         items: [
-          { label: "Directory", href: "/console/people", icon: "Users" },
-          { label: "Teams", href: "/console/people/teams", icon: "UsersRound" },
-          { label: "Workforce", href: "/console/workforce", icon: "HardHat" },
+          // "Directory" echo leaf (/studio/people) dropped — the navigable
+          // People group header is the directory hub (ADR-0011 §"No echo items").
+          { label: "Teams", href: "/studio/people/teams", icon: "UsersRound" },
+          { label: "Workforce", href: "/studio/workforce", icon: "HardHat" },
         ],
       },
       {
         label: "Engagement",
         items: [
-          { label: "Contracts", href: "/console/people/msas", icon: "FileSignature" },
-          { label: "Offer Letters", href: "/console/people/offer-letters", icon: "FileText" },
-          { label: "Delegations", href: "/console/participants/delegations", icon: "UsersRound" },
-          { label: "Visa", href: "/console/participants/visa", icon: "Stamp" },
-          { label: "Rosters", href: "/console/workforce/rosters", icon: "ClipboardSignature" },
+          { label: "Contracts", href: "/studio/people/msas", icon: "FileSignature" },
+          { label: "Offer Letters", href: "/studio/people/offer-letters", icon: "FileText" },
+          { label: "Delegations", href: "/studio/participants/delegations", icon: "UsersRound" },
+          { label: "Visa", href: "/studio/participants/visa", icon: "Stamp" },
+          // ADR-0011 one-home-per-concept: Accreditation lives ONLY in People
+          // (was also under Operations ▸ Guest Experience + Knowledge ▸
+          // Certifications). §03 groups it with participants/credentials.
+          { label: "Accreditation", href: "/studio/accreditation", icon: "BadgeCheck" },
+          { label: "Rosters", href: "/studio/workforce/rosters", icon: "ClipboardSignature" },
         ],
       },
       {
         label: "Development",
         items: [
-          { label: "Training", href: "/console/workforce/training", icon: "GraduationCap" },
-          { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
-          { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
+          { label: "Training", href: "/studio/workforce/training", icon: "GraduationCap" },
+          // Courses deep-links into the LEG3ND shell — LEG3ND is the canonical
+          // learning/LMS owner; the console-embedded Connecteam courses admin
+          // was retired when LEG3ND graduated to its own (legend) shell.
+          { label: "Courses", href: "/legend/learn", icon: "BookOpen" },
+          // The Standard (knowledge base) re-homed here when the platform
+          // Knowledge group dissolved (LEG3ND is now its own (legend) shell).
+          { label: "The Standard", href: "/studio/knowledge", icon: "BookOpenCheck" },
+          { label: "Onboarding", href: "/studio/workforce/onboarding", icon: "ClipboardSignature" },
         ],
       },
       {
         label: "Time & Recognition",
         items: [
-          { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
-          { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
-          { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
-          { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
-          { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },
+          { label: "Time Off", href: "/studio/workforce/time-off", icon: "Calendar" },
+          { label: "Shift Swaps", href: "/studio/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Recognition", href: "/studio/workforce/recognition", icon: "Award" },
+          { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck" },
+          { label: "Resource Forecast", href: "/studio/workforce/forecast", icon: "TrendingUp" },
         ],
       },
     ],
   },
   {
     // SALES — Pipeline & Partners, Hospitality, Marketplace, Revenue.
-    // Pipeline demoted to a saved view on /console/leads (ADR-0006 #1).
+    // Pipeline demoted to a saved view on /studio/leads (ADR-0006 #1).
     // Hospitality internally tabs by hosted persona: Talent / Sponsors /
     // Athletes / Industry / Media & Press / VVIP (ADR-0006 #2).
-    // Analytics = /console/insights (per-domain analytics in their
+    // Analytics = /studio/insights (per-domain analytics in their
     // domain — Stripe pattern, ADR-0006 #4).
     // From XPMS classes 2 (Talent — bookings) + 3 (Marketing).
-    label: "Sales",
+    // COMMERCE — Sales · Hospitality · Marketplace · Revenue, merged into one
+    // domain group per ADR-0011 (Sales + Marketplace + Hospitality → Commerce,
+    // with Sales as the lead section).
+    label: "Commerce",
     items: [],
     sections: [
       {
-        label: "Pipeline & Partners",
+        label: "Sales",
         items: [
-          { label: "Sales", href: "/console/sales", icon: "TrendingUp" },
-          { label: "Pipeline", href: "/console/pipeline", icon: "GitBranch" },
-          { label: "Leads", href: "/console/leads", icon: "UserPlus" },
-          { label: "Clients", href: "/console/clients", icon: "Handshake" },
-          { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
-          { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
-          { label: "Campaigns", href: "/console/campaigns", icon: "Star" },
-          { label: "Function Diary", href: "/console/sales/diary", icon: "CalendarDays" },
-          { label: "BEOs", href: "/console/sales/beos", icon: "ClipboardList" },
+          { label: "Sales", href: "/studio/sales", icon: "TrendingUp" },
+          { label: "Pipeline", href: "/studio/pipeline", icon: "GitBranch" },
+          { label: "Leads", href: "/studio/leads", icon: "UserPlus" },
+          { label: "Clients", href: "/studio/clients", icon: "Handshake" },
+          { label: "Sponsors", href: "/studio/commercial/sponsors", icon: "Award" },
+          { label: "Marketing", href: "/studio/marketing", icon: "Megaphone" },
+          { label: "Campaigns", href: "/studio/campaigns", icon: "Star" },
+          { label: "Function Diary", href: "/studio/sales/diary", icon: "CalendarDays" },
+          { label: "BEOs", href: "/studio/sales/beos", icon: "ClipboardList" },
         ],
       },
       {
         label: "Hospitality",
-        items: [{ label: "Hospitality", href: "/console/commercial/hospitality", icon: "ConciergeBell" }],
+        items: [
+          { label: "Hospitality", href: "/studio/commercial/hospitality", icon: "ConciergeBell" },
+          // Moved from the (now-split) Operations group per ADR-0011 §03 (guest
+          // experience belongs to Commerce). Same page as Hospitality, filtered
+          // to the guest audience via ?audience=guest — matchRoute treats
+          // query-bearing hrefs as never-active, so the Hospitality entry owns
+          // the highlight; both now co-locate in Commerce.
+          { label: "Guest Experience", href: "/studio/commercial/hospitality?audience=guest", icon: "ConciergeBell" },
+        ],
       },
       {
         label: "Marketplace",
         items: [
-          { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
-          { label: "Bookings", href: "/console/bookings", icon: "TrendingUp" },
-          { label: "Tours", href: "/console/agency/tours", icon: "Route" },
-          { label: "Agency Roster", href: "/console/agency/roster", icon: "Users" },
-          { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
-          { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
-          { label: "Inquiries", href: "/console/marketplace/inquiries", icon: "Inbox" },
-          { label: "Box Office", href: "/console/marketplace/box-office", icon: "Ticket" },
-          { label: "Discounts", href: "/console/marketplace/discounts", icon: "Receipt" },
+          { label: "Marketplace", href: "/studio/marketplace", icon: "Globe" },
+          { label: "Bookings", href: "/studio/bookings", icon: "TrendingUp" },
+          { label: "Tours", href: "/studio/agency/tours", icon: "Route" },
+          { label: "Agency Roster", href: "/studio/agency/roster", icon: "Users" },
+          { label: "Talent Roster", href: "/studio/marketplace/talent", icon: "Music" },
+          { label: "Offers", href: "/studio/marketplace/offers", icon: "Gavel" },
+          { label: "Inquiries", href: "/studio/marketplace/inquiries", icon: "Inbox" },
+          { label: "Box Office", href: "/studio/marketplace/box-office", icon: "Ticket" },
+          { label: "Discounts", href: "/studio/marketplace/discounts", icon: "Receipt" },
         ],
       },
       {
         label: "Revenue",
         items: [
-          // Tickets entry removed: /console/commercial/tickets never
-          // existed — ticketing lives in unified assignments.
-          { label: "Analytics", href: "/console/insights", icon: "BarChart3" },
+          // Transactional Revenue (marketplace + box office + store), distinct
+          // from Finance AR (IMPLEMENTATION §5).
+          { label: "Orders", href: "/studio/revenue/orders", icon: "Receipt" },
+          { label: "Transactions", href: "/studio/revenue/transactions", icon: "Coins" },
+          { label: "Analytics", href: "/studio/insights", icon: "BarChart3" },
         ],
       },
     ],
@@ -381,26 +427,27 @@ export const platformNavDomain: NavGroup[] = [
   {
     // FINANCE — Receivables, Payables, Planning, Time & Payroll.
     // Unchanged from ADR-0005's Finance sub-sectioning; just lifts to a
-    // top-level group instead of nesting under EXECUTIVE.
+    // top-level group instead of nesting under EXECUTIVE. Header links the hub.
     label: "Finance",
+    href: "/studio/finance",
     items: [],
     sections: [
       {
         label: "Receivables",
         items: [
-          { label: "Invoices", href: "/console/finance/invoices", icon: "Receipt" },
-          { label: "Pay Apps", href: "/console/finance/pay-apps", icon: "FileSpreadsheet" },
-          { label: "Lien Waivers", href: "/console/finance/lien-waivers", icon: "Stamp" },
-          { label: "E-Sign Envelopes", href: "/console/envelopes", icon: "ClipboardSignature" },
-          { label: "AP Invoice OCR", href: "/console/finance/ap-ocr", icon: "Sparkles" },
+          { label: "Invoices", href: "/studio/finance/invoices", icon: "Receipt" },
+          { label: "Pay Apps", href: "/studio/finance/pay-apps", icon: "FileSpreadsheet" },
+          { label: "Lien Waivers", href: "/studio/finance/lien-waivers", icon: "Stamp" },
+          { label: "E-Sign Envelopes", href: "/studio/envelopes", icon: "ClipboardSignature" },
+          { label: "AP Invoice OCR", href: "/studio/finance/ap-ocr", icon: "Sparkles" },
         ],
       },
       {
         label: "Payables",
         items: [
-          { label: "Expenses", href: "/console/finance/expenses", icon: "CreditCard" },
-          { label: "Mileage", href: "/console/finance/mileage", icon: "Truck" },
-          { label: "Payouts", href: "/console/finance/payouts", icon: "Wallet" },
+          { label: "Expenses", href: "/studio/finance/expenses", icon: "CreditCard" },
+          { label: "Mileage", href: "/studio/finance/mileage", icon: "Truck" },
+          { label: "Payouts", href: "/studio/finance/payouts", icon: "Wallet" },
         ],
       },
       {
@@ -408,211 +455,175 @@ export const platformNavDomain: NavGroup[] = [
         // Promoted from hub-only links (workflow audit F-C).
         label: "Ledger Setup",
         items: [
-          { label: "Entities", href: "/console/finance/entities", icon: "Building2" },
-          { label: "Cost Codes", href: "/console/finance/cost-codes", icon: "ListOrdered" },
+          { label: "Entities", href: "/studio/finance/entities", icon: "Building2" },
+          { label: "Cost Codes", href: "/studio/finance/cost-codes", icon: "ListOrdered" },
         ],
       },
       {
         label: "Planning",
         items: [
-          { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
-          { label: "WIP", href: "/console/finance/wip", icon: "FileSpreadsheet" },
-          { label: "EAC Forecasts", href: "/console/finance/forecasts", icon: "TrendingUp" },
-          { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
-          { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
+          { label: "Budgets", href: "/studio/finance/budgets", icon: "PiggyBank" },
+          { label: "WIP", href: "/studio/finance/wip", icon: "FileSpreadsheet" },
+          { label: "EAC Forecasts", href: "/studio/finance/forecasts", icon: "TrendingUp" },
+          { label: "Periods", href: "/studio/finance/periods", icon: "CalendarDays" },
+          { label: "Reports", href: "/studio/finance/reports", icon: "ChartBar" },
         ],
       },
       {
         label: "Time & Payroll",
         items: [
-          { label: "Time", href: "/console/finance/time", icon: "Clock" },
-          { label: "Timesheets", href: "/console/finance/timesheets", icon: "ClipboardCheck" },
-          { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
-          { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
+          { label: "Time", href: "/studio/finance/time", icon: "Clock" },
+          { label: "Timesheets", href: "/studio/finance/timesheets", icon: "ClipboardCheck" },
+          { label: "Certified Payroll", href: "/studio/finance/payroll", icon: "FileSignature" },
+          { label: "Subscriptions", href: "/studio/subscriptions", icon: "BadgeCheck" },
         ],
       },
     ],
   },
   {
-    // PROCUREMENT — Sourcing, Buying, Reference.
+    // PROCUREMENT — Sourcing, Buying, Reference. Header links the hub.
     // Master Catalog moves here from Settings (ADR-0006 §"What moves").
     label: "Procurement",
+    href: "/studio/procurement",
     items: [],
     sections: [
       {
         label: "Sourcing",
         items: [
-          { label: "Vendors", href: "/console/procurement/vendors", icon: "Store" },
-          { label: "Prequalification", href: "/console/procurement/prequalification", icon: "BookOpenCheck" },
-          { label: "Sourcing", href: "/console/procurement/sourcing", icon: "Compass" },
-          { label: "RFQs", href: "/console/procurement/rfqs", icon: "PackageCheck" },
-          { label: "ITB", href: "/console/procurement/itb", icon: "Gavel" },
+          { label: "Vendors", href: "/studio/procurement/vendors", icon: "Store" },
+          { label: "Prequalification", href: "/studio/procurement/prequalification", icon: "BookOpenCheck" },
+          { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass" },
+          { label: "RFQs", href: "/studio/procurement/rfqs", icon: "PackageCheck" },
+          { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel" },
         ],
       },
       {
         label: "Buying",
         items: [
-          { label: "Requisitions", href: "/console/procurement/requisitions", icon: "ShoppingCart" },
-          { label: "Purchase Orders", href: "/console/procurement/purchase-orders", icon: "Package" },
-          { label: "PO Change Orders", href: "/console/procurement/po-change-orders", icon: "ArrowLeftRight" },
-          { label: "WO Broadcasts", href: "/console/procurement/wo-broadcasts", icon: "Send" },
-          { label: "Contracts", href: "/console/contracts", icon: "ClipboardSignature" },
+          { label: "Requisitions", href: "/studio/procurement/requisitions", icon: "ShoppingCart" },
+          { label: "Purchase Orders", href: "/studio/procurement/purchase-orders", icon: "Package" },
+          { label: "PO Change Orders", href: "/studio/procurement/po-change-orders", icon: "ArrowLeftRight" },
+          { label: "WO Broadcasts", href: "/studio/procurement/wo-broadcasts", icon: "Send" },
+          { label: "Contracts", href: "/studio/contracts", icon: "ClipboardSignature" },
         ],
       },
       {
         label: "Reference",
         items: [
-          { label: "Rate Card", href: "/console/logistics/ratecard", icon: "ListOrdered" },
-          { label: "Submittals", href: "/console/submittals", icon: "Inbox" },
-          { label: "Master Catalog", href: "/console/settings/catalog", icon: "Spline" },
+          { label: "Rate Card", href: "/studio/logistics/ratecard", icon: "ListOrdered" },
+          { label: "Submittals", href: "/studio/submittals", icon: "Inbox" },
+          { label: "Master Catalog", href: "/studio/settings/catalog", icon: "Spline" },
         ],
       },
     ],
   },
+  // OPERATIONS junk-drawer split into four domain-noun groups per ADR-0011
+  // §"The Operations junk-drawer splits into Coordination · Logistics · Safety
+  // · Messages." Guest Experience moved to Commerce ▸ Hospitality (§03 puts
+  // hospitality/guest-exp under Commerce); Accreditation moved to People (one
+  // home). Each group header carries its module hub href (navigable group).
   {
-    // OPERATIONS — Coordination, Communication, Logistics, Safety
-    // (Operational + Compliance), Guest Experience, Reporting.
-    // Largest group, heavily sub-sectioned. Sustainability moves here
-    // as a cross-cutting org-level rollup (ADR-0006 §"What moves").
-    // Guides moves into Coordination as operational reference.
-    // From XPMS classes 6 (Coordination + Logistics + Safety +
-    // Communications) + 7 (Experience) + 8 (Hospitality).
-    label: "Operations",
+    // COORDINATION — the day-to-day production-control surface (schedule,
+    // tasks, daily log, forms, guides) + the org-level Sustainability rollup.
+    // Header links the Operations hub; the redundant "Operations Hub" leaf is
+    // dropped in favour of the navigable header (ADR-0011 §"No echo items").
+    label: "Coordination",
+    href: "/studio/operations",
+    items: [
+      { label: "Schedule", href: "/studio/schedule", icon: "Calendar" },
+      { label: "Calendar", href: "/studio/calendar", icon: "CalendarDays" },
+      { label: "Schedule Baselines", href: "/studio/schedule/baselines", icon: "GitBranch" },
+      { label: "Look-Ahead", href: "/studio/operations/look-ahead", icon: "Telescope" },
+      { label: "Tasks", href: "/studio/tasks", icon: "ListTodo" },
+      { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ScrollText" },
+      { label: "Action Items", href: "/studio/action-items", icon: "CheckSquare" },
+      { label: "Annotations", href: "/studio/annotations", icon: "AlertTriangle" },
+      { label: "Forms", href: "/studio/forms", icon: "ClipboardList" },
+      { label: "Guides", href: "/studio/guides", icon: "Atlas" },
+      { label: "Reservations", href: "/studio/operations/reservations", icon: "ConciergeBell" },
+      // Cross-cutting org-level sustainability rollup (was Operations ▸ Reporting).
+      { label: "Sustainability", href: "/studio/sustainability", icon: "Leaf" },
+    ],
+  },
+  {
+    // LOGISTICS — transport, freight, warehouse, disposition, catering, lodging.
+    label: "Logistics",
+    href: "/studio/logistics",
+    items: [
+      { label: "Transport", href: "/studio/transport", icon: "Truck" },
+      { label: "Dispatch", href: "/studio/transport/dispatch", icon: "Send" },
+      { label: "Freight", href: "/studio/logistics/freight", icon: "Container" },
+      { label: "Warehouse", href: "/studio/logistics/warehouse", icon: "Warehouse" },
+      { label: "Disposition", href: "/studio/logistics/disposition", icon: "PackageOpen" },
+      { label: "Catering", href: "/studio/logistics/services", icon: "UtensilsCrossed" },
+      { label: "Accommodation", href: "/studio/accommodation", icon: "BedDouble" },
+    ],
+  },
+  {
+    // SAFETY — operational response + compliance, two sub-sections. Header
+    // links the safety hub (the cross-domain read feed); the single Incidents
+    // CRUD home stays at /studio/operations/incidents (ADR-0011 one home).
+    label: "Safety",
+    href: "/studio/safety",
     items: [],
     sections: [
       {
-        label: "Coordination",
-        items: [
-          { label: "Operations Hub", href: "/console/operations", icon: "Command" },
-          { label: "Schedule", href: "/console/schedule", icon: "Calendar" },
-          { label: "Schedule Baselines", href: "/console/schedule/baselines", icon: "GitBranch" },
-          { label: "Look-Ahead", href: "/console/operations/look-ahead", icon: "Telescope" },
-          { label: "Tasks", href: "/console/tasks", icon: "ListTodo" },
-          { label: "Daily Log", href: "/console/operations/daily-log", icon: "ScrollText" },
-          { label: "Action Items", href: "/console/action-items", icon: "CheckSquare" },
-          { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
-          { label: "Forms", href: "/console/forms", icon: "ClipboardList" },
-          { label: "Guides", href: "/console/guides", icon: "Atlas" },
-          { label: "Reservations", href: "/console/operations/reservations", icon: "ConciergeBell" },
-        ],
-      },
-      {
-        label: "Communication",
-        items: [
-          { label: "Events", href: "/console/events", icon: "CalendarDays" },
-          { label: "Meetings", href: "/console/meetings", icon: "CalendarDays" },
-          { label: "Meeting Notes", href: "/console/meetings/notes", icon: "FileText" },
-          { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
-          { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
-          { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
-          { label: "Whiteboards", href: "/console/collaborate/whiteboards", icon: "Presentation" },
-          { label: "Transmittals", href: "/console/transmittals", icon: "Send" },
-          { label: "Email Inbox", href: "/console/email-inbox", icon: "Inbox" },
-          { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
-          { label: "Service Desk", href: "/console/services/requests", icon: "ConciergeBell" },
-          { label: "TOC — ITIL", href: "/console/ops/toc", icon: "Network" },
-        ],
-      },
-      {
-        label: "Logistics",
-        items: [
-          { label: "Transport", href: "/console/transport", icon: "Truck" },
-          { label: "Dispatch", href: "/console/transport/dispatch", icon: "Send" },
-          { label: "Freight", href: "/console/logistics/freight", icon: "Container" },
-          { label: "Warehouse", href: "/console/logistics/warehouse", icon: "Warehouse" },
-          { label: "Disposition", href: "/console/logistics/disposition", icon: "PackageOpen" },
-          { label: "Catering", href: "/console/logistics/services", icon: "UtensilsCrossed" },
-          { label: "Accommodation", href: "/console/accommodation", icon: "BedDouble" },
-        ],
-      },
-      {
-        label: "Safety / Operational",
+        label: "Operational",
         items: [
           // F-E: point at the canonical CRUD home (kanban / new / detail), not
-          // the cross-domain read feed at /console/safety/incidents (which
-          // stays reachable via the safety module + cross-links).
-          { label: "Incidents", href: "/console/operations/incidents", icon: "Siren" },
-          { label: "Major Incident", href: "/console/safety/major-incident", icon: "Flame" },
-          { label: "Crisis", href: "/console/safety/crisis", icon: "Flame" },
-          { label: "Medical", href: "/console/safety/medical", icon: "Stethoscope" },
-          { label: "Safeguarding", href: "/console/safety/safeguarding", icon: "HeartHandshake" },
-          { label: "Guard Tours", href: "/console/safety/guard-tours", icon: "ShieldCheck" },
-          { label: "Environmental", href: "/console/safety/environmental", icon: "Leaf" },
-          { label: "Threats", href: "/console/safety/threats", icon: "ShieldAlert" },
+          // the cross-domain read feed at /studio/safety/incidents (which is
+          // the Safety group hub + stays reachable via cross-links).
+          { label: "Incidents", href: "/studio/operations/incidents", icon: "Siren" },
+          { label: "Major Incident", href: "/studio/safety/major-incident", icon: "Flame" },
+          { label: "Crisis", href: "/studio/safety/crisis", icon: "Flame" },
+          { label: "Medical", href: "/studio/safety/medical", icon: "Stethoscope" },
+          { label: "Safeguarding", href: "/studio/safety/safeguarding", icon: "HeartHandshake" },
+          { label: "Guard Tours", href: "/studio/safety/guard-tours", icon: "ShieldCheck" },
+          // Kit v7 CameraScanner archetype — fixed-station gate credential scan.
+          { label: "Access Control", href: "/studio/access-control", icon: "BadgeCheck" },
+          { label: "Environmental", href: "/studio/safety/environmental", icon: "Leaf" },
+          { label: "Threats", href: "/studio/safety/threats", icon: "ShieldAlert" },
         ],
       },
       {
-        label: "Safety / Compliance",
+        label: "Compliance",
         items: [
-          { label: "Inspections", href: "/console/inspections", icon: "Search" },
-          { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
-          { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
-          { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
-          { label: "Chain of Custody", href: "/console/compliance/coc", icon: "FileSignature" },
+          { label: "Inspections", href: "/studio/inspections", icon: "Search" },
+          { label: "OSHA 300", href: "/studio/safety/osha", icon: "ShieldAlert" },
+          { label: "Briefings", href: "/studio/safety/briefings", icon: "ClipboardPlus" },
+          { label: "Playbooks", href: "/studio/safety/playbooks", icon: "BookOpenCheck" },
+          { label: "Chain of Custody", href: "/studio/compliance/coc", icon: "FileSignature" },
         ],
-      },
-      {
-        label: "Guest Experience",
-        items: [
-          { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
-          // Same page as Sales → Hospitality, filtered to the guest
-          // audience via ?audience=guest. The query param keeps the two
-          // entries distinct — matchRoute treats query-bearing hrefs as
-          // never-active, so the Sales entry owns the highlight and only
-          // the Sales group force-opens (ADR-0006 §2).
-          { label: "Guest Experience", href: "/console/commercial/hospitality?audience=guest", icon: "ConciergeBell" },
-        ],
-      },
-      {
-        label: "Reporting",
-        items: [{ label: "Sustainability", href: "/console/sustainability", icon: "Leaf" }],
       },
     ],
   },
   {
-    // KNOWLEDGE — the LEG3ND product (kit v5): The Standard / LMS / Resources /
-    // Catalog / Signage / XMCE engine / Safety. The /console/legend/* subtree
-    // re-skins to Production Orange + the airport-signage type (see
-    // (platform)/console/legend/layout.tsx). Existing modules (knowledge,
-    // courses, accreditation, catalog, safety) are surfaced here as the LEG3ND
-    // lens; signage/engine/resources are net-new LEG3ND routes.
-    label: "Knowledge",
-    items: [],
-    sections: [
-      {
-        label: "LEG3ND",
-        items: [
-          { label: "The Standard", href: "/console/knowledge", icon: "BookOpen" },
-          { label: "Courses", href: "/console/workforce/courses", icon: "GraduationCap" },
-          { label: "Certifications", href: "/console/accreditation", icon: "BadgeCheck" },
-          { label: "Resources", href: "/console/legend/resources", icon: "FolderOpen" },
-          { label: "Catalog", href: "/console/settings/catalog", icon: "Spline" },
-          { label: "Signage", href: "/console/legend/signage", icon: "Map" },
-          { label: "Compliance Engine", href: "/console/legend/engine", icon: "ShieldCheck" },
-          { label: "Safety", href: "/console/safety/incidents", icon: "Siren" },
-        ],
-      },
-      {
-        // The XPMS 2.0 protocol — the master taxonomy (atoms / classes /
-        // codebook / tiers) from which learning, training, and development
-        // derive. It's the knowledge-base substrate, so it lives in the
-        // LEG3ND lens. Paths stay under /console/xpms (NOT /console/legend/*)
-        // so the operational WBS admin isn't re-skinned by the legend
-        // airport-signage layout.
-        label: "The Protocol (XPMS)",
-        items: [
-          { label: "Overview", href: "/console/xpms", icon: "Network" },
-          { label: "Atoms", href: "/console/xpms/atoms", icon: "Spline" },
-          { label: "Classes", href: "/console/xpms/classes", icon: "Layers" },
-          { label: "Codebook", href: "/console/xpms/codebook", icon: "BookOpen" },
-          { label: "Phases", href: "/console/xpms/phases", icon: "GitBranch" },
-          { label: "Tiers", href: "/console/xpms/tiers", icon: "ListOrdered" },
-          { label: "Provenance", href: "/console/xpms/provenance", icon: "ScrollText" },
-          { label: "Variance", href: "/console/xpms/variance", icon: "ChartBar" },
-        ],
-      },
+    // MESSAGES — communication surfaces (announcements, polls, surveys, RFIs,
+    // transmittals, service desk) plus the meeting/event coordination items.
+    // No /studio/comms hub page exists, so the header stays toggle-only.
+    label: "Messages",
+    items: [
+      { label: "Events", href: "/studio/events", icon: "CalendarDays" },
+      { label: "Meetings", href: "/studio/meetings", icon: "CalendarDays" },
+      { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText" },
+      { label: "Announcements", href: "/studio/comms/announcements", icon: "Megaphone" },
+      { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3" },
+      { label: "Surveys", href: "/studio/comms/surveys", icon: "ClipboardCheck" },
+      { label: "Whiteboards", href: "/studio/collaborate/whiteboards", icon: "Presentation" },
+      { label: "Transmittals", href: "/studio/transmittals", icon: "Send" },
+      { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox" },
+      { label: "RFIs", href: "/studio/rfis", icon: "MessageCircleQuestion" },
+      { label: "Service Desk", href: "/studio/services/requests", icon: "ConciergeBell" },
+      { label: "TOC — ITIL", href: "/studio/ops/toc", icon: "Network" },
     ],
   },
+  // KNOWLEDGE group removed (ADR-0011): LEG3ND is now its own (legend) shell
+  // (legend.atlvs.pro / `legendNav`), reached from the ecosystem app-switcher
+  // — not a console sidebar group. Its /legend/* deep-links (Resources,
+  // Signage, Compliance Engine) live in `legendNav`; its /studio/* leaves
+  // resolved to one home each: The Standard + Courses + Certifications →
+  // People, Catalog → Procurement ▸ Reference, Safety (incidents) → the one
+  // Incidents CRUD home in Operations ▸ Safety.
   {
     // COLLABORATE — lightweight workspace surfaces (Airtable-style sheets,
     // etc.) that don't belong to a heavier domain group.
@@ -620,8 +631,11 @@ export const platformNavDomain: NavGroup[] = [
     items: [
       // Block documents (deferred item F4). Single-user editing; multiplayer
       // is out of scope.
-      { label: "Documents", href: "/console/collaborate/docs", icon: "FileText" },
-      { label: "Sheets", href: "/console/collaborate/sheets", icon: "FileSpreadsheet" },
+      { label: "Documents", href: "/studio/collaborate/docs", icon: "FileText" },
+      { label: "Sheets", href: "/studio/collaborate/sheets", icon: "FileSpreadsheet" },
+      // Kit v7 component archetypes — RichTextEditor notes + KanbanBoard.
+      { label: "Notes", href: "/studio/notes", icon: "FileText" },
+      { label: "Board", href: "/studio/board", icon: "Layers" },
     ],
   },
 ];
@@ -633,7 +647,97 @@ export const platformNavDomain: NavGroup[] = [
 export const platformNav: NavGroup[] = platformNavDomain;
 
 /**
- * Settings sidebar — rendered inside `/console/settings/layout.tsx` as a
+ * LEG3ND shell nav (ADR-0011) — the standalone Knowledge · LMS · resource hub
+ * promoted out of the console into its own `(legend)` route group / `legend`
+ * subdomain. Rendered by `src/app/(legend)/layout.tsx`. The three kit modes
+ * (public funnel · learner · authoring/compliance) share this rail; page-level
+ * `requireSession()` gates the authoring/compliance surfaces.
+ */
+export const legendNav: NavGroup[] = [
+  {
+    // LEARN — the LMS spine (reference app: Learning Path → My Learning →
+    // Catalog → Live → Progress), plus the credential wallet.
+    label: "Learn",
+    items: [
+      { label: "Learning Path", href: "/legend/path", icon: "Route" },
+      { label: "My Learning", href: "/legend/my-learning", icon: "BookOpen" },
+      { label: "Catalog", href: "/legend/learn", icon: "GraduationCap" },
+      { label: "Live Sessions", href: "/legend/live", icon: "CalendarDays" },
+      { label: "Progress", href: "/legend/progress", icon: "BarChart3" },
+      { label: "Credentials", href: "/legend/certifications", icon: "BadgeCheck" },
+    ],
+  },
+  {
+    // COMMUNITY — Skool-class discussion, directory, and learning crews.
+    label: "Community",
+    items: [
+      { label: "Community", href: "/legend/community", icon: "UsersRound" },
+      { label: "Members", href: "/legend/community/members", icon: "Users" },
+      { label: "Crew", href: "/legend/crew", icon: "UsersRound" },
+    ],
+  },
+  {
+    // COMPETE — the shared gamification surfaces (Arena = leaderboard).
+    label: "Compete",
+    items: [
+      { label: "The Arena", href: "/legend/leaderboard", icon: "Award" },
+      { label: "Badges", href: "/legend/badges", icon: "Star" },
+      { label: "Rewards", href: "/legend/store", icon: "Store" },
+    ],
+  },
+  {
+    // MANAGE — training console (roster · assignment · compliance reporting).
+    label: "Manage",
+    items: [
+      { label: "Console", href: "/legend/console", icon: "ClipboardList" },
+      { label: "XMCE Engine", href: "/legend/engine", icon: "ShieldCheck" },
+      { label: "Recert Matrix", href: "/legend/compliance", icon: "ClipboardCheck" },
+    ],
+  },
+  {
+    label: "Knowledge",
+    items: [
+      { label: "Overview", href: "/legend", icon: "BookOpen" },
+      { label: "Resources", href: "/legend/resources", icon: "FolderOpen" },
+      { label: "Signage", href: "/legend/signage", icon: "Map" },
+      { label: "For Institutions", href: "/legend/for-institutions", icon: "Building2" },
+    ],
+  },
+  {
+    label: "Account",
+    items: [
+      { label: "Profile", href: "/legend/profile", icon: "UserCircle" },
+      { label: "Architecture", href: "/legend/architecture", icon: "Network" },
+    ],
+  },
+];
+
+/**
+ * GVTEWAY consumer rail (design_handoff §2) — the root-level consumer surfaces
+ * that sit alongside the project+persona `/p/[slug]/*` portal: editorial
+ * discovery, community, shareable lists, saved, and account. Distinct from
+ * `portalNav(slug, persona)`, which is the project-scoped portal.
+ */
+export const portalConsumerNav: NavGroup[] = [
+  {
+    label: "GVTEWAY",
+    items: [
+      { label: "Discover", href: "/p/discover", icon: "Compass" },
+      { label: "Community", href: "/p/community", icon: "Users" },
+      { label: "Scenes", href: "/p/scenes", icon: "Radio" },
+      { label: "Lists", href: "/p/lists", icon: "ListOrdered" },
+      { label: "Saved", href: "/p/saved", icon: "Star" },
+      { label: "Account", href: "/p/account", icon: "User" },
+      // Taste/genre onboarding — composes the same auth primitives as the
+      // operator `(auth)` flow (design_handoff §4). Reached from the signup CTA;
+      // registered here so the sitemap reconciler counts it as nav-reached.
+      { label: "Welcome", href: "/p/welcome", icon: "Sparkles" },
+    ],
+  },
+];
+
+/**
+ * Settings sidebar — rendered inside `/studio/settings/layout.tsx` as a
  * dedicated 2-col admin area. Extracted from `platformNav` 2026-04 so the
  * primary sidebar doesn't carry 14 admin items.
  */
@@ -641,21 +745,21 @@ export const settingsNav: NavGroup[] = [
   {
     label: "Workspace",
     items: [
-      { label: "Organization", href: "/console/settings/organization", minRole: "admin" },
-      { label: "Branding", href: "/console/settings/branding", minRole: "admin" },
-      { label: "Domains", href: "/console/settings/domains", minRole: "admin" },
-      { label: "Email Templates", href: "/console/settings/email-templates", minRole: "manager" },
-      { label: "Locations", href: "/console/locations" },
-      { label: "Marketplace", href: "/console/marketplace/settings", minRole: "admin" },
+      { label: "Organization", href: "/studio/settings/organization", minRole: "admin" },
+      { label: "Branding", href: "/studio/settings/branding", minRole: "admin" },
+      { label: "Domains", href: "/studio/settings/domains", minRole: "admin" },
+      { label: "Email Templates", href: "/studio/settings/email-templates", minRole: "manager" },
+      { label: "Locations", href: "/studio/locations" },
+      { label: "Marketplace", href: "/studio/marketplace/settings", minRole: "admin" },
     ],
   },
   {
     label: "Team & Access",
     items: [
-      { label: "Roles", href: "/console/people/roles", minRole: "admin" },
-      { label: "Invites", href: "/console/people/invites", minRole: "admin" },
-      { label: "Account Managers", href: "/console/settings/account-managers", minRole: "admin" },
-      { label: "Governance", href: "/console/settings/governance", minRole: "admin" },
+      { label: "Roles", href: "/studio/people/roles", minRole: "admin" },
+      { label: "Invites", href: "/studio/people/invites", minRole: "admin" },
+      { label: "Account Managers", href: "/studio/settings/account-managers", minRole: "admin" },
+      { label: "Governance", href: "/studio/settings/governance", minRole: "admin" },
     ],
   },
   {
@@ -663,24 +767,41 @@ export const settingsNav: NavGroup[] = [
     // (operational sourcing concern, not admin). Time-Clock Zones stays
     // as it's purely org-level field configuration.
     label: "Field Config",
-    items: [{ label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" }],
+    items: [{ label: "Time-Clock Zones", href: "/studio/settings/time-clock-zones" }],
+  },
+  {
+    // ADR-0011: the XPMS 2.0 taxonomy (atoms / classes / codebook / tiers /
+    // provenance / variance) is admin config, not daily nav — moved out of the
+    // primary Knowledge group into Settings. Routes stay under /studio/xpms/*
+    // (the WBS admin is NOT re-skinned by the LEG3ND airport-signage layout).
+    label: "Taxonomy",
+    items: [
+      { label: "Overview", href: "/studio/xpms", minRole: "admin" },
+      { label: "Atoms", href: "/studio/xpms/atoms", minRole: "admin" },
+      { label: "Classes", href: "/studio/xpms/classes", minRole: "admin" },
+      { label: "Codebook", href: "/studio/xpms/codebook", minRole: "admin" },
+      { label: "Phases", href: "/studio/xpms/phases", minRole: "admin" },
+      { label: "Tiers", href: "/studio/xpms/tiers", minRole: "admin" },
+      { label: "Provenance", href: "/studio/xpms/provenance", minRole: "admin" },
+      { label: "Variance", href: "/studio/xpms/variance", minRole: "admin" },
+    ],
   },
   {
     label: "Billing & Data",
     items: [
-      { label: "Billing", href: "/console/settings/billing", minRole: "admin" },
-      { label: "Exports", href: "/console/settings/exports", minRole: "manager" },
-      { label: "Imports", href: "/console/settings/imports", minRole: "manager" },
+      { label: "Billing", href: "/studio/settings/billing", minRole: "admin" },
+      { label: "Exports", href: "/studio/settings/exports", minRole: "manager" },
+      { label: "Imports", href: "/studio/settings/imports", minRole: "manager" },
       // ADR-0005 hoist: the project-level Import Jobs queue surfaced
       // as an orphan top-level prefix; it shares its mental model
       // with Exports, so it lands in the same admin sub-section.
-      { label: "Import Jobs", href: "/console/import", minRole: "manager" },
+      { label: "Import Jobs", href: "/studio/import", minRole: "manager" },
       // P0.1 — recycle bin. Browse + restore soft-deleted rows across the
       // human-meaningful soft-deletable tables. Manager+ (same band that can
       // delete). Backed by listTrashed + restoreOrgScoped.
-      { label: "Trash", href: "/console/trash", minRole: "manager" },
+      { label: "Trash", href: "/studio/trash", minRole: "manager" },
       // P0.2 — per-tenant AI & API usage dashboard over usage_rollups.
-      { label: "Usage", href: "/console/settings/usage", minRole: "manager" },
+      { label: "Usage", href: "/studio/settings/usage", minRole: "manager" },
     ],
   },
   {
@@ -689,29 +810,29 @@ export const settingsNav: NavGroup[] = [
     // home for config that drives behavior across the app.
     label: "Integrations",
     items: [
-      { label: "Apps", href: "/console/settings/integrations", minRole: "admin" },
-      { label: "Marketplace", href: "/console/settings/integrations/marketplace", minRole: "admin" },
-      { label: "Ticketing", href: "/console/settings/integrations/ticketing", minRole: "admin" },
-      { label: "Automations", href: "/console/ai/automations", minRole: "manager" },
-      { label: "Field Agents", href: "/console/ai/agents", minRole: "manager" },
+      { label: "Apps", href: "/studio/settings/integrations", minRole: "admin" },
+      { label: "Marketplace", href: "/studio/settings/integrations/marketplace", minRole: "admin" },
+      { label: "Ticketing", href: "/studio/settings/integrations/ticketing", minRole: "admin" },
+      { label: "Automations", href: "/studio/ai/automations", minRole: "manager" },
+      { label: "Field Agents", href: "/studio/ai/agents", minRole: "manager" },
       // F2 — RAG corpus indexer. Status of document_chunks by source + manual reindex.
-      { label: "RAG Corpus", href: "/console/ai/corpus", minRole: "manager" },
-      { label: "API", href: "/console/settings/api", minRole: "admin" },
-      { label: "Webhooks", href: "/console/settings/webhooks", minRole: "admin" },
+      { label: "RAG Corpus", href: "/studio/ai/corpus", minRole: "manager" },
+      { label: "API", href: "/studio/settings/api", minRole: "admin" },
+      { label: "Webhooks", href: "/studio/settings/webhooks", minRole: "admin" },
     ],
   },
   {
     label: "Compliance",
     items: [
-      { label: "Audit Log", href: "/console/settings/audit", minRole: "admin" },
-      { label: "Compliance", href: "/console/settings/compliance", minRole: "manager" },
-      { label: "Marketplace Reviews", href: "/console/marketplace/reviews" },
-      { label: "Privacy", href: "/console/legal/privacy" },
-      { label: "DSAR", href: "/console/legal/privacy/dsar" },
-      { label: "Consent", href: "/console/legal/privacy/consent" },
-      { label: "Data Map", href: "/console/legal/privacy/datamap" },
-      { label: "IP / Trademarks", href: "/console/legal/ip" },
-      { label: "Insurance", href: "/console/legal/insurance" },
+      { label: "Audit Log", href: "/studio/settings/audit", minRole: "admin" },
+      { label: "Compliance", href: "/studio/settings/compliance", minRole: "manager" },
+      { label: "Marketplace Reviews", href: "/studio/marketplace/reviews" },
+      { label: "Privacy", href: "/studio/legal/privacy" },
+      { label: "DSAR", href: "/studio/legal/privacy/dsar" },
+      { label: "Consent", href: "/studio/legal/privacy/consent" },
+      { label: "Data Map", href: "/studio/legal/privacy/datamap" },
+      { label: "IP / Trademarks", href: "/studio/legal/ip" },
+      { label: "Insurance", href: "/studio/legal/insurance" },
     ],
   },
 ];
@@ -1145,6 +1266,9 @@ export const mobileTabs: NavItem[] = [
   { label: "Home", href: "/m" },
   { label: "Calendar", href: "/m/schedule" },
   { label: "Tasks", href: "/m/tasks" },
+  // GVTEWAY consumer Onsite — the live-event center tab (design_handoff §2):
+  // now/next set times, find-my-friends, read-only passes, gamification.
+  { label: "Onsite", href: "/m/onsite" },
   { label: "Assets", href: "/m/inventory" },
   { label: "Inbox", href: "/m/inbox" },
   { label: "More", href: "/m/more" },
@@ -1171,6 +1295,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Inventory", href: "/m/inventory" },
   { label: "Inventory Scan", href: "/m/inventory/scan" },
   { label: "Scan", href: "/m/check-in" },
+  { label: "Quick Scan", href: "/m/scan" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Time", href: "/m/clock" },
   { label: "Requests", href: "/m/requests" },
@@ -1193,6 +1318,7 @@ export const mobileSurfaces: NavItem[] = [
   // Account / credential.
   { label: "Wallet", href: "/m/wallet" },
   { label: "Time Off", href: "/m/time-off" },
+  { label: "Profile", href: "/m/profile" },
   { label: "Activity History", href: "/m/activity" },
   { label: "Referrals & Rewards", href: "/m/referrals" },
   { label: "Emergency", href: "/m/emergency" },
@@ -1245,128 +1371,11 @@ export function mobileSurfacesForPhase(phase?: string): NavItem[] {
   return [...head, ...tail];
 }
 
-/**
- * Persona-routed mobile (ADR-0009 scaffold).
- *
- * Mobile roles drive per-role tab bars + role-relevant Tools drawer
- * ordering. Each role has a home at `/m/[role]` that lands them on a
- * dashboard scoped to their work. Existing `/m/*` surfaces continue to
- * resolve during the three-month grace window (ADR-0009 §"Migration
- * rules" #1) — this is scaffold only; the URL move per surface is a
- * dedicated PR.
- */
-export type MobileRole = "performer" | "crew" | "driver" | "medic" | "guard" | "admin";
-
-export const MOBILE_ROLES: MobileRole[] = ["performer", "crew", "driver", "medic", "guard", "admin"];
-
-/**
- * Resolve the best default mobile role for a session. Operators with
- * an admin/owner role land on the admin home (full surface drawer);
- * personas map by their guide-side mapping plus the deskless extension.
- * Stored override at `user_preferences.ui_state.mobile_role` wins over
- * the inferred default — read at the layout level.
- */
-export function mapSessionToMobileRole(role: string | null, persona: string | null): MobileRole {
-  if (role === "owner" || role === "admin" || role === "manager") return "admin";
-  switch (persona) {
-    case "artist":
-    case "athlete":
-      return "performer";
-    case "crew":
-    case "contractor":
-    case "collaborator":
-      return "crew";
-    default:
-      return "crew";
-  }
-}
-
-/**
- * Per-role mobile tab bar. Five tabs each; role-relevant primary tools
- * surface first. Universal surfaces (Inbox, Alerts, Me) appear under
- * every role so the operator never gets stranded.
- */
-// ADR-0009 URL flip — universal surfaces (inbox, shift, alerts, settings,
-// feed, kudos, learning, time-off, docs, directory) use role-prefixed
-// canonical URLs that map to thin re-exports under /m/[role]/<surface>.
-// Role-specific surfaces (gate, driver, medic, guard) still use static
-// paths because those pages are their role's home — not duplicated.
-// COMPVSS kit rebuild (2026-06-21): the persona-routed /m/[role] tab bars were
-// retired with the role surfaces (driver/medic/guard/etc.). Every role now
-// resolves to the single crew-kit tab model (`mobileTabs`). The MobileRole type
-// + this map are kept so external consumers (sitemap generator, nav tests)
-// still compile; the layout renders `mobileTabs` directly and ignores role.
-export const ROLE_TABS: Record<MobileRole, NavItem[]> = {
-  performer: mobileTabs,
-  crew: mobileTabs,
-  driver: mobileTabs,
-  medic: mobileTabs,
-  guard: mobileTabs,
-  admin: mobileTabs,
-};
-
-export function roleTabs(role: MobileRole): NavItem[] {
-  return ROLE_TABS[role];
-}
-
-/**
- * Per-role tools-drawer priority — the surfaces a role uses most.
- * Composes with phase reordering: role-priority comes first, then
- * phase-priority surfaces that aren't already in the role head, then
- * the rest in default order.
- *
- * Admin gets no role-priority (they touch every surface, so the
- * existing phase ordering is correct for them).
- */
-// COMPVSS kit rebuild (2026-06-21): the persona-routed role surfaces were
-// retired, so per-role drawer priorities collapse to none — the Tools drawer
-// orders by XPMS phase alone (see PHASE_PRIORITY_HREFS). Kept as an export so
-// `mobileSurfacesForRole` and external consumers still resolve.
-const ROLE_PRIORITY_HREFS: Record<MobileRole, string[]> = {
-  performer: [],
-  crew: [],
-  driver: [],
-  medic: [],
-  guard: [],
-  admin: [],
-};
-
-/**
- * Role × phase-aware tools-drawer ordering (ADR-0009).
- *
- * Composes phase reordering on top of role-relevant filtering. Order:
- *   1. Role-priority surfaces (per ROLE_PRIORITY_HREFS).
- *   2. Phase-priority surfaces (per PHASE_PRIORITY_HREFS) not already
- *      in the role head.
- *   3. Everything else in default `mobileSurfaces` order.
- *
- * Pass `role=undefined` to get just phase ordering (existing behavior).
- * Pass `phase=undefined` to get just role ordering.
- */
-export function mobileSurfacesForRole(role: MobileRole | undefined, phase?: string): NavItem[] {
-  if (!role) return mobileSurfacesForPhase(phase);
-  const rolePriority = ROLE_PRIORITY_HREFS[role];
-  const phasePriority = phase ? (PHASE_PRIORITY_HREFS[phase] ?? []) : [];
-  const seen = new Set<string>();
-  const head: NavItem[] = [];
-  const byHref = new Map(mobileSurfaces.map((i) => [i.href, i] as const));
-  for (const href of rolePriority) {
-    const item = byHref.get(href);
-    if (item && !seen.has(href)) {
-      head.push(item);
-      seen.add(href);
-    }
-  }
-  for (const href of phasePriority) {
-    const item = byHref.get(href);
-    if (item && !seen.has(href)) {
-      head.push(item);
-      seen.add(href);
-    }
-  }
-  const tail = mobileSurfaces.filter((i) => !seen.has(i.href));
-  return [...head, ...tail];
-}
+// COMPVSS kit rebuild (2026-06-21) retired the persona-routed /m/[role] tab
+// model entirely. The single crew-kit tab model (`mobileTabs`) + phase-aware
+// ordering (`mobileSurfacesForPhase`) are the canon; the legacy MobileRole /
+// MOBILE_ROLES / ROLE_TABS / roleTabs / mobileSurfacesForRole exports were
+// removed (no live consumers).
 
 // ───────────────────────────────────────────────────────────────────────
 // Self-navigating shells — marketing + personal (/me).
@@ -1463,6 +1472,7 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
 /** Marketing header — direct (non-dropdown) primary links. */
 export const marketingHeaderPrimaryLinks: MarketingNavItem[] = [
   { labelKey: "marketing.header.marketplace", href: "/marketplace" },
+  { labelKey: "nav.events", href: "/events" },
   { labelKey: "nav.pricing", href: "/pricing" },
   { labelKey: "nav.community", href: "/community" },
 ];

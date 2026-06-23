@@ -33,11 +33,16 @@ describe("WORLDS canon", () => {
     expect(lc).not.toMatch(/Strike|Activation|R&D|Compliance|Discovery to Strike/);
   });
 
-  it("hero adopts World Engine voice", () => {
+  it("hero adopts the World Builder's Ecosystem voice (kit canon)", () => {
     const h = EN.marketing.pages.home.hero;
-    expect(h.titleLine1).toBe("Build worlds.");
-    expect(`${h.titleLine2} ${h.titleLine3}`).toBe("Run them live.");
-    expect(h.eyebrow).toBe("The engine behind new worlds");
+    // Headline: "THE WORLD BUILDER'S ECOSYSTEM." with "Ecosystem." in --p-accent.
+    expect(`${h.titleLine1} ${h.titleLine2} ${h.titleLine3}`).toBe("The World Builder's Ecosystem.");
+    expect(h.eyebrow).toBe("From pitch to case study");
+    // The four-surface line — ATLVS runs the bridge … LEG3ND holds the standard.
+    expect(h.subtitleAtlvs).toBe("runs the bridge,");
+    expect(h.subtitleCompvss).toBe("works the floor,");
+    expect(h.subtitleGvteway).toBe("opens the doors, and");
+    expect(h.subtitleLegend).toBe("holds the standard.");
   });
 
   it("app one-liners are identical across seo.ts and en.json (GEO G2)", () => {

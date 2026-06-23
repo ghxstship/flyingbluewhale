@@ -7,9 +7,7 @@ import {
   portalNav,
   mobileTabs,
   mobileSurfaces,
-  ROLE_TABS,
   PORTAL_PERSONAS,
-  MOBILE_ROLES,
   type NavGroup,
   type NavItem,
 } from "@/lib/nav";
@@ -23,7 +21,7 @@ import {
  * Coverage is the four data-driven shells whose nav lives in src/lib/nav.ts:
  *   - ATLVS console (platformNavDomain) + console settings (settingsNav)
  *   - GVTEWAY portal (portalNav, every persona)
- *   - COMPVSS mobile (mobileTabs + mobileSurfaces + every role's ROLE_TABS)
+ *   - COMPVSS mobile (mobileTabs + mobileSurfaces)
  *
  * Marketing / auth / personal links are flat and runtime-covered by
  * routes-public-smoke + personal-self-service; this guard targets the
@@ -85,6 +83,8 @@ function groupHrefs(group: NavGroup): string[] {
   const push = (it: NavItem) => {
     if (it.href?.startsWith("/")) out.push(it.href);
   };
+  // ADR-0011: a navigable group header carries a hub href — guard it too.
+  if (group.href?.startsWith("/")) out.push(group.href);
   const sources = group.sections?.length ? group.sections : [{ items: group.items }];
   for (const s of sources) for (const it of s.items) push(it);
   return out;
@@ -102,12 +102,6 @@ function allNavHrefs(): Array<{ shell: string; href: string }> {
     "mobile",
     [...mobileTabs, ...mobileSurfaces].filter((it) => it.href?.startsWith("/")).map((it) => it.href),
   );
-  for (const role of MOBILE_ROLES) {
-    add(
-      `mobile:${role}`,
-      ROLE_TABS[role].filter((it) => it.href?.startsWith("/")).map((it) => it.href),
-    );
-  }
   return out;
 }
 

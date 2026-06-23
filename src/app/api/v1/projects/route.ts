@@ -93,7 +93,7 @@ async function postHandler(req: NextRequest) {
             orgId: session.orgId,
             eventType: "project.created",
             title: `New project: ${projectName}`,
-            href: projectId ? `/console/projects/${projectId}` : undefined,
+            href: projectId ? `/studio/projects/${projectId}` : undefined,
             data: { projectId, name: projectName },
           });
         } catch (e) {

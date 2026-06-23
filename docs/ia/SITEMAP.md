@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1061 · **API route handlers:** 131 · **Distinct nav hrefs:** 433
+**Page routes:** 1107 · **API route handlers:** 132 · **Distinct nav hrefs:** 472
 
 ## Legend
 
@@ -25,13 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 734 | 199 | 535 | 0 | 0 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 50 | 35 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 140 | 120 | 18 | 0 | 2 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 87 | 32 | 47 | 0 | 8 |
+| ATLVS — Operator Console | platformNav rail | 723 | 206 | 517 | 0 | 0 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 53 | 38 | 13 | 0 | 2 |
+| GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
+| LEG3ND — Knowledge Shell | — | 40 | 21 | 19 | 0 | 0 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 90 | 33 | 49 | 0 | 8 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1061** | **407** | **619** | **0** | **35** |
+| **TOTAL** | | **1107** | **446** | **624** | **0** | **37** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -48,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (35) — intentional non-nav, with reasons
+## · Exempt routes (37) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -67,6 +68,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/proposals` | prefix | Token-gated proposal flow. |
 | `/msa` | prefix | Token-gated MSA flow. |
 | `/share` | prefix | Token-gated share link. |
+| `/sign` | prefix | Token-gated public e-signature flow (emailed signing link). |
 | `/accept-invite` | prefix | Token-gated invite acceptance. |
 | `/auth` | prefix | Auth resolver / redirect. |
 | `/forgot-password` | prefix | Auth recovery flow. |
@@ -76,6 +78,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/sso` | prefix | Auth SSO entry. |
 | `/verify-email` | prefix | Auth email verification. |
 | `/onboarding` | prefix | Post-signup org onboarding flow. |
+| `/home` | exact | Post-auth app launcher — reached via auth redirect, not a nav click. |
 | `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
 | `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
 
@@ -83,1132 +86,1146 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 # Full inventory by app
 
-## ATLVS — Operator Console (`/console`)
+## ATLVS — Operator Console (`/studio`)
 
-734 routes — ● 199 nav · ○ 535 linked · ⚠ 0 orphan
+723 routes — ● 206 nav · ○ 517 linked · ⚠ 0 orphan
+
+<details><summary><code>access-control</code> · 1 route</summary>
+
+● `/studio/access-control`
+
+</details>
 
 <details><summary><code>accommodation</code> · 6 routes</summary>
 
-● `/console/accommodation`
-○ `/console/accommodation/blocks`
-○ `/console/accommodation/blocks/[blockId]`
-○ `/console/accommodation/blocks/[blockId]/edit`
-○ `/console/accommodation/blocks/new`
-○ `/console/accommodation/village`
+● `/studio/accommodation`
+○ `/studio/accommodation/blocks`
+○ `/studio/accommodation/blocks/[blockId]`
+○ `/studio/accommodation/blocks/[blockId]/edit`
+○ `/studio/accommodation/blocks/new`
+○ `/studio/accommodation/village`
 
 </details>
 
 <details><summary><code>accreditation</code> · 17 routes</summary>
 
-● `/console/accreditation`
-○ `/console/accreditation/categories`
-○ `/console/accreditation/categories/[categoryId]`
-○ `/console/accreditation/categories/[categoryId]/edit`
-○ `/console/accreditation/categories/new`
-○ `/console/accreditation/changes`
-○ `/console/accreditation/changes/[changeId]`
-○ `/console/accreditation/changes/[changeId]/edit`
-○ `/console/accreditation/changes/new`
-○ `/console/accreditation/policy`
-○ `/console/accreditation/print`
-○ `/console/accreditation/print/sheet`
-○ `/console/accreditation/scans`
-○ `/console/accreditation/vetting`
-○ `/console/accreditation/vetting/[applicationId]`
-○ `/console/accreditation/vetting/[applicationId]/edit`
-○ `/console/accreditation/zones`
+● `/studio/accreditation`
+○ `/studio/accreditation/categories`
+○ `/studio/accreditation/categories/[categoryId]`
+○ `/studio/accreditation/categories/[categoryId]/edit`
+○ `/studio/accreditation/categories/new`
+○ `/studio/accreditation/changes`
+○ `/studio/accreditation/changes/[changeId]`
+○ `/studio/accreditation/changes/[changeId]/edit`
+○ `/studio/accreditation/changes/new`
+○ `/studio/accreditation/policy`
+○ `/studio/accreditation/print`
+○ `/studio/accreditation/print/sheet`
+○ `/studio/accreditation/scans`
+○ `/studio/accreditation/vetting`
+○ `/studio/accreditation/vetting/[applicationId]`
+○ `/studio/accreditation/vetting/[applicationId]/edit`
+○ `/studio/accreditation/zones`
 
 </details>
 
 <details><summary><code>action-items</code> · 1 route</summary>
 
-● `/console/action-items`
+● `/studio/action-items`
 
 </details>
 
 <details><summary><code>agency</code> · 7 routes</summary>
 
-○ `/console/agency`
-○ `/console/agency/commissions`
-● `/console/agency/roster`
-○ `/console/agency/roster/[agencyArtistId]`
-● `/console/agency/tours`
-○ `/console/agency/tours/[tourId]`
-○ `/console/agency/tours/new`
+○ `/studio/agency`
+○ `/studio/agency/commissions`
+● `/studio/agency/roster`
+○ `/studio/agency/roster/[agencyArtistId]`
+● `/studio/agency/tours`
+○ `/studio/agency/tours/[tourId]`
+○ `/studio/agency/tours/new`
 
 </details>
 
 <details><summary><code>ai</code> · 10 routes</summary>
 
-○ `/console/ai`
-● `/console/ai/agents`
-○ `/console/ai/agents/[agentId]`
-○ `/console/ai/agents/new`
-● `/console/ai/automations`
-○ `/console/ai/automations/[automationId]`
-○ `/console/ai/automations/[automationId]/runs`
-○ `/console/ai/automations/[automationId]/runs/[runId]`
-○ `/console/ai/automations/new`
-● `/console/ai/corpus`
+○ `/studio/ai`
+● `/studio/ai/agents`
+○ `/studio/ai/agents/[agentId]`
+○ `/studio/ai/agents/new`
+● `/studio/ai/automations`
+○ `/studio/ai/automations/[automationId]`
+○ `/studio/ai/automations/[automationId]/runs`
+○ `/studio/ai/automations/[automationId]/runs/[runId]`
+○ `/studio/ai/automations/new`
+● `/studio/ai/corpus`
 
 </details>
 
 <details><summary><code>annotations</code> · 2 routes</summary>
 
-● `/console/annotations`
-○ `/console/annotations/[id]`
+● `/studio/annotations`
+○ `/studio/annotations/[id]`
 
 </details>
 
 <details><summary><code>assistant</code> · 2 routes</summary>
 
-● `/console/assistant`
-○ `/console/assistant/[conversationId]`
+● `/studio/assistant`
+○ `/studio/assistant/[conversationId]`
 
 </details>
 
 <details><summary><code>bim</code> · 5 routes</summary>
 
-● `/console/bim`
-○ `/console/bim/[id]`
-○ `/console/bim/[id]/edit`
-○ `/console/bim/[id]/view`
-○ `/console/bim/new`
+● `/studio/bim`
+○ `/studio/bim/[id]`
+○ `/studio/bim/[id]/edit`
+○ `/studio/bim/[id]/view`
+○ `/studio/bim/new`
+
+</details>
+
+<details><summary><code>board</code> · 1 route</summary>
+
+● `/studio/board`
 
 </details>
 
 <details><summary><code>bookings</code> · 9 routes</summary>
 
-● `/console/bookings`
-○ `/console/bookings/calendar`
-○ `/console/bookings/deals`
-○ `/console/bookings/deals/[offerId]`
-○ `/console/bookings/deals/[offerId]/settlement`
-○ `/console/bookings/holds`
-○ `/console/bookings/holds/new`
-○ `/console/bookings/settlements`
-○ `/console/bookings/settlements/[id]`
+● `/studio/bookings`
+○ `/studio/bookings/calendar`
+○ `/studio/bookings/deals`
+○ `/studio/bookings/deals/[offerId]`
+○ `/studio/bookings/deals/[offerId]/settlement`
+○ `/studio/bookings/holds`
+○ `/studio/bookings/holds/new`
+○ `/studio/bookings/settlements`
+○ `/studio/bookings/settlements/[id]`
+
+</details>
+
+<details><summary><code>calendar</code> · 1 route</summary>
+
+● `/studio/calendar`
 
 </details>
 
 <details><summary><code>campaigns</code> · 2 routes</summary>
 
-● `/console/campaigns`
-○ `/console/campaigns/new`
+● `/studio/campaigns`
+○ `/studio/campaigns/new`
 
 </details>
 
 <details><summary><code>captures</code> · 2 routes</summary>
 
-● `/console/captures`
-○ `/console/captures/new`
+● `/studio/captures`
+○ `/studio/captures/new`
 
 </details>
 
 <details><summary><code>clients</code> · 8 routes</summary>
 
-● `/console/clients`
-○ `/console/clients/[clientId]`
-○ `/console/clients/[clientId]/branding`
-○ `/console/clients/[clientId]/edit`
-○ `/console/clients/[clientId]/invoices`
-○ `/console/clients/[clientId]/projects`
-○ `/console/clients/[clientId]/proposals`
-○ `/console/clients/new`
+● `/studio/clients`
+○ `/studio/clients/[clientId]`
+○ `/studio/clients/[clientId]/branding`
+○ `/studio/clients/[clientId]/edit`
+○ `/studio/clients/[clientId]/invoices`
+○ `/studio/clients/[clientId]/projects`
+○ `/studio/clients/[clientId]/proposals`
+○ `/studio/clients/new`
 
 </details>
 
 <details><summary><code>collaborate</code> · 9 routes</summary>
 
-● `/console/collaborate/docs`
-○ `/console/collaborate/docs/[id]`
-○ `/console/collaborate/docs/new`
-● `/console/collaborate/sheets`
-○ `/console/collaborate/sheets/[id]`
-○ `/console/collaborate/sheets/new`
-● `/console/collaborate/whiteboards`
-○ `/console/collaborate/whiteboards/[id]`
-○ `/console/collaborate/whiteboards/new`
+● `/studio/collaborate/docs`
+○ `/studio/collaborate/docs/[id]`
+○ `/studio/collaborate/docs/new`
+● `/studio/collaborate/sheets`
+○ `/studio/collaborate/sheets/[id]`
+○ `/studio/collaborate/sheets/new`
+● `/studio/collaborate/whiteboards`
+○ `/studio/collaborate/whiteboards/[id]`
+○ `/studio/collaborate/whiteboards/new`
 
 </details>
 
 <details><summary><code>commercial</code> · 9 routes</summary>
 
-○ `/console/commercial`
-● `/console/commercial/hospitality`
-○ `/console/commercial/hospitality/[packageId]`
-○ `/console/commercial/hospitality/[packageId]/edit`
-○ `/console/commercial/licensing`
-● `/console/commercial/sponsors`
-○ `/console/commercial/sponsors/[sponsorId]`
-○ `/console/commercial/sponsors/[sponsorId]/edit`
-○ `/console/commercial/sponsors/new`
+○ `/studio/commercial`
+● `/studio/commercial/hospitality`
+○ `/studio/commercial/hospitality/[packageId]`
+○ `/studio/commercial/hospitality/[packageId]/edit`
+○ `/studio/commercial/licensing`
+● `/studio/commercial/sponsors`
+○ `/studio/commercial/sponsors/[sponsorId]`
+○ `/studio/commercial/sponsors/[sponsorId]/edit`
+○ `/studio/commercial/sponsors/new`
 
 </details>
 
 <details><summary><code>comms</code> · 10 routes</summary>
 
-● `/console/comms/announcements`
-○ `/console/comms/announcements/[id]`
-○ `/console/comms/announcements/[id]/edit`
-○ `/console/comms/announcements/new`
-● `/console/comms/polls`
-○ `/console/comms/polls/[id]`
-○ `/console/comms/polls/new`
-● `/console/comms/surveys`
-○ `/console/comms/surveys/[id]`
-○ `/console/comms/surveys/new`
+● `/studio/comms/announcements`
+○ `/studio/comms/announcements/[id]`
+○ `/studio/comms/announcements/[id]/edit`
+○ `/studio/comms/announcements/new`
+● `/studio/comms/polls`
+○ `/studio/comms/polls/[id]`
+○ `/studio/comms/polls/new`
+● `/studio/comms/surveys`
+○ `/studio/comms/surveys/[id]`
+○ `/studio/comms/surveys/new`
 
 </details>
 
 <details><summary><code>compliance</code> · 1 route</summary>
 
-● `/console/compliance/coc`
+● `/studio/compliance/coc`
 
 </details>
 
 <details><summary><code>contracts</code> · 4 routes</summary>
 
-● `/console/contracts`
-○ `/console/contracts/[contractId]`
-○ `/console/contracts/[contractId]/edit`
-○ `/console/contracts/new`
+● `/studio/contracts`
+○ `/studio/contracts/[contractId]`
+○ `/studio/contracts/[contractId]/edit`
+○ `/studio/contracts/new`
 
 </details>
 
 <details><summary><code>dashboards</code> · 3 routes</summary>
 
-● `/console/dashboards`
-○ `/console/dashboards/[id]`
-○ `/console/dashboards/[id]/edit`
+● `/studio/dashboards`
+○ `/studio/dashboards/[id]`
+○ `/studio/dashboards/[id]/edit`
 
 </details>
 
 <details><summary><code>documents</code> · 2 routes</summary>
 
-● `/console/documents`
-○ `/console/documents/[docType]`
+● `/studio/documents`
+○ `/studio/documents/[docType]`
 
 </details>
 
 <details><summary><code>drawings</code> · 4 routes</summary>
 
-● `/console/drawings`
-○ `/console/drawings/[id]`
-○ `/console/drawings/[id]/edit`
-○ `/console/drawings/new`
+● `/studio/drawings`
+○ `/studio/drawings/[id]`
+○ `/studio/drawings/[id]/edit`
+○ `/studio/drawings/new`
 
 </details>
 
 <details><summary><code>email-inbox</code> · 2 routes</summary>
 
-● `/console/email-inbox`
-○ `/console/email-inbox/[id]`
+● `/studio/email-inbox`
+○ `/studio/email-inbox/[id]`
 
 </details>
 
-<details><summary><code>envelopes</code> · 3 routes</summary>
+<details><summary><code>envelopes</code> · 4 routes</summary>
 
-● `/console/envelopes`
-○ `/console/envelopes/[id]`
-○ `/console/envelopes/new`
+● `/studio/envelopes`
+○ `/studio/envelopes/[id]`
+○ `/studio/envelopes/[id]/prepare`
+○ `/studio/envelopes/new`
 
 </details>
 
 <details><summary><code>estimates</code> · 4 routes</summary>
 
-● `/console/estimates`
-○ `/console/estimates/[id]`
-○ `/console/estimates/[id]/edit`
-○ `/console/estimates/new`
+● `/studio/estimates`
+○ `/studio/estimates/[id]`
+○ `/studio/estimates/[id]/edit`
+○ `/studio/estimates/new`
 
 </details>
 
 <details><summary><code>events</code> · 4 routes</summary>
 
-● `/console/events`
-○ `/console/events/[eventId]`
-○ `/console/events/[eventId]/edit`
-○ `/console/events/new`
+● `/studio/events`
+○ `/studio/events/[eventId]`
+○ `/studio/events/[eventId]/edit`
+○ `/studio/events/new`
 
 </details>
 
 <details><summary><code>finance</code> · 55 routes</summary>
 
-○ `/console/finance`
-● `/console/finance/ap-ocr`
-○ `/console/finance/ap-ocr/[id]`
-● `/console/finance/budgets`
-○ `/console/finance/budgets/[budgetId]`
-○ `/console/finance/budgets/[budgetId]/edit`
-○ `/console/finance/budgets/import`
-○ `/console/finance/budgets/new`
-○ `/console/finance/budgets/summary`
-○ `/console/finance/consolidation`
-● `/console/finance/cost-codes`
-○ `/console/finance/cost-codes/new`
-● `/console/finance/entities`
-○ `/console/finance/entities/[id]`
-○ `/console/finance/entities/[id]/edit`
-○ `/console/finance/entities/new`
-● `/console/finance/expenses`
-○ `/console/finance/expenses/[expenseId]`
-○ `/console/finance/expenses/[expenseId]/edit`
-○ `/console/finance/expenses/new`
-● `/console/finance/forecasts`
-○ `/console/finance/forecasts/new`
-● `/console/finance/invoices`
-○ `/console/finance/invoices/[invoiceId]`
-○ `/console/finance/invoices/[invoiceId]/activity`
-○ `/console/finance/invoices/[invoiceId]/edit`
-○ `/console/finance/invoices/[invoiceId]/line-items`
-○ `/console/finance/invoices/new`
-● `/console/finance/lien-waivers`
-○ `/console/finance/lien-waivers/[id]`
-○ `/console/finance/lien-waivers/new`
-● `/console/finance/mileage`
-○ `/console/finance/mileage/[mileageId]`
-○ `/console/finance/mileage/[mileageId]/edit`
-○ `/console/finance/mileage/new`
-● `/console/finance/pay-apps`
-○ `/console/finance/pay-apps/[id]`
-○ `/console/finance/pay-apps/new`
-● `/console/finance/payouts`
-● `/console/finance/payroll`
-○ `/console/finance/payroll/new`
-● `/console/finance/periods`
-○ `/console/finance/periods/[periodId]`
-○ `/console/finance/periods/[periodId]/transitions`
-○ `/console/finance/periods/new`
-● `/console/finance/reports`
-● `/console/finance/time`
-○ `/console/finance/time/[entryId]`
-○ `/console/finance/time/[entryId]/edit`
-○ `/console/finance/time/new`
-● `/console/finance/timesheets`
-○ `/console/finance/timesheets/[id]`
-○ `/console/finance/treasury`
-● `/console/finance/wip`
-○ `/console/finance/wip/new`
+● `/studio/finance`
+● `/studio/finance/ap-ocr`
+○ `/studio/finance/ap-ocr/[id]`
+● `/studio/finance/budgets`
+○ `/studio/finance/budgets/[budgetId]`
+○ `/studio/finance/budgets/[budgetId]/edit`
+○ `/studio/finance/budgets/import`
+○ `/studio/finance/budgets/new`
+○ `/studio/finance/budgets/summary`
+○ `/studio/finance/consolidation`
+● `/studio/finance/cost-codes`
+○ `/studio/finance/cost-codes/new`
+● `/studio/finance/entities`
+○ `/studio/finance/entities/[id]`
+○ `/studio/finance/entities/[id]/edit`
+○ `/studio/finance/entities/new`
+● `/studio/finance/expenses`
+○ `/studio/finance/expenses/[expenseId]`
+○ `/studio/finance/expenses/[expenseId]/edit`
+○ `/studio/finance/expenses/new`
+● `/studio/finance/forecasts`
+○ `/studio/finance/forecasts/new`
+● `/studio/finance/invoices`
+○ `/studio/finance/invoices/[invoiceId]`
+○ `/studio/finance/invoices/[invoiceId]/activity`
+○ `/studio/finance/invoices/[invoiceId]/edit`
+○ `/studio/finance/invoices/[invoiceId]/line-items`
+○ `/studio/finance/invoices/new`
+● `/studio/finance/lien-waivers`
+○ `/studio/finance/lien-waivers/[id]`
+○ `/studio/finance/lien-waivers/new`
+● `/studio/finance/mileage`
+○ `/studio/finance/mileage/[mileageId]`
+○ `/studio/finance/mileage/[mileageId]/edit`
+○ `/studio/finance/mileage/new`
+● `/studio/finance/pay-apps`
+○ `/studio/finance/pay-apps/[id]`
+○ `/studio/finance/pay-apps/new`
+● `/studio/finance/payouts`
+● `/studio/finance/payroll`
+○ `/studio/finance/payroll/new`
+● `/studio/finance/periods`
+○ `/studio/finance/periods/[periodId]`
+○ `/studio/finance/periods/[periodId]/transitions`
+○ `/studio/finance/periods/new`
+● `/studio/finance/reports`
+● `/studio/finance/time`
+○ `/studio/finance/time/[entryId]`
+○ `/studio/finance/time/[entryId]/edit`
+○ `/studio/finance/time/new`
+● `/studio/finance/timesheets`
+○ `/studio/finance/timesheets/[id]`
+○ `/studio/finance/treasury`
+● `/studio/finance/wip`
+○ `/studio/finance/wip/new`
 
 </details>
 
 <details><summary><code>forms</code> · 6 routes</summary>
 
-● `/console/forms`
-○ `/console/forms/[formId]`
-○ `/console/forms/[formId]/edit`
-○ `/console/forms/[formId]/submissions`
-○ `/console/forms/[formId]/submissions/[submissionId]`
-○ `/console/forms/new`
+● `/studio/forms`
+○ `/studio/forms/[formId]`
+○ `/studio/forms/[formId]/edit`
+○ `/studio/forms/[formId]/submissions`
+○ `/studio/forms/[formId]/submissions/[submissionId]`
+○ `/studio/forms/new`
 
 </details>
 
 <details><summary><code>goals</code> · 4 routes</summary>
 
-● `/console/goals`
-○ `/console/goals/[id]`
-○ `/console/goals/[id]/edit`
-○ `/console/goals/new`
+● `/studio/goals`
+○ `/studio/goals/[id]`
+○ `/studio/goals/[id]/edit`
+○ `/studio/goals/new`
 
 </details>
 
 <details><summary><code>guides</code> · 1 route</summary>
 
-● `/console/guides`
+● `/studio/guides`
 
 </details>
 
 <details><summary><code>import</code> · 1 route</summary>
 
-● `/console/import`
+● `/studio/import`
 
 </details>
 
 <details><summary><code>inbox</code> · 1 route</summary>
 
-● `/console/inbox`
+● `/studio/inbox`
 
 </details>
 
 <details><summary><code>insights</code> · 1 route</summary>
 
-● `/console/insights`
+● `/studio/insights`
 
 </details>
 
 <details><summary><code>inspections</code> · 6 routes</summary>
 
-● `/console/inspections`
-○ `/console/inspections/[id]`
-○ `/console/inspections/[id]/edit`
-○ `/console/inspections/new`
-○ `/console/inspections/templates`
-○ `/console/inspections/templates/new`
+● `/studio/inspections`
+○ `/studio/inspections/[id]`
+○ `/studio/inspections/[id]/edit`
+○ `/studio/inspections/new`
+○ `/studio/inspections/templates`
+○ `/studio/inspections/templates/new`
 
 </details>
 
 <details><summary><code>knowledge</code> · 4 routes</summary>
 
-● `/console/knowledge`
-○ `/console/knowledge/[slug]`
-○ `/console/knowledge/[slug]/edit`
-○ `/console/knowledge/new`
+● `/studio/knowledge`
+○ `/studio/knowledge/[slug]`
+○ `/studio/knowledge/[slug]/edit`
+○ `/studio/knowledge/new`
 
 </details>
 
 <details><summary><code>leads</code> · 6 routes</summary>
 
-● `/console/leads`
-○ `/console/leads/[leadId]`
-○ `/console/leads/[leadId]/activity`
-○ `/console/leads/[leadId]/edit`
-○ `/console/leads/[leadId]/proposals`
-○ `/console/leads/new`
+● `/studio/leads`
+○ `/studio/leads/[leadId]`
+○ `/studio/leads/[leadId]/activity`
+○ `/studio/leads/[leadId]/edit`
+○ `/studio/leads/[leadId]/proposals`
+○ `/studio/leads/new`
 
 </details>
 
 <details><summary><code>legal</code> · 16 routes</summary>
 
-○ `/console/legal`
-● `/console/legal/insurance`
-○ `/console/legal/insurance/[policyId]`
-○ `/console/legal/insurance/[policyId]/edit`
-○ `/console/legal/insurance/new`
-● `/console/legal/ip`
-○ `/console/legal/ip/[markId]`
-○ `/console/legal/ip/[markId]/edit`
-○ `/console/legal/ip/new`
-● `/console/legal/privacy`
-● `/console/legal/privacy/consent`
-● `/console/legal/privacy/datamap`
-● `/console/legal/privacy/dsar`
-○ `/console/legal/privacy/dsar/[requestId]`
-○ `/console/legal/privacy/dsar/[requestId]/edit`
-○ `/console/legal/privacy/dsar/new`
-
-</details>
-
-<details><summary><code>legend</code> · 20 routes</summary>
-
-○ `/console/legend`
-● `/console/legend/engine`
-○ `/console/legend/engine/rules`
-○ `/console/legend/engine/rules/[id]`
-○ `/console/legend/engine/rules/[id]/edit`
-○ `/console/legend/engine/rules/new`
-○ `/console/legend/engine/runs`
-○ `/console/legend/engine/runs/[id]`
-● `/console/legend/resources`
-○ `/console/legend/resources/[id]`
-○ `/console/legend/resources/[id]/edit`
-○ `/console/legend/resources/collections`
-○ `/console/legend/resources/collections/[collectionId]`
-○ `/console/legend/resources/collections/new`
-○ `/console/legend/resources/new`
-● `/console/legend/signage`
-○ `/console/legend/signage/[signId]`
-○ `/console/legend/signage/[signId]/edit`
-○ `/console/legend/signage/[signId]/placements/new`
-○ `/console/legend/signage/new`
+○ `/studio/legal`
+● `/studio/legal/insurance`
+○ `/studio/legal/insurance/[policyId]`
+○ `/studio/legal/insurance/[policyId]/edit`
+○ `/studio/legal/insurance/new`
+● `/studio/legal/ip`
+○ `/studio/legal/ip/[markId]`
+○ `/studio/legal/ip/[markId]/edit`
+○ `/studio/legal/ip/new`
+● `/studio/legal/privacy`
+● `/studio/legal/privacy/consent`
+● `/studio/legal/privacy/datamap`
+● `/studio/legal/privacy/dsar`
+○ `/studio/legal/privacy/dsar/[requestId]`
+○ `/studio/legal/privacy/dsar/[requestId]/edit`
+○ `/studio/legal/privacy/dsar/new`
 
 </details>
 
 <details><summary><code>locations</code> · 5 routes</summary>
 
-● `/console/locations`
-○ `/console/locations/[locationId]`
-○ `/console/locations/[locationId]/edit`
-○ `/console/locations/new`
-○ `/console/locations/picker`
+● `/studio/locations`
+○ `/studio/locations/[locationId]`
+○ `/studio/locations/[locationId]/edit`
+○ `/studio/locations/new`
+○ `/studio/locations/picker`
 
 </details>
 
 <details><summary><code>logistics</code> · 11 routes</summary>
 
-○ `/console/logistics`
-● `/console/logistics/disposition`
-● `/console/logistics/freight`
-○ `/console/logistics/freight/[shipmentId]`
-○ `/console/logistics/freight/[shipmentId]/edit`
-● `/console/logistics/ratecard`
-○ `/console/logistics/ratecard/[itemId]`
-○ `/console/logistics/ratecard/[itemId]/edit`
-○ `/console/logistics/ratecard/new`
-● `/console/logistics/services`
-● `/console/logistics/warehouse`
+● `/studio/logistics`
+● `/studio/logistics/disposition`
+● `/studio/logistics/freight`
+○ `/studio/logistics/freight/[shipmentId]`
+○ `/studio/logistics/freight/[shipmentId]/edit`
+● `/studio/logistics/ratecard`
+○ `/studio/logistics/ratecard/[itemId]`
+○ `/studio/logistics/ratecard/[itemId]/edit`
+○ `/studio/logistics/ratecard/new`
+● `/studio/logistics/services`
+● `/studio/logistics/warehouse`
 
 </details>
 
 <details><summary><code>marketing</code> · 3 routes</summary>
 
-● `/console/marketing`
-○ `/console/marketing/calendar`
-○ `/console/marketing/onsales`
+● `/studio/marketing`
+○ `/studio/marketing/calendar`
+○ `/studio/marketing/onsales`
 
 </details>
 
 <details><summary><code>marketplace</code> · 35 routes</summary>
 
-● `/console/marketplace`
-● `/console/marketplace/box-office`
-○ `/console/marketplace/box-office/[listId]`
-○ `/console/marketplace/box-office/new`
-○ `/console/marketplace/calls`
-○ `/console/marketplace/calls/[callId]`
-○ `/console/marketplace/calls/[callId]/edit`
-○ `/console/marketplace/calls/[callId]/submissions`
-○ `/console/marketplace/calls/[callId]/submissions/[submissionId]`
-○ `/console/marketplace/calls/new`
-● `/console/marketplace/discounts`
-○ `/console/marketplace/discounts/[discountId]`
-○ `/console/marketplace/discounts/new`
-○ `/console/marketplace/discounts/promoters`
-○ `/console/marketplace/discounts/promoters/[promoterId]`
-○ `/console/marketplace/discounts/promoters/new`
-● `/console/marketplace/inquiries`
-● `/console/marketplace/offers`
-○ `/console/marketplace/offers/[offerId]`
-○ `/console/marketplace/offers/new`
-○ `/console/marketplace/postings`
-○ `/console/marketplace/postings/[postingId]`
-○ `/console/marketplace/postings/[postingId]/applicants`
-○ `/console/marketplace/postings/[postingId]/applicants/[applicationId]`
-○ `/console/marketplace/postings/[postingId]/edit`
-○ `/console/marketplace/postings/new`
-● `/console/marketplace/reviews`
-● `/console/marketplace/settings`
-● `/console/marketplace/talent`
-○ `/console/marketplace/talent/[talentId]`
-○ `/console/marketplace/talent/[talentId]/edit`
-○ `/console/marketplace/talent/[talentId]/riders`
-○ `/console/marketplace/talent/[talentId]/riders/[riderId]`
-○ `/console/marketplace/talent/[talentId]/riders/new`
-○ `/console/marketplace/talent/new`
+● `/studio/marketplace`
+● `/studio/marketplace/box-office`
+○ `/studio/marketplace/box-office/[listId]`
+○ `/studio/marketplace/box-office/new`
+○ `/studio/marketplace/calls`
+○ `/studio/marketplace/calls/[callId]`
+○ `/studio/marketplace/calls/[callId]/edit`
+○ `/studio/marketplace/calls/[callId]/submissions`
+○ `/studio/marketplace/calls/[callId]/submissions/[submissionId]`
+○ `/studio/marketplace/calls/new`
+● `/studio/marketplace/discounts`
+○ `/studio/marketplace/discounts/[discountId]`
+○ `/studio/marketplace/discounts/new`
+○ `/studio/marketplace/discounts/promoters`
+○ `/studio/marketplace/discounts/promoters/[promoterId]`
+○ `/studio/marketplace/discounts/promoters/new`
+● `/studio/marketplace/inquiries`
+● `/studio/marketplace/offers`
+○ `/studio/marketplace/offers/[offerId]`
+○ `/studio/marketplace/offers/new`
+○ `/studio/marketplace/postings`
+○ `/studio/marketplace/postings/[postingId]`
+○ `/studio/marketplace/postings/[postingId]/applicants`
+○ `/studio/marketplace/postings/[postingId]/applicants/[applicationId]`
+○ `/studio/marketplace/postings/[postingId]/edit`
+○ `/studio/marketplace/postings/new`
+● `/studio/marketplace/reviews`
+● `/studio/marketplace/settings`
+● `/studio/marketplace/talent`
+○ `/studio/marketplace/talent/[talentId]`
+○ `/studio/marketplace/talent/[talentId]/edit`
+○ `/studio/marketplace/talent/[talentId]/riders`
+○ `/studio/marketplace/talent/[talentId]/riders/[riderId]`
+○ `/studio/marketplace/talent/[talentId]/riders/new`
+○ `/studio/marketplace/talent/new`
 
 </details>
 
 <details><summary><code>meetings</code> · 8 routes</summary>
 
-● `/console/meetings`
-○ `/console/meetings/[meetingId]`
-○ `/console/meetings/[meetingId]/edit`
-○ `/console/meetings/[meetingId]/huddle`
-○ `/console/meetings/new`
-● `/console/meetings/notes`
-○ `/console/meetings/notes/[id]`
-○ `/console/meetings/notes/new`
+● `/studio/meetings`
+○ `/studio/meetings/[meetingId]`
+○ `/studio/meetings/[meetingId]/edit`
+○ `/studio/meetings/[meetingId]/huddle`
+○ `/studio/meetings/new`
+● `/studio/meetings/notes`
+○ `/studio/meetings/notes/[id]`
+○ `/studio/meetings/notes/new`
+
+</details>
+
+<details><summary><code>notes</code> · 2 routes</summary>
+
+● `/studio/notes`
+○ `/studio/notes/[id]`
 
 </details>
 
 <details><summary><code>operations</code> · 17 routes</summary>
 
-● `/console/operations`
-● `/console/operations/daily-log`
-○ `/console/operations/daily-log/[id]`
-○ `/console/operations/daily-log/new`
-○ `/console/operations/dispatch`
-● `/console/operations/incidents`
-○ `/console/operations/incidents/[incidentId]`
-○ `/console/operations/incidents/[incidentId]/edit`
-○ `/console/operations/incidents/new`
-● `/console/operations/look-ahead`
-○ `/console/operations/maintenance`
-○ `/console/operations/maintenance/[jobId]`
-○ `/console/operations/maintenance/schedules/new`
-● `/console/operations/reservations`
-○ `/console/operations/reservations/[id]`
-○ `/console/operations/reservations/new`
-○ `/console/operations/reservations/tables/new`
+● `/studio/operations`
+● `/studio/operations/daily-log`
+○ `/studio/operations/daily-log/[id]`
+○ `/studio/operations/daily-log/new`
+○ `/studio/operations/dispatch`
+● `/studio/operations/incidents`
+○ `/studio/operations/incidents/[incidentId]`
+○ `/studio/operations/incidents/[incidentId]/edit`
+○ `/studio/operations/incidents/new`
+● `/studio/operations/look-ahead`
+○ `/studio/operations/maintenance`
+○ `/studio/operations/maintenance/[jobId]`
+○ `/studio/operations/maintenance/schedules/new`
+● `/studio/operations/reservations`
+○ `/studio/operations/reservations/[id]`
+○ `/studio/operations/reservations/new`
+○ `/studio/operations/reservations/tables/new`
 
 </details>
 
 <details><summary><code>ops</code> · 6 routes</summary>
 
-○ `/console/ops`
-● `/console/ops/toc`
-○ `/console/ops/toc/changes`
-○ `/console/ops/toc/changes/new`
-○ `/console/ops/toc/problems`
-○ `/console/ops/toc/problems/new`
+○ `/studio/ops`
+● `/studio/ops/toc`
+○ `/studio/ops/toc/changes`
+○ `/studio/ops/toc/changes/new`
+○ `/studio/ops/toc/problems`
+○ `/studio/ops/toc/problems/new`
 
 </details>
 
 <details><summary><code>participants</code> · 13 routes</summary>
 
-○ `/console/participants`
-● `/console/participants/delegations`
-○ `/console/participants/delegations/[delegationId]`
-○ `/console/participants/delegations/[delegationId]/edit`
-○ `/console/participants/delegations/new`
-○ `/console/participants/entries`
-○ `/console/participants/entries/[entryId]`
-○ `/console/participants/entries/[entryId]/edit`
-○ `/console/participants/entries/new`
-● `/console/participants/visa`
-○ `/console/participants/visa/[caseId]`
-○ `/console/participants/visa/[caseId]/edit`
-○ `/console/participants/visa/new`
+○ `/studio/participants`
+● `/studio/participants/delegations`
+○ `/studio/participants/delegations/[delegationId]`
+○ `/studio/participants/delegations/[delegationId]/edit`
+○ `/studio/participants/delegations/new`
+○ `/studio/participants/entries`
+○ `/studio/participants/entries/[entryId]`
+○ `/studio/participants/entries/[entryId]/edit`
+○ `/studio/participants/entries/new`
+● `/studio/participants/visa`
+○ `/studio/participants/visa/[caseId]`
+○ `/studio/participants/visa/[caseId]/edit`
+○ `/studio/participants/visa/new`
 
 </details>
 
 <details><summary><code>people</code> · 26 routes</summary>
 
-● `/console/people`
-○ `/console/people/[personId]`
-○ `/console/people/[personId]/assignments`
-○ `/console/people/[personId]/credentials`
-○ `/console/people/[personId]/documents`
-○ `/console/people/[personId]/edit`
-○ `/console/people/[personId]/time`
-○ `/console/people/credentials`
-○ `/console/people/credentials/[credentialId]`
-○ `/console/people/credentials/[credentialId]/edit`
-○ `/console/people/credentials/asset-linker`
-○ `/console/people/credentials/new`
-○ `/console/people/crew`
-○ `/console/people/crew/[crewId]`
-○ `/console/people/crew/[crewId]/edit`
-○ `/console/people/crew/new`
-● `/console/people/invites`
-● `/console/people/msas`
-○ `/console/people/msas/[id]`
-○ `/console/people/msas/new`
-● `/console/people/offer-letters`
-○ `/console/people/offer-letters/[id]`
-○ `/console/people/offer-letters/[id]/onboarding`
-● `/console/people/roles`
-● `/console/people/teams`
-○ `/console/people/teams/[teamId]`
+● `/studio/people`
+○ `/studio/people/[personId]`
+○ `/studio/people/[personId]/assignments`
+○ `/studio/people/[personId]/credentials`
+○ `/studio/people/[personId]/documents`
+○ `/studio/people/[personId]/edit`
+○ `/studio/people/[personId]/time`
+○ `/studio/people/credentials`
+○ `/studio/people/credentials/[credentialId]`
+○ `/studio/people/credentials/[credentialId]/edit`
+○ `/studio/people/credentials/asset-linker`
+○ `/studio/people/credentials/new`
+○ `/studio/people/crew`
+○ `/studio/people/crew/[crewId]`
+○ `/studio/people/crew/[crewId]/edit`
+○ `/studio/people/crew/new`
+● `/studio/people/invites`
+● `/studio/people/msas`
+○ `/studio/people/msas/[id]`
+○ `/studio/people/msas/new`
+● `/studio/people/offer-letters`
+○ `/studio/people/offer-letters/[id]`
+○ `/studio/people/offer-letters/[id]/onboarding`
+● `/studio/people/roles`
+● `/studio/people/teams`
+○ `/studio/people/teams/[teamId]`
 
 </details>
 
 <details><summary><code>photos</code> · 2 routes</summary>
 
-● `/console/photos`
-○ `/console/photos/upload`
+● `/studio/photos`
+○ `/studio/photos/upload`
 
 </details>
 
 <details><summary><code>pipeline</code> · 2 routes</summary>
 
-● `/console/pipeline`
-○ `/console/pipeline/[dealId]`
+● `/studio/pipeline`
+○ `/studio/pipeline/[dealId]`
+
+</details>
+
+<details><summary><code>position</code> · 2 routes</summary>
+
+● `/studio/position`
+○ `/studio/position/forecast`
 
 </details>
 
 <details><summary><code>procurement</code> · 43 routes</summary>
 
-○ `/console/procurement`
-○ `/console/procurement/catalog`
-● `/console/procurement/itb`
-● `/console/procurement/po-change-orders`
-○ `/console/procurement/po-change-orders/[id]`
-○ `/console/procurement/po-change-orders/new`
-● `/console/procurement/prequalification`
-○ `/console/procurement/prequalification/[prequalId]`
-○ `/console/procurement/prequalification/new`
-○ `/console/procurement/prequalification/questionnaires`
-○ `/console/procurement/prequalification/questionnaires/new`
-● `/console/procurement/purchase-orders`
-○ `/console/procurement/purchase-orders/[poId]`
-○ `/console/procurement/purchase-orders/[poId]/checklist`
-○ `/console/procurement/purchase-orders/[poId]/edit`
-○ `/console/procurement/purchase-orders/new`
-● `/console/procurement/requisitions`
-○ `/console/procurement/requisitions/[reqId]`
-○ `/console/procurement/requisitions/[reqId]/edit`
-○ `/console/procurement/requisitions/[reqId]/leveling`
-○ `/console/procurement/requisitions/[reqId]/leveling/new`
-○ `/console/procurement/requisitions/new`
-● `/console/procurement/rfqs`
-○ `/console/procurement/rfqs/[rfqId]`
-○ `/console/procurement/rfqs/[rfqId]/publish`
-○ `/console/procurement/rfqs/[rfqId]/responses`
-○ `/console/procurement/rfqs/[rfqId]/responses/[responseId]`
-○ `/console/procurement/rfqs/new`
-○ `/console/procurement/scorecards`
-● `/console/procurement/sourcing`
-● `/console/procurement/vendors`
-○ `/console/procurement/vendors/[vendorId]`
-○ `/console/procurement/vendors/[vendorId]/edit`
-○ `/console/procurement/vendors/[vendorId]/onboarding`
-○ `/console/procurement/vendors/[vendorId]/pos`
-○ `/console/procurement/vendors/[vendorId]/prequalification`
-○ `/console/procurement/vendors/[vendorId]/prequalification/[prequalId]`
-○ `/console/procurement/vendors/[vendorId]/scorecard`
-○ `/console/procurement/vendors/[vendorId]/submittals`
-○ `/console/procurement/vendors/new`
-● `/console/procurement/wo-broadcasts`
-○ `/console/procurement/wo-broadcasts/[broadcastId]`
-○ `/console/procurement/wo-broadcasts/new`
+● `/studio/procurement`
+○ `/studio/procurement/catalog`
+● `/studio/procurement/itb`
+● `/studio/procurement/po-change-orders`
+○ `/studio/procurement/po-change-orders/[id]`
+○ `/studio/procurement/po-change-orders/new`
+● `/studio/procurement/prequalification`
+○ `/studio/procurement/prequalification/[prequalId]`
+○ `/studio/procurement/prequalification/new`
+○ `/studio/procurement/prequalification/questionnaires`
+○ `/studio/procurement/prequalification/questionnaires/new`
+● `/studio/procurement/purchase-orders`
+○ `/studio/procurement/purchase-orders/[poId]`
+○ `/studio/procurement/purchase-orders/[poId]/checklist`
+○ `/studio/procurement/purchase-orders/[poId]/edit`
+○ `/studio/procurement/purchase-orders/new`
+● `/studio/procurement/requisitions`
+○ `/studio/procurement/requisitions/[reqId]`
+○ `/studio/procurement/requisitions/[reqId]/edit`
+○ `/studio/procurement/requisitions/[reqId]/leveling`
+○ `/studio/procurement/requisitions/[reqId]/leveling/new`
+○ `/studio/procurement/requisitions/new`
+● `/studio/procurement/rfqs`
+○ `/studio/procurement/rfqs/[rfqId]`
+○ `/studio/procurement/rfqs/[rfqId]/publish`
+○ `/studio/procurement/rfqs/[rfqId]/responses`
+○ `/studio/procurement/rfqs/[rfqId]/responses/[responseId]`
+○ `/studio/procurement/rfqs/new`
+○ `/studio/procurement/scorecards`
+● `/studio/procurement/sourcing`
+● `/studio/procurement/vendors`
+○ `/studio/procurement/vendors/[vendorId]`
+○ `/studio/procurement/vendors/[vendorId]/edit`
+○ `/studio/procurement/vendors/[vendorId]/onboarding`
+○ `/studio/procurement/vendors/[vendorId]/pos`
+○ `/studio/procurement/vendors/[vendorId]/prequalification`
+○ `/studio/procurement/vendors/[vendorId]/prequalification/[prequalId]`
+○ `/studio/procurement/vendors/[vendorId]/scorecard`
+○ `/studio/procurement/vendors/[vendorId]/submittals`
+○ `/studio/procurement/vendors/new`
+● `/studio/procurement/wo-broadcasts`
+○ `/studio/procurement/wo-broadcasts/[broadcastId]`
+○ `/studio/procurement/wo-broadcasts/new`
 
 </details>
 
 <details><summary><code>production</code> · 28 routes</summary>
 
-○ `/console/production`
-● `/console/production/av`
-● `/console/production/compounds`
-○ `/console/production/dispatch`
-○ `/console/production/dispatch/[dispatchId]`
-● `/console/production/dispatch/live`
-● `/console/production/equipment`
-○ `/console/production/equipment/[equipmentId]`
-○ `/console/production/equipment/[equipmentId]/edit`
-○ `/console/production/equipment/[equipmentId]/maintenance`
-○ `/console/production/equipment/[equipmentId]/qr`
-○ `/console/production/equipment/[equipmentId]/rentals`
-○ `/console/production/equipment/new`
-● `/console/production/equipment/utilization`
-● `/console/production/fabrication`
-○ `/console/production/fabrication/[orderId]`
-○ `/console/production/fabrication/[orderId]/edit`
-○ `/console/production/fabrication/new`
-● `/console/production/logistics`
-● `/console/production/rentals`
-○ `/console/production/rentals/[rentalId]`
-○ `/console/production/rentals/[rentalId]/edit`
-○ `/console/production/rentals/availability`
-○ `/console/production/rentals/new`
-● `/console/production/ros`
-● `/console/production/warehouse`
-○ `/console/production/warehouse/inventory`
-○ `/console/production/warehouse/locations`
+● `/studio/production`
+● `/studio/production/av`
+● `/studio/production/compounds`
+○ `/studio/production/dispatch`
+○ `/studio/production/dispatch/[dispatchId]`
+● `/studio/production/dispatch/live`
+● `/studio/production/equipment`
+○ `/studio/production/equipment/[equipmentId]`
+○ `/studio/production/equipment/[equipmentId]/edit`
+○ `/studio/production/equipment/[equipmentId]/maintenance`
+○ `/studio/production/equipment/[equipmentId]/qr`
+○ `/studio/production/equipment/[equipmentId]/rentals`
+○ `/studio/production/equipment/new`
+● `/studio/production/equipment/utilization`
+● `/studio/production/fabrication`
+○ `/studio/production/fabrication/[orderId]`
+○ `/studio/production/fabrication/[orderId]/edit`
+○ `/studio/production/fabrication/new`
+● `/studio/production/logistics`
+● `/studio/production/rentals`
+○ `/studio/production/rentals/[rentalId]`
+○ `/studio/production/rentals/[rentalId]/edit`
+○ `/studio/production/rentals/availability`
+○ `/studio/production/rentals/new`
+● `/studio/production/ros`
+● `/studio/production/warehouse`
+○ `/studio/production/warehouse/inventory`
+○ `/studio/production/warehouse/locations`
 
 </details>
 
 <details><summary><code>programs</code> · 22 routes</summary>
 
-● `/console/programs`
-○ `/console/programs/cases`
-○ `/console/programs/ceremonies`
-○ `/console/programs/ceremonies/[ceremonyId]`
-○ `/console/programs/ceremonies/[ceremonyId]/edit`
-○ `/console/programs/pressconf`
-○ `/console/programs/protocol`
-● `/console/programs/readiness`
-○ `/console/programs/readiness/[exerciseId]`
-○ `/console/programs/readiness/[exerciseId]/edit`
-○ `/console/programs/readiness/new`
-● `/console/programs/reviews`
-○ `/console/programs/reviews/[reviewId]`
-○ `/console/programs/reviews/[reviewId]/edit`
-○ `/console/programs/reviews/new`
-● `/console/programs/risk`
-○ `/console/programs/risk/[riskId]`
-○ `/console/programs/risk/[riskId]/edit`
-○ `/console/programs/risk/new`
-○ `/console/programs/schedule`
-○ `/console/programs/scope`
-○ `/console/programs/sessions`
+● `/studio/programs`
+○ `/studio/programs/cases`
+○ `/studio/programs/ceremonies`
+○ `/studio/programs/ceremonies/[ceremonyId]`
+○ `/studio/programs/ceremonies/[ceremonyId]/edit`
+○ `/studio/programs/pressconf`
+○ `/studio/programs/protocol`
+● `/studio/programs/readiness`
+○ `/studio/programs/readiness/[exerciseId]`
+○ `/studio/programs/readiness/[exerciseId]/edit`
+○ `/studio/programs/readiness/new`
+● `/studio/programs/reviews`
+○ `/studio/programs/reviews/[reviewId]`
+○ `/studio/programs/reviews/[reviewId]/edit`
+○ `/studio/programs/reviews/new`
+● `/studio/programs/risk`
+○ `/studio/programs/risk/[riskId]`
+○ `/studio/programs/risk/[riskId]/edit`
+○ `/studio/programs/risk/new`
+○ `/studio/programs/schedule`
+○ `/studio/programs/scope`
+○ `/studio/programs/sessions`
 
 </details>
 
-<details><summary><code>projects</code> · 32 routes</summary>
+<details><summary><code>projects</code> · 34 routes</summary>
 
-● `/console/projects`
-○ `/console/projects/[projectId]`
-○ `/console/projects/[projectId]/advancing`
-○ `/console/projects/[projectId]/advancing/assignments`
-○ `/console/projects/[projectId]/advancing/assignments/[assignmentId]`
-○ `/console/projects/[projectId]/advancing/assignments/new`
-○ `/console/projects/[projectId]/branding`
-○ `/console/projects/[projectId]/budget`
-○ `/console/projects/[projectId]/crew`
-○ `/console/projects/[projectId]/edit`
-○ `/console/projects/[projectId]/files`
-○ `/console/projects/[projectId]/finance`
-○ `/console/projects/[projectId]/finance/draws`
-○ `/console/projects/[projectId]/guides`
-○ `/console/projects/[projectId]/guides/[persona]`
-○ `/console/projects/[projectId]/guides/[persona]/access`
-○ `/console/projects/[projectId]/members`
-○ `/console/projects/[projectId]/onboarding`
-○ `/console/projects/[projectId]/overview`
-○ `/console/projects/[projectId]/photos`
-○ `/console/projects/[projectId]/portal-preview`
-○ `/console/projects/[projectId]/roadmap`
-○ `/console/projects/[projectId]/schedule`
-○ `/console/projects/[projectId]/sprints`
-○ `/console/projects/[projectId]/sprints/new`
-○ `/console/projects/[projectId]/stage-plots`
-○ `/console/projects/[projectId]/stage-plots/[stagePlotId]`
-○ `/console/projects/[projectId]/stage-plots/[stagePlotId]/edit`
-○ `/console/projects/[projectId]/sustainability`
-○ `/console/projects/[projectId]/tasks`
-○ `/console/projects/[projectId]/tracker`
-○ `/console/projects/new`
+● `/studio/projects`
+○ `/studio/projects/[projectId]`
+○ `/studio/projects/[projectId]/advancing`
+○ `/studio/projects/[projectId]/advancing/assignments`
+○ `/studio/projects/[projectId]/advancing/assignments/[assignmentId]`
+○ `/studio/projects/[projectId]/advancing/assignments/new`
+○ `/studio/projects/[projectId]/branding`
+○ `/studio/projects/[projectId]/budget`
+○ `/studio/projects/[projectId]/crew`
+○ `/studio/projects/[projectId]/edit`
+○ `/studio/projects/[projectId]/files`
+○ `/studio/projects/[projectId]/finance`
+○ `/studio/projects/[projectId]/finance/draws`
+○ `/studio/projects/[projectId]/guides`
+○ `/studio/projects/[projectId]/guides/[persona]`
+○ `/studio/projects/[projectId]/guides/[persona]/access`
+○ `/studio/projects/[projectId]/members`
+○ `/studio/projects/[projectId]/onboarding`
+○ `/studio/projects/[projectId]/overview`
+○ `/studio/projects/[projectId]/photos`
+○ `/studio/projects/[projectId]/portal-preview`
+○ `/studio/projects/[projectId]/position/[classCode]/[phase]`
+○ `/studio/projects/[projectId]/roadmap`
+○ `/studio/projects/[projectId]/schedule`
+○ `/studio/projects/[projectId]/sprints`
+○ `/studio/projects/[projectId]/sprints/new`
+○ `/studio/projects/[projectId]/stage-plots`
+○ `/studio/projects/[projectId]/stage-plots/[stagePlotId]`
+○ `/studio/projects/[projectId]/stage-plots/[stagePlotId]/edit`
+○ `/studio/projects/[projectId]/sustainability`
+○ `/studio/projects/[projectId]/tasks`
+○ `/studio/projects/[projectId]/timeline`
+○ `/studio/projects/[projectId]/tracker`
+○ `/studio/projects/new`
 
 </details>
 
 <details><summary><code>proposals</code> · 6 routes</summary>
 
-● `/console/proposals`
-○ `/console/proposals/[proposalId]`
-○ `/console/proposals/[proposalId]/edit`
-○ `/console/proposals/new`
-● `/console/proposals/templates`
-○ `/console/proposals/templates/[templateId]`
+● `/studio/proposals`
+○ `/studio/proposals/[proposalId]`
+○ `/studio/proposals/[proposalId]/edit`
+○ `/studio/proposals/new`
+● `/studio/proposals/templates`
+○ `/studio/proposals/templates/[templateId]`
 
 </details>
 
 <details><summary><code>punch</code> · 5 routes</summary>
 
-● `/console/punch`
-○ `/console/punch/[id]`
-○ `/console/punch/[id]/edit`
-○ `/console/punch/lists`
-○ `/console/punch/new`
+● `/studio/punch`
+○ `/studio/punch/[id]`
+○ `/studio/punch/[id]/edit`
+○ `/studio/punch/lists`
+○ `/studio/punch/new`
 
 </details>
 
 <details><summary><code>reports</code> · 2 routes</summary>
 
-● `/console/reports`
-○ `/console/reports/[reportId]`
+● `/studio/reports`
+○ `/studio/reports/[reportId]`
+
+</details>
+
+<details><summary><code>revenue</code> · 2 routes</summary>
+
+● `/studio/revenue/orders`
+● `/studio/revenue/transactions`
 
 </details>
 
 <details><summary><code>rfis</code> · 4 routes</summary>
 
-● `/console/rfis`
-○ `/console/rfis/[id]`
-○ `/console/rfis/[id]/edit`
-○ `/console/rfis/new`
+● `/studio/rfis`
+○ `/studio/rfis/[id]`
+○ `/studio/rfis/[id]/edit`
+○ `/studio/rfis/new`
 
 </details>
 
 <details><summary><code>risk</code> · 1 route</summary>
 
-● `/console/risk`
+● `/studio/risk`
 
 </details>
 
 <details><summary><code>safety</code> · 38 routes</summary>
 
-○ `/console/safety`
-○ `/console/safety/bcdr`
-● `/console/safety/briefings`
-○ `/console/safety/briefings/[briefingId]`
-○ `/console/safety/briefings/new`
-● `/console/safety/crisis`
-○ `/console/safety/crisis/[alertId]`
-○ `/console/safety/crisis/[alertId]/edit`
-○ `/console/safety/crisis/new`
-○ `/console/safety/cyber-ir`
-● `/console/safety/environmental`
-○ `/console/safety/environmental/[eventId]`
-○ `/console/safety/environmental/[eventId]/edit`
-○ `/console/safety/environmental/new`
-● `/console/safety/guard-tours`
-○ `/console/safety/guard-tours/new`
-● `/console/safety/incidents`
-○ `/console/safety/incidents/[incidentId]`
-● `/console/safety/major-incident`
-○ `/console/safety/major-incident/[eventId]`
-○ `/console/safety/major-incident/[eventId]/edit`
-○ `/console/safety/major-incident/new`
-● `/console/safety/medical`
-○ `/console/safety/medical/encounters`
-○ `/console/safety/medical/encounters/[encounterId]`
-○ `/console/safety/medical/encounters/[encounterId]/edit`
-○ `/console/safety/medical/encounters/new`
-○ `/console/safety/medical/plan`
-● `/console/safety/osha`
-● `/console/safety/playbooks`
-○ `/console/safety/playbooks/[slug]`
-○ `/console/safety/playbooks/new`
-● `/console/safety/safeguarding`
-○ `/console/safety/safeguarding/[reportId]`
-○ `/console/safety/safeguarding/[reportId]/edit`
-○ `/console/safety/safeguarding/new`
-● `/console/safety/threats`
-○ `/console/safety/threats/new`
+● `/studio/safety`
+○ `/studio/safety/bcdr`
+● `/studio/safety/briefings`
+○ `/studio/safety/briefings/[briefingId]`
+○ `/studio/safety/briefings/new`
+● `/studio/safety/crisis`
+○ `/studio/safety/crisis/[alertId]`
+○ `/studio/safety/crisis/[alertId]/edit`
+○ `/studio/safety/crisis/new`
+○ `/studio/safety/cyber-ir`
+● `/studio/safety/environmental`
+○ `/studio/safety/environmental/[eventId]`
+○ `/studio/safety/environmental/[eventId]/edit`
+○ `/studio/safety/environmental/new`
+● `/studio/safety/guard-tours`
+○ `/studio/safety/guard-tours/new`
+○ `/studio/safety/incidents`
+○ `/studio/safety/incidents/[incidentId]`
+● `/studio/safety/major-incident`
+○ `/studio/safety/major-incident/[eventId]`
+○ `/studio/safety/major-incident/[eventId]/edit`
+○ `/studio/safety/major-incident/new`
+● `/studio/safety/medical`
+○ `/studio/safety/medical/encounters`
+○ `/studio/safety/medical/encounters/[encounterId]`
+○ `/studio/safety/medical/encounters/[encounterId]/edit`
+○ `/studio/safety/medical/encounters/new`
+○ `/studio/safety/medical/plan`
+● `/studio/safety/osha`
+● `/studio/safety/playbooks`
+○ `/studio/safety/playbooks/[slug]`
+○ `/studio/safety/playbooks/new`
+● `/studio/safety/safeguarding`
+○ `/studio/safety/safeguarding/[reportId]`
+○ `/studio/safety/safeguarding/[reportId]/edit`
+○ `/studio/safety/safeguarding/new`
+● `/studio/safety/threats`
+○ `/studio/safety/threats/new`
 
 </details>
 
 <details><summary><code>sales</code> · 10 routes</summary>
 
-● `/console/sales`
-● `/console/sales/beos`
-○ `/console/sales/beos/[id]`
-○ `/console/sales/beos/new`
-● `/console/sales/diary`
-○ `/console/sales/diary/[bookingId]`
-○ `/console/sales/diary/[bookingId]/edit`
-○ `/console/sales/diary/new`
-○ `/console/sales/diary/spaces`
-○ `/console/sales/diary/spaces/new`
+● `/studio/sales`
+● `/studio/sales/beos`
+○ `/studio/sales/beos/[id]`
+○ `/studio/sales/beos/new`
+● `/studio/sales/diary`
+○ `/studio/sales/diary/[bookingId]`
+○ `/studio/sales/diary/[bookingId]/edit`
+○ `/studio/sales/diary/new`
+○ `/studio/sales/diary/spaces`
+○ `/studio/sales/diary/spaces/new`
 
 </details>
 
 <details><summary><code>schedule</code> · 5 routes</summary>
 
-● `/console/schedule`
-● `/console/schedule/baselines`
-○ `/console/schedule/baselines/[id]`
-○ `/console/schedule/baselines/[id]/gantt`
-○ `/console/schedule/baselines/new`
+● `/studio/schedule`
+● `/studio/schedule/baselines`
+○ `/studio/schedule/baselines/[id]`
+○ `/studio/schedule/baselines/[id]/gantt`
+○ `/studio/schedule/baselines/new`
 
 </details>
 
 <details><summary><code>services</code> · 4 routes</summary>
 
-○ `/console/services`
-● `/console/services/requests`
-○ `/console/services/requests/[requestId]`
-○ `/console/services/requests/new`
+○ `/studio/services`
+● `/studio/services/requests`
+○ `/studio/services/requests/[requestId]`
+○ `/studio/services/requests/new`
 
 </details>
 
 <details><summary><code>settings</code> · 41 routes</summary>
 
-○ `/console/settings`
-● `/console/settings/account-managers`
-○ `/console/settings/account-managers/[id]`
-○ `/console/settings/account-managers/new`
-● `/console/settings/api`
-● `/console/settings/audit`
-● `/console/settings/billing`
-● `/console/settings/branding`
-● `/console/settings/catalog`
-○ `/console/settings/catalog/[id]`
-○ `/console/settings/catalog/[id]/edit`
-○ `/console/settings/catalog/new`
-● `/console/settings/compliance`
-● `/console/settings/domains`
-● `/console/settings/email-templates`
-● `/console/settings/exports`
-● `/console/settings/governance`
-● `/console/settings/imports`
-● `/console/settings/integrations`
-○ `/console/settings/integrations/[integrationId]`
-○ `/console/settings/integrations/accounting`
-○ `/console/settings/integrations/accounting/[id]`
-○ `/console/settings/integrations/accounting/new`
-● `/console/settings/integrations/marketplace`
-○ `/console/settings/integrations/submissions`
-○ `/console/settings/integrations/submissions/[id]`
-● `/console/settings/integrations/ticketing`
-○ `/console/settings/integrations/ticketing/[connectionId]`
-○ `/console/settings/integrations/ticketing/new`
-● `/console/settings/organization`
-○ `/console/settings/rate-limits`
-○ `/console/settings/sequences`
-○ `/console/settings/sla-policies`
-○ `/console/settings/sso`
-● `/console/settings/time-clock-zones`
-○ `/console/settings/time-clock-zones/[id]`
-○ `/console/settings/time-clock-zones/new`
-● `/console/settings/usage`
-● `/console/settings/webhooks`
-○ `/console/settings/webhooks/[webhookId]`
-○ `/console/settings/webhooks/new`
+○ `/studio/settings`
+● `/studio/settings/account-managers`
+○ `/studio/settings/account-managers/[id]`
+○ `/studio/settings/account-managers/new`
+● `/studio/settings/api`
+● `/studio/settings/audit`
+● `/studio/settings/billing`
+● `/studio/settings/branding`
+● `/studio/settings/catalog`
+○ `/studio/settings/catalog/[id]`
+○ `/studio/settings/catalog/[id]/edit`
+○ `/studio/settings/catalog/new`
+● `/studio/settings/compliance`
+● `/studio/settings/domains`
+● `/studio/settings/email-templates`
+● `/studio/settings/exports`
+● `/studio/settings/governance`
+● `/studio/settings/imports`
+● `/studio/settings/integrations`
+○ `/studio/settings/integrations/[integrationId]`
+○ `/studio/settings/integrations/accounting`
+○ `/studio/settings/integrations/accounting/[id]`
+○ `/studio/settings/integrations/accounting/new`
+● `/studio/settings/integrations/marketplace`
+○ `/studio/settings/integrations/submissions`
+○ `/studio/settings/integrations/submissions/[id]`
+● `/studio/settings/integrations/ticketing`
+○ `/studio/settings/integrations/ticketing/[connectionId]`
+○ `/studio/settings/integrations/ticketing/new`
+● `/studio/settings/organization`
+○ `/studio/settings/rate-limits`
+○ `/studio/settings/sequences`
+○ `/studio/settings/sla-policies`
+○ `/studio/settings/sso`
+● `/studio/settings/time-clock-zones`
+○ `/studio/settings/time-clock-zones/[id]`
+○ `/studio/settings/time-clock-zones/new`
+● `/studio/settings/usage`
+● `/studio/settings/webhooks`
+○ `/studio/settings/webhooks/[webhookId]`
+○ `/studio/settings/webhooks/new`
 
 </details>
 
-<details><summary><code>site-plans</code> · 5 routes</summary>
+<details><summary><code>site-plans</code> · 6 routes</summary>
 
-● `/console/site-plans`
-○ `/console/site-plans/[id]`
-○ `/console/site-plans/[id]/edit`
-○ `/console/site-plans/[id]/markup`
-○ `/console/site-plans/new`
+● `/studio/site-plans`
+○ `/studio/site-plans/[id]`
+○ `/studio/site-plans/[id]/edit`
+○ `/studio/site-plans/[id]/map`
+○ `/studio/site-plans/[id]/markup`
+○ `/studio/site-plans/new`
 
 </details>
 
 <details><summary><code>specs</code> · 4 routes</summary>
 
-● `/console/specs`
-○ `/console/specs/[id]`
-○ `/console/specs/[id]/edit`
-○ `/console/specs/new`
+● `/studio/specs`
+○ `/studio/specs/[id]`
+○ `/studio/specs/[id]/edit`
+○ `/studio/specs/new`
 
 </details>
 
 <details><summary><code>submittals</code> · 4 routes</summary>
 
-● `/console/submittals`
-○ `/console/submittals/[id]`
-○ `/console/submittals/[id]/edit`
-○ `/console/submittals/new`
+● `/studio/submittals`
+○ `/studio/submittals/[id]`
+○ `/studio/submittals/[id]/edit`
+○ `/studio/submittals/new`
 
 </details>
 
 <details><summary><code>subscriptions</code> · 4 routes</summary>
 
-● `/console/subscriptions`
-○ `/console/subscriptions/[subscriptionId]`
-○ `/console/subscriptions/[subscriptionId]/transitions`
-○ `/console/subscriptions/new`
+● `/studio/subscriptions`
+○ `/studio/subscriptions/[subscriptionId]`
+○ `/studio/subscriptions/[subscriptionId]/transitions`
+○ `/studio/subscriptions/new`
 
 </details>
 
 <details><summary><code>sustainability</code> · 5 routes</summary>
 
-● `/console/sustainability`
-○ `/console/sustainability/carbon`
-○ `/console/sustainability/carbon/[metricId]`
-○ `/console/sustainability/carbon/[metricId]/edit`
-○ `/console/sustainability/carbon/new`
+● `/studio/sustainability`
+○ `/studio/sustainability/carbon`
+○ `/studio/sustainability/carbon/[metricId]`
+○ `/studio/sustainability/carbon/[metricId]/edit`
+○ `/studio/sustainability/carbon/new`
 
 </details>
 
 <details><summary><code>takeoffs</code> · 4 routes</summary>
 
-● `/console/takeoffs`
-○ `/console/takeoffs/[id]`
-○ `/console/takeoffs/[id]/edit`
-○ `/console/takeoffs/new`
+● `/studio/takeoffs`
+○ `/studio/takeoffs/[id]`
+○ `/studio/takeoffs/[id]/edit`
+○ `/studio/takeoffs/new`
 
 </details>
 
 <details><summary><code>tasks</code> · 4 routes</summary>
 
-● `/console/tasks`
-○ `/console/tasks/[taskId]`
-○ `/console/tasks/[taskId]/edit`
-○ `/console/tasks/new`
+● `/studio/tasks`
+○ `/studio/tasks/[taskId]`
+○ `/studio/tasks/[taskId]/edit`
+○ `/studio/tasks/new`
 
 </details>
 
 <details><summary><code>templates</code> · 2 routes</summary>
 
-● `/console/templates`
-○ `/console/templates/[templateId]/new`
+● `/studio/templates`
+○ `/studio/templates/[templateId]/new`
 
 </details>
 
 <details><summary><code>transmittals</code> · 3 routes</summary>
 
-● `/console/transmittals`
-○ `/console/transmittals/[id]`
-○ `/console/transmittals/new`
+● `/studio/transmittals`
+○ `/studio/transmittals/[id]`
+○ `/studio/transmittals/new`
 
 </details>
 
 <details><summary><code>transport</code> · 11 routes</summary>
 
-● `/console/transport`
-○ `/console/transport/ad`
-○ `/console/transport/ad/[manifestId]`
-○ `/console/transport/ad/[manifestId]/edit`
-○ `/console/transport/ad/new`
-● `/console/transport/dispatch`
-○ `/console/transport/dispatch/[runId]`
-○ `/console/transport/dispatch/[runId]/edit`
-○ `/console/transport/dispatch/new`
-○ `/console/transport/fleets`
-○ `/console/transport/workforce`
+● `/studio/transport`
+○ `/studio/transport/ad`
+○ `/studio/transport/ad/[manifestId]`
+○ `/studio/transport/ad/[manifestId]/edit`
+○ `/studio/transport/ad/new`
+● `/studio/transport/dispatch`
+○ `/studio/transport/dispatch/[runId]`
+○ `/studio/transport/dispatch/[runId]/edit`
+○ `/studio/transport/dispatch/new`
+○ `/studio/transport/fleets`
+○ `/studio/transport/workforce`
 
 </details>
 
 <details><summary><code>trash</code> · 1 route</summary>
 
-● `/console/trash`
+● `/studio/trash`
 
 </details>
 
 <details><summary><code>venues</code> · 13 routes</summary>
 
-● `/console/venues`
-○ `/console/venues/[venueId]`
-○ `/console/venues/[venueId]/build`
-○ `/console/venues/[venueId]/certifications`
-○ `/console/venues/[venueId]/closeout`
-○ `/console/venues/[venueId]/design`
-○ `/console/venues/[venueId]/edit`
-○ `/console/venues/[venueId]/handover`
-○ `/console/venues/[venueId]/ros`
-○ `/console/venues/[venueId]/vop`
-○ `/console/venues/[venueId]/zones`
-○ `/console/venues/new`
-○ `/console/venues/training`
+● `/studio/venues`
+○ `/studio/venues/[venueId]`
+○ `/studio/venues/[venueId]/build`
+○ `/studio/venues/[venueId]/certifications`
+○ `/studio/venues/[venueId]/closeout`
+○ `/studio/venues/[venueId]/design`
+○ `/studio/venues/[venueId]/edit`
+○ `/studio/venues/[venueId]/handover`
+○ `/studio/venues/[venueId]/ros`
+○ `/studio/venues/[venueId]/vop`
+○ `/studio/venues/[venueId]/zones`
+○ `/studio/venues/new`
+○ `/studio/venues/training`
 
 </details>
 
 <details><summary><code>warranties</code> · 2 routes</summary>
 
-● `/console/warranties`
-○ `/console/warranties/new`
+● `/studio/warranties`
+○ `/studio/warranties/new`
 
 </details>
 
-<details><summary><code>workforce</code> · 46 routes</summary>
+<details><summary><code>workforce</code> · 42 routes</summary>
 
-● `/console/workforce`
-● `/console/workforce/badges`
-○ `/console/workforce/badges/[badgeId]`
-○ `/console/workforce/badges/new`
-○ `/console/workforce/call-sheets`
-○ `/console/workforce/call-sheets/[memberId]`
-○ `/console/workforce/contractors`
-○ `/console/workforce/contractors/[contractorId]`
-○ `/console/workforce/contractors/[contractorId]/edit`
-○ `/console/workforce/contractors/new`
-● `/console/workforce/courses`
-○ `/console/workforce/courses/[courseId]`
-○ `/console/workforce/courses/[courseId]/edit`
-○ `/console/workforce/courses/new`
-○ `/console/workforce/deployment`
-○ `/console/workforce/deployment/[deploymentId]`
-○ `/console/workforce/deployment/[deploymentId]/edit`
-○ `/console/workforce/deployment/new`
-● `/console/workforce/forecast`
-○ `/console/workforce/forecast/[id]`
-○ `/console/workforce/housing`
-● `/console/workforce/onboarding`
-○ `/console/workforce/onboarding/[flowId]`
-○ `/console/workforce/onboarding/new`
-○ `/console/workforce/planning`
-● `/console/workforce/recognition`
-○ `/console/workforce/recognition/new`
-● `/console/workforce/rosters`
-○ `/console/workforce/rosters/[rosterId]`
-○ `/console/workforce/rosters/[rosterId]/edit`
-○ `/console/workforce/rosters/new`
-○ `/console/workforce/services`
-● `/console/workforce/shift-swaps`
-○ `/console/workforce/staff`
-○ `/console/workforce/staff/[staffId]`
-○ `/console/workforce/staff/[staffId]/edit`
-○ `/console/workforce/staff/new`
-● `/console/workforce/time-off`
-● `/console/workforce/training`
-○ `/console/workforce/training/[courseId]`
-○ `/console/workforce/training/[courseId]/edit`
-○ `/console/workforce/uniforms`
-○ `/console/workforce/volunteers`
-○ `/console/workforce/volunteers/[volunteerId]`
-○ `/console/workforce/volunteers/[volunteerId]/edit`
-○ `/console/workforce/volunteers/new`
+● `/studio/workforce`
+● `/studio/workforce/badges`
+○ `/studio/workforce/badges/[badgeId]`
+○ `/studio/workforce/badges/new`
+○ `/studio/workforce/call-sheets`
+○ `/studio/workforce/call-sheets/[memberId]`
+○ `/studio/workforce/contractors`
+○ `/studio/workforce/contractors/[contractorId]`
+○ `/studio/workforce/contractors/[contractorId]/edit`
+○ `/studio/workforce/contractors/new`
+○ `/studio/workforce/deployment`
+○ `/studio/workforce/deployment/[deploymentId]`
+○ `/studio/workforce/deployment/[deploymentId]/edit`
+○ `/studio/workforce/deployment/new`
+● `/studio/workforce/forecast`
+○ `/studio/workforce/forecast/[id]`
+○ `/studio/workforce/housing`
+● `/studio/workforce/onboarding`
+○ `/studio/workforce/onboarding/[flowId]`
+○ `/studio/workforce/onboarding/new`
+○ `/studio/workforce/planning`
+● `/studio/workforce/recognition`
+○ `/studio/workforce/recognition/new`
+● `/studio/workforce/rosters`
+○ `/studio/workforce/rosters/[rosterId]`
+○ `/studio/workforce/rosters/[rosterId]/edit`
+○ `/studio/workforce/rosters/new`
+○ `/studio/workforce/services`
+● `/studio/workforce/shift-swaps`
+○ `/studio/workforce/staff`
+○ `/studio/workforce/staff/[staffId]`
+○ `/studio/workforce/staff/[staffId]/edit`
+○ `/studio/workforce/staff/new`
+● `/studio/workforce/time-off`
+● `/studio/workforce/training`
+○ `/studio/workforce/training/[courseId]`
+○ `/studio/workforce/training/[courseId]/edit`
+○ `/studio/workforce/uniforms`
+○ `/studio/workforce/volunteers`
+○ `/studio/workforce/volunteers/[volunteerId]`
+○ `/studio/workforce/volunteers/[volunteerId]/edit`
+○ `/studio/workforce/volunteers/new`
 
 </details>
 
 <details><summary><code>xpms</code> · 9 routes</summary>
 
-● `/console/xpms`
-● `/console/xpms/atoms`
-● `/console/xpms/classes`
-○ `/console/xpms/classes/[code]`
-● `/console/xpms/codebook`
-● `/console/xpms/phases`
-● `/console/xpms/provenance`
-● `/console/xpms/tiers`
-● `/console/xpms/variance`
+● `/studio/xpms`
+● `/studio/xpms/atoms`
+● `/studio/xpms/classes`
+○ `/studio/xpms/classes/[code]`
+● `/studio/xpms/codebook`
+● `/studio/xpms/phases`
+● `/studio/xpms/provenance`
+● `/studio/xpms/tiers`
+● `/studio/xpms/variance`
 
 </details>
 
 <details><summary><code>·root</code> · 1 route</summary>
 
-● `/console`
+● `/studio`
 
 </details>
 
 ## COMPVSS — Field PWA (`/m`)
 
-50 routes — ● 35 nav · ○ 13 linked · ⚠ 0 orphan
+53 routes — ● 38 nav · ○ 13 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1373,6 +1390,18 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>onsite</code> · 1 route</summary>
+
+● `/m/onsite`
+
+</details>
+
+<details><summary><code>profile</code> · 1 route</summary>
+
+● `/m/profile`
+
+</details>
+
 <details><summary><code>punch</code> · 1 route</summary>
 
 ● `/m/punch`
@@ -1388,6 +1417,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>requests</code> · 1 route</summary>
 
 ● `/m/requests`
+
+</details>
+
+<details><summary><code>scan</code> · 1 route</summary>
+
+● `/m/scan`
 
 </details>
 
@@ -1432,7 +1467,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-140 routes — ● 120 nav · ○ 18 linked · ⚠ 0 orphan
+149 routes — ● 127 nav · ○ 20 linked · ⚠ 0 orphan
+
+<details><summary><code>[slug]</code> · 2 routes</summary>
+
+○ `/p/lists/[slug]`
+○ `/p/scenes/[slug]`
+
+</details>
 
 <details><summary><code>announcements</code> · 1 route</summary>
 
@@ -1528,6 +1570,18 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>e</code> · 1 route</summary>
+
+● `/p/welcome`
+
+</details>
+
+<details><summary><code>er</code> · 1 route</summary>
+
+● `/p/discover`
+
+</details>
+
 <details><summary><code>guest</code> · 5 routes</summary>
 
 ● `/p/[slug]/guest`
@@ -1557,6 +1611,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>inbox</code> · 1 route</summary>
 
 ● `/p/[slug]/inbox`
+
+</details>
+
+<details><summary><code>ity</code> · 1 route</summary>
+
+● `/p/community`
 
 </details>
 
@@ -1634,6 +1694,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>t</code> · 1 route</summary>
+
+● `/p/account`
+
+</details>
+
 <details><summary><code>tasks</code> · 1 route</summary>
 
 ● `/p/[slug]/tasks`
@@ -1682,16 +1748,163 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>·root</code> · 2 routes</summary>
+<details><summary><code>·root</code> · 5 routes</summary>
 
 · `/p/[slug]`
+● `/p/lists`
+● `/p/saved`
+● `/p/scenes`
 · `/p/select`
+
+</details>
+
+## LEG3ND — Knowledge Shell (`/legend`)
+
+40 routes — ● 21 nav · ○ 19 linked · ⚠ 0 orphan
+
+<details><summary><code>architecture</code> · 1 route</summary>
+
+● `/legend/architecture`
+
+</details>
+
+<details><summary><code>badges</code> · 1 route</summary>
+
+● `/legend/badges`
+
+</details>
+
+<details><summary><code>certifications</code> · 1 route</summary>
+
+● `/legend/certifications`
+
+</details>
+
+<details><summary><code>community</code> · 2 routes</summary>
+
+● `/legend/community`
+● `/legend/community/members`
+
+</details>
+
+<details><summary><code>compliance</code> · 1 route</summary>
+
+● `/legend/compliance`
+
+</details>
+
+<details><summary><code>console</code> · 1 route</summary>
+
+● `/legend/console`
+
+</details>
+
+<details><summary><code>crew</code> · 1 route</summary>
+
+● `/legend/crew`
+
+</details>
+
+<details><summary><code>engine</code> · 7 routes</summary>
+
+● `/legend/engine`
+○ `/legend/engine/rules`
+○ `/legend/engine/rules/[id]`
+○ `/legend/engine/rules/[id]/edit`
+○ `/legend/engine/rules/new`
+○ `/legend/engine/runs`
+○ `/legend/engine/runs/[id]`
+
+</details>
+
+<details><summary><code>for-institutions</code> · 1 route</summary>
+
+● `/legend/for-institutions`
+
+</details>
+
+<details><summary><code>leaderboard</code> · 1 route</summary>
+
+● `/legend/leaderboard`
+
+</details>
+
+<details><summary><code>learn</code> · 4 routes</summary>
+
+● `/legend/learn`
+○ `/legend/learn/[course]`
+○ `/legend/learn/[course]/lesson/[id]`
+○ `/legend/learn/[course]/quiz/[id]`
+
+</details>
+
+<details><summary><code>live</code> · 1 route</summary>
+
+● `/legend/live`
+
+</details>
+
+<details><summary><code>my-learning</code> · 1 route</summary>
+
+● `/legend/my-learning`
+
+</details>
+
+<details><summary><code>path</code> · 1 route</summary>
+
+● `/legend/path`
+
+</details>
+
+<details><summary><code>profile</code> · 1 route</summary>
+
+● `/legend/profile`
+
+</details>
+
+<details><summary><code>progress</code> · 1 route</summary>
+
+● `/legend/progress`
+
+</details>
+
+<details><summary><code>resources</code> · 7 routes</summary>
+
+● `/legend/resources`
+○ `/legend/resources/[id]`
+○ `/legend/resources/[id]/edit`
+○ `/legend/resources/collections`
+○ `/legend/resources/collections/[collectionId]`
+○ `/legend/resources/collections/new`
+○ `/legend/resources/new`
+
+</details>
+
+<details><summary><code>signage</code> · 5 routes</summary>
+
+● `/legend/signage`
+○ `/legend/signage/[signId]`
+○ `/legend/signage/[signId]/edit`
+○ `/legend/signage/[signId]/placements/new`
+○ `/legend/signage/new`
+
+</details>
+
+<details><summary><code>store</code> · 1 route</summary>
+
+● `/legend/store`
+
+</details>
+
+<details><summary><code>·root</code> · 1 route</summary>
+
+● `/legend`
 
 </details>
 
 ## GVTEWAY — Public / Marketing
 
-87 routes — ● 32 nav · ○ 47 linked · ⚠ 0 orphan
+90 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -1783,6 +1996,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>es-ES</code> · 1 route</summary>
 
 · `/es-ES`
+
+</details>
+
+<details><summary><code>events</code> · 3 routes</summary>
+
+● `/events`
+○ `/events/[slug]`
+○ `/events/[slug]/tickets`
 
 </details>
 
@@ -2128,7 +2349,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 131 route handlers
+## API surface (`/api/v1`) — 132 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2483,10 +2704,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/stripe</code> · 3</summary>
+<details><summary><code>/api/v1/stripe</code> · 4</summary>
 
 - `/api/v1/stripe/checkout`
 - `/api/v1/stripe/connect/onboarding`
+- `/api/v1/stripe/credits-checkout`
 - `/api/v1/stripe/portal`
 
 </details>

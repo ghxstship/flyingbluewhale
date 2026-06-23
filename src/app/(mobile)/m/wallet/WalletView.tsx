@@ -2,6 +2,7 @@
 
 import { KIcon, RoseCard, RotatingQR } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { mintGateToken } from "./actions";
 
 export type CredentialEntry = {
   id: string;
@@ -56,10 +57,10 @@ export function WalletView({
       <RoseCard />
 
       {/* Live, single-use rotating gate token seeded from the viewer's active
-          scan code. RotatingQR mints its own default token for now; a
-          server-action mintToken lands in a later task. */}
+          scan code. The token is minted server-side (HMAC, 30s window, keyed by
+          a server-only secret) so it's gate-attestable, not a client random. */}
       <div className="pass-qr" style={{ paddingTop: 4 }}>
-        <RotatingQR base={passBase} />
+        <RotatingQR base={passBase} mintToken={mintGateToken} />
       </div>
 
       <div className="sech">

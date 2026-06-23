@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 /**
  * Promoter co-pro splits — the deal terms across talent_offers on this
  * project. Walkout split %, headline fee, guarantee. Read-only here;
- * the canonical authoring surface lives on /console/bookings/deals.
+ * the canonical authoring surface lives on /studio/bookings/deals.
  */
 
 type Offer = {

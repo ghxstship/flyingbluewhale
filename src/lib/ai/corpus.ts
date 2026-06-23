@@ -4,7 +4,7 @@
  * Deferred item F2: the embed-source endpoint + document_chunks table existed
  * but nothing walked the org's source rows or surfaced index health to an
  * operator. This module holds the enum tuples + label maps + the read helpers
- * that the /console/ai/corpus status page renders against. The mutating side
+ * that the /studio/ai/corpus status page renders against. The mutating side
  * (the reindex walk) lives in the sibling `actions.ts` ("use server").
  *
  * No "server-only" import here — the client island (ReindexButton) and the

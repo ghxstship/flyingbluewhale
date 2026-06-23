@@ -6,31 +6,31 @@ import { matchRoute } from "./useActiveRoute";
 
 describe("matchRoute", () => {
   it("returns exact + active when the pathname equals the href", () => {
-    expect(matchRoute("/console/projects", "/console/projects")).toEqual({
+    expect(matchRoute("/studio/projects", "/studio/projects")).toEqual({
       isActive: true,
       isExact: true,
     });
   });
 
   it("returns active but not exact when pathname is a child of href", () => {
-    expect(matchRoute("/console/projects/123", "/console/projects")).toEqual({
+    expect(matchRoute("/studio/projects/123", "/studio/projects")).toEqual({
       isActive: true,
       isExact: false,
     });
   });
 
   it("does NOT mark as active when the prefix match is not at a segment boundary", () => {
-    // `/console/proposals` must never activate `/console/proj` or
-    // `/console/projects` — this was the observed regression that
+    // `/studio/proposals` must never activate `/studio/proj` or
+    // `/studio/projects` — this was the observed regression that
     // motivated the hook.
-    expect(matchRoute("/console/proposals", "/console/projects")).toEqual({
+    expect(matchRoute("/studio/proposals", "/studio/projects")).toEqual({
       isActive: false,
       isExact: false,
     });
   });
 
   it("does not mark root as active on every page", () => {
-    expect(matchRoute("/console/projects", "/")).toEqual({
+    expect(matchRoute("/studio/projects", "/")).toEqual({
       isActive: false,
       isExact: false,
     });
@@ -41,6 +41,6 @@ describe("matchRoute", () => {
   });
 
   it("returns inactive on empty href", () => {
-    expect(matchRoute("/console", "")).toEqual({ isActive: false, isExact: false });
+    expect(matchRoute("/studio", "")).toEqual({ isActive: false, isExact: false });
   });
 });

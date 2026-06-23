@@ -43,7 +43,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
   // Headline numbers from invoices (revenue), expenses (cost),
   // budgets.actual_cents (XPMS canonical; falls back to legacy
   // spent_cents). Lightweight roll-up; the full finance view lives on
-  // /console/finance/reports.
+  // /studio/finance/reports.
   const [{ data: budget }, expensesRes, invoicesRes] = await Promise.all([
     supabase
       .from("budgets")
@@ -128,7 +128,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
           )}{" "}
           {t("p.producer.pnl.fullBreakdownOn", undefined, "Full breakdown on")}{" "}
           <a className="underline" href={urlFor("platform", "/finance/reports")}>
-            /console/finance/reports
+            /studio/finance/reports
           </a>
           .
         </p>

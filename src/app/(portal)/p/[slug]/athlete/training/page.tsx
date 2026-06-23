@@ -162,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             undefined,
             "Training sessions are events tagged via name (training / practice / drill / warm-up). Producer authors them in",
           )}{" "}
-          <code>/console/programs/training</code>
+          <code>/studio/programs/training</code>
           {t("p.athlete.training.footer.suffix", undefined, "; this view is filtered for athletes.")}
         </p>
       </div>

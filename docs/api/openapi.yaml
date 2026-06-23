@@ -507,6 +507,8 @@ paths:
 
   /api/v1/stripe/checkout:
     post: { summary: Create a Checkout Session (idempotent). }
+  /api/v1/stripe/credits-checkout:
+    post: { summary: "LEG3ND credit-pack self-serve checkout (idempotent): records a pending credit_orders row for the given creditProductId and returns a Stripe Checkout session URL; the webhook credits the ledger on payment." }
   /api/v1/stripe/connect/onboarding:
     post: { summary: Create a Connect Express onboarding link (idempotent). }
   /api/v1/stripe/portal:

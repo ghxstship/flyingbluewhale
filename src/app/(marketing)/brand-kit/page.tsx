@@ -114,7 +114,7 @@ function buildBlocks(t: T): Block[] {
       heading: t("marketing.pages.brand-kit.blocks.productUi.heading"),
       tiles: [
         {
-          href: "/console",
+          href: "/studio",
           icon: LayoutGrid,
           title: t("marketing.pages.brand-kit.tiles.appDashboard.title"),
           body: t("marketing.pages.brand-kit.tiles.appDashboard.body"),
@@ -173,20 +173,20 @@ function buildBlocks(t: T): Block[] {
       heading: t("marketing.pages.brand-kit.blocks.saas.heading"),
       tiles: [
         {
-          href: "/console",
+          href: "/studio",
           icon: AppWindow,
           title: t("marketing.pages.brand-kit.tiles.atlvsProductKit.title"),
           body: t("marketing.pages.brand-kit.tiles.atlvsProductKit.body"),
           meta: t("marketing.pages.brand-kit.tiles.atlvsProductKit.meta"),
         },
         {
-          href: "/console",
+          href: "/studio",
           icon: LayoutDashboard,
           title: t("marketing.pages.brand-kit.tiles.saasDashboard.title"),
           body: t("marketing.pages.brand-kit.tiles.saasDashboard.body"),
         },
         {
-          href: "/console",
+          href: "/studio",
           icon: Layers,
           title: t("marketing.pages.brand-kit.tiles.saasScreens.title"),
           body: t("marketing.pages.brand-kit.tiles.saasScreens.body"),

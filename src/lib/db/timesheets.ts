@@ -6,7 +6,7 @@ import type { Database } from "@/lib/supabase/database.types";
 /**
  * Timesheet approval canon — the `utt_timesheet_state` lifecycle plus the
  * manager-gated approval transitions surfaced at
- * `/console/finance/timesheets/[id]`.
+ * `/studio/finance/timesheets/[id]`.
  *
  * The `timesheets.state` column is the LDP cyclical-operational state
  * (renamed-discipline compliant — never a bare `status`). Each manager

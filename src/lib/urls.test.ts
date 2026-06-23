@@ -36,7 +36,7 @@ describe("urlFor — subdomain mode", () => {
     expect(urlFor("personal", "/me")).toBe("https://atlvs.pro/me");
   });
 
-  it("platform → app subdomain, no /console prefix in user URL", async () => {
+  it("platform → app subdomain, no /studio prefix in user URL", async () => {
     const { urlFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
     expect(urlFor("platform", "/projects/abc")).toBe("https://app.atlvs.pro/projects/abc");
     expect(urlFor("platform")).toBe("https://app.atlvs.pro");
@@ -62,7 +62,7 @@ describe("urlFor — subdomain mode", () => {
 describe("urlFor — path-prefix fallback", () => {
   it("preserves shell prefix in path when subdomains disabled", async () => {
     const { urlFor } = await loadUrls({ subdomains: false, appUrl: "https://preview-x.vercel.app" });
-    expect(urlFor("platform", "/projects/abc")).toBe("https://preview-x.vercel.app/console/projects/abc");
+    expect(urlFor("platform", "/projects/abc")).toBe("https://preview-x.vercel.app/studio/projects/abc");
     expect(urlFor("portal", "/mmw26/guide")).toBe("https://preview-x.vercel.app/p/mmw26/guide");
     expect(urlFor("mobile", "/scan")).toBe("https://preview-x.vercel.app/m/scan");
     expect(urlFor("auth", "/login")).toBe("https://preview-x.vercel.app/login");
@@ -103,19 +103,19 @@ describe("shellForHost", () => {
 describe("internalPathFor", () => {
   it("prefixes shell path when not already prefixed", async () => {
     const { internalPathFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
-    expect(internalPathFor("platform", "/projects/abc")).toBe("/console/projects/abc");
+    expect(internalPathFor("platform", "/projects/abc")).toBe("/studio/projects/abc");
     expect(internalPathFor("portal", "/mmw26")).toBe("/p/mmw26");
     expect(internalPathFor("mobile", "/scan")).toBe("/m/scan");
   });
 
   it("is idempotent — already-prefixed paths pass through", async () => {
     const { internalPathFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
-    expect(internalPathFor("platform", "/console/projects")).toBe("/console/projects");
+    expect(internalPathFor("platform", "/studio/projects")).toBe("/studio/projects");
   });
 
   it("handles root path (/)", async () => {
     const { internalPathFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
-    expect(internalPathFor("platform", "/")).toBe("/console");
+    expect(internalPathFor("platform", "/")).toBe("/studio");
     expect(internalPathFor("marketing", "/")).toBe("/");
   });
 
@@ -133,7 +133,7 @@ describe("internalPathFor", () => {
 describe("shellFromResolved", () => {
   it("maps the auth.resolveShell return values to Shell", async () => {
     const { shellFromResolved } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
-    expect(shellFromResolved("/console")).toBe("platform");
+    expect(shellFromResolved("/studio")).toBe("platform");
     expect(shellFromResolved("/p")).toBe("portal");
     expect(shellFromResolved("/m")).toBe("mobile");
     expect(shellFromResolved("/me")).toBe("personal");

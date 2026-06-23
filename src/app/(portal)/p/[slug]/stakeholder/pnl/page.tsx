@@ -122,7 +122,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
         <p className="mt-5 text-xs text-[var(--p-text-2)]">
           {t("p.stakeholder.pnl.fullBreakdownOn", undefined, "Full breakdown on")}{" "}
           <a className="underline" href={urlFor("platform", "/finance/reports")}>
-            /console/finance/reports
+            /studio/finance/reports
           </a>
           .
         </p>

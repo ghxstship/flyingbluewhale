@@ -9,7 +9,7 @@
  *   {
  *     "routes": {
  *       "/": { "maxFirstLoadKb": 250 },
- *       "/console": { "maxFirstLoadKb": 350 },
+ *       "/studio": { "maxFirstLoadKb": 350 },
  *       ...
  *     },
  *     "default": { "maxFirstLoadKb": 400 }

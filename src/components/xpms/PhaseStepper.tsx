@@ -22,13 +22,13 @@ type Props = {
    *  inactive (no phase highlighted, no link target — display-only). */
   currentPhase?: XpmsPhase | null;
   /** Project id used to deep-link into phase-scoped views. When provided
-   *  each phase becomes a link to `/console/projects/{id}?phase={id}`.
+   *  each phase becomes a link to `/studio/projects/{id}?phase={id}`.
    *  When omitted the stepper renders as static display chrome. */
   projectId?: string;
   /** Compact mode hides phase labels, keeping only the numbered dots.
    *  Useful when the parent layout has tight vertical room. */
   compact?: boolean;
-  /** Override the default route prefix. Defaults to /console/projects.
+  /** Override the default route prefix. Defaults to /studio/projects.
    *  Pass when mounting the stepper outside the project shell. */
   hrefBase?: string;
 };
@@ -76,7 +76,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
           // Link only when projectId is supplied AND the phase is not
           // currently selected. Self-links would refresh-loop on click.
           const canLink = projectId && !isCurrent;
-          const href = canLink ? `${hrefBase ?? "/console/projects"}/${projectId}?phase=${phase.id}` : undefined;
+          const href = canLink ? `${hrefBase ?? "/studio/projects"}/${projectId}?phase=${phase.id}` : undefined;
 
           return (
             <li key={phase.id} className="flex min-w-0 flex-1 items-center gap-1">

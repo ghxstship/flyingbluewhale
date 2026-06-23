@@ -104,13 +104,6 @@ const BlueskyLogo = () => (
     <path fill="#1185fe" d="M123 34c65 49 135 148 160 202 25-54 95-153 160-202 47-35 123-62 123 25 0 18-10 146-16 167-21 73-95 91-161 80 115 20 144 84 81 149-120 124-173-31-187-66-3-7-4-10-4-7-1-3-2 0-4 7-14 35-67 190-187 66-63-65-34-129 81-149-66 11-140-7-161-80-6-21-16-149-16-167 0-87 76-60 123-25z" />
   </svg>
 );
-const LimewireLogo = () => (
-  <svg viewBox="0 0 24 24" width="17" height="17" style={{ flex: "none" }}>
-    <rect width="24" height="24" rx="6" fill="#3fae29" />
-    <path d="M9 7.2v9.6l7.5-4.8z" fill="#fff" />
-  </svg>
-);
-
 const soonRibbon: CSSProperties = {
   position: "absolute",
   top: 8,
@@ -468,10 +461,6 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
         </button>
         <button type="button" className="sso" disabled style={{ position: "relative", overflow: "hidden", opacity: 0.85 }}>
           <BlueskyLogo /> {t("m.onboarding.sso.bluesky", undefined, "Continue With Bluesky")}
-          <span style={soonRibbon}>{t("m.onboarding.common.soon", undefined, "Soon")}</span>
-        </button>
-        <button type="button" className="sso" disabled style={{ position: "relative", overflow: "hidden", opacity: 0.85 }}>
-          <LimewireLogo /> {t("m.onboarding.sso.limewire", undefined, "Continue With Limewire")}
           <span style={soonRibbon}>{t("m.onboarding.common.soon", undefined, "Soon")}</span>
         </button>
       </div>

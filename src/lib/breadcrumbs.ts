@@ -63,17 +63,17 @@ export function humanizeSegment(segment: string): string {
 
 /**
  * Derive a default breadcrumb trail for a console pathname. Returns an
- * empty array outside `/console` and on the console root; callers should
+ * empty array outside `/studio` and on the console root; callers should
  * skip rendering trails shorter than two entries — a single-item trail
  * just repeats the page title.
  */
 export function deriveBreadcrumbs(pathname: string): DerivedCrumb[] {
   const path = stripQuery(pathname);
-  if (!path.startsWith("/console") || path === "/console") return [];
+  if (!path.startsWith("/studio") || path === "/studio") return [];
 
   const anchor = navAnchors().find((a) => matchRoute(path, a.href).isActive);
   const crumbs: DerivedCrumb[] = [];
-  let consumed = "/console";
+  let consumed = "/studio";
   if (anchor) {
     if (anchor.group !== anchor.label) crumbs.push({ label: anchor.group });
     if (anchor.section && anchor.section !== anchor.group && anchor.section !== anchor.label) {

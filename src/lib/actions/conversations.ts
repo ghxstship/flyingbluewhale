@@ -59,7 +59,7 @@ export async function postConversationMessage(
   if (typeof result === "object" && "error" in result) return result;
 
   // Revalidate any path under platform / portal that might be showing this thread.
-  revalidatePath("/console", "layout");
+  revalidatePath("/studio", "layout");
   revalidatePath("/p", "layout");
   return null;
 }

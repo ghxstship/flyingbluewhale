@@ -20,7 +20,7 @@
  * Modes:
  *   - Subdomain mode (NEXT_PUBLIC_USE_SUBDOMAINS=1):
  *       atlvs.pro                → marketing / auth / personal
- *       app.atlvs.pro            → platform (rewrites to /console/*)
+ *       app.atlvs.pro            → platform (rewrites to /studio/*)
  *       gvteway.atlvs.pro        → portal   (rewrites to /p/*)
  *       compvss.atlvs.pro        → mobile   (rewrites to /m/*)
  *
@@ -30,14 +30,14 @@
  *     cookie scope, PWA service-worker origin, and CSP envelope.
  *
  *   - Path-prefix fallback (Vercel previews, plain localhost):
- *       single base URL with /console, /p, /m path prefixes (legacy layout).
+ *       single base URL with /studio, /p, /m path prefixes (legacy layout).
  *
  * Future hook for tenant-specific portal subdomains is wired in
  * `shellForHost` — see the commented branch.
  */
 import { env } from "./env";
 
-export type Shell = "marketing" | "auth" | "personal" | "platform" | "portal" | "mobile";
+export type Shell = "marketing" | "auth" | "personal" | "platform" | "portal" | "mobile" | "legend";
 
 const SHELL_SUBDOMAIN: Record<Shell, string | null> = {
   marketing: null,
@@ -46,15 +46,20 @@ const SHELL_SUBDOMAIN: Record<Shell, string | null> = {
   platform: "app",
   portal: "gvteway",
   mobile: "compvss",
+  // ADR-0011 — LEG3ND graduates to its own shell at the real-word `legend`
+  // subdomain. (The gvteway→gateway / compvss→compass real-word migration of
+  // the existing shells is a separate addressing change applied with Vercel.)
+  legend: "legend",
 };
 
 const SHELL_PATH_PREFIX: Record<Shell, string> = {
   marketing: "",
   auth: "",
   personal: "",
-  platform: "/console",
+  platform: "/studio",
   portal: "/p",
   mobile: "/m",
+  legend: "/legend",
 };
 
 const FALLBACK_BASE = "http://localhost:3000";
@@ -121,6 +126,14 @@ export function internalPathFor(shell: Shell, requestPath: string): string {
     return requestPath;
   }
   if (requestPath === prefix || requestPath.startsWith(`${prefix}/`)) return requestPath;
+  // Cross-shell deep-links: a path that already carries ANOTHER shell's
+  // route-group prefix (e.g. `/legend/...` clicked from the app host, or a
+  // `/studio/...` link on the legend host) is served by that group directly —
+  // never re-prefix it (that would 404, e.g. `/studio/legend/...`). This is
+  // what lets the platform Knowledge rail deep-link into the LEG3ND shell.
+  for (const other of ["/studio", "/p", "/m", "/legend"]) {
+    if (other !== prefix && (requestPath === other || requestPath.startsWith(`${other}/`))) return requestPath;
+  }
   if (requestPath === "/") return prefix;
   return `${prefix}${requestPath}`;
 }
@@ -166,8 +179,13 @@ export function shellForHost(host: string | null | undefined): {
   // }
 
   if (sub === "app") return { shell: "platform", tenantSlug: null };
-  if (sub === "gvteway") return { shell: "portal", tenantSlug: null };
-  if (sub === "compvss") return { shell: "mobile", tenantSlug: null };
+  // Both the real-word (IMPLEMENTATION §2 — `gateway`/`compass`) and the legacy
+  // stylized (`gvteway`/`compvss`) host spellings resolve, so the DNS/Vercel
+  // cutover can land either spelling without a code change. The URL helper
+  // still EMITS the current spelling (SHELL_SUBDOMAIN) until that flip.
+  if (sub === "gvteway" || sub === "gateway") return { shell: "portal", tenantSlug: null };
+  if (sub === "compvss" || sub === "compass") return { shell: "mobile", tenantSlug: null };
+  if (sub === "legend") return { shell: "legend", tenantSlug: null };
 
   return { shell: "marketing", tenantSlug: null };
 }
@@ -180,9 +198,9 @@ export function shellForHost(host: string | null | undefined): {
  * is the single bridge. Used by /auth/resolve to dispatch the
  * post-login redirect.
  */
-export function shellFromResolved(resolved: "/console" | "/p" | "/m" | "/me"): Shell {
+export function shellFromResolved(resolved: "/studio" | "/p" | "/m" | "/me"): Shell {
   switch (resolved) {
-    case "/console":
+    case "/studio":
       return "platform";
     case "/p":
       return "portal";

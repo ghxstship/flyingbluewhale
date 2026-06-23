@@ -33,7 +33,7 @@ async function notifyOfferLetterDecision(
     const body =
       `${letter.recipient_name} ${decision} the ${letter.role_title} offer for ${letter.project_name}.` +
       (detail ? ` ${detail}` : "");
-    const href = `/console/people/offer-letters/${letter.id}`;
+    const href = `/studio/people/offer-letters/${letter.id}`;
     const data = { targetTable: "offer_letters", targetId: letter.id, decision };
     if (letter.created_by) {
       await notify({ orgId: letter.org_id, userId: letter.created_by, eventType, title, body, href, data });

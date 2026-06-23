@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 /**
  * Producer readiness — portfolio-level go/no-go snapshot: how many projects
  * sit in each XPMS lifecycle gate. The detailed per-project readiness review
- * lives on the console (/console/programs/readiness); this is the producer's
+ * lives on the console (/studio/programs/readiness); this is the producer's
  * portfolio roll-up.
  */
 
@@ -82,7 +82,7 @@ export default async function ProducerReadiness({ params }: { params: Promise<{ 
         <p className="mt-5 text-xs text-[var(--p-text-2)]">
           {t("p.producer.readiness.detailOn", undefined, "Per-project readiness review on")}{" "}
           <a className="underline" href={urlFor("platform", "/programs/readiness")}>
-            /console/programs/readiness
+            /studio/programs/readiness
           </a>
           .
         </p>

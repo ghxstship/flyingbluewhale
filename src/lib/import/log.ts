@@ -2,7 +2,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Log a CSV import run to `import_runs` so /console/settings/imports can
+ * Log a CSV import run to `import_runs` so /studio/settings/imports can
  * show history. Best-effort: failures here are swallowed; the import
  * itself already returned success/failure to the caller.
  */

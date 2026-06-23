@@ -11,6 +11,8 @@
     "gen:theme:check": "node scripts/gen-theme-tokens.mjs --check",
     "gen:sitemap": "node scripts/generate-sitemap.mjs",
     "gen:sitemap:check": "node scripts/generate-sitemap.mjs --check",
+    "gen:ia-map": "node scripts/gen-ia-map.mjs",
+    "gen:ia-map:check": "node scripts/gen-ia-map.mjs --check",
     "gen:create-actions": "node scripts/gen-create-actions.mjs",
     "gen:create-actions:check": "node scripts/gen-create-actions.mjs --check",
     "lint": "eslint .",

@@ -2,7 +2,7 @@ import { LearningSurface } from "@/components/connecteam/LearningSurface";
 
 /**
  * GVTEWAY crew learning — thin wrapper over shared <LearningSurface>.
- * Learning was retired from the COMPVSS mobile kit (it is a portal/console
+ * Learning was retired from the COMPVSS mobile kit (it is a portal/studio
  * concern, not a field surface), so course rows stay portal-side; the
  * portal-native assessment detail lifts in a future PR. Until then detail
  * links keep the user on the portal learning list rather than 404-ing into

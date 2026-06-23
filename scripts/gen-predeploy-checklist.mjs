@@ -8,20 +8,20 @@ const sweepBy = new Map(sweep.map(s => [s.route, s]));
 
 // Routes interactively driven in-browser this session (real clicks/forms/state transitions)
 const INTERACTIVE = new Set([
-  "/login","/console","/console/projects","/console/projects/new","/console/projects/[projectId]",
-  "/console/projects/[projectId]/budget","/console/projects/[projectId]/guides","/console/projects/[projectId]/guides/[persona]",
-  "/console/proposals","/console/proposals/new","/console/proposals/[proposalId]","/console/proposals/[id]",
-  "/console/procurement/vendors","/console/procurement/vendors/new","/console/procurement/requisitions",
-  "/console/procurement/requisitions/new","/console/procurement/requisitions/[requisitionId]","/console/procurement/requisitions/[requisitionId]/edit",
-  "/console/procurement/purchase-orders","/console/procurement/purchase-orders/new","/console/procurement/purchase-orders/[poId]",
-  "/console/tasks","/console/tasks/new","/console/finance/budgets","/console/finance/budgets/new",
-  "/console/people","/console/production/equipment","/console/settings/catalog","/console/settings/catalog/[itemId]",
-  "/console/comms/announcements/new","/console/comms/announcements/[announcementId]","/console/comms/announcements/[id]",
-  "/console/guides","/marketplace","/marketplace/talent",
+  "/login","/studio","/studio/projects","/studio/projects/new","/studio/projects/[projectId]",
+  "/studio/projects/[projectId]/budget","/studio/projects/[projectId]/guides","/studio/projects/[projectId]/guides/[persona]",
+  "/studio/proposals","/studio/proposals/new","/studio/proposals/[proposalId]","/studio/proposals/[id]",
+  "/studio/procurement/vendors","/studio/procurement/vendors/new","/studio/procurement/requisitions",
+  "/studio/procurement/requisitions/new","/studio/procurement/requisitions/[requisitionId]","/studio/procurement/requisitions/[requisitionId]/edit",
+  "/studio/procurement/purchase-orders","/studio/procurement/purchase-orders/new","/studio/procurement/purchase-orders/[poId]",
+  "/studio/tasks","/studio/tasks/new","/studio/finance/budgets","/studio/finance/budgets/new",
+  "/studio/people","/studio/production/equipment","/studio/settings/catalog","/studio/settings/catalog/[itemId]",
+  "/studio/comms/announcements/new","/studio/comms/announcements/[announcementId]","/studio/comms/announcements/[id]",
+  "/studio/guides","/marketplace","/marketplace/talent",
   "/p/[slug]/overview","/p/[slug]/artist","/p/[slug]/artist/advancing","/p/[slug]/guide",
-  "/console/comms/polls","/console/comms/polls/new","/console/comms/polls/[pollId]","/console/comms/polls/[id]",
-  "/console/settings/account-managers","/console/settings/account-managers/new","/console/settings/account-managers/[id]","/console/settings/account-managers/[assignmentId]",
-  "/console/finance/invoices","/console/finance/invoices/new","/console/finance/invoices/[invoiceId]","/console/finance/invoices/[id]",
+  "/studio/comms/polls","/studio/comms/polls/new","/studio/comms/polls/[pollId]","/studio/comms/polls/[id]",
+  "/studio/settings/account-managers","/studio/settings/account-managers/new","/studio/settings/account-managers/[id]","/studio/settings/account-managers/[assignmentId]",
+  "/studio/finance/invoices","/studio/finance/invoices/new","/studio/finance/invoices/[invoiceId]","/studio/finance/invoices/[id]",
 ]);
 // /m shell validated via compvss smoke harness (92/92 renders + 28/28 RLS mutations)
 const SMOKE_M = true;
@@ -51,7 +51,7 @@ function statusCell(r) {
   return s;
 }
 
-const SHELL_TITLE = { marketing:"Marketing (public, unauth)", auth:"Auth", personal:"Personal (/me)", platform:"Platform console (/console)", portal:"GVTEWAY portal (/p)", mobile:"COMPVSS mobile (/m)", root:"Root / misc" };
+const SHELL_TITLE = { marketing:"Marketing (public, unauth)", auth:"Auth", personal:"Personal (/me)", platform:"Platform console (/studio)", portal:"GVTEWAY portal (/p)", mobile:"COMPVSS mobile (/m)", root:"Root / misc" };
 const order = ["auth","marketing","personal","platform","portal","mobile","root"];
 
 let md = `# ATLVS — Master Pre-Deployment UI Checklist\n\n`;

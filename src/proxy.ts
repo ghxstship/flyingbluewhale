@@ -164,7 +164,7 @@ export async function proxy(request: NextRequest) {
   // Subdomain → internal route-group rewrite. Public URL stays on the
   // subdomain; Next sees the prefixed path. In path-prefix mode (preview
   // deploys without subdomain DNS) shell is "marketing" and no rewrite
-  // happens — the existing /console, /p, /m prefixes already serve the
+  // happens — the existing /studio, /p, /m prefixes already serve the
   // right shell.
   const { shell, tenantSlug } = SUBDOMAINS_ENABLED
     ? shellForHost(request.headers.get("host"))
@@ -239,7 +239,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // Expose the INTERNAL route path (post host-rewrite, so it carries the
-  // /console|/p|/m prefix in every mode) to server components. Lets
+  // /studio|/p|/m prefix in every mode) to server components. Lets
   // requireSession() preserve the caller's location as a ?next= deep link
   // when bouncing an expired session to /login.
   request.headers.set("x-pathname", rewriteUrl?.pathname ?? pathname);
@@ -349,7 +349,7 @@ const MFA_GATE_EXEMPT = [
 ];
 
 const MFA_GATE_PROTECTED = [
-  /^\/console(?:\/|$)/,
+  /^\/studio(?:\/|$)/,
   /^\/me(?!\/security)(?:\/|$)/,
   /^\/p\/[^/]+\/(?!guide$|guide\/)/,
   /^\/m(?:\/|$)/,

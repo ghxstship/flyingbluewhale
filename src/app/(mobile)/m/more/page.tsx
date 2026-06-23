@@ -67,6 +67,7 @@ export default async function MorePage() {
       key: "account",
       label: t("m.more.account", undefined, "Account"),
       links: [
+        { href: "/m/profile", icon: "User", labelKey: "m.more.profile", label: "Profile", subKey: "m.more.profileSub", sub: "Your Badges, Reviews & EPK" },
         { href: "/m/activity", icon: "History", labelKey: "m.more.activity", label: "Activity History", subKey: "m.more.activitySub", sub: "Scans, Access, Reports & More" },
         { href: "/m/referrals", icon: "Gift", labelKey: "m.more.referrals", label: "Referrals & Rewards", subKey: "m.more.referralsSub", sub: "Refer Crew, Earn Rewards" },
         { href: "/m/settings", icon: "Settings", labelKey: "m.more.settings", label: "Settings", subKey: "m.more.settingsSub", sub: "App Preferences" },

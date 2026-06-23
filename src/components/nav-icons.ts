@@ -15,6 +15,7 @@ import {
   BedDouble,
   BookOpen,
   BookOpenCheck,
+  Bookmark,
   Bot,
   Briefcase,
   Building2,
@@ -91,6 +92,7 @@ import {
   Ticket,
   TrendingUp,
   Truck,
+  User,
   UserPlus,
   Users,
   UsersRound,
@@ -99,12 +101,16 @@ import {
   Warehouse,
   Wrench,
   type LucideIcon,
+  List,
+  UserCircle,
 } from "lucide-react";
 import type { IconName } from "@/lib/nav";
 
 export const NAV_ICONS: Record<IconName, LucideIcon> = {
   AlertTriangle,
   ArrowLeftRight,
+  List,
+  UserCircle,
   // Atlas reads as a routing/wayfinding metaphor; Lucide's Compass is the
   // canonical "atlas" stand-in (no Atlas glyph in the set).
   Atlas: Compass,
@@ -114,6 +120,7 @@ export const NAV_ICONS: Record<IconName, LucideIcon> = {
   BedDouble,
   BookOpen,
   BookOpenCheck,
+  Bookmark,
   Bot,
   Briefcase,
   Building2,
@@ -190,6 +197,7 @@ export const NAV_ICONS: Record<IconName, LucideIcon> = {
   Ticket,
   TrendingUp,
   Truck,
+  User,
   UserPlus,
   Users,
   UsersRound,

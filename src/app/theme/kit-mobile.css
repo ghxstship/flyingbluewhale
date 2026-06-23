@@ -393,3 +393,32 @@
 @keyframes ccBub { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 /* @media (max-width: 440px): all original rules (body / .phone / .notch / .statusbar) are
    prototype-shell-only and dropped per the port rules — nothing scoped under .mobile-shell remains. */
+
+/* ── Accessibility — minimum touch target (WCAG 2.5.5 / 2.5.8 AA) ───────────
+   Every interactive control in the COMPVSS field shell is ≥44×44px so it's
+   reliably tappable with a gloved hand on a venue floor. Sizing only — colors
+   stay with the kit rules above (token-only canon). `display:inline` anchors
+   in body copy are unaffected (min-height is a no-op on inline boxes); only
+   block/flex/inline-block controls (buttons, nav items, .tap rows, pills) pick
+   up the floor. */
+.mobile-shell button,
+.mobile-shell [role="button"],
+.mobile-shell .ps-btn,
+.mobile-shell .tap,
+.mobile-shell .item.tap,
+.mobile-shell select,
+.mobile-shell input:not([type="hidden"]):not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+.mobile-shell textarea {
+  min-height: 44px;
+}
+/* Icon-only controls also need width — quick-action tiles, segmented buttons,
+   the tab bar, and toggles. */
+.mobile-shell .qa .qi,
+.mobile-shell .seg2 button,
+.mobile-shell .modal-x,
+.mobile-shell [data-tab],
+.mobile-shell .tabbar a,
+.mobile-shell .tabbar button {
+  min-width: 44px;
+  min-height: 44px;
+}

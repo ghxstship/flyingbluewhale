@@ -193,7 +193,7 @@ export async function setDeliverableStatusAction(deliverableId: string, nextStat
       title:
         nextState === "submitted" ? `Deliverable submitted: ${before.title}` : `Deliverable approved: ${before.title}`,
       body: `Type: ${before.type}`,
-      href: `/console/projects/${before.project_id}/advancing`,
+      href: `/studio/projects/${before.project_id}/advancing`,
       data: { deliverableId, projectId: before.project_id, type: before.type },
     });
   }

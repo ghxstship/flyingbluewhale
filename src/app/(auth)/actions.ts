@@ -113,7 +113,7 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
   }
 
   // Auto-confirm dev mode: session is live immediately. Bootstrap the org
-  // here so the user lands in /console on first redirect.
+  // here so the user lands in /studio on first redirect.
   if (orgName) {
     await bootstrapOrgIfNeeded(supabase, orgName);
   }

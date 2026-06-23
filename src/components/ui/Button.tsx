@@ -34,7 +34,7 @@ const SIZE_CLASS: Record<ButtonSize, string> = {
  * same `.ps-btn` class composition `<Button>` renders, for call sites that
  * need a styled `<Link>` (or other element) without the Button wrapper:
  *
- *   <Link href="/console/projects/new" className={buttonVariants({ size: "sm" })}>
+ *   <Link href="/studio/projects/new" className={buttonVariants({ size: "sm" })}>
  *
  * Prefer `<Button href=...>` where possible; reach for this when you need
  * Link-specific props (prefetch, scroll) or a non-Link element.

@@ -96,6 +96,17 @@ const config: NextConfig = {
   // Trims build time and serverless cold starts.
   serverExternalPackages: ["exceljs", "@react-pdf/renderer", "pptxgenjs", "archiver"],
 
+  // ADR-0011 — the operator console moved from /console to /studio. Keep every
+  // legacy /console/* URL reachable with a permanent redirect (≥1 release).
+  // Applies in path-prefix mode (preview deploys) + any stale external link;
+  // in subdomain mode app.atlvs.pro host-rewrites straight to /studio.
+  async redirects() {
+    return [
+      { source: "/console", destination: "/studio", permanent: true },
+      { source: "/console/:path*", destination: "/studio/:path*", permanent: true },
+    ];
+  },
+
   async headers() {
     return [
       {

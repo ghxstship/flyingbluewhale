@@ -27,7 +27,7 @@ export function AtomPicker({
   required,
   label = "Pin to atom",
   hint,
-  catalogHref = "/console/xpms",
+  catalogHref = "/studio/xpms",
 }: {
   /** Form field name — `xpms_atom_id` for tasks, `atom_id` for deliverables/expenses/PO line items. */
   name: string;

@@ -1,0 +1,173 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { isManagerPlus, requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { TALENT_RIDER_KINDS, slugify } from "@/lib/marketplace";
+import { actionFail, formFail } from "@/lib/forms/fail";
+
+const Schema = z.object({
+  act_name: z.string().min(1).max(200),
+  tagline: z.string().max(200).optional().or(z.literal("")),
+  bio: z.string().max(8000).optional().or(z.literal("")),
+  genre_tags: z.string().max(400).optional().or(z.literal("")),
+  fee_min: z.string().optional().or(z.literal("")),
+  fee_max: z.string().optional().or(z.literal("")),
+  currency: z
+    .string()
+    .regex(/^[A-Z]{3}$/)
+    .default("USD"),
+  travel_radius_km: z.string().optional().or(z.literal("")),
+  deposit_pct: z.string().optional().or(z.literal("")),
+  agent_email: z.string().email().optional().or(z.literal("")),
+  agent_name: z.string().max(120).optional().or(z.literal("")),
+  video_reel_url: z.string().url().optional().or(z.literal("")),
+});
+
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
+
+const toCents = (v: string | undefined): number | null => {
+  if (!v) return null;
+  const n = Number(v.replace(/[$,]/g, ""));
+  return Number.isFinite(n) && n > 0 ? Math.round(n * 100) : null;
+};
+
+const toArray = (v: string | undefined): string[] =>
+  (v ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+export async function createTalentAction(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create talent profiles" };
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return formFail(parsed.error, fd);
+  const supabase = await createClient();
+  const baseHandle = slugify(parsed.data.act_name);
+  const handleSuffix = Math.random().toString(36).slice(2, 6);
+  const publicHandle = `${baseHandle}-${handleSuffix}`;
+
+  const { data, error } = await supabase
+    .from("talent_profiles")
+    .insert({
+      org_id: session.orgId,
+      act_name: parsed.data.act_name,
+      public_handle: publicHandle,
+      tagline: parsed.data.tagline || null,
+      bio: parsed.data.bio || null,
+      genre_tags: toArray(parsed.data.genre_tags),
+      fee_min_cents: toCents(parsed.data.fee_min),
+      fee_max_cents: toCents(parsed.data.fee_max),
+      currency: parsed.data.currency,
+      travel_radius_km: parsed.data.travel_radius_km ? Math.round(Number(parsed.data.travel_radius_km)) : null,
+      deposit_pct: parsed.data.deposit_pct
+        ? Math.min(100, Math.max(0, Math.round(Number(parsed.data.deposit_pct))))
+        : 60,
+      agent_email: parsed.data.agent_email || null,
+      agent_name: parsed.data.agent_name || null,
+      video_reel_url: parsed.data.video_reel_url || null,
+      is_public: false,
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
+
+  if (error) return actionFail(error.message, fd);
+  revalidatePath("/studio/marketplace/talent");
+  redirect(`/studio/marketplace/talent/${(data as { id: string }).id}`);
+}
+
+export async function publishTalentAction(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  // is_public makes the talent profile reachable on the public
+  // marketplace — manager+ only at the app layer.
+  if (!isManagerPlus(session)) return { error: "Only manager+ can publish talent profiles" };
+  const id = String(fd.get("talent_id") ?? "");
+  if (!id) return { error: "Missing talent" };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("talent_profiles")
+    .update({ is_public: true })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  if (error) return { error: error.message };
+  revalidatePath("/studio/marketplace/talent");
+  revalidatePath(`/studio/marketplace/talent/${id}`);
+  return { error: undefined };
+}
+
+export async function unpublishTalentAction(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can unpublish talent profiles" };
+  const id = String(fd.get("talent_id") ?? "");
+  if (!id) return { error: "Missing talent" };
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("talent_profiles")
+    .update({ is_public: false })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  if (error) return { error: error.message };
+  revalidatePath("/studio/marketplace/talent");
+  revalidatePath(`/studio/marketplace/talent/${id}`);
+  return { error: undefined };
+}
+
+const RiderSchema = z.object({
+  talent_id: z.string().uuid(),
+  kind: z.enum(TALENT_RIDER_KINDS),
+  title: z.string().max(200).optional().or(z.literal("")),
+  content: z.string().max(20000).optional().or(z.literal("")),
+  file_url: z.string().url().optional().or(z.literal("")),
+});
+
+export async function createRiderAction(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = RiderSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return formFail(parsed.error, fd);
+  const supabase = await createClient();
+
+  // Cross-tenant FK guard on talent_id. Without it, the demote+insert
+  // pair below could land on another org's talent profile (RLS would
+  // refuse the insert, but the demote would silently hit zero rows
+  // and the caller would see a confusing error).
+  const { data: talent } = await supabase
+    .from("talent_profiles")
+    .select("id")
+    .eq("id", parsed.data.talent_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!talent) return { error: "Talent profile not found in your organization" };
+
+  // Demote the previous current rider of this kind.
+  const { error: updateError } = await supabase
+    .from("talent_riders")
+    .update({ is_current: false })
+    .eq("org_id", session.orgId)
+    .eq("talent_profile_id", parsed.data.talent_id)
+    .eq("kind", parsed.data.kind)
+    .eq("is_current", true);
+  if (updateError) return actionFail(updateError.message, fd);
+
+  const { error: insertError } = await supabase.from("talent_riders").insert({
+    org_id: session.orgId,
+    talent_profile_id: parsed.data.talent_id,
+    kind: parsed.data.kind,
+    title: parsed.data.title || null,
+    content: parsed.data.content ? { body: parsed.data.content } : {},
+    file_url: parsed.data.file_url || null,
+    is_current: true,
+    created_by: session.userId,
+  });
+  if (insertError) return actionFail(insertError.message, fd);
+  revalidatePath(`/studio/marketplace/talent/${parsed.data.talent_id}/riders`);
+  redirect(`/studio/marketplace/talent/${parsed.data.talent_id}/riders`);
+}

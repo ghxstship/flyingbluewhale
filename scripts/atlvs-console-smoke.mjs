@@ -2,7 +2,7 @@
 /**
  * ATLVS console role-matrix smoke harness — sister to compvss-smoke.mjs.
  *
- * Auto-discovers every page.tsx under src/app/(platform)/console, derives
+ * Auto-discovers every page.tsx under src/app/(platform)/studio, derives
  * the URL path (stripping (group) segments + dropping dynamic segments),
  * dedups, and hits each as every test role. Reports HTTP failures, error
  * boundaries, "Configure Supabase" stubs, and unexpected redirects.
@@ -40,7 +40,7 @@ const TEST_USERS = [
   { role: "member", email: "crew@gvteway.test", password: "CompvssTest2026!" },
 ];
 
-const ROOT = "src/app/(platform)/console";
+const ROOT = "src/app/(platform)/studio";
 
 function walk(dir) {
   const out = [];

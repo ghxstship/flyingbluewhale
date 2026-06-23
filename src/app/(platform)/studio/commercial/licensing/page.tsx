@@ -1,0 +1,170 @@
+import Link from "next/link";
+import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { MetricCard } from "@/components/ui/MetricCard";
+import { DataTable } from "@/components/DataTable";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
+
+export const dynamic = "force-dynamic";
+
+type TrademarkRow = {
+  id: string;
+  mark: string;
+  jurisdiction: string | null;
+  registration_no: string | null;
+  registered_on: string | null;
+  expires_on: string | null;
+  trademark_state: string;
+};
+
+const SOON_DAYS = 90;
+
+export default async function Page() {
+  const { t } = await getRequestT();
+  if (!hasSupabase) {
+    return (
+      <>
+        <ModuleHeader
+          eyebrow={t("console.commercial.licensing.eyebrow", undefined, "Commercial")}
+          title={t("console.commercial.licensing.title", undefined, "Licensing")}
+        />
+        <div className="page-content">
+          <div className="surface p-6 text-sm">
+            {t("console.commercial.licensing.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
+        </div>
+      </>
+    );
+  }
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const fmt = await getRequestFormatters();
+  const { data } = await supabase
+    .from("trademarks")
+    .select("id, mark, jurisdiction, registration_no, registered_on, expires_on, trademark_state")
+    .eq("org_id", session.orgId)
+    .order("expires_on", { ascending: true })
+    .limit(500);
+
+  const rows = (data ?? []) as TrademarkRow[];
+  const now = Date.now();
+  const expiringSoon = rows.filter(
+    (r) =>
+      r.expires_on &&
+      new Date(r.expires_on).getTime() - now < SOON_DAYS * 24 * 60 * 60 * 1000 &&
+      r.trademark_state === "active",
+  );
+  const active = rows.filter((r) => r.trademark_state === "active").length;
+  const expired = rows.filter((r) => r.trademark_state === "expired").length;
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow={t("console.commercial.licensing.eyebrow", undefined, "Commercial")}
+        title={t("console.commercial.licensing.title", undefined, "Licensing")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.commercial.licensing.trademarkSingular", undefined, "Trademark") : t("console.commercial.licensing.trademarkPlural", undefined, "Trademarks")} · ${active} ${t("console.commercial.licensing.activeLabel", undefined, "Active")}${expiringSoon.length ? ` · ${expiringSoon.length} ${t("console.commercial.licensing.expiringInDays", { days: SOON_DAYS }, `Expiring In ${SOON_DAYS}d`)}` : ""}`}
+        action={
+          <Button href="/studio/legal/ip" size="sm">
+            {t("console.commercial.licensing.legalIpAction", undefined, "Legal · IP")}
+          </Button>
+        }
+      />
+      <div className="page-content space-y-5">
+        <div className="metric-grid-3">
+          <MetricCard
+            label={t("console.commercial.licensing.metricActive", undefined, "Active")}
+            value={fmt.number(active)}
+            accent
+          />
+          <MetricCard
+            label={t("console.commercial.licensing.metricExpiring", undefined, "Expiring · 90d")}
+            value={fmt.number(expiringSoon.length)}
+          />
+          <MetricCard
+            label={t("console.commercial.licensing.metricExpired", undefined, "Expired")}
+            value={fmt.number(expired)}
+          />
+        </div>
+
+        <DataTable<TrademarkRow>
+          rows={rows}
+          tableId="console:commercial:licensing"
+          emptyLabel={t("console.commercial.licensing.emptyTitle", undefined, "No Trademarks Registered")}
+          emptyDescription={t(
+            "console.commercial.licensing.emptyDescription",
+            undefined,
+            "Track marks, registration numbers, jurisdictions, and renewal dates here. Royalty + merchandise revenue tracking lives alongside Sponsors.",
+          )}
+          emptyAction={
+            <Link href="/studio/legal/ip" className="ps-btn ps-btn--ghost ps-btn--sm">
+              {t("console.commercial.licensing.openLegalIp", undefined, "Open Legal · IP")}
+            </Link>
+          }
+          columns={[
+            {
+              key: "mark",
+              header: t("console.commercial.licensing.colMark", undefined, "Mark"),
+              render: (r) => <span className="font-medium">{r.mark}</span>,
+              accessor: (r) => r.mark,
+            },
+            {
+              key: "jurisdiction",
+              header: t("console.commercial.licensing.colJurisdiction", undefined, "Jurisdiction"),
+              render: (r) => r.jurisdiction ?? "—",
+              accessor: (r) => r.jurisdiction ?? null,
+              filterable: true,
+            },
+            {
+              key: "registration",
+              header: t("console.commercial.licensing.colRegistration", undefined, "Registration"),
+              render: (r) => r.registration_no ?? "—",
+              accessor: (r) => r.registration_no ?? null,
+              mono: true,
+            },
+            {
+              key: "registered",
+              header: t("console.commercial.licensing.colRegistered", undefined, "Registered"),
+              render: (r) => r.registered_on ?? "—",
+              accessor: (r) => r.registered_on ?? null,
+              mono: true,
+            },
+            {
+              key: "expires",
+              header: t("console.commercial.licensing.colExpires", undefined, "Expires"),
+              render: (r) => r.expires_on ?? "—",
+              accessor: (r) => r.expires_on ?? null,
+              mono: true,
+            },
+            {
+              key: "status",
+              header: t("console.commercial.licensing.colStatus", undefined, "Status"),
+              render: (r) => {
+                const expiresMs = r.expires_on ? new Date(r.expires_on).getTime() - now : null;
+                const soon = expiresMs != null && expiresMs < SOON_DAYS * 24 * 60 * 60 * 1000;
+                return (
+                  <div className="flex flex-wrap gap-1.5">
+                    <Badge variant={toneFor(r.trademark_state)}>{toTitle(r.trademark_state)}</Badge>
+                    {r.trademark_state === "active" && soon && (
+                      <Badge variant="warning">
+                        {t("console.commercial.licensing.renewSoon", undefined, "Renew Soon")}
+                      </Badge>
+                    )}
+                  </div>
+                );
+              },
+              accessor: (r) => r.trademark_state,
+              filterable: true,
+            },
+          ]}
+        />
+      </div>
+    </>
+  );
+}

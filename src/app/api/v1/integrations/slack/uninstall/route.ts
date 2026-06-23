@@ -5,7 +5,7 @@ import { disableWorkspaceByOrgId } from "@/lib/integrations/slack/oauth";
 /**
  * Phase 5.3 — manual Slack uninstall.
  *
- * Admin clicks "Disconnect" in /console/settings/integrations/slack — the
+ * Admin clicks "Disconnect" in /studio/settings/integrations/slack — the
  * settings UI POSTs here. We disable (soft-delete) the workspace so notify()
  * stops fanning to it. The bot still appears installed inside Slack until
  * the workspace owner removes it from there; we don't have a clean way to

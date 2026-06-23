@@ -10,7 +10,7 @@ const schema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   // "1" enables subdomain routing (app.atlvs.pro, gvteway.atlvs.pro,
   // compvss.atlvs.pro). Anything else falls back to path-prefix mode
-  // (single-host /console, /p, /m). Vercel preview deploys leave it unset.
+  // (single-host /studio, /p, /m). Vercel preview deploys leave it unset.
   NEXT_PUBLIC_USE_SUBDOMAINS: z.string().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
   SENTRY_AUTH_TOKEN: z.string().optional(),

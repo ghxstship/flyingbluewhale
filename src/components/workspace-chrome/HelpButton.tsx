@@ -9,12 +9,12 @@ import { urlFor } from "@/lib/urls";
 /**
  * `?` Help affordance (ADR-0007).
  *
- * Opens a small popover routing to internal KB (`/console/knowledge`)
+ * Opens a small popover routing to internal KB (`/studio/knowledge`)
  * and external docs / changelog. Replaces a sidebar "Knowledge" entry
  * per ADR-0006 §"What moves". Matches Linear / Notion / Stripe / Vercel
  * — none ship a Help group in their primary nav.
  */
-export function HelpButton({ knowledgeUrl = "/console/knowledge" }: { knowledgeUrl?: string }) {
+export function HelpButton({ knowledgeUrl = "/studio/knowledge" }: { knowledgeUrl?: string }) {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>

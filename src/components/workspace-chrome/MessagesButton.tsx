@@ -9,7 +9,7 @@ import { MessageSquare } from "lucide-react";
  *
  * Lifts the messages destination into the workspace chrome alongside
  * notifications. Each shell passes the canonical messages URL for its
- * scope — `/console/inbox` for platform, `/p/[slug]/messages` for
+ * scope — `/studio/inbox` for platform, `/p/[slug]/messages` for
  * portal, `/m/inbox` for mobile.
  *
  * Behavior MVP: this is a direct link (no popover). A future iteration

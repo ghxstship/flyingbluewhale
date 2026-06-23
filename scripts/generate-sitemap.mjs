@@ -46,7 +46,7 @@ function walk(dir) {
   return out;
 }
 
-// "src/app/(platform)/console/projects/[id]/page.tsx" → "/console/projects/[id]"
+// "src/app/(platform)/studio/projects/[id]/page.tsx" → "/studio/projects/[id]"
 function toRoute(absFile) {
   const rel = relative(APP_DIR, absFile)
     .replace(/\\/g, "/")
@@ -92,12 +92,18 @@ const nav = await import(pathToFileURL(tmpFile).href);
 const navHrefs = new Set();
 const collect = (groups) => {
   for (const g of groups ?? []) {
+    // ADR-0011: a navigable group header carries the hub href, so it must
+    // count as nav reach (an echo leaf that points at the same hub was
+    // dropped in favour of the header link).
+    if (g.href) navHrefs.add(g.href);
     for (const it of g.items ?? []) if (it.href) navHrefs.add(it.href);
     for (const sec of g.sections ?? []) for (const it of sec.items ?? []) if (it.href) navHrefs.add(it.href);
   }
 };
 collect(nav.platformNavDomain);
 collect(nav.settingsNav);
+collect(nav.legendNav);
+collect(nav.portalConsumerNav);
 for (const persona of nav.PORTAL_PERSONAS) collect([nav.portalNav("[slug]", persona)]);
 for (const it of nav.mobileTabs ?? []) navHrefs.add(it.href);
 for (const it of nav.mobileSurfaces ?? []) navHrefs.add(it.href);
@@ -128,9 +134,10 @@ const navSet = new Set([...navHrefs].map(norm));
 // 3. Classification.
 // ─────────────────────────────────────────────────────────────────────────
 const SHELL = {
-  platform: { label: "ATLVS — Operator Console", base: "/console" },
+  platform: { label: "ATLVS — Operator Console", base: "/studio" },
   mobile: { label: "COMPVSS — Field PWA", base: "/m" },
   portal: { label: "GVTEWAY — External Portal", base: "/p" },
+  legend: { label: "LEG3ND — Knowledge Shell", base: "/legend" },
   marketing: { label: "GVTEWAY — Public / Marketing", base: "" },
   personal: { label: "Personal (/me)", base: "/me" },
   auth: { label: "Auth", base: "" },
@@ -147,6 +154,7 @@ function moduleKey(group, route) {
   }
   if (group === "platform") return "console:" + (segs[1] ?? "·root");
   if (group === "mobile") return "m:" + (segs[1] ?? "·root");
+  if (group === "legend") return "legend:" + (segs[1] ?? "·root");
   if (group === "personal") return "me:" + (segs[1] ?? "·root");
   return group + ":" + (segs[0] ?? "·root");
 }
@@ -158,7 +166,8 @@ for (const h of navSet) {
   // Infer group from the path so the key matches the page side. Use segment
   // boundaries so "/marketplace" and "/me/*" aren't mis-read as the "/m" shell.
   let group = "marketing";
-  if (under(h, "/console")) group = "platform";
+  if (under(h, "/studio")) group = "platform";
+  else if (under(h, "/legend")) group = "legend";
   else if (under(h, "/me")) group = "personal";
   else if (under(h, "/m")) group = "mobile";
   else if (under(h, "/p")) group = "portal";
@@ -197,6 +206,7 @@ const EXEMPT = [
   { path: "/proposals", type: "prefix", reason: "Token-gated proposal flow." },
   { path: "/msa", type: "prefix", reason: "Token-gated MSA flow." },
   { path: "/share", type: "prefix", reason: "Token-gated share link." },
+  { path: "/sign", type: "prefix", reason: "Token-gated public e-signature flow (emailed signing link)." },
   { path: "/accept-invite", type: "prefix", reason: "Token-gated invite acceptance." },
   // Auth flows — entered via login / CTAs / emailed links, not nav.
   { path: "/auth", type: "prefix", reason: "Auth resolver / redirect." },
@@ -207,6 +217,7 @@ const EXEMPT = [
   { path: "/sso", type: "prefix", reason: "Auth SSO entry." },
   { path: "/verify-email", type: "prefix", reason: "Auth email verification." },
   { path: "/onboarding", type: "prefix", reason: "Post-signup org onboarding flow." },
+  { path: "/home", type: "exact", reason: "Post-auth app launcher — reached via auth redirect, not a nav click." },
   // COMPVSS settings sub-page — reached from the More/Settings surface, not a primary tab.
   { path: "/m/changelog", type: "exact", reason: "COMPVSS What's New — reached from Settings, not a nav tab." },
   {
@@ -374,9 +385,10 @@ for (const e of EXEMPT) md += `| \`${e.path}\` | ${e.type} | ${e.reason} |\n`;
 
 // Per-shell full inventory.
 const order = [
-  ["platform", "ATLVS — Operator Console (`/console`)", "/console"],
+  ["platform", "ATLVS — Operator Console (`/studio`)", "/studio"],
   ["mobile", "COMPVSS — Field PWA (`/m`)", "/m"],
   ["portal", "GVTEWAY — External Portal (`/p/[slug]`)", "/p/[slug]"],
+  ["legend", "LEG3ND — Knowledge Shell (`/legend`)", "/legend"],
   ["marketing", "GVTEWAY — Public / Marketing", ""],
   ["personal", "Personal (`/me`)", "/me"],
   ["auth", "Auth", ""],

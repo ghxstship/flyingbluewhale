@@ -11,7 +11,7 @@ import { getRequestT } from "@/lib/i18n/request";
  */
 export async function AccessDenied({
   requiredRole,
-  backHref = "/console",
+  backHref = "/studio",
 }: {
   /** Human label of the minimum role band, e.g. "Manager" or "Admin". */
   requiredRole: string;

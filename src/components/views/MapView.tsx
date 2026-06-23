@@ -12,7 +12,7 @@
  * maplibre-gl map with marker pins, a tone-coded legend, popup details
  * + simple distance-based clustering when zoomed out.
  *
- * NOTE on `LiveDispatchMap` (`src/app/(platform)/console/production/
+ * NOTE on `LiveDispatchMap` (`src/app/(platform)/studio/production/
  * dispatch/live/LiveDispatchMap.tsx`): that component still routes
  * through `MapShell` because it also needs route polylines (origin →
  * destination), which `<MapView>` deliberately does not handle yet.

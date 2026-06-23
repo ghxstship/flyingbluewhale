@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
  * as an individual on this project. Unified system: tickets, credentials,
  * catering, radios, tools, equipment, uniforms, travel, lodging,
  * vehicles. Same `assignments` table read on /m/advances (cross-project)
- * and /console/projects/.../advancing/assignments (admin authoring).
+ * and /studio/projects/.../advancing/assignments (admin authoring).
  */
 
 export default async function CrewAdvancesPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -168,7 +168,7 @@ export function toZapierAssignmentScan(row: AssignmentScanRow): ZapierAssignment
     result: row.result ?? "unknown",
     scanned_at: row.at,
     location: parseLocation(row.location),
-    url: urlFor("platform", `/console/settings/catalog`),
+    url: urlFor("platform", `/studio/settings/catalog`),
   };
 }
 
@@ -358,7 +358,7 @@ export const ZAPIER_SAMPLES = {
     result: "accepted",
     scanned_at: "2026-03-21T19:04:11.000Z",
     location: { lat: 25.8576, lng: -80.2781 },
-    url: "https://app.atlvs.pro/console/settings/catalog",
+    url: "https://app.atlvs.pro/studio/settings/catalog",
   } satisfies ZapierAssignmentScan,
   deliverable: {
     id: "00000000-0000-0000-0000-000000000005",
@@ -425,7 +425,7 @@ export const ZAPIER_SAMPLES = {
     user_id: "00000000-0000-0000-0000-000000000004",
     title: "Deliverable approved: Stage Plot v2",
     body: "Your stage plot was approved by the production lead.",
-    href: "/console/projects/00000000-0000-0000-0000-000000000001/advancing/00000000-0000-0000-0000-000000000005",
+    href: "/studio/projects/00000000-0000-0000-0000-000000000001/advancing/00000000-0000-0000-0000-000000000005",
     read_at: null,
     created_at: "2026-02-15T14:00:00.000Z",
   } satisfies ZapierNotification,

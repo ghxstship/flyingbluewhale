@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
- * Incident-report form — used by /console/operations/incidents/new and
+ * Incident-report form — used by /studio/operations/incidents/new and
  * /m/incidents/new. Supports drag-and-drop photo upload, direct camera
  * capture on mobile, and multi-file attachment.
  *
@@ -22,7 +22,7 @@ type Photo = { path: string; caption?: string; localPreview?: string };
 export function IncidentForm({
   projects,
   defaultProjectId,
-  returnHref = "/console/operations/incidents",
+  returnHref = "/studio/operations/incidents",
 }: {
   projects: Array<{ id: string; name: string }>;
   defaultProjectId?: string;

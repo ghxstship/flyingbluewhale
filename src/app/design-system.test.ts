@@ -45,13 +45,13 @@ describe("Design system — component primitive adoption", () => {
       "src/components/mobile/FAB.tsx",
       "src/components/NotificationsBell.tsx",
       // Calendar day-cell highlight (today marker — semantic indicator, not a button)
-      "src/app/(platform)/console/schedule/ScheduleCalendar.tsx",
+      "src/app/(platform)/studio/schedule/ScheduleCalendar.tsx",
       // Phase-stepper active-step dot (XPMS Axis B chrome — semantic indicator, not a button)
       "src/components/xpms/PhaseStepper.tsx",
       // Sign / Decline mode toggle (segmented-control pattern, not a primary button)
       "src/app/(portal)/p/[slug]/client/proposals/[proposalId]/approvals/[approvalId]/ApprovalSignBlock.tsx",
       // Pipeline switcher pill row (segmented-control pattern, not a primary button)
-      "src/app/(platform)/console/pipeline/page.tsx",
+      "src/app/(platform)/studio/pipeline/page.tsx",
       // Clerk / auth UI overrides
       "src/app/layout.tsx",
       // Stage-plot SVG (paper-white fill, not a button)
@@ -241,10 +241,10 @@ describe("Design system — component primitive adoption", () => {
       "src/components/views/CalendarWeekGrid.tsx",
       "src/components/views/CalendarMonthGrid.tsx",
       // Schedule / Gantt: same pattern as calendars.
-      "src/app/(platform)/console/schedule/baselines/[id]/gantt/page.tsx",
+      "src/app/(platform)/studio/schedule/baselines/[id]/gantt/page.tsx",
       // RiskHeatmap renders a row-per-risk grid that needs horizontal
       // scroll on mobile — wrapped at the page level.
-      "src/app/(platform)/console/programs/risk/RiskHeatmap.tsx",
+      "src/app/(platform)/studio/programs/risk/RiskHeatmap.tsx",
       // TrackerView columns target a desktop table layout; parent
       // wraps in overflow-x-auto via .console-content media query.
       "src/components/xpms/TrackerView.tsx",
@@ -438,5 +438,19 @@ describe("Design system — component primitive adoption", () => {
       railTxt.includes("hidden w-56") && railTxt.includes("md:flex"),
       "PortalRail (PortalRail.tsx) must hide below md — add `hidden md:flex` to the outer <aside>",
     ).toBe(true);
+  });
+
+  it("kit v7.1 — platform contracts (forced-colors / prefers-contrast / print / RTL) are present + imported", () => {
+    // The v7.1 enrichment layer (ported from the kit tokens/base.css) restores
+    // keyboard focus in Windows HCM, firms contrast on request, prints legibly,
+    // and ships the RTL/logical-property canon. Guard the file + its import.
+    const platform = readFileSync(join(REPO_ROOT, "src/app/theme/kit-platform.css"), "utf8");
+    expect(platform, "forced-colors focus restoration missing").toMatch(/@media\s*\(forced-colors:\s*active\)/);
+    expect(platform, "prefers-contrast firming missing").toMatch(/@media\s*\(prefers-contrast:\s*more\)/);
+    expect(platform, "print floor missing").toMatch(/@media\s*print/);
+    expect(platform, "RTL flip canon missing").toContain('[dir="rtl"]');
+    expect(platform, "logical-property rail utility missing").toContain("border-inline-start");
+    const index = readFileSync(join(REPO_ROOT, "src/app/theme/index.css"), "utf8");
+    expect(index, "kit-platform.css must be imported from theme/index.css").toContain('@import "./kit-platform.css"');
   });
 });

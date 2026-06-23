@@ -44,7 +44,7 @@ export default async function OpenGraphImage() {
         justifyContent: "space-between",
         background: CANVAS,
         padding: "80px",
-        fontFamily: "Inter, system-ui, sans-serif",
+        fontFamily: "'Hanken Grotesk', system-ui, sans-serif",
       }}
     >
       {/* Top — primary lockup: Waypoint app-icon tile + spaced wordmark */}

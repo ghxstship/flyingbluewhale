@@ -12,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { restoreOrgScoped } from "@/app/(platform)/console/actions/restore";
+import { restoreOrgScoped } from "@/app/(platform)/studio/actions/restore";
 
 type DeleteFormProps = {
   /** Server action bound to the resource id. */

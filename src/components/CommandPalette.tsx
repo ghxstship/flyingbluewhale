@@ -36,7 +36,7 @@ import {
   type PortalPersona,
 } from "@/lib/nav";
 import { navItemKey } from "@/lib/i18n/nav-label";
-import { CONSOLE_CREATE_ACTIONS } from "@/lib/console/create-actions.generated";
+import { CONSOLE_CREATE_ACTIONS } from "@/lib/studio/create-actions.generated";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -183,19 +183,19 @@ export function CommandPalette({
           });
         }
       }
-      // Create group — every static /console/**/new route, auto-derived from
-      // the route tree (workflow audit F-A, src/lib/console/create-actions.
+      // Create group — every static /studio/**/new route, auto-derived from
+      // the route tree (workflow audit F-A, src/lib/studio/create-actions.
       // generated.ts). The six highest-traffic creates keep their hand-tuned
       // i18n labels + icons; the long tail uses generated labels + a generic
       // Plus icon so EVERY dataset is a 2-keystroke create regardless of nav
       // depth. Project-scoped creates (need a picker) are intentionally excluded.
       const curatedCreate: Record<string, { key: string; icon: typeof Briefcase }> = {
-        "/console/projects/new": { key: "newProject", icon: Briefcase },
-        "/console/clients/new": { key: "newClient", icon: Users },
-        "/console/finance/invoices/new": { key: "newInvoice", icon: Receipt },
-        "/console/procurement/purchase-orders/new": { key: "newPo", icon: FileText },
-        "/console/proposals/new": { key: "newProposal", icon: FileText },
-        "/console/production/equipment/new": { key: "addEquipment", icon: Package },
+        "/studio/projects/new": { key: "newProject", icon: Briefcase },
+        "/studio/clients/new": { key: "newClient", icon: Users },
+        "/studio/finance/invoices/new": { key: "newInvoice", icon: Receipt },
+        "/studio/procurement/purchase-orders/new": { key: "newPo", icon: FileText },
+        "/studio/proposals/new": { key: "newProposal", icon: FileText },
+        "/studio/production/equipment/new": { key: "addEquipment", icon: Package },
       };
       for (const c of CONSOLE_CREATE_ACTIONS) {
         const cur = curatedCreate[c.href];
@@ -217,8 +217,8 @@ export function CommandPalette({
         hint: t("commandPalette.hint.create", { group: "People" }, "Create · People"),
         group: "Create",
         icon: Ticket,
-        perform: () => goto("/console/people/credentials/asset-linker"),
-        performAlt: () => gotoNewTab("/console/people/credentials/asset-linker"),
+        perform: () => goto("/studio/people/credentials/asset-linker"),
+        performAlt: () => gotoNewTab("/studio/people/credentials/asset-linker"),
       });
     } else if (scope === "portal" && portalSlug) {
       // Scope the index to the viewer's own persona when the chrome knows

@@ -36,7 +36,7 @@ const SECTIONS = [
     descKey: "marketing.pages.docs.sections.api.desc",
     // Unauthenticated visitors land on signup; auth flow returns them to
     // Settings → API inside ATLVS once they're in. Avoids surfacing the
-    // internal /console/* route path in the marketing site.
+    // internal /studio/* route path in the marketing site.
     href: "/signup?next=/settings/api",
   },
   {

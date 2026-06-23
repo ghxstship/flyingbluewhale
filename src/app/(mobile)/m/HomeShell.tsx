@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { KIcon, RoseCard } from "@/components/mobile/kit";
+import { KIcon, RoseCard, TOOLS, ToolSheet } from "@/components/mobile/kit";
+import { useToast } from "@/lib/hooks/useToast";
 
 export type HomeData = {
   openTasks: number;
@@ -125,6 +126,16 @@ export function HomeShell({
   labels: HomeLabels;
 }) {
   const [newOpen, setNewOpen] = useState(false);
+  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const t = useToast();
+  // Adapt the canonical sonner toast to the kit ToolSheet's {tone,title,message} shape.
+  const toolToast = ({ tone, title, message }: { tone: string; title: string; message?: string }) => {
+    const opts = message ? { description: message } : undefined;
+    if (tone === "ok" || tone === "success") t.success(title, opts);
+    else if (tone === "warn" || tone === "warning") t.warning(title, opts);
+    else if (tone === "danger" || tone === "error") t.error(title, opts);
+    else t.info(title, opts);
+  };
 
   const newLinks: { href: string; icon: string; label: string }[] = [
     { href: "/m/incidents/new", icon: "TriangleAlert", label: L.qaReport },
@@ -250,6 +261,33 @@ export function HomeShell({
         <QA href="/m/connections" icon="UserPlus" tint="accent" label={L.qaInvite} />
       </div>
 
+      {/* Toolbox — field utilities (unit/ops/OSHA/weather/radio/checklists) in a
+          bottom sheet. Mirrors the kit reference's home Toolbox grid. */}
+      <div className="sech">
+        <h2>Toolbox</h2>
+      </div>
+      <div className="qa">
+        {TOOLS.map((tool) => (
+          <button
+            key={tool.id}
+            type="button"
+            onClick={() => setActiveTool(tool.id)}
+            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
+          >
+            <span
+              className="qi"
+              style={{
+                background: `color-mix(in oklab, var(--p-${tool.tint}) ${tool.tint === "accent" ? 20 : 14}%, transparent)`,
+                color: tool.tint === "accent" ? "var(--p-accent-text)" : `var(--p-${tool.tint})`,
+              }}
+            >
+              <KIcon name={tool.icon} size={18} />
+            </span>
+            <span className="ql">{tool.label}</span>
+          </button>
+        ))}
+      </div>
+
       {/* Next upcoming event. */}
       <div className="sech">
         <h2>{L.upcoming}</h2>
@@ -328,6 +366,10 @@ export function HomeShell({
             </div>
           </div>
         </div>
+      ) : null}
+
+      {activeTool ? (
+        <ToolSheet toolId={activeTool} onClose={() => setActiveTool(null)} toast={toolToast} />
       ) : null}
     </div>
   );

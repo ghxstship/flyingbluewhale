@@ -12,23 +12,44 @@
 const PORTAL_SLUG_RX = /^\/p\/([^/]+)(?:\/|$)/;
 
 /**
+ * Reserved first-segments under `/p/` that are real app routes, NOT tenant
+ * slugs: the `select` picker plus the GVTEWAY consumer surfaces (design_handoff
+ * §2 — root-level `/p/discover`, `/p/saved`, `/p/account`, …). The middleware
+ * slug pre-check must skip these so their static routes serve instead of
+ * 404ing as "unknown portal". Keep in sync with the `portalConsumerNav` routes.
+ */
+const RESERVED_PORTAL_SEGMENTS = new Set([
+  "select",
+  "undefined",
+  "null",
+  "discover",
+  "community",
+  "scenes",
+  "lists",
+  "saved",
+  "account",
+  "welcome",
+]);
+
+/**
  * Pull the portal slug out of a URL pathname, or return null when:
  *   - The path isn't a /p/<slug> route.
- *   - The slug is one of the reserved sentinels (`select`,
- *     `undefined`, `null`) — these are app-level placeholders, not
- *     real portal slugs we should DB-resolve.
+ *   - The first segment is a reserved app route (the `select` picker, the
+ *     GVTEWAY consumer surfaces) or a placeholder sentinel — not a real portal
+ *     slug we should DB-resolve.
  *
  * Examples:
  *   /p/mmw26/guide        → "mmw26"
  *   /p/foo                → "foo"
  *   /p/select             → null
- *   /console/foo          → null
+ *   /p/discover           → null
+ *   /studio/foo          → null
  */
 export function extractPortalSlug(pathname: string): string | null {
   const m = PORTAL_SLUG_RX.exec(pathname);
   if (!m) return null;
   const slug = m[1]!;
-  if (slug === "select" || slug === "undefined" || slug === "null") return null;
+  if (RESERVED_PORTAL_SEGMENTS.has(slug)) return null;
   return slug;
 }
 

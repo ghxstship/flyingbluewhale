@@ -74,3 +74,28 @@ export {
   DropdownMenuGroup,
   DropdownMenuPortal,
 } from "./DropdownMenu";
+export { Accordion } from "./Accordion";
+export type { AccordionItemData } from "./Accordion";
+export { RichTextEditor } from "./RichTextEditor";
+export { SignaturePad } from "./SignaturePad";
+export { FileViewer } from "./FileViewer";
+export { MediaPlayer } from "./MediaPlayer";
+export { QuizQuestion } from "./QuizQuestion";
+export type { QuizOption } from "./QuizQuestion";
+export { FloorPlan } from "./FloorPlan";
+export type { FloorPlanPlacement } from "./FloorPlan";
+export { CoordinateMatrix, Coordinate } from "./CoordinateMatrix";
+export type { CoordinateAxis, CoordinateCell } from "./CoordinateMatrix";
+export { GanttChart } from "./GanttChart";
+export type { GanttZoom, GanttRow } from "./GanttChart";
+export { Steps } from "./Steps";
+export type { Step, StepState } from "./Steps";
+export { AchievementBadge } from "./AchievementBadge";
+export type { AchievementTone } from "./AchievementBadge";
+export { LeaderboardRow } from "./LeaderboardRow";
+export { LoyaltyTier } from "./LoyaltyTier";
+export type { LoyaltyTierTone } from "./LoyaltyTier";
+export { ActivityTimeline } from "./ActivityTimeline";
+export type { ActivityItem } from "./ActivityTimeline";
+export { DataView } from "./DataView";
+export type { DataViewColumn } from "./DataView";

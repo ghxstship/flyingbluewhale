@@ -1,13 +1,13 @@
 # ATLVS Theme System
 
-One canonical kit skin (`atlvs-product`). Mode (light/dark), density (compact/comfortable/spacious), and accent intensity (soft/default/vivid) are orthogonal axes. Zero FOUC.
+One canonical kit skin (`atlvs-product`). Mode (light/dark), density (compact/cozy/spacious), and accent intensity (soft/default/vivid) are orthogonal axes. Zero FOUC.
 
 ## Contract
 
 - **Slug is immutable:** `atlvs-product` (the design_handoff_atlvs_kit). Used verbatim in `data-theme`, `localStorage` key `chroma.theme`, cookie `chroma_theme`.
 - **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (pink), `compvss` (amber), `gvteway` (blue, v5.1).
 - **Mode** (`light`/`dark`/`system`) lives on `data-mode`, set by `theme-script.ts` before first paint.
-- **Density** (`compact`/`comfortable`/`spacious`) lives on `data-density`; `comfortable` is the default and strips the attribute.
+- **Density** (`compact`/`cozy`/`spacious`) lives on `data-density`; `cozy` is the default and strips the attribute.
 - **Accent intensity** (`soft`/`default`/`vivid`) lives on `data-accent`; `default` is implicit and strips the attribute.
 
 ## Files

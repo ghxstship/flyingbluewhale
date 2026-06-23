@@ -20,7 +20,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
  *
  * The trigger is the user's avatar; the panel surfaces personal-account
  * actions, the Settings entry-point, help/shortcuts, and Sign out. Settings
- * has its own 2-col layout under `/console/settings`.
+ * has its own 2-col layout under `/studio/settings`.
  */
 export function AvatarMenu({ name, email, src }: { name: string; email?: string | null; src?: string | null }) {
   const t = useT();
@@ -55,7 +55,7 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/console/settings" className="flex items-center gap-2">
+          <Link href="/studio/settings" className="flex items-center gap-2">
             <Settings size={14} aria-hidden="true" />
             {t("common.settings", undefined, "Settings")}
           </Link>

@@ -9,7 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
-  // Protects /console at the outer boundary so every page inherits the
+  // Protects /studio at the outer boundary so every page inherits the
   // guard; individual pages may still call requireSession() for session data.
   const session = await requireSession();
   const tenant = await resolveTenant();
@@ -25,7 +25,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   const uiState = (prefRow?.ui_state as { last_portal_slug?: string } | null) ?? null;
   // ADR-0007 — pre-fetch saved dashboards for the chrome top-bar menu.
   // Hard-cap at 8 so the popover stays scannable; "All Dashboards" footer
-  // always links to /console/dashboards for the full list.
+  // always links to /studio/dashboards for the full list.
   const { data: dashboardRows } = await supabase
     .from("dashboards")
     .select("id, name")
@@ -35,7 +35,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   const dashboards = (dashboardRows ?? []).map((d) => ({
     id: d.id as string,
     name: (d.name as string) ?? "Untitled",
-    href: `/console/dashboards/${d.id}`,
+    href: `/studio/dashboards/${d.id}`,
   }));
   const switcherEntries = await resolveSwitcherEntries({
     supabase,
@@ -51,7 +51,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
        * MUST paint with the neutral atlvs-product skin, not the cosmic
        * GHXSTSHIP brand. data-theme here overrides the html-level slug
        * for this subtree, so the user's cookie pref still controls the
-       * marketing site while /console stays canonical regardless.
+       * marketing site while /studio stays canonical regardless.
        * data-platform="atlvs" narrows the accent to nebula pink.
        */}
       <div
@@ -84,7 +84,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
             workspaceLabel={tenant.orgName}
             userEmail={session.email}
             userName={session.email || t("console.layout.userFallback", undefined, "User")}
-            messagesHref="/console/inbox"
+            messagesHref="/studio/inbox"
             dashboards={dashboards}
             switcherEntries={switcherEntries}
             navDrawer={<MobileNavDrawer groups={platformNav} />}

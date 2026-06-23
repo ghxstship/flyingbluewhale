@@ -1,0 +1,134 @@
+/* ============================================================================
+   ATLVS Technologies — platform contracts (kit v7.1 enrichment)
+   ----------------------------------------------------------------------------
+   Ported from the design-system kit `tokens/base.css` (v7.1). The four
+   platform-environment contracts the repo theme was missing: Windows High
+   Contrast Mode focus restoration, prefers-contrast firming, a print floor,
+   and RTL / logical-property readiness. Scoped to the kit-canon attributes the
+   repo stamps on <html> (`data-ui="saas"` + the legacy `data-theme` value),
+   so it composes with atlvs-product.css without touching token values.
+
+   Loaded from theme/index.css AFTER the product theme + component layers.
+   ========================================================================== */
+
+/* ============================================================================
+   FORCED COLORS — Windows High Contrast Mode
+   ----------------------------------------------------------------------------
+   In forced-colors mode the UA strips author backgrounds, gradients, and
+   box-shadows. The kit's elevation, tinted states, and (critically) the
+   box-shadow focus rings on inputs/PIN/number all vanish — so keyboard focus
+   could become invisible. This block restores a system-colored outline on
+   every focusable control, re-borders shadow-only surfaces, and marks the
+   selected/active state with a real outline (never tint alone).
+   ========================================================================== */
+@media (forced-colors: active) {
+  /* Restore focus visibility everywhere — box-shadow rings are removed in HCM. */
+  [data-ui="saas"] :focus-visible,
+  [data-theme="atlvs-product"] :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  /* Controls that focus via box-shadow (outline:none) need an explicit outline. */
+  [data-ui="saas"] .ps-input:focus,
+  [data-ui="saas"] .ps-num:focus-within,
+  [data-ui="saas"] .ps-pin input:focus,
+  [data-theme="atlvs-product"] .ps-input:focus,
+  [data-theme="atlvs-product"] .ps-num:focus-within,
+  [data-theme="atlvs-product"] .ps-pin input:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+  /* Shadow-only surfaces (elevation has no border) must keep an outline. */
+  [data-ui="saas"] .ps-menu,
+  [data-ui="saas"] .ps-modal,
+  [data-ui="saas"] .ps-toast,
+  [data-theme="atlvs-product"] .ps-menu,
+  [data-theme="atlvs-product"] .ps-modal,
+  [data-theme="atlvs-product"] .ps-toast {
+    border: 1px solid CanvasText;
+  }
+  /* Selection / current state must read without relying on tinted background. */
+  [data-ui="saas"] [aria-selected="true"],
+  [data-ui="saas"] [aria-current],
+  [data-ui="saas"] [data-active="true"],
+  [data-theme="atlvs-product"] [aria-selected="true"],
+  [data-theme="atlvs-product"] [aria-current],
+  [data-theme="atlvs-product"] [data-active="true"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  /* Lucide icons inherit currentColor — let the UA map them to system text. */
+  [data-ui="saas"] svg,
+  [data-theme="atlvs-product"] svg { forced-color-adjust: auto; }
+  /* Signage pictograms are intentional brand color — opt them OUT of override. */
+  [data-ui="saas"] .sign-icon, [data-ui="saas"] .sign-panel,
+  [data-theme="atlvs-product"] .sign-icon, [data-theme="atlvs-product"] .sign-panel {
+    forced-color-adjust: none;
+  }
+}
+
+/* ============================================================================
+   PREFERS-CONTRAST: MORE — user asked the OS for higher contrast
+   ----------------------------------------------------------------------------
+   Firm up hairline borders to full text color and darken secondary ink so the
+   neutral-on-neutral chrome stops being "quiet." Additive; default theme is
+   untouched for users who didn't request it.
+   ========================================================================== */
+@media (prefers-contrast: more) {
+  [data-ui="saas"], [data-theme="atlvs-product"] {
+    --p-border: var(--p-text-2);
+    --p-border-2: var(--p-text-1);
+    --p-text-3: var(--p-text-2);
+    --ring-width: 3px;
+  }
+}
+
+/* ============================================================================
+   PRINT FOUNDATION — kit-wide baseline
+   ----------------------------------------------------------------------------
+   Documents/reports ship their own @page margins; this is the shared floor so
+   ANY consumer page prints legibly: ink on white, no clipped overflow, no
+   orphan shadows, no broken records across page boundaries. (globals.css owns
+   the nav/sticky hide; this adds the card/heading break rules.)
+   ========================================================================== */
+@media print {
+  [data-ui="saas"], [data-theme="atlvs-product"],
+  [data-ui="saas"] body, [data-theme="atlvs-product"] body {
+    background: #fff !important;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  [data-ui="saas"] .ps-card, [data-ui="saas"] .ps-modal, [data-ui="saas"] .ps-menu,
+  [data-theme="atlvs-product"] .ps-card { box-shadow: none !important; }
+  [data-ui="saas"] .ps-card, [data-ui="saas"] table, [data-ui="saas"] figure,
+  [data-theme="atlvs-product"] .ps-card { break-inside: avoid; }
+  [data-ui="saas"] h1, [data-ui="saas"] h2, [data-ui="saas"] h3,
+  [data-theme="atlvs-product"] h1 { break-after: avoid; }
+  /* Chrome that has no place on paper. */
+  [data-ui="saas"] .no-print, [data-theme="atlvs-product"] .no-print,
+  [data-ui="saas"] [data-print="hide"], [data-theme="atlvs-product"] [data-print="hide"] {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   INTERNATIONALIZATION — RTL readiness
+   ----------------------------------------------------------------------------
+   color-scheme is already declared per mode. This adds the direction story:
+   the few physically-anchored kit affordances flip under [dir="rtl"], plus a
+   small set of logical-property utilities and a directional-icon flip so new
+   work can be authored bidi-safe. CANON: author new spacing with logical
+   properties (margin-inline / padding-inline / inset-inline) and use
+   [data-rtl-flip] / .flip-rtl-always on travel/chevron icons.
+   ========================================================================== */
+[dir="rtl"] .atlvs-wordmark { padding-inline-start: 0; padding-inline-end: 0.34em; }
+/* Mirror directional glyphs (chevrons, arrows, back/next) in RTL. */
+[dir="rtl"] [data-rtl-flip], .flip-rtl-always { transform: scaleX(-1); }
+[dir="rtl"] .flip-rtl-always { transform: none; }
+/* Logical-property spacing utilities (dir-aware; prefer these in new code). */
+[data-ui="saas"] .mis-auto, [data-theme="atlvs-product"] .mis-auto { margin-inline-start: auto; }
+[data-ui="saas"] .mie-auto, [data-theme="atlvs-product"] .mie-auto { margin-inline-end: auto; }
+[data-ui="saas"] .ps-rail-start, [data-theme="atlvs-product"] .ps-rail-start { border-inline-start: 5px solid var(--p-accent); padding-inline-start: 15px; }
+[data-ui="saas"] .text-start, [data-theme="atlvs-product"] .text-start { text-align: start; }
+[data-ui="saas"] .text-end, [data-theme="atlvs-product"] .text-end { text-align: end; }

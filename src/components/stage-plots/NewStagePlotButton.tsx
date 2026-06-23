@@ -27,7 +27,7 @@ export function NewStagePlotButton({ projectId }: { projectId: string }) {
       });
       const json = await res.json();
       if (json?.ok && json.data?.stagePlot?.id) {
-        router.push(`/console/projects/${projectId}/stage-plots/${json.data.stagePlot.id}`);
+        router.push(`/studio/projects/${projectId}/stage-plots/${json.data.stagePlot.id}`);
       } else {
         toast.error(json?.error?.message ?? "Create failed");
       }

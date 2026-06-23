@@ -47,7 +47,7 @@ export function RouteTabs({
   const scroll = scrollable ? "overflow-x-auto whitespace-nowrap scrollbar-thin" : "";
   // Identify "parent" tabs whose href is a prefix of another tab's href.
   // The Overview tab on a record is the canonical case: its href is the
-  // record root (`/console/clients/[id]`) and every other tab nests
+  // record root (`/studio/clients/[id]`) and every other tab nests
   // under it. Without this distinction matchRoute would mark Overview
   // active on every sub-route via prefix match. Linear and Stripe both
   // apply the same exact-only rule for parent tabs.

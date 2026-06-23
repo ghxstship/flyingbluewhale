@@ -107,7 +107,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                       {list.map((p) => (
                         <li key={p.id}>
                           <Link
-                            href={p.slug ? `/p/${p.slug}/producer` : `/console/projects/${p.id}`}
+                            href={p.slug ? `/p/${p.slug}/producer` : `/studio/projects/${p.id}`}
                             className="surface hover-lift block p-4"
                           >
                             <div className="truncate text-sm font-semibold">{p.name}</div>

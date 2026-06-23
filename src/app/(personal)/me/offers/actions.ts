@@ -79,7 +79,7 @@ async function notifyOrgOfDecision(offer: OwnOffer, actorId: string, decision: "
       actorId,
       title,
       body: `${offer.act_name} ${decision} the offer for ${offer.performance_date}.`,
-      href: `/console/marketplace/offers/${offer.id}`,
+      href: `/studio/marketplace/offers/${offer.id}`,
       push: false,
     };
     if (offer.created_by) {

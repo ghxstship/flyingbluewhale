@@ -83,7 +83,7 @@ export async function POST(req: Request) {
         if (pi?.id && supabase) {
           // Conditional update: only mark paid if the invoice is still
           // unpaid. Stripe redelivers events on 2xx delays + a manual
-          // /console mark-paid can race the webhook; without this guard
+          // /studio mark-paid can race the webhook; without this guard
           // the second update silently runs and notify() double-fires
           // (users get two "Invoice paid" notifications). The outer
           // stripe_events dedup catches identical event_id replays but
@@ -103,7 +103,7 @@ export async function POST(req: Request) {
               eventType: "invoice.paid",
               title: `Invoice ${paid.number ?? paid.id.slice(0, 8)} paid`,
               body: paid.title ?? undefined,
-              href: `/console/finance/invoices/${paid.id}`,
+              href: `/studio/finance/invoices/${paid.id}`,
               data: { invoiceId: paid.id, amountCents: paid.amount_cents, stripePaymentIntent: pi.id },
             });
           }
@@ -115,6 +115,34 @@ export async function POST(req: Request) {
         // Idempotent: the conditional cart_state flip only succeeds once, so
         // Stripe redeliveries never double-decrement.
         const obj = event.data.object as { metadata?: Record<string, string> };
+
+        // LEG3ND credit-pack checkout — fulfill the order + credit the ledger.
+        // Idempotent: the conditional order_state flip only succeeds once, so
+        // Stripe redeliveries never double-credit.
+        const creditOrderId = obj?.metadata?.credit_order_id;
+        if (creditOrderId && supabase) {
+          // New LEG3ND tables aren't in the generated types yet — loose read.
+          const ldb = supabase as unknown as import("@/lib/supabase/loose").LooseSupabase;
+          const { data: order } = await ldb
+            .from("credit_orders")
+            .update({ order_state: "paid" })
+            .eq("id", creditOrderId)
+            .eq("order_state", "pending")
+            .select("id, org_id, user_id, credits")
+            .maybeSingle();
+          if (order) {
+            await ldb.from("credit_ledger").insert({
+              org_id: order.org_id,
+              user_id: order.user_id,
+              delta: order.credits,
+              reason: "Credit pack purchase",
+              ref_kind: "credit_order",
+              ref_id: order.id,
+            });
+            await ldb.from("credit_orders").update({ order_state: "fulfilled" }).eq("id", order.id);
+          }
+        }
+
         const cartId = obj?.metadata?.store_cart_id;
         if (cartId && supabase) {
           const { data: converted } = await supabase

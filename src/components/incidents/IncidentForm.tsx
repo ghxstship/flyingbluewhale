@@ -35,7 +35,13 @@ export function IncidentForm({
   const [description, setDescription] = React.useState("");
   const [severity, setSeverity] = React.useState<"near_miss" | "minor" | "major" | "critical">("minor");
   const [location, setLocation] = React.useState("");
-  const [occurredAt, setOccurredAt] = React.useState(() => new Date().toISOString().slice(0, 16));
+  // Seed empty so SSR and the client's first render match; default to "now"
+  // client-side on mount (computing `new Date()` in the initializer runs on
+  // both sides at different instants → input-value hydration mismatch, #418).
+  const [occurredAt, setOccurredAt] = React.useState("");
+  React.useEffect(() => {
+    setOccurredAt((v) => v || new Date().toISOString().slice(0, 16));
+  }, []);
   const [projectId, setProjectId] = React.useState(defaultProjectId ?? "");
   const [photos, setPhotos] = React.useState<Photo[]>([]);
   const [uploading, setUploading] = React.useState(false);

@@ -1,7 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+
+/**
+ * Client-only wall clock. Renders empty on the server and the client's first
+ * render (so they match), then fills in the local time after mount — rendering
+ * `new Date()` during SSR hydration-mismatches (server TZ/instant ≠ client),
+ * which is React #418.
+ */
+function LiveClock() {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const fmt = () =>
+      new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+    setTime(fmt());
+    const id = setInterval(() => setTime(fmt()), 10_000);
+    return () => clearInterval(id);
+  }, []);
+  return <>{time}</>;
+}
 import { KIcon, RoseCard, TOOLS, ToolSheet } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 
@@ -167,7 +185,7 @@ export function HomeShell({
           {L.clockTitle}
         </div>
         <div className="tcv">
-          {new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}
+          <LiveClock />
         </div>
         <span className="ps-btn ps-btn--cta" style={{ pointerEvents: "none" }}>
           <KIcon name="Play" size={16} /> {L.clockSub}

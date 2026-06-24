@@ -24,18 +24,23 @@ export function PunchControls({ openStartedAt }: { openStartedAt: string | null 
   const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [now, setNow] = useState<number>(() => Date.now());
+  // null until mount — calling Date.now() in the initializer runs on both the
+  // server and the client at different instants, so the elapsed counter text
+  // hydration-mismatches (React #418). The effect sets the real clock on mount.
+  const [now, setNow] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const punchedIn = !!openStartedAt;
 
   useEffect(() => {
     if (!punchedIn) return;
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, [punchedIn]);
 
-  const elapsed = punchedIn ? fmtElapsed(now - new Date(openStartedAt!).getTime()) : "00:00:00";
+  const elapsed =
+    punchedIn && now != null ? fmtElapsed(now - new Date(openStartedAt!).getTime()) : "00:00:00";
 
   const punch = (fn: typeof clockIn | typeof clockOut) => {
     if (pending) return;

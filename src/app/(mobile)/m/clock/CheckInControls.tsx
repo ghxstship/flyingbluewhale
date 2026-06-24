@@ -34,7 +34,11 @@ export function CheckInControls({
   const router = useRouter();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [now, setNow] = useState(() => elapsed(openSince));
+  // Seed a STABLE placeholder so SSR and the client's first render match —
+  // computing `elapsed()` (Date.now()) in the initializer runs on both sides at
+  // different instants and hydration-mismatches when the second ticks over
+  // (React #418). The effect below sets the real elapsed on mount, client-side.
+  const [now, setNow] = useState("00:00:00");
 
   const clockedIn = openSince != null;
 

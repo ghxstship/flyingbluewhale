@@ -28,7 +28,12 @@ export function TimelineView({
 }) {
   const fmt = useFormatters();
   const t = useT();
-  const [now] = React.useState(() => new Date());
+  // null until mount — computing `new Date()` in the initializer runs on both
+  // server and client at different instants, which can flip the "today" marker
+  // in/out and shift its x-position between SSR and hydration. The marker is a
+  // client-only adornment; it appears after mount.
+  const [now, setNow] = React.useState<Date | null>(null);
+  React.useEffect(() => setNow(new Date()), []);
 
   const allDates = rows.flatMap((r) => [new Date(r.start), new Date(r.end)]);
   if (projectStart) allDates.push(new Date(projectStart));
@@ -121,7 +126,7 @@ export function TimelineView({
             </g>
           ))}
 
-          {now.getTime() >= windowStart && now.getTime() <= windowEnd && (
+          {now != null && now.getTime() >= windowStart && now.getTime() <= windowEnd && (
             <g>
               <line
                 x1={xFor(now.getTime())}

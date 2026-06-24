@@ -12,6 +12,8 @@ import {
   ACCENT_STORAGE_KEY,
   TYPE_COOKIE_NAME,
   TYPE_STORAGE_KEY,
+  TREND_COOKIE_NAME,
+  TREND_STORAGE_KEY,
 } from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
@@ -36,6 +38,43 @@ const TYPE_AXES: TypeAxis[] = ["monument", "legend"];
 function isValidTypeAxis(v: unknown): v is TypeAxis {
   return typeof v === "string" && (TYPE_AXES as string[]).includes(v);
 }
+// Trend axis (v8.1) — end-user personalization skin, orthogonal to every other
+// axis. `none` (default) keeps the Monument base; the others re-skin shape /
+// elevation / motion / expression, hue-locked to the product accent.
+export type Trend =
+  | "none"
+  | "immersive"
+  | "experimental"
+  | "dopamine"
+  | "bold-type"
+  | "dark"
+  | "motion"
+  | "gamified"
+  | "neumorphic"
+  | "synthwave"
+  | "maximalist"
+  | "collage"
+  | "brutalist"
+  | "sustainable";
+const TRENDS: Trend[] = [
+  "none",
+  "immersive",
+  "experimental",
+  "dopamine",
+  "bold-type",
+  "dark",
+  "motion",
+  "gamified",
+  "neumorphic",
+  "synthwave",
+  "maximalist",
+  "collage",
+  "brutalist",
+  "sustainable",
+];
+function isValidTrend(v: unknown): v is Trend {
+  return typeof v === "string" && (TRENDS as string[]).includes(v);
+}
 
 export interface ThemeContextValue {
   theme: ThemeSlug;
@@ -59,6 +98,10 @@ export interface ThemeContextValue {
   /** Kit v5 axis — type system (monument/legend). Applied as data-type. Persists. */
   typeAxis: TypeAxis;
   setTypeAxis: (t: TypeAxis) => void;
+  /** Kit v8.1 axis — personalization trend. Applied as data-trend (omitted when
+   * "none"). Persists. Orthogonal to product/mode/density/accent/type. */
+  trend: Trend;
+  setTrend: (t: Trend) => void;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null);
@@ -93,6 +136,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setModeState] = React.useState<ColorMode>("system");
   const [accent, setAccentState] = React.useState<AccentIntensity>("default");
   const [typeAxis, setTypeAxisState] = React.useState<TypeAxis>("monument");
+  const [trend, setTrendState] = React.useState<Trend>("none");
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -162,6 +206,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     })();
     setTypeAxisState(cookieType ?? storedType ?? "monument");
 
+    const cookieTrend = (() => {
+      const re = new RegExp(`(?:^|;\\s*)${TREND_COOKIE_NAME}=([^;]+)`);
+      const m = document.cookie.match(re);
+      const v = m ? decodeURIComponent(m[1]!) : null;
+      return isValidTrend(v) ? v : null;
+    })();
+    const storedTrend = (() => {
+      try {
+        const v = localStorage.getItem(TREND_STORAGE_KEY);
+        return isValidTrend(v) ? v : null;
+      } catch {
+        return null;
+      }
+    })();
+    setTrendState(cookieTrend ?? storedTrend ?? "none");
+
     setMounted(true);
   }, []);
 
@@ -201,6 +261,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (typeAxis === "monument") root.removeAttribute("data-type");
     else root.setAttribute("data-type", typeAxis);
   }, [typeAxis, mounted]);
+
+  React.useEffect(() => {
+    if (!mounted) return;
+    const root = document.documentElement;
+    if (trend === "none") root.removeAttribute("data-trend");
+    else root.setAttribute("data-trend", trend);
+  }, [trend, mounted]);
 
   React.useEffect(() => {
     if (!mounted || mode !== "system") return;
@@ -292,6 +359,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     writeCookie(TYPE_COOKIE_NAME, t);
   }, []);
 
+  const setTrend = React.useCallback((t: Trend) => {
+    setTrendState(t);
+    try {
+      localStorage.setItem(TREND_STORAGE_KEY, t);
+    } catch {
+      /* ignore */
+    }
+    writeCookie(TREND_COOKIE_NAME, t);
+  }, []);
+
   const value = React.useMemo<ThemeContextValue>(
     () => ({
       theme,
@@ -307,6 +384,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setAccent,
       typeAxis,
       setTypeAxis,
+      trend,
+      setTrend,
     }),
     [
       theme,
@@ -321,6 +400,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setAccent,
       typeAxis,
       setTypeAxis,
+      trend,
+      setTrend,
     ],
   );
 

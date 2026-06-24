@@ -26,6 +26,12 @@ export const ACCENT_STORAGE_KEY = "atlvs.accent";
 // like accent; applied as data-type on <html> (omitted when "monument").
 export const TYPE_COOKIE_NAME = "atlvs_type";
 export const TYPE_STORAGE_KEY = "atlvs.type";
+// Trend axis (v8.1) — end-user PERSONALIZATION skin, orthogonal to every other
+// axis. Re-skins shape/elevation/motion/expression, hue-locked to the product
+// accent. Default = none (no attribute → the Monument base). Applied as
+// data-trend on <html> (omitted when "none").
+export const TREND_COOKIE_NAME = "atlvs_trend";
+export const TREND_STORAGE_KEY = "atlvs.trend";
 
 export const themeScript = `
 (function() {
@@ -34,6 +40,7 @@ export const themeScript = `
     var validModes = ['light','dark','system'];
     var validAccents = ['soft','default','vivid'];
     var validTypes = ['monument','legend'];
+    var validTrends = ['immersive','experimental','dopamine','bold-type','dark','motion','gamified','neumorphic','synthwave','maximalist','collage','brutalist','sustainable'];
 
     // Theme slug (palette) — single canonical kit skin. Stale cookie values
     // (from purged ghxstship / pre-v3 CHROMA slugs) fall through to the default.
@@ -83,6 +90,17 @@ export const themeScript = `
                  : (typeStored && validTypes.indexOf(typeStored) > -1) ? typeStored
                  : 'monument';
     if (typeAxis !== 'monument') document.documentElement.setAttribute('data-type', typeAxis);
+
+    // Trend axis (v8.1) — personalization skin. Cookie + storage only; omitted
+    // when 'none' so the Monument base renders by default.
+    var rc = document.cookie.match(/(?:^|;\\s*)${TREND_COOKIE_NAME}=([^;]+)/);
+    var trendFromCookie = rc ? decodeURIComponent(rc[1]) : null;
+    var trendStored = null;
+    try { trendStored = localStorage.getItem('${TREND_STORAGE_KEY}'); } catch (_) { /* private mode */ }
+    var trend = (trendFromCookie && validTrends.indexOf(trendFromCookie) > -1) ? trendFromCookie
+              : (trendStored && validTrends.indexOf(trendStored) > -1) ? trendStored
+              : 'none';
+    if (trend !== 'none') document.documentElement.setAttribute('data-trend', trend);
 
     // colorScheme — atlvs-product is light-family; dark mode overrides
     // come from [data-mode="dark"] selectors in the theme CSS.

@@ -35,7 +35,7 @@ test.describe("multi-role login + shell resolution", () => {
     test(`login as ${role} succeeds and lands in a shell`, async ({ page }) => {
       await loginAs(page, role);
       const url = page.url();
-      // Must be in console (/console), portal (/p/), mobile (/m), or personal (/me)
+      // Must be in console (/studio), portal (/p/), mobile (/m), or personal (/me)
       expect(url).toMatch(/(console|\/p\/|\/m|\/me|auth\/resolve)/);
     });
   }
@@ -47,10 +47,10 @@ test.describe("internal personas land in console", () => {
   });
 
   for (const role of PERSONAS.internal) {
-    test(`${role} reaches /console`, async ({ page }) => {
+    test(`${role} reaches /studio`, async ({ page }) => {
       await loginAs(page, role);
       // Owner/admin/etc should get to console eventually
-      await page.goto("/console");
+      await page.goto("/studio");
       await expect(page.locator("h1, h2").first()).toBeVisible({ timeout: 5000 });
       // Sidebar should be visible with at least one nav link
       const sidebarLinks = page.locator("aside a, nav a");
@@ -66,16 +66,16 @@ test.describe("console pages render for owner", () => {
   });
 
   const PAGES_TO_TEST = [
-    "/console",
-    "/console/projects",
-    "/console/clients",
-    "/console/proposals",
-    "/console/finance/invoices",
-    "/console/procurement/vendors",
-    "/console/procurement/purchase-orders",
-    "/console/people/crew",
-    "/console/ai/assistant",
-    "/console/settings/compliance",
+    "/studio",
+    "/studio/projects",
+    "/studio/clients",
+    "/studio/proposals",
+    "/studio/finance/invoices",
+    "/studio/procurement/vendors",
+    "/studio/procurement/purchase-orders",
+    "/studio/people/crew",
+    "/studio/ai/assistant",
+    "/studio/settings/compliance",
     "/me/profile",
     "/me/security",
     "/me/privacy",

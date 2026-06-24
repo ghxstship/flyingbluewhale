@@ -5,7 +5,7 @@ import { dismissConsent, loginAs } from "./helpers/auth";
  * Cross-shell HANDOFF suite.
  *
  * Exercises the seams between the three branded shells of the platform:
- *   - `atlvs`   (platform, /console, internal ops)
+ *   - `atlvs`   (platform, /studio, internal ops)
  *   - `gvteway` (portal,   /p/[slug], external partners & guests)
  *   - `compvss` (mobile,   /m,       field crews, PWA)
  *
@@ -41,11 +41,11 @@ type RoleKey =
 
 // The /auth/resolve contract. These are the shell landings we guarantee.
 const SHELL_EXPECT: Record<RoleKey, RegExp> = {
-  owner: /\/console(?:$|[/?])/,
-  admin: /\/console(?:$|[/?])/,
-  controller: /\/console(?:$|[/?])/,
-  collaborator: /\/console(?:$|[/?])/,
-  developer: /\/console(?:$|[/?])/,
+  owner: /\/studio(?:$|[/?])/,
+  admin: /\/studio(?:$|[/?])/,
+  controller: /\/studio(?:$|[/?])/,
+  collaborator: /\/studio(?:$|[/?])/,
+  developer: /\/studio(?:$|[/?])/,
   contractor: /\/p(?:$|\/)/,
   crew: /\/m(?:$|[/?])/,
   client: /\/p(?:$|\/)/,
@@ -82,7 +82,7 @@ async function loginInProjectOrg(page: Page, role: RoleKey) {
 // ---------------------------------------------------------------------------
 test.describe("handoff/auth-resolve: session → shell", () => {
   for (const role of INTERNAL_ROLES) {
-    test(`${role} → atlvs (/console)`, async ({ page }) => {
+    test(`${role} → atlvs (/studio)`, async ({ page }) => {
       await dismissConsent(page);
       await login(page, role);
       await page.goto("/auth/resolve");
@@ -244,14 +244,14 @@ test.describe("handoff/persona-consistency: same role sees same persona in both 
 
 // ---------------------------------------------------------------------------
 // Handoff 5 — cross-shell authorization boundary
-// Internal ops in /console must NOT render the gvteway/compvss shell chrome
+// Internal ops in /studio must NOT render the gvteway/compvss shell chrome
 // (and vice versa). This guards against accidentally leaking the wrong layout.
 // ---------------------------------------------------------------------------
 test.describe("handoff/shell-isolation: each shell renders only its own data-platform marker", () => {
   test("console root carries atlvs only (no gvteway/compvss)", async ({ page }) => {
     await dismissConsent(page);
     await login(page, "owner");
-    await page.goto("/console");
+    await page.goto("/studio");
     await expect(page.locator('[data-platform="atlvs"]').first()).toBeVisible();
     expect(await page.locator('[data-platform="gvteway"]').count()).toBe(0);
     expect(await page.locator('[data-platform="compvss"]').count()).toBe(0);
@@ -280,24 +280,29 @@ test.describe("handoff/shell-isolation: each shell renders only its own data-pla
 // Handoff 6 — sign-out must drop all three shells back to /login
 // ---------------------------------------------------------------------------
 test.describe("handoff/signout: cleared session locks every protected shell", () => {
-  test("after clearing cookies, /console redirects to /login", async ({ page }) => {
+  test("after clearing cookies, /studio redirects to /login", async ({ page }) => {
     await dismissConsent(page);
     await login(page, "owner");
     await page.context().clearCookies();
     await dismissConsent(page);
-    const resp = await page.goto("/console");
+    const resp = await page.goto("/studio");
     // Either redirected to login, or we're on a page containing the login form.
     expect(page.url()).toMatch(/\/login/);
     expect(resp?.status()).toBeLessThan(500);
   });
 
-  test("after clearing cookies, /m redirects to /login", async ({ page }) => {
+  test("after clearing cookies, /m drops to the COMPVSS onboarding gate (no authed shell)", async ({ page }) => {
     await dismissConsent(page);
     await login(page, "crew");
     await page.context().clearCookies();
     await dismissConsent(page);
     await page.goto("/m");
-    expect(page.url()).toMatch(/\/login/);
+    // COMPVSS /m is gated by the kit's OWN in-app auth/onboarding flow (splash →
+    // sign in → … ), NOT the web /login redirect (see (mobile)/layout.tsx). A
+    // cleared session therefore lands on the onboarding gate — never the authed
+    // app shell. `.compvss-onboarding-shell` is the logged-out-only wrapper
+    // ((mobile)/layout.tsx), so its presence proves the session was locked out.
+    await expect(page.locator(".compvss-onboarding-shell")).toBeVisible({ timeout: 10_000 });
   });
 });
 

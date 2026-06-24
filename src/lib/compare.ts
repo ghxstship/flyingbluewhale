@@ -15,6 +15,223 @@ export type CompareConfig = {
 };
 
 export const COMPARE: Record<string, CompareConfig> = {
+  // Live-events-native roster (listed first — the tools a producer actually
+  // shortlists): Lasso (crew/ops back office), Lennd (credential advance),
+  // Prism.fm (booking & settlement). Source: ATLVS Ecosystem kit handoff.
+  lasso: {
+    slug: "lasso",
+    competitor: "Lasso",
+    headline: "ATLVS Technologies vs. Lasso: production ecosystem vs. crew & ops back office.",
+    blurb:
+      "Lasso is a strong back office for staffing and AV companies — scheduling, time, gear, payroll, and a crew marketplace. It stops where the audience begins. ATLVS runs that back office plus the advance, the public marketplace, and the knowledge that outlives the show.",
+    hero:
+      "Lasso is built around the people and equipment a company sends to a job: bulk crew calls, time tracking, travel, warehouse gear flow, payroll, and an AI layer over the top. It is excellent at that. What it does not model is the production itself — riders and stage plots, the credential advance, a public-facing marketplace where the rooms get booked, and a knowledge base that survives the season. Those are first-class in ATLVS.",
+    bottomLine:
+      "If your product is sending crew and gear to a gig, Lasso runs that desk well. If your product is the show, ATLVS runs the whole arc — and the crew desk is one app inside it.",
+    features: [
+      { feature: "Crew scheduling, time tracking, travel", us: true, them: true },
+      { feature: "Gear / inventory / warehouse logistics", us: "Production-side", them: true, note: "Lasso's core strength" },
+      { feature: "Payroll + financial management", us: true, them: true },
+      { feature: "Production advancing (riders, stage plots, RFIs)", us: true, them: "Limited", note: "Lasso PM is task-shaped, not advance-shaped" },
+      { feature: "Credentials, passes, accreditation", us: true, them: "Limited" },
+      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: "Limited" },
+      { feature: "Public marketplace (tickets, talent, gigs, RFPs)", us: true, them: false, note: "Lasso has no audience-facing surface" },
+      { feature: "Interactive proposals → live project on accept", us: true, them: "Quotes only" },
+      { feature: "Knowledge base · LMS · certifications", us: true, them: false },
+      { feature: "Streaming AI grounded in workspace", us: true, them: "Limited", note: "Lasso Intelligence is reporting-led" },
+      { feature: "Per-org pricing, unlimited users", us: true, them: false, note: "Lasso is a custom quote" },
+      { feature: "One record store: office · field · public · knowledge", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "The audience side ships native",
+        body: "GVTEWAY is a public marketplace — ticket discovery, talent, gigs, RFPs. Lasso ends at the company's own crew and gear; it never faces the guest.",
+      },
+      {
+        title: "Advance, not just assignment",
+        body: "Riders, stage plots, input lists, RFIs and submittals are typed primitives. Lasso schedules the people; ATLVS runs the production those people show up to build.",
+      },
+      {
+        title: "Stakeholders aren't seats",
+        body: "Per-org pricing means artists, vendors and clients open scoped slug URLs for free. Lasso pricing scales with the org you have to quote for.",
+      },
+      {
+        title: "Knowledge that outlives the show",
+        body: "LEG3ND keeps courses, certifications and SOPs on the same record. Nothing walks out the door after wrap — Lasso has no equivalent.",
+      },
+    ],
+    whenTheyWin: [
+      "You are primarily an equipment-rental or labor-staffing shop and your product is the warehouse and the crew desk. Lasso's gear and labor tooling is deep and purpose-fit.",
+      "You need Lasso's crew marketplace to source local freelance labor at volume. Keep that desk on Lasso and run the production on ATLVS.",
+    ],
+    migration: [
+      "Export Lasso crew, schedules and gear lists as CSV → maps to COMPVSS crew, shifts and production catalog",
+      "Financial records (quotes, invoices) port into ATLVS finance + procurement",
+      "Most rental/staffing shops keep Lasso on the gear-and-labor desk and run advancing, finance and the public side on ATLVS",
+    ],
+    faqs: [
+      {
+        q: "Is ATLVS a Lasso replacement?",
+        a: "For the production org, yes — advancing, finance, field ops, the public marketplace and knowledge live on one manifest. For a pure equipment-rental or staffing shop whose product is the warehouse and the crew desk, Lasso's gear and labor tooling is deeper; many teams run both and sync.",
+      },
+      {
+        q: "Does ATLVS do crew scheduling and time like Lasso?",
+        a: "Yes. COMPVSS is the offline-first field app — clock-in, shifts, time tracking and the crew channel, built for deskless venue teams. It reads from the same record store as advancing and finance, so there is nothing to reconcile between systems.",
+      },
+      {
+        q: "What about a crew marketplace for local labor?",
+        a: "GVTEWAY covers talent, gigs and RFPs on the public side. If you depend on Lasso's specific freelance labor pool, keep that desk and webhook bookings into ATLVS.",
+      },
+    ],
+    keywords: [
+      "Lasso alternative",
+      "Lasso.io alternative events",
+      "ATLVS vs Lasso",
+      "event production software vs Lasso",
+      "crew management plus production",
+    ],
+  },
+
+  lennd: {
+    slug: "lennd",
+    competitor: "Lennd",
+    headline: "ATLVS Technologies vs. Lennd: production ecosystem vs. credential advance portal.",
+    blurb:
+      "Lennd is the credential and advance portal big festivals lean on — onboarding, passes, catering and asset requests, scoped portals. ATLVS does the credential advance and the finance, the field gate, the public marketplace, and the record that outlives the show.",
+    hero:
+      "Lennd is excellent at the people-and-paperwork advance: phased credentialing, vendor and group onboarding, catering and asset requests, multi-level approvals, and a custom portal for every constituent. For festivals with thousands of names to collect, it earns its place. What sits outside it is the rest of the production — finance and procurement, an offline gate that scans at 15k, a public marketplace, and a knowledge layer — all of which are first-class in ATLVS.",
+    bottomLine:
+      "If you only need to onboard people and issue passes, Lennd does that cleanly. If credentials are one workflow inside a whole production, ATLVS runs the advance and everything downstream on one manifest.",
+    features: [
+      { feature: "Credentials, passes, accreditation", us: true, them: true, note: "Lennd's core strength" },
+      { feature: "Vendor / group onboarding + scoped portals", us: true, them: true },
+      { feature: "Catering & asset requests with approvals", us: true, them: true },
+      { feature: "Production advancing (riders, stage plots, RFIs)", us: true, them: "Partial" },
+      { feature: "Finance: budgets, invoices, procurement, payouts", us: true, them: false },
+      { feature: "Crew ops in the field (clock-in, shifts, offline)", us: true, them: false },
+      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: "Check-in app" },
+      { feature: "Public marketplace (tickets, talent, gigs, RFPs)", us: true, them: false },
+      { feature: "Interactive proposals → live project on accept", us: true, them: false },
+      { feature: "Knowledge base · LMS · certifications", us: true, them: false },
+      { feature: "Per-org pricing, unlimited users", us: true, them: false },
+      { feature: "One record store: office · field · public · knowledge", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Credentials are a module, not the platform",
+        body: "ATLVS runs the credential advance — and the finance, procurement, field gate and public side it feeds. Lennd onboards the people; the rest of the show lives in other tools.",
+      },
+      {
+        title: "Finance ships native",
+        body: "Budgets, invoices, vendor COIs and Stripe Connect payouts are first-class. Lennd has no finance primitives — that reconciliation happens somewhere else.",
+      },
+      {
+        title: "The gate and the field",
+        body: "COMPVSS is an offline-first PWA with sub-100ms atomic gate scan and crew clock-in. Lennd's check-in is portal-led, not a festival-gate field tool.",
+      },
+      {
+        title: "The audience and the archive",
+        body: "GVTEWAY faces the public; LEG3ND keeps the knowledge. Lennd stops at the operational advance for the team running the event.",
+      },
+    ],
+    whenTheyWin: [
+      "You need only credential, catering and asset advancing, and your finance and ticketing already live in dedicated systems you are happy with.",
+      "Your festival has a deeply tuned Lennd advance and the switching cost on credentials alone outweighs the consolidation. Run credentials on Lennd, downstream on ATLVS, and sync.",
+    ],
+    migration: [
+      "Export Lennd people, groups and credential records as CSV → maps to ATLVS credentials + stakeholder portals",
+      "Catering and asset requests port into procurement and production modules",
+      "Most festivals move the advance plus finance, gate and public side onto ATLVS and retire the second system over a season",
+    ],
+    faqs: [
+      {
+        q: "Can ATLVS handle phased credentialing like Lennd?",
+        a: "Yes — requests, counts, multi-level approvals, passes, wristbands and RFID, with scoped portals for every vendor and group. The difference is that the credential advance shares a record store with finance, the gate and the public side, so there is no second system to reconcile.",
+      },
+      {
+        q: "Do external groups need a seat?",
+        a: "No. Vendors, artists and sponsors open a scoped slug URL under per-org pricing — the same portal model Lennd is known for, without per-user cost as your constituent count grows.",
+      },
+    ],
+    keywords: [
+      "Lennd alternative",
+      "ATLVS vs Lennd",
+      "festival credential software alternative",
+      "credential management plus production",
+      "Lennd alternative festivals",
+    ],
+  },
+
+  "prism-fm": {
+    slug: "prism-fm",
+    competitor: "Prism.fm",
+    headline: "ATLVS Technologies vs. Prism.fm: production ecosystem vs. booking & settlement desk.",
+    blurb:
+      "Prism is the booking calendar and settlement desk for music venues and promoters — holds, offers, co-pro splits, show P&L. ATLVS covers booking through settlement and the production that happens between the offer and the payout.",
+    hero:
+      "Prism is purpose-built for the deal and the payout: a hold-to-confirm calendar, fast offer generation, co-promotion and percentage math, contracts, and show-by-show P&L. For a venue or promoter whose product is the calendar and the settlement, it is sharp. What lives between the offer and the payout — advancing, crew, the credential gate, and the audience — is where ATLVS runs.",
+    bottomLine:
+      "Prism for the calendar and the settlement. ATLVS for booking through settlement and the entire production in the middle — advancing, the field, the gate, and the public.",
+    features: [
+      { feature: "Booking calendar: holds, offers, confirms", us: true, them: true, note: "Prism's core strength" },
+      { feature: "Settlement, co-pro splits, show P&L", us: true, them: true },
+      { feature: "Contracts + offer generation", us: true, them: true },
+      { feature: "Production advancing (riders, stage plots, RFIs)", us: true, them: false },
+      { feature: "Crew ops in the field (clock-in, shifts, offline)", us: true, them: false },
+      { feature: "Credentials & accreditation", us: true, them: false },
+      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: false },
+      { feature: "Procurement, vendor COIs, Stripe Connect payouts", us: true, them: "Settlement-side" },
+      { feature: "Public marketplace (tickets, talent, gigs, RFPs)", us: true, them: false },
+      { feature: "Knowledge base · LMS · certifications", us: true, them: false },
+      { feature: "Per-org pricing, unlimited users", us: true, them: false },
+      { feature: "One record store: office · field · public · knowledge", us: true, them: false },
+    ],
+    whyWeWin: [
+      {
+        title: "Everything between offer and payout",
+        body: "Prism brackets the show with the offer and the settlement. ATLVS runs the production in between — advancing, crew, procurement, the gate — on the same record the deal lives on.",
+      },
+      {
+        title: "The field and the gate",
+        body: "COMPVSS scans at the gate offline and runs crew clock-in. Prism is a booking and finance surface; it does not go to the field.",
+      },
+      {
+        title: "The audience side",
+        body: "GVTEWAY is a public marketplace — discovery, talent, gigs, RFPs. Prism faces the venue's booking team, not the guest.",
+      },
+      {
+        title: "One org, every line of work",
+        body: "Festivals, activations, fabrication and broadcast share one platform. Prism is tuned for the music-venue calendar specifically.",
+      },
+    ],
+    whenTheyWin: [
+      "Your product is the booking calendar and the settlement, and production is handled by the touring or building side. Prism's music-industry deal math (radius clauses, co-pro splits, hold periods) is deep.",
+      "You run a single music room or a promoter desk where holds, offers and settlement are 90% of the job and there is little production advance to track.",
+    ],
+    migration: [
+      "Export Prism shows, offers and settlement records as CSV → maps to ATLVS booking, finance and ROS",
+      "Confirmed dates sync into ATLVS via webhook so the production advance opens the moment a hold converts",
+      "Most venues keep Prism on the booking desk during transition and run advancing, the gate and the public side on ATLVS",
+    ],
+    faqs: [
+      {
+        q: "Does ATLVS do holds, offers and settlement like Prism?",
+        a: "Yes — booking calendar with holds and confirms, offer generation, contracts and show P&L through settlement. The difference is that the deal shares a record store with the advance, the gate and the public side, so the show is connected from first hold to final cost report.",
+      },
+      {
+        q: "Can I keep Prism for booking and use ATLVS for production?",
+        a: "Yes. Webhook confirmed shows from Prism into ATLVS; the production advance, crew, procurement and gate ops open automatically. Reconcile settlement numbers nightly.",
+      },
+    ],
+    keywords: [
+      "Prism.fm alternative",
+      "ATLVS vs Prism.fm",
+      "venue booking software alternative",
+      "settlement software plus production",
+      "music venue software alternative",
+    ],
+  },
+
   asana: {
     slug: "asana",
     competitor: "Asana",

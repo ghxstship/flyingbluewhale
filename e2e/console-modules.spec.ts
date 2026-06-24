@@ -94,15 +94,15 @@ test.describe("console modules — create flows", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("Sales · client create", async ({ page }) => {
-    await createInModule(page, "/console/clients/new", { name: `E2E Client ${stamp()}` });
+    await createInModule(page, "/studio/clients/new", { name: `E2E Client ${stamp()}` });
   });
 
   test("Sales · lead create", async ({ page }) => {
-    await createInModule(page, "/console/leads/new", { name: `E2E Lead ${stamp()}` });
+    await createInModule(page, "/studio/leads/new", { name: `E2E Lead ${stamp()}` });
   });
 
   test("Operations · event create", async ({ page }) => {
-    await createInModule(page, "/console/events/new", {
+    await createInModule(page, "/studio/events/new", {
       name: `E2E Event ${stamp()}`,
       starts_at: "2030-01-01T10:00",
       ends_at: "2030-01-01T18:00",
@@ -110,11 +110,11 @@ test.describe("console modules — create flows", () => {
   });
 
   test("Production · equipment create", async ({ page }) => {
-    await createInModule(page, "/console/production/equipment/new", { name: `E2E Equipment ${stamp()}` });
+    await createInModule(page, "/studio/production/equipment/new", { name: `E2E Equipment ${stamp()}` });
   });
 
   test("Finance · expense create", async ({ page }) => {
-    await createInModule(page, "/console/finance/expenses/new", {
+    await createInModule(page, "/studio/finance/expenses/new", {
       description: `E2E Expense ${stamp()}`,
       amount: "500",
     });
@@ -122,54 +122,54 @@ test.describe("console modules — create flows", () => {
 
   test("Settings · master catalog SKU create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/settings/catalog/new", {
+    await createInModule(page, "/studio/settings/catalog/new", {
       name: `E2E SKU ${s}`,
       code: `E2E-${s}`,
       kind: "credential",
     });
   });
 
-  test("Workforce · course create", async ({ page }) => {
-    await createInModule(page, "/console/workforce/courses/new", { title: `E2E Course ${stamp()}` });
-  });
+  // "Workforce · course create" removed — courses migrated to the LEG3ND
+  // learning spine (LEG3ND-only); the /studio/workforce/courses admin no longer
+  // exists. LEG3ND has its own coverage (legend migrations + e2e).
 
   test("Operations · RFI create", async ({ page }) => {
-    await createInModule(page, "/console/rfis/new", {
+    await createInModule(page, "/studio/rfis/new", {
       subject: `E2E RFI ${stamp()}`,
       question: "E2E question body for the RFI.",
     });
   });
 
   test("Production · fabrication order create", async ({ page }) => {
-    await createInModule(page, "/console/production/fabrication/new", { title: `E2E Fab ${stamp()}` });
+    await createInModule(page, "/studio/production/fabrication/new", { title: `E2E Fab ${stamp()}` });
   });
 
   test("Sales · sponsor deliverable create", async ({ page }) => {
-    await createInModule(page, "/console/commercial/sponsors/new", { title: `E2E Sponsor ${stamp()}` });
+    await createInModule(page, "/studio/commercial/sponsors/new", { title: `E2E Sponsor ${stamp()}` });
   });
 
   // Batch 3 — more single-entity creates across safety, ops, knowledge, programs,
   // marketing, finance, legal, workforce.
   test("Safety · crisis create", async ({ page }) => {
-    await createInModule(page, "/console/safety/crisis/new", { title: `E2E Crisis ${stamp()}` });
+    await createInModule(page, "/studio/safety/crisis/new", { title: `E2E Crisis ${stamp()}` });
   });
 
   test("Safety · threat create", async ({ page }) => {
-    await createInModule(page, "/console/safety/threats/new", {
+    await createInModule(page, "/studio/safety/threats/new", {
       title: `E2E Threat ${stamp()}`,
       code: `THR-${stamp().slice(-7)}`,
     });
   });
 
   test("Safety · briefing create", async ({ page }) => {
-    await createInModule(page, "/console/safety/briefings/new", {
+    await createInModule(page, "/studio/safety/briefings/new", {
       topic: `E2E Briefing ${stamp()}`,
       scheduled_for: "2030-01-01T10:00",
     });
   });
 
   test("Operations · meeting create", async ({ page }) => {
-    await createInModule(page, "/console/meetings/new", {
+    await createInModule(page, "/studio/meetings/new", {
       title: `E2E Meeting ${stamp()}`,
       starts_at: "2030-01-01T10:00",
       ends_at: "2030-01-01T11:00",
@@ -178,7 +178,7 @@ test.describe("console modules — create flows", () => {
 
   test("Knowledge · article create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/knowledge/new", {
+    await createInModule(page, "/studio/knowledge/new", {
       title: `E2E Article ${s}`,
       slug: `e2e-article-${s}`,
       body_markdown: "E2E article body content.",
@@ -186,16 +186,16 @@ test.describe("console modules — create flows", () => {
   });
 
   test("Programs · risk create", async ({ page }) => {
-    await createInModule(page, "/console/programs/risk/new", { title: `E2E Risk ${stamp()}` });
+    await createInModule(page, "/studio/programs/risk/new", { title: `E2E Risk ${stamp()}` });
   });
 
   test("Marketing · campaign create", async ({ page }) => {
-    await createInModule(page, "/console/campaigns/new", { name: `E2E Campaign ${stamp()}` });
+    await createInModule(page, "/studio/campaigns/new", { name: `E2E Campaign ${stamp()}` });
   });
 
   test("Finance · cost code create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/finance/cost-codes/new", {
+    await createInModule(page, "/studio/finance/cost-codes/new", {
       code: `E2E-${s}`,
       name: `E2E Cost Code ${s}`,
       description: "E2E cost code",
@@ -204,19 +204,19 @@ test.describe("console modules — create flows", () => {
 
   test("Specs · spec section create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/specs/new", {
+    await createInModule(page, "/studio/specs/new", {
       section_number: `09 ${s.slice(-4)}`,
       title: `E2E Spec ${s}`,
     });
   });
 
   test("Legal · IP / trademark create", async ({ page }) => {
-    await createInModule(page, "/console/legal/ip/new", { mark: `E2E Mark ${stamp()}` });
+    await createInModule(page, "/studio/legal/ip/new", { mark: `E2E Mark ${stamp()}` });
   });
 
   test("Workforce · staff create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/workforce/staff/new", {
+    await createInModule(page, "/studio/workforce/staff/new", {
       full_name: `E2E Staff ${s}`,
       email: `e2e-staff-${s}@test.example`,
     });
@@ -224,7 +224,7 @@ test.describe("console modules — create flows", () => {
 
   test("Workforce · volunteer create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/workforce/volunteers/new", {
+    await createInModule(page, "/studio/workforce/volunteers/new", {
       full_name: `E2E Volunteer ${s}`,
       email: `e2e-vol-${s}@test.example`,
     });

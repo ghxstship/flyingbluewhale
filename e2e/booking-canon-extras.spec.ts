@@ -37,34 +37,34 @@ test.describe("Booking canon · extras", () => {
 
   test("posting edit form persists changes", async ({ page }) => {
     const newDescription = `E2E posting note ${Date.now()}`;
-    await page.goto(`/console/marketplace/postings/${FX.posting}/edit`);
+    await page.goto(`/studio/marketplace/postings/${FX.posting}/edit`);
     const desc = page.locator('textarea[name="description"]');
     await desc.fill(newDescription);
     await page.getByRole("button", { name: /Save Changes/i }).click();
-    await page.waitForURL(`**/console/marketplace/postings/${FX.posting}`, { timeout: 15_000 });
+    await page.waitForURL(`**/studio/marketplace/postings/${FX.posting}`, { timeout: 15_000 });
     await expect(page.getByText(newDescription)).toBeVisible({ timeout: 5_000 });
   });
 
   test("call edit form persists changes", async ({ page }) => {
     const newDescription = `E2E call note ${Date.now()}`;
-    await page.goto(`/console/marketplace/calls/${FX.call}/edit`);
+    await page.goto(`/studio/marketplace/calls/${FX.call}/edit`);
     await page.locator('textarea[name="description"]').fill(newDescription);
     await page.getByRole("button", { name: /Save Changes/i }).click();
-    await page.waitForURL(`**/console/marketplace/calls/${FX.call}`, { timeout: 15_000 });
+    await page.waitForURL(`**/studio/marketplace/calls/${FX.call}`, { timeout: 15_000 });
     await expect(page.getByText(newDescription)).toBeVisible({ timeout: 5_000 });
   });
 
   test("talent edit form persists changes", async ({ page }) => {
     const newTagline = `E2E talent tagline ${Date.now()}`;
-    await page.goto(`/console/marketplace/talent/${FX.talent}/edit`);
+    await page.goto(`/studio/marketplace/talent/${FX.talent}/edit`);
     await page.getByLabel("Tagline").fill(newTagline);
     await page.getByRole("button", { name: /Save Changes/i }).click();
-    await page.waitForURL(`**/console/marketplace/talent/${FX.talent}`, { timeout: 15_000 });
+    await page.waitForURL(`**/studio/marketplace/talent/${FX.talent}`, { timeout: 15_000 });
     await expect(page.getByText(newTagline)).toBeVisible({ timeout: 5_000 });
   });
 
   test("rider list + new rider form", async ({ page }) => {
-    await page.goto(`/console/marketplace/talent/${FX.talent}/riders`);
+    await page.goto(`/studio/marketplace/talent/${FX.talent}/riders`);
     await expect(page.locator("h1")).toContainText("Riders");
     await page
       .getByRole("link", { name: /New Rider/i })
@@ -80,7 +80,7 @@ test.describe("Booking canon · extras", () => {
   });
 
   test("applicant stage transition", async ({ page }) => {
-    await page.goto(`/console/marketplace/postings/${FX.posting}/applicants/${FX.application}`);
+    await page.goto(`/studio/marketplace/postings/${FX.posting}/applicants/${FX.application}`);
     await expect(page.locator("h1")).toContainText(/#/);
     await page.locator('select[name="status"]').selectOption("reviewed");
     await page.getByLabel(/Score/).fill("82");
@@ -88,35 +88,35 @@ test.describe("Booking canon · extras", () => {
     await page.getByRole("button", { name: /Update Stage/i }).click();
     await page.waitForLoadState("networkidle");
     // Reload and assert persistence
-    await page.goto(`/console/marketplace/postings/${FX.posting}/applicants/${FX.application}`);
+    await page.goto(`/studio/marketplace/postings/${FX.posting}/applicants/${FX.application}`);
     await expect(page.getByText("reviewed").first()).toBeVisible();
   });
 
   test("submission stage transition", async ({ page }) => {
-    await page.goto(`/console/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
+    await page.goto(`/studio/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
     await expect(page.locator("h1")).toContainText(/#/);
     await page.locator('select[name="status"]').selectOption("shortlisted");
     await page.getByLabel(/Score/).fill("90");
     await page.getByRole("button", { name: /Update Status/i }).click();
     await page.waitForLoadState("networkidle");
-    await page.goto(`/console/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
+    await page.goto(`/studio/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
     await expect(page.getByText("shortlisted").first()).toBeVisible();
   });
 
   test("call submissions list shows seeded submission", async ({ page }) => {
-    await page.goto(`/console/marketplace/calls/${FX.call}/submissions`);
+    await page.goto(`/studio/marketplace/calls/${FX.call}/submissions`);
     await expect(page.locator("h1")).toContainText("Submissions");
     await expect(page.getByText("Fixture submission").first()).toBeVisible();
   });
 
   test("co-pro partner add → remove → cumulative split badge", async ({ page }) => {
-    await page.goto(`/console/bookings/deals/${FX.offer}`);
+    await page.goto(`/studio/bookings/deals/${FX.offer}`);
     const partnerName = `E2E CoPro ${Date.now()}`;
     await page.getByLabel("Partner Name").fill(partnerName);
     await page.getByLabel("Split %").fill("25");
     await page.getByRole("button", { name: /Add Partner/i }).click();
     await page.waitForLoadState("networkidle");
-    await page.goto(`/console/bookings/deals/${FX.offer}`);
+    await page.goto(`/studio/bookings/deals/${FX.offer}`);
     await expect(page.getByText(partnerName)).toBeVisible();
     await expect(page.getByText("25% allocated")).toBeVisible();
 
@@ -124,13 +124,13 @@ test.describe("Booking canon · extras", () => {
     const li = page.locator("li", { hasText: partnerName });
     await li.getByRole("button", { name: /Remove/i }).click();
     await page.waitForLoadState("networkidle");
-    await page.goto(`/console/bookings/deals/${FX.offer}`);
+    await page.goto(`/studio/bookings/deals/${FX.offer}`);
     await expect(page.getByText(partnerName)).toHaveCount(0);
   });
 
   test("ticketing connection detail + record manual snapshot", async ({ page }) => {
     // Create a fresh connection
-    await page.goto("/console/settings/integrations/ticketing/new");
+    await page.goto("/studio/settings/integrations/ticketing/new");
     await page.locator('select[name="provider"]').selectOption("manual");
     const label = `E2E TX ${Date.now()}`;
     await page.getByLabel("Label").fill(label);
@@ -148,7 +148,7 @@ test.describe("Booking canon · extras", () => {
   });
 
   test("insights pool returns seeded aggregates", async ({ page }) => {
-    await page.goto("/console/insights");
+    await page.goto("/studio/insights");
     await expect(page.locator("h1")).toContainText("Booking Pool");
     // Test-professional is opted in and we seeded 6 final settlements;
     // talent_profiles.genre_tags includes house+techno, so at least one row.

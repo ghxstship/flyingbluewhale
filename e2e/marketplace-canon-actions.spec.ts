@@ -154,38 +154,38 @@ test.describe("Marketplace canon · authed detail pages render", () => {
     await loginAsOwner(page);
   });
 
-  test(`/console/marketplace/postings/${FX.posting}`, async ({ page }) => {
-    const r = await page.goto(`/console/marketplace/postings/${FX.posting}`);
+  test(`/studio/marketplace/postings/${FX.posting}`, async ({ page }) => {
+    const r = await page.goto(`/studio/marketplace/postings/${FX.posting}`);
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Lighting Programmer");
   });
 
-  test(`/console/marketplace/postings/${FX.posting}/applicants`, async ({ page }) => {
-    const r = await page.goto(`/console/marketplace/postings/${FX.posting}/applicants`);
+  test(`/studio/marketplace/postings/${FX.posting}/applicants`, async ({ page }) => {
+    const r = await page.goto(`/studio/marketplace/postings/${FX.posting}/applicants`);
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Applicants");
   });
 
-  test(`/console/marketplace/calls/${FX.call}`, async ({ page }) => {
-    const r = await page.goto(`/console/marketplace/calls/${FX.call}`);
+  test(`/studio/marketplace/calls/${FX.call}`, async ({ page }) => {
+    const r = await page.goto(`/studio/marketplace/calls/${FX.call}`);
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Festival Headliner");
   });
 
-  test(`/console/marketplace/talent/${FX.talent}`, async ({ page }) => {
-    const r = await page.goto(`/console/marketplace/talent/${FX.talent}`);
+  test(`/studio/marketplace/talent/${FX.talent}`, async ({ page }) => {
+    const r = await page.goto(`/studio/marketplace/talent/${FX.talent}`);
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Fixture Band Alpha");
   });
 
-  test(`/console/marketplace/offers/${FX.offer}`, async ({ page }) => {
-    const r = await page.goto(`/console/marketplace/offers/${FX.offer}`);
+  test(`/studio/marketplace/offers/${FX.offer}`, async ({ page }) => {
+    const r = await page.goto(`/studio/marketplace/offers/${FX.offer}`);
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Fixture Band Alpha");
   });
 
-  test(`/console/procurement/rfqs/${FX.rfq}/publish`, async ({ page }) => {
-    const r = await page.goto(`/console/procurement/rfqs/${FX.rfq}/publish`);
+  test(`/studio/procurement/rfqs/${FX.rfq}/publish`, async ({ page }) => {
+    const r = await page.goto(`/studio/procurement/rfqs/${FX.rfq}/publish`);
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Publish RFQ");
   });
@@ -210,13 +210,13 @@ test.describe("Marketplace canon · form actions", () => {
   test("create posting → land on detail → publish → close", async ({ page }) => {
     const title = `E2E Posting ${Date.now()}`;
 
-    await page.goto("/console/marketplace/postings/new");
+    await page.goto("/studio/marketplace/postings/new");
     await page.getByLabel("Title").fill(title);
     await page.getByLabel("City").fill("Atlanta");
     await page.getByLabel("Region/State").fill("GA");
     await page.getByLabel(/Roles/).fill("A1, Stage Tech");
     await page.getByRole("button", { name: /^Save Draft$/i }).click();
-    await page.waitForURL(/\/console\/marketplace\/postings\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await page.waitForURL(/\/studio\/marketplace\/postings\/[0-9a-f-]+$/, { timeout: 15_000 });
 
     await expect(page.locator("h1")).toContainText(title);
     await expect(page.getByText("draft").first()).toBeVisible();
@@ -236,11 +236,11 @@ test.describe("Marketplace canon · form actions", () => {
   test("create open call → publish → see in /marketplace/calls (anon)", async ({ page, request }) => {
     const title = `E2E Open Call ${Date.now()}`;
 
-    await page.goto("/console/marketplace/calls/new");
+    await page.goto("/studio/marketplace/calls/new");
     await page.getByLabel("Title").fill(title);
     await page.getByLabel(/Genre Tags/).fill("disco, italo");
     await page.getByRole("button", { name: /^Save Draft$/i }).click();
-    await page.waitForURL(/\/console\/marketplace\/calls\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await page.waitForURL(/\/studio\/marketplace\/calls\/[0-9a-f-]+$/, { timeout: 15_000 });
 
     await page.getByRole("button", { name: /^Publish$/i }).click();
     await page.waitForLoadState("networkidle");
@@ -257,12 +257,12 @@ test.describe("Marketplace canon · form actions", () => {
   test("create talent profile → publish → unpublish", async ({ page }) => {
     const actName = `E2E Act ${Date.now()}`;
 
-    await page.goto("/console/marketplace/talent/new");
+    await page.goto("/studio/marketplace/talent/new");
     await page.getByLabel("Act Name").fill(actName);
     await page.getByLabel("Tagline").fill("End-to-end test seed.");
     await page.getByLabel(/Genre Tags/).fill("test-genre");
     await page.getByRole("button", { name: /^Save Profile$/i }).click();
-    await page.waitForURL(/\/console\/marketplace\/talent\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await page.waitForURL(/\/studio\/marketplace\/talent\/[0-9a-f-]+$/, { timeout: 15_000 });
 
     await expect(page.locator("h1")).toContainText(actName);
     await expect(page.getByText("private").first()).toBeVisible();
@@ -282,12 +282,12 @@ test.describe("Marketplace canon · form actions", () => {
     // it. State-machine assertions need a known starting state.
     const today = new Date(Date.now() + 30 * 86_400_000).toISOString().slice(0, 10);
 
-    await page.goto("/console/marketplace/offers/new");
+    await page.goto("/studio/marketplace/offers/new");
     await page.locator('select[name="talent_profile_id"]').selectOption({ index: 1 });
     await page.locator('input[name="performance_date"]').fill(today);
     await page.getByLabel("Fee").fill("4500");
     await page.getByRole("button", { name: /^Save Draft$/i }).click();
-    await page.waitForURL(/\/console\/marketplace\/offers\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await page.waitForURL(/\/studio\/marketplace\/offers\/[0-9a-f-]+$/, { timeout: 15_000 });
     await expect(page.getByText("draft").first()).toBeVisible();
 
     await page.getByRole("button", { name: /Send Offer/i }).click();
@@ -300,7 +300,7 @@ test.describe("Marketplace canon · form actions", () => {
   });
 
   test("publishRfqAction toggles visibility", async ({ page }) => {
-    await page.goto(`/console/procurement/rfqs/${FX.rfq}/publish`);
+    await page.goto(`/studio/procurement/rfqs/${FX.rfq}/publish`);
 
     // Read the current visibility, flip it, verify the flip, then restore.
     // This makes the test idempotent across runs even if a previous run
@@ -311,7 +311,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.locator('select[name="visibility"]').selectOption(flip);
     await page.getByRole("button", { name: /Update Visibility/i }).click();
     await page.waitForLoadState("networkidle");
-    await page.goto(`/console/procurement/rfqs/${FX.rfq}/publish`);
+    await page.goto(`/studio/procurement/rfqs/${FX.rfq}/publish`);
     await expect(page.locator('select[name="visibility"]')).toHaveValue(flip);
 
     // Restore to public so downstream tests + seeded marketplace surfaces work.
@@ -369,11 +369,11 @@ test.describe("Marketplace canon · form actions", () => {
   });
 
   test("marketplace settings persist", async ({ page }) => {
-    await page.goto("/console/marketplace/settings");
+    await page.goto("/studio/marketplace/settings");
     await page.locator('input[name="marketplace_take_rate_bps"]').fill("250");
     await page.getByRole("button", { name: /Save Settings/i }).click();
     await page.waitForLoadState("networkidle");
-    await page.goto("/console/marketplace/settings");
+    await page.goto("/studio/marketplace/settings");
     await expect(page.locator('input[name="marketplace_take_rate_bps"]')).toHaveValue("250");
     // Reset to 0 so other tests / orgs aren't surprised.
     await page.locator('input[name="marketplace_take_rate_bps"]').fill("0");
@@ -392,7 +392,7 @@ test.describe("Marketplace canon · triggers", () => {
   });
 
   test("posting detail shows applicant_count from trigger", async ({ page }) => {
-    await page.goto(`/console/marketplace/postings/${FX.posting}`);
+    await page.goto(`/studio/marketplace/postings/${FX.posting}`);
     // Fixture seeded one application → applicant_count must be ≥ 1.
     const applicantsLink = page.getByRole("link", { name: /\d+ applicants/ });
     await expect(applicantsLink).toBeVisible();
@@ -402,7 +402,7 @@ test.describe("Marketplace canon · triggers", () => {
   });
 
   test("call detail shows submission_count from trigger", async ({ page }) => {
-    await page.goto(`/console/marketplace/calls/${FX.call}`);
+    await page.goto(`/studio/marketplace/calls/${FX.call}`);
     const subsLink = page.getByRole("link", { name: /\d+ submissions/ });
     await expect(subsLink).toBeVisible();
     const text = (await subsLink.textContent()) ?? "";
@@ -422,13 +422,13 @@ test.describe("Marketplace canon · navigation", () => {
   });
 
   test("console hub links resolve to live surfaces", async ({ page }) => {
-    await page.goto("/console/marketplace");
+    await page.goto("/studio/marketplace");
     for (const path of [
-      "/console/marketplace/postings",
-      "/console/marketplace/calls",
-      "/console/marketplace/talent",
-      "/console/marketplace/offers",
-      "/console/marketplace/reviews",
+      "/studio/marketplace/postings",
+      "/studio/marketplace/calls",
+      "/studio/marketplace/talent",
+      "/studio/marketplace/offers",
+      "/studio/marketplace/reviews",
     ]) {
       await expect(page.locator(`a[href="${path}"]`).first()).toBeVisible();
     }
@@ -462,25 +462,25 @@ test.describe("Marketplace canon · IA discoverability", () => {
     await loginAsOwner(page);
     // Land on a Commerce-resident route so the group force-opens (the
     // sidebar collapses idle groups by default — see PlatformSidebar §241).
-    await page.goto("/console/marketplace");
+    await page.goto("/studio/marketplace");
     // Marketplace overview link present in the primary sidebar.
-    await expect(page.locator('aside a[href="/console/marketplace"]').first()).toBeVisible();
+    await expect(page.locator('aside a[href="/studio/marketplace"]').first()).toBeVisible();
     // Sub-items live in the same sidebar (under Commerce). Postings + Open
-    // Calls consolidated into the /console/marketplace hub (see src/lib/nav.ts
+    // Calls consolidated into the /studio/marketplace hub (see src/lib/nav.ts
     // §320); Talent Roster + Offers remain discrete sidebar entries.
-    await expect(page.locator('aside a[href="/console/marketplace/talent"]').first()).toBeVisible();
-    await expect(page.locator('aside a[href="/console/marketplace/offers"]').first()).toBeVisible();
+    await expect(page.locator('aside a[href="/studio/marketplace/talent"]').first()).toBeVisible();
+    await expect(page.locator('aside a[href="/studio/marketplace/offers"]').first()).toBeVisible();
     // Reviews moved to Settings sidebar; not in primary platformNav anymore.
-    const reviewsInPrimary = page.locator('aside a[href="/console/marketplace/reviews"]');
+    const reviewsInPrimary = page.locator('aside a[href="/studio/marketplace/reviews"]');
     expect(await reviewsInPrimary.count()).toBe(0);
   });
 
   test("settings sidebar surfaces marketplace reviews + marketplace settings", async ({ page }) => {
     await dismissConsent(page);
     await loginAsOwner(page);
-    await page.goto("/console/settings/organization");
-    await expect(page.locator('a[href="/console/marketplace/reviews"]').first()).toBeVisible();
-    await expect(page.locator('a[href="/console/marketplace/settings"]').first()).toBeVisible();
+    await page.goto("/studio/settings/organization");
+    await expect(page.locator('a[href="/studio/marketplace/reviews"]').first()).toBeVisible();
+    await expect(page.locator('a[href="/studio/marketplace/settings"]').first()).toBeVisible();
   });
 
   test("marketing header: /marketplace is a top-level link", async ({ page }) => {

@@ -29,7 +29,7 @@ test.describe("auth routes", () => {
 
   test("signup form renders with split layout", async ({ page }) => {
     await page.goto("/signup");
-    await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Start building your world" })).toBeVisible();
     await expect(page.getByRole("textbox", { name: "Name" })).toBeVisible();
     await expect(page.getByRole("textbox", { name: "Work email" })).toBeVisible();
     await expect(page.getByRole("textbox", { name: "Password" })).toBeVisible();

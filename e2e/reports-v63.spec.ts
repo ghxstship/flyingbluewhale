@@ -14,16 +14,16 @@ test.describe("v6.3 reports — console", () => {
   });
 
   test("hub lists every report grouped by app", async ({ page }) => {
-    await page.goto("/console/reports");
+    await page.goto("/studio/reports");
     await expect(page.getByRole("heading", { name: "REPORT LIBRARY" })).toBeVisible();
     for (const r of REPORTS_LIST) {
-      await expect(page.locator(`a[href="/console/reports/${r.id}"]`)).toBeVisible();
+      await expect(page.locator(`a[href="/studio/reports/${r.id}"]`)).toBeVisible();
     }
   });
 
   for (const r of REPORTS_LIST) {
     test(`renders ${r.id} (${r.kind})`, async ({ page }) => {
-      await page.goto(`/console/reports/${r.id}`);
+      await page.goto(`/studio/reports/${r.id}`);
       const doc = page.locator(`.doc--report[data-doc="report:${r.id}"]`);
       await expect(doc).toBeVisible();
       // at least one KPI tile + the print affordance
@@ -33,13 +33,13 @@ test.describe("v6.3 reports — console", () => {
   }
 
   test("unknown report id renders not-found (no report artifact)", async ({ page }) => {
-    await page.goto("/console/reports/not-a-real-report");
+    await page.goto("/studio/reports/not-a-real-report");
     await expect(page.getByText("Back to Workspace")).toBeVisible();
     await expect(page.locator(".doc--report")).toHaveCount(0);
   });
 
   test("white-label brand mode strips ATLVS attribution (parity with documents)", async ({ page }) => {
-    await page.goto("/console/reports/executive");
+    await page.goto("/studio/reports/executive");
     const doc = page.locator('.doc--report[data-doc="report:executive"]');
     await expect(doc).toBeVisible();
     await page.getByRole("button", { name: "White-label" }).click();

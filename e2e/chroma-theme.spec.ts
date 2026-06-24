@@ -100,13 +100,36 @@ test.describe("theme system", () => {
     // The per-product overlay is scoped to
     // [data-theme="atlvs-product"][data-platform="gvteway"]; activate it on
     // <html> (already data-theme="atlvs-product") and read the resolved token.
-    const { light, retiredCyanGone } = await page.evaluate(() => {
+    //
+    // v8.1: the accent is authored in OKLCH + light-dark(), so the computed
+    // value is an oklch/lab color string, NOT a hex literal. Resolve it (and the
+    // reference #2563eb) to sRGB via canvas and compare numerically — the OKLCH
+    // GVTEWAY seed is the exact sRGB-equivalent of #2563eb (zero visual change).
+    const { accent, target, retiredCyan } = await page.evaluate(() => {
       document.documentElement.setAttribute("data-platform", "gvteway");
-      const v = getComputedStyle(document.documentElement).getPropertyValue("--p-accent").trim().toLowerCase();
-      return { light: v, retiredCyanGone: v !== "#12b5b5" };
+      const probe = document.createElement("div");
+      probe.style.color = "var(--p-accent)";
+      document.documentElement.appendChild(probe);
+      const accentColor = getComputedStyle(probe).color;
+      probe.remove();
+      const toRGB = (colorStr: string): [number, number, number] => {
+        const c = document.createElement("canvas");
+        c.width = c.height = 1;
+        const ctx = c.getContext("2d")!;
+        ctx.fillStyle = colorStr;
+        ctx.fillRect(0, 0, 1, 1);
+        const d = ctx.getImageData(0, 0, 1, 1).data;
+        return [d[0]!, d[1]!, d[2]!];
+      };
+      return { accent: toRGB(accentColor), target: toRGB("#2563eb"), retiredCyan: toRGB("#12b5b5") };
     });
-    expect(light).toBe("#2563eb");
-    expect(retiredCyanGone).toBe(true);
+    // Resolves to GVTEWAY blue (#2563eb) within a small rounding tolerance…
+    const near = (a: number[], b: number[], tol = 6) => a.every((v, i) => Math.abs(v - b[i]!) <= tol);
+    expect(near(accent, target), `accent rgb(${accent}) should match #2563eb rgb(${target})`).toBe(true);
+    // …and is unmistakably blue (b channel dominant), not the retired cyan.
+    expect(accent[2]).toBeGreaterThan(accent[0]); // blue > red
+    expect(accent[2]).toBeGreaterThan(accent[1]); // blue > green
+    expect(near(accent, retiredCyan), "must NOT be the retired cyan #12b5b5").toBe(false);
   });
 
   test("keyboard nav: arrow keys move focus between mode cards; Enter selects", async ({ page }) => {

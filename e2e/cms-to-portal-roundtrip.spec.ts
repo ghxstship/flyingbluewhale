@@ -10,7 +10,7 @@ const PROFESSIONAL_ORG_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 /**
  * End-to-end CMS → portal roundtrip.
  *
- * Proves that a real authoring action in /console mutates event_guides and is
+ * Proves that a real authoring action in /studio mutates event_guides and is
  * reflected on /p/<slug>/guide within the same session, going through the
  * actual server action path (not service_role seed). This catches regressions
  * in:
@@ -44,7 +44,7 @@ test.describe("handoff/cms-roundtrip: owner edit → portal render", () => {
     const marker = `ROUNDTRIP_${Date.now()}`;
 
     // Navigate to the guide editor for the client persona.
-    await page.goto(`/console/projects/${project.id}/guides/client`);
+    await page.goto(`/studio/projects/${project.id}/guides/client`);
     await expect(page.locator('[data-platform="atlvs"]').first()).toBeVisible({ timeout: 10_000 });
     await expect(page.getByRole("button", { name: /save guide/i })).toBeVisible({ timeout: 10_000 });
 

@@ -1,0 +1,263 @@
+/* ============================================================================
+   ATLVS Technologies — TREND AXIS  (data-trend)  v7.4
+   ----------------------------------------------------------------------------
+   The PERSONALIZATION axis. An end-user picks one trend in their account
+   settings; the whole product re-skins. This is an ORTHOGONAL axis — it stacks
+   on [data-product] / [data-mode] / [data-density] / [data-accent] and NEVER
+   restates a brand hex. It only re-maps four families of resolved tokens:
+
+     1. SHAPE      radii (--p-r-*) + border width
+     2. ELEVATION  the --p-elev-* / --p-shadow* recipe + --glass-blur
+     3. MOTION     eases, hover/press transforms (durations stay reduced-motion-safe)
+     4. EXPRESSION accent INTENSITY (mixed off --k-acc → hue is preserved) and
+                   type PERSONALITY (heading family / weight / casing / tracking)
+
+   THE HUE LOCK: a trend may make the accent softer or more vivid, but it is
+   always color-mixed off the product's own --k-acc seed, so ATLVS reads ATLVS,
+   COMPVSS reads COMPVSS, etc. across every trend. Trends do not set surface or
+   text color — those stay on the audited brand ramp (REC 02/04).
+
+   FONTS: trend display faces are referenced by name with safe fallbacks; they
+   are NOT @imported here (that would tax every consumer page). The consuming
+   surface loads the active trend's font on demand. The `sustainable` trend
+   deliberately uses the system stack — zero added webfont weight.
+
+   Specificity: each block is [data-ui="saas"][data-trend="x"] (0,2,0) and this
+   file imports LAST, so it wins over the per-product accent blocks on ties.
+   ========================================================================== */
+
+/* ---- Shared trend hooks (read by components; default = no-op so non-trend
+   surfaces are unchanged). --trend-rotate is the off-grid tilt collage/maximal
+   lean on; --trend-overlay flags atmospheric backdrops (synthwave grid). ---- */
+[data-ui="saas"], [data-theme="atlvs-product"] {
+  --trend-rotate: 0deg;       /* @kind other */
+  --trend-overlay: none;      /* @kind other */
+  --trend-press-translate: 0; /* @kind other */
+}
+
+/* ===========================================================================
+   1 — IMMERSIVE  ·  3D & depth, glass, layered ambient shadow
+   ========================================================================= */
+[data-ui="saas"][data-trend="immersive"], [data-theme="atlvs-product"][data-trend="immersive"] {
+  --p-r-sm: 12px; /* @kind radius */ --p-r: 16px; /* @kind radius */ --p-r-md: 18px; /* @kind radius */ --p-r-lg: 24px; /* @kind radius */ --p-r-xl: 28px; /* @kind radius */
+  --glass-blur: blur(22px) saturate(1.3); /* @kind other */
+  --p-elev-1: 0 2px 6px rgba(10,12,24,.14), 0 1px 0 rgba(255,255,255,.06) inset;
+  --p-elev-2: 0 4px 12px rgba(10,12,24,.16), 0 24px 48px rgba(10,12,24,.24), 0 1px 0 rgba(255,255,255,.08) inset;
+  --p-elev-3: 0 8px 24px rgba(10,12,24,.22), 0 40px 80px rgba(10,12,24,.34), 0 1px 0 rgba(255,255,255,.10) inset;
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --hover-lift-y: -6px; /* @kind other */ --hover-scale: 1.012; /* @kind other */ --press-scale: 0.985; /* @kind other */
+  --p-ease: var(--motion-normal) var(--ease-emphasized); /* @kind other */
+  --p-heading: "Space Grotesk", var(--font-hanken-grotesk); /* @kind font */ --p-heading-weight: 600; /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.02em; /* @kind font */
+  /* vivid-leaning accent (hue from --k-acc) */
+  --p-accent: color-mix(in oklab, var(--k-acc) 90%, var(--p-text-1) 10%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 16%, transparent);
+}
+
+/* ===========================================================================
+   2 — EXPERIMENTAL  ·  hard edges, flat, condensed display, lots of air
+   ========================================================================= */
+/* ---- 2 — EXPERIMENTAL · hard edges, flat, condensed display.
+   REPO NOTE (v8.1): the kit binds this skin to `:not([data-trend])`, making it
+   the SYSTEM DEFAULT. We DROPPED that binding so the repo's Monument base stays
+   the default (rounded radii, Anton headings, the v8.1 elevation recipe); this
+   flat skin applies ONLY when a user explicitly picks data-trend="experimental".
+   Do not re-add the `:not([data-trend])` selectors. ---- */
+[data-ui="saas"][data-trend="experimental"], [data-theme="atlvs-product"][data-trend="experimental"] {
+  --p-r-sm: 0; /* @kind radius */ --p-r: 0; /* @kind radius */ --p-r-md: 0; /* @kind radius */ --p-r-lg: 0; /* @kind radius */ --p-r-xl: 0; /* @kind radius */ --p-r-pill: 0; /* @kind radius */
+  --p-elev-1: none; --p-elev-2: 0 0 0 1px var(--p-border); --p-elev-3: 0 0 0 1px var(--p-border-2);
+  --p-shadow-sm: none; --p-shadow: none; --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 1px; /* @kind spacing */ --hover-lift-y: 0; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 0.99; /* @kind other */
+  --p-heading: "Archivo Black", var(--font-anton); /* @kind font */ --p-heading-weight: 400; /* @kind font */
+  --p-display-case: uppercase; /* @kind font */ --p-heading-ls: -0.015em; /* @kind font */
+  --p-ease: var(--motion-fast) var(--ease-emphasized); /* @kind other */
+}
+
+/* ===========================================================================
+   3 — DOPAMINE  ·  vibrant, pill controls, flat offset COLOR shadow
+   ========================================================================= */
+[data-ui="saas"][data-trend="dopamine"], [data-theme="atlvs-product"][data-trend="dopamine"] {
+  --p-r-sm: 14px; /* @kind radius */ --p-r: 18px; /* @kind radius */ --p-r-md: 20px; /* @kind radius */ --p-r-lg: 26px; /* @kind radius */ --p-r-xl: 30px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
+  /* offset shadow tinted by the brand accent — hue preserved */
+  --p-elev-1: 4px 4px 0 var(--p-accent-weak);
+  --p-elev-2: 6px 6px 0 color-mix(in oklab, var(--k-acc) 40%, transparent);
+  --p-elev-3: 10px 10px 0 color-mix(in oklab, var(--k-acc) 55%, transparent);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 2px; /* @kind spacing */ --hover-lift-y: -3px; /* @kind other */ --hover-scale: 1.03; /* @kind other */ --press-scale: 0.96; /* @kind other */
+  --p-ease: var(--motion-normal) var(--ease-spring); /* @kind other */
+  --p-heading: "Fraunces", "Space Grotesk", var(--font-anton); /* @kind font */ --p-heading-weight: 600; /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.01em; /* @kind font */
+  --p-accent: color-mix(in oklab, var(--k-acc) 94%, var(--p-text-1) 6%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 22%, transparent);
+}
+
+/* ===========================================================================
+   4 — BOLD TYPE  ·  type is the page; flat, hard edges, colossal display
+   ========================================================================= */
+[data-ui="saas"][data-trend="bold-type"], [data-theme="atlvs-product"][data-trend="bold-type"] {
+  --p-r-sm: 0; /* @kind radius */ --p-r: 0; /* @kind radius */ --p-r-md: 0; /* @kind radius */ --p-r-lg: 0; /* @kind radius */ --p-r-xl: 2px; /* @kind radius */ --p-r-pill: 0; /* @kind radius */
+  --p-elev-1: none; --p-elev-2: 0 0 0 1px var(--p-border); --p-elev-3: 0 8px 24px rgba(10,12,24,.12);
+  --p-shadow-sm: none; --p-shadow: none; --p-shadow-lg: var(--p-elev-3);
+  --p-fs-display-xl: 140px; /* @kind font */ --p-lh-display: 0.9; /* @kind font */
+  --p-heading: var(--font-anton); /* @kind font */ --p-heading-weight: 400; /* @kind font */ --p-display-case: uppercase; /* @kind font */
+  --p-heading-ls: -0.03em; /* @kind font */ --p-tracking-display: -0.035em; /* @kind font */
+  --hover-lift-y: 0; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 0.99; /* @kind other */
+  --p-accent: color-mix(in oklab, var(--k-acc) 92%, var(--p-text-1) 8%);
+}
+
+/* ===========================================================================
+   5 — DARK  ·  the dual-theme showcase; border-led elevation, GitHub-calm radii
+   (the studio also pins [data-mode="dark"] when this trend is chosen)
+   ========================================================================= */
+[data-ui="saas"][data-trend="dark"], [data-theme="atlvs-product"][data-trend="dark"] {
+  --p-r-sm: 6px; /* @kind radius */ --p-r: 8px; /* @kind radius */ --p-r-md: 8px; /* @kind radius */ --p-r-lg: 12px; /* @kind radius */ --p-r-xl: 14px; /* @kind radius */
+  --p-elev-1: 0 0 0 1px var(--p-border); --p-elev-2: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px var(--p-border);
+  --p-elev-3: 0 12px 36px rgba(0,0,0,.5), 0 0 0 1px var(--p-border);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 1px; /* @kind spacing */ --hover-lift-y: -1px; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 0.99; /* @kind other */
+  --p-heading: "Space Grotesk", var(--font-hanken-grotesk); /* @kind font */ --p-heading-weight: 600; /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.015em; /* @kind font */
+  --p-ease: 240ms var(--ease-standard); /* @kind other */
+}
+
+/* ===========================================================================
+   6 — MOTION  ·  clean base, spring eases, generous hover lift (durations stay
+   tokenized → reduced-motion still zeroes them, see guard at end)
+   ========================================================================= */
+[data-ui="saas"][data-trend="motion"], [data-theme="atlvs-product"][data-trend="motion"] {
+  --p-r-md: 10px; /* @kind radius */ --p-r-lg: 14px; /* @kind radius */
+  --motion-normal: 240ms; /* @kind other */ --motion-slow: 400ms; /* @kind other */ --motion-hover: 160ms; /* @kind other */
+  --p-ease: var(--motion-hover) var(--ease-spring); /* @kind other */
+  --ease-standard: cubic-bezier(.2,0,0,1); /* @kind other */ --ease-emphasized: cubic-bezier(0,0,0,1); /* @kind other */
+  --hover-lift-y: -4px; /* @kind other */ --hover-scale: 1.02; /* @kind other */ --press-scale: 0.97; /* @kind other */
+  --p-heading: "Space Grotesk", var(--font-hanken-grotesk); /* @kind font */ --p-heading-weight: 600; /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.015em; /* @kind font */
+}
+
+/* ===========================================================================
+   7 — GAMIFIED  ·  friendly rounded, soft shadow, vivid accent, springy
+   ========================================================================= */
+[data-ui="saas"][data-trend="gamified"], [data-theme="atlvs-product"][data-trend="gamified"] {
+  --p-r-sm: 12px; /* @kind radius */ --p-r: 16px; /* @kind radius */ --p-r-md: 18px; /* @kind radius */ --p-r-lg: 22px; /* @kind radius */ --p-r-xl: 26px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
+  --p-elev-1: 0 2px 6px rgba(10,12,24,.08); --p-elev-2: 0 6px 18px rgba(10,12,24,.12);
+  --p-elev-3: 0 16px 40px rgba(10,12,24,.18);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --hover-lift-y: -3px; /* @kind other */ --hover-scale: 1.04; /* @kind other */ --press-scale: 0.95; /* @kind other */
+  --p-ease: var(--motion-hover) var(--ease-spring); /* @kind other */
+  --p-heading: "Baloo 2", var(--font-hanken-grotesk); /* @kind font */ --p-heading-weight: 700; /* @kind font */
+  --p-font: "Baloo 2", var(--font-hanken-grotesk); /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.005em; /* @kind font */
+  --p-accent: color-mix(in oklab, var(--k-acc) 92%, var(--p-text-1) 8%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 20%, transparent);
+}
+
+/* ===========================================================================
+   8 — NEUMORPHIC  ·  soft UI; dual extruded/inset shadow derived off the surface
+   ========================================================================= */
+[data-ui="saas"][data-trend="neumorphic"], [data-theme="atlvs-product"][data-trend="neumorphic"] {
+  --p-r-sm: 12px; /* @kind radius */ --p-r: 16px; /* @kind radius */ --p-r-md: 18px; /* @kind radius */ --p-r-lg: 20px; /* @kind radius */ --p-r-xl: 24px; /* @kind radius */
+  --p-elev-1: 5px 5px 12px color-mix(in srgb, var(--p-text-1) 14%, transparent), -5px -5px 12px color-mix(in srgb, var(--p-neutral-0) 70%, transparent);
+  --p-elev-2: 8px 8px 18px color-mix(in srgb, var(--p-text-1) 16%, transparent), -8px -8px 18px color-mix(in srgb, var(--p-neutral-0) 80%, transparent);
+  --p-elev-3: 10px 10px 24px color-mix(in srgb, var(--p-text-1) 20%, transparent), -10px -10px 24px color-mix(in srgb, var(--p-neutral-0) 80%, transparent);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-2);
+  --p-border-width: 0px; /* @kind spacing */ --hover-lift-y: 0; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 0.99; /* @kind other */
+  --p-ease: var(--motion-hover) var(--ease-standard); /* @kind other */
+  --p-heading: "Poppins", var(--font-hanken-grotesk); /* @kind font */ --p-heading-weight: 600; /* @kind font */
+  --p-font: "Poppins", var(--font-hanken-grotesk); /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.01em; /* @kind font */
+  --p-accent: color-mix(in oklab, var(--k-acc) 74%, var(--p-surface) 26%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 10%, transparent);
+}
+
+/* ===========================================================================
+   9 — SYNTHWAVE  ·  neon glow (from accent), sharp corners, futuristic display
+   ========================================================================= */
+[data-ui="saas"][data-trend="synthwave"], [data-theme="atlvs-product"][data-trend="synthwave"] {
+  --p-r-sm: 2px; /* @kind radius */ --p-r: 4px; /* @kind radius */ --p-r-md: 4px; /* @kind radius */ --p-r-lg: 6px; /* @kind radius */ --p-r-xl: 8px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
+  --p-elev-1: 0 0 0 1px color-mix(in oklab, var(--k-acc) 55%, transparent), 0 0 14px color-mix(in oklab, var(--k-acc) 35%, transparent);
+  --p-elev-2: 0 0 0 1px color-mix(in oklab, var(--k-acc) 60%, transparent), 0 0 24px color-mix(in oklab, var(--k-acc) 45%, transparent);
+  --p-elev-3: 0 0 0 1px color-mix(in oklab, var(--k-acc) 70%, transparent), 0 0 40px color-mix(in oklab, var(--k-acc) 55%, transparent);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 1px; /* @kind spacing */ --hover-lift-y: -2px; /* @kind other */ --hover-scale: 1.01; /* @kind other */ --press-scale: 0.98; /* @kind other */
+  --trend-overlay: grid; /* @kind other */ --p-ease: var(--motion-normal) var(--ease-out); /* @kind other */
+  --p-heading: "Orbitron", "Space Grotesk", var(--font-anton); /* @kind font */ --p-heading-weight: 700; /* @kind font */
+  --p-display-case: uppercase; /* @kind font */ --p-heading-ls: 0.04em; /* @kind font */
+  --p-accent: color-mix(in oklab, var(--k-acc) 96%, var(--p-text-1) 4%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 20%, transparent);
+}
+
+/* ===========================================================================
+   10 — MAXIMALIST  ·  visible borders, mixed radii, dense, loud display
+   ========================================================================= */
+[data-ui="saas"][data-trend="maximalist"], [data-theme="atlvs-product"][data-trend="maximalist"] {
+  --p-r-sm: 0; /* @kind radius */ --p-r: 4px; /* @kind radius */ --p-r-md: 4px; /* @kind radius */ --p-r-lg: 24px; /* @kind radius */ --p-r-xl: 28px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
+  --p-elev-1: 0 0 0 2px var(--p-text-1); --p-elev-2: 4px 4px 0 var(--p-text-1), 0 0 0 2px var(--p-text-1);
+  --p-elev-3: 8px 8px 0 var(--p-text-1), 0 0 0 2px var(--p-text-1);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 2px; /* @kind spacing */ --trend-rotate: -1deg; /* @kind other */ --hover-lift-y: -2px; /* @kind other */ --hover-scale: 1.02; /* @kind other */ --press-scale: 0.98; /* @kind other */
+  --p-heading: var(--font-anton); /* @kind font */ --p-heading-weight: 400; /* @kind font */ --p-display-case: uppercase; /* @kind font */ --p-heading-ls: -0.01em; /* @kind font */
+  --p-ease: var(--motion-fast) var(--ease-spring); /* @kind other */
+  --p-accent: color-mix(in oklab, var(--k-acc) 94%, var(--p-text-1) 6%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 22%, transparent);
+}
+
+/* ===========================================================================
+   11 — COLLAGE  ·  paper drop shadow, slight off-grid tilt, editorial display
+   ========================================================================= */
+[data-ui="saas"][data-trend="collage"], [data-theme="atlvs-product"][data-trend="collage"] {
+  --p-r-sm: 2px; /* @kind radius */ --p-r: 3px; /* @kind radius */ --p-r-md: 3px; /* @kind radius */ --p-r-lg: 4px; /* @kind radius */ --p-r-xl: 6px; /* @kind radius */
+  --p-elev-1: 2px 3px 6px rgba(10,12,24,.16); --p-elev-2: 3px 5px 12px rgba(10,12,24,.20);
+  --p-elev-3: 6px 10px 24px rgba(10,12,24,.26);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-1); --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 1px; /* @kind spacing */ --trend-rotate: -1.5deg; /* @kind other */ --hover-lift-y: -2px; /* @kind other */ --hover-scale: 1.01; /* @kind other */ --press-scale: 0.99; /* @kind other */
+  --p-heading: "Fraunces", "Space Grotesk", var(--font-anton); /* @kind font */ --p-heading-weight: 600; /* @kind font */
+  --p-display-case: none; /* @kind font */ --p-heading-ls: -0.005em; /* @kind font */
+  --p-ease: var(--motion-normal) var(--ease-spring); /* @kind other */
+}
+
+/* ===========================================================================
+   12 — BRUTALIST  ·  raw, thick black borders, HARD offset shadow, slam-press
+   ========================================================================= */
+[data-ui="saas"][data-trend="brutalist"], [data-theme="atlvs-product"][data-trend="brutalist"] {
+  --p-r-sm: 0; /* @kind radius */ --p-r: 0; /* @kind radius */ --p-r-md: 0; /* @kind radius */ --p-r-lg: 0; /* @kind radius */ --p-r-xl: 0; /* @kind radius */ --p-r-pill: 0; /* @kind radius */
+  --p-elev-1: 3px 3px 0 var(--p-text-1); --p-elev-2: 5px 5px 0 var(--p-text-1); --p-elev-3: 8px 8px 0 var(--p-text-1);
+  --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-2); --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 2px; /* @kind spacing */ --p-border: var(--p-text-1); --p-border-2: var(--p-text-1);
+  --hover-lift-y: -2px; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 1; /* @kind other */ --trend-press-translate: 3px; /* @kind other */
+  --motion-fast: 0ms; /* @kind other */ --motion-normal: 0ms; /* @kind other */ /* mechanical, instant */
+  --p-ease: 0ms linear; /* @kind other */
+  --p-heading: "Archivo Black", "Space Grotesk", var(--font-anton); /* @kind font */ --p-heading-weight: 400; /* @kind font */
+  --p-display-case: uppercase; /* @kind font */ --p-heading-ls: -0.01em; /* @kind font */
+  --p-accent: color-mix(in oklab, var(--k-acc) 96%, var(--p-text-1) 4%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 24%, transparent);
+}
+
+/* ===========================================================================
+   13 — SUSTAINABLE  ·  lean; system fonts (zero webfont), hairline borders,
+   near-zero motion. The restraint is the aesthetic.
+   ========================================================================= */
+[data-ui="saas"][data-trend="sustainable"], [data-theme="atlvs-product"][data-trend="sustainable"] {
+  --p-r-sm: 4px; /* @kind radius */ --p-r: 6px; /* @kind radius */ --p-r-md: 8px; /* @kind radius */ --p-r-lg: 8px; /* @kind radius */ --p-r-xl: 10px; /* @kind radius */
+  --p-elev-1: none; --p-elev-2: 0 0 0 1px var(--p-border); --p-elev-3: 0 0 0 1px var(--p-border-2);
+  --p-shadow-sm: none; --p-shadow: none; --p-shadow-lg: var(--p-elev-3);
+  --p-border-width: 1px; /* @kind spacing */ --hover-lift-y: 0; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 0.99; /* @kind other */
+  --motion-fast: 80ms; /* @kind other */ --motion-normal: 120ms; /* @kind other */ --motion-slow: 160ms; /* @kind other */
+  --p-ease: 120ms var(--ease-standard); /* @kind other */
+  --p-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; /* @kind font */
+  --p-heading: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; /* @kind font */
+  --p-heading-weight: 700; /* @kind font */ --p-display-case: none; /* @kind font */ --p-heading-ls: -0.01em; /* @kind font */
+  --p-accent: color-mix(in oklab, var(--k-acc) 82%, var(--p-text-1) 18%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 12%, transparent);
+}
+
+/* ---- REDUCED-MOTION GUARD (REC, re-asserted at trend specificity) ----
+   Trend blocks raise specificity to 0,2,0, so the base reduced-motion guard
+   (0,1,0) no longer reaches them. Re-assert it here, last, at matching
+   specificity so prefers-reduced-motion always wins over any trend timing. */
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="saas"][data-trend], [data-theme="atlvs-product"][data-trend] {
+    --motion-fast: 0ms; /* @kind other */ --motion-normal: 0ms; /* @kind other */ --motion-slow: 0ms; /* @kind other */
+    --motion-hover: 0ms; /* @kind other */ --motion-skeleton: 0ms; /* @kind other */ --vt-dur: 0ms; /* @kind other */
+    --hover-lift-y: 0; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 1; /* @kind other */ --trend-press-translate: 0; /* @kind other */
+  }
+}

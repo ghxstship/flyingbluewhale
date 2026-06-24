@@ -677,7 +677,7 @@ export default async function Home() {
           {/* C4 — attribute the stats (no orphan numbers). */}
           <p className="mt-4 text-center text-[11px] text-[var(--p-text-3)]">
             {t("marketing.pages.home.stats.source", undefined, "From GHXSTSHIP Industries production history through 2026.")}{" "}
-            <Link href="/about" className="text-[var(--p-accent-text)] hover:underline">
+            <Link href="/about" className="text-[var(--p-accent-text)] underline">
               {t("marketing.pages.home.stats.sourceLink", undefined, "About")}
             </Link>
           </p>

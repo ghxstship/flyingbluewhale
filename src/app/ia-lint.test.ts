@@ -139,6 +139,12 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     // renderer, which owns and renders the recent-scans zero-state — same
     // labels-object hand-off as the COMPVSS kit pages above.
     "src/app/(platform)/studio/access-control/page.tsx",
+    // Approvals engine (Tier-2 build): instance + policy detail pages render a
+    // 1-line "no steps yet" inside their Steps sub-card — detail-page in-section
+    // inline empties, the same category as the offer-letter / RFQ detail pages
+    // above. Page-level voids on these surfaces use <EmptyState>.
+    "src/app/(platform)/studio/governance/approvals/[id]/page.tsx",
+    "src/app/(platform)/studio/governance/approvals/policies/[policyId]/page.tsx",
   ]);
 
   const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));

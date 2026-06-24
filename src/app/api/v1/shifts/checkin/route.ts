@@ -3,7 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { classifyPunch } from "@/lib/connecteam";
+import { classifyPunch } from "@/lib/workforce";
 
 /** /api/v1/shifts/checkin — COMPVSS shift T&A (WF-197).
  *

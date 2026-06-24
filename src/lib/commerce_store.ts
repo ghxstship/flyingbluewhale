@@ -1,7 +1,7 @@
 /**
  * GVTEWAY public commerce — shared helpers for the Shopify-style store.
  * Schema-anchored to migration PENDING_gvteway_store_commerce.sql. Pattern
- * mirrors `src/lib/marketplace.ts` / `src/lib/connecteam.ts`: enum tuples
+ * mirrors `src/lib/marketplace.ts` / `src/lib/workforce.ts`: enum tuples
  * `as const` → derived types → small helpers + label/tone maps.
  *
  * Used by the public storefront (marketing shell, anon), the cart view,

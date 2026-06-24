@@ -1,109 +1,79 @@
-# Brand Voice — ATLVS Technologies
+# Brand Voice — ATLVS Technologies (v8.1)
 
-**The blend:** ClickUp × Virgin Voyages × SXSW — delivered as a **journey**, not a dashboard.
+ATLVS is for people who build worlds — a festival, a film set, a gala, a stadium tour,
+an immersive run, a broadcast. Temporary worlds thousands of people live inside, then
+strike by morning. The voice carries the art of that work, the weight of it, and the
+fun of it — without ever sounding like a brochure.
 
-## Governing metaphor — every production is a voyage
+## Voice DNA — a 40 / 35 / 25 blend
 
-Every production has a beginning, a middle, and an end. The voice lives in that arc.
+- **MCU Spider-Man — 40%, the public lead.** Friendly, fast, a little self-deprecating,
+  genuinely glad to help. Deflates the epic with a joke, then does the hard thing. Leads
+  marketing, the marketplace, and social.
+- **Iron Man — 35%, the console lead.** High-tech, high-taste, sardonic competence:
+  luxury self-confidence with hacker irreverence. The one who already built the thing you're
+  describing — and the only voice that talks when something's broken.
+- **Thor — 25%, the scale.** Mythic weight for the genuinely huge moments — doors open,
+  headliner's on, the wrap — with a wink so it never goes pompous.
 
-- **Act I — DEPART.** The pitch, the contract, the team, the advance, the manifest.
-- **Act II — SAIL.** The build, the run, the show nights, the scan, the service.
-- **Act III — RETURN.** The wrap, the settlement, the recap, the legacy.
+**Two centers of gravity, one voice.** Parker leads the public face; Stark leads the
+operator console. Don't let Parker's nerves write the error states; don't let Stark's
+swagger run the welcome mat. Thor is a volume knob, not a default.
 
-The Atlas is the itinerary. The three rooms (ATLVS · GVTEWAY · COMPVSS) are the ports of call that make the journey possible.
+## The world-builder's mentality
 
-## Three ingredients, re-tuned
+You're not running an event — you're building a world. Don't describe that world from a
+poster; ride along inside it while the user builds (the mentor and the kid: Stark builds,
+Parker makes it reachable). Ambition lives in the invitation to climb in — "take chances,
+get a little messy, we'll flag the cliffs" — not in a slogan.
 
-| Ingredient         | What we take                                                                                                                          |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| **ClickUp**        | Feature velocity. Specifics-per-line. Confident modern SaaS punch. Never boastful — tangible.                                         |
-| **Virgin Voyages** | Voyage-not-cruise swagger. Adults-only confidence. Curated experience. "Sailing orders," "ports of call," "manifest." Design-forward. |
-| **SXSW**           | Discovery. Convergence. Cross-genre. Multi-day, multi-venue. Taste-maker energy. Badge holders. The moment the scenes cross.          |
+## Write like a person, not an AI
 
-## The 12 commandments
+This is the rule that protects everything else. Kill the slop tells:
 
-1. **Every page tells a journey.** Depart → Sail → Return. Even the pricing page has a horizon.
-2. **The definite article.** "The itinerary." "The manifest." "The horizon." Not "an app."
-3. **Verbs of passage.** Cast off. Chart. Sail. Land. Return.
-4. **Specifics over metaphor.** "Twelve venues, eight cities, forty-five nights." A number always wins.
-5. **One punchline per screen.** Not every paragraph — once per scroll.
-6. **No comparison. Ever.** The Atlas stands on its own itinerary.
-7. **Short + long + short.** Rhythm. One-word sentences hit. Long sentences hold.
-8. **First person plural.** "We curate." Not "our customers."
-9. **Second person present.** "You cast off." Not "teams cast off."
-10. **Privacy as posture.** We talk about the voyages the press doesn't cover.
-11. **Burn the SaaS dictionary.** No "solutions," "synergy," "unlocks," "empowers," "streamlines."
-12. **Boarding-call cadence on CTAs.** "Book passage" beats "sign up." "The manifest opens" beats "join now."
+- No rule-of-three triads ("crew, cost, and cue").
+- No alliteration runs.
+- No "X, not Y" antithesis ("a standard, not a trend").
+- No em-dash used for fake drama.
+- Let sentences run uneven. Be concrete — a number beats an adjective
+  ("9-day settlement"; "fourteen cities, zero dropped handoffs").
 
-## The lifecycle lexicon
+## The rules
 
-| Concept                    | Voyage vocabulary                                    |
-| -------------------------- | ---------------------------------------------------- |
-| The product                | The Atlas · the itinerary · the voyage platform      |
-| The whole production       | The voyage · the journey · the crossing              |
-| Pitch → contract → plan    | **Depart**                                           |
-| Build → show → service     | **Sail**                                             |
-| Wrap → settle → recap      | **Return**                                           |
-| Run-sheet                  | The itinerary · sailing orders                       |
-| Show / run / residency     | The crossing · the voyage · the passage              |
-| Schedule                   | The itinerary                                        |
-| Guest list                 | The manifest                                         |
-| Ticket                     | The boarding pass · the pass                         |
-| Venues / cities / dates    | Ports of call                                        |
-| Walkthrough                | Captain's briefing · concierge preview               |
-| Support                    | The concierge                                        |
-| Enterprise / Festival tier | Private charter · Admiral's table                    |
-| Customer / user            | Pass holder · the manifest                           |
-| Sign up                    | Book passage · board the voyage · the manifest opens |
-| Demo                       | Captain's briefing                                   |
-| Studio (us)                | The Studio · the taste-makers' studio                |
-| Legacy / recap             | Homecoming · the log book                            |
-
-## The producer we're writing to
-
-The cultural tastemaker. The producer who:
-
-- Books the rooms people fly in for — and the ones the press doesn't cover.
-- Works across music, film, brand, food, fashion, and art — because the best nights always do.
-- Knows that every show is a trip with a beginning, middle, and end.
-- Reads the room. Reads the line. Reads the room again.
-
-## Headline formulas
-
-- "**[Verb]** the **[noun of passage].**" → "Chart the voyage." / "Cast off the season."
-- "**From [start] to [end].**" → "From pitch to homecoming." / "From horizon to log book."
-- "**The [noun] for the [specific people].**" → "The itinerary for cultural tastemakers."
-- "**Three acts. [Numbers].**" → "Three acts. Twelve ports. One manifest."
-
-## Swap lookup (quick ref)
-
-| Old                   | New                               |
-| --------------------- | --------------------------------- |
-| Platform / Dashboard  | The Atlas · the itinerary         |
-| Project               | The voyage · the crossing         |
-| Workflow              | Sailing orders · the itinerary    |
-| Sign up               | Book passage · the manifest opens |
-| Book a demo           | Captain's briefing                |
-| Pricing               | Passage · cabin classes           |
-| Access (GA)           | Day pass · open manifest          |
-| Pro / Headliner       | Festival pass                     |
-| Enterprise / Festival | Private charter                   |
-| Customer              | Pass holder                       |
-| Dashboard             | The bridge · the chart room       |
-| Support               | The concierge                     |
+- **Person & tense.** First person plural ("We plot the work"), second person present
+  ("You aim big"). Not "our customers."
+- **Trade-true vocabulary.** Talk like the floor: advancing, run-of-show, settlement,
+  call times, load-in, load-out, day-of. It's how producers search and how you earn trust.
+- **Where the wonder goes.** Invitations only — marketing, onboarding, the first empty
+  screen, the help that teaches. In dense chrome and anything broken, drop it: errors stay
+  flat and accountable, confirmations short. Nobody wants a tour guide when the bus is on fire.
+- **No comparison. Ever.** No "unlike," no "vs.", no competitor names. Capture intent
+  against the status quo instead ("moving off spreadsheets").
+- **No emoji. Ever — anywhere.** Icons come from Lucide (UI) or the AIGA signs (wayfinding).
+- **Discretion.** Strategy and positioning notes are direction for how you write — never
+  text to drop on the page.
 
 ## Hard don'ts
 
-- **No "unlike."** No "vs." No "most teams." No competitor names in body copy.
-- **No stale nautical.** No "ahoy," no "shipmates," no pirate clip-art.
-- **No SXSW name-drop in body copy.** The SX energy is a texture, not a pitch.
-- "Unified" — say "one."
-- "Enterprise-grade" — name the feature.
-- "Best-in-class" — pick the class and own it.
-- "Empower" / "enable" — use "let" or "give you."
-- Em-dash bullets starting with gerunds ("Empowering teams to…").
-- Any sentence that would survive in Salesforce docs.
+"solutions," "synergy," "unlocks," "empowers," "streamlines," "unified" (say *one*),
+"enterprise-grade" (name the feature), "best-in-class." No gerund-led em-dash bullets.
+No sentence that would survive in Salesforce docs.
+
+## Register by surface
+
+| Surface | Lead | Sounds like |
+|---|---|---|
+| Marketing hero / CTA | Spider-Man (+ Thor for scale) | "So you're building a city that exists for one weekend." |
+| Operator console copy | Iron Man | "Yeah, it does that too." |
+| Empty state | Spider-Man | "Pick something ambitious and rough it in." |
+| Error | Iron Man (calm) | "That didn't load. Give it another shot — if it sticks, it's on us." |
+| Confirmation | brief | "Saved. Smooth one." |
+| The genuinely huge moment | Thor | reserved, mythic, one line |
 
 ## The voice, in one paragraph
 
-> You host the nights people fly in for. You curate the rooms the press doesn't cover. Every production you run has a shape — a departure, a run, a return — and the Atlas is the itinerary that holds all three. Three rooms (the bridge, the ports of call, the open deck) on one manifest. Built by the taste-makers' studio, written for the producers booking the next crossing.
+> You build worlds for a living — the rooms people fly in for, the nights the press doesn't
+> cover. ATLVS runs the whole thing with you: the pitch, the build, the show, the wrap, every
+> piece of it where you can see it. We don't hand you a list and call it project management.
+> We plot the work, ride along while you build it, and stay calm when something breaks. Built
+> by the taste-makers' studio, written for the people booking the next one.

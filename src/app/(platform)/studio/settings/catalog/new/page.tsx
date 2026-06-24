@@ -2,6 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { getRequestT } from "@/lib/i18n/request";
+import { CATALOG_KINDS, CATALOG_KIND_LABEL } from "@/lib/db/assignments";
 import { createCatalogItem } from "./actions";
 
 export default async function Page() {
@@ -23,17 +24,11 @@ export default async function Page() {
               {t("console.settings.catalog.new.kindLabel", undefined, "Kind")}
             </label>
             <select name="kind" required className="ps-input mt-1.5 w-full" defaultValue="credential">
-              <option value="credential">
-                {t("console.settings.catalog.kind.credential", undefined, "Credential")}
-              </option>
-              <option value="catering">{t("console.settings.catalog.kind.catering", undefined, "Catering")}</option>
-              <option value="radio">{t("console.settings.catalog.kind.radio", undefined, "Radio")}</option>
-              <option value="tool">{t("console.settings.catalog.kind.tool", undefined, "Tool")}</option>
-              <option value="equipment">{t("console.settings.catalog.kind.equipment", undefined, "Equipment")}</option>
-              <option value="uniform">{t("console.settings.catalog.kind.uniform", undefined, "Uniform")}</option>
-              <option value="travel">{t("console.settings.catalog.kind.travel", undefined, "Travel")}</option>
-              <option value="lodging">{t("console.settings.catalog.kind.lodging", undefined, "Lodging")}</option>
-              <option value="vehicle">{t("console.settings.catalog.kind.vehicle", undefined, "Vehicle")}</option>
+              {CATALOG_KINDS.map((k) => (
+                <option key={k} value={k}>
+                  {t(`console.settings.catalog.kind.${k}`, undefined, CATALOG_KIND_LABEL[k])}
+                </option>
+              ))}
             </select>
           </div>
           <Input

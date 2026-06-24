@@ -1,5 +1,5 @@
 /**
- * LEG3ND community (Skool-class) vocabulary. Posts / comments / reactions.
+ * LEG3ND community (cohort-community-class) vocabulary. Posts / comments / reactions.
  * Members + contribution points come from the shared gamification ledger
  * (see src/lib/legend_gamification.ts). Backed by migration
  * 20260623150040_legend_community.

@@ -233,6 +233,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Documents", href: "/studio/documents", icon: "FileStack" },
           { label: "Proposal Templates", href: "/studio/proposals/templates", icon: "Files" },
           { label: "Project Templates", href: "/studio/templates", icon: "Files" },
+          { label: "Event Kits", href: "/studio/kits", icon: "Layers" },
         ],
       },
       {
@@ -258,6 +259,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Risk Scores", href: "/studio/risk", icon: "ShieldAlert" },
           { label: "Readiness", href: "/studio/programs/readiness", icon: "ShieldCheck" },
           { label: "Reviews", href: "/studio/programs/reviews", icon: "ClipboardCheck" },
+          { label: "Approvals", href: "/studio/governance/approvals", icon: "ClipboardCheck" },
         ],
       },
     ],
@@ -277,6 +279,8 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Equipment Utilization", href: "/studio/production/equipment/utilization", icon: "BarChart3" },
           { label: "AV Inventory", href: "/studio/production/av", icon: "Speaker" },
           { label: "Rentals", href: "/studio/production/rentals", icon: "ArrowLeftRight" },
+          { label: "Assets", href: "/studio/assets", icon: "Package" },
+          { label: "Warranties", href: "/studio/assets/warranties", icon: "ShieldCheck" },
         ],
       },
       {
@@ -337,7 +341,7 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Training", href: "/studio/workforce/training", icon: "GraduationCap" },
           // Courses deep-links into the LEG3ND shell — LEG3ND is the canonical
-          // learning/LMS owner; the console-embedded Connecteam courses admin
+          // learning/LMS owner; the console-embedded the deskless-workforce suite courses admin
           // was retired when LEG3ND graduated to its own (legend) shell.
           { label: "Courses", href: "/legend/learn", icon: "BookOpen" },
           // The Standard (knowledge base) re-homed here when the platform
@@ -457,6 +461,8 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Entities", href: "/studio/finance/entities", icon: "Building2" },
           { label: "Cost Codes", href: "/studio/finance/cost-codes", icon: "ListOrdered" },
+          { label: "Chart of Accounts", href: "/studio/finance/accounts", icon: "ListOrdered" },
+          { label: "General Ledger", href: "/studio/finance/ledger", icon: "BookOpen" },
         ],
       },
       {
@@ -467,6 +473,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "EAC Forecasts", href: "/studio/finance/forecasts", icon: "TrendingUp" },
           { label: "Periods", href: "/studio/finance/periods", icon: "CalendarDays" },
           { label: "Reports", href: "/studio/finance/reports", icon: "ChartBar" },
+          { label: "Tax", href: "/studio/finance/tax", icon: "Coins" },
         ],
       },
       {
@@ -502,9 +509,10 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Requisitions", href: "/studio/procurement/requisitions", icon: "ShoppingCart" },
           { label: "Purchase Orders", href: "/studio/procurement/purchase-orders", icon: "Package" },
+          { label: "Receiving", href: "/studio/procurement/receiving", icon: "PackageCheck" },
           { label: "PO Change Orders", href: "/studio/procurement/po-change-orders", icon: "ArrowLeftRight" },
           { label: "WO Broadcasts", href: "/studio/procurement/wo-broadcasts", icon: "Send" },
-          { label: "Contracts", href: "/studio/contracts", icon: "ClipboardSignature" },
+          { label: "Contracts", href: "/studio/legal/contracts", icon: "ClipboardSignature" },
         ],
       },
       {
@@ -609,6 +617,7 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Announcements", href: "/studio/comms/announcements", icon: "Megaphone" },
       { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3" },
       { label: "Surveys", href: "/studio/comms/surveys", icon: "ClipboardCheck" },
+      { label: "Channels", href: "/studio/comms/channels", icon: "MessageSquare" },
       { label: "Whiteboards", href: "/studio/collaborate/whiteboards", icon: "Presentation" },
       { label: "Transmittals", href: "/studio/transmittals", icon: "Send" },
       { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox" },
@@ -668,7 +677,7 @@ export const legendNav: NavGroup[] = [
     ],
   },
   {
-    // COMMUNITY — Skool-class discussion, directory, and learning crews.
+    // COMMUNITY — cohort-community-class discussion, directory, and learning crews.
     label: "Community",
     items: [
       { label: "Community", href: "/legend/community", icon: "UsersRound" },
@@ -1143,7 +1152,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       privacy,
     ],
     // OPERATIONS (6) — labor + fulfillment.
-    // ADR-0008 Move 3 — Connecteam-parity surfaces backfilled into vendor
+    // ADR-0008 Move 3 — Workforce-parity surfaces backfilled into vendor
     // alongside the existing engagement items. Same shared components
     // crew uses; the desktop vendor user gets the full workflow without
     // needing the PWA. 13 items pushes Miller's ceiling — ADR-0008
@@ -1165,7 +1174,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       { label: "Directory", href: `${base}/directory` },
       privacy,
     ],
-    // ADR-0008 Move 2 — Connecteam-parity surfaces backfilled into the
+    // ADR-0008 Move 2 — Workforce-parity surfaces backfilled into the
     // portal crew persona so desktop crew users don't have to install
     // the PWA. Same data as /m/* surfaces; shared component extraction
     // (ADR-0008 Move 1) lifts the rendering pattern in a follow-up. v1
@@ -1214,7 +1223,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
   // ADR-0008 Move 3 §Open questions #1 — vendor at 14 items breaks
   // Miller's 9-item ceiling. Split into Engagement (the procurement-side
   // workflow: PO/invoice/credentials/training/time-off/submissions) +
-  // Operations (the Connecteam-parity day-to-day: feed/chat/kudos/docs/
+  // Operations (the Workforce-parity day-to-day: feed/chat/kudos/docs/
   // directory/schedule/equipment-pull). Other personas keep the single
   // persona section since they're already under 10.
   if (persona === "vendor") {
@@ -1251,8 +1260,8 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
  * Mobile tab bar — 5 generic deskless surfaces (ADR-0006).
  *
  * Was: Home · Gate · Shift · Alerts · Me — too specialized; Gate is a
- * security-team-only tool. SaaS deskless convention (Connecteam, When I
- * Work, Sling) puts Inbox in the primary tab bar so messaging is one
+ * security-team-only tool. The common deskless-workforce convention
+ * puts Inbox in the primary tab bar so messaging is one
  * tap from anywhere. Gate stays a first-class surface, just reachable
  * via the Tools drawer / persona-routed home rather than the global bar.
  * Persona-routed tab bars (ADR-0009, deferred) will customize per role
@@ -1276,7 +1285,7 @@ export const mobileTabs: NavItem[] = [
 
 /**
  * Secondary mobile surfaces. Reachable from the Tools tab on /m and
- * from the mobile cmd-K palette. Connecteam-parity additions live in
+ * from the mobile cmd-K palette. Workforce-parity additions live in
  * the second cluster.
  *
  * ADR-0005 cleanup: the three near-twins (/m/clock, /m/checkin,

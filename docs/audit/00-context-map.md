@@ -42,7 +42,7 @@ src/
     auth.ts        getSession/requireSession/withAuth/has(Role)
     env.ts         typed env access
     branding.ts    safeBranding + brandingToCssVars
-    flags.ts       GrowthBook fetch + local fallback
+    flags.ts       the remote flag service fetch + local fallback
   middleware.ts    rate limiter + updateSession
 supabase/
   migrations/      10 applied SQL files
@@ -96,7 +96,7 @@ sentry.*.ts        Sentry client/server/edge configs
 | Database | Supabase Postgres 14.5 (managed) | `xrovijzjbyssajhtwvas` |
 | Auth | Supabase Auth (bcrypt + WebAuthn + OAuth) | |
 | Storage | Supabase Storage (5 buckets: advancing, receipts, proposals, credentials, branding) | |
-| Observability | Sentry (client + server + edge), GrowthBook (optional) | |
+| Observability | Sentry (client + server + edge), the remote flag service (optional) | |
 
 ### Regions
 
@@ -114,14 +114,14 @@ Top-level runtime packages:
 - `@supabase/ssr@0.10.2` · `@supabase/supabase-js@2.103.3`
 - `@anthropic-ai/sdk@0.88.0`
 - `@sentry/nextjs@10.49.0`
-- `@growthbook/growthbook-react@1.6.5`
+- `remote-flags client@1.6.5`
 - `@tanstack/react-table`, `@tanstack/react-virtual`
 - `@radix-ui/*` (12 packages)
 - `cmdk@1`, `sonner@2`, `framer-motion@12`, `@tiptap/*`
 - `@simplewebauthn/server`, `@simplewebauthn/browser`
 - `zod@4.3.6`
 
-No peer-dep conflicts resolved cleanly (required `--legacy-peer-deps` for Sentry + WebAuthn + GrowthBook). Lockfile committed.
+No peer-dep conflicts resolved cleanly (required `--legacy-peer-deps` for Sentry + WebAuthn + the remote flag service). Lockfile committed.
 
 **Known CVE posture:** not yet scanned in CI (finding IK-028).
 

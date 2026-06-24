@@ -1,7 +1,7 @@
 # Runbook — External-call circuit open
 
 **What broke.** `lib/http.ts`'s per-host breaker tripped. A downstream
-(Stripe, Resend, Anthropic, GrowthBook, etc.) returned 5 consecutive
+(Stripe, Resend, Anthropic, the remote flag service, etc.) returned 5 consecutive
 failures within the breaker window, and every subsequent call is now
 short-circuiting to `CircuitOpenError` for 30 s before a half-open probe.
 
@@ -9,7 +9,7 @@ short-circuiting to `CircuitOpenError` for 30 s before a half-open probe.
 - Stripe open → /api/v1/stripe/checkout + connect/onboarding 500
 - Resend open → email sends silently queue (send is best-effort)
 - Anthropic open → /api/v1/ai/chat streams error event
-- GrowthBook open → feature flags fall back to defaults (benign)
+- the remote flag service open → feature flags fall back to defaults (benign)
 
 **How do I confirm.**
 
@@ -34,7 +34,7 @@ curl -sSf -m 5 https://api.stripe.com/v1/balance -u "${STRIPE_SECRET_KEY}:" | he
 2. **Upstream up but we still tripped** → our creds may be wrong, or
    we're hitting a per-customer rate limit. Check Sentry for the
    404/401/429 signatures emitted just before the breaker opened.
-3. **Circuit open on GrowthBook** → benign, no user impact (local
+3. **Circuit open on the remote flag service** → benign, no user impact (local
    `FLAG_DEFAULTS` fallback kicks in). Clear silently.
 4. **Stuck open breaker** (rare: more than 5 min since the half-open
    window should have let a probe through) → bounce the serverless

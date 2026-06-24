@@ -1904,22 +1904,18 @@
      "ogImageTitle": "Schmeißen Sie die Show."
     },
     "hero": {
-     "eyebrow": "Vom Pitch zur Fallstudie",
+     "eyebrow": "Produktion · Betrieb · Erlebnis · Wissen",
      "titleLine1": "Das Ökosystem der",
      "titleLine2": "Welten-",
-     "subtitleLead": "Das modulare Betriebssystem für erlebnisorientierte und unkonventionelle Produktionen.",
-     "subtitleAtlvs": "steuert die Brücke,",
-     "subtitleCompvss": "arbeitet vor Ort,",
-     "subtitleGvteway": "öffnet die Türen, und",
+     "subtitleLead": "Das ultimative Tool für alle, die größer zu träumen wagten.",
      "ctaPrimary": "Kostenlos loslegen",
      "ctaSecondary": "Live erleben",
      "disclaimer": "Für immer kostenlos im Access-Tarif · Keine Kreditkarte · Preise pro Organisation",
      "ecosystemLabel": "Das ATLVS-Ökosystem",
-     "titleLine3": "bauer.",
-     "subtitleLegend": "hält den Standard."
+     "titleLine3": "bauer."
     },
     "trustBar": {
-     "label": "Die Welten, die diese Teams bauen, laufen auf ATLVS",
+     "label": "Wir treiben die größten Weltenbauer der Welt an",
      "seeWork": "Die Projekte ansehen →"
     },
     "threeApps": {
@@ -1931,22 +1927,22 @@
     "products": {
      "atlvs": {
       "audience": "Für Produzenten · interne Teams",
-      "tag": "Entwickeln · Bauen",
+      "tag": "Die Welt erschaffen",
       "body": "Entwickle und baue die Welt — Projekte, Advancing, Finanzen, Beschaffung und eine KI, die den Papierkram entwirft. Die Kommandobrücke des Produzenten."
      },
      "compvss": {
       "audience": "Für Crew · Dienstleister · Talent",
-      "tag": "Betreiben",
+      "tag": "Die Welt betreiben",
       "body": "Betreibe sie im Einsatz — Planung, Zertifikate, Einlass-Scan, Vorfälle. Offline-first, schnell am Gate, auch wenn das Signal es nicht ist."
      },
      "gvteway": {
       "audience": "Für Gäste · Kunden · Partner",
-      "tag": "Erleben",
+      "tag": "Die Welt erleben",
       "body": "Wo die Welt erlebt wird — Ticketing, Portale, Marktplatz. Jede Persona, jede mit ihrem eigenen Zugang."
      },
      "legend": {
       "audience": "Für Wissen · Schulung · Compliance",
-      "tag": "Wissen",
+      "tag": "Die Welt bereichern",
       "body": "Das Wissen, auf dem die Welt steht — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine."
      }
     },

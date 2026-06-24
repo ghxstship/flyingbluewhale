@@ -2,6 +2,7 @@ import { ChevronLeft, Gift, Send, Ticket, UserCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getOrCreateReferral } from "./actions";
 import { ReferralInvite } from "./ReferralInvite";
@@ -34,7 +35,10 @@ export default async function ReferralsPage() {
   const { t } = await getRequestT();
 
   const ref = await getOrCreateReferral();
-  const link = `atlvs.pro/r/${ref.code.toLowerCase()}`;
+  // The apex signup surface is the canonical join target; the referral code
+  // rides as a `?ref=` query param. There is no `/r/[code]` redemption route,
+  // and the link MUST resolve, so it points at the real `/signup` page.
+  const link = urlFor("auth", `/signup?ref=${ref.code.toLowerCase()}`);
 
   const { data: invites } = await supabase
     .from("referral_invitations")

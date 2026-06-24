@@ -83,14 +83,15 @@ describe("Token SSOT ↔ generated theme parity (Move D1)", () => {
     );
   });
 
-  it("v8.0 palette-locked — each product owns its accent + GHXSTSHIP house green", () => {
+  it("v8.0 palette-locked — each product owns its accent + ATLVS-red house accent", () => {
     // Per-product hues: ATLVS volcanic red · COMPVSS signal yellow · GVTEWAY blue ·
-    // LEG3ND molten orange · GHXSTSHIP house green (the non-product/marketing default).
-    expect(declaredValues("accent").has("#e23414")).toBe(true); // ATLVS red
+    // LEG3ND molten orange. The GHXSTSHIP house accent (non-product/marketing default)
+    // is ATLVS volcanic red — the retired house green (#2edb3a) is gone.
+    expect(declaredValues("accent").has("#e23414")).toBe(true); // ATLVS red (also the house accent)
     expect(declaredValues("accent").has("#ffc400")).toBe(true); // COMPVSS yellow
     expect(declaredValues("accent").has("#2563eb")).toBe(true); // GVTEWAY blue
     expect(declaredValues("accent").has("#ed6a1e")).toBe(true); // LEG3ND orange
-    expect(declaredValues("accent").has("#2edb3a")).toBe(true); // GHXSTSHIP house green
+    expect(declaredValues("accent").has("#2edb3a")).toBe(false); // retired house green
   });
 
   it("tokens.json is stamped v8.0 (palette-locked)", () => {

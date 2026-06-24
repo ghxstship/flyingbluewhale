@@ -1,4 +1,4 @@
-import { ScheduleSurface } from "@/components/connecteam/ScheduleSurface";
+import { ScheduleSurface } from "@/components/workforce/ScheduleSurface";
 
 /**
  * GVTEWAY vendor schedule (ADR-0008 Move 3) — thin wrapper over the

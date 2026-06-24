@@ -89,16 +89,16 @@
   --p-text-1: #181b23;
   --p-text-2: #4a5563;
   --p-text-3: #656d7a;
-  --p-accent: #2edb3a;
-  --p-accent-hover: #00ca22;
-  --p-accent-text: #1f8425;
+  --p-accent: #e23414;
+  --p-accent-hover: #c92c10;
+  --p-accent-text: #971a05;
   --p-accent-contrast: #ffffff;
-  --p-accent-weak: rgba(46, 219, 58, 0.12);
-  /* AA-safe filled-button pair — the GHXSTSHIP house green; the bright fill
-     #2edb3a pairs with the dark ink #001800 so .ps-btn resolves outside
+  --p-accent-weak: rgba(226, 52, 20, 0.12);
+  /* AA-safe filled-button pair — the ATLVS-red house accent; the deepened
+     ink #ad220a pairs with white #ffffff so .ps-btn resolves outside
      [data-platform] scopes (house/marketing default). */
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #001800;
+  --p-accent-cta: #ad220a;
+  --p-accent-cta-contrast: #ffffff;
   --p-success: #2fa968;
   --p-warning: #c8841a;
   --p-danger: #e5484d;
@@ -234,6 +234,52 @@ pre,
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+/* Sliding customer-logo marquee (home trust bar). The track holds three
+   identical copies of the set; translating by one copy (-33.333%) loops
+   seamlessly. Edges fade via a mask; hover pauses; reduced-motion stops it. */
+@keyframes logo-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-33.3333%);
+  }
+}
+
+.logo-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.logo-marquee__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: logo-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+.logo-marquee:hover .logo-marquee__track,
+.logo-marquee:focus-within .logo-marquee__track {
+  animation-play-state: paused;
+}
+
+.logo-marquee__item {
+  flex: none;
+  padding-inline: 2.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee__track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    row-gap: 1rem;
   }
 }
 

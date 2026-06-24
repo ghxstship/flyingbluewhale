@@ -9,7 +9,7 @@
  *   • URID registry        → public.xpms_registry (DEPT.TEAM.SECTION)
  *   • Atom IDs             → src/lib/siteplan/atom-id.ts (buildAtomId)
  *
- * Pattern mirrors src/lib/marketplace.ts + src/lib/connecteam.ts:
+ * Pattern mirrors src/lib/marketplace.ts + src/lib/workforce.ts:
  * enum tuples `as const` → derived string-literal types → small helpers.
  */
 import { CLASSES, TIERS } from "./taxonomy";

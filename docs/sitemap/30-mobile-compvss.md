@@ -49,7 +49,7 @@ The amber `(mobile)` shell — COMPVSS field/venue operations, an offline-first 
 - `/m/shift/swap` — Request a shift swap. **CRUD/interactive:** `requestSwap` server action (pick shift + reason) via `FormShell`; duplicate-request guard; notifies admins.
 - `/m/gigs` — Public open-gigs board for crew on the road (reads anon `public_job_board` view). **CRUD/interactive:** read-only list.
 
-## Connecteam parity
+## Workforce parity
 
 - `/m/feed` — Announcements feed (shared `FeedSurface`, mobile). **CRUD/interactive:** `markAnnouncementRead` server action; Realtime refresh subscription.
 - `/m/inbox` — Chat rooms list with unread markers (shared `ChatSurface`). **CRUD/interactive:** read-only list; deep-links into rooms.

@@ -1,4 +1,4 @@
-import { FeedSurface } from "@/components/connecteam/FeedSurface";
+import { FeedSurface } from "@/components/workforce/FeedSurface";
 
 /** GVTEWAY vendor feed (ADR-0008 Move 3). */
 export const dynamic = "force-dynamic";

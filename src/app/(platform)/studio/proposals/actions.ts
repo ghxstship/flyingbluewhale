@@ -7,7 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
-import { resolveDepositPct } from "@/lib/payment-terms";
+import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 
 const slugify = (s: string) =>
@@ -333,7 +333,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
   // no hardcoded split here (plumb-line DUP-1/DUP-6).
   if (proposal.amount_cents && proposal.amount_cents > 0) {
     const orgDefaults = await getOrgPaymentDefaults(supabase, session.orgId);
-    const depositPct = resolveDepositPct(proposal.deposit_percent, orgDefaults.depositPct);
+    const depositPct = resolveDepositPct(proposal.deposit_percent, orgDefaults.depositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT);
     const depositCents = Math.round((proposal.amount_cents * depositPct) / 100);
     const balanceCents = proposal.amount_cents - depositCents;
     const currency = proposal.currency ?? "USD";

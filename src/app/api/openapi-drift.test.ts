@@ -84,6 +84,52 @@ function parseOpenapi(): Map<string, Set<Method>> {
   return map;
 }
 
+// Which (method, path) operations declare a `responses:` body block. Reuses the
+// shallow line parser — a `responses:` key nested at 6 spaces under a 4-space
+// method, before the next method/path, counts.
+function operationsWithResponses(): Set<string> {
+  const text = readFileSync(OPENAPI_PATH, "utf8");
+  const lines = text.split("\n");
+  const pathsIdx = lines.findIndex((l) => /^paths\s*:\s*$/.test(l));
+  const out = new Set<string>();
+  let currentPath: string | null = null;
+  let currentMethod: Method | null = null;
+  for (let i = pathsIdx + 1; i < lines.length; i++) {
+    const line = lines[i]!;
+    if (!line.trim()) continue;
+    if (/^[^\s#]/.test(line)) break;
+    const pathMatch = line.match(/^ {2}(\/[^\s:]+):\s*$/);
+    if (pathMatch) {
+      currentPath = pathMatch[1]!;
+      currentMethod = null;
+      continue;
+    }
+    const methodMatch = line.match(/^ {4}(get|post|put|patch|delete)\s*:/);
+    if (methodMatch && currentPath) {
+      currentMethod = methodMatch[1] as Method;
+      continue;
+    }
+    if (currentPath && currentMethod && /^ {6}responses\s*:/.test(line)) {
+      out.add(`${currentMethod} ${currentPath}`);
+    }
+  }
+  return out;
+}
+
+// Operations whose response body external consumers bind to — these MUST carry
+// a documented `responses` schema, not just a one-line summary (plumb-line
+// DOC-4 / RPT-3). Path+method-only coverage is not enough for these.
+const CONTRACT_CRITICAL: Array<[Method, string]> = [
+  ["get", "/api/v1/documents"],
+  ["get", "/api/v1/documents/{docType}"],
+  ["post", "/api/v1/documents/{docType}"],
+  ["get", "/api/v1/metrics"],
+  ["get", "/api/v1/metrics/{metricId}"],
+  ["get", "/api/v1/reports"],
+  ["get", "/api/v1/reports/{reportId}"],
+  ["get", "/api/v1/reports/{reportId}/snapshot"],
+];
+
 describe("OpenAPI drift", () => {
   const filesystem = new Map<string, Set<Method>>();
   for (const file of walk(ROUTES_ROOT)) {
@@ -122,5 +168,13 @@ describe("OpenAPI drift", () => {
       }
     }
     expect(orphaned, `Documented but missing: ${orphaned.join(", ")}`).toEqual([]);
+  });
+
+  it("contract-critical operations document a response body, not just a summary", () => {
+    const withResp = operationsWithResponses();
+    const missing = CONTRACT_CRITICAL.filter(([m, p]) => !withResp.has(`${m} ${p}`)).map(
+      ([m, p]) => `${m.toUpperCase()} ${p}`,
+    );
+    expect(missing, `Operations missing a responses block: ${missing.join(", ")}`).toEqual([]);
   });
 });

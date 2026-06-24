@@ -1,4 +1,4 @@
-import { TimeOffSurface } from "@/components/connecteam/TimeOffSurface";
+import { TimeOffSurface } from "@/components/workforce/TimeOffSurface";
 
 /** GVTEWAY vendor time off (ADR-0008 Move 3). */
 export const dynamic = "force-dynamic";

@@ -115,7 +115,7 @@ const soonRibbon: CSSProperties = {
   letterSpacing: "0.1em",
   textTransform: "uppercase",
   padding: "2px 32px",
-  background: "#3fae29",
+  background: "var(--p-accent-cta)",
   color: "#fff",
 };
 

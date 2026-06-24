@@ -8,7 +8,7 @@
  * doesn't exist in the live schema — never a fabricated number.
  */
 import type { MetricResolver, ResolverMap } from "./types";
-import { countWhere } from "./types";
+import { countWhere, NOT_COMPUTED } from "./types";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
 // Dynamic table names → sanctioned LooseSupabase escape hatch (RLS stays the
@@ -67,7 +67,7 @@ const pass_rate: MetricResolver = async (ctx) => {
 };
 
 /** ceus_awarded | float | certificate,transcript — no CEU/credit field in the live schema. */
-const ceus_awarded: MetricResolver = async () => null;
+const ceus_awarded: MetricResolver = NOT_COMPUTED;
 
 /** active_certs | int | certificate — credentials not past their expiry (null expiry = non-expiring). */
 const active_certs: MetricResolver = async (ctx) => {
@@ -96,8 +96,29 @@ const expiring_certs: MetricResolver = async (ctx) => {
   return count ?? 0;
 };
 
-/** compliance_rate | pct | transcript,certificate — no compliance linkage between transcript and certificate in schema. */
-const compliance_rate: MetricResolver = async () => null;
+/**
+ * compliance_rate | pct | certificate — share of issued certifications that are
+ * currently valid (expiry null = non-expiring, or expires_on >= today). This is
+ * the honest "training compliance" signal the live schema supports: there is no
+ * per-role "required training" matrix, so we measure currency of held creds.
+ */
+const compliance_rate: MetricResolver = async (ctx) => {
+  const db = ctx.db as unknown as AnyDB;
+  const { count: total, error: tErr } = await db
+    .from("certification_holders")
+    .select("*", { count: "exact", head: true })
+    .eq("org_id", ctx.orgId);
+  if (tErr) return null;
+  if (!total) return 0;
+  const today = new Date().toISOString().slice(0, 10);
+  const { count: current, error: cErr } = await db
+    .from("certification_holders")
+    .select("*", { count: "exact", head: true })
+    .eq("org_id", ctx.orgId)
+    .or(`expires_on.is.null,expires_on.gte.${today}`);
+  if (cErr) return null;
+  return Math.round(((current ?? 0) / total) * 1000) / 10;
+};
 
 /** enrollment | int | syllabus — count of LMS course assignments (enrollments) for the org. */
 const enrollment: MetricResolver = (ctx) => countWhere(ctx, "course_assignments", {});
@@ -153,14 +174,49 @@ const learner_engagement: MetricResolver = async (ctx) => {
 /** content_usage | int | knowledgeBase — count of knowledge-base ("The Standard") articles for the org. */
 const content_usage: MetricResolver = (ctx) => countWhere(ctx, "kb_articles", {});
 
-/** catalog_adoption | pct | catalog — no adoption signal on master_catalog_items in the live schema. */
-const catalog_adoption: MetricResolver = async () => null;
+/**
+ * catalog_adoption | pct | catalog — distinct active catalog SKUs referenced by
+ * an assignment / total active catalog SKUs. `assignments.catalog_item_id` is
+ * the canonical adoption signal (every advancing assignment instances a SKU).
+ * Capped at 100 (a referenced SKU may have since been deactivated).
+ */
+const catalog_adoption: MetricResolver = async (ctx) => {
+  const db = ctx.db as unknown as AnyDB;
+  const { count: available, error: aErr } = await db
+    .from("master_catalog_items")
+    .select("*", { count: "exact", head: true })
+    .eq("org_id", ctx.orgId)
+    .eq("active", true)
+    .is("deleted_at", null);
+  if (aErr) return null;
+  if (!available) return 0;
+  const { data, error } = await db
+    .from("assignments")
+    .select("catalog_item_id")
+    .eq("org_id", ctx.orgId)
+    .not("catalog_item_id", "is", null);
+  if (error) return null;
+  const referenced = new Set((data ?? []).map((r: { catalog_item_id: string | null }) => r.catalog_item_id));
+  return Math.min(100, Math.round((referenced.size / available) * 1000) / 10);
+};
 
-/** instructor_rating | score | survey,syllabus — survey_responses.answers is freeform jsonb; no structured rating column. */
-const instructor_rating: MetricResolver = async () => null;
+/** instructor_rating | score | syllabus — mean published course review rating (1–5) from legend_course_reviews. */
+const instructor_rating: MetricResolver = async (ctx) => {
+  const { data, error } = await (ctx.db as unknown as AnyDB)
+    .from("legend_course_reviews")
+    .select("rating")
+    .eq("org_id", ctx.orgId)
+    .not("rating", "is", null);
+  if (error) return null;
+  const ratings = (data ?? [])
+    .map((r: { rating: number | null }) => r.rating)
+    .filter((n: number | null): n is number => n != null);
+  if (ratings.length === 0) return 0;
+  return Math.round((ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length) * 10) / 10;
+};
 
 /** onboarding_ramp | days | transcript,certificate — no onboarding-start anchor distinct from assignment in schema. */
-const onboarding_ramp: MetricResolver = async () => null;
+const onboarding_ramp: MetricResolver = NOT_COMPUTED;
 
 export const legendResolvers: ResolverMap = {
   course_completion,

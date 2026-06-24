@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BRAND } from "@/lib/brand";
+import { BRAND, PRODUCT_ACCENTS } from "@/lib/brand";
 
 /** Canonical social profile URLs (parent GHXSTSHIP) — Organization `sameAs`. */
 export const SOCIAL_SAME_AS: readonly string[] = BRAND.socials.map((s) => s.href);
@@ -53,7 +53,7 @@ export const SITE = {
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://atlvs.pro",
   tagline: "Production Runs On It.",
   description:
-    "Develop, build, operate, and experience live productions on one platform. ATLVS for producers, COMPVSS for crew, GVTEWAY for guests, LEG3ND for knowledge — one source of truth, pitch to strike.",
+    "One platform for the whole production, pitch to strike. ATLVS for producers, COMPVSS for crew, GVTEWAY for guests, LEG3ND for knowledge — one source of truth.",
   /**
    * Social handle. Same string across every platform we live on; not a
    * Twitter/X handle — ATLVS does not run an X account. The Twitter Card
@@ -91,26 +91,26 @@ export const SITE = {
     atlvs: {
       name: "ATLVS",
       tagline:
-        "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command deck.",
-      color: "#E23414",
+        "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command center.",
+      color: PRODUCT_ACCENTS.atlvs,
     },
     compvss: {
       name: "COMPVSS",
       tagline:
         "Operate it in the field — scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't.",
-      color: "#FFC400",
+      color: PRODUCT_ACCENTS.compvss,
     },
     gvteway: {
       name: "GVTEWAY",
       tagline:
-        "Where the world is experienced — ticketing, portals, marketplace. Every persona, each their own way in.",
-      color: "#2563EB",
+        "Where the world is experienced — ticketing, portals, marketplace. A way in for every persona.",
+      color: PRODUCT_ACCENTS.gvteway,
     },
     legend: {
       name: "LEG3ND",
       tagline:
         "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine.",
-      color: "#ED6A1E",
+      color: PRODUCT_ACCENTS.legend,
     },
   },
 } as const;

@@ -1,3 +1,9 @@
+// Re-derive CatalogKind from the canonical tuple in `@/lib/db/assignments`
+// (the single authoring site, mirroring public.catalog_kind). TYPE-ONLY
+// import so no `server-only` runtime code reaches client bundles.
+import type { CatalogKind } from "@/lib/db/assignments";
+export type { CatalogKind };
+
 // Discriminated union of every proposal block type.
 // Synthesized from the F1 Miami demo's section surface and proposalzero's PHASES schema.
 //
@@ -19,20 +25,6 @@
 
 export type Money = { cents: number; currency?: string };
 export type AccentColor = string;
-
-// Mirrors public.catalog_kind (0051_catalog_account_manager_canon.sql).
-// Drives the master_catalog_items.kind seed when a proposal line item
-// declares one. Keep in sync with the DB enum.
-export type CatalogKind =
-  | "credential"
-  | "catering"
-  | "radio"
-  | "tool"
-  | "equipment"
-  | "uniform"
-  | "travel"
-  | "lodging"
-  | "vehicle";
 
 // Document-class deliverables only (riders, plots, lists, plans, grids).
 // Per-individual entitlements live in public.assignments via

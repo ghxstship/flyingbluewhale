@@ -1904,22 +1904,18 @@
      "ogImageTitle": "Dirige el show."
     },
     "hero": {
-     "eyebrow": "Del pitch al caso de estudio",
+     "eyebrow": "Producción · Operaciones · Experiencia · Conocimiento",
      "titleLine1": "El ecosistema del",
      "titleLine2": "constructor de",
-     "subtitleLead": "El sistema operativo modular para producciones experienciales y no convencionales.",
-     "subtitleAtlvs": "comanda el puente,",
-     "subtitleCompvss": "trabaja el terreno,",
-     "subtitleGvteway": "abre las puertas, y",
+     "subtitleLead": "La herramienta definitiva para quienes se atrevieron a soñar en grande.",
      "ctaPrimary": "Empieza a construir gratis",
      "ctaSecondary": "Míralo en acción",
      "disclaimer": "Gratis para siempre en el plan Access · Sin tarjeta · Precio por organización",
      "ecosystemLabel": "El ecosistema ATLVS",
-     "titleLine3": "mundos.",
-     "subtitleLegend": "mantiene el estándar."
+     "titleLine3": "mundos."
     },
     "trustBar": {
-     "label": "Los mundos que estos equipos construyen funcionan con ATLVS",
+     "label": "Impulsando a los mejores creadores de mundos del mundo",
      "seeWork": "Ver el trabajo →"
     },
     "threeApps": {
@@ -1931,22 +1927,22 @@
     "products": {
      "atlvs": {
       "audience": "Para productores · equipos internos",
-      "tag": "Desarrolla · Construye",
+      "tag": "Crear el mundo",
       "body": "Desarrolla y construye el mundo: proyectos, advancing, finanzas, compras y una IA que redacta el papeleo. La cabina de mando del productor."
      },
      "compvss": {
       "audience": "Para equipo · proveedores · talento",
-      "tag": "Opera",
+      "tag": "Operar el mundo",
       "body": "Opéralo sobre el terreno: turnos, certificaciones, escaneo en puerta, incidentes. Offline-first y veloz en la puerta aunque la señal no acompañe."
      },
      "gvteway": {
       "audience": "Para público · clientes · socios",
-      "tag": "Experimenta",
+      "tag": "Vivir el mundo",
       "body": "Donde se vive el mundo: entradas, portales, marketplace. Cada perfil, con su propia puerta de entrada."
      },
      "legend": {
       "audience": "Para conocimiento · formación · cumplimiento",
-      "tag": "Conocimiento",
+      "tag": "Enriquecer el mundo",
       "body": "El conocimiento sobre el que se levanta el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento."
      }
     },

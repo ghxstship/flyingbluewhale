@@ -5,7 +5,7 @@
  * each window carrying a hold→confirmed→cancelled lifecycle. Mirrors the
  * SevenRooms / TripleSeat function-diary model.
  *
- * Lib shape matches `src/lib/marketplace.ts` / `src/lib/connecteam.ts`:
+ * Lib shape matches `src/lib/marketplace.ts` / `src/lib/workforce.ts`:
  * enum tuples `as const` → derived union types → small pure helpers +
  * label maps. No DB access here — read helpers live with the route via
  * `listOrgScoped`; this file is the SSOT for the enums + display labels.

@@ -4,7 +4,7 @@ import { supportsRecordBinding } from "@/lib/documents/resolvers";
 import { Badge } from "@/components/ui/Badge";
 
 /**
- * V6 Documents hub — the cross-app document library. Every one of the 27 doc
+ * V6 Documents hub — the cross-app document library. Every one of the 29 doc
  * types renders from the shared DocEngine (token-driven, print-ready, merge-
  * field contract). This index groups templates by the app that owns them.
  */

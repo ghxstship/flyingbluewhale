@@ -382,10 +382,11 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
 
     // Positive assertion: the token SSOT defines the v8 palette-locked per-product
-    // accents — ATLVS volcanic red and the GHXSTSHIP house green both present.
+    // accents — ATLVS volcanic red, which is now also the GHXSTSHIP house/marketing
+    // accent. The retired house green (#2edb3a) must no longer survive as an accent.
     const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
     expect(theme, "ATLVS accent must be volcanic red #e23414").toMatch(/--p-accent:\s*#e23414/i);
-    expect(theme, "GHXSTSHIP house accent must be green #2edb3a").toMatch(/--p-accent:\s*#2edb3a/i);
+    expect(theme, "retired house green #2edb3a must not survive as an accent").not.toMatch(/--p-accent:\s*#2edb3a/i);
   });
 
   it("no bare legacy color tokens — --success/--warning/--danger/--info must be --p-*", () => {

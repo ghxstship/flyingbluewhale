@@ -12,6 +12,8 @@
  */
 import type { DocTemplate } from "@/components/documents/DocEngine";
 
+import { DEFAULT_SIGNING_AUTHORITY_NAME, DEFAULT_SIGNING_AUTHORITY_TITLE } from "@/lib/offer-letters/signing";
+
 const mf = (path: string, value: string) => ({ path, value });
 
 export const DOC_TEMPLATES: DocTemplate[] = [
@@ -291,8 +293,25 @@ export const DOC_TEMPLATES: DocTemplate[] = [
         table: {
           cols: [{ label: "Phase" }, { label: "Budget", align: "r" }, { label: "Committed", align: "r" }, { label: "Actual", align: "r" }, { label: "Variance", align: "r" }],
           rows: [
-            { cells: [mf("budget.0.phase", "Design"), "$48,000", "$44,000", "$43,200", "+$4,800"] },
-            { cells: ["Total", mf("budget.total", "$340,080"), "$312,000", "$201,400", "+$28,080"], variant: "total" },
+            {
+              cells: [
+                mf("budget.0.phase", "Design"),
+                mf("budget.0.budget", "$48,000"),
+                mf("budget.0.committed", "$44,000"),
+                mf("budget.0.actual", "$43,200"),
+                mf("budget.0.variance", "+$4,800"),
+              ],
+            },
+            {
+              cells: [
+                "Total",
+                mf("budget.total", "$340,080"),
+                mf("budget.committedTotal", "$312,000"),
+                mf("budget.actualTotal", "$201,400"),
+                mf("budget.varianceTotal", "+$28,080"),
+              ],
+              variant: "total",
+            },
           ],
         },
       },
@@ -371,7 +390,7 @@ export const DOC_TEMPLATES: DocTemplate[] = [
         eyebrow: "05 · Acceptance",
         heading: "Countersign to accept.",
         paras: [
-          ["This offer is extended by ", mf("signer.name", "Julian Clarkson"), ", ", mf("signer.title", "Producer & Operations Director"), ". Type your full legal name below to formalize acceptance; your typed signature, IP address, and timestamp are captured as the audit trail."],
+          ["This offer is extended by ", mf("signer.name", DEFAULT_SIGNING_AUTHORITY_NAME), ", ", mf("signer.title", DEFAULT_SIGNING_AUTHORITY_TITLE), ". Type your full legal name below to formalize acceptance; your typed signature, IP address, and timestamp are captured as the audit trail."],
         ],
       },
       { kind: "sign", rows: [{ label: "Candidate — signature / date" }, { label: "ATLVS — signature / date" }] },

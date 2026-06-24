@@ -120,8 +120,9 @@ export const BRAND = {
    * Color palette is canonical (per project/tokens.json — see PRODUCT_ACCENTS):
    *   v8.0 palette-locked — each product OWNS its accent: ATLVS volcanic red
    *   #E23414 · COMPVSS signal yellow #FFC400 · GVTEWAY blue #2563EB · LEG3ND
-   *   molten orange #ED6A1E. GHXSTSHIP green #2EDB3A is the house/master brand
-   *   (the default for non-product / ecosystem-marketing surfaces).
+   *   molten orange #ED6A1E. The GHXSTSHIP house/master brand accent is ATLVS
+   *   volcanic red #E23414 (the default for non-product / ecosystem-marketing
+   *   surfaces); the retired house green #2EDB3A is no longer used.
    *
    * The legacy `color` strings (nebula / brass / plasma) are retained only as
    * readable `data-platform` / Tailwind name tokens; the paint flows through

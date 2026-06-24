@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { MetricValues } from "../registry";
 import type { ResolverCtx, ResolverMap } from "./types";
+import { NOT_COMPUTED } from "./types";
 import { atlvsResolvers } from "./atlvs";
 import { compvssResolvers } from "./compvss";
 import { gvtewayResolvers } from "./gvteway";
@@ -20,8 +21,18 @@ const ALL_RESOLVERS: ResolverMap = {
   ...legendResolvers,
 };
 
-export function supportedMetricIds(): string[] {
+/** Every metric id with a registered resolver entry (incl. honest null stubs). */
+export function registeredMetricIds(): string[] {
   return Object.keys(ALL_RESOLVERS);
+}
+
+/**
+ * Metric ids the platform actually computes — excludes the NOT_COMPUTED
+ * sentinel stubs so the `/metrics` `computed` flag never overstates coverage
+ * (plumb-line RPT-1).
+ */
+export function supportedMetricIds(): string[] {
+  return Object.keys(ALL_RESOLVERS).filter((id) => ALL_RESOLVERS[id] !== NOT_COMPUTED);
 }
 
 export async function resolveMetrics(orgId: string, ids: string[]): Promise<MetricValues> {

@@ -244,7 +244,7 @@ export const POSTS: Record<string, BlogPost> = {
       { kind: "h2", text: "What it's not" },
       {
         kind: "p",
-        text: "It's not a replacement for your producer. It's a leverage tool for the producer you already have. Use it to draft, summarize, surface, reconcile — not to decide. The AI will cheerfully hallucinate a vendor contact if you let it. Always check.",
+        text: "It's not a replacement for your producer. It gives the producer you already have more reach. Use it to draft, summarize, surface, reconcile — not to decide. The AI will cheerfully hallucinate a vendor contact if you let it. Always check.",
       },
 
       { kind: "h2", text: "Model switching" },

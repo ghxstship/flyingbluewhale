@@ -5,6 +5,7 @@ import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { KIcon } from "@/components/mobile/kit";
 import { NotifMatrix, type MatrixState } from "./NotifMatrix";
+import { CATEGORIES, CHANNELS } from "./constants";
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +18,6 @@ export const dynamic = "force-dynamic";
  *
  * Design truth: prototype settings notif-matrix (app.jsx 3306-3704).
  */
-
-const CATEGORIES = ["Shifts", "Assignments", "Reviews", "Messages", "Announcements"];
-const CHANNELS = ["push", "email", "text"];
 
 function relativeTime(iso: string): string {
   const ms = Date.now() - new Date(iso).getTime();

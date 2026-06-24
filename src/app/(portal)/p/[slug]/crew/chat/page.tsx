@@ -1,4 +1,4 @@
-import { ChatSurface } from "@/components/connecteam/ChatSurface";
+import { ChatSurface } from "@/components/workforce/ChatSurface";
 
 /**
  * GVTEWAY crew chat — thin wrapper over shared <ChatSurface>. Room

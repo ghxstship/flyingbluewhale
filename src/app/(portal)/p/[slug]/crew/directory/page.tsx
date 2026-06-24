@@ -1,4 +1,4 @@
-import { DirectorySurface } from "@/components/connecteam/DirectorySurface";
+import { DirectorySurface } from "@/components/workforce/DirectorySurface";
 
 /** GVTEWAY crew directory — thin wrapper over shared <DirectorySurface>. */
 export const dynamic = "force-dynamic";

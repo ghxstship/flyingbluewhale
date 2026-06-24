@@ -92,7 +92,7 @@ export type AuditAction =
   | "draw.marked_pending"
   | "draw.seeded_default"
   // ────────────────────────────────────────────────────────────────
-  // Connecteam parity (migrations 0046–0048, 0050–0051)
+  // Workforce parity (migrations 0046–0048, 0050–0051)
   // ────────────────────────────────────────────────────────────────
   | "announcement.published"
   | "announcement.read"

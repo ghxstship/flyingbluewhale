@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
-import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_LABEL_DEFAULT } from "@/lib/payment-terms";
+import { PROPOSAL_DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_LABEL_DEFAULT } from "@/lib/payment-terms";
 import { updateOrgName, updateOrgPaymentDefaults } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -135,8 +135,8 @@ export default async function OrgSettingsPage() {
           <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.organization.paymentTermsBlurb",
-              { pct: DEPOSIT_PCT_DEFAULT, balance: BALANCE_TERMS_LABEL_DEFAULT },
-              `Org-wide default split for new proposals & engagements. Leave blank to use the system default (${DEPOSIT_PCT_DEFAULT}% deposit, ${BALANCE_TERMS_LABEL_DEFAULT.toLowerCase()}). Each proposal can still override per instance.`,
+              { pct: PROPOSAL_DEPOSIT_PCT_DEFAULT, balance: BALANCE_TERMS_LABEL_DEFAULT },
+              `Org-wide default deposit split for new proposals. Leave blank to use the system default (${PROPOSAL_DEPOSIT_PCT_DEFAULT}% deposit, ${BALANCE_TERMS_LABEL_DEFAULT.toLowerCase()}). Each proposal can still override per instance.`,
             )}
           </p>
           {isAdmin ? (
@@ -149,7 +149,7 @@ export default async function OrgSettingsPage() {
                   min={0}
                   max={100}
                   defaultValue={org.default_deposit_pct ?? ""}
-                  placeholder={String(DEPOSIT_PCT_DEFAULT)}
+                  placeholder={String(PROPOSAL_DEPOSIT_PCT_DEFAULT)}
                   className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 />
               </label>
@@ -176,7 +176,11 @@ export default async function OrgSettingsPage() {
             <>
               <Field
                 label={t("console.settings.organization.fieldDefaultDepositPct", undefined, "Default deposit %")}
-                value={org.default_deposit_pct != null ? `${org.default_deposit_pct}%` : `${DEPOSIT_PCT_DEFAULT}% (system)`}
+                value={
+                  org.default_deposit_pct != null
+                    ? `${org.default_deposit_pct}%`
+                    : `${PROPOSAL_DEPOSIT_PCT_DEFAULT}% (system)`
+                }
                 mono
               />
               <Field

@@ -31,8 +31,8 @@ export const THEMES: Record<ThemeSlug, ThemeRegistryEntry> = {
     label: "ATLVS",
     family: "light",
     essence:
-      "Neutral SaaS skin for ATLVS · COMPVSS · GVTEWAY · LEG3ND. Clean light/dark canvas, soft elevation, v8 palette-locked: per-product accents (ATLVS red · COMPVSS yellow · GVTEWAY blue · LEG3ND orange) + GHXSTSHIP house green. MONUMENT type — Anton display (ALL-CAPS) + Hanken Grotesk body, Asana/Linear-adjacent ergonomic register.",
-    swatchColor: "#2edb3a",
+      "Neutral SaaS skin for ATLVS · COMPVSS · GVTEWAY · LEG3ND. Clean light/dark canvas, soft elevation, v8 palette-locked: per-product accents (ATLVS red · COMPVSS yellow · GVTEWAY blue · LEG3ND orange) + ATLVS-red house accent. MONUMENT type — Anton display (ALL-CAPS) + Hanken Grotesk body, Asana/Linear-adjacent ergonomic register.",
+    swatchColor: "#e23414",
   },
 };
 

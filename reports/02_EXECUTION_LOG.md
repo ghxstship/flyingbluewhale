@@ -1,6 +1,6 @@
 # Phase 2 — Execution Log
 
-**Execution env:** local dev server at `http://localhost:3000`, `.env.local` populated only with Supabase URL + anon key. Stripe / Anthropic / Resend / GrowthBook / Sentry absent → third-party-dep flows BLOCKED as documented.
+**Execution env:** local dev server at `http://localhost:3000`, `.env.local` populated only with Supabase URL + anon key. Stripe / Anthropic / Resend / the remote flag service / Sentry absent → third-party-dep flows BLOCKED as documented.
 
 ---
 
@@ -117,7 +117,7 @@ Documented for the readiness report. These cells are **not fail**, they are **en
 | Stripe Checkout / Connect onboarding / webhook signature round-trip | `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` unset | Populate `.env.local` with Stripe keys |
 | Transactional email (invite, proposal share, reset) | `RESEND_API_KEY` unset | Populate `.env.local` |
 | Streaming AI chat | `ANTHROPIC_API_KEY` unset | Populate `.env.local` |
-| GrowthBook flag evaluation | `NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY` unset | Flags fall back to `FLAG_DEFAULTS` — acceptable for deploy; live flags require the key |
+| the remote flag service flag evaluation | `NEXT_PUBLIC_FLAGS_CLIENT_KEY` unset | Flags fall back to `FLAG_DEFAULTS` — acceptable for deploy; live flags require the key |
 | SSO (SAML / OIDC) | **Not implemented** — advertised on `/pricing` as Enterprise | Marketing copy or feature build (flagged in OQ#2) |
 | SCIM user provisioning | **Not implemented** — advertised on `/pricing` as Enterprise | Same (OQ#3) |
 | E2E Playwright suite with real user accounts for each role | No seeded test accounts per role | Seed test users per role OR create in test setup |
@@ -168,7 +168,7 @@ Only S1; everything else intentionally N/A.
 | OQ#2 | P1 | Enterprise SSO advertised but not implemented | Flagged — requires product decision (strip marketing OR build) |
 | OQ#3 | P1 | SCIM provisioning advertised but not implemented | Same as OQ#2 |
 | OQ#4 | P2 | `sponsor` + `artist` portal routes exist without matching `platform_role` enum | Verified — routes gate on RLS-based project membership, not enum. Works; not a bug. |
-| OQ#5 | P2 | `.env.local` missing Stripe/Anthropic/Resend/GrowthBook/Sentry | Env-ops concern, not a code bug |
+| OQ#5 | P2 | `.env.local` missing Stripe/Anthropic/Resend/the remote flag service/Sentry | Env-ops concern, not a code bug |
 
 **Deployment impact:**
 - P0-1: **fixed** — deploy safe

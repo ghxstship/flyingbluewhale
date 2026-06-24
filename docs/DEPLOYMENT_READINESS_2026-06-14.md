@@ -85,11 +85,11 @@ Legend: **✅ Ready** (e2e-verified, full stack) · **🟡 Ready w/ note** · **
 
 | Area | UI | Action | DB/RLS | E2E | Status |
 |---|:--:|:--:|:--:|---|:--:|
-| Clock / checkin / shifts | ✅ | ✅ | ✅ | mobile, compvss-connecteam-parity | ✅ |
-| Feed / inbox / chat (realtime) | ✅ | ✅ | ✅ | compvss-connecteam-parity | ✅ |
-| Learning / time-off / kudos / polls / surveys | ✅ | ✅ | ✅ | compvss-connecteam-parity (21) | ✅ |
+| Clock / checkin / shifts | ✅ | ✅ | ✅ | mobile, compvss-the deskless-workforce suite-parity | ✅ |
+| Feed / inbox / chat (realtime) | ✅ | ✅ | ✅ | compvss-the deskless-workforce suite-parity | ✅ |
+| Learning / time-off / kudos / polls / surveys | ✅ | ✅ | ✅ | compvss-the deskless-workforce suite-parity (21) | ✅ |
 | Advances / docs / directory / onboarding | ✅ | ✅ | ✅ | mobile (10) | ✅ |
-| Incidents (file + queue) | ✅ | ✅ | ✅ | compvss-connecteam-parity | ✅ |
+| Incidents (file + queue) | ✅ | ✅ | ✅ | compvss-the deskless-workforce suite-parity | ✅ |
 
 **COMPVSS verdict: ✅ Ready.** 31 mobile + parity tests green (1 skip).
 

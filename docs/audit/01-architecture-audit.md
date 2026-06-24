@@ -119,7 +119,7 @@ Each dimension is scored **Current** / **Target** on 1–5 where 5 = reference-t
 
 **Current state**
 - No Redis, no Memcached, no edge cache headers.
-- Next.js App Router `revalidate: 60` only on `lib/flags.ts` GrowthBook fetch.
+- Next.js App Router `revalidate: 60` only on `lib/flags.ts` the remote flag service fetch.
 - `user_preferences` has per-call fetch + in-memory cache in `useUserPreferences` hook.
 
 **Findings**
@@ -135,7 +135,7 @@ Each dimension is scored **Current** / **Target** on 1–5 where 5 = reference-t
 - No global timeouts on `fetch` calls to external services except the AI stream (which uses AbortController for user-initiated cancel only).
 - Stripe checkout/onboarding calls: no timeout, no retry.
 - Resend email send: no timeout, no retry (lib/email.ts:21).
-- GrowthBook: no timeout; `catch` returns FLAG_DEFAULTS on error.
+- the remote flag service: no timeout; `catch` returns FLAG_DEFAULTS on error.
 - Anthropic streaming: no server-side timeout.
 - No circuit breakers.
 - Health endpoint exists (`/api/v1/health`).
@@ -220,7 +220,7 @@ Each dimension is scored **Current** / **Target** on 1–5 where 5 = reference-t
 - **IK-052 (High)** — no preview env per PR. PRs can only be validated against dev.
 - **IK-053 (Medium)** — no artifact provenance (SLSA level 0).
 - **IK-054 (Medium)** — no migration safety gate. Destructive migrations could merge undetected.
-- **IK-055 (Low)** — no progressive delivery primitive; feature flags exist (GrowthBook) but not wired to a canary cohort.
+- **IK-055 (Low)** — no progressive delivery primitive; feature flags exist (the remote flag service) but not wired to a canary cohort.
 
 ---
 

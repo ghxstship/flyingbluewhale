@@ -32,7 +32,7 @@ export const TEAMS: TeamRole[] = [
     hero: {
       eyebrow: "For Tour Managers",
       title: "Tour Management, On Modern Rails.",
-      body: "The TM stack hasn't changed in twenty years. Master Tour and a binder. ATLVS retunes the same primitives for cloud-native, real portals, offline mobile, AI assistance, per-org pricing.",
+      body: "The TM stack hasn't changed in twenty years. A desktop app and a binder. ATLVS retunes the same primitives for cloud-native, real portals, offline mobile, AI assistance, per-org pricing.",
     },
     workflows: [
       {
@@ -70,8 +70,8 @@ export const TEAMS: TeamRole[] = [
     ],
     faqs: [
       {
-        q: "Are you a Master Tour replacement?",
-        a: "Yes, for modern touring orgs. We match Master Tour on advancing + day sheets + per-stop variance, and add cloud-native multi-user, real portals, offline mobile, AI, and per-org pricing. We lose to muscle memory; we win on every spec.",
+        q: "Will this replace our desktop touring stack?",
+        a: "Yes, for modern touring orgs. We carry advancing, day sheets, and per-stop variance, and add cloud-native multi-user, real portals, offline mobile, AI, and per-org pricing. The old tools win on muscle memory; we win on every spec.",
       },
       {
         q: "Can we run multiple tours simultaneously?",
@@ -90,7 +90,7 @@ export const TEAMS: TeamRole[] = [
     hero: {
       eyebrow: "For Production Managers",
       title: "Run The Build Like A Build. Just Faster.",
-      body: "The PM stack borrows from construction — ball-in-court RFIs, submittals, daily logs, punch lists, change orders — at show-day velocity. ATLVS is the production-grade Procore.",
+      body: "The PM stack borrows from construction — ball-in-court RFIs, submittals, daily logs, punch lists, change orders — at show-day velocity, built for the production calendar.",
     },
     workflows: [
       {
@@ -128,8 +128,8 @@ export const TEAMS: TeamRole[] = [
     ],
     faqs: [
       {
-        q: "How is this different from Procore?",
-        a: "Same primitives at production velocity. Procore is built for 18-month construction projects with deep BIM. Event production runs in 4-12 week cycles; we drop the heavy procurement-bidding and tighten the loop on what matters.",
+        q: "How does this fit production timelines?",
+        a: "Same primitives at production velocity. Construction tooling is built for 18-month projects with deep BIM. Event production runs in 4-12 week cycles; we drop the heavy procurement-bidding and tighten the loop on what matters.",
       },
       {
         q: "Can we run multiple builds in flight?",

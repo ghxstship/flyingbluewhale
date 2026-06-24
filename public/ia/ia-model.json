@@ -409,6 +409,12 @@
               ]
             },
             {
+              "path": "/studio/kits",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/site-plans",
               "arch": [
                 "LIST"
@@ -467,6 +473,12 @@
               "arch": [
                 "LIST"
               ]
+            },
+            {
+              "path": "/studio/governance/approvals",
+              "arch": [
+                "LIST"
+              ]
             }
           ]
         },
@@ -499,6 +511,18 @@
             },
             {
               "path": "/studio/production/rentals",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets/warranties",
               "arch": [
                 "LIST"
               ]
@@ -892,6 +916,18 @@
               ]
             },
             {
+              "path": "/studio/finance/accounts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/ledger",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/finance/budgets",
               "arch": [
                 "LIST"
@@ -919,6 +955,12 @@
               "path": "/studio/finance/reports",
               "arch": [
                 "RPT"
+              ]
+            },
+            {
+              "path": "/studio/finance/tax",
+              "arch": [
+                "LIST"
               ]
             },
             {
@@ -999,6 +1041,12 @@
               ]
             },
             {
+              "path": "/studio/procurement/receiving",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/procurement/po-change-orders",
               "arch": [
                 "LIST"
@@ -1011,7 +1059,7 @@
               ]
             },
             {
-              "path": "/studio/contracts",
+              "path": "/studio/legal/contracts",
               "arch": [
                 "LIST"
               ]
@@ -1303,6 +1351,12 @@
             },
             {
               "path": "/studio/comms/surveys",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/comms/channels",
               "arch": [
                 "COMM"
               ]

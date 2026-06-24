@@ -1,4 +1,4 @@
-import { TimeOffSurface } from "@/components/connecteam/TimeOffSurface";
+import { TimeOffSurface } from "@/components/workforce/TimeOffSurface";
 
 /**
  * GVTEWAY crew time off — thin wrapper over shared <TimeOffSurface>.

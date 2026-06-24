@@ -179,53 +179,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // ADR-0009 grace window — role-prefixed mobile aliases.
-  //
-  // The URL flip is partial: ten universal surfaces have explicit
-  // `/m/[role]/<surface>/page.tsx` re-exports (the ROLE_PREFIXED_PAGES
-  // set below) and serve from the role-prefixed canonical location.
-  // Everything else falls through to this alias, which rewrites
-  // `/m/<role>/<surface>` → `/m/<surface>` so the existing page bodies
-  // continue to serve role-prefixed URLs without per-role duplication.
-  //
-  // As more surfaces get explicit role-prefixed pages, add their first
-  // segment to ROLE_PREFIXED_PAGES so the alias stops collapsing them.
-  // Per-role index pages (`/m/[role]/page.tsx`) and the role chooser
-  // (`/m/[role]/settings/role`) are also excluded from the alias.
-  const MOBILE_ROLE_ALIAS = /^\/m\/(performer|crew|driver|medic|guard|admin)\/(.+)$/;
-  const ROLE_PREFIXED_PAGES = new Set([
-    "inbox",
-    "shift",
-    "alerts",
-    "settings",
-    "feed",
-    "kudos",
-    "learning",
-    "time-off",
-    "docs",
-    "directory",
-  ]);
-  // Role-OWNED real surfaces: pages that genuinely live at `/m/<role>/<surface>`
-  // (not universal `/m/<surface>` re-exports). Collapsing them would rewrite to a
-  // non-existent `/m/<surface>` and 404 — e.g. `/m/driver/run/[runId]` →
-  // `/m/run/...` and `/m/medic/new` → `/m/new`, neither of which exists. These
-  // must serve from their role-prefixed location, so exclude them from the alias.
-  const ROLE_OWNED_SURFACES = new Set(["run", "new"]);
-  const targetPath = rewriteUrl?.pathname ?? pathname;
-  const aliasMatch = targetPath.match(MOBILE_ROLE_ALIAS);
-  if (aliasMatch) {
-    const rest = aliasMatch[2]!;
-    const firstSegment = rest.split("/")[0]!;
-    const isExplicitRolePrefixed = ROLE_PREFIXED_PAGES.has(firstSegment);
-    const isRoleChooser = rest === "settings/role";
-    const isRoleOwned = ROLE_OWNED_SURFACES.has(firstSegment);
-    if (!isExplicitRolePrefixed && !isRoleChooser && !isRoleOwned) {
-      const aliasUrl = rewriteUrl ? new URL(rewriteUrl.toString()) : request.nextUrl.clone();
-      aliasUrl.pathname = `/m/${rest}`;
-      rewriteUrl = aliasUrl;
-    }
-  }
-
   // P3 hardening — inject x-request-id into the inbound request headers
   // so Server Components + Server Actions can read it back via
   // `headers().get("x-request-id")`. Without this the audit emitter

@@ -14,7 +14,7 @@ import { PostComposer } from "./PostComposer";
 export const dynamic = "force-dynamic";
 
 /**
- * /legend/community — the Skool-class community feed. A post composer over an
+ * /legend/community — the cohort-community-class community feed. A post composer over an
  * <ActivityTimeline> of published posts, with a link to the members directory.
  */
 export default async function CommunityPage() {

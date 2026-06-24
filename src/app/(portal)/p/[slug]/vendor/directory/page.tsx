@@ -1,4 +1,4 @@
-import { DirectorySurface } from "@/components/connecteam/DirectorySurface";
+import { DirectorySurface } from "@/components/workforce/DirectorySurface";
 
 /** GVTEWAY vendor directory (ADR-0008 Move 3). */
 export const dynamic = "force-dynamic";

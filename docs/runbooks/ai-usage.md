@@ -37,7 +37,7 @@ order by tokens desc;
    the `ai` bucket in `src/lib/ratelimit.ts` down to 5/min (from 30)
    and redeploy, OR block the user via membership `deleted_at = now()`.
 2. **Is it system-wide?** Flip the `ai_opus_for_pro` flag off (in
-   GrowthBook or via env override) to route to Sonnet until investigated.
+   the remote flag service or via env override) to route to Sonnet until investigated.
 3. **Is it a single conversation looping?** Query `ai_messages where
    conversation_id = '<id>' order by created_at desc limit 20` — if
    you see the assistant repeating itself, the client is fan-looping

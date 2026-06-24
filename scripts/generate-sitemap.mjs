@@ -107,7 +107,6 @@ collect(nav.portalConsumerNav);
 for (const persona of nav.PORTAL_PERSONAS) collect([nav.portalNav("[slug]", persona)]);
 for (const it of nav.mobileTabs ?? []) navHrefs.add(it.href);
 for (const it of nav.mobileSurfaces ?? []) navHrefs.add(it.href);
-for (const tabs of Object.values(nav.ROLE_TABS ?? {})) for (const it of tabs) navHrefs.add(it.href);
 // Self-navigating shells (marketing + personal) — their nav DATA also lives in
 // nav.ts now, so harvest it the same way (these drive MarketingHeader, the
 // marketing footer, and the /me tabs).
@@ -232,13 +231,6 @@ const isExempt = (route) =>
 function statusOf(group, route) {
   if (isExempt(route)) return "exempt";
   if (navSet.has(norm(route))) return "nav";
-  // COMPVSS persona-routed re-exports: /m/[role]/<surface> is a thin
-  // re-export of the canonical /m/<surface> nav URL (nav.ts:1239). Treat
-  // it (and the /m/[role] role home, reached from the Home tab) as linked.
-  if (group === "mobile" && route.startsWith("/m/[role]")) {
-    const surface = route.replace("/m/[role]", "/m");
-    if (surface === "/m" || navSet.has(surface)) return "linked";
-  }
   if (navModules.has(moduleKey(group, route))) return "linked";
   return "orphan";
 }
@@ -258,16 +250,16 @@ const dangling = [...navSet]
   .filter((h) => !pageSet.has(h) && !pages.some((p) => segMatch(h, p.route)))
   .sort();
 
-// Unresolved priority refs: ROLE_PRIORITY_HREFS / PHASE_PRIORITY_HREFS only
-// *reorder* mobileSurfaces (filtered via byHref). An href listed there but
-// absent from mobileSurfaces silently drops — the intent never renders. These
-// are module-private, so harvest them straight from source.
+// Unresolved priority refs: PHASE_PRIORITY_HREFS only *reorders* mobileSurfaces
+// (filtered via byHref). An href listed there but absent from mobileSurfaces
+// silently drops — the intent never renders. These are module-private, so
+// harvest them straight from source.
 const navSrc = readFileSync(NAV_TS, "utf8");
 const blockHrefs = (name) => {
   const m = navSrc.match(new RegExp(`${name}[\\s\\S]*?\\{([\\s\\S]*?)\\n\\};`));
   return m ? [...m[1].matchAll(/"(\/m\/[^"]+)"/g)].map((x) => x[1]) : [];
 };
-const priorityHrefs = new Set([...blockHrefs("ROLE_PRIORITY_HREFS"), ...blockHrefs("PHASE_PRIORITY_HREFS")]);
+const priorityHrefs = new Set([...blockHrefs("PHASE_PRIORITY_HREFS")]);
 const mobileSurfaceSet = new Set((nav.mobileSurfaces ?? []).map((i) => i.href));
 const deadPriority = [...priorityHrefs].filter((h) => !mobileSurfaceSet.has(h)).sort();
 
@@ -278,8 +270,9 @@ const MARK = { nav: "●", linked: "○", orphan: "⚠", exempt: "·" };
 // Nav source per shell — every shell is now reconciled against nav.ts.
 const NAV_SOURCE = {
   platform: "platformNav rail",
-  mobile: "mobileTabs / mobileSurfaces / ROLE_TABS",
+  mobile: "mobileTabs / mobileSurfaces",
   portal: "portalNav rail",
+  legend: "legendNav rail",
   marketing: "marketingHeaderGroups + marketingFooterGroups",
   personal: "personalNavGroups (tabs)",
   auth: "marketing header auth links + token flows",
@@ -328,7 +321,7 @@ let md = `# SITEMAP — single source of truth
 | Mark | Status | Meaning |
 |------|--------|---------|
 | ● | \`nav\` | Exact path is a nav href — directly clickable from a rail/tab/header/footer. |
-| ○ | \`linked\` | Module is in nav; route reached via in-page link or CRUD child (\`/new\`, \`/[id]\`, deep sub-modules, dynamic SEO children, or \`/m/[role]\` re-export). |
+| ○ | \`linked\` | Module is in nav; route reached via in-page link or CRUD child (\`/new\`, \`/[id]\`, deep sub-modules, or dynamic SEO children). |
 | ⚠ | \`orphan\` | **Nothing** in this module appears anywhere in \`nav.ts\` — invisible to navigation. |
 | · | \`exempt\` | Intentionally not in nav — redirect / token / locale / contextual entry (see "Exempt routes" below). |
 

@@ -7,7 +7,7 @@ import { proposalDataFromBlocks } from "./proposal-binding";
 import { offerLetterData } from "./offer-binding";
 import type { OfferLetterResolved } from "@/lib/offer-letters/types";
 import { loadInvoiceArtifact } from "./sources/invoice";
-import { resolveDepositPct } from "@/lib/payment-terms";
+import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 
 /**
  * Internal data resolvers — map a real org-scoped record to the merge-field
@@ -58,8 +58,8 @@ const resolvers: Record<string, DocResolver> = {
     const { valid: blocks } = partitionBlocks(p.blocks);
     const bound = proposalDataFromBlocks(blocks, {
       currency: p.currency,
-      // Per-instance proposal deposit → org template default → system default.
-      depositPercent: resolveDepositPct(p.deposit_percent, org?.default_deposit_pct),
+      // Per-instance proposal deposit → org template default → proposal system default.
+      depositPercent: resolveDepositPct(p.deposit_percent, org?.default_deposit_pct, PROPOSAL_DEPOSIT_PCT_DEFAULT),
       amountCents: p.amount_cents,
     });
     const total = money(p.amount_cents, p.currency);
@@ -159,15 +159,36 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async budget(db, orgId, projectId) {
-    // A "budget" document is the per-project rollup of budget lines.
+    // A "budget" document is the per-project rollup of budget lines. Bind the
+    // real Budget/Committed/Actual/Variance columns (no fabricated samples) —
+    // first line as the example row, plus the column totals (plumb-line DOC-3).
     const { data: rows } = await db
       .from("budgets")
-      .select("amount_cents, currency")
+      .select("name, category, amount_cents, committed_cents, spent_cents, currency")
       .eq("org_id", orgId)
       .eq("project_id", projectId);
     if (!rows || rows.length === 0) return null;
-    const total = rows.reduce((n, r) => n + Number(r.amount_cents ?? 0), 0);
-    return { budget: { total: money(total, rows[0]?.currency) } };
+    const cur = rows[0]?.currency;
+    const budgetTotal = rows.reduce((n, r) => n + Number(r.amount_cents ?? 0), 0);
+    const committedTotal = rows.reduce((n, r) => n + Number(r.committed_cents ?? 0), 0);
+    const actualTotal = rows.reduce((n, r) => n + Number(r.spent_cents ?? 0), 0);
+    const first = rows[0];
+    if (!first) return null;
+    return {
+      budget: {
+        "0": {
+          phase: first.category ?? first.name,
+          budget: money(first.amount_cents, cur),
+          committed: money(first.committed_cents, cur),
+          actual: money(first.spent_cents, cur),
+          variance: money(Number(first.amount_cents ?? 0) - Number(first.spent_cents ?? 0), cur),
+        },
+        total: money(budgetTotal, cur),
+        committedTotal: money(committedTotal, cur),
+        actualTotal: money(actualTotal, cur),
+        varianceTotal: money(budgetTotal - actualTotal, cur),
+      },
+    };
   },
 
   async offerletter(db, orgId, id) {

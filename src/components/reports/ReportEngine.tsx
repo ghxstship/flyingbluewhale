@@ -70,9 +70,23 @@ function KpiTile({ metricId, mv }: { metricId: string; mv: MetricValue | undefin
     <div className="kpi">
       <div className="kpi-h">
         <span className="kpi-lab">{def.label}</span>
-        {delta != null && (
-          <span className={deltaClass(delta, def.direction)}>{Math.abs(delta).toFixed(1)}%</span>
-        )}
+        <span style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+          {/* Surface the confidence grade for non-PUBLISHED (modeled/benchmarked/
+              quoted) metrics so a proxy never reads as a hard measurement
+              (plumb-line RPT-4). */}
+          {def.confidence && def.confidence !== "PUBLISHED" && def.confidence !== "N/A" ? (
+            <span
+              className="kpi-conf"
+              title={`Confidence grade: ${def.confidence}`}
+              style={{ fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.65 }}
+            >
+              {def.confidence}
+            </span>
+          ) : null}
+          {delta != null && (
+            <span className={deltaClass(delta, def.direction)}>{Math.abs(delta).toFixed(1)}%</span>
+          )}
+        </span>
       </div>
       <div className="kpi-val">
         <span className="mf mf--plain" data-path={`metric.${metricId}.value`}>

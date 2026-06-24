@@ -15,7 +15,7 @@ This is the inverse of the GVTEWAY portal, where every URL is persona-scoped (`/
 2. **The 5-tab bar can't fit every role's primary needs.** Security's primary is Gate Scan; medic's is patient log; driver's is run sheet; performer's is schedule. Generic defaults leave specialists one tap deeper than they should be.
 3. **Smoke testing scales poorly.** `scripts/compvss-smoke.mjs` runs 47 routes × 4 roles = 188 page-render checks, but the routes don't change per role — so the role dimension is mostly trivial. Persona-routing would make smoke tests targeted (only routes that belong to a role are checked for that role).
 
-Connecteam, When I Work, and Sling all persona-route. Salesforce Lightning's per-cloud app model is the same idea at a different scale.
+Leading deskless-workforce apps persona-route their navigation; the same pattern recurs in large per-cloud enterprise app models at a different scale.
 
 ## Decision
 
@@ -133,7 +133,7 @@ Tools drawer (`mobileSurfaces`) survives but is filtered per role — guard sees
 
 ## Forward look
 
-Once persona-routed, COMPVSS is the closest peer to Connecteam: a role-first deskless app where every operator sees their tools first. The role enum becomes the dominant axis for telemetry, smoke testing, and feature gating. Future roles (e.g., `floor_manager`, `dispatcher`, `runner`) get added by extending the enum + adding the route group; no architectural change required.
+Once persona-routed, COMPVSS is the closest peer to the deskless-workforce suite: a role-first deskless app where every operator sees their tools first. The role enum becomes the dominant axis for telemetry, smoke testing, and feature gating. Future roles (e.g., `floor_manager`, `dispatcher`, `runner`) get added by extending the enum + adding the route group; no architectural change required.
 
 This ADR is the highest-cost of the three P1 items because every page under `/m/*` gets a routing change. Mitigated by the three-month grace window and the fact that most page bodies are unchanged (the role gates the tab bar + drawer, not the page contents).
 

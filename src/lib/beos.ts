@@ -6,7 +6,7 @@
  * (`as const` → derived types), their label maps, the legal-transition
  * table for the `beo_state` FSM, and a couple of small totalling helpers
  * shared by the ATLVS console pages. Pattern matches `src/lib/marketplace.ts`
- * and `src/lib/connecteam.ts`.
+ * and `src/lib/workforce.ts`.
  */
 
 // ============================================================

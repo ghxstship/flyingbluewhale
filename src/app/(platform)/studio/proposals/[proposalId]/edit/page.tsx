@@ -9,7 +9,7 @@ import { timeAgo, toTitle } from "@/lib/format";
 import type { Proposal, ProposalShareLink } from "@/lib/supabase/types";
 import { mintProposalShareUrlToken } from "@/lib/proposals/share";
 import { getRequestT } from "@/lib/i18n/request";
-import { resolveDepositPct } from "@/lib/payment-terms";
+import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 import { ProposalEditor } from "./ProposalEditor";
 import { ShareLinkPanel } from "./ShareLinkPanel";
@@ -65,7 +65,11 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
             title: proposal.title,
             doc_number: proposal.doc_number ?? "",
             currency: proposal.currency ?? "USD",
-            deposit_percent: resolveDepositPct(proposal.deposit_percent, orgPaymentDefaults.depositPct),
+            deposit_percent: resolveDepositPct(
+              proposal.deposit_percent,
+              orgPaymentDefaults.depositPct,
+              PROPOSAL_DEPOSIT_PCT_DEFAULT,
+            ),
             theme: (proposal.theme as { primary: string; secondary: string }) ?? {
               primary: "#D4782A",
               secondary: "#6D4A2A",

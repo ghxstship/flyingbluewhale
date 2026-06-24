@@ -16,7 +16,7 @@ import { log } from "@/lib/log";
  *     bundle includes a `_errors` summary so the user knows what's
  *     incomplete. Production deploys should treat any error as a
  *     500 (option via `?strict=1`) or alert via the log namespace.
- *   • New XPMS / Connecteam / marketplace tables are included so the
+ *   • New XPMS / the deskless-workforce suite / marketplace tables are included so the
  *     export reflects every PII-bearing surface the user has touched.
  *
  * Audit-logged via the SSOT trigger (the read itself isn't logged; the
@@ -65,7 +65,7 @@ export async function GET(req: Request) {
   // Identity + access surfaces.
   // Activity / event log surfaces.
   // XPMS / finance surfaces — anything where submitter_id / created_by / user_id keys to the user.
-  // Connecteam parity surfaces — kudos sent/received, time-off, courses, badges, docs.
+  // Workforce parity surfaces — kudos sent/received, time-off, courses, badges, docs.
   // Marketplace surfaces — applications, submissions, offers, reviews, talent profile.
   const probes: Promise<Probe>[] = [
     probe("users", supabase.from("users").select("*").eq("id", userId).limit(10_000)),
@@ -84,7 +84,7 @@ export async function GET(req: Request) {
           "ai_messages",
           supabase.from("ai_messages").select("*").in("conversation_id", userConversationIds).limit(10_000),
         ),
-    // Connecteam parity surfaces (CLAUDE.md §"Connecteam parity (0046–0048)").
+    // Workforce parity surfaces (CLAUDE.md §"Workforce parity (0046–0048)").
     // Failures land in _errors.
     probe("announcement_reads", supabase.from("announcement_reads").select("*").eq("user_id", userId).limit(10_000)),
     probe("chat_messages", supabase.from("chat_messages").select("*").eq("author_id", userId).limit(10_000)),

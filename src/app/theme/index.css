@@ -54,13 +54,13 @@
   --p-text-1: #181b23;
   --p-text-2: #4a5563;
   --p-text-3: #656d7a;
-  --p-accent: #2edb3a;
-  --p-accent-hover: #00ca22;
-  --p-accent-text: #1f8425;
-  --p-accent-weak: rgba(46, 219, 58, 0.12);
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #001800;
+  --p-accent: #e23414;
+  --p-accent-hover: #c92c10;
+  --p-accent-text: #971a05;
+  --p-accent-weak: rgba(226, 52, 20, 0.12);
+  --p-accent-cta: #ad220a;
+  --p-accent-cta-contrast: #ffffff;
   --p-accent-contrast: #ffffff;
-  --p-focus: #1f8425;
+  --p-focus: #e23414;
   color-scheme: light;
 }

@@ -8,8 +8,8 @@
  */
 
 .lk-root {
-  background: var(--p-bg, #f7f8fa);
-  color: var(--p-text-1, #181b23);
+  background: var(--p-bg, #ededed);
+  color: var(--p-text-1, #0a0a0a);
   font-family: var(--p-font, "Hanken Grotesk", system-ui, sans-serif);
   min-height: 100svh;
 }
@@ -26,7 +26,7 @@
   font-size: 12px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--p-text-3, #8c95a3);
+  color: var(--p-text-3, #5c5c5c);
   margin: 0 0 10px;
 }
 .lk-head h1 {
@@ -34,12 +34,12 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0;
-  color: var(--p-text-1, #181b23);
+  color: var(--p-text-1, #0a0a0a);
   text-transform: none;
 }
 .lk-head p {
   font-size: 15px;
-  color: var(--p-text-2, #5b6472);
+  color: var(--p-text-2, #424242);
   margin: 10px 0 0;
   max-width: 680px;
   line-height: 1.55;
@@ -54,8 +54,8 @@
   font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--p-text-3, #8c95a3);
-  border-bottom: 1px solid var(--p-border, #e4e7ec);
+  color: var(--p-text-3, #5c5c5c);
+  border-bottom: 1px solid var(--p-border, #d6d6d6);
   padding-bottom: 12px;
   margin: 0 0 22px;
   font-weight: 600;
@@ -64,7 +64,7 @@
 /* shared card */
 .lk-card {
   background: var(--p-surface, #fff);
-  border: 1px solid var(--p-border, #e4e7ec);
+  border: 1px solid var(--p-border, #d6d6d6);
   border-radius: 12px;
   box-shadow: var(--p-elev-1, 0 1px 2px rgba(16, 20, 30, 0.05));
 }
@@ -92,8 +92,8 @@
   height: 64px;
 }
 .lk-lockup--dark {
-  background: #111318;
-  border-color: #23262e;
+  background: #0d0d0d;
+  border-color: #262626;
 }
 .lk-lk {
   display: flex;
@@ -108,24 +108,24 @@
   font-size: 32px;
 }
 .lk-lockup .lk-wm {
-  color: var(--p-text-1, #181b23);
+  color: var(--p-text-1, #0a0a0a);
 }
 .lk-lockup--dark .lk-wm {
-  color: #f2f4f8;
+  color: #ededed;
 }
 .lk-sub {
   font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--p-text-3, #8c95a3);
+  color: var(--p-text-3, #5c5c5c);
   margin-top: 5px;
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 .lk-lockup--dark .lk-sub {
-  color: #6e7682;
+  color: #909090;
 }
 
 /* icon cells */
@@ -146,7 +146,7 @@
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--p-text-3, #8c95a3);
+  color: var(--p-text-3, #5c5c5c);
   text-align: center;
   margin-top: 10px;
   line-height: 1.4;
@@ -168,7 +168,7 @@
   position: relative;
   padding: 36px;
   display: inline-block;
-  background: repeating-linear-gradient(45deg, #eef0f3 0 8px, transparent 8px 16px);
+  background: repeating-linear-gradient(45deg, #e4e4e4 0 8px, transparent 8px 16px);
   border-radius: 10px;
 }
 .lk-clearbox-inner {
@@ -194,7 +194,7 @@
 .lk-endorse-div {
   width: 1px;
   height: 38px;
-  background: var(--p-border, #e4e7ec);
+  background: var(--p-border, #d6d6d6);
 }
 .lk-endorse-skull {
   image-rendering: pixelated;
@@ -204,7 +204,7 @@
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--p-text-3, #8c95a3);
+  color: var(--p-text-3, #5c5c5c);
 }
 .lk-endorse-cap {
   line-height: 1.6;
@@ -227,7 +227,7 @@
   border-radius: 10px;
   font-size: 13px;
   line-height: 1.6;
-  color: var(--p-text-2, #5b6472);
+  color: var(--p-text-2, #424242);
 }
 .lk-do {
   background: rgba(47, 169, 104, 0.08);
@@ -238,10 +238,10 @@
   border: 1px solid rgba(229, 72, 77, 0.3);
 }
 .lk-do b {
-  color: #1f8a55;
+  color: #1f7d4d;
 }
 .lk-dont b {
-  color: #c2333a;
+  color: #c4322f;
 }
 .lk-do ul,
 .lk-dont ul {

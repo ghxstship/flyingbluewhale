@@ -71,12 +71,10 @@ The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES"
 
 | Surface                                   | Light                                 | Dark                                           |
 | ----------------------------------------- | ------------------------------------- | ---------------------------------------------- |
-| `--p-text-1` on `--p-bg`                  | `#181b23` on `#f7f8fa` → 16.0:1 (AAA) | `#f2f4f8` on `#111318` → 17.4:1 (AAA)          |
-| `--p-text-2` on `--p-surface` (v7.0)      | `#4a5563` on `#ffffff` → 7.6:1 (AAA)  | `#aeb6c4` on `#1a1d24` → 8.3:1 (AAA)           |
-| `--p-text-3` on `--p-surface`             | `#656d7a` on `#ffffff` → 5.2:1 (AA)   | `#9098a4` on `#1a1d24` → 5.1:1 (AA)            |
-| white on `--p-accent-cta` (atlvs light)   | white on `#c91463` → 5.6:1 (AA)       | atlvs dark uses ink on `#ff4d9b` → 6.1:1 (AA)  |
-| white on `--p-accent-cta` (compvss light) | white on `#8a5a0f` → 5.9:1 (AA)       | compvss dark uses ink on `#f0b255` → kit canon |
-| white on `--p-accent-cta` (gvteway light) | white on `#2563eb` → 5.2:1 (AA)       | gvteway dark uses ink on `#5e8bf2` → kit canon |
+| `--p-text-1` on `--p-bg`                  | `#0a0a0a` on `#ededed` → 18.1:1 (AAA) | `#ededed` on `#0d0d0d` → 16.6:1 (AAA)          |
+| `--p-text-2` on `--p-surface`             | `#424242` on `#ffffff` → 10.1:1 (AAA) | `#b0b0b0` on `#0d0d0d` → 9.0:1 (AAA)           |
+| `--p-text-3` on `--p-surface`             | `#5c5c5c` on `#ffffff` → 6.7:1 (AA)   | `#909090` on `#0d0d0d` → 6.1:1 (AA)            |
+| ink on `--p-accent-cta` (v8 mono-green)   | `#012202` on `#2edb3a` → 9.2:1 (AAA)  | `#012202` on `#3ae243` → 9.9:1 (AAA)           |
 
 The bright display accents (`--p-accent`) deliberately fail AA as text — they're for fills, focus halos, and large display text where 3:1 suffices. Use `--p-accent-text` (deepened in light mode) for any small-text usage; or `--p-accent-cta` paired with `--p-accent-cta-contrast` for filled CTAs.
 

@@ -10,17 +10,17 @@
   /* Defensive fallbacks — bermuda-light + other CHROMA themes never
      defined the named --gx-* world, so we re-pin them here so this
      page paints in canon regardless of the active theme. */
-  --gx-void: #060815;
-  --gx-ink: #0a0e27;
-  --gx-ink-2: #161c3d;
-  --gx-ink-3: #28305c;
-  --gx-bone: #fbfaf6;
-  --gx-bone-2: #b9c0e0;
-  --gx-bone-3: #8a93b8;
+  --gx-void: #000000;
+  --gx-ink: #0d0d0d;
+  --gx-ink-2: #171717;
+  --gx-ink-3: #262626;
+  --gx-bone: #ededed;
+  --gx-bone-2: #b0b0b0;
+  --gx-bone-3: #909090;
   --gx-brass: #2edb3a;
   --gx-brass-deep: #147d1c;
   --gx-nebula: #2edb3a;
-  --gx-plasma: #21d4d4;
+  --gx-plasma: #6ee176;
 
   background: var(--gx-void);
   color: var(--gx-bone);

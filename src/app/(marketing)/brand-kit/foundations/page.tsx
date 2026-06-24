@@ -115,7 +115,7 @@ export default async function FoundationsPage() {
               <span
                 className="tile"
                 // eslint-disable-next-line no-restricted-syntax -- intentional fixed ink brand plate
-                style={{ background: "#181B23", border: "1px solid var(--p-border-2)" }}
+                style={{ background: "#0a0a0a", border: "1px solid var(--p-border-2)" }}
                 aria-hidden="true"
               >
                 <Image src="/brand/atlvs-mark-white.svg" alt="" width={38} height={38} />

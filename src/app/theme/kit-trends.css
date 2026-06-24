@@ -26,6 +26,19 @@
    file imports LAST, so it wins over the per-product accent blocks on ties.
    ========================================================================== */
 
+/* ---- Self-hosted trend display faces (v8.1) — SIL OFL / open-source, so
+   redistribution is permitted. Committed under theme/assets/fonts/ (latin
+   subset, single representative weight each; broad font-weight range lets the
+   browser synthesize the rest). Loaded only when a [data-trend] using the face
+   is active; until referenced the @font-face costs nothing. `font-display:swap`
+   so the fallback (Anton/Hanken) paints instantly. ---- */
+@font-face { font-family: "Space Grotesk"; src: url("./assets/fonts/SpaceGrotesk.woff2") format("woff2"); font-weight: 300 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Archivo Black"; src: url("./assets/fonts/ArchivoBlack.woff2") format("woff2"); font-weight: 400 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("./assets/fonts/Fraunces.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Baloo 2"; src: url("./assets/fonts/Baloo2.woff2") format("woff2"); font-weight: 400 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Poppins"; src: url("./assets/fonts/Poppins.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Orbitron"; src: url("./assets/fonts/Orbitron.woff2") format("woff2"); font-weight: 500 900; font-style: normal; font-display: swap; }
+
 /* ---- Shared trend hooks (read by components; default = no-op so non-trend
    surfaces are unchanged). --trend-rotate is the off-grid tilt collage/maximal
    lean on; --trend-overlay flags atmospheric backdrops (synthwave grid). ---- */

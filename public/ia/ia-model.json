@@ -305,7 +305,7 @@
       "name": "ATLVS",
       "descriptor": "Operator console — ERP × CRM × PM",
       "kind": "product",
-      "color": "#FF2E88",
+      "color": "#E23414",
       "host": "app.atlvs.pro",
       "routeGroup": "/studio",
       "groups": [
@@ -1849,7 +1849,7 @@
       "name": "COMPVSS",
       "descriptor": "Site & venue field ops",
       "kind": "product",
-      "color": "#E9A23B",
+      "color": "#FFC400",
       "host": "compass.atlvs.pro",
       "routeGroup": "/m",
       "groups": [
@@ -2105,7 +2105,7 @@
       "name": "LEG3ND",
       "descriptor": "Knowledge · LMS · XPMS 2.0",
       "kind": "product",
-      "color": "#E8500A",
+      "color": "#ED6A1E",
       "host": "legend.atlvs.pro",
       "routeGroup": "/legend",
       "groups": [

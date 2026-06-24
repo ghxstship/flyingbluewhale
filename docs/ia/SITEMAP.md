@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1133 · **API route handlers:** 132 · **Distinct nav hrefs:** 481
+**Page routes:** 1134 · **API route handlers:** 132 · **Distinct nav hrefs:** 481
 
 ## Legend
 
@@ -29,10 +29,10 @@
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 53 | 38 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 90 | 33 | 49 | 0 | 8 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 91 | 33 | 49 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1133** | **455** | **641** | **0** | **37** |
+| **TOTAL** | | **1134** | **455** | **641** | **0** | **38** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (37) — intentional non-nav, with reasons
+## · Exempt routes (38) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -63,6 +63,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/api-docs` | prefix | API reference microsite. |
 | `/brand-kit` | prefix | Brand-kit microsite. |
 | `/demo` | prefix | Demo-booking flow. |
+| `/pitch` | prefix | pitch deck presenter surface |
 | `/forms` | prefix | Embedded campaign/SEO form pages. |
 | `/offer` | prefix | Token-gated offer flow. |
 | `/proposals` | prefix | Token-gated proposal flow. |
@@ -81,6 +82,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/home` | exact | Post-auth app launcher — reached via auth redirect, not a nav click. |
 | `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
 | `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
+| `/social` | prefix | social image asset endpoint |
 
 ---
 
@@ -1940,7 +1942,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — Public / Marketing
 
-90 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
+91 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2125,6 +2127,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>partners</code> · 1 route</summary>
 
 ● `/partners`
+
+</details>
+
+<details><summary><code>pitch</code> · 1 route</summary>
+
+· `/pitch`
 
 </details>
 

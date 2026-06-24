@@ -757,6 +757,60 @@
   --glass-blur: blur(8px) saturate(1.1);
   --p-border-width: 1px;
   --ring-width: 2px;
+
+  /* ── v8.1 inventory-completeness token sets ──────────────────────────────
+     Foundational scales the design-system inventory expects so "every visual
+     decision resolves to a token." Additive — existing surfaces are unchanged. */
+
+  /* Border-width scale — hairline (default) → emphasis → heavy. */
+  --p-border-width-sm: 1px;
+  --p-border-width-md: 2px;
+  --p-border-width-lg: 3px;
+
+  /* Opacity scale — disabled / muted / subtle / hover-veil / scrim. */
+  --p-opacity-disabled: 0.45;
+  --p-opacity-muted: 0.6;
+  --p-opacity-subtle: 0.75;
+  --p-opacity-veil: 0.08;
+  --p-opacity-scrim: 0.4;
+
+  /* Aspect-ratio tokens — for media frames, thumbnails, cards. */
+  --p-ar-square: 1 / 1;
+  --p-ar-video: 16 / 9;
+  --p-ar-photo: 4 / 3;
+  --p-ar-portrait: 3 / 4;
+  --p-ar-wide: 21 / 9;
+  --p-ar-golden: 1.618 / 1;
+
+  /* Grid columns & gutters — the 12-col base + responsive gutter. Reference
+     in CSS grid (`grid-template-columns: repeat(var(--p-grid-cols), 1fr)`). */
+  --p-grid-cols: 12;
+  --p-gutter: var(--p-6);
+  --p-gutter-sm: var(--p-4);
+  --p-gutter-lg: var(--p-8);
+
+  /* Named gradient tokens — accent wash + neutral fade + skeleton shimmer.
+     Reference these instead of inline linear-gradient() in components. */
+  --p-gradient-accent: linear-gradient(135deg, var(--p-accent) 0%, var(--p-accent-cta) 100%);
+  --p-gradient-surface: linear-gradient(180deg, var(--p-surface) 0%, var(--p-bg) 100%);
+  --p-gradient-fade-r: linear-gradient(90deg, transparent 0%, var(--p-surface) 100%);
+  --p-gradient-skeleton: linear-gradient(90deg, var(--p-surface-2) 25%, var(--p-border) 37%, var(--p-surface-2) 63%);
+
+  /* Data-viz SEQUENTIAL ramp (low→high, single-hue perceptual; uses the
+     product accent so it themes per product) + DIVERGING ramp (danger↔neutral↔
+     success around a midpoint) for heatmaps / correlation / choropleth. The
+     categorical --chart-1..8 set above stays the discrete-series palette. */
+  --chart-seq-1: color-mix(in oklab, var(--k-acc, var(--p-accent)) 14%, var(--p-surface));
+  --chart-seq-2: color-mix(in oklab, var(--k-acc, var(--p-accent)) 30%, var(--p-surface));
+  --chart-seq-3: color-mix(in oklab, var(--k-acc, var(--p-accent)) 48%, var(--p-surface));
+  --chart-seq-4: color-mix(in oklab, var(--k-acc, var(--p-accent)) 68%, var(--p-surface));
+  --chart-seq-5: color-mix(in oklab, var(--k-acc, var(--p-accent)) 86%, var(--p-surface));
+  --chart-seq-6: var(--k-acc, var(--p-accent));
+  --chart-div-neg-2: var(--p-danger);
+  --chart-div-neg-1: color-mix(in oklab, var(--p-danger) 45%, var(--p-surface));
+  --chart-div-mid: var(--p-surface-2);
+  --chart-div-pos-1: color-mix(in oklab, var(--p-success) 45%, var(--p-surface));
+  --chart-div-pos-2: var(--p-success);
 }
 
 /* Filled primary buttons + brand badges — use AA-safe CTA fill, not the

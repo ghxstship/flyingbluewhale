@@ -199,6 +199,7 @@ const EXEMPT = [
   { path: "/api-docs", type: "prefix", reason: "API reference microsite." },
   { path: "/brand-kit", type: "prefix", reason: "Brand-kit microsite." },
   { path: "/demo", type: "prefix", reason: "Demo-booking flow." },
+  { path: "/pitch", type: "prefix", reason: "pitch deck presenter surface" },
   { path: "/forms", type: "prefix", reason: "Embedded campaign/SEO form pages." },
   // Token-gated flows — entered via an emailed/shared link, never nav.
   { path: "/offer", type: "prefix", reason: "Token-gated offer flow." },
@@ -224,6 +225,7 @@ const EXEMPT = [
     type: "exact",
     reason: "account lifecycle sub-screen, reached from /m/settings",
   },
+  { path: "/social", type: "prefix", reason: "social image asset endpoint" },
 ];
 const isExempt = (route) =>
   EXEMPT.some((e) => (e.type === "exact" ? route === e.path : route === e.path || route.startsWith(e.path + "/")));

@@ -1,61 +1,88 @@
 /**
- * IA coverage — data-driven render smoke across the ENTIRE navigation tree.
+ * IA coverage — data-driven render smoke across the ENTIRE navigation tree of
+ * EVERY shell. This spec imports the canonical nav config (src/lib/nav.ts)
+ * directly and walks every static list/index route each shell's nav exposes,
+ * so it can never fall behind the IA: a new module added to any nav tree is
+ * automatically asserted here the moment it ships. (nav.ts has zero imports —
+ * pure data — so it loads cleanly in the Playwright runtime.)
  *
- * This spec imports the canonical nav config (src/lib/nav.ts) directly and
- * walks every list/index route the console + settings sidebars expose, so it
- * can never fall behind the IA: a new module added to `platformNavDomain`
- * is automatically asserted here the moment it ships. (nav.ts has zero
- * imports — pure data — so it loads cleanly in the Playwright runtime.)
- *
- * Covers the v4/v5/deferred expansions (Collaborate, AI/RAG corpus, meeting
- * notes, LEG3ND knowledge/signage/resources, Goals/OKRs, Sprints, function
- * diary, BEOs, reservations, store commerce, box office, discounts, the
- * marketplace host console, …) without enumerating them by hand.
+ * Shells covered (full codebase coverage):
+ *   - marketing  (public)            — marketingHeaderGroups + marketingFooterGroups
+ *   - platform   (/studio, authed)   — platformNavDomain
+ *   - settings   (/studio/settings)  — settingsNav
+ *   - legend     (/legend, authed)   — legendNav
+ *   - personal   (/me, authed)       — personalNavGroups
+ *   - mobile     (/m, authed)        — mobileTabs + mobileSurfaces
  *
  * Per route we assert (kit MIGRATION.md §7 render gates):
- *   - the navigation did not bounce to /login (auth held),
+ *   - the navigation did not bounce to /login (auth held; skipped for public),
  *   - the response was not a 4xx/5xx,
  *   - a real <h1> rendered (not a blank/stub shell),
  *   - no uncaught page exception fired during load.
  *
- * Grouped one test per nav group: every route in the group is visited and
- * ALL failures are collected before the assertion, so a single run surfaces
- * every broken surface in that group at once (not just the first).
+ * Grouped one test per nav group: every route in the group is visited and ALL
+ * failures are collected before the assertion, so a single run surfaces every
+ * broken surface in that group at once (not just the first).
  */
 import { expect, test } from "playwright/test";
-import { authedSetup } from "./helpers/auth";
-import { platformNavDomain, settingsNav, type NavGroup } from "../src/lib/nav";
+import { authedSetup, dismissConsent } from "./helpers/auth";
+import {
+  platformNavDomain,
+  settingsNav,
+  legendNav,
+  mobileTabs,
+  mobileSurfaces,
+  marketingHeaderGroups,
+  marketingFooterGroups,
+  personalNavGroups,
+  type NavGroup,
+  type NavItem,
+} from "../src/lib/nav";
 
 type Route = { label: string; href: string };
 
-/** Flatten a nav group to its routes, honoring the sections-vs-items rule. */
-function groupRoutes(group: NavGroup): Route[] {
+const isStatic = (href: string | undefined): href is string =>
+  !!href && href.startsWith("/") && !href.includes("[") && !href.includes("#");
+
+function dedupe(routes: Route[]): Route[] {
   const seen = new Set<string>();
   const out: Route[] = [];
-  const push = (label: string, href: string) => {
-    // Only static list/index routes live in nav; skip anything dynamic.
-    if (!href.startsWith("/") || href.includes("[")) return;
-    if (seen.has(href)) return;
-    seen.add(href);
-    out.push({ label, href });
-  };
-  const sources = group.sections?.length ? group.sections : [{ items: group.items }];
-  for (const s of sources) for (const it of s.items) push(it.label, it.href);
+  for (const r of routes) {
+    if (!isStatic(r.href) || seen.has(r.href)) continue;
+    seen.add(r.href);
+    out.push(r);
+  }
   return out;
 }
 
+/** Flatten a NavGroup (sections-or-items) to its static routes. */
+function navGroupRoutes(group: NavGroup): Route[] {
+  const out: Route[] = [];
+  if (group.href) out.push({ label: group.label, href: group.href });
+  const sources = group.sections?.length ? group.sections : [{ items: group.items }];
+  for (const s of sources) for (const it of s.items) out.push({ label: it.label, href: it.href });
+  return dedupe(out);
+}
+
+const flatItemRoutes = (items: NavItem[]): Route[] =>
+  dedupe(items.map((it) => ({ label: it.label, href: it.href })));
+
 /** Visit one route and return a failure string, or null if it rendered. */
-async function probe(page: import("playwright/test").Page, route: Route): Promise<string | null> {
+async function probe(
+  page: import("playwright/test").Page,
+  route: Route,
+  opts: { public?: boolean } = {},
+): Promise<string | null> {
   const pageErrors: string[] = [];
   const onError = (e: Error) => pageErrors.push(e.message);
   page.on("pageerror", onError);
   try {
     const res = await page.goto(route.href, { waitUntil: "domcontentloaded", timeout: 30000 });
     const status = res?.status() ?? 0;
-    const url = page.url();
-    if (/\/login(\?|$)/.test(url)) return `${route.href} → bounced to /login (auth/role gate)`;
+    if (!opts.public && /\/login(\?|$)/.test(page.url())) {
+      return `${route.href} → bounced to /login (auth/role gate)`;
+    }
     if (status >= 400) return `${route.href} → HTTP ${status}`;
-    // Every real surface renders an <h1> (ModuleHeader / PageStub-free canon).
     const h1 = page.locator("h1").first();
     await expect(h1, `${route.href} has no <h1>`).toBeVisible({ timeout: 15000 });
     if (pageErrors.length) return `${route.href} → uncaught: ${pageErrors[0]}`;
@@ -67,38 +94,102 @@ async function probe(page: import("playwright/test").Page, route: Route): Promis
   }
 }
 
+async function assertGroup(
+  page: import("playwright/test").Page,
+  label: string,
+  routes: Route[],
+  opts: { public?: boolean } = {},
+) {
+  const failures: string[] = [];
+  for (const route of routes) {
+    const fail = await probe(page, route, opts);
+    if (fail) failures.push(fail);
+  }
+  expect(failures, `Broken routes in "${label}":\n${failures.join("\n")}`).toEqual([]);
+}
+
+// ── Marketing (public, no auth) ──────────────────────────────────────────────
+test.describe("IA coverage — marketing (public)", () => {
+  test.describe.configure({ timeout: 180000 });
+  test.beforeEach(async ({ page }) => dismissConsent(page));
+
+  const marketing = dedupe([
+    ...marketingHeaderGroups.flatMap((g) => g.items.map((it) => ({ label: it.labelKey, href: it.href }))),
+    ...marketingFooterGroups.flatMap((g) => g.items.map((it) => ({ label: it.labelKey, href: it.href }))),
+  ]);
+  test(`marketing — ${marketing.length} public route(s) render`, async ({ page }) => {
+    await assertGroup(page, "marketing", marketing, { public: true });
+  });
+});
+
+// ── Console platform (/studio, authed) ───────────────────────────────────────
 test.describe("IA coverage — console (platform sidebar)", () => {
   test.describe.configure({ timeout: 180000 });
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   for (const group of platformNavDomain) {
-    const routes = groupRoutes(group);
+    const routes = navGroupRoutes(group);
     if (routes.length === 0) continue;
     test(`group "${group.label}" — ${routes.length} route(s) render`, async ({ page }) => {
-      const failures: string[] = [];
-      for (const route of routes) {
-        const fail = await probe(page, route);
-        if (fail) failures.push(fail);
-      }
-      expect(failures, `Broken console routes in "${group.label}":\n${failures.join("\n")}`).toEqual([]);
+      await assertGroup(page, group.label, routes);
     });
   }
 });
 
+// ── Console settings (/studio/settings, authed) ──────────────────────────────
 test.describe("IA coverage — console settings", () => {
   test.describe.configure({ timeout: 180000 });
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   for (const group of settingsNav) {
-    const routes = groupRoutes(group);
+    const routes = navGroupRoutes(group);
     if (routes.length === 0) continue;
     test(`settings "${group.label}" — ${routes.length} route(s) render`, async ({ page }) => {
-      const failures: string[] = [];
-      for (const route of routes) {
-        const fail = await probe(page, route);
-        if (fail) failures.push(fail);
-      }
-      expect(failures, `Broken settings routes in "${group.label}":\n${failures.join("\n")}`).toEqual([]);
+      await assertGroup(page, group.label, routes);
+    });
+  }
+});
+
+// ── LEG3ND shell (/legend, authed) ───────────────────────────────────────────
+test.describe("IA coverage — LEG3ND (legend shell)", () => {
+  test.describe.configure({ timeout: 180000 });
+  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+
+  for (const group of legendNav) {
+    const routes = navGroupRoutes(group);
+    if (routes.length === 0) continue;
+    test(`legend "${group.label}" — ${routes.length} route(s) render`, async ({ page }) => {
+      await assertGroup(page, group.label, routes);
+    });
+  }
+});
+
+// ── Personal (/me, authed) ───────────────────────────────────────────────────
+test.describe("IA coverage — personal (/me)", () => {
+  test.describe.configure({ timeout: 180000 });
+  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+
+  for (const group of personalNavGroups) {
+    const routes = dedupe(group.items.map((it) => ({ label: it.fallback, href: it.href })));
+    if (routes.length === 0) continue;
+    test(`me "${group.fallback}" — ${routes.length} route(s) render`, async ({ page }) => {
+      await assertGroup(page, group.fallback, routes);
+    });
+  }
+});
+
+// ── Mobile (/m, authed) ──────────────────────────────────────────────────────
+test.describe("IA coverage — mobile (COMPVSS /m)", () => {
+  test.describe.configure({ timeout: 240000 });
+  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+
+  const mobile = dedupe([...flatItemRoutes(mobileTabs), ...flatItemRoutes(mobileSurfaces)]);
+  // Split into chunks so a single test isn't unboundedly long.
+  const CHUNK = 12;
+  for (let i = 0; i < mobile.length; i += CHUNK) {
+    const slice = mobile.slice(i, i + CHUNK);
+    test(`mobile surfaces ${i + 1}–${i + slice.length} render`, async ({ page }) => {
+      await assertGroup(page, `mobile ${i + 1}–${i + slice.length}`, slice);
     });
   }
 });

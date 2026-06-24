@@ -94,7 +94,11 @@ export type RotatingQRProps = {
 };
 
 export function RotatingQR({ base, size = 176, ttl = 30, mintToken }: RotatingQRProps) {
-  const [token, setToken] = useState<string>(randomToken);
+  // Start empty so the server and the client's first render match — minting a
+  // `Math.random()` token in the useState initializer runs on both sides and
+  // produces different values, which hydration-mismatches (React #418). The
+  // real token is minted client-side on mount in the effect below.
+  const [token, setToken] = useState<string>("");
   const [left, setLeft] = useState(ttl);
 
   const refresh = () => {
@@ -106,6 +110,7 @@ export function RotatingQR({ base, size = 176, ttl = 30, mintToken }: RotatingQR
   };
 
   useEffect(() => {
+    refresh(); // mint the first real token client-side (post-hydration)
     const tick = setInterval(() => {
       setLeft((l) => {
         if (l <= 1) {

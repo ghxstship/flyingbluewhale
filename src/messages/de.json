@@ -21104,7 +21104,7 @@
    "engagementDeposit": "Engagement-Deposit",
    "dueOnSignature": "Fällig bei Vertragsunterzeichnung",
    "balance": "Restbetrag",
-   "dueBeforeEvent": "Fällig 30 Tage vor dem Event",
+   "dueOnLoadIn": "Fällig am Aufbautag",
    "paymentMethod": "Zahlungsmethode",
    "technicalPackage": "Technisches Produktionspaket",
    "available": "Verfügbar"

@@ -46,21 +46,21 @@
  * un-attributed flash matches the canonical kit surface.
  */
 :root:not([data-theme]) {
-  --p-bg: #ededed;
+  --p-bg: #f7f8fa;
   --p-surface: #ffffff;
-  --p-surface-2: #e4e4e4;
-  --p-border: #d6d6d6;
-  --p-border-2: #c4c4c4;
-  --p-text-1: #0a0a0a;
-  --p-text-2: #424242;
-  --p-text-3: #5c5c5c;
+  --p-surface-2: #f1f3f6;
+  --p-border: #e4e7ec;
+  --p-border-2: #d3d8e0;
+  --p-text-1: #181b23;
+  --p-text-2: #4a5563;
+  --p-text-3: #656d7a;
   --p-accent: #2edb3a;
-  --p-accent-hover: #17c62a;
-  --p-accent-text: #147d1c;
+  --p-accent-hover: #00ca22;
+  --p-accent-text: #1f8425;
   --p-accent-weak: rgba(46, 219, 58, 0.12);
   --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #012202;
+  --p-accent-cta-contrast: #001800;
   --p-accent-contrast: #ffffff;
-  --p-focus: #147d1c;
+  --p-focus: #1f8425;
   color-scheme: light;
 }

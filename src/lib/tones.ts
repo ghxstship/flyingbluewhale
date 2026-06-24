@@ -20,14 +20,16 @@
  * Use `toneFor(state)` for generic lookups (falls back to "default"),
  * or import a specific map when you want exhaustive typing.
  *
- * The marketplace module keeps its own canonical-by-module map in
- * `src/lib/marketplace.ts`; it is re-exported here for discoverability.
+ * SSOT note (plumb-line DUP-2): this file is the SINGLE owner of state→tone.
+ * `src/lib/marketplace.ts#STATUS_TONE` is a re-export of `STATE_TONE` below —
+ * the marketplace-specific keys live here (see the "marketplace" block in
+ * DOCUMENT_STATE_TONE) so the generic resolver and the marketplace surfaces can
+ * never disagree on a shared state (they previously diverged on
+ * `closed`/`complete`/`responded`).
  */
 
 import type { BadgeVariant } from "@/components/ui/Badge";
 import type { FulfillmentState } from "@/lib/db/assignments";
-
-export { STATUS_TONE as MARKETPLACE_STATUS_TONE } from "@/lib/marketplace";
 
 /** The subset of Badge variants used for state coloring. */
 export type StateTone = Extract<BadgeVariant, "default" | "muted" | "info" | "success" | "warning" | "error">;
@@ -104,7 +106,7 @@ export const DOCUMENT_STATE_TONE: Record<string, StateTone> = {
   investigating: "info",
   triage: "info",
   acknowledged: "info",
-  responded: "info",
+  responded: "success",
   viewed: "info",
   verified: "info",
   matched: "info",
@@ -192,8 +194,25 @@ export const DOCUMENT_STATE_TONE: Record<string, StateTone> = {
   urgent: "error",
   error: "error",
   // ── terminal / neutral close ──
-  complete: "default",
-  closed: "default",
+  complete: "success",
+  closed: "muted",
+  // ── marketplace-specific keys (folded in from marketplace.ts#STATUS_TONE,
+  //    plumb-line DUP-2 — this file is now their single owner) ──
+  reviewed: "info",
+  phone: "warning",
+  booked: "success",
+  pass: "muted",
+  shortlisted: "warning",
+  contracted: "success",
+  reconciling: "warning",
+  final: "success",
+  routing: "info",
+  announce: "muted",
+  presale_start: "info",
+  presale_end: "info",
+  onsale: "success",
+  sold_out: "success",
+  press_embargo: "warning",
 };
 
 /** Severity grading (incidents, risks, annotations, threats). */
@@ -226,11 +245,21 @@ export const PRIORITY_TONE: Record<string, StateTone> = {
   immediate: "error",
 };
 
-/** Merged lookup table — fulfillment vocabulary wins on shared keys. */
-const MERGED_TONE: Record<string, StateTone> = {
+/**
+ * Merged lookup table — fulfillment vocabulary wins on shared keys. This is the
+ * single source of truth every shell resolves against; `marketplace.ts`
+ * re-exports it as `STATUS_TONE`.
+ */
+export const STATE_TONE: Record<string, StateTone> = {
   ...DOCUMENT_STATE_TONE,
   ...FULFILLMENT_TONE,
 };
+
+/**
+ * Back-compat alias. The marketplace map is no longer a separate authoring
+ * site — it is exactly `STATE_TONE`.
+ */
+export const MARKETPLACE_STATUS_TONE = STATE_TONE;
 
 /**
  * Resolve a state/status string to its canonical Badge tone.
@@ -238,5 +267,5 @@ const MERGED_TONE: Record<string, StateTone> = {
  */
 export function toneFor(state: string | null | undefined): StateTone {
   if (!state) return "default";
-  return MERGED_TONE[state] ?? "default";
+  return STATE_TONE[state] ?? "default";
 }

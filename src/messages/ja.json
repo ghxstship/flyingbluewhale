@@ -21104,7 +21104,7 @@
    "engagementDeposit": "エンゲージメントデポジット",
    "dueOnSignature": "契約署名時に支払い",
    "balance": "残額",
-   "dueBeforeEvent": "イベント30日前に支払い",
+   "dueOnLoadIn": "搬入日に支払い",
    "paymentMethod": "支払い方法",
    "technicalPackage": "テクニカルプロダクションパッケージ",
    "available": "利用可能"

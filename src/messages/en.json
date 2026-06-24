@@ -21711,7 +21711,7 @@
    "engagementDeposit": "Engagement deposit",
    "dueOnSignature": "Due on contract signature",
    "balance": "Balance",
-   "dueBeforeEvent": "Due 30 days before event",
+   "dueOnLoadIn": "Due on load-in",
    "paymentMethod": "Payment method",
    "technicalPackage": "Technical production package",
    "available": "Available"

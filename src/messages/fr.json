@@ -21104,7 +21104,7 @@
    "engagementDeposit": "Acompte d'engagement",
    "dueOnSignature": "Dû à la signature du contrat",
    "balance": "Solde",
-   "dueBeforeEvent": "Dû 30 jours avant l'événement",
+   "dueOnLoadIn": "Dû le jour du montage",
    "paymentMethod": "Mode de paiement",
    "technicalPackage": "Package de production technique",
    "available": "Disponible"

@@ -29,12 +29,13 @@ const SOCIAL_ICONS: Record<string, typeof InstagramLogo> = {
 
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const { t } = await getRequestT();
-  // Single-skin lock: the ATLVS marketing site uses the same neutral SaaS
-  // skin as the console — visual consistency with the actual products
-  // (Hanken Grotesk body, Anton display, soft elevation, neutral surfaces,
-  // per-product accent). There is no separate cosmic marketing skin.
+  // Single-skin lock: the marketing site uses the same neutral SaaS skin as the
+  // console (Hanken Grotesk body, Anton display, soft elevation, neutral
+  // surfaces). It is ECOSYSTEM marketing, not a product surface, so it carries
+  // the GHXSTSHIP house-green accent (v8 palette-locked); the per-product hues
+  // (ATLVS red, COMPVSS yellow, …) appear only on the product cards/consoles.
   return (
-    <div data-ui="saas" data-theme="atlvs-product" data-product="atlvs" data-platform="atlvs" className="page-shell">
+    <div data-ui="saas" data-theme="atlvs-product" data-product="ghxstship" data-platform="ghxstship" className="page-shell">
       <MarketingHeader />
       <WebVitalsReporter />
       <main id="main" tabIndex={-1}>

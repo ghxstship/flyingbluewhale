@@ -33,7 +33,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const TOKENS_PATH = join(ROOT, "src/app/theme/tokens.json");
 export const THEME_PATH = join(ROOT, "src/app/theme/themes/atlvs-product.css");
 
-const PRODUCTS = ["atlvs", "compvss", "gvteway", "legend"];
+const PRODUCTS = ["atlvs", "compvss", "gvteway", "legend", "ghxstship"];
 const lc = (hex) => String(hex).toLowerCase();
 
 /** Selector lists — fixed structure (only the VALUES come from tokens.json). */

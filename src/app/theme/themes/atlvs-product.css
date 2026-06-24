@@ -30,18 +30,21 @@
 /* @gen:brand:start */
 /* Brand-identity tokens (mode-agnostic, for multi-product displays). */
 :root {
-  --brand-atlvs: #2edb3a;
-  --brand-atlvs-ink: #2edb3a;
-  --brand-atlvs-on: #012202;
-  --brand-compvss: #2edb3a;
-  --brand-compvss-ink: #2edb3a;
-  --brand-compvss-on: #012202;
-  --brand-gvteway: #2edb3a;
-  --brand-gvteway-ink: #2edb3a;
-  --brand-gvteway-on: #012202;
-  --brand-legend: #2edb3a;
-  --brand-legend-ink: #2edb3a;
-  --brand-legend-on: #012202;
+  --brand-atlvs: #e23414;
+  --brand-atlvs-ink: #ad220a;
+  --brand-atlvs-on: #ffffff;
+  --brand-compvss: #ffc400;
+  --brand-compvss-ink: #ffc400;
+  --brand-compvss-on: #1f0d00;
+  --brand-gvteway: #2563eb;
+  --brand-gvteway-ink: #2563eb;
+  --brand-gvteway-on: #ffffff;
+  --brand-legend: #ed6a1e;
+  --brand-legend-ink: #ed6a1e;
+  --brand-legend-on: #280300;
+  --brand-ghxstship: #2edb3a;
+  --brand-ghxstship-ink: #2edb3a;
+  --brand-ghxstship-on: #001800;
 }
 /* @gen:brand:end */
 
@@ -215,17 +218,17 @@
 [data-theme="atlvs-product"],
 [data-mode="light"] [data-theme="atlvs-product"] {
   --p-neutral-0: #ffffff;
-  --p-neutral-50: #ededed;
-  --p-neutral-100: #e4e4e4;
-  --p-neutral-200: #d6d6d6;
-  --p-neutral-300: #c4c4c4;
-  --p-neutral-400: #a3a3a3;
-  --p-neutral-500: #808080;
-  --p-neutral-600: #5c5c5c;
-  --p-neutral-700: #424242;
-  --p-neutral-800: #2e2e2e;
-  --p-neutral-900: #1c1c1c;
-  --p-neutral-1000: #0a0a0a;
+  --p-neutral-50: #f7f8fa;
+  --p-neutral-100: #f1f3f6;
+  --p-neutral-200: #e4e7ec;
+  --p-neutral-300: #d3d8e0;
+  --p-neutral-400: #b3bac6;
+  --p-neutral-500: #8b94a3;
+  --p-neutral-600: #656d7a;
+  --p-neutral-700: #4a5563;
+  --p-neutral-800: #343b47;
+  --p-neutral-900: #232932;
+  --p-neutral-1000: #181b23;
   --p-bg: var(--p-neutral-50);
   --p-surface: var(--p-neutral-0);
   --p-surface-2: var(--p-neutral-100);
@@ -242,18 +245,18 @@
 [data-ui="saas"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"],
 [data-mode="dark"] [data-theme="atlvs-product"] {
-  --p-neutral-0: #000000;
-  --p-neutral-50: #0d0d0d;
-  --p-neutral-100: #171717;
-  --p-neutral-200: #262626;
-  --p-neutral-300: #363636;
-  --p-neutral-400: #4d4d4d;
-  --p-neutral-500: #6b6b6b;
-  --p-neutral-600: #909090;
-  --p-neutral-700: #b0b0b0;
-  --p-neutral-800: #cfcfcf;
-  --p-neutral-900: #e0e0e0;
-  --p-neutral-1000: #ededed;
+  --p-neutral-0: #111318;
+  --p-neutral-50: #1a1d24;
+  --p-neutral-100: #232730;
+  --p-neutral-200: #2c313b;
+  --p-neutral-300: #3a404c;
+  --p-neutral-400: #4d5563;
+  --p-neutral-500: #6b7484;
+  --p-neutral-600: #9098a4;
+  --p-neutral-700: #aeb6c4;
+  --p-neutral-800: #cdd3dd;
+  --p-neutral-900: #e6e9ef;
+  --p-neutral-1000: #f2f4f8;
   --p-bg: var(--p-neutral-0);
   --p-surface: var(--p-neutral-50);
   --p-surface-2: var(--p-neutral-100);
@@ -271,134 +274,168 @@
 /* ATLVS */
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --p-accent: #2edb3a;
-  --p-accent-hover: #17c62a;
-  --p-accent-text: #147d1c;
-  --p-accent-weak: rgba(46,219,58,.12);
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #012202;
-  --p-focus: #147d1c;
+  --p-accent: #e23414;
+  --p-accent-hover: #c92c10;
+  --p-accent-text: #971a05;
+  --p-accent-weak: rgba(226,52,20,.12);
+  --p-accent-cta: #ad220a;
+  --p-accent-cta-contrast: #ffffff;
+  --p-focus: var(--p-accent);
 }
 [data-ui="saas"][data-product="atlvs"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --p-accent: #3ae243;
-  --p-accent-text: #6ee176;
-  --p-accent-weak: rgba(46,219,58,.18);
-  --p-accent-cta: #3ae243;
-  --p-accent-cta-contrast: #012202;
+  --p-accent: #ff5634;
+  --p-accent-text: #ff7c5a;
+  --p-accent-weak: rgba(226,52,20,.18);
+  --p-accent-cta: #ff5634;
+  --p-accent-cta-contrast: #0e1014;
   --p-focus: var(--p-accent);
 }
 /* COMPVSS */
 [data-ui="saas"][data-product="compvss"],
 [data-theme="atlvs-product"][data-platform="compvss"] {
-  --p-accent: #2edb3a;
-  --p-accent-hover: #17c62a;
-  --p-accent-text: #147d1c;
-  --p-accent-weak: rgba(46,219,58,.12);
-  --p-accent-contrast: #012202;
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #012202;
-  --p-focus: #147d1c;
+  --p-accent: #ffc400;
+  --p-accent-hover: #eeb400;
+  --p-accent-text: #9d6a00;
+  --p-accent-weak: rgba(255,196,0,.14);
+  --p-accent-contrast: #1f0d00;
+  --p-accent-cta: #ffc400;
+  --p-accent-cta-contrast: #1f0d00;
+  --p-focus: #9d6a00;
 }
 [data-ui="saas"][data-product="compvss"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="compvss"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
-  --p-accent: #3ae243;
-  --p-accent-text: #6ee176;
-  --p-accent-weak: rgba(46,219,58,.18);
-  --p-accent-contrast: #012202;
-  --p-accent-cta: #3ae243;
-  --p-accent-cta-contrast: #012202;
+  --p-accent: #f5ba00;
+  --p-accent-text: #f6c755;
+  --p-accent-weak: rgba(255,196,0,.2);
+  --p-accent-contrast: #1f0d00;
+  --p-accent-cta: #f5ba00;
+  --p-accent-cta-contrast: #1f0d00;
   --p-focus: var(--p-accent);
 }
 /* GVTEWAY */
 [data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --p-accent: #2edb3a;
-  --p-accent-hover: #17c62a;
-  --p-accent-text: #147d1c;
-  --p-accent-weak: rgba(46,219,58,.12);
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #012202;
-  --p-focus: #147d1c;
+  --p-accent: #2563eb;
+  --p-accent-hover: #1f57d6;
+  --p-accent-text: #1d4ed8;
+  --p-accent-weak: rgba(37,99,235,.13);
+  --p-accent-cta: #2563eb;
+  --p-accent-cta-contrast: #ffffff;
+  --p-focus: var(--p-accent);
 }
 [data-ui="saas"][data-product="gvteway"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --p-accent: #3ae243;
-  --p-accent-text: #6ee176;
-  --p-accent-weak: rgba(46,219,58,.18);
-  --p-accent-cta: #3ae243;
-  --p-accent-cta-contrast: #012202;
+  --p-accent: #5e8bf2;
+  --p-accent-text: #88aaf6;
+  --p-accent-weak: rgba(37,99,235,.2);
+  --p-accent-cta: #5e8bf2;
+  --p-accent-cta-contrast: #0e1014;
   --p-focus: var(--p-accent);
 }
 /* LEGEND */
 [data-ui="saas"][data-product="legend"],
 [data-theme="atlvs-product"][data-platform="legend"] {
-  --p-accent: #2edb3a;
-  --p-accent-hover: #17c62a;
-  --p-accent-text: #147d1c;
-  --p-accent-weak: rgba(46,219,58,.12);
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #012202;
-  --p-focus: #147d1c;
+  --p-accent: #ed6a1e;
+  --p-accent-hover: #db5a00;
+  --p-accent-text: #c2520a;
+  --p-accent-weak: rgba(237,106,30,.12);
+  --p-accent-contrast: #280300;
+  --p-accent-cta: #ed6a1e;
+  --p-accent-cta-contrast: #280300;
+  --p-focus: #c2520a;
 }
 [data-ui="saas"][data-product="legend"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="legend"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
-  --p-accent: #3ae243;
-  --p-accent-text: #6ee176;
+  --p-accent: #ff9754;
+  --p-accent-text: #dc7847;
+  --p-accent-weak: rgba(237,106,30,.2);
+  --p-accent-cta: #ff9754;
+  --p-accent-cta-contrast: #0e1014;
+  --p-focus: var(--p-accent);
+}
+/* GHXSTSHIP */
+[data-ui="saas"][data-product="ghxstship"],
+[data-theme="atlvs-product"][data-platform="ghxstship"] {
+  --p-accent: #2edb3a;
+  --p-accent-hover: #00ca22;
+  --p-accent-text: #1f8425;
+  --p-accent-weak: rgba(46,219,58,.12);
+  --p-accent-contrast: #001800;
+  --p-accent-cta: #2edb3a;
+  --p-accent-cta-contrast: #001800;
+  --p-focus: #1f8425;
+}
+[data-ui="saas"][data-product="ghxstship"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="ghxstship"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="ghxstship"] {
+  --p-accent: #43e94b;
+  --p-accent-text: #7dce7b;
   --p-accent-weak: rgba(46,219,58,.18);
-  --p-accent-cta: #3ae243;
-  --p-accent-cta-contrast: #012202;
+  --p-accent-cta: #43e94b;
+  --p-accent-cta-contrast: #0e1014;
   --p-focus: var(--p-accent);
 }
 
 /* ---------- Accent-intensity sources (--k-acc / --k-acc-text mirror the resolved accent) ---------- */
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --k-acc: #2edb3a;
-  --k-acc-text: #147d1c;
+  --k-acc: #e23414;
+  --k-acc-text: #971a05;
 }
 [data-ui="saas"][data-product="atlvs"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --k-acc: #3ae243;
-  --k-acc-text: #6ee176;
+  --k-acc: #ff5634;
+  --k-acc-text: #ff7c5a;
 }
 [data-ui="saas"][data-product="compvss"],
 [data-theme="atlvs-product"][data-platform="compvss"] {
-  --k-acc: #2edb3a;
-  --k-acc-text: #147d1c;
+  --k-acc: #ffc400;
+  --k-acc-text: #9d6a00;
 }
 [data-ui="saas"][data-product="compvss"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="compvss"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
-  --k-acc: #3ae243;
-  --k-acc-text: #6ee176;
+  --k-acc: #f5ba00;
+  --k-acc-text: #f6c755;
 }
 [data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --k-acc: #2edb3a;
-  --k-acc-text: #147d1c;
+  --k-acc: #2563eb;
+  --k-acc-text: #1d4ed8;
 }
 [data-ui="saas"][data-product="gvteway"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --k-acc: #3ae243;
-  --k-acc-text: #6ee176;
+  --k-acc: #5e8bf2;
+  --k-acc-text: #88aaf6;
 }
 [data-ui="saas"][data-product="legend"],
 [data-theme="atlvs-product"][data-platform="legend"] {
-  --k-acc: #2edb3a;
-  --k-acc-text: #147d1c;
+  --k-acc: #ed6a1e;
+  --k-acc-text: #c2520a;
 }
 [data-ui="saas"][data-product="legend"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="legend"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
-  --k-acc: #3ae243;
-  --k-acc-text: #6ee176;
+  --k-acc: #ff9754;
+  --k-acc-text: #dc7847;
+}
+[data-ui="saas"][data-product="ghxstship"],
+[data-theme="atlvs-product"][data-platform="ghxstship"] {
+  --k-acc: #2edb3a;
+  --k-acc-text: #1f8425;
+}
+[data-ui="saas"][data-product="ghxstship"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="ghxstship"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="ghxstship"] {
+  --k-acc: #43e94b;
+  --k-acc-text: #7dce7b;
 }
 /* @gen:tokens:end */
 

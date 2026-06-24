@@ -15,6 +15,7 @@ import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import type { BrandContext } from "@/lib/branding";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { getRequestT } from "@/lib/i18n/request";
+import { DEPOSIT_TERMS_LABEL_DEFAULT, BALANCE_TERMS_LABEL_DEFAULT } from "@/lib/payment-terms";
 import { PhaseBlock } from "./PhaseBlock";
 
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
@@ -445,7 +446,7 @@ function EngagementSplit({
           <div className="font-display mt-3 text-4xl tabular-nums">{block.depositPercent}%</div>
           <div className="mt-1 text-xs text-[var(--p-text-2)]">
             {block.depositLabel ??
-              t("components.proposalBlockRenderer.dueOnSignature", undefined, "Due on contract signature")}
+              t("components.proposalBlockRenderer.dueOnSignature", undefined, DEPOSIT_TERMS_LABEL_DEFAULT)}
           </div>
         </div>
         <div className="surface relative overflow-hidden p-6">
@@ -456,7 +457,7 @@ function EngagementSplit({
           <div className="font-display mt-3 text-4xl tabular-nums">{block.balancePercent}%</div>
           <div className="mt-1 text-xs text-[var(--p-text-2)]">
             {block.balanceLabel ??
-              t("components.proposalBlockRenderer.dueBeforeEvent", undefined, "Due 30 days before event")}
+              t("components.proposalBlockRenderer.dueOnLoadIn", undefined, BALANCE_TERMS_LABEL_DEFAULT)}
           </div>
         </div>
       </div>

@@ -9,10 +9,16 @@ export async function GET(req: Request) {
   const title = searchParams.get("title") ?? "ATLVS Technologies";
   const eyebrow = searchParams.get("eyebrow") ?? "Production OS";
   const platform = (searchParams.get("platform") ?? "") as "atlvs" | "gvteway" | "compvss" | "";
-  // v8.0 mono-green — every product OG card uses the one accent #2EDB3A
-  // (products differentiate by type/layout/iconography, not hue).
-  void platform;
-  const accent = "#2EDB3A";
+  // v8.0 palette-locked — each product owns its accent; non-product/ecosystem
+  // cards use the GHXSTSHIP house green.
+  const accent =
+    platform === "atlvs"
+      ? "#E23414"
+      : platform === "gvteway"
+        ? "#2563EB"
+        : platform === "compvss"
+          ? "#FFC400"
+          : "#2EDB3A";
 
   return new ImageResponse(
     <div

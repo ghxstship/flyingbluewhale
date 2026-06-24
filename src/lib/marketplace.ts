@@ -155,49 +155,13 @@ export function computeBreakEven(args: {
   return Math.ceil(fixed / netPerTicket);
 }
 
-/** Tone mapping for status badges across marketplace surfaces. */
-export const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  // shared
-  draft: "muted",
-  archived: "muted",
-  cancelled: "error",
-  declined: "error",
-  rejected: "error",
-  withdrawn: "muted",
-  // job posting
-  published: "success",
-  closed: "muted",
-  // applications
-  new: "info",
-  reviewed: "info",
-  phone: "warning",
-  booked: "success",
-  hold: "warning",
-  pass: "muted",
-  // submissions
-  submitted: "info",
-  shortlisted: "warning",
-  awarded: "success",
-  // inquiries
-  responded: "success",
-  // offers
-  sent: "info",
-  countered: "warning",
-  accepted: "success",
-  contracted: "success",
-  // 0003 booking canon
-  reconciling: "warning",
-  final: "success",
-  disputed: "error",
-  planning: "muted",
-  routing: "info",
-  confirmed: "success",
-  complete: "success",
-  // milestone kinds (light-touch labeling)
-  announce: "muted",
-  presale_start: "info",
-  presale_end: "info",
-  onsale: "success",
-  sold_out: "success",
-  press_embargo: "warning",
-};
+/**
+ * Tone mapping for status badges across marketplace surfaces.
+ *
+ * SSOT (plumb-line DUP-2): the canonical state→tone map lives in
+ * `src/lib/tones.ts`. This is a re-export of that single map — the
+ * marketplace-specific keys (booked/shortlisted/onsale/…) and the shared keys
+ * are authored there, so a marketplace badge and a generic `toneFor()` lookup
+ * can never disagree on the same state. Importers keep using `STATUS_TONE`.
+ */
+export { STATE_TONE as STATUS_TONE } from "@/lib/tones";

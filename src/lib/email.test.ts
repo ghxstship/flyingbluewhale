@@ -17,21 +17,21 @@ import { BRAND } from "./brand";
 import { SITE } from "./seo";
 
 describe("wrapEmailHtml", () => {
-  it("defaults to the atlvs accent — v8 mono-green tile + atlvs icon", () => {
+  it("defaults to the atlvs accent — atlvs volcanic-red tile + atlvs icon", () => {
     const html = wrapEmailHtml("<p>hi</p>");
-    expect(html).toContain("#2EDB3A");
+    expect(html).toContain("#E23414");
     expect(html).toContain("/brand/atlvs-icon-atlvs.svg");
   });
 
-  it("swaps the accent tile icon per sender (v8 — same mono-green fill, distinct icon)", () => {
-    // v8.0 mono-green: every sender's tile is the one accent #2EDB3A; senders
-    // differentiate by ICON, not hue (no more pink/amber/blue tiles).
+  it("swaps the accent tile per sender (v8 palette-locked — each product its own hue)", () => {
+    // v8.0 palette-locked: each product owns its accent — COMPVSS signal yellow,
+    // GVTEWAY blue — distinct from the default ATLVS volcanic red.
     const compvss = wrapEmailHtml("<p>hi</p>", { accent: "compvss" });
-    expect(compvss).toContain("#2EDB3A");
+    expect(compvss).toContain("#FFC400");
     expect(compvss).toContain("/brand/atlvs-icon-compvss.svg");
 
     const gvteway = wrapEmailHtml("<p>hi</p>", { accent: "gvteway" });
-    expect(gvteway).toContain("#2EDB3A");
+    expect(gvteway).toContain("#2563EB");
     expect(gvteway).toContain("/brand/atlvs-icon-gvteway.svg");
   });
 

@@ -68,7 +68,7 @@ describe("Token SSOT ↔ generated theme parity (Move D1)", () => {
       "accent-cta-contrast": declaredValues("accent-cta-contrast"),
     } as const;
     const missing: string[] = [];
-    for (const product of ["atlvs", "compvss", "gvteway", "legend"] as const) {
+    for (const product of ["atlvs", "compvss", "gvteway", "legend", "ghxstship"] as const) {
       for (const mode of ["light", "dark"] as const) {
         const block = TOKENS.color.accent[product]![mode]!;
         for (const key of ["accent", "accent-text", "accent-cta", "accent-cta-contrast"] as const) {
@@ -83,16 +83,17 @@ describe("Token SSOT ↔ generated theme parity (Move D1)", () => {
     );
   });
 
-  it("v8 mono-green accent is fully represented across products", () => {
-    // v8.0 — the whole ecosystem resolves to ONE accent (Accent 1 #2edb3a),
-    // bright in light, lifted (#3ae243) in dark; AA text inks #147d1c / #6ee176.
-    expect(declaredValues("accent").has("#2edb3a")).toBe(true);
-    expect(declaredValues("accent").has("#3ae243")).toBe(true);
-    expect(declaredValues("accent-text").has("#147d1c")).toBe(true);
-    expect(declaredValues("accent-text").has("#6ee176")).toBe(true);
+  it("v8.0 palette-locked — each product owns its accent + GHXSTSHIP house green", () => {
+    // Per-product hues: ATLVS volcanic red · COMPVSS signal yellow · GVTEWAY blue ·
+    // LEG3ND molten orange · GHXSTSHIP house green (the non-product/marketing default).
+    expect(declaredValues("accent").has("#e23414")).toBe(true); // ATLVS red
+    expect(declaredValues("accent").has("#ffc400")).toBe(true); // COMPVSS yellow
+    expect(declaredValues("accent").has("#2563eb")).toBe(true); // GVTEWAY blue
+    expect(declaredValues("accent").has("#ed6a1e")).toBe(true); // LEG3ND orange
+    expect(declaredValues("accent").has("#2edb3a")).toBe(true); // GHXSTSHIP house green
   });
 
-  it("tokens.json is stamped v8.0 (GHXSTSHIP mono-green)", () => {
+  it("tokens.json is stamped v8.0 (palette-locked)", () => {
     expect(TOKENS.version).toBe("8.0");
   });
 });

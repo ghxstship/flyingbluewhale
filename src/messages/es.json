@@ -21104,7 +21104,7 @@
    "engagementDeposit": "Depósito de contratación",
    "dueOnSignature": "Vence a la firma del contrato",
    "balance": "Saldo",
-   "dueBeforeEvent": "Vence 30 días antes del evento",
+   "dueOnLoadIn": "Vence el día de montaje",
    "paymentMethod": "Método de pago",
    "technicalPackage": "Paquete técnico de producción",
    "available": "Disponible"

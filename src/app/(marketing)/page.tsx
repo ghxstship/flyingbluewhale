@@ -143,7 +143,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.atlvs.body"),
       href: "/solutions/atlvs",
       color: PRODUCT_ACCENTS.atlvs,
-      textColor: "#147d1c",
+      textColor: "#971a05",
     },
     {
       slug: "compvss",
@@ -153,7 +153,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.compvss.body"),
       href: "/solutions/compvss",
       color: PRODUCT_ACCENTS.compvss,
-      textColor: "#147d1c",
+      textColor: "#9d6a00",
     },
     {
       slug: "gvteway",
@@ -163,7 +163,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.gvteway.body"),
       href: "/solutions/gvteway",
       color: PRODUCT_ACCENTS.gvteway,
-      textColor: "#147d1c",
+      textColor: "#1d4ed8",
     },
     {
       slug: "legend",
@@ -173,7 +173,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.legend.body"),
       href: "/solutions/legend",
       color: PRODUCT_ACCENTS.legend,
-      textColor: "#147d1c",
+      textColor: "#c2520a",
     },
   ];
 

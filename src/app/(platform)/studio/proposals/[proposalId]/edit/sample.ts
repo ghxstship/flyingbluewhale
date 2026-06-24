@@ -1,4 +1,10 @@
 import type { ProposalBlock } from "@/lib/proposals/types";
+import {
+  DEPOSIT_PCT_DEFAULT,
+  BALANCE_PCT_DEFAULT,
+  DEPOSIT_TERMS_LABEL_DEFAULT,
+  BALANCE_TERMS_LABEL_DEFAULT,
+} from "@/lib/payment-terms";
 
 export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   {
@@ -163,10 +169,10 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   { type: "total_block", label: "Total engagement", amount: { cents: 17000000 }, note: "All figures in USD." },
   {
     type: "engagement_split",
-    depositPercent: 25,
-    balancePercent: 75,
-    depositLabel: "Due on signature",
-    balanceLabel: "Due 30 days before show",
+    depositPercent: DEPOSIT_PCT_DEFAULT,
+    balancePercent: BALANCE_PCT_DEFAULT,
+    depositLabel: DEPOSIT_TERMS_LABEL_DEFAULT,
+    balanceLabel: BALANCE_TERMS_LABEL_DEFAULT,
   },
   {
     type: "payment_method",
@@ -221,7 +227,11 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     type: "terms_grid",
     items: [
       { section: "S2", title: "Scope", body: "Work as set forth in this proposal; change orders on approval." },
-      { section: "S6", title: "Payment", body: `${25}% deposit on signature, balance 30 days before the event.` },
+      {
+        section: "S6",
+        title: "Payment",
+        body: `${DEPOSIT_PCT_DEFAULT}% deposit on signature, balance due on load-in.`,
+      },
       {
         section: "S9",
         title: "Cancellation",

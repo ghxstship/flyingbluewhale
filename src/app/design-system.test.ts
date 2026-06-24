@@ -354,11 +354,11 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("kit v8 — every product resolves to the mono-green accent #2EDB3A, no retired cyan hexes survive in src/", () => {
-    // v8.0 collapses the whole ecosystem to ONE accent (Accent 1 #2edb3a);
-    // products differentiate by type/layout/iconography, not hue. The retired
-    // cyan hexes (v5.1, pre-blue) must still never resurface in src/ — a single
-    // survivor re-strands a theme combination on a dead brand color.
+  it("kit v8 palette-locked — per-product accents + GHXSTSHIP house green, no retired cyan hexes survive in src/", () => {
+    // v8.0 palette-locked: each product owns its accent (ATLVS red · COMPVSS
+    // yellow · GVTEWAY blue · LEG3ND orange) and GHXSTSHIP green is the house/
+    // marketing default. The retired cyan hexes (v5.1, pre-blue) must still
+    // never resurface in src/ — distinct from CVRGO's cargo cyan #06b6d4.
     const DEAD_CYAN = ["#12b5b5", "#0b7e7e", "#2bd6d6", "#3fe0e0", "#0e9e9e"];
     const deadRe = new RegExp(`(${DEAD_CYAN.join("|")})`, "i");
     const ALLOW = new Set<string>([
@@ -378,13 +378,14 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(
       offenders,
-      `Retired cyan hexes survive — these brand colors are dead (v8 is mono-green #2EDB3A):\n${offenders.join("\n")}`,
+      `Retired cyan hexes survive — these brand colors are dead:\n${offenders.join("\n")}`,
     ).toEqual([]);
 
-    // Positive assertion: the token SSOT defines the v8 mono-green accent.
+    // Positive assertion: the token SSOT defines the v8 palette-locked per-product
+    // accents — ATLVS volcanic red and the GHXSTSHIP house green both present.
     const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
-    expect(theme, "accent must be the v8 mono-green #2edb3a").toMatch(/--p-accent:\s*#2edb3a/i);
-    expect(theme, "accent-text must be the v8 green ink #147d1c").toMatch(/#147d1c/i);
+    expect(theme, "ATLVS accent must be volcanic red #e23414").toMatch(/--p-accent:\s*#e23414/i);
+    expect(theme, "GHXSTSHIP house accent must be green #2edb3a").toMatch(/--p-accent:\s*#2edb3a/i);
   });
 
   it("no bare legacy color tokens — --success/--warning/--danger/--info must be --p-*", () => {

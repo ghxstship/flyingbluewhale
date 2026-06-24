@@ -32,9 +32,9 @@ function brandAssetUrl(path: string): string {
 export type EmailWrapAccent = "atlvs" | "compvss" | "gvteway";
 
 const ACCENT_TILE: Record<EmailWrapAccent, { fill: string; contrast: string; icon: string }> = {
-  atlvs: { fill: PRODUCT_ACCENTS.atlvs, contrast: "#012202", icon: "/brand/atlvs-icon-atlvs.svg" },
-  compvss: { fill: PRODUCT_ACCENTS.compvss, contrast: "#012202", icon: "/brand/atlvs-icon-compvss.svg" },
-  gvteway: { fill: PRODUCT_ACCENTS.gvteway, contrast: "#012202", icon: "/brand/atlvs-icon-gvteway.svg" },
+  atlvs: { fill: PRODUCT_ACCENTS.atlvs, contrast: "#ffffff", icon: "/brand/atlvs-icon-atlvs.svg" },
+  compvss: { fill: PRODUCT_ACCENTS.compvss, contrast: "#1f0d00", icon: "/brand/atlvs-icon-compvss.svg" },
+  gvteway: { fill: PRODUCT_ACCENTS.gvteway, contrast: "#ffffff", icon: "/brand/atlvs-icon-gvteway.svg" },
 };
 
 /**
@@ -54,16 +54,16 @@ export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent
   const subline = opts.brand?.producerName ? "" : "Technologies";
   return `<!doctype html>
 <html><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#EDEDED;font-family:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;color:#0A0A0A">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EDEDED;padding:32px 16px">
+<body style="margin:0;padding:0;background:#F7F8FA;font-family:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;color:#181B23">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7F8FA;padding:32px 16px">
     <tr><td align="center">
-      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border:1px solid #D6D6D6;border-radius:12px;overflow:hidden">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border:1px solid #E4E7EC;border-radius:12px;overflow:hidden">
         <!-- Header band — producer mark/logo (co-brand within shell) -->
-        <tr><td style="padding:20px 24px;border-bottom:1px solid #D6D6D6;background:#FFFFFF">
+        <tr><td style="padding:20px 24px;border-bottom:1px solid #E4E7EC;background:#FFFFFF">
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td style="padding-right:14px;vertical-align:middle"><img src="${markUrl}" width="36" height="36" alt="" style="display:block;border-radius:8px"/></td>
             <td style="vertical-align:middle">
-              <div style="font-size:16px;font-weight:700;letter-spacing:0.04em;color:#0A0A0A;text-transform:uppercase;line-height:1">${wordmark}</div>
+              <div style="font-size:16px;font-weight:700;letter-spacing:0.04em;color:#181B23;text-transform:uppercase;line-height:1">${wordmark}</div>
               ${subline ? `<div style="font-family:'Space Mono','Courier New',monospace;font-size:10px;letter-spacing:0.12em;color:#8C95A3;text-transform:uppercase;margin-top:4px">${subline}</div>` : ""}
             </td>
           </tr></table>
@@ -71,7 +71,7 @@ export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent
         <!-- Body content -->
         <tr><td style="padding:28px 24px;background:#FFFFFF">${bodyHtml}</td></tr>
         <!-- Endorsement footer band — small "powered by ATLVS" -->
-        <tr><td style="padding:18px 24px;border-top:1px solid #D6D6D6;background:#EDEDED;font-family:'Space Mono','Courier New',monospace;font-size:11px;letter-spacing:0.1em;color:#8C95A3;text-transform:uppercase;text-align:center">
+        <tr><td style="padding:18px 24px;border-top:1px solid #E4E7EC;background:#F7F8FA;font-family:'Space Mono','Courier New',monospace;font-size:11px;letter-spacing:0.1em;color:#8C95A3;text-transform:uppercase;text-align:center">
           Powered by <a href="${brandAssetUrl("/")}" style="color:${accentFill};text-decoration:none;font-weight:600">${BRAND.mark}</a>
         </td></tr>
       </table>
@@ -207,7 +207,7 @@ export async function sendProposalShareEmail({
   const bodyHtml =
     tpl?.bodyHtml ||
     `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
-       <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase;color:#0A0A0A">${proposalTitle}</h1>
+       <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase;color:#181B23">${proposalTitle}</h1>
        <p style="color:#181b23;font-size:14px;margin:0 0 20px">${sender} shared a proposal with you.</p>
        <p style="margin:0 0 20px"><a href="${url}" style="display:inline-block;background:${accent};color:${onAccent};padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
        <p style="color:#8c95a3;font-size:12px;margin:0;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code style="word-break:break-all">${url}</code></p>`;

@@ -118,13 +118,14 @@ export const BRAND = {
    * Sub-products under the ATLVS umbrella.
    *
    * Color palette is canonical (per project/tokens.json — see PRODUCT_ACCENTS):
-   *   v8.0 GHXSTSHIP mono-green — every product resolves to ONE accent
-   *   (Accent 1 #2EDB3A). ATLVS / COMPVSS / GVTEWAY / LEG3ND differentiate by
-   *   TYPE, LAYOUT & ICONOGRAPHY, not hue.
+   *   v8.0 palette-locked — each product OWNS its accent: ATLVS volcanic red
+   *   #E23414 · COMPVSS signal yellow #FFC400 · GVTEWAY blue #2563EB · LEG3ND
+   *   molten orange #ED6A1E. GHXSTSHIP green #2EDB3A is the house/master brand
+   *   (the default for non-product / ecosystem-marketing surfaces).
    *
    * The legacy `color` strings (nebula / brass / plasma) are retained only as
-   * readable `data-platform` / Tailwind name tokens; the actual paint flows
-   * through the per-platform `--p-accent` overlays — all the same green. */
+   * readable `data-platform` / Tailwind name tokens; the paint flows through
+   * the per-platform `--p-accent` overlays. */
   products: {
     console: {
       name: "ATLVS",
@@ -179,10 +180,10 @@ export const BRAND = {
  * `src/app/theme/tokens.json`.
  */
 export const PRODUCT_ACCENTS = {
-  atlvs: "#2EDB3A",
-  compvss: "#2EDB3A",
-  gvteway: "#2EDB3A",
-  legend: "#2EDB3A",
+  atlvs: "#E23414",
+  compvss: "#FFC400",
+  gvteway: "#2563EB",
+  legend: "#ED6A1E",
 } as const;
 
 export type ProductAccentKey = keyof typeof PRODUCT_ACCENTS;

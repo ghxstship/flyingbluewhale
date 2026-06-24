@@ -7,6 +7,7 @@ import { proposalDataFromBlocks } from "./proposal-binding";
 import { offerLetterData } from "./offer-binding";
 import type { OfferLetterResolved } from "@/lib/offer-letters/types";
 import { loadInvoiceArtifact } from "./sources/invoice";
+import { resolveDepositPct } from "@/lib/payment-terms";
 
 /**
  * Internal data resolvers — map a real org-scoped record to the merge-field
@@ -49,7 +50,7 @@ const resolvers: Record<string, DocResolver> = {
     if (!p) return null;
     const [{ data: client }, { data: org }] = await Promise.all([
       p.client_id ? db.from("clients").select("name").eq("id", p.client_id).maybeSingle() : noRow(),
-      db.from("orgs").select("name").eq("id", orgId).maybeSingle(),
+      db.from("orgs").select("name, default_deposit_pct").eq("id", orgId).maybeSingle(),
     ]);
     // Map the rich builder document (proposals.blocks, System B) into the kit
     // template's merge fields, then layer identity/total defaults underneath —
@@ -57,7 +58,8 @@ const resolvers: Record<string, DocResolver> = {
     const { valid: blocks } = partitionBlocks(p.blocks);
     const bound = proposalDataFromBlocks(blocks, {
       currency: p.currency,
-      depositPercent: p.deposit_percent,
+      // Per-instance proposal deposit → org template default → system default.
+      depositPercent: resolveDepositPct(p.deposit_percent, org?.default_deposit_pct),
       amountCents: p.amount_cents,
     });
     const total = money(p.amount_cents, p.currency);
@@ -100,20 +102,26 @@ const resolvers: Record<string, DocResolver> = {
   async quote(db, orgId, id) {
     const { data: est } = await db
       .from("estimates")
-      .select("name, project_id, baseline_at")
+      .select("name, project_id, baseline_at, total_with_markup")
       .eq("id", id)
       .eq("org_id", orgId)
       .maybeSingle();
     if (!est) return null;
-    const [{ data: lines }, client] = await Promise.all([
+    const [{ data: lines }, client, { data: org }] = await Promise.all([
       db.from("estimate_lines").select("description, line_total, ordinal").eq("estimate_id", id).order("ordinal", { ascending: true }),
       clientForProject(db, est.project_id),
+      db.from("orgs").select("default_currency").eq("id", orgId).maybeSingle(),
     ]);
+    // estimate_lines.line_total / estimates.total_with_markup are numeric(14,2)
+    // MAJOR units (dollars); money() expects minor units (cents) — convert.
+    const cur = org?.default_currency ?? undefined;
+    const toCents = (n: number | string | null | undefined) => Math.round(Number(n ?? 0) * 100);
     return {
       quote: {
         number: est.name,
         validUntil: date(est.baseline_at),
-        lines: (lines ?? []).map((l) => ({ desc: l.description })),
+        lines: (lines ?? []).map((l) => ({ desc: l.description, amount: money(toCents(l.line_total), cur) })),
+        total: money(toCents(est.total_with_markup), cur),
       },
       client: { name: client?.name },
     };

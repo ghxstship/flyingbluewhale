@@ -9,6 +9,8 @@ import { timeAgo, toTitle } from "@/lib/format";
 import type { Proposal, ProposalShareLink } from "@/lib/supabase/types";
 import { mintProposalShareUrlToken } from "@/lib/proposals/share";
 import { getRequestT } from "@/lib/i18n/request";
+import { resolveDepositPct } from "@/lib/payment-terms";
+import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 import { ProposalEditor } from "./ProposalEditor";
 import { ShareLinkPanel } from "./ShareLinkPanel";
 import { SAMPLE_PROPOSAL_BLOCKS } from "./sample";
@@ -29,6 +31,9 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
     .eq("id", proposalId)
     .maybeSingle();
   if (!proposal) notFound();
+
+  // Canonical deposit %: per-instance → org template → system default (50).
+  const orgPaymentDefaults = await getOrgPaymentDefaults(supabase, session.orgId);
 
   const { data: links } = await supabase
     .from("proposal_share_links")
@@ -60,7 +65,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
             title: proposal.title,
             doc_number: proposal.doc_number ?? "",
             currency: proposal.currency ?? "USD",
-            deposit_percent: proposal.deposit_percent ?? 25,
+            deposit_percent: resolveDepositPct(proposal.deposit_percent, orgPaymentDefaults.depositPct),
             theme: (proposal.theme as { primary: string; secondary: string }) ?? {
               primary: "#D4782A",
               secondary: "#6D4A2A",

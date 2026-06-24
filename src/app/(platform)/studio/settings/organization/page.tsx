@@ -8,7 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
-import { updateOrgName } from "./actions";
+import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_LABEL_DEFAULT } from "@/lib/payment-terms";
+import { updateOrgName, updateOrgPaymentDefaults } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -125,6 +126,66 @@ export default async function OrgSettingsPage() {
             value={formatDate(org.created_at, "medium")}
             mono
           />
+        </div>
+
+        <div className="surface space-y-4 p-5">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            {t("console.settings.organization.paymentTermsHeading", undefined, "Payment terms (templates)")}
+          </h3>
+          <p className="text-xs text-[var(--p-text-2)]">
+            {t(
+              "console.settings.organization.paymentTermsBlurb",
+              { pct: DEPOSIT_PCT_DEFAULT, balance: BALANCE_TERMS_LABEL_DEFAULT },
+              `Org-wide default split for new proposals & engagements. Leave blank to use the system default (${DEPOSIT_PCT_DEFAULT}% deposit, ${BALANCE_TERMS_LABEL_DEFAULT.toLowerCase()}). Each proposal can still override per instance.`,
+            )}
+          </p>
+          {isAdmin ? (
+            <form action={updateOrgPaymentDefaults} className="grid items-end gap-3 sm:grid-cols-[1fr_1fr_auto]">
+              <label className="grid gap-1 text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">
+                {t("console.settings.organization.fieldDefaultDepositPct", undefined, "Default deposit %")}
+                <input
+                  name="default_deposit_pct"
+                  type="number"
+                  min={0}
+                  max={100}
+                  defaultValue={org.default_deposit_pct ?? ""}
+                  placeholder={String(DEPOSIT_PCT_DEFAULT)}
+                  className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                />
+              </label>
+              <label className="grid gap-1 text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">
+                {t("console.settings.organization.fieldDefaultBalanceTerms", undefined, "Balance terms")}
+                <select
+                  name="default_balance_terms"
+                  defaultValue={org.default_balance_terms ?? ""}
+                  className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                >
+                  <option value="">
+                    {t("console.settings.organization.balanceTermsSystemDefault", undefined, "System default (load-in)")}
+                  </option>
+                  <option value="load_in">
+                    {t("console.settings.organization.balanceTermsLoadIn", undefined, "On load-in")}
+                  </option>
+                </select>
+              </label>
+              <Button type="submit" size="sm">
+                {t("common.save", undefined, "Save")}
+              </Button>
+            </form>
+          ) : (
+            <>
+              <Field
+                label={t("console.settings.organization.fieldDefaultDepositPct", undefined, "Default deposit %")}
+                value={org.default_deposit_pct != null ? `${org.default_deposit_pct}%` : `${DEPOSIT_PCT_DEFAULT}% (system)`}
+                mono
+              />
+              <Field
+                label={t("console.settings.organization.fieldDefaultBalanceTerms", undefined, "Balance terms")}
+                value={org.default_balance_terms ?? "load_in (system)"}
+                mono
+              />
+            </>
+          )}
         </div>
 
         <div className="surface space-y-3 p-5">

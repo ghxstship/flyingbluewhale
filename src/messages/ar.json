@@ -4826,7 +4826,7 @@
    "engagementDeposit": "عربون التعاقد",
    "dueOnSignature": "يستحق عند توقيع العقد",
    "balance": "الرصيد المتبقي",
-   "dueBeforeEvent": "يستحق قبل الفعالية بـ 30 يومًا",
+   "dueOnLoadIn": "يُستحق يوم التجهيز",
    "paymentMethod": "طريقة الدفع",
    "technicalPackage": "حزمة الإنتاج التقني",
    "available": "متاح"

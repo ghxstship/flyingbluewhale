@@ -7,6 +7,8 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { resolveDepositPct } from "@/lib/payment-terms";
+import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 
 const slugify = (s: string) =>
   s
@@ -325,12 +327,13 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
     if (updateError) return { error: updateError.message };
   }
 
-  // Seed deposit + balance invoices on the 60/40 convention. The
-  // proposal carries deposit_percent (defaults to 25 in the column
-  // default, overridden to 60 here when the proposal didn't set its
-  // own) so client-specific terms flow through.
+  // Seed deposit + balance invoices via the canonical payment-terms
+  // resolution: per-instance proposal.deposit_percent → org template default
+  // → system default (50/50). The single owner is src/lib/payment-terms.ts —
+  // no hardcoded split here (plumb-line DUP-1/DUP-6).
   if (proposal.amount_cents && proposal.amount_cents > 0) {
-    const depositPct = proposal.deposit_percent ?? 60;
+    const orgDefaults = await getOrgPaymentDefaults(supabase, session.orgId);
+    const depositPct = resolveDepositPct(proposal.deposit_percent, orgDefaults.depositPct);
     const depositCents = Math.round((proposal.amount_cents * depositPct) / 100);
     const balanceCents = proposal.amount_cents - depositCents;
     const currency = proposal.currency ?? "USD";

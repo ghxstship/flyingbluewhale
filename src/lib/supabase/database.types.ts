@@ -19910,7 +19910,9 @@ export type Database = {
           compliance_settings: Json
           created_at: string
           datamap: Json
+          default_balance_terms: string | null
           default_currency: string
+          default_deposit_pct: number | null
           default_locale: string
           default_timezone: string
           id: string
@@ -19934,7 +19936,9 @@ export type Database = {
           compliance_settings?: Json
           created_at?: string
           datamap?: Json
+          default_balance_terms?: string | null
           default_currency?: string
+          default_deposit_pct?: number | null
           default_locale?: string
           default_timezone?: string
           id?: string
@@ -19958,7 +19962,9 @@ export type Database = {
           compliance_settings?: Json
           created_at?: string
           datamap?: Json
+          default_balance_terms?: string | null
           default_currency?: string
+          default_deposit_pct?: number | null
           default_locale?: string
           default_timezone?: string
           id?: string

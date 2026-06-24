@@ -8,6 +8,8 @@ import { validateBlocks } from "@/lib/proposals/validate";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { resolveDepositPct } from "@/lib/payment-terms";
+import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 
 const UpdateSchema = z.object({
   title: z.string().min(1).max(200),
@@ -55,6 +57,14 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   if (!current) return { error: "Not found" };
   const currentVersion = current.version ?? 1;
 
+  // Resolve the deposit % through the canonical payment-terms seam
+  // (per-instance → org template → system default 50). No literal here.
+  const orgDefaults = await getOrgPaymentDefaults(supabase, session.orgId);
+  const depositPct = resolveDepositPct(
+    parsed.data.deposit_percent ? parseInt(parsed.data.deposit_percent, 10) : null,
+    orgDefaults.depositPct,
+  );
+
   // Conditional update on observed version — without it two concurrent
   // saves both read v5, both write v6, and one operator's blocks
   // silently clobber the other. With it, only the racer that observed
@@ -65,7 +75,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
       title: parsed.data.title,
       doc_number: parsed.data.doc_number || null,
       currency: parsed.data.currency?.toUpperCase() || "USD",
-      deposit_percent: parsed.data.deposit_percent ? parseInt(parsed.data.deposit_percent, 10) : 25,
+      deposit_percent: depositPct,
       theme: { primary: parsed.data.theme_primary || "#D4782A", secondary: parsed.data.theme_secondary || "#6D4A2A" },
       blocks,
       version: currentVersion + 1,

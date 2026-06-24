@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { SortableList } from "@/components/ui/SortableList";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { DEPOSIT_PCT_DEFAULT, BALANCE_PCT_DEFAULT } from "@/lib/payment-terms";
 import { BLOCK_LABELS, BLOCK_TYPES, type ProposalBlock, type ProposalBlockType } from "@/lib/proposals/types";
 import { saveProposalAction, type EditState } from "./actions";
 import { LineagePanel, isLineageBlock } from "./LineagePanel";
@@ -48,7 +49,7 @@ const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
     taxNote: "Plus applicable taxes",
   },
   total_block: { type: "total_block", label: "Total investment", amount: { cents: 1200000 } },
-  engagement_split: { type: "engagement_split", depositPercent: 25, balancePercent: 75 },
+  engagement_split: { type: "engagement_split", depositPercent: DEPOSIT_PCT_DEFAULT, balancePercent: BALANCE_PCT_DEFAULT },
   payment_method: {
     type: "payment_method",
     method: "ach",

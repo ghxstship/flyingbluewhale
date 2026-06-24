@@ -50,8 +50,8 @@ const PS_MOD: Record<BadgeVariant, string> = {
 
 // Every dot resolves to a token var — never a Tailwind palette literal.
 // Off-token bg-emerald-500 / bg-amber-500 produced #10b981 / #f59e0b for
-// the dot while the pill variant painted the kit-canonical #2fbf71 /
-// #e9a23b via `badge-success` / `badge-warning`. Both shapes now bind
+// the dot while the pill variant painted the kit-canonical #2fa968 /
+// #c8841a via `badge-success` / `badge-warning`. Both shapes now bind
 // to --p-success / --p-warning so they paint identically.
 const DOT_BG: Record<BadgeVariant, string> = {
   default: "bg-[var(--p-text-2)]",

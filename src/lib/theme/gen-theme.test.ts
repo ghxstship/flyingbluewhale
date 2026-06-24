@@ -28,12 +28,12 @@ describe("Generated theme regions ↔ tokens.json (Move D1)", () => {
     const t = regionBody(theme, "tokens");
     // v7.0 — surfaces map onto the 12-step neutral ramp; the a11y text-3 hex
     // now lives on the ramp (step 600) and text-3 references it via var().
-    expect(t).toContain("--p-neutral-600: #656d7a"); // light tertiary text seed
-    expect(t).toContain("--p-neutral-600: #9098a4"); // dark tertiary text seed
+    expect(t).toContain("--p-neutral-600: #5c5c5c"); // light tertiary text seed (v8)
+    expect(t).toContain("--p-neutral-600: #909090"); // dark tertiary text seed (v8)
     expect(t).toContain("--p-text-3: var(--p-neutral-600)");
-    // text-2 darkened off step 700 for clearer hierarchy (v7.0).
-    expect(t).toContain("--p-neutral-700: #4a5563"); // light secondary text seed
-    expect(t).toContain("--p-accent-cta: #b8430a"); // LEG3ND light CTA
+    // text-2 darkened off step 700 for clearer hierarchy.
+    expect(t).toContain("--p-neutral-700: #424242"); // light secondary text seed (v8)
+    expect(t).toContain("--p-accent-cta: #2edb3a"); // v8 mono-green CTA fill (all products)
     expect(t).not.toContain("#8c95a3"); // retired failing tertiary gray
   });
 });

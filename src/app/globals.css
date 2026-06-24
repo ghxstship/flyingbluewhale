@@ -76,32 +76,32 @@
  * SSR cold-start defaults — used only when no [data-theme] / [data-ui]
  * attribute has hit <html> yet. The pre-paint head script in
  * theme-script.ts sets both before first paint so this block almost never
- * paints in practice; mirrors the kit's light surfaces + atlvs pink accent
+ * paints in practice; mirrors the kit's light surfaces + v8 mono-green accent
  * so the un-attributed flash matches the canonical kit surface.
  */
 :root {
-  --p-bg: #f7f8fa;
+  --p-bg: #ededed;
   --p-surface: #ffffff;
-  --p-surface-2: #f1f3f6;
-  --p-border: #e4e7ec;
-  --p-border-2: #d3d8e0;
-  --p-text-1: #181b23;
-  --p-text-2: #5b6472;
-  --p-text-3: #656d7a;
-  --p-accent: #ff2e88;
-  --p-accent-hover: #e61e76;
-  --p-accent-text: #c91463;
+  --p-surface-2: #e4e4e4;
+  --p-border: #d6d6d6;
+  --p-border-2: #c4c4c4;
+  --p-text-1: #0a0a0a;
+  --p-text-2: #424242;
+  --p-text-3: #5c5c5c;
+  --p-accent: #2edb3a;
+  --p-accent-hover: #17c62a;
+  --p-accent-text: #147d1c;
   --p-accent-contrast: #ffffff;
-  --p-accent-weak: rgba(255, 46, 136, 0.12);
-  /* AA-safe filled-button pair — mirrors the ATLVS light values in
+  --p-accent-weak: rgba(46, 219, 58, 0.12);
+  /* AA-safe filled-button pair — mirrors the v8 mono-green values in
      atlvs-product.css so .ps-btn resolves outside [data-platform] scopes.
-     White on the display accent #ff2e88 is 3.5:1 and fails WCAG 1.4.3. */
-  --p-accent-cta: #c91463;
-  --p-accent-cta-contrast: #ffffff;
+     The bright fill #2edb3a pairs with the dark ink #012202 (9.2:1). */
+  --p-accent-cta: #2edb3a;
+  --p-accent-cta-contrast: #012202;
   --p-success: #2fa968;
-  --p-warning: #e0a12b;
+  --p-warning: #c8841a;
   --p-danger: #e5484d;
-  --p-info: #3b82e0;
+  --p-info: #2596c4;
   --sidebar-width: 16rem;
 }
 
@@ -1096,7 +1096,7 @@ pre,
   }
   /* WCAG color-contrast (1.4.3): eyebrows are ~11px small text, so they
      need 4.5:1. The raw fill accent (--p-accent, e.g. ATLVS pink
-     #ff2e88 = 3.5:1 on white) fails as text — use the per-product
+     #2edb3a is a bright fill) fails as text — use the per-product
      deepened text variant (--p-accent-text → --p-accent-text, AA-tuned in
      the theme) which preserves the brand hue while passing AA. */
   .eyebrow-accent,

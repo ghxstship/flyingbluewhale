@@ -518,7 +518,7 @@ export default async function FoundationsPage() {
                 accentOn: "var(--brand-atlvs-on)",
                 weakBg: "color-mix(in oklab,var(--brand-atlvs) 12%,var(--p-surface))",
                 inkText: "var(--brand-atlvs-ink)",
-                accentText: "accent-text #D11668 (light) · #FF6FAE (dark)",
+                accentText: "accent-text #147D1C (light) · #6EE176 (dark)",
               },
               {
                 name: "COMPVSS",
@@ -528,7 +528,7 @@ export default async function FoundationsPage() {
                 accentOn: "var(--brand-compvss-on)",
                 weakBg: "color-mix(in oklab,var(--brand-compvss) 14%,var(--p-surface))",
                 inkText: "var(--brand-compvss-ink)",
-                accentText: "accent-text #9A6512 (light) · #F0B255 (dark)",
+                accentText: "accent-text #147D1C (light) · #6EE176 (dark)",
               },
               {
                 name: "GVTEWAY",
@@ -538,7 +538,7 @@ export default async function FoundationsPage() {
                 accentOn: "var(--brand-gvteway-on)",
                 weakBg: "color-mix(in oklab,var(--brand-gvteway) 14%,var(--p-surface))",
                 inkText: "var(--brand-gvteway-ink)",
-                accentText: "accent-text #1D4ED8 (light) · #88AAF6 (dark)",
+                accentText: "accent-text #147D1C (light) · #6EE176 (dark)",
               },
             ].map((p) => (
               <div key={p.name} className="kf-idrow">

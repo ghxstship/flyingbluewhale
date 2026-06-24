@@ -17,9 +17,9 @@
   --gx-bone: #fbfaf6;
   --gx-bone-2: #b9c0e0;
   --gx-bone-3: #8a93b8;
-  --gx-brass: #e9a23b;
-  --gx-brass-deep: #b6772a;
-  --gx-nebula: #ff2e88;
+  --gx-brass: #2edb3a;
+  --gx-brass-deep: #147d1c;
+  --gx-nebula: #2edb3a;
   --gx-plasma: #21d4d4;
 
   background: var(--gx-void);

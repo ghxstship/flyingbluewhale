@@ -118,15 +118,13 @@ export const BRAND = {
    * Sub-products under the ATLVS umbrella.
    *
    * Color palette is canonical (per project/tokens.json — see PRODUCT_ACCENTS):
-   *   - ATLVS   = nebula magenta (#FF2E88) — internal, producer & exec facing
-   *   - COMPVSS = brass doubloon (#E9A23B) — crew, vendor & talent facing
-   *   - GVTEWAY = signal blue    (#2563EB) — guest & client facing
-   *   - LEG3ND  = production orange (#E8500A) — knowledge / LMS surface
+   *   v8.0 GHXSTSHIP mono-green — every product resolves to ONE accent
+   *   (Accent 1 #2EDB3A). ATLVS / COMPVSS / GVTEWAY / LEG3ND differentiate by
+   *   TYPE, LAYOUT & ICONOGRAPHY, not hue.
    *
-   * The legacy `color` strings carry the GHXSTSHIP signal name (nebula /
-   * brass / plasma) so call sites that build `data-platform` attributes or
-   * Tailwind class names stay readable. The actual paint flows through
-   * the per-platform `--p-accent` overlays in src/app/theme/index.css. */
+   * The legacy `color` strings (nebula / brass / plasma) are retained only as
+   * readable `data-platform` / Tailwind name tokens; the actual paint flows
+   * through the per-platform `--p-accent` overlays — all the same green. */
   products: {
     console: {
       name: "ATLVS",
@@ -181,10 +179,10 @@ export const BRAND = {
  * `src/app/theme/tokens.json`.
  */
 export const PRODUCT_ACCENTS = {
-  atlvs: "#FF2E88",
-  compvss: "#E9A23B",
-  gvteway: "#2563EB",
-  legend: "#E8500A",
+  atlvs: "#2EDB3A",
+  compvss: "#2EDB3A",
+  gvteway: "#2EDB3A",
+  legend: "#2EDB3A",
 } as const;
 
 export type ProductAccentKey = keyof typeof PRODUCT_ACCENTS;

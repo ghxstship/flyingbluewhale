@@ -17,20 +17,21 @@ import { BRAND } from "./brand";
 import { SITE } from "./seo";
 
 describe("wrapEmailHtml", () => {
-  it("defaults to the atlvs accent — pink tile + atlvs icon", () => {
+  it("defaults to the atlvs accent — v8 mono-green tile + atlvs icon", () => {
     const html = wrapEmailHtml("<p>hi</p>");
-    expect(html).toContain("#FF2E88");
+    expect(html).toContain("#2EDB3A");
     expect(html).toContain("/brand/atlvs-icon-atlvs.svg");
   });
 
-  it("swaps the accent tile for compvss and gvteway senders", () => {
+  it("swaps the accent tile icon per sender (v8 — same mono-green fill, distinct icon)", () => {
+    // v8.0 mono-green: every sender's tile is the one accent #2EDB3A; senders
+    // differentiate by ICON, not hue (no more pink/amber/blue tiles).
     const compvss = wrapEmailHtml("<p>hi</p>", { accent: "compvss" });
-    expect(compvss).toContain("#E9A23B");
+    expect(compvss).toContain("#2EDB3A");
     expect(compvss).toContain("/brand/atlvs-icon-compvss.svg");
-    expect(compvss).not.toContain("#FF2E88");
 
     const gvteway = wrapEmailHtml("<p>hi</p>", { accent: "gvteway" });
-    expect(gvteway).toContain("#2563EB");
+    expect(gvteway).toContain("#2EDB3A");
     expect(gvteway).toContain("/brand/atlvs-icon-gvteway.svg");
   });
 

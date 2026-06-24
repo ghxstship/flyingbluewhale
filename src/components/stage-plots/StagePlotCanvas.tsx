@@ -388,7 +388,7 @@ export function StagePlotCanvas({
                     height={el.h * SCALE}
                     fill={COLOR_BY_KIND[el.kind]}
                     fillOpacity={0.85}
-                    stroke={isSelected ? "#2563eb" : "#0f172a"}
+                    stroke={isSelected ? "var(--p-accent)" : "#0f172a"}
                     strokeWidth={isSelected ? 2 : 1}
                     rx={2}
                   />

@@ -132,7 +132,7 @@ export default async function Home() {
   // `color` is the bright brand fill (decorative accent bars / large display).
   // `textColor` is the per-product AA-deepened text variant (matches the
   // theme's --p-accent-text) so brand-colored text on white surfaces still
-  // clears WCAG 1.4.3 4.5:1 — the bright fills (#ff2e88 etc.) only reach
+  // clears WCAG 1.4.3 4.5:1 — the bright fills (#2edb3a etc.) only reach
   // ~2.2–3.5:1 as text. Same hue, darker value; brand mark colors unchanged.
   const PRODUCTS = [
     {
@@ -143,7 +143,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.atlvs.body"),
       href: "/solutions/atlvs",
       color: PRODUCT_ACCENTS.atlvs,
-      textColor: "#D11668",
+      textColor: "#147d1c",
     },
     {
       slug: "compvss",
@@ -153,7 +153,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.compvss.body"),
       href: "/solutions/compvss",
       color: PRODUCT_ACCENTS.compvss,
-      textColor: "#8A5A0F",
+      textColor: "#147d1c",
     },
     {
       slug: "gvteway",
@@ -163,7 +163,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.gvteway.body"),
       href: "/solutions/gvteway",
       color: PRODUCT_ACCENTS.gvteway,
-      textColor: "#1D4ED8",
+      textColor: "#147d1c",
     },
     {
       slug: "legend",
@@ -173,7 +173,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.legend.body"),
       href: "/solutions/legend",
       color: PRODUCT_ACCENTS.legend,
-      textColor: "#C2410C",
+      textColor: "#147d1c",
     },
   ];
 

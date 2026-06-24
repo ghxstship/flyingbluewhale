@@ -83,12 +83,16 @@ describe("Token SSOT ↔ generated theme parity (Move D1)", () => {
     );
   });
 
-  it("LEG3ND accent is fully represented (the 4th product was added in v6.4)", () => {
-    expect(declaredValues("accent").has("#e8500a")).toBe(true);
-    expect(declaredValues("accent-text").has("#b8430a")).toBe(true);
+  it("v8 mono-green accent is fully represented across products", () => {
+    // v8.0 — the whole ecosystem resolves to ONE accent (Accent 1 #2edb3a),
+    // bright in light, lifted (#3ae243) in dark; AA text inks #147d1c / #6ee176.
+    expect(declaredValues("accent").has("#2edb3a")).toBe(true);
+    expect(declaredValues("accent").has("#3ae243")).toBe(true);
+    expect(declaredValues("accent-text").has("#147d1c")).toBe(true);
+    expect(declaredValues("accent-text").has("#6ee176")).toBe(true);
   });
 
-  it("tokens.json is stamped v7.0 (Monument 2.0)", () => {
-    expect(TOKENS.version).toBe("7.0");
+  it("tokens.json is stamped v8.0 (GHXSTSHIP mono-green)", () => {
+    expect(TOKENS.version).toBe("8.0");
   });
 });

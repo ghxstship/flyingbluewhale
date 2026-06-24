@@ -92,25 +92,25 @@ export const SITE = {
       name: "ATLVS",
       tagline:
         "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command deck.",
-      color: "#FF2E88",
+      color: "#2EDB3A",
     },
     compvss: {
       name: "COMPVSS",
       tagline:
         "Operate it in the field — scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't.",
-      color: "#E9A23B",
+      color: "#2EDB3A",
     },
     gvteway: {
       name: "GVTEWAY",
       tagline:
         "Where the world is experienced — ticketing, portals, marketplace. Every persona, each their own way in.",
-      color: "#2563EB",
+      color: "#2EDB3A",
     },
     legend: {
       name: "LEG3ND",
       tagline:
         "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine.",
-      color: "#E8500A",
+      color: "#2EDB3A",
     },
   },
 } as const;

@@ -354,11 +354,11 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("kit v5.1 — GVTEWAY accent is blue #2563EB, no retired cyan hexes survive in src/", () => {
-    // v5.1 recolored GVTEWAY cyan → blue across every SSOT (product-theme.css,
-    // tokens.json, kit-components.css, kit.css). These retired cyan hexes must
-    // not resurface anywhere in src/ source/style files — a single survivor
-    // re-strands one of the 24 theme combinations on the old brand color.
+  it("kit v8 — every product resolves to the mono-green accent #2EDB3A, no retired cyan hexes survive in src/", () => {
+    // v8.0 collapses the whole ecosystem to ONE accent (Accent 1 #2edb3a);
+    // products differentiate by type/layout/iconography, not hue. The retired
+    // cyan hexes (v5.1, pre-blue) must still never resurface in src/ — a single
+    // survivor re-strands a theme combination on a dead brand color.
     const DEAD_CYAN = ["#12b5b5", "#0b7e7e", "#2bd6d6", "#3fe0e0", "#0e9e9e"];
     const deadRe = new RegExp(`(${DEAD_CYAN.join("|")})`, "i");
     const ALLOW = new Set<string>([
@@ -378,13 +378,13 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(
       offenders,
-      `Retired GVTEWAY cyan hexes survive — v5.1 recolored to blue #2563EB / #1D4ED8:\n${offenders.join("\n")}`,
+      `Retired cyan hexes survive — these brand colors are dead (v8 is mono-green #2EDB3A):\n${offenders.join("\n")}`,
     ).toEqual([]);
 
-    // Positive assertion: the token SSOT defines the v5.1 blue ramp.
+    // Positive assertion: the token SSOT defines the v8 mono-green accent.
     const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
-    expect(theme, "GVTEWAY light accent must be #2563eb").toMatch(/--p-accent:\s*#2563eb/i);
-    expect(theme, "GVTEWAY accent-text must be #1d4ed8").toMatch(/#1d4ed8/i);
+    expect(theme, "accent must be the v8 mono-green #2edb3a").toMatch(/--p-accent:\s*#2edb3a/i);
+    expect(theme, "accent-text must be the v8 green ink #147d1c").toMatch(/#147d1c/i);
   });
 
   it("no bare legacy color tokens — --success/--warning/--danger/--info must be --p-*", () => {

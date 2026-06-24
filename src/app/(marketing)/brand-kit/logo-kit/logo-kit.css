@@ -173,7 +173,7 @@
 }
 .lk-clearbox-inner {
   background: var(--p-surface, #fff);
-  border: 1px dashed #ff2e88;
+  border: 1px dashed #2edb3a;
   padding: 24px;
   display: flex;
   align-items: center;
@@ -259,7 +259,7 @@
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--p-accent-text, #c91463);
+  color: var(--p-accent-text, #147d1c);
   text-decoration: none;
 }
 .lk-link:hover {

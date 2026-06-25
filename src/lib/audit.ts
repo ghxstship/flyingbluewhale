@@ -126,6 +126,16 @@ export type AuditAction =
   | "notification.read"
   | "notification.preferences_updated"
   // ────────────────────────────────────────────────────────────────
+  // Privacy / GDPR — DSAR + data-export surfaces. These are the events
+  // most likely to be litigated (Art. 15 access, Art. 17 erasure,
+  // Art. 20 portability), so each create/fulfil/export is audited with
+  // actor + target.
+  // ────────────────────────────────────────────────────────────────
+  | "privacy.dsar.created"
+  | "privacy.dsar.fulfilled"
+  | "privacy.data_export"
+  | "privacy.audit_export"
+  // ────────────────────────────────────────────────────────────────
   // Marketplace
   // ────────────────────────────────────────────────────────────────
   | "talent_offer.sent"

@@ -1,5 +1,17 @@
 # purge-deleted-accounts
 
+> **SUPERSEDED (2026-06-25).** The purge now runs **in-database** as
+> `private.purge_deleted_accounts()` (SECURITY DEFINER, owned by `postgres`)
+> scheduled by **pg_cron** — see migration
+> `20260625182823_gdpr_purge_and_redaction_cron.sql`. That is the canonical,
+> active mechanism (no network hop / worker token / cold start; it can
+> hard-delete from `auth.users` directly and FK `ON DELETE` rules erase or
+> sever every referencing row). This edge function is retained only as a
+> manual/fallback HTTP entry point; it does **not** need to be deployed or
+> scheduled. If you ever re-enable it, drive it via pg_cron + pg_net
+> (`net.http_post`, both extensions are installed) — do not add a second
+> independent scheduler that races the in-DB job.
+
 Daily cron worker that finalizes account deletion 30 days after the user
 requests it via `/api/v1/me/delete`.
 

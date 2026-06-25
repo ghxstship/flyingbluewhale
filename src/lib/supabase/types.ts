@@ -211,7 +211,9 @@ export type Project = {
   geographic_scope: GeographicScope | null;
   tour_structure: TourStructure | null;
   production_style: ProductionStyle | null;
-  created_by: string;
+  // Nullable since the GDPR account-purge migration (20260625182657) set this
+  // FK to ON DELETE SET NULL — a purged creator severs the link, project stays.
+  created_by: string | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
@@ -357,7 +359,8 @@ export type Expense = {
   id: string;
   org_id: string;
   project_id: string | null;
-  submitter_id: string;
+  // Nullable since GDPR purge migration 20260625182657 (ON DELETE SET NULL).
+  submitter_id: string | null;
   category: string | null;
   description: string;
   amount_cents: number;
@@ -427,7 +430,8 @@ export type TimeEntry = {
   id: string;
   org_id: string;
   project_id: string | null;
-  user_id: string;
+  // Nullable since GDPR purge migration 20260625182657 (ON DELETE SET NULL).
+  user_id: string | null;
   description: string | null;
   started_at: string;
   ended_at: string | null;
@@ -440,7 +444,8 @@ export type MileageLog = {
   id: string;
   org_id: string;
   project_id: string | null;
-  user_id: string;
+  // Nullable since GDPR purge migration 20260625182657 (ON DELETE SET NULL).
+  user_id: string | null;
   origin: string;
   destination: string;
   miles: number;
@@ -470,7 +475,8 @@ export type Requisition = {
   id: string;
   org_id: string;
   project_id: string | null;
-  requester_id: string;
+  // Nullable since GDPR purge migration 20260625182657 (ON DELETE SET NULL).
+  requester_id: string | null;
   title: string;
   description: string | null;
   estimated_cents: number | null;

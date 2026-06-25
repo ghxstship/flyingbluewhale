@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { emitAudit } from "@/lib/audit";
 
 const Schema = z.object({
   requester_email: z.string().email(),
@@ -39,6 +40,17 @@ export async function updateDsarRequest(id: string, _: State, fd: FormData): Pro
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Dsar Request not found." };
   }
+  // GDPR — audit fulfilment (the Art. 15/17/20 close-out is the most
+  // litigation-relevant transition); audit any other state change too.
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: parsed.data.request_state === "fulfilled" ? "privacy.dsar.fulfilled" : "privacy.dsar.created",
+    targetTable: "dsar_requests",
+    targetId: id,
+    metadata: { kind: parsed.data.kind, request_state: parsed.data.request_state },
+  });
   revalidatePath(`/studio/legal/privacy/dsar/${id}`);
   revalidatePath("/studio/legal/privacy/dsar");
   redirect(`/studio/legal/privacy/dsar/${id}`);

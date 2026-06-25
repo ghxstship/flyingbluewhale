@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { emitAudit } from "@/lib/audit";
 
 const Schema = z.object({
   requester_email: z.string().email(),
@@ -38,6 +39,16 @@ export async function createDsar(_: State, fd: FormData): Promise<State> {
     .select("id")
     .single();
   if (error) return actionFail(error.message, fd);
+  // GDPR — DSAR creation is a litigation-grade event; audit actor + target.
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "privacy.dsar.created",
+    targetTable: "dsar_requests",
+    targetId: data.id,
+    metadata: { kind: parsed.data.kind, requester_email: parsed.data.requester_email },
+  });
   revalidatePath("/studio/legal/privacy/dsar");
   redirect(`/studio/legal/privacy/dsar/${data.id}`);
 }

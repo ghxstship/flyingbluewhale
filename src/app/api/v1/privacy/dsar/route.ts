@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 
 /** /api/v1/privacy/dsar — DSAR intake (WF-232). */
 
@@ -65,6 +66,16 @@ export async function POST(req: NextRequest) {
       .select("id, kind, request_state, due_by")
       .single();
     if (error) return apiError("internal", error.message);
+    // GDPR — DSAR creation is a litigation-grade event; audit actor + target.
+    await emitAudit({
+      actorId: session.userId,
+      orgId,
+      actorEmail: session.email,
+      action: "privacy.dsar.created",
+      targetTable: "dsar_requests",
+      targetId: data.id,
+      metadata: { kind: data.kind, requester_email: input.requesterEmail },
+    });
     return apiCreated({ request: data });
   });
 }

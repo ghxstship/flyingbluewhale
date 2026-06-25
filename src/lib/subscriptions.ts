@@ -9,6 +9,17 @@
 
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
+
+/**
+ * The subscriptions table is RLS-gated on `has_org_role(...)` for SELECT and
+ * UPDATE. In-app callers run as the authed user (RLS client). The Stripe
+ * webhook has NO session, so it MUST inject the service-role client — passing
+ * the RLS client there makes every read return null and every transition
+ * silently no-op. Callers pass the appropriate client via `db`.
+ */
+type Db = SupabaseClient<Database>;
 
 export const SUBSCRIPTION_STATES = [
   "PROSPECT",
@@ -88,8 +99,8 @@ export async function listSubscriptions(orgId: string): Promise<Subscription[]> 
   return (data ?? []) as Subscription[];
 }
 
-export async function getSubscription(orgId: string, id: string): Promise<Subscription | null> {
-  const supabase = await createClient();
+export async function getSubscription(orgId: string, id: string, db?: Db): Promise<Subscription | null> {
+  const supabase = db ?? (await createClient());
   const { data, error } = await supabase
     .from("subscriptions")
     .select("*")
@@ -130,9 +141,16 @@ export async function transitionSubscription(args: {
   reason?: string;
   transitionedBy?: string;
   stripeEventId?: string;
+  /**
+   * Supabase client to run under. Omit for in-app (authed) callers — they get
+   * the RLS-scoped client so user-initiated transitions still enforce
+   * `has_org_role`. The Stripe webhook MUST pass `createServiceClient()`: it
+   * has no session, and the RLS client would make every read/update no-op.
+   */
+  db?: Db;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
-  const supabase = await createClient();
-  const current = await getSubscription(args.orgId, args.subscriptionId);
+  const supabase = args.db ?? (await createClient());
+  const current = await getSubscription(args.orgId, args.subscriptionId, supabase);
   if (!current) return { ok: false, error: "Subscription not found" };
   if (!canTransition(current.state, args.to)) {
     return { ok: false, error: `Cannot transition ${current.state} -> ${args.to}` };

@@ -10,8 +10,12 @@ import { savePreferencesAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
+// Color mode (light/dark/system) and the skin slug (`user_preferences.theme`)
+// are NOT edited here. Mode is the orthogonal `data-mode` axis (client-managed
+// by ThemeProvider, set in /me/settings/appearance); the platform ships one
+// skin, so there is no skin to choose. This form persists density + locale +
+// consent only.
 type Prefs = {
-  theme: "light" | "dark" | "system";
   density: "cozy" | "compact" | "spacious";
   locale: string;
   timezone: string;
@@ -19,7 +23,6 @@ type Prefs = {
 };
 
 const DEFAULTS: Prefs = {
-  theme: "system",
   density: "cozy",
   locale: "en",
   timezone: "UTC",
@@ -49,12 +52,11 @@ export default async function Page() {
 
   const { data } = await supabase
     .from("user_preferences")
-    .select("theme, density, locale, timezone, consent, ui_state")
+    .select("density, locale, timezone, consent, ui_state")
     .eq("user_id", u.user!.id)
     .maybeSingle();
 
   const prefs: Prefs = {
-    theme: (data?.theme as Prefs["theme"]) ?? DEFAULTS.theme,
     density: (data?.density as Prefs["density"]) ?? DEFAULTS.density,
     locale: data?.locale ?? DEFAULTS.locale,
     timezone: data?.timezone ?? DEFAULTS.timezone,
@@ -66,7 +68,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow={t("me.preferences.eyebrow", undefined, "My Account")}
         title={t("me.preferences.title", undefined, "Preferences")}
-        subtitle={t("me.preferences.subtitle", undefined, "Theme, density, locale, and consent.")}
+        subtitle={t("me.preferences.subtitle", undefined, "Density, locale, and consent.")}
         breadcrumbs={[
           { label: t("me.preferences.breadcrumbs.account", undefined, "My Account"), href: "/me" },
           { label: t("me.preferences.title", undefined, "Preferences") },
@@ -85,25 +87,19 @@ export default async function Page() {
 
             <div>
               <label className="text-xs font-medium text-[var(--p-text-2)]">
-                {t("me.preferences.appearance.theme", undefined, "Theme")}
+                {t("me.preferences.appearance.colorMode", undefined, "Color mode")}
               </label>
-              <div className="mt-1.5 grid grid-cols-3 gap-1.5">
-                {(["light", "dark", "system"] as const).map((themeOption) => (
-                  <label
-                    key={themeOption}
-                    className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm"
-                  >
-                    <input
-                      type="radio"
-                      name="theme"
-                      value={themeOption}
-                      defaultChecked={prefs.theme === themeOption}
-                      className="accent-[var(--p-accent)]"
-                    />
-                    <span>{toTitle(themeOption)}</span>
-                  </label>
-                ))}
-              </div>
+              {/* Color mode (light/dark/system) is the client-managed data-mode
+                  axis — set it in Appearance settings, not this server form. The
+                  old radio here posted mode values into the theme-slug field and
+                  silently failed the whole save against the slug schema. */}
+              <p className="mt-1.5 text-sm text-[var(--p-text-2)]">
+                {t("me.preferences.appearance.colorModeHint", undefined, "Light, dark, or follow your OS — set in")}{" "}
+                <a className="font-medium text-[var(--p-accent-text)] underline" href="/me/settings/appearance">
+                  {t("me.preferences.appearance.colorModeLink", undefined, "Appearance settings")}
+                </a>
+                .
+              </p>
             </div>
 
             <div>

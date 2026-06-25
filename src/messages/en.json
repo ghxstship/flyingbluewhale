@@ -6353,14 +6353,16 @@
    "eyebrow": "My Account",
    "title": "Preferences",
    "supabaseRequired": "Configure Supabase to manage preferences.",
-   "subtitle": "Theme, density, locale, and consent.",
+   "subtitle": "Density, locale, and consent.",
    "breadcrumbs": {
     "account": "My Account"
    },
    "submit": "Save Preferences",
    "appearance": {
     "legend": "Appearance",
-    "theme": "Theme",
+    "colorMode": "Color mode",
+    "colorModeHint": "Light, dark, or follow your OS — set in",
+    "colorModeLink": "Appearance settings",
     "density": "Density"
    },
    "locale": {

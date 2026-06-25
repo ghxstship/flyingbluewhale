@@ -1,32 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 import { actionFail, formFail } from "@/lib/forms/fail";
-
-// BCP-47 shape: 2–3 char primary tag, optional 4-char script, optional region
-// (2-char alpha or 3-digit). Mirrors the DB check constraint added in
-// 20260504000005_locale_preferences.sql so a save can't pass the form yet
-// fail at the row write.
-const BCP47 = /^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2}|-[0-9]{3})?$/;
-
-const Schema = z.object({
-  // Mirrors src/app/theme/themes.config.ts#ThemeSlug + "system" sentinel.
-  // The canonical platform ships exactly one skin — `atlvs-product` (the
-  // design_handoff_atlvs_kit). The retired cosmic `ghxstship` skin and the
-  // pre-v3 CHROMA set are gone; stored rows carrying a dead slug fall back to
-  // the default on read.
-  //
-  // light/dark is the orthogonal `data-mode` attribute, not stored here.
-  theme: z.enum(["atlvs-product", "system"]),
-  density: z.enum(["compact", "cozy", "spacious"]),
-  locale: z.string().regex(BCP47, "Use a BCP-47 tag like 'en' or 'fr-CA'"),
-  timezone: z.string().min(1).max(64),
-  analytics: z.string().optional(), // "on" if checkbox checked
-  marketing: z.string().optional(),
-});
+import { PreferencesSchema } from "./schema";
 
 export type State = {
   error?: string;
@@ -36,8 +14,7 @@ export type State = {
 } | null;
 
 export async function savePreferencesAction(_: State, fd: FormData): Promise<State> {
-  const parsed = Schema.safeParse({
-    theme: fd.get("theme"),
+  const parsed = PreferencesSchema.safeParse({
     density: fd.get("density"),
     locale: fd.get("locale"),
     timezone: fd.get("timezone"),
@@ -56,10 +33,13 @@ export async function savePreferencesAction(_: State, fd: FormData): Promise<Sta
     marketing: parsed.data.marketing === "on",
   };
 
+  // `theme` (the skin slug) is deliberately omitted: it is not edited here
+  // (one platform skin) and color mode is the orthogonal client-side axis. On
+  // INSERT the column takes its DB default ('system'); on UPDATE the stored
+  // skin is left untouched — so a save never depends on, nor clobbers, theme.
   const { error } = await supabase.from("user_preferences").upsert(
     {
       user_id: u.user.id,
-      theme: parsed.data.theme,
       density: parsed.data.density,
       locale: parsed.data.locale,
       timezone: parsed.data.timezone,

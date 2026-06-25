@@ -140,13 +140,11 @@ test.describe("personal /me · account CRUD (owner)", () => {
 
   test("Preferences · save appearance + locale", async ({ page }) => {
     await expectPersonalRender(page, "/me/preferences");
-    // savePreferencesAction requires theme + density + locale + timezone. theme
-    // (light/dark/system) and density (compact/cozy/spacious) are radio groups
-    // — explicitly pick one of each so the submit always carries a valid theme
-    // (a stored slug outside light/dark/system leaves no radio defaultChecked,
-    // which would drop `theme` from the FormData and fail zod silently). Then
-    // pin a deterministic locale + timezone.
-    await page.locator('main input[name="theme"][value="system"]').check();
+    // savePreferencesAction persists density + locale + timezone + consent (color
+    // MODE is the client data-mode axis, set at /me/settings/appearance — it is
+    // NOT a field here anymore; the old name="theme" radio submitted mode values
+    // against the theme-slug schema and silently failed the whole save). Pick a
+    // density + a deterministic locale/timezone and assert the save persists.
     const density = page.locator('main input[name="density"][value="compact"]');
     if (await density.count()) await density.check();
     await fillAndSubmit(page, { locale: "en", timezone: "America/New_York" });

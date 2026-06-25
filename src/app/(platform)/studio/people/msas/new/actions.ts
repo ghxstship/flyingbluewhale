@@ -14,6 +14,9 @@ export async function createMsa(_prev: State, fd: FormData): Promise<State> {
     const id = await createMsaDraft(session.orgId, crewMemberId);
     redirect(`/studio/people/msas/${id}`);
   } catch (e) {
+    // redirect() throws NEXT_REDIRECT — re-throw so the navigation isn't
+    // swallowed as an error (which would strand the user on /new).
+    if (e instanceof Error && e.message.includes("NEXT_REDIRECT")) throw e;
     return { error: e instanceof Error ? e.message : "Could not create MSA." };
   }
 }

@@ -21,14 +21,20 @@ export async function createRevisionRoundAction(_prev: FormState, fd: FormData):
   const summary = String(fd.get("summary") ?? "").trim();
   const targetKind = String(fd.get("targetKind") ?? "proposal") as "proposal" | "phase" | "change_order" | "asset";
   if (!title) return { error: "Title is required." };
+  // redirect() signals success by THROWING NEXT_REDIRECT — it must live
+  // OUTSIDE the try/catch, or the catch swallows the redirect and converts it
+  // to { error: "NEXT_REDIRECT" }, stranding the user on /new even though the
+  // revision round was created. Capture the id in the try, redirect after.
+  let roundId: string;
   try {
     const round = await createRevisionRound(proposalId, { title, summary, targetKind, targetId: null }, actor(session));
+    roundId = round.id;
     revalidatePath(`/p/${slug}/client/proposals/${proposalId}/revisions`);
     revalidatePath(`/p/${slug}/client/proposals/${proposalId}`);
-    redirect(`/p/${slug}/client/proposals/${proposalId}/revisions/${round.id}`);
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Failed to create revision round." };
   }
+  redirect(`/p/${slug}/client/proposals/${proposalId}/revisions/${roundId}`);
 }
 
 export async function decideRevisionAction(_prev: FormState, fd: FormData): Promise<FormState> {

@@ -54,6 +54,9 @@ export async function createTeamAction(_: State, fd: FormData): Promise<State> {
     revalidatePath("/studio/people/teams");
     redirect(`/studio/people/teams/${team.id}`);
   } catch (err) {
+    // redirect() throws NEXT_REDIRECT — re-throw so the navigation isn't
+    // swallowed as an error (which would strand the user on the create form).
+    if (err instanceof Error && err.message.includes("NEXT_REDIRECT")) throw err;
     const msg = err instanceof Error ? err.message : "Failed to create team";
     if (/duplicate|23505/.test(msg)) {
       return { error: "A team with that slug already exists in this org." };

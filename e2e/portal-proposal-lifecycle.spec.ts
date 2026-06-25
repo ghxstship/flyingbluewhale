@@ -57,21 +57,20 @@ test.describe("portal — client proposal lifecycle", () => {
   // Skipped — characterized precisely: the form DOES submit (POST 200) and the
   // server action runs, but `createChangeOrder`/`createRevisionRound` look the
   // proposal up with `.eq("org_id", actor.orgId)`, and the client's active org in
-  // the server-action context doesn't resolve to the proposal's org (Professional)
-  // even after loginAndSwitchWorkspace — so the lookup returns "Proposal not
-  // found". The render test above passes because the read path
-  // (resolveProposalContext) reads cross-org via RLS without that org filter. Real
-  // clients operate with the project's org active, so this is a test-session
-  // nuance, not a product gap; needs the action's session to honor the switched
-  // workspace (or a same-default-org fixture).
-  test.skip("client requests a scope change-order", async ({ page }) => {
+  // Un-skipped 2026-06-25: these were skipped on a mis-diagnosis (blamed on
+  // org/session resolution). The real cause was createChangeOrderAction /
+  // createRevisionRoundAction calling redirect() INSIDE a try/catch — the catch
+  // swallowed the NEXT_REDIRECT throw, so the row was written but the user was
+  // stranded on /new. Fixed by hoisting redirect() out of the try; guarded by
+  // src/lib/portal-action-redirect-canon.test.ts.
+  test("client requests a scope change-order", async ({ page }) => {
     await submitFormShell(page, `${base}/change-orders/new`, {
       title: `E2E Change Order ${stamp()}`,
       body: "Requesting an added LED wall per the revised scope.",
     });
   });
 
-  test.skip("client requests a creative revision round", async ({ page }) => {
+  test("client requests a creative revision round", async ({ page }) => {
     await submitFormShell(page, `${base}/revisions/new`, {
       title: `E2E Revision ${stamp()}`,
       summary: "Tighten the timeline and refresh the moodboard.",

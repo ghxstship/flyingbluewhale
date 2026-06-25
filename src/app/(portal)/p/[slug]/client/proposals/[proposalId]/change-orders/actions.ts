@@ -19,14 +19,20 @@ export async function createChangeOrderAction(_prev: FormState, fd: FormData): P
   const title = String(fd.get("title") ?? "").trim();
   const body = String(fd.get("body") ?? "").trim();
   if (!title) return { error: "Title is required." };
+  // redirect() signals success by THROWING NEXT_REDIRECT — it must live
+  // OUTSIDE the try/catch, or the catch swallows the redirect and converts it
+  // to { error: "NEXT_REDIRECT" }, stranding the user on /new even though the
+  // change order was created. Capture the id in the try, redirect after.
+  let coId: string;
   try {
     const co = await createChangeOrder(proposalId, { title, body }, actor(session));
+    coId = co.id;
     revalidatePath(`/p/${slug}/client/proposals/${proposalId}/change-orders`);
     revalidatePath(`/p/${slug}/client/proposals/${proposalId}`);
-    redirect(`/p/${slug}/client/proposals/${proposalId}/change-orders/${co.id}`);
   } catch (e) {
     return { error: e instanceof Error ? e.message : "Failed to create change order." };
   }
+  redirect(`/p/${slug}/client/proposals/${proposalId}/change-orders/${coId}`);
 }
 
 export async function decideChangeOrderAction(_prev: FormState, fd: FormData): Promise<FormState> {

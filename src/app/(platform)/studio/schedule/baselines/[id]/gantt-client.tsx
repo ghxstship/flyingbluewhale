@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -61,11 +61,16 @@ export default function GanttClient({ activities, dependencies }: Props) {
   const [lookahead, setLookahead] = useState<Lookahead>("all");
   const [showFloat, setShowFloat] = useState(true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  // `now` is null until mount — `new Date()` during render runs at different
+  // instants on server vs client, shifting the today marker (and the lookahead
+  // window) and hydration-mismatching (React #418). Defaults render with no
+  // "now" applied; both are client-only adornments that appear after mount.
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => setNow(new Date()), []);
 
   // ── Filter by lookahead window ─────────────────────────────────────────
   const filteredActivities = useMemo(() => {
-    if (lookahead === "all") return activities;
-    const now = new Date();
+    if (lookahead === "all" || now === null) return activities;
     const days = lookahead === "3w" ? 21 : 42;
     const horizon = new Date(now.getTime() + days * 86_400_000);
     return activities.filter((a) => {
@@ -73,7 +78,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
       const finish = new Date(a.finish_planned);
       return finish >= now && start <= horizon;
     });
-  }, [activities, lookahead]);
+  }, [activities, lookahead, now]);
 
   // ── Resolve chart bounds ───────────────────────────────────────────────
   const { earliest, latest, spanDays, byId } = useMemo(() => {
@@ -142,8 +147,8 @@ export default function GanttClient({ activities, dependencies }: Props) {
     return paths;
   }, [dependencies, byId, filteredActivities, xForDate]);
 
-  // Today marker.
-  const todayX = LABEL_W + dayDiff(new Date(), earliest) * DAY_W;
+  // Today marker — only once `now` is set after mount (see note above).
+  const todayX = now === null ? null : LABEL_W + dayDiff(now, earliest) * DAY_W;
 
   return (
     <div className="space-y-3">
@@ -207,7 +212,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
           </g>
 
           {/* Today line */}
-          {todayX >= LABEL_W && todayX <= LABEL_W + chartW && (
+          {todayX !== null && todayX >= LABEL_W && todayX <= LABEL_W + chartW && (
             <g>
               <line
                 x1={todayX}

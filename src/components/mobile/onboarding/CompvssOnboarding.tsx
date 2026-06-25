@@ -194,15 +194,20 @@ const Steps = ({ n, of }: { n: number; of: number }) => (
   </div>
 );
 
-const Toggle = ({ on, set, disabled }: { on: boolean; set: (v: boolean) => void; disabled?: boolean }) => (
-  <div
+const Toggle = ({ on, set, disabled, label }: { on: boolean; set: (v: boolean) => void; disabled?: boolean; label?: string }) => (
+  <button
+    type="button"
+    role="switch"
+    aria-checked={on}
+    aria-label={label}
+    disabled={disabled}
     className="sw"
     data-on={on ? "1" : undefined}
     onClick={disabled ? undefined : () => set(!on)}
-    style={disabled ? { opacity: 0.5, cursor: "not-allowed" } : undefined}
+    style={{ border: "none", padding: 0, ...(disabled ? { opacity: 0.5, cursor: "not-allowed" } : {}) }}
   >
     <span className="knob" />
-  </div>
+  </button>
 );
 
 const ErrLine = ({ msg }: { msg?: string }) =>
@@ -521,9 +526,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             {ssoBlock()}
             <p className="muted" style={{ textAlign: "center", marginTop: 16 }}>
               {t("m.onboarding.signup.haveAccount", undefined, "Have an account?")}{" "}
-              <span className="link" onClick={() => go("signin")}>
+              <button type="button" className="link" onClick={() => go("signin")} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.signup.signin", undefined, "Sign In")}
-              </span>
+              </button>
             </p>
           </div>
         );
@@ -544,9 +549,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             <Field label={t("m.onboarding.signin.email", undefined, "Email or Mobile")} lead="User" placeholder="rio@ghxstship.pro" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <PasswordField label={t("m.onboarding.signin.password", undefined, "Password")} placeholder="Your password" value={password} onChange={setPassword} />
             <div style={{ textAlign: "right", marginTop: -4, marginBottom: 14 }}>
-              <span className="link" onClick={() => go("forgot")}>
+              <button type="button" className="link" onClick={() => go("forgot")} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.signin.forgot", undefined, "Forgot Password?")}
-              </span>
+              </button>
             </div>
             <ErrLine msg={err} />
             {cta(t("m.onboarding.signin.cta", undefined, "Dive In"), onSignIn)}
@@ -556,9 +561,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             <div className="spacer" />
             <p className="muted" style={{ textAlign: "center" }}>
               {t("m.onboarding.signin.new", undefined, "New here?")}{" "}
-              <span className="link" onClick={() => go("signup")}>
+              <button type="button" className="link" onClick={() => go("signup")} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.signin.create", undefined, "Create an Account")}
-              </span>
+              </button>
             </p>
           </div>
         );
@@ -594,9 +599,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             </label>
             <p className="muted" style={{ textAlign: "center", marginTop: 16 }}>
               {t("m.onboarding.verify.didnt", undefined, "Didn't get it?")}{" "}
-              <span className="link" onClick={onResend}>
+              <button type="button" className="link" onClick={onResend} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.verify.resend", undefined, "Resend")}
-              </span>
+              </button>
             </p>
             {toast ? (
               <p className="muted" style={{ textAlign: "center", color: "var(--p-success)" }}>
@@ -635,9 +640,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             {cta(t("m.onboarding.forgot.cta", undefined, "Send Reset Link"), onForgot)}
             <p className="muted" style={{ textAlign: "center", marginTop: 16 }}>
               {t("m.onboarding.forgot.remembered", undefined, "Remembered it?")}{" "}
-              <span className="link" onClick={() => go("signin")}>
+              <button type="button" className="link" onClick={() => go("signin")} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.forgot.back", undefined, "Back to Sign In")}
-              </span>
+              </button>
             </p>
           </div>
         );
@@ -820,9 +825,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
               <span>{t("m.onboarding.join.note", undefined, "No code? You can request to join from an org admin, or continue and join a project later.")}</span>
             </div>
             <p className="muted" style={{ textAlign: "center", marginTop: 14 }}>
-              <span className="link" onClick={() => go("permissions")}>
+              <button type="button" className="link" onClick={() => go("permissions")} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.join.skip", undefined, "Skip for Now")}
-              </span>
+              </button>
             </p>
           </div>
         );
@@ -881,6 +886,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                     on={perms[k]}
                     disabled={unavailable || permsBusy === k}
                     set={(v) => onTogglePerm(k, v)}
+                    label={title}
                   />
                 </div>
               );

@@ -18,7 +18,7 @@ import {
   Fira_Sans,
   IBM_Plex_Mono,
 } from "next/font/google";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/app/theme/ThemeProvider";
 import { themeScript, THEME_COOKIE_NAME } from "@/app/theme/theme-script";
@@ -162,6 +162,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "atlvs-product";
   const ssrColorScheme = colorSchemeFor(ssrTheme);
 
+  // Per-request CSP nonce, minted in src/proxy.ts and forwarded on the request
+  // headers. Stamped onto the two inline bootstrap scripts below so they
+  // satisfy `script-src 'nonce-<n>'` without the production CSP needing
+  // 'unsafe-inline'. Undefined in contexts with no middleware (e.g. tests).
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <html
       lang={locale}
@@ -173,7 +179,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* M2-04 — Organization schema appears on every page so Google's
             knowledge panel can resolve the brand. Populates once at the root
             and inherits across every route. */}
@@ -233,7 +239,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             },
           }}
         />
-        <script dangerouslySetInnerHTML={{ __html: swRegister }} />
+        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: swRegister }} />
       </body>
     </html>
   );

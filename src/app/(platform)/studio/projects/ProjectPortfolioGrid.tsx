@@ -23,12 +23,21 @@ export type PortfolioEntry = {
 export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] }) {
   const { locale, currency } = useLocale();
   const t = useT();
+  // `now` is null until mount — health (color + sort order) and the schedule
+  // labels read the wall clock; computing `Date.now()` during render runs at
+  // different instants on server vs client and can reorder tiles or flip a
+  // color, which hydration-mismatches (React #418). Until mounted everything
+  // computes against a fixed reference so SSR == first client render; the
+  // schedule-aware health/labels resolve after mount.
+  const [now, setNow] = React.useState<number | null>(null);
+  React.useEffect(() => setNow(Date.now()), []);
+
   if (entries.length === 0) return null;
 
   const max = Math.max(1, ...entries.map((e) => e.budgetCents));
   const enriched = entries.map((e) => ({
     ...e,
-    health: computeHealth(e),
+    health: computeHealth(e, now),
     relSize: Math.max(0.32, e.budgetCents / max),
   }));
   enriched.sort((a, b) => {
@@ -87,7 +96,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
             </div>
             <div className="mt-3 flex items-baseline justify-between text-[11px] text-[var(--p-text-2)]">
               <span className="font-mono">{fmtBudget(p.budgetCents, locale, currency)}</span>
-              <span className="text-[var(--p-text-2)]">{scheduleLabel(p, t)}</span>
+              <span className="text-[var(--p-text-2)]">{scheduleLabel(p, t, now)}</span>
             </div>
           </Link>
         ))}
@@ -98,15 +107,17 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
 
 type Health = "green" | "amber" | "red";
 
-function computeHealth(p: PortfolioEntry): Health {
+function computeHealth(p: PortfolioEntry, now: number | null): Health {
   if (p.status === "on_hold" || p.status === "cancelled") return "red";
   if (p.status === "completed") return "green";
-  // Schedule pressure: how close to / past end date relative to span.
-  if (!p.endDate) return "green";
+  // Schedule pressure: how close to / past end date relative to span. Before
+  // mount (`now === null`) we skip the wall-clock-dependent pressure check and
+  // treat status-only health as green.
+  if (!p.endDate || now === null) return "green";
   const end = new Date(p.endDate).getTime();
   const start = p.startDate ? new Date(p.startDate).getTime() : end - 30 * 86400000;
   const span = Math.max(end - start, 1);
-  const elapsed = Date.now() - start;
+  const elapsed = now - start;
   const pct = elapsed / span;
   if (pct > 1) return "red"; // past end date but still active
   if (pct > 0.85) return "amber";
@@ -148,9 +159,11 @@ function fmtBudget(cents: number, locale: string, currency: string): string {
 
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
-function scheduleLabel(p: PortfolioEntry, t: Translator): string {
+function scheduleLabel(p: PortfolioEntry, t: Translator, now: number | null): string {
   if (!p.endDate) return t("console.projects.portfolio.schedule.noEnd", undefined, "no end");
-  const days = Math.round((new Date(p.endDate).getTime() - Date.now()) / 86400000);
+  // Before mount, omit the wall-clock-relative day count (deterministic SSR).
+  if (now === null) return "";
+  const days = Math.round((new Date(p.endDate).getTime() - now) / 86400000);
   if (days < 0) return t("console.projects.portfolio.schedule.daysOver", { days: -days }, `${-days}d over`);
   if (days === 0) return t("console.projects.portfolio.schedule.endsToday", undefined, "ends today");
   return t("console.projects.portfolio.schedule.daysLeft", { days }, `${days}d left`);

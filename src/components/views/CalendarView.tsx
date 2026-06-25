@@ -82,30 +82,52 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
     return t(`components.calendarView.mode.${m}`, undefined, fallbacks[m]);
   };
 
-  const today = React.useMemo(() => startOfDayUTC(new Date()), []);
+  // `today` is null until mount — `new Date()` during render runs at different
+  // instants on server vs client (and can land on different UTC days near
+  // midnight), shifting the cursor's fallback date and the "today" highlight,
+  // which hydration-mismatches (React #418). We seed deterministic values from
+  // the URL/props for the first render and fill in the real "today" after
+  // mount.
+  const [today, setToday] = React.useState<Date | null>(null);
+  React.useEffect(() => setToday(startOfDayUTC(new Date())), []);
 
-  // Hydrate state from URL on mount; fall back to props.
+  // Hydrate state from URL on mount; fall back to props. The cursor fallback
+  // uses `initialDate` (or the unix epoch as a deterministic placeholder) so it
+  // never reads the wall clock during render; the mount effect below replaces
+  // the placeholder with today once known.
   const initialFromUrl = React.useMemo(() => {
     const urlMode = searchParams.get("mode");
     const urlDate = searchParams.get("date");
     const mode = urlMode && (MODES as string[]).includes(urlMode) ? (urlMode as CalendarMode) : initialMode;
-    let cursor: Date;
+    let cursor: Date | null;
     if (urlDate && /^\d{4}-\d{2}-\d{2}$/.test(urlDate)) {
       cursor = new Date(`${urlDate}T00:00:00Z`);
     } else if (initialDate) {
       cursor = startOfDayUTC(initialDate);
     } else {
-      cursor = today;
+      cursor = null; // resolved to today after mount
     }
     return { mode, cursor };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [mode, setMode] = React.useState<CalendarMode>(initialFromUrl.mode);
-  const [cursor, setCursor] = React.useState<Date>(initialFromUrl.cursor);
-
-  // Sync URL when state changes — replace history.
+  const [cursorState, setCursor] = React.useState<Date | null>(initialFromUrl.cursor);
+  // When the cursor wasn't pinned by URL/props, adopt today once mounted.
   React.useEffect(() => {
+    if (cursorState === null && today !== null) setCursor(today);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [today]);
+  // Deterministic non-null value for downstream math before the cursor settles
+  // (epoch start-of-day). Nothing user-visible depends on it pre-mount because
+  // the URL-sync effect + body are gated on `settled`. Memoized so the value is
+  // stable across renders (keeps the headerLabel useMemo from rerunning).
+  const cursor = React.useMemo(() => cursorState ?? new Date(0), [cursorState]);
+
+  // Sync URL when state changes — replace history. Skipped until the cursor
+  // settles so we never write the epoch placeholder to the URL.
+  React.useEffect(() => {
+    if (cursorState === null) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set("mode", mode);
     params.set("date", isoDateUTC(cursor));
@@ -161,10 +183,16 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
   }
 
   function jumpToday() {
-    setCursor(today);
+    setCursor(today ?? startOfDayUTC(new Date()));
   }
 
+  // Until the cursor settles (URL/props pinned it, or the mount effect adopted
+  // today) we render no month label or grid — keeps SSR and the first client
+  // render identical (both unsettled) instead of flashing the epoch placeholder.
+  const settled = cursorState !== null;
+
   const headerLabel = React.useMemo(() => {
+    if (!settled) return "";
     if (mode === "month") {
       return new Intl.DateTimeFormat(undefined, MONTH_LABEL_OPTIONS).format(cursor);
     }
@@ -184,7 +212,7 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
       }).format(cursor);
     }
     return t("components.calendarView.upcoming", undefined, "Upcoming");
-  }, [mode, cursor, weekStart, t]);
+  }, [settled, mode, cursor, weekStart, t]);
 
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
@@ -217,7 +245,7 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
           <div className="flex items-center gap-2">
             <input
               type="date"
-              value={isoDateUTC(cursor)}
+              value={settled ? isoDateUTC(cursor) : ""}
               onChange={(ev) => {
                 const v = ev.target.value;
                 if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
@@ -250,39 +278,41 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
           </div>
         </div>
 
-        {/* Body */}
-        {mode === "month" && (
+        {/* Body — withheld until the cursor settles (see `settled` above). */}
+        {settled && mode === "month" && (
           <CalendarMonthGrid
             cursor={cursor}
             weekStart={weekStart}
             eventsByKey={eventsByKey}
-            today={today}
+            today={today ?? new Date(0)}
             onCreate={onCreate}
             renderEvent={renderEvent}
           />
         )}
-        {mode === "week" && (
+        {settled && mode === "week" && (
           <CalendarWeekGrid
             cursor={cursor}
             weekStart={weekStart}
             eventsByKey={eventsByKey}
-            today={today}
+            today={today ?? new Date(0)}
             onCreate={onCreate}
             renderEvent={renderEvent}
           />
         )}
-        {mode === "day" && (
+        {settled && mode === "day" && (
           <CalendarWeekGrid
             cursor={cursor}
             weekStart={weekStart}
             eventsByKey={eventsByKey}
-            today={today}
+            today={today ?? new Date(0)}
             singleDay
             onCreate={onCreate}
             renderEvent={renderEvent}
           />
         )}
-        {mode === "agenda" && <CalendarAgenda cursor={cursor} eventsByKey={eventsByKey} today={today} />}
+        {settled && mode === "agenda" && (
+          <CalendarAgenda cursor={cursor} eventsByKey={eventsByKey} today={today ?? new Date(0)} />
+        )}
       </div>
     </DndContext>
   );

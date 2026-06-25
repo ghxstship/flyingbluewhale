@@ -133,21 +133,29 @@ describe("can (per-persona overlay — Bug #13 / Workstream A1)", () => {
     expect(can(s, "invoices:write")).toBe(false);
   });
 
-  it("client is read-only on proposals + deliverables + tasks", () => {
+  it("client reads proposals/deliverables/tasks + may approve (sign) proposals, not author them", () => {
     const s = m("client");
     expect(can(s, "proposals:read")).toBe(true);
     expect(can(s, "deliverables:read")).toBe(true);
     expect(can(s, "tasks:read")).toBe(true);
+    // The client is the legitimate proposal SIGNER — see
+    // portal-proposal-approve-canon.test.ts.
+    expect(can(s, "proposals:approve")).toBe(true);
+    // …but signing is not authoring: no proposals:write.
+    expect(can(s, "proposals:write")).toBe(false);
     // Critical denials covered by capability-gating spec
     expect(can(s, "projects:write")).toBe(false);
     expect(can(s, "check-in:write")).toBe(false);
     expect(can(s, "invoices:write")).toBe(false);
   });
 
-  it("viewer is read-only on projects + tasks; no writes anywhere", () => {
+  it("viewer reads projects/tasks + may approve (counter-sign) proposals; no other writes", () => {
     const s = m("viewer");
     expect(can(s, "projects:read")).toBe(true);
     expect(can(s, "tasks:read")).toBe(true);
+    // Secondary stakeholder signer on a shared client portal.
+    expect(can(s, "proposals:approve")).toBe(true);
+    expect(can(s, "proposals:write")).toBe(false);
     expect(can(s, "projects:write")).toBe(false);
     expect(can(s, "check-in:write")).toBe(false);
   });

@@ -6,6 +6,9 @@ import { log, serverTiming } from "@/lib/log";
 import { internalPathFor, shellForHost } from "@/lib/urls";
 import { env, hasSupabase } from "@/lib/env";
 import { extractPortalSlug, escapeHtml } from "@/lib/portal-slug";
+import { buildCsp, generateNonce, NONCE_HEADER } from "@/lib/csp";
+
+const IS_DEV = process.env.NODE_ENV !== "production";
 
 const SUBDOMAINS_ENABLED = process.env.NEXT_PUBLIC_USE_SUBDOMAINS === "1";
 
@@ -92,6 +95,21 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const requestId = request.headers.get("x-request-id") ?? newRequestId();
   const startedAt = performance.now();
+
+  // Per-request CSP nonce. Generated for every request, seeded onto the
+  // INBOUND request headers below (so `app/layout.tsx` can read it via
+  // headers().get("x-nonce") and stamp nonce={...} on its inline bootstrap
+  // scripts), and emitted in the document Content-Security-Policy via
+  // applyDocumentCsp() so those scripts run under `script-src 'nonce-<n>'`
+  // without 'unsafe-inline'. API responses keep the static CSP from
+  // next.config.ts (no inline scripts there).
+  const nonce = generateNonce();
+  const isApi = pathname.startsWith("/api/");
+  const applyDocumentCsp = (res: NextResponse) => {
+    if (isApi) return res;
+    res.headers.set("content-security-policy", buildCsp({ nonce, isDev: IS_DEV }));
+    return res;
+  };
 
   // CORS preflight short-circuit — answer OPTIONS before any session refresh
   // or rate-limit accounting. Required for browser fetch() with credentials
@@ -191,6 +209,22 @@ export async function proxy(request: NextRequest) {
     request.headers.set("x-request-id", requestId);
   }
 
+  // Seed the nonce onto the inbound request headers so Server Components
+  // (app/layout.tsx) can read it back via headers().get("x-nonce"). This must
+  // happen before updateSession() builds the response from request.headers.
+  request.headers.set(NONCE_HEADER, nonce);
+
+  // Next reads the nonce from the *request* `content-security-policy` header
+  // during app-render (app-render.js: getScriptNonceFromHeader) and auto-
+  // propagates it onto its OWN injected framework/hydration scripts. Without
+  // this the prod nonce'd CSP would block Next's bootstrap scripts and the app
+  // wouldn't hydrate. Seed the document CSP onto the request for non-API
+  // (document) requests so the framework picks up the same nonce we stamp on
+  // our inline scripts in app/layout.tsx.
+  if (!isApi) {
+    request.headers.set("content-security-policy", buildCsp({ nonce, isDev: IS_DEV }));
+  }
+
   // Expose the INTERNAL route path (post host-rewrite, so it carries the
   // /studio|/p|/m prefix in every mode) to server components. Lets
   // requireSession() preserve the caller's location as a ?next= deep link
@@ -226,7 +260,7 @@ export async function proxy(request: NextRequest) {
       res.headers.set("x-request-id", requestId);
       res.headers.set("x-shell", shell);
       if (tenantSlug) res.headers.set("x-tenant-slug", tenantSlug);
-      return res;
+      return applyDocumentCsp(res);
     }
   }
 
@@ -256,7 +290,7 @@ export async function proxy(request: NextRequest) {
       // Carry over Supabase session cookies set by updateSession so the user
       // doesn't get logged out by the redirect.
       response.cookies.getAll().forEach((c) => res.cookies.set(c.name, c.value));
-      return res;
+      return applyDocumentCsp(res);
     }
   }
 
@@ -271,7 +305,7 @@ export async function proxy(request: NextRequest) {
     existingTiming ? `${existingTiming}, ${serverTiming(mwDuration, "mw")}` : serverTiming(mwDuration, "mw"),
   );
   applyCors(request, response as NextResponse);
-  return response;
+  return applyDocumentCsp(response as NextResponse);
 }
 
 // ────────────────────────────────────────────────────────────────────

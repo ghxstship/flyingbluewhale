@@ -4,6 +4,7 @@ import { MediaPlayer } from "@/components/ui/MediaPlayer";
 import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { sanitizeHtml } from "@/lib/sanitize";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getCourse } from "../../../sample";
 import type { Lesson } from "@/lib/legend_learning";
@@ -138,7 +139,7 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
         <article className="surface prose-sm max-w-none p-5">
           <h1 className="text-2xl font-bold text-[var(--p-text-1)]">{lesson.title}</h1>
           {lesson.body_html ? (
-            <div className="mt-3 text-[var(--p-text-2)]" dangerouslySetInnerHTML={{ __html: lesson.body_html }} />
+            <div className="mt-3 text-[var(--p-text-2)]" dangerouslySetInnerHTML={{ __html: sanitizeHtml(lesson.body_html) }} />
           ) : (
             <p className="mt-3 text-[var(--p-text-2)]">No content.</p>
           )}

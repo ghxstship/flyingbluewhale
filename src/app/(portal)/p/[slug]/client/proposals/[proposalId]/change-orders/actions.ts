@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
+import { getSession, can } from "@/lib/auth";
 import { urlFor } from "@/lib/urls";
 import { createChangeOrder, decideChangeOrder } from "@/lib/proposals/portal/mutations";
 import type { FormState } from "@/components/FormShell";
@@ -11,9 +11,16 @@ function actor(session: { userId: string; orgId: string; email: string }) {
   return { userId: session.userId, orgId: session.orgId, userLabel: session.email.split("@")[0] ?? null };
 }
 
+// Requesting / deciding a scope change-order on the client portal is part of
+// the same client sign-off workflow as approvals — reserved for the client
+// persona (`proposals:approve`) and operator manager+ (`proposals:*`). Org
+// membership alone is NOT sufficient; see the approvals action sibling.
+const APPROVE_DENIED = "You are not authorized to act on this change order.";
+
 export async function createChangeOrderAction(_prev: FormState, fd: FormData): Promise<FormState> {
   const session = await getSession();
   if (!session) redirect(urlFor("auth", "/login"));
+  if (!can(session, "proposals:approve")) return { error: APPROVE_DENIED };
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");
   const title = String(fd.get("title") ?? "").trim();
@@ -38,6 +45,7 @@ export async function createChangeOrderAction(_prev: FormState, fd: FormData): P
 export async function decideChangeOrderAction(_prev: FormState, fd: FormData): Promise<FormState> {
   const session = await getSession();
   if (!session) redirect(urlFor("auth", "/login"));
+  if (!can(session, "proposals:approve")) return { error: APPROVE_DENIED };
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");
   const coId = String(fd.get("coId") ?? "");

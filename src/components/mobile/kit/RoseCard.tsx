@@ -131,9 +131,9 @@ export function RotatingQR({ base, size = 176, ttl = 30, mintToken }: RotatingQR
   const pct = (left / ttl) * 100;
   return (
     <>
-      <div className="qrbox" onClick={regen} style={{ cursor: "pointer", position: "relative" }}>
+      <button type="button" className="qrbox" onClick={regen} aria-label="Refresh pass code" style={{ cursor: "pointer", position: "relative", border: "none", font: "inherit" }}>
         <QR value={`${base}:${token}`} size={size} />
-      </div>
+      </button>
       <div className="pass-id">
         {base.split(":").pop()}-{token}
       </div>
@@ -214,10 +214,12 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
   );
   if (compact)
     return (
-      <div
+      <button
+        type="button"
         className="tap"
         onClick={onClick}
-        style={{ ...skin, padding: "15px 17px", marginBottom: 14, display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
+        aria-label="Open pass"
+        style={{ ...skin, width: "100%", textAlign: "left", font: "inherit", color: "inherit", border: "none", padding: "15px 17px", marginBottom: 14, display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}
       >
         {sheen}
         <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
@@ -246,7 +248,7 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
         >
           <QR value="COMPVSS:RT4471" size={36} />
         </span>
-      </div>
+      </button>
     );
   return (
     <div

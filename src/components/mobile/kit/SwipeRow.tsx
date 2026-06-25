@@ -92,10 +92,28 @@ export function SwipeRow({ actions = [], onClick, children }: SwipeRowProps) {
       <div
         className="swipe-face"
         style={{ transform: `translateX(${tx}px)` }}
+        role="button"
+        tabIndex={0}
+        aria-label={actions.length ? "Row · press to reveal actions" : "Open"}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
         onPointerCancel={onUp}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            if (open) {
+              close();
+            } else if (actions.length) {
+              setOpen(true);
+              setDx(-W);
+            } else {
+              onClick?.();
+            }
+          } else if (e.key === "Escape" && open) {
+            close();
+          }
+        }}
         onClick={() => {
           if (open) {
             close();

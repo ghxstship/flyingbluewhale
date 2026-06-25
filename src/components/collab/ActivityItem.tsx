@@ -46,9 +46,8 @@ const RELATIVE_THRESHOLDS: Array<{ unit: Intl.RelativeTimeFormatUnit; ms: number
   { unit: "minute", ms: 60 * 1000 },
 ];
 
-function formatRelative(iso: string): string {
+function formatRelative(iso: string, now: number): string {
   const then = new Date(iso).getTime();
-  const now = Date.now();
   const delta = then - now;
   const abs = Math.abs(delta);
   if (abs < 30_000) return "just now";
@@ -87,6 +86,13 @@ function renderValue(value: unknown): string {
  */
 export function ActivityItem({ item }: { item: ActivityItemType }) {
   const [open, setOpen] = React.useState(false);
+  // `now` is null until mount — computing `Date.now()` during render runs on
+  // both server and client at different instants, so the relative-time string
+  // ("3 minutes ago") hydration-mismatches (React #418). Until mounted we show
+  // the deterministic absolute timestamp, then swap to relative after the
+  // effect fires.
+  const [now, setNow] = React.useState<number | null>(null);
+  React.useEffect(() => setNow(Date.now()), []);
   const verb = formatActivity(item);
   const actorName = item.actorName ?? item.actorEmail ?? "Someone";
   const fields = fieldsTouched(item);
@@ -114,7 +120,7 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
           )}
         </p>
         <p className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]" title={formatAbsolute(item.occurredAt)}>
-          {formatRelative(item.occurredAt)}
+          {now === null ? formatAbsolute(item.occurredAt) : formatRelative(item.occurredAt, now)}
         </p>
         {hasDiff && (
           <button

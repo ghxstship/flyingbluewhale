@@ -28,13 +28,30 @@ type View = "month" | "week";
 export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
   const t = useT();
   const [view, setView] = React.useState<View>("month");
-  const [cursor, setCursor] = React.useState<Date>(() => startOfMonth(new Date()));
+  // `cursor` and `today` are null until mount. Seeding them from `new Date()`
+  // during render runs at different instants on server vs client and can render
+  // a different month grid (and shift the "today" highlight) between SSR and
+  // hydration — React #418. The grid renders empty until the mount effect sets
+  // the current month.
+  const [cursor, setCursor] = React.useState<Date | null>(null);
+  const [today, setToday] = React.useState<Date | null>(null);
+  React.useEffect(() => {
+    setCursor(startOfMonth(new Date()));
+    setToday(new Date());
+  }, []);
 
-  const range = React.useMemo(() => (view === "month" ? monthRange(cursor) : weekRange(cursor)), [view, cursor]);
-  const days = React.useMemo(() => buildDays(range.start, range.end), [range]);
-  const eventsByDay = React.useMemo(() => bucketEvents(events, range.start, range.end), [events, range]);
+  const range = React.useMemo(
+    () => (cursor === null ? null : view === "month" ? monthRange(cursor) : weekRange(cursor)),
+    [view, cursor],
+  );
+  const days = React.useMemo(() => (range === null ? [] : buildDays(range.start, range.end)), [range]);
+  const eventsByDay = React.useMemo(
+    () => (range === null ? new Map<string, CalendarEvent[]>() : bucketEvents(events, range.start, range.end)),
+    [events, range],
+  );
 
   function shift(direction: -1 | 1) {
+    if (cursor === null) return;
     if (view === "month") {
       const next = new Date(cursor);
       next.setMonth(next.getMonth() + direction);
@@ -49,14 +66,16 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
     setCursor(view === "month" ? startOfMonth(new Date()) : new Date());
   }
 
-  const monthLabel = new Intl.DateTimeFormat(undefined, {
-    month: "long",
-    year: "numeric",
-  }).format(cursor);
+  const monthLabel = cursor
+    ? new Intl.DateTimeFormat(undefined, {
+        month: "long",
+        year: "numeric",
+      }).format(cursor)
+    : "";
 
   return (
     <ChartShell
-      title={view === "month" ? monthLabel : weekLabel(range.start, range.end)}
+      title={view === "month" ? monthLabel : range ? weekLabel(range.start, range.end) : ""}
       description={
         view === "month"
           ? t("console.schedule.calendar.descriptionMonth", undefined, "Click any event chip to open")
@@ -119,8 +138,8 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
         </div>
         <div className={`grid ${view === "month" ? "grid-cols-7 grid-rows-6" : "grid-cols-7 grid-rows-1"}`}>
           {days.map((day, idx) => {
-            const inMonth = view === "week" || day.getMonth() === cursor.getMonth();
-            const today = isSameDay(day, new Date());
+            const inMonth = view === "week" || (cursor !== null && day.getMonth() === cursor.getMonth());
+            const isTodayCell = today !== null && isSameDay(day, today);
             const dayKey = day.toISOString().slice(0, 10);
             const dayEvents = eventsByDay.get(dayKey) ?? [];
             return (
@@ -133,7 +152,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                 <div className="mb-1 flex items-center justify-between">
                   <span
                     className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-medium ${
-                      today
+                      isTodayCell
                         ? "bg-[var(--p-accent)] text-white"
                         : inMonth
                           ? "text-[var(--p-text-1)]"

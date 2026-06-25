@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
+import { getSession, can } from "@/lib/auth";
 import { urlFor } from "@/lib/urls";
 import { toggleGateItem, approvePhase } from "@/lib/proposals/portal/mutations";
 
@@ -16,9 +16,16 @@ function actorFromSession(session: { userId: string; orgId: string; email: strin
   };
 }
 
+// Phase-gate sign-off (checking gate items + approving a phase) is the same
+// binding act as signing an approval — reserved for the client persona
+// (`proposals:approve`) and operator manager+ (`proposals:*`). Org membership
+// alone is NOT sufficient; see the approvals action sibling + RLS note.
+const APPROVE_DENIED = "You are not authorized to act on this proposal lifecycle.";
+
 export async function toggleGateAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   const session = await getSession();
   if (!session) redirect(urlFor("auth", "/login"));
+  if (!can(session, "proposals:approve")) return { error: APPROVE_DENIED };
   const gateItemId = String(fd.get("gateItemId") ?? "");
   const isDone = fd.get("isDone") === "true";
   const slug = String(fd.get("slug") ?? "");
@@ -37,6 +44,7 @@ export async function toggleGateAction(_prev: ActionState, fd: FormData): Promis
 export async function approvePhaseAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   const session = await getSession();
   if (!session) redirect(urlFor("auth", "/login"));
+  if (!can(session, "proposals:approve")) return { error: APPROVE_DENIED };
   const phaseStateId = String(fd.get("phaseStateId") ?? "");
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");

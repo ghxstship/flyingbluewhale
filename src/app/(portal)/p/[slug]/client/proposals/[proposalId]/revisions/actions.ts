@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth";
+import { getSession, can } from "@/lib/auth";
 import { urlFor } from "@/lib/urls";
 import { createRevisionRound, decideRevisionRound } from "@/lib/proposals/portal/mutations";
 import type { RevisionState } from "@/lib/proposals/portal/types";
@@ -12,9 +12,16 @@ function actor(session: { userId: string; orgId: string; email: string }) {
   return { userId: session.userId, orgId: session.orgId, userLabel: session.email.split("@")[0] ?? null };
 }
 
+// Opening / deciding a creative revision round on the client portal is part of
+// the same client sign-off workflow as approvals — reserved for the client
+// persona (`proposals:approve`) and operator manager+ (`proposals:*`). Org
+// membership alone is NOT sufficient; see the approvals action sibling.
+const APPROVE_DENIED = "You are not authorized to act on this revision round.";
+
 export async function createRevisionRoundAction(_prev: FormState, fd: FormData): Promise<FormState> {
   const session = await getSession();
   if (!session) redirect(urlFor("auth", "/login"));
+  if (!can(session, "proposals:approve")) return { error: APPROVE_DENIED };
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");
   const title = String(fd.get("title") ?? "").trim();
@@ -40,6 +47,7 @@ export async function createRevisionRoundAction(_prev: FormState, fd: FormData):
 export async function decideRevisionAction(_prev: FormState, fd: FormData): Promise<FormState> {
   const session = await getSession();
   if (!session) redirect(urlFor("auth", "/login"));
+  if (!can(session, "proposals:approve")) return { error: APPROVE_DENIED };
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");
   const roundId = String(fd.get("roundId") ?? "");

@@ -7,6 +7,7 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
+import { useDismissable } from "./useDismissable";
 
 // Map prototype Badge tone names → repo kit badge classes.
 function badgeClass(tone?: string): string {
@@ -94,6 +95,7 @@ export function RecordDetail({
   onClose,
 }: RecordDetailProps) {
   const [confirm, setConfirm] = useState<RecordAction | null>(null); // pending destructive action
+  const confirmRef = useDismissable<HTMLDivElement>(!!confirm, () => setConfirm(null));
   const [draft, setDraft] = useState("");
   const [tagged, setTagged] = useState<string[]>([]);
   const [tagOpen, setTagOpen] = useState(false);
@@ -155,13 +157,22 @@ export function RecordDetail({
           <div className="sech"><h2>{s.h}</h2>{s.action && <button type="button" className="sech-link" onClick={s.action.on}>{s.action.label}</button>}</div>
           {s.text && <p className="form-intro" style={{ marginBottom: 8 }}>{s.text}</p>}
           {s.node}
-          {s.rows && s.rows.map((r, j) => (
-            <div className="item" key={j} style={{ cursor: r.on ? "pointer" : "default" }} onClick={r.on}>
-              {r.icon && <KIcon name={r.icon} size={18} style={{ color: "var(--p-text-2)" }} />}
-              <div><div className="t">{r.t}</div>{r.s && <div className="s">{r.s}</div>}</div>
-              {r.right && <><span className="sp" />{r.right}</>}
-            </div>
-          ))}
+          {s.rows && s.rows.map((r, j) => {
+            const inner = (
+              <>
+                {r.icon && <KIcon name={r.icon} size={18} style={{ color: "var(--p-text-2)" }} />}
+                <div><div className="t">{r.t}</div>{r.s && <div className="s">{r.s}</div>}</div>
+                {r.right && <><span className="sp" />{r.right}</>}
+              </>
+            );
+            return r.on ? (
+              <button type="button" className="item" key={j} style={{ cursor: "pointer", width: "100%", textAlign: "left", font: "inherit", color: "inherit" }} onClick={r.on}>
+                {inner}
+              </button>
+            ) : (
+              <div className="item" key={j}>{inner}</div>
+            );
+          })}
           {s.timeline && (
             <div className="tl">
               {s.timeline.map((a, j) => (
@@ -184,7 +195,7 @@ export function RecordDetail({
               </div>
             </div>
           ))}
-          {tagged.length > 0 && <div style={{ display: "flex", flexWrap: "wrap", gap: 6, margin: "8px 0 6px" }}>{tagged.map((t) => <span key={t} className="tag-chip" onClick={() => setTagged((s) => s.filter((x) => x !== t))} style={{ cursor: "pointer" }}>@{t} <KIcon name="X" size={11} /></span>)}</div>}
+          {tagged.length > 0 && <div style={{ display: "flex", flexWrap: "wrap", gap: 6, margin: "8px 0 6px" }}>{tagged.map((t) => <button type="button" key={t} className="tag-chip" aria-label={`Remove @${t}`} onClick={() => setTagged((s) => s.filter((x) => x !== t))} style={{ cursor: "pointer", border: "none", font: "inherit", color: "inherit" }}>@{t} <KIcon name="X" size={11} /></button>)}</div>}
           {tagOpen && (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
               {people.filter((p) => !tagged.includes(p)).map((p) => <button key={p} type="button" className="ps-pill" onClick={() => setTagged((s) => [...s, p])} style={{ border: "1px solid var(--p-border)", background: "var(--p-surface)", borderRadius: 999, padding: "5px 11px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>{p}</button>)}
@@ -211,8 +222,8 @@ export function RecordDetail({
 
       {confirm && (
         <div className="sheet">
-          <div className="sheet-bg" onClick={() => setConfirm(null)} />
-          <div className="sheet-panel">
+          <button type="button" className="sheet-bg" aria-label="Cancel" onClick={() => setConfirm(null)} />
+          <div ref={confirmRef} className="sheet-panel" role="dialog" aria-modal="true" aria-label={`Confirm ${typeof confirm.label === "string" ? confirm.label : "action"}`}>
             <div className="sheet-grip" />
             <h2 style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 18, margin: "4px 0 8px" }}>{confirm.label}?</h2>
             <p className="form-intro">{confirm.confirmText || "This can't be undone."}</p>

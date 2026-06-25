@@ -341,14 +341,31 @@ const CAPABILITIES_BY_PERSONA: Partial<Record<Persona, readonly string[]>> = {
   contractor: ["projects:read", "tasks:read", "tasks:write", "time:write"],
   // Field operator. Scanning is the defining capability.
   crew: ["check-in:*", "tasks:read", "tasks:write", "time:write"],
-  // Proposal recipient / portal viewer. Read-only.
-  client: ["proposals:read", "deliverables:read", "tasks:read"],
+  // Proposal recipient / portal viewer. Read-only on the data layer, PLUS
+  // `proposals:approve` — the one binding write the client persona is
+  // *supposed* to perform: signing / declining the proposal approvals,
+  // change-orders, revisions, and phase gates addressed to them in the
+  // GVTEWAY client portal. This is deliberately a distinct capability from
+  // `proposals:write` (which the client does NOT have — they can't author
+  // or re-state the proposal itself). Operator manager+ personas inherit
+  // `proposals:approve` for free via their `proposals:*` grant, so the
+  // operator can also act on the client's behalf. Without this, the portal
+  // sign-off actions (which previously gated only on org membership) let
+  // ANY org member — crew, generic member, contractor — sign a
+  // legally-meaningful client approval; with it, only the client +
+  // operators can. See the portal proposal sign-off actions and
+  // src/lib/portal-proposal-approve-canon.test.ts.
+  client: ["proposals:read", "proposals:approve", "deliverables:read", "tasks:read"],
   // Generic read-only stakeholder. Same read scope as `client` so a
   // GVTEWAY stakeholder-viewer can browse proposals + deliverables on
   // a project they've been added to. Without proposals:read /
   // deliverables:read here, a stakeholder-viewer who follows a portal
-  // link sees a 403 on the only screens they care about.
-  viewer: ["projects:read", "tasks:read", "proposals:read", "deliverables:read"],
+  // link sees a 403 on the only screens they care about. Also granted
+  // `proposals:approve`: a stakeholder-viewer is the secondary signer on a
+  // shared client portal (e.g. a client's legal contact who must counter-
+  // sign), so they share the client's sign-off authority — but, like the
+  // client, NOT `proposals:write`.
+  viewer: ["projects:read", "tasks:read", "proposals:read", "proposals:approve", "deliverables:read"],
   // Public marketplace browser; no organizational capabilities at all.
   community: [],
   // `guest` (pre-real-org member) and `visitor` (anon) intentionally

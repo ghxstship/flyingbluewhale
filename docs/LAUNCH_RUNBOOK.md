@@ -29,11 +29,15 @@ These cannot be done from code/MCP. Do all four before flipping production traff
 - **Why:** Audit flagged it off (`auth_leaked_password_protection`). Cheap SOC2/ASVS win; blocks credential-stuffing with known-breached passwords.
 - **Verify:** Try signing up with `password` — it should be rejected.
 
-### 2.2 Wire Sentry source-map upload in CI
-- **Where:** CI/Vercel build environment variables.
-- **Do:** Set `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`. (`withSentryConfig` is already applied in `next.config.ts`; it warns-and-skips upload when the token is absent, so builds won't break without it — but prod stack traces stay minified until it's set.)
-- **Why:** Without source maps, production Sentry stack traces are unreadable, gutting the (otherwise complete) error tracking.
-- **Verify:** Trigger a prod build; confirm the Sentry release shows uploaded source maps, then throw a test error and confirm a readable stack in Sentry.
+### 2.2 Wire Sentry — ✅ configured + verified locally; ⏳ set the same vars in Vercel
+- **Resolved values** (org `G H X S T S H I P INDUSTRIES LLC`, project `atlvs`, region US): written to local `.env.local` (gitignored) and verified — a `CI=1` prod build **uploaded 890 source-map files** (artifact bundle) and a CLI test event ingested (`Event dispatched`). Keys documented in `.env.example`.
+  - `NEXT_PUBLIC_SENTRY_DSN = https://fd898bba56a981f72ac7b35fcec89b38@o4510240000376832.ingest.us.sentry.io/4510240006275072`
+  - `SENTRY_ORG = g-h-x-s-t-s-h-i-p-industries-l`
+  - `SENTRY_PROJECT = atlvs`
+  - `SENTRY_AUTH_TOKEN = <the org:ci token from sentry-cli login — copy the value from .env.local>`
+- **Remaining (you):** add those four to **Vercel → Project → Settings → Environment Variables** (Production + Preview). `NEXT_PUBLIC_SENTRY_DSN` must be present at build for the client bundle; the other three drive source-map upload in CI.
+- **Security:** the `org:ci` token (used everywhere here) never touched chat — it came from your interactive `sentry-cli login`. The broad **personal token** pasted during setup should be **revoked** at Settings → Auth Tokens (it was only used to discover the org/project/DSN).
+- **Verify after Vercel:** a deploy build log shows "Uploaded files to Sentry"; trigger a client error and confirm a readable (un-minified) stack in the `atlvs` project.
 
 ### 2.3 Confirm backup / disaster-recovery posture
 - **Where:** Supabase Dashboard → **Database → Backups** (+ Point-in-Time Recovery).
@@ -85,6 +89,6 @@ Tracked from the audit's Medium findings. Safe to ship without; address on the t
 | Code/DB criticals + highs remediated | ✅ Done |
 | Cross-tenant isolation proven | ✅ Done |
 | Leaked-password protection | 🔲 §2.1 |
-| Sentry source maps in CI | 🔲 §2.2 |
+| Sentry source maps in CI | 🟡 configured + verified locally; add 4 vars to Vercel (§2.2) |
 | PITR/backup confirmed + restore rehearsed | 🔲 §2.3 |
 | Prod-env smoke (domains/auth/Stripe/push/cron) | 🔲 §2.4 |

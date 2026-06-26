@@ -64,13 +64,13 @@ Run on the **deployed** environment (not local), because these depend on prod co
 
 Tracked from the audit's Medium findings. Safe to ship without; address on the timelines noted.
 
-- **Performance (in progress this session):** request-level `cache()` on session/tenant/org resolution + `unstable_cache` on report metrics; server pagination on ~90 `limit:500` list pages. *(These two are being remediated now — see the perf commits.)*
+- **Performance — ✅ DONE (commit `eab0b8a`):** request-level React `cache()` on session resolution + parallelized `(platform)` layout awaits + `unstable_cache` (60s, org-keyed) on report metrics; server pagination (`src/lib/db/pagination.ts` + `PagerNav`) wired into ~40 high-cardinality list pages. Verified tsc + 1103 unit + e2e smoke.
+- **Rollback runbook — ✅ DONE (commit `43041db`):** see [`ROLLBACK_RUNBOOK.md`](./ROLLBACK_RUNBOOK.md).
+- **Accessibility polish — 🟡 PARTIAL (commit `43041db`):** `scope="col"` added to `DataView.tsx`. **Remaining:** `DataTable.tsx` scope attrs + `error.tsx`/`loading.tsx`/`not-found.tsx` for the `(legend)` shell (agent hit the weekly limit mid-run).
+- **SEO — 🔲 NOT STARTED:** wire the existing `jobPostingSchema`/`productSchema` structured-data helpers on careers/gig/store-product pages; `noIndex` the thin product not-found fallback. (Agent run did not begin — weekly limit.)
 - **DB advisor cleanup — re-run ~2 weeks post-launch on real traffic:** 832 `multiple_permissive_policies` (merge redundant per-(role,action) policies) + 902 `unused_index` findings (drop the still-unused ones once traffic confirms they're truly unused — do NOT mass-drop pre-launch; low traffic produces false positives).
-- **Rollback runbook:** document the PITR-restore procedure as the formal migration-rollback path (migrations are forward-only).
 - **Type safety:** progressively replace ~139 bare `as unknown as Row` casts with typed selects (reserve `LooseSupabase` for genuinely dynamic table names).
 - **Test coverage:** re-enable the 18 skipped finance/procurement e2e mutations (need seed data).
-- **Accessibility polish:** `scope="col"` on the `DataView`/`DataTable` `<th>` primitives; add `error.tsx`/`loading.tsx`/`not-found.tsx` to the `(legend)` shell.
-- **SEO:** wire the existing `jobPostingSchema`/`productSchema` structured-data helpers on careers/gig/store-product pages; `noIndex` the thin product not-found fallback.
 - **i18n:** finish the in-progress sweep (494 keys were filled to align catalogs; ~real translations still needed for de/fr/pt/es; scrub the stray `nav.foo.bar` test key before committing).
 - **Dependencies:** patch-bump `@supabase/*` and `@sentry/nextjs`; track the `next`/`postcss` moderate advisory (resolves on a forward Next patch — do **not** take the `audit fix --force` downgrade).
 

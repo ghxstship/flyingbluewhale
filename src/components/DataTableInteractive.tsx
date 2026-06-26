@@ -838,7 +838,7 @@ export function DataTableInteractive({
           <thead className="sticky top-0 z-10 bg-[var(--p-bg)]">
             <tr>
               {bulkActions && (
-                <th className="w-8 text-center">
+                <th scope="col" className="w-8 text-center">
                   <input
                     type="checkbox"
                     checked={allVisibleSelected}
@@ -856,6 +856,7 @@ export function DataTableInteractive({
                 return (
                   <th
                     key={c.key}
+                    scope="col"
                     className={`${c.className ?? ""} ${pinned ? "bg-[var(--p-surface-2)]" : ""}`}
                     aria-sort={isPrimarySort ? (sortDir === "asc" ? "ascending" : "descending") : "none"}
                   >
@@ -908,7 +909,7 @@ export function DataTableInteractive({
                   </th>
                 );
               })}
-              {hasRowActions && <th className="w-8" aria-label="Actions" />}
+              {hasRowActions && <th scope="col" className="w-8" aria-label="Actions" />}
             </tr>
           </thead>
           <tbody>

@@ -331,6 +331,8 @@ export function productSchema({
   url,
   sku,
   price,
+  currency = "USD",
+  inStock = true,
   brand = SITE.name,
 }: {
   name: string;
@@ -338,6 +340,10 @@ export function productSchema({
   url: string;
   sku?: string;
   price?: string;
+  /** ISO 4217 code; defaults USD (back-compat with existing callers). */
+  currency?: string;
+  /** false → schema.org/OutOfStock; defaults in-stock. */
+  inStock?: boolean;
   brand?: string;
 }) {
   return {
@@ -353,8 +359,8 @@ export function productSchema({
           offers: {
             "@type": "Offer",
             price,
-            priceCurrency: "USD",
-            availability: "https://schema.org/InStock",
+            priceCurrency: currency,
+            availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
           },
         }
       : {}),

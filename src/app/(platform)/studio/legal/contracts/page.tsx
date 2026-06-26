@@ -3,15 +3,21 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { contractKindLabel, formatMinor, type ContractRow } from "@/lib/clm/queries";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -29,14 +35,19 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("contracts", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("contracts", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
-  })) as unknown as ContractRow[];
+    pageSize,
+    cursor: String(offset),
+  });
+  const rows = result.rows as unknown as ContractRow[];
+  const total = result.totalCount;
 
   const countWord =
-    rows.length === 1
+    total === 1
       ? t("console.legal.contracts.contractSingular", undefined, "contract")
       : t("console.legal.contracts.contractPlural", undefined, "contracts");
 
@@ -47,8 +58,8 @@ export default async function Page() {
         title={t("console.legal.contracts.title", undefined, "Contracts")}
         subtitle={t(
           "console.legal.contracts.subtitle",
-          { count: rows.length, countWord },
-          `${rows.length} ${countWord} · the org's contract lifecycle ledger`,
+          { count: total, countWord },
+          `${total} ${countWord} · the org's contract lifecycle ledger`,
         )}
         action={
           <Button href="/studio/legal/contracts/new" size="sm">
@@ -56,9 +67,10 @@ export default async function Page() {
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable<ContractRow>
           rows={rows}
+          totalCount={total}
           rowHref={(r) => `/studio/legal/contracts/${r.id}`}
           emptyLabel={t("console.legal.contracts.emptyLabel", undefined, "No contracts yet")}
           emptyDescription={t(
@@ -106,6 +118,13 @@ export default async function Page() {
               mono: true,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/legal/contracts"
+          searchParams={sp}
         />
       </div>
     </>

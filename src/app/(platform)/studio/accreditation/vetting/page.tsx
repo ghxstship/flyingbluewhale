@@ -1,13 +1,19 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -24,26 +30,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("accreditations", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("accreditations", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
     filters: [{ column: "state", op: "eq", value: "vetting" }],
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.accreditation.vetting.eyebrow", undefined, "Workspace")}
         title={t("console.accreditation.vetting.title", undefined, "Vetting Queue")}
         subtitle={
-          rows.length === 1
-            ? t("console.accreditation.vetting.subtitleOne", { count: rows.length }, `${rows.length} Record`)
-            : t("console.accreditation.vetting.subtitleOther", { count: rows.length }, `${rows.length} Records`)
+          total === 1
+            ? t("console.accreditation.vetting.subtitleOne", { count: total }, `${total} Record`)
+            : t("console.accreditation.vetting.subtitleOther", { count: total }, `${total} Records`)
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/accreditation/vetting/${r.id}`}
           emptyLabel={t("console.accreditation.vetting.emptyLabel", undefined, "No applications in vetting")}
           emptyDescription={t(
@@ -77,6 +89,13 @@ export default async function Page() {
               accessor: (r) => r.created_at ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/accreditation/vetting"
+          searchParams={sp}
         />
       </div>
     </>

@@ -1,13 +1,19 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -24,25 +30,31 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("consent_records", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("consent_records", session.orgId, {
     orderBy: "granted_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.legal.privacy.consent.eyebrow", undefined, "Legal")}
         title={t("console.legal.privacy.consent.title", undefined, "Consent Records")}
         subtitle={
-          rows.length === 1
-            ? t("console.legal.privacy.consent.subtitleOne", { count: rows.length }, `${rows.length} Record`)
-            : t("console.legal.privacy.consent.subtitleOther", { count: rows.length }, `${rows.length} Records`)
+          total === 1
+            ? t("console.legal.privacy.consent.subtitleOne", { count: total }, `${total} Record`)
+            : t("console.legal.privacy.consent.subtitleOther", { count: total }, `${total} Records`)
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           columns={[
             {
               key: "purpose",
@@ -63,6 +75,13 @@ export default async function Page() {
               accessor: (r) => r.version ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/legal/privacy/consent"
+          searchParams={sp}
         />
       </div>
     </>

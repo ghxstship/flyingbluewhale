@@ -2,15 +2,21 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { SEVERITY_TONE } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   const SEVERITY_LABEL: Record<string, string> = {
     info: t("console.safety.crisis.severity.info", undefined, "Info"),
@@ -33,26 +39,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("crisis_alerts", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("crisis_alerts", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.safety.crisis.eyebrow", undefined, "Workspace")}
         title={t("console.safety.crisis.title", undefined, "Crisis Alerts")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.safety.crisis.recordSingular", undefined, "Record") : t("console.safety.crisis.recordPlural", undefined, "Records")}`}
+        subtitle={`${total} ${total === 1 ? t("console.safety.crisis.recordSingular", undefined, "Record") : t("console.safety.crisis.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/studio/safety/crisis/new" size="sm">
             {t("console.safety.crisis.activateAlert", undefined, "+ Activate alert")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/safety/crisis/${r.id}`}
           emptyLabel={t("console.safety.crisis.emptyLabel", undefined, "No crisis alerts")}
           emptyDescription={t(
@@ -86,6 +98,13 @@ export default async function Page() {
               accessor: (r) => r.sent_at ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/safety/crisis"
+          searchParams={sp}
         />
       </div>
     </>

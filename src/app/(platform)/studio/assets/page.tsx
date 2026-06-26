@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -27,7 +29,11 @@ function money(minor: number | null, currency: string | null): string {
   return (minor / 100).toLocaleString("en-US", { style: "currency", currency: currency ?? "USD" });
 }
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -45,11 +51,16 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("assets", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("assets", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 1000,
-  })) as AssetRow[];
+    pageSize,
+    cursor: String(offset),
+  });
+  const rows = result.rows as AssetRow[];
+  const total = result.totalCount;
 
   return (
     <>
@@ -58,8 +69,8 @@ export default async function Page() {
         title={t("console.assets.title", undefined, "Assets")}
         subtitle={t(
           "console.assets.subtitle",
-          { count: rows.length },
-          `${rows.length} tracked assets across the org`,
+          { count: total },
+          `${total} tracked assets across the org`,
         )}
         action={
           <div className="flex items-center gap-2">
@@ -88,6 +99,7 @@ export default async function Page() {
             }
           />
         ) : (
+          <div className="space-y-3">
           <div className="surface overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
@@ -119,6 +131,14 @@ export default async function Page() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <PagerNav
+            page={page}
+            total={total}
+            pageSize={pageSize}
+            basePath="/studio/assets"
+            searchParams={sp}
+          />
           </div>
         )}
       </div>

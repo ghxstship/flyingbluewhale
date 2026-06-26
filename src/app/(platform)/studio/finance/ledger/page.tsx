@@ -2,9 +2,11 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScoped, listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestT } from "@/lib/i18n/request";
@@ -28,7 +30,11 @@ function minorToUSD(minor: number): string {
   return (minor / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
 }
 
-export default async function LedgerPage() {
+export default async function LedgerPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -46,13 +52,18 @@ export default async function LedgerPage() {
     );
   }
   const session = await requireSession();
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
 
   // journal_entries has NO created_at — order by posted_at desc, nulls last.
-  const entries = (await listOrgScoped("journal_entries", session.orgId, {
+  const entriesPage = await listOrgScopedPage("journal_entries", session.orgId, {
     orderBy: "posted_at",
     ascending: false,
-    limit: 500,
-  })) as Entry[];
+    pageSize,
+    cursor: String(offset),
+  });
+  const entries = entriesPage.rows as Entry[];
+  const total = entriesPage.totalCount;
 
   // Period labels for the join.
   const periods = (await listOrgScoped("accounting_periods", session.orgId, {
@@ -82,8 +93,8 @@ export default async function LedgerPage() {
         title={t("console.finance.ledger.title", undefined, "General Ledger")}
         subtitle={t(
           "console.finance.ledger.subtitle",
-          { count: entries.length },
-          `${entries.length} journal entries`,
+          { count: total },
+          `${total} journal entries`,
         )}
         action={
           <Button href="/studio/finance/ledger/new" size="sm">
@@ -107,6 +118,7 @@ export default async function LedgerPage() {
             }
           />
         ) : (
+          <div className="space-y-3">
           <div className="data-table surface overflow-hidden">
             <table className="w-full text-sm">
               <thead>
@@ -152,6 +164,14 @@ export default async function LedgerPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <PagerNav
+            page={page}
+            total={total}
+            pageSize={pageSize}
+            basePath="/studio/finance/ledger"
+            searchParams={sp}
+          />
           </div>
         )}
       </div>

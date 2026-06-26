@@ -2,8 +2,10 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
@@ -14,7 +16,11 @@ export const dynamic = "force-dynamic";
 
 type GuardTourRow = GuardTour;
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -32,11 +38,16 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("guard_tours", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("guard_tours", session.orgId, {
     orderBy: "next_run_at",
     ascending: true,
-    limit: 500,
-  })) as GuardTourRow[];
+    pageSize,
+    cursor: String(offset),
+  });
+  const rows = result.rows as GuardTourRow[];
+  const total = result.totalCount;
 
   const overdue = rows.filter((r) => r.tour_state === "overdue").length;
   const inProgress = rows.filter((r) => r.tour_state === "in_progress").length;
@@ -47,16 +58,16 @@ export default async function Page() {
         eyebrow={t("console.safety.guardTours.eyebrow", undefined, "Safety")}
         title={t("console.safety.guardTours.title", undefined, "Guard Tours")}
         subtitle={
-          rows.length === 1
+          total === 1
             ? t(
                 "console.safety.guardTours.subtitleSingular",
-                { count: rows.length, inProgress, overdue },
-                `${rows.length} Tour · ${inProgress} in progress · ${overdue} overdue`,
+                { count: total, inProgress, overdue },
+                `${total} Tour · ${inProgress} in progress · ${overdue} overdue`,
               )
             : t(
                 "console.safety.guardTours.subtitlePlural",
-                { count: rows.length, inProgress, overdue },
-                `${rows.length} Tours · ${inProgress} in progress · ${overdue} overdue`,
+                { count: total, inProgress, overdue },
+                `${total} Tours · ${inProgress} in progress · ${overdue} overdue`,
               )
         }
         action={
@@ -65,9 +76,10 @@ export default async function Page() {
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           emptyLabel={t("console.safety.guardTours.emptyLabel", undefined, "No guard tours scheduled")}
           emptyDescription={t(
             "console.safety.guardTours.emptyDescription",
@@ -124,6 +136,13 @@ export default async function Page() {
               accessor: (r) => r.tour_state ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/safety/guard-tours"
+          searchParams={sp}
         />
       </div>
     </>

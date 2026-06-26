@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { apiError } from "./api";
@@ -43,7 +44,17 @@ export type Session = {
   scopes?: string[];
 };
 
-export async function getSession(): Promise<Session | null> {
+/**
+ * Resolve the current request's session. Wrapped in React's `cache()` below
+ * (exported as `getSession`) so the auth + memberships + preferences lookups
+ * run at most once per request even though the layout, every page, and many
+ * server components all call it. `cache()` is request-scoped in RSC — a new
+ * request always re-resolves — so this is safe for auth: it never memoizes
+ * across requests or users, and cookies/headers are still read once per
+ * request the first time the function runs. PAT/Bearer auth keeps working
+ * because the Authorization header is read inside the cached body, once.
+ */
+async function resolveSession(): Promise<Session | null> {
   if (!hasSupabase) return null;
 
   // Bearer-token auth (personal access tokens) takes priority over the
@@ -150,6 +161,12 @@ export async function getSession(): Promise<Session | null> {
     persona: chosen.persona ?? (isGuest ? "guest" : personaForRole(chosen.role)),
   };
 }
+
+/**
+ * Request-scoped memoized session resolver. See `resolveSession` for why this
+ * is safe for auth (per-request cache, never cross-request).
+ */
+export const getSession = cache(resolveSession);
 
 function guestSession(userId: string, email: string): Session {
   return {

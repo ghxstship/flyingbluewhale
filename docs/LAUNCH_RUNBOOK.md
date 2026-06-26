@@ -49,7 +49,17 @@ These cannot be done from code/MCP. Do all four before flipping production traff
 - **Note:** Migrations are forward-only (`apply_migration`); the de-facto rollback story is PITR restore — see §3 (write the rollback runbook).
 
 ### 2.4 Production-environment smoke test
-Run on the **deployed** environment (not local), because these depend on prod config/secrets.
+Run on the **deployed** environment (not local), because these depend on prod config/secrets. The automatable half (routing, headers, CSP, API cache, health) is scripted:
+
+```bash
+BASE=https://atlvs.pro bash scripts/prod-smoke.sh
+```
+
+**First live run (2026-06-25 against atlvs.pro): 15 pass / 1 warn / 2 fail.** Headers, apex/compvss/app routing, `/api` no-store, and all three health endpoints pass. Two findings to fix before go-live:
+- 🔴 **`gvteway.atlvs.pro` → 404** — the domain isn't configured in Vercel/DNS. The code maps it correctly (`src/lib/urls.ts` `portal: "gvteway"`; app + compvss route through the same proxy), so this is **infra**: add `gvteway.atlvs.pro` as a Vercel project domain + point DNS, then re-run the smoke.
+- 🔴 **CSP still allows `script-src 'unsafe-inline'` (no nonce)** — prod is serving an **older deployment from before this session's code fixes**. The CSP nonce + all code-level remediation (payments webhook, a11y, hydration, etc.) live on the branch but aren't deployed. **The DB-level fixes (cross-tenant view leak, RLS grants, GDPR cron) ARE live** (applied directly to the DB), but the code is not. **Deploy the current branch to prod**, then the CSP check (and the rest of this session's hardening) goes green. Verified locally: a prod build serves the nonce'd CSP with zero violations.
+
+Also verified now: the GDPR cron jobs are **scheduled + active** (`gdpr-redact-audit-pii` 02:30 UTC, `gdpr-purge-accounts` 03:00 UTC) — the §2.4 "Cron" row's scheduling half is done; the run-result check waits ~24h.
 
 | Area | Check |
 |---|---|

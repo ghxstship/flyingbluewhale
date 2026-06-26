@@ -76,7 +76,7 @@ export function DataView<T>({
             <thead>
               <tr>
                 {columns.map((c) => (
-                  <th key={c.key} style={{ textAlign: c.align ?? "left" }} className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--p-text-3)]">
+                  <th key={c.key} scope="col" style={{ textAlign: c.align ?? "left" }} className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--p-text-3)]">
                     {c.header}
                   </th>
                 ))}

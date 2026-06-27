@@ -84,7 +84,11 @@ export default async function MarketingLayout({ children }: { children: React.Re
                 })}
               </div>
             </div>
-            {marketingFooterGroups.map((col) => (
+            {/* Legal renders in the bottom bar (below), not as a 7th column —
+                brand + 6 groups fills the lg:grid-cols-7 row exactly. */}
+            {marketingFooterGroups
+              .filter((col) => col.labelKey !== "marketing.layout.footer.legal.heading")
+              .map((col) => (
               <div key={col.labelKey}>
                 <div className="eyebrow">{t(col.labelKey)}</div>
                 <ul className="mt-4 space-y-2 text-sm">
@@ -101,7 +105,16 @@ export default async function MarketingLayout({ children }: { children: React.Re
           </div>
           <div className="mt-12 border-t border-[var(--p-border)] pt-6 text-xs text-[var(--p-text-2)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span>{t("marketing.layout.footer.copyright", { year: new Date().getFullYear() })}</span>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <span>{t("marketing.layout.footer.copyright", { year: new Date().getFullYear() })}</span>
+                {marketingFooterGroups
+                  .find((g) => g.labelKey === "marketing.layout.footer.legal.heading")
+                  ?.items.map((item) => (
+                    <Link key={item.href} href={item.href} className="hover:text-[var(--p-text-1)]">
+                      {t(item.labelKey)}
+                    </Link>
+                  ))}
+              </div>
               <span>{t("marketing.layout.footer.tagline")}</span>
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] leading-relaxed">

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { formatMoney } from "@/lib/commerce_store";
 import { buyTicketsAction, type State } from "./actions";
+import { Button } from "@/components/ui/Button";
 
 export type PurchaseTicketType = {
   id: string;
@@ -68,13 +69,9 @@ export function TicketPurchase({ slug, tickets, soldOutLabel }: TicketPurchasePr
       </label>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={pending}
-          className="rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-6 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95 disabled:opacity-50"
-        >
+        <Button type="submit" variant="cta" disabled={pending}>
           {pending ? "Starting checkout…" : "Checkout"}
-        </button>
+        </Button>
         {state?.error && <span className="text-sm text-[var(--p-danger-text)]">{state.error}</span>}
       </div>
     </form>

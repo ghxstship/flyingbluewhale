@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CameraScanner, type ScannedCode } from "./CameraScanner";
+import { Button } from "@/components/ui/Button";
 
 /**
  * ScanCapture — the field-app capture surface built on the CameraScanner
@@ -99,12 +100,9 @@ export function ScanCapture({
               placeholder={labels.manualPlaceholder}
               className="flex-1 rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
             />
-            <button
-              type="submit"
-              className="rounded-md bg-[var(--p-accent-cta)] px-3 py-2 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-            >
+            <Button type="submit" variant="cta" size="sm">
               {labels.manualSubmit}
-            </button>
+            </Button>
           </form>
         )}
       </div>

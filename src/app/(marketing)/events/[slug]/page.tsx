@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
@@ -108,12 +109,9 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
                   : "Sold out"}
             </p>
           </div>
-          <Link
-            href={`/events/${listing.slug}/tickets`}
-            className="rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-          >
+          <Button href={`/events/${listing.slug}/tickets`} variant="cta">
             Get tickets
-          </Link>
+          </Button>
         </div>
       </article>
     </>

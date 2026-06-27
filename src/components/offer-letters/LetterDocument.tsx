@@ -56,7 +56,9 @@ export function LetterDocument({
         </div>
         <div className="text-end text-xs text-[var(--p-text-2)]">
           <div>{t("legal.letterDocument.issued", { date: issuedOn }, `Issued ${issuedOn}`)}</div>
-          <div className="font-mono">REF · OL-{letter.id.slice(0, 8).toUpperCase()}</div>
+          <div className="font-mono" style={{ fontFamily: "var(--p-mono-data)" }}>
+            REF · OL-{letter.id.slice(0, 8).toUpperCase()}
+          </div>
         </div>
       </header>
 
@@ -264,7 +266,7 @@ export function LetterDocument({
                   <tr key={i} className="border-t border-[var(--border-default)] align-top">
                     <td className="px-3 py-2">
                       <div className="font-medium">{d.day_label}</div>
-                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{d.date}</div>
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{d.date}</div>
                     </td>
                     <td className="px-3 py-2 font-mono">{d.call_time}</td>
                     <td className="px-3 py-2 font-mono">{d.wrap_time}</td>
@@ -441,7 +443,7 @@ export function LetterDocument({
           </div>
           <div className="text-end">
             <div>{t("legal.letterDocument.reference", undefined, "Reference")}</div>
-            <div className="font-mono">OL-{letter.id.slice(0, 8).toUpperCase()}</div>
+            <div className="font-mono" style={{ fontFamily: "var(--p-mono-data)" }}>OL-{letter.id.slice(0, 8).toUpperCase()}</div>
           </div>
         </div>
       </section>

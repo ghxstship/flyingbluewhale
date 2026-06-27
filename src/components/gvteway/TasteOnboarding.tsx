@@ -37,7 +37,7 @@ const STEPS: OnboardingStep[] = [
 ];
 
 const GvtewayBrand = (
-  <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY · Welcome</p>
+  <p className="eyebrow eyebrow-accent">GVTEWAY · Welcome</p>
 );
 
 export function TasteOnboarding() {

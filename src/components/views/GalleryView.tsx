@@ -130,9 +130,7 @@ function GalleryCard({ item }: { item: GalleryItem }): React.ReactElement {
       </div>
       <div className="flex flex-col gap-1 p-3">
         {item.eyebrow ? (
-          <span className="text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
-            {item.eyebrow}
-          </span>
+          <span className="eyebrow">{item.eyebrow}</span>
         ) : null}
         <span className="truncate text-sm font-semibold text-[var(--p-text-1)]">{item.title}</span>
         {item.subtitle ? (

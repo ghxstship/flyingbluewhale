@@ -36,9 +36,7 @@ export function DescriptionList({ items, columns = 2, className = "" }: Descript
     <dl className={`grid gap-x-[var(--p-6)] gap-y-[var(--p-4)] ${COLS[columns]} ${className}`.trim()}>
       {items.map((item, i) => (
         <div key={i} className="flex flex-col gap-[var(--p-1)]">
-          <dt className="text-[11px] font-medium tracking-[0.04em] text-[var(--p-text-2)] uppercase">
-            {item.term}
-          </dt>
+          <dt className="eyebrow">{item.term}</dt>
           <dd className="text-sm text-[var(--p-text-1)]">{item.description}</dd>
         </div>
       ))}

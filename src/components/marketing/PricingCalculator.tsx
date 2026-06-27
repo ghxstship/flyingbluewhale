@@ -62,7 +62,7 @@ export function PricingCalculator() {
             <Calculator size={12} aria-hidden />{" "}
             {t("marketing.pricingCalculator.eyebrow", undefined, "What it actually costs")}
           </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pricingCalculator.heading", undefined, "Run the math.")}
           </h2>
           <p className="mt-3 text-sm text-[var(--p-text-2)]">

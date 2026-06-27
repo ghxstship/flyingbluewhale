@@ -78,10 +78,10 @@ export default async function ContactPage() {
     <div>
       <JsonLd data={[organizationSchema()]} />
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
+        <div className="eyebrow eyebrow-accent">
           {t("marketing.pages.contact.hero.eyebrow")}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+        <h1 className="hed-3xl mt-3">
           {t("marketing.pages.contact.hero.title")}
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
@@ -111,7 +111,7 @@ export default async function ContactPage() {
       </section>
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.pages.contact.form.heading")}
         </h2>
         <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@atlvs.pro">

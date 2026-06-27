@@ -135,16 +135,16 @@ export default async function SolutionsIndex() {
   return (
     <>
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
+        <div className="eyebrow eyebrow-accent">
           {t("marketing.pages.solutions.hero.eyebrow")}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">{t("marketing.pages.solutions.hero.title")}</h1>
+        <h1 className="hed-3xl mt-3">{t("marketing.pages.solutions.hero.title")}</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.solutions.hero.body")}</p>
       </section>
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.apps.heading")}</h2>
+        <h2 className="hed-xl">{t("marketing.pages.solutions.apps.heading")}</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {APPS.map((a) => (
             <Link
@@ -185,7 +185,7 @@ export default async function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.industries.heading")}</h2>
+        <h2 className="hed-xl">{t("marketing.pages.solutions.industries.heading")}</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.industries.body")}
         </p>

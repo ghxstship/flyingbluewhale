@@ -89,10 +89,10 @@ export default async function AboutPage() {
     <div>
       <JsonLd data={[organizationSchema()]} />
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
+        <div className="eyebrow eyebrow-accent">
           {t("marketing.pages.about.hero.eyebrow")}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+        <h1 className="hed-3xl mt-3">
           {t("marketing.pages.about.hero.title")}
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.about.hero.lead")}</p>
@@ -100,7 +100,7 @@ export default async function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.pages.about.principles.heading")}
         </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -119,13 +119,13 @@ export default async function AboutPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.pages.about.milestones.heading")}
         </h2>
         <ul className="mt-8 space-y-6">
           {MILESTONES.map((m) => (
             <li key={m.date} className="surface grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
-              <div className="font-mono text-xs text-[var(--p-text-2)]">{m.date}</div>
+              <div className="font-mono text-xs text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{m.date}</div>
               <div>
                 <div className="text-sm font-semibold">{t(m.titleKey)}</div>
                 <p className="mt-1 text-sm text-[var(--p-text-2)]">{t(m.bodyKey)}</p>
@@ -137,7 +137,7 @@ export default async function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-10">
-          <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.about.studio.heading")}</h2>
+          <h2 className="hed-xl">{t("marketing.pages.about.studio.heading")}</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.about.studio.body")}</p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link className="underline underline-offset-4" href="/careers">

@@ -50,9 +50,7 @@ export function DetailShell<T>({
                 key={`${f.label}-${i}`}
                 className="px-5 py-3 md:border-b md:border-[var(--p-border)] md:[&:nth-last-child(-n+2)]:border-b-0"
               >
-                <dt className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-                  {f.label}
-                </dt>
+                <dt className="eyebrow">{f.label}</dt>
                 <dd className="mt-1 text-sm text-[var(--p-text-1)]">{f.value}</dd>
               </div>
             ))}

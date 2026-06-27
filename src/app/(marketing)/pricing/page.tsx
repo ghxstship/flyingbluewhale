@@ -573,7 +573,7 @@ export default async function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.pages.pricing.comparison.title")}
         </h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--p-text-2)]">
@@ -608,7 +608,7 @@ export default async function PricingPage() {
                   <tr className="bg-[var(--p-surface-2)]">
                     <td
                       colSpan={5}
-                      className="py-2 ps-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase"
+                      className="eyebrow py-2 ps-3 text-[var(--p-text-2)]"
                     >
                       {cat.category}
                     </td>

@@ -76,7 +76,7 @@ export default async function CompvssPage() {
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.pages.solutions.compvss.modules.heading")}
         </h2>
         <div className="mt-8">
@@ -122,10 +122,10 @@ export default async function CompvssPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
+            <div className="eyebrow eyebrow-accent flex items-center gap-2">
               <Wifi size={14} /> {t("marketing.pages.solutions.compvss.offlineFirst.eyebrow")}
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+            <h2 className="hed-xl mt-3">
               {t("marketing.pages.solutions.compvss.offlineFirst.heading")}
             </h2>
             <p className="mt-4 text-sm text-[var(--p-text-2)]">

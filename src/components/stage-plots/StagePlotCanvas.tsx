@@ -317,7 +317,7 @@ export function StagePlotCanvas({
       <div className="flex gap-4">
         {/* Palette */}
         <div className="w-36 shrink-0 space-y-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-2">
-          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+          <div className="eyebrow">
             {t("components.stagePlotCanvas.paletteHeading", undefined, "Palette")}
           </div>
           {PALETTE.map((p) => (

@@ -39,9 +39,7 @@ export function CalendarAgenda({ cursor, eventsByKey, today, windowDays = 30 }: 
         return (
           <li key={key} className="px-4 py-3">
             <div className="mb-2 flex items-baseline justify-between">
-              <h3 className="text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
-                {labelForDay(day, today)}
-              </h3>
+              <h3 className="eyebrow">{labelForDay(day, today)}</h3>
               <span className="font-mono text-[10px] text-[var(--p-text-2)]">
                 {events.length} {events.length === 1 ? "event" : "events"}
               </span>

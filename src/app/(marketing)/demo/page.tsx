@@ -54,10 +54,10 @@ export default async function DemoIndex() {
     <div>
       <JsonLd data={[breadcrumbSchema(crumbs)]} />
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+        <div className="eyebrow eyebrow-accent">
           {t("marketing.pages.demo.hero.eyebrow")}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
+        <h1 className="hed-3xl mt-3">
           {t("marketing.pages.demo.hero.title")}
         </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.demo.hero.subtitle")}</p>
@@ -70,12 +70,12 @@ export default async function DemoIndex() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.demo.personas.title")}</h2>
+        <h2 className="hed-xl">{t("marketing.pages.demo.personas.title")}</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.demo.personas.subtitle")}</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {DEMO_PERSONAS.map((p) => (
             <Link key={p.slug} href={`/demo/${p.slug}`} className="surface hover-lift p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">
+              <div className="eyebrow eyebrow-accent">
                 {p.buyer}
               </div>
               <h3 className="mt-2 text-xl font-semibold">{p.hero}</h3>

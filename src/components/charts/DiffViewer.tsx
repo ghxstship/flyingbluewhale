@@ -61,7 +61,12 @@ export function DiffViewer({
         <tbody>
           {rows.map((r, i) => (
             <tr key={i} className="border-t border-[var(--p-border)]">
-              <td className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--p-text-2)]">{r.path}</td>
+              <td
+                className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--p-text-2)]"
+                style={{ fontFamily: "var(--p-mono-data)" }}
+              >
+                {r.path}
+              </td>
               <td className="px-3 py-1.5 align-top">
                 {r.kind !== "added" ? (
                   <code

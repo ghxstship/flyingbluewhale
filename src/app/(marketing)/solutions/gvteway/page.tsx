@@ -75,7 +75,7 @@ export default async function GvtewayPage() {
 
       {/* Personas */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.pages.solutions.gvteway.personas.title")}
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
@@ -154,7 +154,7 @@ export default async function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div className="surface p-8">
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
+            <div className="eyebrow eyebrow-accent flex items-center gap-2">
               <Share2 size={14} /> {t("marketing.pages.solutions.gvteway.features.proposals.eyebrow")}
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -171,7 +171,7 @@ export default async function GvtewayPage() {
             </Link>
           </div>
           <div className="surface p-8">
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
+            <div className="eyebrow eyebrow-accent flex items-center gap-2">
               <BookOpen size={14} /> {t("marketing.pages.solutions.gvteway.features.kbyg.eyebrow")}
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -194,10 +194,10 @@ export default async function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
+            <div className="eyebrow eyebrow-accent">
               {t("marketing.pages.solutions.gvteway.security.eyebrow")}
             </div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">
+            <h3 className="hed-xl mt-3">
               {t("marketing.pages.solutions.gvteway.security.title")}
             </h3>
             <p className="mt-4 text-sm text-[var(--p-text-2)]">

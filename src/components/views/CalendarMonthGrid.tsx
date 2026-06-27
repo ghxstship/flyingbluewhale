@@ -32,7 +32,7 @@ export function CalendarMonthGrid({ cursor, weekStart, eventsByKey, today, onCre
           <div
             key={d}
             role="columnheader"
-            className="px-2 py-1.5 text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase"
+            className="eyebrow px-2 py-1.5"
           >
             {d}
           </div>

@@ -129,7 +129,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
                     {t("marketing.pages.compare.detail.features.columnFeature")}
                   </th>
                   <th
-                    className="px-4 py-3 text-start text-[11px] font-semibold tracking-[0.2em] uppercase"
+                    className="eyebrow px-4 py-3 text-start"
                     style={{ color: "var(--p-accent)" }}
                   >
                     ATLVS

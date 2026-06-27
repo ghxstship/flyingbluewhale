@@ -95,9 +95,7 @@ export function FormView({
         {resolvedSections.map((section, si) => (
           <section key={section.title ?? `section-${si}`}>
             {section.title ? (
-              <h3 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
-                {section.title}
-              </h3>
+              <h3 className="eyebrow mb-3">{section.title}</h3>
             ) : null}
             <dl className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
               {section.fields.map((field, fi) => (

@@ -172,13 +172,13 @@ export function MarketingHeader() {
             <MobileNavSection group={RESOURCES} onClick={() => setMobileOpen(false)} />
             <div className="flex flex-col gap-2 border-t border-[var(--p-border)] pt-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
+                <span className="eyebrow text-[var(--p-text-2)]">
                   {t("marketing.header.theme")}
                 </span>
                 <ThemeToggle />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
+                <span className="eyebrow text-[var(--p-text-2)]">
                   {t("marketing.header.language")}
                 </span>
                 <LocaleSwitcher />
@@ -212,7 +212,7 @@ function MobileNavSection({ group, onClick }: { group: MarketingNavGroup; onClic
   const groupLabel = t(group.labelKey);
   return (
     <details className="group" open>
-      <summary className="nav-item cursor-pointer list-none text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase [&::-webkit-details-marker]:hidden">
+      <summary className="eyebrow nav-item cursor-pointer list-none text-[var(--p-text-2)] [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between">
           {groupLabel}
           <ChevronDown size={12} className="transition-transform group-open:rotate-180" aria-hidden="true" />

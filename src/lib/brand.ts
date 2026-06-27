@@ -46,7 +46,7 @@ export const BRAND = {
   /** Tagline — Bermuda canon was "Production Runs On It"; GHXSTSHIP
    *  canon is "Venture Beyond". We surface the ATLVS-Technologies-tier
    *  tagline here; the umbrella tagline lives on `parent.tagline`. */
-  tagline: "Production Runs On It.",
+  tagline: "The World Builder's Ecosystem",
 
   /** Apex domain (no scheme, no path). */
   apexDomain: "atlvs.pro",

@@ -141,7 +141,7 @@
    "openMenu": "Menü öffnen",
    "closeMenu": "Menü schließen",
    "marketplace": "Marktplatz",
-   "brandAriaLabel": "ATLVS Technologies — Startseite",
+   "brandAriaLabel": "ATLVS Technologies: Startseite",
    "primaryAriaLabel": "Hauptnavigation",
    "mobilePrimaryAriaLabel": "Mobile Hauptnavigation",
    "product": {
@@ -155,19 +155,19 @@
      "description": "ATLVS · COMPVSS · GVTEWAY · LEG3ND"
     },
     "atlvs": {
-     "label": "ATLVS — Produktion",
+     "label": "ATLVS: Produktion",
      "description": "Produzenten-Konsole"
     },
     "compvss": {
-     "label": "COMPVSS — Crew",
+     "label": "COMPVSS: Crew",
      "description": "Personal- + Vor-Ort-Betrieb"
     },
     "gvteway": {
-     "label": "GVTEWAY — Gäste",
+     "label": "GVTEWAY: Gäste",
      "description": "Ticketing + Stakeholder-Portal"
     },
     "legend": {
-     "label": "LEG3ND — Wissen",
+     "label": "LEG3ND: Wissen",
      "description": "Wissen, LMS & Compliance"
     }
    },
@@ -213,7 +213,7 @@
   "footer": {
    "copyright": "© {year} ATLVS Technologies",
    "trademark": "ATLVS, GVTEWAY, COMPVSS und LEG3ND sind eingetragene Marken von ATLVS Technologies, einem Unternehmen von G H X S T S H I P Industries.",
-   "tagline": "ATLVS, GVTEWAY, COMPVSS und LEG3ND — vier vernetzte Apps für Produktionsteams.",
+   "tagline": "ATLVS, GVTEWAY, COMPVSS und LEG3ND: vier vernetzte Apps für Produktionsteams.",
    "ctaTired": "Gebaut für Produktionsteams, die genug davon haben, alles mit Gaffer-Tape zusammenzuhalten."
   },
   "cta": {
@@ -305,7 +305,7 @@
      "sla": "SLA"
     },
     "brand": {
-     "homeAriaLabel": "ATLVS Technologies — Start",
+     "homeAriaLabel": "ATLVS Technologies: Start",
      "tagline": "Das Ökosystem für Produktion. Vier Apps, eine einzige Single Source of Truth."
     },
     "social": {
@@ -313,7 +313,7 @@
      "github": "GitHub"
     },
     "copyright": "© {year} ATLVS Technologies",
-    "tagline": "Produktion läuft darauf.",
+    "tagline": "The World Builder's Ecosystem",
     "trademarkPrefix": "ATLVS, GVTEWAY, COMPVSS und LEG3ND sind eingetragene Marken von ATLVS Technologies, einem",
     "trademarkSuffix": "Industries-Unternehmen."
    }
@@ -321,8 +321,8 @@
   "pages": {
    "about": {
     "meta": {
-     "title": "Über uns — Das Studio",
-     "description": "ATLVS Technologies baut das Ökosystem für die Produktion. ATLVS, GVTEWAY, COMPVSS, LEG3ND — vier Apps, eine zentrale Datenquelle. Entwickelt von Operatoren, die den Saal selbst geführt haben.",
+     "title": "Über uns: Das Studio",
+     "description": "ATLVS Technologies baut das Ökosystem für die Produktion. ATLVS, GVTEWAY, COMPVSS, LEG3ND sind vier Apps mit einer zentralen Datenquelle. Entwickelt von Operatoren, die den Saal selbst geführt haben.",
      "ogImageEyebrow": "Das Studio",
      "ogImageTitle": "Gebaut von den Leuten, die die Show schmeißen."
     },
@@ -363,7 +363,7 @@
      },
      "threeApps": {
       "title": "Vier Apps auf einer zentralen Datenquelle",
-      "body": "ATLVS, GVTEWAY, COMPVSS und LEG3ND liefen auf einer Datenbank — Konsole, Portal, Feld, Wissen."
+      "body": "ATLVS, GVTEWAY, COMPVSS und LEG3ND liefen auf einer Datenbank: Konsole, Portal, Feld, Wissen."
      },
      "kbyg": {
       "title": "KBYG-Eventguides",
@@ -435,7 +435,7 @@
    },
    "ai": {
     "meta": {
-     "title": "KI für die Produktion — Entwürfe aus deinem Workspace, nie aus dem offenen Internet",
+     "title": "KI für die Produktion: Entwürfe aus deinem Workspace, nie aus dem offenen Internet",
      "description": "Ein Assistent, der Rider, Vorfallberichte, Call Sheets, Angebote, Recaps und Sicherheitsbriefings aus deinen Live-Workspace-Daten entwirft. Anthropic Claude unter der Haube; auf deine Organisation begrenzt; nie mit deinen Daten trainiert.",
      "ogImageEyebrow": "KI",
      "ogImageTitle": "Entwürfe aus deinem Workspace."
@@ -451,7 +451,7 @@
      "eyebrow": "KI",
      "titleLine1": "Entwürfe aus deinem Workspace.",
      "titleLine2": "Nie aus dem offenen Internet.",
-     "subtitle": "Ein Assistent, der deine Projekte, Talents, Lieferanten, den Run-of-Show und Budgets liest — und dann das entwirft, was Produktionsteams täglich schreiben. Rider, Vorfallberichte, Call Sheets, Angebote, Recaps, Sicherheitsbriefings. Anthropic Claude unter der Haube, begrenzt auf deinen Mandanten, nie mit deinen Daten trainiert."
+     "subtitle": "Ein Assistent, der deine Projekte, Talents, Lieferanten, den Run-of-Show und Budgets liest und dann das entwirft, was Produktionsteams täglich schreiben. Rider, Vorfallberichte, Call Sheets, Angebote, Recaps, Sicherheitsbriefings. Anthropic Claude unter der Haube, begrenzt auf deinen Mandanten, nie mit deinen Daten trainiert."
     },
     "drafts": {
      "title": "Was er entwirft.",
@@ -460,14 +460,14 @@
     },
     "rules": {
      "eyebrow": "Die Regeln",
-     "title": "Was die KI tut — und was nicht.",
+     "title": "Was die KI tut und was nicht.",
      "subtitle": "Produktionsteams haben uns gefragt, wo die Grenzen liegen. Hier ist der Kanon.",
      "items": {
-      "0": "Liest nur die Daten deiner Organisation. RLS in der Datenbank — nicht in der App.",
+      "0": "Liest nur die Daten deiner Organisation. RLS in der Datenbank, nicht in der App.",
       "1": "Entwirft; veröffentlicht nie automatisch. PM, EHS oder TM hält den Veröffentlichungsschlüssel.",
       "2": "Kennzeichnet Schlussfolgerungen gegenüber belegten Fakten. Du siehst, was erfunden ist.",
-      "3": "Konversationen werden in deinem Mandanten protokolliert — abfragbar, exportierbar, nie geteilt.",
-      "4": "Anthropic Claude — nie mit deinen Datensätzen trainiert.",
+      "3": "Konversationen werden in deinem Mandanten protokolliert: abfragbar, exportierbar, nie geteilt.",
+      "4": "Anthropic Claude, nie mit deinen Datensätzen trainiert.",
       "5": "Kostenobergrenze pro Organisation. Ausufernde Nutzung ist ausgeschlossen."
      }
     },
@@ -475,11 +475,11 @@
      "title": "KI · FAQ",
      "otherOrgs": {
       "q": "Sieht die KI die Daten anderer Organisationen?",
-      "a": "Nein. Jedes Tool, das der Assistent aufrufen kann, ist auf deine Organisation begrenzt. RLS in der Datenbank — dein Mandant ist in Postgres abgeschottet, nicht erst in der App-Schicht. Die KI kann konstruktionsbedingt nicht auf fremde Daten zugreifen."
+      "a": "Nein. Jedes Tool, das der Assistent aufrufen kann, ist auf deine Organisation begrenzt. RLS in der Datenbank: Dein Mandant ist in Postgres abgeschottet, nicht erst in der App-Schicht. Die KI kann konstruktionsbedingt nicht auf fremde Daten zugreifen."
      },
      "training": {
       "q": "Trainiert ihr mit unseren Daten?",
-      "a": "Nein. Wir trainieren keine Modelle. Wir sind ein Produktionsökosystem, das Anthropic Claude unter der Haube betreibt — deine Konversationen bleiben in deinem Mandanten, deine Datensätze bleiben deine."
+      "a": "Nein. Wir trainieren keine Modelle. Wir sind ein Produktionsökosystem, das Anthropic Claude unter der Haube betreibt. Deine Konversationen bleiben in deinem Mandanten, deine Datensätze bleiben deine."
      },
      "model": {
       "q": "Welches Modell verwendet sie?",
@@ -590,7 +590,7 @@
      }
     },
     "meta": {
-     "title": "Blog — Dispatches aus dem ATLVS-Technologies-Team",
+     "title": "Blog: Dispatches aus dem ATLVS-Technologies-Team",
      "description": "Essays über Produktionsbetrieb, Plattformarchitektur und Shows mit weniger Gaffa-Tape. Aus dem ATLVS-Technologies-Team.",
      "ogEyebrow": "Blog",
      "ogTitle": "Dispatches aus dem Team."
@@ -608,7 +608,7 @@
    "brand-kit": {
     "metadata": {
      "title": "Brand Kit · Das Monument-System",
-     "description": "Das Designsystem von ATLVS Technologies — Grundlagen, Marketing-Website, Produkt-UI, Dokumente und Handoff. Das komplette Kit. Jede Kachel ist live; zum Öffnen anklicken.",
+     "description": "Das Designsystem von ATLVS Technologies: Grundlagen, Marketing-Website, Produkt-UI, Dokumente und Handoff. Das komplette Kit. Jede Kachel ist live; zum Öffnen anklicken.",
      "ogTitle": "ATLVS Technologies · Brand Kit",
      "ogDescription": "Monument-Designsystem. Anton für Display, Hanken Grotesk für Fließtext, produktspezifischer Akzent über ATLVS, COMPVSS, GVTEWAY, LEG3ND."
     },
@@ -644,8 +644,8 @@
     "tiles": {
      "homepage": {
       "title": "Homepage",
-      "body": "Komplette Marketing-Website — Pitch·Plan·Produce·Wrap-IA, Live-Ticker, 8-Phasen-Strip-Map, Hero-Mode-Umschalter.",
-      "meta": "/ — öffentlich"
+      "body": "Komplette Marketing-Website: Pitch·Plan·Produce·Wrap-IA, Live-Ticker, 8-Phasen-Strip-Map, Hero-Mode-Umschalter.",
+      "meta": "/ · öffentlich"
      },
      "festivalProduction": {
       "title": "Festivalproduktion",
@@ -654,7 +654,7 @@
      },
      "broadcast": {
       "title": "TV, Film & Broadcast",
-      "body": "Branchen-Landingpage — Service- + FAQ- + Breadcrumb-Schema.",
+      "body": "Branchen-Landingpage: Service- + FAQ- + Breadcrumb-Schema.",
       "meta": "/solutions/"
      },
      "appDashboard": {
@@ -672,7 +672,7 @@
      },
      "bridgeKit3": {
       "title": "Console Kit III",
-      "body": "Atomare Lücken — Tooltip, Slider, Kalender, Galerie, Funnel, Heatmap."
+      "body": "Atomare Lücken: Tooltip, Slider, Kalender, Galerie, Funnel, Heatmap."
      },
      "atlvsGantt": {
       "title": "ATLVS · Gantt",
@@ -688,12 +688,12 @@
      },
      "mobileUi": {
       "title": "Mobile-UI",
-      "body": "Telefon-Screens — Board, Detail, Wallet, Sheet, Auth.",
+      "body": "Telefon-Screens: Board, Detail, Wallet, Sheet, Auth.",
       "meta": "compvss Field-PWA"
      },
      "atlvsProductKit": {
       "title": "ATLVS Produkt-Kit",
-      "body": "Neutrales Light/Dark-SaaS-Theme — Dashboard, Screens, produktspezifischer Akzent. Das Monument-Console-System.",
+      "body": "Neutrales Light/Dark-SaaS-Theme: Dashboard, Screens, produktspezifischer Akzent. Das Monument-Console-System.",
       "meta": "/studio"
      },
      "saasDashboard": {
@@ -702,7 +702,7 @@
      },
      "saasScreens": {
       "title": "SaaS-Screens",
-      "body": "Gantt, Zertifizierungen, Checkout — geskinnt."
+      "body": "Gantt, Zertifizierungen, Checkout, geskinnt."
      },
      "proposalSow": {
       "title": "Proposal / SOW",
@@ -734,7 +734,7 @@
      },
      "readme": {
       "title": "README",
-      "body": "Brand-Brain — Voice, visuelle Grundlagen, Index."
+      "body": "Brand-Brain: Voice, visuelle Grundlagen, Index."
      },
      "brandArchitecture": {
       "title": "Brand-Architektur",
@@ -746,7 +746,7 @@
      },
      "handoff": {
       "title": "Handoff",
-      "body": "Claude-Code-Brief — File-Map, Regeln, Build-Reihenfolge."
+      "body": "Claude-Code-Brief: File-Map, Regeln, Build-Reihenfolge."
      },
      "seoGeo": {
       "title": "SEO / GEO",
@@ -774,15 +774,15 @@
      },
      "logoKit": {
       "title": "ATLVS Logo-Kit",
-      "body": "Der Waypoint — 8-zackiger Navigationsstern. Primäres Lockup, App-Icons, Schutzraum, Endorsement, Do/Don't.",
+      "body": "Der Waypoint: 8-zackiger Navigationsstern. Primäres Lockup, App-Icons, Schutzraum, Endorsement, Do/Don't.",
       "meta": "/brand-kit/logo-kit"
      }
     }
    },
    "careers": {
     "metadata": {
-     "title": "Karriere — Für die Produktion bauen",
-     "description": "Wir sind ein kleines Studio, das das Ökosystem ausliefert, die Live-Experiential-Produktion am Laufen hält. Offene Stellen liefern Arbeit, die auf echten Shows ankommt — gemessen in überstandenen Load-ins, nicht in abgearbeiteten Story Points.",
+     "title": "Karriere: Für die Produktion bauen",
+     "description": "Wir sind ein kleines Studio, das das Ökosystem ausliefert, die Live-Experiential-Produktion am Laufen hält. Offene Stellen liefern Arbeit, die auf echten Shows ankommt, gemessen in überstandenen Load-ins, nicht in abgearbeiteten Story Points.",
      "ogEyebrow": "Karriere",
      "ogTitle": "Für die Produktion bauen."
     },
@@ -793,13 +793,13 @@
     "hero": {
      "eyebrow": "Karriere",
      "title": "Für die Produktion bauen.",
-     "body": "Wir bauen das Ökosystem, das die Live-Experiential-Produktion seit fünfzehn Jahren braucht — vier Apps auf einer einzigen Datenquelle, die den Desk des Produzenten, das Handy der Crew und das Portal des Gasts aus demselben Datensatz betreiben. Kleines Studio, tiefe Ownership, echte Shows."
+     "body": "Wir bauen das Ökosystem, das die Live-Experiential-Produktion seit fünfzehn Jahren braucht: vier Apps auf einer einzigen Datenquelle, die den Desk des Produzenten, das Handy der Crew und das Portal des Gasts aus demselben Datensatz betreiben. Kleines Studio, tiefe Ownership, echte Shows."
     },
     "values": {
      "heading": "Wie wir crewen",
      "crew": {
       "title": "Crew, kein Personal",
-      "body": "Kleine Gruppe, tiefe Ownership. Jede Rolle berührt alle vier Apps — ATLVS, COMPVSS, GVTEWAY und LEG3ND."
+      "body": "Kleine Gruppe, tiefe Ownership. Jede Rolle berührt alle vier Apps: ATLVS, COMPVSS, GVTEWAY und LEG3ND."
      },
      "tested": {
       "title": "Auf dem Wasser getestet",
@@ -807,7 +807,7 @@
      },
      "pricing": {
       "title": "Pricing ist eine Haltung",
-      "body": "Pro Organisation, nicht pro Platz. Diese Linie halten wir intern — keine Token-Ökonomien, kein Kastensystem aus Performance Reviews."
+      "body": "Pro Organisation, nicht pro Platz. Diese Linie halten wir intern. Keine Token-Ökonomien, kein Kastensystem aus Performance Reviews."
      },
      "brandFirst": {
       "title": "Brand-first-Engineering",
@@ -836,11 +836,11 @@
      "heading": "Karriere-FAQ",
      "hiring": {
       "q": "Stellt das Studio gerade ein?",
-      "a": "Wir sind ein kleines Team und stellen bewusst ein. Wenn wir eine Stelle öffnen, landet sie zuerst hier. Steht nichts ausgeschrieben, ist es wirklich zu — aber wir lesen immer durchdachte Vorstellungen über den Kontaktlink unten."
+      "a": "Wir sind ein kleines Team und stellen bewusst ein. Wenn wir eine Stelle öffnen, landet sie zuerst hier. Steht nichts ausgeschrieben, ist es wirklich zu. Aber wir lesen immer durchdachte Vorstellungen über den Kontaktlink unten."
      },
      "visas": {
       "q": "Sponsert ihr Visa?",
-      "a": "Für Senior-Engineering- und Design-Rollen ja — von Fall zu Fall. Bei jeder Ausschreibung sagen wir ausdrücklich, ob ein Sponsoring möglich ist."
+      "a": "Für Senior-Engineering- und Design-Rollen ja, von Fall zu Fall. Bei jeder Ausschreibung sagen wir ausdrücklich, ob ein Sponsoring möglich ist."
      },
      "remote": {
       "q": "Remote? Hybrid? Vor Ort?",
@@ -848,7 +848,7 @@
      },
      "interview": {
       "q": "Wie läuft der Bewerbungsprozess?",
-      "a": "Drei Gespräche: Kennenlernen mit einem Gründer, eine Arbeitssession mit einem Kollegen (keine Whiteboard-Rätsel — wir schauen uns echte Arbeit an) und eine bezahlte Probewoche, wenn beide Seiten weitermachen wollen."
+      "a": "Drei Gespräche: Kennenlernen mit einem Gründer, eine Arbeitssession mit einem Kollegen (keine Whiteboard-Rätsel, wir schauen uns echte Arbeit an) und eine bezahlte Probewoche, wenn beide Seiten weitermachen wollen."
      },
      "notHire": {
       "q": "Wofür stellt ihr NICHT ein?",
@@ -864,7 +864,7 @@
    },
    "changelog": {
     "metadata": {
-     "title": "Changelog — was bei ATLVS Technologies ausgeliefert wurde",
+     "title": "Changelog: was bei ATLVS Technologies ausgeliefert wurde",
      "description": "Release Notes für ATLVS Technologies. Jede ausgelieferte Änderung, mit Kontext. Feature-Launches, Zuverlässigkeit, Sicherheit und Performance.",
      "ogEyebrow": "Changelog",
      "ogTitle": "Was ausgeliefert wurde."
@@ -921,7 +921,7 @@
      }
     },
     "meta": {
-     "title": "Community — die Produktionsteams, die auf ATLVS bauen",
+     "title": "Community: die Produktionsteams, die auf ATLVS bauen",
      "description": "Die Festivals, Touren, Agenturen und Fertigungsbetriebe, die ihre Produktion auf ATLVS, COMPVSS, GVTEWAY und LEG3ND fahren. Mitgliedergeschichten, Zahlen und was sie tatsächlich ausliefern.",
      "ogImageEyebrow": "Community",
      "ogImageTitle": "Produktionsteams, die auf ATLVS laufen."
@@ -996,7 +996,7 @@
     },
     "meta": {
      "title": "Umstieg von einem Allzweck-Tool",
-     "description": "Notizen für Teams, die von einem Allzweck-Tool kommen. Wir führen keine Punktewertungen — wir sagen klar, was wir sind.",
+     "description": "Notizen für Teams, die von einem Allzweck-Tool kommen. Wir führen keine Punktewertungen. Wir sagen klar, was wir sind.",
      "ogImageEyebrow": "Kategorie-Notizen",
      "ogImageTitle": "Wir vergleichen nicht. Wir definieren."
     },
@@ -1007,7 +1007,7 @@
     "hero": {
      "eyebrow": "Kategorie-Notizen",
      "title": "Wir vergleichen nicht. Wir definieren.",
-     "body": "Producer landen hier, weil ihnen ein Allzweck-Tool gezeigt hat, was sie nicht wollten. Diese Seiten sind Notizen für die Suchmaschine — was wir sind, klar gesagt. Keine Punktewertungen."
+     "body": "Producer landen hier, weil ihnen ein Allzweck-Tool gezeigt hat, was sie nicht wollten. Diese Seiten sind Notizen für die Suchmaschine: was wir sind, klar gesagt. Keine Punktewertungen."
     },
     "card": {
      "eyebrow": "Umstieg von",
@@ -1022,7 +1022,7 @@
    },
    "contact": {
     "metadata": {
-     "title": "Kontakt — Sprechen Sie mit dem Studio",
+     "title": "Kontakt: Sprechen Sie mit dem Studio",
      "description": "Direkte Leitung. Demos, Partnerschaften, Concierge-Support, Festival-Zugang. Weitergeleitet an Producer, die den Raum selbst gefahren haben.",
      "ogImageEyebrow": "Kontakt",
      "ogImageTitle": "Sprechen Sie mit dem Studio."
@@ -1036,7 +1036,7 @@
      "title": "Sprechen Sie mit dem Studio.",
      "bodyPrefix": "Keine Dark Patterns. Keine erzwungenen Anrufe. Registrieren Sie sich kostenlos unter",
      "signupLabel": "/signup",
-     "bodySuffix": ". Oder fordern Sie unten einen Walkthrough an — innerhalb eines Werktags, meist schneller."
+     "bodySuffix": ". Oder fordern Sie unten einen Walkthrough an, innerhalb eines Werktags, meist schneller."
     },
     "routes": {
      "walkthrough": {
@@ -1050,7 +1050,7 @@
      },
      "concierge": {
       "title": "Concierge",
-      "body": "Für Bestandskund:innen — nach Tarif priorisiert. Festival erhält ein SLA."
+      "body": "Für Bestandskund:innen, nach Tarif priorisiert. Festival erhält ein SLA."
      },
      "partners": {
       "title": "Partner",
@@ -1084,7 +1084,7 @@
      "heading": "Kontakt-FAQ",
      "start": {
       "q": "Muss ich anrufen, um loszulegen?",
-      "a": "Nein. Gehen Sie auf /signup und Sie sind auf Free — für immer. 14-tägige Testphase bei Crew oder Production, ohne Karte. Das Studio ist für Festival-Zugang, individuelle Integrationen oder einen Walkthrough da."
+      "a": "Nein. Gehen Sie auf /signup und Sie sind auf Free, für immer. 14-tägige Testphase bei Crew oder Production, ohne Karte. Das Studio ist für Festival-Zugang, individuelle Integrationen oder einen Walkthrough da."
      },
      "responseTime": {
       "q": "Wie schnell antwortet das Studio?",
@@ -1096,7 +1096,7 @@
      },
      "location": {
       "q": "Wo sind Sie ansässig?",
-      "a": "Verteilt über die USA — Producer in NYC, LA, Miami, Chicago, Austin. Gern auch persönlich vor Ort, wo immer die Arbeit ist."
+      "a": "Verteilt über die USA: Producer in NYC, LA, Miami, Chicago, Austin. Gern auch persönlich vor Ort, wo immer die Arbeit ist."
      }
     }
    },
@@ -1105,7 +1105,7 @@
      "meta": {
       "fallbackTitle": "Kundengeschichte",
       "fallbackDescription": "ATLVS Kundengeschichte",
-      "title": "{name} — Kundengeschichte",
+      "title": "{name}: Kundengeschichte",
       "descriptionFallback": "Wie {name} die Produktion auf ATLVS fährt."
      },
      "eyebrow": "Kundengeschichte",
@@ -1117,8 +1117,8 @@
      "backLink": "← Alle Kundengeschichten"
     },
     "metadata": {
-     "title": "Kunden — Produktionsteams, die auf ATLVS laufen",
-     "description": "Echte Produktionsteams, die auf ATLVS laufen — Festivals, Touring, Fabrikation, Immersive, Brand-Aktivierungen, Broadcast. Case Studies erscheinen im Laufe von Q4.",
+     "title": "Kunden: Produktionsteams, die auf ATLVS laufen",
+     "description": "Echte Produktionsteams, die auf ATLVS laufen: Festivals, Touring, Fabrikation, Immersive, Brand-Aktivierungen, Broadcast. Case Studies erscheinen im Laufe von Q4.",
      "keywords": {
       "0": "ATLVS Kundengeschichten",
       "1": "Case Studies Produktionssoftware",
@@ -1183,8 +1183,8 @@
    },
    "demo": {
     "metadata": {
-     "title": "Walkthrough buchen — verdrahtet mit einer echten Show",
-     "description": "Sprich mit dem Studio. Geh das Ökosystem an einer Live-Produktion durch. Keine Sales-Call-Gymnastik — Operator reden mit Operatorn.",
+     "title": "Walkthrough buchen: verdrahtet mit einer echten Show",
+     "description": "Sprich mit dem Studio. Geh das Ökosystem an einer Live-Produktion durch. Keine Sales-Call-Gymnastik. Operator reden mit Operatorn.",
      "ogImageEyebrow": "Demo",
      "ogImageTitle": "Geh das Ökosystem durch."
     },
@@ -1195,7 +1195,7 @@
     "hero": {
      "eyebrow": "Demo",
      "title": "Geh das Ökosystem durch.",
-     "subtitle": "Vierzig Minuten, verdrahtet mit einer Live-Produktion. Wähl den Walkthrough, der zu deinem Raum passt — oder melde dich erst kostenlos an und bring deine Fragen später mit."
+     "subtitle": "Vierzig Minuten, verdrahtet mit einer Live-Produktion. Wähl den Walkthrough, der zu deinem Raum passt, oder melde dich erst kostenlos an und bring deine Fragen später mit."
     },
     "personas": {
      "title": "Walkthroughs nach Betrieb.",
@@ -1206,15 +1206,15 @@
      "title": "FAQ",
      "walkthrough": {
       "q": "Was passiert bei einem Walkthrough?",
-      "a": "Vierzig Minuten. Wir öffnen das Ökosystem, verdrahtet mit einer Live-Produktion — die kanonische ist MMW26 Hialeah. Du nennst, was deine Show braucht, wir zeigen dir die Verdrahtung, die sie betreibt. Kein Slide-Deck."
+      "a": "Vierzig Minuten. Wir öffnen das Ökosystem, verdrahtet mit einer Live-Produktion. Die kanonische ist MMW26 Hialeah. Du nennst, was deine Show braucht, wir zeigen dir die Verdrahtung, die sie betreibt. Kein Slide-Deck."
      },
      "salesCall": {
       "q": "Ist das ein Sales Call?",
-      "a": "Nein. Es ist ein Walkthrough. Sales-Gespräche finden statt, wenn du sie willst — die meisten Teams öffnen zuerst die kostenlose Stufe und legen im Ökosystem los."
+      "a": "Nein. Es ist ein Walkthrough. Sales-Gespräche finden statt, wenn du sie willst. Die meisten Teams öffnen zuerst die kostenlose Stufe und legen im Ökosystem los."
      },
      "tryWithoutCall": {
       "q": "Kann ich es einfach ohne Gespräch ausprobieren?",
-      "a": "Ja. Melde dich kostenlos an — 30 Sekunden, keine Karte. Der Walkthrough ist für Teams, die bestimmte Workflows auf ihren Use Case verdrahtet haben wollen."
+      "a": "Ja. Melde dich kostenlos an, 30 Sekunden, keine Karte. Der Walkthrough ist für Teams, die bestimmte Workflows auf ihren Use Case verdrahtet haben wollen."
      }
     },
     "cta": {
@@ -1224,8 +1224,8 @@
    },
    "docs": {
     "meta": {
-     "title": "Docs — Architektur, API, Guides-CMS, Auth",
-     "description": "Technische Referenz für das Ökosystem von ATLVS Technologies — Architektur, Integrationen, das Guides-CMS und das Auth-Modell. Die tiefen Details für Teams, die sie wollen.",
+     "title": "Docs: Architektur, API, Guides-CMS, Auth",
+     "description": "Technische Referenz für das Ökosystem von ATLVS Technologies: Architektur, Integrationen, das Guides-CMS und das Auth-Modell. Die tiefen Details für Teams, die sie wollen.",
      "ogEyebrow": "Docs",
      "ogTitle": "Wie das Ökosystem funktioniert"
     },
@@ -1248,7 +1248,7 @@
      },
      "authModel": {
       "title": "Auth-Modell",
-      "desc": "Vier Plattformrollen fürs Billing, fünf Projektrollen für den Betrieb — auf der Datenebene durchgesetzt."
+      "desc": "Vier Plattformrollen fürs Billing, fünf Projektrollen für den Betrieb, auf der Datenebene durchgesetzt."
      }
     }
    },
@@ -1262,7 +1262,7 @@
    },
    "features": {
     "metadata": {
-     "title": "Features — Jedes Modul. Nativ.",
+     "title": "Features: Jedes Modul. Nativ.",
      "description": "Siebenundvierzig Module über vier Apps, die sich eine Datenbank teilen. ATLVS, COMPVSS, GVTEWAY, LEG3ND. KI, Finanzen, Beschaffung, Audit. Eine Quelle.",
      "ogEyebrow": "Funktionen",
      "ogTitle": "Jedes Modul. Nativ."
@@ -1277,11 +1277,11 @@
      "items": {
       "atlvs": {
        "title": "ATLVS",
-       "desc": "Konsole für den Produktionsbetrieb — 47 Module, 9 Domänen, eine Sidebar."
+       "desc": "Konsole für den Produktionsbetrieb: 47 Module, 9 Domänen, eine Sidebar."
       },
       "portals": {
        "title": "GVTEWAY",
-       "desc": "Öffentliche Schnittstelle + Marktplatz — zwölf Personas, jede auf ihrer Spur."
+       "desc": "Öffentliche Schnittstelle + Marktplatz: zwölf Personas, jede auf ihrer Spur."
       },
       "mobile": {
        "title": "COMPVSS",
@@ -1293,7 +1293,7 @@
       },
       "advancing": {
        "title": "Advancing",
-       "desc": "Rider, Hospitality, Stage Plots, Travel — 16 typisierte Deliverables."
+       "desc": "Rider, Hospitality, Stage Plots, Travel: 16 typisierte Deliverables."
       },
       "proposals": {
        "title": "Angebote",
@@ -1316,8 +1316,8 @@
        "desc": "Incidents, OSHA, Medizin, Krise, BC/DR, Cyber-IR, Safeguarding, Umwelt."
       },
       "guides": {
-       "title": "Event-Guides — KBYG",
-       "desc": "Ein Projekt, sechs Personas, 17 Abschnittstypen — Zeitplan, SOPs, PSA, Funk, Evakuierung."
+       "title": "Event-Guides: KBYG",
+       "desc": "Ein Projekt, sechs Personas, 17 Abschnittstypen: Zeitplan, SOPs, PSA, Funk, Evakuierung."
       },
       "ai": {
        "title": "KI-Assistent",
@@ -1344,8 +1344,8 @@
    },
    "glossary": {
     "meta": {
-     "title": "Glossar — Das Vokabular der Live-Produktion",
-     "description": "Definitionen der Begriffe, die Live-Event-Operator jeden Tag verwenden — Advancing, ROS, KBYG, Rider, Credentials, OSHA-Logs, Settlements.",
+     "title": "Glossar: Das Vokabular der Live-Produktion",
+     "description": "Definitionen der Begriffe, die Live-Event-Operator jeden Tag verwenden: Advancing, ROS, KBYG, Rider, Credentials, OSHA-Logs, Settlements.",
      "ogImageEyebrow": "Glossar",
      "ogImageTitle": "Vokabular der Live-Produktion."
     },
@@ -1359,7 +1359,7 @@
     "hero": {
      "eyebrow": "Glossar",
      "title": "Das Vokabular der Live-Produktion.",
-     "body": "Die Begriffe, mit denen Operator Shows fahren — erklärt so, wie Operator sie verwenden. Keine akademische Beschönigung. Keine Marketing-Umleitung. Nur die Wörter und was sie auf dem Gig bedeuten."
+     "body": "Die Begriffe, mit denen Operator Shows fahren, erklärt so, wie Operator sie verwenden. Keine akademische Beschönigung. Keine Marketing-Umleitung. Nur die Wörter und was sie auf dem Gig bedeuten."
     },
     "cta": {
      "title": "ATLVS ist offen.",
@@ -1380,12 +1380,12 @@
      "faqTitle": "{title} · FAQ",
      "otherGuides": "Weitere Leitfäden",
      "cta": {
-      "title": "Führen Sie die Show – mit ATLVS Technologies",
+      "title": "Führen Sie die Show mit ATLVS Technologies",
       "subtitle": "Für kleine Teams für immer kostenlos. Keine Kreditkarte."
      }
     },
     "meta": {
-     "title": "Leitfäden — Produktions-Ops, Advancing und KBYG",
+     "title": "Leitfäden: Produktions-Ops, Advancing und KBYG",
      "description": "Ausführliche Leitfäden zu Produktionsabläufen. Event-Advancing, Know Before You Go und die These der vereinheitlichten Produktions-Ops. Geschrieben von Operatoren, die die Show führen.",
      "ogImageEyebrow": "Leitfäden",
      "ogImageTitle": "Geschrieben von Operatoren."
@@ -1397,7 +1397,7 @@
     "hero": {
      "eyebrow": "Leitfäden",
      "title": "Geschrieben von Operatoren.",
-     "subtitle": "Tiefgehende Leitfäden zu den Grundlagen der Produktionsabläufe — die Disziplinen, die Taxonomien und das Tooling, mit denen eine Show vom Pitch bis zum Wrap läuft."
+     "subtitle": "Tiefgehende Leitfäden zu den Grundlagen der Produktionsabläufe: die Disziplinen, die Taxonomien und das Tooling, mit denen eine Show vom Pitch bis zum Wrap läuft."
     },
     "cta": {
      "title": "Steuern Sie Ihre Ops",
@@ -1406,8 +1406,8 @@
    },
    "help": {
     "metadata": {
-     "title": "Hilfe — Crew-Support",
-     "description": "Self-Service-Leitfäden, Status und direkte Support-Kanäle. Concierge für Kunden — nach Tier priorisiert. Festival erhält ein SLA.",
+     "title": "Hilfe: Crew-Support",
+     "description": "Self-Service-Leitfäden, Status und direkte Support-Kanäle. Concierge für Kunden, nach Tier priorisiert. Festival erhält ein SLA.",
      "ogImageEyebrow": "Hilfe",
      "ogImageTitle": "Crew-Support."
     },
@@ -1431,7 +1431,7 @@
     "channels": {
      "fieldGuide": {
       "title": "Feldhandbuch",
-      "body": "Ausführliche Leitfäden für jede App — wie man eine Load-in-Woche führt, Advancing einrichtet, Stripe-Auszahlungen verdrahtet, Portal-Zugriffe konfiguriert.",
+      "body": "Ausführliche Leitfäden für jede App: wie man eine Load-in-Woche führt, Advancing einrichtet, Stripe-Auszahlungen verdrahtet, Portal-Zugriffe konfiguriert.",
       "cta": "Field Guide öffnen"
      },
      "changelog": {
@@ -1441,7 +1441,7 @@
      },
      "concierge": {
       "title": "Concierge",
-      "body": "Für Kunden — nach Tier priorisiert (Free, Crew, Production, Festival). Festival erhält ein Vier-Stunden-SLA."
+      "body": "Für Kunden, nach Tier priorisiert (Free, Crew, Production, Festival). Festival erhält ein Vier-Stunden-SLA."
      },
      "hotline": {
       "title": "Produktions-Hotline",
@@ -1452,7 +1452,7 @@
     "troubleshooting": {
      "signIn": {
       "title": "Anmeldung nicht möglich",
-      "body": "Probieren Sie zuerst den Magic-Link-Flow — er umgeht Passwortprobleme. Wird Ihre E-Mail nicht erkannt, muss ein Admin Sie einladen. Der Produzent oder Workspace-Eigentümer kann unter Einstellungen → Personen eine Einladung ausstellen."
+      "body": "Probieren Sie zuerst den Magic-Link-Flow, er umgeht Passwortprobleme. Wird Ihre E-Mail nicht erkannt, muss ein Admin Sie einladen. Der Produzent oder Workspace-Eigentümer kann unter Einstellungen → Personen eine Einladung ausstellen."
      },
      "webhook": {
       "title": "Webhook löst nicht aus",
@@ -1460,7 +1460,7 @@
      },
      "mobileOffline": {
       "title": "Mobile-App bleibt offline hängen",
-      "body": "Pull-to-Refresh auf dem Call Sheet, um eine Synchronisierung zu erzwingen. Bleibt eine eingereihte Aktion länger als 30 Sekunden ausstehend, melden Sie sich ab und wieder an — das koppelt den Offline-Cache neu an den aktiven Workspace."
+      "body": "Pull-to-Refresh auf dem Call Sheet, um eine Synchronisierung zu erzwingen. Bleibt eine eingereihte Aktion länger als 30 Sekunden ausstehend, melden Sie sich ab und wieder an. Das koppelt den Offline-Cache neu an den aktiven Workspace."
      }
     },
     "faqSection": {
@@ -1473,11 +1473,11 @@
      },
      "statusPage": {
       "q": "Gibt es eine Status-Seite?",
-      "a": "Ja — status.atlvs.pro. Produktionsvorfälle werden innerhalb von zehn Minuten gepostet. Wartungsfenster werden 48 Stunden im Voraus angekündigt."
+      "a": "Ja, status.atlvs.pro. Produktionsvorfälle werden innerhalb von zehn Minuten gepostet. Wartungsfenster werden 48 Stunden im Voraus angekündigt."
      },
      "phoneSupport": {
       "q": "Kann ich telefonischen Support bekommen?",
-      "a": "Die Produktions-Hotline kommt dem am nächsten — während aktiver Event-Fenster mit Produzenten besetzt. Allgemeinen Telefonsupport bieten wir nicht; per Concierge-E-Mail erreichen Sie innerhalb von Stunden einen Menschen, bei Festival schneller."
+      "a": "Die Produktions-Hotline kommt dem am nächsten, während aktiver Event-Fenster mit Produzenten besetzt. Allgemeinen Telefonsupport bieten wir nicht; per Concierge-E-Mail erreichen Sie innerhalb von Stunden einen Menschen, bei Festival schneller."
      },
      "invoice": {
       "q": "Wo finde ich meine Rechnung oder ändere meine Abrechnungsdaten?",
@@ -1488,8 +1488,8 @@
       "a": "Einstellungen → Abrechnung → Abonnement kündigen. Ihre Daten bleiben 90 Tage lang schreibgeschützt verfügbar; exportieren Sie in diesem Zeitfenster alles Nötige unter Einstellungen → Exporte."
      },
      "lostAccess": {
-      "q": "Ich habe den Zugriff auf mein Admin-Konto verloren — was nun?",
-      "a": "Kontaktieren Sie den Concierge von der hinterlegten E-Mail-Adresse der Organisation aus. Für die Übertragung der Eigentümerschaft verlangen wir eine Kette von Identitätsnachweisen — in der Regel Gründer-/Geschäftsführer-Dokumentation. Planen Sie etwa 3 Werktage für die Übergabe ein."
+      "q": "Ich habe den Zugriff auf mein Admin-Konto verloren. Was nun?",
+      "a": "Kontaktieren Sie den Concierge von der hinterlegten E-Mail-Adresse der Organisation aus. Für die Übertragung der Eigentümerschaft verlangen wir eine Kette von Identitätsnachweisen, in der Regel Gründer-/Geschäftsführer-Dokumentation. Planen Sie etwa 3 Werktage für die Übergabe ein."
      }
     },
     "cta": {
@@ -1501,8 +1501,8 @@
    },
    "integrations": {
     "meta": {
-     "title": "Integrationen — Stripe, Anthropic, Supabase, Twilio, Resend, Kalender, OAuth, Webhooks",
-     "description": "Die Integrationen, die heute produktiv laufen — Zahlungen, KI, Infrastruktur, Kommunikation, Authentifizierung, Kalender, Geo, Observability. Keine Demnächst-Liste; jeder Eintrag ist live.",
+     "title": "Integrationen: Stripe, Anthropic, Supabase, Twilio, Resend, Kalender, OAuth, Webhooks",
+     "description": "Die Integrationen, die heute produktiv laufen: Zahlungen, KI, Infrastruktur, Kommunikation, Authentifizierung, Kalender, Geo, Observability. Keine Demnächst-Liste; jeder Eintrag ist live.",
      "ogImageEyebrow": "Integrationen",
      "ogImageTitle": "Im Code ausgeliefert, nicht auf einer Folie."
     },
@@ -1558,7 +1558,7 @@
       }
      },
      "metadata": {
-      "title": "Open Calls — Casting- & Produktionseinreichungen",
+      "title": "Open Calls: Casting- & Produktionseinreichungen",
       "description": "Casting Calls und offene RFPs für Live-Produktion, Talent und Kreatives."
      },
      "breadcrumbs": {
@@ -1605,8 +1605,8 @@
     },
     "crew": {
      "metadata": {
-      "title": "Crew-Verzeichnis — Geprüfte Produktionscrew",
-      "description": "Geprüfte Crew-Profile — Rollen, Equipment, Gewerkschaften, Tagessätze, Verfügbarkeit."
+      "title": "Crew-Verzeichnis: geprüfte Produktionscrew",
+      "description": "Geprüfte Crew-Profile mit Rollen, Equipment, Gewerkschaften, Tagessätzen und Verfügbarkeit."
      },
      "breadcrumbs": {
       "marketplace": "Marktplatz",
@@ -1629,7 +1629,7 @@
     },
     "gigs": {
      "meta": {
-      "title": "Crew-Gigs — Job-Board für Produktion",
+      "title": "Crew-Gigs: Job-Board für Produktion",
       "description": "Bezahlte Produktionscrew-Gigs von Veranstaltern im ATLVS-Netzwerk.",
       "perDay": "/Tag",
       "travelPaid": "Reise bezahlt",
@@ -1649,14 +1649,14 @@
      "empty": "Aktuell keine Live-Gigs."
     },
     "meta": {
-     "title": "Marktplatz — Live-Produktionscrew, Talent, RFQs",
+     "title": "Marktplatz: Live-Produktionscrew, Talent, RFQs",
      "description": "Finde offene Produktions-Gigs, Casting Calls, Talent, geprüfte Crew und Live-RFQs im ATLVS-Netzwerk."
     },
     "breadcrumb": "Marktplatz",
     "hero": {
      "eyebrow": "Marktplatz",
      "title": "Finde die Arbeit. Finde die Crew. Finde den Act.",
-     "body": "Ein Netzwerk für Produktions-RFQs, Crew-Gigs, Casting Calls und direkte Künstlerbuchung. Geprüft, nicht crowdsourced. Bewertungen laufen in beide Richtungen. Bieten, buchen, advancen — durchgängig."
+     "body": "Ein Netzwerk für Produktions-RFQs, Crew-Gigs, Casting Calls und direkte Künstlerbuchung. Geprüft, nicht crowdsourced. Bewertungen laufen in beide Richtungen. Bieten, buchen, advancen: durchgängig."
     },
     "sections": {
      "rfqs": {
@@ -1665,7 +1665,7 @@
      },
      "gigs": {
       "title": "Crew-Gigs",
-      "blurb": "Aushang-Board für bezahlte Produktionsrollen — Einzelshow, Tourabschnitt oder wiederkehrend."
+      "blurb": "Aushang-Board für bezahlte Produktionsrollen: Einzelshow, Tourabschnitt oder wiederkehrend."
      },
      "calls": {
       "title": "Open Calls",
@@ -1673,11 +1673,11 @@
      },
      "talent": {
       "title": "Talent",
-      "blurb": "Künstler-EPKs — Bio, Reel, Rider, Gagenbänder, Agentur. Direkte Buchung."
+      "blurb": "Künstler-EPKs mit Bio, Reel, Rider, Gagenbändern und Agentur. Direkte Buchung."
      },
      "crew": {
       "title": "Crew",
-      "blurb": "Geprüfte Produktionscrew-Profile — Rollen, Equipment, Gewerkschaften, Tagessätze."
+      "blurb": "Geprüfte Produktionscrew-Profile mit Rollen, Equipment, Gewerkschaften und Tagessätzen."
      },
      "vendors": {
       "title": "Dienstleister",
@@ -1690,7 +1690,7 @@
     },
     "operators": {
      "title": "Für Veranstalter",
-     "body": "Veröffentliche deine eigenen RFQs, Gigs und Casting Calls — gesteuert durch deine Präqualifikationsregeln.",
+     "body": "Veröffentliche deine eigenen RFQs, Gigs und Casting Calls, gesteuert durch deine Präqualifikationsregeln.",
      "cta": "Kostenlos loslegen"
     },
     "rfqs": {
@@ -1712,7 +1712,7 @@
       "compliance": {
        "title": "Compliance-Gates",
        "prequalification": "Präqualifikation",
-       "insurance": "Versicherung — COI",
+       "insurance": "Versicherung: COI",
        "w9": "W-9 / W-8",
        "nda": "NDA-Annahme"
       },
@@ -1723,7 +1723,7 @@
       }
      },
      "meta": {
-      "title": "Offene RFQs — Produktionsmarktplatz",
+      "title": "Offene RFQs: Produktionsmarktplatz",
       "description": "Durchstöbere offene Angebotsanfragen von Produktionsveranstaltern im ATLVS-Netzwerk."
      },
      "breadcrumbs": {
@@ -1776,7 +1776,7 @@
       }
      },
      "meta": {
-      "title": "Talent-Verzeichnis — Künstler-EPKs",
+      "title": "Talent-Verzeichnis: Künstler-EPKs",
       "description": "Finde und buche Talent für Festivals, Markenaktivierungen und private Events.",
       "kmRadius": "km Radius",
       "monthlyListeners": "mtl. Hörer"
@@ -1797,7 +1797,7 @@
     },
     "vendors": {
      "meta": {
-      "title": "Dienstleister-Verzeichnis — Produktionsdienstleister",
+      "title": "Dienstleister-Verzeichnis: Produktionsdienstleister",
       "description": "Geprüfte Produktionsdienstleister mit aktueller Versicherung, W-9 und Präqualifikation."
      },
      "breadcrumbs": {
@@ -1903,8 +1903,8 @@
    },
    "home": {
     "metadata": {
-     "title": "ATLVS — Produktionsmanagement-Software für Live-Erlebnisse",
-     "description": "ATLVS Technologies — Produktionsmanagement, Crew-Operations, Ticketing und Wissenssoftware für Live-Events. Vier Apps, eine einzige Single Source of Truth: ATLVS für Produzenten, COMPVSS für die Crew, GVTEWAY für Gäste, LEG3ND für Wissen. Von der Pitch-Phase bis zum Wrap auf einem Ökosystem.",
+     "title": "ATLVS: Produktionsmanagement-Software für Live-Erlebnisse",
+     "description": "ATLVS Technologies bietet Produktionsmanagement, Crew-Operations, Ticketing und Wissenssoftware für Live-Events. Vier Apps, eine einzige Single Source of Truth: ATLVS für Produzenten, COMPVSS für die Crew, GVTEWAY für Gäste, LEG3ND für Wissen. Von der Pitch-Phase bis zum Wrap auf einem Ökosystem.",
      "ogImageTitle": "Schmeißen Sie die Show."
     },
     "hero": {
@@ -1925,36 +1925,36 @@
     "threeApps": {
      "eyebrow": "Das ATLVS-Ökosystem",
      "title": "Vier Apps, eine einzige Single Source of Truth.",
-     "body": "ATLVS Technologies liefert vier vernetzte Produkte auf einem gemeinsamen Datenbestand. Setzen Sie eines ein oder betreiben Sie das gesamte Ökosystem — jeder Datensatz fließt über die Producer-Konsole, die Field-PWA, den öffentlichen Marktplatz und den Wissens-Hub.",
+     "body": "ATLVS Technologies liefert vier vernetzte Produkte auf einem gemeinsamen Datenbestand. Setzen Sie eines ein oder betreiben Sie das gesamte Ökosystem. Jeder Datensatz fließt über die Producer-Konsole, die Field-PWA, den öffentlichen Marktplatz und den Wissens-Hub.",
      "readMore": "Mehr erfahren →"
     },
     "products": {
      "atlvs": {
       "audience": "Für Produzenten · interne Teams",
       "tag": "Die Welt erschaffen",
-      "body": "Entwickle und baue die Welt — Projekte, Advancing, Finanzen, Beschaffung und eine KI, die den Papierkram entwirft. Die Kommandobrücke des Produzenten."
+      "body": "Entwickle und baue die Welt: Projekte, Advancing, Finanzen, Beschaffung und eine KI, die den Papierkram entwirft. Die Kommandobrücke des Produzenten."
      },
      "compvss": {
       "audience": "Für Crew · Dienstleister · Talent",
       "tag": "Die Welt betreiben",
-      "body": "Betreibe sie im Einsatz — Planung, Zertifikate, Einlass-Scan, Vorfälle. Offline-first, schnell am Gate, auch wenn das Signal es nicht ist."
+      "body": "Betreibe sie im Einsatz: Planung, Zertifikate, Einlass-Scan, Vorfälle. Offline-first, schnell am Gate, auch wenn das Signal es nicht ist."
      },
      "gvteway": {
       "audience": "Für Gäste · Kunden · Partner",
       "tag": "Die Welt erleben",
-      "body": "Wo die Welt erlebt wird — Ticketing, Portale, Marktplatz. Jede Persona, jede mit ihrem eigenen Zugang."
+      "body": "Wo die Welt erlebt wird: Ticketing, Portale, Marktplatz. Jede Persona, jede mit ihrem eigenen Zugang."
      },
      "legend": {
       "audience": "Für Wissen · Schulung · Compliance",
       "tag": "Die Welt bereichern",
-      "body": "Das Wissen, auf dem die Welt steht — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine."
+      "body": "Das Wissen, auf dem die Welt steht: der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine."
      }
     },
     "industries": {
      "eyebrow": "Gemacht für",
      "title": "Produktionsteams, die echte Arbeit stemmen.",
      "body": "Das Schema ist generisch. Das Vokabular ist spezifisch. Wählen Sie die Art von Produktion, die Sie liefern, und das Ökosystem spricht von Haus aus Ihre Sprache.",
-     "footnote": "Hospitality, Corporate und private Events ebenfalls —",
+     "footnote": "Hospitality, Corporate und private Events ebenfalls.",
      "footnoteLink": "alle Lösungen ansehen →",
      "items": {
       "festivals": {
@@ -1971,7 +1971,7 @@
       },
       "immersiveExperiences": {
        "title": "Immersive Erlebnisse",
-       "body": "Narrative Installationen und Welten, die das Publikum betritt — ticketiert, getaktet, getrackt."
+       "body": "Narrative Installationen und Welten, die das Publikum betritt: ticketiert, getaktet, getrackt."
       },
       "sportingEvents": {
        "title": "Sport-Events",
@@ -2000,7 +2000,7 @@
     "difference": {
      "eyebrow": "Warum ATLVS",
      "title": "Kein CRM, das man an ein PM-Tool geschraubt hat.",
-     "body": "Ein Motor für die ganze Welt — entwickelt, gebaut, betrieben und erlebt auf einem einzigen Datensatz.",
+     "body": "Ein Motor für die ganze Welt: entwickelt, gebaut, betrieben und erlebt auf einem einzigen Datensatz.",
      "edges": {
       "endToEnd": {
        "title": "End-to-End",
@@ -2028,7 +2028,7 @@
       "fullPlatform": {
        "name": "Komplettes Ökosystem",
        "tag": "Alle acht Phasen",
-       "body": "Jede Phase des Produktionszyklus, von der Pitch-Phase bis zum Wrap — ein Workspace, eine einzige Single Source of Truth, lückenlose Nachvollziehbarkeit."
+       "body": "Jede Phase des Produktionszyklus, von der Pitch-Phase bis zum Wrap: ein Workspace, eine einzige Single Source of Truth, lückenlose Nachvollziehbarkeit."
       },
       "singleApp": {
        "name": "Einzelne App",
@@ -2045,7 +2045,7 @@
     "projects": {
      "eyebrow": "Belege · Fallstudien",
      "title": "Mit ATLVS umgesetzt.",
-     "body": "Eine Auswahl von Produktionen, die unsere Kunden auf ATLVS Technologies abgewickelt haben — über Festivals, Brand-Aktivierungen und Broadcast hinweg.",
+     "body": "Eine Auswahl von Produktionen, die unsere Kunden auf ATLVS Technologies abgewickelt haben, über Festivals, Brand-Aktivierungen und Broadcast hinweg.",
      "tableHeaders": {
       "project": "Projekt",
       "title": "Titel",
@@ -2101,11 +2101,11 @@
       },
       "whoIsItFor": {
        "q": "Für wen ist das ATLVS-Ökosystem gedacht?",
-       "a": "Produktionsteams, die echte Live-Arbeit stemmen. Festivals, Residencies, Touring, Fabrikationswerkstätten, Brand-Aktivierungen, Broadcast-Compounds, Privatevents. Das Schema ist generisch; die Fachsprache ist spezifisch. Wenn deine Organisation einen Load-in, ein Manifest, Dienstleister und einen Wrap hat — dann passt es."
+       "a": "Produktionsteams, die echte Live-Arbeit stemmen. Festivals, Residencies, Touring, Fabrikationswerkstätten, Brand-Aktivierungen, Broadcast-Compounds, Privatevents. Das Schema ist generisch; die Fachsprache ist spezifisch. Hat deine Organisation einen Load-in, ein Manifest, Dienstleister und einen Wrap, dann passt es."
       },
       "pricing": {
        "q": "Wie funktioniert die ATLVS-Preisgestaltung?",
-       "a": "ATLVS rechnet pro Organisation ab, nicht pro Platz — für immer kostenlos im Access-Tarif, ohne Kreditkarte. Crew öffnet das Team; Production schaltet jedes Modul plus Multi-Projekt frei; Festival ist Multi-Org mit SSO, individueller DPA und 99,9 % SLA. Das vollständige Raster unter /pricing."
+       "a": "ATLVS rechnet pro Organisation ab, nicht pro Platz. Für immer kostenlos im Access-Tarif, ohne Kreditkarte. Crew öffnet das Team; Production schaltet jedes Modul plus Multi-Projekt frei; Festival ist Multi-Org mit SSO, individueller DPA und 99,9 % SLA. Das vollständige Raster unter /pricing."
       },
       "vendorPayouts": {
        "q": "Wie funktionieren Auszahlungen an Dienstleister?",
@@ -2113,19 +2113,19 @@
       },
       "compvssOffline": {
        "q": "Funktioniert COMPVSS wirklich offline?",
-       "a": "Ja. COMPVSS ist eine Offline-First-PWA. Gate-Scan, Schicht-Einstempeln, Tagesprotokoll, Vorfall, Sanitäter-Aufnahme — alles wird lokal in eine Warteschlange gestellt und synchronisiert sich, sobald das Signal zurückkehrt. Scan in unter 100 ms selbst bei einem Balken LTE. Getestet an Gates mit 15.000 Gästen."
+       "a": "Ja. COMPVSS ist eine Offline-First-PWA. Gate-Scan, Schicht-Einstempeln, Tagesprotokoll, Vorfall, Sanitäter-Aufnahme: alles wird lokal in eine Warteschlange gestellt und synchronisiert sich, sobald das Signal zurückkehrt. Scan in unter 100 ms selbst bei einem Balken LTE. Getestet an Gates mit 15.000 Gästen."
       },
       "whoBuilds": {
        "q": "Wer baut ATLVS Technologies?",
-       "a": "ATLVS Technologies ist ein Unternehmen von GHXSTSHIP Industries — der Technologiezweig eines Experiential-Produktionshauses mit Hauptsitz in Miami und Büros in New York, Chicago und Los Angeles. ATLVS, COMPVSS, GVTEWAY und LEG3ND werden im eigenen Haus von Menschen entwickelt, die echte Shows umgesetzt haben."
+       "a": "ATLVS Technologies ist ein Unternehmen von GHXSTSHIP Industries, der Technologiezweig eines Experiential-Produktionshauses mit Hauptsitz in Miami und Büros in New York, Chicago und Los Angeles. ATLVS, COMPVSS, GVTEWAY und LEG3ND werden im eigenen Haus von Menschen entwickelt, die echte Shows umgesetzt haben."
       },
       "dataSecurity": {
        "q": "Wie werden die Daten gesichert?",
-       "a": "Row-Level-Security auf Datenbankebene — dein Mandant ist in Postgres abgeschottet, nicht erst in der App-Schicht. Jede Änderung schreibt in ein unveränderliches Audit-Log (Akteur, IP, User-Agent, Vorher/Nachher). Signierte Webhooks (HMAC-SHA256). Datei-Freigaben laufen von selbst ab. SOC-2-Attestierung plus individueller AVV in der Festival-Stufe."
+       "a": "Row-Level-Security auf Datenbankebene: dein Mandant ist in Postgres abgeschottet, nicht erst in der App-Schicht. Jede Änderung schreibt in ein unveränderliches Audit-Log (Akteur, IP, User-Agent, Vorher/Nachher). Signierte Webhooks (HMAC-SHA256). Datei-Freigaben laufen von selbst ab. SOC-2-Attestierung plus individueller AVV in der Festival-Stufe."
       },
       "aiAssistant": {
        "q": "Ist der KI-Assistent nützlich oder nur Marketing?",
-       "a": "Nützlich. Er liest die Daten deines Workspace — nie das öffentliche Internet — und entwirft Rider, RFPs, Call-Sheets, Recaps, Sicherheitsbriefings und Vorfallberichte. Streaming, gesprächspersistent in deinem Mandanten. Unter der Haube läuft Anthropic Claude."
+       "a": "Nützlich. Er liest die Daten deines Workspace, nie das öffentliche Internet, und entwirft Rider, RFPs, Call-Sheets, Recaps, Sicherheitsbriefings und Vorfallberichte. Streaming, gesprächspersistent in deinem Mandanten. Unter der Haube läuft Anthropic Claude."
       },
       "exportData": {
        "q": "Kann ich meine Daten exportieren?",
@@ -2143,11 +2143,11 @@
       },
       "release": {
        "cat": "Release",
-       "title": "Advancing v2 — 16 typisierte Deliverables gehen live"
+       "title": "Advancing v2: 16 typisierte Deliverables gehen live"
       },
       "careers": {
        "cat": "Karriere",
-       "title": "Wir stellen ein — Engineers, PMs, Designer"
+       "title": "Wir stellen ein: Engineers, PMs, Designer"
       }
      }
     },
@@ -2161,7 +2161,7 @@
    },
    "partners": {
     "metadata": {
-     "title": "Partner — Produktionsberater + Implementierungspartner",
+     "title": "Partner: Produktionsberater + Implementierungspartner",
      "description": "ATLVS-geschulte Produktionsberater, die Teams migrieren, konfigurieren und perfekt im Ökosystem einrichten. Das Partnerverzeichnis öffnet im Q1.",
      "ogImageEyebrow": "Partner",
      "ogImageTitle": "Implementierung + Beratung."
@@ -2180,12 +2180,12 @@
      "heading": "Drei Partner-Tracks.",
      "implementation": {
       "name": "Implementierungspartner",
-      "body": "Produktionsberater, die Teams in 1–3 Tagen von Tabellen auf ATLVS bringen — sauberer Umstieg, keine verlorenen Ablaufpläne.",
+      "body": "Produktionsberater, die Teams in 1 bis 3 Tagen von Tabellen auf ATLVS bringen: sauberer Umstieg, keine verlorenen Ablaufpläne.",
       "forWho": "Für Agenturen + Berater"
      },
      "build": {
       "name": "Build-Partner",
-      "body": "Studios, die ATLVS auf spezialisierte Branchen zuschneiden — Tournee-Oper, immersives Theater, Themenpark-Installationen.",
+      "body": "Studios, die ATLVS auf spezialisierte Branchen zuschneiden: Tournee-Oper, immersives Theater, Themenpark-Installationen.",
       "forWho": "Für technische Studios"
      },
      "solution": {
@@ -2202,13 +2202,13 @@
     },
     "cta": {
      "title": "Partner werden?",
-     "subtitle": "Erzählen Sie uns von Ihrer Produktionsberatungspraxis — Region, Branche, aktuelle Projekte und wie Sie sich in ATLVS einbringen würden.",
+     "subtitle": "Erzählen Sie uns von Ihrer Produktionsberatungspraxis: Region, Branche, aktuelle Projekte und wie Sie sich in ATLVS einbringen würden.",
      "primaryLabel": "Für das Programm bewerben"
     }
    },
    "press": {
     "meta": {
-     "title": "Presse — Marke, Logos, Ansprechpartner",
+     "title": "Presse: Marke, Logos, Ansprechpartner",
      "description": "Pressekit, Markenrichtlinien, Logo-Lockups und Ansprechpartner für Journalisten, Analysten und Partner, die über ATLVS Technologies berichten.",
      "ogEyebrow": "Presse",
      "ogTitle": "Presse + Marke."
@@ -2269,7 +2269,7 @@
    },
    "pricing": {
     "meta": {
-     "title": "Preise — Pro Org. Niemals pro Sitz.",
+     "title": "Preise: Pro Org. Niemals pro Sitz.",
      "description": "Für kleine Teams für immer kostenlos. Preise pro Org bis ganz nach oben. Keine Pro-Sitz-Falle. Keine Pro-Scan-Steuer.",
      "ogEyebrow": "Preise",
      "ogTitle": "Pro Org. Niemals pro Sitz."
@@ -2307,7 +2307,7 @@
       "features": {
        "everythingInFree": "Alles aus Free",
        "invoicingExpensesBudgets": "Rechnungen + Ausgaben + Budgets",
-       "advancing16": "Advancing — 16 Liefergegenstand-Typen",
+       "advancing16": "Advancing: 16 Liefergegenstand-Typen",
        "upTo10Users": "Bis zu 10 Nutzer",
        "upTo2kCredentials": "Bis zu 2.000 Portal-Credentials pro Projekt",
        "emailSupport": "E-Mail-Support"
@@ -2381,12 +2381,12 @@
      "atlvs": {
       "projectsTasks": "Projekte, Aufgaben, Zeitplan, ROS",
       "rfisSubmittals": "RFIs · Submittals · Tagesberichte · Punch",
-      "inspections": "Inspektionen — 10 Kategorien",
-      "finance": "Finanzen — Rechnungen, Budgets, Ausgaben",
-      "procurement": "Beschaffung — RFQs, POs, Lieferanten-Scorecards",
-      "production": "Production — Equipment, Rentals, Fertigungsaufträge",
+      "inspections": "Inspektionen: 10 Kategorien",
+      "finance": "Finanzen: Rechnungen, Budgets, Ausgaben",
+      "procurement": "Beschaffung: RFQs, POs, Lieferanten-Scorecards",
+      "production": "Production: Equipment, Rentals, Fertigungsaufträge",
       "peopleCredentials": "Personen + Credentials + Call Sheets",
-      "advancing": "Advancing — 16 Liefergegenstand-Typen",
+      "advancing": "Advancing: 16 Liefergegenstand-Typen",
       "kbygGuides": "KBYG-Eventguides"
      },
      "gvteway": {
@@ -2402,7 +2402,7 @@
       "offlineGateScan": "Offline-Gate-Scan",
       "geoShiftClock": "Geo-verifizierte Schicht-Stempeluhr",
       "dailyLog": "Tagesbericht + Lager + Disposition",
-      "fieldIntake": "Feld-Erfassung — Vorfälle, Medizin, Schutz"
+      "fieldIntake": "Feld-Erfassung: Vorfälle, Medizin, Schutz"
      },
      "ai": {
       "assistantGrounded": "Assistent, verankert in deinem Workspace",
@@ -2420,7 +2420,7 @@
       "selfExpiringShares": "Selbstablaufende Dateifreigaben",
       "rateLimited": "Ratenbegrenzte Endpunkte",
       "strictHeaders": "Strenge Edge-Security-Header",
-      "sso": "SSO — SAML / OIDC",
+      "sso": "SSO: SAML / OIDC",
       "soc2": "SOC-2-Attestierungspaket",
       "customDpa": "Individueller AVV",
       "dataResidency": "Datenresidenz"
@@ -2445,11 +2445,11 @@
      },
      "trialWorks": {
       "q": "Wie funktioniert die Testphase?",
-      "a": "Crew und Production schalten 14 Tage lang jede Funktion des Tarifs frei. Keine Karte im Voraus. Kein Upgrade bis Tag 14? Du fällst auf Free zurück — deine Daten bleiben erhalten."
+      "a": "Crew und Production schalten 14 Tage lang jede Funktion des Tarifs frei. Keine Karte im Voraus. Kein Upgrade bis Tag 14? Du fällst auf Free zurück, deine Daten bleiben erhalten."
      },
      "changeTiers": {
       "q": "Kann ich den Tarif später wechseln?",
-      "a": "Jederzeit. Upgrades greifen sofort. Downgrades werden zum Ende des Abrechnungszeitraums wirksam. Nichts wird gelöscht — Funktionen über deinem Tarif werden schreibgeschützt, bis du zurückkehrst."
+      "a": "Jederzeit. Upgrades greifen sofort. Downgrades werden zum Ende des Abrechnungszeitraums wirksam. Nichts wird gelöscht; Funktionen über deinem Tarif werden schreibgeschützt, bis du zurückkehrst."
      },
      "nonprofits": {
       "q": "Gemeinnützige Organisationen und Community-Programme?",
@@ -2465,16 +2465,16 @@
      },
      "selfHost": {
       "q": "Kann ich selbst hosten?",
-      "a": "Die Source-available-Lizenz ist bei Festival dabei. Die gemanagte Infrastruktur ist der empfohlene Weg — sie kümmert sich um Sicherheit, Speicher und Uptime."
+      "a": "Die Source-available-Lizenz ist bei Festival dabei. Die gemanagte Infrastruktur ist der empfohlene Weg; sie kümmert sich um Sicherheit, Speicher und Uptime."
      },
      "dataAfterCancel": {
       "q": "Was passiert mit meinen Daten, wenn ich kündige?",
-      "a": "Exportiere alles — CSV oder JSON — jederzeit. Nach der Kündigung bleiben deine Daten 90 Tage schreibgeschützt (abonniere erneut und du bist zurück), dann werden sie gelöscht. Signierte Protokolle der Löschung auf Anfrage. Die Daten gehören dir."
+      "a": "Exportiere alles, CSV oder JSON, jederzeit. Nach der Kündigung bleiben deine Daten 90 Tage schreibgeschützt (abonniere erneut und du bist zurück), dann werden sie gelöscht. Signierte Protokolle der Löschung auf Anfrage. Die Daten gehören dir."
      }
     },
     "cta": {
      "title": "ATLVS ist offen.",
-     "subtitle": "Kostenlos anmelden — 30 Sekunden, keine Karte. Free ist kostenlos, für immer.",
+     "subtitle": "Kostenlos anmelden: 30 Sekunden, keine Karte. Free ist kostenlos, für immer.",
      "primaryLabel": "Kostenlos loslegen",
      "secondaryLabel": "Walkthrough buchen"
     },
@@ -2484,7 +2484,7 @@
    },
    "roadmap": {
     "metadata": {
-     "title": "Roadmap — Was als Nächstes kommt",
+     "title": "Roadmap: Was als Nächstes kommt",
      "description": "Öffentliche Roadmap, drei Quartale im Voraus. Fest zugesagte Arbeit, Arbeit in Umsetzung und die Anfragen, die wir noch bewerten.",
      "ogImageEyebrow": "Roadmap",
      "ogImageTitle": "Was als Nächstes kommt."
@@ -2499,7 +2499,7 @@
      "subtitle": "Drei Quartale im Voraus. In Umsetzung ist fest zugesagt und liegt im Zeitplan. Als Nächstes ist bewertet und priorisiert. In Prüfung steht für das übernächste Quartal zur Debatte.",
      "influencePrefix": "Möchten Sie bei der Reihenfolge mitreden?",
      "influenceLink": "Schreiben Sie uns",
-     "influenceSuffix": "— wir lesen jede Zeile."
+     "influenceSuffix": "Wir lesen jede Zeile."
     },
     "status": {
      "inFlight": "In Umsetzung",
@@ -2517,7 +2517,7 @@
       "items": {
        "aiUseCases": {
         "title": "KI-Anwendungsfall-Seiten",
-        "body": "Sechs Produktions-KI-Oberflächen ausgeliefert unter /ai — Advancing, Incidents, Scheduling, Angebote, Recaps, Safety."
+        "body": "Sechs Produktions-KI-Oberflächen ausgeliefert unter /ai: Advancing, Incidents, Scheduling, Angebote, Recaps, Safety."
        },
        "featureIndustryFarm": {
         "title": "Programmatische Feature-×-Branchen-Matrix",
@@ -2536,7 +2536,7 @@
         "body": "Spesenrechner + Kapazitätsrechner live; 8 weitere für Q4 bewertet."
        },
        "customerStoriesP1": {
-        "title": "Kundengeschichten — Phase 1",
+        "title": "Kundengeschichten: Phase 1",
         "body": "Sechs Fallstudien mit Launch-Partnern; anonymisierte Teaser sind jetzt online, vollständige Geschichten folgen über Q4 hinweg."
        }
       }
@@ -2557,7 +2557,7 @@
         "body": "Die 13 wichtigsten Seiten übersetzt nach es-ES + pt-BR mit vollständigem hreflang."
        },
        "customerStoriesP2": {
-        "title": "Kundengeschichten — Phase 2",
+        "title": "Kundengeschichten: Phase 2",
         "body": "Vier weitere Fallstudien mit Launch-Partnern, als PDF zum Download."
        },
        "templatesExpansion": {
@@ -2600,7 +2600,7 @@
    "solutions": {
     "atlvs": {
      "meta": {
-      "title": "ATLVS — Konsole für Produktionsabläufe",
+      "title": "ATLVS: Konsole für Produktionsabläufe",
       "description": "Wo die Produktion lebt. RFIs, Freigaben, Tagesberichte, Mängellisten, Advancing, Finanzen, Beschaffung, KI. Vom Pitch bis zum Wrap. Eine einzige Quelle der Wahrheit.",
       "ogImageTitle": "Wo die Produktion lebt"
      },
@@ -2610,8 +2610,8 @@
       "atlvs": "ATLVS"
      },
      "schema": {
-      "name": "ATLVS — Konsole für Produktionsabläufe",
-      "description": "Konsole für Produktionsabläufe. Projekte, Finanzen, Beschaffung, Advancing, KI — eine Konsole, eine einzige Quelle der Wahrheit."
+      "name": "ATLVS: Konsole für Produktionsabläufe",
+      "description": "Konsole für Produktionsabläufe. Projekte, Finanzen, Beschaffung, Advancing, KI: eine Konsole, eine einzige Quelle der Wahrheit."
      },
      "hero": {
       "title": "Wo die Produktion lebt.",
@@ -2663,8 +2663,8 @@
      "architecture": {
       "eyebrow": "Unter der Haube",
       "title": "Dieselben Schienen. Jedes Modul.",
-      "body1": "Liste, Detail, Anlegen, Bearbeiten. Jedes Modul läuft auf denselben Schienen — mit Lifecycle-Fluss dort, wo es zählt (Rechnungen, Angebote, Bestellungen, Aufgaben, RFIs). Validierung an der Tür. Mandant abgeschottet in der Datenbank.",
-      "body2": "Dieselben Schienen bedeuten: Das Team lernt ATLVS einmal. Neue Module gehen in Tagen live. Die Arbeit ändert sich — der Workflow hält.",
+      "body1": "Liste, Detail, Anlegen, Bearbeiten. Jedes Modul läuft auf denselben Schienen, mit Lifecycle-Fluss dort, wo es zählt (Rechnungen, Angebote, Bestellungen, Aufgaben, RFIs). Validierung an der Tür. Mandant abgeschottet in der Datenbank.",
+      "body2": "Dieselben Schienen bedeuten: Das Team lernt ATLVS einmal. Neue Module gehen in Tagen live. Die Arbeit ändert sich, der Workflow hält.",
       "bullets": {
        "rls": "RLS in der Datenbank. Mandant abgeschottet in Postgres.",
        "roleAware": "Rollenbewusst bei jeder Aktion. Serverseitig durchgesetzt, nicht im UI.",
@@ -2695,11 +2695,11 @@
       "title": "ATLVS · FAQ",
       "what": {
        "q": "Was ist ATLVS?",
-       "a": "Die Konsole für Produktionsabläufe. Die pink gebrandete, schreibtischfeste Operator-Oberfläche, immer an. 47 Module — Angebote, RFIs, Freigaben, Tagesberichte, Mängellisten, Inspektionen, Advancing, Finanzen, Beschaffung, KI. Wo die Produktion lebt."
+       "a": "Die Konsole für Produktionsabläufe. Die pink gebrandete, schreibtischfeste Operator-Oberfläche, immer an. 47 Module: Angebote, RFIs, Freigaben, Tagesberichte, Mängellisten, Inspektionen, Advancing, Finanzen, Beschaffung, KI. Wo die Produktion lebt."
       },
       "roleAware": {
        "q": "Wie funktioniert der rollenbewusste Zugriff?",
-       "a": "Zehn Rollen (Owner, Admin, Controller, Collaborator, Contractor, Crew, Kunde, Viewer und Cameos). Jede Fähigkeit ist nach Rolle gegated — durchgesetzt in der Datenbank via RLS, nicht im UI."
+       "a": "Zehn Rollen (Owner, Admin, Controller, Collaborator, Contractor, Crew, Kunde, Viewer und Cameos). Jede Fähigkeit ist nach Rolle gegated, durchgesetzt in der Datenbank via RLS, nicht im UI."
       },
       "brand": {
        "q": "Kann ich es branden?",
@@ -2719,7 +2719,7 @@
     },
     "compvss": {
      "meta": {
-      "title": "COMPVSS — Das Feld",
+      "title": "COMPVSS: Das Feld",
       "description": "Offline-first-PWA. Gate-Scan unter 100 ms. Schicht-Einstempeln, Tagesbericht, Vorfall, Medic, Fahrer, Guard, Lager. Installiert sich mit einem Tipp aus dem Browser.",
       "ogImageTitle": "Offline. Unter 100 ms."
      },
@@ -2729,7 +2729,7 @@
       "compvss": "COMPVSS"
      },
      "schema": {
-      "name": "COMPVSS — Das Feld",
+      "name": "COMPVSS: Das Feld",
       "description": "Offline-first-PWA für Produktions-Crews. Gate-Scan, Einstempeln, Vorfall, Medic, Fahrer, Guard, Lager."
      },
      "hero": {
@@ -2743,7 +2743,7 @@
       "heading": "Was die Crew im Feld betreibt.",
       "today": {
        "title": "Heute",
-       "body": "Rollenbasierte Landung — Call Sheet, angepinnte Aufgaben, Schicht heute Abend."
+       "body": "Rollenbasierte Landung: Call Sheet, angepinnte Aufgaben, Schicht heute Abend."
       },
       "gateScan": {
        "title": "Gate- + Ticket-Scan",
@@ -2751,7 +2751,7 @@
       },
       "doorPass": {
        "title": "Door Pass",
-       "body": "Das KBYG des Portals — crew-seitig auf Funk, PSA und SOPs zugeschnitten."
+       "body": "Das KBYG des Portals, crew-seitig auf Funk, PSA und SOPs zugeschnitten."
       },
       "shift": {
        "title": "Schicht",
@@ -2769,16 +2769,16 @@
      "offlineFirst": {
       "eyebrow": "Offline-first",
       "heading": "Der Funkmast ist nicht dein Problem.",
-      "body1": "Gate Scan, manuelle Suche, der heutige Call Sheet — auf dem Gerät zwischengespeichert. Scans werden lokal in die Queue gelegt und in der Sekunde, in der das Signal zurückkehrt, in Reihenfolge nachgespielt. Nichts geht verloren. Niemand wartet.",
-      "body2": "Installation aus dem Browser — Link öffnen, auf Installieren tippen, Vollbild-Launcher auf dem Startbildschirm. Fertig vor dem Soundcheck.",
+      "body1": "Gate Scan, manuelle Suche, der heutige Call Sheet: auf dem Gerät zwischengespeichert. Scans werden lokal in die Queue gelegt und in der Sekunde, in der das Signal zurückkehrt, in Reihenfolge nachgespielt. Nichts geht verloren. Niemand wartet.",
+      "body2": "Installation aus dem Browser: Link öffnen, auf Installieren tippen, Vollbild-Launcher auf dem Startbildschirm. Fertig vor dem Soundcheck.",
       "bullets": {
-       "install": "Installation aus dem Browser — ein Tipp",
+       "install": "Installation aus dem Browser: ein Tipp",
        "queue": "Offline-Scan-Queue spielt in Reihenfolge nach. Null Verluste.",
        "tested": "Bewährt bei 15.000 pro Nacht",
-       "scanStates": "Klare Scan-Status — akzeptiert · doppelt · annulliert · nicht gefunden",
+       "scanStates": "Klare Scan-Status: akzeptiert · doppelt · annulliert · nicht gefunden",
        "geoVerified": "Geo-verifiziertes Einstempeln mit Genauigkeitsgrenzen",
        "permissions": "Kamera + GPS werden nur bei Bedarf angefragt",
-       "tabBar": "Untere Tab-Leiste — fünf Aktionen für den Field-Einsatz",
+       "tabBar": "Untere Tab-Leiste: fünf Aktionen für den Field-Einsatz",
        "contrast": "Hoher Kontrast auf jedem Screen. Lesbar quer über das Gate."
       }
      },
@@ -2794,11 +2794,11 @@
       },
       "gateSpeed": {
        "q": "Wie schnell ist das Gate?",
-       "a": "Unter 100 ms serverseitig. US-Mobilfunk fügt 200–400 ms Round-Trip hinzu. Offline-Scans landen lokal sofort. Doppelt, annulliert, nicht gefunden — eigene Status, alle auf einen Blick am Screen."
+       "a": "Unter 100 ms serverseitig. US-Mobilfunk fügt 200 bis 400 ms Round-Trip hinzu. Offline-Scans landen lokal sofort. Doppelt, annulliert, nicht gefunden: eigene Status, alle auf einen Blick am Screen."
       },
       "offlineCheckin": {
-       "q": "Offline-Check-in — wirklich?",
-       "a": "Wirklich. Scans werden auf dem Gerät in die Queue gelegt. Nachspielen in Reihenfolge, sobald das Signal zurückkehrt. Während eines Offline-Fensters werden Duplikate, die der Scanner noch nicht bestätigen kann, als ausstehend markiert — der Server gleicht beim Sync ab."
+       "q": "Offline-Check-in, wirklich?",
+       "a": "Wirklich. Scans werden auf dem Gerät in die Queue gelegt. Nachspielen in Reihenfolge, sobald das Signal zurückkehrt. Während eines Offline-Fensters werden Duplikate, die der Scanner noch nicht bestätigen kann, als ausstehend markiert; der Server gleicht beim Sync ab."
       },
       "camera": {
        "q": "Kamerazugriff?",
@@ -2814,7 +2814,7 @@
     },
     "gvteway": {
      "meta": {
-      "title": "GVTEWAY — Das Portal",
+      "title": "GVTEWAY: Das Portal",
       "description": "Zwölf Personas. Jede ihre Spur. Artists sehen Rider. Vendors sehen POs. Clients sehen Angebote. Gleiches Projekt, RLS in der Datenbank.",
       "ogImageTitle": "Zwölf Personas. Jede ihre Spur."
      },
@@ -2823,7 +2823,7 @@
       "solutions": "Lösungen"
      },
      "jsonLd": {
-      "name": "GVTEWAY — Das Portal",
+      "name": "GVTEWAY: Das Portal",
       "description": "Portal für externe Stakeholder. Zwölf Personas, jede über RLS in der Datenbank auf ihre Spur eingegrenzt."
      },
      "hero": {
@@ -2834,7 +2834,7 @@
      },
      "personas": {
       "title": "Zwölf Personas. Gleiche Datenbank.",
-      "body": "Jede Persona landet in ihrer eigenen Spur — Navigation, Flows und Deliverables auf die Rolle abgestimmt. Der Artist sieht nie die Rechnung des Sponsors. Die Delegation sieht nie die COI des Vendors. Erzwungen in Postgres.",
+      "body": "Jede Persona landet in ihrer eigenen Spur: Navigation, Flows und Deliverables auf die Rolle abgestimmt. Der Artist sieht nie die Rechnung des Sponsors. Die Delegation sieht nie die COI des Vendors. Erzwungen in Postgres.",
       "artist": {
        "title": "Artist",
        "body": "Tech Rider, Hospitality Rider, Input List, Stage Plot, Gästeliste, Zeitplan, Reise."
@@ -2853,7 +2853,7 @@
       },
       "guest": {
        "title": "Gast",
-       "body": "Tickets — kaufen, einlösen, übertragen. Zeitplan. Logistik am Eventtag. Rideshare-Übergabe."
+       "body": "Tickets: kaufen, einlösen, übertragen. Zeitplan. Logistik am Eventtag. Rideshare-Übergabe."
       },
       "crew": {
        "title": "Crew",
@@ -2880,7 +2880,7 @@
        "body": "Trainingsbuchungen, Residenz-Services, Schutzauftrag, Visum, Datenschutz-Self-Service."
       },
       "privacy": {
-       "title": "Datenschutz — Alle",
+       "title": "Datenschutz für alle",
        "body": "Jede Persona erhält DSAR-Self-Service + Einwilligungsverwaltung. DSGVO, erledigt."
       }
      },
@@ -2888,7 +2888,7 @@
       "proposals": {
        "eyebrow": "Angebote",
        "title": "Angebote, die sich selbst abschließen.",
-       "body": "Dreiundzwanzig Blocktypen. Scroll-Spy-Navigation. Vertragsreferenzen pro Phase. Add-on-Auswahl mit Live-Summen. E-Signatur direkt vor Ort — getippt oder gezeichnet. Widerrufbare Share-Links. Versionsverlauf. Engagement-Analysen bei jedem Scroll. Sauberes PDF, falls die Rechtsabteilung noch Papier will.",
+       "body": "Dreiundzwanzig Blocktypen. Scroll-Spy-Navigation. Vertragsreferenzen pro Phase. Add-on-Auswahl mit Live-Summen. E-Signatur direkt vor Ort, getippt oder gezeichnet. Widerrufbare Share-Links. Versionsverlauf. Engagement-Analysen bei jedem Scroll. Sauberes PDF, falls die Rechtsabteilung noch Papier will.",
        "link": "Aufschlüsselung lesen →"
       },
       "kbyg": {
@@ -2901,25 +2901,25 @@
      "security": {
       "eyebrow": "Sicherheit",
       "title": "RLS direkt in der Datenbank.",
-      "body": "Jeder Datensatz ist in Postgres auf seine Organisation und sein Projekt eingegrenzt. Freigabelinks sind signiert, ablaufend, widerrufbar und auditprotokolliert. Niemand wechselt aus der Sponsor-Lounge in den Künstler-Compound — der Zugriff wird auf den Daten erzwungen, nicht in der UI.",
+      "body": "Jeder Datensatz ist in Postgres auf seine Organisation und sein Projekt eingegrenzt. Freigabelinks sind signiert, ablaufend, widerrufbar und auditprotokolliert. Niemand wechselt aus der Sponsor-Lounge in den Künstler-Compound; der Zugriff wird auf den Daten erzwungen, nicht in der UI.",
       "items": {
-       "perProjectPortals": "Portale pro Projekt — ein Link, ein Projekt",
+       "perProjectPortals": "Portale pro Projekt: ein Link, ein Projekt",
        "perPersonaNav": "Navigation pro Persona, Lesarten pro Persona",
        "signedLinks": "Signierte Freigabelinks mit Ablauf + Widerruf",
        "fileDownloads": "Datei-Downloads laufen selbst ab",
        "everyViewLogged": "Jeder Aufruf in der Engagement-Analyse protokolliert",
-       "eSign": "E-Signatur direkt im Dokument — getippt oder gezeichnet, IP + Zeitstempel erfasst"
+       "eSign": "E-Signatur direkt im Dokument, getippt oder gezeichnet, IP + Zeitstempel erfasst"
       }
      },
      "faq": {
       "title": "GVTEWAY · FAQ",
       "q1": {
        "q": "Was ist GVTEWAY?",
-       "a": "Das Portal. Blau gebrandet. Jeder Gast, Künstler, Lieferant, Sponsor und Mitwirkende kommt über seine eigene Spur herein. Zwölf Personas — jede sieht nur ihren Bereich."
+       "a": "Das Portal. Blau gebrandet. Jeder Gast, Künstler, Lieferant, Sponsor und Mitwirkende kommt über seine eigene Spur herein. Zwölf Personas, jede sieht nur ihren Bereich."
       },
       "q2": {
        "q": "Brauchen Gäste ein Konto?",
-       "a": "Nur lesen? Link teilen — und sie sind drin. Beitragen (Rider, COIs, Unterschriften)? Eine schlanke Anmeldung erzeugt eine auf dieses Projekt eingegrenzte Berechtigung. Schnell by Design."
+       "a": "Nur lesen? Link teilen, und sie sind drin. Beitragen (Rider, COIs, Unterschriften)? Eine schlanke Anmeldung erzeugt eine auf dieses Projekt eingegrenzte Berechtigung. Schnell by Design."
       },
       "q3": {
        "q": "Kann ich das Portal als White-Label betreiben?",
@@ -2927,7 +2927,7 @@
       },
       "q4": {
        "q": "Wie werden Daten zwischen Projekten isoliert?",
-       "a": "Postgres RLS. Jeder Datensatz ist auf seine Organisation und sein Projekt eingegrenzt. Der Link, den Sie teilen, verweist auf genau ein Projekt — niemand wechselt von einem ins andere."
+       "a": "Postgres RLS. Jeder Datensatz ist auf seine Organisation und sein Projekt eingegrenzt. Der Link, den Sie teilen, verweist auf genau ein Projekt; niemand wechselt von einem ins andere."
       },
       "q5": {
        "q": "Kann eine Berechtigung auf zwei Projekte zugreifen?",
@@ -2942,8 +2942,8 @@
      }
     },
     "metadata": {
-     "title": "Lösungen — Vier Apps. Ein Schema.",
-     "description": "ATLVS — Konsole für den Produktionsbetrieb. COMPVSS — Offline-First-Feld-PWA. GVTEWAY — Stakeholder-Portal & Marktplatz. LEG3ND — Wissen, LMS & Ressourcen. Derselbe Datensatz aus dem Büro, vom Gate, vom Stakeholder und aus dem Standard."
+     "title": "Lösungen: Vier Apps. Ein Schema.",
+     "description": "ATLVS ist die Konsole für den Produktionsbetrieb. COMPVSS ist die Offline-First-Feld-PWA. GVTEWAY ist das Stakeholder-Portal und der Marktplatz. LEG3ND steht für Wissen, LMS und Ressourcen. Derselbe Datensatz aus dem Büro, vom Gate, vom Stakeholder und aus dem Standard."
     },
     "crumbs": {
      "home": "Start",
@@ -2952,7 +2952,7 @@
     "hero": {
      "eyebrow": "Lösungen",
      "title": "Vier Apps. Eine einzige Quelle der Wahrheit.",
-     "body": "A T L V S, C O M P V S S, G V T E W A Y, L E G 3 N D. Eine Datenbank darunter. Derselbe Datensatz, vier optimierte Oberflächen — Ihr Büro, Ihre Crew, Ihre Stakeholder, Ihr Standard, alle lesen dieselbe Wahrheit."
+     "body": "A T L V S, C O M P V S S, G V T E W A Y, L E G 3 N D. Eine Datenbank darunter. Derselbe Datensatz, vier optimierte Oberflächen: Ihr Büro, Ihre Crew, Ihre Stakeholder, Ihr Standard, alle lesen dieselbe Wahrheit."
     },
     "apps": {
      "heading": "Die vier Apps",
@@ -2964,7 +2964,7 @@
       "bullets": {
        "0": "47 Module über 9 Domänen",
        "1": "KI-Assistent, verankert in Ihrem Workspace",
-       "2": "Unveränderliches Audit-Log — Akteur, IP, vorher, nachher",
+       "2": "Unveränderliches Audit-Log: Akteur, IP, vorher, nachher",
        "3": "Rollenbewusst bei jeder Aktion, serverseitig erzwungen"
       }
      },
@@ -2974,7 +2974,7 @@
       "body": "Künstler, Lieferant, Kunde, Sponsor, Gast, Crew, Delegation, Medien, VIP, Hospitality, Volunteer, Athlet. Dasselbe Projekt, eingegrenzte Lesarten.",
       "bullets": {
        "0": "12 Personas pro Projekt",
-       "1": "Angebote direkt im Dokument signiert — 23 Block-Typen",
+       "1": "Angebote direkt im Dokument signiert, 23 Block-Typen",
        "2": "Live-Advancing mit Deliverable-Tracking",
        "3": "KBYG-Guides pro Persona, anonym teilbar"
       }
@@ -2993,18 +2993,18 @@
      "legend": {
       "tier": "WISSEN",
       "title": "Der Wissensbestand",
-      "body": "Der Standard, Kurse, Zertifizierungen, der bepreiste Katalog und die Compliance-Engine — auf dem XPMS-2.0-Protokoll. Das Wissen, auf dem die Welt gebaut ist.",
+      "body": "Der Standard, Kurse, Zertifizierungen, der bepreiste Katalog und die Compliance-Engine, alles auf dem XPMS-2.0-Protokoll. Das Wissen, auf dem die Welt gebaut ist.",
       "bullets": {
-       "0": "Der Standard — eine versionierte Wissensbasis",
+       "0": "Der Standard: eine versionierte Wissensbasis",
        "1": "Kurse & LMS mit Quizzen und Zertifizierungen",
        "2": "Zertifizierungen, die Gate-Scans im Feld freischalten",
-       "3": "XMCE — maschinenprüfbare Compliance"
+       "3": "XMCE: maschinenprüfbare Compliance"
       }
      }
     },
     "industries": {
      "heading": "Live-Arbeit, in jeder Form",
-     "body": "Jede Form bekommt ein abgestimmtes Setup — Starter-Vorlagen, Standard-Rollenmatrix, Fachjargon-Notizen von Operatoren, die es schon gefahren haben.",
+     "body": "Jede Form bekommt ein abgestimmtes Setup: Starter-Vorlagen, Standard-Rollenmatrix, Fachjargon-Notizen von Operatoren, die es schon gefahren haben.",
      "live-events": {
       "name": "Residencies + Nights",
       "blurb": "Ausverkaufte Wochen, wiederkehrendes Programm"
@@ -3043,7 +3043,7 @@
      "items": {
       "0": {
        "q": "Wie unterscheiden sich die vier Apps?",
-       "a": "ATLVS ist die Konsole für den Produktionsbetrieb — wo die Produktion lebt. COMPVSS ist die Offline-First-Feld-PWA — Site- & Venue-Ops. GVTEWAY ist das Stakeholder-Portal — zwölf Personas, jede ihre Spur. LEG3ND ist Wissen, LMS & Ressourcen. Eine Datenbank darunter."
+       "a": "ATLVS ist die Konsole für den Produktionsbetrieb, dort lebt die Produktion. COMPVSS ist die Offline-First-Feld-PWA für Site- und Venue-Ops. GVTEWAY ist das Stakeholder-Portal mit zwölf Personas, jede ihre Spur. LEG3ND ist Wissen, LMS und Ressourcen. Eine Datenbank darunter."
       },
       "1": {
        "q": "Bekomme ich alle vier?",
@@ -3051,7 +3051,7 @@
       },
       "2": {
        "q": "Können andere Organisationen meine Daten sehen?",
-       "a": "Nein. RLS sitzt in der Datenbank — abgeschottet in Postgres, nicht nachträglich auf die App-Ebene geschraubt. Eine Berechtigung in einer Organisation kann auf nichts in einer anderen lesend oder schreibend zugreifen. Durchgesetzt direkt in den Daten selbst."
+       "a": "Nein. RLS sitzt in der Datenbank, abgeschottet in Postgres, nicht nachträglich auf die App-Ebene geschraubt. Eine Berechtigung in einer Organisation kann auf nichts in einer anderen lesend oder schreibend zugreifen. Durchgesetzt direkt in den Daten selbst."
       },
       "3": {
        "q": "Portal im White-Label?",
@@ -3066,8 +3066,8 @@
     },
     "legend": {
      "meta": {
-      "title": "LEG3ND — Wissen, LMS & Compliance",
-      "description": "Das Wissen, auf dem die Welt gebaut ist — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine. Die Wissensschicht der ATLVS World Engine, auf dem XPMS 2.0-Protokoll.",
+      "title": "LEG3ND: Wissen, LMS und Compliance",
+      "description": "Das Wissen, auf dem die Welt gebaut ist: der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine. Die Wissensschicht der ATLVS World Engine, auf dem XPMS 2.0-Protokoll.",
       "ogImageEyebrow": "LEG3ND",
       "ogImageTitle": "Das Wissen, auf dem die Welt gebaut ist."
      },
@@ -3076,24 +3076,24 @@
       "solutions": "Lösungen"
      },
      "jsonLd": {
-      "description": "Das Wissen, auf dem die Welt gebaut ist — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine."
+      "description": "Das Wissen, auf dem die Welt gebaut ist: der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine."
      },
      "hero": {
       "title": "Das Wissen, auf dem die Welt gebaut ist.",
-      "body": "Das Wissen, auf dem die Welt gebaut ist — der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine. Es ist die Wissensschicht der ATLVS World Engine — der Standard, das LMS, Zertifizierungen, der bepreiste Katalog und die Compliance-Engine, alles auf dem XPMS 2.0-Protokoll.",
+      "body": "Das Wissen, auf dem die Welt gebaut ist: der Standard, Kurse, Zertifizierungen, der Katalog und die Compliance-Engine. Es ist die Wissensschicht der ATLVS World Engine: der Standard, das LMS, Zertifizierungen, der bepreiste Katalog und die Compliance-Engine, alles auf dem XPMS 2.0-Protokoll.",
       "ctaPrimary": "Kostenlos loslegen",
       "ctaSecondary": "Demo buchen"
      },
      "pillars": {
       "title": "Eine Bibliothek. Jede Disziplin.",
-      "body": "Die Referenzschicht, aus der jede andere App liest — einmal verfasst, an einem Ort verwaltet, versioniert wie Code.",
+      "body": "Die Referenzschicht, aus der jede andere App liest: einmal verfasst, an einem Ort verwaltet, versioniert wie Code.",
       "standard": {
        "title": "Der Standard",
-       "body": "Die kanonische Wissensbasis — wie die Arbeit tatsächlich läuft, niedergeschrieben und durchsuchbar."
+       "body": "Die kanonische Wissensbasis: wie die Arbeit tatsächlich läuft, niedergeschrieben und durchsuchbar."
       },
       "courses": {
        "title": "Kurse & LMS",
-       "body": "Strukturiertes Lernen mit Lektionen, Quizzes und Abschlussverfolgung — vom Onboarding bis zur Meisterschaft."
+       "body": "Strukturiertes Lernen mit Lektionen, Quizzes und Abschlussverfolgung, vom Onboarding bis zur Meisterschaft."
       },
       "certifications": {
        "title": "Zertifizierungen",
@@ -3101,19 +3101,19 @@
       },
       "resources": {
        "title": "Ressourcen-Hub",
-       "body": "Vorlagen, SOPs und Referenzdokumente — ein Zuhause, keine Archäologie im geteilten Laufwerk mehr."
+       "body": "Vorlagen, SOPs und Referenzdokumente: ein Zuhause, keine Archäologie im geteilten Laufwerk mehr."
       },
       "catalog": {
        "title": "Katalog",
-       "body": "Bepreiste Atome und URIDs — die kalkulierten Bausteine, aus denen Schätzungen und Beschaffung schöpfen."
+       "body": "Bepreiste Atome und URIDs: die kalkulierten Bausteine, aus denen Schätzungen und Beschaffung schöpfen."
       },
       "signage": {
        "title": "Beschilderungs-Bibliothek",
-       "body": "ISO 7010-, DOT-AIGA- und ISA-Piktogramme — produktionsreife Sicherheits-Wegeführung, standardisiert."
+       "body": "ISO 7010-, DOT-AIGA- und ISA-Piktogramme: produktionsreife Sicherheits-Wegeführung, standardisiert."
       },
       "xmce": {
        "title": "XMCE Compliance-Engine",
-       "body": "Maschinell prüfbare Compliance — Regeln, ausgewertet gegen den lebenden Datensatz, nicht gegen einen Ordner."
+       "body": "Maschinell prüfbare Compliance: Regeln, ausgewertet gegen den lebenden Datensatz, nicht gegen einen Ordner."
       },
       "safety": {
        "title": "Sicherheit",
@@ -3125,7 +3125,7 @@
       "title": "Wissen, das der Rest der Welt liest.",
       "body": "LEG3ND ist kein Wiki, das an der Seite angeschraubt ist. Zertifizierungen steuern Feld-Scans. Katalog-Atome bepreisen Schätzungen. Compliance-Regeln werten gegen lebende Projekte aus. Die Wissensschicht ist verdrahtet mit demselben Datenspeicher, auf dem das gesamte Ökosystem läuft.",
       "items": {
-       "standard": "Der Standard — eine kanonische, versionierte Wissensbasis",
+       "standard": "Der Standard: eine kanonische, versionierte Wissensbasis",
        "courses": "Kurse & LMS mit Quizzes und Abschluss-Badges",
        "certifications": "Zertifizierungen, die COMPVSS-Einlass-Scans steuern",
        "catalog": "Bepreiste Katalog-Atome, die Schätzungen & Beschaffung speisen",
@@ -3137,15 +3137,15 @@
       "title": "LEG3ND · FAQ",
       "q1": {
        "q": "Was ist LEG3ND?",
-       "a": "Die Wissensschicht des ATLVS-Ökosystems — der Standard (Wissensbasis), Kurse & LMS, Zertifizierungen, ein Ressourcen-Hub, ein bepreister Katalog, die Beschilderungs-Bibliothek, die XMCE Compliance-Engine und Sicherheit, alles auf dem XPMS 2.0-Protokoll."
+       "a": "Die Wissensschicht des ATLVS-Ökosystems: der Standard (Wissensbasis), Kurse & LMS, Zertifizierungen, ein Ressourcen-Hub, ein bepreister Katalog, die Beschilderungs-Bibliothek, die XMCE Compliance-Engine und Sicherheit, alles auf dem XPMS 2.0-Protokoll."
       },
       "q2": {
        "q": "Wie unterscheidet es sich von einem Wiki oder einem separaten LMS?",
-       "a": "Es teilt sich denselben Datenspeicher mit dem Rest des Ökosystems. Zertifizierungen steuern Feld-Scans in COMPVSS, Katalog-Atome bepreisen Schätzungen in ATLVS, und Compliance-Regeln werten gegen lebende Projekte aus — nichts davon kann ein eigenständiges Wiki oder LMS leisten."
+       "a": "Es teilt sich denselben Datenspeicher mit dem Rest des Ökosystems. Zertifizierungen steuern Feld-Scans in COMPVSS, Katalog-Atome bepreisen Schätzungen in ATLVS, und Compliance-Regeln werten gegen lebende Projekte aus. Nichts davon kann ein eigenständiges Wiki oder LMS leisten."
       },
       "q3": {
        "q": "Was ist die Beschilderungs-Bibliothek?",
-       "a": "Ein produktionsreifer Satz von ISO 7010-, DOT-AIGA- und ISA-Piktogrammen für Sicherheits-Wegeführung — standardisiert, damit jeder Standort dieselbe visuelle Sprache spricht."
+       "a": "Ein produktionsreifer Satz von ISO 7010-, DOT-AIGA- und ISA-Piktogrammen für Sicherheits-Wegeführung, standardisiert, damit jeder Standort dieselbe visuelle Sprache spricht."
       },
       "q4": {
        "q": "Was prüft die Compliance-Engine?",
@@ -3162,7 +3162,7 @@
    },
    "status": {
     "meta": {
-     "title": "Status — Ökosystem-Verfügbarkeit + Störungshistorie",
+     "title": "Status: Ökosystem-Verfügbarkeit + Störungshistorie",
      "description": "Ökosystemstatus in Echtzeit über ATLVS, GVTEWAY, COMPVSS, LEG3ND und die Marketing-Oberfläche. Abonnieren Sie Störungsmeldungen.",
      "ogEyebrow": "Status",
      "ogTitle": "Ökosystem-Zustand."
@@ -3204,7 +3204,7 @@
    },
    "teams": {
     "meta": {
-     "title": "Gebaut für Produktionsrollen — Tour, Produktion, Bühne, Festival, Site, Technik, Talent, EHS",
+     "title": "Gebaut für Produktionsrollen: Tour, Produktion, Bühne, Festival, Site, Technik, Talent, EHS",
      "description": "ATLVS Technologies ist auf die Rolle abgestimmt, die Sie tatsächlich führen. Landingpages pro Rolle mit den Modulen, in denen jede Persona lebt, den Workflows, auf die es ankommt, und den FAQs, die sie stellen.",
      "ogImageEyebrow": "Gebaut für",
      "ogImageTitle": "Die Rolle, die Sie führen."
@@ -3252,12 +3252,12 @@
      },
      "cta": {
       "title": "ATLVS ist offen.",
-      "subtitle": "Öffnen Sie diese Vorlage — und die anderen 47 Module — kostenlos für kleine Teams."
+      "subtitle": "Öffnen Sie diese Vorlage und die anderen 47 Module kostenlos für kleine Teams."
      }
     },
     "meta": {
-     "title": "Vorlagen — Produktionsartefakte, sofort einsatzbereit",
-     "description": "Vorgefertigte ROS, Advancing-Checklisten, Rider, Call Sheets, Sicherheitsbriefings und Vorlagen für das Dienstleister-Onboarding — in Sekunden in ATLVS geöffnet.",
+     "title": "Vorlagen: Produktionsartefakte, sofort einsatzbereit",
+     "description": "Vorgefertigte ROS, Advancing-Checklisten, Rider, Call Sheets, Sicherheitsbriefings und Vorlagen für das Dienstleister-Onboarding, in Sekunden in ATLVS geöffnet.",
      "ogImageEyebrow": "Vorlagen",
      "ogImageTitle": "Produktionsartefakte, sofort einsatzbereit."
     },
@@ -3268,7 +3268,7 @@
     "hero": {
      "eyebrow": "Vorlagen",
      "title": "Produktionsartefakte, sofort einsatzbereit.",
-     "body": "ROS, Advancing-Checklisten, Rider, Call Sheets, Sicherheitsbriefings, Dienstleister-Onboarding — die Artefakte, die jedes Produktionsteam bei jeder Show von Grund auf neu baut. Vorgefertigt, mit klarer Haltung, in Sekunden in ATLVS geöffnet."
+     "body": "ROS, Advancing-Checklisten, Rider, Call Sheets, Sicherheitsbriefings, Dienstleister-Onboarding: die Artefakte, die jedes Produktionsteam bei jeder Show von Grund auf neu baut. Vorgefertigt, mit klarer Haltung, in Sekunden in ATLVS geöffnet."
     },
     "card": {
      "cta": "Diese Vorlage öffnen"
@@ -3280,8 +3280,8 @@
    },
    "tools": {
     "meta": {
-     "title": "Kostenlose Tools — Produktionsrechner",
-     "description": "Spesen-Rechner, Kapazitätsrechner und mehr — kostenlose Tools, mit denen Produktionsteams Shows planen, budgetieren und durchführen.",
+     "title": "Kostenlose Tools: Produktionsrechner",
+     "description": "Spesen-Rechner, Kapazitätsrechner und mehr: kostenlose Tools, mit denen Produktionsteams Shows planen, budgetieren und durchführen.",
      "ogImageEyebrow": "Kostenlose Tools",
      "ogImageTitle": "Produktionsrechner."
     },
@@ -3421,7 +3421,7 @@
      "before": "Wir streben",
      "after": "monatliche Verfügbarkeit an. Geplante Wartungsfenster sind ausgenommen."
     },
-    "credits": "Service-Gutschriften bei verfehltem SLA: 10 % (99,0–99,9 %), 25 % (98,0–99,0 %), 50 % (unter 98,0 %).",
+    "credits": "Service-Gutschriften bei verfehltem SLA: 10 % (99,0 bis 99,9 %), 25 % (98,0 bis 99,0 %), 50 % (unter 98,0 %).",
     "report": {
      "before": "Vorfälle melden an"
     }
@@ -3432,7 +3432,7 @@
    "crumbsToolsLabel": "Tools",
    "capacity": {
     "meta": {
-     "title": "Kapazitätsrechner für Veranstaltungsorte — Maximale Belegung nach Nutzungsart",
+     "title": "Kapazitätsrechner für Veranstaltungsorte: Maximale Belegung nach Nutzungsart",
      "description": "Schätzen Sie die maximal zulässige Belegung anhand von Quadratmetern und Nutzungsart. IBC-konforme Standardwerte für Versammlung, dichte Bestuhlung, Stehplätze und Bewirtung."
     },
     "title": "Kapazitätsrechner für Veranstaltungsorte.",
@@ -3442,17 +3442,17 @@
     "lead": "Schätzen Sie die maximal zulässige Belegung anhand von Quadratmetern und Nutzungsart. IBC-konforme Standardwerte für Versammlung, dichte Bestuhlung, Stehplätze und Bewirtung. Lassen Sie sich vor der Veröffentlichung von der zuständigen Behörde bestätigen.",
     "how": {
      "heading": "So funktioniert die Belegungsdichte.",
-     "body1": "Die Belegungsdichte ist die maximale Personenzahl, die ein Raum aufnehmen kann, festgelegt durch den International Building Code (IBC) und — mit Anpassungen — von den meisten US-Behörden übernommen. Der IBC legt Flächenfaktoren pro Person nach Nutzungsart fest: 7 sq ft pro stehender Person, 15 sq ft für lockere Versammlung mit Tischen, 5 sq ft für Wartebereiche. Multiplizieren Sie die nutzbare Bodenfläche mit dem passenden Faktor, um die Belegung zu ermitteln.",
-     "body2": "Die tatsächliche Kapazität ist der niedrigere Wert aus IBC-Belegung und dem, was die Fluchtwege zulassen — Breite der Ausgänge, feste Bestuhlung, Sprinklerabdeckung und das Ermessen der Behörde spielen alle hinein. Behandeln Sie diesen Rechner als ersten Schätzwert; lassen Sie sich vor der Veröffentlichung der Kapazität von der örtlich zuständigen Behörde bestätigen."
+     "body1": "Die Belegungsdichte ist die maximale Personenzahl, die ein Raum aufnehmen kann, festgelegt durch den International Building Code (IBC) und, mit Anpassungen, von den meisten US-Behörden übernommen. Der IBC legt Flächenfaktoren pro Person nach Nutzungsart fest: 7 sq ft pro stehender Person, 15 sq ft für lockere Versammlung mit Tischen, 5 sq ft für Wartebereiche. Multiplizieren Sie die nutzbare Bodenfläche mit dem passenden Faktor, um die Belegung zu ermitteln.",
+     "body2": "Die tatsächliche Kapazität ist der niedrigere Wert aus IBC-Belegung und dem, was die Fluchtwege zulassen. Breite der Ausgänge, feste Bestuhlung, Sprinklerabdeckung und das Ermessen der Behörde spielen alle hinein. Behandeln Sie diesen Rechner als ersten Schätzwert; lassen Sie sich vor der Veröffentlichung der Kapazität von der örtlich zuständigen Behörde bestätigen."
     },
     "cta": {
      "title": "Kapazität lebt in ATLVS.",
-     "subtitle": "Kapazität pro Veranstaltungsort, Ticketkontingente und Limits für den Gate-Scan — ein Datensatz, eine Single Source of Truth."
+     "subtitle": "Kapazität pro Veranstaltungsort, Ticketkontingente und Limits für den Gate-Scan: ein Datensatz, eine Single Source of Truth."
     }
    },
    "perDiem": {
     "meta": {
-     "title": "Spesenrechner — Reisepauschale für Crew & Talent",
+     "title": "Spesenrechner: Reisepauschale für Crew & Talent",
      "description": "Berechnen Sie die gesamte Tagespauschale für Crew oder Talent über mehrere Städte und Tage hinweg. GSA-konforme Standardsätze mit individuell anpassbaren Raten."
     },
     "title": "Spesenrechner.",
@@ -3462,7 +3462,7 @@
     "lead": "Berechnen Sie die gesamte Tagespauschale für Crew oder Talent über mehrere Städte und Tage hinweg. GSA-konforme Standardsätze; pro Stadt anpassbar.",
     "how": {
      "heading": "So funktioniert die Tagespauschale.",
-     "body1": "Die Tagespauschale ist der tägliche Betrag, den Reisende — Crew, Talent oder Auftragnehmer — für Verpflegung und Nebenkosten fernab der Heimatbasis beziehen. Die US General Services Administration (GSA) veröffentlicht stadtweise Sätze für Dienstreisen des Bundes; die meisten Produktionsbudgets nutzen sie als belastbare Grundlage. Internationale Sätze stammen aus den DSSR-Tabellen des US-Außenministeriums.",
+     "body1": "Die Tagespauschale ist der tägliche Betrag, den Reisende, also Crew, Talent oder Auftragnehmer, für Verpflegung und Nebenkosten fernab der Heimatbasis beziehen. Die US General Services Administration (GSA) veröffentlicht stadtweise Sätze für Dienstreisen des Bundes; die meisten Produktionsbudgets nutzen sie als belastbare Grundlage. Internationale Sätze stammen aus den DSSR-Tabellen des US-Außenministeriums.",
      "body2": "Die Tagespauschale wird üblicherweise pro Show oder wöchentlich abgerechnet, bar oder per Gehaltsabrechnung. Tourmanager verfolgen sie anhand der Stadt-x-Tag-Ratenmatrix, damit der Plan nie von der Realität abweicht."
     },
     "cta": {
@@ -3475,7 +3475,7 @@
    "crumbsLabel": "Marketplace",
    "calendar": {
     "meta": {
-     "title": "Veranstaltungskalender — Verkaufsstarts + Ankündigungen",
+     "title": "Veranstaltungskalender: Verkaufsstarts + Ankündigungen",
      "description": "Anstehende Verkaufsstarts, Presale-Zeitfenster und Ankündigungen."
     },
     "eyebrow": "Marketplace · Kalender",
@@ -3489,7 +3489,7 @@
    },
    "agencies": {
     "meta": {
-     "title": "Agenturverzeichnis — Booking-Agenturen",
+     "title": "Agenturverzeichnis: Booking-Agenturen",
      "description": "Verifizierte Booking-Agenturen im ATLVS-Netzwerk."
     },
     "eyebrow": "Marketplace · Agenturen",
@@ -3522,13 +3522,13 @@
    "crumbsLabel": "Integrationen",
    "thanks": {
     "meta": {
-     "title": "Einreichung erhalten — ATLVS Partnerprogramm",
+     "title": "Einreichung erhalten: ATLVS Partnerprogramm",
      "description": "Dein Vorschlag für eine Partnerintegration ist in der Warteschlange."
     },
     "crumbsLabel": "Einreichung erhalten",
     "title": "Einreichung erhalten.",
     "body": {
-     "before": "Dein Vorschlag ist in der Warteschlange. Das ATLVS Partner-AM-Team antwortet in der Regel innerhalb von 5 Werktagen. Behalte den Posteingang im Blick, mit dem du eingereicht hast — wir melden uns von"
+     "before": "Dein Vorschlag ist in der Warteschlange. Das ATLVS Partner-AM-Team antwortet in der Regel innerhalb von 5 Werktagen. Behalte den Posteingang im Blick, mit dem du eingereicht hast; wir melden uns von"
     },
     "cta": {
      "back": "Zurück zu den Live-Integrationen",
@@ -3537,12 +3537,12 @@
    },
    "partners": {
     "meta": {
-     "title": "Partnerintegrationen — ATLVS Certified- + Verified-Partnerverzeichnis",
+     "title": "Partnerintegrationen: ATLVS Certified- + Verified-Partnerverzeichnis",
      "description": "Drittanbieter-Integrationen, gebaut von ATLVS Partnern. Verified-Partner-Integrationen bestehen unsere technische Prüfung; Certified-Integrationen bestehen zusätzlich die End-to-End-QA."
     },
     "crumbsLabel": "Partnerverzeichnis",
     "title": "Von Partnern gebaut. Von uns verifiziert.",
-    "lead": "Drittanbieter-Integrationen, die an der REST- + GraphQL-Schnittstelle von ATLVS andocken. Verified-Partner-Integrationen bestehen unsere technische Prüfung; Certified-Integrationen bestehen zusätzlich die End-to-End-QA auf einem Live-Mandanten. Bau deine eigene —",
+    "lead": "Drittanbieter-Integrationen, die an der REST- + GraphQL-Schnittstelle von ATLVS andocken. Verified-Partner-Integrationen bestehen unsere technische Prüfung; Certified-Integrationen bestehen zusätzlich die End-to-End-QA auf einem Live-Mandanten. Bau deine eigene:",
     "submitLink": "einen Vorschlag einreichen",
     "cta": {
      "submit": "Partnerintegration einreichen",
@@ -3561,7 +3561,7 @@
    },
    "submit": {
     "meta": {
-     "title": "Partnerintegration einreichen — ATLVS Partnerprogramm",
+     "title": "Partnerintegration einreichen: ATLVS Partnerprogramm",
      "description": "Baue eine Integration gegen die REST- + GraphQL-API von ATLVS und wir listen sie in unserem Partnerverzeichnis. Die Verified-Partner-Prüfung besteht unsere technische Checkliste; Certified besteht die End-to-End-QA auf einem Live-Mandanten."
     },
     "title": "Bau sie. Bring sie raus. Wir listen sie.",
@@ -3578,7 +3578,7 @@
      "contactName": "Ansprechpartner",
      "shortDescription": "Kurzbeschreibung (ein Satz)",
      "longDescription": "Ausführliche Beschreibung",
-     "capabilities": "Funktionen — eine pro Zeile",
+     "capabilities": "Funktionen, eine pro Zeile",
      "homepageUrl": "Homepage-URL",
      "docsUrl": "URL der Integrationsdokumentation"
     },
@@ -3590,7 +3590,7 @@
    "detail": {
     "fallbackTitle": "Integrationen",
     "meta": {
-     "title": "{name} Integration — {short}"
+     "title": "{name} Integration: {short}"
     },
     "eyebrow": "Integration · {category}",
     "eyebrowBase": "Integration",
@@ -3607,7 +3607,7 @@
    "partnerDetail": {
     "fallbackTitle": "Partnerintegration",
     "meta": {
-     "title": "{name} — ATLVS Partnerintegration"
+     "title": "{name}: ATLVS Partnerintegration"
     },
     "ogCertified": "Zertifizierter Partner",
     "ogVerified": "Verifizierter Partner",
@@ -3626,7 +3626,7 @@
    "crumbsLabel": "Funktionen",
    "detail": {
     "fallbackTitle": "Funktion",
-    "fallbackDescription": "ATLVS Technologies — Experience-Produktion, vereint. Vier Apps, eine einzige Single Source of Truth.",
+    "fallbackDescription": "ATLVS Technologies: Experience-Produktion, vereint. Vier Apps, eine einzige Single Source of Truth.",
     "beforeAfter": {
      "heading": "Vorher und nachher.",
      "sub": "Was sich ändert, wenn dieses Modul in deinem Stack landet.",
@@ -3649,17 +3649,17 @@
    "industry": {
     "fallbackTitle": "Funktion × Branche",
     "meta": {
-     "title": "{module} für {industry} — {sub}",
+     "title": "{module} für {industry}: {sub}",
      "description": "{blurb} Gebaut für {industry}-Teams, die {tagline} fahren."
     },
     "ogTitle": "{module} für {industry}",
-    "useCase": "{title} — {body} Bei {industry}-Jobs zeigt sich das als {tagline}.",
+    "useCase": "{title}: {body} Bei {industry}-Jobs zeigt sich das als {tagline}.",
     "howItShowsUp": "Wie es sich zeigt",
     "teamsRunOn": "Worauf {industry}-Teams mit {module} fahren.",
     "industryOutcomes": "Branchenergebnisse",
     "whatChanges": "Was sich für {industry}-Operator ändert.",
     "featureSet": "Der {module}-Funktionsumfang.",
-    "featureSetSub": "Dieselben Primitive, die in unserem {module}-Modul stecken — angewendet auf {industry}-Workflows.",
+    "featureSetSub": "Dieselben Primitive, die in unserem {module}-Modul stecken, angewendet auf {industry}-Workflows.",
     "cta": {
      "runTitle": "Fahr {module} in der {industry}-Produktion.",
      "runSubtitle": "Melde dich kostenlos an für kleine Teams. Pro-Organisation-Preise für alles darüber hinaus."
@@ -3676,7 +3676,7 @@
     "fallbackTitle": "Lösung",
     "fallbackDescription": "Branchenlösung",
     "meta": {
-     "title": "{name} — {tagline} auf ATLVS Technologies"
+     "title": "{name}: {tagline} auf ATLVS Technologies"
     },
     "cta": {
      "bookDemo": "Demo buchen"
@@ -3692,7 +3692,7 @@
    "detail": {
     "fallbackTitle": "Teams",
     "meta": {
-     "title": "{role} — {hero}"
+     "title": "{role}: {hero}"
     },
     "workflows": "Was {role} täglich fahren.",
     "familiar": "Kommt dir bekannt vor?",
@@ -3712,7 +3712,7 @@
    "detail": {
     "fallbackTitle": "Glossar",
     "meta": {
-     "title": "{term} — Definition"
+     "title": "{term}: Definition"
     },
     "eyebrow": "Glossar · {category}",
     "also": "Auch: {list}",
@@ -3727,8 +3727,8 @@
   "brandKit": {
    "foundations": {
     "meta": {
-     "title": "Grundlagen · ATLVS Technologies — Brand- & UI-Kit",
-     "description": "Markengrundlagen von ATLVS Technologies: das Waypoint-Zeichen, Farbe, Typografie (MONUMENT — Anton + Hanken Grotesk), Abstände, Radien, Elevation, Motion und Ikonografie über alle vier Apps hinweg."
+     "title": "Grundlagen · ATLVS Technologies · Brand- & UI-Kit",
+     "description": "Markengrundlagen von ATLVS Technologies: das Waypoint-Zeichen, Farbe, Typografie (MONUMENT mit Anton + Hanken Grotesk), Abstände, Radien, Elevation, Motion und Ikonografie über alle vier Apps hinweg."
     },
     "nav": {
      "aria": "Grundlagen-Abschnitte",
@@ -3751,16 +3751,16 @@
      "lead": {
       "before": "Das ATLVS-Zeichen ist ein",
       "waypoint": "Waypoint",
-      "after": "— ein achtzackiger Navigationsstern mit Leerstelle im Zentrum, das gesamte Navigationssystem in eine geometrische Glyphe geschnitten. Neutraler SaaS-Charakter, je Produkt umgefärbt. Es steht klar abseits des kosmischen GHXSTSHIP-Geisterschiff-Totenkopfs, der ausschließlich das Zeichen der Muttergesellschaft ist."
+      "after": ": ein achtzackiger Navigationsstern mit Leerstelle im Zentrum, das gesamte Navigationssystem in eine geometrische Glyphe geschnitten. Neutraler SaaS-Charakter, je Produkt umgefärbt. Es steht klar abseits des kosmischen GHXSTSHIP-Geisterschiff-Totenkopfs, der ausschließlich das Zeichen der Muttergesellschaft ist."
      },
-     "note": "Die Kachel trägt den Produktakzent; der Stern bleibt weiß (oder Ink auf hellem Grund). Der Schriftzug ist stets gesperrt in Versalien und ohne Umbruch — niemals klein, niemals ungesperrt, außer in URLs und IDs.",
+     "note": "Die Kachel trägt den Produktakzent; der Stern bleibt weiß (oder Ink auf hellem Grund). Der Schriftzug ist stets gesperrt in Versalien und ohne Umbruch, niemals klein, niemals ungesperrt, außer in URLs und IDs.",
      "spec": {
       "colWordmark": "Schriftzug-Spezifikation",
       "colSetting": "Satz",
       "faceLabel": "Schriftschnitt",
-      "faceValue": "— geometrisch, ausschließlich für das Logo-Lockup. Überschriften nutzen Anton; Fließtext & UI nutzen Hanken Grotesk.",
+      "faceValue": "geometrisch, ausschließlich für das Logo-Lockup. Überschriften nutzen Anton; Fließtext & UI nutzen Hanken Grotesk.",
       "aLabel": "Das A",
-      "aBefore": "Eine nackte Spitze —",
+      "aBefore": "Eine nackte Spitze,",
       "aBold": "kein Querbalken",
       "aAfter": ", das V gespiegelt. A und V lesen sich als Spiegelformen.",
       "settingLabel": "Satz",
@@ -3774,13 +3774,13 @@
     },
     "appIcons": {
      "heading": "Ein Zeichen, vier Akzente",
-     "lead": "Jedes Produkt ist derselbe Waypoint auf seiner eigenen Akzentkachel — sofort eine Familie, sofort unverwechselbar.",
+     "lead": "Jedes Produkt ist derselbe Waypoint auf seiner eigenen Akzentkachel: sofort eine Familie, sofort unverwechselbar.",
      "roleAtlvs": "Producer / Intern",
      "roleCompvss": "Crew / Lieferant / Talent",
      "roleGvteway": "Gast / Kunde",
      "inkTitle": "Ink",
      "roleInk": "Neutral / Suite",
-     "minSize": "Mindestgröße — das Zeichen hält in jedem Maßstab",
+     "minSize": "Mindestgröße: das Zeichen hält in jedem Maßstab",
      "bare16": "16 · pur"
     },
     "clearspace": {
@@ -3796,14 +3796,14 @@
       "4after": "Schriftzug, ohne Umbruch."
      },
      "dontItems": {
-      "1": "Den Stern selbst umfärben oder mit Verlauf versehen — nur die Kachel trägt Farbe.",
+      "1": "Den Stern selbst umfärben oder mit Verlauf versehen; nur die Kachel trägt Farbe.",
       "2": "Rotieren, verzerren oder das kosmische Halbton-Raster bzw. den Totenkopf hinzufügen.",
       "3": "Den Schriftzug ungesperrt oder klein setzen.",
       "4": "Das pure Zeichen ohne die solide Kachel auf ein unruhiges Foto setzen."
      },
      "endorsement": {
       "label": "Endorsement der Muttergesellschaft.",
-      "body": "Der GHXSTSHIP-Totenkopf erscheint nur im Endorsement-Lockup — „an ATLVS Technologies, a GHXSTSHIP Industries company.“ Er ist niemals das App-Icon des Produkts."
+      "body": "Der GHXSTSHIP-Totenkopf erscheint nur im Endorsement-Lockup, „an ATLVS Technologies, a GHXSTSHIP Industries company.“ Er ist niemals das App-Icon des Produkts."
      }
     },
     "color": {
@@ -3814,9 +3814,9 @@
       "after": "Namespace ab und justiert sich je Modus für AA-Kontrast neu."
      },
      "surfacesText": "Flächen & Text",
-     "productIdentity": "Produktidentität — der Akzent, den jede App besitzt",
+     "productIdentity": "Produktidentität: der Akzent, den jede App besitzt",
      "accentWeakTint": "Akzent-schwacher Farbton",
-     "semantic": "Semantisch — geteilt über alle vier Produkte",
+     "semantic": "Semantisch, geteilt über alle vier Produkte",
      "swatch": {
       "canvas": "Canvas",
       "surface": "Surface",
@@ -3839,14 +3839,14 @@
       "monument": "Monument.",
       "s1": "Überschriften und Kennzahlen sind gesetzt in",
       "anton": "Anton, eine ultrakondensierte Versal-Display-Schrift",
-      "s2": "— ein einzelner schwarzer Schnitt, der dem Produkt Präsenz im Plakatmaßstab verleiht. Fließtext und UI bleiben",
+      "s2": ": ein einzelner schwarzer Schnitt, der dem Produkt Präsenz im Plakatmaßstab verleiht. Fließtext und UI bleiben",
       "s3": "damit Tabellen und Formulare klar lesbar bleiben;",
       "s4": "ist die Sprache für Eyebrows und Koordinaten (IDs, Codes, Labels); und",
       "s5": "ist ausschließlich das konstruierte Schriftzug-Lockup. Display-Überschriften stehen in VERSALIEN (Anton ist eine Versalschrift); Fließtext und Labels bleiben in Title- / Satzschreibung."
      },
      "face": {
       "anton": "Display · Überschriften · Stats",
-      "hanken": "Fließtext · UI · 400–800",
+      "hanken": "Fließtext · UI · 400 bis 800",
       "mono": "Eyebrows · IDs · Codes",
       "jost": "Nur Schriftzug-Lockup"
      },
@@ -3855,7 +3855,7 @@
       "small": "Sekundäre Metadaten und Hilfetexte."
      },
      "headerTreatments": "Header-Treatments",
-     "headerTreatmentsNote": "Drei zugelassene Wege, die breite Headline einzusetzen. Nutze den passenden für den Kontext — niemals mehr als einen pro Ansicht mischen.",
+     "headerTreatmentsNote": "Drei zugelassene Wege, die breite Headline einzusetzen. Nutze den passenden für den Kontext; niemals mehr als einen pro Ansicht mischen.",
      "a2": {
       "title": "A2 · Alltag",
       "note": "Akzentbalken + Live-Mono-Kicker. Der Standard für App-Chrome und Seiten-Header."
@@ -3864,7 +3864,7 @@
       "title": "A3 · Hero",
       "sampleBefore": "Bring die",
       "samplePop": "Show",
-      "note": "Ein Wort nimmt den Produktakzent auf — Headlines branden sich selbst. Cover, Marketing, Splash."
+      "note": "Ein Wort nimmt den Produktakzent auf; Headlines branden sich selbst. Cover, Marketing, Splash."
      },
      "a4": {
       "title": "A4 · Kennzahlen",
@@ -3877,13 +3877,13 @@
      "eyebrow": "Grundlagen · Raum",
      "heading": "Abstände",
      "lead": {
-      "before": "Ein 4px-Basisraster. Die Dichte tauscht den Rhythmus von Bedienelementen und Zeilen — dieselben Tokens straffen sich unter"
+      "before": "Ein 4px-Basisraster. Die Dichte tauscht den Rhythmus von Bedienelementen und Zeilen; dieselben Tokens straffen sich unter"
      }
     },
     "radii": {
      "eyebrow": "Grundlagen · Radius",
      "heading": "Radien",
-     "lead": "Weich, freundlich für Produktivitäts-Tools — niemals Pop-Art-scharf. Pillen nur für Chips und Toggles."
+     "lead": "Weich, freundlich für Produktivitäts-Tools, niemals Pop-Art-scharf. Pillen nur für Chips und Toggles."
     },
     "elevation": {
      "eyebrow": "Grundlagen · Elevation",
@@ -3898,7 +3898,7 @@
      "heading": "Motion",
      "lead": {
       "s1": "Schnell und unaufgeregt. Eine Easing-Kurve, kurze Dauern und eine harte Regel: niemals ein token-gestütztes",
-      "s2": "über einen Theme-Wechsel hinweg überblenden — sofort umfärben und stattdessen",
+      "s2": "über einen Theme-Wechsel hinweg überblenden; sofort umfärben und stattdessen",
       "or": "oder",
       "instead": "animieren."
      },
@@ -3923,11 +3923,11 @@
      "eyebrow": "Grundlagen · Icons",
      "heading": "Ikonografie",
      "lead": {
-      "before": "Phosphor Icons —",
+      "before": "Phosphor Icons:",
       "bold": "Bold",
       "mid": "für die UI,",
       "fill": "Fill",
-      "after": "für Status-Siegel und Betonung. Auf Texthöhe bei 16–20px ausrichten; eigenständige Aktionen bei 24px. Einfarbig, erbt"
+      "after": "für Status-Siegel und Betonung. Auf Texthöhe bei 16 bis 20px ausrichten; eigenständige Aktionen bei 24px. Einfarbig, erbt"
      }
     },
     "footer": {
@@ -3940,18 +3940,18 @@
   "pricingCalculator": {
    "eyebrow": "Was es tatsächlich kostet",
    "heading": "Rechnen wir nach.",
-   "intro": "Trag deine Shows pro Jahr ein, die Crew zur Spitze und was dich der zusammengewürfelte Stack monatlich kostet. Wir zeigen dir Jahresausgaben und Kosten pro Show auf beiden Seiten. Die Rechnung bleibt konservativ — keine Integrationssteuer, keine Per-Seat-Überschreitungen in der Kalkulation.",
+   "intro": "Trag deine Shows pro Jahr ein, die Crew zur Spitze und was dich der zusammengewürfelte Stack monatlich kostet. Wir zeigen dir Jahresausgaben und Kosten pro Show auf beiden Seiten. Die Rechnung bleibt konservativ: keine Integrationssteuer, keine Per-Seat-Überschreitungen in der Kalkulation.",
    "showsPerYear": "Shows pro Jahr",
    "showOne": "Show",
    "showMany": "Shows",
    "crewAtPeak": "Crew zur Spitze",
    "personOne": "Person",
    "personMany": "Personen",
-   "stackMonthly": "Aktueller Stack — monatlich",
+   "stackMonthly": "Aktueller Stack, monatlich",
    "perMo": "/ Mon.",
    "stackNote": "Standard 1.400 $/Mon. = ein PM-Tool + Ticketing + E-Signatur + Buchhaltung + Dateiablage + Chat + ein Bestell-Tool.",
-   "stackAnnual": "Aktueller Stack — jährlich",
-   "atlvsAnnual": "ATLVS Production — jährlich",
+   "stackAnnual": "Aktueller Stack, jährlich",
+   "atlvsAnnual": "ATLVS Production, jährlich",
    "annualSavings": "Jährliche Ersparnis",
    "currentPerShow": "Aktuell pro Show",
    "atlvsPerShow": "ATLVS pro Show",
@@ -3966,7 +3966,7 @@
     "tier1Hint": "NYC, SF, LA, Chicago",
     "tier2Label": "Tier-2-Metropole",
     "tier2Hint": "Große Regionalstädte",
-    "intlLabel": "International — Durchschnitt",
+    "intlLabel": "International, Durchschnitt",
     "intlHint": "DSSR-Basiswert"
    },
    "leg": "Etappe {n}",
@@ -3975,7 +3975,7 @@
    "cityPlaceholder": "z. B. Las Vegas",
    "days": "Tage",
    "headcount": "Personenzahl",
-   "dailyRate": "Tagessatz — USD",
+   "dailyRate": "Tagessatz in USD",
    "legTotal": "Etappensumme",
    "addLeg": "Etappe hinzufügen",
    "total": "Gesamt",
@@ -3985,22 +3985,22 @@
   "logoKit": {
    "eyebrow": "ATLVS Technologies · Brand",
    "title": "Das Logo-Kit",
-   "intro": "Das ATLVS-Zeichen ist ein Wegpunkt — ein achtzackiger Navigationsstern mit einer Leerstelle im Zentrum, das gesamte Navigationssystem als ein geometrisches Glyph. Neutrales SaaS-Register; je Produkt umgefärbt. Klar abgegrenzt vom kosmischen GHXSTSHIP-Geisterschiff-Totenkopf — dem Zeichen der Muttergesellschaft.",
+   "intro": "Das ATLVS-Zeichen ist ein Wegpunkt: ein achtzackiger Navigationsstern mit einer Leerstelle im Zentrum, das gesamte Navigationssystem als ein geometrisches Glyph. Neutrales SaaS-Register; je Produkt umgefärbt. Klar abgegrenzt vom kosmischen GHXSTSHIP-Geisterschiff-Totenkopf, dem Zeichen der Muttergesellschaft.",
    "primaryLockup": "Primäres Lockup",
-   "appIcons": "Produkt-App-Icons — ein Zeichen, vier Akzente",
-   "favicon": "Favicon / Mindestgröße — das Zeichen hält in jedem Maßstab",
-   "clearspace": "Schutzraum — Rand = ½ Zeichenhöhe auf allen Seiten halten",
-   "endorsement": "Endorsement — ATLVS + Muttergesellschaft GHXSTSHIP",
+   "appIcons": "Produkt-App-Icons: ein Zeichen, vier Akzente",
+   "favicon": "Favicon / Mindestgröße: das Zeichen hält in jedem Maßstab",
+   "clearspace": "Schutzraum: Rand = ½ Zeichenhöhe auf allen Seiten halten",
+   "endorsement": "Endorsement: ATLVS + Muttergesellschaft GHXSTSHIP",
    "parentCompany": "Industries-Unternehmen",
    "doDont": "Do · Don’t",
    "do": "Do",
    "dont": "Don’t",
-   "do1": "Die Kachel im Produktakzent umfärben; das Zeichen weiß halten — oder Ink auf Hell.",
+   "do1": "Die Kachel im Produktakzent umfärben; das Zeichen weiß halten oder Ink auf Hell.",
    "do2": "Schutzraum = ½ Zeichenhöhe einhalten.",
    "do3": "Das bloße Zeichen bei ≤16px; das gekachelte Icon bei ≥32px verwenden.",
    "do4Prefix": "Mit der gespreizten",
    "do4Suffix": "Wortmarke kombinieren, nowrap.",
-   "dont1": "Den Stern selbst umfärben oder mit Verlauf versehen — nur die Kachel trägt Farbe.",
+   "dont1": "Den Stern selbst umfärben oder mit Verlauf versehen. Nur die Kachel trägt Farbe.",
    "dont2": "Drehen, strecken oder das kosmische Halbton-/Totenkopf-Motiv hinzufügen.",
    "dont3": "Die Wortmarke ungespreizt oder in Kleinbuchstaben setzen.",
    "dont4": "Das Zeichen ohne die deckende Kachel auf ein unruhiges Foto setzen.",
@@ -4009,7 +4009,7 @@
    "iconAlt": "{label}-Icon",
    "meta": {
     "title": "ATLVS Logo-Kit · Der Wegpunkt",
-    "description": "Das ATLVS-Zeichen ist der Wegpunkt — ein achtzackiger Navigationsstern mit zentrierter Leerstelle. Primäres Lockup, App-Icons je Produkt, Schutzraum, Endorsement, Do/Don’t."
+    "description": "Das ATLVS-Zeichen ist der Wegpunkt: ein achtzackiger Navigationsstern mit zentrierter Leerstelle. Primäres Lockup, App-Icons je Produkt, Schutzraum, Endorsement, Do/Don’t."
    }
   }
  },
@@ -4060,14 +4060,14 @@
    "couldntStart": "{provider}-Anmeldung konnte nicht gestartet werden",
    "notConfigured": "OAuth-Anbieter nicht konfiguriert",
    "invalidProvider": "Ungültiger Anbieter",
-   "missingCode": "Anmeldung nicht abgeschlossen — bitte erneut versuchen"
+   "missingCode": "Anmeldung nicht abgeschlossen. Bitte erneut versuchen"
   },
   "magicLink": {
    "title": "Magic Link senden",
-   "subtitle": "Wir senden einen Anmeldelink an dein Postfach — kein Passwort nötig.",
+   "subtitle": "Wir senden einen Anmeldelink an dein Postfach. Kein Passwort nötig.",
    "submit": "Magic Link senden",
    "submitting": "Wird gesendet",
-   "success": "Sieh in dein Postfach — wir haben einen Anmeldelink gesendet, der in 1 Stunde abläuft.",
+   "success": "Sieh in dein Postfach: Wir haben einen Anmeldelink gesendet, der in 1 Stunde abläuft.",
    "backToLogin": "Zurück zur Anmeldung",
    "expiredTitle": "Link abgelaufen oder ungültig",
    "expiredSubtitle": "Wir konnten Dich mit diesem Link nicht anmelden.",
@@ -4122,12 +4122,12 @@
   },
   "errors": {
    "invalidCredentials": "Ungültige E-Mail oder Passwort",
-   "accountExists": "Ein Konto mit dieser E-Mail existiert — versuche dich anzumelden",
+   "accountExists": "Ein Konto mit dieser E-Mail existiert bereits. Versuche dich anzumelden",
    "duplicateEmail": "Diese E-Mail ist bereits registriert",
    "weakPassword": "Passwort muss mindestens 8 Zeichen haben",
    "notConfigured": "Supabase nicht konfiguriert. Setze NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
-   "signupNoUser": "Registrierung fehlgeschlagen — kein Benutzer zurückgegeben.",
-   "unknown": "Etwas ist schiefgelaufen — bitte erneut versuchen"
+   "signupNoUser": "Registrierung fehlgeschlagen. Kein Benutzer zurückgegeben.",
+   "unknown": "Etwas ist schiefgelaufen. Bitte erneut versuchen"
   },
   "error": {
    "title": "Anmeldefehler",
@@ -4157,7 +4157,7 @@
    "submit": "Workspace erstellen",
    "ownerNotePrefix": "Du wirst zum Owner. Teammitglieder kannst du einladen aus",
    "ownerNoteSuffix": "sobald du drin bist.",
-   "subtitle": "Angemeldet als {email}. Nur noch ein Schritt — benenne den Workspace, in dem deine Produktionen leben.",
+   "subtitle": "Angemeldet als {email}. Nur noch ein Schritt: Benenne den Workspace, in dem deine Produktionen leben.",
    "ownerNote": "Du wirst zum Owner. Sobald du drin bist, kannst du Teammitglieder aus deinen Team-Einstellungen einladen."
   },
   "sso": {
@@ -4181,14 +4181,14 @@
    "submitting": "Wird gesendet…"
   },
   "roles": {
-   "admin": "Admin — vollständige Org-Kontrolle",
-   "controller": "Controller — Finanzen und Betrieb",
-   "collaborator": "Mitarbeiter — Lese-/Schreibbetrieb",
-   "contractor": "Auftragnehmer — eingeschränkter Zugriff",
-   "crew": "Crew — Außendienst / Mobile",
-   "client": "Kunde — externes Portal",
-   "viewer": "Betrachter — nur lesen",
-   "community": "Community — minimal"
+   "admin": "Admin: vollständige Org-Kontrolle",
+   "controller": "Controller: Finanzen und Betrieb",
+   "collaborator": "Mitarbeiter: Lese-/Schreibbetrieb",
+   "contractor": "Auftragnehmer: eingeschränkter Zugriff",
+   "crew": "Crew: Außendienst / Mobile",
+   "client": "Kunde: externes Portal",
+   "viewer": "Betrachter: nur lesen",
+   "community": "Community: minimal"
   },
   "pending": {
    "heading": "Ausstehend ({count})",
@@ -4225,7 +4225,7 @@
  "theme": {
   "sheet": {
    "title": "Design-Thema wählen",
-   "description": "Acht voll ausgearbeitete Themen. Deine Wahl wird sofort auf jeder Seite angewendet — kein Neuladen, keine Anmeldung. Wir merken sie auf diesem Gerät.",
+   "description": "Acht voll ausgearbeitete Themen. Deine Wahl wird sofort auf jeder Seite angewendet, ohne Neuladen und ohne Anmeldung. Wir merken sie auf diesem Gerät.",
    "appearanceHeading": "Erscheinungsbild",
    "appearanceSubtitle": "Wähle den Look für deinen Workspace. Wird sofort überall angewendet.",
    "matchSystem": "An System anpassen",
@@ -4284,7 +4284,7 @@
   "toggleTheme": "Design wechseln",
   "toggleMenu": "Menü umschalten",
   "openMenu": "Menü öffnen",
-  "homeAriaLabel": "ATLVS Technologies — Startseite",
+  "homeAriaLabel": "ATLVS Technologies: Startseite",
   "loading": "Wird geladen",
   "saving": "Wird gespeichert",
   "saved": "Gespeichert",
@@ -4294,7 +4294,7 @@
  },
  "community": {
   "meta": {
-   "title": "Community — die Produktionsteams, die auf ATLVS aufbauen",
+   "title": "Community: die Produktionsteams, die auf ATLVS aufbauen",
    "description": "Die Festivals, Tourneen, Agenturen und Werkstätten, die ihre Produktion auf ATLVS, GVTEWAY und COMPVSS betreiben. Mitgliedergeschichten, Zahlen und was sie tatsächlich liefern."
   },
   "hero": {
@@ -4323,7 +4323,7 @@
   }
  },
  "rate": {
-  "tooMany": "Zu viele Anfragen — bitte versuchen Sie es kurz erneut",
+  "tooMany": "Zu viele Anfragen. Bitte versuchen Sie es kurz erneut",
   "retryIn": "Erneut versuchen in {seconds}s"
  },
  "errors": {
@@ -4331,7 +4331,7 @@
   "notFound": "Nicht gefunden",
   "forbidden": "Sie haben keinen Zugriff darauf",
   "unauthorized": "Bitte melden Sie sich an, um fortzufahren",
-  "offline": "Sie sind offline — Aktionen werden bei erneuter Verbindung synchronisiert"
+  "offline": "Sie sind offline. Aktionen werden bei erneuter Verbindung synchronisiert"
  },
  "bookings": {
   "title": "Buchungen",
@@ -4428,7 +4428,7 @@
  },
  "insightsPool": {
   "title": "Einblicke",
-  "subtitle": "Anonymisierte monatliche Aggregate nach Genre — Opt-in, k≥3 Anonymitätsschwelle.",
+  "subtitle": "Anonymisierte monatliche Aggregate nach Genre. Opt-in, k≥3 Anonymitätsschwelle.",
   "contributing": "trägt bei",
   "notContributing": "trägt nicht bei",
   "month": "Monat",
@@ -4620,7 +4620,7 @@
    },
    "list": {
     "title": "Deine Anträge",
-    "empty": "Noch keine Anträge — dein Produzent wird dich einladen."
+    "empty": "Noch keine Anträge. Dein Produzent wird dich einladen."
    }
   },
   "artist": {
@@ -4728,7 +4728,7 @@
    "tiles": {
     "requests": {
      "label": "Service-Anfragen",
-     "desc": "Medizinisch, Transport, Zimmer — Anfrage erfassen"
+     "desc": "Medizinisch, Transport, Zimmer: Anfrage erfassen"
     },
     "training": {
      "label": "Training",
@@ -4740,7 +4740,7 @@
     },
     "safeguarding": {
      "label": "Safeguarding",
-     "desc": "Vertraulicher Kanal — Vorfälle melden"
+     "desc": "Vertraulicher Kanal: Vorfälle melden"
     },
     "privacy": {
      "label": "Datenschutz",
@@ -5464,7 +5464,7 @@
     "title": "Tickets",
     "subtitle": "Deine Tickets für dieses Event",
     "projectNotFound": "Projekt nicht gefunden.",
-    "empty": "Noch keine Tickets — kaufe oder löse eines ein, um loszulegen",
+    "empty": "Noch keine Tickets. Kaufe oder löse eines ein, um loszulegen",
     "columns": {
      "code": "Code",
      "tier": "Tier",
@@ -5910,7 +5910,7 @@
      "backToMessages": "Alle Nachrichten",
      "directMessage": "Direktnachricht",
      "subtitle": "Direkter Thread mit deinem Account Manager für {projectName}.",
-     "empty": "Noch keine Nachrichten. Sag hallo — dein Account Manager wird benachrichtigt.",
+     "empty": "Noch keine Nachrichten. Sag hallo: Dein Account Manager wird benachrichtigt.",
      "messagePlaceholder": "Nachricht",
      "emptyTitle": "Noch keine Nachrichten"
     }
@@ -6086,7 +6086,7 @@
     "metrics": {
      "budget": "Budget",
      "margin": "Marge",
-     "revenuePaid": "Umsatz — Bezahlt",
+     "revenuePaid": "Umsatz: Bezahlt",
      "spent": "Ausgegeben"
     },
     "noProject": {
@@ -6313,7 +6313,7 @@
    },
    "concierge": {
     "label": "Concierge:",
-    "window": "— 24/7 während des Event-Fensters."
+    "window": "24/7 während des Event-Fensters."
    },
    "transport": {
     "eyebrow": {
@@ -6346,7 +6346,7 @@
     "status": {
      "pending": "Bewerbung eingegangen",
      "in_review": "In Prüfung",
-     "approved": "Angenommen — Onboarding",
+     "approved": "Angenommen: Onboarding",
      "active": "Aktiver Volunteer",
      "declined": "Abgelehnt"
     },
@@ -6720,7 +6720,7 @@
     "title": "Richtlinie",
     "zonePlural": "Zonen",
     "zoneSingular": "Zone",
-    "zoneVenueHeader": "Zone — Venue"
+    "zoneVenueHeader": "Zone / Venue"
    },
    "policyLabel": "Richtlinie",
    "scans": {
@@ -7247,7 +7247,7 @@
      "storagePath": "Speicherpfad"
     },
     "placeholder": {
-     "name": "Tower-A Architektur — Ebene 03",
+     "name": "Tower-A Architektur, Ebene 03",
      "versionLabel": "Rev 0, 50% DD"
     },
     "selectProject": "Auswählen…"
@@ -7584,7 +7584,7 @@
     "title": "Reality Capture registrieren",
     "submit": "Capture registrieren",
     "name": "Name",
-    "namePlaceholder": "L3 Mech Room Walk — 2026-05-24",
+    "namePlaceholder": "L3 Mech Room Walk, 2026-05-24",
     "project": "Projekt",
     "captureDate": "Aufnahmedatum",
     "panoramas": "Panoramen (ca.)",
@@ -8069,7 +8069,7 @@
      "kindLabel": "Art",
      "nameLabel": "Name",
      "projectLabel": "Projekt",
-     "projectNone": "— Keines —",
+     "projectNone": "Keines",
      "title": "Neuer Kanal",
      "topicLabel": "Thema"
     },
@@ -8146,7 +8146,7 @@
     "numberPlaceholder": "Automatisch generiert, wenn leer",
     "submit": "Vertrag erstellen",
     "title": "Neuer Vertrag",
-    "titlePlaceholder": "Sponsoring — MMW26"
+    "titlePlaceholder": "Sponsoring: MMW26"
    }
   },
   "dashboard": {
@@ -8301,7 +8301,7 @@
     "sheets": "Pläne",
     "state": "Status"
    },
-   "none": "— keine —",
+   "none": "Keine",
    "edit": {
     "breadcrumbs": {
      "drawings": "Zeichnungen"
@@ -8396,7 +8396,7 @@
     "body": "Text / Notizen",
     "expires": "Läuft ab",
     "eyebrow": "Recht",
-    "noProject": "— Kein Projekt —",
+    "noProject": "Kein Projekt",
     "subject": "Betreff",
     "submit": "Umschlag erstellen",
     "targetId": "Ziel-Datensatz-ID",
@@ -8551,9 +8551,9 @@
     "startsLabel": "Beginn",
     "endsLabel": "Ende",
     "projectLabel": "Projekt",
-    "noProject": "— Kein Projekt —",
+    "noProject": "Kein Projekt",
     "locationLabel": "Ort",
-    "noLocation": "— Kein Ort —",
+    "noLocation": "Kein Ort",
     "descriptionLabel": "Beschreibung",
     "eyebrow": "Arbeit",
     "title": "Neues Event"
@@ -8643,7 +8643,7 @@
      "category": "Kategorie",
      "amountCents": "Betrag (Cent)",
      "activation": "Aktivierung",
-     "amount": "Budget — USD",
+     "amount": "Budget (USD)",
      "class": "Klasse",
      "department": "Abteilung",
      "discipline": "Disziplin",
@@ -8655,13 +8655,13 @@
      "location": "Standort",
      "phase": "Phase (8-Gate)",
      "quantity": "Menge",
-     "rate": "Satz — USD",
+     "rate": "Satz (USD)",
      "rateHint": "Schätzung = Menge × Satz (von DB berechnet)",
      "status": "Status",
      "team": "Team",
      "tier": "Stufe",
      "vendor": "Lieferant",
-     "xyz": "XYZ — Kostenverhalten"
+     "xyz": "XYZ: Kostenverhalten"
     },
     "detail": {
      "title": "Budget",
@@ -8705,13 +8705,13 @@
      "location": "Standort",
      "phase": "Phase (8-Gate)",
      "quantity": "Menge",
-     "rate": "Satz — USD",
+     "rate": "Satz (USD)",
      "rateHint": "Schätzung = Menge × Satz (von DB berechnet)",
      "status": "Status",
      "team": "Team",
      "tier": "Stufe",
      "vendor": "Lieferant",
-     "xyz": "XYZ — Kostenverhalten"
+     "xyz": "XYZ: Kostenverhalten"
     },
     "title": "Budgets",
     "configureSupabase": "Supabase konfigurieren.",
@@ -8729,12 +8729,12 @@
     "summary": {
      "eyebrow": "Finanzen",
      "title": "Budget-Zusammenfassung",
-     "subtitle": "Live-XPMS-Rollups. Phasenkurve = nur Scope — Fee & Contingency rollen separat auf.",
-     "byDepartment": "Nach Department — XPMS-Klasse",
-     "byPhase": "Nach Phase — 8-Gate-Lifecycle · Nur Scope",
+     "subtitle": "Live-XPMS-Rollups. Phasenkurve = nur Scope. Fee & Contingency rollen separat auf.",
+     "byDepartment": "Nach Department: XPMS-Klasse",
+     "byPhase": "Nach Phase: 8-Gate-Lifecycle · Nur Scope",
      "byLineType": "Nach Line-Type",
-     "byDiscipline": "Nach Disziplin — Nur Scope",
-     "byXyz": "Nach XYZ — Kostenverhalten · All-in",
+     "byDiscipline": "Nach Disziplin: Nur Scope",
+     "byXyz": "Nach XYZ: Kostenverhalten · All-in",
      "total": "SUMME",
      "grandTotal": "GESAMTSUMME",
      "totalContract": "GESAMTVERTRAG",
@@ -8763,7 +8763,7 @@
     },
     "import": {
      "eyebrow": "Finanzen",
-     "title": "Budget importieren — CSV / TSV"
+     "title": "Budget importieren: CSV / TSV"
     },
     "importAction": "Importieren",
     "summaryAction": "Übersicht"
@@ -8859,10 +8859,10 @@
       "consolidationState": "Konsolidierungsstatus",
       "effectiveFrom": "Gültig ab",
       "effectiveTo": "Gültig bis",
-      "ownershipPct": "Eigentumsanteil % — diese Einheit in der Muttergesellschaft"
+      "ownershipPct": "Eigentumsanteil % dieser Einheit in der Muttergesellschaft"
      },
      "parent": {
-      "topLevel": "— (oberste Ebene)"
+      "topLevel": "(oberste Ebene)"
      }
     },
     "eyebrow": "Finanzen",
@@ -8902,7 +8902,7 @@
      "statusLabel": "Status",
      "spentOnLabel": "Ausgegeben am",
      "amountLabel": "Betrag",
-     "departmentLabel": "Abteilung — XPMS",
+     "departmentLabel": "Abteilung: XPMS",
      "disciplineLabel": "Disziplin",
      "itemLabel": "Position",
      "phaseLabel": "Phase (8-Gate)",
@@ -8946,9 +8946,9 @@
      "category": "Kategorie",
      "categoryPlaceholder": "Reise, Verpflegung, Equipment…",
      "projectOptional": "Projekt (optional)",
-     "noProject": "— Kein Projekt —",
+     "noProject": "Kein Projekt",
      "title": "Ausgabe Erfassen",
-     "department": "Abteilung — XPMS",
+     "department": "Abteilung: XPMS",
      "discipline": "Disziplin",
      "item": "Position",
      "phase": "Phase (8-Gate)",
@@ -9098,9 +9098,9 @@
      "title": "Neue Rechnung",
      "titlePlaceholder": "Retainer Eventproduktion",
      "client": "Kunde",
-     "noClient": "— Kein Kunde —",
+     "noClient": "Kein Kunde",
      "project": "Projekt",
-     "noProject": "— Kein Projekt —",
+     "noProject": "Kein Projekt",
      "amount": "Betrag",
      "currency": "Währung",
      "due": "Fällig",
@@ -9196,7 +9196,7 @@
      "rateCents": "Satz (Cent/Meile)",
      "loggedOn": "Erfasst Am",
      "notes": "Notizen",
-     "rate": "Satz — Pro Meile"
+     "rate": "Satz pro Meile"
     },
     "breadcrumb": "Fahrtenbuch",
     "detail": {
@@ -9371,7 +9371,7 @@
    },
    "periods": {
     "controls": {
-     "terminal": "Endstatus — keine weiteren Übergänge.",
+     "terminal": "Endstatus: keine weiteren Übergänge.",
      "from": "Von"
     },
     "detail": {
@@ -9577,7 +9577,7 @@
      "notes": "Notizen",
      "percentComplete": "Fertigstellungsgrad",
      "project": "Projekt",
-     "selectProject": "— Projekt auswählen —",
+     "selectProject": "Projekt auswählen",
      "snapshotDate": "Snapshot-Datum",
      "submit": "Snapshot erstellen",
      "suretyCarrier": "Bürgschaftsgeber",
@@ -9648,7 +9648,7 @@
      "nameLabel": "Kontoname",
      "normalLabel": "Normalsaldo",
      "parentLabel": "Übergeordnetes Konto",
-     "parentNone": "— Keines (oberste Ebene) —",
+     "parentNone": "Keines (oberste Ebene)",
      "postableLabel": "Buchbar (Buchungen können direkt erfolgen)",
      "title": "Neues Konto",
      "typeLabel": "Kontotyp"
@@ -9692,7 +9692,7 @@
      "eyebrow": "Hauptbuch",
      "form": {
       "account": "Konto",
-      "amount": "Betrag — USD",
+      "amount": "Betrag (USD)",
       "credit": "Haben",
       "debit": "Soll",
       "memo": "Memo",
@@ -10424,7 +10424,7 @@
       "method": "Methode",
       "party": "Partei",
       "payment": "Zahlung",
-      "paymentUsd": "Zahlung — USD",
+      "paymentUsd": "Zahlung (USD)",
       "recurring": "Wiederkehrend",
       "redline": "Redline-Zusammenfassung",
       "role": "Rolle",
@@ -10482,7 +10482,7 @@
      "startAtLabel": "Startdatum",
      "title": "Neuer Vertrag",
      "titleLabel": "Titel",
-     "totalValueLabel": "Gesamtwert — USD"
+     "totalValueLabel": "Gesamtwert (USD)"
     },
     "newContract": "+ Neuer Vertrag",
     "title": "Verträge"
@@ -10555,7 +10555,7 @@
     "selectedLabel": "Ausgewählt:",
     "eyebrow": "Standorte",
     "title": "Location-Picker",
-    "subtitle": "Async Typeahead — fügst Du in jedes Formular ein"
+    "subtitle": "Async Typeahead: fügst Du in jedes Formular ein"
    }
   },
   "logistics": {
@@ -10846,7 +10846,7 @@
       "moveSubmission": "Einreichung verschieben",
       "updateStatus": "Status aktualisieren",
       "statusLabel": "Status",
-      "scoreInputLabel": "Score (0–100)"
+      "scoreInputLabel": "Score (0 bis 100)"
      },
      "eyebrow": "Call · {title}",
      "title": "Einreichungen",
@@ -11030,7 +11030,7 @@
       "scoreLine": "Bewertung: {score}",
       "moveApplicantHeading": "Bewerber verschieben",
       "stageLabel": "Phase",
-      "scoreInputLabel": "Score (0–100)",
+      "scoreInputLabel": "Score (0 bis 100)",
       "reviewerNotesLabel": "Reviewer-Notizen",
       "phoneLabel": "Telefon:"
      },
@@ -11291,7 +11291,7 @@
     "configureSupabase": "Supabase konfigurieren.",
     "eyebrow": "Marketplace",
     "submitLabel": "Einstellungen speichern",
-    "takeRateLabel": "Provisionssatz — bps",
+    "takeRateLabel": "Provisionssatz (bps)",
     "title": "Einstellungen",
     "visibilityLegend": "Sichtbarkeit"
    },
@@ -11538,7 +11538,7 @@
    "lookAhead": {
     "dispatchFallback": "Disposition",
     "eyebrow": "Betrieb",
-    "title": "Vorausschau — nächste 21 Tage",
+    "title": "Vorausschau: nächste 21 Tage",
     "empty": "Nichts in den nächsten 21 Tagen geplant."
    },
    "maintenance": {
@@ -11561,7 +11561,7 @@
       "outcomeLabel": "Ergebnis",
       "outcome": {
        "pass": "Bestanden",
-       "fail": "Nicht bestanden — Maßnahme erforderlich"
+       "fail": "Nicht bestanden: Maßnahme erforderlich"
       },
       "notesLabel": "Notizen",
       "submit": "Als abgeschlossen markieren"
@@ -11655,7 +11655,7 @@
       "typeLabel": "Typ",
       "typeMajor": "Größer",
       "typeNormal": "Normal",
-      "typeStandard": "Standard — Vorab genehmigt"
+      "typeStandard": "Standard: vorab genehmigt"
      },
      "newChange": "+ Neue Änderung",
      "subtitle": {
@@ -11691,10 +11691,10 @@
       "descriptionLabel": "Beschreibung",
       "eyebrow": "Betrieb",
       "priorityLabel": "Priorität",
-      "priorityP1": "P1 — Kritisch",
-      "priorityP2": "P2 — Hoch",
-      "priorityP3": "P3 — Mittel",
-      "priorityP4": "P4 — Niedrig",
+      "priorityP1": "P1: Kritisch",
+      "priorityP2": "P2: Hoch",
+      "priorityP3": "P3: Mittel",
+      "priorityP4": "P4: Niedrig",
       "submit": "Problem erstellen",
       "title": "Neuer Problemdatensatz",
       "titleLabel": "Titel",
@@ -11911,7 +11911,7 @@
     "assetLinker": {
      "form": {
       "assignmentLabel": "Nachweis-Zuordnung",
-      "assignmentPlaceholder": "— Auswählen —",
+      "assignmentPlaceholder": "Auswählen",
       "untitled": "Ohne Titel",
       "tokenKindLabel": "Token-Art",
       "kind": {
@@ -12082,15 +12082,15 @@
    },
    "invites": {
     "role": {
-     "admin": "Admin — volle Org-Kontrolle, ohne Billing",
-     "manager": "Manager — Projekte + Personen, kein Billing",
-     "member": "Mitglied — Zugriff über Projekt-Mitgliedschaft"
+     "admin": "Admin: volle Org-Kontrolle, ohne Billing",
+     "manager": "Manager: Projekte + Personen, kein Billing",
+     "member": "Mitglied: Zugriff über Projekt-Mitgliedschaft"
     },
     "submit": "Einladung Senden",
     "emailLabel": "E-Mail",
     "platformRole": "Plattform-Rolle",
     "scopeProject": "Auf ein Projekt eingrenzen (optional)",
-    "orgWide": "— Org-weite Einladung —",
+    "orgWide": "Org-weite Einladung",
     "projectRole": "Projekt-Rolle",
     "eyebrow": "Personen",
     "title": "Einladungen",
@@ -12114,7 +12114,7 @@
     "copyLink": "Link kopieren",
     "history": "Verlauf",
     "persona": "Portal-Persona · Optional",
-    "personaAuto": "— Aus Rolle ableiten —"
+    "personaAuto": "Aus Rolle ableiten"
    },
    "msas": {
     "detail": {
@@ -12163,7 +12163,7 @@
       "recipient": "Empfänger",
       "role": "Rolle",
       "reportsTo": "Berichtet An",
-      "none": "— Keine —",
+      "none": "Keine",
       "venue": "Venue",
       "issuingEntity": "Ausstellende Entität",
       "classification": "Klassifizierung"
@@ -12220,7 +12220,7 @@
     },
     "lifecycle": {
      "title": "Lebenszyklus",
-     "markSent": "Als Gesendet Markieren — Öffentlichen Link Aktivieren",
+     "markSent": "Als Gesendet Markieren: Öffentlichen Link Aktivieren",
      "msaRequired": "MSA Erforderlich Vor Dem Senden",
      "issueMsa": "MSA Ausstellen →",
      "withdraw": "Letter Zurückziehen",
@@ -12228,7 +12228,7 @@
     },
     "share": {
      "title": "Öffentlicher Share-Link",
-     "statusDraft": "Entwurf — noch nicht gesendet",
+     "statusDraft": "Entwurf: noch nicht gesendet",
      "statusActive": "Öffentlicher Link aktiv",
      "copied": "Kopiert",
      "copyLink": "Link kopieren",
@@ -12729,9 +12729,9 @@
      "submit": "PO erstellen",
      "titleLabel": "Titel",
      "vendorLabel": "Lieferant",
-     "noVendor": "— Kein Lieferant —",
+     "noVendor": "Kein Lieferant",
      "projectLabel": "Projekt",
-     "noProject": "— Kein Projekt —",
+     "noProject": "Kein Projekt",
      "amountLabel": "Betrag (USD)",
      "eyebrow": "Beschaffung",
      "title": "Neue Bestellung"
@@ -12842,7 +12842,7 @@
      "submit": "Sichtbarkeit aktualisieren",
      "visibilityLabel": "Sichtbarkeit",
      "visibility": {
-      "private": "Privat — nur eingeladene Lieferanten"
+      "private": "Privat: nur eingeladene Lieferanten"
      },
      "regionLabel": "Region",
      "budgetBandLabel": "Budgetspanne",
@@ -13126,7 +13126,7 @@
      "state": "Status",
      "notes": "Notizen",
      "award": "Vergeben",
-     "addVendorPlaceholder": "— Lieferant hinzufügen —",
+     "addVendorPlaceholder": "Lieferant hinzufügen",
      "inviteVendor": "Lieferant einladen"
     },
     "title": "Broadcasts",
@@ -13557,7 +13557,7 @@
      "startsLabel": "Beginn",
      "endsLabel": "Ende",
      "projectLabel": "Projekt",
-     "projectNone": "— Kein Projekt —",
+     "projectNone": "Kein Projekt",
      "rateLabel": "Satz (USD)",
      "eyebrow": "Produktion",
      "title": "Neue Miete"
@@ -13601,7 +13601,7 @@
     "subtitleOne": "{count} Cue im Showplan",
     "subtitleOther": "{count} Cues im Showplan",
     "addCue": "Cue hinzufügen",
-    "empty": "Noch keine Cues — oben einen anlegen.",
+    "empty": "Noch keine Cues. Lege oben einen an.",
     "countOne": "{count} Cue",
     "countOther": "{count} Cues",
     "col": {
@@ -13819,7 +13819,7 @@
      "t3Runs14d": "T3-Fahrten · 14 T",
      "vipCategories": "VIP-Kategorien"
     },
-    "t3FleetHeading": "T3-Flotte — nächste 14 Tage",
+    "t3FleetHeading": "T3-Flotte: nächste 14 Tage",
     "title": "Protokoll",
     "vipCategoriesHeading": "VIP-Akkreditierungskategorien"
    },
@@ -14288,7 +14288,7 @@
      "archived": "Archiviert",
      "complete": "Abgeschlossen"
     },
-    "none": "— Keine —",
+    "none": "Keine",
     "scope": {
      "local": "Lokal",
      "regional": "Regional",
@@ -14380,7 +14380,7 @@
      "sectionsLabel": "Abschnitte:",
      "saving": "Wird gespeichert…",
      "saveButton": "Guide speichern",
-     "invalidJson": "Konfiguration muss gültiges JSON sein — {detail}"
+     "invalidJson": "Konfiguration muss gültiges JSON sein: {detail}"
     },
     "access": {
      "issueTitle": "Neuen Code ausgeben",
@@ -14391,7 +14391,7 @@
      "maxUsesPlaceholder": "unbegrenzt",
      "generating": "Wird generiert…",
      "generate": "Code generieren",
-     "copyShareEyebrow": "Kopieren und teilen — wird nur einmal angezeigt",
+     "copyShareEyebrow": "Kopieren und teilen, wird nur einmal angezeigt",
      "copyCode": "Code kopieren",
      "activeCodes": "Aktive Codes",
      "noCodesIssued": "Keine Codes ausgegeben",
@@ -14411,7 +14411,7 @@
      "colIp": "IP",
      "colAgent": "Agent",
      "tipBadge": "Tipp",
-     "publicBadge": "Öffentlich — kein Code erforderlich",
+     "publicBadge": "Öffentlich, kein Code erforderlich",
      "publicUrlLabel": "Öffentliche URL:",
      "editGuideContent": "Guide-Inhalt bearbeiten",
      "persona": {
@@ -14497,7 +14497,7 @@
     "spent": "Ausgegeben",
     "deliverables": "Liefergegenstände",
     "portfolio": "Portfolio →",
-    "position": "Position — Klasse × Phase"
+    "position": "Position: Klasse × Phase"
    },
    "detail": {
     "eyebrow": "Projekt",
@@ -14674,7 +14674,7 @@
     "startDate": "Startdatum",
     "endDate": "Enddatum",
     "client": "Kunde",
-    "none": "— Keine —",
+    "none": "Keine",
     "primaryVenue": "Primärer Veranstaltungsort",
     "budgetUsd": "Budget (USD)",
     "budgetPlaceholder": "z. B. 1500000",
@@ -14750,11 +14750,11 @@
    "edit": {
     "lineage": {
      "noDeliverables": "Keine Deliverables.",
-     "noTypeOption": "— kein Typ (wird nicht angelegt) —",
+     "noTypeOption": "Kein Typ (wird nicht angelegt)",
      "noItems": "Keine Positionen.",
      "itemLabelPlaceholder": "Positionsbezeichnung",
      "codePlaceholder": "CODE",
-     "noKindOption": "— keine Art (wird nicht angelegt) —",
+     "noKindOption": "Keine Art (wird nicht angelegt)",
      "groupsHeader": "Gruppen · angelegt in public.budgets",
      "groupLabelPlaceholder": "Gruppenbezeichnung",
      "collapse": "Lineage einklappen",
@@ -14835,9 +14835,9 @@
     "blocks": "Blöcke",
     "title": "Neues Angebot",
     "client": "Kunde",
-    "noClient": "— Kein Kunde —",
+    "noClient": "Kein Kunde",
     "project": "Projekt",
-    "noProject": "— Kein Projekt —",
+    "noProject": "Kein Projekt",
     "amount": "Betrag (USD)",
     "expires": "Läuft ab",
     "notes": "Notizen / Scope",
@@ -14960,7 +14960,7 @@
     "deleteConfirm": "\"{name}\" löschen?",
     "createHeading": "Liste anlegen",
     "namePlaceholder": "MMW Day 1 Punch",
-    "projectPlaceholder": "— Projekt —",
+    "projectPlaceholder": "Projekt wählen",
     "categoryPlaceholder": "Kategorie (optional)",
     "createButton": "Liste anlegen"
    },
@@ -14981,7 +14981,7 @@
      "punchList": "Punch-Liste"
     },
     "selectPlaceholder": "Auswählen…",
-    "unassignedOption": "— Nicht zugewiesen —",
+    "unassignedOption": "Nicht zugewiesen",
     "gateLabel": "Doors-Open gaten, bis dieser Eintrag geschlossen ist"
    },
    "eyebrow": "Betrieb",
@@ -15146,8 +15146,8 @@
      "attendance": "Teilnahme",
      "unknown": "Unbekannt",
      "signIn": "Anmelden",
-     "orgMemberOption": "— Org-Mitglied —",
-     "crewMemberOption": "— Crew-Mitglied —",
+     "orgMemberOption": "Org-Mitglied",
+     "crewMemberOption": "Crew-Mitglied",
      "notePlaceholder": "Notiz (optional)",
      "markAcknowledged": "Bereits bestätigt markieren",
      "addAttendee": "Teilnehmer hinzufügen"
@@ -15326,10 +15326,10 @@
      "title": "Neuer Wachgang",
      "submit": "Rundgang planen",
      "nameLabel": "Name",
-     "namePlaceholder": "Perimeter-Sweep — Stadion A",
+     "namePlaceholder": "Perimeter-Sweep, Stadion A",
      "descriptionLabel": "Beschreibung",
      "venueLabel": "Venue (optional)",
-     "venueNone": "— Keine / mehrere Venues —",
+     "venueNone": "Keine oder mehrere Venues",
      "cadenceLabel": "Kadenz (Minuten)"
     },
     "eyebrow": "Sicherheit",
@@ -15533,7 +15533,7 @@
    },
    "osha": {
     "eyebrow": "Sicherheit",
-    "title": "OSHA 300 — {year}",
+    "title": "OSHA 300: {year}",
     "subtitle": "OSHA-meldepflichtige Vorfälle gemäß 29 CFR 1904.",
     "exportCsv": "300/300A/301 exportieren (CSV)",
     "metrics": {
@@ -15713,7 +15713,7 @@
   "schedule": {
    "calendar": {
     "descriptionMonth": "Klick auf einen Event-Chip zum Öffnen",
-    "descriptionWeek": "Diese Woche — Events am jeweiligen Starttag sichtbar",
+    "descriptionWeek": "Diese Woche. Events am jeweiligen Starttag sichtbar",
     "emptyLabel": "Noch keine geplanten Events.",
     "viewMonth": "Monat",
     "viewWeek": "Woche",
@@ -15841,14 +15841,14 @@
      "categorySecurity": "Sicherheit",
      "categoryOther": "Sonstiges",
      "severityLabel": "Schweregrad",
-     "severityP2": "P2 — dringend (15 Min. Bestätigung, 4 Std. Lösung)",
-     "severityP3": "P3 — Standard (1 Std. Bestätigung, 1 Tag Lösung)",
-     "severityP4": "P4 — niedrig (4 Std. Bestätigung, 3 Tage Lösung)",
+     "severityP2": "P2 dringend (15 Min. Bestätigung, 4 Std. Lösung)",
+     "severityP3": "P3 Standard (1 Std. Bestätigung, 1 Tag Lösung)",
+     "severityP4": "P4 niedrig (4 Std. Bestätigung, 3 Tage Lösung)",
      "summaryLabel": "Zusammenfassung",
      "summaryPlaceholder": "Einzeilige Beschreibung",
      "descriptionLabel": "Beschreibung",
      "projectLabel": "Projekt (optional)",
-     "noneOption": "— keines —",
+     "noneOption": "Keines",
      "venueLabel": "Venue (optional)"
     },
     "eyebrow": "Services",
@@ -15921,11 +15921,11 @@
     "namePlaceholder": "z. B. CI-Bot",
     "scopesLabel": "Scopes",
     "commonScopeSets": "Gängige Scope-Sets",
-    "scopeReadOnly": "— Reporter nur lesend",
-    "scopeFieldClockIn": "— Feld-Einstempelung",
-    "scopeAdvancing": "— Advancing-Pipeline",
+    "scopeReadOnly": "Reporter nur lesend",
+    "scopeFieldClockIn": "Feld-Einstempelung",
+    "scopeAdvancing": "Advancing-Pipeline",
     "scopeBlank": "(leer)",
-    "scopeFullAccess": "— Vollzugriff des ausstellenden Nutzers",
+    "scopeFullAccess": "Vollzugriff des ausstellenden Nutzers",
     "generateKey": "Schlüssel generieren",
     "endpoints": {
      "health": "Liveness-Probe",
@@ -15964,7 +15964,7 @@
     "revoked": "Widerrufen",
     "active": "Aktiv",
     "revoke": "Widerrufen",
-    "copyFailedToast": "Kopieren fehlgeschlagen — Schlüssel manuell auswählen",
+    "copyFailedToast": "Kopieren fehlgeschlagen. Schlüssel manuell auswählen",
     "reference": "Vollständige API-Referenz durchsuchen →"
    },
    "eyebrow": "Einstellungen",
@@ -16199,7 +16199,7 @@
    "exports": {
     "toast": {
      "failed": "Export fehlgeschlagen",
-     "queued": "Export eingereiht — Polling auf Abschluss",
+     "queued": "Export eingereiht, Polling auf Abschluss",
      "complete": "Export abgeschlossen",
      "downloadFailed": "Download fehlgeschlagen"
     },
@@ -16618,7 +16618,7 @@
     "crumbSettings": "Einstellungen",
     "crumbSequences": "Sequenzen",
     "activeHeading": "Aktive Sequenzen",
-    "activeIntroFiresTokens": "feuert — Tokens:",
+    "activeIntroFiresTokens": "feuert. Tokens:",
     "emptyLabel": "Noch keine Sequenzen zugewiesen",
     "columnScope": "Scope",
     "columnFormat": "Format",
@@ -16664,10 +16664,10 @@
      "heading": "Richtlinie Erstellen / Aktualisieren"
     },
     "sev": {
-     "p1": "P1 — Kritisch",
-     "p2": "P2 — Hoch",
-     "p3": "P3 — Standard",
-     "p4": "P4 — Niedrig"
+     "p1": "P1 Kritisch",
+     "p2": "P2 Hoch",
+     "p3": "P3 Standard",
+     "p4": "P4 Niedrig"
     },
     "placeholder": {
      "response": "Reaktion (Min.)",
@@ -16717,7 +16717,7 @@
      "title": "Neue Zone",
      "name": "Name",
      "projectOptional": "Projekt (optional)",
-     "projectNone": "Keines — organisationsweit",
+     "projectNone": "Keines, organisationsweit",
      "centerLat": "Zentrum Breitengrad",
      "centerLng": "Zentrum Längengrad",
      "radius": "Radius (Meter)"
@@ -16743,7 +16743,7 @@
      "deletedToast": "Endpunkt gelöscht",
      "endpointUrlLabel": "Endpunkt-URL",
      "descriptionLabel": "Beschreibung",
-     "activeLabel": "Aktiv — Events an diesen Endpunkt zustellen",
+     "activeLabel": "Aktiv: Events an diesen Endpunkt zustellen",
      "eventsLabel": "Events",
      "deleting": "Lösche…",
      "deleteEndpoint": "Endpunkt löschen",
@@ -16813,7 +16813,7 @@
   },
   "sitePlans": {
    "transitionBar": {
-    "terminal": "Endzustand — keine Übergänge verfügbar.",
+    "terminal": "Endzustand. Keine Übergänge verfügbar.",
     "lifecycle": "Lebenszyklus"
    },
    "edit": {
@@ -16876,7 +16876,7 @@
    "detail": {
     "eyebrow": "Kreativ · Standortpläne",
     "breadcrumb": "Standortpläne",
-    "noAtomId": "— keine Atom-ID —",
+    "noAtomId": "Keine Atom-ID",
     "revPrefix": "Rev {rev}",
     "sheet": "Blatt",
     "xpmsClass": "XPMS-Klasse",
@@ -16974,7 +16974,7 @@
      "notes": "Notizen"
     },
     "option": {
-     "none": "— Keine —"
+     "none": "Keine"
     }
    },
    "breadcrumb": "Standortpläne",
@@ -16999,13 +16999,13 @@
     "rev": "Rev",
     "venueProject": "Venue / Projekt"
    },
-   "pending": "— ausstehend —",
+   "pending": "ausstehend",
    "map": {
     "back": "Zurück zum Plan",
     "detail": "Platzierung",
     "eyebrow": "Design",
     "selectHint": "Wählen Sie einen Pin, um seine Platzierung zu sehen.",
-    "title": "{code} — Plankarte"
+    "title": "{code}: Plankarte"
    }
   },
   "specs": {
@@ -17045,7 +17045,7 @@
     },
     "placeholders": {
      "title": "Niederspannungstransformatoren",
-     "division": "26 — Elektro"
+     "division": "26 Elektro"
     },
     "selectProject": "Auswählen …",
     "hints": {
@@ -17084,7 +17084,7 @@
     },
     "eyebrow": "Kreativ · Specs",
     "fields": {
-     "bodyMarkdown": "Text — Markdown",
+     "bodyMarkdown": "Text (Markdown)",
      "division": "Gewerk",
      "format": "Format",
      "project": "Projekt",
@@ -17173,7 +17173,7 @@
   },
   "subscriptions": {
    "stateControls": {
-    "terminal": "Endzustand — keine weiteren Übergänge.",
+    "terminal": "Endzustand. Keine weiteren Übergänge.",
     "from": "Von"
    },
    "detail": {
@@ -17253,9 +17253,9 @@
      "periodStart": "Zeitraum-Beginn",
      "periodEnd": "Zeitraum-Ende",
      "scope": "Scope",
-     "scope1": "Scope 1 — direkt",
-     "scope2": "Scope 2 — bezogene Energie",
-     "scope3": "Scope 3 — Wertschöpfungskette",
+     "scope1": "Scope 1: direkt",
+     "scope2": "Scope 2: bezogene Energie",
+     "scope3": "Scope 3: Wertschöpfungskette",
      "kgCo2e": "kg CO₂e",
      "source": "Quelle",
      "method": "Methode"
@@ -17272,9 +17272,9 @@
      "periodStart": "Zeitraum-Beginn",
      "periodEnd": "Zeitraum-Ende",
      "scope": "Scope",
-     "scope1": "Scope 1 — direkt",
-     "scope2": "Scope 2 — bezogene Energie",
-     "scope3": "Scope 3 — Wertschöpfungskette",
+     "scope1": "Scope 1: direkt",
+     "scope2": "Scope 2: bezogene Energie",
+     "scope3": "Scope 3: Wertschöpfungskette",
      "kgCo2e": "kg CO₂e",
      "source": "Quelle",
      "method": "Methode"
@@ -17348,7 +17348,7 @@
      "label": "Bezeichnung",
      "quantity": "Menge"
     },
-    "emptyDescription": "Gegen dieses Aufmaß erfasste Posten — Anzahlen, Längen, Flächen, Volumina — fließen in die Gesamtsumme oben ein.",
+    "emptyDescription": "Gegen dieses Aufmaß erfasste Posten (Anzahlen, Längen, Flächen, Volumina) fließen in die Gesamtsumme oben ein.",
     "emptyLabel": "Noch keine Messungen",
     "eyebrow": "Kreativ",
     "field": {
@@ -17371,7 +17371,7 @@
    "edit": {
     "eyebrow": "Kreativ",
     "fields": {
-     "calibration": "Kalibrierung — Zoll pro Fuß",
+     "calibration": "Kalibrierung: Zoll pro Fuß",
      "costCode": "Kostenstelle · Optional",
      "name": "Name",
      "notes": "Notizen",
@@ -17407,7 +17407,7 @@
      "title": "Titel",
      "description": "Beschreibung",
      "status": "Status",
-     "priority": "Priorität (0–3)",
+     "priority": "Priorität (0 bis 3)",
      "dueAt": "Fällig am"
     }
    },
@@ -17431,7 +17431,7 @@
     "priorityP3": "P3 · Normal",
     "priorityP4": "P4 · Niedrig",
     "project": "Projekt",
-    "noProject": "— Kein Projekt —",
+    "noProject": "Kein Projekt",
     "eyebrow": "Arbeit"
    },
    "title": "Aufgaben",
@@ -17513,8 +17513,8 @@
      "vendor": "Lieferant",
      "externalEmail": "Externe E-Mail"
     },
-    "userOption": "— Nutzer —",
-    "vendorOption": "— Lieferant —",
+    "userOption": "Nutzer",
+    "vendorOption": "Lieferant",
     "emailPlaceholder": "email@…",
     "add": "+ Hinzufügen",
     "noItemsTitle": "Noch keine Positionen",
@@ -17626,9 +17626,9 @@
      "submit": "Lauf planen",
      "fleetLabel": "Flotte",
      "fleet": {
-      "t1": "T1 — Athlet:innen",
-      "t2": "T2 — Teams",
-      "t3": "T3 — Olympische Familie",
+      "t1": "T1 Athlet:innen",
+      "t2": "T2 Teams",
+      "t3": "T3 Olympische Familie",
       "media": "Medien",
       "workforce": "Workforce",
       "spectator": "Publikum"
@@ -17655,9 +17655,9 @@
    },
    "fleets": {
     "label": {
-     "t1": "T1 — VIP",
-     "t2": "T2 — Athlet:innen / Offizielle",
-     "t3": "T3 — Workforce",
+     "t1": "T1 VIP",
+     "t2": "T2 Athlet:innen / Offizielle",
+     "t3": "T3 Workforce",
      "media": "Medien",
      "workforce": "Workforce",
      "spectator": "Publikum"
@@ -17730,7 +17730,7 @@
     "eyebrow": "Venue",
     "title": "Build",
     "configureSupabase": "Supabase konfigurieren.",
-    "titleWithName": "{name} — Build",
+    "titleWithName": "{name}: Build",
     "subtitleOne": "{count} Log-Eintrag",
     "subtitleOther": "{count} Log-Einträge",
     "breadcrumbVenues": "Venues",
@@ -17746,7 +17746,7 @@
    "certifications": {
     "eyebrow": "Venue",
     "title": "Zertifizierungen",
-    "headerTitle": "{name} — Zertifizierungen",
+    "headerTitle": "{name}: Zertifizierungen",
     "metrics": {
      "active": "Aktiv",
      "expiring": "Läuft ab (≤30 T.)",
@@ -17769,7 +17769,7 @@
     "eyebrow": "Venue",
     "title": "Closeout",
     "configureSupabase": "Supabase konfigurieren.",
-    "headerTitle": "{name} — Closeout",
+    "headerTitle": "{name}: Closeout",
     "metric": {
      "complete": "Erledigt",
      "open": "Offen",
@@ -17790,7 +17790,7 @@
     "eyebrow": "Venue",
     "title": "Design",
     "configureSupabase": "Supabase konfigurieren.",
-    "headerTitle": "{name} — Design",
+    "headerTitle": "{name}: Design",
     "metric": {
      "approved": "Freigegeben",
      "inReview": "In Prüfung",
@@ -17826,7 +17826,7 @@
     "eyebrow": "Venue",
     "title": "Handover",
     "configureSupabase": "Supabase konfigurieren.",
-    "titleWithVenue": "{name} — Handover",
+    "titleWithVenue": "{name}: Handover",
     "subtitleOne": "{count} Commissioning-Punkt",
     "subtitleOther": "{count} Commissioning-Punkte",
     "breadcrumb": "Handover",
@@ -17880,7 +17880,7 @@
     "eyebrow": "Venue",
     "title": "Venue-Betriebsplan",
     "configureSupabase": "Supabase konfigurieren.",
-    "headerTitle": "{name} — Venue-Betriebsplan",
+    "headerTitle": "{name}: Venue-Betriebsplan",
     "headerSubtitle": "{approved}/{total} Abschnitte freigegeben",
     "breadcrumb": "VOP",
     "metrics": {
@@ -17895,7 +17895,7 @@
     "eyebrow": "Venue",
     "title": "Zonen",
     "configureSupabase": "Supabase konfigurieren.",
-    "titleWithName": "{name} — Zonen",
+    "titleWithName": "{name}: Zonen",
     "breadcrumbVenues": "Venues",
     "breadcrumbZones": "Zonen",
     "emptyLabel": "Noch keine Zonen",
@@ -17955,7 +17955,7 @@
     "submit": "Garantie anlegen",
     "fields": {
      "name": "Deckungsbezeichnung",
-     "namePlaceholder": "HVAC-Anlage — Trane RT-3",
+     "namePlaceholder": "HVAC-Anlage, Trane RT-3",
      "project": "Projekt",
      "vendor": "Lieferant / Garantiegeber",
      "start": "Start",
@@ -17992,7 +17992,7 @@
      "eyebrow": "Badges",
      "title": "Neuer Badge",
      "codeLabel": "Code",
-     "codeHint": "Kurzkennung — kleingeschrieben, Bindestriche erlaubt.",
+     "codeHint": "Kurzkennung: kleingeschrieben, Bindestriche erlaubt.",
      "nameLabel": "Name",
      "iconLabel": "Icon (Emoji)",
      "descriptionLabel": "Beschreibung"
@@ -18062,7 +18062,7 @@
      "publish": "Veröffentlichen",
      "completionBadge": {
       "title": "Abschluss-Badge",
-      "none": "— Keiner —"
+      "none": "Keiner"
      },
      "save": "Speichern",
      "lessons": {
@@ -18111,7 +18111,7 @@
      "crumb": "Bearbeiten",
      "eyebrow": "Kurs",
      "fields": {
-      "duration": "Dauer — Minuten",
+      "duration": "Dauer (Minuten)",
       "requiredForRole": "Erforderlich für Rolle",
       "summary": "Zusammenfassung",
       "title": "Titel"
@@ -18320,7 +18320,7 @@
      "crumbRecognition": "Anerkennung",
      "crumbGiveKudos": "Kudos Geben",
      "recipientLabel": "Empfänger",
-     "pickTeammate": "— Teammitglied Auswählen —",
+     "pickTeammate": "Teammitglied auswählen",
      "messageLabel": "Nachricht",
      "valueTagLabel": "Wert-Tag (Optional)",
      "cancel": "Abbrechen",
@@ -18702,14 +18702,14 @@
     "subtitle": "Zeitliches Rückgrat. Jedes Atom trägt eine Phase.",
     "openLink": "Phasenansicht öffnen →",
     "configureSupabase": "Supabase konfigurieren.",
-    "eyebrow": "XPMS · 8PP — Acht Produktionsphasen",
+    "eyebrow": "XPMS · 8PP · Acht Produktionsphasen",
     "uac": "UAC",
     "tpc": "TPC",
     "total": "Gesamt",
     "empty": "Noch keine Atome in dieser Phase"
    },
    "footer": {
-    "codebookNote": "Codebook ist global und append-only — siehe",
+    "codebookNote": "Codebook ist global und append-only, siehe",
     "codebookLink": "XTC Codebook"
    },
    "provenance": {
@@ -18803,7 +18803,7 @@
   },
   "legend": {
    "eyebrow": "LEG3ND",
-   "subtitle": "Wissen · LMS · Ressourcen — auf dem XPMS 2.0-Protokoll.",
+   "subtitle": "Wissen · LMS · Ressourcen, auf dem XPMS 2.0-Protokoll.",
    "tiles": {
     "catalog": {
      "blurb": "Der bepreiste Atom-/URID-Hauptkatalog.",
@@ -18814,11 +18814,11 @@
      "title": "Zertifizierungen"
     },
     "courses": {
-     "blurb": "LMS — Schulungspfade, Lektionen und Quizze.",
+     "blurb": "LMS: Schulungspfade, Lektionen und Quizze.",
      "title": "Kurse"
     },
     "engine": {
-     "blurb": "XMCE — Regeln verfassen, Prüfungen ausführen, Befunde triagieren.",
+     "blurb": "XMCE: Regeln verfassen, Prüfungen ausführen, Befunde triagieren.",
      "title": "Compliance-Engine"
     },
     "resources": {
@@ -18834,7 +18834,7 @@
      "title": "Beschilderung"
     },
     "standard": {
-     "blurb": "Wissensbasis — die kanonische Referenz unserer Arbeitsweise.",
+     "blurb": "Wissensbasis: die kanonische Referenz unserer Arbeitsweise.",
      "title": "Der Standard"
     },
     "community": {
@@ -18842,11 +18842,11 @@
      "title": "Community"
     },
     "leaderboard": {
-     "blurb": "Punkte, Stufen und Erfolge — geteilt mit COMPVSS.",
+     "blurb": "Punkte, Stufen und Erfolge, geteilt mit COMPVSS.",
      "title": "Bestenliste"
     },
     "matrix": {
-     "blurb": "Credential-Status der Org — Mitglied × Zertifizierung, nach Status.",
+     "blurb": "Credential-Status der Org: Mitglied × Zertifizierung, nach Status.",
      "title": "Rezertifizierungsmatrix"
     },
     "store": {
@@ -18949,8 +18949,8 @@
      "submit": "Tisch erstellen",
      "tableNo": "Tischnummer",
      "title": "Neuer Tisch",
-     "x": "Sitzplan X (0–100)",
-     "y": "Sitzplan Y (0–60)",
+     "x": "Sitzplan X (0 bis 100)",
+     "y": "Sitzplan Y (0 bis 60)",
      "zone": "Zone"
     }
    },
@@ -18994,7 +18994,7 @@
     },
     "eyebrow": "Box Office",
     "fields": {
-     "event": "Veranstaltung — Optional",
+     "event": "Veranstaltung (optional)",
      "name": "Listenname",
      "notes": "Notizen"
     },
@@ -19063,7 +19063,7 @@
     "client": "Kunde (optional)",
     "endsAt": "Endet um",
     "headcount": "Personenzahl",
-    "none": "— Keine —",
+    "none": "Keine",
     "notes": "Notizen",
     "project": "Projekt (optional)",
     "space": "Raum",
@@ -19389,11 +19389,11 @@
    "eyebrow": "Asset & Logistik",
    "new": {
     "acquiredAtLabel": "Angeschafft",
-    "acquisitionCostLabel": "Anschaffungskosten — USD",
+    "acquisitionCostLabel": "Anschaffungskosten (USD)",
     "assetKindHint": "Freie Kategorie, z. B. Mikrofon, LKW, Funkgerät.",
     "assetKindLabel": "Asset-Art",
     "assetTagLabel": "Asset-Tag",
-    "dailyRateLabel": "Tagessatz — USD",
+    "dailyRateLabel": "Tagessatz (USD)",
     "displayNameLabel": "Anzeigename",
     "eyebrow": "Assets",
     "ownershipLabel": "Eigentum",
@@ -19520,11 +19520,11 @@
     "none": "Keine"
    },
    "new": {
-    "prefilled": "Aus Ihrer letzten Anfrage vorausgefüllt — passen Sie alles Geänderte an.",
+    "prefilled": "Aus Ihrer letzten Anfrage vorausgefüllt. Passen Sie alles Geänderte an.",
     "submitting": "Wird gesendet…"
    },
    "offline": {
-    "body": "Ihre Advancing-Daten werden geladen — und Änderungen synchronisiert — sobald Sie wieder online sind.",
+    "body": "Ihre Advancing-Daten werden geladen und Änderungen synchronisiert, sobald Sie wieder online sind.",
     "title": "Sie sind offline"
    },
    "search": "Advancing durchsuchen…",
@@ -19551,8 +19551,8 @@
    "announce": {
     "error": "Fehler: {message}",
     "accepted": "Akzeptiert: {name}",
-    "duplicate": "Doppeltes Ticket — bereits gescannt",
-    "voided": "Storniertes Ticket — abgelehnt",
+    "duplicate": "Doppeltes Ticket, bereits gescannt",
+    "voided": "Storniertes Ticket, abgelehnt",
     "notFound": "Ticket nicht gefunden"
    },
    "guest": "Gast",
@@ -19624,7 +19624,7 @@
     "network": "Netzwerkfehler"
    },
    "toast": {
-    "queued": "{label} (in Warteschlange — Sync sobald online)",
+    "queued": "{label} (in Warteschlange, Sync sobald online)",
     "checkedIn": "Eingecheckt",
     "breakStarted": "Pause gestartet",
     "clockedOut": "Ausgestempelt",
@@ -19714,7 +19714,7 @@
    "eyebrow": "Feld",
    "title": "Tagesprotokoll",
    "subtitle": "Schnellerfassung direkt vom Floor",
-   "todaysLog": "Heutiges Protokoll — {date}",
+   "todaysLog": "Heutiges Protokoll: {date}",
    "selectProject": "Projekt auswählen …",
    "weatherPlaceholder": "Wetter (z. B. 25 °C, sonnig)",
    "saveLog": "Protokoll speichern",
@@ -20190,7 +20190,7 @@
     "openFullForm": "Vollformular öffnen",
     "summaryLabel": "Was ist passiert?",
     "fileNow": "Jetzt melden",
-    "subtitle": "Sicherheitsvorfall protokollieren — Admin und EHS-Lead werden sofort benachrichtigt.",
+    "subtitle": "Sicherheitsvorfall protokollieren. Admin und EHS-Lead werden sofort benachrichtigt.",
     "filing": "Wird gemeldet…"
    },
    "eyebrow": "Feld",
@@ -20313,15 +20313,15 @@
     "triage": {
      "green": {
       "label": "Grün",
-      "hint": "Leicht — nicht dringend"
+      "hint": "Leicht, nicht dringend"
      },
      "yellow": {
       "label": "Gelb",
-      "hint": "Dringend — innerhalb 30 Min."
+      "hint": "Dringend, innerhalb 30 Min."
      },
      "red": {
       "label": "Rot",
-      "hint": "Sofort — lebensbedrohlich"
+      "hint": "Sofort, lebensbedrohlich"
      },
      "black": {
       "label": "Schwarz",
@@ -20331,7 +20331,7 @@
     "triageLegend": "Triage *",
     "patientRef": {
      "label": "Patientenreferenz",
-     "placeholder": "Pseudonyme ID — niemals ein Name"
+     "placeholder": "Pseudonyme ID, niemals ein Name"
     },
     "chiefComplaint": {
      "label": "Hauptbeschwerde *",
@@ -20445,11 +20445,11 @@
     "freeAgent": "Freier Mitarbeiter",
     "howTo": "So nutzen Sie Ihre Rose",
     "scanNote": "Zum Verifizieren scannen · einmalig, erneuert sich beim Öffnen",
-    "sub": "Wir präsentieren Ihre COMPVSS Rose — das einzige, dauerhafte Credential, das das gesamte ATLVS Ecosystem öffnet. Sie wird einmalig ausgestellt und begleitet Sie ein Leben lang, sie entwickelt sich nur mit Ihrem Zugriff weiter. Willkommen in der Mitgliedschaft.",
+    "sub": "Wir präsentieren Ihre COMPVSS Rose, das einzige, dauerhafte Credential, das das gesamte ATLVS Ecosystem öffnet. Sie wird einmalig ausgestellt und begleitet Sie ein Leben lang, sie entwickelt sich nur mit Ihrem Zugriff weiter. Willkommen in der Mitgliedschaft.",
     "title": "Die COMPVSS Rose",
     "use1": "Tippen oder scannen Sie, um Baustellen zu betreten, Annehmlichkeiten zu nutzen, Assets zu verfolgen und Services anzufordern",
-    "use2": "Zugriff wird aus der Ferne aktualisiert — in Echtzeit gewährt, entzogen oder erweitert",
-    "use3": "Einmalig ausgestellt, ein Leben lang dabei — nur Ihr Zugriff ändert sich je"
+    "use2": "Zugriff wird aus der Ferne aktualisiert, in Echtzeit gewährt, entzogen oder erweitert",
+    "use3": "Einmalig ausgestellt, ein Leben lang dabei. Nur Ihr Zugriff ändert sich je"
    },
    "permissions": {
     "bluetooth": "Bluetooth / NFC",
@@ -20509,7 +20509,7 @@
     "shoe": "Schuh",
     "skills": "Fähigkeiten & Tags",
     "spotify": "Spotify",
-    "sub": "Dies ist Ihre portable Crew-Identität über alle Projekte hinweg. Beginnen Sie mit den Grundlagen — den Rest können Sie jederzeit ergänzen.",
+    "sub": "Dies ist Ihre portable Crew-Identität über alle Projekte hinweg. Beginnen Sie mit den Grundlagen, den Rest können Sie jederzeit ergänzen.",
     "title": "Profil einrichten",
     "username": "Benutzername",
     "visas": "Visa",
@@ -20612,10 +20612,10 @@
     "submit": "Eröffnen",
     "severity": {
      "label": "Schweregrad",
-     "p1": "P1 — Live-Event-Blocker",
-     "p2": "P2 — Dringend",
-     "p3": "P3 — Standard",
-     "p4": "P4 — Niedrig"
+     "p1": "P1: Live-Event-Blocker",
+     "p2": "P2: Dringend",
+     "p3": "P3: Standard",
+     "p4": "P4: Niedrig"
     },
     "category": {
      "label": "Kategorie",
@@ -20629,7 +20629,7 @@
     },
     "summary": {
      "label": "Zusammenfassung",
-     "placeholder": "Eine Zeile — was ist los?"
+     "placeholder": "Eine Zeile: Was ist los?"
     },
     "detail": {
      "label": "Details",
@@ -21031,10 +21031,10 @@
    "due": "Fällig {date}"
   },
   "offline": {
-   "queuedToast": "In Warteschlange — synct, sobald online",
-   "queuedDetail": "offline — Sync ausstehend",
+   "queuedToast": "In Warteschlange, synct, sobald online",
+   "queuedDetail": "offline, Sync ausstehend",
    "queuedBadge": "In Warteschlange",
-   "pendingBadge": "{count} Ausstehend — Synct, Sobald Online"
+   "pendingBadge": "{count} Ausstehend, Synct, Sobald Online"
   },
   "checkInSummary": {
    "eyebrow": "Feld",
@@ -21051,7 +21051,7 @@
     "revoke": "Zugriff wird nach Bestätigung durch den Admin entzogen"
    },
    "eyebrow": "Kontostatus",
-   "intro": "Verwalten Sie Ihren Kontostatus — legen Sie eine Pause ein oder fordern Sie eine Archivierung an.",
+   "intro": "Verwalten Sie Ihren Kontostatus: Legen Sie eine Pause ein oder fordern Sie eine Archivierung an.",
    "pause": {
     "active": "Ihr Konto ist pausiert. Setzen Sie es oben fort, wenn Sie bereit sind.",
     "cta": "Mein Konto pausieren",
@@ -21059,7 +21059,7 @@
     "hide": "Aus Crew-Planung und Dienstplänen ausgeblendet",
     "mute": "Benachrichtigungen pausiert",
     "resume": "Mein Konto fortsetzen",
-    "reverse": "Jederzeit reaktivierbar — nichts geht verloren"
+    "reverse": "Jederzeit reaktivierbar, nichts geht verloren"
    },
    "title": "Konto"
   },
@@ -21076,11 +21076,11 @@
   },
   "inventoryScan": {
    "back": "Assets",
-   "cameraDenied": "Kamera nicht verfügbar — manuelle Eingabe verwenden",
+   "cameraDenied": "Kamera nicht verfügbar, manuelle Eingabe verwenden",
    "cta": "Tag auflösen",
    "enableCamera": "Kamera aktivieren",
    "eyebrow": "Asset-Tag",
-   "hint": "Auf einen Asset-Tag-QR richten — wird automatisch gelesen.",
+   "hint": "Auf einen Asset-Tag-QR richten, wird automatisch gelesen.",
    "logged": "Erfasst",
    "manualLabel": "Asset-Tag",
    "manualPlaceholder": "z. B. R7-014",
@@ -21099,7 +21099,7 @@
   },
   "scan": {
    "eyebrow": "Schnellscan",
-   "hint": "Richten Sie die Kamera auf einen QR-Code oder Barcode — wird automatisch gelesen.",
+   "hint": "Richten Sie die Kamera auf einen QR-Code oder Barcode, wird automatisch gelesen.",
    "manualLabel": "Code",
    "manualPlaceholder": "z. B. R7-014",
    "manualSubmit": "Erfassen",
@@ -21129,7 +21129,7 @@
    "crew": "Crew",
    "decline": "Ablehnen",
    "empty": "Keine Personen",
-   "emptyBody": "Noch keine andere Crew in dieser Org — Vorschläge erscheinen hier, sobald Ihr Netzwerk wächst.",
+   "emptyBody": "Noch keine andere Crew in dieser Org. Vorschläge erscheinen hier, sobald Ihr Netzwerk wächst.",
    "network": "Mein Netzwerk",
    "pending": "Ausstehend",
    "pendingSection": "Ausstehende Anfragen",
@@ -21151,7 +21151,7 @@
    "access": "Zugang",
    "asset": "Asset",
    "batch": "Sammel-Check-in",
-   "cameraDenied": "Kamera nicht verfügbar — manuelle Eingabe verwenden",
+   "cameraDenied": "Kamera nicht verfügbar, manuelle Eingabe verwenden",
    "ctaAccess": "Credential verifizieren",
    "ctaAsset": "Aus- / Einchecken",
    "ctaNfc": "Zum Lesen antippen",
@@ -21193,7 +21193,7 @@
    "contactLabel": "E-Mail oder Telefon",
    "contactPlaceholder": "name@beispiel.de",
    "empty": "Noch keine Empfehlungen",
-   "emptyBody": "Teilen Sie Ihren Code — Empfehlungen und Belohnungen erscheinen hier.",
+   "emptyBody": "Teilen Sie Ihren Code: Empfehlungen und Belohnungen erscheinen hier.",
    "eyebrow": "ATLVS Ecosystem",
    "how": "So funktioniert's",
    "invite": "Einladen",
@@ -21374,9 +21374,9 @@
    "upcoming": "Anstehend",
    "empty": "Noch keine Verfügbarkeits-Slots.",
    "kind": {
-    "block": "Blockieren — Nicht verfügbar",
-    "confirm": "Bestätigen — Gesperrt",
-    "hold": "Reservieren — Auto-Freigabe bei TTL"
+    "block": "Blockieren: Nicht verfügbar",
+    "confirm": "Bestätigen: Gesperrt",
+    "hold": "Reservieren: Auto-Freigabe bei TTL"
    },
    "kindLabel": "Art"
   },
@@ -21405,7 +21405,7 @@
    },
    "reviews": {
     "label": "Meine Bewertungen",
-    "blurb": "Bidirektionale Bewertungen — freigegeben, sobald die Gegenseite postet."
+    "blurb": "Bidirektionale Bewertungen, freigegeben, sobald die Gegenseite postet."
    },
    "profile": {
     "label": "Profil",
@@ -21674,7 +21674,7 @@
     "legend": "Darstellung",
     "density": "Dichte",
     "colorMode": "Farbmodus",
-    "colorModeHint": "Hell, dunkel oder dem Betriebssystem folgend — einstellbar unter",
+    "colorModeHint": "Hell, dunkel oder dem Betriebssystem folgend, einstellbar unter",
     "colorModeLink": "Darstellungseinstellungen"
    },
    "locale": {
@@ -21762,7 +21762,7 @@
     "bio": {
      "label": "Bio",
      "placeholder": "Ein paar Absätze über deine Praxis.",
-     "hint": "Markdown wird nicht geparst — nur Klartext."
+     "hint": "Markdown wird nicht geparst, nur Klartext."
     },
     "avatarUrl": {
      "label": "Avatar-URL"
@@ -21792,7 +21792,7 @@
    "emptyWritten": "Du hast noch keine Bewertungen verfasst.",
    "status": {
     "released": "freigegeben",
-    "hidden": "verborgen — wartet auf Gegenseite"
+    "hidden": "verborgen, wartet auf Gegenseite"
    },
    "new": {
     "cta": {
@@ -21905,7 +21905,7 @@
     "enroll": {
      "title": "Diesen QR-Code scannen",
      "qrAlt": "QR-Code für Zwei-Faktor-Einrichtung",
-     "qrUnavailable": "QR nicht verfügbar — Secret unten einfügen",
+     "qrUnavailable": "QR nicht verfügbar, Secret unten einfügen",
      "pasteSecret": "Oder dieses Secret einfügen",
      "copySecret": "Secret kopieren",
      "codeLabel": "6-stelligen Code eingeben",
@@ -22046,7 +22046,7 @@
  "notifications": {
   "allCaughtUp": "Alles erledigt.",
   "bellAria": "Benachrichtigungen",
-  "bellAriaUnread": "Benachrichtigungen — {count} ungelesen",
+  "bellAriaUnread": "Benachrichtigungen: {count} ungelesen",
   "markAllRead": "Alle als gelesen markieren",
   "markAllReadAria": "Alle als gelesen markieren",
   "title": "Benachrichtigungen",
@@ -22084,8 +22084,8 @@
    "dismiss": "Banner schließen"
   },
   "connectivity": {
-   "offline": "Du bist offline. Scans und Stempelungen werden in die Warteschlange gestellt — alles andere braucht eine Verbindung.",
-   "backOnline": "Wieder online — Scans und Stempelungen werden synchronisiert…"
+   "offline": "Du bist offline. Scans und Stempelungen werden in die Warteschlange gestellt, alles andere braucht eine Verbindung.",
+   "backOnline": "Wieder online. Scans und Stempelungen werden synchronisiert…"
   },
   "density": {
    "compact": "Kompakt",
@@ -22122,7 +22122,7 @@
   },
   "sync": {
    "now": "Jetzt synchronisieren",
-   "queued": "{count} Änderungen in Warteschlange — werden synchronisiert, sobald wieder online",
+   "queued": "{count} Änderungen in Warteschlange, werden synchronisiert, sobald wieder online",
    "syncing": "{count} Änderungen werden synchronisiert…"
   }
  },
@@ -22168,7 +22168,7 @@
   "clearSearch": "Suche leeren",
   "shareViewLink": "View-Link teilen",
   "exportCsv": "Sichtbare Zeilen als CSV exportieren",
-  "importFile": "Zeilen aus Datei importieren — CSV / TSV / JSON / XLSX",
+  "importFile": "Zeilen aus Datei importieren: CSV / TSV / JSON / XLSX",
   "importFileAria": "Zeilen aus Datei importieren",
   "refresh": "Tabellendaten aktualisieren",
   "selectAllPage": "Alle auf dieser Seite auswählen",
@@ -22313,7 +22313,7 @@
   "nameLabel": "Name",
   "namePlaceholder": "z. B. Offene RFIs · Kritisch",
   "descriptionLabel": "Beschreibung",
-  "descriptionHint": "Optional — erkläre, wann diese View nützlich ist.",
+  "descriptionHint": "Optional. Erkläre, wann diese View nützlich ist.",
   "descriptionPlaceholder": "Kontext für Teammitglieder hinzufügen",
   "visibility": "Sichtbarkeit",
   "scope": {
@@ -22456,7 +22456,7 @@
     "manual": "Ausgelöst, wenn jemand auf dieser Seite auf Jetzt ausführen klickt.",
     "schedule": "Läuft nach wiederkehrendem Cron- / RRULE-Zeitplan. Backend landet in Phase 4.3.",
     "webhook": "Läuft, wenn ein eingehender HTTP-POST die URL unten trifft. Backend landet in Phase 4.3.",
-    "event": "Läuft, wenn ein Record-Event matcht — erstellt oder aktualisiert. Backend landet in Phase 4.5."
+    "event": "Läuft, wenn ein Record-Event matcht, erstellt oder aktualisiert. Backend landet in Phase 4.5."
    },
    "kindLabel": "Art",
    "kindAria": "Trigger-Art",
@@ -22467,8 +22467,8 @@
    "rruleHint": "iCal-RRULE-Syntax. Wird jetzt gespeichert; der Runner aktiviert sie in P4.3.",
    "webhookSoon": "Eingehender Endpoint landet in Phase 4.3.",
    "inboundUrl": "Eingehende URL",
-   "secretLabel": "Shared Secret — HMAC",
-   "secretPlaceholder": "Optional — fällt auf das Secret pro Automation zurück",
+   "secretLabel": "Shared Secret: HMAC",
+   "secretPlaceholder": "Optional, fällt auf das Secret pro Automation zurück",
    "secretHint": "Wenn gesetzt, verifiziert der Runner x-lyt-signature vor dem Dispatch.",
    "eventSoon": "Event-Subscription landet in Phase 4.5.",
    "targetTable": "Zieltabelle",
@@ -22636,7 +22636,7 @@
    },
    "occurredAtLabel": "Ereignet Am",
    "projectLabel": "Projekt",
-   "projectNone": "— Keines —",
+   "projectNone": "Keines",
    "locationLabel": "Ort",
    "locationPlaceholder": "z. B. Stage-right Monitor-World",
    "descriptionLabel": "Beschreibung",
@@ -22647,7 +22647,7 @@
    "uploading": "Lädt hoch…",
    "photoAlt": "Hochgeladenes Incident-Foto",
    "removePhoto": "Foto entfernen",
-   "emergencyNotice": "Im Notfall zuerst den lokalen Notruf wählen — dann hier loggen.",
+   "emergencyNotice": "Im Notfall zuerst den lokalen Notruf wählen, dann hier loggen.",
    "submitting": "Wird abgesendet…",
    "submit": "Report absenden"
   },
@@ -22721,7 +22721,7 @@
    "totalRequests": "Anfragen Gesamt",
    "activeConsents": "Aktive Einwilligungen",
    "submitRequest": "Anfrage Stellen",
-   "submitRequestBody": "Nach dem Datenschutzrecht deiner Jurisdiktion — GDPR, CCPA, LGPD etc. — kannst du Zugriff, Portabilität, Korrektur oder Löschung der personenbezogenen Daten verlangen, die wir über dich verarbeiten.",
+   "submitRequestBody": "Nach dem Datenschutzrecht deiner Jurisdiktion, etwa GDPR, CCPA oder LGPD, kannst du Zugriff, Portabilität, Korrektur oder Löschung der personenbezogenen Daten verlangen, die wir über dich verarbeiten.",
    "downloadData": "Meine Daten herunterladen · JSON",
    "emailDsar": "DSAR per E-Mail senden",
    "yourRequests": "Deine Anfragen",
@@ -22736,7 +22736,7 @@
    "statusGranted": "erteilt",
    "statusRevoked": "widerrufen",
    "roleNoteBefore": "Welche Daten wir über dich verarbeiten, hängt von deiner Rolle ab. Als",
-   "roleNoteAfter": "kannst du Einträge haben in: Akkreditierungen, Credentials, Advancing-Rider, Verträgen, Zahlungen, Scans und unterschriebenen Disclosures. Eine Löschungsanfrage kann dein aktives Engagement beeinträchtigen — wir bestätigen das vor der Bearbeitung."
+   "roleNoteAfter": "kannst du Einträge haben in: Akkreditierungen, Credentials, Advancing-Rider, Verträgen, Zahlungen, Scans und unterschriebenen Disclosures. Eine Löschungsanfrage kann dein aktives Engagement beeinträchtigen. Wir bestätigen das vor der Bearbeitung."
   },
   "proposalBlockRenderer": {
    "schedule": {
@@ -22788,7 +22788,7 @@
   },
   "publicFormRenderer": {
    "redirecting": "Weiterleitung…",
-   "thankYouTitle": "Danke — ist angekommen.",
+   "thankYouTitle": "Danke, ist angekommen.",
    "thankYouBody": "Deine Antwort wurde erfasst. Du kannst diesen Tab schließen.",
    "submitted": "Abgesendet",
    "leaveBlank": "Leer lassen",
@@ -22856,7 +22856,7 @@
    "signatures": "Unterschriften",
    "signature": "Unterschrift",
    "signedFromLine": "Unterzeichnet {date} von {ip}",
-   "signaturePending": "Ausstehend — unterzeichne das Angebot über den geteilten Link, um es auszufertigen.",
+   "signaturePending": "Ausstehend. Unterzeichne das Angebot über den geteilten Link, um es auszufertigen.",
    "sectionFallback": "Abschnitt",
    "colItem": "Position",
    "colDescription": "Beschreibung",
@@ -22936,8 +22936,8 @@
   },
   "certifiedPayroll": {
    "title": "Certified Payroll",
-   "formWh347": "U.S. DOL Form WH-347 — Davis-Bacon Certified Payroll",
-   "formGeneric": "Certified Payroll — {type}",
+   "formWh347": "U.S. DOL Form WH-347: Davis-Bacon Certified Payroll",
+   "formGeneric": "Certified Payroll: {type}",
    "weekEndingShort": "WE",
    "weekEnding": "Wochenende am",
    "statementOfCompliance": "Konformitätserklärung",
@@ -22975,8 +22975,8 @@
    "clause1": "(1) Dass ich die Bezahlung der von {contractor} auf dem Projekt {project} beschäftigten Personen leiste oder beaufsichtige; dass während des Abrechnungszeitraums, beginnend am {start} und endend am {end}, alle auf besagtem Projekt beschäftigten Personen die vollen verdienten Wochenlöhne erhalten haben, dass keine Rückvergütungen direkt oder indirekt an oder zugunsten besagten Contractors oder Subcontractors aus den vollen verdienten Wochenlöhnen einer Person geleistet wurden oder werden und dass keine Abzüge direkt oder indirekt von den vollen verdienten Löhnen einer Person vorgenommen wurden, außer zulässigen Abzügen gemäß Regulations, Part 3 (29 CFR Subtitle A).",
    "clause2": "(2) Dass alle anderweitig unter diesem Vertrag für den oben genannten Zeitraum einzureichenden Payrolls korrekt und vollständig sind; dass die darin enthaltenen Lohnsätze für Arbeiter oder Mechaniker nicht unter den anwendbaren Lohnsätzen einer in den Vertrag aufgenommenen Lohnfestsetzung liegen; dass die darin aufgeführten Klassifizierungen für jeden Arbeiter oder Mechaniker der von ihm ausgeführten Arbeit entsprechen.",
    "clause3": "(3) Dass alle im oben genannten Zeitraum beschäftigten Auszubildenden ordnungsgemäß in einem bona-fide-Ausbildungsprogramm registriert sind, das bei einer vom Bureau of Apprenticeship and Training, United States Department of Labor, anerkannten staatlichen Ausbildungsbehörde registriert ist, oder, falls keine solche anerkannte Behörde in einem Bundesstaat existiert, beim Bureau of Apprenticeship and Training, United States Department of Labor, registriert sind.",
-   "clause4WithFringes": "(4) Dass die von der Lohnfestsetzung geforderten Fringe Benefits, soweit anwendbar, gezahlt wurden — Fringe-Zahlungen in diesem Zeitraum gesamt: {amount}.",
-   "clause4NoFringes": "(4) Dass die von der Lohnfestsetzung geforderten Fringe Benefits, soweit anwendbar, gezahlt wurden — keine Fringes in diesem Zeitraum fällig.",
+   "clause4WithFringes": "(4) Dass die von der Lohnfestsetzung geforderten Fringe Benefits, soweit anwendbar, gezahlt wurden. Fringe-Zahlungen in diesem Zeitraum gesamt: {amount}.",
+   "clause4NoFringes": "(4) Dass die von der Lohnfestsetzung geforderten Fringe Benefits, soweit anwendbar, gezahlt wurden. Keine Fringes in diesem Zeitraum fällig.",
    "certified": "Zertifiziert",
    "signedBy": "Unterzeichnet von",
    "notes": "Notizen"
@@ -23001,12 +23001,12 @@
    "colAmount": "Betrag",
    "lineOriginalContractSum": "Ursprüngliche Vertragssumme",
    "lineNetChangeByChangeOrders": "Nettoänderung durch Change Orders",
-   "lineContractSumToDate": "Vertragssumme bis dato — Zeile 1 ± 2",
+   "lineContractSumToDate": "Vertragssumme bis dato: Zeile 1 ± 2",
    "lineTotalCompletedStored": "Gesamt fertiggestellt & eingelagert bis dato",
-   "lineRetainage": "Einbehalt — {pct}",
-   "lineTotalEarnedLessRetainage": "Gesamt verdient abzüglich Retainage — Zeile 4 − 5",
+   "lineRetainage": "Einbehalt: {pct}",
+   "lineTotalEarnedLessRetainage": "Gesamt verdient abzüglich Retainage: Zeile 4 − 5",
    "lineLessPreviousCertificates": "Abzüglich vorheriger Certificates for Payment",
-   "lineCurrentPaymentDue": "Aktuell fällige Zahlung — Zeile 6 − 7",
+   "lineCurrentPaymentDue": "Aktuell fällige Zahlung: Zeile 6 − 7",
    "lineBalanceToFinish": "Restsumme bis Fertigstellung, inklusive Retainage",
    "contractorCertification": "Contractor-Zertifizierung",
    "contractorCertificationBody": "Der unterzeichnende Contractor bestätigt, dass nach bestem Wissen, Kenntnisstand und Überzeugung des Contractors die von dieser Application for Payment abgedeckte Arbeit gemäß den Vertragsdokumenten abgeschlossen wurde, dass alle Beträge vom Contractor für Arbeiten gezahlt wurden, für die vorherige Certificates for Payment ausgestellt und Zahlungen vom Owner erhalten wurden, und dass die hierin ausgewiesene aktuelle Zahlung nun fällig ist.",
@@ -23017,8 +23017,8 @@
    "architect": "Architekt",
    "certified": "Zertifiziert",
    "notes": "Notizen",
-   "scheduleOfValues": "Schedule of Values — Fortsetzungsblatt",
-   "columnsNote": "Spalten A–I gemäß AIA G703. Beträge in USD.",
+   "scheduleOfValues": "Schedule of Values: Fortsetzungsblatt",
+   "columnsNote": "Spalten A bis I gemäß AIA G703. Beträge in USD.",
    "colScheduled": "Geplant",
    "colPrior": "Vorher",
    "colThisPeriod": "Dieser Zeitraum",
@@ -23084,7 +23084,7 @@
    "bodySample": "Body 11pt, 1,45 Zeilenhöhe. Helvetica für Interoperabilität bei Field-Prints verwenden.",
    "usageRules": "Nutzungsregeln",
    "usageRule1": "• Akzentfarbe für laufende Header-Balken + primäre CTAs verwenden.",
-   "usageRule2": "• Dokumente ab Tier 4 tragen ein purpurrotes Klassifizierungsbanner — den Akzent nur für das Banner überschreiben.",
+   "usageRule2": "• Dokumente ab Tier 4 tragen ein purpurrotes Klassifizierungsbanner. Den Akzent nur für das Banner überschreiben.",
    "usageRule3": "• Der rechtliche Footer erscheint auf jeder Seite jedes producer-generierten Dokuments."
   },
   "deliverablesViews": {
@@ -23208,11 +23208,11 @@
    "declineBody": "Teile eine kurze Begründung, damit die Produktion nachfassen kann, falls sich etwas ändert.",
    "declineLetter": "Letter Ablehnen",
    "reasonLabel": "Grund",
-   "reasonPlaceholder": "z. B. Kalenderkonflikt — schon gebucht 14.–18. Mai."
+   "reasonPlaceholder": "z. B. Kalenderkonflikt, schon gebucht vom 14. bis 18. Mai."
   },
   "offerCheckin": {
    "title": "Check-in",
-   "lockedPrefix": "Öffne zuerst dein Engagement-Letter, um den Check-in freizuschalten —",
+   "lockedPrefix": "Öffne zuerst dein Engagement-Letter, um den Check-in freizuschalten:",
    "returnToLetter": "zurück zum Letter",
    "dayOneEyebrow": "Tag-1-Check-in",
    "welcome": "Willkommen in Salvage City, {name}.",
@@ -23226,7 +23226,7 @@
   },
   "offerOnboarding": {
    "title": "Onboarding",
-   "lockedPrefix": "Öffne zuerst dein Engagement-Letter, um das Onboarding freizuschalten —",
+   "lockedPrefix": "Öffne zuerst dein Engagement-Letter, um das Onboarding freizuschalten:",
    "returnToLetter": "zurück zum Letter",
    "stateNotStarted": "Nicht begonnen",
    "stateInProgress": "In Arbeit",
@@ -23253,20 +23253,20 @@
   },
   "msaSign": {
    "submit": "Unterzeichnen & Absenden",
-   "exhibitBHeading": "Exhibit B — Andere Kunden",
+   "exhibitBHeading": "Exhibit B: Andere Kunden",
    "exhibitBHint": "Liste mindestens zwei (2) Kunden, für die du in den letzten 24 Monaten im Wesentlichen ähnliche Leistungen erbracht hast. Lass Zeilen leer, wenn du weniger offenzulegen hast.",
    "exhibitBClientPlaceholder": "Kunde {n}",
    "exhibitBProjectPlaceholder": "Projekt / Engagement",
    "exhibitBDatesPlaceholder": "Zeitraum · z. B. Q3 2025",
-   "exhibitCHeading": "Exhibit C — Kapitalinvestition",
-   "exhibitCHint": "Liste auf, was du mitbringst — Geschäftseinheit, Versicherung, Equipment, Werkzeuge, Zertifizierungen etc.",
+   "exhibitCHeading": "Exhibit C: Kapitalinvestition",
+   "exhibitCHint": "Liste auf, was du mitbringst: Geschäftseinheit, Versicherung, Equipment, Werkzeuge, Zertifizierungen etc.",
    "exhibitCBusinessEntity": "Geschäftseinheit",
    "exhibitCInsurance": "Versicherung",
    "exhibitCToolsEquipment": "Werkzeuge / Equipment",
    "exhibitCItemCategory": "Posten / Kategorie",
    "exhibitCDescriptionPlaceholder": "Beschreibung / Wert",
-   "nscbHeading": "NSCB-Lizenz — Chapter 624",
-   "nscbHint": "Erforderlich für Gewerke-Scopes unter NRS Chapter 624 — Zimmerei, Elektrik, Rigging etc. Überspringen, falls nicht zutreffend.",
+   "nscbHeading": "NSCB-Lizenz: Chapter 624",
+   "nscbHint": "Erforderlich für Gewerke-Scopes unter NRS Chapter 624, etwa Zimmerei, Elektrik, Rigging usw. Überspringen, falls nicht zutreffend.",
    "nscbLicensePlaceholder": "Lizenz-Nr. · z. B. 0012345",
    "nscbClassificationPlaceholder": "Klassifizierung · z. B. C-3",
    "nscbMonetaryLimitPlaceholder": "Monetäres Limit · $-Cents, z. B. 50000000",
@@ -23318,12 +23318,12 @@
    "relationshipHeading": "1. Verhältnis der Parteien",
    "termsHeading": "2. Bedingungen & Konditionen",
    "governingLawHeading": "3. Anwendbares Recht & Vertraulichkeit",
-   "exhibitBHeading": "Exhibit B — Andere Kunden",
+   "exhibitBHeading": "Exhibit B: Andere Kunden",
    "exhibitBHint": "Der Contractor erklärt, in den vierundzwanzig (24) Monaten vor dem Wirksamkeitsdatum dieses Agreements im Wesentlichen ähnliche Leistungen für die folgenden Kunden erbracht zu haben.",
    "colClient": "Kunde",
    "colProject": "Projekt",
    "colDates": "Zeitraum",
-   "exhibitCHeading": "Exhibit C — Aufstellung der Kapitalinvestition",
+   "exhibitCHeading": "Exhibit C: Aufstellung der Kapitalinvestition",
    "exhibitCHint": "Die für die Leistungen relevante Kapitalinvestition des Contractors in sein Geschäft kann unter anderem umfassen: Gründung der Geschäftseinheit, abgeschlossene Versicherungen, eigene Software/Equipment/Werkzeuge, Vorbereitung und Zertifizierungen vor dem Engagement sowie gewerkespezifische NSCB-Lizenzierung, soweit anwendbar.",
    "colItemCategory": "Posten / Kategorie",
    "colDescriptionValue": "Beschreibung / Wert",
@@ -23346,7 +23346,7 @@
    "greeting": "Hallo",
    "introLead": "Du stehst auf dem Manifest. Im Namen von {employer} freuen wir uns, dich an Bord zu holen als",
    "introFor": "für",
-   "introTail": "Alle Engagement-Details stehen unten — bitte lies sie durch und gegenzeichne unten, um es offiziell zu machen.",
+   "introTail": "Alle Engagement-Details stehen unten. Bitte lies sie durch und gegenzeichne unten, um es offiziell zu machen.",
    "questionsBeforeSigning": "Fragen vor dem Unterzeichnen? Erreiche",
    "at": "unter",
    "engagementSummaryHeading": "1. Engagement-Zusammenfassung",
@@ -23383,7 +23383,7 @@
    "onboardingHint": "Eine kurze Liste, um dich startklar zu machen. Versuch, sie innerhalb von 48 Stunden nach Annahme abzuschließen, damit die Credentials verschickt werden können.",
    "signMsa": "Unterzeichne dein Master Services Agreement",
    "openMsaLink": "MSA öffnen ↗",
-   "msaOneTimeNote": "Einmalig. Gilt für jedes Engagement, auf das wir dich buchen — diesen Schritt siehst du nicht wieder.",
+   "msaOneTimeNote": "Einmalig. Gilt für jedes Engagement, auf das wir dich buchen. Diesen Schritt siehst du nicht wieder.",
    "openLink": "Öffnen ↗",
    "reviewGuide": "Lies den Salvage City Production Guide",
    "accepted": "Angenommen",
@@ -23395,10 +23395,10 @@
    "reference": "Referenz",
    "footerMsaOnFile": "Dieses Engagement unterliegt deinem Independent Contractor Master Services Agreement, unterzeichnet {date} · v{version}.",
    "viewMsaLink": "MSA ansehen ↗",
-   "footerMsaPendingPrefix": "Dieses Engagement unterliegt unserem Independent Contractor Master Services Agreement —",
+   "footerMsaPendingPrefix": "Dieses Engagement unterliegt unserem Independent Contractor Master Services Agreement:",
    "readAndSignLink": "lies & unterzeichne deine Kopie ↗",
    "footerMsaPendingSuffix": "einmalig, gilt für jedes künftige Engagement.",
-   "footerMsaSeparateEmail": "Dieses Engagement unterliegt unserem Independent Contractor Master Services Agreement — deine persönliche Kopie kommt in einer separaten E-Mail und ist vor deinem ersten Einsatztag erforderlich.",
+   "footerMsaSeparateEmail": "Dieses Engagement unterliegt unserem Independent Contractor Master Services Agreement. Deine persönliche Kopie kommt in einer separaten E-Mail und ist vor deinem ersten Einsatztag erforderlich.",
    "governingLaw": "Anwendbares Recht: Bundesstaat Nevada. Gerichtsstand: Clark County, NV. Vertraulich und Eigentum von {employer}."
   },
   "heatProposal": {
@@ -23413,7 +23413,7 @@
    "sectionNavLabel": "Abschnittsnavigation",
    "heroEyebrow": "Pop-up-Activation-Programm · {window}",
    "heroHeadlineLine2": "East-Plaza-Activations",
-   "heroSub": "Ein retained Activation-Studio für die East Plaza im Kaseya Center — Konzept, Engineering, Fabrication, Installation und Strike über ein gestaffeltes Menü von Pop-up-Momenten, kalibriert auf Partner-Unlocks, Homestand-Rhythmus und signature Plaza-Takeovers.",
+   "heroSub": "Ein retained Activation-Studio für die East Plaza im Kaseya Center: Konzept, Engineering, Fabrication, Installation und Strike über ein gestaffeltes Menü von Pop-up-Momenten, kalibriert auf Partner-Unlocks, Homestand-Rhythmus und signature Plaza-Takeovers.",
    "metaClient": "Kunde",
    "metaProducer": "Producer",
    "metaVenue": "Venue",
@@ -23422,7 +23422,7 @@
    "heroConfidential": "Vertraulich · Erstellt für {contact} bei Miami HEAT · {validity}",
    "overviewEyebrow": "Projektübersicht",
    "overviewTitle": "Gestaffelte Builds. Retained Kapazität.",
-   "overviewSub": "Drei Engagement-Vektoren, gebaut, um sich zu verstärken. Jede Activation zieht aus einem gestaffelten Build-Menü. Ein monatlicher Retainer — wähle einen von drei Tiers — hält dedizierte Studio-Kapazität hinter dem Programm. Add-Ons stapeln sich on demand auf beides.",
+   "overviewSub": "Drei Engagement-Vektoren, gebaut, um sich zu verstärken. Jede Activation zieht aus einem gestaffelten Build-Menü. Ein monatlicher Retainer, wähle einen von drei Tiers, hält dedizierte Studio-Kapazität hinter dem Programm. Add-Ons stapeln sich on demand auf beides.",
    "perActivation": "Pro Activation",
    "buildMenu": "Build-Menü",
    "sizeSmall": "Klein",
@@ -23446,19 +23446,19 @@
    "buildDiscount": "Build-Rabatt",
    "buildDiscountValue": "Bis Zu 12 % Auf Listenpreis",
    "assetReuse": "Asset-Wiederverwendung",
-   "assetReuseValue": "30–50 % Gutschrift Bei Re-Deployment",
+   "assetReuseValue": "30 bis 50 % Gutschrift Bei Re-Deployment",
    "upsellSeeElevated": "Brauchst Du Mehr? Siehe Elevated →",
    "upsellSeePremium": "Brauchst Du Mehr? Siehe Premium →",
    "retainerTiersEyebrow": "Retainer-Tiers",
    "retainerTiersTitle": "Base. Elevated. Premium.",
-   "retainerTiersSub": "Drei Retainer-Tiers, skaliert auf deine Activation-Kadenz. Jeder Tier baut auf dem letzten auf — Elevated enthält alles aus Base, und Premium enthält alles aus Elevated plus exklusive Linien, die dem Top-Tier vorbehalten sind.",
+   "retainerTiersSub": "Drei Retainer-Tiers, skaliert auf deine Activation-Kadenz. Jeder Tier baut auf dem letzten auf: Elevated enthält alles aus Base, und Premium enthält alles aus Elevated plus exklusive Linien, die dem Top-Tier vorbehalten sind.",
    "monthly": "Monatlich",
    "perYear": "· {amount} / Jahr",
    "fitFor": "Passend Für",
    "choose": "{name} Wählen",
    "premiumExclusivesEyebrow": "Premium-Exklusives · Dem Top-Tier Vorbehalten",
    "premiumExclusivesTitle": "Linien, Die Du Nirgendwo Sonst Findest.",
-   "premiumExclusivesSub": "Vier Linien, die es nur im Premium-Tier gibt — nicht à la carte, nicht auf Elevated, nicht als Einmalkauf. Reserviert für Partner, die mit uns ein saisonprägendes Programm fahren.",
+   "premiumExclusivesSub": "Vier Linien, die es nur im Premium-Tier gibt: nicht à la carte, nicht auf Elevated, nicht als Einmalkauf. Reserviert für Partner, die mit uns ein saisonprägendes Programm fahren.",
    "activationBuildsEyebrow": "Activation-Builds",
    "activationBuildsTitle": "Klein. Mittel. Groß.",
    "activationBuildsSub": "Drei Build-Tiers, kalibriert für den Moment. Jeder Tier hält eine enge Spanne von Basis-Spec bis Top-Spec; größere architektonische und Retail-Moves werden separat über das Add-Ons-Menü angeboten.",
@@ -23466,12 +23466,12 @@
    "precedent": "Präzedenz · {name}",
    "includedInBase": "In Base Enthalten · {amount}",
    "upgradesInTier": "Upgrades In Diesem Tier · Bis Zu {amount}",
-   "tierFootnotePrefix": "Größere architektonische Moves — Chemetal-Verkleidung, Container-Architektur, volles POS-Retail, Hospitality-Builds — werden separat angeboten über das",
+   "tierFootnotePrefix": "Größere architektonische Moves wie Chemetal-Verkleidung, Container-Architektur, volles POS-Retail oder Hospitality-Builds werden separat angeboten über das",
    "addonsMenuLink": "Add-Ons-Menü",
    "tierFootnoteSuffix": "und auf den Tier gelegt, der zum Moment passt.",
    "scopeEyebrow": "Leistungsumfang",
    "scopeTitle": "Gezeichnet. Gebaut. Gedruckt. Installiert.",
-   "scopeSub": "Elf Scope-Knoten, die jedes fabrizierte und gedruckte Element abdecken, plus die Produktionsleistungen, die es vom Shop zur Plaza und zurück bewegen. Der Tier definiert Breite und Finish — nicht, welche Knoten berührt werden.",
+   "scopeSub": "Elf Scope-Knoten, die jedes fabrizierte und gedruckte Element abdecken, plus die Produktionsleistungen, die es vom Shop zur Plaza und zurück bewegen. Der Tier definiert Breite und Finish, nicht, welche Knoten berührt werden.",
    "fabricationPrint": "Fabrication & Druck",
    "productionServices": "Produktionsleistungen",
    "appliesTo": "Gilt Für · {list}",
@@ -23485,7 +23485,7 @@
    "cadenceLarge": "Large-Kadenz",
    "lifecycleEyebrow": "Produktions-Lifecycle",
    "lifecycleTitle": "Vom Brief Bis Zum Strike.",
-   "lifecycleSub": "Acht Phasen, identische Struktur über jede Activation. Die Runway skaliert mit dem Build-Tier — Small verdichtet auf fünf Wochen, Medium läuft neun, Large streckt sich auf dreizehn.",
+   "lifecycleSub": "Acht Phasen, identische Struktur über jede Activation. Die Runway skaliert mit dem Build-Tier: Small verdichtet auf fünf Wochen, Medium läuft neun, Large streckt sich auf dreizehn.",
    "milestones": "Meilensteine",
    "deliverables": "Leistungen",
    "approvalGate": "Approval-Gate",
@@ -23515,7 +23515,7 @@
    "investmentFootnote": "Jede Activation läuft unter ihrem eigenen unterzeichneten Sign-off, eingebettet in dieses Master-Agreement. Jeder Build-Tier hält eine enge Spanne von Base- bis Top-Spec, und Upgrades innerhalb dieser Spanne bleiben im Tier. Größere architektonische Moves werden separat über das Add-Ons-Menü angeboten.",
    "addonsEyebrow": "Add-ons & Upgrades",
    "addonsTitle": "Stapel Alles. Auf Alles.",
-   "addonsSub": "Das volle Menü optionaler Upgrades — Material, Funktion, Service, Logistik und Dokumentation. Wähle jeden Posten, füge ihn jedem Retainer oder jedem Build hinzu. Preis auf Anfrage.",
+   "addonsSub": "Das volle Menü optionaler Upgrades: Material, Funktion, Service, Logistik und Dokumentation. Wähle jeden Posten, füge ihn jedem Retainer oder jedem Build hinzu. Preis auf Anfrage.",
    "itemsCount": "{count} Posten",
    "appliesRetainerActivation": "Retainer + Aktivierung",
    "appliesRetainer": "Retainer",
@@ -23532,7 +23532,7 @@
    "currency": "Währung",
    "optionalScopeEyebrow": "Optionaler Scope",
    "changeOrdersTitle": "Verfügbare Change Orders.",
-   "changeOrdersSub": "Scope außerhalb des Basis-Tier-Menüs — einzeln ausgestellt oder in ein einzelnes Activation-SOW gestapelt.",
+   "changeOrdersSub": "Scope außerhalb des Basis-Tier-Menüs, einzeln ausgestellt oder in ein einzelnes Activation-SOW gestapelt.",
    "available": "Verfügbar",
    "scopeBoundariesEyebrow": "Scope-Grenzen",
    "exclusionsTitle": "Außerhalb Dieses Engagements.",
@@ -23564,7 +23564,7 @@
  },
  "publicFormSubmit": {
   "submitted": "Abgesendet",
-  "thankYouTitle": "Danke — ist angekommen.",
+  "thankYouTitle": "Danke, ist angekommen.",
   "thankYouBody": "Deine Antwort wurde erfasst. Du kannst diesen Tab schließen.",
   "leaveBlank": "Leer lassen",
   "selectPlaceholder": "Auswählen…",

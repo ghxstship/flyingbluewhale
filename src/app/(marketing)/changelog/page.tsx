@@ -2,7 +2,6 @@
 
 import type { Metadata } from "next";
 import { Sparkles, Wrench, ShieldCheck, Zap } from "lucide-react";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
@@ -58,16 +57,9 @@ export default async function ChangelogPage() {
 
   const ENTRIES = CHANGELOG_ENTRIES;
 
-  const crumbs = [
-    { label: t("marketing.pages.changelog.crumbs.home"), href: "/" },
-    { label: t("marketing.pages.changelog.crumbs.changelog"), href: "/changelog" },
-  ];
-
   return (
     <div>
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
+      <section className="mx-auto max-w-4xl px-6 pt-12 pb-10">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.changelog.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.changelog.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">

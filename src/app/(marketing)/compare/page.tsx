@@ -3,7 +3,6 @@ export const revalidate = 300;
 
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
@@ -23,16 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ComparePage() {
   const { t } = await getRequestT();
-  const crumbs = [
-    { label: t("marketing.pages.compare.breadcrumbs.home"), href: "/" },
-    { label: t("marketing.pages.compare.breadcrumbs.current"), href: "/compare" },
-  ];
-
   return (
     <div>
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.compare.hero.eyebrow")}
         </div>

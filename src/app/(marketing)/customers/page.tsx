@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Clock } from "lucide-react";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
@@ -37,9 +36,7 @@ export default async function CustomersHub() {
   return (
     <div>
       <JsonLd data={[breadcrumbSchema(crumbs)]} />
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
           {t("marketing.pages.customers.hero.eyebrow")}
         </div>

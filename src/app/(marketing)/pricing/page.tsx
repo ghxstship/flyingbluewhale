@@ -5,7 +5,6 @@ import { Fragment } from "react";
 import { Check, X, Minus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { Accordion } from "@/components/ui/Accordion";
@@ -526,17 +525,10 @@ export default async function PricingPage() {
   const tiers = buildTiers(t);
   const comparison = buildComparison(t);
   const faqs = buildFaqs(t);
-  const crumbs = [
-    { label: t("marketing.pages.pricing.breadcrumbs.home"), href: "/" },
-    { label: t("marketing.pages.pricing.breadcrumbs.pricing"), href: "/pricing" },
-  ];
-
   return (
     <div>
       <JsonLd data={[faqSchema(faqs)]} />
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-10 text-center">
         <div className="eyebrow eyebrow-accent">{t("marketing.pages.pricing.hero.eyebrow")}</div>
         <h1 className="kinetic-display mx-auto mt-3 max-w-3xl text-5xl sm:text-6xl">
           {t("marketing.pages.pricing.hero.title")}

@@ -5,7 +5,6 @@ export const revalidate = 300;
 
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { buildMetadata } from "@/lib/seo";
 import { POST_LIST } from "@/lib/blog";
 import { getRequestT } from "@/lib/i18n/request";
@@ -24,16 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BlogIndex() {
   const { t } = await getRequestT();
-  const crumbs = [
-    { label: t("marketing.pages.blog.breadcrumbs.home"), href: "/" },
-    { label: t("marketing.pages.blog.breadcrumbs.blog"), href: "/blog" },
-  ];
-
   return (
     <div>
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
+      <section className="mx-auto max-w-4xl px-6 pt-12 pb-10">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.blog.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.blog.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.blog.hero.subtitle")}</p>

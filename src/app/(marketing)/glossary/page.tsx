@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -58,9 +57,7 @@ export default async function GlossaryIndex() {
           },
         ]}
       />
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.glossary.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.glossary.hero.title")}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.glossary.hero.body")}</p>

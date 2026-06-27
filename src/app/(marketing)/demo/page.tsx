@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
@@ -54,9 +53,7 @@ export default async function DemoIndex() {
   return (
     <div>
       <JsonLd data={[breadcrumbSchema(crumbs)]} />
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
           {t("marketing.pages.demo.hero.eyebrow")}
         </div>

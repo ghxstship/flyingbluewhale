@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
@@ -48,9 +47,7 @@ export default async function EventsPage() {
 
   return (
     <>
-      <Breadcrumbs items={[{ label: "Events" }]} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-8">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-8">
         <div className="eyebrow eyebrow-brand">Box Office</div>
         <h1 className="hed-2xl mt-4">Events</h1>
         <p className="mt-3 text-sm text-[var(--p-text-2)]">

@@ -4,7 +4,6 @@ export const revalidate = 300;
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
@@ -32,12 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SolutionsIndex() {
-  const { t } = await getRequestT();
-  const crumbs = [
-    { label: t("marketing.pages.solutions.crumbs.home"), href: "/" },
-    { label: t("marketing.pages.solutions.crumbs.solutions"), href: "/solutions" },
-  ];
-  const APPS = [
+  const { t } = await getRequestT();  const APPS = [
     {
       slug: "atlvs",
       name: "ATLVS",
@@ -140,9 +134,7 @@ export default async function SolutionsIndex() {
   ];
   return (
     <>
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.solutions.hero.eyebrow")}
         </div>

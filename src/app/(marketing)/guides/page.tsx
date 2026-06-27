@@ -5,7 +5,6 @@ export const revalidate = 300;
 
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
@@ -25,16 +24,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GuidesPage() {
   const { t } = await getRequestT();
-  const crumbs = [
-    { label: t("marketing.pages.guides.crumbs.home"), href: "/" },
-    { label: t("marketing.pages.guides.crumbs.guides"), href: "/guides" },
-  ];
-
   return (
     <div>
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
+      <section className="mx-auto max-w-4xl px-6 pt-12 pb-10">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.guides.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.guides.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.guides.hero.subtitle")}</p>

@@ -3,7 +3,6 @@
 import type { Metadata } from "next";
 import { Mail, MessageCircle, Calendar, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
@@ -75,17 +74,10 @@ export default async function ContactPage() {
     },
   ];
 
-  const crumbs = [
-    { label: t("marketing.pages.contact.breadcrumbs.home"), href: "/" },
-    { label: t("marketing.pages.contact.breadcrumbs.contact"), href: "/contact" },
-  ];
-
   return (
     <div>
       <JsonLd data={[organizationSchema()]} />
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.contact.hero.eyebrow")}
         </div>

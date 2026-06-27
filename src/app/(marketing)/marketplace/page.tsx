@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { getRequestT } from "@/lib/i18n/request";
 import { buildMetadata } from "@/lib/seo";
@@ -56,12 +55,7 @@ export default async function Page() {
 
   return (
     <>
-      <Breadcrumbs
-        items={[{ label: t("marketing.pages.marketplace.breadcrumb") }]}
-        className="mx-auto max-w-6xl px-6 pt-6"
-      />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.marketplace.hero.body")}</p>

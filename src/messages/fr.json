@@ -125,6 +125,10 @@
    "finance": "Finance",
    "procurement": "Achats",
    "operations": "Opérations"
+  },
+  "events": "Événements",
+  "foo": {
+   "bar": "Foo Bar"
   }
  },
  "marketing": {
@@ -2473,6 +2477,9 @@
      "subtitle": "Inscrivez-vous gratuitement — 30 secondes, sans carte. Gratuit, c'est gratuit, pour toujours.",
      "primaryLabel": "Commencer à créer, gratuitement",
      "secondaryLabel": "Réserver une démo"
+    },
+    "billingFaq": {
+     "title": "Facturation et forfaits"
     }
    },
    "roadmap": {
@@ -4267,7 +4274,8 @@
    "expand": "Déplier la barre latérale",
    "resize": "Redimensionner la barre latérale",
    "shortcutToggle": "Replier / déplier la barre latérale",
-   "shortcutSearch": "Focus sur la recherche de la barre latérale"
+   "shortcutSearch": "Focus sur la recherche de la barre latérale",
+   "toggleGroup": "Basculer {name}"
   }
  },
  "a11y": {
@@ -5991,6 +5999,35 @@
      "audience": "Audience",
      "anon": "Anon"
     }
+   },
+   "channels": {
+    "configureSupabase": "Configurez Supabase.",
+    "createFirst": "Créez votre premier canal",
+    "detail": {
+     "emptyLabel": "Aucun message",
+     "eyebrow": "Canal",
+     "postPlaceholder": "Écrire un message…",
+     "postSubmit": "Publier",
+     "unknownAuthor": "Inconnu"
+    },
+    "emptyLabel": "Aucun canal",
+    "eyebrow": "Comms",
+    "messageCountOne": "{count} message",
+    "messageCountOther": "{count} messages",
+    "new": {
+     "eyebrow": "Canaux",
+     "kindLabel": "Type",
+     "nameLabel": "Nom",
+     "projectLabel": "Projet",
+     "projectNone": "— Aucun —",
+     "title": "Nouveau canal",
+     "topicLabel": "Sujet"
+    },
+    "newLabel": "+ Nouveau canal",
+    "subtitleOne": "{count} canal",
+    "subtitleOther": "{count} canaux",
+    "title": "Canaux",
+    "untitled": "Canal sans titre"
    }
   },
   "compliance": {
@@ -6177,7 +6214,8 @@
     "selectSheet": "Sélectionner un plan…",
     "addSheet": "+ Ajouter un plan",
     "edit": "Modifier",
-    "noVersionsTitle": "Aucune version pour l'instant"
+    "noVersionsTitle": "Aucune version pour l'instant",
+    "preview": "Aperçu de la planche"
    },
    "new": {
     "eyebrow": "Création",
@@ -6327,6 +6365,27 @@
      "voided": "Enveloppe annulée"
     },
     "void": "Annuler"
+   },
+   "prepare": {
+    "applied": "Signature appliquée",
+    "apply": "Appliquer la signature",
+    "applyHeading": "Appliquer une signature",
+    "applying": "Enregistrement…",
+    "back": "Retour à l'enveloppe",
+    "clear": "Effacer",
+    "copyHint": "Partagez un lien avec chaque signataire externe. Ils signent sur /sign sans compte.",
+    "createLink": "Créer un lien",
+    "drawLabel": "Dessiner la signature",
+    "error": "Impossible d'enregistrer la signature",
+    "eyebrow": "Signature électronique",
+    "linksHeading": "Liens de signature publics",
+    "nameLabel": "Nom complet",
+    "noSignature": "Dessinez une signature pour activer Appliquer",
+    "noSigners": "Ajoutez des signataires à cette enveloppe avant de la préparer pour signature.",
+    "signed": "Signé",
+    "signerSelect": "Signer en tant que",
+    "title": "Préparer pour signature",
+    "titleLabel": "Titre"
    }
   },
   "error": {
@@ -6749,7 +6808,8 @@
       "consolidationMethod": "Méthode de consolidation",
       "consolidationState": "État de consolidation",
       "effectiveFrom": "Effective à partir du",
-      "effectiveTo": "Effective jusqu'au"
+      "effectiveTo": "Effective jusqu'au",
+      "ownershipPct": "% de détention — cette entité dans la société mère"
      },
      "parent": {
       "topLevel": "— (niveau supérieur)"
@@ -6775,7 +6835,11 @@
     "colJurisdiction": "Juridiction",
     "colMethod": "Méthode",
     "colOwnership": "Participation",
-    "colState": "État"
+    "colState": "État",
+    "edit": {
+     "eyebrow": "Finance",
+     "title": "Modifier l'entité juridique"
+    }
    },
    "expenses": {
     "edit": {
@@ -7512,6 +7576,155 @@
     "title": "Feuilles de temps",
     "total": "Total",
     "unknownWorker": "—"
+   },
+   "accounts": {
+    "active": "Actif",
+    "cols": {
+     "code": "Code",
+     "flags": "Indicateurs",
+     "name": "Nom",
+     "normal": "Solde normal",
+     "type": "Type"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "empty": {
+     "label": "Aucun compte"
+    },
+    "inactive": "Inactif",
+    "new": {
+     "codeLabel": "Code de compte",
+     "configureSupabase": "Configurez Supabase.",
+     "eyebrow": "Plan comptable",
+     "nameLabel": "Nom du compte",
+     "normalLabel": "Solde normal",
+     "parentLabel": "Compte parent",
+     "parentNone": "— Aucun (niveau supérieur) —",
+     "postableLabel": "Imputable (les écritures peuvent être passées directement)",
+     "title": "Nouveau compte",
+     "typeLabel": "Type de compte"
+    },
+    "newCta": "+ Nouveau compte",
+    "normal": {
+     "credit": "Crédit",
+     "debit": "Débit"
+    },
+    "postable": "Imputable",
+    "summary": "Synthèse",
+    "title": "Plan comptable",
+    "type": {
+     "asset": "Actif",
+     "equity": "Capitaux propres",
+     "expense": "Charge",
+     "liability": "Passif",
+     "revenue": "Produit"
+    }
+   },
+   "ledger": {
+    "cols": {
+     "debits": "Total des débits",
+     "description": "Description",
+     "number": "Écriture n°",
+     "period": "Période",
+     "posted": "Comptabilisé"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "detail": {
+     "addLine": "Ajouter une ligne",
+     "balanced": "Équilibré ✓",
+     "cols": {
+      "account": "Compte",
+      "credit": "Crédit",
+      "debit": "Débit",
+      "line": "#",
+      "memo": "Libellé"
+     },
+     "configureSupabase": "Configurez Supabase.",
+     "eyebrow": "Grand livre",
+     "form": {
+      "account": "Compte",
+      "amount": "Montant — USD",
+      "credit": "Crédit",
+      "debit": "Débit",
+      "memo": "Libellé",
+      "side": "Sens"
+     },
+     "noAccounts": {
+      "label": "Aucun compte"
+     },
+     "noLines": {
+      "label": "Aucune ligne"
+     },
+     "totalCredits": "Total des crédits",
+     "totalDebits": "Total des débits"
+    },
+    "empty": {
+     "label": "Aucune écriture de journal"
+    },
+    "new": {
+     "configureSupabase": "Configurez Supabase.",
+     "descriptionLabel": "Description",
+     "eyebrow": "Grand livre",
+     "noPeriods": {
+      "cta": "+ Nouvelle période",
+      "label": "Aucune période comptable"
+     },
+     "numberLabel": "Numéro d'écriture",
+     "periodLabel": "Période comptable",
+     "title": "Nouvelle écriture de journal"
+    },
+    "newCta": "+ Nouvelle écriture",
+    "title": "Grand livre"
+   },
+   "tax": {
+    "calculations": {
+     "backToHub": "← Référence fiscale",
+     "cols": {
+      "category": "Catégorie",
+      "computedAt": "Calculé",
+      "jurisdiction": "Juridiction",
+      "rate": "Taux",
+      "source": "Source",
+      "tax": "Taxe",
+      "taxable": "Imposable"
+     },
+     "empty": "Aucun calcul de taxe",
+     "title": "Calculs de taxe"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "eyebrow": "Finance",
+    "jurisdictions": {
+     "cols": {
+      "code": "Code",
+      "country": "Pays",
+      "name": "Nom",
+      "region": "Région"
+     },
+     "empty": "Aucune juridiction définie",
+     "title": "Juridictions"
+    },
+    "rates": {
+     "cols": {
+      "category": "Catégorie",
+      "from": "Du",
+      "jurisdiction": "Juridiction",
+      "rate": "Taux",
+      "to": "Au"
+     },
+     "empty": "Aucun taux de taxe défini",
+     "title": "Taux"
+    },
+    "title": "Taxes",
+    "viewCalculations": "Voir les calculs",
+    "withholding": {
+     "cols": {
+      "appliesTo": "S'applique à",
+      "jurisdiction": "Juridiction",
+      "rate": "Taux",
+      "threshold": "Seuil"
+     },
+     "empty": "Aucune règle de retenue définie",
+     "title": "Règles de retenue à la source"
+    }
    }
   },
   "forms": {
@@ -8132,6 +8345,97 @@
     "dataMap": "Cartographie des données",
     "consentLabel": "Consentement",
     "dsarLabel": "DSAR"
+   },
+   "contracts": {
+    "columns": {
+     "counterparty": "Contrepartie",
+     "endAt": "Fin",
+     "kind": "Type",
+     "number": "Numéro",
+     "state": "État",
+     "title": "Titre",
+     "value": "Valeur"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "contractPlural": "contrats",
+    "contractSingular": "contrat",
+    "detail": {
+     "addVersion": "Ajouter une version",
+     "autoRenew": "Renouvellement automatique",
+     "billing": "Facturation",
+     "col": {
+      "active": "Actif",
+      "capacity": "Pouvoir de signature",
+      "created": "Créé",
+      "description": "Description",
+      "due": "Échéance",
+      "kind": "Type",
+      "label": "Libellé",
+      "method": "Méthode",
+      "party": "Partie",
+      "payment": "Paiement",
+      "paymentUsd": "Paiement — USD",
+      "recurring": "Récurrent",
+      "redline": "Résumé des modifications",
+      "role": "Rôle",
+      "signedAt": "Signé",
+      "signer": "Signataire",
+      "signingRole": "Rôle",
+      "state": "État",
+      "trigger": "Déclencheur",
+      "version": "Version"
+     },
+     "configureSupabase": "Configurez Supabase.",
+     "counterparty": "Contrepartie",
+     "counterpartyEmail": "E-mail",
+     "end": "Fin",
+     "eyebrow": "Contrat",
+     "methodDocusign": "DocuSign",
+     "methodElectronic": "Électronique",
+     "methodWet": "Signature manuscrite",
+     "milestones": "Jalons",
+     "milestonesEmpty": "Aucun jalon",
+     "no": "Non",
+     "obligations": "Obligations",
+     "obligationsEmpty": "Aucune obligation",
+     "parties": "Parties",
+     "partiesEmpty": "Aucune partie",
+     "partySelf": "Moi (utilisateur actuel)",
+     "recordSignature": "Enregistrer la signature",
+     "recurringLabel": "Obligation récurrente",
+     "signatureNeedsVersion": "Ajoutez une version avant d'enregistrer des signatures.",
+     "signatures": "Signatures",
+     "signaturesEmpty": "Aucune signature",
+     "start": "Début",
+     "terms": "Conditions",
+     "termsEmpty": "Aucune condition",
+     "value": "Valeur",
+     "versions": "Versions",
+     "versionsEmpty": "Aucune version",
+     "yes": "Oui"
+    },
+    "emptyLabel": "Aucun contrat",
+    "eyebrow": "Juridique",
+    "new": {
+     "autoRenewLabel": "Renouvellement automatique en fin de terme",
+     "configureSupabase": "Configurez Supabase.",
+     "counterpartyEmailLabel": "E-mail de la contrepartie",
+     "counterpartyNameLabel": "Nom de la contrepartie",
+     "endAtLabel": "Date de fin",
+     "eyebrow": "Juridique",
+     "kindLabel": "Type",
+     "notesLabel": "Notes",
+     "numberHint": "Votre référence de contrat interne.",
+     "numberLabel": "Numéro",
+     "projectLabel": "Projet",
+     "projectPlaceholder": "Sélectionnez un projet…",
+     "startAtLabel": "Date de début",
+     "title": "Nouveau contrat",
+     "titleLabel": "Titre",
+     "totalValueLabel": "Valeur totale — USD"
+    },
+    "newContract": "+ Nouveau contrat",
+    "title": "Contrats"
    }
   },
   "locations": {
@@ -10145,7 +10449,8 @@
      "assetTag": "Étiquette d'actif",
      "dailyRate": "Tarif journalier",
      "status": "Statut",
-     "equipment_state": "Statut"
+     "equipment_state": "Statut",
+     "category": "Catégorie"
     }
    },
    "itb": {
@@ -10805,6 +11110,58 @@
      "awardedTo": "Attribué À",
      "status": "Statut"
     }
+   },
+   "receiving": {
+    "columns": {
+     "notes": "Notes",
+     "partial": "Partielle",
+     "po": "Bon de commande",
+     "receipt": "Réception n°",
+     "receivedAt": "Reçu"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "detail": {
+     "addLineHeading": "Ajouter une ligne reçue",
+     "colItem": "Ligne d'article",
+     "colNotes": "Notes",
+     "colReceived": "Reçu",
+     "colRejected": "Refusé",
+     "colResolved": "Résolu",
+     "colStatus": "Statut",
+     "colVariance": "Écart",
+     "complete": "Complète",
+     "configureSupabase": "Configurez Supabase.",
+     "eyebrow": "Réception",
+     "lineItemLabel": "Ligne du bon de commande",
+     "lineItemPlaceholder": "Sélectionnez une ligne d'article…",
+     "lineNotesLabel": "Notes",
+     "linesEmpty": "Aucune ligne reçue",
+     "linesHeading": "Lignes reçues",
+     "matchEmpty": "Aucun rapprochement de facture",
+     "matchHeading": "Rapprochement à 3 points",
+     "partial": "Partielle",
+     "qtyReceivedLabel": "Qté reçue",
+     "qtyRejectedLabel": "Qté refusée"
+    },
+    "emptyLabel": "Aucun bon de réception",
+    "eyebrow": "Approvisionnement",
+    "new": {
+     "configureSupabase": "Configurez Supabase.",
+     "eyebrow": "Réception",
+     "goToPos": "Bons de commande",
+     "noPosTitle": "Aucun bon de commande",
+     "notesLabel": "Notes",
+     "partialLabel": "Livraison partielle",
+     "poLabel": "Bon de commande",
+     "poPlaceholder": "Sélectionnez un bon de commande…",
+     "receiptNumberLabel": "Numéro de réception",
+     "receivedAtLabel": "Reçu le",
+     "title": "Nouveau bon de réception"
+    },
+    "newReceipt": "+ Nouvelle réception",
+    "partialNo": "Complète",
+    "partialYes": "Partielle",
+    "title": "Réception"
    }
   },
   "production": {
@@ -12046,7 +12403,8 @@
     "advancing": "Advancing",
     "guides": "Guides",
     "sustainability": "Durabilité",
-    "sprints": "Sprints"
+    "sprints": "Sprints",
+    "timeline": "Chronologie"
    },
    "members": {
     "addedToast": "Membre ajouté",
@@ -12087,7 +12445,9 @@
     "events": "Événements",
     "budget": "Budget",
     "spent": "Dépensé",
-    "deliverables": "Livrables"
+    "deliverables": "Livrables",
+    "portfolio": "Portefeuille →",
+    "position": "Position — Classe × Phase"
    },
    "detail": {
     "eyebrow": "Projet",
@@ -12312,6 +12672,16 @@
    },
    "bulk": {
     "archive": "Archiver"
+   },
+   "timeline": {
+    "breadcrumbProjects": "Projets",
+    "emptyTitle": "Rien sur la chronologie pour l'instant",
+    "eventsLane": "Événements",
+    "projectEyebrow": "Projet",
+    "scheduleViews": "Toutes les vues",
+    "subtitle": "Vue Gantt des tâches et événements",
+    "tasksLane": "Tâches",
+    "title": "Chronologie"
    }
   },
   "proposals": {
@@ -14094,7 +14464,12 @@
     "linkDomains": "Domaines →",
     "linkBilling": "Facturation →",
     "linkIntegrations": "Intégrations →",
-    "linkAudit": "Journal d'audit →"
+    "linkAudit": "Journal d'audit →",
+    "balanceTermsLoadIn": "À la mise en place",
+    "balanceTermsSystemDefault": "Valeur par défaut du système (à la mise en place)",
+    "fieldDefaultBalanceTerms": "Conditions du solde",
+    "fieldDefaultDepositPct": "% d'acompte par défaut",
+    "paymentTermsHeading": "Conditions de paiement (modèles)"
    },
    "tiles": {
     "organization": {
@@ -14574,7 +14949,14 @@
     "rev": "Rév",
     "venueProject": "Lieu / Projet"
    },
-   "pending": "— en attente —"
+   "pending": "— en attente —",
+   "map": {
+    "back": "Retour à la planche",
+    "detail": "Emplacement",
+    "eyebrow": "Conception",
+    "selectHint": "Sélectionnez un repère pour voir son emplacement.",
+    "title": "{code} — Plan d'implantation"
+   }
   },
   "specs": {
    "detail": {
@@ -15245,7 +15627,10 @@
     "totalRuns": "Total des Courses",
     "latestRun": "Dernière Course",
     "status": "Statut",
-    "run_state": "Statut"
+    "run_state": "Statut",
+    "col": {
+     "fleet": "Flotte"
+    }
    },
    "sections": {
     "dispatch": {
@@ -15279,7 +15664,8 @@
      "to": "Vers",
      "fleet": "Flotte",
      "vehicle": "Véhicule",
-     "status": "Statut"
+     "status": "Statut",
+     "day": "Jour"
     }
    },
    "metrics": {
@@ -16187,6 +16573,13 @@
      "phase": "Phase",
      "state": "État",
      "qty": "Qté"
+    },
+    "filter": {
+     "allClasses": "Toutes les classes",
+     "allPhases": "Toutes les phases",
+     "class": "Classe",
+     "clear": "Effacer",
+     "phase": "Phase"
     }
    },
    "classes": {
@@ -16393,6 +16786,22 @@
     "standard": {
      "blurb": "Base de connaissances — la référence canonique de nos méthodes de travail.",
      "title": "Le Standard"
+    },
+    "community": {
+     "blurb": "Fil de la cohorte, membres et points de contribution.",
+     "title": "Communauté"
+    },
+    "leaderboard": {
+     "blurb": "Points, niveaux et accomplissements — partagés avec COMPVSS.",
+     "title": "Classement"
+    },
+    "matrix": {
+     "blurb": "Santé des accréditations de l'org — membre × certification, par état.",
+     "title": "Matrice de recertification"
+    },
+    "store": {
+     "blurb": "Achetez des crédits et utilisez des bons pour les cours et examens.",
+     "title": "Boutique"
     }
    },
    "title": "Connaissances"
@@ -16655,6 +17064,351 @@
    },
    "title": "Agenda des événements",
    "today": "Aujourd'hui"
+  },
+  "board": {
+   "col": {
+    "due": "Échéance",
+    "state": "État",
+    "title": "Tâche"
+   },
+   "emptyDescription": "Ajoutez une tâche pour commencer à alimenter le tableau.",
+   "emptyTitle": "Aucun élément de travail",
+   "eyebrow": "Travail",
+   "newTask": "+ Nouvelle tâche",
+   "subtitle": "{open} ouvertes · {done} terminées",
+   "title": "Tableau",
+   "view": {
+    "board": "Tableau",
+    "list": "Liste"
+   }
+  },
+  "kits": {
+   "configureSupabase": "Configurez Supabase.",
+   "detail": {
+    "col": {
+     "capacity": "Capacité",
+     "code": "Code",
+     "deliveringElement": "Élément livrable",
+     "description": "Description",
+     "designIntent": "Intention de conception",
+     "dimensions": "Dimensions",
+     "estimate": "Estimation",
+     "item": "Article",
+     "name": "Nom",
+     "notes": "Notes",
+     "objective": "Objectif",
+     "owner": "Responsable",
+     "phase": "Phase",
+     "qty": "Qté",
+     "rate": "Tarif",
+     "sense": "Sens",
+     "state": "État"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "eyebrow": "Kit d'événement",
+    "lines": "Lignes d'articles",
+    "noLines": "Aucune ligne d'article",
+    "noPhaseGates": "Aucun jalon de phase",
+    "noTouchpoints": "Aucun point de contact",
+    "noZones": "Aucune zone",
+    "phaseGates": "Jalons de phase",
+    "touchpoints": "Points de contact",
+    "zones": "Zones"
+   },
+   "emptyTitle": "Aucun kit",
+   "eyebrow": "Production",
+   "kit": "Kit",
+   "stat": {
+    "lines": "Lignes",
+    "phaseGates": "Jalons de phase",
+    "totalEstimate": "Estimation totale",
+    "touchpoints": "Points de contact",
+    "zones": "Zones"
+   },
+   "title": "Kits d'événement"
+  },
+  "accessControl": {
+   "accepted": "Admis",
+   "checking": "Vérification…",
+   "duplicate": "Déjà utilisé",
+   "error": "Erreur",
+   "expired": "Expiré",
+   "eyebrow": "Opérations",
+   "recentEmpty": "Aucun scan",
+   "recentTitle": "Scans récents",
+   "subtitle": "Scan des accréditations à l'entrée",
+   "title": "Contrôle d'accès",
+   "unknown": "Inconnu",
+   "voided": "Annulé"
+  },
+  "revenue": {
+   "eyebrow": "Commerce",
+   "orders": {
+    "col": {
+     "buyer": "Acheteur",
+     "placed": "Passée",
+     "reference": "Référence",
+     "source": "Source",
+     "state": "État",
+     "total": "Total"
+    },
+    "emptyTitle": "Aucune commande",
+    "title": "Commandes"
+   },
+   "transactions": {
+    "col": {
+     "amount": "Montant",
+     "kind": "Type",
+     "occurred": "Quand",
+     "processor": "Processeur",
+     "state": "État"
+    },
+    "emptyTitle": "Aucune transaction",
+    "title": "Transactions"
+   }
+  },
+  "calendar": {
+   "emptyTitle": "Rien dans le calendrier",
+   "eyebrow": "Opérations",
+   "newEvent": "+ Nouvel événement",
+   "subtitleOne": "{count} événement",
+   "subtitleOther": "{count} événements",
+   "title": "Calendrier"
+  },
+  "governance": {
+   "approvals": {
+    "columns": {
+     "initiated": "Lancée",
+     "policy": "Politique",
+     "state": "État",
+     "subject": "Objet"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "delegations": {
+     "columns": {
+      "delegatee": "Délégataire",
+      "ends": "Fin",
+      "scope": "Périmètre",
+      "starts": "Début",
+      "status": "Statut"
+     },
+     "configureSupabase": "Configurez Supabase.",
+     "emptyLabel": "Aucune délégation",
+     "eyebrow": "Gouvernance",
+     "new": {
+      "configureSupabase": "Configurez Supabase.",
+      "delegateeLabel": "Délégataire",
+      "delegateePlaceholder": "Sélectionnez un membre…",
+      "endsHint": "Facultatif. Sans limite si laissé vide.",
+      "endsLabel": "Se termine le",
+      "eyebrow": "Gouvernance",
+      "scopeLabel": "Périmètre",
+      "scopeRefLabel": "Référence du périmètre",
+      "startsLabel": "Commence le",
+      "title": "Nouvelle délégation"
+     },
+     "newLabel": "+ Nouvelle délégation",
+     "statusActive": "Active",
+     "statusInactive": "Inactive",
+     "title": "Délégations d'approbation"
+    },
+    "delegationsLink": "Délégations",
+    "detail": {
+     "configureSupabase": "Configurez Supabase.",
+     "current": "Actuelle",
+     "decisionLabel": "Décision",
+     "decisionsHeading": "Décisions",
+     "eyebrow": "Approbation",
+     "noDecisions": "Aucune décision enregistrée pour l'instant.",
+     "noSteps": "Cette politique n'a pas encore d'étapes.",
+     "notesLabel": "Notes",
+     "recordHeading": "Enregistrer une décision",
+     "sla": "SLA {n}h",
+     "stepsHeading": "Étapes de la politique",
+     "threshold": "seuil {n}",
+     "untitled": "Approbation"
+    },
+    "emptyAction": "Voir les politiques",
+    "emptyTitle": "Aucune approbation en cours",
+    "eyebrow": "Gouvernance",
+    "policies": {
+     "columns": {
+      "appliesTo": "S'applique à",
+      "name": "Nom",
+      "slug": "Slug",
+      "status": "Statut",
+      "version": "Vers"
+     },
+     "configureSupabase": "Configurez Supabase.",
+     "detail": {
+      "active": "Active",
+      "addStepHeading": "Ajouter une étape",
+      "configureSupabase": "Configurez Supabase.",
+      "eyebrow": "Politique d'approbation",
+      "inactive": "Inactive",
+      "noSteps": "Aucune étape pour l'instant.",
+      "routingLabel": "Type de routage",
+      "sla": "SLA {n}h",
+      "slaLabel": "Heures SLA",
+      "stepNumberLabel": "Numéro d'étape",
+      "stepsHeading": "Étapes",
+      "threshold": "seuil {n}",
+      "thresholdLabel": "Seuil"
+     },
+     "emptyLabel": "Aucune politique",
+     "eyebrow": "Gouvernance",
+     "new": {
+      "appliesToLabel": "S'applique à",
+      "descriptionLabel": "Description",
+      "eyebrow": "Politique d'approbation",
+      "nameLabel": "Nom",
+      "slugLabel": "Slug",
+      "title": "Nouvelle politique"
+     },
+     "newLabel": "+ Nouvelle politique",
+     "statusActive": "Active",
+     "statusInactive": "Inactive",
+     "title": "Politiques d'approbation"
+    },
+    "policiesLink": "Politiques",
+    "title": "Approbations"
+   }
+  },
+  "notes": {
+   "col": {
+    "state": "État",
+    "title": "Titre",
+    "updated": "Mise à jour"
+   },
+   "delete": "Supprimer",
+   "deleteConfirm": "Supprimer cette note ?",
+   "emptyTitle": "Aucune note",
+   "error": "Impossible d'enregistrer",
+   "eyebrow": "Collaborer",
+   "newNote": "+ Nouvelle note",
+   "save": "Enregistrer la note",
+   "saved": "Enregistré",
+   "saving": "Enregistrement…",
+   "stateArchived": "Archivée",
+   "stateDraft": "Brouillon",
+   "stateLabel": "État",
+   "statePublished": "Publiée",
+   "title": "Notes",
+   "titleLabel": "Titre",
+   "titlePlaceholder": "Note sans titre"
+  },
+  "assets": {
+   "columns": {
+    "cost": "Acquisition",
+    "kind": "Type",
+    "name": "Actif",
+    "serial": "Série / Étiquette",
+    "state": "État"
+   },
+   "configureSupabase": "Configurez Supabase.",
+   "detail": {
+    "acquired": "Acquis",
+    "acquisition": "Acquisition",
+    "addDepreciation": "Ajouter un plan",
+    "addMaintenance": "Consigner une maintenance",
+    "configureSupabase": "Configurez Supabase.",
+    "dailyRate": "Tarif journalier",
+    "dep": {
+     "decliningBalance": "Dégressif",
+     "life": "Durée (mois)",
+     "method": "Méthode",
+     "postedThrough": "Comptabilisé",
+     "salvage": "Valeur résiduelle",
+     "start": "Début",
+     "straightLine": "Linéaire"
+    },
+    "depreciationEmpty": "Aucun plan d'amortissement",
+    "depreciationTitle": "Amortissement",
+    "eyebrow": "Actif",
+    "maint": {
+     "cost": "Coût",
+     "date": "Réalisée",
+     "notes": "Notes",
+     "outcome": "Résultat"
+    },
+    "maintenanceEmpty": "Aucune maintenance consignée",
+    "maintenanceTitle": "Historique de maintenance",
+    "retired": "Réformé"
+   },
+   "emptyTitle": "Aucun actif",
+   "eyebrow": "Actifs et logistique",
+   "new": {
+    "acquiredAtLabel": "Acquis",
+    "acquisitionCostLabel": "Coût d'acquisition — USD",
+    "assetKindHint": "Catégorie libre, ex. microphone, camion, radio.",
+    "assetKindLabel": "Type d'actif",
+    "assetTagLabel": "Étiquette d'actif",
+    "dailyRateLabel": "Tarif journalier — USD",
+    "displayNameLabel": "Nom d'affichage",
+    "eyebrow": "Actifs",
+    "ownershipLabel": "Propriété",
+    "serialLabel": "Série",
+    "title": "Nouvel actif"
+   },
+   "newAsset": "+ Nouvel actif",
+   "title": "Actifs",
+   "warranties": {
+    "assetsLink": "Actifs",
+    "columns": {
+     "end": "Expire",
+     "name": "Nom",
+     "reminders": "Rappels",
+     "state": "État",
+     "warrantor": "Garant"
+    },
+    "configureSupabase": "Configurez Supabase.",
+    "emptyTitle": "Aucune garantie",
+    "eyebrow": "Actifs et logistique",
+    "new": {
+     "coverageLabel": "Résumé de la couverture",
+     "durationMonthsLabel": "Durée (mois)",
+     "endDateLabel": "Date de fin",
+     "eyebrow": "Garanties",
+     "nameLabel": "Nom",
+     "notesLabel": "Notes",
+     "projectLabel": "Projet",
+     "startDateLabel": "Date de début",
+     "title": "Nouvelle garantie",
+     "warrantorEmailLabel": "E-mail du garant",
+     "warrantorNameLabel": "Nom du garant"
+    },
+    "newWarranty": "+ Nouvelle garantie",
+    "title": "Garanties"
+   },
+   "warrantiesLink": "Garanties"
+  },
+  "position": {
+   "cell": {
+    "atoms": "Atomes",
+    "class": "Classe",
+    "cost": "Coût",
+    "emptyTitle": "Aucun atome dans cette cellule",
+    "position": "Position",
+    "project": "Projet",
+    "projects": "Projets"
+   },
+   "emptyTitle": "Aucune coordonnée tracée pour l'instant",
+   "eyebrow": "The Chart",
+   "forecast": {
+    "emptyTitle": "Aucun effort affecté pour l'instant",
+    "eyebrow": "The Chart",
+    "person": "Personne",
+    "subtitle": "Charge d'effort par personne, sur les phases",
+    "title": "Prévision de charge de travail",
+    "unnamed": "Non affecté",
+    "utilization": "Taux d'utilisation"
+   },
+   "forecastLabel": "Prévision de charge de travail →",
+   "metricItems": "Éléments ouverts",
+   "metricPeak": "Cellule la plus chargée",
+   "subtitle": "Classe × phase sur tous les projets actifs",
+   "title": "Position",
+   "metricValue": "Exposition $"
   }
  },
  "formShell": {
@@ -16683,7 +17437,8 @@
    "eyebrow": "Mobile",
    "title": "Mes affectations",
    "empty": {
-    "title": "Rien d'assigné pour l'instant"
+    "title": "Rien d'assigné pour l'instant",
+    "body": "Le matériel, les accréditations et les services qui vous sont attribués apparaissent ici."
    },
    "untitled": "Sans titre",
    "projectFallback": "Projet",
@@ -16691,6 +17446,42 @@
     "prompt": "Un seul show au programme ?",
     "link": "Ouvrir votre shift",
     "suffix": "pour voir l'appel du jour."
+   },
+   "detail": {
+    "due": "Échéance",
+    "eyebrow": "Avancement · Article",
+    "fulfilled": "Honoré",
+    "issued": "Émis",
+    "notes": "Notes",
+    "project": "Projet",
+    "purpose": "Objectif opérationnel",
+    "qty": "Quantité",
+    "special": "Demandes spéciales",
+    "state": "État",
+    "type": "Type"
+   },
+   "fulfill": {
+    "done": "Mis à jour",
+    "error": "Mise à jour impossible",
+    "working": "En cours…"
+   },
+   "group": {
+    "kind": "Type",
+    "none": "Aucun"
+   },
+   "new": {
+    "prefilled": "Pré-rempli à partir de votre dernière demande — modifiez ce qui a changé.",
+    "submitting": "Envoi…"
+   },
+   "offline": {
+    "body": "Vos avancements se chargeront — et toute modification se synchronisera — dès votre retour en ligne.",
+    "title": "Vous êtes hors ligne"
+   },
+   "search": "Rechercher des avancements…",
+   "sort": {
+    "deadline": "Échéance",
+    "kind": "Type",
+    "title": "Nom"
    }
   },
   "alerts": {
@@ -16703,7 +17494,8 @@
    "scheduled": "programmée",
    "acknowledgedAt": "Acquittée {time}",
    "acknowledge": "Acquitter",
-   "acknowledging": "Accusé de réception…"
+   "acknowledging": "Accusé de réception…",
+   "emptyTitle": "Tout va bien. Aucune alerte pour l'instant."
   },
   "checkIn": {
    "announce": {
@@ -16800,7 +17592,8 @@
    "title": "Pointage",
    "empty": {
     "title": "Aucun Service Aujourd'hui",
-    "description": "Revenez quand vous serez planifié."
+    "description": "Revenez quand vous serez planifié.",
+    "body": "Pointez pour commencer à suivre votre temps."
    },
    "unassignedVenue": "Lieu non attribué",
    "inLabel": "Entrée",
@@ -16814,7 +17607,17 @@
     "clockIn": "Pointer en entrée"
    },
    "subtitle": "Suivi du temps géo-vérifié",
-   "noWorkforceProfile": "Votre profil personnel n'est pas encore lié à ce compte. Demandez à votre superviseur de relier votre fiche d'équipe à votre identifiant."
+   "noWorkforceProfile": "Votre profil personnel n'est pas encore lié à ce compte. Demandez à votre superviseur de relier votre fiche d'équipe à votre identifiant.",
+   "active": "Actif",
+   "addNote": "Ajouter une note",
+   "asManager": "En tant que manager",
+   "closed": "Clôturé",
+   "hours": "{hours} h",
+   "noZone": "Aucune zone définie",
+   "now": "maintenant",
+   "offShift": "Hors shift",
+   "onClock": "En service",
+   "recent": "Récent"
   },
   "coc": {
    "eyebrow": "Terrain",
@@ -16833,7 +17636,11 @@
     "audit": "Audit"
    },
    "desktopPrompt": "Besoin de la vue bureau ?",
-   "desktopLink": "Ouvrir la chaîne de traçabilité"
+   "desktopLink": "Ouvrir la chaîne de traçabilité",
+   "asset": "Actif",
+   "emptyBody": "Les scans et transferts d'actifs apparaîtront ici sous forme de chronologie.",
+   "emptyTitle": "Aucun événement de garde",
+   "scan": "Scan"
   },
   "common": {
    "configureSupabase": "Configurez Supabase.",
@@ -16864,7 +17671,30 @@
    "recent": "Récents",
    "empty": {
     "title": "Aucun journal pour le moment"
-   }
+   },
+   "back": "Journaux quotidiens",
+   "emptyBody": "Commencez le journal du jour avec la météo et des notes.",
+   "emptyTitle": "Aucun journal",
+   "new": {
+    "cancel": "Annuler",
+    "date": "Date",
+    "eyebrow": "Site",
+    "high": "Max °F",
+    "low": "Min °F",
+    "noProjects": "Aucun projet",
+    "noProjectsBody": "Les journaux quotidiens sont rattachés à un projet. Demandez aux Opérations d'en ajouter un.",
+    "notes": "Notes",
+    "notesPh": "Effectifs, livraisons, blocages, incidents…",
+    "project": "Projet",
+    "saving": "Enregistrement…",
+    "submit": "Enregistrer le journal",
+    "title": "Nouveau journal quotidien",
+    "weather": "Météo",
+    "weatherPh": "ex. Dégagé · vent léger"
+   },
+   "newCta": "Nouveau journal",
+   "noWeather": "Aucune météo enregistrée",
+   "untitled": "Journal sans titre"
   },
   "directory": {
    "eyebrow": "Mobile",
@@ -16872,7 +17702,22 @@
    "peopleCount": "{count} personnes dans votre organisation",
    "empty": {
     "title": "Aucun membre",
-    "description": "Les membres de l'organisation apparaissent ici une fois ajoutés."
+    "description": "Les membres de l'organisation apparaissent ici une fois ajoutés.",
+    "body": "Personne dans les effectifs ne correspond."
+   },
+   "action": {
+    "call": "Appeler",
+    "email": "E-mail",
+    "message": "Message"
+   },
+   "search": "Rechercher équipe, rôle, équipe…",
+   "status": {
+    "active": "Actif",
+    "available": "Disponible",
+    "off": "Hors site"
+   },
+   "team": {
+    "crew": "Équipe"
    }
   },
   "docs": {
@@ -16901,7 +17746,18 @@
    "title": "Mes Documents",
    "uploadCta": "+ Téléverser",
    "empty": {
-    "title": "Aucun Document"
+    "title": "Aucun Document",
+    "body": "Les documents de projet auxquels vous avez accès et vos fichiers personnels apparaissent ici."
+   },
+   "group": {
+    "cat": "Catégorie",
+    "none": "Aucun"
+   },
+   "search": "Rechercher des documents…",
+   "sort": {
+    "cat": "Catégorie",
+    "name": "Nom",
+    "updated": "Mise à jour"
    }
   },
   "driver": {
@@ -16953,7 +17809,18 @@
     "description": "Les annonces de l'organisation apparaîtront ici."
    },
    "pinned": "Épinglé",
-   "markRead": "Marquer Comme Lu"
+   "markRead": "Marquer Comme Lu",
+   "ago": "il y a {time}",
+   "announcerRole": "Annonce",
+   "comment": "Commenter",
+   "composerPlaceholder": "Partager une mise à jour…",
+   "memberRole": "Équipe",
+   "post": "Publier",
+   "share": "Partager",
+   "tag": {
+    "kudos": "Kudos",
+    "update": "Mise à jour"
+   }
   },
   "gate": {
    "configureSupabase": "Configurer Supabase.",
@@ -17009,7 +17876,18 @@
    "countOne": "{count} mission en cours sur le réseau.",
    "countOther": "{count} missions en cours sur le réseau.",
    "empty": "Aucune mission en cours pour le moment.",
-   "travelPaid": "déplacements pris en charge"
+   "travelPaid": "déplacements pris en charge",
+   "applicants": "{count} candidatures",
+   "applied": "Candidature envoyée",
+   "apply": "Postuler",
+   "applying": "Candidature…",
+   "network": "Réseau",
+   "noMatch": "Rien ne correspond à votre recherche.",
+   "openNow": "Ouvert maintenant",
+   "perDay": "{rate}/jour",
+   "postJob": "Publier une offre…",
+   "rateTbd": "Tarif à définir",
+   "search": "Rechercher des offres…"
   },
   "guard": {
    "configureSupabase": "Configurez Supabase.",
@@ -17042,7 +17920,10 @@
    "downloadPdf": {
     "ariaLabel": "Télécharger ce guide en PDF",
     "label": "Télécharger le PDF"
-   }
+   },
+   "empty": "Aucun guide",
+   "emptyBody": "L'équipe de production n'a pas encore publié de guide pour votre rôle.",
+   "title": "Guide"
   },
   "handover": {
    "eyebrow": "Mobile",
@@ -17053,7 +17934,20 @@
     "description": "Rien en attente aujourd'hui."
    },
    "capAbbrev": "cap.",
-   "handedOver": "Transmis"
+   "handedOver": "Transmis",
+   "assets": "Actifs / Clés",
+   "emptyBody": "Soumettez une passation de fin de shift pour démarrer le suivi.",
+   "emptyTitle": "Aucune passation",
+   "handedTo": "Remis à {relief}",
+   "new": "Nouvelle passation",
+   "openItems": "Éléments ouverts",
+   "prior": "Passations récentes",
+   "state": {
+    "allClear": "Tout est en ordre",
+    "issues": "Problèmes",
+    "watchItems": "Points à surveiller"
+   },
+   "untitled": "Passation"
   },
   "home": {
    "tabs": {
@@ -17168,7 +18062,44 @@
    "title": "Aujourd'hui",
    "fab": {
     "scanTicket": "Scanner le Billet"
-   }
+   },
+   "clock": {
+    "sub": "Pointer l'entrée",
+    "title": "Heure locale"
+   },
+   "copilot": {
+    "sub": "Demander · Signaler · Se débloquer",
+    "title": "Copilote terrain"
+   },
+   "newSheet": "Créer",
+   "newSheetBody": "De quoi avez-vous besoin ?",
+   "noShift": "Rien de prévu",
+   "noShiftBody": "Votre prochain appel s'affiche ici.",
+   "qa": {
+    "advance": "Avancements",
+    "approve": "Approuver",
+    "clock": "Pointer",
+    "expense": "Note de frais",
+    "invite": "Inviter",
+    "report": "Signaler",
+    "scan": "Scanner",
+    "swap": "Échanger"
+   },
+   "quickActions": "Actions rapides",
+   "upcoming": {
+    "sub": "Événement à venir"
+   },
+   "upcomingLabel": "À venir",
+   "viewAll": "Voir tous les événements à venir",
+   "w": {
+    "advances": "Affectations",
+    "advancesSub": "Sur tous les shows",
+    "tasks": "Tâches ouvertes",
+    "tasksSub": "Qui vous sont attribuées",
+    "unread": "Messages",
+    "unreadSub": "Activité récente"
+   },
+   "widgets": "Aujourd'hui"
   },
   "inbox": {
    "room": {
@@ -17177,7 +18108,13 @@
     "emptyDescription": "Dites bonjour pour lancer la conversation.",
     "emptyTitle": "Aucun message pour l'instant",
     "loadOlder": "Charger les plus anciens",
-    "loadingOlder": "Chargement…"
+    "loadingOlder": "Chargement…",
+    "channel": "Canal",
+    "direct": "Message direct",
+    "empty": "Aucun message",
+    "emptyHint": "Dites bonjour pour démarrer.",
+    "placeholder": "Message",
+    "today": "Aujourd'hui"
    },
    "configureSupabase": "Configurer Supabase.",
    "eyebrow": "Mobile",
@@ -17187,7 +18124,14 @@
     "title": "Aucune Conversation"
    },
    "unreadBadge": "Nouveau",
-   "directMessage": "Message direct"
+   "directMessage": "Message direct",
+   "back": "Boîte de réception",
+   "channels": "Canaux",
+   "directMessages": "Messages directs",
+   "emptyHint": "Les canaux et messages directs apparaissent ici.",
+   "emptyTitle": "Aucune conversation",
+   "noMessages": "Aucun message",
+   "unread": "Non lus"
   },
   "incident": {
    "new": {
@@ -17206,7 +18150,21 @@
    "fullReport": "Rapport complet",
    "empty": {
     "title": "Aucun rapport pour l'instant"
-   }
+   },
+   "back": "Mes incidents",
+   "emptyBody": "Vous n'avez déposé aucun rapport d'incident.",
+   "emptyTitle": "Aucun dépôt",
+   "quick": {
+    "cancel": "Annuler",
+    "eyebrow": "Express",
+    "filing": "Dépôt en cours…",
+    "intro": "Une ligne. Nous le transmettrons aux Opérations et vous pourrez détailler plus tard.",
+    "label": "Que s'est-il passé",
+    "placeholder": "Décrivez l'incident…",
+    "submit": "Déposer l'incident",
+    "title": "Dépôt rapide"
+   },
+   "untitled": "Incident sans titre"
   },
   "incidents": {
    "eyebrow": "Terrain",
@@ -17217,7 +18175,12 @@
    "reportCta": "+ Signaler un incident",
    "empty": {
     "title": "Tout est calme"
-   }
+   },
+   "emptyBody": "Aucun incident consigné pour cette org pour l'instant.",
+   "emptyTitle": "Tout est en ordre",
+   "file": "Déposer un rapport",
+   "photos": "photos",
+   "untitled": "Incident sans titre"
   },
   "inventory": {
    "scan": {
@@ -17244,7 +18207,24 @@
     "eyebrow": "Terrain",
     "title": "Scan Inventaire",
     "subtitle": "Scannez ou saisissez un tag d'actif pour gérer sortie / retour."
-   }
+   },
+   "available": "Disponible",
+   "colCategory": "Catégorie",
+   "colCode": "Code",
+   "colCost": "Coût unitaire",
+   "colItem": "Article",
+   "colQty": "En stock",
+   "empty": "Aucun actif",
+   "emptyHint": "Rien ne correspond à ces filtres.",
+   "eyebrow": "Catalogue en stock",
+   "onHand": "en stock",
+   "scanCta": "Scanner pour sortir / rentrer",
+   "search": "Rechercher des actifs…",
+   "serialized": "Unités sérialisées",
+   "title": "Actifs",
+   "tracked": "Suivis",
+   "units": "Unités",
+   "untracked": "Non suivis"
   },
   "kudos": {
    "title": "Kudos",
@@ -17343,7 +18323,15 @@
    "settingsLink": "paramètres",
    "empty": {
     "title": "Aucune Notification"
-   }
+   },
+   "channel": {
+    "email": "E-mail",
+    "push": "Push",
+    "text": "SMS"
+   },
+   "emptyTitle": "Vous êtes à jour.",
+   "matrixHeading": "Réception",
+   "recentHeading": "Récentes"
   },
   "onboarding": {
    "title": "Intégration",
@@ -17357,11 +18345,175 @@
    "fallbackFlowName": "Intégration",
    "detail": {
     "empty": {
-     "title": "Aucune étape pour l'instant"
+     "title": "Aucune étape pour l'instant",
+     "description": "Ce parcours d'intégration n'a aucune étape. Revenez une fois que votre admin les aura publiées."
     }
    },
    "finishing": "Finalisation…",
-   "marking": "Enregistrement…"
+   "marking": "Enregistrement…",
+   "assignment": {
+    "accept": "Accepter l'affectation",
+    "contact": "Contacter pour en discuter",
+    "dates": "Dates",
+    "explore": "Explorer la plateforme",
+    "firstCall": "Premier appel",
+    "note": "Pas prêt à décider ? Contactez votre invitant pour discuter du rôle d'abord. Si vous choisissez Explorer la plateforme, cette offre reste dans votre boîte de réception et vos notifications, à accepter à tout moment.",
+    "rate": "Tarif",
+    "reportsTo": "Rend compte à",
+    "role": "Rôle",
+    "sub": "Un rôle vous a été proposé sur ce projet. Examinez l'offre et acceptez-la, ou explorez l'application en tant qu'indépendant.",
+    "title": "Votre première affectation"
+   },
+   "common": {
+    "back": "Retour",
+    "passkey": "Utiliser une clé d'accès",
+    "soon": "Bientôt",
+    "working": "En cours…"
+   },
+   "emptyBody": "Les parcours de nouveaux arrivants qui vous sont attribués apparaissent ici.",
+   "emptyTitle": "Tout est à jour",
+   "forgot": {
+    "back": "Retour à la connexion",
+    "cta": "Envoyer le lien de réinitialisation",
+    "email": "E-mail",
+    "remembered": "Vous vous en souvenez ?",
+    "sent": "Consultez vos e-mails",
+    "sub": "Nous enverrons un lien de réinitialisation à votre adresse e-mail.",
+    "title": "Réinitialiser le mot de passe"
+   },
+   "join": {
+    "code": "Code d'accès",
+    "cta": "Rejoindre",
+    "note": "Pas de code ? Vous pouvez demander à rejoindre via un admin de l'org, ou continuer et rejoindre un projet plus tard.",
+    "skip": "Ignorer pour l'instant",
+    "sub": "Saisissez le code d'accès fourni par votre admin, ou scannez le QR d'invitation.",
+    "title": "Rejoindre votre org"
+   },
+   "pass": {
+    "cta": "Continuer",
+    "faq": "Lire la FAQ complète de la Rose",
+    "freeAgent": "Indépendant",
+    "howTo": "Comment utiliser votre Rose",
+    "scanNote": "Scannez pour vérifier · usage unique, s'actualise à l'ouverture",
+    "sub": "Voici votre COMPVSS Rose — l'accréditation unique et durable qui ouvre tout l'écosystème ATLVS. Elle est émise une seule fois et vous accompagne à vie, n'évoluant qu'au rythme de vos accès. Bienvenue dans la communauté.",
+    "title": "La COMPVSS Rose",
+    "use1": "Touchez ou scannez pour entrer sur les sites, accéder aux services, suivre les actifs et déclencher des prestations",
+    "use2": "Accès mis à jour à distance — accordé, révoqué ou rehaussé en temps réel",
+    "use3": "Émise une fois, conservée à vie — seul votre accès évolue"
+   },
+   "permissions": {
+    "bluetooth": "Bluetooth / NFC",
+    "bluetoothSub": "Toucher les accréditations et lecteurs RFID",
+    "camera": "Caméra",
+    "cameraSub": "Scanner les accréditations QR, les actifs et les documents de site",
+    "cta": "Continuer",
+    "language": "Langue",
+    "location": "Localisation",
+    "locationSub": "Vérifie votre présence sur site pour le pointage géolocalisé",
+    "notifications": "Notifications",
+    "notificationsSub": "Rappels de shift, approbations et alertes opérationnelles",
+    "optional": "Facultatif",
+    "recommended": "Recommandé",
+    "sub": "Définissez votre langue et les autorisations que COMPVSS utilise sur site. Modifiable à tout moment dans les Réglages.",
+    "title": "Accès à l'app et au terrain",
+    "unavailable": "Indisponible sur cet appareil"
+   },
+   "profile": {
+    "addPhoto": "Ajouter une photo",
+    "address": "Adresse",
+    "airport": "Aéroport d'attache",
+    "bio": "Bio",
+    "certs": "Certifications",
+    "city": "Ville",
+    "completeFull": "Compléter le profil complet maintenant",
+    "contact1": "Contact 1",
+    "contact2": "Contact 2",
+    "continueBasics": "Continuer avec l'essentiel",
+    "dietary": "Restrictions alimentaires",
+    "displayName": "Nom d'affichage",
+    "dob": "Date de naissance",
+    "email": "E-mail",
+    "gh": {
+     "contact": "Contact",
+     "credentials": "Accréditations",
+     "dietary": "Alimentaire",
+     "emergency": "Contacts d'urgence",
+     "identity": "Identité",
+     "social": "Réseaux sociaux",
+     "travel": "Profil de voyage",
+     "uniform": "Tailles d'uniforme"
+    },
+    "glove": "Gants",
+    "instagram": "Instagram",
+    "knownTraveler": "Voyageur connu",
+    "laterNote": "La bio, les contacts, les contacts d'urgence, les réseaux sociaux, l'alimentaire, le profil de voyage, les tailles d'uniforme et les accréditations pourront être ajoutés plus tard depuis votre profil.",
+    "linkedin": "LinkedIn",
+    "loyalty": "Fidélité",
+    "pants": "Pantalon",
+    "passport": "N° de passeport",
+    "phone": "Téléphone",
+    "pronouns": "Pronoms",
+    "role": "Rôle / Titre",
+    "saveFull": "Enregistrer le profil",
+    "shirt": "Chemise",
+    "shoe": "Chaussures",
+    "skills": "Compétences et tags",
+    "spotify": "Spotify",
+    "sub": "Voici votre identité d'équipe portable sur tous vos projets. Commencez par l'essentiel — vous pourrez compléter le reste à tout moment.",
+    "title": "Configurer le profil",
+    "username": "Nom d'utilisateur",
+    "visas": "Visas",
+    "website": "Site web",
+    "zip": "Code postal"
+   },
+   "signin": {
+    "create": "Créer un compte",
+    "cta": "C'est parti",
+    "email": "E-mail ou mobile",
+    "forgot": "Mot de passe oublié ?",
+    "new": "Nouveau ici ?",
+    "or": "Ou",
+    "password": "Mot de passe",
+    "sub": "Connectez-vous à votre compte d'équipe.",
+    "title": "Bon retour"
+   },
+   "signup": {
+    "continue": "Continuer",
+    "email": "E-mail professionnel",
+    "haveAccount": "Vous avez un compte ?",
+    "mobile": "Mobile",
+    "name": "Nom complet",
+    "orWith": "Ou inscrivez-vous avec",
+    "password": "Mot de passe",
+    "signin": "Se connecter",
+    "sub": "Utilisez votre e-mail professionnel ou votre numéro de mobile.",
+    "title": "S'inscrire"
+   },
+   "splash": {
+    "haveAccount": "J'ai déjà un compte",
+    "privacyLink": "Politique de confidentialité",
+    "start": "Commencer",
+    "terms": "En continuant, vous acceptez les",
+    "termsLink": "Conditions"
+   },
+   "sso": {
+    "bluesky": "Continuer avec Bluesky",
+    "google": "Continuer avec Google"
+   },
+   "untitled": "Intégration",
+   "verify": {
+    "cta": "Vérifier",
+    "didnt": "Vous ne l'avez pas reçu ?",
+    "resend": "Renvoyer",
+    "resent": "Code envoyé",
+    "sub": "Saisissez le code à 6 chiffres que nous avons envoyé à",
+    "title": "Vérifiez que c'est bien vous"
+   },
+   "welcome": {
+    "cta": "Voir votre Rose",
+    "sub": "Votre compte COMPVSS est configuré et prêt à l'emploi.",
+    "title": "Bienvenue à bord"
+   }
   },
   "polls": {
    "title": "Sondages",
@@ -17382,7 +18534,20 @@
     "action": "Tâches ouvertes"
    },
    "overdue": "En retard",
-   "due": "Échéance {date}"
+   "due": "Échéance {date}",
+   "active": "Actif",
+   "closed": "Clôturé",
+   "emptyBody": "Pointez pour démarrer votre shift.",
+   "emptyTitle": "Aucun pointage",
+   "fullClock": "Feuille de temps complète",
+   "hrs": "h",
+   "in": "Pointer l'entrée",
+   "now": "maintenant",
+   "off": "Hors shift",
+   "on": "En service",
+   "open": "Ouvert",
+   "out": "Pointer la sortie",
+   "today": "Pointages du jour"
   },
   "requests": {
    "detail": {
@@ -17427,7 +18592,35 @@
    "subtitle": "Requêtes actives à travers l'org.",
    "empty": {
     "title": "Rien d'Ouvert",
-    "description": "Tout est calme pour l'instant."
+    "description": "Tout est calme pour l'instant.",
+    "body": "Les demandes de congés et d'échange de shift apparaissent ici."
+   },
+   "approve": "Approuver",
+   "chain": {
+    "managerPlus": "Manager+",
+    "reviewer": "Réviseur",
+    "reviewing": "En révision",
+    "submitted": "Soumise",
+    "submitter": "Demandeur"
+   },
+   "decline": "Refuser",
+   "hours": "{hours} h",
+   "search": "Rechercher des approbations…",
+   "someone": "Quelqu'un",
+   "sort": {
+    "recent": "Récentes",
+    "type": "Type"
+   },
+   "swap": {
+    "title": "Échange de shift",
+    "toTitle": "Échanger avec {who}"
+   },
+   "timeOff": {
+    "title": "Congés"
+   },
+   "type": {
+    "shiftSwap": "Échange de shift",
+    "timeOff": "Congés"
    }
   },
   "ros": {
@@ -17502,7 +18695,85 @@
     "title": "Localisation",
     "description": "Utilisée pour le pointage géolocalisé."
    },
-   "signOut": "Se déconnecter"
+   "signOut": "Se déconnecter",
+   "account": {
+    "archive": "Archiver",
+    "archiveDesc": "Demander la révocation de l'accès. Dossiers conservés.",
+    "archived": "Demandé",
+    "heading": "Compte",
+    "pause": "Pause",
+    "pauseDesc": "Masquer de la planification. Conserve vos dossiers.",
+    "paused": "En pause",
+    "status": "Statut du compte"
+   },
+   "appearance": {
+    "density": "Densité",
+    "heading": "Apparence",
+    "theme": "Thème"
+   },
+   "certs": {
+    "heading": "Certifications",
+    "label": "Certifications",
+    "none": "Aucune certification au dossier."
+   },
+   "contact": {
+    "city": "Ville",
+    "country": "Pays",
+    "email": "Pro",
+    "heading": "Contact",
+    "phone": "Mobile",
+    "region": "Région / État"
+   },
+   "credentials": {
+    "heading": "Accréditations"
+   },
+   "dietary": {
+    "heading": "Alimentaire",
+    "label": "Restrictions alimentaires"
+   },
+   "emergency": {
+    "heading": "Contacts d'urgence",
+    "name": "Nom",
+    "relationship": "Lien"
+   },
+   "profile": {
+    "bio": "Bio",
+    "heading": "Profil",
+    "name": "Nom complet",
+    "pronouns": "Pronoms",
+    "role": "Rôle / Titre",
+    "tagline": "Slogan"
+   },
+   "save": "Enregistrer",
+   "saved": "Enregistré.",
+   "setHint": "Séparez par · ou des virgules",
+   "skills": {
+    "label": "Compétences et tags"
+   },
+   "social": {
+    "heading": "Réseaux sociaux",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "spotify": "Spotify",
+    "website": "Site web"
+   },
+   "travel": {
+    "airport": "Aéroport d'attache",
+    "dob": "Date de naissance",
+    "heading": "Voyage",
+    "knownTraveler": "Voyageur connu",
+    "loyalty": "Programmes de fidélité",
+    "passport": "N° de passeport",
+    "visas": "Visas"
+   },
+   "uniform": {
+    "glove": "Gants",
+    "hat": "Chapeau",
+    "heading": "Uniforme",
+    "pants": "Pantalon",
+    "shirt": "Chemise",
+    "shoe": "Chaussures"
+   }
   },
   "shift": {
    "eyebrow": "Mobile",
@@ -17558,8 +18829,64 @@
    "detail": {
     "back": "← Tâches",
     "dueLabel": "Échéance {date}",
-    "updateStatus": "Mettre à jour le statut"
-   }
+    "updateStatus": "Mettre à jour le statut",
+    "actAssigned": "a réattribué la tâche",
+    "actAttached": "a ajouté une pièce jointe",
+    "actCommented": "a commenté",
+    "actCreated": "Tâche créée",
+    "actDue": "a modifié l'échéance",
+    "actUpdated": "Dernière mise à jour",
+    "activity": "Activité",
+    "activityEmpty": "Aucune activité pour l'instant.",
+    "assignee": "Responsable",
+    "checklist": "Liste de contrôle",
+    "checklistEmpty": "Aucun élément de liste de contrôle.",
+    "created": "Créée",
+    "description": "Description",
+    "descriptionEmpty": "Aucune description.",
+    "due": "Échéance",
+    "eyebrow": "Tâche",
+    "permWarn": "Vous n'avez pas l'autorisation de modifier cette tâche.",
+    "photos": "Photos",
+    "photosEmpty": "Aucune photo pour l'instant.",
+    "priority": "Priorité",
+    "status": "Statut",
+    "updated": "Mise à jour",
+    "updatedToast": "Tâche mise à jour"
+   },
+   "col": {
+    "due": "Échéance",
+    "task": "Tâche"
+   },
+   "emptyBody": "Rien ne correspond à ces filtres.",
+   "filter": {
+    "showCompleted": "Afficher les terminées",
+    "status": "Statut"
+   },
+   "group": {
+    "assignee": "Responsable",
+    "none": "Aucun",
+    "priority": "Priorité",
+    "status": "Statut"
+   },
+   "noDue": "Aucune échéance",
+   "noTasksInLane": "Aucune tâche",
+   "reset": "Réinitialiser les filtres",
+   "search": "Rechercher des tâches…",
+   "sort": {
+    "due": "Échéance",
+    "name": "Nom",
+    "priority": "Priorité"
+   },
+   "state": {
+    "blocked": "Bloquée",
+    "done": "Terminée",
+    "open": "Ouverte",
+    "progress": "En cours",
+    "review": "En révision"
+   },
+   "swipeHint": "Balayez entre les colonnes",
+   "unassigned": "Non attribuée"
   },
   "timeOff": {
    "new": {
@@ -17585,7 +18912,13 @@
     "title": "Aucune demande",
     "description": "Vos demandes de congé apparaîtront ici."
    },
-   "timeOffFallback": "Congé"
+   "timeOffFallback": "Congé",
+   "balance": "Solde",
+   "emptyBody": "Vous n'avez demandé aucun congé.",
+   "emptyTitle": "Aucune demande",
+   "eyebrow": "Vous",
+   "newCta": "Demander un congé",
+   "requests": "Vos demandes"
   },
   "tracker": {
    "configureSupabase": "Configurez Supabase.",
@@ -17609,14 +18942,18 @@
    "title": "Mon Accréditation",
    "subtitle": "Présentez cet écran à l'entrée. Gardez-le actif jusqu'à la fin de votre shift.",
    "empty": {
-    "title": "Aucune Accréditation Émise"
+    "title": "Aucune Accréditation Émise",
+    "body": "Les droits d'accréditation apparaissent ici une fois émis. Contactez votre admin."
    },
    "defaultCategoryCode": "ACC",
    "cardBarcode": "Code-Barres de la Carte",
    "validFrom": "Valide À Partir Du",
    "validTo": "Valide Jusqu'au",
    "otherCards": "Autres Cartes",
-   "openProfile": "Ouvrir le profil →"
+   "openProfile": "Ouvrir le profil →",
+   "accessTitle": "Accès et autorisations",
+   "credential": "Accréditation",
+   "help": "Contacter l'admin pour de l'aide"
   },
   "wayfind": {
    "otherCluster": "Autre",
@@ -17652,6 +18989,292 @@
   "checkInSummary": {
    "eyebrow": "Terrain",
    "title": "Résumé des check-ins"
+  },
+  "account": {
+   "archive": {
+    "confirmLabel": "Saisissez ARCHIVE pour confirmer",
+    "cta": "Demander l'archivage",
+    "export": "Exportez d'abord vos données",
+    "heading": "Archiver le compte",
+    "preserve": "Dossiers opérationnels conservés",
+    "retainTitle": "Les dossiers sont conservés, pas supprimés.",
+    "revoke": "Accès révoqué après confirmation de l'admin"
+   },
+   "eyebrow": "Statut du compte",
+   "intro": "Gérez le statut de votre compte — faites une pause ou demandez l'archivage.",
+   "pause": {
+    "active": "Votre compte est en pause. Reprenez ci-dessus quand vous êtes prêt.",
+    "cta": "Mettre mon compte en pause",
+    "heading": "Mettre le compte en pause",
+    "hide": "Masqué de la planification et des effectifs",
+    "mute": "Notifications suspendues",
+    "resume": "Réactiver mon compte",
+    "reverse": "Réactivez à tout moment — rien n'est perdu"
+   },
+   "title": "Compte"
+  },
+  "companies": {
+   "call": "Appeler",
+   "count": "{n} sur le projet",
+   "email": "E-mail",
+   "empty": "Aucun prestataire",
+   "emptyBody": "Aucune organisation ne correspond.",
+   "general": "Général",
+   "search": "Rechercher prestataires, métier, périmètre…",
+   "title": "Prestataires",
+   "unnamed": "Prestataire sans nom"
+  },
+  "inventoryScan": {
+   "back": "Actifs",
+   "cameraDenied": "Caméra indisponible — Utilisez la saisie manuelle",
+   "cta": "Résoudre l'étiquette",
+   "enableCamera": "Activer la caméra",
+   "eyebrow": "Étiquette d'actif",
+   "hint": "Pointez vers un QR d'étiquette d'actif — lecture automatique.",
+   "logged": "Enregistré",
+   "manualLabel": "Étiquette d'actif",
+   "manualPlaceholder": "ex. R7-014",
+   "recentEmpty": "Aucun scan",
+   "recentTitle": "Activité récente",
+   "scanning": "Vérification…",
+   "title": "Scanner pour sortir / rentrer"
+  },
+  "more": {
+   "account": "Compte",
+   "eyebrow": "Espace de travail",
+   "network": "Réseau",
+   "people": "Personnes",
+   "title": "Plus",
+   "tools": "Outils"
+  },
+  "scan": {
+   "eyebrow": "Scan rapide",
+   "hint": "Pointez la caméra vers un QR ou un code-barres — lecture automatique.",
+   "manualLabel": "Code",
+   "manualPlaceholder": "ex. R7-014",
+   "manualSubmit": "Capturer",
+   "manualToggle": "Saisir le code manuellement",
+   "recentEmpty": "Aucun code capturé pour l'instant",
+   "recentTitle": "Capturés cette session",
+   "title": "Scanner un code"
+  },
+  "catalog": {
+   "back": "Plus",
+   "empty": "Aucun article",
+   "emptyHint": "Rien ne correspond.",
+   "request": "Demander",
+   "search": "Rechercher dans le catalogue…",
+   "title": "Catalogue"
+  },
+  "changelog": {
+   "build": "COMPVSS Field · Build 2406.18",
+   "eyebrow": "COMPVSS Field",
+   "title": "Nouveautés"
+  },
+  "connections": {
+   "accept": "Accepter",
+   "connect": "Se connecter",
+   "connected": "Connecté",
+   "count": "{n} suggérés",
+   "crew": "Équipe",
+   "decline": "Refuser",
+   "empty": "Aucune personne",
+   "emptyBody": "Aucune autre équipe dans cette org pour l'instant — des suggestions apparaîtront ici à mesure que votre réseau s'étoffe.",
+   "network": "Mon réseau",
+   "pending": "En attente",
+   "pendingSection": "Demandes en attente",
+   "remove": "Retirer",
+   "requestSent": "Demande envoyée",
+   "search": "Rechercher par nom, métier, compétence, cert…",
+   "suggestions": "Suggestions",
+   "title": "Mes connexions",
+   "unnamed": "Sans nom"
+  },
+  "activity": {
+   "count": "{n} événements",
+   "empty": "Aucune activité",
+   "emptyBody": "Rien ne correspond à ces filtres.",
+   "search": "Rechercher dans l'activité…",
+   "title": "Historique d'activité"
+  },
+  "checkin": {
+   "access": "Accès",
+   "asset": "Actif",
+   "batch": "Pointage par lot",
+   "cameraDenied": "Caméra indisponible — Utilisez la saisie manuelle",
+   "ctaAccess": "Vérifier l'accréditation",
+   "ctaAsset": "Sortir / Rentrer",
+   "ctaNfc": "Toucher pour lire",
+   "ctaPos": "Scanner le produit",
+   "enableCamera": "Activer la caméra",
+   "eyebrow": "{count} scans récents",
+   "gate": {
+    "eyebrow": "Entrée · {slug}"
+   },
+   "logged": "Enregistré",
+   "manual": "Saisir le code manuellement",
+   "manualLabel": "Code",
+   "manualPlaceholder": "ex. R7-014",
+   "nfc": "NFC",
+   "nfcHint": "Approchez l'accréditation RFID ou le badge du lecteur",
+   "pos": "POS",
+   "qr": "Code QR",
+   "recentEmpty": "Aucun scan",
+   "recentTitle": "Activité récente",
+   "rfid": "RFID / NFC",
+   "scanHintAccess": "Scannez le QR de l'accréditation",
+   "scanHintCamera": "Lit les QR et codes-barres automatiquement",
+   "scanning": "Vérification…",
+   "title": "Scanner"
+  },
+  "checkinManual": {
+   "back": "Pointage",
+   "code": "Code",
+   "cta": "Soumettre le code",
+   "eyebrow": "Saisie manuelle",
+   "hint": "Saisissez un code de scan ou une étiquette d'actif lorsque la caméra ne peut pas lire.",
+   "logged": "Enregistré",
+   "placeholder": "ex. R7-014",
+   "scanning": "Vérification…",
+   "title": "Saisir le code"
+  },
+  "referrals": {
+   "balance": "Solde de récompenses",
+   "contactLabel": "E-mail ou téléphone",
+   "contactPlaceholder": "nom@exemple.com",
+   "empty": "Aucun parrainage",
+   "emptyBody": "Partagez votre code — les parrainages et récompenses s'affichent ici.",
+   "eyebrow": "Écosystème ATLVS",
+   "how": "Comment ça marche",
+   "invite": "Inviter",
+   "next": "Parrainez des équipiers pour commencer à gagner des récompenses.",
+   "pts": "pts",
+   "send": "Envoyer l'invitation",
+   "sending": "Envoi…",
+   "share": "Partager",
+   "step1": "Partagez",
+   "step1s": "Envoyez votre code ou lien",
+   "step2": "Ils rejoignent",
+   "step2s": "Inscription au réseau ATLVS",
+   "step3": "Vous gagnez",
+   "step3s": "Points + argent lors de leur embauche",
+   "tier": "Débutant",
+   "title": "Parrainages et récompenses",
+   "yours": "Vos parrainages"
+  },
+  "batch": {
+   "back": "Pointage",
+   "cta": "Rentrer",
+   "ctaTail": "Sélectionnés",
+   "done": "actif(s) rentré(s).",
+   "empty": "Rien à rendre",
+   "emptyHint": "Vous n'avez aucun matériel sorti pour l'instant.",
+   "hint": "Sélectionnez le matériel attribué à rendre en une fois.",
+   "of": "sur",
+   "selectAll": "Tout sélectionner",
+   "selected": "sélectionnés",
+   "title": "Pointage par lot",
+   "working": "Rentrée en cours…"
+  },
+  "emergency": {
+   "assembly": "Point de rassemblement",
+   "back": "Accueil",
+   "codes": "Codes d'urgence",
+   "evac": "Évacuer",
+   "eyebrow": "Position",
+   "fire": "Sécurité incendie",
+   "musterLabel": "Rassemblement",
+   "musterTo": "Rassemblement : {to}",
+   "position": "Position",
+   "project": "Projet",
+   "reportTo": "Se présenter à",
+   "role": "Rôle d'urgence",
+   "shelter": "Abri",
+   "team": "Équipe",
+   "title": "Fiche d'urgence",
+   "unassigned": "En attente d'affectation"
+  },
+  "market": {
+   "by": "par",
+   "empty": "La marketplace équipe arrive bientôt. Soyez le premier à proposer matériel, outils ou vêtements.",
+   "emptyTitle": "Aucune annonce",
+   "eyebrow": "Marketplace",
+   "listItem": "Mettre un article en vente",
+   "listed": "Annonce enregistrée · en attente du lancement de la marketplace",
+   "markSold": "Marquer comme vendu",
+   "member": "Membre",
+   "mine": "Votre annonce",
+   "title": "Marketplace",
+   "withdraw": "Retirer"
+  },
+  "schedule": {
+   "col": {
+    "detail": "Détail",
+    "event": "Événement",
+    "status": "Statut",
+    "time": "Heure",
+    "type": "Type"
+   },
+   "empty": "Rien ici",
+   "emptyBody": "Aucun élément ne correspond à ces filtres.",
+   "emptyDay": "Rien de prévu",
+   "emptyDayBody": "Aucun élément ce jour.",
+   "eyebrow": "Aujourd'hui · {count} événements",
+   "filter": {
+    "type": "Type"
+   },
+   "group": {
+    "none": "Aucun",
+    "type": "Type"
+   },
+   "reset": "Réinitialiser les filtres",
+   "search": "Rechercher dans le planning…",
+   "sort": {
+    "name": "Nom",
+    "time": "Heure"
+   },
+   "title": "Calendrier",
+   "type": {
+    "meeting": "Réunion",
+    "ros": "Conducteur",
+    "shift": "Shift",
+    "training": "Formation"
+   }
+  },
+  "profile": {
+   "about": "À propos",
+   "airport": "Aéroport d'attache",
+   "badges": "Badges",
+   "certs": "Certifications",
+   "contact": "Contact",
+   "dietary": "Alimentaire",
+   "dob": "Date de naissance",
+   "edit": "Modifier",
+   "email": "E-mail",
+   "emergency": "Contacts d'urgence",
+   "eyebrow": "Vous",
+   "glove": "Gants",
+   "hat": "Chapeau",
+   "knownTraveler": "Voyageur connu",
+   "location": "Localisation",
+   "loyalty": "Fidélité",
+   "mobile": "Mobile",
+   "pants": "Pantalon",
+   "passport": "Passeport",
+   "ratings": "Notes et avis",
+   "reviewCount": "{count} avis",
+   "rose": "Ma Rose",
+   "share": "Partager le profil",
+   "shirt": "Chemise",
+   "shoe": "Chaussures",
+   "skills": "Compétences et tags",
+   "social": "Réseaux sociaux",
+   "someone": "Quelqu'un",
+   "title": "Profil",
+   "travel": "Profil de voyage",
+   "uniform": "Tailles d'uniforme",
+   "unnamed": "Membre d'équipe",
+   "visas": "Visas"
   }
  },
  "me": {
@@ -17999,8 +19622,10 @@
    "submit": "Enregistrer les préférences",
    "appearance": {
     "legend": "Apparence",
-    "theme": "Thème",
-    "density": "Densité"
+    "density": "Densité",
+    "colorMode": "Mode de couleur",
+    "colorModeHint": "Clair, sombre ou selon votre OS — à définir dans",
+    "colorModeLink": "Réglages d'apparence"
    },
    "locale": {
     "legend": "Langue et région",
@@ -20476,6 +22101,29 @@
   },
   "sortable": {
    "dragToReorder": "Glisser pour réorganiser"
+  },
+  "toast": {
+   "dismiss": "Ignorer la notification",
+   "region": "Notifications"
+  },
+  "confirm": {
+   "cancel": "Annuler",
+   "confirm": "Confirmer"
+  },
+  "tour": {
+   "back": "Retour",
+   "done": "Terminé",
+   "next": "Suivant",
+   "progress": "{current} / {total}",
+   "skip": "Ignorer"
+  },
+  "coachmark": {
+   "dismiss": "Ignorer"
+  },
+  "sync": {
+   "now": "Synchroniser maintenant",
+   "queued": "{count} modifications en attente — se synchroniseront au retour en ligne",
+   "syncing": "Synchronisation de {count} modifications…"
   }
  },
  "workspace": {

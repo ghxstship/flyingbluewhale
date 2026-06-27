@@ -52,7 +52,7 @@ export default async function Page() {
         )}
         action={
           <Button href="/studio/governance/approvals/delegations/new" size="sm">
-            {t("console.governance.approvals.delegations.new", undefined, "+ New delegation")}
+            {t("console.governance.approvals.delegations.newLabel", undefined, "+ New delegation")}
           </Button>
         }
       />

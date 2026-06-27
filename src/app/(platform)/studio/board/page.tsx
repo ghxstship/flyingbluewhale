@@ -57,7 +57,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
       <ModuleHeader
         eyebrow={t("console.board.eyebrow", undefined, "Work")}
         title={t("console.board.title", undefined, "Board")}
-        subtitle={t("console.board.subtitle", { open, done: rows.length - open }, `${open} open · ${rows.length - open} done`)}
+        subtitle={t("console.board.subtitle", { open, done: rows.length - open }, "{open} open · {done} done")}
         breadcrumbs={[{ label: "Work" }, { label: "Board" }]}
         action={<Button href="/studio/tasks/new">{t("console.board.newTask", undefined, "+ New Task")}</Button>}
       />

@@ -125,6 +125,10 @@
    "finance": "Finanzen",
    "procurement": "Beschaffung",
    "operations": "Betrieb"
+  },
+  "events": "Events",
+  "foo": {
+   "bar": "Foo Bar"
   }
  },
  "marketing": {
@@ -2473,6 +2477,9 @@
      "subtitle": "Kostenlos anmelden — 30 Sekunden, keine Karte. Free ist kostenlos, für immer.",
      "primaryLabel": "Kostenlos loslegen",
      "secondaryLabel": "Walkthrough buchen"
+    },
+    "billingFaq": {
+     "title": "Abrechnung & Tarife"
     }
    },
    "roadmap": {
@@ -4267,7 +4274,8 @@
    "expand": "Sidebar ausklappen",
    "resize": "Sidebar-Größe ändern",
    "shortcutToggle": "Sidebar ein- / ausklappen",
-   "shortcutSearch": "Sidebar-Suche fokussieren"
+   "shortcutSearch": "Sidebar-Suche fokussieren",
+   "toggleGroup": "{name} umschalten"
   }
  },
  "a11y": {
@@ -8041,6 +8049,35 @@
      "audience": "Zielgruppe",
      "anon": "Anon"
     }
+   },
+   "channels": {
+    "configureSupabase": "Supabase konfigurieren.",
+    "createFirst": "Erstellen Sie Ihren ersten Kanal",
+    "detail": {
+     "emptyLabel": "Noch keine Nachrichten",
+     "eyebrow": "Kanal",
+     "postPlaceholder": "Nachricht schreiben…",
+     "postSubmit": "Posten",
+     "unknownAuthor": "Unbekannt"
+    },
+    "emptyLabel": "Noch keine Kanäle",
+    "eyebrow": "Kommunikation",
+    "messageCountOne": "{count} Nachricht",
+    "messageCountOther": "{count} Nachrichten",
+    "new": {
+     "eyebrow": "Kanäle",
+     "kindLabel": "Art",
+     "nameLabel": "Name",
+     "projectLabel": "Projekt",
+     "projectNone": "— Keines —",
+     "title": "Neuer Kanal",
+     "topicLabel": "Thema"
+    },
+    "newLabel": "+ Neuer Kanal",
+    "subtitleOne": "{count} Kanal",
+    "subtitleOther": "{count} Kanäle",
+    "title": "Kanäle",
+    "untitled": "Unbenannter Kanal"
    }
   },
   "compliance": {
@@ -8227,7 +8264,8 @@
     "selectSheet": "Plan auswählen…",
     "addSheet": "+ Plan hinzufügen",
     "edit": "Bearbeiten",
-    "noVersionsTitle": "Noch keine Versionen"
+    "noVersionsTitle": "Noch keine Versionen",
+    "preview": "Plan-Vorschau"
    },
    "new": {
     "eyebrow": "Creative",
@@ -8377,6 +8415,27 @@
      "voided": "Umschlag storniert"
     },
     "void": "Stornieren"
+   },
+   "prepare": {
+    "applied": "Signatur angewendet",
+    "apply": "Signatur anwenden",
+    "applyHeading": "Signatur anwenden",
+    "applying": "Wird gespeichert…",
+    "back": "Zurück zum Umschlag",
+    "clear": "Löschen",
+    "copyHint": "Teilen Sie mit jedem externen Unterzeichner einen Link. Sie unterschreiben unter /sign ohne Konto.",
+    "createLink": "Link erstellen",
+    "drawLabel": "Signatur zeichnen",
+    "error": "Signatur konnte nicht gespeichert werden",
+    "eyebrow": "E-Signatur",
+    "linksHeading": "Öffentliche Signaturlinks",
+    "nameLabel": "Vollständiger Name",
+    "noSignature": "Zeichnen Sie eine Signatur, um Anwenden zu aktivieren",
+    "noSigners": "Fügen Sie diesem Umschlag Unterzeichner hinzu, bevor Sie ihn zur Unterschrift vorbereiten.",
+    "signed": "Unterschrieben",
+    "signerSelect": "Unterschreiben als",
+    "title": "Zur Unterschrift vorbereiten",
+    "titleLabel": "Titel"
    }
   },
   "error": {
@@ -8799,7 +8858,8 @@
       "consolidationMethod": "Konsolidierungsmethode",
       "consolidationState": "Konsolidierungsstatus",
       "effectiveFrom": "Gültig ab",
-      "effectiveTo": "Gültig bis"
+      "effectiveTo": "Gültig bis",
+      "ownershipPct": "Eigentumsanteil % — diese Einheit in der Muttergesellschaft"
      },
      "parent": {
       "topLevel": "— (oberste Ebene)"
@@ -8825,7 +8885,11 @@
     "colJurisdiction": "Rechtsraum",
     "colMethod": "Methode",
     "colOwnership": "Beteiligung",
-    "colState": "Status"
+    "colState": "Status",
+    "edit": {
+     "eyebrow": "Finanzen",
+     "title": "Rechtseinheit bearbeiten"
+    }
    },
    "expenses": {
     "edit": {
@@ -9562,6 +9626,155 @@
     "title": "Stundenzettel",
     "total": "Summe",
     "unknownWorker": "—"
+   },
+   "accounts": {
+    "active": "Aktiv",
+    "cols": {
+     "code": "Code",
+     "flags": "Kennzeichen",
+     "name": "Name",
+     "normal": "Normalsaldo",
+     "type": "Typ"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "empty": {
+     "label": "Noch keine Konten"
+    },
+    "inactive": "Inaktiv",
+    "new": {
+     "codeLabel": "Kontocode",
+     "configureSupabase": "Supabase konfigurieren.",
+     "eyebrow": "Kontenplan",
+     "nameLabel": "Kontoname",
+     "normalLabel": "Normalsaldo",
+     "parentLabel": "Übergeordnetes Konto",
+     "parentNone": "— Keines (oberste Ebene) —",
+     "postableLabel": "Buchbar (Buchungen können direkt erfolgen)",
+     "title": "Neues Konto",
+     "typeLabel": "Kontotyp"
+    },
+    "newCta": "+ Neues Konto",
+    "normal": {
+     "credit": "Haben",
+     "debit": "Soll"
+    },
+    "postable": "Buchbar",
+    "summary": "Zusammenfassung",
+    "title": "Kontenplan",
+    "type": {
+     "asset": "Aktiva",
+     "equity": "Eigenkapital",
+     "expense": "Aufwand",
+     "liability": "Verbindlichkeit",
+     "revenue": "Ertrag"
+    }
+   },
+   "ledger": {
+    "cols": {
+     "debits": "Soll gesamt",
+     "description": "Beschreibung",
+     "number": "Buchung Nr.",
+     "period": "Periode",
+     "posted": "Gebucht"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "detail": {
+     "addLine": "Zeile hinzufügen",
+     "balanced": "Ausgeglichen ✓",
+     "cols": {
+      "account": "Konto",
+      "credit": "Haben",
+      "debit": "Soll",
+      "line": "#",
+      "memo": "Memo"
+     },
+     "configureSupabase": "Supabase konfigurieren.",
+     "eyebrow": "Hauptbuch",
+     "form": {
+      "account": "Konto",
+      "amount": "Betrag — USD",
+      "credit": "Haben",
+      "debit": "Soll",
+      "memo": "Memo",
+      "side": "Seite"
+     },
+     "noAccounts": {
+      "label": "Keine Konten"
+     },
+     "noLines": {
+      "label": "Noch keine Zeilen"
+     },
+     "totalCredits": "Haben gesamt",
+     "totalDebits": "Soll gesamt"
+    },
+    "empty": {
+     "label": "Noch keine Buchungssätze"
+    },
+    "new": {
+     "configureSupabase": "Supabase konfigurieren.",
+     "descriptionLabel": "Beschreibung",
+     "eyebrow": "Hauptbuch",
+     "noPeriods": {
+      "cta": "+ Neue Periode",
+      "label": "Keine Buchungsperioden"
+     },
+     "numberLabel": "Buchungsnummer",
+     "periodLabel": "Buchungsperiode",
+     "title": "Neuer Buchungssatz"
+    },
+    "newCta": "+ Neue Buchung",
+    "title": "Hauptbuch"
+   },
+   "tax": {
+    "calculations": {
+     "backToHub": "← Steuerreferenz",
+     "cols": {
+      "category": "Kategorie",
+      "computedAt": "Berechnet",
+      "jurisdiction": "Steuergebiet",
+      "rate": "Satz",
+      "source": "Quelle",
+      "tax": "Steuer",
+      "taxable": "Steuerpflichtig"
+     },
+     "empty": "Noch keine Steuerberechnungen",
+     "title": "Steuerberechnungen"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "eyebrow": "Finanzen",
+    "jurisdictions": {
+     "cols": {
+      "code": "Code",
+      "country": "Land",
+      "name": "Name",
+      "region": "Region"
+     },
+     "empty": "Keine Steuergebiete definiert",
+     "title": "Steuergebiete"
+    },
+    "rates": {
+     "cols": {
+      "category": "Kategorie",
+      "from": "Von",
+      "jurisdiction": "Steuergebiet",
+      "rate": "Satz",
+      "to": "Bis"
+     },
+     "empty": "Keine Steuersätze definiert",
+     "title": "Sätze"
+    },
+    "title": "Steuer",
+    "viewCalculations": "Berechnungen ansehen",
+    "withholding": {
+     "cols": {
+      "appliesTo": "Gilt für",
+      "jurisdiction": "Steuergebiet",
+      "rate": "Satz",
+      "threshold": "Schwellenwert"
+     },
+     "empty": "Keine Quellensteuerregeln definiert",
+     "title": "Quellensteuerregeln"
+    }
    }
   },
   "forms": {
@@ -10182,6 +10395,97 @@
     "dataMap": "Datenkarte",
     "consentLabel": "Einwilligung",
     "dsarLabel": "DSAR"
+   },
+   "contracts": {
+    "columns": {
+     "counterparty": "Vertragspartner",
+     "endAt": "Endet",
+     "kind": "Art",
+     "number": "Nummer",
+     "state": "Status",
+     "title": "Titel",
+     "value": "Wert"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "contractPlural": "Verträge",
+    "contractSingular": "Vertrag",
+    "detail": {
+     "addVersion": "Version hinzufügen",
+     "autoRenew": "Automatische Verlängerung",
+     "billing": "Abrechnung",
+     "col": {
+      "active": "Aktiv",
+      "capacity": "Unterschriftsbefugnis",
+      "created": "Erstellt",
+      "description": "Beschreibung",
+      "due": "Fällig",
+      "kind": "Art",
+      "label": "Bezeichnung",
+      "method": "Methode",
+      "party": "Partei",
+      "payment": "Zahlung",
+      "paymentUsd": "Zahlung — USD",
+      "recurring": "Wiederkehrend",
+      "redline": "Redline-Zusammenfassung",
+      "role": "Rolle",
+      "signedAt": "Unterschrieben",
+      "signer": "Unterzeichner",
+      "signingRole": "Rolle",
+      "state": "Status",
+      "trigger": "Auslöser",
+      "version": "Version"
+     },
+     "configureSupabase": "Supabase konfigurieren.",
+     "counterparty": "Vertragspartner",
+     "counterpartyEmail": "E-Mail",
+     "end": "Ende",
+     "eyebrow": "Vertrag",
+     "methodDocusign": "DocuSign",
+     "methodElectronic": "Elektronisch",
+     "methodWet": "Handschriftlich",
+     "milestones": "Meilensteine",
+     "milestonesEmpty": "Keine Meilensteine",
+     "no": "Nein",
+     "obligations": "Verpflichtungen",
+     "obligationsEmpty": "Keine Verpflichtungen",
+     "parties": "Parteien",
+     "partiesEmpty": "Keine Parteien",
+     "partySelf": "Ich (aktueller Benutzer)",
+     "recordSignature": "Signatur erfassen",
+     "recurringLabel": "Wiederkehrende Verpflichtung",
+     "signatureNeedsVersion": "Fügen Sie eine Version hinzu, bevor Sie Signaturen erfassen.",
+     "signatures": "Signaturen",
+     "signaturesEmpty": "Keine Signaturen",
+     "start": "Start",
+     "terms": "Bedingungen",
+     "termsEmpty": "Keine Bedingungen",
+     "value": "Wert",
+     "versions": "Versionen",
+     "versionsEmpty": "Keine Versionen",
+     "yes": "Ja"
+    },
+    "emptyLabel": "Noch keine Verträge",
+    "eyebrow": "Recht",
+    "new": {
+     "autoRenewLabel": "Automatische Verlängerung bei Laufzeitende",
+     "configureSupabase": "Supabase konfigurieren.",
+     "counterpartyEmailLabel": "E-Mail des Vertragspartners",
+     "counterpartyNameLabel": "Name des Vertragspartners",
+     "endAtLabel": "Enddatum",
+     "eyebrow": "Recht",
+     "kindLabel": "Art",
+     "notesLabel": "Notizen",
+     "numberHint": "Ihre interne Vertragsreferenz.",
+     "numberLabel": "Nummer",
+     "projectLabel": "Projekt",
+     "projectPlaceholder": "Projekt auswählen…",
+     "startAtLabel": "Startdatum",
+     "title": "Neuer Vertrag",
+     "titleLabel": "Titel",
+     "totalValueLabel": "Gesamtwert — USD"
+    },
+    "newContract": "+ Neuer Vertrag",
+    "title": "Verträge"
    }
   },
   "locations": {
@@ -12195,7 +12499,8 @@
      "assetTag": "Asset-Tag",
      "dailyRate": "Tagessatz",
      "status": "Status",
-     "equipment_state": "Status"
+     "equipment_state": "Status",
+     "category": "Kategorie"
     }
    },
    "itb": {
@@ -12855,6 +13160,58 @@
      "awardedTo": "Vergeben an",
      "status": "Status"
     }
+   },
+   "receiving": {
+    "columns": {
+     "notes": "Notizen",
+     "partial": "Teilweise",
+     "po": "Bestellung",
+     "receipt": "Beleg-Nr.",
+     "receivedAt": "Erhalten"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "detail": {
+     "addLineHeading": "Erhaltene Zeile hinzufügen",
+     "colItem": "Position",
+     "colNotes": "Notizen",
+     "colReceived": "Erhalten",
+     "colRejected": "Abgelehnt",
+     "colResolved": "Geklärt",
+     "colStatus": "Status",
+     "colVariance": "Abweichung",
+     "complete": "Vollständig",
+     "configureSupabase": "Supabase konfigurieren.",
+     "eyebrow": "Wareneingang",
+     "lineItemLabel": "Bestellposition",
+     "lineItemPlaceholder": "Position auswählen…",
+     "lineNotesLabel": "Notizen",
+     "linesEmpty": "Noch keine Zeilen erhalten",
+     "linesHeading": "Erhaltene Zeilen",
+     "matchEmpty": "Noch keine Rechnungsabgleiche",
+     "matchHeading": "3-Wege-Abgleich",
+     "partial": "Teilweise",
+     "qtyReceivedLabel": "Erhaltene Menge",
+     "qtyRejectedLabel": "Abgelehnte Menge"
+    },
+    "emptyLabel": "Noch keine Wareneingänge",
+    "eyebrow": "Beschaffung",
+    "new": {
+     "configureSupabase": "Supabase konfigurieren.",
+     "eyebrow": "Wareneingang",
+     "goToPos": "Bestellungen",
+     "noPosTitle": "Keine Bestellungen",
+     "notesLabel": "Notizen",
+     "partialLabel": "Teillieferung",
+     "poLabel": "Bestellung",
+     "poPlaceholder": "Bestellung auswählen…",
+     "receiptNumberLabel": "Belegnummer",
+     "receivedAtLabel": "Erhalten am",
+     "title": "Neuer Wareneingang"
+    },
+    "newReceipt": "+ Neuer Beleg",
+    "partialNo": "Vollständig",
+    "partialYes": "Teilweise",
+    "title": "Wareneingang"
    }
   },
   "production": {
@@ -14096,7 +14453,8 @@
     "advancing": "Advancing",
     "guides": "Guides",
     "sustainability": "Nachhaltigkeit",
-    "sprints": "Sprints"
+    "sprints": "Sprints",
+    "timeline": "Zeitleiste"
    },
    "members": {
     "addedToast": "Mitglied hinzugefügt",
@@ -14137,7 +14495,9 @@
     "events": "Events",
     "budget": "Budget",
     "spent": "Ausgegeben",
-    "deliverables": "Liefergegenstände"
+    "deliverables": "Liefergegenstände",
+    "portfolio": "Portfolio →",
+    "position": "Position — Klasse × Phase"
    },
    "detail": {
     "eyebrow": "Projekt",
@@ -14362,6 +14722,16 @@
    },
    "bulk": {
     "archive": "Archivieren"
+   },
+   "timeline": {
+    "breadcrumbProjects": "Projekte",
+    "emptyTitle": "Noch nichts auf der Zeitleiste",
+    "eventsLane": "Events",
+    "projectEyebrow": "Projekt",
+    "scheduleViews": "Alle Ansichten",
+    "subtitle": "Gantt-Ansicht von Aufgaben und Events",
+    "tasksLane": "Aufgaben",
+    "title": "Zeitleiste"
    }
   },
   "proposals": {
@@ -16144,7 +16514,12 @@
     "linkDomains": "Domains →",
     "linkBilling": "Abrechnung →",
     "linkIntegrations": "Integrationen →",
-    "linkAudit": "Audit-Log →"
+    "linkAudit": "Audit-Log →",
+    "balanceTermsLoadIn": "Bei Load-in",
+    "balanceTermsSystemDefault": "Systemstandard (Load-in)",
+    "fieldDefaultBalanceTerms": "Zahlungsbedingungen Restbetrag",
+    "fieldDefaultDepositPct": "Standard-Anzahlung %",
+    "paymentTermsHeading": "Zahlungsbedingungen (Vorlagen)"
    },
    "tiles": {
     "organization": {
@@ -16624,7 +16999,14 @@
     "rev": "Rev",
     "venueProject": "Venue / Projekt"
    },
-   "pending": "— ausstehend —"
+   "pending": "— ausstehend —",
+   "map": {
+    "back": "Zurück zum Plan",
+    "detail": "Platzierung",
+    "eyebrow": "Design",
+    "selectHint": "Wählen Sie einen Pin, um seine Platzierung zu sehen.",
+    "title": "{code} — Plankarte"
+   }
   },
   "specs": {
    "detail": {
@@ -17295,7 +17677,10 @@
     "totalRuns": "Läufe gesamt",
     "latestRun": "Letzter Lauf",
     "status": "Status",
-    "run_state": "Status"
+    "run_state": "Status",
+    "col": {
+     "fleet": "Fuhrpark"
+    }
    },
    "sections": {
     "dispatch": {
@@ -17329,7 +17714,8 @@
      "to": "Nach",
      "fleet": "Flotte",
      "vehicle": "Fahrzeug",
-     "status": "Status"
+     "status": "Status",
+     "day": "Tag"
     }
    },
    "metrics": {
@@ -18237,6 +18623,13 @@
      "phase": "Phase",
      "state": "Zustand",
      "qty": "Anz."
+    },
+    "filter": {
+     "allClasses": "Alle Klassen",
+     "allPhases": "Alle Phasen",
+     "class": "Klasse",
+     "clear": "Löschen",
+     "phase": "Phase"
     }
    },
    "classes": {
@@ -18443,6 +18836,22 @@
     "standard": {
      "blurb": "Wissensbasis — die kanonische Referenz unserer Arbeitsweise.",
      "title": "Der Standard"
+    },
+    "community": {
+     "blurb": "Cohort-Feed, Mitglieder und Beitragspunkte.",
+     "title": "Community"
+    },
+    "leaderboard": {
+     "blurb": "Punkte, Stufen und Erfolge — geteilt mit COMPVSS.",
+     "title": "Bestenliste"
+    },
+    "matrix": {
+     "blurb": "Credential-Status der Org — Mitglied × Zertifizierung, nach Status.",
+     "title": "Rezertifizierungsmatrix"
+    },
+    "store": {
+     "blurb": "Credits kaufen und Gutscheine für Kurse + Prüfungen einlösen.",
+     "title": "Store"
     }
    },
    "title": "Wissen"
@@ -18705,6 +19114,351 @@
    },
    "title": "Veranstaltungskalender",
    "today": "Heute"
+  },
+  "board": {
+   "col": {
+    "due": "Fällig",
+    "state": "Status",
+    "title": "Aufgabe"
+   },
+   "emptyDescription": "Fügen Sie eine Aufgabe hinzu, um das Board zu befüllen.",
+   "emptyTitle": "Noch keine Arbeitsaufgaben",
+   "eyebrow": "Arbeit",
+   "newTask": "+ Neue Aufgabe",
+   "subtitle": "{open} offen · {done} erledigt",
+   "title": "Board",
+   "view": {
+    "board": "Board",
+    "list": "Liste"
+   }
+  },
+  "kits": {
+   "configureSupabase": "Supabase konfigurieren.",
+   "detail": {
+    "col": {
+     "capacity": "Kapazität",
+     "code": "Code",
+     "deliveringElement": "Lieferndes Element",
+     "description": "Beschreibung",
+     "designIntent": "Design-Intention",
+     "dimensions": "Abmessungen",
+     "estimate": "Schätzung",
+     "item": "Artikel",
+     "name": "Name",
+     "notes": "Notizen",
+     "objective": "Ziel",
+     "owner": "Verantwortlich",
+     "phase": "Phase",
+     "qty": "Menge",
+     "rate": "Satz",
+     "sense": "Sinn",
+     "state": "Status"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "eyebrow": "Event-Kit",
+    "lines": "Positionen",
+    "noLines": "Keine Positionen",
+    "noPhaseGates": "Keine Phasen-Gates",
+    "noTouchpoints": "Keine Touchpoints",
+    "noZones": "Keine Zonen",
+    "phaseGates": "Phasen-Gates",
+    "touchpoints": "Touchpoints",
+    "zones": "Zonen"
+   },
+   "emptyTitle": "Noch keine Kits",
+   "eyebrow": "Produktion",
+   "kit": "Kit",
+   "stat": {
+    "lines": "Positionen",
+    "phaseGates": "Phasen-Gates",
+    "totalEstimate": "Gesamtschätzung",
+    "touchpoints": "Touchpoints",
+    "zones": "Zonen"
+   },
+   "title": "Event-Kits"
+  },
+  "accessControl": {
+   "accepted": "Eingelassen",
+   "checking": "Wird geprüft…",
+   "duplicate": "Bereits verwendet",
+   "error": "Fehler",
+   "expired": "Abgelaufen",
+   "eyebrow": "Betrieb",
+   "recentEmpty": "Noch keine Scans",
+   "recentTitle": "Letzte Scans",
+   "subtitle": "Credential-Scan am Eingang",
+   "title": "Zugangskontrolle",
+   "unknown": "Unbekannt",
+   "voided": "Storniert"
+  },
+  "revenue": {
+   "eyebrow": "Commerce",
+   "orders": {
+    "col": {
+     "buyer": "Käufer",
+     "placed": "Aufgegeben",
+     "reference": "Referenz",
+     "source": "Quelle",
+     "state": "Status",
+     "total": "Gesamt"
+    },
+    "emptyTitle": "Noch keine Bestellungen",
+    "title": "Bestellungen"
+   },
+   "transactions": {
+    "col": {
+     "amount": "Betrag",
+     "kind": "Art",
+     "occurred": "Wann",
+     "processor": "Zahlungsabwickler",
+     "state": "Status"
+    },
+    "emptyTitle": "Noch keine Transaktionen",
+    "title": "Transaktionen"
+   }
+  },
+  "calendar": {
+   "emptyTitle": "Nichts im Kalender",
+   "eyebrow": "Betrieb",
+   "newEvent": "+ Neues Event",
+   "subtitleOne": "{count} Event",
+   "subtitleOther": "{count} Events",
+   "title": "Kalender"
+  },
+  "governance": {
+   "approvals": {
+    "columns": {
+     "initiated": "Initiiert",
+     "policy": "Richtlinie",
+     "state": "Status",
+     "subject": "Betreff"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "delegations": {
+     "columns": {
+      "delegatee": "Delegierter",
+      "ends": "Endet",
+      "scope": "Geltungsbereich",
+      "starts": "Beginnt",
+      "status": "Status"
+     },
+     "configureSupabase": "Supabase konfigurieren.",
+     "emptyLabel": "Noch keine Delegationen",
+     "eyebrow": "Governance",
+     "new": {
+      "configureSupabase": "Supabase konfigurieren.",
+      "delegateeLabel": "Delegierter",
+      "delegateePlaceholder": "Mitglied auswählen…",
+      "endsHint": "Optional. Unbefristet, wenn leer.",
+      "endsLabel": "Endet am",
+      "eyebrow": "Governance",
+      "scopeLabel": "Geltungsbereich",
+      "scopeRefLabel": "Geltungsbereich-Referenz",
+      "startsLabel": "Beginnt am",
+      "title": "Neue Delegation"
+     },
+     "newLabel": "+ Neue Delegation",
+     "statusActive": "Aktiv",
+     "statusInactive": "Inaktiv",
+     "title": "Genehmigungsdelegationen"
+    },
+    "delegationsLink": "Delegationen",
+    "detail": {
+     "configureSupabase": "Supabase konfigurieren.",
+     "current": "Aktuell",
+     "decisionLabel": "Entscheidung",
+     "decisionsHeading": "Entscheidungen",
+     "eyebrow": "Genehmigung",
+     "noDecisions": "Noch keine Entscheidungen erfasst.",
+     "noSteps": "Diese Richtlinie hat noch keine Schritte.",
+     "notesLabel": "Notizen",
+     "recordHeading": "Entscheidung erfassen",
+     "sla": "SLA {n} Std.",
+     "stepsHeading": "Richtlinienschritte",
+     "threshold": "Schwellenwert {n}",
+     "untitled": "Genehmigung"
+    },
+    "emptyAction": "Richtlinien ansehen",
+    "emptyTitle": "Keine laufenden Genehmigungen",
+    "eyebrow": "Governance",
+    "policies": {
+     "columns": {
+      "appliesTo": "Gilt für",
+      "name": "Name",
+      "slug": "Slug",
+      "status": "Status",
+      "version": "Ver."
+     },
+     "configureSupabase": "Supabase konfigurieren.",
+     "detail": {
+      "active": "Aktiv",
+      "addStepHeading": "Schritt hinzufügen",
+      "configureSupabase": "Supabase konfigurieren.",
+      "eyebrow": "Genehmigungsrichtlinie",
+      "inactive": "Inaktiv",
+      "noSteps": "Noch keine Schritte.",
+      "routingLabel": "Routing-Art",
+      "sla": "SLA {n} Std.",
+      "slaLabel": "SLA-Stunden",
+      "stepNumberLabel": "Schrittnummer",
+      "stepsHeading": "Schritte",
+      "threshold": "Schwellenwert {n}",
+      "thresholdLabel": "Schwellenwert"
+     },
+     "emptyLabel": "Noch keine Richtlinien",
+     "eyebrow": "Governance",
+     "new": {
+      "appliesToLabel": "Gilt für",
+      "descriptionLabel": "Beschreibung",
+      "eyebrow": "Genehmigungsrichtlinie",
+      "nameLabel": "Name",
+      "slugLabel": "Slug",
+      "title": "Neue Richtlinie"
+     },
+     "newLabel": "+ Neue Richtlinie",
+     "statusActive": "Aktiv",
+     "statusInactive": "Inaktiv",
+     "title": "Genehmigungsrichtlinien"
+    },
+    "policiesLink": "Richtlinien",
+    "title": "Genehmigungen"
+   }
+  },
+  "notes": {
+   "col": {
+    "state": "Status",
+    "title": "Titel",
+    "updated": "Aktualisiert"
+   },
+   "delete": "Löschen",
+   "deleteConfirm": "Diese Notiz löschen?",
+   "emptyTitle": "Noch keine Notizen",
+   "error": "Konnte nicht gespeichert werden",
+   "eyebrow": "Zusammenarbeit",
+   "newNote": "+ Neue Notiz",
+   "save": "Notiz speichern",
+   "saved": "Gespeichert",
+   "saving": "Wird gespeichert…",
+   "stateArchived": "Archiviert",
+   "stateDraft": "Entwurf",
+   "stateLabel": "Status",
+   "statePublished": "Veröffentlicht",
+   "title": "Notizen",
+   "titleLabel": "Titel",
+   "titlePlaceholder": "Unbenannte Notiz"
+  },
+  "assets": {
+   "columns": {
+    "cost": "Anschaffung",
+    "kind": "Art",
+    "name": "Asset",
+    "serial": "Seriennr. / Tag",
+    "state": "Status"
+   },
+   "configureSupabase": "Supabase konfigurieren.",
+   "detail": {
+    "acquired": "Angeschafft",
+    "acquisition": "Anschaffung",
+    "addDepreciation": "Plan hinzufügen",
+    "addMaintenance": "Wartung erfassen",
+    "configureSupabase": "Supabase konfigurieren.",
+    "dailyRate": "Tagessatz",
+    "dep": {
+     "decliningBalance": "Degressiv",
+     "life": "Nutzungsdauer (Mon.)",
+     "method": "Methode",
+     "postedThrough": "Gebucht",
+     "salvage": "Restwert",
+     "start": "Start",
+     "straightLine": "Linear"
+    },
+    "depreciationEmpty": "Kein Abschreibungsplan",
+    "depreciationTitle": "Abschreibung",
+    "eyebrow": "Asset",
+    "maint": {
+     "cost": "Kosten",
+     "date": "Durchgeführt",
+     "notes": "Notizen",
+     "outcome": "Ergebnis"
+    },
+    "maintenanceEmpty": "Keine Wartung erfasst",
+    "maintenanceTitle": "Wartungshistorie",
+    "retired": "Ausgemustert"
+   },
+   "emptyTitle": "Noch keine Assets",
+   "eyebrow": "Asset & Logistik",
+   "new": {
+    "acquiredAtLabel": "Angeschafft",
+    "acquisitionCostLabel": "Anschaffungskosten — USD",
+    "assetKindHint": "Freie Kategorie, z. B. Mikrofon, LKW, Funkgerät.",
+    "assetKindLabel": "Asset-Art",
+    "assetTagLabel": "Asset-Tag",
+    "dailyRateLabel": "Tagessatz — USD",
+    "displayNameLabel": "Anzeigename",
+    "eyebrow": "Assets",
+    "ownershipLabel": "Eigentum",
+    "serialLabel": "Seriennr.",
+    "title": "Neues Asset"
+   },
+   "newAsset": "+ Neues Asset",
+   "title": "Assets",
+   "warranties": {
+    "assetsLink": "Assets",
+    "columns": {
+     "end": "Läuft ab",
+     "name": "Name",
+     "reminders": "Erinnerungen",
+     "state": "Status",
+     "warrantor": "Garantiegeber"
+    },
+    "configureSupabase": "Supabase konfigurieren.",
+    "emptyTitle": "Noch keine Garantien",
+    "eyebrow": "Asset & Logistik",
+    "new": {
+     "coverageLabel": "Zusammenfassung der Abdeckung",
+     "durationMonthsLabel": "Dauer (Monate)",
+     "endDateLabel": "Enddatum",
+     "eyebrow": "Garantien",
+     "nameLabel": "Name",
+     "notesLabel": "Notizen",
+     "projectLabel": "Projekt",
+     "startDateLabel": "Startdatum",
+     "title": "Neue Garantie",
+     "warrantorEmailLabel": "E-Mail des Garantiegebers",
+     "warrantorNameLabel": "Name des Garantiegebers"
+    },
+    "newWarranty": "+ Neue Garantie",
+    "title": "Garantien"
+   },
+   "warrantiesLink": "Garantien"
+  },
+  "position": {
+   "cell": {
+    "atoms": "Atome",
+    "class": "Klasse",
+    "cost": "Kosten",
+    "emptyTitle": "Keine Atome in dieser Zelle",
+    "position": "Position",
+    "project": "Projekt",
+    "projects": "Projekte"
+   },
+   "emptyTitle": "Noch keine Koordinaten eingezeichnet",
+   "eyebrow": "The Chart",
+   "forecast": {
+    "emptyTitle": "Noch kein zugewiesener Aufwand",
+    "eyebrow": "The Chart",
+    "person": "Person",
+    "subtitle": "Aufwandsauslastung pro Person, über Phasen hinweg",
+    "title": "Auslastungsprognose",
+    "unnamed": "Nicht zugewiesen",
+    "utilization": "Auslastung"
+   },
+   "forecastLabel": "Auslastungsprognose →",
+   "metricItems": "Offene Posten",
+   "metricPeak": "Heißeste Zelle",
+   "subtitle": "Klasse × Phase über alle aktiven Projekte",
+   "title": "Position",
+   "metricValue": "$-Exposure"
   }
  },
  "formShell": {
@@ -18733,7 +19487,8 @@
    "eyebrow": "Mobil",
    "title": "Meine Zuweisungen",
    "empty": {
-    "title": "Noch nichts zugewiesen"
+    "title": "Noch nichts zugewiesen",
+    "body": "Equipment, Credentials und Services, die Ihnen zugewiesen sind, erscheinen hier."
    },
    "untitled": "Ohne Titel",
    "projectFallback": "Projekt",
@@ -18741,6 +19496,42 @@
     "prompt": "Arbeitest Du an einer einzelnen Show?",
     "link": "Öffne Deine Schicht",
     "suffix": ", um den heutigen Call zu sehen."
+   },
+   "detail": {
+    "due": "Fällig",
+    "eyebrow": "Advancing · Artikel",
+    "fulfilled": "Erfüllt",
+    "issued": "Ausgegeben",
+    "notes": "Notizen",
+    "project": "Projekt",
+    "purpose": "Betrieblicher Zweck",
+    "qty": "Menge",
+    "special": "Sonderwünsche",
+    "state": "Status",
+    "type": "Typ"
+   },
+   "fulfill": {
+    "done": "Aktualisiert",
+    "error": "Aktualisierung fehlgeschlagen",
+    "working": "Wird bearbeitet…"
+   },
+   "group": {
+    "kind": "Typ",
+    "none": "Keine"
+   },
+   "new": {
+    "prefilled": "Aus Ihrer letzten Anfrage vorausgefüllt — passen Sie alles Geänderte an.",
+    "submitting": "Wird gesendet…"
+   },
+   "offline": {
+    "body": "Ihre Advancing-Daten werden geladen — und Änderungen synchronisiert — sobald Sie wieder online sind.",
+    "title": "Sie sind offline"
+   },
+   "search": "Advancing durchsuchen…",
+   "sort": {
+    "deadline": "Fällig",
+    "kind": "Typ",
+    "title": "Name"
    }
   },
   "alerts": {
@@ -18753,7 +19544,8 @@
    "scheduled": "geplant",
    "acknowledgedAt": "Bestätigt {time}",
    "acknowledge": "Bestätigen",
-   "acknowledging": "Wird bestätigt…"
+   "acknowledging": "Wird bestätigt…",
+   "emptyTitle": "Alles in Ordnung. Derzeit keine Warnungen."
   },
   "checkIn": {
    "announce": {
@@ -18850,7 +19642,8 @@
    "title": "Check-in",
    "empty": {
     "title": "Heute Keine Schichten",
-    "description": "Schau wieder vorbei, sobald du eingeteilt bist."
+    "description": "Schau wieder vorbei, sobald du eingeteilt bist.",
+    "body": "Stempeln Sie sich ein, um Ihre Zeit zu erfassen."
    },
    "unassignedVenue": "Kein Venue zugewiesen",
    "inLabel": "Ein",
@@ -18864,7 +19657,17 @@
     "clockIn": "Einstempeln"
    },
    "subtitle": "Geo-verifizierte Zeiterfassung",
-   "noWorkforceProfile": "Ihr Personalprofil ist noch nicht mit diesem Konto verknüpft. Bitten Sie Ihre:n Vorgesetzte:n, Ihren Crew-Datensatz mit Ihrem Login zu verbinden."
+   "noWorkforceProfile": "Ihr Personalprofil ist noch nicht mit diesem Konto verknüpft. Bitten Sie Ihre:n Vorgesetzte:n, Ihren Crew-Datensatz mit Ihrem Login zu verbinden.",
+   "active": "Aktiv",
+   "addNote": "Notiz hinzufügen",
+   "asManager": "Als Manager",
+   "closed": "Geschlossen",
+   "hours": "{hours} Std.",
+   "noZone": "Keine Zone festgelegt",
+   "now": "jetzt",
+   "offShift": "Außer Dienst",
+   "onClock": "Im Dienst",
+   "recent": "Kürzlich"
   },
   "coc": {
    "eyebrow": "Feld",
@@ -18883,7 +19686,11 @@
     "audit": "Audit"
    },
    "desktopPrompt": "Brauchst Du die Desktop-Ansicht?",
-   "desktopLink": "Chain of Custody öffnen"
+   "desktopLink": "Chain of Custody öffnen",
+   "asset": "Asset",
+   "emptyBody": "Scans und Asset-Übergaben erscheinen hier als Zeitleiste.",
+   "emptyTitle": "Keine Verwahrungsereignisse",
+   "scan": "Scan"
   },
   "common": {
    "configureSupabase": "Supabase konfigurieren.",
@@ -18914,7 +19721,30 @@
    "recent": "Zuletzt",
    "empty": {
     "title": "Noch keine Protokolle"
-   }
+   },
+   "back": "Tagesberichte",
+   "emptyBody": "Beginnen Sie den Tagesbericht mit Wetter und Notizen.",
+   "emptyTitle": "Noch keine Berichte",
+   "new": {
+    "cancel": "Abbrechen",
+    "date": "Datum",
+    "eyebrow": "Standort",
+    "high": "Höchst °F",
+    "low": "Tiefst °F",
+    "noProjects": "Keine Projekte",
+    "noProjectsBody": "Tagesberichte werden einem Projekt zugeordnet. Bitten Sie Ops, eines hinzuzufügen.",
+    "notes": "Notizen",
+    "notesPh": "Personalstärke, Lieferungen, Blocker, Vorfälle…",
+    "project": "Projekt",
+    "saving": "Wird gespeichert…",
+    "submit": "Bericht speichern",
+    "title": "Neuer Tagesbericht",
+    "weather": "Wetter",
+    "weatherPh": "z. B. Klar · leichter Wind"
+   },
+   "newCta": "Neuer Bericht",
+   "noWeather": "Kein Wetter erfasst",
+   "untitled": "Unbenannter Bericht"
   },
   "directory": {
    "eyebrow": "Mobil",
@@ -18922,7 +19752,22 @@
    "peopleCount": "{count} Personen in deiner Organisation",
    "empty": {
     "title": "Keine Mitglieder",
-    "description": "Org-Mitglieder erscheinen hier, sobald sie hinzugefügt sind."
+    "description": "Org-Mitglieder erscheinen hier, sobald sie hinzugefügt sind.",
+    "body": "Niemand auf dem Dienstplan entspricht den Kriterien."
+   },
+   "action": {
+    "call": "Anrufen",
+    "email": "E-Mail",
+    "message": "Nachricht"
+   },
+   "search": "Crew, Rolle, Team suchen…",
+   "status": {
+    "active": "Aktiv",
+    "available": "Verfügbar",
+    "off": "Außerhalb"
+   },
+   "team": {
+    "crew": "Crew"
    }
   },
   "docs": {
@@ -18951,7 +19796,18 @@
    "title": "Meine Dokumente",
    "uploadCta": "+ Hochladen",
    "empty": {
-    "title": "Keine Dokumente"
+    "title": "Keine Dokumente",
+    "body": "Projektdokumente, auf die Sie Zugriff haben, und Ihre persönlichen Dateien erscheinen hier."
+   },
+   "group": {
+    "cat": "Kategorie",
+    "none": "Keine"
+   },
+   "search": "Dokumente durchsuchen…",
+   "sort": {
+    "cat": "Kategorie",
+    "name": "Name",
+    "updated": "Aktualisiert"
    }
   },
   "driver": {
@@ -19003,7 +19859,18 @@
     "description": "Org-Ankündigungen erscheinen hier."
    },
    "pinned": "Angepinnt",
-   "markRead": "Als gelesen markieren"
+   "markRead": "Als gelesen markieren",
+   "ago": "vor {time}",
+   "announcerRole": "Ankündigung",
+   "comment": "Kommentieren",
+   "composerPlaceholder": "Update teilen…",
+   "memberRole": "Crew",
+   "post": "Posten",
+   "share": "Teilen",
+   "tag": {
+    "kudos": "Kudos",
+    "update": "Update"
+   }
   },
   "gate": {
    "configureSupabase": "Supabase konfigurieren.",
@@ -19059,7 +19926,18 @@
    "countOne": "{count} aktiver Gig im Netzwerk.",
    "countOther": "{count} aktive Gigs im Netzwerk.",
    "empty": "Aktuell keine aktiven Gigs.",
-   "travelPaid": "Reise bezahlt"
+   "travelPaid": "Reise bezahlt",
+   "applicants": "{count} beworben",
+   "applied": "Beworben",
+   "apply": "Bewerben",
+   "applying": "Wird beworben…",
+   "network": "Netzwerk",
+   "noMatch": "Nichts entspricht Ihrer Suche.",
+   "openNow": "Jetzt offen",
+   "perDay": "{rate}/Tag",
+   "postJob": "Job ausschreiben…",
+   "rateTbd": "Gage noch offen",
+   "search": "Jobs suchen…"
   },
   "guard": {
    "configureSupabase": "Supabase konfigurieren.",
@@ -19092,7 +19970,10 @@
    "downloadPdf": {
     "ariaLabel": "Diesen Guide als PDF herunterladen",
     "label": "PDF herunterladen"
-   }
+   },
+   "empty": "Noch kein Guide",
+   "emptyBody": "Das Produktionsteam hat noch keinen Guide für Ihre Rolle veröffentlicht.",
+   "title": "Guide"
   },
   "handover": {
    "eyebrow": "Mobile",
@@ -19103,7 +19984,20 @@
     "description": "Heute nichts offen."
    },
    "capAbbrev": "Kap.",
-   "handedOver": "Übergeben"
+   "handedOver": "Übergeben",
+   "assets": "Assets / Schlüssel",
+   "emptyBody": "Reichen Sie eine Schichtübergabe ein, um den Verlauf zu starten.",
+   "emptyTitle": "Keine Übergaben",
+   "handedTo": "Übergeben an {relief}",
+   "new": "Neue Übergabe",
+   "openItems": "Offene Punkte",
+   "prior": "Letzte Übergaben",
+   "state": {
+    "allClear": "Alles in Ordnung",
+    "issues": "Probleme",
+    "watchItems": "Zu beachten"
+   },
+   "untitled": "Übergabe"
   },
   "home": {
    "tabs": {
@@ -19218,7 +20112,44 @@
    "title": "Heute",
    "fab": {
     "scanTicket": "Ticket scannen"
-   }
+   },
+   "clock": {
+    "sub": "Einstempeln",
+    "title": "Ortszeit"
+   },
+   "copilot": {
+    "sub": "Fragen · Melden · Weiterkommen",
+    "title": "Field Copilot"
+   },
+   "newSheet": "Erstellen",
+   "newSheetBody": "Was brauchen Sie?",
+   "noShift": "Nichts geplant",
+   "noShiftBody": "Ihr nächster Call erscheint hier.",
+   "qa": {
+    "advance": "Advancing",
+    "approve": "Genehmigen",
+    "clock": "Stempeln",
+    "expense": "Spese",
+    "invite": "Einladen",
+    "report": "Melden",
+    "scan": "Scannen",
+    "swap": "Tausch"
+   },
+   "quickActions": "Schnellaktionen",
+   "upcoming": {
+    "sub": "Anstehendes Event"
+   },
+   "upcomingLabel": "Anstehend",
+   "viewAll": "Alle anstehenden Events ansehen",
+   "w": {
+    "advances": "Zuweisungen",
+    "advancesSub": "Über alle Shows hinweg",
+    "tasks": "Offene Aufgaben",
+    "tasksSub": "Ihnen zugewiesen",
+    "unread": "Nachrichten",
+    "unreadSub": "Letzte Aktivität"
+   },
+   "widgets": "Heute"
   },
   "inbox": {
    "room": {
@@ -19227,7 +20158,13 @@
     "emptyDescription": "Sagen Sie Hallo, um den Anfang zu machen.",
     "emptyTitle": "Noch keine Nachrichten",
     "loadOlder": "Ältere laden",
-    "loadingOlder": "Wird geladen…"
+    "loadingOlder": "Wird geladen…",
+    "channel": "Kanal",
+    "direct": "Direktnachricht",
+    "empty": "Noch keine Nachrichten",
+    "emptyHint": "Sagen Sie Hallo, um den Anfang zu machen.",
+    "placeholder": "Nachricht",
+    "today": "Heute"
    },
    "configureSupabase": "Supabase konfigurieren.",
    "eyebrow": "Mobile",
@@ -19237,7 +20174,14 @@
     "title": "Keine Konversationen"
    },
    "unreadBadge": "Neu",
-   "directMessage": "Direktnachricht"
+   "directMessage": "Direktnachricht",
+   "back": "Posteingang",
+   "channels": "Kanäle",
+   "directMessages": "Direktnachrichten",
+   "emptyHint": "Kanäle und Direktnachrichten erscheinen hier.",
+   "emptyTitle": "Keine Unterhaltungen",
+   "noMessages": "Noch keine Nachrichten",
+   "unread": "Ungelesen"
   },
   "incident": {
    "new": {
@@ -19256,7 +20200,21 @@
    "fullReport": "Vollständiger Bericht",
    "empty": {
     "title": "Noch keine Meldungen"
-   }
+   },
+   "back": "Meine Vorfälle",
+   "emptyBody": "Sie haben keine Vorfallmeldungen eingereicht.",
+   "emptyTitle": "Nichts eingereicht",
+   "quick": {
+    "cancel": "Abbrechen",
+    "eyebrow": "Express",
+    "filing": "Wird eingereicht…",
+    "intro": "Eine Zeile. Wir leiten es an Ops weiter, und Sie können später Details ergänzen.",
+    "label": "Was ist passiert",
+    "placeholder": "Beschreiben Sie den Vorfall…",
+    "submit": "Vorfall melden",
+    "title": "Schnellmeldung"
+   },
+   "untitled": "Unbenannter Vorfall"
   },
   "incidents": {
    "eyebrow": "Feld",
@@ -19267,7 +20225,12 @@
    "reportCta": "+ Vorfall melden",
    "empty": {
     "title": "Alles ruhig"
-   }
+   },
+   "emptyBody": "Für diese Org wurden noch keine Vorfälle erfasst.",
+   "emptyTitle": "Alles in Ordnung",
+   "file": "Bericht einreichen",
+   "photos": "Fotos",
+   "untitled": "Unbenannter Vorfall"
   },
   "inventory": {
    "scan": {
@@ -19294,7 +20257,24 @@
     "eyebrow": "Feld",
     "title": "Inventar-Scan",
     "subtitle": "Asset-Tag scannen oder eintippen, um ein- / auszuchecken."
-   }
+   },
+   "available": "Verfügbar",
+   "colCategory": "Kategorie",
+   "colCode": "Code",
+   "colCost": "Stückkosten",
+   "colItem": "Artikel",
+   "colQty": "Bestand",
+   "empty": "Keine Assets",
+   "emptyHint": "Nichts entspricht diesen Filtern.",
+   "eyebrow": "Bestandskatalog",
+   "onHand": "auf Lager",
+   "scanCta": "Scannen zum Aus- / Einchecken",
+   "search": "Assets suchen…",
+   "serialized": "Serialisierte Einheiten",
+   "title": "Assets",
+   "tracked": "Verfolgt",
+   "units": "Einheiten",
+   "untracked": "Nicht verfolgt"
   },
   "kudos": {
    "title": "Kudos",
@@ -19393,7 +20373,15 @@
    "settingsLink": "Einstellungen",
    "empty": {
     "title": "Keine Benachrichtigungen"
-   }
+   },
+   "channel": {
+    "email": "E-Mail",
+    "push": "Push",
+    "text": "SMS"
+   },
+   "emptyTitle": "Sie sind auf dem neuesten Stand.",
+   "matrixHeading": "Zustellung",
+   "recentHeading": "Kürzlich"
   },
   "onboarding": {
    "title": "Onboarding",
@@ -19407,11 +20395,175 @@
    "fallbackFlowName": "Onboarding",
    "detail": {
     "empty": {
-     "title": "Noch keine Schritte"
+     "title": "Noch keine Schritte",
+     "description": "Dieser Onboarding-Ablauf hat keine Schritte. Schauen Sie wieder vorbei, sobald Ihr Admin sie veröffentlicht."
     }
    },
    "finishing": "Wird abgeschlossen…",
-   "marking": "Wird gespeichert…"
+   "marking": "Wird gespeichert…",
+   "assignment": {
+    "accept": "Zuweisung annehmen",
+    "contact": "Zur Besprechung kontaktieren",
+    "dates": "Termine",
+    "explore": "Plattform erkunden",
+    "firstCall": "Erster Call",
+    "note": "Noch nicht entschieden? Kontaktieren Sie zunächst die einladende Person, um die Rolle zu besprechen. Wenn Sie „Plattform erkunden“ wählen, bleibt dieses Angebot in Ihrem Posteingang und Ihren Benachrichtigungen und kann jederzeit angenommen werden.",
+    "rate": "Gage",
+    "reportsTo": "Berichtet an",
+    "role": "Rolle",
+    "sub": "Ihnen wurde eine Rolle in diesem Projekt angeboten. Prüfen Sie das Angebot und nehmen Sie es an, oder erkunden Sie die App als freier Mitarbeiter.",
+    "title": "Ihre erste Zuweisung"
+   },
+   "common": {
+    "back": "Zurück",
+    "passkey": "Passkey verwenden",
+    "soon": "Bald",
+    "working": "Wird bearbeitet…"
+   },
+   "emptyBody": "Ihnen zugewiesene Onboarding-Abläufe für neue Mitarbeiter erscheinen hier.",
+   "emptyTitle": "Alles erledigt",
+   "forgot": {
+    "back": "Zurück zur Anmeldung",
+    "cta": "Link zum Zurücksetzen senden",
+    "email": "E-Mail",
+    "remembered": "Wieder eingefallen?",
+    "sent": "Prüfen Sie Ihre E-Mails",
+    "sub": "Wir senden einen Link zum Zurücksetzen an Ihre E-Mail-Adresse.",
+    "title": "Passwort zurücksetzen"
+   },
+   "join": {
+    "code": "Zugangscode",
+    "cta": "Beitreten",
+    "note": "Kein Code? Sie können bei einem Org-Admin den Beitritt anfragen oder fortfahren und später einem Projekt beitreten.",
+    "skip": "Vorerst überspringen",
+    "sub": "Geben Sie den Zugangscode Ihres Admins ein oder scannen Sie den Einladungs-QR.",
+    "title": "Ihrer Org beitreten"
+   },
+   "pass": {
+    "cta": "Weiter",
+    "faq": "Vollständige Rose-FAQ lesen",
+    "freeAgent": "Freier Mitarbeiter",
+    "howTo": "So nutzen Sie Ihre Rose",
+    "scanNote": "Zum Verifizieren scannen · einmalig, erneuert sich beim Öffnen",
+    "sub": "Wir präsentieren Ihre COMPVSS Rose — das einzige, dauerhafte Credential, das das gesamte ATLVS Ecosystem öffnet. Sie wird einmalig ausgestellt und begleitet Sie ein Leben lang, sie entwickelt sich nur mit Ihrem Zugriff weiter. Willkommen in der Mitgliedschaft.",
+    "title": "Die COMPVSS Rose",
+    "use1": "Tippen oder scannen Sie, um Baustellen zu betreten, Annehmlichkeiten zu nutzen, Assets zu verfolgen und Services anzufordern",
+    "use2": "Zugriff wird aus der Ferne aktualisiert — in Echtzeit gewährt, entzogen oder erweitert",
+    "use3": "Einmalig ausgestellt, ein Leben lang dabei — nur Ihr Zugriff ändert sich je"
+   },
+   "permissions": {
+    "bluetooth": "Bluetooth / NFC",
+    "bluetoothSub": "RFID-Credentials und -Lesegeräte antippen",
+    "camera": "Kamera",
+    "cameraSub": "QR-Credentials, Assets und Standortdokumente scannen",
+    "cta": "Weiter",
+    "language": "Sprache",
+    "location": "Standort",
+    "locationSub": "Verifiziert für die Geofencing-Stempelung, dass Sie vor Ort sind",
+    "notifications": "Benachrichtigungen",
+    "notificationsSub": "Schicht-Erinnerungen, Freigaben und Ops-Warnungen",
+    "optional": "Optional",
+    "recommended": "Empfohlen",
+    "sub": "Legen Sie Ihre Sprache und die Berechtigungen fest, die COMPVSS vor Ort nutzt. Jederzeit in den Einstellungen änderbar.",
+    "title": "App- & Vor-Ort-Zugriff",
+    "unavailable": "Auf diesem Gerät nicht verfügbar"
+   },
+   "profile": {
+    "addPhoto": "Foto hinzufügen",
+    "address": "Adresse",
+    "airport": "Heimatflughafen",
+    "bio": "Bio",
+    "certs": "Zertifizierungen",
+    "city": "Stadt",
+    "completeFull": "Vollständiges Profil jetzt ausfüllen",
+    "contact1": "Kontakt 1",
+    "contact2": "Kontakt 2",
+    "continueBasics": "Mit den Grundlagen fortfahren",
+    "dietary": "Ernährungseinschränkungen",
+    "displayName": "Anzeigename",
+    "dob": "Geburtsdatum",
+    "email": "E-Mail",
+    "gh": {
+     "contact": "Kontakt",
+     "credentials": "Credentials",
+     "dietary": "Ernährung",
+     "emergency": "Notfallkontakte",
+     "identity": "Identität",
+     "social": "Soziales",
+     "travel": "Reiseprofil",
+     "uniform": "Uniformgrößen"
+    },
+    "glove": "Handschuh",
+    "instagram": "Instagram",
+    "knownTraveler": "Known Traveler",
+    "laterNote": "Bio, Kontakt, Notfallkontakte, Soziales, Ernährung, Reiseprofil, Uniformgrößen und Credentials können später in Ihrem Profil ergänzt werden.",
+    "linkedin": "LinkedIn",
+    "loyalty": "Vielfliegerprogramme",
+    "pants": "Hose",
+    "passport": "Reisepass-Nr.",
+    "phone": "Telefon",
+    "pronouns": "Pronomen",
+    "role": "Rolle / Titel",
+    "saveFull": "Profil speichern",
+    "shirt": "Hemd",
+    "shoe": "Schuh",
+    "skills": "Fähigkeiten & Tags",
+    "spotify": "Spotify",
+    "sub": "Dies ist Ihre portable Crew-Identität über alle Projekte hinweg. Beginnen Sie mit den Grundlagen — den Rest können Sie jederzeit ergänzen.",
+    "title": "Profil einrichten",
+    "username": "Benutzername",
+    "visas": "Visa",
+    "website": "Website",
+    "zip": "PLZ"
+   },
+   "signin": {
+    "create": "Konto erstellen",
+    "cta": "Loslegen",
+    "email": "E-Mail oder Mobilnummer",
+    "forgot": "Passwort vergessen?",
+    "new": "Neu hier?",
+    "or": "Oder",
+    "password": "Passwort",
+    "sub": "Melden Sie sich bei Ihrem Crew-Konto an.",
+    "title": "Willkommen zurück"
+   },
+   "signup": {
+    "continue": "Weiter",
+    "email": "Geschäftliche E-Mail",
+    "haveAccount": "Bereits ein Konto?",
+    "mobile": "Mobilnummer",
+    "name": "Vollständiger Name",
+    "orWith": "Oder registrieren mit",
+    "password": "Passwort",
+    "signin": "Anmelden",
+    "sub": "Verwenden Sie Ihre geschäftliche E-Mail oder Mobilnummer.",
+    "title": "Registrieren"
+   },
+   "splash": {
+    "haveAccount": "Ich habe bereits ein Konto",
+    "privacyLink": "Datenschutzrichtlinie",
+    "start": "Loslegen",
+    "terms": "Mit dem Fortfahren stimmen Sie zu den",
+    "termsLink": "Nutzungsbedingungen"
+   },
+   "sso": {
+    "bluesky": "Mit Bluesky fortfahren",
+    "google": "Mit Google fortfahren"
+   },
+   "untitled": "Onboarding",
+   "verify": {
+    "cta": "Verifizieren",
+    "didnt": "Nichts erhalten?",
+    "resend": "Erneut senden",
+    "resent": "Code gesendet",
+    "sub": "Geben Sie den 6-stelligen Code ein, den wir gesendet haben an",
+    "title": "Bestätigen Sie, dass Sie es sind"
+   },
+   "welcome": {
+    "cta": "Ihre Rose ansehen",
+    "sub": "Ihr COMPVSS-Konto ist eingerichtet und startklar.",
+    "title": "Willkommen an Bord"
+   }
   },
   "polls": {
    "title": "Umfragen",
@@ -19432,7 +20584,20 @@
     "action": "Offene Aufgaben"
    },
    "overdue": "Überfällig",
-   "due": "Fällig {date}"
+   "due": "Fällig {date}",
+   "active": "Aktiv",
+   "closed": "Geschlossen",
+   "emptyBody": "Stempeln Sie sich ein, um Ihre Schicht zu beginnen.",
+   "emptyTitle": "Keine Stempelungen",
+   "fullClock": "Vollständige Zeiterfassung",
+   "hrs": "Std.",
+   "in": "Einstempeln",
+   "now": "jetzt",
+   "off": "Außer Dienst",
+   "on": "Im Dienst",
+   "open": "Offen",
+   "out": "Ausstempeln",
+   "today": "Heutige Stempelungen"
   },
   "requests": {
    "detail": {
@@ -19477,7 +20642,35 @@
    "subtitle": "Aktive Anfragen in der gesamten Org.",
    "empty": {
     "title": "Nichts Offen",
-    "description": "Gerade alles ruhig."
+    "description": "Gerade alles ruhig.",
+    "body": "Abwesenheits- und Schichttausch-Anfragen erscheinen hier."
+   },
+   "approve": "Genehmigen",
+   "chain": {
+    "managerPlus": "Manager+",
+    "reviewer": "Prüfer",
+    "reviewing": "In Prüfung",
+    "submitted": "Eingereicht",
+    "submitter": "Einreichender"
+   },
+   "decline": "Ablehnen",
+   "hours": "{hours} Std.",
+   "search": "Genehmigungen durchsuchen…",
+   "someone": "Jemand",
+   "sort": {
+    "recent": "Kürzlich",
+    "type": "Typ"
+   },
+   "swap": {
+    "title": "Schichttausch",
+    "toTitle": "Tausch mit {who}"
+   },
+   "timeOff": {
+    "title": "Abwesenheit"
+   },
+   "type": {
+    "shiftSwap": "Schichttausch",
+    "timeOff": "Abwesenheit"
    }
   },
   "ros": {
@@ -19552,7 +20745,85 @@
     "title": "Standort",
     "description": "Wird für geo-verifiziertes Ein- und Ausstempeln verwendet."
    },
-   "signOut": "Abmelden"
+   "signOut": "Abmelden",
+   "account": {
+    "archive": "Archivieren",
+    "archiveDesc": "Zugriffsentzug anfordern. Daten bleiben erhalten.",
+    "archived": "Angefordert",
+    "heading": "Konto",
+    "pause": "Pausieren",
+    "pauseDesc": "Aus der Planung ausblenden. Ihre Daten bleiben erhalten.",
+    "paused": "Pausiert",
+    "status": "Kontostatus"
+   },
+   "appearance": {
+    "density": "Dichte",
+    "heading": "Darstellung",
+    "theme": "Theme"
+   },
+   "certs": {
+    "heading": "Zertifizierungen",
+    "label": "Zertifizierungen",
+    "none": "Keine Zertifizierungen hinterlegt."
+   },
+   "contact": {
+    "city": "Stadt",
+    "country": "Land",
+    "email": "Geschäftlich",
+    "heading": "Kontakt",
+    "phone": "Mobil",
+    "region": "Region / Bundesland"
+   },
+   "credentials": {
+    "heading": "Credentials"
+   },
+   "dietary": {
+    "heading": "Ernährung",
+    "label": "Ernährungseinschränkungen"
+   },
+   "emergency": {
+    "heading": "Notfallkontakte",
+    "name": "Name",
+    "relationship": "Beziehung"
+   },
+   "profile": {
+    "bio": "Bio",
+    "heading": "Profil",
+    "name": "Vollständiger Name",
+    "pronouns": "Pronomen",
+    "role": "Rolle / Titel",
+    "tagline": "Slogan"
+   },
+   "save": "Speichern",
+   "saved": "Gespeichert.",
+   "setHint": "Mit · oder Kommas trennen",
+   "skills": {
+    "label": "Fähigkeiten & Tags"
+   },
+   "social": {
+    "heading": "Soziales",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "spotify": "Spotify",
+    "website": "Website"
+   },
+   "travel": {
+    "airport": "Heimatflughafen",
+    "dob": "Geburtsdatum",
+    "heading": "Reise",
+    "knownTraveler": "Known Traveler",
+    "loyalty": "Vielfliegerprogramme",
+    "passport": "Reisepass-Nr.",
+    "visas": "Visa"
+   },
+   "uniform": {
+    "glove": "Handschuh",
+    "hat": "Mütze",
+    "heading": "Uniform",
+    "pants": "Hose",
+    "shirt": "Hemd",
+    "shoe": "Schuh"
+   }
   },
   "shift": {
    "eyebrow": "Mobil",
@@ -19608,8 +20879,64 @@
    "detail": {
     "back": "← Aufgaben",
     "dueLabel": "Fällig {date}",
-    "updateStatus": "Status Aktualisieren"
-   }
+    "updateStatus": "Status Aktualisieren",
+    "actAssigned": "hat die Aufgabe neu zugewiesen",
+    "actAttached": "hat einen Anhang hinzugefügt",
+    "actCommented": "hat kommentiert",
+    "actCreated": "Aufgabe erstellt",
+    "actDue": "hat das Fälligkeitsdatum geändert",
+    "actUpdated": "Zuletzt aktualisiert",
+    "activity": "Aktivität",
+    "activityEmpty": "Noch keine Aktivität.",
+    "assignee": "Zuständig",
+    "checklist": "Checkliste",
+    "checklistEmpty": "Keine Checklistenpunkte.",
+    "created": "Erstellt",
+    "description": "Beschreibung",
+    "descriptionEmpty": "Keine Beschreibung.",
+    "due": "Fällig",
+    "eyebrow": "Aufgabe",
+    "permWarn": "Sie haben keine Berechtigung, diese Aufgabe zu ändern.",
+    "photos": "Fotos",
+    "photosEmpty": "Noch keine Fotos.",
+    "priority": "Priorität",
+    "status": "Status",
+    "updated": "Aktualisiert",
+    "updatedToast": "Aufgabe aktualisiert"
+   },
+   "col": {
+    "due": "Fällig",
+    "task": "Aufgabe"
+   },
+   "emptyBody": "Nichts entspricht diesen Filtern.",
+   "filter": {
+    "showCompleted": "Erledigte anzeigen",
+    "status": "Status"
+   },
+   "group": {
+    "assignee": "Zuständig",
+    "none": "Keine",
+    "priority": "Priorität",
+    "status": "Status"
+   },
+   "noDue": "Kein Fälligkeitsdatum",
+   "noTasksInLane": "Keine Aufgaben",
+   "reset": "Filter zurücksetzen",
+   "search": "Aufgaben durchsuchen…",
+   "sort": {
+    "due": "Fälligkeitszeit",
+    "name": "Name",
+    "priority": "Priorität"
+   },
+   "state": {
+    "blocked": "Blockiert",
+    "done": "Erledigt",
+    "open": "Offen",
+    "progress": "In Bearbeitung",
+    "review": "In Prüfung"
+   },
+   "swipeHint": "Zwischen Spalten wischen",
+   "unassigned": "Nicht zugewiesen"
   },
   "timeOff": {
    "new": {
@@ -19635,7 +20962,13 @@
     "title": "Keine Anträge",
     "description": "Deine Abwesenheitsanträge erscheinen hier."
    },
-   "timeOffFallback": "Abwesenheit"
+   "timeOffFallback": "Abwesenheit",
+   "balance": "Saldo",
+   "emptyBody": "Sie haben keine Abwesenheit beantragt.",
+   "emptyTitle": "Keine Anträge",
+   "eyebrow": "Sie",
+   "newCta": "Abwesenheit beantragen",
+   "requests": "Ihre Anträge"
   },
   "tracker": {
    "configureSupabase": "Supabase konfigurieren.",
@@ -19659,14 +20992,18 @@
    "title": "Mein Ausweis",
    "subtitle": "Zeige diesen Screen am Gate. Halte ihn aktiv, bis deine Schicht endet.",
    "empty": {
-    "title": "Kein ausgestellter Ausweis"
+    "title": "Kein ausgestellter Ausweis",
+    "body": "Credential-Berechtigungen erscheinen hier, sobald sie ausgestellt sind. Wenden Sie sich an Ihren Admin."
    },
    "defaultCategoryCode": "ACC",
    "cardBarcode": "Karten-Barcode",
    "validFrom": "Gültig ab",
    "validTo": "Gültig bis",
    "otherCards": "Weitere Karten",
-   "openProfile": "Profil öffnen →"
+   "openProfile": "Profil öffnen →",
+   "accessTitle": "Zugriff & Berechtigungen",
+   "credential": "Credential",
+   "help": "Admin um Hilfe bitten"
   },
   "wayfind": {
    "otherCluster": "Sonstige",
@@ -19702,6 +21039,292 @@
   "checkInSummary": {
    "eyebrow": "Feld",
    "title": "Check-in-Zusammenfassung"
+  },
+  "account": {
+   "archive": {
+    "confirmLabel": "Geben Sie ARCHIVIEREN zur Bestätigung ein",
+    "cta": "Archivierung anfordern",
+    "export": "Exportieren Sie zuerst Ihre Daten",
+    "heading": "Konto archivieren",
+    "preserve": "Betriebsdaten bleiben erhalten",
+    "retainTitle": "Daten werden aufbewahrt, nicht gelöscht.",
+    "revoke": "Zugriff wird nach Bestätigung durch den Admin entzogen"
+   },
+   "eyebrow": "Kontostatus",
+   "intro": "Verwalten Sie Ihren Kontostatus — legen Sie eine Pause ein oder fordern Sie eine Archivierung an.",
+   "pause": {
+    "active": "Ihr Konto ist pausiert. Setzen Sie es oben fort, wenn Sie bereit sind.",
+    "cta": "Mein Konto pausieren",
+    "heading": "Konto pausieren",
+    "hide": "Aus Crew-Planung und Dienstplänen ausgeblendet",
+    "mute": "Benachrichtigungen pausiert",
+    "resume": "Mein Konto fortsetzen",
+    "reverse": "Jederzeit reaktivierbar — nichts geht verloren"
+   },
+   "title": "Konto"
+  },
+  "companies": {
+   "call": "Anrufen",
+   "count": "{n} im Projekt",
+   "email": "E-Mail",
+   "empty": "Keine Dienstleister",
+   "emptyBody": "Keine Organisationen entsprechen den Kriterien.",
+   "general": "Allgemein",
+   "search": "Dienstleister, Gewerk, Leistung suchen…",
+   "title": "Dienstleister",
+   "unnamed": "Unbenannter Dienstleister"
+  },
+  "inventoryScan": {
+   "back": "Assets",
+   "cameraDenied": "Kamera nicht verfügbar — manuelle Eingabe verwenden",
+   "cta": "Tag auflösen",
+   "enableCamera": "Kamera aktivieren",
+   "eyebrow": "Asset-Tag",
+   "hint": "Auf einen Asset-Tag-QR richten — wird automatisch gelesen.",
+   "logged": "Erfasst",
+   "manualLabel": "Asset-Tag",
+   "manualPlaceholder": "z. B. R7-014",
+   "recentEmpty": "Noch keine Scans",
+   "recentTitle": "Letzte Aktivität",
+   "scanning": "Wird geprüft…",
+   "title": "Scannen zum Aus- / Einchecken"
+  },
+  "more": {
+   "account": "Konto",
+   "eyebrow": "Arbeitsbereich",
+   "network": "Netzwerk",
+   "people": "Personen",
+   "title": "Mehr",
+   "tools": "Werkzeuge"
+  },
+  "scan": {
+   "eyebrow": "Schnellscan",
+   "hint": "Richten Sie die Kamera auf einen QR-Code oder Barcode — wird automatisch gelesen.",
+   "manualLabel": "Code",
+   "manualPlaceholder": "z. B. R7-014",
+   "manualSubmit": "Erfassen",
+   "manualToggle": "Code manuell eingeben",
+   "recentEmpty": "Noch keine Codes erfasst",
+   "recentTitle": "In dieser Sitzung erfasst",
+   "title": "Code scannen"
+  },
+  "catalog": {
+   "back": "Mehr",
+   "empty": "Keine Artikel",
+   "emptyHint": "Keine Treffer.",
+   "request": "Anfordern",
+   "search": "Katalog durchsuchen…",
+   "title": "Katalog"
+  },
+  "changelog": {
+   "build": "COMPVSS Field · Build 2406.18",
+   "eyebrow": "COMPVSS Field",
+   "title": "Neuigkeiten"
+  },
+  "connections": {
+   "accept": "Annehmen",
+   "connect": "Verbinden",
+   "connected": "Verbunden",
+   "count": "{n} vorgeschlagen",
+   "crew": "Crew",
+   "decline": "Ablehnen",
+   "empty": "Keine Personen",
+   "emptyBody": "Noch keine andere Crew in dieser Org — Vorschläge erscheinen hier, sobald Ihr Netzwerk wächst.",
+   "network": "Mein Netzwerk",
+   "pending": "Ausstehend",
+   "pendingSection": "Ausstehende Anfragen",
+   "remove": "Entfernen",
+   "requestSent": "Anfrage gesendet",
+   "search": "Nach Name, Gewerk, Fähigkeit, Cert suchen…",
+   "suggestions": "Vorschläge",
+   "title": "Meine Verbindungen",
+   "unnamed": "Unbenannt"
+  },
+  "activity": {
+   "count": "{n} Ereignisse",
+   "empty": "Keine Aktivität",
+   "emptyBody": "Nichts entspricht diesen Filtern.",
+   "search": "Aktivität durchsuchen…",
+   "title": "Aktivitätsverlauf"
+  },
+  "checkin": {
+   "access": "Zugang",
+   "asset": "Asset",
+   "batch": "Sammel-Check-in",
+   "cameraDenied": "Kamera nicht verfügbar — manuelle Eingabe verwenden",
+   "ctaAccess": "Credential verifizieren",
+   "ctaAsset": "Aus- / Einchecken",
+   "ctaNfc": "Zum Lesen antippen",
+   "ctaPos": "Produkt scannen",
+   "enableCamera": "Kamera aktivieren",
+   "eyebrow": "{count} letzte Scans",
+   "gate": {
+    "eyebrow": "Eingang · {slug}"
+   },
+   "logged": "Erfasst",
+   "manual": "Code manuell eingeben",
+   "manualLabel": "Code",
+   "manualPlaceholder": "z. B. R7-014",
+   "nfc": "NFC",
+   "nfcHint": "Halten Sie das RFID-Credential oder den Fob ans Lesegerät",
+   "pos": "POS",
+   "qr": "QR-Code",
+   "recentEmpty": "Noch keine Scans",
+   "recentTitle": "Letzte Aktivität",
+   "rfid": "RFID / NFC",
+   "scanHintAccess": "Scannen Sie den QR-Code auf dem Credential",
+   "scanHintCamera": "Liest QR-Codes & Barcodes automatisch",
+   "scanning": "Wird geprüft…",
+   "title": "Scannen"
+  },
+  "checkinManual": {
+   "back": "Check-in",
+   "code": "Code",
+   "cta": "Code übermitteln",
+   "eyebrow": "Manuelle Eingabe",
+   "hint": "Geben Sie einen Scan-Code oder Asset-Tag ein, wenn die Kamera ihn nicht lesen kann.",
+   "logged": "Erfasst",
+   "placeholder": "z. B. R7-014",
+   "scanning": "Wird geprüft…",
+   "title": "Code eingeben"
+  },
+  "referrals": {
+   "balance": "Belohnungsguthaben",
+   "contactLabel": "E-Mail oder Telefon",
+   "contactPlaceholder": "name@beispiel.de",
+   "empty": "Noch keine Empfehlungen",
+   "emptyBody": "Teilen Sie Ihren Code — Empfehlungen und Belohnungen erscheinen hier.",
+   "eyebrow": "ATLVS Ecosystem",
+   "how": "So funktioniert's",
+   "invite": "Einladen",
+   "next": "Empfehlen Sie Crew, um Belohnungen zu verdienen.",
+   "pts": "Pkt.",
+   "send": "Einladung senden",
+   "sending": "Wird gesendet…",
+   "share": "Teilen",
+   "step1": "Teilen",
+   "step1s": "Senden Sie Ihren Code oder Link",
+   "step2": "Sie treten bei",
+   "step2s": "Im ATLVS-Netzwerk registrieren",
+   "step3": "Sie verdienen",
+   "step3s": "Punkte + Bargeld, sobald sie gebucht werden",
+   "tier": "Einsteiger",
+   "title": "Empfehlungen & Belohnungen",
+   "yours": "Ihre Empfehlungen"
+  },
+  "batch": {
+   "back": "Check-in",
+   "cta": "Einchecken",
+   "ctaTail": "Ausgewählt",
+   "done": "Asset(s) eingecheckt.",
+   "empty": "Nichts zurückzugeben",
+   "emptyHint": "Sie haben derzeit kein ausgecheckendes Equipment.",
+   "hint": "Wählen Sie zugewiesenes Equipment aus, um es in einem Durchgang zurückzugeben.",
+   "of": "von",
+   "selectAll": "Alle auswählen",
+   "selected": "ausgewählt",
+   "title": "Sammel-Check-in",
+   "working": "Wird eingecheckt…"
+  },
+  "emergency": {
+   "assembly": "Sammelpunkt",
+   "back": "Start",
+   "codes": "Notfallcodes",
+   "evac": "Evakuieren",
+   "eyebrow": "Position",
+   "fire": "Brandschutz",
+   "musterLabel": "Sammeln",
+   "musterTo": "Sammeln: {to}",
+   "position": "Position",
+   "project": "Projekt",
+   "reportTo": "Melden bei",
+   "role": "Notfallrolle",
+   "shelter": "Schutzraum",
+   "team": "Team",
+   "title": "Notfallkarte",
+   "unassigned": "Zuweisung ausstehend"
+  },
+  "market": {
+   "by": "von",
+   "empty": "Der Crew-Marktplatz geht bald online. Seien Sie der Erste, der Equipment, Werkzeuge oder Bekleidung einstellt.",
+   "emptyTitle": "Noch keine Angebote",
+   "eyebrow": "Marktplatz",
+   "listItem": "Artikel einstellen",
+   "listed": "Angebot gespeichert · ausstehend bis Marktplatz-Start",
+   "markSold": "Als verkauft markieren",
+   "member": "Mitglied",
+   "mine": "Ihr Angebot",
+   "title": "Marktplatz",
+   "withdraw": "Zurückziehen"
+  },
+  "schedule": {
+   "col": {
+    "detail": "Detail",
+    "event": "Event",
+    "status": "Status",
+    "time": "Uhrzeit",
+    "type": "Typ"
+   },
+   "empty": "Nichts hier",
+   "emptyBody": "Keine Einträge entsprechen diesen Filtern.",
+   "emptyDay": "Nichts geplant",
+   "emptyDayBody": "Keine Einträge an diesem Tag.",
+   "eyebrow": "Heute · {count} Events",
+   "filter": {
+    "type": "Typ"
+   },
+   "group": {
+    "none": "Keine",
+    "type": "Typ"
+   },
+   "reset": "Filter zurücksetzen",
+   "search": "Zeitplan durchsuchen…",
+   "sort": {
+    "name": "Name",
+    "time": "Uhrzeit"
+   },
+   "title": "Kalender",
+   "type": {
+    "meeting": "Meeting",
+    "ros": "Run of Show",
+    "shift": "Schicht",
+    "training": "Schulung"
+   }
+  },
+  "profile": {
+   "about": "Über",
+   "airport": "Heimatflughafen",
+   "badges": "Abzeichen",
+   "certs": "Zertifizierungen",
+   "contact": "Kontakt",
+   "dietary": "Ernährung",
+   "dob": "Geburtsdatum",
+   "edit": "Bearbeiten",
+   "email": "E-Mail",
+   "emergency": "Notfallkontakte",
+   "eyebrow": "Sie",
+   "glove": "Handschuh",
+   "hat": "Mütze",
+   "knownTraveler": "Known Traveler",
+   "location": "Standort",
+   "loyalty": "Vielfliegerprogramme",
+   "mobile": "Mobil",
+   "pants": "Hose",
+   "passport": "Reisepass",
+   "ratings": "Bewertungen & Rezensionen",
+   "reviewCount": "{count} Rezensionen",
+   "rose": "Meine Rose",
+   "share": "Profil teilen",
+   "shirt": "Hemd",
+   "shoe": "Schuh",
+   "skills": "Fähigkeiten & Tags",
+   "social": "Soziales",
+   "someone": "Jemand",
+   "title": "Profil",
+   "travel": "Reiseprofil",
+   "uniform": "Uniformgrößen",
+   "unnamed": "Crew-Mitglied",
+   "visas": "Visa"
   }
  },
  "me": {
@@ -20049,8 +21672,10 @@
    "submit": "Einstellungen speichern",
    "appearance": {
     "legend": "Darstellung",
-    "theme": "Theme",
-    "density": "Dichte"
+    "density": "Dichte",
+    "colorMode": "Farbmodus",
+    "colorModeHint": "Hell, dunkel oder dem Betriebssystem folgend — einstellbar unter",
+    "colorModeLink": "Darstellungseinstellungen"
    },
    "locale": {
     "legend": "Sprache & Region",
@@ -20476,6 +22101,29 @@
   },
   "sortable": {
    "dragToReorder": "Zum Neuordnen ziehen"
+  },
+  "toast": {
+   "dismiss": "Benachrichtigung schließen",
+   "region": "Benachrichtigungen"
+  },
+  "confirm": {
+   "cancel": "Abbrechen",
+   "confirm": "Bestätigen"
+  },
+  "tour": {
+   "back": "Zurück",
+   "done": "Fertig",
+   "next": "Weiter",
+   "progress": "{current} / {total}",
+   "skip": "Überspringen"
+  },
+  "coachmark": {
+   "dismiss": "Schließen"
+  },
+  "sync": {
+   "now": "Jetzt synchronisieren",
+   "queued": "{count} Änderungen in Warteschlange — werden synchronisiert, sobald wieder online",
+   "syncing": "{count} Änderungen werden synchronisiert…"
   }
  },
  "workspace": {

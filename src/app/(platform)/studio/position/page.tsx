@@ -61,7 +61,7 @@ export default async function PositionPage() {
             <div className="surface p-4">
               <div className="mb-3 flex items-center justify-end">
                 <Link href="/studio/position/forecast" className="text-xs font-medium text-[var(--p-accent)]">
-                  {t("console.position.forecast", undefined, "Workload forecast →")}
+                  {t("console.position.forecastLabel", undefined, "Workload forecast →")}
                 </Link>
               </div>
               <PositionMatrix

@@ -47,8 +47,8 @@ export default async function ChannelsPage() {
         title={t("console.comms.channels.title", undefined, "Channels")}
         subtitle={
           rows.length === 1
-            ? t("console.comms.channels.subtitleOne", { count: rows.length }, `${rows.length} channel`)
-            : t("console.comms.channels.subtitleOther", { count: rows.length }, `${rows.length} channels`)
+            ? t("console.comms.channels.subtitleOne", { count: rows.length }, "{count} channel")
+            : t("console.comms.channels.subtitleOther", { count: rows.length }, "{count} channels")
         }
         action={
           <Button href="/studio/comms/channels/new" size="sm">
@@ -86,8 +86,8 @@ export default async function ChannelsPage() {
                       {r.topic && <div className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.topic}</div>}
                       <div className="mt-2 font-mono text-[11px] text-[var(--p-text-3)]">
                         {count === 1
-                          ? t("console.comms.channels.messageCountOne", { count }, `${count} message`)
-                          : t("console.comms.channels.messageCountOther", { count }, `${count} messages`)}
+                          ? t("console.comms.channels.messageCountOne", { count }, "{count} message")
+                          : t("console.comms.channels.messageCountOther", { count }, "{count} messages")}
                       </div>
                     </div>
                     <Badge variant="muted">{kindLabel}</Badge>

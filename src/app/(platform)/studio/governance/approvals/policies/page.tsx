@@ -50,7 +50,7 @@ export default async function Page() {
         )}
         action={
           <Button href="/studio/governance/approvals/policies/new" size="sm">
-            {t("console.governance.approvals.policies.new", undefined, "+ New policy")}
+            {t("console.governance.approvals.policies.newLabel", undefined, "+ New policy")}
           </Button>
         }
       />

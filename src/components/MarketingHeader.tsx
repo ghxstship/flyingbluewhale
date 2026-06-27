@@ -11,6 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -122,12 +123,9 @@ export function MarketingHeader() {
           >
             {t(marketingAuthLinks.login.labelKey)}
           </Link>
-          <Link
-            href={marketingAuthLinks.signup.href}
-            className="rounded-md bg-[var(--p-accent-cta)] px-4 py-2 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-          >
+          <Button href={marketingAuthLinks.signup.href} variant="cta">
             {t(marketingAuthLinks.signup.labelKey)}
-          </Link>
+          </Button>
         </div>
 
         {/* Mobile trigger — wrapped in a span so visibility is governed by the
@@ -194,7 +192,7 @@ export function MarketingHeader() {
               </Link>
               <Link
                 href={marketingAuthLinks.signup.href}
-                className="w-full justify-center rounded-md bg-[var(--p-accent-cta)] px-4 py-2 text-center text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
+                className="ps-btn ps-btn--cta w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
                 {t(marketingAuthLinks.signup.labelKey)}

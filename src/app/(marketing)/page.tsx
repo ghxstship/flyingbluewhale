@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { ProductPreview } from "@/components/marketing/ProductPreview";
+import { Button } from "@/components/ui/Button";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
@@ -156,7 +157,6 @@ export default async function Home() {
       body: t("marketing.pages.home.products.atlvs.body"),
       href: "/solutions/atlvs",
       color: PRODUCT_ACCENTS.atlvs,
-      textColor: "#971a05",
     },
     {
       slug: "compvss",
@@ -166,7 +166,6 @@ export default async function Home() {
       body: t("marketing.pages.home.products.compvss.body"),
       href: "/solutions/compvss",
       color: PRODUCT_ACCENTS.compvss,
-      textColor: "#9d6a00",
     },
     {
       slug: "gvteway",
@@ -176,7 +175,6 @@ export default async function Home() {
       body: t("marketing.pages.home.products.gvteway.body"),
       href: "/solutions/gvteway",
       color: PRODUCT_ACCENTS.gvteway,
-      textColor: "#1d4ed8",
     },
     {
       slug: "legend",
@@ -186,7 +184,6 @@ export default async function Home() {
       body: t("marketing.pages.home.products.legend.body"),
       href: "/solutions/legend",
       color: PRODUCT_ACCENTS.legend,
-      textColor: "#c2520a",
     },
   ];
 
@@ -350,12 +347,9 @@ export default async function Home() {
                 {t("marketing.pages.home.hero.subtitleLead")}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/signup"
-                  className="rounded-md bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-                >
+                <Button href="/signup" variant="cta">
                   {t("marketing.pages.home.hero.ctaPrimary")}
-                </Link>
+                </Button>
                 <Link
                   href="/demo"
                   className="rounded-md border border-[var(--p-border-2)] px-5 py-2.5 text-sm font-semibold text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)]"
@@ -369,8 +363,8 @@ export default async function Home() {
                   letter-spaced Wordmark that overflows narrow tracks). */}
               <div className="mt-8 grid grid-cols-2 gap-2.5 lg:hidden">
                 {PRODUCTS.map((p) => (
-                  <div key={p.slug} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-3">
-                    <div className="text-sm font-bold" style={{ color: p.textColor }}>
+                  <div key={p.slug} data-platform={p.slug} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-3">
+                    <div className="text-sm font-bold" style={{ color: "var(--p-accent-text)" }}>
                       {p.title}
                     </div>
                     <p className="eyebrow mt-0.5 text-[var(--p-text-3)]">
@@ -396,9 +390,9 @@ export default async function Home() {
                   {t("marketing.pages.home.hero.ecosystemLabel")}
                 </div>
                 {PRODUCTS.map((p) => (
-                  <div key={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
+                  <div key={p.slug} data-platform={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
                     <div className="flex flex-wrap items-baseline justify-between gap-3">
-                      <Wordmark word={p.title} style={{ color: p.textColor, fontSize: 17 }} />
+                      <Wordmark word={p.title} style={{ color: "var(--p-accent-text)", fontSize: 17 }} />
                       <span className="eyebrow text-[var(--p-text-3)]">
                         {p.audience.replace(/^For /i, "")}
                       </span>
@@ -481,11 +475,11 @@ export default async function Home() {
                   className="absolute inset-x-0 top-0 h-1 rounded-t-xl"
                   style={{ background: p.color }}
                 />
-                <p className="eyebrow" style={{ color: p.textColor }}>
+                <p className="eyebrow" style={{ color: "var(--p-accent-text)" }}>
                   {p.audience}
                 </p>
                 <h3 className="mt-2">
-                  <Wordmark word={p.title} style={{ color: p.textColor, fontSize: 30 }} />
+                  <Wordmark word={p.title} style={{ color: "var(--p-accent-text)", fontSize: 30 }} />
                 </h3>
                 <p className="mt-1 text-xs font-medium text-[var(--p-text-3)] uppercase">{p.tag}</p>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{p.body}</p>
@@ -597,16 +591,16 @@ export default async function Home() {
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.adopt.body")}</p>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {TIERS.map((t) => (
+            {TIERS.map((tier) => (
               <article
-                key={t.name}
+                key={tier.name}
                 className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
               >
-                <h3 className="hed-lg text-[var(--p-text-1)]">{t.name}</h3>
+                <h3 className="hed-lg text-[var(--p-text-1)]">{tier.name}</h3>
                 <span className="eyebrow mt-1 inline-block text-[var(--p-text-3)]">
-                  {t.tag}
+                  {tier.tag}
                 </span>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{t.body}</p>
+                <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{tier.body}</p>
               </article>
             ))}
           </div>
@@ -724,12 +718,9 @@ export default async function Home() {
           <h2 className="hed-2xl mt-3">{t("marketing.pages.home.cta.title")}</h2>
           <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.cta.body")}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/signup"
-              className="rounded-md bg-[var(--p-accent-cta)] px-6 py-3 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-            >
+            <Button href="/signup" variant="cta">
               {t("marketing.pages.home.cta.ctaPrimary")}
-            </Link>
+            </Button>
             <Link
               href="/demo"
               className="rounded-md border border-[var(--p-border-2)] px-6 py-3 text-sm font-semibold text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)]"

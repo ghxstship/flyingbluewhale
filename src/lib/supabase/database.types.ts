@@ -3182,7 +3182,7 @@ export type Database = {
           occurred_at: string
           org_id: string
           reason: string
-          redacted_by: string
+          redacted_by: string | null
         }
         Insert: {
           audit_event_ids: string[]
@@ -3192,7 +3192,7 @@ export type Database = {
           occurred_at?: string
           org_id: string
           reason: string
-          redacted_by: string
+          redacted_by?: string | null
         }
         Update: {
           audit_event_ids?: string[]
@@ -3202,7 +3202,7 @@ export type Database = {
           occurred_at?: string
           org_id?: string
           reason?: string
-          redacted_by?: string
+          redacted_by?: string | null
         }
         Relationships: [
           {
@@ -9283,7 +9283,7 @@ export type Database = {
       deliverable_history: {
         Row: {
           changed_at: string
-          changed_by: string
+          changed_by: string | null
           data: Json
           deliverable_id: string
           id: string
@@ -9291,7 +9291,7 @@ export type Database = {
         }
         Insert: {
           changed_at?: string
-          changed_by: string
+          changed_by?: string | null
           data: Json
           deliverable_id: string
           id?: string
@@ -9299,7 +9299,7 @@ export type Database = {
         }
         Update: {
           changed_at?: string
-          changed_by?: string
+          changed_by?: string | null
           data?: Json
           deliverable_id?: string
           id?: string
@@ -11232,7 +11232,7 @@ export type Database = {
           receipt_path: string | null
           receipt_state: Database["public"]["Enums"]["expense_status"] | null
           spent_at: string
-          submitter_id: string
+          submitter_id: string | null
           updated_at: string
           vendor: string | null
           xpms_phase: string | null
@@ -11269,7 +11269,7 @@ export type Database = {
           receipt_path?: string | null
           receipt_state?: Database["public"]["Enums"]["expense_status"] | null
           spent_at: string
-          submitter_id: string
+          submitter_id?: string | null
           updated_at?: string
           vendor?: string | null
           xpms_phase?: string | null
@@ -11306,7 +11306,7 @@ export type Database = {
           receipt_path?: string | null
           receipt_state?: Database["public"]["Enums"]["expense_status"] | null
           spent_at?: string
-          submitter_id?: string
+          submitter_id?: string | null
           updated_at?: string
           vendor?: string | null
           xpms_phase?: string | null
@@ -14030,7 +14030,7 @@ export type Database = {
           expires_at: string
           id: string
           invite_state: string
-          invited_by: string
+          invited_by: string | null
           org_id: string
           persona: string | null
           project_id: string | null
@@ -14046,7 +14046,7 @@ export type Database = {
           expires_at?: string
           id?: string
           invite_state?: string
-          invited_by: string
+          invited_by?: string | null
           org_id: string
           persona?: string | null
           project_id?: string | null
@@ -14062,7 +14062,7 @@ export type Database = {
           expires_at?: string
           id?: string
           invite_state?: string
-          invited_by?: string
+          invited_by?: string | null
           org_id?: string
           persona?: string | null
           project_id?: string | null
@@ -17888,7 +17888,7 @@ export type Database = {
           project_id: string | null
           rate_cents: number
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -17903,7 +17903,7 @@ export type Database = {
           project_id?: string | null
           rate_cents?: number
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -17918,7 +17918,7 @@ export type Database = {
           project_id?: string | null
           rate_cents?: number
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -22542,7 +22542,7 @@ export type Database = {
           budget_cents: number | null
           client_id: string | null
           created_at: string
-          created_by: string
+          created_by: string | null
           deleted_at: string | null
           description: string | null
           end_date: string | null
@@ -22573,7 +22573,7 @@ export type Database = {
           budget_cents?: number | null
           client_id?: string | null
           created_at?: string
-          created_by: string
+          created_by?: string | null
           deleted_at?: string | null
           description?: string | null
           end_date?: string | null
@@ -22606,7 +22606,7 @@ export type Database = {
           budget_cents?: number | null
           client_id?: string | null
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           deleted_at?: string | null
           description?: string | null
           end_date?: string | null
@@ -25209,7 +25209,7 @@ export type Database = {
           id: string
           org_id: string
           project_id: string | null
-          requester_id: string
+          requester_id: string | null
           requisition_state: Database["public"]["Enums"]["req_status"]
           state: Database["public"]["Enums"]["upo_state"]
           title: string
@@ -25223,7 +25223,7 @@ export type Database = {
           id?: string
           org_id: string
           project_id?: string | null
-          requester_id: string
+          requester_id?: string | null
           requisition_state?: Database["public"]["Enums"]["req_status"]
           state?: Database["public"]["Enums"]["upo_state"]
           title: string
@@ -25237,7 +25237,7 @@ export type Database = {
           id?: string
           org_id?: string
           project_id?: string | null
-          requester_id?: string
+          requester_id?: string | null
           requisition_state?: Database["public"]["Enums"]["req_status"]
           state?: Database["public"]["Enums"]["upo_state"]
           title?: string
@@ -32707,7 +32707,7 @@ export type Database = {
           started_at: string
           timesheet_id: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
           xtc_code: number | null
           zone_id: string | null
         }
@@ -32734,7 +32734,7 @@ export type Database = {
           started_at: string
           timesheet_id?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           xtc_code?: number | null
           zone_id?: string | null
         }
@@ -32761,7 +32761,7 @@ export type Database = {
           started_at?: string
           timesheet_id?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           xtc_code?: number | null
           zone_id?: string | null
         }
@@ -37384,7 +37384,7 @@ export type Database = {
           class_code: number
           cost_cents: number | null
           created_at: string
-          created_by: string
+          created_by: string | null
           currency: string
           description: string | null
           division_code: number
@@ -37418,7 +37418,7 @@ export type Database = {
           class_code: number
           cost_cents?: number | null
           created_at?: string
-          created_by: string
+          created_by?: string | null
           currency?: string
           description?: string | null
           division_code: number
@@ -37452,7 +37452,7 @@ export type Database = {
           class_code?: number
           cost_cents?: number | null
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           currency?: string
           description?: string | null
           division_code?: number
@@ -37904,7 +37904,7 @@ export type Database = {
       xpms_provenance_edges: {
         Row: {
           created_at: string
-          created_by: string
+          created_by: string | null
           from_atom_id: string
           id: string
           kind: Database["public"]["Enums"]["xpms_edge_kind"]
@@ -37914,7 +37914,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          created_by: string
+          created_by?: string | null
           from_atom_id: string
           id?: string
           kind: Database["public"]["Enums"]["xpms_edge_kind"]
@@ -37924,7 +37924,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          created_by?: string
+          created_by?: string | null
           from_atom_id?: string
           id?: string
           kind?: Database["public"]["Enums"]["xpms_edge_kind"]
@@ -38036,7 +38036,7 @@ export type Database = {
           qty_delta: number | null
           reason: Database["public"]["Enums"]["xpms_variance_reason"]
           recorded_at: string
-          recorded_by: string
+          recorded_by: string | null
           tpc_atom_id: string | null
           uac_atom_id: string
         }
@@ -38048,7 +38048,7 @@ export type Database = {
           qty_delta?: number | null
           reason: Database["public"]["Enums"]["xpms_variance_reason"]
           recorded_at?: string
-          recorded_by: string
+          recorded_by?: string | null
           tpc_atom_id?: string | null
           uac_atom_id: string
         }
@@ -38060,7 +38060,7 @@ export type Database = {
           qty_delta?: number | null
           reason?: Database["public"]["Enums"]["xpms_variance_reason"]
           recorded_at?: string
-          recorded_by?: string
+          recorded_by?: string | null
           tpc_atom_id?: string | null
           uac_atom_id?: string
         }
@@ -40152,6 +40152,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      convert_store_cart: {
+        Args: { p_cart_id: string; p_event_id?: string }
+        Returns: Json
+      }
       create_annotation: {
         Args: {
           p_assigned_to?: string
@@ -40249,6 +40253,10 @@ export type Database = {
           std_high: number
           std_low: number
         }[]
+      }
+      fulfill_credit_order: {
+        Args: { p_event_id?: string; p_order_id: string }
+        Returns: Json
       }
       fx_rate_on: {
         Args: { p_date: string; p_from: string; p_to: string }
@@ -40490,6 +40498,10 @@ export type Database = {
           out_project_id: string
           reason_code: string
         }[]
+      }
+      redeem_voucher: {
+        Args: { p_code: string; p_org_id: string; p_user_id: string }
+        Returns: Json
       }
       resolve_atom: {
         Args: { max_rows?: number; q: string }

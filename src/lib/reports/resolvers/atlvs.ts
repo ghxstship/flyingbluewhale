@@ -1,5 +1,5 @@
 import type { MetricResolver, ResolverMap } from "./types";
-import { countWhere } from "./types";
+import { countWhere, NOT_COMPUTED } from "./types";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
@@ -287,7 +287,7 @@ const win_rate: MetricResolver = async (ctx) => {
 
 /** Vendor on-time delivery. The PO schema carries no promised-vs-actual delivery
  *  dates, so a true OTD rate isn't computable — return null rather than proxy. */
-const vendor_otd: MetricResolver = async () => null;
+const vendor_otd: MetricResolver = NOT_COMPUTED;
 
 /** Risk exposure (dollars): committed budget on at-risk (over-budget) active
  *  projects — the dollars in jeopardy. */

@@ -149,6 +149,12 @@ function Calendar_({
 }) {
   const t = useT();
   const [focused, setFocused] = React.useState<Date>(() => value ?? month);
+  // `today` is null until mount. This calendar only renders inside an open
+  // Radix popover (client-only), but computing `new Date()` during render is
+  // the render-time-nondeterminism pattern that causes React #418, so we keep
+  // it post-mount: the "today" ring simply appears after the calendar opens.
+  const [today, setToday] = React.useState<Date | null>(null);
+  React.useEffect(() => setToday(new Date()), []);
 
   const days = React.useMemo(() => buildMonth(month), [month]);
 
@@ -224,7 +230,7 @@ function Calendar_({
           const inMonth = d.getMonth() === month.getMonth();
           const isSelected = value && sameDay(d, value);
           const isFocused = sameDay(d, focused);
-          const isToday = sameDay(d, new Date());
+          const isToday = today !== null && sameDay(d, today);
           const dis = isDisabled(d);
           return (
             <button

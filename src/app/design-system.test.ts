@@ -330,6 +330,12 @@ describe("Design system — component primitive adoption", () => {
     const ALLOW = new Set<string>([
       // The design-system test itself enumerates the dead names.
       "src/app/design-system.test.ts",
+      // The v8.1 trend axis (opt-in [data-trend] personalization) deliberately
+      // uses Space Grotesk / Archivo Black / Fraunces / Baloo 2 / Poppins /
+      // Orbitron as trend DISPLAY faces — distinct from the retired v2 DEFAULT
+      // stack. They render only when a user explicitly picks a trend, behind a
+      // safe fallback chain (Anton / Hanken Grotesk). Sanctioned by the kit.
+      "src/app/theme/kit-trends.css",
     ]);
     const offenders: string[] = [];
     const scan = walk(SRC_DIR).filter((f) => /\.(tsx?|css|md)$/.test(f));
@@ -354,7 +360,7 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("kit v8 palette-locked — per-product accents + GHXSTSHIP house green, no retired cyan hexes survive in src/", () => {
+  it("kit v8.1 palette-locked (OKLCH) — per-product accents + ATLVS-red house accent, no retired cyan hexes survive in src/", () => {
     // v8.0 palette-locked: each product owns its accent (ATLVS red · COMPVSS
     // yellow · GVTEWAY blue · LEG3ND orange) and GHXSTSHIP green is the house/
     // marketing default. The retired cyan hexes (v5.1, pre-blue) must still
@@ -381,11 +387,24 @@ describe("Design system — component primitive adoption", () => {
       `Retired cyan hexes survive — these brand colors are dead:\n${offenders.join("\n")}`,
     ).toEqual([]);
 
-    // Positive assertion: the token SSOT defines the v8 palette-locked per-product
-    // accents — ATLVS volcanic red and the GHXSTSHIP house green both present.
+    // Positive assertion: as of v8.1 the color layer is authored in OKLCH +
+    // light-dark(). The ATLVS volcanic-red seed (sRGB-equal of #e23414) is the
+    // base accent AND the GHXSTSHIP house accent (which aliases it). The retired
+    // house green (#2edb3a, or its OKLCH hue ~143) must not survive.
     const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
-    expect(theme, "ATLVS accent must be volcanic red #e23414").toMatch(/--p-accent:\s*#e23414/i);
-    expect(theme, "GHXSTSHIP house accent must be green #2edb3a").toMatch(/--p-accent:\s*#2edb3a/i);
+    expect(theme, "ATLVS volcanic-red OKLCH seed must be present").toMatch(
+      /--brand-atlvs:\s*oklch\(0\.5964 0\.2136 32\.25\)/i,
+    );
+    expect(theme, "ATLVS product accent must resolve from the ATLVS seed").toMatch(
+      /\[data-product="atlvs"\][\s\S]*?--p-accent:\s*light-dark\(var\(--brand-atlvs\)/i,
+    );
+    expect(theme, "GHXSTSHIP house accent must alias ATLVS red (no green)").toContain(
+      "--brand-ghxstship:           var(--brand-atlvs)",
+    );
+    expect(theme, "retired house green #2edb3a must not survive").not.toMatch(/#2edb3a/i);
+    expect(theme, "retired house-green OKLCH hue (~143) must not seed ghxstship").not.toMatch(
+      /--brand-ghxstship:\s*oklch\([^)]*\b14[0-9]/i,
+    );
   });
 
   it("no bare legacy color tokens — --success/--warning/--danger/--info must be --p-*", () => {

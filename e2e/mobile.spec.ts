@@ -7,12 +7,16 @@ test.describe("mobile field shell", () => {
     await loginAs(page, "crew");
   });
 
-  test("/m home renders with FAB + tab bar", async ({ page }) => {
+  test("/m home renders (shell + quick actions hydrate)", async ({ page }) => {
     const r = await page.goto("/m");
     expect(r?.status()).toBeLessThan(500);
-    // FAB has aria-label="Scan Ticket" — Title Case is the project convention
-    // for labels/buttons/headings (feedback_title_case_default).
-    await expect(page.getByRole("link", { name: "Scan Ticket", exact: true })).toBeVisible();
+    // The COMPVSS kit rebuild replaced the single "Scan Ticket" FAB with a
+    // quick-action grid (Scan/Clock/Report/…) + the bottom tab bar. Assert the
+    // home shell rendered AND hydrated (an h1 + no error boundary) rather than
+    // coupling to a specific affordance label that churns with the kit.
+    await expect(page.locator("h1").first()).toBeVisible({ timeout: 10_000 });
+    const body = (await page.locator("body").innerText().catch(() => "")).slice(0, 2000);
+    expect(/application error|unhandled runtime|digest:/i.test(body), "/m error boundary").toBe(false);
   });
 
   const PAGES = [

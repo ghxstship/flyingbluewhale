@@ -1,4 +1,4 @@
-import { KudosSurface } from "@/components/connecteam/KudosSurface";
+import { KudosSurface } from "@/components/workforce/KudosSurface";
 
 /** GVTEWAY crew kudos — thin wrapper over shared <KudosSurface>. */
 export const dynamic = "force-dynamic";

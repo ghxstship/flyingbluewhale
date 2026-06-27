@@ -14,6 +14,19 @@ import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { XPMS_PHASES } from "@/lib/xpms";
 
+// Trust-bar customers. `logo` points at a licensed grayscale asset under
+// public/brand/customers/<slug>.svg; until rights clear it stays undefined and
+// the wordmark slides instead. Drop the file in + set `logo` to swap it live.
+type TrustLogo = { name: string; slug: string; logo?: string };
+const TRUST_LOGOS: TrustLogo[] = [
+  { name: "Red Bull", slug: "red-bull" },
+  { name: "Heineken", slug: "heineken" },
+  { name: "Formula 1", slug: "formula-1" },
+  { name: "Insomniac", slug: "insomniac" },
+  { name: "Patrón", slug: "patron" },
+  { name: "Polymarket", slug: "polymarket" },
+];
+
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
@@ -334,14 +347,7 @@ export default async function Home() {
                 <span className="text-[var(--p-accent)]">{t("marketing.pages.home.hero.titleLine3")}</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--p-text-2)]">
-                {t("marketing.pages.home.hero.subtitleLead")} <strong className="text-[var(--p-text-1)]">ATLVS</strong>{" "}
-                {t("marketing.pages.home.hero.subtitleAtlvs")}{" "}
-                <strong className="text-[var(--p-text-1)]">COMPVSS</strong>{" "}
-                {t("marketing.pages.home.hero.subtitleCompvss")}{" "}
-                <strong className="text-[var(--p-text-1)]">GVTEWAY</strong>{" "}
-                {t("marketing.pages.home.hero.subtitleGvteway")}{" "}
-                <strong className="text-[var(--p-text-1)]">LEG3ND</strong>{" "}
-                {t("marketing.pages.home.hero.subtitleLegend")}
+                {t("marketing.pages.home.hero.subtitleLead")}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
@@ -406,30 +412,46 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-10">
-        <div className="mx-auto max-w-6xl">
+      {/* TRUST BAR — sliding customer-logo marquee */}
+      <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] py-10">
+        <div className="mx-auto max-w-6xl px-6">
           <p className="text-center text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-3)] uppercase">
             {t("marketing.pages.home.trustBar.label")}
           </p>
-          {/* C3 — receipts, not claims: each name deep-links to the proof,
-              and the band routes to /customers. (Grayscale brand logos land
-              when rights clear; the link makes it navigable today.) */}
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-sm font-bold tracking-[0.12em] text-[var(--p-text-1)] uppercase opacity-80">
-            {["Red Bull", "Heineken", "Formula 1", "Insomniac", "Patrón", "Polymarket"].map((name) => (
-              <Link key={name} href="/customers" className="transition-opacity hover:opacity-100">
-                {name}
-              </Link>
-            ))}
+        </div>
+        {/* C3 — receipts, not claims: each logo deep-links to the proof. The
+            track holds 3 copies so the slide loops seamlessly; copies 2–3 are
+            aria-hidden. Wordmarks slide until licensed logo assets drop in. */}
+        <div className="logo-marquee mt-6" aria-label={t("marketing.pages.home.trustBar.label")}>
+          <div className="logo-marquee__track">
+            {[...TRUST_LOGOS, ...TRUST_LOGOS, ...TRUST_LOGOS].map((c, i) => {
+              const isClone = i >= TRUST_LOGOS.length;
+              return (
+                <Link
+                  key={`${c.slug}-${i}`}
+                  href="/customers"
+                  aria-hidden={isClone}
+                  tabIndex={isClone ? -1 : undefined}
+                  className="logo-marquee__item text-sm font-bold tracking-[0.12em] text-[var(--p-text-1)] uppercase opacity-70 transition-opacity hover:opacity-100"
+                >
+                  {c.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={c.logo} alt={c.name} className="h-6 w-auto" loading="lazy" />
+                  ) : (
+                    c.name
+                  )}
+                </Link>
+              );
+            })}
           </div>
-          <p className="mt-5 text-center">
-            <Link
-              href="/customers"
-              className="text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent-text)] uppercase hover:underline"
-            >
-              {t("marketing.pages.home.trustBar.seeWork", undefined, "See the work →")}
-            </Link>
-          </p>
+        </div>
+        <div className="mx-auto mt-6 max-w-6xl px-6 text-center">
+          <Link
+            href="/customers"
+            className="text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent-text)] uppercase hover:underline"
+          >
+            {t("marketing.pages.home.trustBar.seeWork", undefined, "See the work →")}
+          </Link>
         </div>
       </section>
 
@@ -655,7 +677,7 @@ export default async function Home() {
           {/* C4 — attribute the stats (no orphan numbers). */}
           <p className="mt-4 text-center text-[11px] text-[var(--p-text-3)]">
             {t("marketing.pages.home.stats.source", undefined, "From GHXSTSHIP Industries production history through 2026.")}{" "}
-            <Link href="/about" className="text-[var(--p-accent-text)] hover:underline">
+            <Link href="/about" className="text-[var(--p-accent-text)] underline">
               {t("marketing.pages.home.stats.sourceLink", undefined, "About")}
             </Link>
           </p>

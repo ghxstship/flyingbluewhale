@@ -694,7 +694,7 @@ export default async function FoundationsPage() {
           <div className="kf-board">
             <div className="bb">
               {[
-                { lbl: "Display · 44", text: "Mission Control", size: 44, wide: true, weight: 400, ls: "0.005em" },
+                { lbl: "Display · 44", text: "The Dashboard", size: 44, wide: true, weight: 400, ls: "0.005em" },
                 { lbl: "H1 · 34", text: "Production Timeline", size: 34, wide: true, weight: 400, ls: "0.005em" },
                 { lbl: "H2 · 26", text: "Active Projects", size: 26, wide: true, weight: 400, ls: "0.005em" },
                 {
@@ -785,7 +785,7 @@ export default async function FoundationsPage() {
                     Workspace / Production
                   </span>
                   <span className="t" style={{ fontSize: 24 }}>
-                    Mission Control
+                    The Dashboard
                   </span>
                 </div>
                 <p className="kf-note" style={{ margin: "14px 0 0" }}>

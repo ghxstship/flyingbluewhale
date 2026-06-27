@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { AuditExportPdf } from "@/lib/pdf/audit-export";
+import { emitAudit } from "@/lib/audit";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -95,6 +96,21 @@ export async function GET(req: Request) {
       signedUrlTtlSeconds: 60,
       contentDisposition: "attachment",
       filenameForAttachment: `audit-${rangeFrom.slice(0, 10)}-${rangeTo.slice(0, 10)}.pdf`,
+    });
+    // GDPR / accountability — exporting the audit trail (the forensic record
+    // itself) is litigation-grade; audit who pulled it and the range.
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "privacy.audit_export",
+      targetTable: "audit_events",
+      metadata: {
+        from: rangeFrom.slice(0, 10),
+        to: rangeTo.slice(0, 10),
+        actor_filter: q.data.actor ?? null,
+        row_count: (data ?? []).length,
+      },
     });
     return NextResponse.redirect(signedUrl, 302);
   } catch (e) {

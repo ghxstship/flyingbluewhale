@@ -8,14 +8,14 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1107 · **API route handlers:** 132 · **Distinct nav hrefs:** 472
+**Page routes:** 1134 · **API route handlers:** 132 · **Distinct nav hrefs:** 481
 
 ## Legend
 
 | Mark | Status | Meaning |
 |------|--------|---------|
 | ● | `nav` | Exact path is a nav href — directly clickable from a rail/tab/header/footer. |
-| ○ | `linked` | Module is in nav; route reached via in-page link or CRUD child (`/new`, `/[id]`, deep sub-modules, dynamic SEO children, or `/m/[role]` re-export). |
+| ○ | `linked` | Module is in nav; route reached via in-page link or CRUD child (`/new`, `/[id]`, deep sub-modules, or dynamic SEO children). |
 | ⚠ | `orphan` | **Nothing** in this module appears anywhere in `nav.ts` — invisible to navigation. |
 | · | `exempt` | Intentionally not in nav — redirect / token / locale / contextual entry (see "Exempt routes" below). |
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 723 | 206 | 517 | 0 | 0 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 53 | 38 | 13 | 0 | 2 |
+| ATLVS — Operator Console | platformNav rail | 749 | 215 | 534 | 0 | 0 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 53 | 38 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
-| LEG3ND — Knowledge Shell | — | 40 | 21 | 19 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 90 | 33 | 49 | 0 | 8 |
+| LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 91 | 33 | 49 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1107** | **446** | **624** | **0** | **37** |
+| **TOTAL** | | **1134** | **455** | **641** | **0** | **38** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (37) — intentional non-nav, with reasons
+## · Exempt routes (38) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -63,6 +63,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/api-docs` | prefix | API reference microsite. |
 | `/brand-kit` | prefix | Brand-kit microsite. |
 | `/demo` | prefix | Demo-booking flow. |
+| `/pitch` | prefix | pitch deck presenter surface |
 | `/forms` | prefix | Embedded campaign/SEO form pages. |
 | `/offer` | prefix | Token-gated offer flow. |
 | `/proposals` | prefix | Token-gated proposal flow. |
@@ -81,6 +82,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/home` | exact | Post-auth app launcher — reached via auth redirect, not a nav click. |
 | `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
 | `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
+| `/social` | prefix | social image asset endpoint |
 
 ---
 
@@ -88,7 +90,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-723 routes — ● 206 nav · ○ 517 linked · ⚠ 0 orphan
+749 routes — ● 215 nav · ○ 534 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -166,6 +168,16 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/studio/annotations`
 ○ `/studio/annotations/[id]`
+
+</details>
+
+<details><summary><code>assets</code> · 5 routes</summary>
+
+● `/studio/assets`
+○ `/studio/assets/[id]`
+○ `/studio/assets/new`
+● `/studio/assets/warranties`
+○ `/studio/assets/warranties/new`
 
 </details>
 
@@ -267,12 +279,15 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>comms</code> · 10 routes</summary>
+<details><summary><code>comms</code> · 13 routes</summary>
 
 ● `/studio/comms/announcements`
 ○ `/studio/comms/announcements/[id]`
 ○ `/studio/comms/announcements/[id]/edit`
 ○ `/studio/comms/announcements/new`
+● `/studio/comms/channels`
+○ `/studio/comms/channels/[id]`
+○ `/studio/comms/channels/new`
 ● `/studio/comms/polls`
 ○ `/studio/comms/polls/[id]`
 ○ `/studio/comms/polls/new`
@@ -285,15 +300,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>compliance</code> · 1 route</summary>
 
 ● `/studio/compliance/coc`
-
-</details>
-
-<details><summary><code>contracts</code> · 4 routes</summary>
-
-● `/studio/contracts`
-○ `/studio/contracts/[contractId]`
-○ `/studio/contracts/[contractId]/edit`
-○ `/studio/contracts/new`
 
 </details>
 
@@ -355,9 +361,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>finance</code> · 55 routes</summary>
+<details><summary><code>finance</code> · 62 routes</summary>
 
 ● `/studio/finance`
+● `/studio/finance/accounts`
+○ `/studio/finance/accounts/new`
 ● `/studio/finance/ap-ocr`
 ○ `/studio/finance/ap-ocr/[id]`
 ● `/studio/finance/budgets`
@@ -385,6 +393,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/finance/invoices/[invoiceId]/edit`
 ○ `/studio/finance/invoices/[invoiceId]/line-items`
 ○ `/studio/finance/invoices/new`
+● `/studio/finance/ledger`
+○ `/studio/finance/ledger/[id]`
+○ `/studio/finance/ledger/new`
 ● `/studio/finance/lien-waivers`
 ○ `/studio/finance/lien-waivers/[id]`
 ○ `/studio/finance/lien-waivers/new`
@@ -403,6 +414,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/finance/periods/[periodId]/transitions`
 ○ `/studio/finance/periods/new`
 ● `/studio/finance/reports`
+● `/studio/finance/tax`
+○ `/studio/finance/tax/calculations`
 ● `/studio/finance/time`
 ○ `/studio/finance/time/[entryId]`
 ○ `/studio/finance/time/[entryId]/edit`
@@ -432,6 +445,18 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/goals/[id]`
 ○ `/studio/goals/[id]/edit`
 ○ `/studio/goals/new`
+
+</details>
+
+<details><summary><code>governance</code> · 7 routes</summary>
+
+● `/studio/governance/approvals`
+○ `/studio/governance/approvals/[id]`
+○ `/studio/governance/approvals/delegations`
+○ `/studio/governance/approvals/delegations/new`
+○ `/studio/governance/approvals/policies`
+○ `/studio/governance/approvals/policies/[policyId]`
+○ `/studio/governance/approvals/policies/new`
 
 </details>
 
@@ -470,6 +495,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>kits</code> · 2 routes</summary>
+
+● `/studio/kits`
+○ `/studio/kits/[kitId]`
+
+</details>
+
 <details><summary><code>knowledge</code> · 4 routes</summary>
 
 ● `/studio/knowledge`
@@ -490,9 +522,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>legal</code> · 16 routes</summary>
+<details><summary><code>legal</code> · 19 routes</summary>
 
 ○ `/studio/legal`
+● `/studio/legal/contracts`
+○ `/studio/legal/contracts/[id]`
+○ `/studio/legal/contracts/new`
 ● `/studio/legal/insurance`
 ○ `/studio/legal/insurance/[policyId]`
 ○ `/studio/legal/insurance/[policyId]/edit`
@@ -708,7 +743,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>procurement</code> · 43 routes</summary>
+<details><summary><code>procurement</code> · 46 routes</summary>
 
 ● `/studio/procurement`
 ○ `/studio/procurement/catalog`
@@ -726,6 +761,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/procurement/purchase-orders/[poId]/checklist`
 ○ `/studio/procurement/purchase-orders/[poId]/edit`
 ○ `/studio/procurement/purchase-orders/new`
+● `/studio/procurement/receiving`
+○ `/studio/procurement/receiving/[id]`
+○ `/studio/procurement/receiving/new`
 ● `/studio/procurement/requisitions`
 ○ `/studio/procurement/requisitions/[reqId]`
 ○ `/studio/procurement/requisitions/[reqId]/edit`
@@ -1904,7 +1942,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — Public / Marketing
 
-90 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
+91 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2089,6 +2127,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>partners</code> · 1 route</summary>
 
 ● `/partners`
+
+</details>
+
+<details><summary><code>pitch</code> · 1 route</summary>
+
+· `/pitch`
 
 </details>
 

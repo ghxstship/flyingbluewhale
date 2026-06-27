@@ -3,7 +3,7 @@
  * floor-plan seating module. Schema-anchored to migration
  * `PENDING_reservations_tables.sql` (venue_tables + reservations).
  *
- * Pattern matches `src/lib/marketplace.ts` / `src/lib/connecteam.ts`:
+ * Pattern matches `src/lib/marketplace.ts` / `src/lib/workforce.ts`:
  * enum tuples `as const` → derived union types → label maps + small helpers
  * that the list / floor-plan / form pages all share.
  */

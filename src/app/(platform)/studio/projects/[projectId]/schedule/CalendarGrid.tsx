@@ -36,6 +36,11 @@ export function CalendarGrid({
 }) {
   const t = useT();
   const [cursor, setCursor] = React.useState(() => parseMonth(initialMonth));
+  // `today` is null until mount — `new Date()` during render runs at different
+  // instants on server vs client and flips the "today" highlight, which
+  // hydration-mismatches (React #418). The highlight appears after mount.
+  const [today, setToday] = React.useState<Date | null>(null);
+  React.useEffect(() => setToday(new Date()), []);
   const monthLabel = cursor.toLocaleDateString(undefined, { month: "long", year: "numeric" });
 
   const monthStart = startOfMonth(cursor);
@@ -89,7 +94,7 @@ export function CalendarGrid({
         {days.map((d) => {
           const key = dayKey(d);
           const inMonth = d.getMonth() === cursor.getMonth();
-          const isToday = isSameDay(d, new Date());
+          const isToday = today !== null && isSameDay(d, today);
           const dayEvents = eventsByDay.get(key) ?? [];
           const dayTasks = tasksByDay.get(key) ?? [];
           return (

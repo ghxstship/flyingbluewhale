@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <!-- Tileable diagonal hatch. Uses currentColor at low opacity so it themes per surface. -->
+  <defs>
+    <pattern id="atlvs-diagonal" width="24" height="24" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
+      <path d="M-6 6 L6 -6 M0 24 L24 0 M18 30 L30 18" stroke="currentColor" stroke-width="2" opacity="0.10" fill="none"></path>
+    </pattern>
+  </defs>
+  <rect width="24" height="24" fill="url(#atlvs-diagonal)"></rect>
+</svg>

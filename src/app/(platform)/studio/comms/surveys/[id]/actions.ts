@@ -4,11 +4,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { SURVEY_QUESTION_KINDS } from "@/lib/workforce";
 
 const QSchema = z.object({
   surveyId: z.string().uuid(),
   prompt: z.string().min(1).max(400),
-  question_kind: z.enum(["single_choice", "multi_choice", "scale", "text", "boolean"]),
+  question_kind: z.enum(SURVEY_QUESTION_KINDS),
   options: z.string().optional().or(z.literal("")),
 });
 

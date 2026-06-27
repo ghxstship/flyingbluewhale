@@ -13985,7 +13985,7 @@ CREATE TABLE IF NOT EXISTS "public"."reviews" (
 ALTER TABLE "public"."reviews" OWNER TO "postgres";
 
 
-COMMENT ON TABLE "public"."reviews" IS '0002 — Bidirectional reviews. hidden_until_counterpart=true keeps reviews dark until both sides post (BeatGig pattern). released_at flips visible.';
+COMMENT ON TABLE "public"."reviews" IS '0002 — Bidirectional reviews. hidden_until_counterpart=true keeps reviews dark until both sides post (mutual-release pattern). released_at flips visible.';
 
 
 

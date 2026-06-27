@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,26 +31,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("trademarks", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("trademarks", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.legal.ip.eyebrow", undefined, "Legal · IP")}
         title={t("console.legal.ip.title", undefined, "Trademarks")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.legal.ip.recordSingular", undefined, "Record") : t("console.legal.ip.recordPlural", undefined, "Records")}`}
+        subtitle={`${total} ${total === 1 ? t("console.legal.ip.recordSingular", undefined, "Record") : t("console.legal.ip.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/studio/legal/ip/new" size="sm">
             {t("console.legal.ip.registerMark", undefined, "+ Register mark")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/legal/ip/${r.id}`}
           emptyLabel={t("console.legal.ip.emptyLabel", undefined, "No trademarks tracked")}
           emptyDescription={t(
@@ -85,6 +97,13 @@ export default async function Page() {
               groupable: true,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/legal/ip"
+          searchParams={sp}
         />
       </div>
     </>

@@ -1,7 +1,7 @@
 /**
  * XMCE Compliance Engine (LEG3ND) — shared enum tuples + label maps + small
  * helpers for the compliance authoring + findings surfaces. Pattern mirrors
- * `src/lib/marketplace.ts` / `src/lib/connecteam.ts`: enum tuples `as const`
+ * `src/lib/marketplace.ts` / `src/lib/workforce.ts`: enum tuples `as const`
  * → derived union types → label maps + a couple of pure helpers.
  *
  * XMCE = the compliance engine: author `compliance_rules`, then run checks

@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,26 +31,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("delegations", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("delegations", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.participants.delegations.eyebrow", undefined, "Participants")}
         title={t("console.participants.delegations.title", undefined, "Delegations")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.participants.delegations.recordSingular", undefined, "Record") : t("console.participants.delegations.recordPlural", undefined, "Records")}`}
+        subtitle={`${total} ${total === 1 ? t("console.participants.delegations.recordSingular", undefined, "Record") : t("console.participants.delegations.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/studio/participants/delegations/new" size="sm">
             {t("console.participants.delegations.newAction", undefined, "+ New Delegation")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/participants/delegations/${r.id}`}
           emptyLabel={t("console.participants.delegations.emptyLabel", undefined, "No delegations")}
           emptyDescription={t(
@@ -77,6 +89,13 @@ export default async function Page() {
               accessor: (r) => r.country ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/participants/delegations"
+          searchParams={sp}
         />
       </div>
     </>

@@ -1904,22 +1904,18 @@
      "ogImageTitle": "Menez la production."
     },
     "hero": {
-     "eyebrow": "Du pitch à l'étude de cas",
+     "eyebrow": "Production · Opérations · Expérience · Savoir",
      "titleLine1": "L'écosystème du",
      "titleLine2": "bâtisseur de",
-     "subtitleLead": "Le système d'exploitation modulaire pour les productions expérientielles et non conventionnelles.",
-     "subtitleAtlvs": "tient la passerelle,",
-     "subtitleCompvss": "travaille le terrain,",
-     "subtitleGvteway": "ouvre les portes, et",
+     "subtitleLead": "L'outil ultime pour celles et ceux qui ont osé rêver plus grand.",
      "ctaPrimary": "Commencer à créer, gratuitement",
      "ctaSecondary": "Voir en action",
      "disclaimer": "Gratuit à vie sur l'offre Access · Sans carte bancaire · Tarif par organisation",
      "ecosystemLabel": "L'écosystème ATLVS",
-     "titleLine3": "mondes.",
-     "subtitleLegend": "garde le standard."
+     "titleLine3": "mondes."
     },
     "trustBar": {
-     "label": "Les mondes que ces équipes bâtissent tournent sur ATLVS",
+     "label": "Au service des plus grands bâtisseurs de mondes du monde",
      "seeWork": "Voir les réalisations →"
     },
     "threeApps": {
@@ -1931,22 +1927,22 @@
     "products": {
      "atlvs": {
       "audience": "Pour les producteurs · équipes internes",
-      "tag": "Concevoir · Construire",
+      "tag": "Créer le monde",
       "body": "Concevez et construisez le monde — projets, advancing, finance, achats, et une IA qui rédige la paperasse à votre place. Le poste de commandement du producteur."
      },
      "compvss": {
       "audience": "Pour les équipes terrain · prestataires · talents",
-      "tag": "Opérer",
+      "tag": "Faire tourner le monde",
       "body": "Opérez-le sur le terrain — planning, certifications, scan aux portes, incidents. Offline-first, rapide à la porte même quand le réseau ne suit pas."
      },
      "gvteway": {
       "audience": "Pour les invités · clients · partenaires",
-      "tag": "Vivre",
+      "tag": "Vivre le monde",
       "body": "Là où le monde se vit — billetterie, portails, marketplace. Chaque persona, sa propre porte d'entrée."
      },
      "legend": {
       "audience": "Pour les connaissances · la formation · la conformité",
-      "tag": "Savoir",
+      "tag": "Enrichir le monde",
       "body": "Le savoir sur lequel le monde repose — le Standard, les cours, les certifications, le catalogue et le moteur de conformité."
      }
     },

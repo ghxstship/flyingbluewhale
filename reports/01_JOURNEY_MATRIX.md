@@ -120,7 +120,7 @@ Counting cells that are ✅ or 🔶 (non-N/A):
 ## Phase 2 execution strategy
 
 Given:
-- `.env.local` lacks Stripe, Anthropic, Resend, GrowthBook, Sentry keys.
+- `.env.local` lacks Stripe, Anthropic, Resend, the remote flag service, Sentry keys.
 - No existing seeded test accounts for each role (other than the `demo` org owner from `20260416_000006_seed.sql`).
 
 Phase 2 will execute in three tiers:
@@ -146,7 +146,7 @@ Phase 2 will execute in three tiers:
 - Stripe payment flows, Connect onboarding, webhook signature verify round-trip
 - Real email delivery via Resend
 - Streaming AI chat (Anthropic)
-- GrowthBook flag evaluation
+- the remote flag service flag evaluation
 - OAuth (Google/GitHub/Microsoft — require external OAuth client setup in Supabase dashboard)
 - SSO / SCIM (not implemented)
 

@@ -31,22 +31,18 @@ type CategoryRow = { name: string; value: number };
 // Title/description/series label localized at call site below.
 
 // Multi-hue categorical palette for the pie chart — these are data-encoded
-// distinct categories, not status. Tokenized colors (org-primary + status
-// quartet) are interleaved with neutral fallbacks chosen for hue separation
-// so the chart legend stays distinguishable in any theme.
-// CN-12 note: the four remaining hexes are deliberate — the theme defines
-// no `--p-chart-*` palette tokens yet, and mapping distinct data hues onto
-// semantic tokens would lie about meaning. Swap to chart tokens when the
-// theme grows them.
+// distinct categories, not status. Bound to the 8-color data-viz ramp
+// (`--chart-1..8`) so the legend stays distinguishable and mode-agnostic in
+// any theme.
 const PIE_COLORS = [
-  "var(--p-accent)",
-  "var(--p-success)",
-  "#a855f7", // purple — no semantic token; data-encoded distinct hue
-  "var(--p-warning)",
-  "#06b6d4", // teal
-  "var(--p-danger)",
-  "#84cc16", // lime
-  "#ec4899", // pink
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
 ];
 
 export function ReportsCharts({

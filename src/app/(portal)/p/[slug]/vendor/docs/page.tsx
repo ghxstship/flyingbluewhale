@@ -1,4 +1,4 @@
-import { DocsSurface } from "@/components/connecteam/DocsSurface";
+import { DocsSurface } from "@/components/workforce/DocsSurface";
 
 /** GVTEWAY vendor docs (ADR-0008 Move 3). */
 export const dynamic = "force-dynamic";

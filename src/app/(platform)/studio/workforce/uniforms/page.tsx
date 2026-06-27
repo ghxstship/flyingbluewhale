@@ -2,8 +2,10 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -20,7 +22,11 @@ type UniformRow = {
   active: boolean;
 };
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -38,14 +44,19 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("rate_card_items", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("rate_card_items", session.orgId, {
     orderBy: "name",
     ascending: true,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
     filters: [{ column: "catalog", op: "eq", value: "uniform" }],
-  })) as UniformRow[];
+  });
+  const rows = result.rows as UniformRow[];
+  const total = result.totalCount;
 
-  const totalSkus = rows.length;
+  const totalSkus = total;
   const activeSkus = rows.filter((r) => r.active).length;
   const skuLabel = t(
     totalSkus === 1 ? "console.workforce.uniforms.skuSingular" : "console.workforce.uniforms.skuPlural",
@@ -66,9 +77,10 @@ export default async function Page() {
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable<UniformRow>
           rows={rows}
+          totalCount={total}
           rowHref={(r) => `/studio/logistics/ratecard/${r.id}`}
           emptyLabel={t("console.workforce.uniforms.emptyLabel", undefined, "No uniform SKUs")}
           emptyDescription={t(
@@ -119,6 +131,13 @@ export default async function Page() {
               accessor: (r) => r.active ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/workforce/uniforms"
+          searchParams={sp}
         />
       </div>
     </>

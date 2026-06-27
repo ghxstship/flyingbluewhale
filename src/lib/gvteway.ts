@@ -9,7 +9,7 @@ import type { VenueZonePresence } from "@/components/gvteway/VenueMap";
  * GVTEWAY consumer data layer (design_handoff §2–§3). Server-only typed query
  * helpers over the social/ticketing/onsite tables from
  * `20260623120000_gvteway_consumer.sql` (now applied + in the generated types).
- * Mirrors the shape of `src/lib/marketplace.ts` / `src/lib/connecteam.ts`:
+ * Mirrors the shape of `src/lib/marketplace.ts` / `src/lib/workforce.ts`:
  * presentational components stay dumb; these resolve real org/user-scoped rows
  * and hand back the components' prop shapes. RLS does the authorization — these
  * never widen it (e.g. `activity` only returns self + followed actors).

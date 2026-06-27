@@ -59,7 +59,7 @@ const ROUTES = [
   { path: "/m/shift", label: "Shift", expect: "shift" },
   { path: "/m/alerts", label: "Alerts", expect: "alerts" },
   { path: "/m/settings", label: "Me / Settings", expect: "settings|sign out|preferences" },
-  // Connecteam-parity surfaces (0046/0047)
+  // Workforce-parity surfaces (0046/0047)
   { path: "/m/feed", label: "Updates feed", expect: "updates" },
   { path: "/m/inbox", label: "Inbox", expect: "inbox" },
   { path: "/m/learning", label: "Learning", expect: "learning" },

@@ -4,13 +4,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { CATEGORIES, CHANNELS } from "./constants";
 
 export type State = { error?: string; ok?: true } | null;
-
-// The notif-matrix categories rendered on /m/notifications (kit settings
-// `.notif-matrix`, app.jsx 3336-3346) × the three delivery channels.
-const CATEGORIES = ["Shifts", "Assignments", "Reviews", "Messages", "Announcements"] as const;
-const CHANNELS = ["push", "email", "text"] as const;
 
 const Toggle = z.object({
   category: z.enum(CATEGORIES),

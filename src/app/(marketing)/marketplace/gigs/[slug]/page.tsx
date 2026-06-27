@@ -9,9 +9,24 @@ import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
-import { buildMetadata, metaDescription } from "@/lib/seo";
+import { buildMetadata, jobPostingSchema, metaDescription } from "@/lib/seo";
+import { JsonLd } from "@/components/marketing/JsonLd";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
+
+// public_job_board.employment_type → schema.org JobPosting employmentType enum.
+const EMPLOYMENT_TYPE_MAP: Record<string, "FULL_TIME" | "PART_TIME" | "CONTRACTOR" | "TEMPORARY" | "INTERN"> = {
+  full_time: "FULL_TIME",
+  part_time: "PART_TIME",
+  contract: "CONTRACTOR",
+  contractor: "CONTRACTOR",
+  freelance: "CONTRACTOR",
+  temporary: "TEMPORARY",
+  seasonal: "TEMPORARY",
+  internship: "INTERN",
+  intern: "INTERN",
+};
 
 type Row = {
   id: string;
@@ -33,6 +48,7 @@ type Row = {
   lodging_provided: boolean;
   applicant_count: number;
   expires_at: string | null;
+  published_at: string | null;
   org_name: string;
   org_slug: string;
 };
@@ -79,6 +95,35 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   return (
     <>
+      {r.published_at && (
+        <JsonLd
+          data={[
+            jobPostingSchema({
+              title: r.title,
+              description:
+                r.description ?? `${r.org_name} is hiring for ${r.title} through the ATLVS marketplace.`,
+              url: urlFor("marketing", `/marketplace/gigs/${r.public_slug}`),
+              datePosted: r.published_at,
+              employmentType: EMPLOYMENT_TYPE_MAP[r.employment_type?.toLowerCase()] ?? "CONTRACTOR",
+              location: {
+                city: r.city ?? undefined,
+                region: r.region ?? undefined,
+                country: r.country ?? undefined,
+              },
+              ...(r.day_rate_min_cents != null && r.day_rate_max_cents != null
+                ? {
+                    baseSalary: {
+                      min: r.day_rate_min_cents / 100,
+                      max: r.day_rate_max_cents / 100,
+                      currency: r.currency,
+                      unitText: "DAY" as const,
+                    },
+                  }
+                : {}),
+            }),
+          ]}
+        />
+      )}
       <Breadcrumbs
         items={[
           { label: t("marketing.pages.marketplace-gigs-detail.breadcrumbs.marketplace"), href: "/marketplace" },

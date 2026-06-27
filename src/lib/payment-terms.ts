@@ -1,27 +1,39 @@
 /**
  * Canonical engagement payment terms — the single authoring site for the
- * default deposit / balance split (feedback_payment_terms_default).
+ * default deposit / balance splits (feedback_payment_terms_default).
  *
- * Resolution precedence (plumb-line DUP-1/DUP-6, ratified 2026-06-24):
- *   per-instance value  →  org template default  →  system default (here).
+ * TWO system defaults, by context:
+ *  - BOOKING / engagement (marketplace talent offers + profiles): 60% deposit /
+ *    40% balance on load-in. Mirrored by the Postgres column defaults
+ *    `talent_offers.deposit_pct` / `talent_profiles.deposit_pct` (DEFAULT 60).
+ *  - PROPOSAL (sales proposals → invoices): 50% deposit / 50% balance
+ *    (ratified 2026-06-24).
+ *
+ * Resolution precedence (plumb-line DUP-1/DUP-6):
+ *   per-instance value  →  org template default  →  system default.
  * Every form default, Zod schema default, document binding, and invoice seeder
- * that needs "the deposit %" or "the balance terms" MUST go through
- * `resolveDepositPct()` / `resolveBalanceTerms()` instead of re-hardcoding a
- * literal. The org template default is stored on `orgs.default_deposit_pct` /
- * `orgs.default_balance_terms` and read via `src/lib/payment-terms-server.ts`
- * (`getOrgPaymentDefaults`). The per-instance value lives on the record
- * (e.g. `proposals.deposit_percent`).
+ * MUST go through `resolveDepositPct()` / the exported constants instead of
+ * re-hardcoding a literal. The org template default is stored on
+ * `orgs.default_deposit_pct` / `orgs.default_balance_terms` and read via
+ * `src/lib/payment-terms-server.ts` (`getOrgPaymentDefaults`). The per-instance
+ * value lives on the record (e.g. `proposals.deposit_percent`).
  *
- * This module is pure + client-safe (no DB, no `server-only`) so client
- * components — e.g. the proposal block renderer — can import the labels and the
- * resolver. The DB-backed org-template fetch is the server companion file.
+ * Pure + client-safe (no DB, no `server-only`) so client components can import
+ * the constants and the resolver. The DB-backed org-template fetch is the
+ * server companion file.
  */
 
-/** System default deposit percentage charged on signature (50/50 split). */
-export const DEPOSIT_PCT_DEFAULT = 50;
+/** Booking/engagement system default deposit % (marketplace offers/profiles). */
+export const DEPOSIT_PCT_DEFAULT = 60;
 
-/** System default balance percentage. Derived — never re-author. */
+/** Booking/engagement system default balance %. Derived — never re-author. */
 export const BALANCE_PCT_DEFAULT = 100 - DEPOSIT_PCT_DEFAULT;
+
+/** Proposal system default deposit % (sales proposals → invoices). */
+export const PROPOSAL_DEPOSIT_PCT_DEFAULT = 50;
+
+/** Proposal system default balance %. Derived — never re-author. */
+export const PROPOSAL_BALANCE_PCT_DEFAULT = 100 - PROPOSAL_DEPOSIT_PCT_DEFAULT;
 
 /** When the balance comes due. `load_in` = on load-in day. */
 export const BALANCE_TERMS_DEFAULT = "load_in";
@@ -40,16 +52,25 @@ export function clampDepositPct(pct: number | null | undefined): number | null {
 
 /**
  * Resolve the effective deposit percentage, honoring the precedence
- * per-instance → org template → system default. Always returns a valid
- * whole percentage in [0, 100].
+ * per-instance → org template → system default. `systemDefault` selects the
+ * context default (booking vs proposal); defaults to the booking split.
+ * Always returns a valid whole percentage in [0, 100].
  */
-export function resolveDepositPct(instancePct?: number | null, orgTemplatePct?: number | null): number {
-  return clampDepositPct(instancePct) ?? clampDepositPct(orgTemplatePct) ?? DEPOSIT_PCT_DEFAULT;
+export function resolveDepositPct(
+  instancePct?: number | null,
+  orgTemplatePct?: number | null,
+  systemDefault: number = DEPOSIT_PCT_DEFAULT,
+): number {
+  return clampDepositPct(instancePct) ?? clampDepositPct(orgTemplatePct) ?? systemDefault;
 }
 
 /** The balance percentage paired with a resolved deposit percentage. */
-export function resolveBalancePct(instancePct?: number | null, orgTemplatePct?: number | null): number {
-  return 100 - resolveDepositPct(instancePct, orgTemplatePct);
+export function resolveBalancePct(
+  instancePct?: number | null,
+  orgTemplatePct?: number | null,
+  systemDefault: number = DEPOSIT_PCT_DEFAULT,
+): number {
+  return 100 - resolveDepositPct(instancePct, orgTemplatePct, systemDefault);
 }
 
 /**

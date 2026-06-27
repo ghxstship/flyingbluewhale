@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,20 +31,25 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("delegation_entries", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("delegation_entries", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.participants.entries.eyebrow", undefined, "Participants")}
         title={t("console.participants.entries.title", undefined, "Entries")}
         subtitle={
-          rows.length === 1
-            ? t("console.participants.entries.recordCount.one", { count: rows.length }, `${rows.length} Record`)
-            : t("console.participants.entries.recordCount.other", { count: rows.length }, `${rows.length} Records`)
+          total === 1
+            ? t("console.participants.entries.recordCount.one", { count: total }, `${total} Record`)
+            : t("console.participants.entries.recordCount.other", { count: total }, `${total} Records`)
         }
         action={
           <Button href="/studio/participants/entries/new" size="sm">
@@ -46,9 +57,10 @@ export default async function Page() {
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/participants/entries/${r.id}`}
           emptyLabel={t("console.participants.entries.emptyLabel", undefined, "No participant entries")}
           emptyDescription={t(
@@ -91,6 +103,13 @@ export default async function Page() {
               groupable: true,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/participants/entries"
+          searchParams={sp}
         />
       </div>
     </>

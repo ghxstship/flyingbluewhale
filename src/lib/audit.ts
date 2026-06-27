@@ -92,7 +92,7 @@ export type AuditAction =
   | "draw.marked_pending"
   | "draw.seeded_default"
   // ────────────────────────────────────────────────────────────────
-  // Connecteam parity (migrations 0046–0048, 0050–0051)
+  // Workforce parity (migrations 0046–0048, 0050–0051)
   // ────────────────────────────────────────────────────────────────
   | "announcement.published"
   | "announcement.read"
@@ -125,6 +125,16 @@ export type AuditAction =
   // ────────────────────────────────────────────────────────────────
   | "notification.read"
   | "notification.preferences_updated"
+  // ────────────────────────────────────────────────────────────────
+  // Privacy / GDPR — DSAR + data-export surfaces. These are the events
+  // most likely to be litigated (Art. 15 access, Art. 17 erasure,
+  // Art. 20 portability), so each create/fulfil/export is audited with
+  // actor + target.
+  // ────────────────────────────────────────────────────────────────
+  | "privacy.dsar.created"
+  | "privacy.dsar.fulfilled"
+  | "privacy.data_export"
+  | "privacy.audit_export"
   // ────────────────────────────────────────────────────────────────
   // Marketplace
   // ────────────────────────────────────────────────────────────────

@@ -155,7 +155,7 @@ Per [reports/00_DISCOVERY.md §Tooling/External deps](00_DISCOVERY.md) — uncha
 | Anthropic             | AI assistant streaming | ❌ NOT SET           | `/api/v1/ai/chat` returns 500 (no-op) |
 | Stripe                | Invoicing, Connect     | ❌ NOT SET           | payment flows blocked                 |
 | Resend                | Transactional email    | ❌ NOT SET           | `sendEmail` no-ops silently           |
-| GrowthBook            | Feature flags          | ❌ NOT SET           | `FLAG_DEFAULTS` fallback              |
+| the remote flag service            | Feature flags          | ❌ NOT SET           | `FLAG_DEFAULTS` fallback              |
 | Sentry                | Error tracking         | ❌ NOT SET           | OK; logs only                         |
 
 Phase 2 will execute against this env. Third-party-dependent flows continue to be BLOCKED tier per UJV precedent — code paths verifiable, full round-trips not.

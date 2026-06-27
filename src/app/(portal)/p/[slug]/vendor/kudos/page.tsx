@@ -1,4 +1,4 @@
-import { KudosSurface } from "@/components/connecteam/KudosSurface";
+import { KudosSurface } from "@/components/workforce/KudosSurface";
 
 /** GVTEWAY vendor kudos (ADR-0008 Move 3). */
 export const dynamic = "force-dynamic";

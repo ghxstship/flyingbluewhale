@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Waypoint">
+  <!-- The star / waypoint motif. Default ATLVS volcanic red; set color: to retheme (the counter dot inherits the surface via the knock). -->
+  <path d="M32 4 L37.5 26.5 L60 32 L37.5 37.5 L32 60 L26.5 37.5 L4 32 L26.5 26.5 Z" fill="#E23414"></path>
+  <circle cx="32" cy="32" r="4" fill="#FFFFFF"></circle>
+</svg>

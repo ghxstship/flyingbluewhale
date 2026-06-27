@@ -90,7 +90,13 @@ jobs:
       # ingest it without needing the source tree.
       - name: Generate SBOM
         run: |
-          npx --yes @cyclonedx/cyclonedx-npm@^2 --omit dev --output-format JSON --output-file sbom.cyclonedx.json
+          # --ignore-npm-errors: `npm ls` reports orphaned OPTIONAL native deps
+          # (napi-rs/emnapi wasm fallbacks) as "extraneous"; that's an npm/native
+          # quirk, not a real dependency defect. The flag lets the BOM generate
+          # (still lists every component) without hard-failing on that noise. The
+          # real security gates — `npm audit --audit-level=high` + Gitleaks — are
+          # separate steps and unaffected.
+          npx --yes @cyclonedx/cyclonedx-npm@^2 --omit dev --ignore-npm-errors --output-format JSON --output-file sbom.cyclonedx.json
       - uses: actions/upload-artifact@v4
         with:
           name: sbom-cyclonedx

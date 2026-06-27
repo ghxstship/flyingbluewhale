@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, productSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/marketing/JsonLd";
+import { urlFor } from "@/lib/urls";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { formatMoney, type StoreProduct, type StoreProductVariant } from "@/lib/commerce_store";
 import { AddToCartForm } from "../_components/AddToCartForm";
@@ -32,9 +34,19 @@ async function fetchProduct(slug: string): Promise<{ product: StoreProduct; vari
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const found = await fetchProduct(slug);
+  if (!found) {
+    // No published product at this slug → the page 404s; don't let the thin
+    // "Product" fallback get indexed.
+    return buildMetadata({
+      title: "Product",
+      description: "Shop the GVTEWAY store.",
+      path: `/marketplace/store/${slug}`,
+      noIndex: true,
+    });
+  }
   return buildMetadata({
-    title: found?.product.title ?? "Product",
-    description: found?.product.description ?? "Shop the GVTEWAY store.",
+    title: found.product.title,
+    description: found.product.description ?? "Shop the GVTEWAY store.",
     path: `/marketplace/store/${slug}`,
   });
 }
@@ -48,6 +60,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
+      <JsonLd
+        data={[
+          productSchema({
+            name: product.title,
+            description: product.description ?? `${product.title} — available in the GVTEWAY store.`,
+            url: urlFor("marketing", `/marketplace/store/${product.slug}`),
+            sku: product.id,
+            price: (product.price_cents / 100).toFixed(2),
+            currency: product.currency,
+            inStock: !soldOut,
+          }),
+        ]}
+      />
       <Breadcrumbs
         items={[
           { label: "Marketplace", href: "/marketplace" },

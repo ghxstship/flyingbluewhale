@@ -15,17 +15,17 @@ test.describe("V6 documents", () => {
   });
 
   test("hub lists every template grouped by app", async ({ page }) => {
-    await page.goto("/console/documents");
+    await page.goto("/studio/documents");
     await expect(page.getByRole("heading", { name: "DOCUMENT LIBRARY" })).toBeVisible();
     // every template surfaces as a link to its preview route
     for (const tpl of DOC_TEMPLATES) {
-      await expect(page.locator(`a[href="/console/documents/${tpl.id}"]`)).toBeVisible();
+      await expect(page.locator(`a[href="/studio/documents/${tpl.id}"]`)).toBeVisible();
     }
   });
 
   for (const tpl of DOC_TEMPLATES) {
     test(`renders ${tpl.id} (${tpl.app})`, async ({ page }) => {
-      await page.goto(`/console/documents/${tpl.id}`);
+      await page.goto(`/studio/documents/${tpl.id}`);
       // the document artifact is present and carries its schema contract
       const doc = page.locator(`.doc[data-doc="${tpl.schema}"]`);
       await expect(doc).toBeVisible();
@@ -40,13 +40,13 @@ test.describe("V6 documents", () => {
     // notFound() streams the (platform) not-found boundary. With dynamic RSC
     // streaming the HTTP shell can be 200, so assert on the rendered UI: the
     // not-found page shows and no document artifact is present.
-    await page.goto("/console/documents/not-a-real-doc");
+    await page.goto("/studio/documents/not-a-real-doc");
     await expect(page.getByText("Back to Workspace")).toBeVisible();
     await expect(page.locator(".doc")).toHaveCount(0);
   });
 
   test("merge-field highlight toggles off", async ({ page }) => {
-    await page.goto("/console/documents/invoice");
+    await page.goto("/studio/documents/invoice");
     const doc = page.locator('.doc[data-doc="invoice"]');
     await expect(doc).toHaveAttribute("data-mf", "on");
     await page.getByLabel("Highlight merge fields").uncheck();
@@ -54,7 +54,7 @@ test.describe("V6 documents", () => {
   });
 
   test("white-label brand mode strips ATLVS attribution", async ({ page }) => {
-    await page.goto("/console/documents/proposal");
+    await page.goto("/studio/documents/proposal");
     const doc = page.locator('.doc[data-doc="proposal"]');
     await page.getByRole("button", { name: "White-label" }).click();
     await expect(doc).toHaveAttribute("data-brand", "white");

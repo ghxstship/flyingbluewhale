@@ -8,7 +8,7 @@ import { validateBlocks } from "@/lib/proposals/validate";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { actionFail, formFail } from "@/lib/forms/fail";
-import { resolveDepositPct } from "@/lib/payment-terms";
+import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 
 const UpdateSchema = z.object({
@@ -63,6 +63,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   const depositPct = resolveDepositPct(
     parsed.data.deposit_percent ? parseInt(parsed.data.deposit_percent, 10) : null,
     orgDefaults.depositPct,
+    PROPOSAL_DEPOSIT_PCT_DEFAULT,
   );
 
   // Conditional update on observed version — without it two concurrent

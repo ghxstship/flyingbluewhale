@@ -4,7 +4,7 @@
  * Single helper file for the discounts + promoters module (migration
  * PENDING_discounts_promoter_splits). Mirrors Shopify discounts and
  * Posh.VIP affiliate commission attribution. Pattern matches
- * `src/lib/connecteam.ts` / `src/lib/marketplace.ts`: enum tuples
+ * `src/lib/workforce.ts` / `src/lib/marketplace.ts`: enum tuples
  * `as const` → derived types → label maps + small pure helpers.
  */
 

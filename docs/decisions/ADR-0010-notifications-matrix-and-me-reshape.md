@@ -3,7 +3,7 @@
 **Status:** Proposed
 **Date:** 2026-06-04
 **Owner:** Platform engineering
-**Relates to:** ADR-0007 (cross-shell chrome — defines the bell + messages affordances that read from this matrix), CLAUDE.md §"Push fan-out" + §"Connecteam parity loop-closure (0050–0051)" — `notification_kind_catalog` view already partly there.
+**Relates to:** ADR-0007 (cross-shell chrome — defines the bell + messages affordances that read from this matrix), CLAUDE.md §"Push fan-out" + §"Workforce parity loop-closure (0050–0051)" — `notification_kind_catalog` view already partly there.
 
 ## Context
 

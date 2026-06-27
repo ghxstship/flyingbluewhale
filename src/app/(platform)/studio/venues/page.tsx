@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,22 +31,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("venues", session.orgId, { orderBy: "created_at", ascending: false, limit: 500 });
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("venues", session.orgId, {
+    orderBy: "created_at",
+    ascending: false,
+    pageSize,
+    cursor: String(offset),
+  });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.venues.eyebrow", undefined, "Venues")}
         title={t("console.venues.title", undefined, "Venues")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.venues.recordSingular", undefined, "Record") : t("console.venues.recordPlural", undefined, "Records")}`}
+        subtitle={`${total} ${total === 1 ? t("console.venues.recordSingular", undefined, "Record") : t("console.venues.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/studio/venues/new" size="sm">
             {t("console.venues.newVenue", undefined, "+ New Venue")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/venues/${r.id}`}
           emptyLabel={t("console.venues.emptyLabel", undefined, "No Venues Yet")}
           emptyDescription={t(
@@ -87,6 +103,13 @@ export default async function Page() {
               accessor: (r) => r.handover_state ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/venues"
+          searchParams={sp}
         />
       </div>
     </>

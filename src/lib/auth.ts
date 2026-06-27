@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { apiError } from "./api";
@@ -43,7 +44,17 @@ export type Session = {
   scopes?: string[];
 };
 
-export async function getSession(): Promise<Session | null> {
+/**
+ * Resolve the current request's session. Wrapped in React's `cache()` below
+ * (exported as `getSession`) so the auth + memberships + preferences lookups
+ * run at most once per request even though the layout, every page, and many
+ * server components all call it. `cache()` is request-scoped in RSC — a new
+ * request always re-resolves — so this is safe for auth: it never memoizes
+ * across requests or users, and cookies/headers are still read once per
+ * request the first time the function runs. PAT/Bearer auth keeps working
+ * because the Authorization header is read inside the cached body, once.
+ */
+async function resolveSession(): Promise<Session | null> {
   if (!hasSupabase) return null;
 
   // Bearer-token auth (personal access tokens) takes priority over the
@@ -150,6 +161,12 @@ export async function getSession(): Promise<Session | null> {
     persona: chosen.persona ?? (isGuest ? "guest" : personaForRole(chosen.role)),
   };
 }
+
+/**
+ * Request-scoped memoized session resolver. See `resolveSession` for why this
+ * is safe for auth (per-request cache, never cross-request).
+ */
+export const getSession = cache(resolveSession);
 
 function guestSession(userId: string, email: string): Session {
   return {
@@ -341,14 +358,31 @@ const CAPABILITIES_BY_PERSONA: Partial<Record<Persona, readonly string[]>> = {
   contractor: ["projects:read", "tasks:read", "tasks:write", "time:write"],
   // Field operator. Scanning is the defining capability.
   crew: ["check-in:*", "tasks:read", "tasks:write", "time:write"],
-  // Proposal recipient / portal viewer. Read-only.
-  client: ["proposals:read", "deliverables:read", "tasks:read"],
+  // Proposal recipient / portal viewer. Read-only on the data layer, PLUS
+  // `proposals:approve` — the one binding write the client persona is
+  // *supposed* to perform: signing / declining the proposal approvals,
+  // change-orders, revisions, and phase gates addressed to them in the
+  // GVTEWAY client portal. This is deliberately a distinct capability from
+  // `proposals:write` (which the client does NOT have — they can't author
+  // or re-state the proposal itself). Operator manager+ personas inherit
+  // `proposals:approve` for free via their `proposals:*` grant, so the
+  // operator can also act on the client's behalf. Without this, the portal
+  // sign-off actions (which previously gated only on org membership) let
+  // ANY org member — crew, generic member, contractor — sign a
+  // legally-meaningful client approval; with it, only the client +
+  // operators can. See the portal proposal sign-off actions and
+  // src/lib/portal-proposal-approve-canon.test.ts.
+  client: ["proposals:read", "proposals:approve", "deliverables:read", "tasks:read"],
   // Generic read-only stakeholder. Same read scope as `client` so a
   // GVTEWAY stakeholder-viewer can browse proposals + deliverables on
   // a project they've been added to. Without proposals:read /
   // deliverables:read here, a stakeholder-viewer who follows a portal
-  // link sees a 403 on the only screens they care about.
-  viewer: ["projects:read", "tasks:read", "proposals:read", "deliverables:read"],
+  // link sees a 403 on the only screens they care about. Also granted
+  // `proposals:approve`: a stakeholder-viewer is the secondary signer on a
+  // shared client portal (e.g. a client's legal contact who must counter-
+  // sign), so they share the client's sign-off authority — but, like the
+  // client, NOT `proposals:write`.
+  viewer: ["projects:read", "tasks:read", "proposals:read", "proposals:approve", "deliverables:read"],
   // Public marketplace browser; no organizational capabilities at all.
   community: [],
   // `guest` (pre-real-org member) and `visitor` (anon) intentionally

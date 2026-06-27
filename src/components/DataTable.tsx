@@ -416,7 +416,7 @@ function DataTableEmpty({
         <thead>
           <tr>
             {columns.map((c) => (
-              <th key={c.key} className={c.headerClassName}>
+              <th key={c.key} scope="col" className={c.headerClassName}>
                 {c.header}
               </th>
             ))}
@@ -450,7 +450,7 @@ function DataTableSkeleton({ columns, rows }: { columns: number; rows: number })
         <thead>
           <tr>
             {Array.from({ length: columns }).map((_, i) => (
-              <th key={i}>
+              <th key={i} scope="col">
                 <div className="ps-skel h-4 w-20 rounded" />
               </th>
             ))}

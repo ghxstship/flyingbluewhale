@@ -10,7 +10,13 @@ import type { CatalogKind, DocDeliverableType, ProposalBlock } from "@/lib/propo
 // editable; the optional lineage fields just add the hints the
 // convert-to-project seeder consumes.
 
-const CATALOG_KINDS: CatalogKind[] = [
+// NOTE: the canonical CATALOG_KINDS tuple lives in `@/lib/db/assignments`,
+// but that module is `server-only` and cannot be imported into this client
+// component. This local list is typed against the canonical `CatalogKind`
+// (re-derived from the DB enum), so any membership drift is a compile error;
+// `src/lib/db/enum-sync.test.ts` guards the tuple itself against the DB enum.
+const CATALOG_KINDS = [
+  "ticket",
   "credential",
   "catering",
   "radio",
@@ -20,7 +26,8 @@ const CATALOG_KINDS: CatalogKind[] = [
   "travel",
   "lodging",
   "vehicle",
-];
+  "labor",
+] as const satisfies readonly CatalogKind[];
 
 const DELIVERABLE_TYPES: DocDeliverableType[] = [
   "technical_rider",

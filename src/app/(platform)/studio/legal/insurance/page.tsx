@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,20 +31,25 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("insurance_policies", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("insurance_policies", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.legal.insurance.eyebrow", undefined, "Legal")}
         title={t("console.legal.insurance.title", undefined, "Insurance Policies")}
         subtitle={
-          rows.length === 1
-            ? t("console.legal.insurance.subtitleOne", { count: rows.length }, `${rows.length} Record`)
-            : t("console.legal.insurance.subtitleOther", { count: rows.length }, `${rows.length} Records`)
+          total === 1
+            ? t("console.legal.insurance.subtitleOne", { count: total }, `${total} Record`)
+            : t("console.legal.insurance.subtitleOther", { count: total }, `${total} Records`)
         }
         action={
           <Button href="/studio/legal/insurance/new" size="sm">
@@ -46,9 +57,10 @@ export default async function Page() {
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/legal/insurance/${r.id}`}
           emptyLabel={t("console.legal.insurance.emptyLabel", undefined, "No insurance policies")}
           emptyDescription={t(
@@ -95,6 +107,13 @@ export default async function Page() {
               accessor: (r) => r.expires_on ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/legal/insurance"
+          searchParams={sp}
         />
       </div>
     </>

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
+import { useDismissable } from "./useDismissable";
 
 /**
  * Dropdown-menu pieces for the COMPVSS mobile action bar.
@@ -19,9 +20,17 @@ export type MenuItem = {
 };
 
 /** Internal: the `.ps-menu pop` list both PillMenu and the legacy menu use. */
-function MenuList({ items, className = "" }: { items: MenuItem[]; className?: string }) {
+function MenuList({
+  items,
+  className = "",
+  menuRef,
+}: {
+  items: MenuItem[];
+  className?: string;
+  menuRef?: React.Ref<HTMLDivElement>;
+}) {
   return (
-    <div className={`ps-menu ${className}`.trim()} role="menu">
+    <div ref={menuRef} className={`ps-menu ${className}`.trim()} role="menu">
       {items.map((it, i) => (
         <button key={i} type="button" className="ps-menu-item" role="menuitem" onClick={it.onSelect}>
           {it.icon != null && <span className="ps-menu-ico">{it.icon}</span>}
@@ -56,6 +65,7 @@ export function PillMenu({
   align = "left",
 }: PillMenuProps) {
   const open = menuOpen === openKey;
+  const panelRef = useDismissable<HTMLDivElement>(open, () => setMenuOpen(null), { modal: false });
   return (
     <div style={{ position: "relative", flex: "none" }}>
       <button
@@ -63,6 +73,8 @@ export function PillMenu({
         className="pill ico"
         data-active={active || count ? true : undefined}
         onClick={() => setMenuOpen(open ? null : openKey)}
+        aria-haspopup="menu"
+        aria-expanded={open}
         title={label}
         aria-label={label}
       >
@@ -71,8 +83,13 @@ export function PillMenu({
       </button>
       {open && (
         <>
-          <div className="menu-back" onClick={() => setMenuOpen(null)} />
-          <MenuList className={`pop ${align === "right" ? "r" : ""}`.trim()} items={items} />
+          <button
+            type="button"
+            className="menu-back"
+            aria-label={`Close ${label} menu`}
+            onClick={() => setMenuOpen(null)}
+          />
+          <MenuList menuRef={panelRef} className={`pop ${align === "right" ? "r" : ""}`.trim()} items={items} />
         </>
       )}
     </div>
@@ -105,6 +122,7 @@ export function Popover({
   children,
 }: PopoverProps) {
   const open = menuOpen === openKey;
+  const panelRef = useDismissable<HTMLDivElement>(open, () => setMenuOpen(null), { modal: false });
   return (
     <div style={{ position: "relative", flex: "none" }}>
       <button
@@ -112,6 +130,8 @@ export function Popover({
         className="pill ico"
         data-active={active || count ? true : undefined}
         onClick={() => setMenuOpen(open ? null : openKey)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
         title={label}
         aria-label={label}
       >
@@ -120,8 +140,13 @@ export function Popover({
       </button>
       {open && (
         <>
-          <div className="menu-back" onClick={() => setMenuOpen(null)} />
-          <div className={`ps-menu pop ${align === "right" ? "r" : ""}`.trim()} style={{ width, padding: 14 }}>
+          <button
+            type="button"
+            className="menu-back"
+            aria-label={`Close ${label}`}
+            onClick={() => setMenuOpen(null)}
+          />
+          <div ref={panelRef} role="dialog" aria-label={label} className={`ps-menu pop ${align === "right" ? "r" : ""}`.trim()} style={{ width, padding: 14 }}>
             {children}
           </div>
         </>

@@ -7,9 +7,9 @@
  */
 
 .bk-root {
-  /* Defensive fallbacks — bermuda-light + other CHROMA themes never
-     defined the named --gx-* world, so we re-pin them here so this
-     page paints in canon regardless of the active theme. */
+  /* Neutrals are a self-contained dark-page palette. The GREEN accent tracks
+     the canonical --p-accent token (plumb-line THM-6) so it can never drift
+     from the v8 mono-green; the literal is only the cold-start fallback. */
   --gx-void: #000000;
   --gx-ink: #0d0d0d;
   --gx-ink-2: #171717;
@@ -17,10 +17,10 @@
   --gx-bone: #ededed;
   --gx-bone-2: #b0b0b0;
   --gx-bone-3: #909090;
-  --gx-brass: #2edb3a;
-  --gx-brass-deep: #147d1c;
-  --gx-nebula: #2edb3a;
-  --gx-plasma: #6ee176;
+  --gx-brass: var(--p-accent, #e23414);
+  --gx-brass-deep: #971a05;
+  --gx-nebula: var(--p-accent, #e23414);
+  --gx-plasma: #ff7c5a;
 
   background: var(--gx-void);
   color: var(--gx-bone);

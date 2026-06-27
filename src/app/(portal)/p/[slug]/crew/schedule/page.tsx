@@ -1,4 +1,4 @@
-import { ScheduleSurface } from "@/components/connecteam/ScheduleSurface";
+import { ScheduleSurface } from "@/components/workforce/ScheduleSurface";
 
 /**
  * GVTEWAY crew schedule — thin wrapper over shared <ScheduleSurface>.

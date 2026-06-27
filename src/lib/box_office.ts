@@ -5,7 +5,7 @@
  * surface, and the door-scan affordance. Schema-anchored to migration
  * PENDING_box_office_guest_list.sql.
  *
- * Pattern mirrors `src/lib/marketplace.ts` + `src/lib/connecteam.ts`:
+ * Pattern mirrors `src/lib/marketplace.ts` + `src/lib/workforce.ts`:
  * enum tuples `as const` -> derived types -> small helpers + label / tone
  * maps. Mirrors DICE/TIXR box office + door.
  */

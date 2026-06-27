@@ -45,7 +45,10 @@ export default async function BeoDetail({ params }: { params: Promise<{ id: stri
     filters: [{ column: "beo_id", op: "eq", value: id }],
     orderBy: "sort_order",
     ascending: true,
-    limit: 0,
+    // Cap defensively — a single BEO's line items are bounded by the doc,
+    // but the perf audit flagged the unbounded `limit: 0`. 500 is far past
+    // any real BEO.
+    limit: 500,
   })) as unknown as BeoLineItem[];
 
   const sections = groupBySection(lines);

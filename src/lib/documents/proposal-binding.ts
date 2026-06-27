@@ -15,7 +15,7 @@
  */
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import { formatMoney } from "@/lib/i18n/format";
-import { DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
+import { PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 
 type DocData = Record<string, unknown>;
 
@@ -200,7 +200,7 @@ export function proposalDataFromBlocks(blocks: ProposalBlock[], ctx: ProposalBin
   // Engagement amounts: derive deposit/balance from the canonical split when the
   // blocks didn't state them explicitly but the record carries a total.
   if (ctx.amountCents != null) {
-    const pct = ctx.depositPercent ?? DEPOSIT_PCT_DEFAULT;
+    const pct = ctx.depositPercent ?? PROPOSAL_DEPOSIT_PCT_DEFAULT;
     payment.depositPct ??= `${pct}%`;
     payment.balancePct ??= `${100 - pct}%`;
     payment.depositAmount = formatMoney(Math.round((ctx.amountCents * pct) / 100), currency);

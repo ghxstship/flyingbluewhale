@@ -121,55 +121,37 @@ export async function POST(req: Request) {
         // Stripe redeliveries never double-credit.
         const creditOrderId = obj?.metadata?.credit_order_id;
         if (creditOrderId && supabase) {
-          // New LEG3ND tables aren't in the generated types yet — loose read.
-          const ldb = supabase as unknown as import("@/lib/supabase/loose").LooseSupabase;
-          const { data: order } = await ldb
-            .from("credit_orders")
-            .update({ order_state: "paid" })
-            .eq("id", creditOrderId)
-            .eq("order_state", "pending")
-            .select("id, org_id, user_id, credits")
-            .maybeSingle();
-          if (order) {
-            await ldb.from("credit_ledger").insert({
-              org_id: order.org_id,
-              user_id: order.user_id,
-              delta: order.credits,
-              reason: "Credit pack purchase",
-              ref_kind: "credit_order",
-              ref_id: order.id,
-            });
-            await ldb.from("credit_orders").update({ order_state: "fulfilled" }).eq("id", order.id);
+          // Atomic + idempotent: fulfill_credit_order validates the order is
+          // unfulfilled, grants the ledger credit (keyed on the order so a
+          // redelivery can't double-credit), and flips to fulfilled — all in
+          // one transaction. Replaces the prior three-write sequence that lost
+          // the customer's credit if it crashed between the paid-flip and the
+          // ledger insert.
+          const { data: result, error: fErr } = await supabase.rpc("fulfill_credit_order", {
+            p_order_id: creditOrderId,
+            p_event_id: event.id,
+          });
+          if (fErr) {
+            log.warn("stripe.webhook.credit_fulfill_failed", { event_id: event.id, err: fErr.message });
+          } else {
+            log.info("stripe.webhook.credit_fulfilled", { event_id: event.id, result });
           }
         }
 
         const cartId = obj?.metadata?.store_cart_id;
         if (cartId && supabase) {
-          const { data: converted } = await supabase
-            .from("store_carts")
-            .update({ cart_state: "converted" })
-            .eq("id", cartId)
-            .neq("cart_state", "converted")
-            .select("id")
-            .maybeSingle();
-          if (converted) {
-            const { data: items } = await supabase
-              .from("store_cart_items")
-              .select("product_id, quantity")
-              .eq("cart_id", cartId);
-            for (const it of items ?? []) {
-              const { data: prod } = await supabase
-                .from("store_products")
-                .select("inventory_qty")
-                .eq("id", it.product_id)
-                .maybeSingle();
-              if (prod) {
-                await supabase
-                  .from("store_products")
-                  .update({ inventory_qty: Math.max(0, (prod.inventory_qty ?? 0) - (it.quantity ?? 0)) })
-                  .eq("id", it.product_id);
-              }
-            }
+          // Atomic + idempotent: convert_store_cart flips the cart (only once)
+          // and decrements every line item's inventory in one transaction with
+          // a non-negative floor. Replaces the per-item read-modify-write loop
+          // (lost-update race + partial-decrement on mid-loop crash).
+          const { data: result, error: cErr } = await supabase.rpc("convert_store_cart", {
+            p_cart_id: cartId,
+            p_event_id: event.id,
+          });
+          if (cErr) {
+            log.warn("stripe.webhook.cart_convert_failed", { event_id: event.id, err: cErr.message });
+          } else {
+            log.info("stripe.webhook.cart_converted", { event_id: event.id, result });
           }
         }
         break;
@@ -204,6 +186,10 @@ export async function POST(req: Request) {
                 to: targetState,
                 reason: `Stripe ${event.type}`,
                 stripeEventId: event.id,
+                // No session in webhook context — the subscriptions table RLS
+                // requires has_org_role for SELECT/UPDATE, so the transition
+                // MUST run under the service client or it silently no-ops.
+                db: supabase,
               });
               if (!result.ok) {
                 log.warn("stripe.webhook.subscription_transition_failed", {

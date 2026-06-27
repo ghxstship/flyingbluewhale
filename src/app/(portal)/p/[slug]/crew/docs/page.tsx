@@ -1,4 +1,4 @@
-import { DocsSurface } from "@/components/connecteam/DocsSurface";
+import { DocsSurface } from "@/components/workforce/DocsSurface";
 
 /** GVTEWAY crew docs — thin wrapper over shared <DocsSurface>. */
 export const dynamic = "force-dynamic";

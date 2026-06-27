@@ -30,9 +30,12 @@ export default async function NewBookingPage({
   const { spaceId } = await searchParams;
   const session = await requireSession();
   const [spacesRaw, projects, clients] = await Promise.all([
-    listOrgScoped("function_spaces", session.orgId, { orderBy: "sort_order", ascending: true, limit: 0 }),
-    listOrgScoped("projects", session.orgId, { orderBy: "name", ascending: true, limit: 0 }),
-    listOrgScoped("clients", session.orgId, { orderBy: "name", ascending: true, limit: 0 }),
+    listOrgScoped("function_spaces", session.orgId, { orderBy: "sort_order", ascending: true, limit: 500 }),
+    // Cap the select option lists so a large org doesn't load its whole
+    // clients/projects table into a <select> (perf audit: unbounded
+    // `limit: 0` form selects). 500 is far past any realistic dropdown.
+    listOrgScoped("projects", session.orgId, { orderBy: "name", ascending: true, limit: 500 }),
+    listOrgScoped("clients", session.orgId, { orderBy: "name", ascending: true, limit: 500 }),
   ]);
 
   const spaces: Option[] = (spacesRaw as SpaceRow[])

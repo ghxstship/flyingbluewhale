@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { BRAND } from "@/lib/brand";
+import { BRAND, PRODUCT_ACCENTS } from "@/lib/brand";
 
 // Node runtime — next/og works on both edge and node; staying on node
 // keeps the route eligible for ISR/caching and avoids the
@@ -9,16 +9,9 @@ export async function GET(req: Request) {
   const title = searchParams.get("title") ?? "ATLVS Technologies";
   const eyebrow = searchParams.get("eyebrow") ?? "Production OS";
   const platform = (searchParams.get("platform") ?? "") as "atlvs" | "gvteway" | "compvss" | "";
-  // v8.0 palette-locked — each product owns its accent; non-product/ecosystem
-  // cards use the GHXSTSHIP house green.
-  const accent =
-    platform === "atlvs"
-      ? "#E23414"
-      : platform === "gvteway"
-        ? "#2563EB"
-        : platform === "compvss"
-          ? "#FFC400"
-          : "#2EDB3A";
+  // v8.0 mono-green — every product resolves to the single accent. Sourced from
+  // the canonical PRODUCT_ACCENTS escape-hatch (OG images can't read CSS vars).
+  const accent = PRODUCT_ACCENTS[platform || "atlvs"];
 
   return new ImageResponse(
     <div

@@ -1,5 +1,5 @@
 import type { MetricResolver, ResolverMap } from "./types";
-import { countWhere } from "./types";
+import { countWhere, NOT_COMPUTED } from "./types";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
@@ -44,7 +44,7 @@ const labor_fill_rate: MetricResolver = async (ctx) => {
  * The schema carries `total_minutes`/`billable_minutes` but no overtime flag or
  * OT bucket, so overtime can't be isolated. Returns null.
  */
-const overtime_pct: MetricResolver = async () => null;
+const overtime_pct: MetricResolver = NOT_COMPUTED;
 
 /**
  * labor_cost_per_head (currency, dollars) — total timesheet cost / distinct
@@ -174,7 +174,7 @@ const asset_utilization: MetricResolver = async (ctx) => {
  * fleet_roi (pct) — rental revenue against fleet capital cost. Equipment carries
  * a daily_rate but no acquisition/book cost, so ROI has no cost basis. Null.
  */
-const fleet_roi: MetricResolver = async () => null;
+const fleet_roi: MetricResolver = NOT_COMPUTED;
 
 /**
  * equipment_downtime (pct) — equipment in maintenance / all non-retired
@@ -205,31 +205,31 @@ const equipment_downtime: MetricResolver = async (ctx) => {
  * have no rental-specific marker that distinguishes sub-rentals from any other
  * PO line, so this can't be isolated from real columns. Null.
  */
-const sub_rental_spend: MetricResolver = async () => null;
+const sub_rental_spend: MetricResolver = NOT_COMPUTED;
 
 /**
  * maintenance_compliance (pct) — completed-on-schedule maintenance / due
  * maintenance. No maintenance-schedule or maintenance-log table exists. Null.
  */
-const maintenance_compliance: MetricResolver = async () => null;
+const maintenance_compliance: MetricResolver = NOT_COMPUTED;
 
 /**
  * inventory_accuracy (pct) — counted vs expected on pull sheets. No pull-sheet
  * or cycle-count table exists. Null.
  */
-const inventory_accuracy: MetricResolver = async () => null;
+const inventory_accuracy: MetricResolver = NOT_COMPUTED;
 
 /**
  * turnaround_time (float) — hours between scheduled and actual changeover.
  * No turnaround/changeover timestamps captured. Null.
  */
-const turnaround_time: MetricResolver = async () => null;
+const turnaround_time: MetricResolver = NOT_COMPUTED;
 
 /** waste_diversion (pct) — diverted vs total waste. No waste data. Null. */
-const waste_diversion: MetricResolver = async () => null;
+const waste_diversion: MetricResolver = NOT_COMPUTED;
 
 /** energy_intensity (float) — energy per unit of activity. No energy data. Null. */
-const energy_intensity: MetricResolver = async () => null;
+const energy_intensity: MetricResolver = NOT_COMPUTED;
 
 export const compvssResolvers: ResolverMap = {
   labor_fill_rate,

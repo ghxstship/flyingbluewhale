@@ -36,11 +36,18 @@ function startOfDay(d: Date): number {
   return x.getTime();
 }
 
-function dayLabel(iso: string, t: Translator): string {
+function dayLabel(iso: string, t: Translator, now: number | null): string {
   const item = startOfDay(new Date(iso));
-  const today = startOfDay(new Date());
-  if (item === today) return t("components.activityDrawer.today", undefined, "Today");
-  if (item === today - DAY_MS) return t("components.activityDrawer.yesterday", undefined, "Yesterday");
+  // Before mount (`now === null`) the "Today"/"Yesterday" relative labels are
+  // skipped — deriving today from `new Date()` during render runs at different
+  // instants on server vs client and flips the label text (React #418). We
+  // render the absolute date until the post-mount value arrives.
+  if (now !== null) {
+    const today = startOfDay(new Date(now));
+    if (item === today) return t("components.activityDrawer.today", undefined, "Today");
+    if (item === today - DAY_MS) return t("components.activityDrawer.yesterday", undefined, "Yesterday");
+  }
+  const today = now !== null ? startOfDay(new Date(now)) : item;
   return new Date(iso).toLocaleDateString(undefined, {
     weekday: "short",
     month: "short",
@@ -53,11 +60,15 @@ function dayLabel(iso: string, t: Translator): string {
  * Group activity items by calendar day. Preserves the input order
  * (newest first) so the most recent day surfaces at the top.
  */
-function groupByDay(items: ActivityItemType[], t: Translator): Array<{ label: string; items: ActivityItemType[] }> {
+function groupByDay(
+  items: ActivityItemType[],
+  t: Translator,
+  now: number | null,
+): Array<{ label: string; items: ActivityItemType[] }> {
   const groups: Array<{ label: string; items: ActivityItemType[] }> = [];
   let current: { label: string; items: ActivityItemType[] } | null = null;
   for (const item of items) {
-    const label = dayLabel(item.occurredAt, t);
+    const label = dayLabel(item.occurredAt, t, now);
     if (!current || current.label !== label) {
       current = { label, items: [] };
       groups.push(current);
@@ -69,6 +80,9 @@ function groupByDay(items: ActivityItemType[], t: Translator): Array<{ label: st
 
 function TimelineBody({ items }: { items: ActivityItemType[] }) {
   const t = useT();
+  // Post-mount wall clock for relative day grouping (see `dayLabel`).
+  const [now, setNow] = React.useState<number | null>(null);
+  React.useEffect(() => setNow(Date.now()), []);
   if (items.length === 0) {
     return (
       <EmptyState
@@ -83,7 +97,7 @@ function TimelineBody({ items }: { items: ActivityItemType[] }) {
       />
     );
   }
-  const groups = groupByDay(items, t);
+  const groups = groupByDay(items, t, now);
   return (
     <div className="space-y-5">
       {groups.map((group) => (

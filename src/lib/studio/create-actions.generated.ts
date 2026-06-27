@@ -36,6 +36,16 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "AI"
   },
   {
+    "href": "/studio/assets/new",
+    "label": "New Asset",
+    "group": "Assets"
+  },
+  {
+    "href": "/studio/assets/warranties/new",
+    "label": "New Warranty",
+    "group": "Assets"
+  },
+  {
     "href": "/studio/bim/new",
     "label": "New BIM",
     "group": "BIM"
@@ -86,6 +96,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Comms"
   },
   {
+    "href": "/studio/comms/channels/new",
+    "label": "New Channel",
+    "group": "Comms"
+  },
+  {
     "href": "/studio/comms/polls/new",
     "label": "New Poll",
     "group": "Comms"
@@ -94,11 +109,6 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "href": "/studio/comms/surveys/new",
     "label": "New Survey",
     "group": "Comms"
-  },
-  {
-    "href": "/studio/contracts/new",
-    "label": "New Contract",
-    "group": "Contracts"
   },
   {
     "href": "/studio/drawings/new",
@@ -119,6 +129,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "href": "/studio/events/new",
     "label": "New Event",
     "group": "Events"
+  },
+  {
+    "href": "/studio/finance/accounts/new",
+    "label": "New Account",
+    "group": "Finance"
   },
   {
     "href": "/studio/finance/budgets/new",
@@ -148,6 +163,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
   {
     "href": "/studio/finance/invoices/new",
     "label": "New Invoice",
+    "group": "Finance"
+  },
+  {
+    "href": "/studio/finance/ledger/new",
+    "label": "New Ledger",
     "group": "Finance"
   },
   {
@@ -196,6 +216,16 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Goals"
   },
   {
+    "href": "/studio/governance/approvals/delegations/new",
+    "label": "New Delegation",
+    "group": "Governance"
+  },
+  {
+    "href": "/studio/governance/approvals/policies/new",
+    "label": "New Policy",
+    "group": "Governance"
+  },
+  {
     "href": "/studio/inspections/new",
     "label": "New Inspection",
     "group": "Inspections"
@@ -214,6 +244,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "href": "/studio/leads/new",
     "label": "New Lead",
     "group": "Leads"
+  },
+  {
+    "href": "/studio/legal/contracts/new",
+    "label": "New Contract",
+    "group": "Legal"
   },
   {
     "href": "/studio/legal/insurance/new",
@@ -368,6 +403,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
   {
     "href": "/studio/procurement/purchase-orders/new",
     "label": "New Purchase Order",
+    "group": "Procurement"
+  },
+  {
+    "href": "/studio/procurement/receiving/new",
+    "label": "New Receiving",
     "group": "Procurement"
   },
   {

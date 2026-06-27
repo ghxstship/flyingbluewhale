@@ -986,9 +986,9 @@ Page inventory for the admin, AI, knowledge, and LEG3ND segments of the `(platfo
 
 Inventory of every `page.tsx` under `src/app/(portal)/`. The portal is the `(portal)` shell (`data-platform="gvteway"`, blue). Routes live under `/p/[slug]/...` where `slug` is the project + authorization boundary; one static sibling page lives at `/p/select`.
 
-Per-persona portals are organized as a tile-grid root page plus sub-routes. Almost all surfaces are **read-only** (RLS-scoped lists, status badges, metric cards) — the production team authors in `/console`, the portal displays. The interactive exceptions are concentrated in **Client** (proposal sign/decide/lifecycle), **Artist advancing** (deliverable submit + state machine), **Privacy panels** (DSAR/export), **Messages** (AM chat), and the shared **Connecteam surfaces** (feed/kudos/docs reused in crew + vendor). Many crew/vendor pages link out to the COMPVSS `/m` shell for the actual create action (e.g. time-off, docs upload, requests).
+Per-persona portals are organized as a tile-grid root page plus sub-routes. Almost all surfaces are **read-only** (RLS-scoped lists, status badges, metric cards) — the production team authors in `/console`, the portal displays. The interactive exceptions are concentrated in **Client** (proposal sign/decide/lifecycle), **Artist advancing** (deliverable submit + state machine), **Privacy panels** (DSAR/export), **Messages** (AM chat), and the shared **the deskless-workforce suite surfaces** (feed/kudos/docs reused in crew + vendor). Many crew/vendor pages link out to the COMPVSS `/m` shell for the actual create action (e.g. time-off, docs upload, requests).
 
-Conventions used below: `<PortalDocVault>` = read-only deliverables table (file-centric doc-specs, no download control). `<PortalPrivacyPanel>` = DSAR list + consent ledger + data-export/erasure request links. Connecteam `*Surface` = shared components reused from the COMPVSS PWA.
+Conventions used below: `<PortalDocVault>` = read-only deliverables table (file-centric doc-specs, no download control). `<PortalPrivacyPanel>` = DSAR list + consent ledger + data-export/erasure request links. the deskless-workforce suite `*Surface` = shared components reused from the COMPVSS PWA.
 
 ---
 
@@ -1271,7 +1271,7 @@ The amber `(mobile)` shell — COMPVSS field/venue operations, an offline-first 
 - `/m/shift/swap` — Request a shift swap. **CRUD/interactive:** `requestSwap` server action (pick shift + reason) via `FormShell`; duplicate-request guard; notifies admins.
 - `/m/gigs` — Public open-gigs board for crew on the road (reads anon `public_job_board` view). **CRUD/interactive:** read-only list.
 
-## Connecteam parity
+## Workforce parity
 
 - `/m/feed` — Announcements feed (shared `FeedSurface`, mobile). **CRUD/interactive:** `markAnnouncementRead` server action; Realtime refresh subscription.
 - `/m/inbox` — Chat rooms list with unread markers (shared `ChatSurface`). **CRUD/interactive:** read-only list; deep-links into rooms.

@@ -36,7 +36,7 @@ Three horizons. Each item is an executable unit of work with DoD + acceptance + 
 - **Acceptance:** simulate 8s Stripe hang → request aborts at 5s; simulate 500 from Resend → 3 retries over backoff.
 - **Rollback:** revert wrapper; `fetch` stays.
 - **Metric:** external-call P95 bounded; no function timeouts from upstream hangs.
-- **This session:** `lib/http.ts` shipped; applied to Stripe + Resend + GrowthBook.
+- **This session:** `lib/http.ts` shipped; applied to Stripe + Resend + the remote flag service.
 
 ### H1-05 · Response envelope enforcement — IK-012
 - **DoD:** every `/api/v1/*` route calls `apiOk` / `apiCreated` / `apiError` (no raw `NextResponse.json`). ESLint `no-restricted-syntax` guards against regression.

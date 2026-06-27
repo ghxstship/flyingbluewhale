@@ -57,10 +57,10 @@ const NEW_COMPONENTS = ["LineChart", "AreaChart", "DonutChart", "Calendar", "Gan
 // and the LEG3ND shell promotion both move a value in this table).
 // ─────────────────────────────────────────────────────────────────────────
 const SHELL_META = {
-  atlvs: { name: "ATLVS", descriptor: "Operator console — ERP × CRM × PM", kind: "product", color: "#FF2E88", host: "app.atlvs.pro", routeGroup: "/studio" },
+  atlvs: { name: "ATLVS", descriptor: "Operator console — ERP × CRM × PM", kind: "product", color: "#E23414", host: "app.atlvs.pro", routeGroup: "/studio" },
   gvteway: { name: "GVTEWAY", descriptor: "Public interface & marketplace", kind: "product", color: "#2563EB", host: "gateway.atlvs.pro", routeGroup: "/p" },
-  compvss: { name: "COMPVSS", descriptor: "Site & venue field ops", kind: "product", color: "#E9A23B", host: "compass.atlvs.pro", routeGroup: "/m" },
-  legend: { name: "LEG3ND", descriptor: "Knowledge · LMS · XPMS 2.0", kind: "product", color: "#E8500A", host: "legend.atlvs.pro", routeGroup: "/legend" },
+  compvss: { name: "COMPVSS", descriptor: "Site & venue field ops", kind: "product", color: "#FFC400", host: "compass.atlvs.pro", routeGroup: "/m" },
+  legend: { name: "LEG3ND", descriptor: "Knowledge · LMS · XPMS 2.0", kind: "product", color: "#ED6A1E", host: "legend.atlvs.pro", routeGroup: "/legend" },
   marketing: { name: "Marketing", descriptor: "Public site & positioning", kind: "surface", color: "#181B23", host: "atlvs.pro", routeGroup: "/" },
   auth: { name: "Auth", descriptor: "Login · signup · invites", kind: "surface", color: "#181B23", host: "atlvs.pro", routeGroup: "/auth" },
   personal: { name: "Personal", descriptor: "Any authed user — /me", kind: "surface", color: "#181B23", host: "atlvs.pro", routeGroup: "/me" },

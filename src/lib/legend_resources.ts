@@ -4,7 +4,7 @@
  * Single helper file for the resources + collections module (migration
  * PENDING_legend_resources_hub). A curated library of resources grouped by
  * collection — mirrors a knowledge / resource library. Pattern matches
- * `src/lib/discounts_promoters.ts` / `src/lib/connecteam.ts`: enum tuples
+ * `src/lib/discounts_promoters.ts` / `src/lib/workforce.ts`: enum tuples
  * `as const` → derived types → label maps + small pure helpers.
  */
 

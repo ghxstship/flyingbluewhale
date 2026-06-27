@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Avatar } from "./Avatar";
 
 /**
- * <ActivityTimeline> — the Skool-class community feed primitive. A
+ * <ActivityTimeline> — the cohort-community-class community feed primitive. A
  * vertical stream of contribution events (posts, replies, completions,
  * awards) with actor avatar, verb, optional body, and a relative time.
  * Token-only.

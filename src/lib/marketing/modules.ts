@@ -56,7 +56,7 @@ export const MODULES: Record<string, ModuleConfig> = {
         title: "AI built in",
         body: "An assistant that reads your projects, crew, and budgets — and drafts from them.",
       },
-      { title: "Enterprise-ready", body: "Signed DPA and 99.9% uptime SLA on the Enterprise tier." },
+      { title: "Signed DPA, 99.9% uptime", body: "Signed DPA and 99.9% uptime SLA on the Enterprise tier." },
     ],
     faqs: [
       {
@@ -550,7 +550,7 @@ export const MODULES: Record<string, ModuleConfig> = {
     eyebrow: "ATLVS · Construction-grade ops",
     title: "Construction-grade workflows, built for show calls.",
     blurb:
-      "Ball-in-court RFIs, submittal logs, daily logs, punch lists, change orders, payment applications — the Procore feature set, retuned for production timelines.",
+      "Ball-in-court RFIs, submittal logs, daily logs, punch lists, change orders, payment applications — the construction-ops feature set, retuned for production timelines.",
     heroTitle: "Run the build like a build. Just faster.",
     heroBody:
       "Production schedules don't have time for 14-day RFI cycles. ATLVS gives you the construction-industry workflow primitives — RFIs, submittals, daily logs, punch, change orders, pay apps — clocked to show-day urgency. Routing, official answers, show-ready gates.",
@@ -590,8 +590,8 @@ export const MODULES: Record<string, ModuleConfig> = {
     personas: ["Production managers", "Site supervisors", "General contractors", "Build leads"],
     faqs: [
       {
-        q: "How is this different from Procore?",
-        a: "Same primitives, retuned for live-events velocity. Procore is built for 18-month construction projects. Show calls run in 4-12 weeks — we drop the procurement-bidding and BIM-heavy modules and tighten the loop on what matters: ball-in-court routing, daily logs, punch.",
+        q: "How does this fit production timelines?",
+        a: "Same primitives, retuned for live-events velocity. Construction tooling is built for 18-month projects. Show calls run in 4-12 weeks — we drop the procurement-bidding and BIM-heavy modules and tighten the loop on what matters: ball-in-court routing, daily logs, punch.",
       },
       {
         q: "Does it integrate with our drawings?",

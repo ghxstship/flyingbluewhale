@@ -1,4 +1,4 @@
-import { ChatSurface } from "@/components/connecteam/ChatSurface";
+import { ChatSurface } from "@/components/workforce/ChatSurface";
 
 /** GVTEWAY vendor chat (ADR-0008 Move 3). */
 export const dynamic = "force-dynamic";

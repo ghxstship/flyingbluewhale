@@ -1904,22 +1904,18 @@
      "ogImageTitle": "Comande o show."
     },
     "hero": {
-     "eyebrow": "Do pitch ao estudo de caso",
+     "eyebrow": "Produção · Operações · Experiência · Conhecimento",
      "titleLine1": "O ecossistema do",
      "titleLine2": "construtor de",
-     "subtitleLead": "O sistema operacional modular para produções experienciais e não convencionais.",
-     "subtitleAtlvs": "comanda a ponte,",
-     "subtitleCompvss": "trabalha o campo,",
-     "subtitleGvteway": "abre as portas, e",
+     "subtitleLead": "A ferramenta definitiva para quem ousou sonhar maior.",
      "ctaPrimary": "Comece a construir de graça",
      "ctaSecondary": "Veja em ação",
      "disclaimer": "Grátis para sempre no nível Access · Sem cartão de crédito · Preço por organização",
      "ecosystemLabel": "O Ecossistema ATLVS",
-     "titleLine3": "mundos.",
-     "subtitleLegend": "mantém o padrão."
+     "titleLine3": "mundos."
     },
     "trustBar": {
-     "label": "Os mundos que essas equipes constroem rodam na ATLVS",
+     "label": "Impulsionando os maiores criadores de mundos do mundo",
      "seeWork": "Ver os projetos →"
     },
     "threeApps": {
@@ -1931,22 +1927,22 @@
     "products": {
      "atlvs": {
       "audience": "Para produtores · equipes internas",
-      "tag": "Desenvolver · Construir",
+      "tag": "Criar o mundo",
       "body": "Desenvolva e construa o mundo — projetos, advancing, finanças, compras e uma IA que redige a papelada. A central de comando do produtor."
      },
      "compvss": {
       "audience": "Para equipe · fornecedores · talentos",
-      "tag": "Operar",
+      "tag": "Operar o mundo",
       "body": "Opere em campo — escalas, certificações, leitura no portão, ocorrências. Offline-first, ágil no portão mesmo quando o sinal não está."
      },
      "gvteway": {
       "audience": "Para público · clientes · parceiros",
-      "tag": "Experimentar",
+      "tag": "Viver o mundo",
       "body": "Onde o mundo é vivido — bilheteria, portais, marketplace. Cada persona com sua própria porta de entrada."
      },
      "legend": {
       "audience": "Para conhecimento · treinamento · compliance",
-      "tag": "Conhecimento",
+      "tag": "Enriquecer o mundo",
       "body": "O conhecimento sobre o qual o mundo é construído — o Standard, cursos, certificações, o catálogo e o motor de compliance."
      }
     },

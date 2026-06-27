@@ -3,7 +3,7 @@
 **Status:** Proposed
 **Date:** 2026-06-04
 **Owner:** Platform engineering
-**Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Connecteam parity (0046–0048)"
+**Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
 
 ## Context
 
@@ -17,7 +17,7 @@ A crew lead reviewing tomorrow's schedule from a laptop should not have to insta
 
 ## Decision
 
-Promote 8 Connecteam-parity surfaces from COMPVSS into the portal `crew` and `vendor` personas. Reuse the same underlying tables and components — only the route, layout, and persona-rail entry are new. Mobile surfaces are unchanged (they remain the field-optimized version).
+Promote 8 Workforce-parity surfaces from COMPVSS into the portal `crew` and `vendor` personas. Reuse the same underlying tables and components — only the route, layout, and persona-rail entry are new. Mobile surfaces are unchanged (they remain the field-optimized version).
 
 ### Surfaces to backfill (crew + vendor)
 
@@ -51,7 +51,7 @@ Both stay within Miller's band per section (12 + 6 for crew; 14 + 6 for vendor �
 
 ### What about the other 13 personas?
 
-Most other personas don't need Connecteam-parity surfaces because they don't engage in ongoing operational rhythms (`client` reviews proposals episodically; `sponsor` checks fulfillment quarterly; `guest` is one-trip-only). The personas that benefit:
+Most other personas don't need Workforce-parity surfaces because they don't engage in ongoing operational rhythms (`client` reviews proposals episodically; `sponsor` checks fulfillment quarterly; `guest` is one-trip-only). The personas that benefit:
 
 - **`crew`** — primary target, deskless-workforce
 - **`vendor`** — primary target, recurring engagement
@@ -64,10 +64,10 @@ Volunteer + media additions are a follow-up Move 3 — execute crew + vendor fir
 ## Migration rules
 
 1. **No schema changes.** Every backing table exists. Portal pages are alternate read surfaces over the same data.
-2. **Shared components reused.** `<RealtimeRefresh />`, `<PortalDocVault />`, the same chat / feed / learning page components from `(mobile)/m/*` are factored into `src/components/connecteam/` and imported by both shells.
+2. **Shared components reused.** `<RealtimeRefresh />`, `<PortalDocVault />`, the same chat / feed / learning page components from `(mobile)/m/*` are factored into `src/components/workforce/` and imported by both shells.
 3. **Page-level wrappers per shell** — portal pages wrap the shared component with `<PortalShellPage>` (ModuleHeader + breadcrumbs); mobile pages wrap with `<MobilePage>` (no breadcrumbs, larger touch targets). Same data, different chrome.
 4. **Realtime parity.** The Realtime channel filter (project + user) is identical between shells, so a kudos posted from mobile shows up instantly in the portal and vice versa.
-5. **Three PRs.** Move 1: extract shared components into `src/components/connecteam/`. Move 2: build crew portal pages (8 routes). Move 3: build vendor portal pages (8 routes + persona-specific filters).
+5. **Three PRs.** Move 1: extract shared components into `src/components/workforce/`. Move 2: build crew portal pages (8 routes). Move 3: build vendor portal pages (8 routes + persona-specific filters).
 
 ### URL design choice
 

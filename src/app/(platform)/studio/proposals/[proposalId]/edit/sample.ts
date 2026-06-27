@@ -1,7 +1,7 @@
 import type { ProposalBlock } from "@/lib/proposals/types";
 import {
-  DEPOSIT_PCT_DEFAULT,
-  BALANCE_PCT_DEFAULT,
+  PROPOSAL_DEPOSIT_PCT_DEFAULT,
+  PROPOSAL_BALANCE_PCT_DEFAULT,
   DEPOSIT_TERMS_LABEL_DEFAULT,
   BALANCE_TERMS_LABEL_DEFAULT,
 } from "@/lib/payment-terms";
@@ -169,8 +169,8 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   { type: "total_block", label: "Total engagement", amount: { cents: 17000000 }, note: "All figures in USD." },
   {
     type: "engagement_split",
-    depositPercent: DEPOSIT_PCT_DEFAULT,
-    balancePercent: BALANCE_PCT_DEFAULT,
+    depositPercent: PROPOSAL_DEPOSIT_PCT_DEFAULT,
+    balancePercent: PROPOSAL_BALANCE_PCT_DEFAULT,
     depositLabel: DEPOSIT_TERMS_LABEL_DEFAULT,
     balanceLabel: BALANCE_TERMS_LABEL_DEFAULT,
   },
@@ -230,7 +230,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
       {
         section: "S6",
         title: "Payment",
-        body: `${DEPOSIT_PCT_DEFAULT}% deposit on signature, balance due on load-in.`,
+        body: `${PROPOSAL_DEPOSIT_PCT_DEFAULT}% deposit on signature, balance due on load-in.`,
       },
       {
         section: "S9",

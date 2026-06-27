@@ -1,7 +1,8 @@
-import { env } from "@/lib/env";
+import { urlFor } from "@/lib/urls";
 import type { OfferLetterResolved } from "./types";
 import { formatDateRange, formatDollars } from "./format";
 import { EMPLOYER_LABEL } from "./types";
+import { DEFAULT_SIGNING_AUTHORITY_NAME, DEFAULT_SIGNING_AUTHORITY_TITLE } from "./signing";
 
 export type ComposedEmail = {
   to: string;
@@ -11,17 +12,16 @@ export type ComposedEmail = {
   mailto: string;
 };
 
-function publicBase(): string {
-  return (env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/$/, "");
-}
-
+// The offer flow + guide both live at the apex origin. `urlFor("marketing", …)`
+// resolves to the apex (marketing has no subdomain) in both subdomain and
+// path-prefix modes, so it's the single switch for these absolute links.
 function letterUrl(token: string): string {
-  return `${publicBase()}/offer/${token}`;
+  return urlFor("marketing", `/offer/${token}`);
 }
 
 function guideUrl(letter: OfferLetterResolved): string | null {
   if (!letter.guide_url) return null;
-  return letter.guide_url.startsWith("http") ? letter.guide_url : `${publicBase()}${letter.guide_url}`;
+  return letter.guide_url.startsWith("http") ? letter.guide_url : urlFor("marketing", letter.guide_url);
 }
 
 function compLine(letter: OfferLetterResolved): string {
@@ -61,8 +61,8 @@ export function composeOfferLetterEmail(letter: OfferLetterResolved, msa: MsaCon
   const code = letter.access_code;
   const guide = guideUrl(letter);
   const window = engagementWindowSummary(letter);
-  const signer = letter.signing_authority_name ?? "Julian Clarkson";
-  const signerTitle = letter.signing_authority_title ?? "Producer & Operations Director";
+  const signer = letter.signing_authority_name ?? DEFAULT_SIGNING_AUTHORITY_NAME;
+  const signerTitle = letter.signing_authority_title ?? DEFAULT_SIGNING_AUTHORITY_TITLE;
   const employerName = EMPLOYER_LABEL[letter.employer];
   const venueLine = [letter.venue_name, letter.venue_city, letter.venue_region].filter(Boolean).join(", ");
 

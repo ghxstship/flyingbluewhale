@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ module: s
       description: t(
         "marketing.features.detail.fallbackDescription",
         undefined,
-        "ATLVS Technologies — the unified production management platform.",
+        "ATLVS Technologies — one platform for the whole production.",
       ),
       path: `/features/${module}`,
     });

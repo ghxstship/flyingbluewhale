@@ -56,8 +56,8 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     modules: ["advancing", "logistics", "schedule", "finance", "portals"],
     faqs: [
       {
-        q: "How is this different from Master Tour?",
-        a: "Cloud-native, real portals, offline mobile, AI assistant, per-org pricing. Master Tour's muscle memory is real; if you're picking fresh, picking modern matters.",
+        q: "How does this fit a modern touring stack?",
+        a: "Cloud-native, real portals, offline mobile, AI assistant, per-org pricing. The legacy desktop tools have real muscle memory; if you're picking fresh, picking modern matters.",
       },
       {
         q: "Can our drivers use it?",
@@ -81,8 +81,8 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     modules: ["procore-parity", "inspections", "production", "procurement", "photos"],
     faqs: [
       {
-        q: "Are you a Procore replacement?",
-        a: "For event-production timelines, yes. For permanent construction with BIM and 12+ month timelines, no — Procore is right for that.",
+        q: "Will this replace our construction-ops tool?",
+        a: "For event-production timelines, yes. For permanent construction with BIM and 12+ month timelines, no — dedicated construction tooling is right for that.",
       },
       {
         q: "Can subs use it?",

@@ -1,6 +1,7 @@
 import type { OfferLetterResolved } from "@/lib/offer-letters/types";
 import { EMPLOYER_LABEL, CLASSIFICATION_LABEL, BASIS_LABEL } from "@/lib/offer-letters/types";
 import { formatCompensation, formatPerDiem } from "@/lib/offer-letters/format";
+import { DEFAULT_SIGNING_AUTHORITY_NAME, DEFAULT_SIGNING_AUTHORITY_TITLE } from "@/lib/offer-letters/signing";
 import { formatDate, formatDateTime } from "@/lib/i18n/format";
 import type { CrewMemberActiveMsa } from "@/lib/msa/types";
 import { BRAND } from "@/lib/brand";
@@ -430,11 +431,11 @@ export function LetterDocument({
               )}
             </div>
             <div className="font-subdisplay text-lg tracking-wide">
-              {letter.signing_authority_name ?? "Julian Clarkson"}
+              {letter.signing_authority_name ?? DEFAULT_SIGNING_AUTHORITY_NAME}
             </div>
             <div>
               {letter.signing_authority_title ??
-                t("legal.letterDocument.signerTitle", undefined, "Producer & Operations Director")}
+                t("legal.letterDocument.signerTitle", undefined, DEFAULT_SIGNING_AUTHORITY_TITLE)}
             </div>
             <div>{letter.signing_authority_email ?? ""}</div>
           </div>

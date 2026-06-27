@@ -39,7 +39,7 @@ export const CUSTOMER_STORIES: CustomerStory[] = [
     status: "in_progress",
     expectedPublish: "Q3 2026",
     teaser:
-      "15k-guest residency moved off Eventbrite + Asana + spreadsheets onto one platform; cut wrap-recap time from 14 days to 3.",
+      "15k-guest residency moved off a ticketing-plus-tasks-plus-spreadsheets stack onto one platform; cut wrap-recap time from 14 days to 3.",
     metrics: [
       { value: "−78%", label: "wrap recap time" },
       { value: "0", label: "duplicate ticket scans" },
@@ -95,7 +95,7 @@ export const CUSTOMER_STORIES: CustomerStory[] = [
     status: "in_progress",
     expectedPublish: "Q4 2026",
     teaser:
-      "Procore-style RFI / submittal / punch workflow tuned to 6-week immersive builds — show-ready gate caught 3 issues that would have made the AHJ pull permits.",
+      "Construction-grade RFI / submittal / punch workflow tuned to 6-week immersive builds — show-ready gate caught 3 issues that would have made the AHJ pull permits.",
     metrics: [
       { value: "3", label: "show-stopping issues caught pre-doors" },
       { value: "100%", label: "AHJ pass rate" },

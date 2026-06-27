@@ -1,5 +1,7 @@
 import { resolve } from "node:path";
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
+import { buildCsp } from "./src/lib/csp";
 
 // Pin the workspace root so Next/Turbopack stops inferring it from stray
 // lockfiles in parent directories (e.g. /Users/.../Documents/package-lock.json).
@@ -37,38 +39,18 @@ const supabaseHost = (() => {
 // hard-coded value here. Browsers reject `Access-Control-Allow-Origin: *`
 // on credentialed requests, so static config can't serve a multi-tenant API.
 
-// `unsafe-eval` is needed by Turbopack's dev runtime for HMR; production
-// Next.js (App Router + RSC) doesn't require it. Strip it from prod CSP.
 const isDev = process.env.NODE_ENV !== "production";
-const scriptUnsafe = isDev ? "'unsafe-inline' 'unsafe-eval'" : "'unsafe-inline'";
 
-const csp = [
-  `default-src 'self'`,
-  // 'unsafe-inline' is required by Next for the theme + SW bootstrap inline
-  // scripts in app/layout.tsx. The next-best step would be a per-request
-  // nonce via middleware — non-trivial; tracked as a follow-up. Stripe
-  // host is needed for Stripe.js; Anthropic streams over fetch (already in
-  // connect-src), no script tag.
-  `script-src 'self' ${scriptUnsafe} https://js.stripe.com`,
-  `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
-  `font-src 'self' data: https://fonts.gstatic.com`,
-  `img-src 'self' data: blob: https://${supabaseHost} https://*.stripe.com`,
-  `connect-src 'self' https://${supabaseHost} wss://${supabaseHost} https://api.anthropic.com https://api.stripe.com https://*.ingest.sentry.io`,
-  // 'self' is required so the home page's same-origin <iframe> live-preview
-  // of /p/<slug>/guide loads. Without it, CSP blocks the embed and
-  // top-level hydration fails for any client component declared after the
-  // failed iframe in the tree (CookieConsent, ShortcutDialog, etc.).
-  `frame-src 'self' https://js.stripe.com https://hooks.stripe.com`,
-  // 'self' permits the marketing home page to embed its own portal-guide
-  // iframe (same-origin live preview). External embeds remain blocked, so
-  // this is a strict superset of clickjacking protection (X-Frame-Options:
-  // SAMEORIGIN equivalent). Cross-origin framing would require explicit
-  // host allowlisting here.
-  `frame-ancestors 'self'`,
-  `form-action 'self'`,
-  `base-uri 'self'`,
-  `object-src 'none'`,
-].join("; ");
+// Static fallback CSP — applied to responses that bypass middleware (static
+// assets the proxy matcher excludes). The canonical *document* CSP carries a
+// per-request nonce and is emitted from src/proxy.ts (see src/lib/csp.ts) so
+// the inline bootstrap scripts in app/layout.tsx run under `script-src
+// 'nonce-<n>'` WITHOUT 'unsafe-inline'. Building this from the same helper
+// (no nonce) keeps the two policies in lockstep — in prod the static fallback
+// keeps 'unsafe-inline' ONLY as a degraded path for un-nonced static
+// responses; every HTML document gets the stricter nonce'd policy from
+// middleware, which overrides this header value.
+const csp = buildCsp({ isDev });
 
 const config: NextConfig = {
   reactStrictMode: true,
@@ -138,4 +120,34 @@ const config: NextConfig = {
   },
 };
 
-export default config;
+// Sentry — wrap the config so prod builds upload source maps, turning the
+// minified client/server bundles into readable stack traces in the Sentry UI.
+// Source-map upload requires SENTRY_AUTH_TOKEN + SENTRY_ORG + SENTRY_PROJECT
+// in the CI build env; when the token is absent the plugin warns and skips
+// upload (the build still succeeds), so local + preview builds are unaffected.
+// `deleteSourcemapsAfterUpload` (the v10 successor to `hideSourceMaps`) strips
+// the generated .map files from the served client bundle after upload so we
+// don't leak source to the browser. `disableLogger` tree-shakes the SDK's
+// internal logger out of the production bundle.
+export default withSentryConfig(config, {
+  // Read from env so secrets never live in the repo. `silent` keeps the
+  // build log quiet locally; CI sets the token and gets full upload logs.
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  sourcemaps: { deleteSourcemapsAfterUpload: true },
+  // Tree-shake the SDK's internal debug logger from the prod bundle. The
+  // non-deprecated successor (`webpack.treeshake.removeDebugLogging`) is a
+  // no-op under Turbopack (which this build uses) and is not on the public
+  // SentryBuildOptions type, so we keep the still-valid `disableLogger`; it
+  // emits a benign deprecation warning under Turbopack but is harmless.
+  disableLogger: true,
+  // Don't fail the build if the auth token is missing (local/preview) — warn
+  // and skip the upload step instead of throwing and stopping the bundle.
+  errorHandler: (err) => {
+    // eslint-disable-next-line no-console
+    console.warn("[sentry] source-map upload skipped:", err.message);
+  },
+});

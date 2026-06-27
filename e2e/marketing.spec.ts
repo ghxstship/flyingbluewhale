@@ -22,9 +22,9 @@ test.describe("marketing", () => {
   test("home renders hero + CTAs", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1").first()).toBeVisible();
-    // Hero primary CTA is "Start Free" → /signup
-    // (marketing.pages.home.hero.ctaPrimary in src/messages/en.json).
-    await expect(page.getByRole("link", { name: /start free/i }).first()).toBeVisible();
+    // Hero primary CTA is "Start building free" → /signup
+    // (marketing hero ctaPrimary in src/messages/en.json).
+    await expect(page.getByRole("link", { name: /start building free/i }).first()).toBeVisible();
   });
 
   test("pricing shows 4 tiers + comparison table", async ({ page }) => {

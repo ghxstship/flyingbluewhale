@@ -37,12 +37,16 @@ describe("WORLDS canon", () => {
     const h = EN.marketing.pages.home.hero;
     // Headline: "THE WORLD BUILDER'S ECOSYSTEM." with "Ecosystem." in --p-accent.
     expect(`${h.titleLine1} ${h.titleLine2} ${h.titleLine3}`).toBe("The World Builder's Ecosystem.");
-    expect(h.eyebrow).toBe("From pitch to case study");
-    // The four-surface line — ATLVS runs the bridge … LEG3ND holds the standard.
-    expect(h.subtitleAtlvs).toBe("runs the bridge,");
-    expect(h.subtitleCompvss).toBe("works the floor,");
-    expect(h.subtitleGvteway).toBe("opens the doors, and");
-    expect(h.subtitleLegend).toBe("holds the standard.");
+    expect(h.eyebrow).toBe("Production · Operations · Experience · Knowledge");
+    // Subtitle: one category-defining line. The four-app verb parade is RETIRED —
+    // never reintroduce "runs the build / works the floor / opens the doors / holds the standard".
+    expect(h.subtitleLead).toContain("ultimate tool");
+    for (const k of ["subtitleAtlvs", "subtitleCompvss", "subtitleGvteway", "subtitleLegend"]) {
+      expect(h[k], `retired hero key ${k} must not return`).toBeUndefined();
+    }
+    expect(JSON.stringify(EN.marketing.pages.home)).not.toMatch(
+      /runs the build|works the floor|opens the doors|holds the standard/,
+    );
   });
 
   it("app one-liners are identical across seo.ts and en.json (GEO G2)", () => {

@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,26 +31,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("program_reviews", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("program_reviews", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.programs.reviews.eyebrow", undefined, "Programs")}
         title={t("console.programs.reviews.title", undefined, "Program Reviews")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.programs.reviews.record", undefined, "Record") : t("console.programs.reviews.records", undefined, "Records")}`}
+        subtitle={`${total} ${total === 1 ? t("console.programs.reviews.record", undefined, "Record") : t("console.programs.reviews.records", undefined, "Records")}`}
         action={
           <Button href="/studio/programs/reviews/new" size="sm">
             {t("console.programs.reviews.scheduleReview", undefined, "+ Schedule review")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/programs/reviews/${r.id}`}
           emptyLabel={t("console.programs.reviews.emptyLabel", undefined, "No program reviews")}
           emptyDescription={t(
@@ -71,6 +83,13 @@ export default async function Page() {
               accessor: (r) => r.scheduled_at ?? null,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/programs/reviews"
+          searchParams={sp}
         />
       </div>
     </>

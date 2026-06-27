@@ -36,6 +36,17 @@
    environment media queries layer over every component surface. */
 @import "./kit-platform.css";
 
+/* v8.1 AI-native surface kit — streaming / thinking / citation / confidence
+   primitives, all resolving from --p-* so they theme per product for free. */
+@import "./kit-ai.css";
+
+/* v8.1 personalization axis — [data-trend] re-skins shape/elevation/motion/
+   expression over the brand spine (hue-locked off --k-acc; never restates a
+   brand hue). Imported LAST so [data-trend] (0,2,0) wins on ties. The kit's
+   `:not([data-trend])` default-binding is removed in kit-trends.css, so the
+   repo's Monument base stays the default; a trend applies only when chosen. */
+@import "./kit-trends.css";
+
 /*
  * SSR cold-start fallback — used only when no [data-theme] / [data-ui]
  * attribute has hit <html> yet. Defines the canonical ATLVS light surface in
@@ -54,13 +65,13 @@
   --p-text-1: #181b23;
   --p-text-2: #4a5563;
   --p-text-3: #656d7a;
-  --p-accent: #2edb3a;
-  --p-accent-hover: #00ca22;
-  --p-accent-text: #1f8425;
-  --p-accent-weak: rgba(46, 219, 58, 0.12);
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #001800;
+  --p-accent: #e23414;
+  --p-accent-hover: #c92c10;
+  --p-accent-text: #971a05;
+  --p-accent-weak: rgba(226, 52, 20, 0.12);
+  --p-accent-cta: #ad220a;
+  --p-accent-cta-contrast: #ffffff;
   --p-accent-contrast: #ffffff;
-  --p-focus: #1f8425;
+  --p-focus: #e23414;
   color-scheme: light;
 }

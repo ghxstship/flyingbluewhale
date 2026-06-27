@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Build">
+  <!-- Stacked structure motif (the build coming together). Default ATLVS volcanic red; swap fill to currentColor to retheme. -->
+  <rect x="14" y="40" width="36" height="10" rx="2" fill="#E23414"></rect>
+  <rect x="20" y="27" width="24" height="10" rx="2" fill="#E23414" opacity="0.7"></rect>
+  <rect x="26" y="14" width="12" height="10" rx="2" fill="#E23414" opacity="0.4"></rect>
+</svg>

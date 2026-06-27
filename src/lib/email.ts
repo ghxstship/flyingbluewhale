@@ -187,7 +187,7 @@ export async function sendProposalShareEmail({
   brand?: EmailBrand;
   orgId?: string;
 }) {
-  const accent = brand?.accent ?? "#2EDB3A";
+  const accent = brand?.accent ?? "#E23414";
   const onAccent = pickReadableForeground(accent);
   const fromName = brand?.producerName ?? senderName ?? BRAND.legalName;
   const sender = senderName ?? brand?.producerName ?? "The team";

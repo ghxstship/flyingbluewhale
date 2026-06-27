@@ -11,32 +11,40 @@ import { getRequestT } from "@/lib/i18n/request";
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
   // Protects /studio at the outer boundary so every page inherits the
   // guard; individual pages may still call requireSession() for session data.
+  // Session is the auth gate — it must resolve first (it may redirect). It's
+  // request-memoized via React cache(), so child pages re-calling it are free.
   const session = await requireSession();
-  const tenant = await resolveTenant();
-  const { t } = await getRequestT();
-  // Read last_portal_slug (app-switcher orientation) non-blocking — fall
-  // through if the pref row hasn't materialized yet (new users / first signin).
+
+  // The remaining reads are independent of each other; run them concurrently
+  // instead of serially. resolveTenant/getRequestT each open their own
+  // (request-memoized) Supabase client + auth lookup; the two pref/dashboard
+  // reads share the client created here.
   const supabase = await createClient();
-  const { data: prefRow } = await supabase
-    .from("user_preferences")
-    .select("ui_state")
-    .eq("user_id", session.userId)
-    .maybeSingle();
-  const uiState = (prefRow?.ui_state as { last_portal_slug?: string } | null) ?? null;
-  // ADR-0007 — pre-fetch saved dashboards for the chrome top-bar menu.
-  // Hard-cap at 8 so the popover stays scannable; "All Dashboards" footer
-  // always links to /studio/dashboards for the full list.
-  const { data: dashboardRows } = await supabase
-    .from("dashboards")
-    .select("id, name")
-    .eq("org_id", session.orgId)
-    .order("name", { ascending: true })
-    .limit(8);
-  const dashboards = (dashboardRows ?? []).map((d) => ({
+  const [tenant, { t }, prefResult, dashboardResult] = await Promise.all([
+    resolveTenant(),
+    getRequestT(),
+    // Read last_portal_slug (app-switcher orientation) non-blocking — fall
+    // through if the pref row hasn't materialized yet (new users / first signin).
+    supabase.from("user_preferences").select("ui_state").eq("user_id", session.userId).maybeSingle(),
+    // ADR-0007 — pre-fetch saved dashboards for the chrome top-bar menu.
+    // Hard-cap at 8 so the popover stays scannable; "All Dashboards" footer
+    // always links to /studio/dashboards for the full list.
+    supabase
+      .from("dashboards")
+      .select("id, name")
+      .eq("org_id", session.orgId)
+      .order("name", { ascending: true })
+      .limit(8),
+  ]);
+
+  const uiState = (prefResult.data?.ui_state as { last_portal_slug?: string } | null) ?? null;
+  const dashboards = (dashboardResult.data ?? []).map((d) => ({
     id: d.id as string,
     name: (d.name as string) ?? "Untitled",
     href: `/studio/dashboards/${d.id}`,
   }));
+  // Switcher needs uiState (last_portal_slug) resolved above, so it follows
+  // the parallel batch rather than joining it.
   const switcherEntries = await resolveSwitcherEntries({
     supabase,
     userId: session.userId,

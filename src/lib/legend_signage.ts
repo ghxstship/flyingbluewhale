@@ -4,7 +4,7 @@
  * Shared enum tuples + derived types + label maps + small helpers for the
  * signage library (org-scoped catalog of ISO 7010 / DOT-AIGA / ISA signs)
  * and its per-project placement ledger. Pattern matches
- * `src/lib/connecteam.ts` / `src/lib/marketplace.ts`: tuples `as const` →
+ * `src/lib/workforce.ts` / `src/lib/marketplace.ts`: tuples `as const` →
  * derived union types → label maps + a couple of pure helpers.
  *
  * Lifecycle columns follow LDP: `sign_state` + `placement_state` are

@@ -2,8 +2,10 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import type { Threat } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
@@ -12,7 +14,11 @@ import { SEVERITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -30,11 +36,16 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("threats", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("threats", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
-  })) as Threat[];
+    pageSize,
+    cursor: String(offset),
+  });
+  const rows = result.rows as Threat[];
+  const total = result.totalCount;
 
   const active = rows.filter((r) => r.threat_state === "active").length;
   const critical = rows.filter((r) => r.severity === "critical").length;
@@ -44,16 +55,17 @@ export default async function Page() {
       <ModuleHeader
         eyebrow={t("console.safety.threats.eyebrow", undefined, "Safety")}
         title={t("console.safety.threats.title", undefined, "Threat Register")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.safety.threats.entrySingular", undefined, "entry") : t("console.safety.threats.entryPlural", undefined, "entries")} · ${active} ${t("console.safety.threats.activeLabel", undefined, "Active")}  · ${critical} ${t("console.safety.threats.criticalLabel", undefined, "critical")}`}
+        subtitle={`${total} ${total === 1 ? t("console.safety.threats.entrySingular", undefined, "entry") : t("console.safety.threats.entryPlural", undefined, "entries")} · ${active} ${t("console.safety.threats.activeLabel", undefined, "Active")}  · ${critical} ${t("console.safety.threats.criticalLabel", undefined, "critical")}`}
         action={
           <Button href="/studio/safety/threats/new" size="sm">
             {t("console.safety.threats.newThreat", undefined, "+ New Threat")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable<Threat>
           rows={rows}
+          totalCount={total}
           emptyLabel={t("console.safety.threats.emptyLabel", undefined, "No threats logged")}
           emptyDescription={t(
             "console.safety.threats.emptyDescription",
@@ -113,6 +125,13 @@ export default async function Page() {
               groupable: true,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/safety/threats"
+          searchParams={sp}
         />
       </div>
     </>

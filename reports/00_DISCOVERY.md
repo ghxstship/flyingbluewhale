@@ -132,7 +132,7 @@ Migrations apply via Supabase MCP (`apply_migration`) per CLAUDE.md convention. 
 | Anthropic | `/api/v1/ai/chat` + AI assistant UI | `ANTHROPIC_API_KEY` | **NOT SET** |
 | Stripe | `/api/v1/stripe/*`, `/api/v1/webhooks/stripe`, invoice payments, Connect payouts | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` | **NOT SET** |
 | Resend | Transactional email (invite, proposal share, reset) | `RESEND_API_KEY`, `RESEND_FROM` | **NOT SET** — `sendEmail` no-ops with `hasResend === false` |
-| GrowthBook | Feature flags | `NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY` | **NOT SET** — falls back to `FLAG_DEFAULTS` |
+| the remote flag service | Feature flags | `NEXT_PUBLIC_FLAGS_CLIENT_KEY` | **NOT SET** — falls back to `FLAG_DEFAULTS` |
 | Sentry | Error tracking | `NEXT_PUBLIC_SENTRY_DSN` | **NOT SET** — `hasSentry === false` |
 
 **Implication for Phase 2:** flows that depend on Stripe, Resend, Anthropic, or service-role Supabase access will be **BLOCKED** end-to-end from this environment. Code paths + server-action wiring can still be verified, but full execution against a live third party is not possible without populating `.env.local`.

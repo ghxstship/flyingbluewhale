@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { DocToolbar } from "@/components/documents/DocToolbar";
 
 /**
- * Per-document preview/print route. Renders one of the 27 v6 templates through
+ * Per-document preview/print route. Renders one of the 29 v6 templates through
  * the shared DocEngine + the client viewer toolbar. The same markup is the
  * print/PDF artifact via @media print in kit-documents.css.
  *

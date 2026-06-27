@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ActionBar,
   DataTable,
@@ -70,6 +70,12 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [calDay, setCalDay] = useState<string | null>(null);
+  // `todayKey` is empty until mount — deriving today from `new Date()` during
+  // render runs at different instants on server vs client and flips the
+  // "today" highlight, hydration-mismatching (React #418). The highlight is a
+  // client-only adornment that appears after mount.
+  const [todayKey, setTodayKey] = useState("");
+  useEffect(() => setTodayKey(new Date().toISOString().slice(0, 10)), []);
 
   // The kit's per-type metadata: accent color drives the bar + tag tint.
   const typeMeta = useMemo(
@@ -240,10 +246,13 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
           <div className="weekstrip">
             {(days.length ? days : [activeDay]).map((d) => {
               const cnt = evs.filter((e) => e.dateKey === d).length;
-              const dt = d ? new Date(d + "T00:00:00") : new Date();
-              const dow = dt.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
-              const dnum = dt.getDate();
-              const isToday = d === new Date().toISOString().slice(0, 10);
+              // d is the dateKey; when empty (no event days) fall back to the
+              // post-mount today key so the lone strip cell still labels a day.
+              const key = d || todayKey;
+              const dt = key ? new Date(key + "T00:00:00") : null;
+              const dow = dt ? dt.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase() : "";
+              const dnum = dt ? dt.getDate() : "";
+              const isToday = key !== "" && key === todayKey;
               return (
                 <button
                   key={d || "today"}

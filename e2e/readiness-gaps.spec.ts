@@ -19,7 +19,7 @@ test.describe("admin view gates (P1-A)", () => {
   test("member is denied the billing settings view", async ({ page }) => {
     await dismissConsent(page);
     await loginAs(page, "member");
-    await page.goto("/console/settings/billing");
+    await page.goto("/studio/settings/billing");
     await expect(page.getByText("You Don't Have Access")).toBeVisible();
     // No billing data leaks into the denial view.
     await expect(page.locator("body")).not.toContainText(/Stripe|Invoice History|Current Plan/i);
@@ -28,7 +28,7 @@ test.describe("admin view gates (P1-A)", () => {
   test("member is denied the API keys settings view", async ({ page }) => {
     await dismissConsent(page);
     await loginAs(page, "member");
-    await page.goto("/console/settings/api");
+    await page.goto("/studio/settings/api");
     await expect(page.getByText("You Don't Have Access")).toBeVisible();
     await expect(page.locator('input[name="name"]')).toHaveCount(0);
   });
@@ -36,7 +36,7 @@ test.describe("admin view gates (P1-A)", () => {
   test("admin still sees the billing settings view", async ({ page }) => {
     await dismissConsent(page);
     await loginAs(page, "admin");
-    await page.goto("/console/settings/billing");
+    await page.goto("/studio/settings/billing");
     await expect(page.getByText("You Don't Have Access")).toHaveCount(0);
   });
 });
@@ -44,13 +44,13 @@ test.describe("admin view gates (P1-A)", () => {
 test.describe("unauthenticated deep links (F4)", () => {
   test("console deep link round-trips through login via next param", async ({ page }) => {
     await dismissConsent(page);
-    await page.goto("/console/projects");
+    await page.goto("/studio/projects");
     await page.waitForURL(/\/login/);
     expect(page.url()).toContain("next=");
     await page.fill('input[name="email"]', fixtureEmail("admin"));
     await page.fill('input[name="password"]', TEST_PASSWORD);
     await page.click('button[type="submit"]');
-    await page.waitForURL(/\/console\/projects/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/projects/, { timeout: 30000 });
   });
 });
 

@@ -56,21 +56,24 @@ function ComboField({
       </div>
       {open && (
         <>
-          <div style={{ position: "fixed", inset: 0, zIndex: 5 }} onClick={() => setOpen(false)} />
-          <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 6, background: "var(--p-surface)", border: "1px solid var(--p-border)", borderRadius: 12, boxShadow: "var(--p-elev-2, var(--p-elev-1))", maxHeight: 200, overflowY: "auto" }}>
+          <button type="button" aria-label="Close options" tabIndex={-1} style={{ position: "fixed", inset: 0, zIndex: 5, border: "none", background: "transparent", padding: 0, cursor: "default" }} onClick={() => setOpen(false)} />
+          <div role="listbox" style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 6, background: "var(--p-surface)", border: "1px solid var(--p-border)", borderRadius: 12, boxShadow: "var(--p-elev-2, var(--p-elev-1))", maxHeight: 200, overflowY: "auto" }}>
             {matches.length ? (
               matches.map((o) => (
-                <div
+                <button
+                  type="button"
                   key={o}
+                  role="option"
+                  aria-selected={value === o}
                   onClick={() => {
                     setValue(o);
                     setQ(o);
                     setOpen(false);
                   }}
-                  style={{ padding: "11px 14px", fontSize: 14, cursor: "pointer", borderBottom: "1px solid var(--p-border)", color: value === o ? "var(--p-accent-text)" : "var(--p-text-1)", fontWeight: value === o ? 700 : 400 }}
+                  style={{ display: "block", width: "100%", textAlign: "left", font: "inherit", background: "none", border: "none", borderBottom: "1px solid var(--p-border)", padding: "11px 14px", fontSize: 14, cursor: "pointer", color: value === o ? "var(--p-accent-text)" : "var(--p-text-1)", fontWeight: value === o ? 700 : 400 }}
                 >
                   {o}
-                </div>
+                </button>
               ))
             ) : (
               <div style={{ padding: "11px 14px", fontSize: 13, color: "var(--p-text-3)" }}>No matches — “{q}” will be used as typed.</div>
@@ -113,10 +116,10 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
   }
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-      <span className="avatar-up" onClick={() => setStage("crop")}>
+      <button type="button" className="avatar-up" aria-label={has ? "Change photo" : "Upload photo"} onClick={() => setStage("crop")} style={{ border: "none", padding: 0 }}>
         {has ? <span className="avatar-up-img" style={{ transform: `translateX(${av!.pos}px) scale(${av!.zoom})` }} /> : <span style={{ fontFamily: "var(--p-mono)", fontWeight: 700 }}>RT</span>}
         <span className="avatar-up-badge"><KIcon name="Camera" size={13} /></span>
-      </span>
+      </button>
       <div>
         <button type="button" className="ps-btn ps-btn--secondary" onClick={() => setStage("crop")}><KIcon name="Upload" size={14} /> {has ? "Change Photo" : "Upload Photo"}</button>
         {has && <button type="button" className="ac-remove" onClick={() => setValue(null)}>Remove</button>}
@@ -156,14 +159,25 @@ function Field({ f, value, setValue }: { f: FormField; value: unknown; setValue:
     );
   else if (f.type === "switch")
     control = (
-      <div className="switch" data-on={value ? "1" : undefined} onClick={() => setValue(!value)}><span className="knob" /></div>
+      <button
+        type="button"
+        className="switch"
+        role="switch"
+        aria-checked={!!value}
+        aria-label={f.label}
+        data-on={value ? "1" : undefined}
+        onClick={() => setValue(!value)}
+        style={{ border: "none", padding: 0 }}
+      >
+        <span className="knob" />
+      </button>
     );
   else if (f.type === "photo" || f.type === "file")
     control = (
-      <div className="dropz" onClick={() => setValue(((value as number) || 0) + 1)}>
+      <button type="button" className="dropz" onClick={() => setValue(((value as number) || 0) + 1)} style={{ width: "100%", font: "inherit", background: "none" }}>
         <KIcon name={f.type === "photo" ? "Camera" : "Paperclip"} size={22} />
         <span>{value ? `${value} ${f.type === "photo" ? "photo" : "file"}${(value as number) > 1 ? "s" : ""} added` : `Tap to ${f.type === "photo" ? "capture or upload" : "attach"}`}</span>
-      </div>
+      </button>
     );
   else control = <input type={f.type === "number" ? "number" : f.type === "date" ? "date" : f.type === "time" ? "time" : "text"} {...common} placeholder={f.placeholder} />;
 

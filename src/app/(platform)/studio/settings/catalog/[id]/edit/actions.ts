@@ -6,10 +6,11 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { CATALOG_KINDS } from "@/lib/db/assignments";
 
 const Schema = z.object({
   id: z.string().uuid(),
-  kind: z.enum(["credential", "catering", "radio", "tool", "equipment", "uniform", "travel", "lodging", "vehicle"]),
+  kind: z.enum(CATALOG_KINDS),
   code: z
     .string()
     .min(1)

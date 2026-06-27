@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CATALOG_KINDS } from "@/lib/db/assignments";
 import type { ProposalBlock } from "./types";
 
 // Boundary validator for proposals.blocks. Two callers:
@@ -21,17 +22,7 @@ const Money = z.object({
 });
 const MoneyOrString = z.union([Money, z.string()]);
 
-const CatalogKind = z.enum([
-  "credential",
-  "catering",
-  "radio",
-  "tool",
-  "equipment",
-  "uniform",
-  "travel",
-  "lodging",
-  "vehicle",
-]);
+const CatalogKind = z.enum(CATALOG_KINDS);
 
 const DocDeliverableType = z.enum([
   "technical_rider",

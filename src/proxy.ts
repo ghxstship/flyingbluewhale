@@ -6,6 +6,9 @@ import { log, serverTiming } from "@/lib/log";
 import { internalPathFor, shellForHost } from "@/lib/urls";
 import { env, hasSupabase } from "@/lib/env";
 import { extractPortalSlug, escapeHtml } from "@/lib/portal-slug";
+import { buildCsp, generateNonce, NONCE_HEADER } from "@/lib/csp";
+
+const IS_DEV = process.env.NODE_ENV !== "production";
 
 const SUBDOMAINS_ENABLED = process.env.NEXT_PUBLIC_USE_SUBDOMAINS === "1";
 
@@ -93,6 +96,21 @@ export async function proxy(request: NextRequest) {
   const requestId = request.headers.get("x-request-id") ?? newRequestId();
   const startedAt = performance.now();
 
+  // Per-request CSP nonce. Generated for every request, seeded onto the
+  // INBOUND request headers below (so `app/layout.tsx` can read it via
+  // headers().get("x-nonce") and stamp nonce={...} on its inline bootstrap
+  // scripts), and emitted in the document Content-Security-Policy via
+  // applyDocumentCsp() so those scripts run under `script-src 'nonce-<n>'`
+  // without 'unsafe-inline'. API responses keep the static CSP from
+  // next.config.ts (no inline scripts there).
+  const nonce = generateNonce();
+  const isApi = pathname.startsWith("/api/");
+  const applyDocumentCsp = (res: NextResponse) => {
+    if (isApi) return res;
+    res.headers.set("content-security-policy", buildCsp({ nonce, isDev: IS_DEV }));
+    return res;
+  };
+
   // CORS preflight short-circuit — answer OPTIONS before any session refresh
   // or rate-limit accounting. Required for browser fetch() with credentials
   // from any origin in ALLOWED_ORIGINS.
@@ -179,53 +197,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // ADR-0009 grace window — role-prefixed mobile aliases.
-  //
-  // The URL flip is partial: ten universal surfaces have explicit
-  // `/m/[role]/<surface>/page.tsx` re-exports (the ROLE_PREFIXED_PAGES
-  // set below) and serve from the role-prefixed canonical location.
-  // Everything else falls through to this alias, which rewrites
-  // `/m/<role>/<surface>` → `/m/<surface>` so the existing page bodies
-  // continue to serve role-prefixed URLs without per-role duplication.
-  //
-  // As more surfaces get explicit role-prefixed pages, add their first
-  // segment to ROLE_PREFIXED_PAGES so the alias stops collapsing them.
-  // Per-role index pages (`/m/[role]/page.tsx`) and the role chooser
-  // (`/m/[role]/settings/role`) are also excluded from the alias.
-  const MOBILE_ROLE_ALIAS = /^\/m\/(performer|crew|driver|medic|guard|admin)\/(.+)$/;
-  const ROLE_PREFIXED_PAGES = new Set([
-    "inbox",
-    "shift",
-    "alerts",
-    "settings",
-    "feed",
-    "kudos",
-    "learning",
-    "time-off",
-    "docs",
-    "directory",
-  ]);
-  // Role-OWNED real surfaces: pages that genuinely live at `/m/<role>/<surface>`
-  // (not universal `/m/<surface>` re-exports). Collapsing them would rewrite to a
-  // non-existent `/m/<surface>` and 404 — e.g. `/m/driver/run/[runId]` →
-  // `/m/run/...` and `/m/medic/new` → `/m/new`, neither of which exists. These
-  // must serve from their role-prefixed location, so exclude them from the alias.
-  const ROLE_OWNED_SURFACES = new Set(["run", "new"]);
-  const targetPath = rewriteUrl?.pathname ?? pathname;
-  const aliasMatch = targetPath.match(MOBILE_ROLE_ALIAS);
-  if (aliasMatch) {
-    const rest = aliasMatch[2]!;
-    const firstSegment = rest.split("/")[0]!;
-    const isExplicitRolePrefixed = ROLE_PREFIXED_PAGES.has(firstSegment);
-    const isRoleChooser = rest === "settings/role";
-    const isRoleOwned = ROLE_OWNED_SURFACES.has(firstSegment);
-    if (!isExplicitRolePrefixed && !isRoleChooser && !isRoleOwned) {
-      const aliasUrl = rewriteUrl ? new URL(rewriteUrl.toString()) : request.nextUrl.clone();
-      aliasUrl.pathname = `/m/${rest}`;
-      rewriteUrl = aliasUrl;
-    }
-  }
-
   // P3 hardening — inject x-request-id into the inbound request headers
   // so Server Components + Server Actions can read it back via
   // `headers().get("x-request-id")`. Without this the audit emitter
@@ -236,6 +207,22 @@ export async function proxy(request: NextRequest) {
   // id there before it forwards.
   if (!request.headers.has("x-request-id")) {
     request.headers.set("x-request-id", requestId);
+  }
+
+  // Seed the nonce onto the inbound request headers so Server Components
+  // (app/layout.tsx) can read it back via headers().get("x-nonce"). This must
+  // happen before updateSession() builds the response from request.headers.
+  request.headers.set(NONCE_HEADER, nonce);
+
+  // Next reads the nonce from the *request* `content-security-policy` header
+  // during app-render (app-render.js: getScriptNonceFromHeader) and auto-
+  // propagates it onto its OWN injected framework/hydration scripts. Without
+  // this the prod nonce'd CSP would block Next's bootstrap scripts and the app
+  // wouldn't hydrate. Seed the document CSP onto the request for non-API
+  // (document) requests so the framework picks up the same nonce we stamp on
+  // our inline scripts in app/layout.tsx.
+  if (!isApi) {
+    request.headers.set("content-security-policy", buildCsp({ nonce, isDev: IS_DEV }));
   }
 
   // Expose the INTERNAL route path (post host-rewrite, so it carries the
@@ -273,7 +260,7 @@ export async function proxy(request: NextRequest) {
       res.headers.set("x-request-id", requestId);
       res.headers.set("x-shell", shell);
       if (tenantSlug) res.headers.set("x-tenant-slug", tenantSlug);
-      return res;
+      return applyDocumentCsp(res);
     }
   }
 
@@ -303,7 +290,7 @@ export async function proxy(request: NextRequest) {
       // Carry over Supabase session cookies set by updateSession so the user
       // doesn't get logged out by the redirect.
       response.cookies.getAll().forEach((c) => res.cookies.set(c.name, c.value));
-      return res;
+      return applyDocumentCsp(res);
     }
   }
 
@@ -318,7 +305,7 @@ export async function proxy(request: NextRequest) {
     existingTiming ? `${existingTiming}, ${serverTiming(mwDuration, "mw")}` : serverTiming(mwDuration, "mw"),
   );
   applyCors(request, response as NextResponse);
-  return response;
+  return applyDocumentCsp(response as NextResponse);
 }
 
 // ────────────────────────────────────────────────────────────────────

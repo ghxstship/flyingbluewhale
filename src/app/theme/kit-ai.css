@@ -1,0 +1,96 @@
+/* ============================================================================
+   ATLVS Technologies — AI-NATIVE SURFACE KIT  (v8.1 — adopted from the ATLVS
+   Ecosystem kit, REC 08)
+   ----------------------------------------------------------------------------
+   The agentic / generative surface: an answer being generated (streaming), a
+   tool running (thinking), where it came from (citation), and how sure it is
+   (confidence). Built entirely on the existing --p-* token scale, so it themes
+   per product for free and inherits the reduced-motion guard.
+
+   All --ai-* tokens resolve from --p-* / --p-{semantic} so a product accent or a
+   white-label rebrand re-skins the AI layer with zero extra edits.
+   ========================================================================== */
+
+[data-ui="saas"], [data-theme="atlvs-product"] {
+  --ai-surface:        var(--p-surface);
+  --ai-border:         var(--p-border);
+  --ai-stream-from:    var(--p-text-3);
+  --ai-stream-to:      var(--p-text-1);
+  --ai-think-dot:      var(--p-accent);
+  --ai-cite-bg:        var(--p-accent-weak);
+  --ai-cite-ink:       var(--p-accent-text);
+  --ai-cite-index-bg:  var(--p-accent);
+  --ai-cite-index-ink: var(--p-accent-contrast);
+  --ai-conf-low:       var(--p-danger);
+  --ai-conf-mid:       var(--p-warning);
+  --ai-conf-high:      var(--p-success);
+  --ai-stream-dur:     2.4s;
+  --ai-think-dur:      1.1s;
+}
+
+/* ---- message shell — an agentic answer card ---- */
+[data-ui="saas"] .ai-msg, [data-theme="atlvs-product"] .ai-msg {
+  background: var(--ai-surface); border: 1px solid var(--ai-border); border-radius: var(--p-r-lg); overflow: hidden;
+}
+[data-ui="saas"] .ai-msg__head, [data-theme="atlvs-product"] .ai-msg__head {
+  display: flex; align-items: center; gap: 9px; padding: 11px 14px; border-bottom: 1px solid var(--ai-border);
+  font-family: var(--p-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3);
+}
+[data-ui="saas"] .ai-msg__body, [data-theme="atlvs-product"] .ai-msg__body {
+  padding: 14px; font-size: 14px; line-height: 1.6; color: var(--p-text-1);
+}
+
+/* ---- streaming — token-by-token shimmer on text being generated ---- */
+[data-ui="saas"] .ai-stream, [data-theme="atlvs-product"] .ai-stream {
+  background: linear-gradient(90deg, var(--ai-stream-from) 0%, var(--ai-stream-to) 35%, var(--ai-stream-to) 50%, var(--ai-stream-from) 100%);
+  background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: ai-stream var(--ai-stream-dur) linear infinite;
+}
+@keyframes ai-stream { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+
+/* ---- thinking — tool-running / reasoning indicator ---- */
+[data-ui="saas"] .ai-think, [data-theme="atlvs-product"] .ai-think { display: inline-flex; gap: 3px; align-items: center; }
+[data-ui="saas"] .ai-think > i, [data-theme="atlvs-product"] .ai-think > i {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--ai-think-dot); animation: ai-think var(--ai-think-dur) ease infinite;
+}
+[data-ui="saas"] .ai-think > i:nth-child(2), [data-theme="atlvs-product"] .ai-think > i:nth-child(2) { animation-delay: 0.18s; }
+[data-ui="saas"] .ai-think > i:nth-child(3), [data-theme="atlvs-product"] .ai-think > i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes ai-think { 0%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+
+/* ---- citation — a source chip linking to provenance ---- */
+[data-ui="saas"] .ai-cites, [data-theme="atlvs-product"] .ai-cites { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+[data-ui="saas"] .ai-cite, [data-theme="atlvs-product"] .ai-cite {
+  display: inline-flex; align-items: center; gap: 5px; font-family: var(--p-mono-data); font-size: 10.5px;
+  padding: 3px 8px; border-radius: var(--p-r-pill); background: var(--ai-cite-bg); color: var(--ai-cite-ink);
+  cursor: pointer; border: 0; transition: filter var(--motion-fast) ease;
+}
+[data-ui="saas"] .ai-cite:hover, [data-theme="atlvs-product"] .ai-cite:hover { filter: brightness(0.96); }
+[data-ui="saas"] .ai-cite__n, [data-theme="atlvs-product"] .ai-cite__n {
+  background: var(--ai-cite-index-bg); color: var(--ai-cite-index-ink); width: 14px; height: 14px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 8.5px; font-weight: 700;
+}
+
+/* ---- confidence — a calibrated meter (low→high gradient) ---- */
+[data-ui="saas"] .ai-conf, [data-theme="atlvs-product"] .ai-conf { margin-top: 13px; }
+[data-ui="saas"] .ai-conf__lab, [data-theme="atlvs-product"] .ai-conf__lab {
+  display: flex; justify-content: space-between; font-family: var(--p-mono); font-size: 9.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--p-text-3); margin-bottom: 5px;
+}
+[data-ui="saas"] .ai-conf__bar, [data-theme="atlvs-product"] .ai-conf__bar {
+  height: 5px; border-radius: 999px; background: var(--p-surface-2); overflow: hidden;
+}
+[data-ui="saas"] .ai-conf__bar > i, [data-theme="atlvs-product"] .ai-conf__bar > i {
+  display: block; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--ai-conf-mid), var(--ai-conf-high));
+  transition: width var(--motion-normal) var(--ease-out);
+}
+[data-ui="saas"] .ai-conf[data-level="low"] .ai-conf__bar > i, [data-theme="atlvs-product"] .ai-conf[data-level="low"] .ai-conf__bar > i {
+  background: linear-gradient(90deg, var(--ai-conf-low), var(--ai-conf-mid));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="saas"] .ai-stream, [data-theme="atlvs-product"] .ai-stream {
+    animation: none; color: var(--p-text-1); -webkit-text-fill-color: var(--p-text-1);
+  }
+  [data-ui="saas"] .ai-think > i, [data-theme="atlvs-product"] .ai-think > i { animation: none; opacity: 0.7; }
+}

@@ -59,7 +59,7 @@ Other dimensions held at pre-audit scores — see [01-architecture-audit.md](./0
 - [src/app/api/v1/stripe/checkout/route.ts](../../src/app/api/v1/stripe/checkout/route.ts) (10s)
 - [src/app/api/v1/stripe/connect/onboarding/route.ts](../../src/app/api/v1/stripe/connect/onboarding/route.ts) (10s, 2 calls)
 - [src/lib/email.ts](../../src/lib/email.ts) (8s Resend)
-- [src/lib/flags.ts](../../src/lib/flags.ts) (3s GrowthBook)
+- [src/lib/flags.ts](../../src/lib/flags.ts) (3s the remote flag service)
 
 **Acceptance:** typecheck clean; manual fault-injection (offline laptop) confirms `CircuitOpenError` bubbles as structured `apiError("internal", ...)` after threshold.
 
@@ -440,7 +440,7 @@ concrete artifact reviewable in this repo.
 ### H3-08 / IK-055 — Canary rollout via flag cohorts
 
 - [`src/lib/flags.ts`](../../src/lib/flags.ts) exports `cohortFromUserId`
-  — deterministic FNV-1a → `0-99` bucket. GrowthBook rules can gate
+  — deterministic FNV-1a → `0-99` bucket. the remote flag service rules can gate
   on `cohort < N` for N% rollouts. Same user always lands in the same
   cohort, so canaries don't flicker mid-session.
 - Guard: `src/lib/flags.test.ts` — bucket range, determinism, rough

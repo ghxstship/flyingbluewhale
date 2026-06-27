@@ -130,7 +130,11 @@ describe("URL canon", () => {
 
   it("the `NEXT_PUBLIC_APP_URL ?? ...` fallback pattern lives only in src/lib/seo.ts and src/lib/urls.ts", () => {
     const offenders: string[] = [];
-    const RE = /process\.env\.NEXT_PUBLIC_APP_URL\s*\?\?/;
+    // Catch both the raw `process.env.NEXT_PUBLIC_APP_URL ??` form and the
+    // validated-env-module `env.NEXT_PUBLIC_APP_URL ??` form. The optional
+    // `process.` prefix + a leading word-boundary keep the match anchored to a
+    // real `env` identifier (not an arbitrary `…env`).
+    const RE = /\b(?:process\.)?env\.NEXT_PUBLIC_APP_URL\s*\?\?/;
     for (const file of ALL) {
       const rel = relative(REPO_ROOT, file);
       if (ALLOW_FALLBACK_PATTERN.has(rel)) continue;

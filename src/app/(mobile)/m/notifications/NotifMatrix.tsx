@@ -24,8 +24,8 @@ export function NotifMatrix({
   initial,
   labels,
 }: {
-  categories: string[];
-  channels: string[];
+  categories: readonly string[];
+  channels: readonly string[];
   initial: MatrixState;
   labels: Labels;
 }) {

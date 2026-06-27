@@ -1,4 +1,4 @@
-import { LearningSurface } from "@/components/connecteam/LearningSurface";
+import { LearningSurface } from "@/components/workforce/LearningSurface";
 
 /**
  * GVTEWAY crew learning — thin wrapper over shared <LearningSurface>.

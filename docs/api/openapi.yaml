@@ -1180,18 +1180,154 @@ paths:
     post: { summary: AWS SES inbound-email webhook. Shared-secret header auth; routes messages to the matching project email inbox. }
 
   /api/v1/documents:
-    get: { summary: "List every generatable document type (id, app, OpenAPI schema name, record-binding support). Discovery entry point for the documents system. Scope: documents:read." }
+    get:
+      summary: "List every generatable document type (id, app, OpenAPI schema name, record-binding support). Discovery entry point for the documents system. Scope: documents:read."
+      responses:
+        "200":
+          description: Document type catalog.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        app: { type: string }
+                        schema: { type: string }
+                        recordBinding: { type: boolean }
   /api/v1/documents/{docType}:
-    get: { summary: "Machine-readable data contract for one document type — JSON Schema, sample data object, and merge-field paths. Scope: documents:read." }
-    post: { summary: "Generate a document. Body { data } (external — any doc type) or { recordId } (internal — record-bound types). Returns rendered .doc HTML + resolved data; no mutation. Scope: documents:write." }
+    get:
+      summary: "Machine-readable data contract for one document type — JSON Schema, sample data object, and merge-field paths. Scope: documents:read."
+      responses:
+        "200":
+          description: Data contract for the document type.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  docType: { type: string }
+                  schema: { type: object }
+                  sample: { type: object }
+                  paths: { type: array, items: { type: string } }
+    post:
+      summary: "Generate a document. Body { data } (external — any doc type) or { recordId } (internal — record-bound types). Returns rendered .doc HTML + resolved data; no mutation. Scope: documents:write."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  required: [data]
+                  properties:
+                    data: { type: object }
+                - type: object
+                  required: [recordId]
+                  properties:
+                    recordId: { type: string }
+      responses:
+        "200":
+          description: Rendered document (HTML + resolved data).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  schema: { type: string }
+                  brand: { type: string }
+                  html: { type: string }
+                  data: { type: object }
 
   /api/v1/metrics:
-    get: { summary: "Canonical metric catalog (kit v6.3) — 77 KPI definitions across the 4 apps + whether each is computed live. Scope: reports:read." }
+    get:
+      summary: "Canonical metric catalog (kit v6.3) — 77 KPI definitions across the 4 apps + whether each is computed live. Scope: reports:read."
+      responses:
+        "200":
+          description: Metric catalog.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  metrics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        app: { type: string }
+                        label: { type: string }
+                        unit: { type: string }
+                        format: { type: string }
+                        grain: { type: string }
+                        direction: { type: string, enum: [up, down] }
+                        confidence: { type: string }
+                        computed: { type: boolean }
   /api/v1/metrics/{metricId}:
-    get: { summary: "One metric definition + its value computed live from the caller's org data (null when source data is absent). Scope: reports:read." }
+    get:
+      summary: "One metric definition + its value computed live from the caller's org data (null when source data is absent). Scope: reports:read."
+      responses:
+        "200":
+          description: Metric definition + resolved value.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  value: { type: number, nullable: true }
+                  computed: { type: boolean }
   /api/v1/reports:
-    get: { summary: "The 43-report library (definitions) — each binds metric ids from the registry. Scope: reports:read." }
+    get:
+      summary: "The 43-report library (definitions) — each binds metric ids from the registry. Scope: reports:read."
+      responses:
+        "200":
+          description: Report library.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reports:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        app: { type: string }
+                        title: { type: string }
+                        kind: { type: string }
+                        metrics: { type: array, items: { type: string } }
   /api/v1/reports/{reportId}:
-    get: { summary: "A report definition + its metric values resolved live from org data. Scope: reports:read." }
+    get:
+      summary: "A report definition + its metric values resolved live from org data. Scope: reports:read."
+      responses:
+        "200":
+          description: Report + resolved metric values.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report: { type: object }
+                  metrics: { type: object }
   /api/v1/reports/{reportId}/snapshot:
-    get: { summary: "Immutable point-in-time snapshot of a report (definition + resolved metric values + capturedAt). No mutation. Scope: reports:read." }
+    get:
+      summary: "Timestamped live read of a report (definition + resolved metric values + capturedAt). Computed on demand; not persisted. Scope: reports:read."
+      responses:
+        "200":
+          description: Report snapshot (timestamped live read).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report: { type: object }
+                  metrics: { type: object }
+                  capturedAt: { type: string, format: date-time }

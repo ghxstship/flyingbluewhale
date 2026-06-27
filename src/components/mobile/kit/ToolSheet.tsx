@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
+import { useDismissable } from "./useDismissable";
 
 export type Toast = (t: { tone: string; title: string; message?: string }) => void;
 
@@ -214,11 +215,11 @@ function OshaTool({ toast }: { toast: Toast }) {
     <div>
       <div className="searchbar" style={{ marginBottom: 12 }}><KIcon name="Search" size={16} /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search standards…" /></div>
       {items.map((o, i) => (
-        <div className="item tap" key={i} style={{ cursor: "pointer" }} onClick={() => { window.open(o.url, "_blank", "noopener"); toast({ tone: "info", title: `OSHA ${o.code}`, message: "Opening osha.gov" }); }}>
+        <button type="button" className="item tap" key={i} style={{ cursor: "pointer", width: "100%", textAlign: "left", font: "inherit", color: "inherit" }} onClick={() => { window.open(o.url, "_blank", "noopener"); toast({ tone: "info", title: `OSHA ${o.code}`, message: "Opening osha.gov" }); }}>
           <span className="tool-code">{o.code}</span>
           <div><div className="t">{o.t}</div><div className="s">{o.s}</div></div>
           <span className="sp" /><KIcon name="ExternalLink" size={15} style={{ color: "var(--p-text-3)" }} />
-        </div>
+        </button>
       ))}
       {!items.length && <div className="hint" style={{ textAlign: "center", padding: "16px 0" }}>No standards match.</div>}
     </div>
@@ -296,10 +297,10 @@ function ChecklistTool({ toast, onClose }: { toast: Toast; onClose: () => void }
       <button type="button" className="backbtn" onClick={() => setOpen(null)}><KIcon name="ChevronLeft" size={17} /> Departments</button>
       <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "2px 0 10px" }}><div style={{ fontWeight: 700, fontSize: 15, flex: 1 }}>{open.name}</div><span className="hint">{done}/{open.items.length}</span></div>
       {open.items.map((c, i) => (
-        <div className="item tap" key={i} style={{ cursor: "pointer" }} onClick={() => setChecked((p) => ({ ...p, [i]: !p[i] }))}>
+        <button type="button" role="checkbox" aria-checked={!!checked[i]} className="item tap" key={i} style={{ cursor: "pointer", width: "100%", textAlign: "left", font: "inherit", color: "inherit" }} onClick={() => setChecked((p) => ({ ...p, [i]: !p[i] }))}>
           <span className="check" data-on={checked[i] ? "1" : undefined}>{checked[i] && <KIcon name="Check" size={14} />}</span>
           <div><div className="t" style={{ textDecoration: checked[i] ? "line-through" : "none", opacity: checked[i] ? 0.55 : 1 }}>{c}</div></div>
-        </div>
+        </button>
       ))}
       <button type="button" className={`ps-btn ${all ? "ps-btn--cta" : "ps-btn--secondary"} ps-btn--lg`} style={{ width: "100%", justifyContent: "center", marginTop: 14 }} onClick={() => { if (all) { toast({ tone: "ok", title: "Checklist submitted", message: open.name + " · logged" }); onClose(); } else { setOpen(null); } }}>{all ? "Submit Checklist" : "Back"}</button>
     </div>
@@ -308,11 +309,12 @@ function ChecklistTool({ toast, onClose }: { toast: Toast; onClose: () => void }
 
 export function ToolSheet({ toolId, onClose, toast }: { toolId: string; onClose: () => void; toast: Toast }) {
   const tool = TOOLS.find((t) => t.id === toolId);
+  const panelRef = useDismissable<HTMLDivElement>(!!tool, onClose);
   if (!tool) return null;
   return (
     <div className="sheet">
-      <div className="sheet-bg" onClick={onClose} />
-      <div className="sheet-panel">
+      <button type="button" className="sheet-bg" aria-label="Close" onClick={onClose} />
+      <div ref={panelRef} className="sheet-panel" role="dialog" aria-modal="true" aria-label={tool.label}>
         <div className="sheet-grip" />
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
           <span className="form-ic"><KIcon name={tool.icon} size={20} /></span>

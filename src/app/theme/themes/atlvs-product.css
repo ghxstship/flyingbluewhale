@@ -22,31 +22,198 @@
  */
 
 /* ============================================================================
-   :root brand-identity tokens (mode-agnostic, for multi-product displays).
-   GENERATED from tokens.json#color.brand — edit tokens.json, then run
-   `npm run gen:theme`. Do not hand-edit between the @gen markers; CI
-   (src/lib/theme/gen-theme.test.ts) fails the build if the region is stale.
+   :root brand-identity + color SEED tokens (mode-agnostic).
+   HAND-AUTHORED in OKLCH (v8.1 — adopted from the ATLVS Ecosystem kit). The
+   legacy tokens.json → atlvs-product.css hex generator is RETIRED for the color
+   layer; tokens.json#color is now an sRGB reference mirror (guarded for AA by
+   src/lib/theme/contrast.test.ts + structure by tokens-contract.test.ts).
    ========================================================================== */
-/* @gen:brand:start */
-/* Brand-identity tokens (mode-agnostic, for multi-product displays). */
+/* ----------------------------------------------------------------------------
+   OKLCH BRAND + SEED LAYER (v8.1 — adopted from the ATLVS Ecosystem kit, OKLCH).
+   This replaces the legacy hand-/gen-authored hex brand block. Every brand color
+   is authored exactly once here in OKLCH (perceptual, wide-gamut-ready); the
+   --p-* mapping below resolves these through light-dark(). The base seeds are
+   exact OKLCH equivalents of the v8.0 hex canon (zero change on sRGB displays).
+   Seven roles per product: base · hover · cta (AA filled-btn bg) · text (AA link
+   ink) · on (ink on fill) · lift (dark-mode fill) · lift-text (AA on dark).
+   HOUSE RULE (v8.0 palette-locked): the GHXSTSHIP house/master-brand accent is
+   ATLVS volcanic red — green is the logo/identity mark only, never a UI accent —
+   so --brand-ghxstship* alias the ATLVS-red ramp. Do NOT restore house green.
+   ---------------------------------------------------------------------------- */
 :root {
-  --brand-atlvs: #e23414;
-  --brand-atlvs-ink: #ad220a;
-  --brand-atlvs-on: #ffffff;
-  --brand-compvss: #ffc400;
-  --brand-compvss-ink: #ffc400;
-  --brand-compvss-on: #1f0d00;
-  --brand-gvteway: #2563eb;
-  --brand-gvteway-ink: #2563eb;
-  --brand-gvteway-on: #ffffff;
-  --brand-legend: #ed6a1e;
-  --brand-legend-ink: #ed6a1e;
-  --brand-legend-on: #280300;
-  --brand-ghxstship: #2edb3a;
-  --brand-ghxstship-ink: #2edb3a;
-  --brand-ghxstship-on: #001800;
+  /* ---- ATLVS — volcanic red (also the HOUSE / cold-start accent) ---- */
+  --brand-atlvs:           oklch(0.5964 0.2136 32.25);
+  --brand-atlvs-hover:     oklch(0.5453 0.1964 32.09);
+  --brand-atlvs-cta:       oklch(0.4857 0.1775 31.86);
+  --brand-atlvs-text:      oklch(0.4375 0.1624 31.76);
+  --brand-atlvs-on:        oklch(1 0 0);
+  --brand-atlvs-lift:      oklch(0.6794 0.2107 33.24);
+  --brand-atlvs-lift-text: oklch(0.732 0.1674 35.62);
+
+  /* ---- COMPVSS — signal yellow ---- */
+  --brand-compvss:           oklch(0.8498 0.1739 86.55);
+  --brand-compvss-hover:     oklch(0.8013 0.1642 85.12);
+  --brand-compvss-cta:       oklch(0.8498 0.1739 86.55);
+  --brand-compvss-text:      oklch(0.55 0.1186 75.75); /* a11y: AA 4.6:1 on the #f7f8fa page bg (was 0.5639 → 4.4 on off-white) */
+  --brand-compvss-on:        oklch(0.1825 0.0421 61.82);
+  --brand-compvss-lift:      oklch(0.8202 0.168 85.43);
+  --brand-compvss-lift-text: oklch(0.8504 0.1401 86.39);
+
+  /* ---- GVTEWAY — blue ---- */
+  --brand-gvteway:           oklch(0.5461 0.2152 262.88);
+  --brand-gvteway-hover:     oklch(0.5037 0.2038 263.11);
+  --brand-gvteway-cta:       oklch(0.5461 0.2152 262.88);
+  --brand-gvteway-text:      oklch(0.4882 0.2172 264.38);
+  --brand-gvteway-on:        oklch(1 0 0);
+  --brand-gvteway-lift:      oklch(0.6537 0.1615 264.58);
+  --brand-gvteway-lift-text: oklch(0.7433 0.1168 265.27);
+
+  /* ---- LEG3ND — molten orange ---- */
+  --brand-legend:           oklch(0.675 0.1806 45.23);
+  --brand-legend-hover:     oklch(0.6249 0.1793 44.79);
+  --brand-legend-cta:       oklch(0.675 0.1806 45.23);
+  --brand-legend-text:      oklch(0.5754 0.1601 45.23);
+  --brand-legend-on:        oklch(0.1804 0.0655 33.64);
+  --brand-legend-lift:      oklch(0.7733 0.1493 51.59);
+  --brand-legend-lift-text: oklch(0.6758 0.1399 45.51);
+
+  /* ---- CVRGO — cargo cyan (retail · merch · warehouse · logistics) ---- */
+  --brand-cvrgo:           oklch(0.7148 0.1257 215.22);
+  --brand-cvrgo-hover:     oklch(0.6685 0.1192 216.76);
+  --brand-cvrgo-cta:       oklch(0.7148 0.1257 215.22);
+  --brand-cvrgo-text:      oklch(0.549 0.1004 220.61);
+  --brand-cvrgo-on:        oklch(0.1938 0.0422 236.77);
+  --brand-cvrgo-lift:      oklch(0.8194 0.1256 215.46);
+  --brand-cvrgo-lift-text: oklch(0.7148 0.1257 215.22);
+
+  /* ---- OPVS — studio violet (artist · label · talent · agency) ---- */
+  --brand-opvs:           oklch(0.5413 0.2466 293.01);
+  --brand-opvs-hover:     oklch(0.4907 0.2412 292.58);
+  --brand-opvs-cta:       oklch(0.4907 0.2412 292.58);
+  --brand-opvs-text:      oklch(0.4771 0.2328 292.81);
+  --brand-opvs-on:        oklch(1 0 0);
+  --brand-opvs-lift:      oklch(0.709 0.1592 293.54);
+  --brand-opvs-lift-text: oklch(0.8112 0.1013 293.57);
+
+  /* ---- GVLLEY — galley magenta (F&B · kitchen · menu · service) ---- */
+  --brand-gvlley:           oklch(0.5916 0.218 0.58);
+  --brand-gvlley-hover:     oklch(0.5419 0.2183 0.42);
+  --brand-gvlley-cta:       oklch(0.5188 0.1921 0.5);
+  --brand-gvlley-text:      oklch(0.5162 0.1842 357.67);
+  --brand-gvlley-on:        oklch(1 0 0);
+  --brand-gvlley-lift:      oklch(0.7095 0.2039 357.91);
+  --brand-gvlley-lift-text: oklch(0.7619 0.1335 356.23);
+
+  /* ---- Vault — ATLVS extension, inherits volcanic red (no own accent) ---- */
+  --brand-vault:           var(--brand-atlvs);
+  --brand-vault-hover:     var(--brand-atlvs-hover);
+  --brand-vault-cta:       var(--brand-atlvs-cta);
+  --brand-vault-text:      var(--brand-atlvs-text);
+  --brand-vault-on:        var(--brand-atlvs-on);
+  --brand-vault-lift:      var(--brand-atlvs-lift);
+  --brand-vault-lift-text: var(--brand-atlvs-lift-text);
+
+  /* ---- GHXSTSHIP — HOUSE/master brand = ATLVS volcanic red (v8.0 palette-lock).
+     Green is the logo/identity mark only; the UI accent is ATLVS red. ---- */
+  --brand-ghxstship:           var(--brand-atlvs);
+  --brand-ghxstship-hover:     var(--brand-atlvs-hover);
+  --brand-ghxstship-cta:       var(--brand-atlvs-cta);
+  --brand-ghxstship-text:      var(--brand-atlvs-text);
+  --brand-ghxstship-on:        var(--brand-atlvs-on);
+  --brand-ghxstship-lift:      var(--brand-atlvs-lift);
+  --brand-ghxstship-lift-text: var(--brand-atlvs-lift-text);
+
+  /* Back-compat alias: -ink = the AA-safe cta value (legacy consumers). */
+  --brand-atlvs-ink:     var(--brand-atlvs-cta);
+  --brand-compvss-ink:   var(--brand-compvss-cta);
+  --brand-gvteway-ink:   var(--brand-gvteway-cta);
+  --brand-legend-ink:    var(--brand-legend-cta);
+  --brand-cvrgo-ink:     var(--brand-cvrgo-cta);
+  --brand-opvs-ink:      var(--brand-opvs-cta);
+  --brand-vault-ink:     var(--brand-vault-cta);
+  --brand-gvlley-ink:    var(--brand-gvlley-cta);
+  --brand-ghxstship-ink: var(--brand-ghxstship-cta);
+
+  /* ---- 12-step neutral surface ramp — light (-l-) + dark (-d-) seeds. Exact
+     OKLCH equivalents of the v8.0 hexes (text-3 holds the AA floor at step 600). */
+  --neutral-l-0:    oklch(1 0 0);
+  --neutral-l-50:   oklch(0.9789 0.0029 264.54);
+  --neutral-l-100:  oklch(0.9635 0.0045 258.32);
+  --neutral-l-200:  oklch(0.9271 0.0075 260.73);
+  --neutral-l-300:  oklch(0.8807 0.0123 259.82);
+  --neutral-l-400:  oklch(0.7871 0.0187 261.33);
+  --neutral-l-500:  oklch(0.6642 0.0246 260.7);
+  --neutral-l-600:  oklch(0.5325 0.0226 260.15);
+  --neutral-l-700:  oklch(0.4453 0.027 254.55);
+  --neutral-l-800:  oklch(0.3507 0.023 261.21);
+  --neutral-l-900:  oklch(0.279 0.0187 258.37);
+  --neutral-l-1000: oklch(0.2227 0.0163 268.92);
+  --neutral-d-0:    oklch(0.1869 0.0107 268.11);
+  --neutral-d-50:   oklch(0.2308 0.0143 266.95);
+  --neutral-d-100:  oklch(0.2726 0.0177 266.31);
+  --neutral-d-200:  oklch(0.3125 0.0193 264.24);
+  --neutral-d-300:  oklch(0.3707 0.0222 264.26);
+  --neutral-d-400:  oklch(0.4478 0.0252 261.67);
+  --neutral-d-500:  oklch(0.557 0.0271 262.02);
+  --neutral-d-600:  oklch(0.6771 0.02 258.36);
+  --neutral-d-700:  oklch(0.7743 0.0218 261.76);
+  --neutral-d-800:  oklch(0.8652 0.0153 260.73);
+  --neutral-d-900:  oklch(0.9335 0.0087 264.52);
+  --neutral-d-1000: oklch(0.9668 0.0058 264.53);
+
+  /* ---- Semantic signal seeds — fills (mode-agnostic) + AA -text inks
+     (light value + lifted -dark value for AA on dark tints). ---- */
+  --sem-success:           oklch(0.6527 0.1437 155.1);
+  --sem-warning:           oklch(0.6676 0.1366 71.16);
+  --sem-danger:            oklch(0.6256 0.1933 23.03);
+  --sem-info:              oklch(0.6334 0.1174 231.06);
+  --sem-success-text:      oklch(0.5238 0.1145 155.92);
+  --sem-warning-text:      oklch(0.5326 0.1084 72.99);
+  --sem-danger-text:       oklch(0.5439 0.1834 26.68);
+  --sem-info-text:         oklch(0.5124 0.0973 234.38);
+  --sem-success-text-dark: oklch(0.7369 0.1464 157.63);
+  --sem-warning-text-dark: oklch(0.794 0.1215 78.63);
+  --sem-danger-text-dark:  oklch(0.7432 0.1244 18.63);
+  --sem-info-text-dark:    oklch(0.7635 0.1091 227.1);
+
+  /* ---- On-ink seeds — the text/icon color on a light vs. dark field. ---- */
+  --ink-on-light: oklch(1 0 0);
+  --ink-on-dark:  oklch(0.1727 0.0089 264.31);
+
+  /* ---- Identity discriminator palette — 8 hash buckets (NOT semantic). ---- */
+  --identity-1: oklch(0.6847 0.1479 237.32);
+  --identity-2: oklch(0.6056 0.2189 292.72);
+  --identity-3: oklch(0.6959 0.1491 162.48);
+  --identity-4: oklch(0.7686 0.1647 70.08);
+  --identity-5: oklch(0.6368 0.2078 25.33);
+  --identity-6: oklch(0.6559 0.2118 354.31);
+  --identity-7: oklch(0.5854 0.2041 277.12);
+  --identity-8: oklch(0.7038 0.123 182.5);
 }
-/* @gen:brand:end */
+
+/* ---- WIDE-GAMUT TIER (Display-P3) — lift ONLY the bright fill roles to the
+   chroma the panel can express; hue + lightness held fixed (zero sRGB change). */
+@media (color-gamut: p3) {
+  :root {
+    --brand-atlvs: oklch(0.5964 0.2606 32.25);
+    --brand-atlvs-lift: oklch(0.6794 0.2571 33.24);
+    --brand-compvss: oklch(0.8498 0.2122 86.55);
+    --brand-compvss-lift: oklch(0.8202 0.205 85.43);
+    --brand-gvteway: oklch(0.5461 0.2625 262.88);
+    --brand-gvteway-lift: oklch(0.6537 0.197 264.58);
+    --brand-legend: oklch(0.675 0.2203 45.23);
+    --brand-legend-lift: oklch(0.7733 0.1821 51.59);
+    --brand-cvrgo: oklch(0.7148 0.1534 215.22);
+    --brand-cvrgo-lift: oklch(0.8194 0.1532 215.46);
+    --brand-opvs: oklch(0.5413 0.3009 293.01);
+    --brand-opvs-lift: oklch(0.709 0.1942 293.54);
+    --brand-gvlley: oklch(0.5916 0.266 0.58);
+    --brand-gvlley-lift: oklch(0.7095 0.2488 357.91);
+    /* GHXSTSHIP house = ATLVS red (no green) — alias the ATLVS P3 lift. */
+    --brand-ghxstship: oklch(0.5964 0.2606 32.25);
+    --brand-ghxstship-lift: oklch(0.6794 0.2571 33.24);
+  }
+}
 
 /* ============================================================================
    BASE TYPE + RADII + SPACE + ELEVATION + MOTION
@@ -205,239 +372,196 @@
 }
 
 /* ============================================================================
-   COLOR TOKENS — GENERATED from tokens.json (surfaces, per-product accent, and
-   the --k-acc/--k-acc-text intensity sources). Edit tokens.json, then run
-   `npm run gen:theme`. Do not hand-edit between the @gen markers; CI fails on
-   drift. The [data-accent] color-mix formulas + everything below stay hand-
-   authored (not color-token-derived).
+   COLOR TOKENS — HAND-AUTHORED OKLCH (v8.1). Surfaces resolve through one
+   light-dark() layer (OS-aware; [data-mode] pins it); per-product accents +
+   --k-acc intensity sources reference the OKLCH brand seeds above. The eight
+   products (4 core + CVRGO/OPVS/GVLLEY/Vault) each own an accent; GHXSTSHIP =
+   ATLVS volcanic red (house, no green). Wide-gamut P3 fills lift via the seeds.
    ========================================================================== */
-/* @gen:tokens:start */
-/* ---------- Neutral ramp + surfaces (light default + dark) ---------- */
+/* ---------- Neutral ramp + surfaces — ONE light-dark() layer (OS-aware).
+   color-scheme (declared per mode below) drives light-dark(); [data-mode] pins
+   it, otherwise it follows the OS. Authored once for both modes. ---------- */
+:root { color-scheme: light dark; }
+[data-ui="saas"], [data-theme="atlvs-product"] { color-scheme: light dark; }
+[data-ui="saas"][data-mode="light"], [data-theme="atlvs-product"][data-mode="light"],
+[data-mode="light"] [data-ui="saas"], [data-mode="light"] [data-theme="atlvs-product"] { color-scheme: light; }
+[data-ui="saas"][data-mode="dark"], [data-theme="atlvs-product"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"], [data-mode="dark"] [data-theme="atlvs-product"] { color-scheme: dark; }
+
 [data-ui="saas"],
-[data-ui="saas"][data-mode="light"],
-[data-theme="atlvs-product"],
-[data-mode="light"] [data-theme="atlvs-product"] {
-  --p-neutral-0: #ffffff;
-  --p-neutral-50: #f7f8fa;
-  --p-neutral-100: #f1f3f6;
-  --p-neutral-200: #e4e7ec;
-  --p-neutral-300: #d3d8e0;
-  --p-neutral-400: #b3bac6;
-  --p-neutral-500: #8b94a3;
-  --p-neutral-600: #656d7a;
-  --p-neutral-700: #4a5563;
-  --p-neutral-800: #343b47;
-  --p-neutral-900: #232932;
-  --p-neutral-1000: #181b23;
-  --p-bg: var(--p-neutral-50);
-  --p-surface: var(--p-neutral-0);
-  --p-surface-2: var(--p-neutral-100);
-  --p-border: var(--p-neutral-200);
-  --p-border-2: var(--p-neutral-300);
-  --p-text-1: var(--p-neutral-1000);
-  --p-text-2: var(--p-neutral-700);
-  --p-text-3: var(--p-neutral-600);
-  --p-accent-contrast: #ffffff;
+[data-theme="atlvs-product"] {
+  --p-neutral-0:    light-dark(var(--neutral-l-0),    var(--neutral-d-0));
+  --p-neutral-50:   light-dark(var(--neutral-l-50),   var(--neutral-d-50));
+  --p-neutral-100:  light-dark(var(--neutral-l-100),  var(--neutral-d-100));
+  --p-neutral-200:  light-dark(var(--neutral-l-200),  var(--neutral-d-200));
+  --p-neutral-300:  light-dark(var(--neutral-l-300),  var(--neutral-d-300));
+  --p-neutral-400:  light-dark(var(--neutral-l-400),  var(--neutral-d-400));
+  --p-neutral-500:  light-dark(var(--neutral-l-500),  var(--neutral-d-500));
+  --p-neutral-600:  light-dark(var(--neutral-l-600),  var(--neutral-d-600));
+  --p-neutral-700:  light-dark(var(--neutral-l-700),  var(--neutral-d-700));
+  --p-neutral-800:  light-dark(var(--neutral-l-800),  var(--neutral-d-800));
+  --p-neutral-900:  light-dark(var(--neutral-l-900),  var(--neutral-d-900));
+  --p-neutral-1000: light-dark(var(--neutral-l-1000), var(--neutral-d-1000));
+  /* Surface mapping differs per mode (light bg=50/surface=0; dark bg=0/surface=50). */
+  --p-bg:        light-dark(var(--neutral-l-50),   var(--neutral-d-0));
+  --p-surface:   light-dark(var(--neutral-l-0),    var(--neutral-d-50));
+  --p-surface-2: light-dark(var(--neutral-l-100),  var(--neutral-d-100));
+  --p-border:    light-dark(var(--neutral-l-200),  var(--neutral-d-200));
+  --p-border-2:  light-dark(var(--neutral-l-300),  var(--neutral-d-300));
+  --p-text-1:    light-dark(var(--neutral-l-1000), var(--neutral-d-1000));
+  --p-text-2:    light-dark(var(--neutral-l-700),  var(--neutral-d-700));
+  --p-text-3:    light-dark(var(--neutral-l-600),  var(--neutral-d-600));
+  /* Default (cold-start / non-product) accent = ATLVS volcanic red (the HOUSE
+     accent). Per-product blocks below override. */
+  --p-accent:          light-dark(var(--brand-atlvs),      var(--brand-atlvs-lift));
+  --p-accent-hover:    var(--brand-atlvs-hover);
+  --p-accent-text:     light-dark(var(--brand-atlvs-text), var(--brand-atlvs-lift-text));
+  --p-accent-contrast: light-dark(var(--ink-on-light),     var(--ink-on-dark));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-atlvs) 12%, transparent), color-mix(in srgb, var(--brand-atlvs) 18%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-atlvs-cta), var(--brand-atlvs-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-atlvs-on), var(--ink-on-dark));
   --p-focus: var(--p-accent);
-  color-scheme: light;
+  --k-acc: var(--brand-atlvs);
+  --k-acc-text: light-dark(var(--brand-atlvs-text), var(--brand-atlvs-lift-text));
 }
 
-[data-ui="saas"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"],
-[data-mode="dark"] [data-theme="atlvs-product"] {
-  --p-neutral-0: #111318;
-  --p-neutral-50: #1a1d24;
-  --p-neutral-100: #232730;
-  --p-neutral-200: #2c313b;
-  --p-neutral-300: #3a404c;
-  --p-neutral-400: #4d5563;
-  --p-neutral-500: #6b7484;
-  --p-neutral-600: #9098a4;
-  --p-neutral-700: #aeb6c4;
-  --p-neutral-800: #cdd3dd;
-  --p-neutral-900: #e6e9ef;
-  --p-neutral-1000: #f2f4f8;
-  --p-bg: var(--p-neutral-0);
-  --p-surface: var(--p-neutral-50);
-  --p-surface-2: var(--p-neutral-100);
-  --p-border: var(--p-neutral-200);
-  --p-border-2: var(--p-neutral-300);
-  --p-text-1: var(--p-neutral-1000);
-  --p-text-2: var(--p-neutral-700);
-  --p-text-3: var(--p-neutral-600);
-  --p-accent-contrast: #0e1014;
-  --p-focus: var(--p-accent);
-  color-scheme: dark;
-}
-
-/* ---------- Per-product accent (reads data-product OR data-platform) ---------- */
-/* ATLVS */
+/* ---------- Per-product accent — ONE light-dark() block each (OS-aware), reads
+   data-product OR data-platform. The bright fill + text ink lift on dark; the
+   weak tint opens up on dark. ATLVS/GVTEWAY use white-on-fill (focus = accent);
+   COMPVSS/LEGEND/GVLLEY use dark-ink-on-fill (focus = the AA cta). ---------- */
+/* ATLVS — volcanic red */
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --p-accent: #e23414;
-  --p-accent-hover: #c92c10;
-  --p-accent-text: #971a05;
-  --p-accent-weak: rgba(226,52,20,.12);
-  --p-accent-cta: #ad220a;
-  --p-accent-cta-contrast: #ffffff;
+  --p-accent:          light-dark(var(--brand-atlvs),      var(--brand-atlvs-lift));
+  --p-accent-hover:    var(--brand-atlvs-hover);
+  --p-accent-text:     light-dark(var(--brand-atlvs-text), var(--brand-atlvs-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-atlvs) 12%, transparent), color-mix(in srgb, var(--brand-atlvs) 18%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-atlvs-cta), var(--brand-atlvs-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-atlvs-on), var(--ink-on-dark));
   --p-focus: var(--p-accent);
 }
-[data-ui="saas"][data-product="atlvs"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --p-accent: #ff5634;
-  --p-accent-text: #ff7c5a;
-  --p-accent-weak: rgba(226,52,20,.18);
-  --p-accent-cta: #ff5634;
-  --p-accent-cta-contrast: #0e1014;
-  --p-focus: var(--p-accent);
-}
-/* COMPVSS */
+/* COMPVSS — signal yellow */
 [data-ui="saas"][data-product="compvss"],
 [data-theme="atlvs-product"][data-platform="compvss"] {
-  --p-accent: #ffc400;
-  --p-accent-hover: #eeb400;
-  --p-accent-text: #9d6a00;
-  --p-accent-weak: rgba(255,196,0,.14);
-  --p-accent-contrast: #1f0d00;
-  --p-accent-cta: #ffc400;
-  --p-accent-cta-contrast: #1f0d00;
-  --p-focus: #9d6a00;
+  --p-accent:          light-dark(var(--brand-compvss),      var(--brand-compvss-lift));
+  --p-accent-hover:    var(--brand-compvss-hover);
+  --p-accent-text:     light-dark(var(--brand-compvss-text), var(--brand-compvss-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-compvss) 14%, transparent), color-mix(in srgb, var(--brand-compvss) 20%, transparent));
+  --p-accent-contrast: var(--brand-compvss-on);
+  --p-accent-cta:          light-dark(var(--brand-compvss-cta), var(--brand-compvss-lift));
+  --p-accent-cta-contrast: var(--brand-compvss-on);
+  --p-focus: var(--p-accent-cta);
 }
-[data-ui="saas"][data-product="compvss"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="compvss"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
-  --p-accent: #f5ba00;
-  --p-accent-text: #f6c755;
-  --p-accent-weak: rgba(255,196,0,.2);
-  --p-accent-contrast: #1f0d00;
-  --p-accent-cta: #f5ba00;
-  --p-accent-cta-contrast: #1f0d00;
-  --p-focus: var(--p-accent);
-}
-/* GVTEWAY */
+/* GVTEWAY — blue */
 [data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --p-accent: #2563eb;
-  --p-accent-hover: #1f57d6;
-  --p-accent-text: #1d4ed8;
-  --p-accent-weak: rgba(37,99,235,.13);
-  --p-accent-cta: #2563eb;
-  --p-accent-cta-contrast: #ffffff;
+  --p-accent:          light-dark(var(--brand-gvteway),      var(--brand-gvteway-lift));
+  --p-accent-hover:    var(--brand-gvteway-hover);
+  --p-accent-text:     light-dark(var(--brand-gvteway-text), var(--brand-gvteway-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-gvteway) 13%, transparent), color-mix(in srgb, var(--brand-gvteway) 22%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-gvteway-cta), var(--brand-gvteway-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-gvteway-on), var(--ink-on-dark));
   --p-focus: var(--p-accent);
 }
-[data-ui="saas"][data-product="gvteway"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --p-accent: #5e8bf2;
-  --p-accent-text: #88aaf6;
-  --p-accent-weak: rgba(37,99,235,.2);
-  --p-accent-cta: #5e8bf2;
-  --p-accent-cta-contrast: #0e1014;
-  --p-focus: var(--p-accent);
-}
-/* LEGEND */
+/* LEG3ND — molten orange */
 [data-ui="saas"][data-product="legend"],
 [data-theme="atlvs-product"][data-platform="legend"] {
-  --p-accent: #ed6a1e;
-  --p-accent-hover: #db5a00;
-  --p-accent-text: #c2520a;
-  --p-accent-weak: rgba(237,106,30,.12);
-  --p-accent-contrast: #280300;
-  --p-accent-cta: #ed6a1e;
-  --p-accent-cta-contrast: #280300;
-  --p-focus: #c2520a;
+  --p-accent:          light-dark(var(--brand-legend),      var(--brand-legend-lift));
+  --p-accent-hover:    var(--brand-legend-hover);
+  --p-accent-text:     light-dark(var(--brand-legend-text), var(--brand-legend-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-legend) 12%, transparent), color-mix(in srgb, var(--brand-legend) 20%, transparent));
+  --p-accent-contrast: var(--brand-legend-on);
+  --p-accent-cta:          light-dark(var(--brand-legend-cta), var(--brand-legend-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-legend-on), var(--ink-on-dark));
+  --p-focus: var(--p-accent-cta);
 }
-[data-ui="saas"][data-product="legend"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="legend"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
-  --p-accent: #ff9754;
-  --p-accent-text: #dc7847;
-  --p-accent-weak: rgba(237,106,30,.2);
-  --p-accent-cta: #ff9754;
-  --p-accent-cta-contrast: #0e1014;
-  --p-focus: var(--p-accent);
-}
-/* GHXSTSHIP */
+/* GHXSTSHIP — HOUSE = ATLVS volcanic red (no green; v8.0 palette-lock) */
 [data-ui="saas"][data-product="ghxstship"],
 [data-theme="atlvs-product"][data-platform="ghxstship"] {
-  --p-accent: #2edb3a;
-  --p-accent-hover: #00ca22;
-  --p-accent-text: #1f8425;
-  --p-accent-weak: rgba(46,219,58,.12);
-  --p-accent-contrast: #001800;
-  --p-accent-cta: #2edb3a;
-  --p-accent-cta-contrast: #001800;
-  --p-focus: #1f8425;
+  --p-accent:          light-dark(var(--brand-ghxstship),      var(--brand-ghxstship-lift));
+  --p-accent-hover:    var(--brand-ghxstship-hover);
+  --p-accent-text:     light-dark(var(--brand-ghxstship-text), var(--brand-ghxstship-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-ghxstship) 12%, transparent), color-mix(in srgb, var(--brand-ghxstship) 18%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-ghxstship-cta), var(--brand-ghxstship-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-ghxstship-on), var(--ink-on-dark));
+  --p-focus: var(--p-accent);
 }
-[data-ui="saas"][data-product="ghxstship"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="ghxstship"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="ghxstship"] {
-  --p-accent: #43e94b;
-  --p-accent-text: #7dce7b;
-  --p-accent-weak: rgba(46,219,58,.18);
-  --p-accent-cta: #43e94b;
-  --p-accent-cta-contrast: #0e1014;
+/* CVRGO — cargo cyan (extension product) */
+[data-ui="saas"][data-product="cvrgo"],
+[data-theme="atlvs-product"][data-platform="cvrgo"] {
+  --p-accent:          light-dark(var(--brand-cvrgo),      var(--brand-cvrgo-lift));
+  --p-accent-hover:    var(--brand-cvrgo-hover);
+  --p-accent-text:     light-dark(var(--brand-cvrgo-text), var(--brand-cvrgo-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-cvrgo) 13%, transparent), color-mix(in srgb, var(--brand-cvrgo) 22%, transparent));
+  --p-accent-contrast: var(--brand-cvrgo-on);
+  --p-accent-cta:          light-dark(var(--brand-cvrgo-cta), var(--brand-cvrgo-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-cvrgo-on), var(--ink-on-dark));
+  --p-focus: var(--p-accent-cta);
+}
+/* OPVS — studio violet (extension product) */
+[data-ui="saas"][data-product="opvs"],
+[data-theme="atlvs-product"][data-platform="opvs"] {
+  --p-accent:          light-dark(var(--brand-opvs),      var(--brand-opvs-lift));
+  --p-accent-hover:    var(--brand-opvs-hover);
+  --p-accent-text:     light-dark(var(--brand-opvs-text), var(--brand-opvs-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-opvs) 13%, transparent), color-mix(in srgb, var(--brand-opvs) 24%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-opvs-cta), var(--brand-opvs-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-opvs-on), var(--ink-on-dark));
+  --p-focus: var(--p-accent-cta);
+}
+/* GVLLEY — galley magenta (extension product) */
+[data-ui="saas"][data-product="gvlley"],
+[data-theme="atlvs-product"][data-platform="gvlley"] {
+  --p-accent:          light-dark(var(--brand-gvlley),      var(--brand-gvlley-lift));
+  --p-accent-hover:    var(--brand-gvlley-hover);
+  --p-accent-text:     light-dark(var(--brand-gvlley-text), var(--brand-gvlley-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-gvlley) 13%, transparent), color-mix(in srgb, var(--brand-gvlley) 22%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-gvlley-cta), var(--brand-gvlley-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-gvlley-on), var(--ink-on-dark));
+  --p-focus: var(--p-accent-cta);
+}
+/* Vault — ATLVS extension, inherits volcanic red */
+[data-ui="saas"][data-product="vault"],
+[data-theme="atlvs-product"][data-platform="vault"] {
+  --p-accent:          light-dark(var(--brand-vault),      var(--brand-vault-lift));
+  --p-accent-hover:    var(--brand-vault-hover);
+  --p-accent-text:     light-dark(var(--brand-vault-text), var(--brand-vault-lift-text));
+  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-vault) 12%, transparent), color-mix(in srgb, var(--brand-vault) 18%, transparent));
+  --p-accent-cta:          light-dark(var(--brand-vault-cta), var(--brand-vault-lift));
+  --p-accent-cta-contrast: light-dark(var(--brand-vault-on), var(--ink-on-dark));
   --p-focus: var(--p-accent);
 }
 
-/* ---------- Accent-intensity sources (--k-acc / --k-acc-text mirror the resolved accent) ---------- */
-[data-ui="saas"][data-product="atlvs"],
-[data-theme="atlvs-product"][data-platform="atlvs"] {
-  --k-acc: #e23414;
-  --k-acc-text: #971a05;
+/* ---------- Accent-intensity sources — --k-acc / --k-acc-text feed the accent
+   ramp + the soft/vivid axis. One light-dark() pair per product (incl the four
+   extension products). ---------- */
+[data-ui="saas"][data-product="atlvs"], [data-theme="atlvs-product"][data-platform="atlvs"] {
+  --k-acc: var(--brand-atlvs); --k-acc-text: light-dark(var(--brand-atlvs-text), var(--brand-atlvs-lift-text));
 }
-[data-ui="saas"][data-product="atlvs"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
-  --k-acc: #ff5634;
-  --k-acc-text: #ff7c5a;
+[data-ui="saas"][data-product="compvss"], [data-theme="atlvs-product"][data-platform="compvss"] {
+  --k-acc: var(--brand-compvss); --k-acc-text: light-dark(var(--brand-compvss-text), var(--brand-compvss-lift-text));
 }
-[data-ui="saas"][data-product="compvss"],
-[data-theme="atlvs-product"][data-platform="compvss"] {
-  --k-acc: #ffc400;
-  --k-acc-text: #9d6a00;
+[data-ui="saas"][data-product="gvteway"], [data-theme="atlvs-product"][data-platform="gvteway"] {
+  --k-acc: var(--brand-gvteway); --k-acc-text: light-dark(var(--brand-gvteway-text), var(--brand-gvteway-lift-text));
 }
-[data-ui="saas"][data-product="compvss"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="compvss"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
-  --k-acc: #f5ba00;
-  --k-acc-text: #f6c755;
+[data-ui="saas"][data-product="legend"], [data-theme="atlvs-product"][data-platform="legend"] {
+  --k-acc: var(--brand-legend); --k-acc-text: light-dark(var(--brand-legend-text), var(--brand-legend-lift-text));
 }
-[data-ui="saas"][data-product="gvteway"],
-[data-theme="atlvs-product"][data-platform="gvteway"] {
-  --k-acc: #2563eb;
-  --k-acc-text: #1d4ed8;
+[data-ui="saas"][data-product="ghxstship"], [data-theme="atlvs-product"][data-platform="ghxstship"] {
+  --k-acc: var(--brand-ghxstship); --k-acc-text: light-dark(var(--brand-ghxstship-text), var(--brand-ghxstship-lift-text));
 }
-[data-ui="saas"][data-product="gvteway"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --k-acc: #5e8bf2;
-  --k-acc-text: #88aaf6;
+[data-ui="saas"][data-product="cvrgo"], [data-theme="atlvs-product"][data-platform="cvrgo"] {
+  --k-acc: var(--brand-cvrgo); --k-acc-text: light-dark(var(--brand-cvrgo-text), var(--brand-cvrgo-lift-text));
 }
-[data-ui="saas"][data-product="legend"],
-[data-theme="atlvs-product"][data-platform="legend"] {
-  --k-acc: #ed6a1e;
-  --k-acc-text: #c2520a;
+[data-ui="saas"][data-product="opvs"], [data-theme="atlvs-product"][data-platform="opvs"] {
+  --k-acc: var(--brand-opvs); --k-acc-text: light-dark(var(--brand-opvs-text), var(--brand-opvs-lift-text));
 }
-[data-ui="saas"][data-product="legend"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="legend"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
-  --k-acc: #ff9754;
-  --k-acc-text: #dc7847;
+[data-ui="saas"][data-product="gvlley"], [data-theme="atlvs-product"][data-platform="gvlley"] {
+  --k-acc: var(--brand-gvlley); --k-acc-text: light-dark(var(--brand-gvlley-text), var(--brand-gvlley-lift-text));
 }
-[data-ui="saas"][data-product="ghxstship"],
-[data-theme="atlvs-product"][data-platform="ghxstship"] {
-  --k-acc: #2edb3a;
-  --k-acc-text: #1f8425;
+[data-ui="saas"][data-product="vault"], [data-theme="atlvs-product"][data-platform="vault"] {
+  --k-acc: var(--brand-vault); --k-acc-text: light-dark(var(--brand-vault-text), var(--brand-vault-lift-text));
 }
-[data-ui="saas"][data-product="ghxstship"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"][data-product="ghxstship"],
-[data-mode="dark"] [data-theme="atlvs-product"][data-platform="ghxstship"] {
-  --k-acc: #43e94b;
-  --k-acc-text: #7dce7b;
-}
-/* @gen:tokens:end */
 
 /* ============================================================================
    v7.0 DERIVED LAYER — accent ramp, semantic-text inks, button-hover filter,
@@ -491,6 +615,24 @@
   --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   --p-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   --p-elev-3: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* §OS-dark parity (v8.1) — surfaces/accents already track the OS via light-dark();
+   the semantic-text inks, button-hover filter, and elevation aren't colors, so
+   they need this media mirror to follow OS-dark too. Skips surfaces explicitly
+   pinned to light, so [data-mode="light"] stays light even on an OS-dark host. */
+@media (prefers-color-scheme: dark) {
+  [data-ui="saas"]:not([data-mode="light"]),
+  [data-theme="atlvs-product"]:not([data-mode="light"]) {
+    --p-success-text: #45c585;
+    --p-warning-text: #e6b25a;
+    --p-danger-text: #f08a8d;
+    --p-info-text: #5cc0e8;
+    --p-btn-hover-filter: brightness(1.12);
+    --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    --p-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --p-elev-3: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
 }
 
 [data-accent="soft"] {
@@ -615,6 +757,60 @@
   --glass-blur: blur(8px) saturate(1.1);
   --p-border-width: 1px;
   --ring-width: 2px;
+
+  /* ── v8.1 inventory-completeness token sets ──────────────────────────────
+     Foundational scales the design-system inventory expects so "every visual
+     decision resolves to a token." Additive — existing surfaces are unchanged. */
+
+  /* Border-width scale — hairline (default) → emphasis → heavy. */
+  --p-border-width-sm: 1px;
+  --p-border-width-md: 2px;
+  --p-border-width-lg: 3px;
+
+  /* Opacity scale — disabled / muted / subtle / hover-veil / scrim. */
+  --p-opacity-disabled: 0.45;
+  --p-opacity-muted: 0.6;
+  --p-opacity-subtle: 0.75;
+  --p-opacity-veil: 0.08;
+  --p-opacity-scrim: 0.4;
+
+  /* Aspect-ratio tokens — for media frames, thumbnails, cards. */
+  --p-ar-square: 1 / 1;
+  --p-ar-video: 16 / 9;
+  --p-ar-photo: 4 / 3;
+  --p-ar-portrait: 3 / 4;
+  --p-ar-wide: 21 / 9;
+  --p-ar-golden: 1.618 / 1;
+
+  /* Grid columns & gutters — the 12-col base + responsive gutter. Reference
+     in CSS grid (`grid-template-columns: repeat(var(--p-grid-cols), 1fr)`). */
+  --p-grid-cols: 12;
+  --p-gutter: var(--p-6);
+  --p-gutter-sm: var(--p-4);
+  --p-gutter-lg: var(--p-8);
+
+  /* Named gradient tokens — accent wash + neutral fade + skeleton shimmer.
+     Reference these instead of inline linear-gradient() in components. */
+  --p-gradient-accent: linear-gradient(135deg, var(--p-accent) 0%, var(--p-accent-cta) 100%);
+  --p-gradient-surface: linear-gradient(180deg, var(--p-surface) 0%, var(--p-bg) 100%);
+  --p-gradient-fade-r: linear-gradient(90deg, transparent 0%, var(--p-surface) 100%);
+  --p-gradient-skeleton: linear-gradient(90deg, var(--p-surface-2) 25%, var(--p-border) 37%, var(--p-surface-2) 63%);
+
+  /* Data-viz SEQUENTIAL ramp (low→high, single-hue perceptual; uses the
+     product accent so it themes per product) + DIVERGING ramp (danger↔neutral↔
+     success around a midpoint) for heatmaps / correlation / choropleth. The
+     categorical --chart-1..8 set above stays the discrete-series palette. */
+  --chart-seq-1: color-mix(in oklab, var(--k-acc, var(--p-accent)) 14%, var(--p-surface));
+  --chart-seq-2: color-mix(in oklab, var(--k-acc, var(--p-accent)) 30%, var(--p-surface));
+  --chart-seq-3: color-mix(in oklab, var(--k-acc, var(--p-accent)) 48%, var(--p-surface));
+  --chart-seq-4: color-mix(in oklab, var(--k-acc, var(--p-accent)) 68%, var(--p-surface));
+  --chart-seq-5: color-mix(in oklab, var(--k-acc, var(--p-accent)) 86%, var(--p-surface));
+  --chart-seq-6: var(--k-acc, var(--p-accent));
+  --chart-div-neg-2: var(--p-danger);
+  --chart-div-neg-1: color-mix(in oklab, var(--p-danger) 45%, var(--p-surface));
+  --chart-div-mid: var(--p-surface-2);
+  --chart-div-pos-1: color-mix(in oklab, var(--p-success) 45%, var(--p-surface));
+  --chart-div-pos-2: var(--p-success);
 }
 
 /* Filled primary buttons + brand badges — use AA-safe CTA fill, not the

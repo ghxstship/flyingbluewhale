@@ -75,14 +75,16 @@ export function CommentsBlock({ comments = [], people = [], onComment }: Comment
       {tagged.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, margin: "8px 0 6px" }}>
           {tagged.map((t) => (
-            <span
+            <button
+              type="button"
               key={t}
               className="tag-chip"
-              style={{ cursor: "pointer" }}
+              aria-label={`Remove @${t}`}
+              style={{ cursor: "pointer", border: "none", font: "inherit", color: "inherit" }}
               onClick={() => setTagged((s) => s.filter((x) => x !== t))}
             >
               @{t} <KIcon name="X" size={11} />
-            </span>
+            </button>
           ))}
         </div>
       )}

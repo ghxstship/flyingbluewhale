@@ -1,6 +1,6 @@
 import "server-only";
 import type { MetricResolver, ResolverMap } from "./types";
-import { countWhere } from "./types";
+import { countWhere, NOT_COMPUTED } from "./types";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
@@ -241,25 +241,25 @@ const time_to_hire: MetricResolver = async ({ db, orgId }) => {
 // ── No backing data in schema → honest null (never fabricated) ────────────────
 
 /** Needs web-analytics/session counts (no sessions table). */
-const conversion_rate: MetricResolver = async () => null;
+const conversion_rate: MetricResolver = NOT_COMPUTED;
 /** Needs a vendor revenue-split / platform-fee agreement table (absent). */
-const take_rate: MetricResolver = async () => null;
+const take_rate: MetricResolver = NOT_COMPUTED;
 /** Needs per-vendor order attribution (no vendor-scoped orders). */
-const vendor_gmv: MetricResolver = async () => null;
+const vendor_gmv: MetricResolver = NOT_COMPUTED;
 /** Needs marketing-spend (no campaign-spend table). */
-const cac: MetricResolver = async () => null;
+const cac: MetricResolver = NOT_COMPUTED;
 /** Needs marketing-spend + attributed revenue (no spend table). */
-const roas: MetricResolver = async () => null;
+const roas: MetricResolver = NOT_COMPUTED;
 /** Needs lifetime cohort revenue per customer (no durable buyer identity). */
-const ltv: MetricResolver = async () => null;
+const ltv: MetricResolver = NOT_COMPUTED;
 /** Needs a real NPS survey instrument (reviews are 1–5 ratings, not NPS). */
-const nps: MetricResolver = async () => null;
+const nps: MetricResolver = NOT_COMPUTED;
 /** Needs payment-processor chargeback events (no chargeback field). */
-const chargeback_rate: MetricResolver = async () => null;
+const chargeback_rate: MetricResolver = NOT_COMPUTED;
 /** Needs sponsorship revenue ledger (sponsor_entitlements has no $ amount). */
-const sponsorship_revenue: MetricResolver = async () => null;
+const sponsorship_revenue: MetricResolver = NOT_COMPUTED;
 /** Needs activation marketing-spend vs attributed revenue (no spend table). */
-const activation_roi: MetricResolver = async () => null;
+const activation_roi: MetricResolver = NOT_COMPUTED;
 
 export const gvtewayResolvers: ResolverMap = {
   gmv,

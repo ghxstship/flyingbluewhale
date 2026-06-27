@@ -148,7 +148,7 @@
      "description": "Every module, every phase"
     },
     "solutions": {
-     "label": "Solutions",
+     "label": "Products",
      "description": "ATLVS · COMPVSS · GVTEWAY · LEG3ND"
     },
     "atlvs": {
@@ -255,7 +255,7 @@
      },
      "perOrg": {
       "title": "Per org. Never per seat.",
-      "body": "No per-seat trap. No per-scan tax. No velvet-rope gates on things that should be standard. Pricing reads like one number, not a tax form."
+      "body": "No per-seat trap, no per-scan tax, no velvet-rope gates on things that should be standard. Pricing reads like one number."
      }
     },
     "milestones": {
@@ -701,7 +701,7 @@
     "values": {
      "heading": "How We Crew",
      "crew": {
-      "title": "Crew, not staff",
+      "title": "We hire crew",
       "body": "Small group, deep ownership. Every role touches all four apps — ATLVS, COMPVSS, GVTEWAY, and LEG3ND."
      },
      "tested": {
@@ -926,7 +926,7 @@
    "contact": {
     "metadata": {
      "title": "Contact — Talk to the Studio",
-     "description": "Direct line. Demos, partnerships, concierge support, Festival access. Routed to producers who've run the room.",
+     "description": "Direct line. Demos, partnerships, priority support, Festival access. Routed to producers who've run the room.",
      "ogImageEyebrow": "Contact",
      "ogImageTitle": "Talk to the Studio."
     },
@@ -952,7 +952,7 @@
       "body": "Direct line to a producer. One business day, usually faster."
      },
      "concierge": {
-      "title": "Concierge",
+      "title": "Priority support",
       "body": "For current customers — triaged by tier. Festival gets an SLA."
      },
      "partners": {
@@ -991,7 +991,7 @@
      },
      "responseTime": {
       "q": "How fast does the studio respond?",
-      "a": "Studio: one business day. Concierge on Crew: 24 business hours. Production: 4. Festival: contractual SLA, usually one hour for P0."
+      "a": "Studio: one business day. Priority support on Crew: 24 business hours. Production: 4. Festival: contractual SLA, usually one hour for P0."
      },
      "producer": {
       "q": "Can we talk to a producer, not a salesperson?",
@@ -1289,7 +1289,7 @@
     },
     "meta": {
      "title": "Guides — production ops, advancing, and KBYG",
-     "description": "Long-form guides to production operations. Event advancing, Know Before You Go, and the unified production-ops thesis. Written by operators who run the show.",
+     "description": "Long-form guides to production operations. Event advancing, Know Before You Go, and the one-platform production-ops thesis. Written by operators who run the show.",
      "ogImageEyebrow": "Guides",
      "ogImageTitle": "Written by operators."
     },
@@ -1310,7 +1310,7 @@
    "help": {
     "metadata": {
      "title": "Help — Crew Support",
-     "description": "Self-serve guides, status, and direct support channels. Concierge for customers — triaged by tier. Festival gets an SLA.",
+     "description": "Self-serve guides, status, and direct support channels. Priority support for customers, triaged by tier. Festival gets an SLA.",
      "ogImageEyebrow": "Help",
      "ogImageTitle": "Crew Support."
     },
@@ -1321,7 +1321,7 @@
     "hero": {
      "eyebrow": "Help",
      "title": "Crew Support.",
-     "subtitle": "Self-serve guides for the patient, concierge for the urgent, hotline for the load-in. Pick your channel by how live the show is."
+     "subtitle": "Guides if you can wait, priority support if you can't, hotline for the load-in. Pick the channel by how live the show is."
     },
     "sections": {
      "getHelp": {
@@ -1343,7 +1343,7 @@
       "cta": "Read what shipped"
      },
      "concierge": {
-      "title": "Concierge",
+      "title": "Priority support",
       "body": "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA."
      },
      "hotline": {
@@ -1380,7 +1380,7 @@
      },
      "phoneSupport": {
       "q": "Can I get phone support?",
-      "a": "The production hotline is the closest thing — staffed by producers during active event windows. We don't run general phone support; concierge email reaches a human within hours, faster on Festival."
+      "a": "The production hotline is the closest thing — staffed by producers during active event windows. We don't run general phone support; support email reaches a human within hours, faster on Festival."
      },
      "invoice": {
       "q": "Where do I find my invoice or change billing details?",
@@ -1392,13 +1392,13 @@
      },
      "lostAccess": {
       "q": "I lost access to my admin account — what now?",
-      "a": "Contact concierge from the email on file with the org. We require a chain of identity proof to transfer ownership — typically founder/officer documentation. Plan ~3 business days for the handover."
+      "a": "Contact support from the email on file with the org. We require a chain of identity proof to transfer ownership — typically founder/officer documentation. Plan ~3 business days for the handover."
      }
     },
     "cta": {
      "title": "Still Stuck? Talk to a Producer.",
-     "subtitle": "Concierge email is the fastest path. We respond within hours, faster on Festival.",
-     "primaryLabel": "Email Concierge",
+     "subtitle": "Support email is the fastest path. We respond within hours, faster on Festival.",
+     "primaryLabel": "Email support",
      "secondaryLabel": "Open the Field Guide"
     }
    },
@@ -1407,7 +1407,7 @@
      "title": "Integrations — Stripe, Anthropic, Supabase, Twilio, Resend, Calendar, OAuth, Webhooks",
      "description": "The integrations running in production today — payments, AI, infrastructure, comms, auth, calendar, geo, observability. No coming-soon list; every entry ships live.",
      "ogImageEyebrow": "Integrations",
-     "ogImageTitle": "Shipped In Code, Not On A Slide."
+     "ogImageTitle": "Shipped in code."
     },
     "breadcrumbs": {
      "home": "Home",
@@ -1415,7 +1415,7 @@
     },
     "hero": {
      "eyebrow": "Integrations",
-     "title": "Shipped In Code, Not On A Slide.",
+     "title": "Shipped in code.",
      "body": "Everything below runs live in production. No coming-soon list, no aspirational entries. Each page links to the technical anchor in the codebase, so you can audit before you switch."
     },
     "card": {
@@ -1811,22 +1811,18 @@
      "ogImageTitle": "Run the show."
     },
     "hero": {
-     "eyebrow": "From pitch to case study",
+     "eyebrow": "Production · Operations · Experience · Knowledge",
      "titleLine1": "The",
      "titleLine2": "World Builder's",
-     "subtitleLead": "The modular operating system for experiential and unconventional productions.",
-     "subtitleAtlvs": "runs the bridge,",
-     "subtitleCompvss": "works the floor,",
-     "subtitleGvteway": "opens the doors, and",
+     "subtitleLead": "The ultimate tool for those who dared to dream bigger.",
      "ctaPrimary": "Start building free",
      "ctaSecondary": "See it run",
      "disclaimer": "Free forever on the Access tier · No credit card · Per-org pricing",
      "ecosystemLabel": "The ATLVS Ecosystem",
-     "titleLine3": "Ecosystem.",
-     "subtitleLegend": "holds the standard."
+     "titleLine3": "Ecosystem."
     },
     "trustBar": {
-     "label": "The worlds these teams build run on ATLVS",
+     "label": "Powering the world's greatest world builders",
      "seeWork": "See the work →"
     },
     "threeApps": {
@@ -1838,22 +1834,22 @@
     "products": {
      "atlvs": {
       "audience": "For producers · internal teams",
-      "tag": "Develop · Build",
-      "body": "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command deck."
+      "tag": "Create the World",
+      "body": "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command center."
      },
      "compvss": {
       "audience": "For crew · vendors · talent",
-      "tag": "Operate",
+      "tag": "Run the World",
       "body": "Operate it in the field — scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't."
      },
      "gvteway": {
       "audience": "For guests · clients · partners",
-      "tag": "Experience",
-      "body": "Where the world is experienced — ticketing, portals, marketplace. Every persona, each their own way in."
+      "tag": "Experience the World",
+      "body": "Where the world is experienced — ticketing, portals, marketplace. A way in for every persona."
      },
      "legend": {
       "audience": "For knowledge · training · compliance",
-      "tag": "Knowledge",
+      "tag": "Enrich the World",
       "body": "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine."
      }
     },
@@ -1862,7 +1858,7 @@
      "title": "Production teams running real work.",
      "body": "The schema is generic. The vernacular is specific. Pick the kind of production you ship and the ecosystem speaks your language out of the box.",
      "footnote": "Hospitality, corporate, and private events too —",
-     "footnoteLink": "see every solution →",
+     "footnoteLink": "see every product →",
      "items": {
       "festivals": {
        "title": "Festivals",
@@ -1920,7 +1916,7 @@
        "body": "ATLVS, COMPVSS, GVTEWAY, and LEG3ND share a single Postgres schema. No vendor lock-in dressed up as integrations."
       },
       "perOrgNotPerSeat": {
-       "title": "Per Org, Not Per Seat",
+       "title": "Priced per org",
        "tag": "Add the whole crew",
        "body": "The whole production team, every freelancer, every vendor. Pricing scales with you, not your headcount."
       }
@@ -2012,7 +2008,7 @@
       },
       "pricing": {
        "q": "How does ATLVS pricing work?",
-       "a": "ATLVS pricing is per organization, not per seat — free forever on the Access tier, no credit card. Crew opens up the team; Production unlocks every module plus multi-project; Festival is multi-org with SSO, custom DPA, and a 99.9% SLA. Full grid at /pricing."
+       "a": "ATLVS pricing is per organization, not per seat — free forever on the Access tier, no credit card. Crew opens up the team; Production opens every module plus multi-project; Festival is multi-org with SSO, custom DPA, and a 99.9% SLA. Full grid at /pricing."
       },
       "vendorPayouts": {
        "q": "How do vendor payouts work?",
@@ -2096,7 +2092,7 @@
       "forWho": "For technical studios"
      },
      "solution": {
-      "name": "Solution Partners",
+      "name": "Partners",
       "body": "Domain experts (EHS, rigging, broadcast) who bundle ATLVS into their service.",
       "forWho": "For domain specialists"
      }
@@ -2233,7 +2229,7 @@
        "proposalsSigned": "Proposals signed in place",
        "kbygGuides": "KBYG event guides",
        "unlimitedUsers": "Unlimited users",
-       "priorityConcierge": "Priority concierge + onboarding"
+       "priorityConcierge": "Priority support + onboarding"
       },
       "cta": "14-day trial"
      },
@@ -2352,7 +2348,7 @@
      },
      "trialWorks": {
       "q": "How does the trial work?",
-      "a": "Crew and Production unlock every feature in the tier for 14 days. No card up front. Don't upgrade by day 14? You drop to Free — your data stays put."
+      "a": "Crew and Production open every feature in the tier for 14 days. No card up front. Don't upgrade by day 14? You drop to Free — your data stays put."
      },
      "changeTiers": {
       "q": "Can I change tiers later?",
@@ -2846,7 +2842,7 @@
      }
     },
     "metadata": {
-     "title": "Solutions — Four Apps. One Schema.",
+     "title": "Four apps, one schema.",
      "description": "ATLVS — production operations console. COMPVSS — offline-first field PWA. GVTEWAY — stakeholder portal & marketplace. LEG3ND — knowledge, LMS & resources. Same record from the office, the gate, the stakeholder, and the standard."
     },
     "crumbs": {
@@ -2854,7 +2850,7 @@
      "solutions": "Solutions"
     },
     "hero": {
-     "eyebrow": "Solutions",
+     "eyebrow": "Products",
      "title": "Four Apps. One single source of truth.",
      "body": "A T L V S, C O M P V S S, G V T E W A Y, L E G 3 N D. One database underneath. Same record, four optimized surfaces — your office, your crew, your stakeholders, your standard, all reading the same truth."
     },
@@ -2943,7 +2939,7 @@
      }
     },
     "faq": {
-     "title": "Solutions · FAQ",
+     "title": "Products · FAQ",
      "items": {
       "0": {
        "q": "How are the four apps different?",
@@ -3017,7 +3013,7 @@
       },
       "xmce": {
        "title": "XMCE compliance engine",
-       "body": "Machine-checkable compliance — rules evaluated against the live record, not a binder."
+       "body": "Machine-checkable compliance. Rules run against the live record."
       },
       "safety": {
        "title": "Safety",
@@ -3624,7 +3620,7 @@
    "crumbsLabel": "Features",
    "detail": {
     "fallbackTitle": "Feature",
-    "fallbackDescription": "ATLVS Technologies — experience production, unified. Four apps, one single source of truth.",
+    "fallbackDescription": "ATLVS Technologies — one platform for experience production. Four apps, one single source of truth.",
     "beforeAfter": {
      "heading": "Before And After.",
      "sub": "What changes when this module lands in your stack.",
@@ -3669,10 +3665,10 @@
    }
   },
   "solutions": {
-   "crumbsLabel": "Solutions",
+   "crumbsLabel": "Products",
    "detail": {
-    "fallbackTitle": "Solution",
-    "fallbackDescription": "Industry solution",
+    "fallbackTitle": "Industry",
+    "fallbackDescription": "Industry use case",
     "meta": {
      "title": "{name} — {tagline} on ATLVS Technologies"
     },
@@ -6357,14 +6353,16 @@
    "eyebrow": "My Account",
    "title": "Preferences",
    "supabaseRequired": "Configure Supabase to manage preferences.",
-   "subtitle": "Theme, density, locale, and consent.",
+   "subtitle": "Density, locale, and consent.",
    "breadcrumbs": {
     "account": "My Account"
    },
    "submit": "Save Preferences",
    "appearance": {
     "legend": "Appearance",
-    "theme": "Theme",
+    "colorMode": "Color mode",
+    "colorModeHint": "Light, dark, or follow your OS — set in",
+    "colorModeLink": "Appearance settings",
     "density": "Density"
    },
    "locale": {

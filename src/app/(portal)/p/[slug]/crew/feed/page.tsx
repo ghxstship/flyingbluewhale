@@ -1,4 +1,4 @@
-import { FeedSurface } from "@/components/connecteam/FeedSurface";
+import { FeedSurface } from "@/components/workforce/FeedSurface";
 
 /**
  * GVTEWAY crew feed (ADR-0008 Move 1) — thin wrapper over the shared

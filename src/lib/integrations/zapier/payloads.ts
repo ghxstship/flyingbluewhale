@@ -105,7 +105,8 @@ export type ZapierExpense = {
   amount: number;
   currency: string;
   project_id: string | null;
-  submitter_id: string;
+  // Nullable since GDPR purge migration 20260625182657 (ON DELETE SET NULL).
+  submitter_id: string | null;
   spent_at: string;
   created_at: string;
   updated_at: string;

@@ -16,6 +16,15 @@ export type MetricResolver = (ctx: ResolverCtx) => Promise<number | null>;
 
 export type ResolverMap = Record<string, MetricResolver>;
 
+/**
+ * Canonical "registered but not yet computed" resolver (plumb-line RPT-1).
+ * A metric whose resolver IS this sentinel is honestly registered (so it shows
+ * up in the catalog) but does not compute a real value — the `/metrics`
+ * `computed` flag excludes it via identity comparison, so we never advertise a
+ * pure null-stub as computed. Use this instead of an inline `async () => null`.
+ */
+export const NOT_COMPUTED: MetricResolver = async () => null;
+
 /** Count rows for an org-scoped table with optional extra equality filters. */
 export async function countWhere(
   ctx: ResolverCtx,

@@ -27,7 +27,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Live Events",
       title: "From Pitch to Wrap. One Platform.",
-      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. ATLVS Technologies unifies all of it.",
+      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. ATLVS Technologies runs all of it in one place.",
     },
     stats: [
       { value: "15k+", label: "guests / night" },
@@ -135,7 +135,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Festivals & Tours",
       title: "Run the Festival. Not the Spreadsheet.",
-      body: "Multi-day festivals and city-to-city tours fall over when any one of fifty moving pieces breaks. Unify artist advancing, vendor payouts, crew scheduling, credentials, and KBYG under one platform that doesn't.",
+      body: "Multi-day festivals and city-to-city tours fall over when any one of fifty moving pieces breaks. Put artist advancing, vendor payouts, crew scheduling, credentials, and KBYG on one platform that doesn't.",
     },
     stats: [
       { value: "200+", label: "artists / festival" },
@@ -214,7 +214,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Yes. Each zone has a maximum headcount. The scanner refuses entries that would exceed it, routes the guest to waitlist, and promotes when someone exits.",
       },
       {
-        q: "Can we publish a separate guide for cast vs. front-of-house?",
+        q: "Can we publish a separate guide for cast and for front-of-house?",
         a: "Yes. KBYG guides are per-persona. Cast sees blocking, cue notes, and safety drills. Front-of-house sees guest flow, FAQ, and emergency procedures.",
       },
       {
@@ -376,7 +376,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     hero: {
       eyebrow: "Broadcast, TV & Film",
       title: "Prep to Wrap. One Platform.",
-      body: "Film and television production carry more moving pieces than any other live format. We unify call sheets, day-of logistics, vendor COIs, union payroll, and per-production P&L — so the line producer stays on set, not behind a desk.",
+      body: "Film and television production carry more moving pieces than any other live format. We run call sheets, day-of logistics, vendor COIs, union payroll, and per-production P&L on one record, so the line producer stays on set, not behind a desk.",
     },
     stats: [
       { value: "120+", label: "crew per shoot day" },

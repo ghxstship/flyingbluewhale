@@ -64,7 +64,7 @@ Below is the consolidated finding list (CRITICAL → LOW), then a sequenced reme
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **CRITICAL** | `src/app/api/v1/me/export/route.ts:54–100`                                                                                                        | 13-table GDPR export does sequential `await supabase.from(t).select(...).limit(10_000)` — should be `Promise.all()`; on a hot DSAR endpoint this blocks ~3-5s per request |
 | HIGH         | `src/components/NotificationsBell.tsx:58`                                                                                                         | Polls every 60s instead of Realtime subscription — at 10K active users that's 167 QPS of unread-count queries against one table                                           |
-| HIGH         | Connecteam parity migrations 0046–0048                                                                                                            | FK indexes were added in 0050 instead of inline with table creation; production saw weeks of seq-scan queries                                                             |
+| HIGH         | Workforce parity migrations 0046–0048                                                                                                            | FK indexes were added in 0050 instead of inline with table creation; production saw weeks of seq-scan queries                                                             |
 | MEDIUM       | Many list queries lack pagination contracts (`limit` + cursor) — `/p/[slug]/crew/feed`, `/console/finance/expenses` (legacy), `/me/notifications` |
 
 ### F · Compliance + governance
@@ -73,7 +73,7 @@ Below is the consolidated finding list (CRITICAL → LOW), then a sequenced reme
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **CRITICAL** | **`AuditAction` enum has drift** — `src/lib/audit.ts` ends at `deliverable.fulfilled`. Missing entries for: budget mutations, expense approvals, project_billing_draws, accreditation, courses, shift-swaps, time-off approvals, badge awards, notifications consumption, share-link creation (which is currently `as AuditAction` cast). Every mutation without an audit row is a compliance gap. |
 | **CRITICAL** | **PII in `audit_log.actor_email`** — denormalized for readability, no retention scrubber, no DSAR redaction on historical rows. GDPR/CCPA exposure if leaked.                                                                                                                                                                                                                                      |
-| **HIGH**     | **DSAR/export incomplete** — `/api/v1/me/export` predates the XPMS / Connecteam additions (0046–0073). Newer PII-bearing tables (kudos, time-off, recognition_posts, notifications matrix, etc.) likely not in the export.                                                                                                                                                                         |
+| **HIGH**     | **DSAR/export incomplete** — `/api/v1/me/export` predates the XPMS / the deskless-workforce suite additions (0046–0073). Newer PII-bearing tables (kudos, time-off, recognition_posts, notifications matrix, etc.) likely not in the export.                                                                                                                                                                         |
 | HIGH         | Hard delete of MFA recovery codes leaves no trail (CRITICAL for audit)                                                                                                                                                                                                                                                                                                                             |
 | MEDIUM       | No `down.sql` migrations — rollback = manual restore                                                                                                                                                                                                                                                                                                                                               |
 | MEDIUM       | Backup RPO/RTO undocumented; no DR runbook                                                                                                                                                                                                                                                                                                                                                         |
@@ -96,14 +96,14 @@ Below is the consolidated finding list (CRITICAL → LOW), then a sequenced reme
 | HIGH     | **Legacy columns kept indefinitely** — `budgets.{category,spent_cents,xtc_code,code,notes}`, `expenses.{category,xtc_code,status}`, `*.xtc_code` everywhere. Deprecation comments exist; no removal roadmap                                             |
 | HIGH     | **`expenses.status` violates LDP §NAMING DISCIPLINE** — CLAUDE.md bans `status` in new tables; should be `expenses.receipt_state` or similar                                                                                                            |
 | MEDIUM   | Stub `PageStub` pages from `scripts/generate-stubs.sh` linger; smoke harness flags but no removal pass                                                                                                                                                  |
-| LOW      | i18n keys: many strings still ship English-only fallbacks; XPMS / Connecteam additions don't have `keys.json` entries                                                                                                                                   |
+| LOW      | i18n keys: many strings still ship English-only fallbacks; XPMS / the deskless-workforce suite additions don't have `keys.json` entries                                                                                                                                   |
 
 ---
 
 ## Top 15 must-fix (priority order)
 
 1. **DocuSign + SES webhook `timingSafeEqual`** — 5-minute fix, critical
-2. **AuditAction enum completeness** — add all missing entries (XPMS, Connecteam, share-link); retroactively wire emitAudit on missing mutation paths
+2. **AuditAction enum completeness** — add all missing entries (XPMS, the deskless-workforce suite, share-link); retroactively wire emitAudit on missing mutation paths
 3. **Optimistic concurrency real CAS** — convert "TODO" comments to `.eq("updated_at", expected)` on all 20+ edit actions
 4. **GDPR export → `Promise.all` + error tracking + new-table coverage**
 5. **`listOrgScoped` default `limit: 50` + warn-on-unbounded**
@@ -159,7 +159,7 @@ These three ship in the next session.
 - Middleware injects `x-request-id` into every request; logger + audit emitter pick it up automatically
 - Sentry / OTel SDK adoption (or self-hosted alternative). Wrap silent catches in `log.warn` with the request-id + a `breadcrumb`
 - Realtime notifications bell: subscribe to `notifications` filtered to `user_id = me`, drop the 60s poll
-- Connecteam fan-out via existing `RealtimeRefresh` pattern audit — verify no other surfaces are polling unnecessarily
+- the deskless-workforce suite fan-out via existing `RealtimeRefresh` pattern audit — verify no other surfaces are polling unnecessarily
 
 ### P4 · Schema hygiene + performance
 

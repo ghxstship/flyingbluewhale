@@ -41,8 +41,19 @@ const LEGACY_ALLOWLIST = new Set<string>([
   "20260606230000_baseline.sql",
 ]);
 
-const STATUS_DECL_RE = /^\s+"?status"?\s+("?(text|character\s+varying|public\.[a-z_]+)"?)/i;
-const STATUS_ADD_RE = /ADD\s+COLUMN\s+"?status"?\s+/i;
+// A `status` column declaration in a CREATE TABLE body — the column name
+// is literally `status` (optionally quoted), at column-definition indent,
+// followed by ANY type token. Widened (DB-1) from the original
+// text/varchar/public.enum-only matcher so it also catches `status`
+// columns typed boolean / integer / smallint / bigint / jsonb / etc., and
+// double-quoted schema-qualified enums (e.g. `"public"."some_state"`).
+// The leading anchor (`^\s+"?status"?\s+`) keeps this scoped to a real
+// column named `status`, so widening the type tail introduces no false
+// positives. The type tail accepts an optionally schema-qualified,
+// optionally quoted identifier (covering `public.foo`, `"public"."foo"`,
+// and bare scalar types) — any non-space token after the name qualifies.
+const STATUS_DECL_RE = /^\s+"?status"?\s+("?[a-z]|"?[a-z_]+"?\s*\.\s*"?[a-z_]+"?)/i;
+const STATUS_ADD_RE = /ADD\s+COLUMN\s+(IF\s+NOT\s+EXISTS\s+)?"?status"?\s+/i;
 
 describe("LDP naming canon", () => {
   it("no migration introduces a `status` column outside the legacy allowlist", () => {

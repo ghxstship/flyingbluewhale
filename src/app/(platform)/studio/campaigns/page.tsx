@@ -2,8 +2,10 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -13,7 +15,11 @@ import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -31,20 +37,25 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("campaigns", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("campaigns", session.orgId, {
     orderBy: "starts_on",
     ascending: false,
-    limit: 500,
-  })) as Campaign[];
+    pageSize,
+    cursor: String(offset),
+  });
+  const rows = result.rows as Campaign[];
+  const total = result.totalCount;
 
   const live = rows.filter((r) => r.campaign_state === "live").length;
   const totalBudget = rows.reduce((s, r) => s + (r.budget_cents ?? 0), 0);
   const totalSpent = rows.reduce((s, r) => s + (r.spent_cents ?? 0), 0);
 
   const campaignNoun = t(
-    rows.length === 1 ? "console.campaigns.nounSingular" : "console.campaigns.nounPlural",
+    total === 1 ? "console.campaigns.nounSingular" : "console.campaigns.nounPlural",
     undefined,
-    rows.length === 1 ? "Campaign" : "Campaigns",
+    total === 1 ? "Campaign" : "Campaigns",
   );
   const liveLabel = t("console.campaigns.liveLabel", undefined, "Live");
   const ofLabel = t("console.campaigns.ofLabel", undefined, "of");
@@ -55,16 +66,17 @@ export default async function Page() {
       <ModuleHeader
         eyebrow={t("console.campaigns.eyebrow", undefined, "Workspace")}
         title={t("console.campaigns.title", undefined, "Campaigns")}
-        subtitle={`${rows.length} ${campaignNoun} · ${live} ${liveLabel} · ${formatMoney(totalSpent)} ${ofLabel} ${formatMoney(totalBudget)} ${spentLabel}`}
+        subtitle={`${total} ${campaignNoun} · ${live} ${liveLabel} · ${formatMoney(totalSpent)} ${ofLabel} ${formatMoney(totalBudget)} ${spentLabel}`}
         action={
           <Button href="/studio/campaigns/new" size="sm">
             {t("console.campaigns.newCampaign", undefined, "+ New Campaign")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable<Campaign>
           rows={rows}
+          totalCount={total}
           emptyLabel={t("console.campaigns.emptyLabel", undefined, "No campaigns")}
           emptyDescription={t(
             "console.campaigns.emptyDescription",
@@ -122,6 +134,13 @@ export default async function Page() {
               groupable: true,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/campaigns"
+          searchParams={sp}
         />
       </div>
     </>

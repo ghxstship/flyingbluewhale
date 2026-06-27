@@ -1729,7 +1729,7 @@
     "fields": {
       "report.id": "report definition id (executive|project|financial|operations|workforce|sales|marketing|training)",
       "report.title": "report title",
-      "report.version": "snapshot version integer (append-only)",
+      "report.version": "report version label (display only; reports are computed live, not persisted)",
       "generatedAt": "ISO-8601 snapshot timestamp",
       "period": "reporting period label",
       "scope": "entity the report covers (org|project|event|period)",
@@ -1921,12 +1921,12 @@
       "GET /metrics": "list metric definitions (filter by app)",
       "GET /metrics/{id}": "resolve one metric to a Metric object for a period/scope",
       "GET /reports/{report}": "resolve a report definition to a Report object",
-      "POST /reports/{report}/snapshot": "freeze an immutable, versioned Report snapshot (append-only)"
+      "GET /reports/{report}/snapshot": "timestamped live read of a report (computed on demand; not persisted)"
     }
   },
   "xpms": {
     "protocol": "XPMS 2.0",
-    "note": "Metrics inherit the XPMS confidence ladder: each metric carries a confidence grade and MODELED values are labeled in report UIs. Reports are append-only snapshots (a generated report is immutable; re-runs create new versions). Metric ids are stable URID-adjacent keys; the /metrics + /reports OpenAPI endpoints project the same definitions used by report templates and dashboard widgets.",
+    "note": "Metrics inherit the XPMS confidence ladder: each metric carries a confidence grade and non-PUBLISHED (modeled/benchmarked) values are labeled in report UIs. Reports are computed live and never stored; the /reports/{report}/snapshot endpoint returns a timestamped live read, not a persisted version. Metric ids are stable URID-adjacent keys; the /metrics + /reports OpenAPI endpoints project the same definitions used by report templates and dashboard widgets.",
     "confidenceLadder": [
       "QUOTED",
       "PUBLISHED",
@@ -1934,6 +1934,6 @@
       "MODELED",
       "N/A"
     ],
-    "governance": "append-only (report snapshots immutable + versioned)"
+    "governance": "computed live (reports are never stored; snapshots are timestamped on-demand reads)"
   }
 }

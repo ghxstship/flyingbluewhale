@@ -193,7 +193,7 @@ Sequenced by dependency and value-per-effort: cheap wins that ride existing infr
 ### P3.4 — Vendor onboarding / risk hardening (audit #16)
 - **Current:** GVTEWAY vendor persona + `account_manager_assignments` (lazy DM rooms) + RFQ compliance gates (`requires_prequalification/insurance/w9`, `nda_required`).
 - **Target:** structured onboarding/due-diligence flow with status tracking — extend, don't rebuild. (Borrow SmartSuite's *audit-trail rigor*, not the SOX/TPRM products.)
-- **Build:** vendor onboarding checklist (reuse new-hire-flow pattern from Connecteam parity, repointed to vendors), document collection via the multi-page form (P1.4) + `proposals`/`branding` storage buckets, and a compliance-status rollup on the vendor record. Surface in `/console/procurement/vendors/[id]` and the vendor portal.
+- **Build:** vendor onboarding checklist (reuse new-hire-flow pattern from Workforce parity, repointed to vendors), document collection via the multi-page form (P1.4) + `proposals`/`branding` storage buckets, and a compliance-status rollup on the vendor record. Surface in `/console/procurement/vendors/[id]` and the vendor portal.
 - **Effort:** 1–1.5 wks. **Risk:** low (composes existing primitives). Schema: small `vendor_onboarding_*` or reuse `new_hire_flows` generalized.
 
 ---

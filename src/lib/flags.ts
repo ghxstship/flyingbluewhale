@@ -1,16 +1,18 @@
 import { env } from "./env";
 
 /**
- * Feature flags — GrowthBook-backed, with a safe local fallback.
+ * Feature flags — remote-config-backed, with a safe local fallback.
  *
  * Server-side: call `loadFlags(userContext)` once per request and pass the
  * resulting object to client components via props or React Context.
- * Client-side: use the GrowthBookProvider (`src/components/providers/GrowthBookProvider.tsx`).
+ * Client-side: no provider is wired yet — consume flags via the server-loaded
+ * object passed down as props. (A provider component can be added later; this
+ * module is the registry + server loader, not the React glue.)
  *
- * Env: NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY for client; GROWTHBOOK_API_HOST optional.
+ * Env: NEXT_PUBLIC_FLAGS_CLIENT_KEY for client; FLAGS_API_HOST optional.
  *
  * Default returns the explicit fallback when no client key is configured —
- * enables local dev + tests without a GrowthBook instance.
+ * enables local dev + tests without a remote flag service.
  */
 
 export type Flags = {
@@ -48,7 +50,7 @@ export type FlagMeta = {
  * H3-08 / IK-055 — canary cohort attribute.
  *
  * `cohortFromUserId` deterministically maps a user id into a 0-99 bucket.
- * A rollout rule in GrowthBook (or the local fallback) can read this as
+ * A rollout rule in the remote flag service (or the local fallback) can read this as
  * the `cohort` attribute and gate on `cohort < 10` for a 10% canary,
  * `cohort < 1` for 1%, etc.
  *
@@ -94,8 +96,8 @@ export const FLAG_REGISTRY: Record<keyof Flags, FlagMeta> = {
   },
 };
 
-const GB_HOST = env.GROWTHBOOK_API_HOST ?? "https://cdn.growthbook.io";
-const GB_KEY = env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY;
+const FLAGS_HOST = env.FLAGS_API_HOST;
+const FLAGS_KEY = env.NEXT_PUBLIC_FLAGS_CLIENT_KEY;
 
 type Attributes = {
   userId?: string;
@@ -104,7 +106,7 @@ type Attributes = {
   locale?: string;
 };
 
-type GBFeature = {
+type FlagFeature = {
   defaultValue?: unknown;
   rules?: Array<{
     condition?: Record<string, unknown>;
@@ -113,20 +115,20 @@ type GBFeature = {
     hashAttribute?: string;
   }>;
 };
-type GBPayload = { features?: Record<string, GBFeature> };
+type FlagPayload = { features?: Record<string, FlagFeature> };
 
 /** Server-side feature flag evaluation. Returns a typed Flags map. */
 export async function loadFlags(attrs: Attributes = {}): Promise<Flags> {
-  if (!GB_KEY) return FLAG_DEFAULTS;
+  if (!FLAGS_KEY || !FLAGS_HOST) return FLAG_DEFAULTS;
   try {
     const { httpFetch } = await import("./http");
     // 60s edge cache. httpFetch adds 3s timeout + 2 retries on idempotent reads.
-    const res = await httpFetch(`${GB_HOST}/api/features/${GB_KEY}`, {
+    const res = await httpFetch(`${FLAGS_HOST}/api/features/${FLAGS_KEY}`, {
       next: { revalidate: 60 } as unknown as RequestInit["next"],
       timeoutMs: 3000,
     });
     if (!res.ok) return FLAG_DEFAULTS;
-    const payload = (await res.json()) as GBPayload;
+    const payload = (await res.json()) as FlagPayload;
     const features = payload.features ?? {};
     const out: Record<string, unknown> = { ...FLAG_DEFAULTS };
     for (const [key, def] of Object.entries(features)) {
@@ -138,7 +140,7 @@ export async function loadFlags(attrs: Attributes = {}): Promise<Flags> {
   }
 }
 
-function evaluateFeature(def: GBFeature, attrs: Attributes): unknown {
+function evaluateFeature(def: FlagFeature, attrs: Attributes): unknown {
   if (!def.rules) return def.defaultValue;
   for (const rule of def.rules) {
     if (rule.condition && !matchesCondition(rule.condition, attrs)) continue;

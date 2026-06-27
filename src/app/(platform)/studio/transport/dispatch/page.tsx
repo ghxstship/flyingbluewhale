@@ -1,14 +1,20 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,26 +31,32 @@ export default async function Page() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("dispatch_runs", session.orgId, {
+  const sp = await searchParams;
+  const { page, offset, pageSize } = parsePage(sp);
+  const result = await listOrgScopedPage("dispatch_runs", session.orgId, {
     orderBy: "created_at",
     ascending: false,
-    limit: 500,
+    pageSize,
+    cursor: String(offset),
   });
+  const rows = result.rows;
+  const total = result.totalCount;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.transport.dispatch.eyebrow", undefined, "Transport")}
         title={t("console.transport.dispatch.title", undefined, "Dispatch")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.transport.dispatch.runSingular", undefined, "Run") : t("console.transport.dispatch.runPlural", undefined, "Runs")}`}
+        subtitle={`${total} ${total === 1 ? t("console.transport.dispatch.runSingular", undefined, "Run") : t("console.transport.dispatch.runPlural", undefined, "Runs")}`}
         action={
           <Button href="/studio/transport/dispatch/new" size="sm">
             {t("console.transport.dispatch.newRun", undefined, "+ New Run")}
           </Button>
         }
       />
-      <div className="page-content">
+      <div className="page-content space-y-3">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
+          totalCount={total}
           rowHref={(r) => `/studio/transport/dispatch/${r.id}`}
           emptyLabel={t("console.transport.dispatch.emptyLabel", undefined, "No dispatch runs yet")}
           emptyDescription={t(
@@ -85,6 +97,13 @@ export default async function Page() {
               groupable: true,
             },
           ]}
+        />
+        <PagerNav
+          page={page}
+          total={total}
+          pageSize={pageSize}
+          basePath="/studio/transport/dispatch"
+          searchParams={sp}
         />
       </div>
     </>

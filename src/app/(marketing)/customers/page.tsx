@@ -37,10 +37,10 @@ export default async function CustomersHub() {
     <div>
       <JsonLd data={[breadcrumbSchema(crumbs)]} />
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+        <div className="eyebrow eyebrow-accent">
           {t("marketing.pages.customers.hero.eyebrow")}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">
+        <h1 className="hed-3xl mt-3">
           {t("marketing.pages.customers.hero.title")}
         </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.customers.hero.body")}</p>
@@ -58,7 +58,7 @@ export default async function CustomersHub() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {PUBLISHED_CUSTOMER_STORIES.map((s) => (
               <Link key={s.slug} href={`/customers/${s.slug}`} className="surface hover-lift p-5">
-                <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">
+                <div className="eyebrow eyebrow-accent">
                   {INDUSTRIES[s.industry]?.name ?? s.industry}
                 </div>
                 <h3 className="mt-2 text-base font-semibold">{s.displayName}</h3>
@@ -83,7 +83,7 @@ export default async function CustomersHub() {
           {IN_PROGRESS_CUSTOMER_STORIES.map((s) => (
             <article key={s.slug} className="surface p-6">
               <div className="flex items-center justify-between">
-                <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">
+                <div className="eyebrow eyebrow-accent">
                   {INDUSTRIES[s.industry]?.name ?? s.industry}
                 </div>
                 <div className="inline-flex items-center gap-1 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] font-medium text-[var(--p-text-2)]">

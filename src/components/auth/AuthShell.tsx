@@ -78,7 +78,7 @@ export function AuthShell({
           )}
         </Link>
         <div>
-          <h2 className="text-3xl font-semibold tracking-tight">{tagline}</h2>
+          <h2 className="hed-xl">{tagline}</h2>
           <p className="mt-3 max-w-md text-sm text-[var(--p-text-2)]">{description}</p>
           <ul className="mt-8 space-y-3">
             {highlights.map(({ icon: Icon, label }) => (

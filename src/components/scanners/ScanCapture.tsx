@@ -119,7 +119,12 @@ export function ScanCapture({
           <ul className="divide-y divide-[var(--p-border)]">
             {log.map((e) => (
               <li key={e.at} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
-                <code className="truncate font-mono text-[var(--p-text-1)]">{e.value}</code>
+                <code
+                  className="truncate font-mono text-[var(--p-text-1)]"
+                  style={{ fontFamily: "var(--p-mono-data)" }}
+                >
+                  {e.value}
+                </code>
                 <span className="shrink-0 text-xs text-[var(--p-text-3)]">{e.source}</span>
               </li>
             ))}

@@ -117,8 +117,8 @@ export default async function NotFound() {
             of reading as a generic browser error. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/atlvs-mark.svg" alt="" width={36} height={36} aria-hidden="true" className="mx-auto mb-6" />
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">404</div>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--p-text-1)]">
+        <div className="eyebrow eyebrow-accent">404</div>
+        <h1 className="hed-xl mt-3 text-[var(--p-text-1)]">
           {t("notFound.title", undefined, "Not Found")}
         </h1>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">

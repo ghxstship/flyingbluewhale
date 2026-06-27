@@ -104,9 +104,7 @@ function NavGroupBlock({ group, pathname }: { group: NavGroup; pathname: string 
   if (!items.length) return null;
   return (
     <div>
-      <div className="px-2 py-1 text-[10px] font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">
-        {group.label}
-      </div>
+      <div className="eyebrow px-2 py-1">{group.label}</div>
       <ul>
         {items.map((item) => (
           <li key={item.href}>

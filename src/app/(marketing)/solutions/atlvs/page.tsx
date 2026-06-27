@@ -85,10 +85,10 @@ export default async function ATLVSPage() {
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+        <div className="eyebrow">
           {t("marketing.pages.solutions.atlvs.modules.eyebrow")}
         </div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl mt-3">
           {t("marketing.pages.solutions.atlvs.modules.title")}
         </h2>
         <div className="mt-8">
@@ -149,10 +149,10 @@ export default async function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
+            <div className="eyebrow eyebrow-accent">
               {t("marketing.pages.solutions.atlvs.architecture.eyebrow")}
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+            <h2 className="hed-xl mt-3">
               {t("marketing.pages.solutions.atlvs.architecture.title")}
             </h2>
             <p className="mt-4 text-sm text-[var(--p-text-2)]">
@@ -184,7 +184,7 @@ export default async function ATLVSPage() {
 
       {/* Persona tiles */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.atlvs.personas.title")}</h2>
+        <h2 className="hed-xl">{t("marketing.pages.solutions.atlvs.personas.title")}</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
             {

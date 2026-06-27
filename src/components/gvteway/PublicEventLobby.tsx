@@ -70,8 +70,8 @@ export function PublicEventLobby({
     <div className="mx-auto max-w-3xl space-y-10 px-6 py-10">
       {/* Hero */}
       <header className="space-y-3">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY · Live event</p>
-        <h1 className="text-4xl font-bold tracking-tight">{projectName}</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY · Live event</p>
+        <h1 className="hed-2xl">{projectName}</h1>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--p-text-2)]">
           {dateRange && (
             <span className="flex items-center gap-1.5">

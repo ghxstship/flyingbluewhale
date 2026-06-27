@@ -88,7 +88,7 @@ export default async function LegendPage() {
         <div className="eyebrow eyebrow-accent">
           <Wordmark word="LEG3ND" style={{ color: "var(--p-accent-text)" }} />
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{t(`${K}.hero.title`)}</h1>
+        <h1 className="hed-3xl mt-3">{t(`${K}.hero.title`)}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t(`${K}.hero.body`)}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href="/signup">{t(`${K}.hero.ctaPrimary`)}</Button>
@@ -100,7 +100,7 @@ export default async function LegendPage() {
 
       {/* The eight pillars */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t(`${K}.pillars.title`)}</h2>
+        <h2 className="hed-xl">{t(`${K}.pillars.title`)}</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">{t(`${K}.pillars.body`)}</p>
         <div className="mt-8">
           <FeatureGrid
@@ -118,10 +118,10 @@ export default async function LegendPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
+            <div className="eyebrow eyebrow-accent">
               {t(`${K}.protocol.eyebrow`)}
             </div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">{t(`${K}.protocol.title`)}</h3>
+            <h3 className="hed-xl mt-3">{t(`${K}.protocol.title`)}</h3>
             <p className="mt-4 text-sm text-[var(--p-text-2)]">{t(`${K}.protocol.body`)}</p>
           </div>
           <ul className="space-y-3 text-sm">

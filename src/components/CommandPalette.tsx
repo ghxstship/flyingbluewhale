@@ -451,7 +451,7 @@ export function CommandPalette({
               <Command.Group
                 key={group}
                 heading={t(`commandPalette.groups.${group.toLowerCase()}`, undefined, group)}
-                className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase"
+                className="eyebrow"
               >
                 {items.map((a) => {
                   const Icon = a.icon ?? (group === "Recent" ? Clock : ArrowRight);

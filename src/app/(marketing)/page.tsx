@@ -336,10 +336,10 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
             <div>
-              <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+              <p className="eyebrow eyebrow-accent">
                 {t("marketing.pages.home.hero.eyebrow")}
               </p>
-              <h1 className="mt-5 text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl md:text-6xl">
+              <h1 className="hed-3xl mt-5 leading-[1.05]">
                 {t("marketing.pages.home.hero.titleLine1")}
                 <br />
                 {t("marketing.pages.home.hero.titleLine2")}
@@ -373,7 +373,7 @@ export default async function Home() {
                     <div className="text-sm font-bold" style={{ color: p.textColor }}>
                       {p.title}
                     </div>
-                    <p className="mt-0.5 text-[11px] font-medium tracking-[0.06em] text-[var(--p-text-3)] uppercase">
+                    <p className="eyebrow mt-0.5 text-[var(--p-text-3)]">
                       {p.tag}
                     </p>
                   </div>
@@ -392,14 +392,14 @@ export default async function Home() {
                 <ProductPreview accent={PRODUCT_ACCENTS.atlvs} label="ATLVS · Console" />
               </div>
               <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-2)]">
-                <div className="mb-3 text-[10px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
+                <div className="eyebrow mb-3 text-[var(--p-text-3)]">
                   {t("marketing.pages.home.hero.ecosystemLabel")}
                 </div>
                 {PRODUCTS.map((p) => (
                   <div key={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
                     <div className="flex flex-wrap items-baseline justify-between gap-3">
                       <Wordmark word={p.title} style={{ color: p.textColor, fontSize: 17 }} />
-                      <span className="text-[10px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
+                      <span className="eyebrow text-[var(--p-text-3)]">
                         {p.audience.replace(/^For /i, "")}
                       </span>
                     </div>
@@ -415,7 +415,7 @@ export default async function Home() {
       {/* TRUST BAR — sliding customer-logo marquee */}
       <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] py-10">
         <div className="mx-auto max-w-6xl px-6">
-          <p className="text-center text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-3)] uppercase">
+          <p className="eyebrow text-center text-[var(--p-text-3)]">
             {t("marketing.pages.home.trustBar.label")}
           </p>
         </div>
@@ -448,7 +448,7 @@ export default async function Home() {
         <div className="mx-auto mt-6 max-w-6xl px-6 text-center">
           <Link
             href="/customers"
-            className="text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent-text)] uppercase hover:underline"
+            className="eyebrow eyebrow-accent hover:underline"
           >
             {t("marketing.pages.home.trustBar.seeWork", undefined, "See the work →")}
           </Link>
@@ -458,10 +458,10 @@ export default async function Home() {
       {/* THE FOUR APPS */}
       <section id="apps" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.threeApps.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pages.home.threeApps.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.threeApps.body")}</p>
@@ -481,7 +481,7 @@ export default async function Home() {
                   className="absolute inset-x-0 top-0 h-1 rounded-t-xl"
                   style={{ background: p.color }}
                 />
-                <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: p.textColor }}>
+                <p className="eyebrow" style={{ color: p.textColor }}>
                   {p.audience}
                 </p>
                 <h3 className="mt-2">
@@ -501,10 +501,10 @@ export default async function Home() {
       {/* INDUSTRIES */}
       <section id="industries" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.industries.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pages.home.industries.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.industries.body")}</p>
@@ -532,10 +532,10 @@ export default async function Home() {
       {/* 8-PHASE LIFECYCLE */}
       <section id="lifecycle" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.lifecycle.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pages.home.lifecycle.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.lifecycle.body")}</p>
@@ -559,10 +559,10 @@ export default async function Home() {
       {/* THE DIFFERENCE */}
       <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.difference.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pages.home.difference.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.difference.body")}</p>
@@ -572,11 +572,11 @@ export default async function Home() {
                 key={e.n}
                 className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
               >
-                <span className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent-text)] uppercase">
+                <span className="eyebrow eyebrow-accent">
                   {e.n}
                 </span>
-                <h3 className="mt-2 text-xl font-bold tracking-tight text-[var(--p-text-1)]">{e.title}</h3>
-                <span className="mt-1 inline-block text-[11px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
+                <h3 className="hed-lg mt-2 text-[var(--p-text-1)]">{e.title}</h3>
+                <span className="eyebrow mt-1 inline-block text-[var(--p-text-3)]">
                   {e.tag}
                 </span>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{e.body}</p>
@@ -589,10 +589,10 @@ export default async function Home() {
       {/* ADOPT YOUR WAY */}
       <section id="adopt" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.adopt.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pages.home.adopt.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.adopt.body")}</p>
@@ -602,8 +602,8 @@ export default async function Home() {
                 key={t.name}
                 className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
               >
-                <h3 className="text-xl font-bold tracking-tight text-[var(--p-text-1)]">{t.name}</h3>
-                <span className="mt-1 inline-block text-[11px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
+                <h3 className="hed-lg text-[var(--p-text-1)]">{t.name}</h3>
+                <span className="eyebrow mt-1 inline-block text-[var(--p-text-3)]">
                   {t.tag}
                 </span>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{t.body}</p>
@@ -623,17 +623,17 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+              <p className="eyebrow eyebrow-accent">
                 {t("marketing.pages.home.projects.eyebrow")}
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+              <h2 className="hed-xl mt-3">
                 {t("marketing.pages.home.projects.title")}
               </h2>
             </div>
             <p className="max-w-md text-sm text-[var(--p-text-2)]">{t("marketing.pages.home.projects.body")}</p>
           </div>
           <div className="mt-10 overflow-hidden rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
-            <div className="grid grid-cols-[110px_1fr_70px] gap-4 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] px-5 py-3 text-[10px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
+            <div className="eyebrow grid grid-cols-[110px_1fr_70px] gap-4 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] px-5 py-3 text-[var(--p-text-3)]">
               <span>{t("marketing.pages.home.projects.tableHeaders.project")}</span>
               <span>{t("marketing.pages.home.projects.tableHeaders.title")}</span>
               <span>{t("marketing.pages.home.projects.tableHeaders.year")}</span>
@@ -645,12 +645,12 @@ export default async function Home() {
                 href="/customers"
                 className="grid grid-cols-[110px_1fr_70px] items-center gap-4 border-b border-[var(--p-border)] px-5 py-4 transition-colors last:border-b-0 hover:bg-[var(--p-surface-2)]"
               >
-                <span className="font-mono text-xs font-semibold text-[var(--p-text-1)]">{v.code}</span>
+                <span className="font-mono text-xs font-semibold text-[var(--p-text-1)]" style={{ fontFamily: "var(--p-mono-data)" }}>{v.code}</span>
                 <div>
                   <div className="text-sm font-semibold text-[var(--p-text-1)]">{v.title}</div>
                   <div className="text-xs text-[var(--p-text-3)]">{v.sub}</div>
                 </div>
-                <span className="font-mono text-xs text-[var(--p-text-2)]">{v.year}</span>
+                <span className="font-mono text-xs text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{v.year}</span>
               </Link>
             ))}
           </div>
@@ -668,7 +668,7 @@ export default async function Home() {
             ].map((s) => (
               <div key={s.label}>
                 <div className="text-5xl font-bold tracking-tight text-[var(--p-accent)] md:text-6xl">{s.big}</div>
-                <div className="mt-2 text-[11px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
+                <div className="eyebrow mt-2 text-[var(--p-text-3)]">
                   {s.label}
                 </div>
               </div>
@@ -690,10 +690,10 @@ export default async function Home() {
       {/* LATEST */}
       <section id="latest" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.latest.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="hed-xl mt-3">
             {t("marketing.pages.home.latest.title")}
           </h2>
           <div className="mt-10 divide-y divide-[var(--p-border)] rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
@@ -703,8 +703,8 @@ export default async function Home() {
                 href={l.href}
                 className="flex flex-wrap items-center gap-4 px-5 py-4 transition-colors hover:bg-[var(--p-surface-2)]"
               >
-                <span className="w-32 flex-none font-mono text-xs text-[var(--p-text-3)]">{l.date}</span>
-                <span className="flex-none rounded-full bg-[var(--p-accent-weak)] px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-[var(--p-accent-text)] uppercase">
+                <span className="w-32 flex-none font-mono text-xs text-[var(--p-text-3)]" style={{ fontFamily: "var(--p-mono-data)" }}>{l.date}</span>
+                <span className="eyebrow flex-none rounded-full bg-[var(--p-accent-weak)] px-3 py-1 eyebrow-accent">
                   {l.cat}
                 </span>
                 <span className="flex-1 text-base font-semibold text-[var(--p-text-1)]">{l.title}</span>
@@ -718,10 +718,10 @@ export default async function Home() {
       {/* CTA */}
       <section id="cta" className="px-6 py-24 text-center">
         <div className="mx-auto max-w-3xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             {t("marketing.pages.home.cta.eyebrow")}
           </p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">{t("marketing.pages.home.cta.title")}</h2>
+          <h2 className="hed-2xl mt-3">{t("marketing.pages.home.cta.title")}</h2>
           <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.cta.body")}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link

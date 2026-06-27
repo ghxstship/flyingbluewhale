@@ -58,11 +58,7 @@ export function ModuleHeader({
               removed from SaaS surfaces; UPPERCASE remains on the small
               eyebrow per the Title Case rule's letter-spaced-label
               exception. */}
-          {eyebrow && (
-            <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent)] uppercase">
-              {eyebrow}
-            </div>
-          )}
+          {eyebrow && <div className="eyebrow eyebrow-accent">{eyebrow}</div>}
           <h1 className="mt-1 text-2xl font-bold tracking-[-0.01em] text-[var(--p-text-1)]">{title}</h1>
           {subtitle ? <p className="mt-1 text-sm text-[var(--p-text-2)]">{subtitle}</p> : null}
         </div>

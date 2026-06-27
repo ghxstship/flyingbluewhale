@@ -45,7 +45,7 @@ export async function GuideView({
         )}
         {!hideTitle && (
           <>
-            <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance">{title}</h1>
+            <h1 className="hed-2xl mt-4">{title}</h1>
             {subtitle && <p className="mt-2 text-sm text-[var(--p-text-2)]">{subtitle}</p>}
           </>
         )}
@@ -91,7 +91,7 @@ function SectionWrapper({ index, section, t }: { index: number; section: GuideSe
           {(index + 1).toString().padStart(2, "0")}
         </span>
         <div className="flex-1 border-t border-[var(--p-accent)] pt-2">
-          <h2 className="text-xl font-semibold tracking-tight">{section.heading}</h2>
+          <h2 className="hed-lg">{section.heading}</h2>
         </div>
       </div>
       <div className="ps-16">

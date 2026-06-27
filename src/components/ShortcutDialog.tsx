@@ -101,7 +101,7 @@ export function ShortcutDialog() {
         <div className="mt-4 max-h-[50vh] space-y-5 overflow-y-auto pe-1">
           {grouped.map(([group, items]) => (
             <div key={group}>
-              <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">{group}</div>
+              <div className="eyebrow">{group}</div>
               <ul className="mt-2 space-y-1">
                 {items.map((s) => (
                   <li key={`${s.group}::${s.combo}`} className="flex items-center justify-between gap-3 py-0.5 text-sm">

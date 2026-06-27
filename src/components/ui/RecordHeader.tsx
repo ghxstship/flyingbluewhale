@@ -43,11 +43,7 @@ export function RecordHeader({
       {breadcrumb && <div className="mb-[var(--p-2)]">{breadcrumb}</div>}
       <div className="flex items-start justify-between gap-[var(--p-4)]">
         <div className="min-w-0 flex-1">
-          {eyebrow && (
-            <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent)] uppercase">
-              {eyebrow}
-            </div>
-          )}
+          {eyebrow && <div className="eyebrow eyebrow-accent">{eyebrow}</div>}
           <h1
             className="mt-[var(--p-1)] truncate text-2xl text-[var(--p-text-1)]"
             style={{

@@ -99,8 +99,8 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">{config.eyebrow}</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{config.heroTitle}</h1>
+        <div className="eyebrow eyebrow-accent">{config.eyebrow}</div>
+        <h1 className="hed-3xl mt-3">{config.heroTitle}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{config.heroBody}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
@@ -112,7 +112,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
 
       {config.withoutUs && config.withUs ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-3xl font-semibold tracking-tight">
+          <h2 className="hed-xl">
             {t("marketing.features.detail.beforeAfter.heading", undefined, "Before And After.")}
           </h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
@@ -124,7 +124,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <div className="surface p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+              <div className="eyebrow">
                 {t("marketing.features.detail.beforeAfter.without", undefined, "Without")}
               </div>
               <ul className="mt-4 space-y-3 text-sm">
@@ -138,7 +138,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
             </div>
             <div className="surface p-6">
               <div
-                className="text-[11px] font-semibold tracking-[0.2em] uppercase"
+                className="eyebrow"
                 style={{ color: "var(--p-accent)" }}
               >
                 {t("marketing.features.detail.beforeAfter.with", undefined, "With ATLVS")}
@@ -157,7 +157,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="hed-xl">
           {t("marketing.features.detail.whatItDoes", undefined, "What This Module Does.")}
         </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -173,7 +173,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       {config.personas ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">
+            <div className="eyebrow eyebrow-accent">
               {t("marketing.features.detail.builtFor", undefined, "Built For")}
             </div>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight">

@@ -7,7 +7,10 @@ const schema = z.object({
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
-  NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  // `.or(z.literal(""))`: tolerate an empty-string env value (CI/Vercel pass ""
+  // for unset vars) — `.optional()` alone only admits `undefined`, so a "" would
+  // throw "Invalid URL" and fail the production build. Empty = treated as unset.
+  NEXT_PUBLIC_APP_URL: z.string().url().optional().or(z.literal("")),
   // "1" enables subdomain routing (app.atlvs.pro, gvteway.atlvs.pro,
   // compvss.atlvs.pro). Anything else falls back to path-prefix mode
   // (single-host /studio, /p, /m). Vercel preview deploys leave it unset.
@@ -17,11 +20,11 @@ const schema = z.object({
   RESEND_API_KEY: z.string().optional(),
   RESEND_FROM: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
-  UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+  UPSTASH_REDIS_REST_URL: z.string().url().optional().or(z.literal("")),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
   // Remote feature-flag service. Server reads the host + the public client
   // key; both are optional — flags fall back to defaults if unset.
-  FLAGS_API_HOST: z.string().url().optional(),
+  FLAGS_API_HOST: z.string().url().optional().or(z.literal("")),
   NEXT_PUBLIC_FLAGS_CLIENT_KEY: z.string().optional(),
   // External weather provider — flip to "1" to disable (e.g. when the
   // upstream provider is rate-limiting). Empty/unset = enabled.

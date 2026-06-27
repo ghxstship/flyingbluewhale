@@ -30,3 +30,6 @@ docs/audits/evidence/sea-trial/
 
 # Workflow audit run artifact (regenerate via scripts/workflow-audit.mjs)
 docs/audits/workflow-audit.json
+
+# vitest coverage output
+coverage/

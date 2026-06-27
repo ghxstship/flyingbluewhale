@@ -99,7 +99,7 @@ export default async function HandoverPage() {
           const stateLabel = STATE_LABEL[h.post_state] ?? h.post_state;
           const author = h.from_user_id ? nameMap.get(h.from_user_id) ?? "" : "";
           const relief = h.relief_label
-            ? t("m.handover.handedTo", { relief: h.relief_label }, `Handed To ${h.relief_label}`)
+            ? t("m.handover.handedTo", { relief: h.relief_label }, "Handed To {relief}")
             : "";
           const meta = [author, relief, `${fmt.date(h.created_at)} · ${fmt.time(h.created_at)}`]
             .filter(Boolean)

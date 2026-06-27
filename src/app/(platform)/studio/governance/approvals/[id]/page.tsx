@@ -113,12 +113,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span>{ROUTING_LABEL[s.routing_kind as RoutingKind] ?? s.routing_kind}</span>
                   {s.threshold != null && (
                     <span className="text-[var(--p-text-2)]">
-                      {t("console.governance.approvals.detail.threshold", { n: s.threshold }, `threshold ${s.threshold}`)}
+                      {t("console.governance.approvals.detail.threshold", { n: s.threshold }, "threshold {n}")}
                     </span>
                   )}
                   {s.sla_hours != null && (
                     <span className="text-[var(--p-text-2)]">
-                      {t("console.governance.approvals.detail.sla", { n: s.sla_hours }, `SLA ${s.sla_hours}h`)}
+                      {t("console.governance.approvals.detail.sla", { n: s.sla_hours }, "SLA {n}h")}
                     </span>
                   )}
                   {instance.current_step_id === s.id && (

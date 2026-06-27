@@ -49,8 +49,8 @@ export default async function CalendarPage() {
         title={t("console.calendar.title", undefined, "Calendar")}
         subtitle={
           rows.length === 1
-            ? t("console.calendar.subtitleOne", { count: rows.length }, `${rows.length} event`)
-            : t("console.calendar.subtitleOther", { count: rows.length }, `${rows.length} events`)
+            ? t("console.calendar.subtitleOne", { count: rows.length }, "{count} event")
+            : t("console.calendar.subtitleOther", { count: rows.length }, "{count} events")
         }
         breadcrumbs={[{ label: "Operations" }, { label: "Calendar" }]}
         action={<Button href="/studio/events/new">{t("console.calendar.newEvent", undefined, "+ New Event")}</Button>}

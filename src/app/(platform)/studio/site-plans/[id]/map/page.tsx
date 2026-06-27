@@ -71,7 +71,7 @@ export default async function SitePlanMapPage({ params }: { params: Promise<{ id
     <>
       <ModuleHeader
         eyebrow={t("console.sitePlans.map.eyebrow", undefined, "Design")}
-        title={t("console.sitePlans.map.title", { code: plan.code }, `${plan.code} — Plan map`)}
+        title={t("console.sitePlans.map.title", { code: plan.code }, "{code} — Plan map")}
         subtitle={plan.title}
         breadcrumbs={[
           { label: "Site Plans", href: "/studio/site-plans" },

@@ -441,7 +441,7 @@ function SidebarGroup({
                 onClick={() => onToggleGroup(label)}
                 aria-expanded={isOpen}
                 aria-controls={`${headerId}-items`}
-                aria-label={t("shell.sidebar.toggleGroup", { name: groupLabelDisplay }, `Toggle ${groupLabelDisplay}`)}
+                aria-label={t("shell.sidebar.toggleGroup", { name: groupLabelDisplay }, "Toggle {name}")}
                 className="shrink-0 rounded p-0.5 hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
               >
                 {chevron}

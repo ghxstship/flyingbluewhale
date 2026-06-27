@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-type Provider = { id: "google" | "github" | "azure"; label: string; icon: () => React.ReactNode };
+type Provider = { id: "google" | "azure"; label: string; icon: () => React.ReactNode };
 
 const PROVIDERS: Provider[] = [
   {
@@ -27,15 +27,6 @@ const PROVIDERS: Provider[] = [
           fill="#EA4335"
           d="M12 5.4c1.6 0 3 .5 4.1 1.6l3.1-3.1C17.4 2 14.9 1 12 1 7.9 1 4.2 3.3 2.4 7.2L6 10.1c1-2.6 3.3-4.7 6-4.7z"
         />
-      </svg>
-    ),
-  },
-  {
-    id: "github",
-    label: "GitHub",
-    icon: () => (
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2.2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.4-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.7 1.2 3.4.9.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.4 1.2-3.2-.1-.3-.5-1.4.1-3 0 0 1-.3 3.2 1.2.9-.3 1.9-.4 2.9-.4 1 0 2 .1 2.9.4 2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.7.1 3 .8.8 1.2 1.9 1.2 3.2 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z" />
       </svg>
     ),
   },
@@ -72,7 +63,7 @@ export function OAuthButtons({ next }: { next?: string }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {PROVIDERS.map((p) => (
         <button
           key={p.id}

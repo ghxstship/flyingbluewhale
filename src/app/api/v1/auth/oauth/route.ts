@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 
-const ProviderSchema = z.enum(["google", "github", "azure"]);
+const ProviderSchema = z.enum(["google", "azure"]);
 // `next` MUST be a same-origin relative path — anything else is an open-redirect
 // vector once the OAuth round-trip finishes. Accept only paths that start with a
 // single slash and don't contain a scheme or protocol-relative prefix (//evil).

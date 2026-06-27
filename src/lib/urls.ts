@@ -67,7 +67,9 @@ const FALLBACK_BASE = "http://localhost:3000";
 const SUBDOMAINS_ENABLED = process.env.NEXT_PUBLIC_USE_SUBDOMAINS === "1";
 
 function apexBase(): string {
-  return (env.NEXT_PUBLIC_APP_URL ?? FALLBACK_BASE).replace(/\/$/, "");
+  // `||` (not `??`): an empty-string env (CI/Vercel pass "" for unset vars)
+  // must fall back too, else `new URL(apexBase())` throws and breaks the build.
+  return (env.NEXT_PUBLIC_APP_URL || FALLBACK_BASE).replace(/\/$/, "");
 }
 
 function apexParts(): { protocol: string; host: string } {

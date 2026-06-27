@@ -50,7 +50,10 @@ export const SITE = {
   name: "ATLVS Technologies",
   shortName: "ATLVS",
   domain: "atlvs.pro",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://atlvs.pro",
+  // `||` (not `??`): fall back on an empty string too — CI/Vercel pass "" for
+  // unset vars, and an empty baseUrl would make `new URL(SITE.baseUrl)` (the
+  // metadataBase in layout.tsx) throw and fail the production build.
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL || "https://atlvs.pro",
   tagline: "Production Runs On It.",
   description:
     "One platform for the whole production, pitch to strike. ATLVS for producers, COMPVSS for crew, GVTEWAY for guests, LEG3ND for knowledge — one source of truth.",

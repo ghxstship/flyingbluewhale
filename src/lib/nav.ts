@@ -1436,10 +1436,20 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
         href: "/solutions/legend",
         descriptionKey: "marketing.header.product.legend.description",
       },
+      {
+        labelKey: "marketing.header.product.ai.label",
+        href: "/ai",
+        descriptionKey: "marketing.header.product.ai.description",
+      },
+      {
+        labelKey: "marketing.header.product.integrations.label",
+        href: "/integrations",
+        descriptionKey: "marketing.header.product.integrations.description",
+      },
     ],
   },
   {
-    labelKey: "marketing.header.industries.label",
+    labelKey: "marketing.header.solutions.label",
     items: [
       { labelKey: "marketing.industries.live-events", href: "/solutions/live-events" },
       { labelKey: "marketing.industries.concerts", href: "/solutions/concerts" },
@@ -1474,6 +1484,11 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
         href: "/changelog",
         descriptionKey: "marketing.header.resources.changelog.description",
       },
+      {
+        labelKey: "marketing.header.resources.compare.label",
+        href: "/alternatives",
+        descriptionKey: "marketing.header.resources.compare.description",
+      },
     ],
   },
 ];
@@ -1497,7 +1512,6 @@ export const marketingFooterGroups: MarketingNavGroup[] = [
   {
     labelKey: "marketing.layout.footer.product.heading",
     items: [
-      { labelKey: "marketing.layout.footer.product.solutions", href: "/solutions" },
       { labelKey: "marketing.layout.footer.product.atlvs", href: "/solutions/atlvs" },
       { labelKey: "marketing.layout.footer.product.gvteway", href: "/solutions/gvteway" },
       { labelKey: "marketing.layout.footer.product.compvss", href: "/solutions/compvss" },

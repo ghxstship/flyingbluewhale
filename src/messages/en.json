@@ -169,7 +169,18 @@
     "legend": {
      "label": "LEG3ND",
      "description": "Knowledge, LMS & compliance"
+    },
+    "ai": {
+     "label": "AI",
+     "description": "Drafts the paperwork, scoped to your tenant"
+    },
+    "integrations": {
+     "label": "Integrations",
+     "description": "Connect the tools you already run"
     }
+   },
+   "solutions": {
+    "label": "Solutions"
    },
    "industries": {
     "label": "Industries"
@@ -191,6 +202,10 @@
     "changelog": {
      "label": "Changelog",
      "description": "Every release, dated"
+    },
+    "compare": {
+     "label": "Compare",
+     "description": "How ATLVS stacks up"
     }
    }
   },

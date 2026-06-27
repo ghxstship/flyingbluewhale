@@ -33,7 +33,7 @@ import {
 // Nav data is the single source of truth in `src/lib/nav.ts` (reconciled by
 // `scripts/generate-sitemap.mjs`). Labels are i18n catalog keys resolved with
 // `t()` at render, so untranslated locales degrade to English, not dot-paths.
-const [PRODUCT, INDUSTRIES, RESOURCES] = marketingHeaderGroups;
+const [PRODUCT, SOLUTIONS, RESOURCES] = marketingHeaderGroups;
 
 function NavDropdown({ group }: { group: MarketingNavGroup }) {
   const t = useT();
@@ -101,7 +101,7 @@ export function MarketingHeader() {
             1280px the hamburger sheet takes over. */}
         <nav className="hidden items-center gap-1 xl:flex" aria-label={t("marketing.header.primaryAriaLabel")}>
           <NavDropdown group={PRODUCT} />
-          <NavDropdown group={INDUSTRIES} />
+          <NavDropdown group={SOLUTIONS} />
           {marketingHeaderPrimaryLinks.map((link) => (
             <Link key={link.href} href={link.href} className="nav-item">
               {t(link.labelKey)}
@@ -156,7 +156,7 @@ export function MarketingHeader() {
         <div id="mobile-nav-sheet" className="border-t border-[var(--p-border)] bg-[var(--p-bg)] xl:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5">
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
-            <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />
+            <MobileNavSection group={SOLUTIONS} onClick={() => setMobileOpen(false)} />
             <nav className="flex flex-col gap-1" aria-label={t("marketing.header.mobilePrimaryAriaLabel")}>
               {marketingHeaderPrimaryLinks.map((link) => (
                 <Link

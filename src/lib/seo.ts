@@ -54,9 +54,9 @@ export const SITE = {
   // unset vars, and an empty baseUrl would make `new URL(SITE.baseUrl)` (the
   // metadataBase in layout.tsx) throw and fail the production build.
   baseUrl: process.env.NEXT_PUBLIC_APP_URL || "https://atlvs.pro",
-  tagline: "Production Runs On It.",
+  tagline: "The World Builder's Ecosystem",
   description:
-    "One platform for the whole production, pitch to strike. ATLVS for producers, COMPVSS for crew, GVTEWAY for guests, LEG3ND for knowledge — one source of truth.",
+    "One platform for the whole production, pitch to strike. ATLVS for producers, COMPVSS for crew, GVTEWAY for guests, LEG3ND for knowledge. One source of truth.",
   /**
    * Social handle. Same string across every platform we live on; not a
    * Twitter/X handle — ATLVS does not run an X account. The Twitter Card
@@ -94,25 +94,25 @@ export const SITE = {
     atlvs: {
       name: "ATLVS",
       tagline:
-        "Develop and build the world — projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command center.",
+        "Develop and build the world: projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command center.",
       color: PRODUCT_ACCENTS.atlvs,
     },
     compvss: {
       name: "COMPVSS",
       tagline:
-        "Operate it in the field — scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't.",
+        "Operate it in the field: scheduling, certs, gate scan, incidents. Offline-first, fast at the gate even when the signal isn't.",
       color: PRODUCT_ACCENTS.compvss,
     },
     gvteway: {
       name: "GVTEWAY",
       tagline:
-        "Where the world is experienced — ticketing, portals, marketplace. A way in for every persona.",
+        "Where the world is experienced: ticketing, portals, marketplace. A way in for every persona.",
       color: PRODUCT_ACCENTS.gvteway,
     },
     legend: {
       name: "LEG3ND",
       tagline:
-        "The knowledge the world is built on — the Standard, courses, certifications, the catalog, and the compliance engine.",
+        "The knowledge the world is built on: the Standard, courses, certifications, the catalog, and the compliance engine.",
       color: PRODUCT_ACCENTS.legend,
     },
   },

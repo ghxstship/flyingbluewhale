@@ -26,13 +26,12 @@ const GENRES = [
 
 const PROVIDERS: AuthProvider[] = [
   { id: "google", label: "Google" },
-  { id: "github", label: "GitHub" },
   { id: "azure", label: "Microsoft" },
 ];
 
 const STEPS: OnboardingStep[] = [
-  { id: "account", label: "Account", hint: "Create your GVTEWAY account — we'll keep your nights in sync across web and onsite." },
-  { id: "taste", label: "Your sounds", hint: "Pick a few sounds you love — we'll tune Discover to them. Change them anytime." },
+  { id: "account", label: "Account", hint: "Create your GVTEWAY account. We'll keep your nights in sync across web and onsite." },
+  { id: "taste", label: "Your sounds", hint: "Pick a few sounds you love. We'll tune Discover to them. Change them anytime." },
   { id: "ready", label: "Ready", hint: "You're in. Your first picks are warming up Discover now." },
 ];
 

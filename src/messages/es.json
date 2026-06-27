@@ -141,7 +141,7 @@
    "openMenu": "Abrir menú",
    "closeMenu": "Cerrar menú",
    "marketplace": "Marketplace",
-   "brandAriaLabel": "ATLVS Technologies — inicio",
+   "brandAriaLabel": "ATLVS Technologies: inicio",
    "primaryAriaLabel": "Principal",
    "mobilePrimaryAriaLabel": "Principal móvil",
    "product": {
@@ -155,19 +155,19 @@
      "description": "ATLVS · COMPVSS · GVTEWAY · LEG3ND"
     },
     "atlvs": {
-     "label": "ATLVS — Producción",
+     "label": "ATLVS: Producción",
      "description": "Consola del productor"
     },
     "compvss": {
-     "label": "COMPVSS — Equipo",
+     "label": "COMPVSS: Equipo",
      "description": "Operaciones de personal y campo"
     },
     "gvteway": {
-     "label": "GVTEWAY — Invitados",
+     "label": "GVTEWAY: Invitados",
      "description": "Ticketing y portal de stakeholders"
     },
     "legend": {
-     "label": "LEG3ND — Conocimiento",
+     "label": "LEG3ND: Conocimiento",
      "description": "Conocimiento, LMS y cumplimiento"
     }
    },
@@ -213,7 +213,7 @@
   "footer": {
    "copyright": "© {year} ATLVS Technologies",
    "trademark": "ATLVS, GVTEWAY, COMPVSS y LEG3ND son marcas registradas de ATLVS Technologies, una empresa de G H X S T S H I P Industries.",
-   "tagline": "ATLVS, GVTEWAY, COMPVSS y LEG3ND — cuatro apps conectadas para equipos de producción.",
+   "tagline": "ATLVS, GVTEWAY, COMPVSS y LEG3ND: cuatro apps conectadas para equipos de producción.",
    "ctaTired": "Hecho para equipos de producción cansados de sostenerlo todo con cinta gaffer."
   },
   "cta": {
@@ -305,7 +305,7 @@
      "sla": "SLA"
     },
     "brand": {
-     "homeAriaLabel": "ATLVS Technologies — inicio",
+     "homeAriaLabel": "ATLVS Technologies: inicio",
      "tagline": "El ecosistema para la producción. Cuatro apps, una sola fuente de verdad."
     },
     "social": {
@@ -313,7 +313,7 @@
      "github": "GitHub"
     },
     "copyright": "© {year} ATLVS Technologies",
-    "tagline": "La producción funciona con ella.",
+    "tagline": "The World Builder's Ecosystem",
     "trademarkPrefix": "ATLVS, GVTEWAY, COMPVSS y LEG3ND son marcas registradas de ATLVS Technologies, una empresa",
     "trademarkSuffix": "Industries."
    }
@@ -321,8 +321,8 @@
   "pages": {
    "about": {
     "meta": {
-     "title": "Acerca de — El Estudio",
-     "description": "ATLVS Technologies construye el ecosistema para la producción. ATLVS, GVTEWAY, COMPVSS, LEG3ND — cuatro apps, una sola fuente de verdad. Creada por operadores que han dirigido la sala.",
+     "title": "Acerca de: El Estudio",
+     "description": "ATLVS Technologies construye el ecosistema para la producción. ATLVS, GVTEWAY, COMPVSS, LEG3ND: cuatro apps, una sola fuente de verdad. Creada por operadores que han dirigido la sala.",
      "ogImageEyebrow": "El Estudio",
      "ogImageTitle": "Hecho por quienes dirigen el show."
     },
@@ -363,7 +363,7 @@
      },
      "threeApps": {
       "title": "Cuatro apps sobre una sola fuente de verdad",
-      "body": "ATLVS, GVTEWAY, COMPVSS y LEG3ND se lanzaron sobre una sola base de datos — consola, portal, campo, conocimiento."
+      "body": "ATLVS, GVTEWAY, COMPVSS y LEG3ND se lanzaron sobre una sola base de datos: consola, portal, campo, conocimiento."
      },
      "kbyg": {
       "title": "Guías de evento KBYG",
@@ -435,7 +435,7 @@
    },
    "ai": {
     "meta": {
-     "title": "IA Para Producción — Borradores Desde Tu Espacio De Trabajo, Nunca Desde La Internet Abierta",
+     "title": "IA Para Producción: Borradores Desde Tu Espacio De Trabajo, Nunca Desde La Internet Abierta",
      "description": "Un asistente que redacta riders, reportes de incidentes, call sheets, propuestas, recaps y briefings de seguridad a partir de los datos en vivo de tu espacio de trabajo. Con Anthropic Claude por debajo; alcance por organización; nunca entrenado con tus datos.",
      "ogImageEyebrow": "IA",
      "ogImageTitle": "Borradores Desde Tu Espacio De Trabajo."
@@ -451,7 +451,7 @@
      "eyebrow": "IA",
      "titleLine1": "Borradores Desde Tu Espacio De Trabajo.",
      "titleLine2": "Nunca Desde La Internet Abierta.",
-     "subtitle": "Un asistente que lee tus proyectos, talento, proveedores, run-of-show y presupuestos — y luego redacta lo que los equipos de producción escriben cada día. Riders, reportes de incidentes, call sheets, propuestas, recaps, briefings de seguridad. Con Anthropic Claude por debajo, acotado a tu tenant, nunca entrenado con tus datos."
+     "subtitle": "Un asistente que lee tus proyectos, talento, proveedores, run-of-show y presupuestos, y luego redacta lo que los equipos de producción escriben cada día. Riders, reportes de incidentes, call sheets, propuestas, recaps, briefings de seguridad. Con Anthropic Claude por debajo, acotado a tu tenant, nunca entrenado con tus datos."
     },
     "drafts": {
      "title": "Lo Que Redacta.",
@@ -460,14 +460,14 @@
     },
     "rules": {
      "eyebrow": "Las Reglas",
-     "title": "Lo Que La IA Hace — Y Lo Que No Hará.",
+     "title": "Lo Que La IA Hace Y Lo Que No Hará.",
      "subtitle": "Los equipos de producción nos preguntaron dónde están los límites. Aquí está el canon.",
      "items": {
-      "0": "Lee solo los datos de tu organización. RLS en la base de datos — no en la app.",
+      "0": "Lee solo los datos de tu organización. RLS en la base de datos, no en la app.",
       "1": "Redacta; nunca publica solo. El PM, EHS o TM tiene la llave de publicación.",
       "2": "Marca las inferencias frente a los hechos anclados. Ves lo que es inventado.",
-      "3": "Las conversaciones se registran en tu tenant — consultables, exportables, nunca compartidas.",
-      "4": "Anthropic Claude — nunca entrenado con tus registros.",
+      "3": "Las conversaciones se registran en tu tenant: consultables, exportables, nunca compartidas.",
+      "4": "Anthropic Claude, nunca entrenado con tus registros.",
       "5": "Tope de costo por organización. El uso descontrolado no puede ocurrir."
      }
     },
@@ -475,11 +475,11 @@
      "title": "IA · Preguntas Frecuentes",
      "otherOrgs": {
       "q": "¿La IA ve los datos de otras organizaciones?",
-      "a": "No. Cada herramienta que el asistente puede invocar está acotada a tu organización. RLS en la base de datos — tu tenant queda aislado en Postgres, no en la capa de la app. La IA no puede acceder a los datos de nadie más, por diseño."
+      "a": "No. Cada herramienta que el asistente puede invocar está acotada a tu organización. RLS en la base de datos: tu tenant queda aislado en Postgres, no en la capa de la app. La IA no puede acceder a los datos de nadie más, por diseño."
      },
      "training": {
       "q": "¿Entrenan con nuestros datos?",
-      "a": "No. No entrenamos modelos. Somos un ecosistema de producción que ejecuta Anthropic Claude por debajo — tus conversaciones permanecen en tu tenant, tus registros siguen siendo tuyos."
+      "a": "No. No entrenamos modelos. Somos un ecosistema de producción que ejecuta Anthropic Claude por debajo. Tus conversaciones permanecen en tu tenant, tus registros siguen siendo tuyos."
      },
      "model": {
       "q": "¿Qué modelo usa?",
@@ -549,7 +549,7 @@
      }
     },
     "meta": {
-     "title": "Alternativas — software de producción, lado a lado",
+     "title": "Alternativas: software de producción, lado a lado",
      "description": "¿Evaluando una alternativa? Así es como los equipos de producción miden a Cvent, Procore, DocuSign, Monday, Notion y el resto del campo.",
      "ogEyebrow": "Alternativas",
      "ogTitle": "Software de producción, lado a lado."
@@ -590,7 +590,7 @@
      }
     },
     "meta": {
-     "title": "Blog — apuntes del equipo de ATLVS Technologies",
+     "title": "Blog: apuntes del equipo de ATLVS Technologies",
      "description": "Ensayos sobre operaciones de producción, arquitectura de plataforma y cómo producir shows con menos cinta adhesiva. Del equipo de ATLVS Technologies.",
      "ogEyebrow": "Blog",
      "ogTitle": "Apuntes del equipo."
@@ -645,7 +645,7 @@
      "homepage": {
       "title": "Página de inicio",
       "body": "Sitio de marketing completo: IA Pitch·Plan·Produce·Wrap, ticker en vivo, mapa de las 8 fases, alternador de modo hero.",
-      "meta": "/ — público"
+      "meta": "/ (público)"
      },
      "festivalProduction": {
       "title": "Producción de festivales",
@@ -781,8 +781,8 @@
    },
    "careers": {
     "metadata": {
-     "title": "Empleo — Crea para la producción",
-     "description": "Somos un estudio pequeño que desarrolla el ecosistema que opera la producción experiencial en vivo. Cada vacante entrega trabajo que aterriza en shows reales — medido en cargas de equipo superadas, no en puntos de historia consumidos.",
+     "title": "Empleo: Crea para la producción",
+     "description": "Somos un estudio pequeño que desarrolla el ecosistema que opera la producción experiencial en vivo. Cada vacante entrega trabajo que aterriza en shows reales, medido en cargas de equipo superadas, no en puntos de historia consumidos.",
      "ogEyebrow": "Empleo",
      "ogTitle": "Crea para la producción."
     },
@@ -864,7 +864,7 @@
    },
    "changelog": {
     "metadata": {
-     "title": "Registro de cambios — lo que se lanzó en ATLVS Technologies",
+     "title": "Registro de cambios: lo que se lanzó en ATLVS Technologies",
      "description": "Notas de versión de ATLVS Technologies. Cada cambio lanzado, con su contexto. Lanzamientos de funcionalidades, fiabilidad, seguridad y rendimiento.",
      "ogEyebrow": "Registro de cambios",
      "ogTitle": "Lo que se lanzó."
@@ -921,7 +921,7 @@
      }
     },
     "meta": {
-     "title": "Comunidad — los equipos de producción que construyen sobre ATLVS",
+     "title": "Comunidad: los equipos de producción que construyen sobre ATLVS",
      "description": "Los festivales, giras, agencias y talleres de fabricación que operan su producción en ATLVS, COMPVSS, GVTEWAY y LEG3ND. Historias de miembros, cifras y lo que realmente producen.",
      "ogImageEyebrow": "Comunidad",
      "ogImageTitle": "Equipos de producción operando en ATLVS."
@@ -1022,7 +1022,7 @@
    },
    "contact": {
     "metadata": {
-     "title": "Contacto — Habla con el estudio",
+     "title": "Contacto: Habla con el estudio",
      "description": "Línea directa. Demos, alianzas, soporte concierge, acceso Festival. Atendido por productores que han manejado la sala.",
      "ogImageEyebrow": "Contacto",
      "ogImageTitle": "Habla con el estudio."
@@ -1105,7 +1105,7 @@
      "meta": {
       "fallbackTitle": "Caso de cliente",
       "fallbackDescription": "Caso de cliente de ATLVS",
-      "title": "{name} — Caso de cliente",
+      "title": "{name}: Caso de cliente",
       "descriptionFallback": "Cómo {name} maneja la producción en ATLVS."
      },
      "eyebrow": "Caso de cliente",
@@ -1117,7 +1117,7 @@
      "backLink": "← Todos los casos de clientes"
     },
     "metadata": {
-     "title": "Clientes — Equipos de producción que operan en ATLVS",
+     "title": "Clientes: Equipos de producción que operan en ATLVS",
      "description": "Equipos de producción reales que operan en ATLVS: festivales, giras, fabricación, inmersivo, activaciones de marca, broadcast. Casos de estudio que se publican a lo largo del Q4.",
      "keywords": {
       "0": "casos de clientes de ATLVS",
@@ -1183,7 +1183,7 @@
    },
    "demo": {
     "metadata": {
-     "title": "Reserva un recorrido — Conectado a una producción real",
+     "title": "Reserva un recorrido: Conectado a una producción real",
      "description": "Habla con el estudio. Recorre el ecosistema sobre una producción en vivo. Sin la gimnasia de las llamadas de ventas: operadores hablando con operadores.",
      "ogImageEyebrow": "Demostración",
      "ogImageTitle": "Recorre el ecosistema."
@@ -1224,7 +1224,7 @@
    },
    "docs": {
     "meta": {
-     "title": "Documentación — Arquitectura, API, CMS de Guías, Autenticación",
+     "title": "Documentación: Arquitectura, API, CMS de Guías, Autenticación",
      "description": "Referencia técnica del ecosistema de ATLVS Technologies: arquitectura, integraciones, el CMS de Guías y el modelo de autenticación. Los detalles a fondo para los equipos que los quieren.",
      "ogEyebrow": "Documentación",
      "ogTitle": "Cómo funciona el ecosistema"
@@ -1262,7 +1262,7 @@
    },
    "features": {
     "metadata": {
-     "title": "Funcionalidades — Cada módulo. Nativo.",
+     "title": "Funcionalidades: Cada módulo. Nativo.",
      "description": "Cuarenta y siete módulos en cuatro apps que comparten una misma base de datos. ATLVS, COMPVSS, GVTEWAY, LEG3ND. IA, finanzas, compras, auditoría. Una sola fuente.",
      "ogEyebrow": "Funcionalidades",
      "ogTitle": "Cada módulo. Nativo."
@@ -1316,7 +1316,7 @@
        "desc": "Incidentes, OSHA, atención médica, crisis, BC/DR, ciber-IR, salvaguarda, ambiental."
       },
       "guides": {
-       "title": "Guías de evento — KBYG",
+       "title": "Guías de evento: KBYG",
        "desc": "Un proyecto, seis perfiles, 17 tipos de sección: cronograma, SOPs, EPP, radio, evacuación."
       },
       "ai": {
@@ -1344,7 +1344,7 @@
    },
    "glossary": {
     "meta": {
-     "title": "Glosario — El vocabulario de la producción en vivo",
+     "title": "Glosario: El vocabulario de la producción en vivo",
      "description": "Definiciones de los términos que los operadores de eventos en vivo usan cada día: advancing, ROS, KBYG, riders, credenciales, registros OSHA, settlements.",
      "ogImageEyebrow": "Glosario",
      "ogImageTitle": "Vocabulario de la producción en vivo."
@@ -1385,7 +1385,7 @@
      }
     },
     "meta": {
-     "title": "Guías — operaciones de producción, advancing y KBYG",
+     "title": "Guías: operaciones de producción, advancing y KBYG",
      "description": "Guías extensas sobre operaciones de producción. Advancing de eventos, Know Before You Go y la tesis unificada de operaciones de producción. Escritas por operadores que dirigen el show.",
      "ogImageEyebrow": "Guías",
      "ogImageTitle": "Escritas por operadores."
@@ -1406,7 +1406,7 @@
    },
    "help": {
     "metadata": {
-     "title": "Ayuda — Soporte para el equipo",
+     "title": "Ayuda: Soporte para el equipo",
      "description": "Guías de autoservicio, estado del sistema y canales de soporte directo. Servicio de concierge para clientes, priorizado por nivel. Festival incluye SLA.",
      "ogImageEyebrow": "Ayuda",
      "ogImageTitle": "Soporte para el equipo."
@@ -1501,7 +1501,7 @@
    },
    "integrations": {
     "meta": {
-     "title": "Integraciones — Stripe, Anthropic, Supabase, Twilio, Resend, Calendario, OAuth, Webhooks",
+     "title": "Integraciones: Stripe, Anthropic, Supabase, Twilio, Resend, Calendario, OAuth, Webhooks",
      "description": "Las integraciones que ya están en producción hoy: pagos, IA, infraestructura, comunicaciones, autenticación, calendario, geolocalización, observabilidad. Sin listas de próximamente; cada entrada está en vivo.",
      "ogImageEyebrow": "Integraciones",
      "ogImageTitle": "Embarcado en código, no en una diapositiva."
@@ -1558,7 +1558,7 @@
       }
      },
      "metadata": {
-      "title": "Convocatorias abiertas — Casting y postulaciones de producción",
+      "title": "Convocatorias abiertas: Casting y postulaciones de producción",
       "description": "Convocatorias de casting y RFP abiertos para producción en vivo, talento y creativos."
      },
      "breadcrumbs": {
@@ -1605,7 +1605,7 @@
     },
     "crew": {
      "metadata": {
-      "title": "Directorio de crew — Equipo de producción verificado",
+      "title": "Directorio de crew: Equipo de producción verificado",
       "description": "Perfiles de crew verificados: roles, equipamiento, sindicatos, tarifas diarias, disponibilidad."
      },
      "breadcrumbs": {
@@ -1629,7 +1629,7 @@
     },
     "gigs": {
      "meta": {
-      "title": "Gigs de crew — Bolsa de trabajo de producción",
+      "title": "Gigs de crew: Bolsa de trabajo de producción",
       "description": "Gigs de producción remunerados de operadores en toda la red de ATLVS.",
       "perDay": "/día",
       "travelPaid": "Viaje pagado",
@@ -1649,7 +1649,7 @@
      "empty": "No hay gigs en vivo en este momento."
     },
     "meta": {
-     "title": "Marketplace — Crew, talento y RFQ de producción en vivo",
+     "title": "Marketplace: Crew, talento y RFQ de producción en vivo",
      "description": "Encuentra gigs de producción abiertos, convocatorias de casting, talento, crew verificado y RFQ en vivo en toda la red de ATLVS."
     },
     "breadcrumb": "Marketplace",
@@ -1712,7 +1712,7 @@
       "compliance": {
        "title": "Requisitos de cumplimiento",
        "prequalification": "Precalificación",
-       "insurance": "Seguro — COI",
+       "insurance": "Seguro (COI)",
        "w9": "W-9 / W-8",
        "nda": "Aceptación de NDA"
       },
@@ -1723,7 +1723,7 @@
       }
      },
      "meta": {
-      "title": "RFQ abiertos — Marketplace de producción",
+      "title": "RFQ abiertos: Marketplace de producción",
       "description": "Explora solicitudes de cotización abiertas de operadores de producción en toda la red de ATLVS."
      },
      "breadcrumbs": {
@@ -1776,7 +1776,7 @@
       }
      },
      "meta": {
-      "title": "Directorio de talento — EPK de artistas",
+      "title": "Directorio de talento: EPK de artistas",
       "description": "Encuentra y contrata talento para festivales, activaciones de marca y eventos privados.",
       "kmRadius": "km de radio",
       "monthlyListeners": "oyentes/mes"
@@ -1797,7 +1797,7 @@
     },
     "vendors": {
      "meta": {
-      "title": "Directorio de proveedores — Proveedores de producción",
+      "title": "Directorio de proveedores: Proveedores de producción",
       "description": "Proveedores de producción verificados con seguro vigente, W-9 y precalificación."
      },
      "breadcrumbs": {
@@ -1903,8 +1903,8 @@
    },
    "home": {
     "metadata": {
-     "title": "ATLVS — Software de gestión de producción para experiencias en vivo",
-     "description": "ATLVS Technologies — software de gestión de producción, operaciones de equipos, venta de entradas y conocimiento creado para eventos en vivo. Cuatro apps, una sola fuente de verdad: ATLVS para productores, COMPVSS para el equipo de campo, GVTEWAY para el público, LEG3ND para el conocimiento. Del pitch al wrap en un solo ecosistema.",
+     "title": "ATLVS: Software de gestión de producción para experiencias en vivo",
+     "description": "ATLVS Technologies: software de gestión de producción, operaciones de equipos, venta de entradas y conocimiento creado para eventos en vivo. Cuatro apps, una sola fuente de verdad: ATLVS para productores, COMPVSS para el equipo de campo, GVTEWAY para el público, LEG3ND para el conocimiento. Del pitch al wrap en un solo ecosistema.",
      "ogImageTitle": "Dirige el show."
     },
     "hero": {
@@ -1954,7 +1954,7 @@
      "eyebrow": "Creado para",
      "title": "Equipos de producción que hacen trabajo real.",
      "body": "El esquema es genérico. El vocabulario es específico. Elige el tipo de producción que entregas y el ecosistema habla tu idioma desde el primer día.",
-     "footnote": "Hospitality, eventos corporativos y privados también —",
+     "footnote": "Hospitality, eventos corporativos y privados también.",
      "footnoteLink": "ver todas las soluciones →",
      "items": {
       "festivals": {
@@ -2045,7 +2045,7 @@
     "projects": {
      "eyebrow": "Resultados · Casos de éxito",
      "title": "Producido sobre ATLVS.",
-     "body": "Una selección de producciones que nuestros clientes han gestionado en ATLVS Technologies — en festivales, activaciones de marca y transmisión en vivo.",
+     "body": "Una selección de producciones que nuestros clientes han gestionado en ATLVS Technologies: festivales, activaciones de marca y transmisión en vivo.",
      "tableHeaders": {
       "project": "Proyecto",
       "title": "Título",
@@ -2101,7 +2101,7 @@
       },
       "whoIsItFor": {
        "q": "¿Para quién es el ecosistema ATLVS?",
-       "a": "Equipos de producción que ejecutan trabajo real en vivo. Festivales, residencias, giras, talleres de fabricación, activaciones de marca, compounds de transmisión, eventos privados. El esquema es genérico; el vocabulario es específico. Si tu organización tiene un load-in, un manifiesto, proveedores y un wrap — encaja."
+       "a": "Equipos de producción que ejecutan trabajo real en vivo. Festivales, residencias, giras, talleres de fabricación, activaciones de marca, compounds de transmisión, eventos privados. El esquema es genérico; el vocabulario es específico. Si tu organización tiene un load-in, un manifiesto, proveedores y un wrap, encaja."
       },
       "pricing": {
        "q": "¿Cómo funciona el precio de ATLVS?",
@@ -2113,19 +2113,19 @@
       },
       "compvssOffline": {
        "q": "¿COMPVSS funciona realmente sin conexión?",
-       "a": "Sí. COMPVSS es una PWA con prioridad sin conexión. Escaneo de acceso, fichaje de turno, registro diario, incidentes, ingreso médico — todo se encola localmente y se sincroniza en cuanto vuelve la señal. Escaneo en menos de 100 ms incluso con una barra de LTE. Probado en accesos de 15 000 asistentes."
+       "a": "Sí. COMPVSS es una PWA con prioridad sin conexión. Escaneo de acceso, fichaje de turno, registro diario, incidentes, ingreso médico: todo se encola localmente y se sincroniza en cuanto vuelve la señal. Escaneo en menos de 100 ms incluso con una barra de LTE. Probado en accesos de 15 000 asistentes."
       },
       "whoBuilds": {
        "q": "¿Quién construye ATLVS Technologies?",
-       "a": "ATLVS Technologies es una empresa de GHXSTSHIP Industries — el brazo tecnológico de una casa de producción experiencial con sede en Miami y oficinas en Nueva York, Chicago y Los Ángeles. ATLVS, COMPVSS, GVTEWAY y LEG3ND se construyen internamente por personas que han sacado adelante shows reales."
+       "a": "ATLVS Technologies es una empresa de GHXSTSHIP Industries, el brazo tecnológico de una casa de producción experiencial con sede en Miami y oficinas en Nueva York, Chicago y Los Ángeles. ATLVS, COMPVSS, GVTEWAY y LEG3ND se construyen internamente por personas que han sacado adelante shows reales."
       },
       "dataSecurity": {
        "q": "¿Cómo se protegen los datos?",
-       "a": "Seguridad a nivel de fila en la base de datos — tu tenant queda aislado en Postgres, no en la capa de aplicación. Cada cambio se escribe en un registro de auditoría inmutable (actor, IP, agente de usuario, antes/después). Webhooks firmados (HMAC-SHA256). Los archivos compartidos caducan solos. Certificación SOC-2 más DPA personalizado en el plan Festival."
+       "a": "Seguridad a nivel de fila en la base de datos: tu tenant queda aislado en Postgres, no en la capa de aplicación. Cada cambio se escribe en un registro de auditoría inmutable (actor, IP, agente de usuario, antes/después). Webhooks firmados (HMAC-SHA256). Los archivos compartidos caducan solos. Certificación SOC-2 más DPA personalizado en el plan Festival."
       },
       "aiAssistant": {
        "q": "¿El asistente de IA es útil o es marketing?",
-       "a": "Útil. Lee los datos de tu espacio de trabajo — nunca el internet público — y redacta riders, RFP, call sheets, recaps, briefings de seguridad e informes de incidentes. Streaming, con la conversación persistida en tu tenant. Anthropic Claude bajo el capó."
+       "a": "Útil. Lee los datos de tu espacio de trabajo, nunca el internet público, y redacta riders, RFP, call sheets, recaps, briefings de seguridad e informes de incidentes. Streaming, con la conversación persistida en tu tenant. Anthropic Claude bajo el capó."
       },
       "exportData": {
        "q": "¿Puedo exportar mis datos?",
@@ -2143,11 +2143,11 @@
       },
       "release": {
        "cat": "Lanzamiento",
-       "title": "Advancing v2 — se entregan 16 deliverables tipados"
+       "title": "Advancing v2: se entregan 16 deliverables tipados"
       },
       "careers": {
        "cat": "Empleo",
-       "title": "Buscamos — ingenieros, PM, diseñadores"
+       "title": "Buscamos: ingenieros, PM, diseñadores"
       }
      }
     },
@@ -2161,7 +2161,7 @@
    },
    "partners": {
     "metadata": {
-     "title": "Socios — Consultores de producción + Socios de implementación",
+     "title": "Socios: Consultores de producción + Socios de implementación",
      "description": "Consultores de producción formados en ATLVS que migran, configuran y dejan a los equipos a punto en el ecosistema. El directorio de socios abre en el primer trimestre.",
      "ogImageEyebrow": "Socios",
      "ogImageTitle": "Implementación + Consultoría."
@@ -2208,7 +2208,7 @@
    },
    "press": {
     "meta": {
-     "title": "Prensa — Marca, logotipos, portavoces",
+     "title": "Prensa: Marca, logotipos, portavoces",
      "description": "Kit de prensa, lineamientos de marca, lockups de logotipo y contacto con portavoces para periodistas, analistas y socios que cubren ATLVS Technologies.",
      "ogEyebrow": "Prensa",
      "ogTitle": "Prensa + Marca."
@@ -2269,7 +2269,7 @@
    },
    "pricing": {
     "meta": {
-     "title": "Precios — Por organización. Nunca por asiento.",
+     "title": "Precios: Por organización. Nunca por asiento.",
      "description": "Gratis para siempre para equipos pequeños. Precio por organización en cada nivel. Sin la trampa del precio por asiento. Sin impuesto por escaneo.",
      "ogEyebrow": "Precios",
      "ogTitle": "Por organización. Nunca por asiento."
@@ -2307,7 +2307,7 @@
       "features": {
        "everythingInFree": "Todo lo de Gratis",
        "invoicingExpensesBudgets": "Facturación, gastos y presupuestos",
-       "advancing16": "Advancing — 16 tipos de entregables",
+       "advancing16": "Advancing: 16 tipos de entregables",
        "upTo10Users": "Hasta 10 usuarios",
        "upTo2kCredentials": "Hasta 2.000 credenciales de portal por proyecto",
        "emailSupport": "Soporte por correo"
@@ -2381,12 +2381,12 @@
      "atlvs": {
       "projectsTasks": "Proyectos, tareas, agenda, ROS",
       "rfisSubmittals": "RFI · entregas técnicas · partes diarios · punch list",
-      "inspections": "Inspecciones — 10 categorías",
-      "finance": "Finanzas — facturas, presupuestos, gastos",
-      "procurement": "Compras — RFQ, órdenes de compra, evaluaciones de proveedores",
-      "production": "Producción — equipos, alquileres, órdenes de fabricación",
+      "inspections": "Inspecciones: 10 categorías",
+      "finance": "Finanzas: facturas, presupuestos, gastos",
+      "procurement": "Compras: RFQ, órdenes de compra, evaluaciones de proveedores",
+      "production": "Producción: equipos, alquileres, órdenes de fabricación",
       "peopleCredentials": "Personas, credenciales y call sheets",
-      "advancing": "Advancing — 16 tipos de entregables",
+      "advancing": "Advancing: 16 tipos de entregables",
       "kbygGuides": "Guías de evento KBYG"
      },
      "gvteway": {
@@ -2402,7 +2402,7 @@
       "offlineGateScan": "Escaneo de acceso sin conexión",
       "geoShiftClock": "Fichaje de turno con verificación geográfica",
       "dailyLog": "Parte diario, almacén y despacho",
-      "fieldIntake": "Registro en campo — incidentes, atención médica, protección"
+      "fieldIntake": "Registro en campo: incidentes, atención médica, protección"
      },
      "ai": {
       "assistantGrounded": "Asistente anclado en tu espacio de trabajo",
@@ -2420,7 +2420,7 @@
       "selfExpiringShares": "Compartidos de archivos con caducidad automática",
       "rateLimited": "Endpoints con límite de tasa",
       "strictHeaders": "Encabezados de seguridad estrictos en el edge",
-      "sso": "SSO — SAML / OIDC",
+      "sso": "SSO: SAML / OIDC",
       "soc2": "Paquete de certificación SOC-2",
       "customDpa": "DPA personalizado",
       "dataResidency": "Residencia de datos"
@@ -2469,7 +2469,7 @@
      },
      "dataAfterCancel": {
       "q": "¿Qué pasa con mis datos si cancelo?",
-      "a": "Exporta todo —CSV o JSON— cuando quieras. Tras cancelar, tus datos permanecen 90 días en solo lectura (vuelve a suscribirte y los recuperas) y luego se eliminan. Registros firmados de la eliminación a petición. Los datos son tuyos."
+      "a": "Exporta todo (CSV o JSON) cuando quieras. Tras cancelar, tus datos permanecen 90 días en solo lectura (vuelve a suscribirte y los recuperas) y luego se eliminan. Registros firmados de la eliminación a petición. Los datos son tuyos."
      }
     },
     "cta": {
@@ -2484,7 +2484,7 @@
    },
    "roadmap": {
     "metadata": {
-     "title": "Roadmap — Lo próximo en lanzarse",
+     "title": "Roadmap: Lo próximo en lanzarse",
      "description": "Roadmap público, tres trimestres por delante. Trabajo comprometido, trabajo en marcha y las solicitudes que aún estamos dimensionando.",
      "ogImageEyebrow": "Hoja de ruta",
      "ogImageTitle": "Lo próximo en lanzarse."
@@ -2499,7 +2499,7 @@
      "subtitle": "Tres trimestres por delante. En Marcha está comprometido y avanza según lo previsto. Próximo está dimensionado y priorizado. Explorando está sobre la mesa para el trimestre siguiente.",
      "influencePrefix": "¿Quieres opinar sobre el orden?",
      "influenceLink": "Envíanos una nota",
-     "influenceSuffix": "— leemos cada línea."
+     "influenceSuffix": ". Leemos cada línea."
     },
     "status": {
      "inFlight": "En Marcha",
@@ -2517,7 +2517,7 @@
       "items": {
        "aiUseCases": {
         "title": "Páginas de casos de uso de IA",
-        "body": "Seis superficies de IA para producción lanzadas en /ai — advancing, incidentes, programación, propuestas, recaps, seguridad."
+        "body": "Seis superficies de IA para producción lanzadas en /ai: advancing, incidentes, programación, propuestas, recaps, seguridad."
        },
        "featureIndustryFarm": {
         "title": "Granja programática de función × industria",
@@ -2536,7 +2536,7 @@
         "body": "Calculadora de viáticos + calculadora de aforo activas; 8 más dimensionadas para T4."
        },
        "customerStoriesP1": {
-        "title": "Historias de clientes — Fase 1",
+        "title": "Historias de clientes: Fase 1",
         "body": "Seis casos de éxito de socios de lanzamiento; adelantos anonimizados ya disponibles, historias completas llegando durante el T4."
        }
       }
@@ -2557,7 +2557,7 @@
         "body": "Las 13 páginas principales traducidas a es-ES + pt-BR con hreflang completo."
        },
        "customerStoriesP2": {
-        "title": "Historias de clientes — Fase 2",
+        "title": "Historias de clientes: Fase 2",
         "body": "Cuatro casos de éxito más de socios de lanzamiento con PDF descargable."
        },
        "templatesExpansion": {
@@ -2600,7 +2600,7 @@
    "solutions": {
     "atlvs": {
      "meta": {
-      "title": "ATLVS — Consola de operaciones de producción",
+      "title": "ATLVS: Consola de operaciones de producción",
       "description": "Donde vive la producción. RFI, presentaciones, partes diarios, punch list, advancing, finanzas, compras, IA. Del pitch al wrap. Una única fuente de verdad.",
       "ogImageTitle": "Donde vive la producción"
      },
@@ -2610,8 +2610,8 @@
       "atlvs": "ATLVS"
      },
      "schema": {
-      "name": "ATLVS — Consola de operaciones de producción",
-      "description": "Consola de operaciones de producción. Proyectos, finanzas, compras, advancing, IA — una sola consola, una única fuente de verdad."
+      "name": "ATLVS: Consola de operaciones de producción",
+      "description": "Consola de operaciones de producción. Proyectos, finanzas, compras, advancing, IA: una sola consola, una única fuente de verdad."
      },
      "hero": {
       "title": "Donde vive la producción.",
@@ -2663,8 +2663,8 @@
      "architecture": {
       "eyebrow": "Bajo el capó",
       "title": "Los mismos rieles. Cada módulo.",
-      "body1": "Listar, detallar, crear, editar. Cada módulo corre sobre los mismos rieles — con flujo de ciclo de vida donde importa (facturas, propuestas, órdenes de compra, tareas, RFI). Validación en la puerta. Inquilino aislado en la base de datos.",
-      "body2": "Los mismos rieles significan que el equipo aprende ATLVS una vez. Los nuevos módulos se entregan en días. El trabajo cambia — el flujo de trabajo se mantiene.",
+      "body1": "Listar, detallar, crear, editar. Cada módulo corre sobre los mismos rieles, con flujo de ciclo de vida donde importa (facturas, propuestas, órdenes de compra, tareas, RFI). Validación en la puerta. Inquilino aislado en la base de datos.",
+      "body2": "Los mismos rieles significan que el equipo aprende ATLVS una vez. Los nuevos módulos se entregan en días. El trabajo cambia; el flujo de trabajo se mantiene.",
       "bullets": {
        "rls": "RLS en la base de datos. Inquilino aislado en Postgres.",
        "roleAware": "Consciente del rol en cada acción. Aplicado en el servidor, no en la interfaz.",
@@ -2695,11 +2695,11 @@
       "title": "ATLVS · Preguntas frecuentes",
       "what": {
        "q": "¿Qué es ATLVS?",
-       "a": "La consola de operaciones de producción. La superficie de operador con marca rosa, fija en el escritorio, siempre activa. Cuarenta y siete módulos — propuestas, RFI, presentaciones, partes diarios, punch list, inspecciones, advancing, finanzas, compras, IA. Donde vive la producción."
+       "a": "La consola de operaciones de producción. La superficie de operador con marca rosa, fija en el escritorio, siempre activa. Cuarenta y siete módulos: propuestas, RFI, presentaciones, partes diarios, punch list, inspecciones, advancing, finanzas, compras, IA. Donde vive la producción."
       },
       "roleAware": {
        "q": "¿Cómo funciona el acceso consciente del rol?",
-       "a": "Diez roles (propietario, administrador, controller, colaborador, contratista, crew, cliente, espectador y cameos). Cada capacidad está restringida por rol — aplicado en la base de datos mediante RLS, no en la interfaz."
+       "a": "Diez roles (propietario, administrador, controller, colaborador, contratista, crew, cliente, espectador y cameos). Cada capacidad está restringida por rol: aplicado en la base de datos mediante RLS, no en la interfaz."
       },
       "brand": {
        "q": "¿Puedo personalizarlo con mi marca?",
@@ -2719,7 +2719,7 @@
     },
     "compvss": {
      "meta": {
-      "title": "COMPVSS — El terreno",
+      "title": "COMPVSS: El terreno",
       "description": "PWA offline-first. Escaneo en puerta en menos de 100 ms. Fichaje de turno, parte diario, incidente, médico, conductor, vigilante, almacén. Se instala desde el navegador con un toque.",
       "ogImageTitle": "Sin conexión. Menos de 100 ms."
      },
@@ -2729,7 +2729,7 @@
       "compvss": "COMPVSS"
      },
      "schema": {
-      "name": "COMPVSS — El terreno",
+      "name": "COMPVSS: El terreno",
       "description": "PWA offline-first para el crew de producción. Escaneo en puerta, fichaje, incidente, médico, conductor, vigilante, almacén."
      },
      "hero": {
@@ -2743,7 +2743,7 @@
       "heading": "Lo que el crew opera en el terreno.",
       "today": {
        "title": "Hoy",
-       "body": "Pantalla de inicio enrutada por rol — call sheet, tareas fijadas, el turno de esta noche."
+       "body": "Pantalla de inicio enrutada por rol: call sheet, tareas fijadas, el turno de esta noche."
       },
       "gateScan": {
        "title": "Escaneo de puerta + ticket",
@@ -2814,7 +2814,7 @@
     },
     "gvteway": {
      "meta": {
-      "title": "GVTEWAY — El portal",
+      "title": "GVTEWAY: El portal",
       "description": "Doce perfiles. Cada uno en su carril. Los artistas ven riders. Los proveedores ven órdenes de compra. Los clientes ven propuestas. Mismo proyecto, RLS en la base de datos.",
       "ogImageTitle": "Doce perfiles. Cada uno en su carril."
      },
@@ -2823,7 +2823,7 @@
       "solutions": "Soluciones"
      },
      "jsonLd": {
-      "name": "GVTEWAY — El portal",
+      "name": "GVTEWAY: El portal",
       "description": "Portal para partes interesadas externas. Doce perfiles, cada uno acotado a su carril mediante RLS en la base de datos."
      },
      "hero": {
@@ -2880,7 +2880,7 @@
        "body": "Reservas de entrenamiento, servicios de residencia, protección, visado, autogestión de privacidad."
       },
       "privacy": {
-       "title": "Privacidad — Todos",
+       "title": "Privacidad: Todos",
        "body": "Cada perfil obtiene autogestión de DSAR + gestión de consentimiento. GDPR, resuelto."
       }
      },
@@ -2942,8 +2942,8 @@
      }
     },
     "metadata": {
-     "title": "Soluciones — Cuatro apps. Un esquema.",
-     "description": "ATLVS — consola de operaciones de producción. COMPVSS — PWA de terreno offline-first. GVTEWAY — portal y marketplace para stakeholders. LEG3ND — conocimiento, LMS y recursos. El mismo registro desde la oficina, la puerta, el stakeholder y el estándar."
+     "title": "Soluciones: Cuatro apps. Un esquema.",
+     "description": "ATLVS: consola de operaciones de producción. COMPVSS: PWA de terreno offline-first. GVTEWAY: portal y marketplace para stakeholders. LEG3ND: conocimiento, LMS y recursos. El mismo registro desde la oficina, la puerta, el stakeholder y el estándar."
     },
     "crumbs": {
      "home": "Inicio",
@@ -2995,7 +2995,7 @@
       "title": "El cuerpo de conocimiento",
       "body": "El Standard, cursos, certificaciones, el catálogo con precios y el motor de cumplimiento, sobre el protocolo XPMS 2.0. El conocimiento sobre el que se construye el mundo.",
       "bullets": {
-       "0": "El Standard — una base de conocimiento versionada",
+       "0": "El Standard: una base de conocimiento versionada",
        "1": "Cursos y LMS con cuestionarios y certificaciones",
        "2": "Certificaciones que controlan los escaneos en puerta",
        "3": "Cumplimiento verificable por máquina XMCE"
@@ -3066,8 +3066,8 @@
     },
     "legend": {
      "meta": {
-      "title": "LEG3ND — Conocimiento, LMS y Cumplimiento",
-      "description": "El conocimiento sobre el que se construye el mundo — el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento. La capa de conocimiento del motor de mundos ATLVS, sobre el protocolo XPMS 2.0.",
+      "title": "LEG3ND: Conocimiento, LMS y Cumplimiento",
+      "description": "El conocimiento sobre el que se construye el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento. La capa de conocimiento del motor de mundos ATLVS, sobre el protocolo XPMS 2.0.",
       "ogImageEyebrow": "LEG3ND",
       "ogImageTitle": "El conocimiento sobre el que se construye el mundo."
      },
@@ -3076,24 +3076,24 @@
       "solutions": "Soluciones"
      },
      "jsonLd": {
-      "description": "El conocimiento sobre el que se construye el mundo — el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento."
+      "description": "El conocimiento sobre el que se construye el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento."
      },
      "hero": {
       "title": "El conocimiento sobre el que se construye el mundo.",
-      "body": "El conocimiento sobre el que se construye el mundo — el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento. Es la capa de conocimiento del motor de mundos ATLVS — el Standard, el LMS, las certificaciones, el catálogo con precios y el motor de cumplimiento, todo sobre el protocolo XPMS 2.0.",
+      "body": "El conocimiento sobre el que se construye el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento. Es la capa de conocimiento del motor de mundos ATLVS, con el Standard, el LMS, las certificaciones, el catálogo con precios y el motor de cumplimiento, todo sobre el protocolo XPMS 2.0.",
       "ctaPrimary": "Empieza a construir gratis",
       "ctaSecondary": "Reserva una demo"
      },
      "pillars": {
       "title": "Una biblioteca. Cada disciplina.",
-      "body": "La capa de referencia que leen todas las demás apps — escrita una vez, gobernada en un solo lugar, versionada como código.",
+      "body": "La capa de referencia que leen todas las demás apps: escrita una vez, gobernada en un solo lugar, versionada como código.",
       "standard": {
        "title": "El Standard",
-       "body": "La base de conocimiento canónica — cómo se ejecuta realmente el trabajo, escrito y disponible para búsqueda."
+       "body": "La base de conocimiento canónica: cómo se ejecuta realmente el trabajo, escrito y disponible para búsqueda."
       },
       "courses": {
        "title": "Cursos y LMS",
-       "body": "Aprendizaje estructurado con lecciones, cuestionarios y seguimiento de finalización — del onboarding al dominio."
+       "body": "Aprendizaje estructurado con lecciones, cuestionarios y seguimiento de finalización, del onboarding al dominio."
       },
       "certifications": {
        "title": "Certificaciones",
@@ -3101,19 +3101,19 @@
       },
       "resources": {
        "title": "Centro de recursos",
-       "body": "Plantillas, SOPs y documentos de referencia — un solo hogar, se acabó la arqueología en unidades compartidas."
+       "body": "Plantillas, SOPs y documentos de referencia en un solo hogar. Se acabó la arqueología en unidades compartidas."
       },
       "catalog": {
        "title": "Catálogo",
-       "body": "Átomos con precio y URIDs — los bloques de construcción con coste de los que parten estimaciones y compras."
+       "body": "Átomos con precio y URIDs: los bloques de construcción con coste de los que parten estimaciones y compras."
       },
       "signage": {
        "title": "Biblioteca de señalética",
-       "body": "Pictogramas ISO 7010, DOT-AIGA e ISA — señalización de seguridad lista para producción, estandarizada."
+       "body": "Pictogramas ISO 7010, DOT-AIGA e ISA: señalización de seguridad lista para producción, estandarizada."
       },
       "xmce": {
        "title": "Motor de cumplimiento XMCE",
-       "body": "Cumplimiento verificable por máquina — reglas evaluadas contra el registro vivo, no contra una carpeta."
+       "body": "Cumplimiento verificable por máquina: reglas evaluadas contra el registro vivo, no contra una carpeta."
       },
       "safety": {
        "title": "Seguridad",
@@ -3125,7 +3125,7 @@
       "title": "Conocimiento que lee el resto del mundo.",
       "body": "LEG3ND no es una wiki pegada al margen. Las certificaciones controlan los escaneos en campo. Los átomos del catálogo ponen precio a las estimaciones. Las reglas de cumplimiento se evalúan contra proyectos vivos. La capa de conocimiento está cableada al mismo almacén de registros sobre el que funciona todo el ecosistema.",
       "items": {
-       "standard": "El Standard — una base de conocimiento canónica y versionada",
+       "standard": "El Standard: una base de conocimiento canónica y versionada",
        "courses": "Cursos y LMS con cuestionarios e insignias de finalización",
        "certifications": "Certificaciones que controlan los escaneos de puerta de COMPVSS",
        "catalog": "Átomos de catálogo con precio que alimentan estimaciones y compras",
@@ -3137,15 +3137,15 @@
       "title": "LEG3ND · Preguntas frecuentes",
       "q1": {
        "q": "¿Qué es LEG3ND?",
-       "a": "La capa de conocimiento del ecosistema ATLVS — el Standard (base de conocimiento), Cursos y LMS, Certificaciones, un centro de recursos, un catálogo con precios, la biblioteca de señalética, el motor de cumplimiento XMCE y Seguridad, todo sobre el protocolo XPMS 2.0."
+       "a": "La capa de conocimiento del ecosistema ATLVS: el Standard (base de conocimiento), Cursos y LMS, Certificaciones, un centro de recursos, un catálogo con precios, la biblioteca de señalética, el motor de cumplimiento XMCE y Seguridad, todo sobre el protocolo XPMS 2.0."
       },
       "q2": {
        "q": "¿En qué se diferencia de una wiki o un LMS independiente?",
-       "a": "Comparte el mismo almacén de registros que el resto del ecosistema. Las certificaciones controlan los escaneos en campo en COMPVSS, los átomos del catálogo ponen precio a las estimaciones en ATLVS, y las reglas de cumplimiento se evalúan contra proyectos vivos — nada de lo cual puede hacer una wiki o un LMS aislado."
+       "a": "Comparte el mismo almacén de registros que el resto del ecosistema. Las certificaciones controlan los escaneos en campo en COMPVSS, los átomos del catálogo ponen precio a las estimaciones en ATLVS, y las reglas de cumplimiento se evalúan contra proyectos vivos. Nada de eso puede hacerlo una wiki o un LMS aislado."
       },
       "q3": {
        "q": "¿Qué es la biblioteca de señalética?",
-       "a": "Un conjunto listo para producción de pictogramas ISO 7010, DOT-AIGA e ISA para señalización de seguridad — estandarizado para que cada sitio hable el mismo lenguaje visual."
+       "a": "Un conjunto listo para producción de pictogramas ISO 7010, DOT-AIGA e ISA para señalización de seguridad, estandarizado para que cada sitio hable el mismo lenguaje visual."
       },
       "q4": {
        "q": "¿Qué verifica el motor de cumplimiento?",
@@ -3162,7 +3162,7 @@
    },
    "status": {
     "meta": {
-     "title": "Estado — Disponibilidad del ecosistema + historial de incidencias",
+     "title": "Estado: Disponibilidad del ecosistema + historial de incidencias",
      "description": "Estado del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete a las alertas de incidencias.",
      "ogEyebrow": "Estado",
      "ogTitle": "Salud del ecosistema."
@@ -3204,7 +3204,7 @@
    },
    "teams": {
     "meta": {
-     "title": "Hecho para los roles de producción — Gira, Producción, Escenario, Festival, Sitio, Técnica, Talento, EHS",
+     "title": "Hecho para los roles de producción: Gira, Producción, Escenario, Festival, Sitio, Técnica, Talento, EHS",
      "description": "ATLVS Technologies está afinado al rol que de verdad diriges. Páginas por rol con los módulos en los que vive cada perfil, los flujos de trabajo que importan y las preguntas que hacen.",
      "ogImageEyebrow": "Hecho para",
      "ogImageTitle": "El rol que diriges."
@@ -3252,11 +3252,11 @@
      },
      "cta": {
       "title": "ATLVS está abierto.",
-      "subtitle": "Abre esta plantilla —y los otros 47 módulos— gratis para equipos pequeños."
+      "subtitle": "Abre esta plantilla, y los otros 47 módulos, gratis para equipos pequeños."
      }
     },
     "meta": {
-     "title": "Plantillas — Artefactos de producción, listos para usar",
+     "title": "Plantillas: Artefactos de producción, listos para usar",
      "description": "ROS prearmados, listas de advancing, riders, call sheets, briefings de seguridad y plantillas de alta de proveedores: abre una en ATLVS en segundos.",
      "ogImageEyebrow": "Plantillas",
      "ogImageTitle": "Artefactos de producción, listos para usar."
@@ -3280,7 +3280,7 @@
    },
    "tools": {
     "meta": {
-     "title": "Herramientas gratis — Calculadoras de producción",
+     "title": "Herramientas gratis: Calculadoras de producción",
      "description": "Calculadora de dietas, calculadora de aforo y más: herramientas gratis que los equipos de producción usan para planificar, presupuestar y dirigir shows.",
      "ogImageEyebrow": "Herramientas gratis",
      "ogImageTitle": "Calculadoras de producción."
@@ -3421,7 +3421,7 @@
      "before": "Nuestro objetivo es",
      "after": "de disponibilidad mensual. Las ventanas de mantenimiento programado quedan excluidas."
     },
-    "credits": "Créditos de servicio por incumplir el SLA: 10% (99.0–99.9%), 25% (98.0–99.0%), 50% (por debajo de 98.0%).",
+    "credits": "Créditos de servicio por incumplir el SLA: 10% (de 99.0% a 99.9%), 25% (de 98.0% a 99.0%), 50% (por debajo de 98.0%).",
     "report": {
      "before": "Reporta los incidentes a"
     }
@@ -3432,7 +3432,7 @@
    "crumbsToolsLabel": "Herramientas",
    "capacity": {
     "meta": {
-     "title": "Calculadora de aforo de recintos — Ocupación máxima por uso",
+     "title": "Calculadora de aforo de recintos: Ocupación máxima por uso",
      "description": "Estima la ocupación máxima legal a partir de los metros cuadrados y el tipo de uso. Valores predeterminados alineados con el IBC para asambleas, espacios concentrados, de pie y comedor."
     },
     "title": "Calculadora de aforo de recintos.",
@@ -3442,7 +3442,7 @@
     "lead": "Estima la ocupación máxima legal a partir de los metros cuadrados y el tipo de uso. Valores predeterminados alineados con el IBC para configuraciones de asamblea, concentradas, de pie y comedor. Confírmalo con la autoridad competente antes de publicar.",
     "how": {
      "heading": "Cómo funciona la carga de ocupación.",
-     "body1": "La carga de ocupación es el número máximo de personas que admite un espacio, establecido por el International Building Code (IBC) y adoptado —con modificaciones— por la mayoría de las jurisdicciones de EE. UU. El IBC fija factores de superficie por ocupante según el tipo de uso: 0,65 m² por persona de pie, 1,4 m² para asamblea no concentrada con mesas, 0,46 m² para áreas de espera. Multiplica la superficie útil de suelo por el factor adecuado para obtener la carga.",
+     "body1": "La carga de ocupación es el número máximo de personas que admite un espacio, establecido por el International Building Code (IBC) y adoptado, con modificaciones, por la mayoría de las jurisdicciones de EE. UU. El IBC fija factores de superficie por ocupante según el tipo de uso: 0,65 m² por persona de pie, 1,4 m² para asamblea no concentrada con mesas, 0,46 m² para áreas de espera. Multiplica la superficie útil de suelo por el factor adecuado para obtener la carga.",
      "body2": "El aforo real es el menor entre la carga del IBC y lo que permiten las salidas de evacuación: el ancho de salida, los asientos fijos, la cobertura de rociadores y el criterio de la autoridad competente influyen todos. Trata esta calculadora como una estimación inicial; confírmalo con la autoridad local competente antes de publicar el aforo."
     },
     "cta": {
@@ -3452,7 +3452,7 @@
    },
    "perDiem": {
     "meta": {
-     "title": "Calculadora de viáticos — Dietas de viaje para equipo y talento",
+     "title": "Calculadora de viáticos: Dietas de viaje para equipo y talento",
      "description": "Calcula el total de viáticos para equipo o talento en varias ciudades y días. Tarifas predeterminadas alineadas con la GSA con posibilidad de sobrescribir tarifas personalizadas."
     },
     "title": "Calculadora de viáticos.",
@@ -3462,7 +3462,7 @@
     "lead": "Calcula el total de viáticos para equipo o talento en varias ciudades y días. Tarifas predeterminadas alineadas con la GSA; sobrescríbelas por ciudad.",
     "how": {
      "heading": "Cómo funcionan los viáticos.",
-     "body1": "El viático es la dieta diaria que recibe quien viaja —equipo, talento o contratistas— para comidas y gastos incidentales fuera de su base. La General Services Administration (GSA) de EE. UU. publica tarifas ciudad por ciudad para los viajes federales; la mayoría de los presupuestos de producción las usan como referencia defendible. Las tarifas internacionales provienen de las tablas DSSR del Departamento de Estado.",
+     "body1": "El viático es la dieta diaria que recibe quien viaja (equipo, talento o contratistas) para comidas y gastos incidentales fuera de su base. La General Services Administration (GSA) de EE. UU. publica tarifas ciudad por ciudad para los viajes federales; la mayoría de los presupuestos de producción las usan como referencia defendible. Las tarifas internacionales provienen de las tablas DSSR del Departamento de Estado.",
      "body2": "Los viáticos suelen liquidarse por show o con cadencia semanal, en efectivo o por nómina. Los tour managers los controlan contra la matriz de tarifa por ciudad × día para que lo proyectado nunca se desvíe de lo real."
     },
     "cta": {
@@ -3475,7 +3475,7 @@
    "crumbsLabel": "Marketplace",
    "calendar": {
     "meta": {
-     "title": "Calendario de eventos — Salidas a la venta + anuncios",
+     "title": "Calendario de eventos: Salidas a la venta + anuncios",
      "description": "Próximas fechas de salida a la venta, ventanas de preventa y anuncios."
     },
     "eyebrow": "Marketplace · Calendario",
@@ -3489,7 +3489,7 @@
    },
    "agencies": {
     "meta": {
-     "title": "Directorio de agencias — Agencias de booking",
+     "title": "Directorio de agencias: Agencias de booking",
      "description": "Agencias de booking verificadas en la red de ATLVS."
     },
     "eyebrow": "Marketplace · Agencias",
@@ -3522,13 +3522,13 @@
    "crumbsLabel": "Integraciones",
    "thanks": {
     "meta": {
-     "title": "Propuesta recibida — Programa de partners de ATLVS",
+     "title": "Propuesta recibida: Programa de partners de ATLVS",
      "description": "Tu propuesta de integración como partner ya está en cola."
     },
     "crumbsLabel": "Propuesta recibida",
     "title": "Propuesta recibida.",
     "body": {
-     "before": "Tu propuesta ya está en cola. El equipo de partner-AM de ATLVS suele responder en un plazo de 5 días hábiles. Mantén atenta la bandeja de entrada con la que enviaste la propuesta — te escribiremos desde"
+     "before": "Tu propuesta ya está en cola. El equipo de partner-AM de ATLVS suele responder en un plazo de 5 días hábiles. Mantén atenta la bandeja de entrada con la que enviaste la propuesta. Te escribiremos desde"
     },
     "cta": {
      "back": "Volver a las integraciones activas",
@@ -3537,12 +3537,12 @@
    },
    "partners": {
     "meta": {
-     "title": "Integraciones de partners — Directorio de partners certificados y verificados de ATLVS",
+     "title": "Integraciones de partners: Directorio de partners certificados y verificados de ATLVS",
      "description": "Integraciones de terceros creadas por partners de ATLVS. Las integraciones de Partner Verificado superan nuestra revisión técnica; las integraciones Certificadas también superan el control de calidad de extremo a extremo."
     },
     "crumbsLabel": "Directorio de partners",
     "title": "Creadas por partners. Verificadas por nosotros.",
-    "lead": "Integraciones de terceros que se conectan a la superficie REST + GraphQL de ATLVS. Las integraciones de Partner Verificado superan nuestra revisión técnica; las integraciones Certificadas también superan el control de calidad de extremo a extremo en un tenant en producción. Crea la tuya —",
+    "lead": "Integraciones de terceros que se conectan a la superficie REST + GraphQL de ATLVS. Las integraciones de Partner Verificado superan nuestra revisión técnica; las integraciones Certificadas también superan el control de calidad de extremo a extremo en un tenant en producción. Crea la tuya:",
     "submitLink": "envía una propuesta",
     "cta": {
      "submit": "Enviar una integración de partner",
@@ -3561,7 +3561,7 @@
    },
    "submit": {
     "meta": {
-     "title": "Enviar una integración de partner — Programa de partners de ATLVS",
+     "title": "Enviar una integración de partner: Programa de partners de ATLVS",
      "description": "Crea una integración sobre la API REST + GraphQL de ATLVS y la incluiremos en nuestro directorio de partners. La revisión de Partner Verificado supera nuestra checklist técnica; la Certificación supera el control de calidad de extremo a extremo en un tenant en producción."
     },
     "title": "Constrúyela. Publícala. Nosotros la listamos.",
@@ -3578,7 +3578,7 @@
      "contactName": "Nombre de contacto",
      "shortDescription": "Descripción corta (una frase)",
      "longDescription": "Descripción larga",
-     "capabilities": "Capacidades — una por línea",
+     "capabilities": "Capacidades (una por línea)",
      "homepageUrl": "URL de la página principal",
      "docsUrl": "URL de la documentación de la integración"
     },
@@ -3590,7 +3590,7 @@
    "detail": {
     "fallbackTitle": "Integraciones",
     "meta": {
-     "title": "Integración de {name} — {short}"
+     "title": "Integración de {name}: {short}"
     },
     "eyebrow": "Integración · {category}",
     "eyebrowBase": "Integración",
@@ -3607,7 +3607,7 @@
    "partnerDetail": {
     "fallbackTitle": "Integración de partner",
     "meta": {
-     "title": "{name} — Integración de partner de ATLVS"
+     "title": "{name}: Integración de partner de ATLVS"
     },
     "ogCertified": "Partner Certificado",
     "ogVerified": "Partner Verificado",
@@ -3626,7 +3626,7 @@
    "crumbsLabel": "Funcionalidades",
    "detail": {
     "fallbackTitle": "Funcionalidad",
-    "fallbackDescription": "ATLVS Technologies — la producción de experiencias, unificada. Cuatro apps, una sola fuente de verdad.",
+    "fallbackDescription": "ATLVS Technologies: la producción de experiencias, unificada. Cuatro apps, una sola fuente de verdad.",
     "beforeAfter": {
      "heading": "Antes y después.",
      "sub": "Qué cambia cuando este módulo entra en tu stack.",
@@ -3649,17 +3649,17 @@
    "industry": {
     "fallbackTitle": "Funcionalidad × Industria",
     "meta": {
-     "title": "{module} para {industry} — {sub}",
+     "title": "{module} para {industry}: {sub}",
      "description": "{blurb} Creado para equipos de {industry} que operan {tagline}."
     },
     "ogTitle": "{module} para {industry}",
-    "useCase": "{title} — {body} En trabajos de {industry}, esto se ve como {tagline}.",
+    "useCase": "{title}. {body} En trabajos de {industry}, esto se ve como {tagline}.",
     "howItShowsUp": "Cómo se ve en la práctica",
     "teamsRunOn": "Con qué de {module} operan los equipos de {industry}.",
     "industryOutcomes": "Resultados por industria",
     "whatChanges": "Qué cambia para los operadores de {industry}.",
     "featureSet": "El conjunto de funcionalidades de {module}.",
-    "featureSetSub": "Las mismas primitivas que vienen en nuestro módulo {module} — aplicadas a los flujos de trabajo de {industry}.",
+    "featureSetSub": "Las mismas primitivas que vienen en nuestro módulo {module}, aplicadas a los flujos de trabajo de {industry}.",
     "cta": {
      "runTitle": "Opera {module} en producción de {industry}.",
      "runSubtitle": "Regístrate gratis para equipos pequeños. Precio por organización a partir de ahí."
@@ -3676,7 +3676,7 @@
     "fallbackTitle": "Solución",
     "fallbackDescription": "Solución por industria",
     "meta": {
-     "title": "{name} — {tagline} en ATLVS Technologies"
+     "title": "{name}: {tagline} en ATLVS Technologies"
     },
     "cta": {
      "bookDemo": "Reservar una demo"
@@ -3692,7 +3692,7 @@
    "detail": {
     "fallbackTitle": "Equipos",
     "meta": {
-     "title": "{role} — {hero}"
+     "title": "{role}: {hero}"
     },
     "workflows": "Qué operan los {role} en el día a día.",
     "familiar": "¿Te suena?",
@@ -3712,7 +3712,7 @@
    "detail": {
     "fallbackTitle": "Glosario",
     "meta": {
-     "title": "{term} — Definición"
+     "title": "{term}: Definición"
     },
     "eyebrow": "Glosario · {category}",
     "also": "También: {list}",
@@ -3727,8 +3727,8 @@
   "brandKit": {
    "foundations": {
     "meta": {
-     "title": "Fundamentos · ATLVS Technologies — Kit de marca e interfaz",
-     "description": "Fundamentos de marca de ATLVS Technologies: la marca Waypoint, color, tipografía (MONUMENT — Anton + Hanken Grotesk), espaciado, radios, elevación, movimiento e iconografía en las cuatro apps."
+     "title": "Fundamentos · ATLVS Technologies · Kit de marca e interfaz",
+     "description": "Fundamentos de marca de ATLVS Technologies: la marca Waypoint, color, tipografía (MONUMENT con Anton + Hanken Grotesk), espaciado, radios, elevación, movimiento e iconografía en las cuatro apps."
     },
     "nav": {
      "aria": "Secciones de Fundamentos",
@@ -3751,16 +3751,16 @@
      "lead": {
       "before": "La marca de ATLVS es un",
       "waypoint": "waypoint",
-      "after": "— una estrella de navegación de ocho puntas con un vacío central, todo el sistema de navegación tallado en un único glifo geométrico. Registro SaaS neutral, recoloreado según el producto. Se distingue de la calavera del barco fantasma cósmico de GHXSTSHIP, que es la marca exclusiva de la empresa matriz."
+      "after": ": una estrella de navegación de ocho puntas con un vacío central, todo el sistema de navegación tallado en un único glifo geométrico. Registro SaaS neutral, recoloreado según el producto. Se distingue de la calavera del barco fantasma cósmico de GHXSTSHIP, que es la marca exclusiva de la empresa matriz."
      },
-     "note": "La placa lleva el acento del producto; la estrella permanece blanca (o en tinta sobre fondos claros). El logotipo es siempre mayúsculas espaciadas y sin salto de línea — nunca en minúsculas, nunca sin espaciado salvo en URLs e identificadores.",
+     "note": "La placa lleva el acento del producto; la estrella permanece blanca (o en tinta sobre fondos claros). El logotipo es siempre mayúsculas espaciadas y sin salto de línea: nunca en minúsculas, nunca sin espaciado salvo en URLs e identificadores.",
      "spec": {
       "colWordmark": "Especificación del logotipo",
       "colSetting": "Composición",
       "faceLabel": "Fuente",
-      "faceValue": "— geométrica, solo para el bloque del logo. Los títulos usan Anton; el cuerpo y la interfaz usan Hanken Grotesk.",
+      "faceValue": "Geométrica, solo para el bloque del logo. Los títulos usan Anton; el cuerpo y la interfaz usan Hanken Grotesk.",
       "aLabel": "La A",
-      "aBefore": "Un pico desnudo —",
+      "aBefore": "Un pico desnudo,",
       "aBold": "sin travesaño",
       "aAfter": ", la V invertida. La A y la V se leen como formas en espejo.",
       "settingLabel": "Composición",
@@ -3774,13 +3774,13 @@
     },
     "appIcons": {
      "heading": "Una marca, cuatro acentos",
-     "lead": "Cada producto es el mismo waypoint sobre su propia placa de acento — al instante una familia, al instante distinto.",
+     "lead": "Cada producto es el mismo waypoint sobre su propia placa de acento: al instante una familia, al instante distinto.",
      "roleAtlvs": "Productor / Interno",
      "roleCompvss": "Crew / Proveedor / Talento",
      "roleGvteway": "Invitado / Cliente",
      "inkTitle": "Tinta",
      "roleInk": "Neutro / Suite",
-     "minSize": "Tamaño mínimo — la marca se mantiene a cualquier escala",
+     "minSize": "Tamaño mínimo: la marca se mantiene a cualquier escala",
      "bare16": "16 · sin placa"
     },
     "clearspace": {
@@ -3796,14 +3796,14 @@
       "4after": ", sin salto de línea."
      },
      "dontItems": {
-      "1": "Recolorear o aplicar degradado a la estrella misma — solo la placa lleva color.",
+      "1": "Recolorear o aplicar degradado a la estrella misma; solo la placa lleva color.",
       "2": "Rotar, estirar o añadir el semitono cósmico o la calavera.",
       "3": "Componer el logotipo sin espaciado o en minúsculas.",
       "4": "Colocar la marca sin placa sobre una foto recargada sin la placa sólida."
      },
      "endorsement": {
       "label": "Respaldo de la matriz.",
-      "body": "La calavera de GHXSTSHIP aparece solo en el bloque de respaldo — “una empresa de ATLVS Technologies, una compañía de GHXSTSHIP Industries.” Nunca es el icono de la app de producto."
+      "body": "La calavera de GHXSTSHIP aparece solo en el bloque de respaldo: “una empresa de ATLVS Technologies, una compañía de GHXSTSHIP Industries.” Nunca es el icono de la app de producto."
      }
     },
     "color": {
@@ -3814,9 +3814,9 @@
       "after": "y se reajusta por modo para lograr contraste AA."
      },
      "surfacesText": "Superficies y texto",
-     "productIdentity": "Identidad de producto — el acento que posee cada app",
+     "productIdentity": "Identidad de producto: el acento que posee cada app",
      "accentWeakTint": "Tinte de acento suave",
-     "semantic": "Semántico — compartido por los cuatro productos",
+     "semantic": "Semántico: compartido por los cuatro productos",
      "swatch": {
       "canvas": "Lienzo",
       "surface": "Superficie",
@@ -3839,14 +3839,14 @@
       "monument": "Monument.",
       "s1": "Los títulos y las métricas se componen en",
       "anton": "Anton, una fuente de display ultracondensada en mayúsculas",
-      "s2": "— un único peso negro que da al producto una presencia a escala de cartel. El cuerpo y la interfaz se mantienen en",
+      "s2": ", un único peso negro que da al producto una presencia a escala de cartel. El cuerpo y la interfaz se mantienen en",
       "s3": "para que tablas y formularios se lean nítidos;",
       "s4": "es el lenguaje de los antetítulos y las coordenadas (identificadores, códigos, etiquetas); y",
       "s5": "es exclusivamente el bloque construido del logotipo. Los títulos de display van en MAYÚSCULAS (Anton es una fuente de mayúsculas); el cuerpo y las etiquetas se mantienen en formato de título / oración."
      },
      "face": {
       "anton": "Display · títulos · estadísticas",
-      "hanken": "Cuerpo · UI · 400–800",
+      "hanken": "Cuerpo · UI · 400 a 800",
       "mono": "Antetítulos · identificadores · códigos",
       "jost": "Solo bloque del logotipo"
      },
@@ -3855,7 +3855,7 @@
       "small": "Metadatos secundarios y texto de ayuda."
      },
      "headerTreatments": "Tratamientos de encabezado",
-     "headerTreatmentsNote": "Tres formas autorizadas de desplegar el titular ancho. Usa la adecuada para cada contexto — nunca mezcles más de una por vista.",
+     "headerTreatmentsNote": "Tres formas autorizadas de desplegar el titular ancho. Usa la adecuada para cada contexto; nunca mezcles más de una por vista.",
      "a2": {
       "title": "A2 · Cotidiano",
       "note": "Barra de acento + kicker mono en vivo. La opción por defecto para el chrome de la app y los encabezados de página."
@@ -3864,7 +3864,7 @@
       "title": "A3 · Hero",
       "sampleBefore": "Dirige el",
       "samplePop": "mostrar",
-      "note": "Una palabra toma el acento del producto — los titulares se autobrandean. Portadas, marketing, splash."
+      "note": "Una palabra toma el acento del producto: los titulares se autobrandean. Portadas, marketing, splash."
      },
      "a4": {
       "title": "A4 · Métricas",
@@ -3877,13 +3877,13 @@
      "eyebrow": "Fundamentos · Espacio",
      "heading": "Espaciado",
      "lead": {
-      "before": "Una rejilla base de 4px. La densidad intercambia el ritmo de controles y filas — los mismos tokens se ajustan bajo"
+      "before": "Una rejilla base de 4px. La densidad intercambia el ritmo de controles y filas; los mismos tokens se ajustan bajo"
      }
     },
     "radii": {
      "eyebrow": "Fundamentos · Radio",
      "heading": "Radios",
-     "lead": "Suaves, amigables con las herramientas de productividad — nunca afilados al estilo pop-art. Píldoras solo para chips y toggles."
+     "lead": "Suaves, amigables con las herramientas de productividad; nunca afilados al estilo pop-art. Píldoras solo para chips y toggles."
     },
     "elevation": {
      "eyebrow": "Fundamentos · Elevación",
@@ -3898,7 +3898,7 @@
      "heading": "Movimiento",
      "lead": {
       "s1": "Rápido y sin aspavientos. Una curva de aceleración, duraciones cortas y una regla estricta: nunca animes una transición de un",
-      "s2": "respaldado por tokens durante un cambio de tema — recolorea al instante y anima",
+      "s2": "respaldado por tokens durante un cambio de tema; recolorea al instante y anima",
       "or": "o",
       "instead": "en su lugar."
      },
@@ -3923,11 +3923,11 @@
      "eyebrow": "Fundamentos · Iconos",
      "heading": "Iconografía",
      "lead": {
-      "before": "Phosphor Icons —",
+      "before": "Phosphor Icons.",
       "bold": "Negrita",
       "mid": "para la interfaz,",
       "fill": "Relleno",
-      "after": "para sellos de estado y énfasis. Alinéalos con el texto a 16–20px; acciones independientes a 24px. Un solo color, heredando"
+      "after": "para sellos de estado y énfasis. Alinéalos con el texto a 16 a 20px; acciones independientes a 24px. Un solo color, heredando"
      }
     },
     "footer": {
@@ -3947,11 +3947,11 @@
    "crewAtPeak": "Equipo en su pico",
    "personOne": "persona",
    "personMany": "personas",
-   "stackMonthly": "Stack actual — mensual",
+   "stackMonthly": "Stack actual: mensual",
    "perMo": "/ mes",
    "stackNote": "Predeterminado $1,400/mes = una herramienta de PM + ticketing + firma electrónica + contabilidad + almacenamiento de archivos + chat + una herramienta de órdenes de compra.",
-   "stackAnnual": "Stack actual — anual",
-   "atlvsAnnual": "ATLVS Production — anual",
+   "stackAnnual": "Stack actual: anual",
+   "atlvsAnnual": "ATLVS Production: anual",
    "annualSavings": "Ahorro anual",
    "currentPerShow": "Actual por show",
    "atlvsPerShow": "ATLVS por show",
@@ -3966,7 +3966,7 @@
     "tier1Hint": "NYC, SF, LA, Chicago",
     "tier2Label": "Metrópoli Nivel 2",
     "tier2Hint": "Grandes ciudades regionales",
-    "intlLabel": "Internacional — promedio",
+    "intlLabel": "Internacional: promedio",
     "intlHint": "Base DSSR"
    },
    "leg": "Tramo {n}",
@@ -3975,7 +3975,7 @@
    "cityPlaceholder": "p. ej. Las Vegas",
    "days": "Días",
    "headcount": "Personal",
-   "dailyRate": "Tarifa diaria — USD",
+   "dailyRate": "Tarifa diaria (USD)",
    "legTotal": "Total del tramo",
    "addLeg": "Agregar tramo",
    "total": "Total",
@@ -3987,10 +3987,10 @@
    "title": "El kit de logo",
    "intro": "La marca ATLVS es un waypoint: una estrella de navegación de ocho puntas con un vacío central, todo el sistema de navegación representado como un solo glifo geométrico. Registro neutral de SaaS; cambia de color según el producto. Distinta de la calavera cósmica del barco fantasma de GHXSTSHIP, la marca de la empresa matriz.",
    "primaryLockup": "Lockup principal",
-   "appIcons": "Iconos de las apps — una marca, cuatro acentos",
-   "favicon": "Favicon / Tamaño mínimo — la marca se mantiene a cualquier escala",
-   "clearspace": "Espacio libre — mantén un margen = ½ de la altura de la marca por todos los lados",
-   "endorsement": "Aval — ATLVS + matriz GHXSTSHIP",
+   "appIcons": "Iconos de las apps: una marca, cuatro acentos",
+   "favicon": "Favicon / Tamaño mínimo: la marca se mantiene a cualquier escala",
+   "clearspace": "Espacio libre: mantén un margen = ½ de la altura de la marca por todos los lados",
+   "endorsement": "Aval: ATLVS + matriz GHXSTSHIP",
    "parentCompany": "Empresa de Industries",
    "doDont": "Sí · No",
    "do": "Sí",
@@ -4060,14 +4060,14 @@
    "couldntStart": "No se pudo iniciar el inicio de sesión con {provider}",
    "notConfigured": "Proveedor de OAuth no configurado",
    "invalidProvider": "Proveedor inválido",
-   "missingCode": "El inicio de sesión no se completó — inténtalo de nuevo"
+   "missingCode": "El inicio de sesión no se completó. Inténtalo de nuevo"
   },
   "magicLink": {
    "title": "Enviarme un enlace mágico",
-   "subtitle": "Te enviaremos un enlace de inicio de sesión a tu bandeja de entrada — sin contraseña.",
+   "subtitle": "Te enviaremos un enlace de inicio de sesión a tu bandeja de entrada, sin contraseña.",
    "submit": "Enviar enlace mágico",
    "submitting": "Enviando",
-   "success": "Revisa tu bandeja de entrada — enviamos un enlace de inicio de sesión que caduca en 1 hora.",
+   "success": "Revisa tu bandeja de entrada: enviamos un enlace de inicio de sesión que caduca en 1 hora.",
    "backToLogin": "Volver al inicio de sesión",
    "expiredTitle": "Enlace caducado o no válido",
    "expiredSubtitle": "No pudimos iniciar tu sesión con ese enlace.",
@@ -4122,12 +4122,12 @@
   },
   "errors": {
    "invalidCredentials": "Correo o contraseña inválidos",
-   "accountExists": "Ya existe una cuenta con este correo — inicia sesión",
+   "accountExists": "Ya existe una cuenta con este correo. Inicia sesión",
    "duplicateEmail": "Este correo ya está registrado",
    "weakPassword": "La contraseña debe tener al menos 8 caracteres",
    "notConfigured": "Supabase no configurado. Define NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
-   "signupNoUser": "El registro falló — no se devolvió usuario.",
-   "unknown": "Algo salió mal — inténtalo de nuevo"
+   "signupNoUser": "El registro falló: no se devolvió usuario.",
+   "unknown": "Algo salió mal. Inténtalo de nuevo"
   },
   "error": {
    "title": "Error de inicio de sesión",
@@ -4181,14 +4181,14 @@
    "submitting": "Enviando…"
   },
   "roles": {
-   "admin": "Administrador — control total de la organización",
-   "controller": "Controller — finanzas y operaciones",
-   "collaborator": "Colaborador — operaciones lectura/escritura",
-   "contractor": "Contratista — acceso limitado",
-   "crew": "Equipo — campo / móvil",
-   "client": "Cliente — portal externo",
-   "viewer": "Visor — solo lectura",
-   "community": "Comunidad — mínimo"
+   "admin": "Administrador: control total de la organización",
+   "controller": "Controller: finanzas y operaciones",
+   "collaborator": "Colaborador: operaciones lectura/escritura",
+   "contractor": "Contratista: acceso limitado",
+   "crew": "Equipo: campo / móvil",
+   "client": "Cliente: portal externo",
+   "viewer": "Visor: solo lectura",
+   "community": "Comunidad: mínimo"
   },
   "pending": {
    "heading": "Pendientes ({count})",
@@ -4225,7 +4225,7 @@
  "theme": {
   "sheet": {
    "title": "Elige un tema de diseño",
-   "description": "Ocho temas completamente realizados. Tu elección se aplica al instante en cada página — sin recarga, sin registro. Lo recordaremos en este dispositivo.",
+   "description": "Ocho temas completamente realizados. Tu elección se aplica al instante en cada página, sin recarga y sin registro. Lo recordaremos en este dispositivo.",
    "appearanceHeading": "Apariencia",
    "appearanceSubtitle": "Elige un estilo para tu espacio de trabajo. Se aplica al instante en todas partes.",
    "matchSystem": "Coincidir con el sistema",
@@ -4284,7 +4284,7 @@
   "toggleTheme": "Cambiar tema",
   "toggleMenu": "Alternar menú",
   "openMenu": "Abrir menú",
-  "homeAriaLabel": "ATLVS Technologies — inicio",
+  "homeAriaLabel": "ATLVS Technologies: inicio",
   "loading": "Cargando",
   "saving": "Guardando",
   "saved": "Guardado",
@@ -4294,7 +4294,7 @@
  },
  "community": {
   "meta": {
-   "title": "Comunidad — los equipos de producción que construyen sobre ATLVS",
+   "title": "Comunidad: los equipos de producción que construyen sobre ATLVS",
    "description": "Los festivales, giras, agencias y talleres que ejecutan su producción en ATLVS, GVTEWAY y COMPVSS. Historias de miembros, números y lo que realmente entregan."
   },
   "hero": {
@@ -4323,7 +4323,7 @@
   }
  },
  "rate": {
-  "tooMany": "Demasiadas solicitudes — inténtalo de nuevo en breve",
+  "tooMany": "Demasiadas solicitudes. Inténtalo de nuevo en breve",
   "retryIn": "Reintentar en {seconds}s"
  },
  "errors": {
@@ -4331,7 +4331,7 @@
   "notFound": "No encontrado",
   "forbidden": "No tienes acceso a esto",
   "unauthorized": "Inicia sesión para continuar",
-  "offline": "Estás sin conexión — las acciones en cola se sincronizarán al volver"
+  "offline": "Estás sin conexión. Las acciones en cola se sincronizarán al volver"
  },
  "bookings": {
   "title": "Reservas",
@@ -4428,7 +4428,7 @@
  },
  "insightsPool": {
   "title": "Información",
-  "subtitle": "Agregados mensuales anonimizados por género — opt-in, mínimo k≥3.",
+  "subtitle": "Agregados mensuales anonimizados por género: opt-in, mínimo k≥3.",
   "contributing": "contribuyendo",
   "notContributing": "no contribuyendo",
   "month": "Mes",
@@ -4670,7 +4670,7 @@
     "title": "Política",
     "zonePlural": "zonas",
     "zoneSingular": "zona",
-    "zoneVenueHeader": "Zona — Sede"
+    "zoneVenueHeader": "Zona / Sede"
    },
    "policyLabel": "Política",
    "scans": {
@@ -5197,7 +5197,7 @@
      "storagePath": "Ruta de almacenamiento"
     },
     "placeholder": {
-     "name": "Torre-A Arquitectura — Nivel 03",
+     "name": "Torre-A Arquitectura, Nivel 03",
      "versionLabel": "Rev 0, 50% DD"
     },
     "selectProject": "Seleccionar…"
@@ -5534,7 +5534,7 @@
     "title": "Registrar captura de realidad",
     "submit": "Registrar captura",
     "name": "Nombre",
-    "namePlaceholder": "Recorrido sala mecánica N3 — 2026-05-24",
+    "namePlaceholder": "Recorrido sala mecánica N3, 2026-05-24",
     "project": "Proyecto",
     "captureDate": "Fecha de captura",
     "panoramas": "Panorámicas (aprox.)",
@@ -6019,7 +6019,7 @@
      "kindLabel": "Tipo",
      "nameLabel": "Nombre",
      "projectLabel": "Proyecto",
-     "projectNone": "— Ninguno —",
+     "projectNone": "Ninguno",
      "title": "Nuevo canal",
      "topicLabel": "Tema"
     },
@@ -6096,7 +6096,7 @@
     "numberPlaceholder": "Se genera automáticamente si se deja en blanco",
     "submit": "Crear contrato",
     "title": "Nuevo contrato",
-    "titlePlaceholder": "Patrocinio — MMW26"
+    "titlePlaceholder": "Patrocinio MMW26"
    }
   },
   "dashboard": {
@@ -6251,7 +6251,7 @@
     "sheets": "Planos",
     "state": "Estado"
    },
-   "none": "— ninguno —",
+   "none": "ninguno",
    "edit": {
     "breadcrumbs": {
      "drawings": "Planos"
@@ -6346,7 +6346,7 @@
     "body": "Cuerpo / notas",
     "expires": "Vence",
     "eyebrow": "Legal",
-    "noProject": "— Sin proyecto —",
+    "noProject": "Sin proyecto",
     "subject": "Asunto",
     "submit": "Crear sobre",
     "targetId": "ID del registro de destino",
@@ -6501,9 +6501,9 @@
     "startsLabel": "Comienza",
     "endsLabel": "Termina",
     "projectLabel": "Proyecto",
-    "noProject": "— Sin proyecto —",
+    "noProject": "Sin proyecto",
     "locationLabel": "Ubicación",
-    "noLocation": "— Sin ubicación —",
+    "noLocation": "Sin ubicación",
     "descriptionLabel": "Descripción",
     "eyebrow": "Trabajo",
     "title": "Nuevo evento"
@@ -6593,7 +6593,7 @@
      "category": "Categoría",
      "amountCents": "Importe (céntimos)",
      "activation": "Activación",
-     "amount": "Presupuesto — USD",
+     "amount": "Presupuesto (USD)",
      "class": "Clase",
      "department": "Departamento",
      "discipline": "Disciplina",
@@ -6605,13 +6605,13 @@
      "location": "Ubicación",
      "phase": "Fase (8 puertas)",
      "quantity": "Cantidad",
-     "rate": "Tarifa — USD",
+     "rate": "Tarifa (USD)",
      "rateHint": "Estimación = Cantidad × Tarifa (calculado por la BD)",
      "status": "Estado",
      "team": "Equipo",
      "tier": "Nivel",
      "vendor": "Proveedor",
-     "xyz": "XYZ — Comportamiento de costos"
+     "xyz": "XYZ: Comportamiento de costos"
     },
     "detail": {
      "title": "Presupuesto",
@@ -6655,13 +6655,13 @@
      "location": "Ubicación",
      "phase": "Fase (8 puertas)",
      "quantity": "Cantidad",
-     "rate": "Tarifa — USD",
+     "rate": "Tarifa (USD)",
      "rateHint": "Estimación = Cantidad × Tarifa (calculado por la BD)",
      "status": "Estado",
      "team": "Equipo",
      "tier": "Nivel",
      "vendor": "Proveedor",
-     "xyz": "XYZ — Comportamiento de costos"
+     "xyz": "XYZ: Comportamiento de costos"
     },
     "title": "Presupuestos",
     "configureSupabase": "Configura Supabase.",
@@ -6679,12 +6679,12 @@
     "summary": {
      "eyebrow": "Finanzas",
      "title": "Resumen de Presupuesto",
-     "subtitle": "Rollups XPMS en vivo. Curva de fases = solo Scope — Fee y Contingencia se consolidan por separado.",
-     "byDepartment": "Por Departamento — Clase XPMS",
-     "byPhase": "Por Fase — Ciclo de 8 Gates · Solo Scope",
+     "subtitle": "Rollups XPMS en vivo. Curva de fases = solo Scope; Fee y Contingencia se consolidan por separado.",
+     "byDepartment": "Por Departamento: Clase XPMS",
+     "byPhase": "Por Fase: Ciclo de 8 Gates · Solo Scope",
      "byLineType": "Por Tipo de Línea",
-     "byDiscipline": "Por Disciplina — Solo Scope",
-     "byXyz": "Por XYZ — Comportamiento de Costo · All-in",
+     "byDiscipline": "Por Disciplina: Solo Scope",
+     "byXyz": "Por XYZ: Comportamiento de Costo · All-in",
      "total": "TOTAL",
      "grandTotal": "GRAN TOTAL",
      "totalContract": "CONTRATO TOTAL",
@@ -6713,7 +6713,7 @@
     },
     "import": {
      "eyebrow": "Finanzas",
-     "title": "Importar presupuesto — CSV / TSV"
+     "title": "Importar presupuesto (CSV / TSV)"
     },
     "importAction": "Importar",
     "summaryAction": "Resumen"
@@ -6809,10 +6809,10 @@
       "consolidationState": "Estado de Consolidación",
       "effectiveFrom": "Vigente Desde",
       "effectiveTo": "Vigente Hasta",
-      "ownershipPct": "% de propiedad — Esta entidad en la matriz"
+      "ownershipPct": "% de propiedad: Esta entidad en la matriz"
      },
      "parent": {
-      "topLevel": "— (nivel superior)"
+      "topLevel": "(nivel superior)"
      }
     },
     "eyebrow": "Finanzas",
@@ -6852,7 +6852,7 @@
      "statusLabel": "Estado",
      "spentOnLabel": "Gastado El",
      "amountLabel": "Monto",
-     "departmentLabel": "Departamento — XPMS",
+     "departmentLabel": "Departamento XPMS",
      "disciplineLabel": "Disciplina",
      "itemLabel": "Ítem",
      "phaseLabel": "Fase (8 puertas)",
@@ -6896,9 +6896,9 @@
      "category": "Categoría",
      "categoryPlaceholder": "Viajes, comidas, equipo…",
      "projectOptional": "Proyecto (opcional)",
-     "noProject": "— Sin proyecto —",
+     "noProject": "Sin proyecto",
      "title": "Registrar Gasto",
-     "department": "Departamento — XPMS",
+     "department": "Departamento XPMS",
      "discipline": "Disciplina",
      "item": "Ítem",
      "phase": "Fase (8 puertas)",
@@ -7048,9 +7048,9 @@
      "title": "Nueva factura",
      "titlePlaceholder": "Anticipo de producción del evento",
      "client": "Cliente",
-     "noClient": "— Sin cliente —",
+     "noClient": "Sin cliente",
      "project": "Proyecto",
-     "noProject": "— Sin proyecto —",
+     "noProject": "Sin proyecto",
      "amount": "Importe",
      "currency": "Divisa",
      "due": "Vencimiento",
@@ -7146,7 +7146,7 @@
      "rateCents": "Tarifa (centavos/milla)",
      "loggedOn": "Registrado el",
      "notes": "Notas",
-     "rate": "Tarifa — Por milla"
+     "rate": "Tarifa por milla"
     },
     "breadcrumb": "Kilometraje",
     "detail": {
@@ -7321,7 +7321,7 @@
    },
    "periods": {
     "controls": {
-     "terminal": "Estado terminal — no hay más transiciones.",
+     "terminal": "Estado terminal. No hay más transiciones.",
      "from": "Desde"
     },
     "detail": {
@@ -7527,7 +7527,7 @@
      "notes": "Notas",
      "percentComplete": "Porcentaje completado",
      "project": "Proyecto",
-     "selectProject": "— Selecciona un proyecto —",
+     "selectProject": "Selecciona un proyecto",
      "snapshotDate": "Fecha de instantánea",
      "submit": "Crear instantánea",
      "suretyCarrier": "Aseguradora de fianza",
@@ -7598,7 +7598,7 @@
      "nameLabel": "Nombre de la cuenta",
      "normalLabel": "Saldo normal",
      "parentLabel": "Cuenta principal",
-     "parentNone": "— Ninguna (nivel superior) —",
+     "parentNone": "Ninguna (nivel superior)",
      "postableLabel": "Imputable (los asientos pueden registrarse directamente)",
      "title": "Nueva cuenta",
      "typeLabel": "Tipo de cuenta"
@@ -7642,7 +7642,7 @@
      "eyebrow": "Libro mayor",
      "form": {
       "account": "Cuenta",
-      "amount": "Importe — USD",
+      "amount": "Importe (USD)",
       "credit": "Haber",
       "debit": "Debe",
       "memo": "Concepto",
@@ -8374,7 +8374,7 @@
       "method": "Método",
       "party": "Parte",
       "payment": "Pago",
-      "paymentUsd": "Pago — USD",
+      "paymentUsd": "Pago (USD)",
       "recurring": "Recurrente",
       "redline": "Resumen de cambios",
       "role": "Rol",
@@ -8432,7 +8432,7 @@
      "startAtLabel": "Fecha de inicio",
      "title": "Nuevo contrato",
      "titleLabel": "Título",
-     "totalValueLabel": "Valor total — USD"
+     "totalValueLabel": "Valor total (USD)"
     },
     "newContract": "+ Nuevo contrato",
     "title": "Contratos"
@@ -8505,7 +8505,7 @@
     "selectedLabel": "Seleccionada:",
     "eyebrow": "Ubicaciones",
     "title": "Selector de ubicación",
-    "subtitle": "Autocompletado asíncrono — pégalo en cualquier formulario"
+    "subtitle": "Autocompletado asíncrono: pégalo en cualquier formulario"
    }
   },
   "logistics": {
@@ -9241,7 +9241,7 @@
     "configureSupabase": "Configura Supabase.",
     "eyebrow": "Marketplace",
     "submitLabel": "Guardar ajustes",
-    "takeRateLabel": "Comisión — bps",
+    "takeRateLabel": "Comisión (bps)",
     "title": "Ajustes",
     "visibilityLegend": "Visibilidad"
    },
@@ -9488,7 +9488,7 @@
    "lookAhead": {
     "dispatchFallback": "Despacho",
     "eyebrow": "Operaciones",
-    "title": "Proyección — próximos 21 días",
+    "title": "Proyección: próximos 21 días",
     "empty": "Nada programado en los próximos 21 días."
    },
    "maintenance": {
@@ -9511,7 +9511,7 @@
       "outcomeLabel": "Resultado",
       "outcome": {
        "pass": "Aprobado",
-       "fail": "Falla — acción requerida"
+       "fail": "Falla: acción requerida"
       },
       "notesLabel": "Notas",
       "submit": "Marcar Completado"
@@ -9605,7 +9605,7 @@
       "typeLabel": "Tipo",
       "typeMajor": "Mayor",
       "typeNormal": "Normal",
-      "typeStandard": "Estándar — Preaprobado"
+      "typeStandard": "Estándar: Preaprobado"
      },
      "newChange": "+ Nuevo cambio",
      "subtitle": {
@@ -9641,10 +9641,10 @@
       "descriptionLabel": "Descripción",
       "eyebrow": "Operaciones",
       "priorityLabel": "Prioridad",
-      "priorityP1": "P1 — Crítica",
-      "priorityP2": "P2 — Alta",
-      "priorityP3": "P3 — Media",
-      "priorityP4": "P4 — Baja",
+      "priorityP1": "P1: Crítica",
+      "priorityP2": "P2: Alta",
+      "priorityP3": "P3: Media",
+      "priorityP4": "P4: Baja",
       "submit": "Crear problema",
       "title": "Nuevo registro de problema",
       "titleLabel": "Título",
@@ -9861,7 +9861,7 @@
     "assetLinker": {
      "form": {
       "assignmentLabel": "Asignación de Credencial",
-      "assignmentPlaceholder": "— Seleccionar —",
+      "assignmentPlaceholder": "Seleccionar",
       "untitled": "Sin Título",
       "tokenKindLabel": "Tipo de Token",
       "kind": {
@@ -10032,15 +10032,15 @@
    },
    "invites": {
     "role": {
-     "admin": "Admin — control total de la org excepto facturación",
-     "manager": "Manager — proyectos y personas, sin facturación",
-     "member": "Miembro — acceso por membresía de proyecto"
+     "admin": "Admin: control total de la org excepto facturación",
+     "manager": "Manager: proyectos y personas, sin facturación",
+     "member": "Miembro: acceso por membresía de proyecto"
     },
     "submit": "Enviar Invitación",
     "emailLabel": "Correo electrónico",
     "platformRole": "Rol de plataforma",
     "scopeProject": "Acotar a un proyecto (opcional)",
-    "orgWide": "— Invitación a nivel org —",
+    "orgWide": "Invitación a nivel org",
     "projectRole": "Rol de proyecto",
     "eyebrow": "Personas",
     "title": "Invitaciones",
@@ -10064,7 +10064,7 @@
     "copyLink": "Copiar enlace",
     "history": "Historial",
     "persona": "Persona del portal · Opcional",
-    "personaAuto": "— Derivar del rol —"
+    "personaAuto": "Derivar del rol"
    },
    "msas": {
     "detail": {
@@ -10113,7 +10113,7 @@
       "recipient": "Destinatario",
       "role": "Rol",
       "reportsTo": "Reporta A",
-      "none": "— Ninguno —",
+      "none": "Ninguno",
       "venue": "Recinto",
       "issuingEntity": "Entidad Emisora",
       "classification": "Clasificación"
@@ -10170,7 +10170,7 @@
     },
     "lifecycle": {
      "title": "Ciclo de Vida",
-     "markSent": "Marcar Enviada — Activar Enlace Público",
+     "markSent": "Marcar Enviada y Activar Enlace Público",
      "msaRequired": "MSA Requerido Antes de Enviar",
      "issueMsa": "Emitir MSA →",
      "withdraw": "Retirar Carta",
@@ -10178,7 +10178,7 @@
     },
     "share": {
      "title": "Enlace Público para Compartir",
-     "statusDraft": "Borrador — aún no enviada",
+     "statusDraft": "Borrador: aún no enviada",
      "statusActive": "Enlace público activo",
      "copied": "Copiado",
      "copyLink": "Copiar enlace",
@@ -10679,9 +10679,9 @@
      "submit": "Crear OC",
      "titleLabel": "Título",
      "vendorLabel": "Proveedor",
-     "noVendor": "— Sin proveedor —",
+     "noVendor": "Sin proveedor",
      "projectLabel": "Proyecto",
-     "noProject": "— Sin proyecto —",
+     "noProject": "Sin proyecto",
      "amountLabel": "Monto (USD)",
      "eyebrow": "Compras",
      "title": "Nueva Orden de Compra"
@@ -10792,7 +10792,7 @@
      "submit": "Actualizar Visibilidad",
      "visibilityLabel": "Visibilidad",
      "visibility": {
-      "private": "Privada — solo proveedores invitados"
+      "private": "Privada: solo proveedores invitados"
      },
      "regionLabel": "Región",
      "budgetBandLabel": "Rango de Presupuesto",
@@ -11076,7 +11076,7 @@
      "state": "Estado",
      "notes": "Notas",
      "award": "Adjudicar",
-     "addVendorPlaceholder": "— Agregar proveedor —",
+     "addVendorPlaceholder": "Agregar proveedor",
      "inviteVendor": "Invitar Proveedor"
     },
     "title": "Difusiones",
@@ -11507,7 +11507,7 @@
      "startsLabel": "Inicia",
      "endsLabel": "Termina",
      "projectLabel": "Proyecto",
-     "projectNone": "— Sin proyecto —",
+     "projectNone": "Sin proyecto",
      "rateLabel": "Tarifa (USD)",
      "eyebrow": "Producción",
      "title": "Nueva Renta"
@@ -11551,7 +11551,7 @@
     "subtitleOne": "{count} cue en el plan del show",
     "subtitleOther": "{count} cues en el plan del show",
     "addCue": "Agregar un Cue",
-    "empty": "Aún no hay cues — crea uno arriba.",
+    "empty": "Aún no hay cues. Crea uno arriba.",
     "countOne": "{count} cue",
     "countOther": "{count} cues",
     "col": {
@@ -11769,7 +11769,7 @@
      "t3Runs14d": "Recorridos T3 · 14 d",
      "vipCategories": "Categorías VIP"
     },
-    "t3FleetHeading": "Flota T3 — próximos 14 días",
+    "t3FleetHeading": "Flota T3: próximos 14 días",
     "title": "Protocolo",
     "vipCategoriesHeading": "Categorías de acreditación VIP"
    },
@@ -12238,7 +12238,7 @@
      "archived": "Archivado",
      "complete": "Completo"
     },
-    "none": "— Ninguno —",
+    "none": "Ninguno",
     "scope": {
      "local": "Local",
      "regional": "Regional",
@@ -12330,7 +12330,7 @@
      "sectionsLabel": "Secciones:",
      "saving": "Guardando…",
      "saveButton": "Guardar guía",
-     "invalidJson": "La configuración debe ser JSON válido — {detail}"
+     "invalidJson": "La configuración debe ser JSON válido: {detail}"
     },
     "access": {
      "issueTitle": "Emitir un nuevo código",
@@ -12341,7 +12341,7 @@
      "maxUsesPlaceholder": "ilimitado",
      "generating": "Generando…",
      "generate": "Generar código",
-     "copyShareEyebrow": "Copia y comparte — se muestra una sola vez",
+     "copyShareEyebrow": "Copia y comparte: se muestra una sola vez",
      "copyCode": "Copiar código",
      "activeCodes": "Códigos activos",
      "noCodesIssued": "Sin códigos emitidos",
@@ -12361,7 +12361,7 @@
      "colIp": "IP",
      "colAgent": "Agente",
      "tipBadge": "Consejo",
-     "publicBadge": "Público — sin código requerido",
+     "publicBadge": "Público: sin código requerido",
      "publicUrlLabel": "URL Pública:",
      "editGuideContent": "Editar contenido de la guía",
      "persona": {
@@ -12447,7 +12447,7 @@
     "spent": "Gastado",
     "deliverables": "Entregables",
     "portfolio": "Portafolio →",
-    "position": "Posición — Clase × Fase"
+    "position": "Posición: Clase × Fase"
    },
    "detail": {
     "eyebrow": "Proyecto",
@@ -12624,7 +12624,7 @@
     "startDate": "Fecha de Inicio",
     "endDate": "Fecha de Fin",
     "client": "Cliente",
-    "none": "— Ninguno —",
+    "none": "Ninguno",
     "primaryVenue": "Venue Principal",
     "budgetUsd": "Presupuesto (USD)",
     "budgetPlaceholder": "p. ej. 1500000",
@@ -12700,11 +12700,11 @@
    "edit": {
     "lineage": {
      "noDeliverables": "Sin entregables.",
-     "noTypeOption": "— sin tipo (no se sembrará) —",
+     "noTypeOption": "sin tipo (no se sembrará)",
      "noItems": "Sin elementos.",
      "itemLabelPlaceholder": "Etiqueta del Elemento",
      "codePlaceholder": "CÓDIGO",
-     "noKindOption": "— sin clase (no se sembrará) —",
+     "noKindOption": "sin clase (no se sembrará)",
      "groupsHeader": "Grupos · sembrados en public.budgets",
      "groupLabelPlaceholder": "Etiqueta del Grupo",
      "collapse": "Contraer Linaje",
@@ -12785,9 +12785,9 @@
     "blocks": "bloques",
     "title": "Nueva propuesta",
     "client": "Cliente",
-    "noClient": "— Sin cliente —",
+    "noClient": "Sin cliente",
     "project": "Proyecto",
-    "noProject": "— Sin proyecto —",
+    "noProject": "Sin proyecto",
     "amount": "Monto (USD)",
     "expires": "Vence",
     "notes": "Notas / alcance",
@@ -12910,7 +12910,7 @@
     "deleteConfirm": "¿Eliminar \"{name}\"?",
     "createHeading": "Crear Lista",
     "namePlaceholder": "MMW Día 1 Punch",
-    "projectPlaceholder": "— Proyecto —",
+    "projectPlaceholder": "Proyecto",
     "categoryPlaceholder": "Categoría (opcional)",
     "createButton": "Crear Lista"
    },
@@ -12931,7 +12931,7 @@
      "punchList": "Punch list"
     },
     "selectPlaceholder": "Seleccionar…",
-    "unassignedOption": "— Sin asignar —",
+    "unassignedOption": "Sin asignar",
     "gateLabel": "Bloquear doors-open hasta cerrar este pendiente"
    },
    "eyebrow": "Operaciones",
@@ -13096,8 +13096,8 @@
      "attendance": "Asistencia",
      "unknown": "Desconocido",
      "signIn": "Iniciar Sesión",
-     "orgMemberOption": "— Miembro de la org —",
-     "crewMemberOption": "— Miembro del crew —",
+     "orgMemberOption": "Miembro de la org",
+     "crewMemberOption": "Miembro del crew",
      "notePlaceholder": "Nota (opcional)",
      "markAcknowledged": "Marcar como ya reconocido",
      "addAttendee": "Añadir Asistente"
@@ -13276,10 +13276,10 @@
      "title": "Nueva Ronda de Vigilancia",
      "submit": "Programar Ronda",
      "nameLabel": "Nombre",
-     "namePlaceholder": "Barrido perimetral — Estadio A",
+     "namePlaceholder": "Barrido perimetral, Estadio A",
      "descriptionLabel": "Descripción",
      "venueLabel": "Sede (opcional)",
-     "venueNone": "— Ninguna / multi-sede —",
+     "venueNone": "Ninguna / multi-sede",
      "cadenceLabel": "Cadencia (minutos)"
     },
     "eyebrow": "Seguridad",
@@ -13483,7 +13483,7 @@
    },
    "osha": {
     "eyebrow": "Seguridad",
-    "title": "OSHA 300 — {year}",
+    "title": "OSHA 300: {year}",
     "subtitle": "Incidentes registrables OSHA según 29 CFR 1904.",
     "exportCsv": "Exportar 300/300A/301 (CSV)",
     "metrics": {
@@ -13663,7 +13663,7 @@
   "schedule": {
    "calendar": {
     "descriptionMonth": "Haz clic en cualquier evento para abrirlo",
-    "descriptionWeek": "Esta semana — eventos visibles en su día de inicio",
+    "descriptionWeek": "Esta semana: eventos visibles en su día de inicio",
     "emptyLabel": "Aún no hay eventos programados.",
     "viewMonth": "Mes",
     "viewWeek": "Semana",
@@ -13791,14 +13791,14 @@
      "categorySecurity": "Seguridad",
      "categoryOther": "Otro",
      "severityLabel": "Severidad",
-     "severityP2": "P2 — urgente (15m confirm., 4h resol.)",
-     "severityP3": "P3 — estándar (1h confirm., 1d resol.)",
-     "severityP4": "P4 — baja (4h confirm., 3d resol.)",
+     "severityP2": "P2: urgente (15m confirm., 4h resol.)",
+     "severityP3": "P3: estándar (1h confirm., 1d resol.)",
+     "severityP4": "P4: baja (4h confirm., 3d resol.)",
      "summaryLabel": "Resumen",
      "summaryPlaceholder": "Descripción en una línea",
      "descriptionLabel": "Descripción",
      "projectLabel": "Proyecto (opcional)",
-     "noneOption": "— ninguno —",
+     "noneOption": "ninguno",
      "venueLabel": "Recinto (opcional)"
     },
     "eyebrow": "Servicios",
@@ -13871,11 +13871,11 @@
     "namePlaceholder": "p. ej. bot de CI",
     "scopesLabel": "Ámbitos",
     "commonScopeSets": "Conjuntos de scopes habituales",
-    "scopeReadOnly": "— reporter de solo lectura",
-    "scopeFieldClockIn": "— fichaje en campo",
-    "scopeAdvancing": "— pipeline de advancing",
+    "scopeReadOnly": "Reporter de solo lectura",
+    "scopeFieldClockIn": "Fichaje en campo",
+    "scopeAdvancing": "Pipeline de advancing",
     "scopeBlank": "(en blanco)",
-    "scopeFullAccess": "— acceso total del usuario emisor",
+    "scopeFullAccess": "Acceso total del usuario emisor",
     "generateKey": "Generar clave",
     "endpoints": {
      "health": "Sonda de actividad",
@@ -13914,7 +13914,7 @@
     "revoked": "Revocada",
     "active": "Activa",
     "revoke": "Revocar",
-    "copyFailedToast": "Error al copiar — selecciona la clave manualmente",
+    "copyFailedToast": "Error al copiar. Selecciona la clave manualmente",
     "reference": "Explorar la referencia completa de la API →"
    },
    "eyebrow": "Ajustes",
@@ -14149,7 +14149,7 @@
    "exports": {
     "toast": {
      "failed": "Falló la exportación",
-     "queued": "Exportación en cola — esperando finalización",
+     "queued": "Exportación en cola: esperando finalización",
      "complete": "Exportación completa",
      "downloadFailed": "Falló la descarga"
     },
@@ -14568,7 +14568,7 @@
     "crumbSettings": "Ajustes",
     "crumbSequences": "Secuencias",
     "activeHeading": "Secuencias Activas",
-    "activeIntroFiresTokens": "dispara — tokens:",
+    "activeIntroFiresTokens": "dispara, tokens:",
     "emptyLabel": "Aún no hay secuencias asignadas",
     "columnScope": "Ámbito",
     "columnFormat": "Formato",
@@ -14614,10 +14614,10 @@
      "heading": "Crear / Actualizar Política"
     },
     "sev": {
-     "p1": "P1 — Crítica",
-     "p2": "P2 — Alta",
-     "p3": "P3 — Estándar",
-     "p4": "P4 — Baja"
+     "p1": "P1: Crítica",
+     "p2": "P2: Alta",
+     "p3": "P3: Estándar",
+     "p4": "P4: Baja"
     },
     "placeholder": {
      "response": "Respuesta (min)",
@@ -14667,7 +14667,7 @@
      "title": "Nueva Zona",
      "name": "Nombre",
      "projectOptional": "Proyecto (opcional)",
-     "projectNone": "Ninguno — toda la org",
+     "projectNone": "Ninguno: toda la org",
      "centerLat": "Latitud del centro",
      "centerLng": "Longitud del centro",
      "radius": "Radio (metros)"
@@ -14693,7 +14693,7 @@
      "deletedToast": "Endpoint eliminado",
      "endpointUrlLabel": "URL del endpoint",
      "descriptionLabel": "Descripción",
-     "activeLabel": "Activo — entrega eventos a este endpoint",
+     "activeLabel": "Activo: entrega eventos a este endpoint",
      "eventsLabel": "Eventos",
      "deleting": "Eliminando…",
      "deleteEndpoint": "Eliminar endpoint",
@@ -14763,7 +14763,7 @@
   },
   "sitePlans": {
    "transitionBar": {
-    "terminal": "Estado terminal — no hay transiciones disponibles.",
+    "terminal": "Estado terminal. No hay transiciones disponibles.",
     "lifecycle": "Ciclo de vida"
    },
    "edit": {
@@ -14826,7 +14826,7 @@
    "detail": {
     "eyebrow": "Creativo · Planos del Sitio",
     "breadcrumb": "Planos del Sitio",
-    "noAtomId": "— sin atom id —",
+    "noAtomId": "sin atom id",
     "revPrefix": "Rev {rev}",
     "sheet": "Plano",
     "xpmsClass": "Clase XPMS",
@@ -14924,7 +14924,7 @@
      "notes": "Notas"
     },
     "option": {
-     "none": "— Ninguno —"
+     "none": "Ninguno"
     }
    },
    "breadcrumb": "Planos del Sitio",
@@ -14949,13 +14949,13 @@
     "rev": "Rev",
     "venueProject": "Sede / Proyecto"
    },
-   "pending": "— pendiente —",
+   "pending": "pendiente",
    "map": {
     "back": "Volver a la hoja",
     "detail": "Ubicación",
     "eyebrow": "Diseño",
     "selectHint": "Selecciona un pin para ver su ubicación.",
-    "title": "{code} — Mapa del plano"
+    "title": "{code}: Mapa del plano"
    }
   },
   "specs": {
@@ -14995,7 +14995,7 @@
     },
     "placeholders": {
      "title": "Transformadores de baja tensión",
-     "division": "26 — Eléctrico"
+     "division": "26: Eléctrico"
     },
     "selectProject": "Seleccionar…",
     "hints": {
@@ -15034,7 +15034,7 @@
     },
     "eyebrow": "Creativo · Especificaciones",
     "fields": {
-     "bodyMarkdown": "Cuerpo — Markdown",
+     "bodyMarkdown": "Cuerpo (Markdown)",
      "division": "División",
      "format": "Formato",
      "project": "Proyecto",
@@ -15123,7 +15123,7 @@
   },
   "subscriptions": {
    "stateControls": {
-    "terminal": "Estado terminal — sin transiciones posteriores.",
+    "terminal": "Estado terminal. Sin transiciones posteriores.",
     "from": "Desde"
    },
    "detail": {
@@ -15203,9 +15203,9 @@
      "periodStart": "Inicio del Período",
      "periodEnd": "Fin del Período",
      "scope": "Alcance",
-     "scope1": "Alcance 1 — directo",
-     "scope2": "Alcance 2 — energía adquirida",
-     "scope3": "Alcance 3 — cadena de valor",
+     "scope1": "Alcance 1: directo",
+     "scope2": "Alcance 2: energía adquirida",
+     "scope3": "Alcance 3: cadena de valor",
      "kgCo2e": "kg CO₂e",
      "source": "Fuente",
      "method": "Método"
@@ -15222,9 +15222,9 @@
      "periodStart": "Inicio del Período",
      "periodEnd": "Fin del Período",
      "scope": "Alcance",
-     "scope1": "Alcance 1 — directo",
-     "scope2": "Alcance 2 — energía adquirida",
-     "scope3": "Alcance 3 — cadena de valor",
+     "scope1": "Alcance 1: directo",
+     "scope2": "Alcance 2: energía adquirida",
+     "scope3": "Alcance 3: cadena de valor",
      "kgCo2e": "kg CO₂e",
      "source": "Fuente",
      "method": "Método"
@@ -15298,7 +15298,7 @@
      "label": "Etiqueta",
      "quantity": "Cantidad"
     },
-    "emptyDescription": "Los ítems registrados en esta medición —conteos, longitudes, áreas, volúmenes— se suman en el total de arriba.",
+    "emptyDescription": "Los ítems registrados en esta medición (conteos, longitudes, áreas, volúmenes) se suman en el total de arriba.",
     "emptyLabel": "Aún no hay mediciones",
     "eyebrow": "Creativo",
     "field": {
@@ -15321,7 +15321,7 @@
    "edit": {
     "eyebrow": "Creativo",
     "fields": {
-     "calibration": "Calibración — Pulgadas por pie",
+     "calibration": "Calibración: Pulgadas por pie",
      "costCode": "Código de costo · Opcional",
      "name": "Nombre",
      "notes": "Notas",
@@ -15381,7 +15381,7 @@
     "priorityP3": "P3 · Normal",
     "priorityP4": "P4 · Baja",
     "project": "Proyecto",
-    "noProject": "— Sin Proyecto —",
+    "noProject": "Sin Proyecto",
     "eyebrow": "Trabajo"
    },
    "title": "Tareas",
@@ -15463,8 +15463,8 @@
      "vendor": "Proveedor",
      "externalEmail": "Correo Externo"
     },
-    "userOption": "— usuario —",
-    "vendorOption": "— proveedor —",
+    "userOption": "usuario",
+    "vendorOption": "proveedor",
     "emailPlaceholder": "correo@…",
     "add": "+ Agregar",
     "noItemsTitle": "Aún no hay elementos",
@@ -15576,9 +15576,9 @@
      "submit": "Programar Despacho",
      "fleetLabel": "Flota",
      "fleet": {
-      "t1": "T1 — Atletas",
-      "t2": "T2 — Equipos",
-      "t3": "T3 — Familia Olímpica",
+      "t1": "T1: Atletas",
+      "t2": "T2: Equipos",
+      "t3": "T3: Familia Olímpica",
       "media": "Prensa",
       "workforce": "Personal",
       "spectator": "Espectadores"
@@ -15605,9 +15605,9 @@
    },
    "fleets": {
     "label": {
-     "t1": "T1 — VIP",
-     "t2": "T2 — Atletas / oficiales",
-     "t3": "T3 — Personal",
+     "t1": "T1: VIP",
+     "t2": "T2: Atletas / oficiales",
+     "t3": "T3: Personal",
      "media": "Prensa",
      "workforce": "Personal",
      "spectator": "Espectadores"
@@ -15680,7 +15680,7 @@
     "eyebrow": "Recinto",
     "title": "Obra",
     "configureSupabase": "Configura Supabase.",
-    "titleWithName": "{name} — Obra",
+    "titleWithName": "{name}: Obra",
     "subtitleOne": "{count} entrada de registro",
     "subtitleOther": "{count} entradas de registro",
     "breadcrumbVenues": "Recintos",
@@ -15696,7 +15696,7 @@
    "certifications": {
     "eyebrow": "Recinto",
     "title": "Certificaciones",
-    "headerTitle": "{name} — Certificaciones",
+    "headerTitle": "{name}: Certificaciones",
     "metrics": {
      "active": "Activas",
      "expiring": "Por vencer (≤30d)",
@@ -15719,7 +15719,7 @@
     "eyebrow": "Recinto",
     "title": "Cierre",
     "configureSupabase": "Configura Supabase.",
-    "headerTitle": "{name} — Cierre",
+    "headerTitle": "{name}: Cierre",
     "metric": {
      "complete": "Completados",
      "open": "Abiertos",
@@ -15740,7 +15740,7 @@
     "eyebrow": "Recinto",
     "title": "Diseño",
     "configureSupabase": "Configura Supabase.",
-    "headerTitle": "{name} — Diseño",
+    "headerTitle": "{name}: Diseño",
     "metric": {
      "approved": "Aprobados",
      "inReview": "En revisión",
@@ -15776,7 +15776,7 @@
     "eyebrow": "Recinto",
     "title": "Entrega",
     "configureSupabase": "Configura Supabase.",
-    "titleWithVenue": "{name} — Entrega",
+    "titleWithVenue": "{name}: Entrega",
     "subtitleOne": "{count} ítem de comisionamiento",
     "subtitleOther": "{count} ítems de comisionamiento",
     "breadcrumb": "Entrega",
@@ -15830,7 +15830,7 @@
     "eyebrow": "Recinto",
     "title": "Plan de Operaciones del Recinto",
     "configureSupabase": "Configura Supabase.",
-    "headerTitle": "{name} — Plan de Operaciones del Recinto",
+    "headerTitle": "{name}: Plan de Operaciones del Recinto",
     "headerSubtitle": "{approved}/{total} secciones aprobadas",
     "breadcrumb": "VOP",
     "metrics": {
@@ -15845,7 +15845,7 @@
     "eyebrow": "Recinto",
     "title": "Zonas",
     "configureSupabase": "Configura Supabase.",
-    "titleWithName": "{name} — Zonas",
+    "titleWithName": "{name}: Zonas",
     "breadcrumbVenues": "Recintos",
     "breadcrumbZones": "Zonas",
     "emptyLabel": "Aún no hay zonas",
@@ -15905,7 +15905,7 @@
     "submit": "Crear Garantía",
     "fields": {
      "name": "Nombre de Cobertura",
-     "namePlaceholder": "Sistema HVAC — Trane RT-3",
+     "namePlaceholder": "Sistema HVAC, Trane RT-3",
      "project": "Proyecto",
      "vendor": "Proveedor / Garante",
      "start": "Inicio",
@@ -15942,7 +15942,7 @@
      "eyebrow": "Insignias",
      "title": "Nueva Insignia",
      "codeLabel": "Código",
-     "codeHint": "Identificador breve — minúsculas, guiones permitidos.",
+     "codeHint": "Identificador breve: minúsculas, guiones permitidos.",
      "nameLabel": "Nombre",
      "iconLabel": "Ícono (emoji)",
      "descriptionLabel": "Descripción"
@@ -16012,7 +16012,7 @@
      "publish": "Publicar",
      "completionBadge": {
       "title": "Insignia de Finalización",
-      "none": "— Ninguna —"
+      "none": "Ninguna"
      },
      "save": "Guardar",
      "lessons": {
@@ -16061,7 +16061,7 @@
      "crumb": "Editar",
      "eyebrow": "Curso",
      "fields": {
-      "duration": "Duración — Minutos",
+      "duration": "Duración (Minutos)",
       "requiredForRole": "Obligatorio para el rol",
       "summary": "Resumen",
       "title": "Título"
@@ -16270,7 +16270,7 @@
      "crumbRecognition": "Reconocimiento",
      "crumbGiveKudos": "Dar Kudos",
      "recipientLabel": "Destinatario",
-     "pickTeammate": "— Elige a un Compañero —",
+     "pickTeammate": "Elige a un Compañero",
      "messageLabel": "Mensaje",
      "valueTagLabel": "Etiqueta de Valor (Opcional)",
      "cancel": "Cancelar",
@@ -16652,14 +16652,14 @@
     "subtitle": "Columna vertebral temporal. Cada átomo lleva una fase.",
     "openLink": "Abrir vista de fase →",
     "configureSupabase": "Configura Supabase.",
-    "eyebrow": "XPMS · 8PP — Ocho Fases de Producción",
+    "eyebrow": "XPMS · 8PP · Ocho Fases de Producción",
     "uac": "UAC",
     "tpc": "TPC",
     "total": "Total",
     "empty": "Aún no hay átomos en esta fase"
    },
    "footer": {
-    "codebookNote": "El codebook es global y solo añade entradas — consulta",
+    "codebookNote": "El codebook es global y solo añade entradas; consulta",
     "codebookLink": "codebook XTC"
    },
    "provenance": {
@@ -16753,7 +16753,7 @@
   },
   "legend": {
    "eyebrow": "LEG3ND",
-   "subtitle": "Conocimiento · LMS · Recursos — sobre el protocolo XPMS 2.0.",
+   "subtitle": "Conocimiento · LMS · Recursos, sobre el protocolo XPMS 2.0.",
    "tiles": {
     "catalog": {
      "blurb": "El catálogo maestro de átomos / URID con precio.",
@@ -16764,11 +16764,11 @@
      "title": "Certificaciones"
     },
     "courses": {
-     "blurb": "LMS — rutas de formación, lecciones y cuestionarios.",
+     "blurb": "LMS: rutas de formación, lecciones y cuestionarios.",
      "title": "Cursos"
     },
     "engine": {
-     "blurb": "XMCE — define reglas, ejecuta comprobaciones, clasifica hallazgos.",
+     "blurb": "XMCE: define reglas, ejecuta comprobaciones, clasifica hallazgos.",
      "title": "Motor de cumplimiento"
     },
     "resources": {
@@ -16784,7 +16784,7 @@
      "title": "Señalización"
     },
     "standard": {
-     "blurb": "Base de conocimiento — la referencia canónica de cómo trabajamos.",
+     "blurb": "Base de conocimiento: la referencia canónica de cómo trabajamos.",
      "title": "The Standard"
     },
     "community": {
@@ -16899,8 +16899,8 @@
      "submit": "Crear mesa",
      "tableNo": "Número de mesa",
      "title": "Nueva mesa",
-     "x": "X del plano de planta (0–100)",
-     "y": "Y del plano de planta (0–60)",
+     "x": "X del plano de planta (0 a 100)",
+     "y": "Y del plano de planta (0 a 60)",
      "zone": "Zona"
     }
    },
@@ -16944,7 +16944,7 @@
     },
     "eyebrow": "Taquilla",
     "fields": {
-     "event": "Evento — Opcional",
+     "event": "Evento (Opcional)",
      "name": "Nombre de la lista",
      "notes": "Notas"
     },
@@ -17013,7 +17013,7 @@
     "client": "Cliente (opcional)",
     "endsAt": "Termina a las",
     "headcount": "Aforo",
-    "none": "— Ninguno —",
+    "none": "Ninguno",
     "notes": "Notas",
     "project": "Proyecto (opcional)",
     "space": "Espacio",
@@ -17339,11 +17339,11 @@
    "eyebrow": "Activos y logística",
    "new": {
     "acquiredAtLabel": "Adquirido",
-    "acquisitionCostLabel": "Costo de adquisición — USD",
+    "acquisitionCostLabel": "Costo de adquisición (USD)",
     "assetKindHint": "Categoría libre, p. ej. micrófono, camión, radio.",
     "assetKindLabel": "Tipo de activo",
     "assetTagLabel": "Etiqueta de activo",
-    "dailyRateLabel": "Tarifa diaria — USD",
+    "dailyRateLabel": "Tarifa diaria (USD)",
     "displayNameLabel": "Nombre para mostrar",
     "eyebrow": "Activos",
     "ownershipLabel": "Propiedad",
@@ -17419,8 +17419,8 @@
    "dismiss": "Descartar banner"
   },
   "connectivity": {
-   "offline": "Estás sin conexión. Los escaneos y fichajes se pondrán en cola — todo lo demás requiere conexión.",
-   "backOnline": "De vuelta en línea — sincronizando escaneos y fichajes en cola…"
+   "offline": "Estás sin conexión. Los escaneos y fichajes se pondrán en cola; todo lo demás requiere conexión.",
+   "backOnline": "De vuelta en línea: sincronizando escaneos y fichajes en cola…"
   },
   "density": {
    "compact": "Compacta",
@@ -17556,8 +17556,8 @@
    "announce": {
     "error": "Error: {message}",
     "accepted": "Aceptado: {name}",
-    "duplicate": "Ticket duplicado — ya escaneado",
-    "voided": "Ticket anulado — denegado",
+    "duplicate": "Ticket duplicado: ya escaneado",
+    "voided": "Ticket anulado: denegado",
     "notFound": "Ticket no encontrado"
    },
    "guest": "Invitado",
@@ -17629,7 +17629,7 @@
     "network": "Error de red"
    },
    "toast": {
-    "queued": "{label} (en cola — se sincronizará al volver en línea)",
+    "queued": "{label} (en cola, se sincronizará al volver en línea)",
     "checkedIn": "Check-in realizado",
     "breakStarted": "Descanso iniciado",
     "clockedOut": "Salida fichada",
@@ -17719,7 +17719,7 @@
    "eyebrow": "Campo",
    "title": "Bitácora Diaria",
    "subtitle": "Captura rápida desde el piso",
-   "todaysLog": "Bitácora de hoy — {date}",
+   "todaysLog": "Bitácora de hoy: {date}",
    "selectProject": "Selecciona un proyecto…",
    "weatherPlaceholder": "Clima (p. ej. 78°F, soleado)",
    "saveLog": "Guardar bitácora",
@@ -18195,7 +18195,7 @@
     "openFullForm": "Ábrelo",
     "summaryLabel": "¿Qué pasó?",
     "fileNow": "Reportar Ahora",
-    "subtitle": "Registra una incidencia de seguridad — admin y EHS lead reciben aviso al instante.",
+    "subtitle": "Registra una incidencia de seguridad: admin y EHS lead reciben aviso al instante.",
     "filing": "Registrando…"
    },
    "eyebrow": "Campo",
@@ -18318,15 +18318,15 @@
     "triage": {
      "green": {
       "label": "Verde",
-      "hint": "Leve — no urgente"
+      "hint": "Leve: no urgente"
      },
      "yellow": {
       "label": "Amarillo",
-      "hint": "Urgente — dentro de 30 min"
+      "hint": "Urgente: dentro de 30 min"
      },
      "red": {
       "label": "Rojo",
-      "hint": "Inmediato — riesgo vital"
+      "hint": "Inmediato: riesgo vital"
      },
      "black": {
       "label": "Negro",
@@ -18336,7 +18336,7 @@
     "triageLegend": "Triaje *",
     "patientRef": {
      "label": "Referencia del Paciente",
-     "placeholder": "ID seudónimo — nunca un nombre"
+     "placeholder": "ID seudónimo, nunca un nombre"
     },
     "chiefComplaint": {
      "label": "Motivo Principal *",
@@ -18617,10 +18617,10 @@
     "submit": "Abrir",
     "severity": {
      "label": "Severidad",
-     "p1": "P1 — bloqueador en directo",
-     "p2": "P2 — urgente",
-     "p3": "P3 — estándar",
-     "p4": "P4 — baja"
+     "p1": "P1: bloqueador en directo",
+     "p2": "P2: urgente",
+     "p3": "P3: estándar",
+     "p4": "P4: baja"
     },
     "category": {
      "label": "Categoría",
@@ -18634,7 +18634,7 @@
     },
     "summary": {
      "label": "Resumen",
-     "placeholder": "Una línea — ¿qué falla?"
+     "placeholder": "Una línea: ¿qué falla?"
     },
     "detail": {
      "label": "Detalle",
@@ -19036,10 +19036,10 @@
    "due": "Vence {date}"
   },
   "offline": {
-   "queuedToast": "En cola — se sincronizará al volver online",
-   "queuedDetail": "offline — sincronización pendiente",
+   "queuedToast": "En cola: se sincronizará al volver online",
+   "queuedDetail": "offline: sincronización pendiente",
    "queuedBadge": "En Cola",
-   "pendingBadge": "{count} Pendientes — Se Sincronizarán al Volver Online"
+   "pendingBadge": "{count} Pendientes: Se Sincronizarán al Volver Online"
   },
   "checkInSummary": {
    "eyebrow": "Campo",
@@ -19081,7 +19081,7 @@
   },
   "inventoryScan": {
    "back": "Activos",
-   "cameraDenied": "Cámara no disponible — Usa la entrada manual",
+   "cameraDenied": "Cámara no disponible. Usa la entrada manual",
    "cta": "Resolver etiqueta",
    "enableCamera": "Activar cámara",
    "eyebrow": "Etiqueta de activo",
@@ -19156,7 +19156,7 @@
    "access": "Acceso",
    "asset": "Activo",
    "batch": "Registro por lotes",
-   "cameraDenied": "Cámara no disponible — Usa la entrada manual",
+   "cameraDenied": "Cámara no disponible. Usa la entrada manual",
    "ctaAccess": "Verificar credencial",
    "ctaAsset": "Entrega / Devolución",
    "ctaNfc": "Toca para leer",
@@ -19379,9 +19379,9 @@
    "upcoming": "Próximos",
    "empty": "Aún no hay bloques de disponibilidad.",
    "kind": {
-    "block": "Bloqueo — No disponible",
-    "confirm": "Confirmar — Bloqueado",
-    "hold": "Reserva — Liberación automática al expirar el TTL"
+    "block": "Bloqueo: No disponible",
+    "confirm": "Confirmar: Bloqueado",
+    "hold": "Reserva: Liberación automática al expirar el TTL"
    },
    "kindLabel": "Tipo"
   },
@@ -19410,7 +19410,7 @@
    },
    "reviews": {
     "label": "Mis Reseñas",
-    "blurb": "Reseñas bidireccionales — se publican cuando la contraparte responde."
+    "blurb": "Reseñas bidireccionales: se publican cuando la contraparte responde."
    },
    "profile": {
     "label": "Perfil",
@@ -19767,7 +19767,7 @@
     "bio": {
      "label": "Biografía",
      "placeholder": "Unos párrafos sobre tu práctica.",
-     "hint": "Markdown no se procesa — solo texto plano."
+     "hint": "Markdown no se procesa; solo texto plano."
     },
     "avatarUrl": {
      "label": "URL del Avatar"
@@ -19797,7 +19797,7 @@
    "emptyWritten": "Aún no has escrito ninguna reseña.",
    "status": {
     "released": "publicada",
-    "hidden": "oculta — esperando a la contraparte"
+    "hidden": "oculta: esperando a la contraparte"
    },
    "new": {
     "cta": {
@@ -19910,7 +19910,7 @@
     "enroll": {
      "title": "Escanea este código QR",
      "qrAlt": "Código QR de inscripción de doble factor",
-     "qrUnavailable": "QR no disponible — pega el secreto abajo",
+     "qrUnavailable": "QR no disponible: pega el secreto abajo",
      "pasteSecret": "O pega este secreto",
      "copySecret": "Copiar secreto",
      "codeLabel": "Ingresa el código de 6 dígitos",
@@ -20051,7 +20051,7 @@
  "notifications": {
   "allCaughtUp": "Estás al día.",
   "bellAria": "Notificaciones",
-  "bellAriaUnread": "Notificaciones — {count} sin leer",
+  "bellAriaUnread": "Notificaciones: {count} sin leer",
   "markAllRead": "Marcar todo como leído",
   "markAllReadAria": "Marcar todo como leído",
   "title": "Notificaciones",
@@ -20119,7 +20119,7 @@
    },
    "list": {
     "title": "Tus Solicitudes",
-    "empty": "Aún no hay solicitudes — tu productor te invitará."
+    "empty": "Aún no hay solicitudes. Tu productor te invitará."
    }
   },
   "artist": {
@@ -20227,7 +20227,7 @@
    "tiles": {
     "requests": {
      "label": "Solicitudes de servicio",
-     "desc": "Médico, transporte, habitación — registra una solicitud"
+     "desc": "Médico, transporte, habitación: registra una solicitud"
     },
     "training": {
      "label": "Entrenamiento",
@@ -20239,7 +20239,7 @@
     },
     "safeguarding": {
      "label": "Protección",
-     "desc": "Canal confidencial — reporta incidencias"
+     "desc": "Canal confidencial: reporta incidencias"
     },
     "privacy": {
      "label": "Privacidad",
@@ -20963,7 +20963,7 @@
     "title": "Boletos",
     "subtitle": "Tus boletos para este evento",
     "projectNotFound": "Proyecto no encontrado.",
-    "empty": "Aún no hay boletos — compra o reclama para comenzar",
+    "empty": "Aún no hay boletos. Compra o reclama para comenzar",
     "columns": {
      "code": "Código",
      "tier": "Categoría",
@@ -21517,7 +21517,7 @@
      "backToMessages": "Todos los Mensajes",
      "directMessage": "Mensaje Directo",
      "subtitle": "Conversación directa con tu account manager para {projectName}.",
-     "empty": "Aún no hay mensajes. Saluda — tu account manager recibirá una notificación.",
+     "empty": "Aún no hay mensajes. Saluda y tu account manager recibirá una notificación.",
      "messagePlaceholder": "Mensaje",
      "emptyTitle": "Aún no hay mensajes"
     }
@@ -21693,7 +21693,7 @@
     "metrics": {
      "budget": "Presupuesto",
      "margin": "Margen",
-     "revenuePaid": "Ingresos — Pagados",
+     "revenuePaid": "Ingresos: Pagados",
      "spent": "Gastado"
     },
     "noProject": {
@@ -21920,7 +21920,7 @@
    },
    "concierge": {
     "label": "Conserje:",
-    "window": "— 24/7 durante la ventana del evento."
+    "window": "24/7 durante la ventana del evento."
    },
    "transport": {
     "eyebrow": {
@@ -21953,7 +21953,7 @@
     "status": {
      "pending": "Solicitud recibida",
      "in_review": "En revisión",
-     "approved": "Aprobada — onboarding",
+     "approved": "Aprobada: onboarding",
      "active": "Voluntario activo",
      "declined": "Rechazada"
     },
@@ -22168,7 +22168,7 @@
   "clearSearch": "Limpiar búsqueda",
   "shareViewLink": "Compartir enlace de vista",
   "exportCsv": "Exportar filas visibles a CSV",
-  "importFile": "Importar filas desde un archivo — CSV / TSV / JSON / XLSX",
+  "importFile": "Importar filas desde un archivo (CSV / TSV / JSON / XLSX)",
   "importFileAria": "Importar filas desde un archivo",
   "refresh": "Actualizar datos de la tabla",
   "selectAllPage": "Seleccionar todo en esta página",
@@ -22194,7 +22194,7 @@
   "filter": {
    "activeHint": "Filtros · {count} activos",
    "addHint": "Añade un filtro para acotar filas",
-   "activeAria": "Filtros — {count} activos",
+   "activeAria": "Filtros: {count} activos",
    "addAria": "Añadir filtro",
    "activeLabel": "Filtro · {count}",
    "label": "Filtro",
@@ -22217,7 +22217,7 @@
    "noSort": "Sin orden aplicado",
    "addSortLabel": "Añadir Orden",
    "clearAll": "Limpiar Todos los Órdenes",
-   "toggleDir": "Alternar dirección de {key} — {dir}",
+   "toggleDir": "Alternar dirección de {key}: {dir}",
    "removeSort": "Quitar orden en {key}"
   },
   "viewOptions": "Opciones de vista",
@@ -22313,7 +22313,7 @@
   "nameLabel": "Nombre",
   "namePlaceholder": "p. ej. RFIs Abiertos · Críticos",
   "descriptionLabel": "Descripción",
-  "descriptionHint": "Opcional — explica cuándo es útil esta vista.",
+  "descriptionHint": "Opcional: explica cuándo es útil esta vista.",
   "descriptionPlaceholder": "Añade contexto para tu equipo",
   "visibility": "Visibilidad",
   "scope": {
@@ -22355,7 +22355,7 @@
     "defaultUpdated": "Default Actualizado",
     "defaultFailed": "No se pudo definir el default"
    },
-   "locked": "— bloqueada",
+   "locked": "Bloqueada",
    "lockedAria": "Vista bloqueada",
    "setDefaultHint": "Definir como default para este scope",
    "setDefaultAria": "Definir \"{name}\" como default",
@@ -22403,7 +22403,7 @@
   "activeHeading": "Enlaces activos",
   "loading": "Cargando…",
   "noLinks": "Aún no hay enlaces activos.",
-  "unlabeled": "— sin etiqueta",
+  "unlabeled": "Sin etiqueta",
   "passcodeBadge": "código",
   "useSingular": "{count} uso",
   "usePlural": "{count} usos",
@@ -22456,7 +22456,7 @@
     "manual": "Se dispara cuando un usuario hace clic en Ejecutar ahora en esta página.",
     "schedule": "Corre en una programación recurrente cron / RRULE. El backend llega en la Fase 4.3.",
     "webhook": "Corre cuando un HTTP POST entrante llega a la URL de abajo. El backend llega en la Fase 4.3.",
-    "event": "Corre cuando un evento de registro coincide — creado o actualizado. El backend llega en la Fase 4.5."
+    "event": "Corre cuando un evento de registro coincide, creado o actualizado. El backend llega en la Fase 4.5."
    },
    "kindLabel": "Tipo",
    "kindAria": "Tipo de disparador",
@@ -22467,8 +22467,8 @@
    "rruleHint": "Sintaxis RRULE de iCal. Se guarda ahora; el runner la habilita en P4.3.",
    "webhookSoon": "El endpoint entrante llega en la Fase 4.3.",
    "inboundUrl": "URL Entrante",
-   "secretLabel": "Secreto Compartido — HMAC",
-   "secretPlaceholder": "Opcional — usa el secreto por automatización como fallback",
+   "secretLabel": "Secreto Compartido (HMAC)",
+   "secretPlaceholder": "Opcional: usa el secreto por automatización como fallback",
    "secretHint": "Si se define, el runner verifica x-lyt-signature antes del despacho.",
    "eventSoon": "La suscripción a eventos llega en la Fase 4.5.",
    "targetTable": "Tabla Objetivo",
@@ -22636,7 +22636,7 @@
    },
    "occurredAtLabel": "Ocurrió En",
    "projectLabel": "Proyecto",
-   "projectNone": "— Ninguno —",
+   "projectNone": "Ninguno",
    "locationLabel": "Ubicación",
    "locationPlaceholder": "p. ej. Monitor world lado derecho del escenario",
    "descriptionLabel": "Descripción",
@@ -22647,7 +22647,7 @@
    "uploading": "Subiendo…",
    "photoAlt": "Foto de incidente subida",
    "removePhoto": "Quitar foto",
-   "emergencyNotice": "En emergencias, llama primero a los servicios locales — luego registra aquí.",
+   "emergencyNotice": "En emergencias, llama primero a los servicios locales y luego registra aquí.",
    "submitting": "Enviando…",
    "submit": "Enviar reporte"
   },
@@ -22721,7 +22721,7 @@
    "totalRequests": "Solicitudes Totales",
    "activeConsents": "Consentimientos Activos",
    "submitRequest": "Enviar una Solicitud",
-   "submitRequestBody": "Bajo la ley de privacidad de tu jurisdicción — GDPR, CCPA, LGPD, etc. — puedes solicitar acceso, portabilidad, corrección o eliminación de los datos personales que procesamos sobre ti.",
+   "submitRequestBody": "Bajo la ley de privacidad de tu jurisdicción (GDPR, CCPA, LGPD, etc.) puedes solicitar acceso, portabilidad, corrección o eliminación de los datos personales que procesamos sobre ti.",
    "downloadData": "Descargar mis datos · JSON",
    "emailDsar": "Enviar un DSAR por email",
    "yourRequests": "Tus Solicitudes",
@@ -22736,7 +22736,7 @@
    "statusGranted": "otorgado",
    "statusRevoked": "revocado",
    "roleNoteBefore": "Los datos que procesamos sobre ti dependen de tu rol. Como",
-   "roleNoteAfter": "puedes tener registros en: acreditaciones, credenciales, rider de advancing, contratos, pagos, escaneos y divulgaciones firmadas. Solicitar la eliminación puede impactar tu compromiso activo — confirmaremos antes de procesar."
+   "roleNoteAfter": "puedes tener registros en: acreditaciones, credenciales, rider de advancing, contratos, pagos, escaneos y divulgaciones firmadas. Solicitar la eliminación puede impactar tu compromiso activo; confirmaremos antes de procesar."
   },
   "proposalBlockRenderer": {
    "schedule": {
@@ -22788,7 +22788,7 @@
   },
   "publicFormRenderer": {
    "redirecting": "Redirigiendo…",
-   "thankYouTitle": "Gracias — lo recibimos.",
+   "thankYouTitle": "Gracias, lo recibimos.",
    "thankYouBody": "Tu respuesta quedó registrada. Puedes cerrar esta pestaña.",
    "submitted": "Enviado",
    "leaveBlank": "Dejar en blanco",
@@ -22856,7 +22856,7 @@
    "signatures": "Firmas",
    "signature": "Firma",
    "signedFromLine": "Firmada {date} desde {ip}",
-   "signaturePending": "Pendiente — firma la propuesta en el enlace compartido para ejecutarla.",
+   "signaturePending": "Pendiente: firma la propuesta en el enlace compartido para ejecutarla.",
    "sectionFallback": "Sección",
    "colItem": "Ítem",
    "colDescription": "Descripción",
@@ -22936,8 +22936,8 @@
   },
   "certifiedPayroll": {
    "title": "Nómina Certificada",
-   "formWh347": "Formulario WH-347 del DOL de EE. UU. — Nómina Certificada Davis-Bacon",
-   "formGeneric": "Nómina Certificada — {type}",
+   "formWh347": "Formulario WH-347 del DOL de EE. UU.: Nómina Certificada Davis-Bacon",
+   "formGeneric": "Nómina Certificada: {type}",
    "weekEndingShort": "WE",
    "weekEnding": "Semana que termina",
    "statementOfCompliance": "Declaración de Cumplimiento",
@@ -22975,8 +22975,8 @@
    "clause1": "(1) Que pago o superviso el pago de las personas empleadas por {contractor} en el proyecto {project}; que durante el período de nómina que comienza el día {start} y termina el día {end}, todas las personas empleadas en dicho proyecto han recibido la totalidad de los salarios semanales devengados, que no se han hecho ni se harán reembolsos, directa o indirectamente, a dicho contratista o subcontratista o en su nombre a partir de los salarios semanales completos devengados por persona alguna, y que no se han hecho deducciones, directa o indirectamente, de los salarios completos devengados por persona alguna, salvo las deducciones permisibles definidas en el Reglamento, Parte 3 (29 CFR Subtítulo A).",
    "clause2": "(2) Que cualquier nómina que bajo este contrato deba presentarse para el período anterior es correcta y completa; que las tarifas salariales para obreros o mecánicos allí contenidas no son menores que las tarifas salariales aplicables contenidas en cualquier determinación salarial incorporada al contrato; que las clasificaciones allí establecidas para cada obrero o mecánico corresponden al trabajo que realizó.",
    "clause3": "(3) Que cualquier aprendiz empleado en el período anterior está debidamente registrado en un programa de aprendizaje legítimo registrado ante una agencia estatal de aprendizaje reconocida por el Bureau of Apprenticeship and Training del Departamento de Trabajo de los Estados Unidos, o si no existe tal agencia reconocida en un Estado, está registrado ante el Bureau of Apprenticeship and Training del Departamento de Trabajo de los Estados Unidos.",
-   "clause4WithFringes": "(4) Que las prestaciones complementarias requeridas por la determinación salarial han sido pagadas según corresponda — total de pagos de prestaciones en este período: {amount}.",
-   "clause4NoFringes": "(4) Que las prestaciones complementarias requeridas por la determinación salarial han sido pagadas según corresponda — sin prestaciones adeudadas este período.",
+   "clause4WithFringes": "(4) Que las prestaciones complementarias requeridas por la determinación salarial han sido pagadas según corresponda; total de pagos de prestaciones en este período: {amount}.",
+   "clause4NoFringes": "(4) Que las prestaciones complementarias requeridas por la determinación salarial han sido pagadas según corresponda; sin prestaciones adeudadas este período.",
    "certified": "Certificado",
    "signedBy": "Firmado por",
    "notes": "Notas"
@@ -23001,12 +23001,12 @@
    "colAmount": "Monto",
    "lineOriginalContractSum": "Suma Original del Contrato",
    "lineNetChangeByChangeOrders": "Cambio neto por Órdenes de Cambio",
-   "lineContractSumToDate": "Suma del Contrato a la Fecha — Línea 1 ± 2",
+   "lineContractSumToDate": "Suma del Contrato a la Fecha: Línea 1 ± 2",
    "lineTotalCompletedStored": "Total Completado y Almacenado a la Fecha",
-   "lineRetainage": "Retención — {pct}",
-   "lineTotalEarnedLessRetainage": "Total Devengado Menos Retención — Línea 4 − 5",
+   "lineRetainage": "Retención: {pct}",
+   "lineTotalEarnedLessRetainage": "Total Devengado Menos Retención: Línea 4 − 5",
    "lineLessPreviousCertificates": "Menos Certificados de Pago Previos",
-   "lineCurrentPaymentDue": "Pago Actual Adeudado — Línea 6 − 7",
+   "lineCurrentPaymentDue": "Pago Actual Adeudado: Línea 6 − 7",
    "lineBalanceToFinish": "Saldo por Terminar, Incluida la Retención",
    "contractorCertification": "Certificación del Contratista",
    "contractorCertificationBody": "El Contratista abajo firmante certifica que, según su leal saber y entender, el Trabajo cubierto por esta Solicitud de Pago se ha completado de acuerdo con los Documentos del Contrato, que el Contratista ha pagado todos los montos por Trabajo para el cual se emitieron Certificados de Pago previos y se recibieron pagos del Propietario, y que el pago actual aquí mostrado es ahora exigible.",
@@ -23017,8 +23017,8 @@
    "architect": "Arquitecto",
    "certified": "Certificado",
    "notes": "Notas",
-   "scheduleOfValues": "Calendario de Valores — Hoja de Continuación",
-   "columnsNote": "Columnas A–I según AIA G703. Montos en USD.",
+   "scheduleOfValues": "Calendario de Valores: Hoja de Continuación",
+   "columnsNote": "Columnas de la A a la I según AIA G703. Montos en USD.",
    "colScheduled": "Programado",
    "colPrior": "Previo",
    "colThisPeriod": "Este Período",
@@ -23047,7 +23047,7 @@
    "netOverUnderBilled": "Neto sobre/sub-facturado",
    "aggregateEac": "EAC agregado",
    "projects": "Proyectos",
-   "tableNote": "Todos los montos en USD. % Comp es por costo. Sobre/Sub = Devengado − Facturado — positivo = sobre-facturado.",
+   "tableNote": "Todos los montos en USD. % Comp es por costo. Sobre/Sub = Devengado − Facturado; positivo = sobre-facturado.",
    "colProject": "Proyecto",
    "colRevised": "Revisado",
    "colCostToDate": "Costo a la Fecha",
@@ -23058,7 +23058,7 @@
    "totals": "Totales",
    "projectsCount": "{count} proyectos",
    "methodology": "Metodología",
-   "methodologyBody": "Porcentaje completado = costs_to_date / estimated_at_completion. Ingreso devengado = revised_contract × % comp. Sobre/sub-facturado = devengado − facturado — positivo = sobre-facturado, negativo = sub-facturado. Costo estimado por completar = EAC − costs_to_date."
+   "methodologyBody": "Porcentaje completado = costs_to_date / estimated_at_completion. Ingreso devengado = revised_contract × % comp. Sobre/sub-facturado = devengado − facturado; positivo = sobre-facturado, negativo = sub-facturado. Costo estimado por completar = EAC − costs_to_date."
   },
   "vendorRfp": {
    "eyebrow": "Solicitud de Propuesta",
@@ -23084,7 +23084,7 @@
    "bodySample": "Cuerpo 11pt, interlineado 1.45. Usa Helvetica para interoperabilidad en impresiones de campo.",
    "usageRules": "Reglas de Uso",
    "usageRule1": "• Usa el color de acento para barras de encabezado + CTAs primarios.",
-   "usageRule2": "• Los documentos Tier 4+ llevan un banner de clasificación carmesí — anula el acento solo para el banner.",
+   "usageRule2": "• Los documentos Tier 4+ llevan un banner de clasificación carmesí; anula el acento solo para el banner.",
    "usageRule3": "• El pie legal aparece en cada página de cada documento generado por el productor."
   },
   "deliverablesViews": {
@@ -23208,11 +23208,11 @@
    "declineBody": "Comparte una breve razón para que producción pueda dar seguimiento si algo cambia.",
    "declineLetter": "Rechazar Carta",
    "reasonLabel": "Razón",
-   "reasonPlaceholder": "p. ej. Conflicto de calendario — ya reservado del 14 al 18 de mayo."
+   "reasonPlaceholder": "p. ej. Conflicto de calendario: ya reservado del 14 al 18 de mayo."
   },
   "offerCheckin": {
    "title": "Registro",
-   "lockedPrefix": "Abre primero tu carta de compromiso para desbloquear el check-in —",
+   "lockedPrefix": "Abre primero tu carta de compromiso para desbloquear el check-in:",
    "returnToLetter": "volver a la carta",
    "dayOneEyebrow": "Check-in de Día 1",
    "welcome": "Bienvenido a Salvage City, {name}.",
@@ -23226,7 +23226,7 @@
   },
   "offerOnboarding": {
    "title": "Incorporación",
-   "lockedPrefix": "Abre primero tu carta de compromiso para desbloquear el onboarding —",
+   "lockedPrefix": "Abre primero tu carta de compromiso para desbloquear el onboarding:",
    "returnToLetter": "volver a la carta",
    "stateNotStarted": "No iniciado",
    "stateInProgress": "En progreso",
@@ -23253,20 +23253,20 @@
   },
   "msaSign": {
    "submit": "Firmar y Enviar",
-   "exhibitBHeading": "Anexo B — Otros Clientes",
-   "exhibitBHint": "Lista al menos dos — 2 — clientes a los que hayas servido con servicios sustancialmente similares en los últimos 24 meses. Deja filas en blanco si tienes menos por declarar.",
+   "exhibitBHeading": "Anexo B: Otros Clientes",
+   "exhibitBHint": "Lista al menos dos (2) clientes a los que hayas servido con servicios sustancialmente similares en los últimos 24 meses. Deja filas en blanco si tienes menos por declarar.",
    "exhibitBClientPlaceholder": "Cliente {n}",
    "exhibitBProjectPlaceholder": "Proyecto / Compromiso",
    "exhibitBDatesPlaceholder": "Fechas · p. ej. Q3 2025",
-   "exhibitCHeading": "Anexo C — Inversión de Capital",
-   "exhibitCHint": "Detalla lo que aportas — entidad de negocio, seguros, equipo, herramientas, certificaciones, etc.",
+   "exhibitCHeading": "Anexo C: Inversión de Capital",
+   "exhibitCHint": "Detalla lo que aportas: entidad de negocio, seguros, equipo, herramientas, certificaciones, etc.",
    "exhibitCBusinessEntity": "Entidad de negocio",
    "exhibitCInsurance": "Seguro",
    "exhibitCToolsEquipment": "Herramientas / Equipo",
    "exhibitCItemCategory": "Ítem / Categoría",
    "exhibitCDescriptionPlaceholder": "Descripción / valor",
-   "nscbHeading": "Licencia NSCB — Capítulo 624",
-   "nscbHint": "Requerida para alcances de oficio que caen dentro del Capítulo 624 del NRS — carpintería, eléctrico, rigging, etc. Omite si no aplica.",
+   "nscbHeading": "Licencia NSCB: Capítulo 624",
+   "nscbHint": "Requerida para alcances de oficio que caen dentro del Capítulo 624 del NRS: carpintería, eléctrico, rigging, etc. Omite si no aplica.",
    "nscbLicensePlaceholder": "Licencia # · p. ej. 0012345",
    "nscbClassificationPlaceholder": "Clasificación · p. ej. C-3",
    "nscbMonetaryLimitPlaceholder": "Límite monetario · $ centavos, p. ej. 50000000",
@@ -23318,12 +23318,12 @@
    "relationshipHeading": "1. Relación de las Partes",
    "termsHeading": "2. Términos y Condiciones",
    "governingLawHeading": "3. Ley Aplicable y Confidencialidad",
-   "exhibitBHeading": "Anexo B — Otros Clientes",
-   "exhibitBHint": "El Contratista declara que ha prestado servicios sustancialmente similares para los siguientes clientes dentro de los veinticuatro — 24 — meses anteriores a la fecha de vigencia de este Acuerdo.",
+   "exhibitBHeading": "Anexo B: Otros Clientes",
+   "exhibitBHint": "El Contratista declara que ha prestado servicios sustancialmente similares para los siguientes clientes dentro de los veinticuatro (24) meses anteriores a la fecha de vigencia de este Acuerdo.",
    "colClient": "Cliente",
    "colProject": "Proyecto",
    "colDates": "Fechas",
-   "exhibitCHeading": "Anexo C — Detalle de Inversión de Capital",
+   "exhibitCHeading": "Anexo C: Detalle de Inversión de Capital",
    "exhibitCHint": "La inversión de capital del Contratista en su negocio relevante a los servicios puede incluir, sin limitación, constitución de entidad de negocio, seguros contratados, software/equipo/herramientas en propiedad, preparación previa al compromiso y certificaciones, y licencia NSCB específica del oficio donde aplique.",
    "colItemCategory": "Ítem / Categoría",
    "colDescriptionValue": "Descripción / Valor",
@@ -23346,7 +23346,7 @@
    "greeting": "Saludos",
    "introLead": "Estás en el manifiesto. En nombre de {employer}, nos complace incorporarte como",
    "introFor": "para",
-   "introTail": "Los detalles completos del compromiso se describen abajo — dale una leída y luego contrafirma al final para hacerlo oficial.",
+   "introTail": "Los detalles completos del compromiso se describen abajo. Dales una leída y luego contrafirma al final para hacerlo oficial.",
    "questionsBeforeSigning": "¿Preguntas antes de firmar? Contacta a",
    "at": "en",
    "engagementSummaryHeading": "1. Resumen del Compromiso",
@@ -23383,7 +23383,7 @@
    "onboardingHint": "Una lista corta para dejarte listo. Intenta cerrarla dentro de las 48 horas posteriores a la aceptación para que las credenciales puedan enviarse.",
    "signMsa": "Firma tu Acuerdo Marco de Servicios",
    "openMsaLink": "Abrir MSA ↗",
-   "msaOneTimeNote": "Una sola vez. La firma aplica a cada compromiso en el que te reservemos — no volverás a ver este paso.",
+   "msaOneTimeNote": "Una sola vez. La firma aplica a cada compromiso en el que te reservemos; no volverás a ver este paso.",
    "openLink": "Abrir ↗",
    "reviewGuide": "Revisa la Guía de Producción de Salvage City",
    "accepted": "Aceptada",
@@ -23395,10 +23395,10 @@
    "reference": "Referencia",
    "footerMsaOnFile": "Este compromiso está sujeto a tu Acuerdo Marco de Servicios de Contratista Independiente firmado {date} · v{version}.",
    "viewMsaLink": "Ver MSA ↗",
-   "footerMsaPendingPrefix": "Este compromiso está sujeto a nuestro Acuerdo Marco de Servicios de Contratista Independiente —",
+   "footerMsaPendingPrefix": "Este compromiso está sujeto a nuestro Acuerdo Marco de Servicios de Contratista Independiente.",
    "readAndSignLink": "lee y firma tu copia ↗",
    "footerMsaPendingSuffix": "una sola vez, aplica a cada compromiso futuro.",
-   "footerMsaSeparateEmail": "Este compromiso está sujeto a nuestro Acuerdo Marco de Servicios de Contratista Independiente — tu copia personal llegará en un email aparte y es requerida antes de tu primer día de servicio.",
+   "footerMsaSeparateEmail": "Este compromiso está sujeto a nuestro Acuerdo Marco de Servicios de Contratista Independiente. Tu copia personal llegará en un email aparte y es requerida antes de tu primer día de servicio.",
    "governingLaw": "Ley aplicable: Estado de Nevada. Jurisdicción: Condado de Clark, NV. Confidencial y propiedad de {employer}."
   },
   "heatProposal": {
@@ -23413,7 +23413,7 @@
    "sectionNavLabel": "Navegación de secciones",
    "heroEyebrow": "Programa de Activaciones Pop-Up · {window}",
    "heroHeadlineLine2": "Activaciones de East Plaza",
-   "heroSub": "Un estudio de activaciones en retainer para la East Plaza dentro del Kaseya Center — concepto, ingeniería, fabricación, instalación y strike a través de un menú escalonado de momentos pop-up calibrados a desbloqueos de partners, ritmo de homestands y takeovers insignia de la plaza.",
+   "heroSub": "Un estudio de activaciones en retainer para la East Plaza dentro del Kaseya Center: concepto, ingeniería, fabricación, instalación y strike a través de un menú escalonado de momentos pop-up calibrados a desbloqueos de partners, ritmo de homestands y takeovers insignia de la plaza.",
    "metaClient": "Cliente",
    "metaProducer": "Productor",
    "metaVenue": "Recinto",
@@ -23422,7 +23422,7 @@
    "heroConfidential": "Confidencial · Preparado para {contact} en Miami HEAT · {validity}",
    "overviewEyebrow": "Resumen del Proyecto",
    "overviewTitle": "Builds Escalonados. Capacidad Retenida.",
-   "overviewSub": "Tres vectores de compromiso, diseñados para componerse. Cada activación toma de un menú de builds escalonado. Un retainer mensual — elige uno de tres tiers — reserva capacidad dedicada de estudio detrás del programa. Los Add-Ons se apilan sobre cualquiera, a demanda.",
+   "overviewSub": "Tres vectores de compromiso, diseñados para componerse. Cada activación toma de un menú de builds escalonado. Un retainer mensual (elige uno de tres tiers) reserva capacidad dedicada de estudio detrás del programa. Los Add-Ons se apilan sobre cualquiera, a demanda.",
    "perActivation": "Por Activación",
    "buildMenu": "Menú de Builds",
    "sizeSmall": "Pequeño",
@@ -23446,19 +23446,19 @@
    "buildDiscount": "Descuento de Build",
    "buildDiscountValue": "Hasta 12% Bajo Lista",
    "assetReuse": "Reutilización de Activos",
-   "assetReuseValue": "30–50% de Crédito en Redespliegue",
+   "assetReuseValue": "30 a 50% de Crédito en Redespliegue",
    "upsellSeeElevated": "¿Necesitas Más? Ve Elevated →",
    "upsellSeePremium": "¿Necesitas Más? Ve Premium →",
    "retainerTiersEyebrow": "Tiers de Retainer",
    "retainerTiersTitle": "Base. Elevado. Premium.",
-   "retainerTiersSub": "Tres tiers de retainer, escalados a tu cadencia de activaciones. Cada tier construye sobre el anterior — Elevated incluye todo lo de Base, y Premium incluye todo lo de Elevated más líneas exclusivas reservadas para el tier superior.",
+   "retainerTiersSub": "Tres tiers de retainer, escalados a tu cadencia de activaciones. Cada tier construye sobre el anterior: Elevated incluye todo lo de Base, y Premium incluye todo lo de Elevated más líneas exclusivas reservadas para el tier superior.",
    "monthly": "Mensual",
    "perYear": "· {amount} / año",
    "fitFor": "Ideal Para",
    "choose": "Elegir {name}",
    "premiumExclusivesEyebrow": "Exclusivas Premium · Reservadas para el Tier Superior",
    "premiumExclusivesTitle": "Líneas que No Encontrarás en Ningún Otro Lugar.",
-   "premiumExclusivesSub": "Cuatro líneas disponibles solo en el tier Premium — no a la carta, no en Elevated, no como compra única. Reservadas para partners que corren con nosotros un programa que define la temporada.",
+   "premiumExclusivesSub": "Cuatro líneas disponibles solo en el tier Premium: no a la carta, no en Elevated, no como compra única. Reservadas para partners que corren con nosotros un programa que define la temporada.",
    "activationBuildsEyebrow": "Builds de Activación",
    "activationBuildsTitle": "Pequeño. Mediano. Grande.",
    "activationBuildsSub": "Tres tiers de build, calibrados para el momento. Cada tier mantiene un rango ajustado de spec base a spec tope, con movimientos arquitectónicos y de retail mayores cotizados aparte desde el menú de Add-Ons.",
@@ -23466,12 +23466,12 @@
    "precedent": "Precedente · {name}",
    "includedInBase": "Incluido en Base · {amount}",
    "upgradesInTier": "Upgrades en Este Tier · Hasta {amount}",
-   "tierFootnotePrefix": "Los movimientos arquitectónicos mayores — revestimiento chemetal, arquitectura de contenedores, retail POS completo, builds de hospitalidad — se cotizan aparte desde el",
+   "tierFootnotePrefix": "Los movimientos arquitectónicos mayores (revestimiento chemetal, arquitectura de contenedores, retail POS completo, builds de hospitalidad) se cotizan aparte desde el",
    "addonsMenuLink": "menú de Add-Ons",
    "tierFootnoteSuffix": "y se superponen al tier que mejor calce con el momento.",
    "scopeEyebrow": "Alcance del Trabajo",
    "scopeTitle": "Dibujado. Construido. Impreso. Instalado.",
-   "scopeSub": "Once nodos de alcance que cubren cada elemento fabricado e impreso más los servicios de producción que lo mueven del taller a la plaza y de regreso. El tier define amplitud y acabado — no qué nodos se tocan.",
+   "scopeSub": "Once nodos de alcance que cubren cada elemento fabricado e impreso más los servicios de producción que lo mueven del taller a la plaza y de regreso. El tier define amplitud y acabado, no qué nodos se tocan.",
    "fabricationPrint": "Fabricación e Impresión",
    "productionServices": "Servicios de Producción",
    "appliesTo": "Aplica A · {list}",
@@ -23485,7 +23485,7 @@
    "cadenceLarge": "Cadencia Large",
    "lifecycleEyebrow": "Ciclo de Vida de Producción",
    "lifecycleTitle": "Del Brief al Strike.",
-   "lifecycleSub": "Ocho fases, estructura idéntica en cada activación. La pista escala con el tier de build — Small se condensa a cinco semanas, Medium corre nueve, Large se extiende a trece.",
+   "lifecycleSub": "Ocho fases, estructura idéntica en cada activación. La pista escala con el tier de build: Small se condensa a cinco semanas, Medium corre nueve, Large se extiende a trece.",
    "milestones": "Hitos",
    "deliverables": "Entregables",
    "approvalGate": "Gate de Aprobación",
@@ -23515,7 +23515,7 @@
    "investmentFootnote": "Cada activación corre bajo su propio sign-off firmado, integrado a este acuerdo maestro. Cada tier de build mantiene un rango ajustado de spec base a spec tope, y los upgrades dentro de ese rango permanecen dentro del tier. Los movimientos arquitectónicos mayores se cotizan aparte desde el menú de Add-Ons.",
    "addonsEyebrow": "Add-Ons y Upgrades",
    "addonsTitle": "Apila Cualquier Cosa. Sobre Cualquier Cosa.",
-   "addonsSub": "El menú completo de upgrades opcionales — material, funcional, servicio, logística y documentación. Elige cualquier ítem y añádelo a cualquier retainer o cualquier build. Precio bajo solicitud.",
+   "addonsSub": "El menú completo de upgrades opcionales: material, funcional, servicio, logística y documentación. Elige cualquier ítem y añádelo a cualquier retainer o cualquier build. Precio bajo solicitud.",
    "itemsCount": "{count} ítems",
    "appliesRetainerActivation": "Retainer + Activación",
    "appliesRetainer": "Retención",
@@ -23524,7 +23524,7 @@
    "activationDeposit": "Depósito de Activación",
    "depositDue": "Vence con la aprobación escrita de cada Statement of Work de activación.",
    "balance": "Saldo",
-   "balanceDue": "Vence cinco — 5 — días hábiles antes del load-in. El retainer se factura aparte, mensual net-15.",
+   "balanceDue": "Vence cinco (5) días hábiles antes del load-in. El retainer se factura aparte, mensual net-15.",
    "paymentMethodAch": "Método de Pago · ACH / Transferencia",
    "payableTo": "A Nombre De",
    "achWire": "ACH / Transferencia",
@@ -23532,7 +23532,7 @@
    "currency": "Moneda",
    "optionalScopeEyebrow": "Alcance Opcional",
    "changeOrdersTitle": "Órdenes de Cambio Disponibles.",
-   "changeOrdersSub": "Alcance fuera del menú base del tier — emitido individualmente o apilado en un solo SOW de activación.",
+   "changeOrdersSub": "Alcance fuera del menú base del tier: emitido individualmente o apilado en un solo SOW de activación.",
    "available": "Disponible",
    "scopeBoundariesEyebrow": "Límites del Alcance",
    "exclusionsTitle": "Fuera de Este Compromiso.",
@@ -23564,7 +23564,7 @@
  },
  "publicFormSubmit": {
   "submitted": "Enviado",
-  "thankYouTitle": "Gracias — lo recibimos.",
+  "thankYouTitle": "Gracias, lo recibimos.",
   "thankYouBody": "Tu respuesta quedó registrada. Puedes cerrar esta pestaña.",
   "leaveBlank": "Dejar en blanco",
   "selectPlaceholder": "Seleccionar…",

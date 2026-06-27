@@ -39,21 +39,11 @@ export function ProductPreview({
         strokeWidth="1.5"
       />
 
-      {/* Title bar: traffic dots + a mono label */}
+      {/* Title bar: traffic dots only (no label text — the surrounding copy
+          already names the product; a chrome label just repeats it). */}
       <circle cx="22" cy="20" r="4" fill={accent} />
       <circle cx="38" cy="20" r="4" fill="var(--p-border-2)" />
       <circle cx="54" cy="20" r="4" fill="var(--p-border-2)" />
-      <text
-        x="200"
-        y="24"
-        textAnchor="middle"
-        fontSize="10"
-        fontFamily="'Space Mono', ui-monospace, monospace"
-        letterSpacing="1.5"
-        fill="var(--p-text-3)"
-      >
-        {label.toUpperCase()}
-      </text>
       <line x1="1.5" y1="40" x2="398.5" y2="40" stroke="var(--p-border)" strokeWidth="1" />
 
       {/* Sidebar */}

@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { QuizQuestion } from "@/components/ui/QuizQuestion";
+import { Button } from "@/components/ui/Button";
 import type { QuizItem } from "../../sample";
 
 export type QuizRunnerProps = {
@@ -31,12 +31,9 @@ export function QuizRunner({ items, startIndex }: QuizRunnerProps): React.ReactE
         <p className="text-2xl font-bold text-[var(--p-text-1)]">
           {score} / {items.length}
         </p>
-        <Link
-          href="/legend/learn"
-          className="inline-block rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-        >
+        <Button href="/legend/learn" variant="cta" className="inline-block">
           Back to courses
-        </Link>
+        </Button>
       </div>
     );
   }
@@ -71,22 +68,13 @@ export function QuizRunner({ items, startIndex }: QuizRunnerProps): React.ReactE
       />
       <div className="flex justify-end gap-2">
         {!revealed ? (
-          <button
-            type="button"
-            onClick={check}
-            disabled={selected == null}
-            className="rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95 disabled:opacity-50"
-          >
+          <Button type="button" variant="cta" onClick={check} disabled={selected == null}>
             Check answer
-          </button>
+          </Button>
         ) : (
-          <button
-            type="button"
-            onClick={advance}
-            className="rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-          >
+          <Button type="button" variant="cta" onClick={advance}>
             {index + 1 >= items.length ? "Finish" : "Next question"}
-          </button>
+          </Button>
         )}
       </div>
     </div>

@@ -584,20 +584,20 @@ export default async function PricingPage() {
           .
         </p>
         <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-[720px] text-start">
+          <table className="ps-table min-w-[720px]">
             <thead>
-              <tr className="border-b border-[var(--p-border)] text-xs tracking-wider text-[var(--p-text-2)] uppercase">
-                <th className="py-3 pe-4 font-semibold">{t("marketing.pages.pricing.comparison.headers.module")}</th>
-                <th className="py-3 pe-4 text-center font-semibold">
+              <tr>
+                <th>{t("marketing.pages.pricing.comparison.headers.module")}</th>
+                <th style={{ textAlign: "center" }}>
                   {t("marketing.pages.pricing.comparison.headers.free")}
                 </th>
-                <th className="py-3 pe-4 text-center font-semibold">
+                <th style={{ textAlign: "center" }}>
                   {t("marketing.pages.pricing.comparison.headers.crew")}
                 </th>
-                <th className="py-3 pe-4 text-center font-semibold">
+                <th style={{ textAlign: "center" }}>
                   {t("marketing.pages.pricing.comparison.headers.production")}
                 </th>
-                <th className="py-3 pe-4 text-center font-semibold">
+                <th style={{ textAlign: "center" }}>
                   {t("marketing.pages.pricing.comparison.headers.festival")}
                 </th>
               </tr>
@@ -606,26 +606,23 @@ export default async function PricingPage() {
               {comparison.map((cat) => (
                 <Fragment key={cat.category}>
                   <tr className="bg-[var(--p-surface-2)]">
-                    <td
-                      colSpan={5}
-                      className="eyebrow py-2 ps-3 text-[var(--p-text-2)]"
-                    >
+                    <td colSpan={5} className="eyebrow">
                       {cat.category}
                     </td>
                   </tr>
                   {cat.rows.map((r) => (
-                    <tr key={cat.category + r.feature} className="border-b border-[var(--p-border)]">
-                      <td className="py-3 pe-4 text-sm">{r.feature}</td>
-                      <td className="py-3 pe-4 text-center">
+                    <tr key={cat.category + r.feature}>
+                      <td>{r.feature}</td>
+                      <td style={{ textAlign: "center" }}>
                         <Cell value={r.free} />
                       </td>
-                      <td className="py-3 pe-4 text-center">
+                      <td style={{ textAlign: "center" }}>
                         <Cell value={r.crew} />
                       </td>
-                      <td className="py-3 pe-4 text-center">
+                      <td style={{ textAlign: "center" }}>
                         <Cell value={r.production} />
                       </td>
-                      <td className="py-3 pe-4 text-center">
+                      <td style={{ textAlign: "center" }}>
                         <Cell value={r.festival} />
                       </td>
                     </tr>

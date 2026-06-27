@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Button } from "@/components/ui/Button";
 import { SignaturePad } from "@/components/ui/SignaturePad";
 import { submitSignatureAction, type State } from "./actions";
 
@@ -55,13 +56,9 @@ export function PublicSign({ token, labels }: PublicSignProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={busy || !image}
-          className="rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95 disabled:opacity-50"
-        >
+        <Button type="submit" variant="cta" disabled={busy || !image}>
           {busy ? labels.submitting : labels.submit}
-        </button>
+        </Button>
         {!image && <span className="text-xs text-[var(--p-text-3)]">{labels.noSignature}</span>}
         {state?.error && <span className="text-sm text-[var(--p-danger-text)]">{state.error || labels.error}</span>}
       </div>

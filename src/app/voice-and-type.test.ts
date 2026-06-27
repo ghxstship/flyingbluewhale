@@ -51,6 +51,7 @@ function collectStrings(obj: unknown, path: string[], acc: StringEntry[]) {
 
 const MESSAGE_FILES = walk(MESSAGES).filter((f) => f.endsWith(".json"));
 const MARKETING_TSX = walk(MARKETING).filter((f) => f.endsWith(".tsx"));
+const ALL_TSX = walk(join(REPO_ROOT, "src")).filter((f) => f.endsWith(".tsx") && !/\.test\.tsx?$/.test(f));
 
 // ── Voice: no em/en-dashes in UI copy ───────────────────────────────────────
 const DASH = /[—–]/; // em-dash, en-dash
@@ -128,11 +129,11 @@ describe("Type guard — marketing uses the .eyebrow class", () => {
   });
 });
 
-// ── Components: marketing CTAs go through <Button variant="cta"> ──────────────
-describe("Component guard — marketing CTAs use the Button primitive", () => {
-  it("no hand-rolled bg-[var(--p-accent-cta)] CTAs on marketing", () => {
+// ── Components: every CTA goes through <Button variant="cta"> ────────────────
+describe("Component guard — CTAs use the Button primitive", () => {
+  it("no hand-rolled bg-[var(--p-accent-cta)] CTAs anywhere in src", () => {
     const offenders: string[] = [];
-    for (const f of MARKETING_TSX) {
+    for (const f of ALL_TSX) {
       readFileSync(f, "utf8")
         .split("\n")
         .forEach((line, i) => {

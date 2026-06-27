@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Accordion } from "@/components/ui/Accordion";
+import { Button } from "@/components/ui/Button";
 import { urlFor } from "@/lib/urls";
 
 /**
@@ -42,12 +43,9 @@ export default function ForInstitutionsPage() {
           your field operations run on. Train, certify, and recertify, then let those credentials gate real work.
         </p>
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href={urlFor("marketing", "/contact")}
-            className="rounded-[var(--p-r,8px)] bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
-          >
+          <Button href={urlFor("marketing", "/contact")} variant="cta">
             Talk to us
-          </Link>
+          </Button>
           <Link
             href="/legend"
             className="rounded-[var(--p-r,8px)] border border-[var(--p-border-2)] px-5 py-2.5 text-sm font-semibold text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)]"

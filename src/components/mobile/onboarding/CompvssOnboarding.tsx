@@ -1071,7 +1071,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             </p>
             <div className="card" style={{ marginBottom: 14, padding: 0, overflow: "hidden" }}>
               <div style={{ background: "#0c0e12", color: "#fff", padding: "14px 16px", display: "flex", alignItems: "center", gap: 11 }}>
-                <span style={{ width: 40, height: 40, borderRadius: 10, background: "var(--p-accent)", color: "#1f0e03", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--p-wordmark)", fontWeight: 500, flex: "none" }}>
+                <span style={{ width: 40, height: 40, borderRadius: 10, background: "var(--p-accent)", color: "var(--p-accent-cta-contrast)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--p-wordmark)", fontWeight: 500, flex: "none" }}>
                   {resolvedOffer.initials}
                 </span>
                 <div>

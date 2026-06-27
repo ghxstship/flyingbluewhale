@@ -5,7 +5,7 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
 import { getRequestT } from "@/lib/i18n/request";
 
-const SUPPORTED_PROVIDERS = ["google", "github", "azure", "apple", "linkedin_oidc"] as const;
+const SUPPORTED_PROVIDERS = ["google", "azure", "apple", "linkedin_oidc"] as const;
 type SupportedProvider = (typeof SUPPORTED_PROVIDERS)[number];
 
 function isSupported(p: string): p is SupportedProvider {

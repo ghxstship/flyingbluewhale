@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
@@ -52,9 +51,7 @@ export default async function StatusPage() {
   return (
     <div>
       <JsonLd data={[breadcrumbSchema(crumbs)]} />
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.status.hero.eyebrow")}</div>
         <h1 className="hed-3xl mt-4">{t("marketing.pages.status.hero.title")}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.status.hero.body")}</p>

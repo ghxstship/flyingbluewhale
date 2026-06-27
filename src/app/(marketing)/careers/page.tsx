@@ -3,7 +3,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Compass, Globe2, Heart, Layers, Rocket, Sparkles } from "lucide-react";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { FAQSection } from "@/components/marketing/FAQ";
@@ -81,8 +80,7 @@ export default async function CareersPage() {
       />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <Breadcrumbs items={trail} />
-        <div className="mt-6 max-w-3xl">
+        <div className="max-w-3xl">
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.careers.hero.eyebrow")}</div>
           <h1 className="hed-2xl mt-4">{t("marketing.pages.careers.hero.title")}</h1>
           <p className="mt-5 text-base leading-relaxed text-[var(--p-text-2)] sm:text-lg">

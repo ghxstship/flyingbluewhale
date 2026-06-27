@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { COMMUNITY_LIST } from "@/lib/community";
@@ -23,16 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CommunityPage() {
   const { t } = await getRequestT();
-  const crumbs = [
-    { label: t("marketing.pages.community.breadcrumbs.home"), href: "/" },
-    { label: t("marketing.pages.community.breadcrumbs.community"), href: "/community" },
-  ];
-
   return (
     <div>
-      <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
-
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
+      <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.community.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.community.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.community.hero.subtitle")}</p>

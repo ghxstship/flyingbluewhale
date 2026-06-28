@@ -2314,6 +2314,18 @@
               "arch": [
                 "LIST"
               ]
+            },
+            {
+              "path": "/ai",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/integrations",
+              "arch": [
+                "LIST"
+              ]
             }
           ]
         },
@@ -2393,6 +2405,12 @@
             },
             {
               "path": "/changelog",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/alternatives",
               "arch": [
                 "LIST"
               ]

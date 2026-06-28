@@ -44,6 +44,13 @@ export type AuditAction =
   // API keys (PATs).
   | "auth.api_key.minted"
   | "auth.api_key.revoked"
+  // Developer "Act As" impersonation + sandbox-user lifecycle. The most
+  // sensitive operator action set — each start/stop/spawn/cull is audited
+  // with actor (the developer) + target.
+  | "impersonate.start"
+  | "impersonate.stop"
+  | "impersonate.sandbox_spawn"
+  | "impersonate.sandbox_cull"
   // Org-level admin config that changes auth posture.
   | "auth.sso.upserted"
   | "auth.sso.deleted"

@@ -42,6 +42,18 @@ export type Session = {
    * that want to gate beyond persona/role.
    */
   scopes?: string[];
+  /**
+   * When the request is a developer "Act As" impersonation, this is the REAL
+   * developer's email (the impersonator) — read from the HMAC-signed
+   * `atlvs_impersonator` cookie. Null / undefined for ordinary sessions.
+   *
+   * During impersonation the Supabase session IS the target's, so every
+   * other field on this object (userId, orgId, role, persona, scopes)
+   * correctly reflects the impersonated user — RLS evaluates as the target.
+   * This field exists purely so chrome (the banner) and audit surfaces can
+   * tell that an operator is acting on someone else's behalf, and by whom.
+   */
+  impersonatedBy?: string | null;
 };
 
 /**
@@ -144,8 +156,23 @@ async function resolveSession(): Promise<Session | null> {
   const chosen = real ?? rows[0]!;
   const isGuest = chosen.orgs?.slug === DEMO_ORG_SLUG && !real;
 
+  // Developer "Act As": when a valid, HMAC-signed `atlvs_impersonator`
+  // cookie is present, the Supabase session above is the TARGET's (so all
+  // fields stay the target's, RLS-correct). Surface the real developer's
+  // email so chrome can render the banner. Lazy-imported to avoid a static
+  // import cycle (impersonation.ts depends on getSession from this module).
+  let impersonatedBy: string | null = null;
+  try {
+    const { currentImpersonator } = await import("./auth/impersonation");
+    const imp = await currentImpersonator();
+    impersonatedBy = imp?.impersonatorEmail ?? null;
+  } catch {
+    // No cookie / no signing secret / outside request scope — not impersonating.
+  }
+
   return {
     userId: user.id,
+    impersonatedBy,
     email: user.email ?? "",
     orgId: chosen.org_id,
     orgSlug: chosen.orgs?.slug ?? "",

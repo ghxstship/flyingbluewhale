@@ -27,6 +27,7 @@ import { TooltipProvider } from "@/components/ui/Tooltip";
 import { LiveRegionProvider } from "@/components/ui/LiveRegion";
 import { CookieConsent } from "@/components/compliance/CookieConsent";
 import { ShortcutDialog } from "@/components/ShortcutDialog";
+import { ImpersonationBanner } from "@/components/ImpersonationBanner";
 import { isRtl } from "@/lib/i18n/config";
 import { BRAND } from "@/lib/brand";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
@@ -214,6 +215,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                     duplicated the (platform) layout's <main id="main">. Each
                     shell layout's <main id="main" tabIndex={-1}> is the skip
                     target now. */}
+                {/* Dev "Act As" banner — universal across every shell so the
+                    Exit control is always reachable while impersonating. Renders
+                    nothing for ordinary (non-impersonated) sessions. */}
+                <ImpersonationBanner />
                 <div className="flex min-w-0 flex-1 flex-col">{children}</div>
                 <CookieConsent />
                 <ShortcutDialog />

@@ -1331,3 +1331,21 @@ paths:
                   report: { type: object }
                   metrics: { type: object }
                   capturedAt: { type: string, format: date-time }
+  /api/v1/admin/impersonate:
+    post:
+      summary: "Developer Act-As: start impersonating a user by id (mints the target's real Supabase session so RLS evaluates as the target). Internal, isDeveloper-gated; not for external consumers."
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+    delete:
+      summary: "Developer Act-As: stop impersonating and restore the developer session. Trusts only the HMAC-signed impersonator cookie."
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+  /api/v1/admin/sandbox-user:
+    post:
+      summary: "Developer-only: spawn a throwaway sandbox user with a chosen role and persona in an org, for testing. isDeveloper-gated; users carry user_metadata.sandbox for cull."
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+    delete:
+      summary: "Developer-only: cull all sandbox users (user_metadata.sandbox=true) and their memberships."
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }

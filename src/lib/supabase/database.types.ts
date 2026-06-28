@@ -10802,10 +10802,13 @@ export type Database = {
           deleted_at: string | null
           ends_at: string | null
           event_id: string | null
+          fulfillment: string
           hero_image: string | null
           id: string
           listing_state: string
           org_id: string
+          provider_name: string | null
+          seat_map: Json | null
           slug: string
           starts_at: string | null
           summary: string | null
@@ -10819,10 +10822,13 @@ export type Database = {
           deleted_at?: string | null
           ends_at?: string | null
           event_id?: string | null
+          fulfillment?: string
           hero_image?: string | null
           id?: string
           listing_state?: string
           org_id: string
+          provider_name?: string | null
+          seat_map?: Json | null
           slug: string
           starts_at?: string | null
           summary?: string | null
@@ -10836,10 +10842,13 @@ export type Database = {
           deleted_at?: string | null
           ends_at?: string | null
           event_id?: string | null
+          fulfillment?: string
           hero_image?: string | null
           id?: string
           listing_state?: string
           org_id?: string
+          provider_name?: string | null
+          seat_map?: Json | null
           slug?: string
           starts_at?: string | null
           summary?: string | null
@@ -10944,6 +10953,76 @@ export type Database = {
           },
         ]
       }
+      event_payouts: {
+        Row: {
+          account: string | null
+          created_at: string
+          currency: string
+          event_listing_id: string | null
+          id: string
+          net_cents: number
+          org_id: string
+          paid_at: string | null
+          payout_state: string
+          period_label: string | null
+          scheduled_for: string | null
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          account?: string | null
+          created_at?: string
+          currency?: string
+          event_listing_id?: string | null
+          id?: string
+          net_cents?: number
+          org_id: string
+          paid_at?: string | null
+          payout_state?: string
+          period_label?: string | null
+          scheduled_for?: string | null
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account?: string | null
+          created_at?: string
+          currency?: string
+          event_listing_id?: string | null
+          id?: string
+          net_cents?: number
+          org_id?: string
+          paid_at?: string | null
+          payout_state?: string
+          period_label?: string | null
+          scheduled_for?: string | null
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_payouts_event_listing_id_fkey"
+            columns: ["event_listing_id"]
+            isOneToOne: false
+            referencedRelation: "event_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_payouts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_payouts_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "revenue_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_recurrence_exceptions: {
         Row: {
           exception_kind: string
@@ -11022,6 +11101,70 @@ export type Database = {
           },
         ]
       }
+      event_ticket_scans: {
+        Row: {
+          created_at: string
+          event_listing_id: string | null
+          gate: string | null
+          id: string
+          location: string | null
+          org_id: string
+          result: string
+          scanned_at: string
+          scanned_by: string | null
+          scanned_code: string | null
+          ticket_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_listing_id?: string | null
+          gate?: string | null
+          id?: string
+          location?: string | null
+          org_id: string
+          result: string
+          scanned_at?: string
+          scanned_by?: string | null
+          scanned_code?: string | null
+          ticket_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_listing_id?: string | null
+          gate?: string | null
+          id?: string
+          location?: string | null
+          org_id?: string
+          result?: string
+          scanned_at?: string
+          scanned_by?: string | null
+          scanned_code?: string | null
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ticket_scans_event_listing_id_fkey"
+            columns: ["event_listing_id"]
+            isOneToOne: false
+            referencedRelation: "event_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ticket_scans_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_ticket_scans_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "event_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_ticket_types: {
         Row: {
           created_at: string
@@ -11036,6 +11179,7 @@ export type Database = {
           quantity_sold: number
           quantity_total: number
           sales_state: string
+          seating_zone: string | null
           sort_order: number
           updated_at: string
         }
@@ -11052,6 +11196,7 @@ export type Database = {
           quantity_sold?: number
           quantity_total?: number
           sales_state?: string
+          seating_zone?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -11068,6 +11213,7 @@ export type Database = {
           quantity_sold?: number
           quantity_total?: number
           sales_state?: string
+          seating_zone?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -11084,6 +11230,92 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_tickets: {
+        Row: {
+          code: string
+          created_at: string
+          deleted_at: string | null
+          event_listing_id: string
+          holder_email: string | null
+          holder_name: string | null
+          holder_user_id: string | null
+          id: string
+          issued_at: string
+          order_id: string | null
+          org_id: string
+          redeemed_at: string | null
+          seat_label: string | null
+          ticket_state: string
+          ticket_type_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          deleted_at?: string | null
+          event_listing_id: string
+          holder_email?: string | null
+          holder_name?: string | null
+          holder_user_id?: string | null
+          id?: string
+          issued_at?: string
+          order_id?: string | null
+          org_id: string
+          redeemed_at?: string | null
+          seat_label?: string | null
+          ticket_state?: string
+          ticket_type_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          deleted_at?: string | null
+          event_listing_id?: string
+          holder_email?: string | null
+          holder_name?: string | null
+          holder_user_id?: string | null
+          id?: string
+          issued_at?: string
+          order_id?: string | null
+          org_id?: string
+          redeemed_at?: string | null
+          seat_label?: string | null
+          ticket_state?: string
+          ticket_type_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_tickets_event_listing_id_fkey"
+            columns: ["event_listing_id"]
+            isOneToOne: false
+            referencedRelation: "event_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_tickets_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "revenue_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_tickets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_tickets_ticket_type_id_fkey"
+            columns: ["ticket_type_id"]
+            isOneToOne: false
+            referencedRelation: "event_ticket_types"
             referencedColumns: ["id"]
           },
         ]
@@ -39553,6 +39785,34 @@ export type Database = {
           },
         ]
       }
+      v_event_revenue: {
+        Row: {
+          adjustments_cents: number | null
+          event_listing_id: string | null
+          fees_cents: number | null
+          gross_cents: number | null
+          order_count: number | null
+          org_id: string | null
+          paid_out_cents: number | null
+          refunds_cents: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revenue_orders_event_listing_id_fkey"
+            columns: ["event_listing_id"]
+            isOneToOne: false
+            referencedRelation: "event_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revenue_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_line_permit_flags: {
         Row: {
           ahj_default: string | null
@@ -40480,6 +40740,10 @@ export type Database = {
       record_role_for: {
         Args: { p_id: string; p_table: string }
         Returns: Database["public"]["Enums"]["record_role"]
+      }
+      redeem_event_ticket: {
+        Args: { p_code: string; p_gate?: string; p_location?: string }
+        Returns: Json
       }
       redeem_guide_access_code: {
         Args: {

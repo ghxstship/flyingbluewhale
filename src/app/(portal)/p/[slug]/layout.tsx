@@ -3,7 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
 import { portalPersonaForSession } from "@/lib/nav";
-import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { WorkspaceChrome } from "@/components/workspace-chrome/WorkspaceChrome";
+import { AppRail } from "@/components/workspace-chrome/AppRail";
+import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
 import { getSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -41,37 +43,55 @@ export default async function PortalSlugLayout({
   // portal visitors still get the bare layout; chrome only renders when
   // a session exists so we don't surface bell/messages to non-users.
   const session = await getSession();
-  const switcherEntries = session
-    ? await resolveSwitcherEntries({ supabase, userId: session.userId, role: session.role, currentPortalSlug: slug })
-    : [];
+  // Global App Rail — only for authenticated portal users (rule 2: never on
+  // public surfaces); supersedes the top-bar popover here.
+  const rail = session
+    ? await resolveAppRail({
+        shell: "portal",
+        userId: session.userId,
+        role: session.role,
+        persona: session.persona,
+        isDeveloper: session.isDeveloper,
+        portalSlug: slug,
+      })
+    : null;
 
   return (
-    <div data-portal-slug={slug} data-theme="atlvs-product" data-platform="gvteway" style={style}>
-      {data?.branding && Object.keys(branding).length > 0 && (
-        <a className="sr-only" href={`/p/${slug}`}>
-          {t("p.shared.layout.srPortalLink", { name: data.name ?? slug }, `${data.name ?? slug} portal`)}
-        </a>
-      )}
-      {session ? (
-        <WorkspaceChrome
-          shell="portal"
-          workspaceLabel={data.name ?? slug}
-          userEmail={session.email}
-          messagesHref={`/p/${slug}/messages`}
-          switcherEntries={switcherEntries}
+    <div
+      data-portal-slug={slug}
+      data-theme="atlvs-product"
+      data-platform="gvteway"
+      style={style}
+      className="flex min-h-screen"
+    >
+      {rail?.show ? <AppRail groups={rail.groups} activeId={rail.activeId} labels={rail.labels} /> : null}
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        {data?.branding && Object.keys(branding).length > 0 && (
+          <a className="sr-only" href={`/p/${slug}`}>
+            {t("p.shared.layout.srPortalLink", { name: data.name ?? slug }, `${data.name ?? slug} portal`)}
+          </a>
+        )}
+        {session ? (
+          <WorkspaceChrome
+            shell="portal"
+            workspaceLabel={data.name ?? slug}
+            userEmail={session.email}
+            messagesHref={`/p/${slug}/messages`}
+            switcherEntries={[]}
+          />
+        ) : null}
+        {/* AX-4 — the portal shell had no <main> landmark, so the root skip
+            link had nothing to land on and screen readers lacked a main-content
+            anchor. tabIndex={-1} lets the skip link move focus here. */}
+        <main id="main" tabIndex={-1}>
+          {children}
+        </main>
+        <CommandPalette
+          scope="portal"
+          portalSlug={slug}
+          portalPersona={portalPersonaForSession(session?.persona) ?? undefined}
         />
-      ) : null}
-      {/* AX-4 — the portal shell had no <main> landmark, so the root skip
-          link had nothing to land on and screen readers lacked a main-content
-          anchor. tabIndex={-1} lets the skip link move focus here. */}
-      <main id="main" tabIndex={-1}>
-        {children}
-      </main>
-      <CommandPalette
-        scope="portal"
-        portalSlug={slug}
-        portalPersona={portalPersonaForSession(session?.persona) ?? undefined}
-      />
+      </div>
     </div>
   );
 }

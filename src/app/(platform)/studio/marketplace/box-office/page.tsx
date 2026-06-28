@@ -78,9 +78,14 @@ export default async function BoxOfficePage() {
           "Guest lists, door scan, and live check-in. DICE/TIXR-style box office.",
         )}
         action={
-          <Button href="/studio/marketplace/box-office/new">
-            {t("console.boxOffice.newList", undefined, "+ New Guest List")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/studio/marketplace/box-office/listings" variant="secondary" size="sm">
+              {t("console.boxOffice.ticketedEvents", undefined, "Ticketed events")}
+            </Button>
+            <Button href="/studio/marketplace/box-office/new">
+              {t("console.boxOffice.newList", undefined, "+ New Guest List")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-5">

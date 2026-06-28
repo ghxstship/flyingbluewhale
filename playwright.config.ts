@@ -30,7 +30,10 @@ export default defineConfig({
   // One retry locally too: a `next dev` cold-compile that overruns the nav
   // budget on its first hit self-heals on retry (the route is warm by then).
   // The happy path is unaffected — retries only re-run failures.
-  retries: process.env.CI ? 2 : 1,
+  // Remote targets (CI prod build OR an E2E_BASE_URL deployment) are inherently
+  // flakier — network latency, the edge proxy's per-IP rate limiting, and the
+  // odd transient nav abort — so give them 2 retries. Local dev keeps 1.
+  retries: process.env.CI || REMOTE ? 2 : 1,
   workers: 1,
   // Pre-warm the shared shells (marketing/auth + the authed app layouts) once
   // before the suite so the first real test doesn't pay the cold-compile tax

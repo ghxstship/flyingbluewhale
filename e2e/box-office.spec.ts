@@ -26,13 +26,18 @@
  * collaborator (role=member), surfaced by FormShell as an Alert (role="alert").
  */
 import { expect, test, type Page } from "playwright/test";
-import { authedSetup, dismissConsent } from "./helpers/auth";
+import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 
 const SLUG = "e2e-warehouse-02";
 const EVENT_TITLE = "E2E Warehouse 02";
 const TIER = "General Admission";
 const PAYOUT = "E2E Settlement";
+// The fixture (e2e-warehouse-02) lives in the test-professional org; the seeded
+// test+<role> users belong to multiple tier orgs and their DEFAULT active
+// workspace isn't necessarily this one, so pin it (mirrors booking-canon /
+// marketplace-canon, which use the same switch for the same reason).
+const PROF_ORG = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 
 const ACCESS_DENIED = /you don'?t have access/i;
 const ERROR_BOUNDARY = /application error|something went wrong|unhandled|digest:|client-side exception/i;
@@ -53,8 +58,11 @@ const isManagerPlus = (t: Tier) => t === "manager";
 // ── ATLVS operator console ──────────────────────────────────────────────────
 for (const op of OPERATORS) {
   test.describe(`box office · ATLVS console · ${op.fixture} (${op.tier})`, () => {
-    test.describe.configure({ timeout: 180_000 });
-    test.beforeEach(async ({ page }) => authedSetup(page, op.fixture));
+    test.describe.configure({ timeout: 300_000 });
+    test.beforeEach(async ({ page }) => {
+      await dismissConsent(page);
+      await loginAndSwitchWorkspace(page, op.fixture, PROF_ORG);
+    });
 
     test("listings index renders for operators + lists the seeded event", async ({ page }) => {
       await page.goto("/studio/marketplace/box-office/listings");
@@ -136,7 +144,9 @@ for (const op of OPERATORS) {
       await expect(form, "the New ticket type form is present").toBeVisible({ timeout: 15_000 });
       await form.locator("[name='name']").fill(name);
       await form.locator("[name='price']").fill("30");
-      await form.getByRole("button", { name: /add ticket type/i }).click();
+      const submit = form.getByRole("button", { name: /add ticket type/i });
+      await submit.scrollIntoViewIfNeeded();
+      await submit.click();
 
       if (isManagerPlus(op.tier)) {
         // Success: the action revalidates and the new tier row renders. No
@@ -221,11 +231,12 @@ test.describe("box office · GVTEWAY public · anon", () => {
     // First-party checkout: the quantity stepper (+/- per tier) and the Checkout
     // CTA. (Sold-out tiers replace the stepper with a label — tolerate either by
     // asserting the buy affordance OR the stepper is present.)
-    const stepper = page.getByRole("button", { name: /add one/i }).first();
-    const checkout = page.getByRole("button", { name: /checkout/i }).first();
+    // A first-party listing renders BOTH the per-tier quantity stepper and the
+    // Checkout CTA; assert the stepper directly (an `.or()` over two present
+    // elements trips Playwright strict mode).
     await expect(
-      stepper.or(checkout),
-      "the first-party checkout exposes a quantity stepper or a buy CTA",
+      page.getByRole("button", { name: /add one/i }).first(),
+      "the first-party checkout exposes a per-tier quantity stepper",
     ).toBeVisible({ timeout: 15_000 });
   });
 });

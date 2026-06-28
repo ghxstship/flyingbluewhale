@@ -16,9 +16,14 @@ const E2E_BASE_URL = process.env.E2E_BASE_URL;
 // REMOTE = a pre-compiled server (prod build OR a deployed URL): no dev
 // cold-compile, so use the tighter timeouts + skip the local pre-warm.
 const REMOTE = E2E_PROD || !!E2E_BASE_URL;
+// TUTORIAL=1 captures rich artifacts for EVERY test — a video of every action,
+// per-action trace snapshots, and a final screenshot — into TUTORIAL_OUT, for
+// authoring product tutorials. Off by default so normal/CI runs are unaffected.
+const TUTORIAL = process.env.TUTORIAL === "1";
 
 export default defineConfig({
   testDir: "./e2e",
+  outputDir: process.env.TUTORIAL_OUT || "test-results",
   // The visual-regression audit (e2e/audit/**) has its own dedicated config
   // (playwright.audit.config.ts) with config-specific snapshot baselines and a
   // multi-browser matrix. Running those PNG-diff specs under the functional
@@ -52,7 +57,10 @@ export default defineConfig({
     // 60s nav budget (matches the sitemap-crawl harness); a prod server serves
     // pre-compiled routes instantly, so 30s is plenty there.
     navigationTimeout: REMOTE ? 30000 : 60000,
-    trace: "on-first-retry",
+    trace: TUTORIAL ? "on" : "on-first-retry",
+    // Tutorial capture: a video of every action + a final screenshot per test.
+    screenshot: TUTORIAL ? "on" : "off",
+    video: TUTORIAL ? "on" : "off",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: E2E_BASE_URL ? undefined : {

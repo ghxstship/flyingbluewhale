@@ -53,6 +53,10 @@
    repo's Monument base stays the default; a trend applies only when chosen. */
 @import "./kit-trends.css";
 
+/* Global App Rail — persistent cross-product switcher chrome (ATLVS Ecosystem
+   kit). Pairs with src/components/workspace-chrome/AppRail.tsx. */
+@import "./kit-rail.css";
+
 /*
  * SSR cold-start fallback — used only when no [data-theme] / [data-ui]
  * attribute has hit <html> yet. Defines the canonical ATLVS light surface in

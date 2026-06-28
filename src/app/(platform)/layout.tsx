@@ -1,7 +1,9 @@
 import { PlatformSidebar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { MobileNavDrawer } from "@/components/MobileNavDrawer";
-import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { WorkspaceChrome } from "@/components/workspace-chrome/WorkspaceChrome";
+import { AppRail } from "@/components/workspace-chrome/AppRail";
+import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { platformNav } from "@/lib/nav";
@@ -43,13 +45,16 @@ export default async function PlatformLayout({ children }: { children: React.Rea
     name: (d.name as string) ?? "Untitled",
     href: `/studio/dashboards/${d.id}`,
   }));
-  // Switcher needs uiState (last_portal_slug) resolved above, so it follows
-  // the parallel batch rather than joining it.
-  const switcherEntries = await resolveSwitcherEntries({
-    supabase,
+  // Global App Rail — the persistent cross-product switcher (supersedes the
+  // top-bar popover here). Needs uiState (last_portal_slug) resolved above, so
+  // it follows the parallel batch rather than joining it.
+  const rail = await resolveAppRail({
+    shell: "platform",
     userId: session.userId,
     role: session.role,
-    currentPortalSlug: uiState?.last_portal_slug ?? null,
+    persona: session.persona,
+    isDeveloper: session.isDeveloper,
+    portalSlug: uiState?.last_portal_slug ?? null,
   });
   return (
     <TenantShell tenant={tenant}>
@@ -69,6 +74,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
         data-platform="atlvs"
         className="console-shell"
       >
+        {rail.show ? <AppRail groups={rail.groups} activeId={rail.activeId} labels={rail.labels} /> : null}
         <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} />
         <div className="console-main">
           {/*
@@ -94,7 +100,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
             userName={session.email || t("console.layout.userFallback", undefined, "User")}
             messagesHref="/studio/inbox"
             dashboards={dashboards}
-            switcherEntries={switcherEntries}
+            switcherEntries={[]}
             navDrawer={<MobileNavDrawer groups={platformNav} />}
           />
           {/*

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "ATLVS Ecosystem — App Rail Entitlements",
+    "version": "1.0.0",
+    "updated": "2026-06-28",
+    "purpose": "SSOT for the global app rail (AppSwitcher as persistent shell chrome). Defines the addressable surfaces, the role→surface reach matrix, and the rules that gate when the rail renders and how it navigates. The codebase implements against this; the runtime entitlement list is API-fed per user (see rules.entitlementsSource), this file is the design contract + fallback shape.",
+    "addressing": "host is the canonical origin boundary (subdomain). Products own their host; extensions are PATHS within their parent product's host. The rail mixes cross-origin links (different host) and same-origin route changes (same host, different path)."
+  },
+  "rules": {
+    "showRailWhenEntitledAppsGTE": 2,
+    "hideOnPublicSurfaces": true,
+    "publicHostsNoRail": ["atlvs.pro", "gateway.atlvs.pro/marketplace", "legend.atlvs.pro"],
+    "entitlementsSource": "GET /v1/me/entitlements → { apps: [{id, access}] } — NEVER hardcode the list; this file is the shape + design-time fallback",
+    "navigation": "if target.host === current.host → client-side route to target.routeGroup; else → full cross-origin navigation (prefetch on hover) to https://{host}{routeGroup}",
+    "sso": { "cookieDomain": ".atlvs.pro", "resolver": "/auth/resolve", "note": "shared parent-domain session so the rail carries the user across subdomains without re-login; token handoff via the resolver for first cross-host hop" },
+    "theming": { "activeProduct": "set data-product to the active app's accentOwner", "tenant": "tenant white-label overrides brand seeds on the shell root; product accent resolves under it", "note": "extensions inherit their parent product's accent unless they own one" },
+    "railOrder": ["atlvs", "compvss", "gvteway", "legend", "opvs", "cvrgo", "vault", "mvnifest", "gvlley", "social", "email"],
+    "groups": [
+      { "label": "Products", "apps": ["atlvs", "compvss", "gvteway", "legend"] },
+      { "label": "Extensions", "apps": ["opvs", "cvrgo", "vault", "mvnifest", "gvlley", "social", "email"] }
+    ]
+  },
+  "apps": [
+    { "id": "atlvs",    "name": "ATLVS",    "tier": "product",   "accentOwner": "atlvs",   "host": "app.atlvs.pro",     "routeGroup": "/studio",                 "icon": "layout-dashboard", "addressing": "subdomain" },
+    { "id": "compvss",  "name": "COMPVSS",  "tier": "product",   "accentOwner": "compvss", "host": "compass.atlvs.pro", "routeGroup": "/m",                      "icon": "hard-hat",         "addressing": "subdomain", "pwa": true },
+    { "id": "gvteway",  "name": "GVTEWAY",  "tier": "product",   "accentOwner": "gvteway", "host": "gateway.atlvs.pro", "routeGroup": "/p",                      "icon": "globe",            "addressing": "subdomain", "publicSurfaces": ["/marketplace"] },
+    { "id": "legend",   "name": "LEG3ND",   "tier": "product",   "accentOwner": "legend",  "host": "legend.atlvs.pro",  "routeGroup": "/legend",                 "icon": "graduation-cap",   "addressing": "subdomain", "publicSurfaces": ["/legend", "/legend/catalog"] },
+    { "id": "opvs",     "name": "OPVS",     "tier": "extension", "accentOwner": "opvs",    "host": "app.atlvs.pro",     "routeGroup": "/console/opvs",           "icon": "mic-2",            "addressing": "path", "parent": "atlvs" },
+    { "id": "cvrgo",    "name": "CVRGO",    "tier": "extension", "accentOwner": "cvrgo",   "host": "app.atlvs.pro",     "routeGroup": "/console/cvrgo",          "icon": "package",          "addressing": "path", "parent": "atlvs" },
+    { "id": "vault",    "name": "Vault",    "tier": "extension", "accentOwner": "atlvs",   "host": "app.atlvs.pro",     "routeGroup": "/vault",                  "icon": "wallet",           "addressing": "path", "parent": "atlvs", "note": "inherits ATLVS red" },
+    { "id": "mvnifest", "name": "MVNIFEST", "tier": "extension", "accentOwner": "atlvs",   "host": "app.atlvs.pro",     "routeGroup": "/studio/finance/payroll", "icon": "users",            "addressing": "path", "parent": "atlvs" },
+    { "id": "gvlley",   "name": "GVLLEY",   "tier": "extension", "accentOwner": "gvlley",  "host": "app.atlvs.pro",     "routeGroup": "/console/gvlley",         "icon": "utensils",         "addressing": "path", "parent": "atlvs" },
+    { "id": "social",   "name": "Social",   "tier": "extension", "accentOwner": "atlvs",   "host": "app.atlvs.pro",     "routeGroup": "/studio/social",          "icon": "share-2",          "addressing": "path", "parent": "atlvs" },
+    { "id": "email",    "name": "Email",    "tier": "extension", "accentOwner": "atlvs",   "host": "app.atlvs.pro",     "routeGroup": "/studio/email",           "icon": "mail",             "addressing": "path", "parent": "atlvs" }
+  ],
+  "personas": [
+    { "id": "operator", "name": "Operator / Producer", "landing": "atlvs",   "reach": { "atlvs": "full", "compvss": "full", "gvteway": "ro", "legend": "ro", "opvs": "full", "cvrgo": "full", "vault": "full", "mvnifest": "full", "gvlley": "full", "social": "full", "email": "full" } },
+    { "id": "pm",       "name": "Project Manager",     "landing": "atlvs",   "reach": { "atlvs": "full", "compvss": "full", "mvnifest": "ro" } },
+    { "id": "finance",  "name": "Finance / Controller","landing": "atlvs",   "reach": { "atlvs": "full", "mvnifest": "full", "email": "ro" } },
+    { "id": "crew",     "name": "Crew / Field",        "landing": "compvss", "reach": { "compvss": "full", "gvlley": "ro", "legend": "ro" } },
+    { "id": "partner",  "name": "Partner / Vendor",    "landing": "gvteway", "reach": { "gvteway": "full", "cvrgo": "ro" } },
+    { "id": "talent",   "name": "Talent / Artist",     "landing": "gvteway", "reach": { "gvteway": "full", "opvs": "full", "compvss": "ro" } },
+    { "id": "client",   "name": "Client / Sponsor",    "landing": "gvteway", "reach": { "gvteway": "full" } },
+    { "id": "learner",  "name": "Learner",             "landing": "legend",  "reach": { "legend": "full", "compvss": "ro" } },
+    { "id": "admin",    "name": "Tenant Admin",        "landing": "atlvs",   "reach": "all" },
+    { "id": "super",    "name": "Super Admin",         "landing": "atlvs",   "reach": "all", "crossTenant": true }
+  ]
+}

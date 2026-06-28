@@ -23614,5 +23614,14 @@
   "requestBody": "Request body",
   "responses": "Responses",
   "footer": "OpenAPI 3.1 · {count} paths · Generated at request time from registered Zod schemas."
+ },
+ "rail": {
+  "nav": "Switch app",
+  "readOnly": "read-only",
+  "soon": "Soon",
+  "group": {
+   "products": "Products",
+   "extensions": "Extensions"
+  }
  }
 }

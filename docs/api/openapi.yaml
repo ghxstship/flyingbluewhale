@@ -616,6 +616,8 @@ paths:
   /api/v1/me/workspaces:
     get:   { summary: List every workspace the session user is a member of, plus the currently active one. }
     patch: { summary: Switch the active workspace by updating `last_org_id` on the user's preferences. }
+  /api/v1/me/entitlements:
+    get: { summary: "Ecosystem app entitlements for the global App Rail — the apps the session user can reach with access level ({ apps: [{id, access}] }). SSOT for the cross-product switcher." }
   /api/v1/me/export:
     get: { summary: Download a GDPR JSON export of the session's data. }
   /api/v1/me/delete:

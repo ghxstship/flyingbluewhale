@@ -1,0 +1,130 @@
+/*
+ * Global App Rail — persistent cross-product switcher (ATLVS Ecosystem kit).
+ *
+ * A fixed-width vertical rail on the left edge of the authenticated console:
+ * one click crosses the ecosystem (ATLVS · COMPVSS · GVTEWAY · LEG3ND, plus
+ * the coming-soon extensions). Metrics are token-exact per the handoff; all
+ * colour resolves from the live --p-* layer so it re-skins with product/tenant.
+ * Component: src/components/workspace-chrome/AppRail.tsx.
+ */
+.app-rail {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  width: 74px;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 0;
+  background: var(--p-surface);
+  border-right: 1px solid var(--p-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: var(--p-z-nav, 25);
+  scrollbar-width: none;
+}
+.app-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.app-rail__group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+}
+
+/* Thin separator between the Products and Extensions groups. */
+.app-rail__divider {
+  width: 34px;
+  height: 1px;
+  background: var(--p-border);
+  margin: 7px 0;
+  flex-shrink: 0;
+}
+
+.app-rail__item {
+  position: relative;
+  width: 56px;
+  height: 54px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--p-text-3);
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+.app-rail__item:hover {
+  background: var(--p-surface-2);
+  color: var(--p-text-1);
+}
+.app-rail__item:focus-visible {
+  outline: 2px solid var(--p-focus);
+  outline-offset: -2px;
+}
+/* Active product. */
+.app-rail__item[aria-current="page"] {
+  background: var(--p-accent-weak);
+  border-color: var(--p-accent);
+  color: var(--p-accent-text);
+}
+
+/* Coming-soon extension — visible but inert, with a "Soon" tag. */
+.app-rail__item--soon {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.app-rail__label {
+  font-family: var(--p-mono-data, ui-monospace, monospace);
+  font-size: 7.5px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Read-only badge dot (top-right of the icon cell). */
+.app-rail__ro {
+  position: absolute;
+  top: 6px;
+  right: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--p-warning, #c8841a);
+}
+
+/* "Soon" pill under coming-soon items replaces the live state. */
+.app-rail__soon-tag {
+  font-family: var(--p-mono-data, ui-monospace, monospace);
+  font-size: 6.5px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--p-text-3);
+}
+
+/* The rail is desktop-console chrome — collapse it on phone-width viewports
+   (the COMPVSS field PWA keeps its own popover switcher instead). */
+@media (max-width: 767px) {
+  .app-rail {
+    display: none;
+  }
+}

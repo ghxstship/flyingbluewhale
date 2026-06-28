@@ -423,6 +423,7 @@ export const platformNavDomain: NavGroup[] = [
           // from Finance AR (IMPLEMENTATION §5).
           { label: "Orders", href: "/studio/revenue/orders", icon: "Receipt" },
           { label: "Transactions", href: "/studio/revenue/transactions", icon: "Coins" },
+          { label: "Payouts", href: "/studio/revenue/payouts", icon: "Coins" },
           { label: "Analytics", href: "/studio/insights", icon: "BarChart3" },
         ],
       },
@@ -1305,6 +1306,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Inventory Scan", href: "/m/inventory/scan" },
   { label: "Scan", href: "/m/check-in" },
   { label: "Quick Scan", href: "/m/scan" },
+  { label: "Door Scanner", href: "/m/door" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Time", href: "/m/clock" },
   { label: "Requests", href: "/m/requests" },

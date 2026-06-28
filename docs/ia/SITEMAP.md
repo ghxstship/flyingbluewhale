@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1134 · **API route handlers:** 132 · **Distinct nav hrefs:** 481
+**Page routes:** 1135 · **API route handlers:** 134 · **Distinct nav hrefs:** 481
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 749 | 215 | 534 | 0 | 0 |
+| ATLVS — Operator Console | platformNav rail | 750 | 215 | 534 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 53 | 38 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 91 | 33 | 49 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1134** | **455** | **641** | **0** | **38** |
+| **TOTAL** | | **1135** | **455** | **641** | **0** | **39** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (38) — intentional non-nav, with reasons
+## · Exempt routes (39) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -83,6 +83,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
 | `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
 | `/social` | prefix | social image asset endpoint |
+| `/studio/settings/impersonate` | exact | dev-only impersonation console (isDeveloper-gated, notFound otherwise) |
 
 ---
 
@@ -90,7 +91,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-749 routes — ● 215 nav · ○ 534 linked · ⚠ 0 orphan
+750 routes — ● 215 nav · ○ 534 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -1020,7 +1021,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>settings</code> · 41 routes</summary>
+<details><summary><code>settings</code> · 42 routes</summary>
 
 ○ `/studio/settings`
 ● `/studio/settings/account-managers`
@@ -1039,6 +1040,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/studio/settings/email-templates`
 ● `/studio/settings/exports`
 ● `/studio/settings/governance`
+· `/studio/settings/impersonate`
 ● `/studio/settings/imports`
 ● `/studio/settings/integrations`
 ○ `/studio/settings/integrations/[integrationId]`
@@ -2393,12 +2395,19 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 132 route handlers
+## API surface (`/api/v1`) — 134 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
 
 - `/api/v1/accreditation/scan`
+
+</details>
+
+<details><summary><code>/api/v1/admin</code> · 2</summary>
+
+- `/api/v1/admin/impersonate`
+- `/api/v1/admin/sandbox-user`
 
 </details>
 

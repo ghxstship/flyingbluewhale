@@ -226,6 +226,11 @@ const EXEMPT = [
     reason: "account lifecycle sub-screen, reached from /m/settings",
   },
   { path: "/social", type: "prefix", reason: "social image asset endpoint" },
+  {
+    path: "/studio/settings/impersonate",
+    type: "exact",
+    reason: "dev-only impersonation console (isDeveloper-gated, notFound otherwise)",
+  },
 ];
 const isExempt = (route) =>
   EXEMPT.some((e) => (e.type === "exact" ? route === e.path : route === e.path || route.startsWith(e.path + "/")));

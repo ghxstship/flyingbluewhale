@@ -40,6 +40,12 @@
    primitives, all resolving from --p-* so they theme per product for free. */
 @import "./kit-ai.css";
 
+/* kit v8 "layers" — a named z-index ladder (--p-z-*), an opacity scale
+   (--p-o-*), and an opt-in colorblind-safe chart palette ([data-chart="safe"],
+   Okabe–Ito). Additive + var()-able; resolves the previously-implicit stacking
+   order. Guarded by src/lib/theme/layers-tokens.test.ts. */
+@import "./kit-layers.css";
+
 /* v8.1 personalization axis — [data-trend] re-skins shape/elevation/motion/
    expression over the brand spine (hue-locked off --k-acc; never restates a
    brand hue). Imported LAST so [data-trend] (0,2,0) wins on ties. The kit's

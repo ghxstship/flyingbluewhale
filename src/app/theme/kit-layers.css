@@ -1,0 +1,74 @@
+/* ============================================================================
+   ATLVS — STACKING, OPACITY & ACCESSIBLE-DATAVIZ tokens (kit v8 · "layers")
+   ----------------------------------------------------------------------------
+   Adopted from the ATLVS Ecosystem kit (tokens/layers.css). Three small token
+   sets, previously implicit in the repo, now named and referenceable via var():
+
+     1. --p-z-*   a semantic z-index ladder (one source for stacking order)
+     2. --p-o-*   an opacity scale (disabled / muted / scrim steps)
+     3. [data-chart="safe"]  an opt-in colorblind-safe categorical chart palette
+        (Okabe–Ito, authored in oklch) + optional [data-encode="patterned"]
+        non-color dash encodings (WCAG 1.4.1 — never rely on hue alone)
+
+   Imported by theme/index.css after kit-ai.css. No brand hue is restated.
+   Guarded by src/lib/theme/layers-tokens.test.ts.
+   ============================================================================ */
+
+:root {
+  /* 1 · Z-INDEX LADDER — the canonical stacking order. Components reference
+     these instead of hand-typing z-index:44/60/70. Gaps of 100 leave room to
+     slot a layer between two without renumbering. Order mirrors paint order:
+     raised → sticky → nav → dropdown → overlay/scrim → modal → popover →
+     toast → tour, so a higher concept never renders under a lower one. */
+  --p-z-base: 0; /* default in-flow content */
+  --p-z-raised: 10; /* hover-lifted cards, sticky cells */
+  --p-z-sticky: 100; /* sticky table headers, in-page bars */
+  --p-z-nav: 200; /* app shell sidebar / top bar */
+  --p-z-dropdown: 300; /* menus, selects, comboboxes, anchored popovers */
+  --p-z-overlay: 400; /* modal / drawer scrim (backdrop) */
+  --p-z-modal: 500; /* dialog, drawer, sheet, command palette */
+  --p-z-popover: 600; /* popover / tooltip ABOVE a modal */
+  --p-z-toast: 700; /* toast / snackbar stack */
+  --p-z-tour: 800; /* coachmark spotlight + its popper */
+  --p-z-max: 2147483000; /* dev overlays, a11y skip-link on focus */
+
+  /* 2 · OPACITY SCALE — the few alpha steps the system uses, named once so the
+     value changes in one place. */
+  --p-o-disabled: 0.45; /* disabled control / text */
+  --p-o-muted: 0.65; /* secondary, de-emphasized */
+  --p-o-faint: 0.3; /* watermarks, ghost placeholders */
+  --p-o-scrim: 0.4; /* light-mode overlay backdrop alpha */
+  --p-o-scrim-dark: 0.6; /* dark-mode overlay backdrop alpha */
+}
+
+/* 3 · COLORBLIND-SAFE CATEGORICAL PALETTE — opt-in via [data-chart="safe"].
+   Remaps the eight --chart-* slots (default ramp in atlvs-product.css) to the
+   Okabe–Ito qualitative palette — the field standard for deuteranopia /
+   protanopia / tritanopia distinguishability — authored in oklch() to match the
+   wide-gamut pipeline. Charts pick it up with zero code change: set
+   data-chart="safe" on the chart (or any ancestor).
+   Okabe & Ito (2008), "Color Universal Design". */
+[data-chart="safe"] {
+  --chart-1: oklch(0.55 0.13 250); /* #0072B2 blue */
+  --chart-2: oklch(0.72 0.17 55); /* #E69F00 orange */
+  --chart-3: oklch(0.66 0.13 165); /* #009E73 bluish-green */
+  --chart-4: oklch(0.9 0.16 100); /* #F0E442 yellow */
+  --chart-5: oklch(0.74 0.12 230); /* #56B4E9 sky-blue */
+  --chart-6: oklch(0.62 0.2 35); /* #D55E00 vermillion */
+  --chart-7: oklch(0.6 0.13 350); /* #CC79A7 reddish-purple */
+  --chart-8: oklch(0.45 0.02 260); /* #4D4D4D grey */
+}
+
+/* Non-color redundancy — add data-encode="patterned" alongside data-chart="safe"
+   to drive the kit's series-pattern hooks (dasharray on lines, texture on
+   fills). Components that support it read these; ones that don't ignore them. */
+[data-chart="safe"][data-encode="patterned"] {
+  --chart-dash-1: 0; /* solid */
+  --chart-dash-2: 6 4;
+  --chart-dash-3: 2 3;
+  --chart-dash-4: 8 3 2 3;
+  --chart-dash-5: 1 4;
+  --chart-dash-6: 10 4;
+  --chart-dash-7: 4 2 1 2;
+  --chart-dash-8: 3 3;
+}

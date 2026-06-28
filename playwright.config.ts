@@ -44,8 +44,13 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: E2E_PROD ? "npm run build && npm run start" : "npm run dev",
-    url: "http://localhost:3000",
+    // Readiness probe hits the fast liveness endpoint, NOT `/` — the marketing
+    // home cold-compiles for minutes on a fresh dev server (heavy client libs),
+    // which blew the old 120s budget before any test ran. Liveness compiles in
+    // ~1s, so the server is "ready" quickly; individual routes then cold-compile
+    // within each test's own timeout.
+    url: E2E_PROD ? "http://localhost:3000" : "http://localhost:3000/api/v1/health/liveness",
     reuseExistingServer: !process.env.CI,
-    timeout: E2E_PROD ? 600000 : 120000, // production build can take several minutes
+    timeout: E2E_PROD ? 600000 : 240000, // dev cold-start headroom
   },
 });

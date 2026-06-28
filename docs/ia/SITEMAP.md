@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1135 · **API route handlers:** 134 · **Distinct nav hrefs:** 481
+**Page routes:** 1137 · **API route handlers:** 134 · **Distinct nav hrefs:** 481
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 750 | 215 | 534 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 752 | 215 | 536 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 53 | 38 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 91 | 33 | 49 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1135** | **455** | **641** | **0** | **39** |
+| **TOTAL** | | **1137** | **455** | **643** | **0** | **39** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -91,7 +91,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-750 routes — ● 215 nav · ○ 534 linked · ⚠ 0 orphan
+752 routes — ● 215 nav · ○ 536 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -581,11 +581,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>marketplace</code> · 35 routes</summary>
+<details><summary><code>marketplace</code> · 37 routes</summary>
 
 ● `/studio/marketplace`
 ● `/studio/marketplace/box-office`
 ○ `/studio/marketplace/box-office/[listId]`
+○ `/studio/marketplace/box-office/listings`
+○ `/studio/marketplace/box-office/listings/[listingId]`
 ○ `/studio/marketplace/box-office/new`
 ○ `/studio/marketplace/calls`
 ○ `/studio/marketplace/calls/[callId]`

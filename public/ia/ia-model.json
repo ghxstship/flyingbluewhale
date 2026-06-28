@@ -839,6 +839,12 @@
               ]
             },
             {
+              "path": "/studio/revenue/payouts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/insights",
               "arch": [
                 "RPT"
@@ -1931,6 +1937,12 @@
               "path": "/m/scan",
               "arch": [
                 "FIELD"
+              ]
+            },
+            {
+              "path": "/m/door",
+              "arch": [
+                "LIST"
               ]
             },
             {

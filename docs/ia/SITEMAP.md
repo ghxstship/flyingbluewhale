@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1137 · **API route handlers:** 134 · **Distinct nav hrefs:** 481
+**Page routes:** 1139 · **API route handlers:** 134 · **Distinct nav hrefs:** 483
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 752 | 215 | 536 | 0 | 1 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 53 | 38 | 13 | 0 | 2 |
+| ATLVS — Operator Console | platformNav rail | 753 | 216 | 536 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 91 | 33 | 49 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1137** | **455** | **643** | **0** | **39** |
+| **TOTAL** | | **1139** | **457** | **643** | **0** | **39** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -91,7 +91,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-752 routes — ● 215 nav · ○ 536 linked · ⚠ 0 orphan
+753 routes — ● 216 nav · ○ 536 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -924,9 +924,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>revenue</code> · 2 routes</summary>
+<details><summary><code>revenue</code> · 3 routes</summary>
 
 ● `/studio/revenue/orders`
+● `/studio/revenue/payouts`
 ● `/studio/revenue/transactions`
 
 </details>
@@ -1267,7 +1268,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-53 routes — ● 38 nav · ○ 13 linked · ⚠ 0 orphan
+54 routes — ● 39 nav · ○ 13 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1345,6 +1346,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>docs</code> · 1 route</summary>
 
 ● `/m/docs`
+
+</details>
+
+<details><summary><code>door</code> · 1 route</summary>
+
+● `/m/door`
 
 </details>
 

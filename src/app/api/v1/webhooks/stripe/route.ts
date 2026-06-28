@@ -114,7 +114,29 @@ export async function POST(req: Request) {
         // GVTEWAY store checkout — convert the cart + decrement inventory.
         // Idempotent: the conditional cart_state flip only succeeds once, so
         // Stripe redeliveries never double-decrement.
-        const obj = event.data.object as { metadata?: Record<string, string> };
+        const obj = event.data.object as {
+          metadata?: Record<string, string>;
+          id?: string;
+          payment_intent?: string;
+          amount_total?: number;
+          currency?: string;
+        };
+
+        // GVTEWAY first-party box-office checkout — fulfill the ticket order.
+        // Idempotent: skip if the order is already paid OR tickets already
+        // exist for it, so Stripe redeliveries never double-issue.
+        const orderId = obj?.metadata?.order_id;
+        if (orderId && supabase) {
+          await fulfillBoxOfficeOrder(supabase, {
+            orderId,
+            eventListingId: obj?.metadata?.event_listing_id,
+            itemsMeta: obj?.metadata?.items,
+            amountTotal: obj?.amount_total,
+            currency: obj?.currency,
+            processorRef: obj?.payment_intent ?? obj?.id,
+            eventId: event.id,
+          });
+        }
 
         // LEG3ND credit-pack checkout — fulfill the order + credit the ledger.
         // Idempotent: the conditional order_state flip only succeeds once, so
@@ -211,6 +233,150 @@ export async function POST(req: Request) {
     const msg = e instanceof Error ? e.message : "Webhook handler failed";
     return apiError("internal", msg);
   }
+}
+
+type ServiceClient = ReturnType<typeof createServiceClient>;
+
+type BoxOfficeFulfillment = {
+  orderId: string;
+  eventListingId: string | undefined;
+  itemsMeta: string | undefined;
+  amountTotal: number | undefined;
+  currency: string | undefined;
+  processorRef: string | undefined;
+  eventId: string;
+};
+
+/**
+ * Fulfill a GVTEWAY first-party box-office ticket order on
+ * checkout.session.completed.
+ *
+ * Idempotency (two read-side guards, either one short-circuits a redelivery):
+ *   1. The order must still be unpaid. If it is already 'paid', return.
+ *   2. No event_tickets may already exist for the order_id. If any do, a prior
+ *      delivery already issued them, so return.
+ * Both are checked before any write, so Stripe at-least-once delivery can never
+ * double-charge the ledger or double-issue passes. The final order flip is also
+ * conditional (.neq order_state 'paid') as a third backstop against a racing
+ * concurrent redelivery.
+ */
+async function fulfillBoxOfficeOrder(supabase: ServiceClient, f: BoxOfficeFulfillment): Promise<void> {
+  const { data: order } = await supabase
+    .from("revenue_orders")
+    .select("id, org_id, currency, total_cents, order_state, event_listing_id, buyer_name, buyer_email")
+    .eq("id", f.orderId)
+    .maybeSingle();
+  if (!order) {
+    log.warn("stripe.webhook.box_office_order_missing", { event_id: f.eventId, order_id: f.orderId });
+    return;
+  }
+
+  // Guard 1: already fulfilled.
+  if (order.order_state === "paid") {
+    log.info("stripe.webhook.box_office_replay", { event_id: f.eventId, order_id: f.orderId, reason: "paid" });
+    return;
+  }
+
+  // Guard 2: tickets already issued for this order (covers a crash between the
+  // ticket inserts and the order flip on a prior delivery).
+  const { count: existingTickets } = await supabase
+    .from("event_tickets")
+    .select("id", { count: "exact", head: true })
+    .eq("order_id", f.orderId);
+  if ((existingTickets ?? 0) > 0) {
+    log.info("stripe.webhook.box_office_replay", { event_id: f.eventId, order_id: f.orderId, reason: "tickets_exist" });
+    return;
+  }
+
+  const listingId = order.event_listing_id ?? f.eventListingId ?? null;
+  if (!listingId) {
+    log.warn("stripe.webhook.box_office_no_listing", { event_id: f.eventId, order_id: f.orderId });
+    return;
+  }
+  const currency = (f.currency ?? order.currency ?? "usd").toLowerCase();
+
+  // Parse "<typeId:qty,...>" into per-type counts.
+  const items = (f.itemsMeta ?? "")
+    .split(",")
+    .map((pair) => pair.trim())
+    .filter(Boolean)
+    .map((pair) => {
+      const [typeId = "", qtyRaw = ""] = pair.split(":");
+      const qty = Number.parseInt(qtyRaw, 10);
+      return { typeId, qty: Number.isFinite(qty) ? Math.max(0, qty) : 0 };
+    })
+    .filter((i) => i.typeId && i.qty > 0);
+
+  if (items.length === 0) {
+    log.warn("stripe.webhook.box_office_no_items", { event_id: f.eventId, order_id: f.orderId });
+  }
+
+  // Issue one event_tickets row per quantity per ticket type.
+  const ticketRows = items.flatMap((item) =>
+    Array.from({ length: item.qty }, () => ({
+      org_id: order.org_id,
+      event_listing_id: listingId,
+      ticket_type_id: item.typeId,
+      order_id: f.orderId,
+      holder_name: order.buyer_name,
+      holder_email: order.buyer_email,
+      code: `tix_${crypto.randomUUID()}`,
+      ticket_state: "issued",
+    })),
+  );
+  if (ticketRows.length > 0) {
+    const { error: tErr } = await supabase.from("event_tickets").insert(ticketRows);
+    if (tErr) {
+      log.warn("stripe.webhook.box_office_ticket_insert_failed", { event_id: f.eventId, err: tErr.message });
+      return; // leave the order pending so a Stripe retry can re-issue cleanly
+    }
+  }
+
+  // Bump quantity_sold per ticket type by the issued qty.
+  for (const item of items) {
+    const { data: tt } = await supabase
+      .from("event_ticket_types")
+      .select("quantity_sold")
+      .eq("id", item.typeId)
+      .maybeSingle();
+    if (tt) {
+      await supabase
+        .from("event_ticket_types")
+        .update({ quantity_sold: (tt.quantity_sold ?? 0) + item.qty })
+        .eq("id", item.typeId);
+    }
+  }
+
+  // Ledger transaction — charge succeeded.
+  const { error: txErr } = await supabase.from("revenue_transactions").insert({
+    org_id: order.org_id,
+    order_id: f.orderId,
+    txn_kind: "charge",
+    txn_state: "succeeded",
+    amount_cents: f.amountTotal ?? order.total_cents,
+    currency,
+    processor: "stripe",
+    processor_ref: f.processorRef ?? null,
+  });
+  if (txErr) {
+    log.warn("stripe.webhook.box_office_txn_insert_failed", { event_id: f.eventId, err: txErr.message });
+  }
+
+  // Flip the order to paid LAST and conditionally, so a concurrent redelivery
+  // that slipped past the read guards can't re-run the side effects.
+  const { data: flipped } = await supabase
+    .from("revenue_orders")
+    .update({ order_state: "paid" })
+    .eq("id", f.orderId)
+    .neq("order_state", "paid")
+    .select("id")
+    .maybeSingle();
+  log.info("stripe.webhook.box_office_fulfilled", {
+    event_id: f.eventId,
+    order_id: f.orderId,
+    tickets_issued: ticketRows.length,
+    flipped: Boolean(flipped),
+  });
 }
 
 /**

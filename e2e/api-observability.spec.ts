@@ -35,6 +35,11 @@ test.describe("request correlation headers", () => {
 
 test.describe("Server-Timing header", () => {
   test("app route includes mw;dur=N", async ({ request }) => {
+    // Vercel's edge strips `Server-Timing` on deployed targets (verified: it's
+    // absent on every prod response while the middleware's sibling x-request-id
+    // header survives, so the middleware runs — the platform drops this header).
+    // The assertion stays meaningful on localhost/CI (next start/dev).
+    test.skip(!!process.env.E2E_BASE_URL, "Vercel edge strips middleware Server-Timing on deployed targets");
     const r = await request.get("/api/v1/ai/conversations");
     const timing = r.headers()["server-timing"] ?? "";
     expect(timing).toMatch(/mw;dur=\d+(\.\d+)?/);

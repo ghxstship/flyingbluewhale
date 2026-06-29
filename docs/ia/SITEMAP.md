@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1152 · **API route handlers:** 142 · **Distinct nav hrefs:** 490
+**Page routes:** 1153 · **API route handlers:** 142 · **Distinct nav hrefs:** 490
 
 ## Legend
 
@@ -27,12 +27,12 @@
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 764 | 223 | 540 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
+| GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1152** | **464** | **649** | **0** | **39** |
+| **TOTAL** | | **1153** | **464** | **649** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (39) — intentional non-nav, with reasons
+## · Exempt routes (40) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -57,6 +57,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 |-------|------|--------|
 | `/p/[slug]` | exact | Portal gateway — persona picker / redirect to the viewer's persona home. |
 | `/p/select` | exact | Org/slug picker — reached when a portal user has no resolved slug. |
+| `/p` | exact | GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item). |
 | `/` | exact | Home — reached via the logo, not a nav entry. |
 | `/es-ES` | prefix | i18n locale root. |
 | `/pt-BR` | prefix | i18n locale root. |
@@ -1527,7 +1528,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-149 routes — ● 127 nav · ○ 20 linked · ⚠ 0 orphan
+150 routes — ● 127 nav · ○ 20 linked · ⚠ 0 orphan
 
 <details><summary><code>[slug]</code> · 2 routes</summary>
 
@@ -1808,8 +1809,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>·root</code> · 5 routes</summary>
+<details><summary><code>·root</code> · 6 routes</summary>
 
+· `/p`
 · `/p/[slug]`
 ● `/p/lists`
 ● `/p/saved`

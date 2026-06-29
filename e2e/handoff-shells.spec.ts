@@ -40,15 +40,24 @@ type RoleKey =
   | "community";
 
 // The /auth/resolve contract. These are the shell landings we guarantee.
+// Each shell's landing URL accepts BOTH routing modes: the single-host
+// path-prefix used locally / on preview deploys (`/studio`, `/p`, `/m`) AND the
+// per-product SUBDOMAIN used in production (NEXT_PUBLIC_USE_SUBDOMAINS=1 →
+// app/gvteway/compvss.atlvs.pro). Without the subdomain alternative these
+// assertions falsely fail against prod, where auth-resolve correctly redirects
+// internal→app., portal→gvteway., field→compvss. (Personal /me stays on the apex.)
+const ATLVS = /(?:\/studio(?:$|[/?])|app\.atlvs\.pro)/;
+const GVTEWAY = /(?:\/p(?:$|\/)|gvteway\.atlvs\.pro)/;
+const COMPVSS = /(?:\/m(?:$|[/?])|compvss\.atlvs\.pro)/;
 const SHELL_EXPECT: Record<RoleKey, RegExp> = {
-  owner: /\/studio(?:$|[/?])/,
-  admin: /\/studio(?:$|[/?])/,
-  controller: /\/studio(?:$|[/?])/,
-  collaborator: /\/studio(?:$|[/?])/,
-  developer: /\/studio(?:$|[/?])/,
-  contractor: /\/p(?:$|\/)/,
-  crew: /\/m(?:$|[/?])/,
-  client: /\/p(?:$|\/)/,
+  owner: ATLVS,
+  admin: ATLVS,
+  controller: ATLVS,
+  collaborator: ATLVS,
+  developer: ATLVS,
+  contractor: GVTEWAY,
+  crew: COMPVSS,
+  client: GVTEWAY,
   viewer: /\/me(?:$|[/?])/,
   community: /\/me(?:$|[/?])/,
 };

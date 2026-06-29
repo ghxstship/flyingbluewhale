@@ -67,10 +67,13 @@ test.describe("marketing", () => {
     await page.goto("/");
     const footer = page.locator("footer");
     await expect(footer).toBeVisible();
-    // Headings declared in src/app/(marketing)/layout.tsx FOOTER_NAV.
-    for (const heading of ["Product", "Industries", "Resources", "Studio", "Legal"]) {
+    // The 5 column headings (marketingFooterGroups minus Legal). Legal moved to
+    // the bottom bar as Terms/Privacy links, not a column — see (marketing)/layout.tsx.
+    for (const heading of ["Product", "Industries", "Resources", "Compare", "Studio"]) {
       await expect(footer.getByText(heading, { exact: true })).toBeVisible();
     }
+    // Legal now lives in the bottom bar.
+    await expect(footer.getByRole("link", { name: /privacy/i }).first()).toBeVisible();
   });
 
   test("sitemap + robots serve", async ({ request }) => {

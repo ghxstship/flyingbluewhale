@@ -102,6 +102,10 @@ test.describe("API v1 envelope contract", () => {
   });
 
   test("Server-Timing header is set by middleware on app routes", async ({ request }) => {
+    // Vercel's edge strips Server-Timing on deployed targets (the middleware sets
+    // it + its sibling x-request-id survives in prod, so the platform drops this
+    // header specifically). Meaningful on localhost/CI; skipped vs a deployment.
+    test.skip(!!process.env.E2E_BASE_URL, "Vercel edge strips middleware Server-Timing on deployed targets");
     const r = await request.get("/api/v1/ai/conversations");
     const timing = r.headers()["server-timing"] ?? "";
     // Probe routes bypass middleware on purpose, but app routes must have mw;dur=...

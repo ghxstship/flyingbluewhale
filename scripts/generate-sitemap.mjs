@@ -190,6 +190,7 @@ const EXEMPT = [
     reason: "Portal gateway — persona picker / redirect to the viewer's persona home.",
   },
   { path: "/p/select", type: "exact", reason: "Org/slug picker — reached when a portal user has no resolved slug." },
+  { path: "/p", type: "exact", reason: "GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item)." },
   // Marketing home — reached via the logo lockup, not a nav item.
   { path: "/", type: "exact", reason: "Home — reached via the logo, not a nav entry." },
   // i18n locale roots.

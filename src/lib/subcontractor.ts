@@ -156,6 +156,41 @@ export function canTransitionWorkOrder(from: WorkOrderState, to: WorkOrderState)
 export const CHANGE_ORDER_STATES = ["pending", "approved", "declined"] as const;
 export type ChangeOrderState = (typeof CHANGE_ORDER_STATES)[number];
 
+// ── Sub invoicing (P3) ───────────────────────────────────────────────────
+export const SUB_INVOICE_STATES = ["submitted", "approved", "paid", "rejected"] as const;
+export type SubInvoiceState = (typeof SUB_INVOICE_STATES)[number];
+
+export const SUB_INVOICE_STATE_LABELS: Record<SubInvoiceState, string> = {
+  submitted: "Submitted",
+  approved: "Approved",
+  paid: "Paid",
+  rejected: "Rejected",
+};
+
+export const SUB_INVOICE_BADGE: Record<SubInvoiceState, "info" | "success" | "muted" | "error"> = {
+  submitted: "info",
+  approved: "success",
+  paid: "muted",
+  rejected: "error",
+};
+
+/** Allowed forward transitions for an inbound sub-invoice (server-enforced). */
+export const NEXT_SUB_INVOICE_STATES: Record<SubInvoiceState, SubInvoiceState[]> = {
+  submitted: ["approved", "rejected"],
+  approved: ["paid"],
+  paid: [],
+  rejected: [],
+};
+
+// ── Vendor scorecard (P3) ──────────────────────────────────────────────────
+/** Weighted composite 0–100 from on-time %, quality (0–5→%), disputes penalty. */
+export function compositeScore(onTimePct: number, qualityAvg: number, disputes: number): number {
+  const quality = (qualityAvg / 5) * 100;
+  const base = onTimePct * 0.5 + quality * 0.5;
+  const penalty = Math.min(20, disputes * 4);
+  return Math.max(0, Math.min(100, Math.round(base - penalty)));
+}
+
 /** Format integer cents as USD (mirrors the finance display convention). */
 export function formatCents(cents: number | null | undefined): string {
   if (cents == null) return "—";

@@ -536,6 +536,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Settings"
   },
   {
+    "href": "/studio/settings/job-templates/new",
+    "label": "New Job Template",
+    "group": "Settings"
+  },
+  {
     "href": "/studio/settings/time-clock-zones/new",
     "label": "New Time Clock Zone",
     "group": "Settings"

@@ -14,6 +14,215 @@ export type Database = {
   }
   public: {
     Tables: {
+      sub_invoices: {
+        Row: {
+          amount_cents: number
+          approved_at: string | null
+          created_at: string
+          deleted_at: string | null
+          id: string
+          invoice_state: string
+          org_id: string
+          paid_at: string | null
+          submitted_on: string
+          updated_at: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Insert: {
+          amount_cents: number
+          approved_at?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          invoice_state?: string
+          org_id: string
+          paid_at?: string | null
+          submitted_on?: string
+          updated_at?: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Update: {
+          amount_cents?: number
+          approved_at?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          invoice_state?: string
+          org_id?: string
+          paid_at?: string | null
+          submitted_on?: string
+          updated_at?: string
+          vendor_id?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sub_invoices_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      job_templates: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          name: string
+          org_id: string
+          template_state: string
+          trade: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          name: string
+          org_id: string
+          template_state?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          template_state?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_templates_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      job_template_steps: {
+        Row: {
+          id: string
+          job_template_id: string
+          label: string
+          position: number
+          requires_photo: boolean
+        }
+        Insert: {
+          id?: string
+          job_template_id: string
+          label: string
+          position?: number
+          requires_photo?: boolean
+        }
+        Update: {
+          id?: string
+          job_template_id?: string
+          label?: string
+          position?: number
+          requires_photo?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_template_steps_job_template_id_fkey"
+            columns: ["job_template_id"]
+            isOneToOne: false
+            referencedRelation: "job_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      vendor_scores: {
+        Row: {
+          composite: number | null
+          disputes: number
+          jobs_completed: number
+          on_time_pct: number | null
+          org_id: string
+          quality_avg: number | null
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          composite?: number | null
+          disputes?: number
+          jobs_completed?: number
+          on_time_pct?: number | null
+          org_id: string
+          quality_avg?: number | null
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          composite?: number | null
+          disputes?: number
+          jobs_completed?: number
+          on_time_pct?: number | null
+          org_id?: string
+          quality_avg?: number | null
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_scores_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scores_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scores_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
       work_order_messages: {
         Row: {
           attachment_file_id: string | null

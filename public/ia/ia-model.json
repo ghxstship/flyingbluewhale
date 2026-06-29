@@ -850,6 +850,12 @@
               ]
             },
             {
+              "path": "/studio/finance/sub-invoices",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/finance/lien-waivers",
               "arch": [
                 "LIST"
@@ -993,6 +999,12 @@
               ]
             },
             {
+              "path": "/studio/procurement/scorecard",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/procurement/sourcing",
               "arch": [
                 "LIST"
@@ -1057,6 +1069,12 @@
               "arch": [
                 "SET",
                 "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/settings/job-templates",
+              "arch": [
+                "SET"
               ]
             }
           ]

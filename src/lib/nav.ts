@@ -438,6 +438,7 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Invoices", href: "/studio/finance/invoices", icon: "Receipt" },
           { label: "Pay Apps", href: "/studio/finance/pay-apps", icon: "FileSpreadsheet" },
+          { label: "Sub Invoices", href: "/studio/finance/sub-invoices", icon: "ReceiptText" },
           { label: "Lien Waivers", href: "/studio/finance/lien-waivers", icon: "Stamp" },
           { label: "E-Sign Envelopes", href: "/studio/envelopes", icon: "ClipboardSignature" },
           { label: "AP Invoice OCR", href: "/studio/finance/ap-ocr", icon: "Sparkles" },
@@ -496,6 +497,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Compliance", href: "/studio/procurement/compliance", icon: "ShieldCheck" },
           { label: "Subs Network", href: "/studio/procurement/network", icon: "Users" },
           { label: "Trades Marketplace", href: "/studio/procurement/marketplace", icon: "Store" },
+          { label: "Vendor Scorecard", href: "/studio/procurement/scorecard", icon: "Star" },
           { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass" },
           { label: "RFQs", href: "/studio/procurement/rfqs", icon: "PackageCheck" },
           { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel" },
@@ -517,6 +519,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Rate Card", href: "/studio/logistics/ratecard", icon: "ListOrdered" },
           { label: "Submittals", href: "/studio/submittals", icon: "Inbox" },
           { label: "Master Catalog", href: "/studio/settings/catalog", icon: "Spline" },
+          { label: "Job Templates", href: "/studio/settings/job-templates", icon: "ListChecks" },
         ],
       },
     ],

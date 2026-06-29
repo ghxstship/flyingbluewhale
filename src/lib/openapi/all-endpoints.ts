@@ -421,3 +421,42 @@ registerEndpoint({
   },
   auth: "session",
 });
+
+// ─── Subcontractor ops — P3 leverage surfaces (v7.5) ─────────────────
+registerEndpoint({
+  method: "GET",
+  path: "/sub-invoices",
+  summary: "List sub-invoices",
+  description: "Inbound subcontractor payment applications for the org. Optional state filter.",
+  tags: ["Sub Invoices"],
+  queryParams: { state: z.string().optional() },
+  responses: {
+    200: { description: "Sub-invoice list", schema: okEnvelope(z.object({ subInvoices: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+registerEndpoint({
+  method: "GET",
+  path: "/job-templates",
+  summary: "List job templates",
+  description: "Reusable scope-checklist templates with step counts.",
+  tags: ["Job Templates"],
+  responses: {
+    200: { description: "Template list", schema: okEnvelope(z.object({ jobTemplates: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+registerEndpoint({
+  method: "GET",
+  path: "/scorecard",
+  summary: "Vendor scorecard",
+  description: "Vendor performance composite rollup (on-time, quality, disputes).",
+  tags: ["Scorecard"],
+  responses: {
+    200: { description: "Vendor scores", schema: okEnvelope(z.object({ scores: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});

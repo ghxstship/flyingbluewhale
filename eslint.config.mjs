@@ -131,6 +131,21 @@ const config = [
           selector: "JSXAttribute[name.name='className'] TemplateElement[value.raw=/(^|\\s)animate-spin\\b/]",
           message: "Use `motion-safe:animate-spin` so reduced-motion users see a static spinner — or just use `<Spinner>` from @/components/ui.",
         },
+        // GRID CANON — Tailwind arbitrary SPACING values (`mt-[6px]`, `left-[15px]`,
+        // `ms-[18px]`, `start-[7px]`, `translate-x-[1.125rem]`…) bypass the 4px ramp.
+        // Use a scale utility (`mt-2`, `left-4`, `gap-3`, `translate-x-4`) or, for
+        // a one-off, a token: `p-[var(--p-3)]`. Sizing/type arbitraries (`w-[160px]`,
+        // `text-[11px]`) are unaffected; `9999px` (off-screen idiom) is allowlisted.
+        {
+          selector:
+            "JSXAttribute[name.name='className'] Literal[value=/(?:^|[\\s:])-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|inset(?:-[xy])?|top|right|bottom|left|start|end|scroll-[pm][xytrbl]?|translate-[xy])-\\[(?!9999px\\])-?\\d+(?:\\.\\d+)?(?:px|rem)\\]/]",
+          message: "Off-grid Tailwind arbitrary spacing. Snap to a 4px-scale utility (mt-2, gap-3, left-4) or a token (p-[var(--p-3)]). See MIGRATION.md remap.",
+        },
+        {
+          selector:
+            "JSXAttribute[name.name='className'] TemplateElement[value.raw=/(?:^|[\\s:])-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|inset(?:-[xy])?|top|right|bottom|left|start|end|scroll-[pm][xytrbl]?|translate-[xy])-\\[(?!9999px\\])-?\\d+(?:\\.\\d+)?(?:px|rem)\\]/]",
+          message: "Off-grid Tailwind arbitrary spacing. Snap to a 4px-scale utility (mt-2, gap-3, left-4) or a token (p-[var(--p-3)]). See MIGRATION.md remap.",
+        },
       ],
     },
   },

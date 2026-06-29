@@ -35,7 +35,7 @@ export function ActivityTimeline({ items, emptyLabel = "No activity yet" }: { it
             {!last && (
               <span
                 aria-hidden="true"
-                className="absolute left-[15px] top-9 w-px"
+                className="absolute left-4 top-9 w-px"
                 style={{ height: "calc(100% - 1.75rem)", background: "var(--p-border)" }}
               />
             )}

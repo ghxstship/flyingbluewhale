@@ -45,7 +45,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 14px 26px 28px;
+  padding: var(--p-4) var(--p-6) 28px;
   position: relative;
 }
 .compvss-onboarding .scr.center {
@@ -85,17 +85,17 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--p-accent-text);
-  margin-bottom: 10px;
+  margin-bottom: var(--p-3);
 }
 .compvss-onboarding .field {
-  margin-bottom: 14px;
+  margin-bottom: var(--p-4);
 }
 .compvss-onboarding .field label {
   display: block;
   font-size: 12px;
   font-weight: 700;
   color: var(--p-text-2);
-  margin-bottom: 6px;
+  margin-bottom: var(--p-2);
 }
 .compvss-onboarding .field input,
 .compvss-onboarding .field select,
@@ -104,7 +104,7 @@
   box-sizing: border-box;
   border: 1px solid var(--p-border);
   border-radius: 12px;
-  padding: 13px 14px;
+  padding: var(--p-3) var(--p-4);
   font-size: 15px;
   background: var(--p-surface);
   color: var(--p-text-1);
@@ -123,7 +123,7 @@
 }
 .compvss-onboarding .inwrap .lead {
   position: absolute;
-  left: 13px;
+  left: var(--p-3);
   color: var(--p-text-3);
   display: flex;
 }
@@ -132,7 +132,7 @@
 }
 .compvss-onboarding .row {
   display: flex;
-  gap: 10px;
+  gap: var(--p-3);
 }
 .compvss-onboarding .link {
   color: var(--p-accent-text);
@@ -148,7 +148,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--p-3);
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
@@ -183,7 +183,7 @@
 }
 .compvss-onboarding .otp {
   display: flex;
-  gap: 10px;
+  gap: var(--p-3);
   justify-content: center;
   margin: 8px 0 4px;
 }
@@ -210,8 +210,8 @@
 .compvss-onboarding .toggle-row {
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 14px 0;
+  gap: var(--p-3);
+  padding: var(--p-4) 0;
   border-bottom: 1px solid var(--p-border);
 }
 .compvss-onboarding .toggle-row .ic {
@@ -247,8 +247,8 @@
 }
 .compvss-onboarding .sw .knob {
   position: absolute;
-  top: 3px;
-  left: 3px;
+  top: var(--p-1);
+  left: var(--p-1);
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -257,7 +257,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 .compvss-onboarding .sw[data-on] .knob {
-  left: 21px;
+  left: var(--p-5);
 }
 .compvss-onboarding .card {
   border: 1px solid var(--p-border);
@@ -267,8 +267,8 @@
 }
 .compvss-onboarding .pill-step {
   display: flex;
-  gap: 6px;
-  margin-bottom: 18px;
+  gap: var(--p-2);
+  margin-bottom: var(--p-4);
 }
 .compvss-onboarding .pill-step i {
   height: 4px;
@@ -319,7 +319,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin: 4px 0 14px;
+  margin: 4px 0 var(--p-4);
 }
 .compvss-onboarding .scan-frame .cnr {
   position: absolute;
@@ -328,29 +328,29 @@
   border: 3px solid var(--p-accent);
 }
 .compvss-onboarding .scan-frame .cnr.tl {
-  top: 22px;
-  left: 22px;
+  top: var(--p-6);
+  left: var(--p-6);
   border-right: none;
   border-bottom: none;
   border-radius: 8px 0 0 0;
 }
 .compvss-onboarding .scan-frame .cnr.tr {
-  top: 22px;
-  right: 22px;
+  top: var(--p-6);
+  right: var(--p-6);
   border-left: none;
   border-bottom: none;
   border-radius: 0 8px 0 0;
 }
 .compvss-onboarding .scan-frame .cnr.bl {
-  bottom: 22px;
-  left: 22px;
+  bottom: var(--p-6);
+  left: var(--p-6);
   border-right: none;
   border-top: none;
   border-radius: 0 0 0 8px;
 }
 .compvss-onboarding .scan-frame .cnr.br {
-  bottom: 22px;
-  right: 22px;
+  bottom: var(--p-6);
+  right: var(--p-6);
   border-left: none;
   border-top: none;
   border-radius: 0 0 8px 0;
@@ -378,7 +378,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 0;
+  padding: var(--p-4) 0;
   border-bottom: 1px solid var(--p-border);
   cursor: pointer;
 }
@@ -399,7 +399,7 @@
 }
 .compvss-onboarding .note {
   display: flex;
-  gap: 9px;
+  gap: var(--p-2);
   align-items: flex-start;
   background: color-mix(in oklab, var(--p-info) 8%, var(--p-surface));
   border: 1px solid color-mix(in oklab, var(--p-info) 28%, var(--p-border));
@@ -419,7 +419,7 @@
   background: none;
   border: none;
   padding: 0;
-  margin: 0 0 14px -2px;
+  margin: 0 0 var(--p-4) -2px;
   color: var(--p-text-2);
   font-weight: 600;
   font-size: 14px;

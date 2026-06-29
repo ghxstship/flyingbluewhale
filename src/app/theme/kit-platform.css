@@ -129,6 +129,6 @@
 /* Logical-property spacing utilities (dir-aware; prefer these in new code). */
 [data-ui="saas"] .mis-auto, [data-theme="atlvs-product"] .mis-auto { margin-inline-start: auto; }
 [data-ui="saas"] .mie-auto, [data-theme="atlvs-product"] .mie-auto { margin-inline-end: auto; }
-[data-ui="saas"] .ps-rail-start, [data-theme="atlvs-product"] .ps-rail-start { border-inline-start: 5px solid var(--p-accent); padding-inline-start: 15px; }
+[data-ui="saas"] .ps-rail-start, [data-theme="atlvs-product"] .ps-rail-start { border-inline-start: 5px solid var(--p-accent); padding-inline-start: var(--p-4); }
 [data-ui="saas"] .text-start, [data-theme="atlvs-product"] .text-start { text-align: start; }
 [data-ui="saas"] .text-end, [data-theme="atlvs-product"] .text-end { text-align: end; }

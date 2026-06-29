@@ -114,8 +114,8 @@ export function SavedViewSelector({
           <DropdownMenuItem onSelect={() => onLoad(null)}>
             <span className="flex w-full items-center justify-between">
               <span className="flex items-center gap-1.5">
-                {!activeId && <Check size={12} aria-hidden="true" />}
-                <span className={!activeId ? "" : "ms-[18px]"}>
+                {!activeId ? <Check size={12} aria-hidden="true" /> : <span className="inline-block w-3" aria-hidden="true" />}
+                <span>
                   {t("savedViews.selector.defaultView", undefined, "Default View")}
                 </span>
               </span>

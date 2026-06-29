@@ -812,8 +812,12 @@ pre,
   .nav-item {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    padding: 0.5rem 0.75rem;
+    /* v8.0 grid pass: gap snapped to the ramp (was 0.625rem/10px off-grid) and
+       vertical padding routed through the shared control token so the nav is
+       density-aware on the single --k-* path (parallel [data-density] override
+       below deleted). */
+    gap: var(--p-2);
+    padding: var(--k-ctl-py) 0.75rem;
     /* Audit: was hardcoded 0.5rem, which bypassed bermuda-triangle's
        `--p-r: 0` (sharp-corner canon) and any future theme that
        deviates from the legacy 8px radius. Now follows the active theme. */
@@ -1162,35 +1166,12 @@ pre,
     font-weight: 600;
   }
 
-  /* ───── Density (compact / cozy / spacious) ───── */
-
-  [data-density="compact"] .ps-input {
-    padding: 0.375rem 0.625rem;
-    font-size: 0.8125rem;
-  }
-  [data-density="compact"] .ps-table th,
-  [data-density="compact"] .ps-table td {
-    padding-top: 0.375rem;
-    padding-bottom: 0.375rem;
-  }
-  [data-density="compact"] .nav-item {
-    padding-top: 0.375rem;
-    padding-bottom: 0.375rem;
-  }
-
-  [data-density="spacious"] .ps-input {
-    padding: 0.75rem 1rem;
-    font-size: 0.9375rem;
-  }
-  [data-density="spacious"] .ps-table th,
-  [data-density="spacious"] .ps-table td {
-    padding-top: 0.875rem;
-    padding-bottom: 0.875rem;
-  }
-  [data-density="spacious"] .nav-item {
-    padding-top: 0.625rem;
-    padding-bottom: 0.625rem;
-  }
+  /* ───── Density (compact / cozy / spacious) ─────
+     v8.0 grid pass: the per-element [data-density] overrides that lived here
+     (off-grid rem: 0.375/0.625/0.875rem) are GONE. Density now flows through the
+     single normalized --k-* token scale defined in atlvs-product.css — .ps-input,
+     .ps-table cells, and .nav-item all read the control/row tokens, so a density
+     switch retunes them on-grid with no parallel hardcoded path. */
 
   /* ───── Overlay ───── */
 

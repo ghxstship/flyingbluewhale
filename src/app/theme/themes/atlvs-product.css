@@ -354,17 +354,21 @@
   --p-danger: #e5484d;
   --p-info: #2596c4;
 
-  /* Density token defaults (cozy). Overridden by [data-density="compact"]. */
+  /* Density token defaults (cozy). Overridden by [data-density="compact"|"spacious"].
+     v8.0 grid pass: every *spacing* member snaps to the 4px ramp via var(--p-*)
+     (was 9/13/18/14px off-grid — the seed the kit CSS copied as literals). The
+     *-fs (font-size) members stay literal — they're the type scale (§5), not spacing. */
   --p-on-strong: #fff;
-  --k-ctl-py: 9px;
-  --k-ctl-px: 16px;
+  --k-ctl-py: var(--p-2);   /* 8px  */
+  --k-ctl-px: var(--p-4);   /* 16px */
+  --k-input-px: var(--p-3); /* 12px — inputs one rung tighter than buttons */
   --k-ctl-fs: 14px;
-  --k-row-py: 13px;
-  --k-row-px: 16px;
+  --k-row-py: var(--p-3);   /* 12px */
+  --k-row-px: var(--p-4);   /* 16px */
   --k-cell-fs: 14px;
-  --k-card-pad: 18px;
-  --k-gap: 14px;
-  --k-stack: 12px;
+  --k-card-pad: var(--p-4); /* 16px */
+  --k-gap: var(--p-3);      /* 12px */
+  --k-stack: var(--p-3);    /* 12px */
 
   font-family: var(--p-font);
   background: var(--p-bg);
@@ -684,26 +688,28 @@
    .ps-input / .ps-table / .nav-item overrides in globals.css layer on top.
    ========================================================================== */
 [data-density="compact"] {
-  --k-ctl-py: 6px;
-  --k-ctl-px: 12px;
+  --k-ctl-py: var(--p-1);   /* 4px  */
+  --k-ctl-px: var(--p-3);   /* 12px */
+  --k-input-px: var(--p-2); /* 8px  — inputs one rung tighter than buttons */
   --k-ctl-fs: 13px;
-  --k-row-py: 8px;
-  --k-row-px: 12px;
+  --k-row-py: var(--p-2);   /* 8px  */
+  --k-row-px: var(--p-3);   /* 12px */
   --k-cell-fs: 13px;
-  --k-card-pad: 13px;
-  --k-gap: 10px;
-  --k-stack: 8px;
+  --k-card-pad: var(--p-3); /* 12px */
+  --k-gap: var(--p-2);      /* 8px  */
+  --k-stack: var(--p-2);    /* 8px  */
 }
 [data-density="spacious"] {
-  --k-ctl-py: 12px;
-  --k-ctl-px: 18px;
+  --k-ctl-py: var(--p-3);   /* 12px */
+  --k-ctl-px: var(--p-5);   /* 20px */
+  --k-input-px: var(--p-4); /* 16px — inputs one rung tighter than buttons */
   --k-ctl-fs: 15px;
-  --k-row-py: 18px;
-  --k-row-px: 20px;
+  --k-row-py: var(--p-4);   /* 16px */
+  --k-row-px: var(--p-5);   /* 20px */
   --k-cell-fs: 15px;
-  --k-card-pad: 24px;
-  --k-gap: 20px;
-  --k-stack: 16px;
+  --k-card-pad: var(--p-6); /* 24px */
+  --k-gap: var(--p-5);      /* 20px */
+  --k-stack: var(--p-4);    /* 16px */
 }
 
 /* ============================================================================
@@ -911,12 +917,12 @@
 }
 [data-ui="saas"] .ps-btn--sm,
 [data-theme="atlvs-product"] .ps-btn--sm {
-  padding: 5px 11px;
+  padding: var(--p-1) var(--p-3);
   font-size: 12px;
 }
 [data-ui="saas"] .ps-btn--lg,
 [data-theme="atlvs-product"] .ps-btn--lg {
-  padding: 12px 22px;
+  padding: 12px var(--p-6);
   font-size: 15px;
 }
 [data-ui="saas"] .ps-btn--ghost,
@@ -1031,12 +1037,17 @@
 [data-theme="atlvs-product"] .ps-input {
   width: 100%;
   font-family: var(--p-font);
-  font-size: 14px;
+  /* v8.0 grid pass: read the shared control tokens so inputs are density-aware
+     on the single --k-* path (was hardcoded 14px / 9px 12px off-grid + a
+     parallel [data-density] override in globals.css, now deleted). */
+  font-size: var(--k-ctl-fs);
   color: var(--p-text-1);
   background: var(--p-surface);
   border: 1px solid var(--p-border-2);
   border-radius: var(--p-r-sm);
-  padding: 9px 12px;
+  /* horizontal on --k-input-px (one rung tighter than the button --k-ctl-px);
+     vertical shares --k-ctl-py so inputs and buttons keep equal height. */
+  padding: var(--k-ctl-py) var(--k-input-px);
 }
 [data-ui="saas"] .ps-input::placeholder,
 [data-theme="atlvs-product"] .ps-input::placeholder {
@@ -1059,17 +1070,17 @@
 /* v7.0 — explicit size variants (independent of the density axis). */
 [data-ui="saas"] .ps-input--sm,
 [data-theme="atlvs-product"] .ps-input--sm {
-  padding: 6px 10px;
+  padding: var(--p-2) var(--p-3);
   font-size: 13px;
   border-radius: var(--p-r-sm);
 }
 [data-ui="saas"] .ps-input--lg,
 [data-theme="atlvs-product"] .ps-input--lg {
-  padding: 12px 14px;
+  padding: 12px var(--p-4);
   font-size: 15px;
 }
 [data-density="compact"] .ps-input {
-  padding: 6px 10px;
+  padding: var(--p-2) var(--p-3);
   font-size: 13px;
 }
 [data-ui="saas"] textarea.ps-input,
@@ -1087,7 +1098,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' stroke='%23656D7A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 11px center;
-  padding-right: 30px;
+  padding-right: var(--p-8);
 }
 [data-ui="saas"] .ps-inputgrp,
 [data-theme="atlvs-product"] .ps-inputgrp {
@@ -1097,7 +1108,7 @@
   background: var(--p-surface);
   border: 1px solid var(--p-border-2);
   border-radius: var(--p-r-sm);
-  padding: 0 12px;
+  padding: 0 var(--k-input-px); /* density-aware, matches .ps-input (was fixed 12px) */
 }
 [data-ui="saas"] .ps-inputgrp:focus-within,
 [data-theme="atlvs-product"] .ps-inputgrp:focus-within {
@@ -1113,7 +1124,7 @@
   font-family: var(--p-font);
   font-size: 14px;
   color: var(--p-text-1);
-  padding: 9px 0;
+  padding: var(--p-2) 0;
 }
 
 /* ---- field / label / hint ---- */
@@ -1121,7 +1132,7 @@
 [data-theme="atlvs-product"] .ps-field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--p-2);
 }
 [data-ui="saas"] .ps-label,
 [data-theme="atlvs-product"] .ps-label {
@@ -1169,7 +1180,7 @@
 [data-theme="atlvs-product"] .ps-check:checked::after {
   content: "";
   position: absolute;
-  left: 5px;
+  left: var(--p-1);
   top: 1.5px;
   width: 5px;
   height: 9px;
@@ -1189,8 +1200,8 @@
 [data-ui="saas"] .ps-check--radio:checked::after,
 [data-theme="atlvs-product"] .ps-check--radio:checked::after {
   content: "";
-  left: 3px;
-  top: 3px;
+  left: var(--p-1);
+  top: var(--p-1);
   width: 8px;
   height: 8px;
   border: 0;
@@ -1241,11 +1252,11 @@
 [data-ui="saas"] .ps-seg,
 [data-theme="atlvs-product"] .ps-seg {
   display: inline-flex;
-  gap: 3px;
+  gap: var(--p-1);
   background: var(--p-surface-2);
   border: 1px solid var(--p-border);
   border-radius: var(--p-r);
-  padding: 3px;
+  padding: var(--p-1);
 }
 [data-ui="saas"] .ps-seg button,
 [data-theme="atlvs-product"] .ps-seg button {
@@ -1255,7 +1266,7 @@
   color: var(--p-text-2);
   background: none;
   border: 0;
-  padding: 6px 14px;
+  padding: var(--p-2) var(--p-4);
   border-radius: var(--p-r-sm);
   cursor: pointer;
 }
@@ -1304,10 +1315,10 @@
 [data-theme="atlvs-product"] .ps-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--p-2);
   font-size: 12px;
   font-weight: 600;
-  padding: 3px 10px;
+  padding: var(--p-1) var(--p-3);
   border-radius: var(--p-r-pill);
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
@@ -1316,10 +1327,10 @@
 [data-theme="atlvs-product"] .ps-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--p-2);
   font-size: 12px;
   font-weight: 500;
-  padding: 3px 9px;
+  padding: var(--p-1) var(--p-2);
   border-radius: var(--p-r-sm);
   background: var(--p-surface-2);
   color: var(--p-text-2);
@@ -1334,7 +1345,7 @@
 [data-theme="atlvs-product"] .ps-chip--sm,
 [data-theme="atlvs-product"] .ps-tag--sm {
   font-size: 10px;
-  padding: 2px 7px;
+  padding: 2px var(--p-2);
   gap: 4px;
 }
 /* Selectable chip — interactive filter toggle. Drive with aria-pressed; the
@@ -1361,10 +1372,10 @@
 [data-theme="atlvs-product"] .ps-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--p-2);
   font-size: 11px;
   font-weight: 600;
-  padding: 3px 10px;
+  padding: var(--p-1) var(--p-3);
   border-radius: var(--p-r-pill);
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
@@ -1526,7 +1537,7 @@
   color: var(--p-text-3);
   background: none;
   border: 0;
-  padding: 10px 14px;
+  padding: var(--p-3) var(--p-4);
   border-bottom: 2px solid transparent;
   cursor: pointer;
   margin-bottom: -1px;
@@ -1606,15 +1617,15 @@
   border: 1px solid var(--p-border);
   border-radius: var(--p-r);
   box-shadow: var(--p-elev-3);
-  padding: 6px;
+  padding: var(--p-2);
   min-width: 200px;
 }
 [data-ui="saas"] .ps-menu .mi,
 [data-theme="atlvs-product"] .ps-menu .mi {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: var(--p-3);
+  padding: 8px var(--p-3);
   border-radius: var(--p-r-sm);
   font-size: 13px;
   color: var(--p-text-1);
@@ -1633,7 +1644,7 @@
 [data-theme="atlvs-product"] .ps-menu .sep {
   height: 1px;
   background: var(--p-border);
-  margin: 6px 0;
+  margin: var(--p-2) 0;
 }
 [data-ui="saas"] .ps-menu .lbl,
 [data-theme="atlvs-product"] .ps-menu .lbl {
@@ -1642,7 +1653,7 @@
   letter-spacing: 0.1em;
   text-transform: var(--p-case-eyebrow, uppercase);
   color: var(--p-text-3);
-  padding: 6px 10px 4px;
+  padding: var(--p-2) var(--p-3) 4px;
 }
 [data-ui="saas"] .ps-kbd,
 [data-theme="atlvs-product"] .ps-kbd {
@@ -1652,7 +1663,7 @@
   background: var(--p-surface-2);
   border: 1px solid var(--p-border);
   border-radius: 5px;
-  padding: 1px 6px;
+  padding: 1px var(--p-2);
   margin-left: auto;
 }
 
@@ -1674,7 +1685,7 @@
   letter-spacing: 0.04em;
   text-transform: var(--p-case-tablehead, uppercase);
   color: var(--p-text-3);
-  padding: 11px var(--k-row-px);
+  padding: var(--k-row-py) var(--k-row-px);
   border-bottom: 1px solid var(--p-border);
   background: var(--p-surface-2);
   white-space: nowrap;
@@ -1745,7 +1756,7 @@
   display: inline-block;
   width: 0;
   height: 0;
-  margin-inline-start: 6px;
+  margin-inline-start: var(--p-2);
   vertical-align: middle;
   border-inline: 3px solid transparent;
   opacity: 0.3;
@@ -1790,7 +1801,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 12px var(--p-4);
   border-radius: var(--p-r);
   border: 1px solid var(--p-border);
   background: var(--p-surface-2);
@@ -1826,7 +1837,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 12px var(--p-4);
   border-radius: var(--p-r);
   background: var(--p-surface);
   border: 1px solid var(--p-border);
@@ -1850,7 +1861,7 @@
   color: var(--p-bg);
   font-size: 12px;
   font-weight: 500;
-  padding: 6px 10px;
+  padding: var(--p-2) var(--p-3);
   border-radius: 6px;
   white-space: nowrap;
   box-shadow: var(--p-elev-2);
@@ -1891,7 +1902,7 @@
   font-variant-numeric: tabular-nums;
   font-size: 30px;
   color: var(--p-text-1);
-  margin-top: 6px;
+  margin-top: var(--p-2);
   letter-spacing: var(--p-tracking-heading);
   line-height: var(--p-lh-tight);
 }
@@ -1957,7 +1968,7 @@
   width: 46px;
   height: 2px;
   background: var(--p-border-2);
-  margin: 0 10px;
+  margin: 0 var(--p-3);
   flex: none;
 }
 [data-ui="saas"] .ps-steps .s.done + .ln,
@@ -1982,7 +1993,7 @@
   display: grid;
   place-items: center;
   font-size: 24px;
-  margin: 0 auto 14px;
+  margin: 0 auto var(--p-4);
 }
 [data-ui="saas"] .ps-empty h4,
 [data-theme="atlvs-product"] .ps-empty h4 {
@@ -1995,7 +2006,7 @@
 [data-theme="atlvs-product"] .ps-empty p {
   font-size: 13px;
   color: var(--p-text-2);
-  margin: 0 auto 14px;
+  margin: 0 auto var(--p-4);
   max-width: 320px;
   line-height: 1.5;
 }
@@ -2051,7 +2062,7 @@
 }
 [data-ui="saas"] .ps-modal .mh,
 [data-theme="atlvs-product"] .ps-modal .mh {
-  padding: 18px 20px 0;
+  padding: var(--p-4) 20px 0;
 }
 [data-ui="saas"] .ps-modal .mh h3,
 [data-theme="atlvs-product"] .ps-modal .mh h3 {
@@ -2062,7 +2073,7 @@
 }
 [data-ui="saas"] .ps-modal .mb,
 [data-theme="atlvs-product"] .ps-modal .mb {
-  padding: 10px 20px 18px;
+  padding: var(--p-3) 20px var(--p-4);
   font-size: 13px;
   color: var(--p-text-2);
   line-height: 1.55;
@@ -2071,8 +2082,8 @@
 [data-theme="atlvs-product"] .ps-modal .mf {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 14px 20px;
+  gap: var(--p-3);
+  padding: var(--p-4) 20px;
   background: var(--p-surface-2);
   border-top: 1px solid var(--p-border);
 }
@@ -2124,7 +2135,7 @@
 [data-theme="atlvs-product"] .ps-pagehead {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: var(--p-2);
 }
 [data-ui="saas"] .ps-pagehead .kick,
 [data-theme="atlvs-product"] .ps-pagehead .kick {
@@ -2160,7 +2171,7 @@
   font-size: 30px;
   text-transform: var(--p-display-case, uppercase);
   border-left: 5px solid var(--p-accent);
-  padding-left: 15px;
+  padding-left: var(--p-4);
 }
 /* Drop the accent bar (some embedded contexts already provide their own affordance). */
 [data-ui="saas"] .ps-pagehead--plain .t,

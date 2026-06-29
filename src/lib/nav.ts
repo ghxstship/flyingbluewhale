@@ -295,6 +295,7 @@ export const platformNavDomain: NavGroup[] = [
         label: "Show",
         items: [
           { label: "Run of Show", href: "/studio/production/ros", icon: "Play" },
+          { label: "Work Orders", href: "/studio/production/work-orders", icon: "ClipboardList" },
           { label: "Live Dispatch", href: "/studio/production/dispatch/live", icon: "Radio" },
           { label: "Production Logistics", href: "/studio/production/logistics", icon: "Crosshair" },
         ],
@@ -492,6 +493,7 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Vendors", href: "/studio/procurement/vendors", icon: "Store" },
           { label: "Prequalification", href: "/studio/procurement/prequalification", icon: "BookOpenCheck" },
+          { label: "Compliance", href: "/studio/procurement/compliance", icon: "ShieldCheck" },
           { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass" },
           { label: "RFQs", href: "/studio/procurement/rfqs", icon: "PackageCheck" },
           { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel" },

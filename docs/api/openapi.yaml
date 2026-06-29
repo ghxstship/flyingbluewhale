@@ -1195,3 +1195,10 @@ paths:
     get: { summary: "A report definition + its metric values resolved live from org data. Scope: reports:read." }
   /api/v1/reports/{reportId}/snapshot:
     get: { summary: "Immutable point-in-time snapshot of a report (definition + resolved metric values + capturedAt). No mutation. Scope: reports:read." }
+  /api/v1/work-orders:
+    get: { summary: "List the org's subcontractor work orders (newest first). Optional state filter." }
+    post: { summary: "Create a draft work order to dispatch a trade crew." }
+  /api/v1/work-orders/{id}:
+    get: { summary: "A work order with its bids and change orders. Org-scoped." }
+  /api/v1/compliance:
+    get: { summary: "Derived subcontractor eligibility verdicts (blocked/expiring/eligible) per vendor x trade. Optional trade filter." }

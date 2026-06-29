@@ -552,6 +552,12 @@
               ]
             },
             {
+              "path": "/studio/production/work-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/production/dispatch/live",
               "arch": [
                 "LIST"
@@ -964,6 +970,12 @@
             },
             {
               "path": "/studio/procurement/prequalification",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/compliance",
               "arch": [
                 "LIST"
               ]

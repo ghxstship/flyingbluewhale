@@ -14,6 +14,325 @@ export type Database = {
   }
   public: {
     Tables: {
+      trade_requirements: {
+        Row: {
+          created_at: string
+          doc_kind: string
+          id: string
+          org_id: string
+          trade: string
+        }
+        Insert: {
+          created_at?: string
+          doc_kind: string
+          id?: string
+          org_id: string
+          trade: string
+        }
+        Update: {
+          created_at?: string
+          doc_kind?: string
+          id?: string
+          org_id?: string
+          trade?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trade_requirements_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      compliance_documents: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          doc_kind: string
+          expires_on: string | null
+          file_id: string | null
+          id: string
+          issued_by: string | null
+          org_id: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          doc_kind: string
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string
+          issued_by?: string | null
+          org_id: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          doc_kind?: string
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string
+          issued_by?: string | null
+          org_id?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_documents_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      compliance_document_states: {
+        Row: {
+          compliance_document_id: string
+          state: string
+        }
+        Insert: {
+          compliance_document_id: string
+          state: string
+        }
+        Update: {
+          compliance_document_id?: string
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_document_states_compliance_document_id_fkey"
+            columns: ["compliance_document_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_document_states_compliance_document_id_fkey"
+            columns: ["compliance_document_id"]
+            isOneToOne: false
+            referencedRelation: "v_compliance_doc_status"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      work_orders: {
+        Row: {
+          awarded_vendor_id: string | null
+          budget_guide_cents: number | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          dispatch_mode: string
+          end_date: string | null
+          id: string
+          org_id: string
+          project_id: string | null
+          site_address: string | null
+          start_date: string | null
+          title: string
+          trade: string
+          updated_at: string
+          visibility: string
+          work_order_state: string
+        }
+        Insert: {
+          awarded_vendor_id?: string | null
+          budget_guide_cents?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          dispatch_mode?: string
+          end_date?: string | null
+          id?: string
+          org_id: string
+          project_id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title: string
+          trade: string
+          updated_at?: string
+          visibility?: string
+          work_order_state?: string
+        }
+        Update: {
+          awarded_vendor_id?: string | null
+          budget_guide_cents?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          dispatch_mode?: string
+          end_date?: string | null
+          id?: string
+          org_id?: string
+          project_id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title?: string
+          trade?: string
+          updated_at?: string
+          visibility?: string
+          work_order_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_orders_awarded_vendor_id_fkey"
+            columns: ["awarded_vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_awarded_vendor_id_fkey"
+            columns: ["awarded_vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      work_order_bids: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          id: string
+          note: string | null
+          org_id: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          org_id: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          org_id?: string
+          vendor_id?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_order_bids_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      work_order_change_orders: {
+        Row: {
+          amount_cents: number
+          change_order_state: string
+          created_at: string
+          id: string
+          org_id: string
+          reason: string
+          updated_at: string
+          work_order_id: string
+        }
+        Insert: {
+          amount_cents: number
+          change_order_state?: string
+          created_at?: string
+          id?: string
+          org_id: string
+          reason: string
+          updated_at?: string
+          work_order_id: string
+        }
+        Update: {
+          amount_cents?: number
+          change_order_state?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          reason?: string
+          updated_at?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_order_change_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_change_orders_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
       access_scans: {
         Row: {
           accreditation_id: string | null
@@ -38290,6 +38609,92 @@ export type Database = {
       }
     }
     Views: {
+      v_compliance_doc_status: {
+        Row: {
+          doc_kind: string | null
+          doc_status: string | null
+          expires_on: string | null
+          file_id: string | null
+          id: string | null
+          org_id: string | null
+          remaining_pct: number | null
+          vendor_id: string | null
+        }
+        Insert: {
+          doc_kind?: string | null
+          doc_status?: never
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string | null
+          org_id?: string | null
+          remaining_pct?: never
+          vendor_id?: string | null
+        }
+        Update: {
+          doc_kind?: string | null
+          doc_status?: never
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string | null
+          org_id?: string | null
+          remaining_pct?: never
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_documents_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
+      v_sub_eligibility: {
+        Row: {
+          org_id: string | null
+          trade: string | null
+          vendor_id: string | null
+          verdict: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trade_requirements_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
       audit_log: {
         Row: {
           action: string | null

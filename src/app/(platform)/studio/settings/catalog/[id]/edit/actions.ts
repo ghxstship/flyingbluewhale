@@ -20,6 +20,8 @@ const Schema = z.object({
   description: z.string().max(1000).optional().or(z.literal("")),
   unit_cost_usd: z.string().optional().or(z.literal("")),
   inventory_qty: z.string().optional().or(z.literal("")),
+  scan_opens_at: z.string().optional().or(z.literal("")),
+  scan_closes_at: z.string().optional().or(z.literal("")),
 });
 
 export type State = {
@@ -28,6 +30,11 @@ export type State = {
   fieldErrors?: Record<string, string>;
   values?: Record<string, string>;
 } | null;
+
+function isValidDate(iso: string): boolean {
+  const d = new Date(iso);
+  return !isNaN(d.getTime());
+}
 
 export async function updateCatalogItem(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -41,6 +48,17 @@ export async function updateCatalogItem(_: State, fd: FormData): Promise<State> 
   if (cents != null && !Number.isFinite(cents)) return { error: "Bad unit cost" };
   if (qty != null && !Number.isFinite(qty)) return { error: "Bad inventory quantity" };
 
+  const scanOpensAt = parsed.data.scan_opens_at
+    ? new Date(parsed.data.scan_opens_at).toISOString()
+    : null;
+  const scanClosesAt = parsed.data.scan_closes_at
+    ? new Date(parsed.data.scan_closes_at).toISOString()
+    : null;
+  if (scanOpensAt && !isValidDate(scanOpensAt)) return { error: "Invalid gate-opens-at datetime" };
+  if (scanClosesAt && !isValidDate(scanClosesAt)) return { error: "Invalid gate-closes-at datetime" };
+  if (scanOpensAt && scanClosesAt && scanOpensAt >= scanClosesAt)
+    return { error: "Gate-opens-at must be before gate-closes-at" };
+
   const { error } = await supabase
     .from("master_catalog_items")
     .update({
@@ -50,6 +68,8 @@ export async function updateCatalogItem(_: State, fd: FormData): Promise<State> 
       description: parsed.data.description || null,
       unit_cost_cents: cents,
       inventory_qty: qty,
+      scan_opens_at: scanOpensAt,
+      scan_closes_at: scanClosesAt,
     })
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);

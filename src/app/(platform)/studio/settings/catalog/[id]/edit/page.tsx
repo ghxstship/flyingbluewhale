@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const { data } = await supabase
     .from("master_catalog_items")
-    .select("id, kind, code, name, description, unit_cost_cents, inventory_qty")
+    .select("id, kind, code, name, description, unit_cost_cents, inventory_qty, scan_opens_at, scan_closes_at")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -39,6 +39,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     description: string | null;
     unit_cost_cents: number | null;
     inventory_qty: number | null;
+    scan_opens_at: string | null;
+    scan_closes_at: string | null;
   };
 
   return (
@@ -108,6 +110,42 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             min="0"
             defaultValue={item.inventory_qty != null ? String(item.inventory_qty) : ""}
           />
+          {item.kind === "ticket" && (
+            <>
+              <div style={{ borderTop: "1px solid var(--p-border)", paddingTop: 16, marginTop: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "var(--p-text-2)", marginBottom: 12 }}>
+                  {t("console.settings.catalog.edit.scanWindowSection", undefined, "Scan Window")}
+                </div>
+                <p style={{ fontSize: 12, color: "var(--p-text-3)", marginBottom: 12 }}>
+                  {t(
+                    "console.settings.catalog.edit.scanWindowHint",
+                    undefined,
+                    "Set when this ticket type can be scanned at the gate. Leave blank for no restriction.",
+                  )}
+                </p>
+                <Input
+                  label={t("console.settings.catalog.edit.scanOpensAtLabel", undefined, "Gate opens at")}
+                  name="scan_opens_at"
+                  type="datetime-local"
+                  defaultValue={
+                    item.scan_opens_at
+                      ? new Date(item.scan_opens_at).toISOString().slice(0, 16)
+                      : ""
+                  }
+                />
+                <Input
+                  label={t("console.settings.catalog.edit.scanClosesAtLabel", undefined, "Gate closes at")}
+                  name="scan_closes_at"
+                  type="datetime-local"
+                  defaultValue={
+                    item.scan_closes_at
+                      ? new Date(item.scan_closes_at).toISOString().slice(0, 16)
+                      : ""
+                  }
+                />
+              </div>
+            </>
+          )}
         </FormShell>
       </div>
     </>

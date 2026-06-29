@@ -220,7 +220,8 @@ export type ScanResult =
   | { result: "duplicate"; assignmentId: string; redeemedAt: string | null }
   | { result: "voided"; assignmentId: string }
   | { result: "expired"; assignmentId: string }
-  | { result: "not_found" };
+  | { result: "not_found" }
+  | { result: "window_closed"; assignmentId: string; opensAt: string | null; closesAt: string | null };
 
 /**
  * Journal a scan attempt. The journal IS the audit trail — an accepted
@@ -298,10 +299,10 @@ export async function scanAssignment(input: {
     return { result: "not_found" };
   }
 
-  // Read the parent assignment to evaluate validity.
+  // Read the parent assignment + its catalog item (for scan window).
   const { data: a } = await supabase
     .from("assignments")
-    .select("id, org_id, fulfillment_state, fulfilled_at, catalog_kind, title")
+    .select("id, org_id, fulfillment_state, fulfilled_at, catalog_kind, catalog_item_id, title")
     .eq("id", scanCode.assignment_id)
     .eq("org_id", input.orgId)
     .maybeSingle();
@@ -309,6 +310,36 @@ export async function scanAssignment(input: {
   const state = a.fulfillment_state as FulfillmentState;
   const catalogKind = a.catalog_kind as CatalogKind;
   const title = (a.title as string | null) ?? null;
+
+  // Enforce scan time window (Eventbrite April 2026 parity).
+  if (catalogKind === "ticket" && a.catalog_item_id) {
+    const { data: item } = await supabase
+      .from("master_catalog_items")
+      .select("scan_opens_at, scan_closes_at")
+      .eq("id", a.catalog_item_id as string)
+      .maybeSingle();
+    if (item) {
+      const now = new Date();
+      const opensAt = item.scan_opens_at ? new Date(item.scan_opens_at as string) : null;
+      const closesAt = item.scan_closes_at ? new Date(item.scan_closes_at as string) : null;
+      if ((opensAt && now < opensAt) || (closesAt && now > closesAt)) {
+        await logScanEvent(supabase, {
+          assignment_id: a.id,
+          org_id: input.orgId,
+          actor_user_id: input.scannerUserId,
+          scan_code_id: scanCode.id,
+          result: "window_closed",
+          location: input.location ?? null,
+        });
+        return {
+          result: "window_closed",
+          assignmentId: a.id,
+          opensAt: item.scan_opens_at as string | null,
+          closesAt: item.scan_closes_at as string | null,
+        };
+      }
+    }
+  }
 
   if (state === "voided") {
     await logScanEvent(supabase, {
@@ -386,4 +417,88 @@ export async function scanAssignment(input: {
   });
 
   return { result: "accepted", assignmentId: a.id, scanCodeId: scanCode.id, catalogKind, title };
+}
+
+// ──────────────────────────────────────────────────────────────
+// Waitlist — position-ordered queue per catalog item.
+// ──────────────────────────────────────────────────────────────
+
+export type WaitlistRow = {
+  id: string;
+  catalog_item_id: string;
+  party_user_id: string | null;
+  party_email: string | null;
+  party_name: string | null;
+  position: number;
+  joined_at: string;
+  notified_at: string | null;
+};
+
+export async function listWaitlistByItem(
+  orgId: string,
+  catalogItemId: string,
+): Promise<WaitlistRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("catalog_waitlist")
+    .select("id, catalog_item_id, party_user_id, party_email, party_name, position, joined_at, notified_at")
+    .eq("org_id", orgId)
+    .eq("catalog_item_id", catalogItemId)
+    .order("position", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as unknown as WaitlistRow[];
+}
+
+export async function getMyWaitlistEntry(
+  orgId: string,
+  catalogItemId: string,
+  userId: string,
+): Promise<WaitlistRow | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("catalog_waitlist")
+    .select("id, catalog_item_id, party_user_id, party_email, party_name, position, joined_at, notified_at")
+    .eq("org_id", orgId)
+    .eq("catalog_item_id", catalogItemId)
+    .eq("party_user_id", userId)
+    .maybeSingle();
+  return (data ?? null) as unknown as WaitlistRow | null;
+}
+
+export async function joinWaitlist(
+  orgId: string,
+  catalogItemId: string,
+  party: { userId: string; name?: string } | { email: string; name?: string },
+): Promise<{ id: string; position: number }> {
+  const supabase = await createClient();
+  const row =
+    "userId" in party
+      ? { org_id: orgId, catalog_item_id: catalogItemId, party_user_id: party.userId, party_name: party.name ?? null }
+      : { org_id: orgId, catalog_item_id: catalogItemId, party_email: party.email, party_name: party.name ?? null };
+  const { data, error } = await supabase
+    .from("catalog_waitlist")
+    .insert(row as Parameters<typeof supabase.from>[0] extends string ? never : object)
+    .select("id, position")
+    .single();
+  if (error) throw error;
+  return data as { id: string; position: number };
+}
+
+export async function leaveWaitlist(orgId: string, waitlistId: string): Promise<void> {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("catalog_waitlist")
+    .delete()
+    .eq("id", waitlistId)
+    .eq("org_id", orgId);
+  if (error) throw error;
+}
+
+export async function markWaitlistNotified(orgId: string, waitlistId: string): Promise<void> {
+  const supabase = await createClient();
+  await supabase
+    .from("catalog_waitlist")
+    .update({ notified_at: new Date().toISOString() })
+    .eq("id", waitlistId)
+    .eq("org_id", orgId);
 }

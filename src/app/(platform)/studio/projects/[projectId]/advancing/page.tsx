@@ -92,6 +92,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               label: t("console.projects.advancing.tabs.assignments", undefined, "Assignments"),
               href: `/studio/projects/${projectId}/advancing/assignments`,
             },
+            {
+              label: t("console.projects.advancing.tabs.waitlist", undefined, "Waitlist"),
+              href: `/studio/projects/${projectId}/advancing/waitlist`,
+            },
           ]}
           className="border-b border-[var(--p-border)]"
         />

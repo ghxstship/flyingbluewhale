@@ -189,6 +189,11 @@ const EXEMPT = [
     type: "exact",
     reason: "Portal gateway — persona picker / redirect to the viewer's persona home.",
   },
+  {
+    path: "/p/[slug]/guest/waitlist",
+    type: "prefix",
+    reason: "Waitlist join/leave — contextually reached from ticket listings, not a primary nav click.",
+  },
   { path: "/p/select", type: "exact", reason: "Org/slug picker — reached when a portal user has no resolved slug." },
   // Marketing home — reached via the logo lockup, not a nav item.
   { path: "/", type: "exact", reason: "Home — reached via the logo, not a nav entry." },

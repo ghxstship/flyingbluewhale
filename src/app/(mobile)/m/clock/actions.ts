@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
 
-export type State = { error?: string; ok?: boolean } | null;
+export type State = { error?: string; ok?: boolean; entryId?: string } | null;
 
 /**
  * Open a time entry for the signed-in user. No-op if one is already open
@@ -68,6 +68,38 @@ export async function clockOut(): Promise<State> {
     .eq("user_id", session.userId);
   if (error) {
     log.error("m.clock.clock_out_failed", { err: error.message });
+    return { error: error.message };
+  }
+  revalidatePath("/m/clock");
+  return { ok: true, entryId: open.id as string };
+}
+
+/**
+ * Attach a Shift Pulse rating to a just-closed time entry (Deputy Shift Pulse+ parity).
+ * pulse_rating is 1–5 (1 = rough, 5 = great); pulse_note is optional free text.
+ * Skipping is always valid — callers simply don't invoke this action.
+ */
+export async function submitShiftPulse(
+  entryId: string,
+  rating: number,
+  note?: string,
+): Promise<State> {
+  const session = await requireSession();
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) return { error: "Rating must be 1–5." };
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("time_entries")
+    .update({
+      pulse_rating: rating,
+      pulse_note: note?.trim() || null,
+    })
+    .eq("id", entryId)
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .not("ended_at", "is", null);
+  if (error) {
+    log.error("m.clock.shift_pulse_failed", { err: error.message });
     return { error: error.message };
   }
   revalidatePath("/m/clock");

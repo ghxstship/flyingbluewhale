@@ -355,6 +355,8 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Time Off", href: "/studio/workforce/time-off", icon: "Calendar" },
           { label: "Shift Swaps", href: "/studio/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Shift Pulse", href: "/studio/workforce/shift-pulse", icon: "Star" },
+          { label: "Labor Insights", href: "/studio/workforce/labor-insights", icon: "BarChart3" },
           { label: "Recognition", href: "/studio/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck" },
           { label: "Resource Forecast", href: "/studio/workforce/forecast", icon: "TrendingUp" },
@@ -1212,6 +1214,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       { label: "Tickets", href: `${base}/tickets` },
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Logistics", href: `${base}/logistics` },
+      { label: "Flyer", href: `/p/${slug}/flyer` },
       privacy,
     ],
     vip: [

@@ -108,7 +108,7 @@ export async function awardWorkOrderAction(workOrderId: string, vendorId: string
     .eq("trade", wo.trade)
     .maybeSingle();
   if (elig?.verdict === "blocked") {
-    return { error: "This subcontractor is blocked — required compliance documents are missing or expired." };
+    return { error: "This subcontractor is blocked: required compliance documents are missing or expired." };
   }
 
   const { error } = await supabase

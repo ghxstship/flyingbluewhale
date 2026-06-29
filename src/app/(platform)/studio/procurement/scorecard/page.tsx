@@ -45,7 +45,7 @@ export default async function ScorecardPage() {
         subtitle={t(
           "console.procurement.scorecard.subtitle",
           undefined,
-          "Subcontractor performance — on-time, quality and disputes roll up into a composite that weights dispatch.",
+          "Subcontractor performance: on-time, quality and disputes roll up into a composite that weights dispatch.",
         )}
       />
       <div className="metric-grid mb-6">
@@ -60,7 +60,7 @@ export default async function ScorecardPage() {
           description={t(
             "console.procurement.scorecard.emptyBody",
             undefined,
-            "Composite scores accrue as work orders close out — on-time delivery, quality ratings, and disputes.",
+            "Composite scores accrue as work orders close out: on-time delivery, quality ratings, and disputes.",
           )}
         />
       ) : (

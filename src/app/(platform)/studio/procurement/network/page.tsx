@@ -81,7 +81,7 @@ export default async function NetworkPage() {
         subtitle={t(
           "console.procurement.network.subtitle",
           undefined,
-          "Your outside trade crews as external companies — ranked by compliance standing.",
+          "Your outside trade crews as external companies, ranked by compliance standing.",
         )}
       />
       <div className="metric-grid mb-6">

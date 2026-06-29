@@ -178,7 +178,7 @@ export default async function WorkOrderDetail({ params }: { params: Promise<{ id
                   ) : (
                     ["posted", "bids-in"].includes(order.work_order_state) && (
                       <form action={awardWorkOrderForm.bind(null, order.id, b.vendor_id)} className="mt-3">
-                        <Button type="submit" disabled={blocked} title={blocked ? "Sub is blocked — resolve compliance first" : undefined}>
+                        <Button type="submit" disabled={blocked} title={blocked ? "Sub is blocked: resolve compliance first" : undefined}>
                           {t("console.production.workOrders.award", undefined, "Award")}
                         </Button>
                       </form>

@@ -36,8 +36,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const wo = await load(id);
   return buildMetadata({
-    title: wo ? `${wo.title} — ${wo.trade}` : "Work order",
-    description: wo ? `Open ${wo.trade} work order. ${formatCents(wo.budget_guide_cents)} budget guide.` : undefined,
+    title: wo ? `${wo.title} · ${wo.trade}` : "Work order",
+    description: wo ? `Open ${wo.trade} work order. ${formatCents(wo.budget_guide_cents)} budget guide.` : "Open subcontractor trade work order.",
     path: `/marketplace/work-orders/${id}`,
   });
 }

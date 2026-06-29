@@ -62,7 +62,7 @@ export default async function SubInvoicesPage() {
         subtitle={t(
           "console.finance.subInvoices.subtitle",
           undefined,
-          "Inbound subcontractor payment applications — submitted against approved work orders.",
+          "Inbound subcontractor payment applications, submitted against approved work orders.",
         )}
       />
       <div className="metric-grid mb-6">

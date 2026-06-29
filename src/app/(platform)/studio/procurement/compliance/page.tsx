@@ -73,7 +73,7 @@ export default async function CompliancePage() {
         subtitle={t(
           "console.procurement.compliance.subtitle",
           undefined,
-          "Subcontractor insurance, licenses and certs — eligibility is derived from what's on file.",
+          "Subcontractor insurance, licenses and certs. Eligibility is derived from what's on file.",
         )}
       />
 

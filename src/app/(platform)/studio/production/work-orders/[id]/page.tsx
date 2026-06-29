@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
@@ -99,9 +100,15 @@ export default async function WorkOrderDetail({ params }: { params: Promise<{ id
         subtitle={`${order.trade} · ${DISPATCH_MODE_LABELS[order.dispatch_mode]}`}
       />
 
-      <div className="mb-6 flex items-center gap-2">
+      <div className="mb-6 flex items-center gap-3">
         <Badge variant={STATE_TONE[order.work_order_state]}>{WORK_ORDER_STATE_LABELS[order.work_order_state]}</Badge>
         <span className="text-xs text-[var(--p-text-2)]">{order.visibility === "public" ? "Public" : "Private"}</span>
+        <Link
+          href={`/studio/production/work-orders/${order.id}/thread`}
+          className="ms-auto text-sm text-[var(--p-accent-text)] hover:underline"
+        >
+          {t("console.production.workOrders.thread.open", undefined, "Open thread →")}
+        </Link>
       </div>
 
       <div className="metric-grid mb-6">

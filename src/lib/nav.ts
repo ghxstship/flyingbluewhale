@@ -494,6 +494,8 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Vendors", href: "/studio/procurement/vendors", icon: "Store" },
           { label: "Prequalification", href: "/studio/procurement/prequalification", icon: "BookOpenCheck" },
           { label: "Compliance", href: "/studio/procurement/compliance", icon: "ShieldCheck" },
+          { label: "Subs Network", href: "/studio/procurement/network", icon: "Users" },
+          { label: "Trades Marketplace", href: "/studio/procurement/marketplace", icon: "Store" },
           { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass" },
           { label: "RFQs", href: "/studio/procurement/rfqs", icon: "PackageCheck" },
           { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel" },

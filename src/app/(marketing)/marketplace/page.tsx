@@ -23,6 +23,15 @@ export default async function Page() {
       blurb: t("marketing.pages.marketplace.sections.rfqs.blurb"),
     },
     {
+      href: "/marketplace/work-orders",
+      title: t("marketing.pages.marketplace.sections.workOrders.title", undefined, "Trade Work Orders"),
+      blurb: t(
+        "marketing.pages.marketplace.sections.workOrders.blurb",
+        undefined,
+        "Open subcontractor jobs — bid on trade work posted by producers.",
+      ),
+    },
+    {
       href: "/marketplace/gigs",
       title: t("marketing.pages.marketplace.sections.gigs.title"),
       blurb: t("marketing.pages.marketplace.sections.gigs.blurb"),

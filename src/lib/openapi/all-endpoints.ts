@@ -384,3 +384,40 @@ registerEndpoint({
   },
   auth: "session",
 });
+
+// ─── Subcontractor ops — Work Order Thread (v7.5 P2) ─────────────────
+const WoMessageShape = z.object({
+  id: z.string().uuid(),
+  body: z.string(),
+  author_id: z.string().uuid().nullable(),
+  created_at: z.string(),
+});
+
+registerEndpoint({
+  method: "GET",
+  path: "/work-orders/{id}/messages",
+  summary: "Work order thread",
+  description: "Messages on a work order's coordination thread (oldest first).",
+  tags: ["Work Orders"],
+  pathParams: { id: z.string().uuid() },
+  responses: {
+    200: { description: "Thread", schema: okEnvelope(z.object({ messages: z.array(WoMessageShape) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "POST",
+  path: "/work-orders/{id}/messages",
+  summary: "Post to a work order thread",
+  tags: ["Work Orders"],
+  pathParams: { id: z.string().uuid() },
+  requestBody: z.object({ body: z.string().min(1).max(2000) }),
+  responses: {
+    201: { description: "Posted", schema: okEnvelope(z.object({ message: WoMessageShape })) },
+    400: { description: "Validation error", schema: ErrorEnvelope },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});

@@ -14,6 +14,58 @@ export type Database = {
   }
   public: {
     Tables: {
+      work_order_messages: {
+        Row: {
+          attachment_file_id: string | null
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          org_id: string
+          work_order_id: string
+        }
+        Insert: {
+          attachment_file_id?: string | null
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          org_id: string
+          work_order_id: string
+        }
+        Update: {
+          attachment_file_id?: string | null
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_order_messages_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_messages_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_messages_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      },
       trade_requirements: {
         Row: {
           created_at: string
@@ -38609,6 +38661,45 @@ export type Database = {
       }
     }
     Views: {
+      public_work_orders: {
+        Row: {
+          budget_guide_cents: number | null
+          created_at: string | null
+          dispatch_mode: string | null
+          end_date: string | null
+          id: string | null
+          site_address: string | null
+          start_date: string | null
+          title: string | null
+          trade: string | null
+          work_order_state: string | null
+        }
+        Insert: {
+          budget_guide_cents?: number | null
+          created_at?: string | null
+          dispatch_mode?: string | null
+          end_date?: string | null
+          id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title?: string | null
+          trade?: string | null
+          work_order_state?: string | null
+        }
+        Update: {
+          budget_guide_cents?: number | null
+          created_at?: string | null
+          dispatch_mode?: string | null
+          end_date?: string | null
+          id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title?: string | null
+          trade?: string | null
+          work_order_state?: string | null
+        }
+        Relationships: []
+      },
       v_compliance_doc_status: {
         Row: {
           doc_kind: string | null

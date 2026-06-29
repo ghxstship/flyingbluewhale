@@ -981,6 +981,18 @@
               ]
             },
             {
+              "path": "/studio/procurement/network",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/marketplace",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
               "path": "/studio/procurement/sourcing",
               "arch": [
                 "LIST"

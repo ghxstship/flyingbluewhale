@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1111 · **API route handlers:** 135 · **Distinct nav hrefs:** 474
+**Page routes:** 1116 · **API route handlers:** 136 · **Distinct nav hrefs:** 476
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 727 | 208 | 519 | 0 | 0 |
+| ATLVS — Operator Console | platformNav rail | 730 | 210 | 520 | 0 | 0 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces / ROLE_TABS | 53 | 38 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
 | LEG3ND — Knowledge Shell | — | 40 | 21 | 19 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 90 | 33 | 49 | 0 | 8 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 92 | 33 | 51 | 0 | 8 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1111** | **448** | **626** | **0** | **37** |
+| **TOTAL** | | **1116** | **450** | **629** | **0** | **37** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -88,7 +88,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-727 routes — ● 208 nav · ○ 519 linked · ⚠ 0 orphan
+730 routes — ● 210 nav · ○ 520 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -708,12 +708,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>procurement</code> · 44 routes</summary>
+<details><summary><code>procurement</code> · 46 routes</summary>
 
 ● `/studio/procurement`
 ○ `/studio/procurement/catalog`
 ● `/studio/procurement/compliance`
 ● `/studio/procurement/itb`
+● `/studio/procurement/marketplace`
+● `/studio/procurement/network`
 ● `/studio/procurement/po-change-orders`
 ○ `/studio/procurement/po-change-orders/[id]`
 ○ `/studio/procurement/po-change-orders/new`
@@ -757,7 +759,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>production</code> · 31 routes</summary>
+<details><summary><code>production</code> · 32 routes</summary>
 
 ● `/studio/production`
 ● `/studio/production/av`
@@ -789,6 +791,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/production/warehouse/locations`
 ● `/studio/production/work-orders`
 ○ `/studio/production/work-orders/[id]`
+○ `/studio/production/work-orders/[id]/thread`
 ○ `/studio/production/work-orders/new`
 
 </details>
@@ -1908,7 +1911,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — Public / Marketing
 
-90 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
+92 routes — ● 33 nav · ○ 51 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2059,7 +2062,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>marketplace</code> · 26 routes</summary>
+<details><summary><code>marketplace</code> · 28 routes</summary>
 
 ● `/marketplace`
 ○ `/marketplace/agencies`
@@ -2087,6 +2090,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/marketplace/vendors`
 ○ `/marketplace/vendors/[handle]`
 ○ `/marketplace/vendors/[handle]/inquire`
+○ `/marketplace/work-orders`
+○ `/marketplace/work-orders/[id]`
 
 </details>
 
@@ -2353,7 +2358,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 135 route handlers
+## API surface (`/api/v1`) — 136 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2762,10 +2767,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/work-orders</code> · 2</summary>
+<details><summary><code>/api/v1/work-orders</code> · 3</summary>
 
 - `/api/v1/work-orders`
 - `/api/v1/work-orders/[id]`
+- `/api/v1/work-orders/[id]/messages`
 
 </details>
 

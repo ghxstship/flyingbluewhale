@@ -129,6 +129,25 @@ export async function awardWorkOrderForm(workOrderId: string, vendorId: string):
   await awardWorkOrderAction(workOrderId, vendorId);
 }
 
+const MessageSchema = z.object({ body: z.string().min(1).max(2000) });
+
+/** Post a message to a work order's thread (Phase 2). Author = the caller. */
+export async function postWorkOrderMessageAction(workOrderId: string, _: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = MessageSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return formFail(parsed.error, fd);
+  const supabase = await createClient();
+  const { error } = await supabase.from("work_order_messages").insert({
+    org_id: session.orgId,
+    work_order_id: workOrderId,
+    author_id: session.userId,
+    body: parsed.data.body,
+  });
+  if (error) return actionFail(error.message, fd);
+  revalidatePath(`/studio/production/work-orders/${workOrderId}/thread`);
+  return { ok: true };
+}
+
 const BidSchema = z.object({
   vendor_id: z.string().uuid(),
   amount: z.coerce.number().min(0),

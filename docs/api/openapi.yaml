@@ -1202,3 +1202,6 @@ paths:
     get: { summary: "A work order with its bids and change orders. Org-scoped." }
   /api/v1/compliance:
     get: { summary: "Derived subcontractor eligibility verdicts (blocked/expiring/eligible) per vendor x trade. Optional trade filter." }
+  /api/v1/work-orders/{id}/messages:
+    get: { summary: "Messages on a work order's coordination thread (oldest first)." }
+    post: { summary: "Post a message to a work order thread (author = caller)." }

@@ -25,16 +25,16 @@ const PUBLIC_SURFACES: Surface[] = [
 ];
 
 const CONSOLE_SURFACES: Surface[] = [
-  { path: "/console/marketplace", expectedH1: /Overview/i, allowRedirect: true },
-  { path: "/console/marketplace/postings", expectedH1: /Job Postings/i, allowRedirect: true },
-  { path: "/console/marketplace/postings/new", expectedH1: /New Posting/i, allowRedirect: true },
-  { path: "/console/marketplace/calls", expectedH1: /Open Calls/i, allowRedirect: true },
-  { path: "/console/marketplace/calls/new", expectedH1: /New Open Call/i, allowRedirect: true },
-  { path: "/console/marketplace/talent", expectedH1: /Talent/i, allowRedirect: true },
-  { path: "/console/marketplace/talent/new", expectedH1: /New Talent Profile/i, allowRedirect: true },
-  { path: "/console/marketplace/offers", expectedH1: /Offers/i, allowRedirect: true },
-  { path: "/console/marketplace/reviews", expectedH1: /Reviews/i, allowRedirect: true },
-  { path: "/console/marketplace/settings", expectedH1: /Settings/i, allowRedirect: true },
+  { path: "/studio/marketplace", expectedH1: /Overview/i, allowRedirect: true },
+  { path: "/studio/marketplace/postings", expectedH1: /Job Postings/i, allowRedirect: true },
+  { path: "/studio/marketplace/postings/new", expectedH1: /New Posting/i, allowRedirect: true },
+  { path: "/studio/marketplace/calls", expectedH1: /Open Calls/i, allowRedirect: true },
+  { path: "/studio/marketplace/calls/new", expectedH1: /New Open Call/i, allowRedirect: true },
+  { path: "/studio/marketplace/talent", expectedH1: /Talent/i, allowRedirect: true },
+  { path: "/studio/marketplace/talent/new", expectedH1: /New Talent Profile/i, allowRedirect: true },
+  { path: "/studio/marketplace/offers", expectedH1: /Offers/i, allowRedirect: true },
+  { path: "/studio/marketplace/reviews", expectedH1: /Reviews/i, allowRedirect: true },
+  { path: "/studio/marketplace/settings", expectedH1: /Settings/i, allowRedirect: true },
 ];
 
 test.describe("Marketplace canon — public discovery", () => {

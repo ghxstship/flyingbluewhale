@@ -39,11 +39,11 @@ test.describe("console core — Projects", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("create a project lands on a detail page", async ({ page }) => {
-    await page.goto("/console/projects/new");
+    await page.goto("/studio/projects/new");
     const name = `E2E Project ${stamp()}`;
     await fillByName(page, "name", name);
     await submitForm(page);
-    // redirect to /console/projects or the new detail; the name should render
+    // redirect to /studio/projects or the new detail; the name should render
     await expect(page.locator("body")).toContainText(name, { timeout: 15000 });
   });
 });
@@ -52,7 +52,7 @@ test.describe("console core — Tasks", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("create a task appears in the list", async ({ page }) => {
-    await page.goto("/console/tasks/new");
+    await page.goto("/studio/tasks/new");
     const title = `E2E Task ${stamp()}`;
     await fillByName(page, "title", title);
     await submitForm(page);
@@ -64,7 +64,7 @@ test.describe("console core — Finance invoice receivables lifecycle", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("invoice draft → sent → paid", async ({ page }) => {
-    await page.goto("/console/finance/invoices/new");
+    await page.goto("/studio/finance/invoices/new");
     const title = `E2E Invoice ${stamp()}`;
     await fillByName(page, "title", title);
     // Amount is a <MoneyInput>: a visible decimal field (placeholder "0.00")
@@ -89,7 +89,7 @@ test.describe("console core — Procurement W-9/COI gate", () => {
 
   test("compliant vendor → PO binds and Send succeeds", async ({ page }) => {
     // 1. compliant vendor (W-9 on file + future COI)
-    await page.goto("/console/procurement/vendors/new");
+    await page.goto("/studio/procurement/vendors/new");
     const vendor = `E2E Vendor ${stamp()}`;
     await fillByName(page, "name", vendor);
     await fillByName(page, "coi_expires_at", "2030-01-01");
@@ -98,7 +98,7 @@ test.describe("console core — Procurement W-9/COI gate", () => {
     await expect(page.locator("body")).toContainText(vendor, { timeout: 15000 });
 
     // 2. PO bound to that vendor
-    await page.goto("/console/procurement/purchase-orders/new");
+    await page.goto("/studio/procurement/purchase-orders/new");
     await fillByName(page, "title", `E2E PO ${stamp()}`);
     await page.locator('[name="vendor_id"]').selectOption({ label: vendor });
     await fillByName(page, "amount", "5000");
@@ -115,7 +115,7 @@ test.describe("console core — Proposals lifecycle", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("proposal draft → sent → approved", async ({ page }) => {
-    await page.goto("/console/proposals/new");
+    await page.goto("/studio/proposals/new");
     const title = `E2E Proposal ${stamp()}`;
     await fillByName(page, "title", title);
     // amount/value field name varies; fill any required number field present
@@ -137,7 +137,7 @@ test.describe("console core — Comms", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("announcement create → publish", async ({ page }) => {
-    await page.goto("/console/comms/announcements/new");
+    await page.goto("/studio/comms/announcements/new");
     const title = `E2E Announcement ${stamp()}`;
     await fillByName(page, "title", title);
     await page.locator('textarea[name="body"]').fill("E2E body copy for the announcement.");
@@ -148,7 +148,7 @@ test.describe("console core — Comms", () => {
   });
 
   test("poll create → publish", async ({ page }) => {
-    await page.goto("/console/comms/polls/new");
+    await page.goto("/studio/comms/polls/new");
     const q = `E2E Poll ${stamp()}`;
     await fillByName(page, "question", q);
     await page.locator('textarea[name="options"]').fill("Option A\nOption B\nOption C");

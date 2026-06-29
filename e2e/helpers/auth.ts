@@ -11,7 +11,7 @@
  *   independent of fixture-cycle timing.
  *
  * Login resilience:
- *   The first /login + /console hit on a cold dev server takes 10–25s
+ *   The first /login + /studio hit on a cold dev server takes 10–25s
  *   for Turbopack to compile the route graph. The 25s navigation
  *   timeout below absorbs that on CI's first retry. Subsequent calls
  *   in the same worker are sub-second.
@@ -32,6 +32,13 @@ export function fixtureEmail(role: string): string {
  * to the minimum. Run before `page.goto()` calls.
  */
 export async function dismissConsent(page: Page): Promise<void> {
+  // Pre-set the consent cookie so the CookieConsent dialog (a fixed inset-0
+  // backdrop scrim) never renders and intercepts clicks. Scope it to the
+  // current target via `url` (NOT a hardcoded localhost domain) so it works
+  // both locally AND when the suite runs against a deployed target through
+  // E2E_BASE_URL (e.g. https://atlvs.pro) — otherwise the scrim swallows every
+  // click on prod and click-based tests time out.
+  const base = process.env.E2E_BASE_URL || "http://localhost:3000";
   await page.context().addCookies([
     {
       // Canonical consent cookie after the brand sweep (legacy fbw_consent is
@@ -45,8 +52,7 @@ export async function dismissConsent(page: Page): Promise<void> {
           decidedAt: new Date().toISOString(),
         }),
       ),
-      domain: "localhost",
-      path: "/",
+      url: base,
     },
   ]);
 }

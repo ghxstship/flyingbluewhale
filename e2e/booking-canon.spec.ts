@@ -4,7 +4,7 @@
  * Coverage:
  *   - Public surfaces: /marketplace/agencies + slug, /marketplace/calendar
  *   - Console hub + every booking sub-surface compiles + renders
- *   - Settings sidebar surfaces /console/settings/integrations/ticketing
+ *   - Settings sidebar surfaces /studio/settings/integrations/ticketing
  *   - Form actions: settlement upsert + finalize, tiered hold create + auto-promote,
  *     ticketing connection, tour create
  *   - Trigger behaviors: tier auto-promotion on hold release,
@@ -28,23 +28,23 @@ const PUBLIC_SURFACES = [
 ];
 
 const CONSOLE_SURFACES = [
-  { path: "/console/bookings", h1: /Overview/i },
-  { path: "/console/bookings/deals", h1: /Deal Tracker/i },
-  { path: "/console/bookings/holds", h1: /Holds/i },
-  { path: "/console/bookings/holds/new", h1: /New Hold/i },
-  { path: "/console/bookings/calendar", h1: /Calendar/i },
-  { path: "/console/bookings/settlements", h1: /Settlements/i },
-  { path: "/console/agency", h1: /Overview/i },
-  { path: "/console/agency/roster", h1: /Roster/i },
-  { path: "/console/agency/tours", h1: /Tours/i },
-  { path: "/console/agency/tours/new", h1: /New Tour/i },
-  { path: "/console/agency/commissions", h1: /Commissions/i },
-  { path: "/console/marketing", h1: /Overview/i },
-  { path: "/console/marketing/onsales", h1: /On-sales/i },
-  { path: "/console/marketing/calendar", h1: /Calendar/i },
-  { path: "/console/insights", h1: /Booking Pool/i },
-  { path: "/console/settings/integrations/ticketing", h1: /Ticketing/i },
-  { path: "/console/settings/integrations/ticketing/new", h1: /New Ticketing Connection/i },
+  { path: "/studio/bookings", h1: /Overview/i },
+  { path: "/studio/bookings/deals", h1: /Deal Tracker/i },
+  { path: "/studio/bookings/holds", h1: /Holds/i },
+  { path: "/studio/bookings/holds/new", h1: /New Hold/i },
+  { path: "/studio/bookings/calendar", h1: /Calendar/i },
+  { path: "/studio/bookings/settlements", h1: /Settlements/i },
+  { path: "/studio/agency", h1: /Overview/i },
+  { path: "/studio/agency/roster", h1: /Roster/i },
+  { path: "/studio/agency/tours", h1: /Tours/i },
+  { path: "/studio/agency/tours/new", h1: /New Tour/i },
+  { path: "/studio/agency/commissions", h1: /Commissions/i },
+  { path: "/studio/marketing", h1: /Overview/i },
+  { path: "/studio/marketing/onsales", h1: /On-sales/i },
+  { path: "/studio/marketing/calendar", h1: /Calendar/i },
+  { path: "/studio/insights", h1: /Booking Pool/i },
+  { path: "/studio/settings/integrations/ticketing", h1: /Ticketing/i },
+  { path: "/studio/settings/integrations/ticketing/new", h1: /New Ticketing Connection/i },
 ];
 
 test.describe("Booking canon · public surfaces render", () => {
@@ -79,8 +79,8 @@ test.describe("Booking canon · settings sidebar surfaces ticketing link", () =>
   test("settings sidebar shows Ticketing link", async ({ page }) => {
     await dismissConsent(page);
     await loginAsOwner(page);
-    await page.goto("/console/settings/organization");
-    await expect(page.locator('a[href="/console/settings/integrations/ticketing"]').first()).toBeVisible();
+    await page.goto("/studio/settings/organization");
+    await expect(page.locator('a[href="/studio/settings/integrations/ticketing"]').first()).toBeVisible();
   });
 });
 
@@ -92,7 +92,7 @@ test.describe("Booking canon · form actions", () => {
 
   test("create tiered hold → list shows it", async ({ page }) => {
     const label = `E2E Hold T1 ${Date.now()}`;
-    await page.goto("/console/bookings/holds/new");
+    await page.goto("/studio/bookings/holds/new");
     await page.locator('select[name="tier"]').selectOption("1");
     await page.getByLabel("Label").fill(label);
     const start = new Date(Date.now() + 86_400_000).toISOString().slice(0, 16);
@@ -100,14 +100,14 @@ test.describe("Booking canon · form actions", () => {
     await page.locator('input[name="starts_at"]').fill(start);
     await page.locator('input[name="ends_at"]').fill(end);
     await page.getByRole("button", { name: /Place Hold/i }).click();
-    await page.waitForURL("**/console/bookings/holds", { timeout: 15_000 });
+    await page.waitForURL("**/studio/bookings/holds", { timeout: 15_000 });
     await expect(page.getByText(label)).toBeVisible({ timeout: 5_000 });
   });
 
   test("upsert settlement on a deal → balance recomputes", async ({ page }) => {
     // Use the seeded fixture offer.
     const offerId = "ffffffff-0001-4001-8001-000000000001";
-    await page.goto(`/console/bookings/deals/${offerId}/settlement`);
+    await page.goto(`/studio/bookings/deals/${offerId}/settlement`);
     await expect(page.locator("h1").first()).toHaveText(/Post-Show Reconciliation/i);
 
     await page.getByLabel("Gross Box Office").fill("12500");
@@ -121,14 +121,14 @@ test.describe("Booking canon · form actions", () => {
     await page.waitForLoadState("networkidle");
 
     // Reload and assert the computed block renders
-    await page.goto(`/console/bookings/deals/${offerId}/settlement`);
+    await page.goto(`/studio/bookings/deals/${offerId}/settlement`);
     await expect(page.getByText(/Computed/i).first()).toBeVisible();
     await expect(page.getByText("NBOR").first()).toBeVisible();
   });
 
   test("create ticketing connection", async ({ page }) => {
     const label = `E2E DICE ${Date.now()}`;
-    await page.goto("/console/settings/integrations/ticketing/new");
+    await page.goto("/studio/settings/integrations/ticketing/new");
     await page.locator('select[name="provider"]').selectOption("dice");
     await page.getByLabel("Label").fill(label);
     await page.getByRole("button", { name: /^Connect$/i }).click();
@@ -139,11 +139,11 @@ test.describe("Booking canon · form actions", () => {
 
   test("create tour → land on detail with empty leg list", async ({ page }) => {
     const name = `E2E Tour ${Date.now()}`;
-    await page.goto("/console/agency/tours/new");
+    await page.goto("/studio/agency/tours/new");
     await page.getByLabel("Tour Name").fill(name);
     await page.locator('select[name="talent_profile_id"]').selectOption({ index: 1 });
     await page.getByRole("button", { name: /Create Tour/i }).click();
-    await page.waitForURL(/\/console\/agency\/tours\/[0-9a-f-]+$/, { timeout: 15_000 });
+    await page.waitForURL(/\/studio\/agency\/tours\/[0-9a-f-]+$/, { timeout: 15_000 });
     await expect(page.locator("h1").first()).toHaveText(name);
   });
 });
@@ -152,16 +152,16 @@ test.describe("Booking canon · IA — Bookings group + ticketing in settings", 
   test("Bookings group surfaces in primary sidebar", async ({ page }) => {
     await dismissConsent(page);
     await loginAsOwner(page);
-    await page.goto("/console/bookings");
+    await page.goto("/studio/bookings");
     // The Talent/Bookings IA consolidated Deals/Holds/Calendar/Settlements into
-    // tabs WITHIN the /console/bookings hub (see src/lib/nav.ts §300 "Bookings
+    // tabs WITHIN the /studio/bookings hub (see src/lib/nav.ts §300 "Bookings
     // is a tabbed landing"). The primary sidebar exposes the hub entries, not
     // the per-tab sub-routes.
-    for (const path of ["/console/bookings", "/console/agency/tours", "/console/marketing", "/console/insights"]) {
+    for (const path of ["/studio/bookings", "/studio/agency/tours", "/studio/marketing", "/studio/insights"]) {
       await expect(page.locator(`aside a[href="${path}"]`).first()).toBeVisible();
     }
     // The consolidated sub-tabs still render as pages under the hub.
-    for (const tab of ["/console/bookings/deals", "/console/bookings/holds"]) {
+    for (const tab of ["/studio/bookings/deals", "/studio/bookings/holds"]) {
       await page.goto(tab);
       await expect(page.locator("h1").first()).toBeVisible({ timeout: 15000 });
     }

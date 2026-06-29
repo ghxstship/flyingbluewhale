@@ -17,15 +17,15 @@ import { TEST_PASSWORD, fixtureEmail, dismissConsent } from "./auth";
 // The routes that actually cold-compile slowly enough to flake under a 30s
 // budget (observed in full-suite runs). Warming these is the high-value move.
 const HEAVY_AUTHED = [
-  "/console",
-  "/console/inspections",
-  "/console/safety/osha",
-  "/console/settings/integrations",
-  "/console/settings/integrations/marketplace",
-  "/console/settings/audit",
-  "/console/ai/automations",
-  "/console/finance/payroll",
-  "/console/documents",
+  "/studio",
+  "/studio/inspections",
+  "/studio/safety/osha",
+  "/studio/settings/integrations",
+  "/studio/settings/integrations/marketplace",
+  "/studio/settings/audit",
+  "/studio/ai/automations",
+  "/studio/finance/payroll",
+  "/studio/documents",
   "/me",
   "/m",
 ];

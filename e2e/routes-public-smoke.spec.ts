@@ -73,7 +73,7 @@ test.describe("graceful 404s", () => {
         path: "/",
       },
     ]);
-    const r = await page.goto("/console/does-not-exist");
+    const r = await page.goto("/studio/does-not-exist");
     expect(r?.status() ?? 200).not.toBe(500);
   });
 });

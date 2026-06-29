@@ -5,12 +5,12 @@
  * pages that are NOT in the sidebar nav (so `ia-coverage` can't reach them) and
  * carry no dynamic id (so they're verifiable without seeded fixtures):
  *
- *   - /console/contracts            (list)  + /new
- *   - /console/envelopes            (list)  + /new
- *   - /console/email-inbox          (list)
- *   - /console/finance/ap-ocr       (list)
- *   - /console/finance/wip/new      (create)
- *   - /console/settings/integrations/accounting + /new
+ *   - /studio/contracts            (list)  + /new
+ *   - /studio/envelopes            (list)  + /new
+ *   - /studio/email-inbox          (list)
+ *   - /studio/finance/ap-ocr       (list)
+ *   - /studio/finance/wip/new      (create)
+ *   - /studio/settings/integrations/accounting + /new
  *
  * Per route we assert the navigation held auth (no /login bounce), the HTTP
  * status was < 400, and the (platform) error boundary did NOT render. Create
@@ -23,18 +23,18 @@ import { authedSetup } from "./helpers/auth";
 type Surface = { href: string; form?: boolean; link?: string };
 
 const SURFACES: Surface[] = [
-  { href: "/console/contracts" },
-  { href: "/console/contracts/new", form: true },
-  { href: "/console/envelopes" },
-  { href: "/console/envelopes/new", form: true },
-  { href: "/console/email-inbox" },
-  { href: "/console/finance/ap-ocr" },
-  { href: "/console/finance/wip/new", form: true },
-  { href: "/console/settings/integrations/accounting" },
+  { href: "/studio/contracts" },
+  { href: "/studio/contracts/new", form: true },
+  { href: "/studio/envelopes" },
+  { href: "/studio/envelopes/new", form: true },
+  { href: "/studio/email-inbox" },
+  { href: "/studio/finance/ap-ocr" },
+  { href: "/studio/finance/wip/new", form: true },
+  { href: "/studio/settings/integrations/accounting" },
   // Connect screen, by design form-less: a "Connect" anchor 302s to the
   // provider's OAuth flow (no secret-capturing form in the UI). Assert the
   // connect affordance rather than a <form>.
-  { href: "/console/settings/integrations/accounting/new", link: "Connect" },
+  { href: "/studio/settings/integrations/accounting/new", link: "Connect" },
 ];
 
 async function probe(page: Page, s: Surface): Promise<string | null> {

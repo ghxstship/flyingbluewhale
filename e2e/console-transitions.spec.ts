@@ -14,7 +14,7 @@ test.describe("console — state-machine transitions", () => {
 
   test("Master catalog SKU · deactivate → reactivate", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/settings/catalog/new", {
+    await createInModule(page, "/studio/settings/catalog/new", {
       name: `E2E SKU ${s}`,
       code: `E2E-${s}`,
       kind: "credential",
@@ -31,8 +31,8 @@ test.describe("console — state-machine transitions", () => {
   // (draft→submitted→…) was validated manually (see BROWSER_E2E_CASA_WYNWOOD.md).
   test.skip("Requisition · status draft → submitted (edit)", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/procurement/requisitions/new", { title: `E2E Req ${s}` });
-    // on the requisition detail (/console/procurement/requisitions/<id>) → edit form
+    await createInModule(page, "/studio/procurement/requisitions/new", { title: `E2E Req ${s}` });
+    // on the requisition detail (/studio/procurement/requisitions/<id>) → edit form
     const detailUrl = page.url().split("?")[0]!.replace(/\/$/, "");
     await page.goto(`${detailUrl}/edit`, { timeout: 90000 }); // cold-compile headroom (dev)
     await expect(page.locator('select[name="status"]')).toBeVisible({ timeout: 20000 });
@@ -47,7 +47,7 @@ test.describe("console — state-machine transitions", () => {
 
   test("Task · create → mark done", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/tasks/new", { title: `E2E Task ${s}` });
+    await createInModule(page, "/studio/tasks/new", { title: `E2E Task ${s}` });
     // task detail/list — find a status control that completes the task
     const markDone = page.getByRole("button", { name: /done|complete|mark/i }).first();
     if (await markDone.count()) {

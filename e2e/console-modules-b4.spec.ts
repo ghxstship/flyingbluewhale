@@ -14,51 +14,51 @@ test.describe("console modules — create flows (batch 4)", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("Accommodation · room block create", async ({ page }) => {
-    await createInModule(page, "/console/accommodation/blocks/new", { name: `E2E Block ${stamp()}` });
+    await createInModule(page, "/studio/accommodation/blocks/new", { name: `E2E Block ${stamp()}` });
   });
 
   test("Accreditation · category create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/accreditation/categories/new", {
+    await createInModule(page, "/studio/accreditation/categories/new", {
       code: `E2E${s.slice(-5)}`,
       name: `E2E Cat ${s}`,
     });
   });
 
   test("AI · automation create", async ({ page }) => {
-    await createInModule(page, "/console/ai/automations/new", { name: `E2E Automation ${stamp()}` });
+    await createInModule(page, "/studio/ai/automations/new", { name: `E2E Automation ${stamp()}` });
   });
 
   test("Reality captures · create", async ({ page }) => {
-    await createInModule(page, "/console/captures/new", { name: `E2E Capture ${stamp()}` });
+    await createInModule(page, "/studio/captures/new", { name: `E2E Capture ${stamp()}` });
   });
 
   test("Comms · survey create", async ({ page }) => {
-    await createInModule(page, "/console/comms/surveys/new", { title: `E2E Survey ${stamp()}` });
+    await createInModule(page, "/studio/comms/surveys/new", { title: `E2E Survey ${stamp()}` });
   });
 
   test("Drawings · create", async ({ page }) => {
-    await createInModule(page, "/console/drawings/new", { name: `E2E Drawing ${stamp()}` });
+    await createInModule(page, "/studio/drawings/new", { name: `E2E Drawing ${stamp()}` });
   });
 
   test("Estimates · create", async ({ page }) => {
-    await createInModule(page, "/console/estimates/new", { name: `E2E Estimate ${stamp()}` });
+    await createInModule(page, "/studio/estimates/new", { name: `E2E Estimate ${stamp()}` });
   });
 
   test("Finance · entity create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/finance/entities/new", {
+    await createInModule(page, "/studio/finance/entities/new", {
       legal_name: `E2E Entity ${s}`,
       short_code: `E${s.slice(-5)}`,
     });
   });
 
   test("Finance · forecast create", async ({ page }) => {
-    await createInModule(page, "/console/finance/forecasts/new", { name: `E2E Forecast ${stamp()}` });
+    await createInModule(page, "/studio/finance/forecasts/new", { name: `E2E Forecast ${stamp()}` });
   });
 
   test("Finance · mileage log create", async ({ page }) => {
-    await createInModule(page, "/console/finance/mileage/new", {
+    await createInModule(page, "/studio/finance/mileage/new", {
       origin: "Studio",
       destination: "Venue",
       miles: "42",
@@ -66,24 +66,24 @@ test.describe("console modules — create flows (batch 4)", () => {
   });
 
   test("Finance · accounting period create", async ({ page }) => {
-    await createInModule(page, "/console/finance/periods/new", { period_label: `E2E ${stamp()}` });
+    await createInModule(page, "/studio/finance/periods/new", { period_label: `E2E ${stamp()}` });
   });
 
   test("Finance · time entry create", async ({ page }) => {
-    await createInModule(page, "/console/finance/time/new", { description: `E2E Time ${stamp()}` });
+    await createInModule(page, "/studio/finance/time/new", { description: `E2E Time ${stamp()}` });
   });
 
   test("Forms · create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/forms/new", { slug: `e2e-form-${s}`, title: `E2E Form ${s}` });
+    await createInModule(page, "/studio/forms/new", { slug: `e2e-form-${s}`, title: `E2E Form ${s}` });
   });
 
   test("Locations · create", async ({ page }) => {
-    await createInModule(page, "/console/locations/new", { name: `E2E Location ${stamp()}` });
+    await createInModule(page, "/studio/locations/new", { name: `E2E Location ${stamp()}` });
   });
 
   test("Logistics · rate card create", async ({ page }) => {
-    await createInModule(page, "/console/logistics/ratecard/new", {
+    await createInModule(page, "/studio/logistics/ratecard/new", {
       name: `E2E Rate ${stamp()}`,
       sku: `E2E-SKU-${stamp()}`,
     });
@@ -91,7 +91,7 @@ test.describe("console modules — create flows (batch 4)", () => {
 
   test("ITIL · change create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/ops/toc/changes/new", {
+    await createInModule(page, "/studio/ops/toc/changes/new", {
       code: `CHG-${s.slice(-5)}`,
       title: `E2E Change ${s}`,
     });
@@ -99,7 +99,7 @@ test.describe("console modules — create flows (batch 4)", () => {
 
   test("ITIL · problem create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/ops/toc/problems/new", {
+    await createInModule(page, "/studio/ops/toc/problems/new", {
       code: `PRB-${s.slice(-5)}`,
       title: `E2E Problem ${s}`,
     });
@@ -107,25 +107,25 @@ test.describe("console modules — create flows (batch 4)", () => {
 
   test("Participants · delegation create", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/console/participants/delegations/new", {
+    await createInModule(page, "/studio/participants/delegations/new", {
       code: `DEL-${s.slice(-5)}`,
       name: `E2E Delegation ${s}`,
     });
   });
 
   test("Participants · visa record create", async ({ page }) => {
-    await createInModule(page, "/console/participants/visa/new", { person_name: `E2E Person ${stamp()}` });
+    await createInModule(page, "/studio/participants/visa/new", { person_name: `E2E Person ${stamp()}` });
   });
 
   test("People · crew member create", async ({ page }) => {
-    await createInModule(page, "/console/people/crew/new", { name: `E2E Crew ${stamp()}` });
+    await createInModule(page, "/studio/people/crew/new", { name: `E2E Crew ${stamp()}` });
   });
 
   test("Procurement · RFQ create", async ({ page }) => {
-    await createInModule(page, "/console/procurement/rfqs/new", { title: `E2E RFQ ${stamp()}` });
+    await createInModule(page, "/studio/procurement/rfqs/new", { title: `E2E RFQ ${stamp()}` });
   });
 
   test("Programs · review create", async ({ page }) => {
-    await createInModule(page, "/console/programs/reviews/new", { title: `E2E Review ${stamp()}` });
+    await createInModule(page, "/studio/programs/reviews/new", { title: `E2E Review ${stamp()}` });
   });
 });

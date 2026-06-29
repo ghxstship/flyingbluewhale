@@ -57,7 +57,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
     const subject = `E2E RFI ${Date.now()}`;
     const subjectEdited = `${subject} (edited)`;
 
-    await page.goto("/console/rfis/new", { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto("/studio/rfis/new", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.locator('input[name="subject"]').fill(subject);
     await page
       .locator('textarea[name="question"]')
@@ -65,7 +65,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
     await pickFirstProjectOption(page, "project_id");
     await page.getByRole("button", { name: /open rfi|save/i }).click();
 
-    await page.waitForURL(/\/console\/rfis\/[a-f0-9-]{36}/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/rfis\/[a-f0-9-]{36}/, { timeout: 30000 });
     await expect(page.getByText(subject, { exact: false })).toBeVisible({ timeout: 30000 });
 
     await page.getByRole("link", { name: /^Edit$/ }).click();
@@ -77,7 +77,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
       .fill("Confirmed: 500 lb capacity at downstage left, signed off by rigger.");
     await page.getByRole("button", { name: /save rfi/i }).click();
 
-    await page.waitForURL(/\/console\/rfis\/[a-f0-9-]{36}$/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/rfis\/[a-f0-9-]{36}$/, { timeout: 30000 });
     await expect(page.getByText(subjectEdited)).toBeVisible({ timeout: 30000 });
     await expect(page.getByText(/Confirmed: 500 lb capacity/)).toBeVisible({ timeout: 30000 });
   });
@@ -85,7 +85,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
   test("Submittal: create → edit status", async ({ page }) => {
     const title = `E2E Submittal ${Date.now()}`;
 
-    await page.goto("/console/submittals/new", { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto("/studio/submittals/new", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.locator('input[name="title"]').fill(title);
     await pickFirstProjectOption(page, "project_id");
     await page
@@ -93,7 +93,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
       .first()
       .click();
 
-    await page.waitForURL(/\/console\/submittals\/[a-f0-9-]{36}/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/submittals\/[a-f0-9-]{36}/, { timeout: 30000 });
     await expect(page.getByText(title, { exact: false })).toBeVisible({ timeout: 30000 });
 
     await page.getByRole("link", { name: /^Edit$/ }).click();
@@ -101,7 +101,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
     await page.locator('select[name="status"]').selectOption("submitted");
     await page.getByRole("button", { name: /save submittal/i }).click();
 
-    await page.waitForURL(/\/console\/submittals\/[a-f0-9-]{36}$/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/submittals\/[a-f0-9-]{36}$/, { timeout: 30000 });
     await expect(page.getByText(/submitted/i).first()).toBeVisible({ timeout: 30000 });
   });
 
@@ -109,7 +109,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
     const title = `E2E Punch ${Date.now()}`;
     const titleEdited = `${title} (revised)`;
 
-    await page.goto("/console/punch/new", { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto("/studio/punch/new", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.locator('input[name="title"]').fill(title);
     await pickFirstProjectOption(page, "project_id");
     await page
@@ -117,7 +117,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
       .first()
       .click();
 
-    await page.waitForURL(/\/console\/punch\/[a-f0-9-]{36}/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/punch\/[a-f0-9-]{36}/, { timeout: 30000 });
     await expect(page.getByText(title, { exact: false })).toBeVisible({ timeout: 30000 });
 
     await page.getByRole("link", { name: /^Edit$/ }).click();
@@ -126,7 +126,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
     await page.locator('select[name="priority"]').selectOption("urgent");
     await page.getByRole("button", { name: /save punch/i }).click();
 
-    await page.waitForURL(/\/console\/punch\/[a-f0-9-]{36}$/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/punch\/[a-f0-9-]{36}$/, { timeout: 30000 });
     await expect(page.getByText(titleEdited)).toBeVisible({ timeout: 30000 });
     await expect(page.getByText(/urgent/i).first()).toBeVisible({ timeout: 30000 });
   });
@@ -134,14 +134,14 @@ test.describe("construction-trade CRUD lifecycles", () => {
   test("Inspection: create → edit notes", async ({ page }) => {
     const name = `E2E Inspection ${Date.now()}`;
 
-    await page.goto("/console/inspections/new", { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto("/studio/inspections/new", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.locator('input[name="name"]').fill(name);
     await page
       .getByRole("button", { name: /^schedule$|^create$|^save$|^open$/i })
       .first()
       .click();
 
-    await page.waitForURL(/\/console\/inspections\/[a-f0-9-]{36}/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/inspections\/[a-f0-9-]{36}/, { timeout: 30000 });
     await expect(page.getByText(name, { exact: false })).toBeVisible({ timeout: 30000 });
 
     await page.getByRole("link", { name: /^Edit$/ }).click();
@@ -149,14 +149,14 @@ test.describe("construction-trade CRUD lifecycles", () => {
     await page.locator('textarea[name="notes"]').fill("E2E note: verified template items and inspector assignment.");
     await page.getByRole("button", { name: /save inspection/i }).click();
 
-    await page.waitForURL(/\/console\/inspections\/[a-f0-9-]{36}$/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/inspections\/[a-f0-9-]{36}$/, { timeout: 30000 });
   });
 
   test("Site plan: create → edit discipline", async ({ page }) => {
     const code = `E2E${Date.now().toString().slice(-6)}`;
     const title = `E2E Site Plan ${Date.now()}`;
 
-    await page.goto("/console/site-plans/new", { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.goto("/studio/site-plans/new", { waitUntil: "domcontentloaded", timeout: 60000 });
     // URID atom fields — required with no defaults on the redesigned creator
     // (discipline moved to the edit page; classification comes from
     // primary_class).
@@ -171,7 +171,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
       .first()
       .click();
 
-    await page.waitForURL(/\/console\/site-plans\/[a-f0-9-]{36}/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/site-plans\/[a-f0-9-]{36}/, { timeout: 30000 });
     // Detail h1 renders the sheet TITLE; the code surfaces in the meta strip.
     await expect(page.getByRole("heading", { name: title })).toBeVisible({ timeout: 30000 });
 
@@ -180,7 +180,7 @@ test.describe("construction-trade CRUD lifecycles", () => {
     await page.locator('select[name="discipline"]').selectOption("power");
     await page.getByRole("button", { name: /save sheet|save site plan/i }).click();
 
-    await page.waitForURL(/\/console\/site-plans\/[a-f0-9-]{36}$/, { timeout: 30000 });
+    await page.waitForURL(/\/studio\/site-plans\/[a-f0-9-]{36}$/, { timeout: 30000 });
     await expect(page.getByText(/power/i).first()).toBeVisible({ timeout: 30000 });
   });
 });

@@ -14,7 +14,7 @@ test.describe("console — state-machine transitions (batch 2)", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("Punch item · open → start (lifecycle advances)", async ({ page }) => {
-    await createInModule(page, "/console/punch/new", { title: `E2E Punch ${stamp()}` });
+    await createInModule(page, "/studio/punch/new", { title: `E2E Punch ${stamp()}` });
     // On the punch detail. Drive the first transition.
     const start = page.getByRole("button", { name: /^start$/i }).first();
     await expect(start).toBeVisible({ timeout: 15000 });
@@ -25,8 +25,8 @@ test.describe("console — state-machine transitions (batch 2)", () => {
   });
 
   test("Inspection · scheduled → start (then Pass/Fail exposed)", async ({ page }) => {
-    await createInModule(page, "/console/inspections/new", { name: `E2E Inspection ${stamp()}` });
-    // On the inspection detail (redirects to /console/inspections/[id]).
+    await createInModule(page, "/studio/inspections/new", { name: `E2E Inspection ${stamp()}` });
+    // On the inspection detail (redirects to /studio/inspections/[id]).
     const start = page.getByRole("button", { name: /^start$/i }).first();
     await expect(start).toBeVisible({ timeout: 15000 });
     await start.click();
@@ -40,7 +40,7 @@ test.describe("console — state-machine transitions (batch 2)", () => {
   // it needs the created order's detail URL, which the generic create helper
   // doesn't surface — best done by a fixture-seeded fabrication detail spec.
   test.skip("Fabrication order · open → start (production_phase advances)", async ({ page }) => {
-    await createInModule(page, "/console/production/fabrication/new", { name: `E2E Fab ${stamp()}` });
+    await createInModule(page, "/studio/production/fabrication/new", { name: `E2E Fab ${stamp()}` });
     // On the fabrication detail. The order may start queued (first action "Open")
     // or already open ("Start") — drive whichever forward transition is exposed.
     const firstStep = page.getByRole("button", { name: /^(open|start)$/i }).first();

@@ -288,3 +288,175 @@ registerEndpoint({
   },
   auth: "session",
 });
+
+// ─── Subcontractor operations (v7.5) ─────────────────────────────────
+const WorkOrderShape = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  trade: z.string(),
+  work_order_state: z.string(),
+  dispatch_mode: z.string(),
+  visibility: z.string(),
+  budget_guide_cents: z.number().int().nullable(),
+  start_date: z.string().nullable(),
+  end_date: z.string().nullable(),
+  awarded_vendor_id: z.string().uuid().nullable(),
+});
+
+registerEndpoint({
+  method: "GET",
+  path: "/work-orders",
+  summary: "List work orders",
+  description: "List the org's subcontractor work orders (newest first). Optional `state` filter.",
+  tags: ["Work Orders"],
+  queryParams: { state: z.string().optional() },
+  responses: {
+    200: { description: "Work order list", schema: okEnvelope(z.object({ workOrders: z.array(WorkOrderShape) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "POST",
+  path: "/work-orders",
+  summary: "Create a work order",
+  description: "Create a draft work order to dispatch a trade crew.",
+  tags: ["Work Orders"],
+  requestBody: z.object({
+    title: z.string().min(1).max(160),
+    trade: z.string().min(1).max(80),
+    siteAddress: z.string().max(300).optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    budgetGuideCents: z.number().int().min(0).optional(),
+    visibility: z.enum(["private", "public"]).optional(),
+    dispatchMode: z.enum(["allow-offers", "firm-price", "instant-book", "assign"]).optional(),
+  }),
+  responses: {
+    201: { description: "Created", schema: okEnvelope(z.object({ workOrder: WorkOrderShape.partial() })) },
+    400: { description: "Validation error", schema: ErrorEnvelope },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "GET",
+  path: "/work-orders/{id}",
+  summary: "Get a work order",
+  description: "A work order with its bids and change orders.",
+  tags: ["Work Orders"],
+  pathParams: { id: z.string().uuid() },
+  responses: {
+    200: {
+      description: "Work order detail",
+      schema: okEnvelope(
+        z.object({ workOrder: WorkOrderShape, bids: z.array(z.unknown()), changeOrders: z.array(z.unknown()) }),
+      ),
+    },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+    404: { description: "Not found", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "GET",
+  path: "/compliance",
+  summary: "Subcontractor eligibility",
+  description:
+    "Derived subcontractor eligibility verdicts (blocked / expiring / eligible) per vendor × trade. Optional `trade` filter.",
+  tags: ["Compliance"],
+  queryParams: { trade: z.string().optional() },
+  responses: {
+    200: {
+      description: "Eligibility verdicts",
+      schema: okEnvelope(
+        z.object({
+          eligibility: z.array(
+            z.object({ vendor_id: z.string().uuid(), trade: z.string(), verdict: z.enum(["eligible", "expiring", "blocked"]) }),
+          ),
+        }),
+      ),
+    },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+// ─── Subcontractor ops — Work Order Thread (v7.5 P2) ─────────────────
+const WoMessageShape = z.object({
+  id: z.string().uuid(),
+  body: z.string(),
+  author_id: z.string().uuid().nullable(),
+  created_at: z.string(),
+});
+
+registerEndpoint({
+  method: "GET",
+  path: "/work-orders/{id}/messages",
+  summary: "Work order thread",
+  description: "Messages on a work order's coordination thread (oldest first).",
+  tags: ["Work Orders"],
+  pathParams: { id: z.string().uuid() },
+  responses: {
+    200: { description: "Thread", schema: okEnvelope(z.object({ messages: z.array(WoMessageShape) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "POST",
+  path: "/work-orders/{id}/messages",
+  summary: "Post to a work order thread",
+  tags: ["Work Orders"],
+  pathParams: { id: z.string().uuid() },
+  requestBody: z.object({ body: z.string().min(1).max(2000) }),
+  responses: {
+    201: { description: "Posted", schema: okEnvelope(z.object({ message: WoMessageShape })) },
+    400: { description: "Validation error", schema: ErrorEnvelope },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+// ─── Subcontractor ops — P3 leverage surfaces (v7.5) ─────────────────
+registerEndpoint({
+  method: "GET",
+  path: "/sub-invoices",
+  summary: "List sub-invoices",
+  description: "Inbound subcontractor payment applications for the org. Optional state filter.",
+  tags: ["Sub Invoices"],
+  queryParams: { state: z.string().optional() },
+  responses: {
+    200: { description: "Sub-invoice list", schema: okEnvelope(z.object({ subInvoices: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+registerEndpoint({
+  method: "GET",
+  path: "/job-templates",
+  summary: "List job templates",
+  description: "Reusable scope-checklist templates with step counts.",
+  tags: ["Job Templates"],
+  responses: {
+    200: { description: "Template list", schema: okEnvelope(z.object({ jobTemplates: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+registerEndpoint({
+  method: "GET",
+  path: "/scorecard",
+  summary: "Vendor scorecard",
+  description: "Vendor performance composite rollup (on-time, quality, disputes).",
+  tags: ["Scorecard"],
+  responses: {
+    200: { description: "Vendor scores", schema: okEnvelope(z.object({ scores: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});

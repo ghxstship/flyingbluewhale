@@ -20,18 +20,18 @@
 
 /* report shell — a wider doc tuned for landscape analytics */
 .doc--report{--doc-w:1040px}
-.rpt-stage{background:var(--p-bg);min-height:100vh;padding:28px 18px 90px;font-family:var(--p-font);color:var(--p-text-1)}
+.rpt-stage{background:var(--p-bg);min-height:100vh;padding:28px var(--p-4) var(--p-24);font-family:var(--p-font);color:var(--p-text-1)}
 
 /* report header band (KPI summary strip under the masthead) */
 .rpt-summary{display:grid;grid-template-columns:repeat(var(--cols,4),1fr);gap:0;border-top:1px solid color-mix(in oklab,currentColor 22%,transparent)}
-.rpt-summary>*{min-width:0;padding:16px 18px;border-right:1px solid color-mix(in oklab,currentColor 14%,transparent)}
+.rpt-summary>*{min-width:0;padding:16px var(--p-4);border-right:1px solid color-mix(in oklab,currentColor 14%,transparent)}
 .rpt-summary>*:last-child{border-right:0}
 .rpt-summary .k{font-family:var(--p-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.62}
-.rpt-summary .v{font-family:var(--p-heading);font-stretch:var(--p-heading-stretch);font-weight:var(--p-heading-weight);font-variant-numeric:tabular-nums;font-size:30px;line-height:1.05;margin-top:5px}
-.rpt-summary .d{font-size:11px;font-weight:600;margin-top:3px}
+.rpt-summary .v{font-family:var(--p-heading);font-stretch:var(--p-heading-stretch);font-weight:var(--p-heading-weight);font-variant-numeric:tabular-nums;font-size:30px;line-height:1.05;margin-top:var(--p-1)}
+.rpt-summary .d{font-size:11px;font-weight:600;margin-top:var(--p-1)}
 
 /* ---- metric grid --------------------------------------------------------- */
-.rpt-grid{display:grid;grid-template-columns:repeat(var(--cols,3),1fr);gap:14px}
+.rpt-grid{display:grid;grid-template-columns:repeat(var(--cols,3),1fr);gap:var(--p-4)}
 .rpt-grid>*{min-width:0}
 @media(max-width:760px){.rpt-grid{grid-template-columns:repeat(2,1fr)}}
 .rpt-col2{grid-column:span 2}
@@ -39,7 +39,7 @@
 .rpt-col4{grid-column:span 4}
 
 /* ---- KPI scorecard tile -------------------------------------------------- */
-.kpi{background:var(--p-surface);border:1px solid var(--p-border);border-radius:var(--p-r);padding:15px 16px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--p-elev-1)}
+.kpi{background:var(--p-surface);border:1px solid var(--p-border);border-radius:var(--p-r);padding:var(--p-4) 16px var(--p-4);display:flex;flex-direction:column;gap:8px;box-shadow:var(--p-elev-1)}
 .kpi .kpi-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .kpi .kpi-lab{font-family:var(--p-mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--p-text-3)}
 .kpi .kpi-val{font-family:var(--p-heading);font-stretch:var(--p-heading-stretch);font-weight:var(--p-heading-weight);font-variant-numeric:tabular-nums;font-size:34px;line-height:.98;color:var(--p-text-1)}
@@ -48,7 +48,7 @@
 .kpi--accent{border-color:color-mix(in oklab,var(--p-accent) 40%,var(--p-border));background:color-mix(in oklab,var(--p-accent) 7%,var(--p-surface))}
 
 /* trend delta pill — semantics set by .up/.down + direction-aware good/bad */
-.delta{display:inline-flex;align-items:center;gap:3px;font-family:var(--p-mono);font-size:10.5px;font-weight:600;letter-spacing:.02em;padding:2px 7px;border-radius:var(--p-r-pill);white-space:nowrap}
+.delta{display:inline-flex;align-items:center;gap:var(--p-1);font-family:var(--p-mono);font-size:10.5px;font-weight:600;letter-spacing:.02em;padding:2px var(--p-2);border-radius:var(--p-r-pill);white-space:nowrap}
 .delta::before{font-weight:700}
 .delta.up{color:var(--p-success);background:color-mix(in oklab,var(--p-success) 14%,transparent)}
 .delta.up::before{content:"\25B2"}
@@ -83,7 +83,7 @@
 .gauge-semi{--v:50;width:160px;height:80px;overflow:hidden;position:relative;flex:none}
 .gauge-semi::before{content:"";position:absolute;inset:0;border-radius:160px 160px 0 0;
   background:conic-gradient(from 270deg,var(--p-accent) calc(var(--v)*0.5%),var(--p-surface-2) 0 50%,transparent 0);-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.gauge-semi::after{content:"";position:absolute;left:18px;right:18px;bottom:0;top:18px;border-radius:140px 140px 0 0;background:var(--p-surface)}
+.gauge-semi::after{content:"";position:absolute;left:var(--p-4);right:var(--p-4);bottom:0;top:var(--p-4);border-radius:140px 140px 0 0;background:var(--p-surface)}
 
 /* ---- bullet / benchmark bar (actual vs target vs qualitative range) ------ */
 .bullet{display:grid;grid-template-columns:130px 1fr 58px;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--p-border)}
@@ -92,7 +92,7 @@
 .bullet .b-lab b{color:var(--p-text-1)}
 .bullet .b-track{position:relative;height:14px;border-radius:4px;background:var(--p-surface-2);overflow:hidden}
 .bullet .b-range{position:absolute;inset:0;background:linear-gradient(90deg,color-mix(in oklab,var(--p-text-3) 14%,transparent),color-mix(in oklab,var(--p-text-3) 8%,transparent) var(--good,70%),transparent 0);-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.bullet .b-fill{position:absolute;top:3px;bottom:3px;left:0;width:calc(var(--v,50)*1%);border-radius:3px;background:var(--p-accent);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bullet .b-fill{position:absolute;top:var(--p-1);bottom:var(--p-1);left:0;width:calc(var(--v,50)*1%);border-radius:3px;background:var(--p-accent);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .bullet .b-fill.warn{background:var(--p-warning)}
 .bullet .b-fill.bad{background:var(--p-danger)}
 .bullet .b-target{position:absolute;top:-2px;bottom:-2px;left:calc(var(--t,90)*1%);width:2px;background:var(--p-text-1)}
@@ -114,43 +114,43 @@
 .ring b{position:relative;z-index:1;font-family:var(--p-mono);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--p-text-1)}
 
 /* ---- funnel -------------------------------------------------------------- */
-.funnel{display:flex;flex-direction:column;gap:5px}
+.funnel{display:flex;flex-direction:column;gap:var(--p-1)}
 .funnel .fn{position:relative;height:42px;border-radius:6px;background:color-mix(in oklab,var(--p-accent) 16%,var(--p-surface-2));display:flex;align-items:center;overflow:hidden}
 .funnel .fn .bar{position:absolute;inset:0;width:calc(var(--v,100)*1%);background:var(--p-accent);opacity:calc(0.35 + var(--i,0)*0.16);-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.funnel .fn .lab{position:relative;z-index:1;padding:0 13px;font-size:12.5px;font-weight:600;color:var(--p-text-1)}
-.funnel .fn .num{position:relative;z-index:1;margin-left:auto;padding:0 13px;font-family:var(--p-mono);font-size:12px;font-variant-numeric:tabular-nums;color:var(--p-text-1)}
-.funnel .fn .conv{position:relative;z-index:1;padding:0 13px;font-family:var(--p-mono);font-size:10px;color:var(--p-text-3)}
+.funnel .fn .lab{position:relative;z-index:1;padding:0 var(--p-3);font-size:12.5px;font-weight:600;color:var(--p-text-1)}
+.funnel .fn .num{position:relative;z-index:1;margin-left:auto;padding:0 var(--p-3);font-family:var(--p-mono);font-size:12px;font-variant-numeric:tabular-nums;color:var(--p-text-1)}
+.funnel .fn .conv{position:relative;z-index:1;padding:0 var(--p-3);font-family:var(--p-mono);font-size:10px;color:var(--p-text-3)}
 
 /* ---- heatmap / cohort grid ----------------------------------------------- */
-.heatgrid{display:grid;gap:3px;grid-template-columns:repeat(var(--cols,12),1fr)}
+.heatgrid{display:grid;gap:var(--p-1);grid-template-columns:repeat(var(--cols,12),1fr)}
 .heatgrid .cell{aspect-ratio:1;border-radius:3px;background:color-mix(in oklab,var(--p-accent) calc(var(--v,0)*1%),var(--p-surface-2));-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .cohort{width:100%;border-collapse:separate;border-spacing:3px}
-.cohort th{font-family:var(--p-mono);font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--p-text-3);font-weight:500;padding:3px 5px;text-align:center}
+.cohort th{font-family:var(--p-mono);font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--p-text-3);font-weight:500;padding:var(--p-1) var(--p-1);text-align:center}
 .cohort td.lab{font-size:12px;color:var(--p-text-2);text-align:left;white-space:nowrap;padding-right:8px}
-.cohort td.c{text-align:center;font-family:var(--p-mono);font-size:11px;font-variant-numeric:tabular-nums;border-radius:4px;padding:7px 4px;color:color-mix(in oklab,var(--p-text-1) calc(40% + var(--v,0)*0.6%),var(--p-text-3));
+.cohort td.c{text-align:center;font-family:var(--p-mono);font-size:11px;font-variant-numeric:tabular-nums;border-radius:4px;padding:var(--p-2) 4px;color:color-mix(in oklab,var(--p-text-1) calc(40% + var(--v,0)*0.6%),var(--p-text-3));
   background:color-mix(in oklab,var(--p-accent) calc(var(--v,0)*0.9%),var(--p-surface-2));-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
 /* ---- leaderboard / ranked bars ------------------------------------------- */
 .lboard{display:flex;flex-direction:column}
-.lboard .lb-row{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--p-border)}
+.lboard .lb-row{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:var(--p-3);padding:var(--p-2) 0;border-bottom:1px solid var(--p-border)}
 .lboard .lb-row:last-child{border-bottom:0}
 .lboard .rk{font-family:var(--p-mono);font-size:11px;color:var(--p-text-3);font-variant-numeric:tabular-nums}
 .lboard .lb-name{font-size:13px;color:var(--p-text-1);font-weight:500}
-.lboard .lb-bar{height:6px;border-radius:3px;margin-top:5px;background:var(--p-accent);width:calc(var(--v,50)*1%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.lboard .lb-bar{height:6px;border-radius:3px;margin-top:var(--p-1);background:var(--p-accent);width:calc(var(--v,50)*1%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .lboard .lb-val{font-family:var(--p-mono);font-size:12.5px;font-weight:600;color:var(--p-text-1);font-variant-numeric:tabular-nums}
 
 /* ---- combo chart (bars + overlaid line) ---------------------------------- */
-.combo{position:relative;height:170px;display:flex;align-items:flex-end;gap:12px;padding:6px 2px 0}
-.combo .cb{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;justify-content:flex-end;height:100%;position:relative;z-index:1}
+.combo{position:relative;height:170px;display:flex;align-items:flex-end;gap:12px;padding:var(--p-2) 2px 0}
+.combo .cb{flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--p-2);justify-content:flex-end;height:100%;position:relative;z-index:1}
 .combo .cb .fill{width:100%;max-width:40px;border-radius:5px 5px 0 0;background:color-mix(in oklab,var(--p-accent) 30%,var(--p-surface-2));height:calc(var(--v,50)*1%);min-height:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .combo .cb .lb{font-family:var(--p-mono);font-size:9px;letter-spacing:.03em;text-transform:uppercase;color:var(--p-text-3)}
 /* svg is a replaced element: with height:auto + top/bottom set it uses INTRINSIC height,
    not the inset gap — so it must be given an explicit height or it renders square + overflows */
-.combo .combo-line{position:absolute;left:2px;top:6px;width:calc(100% - 4px);height:calc(100% - 28px);z-index:2;pointer-events:none;overflow:visible}
+.combo .combo-line{position:absolute;left:2px;top:var(--p-2);width:calc(100% - 4px);height:calc(100% - 28px);z-index:2;pointer-events:none;overflow:visible}
 
 /* ---- variance waterfall -------------------------------------------------- */
-.waterfall{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:6px}
-.waterfall .wf{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:7px}
+.waterfall{display:flex;align-items:flex-end;gap:var(--p-3);height:170px;padding-top:var(--p-2)}
+.waterfall .wf{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:var(--p-2)}
 .waterfall .wf .seg{width:100%;max-width:50px;border-radius:4px;height:calc(var(--v,20)*1%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .waterfall .wf.base .seg{background:var(--p-text-1)}
 .waterfall .wf.pos .seg{background:var(--p-success)}
@@ -160,21 +160,21 @@
 
 /* ---- report data table w/ conditional formatting ------------------------- */
 .rpt-table{width:100%;border-collapse:collapse}
-.rpt-table th{font-family:var(--p-mono);font-size:10px;letter-spacing:.08em;text-transform:var(--p-case-tablehead);color:var(--p-text-3);text-align:left;padding:9px 11px;border-bottom:2px solid var(--p-text-1)}
+.rpt-table th{font-family:var(--p-mono);font-size:10px;letter-spacing:.08em;text-transform:var(--p-case-tablehead);color:var(--p-text-3);text-align:left;padding:var(--p-2) var(--p-3);border-bottom:2px solid var(--p-text-1)}
 .rpt-table th.r,.rpt-table td.r{text-align:right}
-.rpt-table td{padding:10px 11px;border-bottom:1px solid var(--p-border);font-size:13px;color:var(--p-text-2);font-variant-numeric:tabular-nums}
+.rpt-table td{padding:var(--p-3) var(--p-3);border-bottom:1px solid var(--p-border);font-size:13px;color:var(--p-text-2);font-variant-numeric:tabular-nums}
 .rpt-table td b{color:var(--p-text-1)}
 .rpt-table tr.total td{border-top:2px solid var(--p-text-1);border-bottom:0;font-weight:700;color:var(--p-text-1)}
 .rpt-table .cell-bar{display:block;height:5px;border-radius:3px;background:var(--p-accent);width:calc(var(--v,50)*1%);margin-top:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .rpt-table td.pos{color:var(--p-success);font-weight:600}
 .rpt-table td.neg{color:var(--p-danger);font-weight:600}
-.tag-state{font-family:var(--p-mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:var(--p-r-pill);border:1px solid var(--p-border-2);color:var(--p-text-3)}
+.tag-state{font-family:var(--p-mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;padding:2px var(--p-2);border-radius:var(--p-r-pill);border:1px solid var(--p-border-2);color:var(--p-text-3)}
 .tag-state.ok{color:var(--p-success);border-color:color-mix(in oklab,var(--p-success) 40%,transparent);background:color-mix(in oklab,var(--p-success) 10%,transparent)}
 .tag-state.warn{color:var(--p-warning);border-color:color-mix(in oklab,var(--p-warning) 40%,transparent);background:color-mix(in oklab,var(--p-warning) 10%,transparent)}
 .tag-state.bad{color:var(--p-danger);border-color:color-mix(in oklab,var(--p-danger) 40%,transparent);background:color-mix(in oklab,var(--p-danger) 10%,transparent)}
 
 /* ---- insight callout (the "insights" surface) ---------------------------- */
-.insight{display:flex;gap:12px;padding:14px 16px;border-radius:var(--p-r);background:color-mix(in oklab,var(--p-accent) 7%,var(--p-surface));border:1px solid color-mix(in oklab,var(--p-accent) 26%,var(--p-border))}
+.insight{display:flex;gap:12px;padding:var(--p-4) 16px;border-radius:var(--p-r);background:color-mix(in oklab,var(--p-accent) 7%,var(--p-surface));border:1px solid color-mix(in oklab,var(--p-accent) 26%,var(--p-border))}
 .insight .ic{width:30px;height:30px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--p-accent);color:var(--p-accent-contrast);font-size:16px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .insight .tx{font-size:13px;line-height:1.55;color:var(--p-text-2)}
 .insight .tx b{color:var(--p-text-1)}
@@ -182,11 +182,11 @@
 .insight--warn .ic{background:var(--p-warning)}
 
 /* ---- chart frame label / legend chips ------------------------------------ */
-.viz-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:13px}
+.viz-h{display:flex;align-items:baseline;justify-content:space-between;gap:var(--p-3);margin-bottom:var(--p-3)}
 .viz-h .t{font-family:var(--p-heading);font-stretch:var(--p-heading-stretch);font-weight:var(--p-heading-weight);text-transform:var(--p-display-case);font-size:17px;color:var(--p-text-1)}
 .viz-h .m{font-family:var(--p-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--p-text-3)}
-.viz-legend{display:flex;flex-wrap:wrap;gap:13px;margin-top:12px}
-.viz-legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--p-text-2)}
+.viz-legend{display:flex;flex-wrap:wrap;gap:var(--p-3);margin-top:12px}
+.viz-legend .li{display:flex;align-items:center;gap:var(--p-2);font-size:11.5px;color:var(--p-text-2)}
 .viz-legend .sw{width:10px;height:10px;border-radius:3px;flex:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .sw--accent{background:var(--p-accent)}
 .sw--accent2{background:color-mix(in oklab,var(--p-accent) 45%,var(--p-surface))}

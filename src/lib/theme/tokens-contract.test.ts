@@ -22,7 +22,13 @@ const CSS = readFileSync(join(process.cwd(), "src/app/theme/themes/atlvs-product
 const cssLower = CSS.toLowerCase();
 const TOKENS = JSON.parse(readFileSync(join(process.cwd(), "src/app/theme/tokens.json"), "utf8")) as {
   version: string;
-  color: { accent: Record<string, { light?: { accent?: string } }> };
+  color: {
+    neutral: Record<"light" | "dark", Record<string, string>>;
+    surface: Record<"light" | "dark", Record<string, string>>;
+    accent: Record<string, Record<"light" | "dark", Record<string, string>>>;
+  };
+  spacing: Record<string, string>;
+  density: Record<string, Record<string, string>>;
 };
 
 const CORE_PRODUCTS = ["atlvs", "compvss", "gvteway", "legend"] as const;
@@ -87,5 +93,62 @@ describe("OKLCH color layer contract (v8.1)", () => {
     for (const product of [...CORE_PRODUCTS, "ghxstship"] as const) {
       expect(TOKENS.color.accent[product]?.light?.accent, `tokens.json#color.accent.${product} missing`).toBeTruthy();
     }
+  });
+});
+
+/**
+ * Density-scale SSOT lock (v8.0 grid pass).
+ *
+ * The --k-* density tokens were the seed of the grid drift (authored 9/13/18/14px
+ * off-grid, then copied as literals across the kit CSS). They now live in
+ * tokens.json#density and every SPACING member must (a) resolve to a 4px-ramp rung
+ * and (b) be emitted in atlvs-product.css as `var(--p-*)`, not a raw px — so the
+ * density axis can never silently fork off-grid again.
+ */
+describe("Density tokens ↔ generated theme parity (v8.0 grid pass)", () => {
+  const SPACING_MEMBERS = [
+    "k-ctl-py",
+    "k-ctl-px",
+    "k-input-px",
+    "k-row-py",
+    "k-row-px",
+    "k-card-pad",
+    "k-gap",
+    "k-stack",
+  ] as const;
+
+  // "8px" → "p-2", built from the canonical 4px ramp in tokens.json#spacing.
+  const pxToStep = new Map<string, string>();
+  for (const [step, px] of Object.entries(TOKENS.spacing)) {
+    if (step === "grid") continue;
+    pxToStep.set(px, step);
+  }
+
+  it("every --k-* spacing member resolves to a 4px-ramp rung in all three tiers", () => {
+    const missing: string[] = [];
+    for (const name of SPACING_MEMBERS) {
+      const tiers = TOKENS.density[name]!;
+      for (const tier of ["compact", "cozy", "spacious"] as const) {
+        const px = tiers[tier]!;
+        const step = pxToStep.get(px);
+        if (!step) {
+          missing.push(`${name}.${tier} = ${px} is not a --p-* rung (off the 4px ramp)`);
+          continue;
+        }
+        if (!CSS.includes(`--${name}: var(--${step})`)) {
+          missing.push(`${name}.${tier} = ${px} → "--${name}: var(--${step})" missing from atlvs-product.css`);
+        }
+      }
+    }
+    expect(missing, `density token forked off the ramp / the theme:\n${missing.join("\n")}`).toEqual([]);
+  });
+
+  it("no --k-* spacing member is authored as a raw off-grid px (the pre-v8.0 defect)", () => {
+    const raw: string[] = [];
+    for (const name of SPACING_MEMBERS) {
+      // a digit immediately after the colon = a raw px literal instead of var(--p-*)
+      if (new RegExp(`--${name}:\\s*\\d`).test(CSS)) raw.push(name);
+    }
+    expect(raw, `these --k-* spacing tokens still carry raw px (must be var(--p-*)): ${raw.join(", ")}`).toEqual([]);
   });
 });

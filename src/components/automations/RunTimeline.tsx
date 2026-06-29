@@ -134,11 +134,11 @@ export function RunTimeline({ steps }: RunTimelineProps) {
   return (
     <ol className="relative space-y-3 ps-6">
       {/* Vertical rail — sits behind the status dots. */}
-      <div className="absolute start-[7px] top-1 bottom-1 w-px bg-[var(--p-border)]" aria-hidden="true" />
+      <div className="absolute start-2 top-1 bottom-1 w-px bg-[var(--p-border)]" aria-hidden="true" />
       {steps.map((s) => (
         <li key={s.stepIndex} className="relative">
           <span
-            className={`absolute -start-[1px] top-2 inline-block h-3 w-3 rounded-full ring-2 ring-[var(--p-bg)] ${STATUS_DOT[s.status]}`}
+            className={`absolute start-0 top-2 inline-block h-3 w-3 rounded-full ring-2 ring-[var(--p-bg)] ${STATUS_DOT[s.status]}`}
             aria-hidden="true"
           />
           <div className="surface rounded border border-[var(--p-border)] p-3">

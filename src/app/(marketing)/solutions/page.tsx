@@ -168,7 +168,7 @@ export default async function SolutionsIndex() {
                 {a.bullets.map((b) => (
                   <li key={b} className="flex items-start gap-2">
                     <span
-                      className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full"
+                      className="mt-2 inline-block h-1 w-1 shrink-0 rounded-full"
                       style={{ background: "var(--p-accent)" }}
                     />
                     {b}

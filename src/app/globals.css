@@ -1146,10 +1146,10 @@ pre,
     color: var(--p-text-2);
   }
   /* WCAG color-contrast (1.4.3): eyebrows are ~11px small text, so they
-     need 4.5:1. The raw fill accent (--p-accent, e.g. ATLVS pink
-     #2edb3a is a bright fill) fails as text — use the per-product
-     deepened text variant (--p-accent-text → --p-accent-text, AA-tuned in
-     the theme) which preserves the brand hue while passing AA. */
+     need 4.5:1. The raw fill accent (--p-accent, e.g. ATLVS volcanic red
+     #E23414 is a bright fill) fails as text; use the per-product deepened
+     text variant (--p-accent-text, AA-tuned in the theme) which preserves
+     the brand hue while passing AA. */
   .eyebrow-accent,
   .eyebrow-brand {
     color: var(--p-accent-text);

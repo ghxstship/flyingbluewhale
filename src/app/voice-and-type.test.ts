@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
+import { TRADEMARK_LINE } from "@/lib/brand";
 
 /**
  * Voice + type regression guards (Phase 5 of the 2026-06-27 conformance pass).
@@ -159,5 +160,36 @@ describe("Color guard — marketing resolves color from tokens", () => {
         });
     }
     expect(offenders, `Color from var(--p-*) instead of a hex literal:\n${offenders.join("\n")}`).toEqual([]);
+  });
+});
+
+// DS conformance — root metadata + brand SSOT language (the layers the other
+// guards don't scan). Prevents the retired-era drift this remediation fixed.
+describe("DS conformance — brand language", () => {
+  const layout = readFileSync(join(REPO_ROOT, "src/app/layout.tsx"), "utf8");
+
+  it("root metadata description is dash-free and voyage-free", () => {
+    const meta = layout.match(/description:\s*\n?\s*"([^"]+)"/)?.[1] ?? "";
+    expect(meta.length, "could not find root metadata description").toBeGreaterThan(0);
+    expect(/[—–]/.test(meta), "em/en-dash in meta description").toBe(false);
+    expect(/\b(voyage|bridge|instruments?|set sail|harbor|cast off)\b/i.test(meta), "voyage lexicon in meta").toBe(
+      false,
+    );
+  });
+
+  it("metadata title derives from BRAND.tagline (no frozen tagline)", () => {
+    expect(layout).toMatch(/default:\s*`\$\{BRAND\.legalName\}[^`]*\$\{BRAND\.tagline\}/);
+    expect(layout, "retired 'Production Runs On It' tagline literal").not.toContain("Production Runs On It");
+  });
+
+  it("trademark line names all four products", () => {
+    for (const p of ["ATLVS", "COMPVSS", "GVTEWAY", "LEG3ND"]) {
+      expect(TRADEMARK_LINE, `trademark line missing ${p}`).toContain(p);
+    }
+  });
+
+  it("theme README carries no retired mono-green #2edb3a", () => {
+    const readme = readFileSync(join(REPO_ROOT, "src/app/theme/README.md"), "utf8");
+    expect(readme, "retired mono-green #2edb3a in theme README").not.toMatch(/#2edb3a/i);
   });
 });

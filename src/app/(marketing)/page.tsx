@@ -146,8 +146,9 @@ export default async function Home() {
   // `color` is the bright brand fill (decorative accent bars / large display).
   // `textColor` is the per-product AA-deepened text variant (matches the
   // theme's --p-accent-text) so brand-colored text on white surfaces still
-  // clears WCAG 1.4.3 4.5:1 — the bright fills (#2edb3a etc.) only reach
-  // ~2.2–3.5:1 as text. Same hue, darker value; brand mark colors unchanged.
+  // clears WCAG 1.4.3 4.5:1; the bright fills (COMPVSS #FFC400, ATLVS #E23414,
+  // etc.) only reach ~2.2-3.5:1 as text. Same hue, darker value; brand mark
+  // colors unchanged.
   const PRODUCTS = [
     {
       slug: "atlvs",

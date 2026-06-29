@@ -18,7 +18,8 @@
  *   data-ui) both paint identically. App shells set both.
  *
  *   Per-product accent reads data-product (kit canon) OR data-platform
- *   (existing codebase convention). Same three values: atlvs · compvss · gvteway.
+ *   (existing codebase convention). Core: atlvs · compvss · gvteway · legend;
+ *   extensions: cvrgo · opvs · gvlley · vault; house: ghxstship (= ATLVS red).
  */
 
 /* ============================================================================

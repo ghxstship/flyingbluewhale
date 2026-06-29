@@ -5,10 +5,11 @@
  *   - GHXSTSHIP is the parent company (the "Spaceport" marketing
  *     site, ghxstship.tours — coming later).
  *   - ATLVS Technologies is the Tech vertical legal entity that owns the
- *     proprietary software (v4 kit roles): ATLVS — Experiential Productions
- *     (ERP×CRM×PM superset console, nebula/pink); COMPVSS — Site & Venue
- *     Operations (field/venue ops, brass/amber); GVTEWAY — Public Interface
- *     & Marketplace (tickets/stores/jobs/RFPs portal, plasma/cyan).
+ *     proprietary software (v8.1 kit roles): ATLVS, Experiential Productions
+ *     (ERP×CRM×PM superset console, volcanic red); COMPVSS, Site & Venue
+ *     Operations (field/venue ops, signal yellow); GVTEWAY, Public Interface
+ *     & Marketplace (tickets/stores/jobs/RFPs portal, blue); LEG3ND,
+ *     Knowledge · LMS · Resources (the /studio/legend surface, molten orange).
  *
  * This file describes the ATLVS Technologies brand that ships on
  * atlvs.pro today. The umbrella `parent` block carries the GHXSTSHIP
@@ -122,7 +123,8 @@ export const BRAND = {
    *   #E23414 · COMPVSS signal yellow #FFC400 · GVTEWAY blue #2563EB · LEG3ND
    *   molten orange #ED6A1E. The GHXSTSHIP house/master brand accent is ATLVS
    *   volcanic red #E23414 (the default for non-product / ecosystem-marketing
-   *   surfaces); the retired house green #2EDB3A is no longer used.
+   *   surfaces); the v8.0 mono house-green experiment is retired (logo /
+   *   identity mark only, never a UI accent).
    *
    * The legacy `color` strings (nebula / brass / plasma) are retained only as
    * readable `data-platform` / Tailwind name tokens; the paint flows through
@@ -167,6 +169,18 @@ export const BRAND = {
       iconInk: "/brand/atlvs-mark.svg",
       iconTile: "/brand/atlvs-icon-compvss.svg",
     },
+    knowledge: {
+      name: "LEG3ND",
+      mark: "L E G 3 N D",
+      color: "molten",
+      // LEG3ND is a /studio surface, not its own subdomain shell, but it is a
+      // named, trademarked product with its own wordmark + accent (molten orange).
+      subtitle: "Knowledge · LMS · Resources",
+      audience: "Crew · Staff · Learners",
+      iconWhite: "/brand/atlvs-mark-white.svg",
+      iconInk: "/brand/atlvs-mark.svg",
+      iconTile: "/brand/atlvs-icon-legend.svg",
+    },
   },
 } as const;
 
@@ -190,4 +204,4 @@ export const PRODUCT_ACCENTS = {
 export type ProductAccentKey = keyof typeof PRODUCT_ACCENTS;
 
 /** Convenience: the full trademark line used in footers + i18n. */
-export const TRADEMARK_LINE = `${BRAND.products.console.name}, ${BRAND.products.portal.name}, and ${BRAND.products.mobile.name} are trademarks of ${BRAND.legalName}, a ${BRAND.parent.mark} company.`;
+export const TRADEMARK_LINE = `${BRAND.products.console.name}, ${BRAND.products.portal.name}, ${BRAND.products.mobile.name}, and ${BRAND.products.knowledge.name} are trademarks of ${BRAND.legalName}, a ${BRAND.parent.mark} company.`;

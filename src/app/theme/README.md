@@ -5,7 +5,7 @@ One canonical kit skin (`atlvs-product`). Mode (light/dark), density (compact/co
 ## Contract
 
 - **Slug is immutable:** `atlvs-product` (the design_handoff_atlvs_kit). Used verbatim in `data-theme`, `localStorage` key `chroma.theme`, cookie `chroma_theme`.
-- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (pink), `compvss` (amber), `gvteway` (blue, v5.1).
+- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (volcanic red — also the house / cold-start default), `compvss` (signal yellow), `gvteway` (blue), `legend` (molten orange), plus extension products `cvrgo`/`opvs`/`gvlley`/`vault` and `ghxstship` (house = ATLVS red).
 - **Mode** (`light`/`dark`/`system`) lives on `data-mode`, set by `theme-script.ts` before first paint.
 - **Density** (`compact`/`cozy`/`spacious`) lives on `data-density`; `cozy` is the default and strips the attribute.
 - **Accent intensity** (`soft`/`default`/`vivid`) lives on `data-accent`; `default` is implicit and strips the attribute.
@@ -69,12 +69,12 @@ The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES"
 
 ## Contrast — WCAG 1.4.3
 
-| Surface                                   | Light                                 | Dark                                           |
-| ----------------------------------------- | ------------------------------------- | ---------------------------------------------- |
-| `--p-text-1` on `--p-bg`                  | `#0a0a0a` on `#ededed` → 18.1:1 (AAA) | `#ededed` on `#0d0d0d` → 16.6:1 (AAA)          |
-| `--p-text-2` on `--p-surface`             | `#424242` on `#ffffff` → 10.1:1 (AAA) | `#b0b0b0` on `#0d0d0d` → 9.0:1 (AAA)           |
-| `--p-text-3` on `--p-surface`             | `#5c5c5c` on `#ffffff` → 6.7:1 (AA)   | `#909090` on `#0d0d0d` → 6.1:1 (AA)            |
-| ink on `--p-accent-cta` (v8 mono-green)   | `#012202` on `#2edb3a` → 9.2:1 (AAA)  | `#012202` on `#3ae243` → 9.9:1 (AAA)           |
+| Surface                              | Light                                   | Dark                                     |
+| ------------------------------------ | --------------------------------------- | ---------------------------------------- |
+| `--p-text-1` on `--p-surface`        | `#181B23` on `#ffffff` → 17.21:1 (AAA)  | `#F2F4F8` on `#1a1d24` → 15.32:1 (AAA)   |
+| `--p-text-2` on `--p-surface`        | `#4A5563` on `#ffffff` → 7.58:1 (AAA)   | `#AEB6C4` on `#1a1d24` → 8.26:1 (AAA)    |
+| `--p-text-3` on `--p-surface`        | `#656D7A` on `#ffffff` → 5.22:1 (AA)    | `#9098A4` on `#1a1d24` → 5.79:1 (AA)     |
+| `--p-accent-cta-contrast` on `--p-accent-cta` (ATLVS) | `#ffffff` on `#ad220a` → 6.98:1 (AA) | `#0e1014` on `#ff5634` → 6.01:1 (AA) |
 
 The bright display accents (`--p-accent`) deliberately fail AA as text — they're for fills, focus halos, and large display text where 3:1 suffices. Use `--p-accent-text` (deepened in light mode) for any small-text usage; or `--p-accent-cta` paired with `--p-accent-cta-contrast` for filled CTAs.
 

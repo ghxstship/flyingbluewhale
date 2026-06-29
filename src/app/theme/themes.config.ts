@@ -5,8 +5,9 @@
  * pre-kit cosmic GHXSTSHIP skin and the earlier CHROMA exploration set
  * (bermuda-triangle, glass, brutal, bento, kinetic, copilot, cyber, soft,
  * earthy) were retired in this refactor — the kit's neutral light/dark
- * surfaces + per-product accent (atlvs/compvss/gvteway) now drive every
- * shell across the platform.
+ * surfaces + per-product accent (atlvs/compvss/gvteway/legend, the
+ * cvrgo/opvs/gvlley/vault extensions, and the ghxstship house accent) now
+ * drive every shell across the ecosystem.
  *
  * Slug is immutable — used verbatim in `data-theme`, localStorage, URLs,
  * and the `user_preferences_theme_check` Postgres CHECK constraint.

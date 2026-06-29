@@ -77,11 +77,11 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.baseUrl),
   title: {
-    default: `${BRAND.legalName} — Production Runs On It`,
+    default: `${BRAND.legalName} · ${BRAND.tagline}`,
     template: `%s · ${BRAND.legalName}`,
   },
   description:
-    "ATLVS · COMPVSS · GVTEWAY — proprietary production, workforce, and ticketing software from GHXSTSHIP. Three instruments, one connected bridge for experiential production at scale.",
+    "The production ecosystem from GHXSTSHIP: ATLVS, COMPVSS, GVTEWAY, and LEG3ND on one manifest, from the pitch through show day to the record that outlives the load-out.",
   keywords: [
     "production management",
     "live events",
@@ -108,14 +108,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: BRAND.legalName,
-    description: "ATLVS · COMPVSS · GVTEWAY · LEG3ND — the engine behind new worlds.",
+    description: "ATLVS · COMPVSS · GVTEWAY · LEG3ND: the engine behind new worlds.",
     siteName: BRAND.legalName,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: BRAND.legalName,
-    description: "ATLVS · COMPVSS · GVTEWAY · LEG3ND — the engine behind new worlds.",
+    description: "ATLVS · COMPVSS · GVTEWAY · LEG3ND: the engine behind new worlds.",
   },
   robots: { index: true, follow: true },
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "ATLVS" },
@@ -123,9 +123,9 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   // Audit T8 fix: was a single raw `#0A0A0A` that didn't reflect the actual
-  // theme paint. Bermuda Triangle (HVRBOR-aligned) light paint is the cream
-  // paper #F5F2EC; dark paint is near-black ink. Native mobile chrome (status
-  // bar, app switcher) follows the user's OS preference.
+  // theme paint. The v8.1 kit light paint is the neutral page bg #F7F8FA; dark
+  // paint is the base ink #111318. Native mobile chrome (status bar, app
+  // switcher) follows the user's OS preference.
   themeColor: [
     // ATLVS kit canon — --p-bg light / --p-bg dark. Native mobile chrome
     // (status bar, app switcher) matches the kit's neutral canvas.
@@ -238,7 +238,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               description: "text-[var(--p-text-2)]",
               // Audit T7 fix: text-white was a raw value bypassing tokens.
               // --p-accent-contrast is set per-product overlay (white on
-              // ATLVS pink + GVTEWAY blue, near-ink on COMPVSS amber).
+              // ATLVS red + GVTEWAY blue, near-ink on COMPVSS yellow).
               actionButton: "bg-[var(--p-accent)] text-[var(--p-accent-contrast,white)]",
               cancelButton: "bg-[var(--p-surface-2)]",
             },

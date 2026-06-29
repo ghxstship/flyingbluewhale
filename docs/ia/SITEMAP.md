@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1139 · **API route handlers:** 135 · **Distinct nav hrefs:** 483
+**Page routes:** 1152 · **API route handlers:** 142 · **Distinct nav hrefs:** 490
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 753 | 216 | 536 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 764 | 223 | 540 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 149 | 127 | 20 | 0 | 2 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 91 | 33 | 49 | 0 | 9 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1139** | **457** | **643** | **0** | **39** |
+| **TOTAL** | | **1152** | **464** | **649** | **0** | **39** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -91,7 +91,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-753 routes — ● 216 nav · ○ 536 linked · ⚠ 0 orphan
+764 routes — ● 223 nav · ○ 540 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -362,7 +362,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>finance</code> · 62 routes</summary>
+<details><summary><code>finance</code> · 63 routes</summary>
 
 ● `/studio/finance`
 ● `/studio/finance/accounts`
@@ -415,6 +415,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/finance/periods/[periodId]/transitions`
 ○ `/studio/finance/periods/new`
 ● `/studio/finance/reports`
+● `/studio/finance/sub-invoices`
 ● `/studio/finance/tax`
 ○ `/studio/finance/tax/calculations`
 ● `/studio/finance/time`
@@ -746,11 +747,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>procurement</code> · 46 routes</summary>
+<details><summary><code>procurement</code> · 50 routes</summary>
 
 ● `/studio/procurement`
 ○ `/studio/procurement/catalog`
+● `/studio/procurement/compliance`
 ● `/studio/procurement/itb`
+● `/studio/procurement/marketplace`
+● `/studio/procurement/network`
 ● `/studio/procurement/po-change-orders`
 ○ `/studio/procurement/po-change-orders/[id]`
 ○ `/studio/procurement/po-change-orders/new`
@@ -779,6 +783,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/procurement/rfqs/[rfqId]/responses`
 ○ `/studio/procurement/rfqs/[rfqId]/responses/[responseId]`
 ○ `/studio/procurement/rfqs/new`
+● `/studio/procurement/scorecard`
 ○ `/studio/procurement/scorecards`
 ● `/studio/procurement/sourcing`
 ● `/studio/procurement/vendors`
@@ -797,7 +802,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>production</code> · 28 routes</summary>
+<details><summary><code>production</code> · 32 routes</summary>
 
 ● `/studio/production`
 ● `/studio/production/av`
@@ -827,6 +832,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/studio/production/warehouse`
 ○ `/studio/production/warehouse/inventory`
 ○ `/studio/production/warehouse/locations`
+● `/studio/production/work-orders`
+○ `/studio/production/work-orders/[id]`
+○ `/studio/production/work-orders/[id]/thread`
+○ `/studio/production/work-orders/new`
 
 </details>
 
@@ -1024,7 +1033,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>settings</code> · 42 routes</summary>
+<details><summary><code>settings</code> · 44 routes</summary>
 
 ○ `/studio/settings`
 ● `/studio/settings/account-managers`
@@ -1056,6 +1065,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/studio/settings/integrations/ticketing`
 ○ `/studio/settings/integrations/ticketing/[connectionId]`
 ○ `/studio/settings/integrations/ticketing/new`
+● `/studio/settings/job-templates`
+○ `/studio/settings/job-templates/new`
 ● `/studio/settings/organization`
 ○ `/studio/settings/rate-limits`
 ○ `/studio/settings/sequences`
@@ -1953,7 +1964,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — Public / Marketing
 
-91 routes — ● 33 nav · ○ 49 linked · ⚠ 0 orphan
+93 routes — ● 33 nav · ○ 51 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2104,7 +2115,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>marketplace</code> · 26 routes</summary>
+<details><summary><code>marketplace</code> · 28 routes</summary>
 
 ● `/marketplace`
 ○ `/marketplace/agencies`
@@ -2132,6 +2143,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/marketplace/vendors`
 ○ `/marketplace/vendors/[handle]`
 ○ `/marketplace/vendors/[handle]/inquire`
+○ `/marketplace/work-orders`
+○ `/marketplace/work-orders/[id]`
 
 </details>
 
@@ -2404,7 +2417,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 135 route handlers
+## API surface (`/api/v1`) — 142 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2463,8 +2476,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/compliance</code> · 1</summary>
+<details><summary><code>/api/v1/compliance</code> · 2</summary>
 
+- `/api/v1/compliance`
 - `/api/v1/compliance/audit-export`
 
 </details>
@@ -2609,6 +2623,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>/api/v1/job-templates</code> · 1</summary>
+
+- `/api/v1/job-templates`
+
+</details>
+
 <details><summary><code>/api/v1/locations</code> · 1</summary>
 
 - `/api/v1/locations`
@@ -2735,6 +2755,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>/api/v1/scorecard</code> · 1</summary>
+
+- `/api/v1/scorecard`
+
+</details>
+
 <details><summary><code>/api/v1/share-links</code> · 2</summary>
 
 - `/api/v1/share-links`
@@ -2773,6 +2799,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 - `/api/v1/stripe/connect/onboarding`
 - `/api/v1/stripe/credits-checkout`
 - `/api/v1/stripe/portal`
+
+</details>
+
+<details><summary><code>/api/v1/sub-invoices</code> · 1</summary>
+
+- `/api/v1/sub-invoices`
 
 </details>
 
@@ -2817,6 +2849,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>/api/v1/wip</code> · 1</summary>
 
 - `/api/v1/wip/snapshot-pdf`
+
+</details>
+
+<details><summary><code>/api/v1/work-orders</code> · 3</summary>
+
+- `/api/v1/work-orders`
+- `/api/v1/work-orders/[id]`
+- `/api/v1/work-orders/[id]/messages`
 
 </details>
 

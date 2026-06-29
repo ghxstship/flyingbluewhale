@@ -446,6 +446,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Production"
   },
   {
+    "href": "/studio/production/work-orders/new",
+    "label": "New Work Order",
+    "group": "Production"
+  },
+  {
     "href": "/studio/programs/readiness/new",
     "label": "New Readiness",
     "group": "Programs"
@@ -568,6 +573,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
   {
     "href": "/studio/settings/integrations/ticketing/new",
     "label": "New Ticketing",
+    "group": "Settings"
+  },
+  {
+    "href": "/studio/settings/job-templates/new",
+    "label": "New Job Template",
     "group": "Settings"
   },
   {

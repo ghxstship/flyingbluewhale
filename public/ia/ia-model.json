@@ -576,6 +576,12 @@
               ]
             },
             {
+              "path": "/studio/production/work-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/production/dispatch/live",
               "arch": [
                 "LIST"
@@ -874,6 +880,12 @@
               ]
             },
             {
+              "path": "/studio/finance/sub-invoices",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/finance/lien-waivers",
               "arch": [
                 "LIST"
@@ -1017,6 +1029,30 @@
               ]
             },
             {
+              "path": "/studio/procurement/compliance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/network",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/marketplace",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/procurement/scorecard",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/procurement/sourcing",
               "arch": [
                 "LIST"
@@ -1087,6 +1123,12 @@
               "arch": [
                 "SET",
                 "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/settings/job-templates",
+              "arch": [
+                "SET"
               ]
             }
           ]

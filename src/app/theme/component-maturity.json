@@ -33,6 +33,7 @@
     "DescriptionList": "beta",
     "Dialog": "stable",
     "Divider": "beta",
+    "DocStatusRow": "beta",
     "DropdownMenu": "stable",
     "DueDateBadge": "stable",
     "EditableCell": "stable",

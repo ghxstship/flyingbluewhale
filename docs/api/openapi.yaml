@@ -1351,3 +1351,19 @@ paths:
       summary: "Developer-only: cull all sandbox users (user_metadata.sandbox=true) and their memberships."
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+  /api/v1/work-orders:
+    get: { summary: "List the org's subcontractor work orders (newest first). Optional state filter." }
+    post: { summary: "Create a draft work order to dispatch a trade crew." }
+  /api/v1/work-orders/{id}:
+    get: { summary: "A work order with its bids and change orders. Org-scoped." }
+  /api/v1/compliance:
+    get: { summary: "Derived subcontractor eligibility verdicts (blocked/expiring/eligible) per vendor x trade. Optional trade filter." }
+  /api/v1/work-orders/{id}/messages:
+    get: { summary: "Messages on a work order's coordination thread (oldest first)." }
+    post: { summary: "Post a message to a work order thread (author = caller)." }
+  /api/v1/sub-invoices:
+    get: { summary: "Inbound subcontractor payment applications for the org. Optional state filter." }
+  /api/v1/job-templates:
+    get: { summary: "Reusable scope-checklist templates with step counts." }
+  /api/v1/scorecard:
+    get: { summary: "Vendor performance composite rollup (on-time, quality, disputes)." }

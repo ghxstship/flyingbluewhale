@@ -17,7 +17,7 @@ export async function transitionSubInvoiceForm(id: string, to: SubInvoiceState):
   if (!cur) return;
   const from = cur.invoice_state as SubInvoiceState;
   if (!(NEXT_SUB_INVOICE_STATES[from] ?? []).includes(to)) return;
-  const patch: Record<string, unknown> = { invoice_state: to };
+  const patch: { invoice_state: SubInvoiceState; approved_at?: string; paid_at?: string } = { invoice_state: to };
   if (to === "approved") patch.approved_at = new Date().toISOString();
   if (to === "paid") patch.paid_at = new Date().toISOString();
   await supabase.from("sub_invoices").update(patch).eq("id", id).eq("org_id", session.orgId);

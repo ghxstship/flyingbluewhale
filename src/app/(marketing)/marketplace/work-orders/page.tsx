@@ -73,7 +73,7 @@ export default async function PublicWorkOrdersPage() {
               description={t(
                 "marketing.pages.marketplace.workOrders.emptyBody",
                 undefined,
-                "Check back soon — new trade jobs are posted as productions ramp up.",
+                "Check back soon. New trade jobs are posted as productions ramp up.",
               )}
             />
           </div>

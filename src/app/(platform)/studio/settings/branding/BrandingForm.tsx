@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { LogoUploader } from "@/components/branding/LogoUploader";
+import { bestInk, contrastRatio, wcagLevel } from "@/lib/theme/contrast-util";
 import { updateBrandingAction, type BrandingState } from "./actions";
 
 type Initial = {
@@ -140,6 +141,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             </div>
           </div>
         </div>
+        <WcagGuard accent={accent} foreground={foreground} onUseInk={setForeground} t={t} />
       </section>
 
       <section className="surface p-5">
@@ -212,5 +214,51 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         </Button>
       </div>
     </form>
+  );
+}
+
+/**
+ * Live WCAG guard (ThemeStudio, v7.7): grades the chosen "text on accent" pair
+ * against WCAG 1.4.3 as the operator edits, and offers the best-contrast ink
+ * when the pair fails AA. Keeps a white-labeled palette accessible by default.
+ */
+function WcagGuard({
+  accent,
+  foreground,
+  onUseInk,
+  t,
+}: {
+  accent: string;
+  foreground: string;
+  onUseInk: (ink: string) => void;
+  t: ReturnType<typeof useT>;
+}) {
+  const ratio = contrastRatio(accent, foreground);
+  const level = wcagLevel(ratio);
+  const passes = level === "AA" || level === "AAA";
+  const tone = passes ? "var(--p-success-text)" : "var(--p-danger-text)";
+  const ink = bestInk(accent);
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3" role="status" aria-live="polite">
+      <span className="text-xs text-[var(--p-text-2)]">
+        {t("console.settings.branding.color.contrastLabel", undefined, "Text on accent contrast")}
+      </span>
+      <span
+        className="ps-badge"
+        style={{ color: tone, fontVariantNumeric: "tabular-nums", fontWeight: 600 }}
+      >
+        {ratio == null ? "—" : `${ratio.toFixed(2)}:1`} · {level}
+      </span>
+      {!passes && ink.toLowerCase() !== foreground.toLowerCase() && (
+        <button
+          type="button"
+          className="ps-btn ps-btn--tertiary ps-btn--sm"
+          onClick={() => onUseInk(ink)}
+        >
+          {t("console.settings.branding.color.useSuggestedInk", undefined, "Use accessible ink")} ({ink})
+        </button>
+      )}
+    </div>
   );
 }

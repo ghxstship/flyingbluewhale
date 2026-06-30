@@ -135,9 +135,17 @@ export function DueDateBadge(props: DueDateBadgeProps): React.ReactElement | nul
   const sizeClass = size === "sm" ? "text-[10px]" : "text-xs";
 
   return (
+    // resolve() reads `new Date()`, so the variant + relative label ("Overdue
+    // (N days)", "Today", "Due soon") are computed against the SSR server's clock
+    // and again against the browser's at hydration. Near a day boundary / across
+    // timezones those differ → React #418. The badge is a relative-time display,
+    // so suppress the per-element hydration check (the repo pattern, see
+    // AuditLogViewer / ActivityView).
     <span role="status" aria-label={resolved.ariaLabel} className={`inline-flex ${className}`.trim()}>
       <Badge variant={resolved.variant} shape="dot" className={sizeClass}>
-        {iconOnly ? "" : resolved.label}
+        {/* suppress on the element directly wrapping the relative label — #418 is
+            a text-content mismatch and only suppresses one level deep. */}
+        {iconOnly ? "" : <span suppressHydrationWarning>{resolved.label}</span>}
       </Badge>
     </span>
   );

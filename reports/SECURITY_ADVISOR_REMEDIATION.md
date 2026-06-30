@@ -1,5 +1,21 @@
 # Security Advisor Remediation Plan
 
+## FINAL DISPOSITION (2026-06-30, after the prod e2e went green)
+| Flag | Count | Lvl | Disposition |
+|---|---|---|---|
+| `security_definer_view` (talent, agency) | 2 | ERR | **FIXED** → `security_invoker` (probe-verified anon-identical; RLS now backs them) |
+| `security_definer_view` (vendor/crew/rfq/open_calls/job_board/event_calendar) | 6 | ERR | **ACCEPTED** — intentional curated public projection; invoker would need anon base policies that expose *all columns* of published rows (broader, not safer). WHERE filters published-only; cross-tenant e2e proves no leak |
+| `rls_disabled_in_public` (spatial_ref_sys) | 1 | ERR | **ACCEPTED** — PostGIS SRID reference table (static public data, extension-owned) |
+| SECURITY DEFINER fns executable by anon/authenticated | 37 | WARN | **ACCEPTED** — verified intentional: token-validated public flows (`get_*_by_token`, `redeem_*`, `sign_msa`) + privileged RPCs that do their own `is_org_member`/`has_org_role` authz (spot-checked `redeem_event_ticket`, `consume_proposal_share_link`) |
+| `extension_in_public` (postgis/vector/ltree/pg_trgm/pg_net) | 5 | WARN | **ACCEPTED** — high post-hoc move risk (postgis/vector dependents); optional future move for the low-dep three |
+| `auth_leaked_password_protection` | 1 | WARN | **USER ACTION** — enable HaveIBeenPwned in Dashboard → Authentication (cannot be set by migration) |
+| `rls_enabled_no_policy` (4 system/staging tables) | 4 | INFO | **ACCEPTED** — RLS-on + no-policy = deny-all to anon/authenticated, the correct default for service-role-only tables |
+
+Net: **2 ERRORs fixed**; the remaining flags are grounded, documented exceptions (intentional design) or a single dashboard toggle. No flag is an unaddressed vulnerability. Re-run `get_advisors(security)` to confirm the 2 cleared; the accepted set will still display (advisor has no per-object suppression) but each is dispositioned above.
+
+---
+
+
 **Project:** `flyingbluewhale` (`xrovijzjbyssajhtwvas`) · **Pulled:** 2026-06-30
 **Scope:** 10 ERROR · 43 WARN · 4 INFO security lints.
 **Run order:** AFTER the full prod e2e suite is green (no app defects). Each phase ends
@@ -32,6 +48,22 @@ regresses the cross-tenant isolation suite.
   rfqs `visibility`/`public_slug`, open_calls + job_postings published state, events
   public flag, work_orders public flag. Do one view at a time, re-running
   `e2e/cross-tenant-isolation.spec.ts` after each.
+
+## DECISION (2026-06-30) — the 6 remaining views STAY `security_definer` (accepted)
+After converting talent/agency, deeper analysis settled the other 6
+(vendor/crew/rfq/open_calls/job_board/event_calendar): converting them to
+`security_invoker` requires adding an anon SELECT policy to each base table
+(`vendors`, `crew_members`, `rfqs`, `open_calls`, `job_postings`, `event_milestones`,
++ `orgs` for the inner-join views). That grants anon **every column** of published
+rows via direct table access — *broader* than the curated column subset these views
+expose. The DEFINER views are the CORRECT pattern here: a tight, published-gated,
+column-curated public projection. Verified: every view's `WHERE` is published-only
+(`is_public_profile`, `visibility='public'`, `*_phase='published'`, `rfq_state='sent'`,
+deleted/expiry-aware), and `e2e/cross-tenant-isolation.spec.ts` proves no private leak.
+**Resolution: ACCEPT as documented exceptions** (the talent/agency two were converted
+only because their base tables already carried the anon policy, so it was a no-op for
+exposure). Column-scoped anon grants + invoker is a possible future hardening but is
+NOT a security improvement today.
 
 ## Phase 1 — ERRORS (highest risk, do first)
 

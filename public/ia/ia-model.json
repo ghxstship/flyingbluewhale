@@ -350,6 +350,12 @@
               ]
             },
             {
+              "path": "/studio/copilot",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/me/notifications/inbox",
               "arch": [
                 "COMM"

@@ -152,7 +152,11 @@ export type AuditAction =
   | "review.created"
   | "review.released"
   | "job_application.submitted"
-  | "open_call_submission.submitted";
+  | "open_call_submission.submitted"
+  // ────────────────────────────────────────────────────────────────
+  // AI
+  // ────────────────────────────────────────────────────────────────
+  | "copilot.answered";
 
 export type AuditInput = {
   /** Actor's user id (auth.users.id). */

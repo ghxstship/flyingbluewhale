@@ -99,6 +99,43 @@ registerEndpoint({
 });
 
 registerEndpoint({
+  method: "POST",
+  path: "/ai/copilot",
+  summary: "Grounded Copilot answer",
+  description:
+    "Answer a question using ONLY the org's indexed RAG corpus, returning the real source citations + a confidence grade. Never fabricates: an ungrounded question returns low confidence and no citations. Every call is audited.",
+  tags: ["AI"],
+  requestBody: z.object({
+    question: z.string().min(3).max(2000),
+    projectId: z.string().uuid().optional(),
+  }),
+  responses: {
+    200: {
+      description: "Grounded answer",
+      schema: okEnvelope(
+        z.object({
+          answer: z.string(),
+          citations: z.array(
+            z.object({
+              sourceType: z.string(),
+              sourceId: z.string(),
+              excerpt: z.string(),
+              similarity: z.number(),
+            }),
+          ),
+          confidence: z.enum(["high", "medium", "low"]),
+          grounded: z.boolean(),
+        }),
+      ),
+    },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+    429: { description: "Rate limited", schema: ErrorEnvelope },
+    503: { description: "AI not configured", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
   method: "GET",
   path: "/inbox",
   summary: "Unified triage inbox",

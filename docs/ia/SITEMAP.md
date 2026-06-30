@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1154 · **API route handlers:** 144 · **Distinct nav hrefs:** 491
+**Page routes:** 1155 · **API route handlers:** 145 · **Distinct nav hrefs:** 492
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 765 | 224 | 540 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 766 | 225 | 540 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1154** | **465** | **649** | **0** | **40** |
+| **TOTAL** | | **1155** | **466** | **649** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -92,7 +92,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-765 routes — ● 224 nav · ○ 540 linked · ⚠ 0 orphan
+766 routes — ● 225 nav · ○ 540 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -302,6 +302,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>compliance</code> · 1 route</summary>
 
 ● `/studio/compliance/coc`
+
+</details>
+
+<details><summary><code>copilot</code> · 1 route</summary>
+
+● `/studio/copilot`
 
 </details>
 
@@ -2425,7 +2431,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 144 route handlers
+## API surface (`/api/v1`) — 145 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2441,11 +2447,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/ai</code> · 5</summary>
+<details><summary><code>/api/v1/ai</code> · 6</summary>
 
 - `/api/v1/ai/chat`
 - `/api/v1/ai/conversations`
 - `/api/v1/ai/conversations/[id]`
+- `/api/v1/ai/copilot`
 - `/api/v1/ai/embed-source`
 - `/api/v1/ai/propose`
 

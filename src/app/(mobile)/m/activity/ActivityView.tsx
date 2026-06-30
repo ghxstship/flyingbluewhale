@@ -85,7 +85,12 @@ export function ActivityView({ rows, labels }: { rows: ActivityRow[]; labels: La
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="ttxt">{r.title}</div>
-                <div className="ttime">
+                {/* rel() uses the runtime-default locale + timezone, which
+                    differs between the SSR server (UTC) and the browser, so the
+                    formatted text mismatches on hydration → React #418. The row
+                    timestamp is purely informational, so suppress the per-cell
+                    hydration check (the repo pattern, see AuditLogViewer). */}
+                <div className="ttime" suppressHydrationWarning>
                   {r.type} · {rel(r.at)}
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "playwright/test";
-import { dismissConsent, loginAs } from "./helpers/auth";
+import { dismissConsent, loginAs, loginAndSwitchWorkspace } from "./helpers/auth";
 
 /**
  * CROSS-TENANT ISOLATION — behavioral end-to-end proof.
@@ -40,6 +40,12 @@ const ORG_B = {
 // An Org A project that genuinely belongs to the fixture user's session org —
 // the positive control proving the negative results aren't a blanket 404.
 const ORG_A_PROJECT_ID = "f62d1228-dd83-49bf-baa4-b82242bd3056"; // test-professional-show
+// The org that owns ORG_A_PROJECT_ID ("proshow", professional tier). The fixture
+// user belongs to four test orgs; the API project read is session-org-scoped, so
+// the positive control MUST pin the active workspace to this org (the default
+// workspace is whichever membership sorts first and is not guaranteed to be this
+// one) — otherwise it 404s correctly and the positive control flakes.
+const ORG_A_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 
 /**
  * A studio detail page for a foreign record must render the not-found UI and
@@ -105,7 +111,10 @@ test.describe("cross-tenant: API (/api/v1) is session-org-scoped", () => {
 
   test("Org A user GET own-org project → 200 (positive control)", async ({ page }) => {
     await dismissConsent(page);
-    await loginAs(page, "owner");
+    // Pin the session to the org that owns ORG_A_PROJECT_ID — the API read is
+    // session-org-scoped, so without this the default workspace may not be proshow
+    // and the positive control 404s (correct behavior, wrong test assumption).
+    await loginAndSwitchWorkspace(page, "owner", ORG_A_ID);
     const r = await page.request.get(`/api/v1/projects/${ORG_A_PROJECT_ID}`);
     expect(r.status()).toBe(200);
     const body = await r.json();

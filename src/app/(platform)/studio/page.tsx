@@ -11,6 +11,8 @@ import { requireSession } from "@/lib/auth";
 import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SetupChecklist } from "@/components/ui/SetupChecklist";
+import { getSetupProgress } from "@/lib/setup/progress";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 // Dashboard hub tabs — folds the previous Dashboard sidebar group
@@ -107,6 +109,9 @@ export default async function ConsoleDashboard() {
         tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
       />
       <div className="page-content space-y-6">
+        <Suspense fallback={null}>
+          <SetupCard orgId={session.orgId} />
+        </Suspense>
         <Suspense fallback={<MetricGridSkeleton count={4} />}>
           <DashboardMetrics orgId={session.orgId} />
         </Suspense>
@@ -134,6 +139,29 @@ export default async function ConsoleDashboard() {
  * independently of the recent-projects table so whichever resolves
  * first paints first; the header chrome above never waits on either.
  */
+async function SetupCard({ orgId }: { orgId: string }) {
+  const [{ t }, progress] = await Promise.all([getRequestT(), getSetupProgress(orgId)]);
+  if (progress.complete) return null;
+  const steps = progress.steps.map((s) => ({
+    id: s.id,
+    href: s.href,
+    done: s.done,
+    label: t(s.labelKey, undefined, s.fallbackLabel),
+  }));
+  return (
+    <SetupChecklist
+      orgId={orgId}
+      steps={steps}
+      labels={{
+        title: t("console.setup.title", undefined, "Finish setting up"),
+        subtitle: t("console.setup.subtitle", undefined, "A few steps to get your workspace operating."),
+        dismiss: t("console.setup.dismiss", undefined, "Dismiss"),
+        progress: (done, total) => t("console.setup.progress", { done, total }, `${done} of ${total} done`),
+      }}
+    />
+  );
+}
+
 async function DashboardMetrics({ orgId }: { orgId: string }) {
   const [{ t }, fmt, stats] = await Promise.all([getRequestT(), getRequestFormatters(), projectStats(orgId)]);
   return (

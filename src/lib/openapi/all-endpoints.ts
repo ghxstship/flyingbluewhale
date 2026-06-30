@@ -66,6 +66,39 @@ registerEndpoint({
 });
 
 registerEndpoint({
+  method: "GET",
+  path: "/setup",
+  summary: "Activation checklist",
+  description:
+    "The calling org's setup / time-to-value checklist (create project → import → invite → go live), derived live from real data. Each step reports a done flag; `complete` is true once all steps are satisfied.",
+  tags: ["Org"],
+  responses: {
+    200: {
+      description: "Activation progress",
+      schema: okEnvelope(
+        z.object({
+          steps: z.array(
+            z.object({
+              id: z.enum(["create_project", "import_data", "invite_team", "go_live"]),
+              labelKey: z.string(),
+              fallbackLabel: z.string(),
+              href: z.string(),
+              done: z.boolean(),
+            }),
+          ),
+          completed: z.number().int(),
+          total: z.number().int(),
+          complete: z.boolean(),
+        }),
+      ),
+    },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+    429: { description: "Rate limited", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
   method: "POST",
   path: "/projects",
   summary: "Create a project",

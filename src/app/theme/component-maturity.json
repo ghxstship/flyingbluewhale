@@ -73,6 +73,7 @@
     "RowActions": "stable",
     "Select": "stable",
     "SelectableCard": "stable",
+    "SetupChecklist": "beta",
     "Sheet": "stable",
     "SignaturePad": "stable",
     "Skeleton": "stable",
@@ -88,6 +89,7 @@
     "TimePicker": "beta",
     "Toast": "beta",
     "Tooltip": "stable",
+    "UndoStack": "beta",
     "UploadZone": "beta"
   }
 }

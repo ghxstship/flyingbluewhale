@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { useUndoStack, UndoBar } from "./ui/UndoStack";
 import {
   ArrowUp,
   ArrowDown,
@@ -119,6 +120,24 @@ export type InteractiveColumn = {
   total?: "sum" | "avg" | "min" | "max" | "count";
   /** Optional formatter for the footer cell. */
   totalFormat?: (n: number) => string;
+  /** When true, double-click a cell to edit it inline (v7.7 engine depth). The
+   *  editor seeds from `row.values[i]`, so editable columns MUST set an accessor.
+   *  Requires the table's `onCellEdit` callback to persist the change. */
+  editable?: boolean;
+};
+
+/** Inline-edit context threaded to each rendered row. */
+export type EditCtx = {
+  /** Column keys that are editable. */
+  keys: Set<string>;
+  /** The cell currently in edit mode, or null. */
+  editing: { rowId: string; key: string } | null;
+  start: (rowId: string, key: string) => void;
+  cancel: () => void;
+  /** Commit a new value; `oldValue` is what the cell showed before the edit. */
+  commit: (rowId: string, key: string, value: string, oldValue: string) => void;
+  /** `${rowId}::${key}` → optimistic displayed value. */
+  overrides: Record<string, string>;
 };
 
 export type InteractiveRow = {
@@ -176,6 +195,10 @@ export type InteractiveTableProps = {
    *  the toolbar. Defaults to `router.refresh()` so server-rendered tables
    *  re-query without callers wiring anything. */
   onRefresh?: () => void | Promise<void>;
+  /** Persist an inline cell edit (v7.7). Receives the row id, column key, and
+   *  the new string value; pass a client-safe callable (a server action ref).
+   *  Required for any column that sets `editable: true`. */
+  onCellEdit?: (rowId: string, columnKey: string, value: string) => void | Promise<void>;
   /** Which kind of view the host page is rendering. P3.1 only ships
    *  `'grid'`; P3.2-3.6 alt renderers (kanban, calendar, timeline, chart,
    *  map) read this off the saved-view row's `type`. Default `'grid'`. */
@@ -225,6 +248,7 @@ export function DataTableInteractive({
   rowHeight,
   onImport,
   onRefresh,
+  onCellEdit,
   viewType = "grid",
   viewConfigsForTable = [],
   activeViewId = null,
@@ -303,6 +327,49 @@ export function DataTableInteractive({
     },
     [colwKey],
   );
+
+  // Inline cell editing (v7.7 engine depth). Edits are optimistic — an
+  // `overrides` map shadows the server-rendered cell — and each commit is a
+  // reversible UndoStack action (⌘Z / ⌘⇧Z via <UndoBar>). The actual persist
+  // is the caller's `onCellEdit` (a server action).
+  const undo = useUndoStack();
+  const [editing, setEditing] = React.useState<{ rowId: string; key: string } | null>(null);
+  const [overrides, setOverrides] = React.useState<Record<string, string>>({});
+  const editableKeys = React.useMemo(
+    () => new Set(columns.filter((c) => c.editable).map((c) => c.key)),
+    [columns],
+  );
+  const applyOverride = React.useCallback(
+    (rowId: string, key: string, value: string) => {
+      setOverrides((o) => ({ ...o, [`${rowId}::${key}`]: value }));
+      void onCellEdit?.(rowId, key, value);
+    },
+    [onCellEdit],
+  );
+  const commitEdit = React.useCallback(
+    (rowId: string, key: string, value: string, oldValue: string) => {
+      setEditing(null);
+      if (value === oldValue) return;
+      applyOverride(rowId, key, value);
+      undo.push({
+        label: key,
+        undo: () => applyOverride(rowId, key, oldValue),
+        redo: () => applyOverride(rowId, key, value),
+      });
+    },
+    [applyOverride, undo],
+  );
+  const editCtx: EditCtx | undefined =
+    onCellEdit && editableKeys.size > 0
+      ? {
+          keys: editableKeys,
+          editing,
+          start: (rowId, key) => setEditing({ rowId, key }),
+          cancel: () => setEditing(null),
+          commit: commitEdit,
+          overrides,
+        }
+      : undefined;
 
   // ── Named-saved-view layer (P3.1) ─────────────────────────────────────
   // Tracks the currently-loaded `view_configs.id`. The parent can drive
@@ -860,6 +927,14 @@ export function DataTableInteractive({
         onClearAll={() => setFilters({})}
       />
 
+      {/* Inline-edit undo affordance (⌘Z / ⌘⇧Z) — only renders once an edit
+          has been made. */}
+      {editCtx && (undo.canUndo || undo.canRedo) && (
+        <div style={{ marginBottom: "var(--p-2)" }}>
+          <UndoBar controller={undo} />
+        </div>
+      )}
+
       {/* Table — borderless container; the table itself carries header
           bottom-rule + 1px row dividers so the data structure reads
           without an outer card. Scroll bounds remain (70vh fallback when
@@ -1014,6 +1089,7 @@ export function DataTableInteractive({
                           showActions={hasRowActions}
                           selected={selected.has(row.id)}
                           onSelect={toggleOne}
+                          editCtx={editCtx}
                         />
                       ))}
                     {!isCollapsed && groupTotals && hasAnyTotals && (
@@ -1052,6 +1128,7 @@ export function DataTableInteractive({
                     showActions={hasRowActions}
                     selected={selected.has(row.id)}
                     onSelect={toggleOne}
+                    editCtx={editCtx}
                   />
                 ))
               )
@@ -1082,6 +1159,7 @@ export function DataTableInteractive({
                       showActions={hasRowActions}
                       selected={selected.has(row.id)}
                       onSelect={toggleOne}
+                      editCtx={editCtx}
                       style={{ height: `${virtualRow.size}px` }}
                     />
                   );
@@ -1180,6 +1258,46 @@ export function DataTableInteractive({
   );
 }
 
+/** Inline cell editor — a controlled input that commits on Enter/blur and
+ *  cancels on Escape. Autofocuses + selects so a double-click flows straight
+ *  into typing (v7.7 engine depth). */
+function CellEditor({
+  initial,
+  onCommit,
+  onCancel,
+}: {
+  initial: string;
+  onCommit: (value: string) => void;
+  onCancel: () => void;
+}) {
+  const [val, setVal] = React.useState(initial);
+  const ref = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    ref.current?.focus();
+    ref.current?.select();
+  }, []);
+  return (
+    <input
+      ref={ref}
+      value={val}
+      onChange={(e) => setVal(e.target.value)}
+      onBlur={() => onCommit(val)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          onCommit(val);
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          onCancel();
+        }
+      }}
+      className="ps-input ps-input--sm"
+      style={{ width: "100%", minWidth: 80 }}
+      aria-label="Edit cell"
+    />
+  );
+}
+
 function TableRow({
   row,
   cols,
@@ -1189,6 +1307,7 @@ function TableRow({
   showActions,
   selected,
   onSelect,
+  editCtx,
   style,
 }: {
   row: InteractiveRow;
@@ -1199,6 +1318,7 @@ function TableRow({
   showActions: boolean;
   selected: boolean;
   onSelect: (id: string) => void;
+  editCtx?: EditCtx;
   style?: React.CSSProperties;
 }) {
   const trClass = [rowPad, selected ? "bg-[var(--p-surface-2)]" : "", row.className].filter(Boolean).join(" ");
@@ -1219,14 +1339,43 @@ function TableRow({
         const cell = row.cells[originalIdx];
         const cellOverride = row.cellClassNames?.[c.key];
         const tdClass = [c.className, cellOverride].filter(Boolean).join(" ") || undefined;
+        const editable = editCtx?.keys.has(c.key) ?? false;
+        const ovKey = `${row.id}::${c.key}`;
+        const override = editCtx?.overrides[ovKey];
+        const display = override !== undefined ? override : cell;
+        const isEditing = editCtx?.editing?.rowId === row.id && editCtx?.editing?.key === c.key;
+        // The pre-edit value the editor seeds from + that undo restores to.
+        const seed = override !== undefined ? override : String(row.values?.[originalIdx] ?? "");
         return (
           <td key={c.key} className={tdClass}>
-            {row.href && i === 0 ? (
+            {isEditing && editCtx ? (
+              <CellEditor
+                initial={seed}
+                onCommit={(v) => editCtx.commit(row.id, c.key, v, seed)}
+                onCancel={editCtx.cancel}
+              />
+            ) : editable && editCtx ? (
+              <span
+                role="button"
+                tabIndex={0}
+                onDoubleClick={() => editCtx.start(row.id, c.key)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === "F2") {
+                    e.preventDefault();
+                    editCtx.start(row.id, c.key);
+                  }
+                }}
+                title="Double-click to edit"
+                style={{ display: "inline-block", minWidth: "1ch", cursor: "text" }}
+              >
+                {display}
+              </span>
+            ) : row.href && i === 0 ? (
               <Link href={row.href} className="text-[var(--p-text-1)] hover:underline">
-                {cell}
+                {display}
               </Link>
             ) : (
-              cell
+              display
             )}
           </td>
         );

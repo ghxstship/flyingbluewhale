@@ -73,6 +73,10 @@ export type Column<T> = {
    *  `toLocaleString()` for numeric aggregates and the integer string for
    *  `count`. */
   totalFormat?: (n: number) => string;
+  /** When true, double-click a cell to edit it inline (v7.7). Editable columns
+   *  MUST set an `accessor` (the editor seeds from it) and the table MUST set
+   *  `onCellEdit` to persist. */
+  editable?: boolean;
 };
 
 /**
@@ -146,6 +150,9 @@ export type DataTableProps<T extends { id: string }> = {
   onImport?: (file: File) => void | Promise<void>;
   /** Optional Refresh handler. Defaults to `router.refresh()` when omitted. */
   onRefresh?: () => void | Promise<void>;
+  /** Persist an inline cell edit (v7.7). Pass a server-action ref. Required for
+   *  any column with `editable: true`. */
+  onCellEdit?: (rowId: string, columnKey: string, value: string) => void | Promise<void>;
   /** Per-row className resolver. Return CSS class string or undefined. Used
    *  for ad-hoc conditional row formatting; for the structured rule API see
    *  `spotlight`. */
@@ -249,6 +256,7 @@ export async function DataTable<T extends { id: string }>({
   bulkActions,
   onImport,
   onRefresh,
+  onCellEdit,
   rowClassName,
   spotlight,
   viewType = "grid",
@@ -308,6 +316,7 @@ export async function DataTable<T extends { id: string }>({
     groupable: c.groupable,
     total: c.total,
     totalFormat: c.totalFormat,
+    editable: c.editable,
   }));
 
   const interactiveRows: InteractiveRow[] = rows.map((row) => {
@@ -370,6 +379,7 @@ export async function DataTable<T extends { id: string }>({
       tableId={resolvedTableId}
       onImport={onImport}
       onRefresh={onRefresh}
+      onCellEdit={onCellEdit}
       viewType={viewType}
       viewConfigsForTable={viewConfigsForTable}
       allowedSaveScopes={allowedSaveScopes}

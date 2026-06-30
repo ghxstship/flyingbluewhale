@@ -208,6 +208,7 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Position", href: "/studio/position", icon: "Compass" },
       { label: "Assistant", href: "/studio/assistant", icon: "Bot" },
       { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
+      { label: "Triage", href: "/studio/triage", icon: "CheckSquare" },
       { label: "Threads", href: "/studio/inbox", icon: "MessageSquare" },
     ],
   },

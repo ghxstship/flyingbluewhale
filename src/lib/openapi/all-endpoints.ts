@@ -99,6 +99,41 @@ registerEndpoint({
 });
 
 registerEndpoint({
+  method: "GET",
+  path: "/inbox",
+  summary: "Unified triage inbox",
+  description:
+    "The calling user's triage queue — unread notifications (approvals / mentions / assignment pings) plus their own not-done tasks (SLA-flagged), most-overdue then newest first. Self-scoped to the session user.",
+  tags: ["Org"],
+  responses: {
+    200: {
+      description: "Inbox items",
+      schema: okEnvelope(
+        z.object({
+          items: z.array(
+            z.object({
+              itemId: z.string().uuid(),
+              source: z.enum(["notification", "task"]),
+              kind: z.string(),
+              title: z.string(),
+              subtitle: z.string().nullable(),
+              href: z.string().nullable(),
+              at: z.string(),
+              slaOverdue: z.boolean(),
+              priority: z.number().int(),
+            }),
+          ),
+          count: z.number().int(),
+        }),
+      ),
+    },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+    429: { description: "Rate limited", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
   method: "POST",
   path: "/projects",
   summary: "Create a project",

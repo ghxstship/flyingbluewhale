@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1153 · **API route handlers:** 143 · **Distinct nav hrefs:** 490
+**Page routes:** 1154 · **API route handlers:** 144 · **Distinct nav hrefs:** 491
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 764 | 223 | 540 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 765 | 224 | 540 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1153** | **464** | **649** | **0** | **40** |
+| **TOTAL** | | **1154** | **465** | **649** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -92,7 +92,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-764 routes — ● 223 nav · ○ 540 linked · ⚠ 0 orphan
+765 routes — ● 224 nav · ○ 540 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -1183,6 +1183,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>trash</code> · 1 route</summary>
 
 ● `/studio/trash`
+
+</details>
+
+<details><summary><code>triage</code> · 1 route</summary>
+
+● `/studio/triage`
 
 </details>
 
@@ -2419,7 +2425,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 143 route handlers
+## API surface (`/api/v1`) — 144 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2587,6 +2593,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 - `/api/v1/import/crew-members`
 - `/api/v1/import/tasks`
 - `/api/v1/import/vendors`
+
+</details>
+
+<details><summary><code>/api/v1/inbox</code> · 1</summary>
+
+- `/api/v1/inbox`
 
 </details>
 

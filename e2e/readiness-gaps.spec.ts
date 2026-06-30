@@ -50,7 +50,11 @@ test.describe("unauthenticated deep links (F4)", () => {
     await page.fill('input[name="email"]', fixtureEmail("admin"));
     await page.fill('input[name="password"]', TEST_PASSWORD);
     await page.click('button[type="submit"]');
-    await page.waitForURL(/\/studio\/projects/, { timeout: 30000 });
+    // Accept BOTH the path-prefix form (/studio/projects — local/CI) AND the
+    // per-product subdomain prod uses (app.atlvs.pro/projects). Without the
+    // subdomain alternative this falsely fails against prod, where auth-resolve
+    // correctly lands internal users on the app. host (see handoff-shells).
+    await page.waitForURL(/\/studio\/projects|app\.atlvs\.pro\/projects/, { timeout: 30000 });
   });
 });
 

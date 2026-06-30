@@ -90,3 +90,23 @@ test.describe("v7.7 — ThemeStudio WCAG guard", () => {
     await expect(guard.first()).toBeVisible({ timeout: 10000 });
   });
 });
+
+test.describe("v7.7 — Copilot (grounded)", () => {
+  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+
+  test("/studio/copilot renders (auth held, h1 present)", async ({ page }) => {
+    const res = await gotoResilient(page, "/studio/copilot");
+    expect(res?.status() ?? 0).toBeLessThan(500);
+    expect(/\/login(\?|$)/.test(page.url())).toBe(false);
+    await expect(page.locator("h1").first()).toBeVisible({ timeout: 15000 });
+  });
+
+  test("POST /api/v1/ai/copilot validates the question (400, no model spend)", async ({ page }) => {
+    // A too-short question fails BodySchema before any embedding/model call —
+    // proves the endpoint is wired + guarded without spending AI credit.
+    const r = await page.request.post("/api/v1/ai/copilot", { data: { question: "hi" } });
+    expect(r.status()).toBe(400);
+    const body = await r.json();
+    expect(body.ok).toBe(false);
+  });
+});

@@ -69,12 +69,32 @@ const flatItemRoutes = (items: NavItem[]): Route[] => items.map((it) => ({ label
  * uncaught client exception). 4xx, /login or /studio redirects, and rendered
  * empty states are all acceptable for a role that lacks entitlement.
  */
+// A deployed target under parallel load aborts/times-out some navigations (load
+// shedding, not a render failure). Retry the goto once on that signature so the
+// "no role crashes any surface" assertion stays about real 5xx/crashes.
+const THROTTLE = /ERR_ABORTED|ERR_NETWORK_CHANGED|ERR_CONNECTION|Timeout|interrupted/i;
+async function gotoResilient(page: import("playwright/test").Page, href: string) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30000 });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (attempt === 0 && THROTTLE.test(msg)) {
+        await page.waitForTimeout(800);
+        continue;
+      }
+      throw e;
+    }
+  }
+  return null;
+}
+
 async function probeNoCrash(page: import("playwright/test").Page, route: Route): Promise<string | null> {
   const pageErrors: string[] = [];
   const onError = (e: Error) => pageErrors.push(e.message);
   page.on("pageerror", onError);
   try {
-    const res = await page.goto(route.href, { waitUntil: "domcontentloaded", timeout: 30000 });
+    const res = await gotoResilient(page, route.href);
     const status = res?.status() ?? 0;
     if (status >= 500) return `${route.href} → HTTP ${status}`;
     // Give a client-side error boundary a beat to throw after DOM-ready.

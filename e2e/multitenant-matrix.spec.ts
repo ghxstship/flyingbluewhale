@@ -37,6 +37,26 @@ const TENANT_SURFACES = [
   "/studio/settings/organization",
 ];
 
+// Throttle signatures: a deployed target under parallel load aborts/again-times
+// some navigations (not a render failure). Retry the goto once before recording
+// a failure so the assertion stays about real 5xx/crashes, not load shedding.
+const THROTTLE = /ERR_ABORTED|ERR_NETWORK_CHANGED|ERR_CONNECTION|Timeout|interrupted/i;
+async function gotoResilient(page: import("playwright/test").Page, href: string) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30000 });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (attempt === 0 && THROTTLE.test(msg)) {
+        await page.waitForTimeout(800);
+        continue;
+      }
+      throw e;
+    }
+  }
+  return null;
+}
+
 async function getWorkspaces(page: import("playwright/test").Page): Promise<{ workspaces: Workspace[]; current: string | null }> {
   const r = await page.request.get("/api/v1/me/workspaces");
   expect(r.status(), "GET /api/v1/me/workspaces").toBe(200);
@@ -82,15 +102,20 @@ test.describe("multitenant matrix", () => {
         const onError = (e: Error) => pageErrors.push(e.message);
         page.on("pageerror", onError);
         try {
-          const res = await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30000 });
+          const res = await gotoResilient(page, href);
           const status = res?.status() ?? 0;
           if (status >= 500) {
             failures.push(`[${ws.name}] ${href} → HTTP ${status}`);
           } else {
+            // Wait for the h1 (client-rendered pages paint it after hydration/
+            // fetch) — mirror ia-coverage's toBeVisible wait rather than an
+            // instant isVisible(), which races the paint and false-negatives.
             const h1 = page.locator("h1").first();
-            const ok = await h1.isVisible().catch(() => false);
+            const ok = await h1
+              .waitFor({ state: "visible", timeout: 12000 })
+              .then(() => true)
+              .catch(() => false);
             if (!ok && !/\/login(\?|$)/.test(page.url())) failures.push(`[${ws.name}] ${href} → no <h1> (status ${status})`);
-            await page.waitForTimeout(200);
             if (pageErrors.length) failures.push(`[${ws.name}] ${href} → uncaught: ${pageErrors[0]}`);
           }
         } catch (e) {

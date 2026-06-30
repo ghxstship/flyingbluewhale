@@ -111,6 +111,17 @@ test.describe("Booking canon · extras", () => {
 
   test("co-pro partner add → remove → cumulative split badge", async ({ page }) => {
     await page.goto(`/studio/bookings/deals/${FX.offer}`);
+    // Self-heal: this shared fixture offer accumulates partners if a prior run's
+    // remove step was interrupted (prod throttle). Left unchecked they saturate
+    // the ≤100% cumulative-split cap and the app then (correctly) rejects new
+    // adds. Clear any residue first so the test is idempotent.
+    for (let i = 0; i < 8; i++) {
+      const removeBtns = page.locator("li").getByRole("button", { name: /Remove/i });
+      if ((await removeBtns.count()) === 0) break;
+      await removeBtns.first().click();
+      await page.waitForLoadState("networkidle");
+      await page.goto(`/studio/bookings/deals/${FX.offer}`);
+    }
     const partnerName = `E2E CoPro ${Date.now()}`;
     await page.getByLabel("Partner Name").fill(partnerName);
     await page.getByLabel("Split %").fill("25");

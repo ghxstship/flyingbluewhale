@@ -267,6 +267,43 @@ export function DataTableInteractive({
   const [groupBy, setGroupBy] = React.useState<string>(savedView?.groupBy ?? "");
   const [collapsed, setCollapsed] = React.useState<Set<string>>(new Set(savedView?.collapsed ?? []));
 
+  // Column resize (v7.7 engine depth) — per-user, persisted to localStorage
+  // (keyed by table) so it survives navigations without touching the server
+  // view schema. Opt-in by dragging the header edge; default layout unchanged.
+  const colwKey = `atlvs.colw.${tableId ?? "default"}`;
+  const [colWidths, setColWidths] = React.useState<Record<string, number>>({});
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem(colwKey);
+      if (raw) setColWidths(JSON.parse(raw) as Record<string, number>);
+    } catch {
+      /* storage blocked / malformed — start unsized */
+    }
+  }, [colwKey]);
+  const startResize = React.useCallback(
+    (key: string, startX: number, startW: number) => {
+      const onMove = (e: PointerEvent) => {
+        const w = Math.max(64, startW + (e.clientX - startX));
+        setColWidths((prev) => ({ ...prev, [key]: w }));
+      };
+      const onUp = () => {
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        setColWidths((prev) => {
+          try {
+            localStorage.setItem(colwKey, JSON.stringify(prev));
+          } catch {
+            /* storage blocked — keep in-memory for the session */
+          }
+          return prev;
+        });
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+    },
+    [colwKey],
+  );
+
   // ── Named-saved-view layer (P3.1) ─────────────────────────────────────
   // Tracks the currently-loaded `view_configs.id`. The parent can drive
   // this externally (controlled mode); when uncontrolled, we own it
@@ -859,6 +896,7 @@ export function DataTableInteractive({
                     scope="col"
                     className={`${c.className ?? ""} ${pinned ? "bg-[var(--p-surface-2)]" : ""}`}
                     aria-sort={isPrimarySort ? (sortDir === "asc" ? "ascending" : "descending") : "none"}
+                    style={{ width: colWidths[c.key], position: "relative" }}
                   >
                     <div className="inline-flex items-center gap-1">
                       {c.sortable ? (
@@ -906,6 +944,28 @@ export function DataTableInteractive({
                         />
                       )}
                     </div>
+                    <span
+                      role="separator"
+                      aria-orientation="vertical"
+                      aria-label={t("dataTable.resizeColumn", { col: c.header }, `Resize ${c.header}`)}
+                      onPointerDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const th = e.currentTarget.parentElement as HTMLElement;
+                        startResize(c.key, e.clientX, colWidths[c.key] ?? th.offsetWidth);
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        width: 6,
+                        height: "100%",
+                        cursor: "col-resize",
+                        userSelect: "none",
+                        touchAction: "none",
+                      }}
+                    />
                   </th>
                 );
               })}

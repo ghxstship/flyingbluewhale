@@ -5,8 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { RecordActionButton } from "@/components/RecordActionButton";
-import { isManagerPlus, requireSession } from "@/lib/auth";
+import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -41,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   // PO header for context.
   const { data: po } = await supabase
     .from("purchase_orders")
-    .select("id, number, title, amount_cents, currency, po_state")
+    .select("id, number, title, amount_cents, currency, po_state, vendor_id")
     .eq("id", receipt.po_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -78,24 +77,43 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   // 3-way match rows for the PO.
   const { data: matchData } = await supabase
     .from("po_invoice_matches")
-    .select("id, match_status, variance_minor, resolved_at, created_at")
+    .select("id, match_status, variance_minor, resolved_at, created_at, invoice:invoice_id(id, number)")
     .eq("org_id", session.orgId)
     .eq("po_id", receipt.po_id)
     .order("created_at", { ascending: false });
-  const matches = (matchData ?? []) as {
+  const matches = (matchData ?? []) as unknown as {
     id: string;
     match_status: string;
     variance_minor: number;
     resolved_at: string | null;
     created_at: string;
+    invoice: { id: string; number: string } | null;
+  }[];
+
+  // Candidate invoices for the match form: already linked to this PO, or
+  // unlinked AP-sub invoices from the PO's vendor (the RPC links them).
+  const candidateFilter = po?.vendor_id
+    ? `purchase_order_id.eq.${receipt.po_id},and(source.eq.ap_sub,purchase_order_id.is.null,vendor_id.eq.${po.vendor_id})`
+    : `purchase_order_id.eq.${receipt.po_id}`;
+  const { data: candidateData } = await supabase
+    .from("invoices")
+    .select("id, number, title, amount_cents, currency, invoice_state, source")
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .or(candidateFilter)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  const candidates = (candidateData ?? []) as {
+    id: string;
+    number: string;
+    title: string;
+    amount_cents: number;
+    currency: string;
+    invoice_state: string;
+    source: string;
   }[];
 
   const poCurrency = po?.currency ?? "USD";
-
-  // v7.8 record action gate — mirrors matchReceiptToPoAction: a complete
-  // (non-partial) receipt against a sent/acknowledged PO can close it.
-  const canMatch =
-    isManagerPlus(session) && !receipt.partial && !!po && (po.po_state === "sent" || po.po_state === "acknowledged");
 
   return (
     <>
@@ -116,15 +134,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </Badge>
             <span className="font-mono text-xs">{new Date(receipt.received_at).toLocaleDateString("en-US")}</span>
           </span>
-        }
-        action={
-          canMatch ? (
-            <RecordActionButton
-              action={matchReceiptToPoAction.bind(null, receipt.id)}
-              label={t("console.procurement.receiving.detail.confirmMatch", undefined, "Confirm Match · Close PO")}
-              pendingLabel={t("console.procurement.receiving.detail.matching", undefined, "Matching…")}
-            />
-          ) : undefined
         }
       />
       <div className="page-content max-w-3xl space-y-4">
@@ -239,6 +248,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <table className="data-table w-full">
                 <thead>
                   <tr>
+                    <th>{t("console.procurement.receiving.detail.colInvoice", undefined, "Invoice")}</th>
                     <th>{t("console.procurement.receiving.detail.colStatus", undefined, "Status")}</th>
                     <th>{t("console.procurement.receiving.detail.colVariance", undefined, "Variance")}</th>
                     <th>{t("console.procurement.receiving.detail.colResolved", undefined, "Resolved")}</th>
@@ -247,6 +257,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <tbody>
                   {matches.map((m) => (
                     <tr key={m.id}>
+                      <td className="font-mono text-xs">
+                        {m.invoice ? (
+                          <a className="underline" href={`/studio/finance/invoices/${m.invoice.id}`}>
+                            {m.invoice.number}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
                       <td>
                         <StatusBadge status={m.match_status} />
                       </td>
@@ -261,6 +280,43 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
           )}
         </section>
+
+        {/* Record a 3-way match (kit 20 REPO_LANDING §2): the RPC cross-patches
+            the PO and the chosen invoice in one transaction. */}
+        {candidates.length > 0 && (
+          <section>
+            <h3 className="mb-2 text-sm font-semibold text-[var(--p-text-1)]">
+              {t("console.procurement.receiving.detail.recordMatchHeading", undefined, "Record 3-way match")}
+            </h3>
+            <p className="mb-2 text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.procurement.receiving.detail.recordMatchHint",
+                undefined,
+                "Reconciles the chosen invoice against this PO and receipt. A full match advances the PO to matched and approves the sub invoice to pay.",
+              )}
+            </p>
+            <FormShell
+              action={matchReceiptToPoAction.bind(null, receipt.id)}
+              submitLabel={t("console.procurement.receiving.detail.recordMatchSubmit", undefined, "Match")}
+            >
+              <div>
+                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                  {t("console.procurement.receiving.detail.matchInvoiceLabel", undefined, "Invoice")}
+                </label>
+                <select name="invoice_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+                  <option value="" disabled>
+                    {t("console.procurement.receiving.detail.matchInvoicePlaceholder", undefined, "Select an invoice…")}
+                  </option>
+                  {candidates.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.number} · {c.title} · {formatMinor(c.amount_cents, c.currency)} · {c.invoice_state}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </FormShell>
+          </section>
+        )}
       </div>
     </>
   );

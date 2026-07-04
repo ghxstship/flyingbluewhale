@@ -80,7 +80,14 @@ async function FinanceMetrics({ orgId }: { orgId: string }) {
     countOrgScoped("invoices", orgId),
     countOrgScoped("expenses", orgId),
     countOrgScoped("budgets", orgId),
-    supabase.from("invoices").select("amount_cents, invoice_state").eq("org_id", orgId).is("deleted_at", null),
+    // AR-only: the §09 merge folded AP-sub invoices into this store; the
+    // hub's outstanding/collected figures are receivables math.
+    supabase
+      .from("invoices")
+      .select("amount_cents, invoice_state")
+      .eq("org_id", orgId)
+      .eq("source", "ar")
+      .is("deleted_at", null),
     supabase.from("expenses").select("amount_cents").eq("org_id", orgId),
     supabase.from("budgets").select("amount_cents").eq("org_id", orgId),
   ]);

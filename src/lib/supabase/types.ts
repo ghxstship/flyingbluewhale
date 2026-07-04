@@ -104,6 +104,8 @@ export type DeliverableType =
   | "custom";
 export type LeadStage = "new" | "qualified" | "contacted" | "proposal" | "won" | "lost";
 export type ProposalStatus = "draft" | "sent" | "approved" | "rejected" | "expired" | "signed";
+// AR arc (draft→sent→paid/overdue/voided) + the AP-sub arc added by the
+// Phase A §09 merge (submitted→approved|rejected→paid).
 export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "voided" | "submitted" | "approved" | "rejected";
 export type ExpenseStatus = "pending" | "approved" | "rejected" | "reimbursed";
 export type POStatus = "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled";
@@ -384,6 +386,16 @@ export type Invoice = {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  // Phase A §09 merge facet: 'ar' outbound billing · 'ap_sub' inbound
+  // subcontractor payment applications (ex-sub_invoices). Kept as string to
+  // stay assignable from the generated row type (narrow with InvoiceSource).
+  source: string;
+  vendor_id: string | null;
+  work_order_id: string | null;
+  purchase_order_id: string | null;
+  retainage_pct: number;
+  lien_waiver_id: string | null;
+  approved_at: string | null;
 };
 export type InvoiceLineItem = {
   id: string;

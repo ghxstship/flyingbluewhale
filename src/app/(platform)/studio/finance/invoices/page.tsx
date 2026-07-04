@@ -2,7 +2,9 @@ import { Suspense, cache } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { INVOICE_SOURCE_LABELS, type InvoiceSource } from "@/lib/subcontractor";
 import { requireSession } from "@/lib/auth";
 import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -124,6 +126,20 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
           header: t("console.finance.invoices.columns.title", undefined, "Title"),
           render: (r) => r.title,
           accessor: (r) => r.title,
+        },
+        {
+          // Phase A §09 fact-direction facet: AR (outbound client billing)
+          // vs AP · Sub (inbound subcontractor payment applications).
+          key: "source",
+          header: t("console.finance.invoices.columns.source", undefined, "Source"),
+          render: (r) => (
+            <Badge variant={r.source === "ap_sub" ? "info" : "muted"}>
+              {INVOICE_SOURCE_LABELS[r.source as InvoiceSource] ?? r.source}
+            </Badge>
+          ),
+          accessor: (r) => r.source,
+          filterable: true,
+          groupable: true,
         },
         {
           key: "amount",

@@ -156,7 +156,22 @@ export function canTransitionWorkOrder(from: WorkOrderState, to: WorkOrderState)
 export const CHANGE_ORDER_STATES = ["pending", "approved", "declined"] as const;
 export type ChangeOrderState = (typeof CHANGE_ORDER_STATES)[number];
 
-// ── Sub invoicing (P3) ───────────────────────────────────────────────────
+// ── Sub invoicing (P3 → merged into invoices, Phase A §09) ────────────────
+// As of migration 20260703170100 the sub_invoices table is GONE — inbound
+// subcontractor payment applications are `invoices` rows with
+// `source = 'ap_sub'` (+ retainage_pct, lien_waiver_id, work_order_id,
+// purchase_order_id). /studio/finance/sub-invoices is a filtered lens on
+// that one store. The AP lifecycle arc below rides the shared
+// `invoice_state` enum; the DB gates it (approved-WO on insert, lien
+// waiver before paid).
+export const INVOICE_SOURCES = ["ar", "ap_sub"] as const;
+export type InvoiceSource = (typeof INVOICE_SOURCES)[number];
+
+export const INVOICE_SOURCE_LABELS: Record<InvoiceSource, string> = {
+  ar: "AR",
+  ap_sub: "AP · Sub",
+};
+
 export const SUB_INVOICE_STATES = ["submitted", "approved", "paid", "rejected"] as const;
 export type SubInvoiceState = (typeof SUB_INVOICE_STATES)[number];
 
@@ -181,6 +196,24 @@ export const NEXT_SUB_INVOICE_STATES: Record<SubInvoiceState, SubInvoiceState[]>
   paid: [],
   rejected: [],
 };
+
+// ── Waiver gate (kit contract: waiver on file before Paid) ────────────────
+/** lien_waivers.waiver_state values that count as "on file" for pay release. */
+export const WAIVER_ON_FILE_STATES = ["signed", "returned", "released"] as const;
+
+export function waiverOnFile(state: string | null | undefined): boolean {
+  return !!state && (WAIVER_ON_FILE_STATES as readonly string[]).includes(state);
+}
+
+/** Badge copy for the sub-invoice waiver column. Missing blocks pay. */
+export function waiverBadge(state: string | null | undefined): {
+  label: string;
+  variant: "success" | "info" | "error";
+} {
+  if (waiverOnFile(state)) return { label: "On File", variant: "success" };
+  if (state === "sent" || state === "drafted") return { label: "Sent", variant: "info" };
+  return { label: "Missing · Blocks Pay", variant: "error" };
+}
 
 // ── Vendor scorecard (P3) ──────────────────────────────────────────────────
 /** Weighted composite 0–100 from on-time %, quality (0–5→%), disputes penalty. */

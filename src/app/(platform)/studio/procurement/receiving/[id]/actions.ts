@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
@@ -65,86 +64,55 @@ export async function addReceiptLine(receiptId: string, _: State, fd: FormData):
   return { ok: true };
 }
 
-export type MatchReceiptState = { error?: string } | null;
+const MatchSchema = z.object({
+  invoice_id: z.string().uuid(),
+});
 
 /**
- * v7.8 record action — "Confirm Match · Close PO". A complete (non-partial)
- * goods receipt confirms the PO's goods leg, so the linked purchase order
- * advances sent/acknowledged → fulfilled and gets a `[receipt:<id>]`
- * lineage marker appended to its notes (purchase_orders has no receipt FK;
- * the marker doubles as the queryable back-link). Already-fulfilled POs are
- * treated as idempotent success — a double-click just lands on the PO.
- *
- * NOTE the honest-coverage rule: the invoice leg of 3-way match is NOT
- * wired here because AR invoices carry no PO linkage (that arrives with the
- * Phase A sub_invoices merge).
+ * v7.8 record action — "3-way match", invoice leg completed by the Phase A
+ * sub_invoices merge (kit 20 REPO_LANDING §2). Delegates to the
+ * `match_receipt_three_way` RPC, which — in ONE transaction — records the
+ * match verdict (full / over / partial / qty_variance) in
+ * `po_invoice_matches`, advances the PO to matched/fulfilled on a full
+ * match, and back-links + approves the AP invoice (approve-to-pay; the
+ * lien-waiver gate still guards paid). Re-running the match on the same
+ * (receipt, invoice) pair refreshes the verdict — idempotent on retry.
+ * Supersedes the Phase B PO-only marker patch that deliberately left the
+ * invoice leg open.
  */
-export async function matchReceiptToPoAction(receiptId: string): Promise<MatchReceiptState> {
+export async function matchReceiptToPoAction(receiptId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can match receipts" };
+  if (!isManagerPlus(session)) return { error: "Only manager+ can record a 3-way match" };
+  const parsed = MatchSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
-  const { data: receipt, error: loadError } = await supabase
-    .from("goods_receipts")
-    .select("id, po_id, partial")
-    .eq("org_id", session.orgId)
-    .eq("id", receiptId)
-    .maybeSingle();
-  if (loadError) return { error: loadError.message };
-  if (!receipt) return { error: "Receipt not found" };
-  if (receipt.partial) {
-    return { error: "Only a complete receipt can close the purchase order. Mark it complete first." };
-  }
-  if (!receipt.po_id) return { error: "Receipt is not linked to a purchase order" };
-
-  const { data: po } = await supabase
-    .from("purchase_orders")
-    .select("id, po_state, notes")
-    .eq("org_id", session.orgId)
-    .eq("id", receipt.po_id)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (!po) return { error: "Linked purchase order not found" };
-
-  // Idempotency: an already-fulfilled PO means a prior match (or another
-  // path) closed it — success, just land on the PO.
-  if (po.po_state === "fulfilled") {
-    redirect(`/studio/procurement/purchase-orders/${po.id}`);
-  }
-  if (po.po_state !== "sent" && po.po_state !== "acknowledged") {
-    return { error: `Purchase order must be sent or acknowledged before matching (currently ${po.po_state})` };
-  }
-
-  // Lineage marker into the PO's free-text notes; skip if a retry already
-  // wrote it. Conditional update (`.eq("po_state", current)`) closes the
-  // TOCTOU between the gate read and the write.
-  const marker = `[receipt:${receiptId}]`;
-  const notes = po.notes?.includes(marker) ? po.notes : [po.notes?.trim() || null, marker].filter(Boolean).join("\n");
-  const { data: updated, error: updateError } = await supabase
-    .from("purchase_orders")
-    .update({ po_state: "fulfilled", notes })
-    .eq("org_id", session.orgId)
-    .eq("id", po.id)
-    .eq("po_state", po.po_state)
-    .select("id");
-  if (updateError) return { error: updateError.message };
-  if (!updated || updated.length === 0) {
-    return { error: "Purchase order changed concurrently. Refresh and retry." };
-  }
+  const { data, error } = await supabase.rpc("match_receipt_three_way", {
+    p_receipt_id: receiptId,
+    p_invoice_id: parsed.data.invoice_id,
+  });
+  if (error) return actionFail(error.message, fd);
+  const result = data as { match_id: string; match_status: string; variance_minor: number } | null;
 
   await emitAudit({
     actorId: session.userId,
     orgId: session.orgId,
     actorEmail: session.email,
     action: "goods_receipt.matched_to_po",
-    targetTable: "purchase_orders",
-    targetId: po.id,
-    metadata: { receiptId, poId: po.id },
+    targetTable: "po_invoice_matches",
+    targetId: result?.match_id ?? null,
+    metadata: {
+      receiptId,
+      invoiceId: parsed.data.invoice_id,
+      matchStatus: result?.match_status,
+      varianceMinor: result?.variance_minor,
+    },
   });
 
   revalidatePath(`/studio/procurement/receiving/${receiptId}`);
   revalidatePath("/studio/procurement/receiving");
-  revalidatePath(`/studio/procurement/purchase-orders/${po.id}`);
   revalidatePath("/studio/procurement/purchase-orders");
-  redirect(`/studio/procurement/purchase-orders/${po.id}`);
+  revalidatePath("/studio/finance/invoices");
+  revalidatePath("/studio/finance/sub-invoices");
+  return { ok: true };
 }

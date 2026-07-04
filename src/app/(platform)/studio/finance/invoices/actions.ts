@@ -102,8 +102,9 @@ export async function setInvoiceStatusAction(
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can change invoice status" };
   const supabase = await createClient();
-  const patch: { invoice_state: typeof status; paid_at?: string } = { invoice_state: status };
+  const patch: { invoice_state: typeof status; paid_at?: string; approved_at?: string } = { invoice_state: status };
   if (status === "paid") patch.paid_at = new Date().toISOString();
+  if (status === "approved") patch.approved_at = new Date().toISOString();
   const { data: before } = await supabase
     .from("invoices")
     .select("number, title, amount_cents, created_by")

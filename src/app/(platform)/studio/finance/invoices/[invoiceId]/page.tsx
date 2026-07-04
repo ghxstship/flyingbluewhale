@@ -4,9 +4,12 @@ import { DownloadLink } from "@/components/DownloadLink";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { INVOICE_SOURCE_LABELS, waiverBadge, type InvoiceSource } from "@/lib/subcontractor";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -22,6 +25,28 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
   const invoice = await getOrgScoped("invoices", session.orgId, invoiceId);
   if (!invoice) notFound();
   const { t } = await getRequestT();
+
+  // AP-sub facet context (Phase A §09 merge): the parties + gates an
+  // inbound subcontractor payment application carries.
+  type ApContext = {
+    vendor: { name: string | null } | null;
+    work_order: { title: string | null } | null;
+    po: { id: string; number: string } | null;
+    waiver: { waiver_state: string | null } | null;
+  } | null;
+  let ap: ApContext = null;
+  if (invoice.source === "ap_sub") {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("invoices")
+      .select(
+        "vendor:vendor_id(name), work_order:work_order_id(title), po:purchase_order_id(id, number), waiver:lien_waiver_id(waiver_state)",
+      )
+      .eq("id", invoiceId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    ap = (data ?? null) as ApContext;
+  }
 
   return (
     <>
@@ -82,6 +107,39 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
           <Field label={t("console.finance.invoices.fields.stripe", undefined, "Stripe")} mono>
             {invoice.stripe_payment_intent ?? "—"}
           </Field>
+          <Field label={t("console.finance.invoices.fields.source", undefined, "Source")}>
+            <Badge variant={invoice.source === "ap_sub" ? "info" : "muted"}>
+              {INVOICE_SOURCE_LABELS[invoice.source as InvoiceSource] ?? invoice.source}
+            </Badge>
+          </Field>
+          {invoice.source === "ap_sub" && (
+            <>
+              <Field label={t("console.finance.invoices.fields.vendor", undefined, "Subcontractor")}>
+                {ap?.vendor?.name ?? "—"}
+              </Field>
+              <Field label={t("console.finance.invoices.fields.workOrder", undefined, "Work Order")}>
+                {ap?.work_order?.title ?? "—"}
+              </Field>
+              <Field label={t("console.finance.invoices.fields.po", undefined, "Purchase Order")} mono>
+                {ap?.po ? (
+                  <a className="underline" href={`/studio/procurement/purchase-orders/${ap.po.id}`}>
+                    {ap.po.number}
+                  </a>
+                ) : (
+                  "—"
+                )}
+              </Field>
+              <Field label={t("console.finance.invoices.fields.retainage", undefined, "Retainage")} mono>
+                {invoice.retainage_pct > 0 ? `${invoice.retainage_pct}%` : "—"}
+              </Field>
+              <Field label={t("console.finance.invoices.fields.waiver", undefined, "Lien Waiver")}>
+                {(() => {
+                  const wb = waiverBadge(ap?.waiver?.waiver_state);
+                  return <Badge variant={wb.variant}>{wb.label}</Badge>;
+                })()}
+              </Field>
+            </>
+          )}
         </div>
         {invoice.notes && (
           <div className="surface p-5">

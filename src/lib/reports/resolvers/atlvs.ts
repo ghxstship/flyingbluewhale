@@ -94,8 +94,10 @@ const budget_variance: MetricResolver = async (ctx) => {
 /** (collected revenue − cost) / revenue × 100. Revenue = paid invoices;
  *  cost = budget spend. */
 const gross_margin: MetricResolver = async (ctx) => {
+  // source='ar' — the §09 merge folded AP-sub invoices into this store;
+  // a paid sub invoice is cost, not collected revenue.
   const inv = await rows(ctx, "invoices", "amount_cents,invoice_state", {
-    eq: { invoice_state: "paid" },
+    eq: { invoice_state: "paid", source: "ar" },
     isNull: ["deleted_at"],
   });
   const b = await rows(ctx, "budgets", "spent_cents,actual_cents");
@@ -252,7 +254,8 @@ const backlog_value: MetricResolver = async (ctx) => {
 /** Days sales outstanding: mean (paid_at − issued_at) over paid invoices. */
 const dso: MetricResolver = async (ctx) => {
   const inv = await rows(ctx, "invoices", "issued_at,paid_at,invoice_state", {
-    eq: { invoice_state: "paid" },
+    // AR-only: sales outstanding measures collections, not AP-sub payouts.
+    eq: { invoice_state: "paid", source: "ar" },
     notNull: ["paid_at", "issued_at"],
     isNull: ["deleted_at"],
   });

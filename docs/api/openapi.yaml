@@ -1384,7 +1384,7 @@ paths:
     get: { summary: "Messages on a work order's coordination thread (oldest first)." }
     post: { summary: "Post a message to a work order thread (author = caller)." }
   /api/v1/sub-invoices:
-    get: { summary: "Inbound subcontractor payment applications for the org. Optional state filter." }
+    get: { summary: "Inbound subcontractor payment applications — an AP lens on the merged invoices store (source=ap_sub, with retainage + lien-waiver state). Optional state filter." }
   /api/v1/job-templates:
     get: { summary: "Reusable scope-checklist templates with step counts." }
   /api/v1/scorecard:

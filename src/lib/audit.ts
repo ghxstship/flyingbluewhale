@@ -178,6 +178,10 @@ export type AuditAction =
   | "asset.checked_in"
   | "asset.state_changed"
   | "submission.offer_created"
+  // Receiving → 3-way match. As of the Phase A sub_invoices merge the
+  // action rides the match_receipt_three_way RPC, which cross-patches the
+  // PO and the linked invoice in one transaction; this row is the
+  // operator-attributed lineage on top of it.
   | "goods_receipt.matched_to_po";
 
 export type AuditInput = {

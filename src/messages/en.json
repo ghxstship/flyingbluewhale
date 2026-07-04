@@ -10406,8 +10406,8 @@
       }
     },
     "inbox": {
-      "eyebrow": "Workspace",
-      "title": "Messages",
+      "eyebrow": "Home",
+      "title": "My Inbox",
       "configureSupabase": "Configure Supabase.",
       "conversationCount": {
         "one": "{count} conversation",
@@ -10415,7 +10415,8 @@
       },
       "unreadSuffix": "{count} unread",
       "empty": {
-        "title": "No Conversations"
+        "title": "No Threads Yet",
+        "description": "Start a direct message or a channel with New Message above; portal contact threads land here too."
       },
       "untitledRoom": "Untitled room",
       "newBadge": "New"

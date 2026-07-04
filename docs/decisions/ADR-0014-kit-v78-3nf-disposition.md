@@ -118,3 +118,15 @@ invoice)` SECURITY DEFINER RPC computes the verdict
 
 - The rail satisfies Law #3 with zero label collisions — guarded by `src/lib/nav-labels.test.ts` (uniqueness + full `sub` coverage + lens integrity + no em/en dashes).
 - All four Phase A store merges are executed (crm · inventory · schedule · sub-invoices); the remaining kit 20 queue is rail/tab verbatim alignment to `_ia-dump.md` and screenshot parity.
+
+## Kit 20 Jul-2 prototype layer (Inbox M1-M10 · Dead-Ends D1-D7) — audit + landing (2026-07-04)
+
+Line-item audit of the bundle's Jul 2 changelog entries against the repo, then a landing for the real gaps:
+
+**Landed (this pass):** M1 the console two-pane inbox — `/studio/inbox` now hosts the rooms list AND the thread (day dividers, author names, Enter-sends composer with optimistic append, realtime, mark-read on open); the old list ejected operators to the COMPVSS shell, a genuine dead end. M2 New Message / New Channel intakes in the console (DM find-or-creates the direct room, org-pinned). M-series record-ref chips — `record-refs.ts` resolves doc codes (`invoices.number`, `proposals.doc_number`, `rfis.code`) org-scoped plus pasted `/studio` links; unresolved tokens stay plain text. Demonstrated live: INV/RFI codes and a pasted link all chip to their records.
+
+**Already exceeded the prototype (no work):** D1 notifications (real store, per-item click-through, mark-all, PLUS done/snooze/undo triage); D5 2FA (real Supabase TOTP enrollment with QR vs the demo code 246810); D4 CSV export (accessor-driven in DataTable; PDF via print views on documents/reports); Home nav cluster (the kit 20 rail landing).
+
+**Satisfied by architecture:** D2/D3 copy-link/QR/send — the repo has real shareable URLs on every record (the prototype needed deep-link synthesis for its hash routes); dedicated share surfaces exist where semantics matter (offer letters, portal lists, GVTEWAY ShareSheet).
+
+**Deferred, migration-scoped:** thread pin/mute (needs `chat_room_members` columns), message reactions and @mention store (new tables), unread jump line (needs per-message read watermarks). Same discipline as the §09 folds — schema changes land as their own migration-scoped decisions, not UI passes.

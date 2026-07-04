@@ -36,8 +36,10 @@ order by tokens desc;
 1. **Is it one actor?** Temporarily reduce that user's AI budget: bump
    the `ai` bucket in `src/lib/ratelimit.ts` down to 5/min (from 30)
    and redeploy, OR block the user via membership `deleted_at = now()`.
-2. **Is it system-wide?** Flip the `ai_opus_for_pro` flag off (in
-   the remote flag service or via env override) to route to Sonnet until investigated.
+2. **Is it system-wide?** Force the model to Sonnet in
+   `src/app/api/v1/ai/chat/route.ts` (the tier→model map) and redeploy until
+   investigated. (The old `ai_opus_for_pro` flag was retired 2026-07-03 —
+   it never gated the route.)
 3. **Is it a single conversation looping?** Query `ai_messages where
    conversation_id = '<id>' order by created_at desc limit 20` — if
    you see the assistant repeating itself, the client is fan-looping

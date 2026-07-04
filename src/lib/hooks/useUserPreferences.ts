@@ -24,6 +24,9 @@ export type UserPreferences = {
   /** ADR-0007: last-visited portal slug — used by the app switcher to
    *  deep-link the GVTEWAY entry to where the user was last. */
   last_portal_slug?: string;
+  /** v7.8 Role Lens — persona preset over the platform rail groups
+   *  (All · Produce · Ops · Crew · Finance · Safety). */
+  nav_lens?: string;
 };
 
 let cache: UserPreferences | null = null;

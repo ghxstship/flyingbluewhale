@@ -14,6 +14,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { SetupChecklist } from "@/components/ui/SetupChecklist";
 import { getSetupProgress } from "@/lib/setup/progress";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { EventSpine } from "./EventSpine";
 
 // Dashboard hub tabs — folds the previous Dashboard sidebar group
 // (Overview, Portfolio, Action Items, Command Palette) into one record-
@@ -112,6 +113,11 @@ export default async function ConsoleDashboard() {
         <Suspense fallback={null}>
           <SetupCard orgId={session.orgId} />
         </Suspense>
+        {/* Event Spine — the Sell → Settle lifecycle checklist IS the training
+            (v7.8 zero-training layer). Streams independently of the metrics. */}
+        <Suspense fallback={<div className="ps-skel h-40" aria-busy="true" />}>
+          <EventSpine orgId={session.orgId} />
+        </Suspense>
         <Suspense fallback={<MetricGridSkeleton count={4} />}>
           <DashboardMetrics orgId={session.orgId} />
         </Suspense>
@@ -148,6 +154,9 @@ async function SetupCard({ orgId }: { orgId: string }) {
     done: s.done,
     label: t(s.labelKey, undefined, s.fallbackLabel),
   }));
+  // Pre-format the progress label server-side — SetupChecklist is a client
+  // component; a formatter function would violate the RSC boundary.
+  const doneCount = steps.filter((s) => s.done).length;
   return (
     <SetupChecklist
       orgId={orgId}
@@ -156,7 +165,11 @@ async function SetupCard({ orgId }: { orgId: string }) {
         title: t("console.setup.title", undefined, "Finish setting up"),
         subtitle: t("console.setup.subtitle", undefined, "A few steps to get your workspace operating."),
         dismiss: t("console.setup.dismiss", undefined, "Dismiss"),
-        progress: (done, total) => t("console.setup.progress", { done, total }, `${done} of ${total} done`),
+        progress: t(
+          "console.setup.progress",
+          { done: doneCount, total: steps.length },
+          `${doneCount} of ${steps.length} done`,
+        ),
       }}
     />
   );

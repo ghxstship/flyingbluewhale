@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1155 · **API route handlers:** 145 · **Distinct nav hrefs:** 492
+**Page routes:** 1156 · **API route handlers:** 145 · **Distinct nav hrefs:** 493
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 766 | 225 | 540 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 767 | 226 | 540 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1155** | **466** | **649** | **0** | **40** |
+| **TOTAL** | | **1156** | **467** | **649** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -55,6 +55,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 | Match | Type | Reason |
 |-------|------|--------|
+| `/studio/advancing/request` | exact | One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu. |
 | `/p/[slug]` | exact | Portal gateway — persona picker / redirect to the viewer's persona home. |
 | `/p/select` | exact | Org/slug picker — reached when a portal user has no resolved slug. |
 | `/p` | exact | GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item). |
@@ -92,7 +93,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-766 routes — ● 225 nav · ○ 540 linked · ⚠ 0 orphan
+767 routes — ● 226 nav · ○ 540 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -641,6 +642,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/studio/meetings/notes`
 ○ `/studio/meetings/notes/[id]`
 ○ `/studio/meetings/notes/new`
+
+</details>
+
+<details><summary><code>my-work</code> · 1 route</summary>
+
+● `/studio/my-work`
 
 </details>
 

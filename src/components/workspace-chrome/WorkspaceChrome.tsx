@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { AvatarMenu } from "@/components/AvatarMenu";
 import { urlFor } from "@/lib/urls";
 import { AppSwitcher, type AppSwitcherEntry } from "./AppSwitcher";
+import { CreateMenu } from "./CreateMenu";
 import { HelpButton } from "./HelpButton";
 import { MessagesButton } from "./MessagesButton";
 import { DashboardsMenu, type DashboardEntry } from "./DashboardsMenu";
@@ -68,6 +69,9 @@ export function WorkspaceChrome({
         <span className="hidden truncate text-sm font-medium text-[var(--p-text-2)] sm:inline">{workspaceLabel}</span>
       ) : null}
       <div className="ms-auto flex items-center gap-0.5">
+        {/* One Front Door (v7.8) — the global "+", Request-first. ATLVS only:
+            portal/mobile personas have their own scoped intakes. */}
+        {shell === "platform" ? <CreateMenu /> : null}
         <CommandPaletteTrigger />
         {shell === "platform" && dashboards !== undefined ? <DashboardsMenu entries={dashboards} /> : null}
         <HelpButton />

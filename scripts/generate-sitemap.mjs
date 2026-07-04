@@ -183,6 +183,14 @@ for (const h of navSet) {
 // one route; `prefix` matches the route and its descendants. Every entry carries
 // a reason (rendered in the doc). Everything else unreachable from nav = orphan.
 const EXEMPT = [
+  // One Front Door (v7.8) — redirect resolver: picks the active production
+  // and lands on its advancing new-assignment form. Reached from the global
+  // "+" menu, never a sidebar item.
+  {
+    path: "/studio/advancing/request",
+    type: "exact",
+    reason: "One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu.",
+  },
   // Portal infra — persona routing, not a nav target.
   {
     path: "/p/[slug]",

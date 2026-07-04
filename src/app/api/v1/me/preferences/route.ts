@@ -24,6 +24,12 @@ const PatchSchema = z.object({
   sidebar_width: z.number().int().min(56).max(480).optional(),
   sidebar_pinned: z.array(z.string()).max(30).optional(),
   sidebar_collapsed: z.boolean().optional(),
+  // Sidebar expanded-group allow-list — written by PlatformSidebar since the
+  // collapse-by-default pass but missing here until v7.8, so toggles never
+  // actually persisted across sessions.
+  sidebar_expanded_groups: z.array(z.string()).max(30).optional(),
+  // v7.8 Role Lens — persona preset over the platform rail groups.
+  nav_lens: z.enum(["All", "Produce", "Ops", "Crew", "Finance", "Safety"]).optional(),
   // ADR-0009: persisted mobile role for persona-routed COMPVSS.
   mobile_role: z.enum(["performer", "crew", "driver", "medic", "guard", "admin"]).optional(),
   // ADR-0007: last-visited portal slug for the app switcher's GVTEWAY entry.
@@ -35,6 +41,8 @@ const UI_STATE_KEYS = [
   "sidebar_width",
   "sidebar_pinned",
   "sidebar_collapsed",
+  "sidebar_expanded_groups",
+  "nav_lens",
   "mobile_role",
   "last_portal_slug",
 ] as const;

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, ChevronDown } from "lucide-react";
-import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
+import { NAV_LENSES, NAV_LENS_ORDER, type NavGroup, type NavItem, type NavLens, type NavSection } from "@/lib/nav";
 import { NAV_ICONS } from "@/components/nav-icons";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
@@ -41,6 +41,12 @@ export function PlatformSidebar({
   // The active-route group still force-opens below so the user can never
   // lose their current page from the nav.
   const [expandedGroups, setExpandedGroups] = React.useState<string[]>(prefs.sidebar_expanded_groups ?? []);
+  // Role Lens (v7.8 zero-training layer) — persona preset over the rail
+  // groups. A default, not a cage: "All" reveals everything, pinned items
+  // escape the lens, and the active-route group is always kept.
+  const [lens, setLens] = React.useState<NavLens>(
+    prefs.nav_lens && prefs.nav_lens in NAV_LENSES ? (prefs.nav_lens as NavLens) : "All",
+  );
   const [query, setQuery] = React.useState("");
   const [showSearch, setShowSearch] = React.useState(false);
   const searchRef = React.useRef<HTMLInputElement>(null);
@@ -51,7 +57,8 @@ export function PlatformSidebar({
     if (prefs.sidebar_width != null) setWidth(prefs.sidebar_width);
     if (prefs.sidebar_pinned != null) setPinned(prefs.sidebar_pinned);
     if (prefs.sidebar_expanded_groups != null) setExpandedGroups(prefs.sidebar_expanded_groups);
-  }, [prefs.sidebar_collapsed, prefs.sidebar_width, prefs.sidebar_pinned, prefs.sidebar_expanded_groups]);
+    if (prefs.nav_lens && prefs.nav_lens in NAV_LENSES) setLens(prefs.nav_lens as NavLens);
+  }, [prefs.sidebar_collapsed, prefs.sidebar_width, prefs.sidebar_pinned, prefs.sidebar_expanded_groups, prefs.nav_lens]);
 
   // Register shortcuts for the cheatsheet
   React.useEffect(() => {
@@ -133,12 +140,28 @@ export function PlatformSidebar({
     return g.items;
   }, []);
 
+  // Role-lens pass — runs BEFORE search so "/" search operates within the
+  // chosen lens. The group containing the active route is always kept
+  // (hiding the current page would be hostile), matching the force-open rule.
+  const lensed = React.useMemo<NavGroup[]>(() => {
+    const allow = NAV_LENSES[lens];
+    if (!allow) return groups;
+    return groups.filter((g) => {
+      if (allow.includes(g.label)) return true;
+      const items = g.sections && g.sections.length > 0 ? g.sections.flatMap((s) => s.items) : g.items;
+      return (
+        items.some((i) => matchRoute(pathname ?? "", i.href).isActive) ||
+        (!!g.href && matchRoute(pathname ?? "", g.href).isActive)
+      );
+    });
+  }, [groups, lens, pathname]);
+
   // Filter groups by query — when sections are present, filter them
   // section-by-section so empty sections drop out.
   const filtered = React.useMemo<NavGroup[]>(() => {
-    if (!query) return groups;
+    if (!query) return lensed;
     const q = query.toLowerCase();
-    return groups
+    return lensed
       .map((g) => {
         if (g.sections && g.sections.length > 0) {
           const sections = g.sections
@@ -149,7 +172,7 @@ export function PlatformSidebar({
         return { ...g, items: g.items.filter((i) => i.label.toLowerCase().includes(q)) };
       })
       .filter((g) => itemsOf(g).length > 0);
-  }, [groups, query, itemsOf]);
+  }, [lensed, query, itemsOf]);
 
   // Pinned items as a synthesized group
   const pinnedItems: NavItem[] = React.useMemo(() => {
@@ -239,6 +262,35 @@ export function PlatformSidebar({
                 <kbd className="font-mono text-[10px]">/</kbd>
               </button>
             )}
+          </div>
+        )}
+
+        {/* Role Lens — persona preset over the rail groups (v7.8). A quiet
+            select, styled like the search row; hidden in rail mode. */}
+        {!collapsed && (
+          <div className="flex items-center gap-2 border-b border-[var(--p-border)] px-3 py-1.5">
+            <label
+              htmlFor="sidebar-role-lens"
+              className="font-mono text-[9px] tracking-[0.14em] text-[var(--p-text-3)] uppercase"
+            >
+              {t("shell.sidebar.lens", undefined, "Lens")}
+            </label>
+            <select
+              id="sidebar-role-lens"
+              value={lens}
+              onChange={(e) => {
+                const next = e.target.value as NavLens;
+                setLens(next);
+                void setPrefs({ nav_lens: next });
+              }}
+              className="w-full cursor-pointer rounded-md bg-transparent py-0.5 text-xs text-[var(--p-text-2)] outline-none hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+            >
+              {NAV_LENS_ORDER.map((l) => (
+                <option key={l} value={l}>
+                  {t(`shell.sidebar.lens${l}`, undefined, l)}
+                </option>
+              ))}
+            </select>
           </div>
         )}
 
@@ -533,6 +585,8 @@ function SidebarItems({
             // Prefetch off — see SidebarGroup notes on RSC fetch storms.
             prefetch={false}
             aria-current={active ? "page" : undefined}
+            // v7.8 nav-hover subtitle — teaches the noun without a click.
+            title={item.sub ? `${itemLabel} · ${item.sub}` : undefined}
             className={`flex items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
               collapsed ? "" : "pe-7"
             } ${
@@ -564,7 +618,7 @@ function SidebarItems({
         return (
           <li key={item.href} className="group relative">
             {collapsed ? (
-              <Hint label={itemLabel} side="right" delayDuration={300}>
+              <Hint label={item.sub ? `${itemLabel} · ${item.sub}` : itemLabel} side="right" delayDuration={300}>
                 {linkEl}
               </Hint>
             ) : (

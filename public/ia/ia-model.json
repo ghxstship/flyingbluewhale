@@ -319,6 +319,12 @@
               ]
             },
             {
+              "path": "/studio/my-work",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/dashboards",
               "arch": [
                 "RPT",

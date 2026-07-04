@@ -136,6 +136,12 @@ export type NavItem = {
    * discovering admin tools via failed mutations.
    */
   minRole?: "manager" | "admin";
+  /**
+   * One-line hover subtitle (v7.8 zero-training layer). Surfaces as a
+   * tooltip/title on the sidebar entry so a new operator learns what a
+   * noun is without clicking through. Optional — high-traffic items first.
+   */
+  sub?: string;
 };
 /**
  * Optional sub-grouping inside a NavGroup. Use when a class group exceeds
@@ -200,7 +206,11 @@ export const platformNavDomain: NavGroup[] = [
     label: "Dashboard",
     href: "/studio",
     items: [
-      { label: "Dashboards", href: "/studio/dashboards", icon: "BarChart3" },
+      // v7.8 zero-training layer — the one personal spine: union of my
+      // tasks · approvals waiting on me · my requests. Home rail, top slot
+      // (design_handoff_console_rebuild README §"My Work").
+      { label: "My Work", href: "/studio/my-work", icon: "CheckSquare", sub: "Tasks · Approvals · My Requests" },
+      { label: "Dashboards", href: "/studio/dashboards", icon: "BarChart3", sub: "Saved Metric Boards" },
       { label: "Reports", href: "/studio/reports", icon: "ChartBar" },
       { label: "Goals", href: "/studio/goals", icon: "Crosshair" },
       // §9 coordinate lens — portfolio class × phase. An analytical lens (a nav
@@ -209,8 +219,8 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Assistant", href: "/studio/assistant", icon: "Bot" },
       { label: "Copilot", href: "/studio/copilot", icon: "Sparkles" },
       { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
-      { label: "Triage", href: "/studio/triage", icon: "CheckSquare" },
-      { label: "Threads", href: "/studio/inbox", icon: "MessageSquare" },
+      { label: "Triage", href: "/studio/triage", icon: "CheckSquare", sub: "Clear The Decision Queue" },
+      { label: "Threads", href: "/studio/inbox", icon: "MessageSquare", sub: "Channels & Direct Messages" },
     ],
   },
   {
@@ -231,8 +241,8 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Authoring",
         items: [
-          { label: "Proposals", href: "/studio/proposals", icon: "FileText" },
-          { label: "Documents", href: "/studio/documents", icon: "FileStack" },
+          { label: "Proposals", href: "/studio/proposals", icon: "FileText", sub: "Pitch, Sign, Convert To Project" },
+          { label: "Documents", href: "/studio/documents", icon: "FileStack", sub: "29 Doc Types · Merge & Print" },
           { label: "Proposal Templates", href: "/studio/proposals/templates", icon: "Files" },
           { label: "Project Templates", href: "/studio/templates", icon: "Files" },
           { label: "Event Kits", href: "/studio/kits", icon: "Layers" },
@@ -250,8 +260,8 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Estimating",
         items: [
-          { label: "Takeoffs", href: "/studio/takeoffs", icon: "Crosshair" },
-          { label: "Estimates", href: "/studio/estimates", icon: "Coins" },
+          { label: "Takeoffs", href: "/studio/takeoffs", icon: "Crosshair", sub: "Quantity Counts From Drawings" },
+          { label: "Estimates", href: "/studio/estimates", icon: "Coins", sub: "Price The Job · Convert To Budget" },
         ],
       },
       {
@@ -261,7 +271,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Risk Scores", href: "/studio/risk", icon: "ShieldAlert" },
           { label: "Readiness", href: "/studio/programs/readiness", icon: "ShieldCheck" },
           { label: "Reviews", href: "/studio/programs/reviews", icon: "ClipboardCheck" },
-          { label: "Approvals", href: "/studio/governance/approvals", icon: "ClipboardCheck" },
+          { label: "Approvals", href: "/studio/governance/approvals", icon: "ClipboardCheck", sub: "Routed Sign-Off Chains" },
         ],
       },
     ],
@@ -300,8 +310,8 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Show",
         items: [
-          { label: "Run of Show", href: "/studio/production/ros", icon: "Play" },
-          { label: "Work Orders", href: "/studio/production/work-orders", icon: "ClipboardList" },
+          { label: "Run of Show", href: "/studio/production/ros", icon: "Play", sub: "Cue-By-Cue Show Timeline" },
+          { label: "Work Orders", href: "/studio/production/work-orders", icon: "ClipboardList", sub: "Dispatch Scoped Work To Subs" },
           { label: "Live Dispatch", href: "/studio/production/dispatch/live", icon: "Radio" },
           { label: "Production Logistics", href: "/studio/production/logistics", icon: "Crosshair" },
         ],
@@ -356,7 +366,7 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Time & Recognition",
         items: [
-          { label: "Time Off", href: "/studio/workforce/time-off", icon: "Calendar" },
+          { label: "Time Off", href: "/studio/workforce/time-off", icon: "Calendar", sub: "Request & Approve Leave" },
           { label: "Shift Swaps", href: "/studio/workforce/shift-swaps", icon: "ArrowLeftRight" },
           { label: "Recognition", href: "/studio/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck" },
@@ -383,8 +393,8 @@ export const platformNavDomain: NavGroup[] = [
         label: "Sales",
         items: [
           { label: "Sales", href: "/studio/sales", icon: "TrendingUp" },
-          { label: "Pipeline", href: "/studio/pipeline", icon: "GitBranch" },
-          { label: "Leads", href: "/studio/leads", icon: "UserPlus" },
+          { label: "Pipeline", href: "/studio/pipeline", icon: "GitBranch", sub: "Deals By Stage · Kanban" },
+          { label: "Leads", href: "/studio/leads", icon: "UserPlus", sub: "Qualify, Then Convert To Deal" },
           { label: "Clients", href: "/studio/clients", icon: "Handshake" },
           { label: "Sponsors", href: "/studio/commercial/sponsors", icon: "Award" },
           { label: "Marketing", href: "/studio/marketing", icon: "Megaphone" },
@@ -516,9 +526,9 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Buying",
         items: [
-          { label: "Requisitions", href: "/studio/procurement/requisitions", icon: "ShoppingCart" },
-          { label: "Purchase Orders", href: "/studio/procurement/purchase-orders", icon: "Package" },
-          { label: "Receiving", href: "/studio/procurement/receiving", icon: "PackageCheck" },
+          { label: "Requisitions", href: "/studio/procurement/requisitions", icon: "ShoppingCart", sub: "Ask To Buy · Converts To PO/RFQ" },
+          { label: "Purchase Orders", href: "/studio/procurement/purchase-orders", icon: "Package", sub: "Committed Spend To Vendors" },
+          { label: "Receiving", href: "/studio/procurement/receiving", icon: "PackageCheck", sub: "Goods In · 3-Way Match" },
           { label: "PO Change Orders", href: "/studio/procurement/po-change-orders", icon: "ArrowLeftRight" },
           { label: "WO Broadcasts", href: "/studio/procurement/wo-broadcasts", icon: "Send" },
           { label: "Contracts", href: "/studio/legal/contracts", icon: "ClipboardSignature" },
@@ -552,8 +562,8 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Calendar", href: "/studio/calendar", icon: "CalendarDays" },
       { label: "Schedule Baselines", href: "/studio/schedule/baselines", icon: "GitBranch" },
       { label: "Look-Ahead", href: "/studio/operations/look-ahead", icon: "Telescope" },
-      { label: "Tasks", href: "/studio/tasks", icon: "ListTodo" },
-      { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ScrollText" },
+      { label: "Tasks", href: "/studio/tasks", icon: "ListTodo", sub: "Assigned Work · Lands In My Work" },
+      { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ScrollText", sub: "The Signed Site Record" },
       { label: "Action Items", href: "/studio/action-items", icon: "CheckSquare" },
       { label: "Annotations", href: "/studio/annotations", icon: "AlertTriangle" },
       { label: "Forms", href: "/studio/forms", icon: "ClipboardList" },
@@ -591,7 +601,7 @@ export const platformNavDomain: NavGroup[] = [
           // F-E: point at the canonical CRUD home (kanban / new / detail), not
           // the cross-domain read feed at /studio/safety/incidents (which is
           // the Safety group hub + stays reachable via cross-links).
-          { label: "Incidents", href: "/studio/operations/incidents", icon: "Siren" },
+          { label: "Incidents", href: "/studio/operations/incidents", icon: "Siren", sub: "Report It · Spawns Corrective Tasks" },
           { label: "Major Incident", href: "/studio/safety/major-incident", icon: "Flame" },
           { label: "Crisis", href: "/studio/safety/crisis", icon: "Flame" },
           { label: "Medical", href: "/studio/safety/medical", icon: "Stethoscope" },
@@ -632,7 +642,7 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Transmittals", href: "/studio/transmittals", icon: "Send" },
       { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox" },
       { label: "RFIs", href: "/studio/rfis", icon: "MessageCircleQuestion" },
-      { label: "Service Desk", href: "/studio/services/requests", icon: "ConciergeBell" },
+      { label: "Service Desk", href: "/studio/services/requests", icon: "ConciergeBell", sub: "IT & Facilities Tickets" },
       { label: "TOC — ITIL", href: "/studio/ops/toc", icon: "Network" },
     ],
   },
@@ -664,6 +674,29 @@ export const platformNavDomain: NavGroup[] = [
  * `platformNav` directly; there is no per-user nav-mode switch.
  */
 export const platformNav: NavGroup[] = platformNavDomain;
+
+/**
+ * Role Lenses (v7.8 zero-training layer) — persona presets over the
+ * platform rail. Each lens is an allow-list of `platformNav` group labels;
+ * `null` = All (everything). Defaults, not cages: the sidebar always offers
+ * "All", pinned items escape the lens, and the group holding the active
+ * route is always kept so the user can never lose their current page.
+ * Persisted per user via `user_preferences.ui_state.nav_lens`.
+ *
+ * Kit map (design_handoff_console_rebuild/_ia-dump.md §Role Lenses)
+ * translated to this repo's group nouns: Home→Dashboard · Sales/Talent→
+ * Commerce · Operations→Coordination+Logistics · Comms→Messages.
+ */
+export type NavLens = "All" | "Produce" | "Ops" | "Crew" | "Finance" | "Safety";
+export const NAV_LENSES: Record<NavLens, string[] | null> = {
+  All: null,
+  Produce: ["Dashboard", "Projects", "Commerce", "Procurement", "Production", "Finance"],
+  Ops: ["Dashboard", "Projects", "Production", "Coordination", "Logistics", "Safety", "Messages"],
+  Crew: ["Dashboard", "Coordination", "People", "Messages", "Collaborate"],
+  Finance: ["Dashboard", "Commerce", "Procurement", "Finance"],
+  Safety: ["Dashboard", "Safety", "Coordination", "Messages"],
+};
+export const NAV_LENS_ORDER: NavLens[] = ["All", "Produce", "Ops", "Crew", "Finance", "Safety"];
 
 /**
  * LEG3ND shell nav (ADR-0011) — the standalone Knowledge · LMS · resource hub

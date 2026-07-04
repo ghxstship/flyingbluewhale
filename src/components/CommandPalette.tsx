@@ -46,7 +46,7 @@ type Action = {
   label: string;
   hint?: string;
   icon?: React.ComponentType<{ size?: number }>;
-  group: "Recent" | "Navigate" | "Create" | "Switch" | "Settings";
+  group: "Recent" | "Navigate" | "Request" | "Create" | "Switch" | "Settings";
   shortcut?: string;
   keywords?: string[];
   /** Primary handler — runs on Enter / Click. */
@@ -197,6 +197,27 @@ export function CommandPalette({
         "/studio/proposals/new": { key: "newProposal", icon: FileText },
         "/studio/production/equipment/new": { key: "addEquipment", icon: Package },
       };
+      // Request group (v7.8 One Front Door) — mirrors the global "+" menu's
+      // Request-first section so ⌘K teaches the same five intakes.
+      const requestActions: Array<{ id: string; key: string; label: string; href: string }> = [
+        { id: "request-advance", key: "gearAdvance", label: "Gear & Advance Request", href: "/studio/advancing/request" },
+        { id: "request-requisition", key: "requisition", label: "Purchase Requisition", href: "/studio/procurement/requisitions/new" },
+        { id: "request-time-off", key: "timeOff", label: "Time Off", href: "/studio/workforce/time-off" },
+        { id: "request-report-it", key: "reportIt", label: "Report It · Incident / Medical / Lost", href: "/studio/operations/incidents/new" },
+        { id: "request-it-ticket", key: "itTicket", label: "IT & Facilities Ticket", href: "/studio/services/requests/new" },
+      ];
+      for (const r of requestActions) {
+        list.push({
+          id: r.id,
+          label: t(`createMenu.request.${r.key}`, undefined, r.label),
+          hint: t("commandPalette.hint.request", undefined, "Request · One Front Door"),
+          group: "Request",
+          icon: Plus,
+          perform: () => goto(r.href),
+          performAlt: () => gotoNewTab(r.href),
+          keywords: ["request", "ask", "new"],
+        });
+      }
       for (const c of CONSOLE_CREATE_ACTIONS) {
         const cur = curatedCreate[c.href];
         list.push({

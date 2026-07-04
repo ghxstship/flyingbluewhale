@@ -17,7 +17,6 @@ import { env } from "./env";
 
 export type Flags = {
   command_palette_v2: boolean;
-  ai_opus_for_pro: boolean;
   portal_comments: boolean;
   data_table_saved_views: boolean;
   passkeys: boolean;
@@ -25,7 +24,6 @@ export type Flags = {
 
 export const FLAG_DEFAULTS: Flags = {
   command_palette_v2: true,
-  ai_opus_for_pro: false,
   portal_comments: true,
   data_table_saved_views: false,
   passkeys: false,
@@ -74,11 +72,9 @@ export const FLAG_REGISTRY: Record<keyof Flags, FlagMeta> = {
     expiresAt: "2026-08-01",
     description: "Enables v2 command palette with fuzzy search + recents.",
   },
-  ai_opus_for_pro: {
-    owner: "julian.clarkson@ghxstship.pro",
-    expiresAt: "2026-07-01",
-    description: "Routes Pro-tier orgs to claude-opus instead of claude-sonnet.",
-  },
+  // ai_opus_for_pro removed 2026-07-03 — expired 2026-07-01 with zero code
+  // consumers (model routing ships tier-checked in the AI chat route, never
+  // read this flag); the past-due-flag hygiene test enforces removal.
   portal_comments: {
     owner: "julian.clarkson@ghxstship.pro",
     expiresAt: "2026-09-01",

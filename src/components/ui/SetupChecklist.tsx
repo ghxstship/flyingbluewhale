@@ -12,7 +12,11 @@ import Link from "next/link";
  */
 export type SetupChecklistStep = { id: string; label: string; href: string; done: boolean };
 
-type Labels = { title?: string; subtitle?: string; dismiss?: string; progress?: (done: number, total: number) => string };
+// `progress` is a pre-formatted string, NOT a formatter function — labels
+// cross the RSC boundary from server pages into this client component, and
+// functions are not serializable ("Functions cannot be passed directly to
+// Client Components"). done/total are derivable server-side from `steps`.
+type Labels = { title?: string; subtitle?: string; dismiss?: string; progress?: string };
 
 export function SetupChecklist({
   steps,
@@ -26,15 +30,15 @@ export function SetupChecklist({
   labels?: Labels;
   className?: string;
 }) {
+  const done = steps.filter((s) => s.done).length;
+  const total = steps.length;
   const t = {
     title: "Finish setting up",
     subtitle: "A few steps to get your workspace operating.",
     dismiss: "Dismiss",
-    progress: (done: number, total: number) => `${done} of ${total} done`,
+    progress: `${done} of ${total} done`,
     ...labels,
   };
-  const done = steps.filter((s) => s.done).length;
-  const total = steps.length;
   const allDone = done === total;
   const key = `atlvs.setup.dismissed.${orgId}`;
 
@@ -77,7 +81,7 @@ export function SetupChecklist({
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={t.progress(done, total)}
+        aria-label={t.progress}
         style={{
           height: 6,
           margin: "var(--p-3) 0",
@@ -96,7 +100,7 @@ export function SetupChecklist({
           color: "var(--p-text-2)",
         }}
       >
-        {t.progress(done, total)}
+        {t.progress}
       </p>
 
       <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--p-2)" }}>

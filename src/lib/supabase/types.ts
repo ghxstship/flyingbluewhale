@@ -111,6 +111,17 @@ export type ReqStatus = "draft" | "submitted" | "approved" | "rejected" | "conve
 export type EquipmentStatus = "available" | "reserved" | "in_use" | "maintenance" | "retired";
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "review" | "done";
 export type EventStatus = "draft" | "scheduled" | "live" | "complete" | "cancelled";
+export type ScheduleEventKind =
+  | "general"
+  | "load_in"
+  | "load_out"
+  | "delivery"
+  | "sound_check"
+  | "inspection"
+  | "shift"
+  | "meeting"
+  | "training"
+  | "run_of_show";
 export type AnnotationKind = "flag" | "note" | "comment" | "tag";
 export type AnnotationSeverity = "info" | "warning" | "critical";
 export type AnnotationStatus = "open" | "acknowledged" | "resolved" | "dismissed";
@@ -572,6 +583,7 @@ export type EventRow = {
   ends_at: string;
   location_id: string | null;
   event_state: EventStatus;
+  event_kind: ScheduleEventKind;
   description: string | null;
   created_by: string | null;
   created_at: string;

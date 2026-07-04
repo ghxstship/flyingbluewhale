@@ -50,14 +50,13 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data: meeting } = await supabase
-    .from("meetings")
-    .select("id, title")
+    .from("events")
+    .select("id, name")
     .eq("id", meetingId)
     .eq("org_id", session.orgId)
-    .is("deleted_at", null)
     .maybeSingle();
   if (!meeting) notFound();
-  const meetingTitle = (meeting as { title?: string }).title ?? meetingId;
+  const meetingTitle = (meeting as { name?: string }).name ?? meetingId;
 
   const { data: callData } = await supabase
     .from("video_calls")
@@ -125,9 +124,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
                 ? "Start a huddle to open a room for this meeting and let attendees join."
                 : "A manager hasn't opened a huddle for this meeting yet."
             }
-            action={
-              canManage ? <HuddleControls kind="ensure" meetingId={meetingId} /> : undefined
-            }
+            action={canManage ? <HuddleControls kind="ensure" meetingId={meetingId} /> : undefined}
           />
         ) : (
           <>
@@ -143,10 +140,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
                 {present.map((p) => {
                   const name = p.user?.name ?? p.user?.email ?? "Member";
                   return (
-                    <div
-                      key={p.id}
-                      className="surface flex flex-col items-center justify-center gap-2 p-6 text-center"
-                    >
+                    <div key={p.id} className="surface flex flex-col items-center justify-center gap-2 p-6 text-center">
                       <Avatar name={name} src={p.user?.avatar_url} size="xl" presence="online" />
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm font-medium text-[var(--p-text-1)]">{name}</span>
@@ -199,9 +193,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
                         <td className="font-mono text-xs">
                           {p.joined_at ? new Date(p.joined_at).toLocaleString() : "—"}
                         </td>
-                        <td className="font-mono text-xs">
-                          {p.left_at ? new Date(p.left_at).toLocaleString() : "—"}
-                        </td>
+                        <td className="font-mono text-xs">{p.left_at ? new Date(p.left_at).toLocaleString() : "—"}</td>
                       </tr>
                     );
                   })}

@@ -15,10 +15,10 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { data: meetings } = await supabase
-    .from("meetings")
-    .select("id, title")
+    .from("events")
+    .select("id, title:name")
     .eq("org_id", session.orgId)
-    .is("deleted_at", null)
+    .eq("event_kind", "meeting")
     .order("starts_at", { ascending: false })
     .limit(200);
 

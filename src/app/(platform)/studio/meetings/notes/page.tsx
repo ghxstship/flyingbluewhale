@@ -37,7 +37,7 @@ export default async function Page() {
 
   const { data } = await supabase
     .from("meeting_notes")
-    .select("id, title, note_state, created_at, summarized_at, action_items, meeting:meeting_id(title)")
+    .select("id, title, note_state, created_at, summarized_at, action_items, meeting:meeting_id(title:name)")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("created_at", { ascending: false })

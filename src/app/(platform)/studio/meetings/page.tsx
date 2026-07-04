@@ -13,6 +13,10 @@ import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
+// Kit 20 Phase A: /studio/meetings is a filtered lens over the unified
+// schedule store — events WHERE event_kind = 'meeting' — with the
+// meeting-shaped columns hydrated from the meeting_event_details sibling.
+
 type MeetingKind =
   | "kickoff"
   | "owner_architect_contractor"
@@ -22,14 +26,29 @@ type MeetingKind =
   | "design_review"
   | "progress"
   | "other";
-type MeetingState = "scheduled" | "in_progress" | "completed" | "cancelled";
+type EventState = "draft" | "scheduled" | "live" | "complete" | "cancelled";
+
+type QueryRow = {
+  id: string;
+  name: string;
+  event_state: EventState;
+  starts_at: string;
+  ends_at: string;
+  project: { name: string | null } | null;
+  details: {
+    code: string;
+    kind: MeetingKind;
+    location_name: string | null;
+    finalized_at: string | null;
+  } | null;
+};
 
 type Row = {
   id: string;
   code: string;
   title: string;
   kind: MeetingKind;
-  meeting_state: MeetingState;
+  event_state: EventState;
   starts_at: string;
   ends_at: string | null;
   location_name: string | null;
@@ -37,17 +56,6 @@ type Row = {
   project: { name: string | null } | null;
   attendee_count: number;
   open_action_count: number;
-};
-
-const KIND_LABEL: Record<MeetingKind, string> = {
-  kickoff: "Kickoff",
-  owner_architect_contractor: "OAC",
-  sub_meeting: "Sub Meeting",
-  safety: "Safety",
-  punch_walk: "Punch Walk",
-  design_review: "Design Review",
-  progress: "Progress",
-  other: "Other",
 };
 
 export default async function Page() {
@@ -80,19 +88,18 @@ export default async function Page() {
     progress: t("console.meetings.kind.progress", undefined, "Progress"),
     other: t("console.meetings.kind.other", undefined, "Other"),
   };
-  void KIND_LABEL;
 
   const { data } = await supabase
-    .from("meetings")
+    .from("events")
     .select(
-      "id, code, title, kind, meeting_state, starts_at, ends_at, location_name, finalized_at, project:project_id(name)",
+      "id, name, event_state, starts_at, ends_at, project:project_id(name), details:meeting_event_details(code, kind, location_name, finalized_at)",
     )
     .eq("org_id", session.orgId)
-    .is("deleted_at", null)
+    .eq("event_kind", "meeting")
     .order("starts_at", { ascending: false })
     .limit(300);
 
-  const headers = (data ?? []) as unknown as Omit<Row, "attendee_count" | "open_action_count">[];
+  const headers = (data ?? []) as unknown as QueryRow[];
   const ids = headers.map((h) => h.id);
 
   const attendeeCounts: Record<string, number> = {};
@@ -113,12 +120,21 @@ export default async function Page() {
   }
 
   const rows: Row[] = headers.map((h) => ({
-    ...h,
+    id: h.id,
+    code: h.details?.code ?? "—",
+    title: h.name,
+    kind: h.details?.kind ?? "other",
+    event_state: h.event_state,
+    starts_at: h.starts_at,
+    ends_at: h.ends_at,
+    location_name: h.details?.location_name ?? null,
+    finalized_at: h.details?.finalized_at ?? null,
+    project: h.project,
     attendee_count: attendeeCounts[h.id] ?? 0,
     open_action_count: actionCounts[h.id] ?? 0,
   }));
 
-  const upcomingCount = rows.filter((r) => r.meeting_state === "scheduled" || r.meeting_state === "in_progress").length;
+  const upcomingCount = rows.filter((r) => r.event_state === "scheduled" || r.event_state === "live").length;
   const totalOpenActions = rows.reduce((s, r) => s + r.open_action_count, 0);
 
   return (
@@ -128,9 +144,14 @@ export default async function Page() {
         title={t("console.meetings.title", undefined, "Meetings")}
         subtitle={`${rows.length} ${rows.length === 1 ? t("console.meetings.subtitle.meeting", undefined, "meeting") : t("console.meetings.subtitle.meetings", undefined, "meetings")} · ${upcomingCount} ${t("console.meetings.subtitle.upcoming", undefined, "upcoming")} · ${totalOpenActions} ${totalOpenActions === 1 ? t("console.meetings.subtitle.openActionItem", undefined, "open action item") : t("console.meetings.subtitle.openActionItems", undefined, "open action items")}`}
         action={
-          <Button href="/studio/meetings/new" size="sm">
-            {t("console.meetings.newMeeting", undefined, "+ New Meeting")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/studio/schedule" variant="ghost" size="sm">
+              {t("console.meetings.fullSchedule", undefined, "Full Schedule")}
+            </Button>
+            <Button href="/studio/meetings/new" size="sm">
+              {t("console.meetings.newMeeting", undefined, "+ New Meeting")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-5">
@@ -150,7 +171,7 @@ export default async function Page() {
           {t(
             "console.meetings.description",
             undefined,
-            "Project meetings with minutes. Action items added to a meeting auto-create a task for the assignee — closure is bidirectional via meeting_action_items.task_id.",
+            "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
           )}
         </div>
         <DataTable<Row>
@@ -229,9 +250,9 @@ export default async function Page() {
               key: "state",
               header: t("console.meetings.columns.state", undefined, "State"),
               render: (r) => (
-                <Badge variant={toneFor(r.meeting_state)}>{toTitle(r.meeting_state.replace(/_/g, " "))}</Badge>
+                <Badge variant={toneFor(r.event_state)}>{toTitle(r.event_state.replace(/_/g, " "))}</Badge>
               ),
-              accessor: (r) => r.meeting_state,
+              accessor: (r) => r.event_state,
               filterable: true,
               groupable: true,
             },

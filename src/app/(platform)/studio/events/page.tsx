@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
+import { scheduleKindLabel } from "@/lib/schedule/kinds";
 import type { EventRow } from "@/lib/supabase/types";
 import { bulkCancelEvents } from "./actions";
 
@@ -35,7 +36,7 @@ export default async function EventsPage() {
       <div className="page-content">
         <DataTable<EventRow>
           rows={rows}
-          rowHref={(row) => `/studio/events/${row.id}`}
+          rowHref={(row) => (row.event_kind === "meeting" ? `/studio/meetings/${row.id}` : `/studio/events/${row.id}`)}
           emptyLabel={t("console.events.emptyLabel", undefined, "No events scheduled")}
           emptyDescription={t(
             "console.events.emptyDescription",
@@ -61,6 +62,15 @@ export default async function EventsPage() {
               header: t("console.events.columns.name", undefined, "Name"),
               render: (row) => row.name,
               accessor: (row) => row.name,
+            },
+            {
+              key: "kind",
+              header: t("console.events.columns.type", undefined, "Type"),
+              render: (row) => scheduleKindLabel(row.event_kind),
+              accessor: (row) => row.event_kind,
+              filterable: true,
+              groupable: true,
+              className: "text-xs",
             },
             {
               key: "starts",

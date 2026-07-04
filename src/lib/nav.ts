@@ -646,7 +646,7 @@ export const platformNavDomain: NavGroup[] = [
     label: "Messages",
     items: [
       { label: "Events", href: "/studio/events", icon: "CalendarDays", sub: "Public Event Listings" },
-      { label: "Meetings", href: "/studio/meetings", icon: "CalendarDays", sub: "Agendas & Attendance" },
+      { label: "Meetings", href: "/studio/meetings", icon: "CalendarDays", sub: "Schedule Lens · Agendas & Attendance" },
       { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText", sub: "Minutes & Decisions" },
       { label: "Announcements", href: "/studio/comms/announcements", icon: "Megaphone", sub: "Broadcast To The Workforce" },
       { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3", sub: "Quick Votes" },

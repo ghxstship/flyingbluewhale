@@ -9,6 +9,9 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
+// Kit 20 Phase A: a meeting is an events row (event_kind = 'meeting') plus a
+// meeting_event_details sibling carrying the meeting-shaped fields.
+
 const Schema = z.object({
   title: z.string().min(1).max(200),
   project_id: z.string().uuid().optional().or(z.literal("")),
@@ -55,28 +58,49 @@ export async function createMeeting(_: State, fd: FormData): Promise<State> {
     if (!project) return { error: "Project not found in your organization" };
   }
 
-  const code = await nextOrgCode("meetings", session.orgId, "MTG");
+  const code = await nextOrgCode("meeting_event_details", session.orgId, "MTG");
+
+  // events.ends_at is NOT NULL on the unified store — open-ended meetings
+  // default to a one-hour block (same rule the merge migration applied).
+  const startsAt = parsed.data.starts_at;
+  const startsMs = new Date(startsAt).getTime();
+  const endsAt =
+    parsed.data.ends_at || (Number.isNaN(startsMs) ? startsAt : new Date(startsMs + 60 * 60 * 1000).toISOString());
 
   const { data: row, error } = await supabase
-    .from("meetings")
+    .from("events")
     .insert({
       org_id: session.orgId,
       project_id: parsed.data.project_id || null,
-      code,
-      title: parsed.data.title,
-      kind: parsed.data.kind,
-      meeting_state: "scheduled",
-      starts_at: parsed.data.starts_at,
-      ends_at: parsed.data.ends_at || null,
-      location_name: parsed.data.location_name || null,
-      meeting_url: parsed.data.meeting_url || null,
-      agenda_md: parsed.data.agenda_md || null,
+      name: parsed.data.title,
+      event_kind: "meeting",
+      event_state: "scheduled",
+      starts_at: startsAt,
+      ends_at: endsAt,
       created_by: session.userId,
     })
     .select("id")
     .single();
   if (error) return actionFail(error.message, fd);
+  const eventId = (row as { id: string }).id;
+
+  const { error: detailsError } = await supabase.from("meeting_event_details").insert({
+    id: eventId,
+    org_id: session.orgId,
+    code,
+    kind: parsed.data.kind,
+    location_name: parsed.data.location_name || null,
+    meeting_url: parsed.data.meeting_url || null,
+    agenda_md: parsed.data.agenda_md || null,
+  });
+  if (detailsError) {
+    // Compensate: never leave a meeting event without its details sibling.
+    await supabase.from("events").delete().eq("id", eventId).eq("org_id", session.orgId);
+    return actionFail(detailsError.message, fd);
+  }
 
   revalidatePath("/studio/meetings");
-  redirect(`/studio/meetings/${(row as { id: string }).id}`);
+  revalidatePath("/studio/schedule");
+  revalidatePath("/studio/calendar");
+  redirect(`/studio/meetings/${eventId}`);
 }

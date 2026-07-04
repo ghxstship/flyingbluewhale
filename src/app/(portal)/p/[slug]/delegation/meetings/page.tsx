@@ -12,12 +12,16 @@ export const dynamic = "force-dynamic";
 type EventRow = {
   id: string;
   name: string;
+  event_kind: string;
   starts_at: string;
   ends_at: string;
   status: string;
   location: { name: string | null } | null;
 };
 
+// Kit 20 Phase A: meetings live on the unified schedule store as
+// events.event_kind = 'meeting' — the name-pattern heuristic still catches
+// briefing-shaped events that predate the facet.
 const MEETING_PATTERN = /(meeting|chef[- ]de[- ]mission|cdm|technical brief|attaché|attache|delegation brief)/i;
 
 function fmt(iso: string): string {
@@ -53,13 +57,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const since = new Date(Date.now() - 7 * 86_400_000).toISOString();
   const { data } = await supabase
     .from("events")
-    .select("id, name, starts_at, ends_at, status:event_state, location:location_id(name)")
+    .select("id, name, event_kind, starts_at, ends_at, status:event_state, location:location_id(name)")
     .eq("org_id", session.orgId)
     .gte("starts_at", since)
     .order("starts_at", { ascending: true })
     .limit(200);
 
-  const meetings = ((data ?? []) as unknown as EventRow[]).filter((e) => MEETING_PATTERN.test(e.name));
+  const meetings = ((data ?? []) as unknown as EventRow[]).filter(
+    (e) => e.event_kind === "meeting" || MEETING_PATTERN.test(e.name),
+  );
   const upcoming = meetings.filter((m) => new Date(m.starts_at).getTime() >= Date.now());
 
   return (

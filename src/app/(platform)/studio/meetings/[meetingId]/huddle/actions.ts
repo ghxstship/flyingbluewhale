@@ -28,13 +28,12 @@ export async function ensureCall(_: State, fd: FormData): Promise<State> {
   if (!z.string().uuid().safeParse(meetingId).success) return { error: "Invalid meeting" };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
-  // Confirm the meeting belongs to the caller's org.
+  // Confirm the meeting event belongs to the caller's org.
   const { data: meeting } = await supabase
-    .from("meetings")
-    .select("id, title")
+    .from("events")
+    .select("id, name")
     .eq("id", meetingId)
     .eq("org_id", session.orgId)
-    .is("deleted_at", null)
     .maybeSingle();
   if (!meeting) return { error: "Meeting not found in your organization" };
 
@@ -53,7 +52,7 @@ export async function ensureCall(_: State, fd: FormData): Promise<State> {
   const { error } = await supabase.from("video_calls").insert({
     org_id: session.orgId,
     meeting_id: meetingId,
-    title: (meeting as { title?: string }).title ?? "Huddle",
+    title: (meeting as { name?: string }).name ?? "Huddle",
     call_state: "scheduled",
     created_by: session.userId,
   });

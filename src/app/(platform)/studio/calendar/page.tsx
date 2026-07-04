@@ -39,7 +39,7 @@ export default async function CalendarPage() {
     start: e.starts_at,
     end: e.ends_at,
     tone: toneForStatus(e.event_state),
-    href: `/studio/events/${e.id}`,
+    href: e.event_kind === "meeting" ? `/studio/meetings/${e.id}` : `/studio/events/${e.id}`,
   }));
 
   return (
@@ -64,7 +64,9 @@ export default async function CalendarPage() {
               undefined,
               "Events scheduled across your org appear here. Create an event to populate the calendar.",
             )}
-            action={<Button href="/studio/events/new">{t("console.calendar.newEvent", undefined, "+ New Event")}</Button>}
+            action={
+              <Button href="/studio/events/new">{t("console.calendar.newEvent", undefined, "+ New Event")}</Button>
+            }
           />
         ) : (
           <CalendarView events={events} initialMode="month" />

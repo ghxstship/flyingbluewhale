@@ -4,6 +4,8 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { updateMeeting, type State } from "./actions";
@@ -21,8 +23,19 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
   const session = await requireSession();
   const row = await getOrgScoped("events", session.orgId, p.meetingId);
   if (!row) notFound();
-  const r = row as Record<string, unknown>;
-  void r;
+  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const { data: detailsData } = await supabase
+    .from("meeting_event_details")
+    .select("location_name, meeting_url, agenda_md, minutes_md")
+    .eq("id", p.meetingId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  const details = (detailsData ?? null) as {
+    location_name: string | null;
+    meeting_url: string | null;
+    agenda_md: string | null;
+    minutes_md: string | null;
+  } | null;
   const { t } = await getRequestT();
   const action = updateMeeting.bind(null, p.meetingId) as unknown as (state: State, fd: FormData) => Promise<State>;
   const meetingName =
@@ -78,7 +91,12 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.meetings.edit.fields.event_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.event_state ?? ""} required className="ps-input focus-ring w-full">
+            <select
+              name="event_state"
+              defaultValue={row.event_state ?? ""}
+              required
+              className="ps-input focus-ring w-full"
+            >
               <option value="draft">{t("console.meetings.edit.event_state.draft", undefined, "draft")}</option>
               <option value="scheduled">
                 {t("console.meetings.edit.event_state.scheduled", undefined, "scheduled")}
@@ -90,6 +108,45 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
               </option>
             </select>
           </label>
+          {details && (
+            <>
+              <input type="hidden" name="_has_details" value="1" />
+              <Input
+                label={t("console.meetings.edit.fields.location", undefined, "Location")}
+                name="location_name"
+                defaultValue={details.location_name ?? ""}
+                maxLength={200}
+              />
+              <Input
+                label={t("console.meetings.edit.fields.meetingUrl", undefined, "Meeting URL")}
+                name="meeting_url"
+                defaultValue={details.meeting_url ?? ""}
+                maxLength={500}
+              />
+              <label className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-[var(--p-text-2)]">
+                  {t("console.meetings.edit.fields.agenda", undefined, "Agenda (Markdown)")}
+                </span>
+                <textarea
+                  name="agenda_md"
+                  defaultValue={details.agenda_md ?? ""}
+                  rows={6}
+                  className="ps-input focus-ring w-full font-mono text-xs"
+                />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className="text-xs font-medium text-[var(--p-text-2)]">
+                  {t("console.meetings.edit.fields.minutes", undefined, "Minutes (Markdown)")}
+                </span>
+                <textarea
+                  name="minutes_md"
+                  defaultValue={details.minutes_md ?? ""}
+                  rows={8}
+                  className="ps-input focus-ring w-full font-mono text-xs"
+                />
+              </label>
+            </>
+          )}
         </FormShell>
       </div>
     </>

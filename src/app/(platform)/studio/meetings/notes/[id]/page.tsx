@@ -11,12 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { parseActionItems, type NoteState } from "@/lib/meeting-notes";
-import {
-  summarizeNote,
-  createTasksFromActionItems,
-  archiveNote,
-  deleteNote,
-} from "../actions";
+import { summarizeNote, createTasksFromActionItems, archiveNote, deleteNote } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { data } = await supabase
     .from("meeting_notes")
     .select(
-      "id, title, note_state, transcript, summary, action_items, summarized_at, created_at, meeting:meeting_id(id, title)",
+      "id, title, note_state, transcript, summary, action_items, summarized_at, created_at, meeting:meeting_id(id, title:name)",
     )
     .eq("id", id)
     .eq("org_id", session.orgId)
@@ -81,7 +76,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               confirm={
                 note.note_state === "draft"
                   ? undefined
-                  : { body: "Re-run the AI summary? Existing action items keep any task links matched by text.", confirmLabel: "Re-summarize" }
+                  : {
+                      body: "Re-run the AI summary? Existing action items keep any task links matched by text.",
+                      confirmLabel: "Re-summarize",
+                    }
               }
             />
             {note.note_state !== "archived" && (

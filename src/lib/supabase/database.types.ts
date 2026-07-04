@@ -11906,6 +11906,7 @@ export type Database = {
           created_by: string | null
           description: string | null
           ends_at: string
+          event_kind: Database["public"]["Enums"]["schedule_event_kind"]
           event_state: Database["public"]["Enums"]["event_status"]
           id: string
           location_id: string | null
@@ -11920,6 +11921,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           ends_at: string
+          event_kind?: Database["public"]["Enums"]["schedule_event_kind"]
           event_state?: Database["public"]["Enums"]["event_status"]
           id?: string
           location_id?: string | null
@@ -11934,6 +11936,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           ends_at?: string
+          event_kind?: Database["public"]["Enums"]["schedule_event_kind"]
           event_state?: Database["public"]["Enums"]["event_status"]
           id?: string
           location_id?: string | null
@@ -18131,7 +18134,7 @@ export type Database = {
             foreignKeyName: "meeting_action_items_meeting_id_fkey"
             columns: ["meeting_id"]
             isOneToOne: false
-            referencedRelation: "meetings"
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -18198,7 +18201,7 @@ export type Database = {
             foreignKeyName: "meeting_attendees_meeting_id_fkey"
             columns: ["meeting_id"]
             isOneToOne: false
-            referencedRelation: "meetings"
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -18227,6 +18230,69 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meeting_event_details: {
+        Row: {
+          agenda_md: string | null
+          code: string
+          created_at: string
+          finalized_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["meeting_kind"]
+          location_name: string | null
+          location_room: string | null
+          meeting_url: string | null
+          minutes_md: string | null
+          org_id: string
+          recorded_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          agenda_md?: string | null
+          code: string
+          created_at?: string
+          finalized_at?: string | null
+          id: string
+          kind?: Database["public"]["Enums"]["meeting_kind"]
+          location_name?: string | null
+          location_room?: string | null
+          meeting_url?: string | null
+          minutes_md?: string | null
+          org_id: string
+          recorded_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agenda_md?: string | null
+          code?: string
+          created_at?: string
+          finalized_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["meeting_kind"]
+          location_name?: string | null
+          location_room?: string | null
+          meeting_url?: string | null
+          minutes_md?: string | null
+          org_id?: string
+          recorded_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_event_details_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_event_details_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -18282,7 +18348,7 @@ export type Database = {
             foreignKeyName: "meeting_notes_meeting_id_fkey"
             columns: ["meeting_id"]
             isOneToOne: false
-            referencedRelation: "meetings"
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -18290,90 +18356,6 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      meetings: {
-        Row: {
-          agenda_md: string | null
-          code: string
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          ends_at: string | null
-          finalized_at: string | null
-          id: string
-          kind: Database["public"]["Enums"]["meeting_kind"]
-          location_name: string | null
-          location_room: string | null
-          meeting_state: Database["public"]["Enums"]["meeting_state"]
-          meeting_url: string | null
-          minutes_md: string | null
-          org_id: string
-          project_id: string | null
-          recorded_by: string | null
-          starts_at: string
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          agenda_md?: string | null
-          code: string
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          ends_at?: string | null
-          finalized_at?: string | null
-          id?: string
-          kind?: Database["public"]["Enums"]["meeting_kind"]
-          location_name?: string | null
-          location_room?: string | null
-          meeting_state?: Database["public"]["Enums"]["meeting_state"]
-          meeting_url?: string | null
-          minutes_md?: string | null
-          org_id: string
-          project_id?: string | null
-          recorded_by?: string | null
-          starts_at: string
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          agenda_md?: string | null
-          code?: string
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          ends_at?: string | null
-          finalized_at?: string | null
-          id?: string
-          kind?: Database["public"]["Enums"]["meeting_kind"]
-          location_name?: string | null
-          location_room?: string | null
-          meeting_state?: Database["public"]["Enums"]["meeting_state"]
-          meeting_url?: string | null
-          minutes_md?: string | null
-          org_id?: string
-          project_id?: string | null
-          recorded_by?: string | null
-          starts_at?: string
-          title?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "meetings_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "meetings_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -36696,7 +36678,7 @@ export type Database = {
             foreignKeyName: "video_calls_meeting_id_fkey"
             columns: ["meeting_id"]
             isOneToOne: false
-            referencedRelation: "meetings"
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
@@ -42630,7 +42612,6 @@ export type Database = {
         | "design_review"
         | "progress"
         | "other"
-      meeting_state: "scheduled" | "in_progress" | "completed" | "cancelled"
       milestone_visibility: "public" | "partners" | "internal"
       note_state: "draft" | "summarized" | "archived"
       offer_letter_classification: "w2" | "1099" | "agency" | "intern"
@@ -42807,6 +42788,17 @@ export type Database = {
         | "as_soon_as_possible"
         | "as_late_as_possible"
       schedule_dep_type: "fs" | "ss" | "ff" | "sf"
+      schedule_event_kind:
+        | "general"
+        | "load_in"
+        | "load_out"
+        | "delivery"
+        | "sound_check"
+        | "inspection"
+        | "shift"
+        | "meeting"
+        | "training"
+        | "run_of_show"
       settlement_status: "draft" | "reconciling" | "final" | "disputed"
       share_link_role: "viewer" | "commenter"
       sheet_callout_target_type:
@@ -43808,7 +43800,6 @@ export const Constants = {
         "progress",
         "other",
       ],
-      meeting_state: ["scheduled", "in_progress", "completed", "cancelled"],
       milestone_visibility: ["public", "partners", "internal"],
       note_state: ["draft", "summarized", "archived"],
       offer_letter_classification: ["w2", "1099", "agency", "intern"],
@@ -44006,6 +43997,18 @@ export const Constants = {
         "as_late_as_possible",
       ],
       schedule_dep_type: ["fs", "ss", "ff", "sf"],
+      schedule_event_kind: [
+        "general",
+        "load_in",
+        "load_out",
+        "delivery",
+        "sound_check",
+        "inspection",
+        "shift",
+        "meeting",
+        "training",
+        "run_of_show",
+      ],
       settlement_status: ["draft", "reconciling", "final", "disputed"],
       share_link_role: ["viewer", "commenter"],
       sheet_callout_target_type: [

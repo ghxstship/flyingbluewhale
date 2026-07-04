@@ -69,7 +69,6 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
   "lien_waivers",
   "marketplace_listings",
   "master_catalog_items",
-  "meetings",
   "memberships",
   "messages",
   "new_hire_flows",

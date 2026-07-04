@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { deleteMeeting } from "./edit/actions";
@@ -27,6 +29,21 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
   const session = await requireSession();
   const row = await getOrgScoped("events", session.orgId, p.meetingId);
   if (!row) notFound();
+
+  // Meeting lens: hydrate the meeting_event_details sibling (agenda, minutes,
+  // MTG code, meeting URL…) into the record view when this event carries one.
+  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const { data: details } = await supabase
+    .from("meeting_event_details")
+    .select("code, kind, location_name, location_room, meeting_url, agenda_md, minutes_md, finalized_at")
+    .eq("id", p.meetingId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+
+  const record: Record<string, unknown> = {
+    ...(row as Record<string, unknown>),
+    ...((details ?? {}) as Record<string, unknown>),
+  };
   const title = (row as Record<string, unknown>)["name"] as string | undefined;
   return (
     <>
@@ -57,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
       />
       <div className="page-content">
         <dl className="surface grid grid-cols-1 gap-3 p-6 sm:grid-cols-2">
-          {Object.entries(row as Record<string, unknown>).map(([k, v]) => (
+          {Object.entries(record).map(([k, v]) => (
             <div key={k} className="flex flex-col gap-1">
               <dt className="text-xs tracking-wide text-[var(--muted)] uppercase">{k}</dt>
               <dd className="font-mono text-xs break-all">

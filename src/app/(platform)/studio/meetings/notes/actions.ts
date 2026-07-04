@@ -31,11 +31,7 @@ type NoteRow = {
   note_state: string;
 };
 
-async function loadNote(
-  supabase: LooseSupabase,
-  orgId: string,
-  id: string,
-): Promise<NoteRow | null> {
+async function loadNote(supabase: LooseSupabase, orgId: string, id: string): Promise<NoteRow | null> {
   const { data } = await supabase
     .from("meeting_notes")
     .select("id, org_id, transcript, action_items, note_state")
@@ -55,11 +51,11 @@ export async function createNote(_: State, fd: FormData): Promise<State> {
 
   if (parsed.data.meeting_id) {
     const { data: meeting } = await supabase
-      .from("meetings")
+      .from("events")
       .select("id")
       .eq("id", parsed.data.meeting_id)
       .eq("org_id", session.orgId)
-      .is("deleted_at", null)
+      .eq("event_kind", "meeting")
       .maybeSingle();
     if (!meeting) return { error: "Meeting not found in your organization" };
   }
@@ -164,11 +160,7 @@ export async function createTasksFromActionItems(id: string): Promise<void> {
     updated.push({ ...item, task_id: (task as { id: string }).id });
   }
 
-  await supabase
-    .from("meeting_notes")
-    .update({ action_items: updated })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
+  await supabase.from("meeting_notes").update({ action_items: updated }).eq("id", id).eq("org_id", session.orgId);
 
   revalidatePath(`/studio/meetings/notes/${id}`);
   revalidatePath("/studio/meetings/notes");
@@ -178,11 +170,7 @@ export async function archiveNote(id: string): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  await supabase
-    .from("meeting_notes")
-    .update({ note_state: "archived" })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
+  await supabase.from("meeting_notes").update({ note_state: "archived" }).eq("id", id).eq("org_id", session.orgId);
   revalidatePath(`/studio/meetings/notes/${id}`);
   revalidatePath("/studio/meetings/notes");
 }

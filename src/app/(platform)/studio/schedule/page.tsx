@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { CalendarEvent } from "@/components/views/CalendarView";
 import { ScheduleCalendarView } from "./ScheduleCalendarView";
+import { scheduleKindLabel } from "@/lib/schedule/kinds";
 import type { EventRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -42,7 +43,7 @@ export default async function SchedulePage() {
     start: e.starts_at,
     end: e.ends_at,
     tone: toneForStatus(e.event_state),
-    href: `/studio/events/${e.id}`,
+    href: e.event_kind === "meeting" ? `/studio/meetings/${e.id}` : `/studio/events/${e.id}`,
   }));
 
   return (
@@ -69,13 +70,22 @@ export default async function SchedulePage() {
 
         <DataTable<EventRow>
           rows={rows}
-          rowHref={(r) => `/studio/events/${r.id}`}
+          rowHref={(r) => (r.event_kind === "meeting" ? `/studio/meetings/${r.id}` : `/studio/events/${r.id}`)}
           columns={[
             {
               key: "name",
               header: t("console.schedule.col.name", undefined, "Name"),
               render: (r) => r.name,
               accessor: (r) => r.name,
+            },
+            {
+              key: "kind",
+              header: t("console.schedule.col.type", undefined, "Type"),
+              render: (r) => scheduleKindLabel(r.event_kind),
+              accessor: (r) => r.event_kind,
+              filterable: true,
+              groupable: true,
+              className: "text-xs",
             },
             {
               key: "starts",

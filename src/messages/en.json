@@ -11817,7 +11817,11 @@
      "startsAt": "Starts At",
      "endsAt": "Ends At",
      "status": "Status",
-     "event_state": "Status"
+     "event_state": "Status",
+     "location": "Location",
+     "meetingUrl": "Meeting URL",
+     "agenda": "Agenda (Markdown)",
+     "minutes": "Minutes (Markdown)"
     },
     "status": {
      "draft": "draft",
@@ -11907,7 +11911,9 @@
     "people": "People",
     "openActs": "Open Acts",
     "state": "State"
-   }
+   },
+   "description": "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
+   "fullSchedule": "Full Schedule"
   },
   "operations": {
    "dailyLog": {

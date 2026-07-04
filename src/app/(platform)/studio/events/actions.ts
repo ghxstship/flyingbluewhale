@@ -6,12 +6,14 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { SCHEDULE_EVENT_KINDS } from "@/lib/schedule/kinds";
 
 const Schema = z
   .object({
     name: z.string().min(1),
     starts_at: z.string().min(1),
     ends_at: z.string().min(1),
+    event_kind: z.enum(SCHEDULE_EVENT_KINDS).default("general"),
     location_id: z.string().uuid().optional().or(z.literal("")),
     project_id: z.string().uuid().optional().or(z.literal("")),
     description: z.string().optional(),
@@ -59,6 +61,7 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
   const { error } = await supabase.from("events").insert({
     org_id: session.orgId,
     name: parsed.data.name,
+    event_kind: parsed.data.event_kind,
     starts_at: new Date(parsed.data.starts_at).toISOString(),
     ends_at: new Date(parsed.data.ends_at).toISOString(),
     location_id: parsed.data.location_id || null,

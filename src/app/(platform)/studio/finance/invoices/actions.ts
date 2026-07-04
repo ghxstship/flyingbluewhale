@@ -95,7 +95,10 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
   redirect(`/studio/finance/invoices/${data.id}`);
 }
 
-export async function setInvoiceStatusAction(id: string, status: "draft" | "sent" | "paid" | "overdue" | "voided") {
+export async function setInvoiceStatusAction(
+  id: string,
+  status: "draft" | "sent" | "paid" | "overdue" | "voided" | "submitted" | "approved" | "rejected",
+) {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can change invoice status" };
   const supabase = await createClient();

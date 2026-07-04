@@ -1,7 +1,7 @@
 /**
  * Console module create flows — extends console-core-flows.spec.ts with the
  * single-entity "create" interactions across more platform modules: Sales
- * (clients, leads), Operations (events), Production (equipment), Finance
+ * (clients, leads), Operations (events), Production (assets), Finance
  * (expenses), Settings (master catalog). Each test creates a record as the
  * seeded `owner` fixture and asserts the create action redirected off the
  * `/new` form (i.e. the server action ran + persisted), with no error surface.
@@ -109,8 +109,14 @@ test.describe("console modules — create flows", () => {
     });
   });
 
-  test("Production · equipment create", async ({ page }) => {
-    await createInModule(page, "/studio/production/equipment/new", { name: `E2E Equipment ${stamp()}` });
+  test("Production · asset create", async ({ page }) => {
+    // Equipment folded into the unified assets store (kit-20 Phase A);
+    // /studio/production/equipment is now a read-only Fleet lens and the
+    // canonical create form is /studio/assets/new (redirects to /studio/assets/{id}).
+    await createInModule(page, "/studio/assets/new", {
+      display_name: `E2E Asset ${stamp()}`,
+      asset_kind: "e2e-gear",
+    });
   });
 
   test("Finance · expense create", async ({ page }) => {

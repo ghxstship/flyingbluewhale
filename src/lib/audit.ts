@@ -176,6 +176,7 @@ export type AuditAction =
   | "lead.proposal_created"
   | "asset.checked_out"
   | "asset.checked_in"
+  | "asset.state_changed"
   | "submission.offer_created"
   | "goods_receipt.matched_to_po";
 

@@ -40,7 +40,14 @@ export async function createSchedule(_: State, fd: FormData): Promise<State> {
       const { data } = await supabase.from("venues").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();
       exists = !!data;
     } else if (parsed.data.target_kind === "equipment") {
-      const { data } = await supabase.from("equipment").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();
+      // target_kind stays "equipment" (DB check constraint); ids now resolve against the unified assets store.
+      const { data } = await supabase
+        .from("assets")
+        .select("id")
+        .eq("id", id)
+        .eq("org_id", orgId)
+        .is("deleted_at", null)
+        .maybeSingle();
       exists = !!data;
     } else if (parsed.data.target_kind === "credential") {
       const { data } = await supabase.from("credentials").select("id").eq("id", id).eq("org_id", orgId).maybeSingle();

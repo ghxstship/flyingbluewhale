@@ -510,37 +510,7 @@
               ]
             },
             {
-              "path": "/studio/production/equipment",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/equipment/utilization",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/av",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/rentals",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/assets",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/assets/warranties",
               "arch": [
                 "LIST"
               ]
@@ -553,12 +523,6 @@
             },
             {
               "path": "/studio/production/compounds",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/warehouse",
               "arch": [
                 "LIST"
               ]
@@ -1263,12 +1227,6 @@
             },
             {
               "path": "/studio/logistics/freight",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/logistics/warehouse",
               "arch": [
                 "LIST"
               ]

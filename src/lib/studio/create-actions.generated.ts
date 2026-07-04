@@ -431,11 +431,6 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Procurement"
   },
   {
-    "href": "/studio/production/equipment/new",
-    "label": "New Equipment",
-    "group": "Production"
-  },
-  {
     "href": "/studio/production/fabrication/new",
     "label": "New Fabrication",
     "group": "Production"

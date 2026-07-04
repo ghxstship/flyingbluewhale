@@ -14071,7 +14071,7 @@
           "eyebrow": "Production",
           "title": "New Rental"
         },
-        "title": "Rentals",
+        "title": "Sub-Rentals",
         "configureSupabase": "Configure Supabase.",
         "eyebrow": "Production",
         "subtitle": "{count} Active  rentals",
@@ -19698,8 +19698,8 @@
         "dailyRateLabel": "Daily rate (USD)",
         "acquiredAtLabel": "Acquired"
       },
-      "eyebrow": "Asset & Logistics",
-      "title": "Assets",
+      "eyebrow": "Production · Build",
+      "title": "Assets & Inventory",
       "configureSupabase": "Configure Supabase.",
       "warrantiesLink": "Warranties",
       "newAsset": "+ New asset",

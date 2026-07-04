@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1157 · **API route handlers:** 145 · **Distinct nav hrefs:** 494
+**Page routes:** 1153 · **API route handlers:** 145 · **Distinct nav hrefs:** 487
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 768 | 227 | 540 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 764 | 220 | 543 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1157** | **468** | **649** | **0** | **40** |
+| **TOTAL** | | **1153** | **461** | **652** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -93,7 +93,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-768 routes — ● 227 nav · ○ 540 linked · ⚠ 0 orphan
+764 routes — ● 220 nav · ○ 543 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -174,12 +174,17 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>assets</code> · 5 routes</summary>
+<details><summary><code>assets</code> · 10 routes</summary>
 
 ● `/studio/assets`
 ○ `/studio/assets/[id]`
+○ `/studio/assets/[id]/edit`
+○ `/studio/assets/[id]/qr`
 ○ `/studio/assets/new`
-● `/studio/assets/warranties`
+○ `/studio/assets/power`
+○ `/studio/assets/pull-sheets`
+○ `/studio/assets/scans`
+○ `/studio/assets/warranties`
 ○ `/studio/assets/warranties/new`
 
 </details>
@@ -584,7 +589,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/logistics/ratecard/[itemId]/edit`
 ○ `/studio/logistics/ratecard/new`
 ● `/studio/logistics/services`
-● `/studio/logistics/warehouse`
+○ `/studio/logistics/warehouse`
 
 </details>
 
@@ -822,36 +827,27 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>production</code> · 32 routes</summary>
+<details><summary><code>production</code> · 23 routes</summary>
 
 ● `/studio/production`
-● `/studio/production/av`
+○ `/studio/production/av`
 ● `/studio/production/compounds`
 ○ `/studio/production/dispatch`
 ○ `/studio/production/dispatch/[dispatchId]`
 ● `/studio/production/dispatch/live`
-● `/studio/production/equipment`
-○ `/studio/production/equipment/[equipmentId]`
-○ `/studio/production/equipment/[equipmentId]/edit`
-○ `/studio/production/equipment/[equipmentId]/maintenance`
-○ `/studio/production/equipment/[equipmentId]/qr`
-○ `/studio/production/equipment/[equipmentId]/rentals`
-○ `/studio/production/equipment/new`
-● `/studio/production/equipment/utilization`
+○ `/studio/production/equipment`
+○ `/studio/production/equipment/utilization`
 ● `/studio/production/fabrication`
 ○ `/studio/production/fabrication/[orderId]`
 ○ `/studio/production/fabrication/[orderId]/edit`
 ○ `/studio/production/fabrication/new`
 ● `/studio/production/logistics`
-● `/studio/production/rentals`
+○ `/studio/production/rentals`
 ○ `/studio/production/rentals/[rentalId]`
 ○ `/studio/production/rentals/[rentalId]/edit`
 ○ `/studio/production/rentals/availability`
 ○ `/studio/production/rentals/new`
 ● `/studio/production/ros`
-● `/studio/production/warehouse`
-○ `/studio/production/warehouse/inventory`
-○ `/studio/production/warehouse/locations`
 ● `/studio/production/work-orders`
 ○ `/studio/production/work-orders/[id]`
 ○ `/studio/production/work-orders/[id]/thread`

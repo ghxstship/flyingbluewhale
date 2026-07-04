@@ -15,6 +15,19 @@ const NEXT: Record<InvoiceStatus, { next: InvoiceStatus; labelKey: string; label
   },
   sent: { next: "paid", labelKey: "console.finance.invoices.statusControls.markPaid", labelFallback: "Mark Paid" },
   overdue: { next: "paid", labelKey: "console.finance.invoices.statusControls.markPaid", labelFallback: "Mark Paid" },
+  // AP-inbound arc (invoice_status enum gained submitted/approved/rejected):
+  // submitted invoices approve, approved invoices pay; rejected is terminal.
+  submitted: {
+    next: "approved",
+    labelKey: "console.finance.invoices.statusControls.approve",
+    labelFallback: "Approve",
+  },
+  approved: {
+    next: "paid",
+    labelKey: "console.finance.invoices.statusControls.markPaid",
+    labelFallback: "Mark Paid",
+  },
+  rejected: null,
   paid: null,
   voided: null,
 };

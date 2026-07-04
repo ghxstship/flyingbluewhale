@@ -132,11 +132,10 @@
 (platform)/studio/production/rentals/new/page.tsx|New rental|
 (platform)/studio/production/rentals/[rentalId]/page.tsx|Rental|
 (platform)/studio/production/equipment/page.tsx|Equipment|
-(platform)/studio/production/equipment/new/page.tsx|New equipment|
-(platform)/studio/production/equipment/[equipmentId]/page.tsx|Equipment|
-(platform)/studio/production/warehouse/page.tsx|Warehouse|
-(platform)/studio/production/warehouse/inventory/page.tsx|Inventory|
-(platform)/studio/production/warehouse/locations/page.tsx|Warehouse locations|
+# equipment/new, equipment/[equipmentId], and production/warehouse/* were
+# deleted in kit-20 Phase A (equipment folded into the unified assets store;
+# /studio/assets/new is the canonical create form and /studio/production/equipment
+# survives as a read-only Fleet lens). Do not re-stub the deleted routes.
 (platform)/studio/production/logistics/page.tsx|Logistics|
 
 # PLATFORM — people

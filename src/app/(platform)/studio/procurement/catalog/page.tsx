@@ -11,17 +11,17 @@ import { getRequestT } from "@/lib/i18n/request";
 
 type CatalogRow = {
   id: string;
-  name: string;
-  category: string | null;
+  display_name: string;
+  asset_kind: string | null;
   asset_tag: string | null;
-  daily_rate_cents: number | null;
-  equipment_state: string;
+  daily_rate_minor: number | null;
+  state: string;
 };
 
 /**
- * Approved-item catalog = every owned equipment row that's not retired.
- * The `equipment` table doubles as the SKU library — each tag, rate,
- * and category is the same shape a dedicated `catalog_items` table
+ * Approved-item catalog = every owned asset row that's not retired.
+ * The `assets` table doubles as the SKU library — each tag, rate,
+ * and kind is the same shape a dedicated `catalog_items` table
  * would carry.
  */
 export default async function CatalogPage() {
@@ -29,16 +29,16 @@ export default async function CatalogPage() {
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
-    .from("equipment")
-    .select("id, name, category, asset_tag, daily_rate_cents, equipment_state")
+    .from("assets")
+    .select("id, display_name, asset_kind, asset_tag, daily_rate_minor, state")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
-    .neq("equipment_state", "retired")
-    .order("category", { ascending: true, nullsFirst: false })
-    .order("name", { ascending: true });
+    .neq("state", "retired")
+    .order("asset_kind", { ascending: true, nullsFirst: false })
+    .order("display_name", { ascending: true });
   const rows = (data ?? []) as CatalogRow[];
   const uncategorized = t("console.procurement.catalog.uncategorized", undefined, "Uncategorized");
-  const categoryCount = new Set(rows.map((r) => r.category ?? uncategorized)).size;
+  const categoryCount = new Set(rows.map((r) => r.asset_kind ?? uncategorized)).size;
   return (
     <>
       <ModuleHeader
@@ -59,7 +59,7 @@ export default async function CatalogPage() {
         <DataTable<CatalogRow>
           rows={rows}
           tableId="console:procurement:catalog"
-          rowHref={(i) => `/studio/production/equipment/${i.id}`}
+          rowHref={(i) => `/studio/assets/${i.id}`}
           emptyLabel={t("console.procurement.catalog.empty.title", undefined, "No Items in the Catalog Yet")}
           emptyDescription={t(
             "console.procurement.catalog.empty.description",
@@ -67,24 +67,24 @@ export default async function CatalogPage() {
             "Add equipment via the Production module or bulk-import through Settings → Imports. Every non-retired item appears here as a SKU.",
           )}
           emptyAction={
-            <Link className="text-sm text-[var(--p-accent)]" href="/studio/production/equipment">
+            <Link className="text-sm text-[var(--p-accent)]" href="/studio/assets">
               {t("console.procurement.catalog.empty.cta", undefined, "Go to Equipment →")}
             </Link>
           }
           columns={[
             {
-              key: "category",
+              key: "asset_kind",
               header: t("console.procurement.catalog.column.category", undefined, "Category"),
-              render: (i) => i.category ?? uncategorized,
-              accessor: (i) => i.category ?? uncategorized,
+              render: (i) => i.asset_kind ?? uncategorized,
+              accessor: (i) => i.asset_kind ?? uncategorized,
               filterable: true,
               groupable: true,
             },
             {
               key: "name",
               header: t("console.procurement.catalog.column.name", undefined, "Name"),
-              render: (i) => i.name,
-              accessor: (i) => i.name,
+              render: (i) => i.display_name,
+              accessor: (i) => i.display_name,
             },
             {
               key: "asset_tag",
@@ -96,16 +96,16 @@ export default async function CatalogPage() {
             {
               key: "daily_rate",
               header: t("console.procurement.catalog.column.dailyRate", undefined, "Daily rate"),
-              render: (i) => money(i.daily_rate_cents),
-              accessor: (i) => i.daily_rate_cents ?? null,
+              render: (i) => money(i.daily_rate_minor),
+              accessor: (i) => i.daily_rate_minor ?? null,
               mono: true,
               tabular: true,
             },
             {
-              key: "equipment_state",
+              key: "state",
               header: t("console.procurement.catalog.column.equipment_state", undefined, "Status"),
-              render: (i) => toTitle(i.equipment_state),
-              accessor: (i) => i.equipment_state,
+              render: (i) => toTitle(i.state),
+              accessor: (i) => i.state,
               filterable: true,
             },
           ]}

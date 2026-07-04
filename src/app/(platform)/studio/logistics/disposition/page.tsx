@@ -10,19 +10,22 @@ import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
+import { ASSET_DISPOSITION_LABELS } from "@/lib/db/assets";
+import type { AssetDisposition } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 type AssetRow = {
   id: string;
-  name: string;
-  category: string | null;
+  display_name: string;
+  asset_kind: string | null;
   asset_tag: string | null;
-  equipment_state: string;
-  daily_rate_cents: number | null;
+  state: string;
+  disposition: AssetDisposition | null;
+  daily_rate_minor: number | null;
 };
 
-const DISPOSITION_KINDS = ["maintenance", "retired"] as const;
+const DISPOSITION_STATES = ["in_maintenance", "retired"] as const;
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -47,19 +50,24 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
   const [{ data: assetData }, { count: totalAssets }] = await Promise.all([
     supabase
-      .from("equipment")
-      .select("id, name, category, asset_tag, equipment_state, daily_rate_cents")
+      .from("assets")
+      .select("id, display_name, asset_kind, asset_tag, state, disposition, daily_rate_minor")
       .eq("org_id", session.orgId)
-      .in("equipment_state", [...DISPOSITION_KINDS])
-      .order("category", { ascending: true })
+      .is("deleted_at", null)
+      .in("state", [...DISPOSITION_STATES])
+      .order("asset_kind", { ascending: true })
       .limit(500),
-    supabase.from("equipment").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
+    supabase
+      .from("assets")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null),
   ]);
 
   const rows = (assetData ?? []) as AssetRow[];
-  const retired = rows.filter((r) => r.equipment_state === "retired").length;
-  const maintenance = rows.filter((r) => r.equipment_state === "maintenance").length;
-  const totalReplaceable = rows.reduce((s, r) => s + (r.daily_rate_cents != null ? r.daily_rate_cents * 30 * 6 : 0), 0);
+  const retired = rows.filter((r) => r.state === "retired").length;
+  const maintenance = rows.filter((r) => r.state === "in_maintenance").length;
+  const totalReplaceable = rows.reduce((s, r) => s + (r.daily_rate_minor != null ? r.daily_rate_minor * 30 * 6 : 0), 0);
 
   return (
     <>
@@ -78,7 +86,7 @@ export default async function Page() {
           `${rows.length} of ${totalAssets ?? 0} Asset${totalAssets === 1 ? "" : "s"} Pending · ${retired} Retired · ${maintenance} Maintenance`,
         )}
         action={
-          <Button href="/studio/production/equipment" size="sm">
+          <Button href="/studio/assets" size="sm">
             {t("console.logistics.disposition.allEquipment", undefined, "All equipment")}
           </Button>
         }
@@ -102,7 +110,7 @@ export default async function Page() {
 
         <DataTable<AssetRow>
           rows={rows}
-          rowHref={(r) => `/studio/production/equipment/${r.id}`}
+          rowHref={(r) => `/studio/assets/${r.id}`}
           emptyLabel={t("console.logistics.disposition.empty.label", undefined, "Nothing pending disposition")}
           emptyDescription={t(
             "console.logistics.disposition.empty.description",
@@ -113,8 +121,8 @@ export default async function Page() {
             {
               key: "name",
               header: t("console.logistics.disposition.col.asset", undefined, "Asset"),
-              render: (r) => r.name,
-              accessor: (r) => r.name,
+              render: (r) => r.display_name,
+              accessor: (r) => r.display_name,
             },
             {
               key: "tag",
@@ -124,25 +132,33 @@ export default async function Page() {
               accessor: (r) => r.asset_tag ?? null,
             },
             {
-              key: "category",
+              key: "asset_kind",
               header: t("console.logistics.disposition.col.category", undefined, "Category"),
-              render: (r) => r.category ?? "—",
-              accessor: (r) => r.category ?? null,
+              render: (r) => r.asset_kind ?? "—",
+              accessor: (r) => r.asset_kind ?? null,
               filterable: true,
               groupable: true,
             },
             {
               key: "rate",
               header: t("console.logistics.disposition.col.dailyRate", undefined, "Daily Rate"),
-              render: (r) => (r.daily_rate_cents != null ? formatMoney(r.daily_rate_cents) : "—"),
+              render: (r) => (r.daily_rate_minor != null ? formatMoney(r.daily_rate_minor) : "—"),
               className: "font-mono text-xs",
-              accessor: (r) => Number(r.daily_rate_cents ?? 0),
+              accessor: (r) => Number(r.daily_rate_minor ?? 0),
             },
             {
-              key: "equipment_state",
+              key: "state",
               header: t("console.logistics.disposition.col.equipment_state", undefined, "Status"),
-              render: (r) => <Badge variant={toneFor(r.equipment_state)}>{toTitle(r.equipment_state)}</Badge>,
-              accessor: (r) => r.equipment_state ?? null,
+              render: (r) => <Badge variant={toneFor(r.state)}>{toTitle(r.state)}</Badge>,
+              accessor: (r) => r.state ?? null,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "disposition",
+              header: t("console.logistics.disposition.col.disposition", undefined, "Disposition"),
+              render: (r) => (r.disposition ? ASSET_DISPOSITION_LABELS[r.disposition] : "—"),
+              accessor: (r) => r.disposition ?? null,
               filterable: true,
               groupable: true,
             },

@@ -21,7 +21,7 @@ export const TRASH_TYPES: readonly TrashType[] = [
   { table: "vendors", label: "Vendors" },
   { table: "purchase_orders", label: "Purchase Orders" },
   { table: "master_catalog_items", label: "Catalog Items" },
-  { table: "equipment", label: "Equipment" },
+  { table: "assets", label: "Assets" },
   { table: "estimates", label: "Estimates" },
   { table: "contracts", label: "Contracts" },
   { table: "incidents", label: "Incidents" },
@@ -43,6 +43,7 @@ export function isKnownTrashType(table: string | undefined | null): boolean {
 export function trashRowLabel(row: Record<string, unknown>): string {
   const candidates = [
     "name",
+    "display_name",
     "title",
     "label",
     "subject",

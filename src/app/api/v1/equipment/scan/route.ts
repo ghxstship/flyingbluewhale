@@ -4,11 +4,12 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
+import type { UalState } from "@/lib/supabase/types";
 
 /**
  * Asset-tag lookup + check-in/out toggle. Mirrors `/api/v1/scan`
- * for equipment. Given an `assetTag`, fetches the equipment row, toggles
- * its `status` between `available` and `checked_out`.
+ * for equipment. Given an `assetTag`, fetches the asset row, toggles
+ * its `state` between `available` and `in_use`.
  */
 
 const ScanInput = z.object({
@@ -34,8 +35,8 @@ export async function POST(req: NextRequest) {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
     const supabase = await createClient();
     const { data: row } = await supabase
-      .from("equipment")
-      .select("id, name, asset_tag, equipment_state")
+      .from("assets")
+      .select("id, display_name, asset_tag, state")
       .eq("org_id", session.orgId)
       .eq("asset_tag", input.assetTag)
       .is("deleted_at", null)
@@ -43,34 +44,33 @@ export async function POST(req: NextRequest) {
     if (!row) {
       return apiOk({ result: "not_found" as const, assetTag: input.assetTag });
     }
-    // equipment_status enum: available | reserved | in_use | maintenance | retired.
-    // Check-out maps to `in_use`; check-in to `available`.
-    let nextStatus: "available" | "reserved" | "in_use" | "maintenance" | "retired" = row.equipment_state;
+    // ual_state enum. Check-out maps to `in_use`; check-in to `available`.
+    let nextStatus: UalState = row.state;
     if (input.action === "check_in") nextStatus = "available";
     else if (input.action === "check_out") nextStatus = "in_use";
-    else nextStatus = row.equipment_state === "in_use" ? "available" : "in_use";
+    else nextStatus = row.state === "in_use" ? "available" : "in_use";
 
-    // Conditional update on .eq("equipment_state", row.equipment_state) closes the TOCTOU
+    // Conditional update on .eq("state", row.state) closes the TOCTOU
     // between the SELECT above and this write — concurrent scans on the
     // same asset would otherwise overwrite each other's transitions.
     // The org_id filter is defense in depth alongside RLS.
     const { data: updated, error } = await supabase
-      .from("equipment")
-      .update({ equipment_state: nextStatus })
+      .from("assets")
+      .update({ state: nextStatus })
       .eq("id", row.id)
       .eq("org_id", session.orgId)
-      .eq("equipment_state", row.equipment_state)
+      .eq("state", row.state)
       .select("id");
     if (error) return apiError("internal", error.message);
     if (!updated || updated.length === 0) {
-      return apiError("conflict", "Equipment status changed concurrently — re-scan to confirm current state");
+      return apiError("conflict", "Asset state changed concurrently — re-scan to confirm current state");
     }
     return apiOk({
       result: "ok" as const,
       equipmentId: row.id,
-      name: row.name,
+      name: row.display_name,
       assetTag: row.asset_tag,
-      previousStatus: row.equipment_state,
+      previousStatus: row.state,
       equipment_state: nextStatus,
     });
   });

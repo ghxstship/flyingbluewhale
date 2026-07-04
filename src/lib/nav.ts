@@ -315,34 +315,18 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Inventory",
         items: [
-          { label: "Equipment", href: "/studio/production/equipment", icon: "Wrench", sub: "Owned Gear Registry" },
+          // Kit 20 Phase A (C-06): ONE physical-asset noun in the rail. The
+          // old Equipment / Rentals / Assets / Warranty Reminders items are
+          // the second shelf now — the 9-tab family on /studio/assets
+          // (Registry · Fleet · Lots · Pull Sheets · Scan Sessions ·
+          // Sub-Rentals · Warranties · Maintenance · Power Plan). Fleet and
+          // Lots re-expose the legacy equipment/warehouse routes as
+          // asset_class lenses over the unified `assets` store.
           {
-            label: "Equipment Utilization",
-            href: "/studio/production/equipment/utilization",
-            icon: "BarChart3",
-            sub: "Usage & Idle Rates",
-          },
-          {
-            label: "AV Inventory",
-            href: "/studio/production/av",
-            icon: "Speaker",
-            sub: "Audio · Video · Lighting Stock",
-          },
-          {
-            label: "Rentals",
-            href: "/studio/production/rentals",
-            icon: "ArrowLeftRight",
-            sub: "Sub-Rented Gear In & Out",
-          },
-          { label: "Assets", href: "/studio/assets", icon: "Package", sub: "Tracked Asset Registry" },
-          // Disambiguated from Build ▸ Warranties (kit Law #3, one noun one
-          // home): this is the warranty_reminders expiry tracker; the
-          // closeout warranty records live at /studio/warranties.
-          {
-            label: "Warranty Reminders",
-            href: "/studio/assets/warranties",
-            icon: "ShieldCheck",
-            sub: "Asset Warranty Expiry Tracking",
+            label: "Assets & Inventory",
+            href: "/studio/assets",
+            icon: "Package",
+            sub: "One Registry · Gear · Fleet · Lots",
           },
         ],
       },
@@ -356,7 +340,9 @@ export const platformNavDomain: NavGroup[] = [
             sub: "Build Orders Through QC",
           },
           { label: "Compounds", href: "/studio/production/compounds", icon: "Tent", sub: "Site Compound Layouts" },
-          { label: "Yard", href: "/studio/production/warehouse", icon: "Network", sub: "Yard & Staging Inventory" },
+          // "Yard" rail item retired (kit 20 Phase A): the yard/staging
+          // dashboard folded into the unified Assets & Inventory registry —
+          // lots are asset_class='lot' rows on the Lots lens.
           {
             label: "Punch List",
             href: "/studio/punch",
@@ -517,9 +503,8 @@ export const platformNavDomain: NavGroup[] = [
         label: "Sales",
         items: [
           { label: "Sales", href: "/studio/sales", icon: "TrendingUp", sub: "The Sales & CRM Hub" },
-          // One pursuit store (ADR-0014 Phase A amendment, kit §09 C-11):
           // CRM is the canonical merged surface; Pipeline and Leads are
-          // filtered lenses over the same `opportunities` store.
+          // filtered lenses over the one pursuit store (kit §09 C-11).
           { label: "CRM", href: "/studio/crm", icon: "Handshake", sub: "One Pursuit Store · Deals · Leads · RFPs" },
           { label: "Pipeline", href: "/studio/pipeline", icon: "GitBranch", sub: "The Deal Lens · By Stage" },
           { label: "Leads", href: "/studio/leads", icon: "UserPlus", sub: "The Lead Lens · Qualify, Then Convert" },
@@ -885,7 +870,8 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Transport", href: "/studio/transport", icon: "Truck", sub: "Ground Moves & Runs" },
       { label: "Dispatch", href: "/studio/transport/dispatch", icon: "Send", sub: "Driver & Vehicle Dispatch" },
       { label: "Freight", href: "/studio/logistics/freight", icon: "Container", sub: "Carrier Shipments & Customs" },
-      { label: "Warehouse", href: "/studio/logistics/warehouse", icon: "Warehouse", sub: "Storage Lots & Bins" },
+      // Warehouse rail item retired (kit 20 Phase A): /studio/logistics/warehouse
+      // is now the Lots lens of Assets & Inventory, reached via its tab family.
       {
         label: "Disposition",
         href: "/studio/logistics/disposition",
@@ -981,12 +967,7 @@ export const platformNavDomain: NavGroup[] = [
     label: "Messages",
     items: [
       { label: "Events", href: "/studio/events", icon: "CalendarDays", sub: "Public Event Listings" },
-      {
-        label: "Meetings",
-        href: "/studio/meetings",
-        icon: "CalendarDays",
-        sub: "Schedule Lens · Agendas & Attendance",
-      },
+      { label: "Meetings", href: "/studio/meetings", icon: "CalendarDays", sub: "Agendas & Attendance" },
       { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText", sub: "Minutes & Decisions" },
       {
         label: "Announcements",

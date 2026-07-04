@@ -31,7 +31,7 @@ export default async function DispatchPage() {
       .order("starts_at", { ascending: true }),
     supabase
       .from("rentals")
-      .select("id, equipment_id, starts_at, ends_at")
+      .select("id, asset_id, starts_at, ends_at")
       .eq("org_id", session.orgId)
       .gte("ends_at", nowIso)
       .lte("starts_at", in48h),

@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             required
           />
           <Input
-            label={t("console.production.rentals.edit.rateCents", undefined, "Rate — Cents")}
+            label={t("console.production.rentals.edit.rateCents", undefined, "Rate (cents)")}
             name="rate_cents"
             type="number"
             defaultValue={row.rate_cents != null ? String(row.rate_cents) : ""}
@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             {t(
               "console.production.rentals.edit.changeHint",
               undefined,
-              "To change equipment or project, delete and recreate.",
+              "To change the asset or project, delete and recreate.",
             )}
           </p>
         </FormShell>

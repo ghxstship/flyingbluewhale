@@ -9,7 +9,7 @@ import { getRequestT } from "@/lib/i18n/request";
 
 type RentalRow = {
   id: string;
-  equipment_id: string;
+  asset_id: string;
   project_id: string | null;
   starts_at: string;
   ends_at: string;
@@ -32,7 +32,7 @@ export default async function LogisticsPage() {
   const in7d = new Date(now.getTime() + 7 * 864e5).toISOString();
   const { data: rentals } = await supabase
     .from("rentals")
-    .select("id, equipment_id, project_id, starts_at, ends_at, rate_cents, notes")
+    .select("id, asset_id, project_id, starts_at, ends_at, rate_cents, notes")
     .eq("org_id", session.orgId)
     .or(`and(starts_at.lte.${in7d},ends_at.gte.${nowIso})`)
     .order("starts_at", { ascending: true })
@@ -66,7 +66,7 @@ export default async function LogisticsPage() {
           emptyDescription={t(
             "console.production.logistics.empty.description",
             undefined,
-            "Rentals with overlapping windows surface here as load-out / load-in candidates. Seed a rental against an equipment row to see it appear.",
+            "Rentals with overlapping windows surface here as load-out / load-in candidates. Seed a rental against an asset to see it appear.",
           )}
           columns={[
             {

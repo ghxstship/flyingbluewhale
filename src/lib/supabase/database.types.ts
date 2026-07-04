@@ -14,586 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      sub_invoices: {
-        Row: {
-          amount_cents: number
-          approved_at: string | null
-          created_at: string
-          deleted_at: string | null
-          id: string
-          invoice_state: string
-          org_id: string
-          paid_at: string | null
-          submitted_on: string
-          updated_at: string
-          vendor_id: string
-          work_order_id: string
-        }
-        Insert: {
-          amount_cents: number
-          approved_at?: string | null
-          created_at?: string
-          deleted_at?: string | null
-          id?: string
-          invoice_state?: string
-          org_id: string
-          paid_at?: string | null
-          submitted_on?: string
-          updated_at?: string
-          vendor_id: string
-          work_order_id: string
-        }
-        Update: {
-          amount_cents?: number
-          approved_at?: string | null
-          created_at?: string
-          deleted_at?: string | null
-          id?: string
-          invoice_state?: string
-          org_id?: string
-          paid_at?: string | null
-          submitted_on?: string
-          updated_at?: string
-          vendor_id?: string
-          work_order_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sub_invoices_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sub_invoices_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sub_invoices_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sub_invoices_work_order_id_fkey"
-            columns: ["work_order_id"]
-            isOneToOne: false
-            referencedRelation: "public_work_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "sub_invoices_work_order_id_fkey"
-            columns: ["work_order_id"]
-            isOneToOne: false
-            referencedRelation: "work_orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      job_templates: {
-        Row: {
-          created_at: string
-          deleted_at: string | null
-          id: string
-          name: string
-          org_id: string
-          template_state: string
-          trade: string | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          deleted_at?: string | null
-          id?: string
-          name: string
-          org_id: string
-          template_state?: string
-          trade?: string | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          deleted_at?: string | null
-          id?: string
-          name?: string
-          org_id?: string
-          template_state?: string
-          trade?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_templates_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      job_template_steps: {
-        Row: {
-          id: string
-          job_template_id: string
-          label: string
-          position: number
-          requires_photo: boolean
-        }
-        Insert: {
-          id?: string
-          job_template_id: string
-          label: string
-          position?: number
-          requires_photo?: boolean
-        }
-        Update: {
-          id?: string
-          job_template_id?: string
-          label?: string
-          position?: number
-          requires_photo?: boolean
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_template_steps_job_template_id_fkey"
-            columns: ["job_template_id"]
-            isOneToOne: false
-            referencedRelation: "job_templates"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      vendor_scores: {
-        Row: {
-          composite: number | null
-          disputes: number
-          jobs_completed: number
-          on_time_pct: number | null
-          org_id: string
-          quality_avg: number | null
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          composite?: number | null
-          disputes?: number
-          jobs_completed?: number
-          on_time_pct?: number | null
-          org_id: string
-          quality_avg?: number | null
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          composite?: number | null
-          disputes?: number
-          jobs_completed?: number
-          on_time_pct?: number | null
-          org_id?: string
-          quality_avg?: number | null
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vendor_scores_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "vendor_scores_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "vendor_scores_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      work_order_messages: {
-        Row: {
-          attachment_file_id: string | null
-          author_id: string | null
-          body: string
-          created_at: string
-          id: string
-          org_id: string
-          work_order_id: string
-        }
-        Insert: {
-          attachment_file_id?: string | null
-          author_id?: string | null
-          body: string
-          created_at?: string
-          id?: string
-          org_id: string
-          work_order_id: string
-        }
-        Update: {
-          attachment_file_id?: string | null
-          author_id?: string | null
-          body?: string
-          created_at?: string
-          id?: string
-          org_id?: string
-          work_order_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "work_order_messages_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_order_messages_work_order_id_fkey"
-            columns: ["work_order_id"]
-            isOneToOne: false
-            referencedRelation: "public_work_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_order_messages_work_order_id_fkey"
-            columns: ["work_order_id"]
-            isOneToOne: false
-            referencedRelation: "work_orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      trade_requirements: {
-        Row: {
-          created_at: string
-          doc_kind: string
-          id: string
-          org_id: string
-          trade: string
-        }
-        Insert: {
-          created_at?: string
-          doc_kind: string
-          id?: string
-          org_id: string
-          trade: string
-        }
-        Update: {
-          created_at?: string
-          doc_kind?: string
-          id?: string
-          org_id?: string
-          trade?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "trade_requirements_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      compliance_documents: {
-        Row: {
-          created_at: string
-          deleted_at: string | null
-          doc_kind: string
-          expires_on: string | null
-          file_id: string | null
-          id: string
-          issued_by: string | null
-          org_id: string
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          created_at?: string
-          deleted_at?: string | null
-          doc_kind: string
-          expires_on?: string | null
-          file_id?: string | null
-          id?: string
-          issued_by?: string | null
-          org_id: string
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          created_at?: string
-          deleted_at?: string | null
-          doc_kind?: string
-          expires_on?: string | null
-          file_id?: string | null
-          id?: string
-          issued_by?: string | null
-          org_id?: string
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "compliance_documents_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "compliance_documents_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "compliance_documents_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      compliance_document_states: {
-        Row: {
-          compliance_document_id: string
-          state: string
-        }
-        Insert: {
-          compliance_document_id: string
-          state: string
-        }
-        Update: {
-          compliance_document_id?: string
-          state?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "compliance_document_states_compliance_document_id_fkey"
-            columns: ["compliance_document_id"]
-            isOneToOne: false
-            referencedRelation: "compliance_documents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "compliance_document_states_compliance_document_id_fkey"
-            columns: ["compliance_document_id"]
-            isOneToOne: false
-            referencedRelation: "v_compliance_doc_status"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      work_orders: {
-        Row: {
-          awarded_vendor_id: string | null
-          budget_guide_cents: number | null
-          created_at: string
-          created_by: string | null
-          deleted_at: string | null
-          dispatch_mode: string
-          end_date: string | null
-          id: string
-          org_id: string
-          project_id: string | null
-          site_address: string | null
-          start_date: string | null
-          title: string
-          trade: string
-          updated_at: string
-          visibility: string
-          work_order_state: string
-        }
-        Insert: {
-          awarded_vendor_id?: string | null
-          budget_guide_cents?: number | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          dispatch_mode?: string
-          end_date?: string | null
-          id?: string
-          org_id: string
-          project_id?: string | null
-          site_address?: string | null
-          start_date?: string | null
-          title: string
-          trade: string
-          updated_at?: string
-          visibility?: string
-          work_order_state?: string
-        }
-        Update: {
-          awarded_vendor_id?: string | null
-          budget_guide_cents?: number | null
-          created_at?: string
-          created_by?: string | null
-          deleted_at?: string | null
-          dispatch_mode?: string
-          end_date?: string | null
-          id?: string
-          org_id?: string
-          project_id?: string | null
-          site_address?: string | null
-          start_date?: string | null
-          title?: string
-          trade?: string
-          updated_at?: string
-          visibility?: string
-          work_order_state?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "work_orders_awarded_vendor_id_fkey"
-            columns: ["awarded_vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_orders_awarded_vendor_id_fkey"
-            columns: ["awarded_vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_orders_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_orders_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      work_order_bids: {
-        Row: {
-          amount_cents: number
-          created_at: string
-          id: string
-          note: string | null
-          org_id: string
-          vendor_id: string
-          work_order_id: string
-        }
-        Insert: {
-          amount_cents: number
-          created_at?: string
-          id?: string
-          note?: string | null
-          org_id: string
-          vendor_id: string
-          work_order_id: string
-        }
-        Update: {
-          amount_cents?: number
-          created_at?: string
-          id?: string
-          note?: string | null
-          org_id?: string
-          vendor_id?: string
-          work_order_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "work_order_bids_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_order_bids_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_order_bids_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_order_bids_work_order_id_fkey"
-            columns: ["work_order_id"]
-            isOneToOne: false
-            referencedRelation: "work_orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      work_order_change_orders: {
-        Row: {
-          amount_cents: number
-          change_order_state: string
-          created_at: string
-          id: string
-          org_id: string
-          reason: string
-          updated_at: string
-          work_order_id: string
-        }
-        Insert: {
-          amount_cents: number
-          change_order_state?: string
-          created_at?: string
-          id?: string
-          org_id: string
-          reason: string
-          updated_at?: string
-          work_order_id: string
-        }
-        Update: {
-          amount_cents?: number
-          change_order_state?: string
-          created_at?: string
-          id?: string
-          org_id?: string
-          reason?: string
-          updated_at?: string
-          work_order_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "work_order_change_orders_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "work_order_change_orders_work_order_id_fkey"
-            columns: ["work_order_id"]
-            isOneToOne: false
-            referencedRelation: "work_orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
       access_scans: {
         Row: {
           accreditation_id: string | null
@@ -2930,6 +2350,13 @@ export type Database = {
             referencedRelation: "assets"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "asset_depreciation_schedule_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
+          },
         ]
       }
       asset_identifiers: {
@@ -2958,6 +2385,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_identifiers_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
         ]
       }
@@ -2990,6 +2424,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_locations_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: true
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "asset_locations_custodian_party_id_fkey"
@@ -3055,6 +2496,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_maintenance_history_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "asset_maintenance_history_performed_by_fkey"
@@ -3129,6 +2577,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "asset_movements_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
+          },
+          {
             foreignKeyName: "asset_movements_from_custodian_id_fkey"
             columns: ["from_custodian_id"]
             isOneToOne: false
@@ -3189,11 +2644,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "asset_relationships_child_asset_id_fkey"
+            columns: ["child_asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
+          },
+          {
             foreignKeyName: "asset_relationships_parent_asset_id_fkey"
             columns: ["parent_asset_id"]
             isOneToOne: false
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_relationships_parent_asset_id_fkey"
+            columns: ["parent_asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
         ]
       }
@@ -3202,66 +2671,94 @@ export type Database = {
           acquired_at: string
           acquisition_cost_minor: number | null
           acquisition_currency: string | null
+          asset_class: Database["public"]["Enums"]["asset_class"]
           asset_kind: string
           asset_tag: string | null
           category_code: number | null
           created_at: string
           daily_rate_currency: string | null
           daily_rate_minor: number | null
+          deleted_at: string | null
           display_name: string
+          disposition: Database["public"]["Enums"]["asset_disposition"] | null
           id: string
+          location_id: string | null
           metadata: Json
+          notes: string | null
           org_id: string
           ownership: string
+          qty: number
           retired_at: string | null
           serial: string | null
           state: Database["public"]["Enums"]["ual_state"]
           updated_at: string
           xpms_atom_id: string | null
+          xtc_code: number | null
         }
         Insert: {
           acquired_at?: string
           acquisition_cost_minor?: number | null
           acquisition_currency?: string | null
+          asset_class?: Database["public"]["Enums"]["asset_class"]
           asset_kind: string
           asset_tag?: string | null
           category_code?: number | null
           created_at?: string
           daily_rate_currency?: string | null
           daily_rate_minor?: number | null
+          deleted_at?: string | null
           display_name: string
+          disposition?: Database["public"]["Enums"]["asset_disposition"] | null
           id?: string
+          location_id?: string | null
           metadata?: Json
+          notes?: string | null
           org_id: string
           ownership?: string
+          qty?: number
           retired_at?: string | null
           serial?: string | null
           state?: Database["public"]["Enums"]["ual_state"]
           updated_at?: string
           xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Update: {
           acquired_at?: string
           acquisition_cost_minor?: number | null
           acquisition_currency?: string | null
+          asset_class?: Database["public"]["Enums"]["asset_class"]
           asset_kind?: string
           asset_tag?: string | null
           category_code?: number | null
           created_at?: string
           daily_rate_currency?: string | null
           daily_rate_minor?: number | null
+          deleted_at?: string | null
           display_name?: string
+          disposition?: Database["public"]["Enums"]["asset_disposition"] | null
           id?: string
+          location_id?: string | null
           metadata?: Json
+          notes?: string | null
           org_id?: string
           ownership?: string
+          qty?: number
           retired_at?: string | null
           serial?: string | null
           state?: Database["public"]["Enums"]["ual_state"]
           updated_at?: string
           xpms_atom_id?: string | null
+          xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "assets_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "assets_org_id_fkey"
             columns: ["org_id"]
@@ -6407,6 +5904,97 @@ export type Database = {
           },
         ]
       }
+      compliance_document_states: {
+        Row: {
+          compliance_document_id: string
+          state: string
+        }
+        Insert: {
+          compliance_document_id: string
+          state: string
+        }
+        Update: {
+          compliance_document_id?: string
+          state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_document_states_compliance_document_id_fkey"
+            columns: ["compliance_document_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_document_states_compliance_document_id_fkey"
+            columns: ["compliance_document_id"]
+            isOneToOne: false
+            referencedRelation: "v_compliance_doc_status"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_documents: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          doc_kind: string
+          expires_on: string | null
+          file_id: string | null
+          id: string
+          issued_by: string | null
+          org_id: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          doc_kind: string
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string
+          issued_by?: string | null
+          org_id: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          doc_kind?: string
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string
+          issued_by?: string | null
+          org_id?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_documents_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_findings: {
         Row: {
           created_at: string
@@ -9285,15 +8873,15 @@ export type Database = {
             foreignKeyName: "daily_log_equipment_equipment_id_fkey"
             columns: ["equipment_id"]
             isOneToOne: false
-            referencedRelation: "equipment"
+            referencedRelation: "assets"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "daily_log_equipment_equipment_id_fkey"
             columns: ["equipment_id"]
             isOneToOne: false
-            referencedRelation: "v_equipment_utilization"
-            referencedColumns: ["equipment_id"]
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "daily_log_equipment_org_id_fkey"
@@ -10904,106 +10492,6 @@ export type Database = {
           },
         ]
       }
-      equipment: {
-        Row: {
-          asset_tag: string | null
-          category: string | null
-          created_at: string
-          daily_rate_cents: number | null
-          daily_rate_currency: string
-          deleted_at: string | null
-          equipment_state: Database["public"]["Enums"]["equipment_status"]
-          id: string
-          location_id: string | null
-          name: string
-          notes: string | null
-          org_id: string
-          serial: string | null
-          updated_at: string
-          xpms_atom_id: string | null
-          xtc_code: number | null
-        }
-        Insert: {
-          asset_tag?: string | null
-          category?: string | null
-          created_at?: string
-          daily_rate_cents?: number | null
-          daily_rate_currency?: string
-          deleted_at?: string | null
-          equipment_state?: Database["public"]["Enums"]["equipment_status"]
-          id?: string
-          location_id?: string | null
-          name: string
-          notes?: string | null
-          org_id: string
-          serial?: string | null
-          updated_at?: string
-          xpms_atom_id?: string | null
-          xtc_code?: number | null
-        }
-        Update: {
-          asset_tag?: string | null
-          category?: string | null
-          created_at?: string
-          daily_rate_cents?: number | null
-          daily_rate_currency?: string
-          deleted_at?: string | null
-          equipment_state?: Database["public"]["Enums"]["equipment_status"]
-          id?: string
-          location_id?: string | null
-          name?: string
-          notes?: string | null
-          org_id?: string
-          serial?: string | null
-          updated_at?: string
-          xpms_atom_id?: string | null
-          xtc_code?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "equipment_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "equipment_xpms_atom_id_fkey"
-            columns: ["xpms_atom_id"]
-            isOneToOne: false
-            referencedRelation: "v_xpms_atom_rollup"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "equipment_xpms_atom_id_fkey"
-            columns: ["xpms_atom_id"]
-            isOneToOne: false
-            referencedRelation: "v_xpms_atom_rollup_recursive"
-            referencedColumns: ["atom_id"]
-          },
-          {
-            foreignKeyName: "equipment_xpms_atom_id_fkey"
-            columns: ["xpms_atom_id"]
-            isOneToOne: false
-            referencedRelation: "xpms_atoms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "equipment_xtc_code_fkey"
-            columns: ["xtc_code"]
-            isOneToOne: false
-            referencedRelation: "v_xtc_codebook"
-            referencedColumns: ["line_code"]
-          },
-          {
-            foreignKeyName: "equipment_xtc_code_fkey"
-            columns: ["xtc_code"]
-            isOneToOne: false
-            referencedRelation: "xtc_codes"
-            referencedColumns: ["code"]
-          },
-        ]
-      }
       estimate_lines: {
         Row: {
           cost_code_id: string | null
@@ -11671,6 +11159,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_resources_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "event_resources_event_id_fkey"
@@ -13072,6 +12567,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goods_receipt_lines_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "goods_receipt_lines_receipt_id_fkey"
@@ -15079,6 +14581,7 @@ export type Database = {
       invoices: {
         Row: {
           amount_cents: number
+          approved_at: string | null
           base_amount_cents: number | null
           base_currency: string | null
           client_id: string | null
@@ -15092,17 +14595,24 @@ export type Database = {
           id: string
           invoice_state: Database["public"]["Enums"]["invoice_status"]
           issued_at: string | null
+          lien_waiver_id: string | null
           notes: string | null
           number: string
           org_id: string
           paid_at: string | null
           project_id: string | null
+          purchase_order_id: string | null
+          retainage_pct: number
+          source: string
           stripe_payment_intent: string | null
           title: string
           updated_at: string
+          vendor_id: string | null
+          work_order_id: string | null
         }
         Insert: {
           amount_cents?: number
+          approved_at?: string | null
           base_amount_cents?: number | null
           base_currency?: string | null
           client_id?: string | null
@@ -15116,17 +14626,24 @@ export type Database = {
           id?: string
           invoice_state?: Database["public"]["Enums"]["invoice_status"]
           issued_at?: string | null
+          lien_waiver_id?: string | null
           notes?: string | null
           number: string
           org_id: string
           paid_at?: string | null
           project_id?: string | null
+          purchase_order_id?: string | null
+          retainage_pct?: number
+          source?: string
           stripe_payment_intent?: string | null
           title: string
           updated_at?: string
+          vendor_id?: string | null
+          work_order_id?: string | null
         }
         Update: {
           amount_cents?: number
+          approved_at?: string | null
           base_amount_cents?: number | null
           base_currency?: string | null
           client_id?: string | null
@@ -15140,14 +14657,20 @@ export type Database = {
           id?: string
           invoice_state?: Database["public"]["Enums"]["invoice_status"]
           issued_at?: string | null
+          lien_waiver_id?: string | null
           notes?: string | null
           number?: string
           org_id?: string
           paid_at?: string | null
           project_id?: string | null
+          purchase_order_id?: string | null
+          retainage_pct?: number
+          source?: string
           stripe_payment_intent?: string | null
           title?: string
           updated_at?: string
+          vendor_id?: string | null
+          work_order_id?: string | null
         }
         Relationships: [
           {
@@ -15172,6 +14695,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "invoices_lien_waiver_id_fkey"
+            columns: ["lien_waiver_id"]
+            isOneToOne: false
+            referencedRelation: "lien_waivers"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "invoices_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -15183,6 +14713,41 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_purchase_order_id_fkey"
+            columns: ["purchase_order_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
             referencedColumns: ["id"]
           },
         ]
@@ -15800,6 +15365,79 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      job_template_steps: {
+        Row: {
+          id: string
+          job_template_id: string
+          label: string
+          position: number
+          requires_photo: boolean
+        }
+        Insert: {
+          id?: string
+          job_template_id: string
+          label: string
+          position?: number
+          requires_photo?: boolean
+        }
+        Update: {
+          id?: string
+          job_template_id?: string
+          label?: string
+          position?: number
+          requires_photo?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_template_steps_job_template_id_fkey"
+            columns: ["job_template_id"]
+            isOneToOne: false
+            referencedRelation: "job_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_templates: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          name: string
+          org_id: string
+          template_state: string
+          trade: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          name: string
+          org_id: string
+          template_state?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          template_state?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_templates_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       journal_entries: {
         Row: {
@@ -22268,7 +21906,8 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          invoice_tx_id: string
+          invoice_id: string | null
+          invoice_tx_id: string | null
           match_status: string
           org_id: string
           po_id: string
@@ -22280,7 +21919,8 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          invoice_tx_id: string
+          invoice_id?: string | null
+          invoice_tx_id?: string | null
           match_status: string
           org_id: string
           po_id: string
@@ -22292,7 +21932,8 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
-          invoice_tx_id?: string
+          invoice_id?: string | null
+          invoice_tx_id?: string | null
           match_status?: string
           org_id?: string
           po_id?: string
@@ -22302,6 +21943,20 @@ export type Database = {
           variance_minor?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "po_invoice_matches_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "po_invoice_matches_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "v_consolidated_ar"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "po_invoice_matches_invoice_tx_id_fkey"
             columns: ["invoice_tx_id"]
@@ -25700,9 +25355,9 @@ export type Database = {
       }
       rentals: {
         Row: {
+          asset_id: string
           created_at: string
           ends_at: string
-          equipment_id: string
           id: string
           notes: string | null
           org_id: string
@@ -25714,9 +25369,9 @@ export type Database = {
           xpms_atom_id: string | null
         }
         Insert: {
+          asset_id: string
           created_at?: string
           ends_at: string
-          equipment_id: string
           id?: string
           notes?: string | null
           org_id: string
@@ -25728,9 +25383,9 @@ export type Database = {
           xpms_atom_id?: string | null
         }
         Update: {
+          asset_id?: string
           created_at?: string
           ends_at?: string
-          equipment_id?: string
           id?: string
           notes?: string | null
           org_id?: string
@@ -25743,18 +25398,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "rentals_equipment_id_fkey"
-            columns: ["equipment_id"]
+            foreignKeyName: "rentals_asset_id_fkey"
+            columns: ["asset_id"]
             isOneToOne: false
-            referencedRelation: "equipment"
+            referencedRelation: "assets"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "rentals_equipment_id_fkey"
-            columns: ["equipment_id"]
+            foreignKeyName: "rentals_asset_id_fkey"
+            columns: ["asset_id"]
             isOneToOne: false
-            referencedRelation: "v_equipment_utilization"
-            referencedColumns: ["equipment_id"]
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "rentals_org_id_fkey"
@@ -31172,6 +30827,93 @@ export type Database = {
         }
         Relationships: []
       }
+      // SPLICE (kit-20 Phase A parallel-session note): sub_invoices was
+      // merged into invoices(source) by the concurrent AP-merge session
+      // (migrations 20260703170000/170100/171500) whose code rewire has
+      // not landed on main yet. Block retained from the pre-drop generated
+      // file so main compiles; the next regen after that session lands
+      // should drop it.
+      sub_invoices: {
+        Row: {
+          amount_cents: number
+          approved_at: string | null
+          created_at: string
+          deleted_at: string | null
+          id: string
+          invoice_state: string
+          org_id: string
+          paid_at: string | null
+          submitted_on: string
+          updated_at: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Insert: {
+          amount_cents: number
+          approved_at?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          invoice_state?: string
+          org_id: string
+          paid_at?: string | null
+          submitted_on?: string
+          updated_at?: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Update: {
+          amount_cents?: number
+          approved_at?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          invoice_state?: string
+          org_id?: string
+          paid_at?: string | null
+          submitted_on?: string
+          updated_at?: string
+          vendor_id?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sub_invoices_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sub_invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       submittal_review_chain_steps: {
         Row: {
           chain_id: string
@@ -33941,6 +33683,38 @@ export type Database = {
           },
         ]
       }
+      trade_requirements: {
+        Row: {
+          created_at: string
+          doc_kind: string
+          id: string
+          org_id: string
+          trade: string
+        }
+        Insert: {
+          created_at?: string
+          doc_kind: string
+          id?: string
+          org_id: string
+          trade: string
+        }
+        Update: {
+          created_at?: string
+          doc_kind?: string
+          id?: string
+          org_id?: string
+          trade?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trade_requirements_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trademarks: {
         Row: {
           created_at: string
@@ -34817,6 +34591,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "assets"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uqm_incidents_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "uqm_incidents_org_id_fkey"
@@ -35833,6 +35614,61 @@ export type Database = {
           },
           {
             foreignKeyName: "vendor_scorecards_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_scores: {
+        Row: {
+          composite: number | null
+          disputes: number
+          jobs_completed: number
+          on_time_pct: number | null
+          org_id: string
+          quality_avg: number | null
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          composite?: number | null
+          disputes?: number
+          jobs_completed?: number
+          on_time_pct?: number | null
+          org_id: string
+          quality_avg?: number | null
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          composite?: number | null
+          disputes?: number
+          jobs_completed?: number
+          on_time_pct?: number | null
+          org_id?: string
+          quality_avg?: number | null
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_scores_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scores_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_scores_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
@@ -36935,6 +36771,7 @@ export type Database = {
       }
       warranties: {
         Row: {
+          asset_id: string | null
           coverage_summary_md: string | null
           created_at: string
           created_by: string | null
@@ -36942,7 +36779,6 @@ export type Database = {
           document_path: string | null
           duration_months: number | null
           end_date: string
-          equipment_id: string | null
           id: string
           name: string
           notes: string | null
@@ -36958,6 +36794,7 @@ export type Database = {
           warranty_state: Database["public"]["Enums"]["warranty_state"]
         }
         Insert: {
+          asset_id?: string | null
           coverage_summary_md?: string | null
           created_at?: string
           created_by?: string | null
@@ -36965,7 +36802,6 @@ export type Database = {
           document_path?: string | null
           duration_months?: number | null
           end_date: string
-          equipment_id?: string | null
           id?: string
           name: string
           notes?: string | null
@@ -36981,6 +36817,7 @@ export type Database = {
           warranty_state?: Database["public"]["Enums"]["warranty_state"]
         }
         Update: {
+          asset_id?: string | null
           coverage_summary_md?: string | null
           created_at?: string
           created_by?: string | null
@@ -36988,7 +36825,6 @@ export type Database = {
           document_path?: string | null
           duration_months?: number | null
           end_date?: string
-          equipment_id?: string | null
           id?: string
           name?: string
           notes?: string | null
@@ -37005,18 +36841,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "warranties_equipment_id_fkey"
-            columns: ["equipment_id"]
+            foreignKeyName: "warranties_asset_id_fkey"
+            columns: ["asset_id"]
             isOneToOne: false
-            referencedRelation: "equipment"
+            referencedRelation: "assets"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "warranties_equipment_id_fkey"
-            columns: ["equipment_id"]
+            foreignKeyName: "warranties_asset_id_fkey"
+            columns: ["asset_id"]
             isOneToOne: false
-            referencedRelation: "v_equipment_utilization"
-            referencedColumns: ["equipment_id"]
+            referencedRelation: "v_asset_utilization"
+            referencedColumns: ["asset_id"]
           },
           {
             foreignKeyName: "warranties_org_id_fkey"
@@ -37747,6 +37583,72 @@ export type Database = {
           },
         ]
       }
+      work_order_bids: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          id: string
+          note: string | null
+          org_id: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          org_id: string
+          vendor_id: string
+          work_order_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          id?: string
+          note?: string | null
+          org_id?: string
+          vendor_id?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_order_bids_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_bids_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       work_order_broadcast_invites: {
         Row: {
           broadcast_id: string
@@ -37915,6 +37817,202 @@ export type Database = {
             columns: ["requisition_id"]
             isOneToOne: false
             referencedRelation: "requisitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_order_change_orders: {
+        Row: {
+          amount_cents: number
+          change_order_state: string
+          created_at: string
+          id: string
+          org_id: string
+          reason: string
+          updated_at: string
+          work_order_id: string
+        }
+        Insert: {
+          amount_cents: number
+          change_order_state?: string
+          created_at?: string
+          id?: string
+          org_id: string
+          reason: string
+          updated_at?: string
+          work_order_id: string
+        }
+        Update: {
+          amount_cents?: number
+          change_order_state?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          reason?: string
+          updated_at?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_order_change_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_change_orders_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_change_orders_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_order_messages: {
+        Row: {
+          attachment_file_id: string | null
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          org_id: string
+          work_order_id: string
+        }
+        Insert: {
+          attachment_file_id?: string | null
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          org_id: string
+          work_order_id: string
+        }
+        Update: {
+          attachment_file_id?: string | null
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          work_order_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_order_messages_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_messages_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "public_work_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_order_messages_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_orders: {
+        Row: {
+          awarded_vendor_id: string | null
+          budget_guide_cents: number | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          dispatch_mode: string
+          end_date: string | null
+          id: string
+          org_id: string
+          project_id: string | null
+          site_address: string | null
+          start_date: string | null
+          title: string
+          trade: string
+          updated_at: string
+          visibility: string
+          work_order_state: string
+        }
+        Insert: {
+          awarded_vendor_id?: string | null
+          budget_guide_cents?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          dispatch_mode?: string
+          end_date?: string | null
+          id?: string
+          org_id: string
+          project_id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title: string
+          trade: string
+          updated_at?: string
+          visibility?: string
+          work_order_state?: string
+        }
+        Update: {
+          awarded_vendor_id?: string | null
+          budget_guide_cents?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          dispatch_mode?: string
+          end_date?: string | null
+          id?: string
+          org_id?: string
+          project_id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title?: string
+          trade?: string
+          updated_at?: string
+          visibility?: string
+          work_order_state?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_orders_awarded_vendor_id_fkey"
+            columns: ["awarded_vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_awarded_vendor_id_fkey"
+            columns: ["awarded_vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_orders_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -39046,131 +39144,6 @@ export type Database = {
       }
     }
     Views: {
-      public_work_orders: {
-        Row: {
-          budget_guide_cents: number | null
-          created_at: string | null
-          dispatch_mode: string | null
-          end_date: string | null
-          id: string | null
-          site_address: string | null
-          start_date: string | null
-          title: string | null
-          trade: string | null
-          work_order_state: string | null
-        }
-        Insert: {
-          budget_guide_cents?: number | null
-          created_at?: string | null
-          dispatch_mode?: string | null
-          end_date?: string | null
-          id?: string | null
-          site_address?: string | null
-          start_date?: string | null
-          title?: string | null
-          trade?: string | null
-          work_order_state?: string | null
-        }
-        Update: {
-          budget_guide_cents?: number | null
-          created_at?: string | null
-          dispatch_mode?: string | null
-          end_date?: string | null
-          id?: string | null
-          site_address?: string | null
-          start_date?: string | null
-          title?: string | null
-          trade?: string | null
-          work_order_state?: string | null
-        }
-        Relationships: []
-      },
-      v_compliance_doc_status: {
-        Row: {
-          doc_kind: string | null
-          doc_status: string | null
-          expires_on: string | null
-          file_id: string | null
-          id: string | null
-          org_id: string | null
-          remaining_pct: number | null
-          vendor_id: string | null
-        }
-        Insert: {
-          doc_kind?: string | null
-          doc_status?: never
-          expires_on?: string | null
-          file_id?: string | null
-          id?: string | null
-          org_id?: string | null
-          remaining_pct?: never
-          vendor_id?: string | null
-        }
-        Update: {
-          doc_kind?: string | null
-          doc_status?: never
-          expires_on?: string | null
-          file_id?: string | null
-          id?: string | null
-          org_id?: string | null
-          remaining_pct?: never
-          vendor_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "compliance_documents_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "compliance_documents_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "compliance_documents_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
-      v_sub_eligibility: {
-        Row: {
-          org_id: string | null
-          trade: string | null
-          vendor_id: string | null
-          verdict: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "compliance_documents_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "public_vendor_directory"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "compliance_documents_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "trade_requirements_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      },
       audit_log: {
         Row: {
           action: string | null
@@ -40225,6 +40198,45 @@ export type Database = {
         }
         Relationships: []
       }
+      public_work_orders: {
+        Row: {
+          budget_guide_cents: number | null
+          created_at: string | null
+          dispatch_mode: string | null
+          end_date: string | null
+          id: string | null
+          site_address: string | null
+          start_date: string | null
+          title: string | null
+          trade: string | null
+          work_order_state: string | null
+        }
+        Insert: {
+          budget_guide_cents?: number | null
+          created_at?: string | null
+          dispatch_mode?: string | null
+          end_date?: string | null
+          id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title?: string | null
+          trade?: string | null
+          work_order_state?: string | null
+        }
+        Update: {
+          budget_guide_cents?: number | null
+          created_at?: string | null
+          dispatch_mode?: string | null
+          end_date?: string | null
+          id?: string | null
+          site_address?: string | null
+          start_date?: string | null
+          title?: string | null
+          trade?: string | null
+          work_order_state?: string | null
+        }
+        Relationships: []
+      }
       tour_p_and_l: {
         Row: {
           agent_commission_cents: number | null
@@ -40257,6 +40269,36 @@ export type Database = {
           title: string | null
         }
         Relationships: []
+      }
+      v_asset_utilization: {
+        Row: {
+          asset_class: Database["public"]["Enums"]["asset_class"] | null
+          asset_id: string | null
+          asset_kind: string | null
+          asset_tag: string | null
+          daily_rate_cents: number | null
+          daily_rate_currency: string | null
+          idle_revenue_30d_cents: number | null
+          last_active_at: string | null
+          movements_30d: number | null
+          movements_90d: number | null
+          name: string | null
+          org_id: string | null
+          reserved_days_30d: number | null
+          reserved_days_90d: number | null
+          state: Database["public"]["Enums"]["ual_state"] | null
+          utilization_pct_30d: number | null
+          utilization_pct_90d: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       v_budget_health: {
         Row: {
@@ -40342,6 +40384,61 @@ export type Database = {
           },
         ]
       }
+      v_compliance_doc_status: {
+        Row: {
+          doc_kind: string | null
+          doc_status: string | null
+          expires_on: string | null
+          file_id: string | null
+          id: string | null
+          org_id: string | null
+          remaining_pct: number | null
+          vendor_id: string | null
+        }
+        Insert: {
+          doc_kind?: string | null
+          doc_status?: never
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string | null
+          org_id?: string | null
+          remaining_pct?: never
+          vendor_id?: string | null
+        }
+        Update: {
+          doc_kind?: string | null
+          doc_status?: never
+          expires_on?: string | null
+          file_id?: string | null
+          id?: string | null
+          org_id?: string | null
+          remaining_pct?: never
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_documents_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_consolidated_ar: {
         Row: {
           amount_cents: number | null
@@ -40405,35 +40502,6 @@ export type Database = {
           },
         ]
       }
-      v_equipment_utilization: {
-        Row: {
-          asset_tag: string | null
-          category: string | null
-          daily_rate_cents: number | null
-          daily_rate_currency: string | null
-          equipment_id: string | null
-          idle_revenue_30d_cents: number | null
-          last_active_at: string | null
-          movements_30d: number | null
-          movements_90d: number | null
-          name: string | null
-          org_id: string | null
-          reserved_days_30d: number | null
-          reserved_days_90d: number | null
-          status: Database["public"]["Enums"]["equipment_status"] | null
-          utilization_pct_30d: number | null
-          utilization_pct_90d: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "equipment_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       v_event_revenue: {
         Row: {
           adjustments_cents: number | null
@@ -40461,6 +40529,22 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      v_inbox_items: {
+        Row: {
+          at: string | null
+          href: string | null
+          item_id: string | null
+          kind: string | null
+          org_id: string | null
+          priority: number | null
+          sla_overdue: boolean | null
+          source: string | null
+          subtitle: string | null
+          title: string | null
+          user_id: string | null
+        }
+        Relationships: []
       }
       v_line_permit_flags: {
         Row: {
@@ -40560,6 +40644,37 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "site_plans_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_sub_eligibility: {
+        Row: {
+          org_id: string | null
+          trade: string | null
+          vendor_id: string | null
+          verdict: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trade_requirements_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -41325,6 +41440,10 @@ export type Database = {
           source_id: string
           source_type: string
         }[]
+      }
+      match_receipt_three_way: {
+        Args: { p_invoice_id: string; p_receipt_id: string }
+        Returns: Json
       }
       next_sequence: {
         Args: { p_format?: string; p_org_id: string; p_scope: string }
@@ -42197,6 +42316,8 @@ export type Database = {
         | "rejected"
         | "failed"
       approval_state: "pending" | "signed" | "declined" | "expired"
+      asset_class: "gear" | "fleet" | "lot"
+      asset_disposition: "ship_to_site" | "return_to_vendor" | "hold"
       assignment_event_kind:
         | "scan"
         | "consume"
@@ -42424,12 +42545,6 @@ export type Database = {
         | "lien_waiver"
         | "nda"
         | "other"
-      equipment_status:
-        | "available"
-        | "reserved"
-        | "in_use"
-        | "maintenance"
-        | "retired"
       erp_state: "draft" | "approved" | "archived"
       estimate_state:
         | "draft"
@@ -42507,7 +42622,15 @@ export type Database = {
         | "cancelled"
       incident_severity: "near_miss" | "minor" | "major" | "critical"
       incident_status: "open" | "investigating" | "resolved" | "closed"
-      invoice_status: "draft" | "sent" | "paid" | "overdue" | "voided"
+      invoice_status:
+        | "draft"
+        | "sent"
+        | "paid"
+        | "overdue"
+        | "voided"
+        | "submitted"
+        | "approved"
+        | "rejected"
       itb_invite_state:
         | "pending"
         | "sent"
@@ -43356,6 +43479,8 @@ export const Constants = {
         "failed",
       ],
       approval_state: ["pending", "signed", "declined", "expired"],
+      asset_class: ["gear", "fleet", "lot"],
+      asset_disposition: ["ship_to_site", "return_to_vendor", "hold"],
       assignment_event_kind: [
         "scan",
         "consume",
@@ -43603,13 +43728,6 @@ export const Constants = {
         "nda",
         "other",
       ],
-      equipment_status: [
-        "available",
-        "reserved",
-        "in_use",
-        "maintenance",
-        "retired",
-      ],
       erp_state: ["draft", "approved", "archived"],
       estimate_state: [
         "draft",
@@ -43695,7 +43813,16 @@ export const Constants = {
       ],
       incident_severity: ["near_miss", "minor", "major", "critical"],
       incident_status: ["open", "investigating", "resolved", "closed"],
-      invoice_status: ["draft", "sent", "paid", "overdue", "voided"],
+      invoice_status: [
+        "draft",
+        "sent",
+        "paid",
+        "overdue",
+        "voided",
+        "submitted",
+        "approved",
+        "rejected",
+      ],
       itb_invite_state: [
         "pending",
         "sent",

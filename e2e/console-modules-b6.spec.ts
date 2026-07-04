@@ -18,10 +18,16 @@ test.describe("console modules — self-seeding dependent creates (batch 6)", ()
   test.describe.configure({ timeout: 150000 });
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
-  test("Production · rental (seed equipment → rental)", async ({ page }) => {
-    await createInModule(page, "/studio/production/equipment/new", { name: `E2E Eq ${stamp()}` });
+  test("Production · rental (seed asset → rental)", async ({ page }) => {
+    // Equipment folded into the unified assets store (kit-20 Phase A) — seed
+    // via the canonical /studio/assets/new form; the rental form's select is
+    // now named asset_id ("auto" = helper picks the first non-empty option).
+    await createInModule(page, "/studio/assets/new", {
+      display_name: `E2E Asset ${stamp()}`,
+      asset_kind: "e2e-gear",
+    });
     await createInModule(page, "/studio/production/rentals/new", {
-      equipment_id: "auto",
+      asset_id: "auto",
       rate: "100",
       starts_at: "2030-01-01T08:00",
       ends_at: "2030-01-02T08:00",

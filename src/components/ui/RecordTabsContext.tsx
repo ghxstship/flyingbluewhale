@@ -33,8 +33,8 @@ export function RecordTabsProvider({ tabs, children }: { tabs: RouteTab[]; child
  * nothing. Slotted into `ModuleHeader` (see `src/components/Shell.tsx`)
  * as the fallback when no explicit `tabs` prop is passed.
  */
-export function RecordTabsSlot() {
+export function RecordTabsSlot({ fallback = null }: { fallback?: React.ReactNode }) {
   const tabs = React.useContext(RecordTabsCtx);
-  if (!tabs || tabs.length === 0) return null;
+  if (!tabs || tabs.length === 0) return <>{fallback}</>;
   return <RouteTabs tabs={tabs} />;
 }

@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1153 · **API route handlers:** 145 · **Distinct nav hrefs:** 487
+**Page routes:** 1161 · **API route handlers:** 145 · **Distinct nav hrefs:** 505
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 764 | 220 | 543 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 772 | 238 | 533 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1153** | **461** | **652** | **0** | **40** |
+| **TOTAL** | | **1161** | **479** | **642** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -93,11 +93,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-764 routes — ● 220 nav · ○ 543 linked · ⚠ 0 orphan
+772 routes — ● 238 nav · ○ 533 linked · ⚠ 0 orphan
 
-<details><summary><code>access-control</code> · 1 route</summary>
+<details><summary><code>access-control</code> · 2 routes</summary>
 
 ● `/studio/access-control`
+● `/studio/access-control/counts`
 
 </details>
 
@@ -137,6 +138,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>action-items</code> · 1 route</summary>
 
 ● `/studio/action-items`
+
+</details>
+
+<details><summary><code>advancing</code> · 1 route</summary>
+
+● `/studio/advancing`
 
 </details>
 
@@ -181,10 +188,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/assets/[id]/edit`
 ○ `/studio/assets/[id]/qr`
 ○ `/studio/assets/new`
-○ `/studio/assets/power`
-○ `/studio/assets/pull-sheets`
-○ `/studio/assets/scans`
-○ `/studio/assets/warranties`
+● `/studio/assets/power`
+● `/studio/assets/pull-sheets`
+● `/studio/assets/scans`
+● `/studio/assets/warranties`
 ○ `/studio/assets/warranties/new`
 
 </details>
@@ -305,9 +312,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>compliance</code> · 1 route</summary>
+<details><summary><code>compliance</code> · 3 routes</summary>
 
+● `/studio/compliance`
 ● `/studio/compliance/coc`
+● `/studio/compliance/permits`
 
 </details>
 
@@ -381,19 +390,21 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>finance</code> · 63 routes</summary>
+<details><summary><code>finance</code> · 65 routes</summary>
 
-● `/studio/finance`
+○ `/studio/finance`
 ● `/studio/finance/accounts`
 ○ `/studio/finance/accounts/new`
 ● `/studio/finance/ap-ocr`
 ○ `/studio/finance/ap-ocr/[id]`
+● `/studio/finance/auto-invoicing`
 ● `/studio/finance/budgets`
 ○ `/studio/finance/budgets/[budgetId]`
 ○ `/studio/finance/budgets/[budgetId]/edit`
 ○ `/studio/finance/budgets/import`
 ○ `/studio/finance/budgets/new`
 ○ `/studio/finance/budgets/summary`
+● `/studio/finance/budgets/variance`
 ○ `/studio/finance/consolidation`
 ● `/studio/finance/cost-codes`
 ○ `/studio/finance/cost-codes/new`
@@ -579,7 +590,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 <details><summary><code>logistics</code> · 11 routes</summary>
 
-● `/studio/logistics`
+○ `/studio/logistics`
 ● `/studio/logistics/disposition`
 ● `/studio/logistics/freight`
 ○ `/studio/logistics/freight/[shipmentId]`
@@ -589,7 +600,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/logistics/ratecard/[itemId]/edit`
 ○ `/studio/logistics/ratecard/new`
 ● `/studio/logistics/services`
-○ `/studio/logistics/warehouse`
+● `/studio/logistics/warehouse`
 
 </details>
 
@@ -601,15 +612,15 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>marketplace</code> · 37 routes</summary>
+<details><summary><code>marketplace</code> · 38 routes</summary>
 
 ● `/studio/marketplace`
 ● `/studio/marketplace/box-office`
 ○ `/studio/marketplace/box-office/[listId]`
-○ `/studio/marketplace/box-office/listings`
+● `/studio/marketplace/box-office/listings`
 ○ `/studio/marketplace/box-office/listings/[listingId]`
 ○ `/studio/marketplace/box-office/new`
-○ `/studio/marketplace/calls`
+● `/studio/marketplace/calls`
 ○ `/studio/marketplace/calls/[callId]`
 ○ `/studio/marketplace/calls/[callId]/edit`
 ○ `/studio/marketplace/calls/[callId]/submissions`
@@ -625,7 +636,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/studio/marketplace/offers`
 ○ `/studio/marketplace/offers/[offerId]`
 ○ `/studio/marketplace/offers/new`
-○ `/studio/marketplace/postings`
+● `/studio/marketplace/postings`
 ○ `/studio/marketplace/postings/[postingId]`
 ○ `/studio/marketplace/postings/[postingId]/applicants`
 ○ `/studio/marketplace/postings/[postingId]/applicants/[applicationId]`
@@ -633,6 +644,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/marketplace/postings/new`
 ● `/studio/marketplace/reviews`
 ● `/studio/marketplace/settings`
+● `/studio/marketplace/submissions`
 ● `/studio/marketplace/talent`
 ○ `/studio/marketplace/talent/[talentId]`
 ○ `/studio/marketplace/talent/[talentId]/edit`
@@ -671,7 +683,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 <details><summary><code>operations</code> · 17 routes</summary>
 
-● `/studio/operations`
+○ `/studio/operations`
 ● `/studio/operations/daily-log`
 ○ `/studio/operations/daily-log/[id]`
 ○ `/studio/operations/daily-log/new`
@@ -681,7 +693,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/operations/incidents/[incidentId]/edit`
 ○ `/studio/operations/incidents/new`
 ● `/studio/operations/look-ahead`
-○ `/studio/operations/maintenance`
+● `/studio/operations/maintenance`
 ○ `/studio/operations/maintenance/[jobId]`
 ○ `/studio/operations/maintenance/schedules/new`
 ● `/studio/operations/reservations`
@@ -722,19 +734,19 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 <details><summary><code>people</code> · 26 routes</summary>
 
-● `/studio/people`
+○ `/studio/people`
 ○ `/studio/people/[personId]`
 ○ `/studio/people/[personId]/assignments`
 ○ `/studio/people/[personId]/credentials`
 ○ `/studio/people/[personId]/documents`
 ○ `/studio/people/[personId]/edit`
 ○ `/studio/people/[personId]/time`
-○ `/studio/people/credentials`
+● `/studio/people/credentials`
 ○ `/studio/people/credentials/[credentialId]`
 ○ `/studio/people/credentials/[credentialId]/edit`
 ○ `/studio/people/credentials/asset-linker`
 ○ `/studio/people/credentials/new`
-○ `/studio/people/crew`
+● `/studio/people/crew`
 ○ `/studio/people/crew/[crewId]`
 ○ `/studio/people/crew/[crewId]/edit`
 ○ `/studio/people/crew/new`
@@ -774,8 +786,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 <details><summary><code>procurement</code> · 50 routes</summary>
 
-● `/studio/procurement`
-○ `/studio/procurement/catalog`
+○ `/studio/procurement`
+● `/studio/procurement/catalog`
 ● `/studio/procurement/compliance`
 ● `/studio/procurement/itb`
 ● `/studio/procurement/marketplace`
@@ -829,20 +841,20 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 <details><summary><code>production</code> · 23 routes</summary>
 
-● `/studio/production`
+○ `/studio/production`
 ○ `/studio/production/av`
 ● `/studio/production/compounds`
 ○ `/studio/production/dispatch`
 ○ `/studio/production/dispatch/[dispatchId]`
 ● `/studio/production/dispatch/live`
-○ `/studio/production/equipment`
+● `/studio/production/equipment`
 ○ `/studio/production/equipment/utilization`
 ● `/studio/production/fabrication`
 ○ `/studio/production/fabrication/[orderId]`
 ○ `/studio/production/fabrication/[orderId]/edit`
 ○ `/studio/production/fabrication/new`
 ● `/studio/production/logistics`
-○ `/studio/production/rentals`
+● `/studio/production/rentals`
 ○ `/studio/production/rentals/[rentalId]`
 ○ `/studio/production/rentals/[rentalId]/edit`
 ○ `/studio/production/rentals/availability`
@@ -972,7 +984,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>safety</code> · 38 routes</summary>
+<details><summary><code>safety</code> · 39 routes</summary>
 
 ● `/studio/safety`
 ○ `/studio/safety/bcdr`
@@ -992,6 +1004,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/safety/guard-tours/new`
 ○ `/studio/safety/incidents`
 ○ `/studio/safety/incidents/[incidentId]`
+● `/studio/safety/lost-found`
 ● `/studio/safety/major-incident`
 ○ `/studio/safety/major-incident/[eventId]`
 ○ `/studio/safety/major-incident/[eventId]/edit`
@@ -1042,7 +1055,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 <details><summary><code>services</code> · 4 routes</summary>
 
-○ `/studio/services`
+● `/studio/services`
 ● `/studio/services/requests`
 ○ `/studio/services/requests/[requestId]`
 ○ `/studio/services/requests/new`
@@ -1244,7 +1257,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/workforce/contractors/[contractorId]`
 ○ `/studio/workforce/contractors/[contractorId]/edit`
 ○ `/studio/workforce/contractors/new`
-○ `/studio/workforce/deployment`
+● `/studio/workforce/deployment`
 ○ `/studio/workforce/deployment/[deploymentId]`
 ○ `/studio/workforce/deployment/[deploymentId]/edit`
 ○ `/studio/workforce/deployment/new`

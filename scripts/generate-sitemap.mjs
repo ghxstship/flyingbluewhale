@@ -101,6 +101,14 @@ const collect = (groups) => {
   }
 };
 collect(nav.platformNavDomain);
+// Kit 20 second shelf + utility surfaces: every tab is a real route, and
+// the surfaces the verbatim rail does not carry stay nav-reached through
+// platformUtility (⌘K + hubs) — the reshape retired zero URLs.
+for (const fam of nav.platformTabs ?? []) {
+  navHrefs.add(fam.owner);
+  for (const tab of fam.tabs ?? []) if (tab.href) navHrefs.add(tab.href);
+}
+for (const it of nav.platformUtility ?? []) if (it.href) navHrefs.add(it.href);
 collect(nav.settingsNav);
 collect(nav.legendNav);
 collect(nav.portalConsumerNav);

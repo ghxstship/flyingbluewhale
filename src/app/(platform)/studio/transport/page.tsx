@@ -55,7 +55,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.transport.eyebrow", undefined, "Logistics")}
+        eyebrow={t("console.transport.eyebrow", undefined, "Operations · Run")}
         title={t("console.transport.title", undefined, "Transport")}
         subtitle={t(
           "console.transport.subtitle",
@@ -104,17 +104,16 @@ async function TransportMetrics() {
   if (fleetRes.error) throw fleetRes.error;
   const runs = fleetRes.data ?? [];
   const fleetCount = new Set(runs.map((r) => r.fleet)).size;
-  const vehicleCount = new Set(
-    runs.map((r) => r.vehicle_ref).filter((v): v is string => Boolean(v)),
-  ).size;
+  const vehicleCount = new Set(runs.map((r) => r.vehicle_ref).filter((v): v is string => Boolean(v))).size;
 
   return (
     <div className="metric-grid">
-      <MetricCard label={t("console.transport.metrics.dispatch", undefined, "Dispatch Runs")} value={dispatchCount} accent />
       <MetricCard
-        label={t("console.transport.metrics.manifests", undefined, "A&D Manifests")}
-        value={manifestCount}
+        label={t("console.transport.metrics.dispatch", undefined, "Dispatch Runs")}
+        value={dispatchCount}
+        accent
       />
+      <MetricCard label={t("console.transport.metrics.manifests", undefined, "A&D Manifests")} value={manifestCount} />
       <MetricCard label={t("console.transport.metrics.fleets", undefined, "Fleets")} value={fleetCount} />
       <MetricCard label={t("console.transport.metrics.vehicles", undefined, "Vehicles")} value={vehicleCount} />
     </div>

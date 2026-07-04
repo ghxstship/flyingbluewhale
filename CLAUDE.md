@@ -66,6 +66,18 @@ The cross-app reporting engine. Mirrors the documents system (registry → engin
 - **API (OpenAPI-described, `reports:read` scope):** `GET /api/v1/metrics` (catalog + computed flag), `GET /api/v1/metrics/{metricId}` (def + resolved value), `GET /api/v1/reports` (library), `GET /api/v1/reports/{reportId}` (report + resolved metrics), `GET /api/v1/reports/{reportId}/snapshot` (+ `capturedAt`). Documented in `docs/api/openapi.yaml` (drift-guarded).
 - **Console:** `/studio/reports` hub (43-report library grouped by app, turnkey-template dot) + `/studio/reports/[reportId]` parametric viewer (metrics resolved live, org/client white-label brand applied, print/PDF artifact). Nav entry in the Dashboard group (`src/lib/nav.ts`). Both render inside the auth-gated `(platform)` layout, so the hub is **dynamic** (not `force-static` — that bakes in the unauthenticated redirect). Guards: `src/lib/reports/registry.test.ts`, `e2e/reports-v63.spec.ts` (hub + all 43 renders + API).
 
+## Console identity rail (kit 20, landed 2026-07-04)
+
+The `/studio` IA is the **verbatim kit 20 map** (`ATLVS Ecosystem (20).zip` → `design_handoff_console_rebuild/_ia-dump.md`): **10 pinnable groups + Home · 60 rail items · 30 tab families / 116 tabs · 15 filtered-lens aliases**. The rail is the acceptance fixture — do not add/rename rail items without a kit revision.
+
+- **`platformNav`** (src/lib/nav.ts) — the flat 11-group rail, kit labels/order/icons verbatim; every item carries a hover `sub`. Groups gained an optional `sub` descriptor (Talent · "Book").
+- **`platformTabs`** — the second shelf: `{ owner, eyebrow, tabs[] }` per family; auto-rendered by `PlatformTabsAuto` (src/components/PlatformTabs.tsx) through the `ModuleHeader` RecordTabsSlot fallback on EXACT member-path match (detail pages keep their record tabs). Every tab href is a real route — guarded by `nav-routes.test.ts`.
+- **`platformUtility`** — the 66 surfaces the kit rail doesn't carry (Copilot, Triage, Position, BIM, envelopes, safety sub-surfaces, …). Nav-reached via ⌘K ("Utility" group) + consumed by `generate-sitemap.mjs`/`gen-ia-map.mjs`, so **no URL died** in the reshape (SITEMAP.md: 0 orphans).
+- **NAV_LENSES** now use the kit group nouns verbatim (Home/Sales/Talent/Projects/Procurement/Production/People/Operations/Safety/Finance/Comms).
+- **Home (fixture 01)**: production hero + `Phase N · <phase>` chip + slug, Show-Day Mode pill (persisted `ui_state.show_day_mode`; strip tiles = open incidents · scans last hour · crew clocked in · tasks due today — all real reads), world clocks, Quick Actions (the 5 Request intakes), Copilot Suggests rail (derived counts, never auto-applies, per-day local dismiss).
+- **Kit-20 filtered-lens/new pages** (all real data): `/studio/marketplace/submissions` (cross-call queue) · `/studio/advancing` (deliverables + assignments hub) · `/studio/compliance` (hub) + `/studio/compliance/permits` (dim_permit register) · `/studio/safety/lost-found` (incidents, injury_type IS NULL) · `/studio/access-control/counts` (scan-journal occupancy) · `/studio/finance/auto-invoicing` (signed-proposal billing schedule) · `/studio/finance/budgets/variance` (plan vs actual per line).
+- Record actions: 15 real chains + 4 existing mechanisms + 1 re-homed lens + 1 deferred (guest-list issue-credential — external-party form UX). Full table: `docs/decisions/ADR-0014-kit-v78-3nf-disposition.md`.
+
 ## Console zero-training layer (v7.8, Workflow-Sweep spec)
 
 The four v7.8 surfaces from `ATLVS Ecosystem (18/19)` / `design_handoff_console_rebuild` (kit README §"THE ZERO-TRAINING LAYER"), landed 2026-07-03. Principle: _the product is the training_ — a first-time operator runs an event guided only by the UI.

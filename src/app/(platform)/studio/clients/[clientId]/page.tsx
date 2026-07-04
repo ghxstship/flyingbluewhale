@@ -26,7 +26,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
         title={client.name}
         subtitle={client.contact_email ?? t("console.clients.detail.noEmail", undefined, "No email on file")}
         breadcrumbs={[
-          { label: t("console.clients.detail.breadcrumb.commerce", undefined, "Commerce"), href: "/studio/clients" },
+          { label: t("console.clients.detail.breadcrumb.commerce", undefined, "Sales"), href: "/studio/clients" },
           { label: t("console.clients.detail.breadcrumb.clients", undefined, "Clients"), href: "/studio/clients" },
           { label: client.name },
         ]}

@@ -24,7 +24,7 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Coordination" title="New Meeting Note" />
+      <ModuleHeader eyebrow="Operations · Run" title="New Meeting Note" />
       <div className="page-content max-w-2xl">
         <FormShell action={createNote} cancelHref="/studio/meetings/notes" submitLabel="Create Note">
           <label className="flex flex-col gap-1.5">

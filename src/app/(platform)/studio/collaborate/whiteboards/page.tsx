@@ -17,7 +17,7 @@ export default async function WhiteboardsPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Collaborate" title="Whiteboards" />
+        <ModuleHeader eyebrow="Projects · Plan" title="Whiteboards" />
         <ConfigureSupabase />
       </>
     );
@@ -29,11 +29,9 @@ export default async function WhiteboardsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Collaborate"
+        eyebrow="Projects · Plan"
         title="Whiteboards"
-        subtitle={
-          boards.length === 1 ? "1 board" : `${boards.length} boards`
-        }
+        subtitle={boards.length === 1 ? "1 board" : `${boards.length} boards`}
         action={
           <Link href="/studio/collaborate/whiteboards/new">
             <Button size="sm">New Whiteboard</Button>

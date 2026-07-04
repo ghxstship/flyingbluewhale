@@ -10,10 +10,5 @@ export const dynamic = "force-dynamic";
  */
 export default async function Page() {
   const { t } = await getRequestT();
-  return (
-    <AssetInventorySurface
-      title={t("console.assets.title", undefined, "Assets & Inventory")}
-      activeTab="/studio/assets"
-    />
-  );
+  return <AssetInventorySurface title={t("console.assets.title", undefined, "Assets & Inventory")} />;
 }

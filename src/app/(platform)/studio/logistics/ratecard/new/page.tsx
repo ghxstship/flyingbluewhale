@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.logistics.ratecard.new.eyebrow", undefined, "Logistics")}
+        eyebrow={t("console.logistics.ratecard.new.eyebrow", undefined, "Procurement · Source")}
         title={t("console.logistics.ratecard.new.title", undefined, "New Rate-Card Item")}
       />
       <div className="page-content max-w-xl">

@@ -11,7 +11,7 @@ export default async function NewWhiteboardPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Collaborate" title="New Whiteboard" />
+        <ModuleHeader eyebrow="Projects · Plan" title="New Whiteboard" />
         <ConfigureSupabase />
       </>
     );
@@ -21,10 +21,10 @@ export default async function NewWhiteboardPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Collaborate"
+        eyebrow="Projects · Plan"
         title="New Whiteboard"
         breadcrumbs={[
-          { label: "Collaborate" },
+          { label: "Projects · Plan" },
           { label: "Whiteboards", href: "/studio/collaborate/whiteboards" },
           { label: "New" },
         ]}

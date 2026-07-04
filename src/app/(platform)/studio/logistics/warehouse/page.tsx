@@ -15,7 +15,6 @@ export default async function Page() {
   return (
     <AssetInventorySurface
       title={t("console.assets.lots.title", undefined, "Warehouse Lots")}
-      activeTab="/studio/logistics/warehouse"
       classFilter="lot"
       subtitleHint={t(
         "console.assets.lots.subtitle",

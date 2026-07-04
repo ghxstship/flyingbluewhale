@@ -26,7 +26,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.meetings.new.eyebrow", undefined, "Coordination")}
+        eyebrow={t("console.meetings.new.eyebrow", undefined, "Operations · Run")}
         title={t("console.meetings.new.title", undefined, "New Meeting")}
       />
       <div className="page-content max-w-2xl">

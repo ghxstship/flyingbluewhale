@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
-import { RouteTabs } from "@/components/ui/RouteTabs";
 import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -16,6 +15,10 @@ import { SetupChecklist } from "@/components/ui/SetupChecklist";
 import { getSetupProgress } from "@/lib/setup/progress";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EventSpine } from "./EventSpine";
+import { WorldClocks } from "@/components/home/WorldClocks";
+import { ShowDayToggle } from "@/components/home/ShowDayToggle";
+import { CopilotSuggests, type CopilotSuggestion } from "@/components/home/CopilotSuggests";
+import { Badge } from "@/components/ui/Badge";
 
 // Dashboard hub tabs — folds the previous Dashboard sidebar group
 // (Overview, Portfolio, Action Items, Command Palette) into one record-
@@ -24,11 +27,8 @@ export const dynamic = "force-dynamic";
 
 export default async function ConsoleDashboard() {
   const { t } = await getRequestT();
-  const DASHBOARD_TABS = [
-    { label: t("console.dashboard.tabs.overview", undefined, "Overview"), href: "/studio" },
-    { label: t("console.dashboard.tabs.portfolio", undefined, "Portfolio"), href: "/studio/dashboards" },
-    { label: t("console.dashboard.tabs.actionItems", undefined, "Action Items"), href: "/studio/action-items" },
-  ];
+  // Tabs: the kit 20 overview family (Overview · Dashboards · Insights ·
+  // Reports · Goals · Sustainability) auto-renders via PlatformTabsAuto.
 
   if (!hasSupabase) {
     return (
@@ -36,7 +36,6 @@ export default async function ConsoleDashboard() {
         <ModuleHeader
           title={t("console.dashboard.title", undefined, "Workspace")}
           subtitle={t("console.dashboard.subtitle", undefined, "Operations dashboard")}
-          tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
         />
         <div className="page-content">
           <div className="surface p-6">
@@ -70,7 +69,6 @@ export default async function ConsoleDashboard() {
         <ModuleHeader
           title={t("console.dashboard.title", undefined, "Workspace")}
           subtitle={t("console.dashboard.loggedInAs", { email: session.email }, `Logged in as ${session.email}`)}
-          tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
         />
         <div className="page-content">
           <EmptyState
@@ -102,15 +100,93 @@ export default async function ConsoleDashboard() {
   // production is active. Same cheap indexed query the EventSpine island
   // runs; both are force-dynamic streaming reads.
   const supabase = await createClient();
-  const { data: activeProject } = await supabase
-    .from("projects")
-    .select("name, xpms_phase")
-    .eq("org_id", session.orgId)
-    .eq("project_state", "active")
-    .is("deleted_at", null)
-    .order("start_date", { ascending: false, nullsFirst: false })
-    .limit(1)
-    .maybeSingle();
+  const [{ data: activeProject }, { data: prefRow }] = await Promise.all([
+    supabase
+      .from("projects")
+      .select("name, slug, xpms_phase")
+      .eq("org_id", session.orgId)
+      .eq("project_state", "active")
+      .is("deleted_at", null)
+      .order("start_date", { ascending: false, nullsFirst: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase.from("user_preferences").select("ui_state").eq("user_id", session.userId).maybeSingle(),
+  ]);
+  const showDay = Boolean((prefRow?.ui_state as { show_day_mode?: boolean } | null)?.show_day_mode);
+
+  // Kit 20 fixture 01 — phase chip (Phase N · Name) + the production's mono
+  // identifier, rendered as the hero subtitle chips.
+  const XPMS_PHASES = ["Discovery", "Design", "Advance", "Procurement", "Build", "Install", "Operate", "Close"];
+  const phaseNum = activeProject ? XPMS_PHASES.indexOf(activeProject.xpms_phase) + 1 : 0;
+
+  // Copilot Suggests — derived next-best actions from real org state.
+  const [blockedQ, approvalsQ, incidentsQ] = await Promise.all([
+    supabase
+      .from("tasks")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("task_state", "blocked"),
+    supabase
+      .from("approval_instances")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("state", "pending"),
+    supabase
+      .from("incidents")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .is("closed_at", null)
+      .is("deleted_at", null),
+  ]);
+  const suggestions: CopilotSuggestion[] = [];
+  if ((blockedQ.count ?? 0) > 0)
+    suggestions.push({
+      id: "tasks-blocked",
+      title: t(
+        "console.copilotSuggests.blocked.title",
+        { count: blockedQ.count ?? 0 },
+        `${blockedQ.count} Task${blockedQ.count === 1 ? "" : "s"} Blocked`,
+      ),
+      body: t(
+        "console.copilotSuggests.blocked.body",
+        undefined,
+        "Blocked work cascades into the phases behind it. Unblock before it spreads.",
+      ),
+      ctaLabel: t("console.copilotSuggests.blocked.cta", undefined, "Open Tasks"),
+      ctaHref: "/studio/tasks",
+    });
+  if ((approvalsQ.count ?? 0) > 0)
+    suggestions.push({
+      id: "approvals-waiting",
+      title: t(
+        "console.copilotSuggests.approvals.title",
+        { count: approvalsQ.count ?? 0 },
+        `${approvalsQ.count} Approval${approvalsQ.count === 1 ? "" : "s"} Wait On You`,
+      ),
+      body: t(
+        "console.copilotSuggests.approvals.body",
+        undefined,
+        "Requests sit until someone decides. Clear the queue to keep money and gear moving.",
+      ),
+      ctaLabel: t("console.copilotSuggests.approvals.cta", undefined, "Open Queue"),
+      ctaHref: "/studio/governance/approvals",
+    });
+  if ((incidentsQ.count ?? 0) > 0)
+    suggestions.push({
+      id: "incidents-open",
+      title: t(
+        "console.copilotSuggests.incidents.title",
+        { count: incidentsQ.count ?? 0 },
+        `${incidentsQ.count} Incident${incidentsQ.count === 1 ? "" : "s"} Open`,
+      ),
+      body: t(
+        "console.copilotSuggests.incidents.body",
+        undefined,
+        "Open incidents need an owner and a close-out. Triage them before the next call.",
+      ),
+      ctaLabel: t("console.copilotSuggests.incidents.cta", undefined, "Open Incidents"),
+      ctaHref: "/studio/operations/incidents",
+    });
 
   return (
     <>
@@ -118,24 +194,39 @@ export default async function ConsoleDashboard() {
         eyebrow={t("console.dashboard.eyebrow", undefined, "Home")}
         title={activeProject?.name ?? t("console.dashboard.title", undefined, "Workspace")}
         subtitle={
-          activeProject
-            ? t(
-                "console.dashboard.activePhase",
-                { phase: activeProject.xpms_phase },
-                `Active Production · ${activeProject.xpms_phase}`,
-              )
-            : t(
-                "console.dashboard.loggedInAsWithRole",
-                { email: session.email, role: session.role },
-                `Logged in as ${session.email} · ${session.role}`,
-              )
+          activeProject ? (
+            <span className="inline-flex flex-wrap items-center gap-2">
+              <Badge variant="brand">
+                {phaseNum > 0
+                  ? t(
+                      "console.dashboard.phaseChip",
+                      { num: phaseNum, phase: activeProject.xpms_phase },
+                      `Phase ${phaseNum} · ${activeProject.xpms_phase}`,
+                    )
+                  : activeProject.xpms_phase}
+              </Badge>
+              {activeProject.slug ? (
+                <span className="font-mono text-xs tracking-wider text-[var(--p-text-3)] uppercase">
+                  {activeProject.slug}
+                </span>
+              ) : null}
+            </span>
+          ) : (
+            t(
+              "console.dashboard.loggedInAsWithRole",
+              { email: session.email, role: session.role },
+              `Logged in as ${session.email} · ${session.role}`,
+            )
+          )
         }
-        action={
-          <Button href="/studio/projects/new">{t("console.dashboard.newProject", undefined, "+ New Project")}</Button>
-        }
-        tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
+        action={<ShowDayToggle on={showDay} />}
       />
       <div className="page-content space-y-6">
+        {showDay ? (
+          <Suspense fallback={<MetricGridSkeleton count={4} />}>
+            <ShowDayStrip orgId={session.orgId} />
+          </Suspense>
+        ) : null}
         <Suspense fallback={null}>
           <SetupCard orgId={session.orgId} />
         </Suspense>
@@ -147,6 +238,13 @@ export default async function ConsoleDashboard() {
         <Suspense fallback={<MetricGridSkeleton count={4} />}>
           <DashboardMetrics orgId={session.orgId} />
         </Suspense>
+
+        <WorldClocks />
+
+        <section>
+          <h2 className="eyebrow pb-3">{t("console.dashboard.quickActions", undefined, "Quick Actions")}</h2>
+          <QuickActions />
+        </section>
 
         <section>
           <div className="flex items-center justify-between pb-3">
@@ -162,7 +260,84 @@ export default async function ConsoleDashboard() {
           </Suspense>
         </section>
       </div>
+      <CopilotSuggests suggestions={suggestions} />
     </>
+  );
+}
+
+/**
+ * Show-Day strip — live-ops tiles, all real reads: open incidents, gate
+ * scans in the last hour, crew currently clocked in, tasks due today.
+ */
+async function ShowDayStrip({ orgId }: { orgId: string }) {
+  const [{ t }, supabase] = await Promise.all([getRequestT(), createClient()]);
+  const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const dayEnd = new Date();
+  dayEnd.setHours(23, 59, 59, 999);
+  const [incidentsQ, scansQ, crewQ, dueQ] = await Promise.all([
+    supabase
+      .from("incidents")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", orgId)
+      .is("closed_at", null)
+      .is("deleted_at", null),
+    supabase
+      .from("assignment_events")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", orgId)
+      .eq("event_kind", "scan")
+      .gte("at", hourAgo),
+    supabase.from("time_entries").select("id", { count: "exact", head: true }).eq("org_id", orgId).is("ended_at", null),
+    supabase
+      .from("tasks")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", orgId)
+      .in("task_state", ["todo", "in_progress", "blocked", "review"])
+      .lte("due_at", dayEnd.toISOString()),
+  ]);
+  return (
+    <div className="metric-grid">
+      <MetricCard
+        label={t("console.showDay.incidents", undefined, "Open Incidents")}
+        value={String(incidentsQ.count ?? 0)}
+        accent
+      />
+      <MetricCard
+        label={t("console.showDay.scans", undefined, "Scans · Last Hour")}
+        value={String(scansQ.count ?? 0)}
+      />
+      <MetricCard label={t("console.showDay.crew", undefined, "Crew Clocked In")} value={String(crewQ.count ?? 0)} />
+      <MetricCard label={t("console.showDay.due", undefined, "Tasks Due Today")} value={String(dueQ.count ?? 0)} />
+    </div>
+  );
+}
+
+/** One Front Door echoes — the five Request intakes as home quick actions. */
+async function QuickActions() {
+  const { t } = await getRequestT();
+  const actions = [
+    { label: t("console.quickActions.gear", undefined, "Gear & Advance"), href: "/studio/advancing/request" },
+    {
+      label: t("console.quickActions.requisition", undefined, "Purchase Requisition"),
+      href: "/studio/procurement/requisitions/new",
+    },
+    { label: t("console.quickActions.timeOff", undefined, "Time Off"), href: "/studio/workforce/time-off" },
+    { label: t("console.quickActions.reportIt", undefined, "Report It"), href: "/studio/operations/incidents/new" },
+    { label: t("console.quickActions.itTicket", undefined, "IT & Facilities"), href: "/studio/services/requests/new" },
+    { label: t("console.quickActions.myWork", undefined, "My Work"), href: "/studio/my-work" },
+  ];
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {actions.map((a) => (
+        <Link
+          key={a.href}
+          href={a.href}
+          className="surface hover-lift press-scale flex items-center justify-center px-3 py-4 text-center text-sm font-medium"
+        >
+          {a.label}
+        </Link>
+      ))}
+    </div>
   );
 }
 

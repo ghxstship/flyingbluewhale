@@ -64,7 +64,7 @@ export default async function Page() {
     return (
       <>
         <ModuleHeader
-          eyebrow={t("console.meetings.eyebrow", undefined, "Coordination")}
+          eyebrow={t("console.meetings.eyebrow", undefined, "Operations · Run")}
           title={t("console.meetings.title", undefined, "Meetings")}
         />
         <div className="page-content">
@@ -140,7 +140,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.meetings.eyebrow", undefined, "Coordination")}
+        eyebrow={t("console.meetings.eyebrow", undefined, "Operations · Run")}
         title={t("console.meetings.title", undefined, "Meetings")}
         subtitle={`${rows.length} ${rows.length === 1 ? t("console.meetings.subtitle.meeting", undefined, "meeting") : t("console.meetings.subtitle.meetings", undefined, "meetings")} · ${upcomingCount} ${t("console.meetings.subtitle.upcoming", undefined, "upcoming")} · ${totalOpenActions} ${totalOpenActions === 1 ? t("console.meetings.subtitle.openActionItem", undefined, "open action item") : t("console.meetings.subtitle.openActionItems", undefined, "open action items")}`}
         action={

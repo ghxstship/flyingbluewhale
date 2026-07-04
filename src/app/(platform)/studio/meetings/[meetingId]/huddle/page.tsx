@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Coordination" title="Huddle" />
+        <ModuleHeader eyebrow="Operations · Run" title="Huddle" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -87,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Coordination"
+        eyebrow="Operations · Run"
         title={`Huddle · ${meetingTitle}`}
         subtitle={
           call

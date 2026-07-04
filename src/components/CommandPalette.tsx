@@ -27,6 +27,7 @@ import {
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
 import {
   platformNav,
+  platformUtility,
   portalNav,
   mobileTabs,
   mobileSurfaces,
@@ -166,6 +167,11 @@ export function CommandPalette({
           }
         }
       }
+      // Kit 20: surfaces the verbatim rail does not carry stay one ⌘K away —
+      // platformUtility is their discoverability home (nav.ts).
+      for (const item of platformUtility) {
+        pushNav(item, "Utility", ["utility"]);
+      }
       // Settings items are not in the primary sidebar but should still be
       // searchable from anywhere — that's the whole point of ⌘K when admin
       // moves out of the sidebar (docs/ia/03-ia-compression-proposal.md).
@@ -200,11 +206,31 @@ export function CommandPalette({
       // Request group (v7.8 One Front Door) — mirrors the global "+" menu's
       // Request-first section so ⌘K teaches the same five intakes.
       const requestActions: Array<{ id: string; key: string; label: string; href: string }> = [
-        { id: "request-advance", key: "gearAdvance", label: "Gear & Advance Request", href: "/studio/advancing/request" },
-        { id: "request-requisition", key: "requisition", label: "Purchase Requisition", href: "/studio/procurement/requisitions/new" },
+        {
+          id: "request-advance",
+          key: "gearAdvance",
+          label: "Gear & Advance Request",
+          href: "/studio/advancing/request",
+        },
+        {
+          id: "request-requisition",
+          key: "requisition",
+          label: "Purchase Requisition",
+          href: "/studio/procurement/requisitions/new",
+        },
         { id: "request-time-off", key: "timeOff", label: "Time Off", href: "/studio/workforce/time-off" },
-        { id: "request-report-it", key: "reportIt", label: "Report It · Incident / Medical / Lost", href: "/studio/operations/incidents/new" },
-        { id: "request-it-ticket", key: "itTicket", label: "IT & Facilities Ticket", href: "/studio/services/requests/new" },
+        {
+          id: "request-report-it",
+          key: "reportIt",
+          label: "Report It · Incident / Medical / Lost",
+          href: "/studio/operations/incidents/new",
+        },
+        {
+          id: "request-it-ticket",
+          key: "itTicket",
+          label: "IT & Facilities Ticket",
+          href: "/studio/services/requests/new",
+        },
       ];
       for (const r of requestActions) {
         list.push({

@@ -121,7 +121,35 @@ export type IconName =
   | "Presentation"
   // GVTEWAY consumer nav
   | "List"
-  | "UserCircle";
+  | "UserCircle"
+  // Kit 20 console-identity rail (verbatim prototype icons)
+  | "House"
+  | "SquareCheck"
+  | "ChartColumn"
+  | "Contact"
+  | "CalendarCheck"
+  | "Clapperboard"
+  | "Video"
+  | "FolderKanban"
+  | "PencilRuler"
+  | "Calculator"
+  | "ClipboardPen"
+  | "FileCheck"
+  | "Boxes"
+  | "ClipboardType"
+  | "CalendarRange"
+  | "ListChecks"
+  | "ScanLine"
+  | "SearchCheck"
+  | "Banknote"
+  | "Landmark"
+  | "RadioTower"
+  | "Headset"
+  | "MapPin"
+  | "Mic"
+  | "CheckCheck"
+  | "TriangleAlert"
+  | "MessagesSquare";
 
 export type NavItem = {
   label: string;
@@ -158,7 +186,23 @@ export type NavSection = { label: string; items: NavItem[] };
  * orphaning the hub route (ADR-0011 §"No echo items"). Groups without a hub
  * page (e.g. Commerce, Messages) omit `href` and keep a toggle-only header.
  */
-export type NavGroup = { label: string; href?: string; items: NavItem[]; sections?: NavSection[] };
+export type NavGroup = {
+  label: string;
+  /** Group descriptor (kit rail sub-label, e.g. Talent · "Book") — rendered
+   *  in page eyebrows and header tooltips, not as rail text. */
+  sub?: string;
+  href?: string;
+  items: NavItem[];
+  sections?: NavSection[];
+};
+
+/**
+ * Second-shelf page-tab family (kit 20). `owner` is the rail item href the
+ * family belongs to — the sidebar highlights it while any member tab is
+ * active, and ModuleHeader auto-renders the family on every member route.
+ */
+export type PlatformTabFamily = { owner: string; eyebrow: string; tabs: RouteTabDef[] };
+export type RouteTabDef = { label: string; href: string };
 
 /** Rank order for NavItem.minRole filtering. Owner/admin share the top tier. */
 const ROLE_RANK: Record<string, number> = { owner: 3, admin: 3, manager: 2 };
@@ -180,851 +224,648 @@ export function filterNavByRole(groups: NavGroup[], role: string | null | undefi
 }
 
 /**
- * Domain-noun sidebar (ADR-0006, 2026-06-04) — the operator-default.
- *
- * Seven plain-English groups: Projects · Production · Workforce · Sales ·
- * Finance · Procurement · Operations. No Knowledge / Insights group —
- * Articles route to the Help affordance, Guides land in Operations,
- * Dashboards live in workspace chrome, Assistant in ⌘K + right rail,
- * Automations in Settings → Integrations, Sustainability in Operations →
- * Reporting. Matches Linear / Stripe / Notion / Vercel.
- *
- * URL preservation: grouping and labels are the only nav concern; every
- * console route keeps its existing URL. The "Guest Hospitality" entry
- * is renamed "Guest Experience" (same URL `/studio/commercial/hospitality`,
- * tabbed internally by hosted persona for Sales-side Hospitality and
- * by audience filter for Operations-side Guest Experience).
- *
- * One pursuit store (ADR-0014 Phase A amendment, kit §09 C-11): leads and
- * deals merged into `opportunities` behind the `kind` facet — /studio/crm is
- * the canonical surface; Pipeline and Leads are filtered lenses over it.
+ * Kit 20 console-identity rail (design_handoff_console_rebuild/_ia-dump.md,
+ * landed 2026-07-04) — the VERBATIM 10-group / 60-item map. Labels, order,
+ * and icons are the prototype contract; hrefs are the repo's canonical
+ * routes (the A1-A4 store merges made /studio/crm · /studio/schedule ·
+ * /studio/assets · /studio/finance/invoices the one-store-per-noun homes).
+ * The second shelf lives in `platformTabs` below (30 tab families, every
+ * tab a real route); surfaces the kit rail does not carry stay first-class
+ * in `platformUtility` (⌘K + hubs + sitemap), so no URL died in the
+ * reshape. Do not add rail items here without a kit revision — the rail is
+ * the acceptance fixture (REPO_LANDING.md §4.1).
  */
 export const platformNavDomain: NavGroup[] = [
   {
-    // Workspace chrome — not a domain group; the rail's top tile. The header
-    // links the console home (was the "Overview" echo leaf — dropped per
-    // ADR-0011 §"No echo items"; the navigable header is the hub).
-    label: "Dashboard",
-    href: "/studio",
+    label: "Home",
     items: [
-      // v7.8 zero-training layer — the one personal spine: union of my
-      // tasks · approvals waiting on me · my requests. Home rail, top slot
-      // (design_handoff_console_rebuild README §"My Work").
-      { label: "My Work", href: "/studio/my-work", icon: "CheckSquare", sub: "Tasks · Approvals · My Requests" },
-      { label: "Dashboards", href: "/studio/dashboards", icon: "BarChart3", sub: "Saved Metric Boards" },
-      { label: "Reports", href: "/studio/reports", icon: "ChartBar", sub: "43-Report Library · Print & PDF" },
-      { label: "Goals", href: "/studio/goals", icon: "Crosshair", sub: "Targets & Progress" },
-      // §9 coordinate lens — portfolio class × phase. An analytical lens (a nav
-      // ITEM, never a top-level group); the sidebar stays domain-noun.
-      { label: "Position", href: "/studio/position", icon: "Compass", sub: "Class × Phase Portfolio Lens" },
-      { label: "Assistant", href: "/studio/assistant", icon: "Bot", sub: "Free-Form AI Chat" },
-      { label: "Copilot", href: "/studio/copilot", icon: "Sparkles", sub: "Grounded Answers With Citations" },
-      { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox", sub: "Cross-App Activity Feed" },
-      { label: "Triage", href: "/studio/triage", icon: "CheckSquare", sub: "Clear The Decision Queue" },
-      { label: "Threads", href: "/studio/inbox", icon: "MessageSquare", sub: "Channels & Direct Messages" },
+      { label: "Dashboard", href: "/studio", icon: "House", sub: "Production Home · The Event Spine" },
+      { label: "My Inbox", href: "/studio/inbox", icon: "Inbox", sub: "Channels & Direct Messages" },
+      { label: "My Work", href: "/studio/my-work", icon: "SquareCheck", sub: "Tasks · Approvals · My Requests" },
+      { label: "My Calendar", href: "/studio/calendar", icon: "CalendarDays", sub: "Your Cross-Module Calendar" },
+      { label: "Reports", href: "/studio/reports", icon: "ChartColumn", sub: "43-Report Library · Print & PDF" },
+      { label: "Insights", href: "/studio/insights", icon: "TrendingUp", sub: "Cross-Domain Analytics" },
     ],
   },
   {
-    // PROJECTS — Portfolio, Authoring, Design, Estimating, Governance.
-    // From XPMS classes 0 (Strategy) + 1 (Creative). The header links the
-    // Projects hub (was the "Projects" echo leaf — dropped per ADR-0011).
-    label: "Projects",
-    href: "/studio/projects",
-    items: [],
-    sections: [
-      {
-        label: "Portfolio",
-        items: [
-          { label: "Programs", href: "/studio/programs", icon: "Layers", sub: "Multi-Project Portfolios" },
-          { label: "Venues", href: "/studio/venues", icon: "Building2", sub: "Venue Registry & Specs" },
-        ],
-      },
-      {
-        label: "Authoring",
-        items: [
-          { label: "Proposals", href: "/studio/proposals", icon: "FileText", sub: "Pitch, Sign, Convert To Project" },
-          // The canonical Documents home (doc-merge engine, 29 types); the
-          // Collaborate block-doc surface is "Pages" (kit Law #3 dedup).
-          { label: "Documents", href: "/studio/documents", icon: "FileStack", sub: "29 Doc Types · Merge & Print" },
-          {
-            label: "Proposal Templates",
-            href: "/studio/proposals/templates",
-            icon: "Files",
-            sub: "Reusable Proposal Blocks",
-          },
-          {
-            label: "Project Templates",
-            href: "/studio/templates",
-            icon: "Files",
-            sub: "Clone-To-Start Project Shapes",
-          },
-          { label: "Event Kits", href: "/studio/kits", icon: "Layers", sub: "Zones · Lines · Touchpoints · Gates" },
-        ],
-      },
-      {
-        label: "Design",
-        items: [
-          { label: "Site Plans", href: "/studio/site-plans", icon: "Map", sub: "Overlays On The Venue Map" },
-          { label: "Drawings", href: "/studio/drawings", icon: "Files", sub: "Sheet Sets & Revisions" },
-          { label: "Specifications", href: "/studio/specs", icon: "BookOpen", sub: "Technical Spec Sections" },
-          { label: "BIM Models", href: "/studio/bim", icon: "Network", sub: "3D Model Registry" },
-        ],
-      },
-      {
-        label: "Estimating",
-        items: [
-          { label: "Takeoffs", href: "/studio/takeoffs", icon: "Crosshair", sub: "Quantity Counts From Drawings" },
-          { label: "Estimates", href: "/studio/estimates", icon: "Coins", sub: "Price The Job · Convert To Budget" },
-        ],
-      },
-      {
-        label: "Governance",
-        items: [
-          {
-            label: "Risk Register",
-            href: "/studio/programs/risk",
-            icon: "AlertTriangle",
-            sub: "Program-Level Risk Log",
-          },
-          { label: "Risk Scores", href: "/studio/risk", icon: "ShieldAlert", sub: "Probability × Impact Matrix" },
-          { label: "Readiness", href: "/studio/programs/readiness", icon: "ShieldCheck", sub: "Go-Live Gate Checks" },
-          {
-            label: "Reviews",
-            href: "/studio/programs/reviews",
-            icon: "ClipboardCheck",
-            sub: "Stage-Gate Program Reviews",
-          },
-          {
-            label: "Approvals",
-            href: "/studio/governance/approvals",
-            icon: "ClipboardCheck",
-            sub: "Routed Sign-Off Chains",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    // PRODUCTION — Inventory, Build, Show. The technical envelope gets
-    // its own front door (lifecycle-proposal regression fix).
-    // From XPMS classes 4 (Build) + 5 (Production). Header links the hub.
-    label: "Production",
-    href: "/studio/production",
-    items: [],
-    sections: [
-      {
-        label: "Inventory",
-        items: [
-          // Kit 20 Phase A (C-06): ONE physical-asset noun in the rail. The
-          // old Equipment / Rentals / Assets / Warranty Reminders items are
-          // the second shelf now — the 9-tab family on /studio/assets
-          // (Registry · Fleet · Lots · Pull Sheets · Scan Sessions ·
-          // Sub-Rentals · Warranties · Maintenance · Power Plan). Fleet and
-          // Lots re-expose the legacy equipment/warehouse routes as
-          // asset_class lenses over the unified `assets` store.
-          {
-            label: "Assets & Inventory",
-            href: "/studio/assets",
-            icon: "Package",
-            sub: "One Registry · Gear · Fleet · Lots",
-          },
-        ],
-      },
-      {
-        label: "Build",
-        items: [
-          {
-            label: "Fabrication",
-            href: "/studio/production/fabrication",
-            icon: "Hammer",
-            sub: "Build Orders Through QC",
-          },
-          { label: "Compounds", href: "/studio/production/compounds", icon: "Tent", sub: "Site Compound Layouts" },
-          // "Yard" rail item retired (kit 20 Phase A): the yard/staging
-          // dashboard folded into the unified Assets & Inventory registry —
-          // lots are asset_class='lot' rows on the Lots lens.
-          {
-            label: "Punch List",
-            href: "/studio/punch",
-            icon: "ClipboardList",
-            sub: "Defects To Clear Before Handover",
-          },
-          { label: "Reality Captures", href: "/studio/captures", icon: "Telescope", sub: "Scans & As-Built Captures" },
-          { label: "Photo Log", href: "/studio/photos", icon: "Telescope", sub: "Timestamped Site Photos" },
-          { label: "Warranties", href: "/studio/warranties", icon: "ShieldCheck", sub: "Closeout Warranty Records" },
-        ],
-      },
-      {
-        label: "Show",
-        items: [
-          { label: "Run of Show", href: "/studio/production/ros", icon: "Play", sub: "Cue-By-Cue Show Timeline" },
-          {
-            label: "Work Orders",
-            href: "/studio/production/work-orders",
-            icon: "ClipboardList",
-            sub: "Dispatch Scoped Work To Subs",
-          },
-          {
-            label: "Live Dispatch",
-            href: "/studio/production/dispatch/live",
-            icon: "Radio",
-            sub: "Real-Time Crew Dispatch Board",
-          },
-          {
-            label: "Production Logistics",
-            href: "/studio/production/logistics",
-            icon: "Crosshair",
-            sub: "Show-Side Moves & Staging",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    // PEOPLE — Directory, Engagement, Development, Time & Recognition.
-    // Renamed from "Workforce" per ADR-0011 (the domain noun is People; the
-    // Workforce directory + courses + accreditation live under it).
-    label: "People",
-    href: "/studio/people",
-    items: [],
-    sections: [
-      {
-        label: "Directory",
-        items: [
-          // "Directory" echo leaf (/studio/people) dropped — the navigable
-          // People group header is the directory hub (ADR-0011 §"No echo items").
-          { label: "Teams", href: "/studio/people/teams", icon: "UsersRound", sub: "Org Team Structure" },
-          { label: "Workforce", href: "/studio/workforce", icon: "HardHat", sub: "Deskless Crew Directory" },
-        ],
-      },
-      {
-        label: "Engagement",
-        items: [
-          // Disambiguated from Procurement ▸ Contracts (kit Law #3): these are
-          // the people-side MSAs/engagement terms; vendor agreements live at
-          // /studio/legal/contracts.
-          {
-            label: "Crew Contracts",
-            href: "/studio/people/msas",
-            icon: "FileSignature",
-            sub: "MSAs & Engagement Terms",
-          },
-          {
-            label: "Offer Letters",
-            href: "/studio/people/offer-letters",
-            icon: "FileText",
-            sub: "Send, Countersign, Activate",
-          },
-          {
-            label: "Delegations",
-            href: "/studio/participants/delegations",
-            icon: "UsersRound",
-            sub: "Visiting Delegation Rosters",
-          },
-          { label: "Visa", href: "/studio/participants/visa", icon: "Stamp", sub: "Visa & Immigration Cases" },
-          // ADR-0011 one-home-per-concept: Accreditation lives ONLY in People
-          // (was also under Operations ▸ Guest Experience + Knowledge ▸
-          // Certifications). §03 groups it with participants/credentials.
-          {
-            label: "Accreditation",
-            href: "/studio/accreditation",
-            icon: "BadgeCheck",
-            sub: "Credentials & Access Levels",
-          },
-          {
-            label: "Rosters",
-            href: "/studio/workforce/rosters",
-            icon: "ClipboardSignature",
-            sub: "Published Shift Rosters",
-          },
-        ],
-      },
-      {
-        label: "Development",
-        items: [
-          {
-            label: "Training",
-            href: "/studio/workforce/training",
-            icon: "GraduationCap",
-            sub: "Required Training Matrix",
-          },
-          // Courses deep-links into the LEG3ND shell — LEG3ND is the canonical
-          // learning/LMS owner; the console-embedded the deskless-workforce suite courses admin
-          // was retired when LEG3ND graduated to its own (legend) shell.
-          { label: "Courses", href: "/legend/learn", icon: "BookOpen", sub: "LEG3ND Learning Paths" },
-          // The Standard (knowledge base) re-homed here when the platform
-          // Knowledge group dissolved (LEG3ND is now its own (legend) shell).
-          { label: "The Standard", href: "/studio/knowledge", icon: "BookOpenCheck", sub: "The Knowledge Base" },
-          {
-            label: "Onboarding",
-            href: "/studio/workforce/onboarding",
-            icon: "ClipboardSignature",
-            sub: "New-Hire Flow Assignments",
-          },
-        ],
-      },
-      {
-        label: "Time & Recognition",
-        items: [
-          { label: "Time Off", href: "/studio/workforce/time-off", icon: "Calendar", sub: "Request & Approve Leave" },
-          {
-            label: "Shift Swaps",
-            href: "/studio/workforce/shift-swaps",
-            icon: "ArrowLeftRight",
-            sub: "Peer Swap Requests & Approvals",
-          },
-          { label: "Recognition", href: "/studio/workforce/recognition", icon: "Award", sub: "Kudos & Shout-Outs" },
-          { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck", sub: "Award & Track Badges" },
-          {
-            label: "Resource Forecast",
-            href: "/studio/workforce/forecast",
-            icon: "TrendingUp",
-            sub: "Person × Week Capacity",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    // SALES — Pipeline & Partners, Hospitality, Marketplace, Revenue.
-    // Pipeline demoted to a saved view on /studio/leads (ADR-0006 #1).
-    // Hospitality internally tabs by hosted persona: Talent / Sponsors /
-    // Athletes / Industry / Media & Press / VVIP (ADR-0006 #2).
-    // Analytics = /studio/insights (per-domain analytics in their
-    // domain — Stripe pattern, ADR-0006 #4).
-    // From XPMS classes 2 (Talent — bookings) + 3 (Marketing).
-    // COMMERCE — Sales · Hospitality · Marketplace · Revenue, merged into one
-    // domain group per ADR-0011 (Sales + Marketplace + Hospitality → Commerce,
-    // with Sales as the lead section).
-    label: "Commerce",
-    items: [],
-    sections: [
-      {
-        label: "Sales",
-        items: [
-          { label: "Sales", href: "/studio/sales", icon: "TrendingUp", sub: "The Sales & CRM Hub" },
-          // CRM is the canonical merged surface; Pipeline and Leads are
-          // filtered lenses over the one pursuit store (kit §09 C-11).
-          { label: "CRM", href: "/studio/crm", icon: "Handshake", sub: "One Pursuit Store · Deals · Leads · RFPs" },
-          { label: "Pipeline", href: "/studio/pipeline", icon: "GitBranch", sub: "The Deal Lens · By Stage" },
-          { label: "Leads", href: "/studio/leads", icon: "UserPlus", sub: "The Lead Lens · Qualify, Then Convert" },
-          { label: "Clients", href: "/studio/clients", icon: "Handshake", sub: "Client Accounts & Contacts" },
-          {
-            label: "Sponsors",
-            href: "/studio/commercial/sponsors",
-            icon: "Award",
-            sub: "Sponsorship Accounts & Assets",
-          },
-          { label: "Marketing", href: "/studio/marketing", icon: "Megaphone", sub: "Audiences & Channels" },
-          { label: "Campaigns", href: "/studio/campaigns", icon: "Star", sub: "Campaign Planning & Results" },
-          { label: "Function Diary", href: "/studio/sales/diary", icon: "CalendarDays", sub: "Venue Booking Diary" },
-          { label: "BEOs", href: "/studio/sales/beos", icon: "ClipboardList", sub: "Banquet Event Orders" },
-        ],
-      },
+    label: "Sales",
+    items: [
+      { label: "Sales & CRM", href: "/studio/crm", icon: "Handshake", sub: "One Pursuit Store · Deals · Leads · RFPs" },
+      { label: "Clients", href: "/studio/clients", icon: "Contact", sub: "Client Accounts & Contacts" },
+      { label: "Marketing", href: "/studio/marketing", icon: "Megaphone", sub: "Audiences, Campaigns & Channels" },
       {
         label: "Hospitality",
-        items: [
-          {
-            label: "Hospitality",
-            href: "/studio/commercial/hospitality",
-            icon: "ConciergeBell",
-            sub: "Hosted Persona Programs",
-          },
-          // Moved from the (now-split) Operations group per ADR-0011 §03 (guest
-          // experience belongs to Commerce). Same page as Hospitality, filtered
-          // to the guest audience via ?audience=guest — matchRoute treats
-          // query-bearing hrefs as never-active, so the Hospitality entry owns
-          // the highlight; both now co-locate in Commerce.
-          {
-            label: "Guest Experience",
-            href: "/studio/commercial/hospitality?audience=guest",
-            icon: "ConciergeBell",
-            sub: "The Guest-Audience Lens",
-          },
-        ],
-      },
-      {
-        label: "Marketplace",
-        items: [
-          { label: "Marketplace", href: "/studio/marketplace", icon: "Globe", sub: "Public Postings · Calls · EPKs" },
-          { label: "Bookings", href: "/studio/bookings", icon: "TrendingUp", sub: "Artist Offers & Holds" },
-          { label: "Tours", href: "/studio/agency/tours", icon: "Route", sub: "Multi-Stop Tour Routing" },
-          { label: "Agency Roster", href: "/studio/agency/roster", icon: "Users", sub: "Represented Artists" },
-          { label: "Talent Roster", href: "/studio/marketplace/talent", icon: "Music", sub: "EPKs & Riders" },
-          { label: "Offers", href: "/studio/marketplace/offers", icon: "Gavel", sub: "Booking Offers · 60/40 Terms" },
-          { label: "Inquiries", href: "/studio/marketplace/inquiries", icon: "Inbox", sub: "Inbound Booking Interest" },
-          {
-            label: "Box Office",
-            href: "/studio/marketplace/box-office",
-            icon: "Ticket",
-            sub: "Tickets · Tiers · Gates",
-          },
-          { label: "Discounts", href: "/studio/marketplace/discounts", icon: "Receipt", sub: "Codes & Comps" },
-        ],
-      },
-      {
-        label: "Revenue",
-        items: [
-          // Transactional Revenue (marketplace + box office + store), distinct
-          // from Finance AR (IMPLEMENTATION §5).
-          { label: "Orders", href: "/studio/revenue/orders", icon: "Receipt", sub: "Ticket & Store Orders" },
-          { label: "Transactions", href: "/studio/revenue/transactions", icon: "Coins", sub: "The Payment Ledger" },
-          // "Payouts" here = event/marketplace payouts (event_payouts store);
-          // AP vendor payouts are Finance ▸ Payables ▸ Vendor Payouts.
-          { label: "Payouts", href: "/studio/revenue/payouts", icon: "Coins", sub: "Event & Marketplace Payouts" },
-          { label: "Analytics", href: "/studio/insights", icon: "BarChart3", sub: "Cross-Domain Insights" },
-        ],
-      },
-    ],
-  },
-  {
-    // FINANCE — Receivables, Payables, Planning, Time & Payroll.
-    // Unchanged from ADR-0005's Finance sub-sectioning; just lifts to a
-    // top-level group instead of nesting under EXECUTIVE. Header links the hub.
-    label: "Finance",
-    href: "/studio/finance",
-    items: [],
-    sections: [
-      {
-        label: "Receivables",
-        items: [
-          { label: "Invoices", href: "/studio/finance/invoices", icon: "Receipt", sub: "AR Billing & Aging" },
-          {
-            label: "Pay Apps",
-            href: "/studio/finance/pay-apps",
-            icon: "FileSpreadsheet",
-            sub: "SOV % Complete & Retainage",
-          },
-          {
-            label: "Sub Invoices",
-            href: "/studio/finance/sub-invoices",
-            icon: "Receipt",
-            sub: "Inbound Sub Billing · Waiver-Gated",
-          },
-          {
-            label: "Lien Waivers",
-            href: "/studio/finance/lien-waivers",
-            icon: "Stamp",
-            sub: "Conditional & Final Waivers",
-          },
-          {
-            label: "E-Sign Envelopes",
-            href: "/studio/envelopes",
-            icon: "ClipboardSignature",
-            sub: "Signature Packets & Status",
-          },
-          { label: "AP Invoice OCR", href: "/studio/finance/ap-ocr", icon: "Sparkles", sub: "Captured Invoice Intake" },
-        ],
-      },
-      {
-        label: "Payables",
-        items: [
-          {
-            label: "Expenses",
-            href: "/studio/finance/expenses",
-            icon: "CreditCard",
-            sub: "Card · Reimbursement · Mileage",
-          },
-          { label: "Mileage", href: "/studio/finance/mileage", icon: "Truck", sub: "Mileage Logs & Rate Math" },
-          // Disambiguated from Commerce ▸ Revenue ▸ Payouts (kit Law #3):
-          // this is AP-side vendor payout onboarding, not event payouts.
-          {
-            label: "Vendor Payouts",
-            href: "/studio/finance/payouts",
-            icon: "Wallet",
-            sub: "Stripe Connect Vendor Status",
-          },
-        ],
-      },
-      {
-        // Ledger setup — chart-of-accounts entities + cost-code reference.
-        // Promoted from hub-only links (workflow audit F-C).
-        label: "Ledger Setup",
-        items: [
-          { label: "Entities", href: "/studio/finance/entities", icon: "Building2", sub: "Legal Entities & Books" },
-          {
-            label: "Cost Codes",
-            href: "/studio/finance/cost-codes",
-            icon: "ListOrdered",
-            sub: "The Job-Costing Backbone",
-          },
-          {
-            label: "Chart of Accounts",
-            href: "/studio/finance/accounts",
-            icon: "ListOrdered",
-            sub: "GL Account Structure",
-          },
-          {
-            label: "General Ledger",
-            href: "/studio/finance/ledger",
-            icon: "BookOpen",
-            sub: "Journal Entries & Balances",
-          },
-        ],
-      },
-      {
-        label: "Planning",
-        items: [
-          {
-            label: "Budgets",
-            href: "/studio/finance/budgets",
-            icon: "PiggyBank",
-            sub: "Cost-Coded Budget Lines & FAC",
-          },
-          { label: "WIP", href: "/studio/finance/wip", icon: "FileSpreadsheet", sub: "Earned vs Billed · Settlement" },
-          {
-            label: "EAC Forecasts",
-            href: "/studio/finance/forecasts",
-            icon: "TrendingUp",
-            sub: "Estimate At Completion",
-          },
-          { label: "Periods", href: "/studio/finance/periods", icon: "CalendarDays", sub: "Month-End Close & Lock" },
-          // Disambiguated from Dashboard ▸ Reports (kit Law #3): the finance
-          // statement set, not the cross-app report library.
-          {
-            label: "Financial Reports",
-            href: "/studio/finance/reports",
-            icon: "ChartBar",
-            sub: "P&L From Current Books",
-          },
-          { label: "Tax", href: "/studio/finance/tax", icon: "Coins", sub: "Tax Rates & Filings" },
-        ],
-      },
-      {
-        label: "Time & Payroll",
-        items: [
-          { label: "Time", href: "/studio/finance/time", icon: "Clock", sub: "The Time Tracker" },
-          {
-            label: "Timesheets",
-            href: "/studio/finance/timesheets",
-            icon: "ClipboardCheck",
-            sub: "Approval-Gated Timesheets",
-          },
-          {
-            label: "Certified Payroll",
-            href: "/studio/finance/payroll",
-            icon: "FileSignature",
-            sub: "Runs Gated On Timesheets",
-          },
-          { label: "Subscriptions", href: "/studio/subscriptions", icon: "BadgeCheck", sub: "Plan, Seats & Billing" },
-        ],
-      },
-    ],
-  },
-  {
-    // PROCUREMENT — Sourcing, Buying, Reference. Header links the hub.
-    // Master Catalog moves here from Settings (ADR-0006 §"What moves").
-    label: "Procurement",
-    href: "/studio/procurement",
-    items: [],
-    sections: [
-      {
-        label: "Sourcing",
-        items: [
-          { label: "Vendors", href: "/studio/procurement/vendors", icon: "Store", sub: "Supplier & Sub Directory" },
-          {
-            label: "Prequalification",
-            href: "/studio/procurement/prequalification",
-            icon: "BookOpenCheck",
-            sub: "Vendor Qualification Packets",
-          },
-          {
-            label: "Compliance",
-            href: "/studio/procurement/compliance",
-            icon: "ShieldCheck",
-            sub: "COI · W-9 · License Vault",
-          },
-          {
-            label: "Subs Network",
-            href: "/studio/procurement/network",
-            icon: "Users",
-            sub: "Trade & Region Eligibility",
-          },
-          {
-            label: "Trades Marketplace",
-            href: "/studio/procurement/marketplace",
-            icon: "Store",
-            sub: "Open Work Order Board",
-          },
-          {
-            label: "Vendor Scorecard",
-            href: "/studio/procurement/scorecard",
-            icon: "Star",
-            sub: "Performance By Vendor",
-          },
-          { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass", sub: "Sourcing Events & Bids" },
-          { label: "RFQs", href: "/studio/procurement/rfqs", icon: "PackageCheck", sub: "Quote, Compare, Award To PO" },
-          { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel", sub: "Invitations To Bid" },
-        ],
-      },
-      {
-        label: "Buying",
-        items: [
-          {
-            label: "Requisitions",
-            href: "/studio/procurement/requisitions",
-            icon: "ShoppingCart",
-            sub: "Ask To Buy · Converts To PO/RFQ",
-          },
-          {
-            label: "Purchase Orders",
-            href: "/studio/procurement/purchase-orders",
-            icon: "Package",
-            sub: "Committed Spend To Vendors",
-          },
-          {
-            label: "Receiving",
-            href: "/studio/procurement/receiving",
-            icon: "PackageCheck",
-            sub: "Goods In · 3-Way Match",
-          },
-          {
-            label: "PO Change Orders",
-            href: "/studio/procurement/po-change-orders",
-            icon: "ArrowLeftRight",
-            sub: "Scope & Price Changes On POs",
-          },
-          {
-            label: "WO Broadcasts",
-            href: "/studio/procurement/wo-broadcasts",
-            icon: "Send",
-            sub: "Blast Work To Eligible Subs",
-          },
-          {
-            label: "Contracts",
-            href: "/studio/legal/contracts",
-            icon: "ClipboardSignature",
-            sub: "Vendor & Client Agreements",
-          },
-        ],
-      },
-      {
-        label: "Reference",
-        items: [
-          {
-            label: "Rate Card",
-            href: "/studio/logistics/ratecard",
-            icon: "ListOrdered",
-            sub: "Standard Rates By Line",
-          },
-          { label: "Submittals", href: "/studio/submittals", icon: "Inbox", sub: "Review & Approve Submittals" },
-          {
-            label: "Master Catalog",
-            href: "/studio/settings/catalog",
-            icon: "Spline",
-            sub: "Reusable SKUs For Advancing",
-          },
-          {
-            label: "Job Templates",
-            href: "/studio/settings/job-templates",
-            icon: "ClipboardList",
-            sub: "Priced Scope Templates",
-          },
-        ],
-      },
-    ],
-  },
-  // OPERATIONS junk-drawer split into four domain-noun groups per ADR-0011
-  // §"The Operations junk-drawer splits into Coordination · Logistics · Safety
-  // · Messages." Guest Experience moved to Commerce ▸ Hospitality (§03 puts
-  // hospitality/guest-exp under Commerce); Accreditation moved to People (one
-  // home). Each group header carries its module hub href (navigable group).
-  {
-    // COORDINATION — the day-to-day production-control surface (schedule,
-    // tasks, daily log, forms, guides) + the org-level Sustainability rollup.
-    // Header links the Operations hub; the redundant "Operations Hub" leaf is
-    // dropped in favour of the navigable header (ADR-0011 §"No echo items").
-    label: "Coordination",
-    href: "/studio/operations",
-    items: [
-      { label: "Schedule", href: "/studio/schedule", icon: "Calendar", sub: "The Master Production Schedule" },
-      { label: "Calendar", href: "/studio/calendar", icon: "CalendarDays", sub: "Schedule As A Calendar" },
-      {
-        label: "Schedule Baselines",
-        href: "/studio/schedule/baselines",
-        icon: "GitBranch",
-        sub: "Snapshots For Slip Tracking",
-      },
-      { label: "Look-Ahead", href: "/studio/operations/look-ahead", icon: "Telescope", sub: "Rolling 2-Week Plan" },
-      { label: "Tasks", href: "/studio/tasks", icon: "ListTodo", sub: "Assigned Work · Lands In My Work" },
-      { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ScrollText", sub: "The Signed Site Record" },
-      { label: "Action Items", href: "/studio/action-items", icon: "CheckSquare", sub: "Cross-Domain Follow-Ups" },
-      { label: "Annotations", href: "/studio/annotations", icon: "AlertTriangle", sub: "Pinned Notes On Plans" },
-      { label: "Forms", href: "/studio/forms", icon: "ClipboardList", sub: "Field Forms & Responses" },
-      { label: "Guides", href: "/studio/guides", icon: "Atlas", sub: "Know-Before-You-Go Guides" },
-      {
-        label: "Reservations",
-        href: "/studio/operations/reservations",
+        href: "/studio/commercial/hospitality",
         icon: "ConciergeBell",
-        sub: "Space Holds & Confirmations",
+        sub: "Hosted Guests & Service Programs",
       },
-      // Cross-cutting org-level sustainability rollup (was Operations ▸ Reporting).
-      { label: "Sustainability", href: "/studio/sustainability", icon: "Leaf", sub: "Footprint & Diversion Rollup" },
+      { label: "Marketplace", href: "/studio/marketplace", icon: "Store", sub: "Public Postings · Calls · EPKs" },
+      { label: "Revenue", href: "/studio/revenue/orders", icon: "ShoppingCart", sub: "Orders, Transactions & Payouts" },
     ],
   },
   {
-    // LOGISTICS — transport, freight, warehouse, disposition, catering, lodging.
-    label: "Logistics",
-    href: "/studio/logistics",
+    label: "Talent",
+    sub: "Book",
     items: [
-      { label: "Transport", href: "/studio/transport", icon: "Truck", sub: "Ground Moves & Runs" },
-      { label: "Dispatch", href: "/studio/transport/dispatch", icon: "Send", sub: "Driver & Vehicle Dispatch" },
-      { label: "Freight", href: "/studio/logistics/freight", icon: "Container", sub: "Carrier Shipments & Customs" },
-      // Warehouse rail item retired (kit 20 Phase A): /studio/logistics/warehouse
-      // is now the Lots lens of Assets & Inventory, reached via its tab family.
       {
-        label: "Disposition",
-        href: "/studio/logistics/disposition",
-        icon: "PackageOpen",
-        sub: "Sell · Store · Scrap Decisions",
+        label: "Artist Roster",
+        href: "/studio/marketplace/talent",
+        icon: "Mic",
+        sub: "Artists & Performers · EPKs & Riders",
       },
+      {
+        label: "Artist Offers & Holds",
+        href: "/studio/bookings",
+        icon: "CalendarCheck",
+        sub: "Holds & Offers · Confirmed Books Spawn The Advance Chain",
+      },
+      {
+        label: "Casting Calls",
+        href: "/studio/marketplace/calls",
+        icon: "Clapperboard",
+        sub: "Post A Role · Submissions Queue Per Role",
+      },
+      {
+        label: "Submissions",
+        href: "/studio/marketplace/submissions",
+        icon: "Video",
+        sub: "Applicants Against Roles · Book To Roster",
+      },
+    ],
+  },
+  {
+    label: "Projects",
+    sub: "Plan",
+    items: [
+      { label: "Events", href: "/studio/projects", icon: "FolderKanban", sub: "The Event Portfolio · Sell To Settle" },
+      { label: "Programs", href: "/studio/programs", icon: "Layers", sub: "Multi-Project Portfolios" },
+      { label: "Locations", href: "/studio/locations", icon: "MapPin", sub: "The Canonical Space Registry" },
+      { label: "Proposals", href: "/studio/proposals", icon: "FileSignature", sub: "Pitch, Sign, Convert To Project" },
+      { label: "Documents", href: "/studio/documents", icon: "FileText", sub: "29 Doc Types · Merge & Print" },
+      { label: "Drawings", href: "/studio/drawings", icon: "PencilRuler", sub: "Sheet Sets & Revisions" },
+      { label: "Estimates", href: "/studio/estimates", icon: "Calculator", sub: "Price The Job · Convert To Budget" },
+      {
+        label: "Approvals",
+        href: "/studio/governance/approvals",
+        icon: "CheckCheck",
+        sub: "The Approval Queue · Every Chain",
+      },
+    ],
+  },
+  {
+    label: "Procurement",
+    sub: "Source",
+    items: [
+      { label: "Vendors", href: "/studio/procurement/vendors", icon: "Building2", sub: "Supplier & Sub Directory" },
+      {
+        label: "Requisitions",
+        href: "/studio/procurement/requisitions",
+        icon: "ClipboardPen",
+        sub: "Capture Demand Before Money Moves · Convert To PO Or RFQ",
+      },
+      {
+        label: "RFQs & Sourcing",
+        href: "/studio/procurement/rfqs",
+        icon: "Gavel",
+        sub: "Run A Sourcing Event · Three Bids And A Buy",
+      },
+      {
+        label: "Purchase Orders",
+        href: "/studio/procurement/purchase-orders",
+        icon: "FileCheck",
+        sub: "Commit Spend · Receive · Match",
+      },
+      {
+        label: "Advancing",
+        href: "/studio/advancing",
+        icon: "ClipboardCheck",
+        sub: "Catalog Fulfillment Per Party · Gear, Travel & Credentials",
+      },
+      {
+        label: "Contracts",
+        href: "/studio/legal/contracts",
+        icon: "ScrollText",
+        sub: "One Contract Store · Every Scope",
+      },
+      { label: "Catalog", href: "/studio/procurement/catalog", icon: "Boxes", sub: "Approved Items & Rate References" },
+    ],
+  },
+  {
+    label: "Production",
+    sub: "Build",
+    items: [
+      { label: "Run Of Show", href: "/studio/production/ros", icon: "Clapperboard", sub: "Cue-By-Cue Show Timeline" },
+      {
+        label: "Build & Fabrication",
+        href: "/studio/production/fabrication",
+        icon: "Hammer",
+        sub: "Work Orders Through QC",
+      },
+      {
+        label: "Assets & Inventory",
+        href: "/studio/assets",
+        icon: "Package",
+        sub: "One Physical-Asset Store · Gear, Fleet & Lots",
+      },
+      {
+        label: "Work Orders",
+        href: "/studio/production/work-orders",
+        icon: "ClipboardType",
+        sub: "Dispatch Jobs To Outside Crews",
+      },
+      {
+        label: "Activations",
+        href: "/studio/commercial/sponsors",
+        icon: "Sparkles",
+        sub: "Sponsor & Brand Activations",
+      },
+    ],
+  },
+  {
+    label: "People",
+    sub: "Crew",
+    items: [
+      { label: "Team Roster", href: "/studio/people/crew", icon: "Users", sub: "The Internal Team Directory" },
+      {
+        label: "Staff Schedule",
+        href: "/studio/workforce/deployment",
+        icon: "CalendarRange",
+        sub: "Shift Deployment & Coverage",
+      },
+      { label: "Manning", href: "/studio/workforce/rosters", icon: "UsersRound", sub: "Muster Lists & Site Headcount" },
+      {
+        label: "Credentialing",
+        href: "/studio/people/credentials",
+        icon: "BadgeCheck",
+        sub: "Issue & Track Credentials",
+      },
+    ],
+  },
+  {
+    label: "Operations",
+    sub: "Run",
+    items: [
+      {
+        label: "Schedule",
+        href: "/studio/schedule",
+        icon: "CalendarDays",
+        sub: "One Schedule Store · Events & Meetings",
+      },
+      { label: "Tasks", href: "/studio/tasks", icon: "ListChecks", sub: "Phase × Department Work Items" },
+      { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ClipboardList", sub: "The Signed Site Diary" },
+      { label: "Transport", href: "/studio/logistics/freight", icon: "Truck", sub: "Freight & Ground Movement" },
       {
         label: "Catering",
         href: "/studio/logistics/services",
         icon: "UtensilsCrossed",
-        sub: "Meals & Service Vendors",
+        sub: "Crew Meals & Site Services",
       },
-      {
-        label: "Accommodation",
-        href: "/studio/accommodation",
-        icon: "BedDouble",
-        sub: "Rooms, Blocks & Rooming Lists",
-      },
+      { label: "Accommodation", href: "/studio/accommodation", icon: "BedDouble", sub: "Rooming Lists & Hotel Blocks" },
     ],
   },
   {
-    // SAFETY — operational response + compliance, two sub-sections. Header
-    // links the safety hub (the cross-domain read feed); the single Incidents
-    // CRUD home stays at /studio/operations/incidents (ADR-0011 one home).
     label: "Safety",
-    href: "/studio/safety",
-    items: [],
-    sections: [
+    sub: "Protect",
+    items: [
+      { label: "Incidents", href: "/studio/operations/incidents", icon: "Siren", sub: "Report, Triage & Resolve" },
+      { label: "Access Control", href: "/studio/access-control", icon: "ScanLine", sub: "Checkpoints, Scans & Zones" },
+      { label: "Inspections", href: "/studio/inspections", icon: "SearchCheck", sub: "Scheduled & Spot Checks" },
       {
-        label: "Operational",
-        items: [
-          // F-E: point at the canonical CRUD home (kanban / new / detail), not
-          // the cross-domain read feed at /studio/safety/incidents (which is
-          // the Safety group hub + stays reachable via cross-links).
-          {
-            label: "Incidents",
-            href: "/studio/operations/incidents",
-            icon: "Siren",
-            sub: "Report It · Spawns Corrective Tasks",
-          },
-          { label: "Major Incident", href: "/studio/safety/major-incident", icon: "Flame", sub: "MIM Bridge & Comms" },
-          { label: "Crisis", href: "/studio/safety/crisis", icon: "Flame", sub: "Crisis Playbook Activation" },
-          { label: "Medical", href: "/studio/safety/medical", icon: "Stethoscope", sub: "Medical Log & Treatments" },
-          {
-            label: "Safeguarding",
-            href: "/studio/safety/safeguarding",
-            icon: "HeartHandshake",
-            sub: "Welfare & Vulnerable Persons",
-          },
-          {
-            label: "Guard Tours",
-            href: "/studio/safety/guard-tours",
-            icon: "ShieldCheck",
-            sub: "Patrol Routes & Checkpoints",
-          },
-          // Kit v7 CameraScanner archetype — fixed-station gate credential scan.
-          { label: "Access Control", href: "/studio/access-control", icon: "BadgeCheck", sub: "Gate Scans & Zones" },
-          {
-            label: "Environmental",
-            href: "/studio/safety/environmental",
-            icon: "Leaf",
-            sub: "Weather & Environmental Triggers",
-          },
-          { label: "Threats", href: "/studio/safety/threats", icon: "ShieldAlert", sub: "Security Threat Register" },
-        ],
+        label: "Risk",
+        href: "/studio/programs/risk",
+        icon: "TriangleAlert",
+        sub: "The Risk Register · Probability × Impact",
       },
-      {
-        label: "Compliance",
-        items: [
-          { label: "Inspections", href: "/studio/inspections", icon: "Search", sub: "Scheduled Checks & Findings" },
-          { label: "OSHA 300", href: "/studio/safety/osha", icon: "ShieldAlert", sub: "Recordable Injury Log" },
-          {
-            label: "Briefings",
-            href: "/studio/safety/briefings",
-            icon: "ClipboardPlus",
-            sub: "Toolbox Talks & Sign-Ins",
-          },
-          { label: "Playbooks", href: "/studio/safety/playbooks", icon: "BookOpenCheck", sub: "Response Procedures" },
-          {
-            label: "Chain of Custody",
-            href: "/studio/compliance/coc",
-            icon: "FileSignature",
-            sub: "Evidence Handling Log",
-          },
-        ],
-      },
+      { label: "Compliance", href: "/studio/compliance", icon: "ShieldCheck", sub: "Requirements, Permits & Evidence" },
     ],
   },
   {
-    // MESSAGES — communication surfaces (announcements, polls, surveys, RFIs,
-    // transmittals, service desk) plus the meeting/event coordination items.
-    // No /studio/comms hub page exists, so the header stays toggle-only.
-    label: "Messages",
+    label: "Finance",
+    sub: "Settle",
     items: [
-      { label: "Events", href: "/studio/events", icon: "CalendarDays", sub: "Public Event Listings" },
-      { label: "Meetings", href: "/studio/meetings", icon: "CalendarDays", sub: "Agendas & Attendance" },
-      { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText", sub: "Minutes & Decisions" },
+      { label: "Invoices", href: "/studio/finance/invoices", icon: "Receipt", sub: "AR & AP · One Invoice Store" },
+      { label: "Expenses", href: "/studio/finance/expenses", icon: "Wallet", sub: "Capture, Submit & Approve" },
+      { label: "Budgets", href: "/studio/finance/budgets", icon: "PiggyBank", sub: "Plan, Track & Settle" },
+      { label: "Payroll", href: "/studio/finance/payroll", icon: "Banknote", sub: "Crew Pay & Certified Runs" },
+      { label: "Ledger", href: "/studio/finance/ledger", icon: "Landmark", sub: "The General Ledger & Cost Codes" },
+    ],
+  },
+  {
+    label: "Comms",
+    sub: "Connect",
+    items: [
       {
-        label: "Announcements",
+        label: "Communications",
         href: "/studio/comms/announcements",
-        icon: "Megaphone",
-        sub: "Broadcast To The Workforce",
+        icon: "RadioTower",
+        sub: "Announcements & Broadcasts",
       },
-      { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3", sub: "Quick Votes" },
-      { label: "Surveys", href: "/studio/comms/surveys", icon: "ClipboardCheck", sub: "Structured Feedback Runs" },
-      { label: "Channels", href: "/studio/comms/channels", icon: "MessageSquare", sub: "Radio & Comms Channel Plan" },
-      {
-        label: "Whiteboards",
-        href: "/studio/collaborate/whiteboards",
-        icon: "Presentation",
-        sub: "Freeform Canvas Boards",
-      },
-      { label: "Transmittals", href: "/studio/transmittals", icon: "Send", sub: "Formal Document Handoffs" },
-      { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox", sub: "Shared Org Mailbox" },
-      { label: "RFIs", href: "/studio/rfis", icon: "MessageCircleQuestion", sub: "Requests For Information" },
-      {
-        label: "Service Desk",
-        href: "/studio/services/requests",
-        icon: "ConciergeBell",
-        sub: "IT & Facilities Tickets",
-      },
-      { label: "TOC — ITIL", href: "/studio/ops/toc", icon: "Network", sub: "Tech Ops Center · Service Health" },
+      { label: "Community", href: "/legend/community", icon: "MessagesSquare", sub: "Cohorts, Members & Crews" },
+      { label: "Knowledge Base", href: "/studio/knowledge", icon: "BookOpen", sub: "The Standard · Articles & SOPs" },
+      { label: "Service Desk", href: "/studio/services", icon: "Headset", sub: "IT & Facilities Tickets" },
     ],
   },
-  // KNOWLEDGE group removed (ADR-0011): LEG3ND is now its own (legend) shell
-  // (legend.atlvs.pro / `legendNav`), reached from the ecosystem app-switcher
-  // — not a console sidebar group. Its /legend/* deep-links (Resources,
-  // Signage, Compliance Engine) live in `legendNav`; its /studio/* leaves
-  // resolved to one home each: The Standard + Courses + Certifications →
-  // People, Catalog → Procurement ▸ Reference, Safety (incidents) → the one
-  // Incidents CRUD home in Operations ▸ Safety.
+];
+
+export const platformTabs: PlatformTabFamily[] = [
   {
-    // COLLABORATE — lightweight workspace surfaces (Airtable-style sheets,
-    // etc.) that don't belong to a heavier domain group.
-    label: "Collaborate",
-    items: [
-      // Block documents (deferred item F4). Single-user editing; multiplayer
-      // is out of scope.
-      // Disambiguated from Projects ▸ Documents (kit Law #3): the doc-merge
-      // engine at /studio/documents is the canonical Documents home; these
-      // are Notion-style block pages.
-      { label: "Pages", href: "/studio/collaborate/docs", icon: "FileText", sub: "Block-Based Collaborative Pages" },
-      {
-        label: "Sheets",
-        href: "/studio/collaborate/sheets",
-        icon: "FileSpreadsheet",
-        sub: "Lightweight Grid Workspaces",
-      },
-      // Kit v7 component archetypes — RichTextEditor notes + KanbanBoard.
-      { label: "Notes", href: "/studio/notes", icon: "FileText", sub: "Rich-Text Scratch Notes" },
-      { label: "Board", href: "/studio/board", icon: "Layers", sub: "Freeform Kanban" },
+    owner: "/studio",
+    eyebrow: "Home",
+    tabs: [
+      { label: "Overview", href: "/studio" },
+      { label: "Dashboards", href: "/studio/dashboards" },
+      { label: "Insights", href: "/studio/insights" },
+      { label: "Reports", href: "/studio/reports" },
+      { label: "Goals", href: "/studio/goals" },
+      { label: "Sustainability", href: "/studio/sustainability" },
     ],
   },
+  {
+    owner: "/studio/marketplace/talent",
+    eyebrow: "Talent · Book",
+    tabs: [
+      { label: "Roster", href: "/studio/marketplace/talent" },
+      { label: "Artist Offers & Holds", href: "/studio/bookings" },
+      { label: "Casting Calls", href: "/studio/marketplace/calls" },
+      { label: "Submissions", href: "/studio/marketplace/submissions" },
+    ],
+  },
+  {
+    owner: "/studio/crm",
+    eyebrow: "Sales",
+    tabs: [
+      { label: "CRM", href: "/studio/crm" },
+      { label: "Leads", href: "/studio/leads" },
+      { label: "Opportunities", href: "/studio/pipeline" },
+    ],
+  },
+  {
+    owner: "/studio/projects",
+    eyebrow: "Projects · Plan",
+    tabs: [
+      { label: "Events", href: "/studio/projects" },
+      { label: "Timeline", href: "/studio/schedule/baselines" },
+      { label: "Coordinate Matrix", href: "/studio/position" },
+      { label: "Deliverables", href: "/studio/advancing" },
+      { label: "Proofs", href: "/studio/annotations" },
+    ],
+  },
+  {
+    owner: "/studio/revenue/orders",
+    eyebrow: "Sales",
+    tabs: [
+      { label: "Orders", href: "/studio/revenue/orders" },
+      { label: "Transactions", href: "/studio/revenue/transactions" },
+      { label: "Box Office", href: "/studio/marketplace/box-office" },
+      { label: "Guest List", href: "/studio/commercial/hospitality?audience=guest" },
+      { label: "Merch", href: "/studio/marketplace/box-office/listings" },
+      { label: "Discounts", href: "/studio/marketplace/discounts" },
+      { label: "Payouts", href: "/studio/revenue/payouts" },
+    ],
+  },
+  {
+    owner: "/studio/documents",
+    eyebrow: "Projects · Plan",
+    tabs: [
+      { label: "Files", href: "/studio/documents" },
+      { label: "Whiteboards", href: "/studio/collaborate/whiteboards" },
+      { label: "Document Control", href: "/studio/transmittals" },
+    ],
+  },
+  {
+    owner: "/studio/drawings",
+    eyebrow: "Projects · Plan",
+    tabs: [
+      { label: "Sheet Sets", href: "/studio/drawings" },
+      { label: "RFIs", href: "/studio/rfis" },
+      { label: "Submittals", href: "/studio/submittals" },
+    ],
+  },
+  {
+    owner: "/studio/procurement/vendors",
+    eyebrow: "Procurement · Source",
+    tabs: [
+      { label: "Directory", href: "/studio/procurement/vendors" },
+      { label: "Scorecard", href: "/studio/procurement/scorecard" },
+      { label: "COIs", href: "/studio/procurement/compliance" },
+      { label: "Sub Network", href: "/studio/procurement/network" },
+      { label: "Sub Compliance", href: "/studio/procurement/prequalification" },
+    ],
+  },
+  {
+    owner: "/studio/procurement/purchase-orders",
+    eyebrow: "Procurement · Source",
+    tabs: [
+      { label: "Purchase Orders", href: "/studio/procurement/purchase-orders" },
+      { label: "Receiving", href: "/studio/procurement/receiving" },
+      { label: "Change Orders", href: "/studio/procurement/po-change-orders" },
+    ],
+  },
+  {
+    owner: "/studio/procurement/catalog",
+    eyebrow: "Procurement · Source",
+    tabs: [
+      { label: "Catalog", href: "/studio/procurement/catalog" },
+      { label: "Rate Cards", href: "/studio/logistics/ratecard" },
+      { label: "Job Templates", href: "/studio/settings/job-templates" },
+    ],
+  },
+  {
+    owner: "/studio/assets",
+    eyebrow: "Production · Build",
+    tabs: [
+      { label: "Registry", href: "/studio/assets" },
+      { label: "Fleet", href: "/studio/production/equipment" },
+      { label: "Lots", href: "/studio/logistics/warehouse" },
+      { label: "Pull Sheets", href: "/studio/assets/pull-sheets" },
+      { label: "Scan Sessions", href: "/studio/assets/scans" },
+      { label: "Sub-Rentals", href: "/studio/production/rentals" },
+      { label: "Warranties", href: "/studio/assets/warranties" },
+      { label: "Maintenance", href: "/studio/operations/maintenance" },
+      { label: "Power Plan", href: "/studio/assets/power" },
+    ],
+  },
+  {
+    owner: "/studio/production/fabrication",
+    eyebrow: "Production · Build",
+    tabs: [
+      { label: "Fabrication", href: "/studio/production/fabrication" },
+      { label: "Punch List", href: "/studio/punch" },
+    ],
+  },
+  {
+    owner: "/studio/people/crew",
+    eyebrow: "People · Crew",
+    tabs: [
+      { label: "Roster", href: "/studio/people/crew" },
+      { label: "Hiring", href: "/studio/marketplace/postings" },
+      { label: "Onboarding", href: "/studio/workforce/onboarding" },
+      { label: "Positions", href: "/studio/people/roles" },
+      { label: "Performance", href: "/legend/console" },
+      { label: "Recognition", href: "/studio/workforce/recognition" },
+    ],
+  },
+  {
+    owner: "/studio/workforce/deployment",
+    eyebrow: "People · Crew",
+    tabs: [
+      { label: "Shifts", href: "/studio/workforce/deployment" },
+      { label: "Capacity", href: "/studio/workforce/forecast" },
+      { label: "Time Off", href: "/studio/workforce/time-off" },
+      { label: "Shift Offers", href: "/studio/workforce/shift-swaps" },
+      { label: "Hours & Fatigue", href: "/studio/finance/timesheets" },
+    ],
+  },
+  {
+    owner: "/studio/workforce/rosters",
+    eyebrow: "People · Crew",
+    tabs: [{ label: "Manning", href: "/studio/workforce/rosters" }],
+  },
+  {
+    owner: "/studio/people/credentials",
+    eyebrow: "People · Crew",
+    tabs: [
+      { label: "Credentials", href: "/studio/people/credentials" },
+      { label: "Access Matrix", href: "/studio/accreditation" },
+      { label: "Training", href: "/studio/workforce/training" },
+      { label: "Delegations", href: "/studio/participants/delegations" },
+      { label: "Visa & Immigration", href: "/studio/participants/visa" },
+    ],
+  },
+  {
+    owner: "/studio/schedule",
+    eyebrow: "Operations · Run",
+    tabs: [
+      { label: "Schedule", href: "/studio/schedule" },
+      { label: "Calendar", href: "/studio/calendar" },
+      { label: "Event Orders", href: "/studio/sales/beos" },
+      { label: "Meetings", href: "/studio/meetings" },
+    ],
+  },
+  {
+    owner: "/studio/locations",
+    eyebrow: "Projects · Plan",
+    tabs: [
+      { label: "Registry", href: "/studio/locations" },
+      { label: "Reservations", href: "/studio/operations/reservations" },
+      { label: "Date Holds", href: "/studio/sales/diary" },
+      { label: "Occupancy", href: "/studio/venues" },
+    ],
+  },
+  {
+    owner: "/studio/operations/incidents",
+    eyebrow: "Safety · Protect",
+    tabs: [
+      { label: "Incidents", href: "/studio/operations/incidents" },
+      { label: "Field Reports", href: "/studio/safety" },
+      { label: "Medical Log", href: "/studio/safety/medical" },
+      { label: "Weather Triggers", href: "/studio/safety/environmental" },
+      { label: "Lost & Found", href: "/studio/safety/lost-found" },
+    ],
+  },
+  {
+    owner: "/studio/programs/risk",
+    eyebrow: "Safety · Protect",
+    tabs: [
+      { label: "Register", href: "/studio/programs/risk" },
+      { label: "Matrix", href: "/studio/risk" },
+    ],
+  },
+  {
+    owner: "/studio/compliance",
+    eyebrow: "Safety · Protect",
+    tabs: [
+      { label: "Compliance", href: "/studio/compliance" },
+      { label: "Permits", href: "/studio/compliance/permits" },
+      { label: "Governance & Privacy", href: "/studio/settings/governance" },
+      { label: "Security Ops", href: "/studio/safety/threats" },
+    ],
+  },
+  {
+    owner: "/studio/finance/invoices",
+    eyebrow: "Finance · Settle",
+    tabs: [
+      { label: "Invoices", href: "/studio/finance/invoices" },
+      { label: "Auto-Invoicing", href: "/studio/finance/auto-invoicing" },
+      { label: "Pay Applications", href: "/studio/finance/pay-apps" },
+      { label: "Sub Invoices", href: "/studio/finance/sub-invoices" },
+      { label: "Lien Waivers", href: "/studio/finance/lien-waivers" },
+    ],
+  },
+  {
+    owner: "/studio/finance/budgets",
+    eyebrow: "Finance · Settle",
+    tabs: [
+      { label: "Budgets", href: "/studio/finance/budgets" },
+      { label: "Variance", href: "/studio/finance/budgets/variance" },
+      { label: "Profitability", href: "/studio/finance/reports" },
+      { label: "Scenario", href: "/studio/finance/forecasts" },
+      { label: "Settlement", href: "/studio/finance/wip" },
+      { label: "Close", href: "/studio/finance/periods" },
+    ],
+  },
+  {
+    owner: "/studio/finance/ledger",
+    eyebrow: "Finance · Settle",
+    tabs: [
+      { label: "General Ledger", href: "/studio/finance/ledger" },
+      { label: "Cost Codes", href: "/studio/finance/cost-codes" },
+    ],
+  },
+  {
+    owner: "/studio/finance/payroll",
+    eyebrow: "Finance · Settle",
+    tabs: [
+      { label: "Payroll", href: "/studio/finance/payroll" },
+      { label: "Time Tracker", href: "/studio/finance/time" },
+    ],
+  },
+  {
+    owner: "/studio/comms/announcements",
+    eyebrow: "Comms · Connect",
+    tabs: [
+      { label: "Communications", href: "/studio/comms/announcements" },
+      { label: "Channel Plan", href: "/studio/comms/channels" },
+    ],
+  },
+  {
+    owner: "/studio/production/ros",
+    eyebrow: "Production · Build",
+    tabs: [
+      { label: "Cues", href: "/studio/production/ros" },
+      { label: "Lineup & Set Times", href: "/studio/events" },
+    ],
+  },
+  {
+    owner: "/studio/logistics/freight",
+    eyebrow: "Operations · Run",
+    tabs: [
+      { label: "Freight", href: "/studio/logistics/freight" },
+      { label: "Ground", href: "/studio/transport" },
+    ],
+  },
+  {
+    owner: "/studio/access-control",
+    eyebrow: "Safety · Protect",
+    tabs: [
+      { label: "Checkpoints", href: "/studio/access-control" },
+      { label: "Crowd Counts", href: "/studio/access-control/counts" },
+    ],
+  },
+  {
+    owner: "/studio/tasks",
+    eyebrow: "Operations · Run",
+    tabs: [
+      { label: "Tasks", href: "/studio/tasks" },
+      { label: "Forms", href: "/studio/forms" },
+      { label: "Playbooks", href: "/studio/safety/playbooks" },
+      { label: "Automations", href: "/studio/ai/automations" },
+    ],
+  },
+];
+
+export const platformUtility: NavItem[] = [
+  { label: "Assistant", href: "/studio/assistant", icon: "Bot", sub: "Free-Form AI Chat" },
+  { label: "Copilot", href: "/studio/copilot", icon: "Sparkles", sub: "Grounded Answers With Citations" },
+  { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox", sub: "Cross-App Activity Feed" },
+  { label: "Triage", href: "/studio/triage", icon: "CheckSquare", sub: "Clear The Decision Queue" },
+  { label: "Proposal Templates", href: "/studio/proposals/templates", icon: "Files", sub: "Reusable Proposal Blocks" },
+  { label: "Project Templates", href: "/studio/templates", icon: "Files", sub: "Clone-To-Start Project Shapes" },
+  { label: "Event Kits", href: "/studio/kits", icon: "Layers", sub: "Zones · Lines · Touchpoints · Gates" },
+  { label: "Site Plans", href: "/studio/site-plans", icon: "Map", sub: "Overlays On The Venue Map" },
+  { label: "Specifications", href: "/studio/specs", icon: "BookOpen", sub: "Technical Spec Sections" },
+  { label: "BIM Models", href: "/studio/bim", icon: "Network", sub: "3D Model Registry" },
+  { label: "Takeoffs", href: "/studio/takeoffs", icon: "Crosshair", sub: "Quantity Counts From Drawings" },
+  { label: "Readiness", href: "/studio/programs/readiness", icon: "ShieldCheck", sub: "Go-Live Gate Checks" },
+  { label: "Reviews", href: "/studio/programs/reviews", icon: "ClipboardCheck", sub: "Stage-Gate Program Reviews" },
+  { label: "Compounds", href: "/studio/production/compounds", icon: "Tent", sub: "Site Compound Layouts" },
+  { label: "Reality Captures", href: "/studio/captures", icon: "Telescope", sub: "Scans & As-Built Captures" },
+  { label: "Photo Log", href: "/studio/photos", icon: "Telescope", sub: "Timestamped Site Photos" },
+  { label: "Warranties", href: "/studio/warranties", icon: "ShieldCheck", sub: "Closeout Warranty Records" },
+  {
+    label: "Live Dispatch",
+    href: "/studio/production/dispatch/live",
+    icon: "Radio",
+    sub: "Real-Time Crew Dispatch Board",
+  },
+  {
+    label: "Production Logistics",
+    href: "/studio/production/logistics",
+    icon: "Crosshair",
+    sub: "Show-Side Moves & Staging",
+  },
+  { label: "Teams", href: "/studio/people/teams", icon: "UsersRound", sub: "Org Team Structure" },
+  { label: "Workforce", href: "/studio/workforce", icon: "HardHat", sub: "Deskless Crew Directory" },
+  { label: "Crew Contracts", href: "/studio/people/msas", icon: "FileSignature", sub: "MSAs & Engagement Terms" },
+  {
+    label: "Offer Letters",
+    href: "/studio/people/offer-letters",
+    icon: "FileText",
+    sub: "Send, Countersign, Activate",
+  },
+  { label: "Courses", href: "/legend/learn", icon: "BookOpen", sub: "LEG3ND Learning Paths" },
+  { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck", sub: "Award & Track Badges" },
+  { label: "Sales", href: "/studio/sales", icon: "TrendingUp", sub: "The Sales & CRM Hub" },
+  { label: "Campaigns", href: "/studio/campaigns", icon: "Star", sub: "Campaign Planning & Results" },
+  { label: "Tours", href: "/studio/agency/tours", icon: "Route", sub: "Multi-Stop Tour Routing" },
+  { label: "Agency Roster", href: "/studio/agency/roster", icon: "Users", sub: "Represented Artists" },
+  { label: "Offers", href: "/studio/marketplace/offers", icon: "Gavel", sub: "Booking Offers · 60/40 Terms" },
+  { label: "Inquiries", href: "/studio/marketplace/inquiries", icon: "Inbox", sub: "Inbound Booking Interest" },
+  {
+    label: "E-Sign Envelopes",
+    href: "/studio/envelopes",
+    icon: "ClipboardSignature",
+    sub: "Signature Packets & Status",
+  },
+  { label: "AP Invoice OCR", href: "/studio/finance/ap-ocr", icon: "Sparkles", sub: "Captured Invoice Intake" },
+  { label: "Mileage", href: "/studio/finance/mileage", icon: "Truck", sub: "Mileage Logs & Rate Math" },
+  { label: "Vendor Payouts", href: "/studio/finance/payouts", icon: "Wallet", sub: "Stripe Connect Vendor Status" },
+  { label: "Entities", href: "/studio/finance/entities", icon: "Building2", sub: "Legal Entities & Books" },
+  { label: "Chart of Accounts", href: "/studio/finance/accounts", icon: "ListOrdered", sub: "GL Account Structure" },
+  { label: "Tax", href: "/studio/finance/tax", icon: "Coins", sub: "Tax Rates & Filings" },
+  { label: "Subscriptions", href: "/studio/subscriptions", icon: "BadgeCheck", sub: "Plan, Seats & Billing" },
+  { label: "Trades Marketplace", href: "/studio/procurement/marketplace", icon: "Store", sub: "Open Work Order Board" },
+  { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass", sub: "Sourcing Events & Bids" },
+  { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel", sub: "Invitations To Bid" },
+  {
+    label: "WO Broadcasts",
+    href: "/studio/procurement/wo-broadcasts",
+    icon: "Send",
+    sub: "Blast Work To Eligible Subs",
+  },
+  { label: "Master Catalog", href: "/studio/settings/catalog", icon: "Spline", sub: "Reusable SKUs For Advancing" },
+  { label: "Look-Ahead", href: "/studio/operations/look-ahead", icon: "Telescope", sub: "Rolling 2-Week Plan" },
+  { label: "Action Items", href: "/studio/action-items", icon: "CheckSquare", sub: "Cross-Domain Follow-Ups" },
+  { label: "Guides", href: "/studio/guides", icon: "Atlas", sub: "Know-Before-You-Go Guides" },
+  { label: "Dispatch", href: "/studio/transport/dispatch", icon: "Send", sub: "Driver & Vehicle Dispatch" },
+  {
+    label: "Disposition",
+    href: "/studio/logistics/disposition",
+    icon: "PackageOpen",
+    sub: "Sell · Store · Scrap Decisions",
+  },
+  { label: "Major Incident", href: "/studio/safety/major-incident", icon: "Flame", sub: "MIM Bridge & Comms" },
+  { label: "Crisis", href: "/studio/safety/crisis", icon: "Flame", sub: "Crisis Playbook Activation" },
+  {
+    label: "Safeguarding",
+    href: "/studio/safety/safeguarding",
+    icon: "HeartHandshake",
+    sub: "Welfare & Vulnerable Persons",
+  },
+  { label: "Guard Tours", href: "/studio/safety/guard-tours", icon: "ShieldCheck", sub: "Patrol Routes & Checkpoints" },
+  { label: "OSHA 300", href: "/studio/safety/osha", icon: "ShieldAlert", sub: "Recordable Injury Log" },
+  { label: "Briefings", href: "/studio/safety/briefings", icon: "ClipboardPlus", sub: "Toolbox Talks & Sign-Ins" },
+  { label: "Chain of Custody", href: "/studio/compliance/coc", icon: "FileSignature", sub: "Evidence Handling Log" },
+  { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText", sub: "Minutes & Decisions" },
+  { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3", sub: "Quick Votes" },
+  { label: "Surveys", href: "/studio/comms/surveys", icon: "ClipboardCheck", sub: "Structured Feedback Runs" },
+  { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox", sub: "Shared Org Mailbox" },
+  { label: "Service Desk", href: "/studio/services/requests", icon: "ConciergeBell", sub: "IT & Facilities Tickets" },
+  { label: "TOC — ITIL", href: "/studio/ops/toc", icon: "Network", sub: "Tech Ops Center · Service Health" },
+  { label: "Pages", href: "/studio/collaborate/docs", icon: "FileText", sub: "Block-Based Collaborative Pages" },
+  { label: "Sheets", href: "/studio/collaborate/sheets", icon: "FileSpreadsheet", sub: "Lightweight Grid Workspaces" },
+  { label: "Notes", href: "/studio/notes", icon: "FileText", sub: "Rich-Text Scratch Notes" },
+  { label: "Board", href: "/studio/board", icon: "Layers", sub: "Freeform Kanban" },
 ];
 
 /**
@@ -1041,18 +882,17 @@ export const platformNav: NavGroup[] = platformNavDomain;
  * route is always kept so the user can never lose their current page.
  * Persisted per user via `user_preferences.ui_state.nav_lens`.
  *
- * Kit map (design_handoff_console_rebuild/_ia-dump.md §Role Lenses)
- * translated to this repo's group nouns: Home→Dashboard · Sales/Talent→
- * Commerce · Operations→Coordination+Logistics · Comms→Messages.
+ * Kit map (design_handoff_console_rebuild/_ia-dump.md §Role Lenses) —
+ * VERBATIM since the kit 20 rail landed; group nouns now match the kit.
  */
 export type NavLens = "All" | "Produce" | "Ops" | "Crew" | "Finance" | "Safety";
 export const NAV_LENSES: Record<NavLens, string[] | null> = {
   All: null,
-  Produce: ["Dashboard", "Projects", "Commerce", "Procurement", "Production", "Finance"],
-  Ops: ["Dashboard", "Projects", "Production", "Coordination", "Logistics", "Safety", "Messages"],
-  Crew: ["Dashboard", "Coordination", "People", "Messages", "Collaborate"],
-  Finance: ["Dashboard", "Commerce", "Procurement", "Finance"],
-  Safety: ["Dashboard", "Safety", "Coordination", "Messages"],
+  Produce: ["Home", "Sales", "Talent", "Projects", "Procurement", "Production", "Finance"],
+  Ops: ["Home", "Projects", "Production", "Operations", "Safety", "Comms"],
+  Crew: ["Home", "Operations", "People", "Comms"],
+  Finance: ["Home", "Sales", "Procurement", "Finance"],
+  Safety: ["Home", "Safety", "Operations", "Comms"],
 };
 export const NAV_LENS_ORDER: NavLens[] = ["All", "Produce", "Ops", "Crew", "Finance", "Safety"];
 

@@ -5,7 +5,6 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { AssetsTabs } from "@/components/assets/AssetsTabs";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +58,6 @@ export default async function Page() {
         )}
       />
       <div className="page-content space-y-5">
-        <AssetsTabs active="/studio/assets/pull-sheets" />
         {rentals.length === 0 ? (
           <EmptyState
             title={t("console.assets.pullSheets.emptyTitle", undefined, "No pull sheets yet")}

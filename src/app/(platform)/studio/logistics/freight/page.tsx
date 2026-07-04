@@ -63,7 +63,7 @@ export default async function Page() {
     return (
       <>
         <ModuleHeader
-          eyebrow={t("console.logistics.freight.eyebrow", undefined, "Logistics")}
+          eyebrow={t("console.logistics.freight.eyebrow", undefined, "Operations · Run")}
           title={t("console.logistics.freight.title", undefined, "Freight")}
         />
         <div className="page-content">
@@ -111,7 +111,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.logistics.freight.eyebrow", undefined, "Logistics")}
+        eyebrow={t("console.logistics.freight.eyebrow", undefined, "Operations · Run")}
         title={t("console.logistics.freight.title", undefined, "Freight")}
         subtitle={`${manifests.length} ${manifests.length === 1 ? t("console.logistics.freight.subtitle.manifest", undefined, "manifest") : t("console.logistics.freight.subtitle.manifests", undefined, "manifests")} · ${upcoming.length} ${t("console.logistics.freight.subtitle.upcoming", undefined, "Upcoming")} · ${orders.length} ${orders.length === 1 ? t("console.logistics.freight.subtitle.rateCardOrder", undefined, "rate-card order") : t("console.logistics.freight.subtitle.rateCardOrders", undefined, "rate-card orders")}`}
         action={
@@ -203,7 +203,9 @@ export default async function Page() {
                 {
                   key: "order_state",
                   header: t("console.logistics.freight.manifests.col.order_state", undefined, "Status"),
-                  render: (m) => <Badge variant={STATUS_TONE[m.order_state] ?? "muted"}>{toTitle(m.order_state)}</Badge>,
+                  render: (m) => (
+                    <Badge variant={STATUS_TONE[m.order_state] ?? "muted"}>{toTitle(m.order_state)}</Badge>
+                  ),
                   accessor: (m) => m.order_state,
                   filterable: true,
                 },

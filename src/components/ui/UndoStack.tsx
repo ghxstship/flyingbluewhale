@@ -121,9 +121,12 @@ export function UndoBar({
 }) {
   const { undo, redo, canUndo, canRedo, pending } = controller;
   const t = { done: "Done:", undo: "Undo", redo: "Redo", ...labels };
-  // Keep handlers fresh without rebinding every render.
+  // Keep handlers fresh without rebinding every render (updated in an
+  // effect — the react-hooks/refs rule forbids ref writes during render).
   const ref = useRef({ undo, redo });
-  ref.current = { undo, redo };
+  useEffect(() => {
+    ref.current = { undo, redo };
+  }, [undo, redo]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

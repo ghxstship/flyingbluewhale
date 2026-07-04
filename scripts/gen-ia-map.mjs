@@ -127,6 +127,18 @@ const groupFrom = (label, items) => ({ label, routes: toRoutes(items) });
 // ── atlvs (platform) — the domain-noun rails + Settings. ──────────────────
 const atlvsGroups = [];
 for (const g of nav.platformNavDomain ?? []) atlvsGroups.push(groupFrom(g.label, flatten(g)));
+// Kit 20 second shelf (30 tab families) + utility surfaces — both are nav
+// reach; the IA model must mirror the sitemap's notion of "wired".
+{
+  const shelf = [];
+  const seen = new Set();
+  for (const fam of nav.platformTabs ?? [])
+    for (const tab of fam.tabs ?? [])
+      if (tab.href && !seen.has(tab.href)) { seen.add(tab.href); shelf.push({ label: tab.label, href: tab.href }); }
+  if (shelf.length) atlvsGroups.push(groupFrom("Second Shelf", shelf));
+  const util = (nav.platformUtility ?? []).map((it) => ({ label: it.label, href: it.href }));
+  if (util.length) atlvsGroups.push(groupFrom("Utility", util));
+}
 if (nav.settingsNav) {
   const settingsItems = [];
   for (const g of nav.settingsNav) settingsItems.push(...flatten(g));

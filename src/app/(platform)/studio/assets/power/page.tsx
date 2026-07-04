@@ -8,7 +8,6 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
-import { AssetsTabs } from "@/components/assets/AssetsTabs";
 import { ASSET_CLASS_LABELS } from "@/lib/db/assets";
 import type { Asset } from "@/lib/supabase/types";
 
@@ -72,7 +71,6 @@ export default async function Page() {
         )}
       />
       <div className="page-content space-y-5">
-        <AssetsTabs active="/studio/assets/power" />
         <div className="metric-grid">
           <MetricCard
             label={t("console.assets.power.stat.assets", undefined, "Power Assets")}

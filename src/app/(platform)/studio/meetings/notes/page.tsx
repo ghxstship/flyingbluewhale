@@ -25,7 +25,7 @@ export default async function Page() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Coordination" title="Meeting Notes" />
+        <ModuleHeader eyebrow="Operations · Run" title="Meeting Notes" />
         <div className="page-content">
           <div className="surface p-6 text-sm">Configure Supabase.</div>
         </div>
@@ -59,7 +59,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Coordination"
+        eyebrow="Operations · Run"
         title="Meeting Notes"
         subtitle="Paste a transcript, generate an AI summary + action items, push them to tasks."
         action={

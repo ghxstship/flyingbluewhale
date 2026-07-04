@@ -11068,7 +11068,7 @@
     },
     "logistics": {
       "disposition": {
-        "eyebrow": "Logistics",
+        "eyebrow": "Operations · Run",
         "title": "Disposition",
         "configureSupabase": "Configure Supabase.",
         "allEquipment": "All equipment",
@@ -11108,7 +11108,7 @@
           "configureSupabase": "Configure Supabase.",
           "eyebrow": "Record"
         },
-        "eyebrow": "Logistics",
+        "eyebrow": "Operations · Run",
         "title": "Freight",
         "configureSupabase": "Configure Supabase.",
         "subtitle": {
@@ -11164,7 +11164,7 @@
           "eyebrow": "Record"
         },
         "new": {
-          "eyebrow": "Logistics",
+          "eyebrow": "Procurement · Source",
           "title": "New Rate-Card Item",
           "submit": "Add Item",
           "fields": {
@@ -11180,7 +11180,7 @@
         "eyebrowWorkspace": "Workspace",
         "title": "Rate Card Items",
         "configureSupabase": "Configure Supabase.",
-        "eyebrow": "Logistics",
+        "eyebrow": "Procurement · Source",
         "subtitleOne": "{count} Item",
         "subtitleOther": "{count} Items",
         "newRate": "+ New Rate",
@@ -11198,7 +11198,7 @@
       "servicesLabel": "Services",
       "warehouseLabel": "Warehouse",
       "services": {
-        "eyebrow": "Logistics",
+        "eyebrow": "Operations · Run",
         "title": "Services",
         "configureSupabase": "Configure Supabase.",
         "newService": "+ New Service",
@@ -11845,7 +11845,7 @@
         "huddle": "Huddle"
       },
       "new": {
-        "eyebrow": "Coordination",
+        "eyebrow": "Operations · Run",
         "title": "New Meeting",
         "submit": "Schedule Meeting",
         "fields": {
@@ -11873,7 +11873,7 @@
           "other": "Other"
         }
       },
-      "eyebrow": "Coordination",
+      "eyebrow": "Operations · Run",
       "title": "Meetings",
       "configureSupabase": "Configure Supabase.",
       "kind": {
@@ -13314,7 +13314,7 @@
         },
         "title": "Requisitions",
         "configureSupabase": "Configure Supabase.",
-        "eyebrow": "Procurement",
+        "eyebrow": "Procurement · Source",
         "subtitle": "{count} Requests",
         "newRequest": "+ New Request",
         "emptyLabel": "No requisitions",
@@ -18205,7 +18205,7 @@
           "title": "Fleets"
         }
       },
-      "eyebrow": "Logistics",
+      "eyebrow": "Operations · Run",
       "title": "Transport",
       "workforce": {
         "eyebrow": "Transport",
@@ -19973,7 +19973,7 @@
           "placed": "Placed"
         }
       },
-      "eyebrow": "Commerce",
+      "eyebrow": "Sales",
       "transactions": {
         "title": "Transactions",
         "emptyTitle": "No transactions yet",

@@ -12,7 +12,6 @@ import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { ASSET_CLASS_LABELS, ASSET_DISPOSITION_LABELS } from "@/lib/db/assets";
 import type { Asset, AssetClass } from "@/lib/supabase/types";
-import { AssetsTabs } from "./AssetsTabs";
 import { bulkDeleteAssets } from "@/app/(platform)/studio/assets/actions";
 
 const CLASS_TONE: Record<AssetClass, "info" | "warning" | "muted"> = {
@@ -30,12 +29,10 @@ const CLASS_TONE: Record<AssetClass, "info" | "warning" | "muted"> = {
  */
 export async function AssetInventorySurface({
   title,
-  activeTab,
   classFilter,
   subtitleHint,
 }: {
   title: string;
-  activeTab: string;
   classFilter?: AssetClass;
   subtitleHint?: string;
 }) {
@@ -96,8 +93,7 @@ export async function AssetInventorySurface({
         }
       />
       <div className="page-content space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <AssetsTabs active={activeTab} />
+        <div className="flex flex-wrap items-center justify-end gap-3">
           <div className="flex items-center gap-3 text-xs">
             <a
               className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)] hover:underline"

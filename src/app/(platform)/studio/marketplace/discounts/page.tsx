@@ -8,11 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
-import {
-  formatDiscountValue,
-  isRedemptionExhausted,
-  type DiscountKind,
-} from "@/lib/discounts_promoters";
+import { formatDiscountValue, isRedemptionExhausted, type DiscountKind } from "@/lib/discounts_promoters";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +27,7 @@ export default async function DiscountsPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Commerce" title="Discounts" />
+        <ModuleHeader eyebrow="Sales" title="Discounts" />
         <ConfigureSupabase />
       </>
     );
@@ -50,13 +46,10 @@ export default async function DiscountsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Commerce"
+        eyebrow="Sales"
         title="Discounts"
         subtitle={rows.length === 1 ? "1 code" : `${rows.length} codes`}
-        breadcrumbs={[
-          { label: "Marketplace", href: "/studio/marketplace" },
-          { label: "Discounts" },
-        ]}
+        breadcrumbs={[{ label: "Marketplace", href: "/studio/marketplace" }, { label: "Discounts" }]}
         action={
           <div className="flex items-center gap-2">
             <Button href="/studio/marketplace/discounts/promoters" size="sm" variant="secondary">

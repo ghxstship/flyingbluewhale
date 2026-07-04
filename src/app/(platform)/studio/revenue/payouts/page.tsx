@@ -39,7 +39,7 @@ export default async function RevenuePayoutsPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Commerce" title={t("console.revenue.payouts.title", undefined, "Payouts")} />
+        <ModuleHeader eyebrow="Sales" title={t("console.revenue.payouts.title", undefined, "Payouts")} />
         <ConfigureSupabase />
       </>
     );
@@ -92,10 +92,10 @@ export default async function RevenuePayoutsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.revenue.eyebrow", undefined, "Commerce")}
+        eyebrow={t("console.revenue.eyebrow", undefined, "Sales")}
         title={t("console.revenue.payouts.title", undefined, "Payouts")}
         subtitle={rows.length === 1 ? "1 payout" : `${rows.length} payouts`}
-        breadcrumbs={[{ label: "Commerce" }, { label: "Revenue" }, { label: "Payouts" }]}
+        breadcrumbs={[{ label: "Sales" }, { label: "Revenue" }, { label: "Payouts" }]}
       />
       <div className="page-content">
         <div className="metric-grid mb-6">

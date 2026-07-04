@@ -34,7 +34,7 @@ export default async function RevenueOrdersPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Commerce" title={t("console.revenue.orders.title", undefined, "Orders")} />
+        <ModuleHeader eyebrow="Sales" title={t("console.revenue.orders.title", undefined, "Orders")} />
         <ConfigureSupabase />
       </>
     );
@@ -53,10 +53,10 @@ export default async function RevenueOrdersPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.revenue.eyebrow", undefined, "Commerce")}
+        eyebrow={t("console.revenue.eyebrow", undefined, "Sales")}
         title={t("console.revenue.orders.title", undefined, "Orders")}
         subtitle={rows.length === 1 ? "1 order" : `${rows.length} orders`}
-        breadcrumbs={[{ label: "Commerce" }, { label: "Revenue" }, { label: "Orders" }]}
+        breadcrumbs={[{ label: "Sales" }, { label: "Revenue" }, { label: "Orders" }]}
       />
       <div className="page-content">
         {rows.length === 0 ? (

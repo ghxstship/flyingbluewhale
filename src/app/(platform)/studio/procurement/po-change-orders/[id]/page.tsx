@@ -7,7 +7,13 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { addCoLine, deleteCoLine, routePoChangeOrderToApprovalsAction, transitionPoChangeOrder } from "./actions";
+import {
+  addCoLine,
+  deleteCoLine,
+  routePoChangeOrderToApprovalsAction,
+  executeCoPostToBudgetAction,
+  transitionPoChangeOrder,
+} from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { toTitle } from "@/lib/format";
@@ -68,6 +74,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Badge variant={toneFor(co.change_order_state)}>{toTitle(co.change_order_state)}</Badge>
+            {isManagerPlus(session) && co.change_order_state === "approved" && (
+              <RecordActionButton
+                action={executeCoPostToBudgetAction.bind(null, id)}
+                label={t(
+                  "console.procurement.poChangeOrders.detail.postToBudget",
+                  undefined,
+                  "Execute · Post To Budget",
+                )}
+                pendingLabel={t("console.procurement.poChangeOrders.detail.posting", undefined, "Posting…")}
+              />
+            )}
             {isManagerPlus(session) && !["approved", "rejected", "void"].includes(co.change_order_state) && (
               <RecordActionButton
                 action={routePoChangeOrderToApprovalsAction.bind(null, id)}

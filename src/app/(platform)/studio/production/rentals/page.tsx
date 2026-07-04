@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
-import { AssetsTabs } from "@/components/assets/AssetsTabs";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { createClient } from "@/lib/supabase/server";
@@ -47,7 +46,6 @@ export default async function RentalsPage() {
         }
       />
       <div className="page-content">
-        <AssetsTabs active="/studio/production/rentals" />
         <DataTable<Rental>
           rows={rows}
           rowHref={(r) => `/studio/production/rentals/${r.id}`}

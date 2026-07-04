@@ -3,6 +3,8 @@ import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import {
   platformNavDomain,
+  platformTabs,
+  platformUtility,
   settingsNav,
   portalNav,
   mobileTabs,
@@ -96,6 +98,18 @@ function allNavHrefs(): Array<{ shell: string; href: string }> {
   const add = (shell: string, hrefs: string[]) => hrefs.forEach((href) => out.push({ shell, href }));
 
   for (const g of platformNavDomain) add("console", groupHrefs(g));
+  // Kit 20 acceptance §4.2 — every second-shelf tab is a real route, and the
+  // utility surfaces the verbatim rail dropped must never 404 either.
+  for (const fam of platformTabs) {
+    add(
+      "console:tabs",
+      [fam.owner, ...fam.tabs.map((t) => t.href)].filter((h) => h.startsWith("/")),
+    );
+  }
+  add(
+    "console:utility",
+    platformUtility.filter((it) => it.href.startsWith("/")).map((it) => it.href),
+  );
   for (const g of settingsNav) add("console:settings", groupHrefs(g));
   for (const persona of PORTAL_PERSONAS) add(`portal:${persona}`, groupHrefs(portalNav(SAMPLE_SLUG, persona)));
   add(

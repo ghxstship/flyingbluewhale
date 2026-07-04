@@ -34,9 +34,9 @@ function spinePhases(projectId: string | null): SpinePhase[] {
     {
       key: "sell",
       label: "Sell",
-      href: "/studio/pipeline",
+      href: "/studio/crm",
       steps: [
-        { key: "dealWon", label: "Deal Won", href: "/studio/pipeline" },
+        { key: "dealWon", label: "Deal Won", href: "/studio/crm" },
         { key: "proposalSigned", label: "Proposal Signed", href: "/studio/proposals" },
       ],
     },
@@ -72,10 +72,10 @@ function spinePhases(projectId: string | null): SpinePhase[] {
     {
       key: "crew",
       label: "Crew",
-      href: "/studio/workforce/rosters",
+      href: "/studio/workforce/deployment",
       steps: [
-        { key: "shiftsPublished", label: "Shifts Published", href: "/studio/workforce/rosters" },
-        { key: "credentialsIssued", label: "Credentials Issued", href: "/studio/accreditation" },
+        { key: "shiftsPublished", label: "Shifts Published", href: "/studio/workforce/deployment" },
+        { key: "credentialsIssued", label: "Credentials Issued", href: "/studio/people/credentials" },
       ],
     },
     {
@@ -92,7 +92,7 @@ function spinePhases(projectId: string | null): SpinePhase[] {
       label: "Protect",
       href: "/studio/safety",
       steps: [
-        { key: "permitsCleared", label: "Permits Cleared", href: "/studio/safety" },
+        { key: "permitsCleared", label: "Permits Cleared", href: "/studio/compliance/permits" },
         { key: "inspectionsPassed", label: "Inspections Passed", href: "/studio/inspections" },
       ],
     },

@@ -43,7 +43,7 @@ export default async function RevenueTransactionsPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Commerce" title={t("console.revenue.transactions.title", undefined, "Transactions")} />
+        <ModuleHeader eyebrow="Sales" title={t("console.revenue.transactions.title", undefined, "Transactions")} />
         <ConfigureSupabase />
       </>
     );
@@ -61,10 +61,10 @@ export default async function RevenueTransactionsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.revenue.eyebrow", undefined, "Commerce")}
+        eyebrow={t("console.revenue.eyebrow", undefined, "Sales")}
         title={t("console.revenue.transactions.title", undefined, "Transactions")}
         subtitle={rows.length === 1 ? "1 transaction" : `${rows.length} transactions`}
-        breadcrumbs={[{ label: "Commerce" }, { label: "Revenue" }, { label: "Transactions" }]}
+        breadcrumbs={[{ label: "Sales" }, { label: "Revenue" }, { label: "Transactions" }]}
       />
       <div className="page-content">
         {rows.length === 0 ? (
@@ -98,7 +98,8 @@ export default async function RevenueTransactionsPage() {
               {
                 key: "processor",
                 header: t("console.revenue.transactions.col.processor", undefined, "Processor"),
-                render: (r) => (r.processor_ref ? `${toTitle(r.processor)} · ${r.processor_ref}` : toTitle(r.processor)),
+                render: (r) =>
+                  r.processor_ref ? `${toTitle(r.processor)} · ${r.processor_ref}` : toTitle(r.processor),
                 accessor: (r) => r.processor,
               },
               {

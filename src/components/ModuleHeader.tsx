@@ -2,6 +2,7 @@ import React from "react";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
 import { DerivedBreadcrumbs } from "@/components/DerivedBreadcrumbs";
 import { RecordTabsSlot } from "@/components/ui/RecordTabsContext";
+import { PlatformTabsAuto } from "@/components/PlatformTabs";
 
 /**
  * Module header — canonical SaaS title block used by every page.
@@ -64,7 +65,7 @@ export function ModuleHeader({
         </div>
         {action && <div className="flex items-center gap-2">{action}</div>}
       </div>
-      <div className="module-header-tabs px-6">{tabs ?? <RecordTabsSlot />}</div>
+      <div className="module-header-tabs px-6">{tabs ?? <RecordTabsSlot fallback={<PlatformTabsAuto />} />}</div>
     </div>
   );
 }

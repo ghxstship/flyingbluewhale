@@ -26,7 +26,7 @@ export default async function PromotersPage() {
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Commerce" title="Promoters" />
+        <ModuleHeader eyebrow="Sales" title="Promoters" />
         <ConfigureSupabase />
       </>
     );
@@ -45,7 +45,7 @@ export default async function PromotersPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Commerce"
+        eyebrow="Sales"
         title="Promoters"
         subtitle={rows.length === 1 ? "1 affiliate" : `${rows.length} affiliates`}
         breadcrumbs={[

@@ -44,7 +44,7 @@ export default async function Page({
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.logistics.ratecard.eyebrow", undefined, "Logistics")}
+        eyebrow={t("console.logistics.ratecard.eyebrow", undefined, "Procurement · Source")}
         title={t("console.logistics.ratecard.title", undefined, "Rate Card Items")}
         subtitle={
           total === 1

@@ -157,6 +157,69 @@ export async function routePoChangeOrderToApprovalsAction(id: string): Promise<R
   redirect(`/studio/governance/approvals/${routed.id}`);
 }
 
+/**
+ * Kit 20 record action — changeOrders · "Execute · Post To Budget".
+ * An APPROVED change order posts its amount as a budget line on the CO's
+ * project (name `CO #n · title`, marker back-link in internal_notes), so
+ * the budget reflects the executed change without a parallel store. The
+ * marker gives idempotency: re-clicking never double-posts.
+ */
+export async function executeCoPostToBudgetAction(id: string): Promise<RouteCoState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can post change orders to budget" };
+
+  const supabase = await createClient();
+  const { data: co } = await supabase
+    .from("po_change_orders")
+    .select("id, number, title, amount_cents, change_order_state, project_id")
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .maybeSingle();
+  if (!co) return { error: "Change order not found" };
+  if (co.change_order_state !== "approved") {
+    return { error: "Only an approved change order can post to budget — route it through approvals first" };
+  }
+
+  const marker = `[po_change_order:${id}]`;
+  const { data: existing } = await supabase
+    .from("budgets")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .ilike("internal_notes", `%${marker}%`)
+    .limit(1);
+  if (existing && existing.length > 0) {
+    redirect(`/studio/finance/budgets/${existing[0]!.id}`);
+  }
+
+  const { data: line, error } = await supabase
+    .from("budgets")
+    .insert({
+      org_id: session.orgId,
+      project_id: co.project_id,
+      name: `CO #${co.number} · ${co.title}`,
+      amount_cents: co.amount_cents,
+      category: "Change Order",
+      internal_notes: `Posted from PO change order CO-${co.number}. ${marker}`,
+    } as never)
+    .select("id")
+    .single();
+  if (error || !line) return { error: error?.message ?? "Could not create the budget line" };
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "po_change_order.posted_to_budget",
+    targetTable: "budgets",
+    targetId: (line as { id: string }).id,
+    metadata: { changeOrderId: id, number: co.number, amountCents: co.amount_cents },
+  });
+
+  revalidatePath(`/studio/procurement/po-change-orders/${id}`);
+  revalidatePath("/studio/finance/budgets");
+  redirect(`/studio/finance/budgets/${(line as { id: string }).id}`);
+}
+
 async function guardCoEditable(coId: string, orgId: string): Promise<boolean> {
   const supabase = await createClient();
   const { data } = await supabase

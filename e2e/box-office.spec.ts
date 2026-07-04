@@ -25,7 +25,7 @@
  * "New ticket type" action returns "Only manager+ can add ticket types" for a
  * collaborator (role=member), surfaced by FormShell as an Alert (role="alert").
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test } from "playwright/test";
 import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 
@@ -94,10 +94,9 @@ for (const op of OPERATORS) {
       // the Payouts settlement grid both render formatted money).
       await expect(page.getByText(/gross/i).first()).toBeVisible({ timeout: 15_000 });
       await expect(page.getByText(/net/i).first()).toBeVisible({ timeout: 15_000 });
-      await expect(
-        page.getByText(/\$[\d,]+(\.\d{2})?/).first(),
-        "a formatted money figure renders",
-      ).toBeVisible({ timeout: 15_000 });
+      await expect(page.getByText(/\$[\d,]+(\.\d{2})?/).first(), "a formatted money figure renders").toBeVisible({
+        timeout: 15_000,
+      });
     });
 
     test("revenue payouts ledger renders the seeded payout + the settlement summary", async ({ page }) => {
@@ -111,10 +110,9 @@ for (const op of OPERATORS) {
       await expect(page.getByText(/refunds/i).first()).toBeVisible({ timeout: 15_000 });
       await expect(page.getByText(/paid out/i).first()).toBeVisible({ timeout: 15_000 });
       // The seeded payout row.
-      await expect(
-        page.getByText(PAYOUT, { exact: false }).first(),
-        "the seeded payout is in the ledger",
-      ).toBeVisible({ timeout: 15_000 });
+      await expect(page.getByText(PAYOUT, { exact: false }).first(), "the seeded payout is in the ledger").toBeVisible({
+        timeout: 15_000,
+      });
     });
 
     test("box-office hub exposes the Ticketed events link", async ({ page }) => {
@@ -164,14 +162,16 @@ for (const op of OPERATORS) {
         // collaborator (role=member): the action returns "Only manager+ can add
         // ticket types", surfaced by FormShell as an error Alert. No new row.
         await expect(
-          page.getByRole("alert").filter({ hasText: /manager\+? can add ticket types|manager/i }).first(),
+          page
+            .getByRole("alert")
+            .filter({ hasText: /manager\+? can add ticket types|manager/i })
+            .first(),
           "collaborator is blocked with a manager-band action error",
         ).toBeVisible({ timeout: 15_000 });
         await page.reload();
-        await expect(
-          page.getByText(name, { exact: false }),
-          "the blocked create added no ticket type row",
-        ).toHaveCount(0);
+        await expect(page.getByText(name, { exact: false }), "the blocked create added no ticket type row").toHaveCount(
+          0,
+        );
       }
     });
   });
@@ -224,10 +224,9 @@ test.describe("box office · GVTEWAY public · anon", () => {
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
     // The seeded tier + a formatted price.
     await expect(page.getByText(TIER, { exact: false }).first()).toBeVisible({ timeout: 15_000 });
-    await expect(
-      page.getByText(/\$[\d,]+(\.\d{2})?/).first(),
-      "a ticket price renders",
-    ).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/\$[\d,]+(\.\d{2})?/).first(), "a ticket price renders").toBeVisible({
+      timeout: 15_000,
+    });
     // First-party checkout: the quantity stepper (+/- per tier) and the Checkout
     // CTA. (Sold-out tiers replace the stepper with a label — tolerate either by
     // asserting the buy affordance OR the stepper is present.)

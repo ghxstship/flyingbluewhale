@@ -5,7 +5,7 @@ export default function NewPromoterPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Commerce"
+        eyebrow="Sales"
         title="New Promoter"
         breadcrumbs={[
           { label: "Marketplace", href: "/studio/marketplace" },

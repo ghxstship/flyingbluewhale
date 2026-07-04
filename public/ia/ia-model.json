@@ -310,12 +310,18 @@
       "routeGroup": "/studio",
       "groups": [
         {
-          "label": "Dashboard",
+          "label": "Home",
           "routes": [
             {
               "path": "/studio",
               "arch": [
                 "SHELL"
+              ]
+            },
+            {
+              "path": "/studio/inbox",
+              "arch": [
+                "COMM"
               ]
             },
             {
@@ -325,10 +331,419 @@
               ]
             },
             {
+              "path": "/studio/calendar",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/reports",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
+              "path": "/studio/insights",
+              "arch": [
+                "RPT"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Sales",
+          "routes": [
+            {
+              "path": "/studio/crm",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/clients",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketing",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/commercial/hospitality",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/revenue/orders",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Talent",
+          "routes": [
+            {
+              "path": "/studio/marketplace/talent",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/bookings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/calls",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/submissions",
+              "arch": [
+                "SHOP"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Projects",
+          "routes": [
+            {
+              "path": "/studio/projects",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/programs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/locations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/proposals",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/documents",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/drawings",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/estimates",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/governance/approvals",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Procurement",
+          "routes": [
+            {
+              "path": "/studio/procurement/vendors",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/requisitions",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/rfqs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/purchase-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/advancing",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/legal/contracts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/catalog",
+              "arch": [
+                "SHOP"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Production",
+          "routes": [
+            {
+              "path": "/studio/production/ros",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/fabrication",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/work-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/commercial/sponsors",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "People",
+          "routes": [
+            {
+              "path": "/studio/people/crew",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/deployment",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/rosters",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/people/credentials",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Operations",
+          "routes": [
+            {
+              "path": "/studio/schedule",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/tasks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/daily-log",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/logistics/freight",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/services",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/accommodation",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Safety",
+          "routes": [
+            {
+              "path": "/studio/operations/incidents",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/access-control",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/inspections",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/programs/risk",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/compliance",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Finance",
+          "routes": [
+            {
+              "path": "/studio/finance/invoices",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/expenses",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/budgets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/payroll",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/ledger",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Comms",
+          "routes": [
+            {
+              "path": "/studio/comms/announcements",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/legend/community",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/knowledge",
+              "arch": [
+                "LMS"
+              ]
+            },
+            {
+              "path": "/studio/services",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Second Shelf",
+          "routes": [
+            {
+              "path": "/studio",
+              "arch": [
+                "SHELL"
+              ]
+            },
+            {
               "path": "/studio/dashboards",
               "arch": [
                 "RPT",
                 "BOARD"
+              ]
+            },
+            {
+              "path": "/studio/insights",
+              "arch": [
+                "RPT"
               ]
             },
             {
@@ -344,11 +759,677 @@
               ]
             },
             {
+              "path": "/studio/sustainability",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/talent",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/bookings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/calls",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/submissions",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/crm",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/leads",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/pipeline",
+              "arch": [
+                "BOARD"
+              ]
+            },
+            {
+              "path": "/studio/projects",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/schedule/baselines",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
               "path": "/studio/position",
               "arch": [
                 "LIST"
               ]
             },
+            {
+              "path": "/studio/advancing",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/annotations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/revenue/orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/revenue/transactions",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/box-office",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/commercial/hospitality?audience=guest",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/box-office/listings",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/discounts",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/revenue/payouts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/documents",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/collaborate/whiteboards",
+              "arch": [
+                "BOARD"
+              ]
+            },
+            {
+              "path": "/studio/transmittals",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/drawings",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/rfis",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/submittals",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/studio/procurement/vendors",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/scorecard",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/compliance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/network",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/prequalification",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/purchase-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/receiving",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/po-change-orders",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/procurement/catalog",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/logistics/ratecard",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/settings/job-templates",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/assets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/equipment",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/logistics/warehouse",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets/pull-sheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets/scans",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/production/rentals",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets/warranties",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/maintenance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/assets/power",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/production/fabrication",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/punch",
+              "arch": [
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/people/crew",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/marketplace/postings",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/workforce/onboarding",
+              "arch": [
+                "BOARD",
+                "AUTH"
+              ]
+            },
+            {
+              "path": "/studio/people/roles",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/console",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/recognition",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/deployment",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/forecast",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/time-off",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/shift-swaps",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/timesheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/rosters",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/people/credentials",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/accreditation",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/workforce/training",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/participants/delegations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/participants/visa",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/schedule",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/calendar",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/studio/sales/beos",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/meetings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/locations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/reservations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/sales/diary",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/venues",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/operations/incidents",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/medical",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/environmental",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/lost-found",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/programs/risk",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/risk",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/compliance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/compliance/permits",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/settings/governance",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/safety/threats",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/invoices",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/auto-invoicing",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/pay-apps",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/sub-invoices",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/lien-waivers",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/budgets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/budgets/variance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/reports",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
+              "path": "/studio/finance/forecasts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/wip",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/periods",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/ledger",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/cost-codes",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/payroll",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/finance/time",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/comms/announcements",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/comms/channels",
+              "arch": [
+                "COMM"
+              ]
+            },
+            {
+              "path": "/studio/production/ros",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/events",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/logistics/freight",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/transport",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/access-control",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/access-control/counts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/tasks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/forms",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/safety/playbooks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/ai/automations",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Utility",
+          "routes": [
             {
               "path": "/studio/assistant",
               "arch": [
@@ -371,47 +1452,6 @@
               "path": "/studio/triage",
               "arch": [
                 "LIST"
-              ]
-            },
-            {
-              "path": "/studio/inbox",
-              "arch": [
-                "COMM"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Projects",
-          "routes": [
-            {
-              "path": "/studio/projects",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/programs",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/venues",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/proposals",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/documents",
-              "arch": [
-                "DOC"
               ]
             },
             {
@@ -439,12 +1479,6 @@
               ]
             },
             {
-              "path": "/studio/drawings",
-              "arch": [
-                "DOC"
-              ]
-            },
-            {
               "path": "/studio/specs",
               "arch": [
                 "DOC"
@@ -463,24 +1497,6 @@
               ]
             },
             {
-              "path": "/studio/estimates",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/programs/risk",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/risk",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/programs/readiness",
               "arch": [
                 "LIST"
@@ -493,44 +1509,9 @@
               ]
             },
             {
-              "path": "/studio/governance/approvals",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Production",
-          "routes": [
-            {
-              "path": "/studio/production",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/assets",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/fabrication",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/production/compounds",
               "arch": [
                 "LIST"
-              ]
-            },
-            {
-              "path": "/studio/punch",
-              "arch": [
-                "FIELD"
               ]
             },
             {
@@ -552,18 +1533,6 @@
               ]
             },
             {
-              "path": "/studio/production/ros",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/work-orders",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/production/dispatch/live",
               "arch": [
                 "LIST"
@@ -571,17 +1540,6 @@
             },
             {
               "path": "/studio/production/logistics",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "People",
-          "routes": [
-            {
-              "path": "/studio/people",
               "arch": [
                 "LIST"
               ]
@@ -611,70 +1569,9 @@
               ]
             },
             {
-              "path": "/studio/participants/delegations",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/participants/visa",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/accreditation",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/workforce/rosters",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/workforce/training",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/legend/learn",
               "arch": [
                 "LMS"
-              ]
-            },
-            {
-              "path": "/studio/knowledge",
-              "arch": [
-                "LMS"
-              ]
-            },
-            {
-              "path": "/studio/workforce/onboarding",
-              "arch": [
-                "BOARD",
-                "AUTH"
-              ]
-            },
-            {
-              "path": "/studio/workforce/time-off",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/workforce/shift-swaps",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/workforce/recognition",
-              "arch": [
-                "LIST"
               ]
             },
             {
@@ -684,96 +1581,13 @@
               ]
             },
             {
-              "path": "/studio/workforce/forecast",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Commerce",
-          "routes": [
-            {
               "path": "/studio/sales",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/studio/crm",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/pipeline",
-              "arch": [
-                "BOARD"
-              ]
-            },
-            {
-              "path": "/studio/leads",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/clients",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/commercial/sponsors",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/marketing",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/campaigns",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/sales/diary",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/sales/beos",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/commercial/hospitality",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/commercial/hospitality?audience=guest",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/marketplace",
-              "arch": [
-                "SHOP"
-              ]
-            },
-            {
-              "path": "/studio/bookings",
               "arch": [
                 "LIST"
               ]
@@ -791,12 +1605,6 @@
               ]
             },
             {
-              "path": "/studio/marketplace/talent",
-              "arch": [
-                "SHOP"
-              ]
-            },
-            {
               "path": "/studio/marketplace/offers",
               "arch": [
                 "SHOP"
@@ -809,77 +1617,6 @@
               ]
             },
             {
-              "path": "/studio/marketplace/box-office",
-              "arch": [
-                "SHOP"
-              ]
-            },
-            {
-              "path": "/studio/marketplace/discounts",
-              "arch": [
-                "SHOP"
-              ]
-            },
-            {
-              "path": "/studio/revenue/orders",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/revenue/transactions",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/revenue/payouts",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/insights",
-              "arch": [
-                "RPT"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Finance",
-          "routes": [
-            {
-              "path": "/studio/finance",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/invoices",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/pay-apps",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/sub-invoices",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/lien-waivers",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/envelopes",
               "arch": [
                 "DOC"
@@ -887,12 +1624,6 @@
             },
             {
               "path": "/studio/finance/ap-ocr",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/expenses",
               "arch": [
                 "LIST"
               ]
@@ -916,51 +1647,9 @@
               ]
             },
             {
-              "path": "/studio/finance/cost-codes",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/finance/accounts",
               "arch": [
                 "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/ledger",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/budgets",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/wip",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/forecasts",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/periods",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/reports",
-              "arch": [
-                "RPT"
               ]
             },
             {
@@ -970,60 +1659,7 @@
               ]
             },
             {
-              "path": "/studio/finance/time",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/timesheets",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/finance/payroll",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/subscriptions",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Procurement",
-          "routes": [
-            {
-              "path": "/studio/procurement",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/vendors",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/prequalification",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/compliance",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/network",
               "arch": [
                 "LIST"
               ]
@@ -1035,19 +1671,7 @@
               ]
             },
             {
-              "path": "/studio/procurement/scorecard",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/procurement/sourcing",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/rfqs",
               "arch": [
                 "LIST"
               ]
@@ -1059,51 +1683,9 @@
               ]
             },
             {
-              "path": "/studio/procurement/requisitions",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/purchase-orders",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/receiving",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/procurement/po-change-orders",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/procurement/wo-broadcasts",
               "arch": [
                 "LIST"
-              ]
-            },
-            {
-              "path": "/studio/legal/contracts",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/logistics/ratecard",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/submittals",
-              "arch": [
-                "DOC"
               ]
             },
             {
@@ -1114,72 +1696,13 @@
               ]
             },
             {
-              "path": "/studio/settings/job-templates",
-              "arch": [
-                "SET"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Coordination",
-          "routes": [
-            {
-              "path": "/studio/operations",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/schedule",
-              "arch": [
-                "CAL"
-              ]
-            },
-            {
-              "path": "/studio/calendar",
-              "arch": [
-                "CAL"
-              ]
-            },
-            {
-              "path": "/studio/schedule/baselines",
-              "arch": [
-                "CAL"
-              ]
-            },
-            {
               "path": "/studio/operations/look-ahead",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/studio/tasks",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/operations/daily-log",
-              "arch": [
-                "FIELD"
-              ]
-            },
-            {
               "path": "/studio/action-items",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/annotations",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/forms",
               "arch": [
                 "LIST"
               ]
@@ -1191,77 +1714,13 @@
               ]
             },
             {
-              "path": "/studio/operations/reservations",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/sustainability",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Logistics",
-          "routes": [
-            {
-              "path": "/studio/logistics",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/transport",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/transport/dispatch",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/studio/logistics/freight",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/logistics/disposition",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/logistics/services",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/accommodation",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Safety",
-          "routes": [
-            {
-              "path": "/studio/safety",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/operations/incidents",
               "arch": [
                 "LIST"
               ]
@@ -1279,12 +1738,6 @@
               ]
             },
             {
-              "path": "/studio/safety/medical",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/safety/safeguarding",
               "arch": [
                 "LIST"
@@ -1294,30 +1747,6 @@
               "path": "/studio/safety/guard-tours",
               "arch": [
                 "LIST"
-              ]
-            },
-            {
-              "path": "/studio/access-control",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/safety/environmental",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/safety/threats",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/inspections",
-              "arch": [
-                "DOC"
               ]
             },
             {
@@ -1333,30 +1762,7 @@
               ]
             },
             {
-              "path": "/studio/safety/playbooks",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/compliance/coc",
-              "arch": [
-                "LIST"
-              ]
-            }
-          ]
-        },
-        {
-          "label": "Messages",
-          "routes": [
-            {
-              "path": "/studio/events",
-              "arch": [
-                "SHOP"
-              ]
-            },
-            {
-              "path": "/studio/meetings",
               "arch": [
                 "LIST"
               ]
@@ -1365,12 +1771,6 @@
               "path": "/studio/meetings/notes",
               "arch": [
                 "DOC"
-              ]
-            },
-            {
-              "path": "/studio/comms/announcements",
-              "arch": [
-                "COMM"
               ]
             },
             {
@@ -1386,33 +1786,9 @@
               ]
             },
             {
-              "path": "/studio/comms/channels",
-              "arch": [
-                "COMM"
-              ]
-            },
-            {
-              "path": "/studio/collaborate/whiteboards",
-              "arch": [
-                "BOARD"
-              ]
-            },
-            {
-              "path": "/studio/transmittals",
-              "arch": [
-                "DOC"
-              ]
-            },
-            {
               "path": "/studio/email-inbox",
               "arch": [
                 "COMM"
-              ]
-            },
-            {
-              "path": "/studio/rfis",
-              "arch": [
-                "LIST"
               ]
             },
             {
@@ -1426,12 +1802,7 @@
               "arch": [
                 "LIST"
               ]
-            }
-          ]
-        },
-        {
-          "label": "Collaborate",
-          "routes": [
+            },
             {
               "path": "/studio/collaborate/docs",
               "arch": [

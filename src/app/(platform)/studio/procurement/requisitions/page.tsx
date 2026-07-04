@@ -30,7 +30,7 @@ export default async function RequisitionsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.procurement.requisitions.eyebrow", undefined, "Procurement")}
+        eyebrow={t("console.procurement.requisitions.eyebrow", undefined, "Procurement · Source")}
         title={t("console.procurement.requisitions.title", undefined, "Requisitions")}
         subtitle={t("console.procurement.requisitions.subtitle", { count: rows.length }, `${rows.length} Requests`)}
         action={

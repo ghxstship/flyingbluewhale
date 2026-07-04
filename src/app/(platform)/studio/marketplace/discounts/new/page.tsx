@@ -5,7 +5,7 @@ export default function NewDiscountPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Commerce"
+        eyebrow="Sales"
         title="New Discount Code"
         breadcrumbs={[
           { label: "Marketplace", href: "/studio/marketplace" },

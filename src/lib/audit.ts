@@ -173,6 +173,7 @@ export type AuditAction =
   // v7.8 Phase B completion (kit 20 REPO_LANDING §2)
   | "purchase_order.routed_to_approvals"
   | "po_change_order.routed_to_approvals"
+  | "po_change_order.posted_to_budget"
   | "lead.proposal_created"
   | "asset.checked_out"
   | "asset.checked_in"

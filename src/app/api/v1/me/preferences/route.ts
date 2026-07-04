@@ -34,6 +34,9 @@ const PatchSchema = z.object({
   mobile_role: z.enum(["performer", "crew", "driver", "medic", "guard", "admin"]).optional(),
   // ADR-0007: last-visited portal slug for the app switcher's GVTEWAY entry.
   last_portal_slug: z.string().min(1).max(64).optional(),
+  // Kit 20 fixture 01 — Show-Day Mode: flips the console home into the
+  // live-ops strip (countdown, scans, incidents, crew on site).
+  show_day_mode: z.boolean().optional(),
 });
 
 const UI_STATE_KEYS = [
@@ -45,6 +48,7 @@ const UI_STATE_KEYS = [
   "nav_lens",
   "mobile_role",
   "last_portal_slug",
+  "show_day_mode",
 ] as const;
 
 export async function GET() {

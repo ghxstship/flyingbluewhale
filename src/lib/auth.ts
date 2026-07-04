@@ -150,11 +150,18 @@ async function resolveSession(): Promise<Session | null> {
   }
 
   const realRows = rows.filter((r) => r.orgs?.slug !== DEMO_ORG_SLUG);
-  const preferred = lastOrgId ? realRows.find((r) => r.org_id === lastOrgId) : null;
-  const real = preferred ?? realRows[0] ?? null;
+  // An explicit workspace pointer wins outright — INCLUDING the demo org.
+  // Before kit 20 the pointer was only honored among real orgs, so a
+  // multi-org user could never switch into demo while the chrome
+  // (resolveTenant reads the same pointer) still labeled demo as current —
+  // the session/label mismatch beta testers would read as missing data.
+  // The prefer-real-orgs rule now applies only when no pointer is set.
+  const pointed = lastOrgId ? rows.find((r) => r.org_id === lastOrgId) : null;
   // rows.length === 0 already returned above, so rows[0] exists.
-  const chosen = real ?? rows[0]!;
-  const isGuest = chosen.orgs?.slug === DEMO_ORG_SLUG && !real;
+  const chosen = pointed ?? realRows[0] ?? rows[0]!;
+  // Guest = the auto-added demo membership is the user's ONLY org (a true
+  // fallback). An explicit pointer at demo is a member's deliberate choice.
+  const isGuest = chosen.orgs?.slug === DEMO_ORG_SLUG && realRows.length === 0;
 
   // Developer "Act As": when a valid, HMAC-signed `atlvs_impersonator`
   // cookie is present, the Supabase session above is the TARGET's (so all

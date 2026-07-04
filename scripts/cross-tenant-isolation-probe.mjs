@@ -88,7 +88,7 @@ const STRICT_TABLES = [
   "assignments",
   "deliverables",
   "clients",
-  "leads",
+  "opportunities",
   "tasks",
   "events",
   "crew_members",

@@ -737,6 +737,12 @@
               ]
             },
             {
+              "path": "/studio/crm",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/pipeline",
               "arch": [
                 "BOARD"

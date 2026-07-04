@@ -16557,79 +16557,6 @@ export type Database = {
           },
         ]
       }
-      leads: {
-        Row: {
-          assigned_to: string | null
-          created_at: string
-          created_by: string | null
-          email: string | null
-          estimated_value_cents: number | null
-          estimated_value_currency: string
-          id: string
-          name: string
-          notes: string | null
-          org_id: string
-          phone: string | null
-          source: string | null
-          stage: Database["public"]["Enums"]["lead_stage"]
-          updated_at: string
-        }
-        Insert: {
-          assigned_to?: string | null
-          created_at?: string
-          created_by?: string | null
-          email?: string | null
-          estimated_value_cents?: number | null
-          estimated_value_currency?: string
-          id?: string
-          name: string
-          notes?: string | null
-          org_id: string
-          phone?: string | null
-          source?: string | null
-          stage?: Database["public"]["Enums"]["lead_stage"]
-          updated_at?: string
-        }
-        Update: {
-          assigned_to?: string | null
-          created_at?: string
-          created_by?: string | null
-          email?: string | null
-          estimated_value_cents?: number | null
-          estimated_value_currency?: string
-          id?: string
-          name?: string
-          notes?: string | null
-          org_id?: string
-          phone?: string | null
-          source?: string | null
-          stage?: Database["public"]["Enums"]["lead_stage"]
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "leads_assigned_to_fkey"
-            columns: ["assigned_to"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "leads_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "leads_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       legend_certifications: {
         Row: {
           certification_state: string
@@ -19997,19 +19924,26 @@ export type Database = {
       opportunities: {
         Row: {
           account_id: string | null
+          assigned_to: string | null
           close_outcome: string | null
           closed_at: string | null
+          contact_email: string | null
+          contact_phone: string | null
           contract_id: string | null
           created_at: string
-          current_stage_id: string
+          created_by: string | null
+          current_stage_id: string | null
           estimated_value_currency: string | null
           estimated_value_minor: number | null
           expected_close: string | null
           id: string
+          kind: Database["public"]["Enums"]["crm_record_kind"]
+          lead_phase: Database["public"]["Enums"]["lead_stage"] | null
           metadata: Json
+          notes: string | null
           org_id: string
           party_id: string | null
-          pipeline_id: string
+          pipeline_id: string | null
           probability: number | null
           source: string | null
           title: string
@@ -20017,19 +19951,26 @@ export type Database = {
         }
         Insert: {
           account_id?: string | null
+          assigned_to?: string | null
           close_outcome?: string | null
           closed_at?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
           contract_id?: string | null
           created_at?: string
-          current_stage_id: string
+          created_by?: string | null
+          current_stage_id?: string | null
           estimated_value_currency?: string | null
           estimated_value_minor?: number | null
           expected_close?: string | null
           id?: string
+          kind?: Database["public"]["Enums"]["crm_record_kind"]
+          lead_phase?: Database["public"]["Enums"]["lead_stage"] | null
           metadata?: Json
+          notes?: string | null
           org_id: string
           party_id?: string | null
-          pipeline_id: string
+          pipeline_id?: string | null
           probability?: number | null
           source?: string | null
           title: string
@@ -20037,19 +19978,26 @@ export type Database = {
         }
         Update: {
           account_id?: string | null
+          assigned_to?: string | null
           close_outcome?: string | null
           closed_at?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
           contract_id?: string | null
           created_at?: string
-          current_stage_id?: string
+          created_by?: string | null
+          current_stage_id?: string | null
           estimated_value_currency?: string | null
           estimated_value_minor?: number | null
           expected_close?: string | null
           id?: string
+          kind?: Database["public"]["Enums"]["crm_record_kind"]
+          lead_phase?: Database["public"]["Enums"]["lead_stage"] | null
           metadata?: Json
+          notes?: string | null
           org_id?: string
           party_id?: string | null
-          pipeline_id?: string
+          pipeline_id?: string | null
           probability?: number | null
           source?: string | null
           title?: string
@@ -20061,6 +20009,20 @@ export type Database = {
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunities_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunities_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
@@ -42372,6 +42334,7 @@ export type Database = {
         | "succeeded"
         | "partial"
         | "failed"
+      crm_record_kind: "deal" | "lead" | "rfp"
       deal_type:
         | "flat"
         | "door"
@@ -43541,6 +43504,7 @@ export const Constants = {
         "declined",
       ],
       corpus_run_state: ["queued", "running", "succeeded", "partial", "failed"],
+      crm_record_kind: ["deal", "lead", "rfp"],
       deal_type: [
         "flat",
         "door",

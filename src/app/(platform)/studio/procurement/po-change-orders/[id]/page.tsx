@@ -71,11 +71,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {isManagerPlus(session) && !["approved", "rejected", "void"].includes(co.change_order_state) && (
               <RecordActionButton
                 action={routePoChangeOrderToApprovalsAction.bind(null, id)}
-                label={t(
-                  "console.procurement.poChangeOrders.detail.routeToApprovals",
-                  undefined,
-                  "Route To Approvals",
-                )}
+                label={t("console.procurement.poChangeOrders.detail.routeToApprovals", undefined, "Route To Approvals")}
                 pendingLabel={t("console.procurement.poChangeOrders.detail.routing", undefined, "Routing…")}
               />
             )}

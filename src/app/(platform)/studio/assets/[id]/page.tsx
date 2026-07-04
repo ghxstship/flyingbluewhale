@@ -64,7 +64,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="page-content">{t("console.assets.detail.configureSupabase", undefined, "Configure Supabase.")}</div>
+      <div className="page-content">
+        {t("console.assets.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
     );
   const { id } = await params;
   const session = await requireSession();
@@ -196,7 +198,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </table>
             </div>
           )}
-          <FormShell action={addDepreciation} submitLabel={t("console.assets.detail.addDepreciation", undefined, "Add schedule")}>
+          <FormShell
+            action={addDepreciation}
+            submitLabel={t("console.assets.detail.addDepreciation", undefined, "Add schedule")}
+          >
             <input type="hidden" name="asset_id" value={asset.id} />
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -273,7 +278,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </table>
             </div>
           )}
-          <FormShell action={addMaintenance} submitLabel={t("console.assets.detail.addMaintenance", undefined, "Log maintenance")}>
+          <FormShell
+            action={addMaintenance}
+            submitLabel={t("console.assets.detail.addMaintenance", undefined, "Log maintenance")}
+          >
             <input type="hidden" name="asset_id" value={asset.id} />
             <div className="grid grid-cols-2 gap-3">
               <Input

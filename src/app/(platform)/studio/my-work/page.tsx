@@ -31,7 +31,9 @@ type WorkRow = {
 export default async function MyWorkPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="page-content">{t("console.myWork.configureSupabase", undefined, "Configure Supabase.")}</div>;
+    return (
+      <div className="page-content">{t("console.myWork.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   }
   const session = await requireSession();
   const fmt = await getRequestFormatters();
@@ -197,7 +199,10 @@ export default async function MyWorkPage() {
             label={t("console.myWork.stats.approvals", undefined, "Approvals Pending")}
             value={fmt.number(approvalCount)}
           />
-          <MetricCard label={t("console.myWork.stats.requests", undefined, "Open Requests")} value={fmt.number(requestCount)} />
+          <MetricCard
+            label={t("console.myWork.stats.requests", undefined, "Open Requests")}
+            value={fmt.number(requestCount)}
+          />
         </div>
 
         <WorkSection
@@ -236,7 +241,10 @@ export default async function MyWorkPage() {
             undefined,
             "No open requisitions. Need something bought? Start one from the + menu; it converts to a PO once approved.",
           )}
-          emptyAction={{ href: "/studio/procurement/requisitions/new", label: t("console.myWork.requestPurchase", undefined, "Request A Purchase") }}
+          emptyAction={{
+            href: "/studio/procurement/requisitions/new",
+            label: t("console.myWork.requestPurchase", undefined, "Request A Purchase"),
+          }}
         />
         <WorkSection
           title={t("console.myWork.sections.workOrders", undefined, "My Work Orders")}
@@ -259,7 +267,10 @@ export default async function MyWorkPage() {
             undefined,
             "No open tickets. IT and facilities requests you file from the + menu wait here until resolved.",
           )}
-          emptyAction={{ href: "/studio/services/requests/new", label: t("console.myWork.fileTicket", undefined, "File A Ticket") }}
+          emptyAction={{
+            href: "/studio/services/requests/new",
+            label: t("console.myWork.fileTicket", undefined, "File A Ticket"),
+          }}
         />
         <WorkSection
           title={t("console.myWork.sections.timeOff", undefined, "My Time Off")}
@@ -271,7 +282,10 @@ export default async function MyWorkPage() {
             undefined,
             "No pending time off. Requests you submit wait here until they are approved.",
           )}
-          emptyAction={{ href: "/studio/workforce/time-off", label: t("console.myWork.requestTimeOff", undefined, "Request Time Off") }}
+          emptyAction={{
+            href: "/studio/workforce/time-off",
+            label: t("console.myWork.requestTimeOff", undefined, "Request Time Off"),
+          }}
         />
         <WorkSection
           title={t("console.myWork.sections.expenses", undefined, "My Pending Expenses")}
@@ -283,7 +297,10 @@ export default async function MyWorkPage() {
             undefined,
             "No pending expenses. Submit one and track it here until it is approved and reimbursed.",
           )}
-          emptyAction={{ href: "/studio/finance/expenses/new", label: t("console.myWork.submitExpense", undefined, "Submit An Expense") }}
+          emptyAction={{
+            href: "/studio/finance/expenses/new",
+            label: t("console.myWork.submitExpense", undefined, "Submit An Expense"),
+          }}
         />
       </div>
     </>

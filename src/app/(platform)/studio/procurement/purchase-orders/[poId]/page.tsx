@@ -34,11 +34,7 @@ export default async function POPage({ params }: { params: Promise<{ poId: strin
             {isManagerPlus(session) && (po.po_state === "draft" || po.po_state === "sent") && (
               <RecordActionButton
                 action={routePoToApprovalsAction.bind(null, poId)}
-                label={t(
-                  "console.procurement.purchaseOrders.detail.routeToApprovals",
-                  undefined,
-                  "Route To Approvals",
-                )}
+                label={t("console.procurement.purchaseOrders.detail.routeToApprovals", undefined, "Route To Approvals")}
                 pendingLabel={t("console.procurement.purchaseOrders.detail.routing", undefined, "Routing…")}
               />
             )}

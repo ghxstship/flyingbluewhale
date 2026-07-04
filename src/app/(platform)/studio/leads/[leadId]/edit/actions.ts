@@ -28,14 +28,15 @@ export async function updateLead(id: string, _: State, fd: FormData): Promise<St
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  // Sea Trial FINDING-022: optimistic concurrency.
+  // Sea Trial FINDING-022: optimistic concurrency. Leads live in the merged
+  // CRM store (opportunities, kind='lead' — ADR-0014 Phase A amendment).
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
-  const result = await updateOrgScopedWithCheck("leads", session.orgId, id, expectedUpdatedAt, {
-    name: parsed.data.name,
-    email: parsed.data.email || null,
-    phone: parsed.data.phone || null,
+  const result = await updateOrgScopedWithCheck("opportunities", session.orgId, id, expectedUpdatedAt, {
+    title: parsed.data.name,
+    contact_email: parsed.data.email || null,
+    contact_phone: parsed.data.phone || null,
     source: parsed.data.source || null,
-    estimated_value_cents: parsed.data.estimated_value_cents
+    estimated_value_minor: parsed.data.estimated_value_cents
       ? Math.round(Number(parsed.data.estimated_value_cents))
       : null,
     notes: parsed.data.notes || null,
@@ -45,14 +46,21 @@ export async function updateLead(id: string, _: State, fd: FormData): Promise<St
   }
   revalidatePath(`/studio/leads/${id}`);
   revalidatePath("/studio/leads");
+  revalidatePath("/studio/crm");
   redirect(`/studio/leads/${id}`);
 }
 
 export async function deleteLead(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  const { error } = await supabase.from("leads").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("opportunities")
+    .delete()
+    .eq("id", id)
+    .eq("kind", "lead")
+    .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not delete lead: ${error.message}`);
   revalidatePath("/studio/leads");
+  revalidatePath("/studio/crm");
   redirect("/studio/leads");
 }

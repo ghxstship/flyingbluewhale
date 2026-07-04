@@ -128,8 +128,8 @@ async function runEvent(ev) {
   c.client = await step(ev.tier, "Discovery", "client.create", async () =>
     await ins("clients", { org_id: ORG_ID, name: `Spotify LATAM (${ev.artist})` }));
   c.lead = await step(ev.tier, "Discovery", "lead.create+qualify", async () => {
-    const l = await ins("leads", { org_id: ORG_ID, name: `Casa Miami — ${ev.artist}`, stage: "new" });
-    await upd("leads", l.id, { stage: "qualified" }); await upd("leads", l.id, { stage: "proposal" });
+    const l = await ins("opportunities", { org_id: ORG_ID, kind: "lead", title: `Casa Miami — ${ev.artist}`, lead_phase: "new" });
+    await upd("opportunities", l.id, { lead_phase: "qualified" }); await upd("opportunities", l.id, { lead_phase: "proposal" });
     return l;
   });
   c.project = await step(ev.tier, "Discovery", "project.create(Discovery)", async () => {

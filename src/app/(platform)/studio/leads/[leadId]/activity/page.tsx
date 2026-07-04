@@ -26,7 +26,9 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
     .from("audit_log")
     .select("id,actor_id,action,metadata,at")
     .eq("org_id", session.orgId)
-    .eq("target_table", "leads")
+    // Merged CRM store: new audit rows target `opportunities`; rows written
+    // before the ADR-0014 Phase A merge still say `leads`.
+    .in("target_table", ["opportunities", "leads"])
     .eq("target_id", leadId)
     .order("at", { ascending: false })
     .limit(100);

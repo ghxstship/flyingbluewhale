@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
@@ -20,19 +20,22 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
   const { leadId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const lead = await getOrgScoped("leads", session.orgId, leadId);
+  const lead = await getOrgScoped("opportunities", session.orgId, leadId);
   if (!lead) notFound();
+  // Merged CRM store: a converted record is a deal — its home is the pipeline lens.
+  if (lead.kind !== "lead") redirect(`/studio/pipeline/${leadId}`);
   const { t } = await getRequestT();
   // Mirrors PROPOSAL_READY_STAGES in ../actions.ts (the action
   // re-validates server-side; this only gates button visibility).
-  const canCreateProposal = isManagerPlus(session) && ["qualified", "proposal", "won"].includes(lead.stage);
+  const canCreateProposal =
+    isManagerPlus(session) && ["qualified", "proposal", "won"].includes(lead.lead_phase ?? "new");
 
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.leads.detail.eyebrow", undefined, "Lead")}
-        title={lead.name}
-        subtitle={lead.email ?? t("console.leads.detail.noEmail", undefined, "No email")}
+        title={lead.title}
+        subtitle={lead.contact_email ?? t("console.leads.detail.noEmail", undefined, "No email")}
         action={
           <div className="flex items-center gap-2">
             {canCreateProposal && (
@@ -42,7 +45,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
                 pendingLabel={t("console.leads.detail.creatingProposal", undefined, "Creating…")}
               />
             )}
-            <LeadStageMover leadId={lead.id} stage={lead.stage} />
+            <LeadStageMover leadId={lead.id} stage={lead.lead_phase ?? "new"} />
             <Button href={`/studio/leads/${leadId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>
@@ -50,8 +53,8 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
               action={deleteLead.bind(null, leadId)}
               confirm={t(
                 "console.leads.detail.deleteConfirm",
-                { name: lead.name },
-                `Delete lead "${lead.name}"? This cannot be undone.`,
+                { name: lead.title },
+                `Delete lead "${lead.title}"? This cannot be undone.`,
               )}
             />
           </div>
@@ -60,10 +63,10 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
       <div className="page-content space-y-6">
         <div className="metric-grid">
           <Field label={t("console.leads.detail.fields.stage", undefined, "Stage")}>
-            <StatusBadge status={lead.stage} />
+            <StatusBadge status={lead.lead_phase ?? "new"} />
           </Field>
           <Field label={t("console.leads.detail.fields.value", undefined, "Value")}>
-            {formatMoney(lead.estimated_value_cents)}
+            {formatMoney(lead.estimated_value_minor)}
           </Field>
           <Field label={t("console.leads.detail.fields.source", undefined, "Source")}>{lead.source ?? "—"}</Field>
           <Field label={t("console.leads.detail.fields.updated", undefined, "Updated")}>

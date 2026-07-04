@@ -24,13 +24,7 @@ export function BookOfferForm({ submissionId, defaultFee }: { submissionId: stri
           <label className="text-xs font-medium text-[var(--p-text-2)]" htmlFor="book-offer-date">
             {t("console.marketplace.calls.submissions.detail.book.date", undefined, "Performance Date")}
           </label>
-          <input
-            id="book-offer-date"
-            name="performance_date"
-            type="date"
-            required
-            className="ps-input mt-1.5 w-full"
-          />
+          <input id="book-offer-date" name="performance_date" type="date" required className="ps-input mt-1.5 w-full" />
         </div>
         <div>
           <label className="text-xs font-medium text-[var(--p-text-2)]" htmlFor="book-offer-fee">

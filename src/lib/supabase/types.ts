@@ -269,17 +269,33 @@ export type Client = {
   created_at: string;
   updated_at: string;
 };
-export type Lead = {
+// One pursuit store (kit v7.8 §09 C-11, ADR-0014 Phase A amendment): `leads`
+// folded into `opportunities` behind the `kind` facet. Leads carry the
+// `lead_phase` arc; deals ride pipeline_id/current_stage_id.
+export type CrmRecordKind = "deal" | "lead" | "rfp";
+export type CrmRecord = {
   id: string;
   org_id: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
+  kind: CrmRecordKind;
+  title: string;
+  contact_email: string | null;
+  contact_phone: string | null;
   source: string | null;
-  stage: LeadStage;
-  estimated_value_cents: number | null;
+  lead_phase: LeadStage | null;
+  pipeline_id: string | null;
+  current_stage_id: string | null;
+  estimated_value_minor: number | null;
+  estimated_value_currency: string | null;
+  probability: number | null;
+  expected_close: string | null;
+  close_outcome: string | null;
+  closed_at: string | null;
+  account_id: string | null;
+  party_id: string | null;
+  contract_id: string | null;
   assigned_to: string | null;
   notes: string | null;
+  metadata: Record<string, unknown> | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;

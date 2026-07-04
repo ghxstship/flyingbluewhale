@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 
 type OpportunityRow = {
   id: string;
+  kind: "deal" | "lead" | "rfp";
   title: string;
   source: string | null;
   probability: number | null;
@@ -63,7 +64,7 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
   const { data } = await supabase
     .from("opportunities")
     .select(
-      "id, title, source, probability, estimated_value_minor, estimated_value_currency, expected_close, closed_at, close_outcome, metadata, created_at, updated_at, " +
+      "id, kind, title, source, probability, estimated_value_minor, estimated_value_currency, expected_close, closed_at, close_outcome, metadata, created_at, updated_at, " +
         "pipeline:pipeline_id(id, name, slug), " +
         "stage:current_stage_id(id, name, stage_key, is_won, is_terminal), " +
         "account:account_id(id, account_kind, party:party_id(display_name)), " +
@@ -75,6 +76,8 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
 
   const deal = data as unknown as OpportunityRow | null;
   if (!deal) notFound();
+  // Merged CRM store: an unconverted lead's home is the leads lens.
+  if (deal.kind === "lead") redirect(`/studio/leads/${dealId}`);
 
   const { data: actData } = await supabase
     .from("opportunity_activities")

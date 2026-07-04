@@ -110,12 +110,15 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
     .order("display_order");
   const stages = (stagesData ?? []) as StageRow[];
 
+  // Deal lens over the merged CRM store (kind facet — ADR-0014 Phase A
+  // amendment). Leads/RFPs have no pipeline stage until converted.
   const { data: oppData } = await supabase
     .from("opportunities")
     .select(
       "id, title, current_stage_id, pipeline_id, estimated_value_minor, estimated_value_currency, probability, expected_close, source, updated_at, account:account_id(party:party_id(display_name))",
     )
     .eq("org_id", session.orgId)
+    .eq("kind", "deal")
     .eq("pipeline_id", active.id)
     .is("closed_at", null)
     .order("updated_at", { ascending: false })

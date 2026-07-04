@@ -7,3 +7,6 @@ test-results
 *.tsbuildinfo
 next-env.d.ts
 src/lib/supabase/database.types.ts
+# generator-owned artifacts with byte-exact drift gates (gen:sitemap:check / gen:ia-map:check)
+docs/ia/SITEMAP.md
+public/ia/ia-model.json

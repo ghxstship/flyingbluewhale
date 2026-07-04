@@ -144,7 +144,13 @@ async function transitionAssetState(
  * `checkout` movement row on the UAL ledger.
  */
 export async function checkOutAssetAction(assetId: string): Promise<RecordActionState> {
-  return transitionAssetState(assetId, ["available", "reserved", "acquired"], "in_use", "checkout", "asset.checked_out");
+  return transitionAssetState(
+    assetId,
+    ["available", "reserved", "acquired"],
+    "in_use",
+    "checkout",
+    "asset.checked_out",
+  );
 }
 
 /**

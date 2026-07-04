@@ -15,9 +15,7 @@ import { createClient } from "@/lib/supabase/server";
 // "returned" instances are still in flight and must not be duplicated.
 const OPEN_INSTANCE_STATES = ["initiated", "in_review", "escalated", "returned"] as const;
 
-export type RouteToApprovalsResult =
-  | { id: string; alreadyRouted: boolean }
-  | { error: string };
+export type RouteToApprovalsResult = { id: string; alreadyRouted: boolean } | { error: string };
 
 export async function routeToApprovals({
   session,

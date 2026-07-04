@@ -16,7 +16,7 @@ import { log } from "@/lib/log";
  */
 
 /** Allowed tables an agent can target. Whitelisted to keep the surface honest. */
-const ALLOWED_TABLES = new Set<string>(["incidents", "tickets", "tasks", "deliverables", "leads"]);
+const ALLOWED_TABLES = new Set<string>(["incidents", "tickets", "tasks", "deliverables", "opportunities"]);
 
 /** Output schemas keyed by `output_type`. */
 const SCHEMAS = {

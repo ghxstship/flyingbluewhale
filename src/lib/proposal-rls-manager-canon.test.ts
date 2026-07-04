@@ -159,8 +159,9 @@ const GUARDED_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> =
   { table: "itil_problems", policy: "itil_problems_update" },
   { table: "kb_articles", policy: "kb_articles_write__insert" },
   { table: "kb_articles", policy: "kb_articles_write__update" },
-  { table: "leads", policy: "leads_insert" },
-  { table: "leads", policy: "leads_update" },
+  // leads merged into opportunities (ADR-0014 Phase A, 20260703150000_crm_merge_leads_kind)
+  { table: "opportunities", policy: "opportunities_insert" },
+  { table: "opportunities", policy: "opportunities_update" },
   { table: "legend_certifications", policy: "legend_certifications_write" },
   { table: "legend_courses", policy: "legend_courses_write" },
   { table: "legend_crew_members", policy: "legend_crew_members_write" },
@@ -292,10 +293,7 @@ function lastPolicyBody(policy: string, table: string): string | null {
   let body: string | null = null;
   // Match `create policy "<policy>" on "public"."<table>" ...;`
   // (case-insensitive; tolerant of optional quoting and whitespace).
-  const re = new RegExp(
-    `create\\s+policy\\s+"?${policy}"?\\s+on\\s+"?public"?\\."?${table}"?[\\s\\S]*?;`,
-    "gi",
-  );
+  const re = new RegExp(`create\\s+policy\\s+"?${policy}"?\\s+on\\s+"?public"?\\."?${table}"?[\\s\\S]*?;`, "gi");
   for (const name of files) {
     const txt = readFileSync(join(MIGRATIONS_DIR, name), "utf8");
     const matches = txt.match(re);

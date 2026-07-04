@@ -94,7 +94,10 @@ const budget_variance: MetricResolver = async (ctx) => {
 /** (collected revenue − cost) / revenue × 100. Revenue = paid invoices;
  *  cost = budget spend. */
 const gross_margin: MetricResolver = async (ctx) => {
-  const inv = await rows(ctx, "invoices", "amount_cents,invoice_state", { eq: { invoice_state: "paid" }, isNull: ["deleted_at"] });
+  const inv = await rows(ctx, "invoices", "amount_cents,invoice_state", {
+    eq: { invoice_state: "paid" },
+    isNull: ["deleted_at"],
+  });
   const b = await rows(ctx, "budgets", "spent_cents,actual_cents");
   if (!inv || inv.length === 0) return null;
   const revenue = sum(inv, "amount_cents");
@@ -109,7 +112,8 @@ const cost_to_complete: MetricResolver = async (ctx) => {
   const b = await rows(ctx, "budgets", "amount_cents,actual_cents,spent_cents,eac_cents,forecast_cents");
   if (!b || b.length === 0) return null;
   const ctc = b.reduce((a, r) => {
-    const eac = r.eac_cents != null ? num(r.eac_cents) : r.forecast_cents != null ? num(r.forecast_cents) : num(r.amount_cents);
+    const eac =
+      r.eac_cents != null ? num(r.eac_cents) : r.forecast_cents != null ? num(r.forecast_cents) : num(r.amount_cents);
     const actual = r.actual_cents != null ? num(r.actual_cents) : num(r.spent_cents);
     return a + Math.max(eac - actual, 0);
   }, 0);
@@ -176,13 +180,16 @@ const billable_utilization: MetricResolver = async (ctx) => {
 // SALES / PIPELINE
 // ===========================================================================
 
-/** Open lead pipeline value (dollars) — stages still in flight. */
+/** Open pursuit value (dollars) — merged CRM store (ADR-0014 Phase A):
+ *  leads still in flight on the lead_phase arc + unclosed deals/RFPs. */
 const pipeline_value: MetricResolver = async (ctx) => {
-  const leads = await rows(ctx, "leads", "estimated_value_cents,stage");
-  if (!leads) return null;
-  const open = leads.filter((l) => !["won", "lost"].includes(String(l.stage)));
+  const pursuits = await rows(ctx, "opportunities", "estimated_value_minor,kind,lead_phase,closed_at");
+  if (!pursuits) return null;
+  const open = pursuits.filter((p) =>
+    p.kind === "lead" ? !["won", "lost"].includes(String(p.lead_phase)) : p.closed_at == null,
+  );
   if (open.length === 0) return 0;
-  return sum(open, "estimated_value_cents") / 100;
+  return sum(open, "estimated_value_minor") / 100;
 };
 
 /** Active projects count. */
@@ -221,7 +228,8 @@ const project_health: MetricResolver = async (ctx) => {
   if (!projs || projs.length === 0) return null;
   const live = projs.filter((p) => !["archived"].includes(String(p.project_state)));
   if (live.length === 0) return null;
-  const activeShare = projs.filter((p) => ["active", "complete"].includes(String(p.project_state))).length / projs.length;
+  const activeShare =
+    projs.filter((p) => ["active", "complete"].includes(String(p.project_state))).length / projs.length;
   const atRisk = await at_risk_projects(ctx);
   const riskShare = atRisk != null && live.length > 0 ? atRisk / live.length : 0;
   return Math.round(Math.max(0, Math.min(100, (activeShare * 0.6 + (1 - riskShare) * 0.4) * 100)));
@@ -265,7 +273,9 @@ const ar_overdue: MetricResolver = async (ctx) => {
   if (outValue === 0) return null;
   const today = Date.now();
   const overdueValue = outstanding
-    .filter((r) => String(r.invoice_state) === "overdue" || (r.due_at && new Date(r.due_at as string).getTime() < today))
+    .filter(
+      (r) => String(r.invoice_state) === "overdue" || (r.due_at && new Date(r.due_at as string).getTime() < today),
+    )
     .reduce((a, r) => a + num(r.amount_cents), 0);
   return (overdueValue / outValue) * 100;
 };

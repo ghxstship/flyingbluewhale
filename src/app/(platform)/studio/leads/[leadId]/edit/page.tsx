@@ -15,15 +15,15 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
   const p = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const row = await getOrgScoped("leads", session.orgId, p.leadId);
-  if (!row) notFound();
+  const row = await getOrgScoped("opportunities", session.orgId, p.leadId);
+  if (!row || row.kind !== "lead") notFound();
   const { t } = await getRequestT();
   const action = updateLead.bind(null, p.leadId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.leads.edit.eyebrow", undefined, "Lead")}
-        title={t("console.leads.edit.title", { name: row.name }, `Edit ${row.name}`)}
+        title={t("console.leads.edit.title", { name: row.title }, `Edit ${row.title}`)}
       />
       <div className="page-content max-w-xl">
         <FormShell
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
           <Input
             label={t("console.leads.edit.fields.name", undefined, "Name")}
             name="name"
-            defaultValue={row.name}
+            defaultValue={row.title}
             required
             maxLength={200}
           />
@@ -44,12 +44,12 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
             label={t("console.leads.edit.fields.email", undefined, "Email")}
             name="email"
             type="email"
-            defaultValue={row.email ?? ""}
+            defaultValue={row.contact_email ?? ""}
           />
           <Input
             label={t("console.leads.edit.fields.phone", undefined, "Phone")}
             name="phone"
-            defaultValue={row.phone ?? ""}
+            defaultValue={row.contact_phone ?? ""}
             maxLength={40}
           />
           <Input
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
           <MoneyInput
             label={t("console.leads.edit.fields.estimatedValue", undefined, "Estimated Value")}
             name="estimated_value_cents"
-            defaultCents={row.estimated_value_cents ?? null}
+            defaultCents={row.estimated_value_minor ?? null}
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">

@@ -11,5 +11,5 @@ export type AgentOutputType = (typeof AGENT_OUTPUT_TYPES)[number];
  * `src/lib/ai/agents.ts` — keep the two in sync so the UI never offers a
  * target the executor would reject at runtime.
  */
-export const AGENT_TARGET_TABLES = ["incidents", "tickets", "tasks", "deliverables", "leads"] as const;
+export const AGENT_TARGET_TABLES = ["incidents", "tickets", "tasks", "deliverables", "opportunities"] as const;
 export type AgentTargetTable = (typeof AGENT_TARGET_TABLES)[number];

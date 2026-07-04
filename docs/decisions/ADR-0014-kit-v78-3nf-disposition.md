@@ -1,40 +1,40 @@
 # ADR-0014 — Kit v7.8 §09 3NF merges: repo disposition
 
-- **Status:** Accepted (2026-07-03) · **Amended same day by kit 20** — `ATLVS Ecosystem (20).zip` ships `design_handoff_console_rebuild/REPO_LANDING.md`, which removes the "recreate in the target environment" latitude this ADR leaned on: *"the prototype is the contract... where repo reality and prototype disagree, the prototype wins — the repo moves."* Its Phase A mandates the table folds this ADR rejected or deferred, as real Supabase migrations (facet column → row migration → duplicate deleted → old route re-exposed as a filtered alias). The dispositions below stay as the honest audit of 2026-07-03; the **Rejected/Deferred rows are now the Phase A execution queue**, each to land as its own migration-scoped change (per the landing order's own "separate PRs" instruction) with RLS, `database.types.ts` regen, alias routes, sitemap/ia-map regen, and e2e updates. Sequencing note: `sub_invoices → invoices(source)` also carries the AP/PO linkage that completes the receiving 3-way match invoice leg (Phase B shipped the PO leg only).
+- **Status:** Accepted (2026-07-03) · **Amended same day by kit 20** — `ATLVS Ecosystem (20).zip` ships `design_handoff_console_rebuild/REPO_LANDING.md`, which removes the "recreate in the target environment" latitude this ADR leaned on: _"the prototype is the contract... where repo reality and prototype disagree, the prototype wins — the repo moves."_ Its Phase A mandates the table folds this ADR rejected or deferred, as real Supabase migrations (facet column → row migration → duplicate deleted → old route re-exposed as a filtered alias). The dispositions below stay as the honest audit of 2026-07-03; the **Rejected/Deferred rows are now the Phase A execution queue**, each to land as its own migration-scoped change (per the landing order's own "separate PRs" instruction) with RLS, `database.types.ts` regen, alias routes, sitemap/ia-map regen, and e2e updates. Sequencing note: `sub_invoices → invoices(source)` also carries the AP/PO linkage that completes the receiving 3-way match invoice leg (Phase B shipped the PO leg only).
 - **Context:** The v7.8 console-rebuild kit (`ATLVS Ecosystem (18/19)`, `design_handoff_console_rebuild`) enforced "one noun · one store" on its own prototype registry by merging 12 duplicate entities into canonical stores behind filtered aliases (§09 post-pass), and demands the same law in any implementation (README Law #1/#3). This ADR dispositions each kit merge against the repo, where "stores" are real Postgres tables with RLS, not client-side registry arrays.
 
 ## Principle
 
-The kit's law targets *duplicate stores of the same fact*. The repo's schema was normalized independently (LDP, ADR-0006/0011); several kit "merges" correspond to tables that hold **different facts that happen to share a label**. For those, the correct repo move is **label disambiguation** (the kit's own "Offers" precedent), not folding tables. Folding a real table into another is a schema migration with RLS/API/e2e blast radius and needs its own migration-scoped decision, not a nav cleanup.
+The kit's law targets _duplicate stores of the same fact_. The repo's schema was normalized independently (LDP, ADR-0006/0011); several kit "merges" correspond to tables that hold **different facts that happen to share a label**. For those, the correct repo move is **label disambiguation** (the kit's own "Offers" precedent), not folding tables. Folding a real table into another is a schema migration with RLS/API/e2e blast radius and needs its own migration-scoped decision, not a nav cleanup.
 
 ## Disposition of the 12 kit merges
 
-| Kit merge (§09) | Repo state | Disposition |
-|---|---|---|
-| `vendorContracts → contracts(scope)` | One store: `contracts` at `/studio/legal/contracts`; people-side MSAs are a different fact (engagement terms) | **Satisfied**; rail labels disambiguated 2026-07-03 (`Contracts` vs `Crew Contracts`) |
-| `subNetwork → vendors(type)` | Already a lens: subs network reads `vendors` + eligibility view (v7.5 subcontractor-ops) | **Satisfied** |
-| `subCompliance → cois(scope)` | Compliance vault reads vendor compliance records; one store | **Satisfied** |
-| `subInvoices → invoices(source)` | `sub_invoices` is a separate table (inbound approve-to-pay, retainage + waiver gate) vs AR `invoices` — different fact directions (AP vs AR) | **Rejected as-is** — AP-inbound vs AR-outbound are distinct facts here; revisit only if a unified invoicing ledger is ever scoped |
-| `leads + opportunities → crm(kind)` | `leads` is a real table; pipeline is a saved view on it (ADR-0006 #1). No separate `opportunities` store exists | **Satisfied in spirit** — one store + lens; the kit's `crm` super-entity is not adopted |
-| `equipment + warehouse → inventory(class)` | `equipment`, warehouse/yard, and `assets` are distinct tables with distinct shapes (owned gear vs storage lots vs tracked assets) | **Deferred** — a unified `inventory(class)` super-store is a schema project; flag for the asset-domain roadmap. No duplicate *facts* today |
-| `meetings → schedule(type)` | `meetings` and `schedule`/`events` are separate tables | **Deferred** — same reasoning; meetings carry agenda/attendance shape the schedule rows don't |
-| `proofs → deliverables(type)` | Creative proofs live in `deliverables` (doc-spec model) already | **Satisfied** |
-| `dateHolds → reservations(kind)` | Reservations own holds/confirmations at `/studio/operations/reservations` | **Satisfied** |
-| `sprints` deleted | Never existed in the repo | **Satisfied** |
-| `myTasks` alias bound to current user | `/studio/my-work` (v7.8 zero-training layer) is `session.userId`-bound | **Satisfied** |
-| `calendar → schedule(view)` | `/studio/calendar` renders the schedule as a calendar view | **Satisfied** |
+| Kit merge (§09)                            | Repo state                                                                                                                                                                                                                                       | Disposition                                                                                                                                |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `vendorContracts → contracts(scope)`       | One store: `contracts` at `/studio/legal/contracts`; people-side MSAs are a different fact (engagement terms)                                                                                                                                    | **Satisfied**; rail labels disambiguated 2026-07-03 (`Contracts` vs `Crew Contracts`)                                                      |
+| `subNetwork → vendors(type)`               | Already a lens: subs network reads `vendors` + eligibility view (v7.5 subcontractor-ops)                                                                                                                                                         | **Satisfied**                                                                                                                              |
+| `subCompliance → cois(scope)`              | Compliance vault reads vendor compliance records; one store                                                                                                                                                                                      | **Satisfied**                                                                                                                              |
+| `subInvoices → invoices(source)`           | `sub_invoices` is a separate table (inbound approve-to-pay, retainage + waiver gate) vs AR `invoices` — different fact directions (AP vs AR)                                                                                                     | **Rejected as-is** — AP-inbound vs AR-outbound are distinct facts here; revisit only if a unified invoicing ledger is ever scoped          |
+| `leads + opportunities → crm(kind)`        | ~~Original claim: no separate `opportunities` store exists~~ — stale: the repo had grown a real `opportunities` store (`pipeline_definitions`/`pipeline_stages`, `/studio/pipeline`) alongside `leads`, i.e. two stores of the same pursuit fact | **Adopted** (Phase A amendment, 2026-07-03) — merged via `20260703150000_crm_merge_leads_kind`; see amendment below                        |
+| `equipment + warehouse → inventory(class)` | `equipment`, warehouse/yard, and `assets` are distinct tables with distinct shapes (owned gear vs storage lots vs tracked assets)                                                                                                                | **Deferred** — a unified `inventory(class)` super-store is a schema project; flag for the asset-domain roadmap. No duplicate _facts_ today |
+| `meetings → schedule(type)`                | `meetings` and `schedule`/`events` are separate tables                                                                                                                                                                                           | **Deferred** — same reasoning; meetings carry agenda/attendance shape the schedule rows don't                                              |
+| `proofs → deliverables(type)`              | Creative proofs live in `deliverables` (doc-spec model) already                                                                                                                                                                                  | **Satisfied**                                                                                                                              |
+| `dateHolds → reservations(kind)`           | Reservations own holds/confirmations at `/studio/operations/reservations`                                                                                                                                                                        | **Satisfied**                                                                                                                              |
+| `sprints` deleted                          | Never existed in the repo                                                                                                                                                                                                                        | **Satisfied**                                                                                                                              |
+| `myTasks` alias bound to current user      | `/studio/my-work` (v7.8 zero-training layer) is `session.userId`-bound                                                                                                                                                                           | **Satisfied**                                                                                                                              |
+| `calendar → schedule(view)`                | `/studio/calendar` renders the schedule as a calendar view                                                                                                                                                                                       | **Satisfied**                                                                                                                              |
 
 ## Rail-label dedup (Law #3: a noun appears once)
 
 Five duplicate labels existed in `platformNav`; all five were **different stores**, so all five were disambiguated (2026-07-03), not folded:
 
-| Was (×2) | Now | Stores |
-|---|---|---|
-| Reports | `Reports` (cross-app library) / `Financial Reports` | reports registry vs finance statements |
-| Documents | `Documents` (doc-merge engine) / `Pages` (Collaborate) | 29-doc-type engine vs block docs (catalog keys updated in all 7 locales) |
-| Warranties | `Warranties` (closeout) / `Warranty Reminders` | `warranties` vs `warranty_reminders` |
-| Contracts | `Contracts` (Procurement) / `Crew Contracts` (People) | `contracts` vs MSAs |
-| Payouts | `Payouts` (Revenue) / `Vendor Payouts` (Finance) | `event_payouts` vs vendor Connect status |
+| Was (×2)   | Now                                                    | Stores                                                                   |
+| ---------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Reports    | `Reports` (cross-app library) / `Financial Reports`    | reports registry vs finance statements                                   |
+| Documents  | `Documents` (doc-merge engine) / `Pages` (Collaborate) | 29-doc-type engine vs block docs (catalog keys updated in all 7 locales) |
+| Warranties | `Warranties` (closeout) / `Warranty Reminders`         | `warranties` vs `warranty_reminders`                                     |
+| Contracts  | `Contracts` (Procurement) / `Crew Contracts` (People)  | `contracts` vs MSAs                                                      |
+| Payouts    | `Payouts` (Revenue) / `Vendor Payouts` (Finance)       | `event_payouts` vs vendor Connect status                                 |
 
 ## Record actions (kit's 22) — final Phase B accounting (2026-07-03)
 
@@ -49,4 +49,34 @@ No backing store, prototype-only (1): lost-found match-return (no table; COMPVSS
 ## Consequences
 
 - The rail satisfies Law #3 with zero label collisions — guarded by `src/lib/nav-labels.test.ts` (uniqueness + full `sub` coverage + lens integrity + no em/en dashes).
-- The Phase A queue (kit 20 mandate): `leads→crm(kind)` · `equipment+warehouse→inventory(class)` · `meetings→schedule(type)` · `sub_invoices→invoices(source)` · rail/tab verbatim alignment to `_ia-dump.md` (10 groups · 60 items · 140 routes) · screenshot parity (fixtures 04–09). Each is a migration-scoped landing on the live DB — staged separately, never bundled.
+- The Phase A queue (kit 20 mandate): `leads→crm(kind)` **(executed below)** · `equipment+warehouse→inventory(class)` · `meetings→schedule(type)` · `sub_invoices→invoices(source)` · rail/tab verbatim alignment to `_ia-dump.md` (10 groups · 60 items · 140 routes) · screenshot parity (fixtures 04–09). Each is a migration-scoped landing on the live DB — staged separately, never bundled.
+
+## Phase A execution — `leads + opportunities → crm(kind)` (2026-07-03)
+
+The original "Satisfied in spirit" row rested on a claim that was stale by
+2026-07-03: `/studio/pipeline` was NOT a saved view on `leads` — it read a real
+`opportunities` store (with `pipeline_definitions`/`pipeline_stages`). Two
+tables held the same pursuit fact, which is exactly the duplicate the kit's
+C-11 merge targets. Executed as:
+
+- **Store:** migration `20260703150000_crm_merge_leads_kind` — `opportunities`
+  gains the `kind` facet (`crm_record_kind`: `deal` · `lead` · `rfp`, default
+  `deal`), the lead columns (`lead_phase` reusing the `lead_stage` enum,
+  `contact_email`, `contact_phone`, `notes`, `assigned_to`, `created_by`), and
+  nullable `pipeline_id`/`current_stage_id` with CHECKs (deals must ride a
+  pipeline stage; leads must carry `lead_phase`). All `leads` rows migrated
+  id-preserving with `kind='lead'`; the `leads` table is dropped. RLS carries
+  the role-banded policy set `leads` had (member select; owner/admin/manager/
+  controller/collaborator write; owner/admin delete) — replacing the broader
+  single ALL policy.
+- **Routes:** `/studio/crm` is the canonical one-store surface; `/studio/leads`
+  (kind=`lead`) and `/studio/pipeline` (kind=`deal`, by pipeline stage) are
+  filtered lenses. Detail pages cross-redirect on kind so a converted record's
+  deep links land on its current lens. `moveLeadStageAction` and the lead CRUD
+  now write the merged store (`lead_phase`).
+- **`rfp` facet:** reserved by the enum for the RFP pursuit lane (kit
+  "Opportunities" tab); no rows carry it yet — procurement RFQs remain their
+  own sourcing fact and are NOT folded here.
+- **Record actions preserved:** `moveLeadStageAction` writes `lead_phase`;
+  the Phase B lead→proposal chain (`createProposalFromLeadAction`, `[lead:<id>]`
+  marker) reads the merged store — marker and proposal lineage unchanged.

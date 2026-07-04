@@ -10,6 +10,9 @@ import { moneyDollarsString } from "@/lib/zod/money";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
 
+// Leads live in the merged CRM store (`opportunities`, kind='lead' — ADR-0014
+// Phase A amendment). The form vocabulary is unchanged; fields map onto the
+// merged columns (name→title, email→contact_email, stage→lead_phase).
 const Schema = z.object({
   name: z.string().min(1).max(120),
   email: z.string().email().optional().or(z.literal("")),
@@ -36,15 +39,16 @@ export async function createLeadAction(_: State, fd: FormData): Promise<State> {
 
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("leads")
+    .from("opportunities")
     .insert({
       org_id: session.orgId,
-      name: parsed.data.name,
-      email: parsed.data.email || null,
-      phone: parsed.data.phone || null,
+      kind: "lead" as const,
+      title: parsed.data.name,
+      contact_email: parsed.data.email || null,
+      contact_phone: parsed.data.phone || null,
       source: parsed.data.source || null,
-      stage: parsed.data.stage,
-      estimated_value_cents: parsed.data.estimated_value ? dollarsToCents(parsed.data.estimated_value) : null,
+      lead_phase: parsed.data.stage,
+      estimated_value_minor: parsed.data.estimated_value ? dollarsToCents(parsed.data.estimated_value) : null,
       notes: parsed.data.notes || null,
       created_by: session.userId,
     })
@@ -52,15 +56,22 @@ export async function createLeadAction(_: State, fd: FormData): Promise<State> {
     .single();
   if (error) return actionFail(error.message, fd);
   revalidatePath("/studio/leads");
+  revalidatePath("/studio/crm");
   redirect(`/studio/leads/${data.id}`);
 }
 
 export async function moveLeadStageAction(leadId: string, stage: z.infer<typeof Schema>["stage"]) {
   const session = await requireSession();
   const supabase = await createClient();
-  const { error } = await supabase.from("leads").update({ stage }).eq("org_id", session.orgId).eq("id", leadId);
+  const { error } = await supabase
+    .from("opportunities")
+    .update({ lead_phase: stage })
+    .eq("org_id", session.orgId)
+    .eq("kind", "lead")
+    .eq("id", leadId);
   if (error) return { error: error.message };
   revalidatePath("/studio/leads");
+  revalidatePath("/studio/crm");
   return { ok: true as const };
 }
 
@@ -87,9 +98,10 @@ export async function createProposalFromLeadAction(leadId: string): Promise<Crea
 
   const supabase = await createClient();
   const { data: lead, error: loadError } = await supabase
-    .from("leads")
-    .select("id, name, stage, notes, estimated_value_cents")
+    .from("opportunities")
+    .select("id, title, kind, lead_phase, notes, estimated_value_minor")
     .eq("org_id", session.orgId)
+    .eq("kind", "lead")
     .eq("id", leadId)
     .maybeSingle();
   if (loadError) return { error: loadError.message };
@@ -110,16 +122,17 @@ export async function createProposalFromLeadAction(leadId: string): Promise<Crea
     redirect(`/studio/proposals/${existingProposal.id}`);
   }
 
-  if (!PROPOSAL_READY_STAGES.includes(lead.stage as (typeof PROPOSAL_READY_STAGES)[number])) {
-    return { error: `Lead must be qualified before drafting a proposal (currently ${lead.stage})` };
+  const leadPhase = lead.lead_phase ?? "new";
+  if (!PROPOSAL_READY_STAGES.includes(leadPhase as (typeof PROPOSAL_READY_STAGES)[number])) {
+    return { error: `Lead must be qualified before drafting a proposal (currently ${leadPhase})` };
   }
 
   const { data: proposal, error: insertError } = await supabase
     .from("proposals")
     .insert({
       org_id: session.orgId,
-      title: `Proposal for ${lead.name}`,
-      amount_cents: lead.estimated_value_cents,
+      title: `Proposal for ${lead.title}`,
+      amount_cents: lead.estimated_value_minor,
       notes: [lead.notes, `Drafted from lead ${marker}`].filter(Boolean).join("\n\n"),
       created_by: session.userId,
     })
@@ -134,7 +147,7 @@ export async function createProposalFromLeadAction(leadId: string): Promise<Crea
     action: "lead.proposal_created",
     targetTable: "proposals",
     targetId: proposal.id,
-    metadata: { leadId, amountCents: lead.estimated_value_cents },
+    metadata: { leadId, amountCents: lead.estimated_value_minor },
   });
 
   revalidatePath("/studio/proposals");

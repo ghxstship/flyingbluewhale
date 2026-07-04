@@ -4,11 +4,12 @@ import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Sales hub (ADR-0006). The four-section landing: Pipeline & Partners ·
- * Hospitality · Marketplace · Revenue. Pipeline survives as the default
- * kanban view on /studio/leads (no separate sidebar entry per ADR-0006
- * §"Resolved decisions" #1). Hospitality is the canonical Sales surface
- * covering Talent / Sponsors / Athletes / Industry / Media & Press /
- * VVIP — distinct from Operations → Guest Experience (audience-facing).
+ * Hospitality · Marketplace · Revenue. Deals, leads, and RFPs live in the
+ * ONE merged CRM store (/studio/crm — ADR-0014 Phase A amendment);
+ * /studio/pipeline and /studio/leads are filtered lenses over it.
+ * Hospitality is the canonical Sales surface covering Talent / Sponsors /
+ * Athletes / Industry / Media & Press / VVIP — distinct from Operations →
+ * Guest Experience (audience-facing).
  */
 export default async function Page() {
   const { t } = await getRequestT();
@@ -25,10 +26,10 @@ export default async function Page() {
             {t("console.sales.hub.sections.pipeline", undefined, "Pipeline & Partners")}
           </h2>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <Link className="surface hover-lift p-4" href="/studio/leads">
-              <div className="text-sm font-medium">{t("console.sales.hub.cards.leads", undefined, "Leads")}</div>
+            <Link className="surface hover-lift p-4" href="/studio/crm">
+              <div className="text-sm font-medium">{t("console.sales.hub.cards.crm", undefined, "CRM")}</div>
               <div className="mt-1 text-xs text-[var(--p-text-2)]">
-                {t("console.sales.hub.cards.leadsDesc", undefined, "Pipeline kanban + saved views")}
+                {t("console.sales.hub.cards.crmDesc", undefined, "One pursuit store · deals, leads, RFPs")}
               </div>
             </Link>
             <Link className="surface hover-lift p-4" href="/studio/clients">

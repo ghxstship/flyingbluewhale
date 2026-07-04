@@ -95,10 +95,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   // v7.8 record action gate — mirrors matchReceiptToPoAction: a complete
   // (non-partial) receipt against a sent/acknowledged PO can close it.
   const canMatch =
-    isManagerPlus(session) &&
-    !receipt.partial &&
-    !!po &&
-    (po.po_state === "sent" || po.po_state === "acknowledged");
+    isManagerPlus(session) && !receipt.partial && !!po && (po.po_state === "sent" || po.po_state === "acknowledged");
 
   return (
     <>
@@ -131,9 +128,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
       />
       <div className="page-content max-w-3xl space-y-4">
-        {receipt.notes && (
-          <section className="surface p-4 text-sm whitespace-pre-wrap">{receipt.notes}</section>
-        )}
+        {receipt.notes && <section className="surface p-4 text-sm whitespace-pre-wrap">{receipt.notes}</section>}
 
         {/* Received lines */}
         <section>

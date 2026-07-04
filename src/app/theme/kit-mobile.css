@@ -224,7 +224,9 @@
 /* ── forms ── */
 .mobile-shell .formscreen { position: absolute; inset: 0; z-index: 30; background: var(--p-bg); overflow-y: auto; padding: var(--p-12) var(--p-4) 28px; }
 .mobile-shell .fld { margin-bottom: 16px; }
-.mobile-shell .fld > label { display: block; font-size: 12px; font-weight: 700; color: var(--p-text-2); margin-bottom: var(--p-2); }
+/* `.fld-label` = the same voice for group headings (segmented buttons) that
+   have no single labelable control — a real <label> there fails a11y. */
+.mobile-shell .fld > label, .mobile-shell .fld > .fld-label { display: block; font-size: 12px; font-weight: 700; color: var(--p-text-2); margin-bottom: var(--p-2); }
 .mobile-shell .fld .req { color: var(--p-danger); }
 .mobile-shell .fld input, .mobile-shell .fld textarea, .mobile-shell .fld select { width: 100%; box-sizing: border-box; border: 1px solid var(--p-border); border-radius: 11px; padding: var(--p-3) var(--p-3); font-size: 14px; font-family: inherit; background: var(--p-surface); color: var(--p-text-1); }
 .mobile-shell .fld input:focus, .mobile-shell .fld textarea:focus, .mobile-shell .fld select:focus { outline: none; border-color: var(--p-accent); }

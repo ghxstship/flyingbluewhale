@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -59,22 +59,25 @@ export function ConnectionsView({
   const [sent, setSent] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
 
-  const matches = (s: string) => !query || s.toLowerCase().includes(query.toLowerCase());
+  const matches = useCallback(
+    (s: string) => !query || s.toLowerCase().includes(query.toLowerCase()),
+    [query],
+  );
 
   const fNetwork = useMemo(
     () => network.filter((c) => matches(`${c.name} ${c.role}`)),
-    [network, query],
+    [network, matches],
   );
   const fPending = useMemo(
     () => pending.filter((c) => matches(`${c.name} ${c.role}`)),
-    [pending, query],
+    [pending, matches],
   );
   const fSuggestions = useMemo(
     () =>
       suggestions
         .filter((c) => !sent.has(c.userId))
         .filter((c) => matches(`${c.name} ${c.role} ${c.tags.join(" ")}`)),
-    [suggestions, query, sent],
+    [suggestions, matches, sent],
   );
 
   const run = (action: () => Promise<{ error?: string } | null>) => {

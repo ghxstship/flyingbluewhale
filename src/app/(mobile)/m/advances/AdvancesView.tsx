@@ -141,8 +141,16 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
     <div
       className="item tap"
       key={r.id}
+      role="button"
+      tabIndex={0}
       style={{ cursor: "pointer" }}
       onClick={() => router.push(`/m/advances/${r.id}`)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          router.push(`/m/advances/${r.id}`);
+        }
+      }}
     >
       <span className="bar" style={{ background: toneVar(STATE_TONE[r.fulfillmentState]) }} />
       <KIcon name={KIND_ICON[r.catalogKind] ?? "Package"} size={18} style={{ color: "var(--p-text-2)", flex: "none" }} />

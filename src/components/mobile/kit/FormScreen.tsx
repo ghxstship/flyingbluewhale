@@ -100,12 +100,12 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
           <div className="ac-mask" />
         </div>
         <div className="fld" style={{ marginBottom: 8 }}>
-          <label>Zoom</label>
-          <input type="range" min="1" max="3" step="0.01" value={zoom} onChange={(e) => setZoom(parseFloat(e.target.value))} />
+          <label htmlFor="ac-zoom">Zoom</label>
+          <input id="ac-zoom" type="range" min="1" max="3" step="0.01" value={zoom} onChange={(e) => setZoom(parseFloat(e.target.value))} />
         </div>
         <div className="fld" style={{ marginBottom: 12 }}>
-          <label>Position</label>
-          <input type="range" min="-60" max="60" step="1" value={pos} onChange={(e) => setPos(parseInt(e.target.value))} />
+          <label htmlFor="ac-pos">Position</label>
+          <input id="ac-pos" type="range" min="-60" max="60" step="1" value={pos} onChange={(e) => setPos(parseInt(e.target.value))} />
         </div>
         <div style={{ display: "flex", gap: 10 }}>
           <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={() => setStage("view")}>Cancel</button>

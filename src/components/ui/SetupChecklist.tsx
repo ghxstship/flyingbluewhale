@@ -153,7 +153,7 @@ function Check({ done }: { done: boolean }) {
         justifyContent: "center",
         background: done ? "var(--p-accent)" : "transparent",
         border: done ? "none" : "2px solid var(--p-border-2)",
-        color: "var(--p-accent-contrast, #fff)",
+        color: "var(--p-accent-contrast)",
         fontSize: 11,
         lineHeight: 1,
       }}

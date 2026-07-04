@@ -62,11 +62,12 @@ would render unstyled email. Keep `PALETTE` in sync with
 
 ```ts
 import { emailLayout, emailHeading, emailText, emailButton } from "@/components/email";
+import { urlFor } from "@/lib/urls";
 
 const html = emailLayout({
   preheader: "Hidden inbox-snippet preview text",
   body: emailHeading("Hello") + emailText("Body copy") +
-        emailButton({ label: "Go", href: "https://atlvs.pro" }),
+        emailButton({ label: "Go", href: urlFor("marketing", "/") }),
 });
 ```
 

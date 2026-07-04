@@ -186,9 +186,9 @@ const config = [
     // Hex-literal allowlist — these files legitimately need raw colors.
     files: [
       "src/components/auth/OAuthButtons.tsx",              // third-party brand SVG marks
-      "src/app/(platform)/console/projects/**/BrandingForm.tsx",
-      "src/app/(platform)/console/proposals/**/actions.ts",
-      "src/app/(platform)/console/proposals/**/edit/page.tsx",
+      "src/app/(platform)/studio/projects/**/BrandingForm.tsx",
+      "src/app/(platform)/studio/proposals/**/actions.ts",
+      "src/app/(platform)/studio/proposals/**/edit/page.tsx",
       "src/app/proposals/**",                              // isolated print stylesheet + themed proposal docs
       "src/app/og/route.tsx",                              // Open Graph server route
       "src/app/opengraph-image.tsx",                       // OG image — ImageResponse runtime has no CSS vars
@@ -196,12 +196,14 @@ const config = [
       "src/app/theme/**",                                  // CHROMA BEACON token definitions
       "src/lib/pdf/**",                                    // @react-pdf/renderer — style objects require hex; no CSS var support
       "src/components/stage-plots/StagePlotCanvas.tsx",    // user-input shape colors; brand-free canvas editor
-      "src/app/(platform)/console/settings/branding/**",   // brand-color picker UI — raw hex is the data, not a style
+      "src/app/(platform)/studio/settings/branding/**",    // brand-color picker UI — raw hex is the data, not a style
       "src/components/charts/**",                          // chart palettes — recharts/maplibre need raw hex
-      "src/app/(platform)/console/finance/reports/ReportsCharts.tsx",
-      "src/app/(platform)/console/sustainability/carbon/CarbonCharts.tsx",
-      "src/app/(platform)/console/production/dispatch/live/LiveDispatchMap.tsx",
-      "src/app/(platform)/console/projects/[projectId]/gantt/GanttChart.tsx",
+      "src/app/(platform)/studio/finance/reports/ReportsCharts.tsx",
+      "src/app/(platform)/studio/sustainability/carbon/CarbonCharts.tsx",
+      "src/app/(platform)/studio/production/dispatch/live/LiveDispatchMap.tsx",
+      "src/app/(platform)/studio/projects/[projectId]/gantt/GanttChart.tsx",
+      "src/components/mobile/kit/RoseCard.tsx",            // Rose ID-card artwork — fixed gradients + white QR quiet zone
+      "src/components/mobile/onboarding/CompvssOnboarding.tsx", // Google/Bluesky brand SVGs + Rose card artwork + QR contrast pair
     ],
     rules: {
       "no-restricted-syntax": "off",

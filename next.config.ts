@@ -147,7 +147,6 @@ export default withSentryConfig(config, {
   // Don't fail the build if the auth token is missing (local/preview) — warn
   // and skip the upload step instead of throwing and stopping the bundle.
   errorHandler: (err) => {
-    // eslint-disable-next-line no-console
     console.warn("[sentry] source-map upload skipped:", err.message);
   },
 });

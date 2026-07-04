@@ -78,6 +78,10 @@ export function InboxView({ items: initial, labels }: { items: InboxItem[]; labe
         style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "var(--p-2)", outline: "none" }}
       >
         {items.map((item, i) => (
+          // Keyboard interaction lives on the listbox <ul> above (onKeyDown +
+          // aria-activedescendant roving selection) — the option itself is
+          // never focused, so a key handler here would be dead code.
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <li
             key={item.itemId}
             id={`inbox-${item.itemId}`}

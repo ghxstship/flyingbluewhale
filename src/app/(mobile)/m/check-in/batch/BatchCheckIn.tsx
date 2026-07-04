@@ -53,7 +53,21 @@ export function BatchCheckIn({ assets }: { assets: BatchAsset[] }) {
           {assets.map((a) => {
             const on = sel.has(a.id);
             return (
-              <div className="item tap" key={a.id} style={{ cursor: "pointer" }} onClick={() => toggle(a.id)}>
+              <div
+                className="item tap"
+                key={a.id}
+                role="checkbox"
+                aria-checked={on}
+                tabIndex={0}
+                style={{ cursor: "pointer" }}
+                onClick={() => toggle(a.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggle(a.id);
+                  }
+                }}
+              >
                 <span className="check" data-on={on ? "1" : undefined}>
                   {on && <KIcon name="Check" size={14} stroke={3} />}
                 </span>

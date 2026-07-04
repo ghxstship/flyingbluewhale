@@ -84,7 +84,18 @@ export function FeedView({
           </div>
         </form>
       ) : (
-        <div className="composer-cta" onClick={() => setOpen(true)} role="button" tabIndex={0}>
+        <div
+          className="composer-cta"
+          onClick={() => setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setOpen(true);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
           <span className="avatar" style={{ width: 38, height: 38, flex: "none" }}>{myInitials}</span>
           <span className="cc-box">{t("m.feed.composerPlaceholder", undefined, "Share an update…")}</span>
           <KIcon name="Image" size={18} style={{ color: "var(--p-text-3)" }} />

@@ -50,7 +50,10 @@ export function PinInput({
   const refs = React.useRef<Array<HTMLInputElement | null>>([]);
   const completedFor = React.useRef<string | null>(null);
 
-  const pattern = type === "numeric" ? /[^0-9]/g : /[^0-9a-zA-Z]/g;
+  const pattern = React.useMemo(
+    () => (type === "numeric" ? /[^0-9]/g : /[^0-9a-zA-Z]/g),
+    [type],
+  );
   const chars = React.useMemo(() => {
     const arr = value.split("");
     return Array.from({ length }, (_, i) => arr[i] ?? "");

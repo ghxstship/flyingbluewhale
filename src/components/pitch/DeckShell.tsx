@@ -106,7 +106,7 @@ export function DeckShell({ slides, label = "Pitch deck" }: { slides: React.Reac
               aria-selected={i === index}
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => go(i)}
-              className={`h-2 rounded-full transition-all ${
+              className={`h-2 rounded-full transition-[width,background-color] ${
                 i === index ? "w-6 bg-[var(--p-accent)]" : "w-2 bg-[var(--p-border-2)] hover:bg-[var(--p-text-3)]"
               }`}
             />

@@ -7,6 +7,7 @@
  * the canonical call site for production senders.
  */
 
+import { urlFor } from "@/lib/urls";
 import {
   welcomeEmail,
   verifyEmail,
@@ -37,7 +38,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
     label: "Welcome",
     description: "Sent after signup — sets the tone, points to first run.",
     render: (p) => welcomeEmail({ name: p.name ?? "", ctaUrl: p.ctaUrl ?? "" }),
-    sample: { name: "Riley", ctaUrl: "https://app.atlvs.pro/studio" },
+    sample: { name: "Riley", ctaUrl: urlFor("platform") },
   },
   verify: {
     label: "Verify email",
@@ -46,7 +47,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
       verifyEmail({ code: p.code ?? "", verifyUrl: p.verifyUrl ?? "" }),
     sample: {
       code: "739204",
-      verifyUrl: "https://atlvs.pro/auth/verify?token=abc123",
+      verifyUrl: urlFor("auth", "/auth/verify?token=abc123"),
     },
   },
   invite: {
@@ -61,7 +62,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
     sample: {
       inviter: "Dana Cruz",
       orgName: "Meridian Live",
-      acceptUrl: "https://atlvs.pro/auth/accept?token=xyz789",
+      acceptUrl: urlFor("auth", "/auth/accept?token=xyz789"),
     },
   },
   announcement: {
@@ -78,7 +79,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
       title: "Reports & Analytics is live",
       body: "Forty-three reports, computed from your real data. No setup, no spreadsheets — just open the hub and read your show.",
       ctaLabel: "See the reports",
-      ctaUrl: "https://app.atlvs.pro/studio/reports",
+      ctaUrl: urlFor("platform", "/reports"),
     },
   },
 };

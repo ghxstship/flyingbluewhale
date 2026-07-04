@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -64,9 +65,9 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
   return (
     <div className="screen screen-anim">
       <div className="chatview">
-        <a href="/m/inbox" className="backbtn">
+        <Link href="/m/inbox" className="backbtn">
           {t("m.inbox.back", undefined, "Inbox")}
-        </a>
+        </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
           {isChannel ? (
             <span className="chan">#</span>

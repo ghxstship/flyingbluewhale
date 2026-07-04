@@ -62,7 +62,6 @@ function UnitTool() {
     const u = unitsFor(cat);
     setFrom(u[0] || "");
     setTo(u[1] || "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cat]);
   const toC = (n: number, u: string) => (u === "°F" ? ((n - 32) * 5) / 9 : u === "K" ? n - 273.15 : n);
   const fromC = (c: number, u: string) => (u === "°F" ? (c * 9) / 5 + 32 : u === "K" ? c + 273.15 : c);
@@ -78,10 +77,10 @@ function UnitTool() {
   return (
     <div>
       <div className="chips" style={{ paddingBottom: 12 }}>{CATS.map((c) => <button key={c} type="button" className={`chip ${cat === c ? "on" : ""}`} onClick={() => setCat(c)}>{c}</button>)}</div>
-      <div className="fld"><label>Value</label><input type="number" inputMode="decimal" value={val} onChange={(e) => setVal(e.target.value)} /></div>
+      <div className="fld"><label htmlFor="conv-val">Value</label><input id="conv-val" type="number" inputMode="decimal" value={val} onChange={(e) => setVal(e.target.value)} /></div>
       <div className="frow">
-        <div className="fld"><label>From</label><select value={from} onChange={(e) => setFrom(e.target.value)}>{units.map((u) => <option key={u}>{u}</option>)}</select></div>
-        <div className="fld"><label>To</label><select value={to} onChange={(e) => setTo(e.target.value)}>{units.map((u) => <option key={u}>{u}</option>)}</select></div>
+        <div className="fld"><label htmlFor="conv-from">From</label><select id="conv-from" value={from} onChange={(e) => setFrom(e.target.value)}>{units.map((u) => <option key={u}>{u}</option>)}</select></div>
+        <div className="fld"><label htmlFor="conv-to">To</label><select id="conv-to" value={to} onChange={(e) => setTo(e.target.value)}>{units.map((u) => <option key={u}>{u}</option>)}</select></div>
       </div>
       <div className="tool-out">{out}<span> {to}</span></div>
     </div>
@@ -118,8 +117,8 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     hint = `Load factor ${factor} sq ft / person. Verify vs. posted certificate.`;
     body = (
       <>
-        <div className="fld"><label>Usable Area (sq ft)</label><input type="number" inputMode="decimal" value={a} onChange={(e) => setA(e.target.value)} /></div>
-        <div className="fld"><label>Use</label><div className="seg2">{([["Standing", 5], ["Seated", 7], ["Tables", 15]] as [string, number][]).map(([l, f]) => <button key={f} type="button" className={factor === f ? "on" : ""} onClick={() => setFactor(f)}>{l}</button>)}</div></div>
+        <div className="fld"><label htmlFor="oc-area">Usable Area (sq ft)</label><input id="oc-area" type="number" inputMode="decimal" value={a} onChange={(e) => setA(e.target.value)} /></div>
+        <div className="fld"><span className="fld-label" id="oc-use-label">Use</span><div className="seg2" role="group" aria-labelledby="oc-use-label">{([["Standing", 5], ["Seated", 7], ["Tables", 15]] as [string, number][]).map(([l, f]) => <button key={f} type="button" className={factor === f ? "on" : ""} onClick={() => setFactor(f)}>{l}</button>)}</div></div>
       </>
     );
   }
@@ -129,7 +128,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     unit = "persons / m²";
     if (!isNaN(d)) flag = d > 5 ? { t: "Stop entry", tone: "warn" } : d > 4 ? { t: "Restrict flow", tone: "warn" } : { t: "Within limits", tone: "ok" };
     hint = "Above 4 p/m² restrict flow · above 5 stop entry.";
-    body = <div className="frow"><div className="fld"><label>People</label><input type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label>Area (m²)</label><input type="number" value={b} onChange={(e) => setB(e.target.value)} /></div></div>;
+    body = <div className="frow"><div className="fld"><label htmlFor="dn-people">People</label><input id="dn-people" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="dn-area">Area (m²)</label><input id="dn-area" type="number" value={b} onChange={(e) => setB(e.target.value)} /></div></div>;
   }
   if (id === "staffing") {
     result = isNaN(n1) ? "—" : Math.ceil(n1 / ratio).toLocaleString();
@@ -137,8 +136,8 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     hint = "Round up · add 10–15% relief for breaks.";
     body = (
       <>
-        <div className="fld"><label>Expected Attendance</label><input type="number" value={a} onChange={(e) => setA(e.target.value)} /></div>
-        <div className="fld"><label>Ratio</label><div className="seg2">{([["Security 1:100", 100], ["Medical 1:1k", 1000], ["Bar 1:75", 75]] as [string, number][]).map(([l, r]) => <button key={r} type="button" className={ratio === r ? "on" : ""} onClick={() => setRatio(r)}>{l}</button>)}</div></div>
+        <div className="fld"><label htmlFor="st-att">Expected Attendance</label><input id="st-att" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div>
+        <div className="fld"><span className="fld-label" id="st-ratio-label">Ratio</span><div className="seg2" role="group" aria-labelledby="st-ratio-label">{([["Security 1:100", 100], ["Medical 1:1k", 1000], ["Bar 1:75", 75]] as [string, number][]).map(([l, r]) => <button key={r} type="button" className={ratio === r ? "on" : ""} onClick={() => setRatio(r)}>{l}</button>)}</div></div>
       </>
     );
   }
@@ -149,7 +148,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     result = isNaN(mins) ? "—" : Math.ceil(mins).toLocaleString();
     unit = "minutes to clear";
     hint = "Assumes ~20 scans/lane/min. Open more lanes to cut wait.";
-    body = <div className="frow"><div className="fld"><label>Crowd Size</label><input type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label>Open Lanes</label><input type="number" value={b} placeholder="1" onChange={(e) => setB(e.target.value)} /></div></div>;
+    body = <div className="frow"><div className="fld"><label htmlFor="tp-crowd">Crowd Size</label><input id="tp-crowd" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="tp-lanes">Open Lanes</label><input id="tp-lanes" type="number" value={b} placeholder="1" onChange={(e) => setB(e.target.value)} /></div></div>;
   }
   if (id === "power") {
     const amps = isNaN(n1) ? NaN : n1 / (n2 || 120);
@@ -157,7 +156,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     unit = "amps";
     if (!isNaN(amps)) flag = amps > 16 ? { t: "Use 20A circuit", tone: "warn" } : { t: "15A OK", tone: "ok" };
     hint = "Watts ÷ volts = amps. Stay under 80% of breaker rating.";
-    body = <div className="frow"><div className="fld"><label>Total Watts</label><input type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label>Volts</label><input type="number" value={b} placeholder="120" onChange={(e) => setB(e.target.value)} /></div></div>;
+    body = <div className="frow"><div className="fld"><label htmlFor="pw-watts">Total Watts</label><input id="pw-watts" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="pw-volts">Volts</label><input id="pw-volts" type="number" value={b} placeholder="120" onChange={(e) => setB(e.target.value)} /></div></div>;
   }
   if (id === "barstock") {
     const servings = isNaN(n1) ? NaN : Math.round(n1 * (n2 || 2));
@@ -165,7 +164,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     result = isNaN(cases) ? "—" : cases.toLocaleString();
     unit = "cases (24/ea)";
     hint = isNaN(servings) ? "" : `~${servings.toLocaleString()} servings. Adjust drinks/guest for the crowd.`;
-    body = <div className="frow"><div className="fld"><label>Guests</label><input type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label>Drinks / Guest</label><input type="number" value={b} placeholder="2" onChange={(e) => setB(e.target.value)} /></div></div>;
+    body = <div className="frow"><div className="fld"><label htmlFor="bs-guests">Guests</label><input id="bs-guests" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="bs-drinks">Drinks / Guest</label><input id="bs-drinks" type="number" value={b} placeholder="2" onChange={(e) => setB(e.target.value)} /></div></div>;
   }
   return (
     <div>

@@ -136,8 +136,17 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
       <div key={x.id}>
         <div
           className="item tap"
+          role="button"
+          tabIndex={0}
+          aria-expanded={open}
           style={{ cursor: "pointer" }}
           onClick={() => setExpanded(open ? null : x.id)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setExpanded(open ? null : x.id);
+            }
+          }}
         >
           <span className="bar" style={{ background: `var(--p-${tone === "warn" ? "warning" : tone === "ok" ? "success" : "border"})` }} />
           <span className="cart-thumb" style={{ width: 38, height: 38 }}>
@@ -214,7 +223,20 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
       {view === "gallery" ? (
         <div className="mkt">
           {filtered.map((x) => (
-            <div className="mcard" key={x.id} onClick={() => setExpanded(expanded === x.id ? null : x.id)}>
+            <div
+              className="mcard"
+              key={x.id}
+              role="button"
+              tabIndex={0}
+              aria-expanded={expanded === x.id}
+              onClick={() => setExpanded(expanded === x.id ? null : x.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setExpanded(expanded === x.id ? null : x.id);
+                }
+              }}
+            >
               <div className="mthumb">
                 <KIcon name="Package" size={30} style={{ color: "var(--p-text-3)" }} />
                 {x.code && <span className="mtag">{x.code}</span>}

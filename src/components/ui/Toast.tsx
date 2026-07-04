@@ -159,6 +159,10 @@ export function ToastProvider({
               {toasts.map((x) => {
                 const { border, bg, fg, Icon } = TONE_CLASS[x.tone];
                 return (
+                  // False positive: the element HAS a role (alert/status below) —
+                  // the linter just can't resolve the conditional expression. The
+                  // hover/focus handlers only pause the auto-dismiss timer.
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                   <div
                     key={x.id}
                     role={x.tone === "danger" ? "alert" : "status"}

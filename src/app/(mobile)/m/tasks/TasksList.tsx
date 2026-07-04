@@ -54,6 +54,8 @@ function badgeClass(s: TaskState): string {
   }
 }
 
+const PRI_RANK: Record<KitTask["priority"], number> = { High: 0, Medium: 1, Low: 2 };
+
 /** Stable colour per state for the board lane dots. */
 const STATE_DOT: Record<TaskState, string> = {
   todo: "var(--p-text-3)",
@@ -85,8 +87,6 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
     [L],
   );
 
-  const priRank: Record<KitTask["priority"], number> = { High: 0, Medium: 1, Low: 2 };
-
   const entries = useMemo(() => {
     return tasks
       .filter((t) => states.size === 0 || states.has(t.state))
@@ -95,7 +95,7 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
       .slice()
       .sort((a, b) => {
         if (sort === "name") return a.title.localeCompare(b.title);
-        if (sort === "priority") return priRank[a.priority] - priRank[b.priority];
+        if (sort === "priority") return PRI_RANK[a.priority] - PRI_RANK[b.priority];
         return a.due.localeCompare(b.due);
       });
   }, [tasks, states, showCompleted, query, sort]);
@@ -130,7 +130,20 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
   );
 
   const bcard = (t: KitTask) => (
-    <div className="bcard" key={t.id} onClick={() => open(t.id)} style={{ cursor: "pointer" }}>
+    <div
+      className="bcard"
+      key={t.id}
+      role="button"
+      tabIndex={0}
+      onClick={() => open(t.id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          open(t.id);
+        }
+      }}
+      style={{ cursor: "pointer" }}
+    >
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
         <span style={{ width: 8, height: 8, borderRadius: 2, background: PRI_COLOR[t.priority], flex: "none" }} />
         <span className="time" style={{ color: "var(--p-text-3)" }}>
@@ -302,7 +315,20 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
             <span>{L.colDue}</span>
           </div>
           {entries.map((t) => (
-            <div className="dtbl-row" key={t.id} onClick={() => open(t.id)} style={{ cursor: "pointer" }}>
+            <div
+              className="dtbl-row"
+              key={t.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => open(t.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  open(t.id);
+                }
+              }}
+              style={{ cursor: "pointer" }}
+            >
               <span className="pri-dot" style={{ background: PRI_COLOR[t.priority] }} title={t.priority} />
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div className="dt-title">{t.title}</div>

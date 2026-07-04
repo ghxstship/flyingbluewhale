@@ -339,7 +339,10 @@ export function HomeShell({
       </button>
 
       {newOpen ? (
+        // Scrim — a pointer-only duplicate of the close affordance; the links
+        // inside the sheet remain the keyboard path, so it stays presentational.
         <div
+          role="presentation"
           onClick={() => setNewOpen(false)}
           style={{
             position: "fixed",
@@ -351,6 +354,7 @@ export function HomeShell({
           }}
         >
           <div
+            role="presentation"
             onClick={(e) => e.stopPropagation()}
             style={{
               width: "100%",

@@ -133,8 +133,12 @@ export function Carousel<T>({
         </button>
       </div>
 
+      {/* Layout wrapper — semantics live on the <section> (carousel) and the
+          slides; the keydown here only catches events bubbling from the
+          roving-tabindex slide that owns focus. */}
       <div
         ref={scrollerRef}
+        role="presentation"
         onKeyDown={onKeyDown}
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-1 [scrollbar-width:thin]"
       >
@@ -164,7 +168,7 @@ export function Carousel<T>({
               onClick={() => scrollToSlide(i)}
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === active ? "true" : undefined}
-              className={`focus-ring h-2 rounded-full outline-none transition-all ${
+              className={`focus-ring h-2 rounded-full outline-none transition-[width,background-color] ${
                 i === active ? "w-5 bg-[var(--p-accent)]" : "w-2 bg-[var(--p-border)] hover:bg-[var(--p-text-3)]"
               }`}
             />

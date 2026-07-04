@@ -1019,10 +1019,11 @@ export function DataTableInteractive({
                         />
                       )}
                     </div>
+                    {/* Pointer-only resize affordance — hidden from the
+                        accessibility tree; column widths are visual-only and
+                        keyboard users get the full cell content regardless. */}
                     <span
-                      role="separator"
-                      aria-orientation="vertical"
-                      aria-label={t("dataTable.resizeColumn", { col: c.header }, `Resize ${c.header}`)}
+                      aria-hidden="true"
                       onPointerDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();

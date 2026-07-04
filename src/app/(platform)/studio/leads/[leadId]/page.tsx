@@ -2,14 +2,16 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { RecordActionButton } from "@/components/RecordActionButton";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
 import { LeadStageMover } from "./LeadStageMover";
+import { createProposalFromLeadAction } from "../actions";
 import { deleteLead } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +23,9 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
   const lead = await getOrgScoped("leads", session.orgId, leadId);
   if (!lead) notFound();
   const { t } = await getRequestT();
+  // Mirrors PROPOSAL_READY_STAGES in ../actions.ts (the action
+  // re-validates server-side; this only gates button visibility).
+  const canCreateProposal = isManagerPlus(session) && ["qualified", "proposal", "won"].includes(lead.stage);
 
   return (
     <>
@@ -30,6 +35,13 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
         subtitle={lead.email ?? t("console.leads.detail.noEmail", undefined, "No email")}
         action={
           <div className="flex items-center gap-2">
+            {canCreateProposal && (
+              <RecordActionButton
+                action={createProposalFromLeadAction.bind(null, leadId)}
+                label={t("console.leads.detail.createProposal", undefined, "Create Proposal")}
+                pendingLabel={t("console.leads.detail.creatingProposal", undefined, "Creating…")}
+              />
+            )}
             <LeadStageMover leadId={lead.id} stage={lead.stage} />
             <Button href={`/studio/leads/${leadId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}

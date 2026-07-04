@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
@@ -11,6 +11,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { transitionSubmissionAction } from "./actions";
+import { BookOfferForm } from "./BookOfferForm";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,12 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
     .maybeSingle();
   if (!data) return notFound();
   const s = data as Sub;
+  // Mirrors BOOKABLE_STATES in ./actions.ts (the action re-validates
+  // server-side; this only gates the form card's visibility).
+  const canBook =
+    isManagerPlus(session) &&
+    (s.submission_state === "submitted" || s.submission_state === "shortlisted") &&
+    !!s.talent_profile_id;
 
   return (
     <>
@@ -111,6 +118,18 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               {t("console.marketplace.calls.submissions.detail.internalNotes", undefined, "Internal Notes")}
             </h2>
             <div className="text-sm whitespace-pre-wrap">{s.internal_notes}</div>
+          </section>
+        )}
+
+        {canBook && (
+          <section className="surface p-5">
+            <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+              {t("console.marketplace.calls.submissions.detail.book.heading", undefined, "Book This Talent")}
+            </h2>
+            <BookOfferForm
+              submissionId={s.id}
+              defaultFee={s.fee_proposed_cents ? (s.fee_proposed_cents / 100).toFixed(2) : undefined}
+            />
           </section>
         )}
 

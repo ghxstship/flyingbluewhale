@@ -1,6 +1,6 @@
 # ADR-0014 — Kit v7.8 §09 3NF merges: repo disposition
 
-- **Status:** Accepted (2026-07-03)
+- **Status:** Accepted (2026-07-03) · **Amended same day by kit 20** — `ATLVS Ecosystem (20).zip` ships `design_handoff_console_rebuild/REPO_LANDING.md`, which removes the "recreate in the target environment" latitude this ADR leaned on: *"the prototype is the contract... where repo reality and prototype disagree, the prototype wins — the repo moves."* Its Phase A mandates the table folds this ADR rejected or deferred, as real Supabase migrations (facet column → row migration → duplicate deleted → old route re-exposed as a filtered alias). The dispositions below stay as the honest audit of 2026-07-03; the **Rejected/Deferred rows are now the Phase A execution queue**, each to land as its own migration-scoped change (per the landing order's own "separate PRs" instruction) with RLS, `database.types.ts` regen, alias routes, sitemap/ia-map regen, and e2e updates. Sequencing note: `sub_invoices → invoices(source)` also carries the AP/PO linkage that completes the receiving 3-way match invoice leg (Phase B shipped the PO leg only).
 - **Context:** The v7.8 console-rebuild kit (`ATLVS Ecosystem (18/19)`, `design_handoff_console_rebuild`) enforced "one noun · one store" on its own prototype registry by merging 12 duplicate entities into canonical stores behind filtered aliases (§09 post-pass), and demands the same law in any implementation (README Law #1/#3). This ADR dispositions each kit merge against the repo, where "stores" are real Postgres tables with RLS, not client-side registry arrays.
 
 ## Principle
@@ -36,7 +36,17 @@ Five duplicate labels existed in `platformNav`; all five were **different stores
 | Contracts | `Contracts` (Procurement) / `Crew Contracts` (People) | `contracts` vs MSAs |
 | Payouts | `Payouts` (Revenue) / `Vendor Payouts` (Finance) | `event_payouts` vs vendor Connect status |
 
+## Record actions (kit's 22) — final Phase B accounting (2026-07-03)
+
+Implemented as real chains (14): proposal→project (pre-existing) · estimate→budget · incident→corrective task · requisition→PO · requisition→RFQ · RFQ award→PO · reservation→event (commit a8b26c4) · PO route-to-approvals · PO change-order route-to-approvals · lead→proposal · asset check-out · asset check-in · submission→talent offer · receiving→PO match (this landing; the invoice leg of 3-way match waits on the Phase A `sub_invoices` merge — AR `invoices` carry no PO linkage today, and honest coverage forbids a fake link).
+
+Satisfied by existing mechanisms (4): crm convert-to-deal + mark-won (lead `stage` transitions via `moveLeadStageAction`) · time-off route-to-approvals (direct `decideTimeOff` + `approve_time_off_request` RPC is the earnable loop) · bookings add-to-lineup (the `talent_offers` state machine is the repo's booking loop; no lineup store exists — revisit with the events/ROS cycle).
+
+Deferred with rationale (2): guest-list issue-credential (no guest-list detail surface; credential assignments require a `master_catalog_items` pick — needs its own UX pass) · permits log-evidence (no permits operational store; only the `dim_permit` warehouse dimension exists).
+
+No backing store, prototype-only (1): lost-found match-return (no table; COMPVSS "Report It · Lost" intake covers the field need).
+
 ## Consequences
 
-- The rail satisfies Law #3 with zero label collisions (guarded informally by review; add a vitest label-uniqueness guard if regressions appear).
-- Two deferred super-store candidates (`inventory(class)`, `meetings→schedule`) are recorded here so future schema cycles treat them as deliberate debt, not oversights.
+- The rail satisfies Law #3 with zero label collisions — guarded by `src/lib/nav-labels.test.ts` (uniqueness + full `sub` coverage + lens integrity + no em/en dashes).
+- The Phase A queue (kit 20 mandate): `leads→crm(kind)` · `equipment+warehouse→inventory(class)` · `meetings→schedule(type)` · `sub_invoices→invoices(source)` · rail/tab verbatim alignment to `_ia-dump.md` (10 groups · 60 items · 140 routes) · screenshot parity (fixtures 04–09). Each is a migration-scoped landing on the live DB — staged separately, never bundled.

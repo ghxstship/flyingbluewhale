@@ -5,13 +5,14 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
-import { requireSession } from "@/lib/auth";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
-import { addDepreciation, addMaintenance } from "./actions";
+import { addDepreciation, addMaintenance, checkInAssetAction, checkOutAssetAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -88,6 +89,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const depreciation = (depRows ?? []) as DepreciationRow[];
   const maintenance = (maintRows ?? []) as MaintenanceRow[];
 
+  // v7.8 record actions — the state gates mirror the server-side checks
+  // in checkOutAssetAction / checkInAssetAction, so exactly one button
+  // shows (or neither, for terminal-ish states like retired or lost).
+  const canCheckOut = ["available", "reserved", "acquired"].includes(asset.state);
+  const canCheckIn = ["in_use", "in_transit"].includes(asset.state);
+
   return (
     <>
       <ModuleHeader
@@ -102,6 +109,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className="font-mono text-xs">{asset.serial || asset.asset_tag}</span>
             )}
           </span>
+        }
+        action={
+          isManagerPlus(session) && (canCheckOut || canCheckIn) ? (
+            <div className="flex items-center gap-2">
+              {canCheckOut && (
+                <RecordActionButton
+                  action={checkOutAssetAction.bind(null, asset.id)}
+                  label={t("console.assets.detail.checkOut", undefined, "Check Out")}
+                  pendingLabel={t("console.assets.detail.checkingOut", undefined, "Checking Out…")}
+                />
+              )}
+              {canCheckIn && (
+                <RecordActionButton
+                  action={checkInAssetAction.bind(null, asset.id)}
+                  label={t("console.assets.detail.checkIn", undefined, "Check In")}
+                  pendingLabel={t("console.assets.detail.checkingIn", undefined, "Checking In…")}
+                />
+              )}
+            </div>
+          ) : undefined
         }
       />
       <div className="page-content max-w-3xl space-y-6">

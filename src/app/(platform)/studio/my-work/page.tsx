@@ -49,7 +49,7 @@ export default async function MyWorkPage() {
     .limit(8);
   if (!managerPlus) approvalsQuery = approvalsQuery.eq("initiated_by", session.userId);
 
-  const [tasksRes, approvalsRes, reqsRes, timeOffRes, expensesRes] = await Promise.all([
+  const [tasksRes, approvalsRes, reqsRes, timeOffRes, expensesRes, workOrdersRes, ticketsRes] = await Promise.all([
     supabase
       .from("tasks")
       .select("id, title, task_state, due_at, priority", { count: "exact" })
@@ -83,11 +83,33 @@ export default async function MyWorkPage() {
       .eq("expense_state", "pending")
       .order("spent_at", { ascending: false })
       .limit(8),
+    supabase
+      .from("work_orders")
+      .select("id, title, trade, work_order_state, start_date", { count: "exact" })
+      .eq("org_id", session.orgId)
+      .eq("created_by", session.userId)
+      .is("deleted_at", null)
+      .not("work_order_state", "in", '("complete","approved","invoiced","closed","cancelled")')
+      .order("created_at", { ascending: false })
+      .limit(8),
+    supabase
+      .from("service_requests")
+      .select("id, summary, category, request_state, opened_at", { count: "exact" })
+      .eq("org_id", session.orgId)
+      .eq("requester_id", session.userId)
+      .not("request_state", "in", '("resolved","cancelled")')
+      .order("opened_at", { ascending: false })
+      .limit(8),
   ]);
 
   const taskCount = tasksRes.count ?? 0;
   const approvalCount = approvalsRes.count ?? 0;
-  const requestCount = (reqsRes.count ?? 0) + (timeOffRes.count ?? 0) + (expensesRes.count ?? 0);
+  const requestCount =
+    (reqsRes.count ?? 0) +
+    (timeOffRes.count ?? 0) +
+    (expensesRes.count ?? 0) +
+    (workOrdersRes.count ?? 0) +
+    (ticketsRes.count ?? 0);
 
   const taskRows: WorkRow[] = (tasksRes.data ?? []).map((r) => ({
     id: r.id,
@@ -132,6 +154,20 @@ export default async function MyWorkPage() {
     meta: `${fmt.money(r.amount_cents)} · ${fmt.date(r.spent_at)}`,
     status: r.expense_state,
     href: `/studio/finance/expenses/${r.id}`,
+  }));
+  const workOrderRows: WorkRow[] = (workOrdersRes.data ?? []).map((r) => ({
+    id: r.id,
+    title: r.title,
+    meta: r.start_date ? `${r.trade} · ${fmt.date(r.start_date)}` : r.trade,
+    status: r.work_order_state,
+    href: `/studio/production/work-orders/${r.id}`,
+  }));
+  const ticketRows: WorkRow[] = (ticketsRes.data ?? []).map((r) => ({
+    id: r.id,
+    title: r.summary,
+    meta: `${r.category} · ${fmt.relative(r.opened_at)}`,
+    status: r.request_state,
+    href: `/studio/services/requests/${r.id}`,
   }));
 
   return (
@@ -201,6 +237,29 @@ export default async function MyWorkPage() {
             "No open requisitions. Need something bought? Start one from the + menu; it converts to a PO once approved.",
           )}
           emptyAction={{ href: "/studio/procurement/requisitions/new", label: t("console.myWork.requestPurchase", undefined, "Request A Purchase") }}
+        />
+        <WorkSection
+          title={t("console.myWork.sections.workOrders", undefined, "My Work Orders")}
+          viewAllHref="/studio/production/work-orders"
+          viewAllLabel={t("console.myWork.viewAll", undefined, "View all →")}
+          rows={workOrderRows}
+          empty={t(
+            "console.myWork.empty.workOrders",
+            undefined,
+            "No open work orders. Dispatch scoped work from Production and track it here until it closes.",
+          )}
+        />
+        <WorkSection
+          title={t("console.myWork.sections.tickets", undefined, "My Service Tickets")}
+          viewAllHref="/studio/services/requests"
+          viewAllLabel={t("console.myWork.viewAll", undefined, "View all →")}
+          rows={ticketRows}
+          empty={t(
+            "console.myWork.empty.tickets",
+            undefined,
+            "No open tickets. IT and facilities requests you file from the + menu wait here until resolved.",
+          )}
+          emptyAction={{ href: "/studio/services/requests/new", label: t("console.myWork.fileTicket", undefined, "File A Ticket") }}
         />
         <WorkSection
           title={t("console.myWork.sections.timeOff", undefined, "My Time Off")}

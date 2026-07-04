@@ -1,9 +1,12 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
+import { routeToApprovals } from "@/lib/approvals/route";
 
 type PoChangeOrderStatus = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "void";
 
@@ -102,6 +105,56 @@ export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatu
 
   revalidatePath(`/studio/procurement/po-change-orders/${id}`);
   revalidatePath("/studio/procurement/po-change-orders");
+}
+
+export type RouteCoState = { error?: string } | null;
+
+/**
+ * v7.8 record action — "Route To Approvals". Opens an approval_instances
+ * row for the change order via the shared approvals engine (kit 20
+ * REPO_LANDING §2: no local status fields; change_order_state keeps its
+ * own FSM while the instance carries the review lifecycle).
+ */
+export async function routePoChangeOrderToApprovalsAction(id: string): Promise<RouteCoState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can route change orders to approvals" };
+
+  const supabase = await createClient();
+  const { data: co } = await supabase
+    .from("po_change_orders")
+    .select("id, number, title, amount_cents, change_order_state")
+    .eq("org_id", session.orgId)
+    .eq("id", id)
+    .maybeSingle();
+  if (!co) return { error: "Change order not found" };
+  // Terminal states (approved/rejected/void) are past the review window.
+  if (["approved", "rejected", "void"].includes(co.change_order_state)) {
+    return { error: `A ${co.change_order_state} change order cannot be routed for approval` };
+  }
+
+  const routed = await routeToApprovals({
+    session,
+    subjectTable: "po_change_orders",
+    subjectId: id,
+    metadata: { number: co.number, title: co.title, amountCents: co.amount_cents },
+  });
+  if ("error" in routed) return { error: routed.error };
+
+  if (!routed.alreadyRouted) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "po_change_order.routed_to_approvals",
+      targetTable: "approval_instances",
+      targetId: routed.id,
+      metadata: { changeOrderId: id, number: co.number },
+    });
+  }
+
+  revalidatePath(`/studio/procurement/po-change-orders/${id}`);
+  revalidatePath("/studio/governance/approvals");
+  redirect(`/studio/governance/approvals/${routed.id}`);
 }
 
 async function guardCoEditable(coId: string, orgId: string): Promise<boolean> {

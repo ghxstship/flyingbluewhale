@@ -5,11 +5,12 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { requireSession } from "@/lib/auth";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { addReceiptLine } from "./actions";
+import { addReceiptLine, matchReceiptToPoAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -91,6 +92,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const poCurrency = po?.currency ?? "USD";
 
+  // v7.8 record action gate — mirrors matchReceiptToPoAction: a complete
+  // (non-partial) receipt against a sent/acknowledged PO can close it.
+  const canMatch =
+    isManagerPlus(session) &&
+    !receipt.partial &&
+    !!po &&
+    (po.po_state === "sent" || po.po_state === "acknowledged");
+
   return (
     <>
       <ModuleHeader
@@ -110,6 +119,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </Badge>
             <span className="font-mono text-xs">{new Date(receipt.received_at).toLocaleDateString("en-US")}</span>
           </span>
+        }
+        action={
+          canMatch ? (
+            <RecordActionButton
+              action={matchReceiptToPoAction.bind(null, receipt.id)}
+              label={t("console.procurement.receiving.detail.confirmMatch", undefined, "Confirm Match · Close PO")}
+              pendingLabel={t("console.procurement.receiving.detail.matching", undefined, "Matching…")}
+            />
+          ) : undefined
         }
       />
       <div className="page-content max-w-3xl space-y-4">

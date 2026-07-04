@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { ConversationPanel } from "@/components/ConversationPanel";
-import { requireSession } from "@/lib/auth";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { addCoLine, deleteCoLine, transitionPoChangeOrder } from "./actions";
+import { addCoLine, deleteCoLine, routePoChangeOrderToApprovalsAction, transitionPoChangeOrder } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { toTitle } from "@/lib/format";
@@ -67,6 +68,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Badge variant={toneFor(co.change_order_state)}>{toTitle(co.change_order_state)}</Badge>
+            {isManagerPlus(session) && !["approved", "rejected", "void"].includes(co.change_order_state) && (
+              <RecordActionButton
+                action={routePoChangeOrderToApprovalsAction.bind(null, id)}
+                label={t(
+                  "console.procurement.poChangeOrders.detail.routeToApprovals",
+                  undefined,
+                  "Route To Approvals",
+                )}
+                pendingLabel={t("console.procurement.poChangeOrders.detail.routing", undefined, "Routing…")}
+              />
+            )}
             {co.change_order_state === "proposed" && (
               <StatusForm
                 action={transitionPoChangeOrder.bind(null, id, "submitted")}

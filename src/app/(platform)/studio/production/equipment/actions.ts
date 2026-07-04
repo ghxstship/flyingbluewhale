@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { dollarsToCents } from "@/lib/format";
 import type { EquipmentStatus } from "@/lib/supabase/types";
 import { actionFail, formFail } from "@/lib/forms/fail";
@@ -95,23 +94,14 @@ export async function setEquipmentStatus(formData: FormData): Promise<void> {
     throw new Error("Equipment status changed concurrently — refresh and retry");
   }
 
-  // Append to the LDP §3 asset_movements ledger — the equipment detail
-  // page surfaces this as a movement timeline. Best-effort: a write
-  // failure here shouldn't block the status transition (the equipment
-  // row already moved) but it leaves the timeline incomplete, which is
-  // a visible UI cue that something's off. Uses the loose client
-  // because database.types.ts was generated against the 0019 shadowed
-  // schema (asset_id) rather than the canonical 0016 (equipment_id +
-  // org_id); migration 0060 enforces the canonical shape stays.
-  const loose = supabase as unknown as LooseSupabase;
-  void loose.from("asset_movements").insert({
-    org_id: session.orgId,
-    equipment_id: id,
-    from_state: current,
-    to_state: next.data,
-    moved_by: session.userId,
-    reason: null,
-  });
+  // NOTE (2026-07-03): the asset_movements ledger append that lived here
+  // never executed — it targeted columns (org_id/equipment_id/moved_by)
+  // that do not exist on the live table, and asset_movements.asset_id is
+  // FK'd to assets(id), which equipment rows are not in. It was also an
+  // unawaited fire-and-forget, so the constraint failure was invisible.
+  // Removed as dead code. Equipment gains a real movement ledger when
+  // Phase A2 of the kit-20 landing order folds equipment into the unified
+  // inventory / asset domain (ADR-0014 §Phase A queue).
 
   revalidatePath("/studio/production/equipment");
   revalidatePath(`/studio/production/equipment/${id}`);

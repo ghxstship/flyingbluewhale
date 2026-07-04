@@ -3,13 +3,15 @@ import { ModuleHeader } from "@/components/Shell";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
 import { PoStatusControls } from "./PoStatusControls";
+import { routePoToApprovalsAction } from "../actions";
 import { deletePurchaseOrder } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +31,17 @@ export default async function POPage({ params }: { params: Promise<{ poId: strin
         subtitle={`${formatMoney(po.amount_cents, po.currency)} · ${po.po_state}`}
         action={
           <div className="flex items-center gap-2">
+            {isManagerPlus(session) && (po.po_state === "draft" || po.po_state === "sent") && (
+              <RecordActionButton
+                action={routePoToApprovalsAction.bind(null, poId)}
+                label={t(
+                  "console.procurement.purchaseOrders.detail.routeToApprovals",
+                  undefined,
+                  "Route To Approvals",
+                )}
+                pendingLabel={t("console.procurement.purchaseOrders.detail.routing", undefined, "Routing…")}
+              />
+            )}
             <PoStatusControls id={po.id} status={po.po_state} />
             <Button href={`/studio/procurement/purchase-orders/${poId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}

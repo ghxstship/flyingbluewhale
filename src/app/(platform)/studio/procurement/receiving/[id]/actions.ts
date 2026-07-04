@@ -1,9 +1,11 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
@@ -61,4 +63,88 @@ export async function addReceiptLine(receiptId: string, _: State, fd: FormData):
 
   revalidatePath(`/studio/procurement/receiving/${receiptId}`);
   return { ok: true };
+}
+
+export type MatchReceiptState = { error?: string } | null;
+
+/**
+ * v7.8 record action — "Confirm Match · Close PO". A complete (non-partial)
+ * goods receipt confirms the PO's goods leg, so the linked purchase order
+ * advances sent/acknowledged → fulfilled and gets a `[receipt:<id>]`
+ * lineage marker appended to its notes (purchase_orders has no receipt FK;
+ * the marker doubles as the queryable back-link). Already-fulfilled POs are
+ * treated as idempotent success — a double-click just lands on the PO.
+ *
+ * NOTE the honest-coverage rule: the invoice leg of 3-way match is NOT
+ * wired here because AR invoices carry no PO linkage (that arrives with the
+ * Phase A sub_invoices merge).
+ */
+export async function matchReceiptToPoAction(receiptId: string): Promise<MatchReceiptState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can match receipts" };
+  const supabase = await createClient();
+
+  const { data: receipt, error: loadError } = await supabase
+    .from("goods_receipts")
+    .select("id, po_id, partial")
+    .eq("org_id", session.orgId)
+    .eq("id", receiptId)
+    .maybeSingle();
+  if (loadError) return { error: loadError.message };
+  if (!receipt) return { error: "Receipt not found" };
+  if (receipt.partial) {
+    return { error: "Only a complete receipt can close the purchase order. Mark it complete first." };
+  }
+  if (!receipt.po_id) return { error: "Receipt is not linked to a purchase order" };
+
+  const { data: po } = await supabase
+    .from("purchase_orders")
+    .select("id, po_state, notes")
+    .eq("org_id", session.orgId)
+    .eq("id", receipt.po_id)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!po) return { error: "Linked purchase order not found" };
+
+  // Idempotency: an already-fulfilled PO means a prior match (or another
+  // path) closed it — success, just land on the PO.
+  if (po.po_state === "fulfilled") {
+    redirect(`/studio/procurement/purchase-orders/${po.id}`);
+  }
+  if (po.po_state !== "sent" && po.po_state !== "acknowledged") {
+    return { error: `Purchase order must be sent or acknowledged before matching (currently ${po.po_state})` };
+  }
+
+  // Lineage marker into the PO's free-text notes; skip if a retry already
+  // wrote it. Conditional update (`.eq("po_state", current)`) closes the
+  // TOCTOU between the gate read and the write.
+  const marker = `[receipt:${receiptId}]`;
+  const notes = po.notes?.includes(marker) ? po.notes : [po.notes?.trim() || null, marker].filter(Boolean).join("\n");
+  const { data: updated, error: updateError } = await supabase
+    .from("purchase_orders")
+    .update({ po_state: "fulfilled", notes })
+    .eq("org_id", session.orgId)
+    .eq("id", po.id)
+    .eq("po_state", po.po_state)
+    .select("id");
+  if (updateError) return { error: updateError.message };
+  if (!updated || updated.length === 0) {
+    return { error: "Purchase order changed concurrently. Refresh and retry." };
+  }
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "goods_receipt.matched_to_po",
+    targetTable: "purchase_orders",
+    targetId: po.id,
+    metadata: { receiptId, poId: po.id },
+  });
+
+  revalidatePath(`/studio/procurement/receiving/${receiptId}`);
+  revalidatePath("/studio/procurement/receiving");
+  revalidatePath(`/studio/procurement/purchase-orders/${po.id}`);
+  revalidatePath("/studio/procurement/purchase-orders");
+  redirect(`/studio/procurement/purchase-orders/${po.id}`);
 }

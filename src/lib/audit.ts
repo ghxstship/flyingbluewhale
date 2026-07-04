@@ -169,7 +169,15 @@ export type AuditAction =
   | "requisition.converted_to_po"
   | "requisition.converted_to_rfq"
   | "rfq.awarded_po_drafted"
-  | "reservation.event_created";
+  | "reservation.event_created"
+  // v7.8 Phase B completion (kit 20 REPO_LANDING §2)
+  | "purchase_order.routed_to_approvals"
+  | "po_change_order.routed_to_approvals"
+  | "lead.proposal_created"
+  | "asset.checked_out"
+  | "asset.checked_in"
+  | "submission.offer_created"
+  | "goods_receipt.matched_to_po";
 
 export type AuditInput = {
   /** Actor's user id (auth.users.id). */

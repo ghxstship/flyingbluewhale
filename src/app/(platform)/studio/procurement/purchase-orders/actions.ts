@@ -6,6 +6,8 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { emitAudit } from "@/lib/audit";
+import { routeToApprovals } from "@/lib/approvals/route";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -117,4 +119,54 @@ export async function setPoStatusAction(
   revalidatePath(`/studio/procurement/purchase-orders/${id}`);
   revalidatePath("/studio/procurement/purchase-orders");
   return { ok: true as const };
+}
+
+export type RoutePoState = { error?: string } | null;
+
+/**
+ * v7.8 record action — "Route To Approvals". Opens an approval_instances
+ * row for the PO via the shared approvals engine (kit 20 REPO_LANDING §2:
+ * no local status fields; the PO keeps its own po_state FSM while the
+ * instance carries the review lifecycle).
+ */
+export async function routePoToApprovalsAction(poId: string): Promise<RoutePoState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can route purchase orders to approvals" };
+
+  const supabase = await createClient();
+  const { data: po } = await supabase
+    .from("purchase_orders")
+    .select("id, number, title, amount_cents, po_state")
+    .eq("org_id", session.orgId)
+    .eq("id", poId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!po) return { error: "Purchase order not found" };
+  if (po.po_state !== "draft" && po.po_state !== "sent") {
+    return { error: `Only draft or sent purchase orders can be routed (currently ${po.po_state})` };
+  }
+
+  const routed = await routeToApprovals({
+    session,
+    subjectTable: "purchase_orders",
+    subjectId: poId,
+    metadata: { number: po.number, title: po.title, amountCents: po.amount_cents },
+  });
+  if ("error" in routed) return { error: routed.error };
+
+  if (!routed.alreadyRouted) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "purchase_order.routed_to_approvals",
+      targetTable: "approval_instances",
+      targetId: routed.id,
+      metadata: { poId, number: po.number },
+    });
+  }
+
+  revalidatePath(`/studio/procurement/purchase-orders/${poId}`);
+  revalidatePath("/studio/governance/approvals");
+  redirect(`/studio/governance/approvals/${routed.id}`);
 }

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { listProjects, projectStats } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -95,15 +96,40 @@ export default async function ConsoleDashboard() {
     );
   }
 
+  // Kit 20 acceptance fixture 01: the Home hero is the ACTIVE PRODUCTION
+  // (name + phase chip), not a generic workspace label — the operator lands
+  // on the world they are building. Falls back to "Workspace" when no
+  // production is active. Same cheap indexed query the EventSpine island
+  // runs; both are force-dynamic streaming reads.
+  const supabase = await createClient();
+  const { data: activeProject } = await supabase
+    .from("projects")
+    .select("name, xpms_phase")
+    .eq("org_id", session.orgId)
+    .eq("project_state", "active")
+    .is("deleted_at", null)
+    .order("start_date", { ascending: false, nullsFirst: false })
+    .limit(1)
+    .maybeSingle();
+
   return (
     <>
       <ModuleHeader
-        title={t("console.dashboard.title", undefined, "Workspace")}
-        subtitle={t(
-          "console.dashboard.loggedInAsWithRole",
-          { email: session.email, role: session.role },
-          `Logged in as ${session.email} · ${session.role}`,
-        )}
+        eyebrow={t("console.dashboard.eyebrow", undefined, "Home")}
+        title={activeProject?.name ?? t("console.dashboard.title", undefined, "Workspace")}
+        subtitle={
+          activeProject
+            ? t(
+                "console.dashboard.activePhase",
+                { phase: activeProject.xpms_phase },
+                `Active Production · ${activeProject.xpms_phase}`,
+              )
+            : t(
+                "console.dashboard.loggedInAsWithRole",
+                { email: session.email, role: session.role },
+                `Logged in as ${session.email} · ${session.role}`,
+              )
+        }
         action={
           <Button href="/studio/projects/new">{t("console.dashboard.newProject", undefined, "+ New Project")}</Button>
         }

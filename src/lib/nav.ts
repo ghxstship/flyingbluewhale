@@ -245,8 +245,18 @@ export const platformNavDomain: NavGroup[] = [
           // The canonical Documents home (doc-merge engine, 29 types); the
           // Collaborate block-doc surface is "Pages" (kit Law #3 dedup).
           { label: "Documents", href: "/studio/documents", icon: "FileStack", sub: "29 Doc Types · Merge & Print" },
-          { label: "Proposal Templates", href: "/studio/proposals/templates", icon: "Files", sub: "Reusable Proposal Blocks" },
-          { label: "Project Templates", href: "/studio/templates", icon: "Files", sub: "Clone-To-Start Project Shapes" },
+          {
+            label: "Proposal Templates",
+            href: "/studio/proposals/templates",
+            icon: "Files",
+            sub: "Reusable Proposal Blocks",
+          },
+          {
+            label: "Project Templates",
+            href: "/studio/templates",
+            icon: "Files",
+            sub: "Clone-To-Start Project Shapes",
+          },
           { label: "Event Kits", href: "/studio/kits", icon: "Layers", sub: "Zones · Lines · Touchpoints · Gates" },
         ],
       },
@@ -269,11 +279,26 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Governance",
         items: [
-          { label: "Risk Register", href: "/studio/programs/risk", icon: "AlertTriangle", sub: "Program-Level Risk Log" },
+          {
+            label: "Risk Register",
+            href: "/studio/programs/risk",
+            icon: "AlertTriangle",
+            sub: "Program-Level Risk Log",
+          },
           { label: "Risk Scores", href: "/studio/risk", icon: "ShieldAlert", sub: "Probability × Impact Matrix" },
           { label: "Readiness", href: "/studio/programs/readiness", icon: "ShieldCheck", sub: "Go-Live Gate Checks" },
-          { label: "Reviews", href: "/studio/programs/reviews", icon: "ClipboardCheck", sub: "Stage-Gate Program Reviews" },
-          { label: "Approvals", href: "/studio/governance/approvals", icon: "ClipboardCheck", sub: "Routed Sign-Off Chains" },
+          {
+            label: "Reviews",
+            href: "/studio/programs/reviews",
+            icon: "ClipboardCheck",
+            sub: "Stage-Gate Program Reviews",
+          },
+          {
+            label: "Approvals",
+            href: "/studio/governance/approvals",
+            icon: "ClipboardCheck",
+            sub: "Routed Sign-Off Chains",
+          },
         ],
       },
     ],
@@ -289,24 +314,40 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Inventory",
         items: [
-          { label: "Equipment", href: "/studio/production/equipment", icon: "Wrench", sub: "Owned Gear Registry" },
-          { label: "Equipment Utilization", href: "/studio/production/equipment/utilization", icon: "BarChart3", sub: "Usage & Idle Rates" },
-          { label: "AV Inventory", href: "/studio/production/av", icon: "Speaker", sub: "Audio · Video · Lighting Stock" },
-          { label: "Rentals", href: "/studio/production/rentals", icon: "ArrowLeftRight", sub: "Sub-Rented Gear In & Out" },
-          { label: "Assets", href: "/studio/assets", icon: "Package", sub: "Tracked Asset Registry" },
-          // Disambiguated from Build ▸ Warranties (kit Law #3, one noun one
-          // home): this is the warranty_reminders expiry tracker; the
-          // closeout warranty records live at /studio/warranties.
-          { label: "Warranty Reminders", href: "/studio/assets/warranties", icon: "ShieldCheck", sub: "Asset Warranty Expiry Tracking" },
+          // Kit 20 Phase A (C-06): ONE physical-asset noun in the rail. The
+          // old Equipment / Rentals / Assets / Warranty Reminders items are
+          // the second shelf now — the 9-tab family on /studio/assets
+          // (Registry · Fleet · Lots · Pull Sheets · Scan Sessions ·
+          // Sub-Rentals · Warranties · Maintenance · Power Plan). Fleet and
+          // Lots re-expose the legacy equipment/warehouse routes as
+          // asset_class lenses over the unified `assets` store.
+          {
+            label: "Assets & Inventory",
+            href: "/studio/assets",
+            icon: "Package",
+            sub: "One Registry · Gear · Fleet · Lots",
+          },
         ],
       },
       {
         label: "Build",
         items: [
-          { label: "Fabrication", href: "/studio/production/fabrication", icon: "Hammer", sub: "Build Orders Through QC" },
+          {
+            label: "Fabrication",
+            href: "/studio/production/fabrication",
+            icon: "Hammer",
+            sub: "Build Orders Through QC",
+          },
           { label: "Compounds", href: "/studio/production/compounds", icon: "Tent", sub: "Site Compound Layouts" },
-          { label: "Yard", href: "/studio/production/warehouse", icon: "Network", sub: "Yard & Staging Inventory" },
-          { label: "Punch List", href: "/studio/punch", icon: "ClipboardList", sub: "Defects To Clear Before Handover" },
+          // "Yard" rail item retired (kit 20 Phase A): the yard/staging
+          // dashboard folded into the unified Assets & Inventory registry —
+          // lots are asset_class='lot' rows on the Lots lens.
+          {
+            label: "Punch List",
+            href: "/studio/punch",
+            icon: "ClipboardList",
+            sub: "Defects To Clear Before Handover",
+          },
           { label: "Reality Captures", href: "/studio/captures", icon: "Telescope", sub: "Scans & As-Built Captures" },
           { label: "Photo Log", href: "/studio/photos", icon: "Telescope", sub: "Timestamped Site Photos" },
           { label: "Warranties", href: "/studio/warranties", icon: "ShieldCheck", sub: "Closeout Warranty Records" },
@@ -316,9 +357,24 @@ export const platformNavDomain: NavGroup[] = [
         label: "Show",
         items: [
           { label: "Run of Show", href: "/studio/production/ros", icon: "Play", sub: "Cue-By-Cue Show Timeline" },
-          { label: "Work Orders", href: "/studio/production/work-orders", icon: "ClipboardList", sub: "Dispatch Scoped Work To Subs" },
-          { label: "Live Dispatch", href: "/studio/production/dispatch/live", icon: "Radio", sub: "Real-Time Crew Dispatch Board" },
-          { label: "Production Logistics", href: "/studio/production/logistics", icon: "Crosshair", sub: "Show-Side Moves & Staging" },
+          {
+            label: "Work Orders",
+            href: "/studio/production/work-orders",
+            icon: "ClipboardList",
+            sub: "Dispatch Scoped Work To Subs",
+          },
+          {
+            label: "Live Dispatch",
+            href: "/studio/production/dispatch/live",
+            icon: "Radio",
+            sub: "Real-Time Crew Dispatch Board",
+          },
+          {
+            label: "Production Logistics",
+            href: "/studio/production/logistics",
+            icon: "Crosshair",
+            sub: "Show-Side Moves & Staging",
+          },
         ],
       },
     ],
@@ -346,21 +402,51 @@ export const platformNavDomain: NavGroup[] = [
           // Disambiguated from Procurement ▸ Contracts (kit Law #3): these are
           // the people-side MSAs/engagement terms; vendor agreements live at
           // /studio/legal/contracts.
-          { label: "Crew Contracts", href: "/studio/people/msas", icon: "FileSignature", sub: "MSAs & Engagement Terms" },
-          { label: "Offer Letters", href: "/studio/people/offer-letters", icon: "FileText", sub: "Send, Countersign, Activate" },
-          { label: "Delegations", href: "/studio/participants/delegations", icon: "UsersRound", sub: "Visiting Delegation Rosters" },
+          {
+            label: "Crew Contracts",
+            href: "/studio/people/msas",
+            icon: "FileSignature",
+            sub: "MSAs & Engagement Terms",
+          },
+          {
+            label: "Offer Letters",
+            href: "/studio/people/offer-letters",
+            icon: "FileText",
+            sub: "Send, Countersign, Activate",
+          },
+          {
+            label: "Delegations",
+            href: "/studio/participants/delegations",
+            icon: "UsersRound",
+            sub: "Visiting Delegation Rosters",
+          },
           { label: "Visa", href: "/studio/participants/visa", icon: "Stamp", sub: "Visa & Immigration Cases" },
           // ADR-0011 one-home-per-concept: Accreditation lives ONLY in People
           // (was also under Operations ▸ Guest Experience + Knowledge ▸
           // Certifications). §03 groups it with participants/credentials.
-          { label: "Accreditation", href: "/studio/accreditation", icon: "BadgeCheck", sub: "Credentials & Access Levels" },
-          { label: "Rosters", href: "/studio/workforce/rosters", icon: "ClipboardSignature", sub: "Published Shift Rosters" },
+          {
+            label: "Accreditation",
+            href: "/studio/accreditation",
+            icon: "BadgeCheck",
+            sub: "Credentials & Access Levels",
+          },
+          {
+            label: "Rosters",
+            href: "/studio/workforce/rosters",
+            icon: "ClipboardSignature",
+            sub: "Published Shift Rosters",
+          },
         ],
       },
       {
         label: "Development",
         items: [
-          { label: "Training", href: "/studio/workforce/training", icon: "GraduationCap", sub: "Required Training Matrix" },
+          {
+            label: "Training",
+            href: "/studio/workforce/training",
+            icon: "GraduationCap",
+            sub: "Required Training Matrix",
+          },
           // Courses deep-links into the LEG3ND shell — LEG3ND is the canonical
           // learning/LMS owner; the console-embedded the deskless-workforce suite courses admin
           // was retired when LEG3ND graduated to its own (legend) shell.
@@ -368,17 +454,32 @@ export const platformNavDomain: NavGroup[] = [
           // The Standard (knowledge base) re-homed here when the platform
           // Knowledge group dissolved (LEG3ND is now its own (legend) shell).
           { label: "The Standard", href: "/studio/knowledge", icon: "BookOpenCheck", sub: "The Knowledge Base" },
-          { label: "Onboarding", href: "/studio/workforce/onboarding", icon: "ClipboardSignature", sub: "New-Hire Flow Assignments" },
+          {
+            label: "Onboarding",
+            href: "/studio/workforce/onboarding",
+            icon: "ClipboardSignature",
+            sub: "New-Hire Flow Assignments",
+          },
         ],
       },
       {
         label: "Time & Recognition",
         items: [
           { label: "Time Off", href: "/studio/workforce/time-off", icon: "Calendar", sub: "Request & Approve Leave" },
-          { label: "Shift Swaps", href: "/studio/workforce/shift-swaps", icon: "ArrowLeftRight", sub: "Peer Swap Requests & Approvals" },
+          {
+            label: "Shift Swaps",
+            href: "/studio/workforce/shift-swaps",
+            icon: "ArrowLeftRight",
+            sub: "Peer Swap Requests & Approvals",
+          },
           { label: "Recognition", href: "/studio/workforce/recognition", icon: "Award", sub: "Kudos & Shout-Outs" },
           { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck", sub: "Award & Track Badges" },
-          { label: "Resource Forecast", href: "/studio/workforce/forecast", icon: "TrendingUp", sub: "Person × Week Capacity" },
+          {
+            label: "Resource Forecast",
+            href: "/studio/workforce/forecast",
+            icon: "TrendingUp",
+            sub: "Person × Week Capacity",
+          },
         ],
       },
     ],
@@ -404,7 +505,12 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Pipeline", href: "/studio/pipeline", icon: "GitBranch", sub: "Deals By Stage · Kanban" },
           { label: "Leads", href: "/studio/leads", icon: "UserPlus", sub: "Qualify, Then Convert To Deal" },
           { label: "Clients", href: "/studio/clients", icon: "Handshake", sub: "Client Accounts & Contacts" },
-          { label: "Sponsors", href: "/studio/commercial/sponsors", icon: "Award", sub: "Sponsorship Accounts & Assets" },
+          {
+            label: "Sponsors",
+            href: "/studio/commercial/sponsors",
+            icon: "Award",
+            sub: "Sponsorship Accounts & Assets",
+          },
           { label: "Marketing", href: "/studio/marketing", icon: "Megaphone", sub: "Audiences & Channels" },
           { label: "Campaigns", href: "/studio/campaigns", icon: "Star", sub: "Campaign Planning & Results" },
           { label: "Function Diary", href: "/studio/sales/diary", icon: "CalendarDays", sub: "Venue Booking Diary" },
@@ -414,13 +520,23 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Hospitality",
         items: [
-          { label: "Hospitality", href: "/studio/commercial/hospitality", icon: "ConciergeBell", sub: "Hosted Persona Programs" },
+          {
+            label: "Hospitality",
+            href: "/studio/commercial/hospitality",
+            icon: "ConciergeBell",
+            sub: "Hosted Persona Programs",
+          },
           // Moved from the (now-split) Operations group per ADR-0011 §03 (guest
           // experience belongs to Commerce). Same page as Hospitality, filtered
           // to the guest audience via ?audience=guest — matchRoute treats
           // query-bearing hrefs as never-active, so the Hospitality entry owns
           // the highlight; both now co-locate in Commerce.
-          { label: "Guest Experience", href: "/studio/commercial/hospitality?audience=guest", icon: "ConciergeBell", sub: "The Guest-Audience Lens" },
+          {
+            label: "Guest Experience",
+            href: "/studio/commercial/hospitality?audience=guest",
+            icon: "ConciergeBell",
+            sub: "The Guest-Audience Lens",
+          },
         ],
       },
       {
@@ -433,7 +549,12 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Talent Roster", href: "/studio/marketplace/talent", icon: "Music", sub: "EPKs & Riders" },
           { label: "Offers", href: "/studio/marketplace/offers", icon: "Gavel", sub: "Booking Offers · 60/40 Terms" },
           { label: "Inquiries", href: "/studio/marketplace/inquiries", icon: "Inbox", sub: "Inbound Booking Interest" },
-          { label: "Box Office", href: "/studio/marketplace/box-office", icon: "Ticket", sub: "Tickets · Tiers · Gates" },
+          {
+            label: "Box Office",
+            href: "/studio/marketplace/box-office",
+            icon: "Ticket",
+            sub: "Tickets · Tiers · Gates",
+          },
           { label: "Discounts", href: "/studio/marketplace/discounts", icon: "Receipt", sub: "Codes & Comps" },
         ],
       },
@@ -464,21 +585,51 @@ export const platformNavDomain: NavGroup[] = [
         label: "Receivables",
         items: [
           { label: "Invoices", href: "/studio/finance/invoices", icon: "Receipt", sub: "AR Billing & Aging" },
-          { label: "Pay Apps", href: "/studio/finance/pay-apps", icon: "FileSpreadsheet", sub: "SOV % Complete & Retainage" },
-          { label: "Sub Invoices", href: "/studio/finance/sub-invoices", icon: "Receipt", sub: "Inbound Sub Billing · Waiver-Gated" },
-          { label: "Lien Waivers", href: "/studio/finance/lien-waivers", icon: "Stamp", sub: "Conditional & Final Waivers" },
-          { label: "E-Sign Envelopes", href: "/studio/envelopes", icon: "ClipboardSignature", sub: "Signature Packets & Status" },
+          {
+            label: "Pay Apps",
+            href: "/studio/finance/pay-apps",
+            icon: "FileSpreadsheet",
+            sub: "SOV % Complete & Retainage",
+          },
+          {
+            label: "Sub Invoices",
+            href: "/studio/finance/sub-invoices",
+            icon: "Receipt",
+            sub: "Inbound Sub Billing · Waiver-Gated",
+          },
+          {
+            label: "Lien Waivers",
+            href: "/studio/finance/lien-waivers",
+            icon: "Stamp",
+            sub: "Conditional & Final Waivers",
+          },
+          {
+            label: "E-Sign Envelopes",
+            href: "/studio/envelopes",
+            icon: "ClipboardSignature",
+            sub: "Signature Packets & Status",
+          },
           { label: "AP Invoice OCR", href: "/studio/finance/ap-ocr", icon: "Sparkles", sub: "Captured Invoice Intake" },
         ],
       },
       {
         label: "Payables",
         items: [
-          { label: "Expenses", href: "/studio/finance/expenses", icon: "CreditCard", sub: "Card · Reimbursement · Mileage" },
+          {
+            label: "Expenses",
+            href: "/studio/finance/expenses",
+            icon: "CreditCard",
+            sub: "Card · Reimbursement · Mileage",
+          },
           { label: "Mileage", href: "/studio/finance/mileage", icon: "Truck", sub: "Mileage Logs & Rate Math" },
           // Disambiguated from Commerce ▸ Revenue ▸ Payouts (kit Law #3):
           // this is AP-side vendor payout onboarding, not event payouts.
-          { label: "Vendor Payouts", href: "/studio/finance/payouts", icon: "Wallet", sub: "Stripe Connect Vendor Status" },
+          {
+            label: "Vendor Payouts",
+            href: "/studio/finance/payouts",
+            icon: "Wallet",
+            sub: "Stripe Connect Vendor Status",
+          },
         ],
       },
       {
@@ -487,21 +638,51 @@ export const platformNavDomain: NavGroup[] = [
         label: "Ledger Setup",
         items: [
           { label: "Entities", href: "/studio/finance/entities", icon: "Building2", sub: "Legal Entities & Books" },
-          { label: "Cost Codes", href: "/studio/finance/cost-codes", icon: "ListOrdered", sub: "The Job-Costing Backbone" },
-          { label: "Chart of Accounts", href: "/studio/finance/accounts", icon: "ListOrdered", sub: "GL Account Structure" },
-          { label: "General Ledger", href: "/studio/finance/ledger", icon: "BookOpen", sub: "Journal Entries & Balances" },
+          {
+            label: "Cost Codes",
+            href: "/studio/finance/cost-codes",
+            icon: "ListOrdered",
+            sub: "The Job-Costing Backbone",
+          },
+          {
+            label: "Chart of Accounts",
+            href: "/studio/finance/accounts",
+            icon: "ListOrdered",
+            sub: "GL Account Structure",
+          },
+          {
+            label: "General Ledger",
+            href: "/studio/finance/ledger",
+            icon: "BookOpen",
+            sub: "Journal Entries & Balances",
+          },
         ],
       },
       {
         label: "Planning",
         items: [
-          { label: "Budgets", href: "/studio/finance/budgets", icon: "PiggyBank", sub: "Cost-Coded Budget Lines & FAC" },
+          {
+            label: "Budgets",
+            href: "/studio/finance/budgets",
+            icon: "PiggyBank",
+            sub: "Cost-Coded Budget Lines & FAC",
+          },
           { label: "WIP", href: "/studio/finance/wip", icon: "FileSpreadsheet", sub: "Earned vs Billed · Settlement" },
-          { label: "EAC Forecasts", href: "/studio/finance/forecasts", icon: "TrendingUp", sub: "Estimate At Completion" },
+          {
+            label: "EAC Forecasts",
+            href: "/studio/finance/forecasts",
+            icon: "TrendingUp",
+            sub: "Estimate At Completion",
+          },
           { label: "Periods", href: "/studio/finance/periods", icon: "CalendarDays", sub: "Month-End Close & Lock" },
           // Disambiguated from Dashboard ▸ Reports (kit Law #3): the finance
           // statement set, not the cross-app report library.
-          { label: "Financial Reports", href: "/studio/finance/reports", icon: "ChartBar", sub: "P&L From Current Books" },
+          {
+            label: "Financial Reports",
+            href: "/studio/finance/reports",
+            icon: "ChartBar",
+            sub: "P&L From Current Books",
+          },
           { label: "Tax", href: "/studio/finance/tax", icon: "Coins", sub: "Tax Rates & Filings" },
         ],
       },
@@ -509,8 +690,18 @@ export const platformNavDomain: NavGroup[] = [
         label: "Time & Payroll",
         items: [
           { label: "Time", href: "/studio/finance/time", icon: "Clock", sub: "The Time Tracker" },
-          { label: "Timesheets", href: "/studio/finance/timesheets", icon: "ClipboardCheck", sub: "Approval-Gated Timesheets" },
-          { label: "Certified Payroll", href: "/studio/finance/payroll", icon: "FileSignature", sub: "Runs Gated On Timesheets" },
+          {
+            label: "Timesheets",
+            href: "/studio/finance/timesheets",
+            icon: "ClipboardCheck",
+            sub: "Approval-Gated Timesheets",
+          },
+          {
+            label: "Certified Payroll",
+            href: "/studio/finance/payroll",
+            icon: "FileSignature",
+            sub: "Runs Gated On Timesheets",
+          },
           { label: "Subscriptions", href: "/studio/subscriptions", icon: "BadgeCheck", sub: "Plan, Seats & Billing" },
         ],
       },
@@ -527,11 +718,36 @@ export const platformNavDomain: NavGroup[] = [
         label: "Sourcing",
         items: [
           { label: "Vendors", href: "/studio/procurement/vendors", icon: "Store", sub: "Supplier & Sub Directory" },
-          { label: "Prequalification", href: "/studio/procurement/prequalification", icon: "BookOpenCheck", sub: "Vendor Qualification Packets" },
-          { label: "Compliance", href: "/studio/procurement/compliance", icon: "ShieldCheck", sub: "COI · W-9 · License Vault" },
-          { label: "Subs Network", href: "/studio/procurement/network", icon: "Users", sub: "Trade & Region Eligibility" },
-          { label: "Trades Marketplace", href: "/studio/procurement/marketplace", icon: "Store", sub: "Open Work Order Board" },
-          { label: "Vendor Scorecard", href: "/studio/procurement/scorecard", icon: "Star", sub: "Performance By Vendor" },
+          {
+            label: "Prequalification",
+            href: "/studio/procurement/prequalification",
+            icon: "BookOpenCheck",
+            sub: "Vendor Qualification Packets",
+          },
+          {
+            label: "Compliance",
+            href: "/studio/procurement/compliance",
+            icon: "ShieldCheck",
+            sub: "COI · W-9 · License Vault",
+          },
+          {
+            label: "Subs Network",
+            href: "/studio/procurement/network",
+            icon: "Users",
+            sub: "Trade & Region Eligibility",
+          },
+          {
+            label: "Trades Marketplace",
+            href: "/studio/procurement/marketplace",
+            icon: "Store",
+            sub: "Open Work Order Board",
+          },
+          {
+            label: "Vendor Scorecard",
+            href: "/studio/procurement/scorecard",
+            icon: "Star",
+            sub: "Performance By Vendor",
+          },
           { label: "Sourcing", href: "/studio/procurement/sourcing", icon: "Compass", sub: "Sourcing Events & Bids" },
           { label: "RFQs", href: "/studio/procurement/rfqs", icon: "PackageCheck", sub: "Quote, Compare, Award To PO" },
           { label: "ITB", href: "/studio/procurement/itb", icon: "Gavel", sub: "Invitations To Bid" },
@@ -540,21 +756,66 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Buying",
         items: [
-          { label: "Requisitions", href: "/studio/procurement/requisitions", icon: "ShoppingCart", sub: "Ask To Buy · Converts To PO/RFQ" },
-          { label: "Purchase Orders", href: "/studio/procurement/purchase-orders", icon: "Package", sub: "Committed Spend To Vendors" },
-          { label: "Receiving", href: "/studio/procurement/receiving", icon: "PackageCheck", sub: "Goods In · 3-Way Match" },
-          { label: "PO Change Orders", href: "/studio/procurement/po-change-orders", icon: "ArrowLeftRight", sub: "Scope & Price Changes On POs" },
-          { label: "WO Broadcasts", href: "/studio/procurement/wo-broadcasts", icon: "Send", sub: "Blast Work To Eligible Subs" },
-          { label: "Contracts", href: "/studio/legal/contracts", icon: "ClipboardSignature", sub: "Vendor & Client Agreements" },
+          {
+            label: "Requisitions",
+            href: "/studio/procurement/requisitions",
+            icon: "ShoppingCart",
+            sub: "Ask To Buy · Converts To PO/RFQ",
+          },
+          {
+            label: "Purchase Orders",
+            href: "/studio/procurement/purchase-orders",
+            icon: "Package",
+            sub: "Committed Spend To Vendors",
+          },
+          {
+            label: "Receiving",
+            href: "/studio/procurement/receiving",
+            icon: "PackageCheck",
+            sub: "Goods In · 3-Way Match",
+          },
+          {
+            label: "PO Change Orders",
+            href: "/studio/procurement/po-change-orders",
+            icon: "ArrowLeftRight",
+            sub: "Scope & Price Changes On POs",
+          },
+          {
+            label: "WO Broadcasts",
+            href: "/studio/procurement/wo-broadcasts",
+            icon: "Send",
+            sub: "Blast Work To Eligible Subs",
+          },
+          {
+            label: "Contracts",
+            href: "/studio/legal/contracts",
+            icon: "ClipboardSignature",
+            sub: "Vendor & Client Agreements",
+          },
         ],
       },
       {
         label: "Reference",
         items: [
-          { label: "Rate Card", href: "/studio/logistics/ratecard", icon: "ListOrdered", sub: "Standard Rates By Line" },
+          {
+            label: "Rate Card",
+            href: "/studio/logistics/ratecard",
+            icon: "ListOrdered",
+            sub: "Standard Rates By Line",
+          },
           { label: "Submittals", href: "/studio/submittals", icon: "Inbox", sub: "Review & Approve Submittals" },
-          { label: "Master Catalog", href: "/studio/settings/catalog", icon: "Spline", sub: "Reusable SKUs For Advancing" },
-          { label: "Job Templates", href: "/studio/settings/job-templates", icon: "ClipboardList", sub: "Priced Scope Templates" },
+          {
+            label: "Master Catalog",
+            href: "/studio/settings/catalog",
+            icon: "Spline",
+            sub: "Reusable SKUs For Advancing",
+          },
+          {
+            label: "Job Templates",
+            href: "/studio/settings/job-templates",
+            icon: "ClipboardList",
+            sub: "Priced Scope Templates",
+          },
         ],
       },
     ],
@@ -574,7 +835,12 @@ export const platformNavDomain: NavGroup[] = [
     items: [
       { label: "Schedule", href: "/studio/schedule", icon: "Calendar", sub: "The Master Production Schedule" },
       { label: "Calendar", href: "/studio/calendar", icon: "CalendarDays", sub: "Schedule As A Calendar" },
-      { label: "Schedule Baselines", href: "/studio/schedule/baselines", icon: "GitBranch", sub: "Snapshots For Slip Tracking" },
+      {
+        label: "Schedule Baselines",
+        href: "/studio/schedule/baselines",
+        icon: "GitBranch",
+        sub: "Snapshots For Slip Tracking",
+      },
       { label: "Look-Ahead", href: "/studio/operations/look-ahead", icon: "Telescope", sub: "Rolling 2-Week Plan" },
       { label: "Tasks", href: "/studio/tasks", icon: "ListTodo", sub: "Assigned Work · Lands In My Work" },
       { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ScrollText", sub: "The Signed Site Record" },
@@ -582,7 +848,12 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Annotations", href: "/studio/annotations", icon: "AlertTriangle", sub: "Pinned Notes On Plans" },
       { label: "Forms", href: "/studio/forms", icon: "ClipboardList", sub: "Field Forms & Responses" },
       { label: "Guides", href: "/studio/guides", icon: "Atlas", sub: "Know-Before-You-Go Guides" },
-      { label: "Reservations", href: "/studio/operations/reservations", icon: "ConciergeBell", sub: "Space Holds & Confirmations" },
+      {
+        label: "Reservations",
+        href: "/studio/operations/reservations",
+        icon: "ConciergeBell",
+        sub: "Space Holds & Confirmations",
+      },
       // Cross-cutting org-level sustainability rollup (was Operations ▸ Reporting).
       { label: "Sustainability", href: "/studio/sustainability", icon: "Leaf", sub: "Footprint & Diversion Rollup" },
     ],
@@ -595,10 +866,26 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Transport", href: "/studio/transport", icon: "Truck", sub: "Ground Moves & Runs" },
       { label: "Dispatch", href: "/studio/transport/dispatch", icon: "Send", sub: "Driver & Vehicle Dispatch" },
       { label: "Freight", href: "/studio/logistics/freight", icon: "Container", sub: "Carrier Shipments & Customs" },
-      { label: "Warehouse", href: "/studio/logistics/warehouse", icon: "Warehouse", sub: "Storage Lots & Bins" },
-      { label: "Disposition", href: "/studio/logistics/disposition", icon: "PackageOpen", sub: "Sell · Store · Scrap Decisions" },
-      { label: "Catering", href: "/studio/logistics/services", icon: "UtensilsCrossed", sub: "Meals & Service Vendors" },
-      { label: "Accommodation", href: "/studio/accommodation", icon: "BedDouble", sub: "Rooms, Blocks & Rooming Lists" },
+      // Warehouse rail item retired (kit 20 Phase A): /studio/logistics/warehouse
+      // is now the Lots lens of Assets & Inventory, reached via its tab family.
+      {
+        label: "Disposition",
+        href: "/studio/logistics/disposition",
+        icon: "PackageOpen",
+        sub: "Sell · Store · Scrap Decisions",
+      },
+      {
+        label: "Catering",
+        href: "/studio/logistics/services",
+        icon: "UtensilsCrossed",
+        sub: "Meals & Service Vendors",
+      },
+      {
+        label: "Accommodation",
+        href: "/studio/accommodation",
+        icon: "BedDouble",
+        sub: "Rooms, Blocks & Rooming Lists",
+      },
     ],
   },
   {
@@ -615,15 +902,35 @@ export const platformNavDomain: NavGroup[] = [
           // F-E: point at the canonical CRUD home (kanban / new / detail), not
           // the cross-domain read feed at /studio/safety/incidents (which is
           // the Safety group hub + stays reachable via cross-links).
-          { label: "Incidents", href: "/studio/operations/incidents", icon: "Siren", sub: "Report It · Spawns Corrective Tasks" },
+          {
+            label: "Incidents",
+            href: "/studio/operations/incidents",
+            icon: "Siren",
+            sub: "Report It · Spawns Corrective Tasks",
+          },
           { label: "Major Incident", href: "/studio/safety/major-incident", icon: "Flame", sub: "MIM Bridge & Comms" },
           { label: "Crisis", href: "/studio/safety/crisis", icon: "Flame", sub: "Crisis Playbook Activation" },
           { label: "Medical", href: "/studio/safety/medical", icon: "Stethoscope", sub: "Medical Log & Treatments" },
-          { label: "Safeguarding", href: "/studio/safety/safeguarding", icon: "HeartHandshake", sub: "Welfare & Vulnerable Persons" },
-          { label: "Guard Tours", href: "/studio/safety/guard-tours", icon: "ShieldCheck", sub: "Patrol Routes & Checkpoints" },
+          {
+            label: "Safeguarding",
+            href: "/studio/safety/safeguarding",
+            icon: "HeartHandshake",
+            sub: "Welfare & Vulnerable Persons",
+          },
+          {
+            label: "Guard Tours",
+            href: "/studio/safety/guard-tours",
+            icon: "ShieldCheck",
+            sub: "Patrol Routes & Checkpoints",
+          },
           // Kit v7 CameraScanner archetype — fixed-station gate credential scan.
           { label: "Access Control", href: "/studio/access-control", icon: "BadgeCheck", sub: "Gate Scans & Zones" },
-          { label: "Environmental", href: "/studio/safety/environmental", icon: "Leaf", sub: "Weather & Environmental Triggers" },
+          {
+            label: "Environmental",
+            href: "/studio/safety/environmental",
+            icon: "Leaf",
+            sub: "Weather & Environmental Triggers",
+          },
           { label: "Threats", href: "/studio/safety/threats", icon: "ShieldAlert", sub: "Security Threat Register" },
         ],
       },
@@ -632,9 +939,19 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Inspections", href: "/studio/inspections", icon: "Search", sub: "Scheduled Checks & Findings" },
           { label: "OSHA 300", href: "/studio/safety/osha", icon: "ShieldAlert", sub: "Recordable Injury Log" },
-          { label: "Briefings", href: "/studio/safety/briefings", icon: "ClipboardPlus", sub: "Toolbox Talks & Sign-Ins" },
+          {
+            label: "Briefings",
+            href: "/studio/safety/briefings",
+            icon: "ClipboardPlus",
+            sub: "Toolbox Talks & Sign-Ins",
+          },
           { label: "Playbooks", href: "/studio/safety/playbooks", icon: "BookOpenCheck", sub: "Response Procedures" },
-          { label: "Chain of Custody", href: "/studio/compliance/coc", icon: "FileSignature", sub: "Evidence Handling Log" },
+          {
+            label: "Chain of Custody",
+            href: "/studio/compliance/coc",
+            icon: "FileSignature",
+            sub: "Evidence Handling Log",
+          },
         ],
       },
     ],
@@ -648,15 +965,30 @@ export const platformNavDomain: NavGroup[] = [
       { label: "Events", href: "/studio/events", icon: "CalendarDays", sub: "Public Event Listings" },
       { label: "Meetings", href: "/studio/meetings", icon: "CalendarDays", sub: "Agendas & Attendance" },
       { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText", sub: "Minutes & Decisions" },
-      { label: "Announcements", href: "/studio/comms/announcements", icon: "Megaphone", sub: "Broadcast To The Workforce" },
+      {
+        label: "Announcements",
+        href: "/studio/comms/announcements",
+        icon: "Megaphone",
+        sub: "Broadcast To The Workforce",
+      },
       { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3", sub: "Quick Votes" },
       { label: "Surveys", href: "/studio/comms/surveys", icon: "ClipboardCheck", sub: "Structured Feedback Runs" },
       { label: "Channels", href: "/studio/comms/channels", icon: "MessageSquare", sub: "Radio & Comms Channel Plan" },
-      { label: "Whiteboards", href: "/studio/collaborate/whiteboards", icon: "Presentation", sub: "Freeform Canvas Boards" },
+      {
+        label: "Whiteboards",
+        href: "/studio/collaborate/whiteboards",
+        icon: "Presentation",
+        sub: "Freeform Canvas Boards",
+      },
       { label: "Transmittals", href: "/studio/transmittals", icon: "Send", sub: "Formal Document Handoffs" },
       { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox", sub: "Shared Org Mailbox" },
       { label: "RFIs", href: "/studio/rfis", icon: "MessageCircleQuestion", sub: "Requests For Information" },
-      { label: "Service Desk", href: "/studio/services/requests", icon: "ConciergeBell", sub: "IT & Facilities Tickets" },
+      {
+        label: "Service Desk",
+        href: "/studio/services/requests",
+        icon: "ConciergeBell",
+        sub: "IT & Facilities Tickets",
+      },
       { label: "TOC — ITIL", href: "/studio/ops/toc", icon: "Network", sub: "Tech Ops Center · Service Health" },
     ],
   },
@@ -678,7 +1010,12 @@ export const platformNavDomain: NavGroup[] = [
       // engine at /studio/documents is the canonical Documents home; these
       // are Notion-style block pages.
       { label: "Pages", href: "/studio/collaborate/docs", icon: "FileText", sub: "Block-Based Collaborative Pages" },
-      { label: "Sheets", href: "/studio/collaborate/sheets", icon: "FileSpreadsheet", sub: "Lightweight Grid Workspaces" },
+      {
+        label: "Sheets",
+        href: "/studio/collaborate/sheets",
+        icon: "FileSpreadsheet",
+        sub: "Lightweight Grid Workspaces",
+      },
       // Kit v7 component archetypes — RichTextEditor notes + KanbanBoard.
       { label: "Notes", href: "/studio/notes", icon: "FileText", sub: "Rich-Text Scratch Notes" },
       { label: "Board", href: "/studio/board", icon: "Layers", sub: "Freeform Kanban" },

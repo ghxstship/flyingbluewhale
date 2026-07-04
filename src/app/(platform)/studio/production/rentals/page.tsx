@@ -1,8 +1,11 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { AssetsTabs } from "@/components/assets/AssetsTabs";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate, formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -15,7 +18,7 @@ export default async function RentalsPage() {
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title={t("console.production.rentals.title", undefined, "Rentals")} />
+        <ModuleHeader title={t("console.production.rentals.title", undefined, "Sub-Rentals")} />
         <div className="page-content">
           <div className="surface p-6 text-sm">
             {t("console.production.rentals.configureSupabase", undefined, "Configure Supabase.")}
@@ -25,11 +28,17 @@ export default async function RentalsPage() {
     );
   const session = await requireSession();
   const rows = await listOrgScoped("rentals", session.orgId, { orderBy: "starts_at" });
+  const supabase = await createClient();
+  const assetIds = Array.from(new Set(rows.map((r) => r.asset_id).filter(Boolean)));
+  const { data: assets } = assetIds.length
+    ? await supabase.from("assets").select("id, display_name, asset_tag").in("id", assetIds)
+    : { data: [] as { id: string; display_name: string; asset_tag: string | null }[] };
+  const assetById = new Map((assets ?? []).map((a) => [a.id, a]));
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.production.rentals.eyebrow", undefined, "Production")}
-        title={t("console.production.rentals.title", undefined, "Rentals")}
+        title={t("console.production.rentals.title", undefined, "Sub-Rentals")}
         subtitle={t("console.production.rentals.subtitle", { count: rows.length }, `${rows.length} Active  rentals`)}
         action={
           <Button href="/studio/production/rentals/new">
@@ -38,6 +47,7 @@ export default async function RentalsPage() {
         }
       />
       <div className="page-content">
+        <AssetsTabs active="/studio/production/rentals" />
         <DataTable<Rental>
           rows={rows}
           rowHref={(r) => `/studio/production/rentals/${r.id}`}
@@ -54,10 +64,17 @@ export default async function RentalsPage() {
           }
           columns={[
             {
-              key: "equipment_id",
-              header: t("console.production.rentals.columns.equipment", undefined, "Equipment"),
-              render: (r) => <span className="font-mono text-xs">{r.equipment_id.slice(0, 8)}</span>,
-              accessor: (r) => r.equipment_id.slice ?? null,
+              key: "asset_id",
+              header: t("console.production.rentals.columns.asset", undefined, "Asset"),
+              render: (r) => {
+                const asset = assetById.get(r.asset_id);
+                return (
+                  <Link href={`/studio/assets/${r.asset_id}`} className="hover:underline">
+                    {asset?.display_name ?? r.asset_id.slice(0, 8)}
+                  </Link>
+                );
+              },
+              accessor: (r) => assetById.get(r.asset_id)?.display_name ?? r.asset_id,
             },
             {
               key: "starts",

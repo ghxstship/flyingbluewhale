@@ -11,11 +11,11 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 export const dynamic = "force-dynamic";
 
 type Row = {
-  equipment_id: string;
-  category: string | null;
+  asset_id: string;
+  asset_kind: string | null;
   name: string;
   asset_tag: string | null;
-  status: string;
+  state: string;
   daily_rate_cents: number | null;
   movements_30d: number;
   movements_90d: number;
@@ -49,9 +49,9 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
 
   const { data } = await supabase
-    .from("v_equipment_utilization")
+    .from("v_asset_utilization")
     .select(
-      "equipment_id, category, name, asset_tag, status, daily_rate_cents, movements_30d, movements_90d, reserved_days_30d, reserved_days_90d, utilization_pct_30d, utilization_pct_90d, idle_revenue_30d_cents, last_active_at",
+      "asset_id, asset_kind, name, asset_tag, state, daily_rate_cents, movements_30d, movements_90d, reserved_days_30d, reserved_days_90d, utilization_pct_30d, utilization_pct_90d, idle_revenue_30d_cents, last_active_at",
     )
     .eq("org_id", session.orgId)
     .order("utilization_pct_30d", { ascending: true })
@@ -59,8 +59,8 @@ export default async function Page() {
 
   const rows = (data ?? []) as unknown as Row[];
 
-  // DataTable requires an `id`; equipment_id is unique.
-  const tableRows = rows.map((r) => ({ ...r, id: r.equipment_id }));
+  // DataTable requires an `id`; asset_id is unique.
+  const tableRows = rows.map((r) => ({ ...r, id: r.asset_id }));
 
   const idleCount = rows.filter((r) => Number(r.utilization_pct_30d ?? 0) < 25).length;
   const totalIdleRevenue = rows.reduce((s, r) => s + Number(r.idle_revenue_30d_cents ?? 0), 0);
@@ -99,6 +99,7 @@ export default async function Page() {
         </div>
         <DataTable
           rows={tableRows}
+          rowHref={(r) => `/studio/assets/${r.asset_id}`}
           emptyLabel={t("console.production.equipment.utilization.emptyLabel", undefined, "No equipment yet")}
           emptyDescription={t(
             "console.production.equipment.utilization.emptyDescription",
@@ -120,10 +121,10 @@ export default async function Page() {
               className: "font-mono text-xs",
             },
             {
-              key: "category",
+              key: "asset_kind",
               header: t("console.production.equipment.utilization.col.category", undefined, "Category"),
-              render: (r) => r.category ?? "—",
-              accessor: (r) => r.category,
+              render: (r) => r.asset_kind ?? "—",
+              accessor: (r) => r.asset_kind,
               filterable: true,
               groupable: true,
               className: "text-xs",

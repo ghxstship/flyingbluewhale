@@ -43,7 +43,9 @@ const resolvers: Record<string, DocResolver> = {
   async proposal(db, orgId, id) {
     const { data: p } = await db
       .from("proposals")
-      .select("title, amount_cents, currency, deposit_percent, doc_number, sent_at, created_at, blocks, client_id, project_id")
+      .select(
+        "title, amount_cents, currency, deposit_percent, doc_number, sent_at, created_at, blocks, client_id, project_id",
+      )
       .eq("id", id)
       .eq("org_id", orgId)
       .maybeSingle();
@@ -108,7 +110,11 @@ const resolvers: Record<string, DocResolver> = {
       .maybeSingle();
     if (!est) return null;
     const [{ data: lines }, client, { data: org }] = await Promise.all([
-      db.from("estimate_lines").select("description, line_total, ordinal").eq("estimate_id", id).order("ordinal", { ascending: true }),
+      db
+        .from("estimate_lines")
+        .select("description, line_total, ordinal")
+        .eq("estimate_id", id)
+        .order("ordinal", { ascending: true }),
       clientForProject(db, est.project_id),
       db.from("orgs").select("default_currency").eq("id", orgId).maybeSingle(),
     ]);
@@ -285,12 +291,7 @@ const resolvers: Record<string, DocResolver> = {
 
   // ── GVTEWAY ────────────────────────────────────────────────────────────────
   async guestlist(db, orgId, id) {
-    const { data: gl } = await db
-      .from("guest_lists")
-      .select("name")
-      .eq("id", id)
-      .eq("org_id", orgId)
-      .maybeSingle();
+    const { data: gl } = await db.from("guest_lists").select("name").eq("id", id).eq("org_id", orgId).maybeSingle();
     if (!gl) return null;
     const { data: entries } = await db
       .from("guest_list_entries")
@@ -421,23 +422,23 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async pullsheet(db, orgId, projectId) {
-    // A pull sheet is the equipment pulled for a project (its rentals).
+    // A pull sheet is the assets pulled for a project (its rentals).
     const { data: rentals } = await db
       .from("rentals")
-      .select("equipment_id, created_at")
+      .select("asset_id, created_at")
       .eq("org_id", orgId)
       .eq("project_id", projectId)
       .order("created_at", { ascending: true });
     if (!rentals || rentals.length === 0) return null;
-    const ids = rentals.map((r) => r.equipment_id).filter(Boolean) as string[];
-    const { data: equip } = ids.length
-      ? await db.from("equipment").select("id, name").in("id", ids)
-      : { data: [] as { id: string; name: string }[] };
-    const nameById = new Map((equip ?? []).map((e) => [e.id, e.name]));
+    const ids = rentals.map((r) => r.asset_id).filter(Boolean) as string[];
+    const { data: assets } = ids.length
+      ? await db.from("assets").select("id, display_name").in("id", ids)
+      : { data: [] as { id: string; display_name: string }[] };
+    const nameById = new Map((assets ?? []).map((a) => [a.id, a.display_name]));
     return {
       pull: {
         id: shortId(projectId),
-        ...Object.fromEntries(rentals.map((r, i) => [String(i), { asset: nameById.get(r.equipment_id ?? "") }])),
+        ...Object.fromEntries(rentals.map((r, i) => [String(i), { asset: nameById.get(r.asset_id ?? "") }])),
       },
     };
   },
@@ -520,7 +521,11 @@ const resolvers: Record<string, DocResolver> = {
     if (!r) return null;
     return {
       event: { name: r.event_name, date: date(r.event_date) },
-      recap: { headline: r.headline, attendance: r.attendance != null ? String(r.attendance) : undefined, summary: r.summary },
+      recap: {
+        headline: r.headline,
+        attendance: r.attendance != null ? String(r.attendance) : undefined,
+        summary: r.summary,
+      },
       site: { name: r.site_name },
     };
   },
@@ -552,7 +557,9 @@ const resolvers: Record<string, DocResolver> = {
         assessor: r.assessor,
         date: date(r.assessed_on),
         method: r.method,
-        ...Object.fromEntries((Array.isArray(r.hazards) ? r.hazards : []).map((h: unknown, i: number) => [String(i), h])),
+        ...Object.fromEntries(
+          (Array.isArray(r.hazards) ? r.hazards : []).map((h: unknown, i: number) => [String(i), h]),
+        ),
       },
     };
   },
@@ -585,7 +592,14 @@ const resolvers: Record<string, DocResolver> = {
     if (!e) return null;
     return {
       event: { name: e.event_name },
-      erp: { scope: e.scope, rev: e.rev, approver: e.approver, date: date(e.approved_on), evac: e.evac, ic: e.ic_contact },
+      erp: {
+        scope: e.scope,
+        rev: e.rev,
+        approver: e.approver,
+        date: date(e.approved_on),
+        evac: e.evac,
+        ic: e.ic_contact,
+      },
       site: { hospital: e.hospital },
     };
   },
@@ -667,7 +681,12 @@ const resolvers: Record<string, DocResolver> = {
 
 async function ticketHolderName(
   db: DB,
-  a: { party_kind: string | null; party_user_id: string | null; party_crew_id: string | null; party_external_id: string | null },
+  a: {
+    party_kind: string | null;
+    party_user_id: string | null;
+    party_crew_id: string | null;
+    party_external_id: string | null;
+  },
 ): Promise<string | undefined> {
   if (a.party_user_id) {
     const { data } = await db.from("users").select("name").eq("id", a.party_user_id).maybeSingle();
@@ -678,7 +697,11 @@ async function ticketHolderName(
     return data?.name ?? undefined;
   }
   if (a.party_external_id) {
-    const { data } = await db.from("assignment_external_holders").select("holder_name").eq("id", a.party_external_id).maybeSingle();
+    const { data } = await db
+      .from("assignment_external_holders")
+      .select("holder_name")
+      .eq("id", a.party_external_id)
+      .maybeSingle();
     return data?.holder_name ?? undefined;
   }
   return undefined;
@@ -706,7 +729,12 @@ export function supportsRecordBinding(docType: string): boolean {
 }
 
 /** Resolve a record to its document data object, or null if unbound/absent. */
-export async function resolveDocData(docType: string, db: DB, orgId: string, recordId: string): Promise<DocData | null> {
+export async function resolveDocData(
+  docType: string,
+  db: DB,
+  orgId: string,
+  recordId: string,
+): Promise<DocData | null> {
   const fn = resolvers[docType];
   if (!fn) return null;
   return fn(db, orgId, recordId);

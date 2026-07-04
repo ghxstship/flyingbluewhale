@@ -8,38 +8,38 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1156 · **API route handlers:** 145 · **Distinct nav hrefs:** 493
+**Page routes:** 1152 · **API route handlers:** 145 · **Distinct nav hrefs:** 486
 
 ## Legend
 
-| Mark | Status | Meaning |
-|------|--------|---------|
-| ● | `nav` | Exact path is a nav href — directly clickable from a rail/tab/header/footer. |
-| ○ | `linked` | Module is in nav; route reached via in-page link or CRUD child (`/new`, `/[id]`, deep sub-modules, or dynamic SEO children). |
-| ⚠ | `orphan` | **Nothing** in this module appears anywhere in `nav.ts` — invisible to navigation. |
-| · | `exempt` | Intentionally not in nav — redirect / token / locale / contextual entry (see "Exempt routes" below). |
+| Mark | Status   | Meaning                                                                                                                      |
+| ---- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| ●    | `nav`    | Exact path is a nav href — directly clickable from a rail/tab/header/footer.                                                 |
+| ○    | `linked` | Module is in nav; route reached via in-page link or CRUD child (`/new`, `/[id]`, deep sub-modules, or dynamic SEO children). |
+| ⚠    | `orphan` | **Nothing** in this module appears anywhere in `nav.ts` — invisible to navigation.                                           |
+| ·    | `exempt` | Intentionally not in nav — redirect / token / locale / contextual entry (see "Exempt routes" below).                         |
 
 **Every shell is now reconciled against `nav.ts`** — the rails (platform/mobile/portal), the marketing header + footer (`marketingHeaderGroups` / `marketingFooterGroups`), and the `/me` tabs (`personalNavGroups`) all source their links from `nav.ts`, and the components render that data. There is no longer an unmeasured self-navigating shell.
 
 ## Reconciliation scorecard
 
-| Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
-|-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 767 | 226 | 540 | 0 | 1 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
-| LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
-| Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
-| Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1156** | **467** | **649** | **0** | **40** |
+| Shell                        | Nav source                                    |   Routes |   ● nav | ○ linked | ⚠ orphan | · exempt |
+| ---------------------------- | --------------------------------------------- | -------: | ------: | -------: | -------: | -------: |
+| ATLVS — Operator Console     | platformNav rail                              |      763 |     219 |      543 |        0 |        1 |
+| COMPVSS — Field PWA          | mobileTabs / mobileSurfaces                   |       54 |      39 |       13 |        0 |        2 |
+| GVTEWAY — External Portal    | portalNav rail                                |      150 |     127 |       20 |        0 |        3 |
+| LEG3ND — Knowledge Shell     | legendNav rail                                |       40 |      21 |       19 |        0 |        0 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups |       93 |      33 |       51 |        0 |        9 |
+| Personal (/me)               | personalNavGroups (tabs)                      |       25 |      19 |        6 |        0 |        0 |
+| Auth                         | marketing header auth links + token flows     |       13 |       2 |        0 |        0 |       11 |
+| **TOTAL**                    |                                               | **1152** | **460** |  **652** |    **0** |   **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
 These trees exist on disk and are routable, but nothing in `nav.ts` links to them. They are the primary reconciliation target.
 
 | Shell | Module | Orphaned routes |
-|-------|--------|----------------:|
+| ----- | ------ | --------------: |
 
 ## 🔗 Dangling nav hrefs (0) — links with no page on disk
 
@@ -53,39 +53,39 @@ _None — every role/phase priority href is a registered `mobileSurfaces` entry.
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
-| Match | Type | Reason |
-|-------|------|--------|
-| `/studio/advancing/request` | exact | One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu. |
-| `/p/[slug]` | exact | Portal gateway — persona picker / redirect to the viewer's persona home. |
-| `/p/select` | exact | Org/slug picker — reached when a portal user has no resolved slug. |
-| `/p` | exact | GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item). |
-| `/` | exact | Home — reached via the logo, not a nav entry. |
-| `/es-ES` | prefix | i18n locale root. |
-| `/pt-BR` | prefix | i18n locale root. |
-| `/api-docs` | prefix | API reference microsite. |
-| `/brand-kit` | prefix | Brand-kit microsite. |
-| `/demo` | prefix | Demo-booking flow. |
-| `/pitch` | prefix | pitch deck presenter surface |
-| `/forms` | prefix | Embedded campaign/SEO form pages. |
-| `/offer` | prefix | Token-gated offer flow. |
-| `/proposals` | prefix | Token-gated proposal flow. |
-| `/msa` | prefix | Token-gated MSA flow. |
-| `/share` | prefix | Token-gated share link. |
-| `/sign` | prefix | Token-gated public e-signature flow (emailed signing link). |
-| `/accept-invite` | prefix | Token-gated invite acceptance. |
-| `/auth` | prefix | Auth resolver / redirect. |
-| `/forgot-password` | prefix | Auth recovery flow. |
-| `/reset-password` | prefix | Auth recovery flow. |
-| `/magic-link` | prefix | Auth passwordless flow. |
-| `/mfa` | prefix | Auth MFA challenge. |
-| `/sso` | prefix | Auth SSO entry. |
-| `/verify-email` | prefix | Auth email verification. |
-| `/onboarding` | prefix | Post-signup org onboarding flow. |
-| `/home` | exact | Post-auth app launcher — reached via auth redirect, not a nav click. |
-| `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
-| `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
-| `/social` | prefix | social image asset endpoint |
-| `/studio/settings/impersonate` | exact | dev-only impersonation console (isDeveloper-gated, notFound otherwise) |
+| Match                          | Type   | Reason                                                                                                                   |
+| ------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `/studio/advancing/request`    | exact  | One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu.             |
+| `/p/[slug]`                    | exact  | Portal gateway — persona picker / redirect to the viewer's persona home.                                                 |
+| `/p/select`                    | exact  | Org/slug picker — reached when a portal user has no resolved slug.                                                       |
+| `/p`                           | exact  | GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item). |
+| `/`                            | exact  | Home — reached via the logo, not a nav entry.                                                                            |
+| `/es-ES`                       | prefix | i18n locale root.                                                                                                        |
+| `/pt-BR`                       | prefix | i18n locale root.                                                                                                        |
+| `/api-docs`                    | prefix | API reference microsite.                                                                                                 |
+| `/brand-kit`                   | prefix | Brand-kit microsite.                                                                                                     |
+| `/demo`                        | prefix | Demo-booking flow.                                                                                                       |
+| `/pitch`                       | prefix | pitch deck presenter surface                                                                                             |
+| `/forms`                       | prefix | Embedded campaign/SEO form pages.                                                                                        |
+| `/offer`                       | prefix | Token-gated offer flow.                                                                                                  |
+| `/proposals`                   | prefix | Token-gated proposal flow.                                                                                               |
+| `/msa`                         | prefix | Token-gated MSA flow.                                                                                                    |
+| `/share`                       | prefix | Token-gated share link.                                                                                                  |
+| `/sign`                        | prefix | Token-gated public e-signature flow (emailed signing link).                                                              |
+| `/accept-invite`               | prefix | Token-gated invite acceptance.                                                                                           |
+| `/auth`                        | prefix | Auth resolver / redirect.                                                                                                |
+| `/forgot-password`             | prefix | Auth recovery flow.                                                                                                      |
+| `/reset-password`              | prefix | Auth recovery flow.                                                                                                      |
+| `/magic-link`                  | prefix | Auth passwordless flow.                                                                                                  |
+| `/mfa`                         | prefix | Auth MFA challenge.                                                                                                      |
+| `/sso`                         | prefix | Auth SSO entry.                                                                                                          |
+| `/verify-email`                | prefix | Auth email verification.                                                                                                 |
+| `/onboarding`                  | prefix | Post-signup org onboarding flow.                                                                                         |
+| `/home`                        | exact  | Post-auth app launcher — reached via auth redirect, not a nav click.                                                     |
+| `/m/changelog`                 | exact  | COMPVSS What's New — reached from Settings, not a nav tab.                                                               |
+| `/m/settings/account`          | exact  | account lifecycle sub-screen, reached from /m/settings                                                                   |
+| `/social`                      | prefix | social image asset endpoint                                                                                              |
+| `/studio/settings/impersonate` | exact  | dev-only impersonation console (isDeveloper-gated, notFound otherwise)                                                   |
 
 ---
 
@@ -93,7 +93,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-767 routes — ● 226 nav · ○ 540 linked · ⚠ 0 orphan
+763 routes — ● 219 nav · ○ 543 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 1 route</summary>
 
@@ -174,12 +174,17 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>assets</code> · 5 routes</summary>
+<details><summary><code>assets</code> · 10 routes</summary>
 
 ● `/studio/assets`
 ○ `/studio/assets/[id]`
+○ `/studio/assets/[id]/edit`
+○ `/studio/assets/[id]/qr`
 ○ `/studio/assets/new`
-● `/studio/assets/warranties`
+○ `/studio/assets/power`
+○ `/studio/assets/pull-sheets`
+○ `/studio/assets/scans`
+○ `/studio/assets/warranties`
 ○ `/studio/assets/warranties/new`
 
 </details>
@@ -578,7 +583,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/logistics/ratecard/[itemId]/edit`
 ○ `/studio/logistics/ratecard/new`
 ● `/studio/logistics/services`
-● `/studio/logistics/warehouse`
+○ `/studio/logistics/warehouse`
 
 </details>
 
@@ -816,36 +821,27 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>production</code> · 32 routes</summary>
+<details><summary><code>production</code> · 23 routes</summary>
 
 ● `/studio/production`
-● `/studio/production/av`
+○ `/studio/production/av`
 ● `/studio/production/compounds`
 ○ `/studio/production/dispatch`
 ○ `/studio/production/dispatch/[dispatchId]`
 ● `/studio/production/dispatch/live`
-● `/studio/production/equipment`
-○ `/studio/production/equipment/[equipmentId]`
-○ `/studio/production/equipment/[equipmentId]/edit`
-○ `/studio/production/equipment/[equipmentId]/maintenance`
-○ `/studio/production/equipment/[equipmentId]/qr`
-○ `/studio/production/equipment/[equipmentId]/rentals`
-○ `/studio/production/equipment/new`
-● `/studio/production/equipment/utilization`
+○ `/studio/production/equipment`
+○ `/studio/production/equipment/utilization`
 ● `/studio/production/fabrication`
 ○ `/studio/production/fabrication/[orderId]`
 ○ `/studio/production/fabrication/[orderId]/edit`
 ○ `/studio/production/fabrication/new`
 ● `/studio/production/logistics`
-● `/studio/production/rentals`
+○ `/studio/production/rentals`
 ○ `/studio/production/rentals/[rentalId]`
 ○ `/studio/production/rentals/[rentalId]/edit`
 ○ `/studio/production/rentals/availability`
 ○ `/studio/production/rentals/new`
 ● `/studio/production/ros`
-● `/studio/production/warehouse`
-○ `/studio/production/warehouse/inventory`
-○ `/studio/production/warehouse/locations`
 ● `/studio/production/work-orders`
 ○ `/studio/production/work-orders/[id]`
 ○ `/studio/production/work-orders/[id]/thread`
@@ -2439,7 +2435,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ---
 
 ## API surface (`/api/v1`) — 145 route handlers
-
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
 

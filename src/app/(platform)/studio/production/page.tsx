@@ -26,11 +26,9 @@ export default async function Page() {
           </h2>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Link className="surface hover-lift p-4" href="/studio/production/equipment">
-              <div className="text-sm font-medium">
-                {t("console.production.hub.cards.equipment", undefined, "Equipment")}
-              </div>
+              <div className="text-sm font-medium">{t("console.production.hub.cards.fleet", undefined, "Fleet")}</div>
               <div className="mt-1 text-xs text-[var(--p-text-2)]">
-                {t("console.production.hub.cards.equipmentDesc", undefined, "Owned assets + maintenance")}
+                {t("console.production.hub.cards.fleetDesc", undefined, "Owned assets + maintenance")}
               </div>
             </Link>
             <Link className="surface hover-lift p-4" href="/studio/production/equipment/utilization">
@@ -69,7 +67,7 @@ export default async function Page() {
                 {t("console.production.hub.cards.compounds", undefined, "Compounds")}
               </div>
             </Link>
-            <Link className="surface hover-lift p-4" href="/studio/production/warehouse">
+            <Link className="surface hover-lift p-4" href="/studio/logistics/warehouse">
               <div className="text-sm font-medium">{t("console.production.hub.cards.yard", undefined, "Yard")}</div>
             </Link>
             <Link className="surface hover-lift p-4" href="/studio/punch">

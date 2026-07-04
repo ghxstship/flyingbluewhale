@@ -100,30 +100,12 @@
     "BOARD": {
       "name": "Kanban / pipeline",
       "desc": "Draggable columns of cards.",
-      "components": [
-        "KanbanBoard",
-        "Card",
-        "Badge",
-        "Tag",
-        "Avatar",
-        "FilterBar",
-        "Menu",
-        "EmptyState"
-      ]
+      "components": ["KanbanBoard", "Card", "Badge", "Tag", "Avatar", "FilterBar", "Menu", "EmptyState"]
     },
     "CAL": {
       "name": "Calendar / schedule",
       "desc": "Month/week/day + timeline.",
-      "components": [
-        "Calendar",
-        "GanttChart",
-        "SegmentedControl",
-        "Tabs",
-        "Badge",
-        "Tag",
-        "Menu",
-        "Button"
-      ]
+      "components": ["Calendar", "GanttChart", "SegmentedControl", "Tabs", "Badge", "Tag", "Menu", "Button"]
     },
     "RPT": {
       "name": "Report / analytics",
@@ -163,45 +145,17 @@
     "COMM": {
       "name": "Messages / inbox",
       "desc": "Threads, chat, announcements.",
-      "components": [
-        "ChatBubble",
-        "Avatar",
-        "Badge",
-        "Banner",
-        "Field",
-        "Input",
-        "Menu",
-        "EmptyState",
-        "Button"
-      ]
+      "components": ["ChatBubble", "Avatar", "Badge", "Banner", "Field", "Input", "Menu", "EmptyState", "Button"]
     },
     "AUTH": {
       "name": "Auth",
       "desc": "Split card: login, signup, invite.",
-      "components": [
-        "AuthCard",
-        "Field",
-        "Input",
-        "Checkbox",
-        "Banner",
-        "Spinner",
-        "Button"
-      ]
+      "components": ["AuthCard", "Field", "Input", "Checkbox", "Banner", "Spinner", "Button"]
     },
     "MKTG": {
       "name": "Marketing / landing",
       "desc": "Hero, features, pricing, FAQ.",
-      "components": [
-        "PlanCard",
-        "MediaCard",
-        "Card",
-        "Accordion",
-        "Tag",
-        "Badge",
-        "Banner",
-        "Avatar",
-        "Button"
-      ]
+      "components": ["PlanCard", "MediaCard", "Card", "Accordion", "Tag", "Badge", "Banner", "Avatar", "Button"]
     },
     "SHOP": {
       "name": "Marketplace / store",
@@ -314,70 +268,47 @@
           "routes": [
             {
               "path": "/studio",
-              "arch": [
-                "SHELL"
-              ]
+              "arch": ["SHELL"]
             },
             {
               "path": "/studio/my-work",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/dashboards",
-              "arch": [
-                "RPT",
-                "BOARD"
-              ]
+              "arch": ["RPT", "BOARD"]
             },
             {
               "path": "/studio/reports",
-              "arch": [
-                "RPT"
-              ]
+              "arch": ["RPT"]
             },
             {
               "path": "/studio/goals",
-              "arch": [
-                "RPT"
-              ]
+              "arch": ["RPT"]
             },
             {
               "path": "/studio/position",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/assistant",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/copilot",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/notifications/inbox",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/studio/triage",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/inbox",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             }
           ]
         },
@@ -386,117 +317,79 @@
           "routes": [
             {
               "path": "/studio/projects",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/programs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/venues",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/proposals",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/documents",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/proposals/templates",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/templates",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/kits",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/site-plans",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/drawings",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/specs",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/bim",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/takeoffs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/estimates",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/programs/risk",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/risk",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/programs/readiness",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/programs/reviews",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/governance/approvals",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -505,111 +398,51 @@
           "routes": [
             {
               "path": "/studio/production",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/equipment",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/equipment/utilization",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/av",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/rentals",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/assets",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/assets/warranties",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/production/fabrication",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/production/compounds",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/production/warehouse",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/punch",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/studio/captures",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/photos",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/warranties",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/production/ros",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/production/work-orders",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/production/dispatch/live",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/production/logistics",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -618,112 +451,75 @@
           "routes": [
             {
               "path": "/studio/people",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/people/teams",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/people/msas",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/people/offer-letters",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/participants/delegations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/participants/visa",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/accreditation",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce/rosters",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce/training",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/learn",
-              "arch": [
-                "LMS"
-              ]
+              "arch": ["LMS"]
             },
             {
               "path": "/studio/knowledge",
-              "arch": [
-                "LMS"
-              ]
+              "arch": ["LMS"]
             },
             {
               "path": "/studio/workforce/onboarding",
-              "arch": [
-                "BOARD",
-                "AUTH"
-              ]
+              "arch": ["BOARD", "AUTH"]
             },
             {
               "path": "/studio/workforce/time-off",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce/shift-swaps",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce/recognition",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce/badges",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/workforce/forecast",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -732,147 +528,99 @@
           "routes": [
             {
               "path": "/studio/sales",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/pipeline",
-              "arch": [
-                "BOARD"
-              ]
+              "arch": ["BOARD"]
             },
             {
               "path": "/studio/leads",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/clients",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/commercial/sponsors",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/marketing",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/campaigns",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/sales/diary",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/sales/beos",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/commercial/hospitality",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/commercial/hospitality?audience=guest",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/marketplace",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/bookings",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/agency/tours",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/agency/roster",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/marketplace/talent",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/marketplace/offers",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/marketplace/inquiries",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/marketplace/box-office",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/marketplace/discounts",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/revenue/orders",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/revenue/transactions",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/revenue/payouts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/insights",
-              "arch": [
-                "RPT"
-              ]
+              "arch": ["RPT"]
             }
           ]
         },
@@ -881,147 +629,99 @@
           "routes": [
             {
               "path": "/studio/finance",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/invoices",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/pay-apps",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/sub-invoices",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/lien-waivers",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/envelopes",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/finance/ap-ocr",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/expenses",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/mileage",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/payouts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/entities",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/cost-codes",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/accounts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/ledger",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/budgets",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/wip",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/forecasts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/periods",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/reports",
-              "arch": [
-                "RPT"
-              ]
+              "arch": ["RPT"]
             },
             {
               "path": "/studio/finance/tax",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/time",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/timesheets",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/finance/payroll",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/subscriptions",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -1030,124 +730,83 @@
           "routes": [
             {
               "path": "/studio/procurement",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/vendors",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/prequalification",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/compliance",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/network",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/marketplace",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/procurement/scorecard",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/sourcing",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/rfqs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/itb",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/requisitions",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/purchase-orders",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/receiving",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/po-change-orders",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/procurement/wo-broadcasts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/legal/contracts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/logistics/ratecard",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/submittals",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/settings/catalog",
-              "arch": [
-                "SET",
-                "SHOP"
-              ]
+              "arch": ["SET", "SHOP"]
             },
             {
               "path": "/studio/settings/job-templates",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             }
           ]
         },
@@ -1156,81 +815,55 @@
           "routes": [
             {
               "path": "/studio/operations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/schedule",
-              "arch": [
-                "CAL"
-              ]
+              "arch": ["CAL"]
             },
             {
               "path": "/studio/calendar",
-              "arch": [
-                "CAL"
-              ]
+              "arch": ["CAL"]
             },
             {
               "path": "/studio/schedule/baselines",
-              "arch": [
-                "CAL"
-              ]
+              "arch": ["CAL"]
             },
             {
               "path": "/studio/operations/look-ahead",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/tasks",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/operations/daily-log",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/studio/action-items",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/annotations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/forms",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/guides",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/operations/reservations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/sustainability",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -1239,51 +872,31 @@
           "routes": [
             {
               "path": "/studio/logistics",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/transport",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/transport/dispatch",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/logistics/freight",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/logistics/warehouse",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/logistics/disposition",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/logistics/services",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/accommodation",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -1292,93 +905,63 @@
           "routes": [
             {
               "path": "/studio/safety",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/operations/incidents",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/major-incident",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/crisis",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/medical",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/safeguarding",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/guard-tours",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/access-control",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/environmental",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/threats",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/inspections",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/safety/osha",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/briefings",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/safety/playbooks",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/compliance/coc",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -1387,81 +970,55 @@
           "routes": [
             {
               "path": "/studio/events",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/meetings",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/meetings/notes",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/comms/announcements",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/studio/comms/polls",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/studio/comms/surveys",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/studio/comms/channels",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/studio/collaborate/whiteboards",
-              "arch": [
-                "BOARD"
-              ]
+              "arch": ["BOARD"]
             },
             {
               "path": "/studio/transmittals",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/email-inbox",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/studio/rfis",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/services/requests",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/ops/toc",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -1470,27 +1027,19 @@
           "routes": [
             {
               "path": "/studio/collaborate/docs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/collaborate/sheets",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/notes",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/studio/board",
-              "arch": [
-                "BOARD"
-              ]
+              "arch": ["BOARD"]
             }
           ]
         },
@@ -1499,259 +1048,171 @@
           "routes": [
             {
               "path": "/studio/settings/organization",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/branding",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/domains",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/email-templates",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/locations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/marketplace/settings",
-              "arch": [
-                "SET",
-                "SHOP"
-              ]
+              "arch": ["SET", "SHOP"]
             },
             {
               "path": "/studio/people/roles",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/people/invites",
-              "arch": [
-                "AUTH"
-              ]
+              "arch": ["AUTH"]
             },
             {
               "path": "/studio/settings/account-managers",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/governance",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/time-clock-zones",
-              "arch": [
-                "SET",
-                "FIELD"
-              ]
+              "arch": ["SET", "FIELD"]
             },
             {
               "path": "/studio/xpms",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/atoms",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/classes",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/codebook",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/phases",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/tiers",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/provenance",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/xpms/variance",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/settings/billing",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/exports",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/imports",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/import",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/trash",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/settings/usage",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/integrations",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/integrations/marketplace",
-              "arch": [
-                "SET",
-                "SHOP"
-              ]
+              "arch": ["SET", "SHOP"]
             },
             {
               "path": "/studio/settings/integrations/ticketing",
-              "arch": [
-                "SET",
-                "SHOP"
-              ]
+              "arch": ["SET", "SHOP"]
             },
             {
               "path": "/studio/ai/automations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/ai/agents",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/ai/corpus",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/settings/api",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/webhooks",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/audit",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/settings/compliance",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/studio/marketplace/reviews",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/studio/legal/privacy",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/legal/privacy/dsar",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/legal/privacy/consent",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/legal/privacy/datamap",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/legal/ip",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/studio/legal/insurance",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         }
@@ -1771,45 +1232,31 @@
           "routes": [
             {
               "path": "/p/discover",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/community",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/scenes",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/lists",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/saved",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/account",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/welcome",
-              "arch": [
-                "AUTH"
-              ]
+              "arch": ["AUTH"]
             }
           ]
         },
@@ -1818,93 +1265,63 @@
           "routes": [
             {
               "path": "/p/[slug]/promoter",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/producer",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/stakeholder",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/artist",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/athlete",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/delegation",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/client",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/sponsor",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/media",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/vendor",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/crew",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/volunteer",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/hospitality",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/guest",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/p/[slug]/vip",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         }
@@ -1924,45 +1341,31 @@
           "routes": [
             {
               "path": "/m",
-              "arch": [
-                "SHELL"
-              ]
+              "arch": ["SHELL"]
             },
             {
               "path": "/m/schedule",
-              "arch": [
-                "CAL"
-              ]
+              "arch": ["CAL"]
             },
             {
               "path": "/m/tasks",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/onsite",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/inventory",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/inbox",
-              "arch": [
-                "COMM"
-              ]
+              "arch": ["COMM"]
             },
             {
               "path": "/m/more",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -1971,202 +1374,135 @@
           "routes": [
             {
               "path": "/m/catalog",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/m/inventory",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/inventory/scan",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/check-in",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/scan",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/door",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/advances",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/clock",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/requests",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/docs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/handover",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/daily-log",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/punch",
-              "arch": [
-                "FIELD"
-              ]
+              "arch": ["FIELD"]
             },
             {
               "path": "/m/coc",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/incidents",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/incident",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/guide",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/directory",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/directory/companies",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/connections",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/feed",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/gigs",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/m/market",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/wallet",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/time-off",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/profile",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/activity",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/referrals",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/emergency",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/alerts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/notifications",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/m/onboarding",
-              "arch": [
-                "BOARD",
-                "AUTH"
-              ]
+              "arch": ["BOARD", "AUTH"]
             },
             {
               "path": "/m/settings",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             }
           ]
         }
@@ -2186,39 +1522,27 @@
           "routes": [
             {
               "path": "/legend/path",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/my-learning",
-              "arch": [
-                "LMS"
-              ]
+              "arch": ["LMS"]
             },
             {
               "path": "/legend/learn",
-              "arch": [
-                "LMS"
-              ]
+              "arch": ["LMS"]
             },
             {
               "path": "/legend/live",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/progress",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/certifications",
-              "arch": [
-                "LMS"
-              ]
+              "arch": ["LMS"]
             }
           ]
         },
@@ -2227,21 +1551,15 @@
           "routes": [
             {
               "path": "/legend/community",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/community/members",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/crew",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2250,21 +1568,15 @@
           "routes": [
             {
               "path": "/legend/leaderboard",
-              "arch": [
-                "BOARD"
-              ]
+              "arch": ["BOARD"]
             },
             {
               "path": "/legend/badges",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/store",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             }
           ]
         },
@@ -2273,21 +1585,15 @@
           "routes": [
             {
               "path": "/legend/console",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/engine",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/compliance",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2296,27 +1602,19 @@
           "routes": [
             {
               "path": "/legend",
-              "arch": [
-                "SHELL"
-              ]
+              "arch": ["SHELL"]
             },
             {
               "path": "/legend/resources",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/signage",
-              "arch": [
-                "DOC"
-              ]
+              "arch": ["DOC"]
             },
             {
               "path": "/legend/for-institutions",
-              "arch": [
-                "MKTG"
-              ]
+              "arch": ["MKTG"]
             }
           ]
         },
@@ -2325,15 +1623,11 @@
           "routes": [
             {
               "path": "/legend/profile",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/legend/architecture",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         }
@@ -2353,51 +1647,35 @@
           "routes": [
             {
               "path": "/features",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/atlvs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/compvss",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/gvteway",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/legend",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/ai",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/integrations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2406,51 +1684,35 @@
           "routes": [
             {
               "path": "/solutions/live-events",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/solutions/concerts",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/festivals-tours",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/immersive-experiences",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/brand-activations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/corporate-events",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/solutions/theatrical-performances",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/solutions/broadcast-tv-film",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2459,33 +1721,23 @@
           "routes": [
             {
               "path": "/blog",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/guides",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/docs",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/changelog",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/alternatives",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2494,27 +1746,19 @@
           "routes": [
             {
               "path": "/marketplace",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/events",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/pricing",
-              "arch": [
-                "MKTG"
-              ]
+              "arch": ["MKTG"]
             },
             {
               "path": "/community",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         }
@@ -2534,16 +1778,11 @@
           "routes": [
             {
               "path": "/login",
-              "arch": [
-                "AUTH"
-              ]
+              "arch": ["AUTH"]
             },
             {
               "path": "/signup",
-              "arch": [
-                "DOC",
-                "AUTH"
-              ]
+              "arch": ["DOC", "AUTH"]
             }
           ]
         }
@@ -2563,39 +1802,27 @@
           "routes": [
             {
               "path": "/me/profile",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/preferences",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/settings",
-              "arch": [
-                "SET"
-              ]
+              "arch": ["SET"]
             },
             {
               "path": "/me/privacy",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/security",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/organizations",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2604,27 +1831,19 @@
           "routes": [
             {
               "path": "/me",
-              "arch": [
-                "SHELL"
-              ]
+              "arch": ["SHELL"]
             },
             {
               "path": "/me/notifications",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/tickets",
-              "arch": [
-                "SHOP"
-              ]
+              "arch": ["SHOP"]
             },
             {
               "path": "/me/reviews",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         },
@@ -2633,51 +1852,35 @@
           "routes": [
             {
               "path": "/me/talent",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/applications",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/submissions",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/inquiries",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/offers",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/availability",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/saved-searches",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             },
             {
               "path": "/me/crew",
-              "arch": [
-                "LIST"
-              ]
+              "arch": ["LIST"]
             }
           ]
         }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -10,17 +11,27 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-type EquipmentRow = {
+type AssetRow = {
   id: string;
-  name: string;
+  display_name: string;
   asset_tag: string | null;
-  category: string | null;
-  equipment_state: "available" | "reserved" | "in_use" | "maintenance" | "retired" | string;
+  asset_kind: string | null;
+  state:
+    | "acquired"
+    | "available"
+    | "reserved"
+    | "in_transit"
+    | "in_use"
+    | "returned"
+    | "in_maintenance"
+    | "retired"
+    | "lost"
+    | string;
 };
 
 type RentalRow = {
   id: string;
-  equipment_id: string;
+  asset_id: string;
   starts_at: string;
   ends_at: string;
   project: { id: string; name: string } | null;
@@ -58,52 +69,52 @@ export default async function Page() {
   const fromIso = windowStart.toISOString();
   const toIso = windowEnd.toISOString();
 
-  const [{ data: equipment }, { data: rentals }] = await Promise.all([
+  const [{ data: assets }, { data: rentals }] = await Promise.all([
     supabase
-      .from("equipment")
-      .select("id, name, asset_tag, category, equipment_state")
+      .from("assets")
+      .select("id, display_name, asset_tag, asset_kind, state")
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
-      .neq("equipment_state", "retired")
-      .order("name", { ascending: true })
+      .neq("state", "retired")
+      .order("display_name", { ascending: true })
       .limit(500),
     supabase
       .from("rentals")
-      .select("id, equipment_id, starts_at, ends_at, project:project_id(id, name)")
+      .select("id, asset_id, starts_at, ends_at, project:project_id(id, name)")
       .eq("org_id", session.orgId)
       .lte("starts_at", toIso)
       .gte("ends_at", fromIso)
       .order("starts_at", { ascending: true }),
   ]);
 
-  const eqList = (equipment ?? []) as EquipmentRow[];
+  const assetList = (assets ?? []) as AssetRow[];
   const rentalList = ((rentals ?? []) as unknown as RentalRow[]).filter((r) => inWindow(r, fromIso, toIso));
 
-  // Group rentals by equipment_id
-  const rentalsByEq = new Map<string, RentalRow[]>();
+  // Group rentals by asset_id
+  const rentalsByAsset = new Map<string, RentalRow[]>();
   for (const r of rentalList) {
-    if (!rentalsByEq.has(r.equipment_id)) rentalsByEq.set(r.equipment_id, []);
-    rentalsByEq.get(r.equipment_id)!.push(r);
+    if (!rentalsByAsset.has(r.asset_id)) rentalsByAsset.set(r.asset_id, []);
+    rentalsByAsset.get(r.asset_id)!.push(r);
   }
 
-  // Build a 7-day grid for each equipment row
+  // Build a 7-day grid for each asset row
   const days: Date[] = [];
   for (let i = 0; i < 7; i++) {
     days.push(new Date(now.getFullYear(), now.getMonth(), now.getDate() + i));
   }
 
-  function statusForDay(eq: EquipmentRow, day: Date): "free" | "booked" | "blocked" {
-    if (eq.equipment_state === "maintenance") return "blocked";
+  function statusForDay(asset: AssetRow, day: Date): "free" | "booked" | "blocked" {
+    if (asset.state === "in_maintenance") return "blocked";
     const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).toISOString();
     const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1).toISOString();
-    const list = rentalsByEq.get(eq.id) ?? [];
+    const list = rentalsByAsset.get(asset.id) ?? [];
     return list.some((r) => inWindow(r, dayStart, dayEnd)) ? "booked" : "free";
   }
 
   // Roll-up: how many available now
-  const availableNow = eqList.filter((e) => e.equipment_state === "available").length;
-  const reservedNow = eqList.filter((e) => e.equipment_state === "reserved").length;
-  const inUseNow = eqList.filter((e) => e.equipment_state === "in_use").length;
+  const availableNow = assetList.filter((a) => a.state === "available").length;
+  const reservedNow = assetList.filter((a) => a.state === "reserved").length;
+  const inUseNow = assetList.filter((a) => a.state === "in_use").length;
 
   return (
     <>
@@ -122,13 +133,13 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        {eqList.length === 0 ? (
+        {assetList.length === 0 ? (
           <EmptyState
-            title={t("console.production.rentals.availability.empty.title", undefined, "No Equipment to Show")}
+            title={t("console.production.rentals.availability.empty.title", undefined, "No Assets to Show")}
             description={t(
               "console.production.rentals.availability.empty.description",
               undefined,
-              "Author equipment in /studio/production/equipment, then bookings + availability surface here.",
+              "Author assets in /studio/assets, then bookings + availability surface here.",
             )}
           />
         ) : (
@@ -137,7 +148,7 @@ export default async function Page() {
               <thead>
                 <tr>
                   <th>{t("console.production.rentals.availability.col.asset", undefined, "Asset")}</th>
-                  <th>{t("console.production.rentals.availability.col.equipment_state", undefined, "Status")}</th>
+                  <th>{t("console.production.rentals.availability.col.state", undefined, "Status")}</th>
                   {days.map((d) => (
                     <th key={d.toISOString()} className="text-center text-xs">
                       {fmt.dateParts(d, { weekday: "short", month: "numeric", day: "numeric" })}
@@ -146,19 +157,23 @@ export default async function Page() {
                 </tr>
               </thead>
               <tbody>
-                {eqList.slice(0, 200).map((eq) => (
-                  <tr key={eq.id}>
+                {assetList.slice(0, 200).map((asset) => (
+                  <tr key={asset.id}>
                     <td>
-                      <div className="text-sm font-medium">{eq.name}</div>
+                      <div className="text-sm font-medium">
+                        <Link href={`/studio/assets/${asset.id}`} className="hover:underline">
+                          {asset.display_name}
+                        </Link>
+                      </div>
                       <div className="font-mono text-[10px] text-[var(--p-text-2)]">
-                        {eq.asset_tag ?? "—"} {eq.category ? `· ${eq.category}` : ""}
+                        {asset.asset_tag ?? "—"} {asset.asset_kind ? `· ${asset.asset_kind}` : ""}
                       </div>
                     </td>
                     <td>
-                      <StatusBadge status={eq.equipment_state} />
+                      <StatusBadge status={asset.state} />
                     </td>
                     {days.map((d) => {
-                      const s = statusForDay(eq, d);
+                      const s = statusForDay(asset, d);
                       const tone = s === "free" ? "success" : s === "booked" ? "warning" : "error";
                       const label =
                         s === "free"
@@ -176,12 +191,12 @@ export default async function Page() {
                 ))}
               </tbody>
             </table>
-            {eqList.length > 200 && (
+            {assetList.length > 200 && (
               <p className="px-4 py-3 text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.production.rentals.availability.truncationNote",
                   undefined,
-                  "Showing first 200 assets. Filter by category in /studio/production/equipment for narrower views.",
+                  "Showing first 200 assets. Filter by kind in /studio/assets for narrower views.",
                 )}
               </p>
             )}

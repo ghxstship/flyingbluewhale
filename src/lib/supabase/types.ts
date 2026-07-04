@@ -104,11 +104,22 @@ export type DeliverableType =
   | "custom";
 export type LeadStage = "new" | "qualified" | "contacted" | "proposal" | "won" | "lost";
 export type ProposalStatus = "draft" | "sent" | "approved" | "rejected" | "expired" | "signed";
-export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "voided";
+export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "voided" | "submitted" | "approved" | "rejected";
 export type ExpenseStatus = "pending" | "approved" | "rejected" | "reimbursed";
 export type POStatus = "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled";
 export type ReqStatus = "draft" | "submitted" | "approved" | "rejected" | "converted";
-export type EquipmentStatus = "available" | "reserved" | "in_use" | "maintenance" | "retired";
+export type UalState =
+  | "acquired"
+  | "available"
+  | "reserved"
+  | "in_transit"
+  | "in_use"
+  | "returned"
+  | "in_maintenance"
+  | "retired"
+  | "lost";
+export type AssetClass = "gear" | "fleet" | "lot";
+export type AssetDisposition = "ship_to_site" | "return_to_vendor" | "hold";
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "review" | "done";
 export type EventStatus = "draft" | "scheduled" | "live" | "complete" | "cancelled";
 export type AnnotationKind = "flag" | "note" | "comment" | "tag";
@@ -508,18 +519,32 @@ export type POLineItem = {
   position: number;
 };
 
-// Production
-export type Equipment = {
+// Production — the unified physical-asset store (kit 20 Phase A C-06;
+// `equipment` folded into `assets` as asset_class='fleet').
+export type Asset = {
   id: string;
   org_id: string;
-  name: string;
-  category: string | null;
-  asset_tag: string | null;
+  asset_kind: string;
+  asset_class: AssetClass;
+  category_code: number | null;
+  xpms_atom_id: string | null;
+  display_name: string;
+  state: UalState;
+  qty: number;
+  disposition: AssetDisposition | null;
   serial: string | null;
-  equipment_state: EquipmentStatus;
+  asset_tag: string | null;
+  ownership: string;
   location_id: string | null;
-  daily_rate_cents: number | null;
+  acquired_at: string | null;
+  retired_at: string | null;
+  acquisition_cost_minor: number | null;
+  acquisition_currency: string | null;
+  daily_rate_minor: number | null;
+  daily_rate_currency: string | null;
+  metadata: unknown;
   notes: string | null;
+  xtc_code: number | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
@@ -528,7 +553,7 @@ export type Rental = {
   id: string;
   org_id: string;
   project_id: string | null;
-  equipment_id: string;
+  asset_id: string;
   starts_at: string;
   ends_at: string;
   rate_cents: number | null;

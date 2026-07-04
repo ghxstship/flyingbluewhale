@@ -33,14 +33,14 @@ export async function GET(req: Request, ctx: { params: Promise<{ rentalId: strin
   const supabase = await createClient();
   const { data: r, error } = await supabase
     .from("rentals")
-    .select("id, equipment_id, starts_at, ends_at, notes")
+    .select("id, asset_id, starts_at, ends_at, notes")
     .eq("id", p.data.rentalId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (error || !r) return apiError("not_found", "Rental not found");
 
-  const { data: equipment } = r.equipment_id
-    ? await supabase.from("equipment").select("name, serial").eq("id", r.equipment_id).maybeSingle()
+  const { data: asset } = r.asset_id
+    ? await supabase.from("assets").select("display_name, serial").eq("id", r.asset_id).maybeSingle()
     : { data: null };
   const { data: org } = await supabase
     .from("orgs")
@@ -65,16 +65,16 @@ export async function GET(req: Request, ctx: { params: Promise<{ rentalId: strin
             ends_on: typeof r.ends_at === "string" ? r.ends_at.slice(0, 10) : null,
           }}
           lineItems={
-            equipment
+            asset
               ? [
                   {
                     qty: 1,
-                    item: equipment.name ?? "Rental item",
-                    serial: equipment.serial ?? null,
+                    item: asset.display_name ?? "Rental item",
+                    serial: asset.serial ?? null,
                     note: r.notes ?? null,
                   },
                 ]
-              : [{ qty: 1, item: "Rental (equipment TBD)", serial: null, note: r.notes ?? null }]
+              : [{ qty: 1, item: "Rental (asset TBD)", serial: null, note: r.notes ?? null }]
           }
         />
       ),

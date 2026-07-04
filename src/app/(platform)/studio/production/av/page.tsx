@@ -9,16 +9,16 @@ import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-// Heuristic — gear whose category matches one of these is treated as AV.
-// Tag a piece of equipment with a more specific category to surface here.
+// Heuristic — gear whose asset_kind matches one of these is treated as AV.
+// Tag an asset with a more specific kind to surface here.
 const AV_CATEGORY_PATTERN = /(av|audio|video|lighting|sound|scoreboard|broadcast|projection|led|camera|mic)/i;
 
-type EquipmentRow = {
+type AssetRow = {
   id: string;
-  name: string;
+  display_name: string;
   asset_tag: string | null;
-  category: string | null;
-  equipment_state: string;
+  asset_kind: string | null;
+  state: string;
   serial: string | null;
   notes: string | null;
 };
@@ -43,18 +43,18 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
-    .from("equipment")
-    .select("id, name, asset_tag, category, equipment_state, serial, notes")
+    .from("assets")
+    .select("id, display_name, asset_tag, asset_kind, state, serial, notes")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
-    .order("name", { ascending: true })
+    .order("display_name", { ascending: true })
     .limit(1000);
-  const all = (data ?? []) as EquipmentRow[];
-  const av = all.filter((e) => e.category && AV_CATEGORY_PATTERN.test(e.category));
+  const all = (data ?? []) as AssetRow[];
+  const av = all.filter((e) => e.asset_kind && AV_CATEGORY_PATTERN.test(e.asset_kind));
 
-  // Aggregate by category for a quick split
+  // Aggregate by kind for a quick split
   const byCat = av.reduce<Record<string, number>>((acc, r) => {
-    const k = r.category ?? "—";
+    const k = r.asset_kind ?? "—";
     acc[k] = (acc[k] ?? 0) + 1;
     return acc;
   }, {});
@@ -67,7 +67,7 @@ export default async function Page() {
         title={t("console.production.av.title", undefined, "AV Systems")}
         subtitle={`${av.length} ${av.length === 1 ? t("console.production.av.assetSingular", undefined, "AV asset") : t("console.production.av.assetPlural", undefined, "AV assets")} · ${catEntries.length} ${catEntries.length === 1 ? t("console.production.av.categorySingular", undefined, "category") : t("console.production.av.categoryPlural", undefined, "categories")}`}
         action={
-          <Button href="/studio/production/equipment/new" size="sm">
+          <Button href="/studio/assets/new" size="sm">
             {t("console.production.av.newAvSetup", undefined, "+ New AV Setup")}
           </Button>
         }
@@ -87,9 +87,9 @@ export default async function Page() {
           </section>
         )}
 
-        <DataTable<EquipmentRow>
+        <DataTable<AssetRow>
           rows={av}
-          rowHref={(r) => `/studio/production/equipment/${r.id}`}
+          rowHref={(r) => `/studio/assets/${r.id}`}
           emptyLabel={t("console.production.av.emptyLabel", undefined, "No AV assets identified")}
           emptyDescription={t(
             "console.production.av.emptyDescription",
@@ -97,7 +97,7 @@ export default async function Page() {
             "AV assets are equipment whose category matches AV / audio / video / lighting / sound / scoreboard / broadcast / projection / LED / camera / mic. Tag your gear's category to surface it here.",
           )}
           emptyAction={
-            <Button href="/studio/production/equipment/new" size="sm">
+            <Button href="/studio/assets/new" size="sm">
               {t("console.production.av.newAvSetup", undefined, "+ New AV Setup")}
             </Button>
           }
@@ -105,8 +105,8 @@ export default async function Page() {
             {
               key: "name",
               header: t("console.production.av.columns.name", undefined, "Name"),
-              render: (r) => r.name,
-              accessor: (r) => r.name,
+              render: (r) => r.display_name,
+              accessor: (r) => r.display_name,
             },
             {
               key: "asset_tag",
@@ -115,10 +115,10 @@ export default async function Page() {
               accessor: (r) => r.asset_tag ?? null,
             },
             {
-              key: "category",
+              key: "asset_kind",
               header: t("console.production.av.columns.category", undefined, "Category"),
-              render: (r) => r.category ?? "—",
-              accessor: (r) => r.category ?? null,
+              render: (r) => r.asset_kind ?? "—",
+              accessor: (r) => r.asset_kind ?? null,
               filterable: true,
               groupable: true,
             },
@@ -129,10 +129,10 @@ export default async function Page() {
               accessor: (r) => r.serial ?? null,
             },
             {
-              key: "equipment_state",
+              key: "state",
               header: t("console.production.av.columns.equipment_state", undefined, "Status"),
-              render: (r) => <StatusBadge status={r.equipment_state} />,
-              accessor: (r) => r.equipment_state,
+              render: (r) => <StatusBadge status={r.state} />,
+              accessor: (r) => r.state,
               filterable: true,
               groupable: true,
             },

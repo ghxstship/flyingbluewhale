@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -17,7 +18,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
   const { data: row } = await supabase
     .from("rentals")
     .select(
-      "id, equipment_id, project_id, starts_at, ends_at, rate_cents, notes, created_at, equipment(name, asset_tag)",
+      "id, asset_id, project_id, starts_at, ends_at, rate_cents, notes, created_at, assets(display_name, asset_tag)",
     )
     .eq("org_id", session.orgId)
     .eq("id", rentalId)
@@ -39,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
     );
   }
 
-  const eq = row.equipment as { name?: string; asset_tag?: string | null } | null;
+  const asset = row.assets as { display_name?: string; asset_tag?: string | null } | null;
   const now = Date.now();
   const status =
     new Date(row.ends_at).getTime() < now ? "ended" : new Date(row.starts_at).getTime() <= now ? "active" : "scheduled";
@@ -48,15 +49,15 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
     <>
       <ModuleHeader
         eyebrow={t("console.production.rentals.detail.eyebrow", undefined, "Production")}
-        title={`${t("console.production.rentals.detail.title", undefined, "Rental")} · ${eq?.name ?? "—"}`}
-        subtitle={eq?.asset_tag ?? undefined}
+        title={`${t("console.production.rentals.detail.title", undefined, "Rental")} · ${asset?.display_name ?? "—"}`}
+        subtitle={asset?.asset_tag ?? undefined}
         breadcrumbs={[
           { label: t("console.production.rentals.detail.breadcrumbProduction", undefined, "Production") },
           {
             label: t("console.production.rentals.detail.breadcrumbRentals", undefined, "Rentals"),
             href: "/studio/production/rentals",
           },
-          { label: eq?.name ?? t("console.production.rentals.detail.title", undefined, "Rental") },
+          { label: asset?.display_name ?? t("console.production.rentals.detail.title", undefined, "Rental") },
         ]}
         action={
           <div className="flex items-center gap-2">
@@ -93,6 +94,14 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
                       ? t("console.production.rentals.detail.statusScheduled", undefined, "scheduled")
                       : t("console.production.rentals.detail.statusEnded", undefined, "ended")}
                 </Badge>
+              }
+            />
+            <Field
+              label={t("console.production.rentals.detail.fieldAsset", undefined, "Asset")}
+              value={
+                <Link href={`/studio/assets/${row.asset_id}`} className="hover:underline">
+                  {asset?.display_name ?? row.asset_id.slice(0, 8)}
+                </Link>
               }
             />
             <Field

@@ -17,12 +17,17 @@ export type State = {
 const Schema = z.object({
   display_name: z.string().min(1).max(200),
   asset_kind: z.string().min(1).max(64),
+  asset_class: z.enum(["gear", "fleet", "lot"]).default("gear"),
+  qty: z.coerce.number().int().min(1).max(1_000_000).default(1),
+  disposition: z.enum(["ship_to_site", "return_to_vendor", "hold"]).optional().or(z.literal("")),
+  location_id: z.string().uuid().optional().or(z.literal("")),
   ownership: z.enum(["owned", "leased", "rented", "sub_hired"]),
   serial: z.string().max(120).optional().or(z.literal("")),
   asset_tag: z.string().max(120).optional().or(z.literal("")),
   acquisition_cost_usd: z.string().optional().or(z.literal("")),
   daily_rate_usd: z.string().optional().or(z.literal("")),
   acquired_at: z.string().optional().or(z.literal("")),
+  notes: z.string().max(2000).optional().or(z.literal("")),
 });
 
 function toMinor(usd: string | undefined): number | null {
@@ -51,6 +56,11 @@ export async function createAsset(_: State, fd: FormData): Promise<State> {
       org_id: session.orgId,
       display_name: parsed.data.display_name,
       asset_kind: parsed.data.asset_kind,
+      asset_class: parsed.data.asset_class,
+      qty: parsed.data.qty,
+      disposition: parsed.data.disposition || null,
+      location_id: parsed.data.location_id || null,
+      notes: parsed.data.notes || null,
       ownership: parsed.data.ownership,
       serial: parsed.data.serial || null,
       asset_tag: parsed.data.asset_tag || null,

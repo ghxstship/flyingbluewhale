@@ -146,26 +146,26 @@ const ros_adherence: MetricResolver = async (ctx) => {
 };
 
 /**
- * asset_utilization (pct) — equipment currently deployed (in_use or reserved) /
- * all non-retired equipment. No pull-sheet table exists, so the equipment-state
+ * asset_utilization (pct) — assets currently deployed (in_use or reserved) /
+ * all non-retired assets. No pull-sheet table exists, so the asset-state
  * roll-up is the utilization signal.
  */
 const asset_utilization: MetricResolver = async (ctx) => {
   const fleet = await (ctx.db as unknown as AnyDB)
-    .from("equipment")
+    .from("assets")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
     .is("deleted_at", null)
-    .neq("equipment_state", "retired");
+    .neq("state", "retired");
   if (fleet.error) return null;
   const total = fleet.count ?? 0;
   if (!total) return null;
   const deployed = await (ctx.db as unknown as AnyDB)
-    .from("equipment")
+    .from("assets")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
     .is("deleted_at", null)
-    .in("equipment_state", ["in_use", "reserved"]);
+    .in("state", ["in_use", "reserved"]);
   if (deployed.error) return null;
   return ((deployed.count ?? 0) / total) * 100;
 };
@@ -177,25 +177,25 @@ const asset_utilization: MetricResolver = async (ctx) => {
 const fleet_roi: MetricResolver = NOT_COMPUTED;
 
 /**
- * equipment_downtime (pct) — equipment in maintenance / all non-retired
- * equipment (the share of the fleet out of service right now).
+ * equipment_downtime (pct) — assets in maintenance / all non-retired
+ * assets (the share of the fleet out of service right now).
  */
 const equipment_downtime: MetricResolver = async (ctx) => {
   const fleet = await (ctx.db as unknown as AnyDB)
-    .from("equipment")
+    .from("assets")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
     .is("deleted_at", null)
-    .neq("equipment_state", "retired");
+    .neq("state", "retired");
   if (fleet.error) return null;
   const total = fleet.count ?? 0;
   if (!total) return null;
   const down = await (ctx.db as unknown as AnyDB)
-    .from("equipment")
+    .from("assets")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
     .is("deleted_at", null)
-    .eq("equipment_state", "maintenance");
+    .eq("state", "in_maintenance");
   if (down.error) return null;
   return ((down.count ?? 0) / total) * 100;
 };

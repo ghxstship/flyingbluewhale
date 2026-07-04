@@ -19,13 +19,14 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
  * three the F2 brief calls out have org-walkable text today. The endpoint
  * accepts more kinds; add a walker below as those tables gain renderable text.
  */
-export const REINDEXABLE_SOURCE_KINDS = ["deliverable", "submittal", "rfi"] as const;
+export const REINDEXABLE_SOURCE_KINDS = ["deliverable", "submittal", "rfi", "kb_article"] as const;
 export type ReindexableSourceKind = (typeof REINDEXABLE_SOURCE_KINDS)[number];
 
 export const SOURCE_KIND_LABEL: Record<string, string> = {
   deliverable: "Deliverables",
   submittal: "Submittals",
   rfi: "RFIs",
+  kb_article: "Knowledge Base",
   daily_log: "Daily Logs",
   spec_section: "Spec Sections",
   site_plan: "Site Plans",
@@ -166,6 +167,25 @@ export async function walkOrgSources(
       r.official_answer ? `A: ${r.official_answer}` : null,
     );
     if (text) out.push({ source_type: "rfi", source_id: r.id, project_id: r.project_id, text });
+  }
+
+  // Knowledge base — the canonical org knowledge store (3NF audit §1.2).
+  // Title + body carry the retrievable content; tags sharpen recall for
+  // short articles. Org-scoped, never project-scoped.
+  const { data: articles } = await supabase
+    .from("kb_articles")
+    .select("id, title, body_markdown, tags")
+    .eq("org_id", orgId)
+    .limit(5000);
+  for (const a of (articles ?? []) as {
+    id: string;
+    title: string | null;
+    body_markdown: string | null;
+    tags: unknown;
+  }[]) {
+    const tags = Array.isArray(a.tags) ? a.tags.filter((t): t is string => typeof t === "string") : [];
+    const text = joinText(a.title, a.body_markdown, tags.length ? `Tags: ${tags.join(", ")}` : null);
+    if (text) out.push({ source_type: "kb_article", source_id: a.id, project_id: null, text });
   }
 
   return out;

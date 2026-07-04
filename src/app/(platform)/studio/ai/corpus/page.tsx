@@ -57,7 +57,7 @@ export default async function Page() {
         </div>
 
         <Alert kind="info" title="Manual indexing only">
-          Reindex walks this org&apos;s deliverables, submittals, and RFIs and feeds each to the
+          Reindex walks this org&apos;s deliverables, submittals, RFIs, and knowledge base articles and feeds each to the
           embedding worker on demand. Continuous, scheduled indexing requires a cron registration
           (a scheduled job that calls an authenticated batch route) — not yet wired. An embedding
           provider key (OPENAI_API_KEY or VOYAGE_API_KEY) must be configured for embeddings to be
@@ -69,7 +69,7 @@ export default async function Page() {
           <DataTable<CorpusSourceRow>
             rows={rows}
             emptyLabel="No sources indexed yet"
-            emptyDescription="Run Reindex to walk deliverables, submittals, and RFIs into the RAG corpus."
+            emptyDescription="Run Reindex to walk deliverables, submittals, RFIs, and knowledge base articles into the RAG corpus."
             columns={[
               {
                 key: "source",

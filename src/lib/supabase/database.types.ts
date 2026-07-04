@@ -1341,6 +1341,54 @@ export type Database = {
           },
         ]
       }
+      ai_risk_reports: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          model: string | null
+          org_id: string
+          project_id: string
+          prompt_context: Json
+          report_data: Json
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          model?: string | null
+          org_id: string
+          project_id: string
+          prompt_context?: Json
+          report_data?: Json
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          model?: string | null
+          org_id?: string
+          project_id?: string
+          prompt_context?: Json
+          report_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_risk_reports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_risk_reports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_schedule_suggestions: {
         Row: {
           applied_at: string | null
@@ -42432,6 +42480,7 @@ export type Database = {
         | "proposal"
         | "contract"
         | "file"
+        | "kb_article"
       envelope_provider:
         | "docusign"
         | "adobe_sign"
@@ -43611,6 +43660,7 @@ export const Constants = {
         "proposal",
         "contract",
         "file",
+        "kb_article",
       ],
       envelope_provider: [
         "docusign",

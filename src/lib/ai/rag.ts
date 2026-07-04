@@ -33,7 +33,8 @@ export type RagScope =
         | "meeting_note"
         | "proposal"
         | "contract"
-        | "file";
+        | "file"
+        | "kb_article";
       sourceId: string;
     };
 

@@ -10,6 +10,7 @@ import { money, fmtDate } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
 import { rollupCoordinate, rollupToData, COORDINATE_METRIC_LABELS, COORDINATE_METRICS } from "@/lib/xpms/coordinate";
 import { PositionMatrix } from "@/components/coordinate/PositionMatrix";
+import { RiskReportCard } from "./RiskReportCard";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
@@ -120,6 +121,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </div>
           </Link>
         </div>
+        <RiskReportCard projectId={projectId} orgId={session.orgId} />
         {rollups.open.total > 0 && (
           <div className="surface p-5">
             <div className="mb-3 flex items-center justify-between">

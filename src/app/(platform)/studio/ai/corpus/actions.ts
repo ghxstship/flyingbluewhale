@@ -13,7 +13,7 @@ export type State = { error?: string; ok?: true; indexed?: number; skipped?: num
 
 /**
  * Reindex the org corpus. Enumerates reindexable source rows (deliverables,
- * submittals, RFIs) under the caller's org and POSTs each to the existing
+ * submittals, RFIs, knowledge base articles) under the caller's org and POSTs each to the existing
  * /api/v1/ai/embed-source endpoint via a server-side fetch — exactly the
  * contract that endpoint expects, so this surface stays a thin operator
  * driver rather than re-implementing the embedding write path.
@@ -42,7 +42,7 @@ export async function reindexCorpus(): Promise<State> {
   }
 
   if (sources.length === 0) {
-    return { error: "No deliverables, submittals, or RFIs with text to index." };
+    return { error: "No deliverables, submittals, RFIs, or knowledge base articles with text to index." };
   }
 
   // Resolve an absolute origin for the self-call. Prefer the live request

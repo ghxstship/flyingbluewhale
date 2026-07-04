@@ -31,6 +31,7 @@ const BodySchema = z.object({
     "proposal",
     "contract",
     "file",
+    "kb_article",
   ]),
   source_id: z.string().uuid(),
   project_id: z.string().uuid().optional(),

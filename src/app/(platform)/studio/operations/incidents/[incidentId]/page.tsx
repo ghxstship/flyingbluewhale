@@ -2,10 +2,12 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusChip, type StatusTone } from "@/components/ui/StatusChip";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { createCorrectiveTaskAction } from "../actions";
 import { deleteIncident } from "./edit/actions";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
@@ -40,6 +42,7 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
   const fields = row as Record<string, unknown>;
   const summary = (fields["summary"] as string | undefined) ?? p.incidentId;
   const severity = (fields["severity"] as string | undefined) ?? "minor";
+  const incidentState = (fields["incident_state"] as string | undefined) ?? "open";
   return (
     <>
       <ModuleHeader
@@ -50,6 +53,13 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             <Button href="/studio/operations/incidents" variant="ghost" size="sm">
               {t("common.back", undefined, "Back")}
             </Button>
+            {isManagerPlus(session) && incidentState !== "closed" && (
+              <RecordActionButton
+                action={createCorrectiveTaskAction.bind(null, p.incidentId)}
+                label={t("console.operations.incidents.detail.createTask", undefined, "Create Corrective Task")}
+                pendingLabel={t("console.operations.incidents.detail.creatingTask", undefined, "Creating…")}
+              />
+            )}
             <Button href={`/studio/operations/incidents/${p.incidentId}/edit`} size="sm">
               {t("common.edit", undefined, "Edit")}
             </Button>

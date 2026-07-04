@@ -7,7 +7,15 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { emitAudit } from "@/lib/audit";
 import { RESERVATION_STATES, canTransitionReservation, type ReservationState } from "@/lib/reservations";
+
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48);
 
 export type State = {
   error?: string;
@@ -104,6 +112,109 @@ export async function transitionReservation(_: State, fd: FormData): Promise<Sta
   revalidatePath("/studio/operations/reservations");
   revalidatePath(`/studio/operations/reservations/${parsed.data.reservation_id}`);
   return { ok: true };
+}
+
+/**
+ * v7.8 record action — "Confirm → Create Event". A booked reservation
+ * confirms into a live event: creates a projects row pre-filled from
+ * the reservation (name, start date, guest context) and patches the
+ * source with a `[project:<id>]` marker in its notes (reservations has
+ * no project FK; the marker is both the back-link and the idempotency
+ * probe). The reservation's own FSM is untouched — booked IS the
+ * confirmed state in that lifecycle.
+ */
+export async function confirmReservationCreateEventAction(reservationId: string): Promise<State> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can create events" };
+  const supabase = await createClient();
+
+  const { data: res } = await supabase
+    .from("reservations")
+    .select("id, guest_name, party_size, reserved_for, reservation_state, notes, contact_email, contact_phone")
+    .eq("org_id", session.orgId)
+    .eq("id", reservationId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!res) return { error: "Reservation not found" };
+
+  // Idempotency: a prior conversion left its project marker in notes.
+  const linkedProjectId = res.notes?.match(/\[project:([0-9a-f-]{36})\]/)?.[1];
+  if (linkedProjectId) {
+    const { data: linked } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("id", linkedProjectId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (linked) redirect(`/studio/projects/${linked.id}`);
+  }
+
+  if (res.reservation_state !== "booked") {
+    return { error: `Only a booked reservation can become an event (currently ${res.reservation_state})` };
+  }
+
+  const eventDate = res.reserved_for.slice(0, 10);
+  const name = `${res.guest_name} · ${eventDate}`;
+  const baseSlug = slugify(name) || `event-${reservationId.slice(0, 8)}`;
+  let slug = baseSlug;
+  for (let suffix = 2; suffix <= 99; suffix++) {
+    const { data: clash } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!clash) break;
+    slug = `${baseSlug}-${suffix}`;
+    if (suffix === 99) return { error: "Could not derive a unique event slug" };
+  }
+
+  const descriptionLines = [
+    `Created from reservation ${reservationId}`,
+    `Guest: ${res.guest_name} · Party of ${res.party_size}`,
+    res.contact_email ? `Email: ${res.contact_email}` : null,
+    res.contact_phone ? `Phone: ${res.contact_phone}` : null,
+  ].filter(Boolean);
+
+  const { data: project, error: insertError } = await supabase
+    .from("projects")
+    .insert({
+      org_id: session.orgId,
+      slug,
+      name,
+      description: descriptionLines.join("\n"),
+      project_state: "active",
+      xpms_phase: "Discovery",
+      start_date: eventDate,
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
+  if (insertError) return { error: insertError.message };
+
+  // Patch the source with the back-link marker.
+  const patchedNotes = [res.notes?.trim() || null, `[project:${project.id}]`].filter(Boolean).join("\n");
+  await supabase
+    .from("reservations")
+    .update({ notes: patchedNotes })
+    .eq("org_id", session.orgId)
+    .eq("id", reservationId);
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "reservation.event_created",
+    targetTable: "projects",
+    targetId: project.id,
+    metadata: { reservationId },
+  });
+
+  revalidatePath("/studio/operations/reservations");
+  revalidatePath(`/studio/operations/reservations/${reservationId}`);
+  revalidatePath("/studio/projects");
+  redirect(`/studio/projects/${project.id}`);
 }
 
 export async function deleteReservation(reservationId: string): Promise<void> {

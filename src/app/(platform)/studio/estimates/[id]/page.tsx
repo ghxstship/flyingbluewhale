@@ -3,8 +3,10 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { convertEstimateToBudgetAction } from "../actions";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
@@ -45,12 +47,25 @@ export default async function EstimateDetail({ params }: { params: Promise<{ id:
         title={estimate.name}
         subtitle={projectName ?? t("console.estimates.detail.noProject", undefined, "No project on file")}
         breadcrumbs={[
-          { label: t("console.estimates.detail.breadcrumb.creative", undefined, "Creative"), href: "/studio/estimates" },
-          { label: t("console.estimates.detail.breadcrumb.estimates", undefined, "Estimates"), href: "/studio/estimates" },
+          {
+            label: t("console.estimates.detail.breadcrumb.creative", undefined, "Creative"),
+            href: "/studio/estimates",
+          },
+          {
+            label: t("console.estimates.detail.breadcrumb.estimates", undefined, "Estimates"),
+            href: "/studio/estimates",
+          },
           { label: estimate.name },
         ]}
         action={
           <div className="flex items-center gap-2">
+            {isManagerPlus(session) && estimate.estimate_state === "won" && (
+              <RecordActionButton
+                action={convertEstimateToBudgetAction.bind(null, id)}
+                label={t("console.estimates.detail.convertToBudget", undefined, "Convert To Budget")}
+                pendingLabel={t("console.estimates.detail.converting", undefined, "Converting…")}
+              />
+            )}
             <Button href={`/studio/estimates/${id}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

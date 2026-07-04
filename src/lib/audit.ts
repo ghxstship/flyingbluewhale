@@ -156,7 +156,20 @@ export type AuditAction =
   // ────────────────────────────────────────────────────────────────
   // AI
   // ────────────────────────────────────────────────────────────────
-  | "copilot.answered";
+  | "copilot.answered"
+  // ────────────────────────────────────────────────────────────────
+  // v7.8 record actions — loop-closing conversions. Each one creates
+  // the downstream record pre-filled from the source and patches the
+  // source; the audit row is the cross-record lineage trail (the
+  // destination table's own trigger, where present, only sees the
+  // insert — not what it was derived from).
+  // ────────────────────────────────────────────────────────────────
+  | "estimate.converted_to_budget"
+  | "incident.corrective_task_created"
+  | "requisition.converted_to_po"
+  | "requisition.converted_to_rfq"
+  | "rfq.awarded_po_drafted"
+  | "reservation.event_created";
 
 export type AuditInput = {
   /** Actor's user id (auth.users.id). */

@@ -2,14 +2,15 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 import { RESERVATION_STATE_LABELS, type ReservationState } from "@/lib/reservations";
-import { deleteReservation } from "../actions";
+import { RecordActionButton } from "@/components/RecordActionButton";
+import { confirmReservationCreateEventAction, deleteReservation } from "../actions";
 import { TransitionControl } from "./TransitionControl";
 
 export const dynamic = "force-dynamic";
@@ -61,26 +62,36 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           minute: "2-digit",
         })}
         breadcrumbs={[
-          { label: t("console.reservations.title", undefined, "Reservations"), href: "/studio/operations/reservations" },
+          {
+            label: t("console.reservations.title", undefined, "Reservations"),
+            href: "/studio/operations/reservations",
+          },
           { label: res.guest_name },
         ]}
         action={
-          <DeleteForm
-            action={deleteReservation.bind(null, res.id)}
-            confirm={t(
-              "console.reservations.detail.deleteConfirm",
-              { name: res.guest_name },
-              `Delete reservation for "${res.guest_name}"?`,
+          <div className="flex items-center gap-2">
+            {isManagerPlus(session) && res.reservation_state === "booked" && (
+              <RecordActionButton
+                action={confirmReservationCreateEventAction.bind(null, res.id)}
+                label={t("console.reservations.detail.createEvent", undefined, "Confirm → Create Event")}
+                pendingLabel={t("console.reservations.detail.creatingEvent", undefined, "Creating…")}
+              />
             )}
-          />
+            <DeleteForm
+              action={deleteReservation.bind(null, res.id)}
+              confirm={t(
+                "console.reservations.detail.deleteConfirm",
+                { name: res.guest_name },
+                `Delete reservation for "${res.guest_name}"?`,
+              )}
+            />
+          </div>
         }
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
           <Field label={t("console.reservations.detail.field.state", undefined, "State")}>
-            <Badge variant={toneFor(res.reservation_state)}>
-              {RESERVATION_STATE_LABELS[res.reservation_state]}
-            </Badge>
+            <Badge variant={toneFor(res.reservation_state)}>{RESERVATION_STATE_LABELS[res.reservation_state]}</Badge>
           </Field>
           <Field label={t("console.reservations.detail.field.party", undefined, "Party size")}>
             {fmt.number(res.party_size)}

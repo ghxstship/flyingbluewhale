@@ -3,12 +3,13 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
+import { AwardRfqForm } from "./AwardRfqForm";
 
 export const dynamic = "force-dynamic";
 
@@ -84,6 +85,21 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
   const lowestBid = responses
     .filter((r) => r.total_cents != null)
     .sort((a, b) => (a.total_cents ?? 0) - (b.total_cents ?? 0))[0];
+
+  // "Award → Draft PO" (v7.8 record action) — manager+ only, and only
+  // while the RFQ is in a non-terminal state.
+  const awardable = isManagerPlus(session) && ["draft", "sent", "closed"].includes(rfq.status);
+  let awardVendors: { id: string; name: string }[] = [];
+  if (awardable) {
+    const { data: vendorRows } = await supabase
+      .from("vendors")
+      .select("id, name")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("name")
+      .limit(200);
+    awardVendors = (vendorRows ?? []) as { id: string; name: string }[];
+  }
 
   return (
     <>
@@ -167,6 +183,28 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             </div>
           )}
         </section>
+
+        {awardable && awardVendors.length > 0 && (
+          <section className="surface p-4">
+            <h3 className="text-sm font-semibold">
+              {t("console.procurement.rfqs.detail.awardTitle", undefined, "Award")}
+            </h3>
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.procurement.rfqs.detail.awardHint",
+                undefined,
+                "Awarding closes this RFQ and drafts a purchase order for the winning vendor.",
+              )}
+            </p>
+            <div className="mt-3">
+              <AwardRfqForm
+                rfqId={rfq.id}
+                vendors={awardVendors}
+                defaultAmount={lowestBid?.total_cents != null ? (lowestBid.total_cents / 100).toFixed(2) : undefined}
+              />
+            </div>
+          </section>
+        )}
 
         <section className="surface p-4">
           <div className="flex items-center justify-between">

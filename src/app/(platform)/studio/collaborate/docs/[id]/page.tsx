@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.collaborate.docs.detail.eyebrow", undefined, "Documents")}
+        eyebrow={t("console.collaborate.docs.detail.eyebrow", undefined, "Pages")}
         title={doc.title}
         action={
           <div className="flex items-center gap-3">

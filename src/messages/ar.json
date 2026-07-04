@@ -20611,18 +20611,18 @@
     "configureSupabase": "اضبط Supabase.",
     "detail": {
      "configureSupabase": "اضبط Supabase.",
-     "eyebrow": "المستندات"
+     "eyebrow": "الصفحات"
     },
     "emptyLabel": "لا توجد مستندات بعد",
     "eyebrow": "التعاون",
     "new": {
-     "eyebrow": "المستندات",
+     "eyebrow": "الصفحات",
      "stateLabel": "الحالة",
      "title": "مستند جديد",
      "titleLabel": "العنوان"
     },
     "newLabel": "+ مستند جديد",
-    "title": "المستندات"
+    "title": "الصفحات"
    }
   },
   "reservations": {

@@ -16826,18 +16826,18 @@
     "configureSupabase": "Configurer Supabase.",
     "detail": {
      "configureSupabase": "Configurer Supabase.",
-     "eyebrow": "Documents"
+     "eyebrow": "Pages"
     },
     "emptyLabel": "Aucun document pour l'instant",
     "eyebrow": "Collaborer",
     "new": {
-     "eyebrow": "Documents",
+     "eyebrow": "Pages",
      "stateLabel": "État",
      "title": "Nouveau document",
      "titleLabel": "Titre"
     },
     "newLabel": "+ Nouveau document",
-    "title": "Documents"
+    "title": "Pages"
    }
   },
   "reservations": {

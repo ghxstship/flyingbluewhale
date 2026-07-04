@@ -19325,16 +19325,16 @@
    "docs": {
     "detail": {
      "configureSupabase": "Configure Supabase.",
-     "eyebrow": "Documents"
+     "eyebrow": "Pages"
     },
     "new": {
-     "eyebrow": "Documents",
+     "eyebrow": "Pages",
      "title": "New Document",
      "titleLabel": "Title",
      "stateLabel": "State"
     },
     "eyebrow": "Collaborate",
-    "title": "Documents",
+    "title": "Pages",
     "configureSupabase": "Configure Supabase.",
     "emptyLabel": "No documents yet",
     "columns": {

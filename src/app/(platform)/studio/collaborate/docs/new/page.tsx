@@ -10,7 +10,7 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.collaborate.docs.new.eyebrow", undefined, "Documents")}
+        eyebrow={t("console.collaborate.docs.new.eyebrow", undefined, "Pages")}
         title={t("console.collaborate.docs.new.title", undefined, "New Document")}
       />
       <div className="page-content max-w-2xl">

@@ -25,7 +25,7 @@ export default async function Page() {
       <>
         <ModuleHeader
           eyebrow={t("console.collaborate.docs.eyebrow", undefined, "Collaborate")}
-          title={t("console.collaborate.docs.title", undefined, "Documents")}
+          title={t("console.collaborate.docs.title", undefined, "Pages")}
         />
         <div className="page-content">
           <div className="surface p-6 text-sm">
@@ -53,7 +53,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow={t("console.collaborate.docs.eyebrow", undefined, "Collaborate")}
-        title={t("console.collaborate.docs.title", undefined, "Documents")}
+        title={t("console.collaborate.docs.title", undefined, "Pages")}
         subtitle={t(
           "console.collaborate.docs.subtitle",
           undefined,

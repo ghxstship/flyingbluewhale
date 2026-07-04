@@ -18685,18 +18685,18 @@
     "configureSupabase": "Supabaseを設定してください。",
     "detail": {
      "configureSupabase": "Supabaseを設定してください。",
-     "eyebrow": "ドキュメント"
+     "eyebrow": "ページ"
     },
     "emptyLabel": "ドキュメントがまだありません",
     "eyebrow": "コラボレート",
     "new": {
-     "eyebrow": "ドキュメント",
+     "eyebrow": "ページ",
      "stateLabel": "状態",
      "title": "新規ドキュメント",
      "titleLabel": "タイトル"
     },
     "newLabel": "+ 新規ドキュメント",
-    "title": "ドキュメント"
+    "title": "ページ"
    }
   },
   "reservations": {

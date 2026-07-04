@@ -1,0 +1,42 @@
+# ADR-0014 — Kit v7.8 §09 3NF merges: repo disposition
+
+- **Status:** Accepted (2026-07-03)
+- **Context:** The v7.8 console-rebuild kit (`ATLVS Ecosystem (18/19)`, `design_handoff_console_rebuild`) enforced "one noun · one store" on its own prototype registry by merging 12 duplicate entities into canonical stores behind filtered aliases (§09 post-pass), and demands the same law in any implementation (README Law #1/#3). This ADR dispositions each kit merge against the repo, where "stores" are real Postgres tables with RLS, not client-side registry arrays.
+
+## Principle
+
+The kit's law targets *duplicate stores of the same fact*. The repo's schema was normalized independently (LDP, ADR-0006/0011); several kit "merges" correspond to tables that hold **different facts that happen to share a label**. For those, the correct repo move is **label disambiguation** (the kit's own "Offers" precedent), not folding tables. Folding a real table into another is a schema migration with RLS/API/e2e blast radius and needs its own migration-scoped decision, not a nav cleanup.
+
+## Disposition of the 12 kit merges
+
+| Kit merge (§09) | Repo state | Disposition |
+|---|---|---|
+| `vendorContracts → contracts(scope)` | One store: `contracts` at `/studio/legal/contracts`; people-side MSAs are a different fact (engagement terms) | **Satisfied**; rail labels disambiguated 2026-07-03 (`Contracts` vs `Crew Contracts`) |
+| `subNetwork → vendors(type)` | Already a lens: subs network reads `vendors` + eligibility view (v7.5 subcontractor-ops) | **Satisfied** |
+| `subCompliance → cois(scope)` | Compliance vault reads vendor compliance records; one store | **Satisfied** |
+| `subInvoices → invoices(source)` | `sub_invoices` is a separate table (inbound approve-to-pay, retainage + waiver gate) vs AR `invoices` — different fact directions (AP vs AR) | **Rejected as-is** — AP-inbound vs AR-outbound are distinct facts here; revisit only if a unified invoicing ledger is ever scoped |
+| `leads + opportunities → crm(kind)` | `leads` is a real table; pipeline is a saved view on it (ADR-0006 #1). No separate `opportunities` store exists | **Satisfied in spirit** — one store + lens; the kit's `crm` super-entity is not adopted |
+| `equipment + warehouse → inventory(class)` | `equipment`, warehouse/yard, and `assets` are distinct tables with distinct shapes (owned gear vs storage lots vs tracked assets) | **Deferred** — a unified `inventory(class)` super-store is a schema project; flag for the asset-domain roadmap. No duplicate *facts* today |
+| `meetings → schedule(type)` | `meetings` and `schedule`/`events` are separate tables | **Deferred** — same reasoning; meetings carry agenda/attendance shape the schedule rows don't |
+| `proofs → deliverables(type)` | Creative proofs live in `deliverables` (doc-spec model) already | **Satisfied** |
+| `dateHolds → reservations(kind)` | Reservations own holds/confirmations at `/studio/operations/reservations` | **Satisfied** |
+| `sprints` deleted | Never existed in the repo | **Satisfied** |
+| `myTasks` alias bound to current user | `/studio/my-work` (v7.8 zero-training layer) is `session.userId`-bound | **Satisfied** |
+| `calendar → schedule(view)` | `/studio/calendar` renders the schedule as a calendar view | **Satisfied** |
+
+## Rail-label dedup (Law #3: a noun appears once)
+
+Five duplicate labels existed in `platformNav`; all five were **different stores**, so all five were disambiguated (2026-07-03), not folded:
+
+| Was (×2) | Now | Stores |
+|---|---|---|
+| Reports | `Reports` (cross-app library) / `Financial Reports` | reports registry vs finance statements |
+| Documents | `Documents` (doc-merge engine) / `Pages` (Collaborate) | 29-doc-type engine vs block docs (catalog keys updated in all 7 locales) |
+| Warranties | `Warranties` (closeout) / `Warranty Reminders` | `warranties` vs `warranty_reminders` |
+| Contracts | `Contracts` (Procurement) / `Crew Contracts` (People) | `contracts` vs MSAs |
+| Payouts | `Payouts` (Revenue) / `Vendor Payouts` (Finance) | `event_payouts` vs vendor Connect status |
+
+## Consequences
+
+- The rail satisfies Law #3 with zero label collisions (guarded informally by review; add a vitest label-uniqueness guard if regressions appear).
+- Two deferred super-store candidates (`inventory(class)`, `meetings→schedule`) are recorded here so future schema cycles treat them as deliberate debt, not oversights.

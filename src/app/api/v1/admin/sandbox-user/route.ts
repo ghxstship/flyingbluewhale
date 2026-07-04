@@ -9,9 +9,13 @@ import { log } from "@/lib/log";
 
 export const dynamic = "force-dynamic";
 
-/** Sandbox accounts use this email pattern so they are findable + cullable. */
+/** Sandbox accounts use this email pattern so they are findable + cullable.
+ *  Domain renamed from the repo-nickname `flyingbluewhale.test` 2026-07-03
+ *  (brand canon bans the nickname in any email/identifier). Pre-rename
+ *  sandbox users keep their old address — the domain is only used at
+ *  creation, never queried. */
 const SANDBOX_EMAIL_PREFIX = "sandbox+";
-const SANDBOX_EMAIL_DOMAIN = "flyingbluewhale.test";
+const SANDBOX_EMAIL_DOMAIN = "atlvs.test";
 
 const SpawnBody = z.object({
   orgSlug: z.string().min(1).max(120),

@@ -884,6 +884,10 @@ export const platformUtility: NavItem[] = [
   { label: "Sheets", href: "/studio/collaborate/sheets", icon: "FileSpreadsheet", sub: "Lightweight Grid Workspaces" },
   { label: "Notes", href: "/studio/notes", icon: "FileText", sub: "Rich-Text Scratch Notes" },
   { label: "Board", href: "/studio/board", icon: "Layers", sub: "Freeform Kanban" },
+  // Kit 21 W6 — console Help surfaces (reached via the chrome ? menu + ⌘K).
+  { label: "Help Center", href: "/studio/help", icon: "BookOpen", sub: "Product Help · Release Notes · Status" },
+  { label: "What's New", href: "/studio/help/whats-new", icon: "Sparkles", sub: "Every Release, Newest First" },
+  { label: "System Status", href: "/studio/help/status", icon: "ShieldCheck", sub: "Live Platform Component Health" },
 ];
 
 /**

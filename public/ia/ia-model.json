@@ -1826,6 +1826,24 @@
               "arch": [
                 "BOARD"
               ]
+            },
+            {
+              "path": "/studio/help",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/help/whats-new",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/help/status",
+              "arch": [
+                "LIST"
+              ]
             }
           ]
         },

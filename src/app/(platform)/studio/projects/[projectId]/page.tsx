@@ -5,6 +5,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { RecordShare } from "@/components/records/RecordShare";
 import { Presence } from "@/components/collab/Presence";
 import { getPresenceUser } from "@/components/collab/getPresenceUser";
 import { ActivityDrawer } from "@/components/collab/activity";
@@ -50,6 +51,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
               <PresenceSlot session={session} projectId={project.id} />
             </Suspense>
             <ProjectStatusToggle projectId={project.id} projectState={project.project_state} />
+            <RecordShare path={`/studio/projects/${projectId}`} title={project.name} />
             <ProjectReportsMenu projectId={project.id} />
             <Button href={`/studio/projects/${projectId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}

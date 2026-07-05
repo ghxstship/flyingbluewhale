@@ -4,6 +4,7 @@ import { DownloadLink } from "@/components/DownloadLink";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { RecordShare } from "@/components/records/RecordShare";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
@@ -68,6 +69,16 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
         action={
           <div className="flex items-center gap-2">
             <InvoiceStatusControls id={invoice.id} status={invoice.invoice_state} />
+            <RecordShare
+              path={`/studio/finance/invoices/${invoiceId}`}
+              title={invoice.number}
+              fields={{
+                Number: invoice.number,
+                Title: invoice.title,
+                Amount: formatMoney(invoice.amount_cents, invoice.currency),
+                Status: invoice.invoice_state,
+              }}
+            />
             <Button href={`/studio/documents/invoice?recordId=${invoiceId}`} size="sm" variant="secondary">
               {t("console.finance.invoices.openAsDocument", undefined, "Document")}
             </Button>

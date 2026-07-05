@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { RecordShare } from "@/components/records/RecordShare";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -38,6 +39,14 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
             <Button href={`/studio/finance/invoices/new?clientId=${client.id}`} size="sm" variant="secondary">
               {t("console.clients.detail.newInvoice", undefined, "+ New Invoice")}
             </Button>
+            <RecordShare
+              path={`/studio/clients/${clientId}`}
+              title={client.name}
+              fields={{
+                Name: client.name,
+                Email: client.contact_email ?? "",
+              }}
+            />
             <Button href={`/studio/clients/${clientId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

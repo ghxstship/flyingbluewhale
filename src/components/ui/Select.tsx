@@ -59,7 +59,7 @@ export const SelectContent = React.forwardRef<
         ref={ref}
         position={position}
         sideOffset={4}
-        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] ${className}`}
+        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-[var(--p-z-popover)] max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] ${className}`}
         {...props}
       >
         <SelectPrimitive.ScrollUpButton className="flex h-6 items-center justify-center">

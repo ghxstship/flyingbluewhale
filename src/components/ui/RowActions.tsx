@@ -65,7 +65,7 @@ export function RowActions({
         <DropdownMenu.Content
           align={align}
           sideOffset={4}
-          className="surface z-50 min-w-[10rem] rounded-lg border border-[var(--p-border)] p-1 text-sm"
+          className="surface z-[var(--p-z-popover)] min-w-[10rem] rounded-lg border border-[var(--p-border)] p-1 text-sm"
         >
           {items.map((it, i) => {
             if ("separator" in it && it.separator) {

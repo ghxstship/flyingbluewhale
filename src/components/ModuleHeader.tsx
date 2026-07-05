@@ -1,8 +1,10 @@
 import React from "react";
+import { Info } from "lucide-react";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
 import { DerivedBreadcrumbs } from "@/components/DerivedBreadcrumbs";
 import { RecordTabsSlot } from "@/components/ui/RecordTabsContext";
 import { PlatformTabsAuto } from "@/components/PlatformTabs";
+import { Hint } from "@/components/ui/Tooltip";
 
 /**
  * Module header — canonical SaaS title block used by every page.
@@ -24,6 +26,7 @@ import { PlatformTabsAuto } from "@/components/PlatformTabs";
 export function ModuleHeader({
   title,
   subtitle,
+  info,
   action,
   eyebrow,
   breadcrumbs,
@@ -31,6 +34,10 @@ export function ModuleHeader({
 }: {
   title: string;
   subtitle?: React.ReactNode;
+  /** Kit W0 tooltip pattern — the module blurb, shown from an ⓘ beside the
+   *  title instead of a description paragraph. Use for what-this-page-is
+   *  copy; keep `subtitle` for record metadata (dates, IDs, live status). */
+  info?: string;
   action?: React.ReactNode;
   eyebrow?: React.ReactNode;
   /** Optional breadcrumb trail rendered above the title. Delegates to the
@@ -60,7 +67,16 @@ export function ModuleHeader({
               eyebrow per the Title Case rule's letter-spaced-label
               exception. */}
           {eyebrow && <div className="eyebrow eyebrow-accent">{eyebrow}</div>}
-          <h1 className="mt-1 text-2xl font-bold tracking-[-0.01em] text-[var(--p-text-1)]">{title}</h1>
+          <h1 className="mt-1 flex items-center gap-2 text-2xl font-bold tracking-[-0.01em] text-[var(--p-text-1)]">
+            {title}
+            {info ? (
+              <Hint label={info} side="right">
+                <span className="inline-grid cursor-help place-items-center p-0.5 text-[var(--p-text-3)]" tabIndex={0}>
+                  <Info size={15} aria-label={info} />
+                </span>
+              </Hint>
+            ) : null}
+          </h1>
           {subtitle ? <p className="mt-1 text-sm text-[var(--p-text-2)]">{subtitle}</p> : null}
         </div>
         {action && <div className="flex items-center gap-2">{action}</div>}

@@ -153,7 +153,7 @@ export function ToastProvider({
             // Polite live region: queued toasts are announced without interrupting.
             role="region"
             aria-label={t("ui.toast.region", undefined, "Notifications")}
-            className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex flex-col items-end gap-2 p-4 sm:end-0 sm:start-auto"
+            className="pointer-events-none fixed inset-x-0 bottom-0 z-[var(--p-z-toast)] flex flex-col items-end gap-2 p-4 sm:end-0 sm:start-auto"
           >
             <div aria-live="polite" aria-atomic="false" className="flex w-full flex-col items-end gap-2">
               {toasts.map((x) => {

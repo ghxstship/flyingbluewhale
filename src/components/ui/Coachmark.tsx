@@ -102,7 +102,7 @@ const CoachmarkBubble = React.forwardRef<HTMLDivElement, CoachmarkBubbleContentP
         aria-describedby={body ? describedById : undefined}
         tabIndex={-1}
         style={style}
-        className="surface-raised animate-scale-in pointer-events-auto fixed z-[71] w-72 rounded-[var(--p-r-md)] border border-[var(--p-border)] p-4 outline-none"
+        className="surface-raised animate-scale-in pointer-events-auto fixed z-[calc(var(--p-z-tour)+1)] w-72 rounded-[var(--p-r-md)] border border-[var(--p-border)] p-4 outline-none"
       >
         <div className="flex items-start justify-between gap-2">
           <h2 id={labelledById} className="text-sm font-semibold tracking-tight text-[var(--p-text-1)]">
@@ -177,7 +177,7 @@ function Spotlight({ rect, onClick }: { rect: Rect; onClick?: () => void }) {
     <div
       aria-hidden
       onClick={onClick}
-      className="animate-fade-in fixed inset-0 z-[70]"
+      className="animate-fade-in fixed inset-0 z-[var(--p-z-tour)]"
       style={{
         // Four panels of scrim around the target leave a clear cutout, so the
         // highlighted element stays fully visible and interactive.

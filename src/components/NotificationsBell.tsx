@@ -194,7 +194,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
         <Popover.Content
           align="end"
           sideOffset={8}
-          className="surface z-50 w-[360px] rounded-lg border border-[var(--p-border)] text-sm"
+          className="surface z-[var(--p-z-popover)] w-[360px] rounded-lg border border-[var(--p-border)] text-sm"
         >
           <div className="flex items-center justify-between border-b border-[var(--p-border)] px-3 py-2">
             <span className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">

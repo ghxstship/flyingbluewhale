@@ -55,7 +55,7 @@ export function DeckShell({ slides, label = "Pitch deck" }: { slides: React.Reac
   const atEnd = index === count - 1;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[var(--p-bg)]">
+    <div className="fixed inset-0 z-[var(--p-z-modal)] flex flex-col bg-[var(--p-bg)]">
       {/* Top bar: label · counter · exit */}
       <header className="flex flex-none items-center justify-between px-5 py-3">
         <span className="text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-3)] uppercase">{label}</span>

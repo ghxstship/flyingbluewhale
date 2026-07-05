@@ -99,7 +99,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
         <DropdownMenu.Content
           align="end"
           sideOffset={6}
-          className="surface z-50 min-w-[11rem] rounded-lg border border-[var(--p-border)] p-1 text-sm"
+          className="surface z-[var(--p-z-popover)] min-w-[11rem] rounded-lg border border-[var(--p-border)] p-1 text-sm"
         >
           <DropdownMenu.Label className="px-2 pt-0.5 pb-1 text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
             {t("marketing.header.language")}

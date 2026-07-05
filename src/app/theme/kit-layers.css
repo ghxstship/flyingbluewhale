@@ -39,6 +39,11 @@
   --p-o-faint: 0.3; /* watermarks, ghost placeholders */
   --p-o-scrim: 0.4; /* light-mode overlay backdrop alpha */
   --p-o-scrim-dark: 0.6; /* dark-mode overlay backdrop alpha */
+
+  /* 2b · OVERLAY SCRIM — the single backdrop color every modal layer (Dialog,
+     Sheet, CommandPalette) paints. Mode-aware via light-dark(); components
+     use bg-[var(--overlay-backdrop)] instead of restating bg-black/40. */
+  --overlay-backdrop: light-dark(rgb(0 0 0 / var(--p-o-scrim)), rgb(0 0 0 / var(--p-o-scrim-dark)));
 }
 
 /* 3 · COLORBLIND-SAFE CATEGORICAL PALETTE — opt-in via [data-chart="safe"].

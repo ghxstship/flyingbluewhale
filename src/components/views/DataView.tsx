@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DataTableInteractive, type InteractiveColumn, type InteractiveRow, type BulkAction } from "@/components/DataTableInteractive";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/Sheet";
 import { KanbanBoard, type KanbanLane } from "./KanbanBoard";
@@ -28,6 +28,10 @@ import type { DataViewKind } from "./DataViewKind";
 export type DataViewPeek<Row> = {
   title?: (row: Row) => React.ReactNode;
   render: (row: Row) => React.ReactNode;
+  /** Full record page for a row. Lights up the kit W0 peek contract: ⌘↵
+   *  promotes the open peek to the record page, and an "Open Full" link
+   *  renders in the peek header. */
+  hrefOf?: (row: Row) => string | undefined;
 };
 
 export type DataViewBoard<Row extends { id: string }> = {
@@ -90,13 +94,61 @@ export function DataView<Row extends { id: string }>({
 
   const fallback = defaultView && allowed.includes(defaultView) ? defaultView : allowed[0]!;
   const params = useSearchParams();
+  const router = useRouter();
   const raw = params?.get("view") ?? undefined;
   const view: DataViewKind = raw && allowed.includes(raw as DataViewKind) ? (raw as DataViewKind) : fallback;
 
   const [peekRow, setPeekRow] = React.useState<Row | null>(null);
-  const openPeek = React.useCallback((row: Row) => setPeekRow(row), []);
-
   const byId = React.useMemo(() => new Map(rows.map((r) => [r.id, r])), [rows]);
+
+  // Kit W0 — peek deep links: `?peek=<id>` mirrors the open peek so the URL
+  // is shareable and survives reload; restored once on mount, and kept in
+  // sync (replace, no history spam) as the peek opens/closes.
+  const setPeekParam = React.useCallback(
+    (id: string | null) => {
+      const sp = new URLSearchParams(window.location.search);
+      if (id) sp.set("peek", id);
+      else sp.delete("peek");
+      const qs = sp.toString();
+      window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+    },
+    [],
+  );
+  const openPeek = React.useCallback(
+    (row: Row) => {
+      setPeekRow(row);
+      setPeekParam(row.id);
+    },
+    [setPeekParam],
+  );
+  const closePeek = React.useCallback(() => {
+    setPeekRow(null);
+    setPeekParam(null);
+  }, [setPeekParam]);
+  const restoredRef = React.useRef(false);
+  React.useEffect(() => {
+    if (restoredRef.current || !peek) return;
+    restoredRef.current = true;
+    const id = params?.get("peek");
+    if (!id) return;
+    const row = byId.get(id);
+    if (row) setPeekRow(row);
+  }, [params, peek, byId]);
+
+  // Kit W0 — ⌘↵ / Ctrl+↵ promotes the open peek to its full record page.
+  React.useEffect(() => {
+    if (!peekRow || !peek?.hrefOf) return;
+    const href = peek.hrefOf(peekRow);
+    if (!href) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        router.push(href);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [peekRow, peek, router]);
 
   // Table path — inject a "Peek" row action when a peek drawer is configured.
   const tableRows = React.useMemo<InteractiveRow[]>(
@@ -161,12 +213,23 @@ export function DataView<Row extends { id: string }>({
       )}
 
       {peek && (
-        <Sheet open={peekRow !== null} onOpenChange={(o) => !o && setPeekRow(null)}>
+        <Sheet open={peekRow !== null} onOpenChange={(o) => !o && closePeek()}>
           <SheetContent>
             {peekRow && (
               <>
                 <SheetHeader>
                   <SheetTitle>{peek.title ? peek.title(peekRow) : "Details"}</SheetTitle>
+                  {peek.hrefOf?.(peekRow) ? (
+                    <a
+                      href={peek.hrefOf(peekRow)}
+                      className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent-text)] hover:underline"
+                    >
+                      Open Full
+                      <kbd className="rounded bg-[var(--p-surface-2,var(--p-bg))] px-1 py-0.5 font-mono text-[10px] text-[var(--p-text-3)]">
+                        ⌘↵
+                      </kbd>
+                    </a>
+                  ) : null}
                 </SheetHeader>
                 <div className="px-1 py-2">{peek.render(byId.get(peekRow.id) ?? peekRow)}</div>
               </>

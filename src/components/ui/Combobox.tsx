@@ -109,7 +109,7 @@ export function Combobox({
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
+          className="z-[var(--p-z-popover)] w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
         >
           {/* shouldFilter=false when async, so cmdk doesn't strip server results */}
           <CommandPrimitive className="flex flex-col" shouldFilter={!optionsLoader}>
@@ -207,7 +207,7 @@ export function MultiCombobox({
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
+          className="z-[var(--p-z-popover)] w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
         >
           <CommandPrimitive>
             <div className="border-b border-[var(--p-border)] px-3 py-2">

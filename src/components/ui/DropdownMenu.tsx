@@ -34,7 +34,7 @@ export const DropdownMenuSubContent = React.forwardRef<
   return (
     <DropdownMenuPrimitive.SubContent
       ref={ref}
-      className={`data-[state=open]:animate-fade-in z-50 min-w-[8rem] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-1 ${className}`}
+      className={`data-[state=open]:animate-fade-in z-[var(--p-z-popover)] min-w-[8rem] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-1 ${className}`}
       {...props}
     />
   );
@@ -49,7 +49,7 @@ export const DropdownMenuContent = React.forwardRef<
       <DropdownMenuPrimitive.Content
         ref={ref}
         sideOffset={sideOffset}
-        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 min-w-[10rem] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-1 ${className}`}
+        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-[var(--p-z-popover)] min-w-[10rem] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-1 ${className}`}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>

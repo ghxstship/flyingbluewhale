@@ -235,6 +235,20 @@ export function filterNavByRole(groups: NavGroup[], role: string | null | undefi
 }
 
 /**
+ * Narrow the rail to a scope-gated member's module allow-list (kit 21 W4).
+ * `moduleScope` is the set of NavGroup labels the subcontractor was invited
+ * for; null/empty = full access (ordinary members). Home is always kept — it
+ * carries the personal-work spine (My Work · My Inbox) every seat needs. This
+ * is a UI narrowing layered on the org-membership RLS every surface already
+ * enforces, not a security boundary on its own.
+ */
+export function filterNavByModuleScope(groups: NavGroup[], moduleScope: string[] | null | undefined): NavGroup[] {
+  if (!moduleScope || moduleScope.length === 0) return groups;
+  const allowed = new Set(moduleScope);
+  return groups.filter((g) => g.label === "Home" || allowed.has(g.label));
+}
+
+/**
  * Kit 20 console-identity rail (design_handoff_console_rebuild/_ia-dump.md,
  * landed 2026-07-04) — the VERBATIM 10-group / 60-item map. Labels, order,
  * and icons are the prototype contract; hrefs are the repo's canonical

@@ -9,9 +9,10 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type ProjectOption = { id: string; name: string };
 
-export function InviteForm({ projects }: { projects: ProjectOption[] }) {
+export function InviteForm({ projects, modules }: { projects: ProjectOption[]; modules: string[] }) {
   const t = useT();
   const [projectId, setProjectId] = useState<string>("");
+  const [scopeGated, setScopeGated] = useState(false);
   const isProjectScoped = projectId !== "";
 
   const ROLES: { value: "admin" | "manager" | "member"; label: string }[] = [
@@ -112,6 +113,50 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
               "Project-level access is granted on each project after they accept. Owner role is reserved for org transfer.",
             )}
       </p>
+
+      {/* Subcontractor · Scope-Gated (kit 21 W4) — the external-company access
+          model: an allow-list of console modules + a time-boxed seat. */}
+      <div className="rounded-[var(--p-r-md)] border border-[var(--p-border)] p-3">
+        <label className="flex items-center gap-2 text-xs font-medium">
+          <input
+            type="checkbox"
+            checked={scopeGated}
+            onChange={(e) => setScopeGated(e.target.checked)}
+            className="focus-ring"
+          />
+          {t("console.people.invites.scopeGated", undefined, "Subcontractor · Scope-Gated")}
+        </label>
+        {scopeGated && (
+          <div className="mt-3 space-y-3">
+            <fieldset>
+              <legend className="mb-1.5 text-xs font-medium">
+                {t("console.people.invites.moduleAllowList", undefined, "Modules They Can Reach")}
+              </legend>
+              <div className="grid grid-cols-2 gap-1.5">
+                {modules.map((m) => (
+                  <label key={m} className="flex items-center gap-2 text-xs text-[var(--p-text-2)]">
+                    <input type="checkbox" name="moduleScope" value={m} className="focus-ring" />
+                    {m}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <label className="block text-xs font-medium">
+              <span className="mb-1 block">
+                {t("console.people.invites.accessExpires", undefined, "Access Expires In · Days")}
+              </span>
+              <Input name="expiresInDays" type="number" min={1} max={365} defaultValue={30} className="w-32" />
+            </label>
+            <p className="text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.people.invites.helpScopeGated",
+                undefined,
+                "They join as a member but the console rail is narrowed to the ticked modules, and the seat lapses on the expiry date. Every surface still enforces org RLS underneath.",
+              )}
+            </p>
+          </div>
+        )}
+      </div>
     </FormShell>
   );
 }

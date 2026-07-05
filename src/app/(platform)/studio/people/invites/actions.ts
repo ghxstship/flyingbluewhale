@@ -10,9 +10,13 @@ import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { PLATFORM_ROLES, PROJECT_ROLES } from "@/lib/supabase/types";
-import { PORTAL_PERSONAS } from "@/lib/nav";
+import { PORTAL_PERSONAS, platformNavDomain } from "@/lib/nav";
 import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
+
+/** The scopable module set (kit 21 W4) — the console rail's top-level group
+ *  labels. A subcontractor invite's allow-list is a subset of these. */
+export const SCOPABLE_MODULES = platformNavDomain.map((g) => g.label);
 
 const CreateSchema = z
   .object({
@@ -49,6 +53,17 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
+  // Scope-gated subcontractor fields (kit 21 W4). module_scope is a subset of
+  // the console rail groups; when set, the seat is time-boxed via expiresInDays
+  // (rides the invite's expires_at, mirrored onto the membership on accept).
+  const rawModules = fd.getAll("moduleScope").map(String).filter(Boolean);
+  const moduleScope = rawModules.filter((m) => SCOPABLE_MODULES.includes(m));
+  if (rawModules.length > 0 && moduleScope.length === 0) {
+    return { error: "Pick at least one module the subcontractor can reach." };
+  }
+  const expiresRaw = Number(fd.get("expiresInDays") ?? "");
+  const expiresInDays = Number.isFinite(expiresRaw) && expiresRaw > 0 ? Math.min(365, Math.floor(expiresRaw)) : null;
+
   const supabase = await createClient();
 
   // Guard: a project_id from the form must belong to this org. Without
@@ -75,6 +90,11 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
       invited_by: session.userId,
       project_id: parsed.data.projectId ?? null,
       project_role: parsed.data.projectId ? parsed.data.projectRole : null,
+      module_scope: moduleScope.length > 0 ? moduleScope : null,
+      // A scoped, time-boxed invite overrides the default 7-day window.
+      ...(moduleScope.length > 0 && expiresInDays
+        ? { expires_at: new Date(Date.now() + expiresInDays * 86_400_000).toISOString() }
+        : {}),
     } as never)
     .select("id, token")
     .single();
@@ -119,6 +139,8 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
       persona: parsed.data.persona ?? null,
       project_id: parsed.data.projectId ?? null,
       project_role: parsed.data.projectRole ?? null,
+      module_scope: moduleScope.length > 0 ? moduleScope : null,
+      expires_in_days: moduleScope.length > 0 ? expiresInDays : null,
     },
   });
 

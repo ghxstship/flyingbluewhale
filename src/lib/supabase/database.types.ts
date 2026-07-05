@@ -14406,6 +14406,7 @@ export type Database = {
           id: string
           invite_state: string
           invited_by: string | null
+          module_scope: string[] | null
           org_id: string
           persona: string | null
           project_id: string | null
@@ -14422,6 +14423,7 @@ export type Database = {
           id?: string
           invite_state?: string
           invited_by?: string | null
+          module_scope?: string[] | null
           org_id: string
           persona?: string | null
           project_id?: string | null
@@ -14438,6 +14440,7 @@ export type Database = {
           id?: string
           invite_state?: string
           invited_by?: string | null
+          module_scope?: string[] | null
           org_id?: string
           persona?: string | null
           project_id?: string | null
@@ -17985,10 +17988,12 @@ export type Database = {
       }
       memberships: {
         Row: {
+          access_expires_at: string | null
           created_at: string
           deleted_at: string | null
           id: string
           is_developer: boolean
+          module_scope: string[] | null
           org_id: string
           persona: string
           role: Database["public"]["Enums"]["platform_role"]
@@ -17996,10 +18001,12 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          access_expires_at?: string | null
           created_at?: string
           deleted_at?: string | null
           id?: string
           is_developer?: boolean
+          module_scope?: string[] | null
           org_id: string
           persona?: string
           role?: Database["public"]["Enums"]["platform_role"]
@@ -18007,10 +18014,12 @@ export type Database = {
           user_id: string
         }
         Update: {
+          access_expires_at?: string | null
           created_at?: string
           deleted_at?: string | null
           id?: string
           is_developer?: boolean
+          module_scope?: string[] | null
           org_id?: string
           persona?: string
           role?: Database["public"]["Enums"]["platform_role"]

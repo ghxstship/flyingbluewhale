@@ -6,7 +6,7 @@ import { AppRail } from "@/components/workspace-chrome/AppRail";
 import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
-import { platformNav } from "@/lib/nav";
+import { platformNav, filterNavByModuleScope } from "@/lib/nav";
 import { getNavCounts } from "@/lib/nav-counts";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
@@ -23,7 +23,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   // (request-memoized) Supabase client + auth lookup; the two pref/dashboard
   // reads share the client created here.
   const supabase = await createClient();
-  const [tenant, { t }, prefResult, dashboardResult, navCounts] = await Promise.all([
+  const [tenant, { t }, prefResult, dashboardResult, navCounts, scopeResult] = await Promise.all([
     resolveTenant(),
     getRequestT(),
     // Read last_portal_slug (app-switcher orientation) non-blocking — fall
@@ -41,7 +41,24 @@ export default async function PlatformLayout({ children }: { children: React.Rea
     // Live rail count badges (kit 21 W1) — unread rooms · my open tasks ·
     // approvals waiting on me. Recomputed every navigation / router.refresh().
     getNavCounts(supabase, { userId: session.userId, orgId: session.orgId, role: session.role }),
+    // Scope-gated access (kit 21 W4) — a subcontractor membership's module
+    // allow-list + expiry. Null scope (ordinary members) → full rail.
+    supabase
+      .from("memberships")
+      .select("module_scope, access_expires_at")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .maybeSingle(),
   ]);
+
+  // Resolve the rail this seat sees: a scoped, unexpired membership narrows it
+  // to its allow-listed modules; everyone else gets the full rail.
+  const scopeRow = (scopeResult.data ?? null) as { module_scope: string[] | null; access_expires_at: string | null } | null;
+  const scopeActive =
+    scopeRow?.module_scope &&
+    scopeRow.module_scope.length > 0 &&
+    (!scopeRow.access_expires_at || new Date(scopeRow.access_expires_at) > new Date());
+  const nav = scopeActive ? filterNavByModuleScope(platformNav, scopeRow!.module_scope) : platformNav;
 
   const uiState = (prefResult.data?.ui_state as { last_portal_slug?: string } | null) ?? null;
   const dashboards = (dashboardResult.data ?? []).map((d) => ({
@@ -79,7 +96,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
         className="console-shell"
       >
         {rail.show ? <AppRail groups={rail.groups} activeId={rail.activeId} labels={rail.labels} /> : null}
-        <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} counts={navCounts} />
+        <PlatformSidebar groups={nav} workspaceName={tenant.orgName} counts={navCounts} />
         <div className="console-main">
           {/*
            * Canonical SaaS topbar — per ui_kits/atlvs/dashboard.html .top.
@@ -105,7 +122,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
             messagesHref="/studio/inbox"
             dashboards={dashboards}
             switcherEntries={[]}
-            navDrawer={<MobileNavDrawer groups={platformNav} />}
+            navDrawer={<MobileNavDrawer groups={nav} />}
           />
           {/*
            * <main> landmark — Sea Trial FINDING-004. Was a generic <div>

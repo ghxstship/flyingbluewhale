@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { InviteForm } from "./InviteForm";
+import { SCOPABLE_MODULES } from "./actions";
 
 type InviteRow = {
   id: string;
@@ -20,6 +21,7 @@ type InviteRow = {
   token: string;
   project_id: string | null;
   project_role: string | null;
+  module_scope: string[] | null;
 };
 
 function relTime(iso: string): string {
@@ -44,7 +46,9 @@ export default async function InvitesPage() {
   const [{ data: rawInvites }, { data: projects }] = await Promise.all([
     supabase
       .from("invites")
-      .select("id, email, role, invite_state, expires_at, accepted_at, created_at, token, project_id, project_role")
+      .select(
+        "id, email, role, invite_state, expires_at, accepted_at, created_at, token, project_id, project_role, module_scope",
+      )
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false }),
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
@@ -79,7 +83,10 @@ export default async function InvitesPage() {
               )}
             </p>
             <div className="mt-4">
-              <InviteForm projects={(projects ?? []) as Array<{ id: string; name: string }>} />
+              <InviteForm
+                projects={(projects ?? []) as Array<{ id: string; name: string }>}
+                modules={SCOPABLE_MODULES}
+              />
             </div>
           </section>
         )}
@@ -127,6 +134,14 @@ export default async function InvitesPage() {
                             },
                             `on ${projectName.get(i.project_id) ?? "project"}`,
                           )}
+                        </span>
+                      )}
+                      {i.module_scope && i.module_scope.length > 0 && (
+                        <span className="ms-2 inline-flex items-center gap-1">
+                          <Badge variant="warning">
+                            {t("console.people.invites.scopedBadge", undefined, "Scope-Gated")}
+                          </Badge>
+                          <span className="text-xs text-[var(--p-text-3)]">{i.module_scope.join(" · ")}</span>
                         </span>
                       )}
                     </>

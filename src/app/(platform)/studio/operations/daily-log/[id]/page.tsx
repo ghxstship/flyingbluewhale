@@ -15,8 +15,8 @@ import {
   transitionDailyLog,
   uploadDailyLogPhoto,
   toggleDailyLogSignoff,
-  DAILY_LOG_SECTIONS,
 } from "./actions";
+import { DAILY_LOG_SECTIONS } from "./sections";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";

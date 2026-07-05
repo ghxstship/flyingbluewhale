@@ -4,7 +4,7 @@
  * Enum tuples + label maps + the eligibility-verdict derivation, mirroring the
  * `src/lib/marketplace.ts` shape. The DB is the SSOT: `work_order_state` /
  * `change_order_state` / `dispatch_mode` / `visibility` are CHECK-constrained in
- * migration `20260629120000_subcontractor_ops_p1.sql`, and the eligibility
+ * migration `20260629191356_subcontractor_ops_p1.sql`, and the eligibility
  * verdict is the `v_sub_eligibility` view. These tuples must stay in lockstep
  * with those constraints (guarded by `subcontractor.test.ts`).
  *

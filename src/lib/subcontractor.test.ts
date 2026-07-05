@@ -76,7 +76,7 @@ describe("work-order transition map", () => {
  */
 describe("enum tuples ↔ migration CHECK constraints", () => {
   const sql = readFileSync(
-    join(process.cwd(), "supabase/migrations/20260629120000_subcontractor_ops_p1.sql"),
+    join(process.cwd(), "supabase/migrations/20260629191356_subcontractor_ops_p1.sql"),
     "utf8",
   );
   const checkList = (col: string): string[] => {

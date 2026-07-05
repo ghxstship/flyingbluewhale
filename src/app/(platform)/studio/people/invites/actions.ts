@@ -10,13 +10,10 @@ import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { PLATFORM_ROLES, PROJECT_ROLES } from "@/lib/supabase/types";
-import { PORTAL_PERSONAS, platformNavDomain } from "@/lib/nav";
+import { PORTAL_PERSONAS } from "@/lib/nav";
 import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
-
-/** The scopable module set (kit 21 W4) — the console rail's top-level group
- *  labels. A subcontractor invite's allow-list is a subset of these. */
-export const SCOPABLE_MODULES = platformNavDomain.map((g) => g.label);
+import { SCOPABLE_MODULES } from "./scopable-modules";
 
 const CreateSchema = z
   .object({

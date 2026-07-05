@@ -9,7 +9,10 @@ import { createClient } from "@/lib/supabase/server";
  * payload. The DB function returns `not_found` with no other fields, so
  * `ticket_id` / `holder` / `seat` are optional.
  */
-export const DOOR_RESULTS = ["accepted", "duplicate", "refunded", "voided", "not_found"] as const;
+// Not exported: a "use server" module may only export async functions. This
+// tuple is module-local; the derived DoorResult type (erased at build) stays
+// exported for callers.
+const DOOR_RESULTS = ["accepted", "duplicate", "refunded", "voided", "not_found"] as const;
 export type DoorResult = (typeof DOOR_RESULTS)[number];
 
 export type DoorScanRow = {

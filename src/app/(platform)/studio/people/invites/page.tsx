@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { InviteForm } from "./InviteForm";
-import { SCOPABLE_MODULES } from "./actions";
+import { SCOPABLE_MODULES } from "./scopable-modules";
 
 type InviteRow = {
   id: string;

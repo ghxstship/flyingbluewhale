@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import { DAILY_LOG_SECTIONS } from "./sections";
 
 // Reuse the same bucket as the project-photos uploader. Both surfaces
 // are "field documentation against a project" so co-location is correct;
@@ -180,9 +181,6 @@ export async function deleteDailyLogPhoto(fd: FormData): Promise<void> {
 
   revalidatePath(`/studio/operations/daily-log/${parsed.data.dailyLogId}`);
 }
-
-/** The daily-log sections a foreman signs off (kit 21 remediation R3). */
-export const DAILY_LOG_SECTIONS = ["manpower", "deliveries", "equipment", "visitors", "photos", "narrative"] as const;
 
 /**
  * Toggle a section sign-off (kit 21 remediation R3, ADR-0015; Raken). Writes /

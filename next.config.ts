@@ -138,12 +138,11 @@ export default withSentryConfig(config, {
   silent: !process.env.CI,
   widenClientFileUpload: true,
   sourcemaps: { deleteSourcemapsAfterUpload: true },
-  // Tree-shake the SDK's internal debug logger from the prod bundle. The
-  // non-deprecated successor (`webpack.treeshake.removeDebugLogging`) is a
-  // no-op under Turbopack (which this build uses) and is not on the public
-  // SentryBuildOptions type, so we keep the still-valid `disableLogger`; it
-  // emits a benign deprecation warning under Turbopack but is harmless.
-  disableLogger: true,
+  // NOTE: the SDK's `disableLogger` (debug-logger tree-shaking) was removed
+  // here — it is deprecated and its successor (`webpack.treeshake.removeDebugLogging`)
+  // is not supported under Turbopack, which this build uses. Keeping it only
+  // emitted a deprecation warning on every build without shaking anything, so
+  // the build now runs warning-free. Revisit if we move off Turbopack.
   // Don't fail the build if the auth token is missing (local/preview) — warn
   // and skip the upload step instead of throwing and stopping the bundle.
   errorHandler: (err) => {

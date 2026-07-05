@@ -170,7 +170,18 @@ export type NavItem = {
    * noun is without clicking through. Optional — high-traffic items first.
    */
   sub?: string;
+  /**
+   * Live count badge slot (kit 21 wave W1). Names which computed count this
+   * item displays — the (platform) layout resolves the numbers per request
+   * (src/lib/nav-counts.ts) and PlatformSidebar renders the pill. Counts
+   * are "needing you" numbers, never vanity totals: unread rooms · my open
+   * tasks · approvals waiting on me.
+   */
+  countKey?: NavCountKey;
 };
+
+/** The three live sidebar counts (kit 21 W1). */
+export type NavCountKey = "inbox" | "myWork" | "approvals";
 /**
  * Optional sub-grouping inside a NavGroup. Use when a class group exceeds
  * Miller's 5-9 band — render section labels as quiet dividers above the
@@ -240,8 +251,14 @@ export const platformNavDomain: NavGroup[] = [
     label: "Home",
     items: [
       { label: "Dashboard", href: "/studio", icon: "House", sub: "Production Home · The Event Spine" },
-      { label: "My Inbox", href: "/studio/inbox", icon: "Inbox", sub: "Channels & Direct Messages" },
-      { label: "My Work", href: "/studio/my-work", icon: "SquareCheck", sub: "Tasks · Approvals · My Requests" },
+      { label: "My Inbox", href: "/studio/inbox", icon: "Inbox", sub: "Channels & Direct Messages", countKey: "inbox" },
+      {
+        label: "My Work",
+        href: "/studio/my-work",
+        icon: "SquareCheck",
+        sub: "Tasks · Approvals · My Requests",
+        countKey: "myWork",
+      },
       { label: "My Calendar", href: "/studio/calendar", icon: "CalendarDays", sub: "Your Cross-Module Calendar" },
       { label: "Reports", href: "/studio/reports", icon: "ChartColumn", sub: "43-Report Library · Print & PDF" },
       { label: "Insights", href: "/studio/insights", icon: "TrendingUp", sub: "Cross-Domain Analytics" },
@@ -309,6 +326,7 @@ export const platformNavDomain: NavGroup[] = [
         href: "/studio/governance/approvals",
         icon: "CheckCheck",
         sub: "The Approval Queue · Every Chain",
+        countKey: "approvals",
       },
     ],
   },

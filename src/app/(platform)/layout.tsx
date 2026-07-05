@@ -7,6 +7,7 @@ import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { platformNav } from "@/lib/nav";
+import { getNavCounts } from "@/lib/nav-counts";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -22,7 +23,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   // (request-memoized) Supabase client + auth lookup; the two pref/dashboard
   // reads share the client created here.
   const supabase = await createClient();
-  const [tenant, { t }, prefResult, dashboardResult] = await Promise.all([
+  const [tenant, { t }, prefResult, dashboardResult, navCounts] = await Promise.all([
     resolveTenant(),
     getRequestT(),
     // Read last_portal_slug (app-switcher orientation) non-blocking — fall
@@ -37,6 +38,9 @@ export default async function PlatformLayout({ children }: { children: React.Rea
       .eq("org_id", session.orgId)
       .order("name", { ascending: true })
       .limit(8),
+    // Live rail count badges (kit 21 W1) — unread rooms · my open tasks ·
+    // approvals waiting on me. Recomputed every navigation / router.refresh().
+    getNavCounts(supabase, { userId: session.userId, orgId: session.orgId, role: session.role }),
   ]);
 
   const uiState = (prefResult.data?.ui_state as { last_portal_slug?: string } | null) ?? null;
@@ -75,7 +79,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
         className="console-shell"
       >
         {rail.show ? <AppRail groups={rail.groups} activeId={rail.activeId} labels={rail.labels} /> : null}
-        <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} />
+        <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} counts={navCounts} />
         <div className="console-main">
           {/*
            * Canonical SaaS topbar — per ui_kits/atlvs/dashboard.html .top.

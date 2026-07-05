@@ -5,7 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, ChevronDown } from "lucide-react";
-import { NAV_LENSES, NAV_LENS_ORDER, type NavGroup, type NavItem, type NavLens, type NavSection } from "@/lib/nav";
+import {
+  NAV_LENSES,
+  NAV_LENS_ORDER,
+  type NavCountKey,
+  type NavGroup,
+  type NavItem,
+  type NavLens,
+  type NavSection,
+} from "@/lib/nav";
 import { NAV_ICONS } from "@/components/nav-icons";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { useHotkeys, registerShortcut } from "@/lib/hooks/useHotkeys";
@@ -24,11 +32,15 @@ const COLLAPSED_WIDTH = 56;
 export function PlatformSidebar({
   groups,
   workspaceName,
+  counts,
 }: {
   groups: NavGroup[];
   /** Pre-resolved active workspace name so the server-rendered sidebar
    *  doesn't flash "Workspace" before the switcher hydrates. */
   workspaceName?: string;
+  /** Live count badges (kit 21 W1) — resolved server-side per request in the
+   *  (platform) layout, keyed by NavItem.countKey. */
+  counts?: Partial<Record<NavCountKey, number>>;
 }) {
   const t = useT();
   const pathname = usePathname();
@@ -304,6 +316,7 @@ export function PlatformSidebar({
               collapsed={collapsed}
               pinned={pinned}
               onTogglePin={togglePin}
+              counts={counts}
               // Pinned is always expanded — the whole point is one-click access.
               isOpen
               onToggleGroup={null}
@@ -333,6 +346,7 @@ export function PlatformSidebar({
                 collapsed={collapsed}
                 pinned={pinned}
                 onTogglePin={togglePin}
+                counts={counts}
                 isOpen={isOpen}
                 // Disable the toggle when the group is forced open (active route
                 // lives inside) — hiding the current page would be hostile.
@@ -431,6 +445,7 @@ function SidebarGroup({
   collapsed,
   pinned,
   onTogglePin,
+  counts,
   isOpen,
   onToggleGroup,
 }: {
@@ -446,6 +461,8 @@ function SidebarGroup({
   collapsed: boolean;
   pinned: string[];
   onTogglePin: (href: string) => void;
+  /** Live count badges keyed by NavItem.countKey (kit 21 W1). */
+  counts?: Partial<Record<NavCountKey, number>>;
   /** Whether the group body is visible. Always true when the whole sidebar is
    *  narrow (collapsed mode), when search is active, or when an item in the
    *  group is the active route. */
@@ -535,6 +552,7 @@ function SidebarGroup({
                   collapsed={collapsed}
                   pinned={pinned}
                   onTogglePin={onTogglePin}
+                  counts={counts}
                 />
               </div>
             ))}
@@ -548,6 +566,7 @@ function SidebarGroup({
             collapsed={collapsed}
             pinned={pinned}
             onTogglePin={onTogglePin}
+            counts={counts}
           />
         ))}
     </div>
@@ -560,6 +579,7 @@ function SidebarItems({
   collapsed,
   pinned,
   onTogglePin,
+  counts,
   id,
   ariaLabelledBy,
 }: {
@@ -568,6 +588,7 @@ function SidebarItems({
   collapsed: boolean;
   pinned: string[];
   onTogglePin: (href: string) => void;
+  counts?: Partial<Record<NavCountKey, number>>;
   id?: string;
   ariaLabelledBy?: string;
 }) {
@@ -579,6 +600,11 @@ function SidebarItems({
         const isPinned = pinned.includes(item.href);
         const Icon = item.icon ? NAV_ICONS[item.icon] : null;
         const itemLabel = t(navItemKey(item), undefined, item.label);
+        // Live count badge (kit 21 W1) — only render when > 0, so a rail
+        // with nothing waiting stays quiet. Caps at 99+ so long numbers
+        // never blow out the pill.
+        const count = item.countKey ? (counts?.[item.countKey] ?? 0) : 0;
+        const badgeText = count > 99 ? "99+" : String(count);
         const linkEl = (
           <Link
             href={item.href}
@@ -598,20 +624,39 @@ function SidebarItems({
             {active && (
               <span aria-hidden="true" className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--p-accent)]" />
             )}
-            <span className="flex min-w-0 items-center gap-2 truncate ps-1">
+            <span className="flex min-w-0 flex-1 items-center gap-2 truncate ps-1">
               {Icon ? (
-                <Icon
-                  size={14}
-                  strokeWidth={2}
-                  className={`shrink-0 ${
-                    active ? "text-[var(--p-text-1)]" : "text-[var(--p-text-2)] group-hover:text-[var(--p-text-1)]"
-                  }`}
-                  aria-hidden="true"
-                />
+                <span className="relative shrink-0">
+                  <Icon
+                    size={14}
+                    strokeWidth={2}
+                    className={
+                      active ? "text-[var(--p-text-1)]" : "text-[var(--p-text-2)] group-hover:text-[var(--p-text-1)]"
+                    }
+                    aria-hidden="true"
+                  />
+                  {/* Collapsed mode has no room for the numeric pill — show a
+                      dot on the icon so the "something's waiting" signal
+                      survives. */}
+                  {collapsed && count > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute -end-1 -top-1 h-2 w-2 rounded-full bg-[var(--p-accent)] ring-2 ring-[var(--p-bg)]"
+                    />
+                  )}
+                </span>
               ) : collapsed ? (
                 <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
               ) : null}
               {!collapsed && <span className="truncate">{itemLabel}</span>}
+              {!collapsed && count > 0 && (
+                <span
+                  className="ms-auto shrink-0 rounded-full bg-[var(--p-accent)] px-1.5 py-0.5 text-[10px] leading-none font-semibold text-[var(--p-accent-contrast,white)] tabular-nums group-hover:opacity-0"
+                  aria-label={`${badgeText} ${itemLabel}`}
+                >
+                  {badgeText}
+                </span>
+              )}
             </span>
           </Link>
         );

@@ -47,3 +47,45 @@ export async function createJobTemplateAction(_: State, fd: FormData): Promise<S
   revalidatePath("/studio/settings/job-templates");
   redirect("/studio/settings/job-templates");
 }
+
+/**
+ * Create a work order from a job template (kit 21 remediation R2, ADR-0015;
+ * clone-to-start). Seeds a `work_orders` row pre-filled from the template
+ * (name + trade) and stamps the template's `last_used_at`. Mirrors the kit's
+ * requisition→PO / estimate→budget clone chains — a record-action over
+ * existing stores, not a new noun.
+ */
+export async function createWorkOrderFromTemplate(templateId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const { data: tpl } = await supabase
+    .from("job_templates")
+    .select("id, name, trade")
+    .eq("id", templateId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!tpl) return;
+
+  const { data: wo, error } = await supabase
+    .from("work_orders")
+    .insert({
+      org_id: session.orgId,
+      title: (tpl as { name: string }).name,
+      trade: (tpl as { trade: string | null }).trade || "General",
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
+  if (error || !wo) return;
+
+  await supabase
+    .from("job_templates")
+    .update({ last_used_at: new Date().toISOString() })
+    .eq("id", templateId)
+    .eq("org_id", session.orgId);
+
+  revalidatePath("/studio/settings/job-templates");
+  redirect(`/studio/production/work-orders/${(wo as { id: string }).id}`);
+}

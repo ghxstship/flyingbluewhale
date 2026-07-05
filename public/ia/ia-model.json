@@ -807,6 +807,12 @@
               ]
             },
             {
+              "path": "/studio/opportunities",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/projects",
               "arch": [
                 "LIST"

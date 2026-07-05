@@ -57,10 +57,10 @@ export default async function CommunityPage() {
       time: timeAgo(p.created_at),
       body: (
         <div>
-          <div className="font-medium text-[var(--p-text-1)]">
+          <Link href={`/legend/community/${p.id}`} className="font-medium text-[var(--p-text-1)] hover:underline">
             {p.pinned && <span className="mr-1 text-[var(--p-accent)]">📌</span>}
             {p.title}
-          </div>
+          </Link>
           <div className="mt-0.5 flex gap-3 text-xs text-[var(--p-text-3)]">
             <span>♥ {p.like_count}</span>
             <span>💬 {p.comment_count}</span>

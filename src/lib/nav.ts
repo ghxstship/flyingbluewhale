@@ -528,7 +528,10 @@ export const platformTabs: PlatformTabFamily[] = [
     tabs: [
       { label: "CRM", href: "/studio/crm" },
       { label: "Leads", href: "/studio/leads" },
-      { label: "Opportunities", href: "/studio/pipeline" },
+      { label: "Deals", href: "/studio/pipeline" },
+      // Kit 21 R2 (ADR-0015) — Opportunities is now the business-development
+      // lens over crm(kind=rfp), distinct from the deals pipeline.
+      { label: "Opportunities", href: "/studio/opportunities" },
     ],
   },
   {

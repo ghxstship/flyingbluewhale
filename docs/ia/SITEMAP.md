@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1166 · **API route handlers:** 145 · **Distinct nav hrefs:** 509
+**Page routes:** 1168 · **API route handlers:** 145 · **Distinct nav hrefs:** 510
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 777 | 242 | 534 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 778 | 243 | 534 | 0 | 1 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
-| LEG3ND — Knowledge Shell | legendNav rail | 40 | 21 | 19 | 0 | 0 |
+| LEG3ND — Knowledge Shell | legendNav rail | 41 | 21 | 20 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1166** | **483** | **643** | **0** | **40** |
+| **TOTAL** | | **1168** | **484** | **644** | **0** | **40** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -93,7 +93,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-777 routes — ● 242 nav · ○ 534 linked · ⚠ 0 orphan
+778 routes — ● 243 nav · ○ 534 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -709,6 +709,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/operations/reservations/[id]`
 ○ `/studio/operations/reservations/new`
 ○ `/studio/operations/reservations/tables/new`
+
+</details>
+
+<details><summary><code>opportunities</code> · 1 route</summary>
+
+● `/studio/opportunities`
 
 </details>
 
@@ -1866,7 +1872,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-40 routes — ● 21 nav · ○ 19 linked · ⚠ 0 orphan
+41 routes — ● 21 nav · ○ 20 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -1886,9 +1892,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>community</code> · 2 routes</summary>
+<details><summary><code>community</code> · 3 routes</summary>
 
 ● `/legend/community`
+○ `/legend/community/[postId]`
 ● `/legend/community/members`
 
 </details>

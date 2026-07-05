@@ -5822,6 +5822,7 @@ export type Database = {
       }
       community_posts: {
         Row: {
+          accepted_comment_id: string | null
           author_id: string | null
           body_html: string
           category: string
@@ -5837,6 +5838,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          accepted_comment_id?: string | null
           author_id?: string | null
           body_html?: string
           category?: string
@@ -5852,6 +5854,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          accepted_comment_id?: string | null
           author_id?: string | null
           body_html?: string
           category?: string
@@ -15512,6 +15515,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           id: string
+          last_used_at: string | null
           name: string
           org_id: string
           template_state: string
@@ -15522,6 +15526,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           id?: string
+          last_used_at?: string | null
           name: string
           org_id: string
           template_state?: string
@@ -15532,6 +15537,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           id?: string
+          last_used_at?: string | null
           name?: string
           org_id?: string
           template_state?: string
@@ -19687,6 +19693,7 @@ export type Database = {
         Row: {
           account_id: string | null
           assigned_to: string | null
+          bd_type: string | null
           close_outcome: string | null
           closed_at: string | null
           contact_email: string | null
@@ -19714,6 +19721,7 @@ export type Database = {
         Insert: {
           account_id?: string | null
           assigned_to?: string | null
+          bd_type?: string | null
           close_outcome?: string | null
           closed_at?: string | null
           contact_email?: string | null
@@ -19741,6 +19749,7 @@ export type Database = {
         Update: {
           account_id?: string | null
           assigned_to?: string | null
+          bd_type?: string | null
           close_outcome?: string | null
           closed_at?: string | null
           contact_email?: string | null

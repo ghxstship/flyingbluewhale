@@ -98,6 +98,9 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
             today: t("m.inbox.room.today", undefined, "Today"),
             empty: t("m.inbox.room.empty", undefined, "No Messages Yet"),
             emptyHint: t("m.inbox.room.emptyHint", undefined, "Say hello to get things started."),
+            offline: t("m.offline.offlineChat", undefined, "You're offline — messages send when you reconnect."),
+            queued: t("m.offline.queued", undefined, "{n} waiting to sync"),
+            syncingLabel: t("m.offline.syncing", undefined, "Syncing…"),
           }}
         />
       </div>

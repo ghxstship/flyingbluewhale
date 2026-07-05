@@ -1,8 +1,10 @@
 "use client";
 
-import { useActionState, useEffect, useLayoutEffect, useOptimistic, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useLayoutEffect, useOptimistic, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
+import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
+import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
 import { createClient } from "@/lib/supabase/client";
 import { formatTime, formatDate } from "@/lib/i18n/format";
 import type { Locale } from "@/lib/i18n/config";
@@ -30,6 +32,9 @@ export type ChatRoomLabels = {
   today: string;
   empty: string;
   emptyHint: string;
+  offline: string;
+  queued: string;
+  syncingLabel: string;
 };
 
 function mergeById(existing: OptimisticMessage[], incoming: ChatMessage[]): OptimisticMessage[] {
@@ -69,6 +74,26 @@ export function ChatRoom({
 
   const listRef = useRef<HTMLDivElement>(null);
   const lastIdRef = useRef<string | null>(null);
+
+  // Offline outbox (kit 21 W8) — a send made with no signal is queued and
+  // replays on reconnect. The pending bubble lives in `messages` (durable,
+  // unlike useOptimistic which reverts) tagged `offline-`; once the queue
+  // drains, realtime brings the real rows and we drop the offline stand-ins.
+  const {
+    online,
+    pending: queued,
+    syncing,
+    submit: queueSubmit,
+  } = useOfflineQueue<{ roomId: string; body: string }>(`chat:${roomId}`, async (p) => {
+    const fd = new FormData();
+    fd.set("roomId", p.roomId);
+    fd.set("body", p.body);
+    const res = await sendMessage(null, fd);
+    return !res?.error;
+  });
+  useEffect(() => {
+    if (queued === 0) setMessages((cur) => cur.filter((m) => !m.id.startsWith("offline-")));
+  }, [queued]);
 
   const [formState, formAction, pending] = useActionState<State, FormData>(async (prev, fd) => {
     const body = String(fd.get("body") ?? "").trim();
@@ -168,8 +193,41 @@ export function ChatRoom({
         </div>
       )}
 
-      <form action={formAction} className="composer">
-        <input type="hidden" name="roomId" value={roomId} />
+      <OfflineSyncBanner
+        online={online}
+        pending={queued}
+        syncing={syncing}
+        labels={{
+          offline: labels.offline,
+          queued: labels.queued,
+          syncing: labels.syncingLabel,
+        }}
+      />
+
+      <form
+        className="composer"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const body = draft.trim();
+          if (!body || pending) return;
+          if (online) {
+            // Unchanged online path — useActionState optimistic + realtime.
+            const fd = new FormData();
+            fd.set("roomId", roomId);
+            fd.set("body", body);
+            startTransition(() => formAction(fd));
+            return;
+          }
+          // Offline: durable optimistic bubble + enqueue for replay.
+          const id = `offline-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+          setMessages((cur) => [
+            ...cur,
+            { id, author_id: userId, body, created_at: new Date().toISOString(), pending: true },
+          ]);
+          void queueSubmit(id, { roomId, body });
+          setDraft("");
+        }}
+      >
         <input
           className="box"
           name="body"

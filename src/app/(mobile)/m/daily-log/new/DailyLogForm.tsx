@@ -6,13 +6,16 @@ import { FolderOpen } from "lucide-react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
+import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
+import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
 import { saveDailyLog } from "../actions";
 
 export type ProjectOpt = { id: string; name: string };
 
 /**
  * COMPVSS · New Daily Log — project + date + weather + notes. Submits to the
- * `saveDailyLog` upsert action and routes back to the log list.
+ * `saveDailyLog` upsert action; an offline submit is queued (kit 21 W8) and
+ * replays on reconnect so a log filed with no signal is never lost.
  */
 export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
   const router = useRouter();
@@ -21,17 +24,36 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
   const [error, setError] = useState<string | null>(null);
   const today = new Date().toISOString().slice(0, 10);
 
+  // Offline outbox — the send handler rebuilds FormData from the queued record
+  // and calls the same server action, online or on reconnect.
+  const {
+    online,
+    pending: queued,
+    syncing,
+    submit: queueSubmit,
+  } = useOfflineQueue<Record<string, string>>("daily-log", async (payload) => {
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(payload)) fd.set(k, v);
+    const res = await saveDailyLog(null, fd);
+    if (res?.error) {
+      setError(res.error);
+      return false; // business/validation error — do not queue-retry
+    }
+    return true;
+  });
+
   function onSubmit(fd: FormData) {
     if (pending) return;
     setError(null);
+    const payload: Record<string, string> = {};
+    for (const [k, v] of fd.entries()) payload[k] = String(v);
+    const id = `daily-log-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     startTransition(async () => {
-      const res = await saveDailyLog(null, fd);
-      if (res?.error) {
-        setError(res.error);
-        return;
-      }
+      const status = await queueSubmit(id, payload);
+      if (status === "failed") return; // error already surfaced by the handler
+      if (status === "sent") router.refresh();
+      // Sent or queued → back to the list (a queued log syncs on reconnect).
       router.push("/m/daily-log");
-      router.refresh();
     });
   }
 
@@ -44,6 +66,17 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.dailyLog.new.title", undefined, "New Daily Log")}
       </h1>
+
+      <OfflineSyncBanner
+        online={online}
+        pending={queued}
+        syncing={syncing}
+        labels={{
+          offline: t("m.offline.offline", undefined, "You're offline — this log saves to your device and syncs later."),
+          queued: t("m.offline.queued", undefined, "{n} waiting to sync"),
+          syncing: t("m.offline.syncing", undefined, "Syncing…"),
+        }}
+      />
 
       {projects.length === 0 ? (
         <EmptyState
@@ -120,7 +153,9 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
             >
               {pending
                 ? t("m.dailyLog.new.saving", undefined, "Saving…")
-                : t("m.dailyLog.new.submit", undefined, "Save Log")}
+                : online
+                  ? t("m.dailyLog.new.submit", undefined, "Save Log")
+                  : t("m.dailyLog.new.submitOffline", undefined, "Save Offline")}
             </button>
           </div>
         </form>

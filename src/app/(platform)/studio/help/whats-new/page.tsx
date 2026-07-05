@@ -30,7 +30,7 @@ export default async function WhatsNewPage() {
             all: t("console.help.whatsNew.all", undefined, "All"),
             new: t("console.help.whatsNew.new", undefined, "New"),
             improved: t("console.help.whatsNew.improved", undefined, "Improved"),
-            empty: t("console.help.whatsNew.empty", undefined, "Nothing here yet."),
+            empty: t("console.help.whatsNew.empty", undefined, "No entries match that filter."),
           }}
         />
       </div>

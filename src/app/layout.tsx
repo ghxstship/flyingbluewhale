@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import {
-  // ATLVS kit typography — "MONUMENT" (RATIFIED 2026-06-13, supersedes
-  // "Industrial Wide"). Anton — an ultra-condensed all-caps display face —
-  // drives headings + metrics; Hanken Grotesk drives body + UI; Space Mono
-  // drives eyebrows / IDs / coordinates; Jost is reserved for the spaced
-  // crossbar-less wordmark. The retired faces (Archivo, Space Grotesk, Inter,
-  // JetBrains Mono — and the cosmic Big Shoulders / Silkscreen) are no longer
-  // loaded; `design-system.test.ts` guards against their return.
+  // ATLVS kit typography — "MONUMENT · Wired Scale" (Type v8.0, 2026-07-05).
+  // Bebas Neue — a tall condensed caps face, cleaner than Anton at UI sizes —
+  // drives the semantic heading stack (h1/h2 + card/section/record/nav titles);
+  // Anton is now reserved for DISPLAY + METRICS only (.ps-hero / .hed-* / KPI
+  // numbers); Hanken Grotesk drives body + UI + h3/h4; Space Mono drives
+  // eyebrows / IDs; Jost is the spaced crossbar-less wordmark. The retired
+  // faces (Archivo, Space Grotesk, Inter, JetBrains Mono) stay unloaded;
+  // `design-system.test.ts` guards against their return. The six trend display
+  // faces load lazily via kit-trends.css `@font-face` — not on the core path.
   Anton,
+  Bebas_Neue,
   Hanken_Grotesk,
   Space_Mono,
   Jost,
@@ -44,6 +47,10 @@ import "./theme/index.css";
 // (no width axis). Drives every heading + metric via --p-heading; rendered
 // ALL-CAPS by --p-display-case in the kit theme.
 const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
+// Bebas Neue — MONUMENT heading face (Type v8.0). Single 400 weight, tall
+// condensed caps. Resolves --p-heading; reads slightly positive tracking
+// (--p-heading-ls) at UI sizes. Anton stays for display/metrics only.
+const bebas = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas-neue", display: "swap" });
 // Hanken Grotesk — MONUMENT body/UI face. Variable weight covers 400–800 for
 // labels, tables, and forms. Resolves --p-font / --font-body.
 const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken-grotesk", display: "swap" });
@@ -176,7 +183,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       data-theme={ssrTheme}
       data-ui="saas"
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${anton.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable} ${firaSans.variable} ${ibmPlexMono.variable}`}
+      className={`h-full ${anton.variable} ${bebas.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable} ${firaSans.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
       <head>

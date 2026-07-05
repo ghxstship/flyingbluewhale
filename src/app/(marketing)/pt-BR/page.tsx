@@ -95,7 +95,7 @@ export default function HomePT() {
 
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="eyebrow eyebrow-brand">O motor por trás de novos mundos</div>
-        <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
+        <h1 className="hed-3xl mt-4 leading-[1.05]">
           Construa mundos.
           <br />
           Comande-os ao vivo.

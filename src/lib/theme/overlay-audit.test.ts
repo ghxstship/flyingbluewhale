@@ -30,9 +30,11 @@ const OVERLAY_FILES = [
   "src/components/NotificationsBell.tsx",
 ];
 
-/** Matches literal z utilities (z-50, z-[60]) but not z-[var(--p-z-*)] /
- *  z-[calc(var(--p-z-*)+1)]. Comments are stripped so prose mentions don't
- *  trip the gate. */
+/** Matches literal z utilities (z-50, z-[60]) but not the ladder-token form
+ *  (a z arbitrary value wrapping var(--p-z-NAME)). Comments are stripped so
+ *  prose mentions don't trip the gate. NOTE: no bracketed z-token example is
+ *  written here — Tailwind's source scanner would extract it as a real class
+ *  candidate and emit invalid CSS. */
 const LITERAL_Z = /\bz-(\d|\[\d)/;
 const LITERAL_SCRIM = /bg-black\/\d/;
 
@@ -46,7 +48,7 @@ describe("overlay audit — z-index ladder + scrim SSOT (W0)", () => {
 
     it(`${rel} has no literal z-index utilities`, () => {
       const hit = src.match(LITERAL_Z);
-      expect(hit, `found literal z utility "${hit?.[0]}" — use z-[var(--p-z-*)]`).toBeNull();
+      expect(hit, `found literal z utility "${hit?.[0]}" — use a --p-z-* ladder token instead`).toBeNull();
     });
 
     it(`${rel} has no hardcoded black scrim`, () => {

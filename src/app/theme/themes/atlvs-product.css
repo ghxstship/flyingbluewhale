@@ -244,10 +244,18 @@
   --p-font:
     var(--font-hanken-grotesk), "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
     sans-serif;
-  --p-heading: var(--font-anton), "Anton", "Arial Narrow", var(--font-hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+  /* Type v8.0 · "Wired Scale" — the semantic HEADING face is Bebas Neue (tall
+     condensed caps, cleaner than Anton at UI sizes); Anton is now the DISPLAY /
+     METRICS face only (.ps-hero / .hed-* / KPI numbers). A bare <h1>/<h2>
+     renders Bebas via --p-heading; display treatments render Anton via
+     --p-display; h3/h4 drop to Hanken 700 (see the element wiring in
+     globals.css). Bebas falls back to Anton so an un-loaded face still reads. */
+  --p-heading: var(--font-bebas-neue), "Bebas Neue", var(--font-anton), "Anton", "Arial Narrow", var(--font-hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+  --p-display: var(--font-anton), "Anton", "Arial Narrow", var(--font-hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
   --p-heading-stretch: normal;
   --p-heading-weight: 400;
-  --p-heading-ls: -0.01em; /* v7.0 — tracking.heading (was 0.005em) */
+  --p-heading-ls: 0.005em; /* v8.0 — Bebas condensed caps read best slightly positive */
+  --p-display-ls: -0.01em; /* v8.0 — Anton display/metrics, optically tighter */
   --p-display-case: uppercase;
 
   /* Paired type metrics (Monument 2.0). Per-role line-height + tracking so
@@ -258,8 +266,11 @@
   --p-lh-snug: 1.3;
   --p-lh-body: 1.55;
   --p-lh-tight: 1.04;
-  --p-tracking-display: -0.02em;
-  --p-tracking-heading: -0.01em;
+  /* Tracking (v8.0 · REC 04) — ONE home. --p-heading-ls / --p-display-ls are
+     the canonical READ tokens; the ramp names below MIRROR them so a trend or
+     author can't set a value that silently contradicts what headings render. */
+  --p-tracking-display: var(--p-display-ls);
+  --p-tracking-heading: var(--p-heading-ls);
   --p-tracking-body: 0;
   --p-tracking-mono: 0.02em;
   --p-tracking-eyebrow: 0.14em;
@@ -276,7 +287,26 @@
   --p-mono-data: var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
   --p-eyebrow: var(--p-mono);
   --p-wordmark: var(--font-jost), "Jost", var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif;
-  --p-casing: none;
+
+  /* ── Type scale (v8.0 · REC 01/02) — ONE fluid rem ramp, the SSOT for every
+     text size. rem so user zoom applies; clamp() where the type is large enough
+     to breathe between mobile and desktop; static below for UI density. Elements
+     (h1–h4) and the display treatments (.ps-hero / .hed-*) all read these.
+     Mirrored in tokens.json#fontSize. Trailing comments = px min→max. */
+  --p-fs-hero: clamp(3rem, 1.5rem + 6vw, 5rem); /* 48 → 80 · .ps-hero / .hed-3xl */
+  --p-fs-display: clamp(2.5rem, 1.6rem + 3.4vw, 3.75rem); /* 40 → 60 · .hed-2xl */
+  --p-fs-display-sm: clamp(1.75rem, 1.3rem + 2vw, 2.5rem); /* 28 → 40 · .hed-xl */
+  --p-fs-h1: clamp(1.625rem, 1.45rem + 0.9vw, 2rem); /* 26 → 32 · <h1> */
+  --p-fs-h2: 1.5rem; /* 24 · <h2> */
+  --p-fs-h3: 1.125rem; /* 18 · <h3> */
+  --p-fs-h4: 1rem; /* 16 · <h4> */
+  --p-fs-body: 0.875rem; /* 14 · body / UI */
+  --p-fs-small: 0.75rem; /* 12 · secondary */
+  --p-fs-eyebrow: 0.6875rem; /* 11 · eyebrow / label floor */
+  /* Plain-length ceilings — templates use these as the MAX inside their own
+     local clamp(), so they must stay lengths (never clamps). */
+  --p-fs-display-l: 6rem; /* 96 */
+  --p-fs-display-xl: 6.75rem; /* 108 */
 
   /* Radii — productivity-tool friendly. v7.0 adds r-md (10px) + r-xl (16px);
      modals/sheets ride r-xl. */
@@ -670,9 +700,14 @@
 [data-theme="atlvs-product"][data-type="legend"] {
   --p-font: "Airport X", "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Arial, sans-serif;
   --p-heading: "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* v8.0 · REC 06 — legend keeps ONE signage face across the whole stack: the
+     display treatments (.ps-hero / .hed-*) ride the SAME Airport face here, not
+     Anton, so a heading hierarchy never spans two unrelated faces. */
+  --p-display: "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --p-heading-weight: 700;
   --p-heading-stretch: normal;
   --p-heading-ls: 0;
+  --p-display-ls: 0;
   --p-display-case: none; /* signage face is Title Case — the large x-height carries it */
   --p-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 }
@@ -833,29 +868,65 @@
    Anton, single black weight, no width axis, ALL-CAPS via --p-display-case, on
    the heading line-height. h3/h4 drop to Hanken Grotesk 700 sentence case
    (below — Anton at small sizes is hard to read and over-shouts subsections). */
-[data-ui="saas"] h1,
-[data-ui="saas"] h2,
-[data-theme="atlvs-product"] h1,
-[data-theme="atlvs-product"] h2 {
-  text-transform: var(--p-display-case, uppercase);
-  font-family: var(--p-heading);
-  font-stretch: var(--p-heading-stretch);
-  font-weight: var(--p-heading-weight);
-  letter-spacing: var(--p-heading-ls);
-  line-height: var(--p-lh-heading);
-  color: var(--p-text-1);
-}
-/* h3 / h4 — Hanken Grotesk 700, sentence case, snug leading. */
-[data-ui="saas"] h3,
-[data-ui="saas"] h4,
-[data-theme="atlvs-product"] h3,
-[data-theme="atlvs-product"] h4 {
-  font-family: var(--p-font);
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: var(--p-tracking-body);
-  line-height: var(--p-lh-snug);
-  color: var(--p-text-1);
+/* v8.0 · REC 01 — the scale reaches the ELEMENTS: a bare <h1>–<h4> lands on
+   the --p-fs-* ramp with no per-instance size. These element DEFAULTS live in
+   @layer base so an explicit display class (.hed-* / .ps-hero, in @layer
+   components) or a Tailwind utility always overrides them — "a bare heading
+   lands on the ramp; a class wins." */
+@layer base {
+  [data-ui="saas"] h1,
+  [data-ui="saas"] h2,
+  [data-theme="atlvs-product"] h1,
+  [data-theme="atlvs-product"] h2 {
+    text-transform: var(--p-display-case, uppercase);
+    font-family: var(--p-heading);
+    font-stretch: var(--p-heading-stretch);
+    font-weight: var(--p-heading-weight);
+    letter-spacing: var(--p-heading-ls);
+    line-height: var(--p-lh-heading);
+    color: var(--p-text-1);
+  }
+  [data-ui="saas"] h1,
+  [data-theme="atlvs-product"] h1 {
+    font-size: var(--p-fs-h1);
+    line-height: var(--p-lh-tight);
+  }
+  [data-ui="saas"] h2,
+  [data-theme="atlvs-product"] h2 {
+    font-size: var(--p-fs-h2);
+  }
+  /* h3 / h4 — Hanken Grotesk 700, sentence case, snug leading; on the ramp. */
+  [data-ui="saas"] h3,
+  [data-ui="saas"] h4,
+  [data-theme="atlvs-product"] h3,
+  [data-theme="atlvs-product"] h4 {
+    font-family: var(--p-font);
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: var(--p-tracking-body);
+    line-height: var(--p-lh-snug);
+    color: var(--p-text-1);
+  }
+  [data-ui="saas"] h3,
+  [data-theme="atlvs-product"] h3 {
+    font-size: var(--p-fs-h3);
+  }
+  [data-ui="saas"] h4,
+  [data-theme="atlvs-product"] h4 {
+    font-size: var(--p-fs-h4);
+  }
+  /* v8.0 · REC 06 — legend axis keeps ONE face (Airport) across the whole
+     stack: h3/h4 ride the signage heading face here, not the Hanken fallback
+     the default axis uses, so a hierarchy never spans two unrelated faces. */
+  [data-ui="saas"][data-type="legend"] h3,
+  [data-ui="saas"][data-type="legend"] h4,
+  [data-theme="atlvs-product"][data-type="legend"] h3,
+  [data-theme="atlvs-product"][data-type="legend"] h4 {
+    font-family: var(--p-heading);
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+  }
 }
 
 /* ============================================================================
@@ -1515,12 +1586,14 @@
 [data-ui="saas"] .ps-id,
 [data-theme="atlvs-product"] .ps-id {
   /* v7.0 — record IDs ride the DATA mono (IBM Plex Mono), not the Space Mono
-     eyebrow voice. */
+     eyebrow voice. v8.0 · REC 05 — tabular figures so ID columns align. */
   font-family: var(--p-mono-data);
   font-size: 12px;
   font-weight: 600;
   color: var(--p-accent-text);
   letter-spacing: var(--p-tracking-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
 /* ---- tabs / breadcrumb / pagination ---- */
@@ -1698,6 +1771,9 @@
   font-size: var(--k-cell-fs);
   color: var(--p-text-2);
   vertical-align: middle;
+  /* v8.0 · REC 05 — cell figures tabular so numeric columns align. */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 [data-ui="saas"] .ps-table tbody tr:last-child td,
 [data-theme="atlvs-product"] .ps-table tbody tr:last-child td {
@@ -2124,7 +2200,7 @@
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
   text-transform: var(--p-display-case, uppercase);
-  line-height: var(--p-lh-display);
+  line-height: var(--p-lh-tight); /* v8.0 · REC 04 — .ps-h page title reads --p-lh-tight */
   color: var(--p-text-1);
   margin: 0;
 }
@@ -2201,12 +2277,15 @@
    under .pop while the rest stays on --p-text-1. */
 [data-ui="saas"] .ps-hero,
 [data-theme="atlvs-product"] .ps-hero {
-  font-family: var(--p-heading);
+  /* v8.0 — .ps-hero is a DISPLAY treatment → Anton (--p-display), not the
+     semantic heading face; size reads the --p-fs-hero ramp. */
+  font-family: var(--p-display);
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
-  letter-spacing: var(--p-heading-ls);
+  letter-spacing: var(--p-display-ls);
   text-transform: var(--p-display-case, uppercase);
   line-height: var(--p-lh-display);
+  font-size: var(--p-fs-hero);
   color: var(--p-text-1);
   margin: 0;
   text-wrap: balance;

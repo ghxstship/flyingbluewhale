@@ -120,15 +120,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings consume the theme's display stack. Break long brand/word tokens
-   rather than force a horizontal scrollbar at narrow viewports (audit m1-alt). */
+/* Headings consume the theme's heading stack (Type v8.0 = Bebas Neue via
+   --p-heading; Anton stays the display/metrics face on --p-display). Break long
+   brand/word tokens rather than force a horizontal scrollbar (audit m1-alt). */
+/* Long brand/word tokens break rather than force a horizontal scrollbar
+   (audit m1-alt). Type v8.0 — the heading FONT-FAMILY + the element font-size
+   wiring (h1/h2 → Bebas via --p-heading, h3/h4 → Hanken, all on the --p-fs-*
+   ramp) live in @layer base in the theme file (atlvs-product.css), so an
+   explicit `.hed-*` class (@layer components) always overrides them. This rule
+   only carries the wrap behavior so it can't out-specify the layered classes. */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-display, var(--font-body, system-ui, sans-serif));
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -1097,28 +1103,31 @@ pre,
      already condensed, ALL-CAPS via --p-display-case). Sizes use clamp() so
      the heading breathes through the breakpoint without `sm:` / `md:` / `lg:`
      class clouds at the call site. */
+  /* Type v8.0 — .hed-* are DISPLAY treatments → the Anton display face
+     (--p-display), NOT the semantic heading face (--p-heading = Bebas). Sizes
+     read the --p-fs-* ramp so the three former display scales are one SSOT. */
   .hed-3xl,
   .hed-2xl,
   .hed-xl,
   .hed-lg,
   .hed-md {
-    font-family: var(--p-heading, var(--font-body, system-ui, sans-serif));
+    font-family: var(--p-display, var(--font-body, system-ui, sans-serif));
     font-stretch: var(--p-heading-stretch, normal);
     font-weight: var(--p-heading-weight, 400);
-    letter-spacing: var(--p-heading-ls, 0.005em);
+    letter-spacing: var(--p-display-ls, -0.01em);
     text-transform: var(--p-display-case, uppercase);
     text-wrap: balance;
   }
   .hed-3xl {
-    font-size: clamp(3rem, 4.5vw + 1.5rem, 5rem);
+    font-size: var(--p-fs-hero);
     line-height: 1;
   }
   .hed-2xl {
-    font-size: clamp(2.5rem, 3vw + 1.25rem, 3.75rem);
+    font-size: var(--p-fs-display);
     line-height: 1.02;
   }
   .hed-xl {
-    font-size: clamp(1.75rem, 1.5vw + 1rem, 2.5rem);
+    font-size: var(--p-fs-display-sm);
     line-height: 1.05;
   }
   .hed-lg {
@@ -1138,10 +1147,11 @@ pre,
      `.eyebrow-accent` is the canonical brand-color modifier;
      `.eyebrow-brand` is a deprecated alias kept until call sites migrate. */
   .eyebrow {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 0.6875rem;
+    font-family: var(--p-mono, var(--font-mono, ui-monospace, monospace));
+    font-size: var(--p-fs-eyebrow, 0.6875rem);
     font-weight: 600;
-    letter-spacing: 0.22em;
+    /* v8.0 · REC 04 — one eyebrow tracking token (was a 0.22em literal). */
+    letter-spacing: var(--p-tracking-eyebrow, 0.14em);
     text-transform: uppercase;
     color: var(--p-text-2);
   }
@@ -1153,6 +1163,33 @@ pre,
   .eyebrow-accent,
   .eyebrow-brand {
     color: var(--p-accent-text);
+  }
+
+  /* v8.0 · REC 02 — body & label text utilities. The display scale had .hed-*
+     but paragraph/secondary text was hand-set everywhere (drifting between
+     15 / 15.5 / 16 / 17px). These read the same --p-fs-* ramp so body copy is
+     systematized too. .ps-lead is the one intro paragraph that may run larger. */
+  .ps-body {
+    font-family: var(--p-font);
+    font-size: var(--p-fs-body);
+    line-height: var(--p-lh-body, 1.55);
+    color: var(--p-text-2);
+  }
+  .ps-lead {
+    font-family: var(--p-font);
+    font-size: clamp(0.9375rem, 0.85rem + 0.4vw, 1.0625rem);
+    line-height: 1.55;
+    color: var(--p-text-2);
+  }
+  .ps-small {
+    font-size: var(--p-fs-small);
+    line-height: 1.5;
+    color: var(--p-text-2);
+  }
+  .ps-caption {
+    font-size: var(--p-fs-eyebrow);
+    line-height: 1.45;
+    color: var(--p-text-3);
   }
 
   /* `.kinetic-display` — large-format display text with a subtle slide-up

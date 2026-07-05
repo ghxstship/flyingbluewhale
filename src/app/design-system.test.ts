@@ -281,17 +281,18 @@ describe("Design system — component primitive adoption", () => {
 
   it("no dead font references survive (Bermuda-Triangle / CHROMA BEACON / kit-v2)", () => {
     // Three retired typography stacks must not resurrect dead bytes:
-    //  1. Bermuda Triangle / HVRBOR — Bebas Neue / Share Tech / Share Tech
-    //     Mono / DM Sans (retired with the two-skin lock 453bbd7c).
+    //  1. Bermuda Triangle / HVRBOR — Share Tech / Share Tech Mono / DM Sans
+    //     (retired with the two-skin lock 453bbd7c).
     //  2. CHROMA BEACON 8-theme picker — Fraunces / Instrument Serif / DM
     //     Serif Display / Bricolage / Geist / Geist Mono / Cormorant Garamond.
     //  3. Kit v2 "Industrial Wide" — Archivo (display) / Space Grotesk (body)
     //     plus the never-canon Inter / JetBrains Mono — all superseded by the
-    //     v3 "MONUMENT" stack (Anton + Hanken Grotesk + Space Mono + Jost,
-    //     ratified 2026-06-13). NOTE: Anton is now CANONICAL (the MONUMENT
-    //     display face) and is intentionally absent from this list.
+    //     v3 "MONUMENT" stack, ratified 2026-06-13.
+    //  NOTE: both Anton AND Bebas Neue are now CANONICAL and intentionally
+    //  absent from this list. Type v8.0 "Wired Scale" (2026-07-05) made Bebas
+    //  Neue the semantic HEADING face (h1/h2 + card/section/nav titles) and
+    //  reserved Anton for DISPLAY + METRICS only (.ps-hero / .hed-* / KPIs).
     const DEAD_FONTS = [
-      "Bebas_Neue",
       "Share_Tech",
       "Share_Tech_Mono",
       "DM_Sans",
@@ -308,7 +309,6 @@ describe("Design system — component primitive adoption", () => {
       "JetBrains_Mono",
     ];
     const DEAD_VARS = [
-      "--font-bebas-neue",
       "--font-share-tech",
       "--font-share-tech-mono",
       "--font-dm-sans",
@@ -356,7 +356,7 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(
       offenders,
-      `Dead-font references resurrect retired typography (Bermuda Triangle / CHROMA BEACON / kit-v2 Industrial Wide). The canonical stack is MONUMENT — Anton + Hanken Grotesk + Space Mono + Jost:\n${offenders.join("\n")}`,
+      `Dead-font references resurrect retired typography (Bermuda Triangle / CHROMA BEACON / kit-v2 Industrial Wide). The canonical stack is MONUMENT "Wired Scale" (v8.0) — Bebas Neue (headings) + Anton (display/metrics) + Hanken Grotesk + Space Mono + Jost:\n${offenders.join("\n")}`,
     ).toEqual([]);
   });
 

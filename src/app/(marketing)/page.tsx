@@ -662,7 +662,7 @@ export default async function Home() {
               { big: "5M+", label: t("marketing.pages.home.stats.items.guestsServed") },
             ].map((s) => (
               <div key={s.label}>
-                <div className="text-5xl font-bold tracking-tight text-[var(--p-accent)] md:text-6xl">{s.big}</div>
+                <div className="hed-2xl text-[var(--p-accent)]">{s.big}</div>
                 <div className="eyebrow mt-2 text-[var(--p-text-3)]">
                   {s.label}
                 </div>

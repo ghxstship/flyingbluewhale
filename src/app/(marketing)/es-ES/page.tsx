@@ -95,7 +95,7 @@ export default function HomeES() {
 
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="eyebrow eyebrow-brand">El motor que da vida a nuevos mundos</div>
-        <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
+        <h1 className="hed-3xl mt-4 leading-[1.05]">
           Crea mundos.
           <br />
           Hazlos vivir en vivo.

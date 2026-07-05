@@ -5248,11 +5248,65 @@ export type Database = {
           },
         ]
       }
+      chat_message_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message_id: string
+          org_id: string
+          room_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          message_id: string
+          org_id: string
+          room_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message_id?: string
+          org_id?: string
+          room_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_message_reactions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_message_reactions_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_room_members: {
         Row: {
           joined_at: string
           last_read_at: string | null
           member_role: string
+          muted_at: string | null
+          pinned_at: string | null
           room_id: string
           user_id: string
         }
@@ -5260,6 +5314,8 @@ export type Database = {
           joined_at?: string
           last_read_at?: string | null
           member_role?: string
+          muted_at?: string | null
+          pinned_at?: string | null
           room_id: string
           user_id: string
         }
@@ -5267,6 +5323,8 @@ export type Database = {
           joined_at?: string
           last_read_at?: string | null
           member_role?: string
+          muted_at?: string | null
+          pinned_at?: string | null
           room_id?: string
           user_id?: string
         }

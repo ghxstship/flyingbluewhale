@@ -161,3 +161,115 @@ export async function startDmAction(_prev: State, fd: FormData): Promise<State> 
   revalidatePath("/studio/inbox");
   redirect(`/studio/inbox?room=${roomId}`);
 }
+
+// ── Thread management (kit 21 W5) — pin/mute/leave/mark-unread + reactions.
+// All are membership-scoped: the RLS + the explicit user_id filter mean a
+// caller can only ever touch their own membership row / their own reaction.
+
+/** Toggle pinned_at on my membership — pinned rooms sort first in the list. */
+export async function toggleRoomPin(roomId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { data: row } = await supabase
+    .from("chat_room_members")
+    .select("pinned_at")
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!row) return;
+  await supabase
+    .from("chat_room_members")
+    .update({ pinned_at: (row as { pinned_at: string | null }).pinned_at ? null : new Date().toISOString() })
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId);
+  revalidatePath("/studio/inbox");
+}
+
+/** Toggle muted_at — muted rooms drop their unread badge + sidebar count. */
+export async function toggleRoomMute(roomId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { data: row } = await supabase
+    .from("chat_room_members")
+    .select("muted_at")
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!row) return;
+  await supabase
+    .from("chat_room_members")
+    .update({ muted_at: (row as { muted_at: string | null }).muted_at ? null : new Date().toISOString() })
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId);
+  revalidatePath("/studio/inbox");
+}
+
+/** Rewind last_read_at so the room reads as unread again (Linear "mark unread"). */
+export async function markRoomUnread(roomId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  await supabase
+    .from("chat_room_members")
+    .update({ last_read_at: null })
+    .eq("room_id", roomId)
+    .eq("user_id", session.userId);
+  revalidatePath("/studio/inbox");
+}
+
+/** Leave a channel — drops my membership row. Direct rooms can't be left
+ *  (there's no re-invite path), so this is channel-only. */
+export async function leaveRoom(roomId: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { data: room } = await supabase
+    .from("chat_rooms")
+    .select("room_kind")
+    .eq("id", roomId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!room || (room as { room_kind: string }).room_kind === "direct") return;
+  await supabase.from("chat_room_members").delete().eq("room_id", roomId).eq("user_id", session.userId);
+  revalidatePath("/studio/inbox");
+  redirect("/studio/inbox");
+}
+
+const REACTION_EMOJI = new Set(["👍", "❤️", "🎉", "👀"]);
+
+/** Toggle one of the four curated reactions on a message. Insert if absent,
+ *  delete if present (the unique (message_id, user_id, emoji) makes it a
+ *  clean upsert-or-remove). */
+export async function toggleReaction(messageId: string, emoji: string): Promise<void> {
+  if (!REACTION_EMOJI.has(emoji)) return;
+  const session = await requireSession();
+  const supabase = await createClient();
+
+  const { data: msg } = await supabase
+    .from("chat_messages")
+    .select("id, org_id, room_id")
+    .eq("id", messageId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!msg) return;
+  const message = msg as { id: string; org_id: string; room_id: string };
+
+  const { data: existing } = await supabase
+    .from("chat_message_reactions")
+    .select("id")
+    .eq("message_id", messageId)
+    .eq("user_id", session.userId)
+    .eq("emoji", emoji)
+    .maybeSingle();
+
+  if (existing) {
+    await supabase.from("chat_message_reactions").delete().eq("id", (existing as { id: string }).id);
+  } else {
+    await supabase.from("chat_message_reactions").insert({
+      org_id: message.org_id,
+      room_id: message.room_id,
+      message_id: messageId,
+      user_id: session.userId,
+      emoji,
+    });
+  }
+  revalidatePath("/studio/inbox");
+}

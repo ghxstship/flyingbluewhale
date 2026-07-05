@@ -42,18 +42,21 @@ export async function getNavCounts(
 async function unreadRoomCount(supabase: SupabaseClient, session: Session): Promise<number> {
   const { data: memberships } = await supabase
     .from("chat_room_members")
-    .select("room_id, last_read_at")
+    .select("room_id, last_read_at, muted_at")
     .eq("user_id", session.userId);
-  const rows = (memberships ?? []) as Array<{ room_id: string; last_read_at: string | null }>;
+  const rows = (memberships ?? []) as Array<{ room_id: string; last_read_at: string | null; muted_at: string | null }>;
   if (rows.length === 0) return 0;
-  const readMap = new Map(rows.map((m) => [m.room_id, m.last_read_at]));
+  // Muted rooms never contribute to the sidebar unread badge (kit 21 W5).
+  const active = rows.filter((m) => !m.muted_at);
+  if (active.length === 0) return 0;
+  const readMap = new Map(active.map((m) => [m.room_id, m.last_read_at]));
   const { data: rooms } = await supabase
     .from("chat_rooms")
     .select("id, last_message_at")
     .eq("org_id", session.orgId)
     .in(
       "id",
-      rows.map((m) => m.room_id),
+      active.map((m) => m.room_id),
     )
     .is("deleted_at", null)
     .not("last_message_at", "is", null);

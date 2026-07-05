@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BellOff } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -9,6 +10,8 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { ConsoleChat, type ConsoleMessage } from "./ConsoleChat";
 import { NewThreadControls } from "./NewThreadControls";
+import { RoomPinButton } from "./RoomPinButton";
+import { ThreadMenu } from "./ThreadMenu";
 import { resolveRecordRefs } from "./record-refs";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +24,8 @@ type RoomRow = {
   room_kind: string;
   last_message_at: string | null;
 };
+
+type MemberRow = { room_id: string; last_read_at: string | null; pinned_at: string | null; muted_at: string | null };
 
 /**
  * My Inbox (kit 20 Inbox M1) — the console's two-pane messaging surface.
@@ -52,11 +57,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
 
   const { data: memberships } = await supabase
     .from("chat_room_members")
-    .select("room_id, last_read_at")
+    .select("room_id, last_read_at, pinned_at, muted_at")
     .eq("user_id", session.userId);
-  const memberRows = (memberships ?? []) as Array<{ room_id: string; last_read_at: string | null }>;
+  const memberRows = (memberships ?? []) as MemberRow[];
   const roomIds = memberRows.map((m) => m.room_id);
   const readMap = new Map(memberRows.map((m) => [m.room_id, m.last_read_at]));
+  const pinnedMap = new Map(memberRows.map((m) => [m.room_id, !!m.pinned_at]));
+  const mutedMap = new Map(memberRows.map((m) => [m.room_id, !!m.muted_at]));
 
   const { data: roomsData } = roomIds.length
     ? await supabase
@@ -67,7 +74,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
         .is("deleted_at", null)
         .order("last_message_at", { ascending: false, nullsFirst: false })
     : { data: [] as RoomRow[] };
-  const rooms = (roomsData ?? []) as RoomRow[];
+  // Pinned rooms float to the top; within each band the server already sorted
+  // by last_message_at desc.
+  const rooms = ((roomsData ?? []) as RoomRow[])
+    .slice()
+    .sort((a, b) => Number(pinnedMap.get(b.id) ?? false) - Number(pinnedMap.get(a.id) ?? false));
 
   // Direct rooms are unnamed — label them with the other party. One batched
   // membership + user lookup covers every direct room in the list.
@@ -96,6 +107,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
 
   let thread: ConsoleMessage[] = [];
   let refs = {};
+  // last_read_at captured BEFORE the mark-read write below, so the client can
+  // draw the unread jump line at the first message newer than it.
+  const selectedLastRead = selected ? (readMap.get(selected.id) ?? null) : null;
   if (selected) {
     const { data: msgs } = await supabase
       .from("chat_messages")
@@ -122,6 +136,30 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
       ordered.map((m) => m.body),
     );
 
+    // Reactions for the visible messages, folded to per-message emoji tallies
+    // (count + whether the caller reacted) for the composer.
+    const reactionsByMessage = new Map<string, Map<string, { count: number; mine: boolean }>>();
+    if (ordered.length > 0) {
+      const { data: reactionRows } = await supabase
+        .from("chat_message_reactions")
+        .select("message_id, emoji, user_id")
+        .in(
+          "message_id",
+          ordered.map((m) => m.id),
+        );
+      for (const r of (reactionRows ?? []) as Array<{ message_id: string; emoji: string; user_id: string }>) {
+        let byEmoji = reactionsByMessage.get(r.message_id);
+        if (!byEmoji) {
+          byEmoji = new Map();
+          reactionsByMessage.set(r.message_id, byEmoji);
+        }
+        const cur = byEmoji.get(r.emoji) ?? { count: 0, mine: false };
+        cur.count += 1;
+        if (r.user_id === session.userId) cur.mine = true;
+        byEmoji.set(r.emoji, cur);
+      }
+    }
+
     thread = ordered.map((m) => ({
       id: m.id,
       authorId: m.author_id,
@@ -130,6 +168,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
       timeText: fmt.time(m.created_at),
       dayKey: fmt.dateParts(m.created_at, { year: "numeric", month: "2-digit", day: "2-digit" }),
       dayLabel: fmt.dateParts(m.created_at, { weekday: "short", month: "short", day: "numeric" }),
+      createdAt: m.created_at,
+      reactions: [...(reactionsByMessage.get(m.id)?.entries() ?? [])].map(([emoji, v]) => ({
+        emoji,
+        count: v.count,
+        mine: v.mine,
+      })),
     }));
 
     // Mark read on render — keeps the badge honest (mirrors /m/inbox).
@@ -192,14 +236,18 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
             <ul className="space-y-2 lg:max-h-[70vh] lg:overflow-y-auto lg:pr-1">
               {rooms.map((r) => {
                 const lastRead = readMap.get(r.id);
-                const unread = r.last_message_at && (!lastRead || new Date(r.last_message_at) > new Date(lastRead));
+                const muted = mutedMap.get(r.id) ?? false;
+                const pinned = pinnedMap.get(r.id) ?? false;
+                // Muted rooms never badge — they still list, just quietly.
+                const unread =
+                  !muted && r.last_message_at && (!lastRead || new Date(r.last_message_at) > new Date(lastRead));
                 const active = selected?.id === r.id;
                 return (
-                  <li key={r.id}>
+                  <li key={r.id} className="group relative">
                     <Link
                       href={`/studio/inbox?room=${r.id}`}
                       aria-current={active ? "page" : undefined}
-                      className={`surface flex items-start justify-between gap-3 p-3 ${
+                      className={`surface flex items-start justify-between gap-3 p-3 pe-9 ${
                         active ? "border-[var(--p-accent)]" : ""
                       }`}
                     >
@@ -207,6 +255,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                         <div className="flex items-center gap-2">
                           <Badge variant="muted">{toTitle(r.room_kind)}</Badge>
                           <span className="truncate text-sm font-medium">{roomLabel(r)}</span>
+                          {muted ? <BellOff size={12} className="shrink-0 text-[var(--p-text-3)]" /> : null}
                         </div>
                         {r.last_message_at ? (
                           <div className="mt-1 font-mono text-[10px] text-[var(--p-text-3)]">
@@ -223,6 +272,16 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                         <Badge variant="success">{t("console.inbox.newBadge", undefined, "New")}</Badge>
                       ) : null}
                     </Link>
+                    <div className="absolute end-2 top-2.5">
+                      <RoomPinButton
+                        roomId={r.id}
+                        pinned={pinned}
+                        labels={{
+                          pin: t("console.inbox.pin", undefined, "Pin To Top"),
+                          unpin: t("console.inbox.unpin", undefined, "Unpin"),
+                        }}
+                      />
+                    </div>
                   </li>
                 );
               })}
@@ -233,18 +292,43 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                   <div className="mb-3 flex items-center gap-2 border-b border-[var(--p-border)] pb-3">
                     <Badge variant="muted">{toTitle(selected.room_kind)}</Badge>
                     <span className="truncate text-sm font-semibold">{roomLabel(selected)}</span>
+                    <span className="flex-1" />
+                    <ThreadMenu
+                      roomId={selected.id}
+                      muted={mutedMap.get(selected.id) ?? false}
+                      canLeave={selected.room_kind !== "direct"}
+                      labels={{
+                        menu: t("console.inbox.threadMenu", undefined, "Thread Options"),
+                        mute: t("console.inbox.mute", undefined, "Mute"),
+                        unmute: t("console.inbox.unmute", undefined, "Unmute"),
+                        markUnread: t("console.inbox.markUnread", undefined, "Mark Unread"),
+                        leave: t("console.inbox.leave", undefined, "Leave Channel"),
+                        leaveConfirmTitle: t("console.inbox.leaveConfirmTitle", undefined, "Leave Channel?"),
+                        leaveConfirmBody: t(
+                          "console.inbox.leaveConfirmBody",
+                          undefined,
+                          "You'll stop receiving messages here and it drops off your list. An admin can re-add you.",
+                        ),
+                        cancel: t("common.cancel", undefined, "Cancel"),
+                      }}
+                    />
                   </div>
                   <ConsoleChat
                     roomId={selected.id}
                     userId={session.userId}
                     messages={thread}
                     refs={refs}
+                    lastReadAt={selectedLastRead}
                     labels={{
                       placeholder: t("console.inbox.placeholder", undefined, "Message · Enter Sends"),
                       send: t("common.send", undefined, "Send"),
                       sending: t("console.inbox.sending", undefined, "Sending…"),
                       empty: t("console.inbox.thread.empty", undefined, "No Messages Yet"),
                       emptyHint: t("console.inbox.thread.emptyHint", undefined, "Say hello to get things started."),
+                      newMessages: t("console.inbox.newMessages", undefined, "New"),
+                      addReaction: t("console.inbox.addReaction", undefined, "React"),
+                      copy: t("console.inbox.copy", undefined, "Copy Text"),
+                      copied: t("console.inbox.copied", undefined, "Copied"),
                     }}
                   />
                 </>

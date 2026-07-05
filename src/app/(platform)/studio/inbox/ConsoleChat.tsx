@@ -44,12 +44,15 @@ const REACTIONS = ["👍", "❤️", "🎉", "👀"] as const;
  * a server re-render, which also re-resolves record-ref chips for new
  * messages). Enter sends, Shift+Enter breaks the line.
  */
+export type ChatMember = { id: string; label: string };
+
 export function ConsoleChat({
   roomId,
   userId,
   messages,
   refs,
   lastReadAt,
+  people,
   labels,
 }: {
   roomId: string;
@@ -59,6 +62,8 @@ export function ConsoleChat({
   /** Caller's last_read_at captured before the mark-read write; the first
    *  message newer than it (and not mine) gets the unread jump line. */
   lastReadAt: string | null;
+  /** Org people for @mention typeahead + highlight (kit 21 W5). */
+  people: ChatMember[];
   labels: ConsoleChatLabels;
 }) {
   const [draft, setDraft] = React.useState("");
@@ -66,6 +71,48 @@ export function ConsoleChat({
   const [optimistic, addOptimistic] = useOptimistic(messages, (cur, next: ConsoleMessage) => [...cur, next]);
   const formRef = React.useRef<HTMLFormElement>(null);
   const endRef = React.useRef<HTMLDivElement>(null);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  // @mention typeahead — when the word at the caret starts with "@", surface
+  // a member picker; selecting inserts "@Full Name ". `mentionNames` drives
+  // the highlight of @mentions in rendered messages.
+  const [mentionQuery, setMentionQuery] = React.useState<string | null>(null);
+  const [mentionIdx, setMentionIdx] = React.useState(0);
+  const mentionNames = React.useMemo(() => people.map((p) => p.label), [people]);
+  const mentionMatches = React.useMemo(() => {
+    if (mentionQuery === null) return [];
+    const q = mentionQuery.toLowerCase();
+    return people.filter((p) => p.label.toLowerCase().includes(q)).slice(0, 6);
+  }, [mentionQuery, people]);
+
+  const syncMention = (value: string, caret: number) => {
+    // The token being typed: from the last "@" back to a whitespace boundary.
+    const upto = value.slice(0, caret);
+    const at = upto.lastIndexOf("@");
+    if (at === -1) return setMentionQuery(null);
+    const between = upto.slice(at + 1);
+    // A mention token has no whitespace and follows start-of-line or a space.
+    if (/\s/.test(between) || (at > 0 && !/\s/.test(value[at - 1]!))) return setMentionQuery(null);
+    setMentionQuery(between);
+    setMentionIdx(0);
+  };
+
+  const applyMention = (member: ChatMember) => {
+    const el = textareaRef.current;
+    const caret = el?.selectionStart ?? draft.length;
+    const upto = draft.slice(0, caret);
+    const at = upto.lastIndexOf("@");
+    if (at === -1) return;
+    const next = `${draft.slice(0, at)}@${member.label} ${draft.slice(caret)}`;
+    setDraft(next);
+    setMentionQuery(null);
+    // Restore focus + place caret after the inserted mention.
+    requestAnimationFrame(() => {
+      const pos = at + member.label.length + 2;
+      el?.focus();
+      el?.setSelectionRange(pos, pos);
+    });
+  };
 
   React.useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
@@ -143,6 +190,7 @@ export function ConsoleChat({
                     mine={mine}
                     grouped={grouped}
                     refs={refs}
+                    mentionNames={mentionNames}
                     labels={labels}
                     isPending={m.dayKey === "pending"}
                   />
@@ -163,19 +211,73 @@ export function ConsoleChat({
         action={() => submit()}
         className="mt-3 flex items-end gap-2 border-t border-[var(--p-border)] pt-3"
       >
-        <textarea
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              submit();
-            }
-          }}
-          rows={2}
-          placeholder={labels.placeholder}
-          className="ps-input min-h-[44px] flex-1 resize-y"
-        />
+        <div className="relative flex-1">
+          {mentionQuery !== null && mentionMatches.length > 0 ? (
+            <ul
+              role="listbox"
+              className="absolute bottom-full z-[var(--p-z-popover)] mb-1 max-h-48 w-full overflow-y-auto rounded-[var(--p-r-md)] border border-[var(--p-border)] bg-[var(--p-surface)] p-1 shadow-lg"
+            >
+              {mentionMatches.map((p, i) => (
+                <li key={p.id}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={i === mentionIdx}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      applyMention(p);
+                    }}
+                    className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-start text-sm ${
+                      i === mentionIdx ? "bg-[var(--p-accent-weak,var(--p-surface))]" : "hover:bg-[var(--p-surface)]"
+                    }`}
+                  >
+                    <span className="text-[var(--p-accent-text)]">@</span>
+                    {p.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <textarea
+            ref={textareaRef}
+            value={draft}
+            onChange={(e) => {
+              setDraft(e.target.value);
+              syncMention(e.target.value, e.target.selectionStart ?? e.target.value.length);
+            }}
+            onKeyDown={(e) => {
+              if (mentionQuery !== null && mentionMatches.length > 0) {
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setMentionIdx((n) => (n + 1) % mentionMatches.length);
+                  return;
+                }
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setMentionIdx((n) => (n - 1 + mentionMatches.length) % mentionMatches.length);
+                  return;
+                }
+                if (e.key === "Enter" || e.key === "Tab") {
+                  e.preventDefault();
+                  applyMention(mentionMatches[mentionIdx]!);
+                  return;
+                }
+                if (e.key === "Escape") {
+                  e.preventDefault();
+                  setMentionQuery(null);
+                  return;
+                }
+              }
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                submit();
+              }
+            }}
+            rows={2}
+            placeholder={labels.placeholder}
+            className="ps-input min-h-[44px] w-full resize-y"
+          />
+        </div>
         <button type="submit" className="ps-btn" disabled={pending || draft.trim().length === 0}>
           {pending ? labels.sending : labels.send}
         </button>
@@ -194,6 +296,7 @@ function Message({
   mine,
   grouped,
   refs,
+  mentionNames,
   labels,
   isPending,
 }: {
@@ -201,6 +304,7 @@ function Message({
   mine: boolean;
   grouped: boolean;
   refs: RecordRefMap;
+  mentionNames: string[];
   labels: ConsoleChatLabels;
   isPending: boolean;
 }) {
@@ -230,7 +334,7 @@ function Message({
           {!mine && !grouped && m.authorName ? (
             <div className="text-[11px] font-semibold text-[var(--p-text-2)]">{m.authorName}</div>
           ) : null}
-          <MessageBody body={m.body} refs={refs} mine={mine} />
+          <MessageBody body={m.body} refs={refs} mine={mine} mentionNames={mentionNames} />
           <div className={`mt-0.5 text-right font-mono text-[10px] ${mine ? "opacity-80" : "text-[var(--p-text-3)]"}`}>
             {m.timeText}
           </div>
@@ -287,7 +391,17 @@ function Message({
  * codes) render as deep-link chips; pasted /studio links chip even without
  * a lookup. Unresolved text stays plain — no fabricated links.
  */
-function MessageBody({ body, refs, mine }: { body: string; refs: RecordRefMap; mine: boolean }) {
+function MessageBody({
+  body,
+  refs,
+  mine,
+  mentionNames,
+}: {
+  body: string;
+  refs: RecordRefMap;
+  mine: boolean;
+  mentionNames: string[];
+}) {
   const tokens = Object.keys(refs);
   const pattern =
     tokens.length > 0
@@ -300,13 +414,25 @@ function MessageBody({ body, refs, mine }: { body: string; refs: RecordRefMap; m
   // Local, non-global copy — testing with the shared /g regex would mutate
   // its lastIndex during render.
   const urlTest = new RegExp(`^(?:${CHAT_URL_PATTERN.source})$`);
+  // Longest-first so "@Jane Doe" wins over a stray "@Jane".
+  const mentionRe =
+    mentionNames.length > 0
+      ? new RegExp(
+          `(@(?:${mentionNames
+            .slice()
+            .sort((a, b) => b.length - a.length)
+            .map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+            .join("|")}))`,
+          "g",
+        )
+      : null;
   return (
     <div className="text-sm break-words whitespace-pre-wrap">
       {parts.map((part, i) => {
         if (!part) return null;
         const ref = refs[part];
         const isUrl = !ref && urlTest.test(part) && part.includes("/studio/");
-        if (!ref && !isUrl) return <React.Fragment key={i}>{part}</React.Fragment>;
+        if (!ref && !isUrl) return <React.Fragment key={i}>{renderMentions(part, mentionRe, mine, i)}</React.Fragment>;
         const href = ref ? ref.href : part.slice(part.indexOf("/studio/"));
         const label = ref ? ref.label : href.split(/[?#]/)[0];
         return (
@@ -325,4 +451,26 @@ function MessageBody({ body, refs, mine }: { body: string; refs: RecordRefMap; m
       })}
     </div>
   );
+}
+
+/** Highlight @mentions of known members inside a plain-text fragment.
+ *  split() with a single capturing group yields [text, mention, text, …], so
+ *  odd indices are the captured @mentions — no re-testing needed. */
+function renderMentions(text: string, mentionRe: RegExp | null, mine: boolean, keyBase: number): React.ReactNode {
+  if (!mentionRe) return text;
+  const segs = text.split(mentionRe);
+  return segs.map((seg, j) => {
+    if (!seg) return null;
+    if (j % 2 === 1) {
+      return (
+        <span
+          key={`${keyBase}-${j}`}
+          className={`rounded px-0.5 font-semibold ${mine ? "text-[var(--p-accent-on)]" : "text-[var(--p-accent-text)]"}`}
+        >
+          {seg}
+        </span>
+      );
+    }
+    return <React.Fragment key={`${keyBase}-${j}`}>{seg}</React.Fragment>;
+  });
 }

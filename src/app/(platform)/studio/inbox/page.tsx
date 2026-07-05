@@ -319,6 +319,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                     messages={thread}
                     refs={refs}
                     lastReadAt={selectedLastRead}
+                    people={people}
                     labels={{
                       placeholder: t("console.inbox.placeholder", undefined, "Message · Enter Sends"),
                       send: t("common.send", undefined, "Send"),

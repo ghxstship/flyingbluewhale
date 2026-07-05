@@ -4,6 +4,7 @@ import * as React from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { DiffViewer } from "@/components/charts/DiffViewer";
+import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { timeAgo } from "@/lib/format";
 import type { AuditLog } from "@/lib/supabase/types";
@@ -13,13 +14,56 @@ import type { AuditLog } from "@/lib/supabase/types";
  * target-table filters. Modeled on Notion's audit panel and GitHub's
  * commit page. Each row's `metadata` is treated as `{ before, after }`
  * when both fields are present; otherwise we render whatever shape exists.
+ *
+ * Live prepend (kit 21 remediation R1, ADR-0015): on the first page the
+ * viewer subscribes to `audit_log` INSERTs for the org and prepends them —
+ * the audit_log IS the SSOT that `emitAudit` already writes, so "live" is a
+ * realtime read over it, not a parallel session-event store.
  */
-export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
+export function AuditLogViewer({
+  rows: initialRows,
+  orgId,
+  live = false,
+}: {
+  rows: AuditLog[];
+  orgId?: string;
+  /** Enable the realtime prepend — only on the first page (offset 0), so a
+   *  paginated "older" view isn't confusingly reordered by fresh events. */
+  live?: boolean;
+}) {
   const t = useT();
   const [actorFilter, setActorFilter] = React.useState("");
   const [actionFilter, setActionFilter] = React.useState("");
   const [tableFilter, setTableFilter] = React.useState("");
   const [open, setOpen] = React.useState<string | null>(null);
+  const [liveRows, setLiveRows] = React.useState<AuditLog[]>([]);
+
+  React.useEffect(() => {
+    if (!live || !orgId) return;
+    const supabase = createClient();
+    const channel = supabase
+      .channel(`audit-log-${orgId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "audit_log", filter: `org_id=eq.${orgId}` },
+        (payload) => {
+          const row = payload.new as AuditLog;
+          setLiveRows((cur) => (cur.some((r) => r.id === row.id) ? cur : [row, ...cur]));
+        },
+      )
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [live, orgId]);
+
+  // Session-fresh events (newest first) above the server page, deduped against
+  // the initial rows so a refresh doesn't double them.
+  const initialIds = React.useMemo(() => new Set(initialRows.map((r) => r.id)), [initialRows]);
+  const rows = React.useMemo(
+    () => [...liveRows.filter((r) => !initialIds.has(r.id)), ...initialRows],
+    [liveRows, initialRows, initialIds],
+  );
 
   const actions = React.useMemo(() => Array.from(new Set(rows.map((r) => r.action))).sort(), [rows]);
   const tables = React.useMemo(

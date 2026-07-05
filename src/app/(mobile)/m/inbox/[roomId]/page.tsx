@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { resolveRecordRefs } from "@/lib/chat/record-refs";
 import { ChatRoom, type ChatMessage } from "./ChatRoom";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +53,16 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
     .limit(PAGE_SIZE);
   const messages = ((msgs ?? []) as ChatMessage[]).slice().reverse();
 
+  // Record-ref chips (kit 21 remediation R1) — resolve via the shared SSOT
+  // for the mobile shell; console-record chips render unlinked here (no field
+  // route) but keep the "this is a record" affordance.
+  const refs = await resolveRecordRefs(
+    supabase,
+    session.orgId,
+    messages.map((m) => m.body),
+    "mobile",
+  );
+
   // Mark the room read on render — keeps the inbox unread badge honest.
   await supabase
     .from("chat_room_members")
@@ -92,6 +103,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
           locale={fmt.settings.locale}
           timezone={fmt.settings.timezone}
           initialMessages={messages}
+          refs={refs}
           labels={{
             placeholder: t("m.inbox.room.placeholder", undefined, "Message"),
             send: t("common.send", undefined, "Send"),

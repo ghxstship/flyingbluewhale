@@ -3,7 +3,7 @@
  * is server-only — it does the org-scoped lookups). The island only needs
  * the resolved map shape and the pasted-link pattern.
  */
-export type RecordRef = { href: string; label: string };
+export type RecordRef = { href: string | null; label: string };
 export type RecordRefMap = Record<string, RecordRef>;
 
 /** Internal console link, absolute or origin-relative. */

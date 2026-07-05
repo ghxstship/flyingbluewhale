@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, useEffect, useLayoutEffect, useOptimistic, useRef, useState } from "react";
+import Link from "next/link";
 import { Send } from "lucide-react";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
@@ -55,6 +56,7 @@ export function ChatRoom({
   locale,
   timezone,
   initialMessages,
+  refs,
   labels,
 }: {
   roomId: string;
@@ -62,6 +64,8 @@ export function ChatRoom({
   locale: Locale;
   timezone: string;
   initialMessages: ChatMessage[];
+  /** Record-ref chip map (kit 21 R1) — token → shell-mapped href + label. */
+  refs: Record<string, { href: string | null; label: string }>;
   labels: ChatRoomLabels;
 }) {
   const [messages, setMessages] = useState<OptimisticMessage[]>(initialMessages);
@@ -176,7 +180,7 @@ export function ChatRoom({
                       </div>
                     ) : null}
                     <div className={`bub ${mine ? "me" : "them"}`} style={m.pending ? { opacity: 0.6 } : undefined}>
-                      {m.body}
+                      <MobileMessageBody body={m.body} refs={refs} />
                       <div className="bt">{formatTime(m.created_at, { locale, timezone })}</div>
                     </div>
                   </div>
@@ -242,6 +246,43 @@ export function ChatRoom({
           <Send size={17} />
         </button>
       </form>
+    </>
+  );
+}
+
+/**
+ * Record-ref chips in a field message (kit 21 R1). Splits the body on the
+ * resolved ref tokens and renders each as a chip — a Link when the record has
+ * a route in this shell (href set), else an unlinked badge (still signals
+ * "this is a record" without a broken cross-shell jump).
+ */
+function MobileMessageBody({
+  body,
+  refs,
+}: {
+  body: string;
+  refs: Record<string, { href: string | null; label: string }>;
+}) {
+  const tokens = Object.keys(refs);
+  if (tokens.length === 0) return <>{body}</>;
+  const pattern = new RegExp(`(${tokens.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`, "g");
+  const parts = body.split(pattern);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const ref = refs[part];
+        if (!ref) return <span key={i}>{part}</span>;
+        const cls = "refchip";
+        return ref.href ? (
+          <Link key={i} href={ref.href} className={cls}>
+            {ref.label}
+          </Link>
+        ) : (
+          <span key={i} className={cls}>
+            {ref.label}
+          </span>
+        );
+      })}
     </>
   );
 }

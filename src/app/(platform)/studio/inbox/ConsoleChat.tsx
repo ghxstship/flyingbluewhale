@@ -434,19 +434,22 @@ function MessageBody({
         const isUrl = !ref && urlTest.test(part) && part.includes("/studio/");
         if (!ref && !isUrl) return <React.Fragment key={i}>{renderMentions(part, mentionRe, mine, i)}</React.Fragment>;
         const href = ref ? ref.href : part.slice(part.indexOf("/studio/"));
-        const label = ref ? ref.label : href.split(/[?#]/)[0];
-        return (
-          <Link
-            key={i}
-            href={href}
-            className={`mx-0.5 inline-flex max-w-full items-center truncate rounded-full border px-2 py-0.5 align-middle font-mono text-[11px] font-semibold ${
-              mine
-                ? "border-[var(--p-accent-on)] text-[var(--p-accent-on)] underline-offset-2 hover:underline"
-                : "border-[var(--p-border)] bg-[var(--p-bg)] text-[var(--p-accent-text)] hover:underline"
-            }`}
-          >
+        const label = ref ? ref.label : (href ?? part).split(/[?#]/)[0];
+        const chipClass = `mx-0.5 inline-flex max-w-full items-center truncate rounded-full border px-2 py-0.5 align-middle font-mono text-[11px] font-semibold ${
+          mine
+            ? "border-[var(--p-accent-on)] text-[var(--p-accent-on)] underline-offset-2 hover:underline"
+            : "border-[var(--p-border)] bg-[var(--p-bg)] text-[var(--p-accent-text)] hover:underline"
+        }`;
+        // A record with no route in this shell (href null) still chips — it
+        // just doesn't navigate (ADR-0015 shell-route-map).
+        return href ? (
+          <Link key={i} href={href} className={chipClass}>
             {label}
           </Link>
+        ) : (
+          <span key={i} className={chipClass.replace("hover:underline", "")}>
+            {label}
+          </span>
         );
       })}
     </div>

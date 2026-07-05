@@ -58,7 +58,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
         }
       />
       <div className="page-content max-w-6xl space-y-3">
-        <AuditLogViewer rows={rows} />
+        <AuditLogViewer rows={rows} orgId={session.orgId} live={offset === 0} />
         <nav className="flex items-center justify-between text-xs">
           {offset > 0 ? (
             <Link

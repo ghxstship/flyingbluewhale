@@ -2053,6 +2053,12 @@
               ]
             },
             {
+              "path": "/studio/settings/schema",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
               "path": "/studio/settings/audit",
               "arch": [
                 "SET"

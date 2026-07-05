@@ -1105,6 +1105,7 @@ export const settingsNav: NavGroup[] = [
       { label: "RAG Corpus", href: "/studio/ai/corpus", minRole: "manager" },
       { label: "API", href: "/studio/settings/api", minRole: "admin" },
       { label: "Webhooks", href: "/studio/settings/webhooks", minRole: "admin" },
+      { label: "Schema Builder", href: "/studio/settings/schema", minRole: "admin" },
     ],
   },
   {

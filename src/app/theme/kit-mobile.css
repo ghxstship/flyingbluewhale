@@ -217,6 +217,10 @@
 .mobile-shell .bub .bt { font-family: var(--p-mono); font-size: 9px; opacity: 0.55; margin-top: var(--p-1); text-align: right; }
 .mobile-shell .composer { display: flex; gap: 8px; align-items: center; padding: var(--p-3) 0 4px; }
 .mobile-shell .chatview { display: flex; flex-direction: column; min-height: 100%; }
+/* Record-ref chip in a field message (kit 21 R1). Inline mono pill; a linked
+   ref underlines on press, an unlinked one (no route in this shell) doesn't. */
+.mobile-shell .refchip { display: inline-flex; align-items: center; margin: 0 2px; padding: 0 var(--p-2); border-radius: 999px; border: 1px solid var(--p-border); background: var(--p-bg); color: var(--p-accent-text); font-family: var(--p-mono-data, var(--p-mono)); font-size: 11px; font-weight: 700; vertical-align: middle; text-decoration: none; }
+a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration: underline; }
 .mobile-shell .chatview .chat-msgs { flex: 1; }
 .mobile-shell .chatview .composer { position: sticky; bottom: 0; background: var(--p-bg); margin-top: 8px; padding: var(--p-3) 0 var(--p-2); border-top: 1px solid var(--p-border); }
 .mobile-shell .composer .box { flex: 1; border: 1px solid var(--p-border); border-radius: 20px; padding: var(--p-3) var(--p-4); font-size: 13.5px; background: var(--p-surface); color: var(--p-text-3); }

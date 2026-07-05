@@ -134,6 +134,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
       supabase,
       session.orgId,
       ordered.map((m) => m.body),
+      "platform",
     );
 
     // Reactions for the visible messages, folded to per-message emoji tallies

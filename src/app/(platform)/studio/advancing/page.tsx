@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -20,6 +21,7 @@ type DeliverableRow = {
   fulfillment_state: FulfillmentState;
   deadline: string | null;
   project: { id: string; name: string | null } | null;
+  reviewTally?: { approved: number; total: number; changes: boolean };
 };
 
 type AssignmentRow = {
@@ -82,6 +84,28 @@ export default async function Page() {
 
   const docRows = (deliverables ?? []) as unknown as DeliverableRow[];
   const asgRows = (assignments ?? []) as unknown as AssignmentRow[];
+
+  // Reviewer tally (kit 21 W2, Frame.io) — one batched query folds every
+  // deliverable's reviewers to an approved/total count + a changes flag.
+  if (docRows.length > 0) {
+    const { data: revs } = await supabase
+      .from("deliverable_reviewers")
+      .select("deliverable_id, review_state")
+      .eq("org_id", session.orgId)
+      .in(
+        "deliverable_id",
+        docRows.map((d) => d.id),
+      );
+    const tally = new Map<string, { approved: number; total: number; changes: boolean }>();
+    for (const r of (revs ?? []) as Array<{ deliverable_id: string; review_state: string }>) {
+      const cur = tally.get(r.deliverable_id) ?? { approved: 0, total: 0, changes: false };
+      cur.total += 1;
+      if (r.review_state === "approved") cur.approved += 1;
+      if (r.review_state === "changes_requested") cur.changes = true;
+      tally.set(r.deliverable_id, cur);
+    }
+    for (const d of docRows) d.reviewTally = tally.get(d.id);
+  }
   const openDocs = docRows.filter((d) => OPEN_STATES.includes(d.fulfillment_state)).length;
   const openAsg = asgRows.filter((a) => OPEN_STATES.includes(a.fulfillment_state)).length;
   const fulfilled = asgRows.filter((a) => ["delivered", "issued", "redeemed"].includes(a.fulfillment_state)).length;
@@ -129,7 +153,7 @@ export default async function Page() {
           </h2>
           <DataTable<DeliverableRow>
             rows={docRows}
-            rowHref={(r) => (r.project ? `/studio/projects/${r.project.id}/advancing` : "/studio/projects")}
+            rowHref={(r) => `/studio/advancing/deliverables/${r.id}`}
             emptyLabel={t("console.advancing.docs.emptyLabel", undefined, "No deliverables yet")}
             emptyDescription={t(
               "console.advancing.docs.emptyDescription",
@@ -170,6 +194,25 @@ export default async function Page() {
                 accessor: (r) => r.fulfillment_state,
                 filterable: true,
                 groupable: true,
+              },
+              {
+                key: "reviewers",
+                header: t("console.advancing.column.reviewers", undefined, "Reviewers"),
+                render: (r) =>
+                  r.reviewTally ? (
+                    <Badge variant={r.reviewTally.changes ? "warning" : r.reviewTally.approved === r.reviewTally.total ? "success" : "muted"}>
+                      {r.reviewTally.changes
+                        ? t("console.advancing.column.changesRequested", undefined, "Changes Requested")
+                        : t(
+                            "console.advancing.column.approvedTally",
+                            { approved: r.reviewTally.approved, total: r.reviewTally.total },
+                            `${r.reviewTally.approved} Of ${r.reviewTally.total} Approved`,
+                          )}
+                    </Badge>
+                  ) : (
+                    <span className="text-[var(--p-text-3)]">—</span>
+                  ),
+                accessor: (r) => (r.reviewTally ? r.reviewTally.approved : -1),
               },
               {
                 key: "deadline",

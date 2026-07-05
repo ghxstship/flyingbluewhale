@@ -9599,6 +9599,54 @@ export type Database = {
           },
         ]
       }
+      deliverable_reviewers: {
+        Row: {
+          assigned_at: string
+          deliverable_id: string
+          id: string
+          note: string | null
+          org_id: string
+          review_state: Database["public"]["Enums"]["deliverable_review_state"]
+          reviewed_at: string | null
+          reviewer_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          deliverable_id: string
+          id?: string
+          note?: string | null
+          org_id: string
+          review_state?: Database["public"]["Enums"]["deliverable_review_state"]
+          reviewed_at?: string | null
+          reviewer_id: string
+        }
+        Update: {
+          assigned_at?: string
+          deliverable_id?: string
+          id?: string
+          note?: string | null
+          org_id?: string
+          review_state?: Database["public"]["Enums"]["deliverable_review_state"]
+          reviewed_at?: string | null
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deliverable_reviewers_deliverable_id_fkey"
+            columns: ["deliverable_id"]
+            isOneToOne: false
+            referencedRelation: "deliverables"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverable_reviewers_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deliverable_templates: {
         Row: {
           created_at: string
@@ -42452,6 +42500,7 @@ export type Database = {
         | "tiered"
         | "flat_plus"
         | "vs_plus_walk"
+      deliverable_review_state: "pending" | "approved" | "changes_requested"
       deliverable_type:
         | "technical_rider"
         | "hospitality_rider"
@@ -43627,6 +43676,7 @@ export const Constants = {
         "flat_plus",
         "vs_plus_walk",
       ],
+      deliverable_review_state: ["pending", "approved", "changes_requested"],
       deliverable_type: [
         "technical_rider",
         "hospitality_rider",

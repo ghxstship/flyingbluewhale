@@ -4,9 +4,16 @@ import { useActionState, useEffect, useLayoutEffect, useOptimistic, useRef, useS
 import { Send } from "lucide-react";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { createClient } from "@/lib/supabase/client";
-import { formatTime } from "@/lib/i18n/format";
+import { formatTime, formatDate } from "@/lib/i18n/format";
 import type { Locale } from "@/lib/i18n/config";
 import { sendMessage, type State } from "./actions";
+
+/** Stable YYYY-MM-DD day key in the viewer's timezone (day-divider grouping). */
+function dayKeyOf(iso: string, locale: Locale, timezone: string): string {
+  return new Intl.DateTimeFormat(locale, { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(
+    new Date(iso),
+  );
+}
 
 export type ChatMessage = {
   id: string;
@@ -128,20 +135,29 @@ export function ChatRoom({
           </div>
         ) : (
           <>
-            <div className="daysep">{labels.today}</div>
-            {optimistic.map((m) => {
-              const mine = m.author_id === userId;
-              return (
-                <div
-                  className={`bub ${mine ? "me" : "them"}`}
-                  key={m.id}
-                  style={m.pending ? { opacity: 0.6 } : undefined}
-                >
-                  {m.body}
-                  <div className="bt">{formatTime(m.created_at, { locale, timezone })}</div>
-                </div>
-              );
-            })}
+            {(() => {
+              const todayKey = dayKeyOf(new Date().toISOString(), locale, timezone);
+              let lastDay = "";
+              return optimistic.map((m) => {
+                const mine = m.author_id === userId;
+                const key = dayKeyOf(m.created_at, locale, timezone);
+                const divider = key !== lastDay ? key : null;
+                lastDay = key;
+                return (
+                  <div key={m.id} className="contents">
+                    {divider ? (
+                      <div className="daysep">
+                        {divider === todayKey ? labels.today : formatDate(m.created_at, { locale, timezone })}
+                      </div>
+                    ) : null}
+                    <div className={`bub ${mine ? "me" : "them"}`} style={m.pending ? { opacity: 0.6 } : undefined}>
+                      {m.body}
+                      <div className="bt">{formatTime(m.created_at, { locale, timezone })}</div>
+                    </div>
+                  </div>
+                );
+              });
+            })()}
           </>
         )}
       </div>

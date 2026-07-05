@@ -66,6 +66,10 @@ export type AuditAction =
   // surface — proposals, decks, drawings — should emit one of these.
   | "share_link.create"
   | "share_link.revoke"
+  // Knowledge Base article verification (kit 21 W7) — stamping / clearing the
+  // "verified" trust signal on an SOP.
+  | "kb.article.verified"
+  | "kb.article.unverified"
   // MFA recovery code rotation. Recovery codes are sensitive material;
   // when they're regenerated the prior batch is hard-deleted (no soft
   // delete — leaves redeemable secrets findable). The audit row is the

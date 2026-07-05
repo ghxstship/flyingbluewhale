@@ -3,12 +3,14 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { Markdown } from "@/components/Markdown";
 import { getRequestT } from "@/lib/i18n/request";
+import { kbVerification } from "@/lib/kb/verification";
+import { VerifyButton } from "./VerifyButton";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,8 @@ type Article = {
   version: number;
   updated_at: string;
   created_at: string;
+  verified_at: string | null;
+  review_interval_days: number;
 };
 
 function tagsOf(raw: unknown): string[] {
@@ -51,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const { data } = await supabase
     .from("kb_articles")
-    .select("id, slug, title, body_markdown, tags, version, updated_at, created_at")
+    .select("id, slug, title, body_markdown, tags, version, updated_at, created_at, verified_at, review_interval_days")
     .eq("slug", slug)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -60,6 +64,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (!article) notFound();
 
   const tags = tagsOf(article.tags);
+  const canVerify = isManagerPlus(session);
+  const verification = kbVerification(article.verified_at, article.review_interval_days, Date.now());
 
   return (
     <>
@@ -77,21 +83,42 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           { label: article.title },
         ]}
         action={
-          <Button href={`/studio/knowledge/${article.slug}/edit`} size="sm" variant="secondary">
-            {t("common.edit", undefined, "Edit")}
-          </Button>
+          <div className="flex items-center gap-2">
+            {canVerify && (
+              <VerifyButton
+                articleId={article.id}
+                slug={article.slug}
+                verified={verification.state !== "unverified"}
+                labels={{
+                  verify: t("console.knowledge.verify", undefined, "Mark Verified"),
+                  unverify: t("console.knowledge.unverify", undefined, "Clear Verified"),
+                }}
+              />
+            )}
+            <Button href={`/studio/knowledge/${article.slug}/edit`} size="sm" variant="secondary">
+              {t("common.edit", undefined, "Edit")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content max-w-3xl space-y-5">
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {tags.map((tag) => (
-              <Link key={tag} href={`/studio/knowledge?tag=${encodeURIComponent(tag)}`}>
-                <Badge variant="muted">{tag}</Badge>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {verification.state === "verified" && (
+            <Badge variant="success">
+              {t("console.knowledge.verifiedStamp", { when: timeAgo(verification.verifiedAt) }, `Verified ${timeAgo(verification.verifiedAt)}`)}
+            </Badge>
+          )}
+          {verification.state === "stale" && (
+            <Badge variant="warning">
+              {t("console.knowledge.staleStamp", undefined, "Stale · Review Before Show")}
+            </Badge>
+          )}
+          {tags.map((tag) => (
+            <Link key={tag} href={`/studio/knowledge?tag=${encodeURIComponent(tag)}`}>
+              <Badge variant="muted">{tag}</Badge>
+            </Link>
+          ))}
+        </div>
 
         <article className="surface p-8">
           <Markdown source={article.body_markdown} />

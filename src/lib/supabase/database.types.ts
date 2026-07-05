@@ -15638,10 +15638,13 @@ export type Database = {
           created_at: string
           id: string
           org_id: string
+          review_interval_days: number
           slug: string
           tags: Json
           title: string
           updated_at: string
+          verified_at: string | null
+          verified_by: string | null
           version: number
         }
         Insert: {
@@ -15650,10 +15653,13 @@ export type Database = {
           created_at?: string
           id?: string
           org_id: string
+          review_interval_days?: number
           slug: string
           tags?: Json
           title: string
           updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
           version?: number
         }
         Update: {
@@ -15662,10 +15668,13 @@ export type Database = {
           created_at?: string
           id?: string
           org_id?: string
+          review_interval_days?: number
           slug?: string
           tags?: Json
           title?: string
           updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
           version?: number
         }
         Relationships: []

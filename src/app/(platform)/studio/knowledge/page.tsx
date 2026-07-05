@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { BadgeCheck } from "lucide-react";
+import { kbVerification } from "@/lib/kb/verification";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +21,8 @@ type Article = {
   tags: string[] | null;
   version: number;
   updated_at: string;
+  verified_at: string | null;
+  review_interval_days: number;
 };
 
 function tagsOf(raw: unknown): string[] {
@@ -60,7 +64,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
 
   let q = supabase
     .from("kb_articles")
-    .select("id, slug, title, body_markdown, tags, version, updated_at")
+    .select("id, slug, title, body_markdown, tags, version, updated_at, verified_at, review_interval_days")
     .eq("org_id", session.orgId)
     .order("updated_at", { ascending: false })
     .limit(200);
@@ -155,7 +159,23 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                   <div className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                     /{a.slug} · v{a.version}
                   </div>
-                  <h3 className="mt-1 text-base font-semibold">{a.title}</h3>
+                  <div className="mt-1 flex items-center gap-2">
+                    <h3 className="text-base font-semibold">{a.title}</h3>
+                    {(() => {
+                      const v = kbVerification(a.verified_at, a.review_interval_days, Date.now());
+                      if (v.state === "verified")
+                        return (
+                          <BadgeCheck size={14} className="shrink-0 text-[var(--p-success-text)]" aria-label="Verified" />
+                        );
+                      if (v.state === "stale")
+                        return (
+                          <span className="shrink-0 rounded-full bg-[color:var(--p-warning)]/15 px-1.5 py-0.5 text-[9px] font-semibold text-[var(--p-warning-text)]">
+                            {t("console.knowledge.staleShort", undefined, "Stale")}
+                          </span>
+                        );
+                      return null;
+                    })()}
+                  </div>
                   <p className="mt-2 line-clamp-3 text-xs text-[var(--p-text-2)]">{preview(a.body_markdown)}</p>
                   <div className="mt-3 flex items-center justify-between text-[10px] text-[var(--p-text-2)]">
                     <div className="flex flex-wrap gap-1">

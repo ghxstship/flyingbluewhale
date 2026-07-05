@@ -9073,6 +9073,48 @@ export type Database = {
           },
         ]
       }
+      daily_log_signoffs: {
+        Row: {
+          daily_log_id: string
+          id: string
+          org_id: string
+          section: string
+          signed_at: string
+          signed_by: string | null
+        }
+        Insert: {
+          daily_log_id: string
+          id?: string
+          org_id: string
+          section: string
+          signed_at?: string
+          signed_by?: string | null
+        }
+        Update: {
+          daily_log_id?: string
+          id?: string
+          org_id?: string
+          section?: string
+          signed_at?: string
+          signed_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_log_signoffs_daily_log_id_fkey"
+            columns: ["daily_log_id"]
+            isOneToOne: false
+            referencedRelation: "daily_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_log_signoffs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       daily_log_visitors: {
         Row: {
           arrived_at: string | null
@@ -32620,7 +32662,9 @@ export type Database = {
           due_at: string | null
           effort: number | null
           id: string
+          kind: string
           org_id: string
+          period_id: string | null
           priority: number
           project_id: string | null
           task_state: Database["public"]["Enums"]["task_status"]
@@ -32636,7 +32680,9 @@ export type Database = {
           due_at?: string | null
           effort?: number | null
           id?: string
+          kind?: string
           org_id: string
+          period_id?: string | null
           priority?: number
           project_id?: string | null
           task_state?: Database["public"]["Enums"]["task_status"]
@@ -32652,7 +32698,9 @@ export type Database = {
           due_at?: string | null
           effort?: number | null
           id?: string
+          kind?: string
           org_id?: string
+          period_id?: string | null
           priority?: number
           project_id?: string | null
           task_state?: Database["public"]["Enums"]["task_status"]

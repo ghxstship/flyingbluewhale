@@ -11,7 +11,9 @@ import {
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { createClient } from "@/lib/supabase/server";
 import { AccountingPeriodStateControls } from "./AccountingPeriodStateControls";
+import { CloseChecklist, type CloseItem } from "./CloseChecklist";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +26,20 @@ export default async function AccountingPeriodDetailPage({ params }: { params: P
   if (!period) notFound();
   const transitions = await listAccountingPeriodTransitions(session.orgId, periodId);
   const allowedNext = ACCOUNTING_PERIOD_TRANSITION_GRAPH[period.state];
+
+  // Close checklist (kit 21 R3) — close-kind tasks scoped to this period.
+  const supabase = await createClient();
+  const { data: closeTasks } = await supabase
+    .from("tasks")
+    .select("id, title, task_state")
+    .eq("org_id", session.orgId)
+    .eq("period_id", periodId)
+    .eq("kind", "close")
+    .order("created_at", { ascending: true });
+  const closeItems: CloseItem[] = ((closeTasks ?? []) as Array<{ id: string; title: string; task_state: string }>).map(
+    (r) => ({ id: r.id, title: r.title, done: r.task_state === "done" }),
+  );
+  const periodLocked = period.state === "CLOSED" || period.state === "AUDITED";
 
   return (
     <>
@@ -61,6 +77,8 @@ export default async function AccountingPeriodDetailPage({ params }: { params: P
             </p>
           ) : null}
         </section>
+
+        <CloseChecklist periodId={period.id} items={closeItems} locked={periodLocked} />
 
         <section className="surface space-y-3 p-6">
           <div className="flex items-center justify-between">

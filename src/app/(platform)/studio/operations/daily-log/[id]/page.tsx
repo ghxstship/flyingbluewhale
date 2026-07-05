@@ -10,7 +10,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { createServiceClient } from "@/lib/supabase/server";
-import { deleteDailyLogPhoto, transitionDailyLog, uploadDailyLogPhoto } from "./actions";
+import {
+  deleteDailyLogPhoto,
+  transitionDailyLog,
+  uploadDailyLogPhoto,
+  toggleDailyLogSignoff,
+  DAILY_LOG_SECTIONS,
+} from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -100,6 +106,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const totalHours = (manpower ?? []).reduce((s, m) => s + Number(m.hours_worked ?? 0), 0);
   const projectName = (log.project as unknown as { name: string | null } | null)?.name ?? "—";
 
+  // Section sign-off (kit 21 R3) — one row per signed section; the header
+  // shows sections-signed completeness (Raken).
+  const { data: signoffData } = await supabase
+    .from("daily_log_signoffs")
+    .select("section")
+    .eq("org_id", session.orgId)
+    .eq("daily_log_id", id);
+  const signedSections = new Set(((signoffData ?? []) as Array<{ section: string }>).map((s) => s.section));
+  const signedCount = DAILY_LOG_SECTIONS.filter((s) => signedSections.has(s)).length;
+
   return (
     <>
       <ModuleHeader
@@ -116,6 +132,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="daily_logs" targetId={id} currentUser={presenceUser} />
+            <Badge variant={signedCount === DAILY_LOG_SECTIONS.length ? "success" : "muted"}>
+              {t(
+                "console.operations.dailyLog.detail.signedTally",
+                { signed: signedCount, total: DAILY_LOG_SECTIONS.length },
+                `${signedCount}/${DAILY_LOG_SECTIONS.length} Signed`,
+              )}
+            </Badge>
             <Badge variant={toneFor(log.log_state)}>{toTitle(log.log_state)}</Badge>
             {log.log_state === "draft" && (
               <StatusForm
@@ -324,6 +347,44 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </p>
           )}
+        </section>
+
+        <section className="surface p-4">
+          <div className="flex items-baseline justify-between">
+            <h3 className="text-sm font-semibold">
+              {t("console.operations.dailyLog.detail.signOff", undefined, "Sign-Off")}
+            </h3>
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.operations.dailyLog.detail.signedTally",
+                { signed: signedCount, total: DAILY_LOG_SECTIONS.length },
+                `${signedCount}/${DAILY_LOG_SECTIONS.length} Signed`,
+              )}
+            </span>
+          </div>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {DAILY_LOG_SECTIONS.map((sec) => {
+              const signed = signedSections.has(sec);
+              return (
+                <li
+                  key={sec}
+                  className="flex items-center justify-between gap-2 rounded-[var(--p-r-md)] border border-[var(--p-border)] px-3 py-2"
+                >
+                  <span className="text-sm capitalize">{sec}</span>
+                  <form action={toggleDailyLogSignoff.bind(null, id, sec)}>
+                    <button
+                      type="submit"
+                      className={`ps-btn ps-btn--sm ${signed ? "ps-btn--secondary" : "ps-btn--cta"}`}
+                    >
+                      {signed
+                        ? t("console.operations.dailyLog.detail.signed", undefined, "Signed")
+                        : t("console.operations.dailyLog.detail.sign", undefined, "Sign")}
+                    </button>
+                  </form>
+                </li>
+              );
+            })}
+          </ul>
         </section>
 
         <div className="grid gap-4 lg:grid-cols-2">

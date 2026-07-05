@@ -180,3 +180,37 @@ export async function deleteDailyLogPhoto(fd: FormData): Promise<void> {
 
   revalidatePath(`/studio/operations/daily-log/${parsed.data.dailyLogId}`);
 }
+
+/** The daily-log sections a foreman signs off (kit 21 remediation R3). */
+export const DAILY_LOG_SECTIONS = ["manpower", "deliveries", "equipment", "visitors", "photos", "narrative"] as const;
+
+/**
+ * Toggle a section sign-off (kit 21 remediation R3, ADR-0015; Raken). Writes /
+ * clears one `daily_log_signoffs` row per (log, section) so the header can show
+ * sections-signed completeness.
+ */
+export async function toggleDailyLogSignoff(dailyLogId: string, section: string): Promise<void> {
+  const session = await requireSession();
+  if (!(DAILY_LOG_SECTIONS as readonly string[]).includes(section)) return;
+  const supabase = await createClient();
+
+  const { data: existing } = await supabase
+    .from("daily_log_signoffs")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .eq("daily_log_id", dailyLogId)
+    .eq("section", section)
+    .maybeSingle();
+
+  if (existing) {
+    await supabase.from("daily_log_signoffs").delete().eq("id", (existing as { id: string }).id);
+  } else {
+    await supabase.from("daily_log_signoffs").insert({
+      org_id: session.orgId,
+      daily_log_id: dailyLogId,
+      section,
+      signed_by: session.userId,
+    });
+  }
+  revalidatePath(`/studio/operations/daily-log/${dailyLogId}`);
+}

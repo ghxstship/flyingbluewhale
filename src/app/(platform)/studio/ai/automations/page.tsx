@@ -75,6 +75,35 @@ export default async function Page() {
   const enabled = rows.filter((r) => r.enabled).length;
   const failing = rows.filter((r) => r.last_run_status && ["failed", "error"].includes(r.last_run_status)).length;
 
+  // Recent Runs (kit 21 W7 · Zapier canon) — the run-history trust surface.
+  // One batched query for the org's recent runs, grouped per automation; each
+  // row shows its last ~7 outcomes as a ✓/✗ glyph strip (newest last).
+  const recentByAutomation = new Map<string, Array<{ state: string; at: string; error: string | null }>>();
+  if (rows.length > 0) {
+    const { data: runs } = await supabase
+      .from("automation_runs")
+      .select("automation_id, run_state, error_summary, created_at")
+      .eq("org_id", session.orgId)
+      .in(
+        "automation_id",
+        rows.map((r) => r.id),
+      )
+      .order("created_at", { ascending: false })
+      .limit(500);
+    for (const run of (runs ?? []) as Array<{
+      automation_id: string;
+      run_state: string;
+      error_summary: string | null;
+      created_at: string;
+    }>) {
+      const list = recentByAutomation.get(run.automation_id) ?? [];
+      if (list.length < 7) {
+        list.push({ state: run.run_state, at: run.created_at, error: run.error_summary });
+        recentByAutomation.set(run.automation_id, list);
+      }
+    }
+  }
+
   return (
     <>
       <ModuleHeader
@@ -137,12 +166,18 @@ export default async function Page() {
                     {r.description && (
                       <p className="mt-0.5 line-clamp-1 text-xs text-[var(--p-text-2)]">{r.description}</p>
                     )}
-                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
-                      {t(
-                        "console.ai.automations.lastRun",
-                        { time: relativeTime(r.last_run_at, t) },
-                        `Last run ${relativeTime(r.last_run_at, t)}`,
-                      )}
+                    <div className="mt-1 flex items-center gap-2 font-mono text-xs text-[var(--p-text-2)]">
+                      <RunStrip
+                        runs={recentByAutomation.get(r.id) ?? []}
+                        noneLabel={t("console.ai.automations.noRuns", undefined, "No runs yet")}
+                      />
+                      <span>
+                        {t(
+                          "console.ai.automations.lastRun",
+                          { time: relativeTime(r.last_run_at, t) },
+                          `Last run ${relativeTime(r.last_run_at, t)}`,
+                        )}
+                      </span>
                     </div>
                   </div>
                   {r.last_run_status && <Badge variant={toneFor(r.last_run_status)}>{r.last_run_status}</Badge>}
@@ -153,5 +188,47 @@ export default async function Page() {
         )}
       </div>
     </>
+  );
+}
+
+/**
+ * Recent Runs glyph strip (kit 21 W7) — a run's outcome as a ✓ (ok) / ✗
+ * (failed) / · (running/pending) tick, oldest→newest left to right. Native
+ * title carries the per-run timestamp + error summary. Empty = never ran.
+ */
+const RUN_GLYPH: Record<string, { ch: string; cls: string }> = {
+  succeeded: { ch: "✓", cls: "text-[var(--p-success-text)]" },
+  success: { ch: "✓", cls: "text-[var(--p-success-text)]" },
+  completed: { ch: "✓", cls: "text-[var(--p-success-text)]" },
+  failed: { ch: "✗", cls: "text-[var(--p-danger-text)]" },
+  error: { ch: "✗", cls: "text-[var(--p-danger-text)]" },
+  running: { ch: "·", cls: "text-[var(--p-text-3)]" },
+  pending: { ch: "·", cls: "text-[var(--p-text-3)]" },
+  queued: { ch: "·", cls: "text-[var(--p-text-3)]" },
+  cancelled: { ch: "○", cls: "text-[var(--p-text-3)]" },
+};
+
+function RunStrip({
+  runs,
+  noneLabel,
+}: {
+  runs: Array<{ state: string; at: string; error: string | null }>;
+  noneLabel: string;
+}) {
+  if (runs.length === 0) return <span className="text-[var(--p-text-3)]">{noneLabel}</span>;
+  // Stored newest-first; render oldest-first so the strip reads chronologically.
+  const chrono = runs.slice().reverse();
+  return (
+    <span className="inline-flex items-center gap-0.5" aria-label="Recent runs">
+      {chrono.map((run, i) => {
+        const g = RUN_GLYPH[run.state] ?? { ch: "·", cls: "text-[var(--p-text-3)]" };
+        const tip = `${run.state}${run.error ? ` — ${run.error}` : ""}`;
+        return (
+          <span key={i} className={g.cls} title={tip} aria-hidden="true">
+            {g.ch}
+          </span>
+        );
+      })}
+    </span>
   );
 }

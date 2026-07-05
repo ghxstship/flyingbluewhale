@@ -6,10 +6,14 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
 import { log } from "@/lib/log";
+import { computeSwapOvertimeRisk } from "@/lib/db/shift-swaps";
 
 const Schema = z.object({
   id: z.string().uuid(),
   decision: z.enum(["approved", "declined"]),
+  // Set by the "Approve Anyway" button the page renders once it has
+  // already computed and surfaced the overtime risk for this row.
+  force: z.string().optional(),
 });
 
 export async function decideSwap(fd: FormData): Promise<void> {
@@ -19,6 +23,24 @@ export async function decideSwap(fd: FormData): Promise<void> {
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
+
+  if (parsed.data.decision === "approved" && parsed.data.force !== "1") {
+    const { data: swap } = await supabase
+      .from("shift_swaps")
+      .select("shift_id, target_user_id")
+      .eq("id", parsed.data.id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    const risk = swap ? await computeSwapOvertimeRisk(session.orgId, swap.shift_id, swap.target_user_id) : null;
+    // The page only renders a plain "Approve" button when it has already
+    // determined there's no risk — a request that still hits this branch
+    // is either stale or a bypass attempt, so fail closed.
+    if (risk) {
+      throw new Error(
+        `Approving would put this worker at ${risk.projectedHours}h for the week (over the ${risk.thresholdHours}h threshold). Resubmit with "Approve Anyway" to override.`,
+      );
+    }
+  }
 
   // Conditional update — without it, a concurrent approve+decline would
   // last-write-wins and lose the audit attribution. `.select` confirms a
@@ -35,6 +57,10 @@ export async function decideSwap(fd: FormData): Promise<void> {
     .in("swap_state", ["requested", "accepted"])
     .select("id, requested_by");
   if (error) throw new Error(`Could not update shift swap: ${error.message}`);
+
+  if (parsed.data.decision === "approved" && parsed.data.force === "1") {
+    log.warn("shift_swap.overtime_override", { id: parsed.data.id, decidedBy: session.userId });
+  }
 
   // Tell the requester — the decision used to land silently and crew
   // found out by re-checking /m/shift. Best-effort: a notify failure

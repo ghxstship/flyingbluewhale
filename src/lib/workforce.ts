@@ -40,6 +40,26 @@ export function classifyPunch(
 export const SWAP_STATES = ["requested", "accepted", "declined", "approved", "cancelled"] as const;
 export type SwapState = (typeof SWAP_STATES)[number];
 
+/** Weekly hours above which approving a swap is flagged as an overtime
+ *  risk (competitive-parity guardrail — see docs/COMPETITIVE_VERTICAL_PARITY_PLAN.md). */
+export const WEEKLY_OVERTIME_THRESHOLD_HOURS = 40;
+
+/** Monday 00:00 UTC → next Monday 00:00 UTC bounds for the week containing `iso`. */
+export function weekBoundsUtc(iso: string): { start: string; end: string } {
+  const d = new Date(iso);
+  const diffToMonday = (d.getUTCDay() + 6) % 7; // Mon=0 .. Sun=6
+  const monday = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - diffToMonday));
+  const nextMonday = new Date(monday);
+  nextMonday.setUTCDate(monday.getUTCDate() + 7);
+  return { start: monday.toISOString(), end: nextMonday.toISOString() };
+}
+
+/** Scheduled hours for a shift, net of its unpaid break. */
+export function shiftHours(startsAt: string, endsAt: string, breakMinutes: number): number {
+  const ms = new Date(endsAt).getTime() - new Date(startsAt).getTime();
+  return Math.max(0, ms / 3_600_000 - breakMinutes / 60);
+}
+
 // ============================================================
 // Announcements / updates feed
 // ============================================================

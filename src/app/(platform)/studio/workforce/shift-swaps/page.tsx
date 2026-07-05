@@ -9,6 +9,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { decideSwap } from "./actions";
 import { toneFor } from "@/lib/tones";
+import { computeSwapOvertimeRisk, type SwapOvertimeRisk } from "@/lib/db/shift-swaps";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ type Row = {
   reason: string | null;
   swap_state: string;
   created_at: string;
+  otRisk: SwapOvertimeRisk | null;
 };
 
 export default async function Page() {
@@ -96,6 +98,17 @@ export default async function Page() {
     ]),
   );
 
+  // Overtime guardrail (competitive parity — see
+  // docs/COMPETITIVE_VERTICAL_PARITY_PLAN.md): only pending swaps with a
+  // named target can be evaluated, so skip the query for the rest.
+  const pendingWithTarget = raw.filter(
+    (r) => (r.swap_state === "requested" || r.swap_state === "accepted") && r.target_user_id,
+  );
+  const riskEntries = await Promise.all(
+    pendingWithTarget.map(async (r) => [r.id, await computeSwapOvertimeRisk(session.orgId, r.shift_id, r.target_user_id)] as const),
+  );
+  const riskMap = new Map(riskEntries);
+
   const rows: Row[] = raw.map((r) => {
     const s = shiftMap.get(r.shift_id);
     return {
@@ -112,6 +125,7 @@ export default async function Page() {
       reason: r.reason,
       swap_state: r.swap_state,
       created_at: r.created_at,
+      otRisk: riskMap.get(r.id) ?? null,
     };
   });
 
@@ -208,21 +222,47 @@ export default async function Page() {
               header: t("console.workforce.shiftSwaps.column.action", undefined, "Action"),
               render: (r) =>
                 r.swap_state === "requested" || r.swap_state === "accepted" ? (
-                  <div className="flex items-center gap-1">
-                    <form action={decideSwap}>
-                      <input type="hidden" name="id" value={r.id} />
-                      <input type="hidden" name="decision" value="approved" />
-                      <button type="submit" className="ps-btn btn-xs">
-                        {t("console.workforce.shiftSwaps.action.approve", undefined, "Approve")}
-                      </button>
-                    </form>
-                    <form action={decideSwap}>
-                      <input type="hidden" name="id" value={r.id} />
-                      <input type="hidden" name="decision" value="declined" />
-                      <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
-                        {t("console.workforce.shiftSwaps.action.decline", undefined, "Decline")}
-                      </button>
-                    </form>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-1">
+                      <form action={decideSwap}>
+                        <input type="hidden" name="id" value={r.id} />
+                        <input type="hidden" name="decision" value="approved" />
+                        {r.otRisk && <input type="hidden" name="force" value="1" />}
+                        <button
+                          type="submit"
+                          className={r.otRisk ? "ps-btn ps-btn--danger btn-xs" : "ps-btn btn-xs"}
+                          title={
+                            r.otRisk
+                              ? t(
+                                  "console.workforce.shiftSwaps.action.overtimeTitle",
+                                  { hours: r.otRisk.projectedHours, threshold: r.otRisk.thresholdHours },
+                                  `Puts this worker at ${r.otRisk.projectedHours}h this week (over ${r.otRisk.thresholdHours}h)`,
+                                )
+                              : undefined
+                          }
+                        >
+                          {r.otRisk
+                            ? t("console.workforce.shiftSwaps.action.approveAnyway", undefined, "Approve Anyway (OT)")
+                            : t("console.workforce.shiftSwaps.action.approve", undefined, "Approve")}
+                        </button>
+                      </form>
+                      <form action={decideSwap}>
+                        <input type="hidden" name="id" value={r.id} />
+                        <input type="hidden" name="decision" value="declined" />
+                        <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
+                          {t("console.workforce.shiftSwaps.action.decline", undefined, "Decline")}
+                        </button>
+                      </form>
+                    </div>
+                    {r.otRisk && (
+                      <span className="text-xs ps-badge ps-badge--warn" style={{ width: "fit-content" }}>
+                        {t(
+                          "console.workforce.shiftSwaps.action.overtimeBadge",
+                          { hours: r.otRisk.projectedHours },
+                          `⚠ OT risk: ${r.otRisk.projectedHours}h`,
+                        )}
+                      </span>
+                    )}
                   </div>
                 ) : (
                   <span className="text-xs text-[var(--p-text-2)]">—</span>

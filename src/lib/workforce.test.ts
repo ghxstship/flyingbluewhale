@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { metersBetween, classifyPunch, scoreQuiz, daysBetween } from "./workforce";
+import { metersBetween, classifyPunch, scoreQuiz, daysBetween, weekBoundsUtc, shiftHours } from "./workforce";
 
 describe("the deskless-workforce suite helpers", () => {
   describe("metersBetween", () => {
@@ -121,6 +121,34 @@ describe("the deskless-workforce suite helpers", () => {
     it("handles cross-month ranges", () => {
       // May 11 → June 11 inclusive = 32 days
       expect(daysBetween("2026-05-11", "2026-06-11")).toBe(32);
+    });
+  });
+
+  describe("weekBoundsUtc", () => {
+    it("returns the same Monday-to-Monday window for every day in that week", () => {
+      // 2026-07-06 is a Monday; 2026-07-12 is the following Sunday.
+      const monday = weekBoundsUtc("2026-07-06T09:00:00.000Z");
+      const sunday = weekBoundsUtc("2026-07-12T23:00:00.000Z");
+      expect(monday.start).toBe("2026-07-06T00:00:00.000Z");
+      expect(monday.end).toBe("2026-07-13T00:00:00.000Z");
+      expect(sunday).toEqual(monday);
+    });
+
+    it("rolls a Sunday shift back into the week that started the prior Monday", () => {
+      // 2026-07-05 is a Sunday — belongs to the week starting 2026-06-29.
+      const bounds = weekBoundsUtc("2026-07-05T12:00:00.000Z");
+      expect(bounds.start).toBe("2026-06-29T00:00:00.000Z");
+      expect(bounds.end).toBe("2026-07-06T00:00:00.000Z");
+    });
+  });
+
+  describe("shiftHours", () => {
+    it("computes hours net of the unpaid break", () => {
+      expect(shiftHours("2026-07-06T09:00:00.000Z", "2026-07-06T17:00:00.000Z", 30)).toBe(7.5);
+    });
+
+    it("floors at 0 rather than going negative for a malformed break", () => {
+      expect(shiftHours("2026-07-06T09:00:00.000Z", "2026-07-06T09:30:00.000Z", 60)).toBe(0);
     });
   });
 });

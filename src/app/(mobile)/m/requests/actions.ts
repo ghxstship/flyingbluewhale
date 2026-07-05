@@ -6,8 +6,9 @@ import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
 import { log } from "@/lib/log";
+import { computeSwapOvertimeRisk, type SwapOvertimeRisk } from "@/lib/db/shift-swaps";
 
-export type State = { error?: string; ok?: boolean } | null;
+export type State = { error?: string; ok?: boolean; otRisk?: SwapOvertimeRisk } | null;
 
 const TimeOffDecision = z.object({
   id: z.string().uuid(),
@@ -18,6 +19,8 @@ const TimeOffDecision = z.object({
 const SwapDecision = z.object({
   id: z.string().uuid(),
   decision: z.enum(["approved", "declined"]),
+  // Confirms an "Approve Anyway" past a surfaced overtime warning.
+  force: z.string().optional(),
 });
 
 /**
@@ -84,11 +87,16 @@ export async function decideSwap(_prev: State, fd: FormData): Promise<State> {
   const supabase = await createClient();
   const { data: swap } = await supabase
     .from("shift_swaps")
-    .select("id, requested_by")
+    .select("id, requested_by, shift_id, target_user_id")
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!swap) return { error: "Swap not found." };
+
+  if (parsed.data.decision === "approved" && parsed.data.force !== "1") {
+    const risk = await computeSwapOvertimeRisk(session.orgId, swap.shift_id, swap.target_user_id);
+    if (risk) return { otRisk: risk };
+  }
 
   const { error } = await supabase
     .from("shift_swaps")
@@ -102,6 +110,9 @@ export async function decideSwap(_prev: State, fd: FormData): Promise<State> {
   if (error) {
     log.error("m.requests.swap_decide_failed", { err: error.message });
     return { error: error.message };
+  }
+  if (parsed.data.decision === "approved" && parsed.data.force === "1") {
+    log.warn("shift_swap.overtime_override", { id: parsed.data.id, decidedBy: session.userId });
   }
 
   const requester = swap.requested_by as string;

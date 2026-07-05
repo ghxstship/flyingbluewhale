@@ -57,6 +57,13 @@ export function RequestsView({
   const [types, setTypes] = useState<Set<string>>(new Set());
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Overtime guardrail (competitive parity): when a swap approval would
+  // push the target worker over the weekly threshold, the action returns
+  // otRisk instead of applying the decision. We stash it here and ask for
+  // one more tap before resubmitting with force=1.
+  const [otConfirm, setOtConfirm] = useState<{ id: string; projectedHours: number; thresholdHours: number } | null>(
+    null,
+  );
 
   const typeList = useMemo(() => Array.from(new Set(rows.map((r) => r.type))).sort(), [rows]);
 
@@ -76,18 +83,24 @@ export function RequestsView({
       return next;
     });
 
-  const decide = (r: RequestRow, decision: "approved" | "declined") => {
+  const decide = (r: RequestRow, decision: "approved" | "declined", force?: boolean) => {
     if (pending) return;
     setError(null);
     const fd = new FormData();
     fd.set("id", r.id);
     fd.set("decision", decision);
+    if (force) fd.set("force", "1");
     startTransition(async () => {
       const res = r.kind === "time_off" ? await decideTimeOff(null, fd) : await decideSwap(null, fd);
+      if (res?.otRisk) {
+        setOtConfirm({ id: r.id, projectedHours: res.otRisk.projectedHours, thresholdHours: res.otRisk.thresholdHours });
+        return;
+      }
       if (res?.error) {
         setError(res.error);
         return;
       }
+      setOtConfirm(null);
       router.refresh();
     });
   };
@@ -140,7 +153,39 @@ export function RequestsView({
 
         {r.detail && <p className="form-intro" style={{ margin: "8px 0 0" }}>{r.detail}</p>}
 
-        {manager && isOpen(r.state) && (
+        {manager && isOpen(r.state) && otConfirm?.id === r.id && (
+          <div className="ps-alert ps-alert--warn" style={{ marginTop: 10 }}>
+            <div style={{ marginBottom: 8 }}>
+              {t(
+                "m.requests.swap.otWarning",
+                { hours: otConfirm.projectedHours, threshold: otConfirm.thresholdHours },
+                `This puts them at ${otConfirm.projectedHours}h this week, over the ${otConfirm.thresholdHours}h threshold.`,
+              )}
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                type="button"
+                className="ps-btn ps-btn--danger"
+                style={{ flex: 1, justifyContent: "center" }}
+                disabled={pending}
+                onClick={() => decide(r, "approved", true)}
+              >
+                {t("m.requests.swap.approveAnyway", undefined, "Approve Anyway")}
+              </button>
+              <button
+                type="button"
+                className="ps-btn ps-btn--ghost"
+                style={{ flex: 1, justifyContent: "center" }}
+                disabled={pending}
+                onClick={() => setOtConfirm(null)}
+              >
+                {t("m.requests.swap.cancel", undefined, "Cancel")}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {manager && isOpen(r.state) && otConfirm?.id !== r.id && (
           <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
             <button
               type="button"

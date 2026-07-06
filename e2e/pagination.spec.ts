@@ -1,4 +1,5 @@
-import { expect, test, type Page, type BrowserContext } from "playwright/test";
+import { expect, test, type Page } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 /**
  * H2-04 / IK-015 — pagination envelope contract.
@@ -12,17 +13,6 @@ import { expect, test, type Page, type BrowserContext } from "playwright/test";
 
 const PASSWORD = "FlyingBlue!Test2026";
 
-async function dismissConsent(ctx: BrowserContext) {
-  await ctx.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(JSON.stringify({ essential: true, decidedAt: new Date().toISOString() })),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
 async function login(page: Page) {
   await page.goto("/login");
   await page.getByRole("textbox", { name: "Email" }).fill("test+owner@flyingbluewhale.app");
@@ -32,8 +22,8 @@ async function login(page: Page) {
 }
 
 test.describe("pagination/projects", () => {
-  test("GET /api/v1/projects returns pagination envelope + X-Total-Count", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("GET /api/v1/projects returns pagination envelope + X-Total-Count", async ({ page }) => {
+    await dismissConsent(page);
     await login(page);
 
     const r = await page.request.get("/api/v1/projects");
@@ -53,8 +43,8 @@ test.describe("pagination/projects", () => {
     expect(String(d.totalCount)).toBe(headerCount);
   });
 
-  test("pageSize=1 returns one row + nextCursor when more exist", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("pageSize=1 returns one row + nextCursor when more exist", async ({ page }) => {
+    await dismissConsent(page);
     await login(page);
 
     const r = await page.request.get("/api/v1/projects?pageSize=1");
@@ -72,8 +62,8 @@ test.describe("pagination/projects", () => {
     }
   });
 
-  test("pageSize is clamped to a sane max (≤ 200)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("pageSize is clamped to a sane max (≤ 200)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page);
 
     const r = await page.request.get("/api/v1/projects?pageSize=9999");

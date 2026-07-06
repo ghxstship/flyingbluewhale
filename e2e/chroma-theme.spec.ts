@@ -21,7 +21,7 @@ const SLUGS = ["atlvs-product"] as const;
 test.describe("theme system", () => {
   test("data-theme is set on <html> before first paint (head script)", async ({ page }) => {
     await dismissConsent(page);
-    await page.context().addCookies([{ name: "chroma_theme", value: "atlvs-product", domain: "localhost", path: "/" }]);
+    await page.context().addCookies([{ name: "chroma_theme", value: "atlvs-product", url: process.env.E2E_BASE_URL || "http://localhost:3000" }]);
     await page.goto("/");
     const theme = await page.getAttribute("html", "data-theme");
     expect(theme).toBe("atlvs-product");
@@ -39,7 +39,7 @@ test.describe("theme system", () => {
     await dismissConsent(page);
     await page
       .context()
-      .addCookies([{ name: "chroma_theme", value: "not-a-real-slug", domain: "localhost", path: "/" }]);
+      .addCookies([{ name: "chroma_theme", value: "not-a-real-slug", url: process.env.E2E_BASE_URL || "http://localhost:3000" }]);
     await page.goto("/");
     const theme = await page.getAttribute("html", "data-theme");
     // Purged slugs (ghxstship, cyber, bermuda-triangle, …) must NOT resurface.
@@ -79,7 +79,7 @@ test.describe("theme system", () => {
   for (const slug of SLUGS) {
     test(`theme ${slug}: every token resolves (no unset CSS vars)`, async ({ page }) => {
       await dismissConsent(page);
-      await page.context().addCookies([{ name: "chroma_theme", value: slug, domain: "localhost", path: "/" }]);
+      await page.context().addCookies([{ name: "chroma_theme", value: slug, url: process.env.E2E_BASE_URL || "http://localhost:3000" }]);
       await page.goto("/");
       const unset = await page.evaluate(() => {
         const style = getComputedStyle(document.documentElement);

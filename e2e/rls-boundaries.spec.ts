@@ -1,4 +1,5 @@
-import { expect, test, type Page, type BrowserContext, type APIRequestContext } from "playwright/test";
+import { expect, test, type Page, type APIRequestContext } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 /**
  * Row-level security boundary suite.
@@ -24,24 +25,6 @@ const TEST_PROJECT_IDS: Record<string, string> = {
   "test-enterprise-show": "e4340ab4-d105-4b49-ab84-90b038542f89",
 };
 
-async function dismissConsent(ctx: BrowserContext) {
-  await ctx.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
 async function login(page: Page, role: string) {
   await page.goto("/login");
   await page.getByRole("textbox", { name: "Email" }).fill(TEST_EMAIL(role));
@@ -60,8 +43,8 @@ async function authedRequest(page: Page): Promise<APIRequestContext> {
 }
 
 test.describe("rls/cross-tenant: session.orgId gates project reads", () => {
-  test("owner cannot read a project from an org they don't belong to (demo)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("owner cannot read a project from an org they don't belong to (demo)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
     const req = await authedRequest(page);
 
@@ -72,8 +55,8 @@ test.describe("rls/cross-tenant: session.orgId gates project reads", () => {
     expect(body.error.code).toBe("not_found");
   });
 
-  test("owner sees exactly one of the four test projects (their session.orgId)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("owner sees exactly one of the four test projects (their session.orgId)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
     const req = await authedRequest(page);
 
@@ -92,8 +75,8 @@ test.describe("rls/cross-tenant: session.orgId gates project reads", () => {
     expect(notFounds).toHaveLength(3);
   });
 
-  test("bogus UUID yields 400 (or 404), never 500", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("bogus UUID yields 400 (or 404), never 500", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "owner");
     const req = await authedRequest(page);
 

@@ -59,7 +59,7 @@ test.describe("COMPVSS — Connecteam-parity surfaces", () => {
       page.on("console", (m) => {
         if (m.type() === "error") errors.push(m.text());
       });
-      const r = await page.goto("/m/feed", { waitUntil: "networkidle" });
+      const r = await page.goto("/m/feed", { waitUntil: "domcontentloaded" });
       expect(r?.status()).toBeLessThan(500);
       // Filter out the well-known noisy warnings that the rest of the suite
       // already accepts (consent banner hydration etc.).

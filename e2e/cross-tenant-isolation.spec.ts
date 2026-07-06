@@ -61,7 +61,7 @@ const ORG_A_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
  * shows the "not found / no access" copy and contains ZERO Org B record data.
  */
 async function expectStudioNotFound(page: Page, path: string) {
-  await page.goto(path, { waitUntil: "networkidle" });
+  await page.goto(path, { waitUntil: "domcontentloaded" });
   // The (platform) not-found.tsx renders "That record doesn't exist, or you
   // don't have access." — wait for it so we assert against settled content.
   await expect(

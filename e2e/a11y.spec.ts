@@ -1,5 +1,6 @@
 import { test, expect } from "playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { dismissConsent } from "./helpers/auth";
 
 /**
  * WCAG 2.2 AA axe scan over key marketing + auth surfaces.
@@ -9,22 +10,8 @@ import AxeBuilder from "@axe-core/playwright";
  * and trip color-contrast on backdrop-blurred buttons.
  */
 
-test.beforeEach(async ({ context }) => {
-  await context.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
+test.beforeEach(async ({ page }) => {
+  await dismissConsent(page);
 });
 
 const PAGES = [

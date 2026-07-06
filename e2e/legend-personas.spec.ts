@@ -157,7 +157,7 @@ test.describe("LEG3ND · learner CRUD (crew)", () => {
         page.locator(".ps-alert--danger, [role='alert']").filter({ hasText: RLS_ERROR }),
         "lesson completion surfaced no RLS error",
       ).toHaveCount(0);
-      await page.waitForLoadState("networkidle").catch(() => {});
+      await page.waitForLoadState("load").catch(() => {});
     }
 
     // ── Assert progress persisted: the overview now shows a progress bar ──────

@@ -23,29 +23,15 @@
  * Anon tests set the consent cookie (atlvs_consent) so the cookie banner doesn't
  * intercept CTA clicks — same idiom as helpers/auth.ts#dismissConsent.
  */
-import { expect, test, type Page } from "playwright/test";
-import { authedSetup } from "./helpers/auth";
+import { expect, test } from "playwright/test";
+import { authedSetup, dismissConsent } from "./helpers/auth";
 
 const ERROR_BOUNDARY = /application error|something went wrong|unhandled|digest:|client-side exception/i;
-
-/** Set the essential-only consent cookie so the banner can't eat CTA clicks. */
-async function consent(page: Page): Promise<void> {
-  await page.context().addCookies([
-    {
-      name: "atlvs_consent",
-      value: encodeURIComponent(
-        JSON.stringify({ essential: true, analytics: false, marketing: false, decidedAt: new Date().toISOString() }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
 
 // ── Marketing visitor — conversion journeys ─────────────────────────────────
 test.describe("marketing · visitor (anon) — conversion journeys", () => {
   test.describe.configure({ timeout: 120_000 });
-  test.beforeEach(async ({ page }) => consent(page));
+  test.beforeEach(async ({ page }) => dismissConsent(page));
 
   test("home → /signup via the hero CTA", async ({ page }) => {
     await page.goto("/");
@@ -105,7 +91,7 @@ test.describe("auth · login round-trip + signup validation", () => {
   });
 
   test("signup form surfaces validation on bad input (no account created)", async ({ page }) => {
-    await consent(page);
+    await dismissConsent(page);
     await page.goto("/signup");
     await expect(page.getByRole("heading", { name: /start building/i })).toBeVisible({ timeout: 15_000 });
     // Submit deliberately-invalid input — a too-short password / bad email — and

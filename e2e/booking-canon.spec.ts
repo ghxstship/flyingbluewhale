@@ -118,7 +118,7 @@ test.describe("Booking canon · form actions", () => {
     await page.getByLabel("Agent Commission").fill("500");
     await page.getByLabel("Deposit Received").fill("3000");
     await page.getByRole("button", { name: /Create Settlement|Update/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
 
     // Reload and assert the computed block renders
     await page.goto(`/studio/bookings/deals/${offerId}/settlement`);
@@ -153,11 +153,18 @@ test.describe("Booking canon · IA — Bookings group + ticketing in settings", 
     await dismissConsent(page);
     await loginAsOwner(page);
     await page.goto("/studio/bookings");
-    // The Talent/Bookings IA consolidated Deals/Holds/Calendar/Settlements into
-    // tabs WITHIN the /studio/bookings hub (see src/lib/nav.ts §300 "Bookings
-    // is a tabbed landing"). The primary sidebar exposes the hub entries, not
-    // the per-tab sub-routes.
-    for (const path of ["/studio/bookings", "/studio/agency/tours", "/studio/marketing", "/studio/insights"]) {
+    // Kit-20 rail: /studio/bookings ("Artist Offers & Holds") lives in the
+    // TALENT group (src/lib/nav.ts §298), alongside Artist Roster / Casting
+    // Calls / Submissions. The sidebar is group-scoped, so landing on
+    // /studio/bookings force-opens the Talent group — those sibling entries are
+    // what the primary sidebar exposes (Deals/Holds/Calendar/Settlements are
+    // tabs under the hub, not sidebar rows).
+    for (const path of [
+      "/studio/bookings",
+      "/studio/marketplace/talent",
+      "/studio/marketplace/calls",
+      "/studio/marketplace/submissions",
+    ]) {
       await expect(page.locator(`aside a[href="${path}"]`).first()).toBeVisible();
     }
     // The consolidated sub-tabs still render as pages under the hub.

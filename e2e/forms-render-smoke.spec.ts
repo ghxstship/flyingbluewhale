@@ -1,4 +1,5 @@
 import { expect, test } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 /**
  * forms-render-smoke
@@ -41,21 +42,7 @@ test.beforeAll(async ({ browser }) => {
   // otherwise be inherited here and ENOENT on the first run.
   const context = await browser.newContext({ storageState: undefined });
   const page = await context.newPage();
-  await context.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
+  await dismissConsent(page);
   await page.goto("/login");
   await page.getByRole("textbox", { name: "Email" }).fill(OWNER_EMAIL);
   await page.getByRole("textbox", { name: "Password" }).fill(PASSWORD);

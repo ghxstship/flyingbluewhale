@@ -1,22 +1,9 @@
 import { expect, test } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 test.describe("marketing", () => {
-  test.beforeEach(async ({ context }) => {
-    await context.addCookies([
-      {
-        name: "fbw_consent",
-        value: encodeURIComponent(
-          JSON.stringify({
-            essential: true,
-            analytics: false,
-            marketing: false,
-            decidedAt: new Date().toISOString(),
-          }),
-        ),
-        domain: "localhost",
-        path: "/",
-      },
-    ]);
+  test.beforeEach(async ({ page }) => {
+    await dismissConsent(page);
   });
 
   test("home renders hero + CTAs", async ({ page }) => {

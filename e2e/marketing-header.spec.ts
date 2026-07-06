@@ -1,4 +1,5 @@
-import { expect, test, type BrowserContext } from "playwright/test";
+import { expect, test } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 /**
  * Marketing-header M1 remediations:
@@ -14,20 +15,9 @@ import { expect, test, type BrowserContext } from "playwright/test";
  *           links + color-mode toggle + locale switcher.
  */
 
-async function dismissConsent(ctx: BrowserContext) {
-  await ctx.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(JSON.stringify({ essential: true, decidedAt: new Date().toISOString() })),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
-
 test.describe("marketing-header/theme-toggle", () => {
-  test("segmented control uses the System label (M1-01)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("segmented control uses the System label (M1-01)", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/");
     // ThemeToggle uses aria-label="Color mode" on the radiogroup with
     // three radios labelled exactly "Light" / "Match System" / "Dark".
@@ -44,8 +34,8 @@ test.describe("marketing-header/theme-toggle", () => {
     await expect(systemRadio).not.toHaveAttribute("aria-label", /^Auto$/);
   });
 
-  test("clicking Dark flips checked state AND writes data-mode=dark on <html>", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("clicking Dark flips checked state AND writes data-mode=dark on <html>", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/");
 
     // The CHROMA BEACON provider now owns both axes: `data-mode` carries
@@ -63,7 +53,7 @@ test.describe("marketing-header/theme-toggle", () => {
   });
 
   test("mode cookie (atlvs_mode) persists the choice", async ({ page, context }) => {
-    await dismissConsent(context);
+    await dismissConsent(page);
     await page.goto("/");
     await page.getByRole("radio", { name: "Dark", exact: true }).click();
     await expect
@@ -77,7 +67,7 @@ test.describe("marketing-header/theme-toggle", () => {
 
 test.describe("marketing-header/locale-switcher (M1-03)", () => {
   test("switching to ja writes a cookie and updates <html lang>", async ({ page, context }) => {
-    await dismissConsent(context);
+    await dismissConsent(page);
     await page.goto("/");
 
     // Open dropdown
@@ -94,8 +84,8 @@ test.describe("marketing-header/locale-switcher (M1-03)", () => {
     expect(localeCookie?.value).toBe("ja");
   });
 
-  test("switching to ar flips <html dir> to rtl", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("switching to ar flips <html dir> to rtl", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/");
     await page.getByRole("button", { name: /change language/i }).click();
     await page.getByRole("menuitemradio", { name: /العربية/ }).click();
@@ -113,8 +103,8 @@ test.describe("marketing-header/locale-switcher (M1-03)", () => {
 test.describe("marketing-header/mobile-nav (M1-05)", () => {
   test.use({ viewport: { width: 390, height: 844 } }); // iPhone 15 class
 
-  test("hamburger replaces the desktop nav on narrow viewports", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("hamburger replaces the desktop nav on narrow viewports", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/");
 
     // Desktop primary nav is hidden on mobile.
@@ -142,8 +132,8 @@ test.describe("marketing-header/mobile-nav (M1-05)", () => {
     await expect(page.getByRole("button", { name: /change language/i })).toBeVisible();
   });
 
-  test("close button restores the original state", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("close button restores the original state", async ({ page }) => {
+    await dismissConsent(page);
     await page.goto("/");
 
     await page.getByRole("button", { name: /open menu/i }).click();

@@ -224,12 +224,12 @@ test.describe("Marketplace canon · form actions", () => {
     // Publish via the PublishControls form. The control sits inside an
     // expandable surface — submit by clicking the "Publish" button.
     await page.getByRole("button", { name: /^Publish$/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("published").first()).toBeVisible({ timeout: 5_000 });
 
     // Close
     await page.getByRole("button", { name: /Close Posting/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("closed").first()).toBeVisible({ timeout: 5_000 });
   });
 
@@ -243,7 +243,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.waitForURL(/\/studio\/marketplace\/calls\/[0-9a-f-]+$/, { timeout: 15_000 });
 
     await page.getByRole("button", { name: /^Publish$/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("published").first()).toBeVisible({ timeout: 5_000 });
 
     // Anon visibility check: hit the public list and verify the title
@@ -268,11 +268,11 @@ test.describe("Marketplace canon · form actions", () => {
     await expect(page.getByText("private").first()).toBeVisible();
 
     await page.getByRole("button", { name: /Publish to Directory/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("public").first()).toBeVisible({ timeout: 5_000 });
 
     await page.getByRole("button", { name: /^Unpublish$/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("private").first()).toBeVisible({ timeout: 5_000 });
   });
 
@@ -291,11 +291,11 @@ test.describe("Marketplace canon · form actions", () => {
     await expect(page.getByText("draft").first()).toBeVisible();
 
     await page.getByRole("button", { name: /Send Offer/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("sent").first()).toBeVisible({ timeout: 5_000 });
 
     await page.getByRole("button", { name: /Mark Accepted/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("accepted").first()).toBeVisible({ timeout: 5_000 });
   });
 
@@ -310,14 +310,14 @@ test.describe("Marketplace canon · form actions", () => {
 
     await page.locator('select[name="visibility"]').selectOption(flip);
     await page.getByRole("button", { name: /Update Visibility/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto(`/studio/procurement/rfqs/${FX.rfq}/publish`);
     await expect(page.locator('select[name="visibility"]')).toHaveValue(flip);
 
     // Restore to public so downstream tests + seeded marketplace surfaces work.
     await page.locator('select[name="visibility"]').selectOption("public");
     await page.getByRole("button", { name: /Update Visibility/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
   });
 
   test("/me/availability add + delete slot", async ({ page }) => {
@@ -332,7 +332,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.locator('input[name="starts_at"]').fill(tomorrow);
     await page.locator('input[name="ends_at"]').fill(dayAfter);
     await page.getByRole("button", { name: /^Add$/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     // Assert PERSISTENCE via reload — the live revalidate-driven list refresh
     // is intermittently slow/absent (readiness backlog: availability refresh
     // race) and is tracked separately from the data contract this test owns.
@@ -342,7 +342,7 @@ test.describe("Marketplace canon · form actions", () => {
     // Delete it
     const li = page.locator("li", { hasText: label });
     await li.getByRole("button", { name: /^Remove$/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.reload();
     await expect(page.getByText(label)).toHaveCount(0, { timeout: 20_000 });
   });
@@ -361,7 +361,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.getByRole("button", { name: /^Save EPK$/i }).click();
     // Server action redirects via revalidate; wait for the form's pending
     // state to clear before re-loading.
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.waitForTimeout(500);
     // Re-load and assert persistence
     await page.goto("/me/talent");
@@ -372,7 +372,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.goto("/studio/marketplace/settings");
     await page.locator('input[name="marketplace_take_rate_bps"]').fill("250");
     await page.getByRole("button", { name: /Save Settings/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto("/studio/marketplace/settings");
     await expect(page.locator('input[name="marketplace_take_rate_bps"]')).toHaveValue("250");
     // Reset to 0 so other tests / orgs aren't surprised.
@@ -457,20 +457,25 @@ test.describe("Marketplace canon · navigation", () => {
 // ────────────────────────────────────────────────────────────────────
 
 test.describe("Marketplace canon · IA discoverability", () => {
-  test("console nav: marketplace items live inside Commerce, not as a sibling group", async ({ page }) => {
+  test("console nav: marketplace items are grouped in the primary sidebar (Sales + Talent), not orphaned", async ({
+    page,
+  }) => {
     await dismissConsent(page);
     await loginAsOwner(page);
-    // Land on a Commerce-resident route so the group force-opens (the
-    // sidebar collapses idle groups by default — see PlatformSidebar §241).
+    // Kit-20 rail: /studio/marketplace ("Marketplace") lives in the SALES group
+    // (src/lib/nav.ts §282); the sidebar collapses idle groups, so land on the
+    // route to force its group open.
     await page.goto("/studio/marketplace");
-    // Marketplace overview link present in the primary sidebar.
     await expect(page.locator('aside a[href="/studio/marketplace"]').first()).toBeVisible();
-    // Sub-items live in the same sidebar (under Commerce). Postings + Open
-    // Calls consolidated into the /studio/marketplace hub (see src/lib/nav.ts
-    // §320); Talent Roster + Offers remain discrete sidebar entries.
+    // It sits among its Sales-group siblings (Marketing, …), not as a
+    // standalone group.
+    await expect(page.locator('aside a[href="/studio/marketing"]').first()).toBeVisible();
+    // The talent-facing sub-surfaces (Artist Roster, Casting Calls, Submissions)
+    // live in the sibling TALENT group (§298) — land there to force it open.
+    await page.goto("/studio/marketplace/talent");
     await expect(page.locator('aside a[href="/studio/marketplace/talent"]').first()).toBeVisible();
-    await expect(page.locator('aside a[href="/studio/marketplace/offers"]').first()).toBeVisible();
-    // Reviews moved to Settings sidebar; not in primary platformNav anymore.
+    await expect(page.locator('aside a[href="/studio/marketplace/calls"]').first()).toBeVisible();
+    // Reviews moved to the Settings sidebar; not in primary platformNav anymore.
     const reviewsInPrimary = page.locator('aside a[href="/studio/marketplace/reviews"]');
     expect(await reviewsInPrimary.count()).toBe(0);
   });

@@ -27,7 +27,10 @@ async function fillByName(page: Page, name: string, value: string) {
 /** Submit the page's primary form and wait for the navigation it triggers. */
 async function submitForm(page: Page) {
   await Promise.all([
-    page.waitForLoadState("networkidle"),
+    // NOT "networkidle": realtime surfaces (comms/polls) hold a Supabase
+    // Realtime websocket open, so the network never idles and this hangs to
+    // timeout. "load" fires on the redirect the server action triggers.
+    page.waitForLoadState("load"),
     page
       .locator("main form")
       .first()

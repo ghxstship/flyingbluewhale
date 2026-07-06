@@ -86,7 +86,7 @@ test.describe("Booking canon · extras", () => {
     await page.getByLabel(/Score/).fill("82");
     await page.locator('textarea[name="reviewer_notes"]').fill("E2E reviewer note");
     await page.getByRole("button", { name: /Update Stage/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     // Reload and assert persistence
     await page.goto(`/studio/marketplace/postings/${FX.posting}/applicants/${FX.application}`);
     await expect(page.getByText("reviewed").first()).toBeVisible();
@@ -98,7 +98,7 @@ test.describe("Booking canon · extras", () => {
     await page.locator('select[name="status"]').selectOption("shortlisted");
     await page.getByLabel(/Score/).fill("90");
     await page.getByRole("button", { name: /Update Status/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto(`/studio/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
     await expect(page.getByText("shortlisted").first()).toBeVisible();
   });
@@ -119,14 +119,14 @@ test.describe("Booking canon · extras", () => {
       const removeBtns = page.locator("li").getByRole("button", { name: /Remove/i });
       if ((await removeBtns.count()) === 0) break;
       await removeBtns.first().click();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("load");
       await page.goto(`/studio/bookings/deals/${FX.offer}`);
     }
     const partnerName = `E2E CoPro ${Date.now()}`;
     await page.getByLabel("Partner Name").fill(partnerName);
     await page.getByLabel("Split %").fill("25");
     await page.getByRole("button", { name: /Add Partner/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto(`/studio/bookings/deals/${FX.offer}`);
     await expect(page.getByText(partnerName)).toBeVisible();
     await expect(page.getByText("25% allocated")).toBeVisible();
@@ -134,7 +134,7 @@ test.describe("Booking canon · extras", () => {
     // Remove
     const li = page.locator("li", { hasText: partnerName });
     await li.getByRole("button", { name: /Remove/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto(`/studio/bookings/deals/${FX.offer}`);
     await expect(page.getByText(partnerName)).toHaveCount(0);
   });
@@ -153,7 +153,7 @@ test.describe("Booking canon · extras", () => {
     await page.getByLabel("Total Capacity").fill("500");
     await page.getByLabel("Gross Revenue").fill("12500");
     await page.getByRole("button", { name: /Record Snapshot/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await expect(page.getByText("Latest Snapshot")).toBeVisible();
     await expect(page.getByText(/250/)).toBeVisible();
   });
@@ -173,7 +173,7 @@ test.describe("Booking canon · extras", () => {
     await page.getByLabel("Tagline").fill(tagline);
     await page.getByLabel(/Roles/).fill("A1, Lighting Programmer");
     await page.getByRole("button", { name: /Save Profile/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.waitForTimeout(500);
     await page.goto("/me/crew");
     await expect(page.getByLabel("Tagline")).toHaveValue(tagline);
@@ -186,13 +186,13 @@ test.describe("Booking canon · extras", () => {
     await page.getByLabel("Name").fill(searchName);
     await page.locator('textarea[name="query"]').fill('{"role":"A1"}');
     await page.getByRole("button", { name: /^Save$/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto("/me/saved-searches");
     await expect(page.getByText(searchName)).toBeVisible();
 
     const li = page.locator("li", { hasText: searchName });
     await li.getByRole("button", { name: /Remove/i }).click();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     await page.goto("/me/saved-searches");
     await expect(page.getByText(searchName)).toHaveCount(0);
   });

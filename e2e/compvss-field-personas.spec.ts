@@ -67,7 +67,7 @@ test.describe("COMPVSS field · crew", () => {
     for (let i = 0; i < 5; i++) {
       if (!(await clockOutBtn.count())) break;
       await clockOutBtn.first().click();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("load");
       await page.reload();
       await expectRendered(page);
     }
@@ -92,7 +92,7 @@ test.describe("COMPVSS field · crew", () => {
     for (let i = 0; i < 5; i++) {
       if (!(await clockOutBtn.count())) break;
       await clockOutBtn.first().click();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("load");
       await page.reload();
       await expectRendered(page);
     }

@@ -1,4 +1,5 @@
-import { expect, test, type Page, type BrowserContext } from "playwright/test";
+import { expect, test, type Page } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 /**
  * H2-10 / IK-017 — application-layer capability gate on mutating endpoints.
@@ -11,24 +12,6 @@ import { expect, test, type Page, type BrowserContext } from "playwright/test";
 
 const PASSWORD = "FlyingBlue!Test2026";
 const TEST_EMAIL = (role: string) => `test+${role}@flyingbluewhale.app`;
-
-async function dismissConsent(ctx: BrowserContext) {
-  await ctx.addCookies([
-    {
-      name: "fbw_consent",
-      value: encodeURIComponent(
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-          decidedAt: new Date().toISOString(),
-        }),
-      ),
-      domain: "localhost",
-      path: "/",
-    },
-  ]);
-}
 
 async function login(page: Page, role: string) {
   await page.goto("/login");
@@ -44,8 +27,8 @@ test.describe("capability/projects:write", () => {
   const UNAUTHORIZED: string[] = ["crew", "client", "viewer", "community", "contractor"];
 
   for (const role of UNAUTHORIZED) {
-    test(`${role} cannot POST /api/v1/projects → 403 forbidden`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} cannot POST /api/v1/projects → 403 forbidden`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       const r = await page.request.post("/api/v1/projects", {
         data: { name: `gate-probe-${Date.now()}`, slug: `gate-probe-${Date.now()}` },
@@ -60,8 +43,8 @@ test.describe("capability/projects:write", () => {
     });
   }
 
-  test(`collaborator CAN POST /api/v1/projects → 201 or duplicate conflict`, async ({ page, context }) => {
-    await dismissConsent(context);
+  test(`collaborator CAN POST /api/v1/projects → 201 or duplicate conflict`, async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "collaborator");
     const r = await page.request.post("/api/v1/projects", {
       data: {
@@ -83,8 +66,8 @@ test.describe("capability/check-in:write", () => {
   const UNAUTHORIZED: string[] = ["client", "community", "viewer"];
 
   for (const role of UNAUTHORIZED) {
-    test(`${role} cannot POST /api/v1/scan → 403 forbidden`, async ({ page, context }) => {
-      await dismissConsent(context);
+    test(`${role} cannot POST /api/v1/scan → 403 forbidden`, async ({ page }) => {
+      await dismissConsent(page);
       await login(page, role);
       const r = await page.request.post("/api/v1/scan", {
         data: { code: `probe-${Date.now()}` },
@@ -97,8 +80,8 @@ test.describe("capability/check-in:write", () => {
     });
   }
 
-  test("crew CAN POST /api/v1/scan (no forbidden error)", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("crew CAN POST /api/v1/scan (no forbidden error)", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "crew");
     const r = await page.request.post("/api/v1/scan", {
       data: { code: `probe-${Date.now()}` },
@@ -111,8 +94,8 @@ test.describe("capability/check-in:write", () => {
 test.describe("capability/invoices:write", () => {
   // Clients should never be able to initiate a Stripe checkout — they pay
   // through the resulting URL but don't create sessions.
-  test("client cannot POST /api/v1/stripe/checkout → 403 forbidden", async ({ page, context }) => {
-    await dismissConsent(context);
+  test("client cannot POST /api/v1/stripe/checkout → 403 forbidden", async ({ page }) => {
+    await dismissConsent(page);
     await login(page, "client");
     const r = await page.request.post("/api/v1/stripe/checkout", {
       data: { invoiceId: "00000000-0000-0000-0000-000000000000" },

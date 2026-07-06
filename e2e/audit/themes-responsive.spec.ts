@@ -46,7 +46,9 @@ async function setTheme(page: Page, theme: Theme) {
   // Cookie is the highest-priority source in the head bootstrap, so it
   // flips the theme before first paint. No reload needed — we set this
   // BEFORE navigating.
-  await page.context().addCookies([{ name: "chroma_theme", value: theme, domain: "localhost", path: "/" }]);
+  await page.context().addCookies([
+    { name: "chroma_theme", value: theme, url: process.env.E2E_BASE_URL || "http://localhost:3000" },
+  ]);
 }
 
 // Wraps the canonical loginAs helper with a try/catch so the audit matrix

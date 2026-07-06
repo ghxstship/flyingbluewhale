@@ -39,10 +39,9 @@ async function setTheme(page: Page, theme: string) {
       value: encodeURIComponent(
         '{"essential":true,"analytics":false,"marketing":false,"decidedAt":"2026-04-20T00:00:00Z"}',
       ),
-      domain: "localhost",
-      path: "/",
+      url: process.env.E2E_BASE_URL || "http://localhost:3000",
     },
-    { name: "chroma_theme", value: theme, domain: "localhost", path: "/" },
+    { name: "chroma_theme", value: theme, url: process.env.E2E_BASE_URL || "http://localhost:3000" },
   ]);
 }
 

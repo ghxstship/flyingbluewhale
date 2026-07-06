@@ -9,6 +9,7 @@
  * focused on content assertions; this file is for "does anything 500".
  */
 import { expect, test } from "playwright/test";
+import { dismissConsent } from "./helpers/auth";
 
 const MARKETING = [
   "/",
@@ -61,18 +62,9 @@ test.describe("graceful 404s", () => {
     await expect(page.getByText(/not found|404/i).first()).toBeVisible({ timeout: 5000 });
   });
 
-  test("unknown console route under an auth'd user 404s instead of crashing", async ({ page, context }) => {
+  test("unknown console route under an auth'd user 404s instead of crashing", async ({ page }) => {
     // Without a session the middleware redirects to /login, which is fine too.
-    await context.addCookies([
-      {
-        name: "fbw_consent",
-        value: encodeURIComponent(
-          JSON.stringify({ essential: true, analytics: false, marketing: false, decidedAt: new Date().toISOString() }),
-        ),
-        domain: "localhost",
-        path: "/",
-      },
-    ]);
+    await dismissConsent(page);
     const r = await page.goto("/studio/does-not-exist");
     expect(r?.status() ?? 200).not.toBe(500);
   });

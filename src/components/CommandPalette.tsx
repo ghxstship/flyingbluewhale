@@ -560,6 +560,7 @@ export function CommandPaletteTrigger() {
   return (
     <button
       type="button"
+      data-tour="cmdk"
       onClick={() => {
         window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
       }}

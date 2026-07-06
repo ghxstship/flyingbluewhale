@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { ChartBar } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import { Hint } from "@/components/ui/Tooltip";
 
 /**
  * ATLVS-only Dashboards menu (ADR-0006 / ADR-0007).
@@ -23,15 +24,17 @@ export type DashboardEntry = { id: string; name: string; href: string };
 export function DashboardsMenu({ entries }: { entries: DashboardEntry[] }) {
   return (
     <Popover.Root>
-      <Popover.Trigger asChild>
-        <button
-          type="button"
-          aria-label="Dashboards"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
-        >
-          <ChartBar size={16} aria-hidden="true" />
-        </button>
-      </Popover.Trigger>
+      <Hint label="Dashboards" side="bottom">
+        <Popover.Trigger asChild>
+          <button
+            type="button"
+            aria-label="Dashboards"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
+          >
+            <ChartBar size={16} aria-hidden="true" />
+          </button>
+        </Popover.Trigger>
+      </Hint>
       <Popover.Portal>
         <Popover.Content
           align="end"

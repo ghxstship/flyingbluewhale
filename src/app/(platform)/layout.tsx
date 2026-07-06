@@ -1,5 +1,6 @@
 import { PlatformSidebar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
+import { ConsoleTour } from "@/components/ConsoleTour";
 import { MobileNavDrawer } from "@/components/MobileNavDrawer";
 import { WorkspaceChrome } from "@/components/workspace-chrome/WorkspaceChrome";
 import { AppRail } from "@/components/workspace-chrome/AppRail";
@@ -136,6 +137,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
           </main>
         </div>
         <CommandPalette scope="platform" />
+        <ConsoleTour />
       </div>
     </TenantShell>
   );

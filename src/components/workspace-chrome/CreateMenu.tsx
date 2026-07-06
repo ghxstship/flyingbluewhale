@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { Hint } from "@/components/ui/Tooltip";
 
 /**
  * One Front Door — the global "+" (v7.8 zero-training layer,
@@ -53,15 +54,18 @@ export function CreateMenu() {
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger asChild>
-        <button
-          type="button"
-          aria-label={t("createMenu.trigger", undefined, "Create or request")}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--p-accent)] text-[var(--p-accent-contrast)] transition-transform hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
-        >
-          <Plus size={16} aria-hidden="true" />
-        </button>
-      </Popover.Trigger>
+      <Hint label={t("createMenu.triggerHint", undefined, "Create or request")} side="bottom">
+        <Popover.Trigger asChild>
+          <button
+            type="button"
+            data-tour="create"
+            aria-label={t("createMenu.trigger", undefined, "Create or request")}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--p-accent)] text-[var(--p-accent-contrast)] transition-transform hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+          >
+            <Plus size={16} aria-hidden="true" />
+          </button>
+        </Popover.Trigger>
+      </Hint>
       <Popover.Portal>
         <Popover.Content
           align="end"

@@ -2,9 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { HelpCircle, BookOpen, Sparkles, Activity, LifeBuoy } from "lucide-react";
+import { HelpCircle, BookOpen, Sparkles, Activity, LifeBuoy, Compass } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { LATEST_RELEASE_VERSION, getSeenVersion } from "@/lib/help/whats-new";
+import { startConsoleTour } from "@/lib/help/console-tour";
+import { Hint } from "@/components/ui/Tooltip";
 
 /**
  * `?` Help affordance (ADR-0007; kit 21 W6).
@@ -26,27 +28,40 @@ export function HelpButton({ knowledgeUrl = "/studio/knowledge" }: { knowledgeUr
 
   return (
     <Popover.Root>
-      <Popover.Trigger asChild>
-        <button
-          type="button"
-          aria-label="Help"
-          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
-        >
-          <HelpCircle size={16} aria-hidden="true" />
-          {unseen && (
-            <span
-              aria-hidden="true"
-              className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-[var(--p-accent)] ring-2 ring-[var(--p-bg)]"
-            />
-          )}
-        </button>
-      </Popover.Trigger>
+      <Hint label="Help &amp; tour" side="bottom">
+        <Popover.Trigger asChild>
+          <button
+            type="button"
+            data-tour="help"
+            aria-label="Help"
+            className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
+          >
+            <HelpCircle size={16} aria-hidden="true" />
+            {unseen && (
+              <span
+                aria-hidden="true"
+                className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-[var(--p-accent)] ring-2 ring-[var(--p-bg)]"
+              />
+            )}
+          </button>
+        </Popover.Trigger>
+      </Hint>
       <Popover.Portal>
         <Popover.Content
           align="end"
           sideOffset={6}
           className="z-[var(--p-z-popover)] w-64 rounded-lg border border-[var(--p-border)] bg-[var(--p-bg)] p-1 shadow-lg"
         >
+          <Popover.Close asChild>
+            <button
+              type="button"
+              onClick={() => startConsoleTour()}
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-start text-sm hover:bg-[var(--p-surface)]"
+            >
+              <Compass size={14} aria-hidden="true" className="text-[var(--p-text-2)]" />
+              <span>Take the tour</span>
+            </button>
+          </Popover.Close>
           <Link
             href="/studio/help"
             className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"

@@ -198,6 +198,7 @@ export function PlatformSidebar({
   return (
     <aside
       aria-label={t("shell.sidebar.primary", undefined, "Primary")}
+      data-tour="nav"
       // hidden md:flex: the desktop sidebar is suppressed below 768px
       // because its width swallows the entire phone viewport. The
       // MobileNavDrawer (top bar hamburger) replaces it for `< md`. See

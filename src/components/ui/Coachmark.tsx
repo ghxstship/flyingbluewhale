@@ -283,6 +283,27 @@ export function Tour({ steps, open, onClose, index, onIndexChange, spotlight = t
     return () => document.removeEventListener("keydown", onKey);
   }, [open, next, back, finish]);
 
+  // Clamp the bubble into the viewport: `bubblePosition` centers it on the
+  // target, so a target near an edge (e.g. a top-right chrome button, or a
+  // full-height sidebar) can push the bubble — and its controls — off-screen.
+  // Measure the rendered bubble and nudge it back with a compensating margin.
+  React.useLayoutEffect(() => {
+    const el = bubbleRef.current;
+    if (!open || !el) return;
+    el.style.marginLeft = "0px";
+    el.style.marginTop = "0px";
+    const r = el.getBoundingClientRect();
+    const m = 8;
+    let dx = 0;
+    let dy = 0;
+    if (r.left < m) dx = m - r.left;
+    else if (r.right > window.innerWidth - m) dx = window.innerWidth - m - r.right;
+    if (r.top < m) dy = m - r.top;
+    else if (r.bottom > window.innerHeight - m) dy = window.innerHeight - m - r.bottom;
+    if (dx) el.style.marginLeft = `${dx}px`;
+    if (dy) el.style.marginTop = `${dy}px`;
+  }, [open, current, rect]);
+
   if (!mounted || !open || !step || !rect) return null;
 
   const isLast = current >= steps.length - 1;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Bell, Check } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
+import { Hint } from "@/components/ui/Tooltip";
 import { createClient as createBrowserSupabase } from "@/lib/supabase/client";
 import { log } from "@/lib/log";
 
@@ -169,9 +170,11 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger asChild>
+      <Hint label={t("notifications.bellAria", undefined, "Notifications")} side="bottom">
+        <Popover.Trigger asChild>
         <button
           type="button"
+          data-tour="notifications"
           className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-1 focus-visible:outline-none"
           aria-label={
             unread > 0
@@ -189,7 +192,8 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
             </span>
           ) : null}
         </button>
-      </Popover.Trigger>
+        </Popover.Trigger>
+      </Hint>
       <Popover.Portal>
         <Popover.Content
           align="end"

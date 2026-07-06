@@ -28,6 +28,18 @@ version current at merge.
     retired for UI).
   - `tokens.json` stamped with `typeSystem`/`radiusSystem` for the mirror guard.
 
+### Added
+- **Console product tour + chrome tooltips** — the DS `Tour` primitive (built but never
+  instantiated) is now wired as `<ConsoleTour>` in the platform shell: a 5-step spotlight walk
+  (navigation rail → Create/one-front-door → ⌘K → notifications → Help) that auto-launches once
+  per browser (versioned localStorage, always skippable) and replays from a new "Take the tour"
+  entry in the Help menu (`startConsoleTour()` / `CONSOLE_TOUR_EVENT`). Steps resolve only to
+  present + visible targets, so it degrades gracefully on narrow viewports. Added `data-tour="…"`
+  anchors + `Hint` tooltips to the previously-bare top-bar icon buttons (Create, Notifications,
+  Help, Messages, Dashboards) and `data-tour` on the ⌘K trigger + sidebar rail. Fixed a
+  viewport-clamp bug in the `Tour` bubble (`Coachmark.tsx`) — it now nudges back on-screen so a
+  corner target can't push its controls out of view. Guarded by `e2e/console-tour.spec.ts`.
+
 ### Fixed
 - **Document engine correctness pass (kit 25 · `design_handoff_document_engine`)** — the
   29-template document system was already at parity (format layer, white-label brand modes,

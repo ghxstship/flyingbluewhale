@@ -97,7 +97,7 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       {
         kind: "section",
         eyebrow: "06 · Investment Summary",
-        heading: "Investment summary.",
+        heading: "What it costs.",
         table: {
           cols: [{ label: "Workstream" }, { label: "" }, { label: "Investment", align: "r" }],
           rows: [
@@ -110,7 +110,7 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       {
         kind: "section",
         eyebrow: "07 · Engagement & Payment",
-        heading: "Terms of engagement.",
+        heading: "How we bill.",
         kv: {
           rows: [
             { k: "Deposit", v: [mf("payment.depositPct", "60%"), " · ", mf("payment.depositAmount", "$105,000"), " on signature"] },
@@ -366,7 +366,7 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       {
         kind: "section",
         eyebrow: "03 · Compensation",
-        heading: "Compensation & reimbursement.",
+        heading: "Pay & reimbursement.",
         kv: {
           rows: [
             { k: "Basis", v: mf("comp.basis", "Per Day") },
@@ -405,7 +405,7 @@ export const DOC_TEMPLATES: DocTemplate[] = [
     blocks: [
       { kind: "head", doctype: "Agreement", docno: mf("agreement.id", "AGR-330") },
       { kind: "section", eyebrow: "Parties", heading: "This agreement.", paras: [["Between ", mf("owner.org", "ATLVS"), " and ", mf("party.name", "Acme Live"), ", effective ", mf("agreement.effectiveAt", "2026-06-15"), "."]] },
-      { kind: "section", eyebrow: "Terms", heading: "Terms & conditions.", paras: [mf("agreement.terms", "Standard master services terms apply.")] },
+      { kind: "section", eyebrow: "Terms", heading: "What both sides agree to.", paras: [mf("agreement.terms", "Standard master services terms apply.")] },
       { kind: "sign", rows: [{ label: "Party A — signature / date" }, { label: "Party B — signature / date" }] },
       { kind: "foot", text: "Executed agreement" },
     ],

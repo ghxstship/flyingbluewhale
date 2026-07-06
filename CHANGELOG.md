@@ -28,6 +28,34 @@ version current at merge.
     retired for UI).
   - `tokens.json` stamped with `typeSystem`/`radiusSystem` for the mirror guard.
 
+### Fixed
+- **Document engine correctness pass (kit 25 · `design_handoff_document_engine`)** — the
+  29-template document system was already at parity (format layer, white-label brand modes,
+  merge contract, `DocToolbar` brand+merge controls); this cycle lands the two outstanding
+  fixes:
+  - **Cover title contrast** (`kit-documents.css`): `.doc-cover h1` now sets `color:var(--p-bg)`
+    (+ new `.doc-cover--accent h1{color:var(--p-accent-contrast)}`). The `@layer base`
+    `[data-theme="atlvs-product"] h1{color:var(--p-text-1)}` element rule was overriding the
+    inherited light cover color, rendering titles dark-on-dark.
+  - **Print page-break rules** (`kit-documents.css`): `break-inside:avoid` now also covers
+    `.doc-phase` steps and individual `.doc-table tr` rows, and `thead{display:table-header-group}`
+    repeats table headers on each printed page — aligning the print/PDF artifact to the kit.
+  - **App-aware wordmark** (`kit-documents.css` + both renderers): the cover + letterhead
+    wordmark now reflects the OWNING app (ATLVS · COMPVSS · GVTEWAY · LEG3ND) instead of a
+    hardcoded "ATLVS" on every document (README §0.2). `--ob-name` defaults per `data-product`
+    and the cover routes through `.doc-wm::after{content:var(--ob-name)}`; co/white still
+    override `--ob-name` with the issuing org's name, so the white-label layer is unaffected.
+    Both `render-html.ts` and `DocEngine.tsx` now emit an empty `.doc-wm` span. Guarded by
+    new tests in `render-html.test.ts`.
+  - Verified full template parity against the kit registry (all 29 templates): block structure,
+    every heading/eyebrow/doctype, table columns, kv keys, and the 221-path merge contract are
+    identical; and every `--p-*`/`--ob-*`/`--cl-*` token the format layer uses resolves. So the
+    templates already match the kit; the items above are the format-layer + wordmark deltas.
+  - **Eyebrow/heading de-dups** (`registry.ts`): headings no longer restate their eyebrow —
+    Proposal §06 "Investment summary." → "What it costs."; §07 "Terms of engagement." → "How we
+    bill."; Offer Letter §03 "Compensation & reimbursement." → "Pay & reimbursement."; Agreement
+    Terms "Terms & conditions." → "What both sides agree to."
+
 ### Added
 - **Unified Schedule (CP·3 + CP·4 · `REPO_UNIFIED_SCHEDULE_HANDOFF`)** — promotes the
   read-only Dispatch Matrix into the writable operational timeline at

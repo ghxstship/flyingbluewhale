@@ -39,6 +39,18 @@
 .doc[data-brand="co"]{ --doc-attrib:"Powered by ATLVS"; }
 .doc[data-brand="white"]{ --doc-attrib:""; }
 
+/* App-aware wordmark (README §0.2): the cover + letterhead wordmark reflects the
+   OWNING app — not a hardcoded ATLVS on every document. --ob-name defaults per
+   data-product (atlvs keeps the base "ATLVS" above); co/white modes still
+   override --ob-name inline with the issuing org's name, so the white-label
+   layer is unaffected. Both the cover (.doc-wm) and letterhead (.doc-brandname)
+   resolve their text from --ob-name via ::after, with the wordmark tracking
+   supplying the spaced look. */
+.doc-stage[data-product="compvss"] .doc{ --ob-name:"COMPVSS"; }
+.doc-stage[data-product="gvteway"] .doc{ --ob-name:"GVTEWAY"; }
+.doc-stage[data-product="legend"] .doc{ --ob-name:"LEG3ND"; }
+.doc-wm::after{content:var(--ob-name)}
+
 .doc-masthead{display:flex;align-items:center;gap:var(--p-3)}
 .doc-mark{width:30px;height:30px;border-radius:7px;flex:none;background-color:var(--ob-accent);background-image:var(--ob-logo);background-size:19px;background-position:center;background-repeat:no-repeat}
 .doc-brandname{font-family:var(--p-wordmark);font-weight:500;letter-spacing:.24em;white-space:nowrap;font-size:15px}
@@ -68,7 +80,13 @@
 .doc-cover--accent .brandrow .mk{background:var(--p-accent-contrast)}
 .doc-cover .wm{font-family:var(--p-font);font-weight:600;letter-spacing:.04em}
 .doc-cover .doctype{font-family:var(--p-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin:0 0 12px}
-.doc-cover h1{font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);letter-spacing:var(--p-heading-ls);text-transform:var(--p-display-case);font-size:48px;line-height:.96;margin:0 0 var(--p-3)}
+/* Cover h1 MUST set an explicit light color: the `@layer base`
+   `[data-theme="atlvs-product"] h1{color:var(--p-text-1)}` element rule
+   otherwise wins over the inherited `.doc-cover{color:var(--p-bg)}` and renders
+   the title dark-on-dark. Any heading on a dark/accent block sets color the same
+   way (see `.doc-sec--ink h2` below). */
+.doc-cover h1{color:var(--p-bg);font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);letter-spacing:var(--p-heading-ls);text-transform:var(--p-display-case);font-size:48px;line-height:.96;margin:0 0 var(--p-3)}
+.doc-cover--accent h1{color:var(--p-accent-contrast)}
 .doc-cover .sub{font-size:15px;opacity:.82;margin:0 0 28px;max-width:480px;line-height:1.5}
 .doc-cover .stamp{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--p-3);border-top:1.5px solid color-mix(in oklab,currentColor 30%,transparent);padding-top:16px}
 .doc-cover .stamp>*{min-width:0}
@@ -143,5 +161,8 @@
   .doc-note,.doc-toolbar{display:none !important}
   .doc{max-width:none;margin:0;border:0;border-radius:0;box-shadow:none}
   .mf{background:none !important;color:inherit !important;font-weight:inherit !important;padding:0 !important}
-  .doc-sec,.doc-cover,.doc-sign{break-inside:avoid}
+  /* Keep whole blocks — plus phase steps and individual table rows — from
+     splitting across a page break, and repeat table headers on each page. */
+  .doc-sec,.doc-cover,.doc-sign,.doc-phase,.doc-table tr{break-inside:avoid}
+  thead{display:table-header-group}
 }

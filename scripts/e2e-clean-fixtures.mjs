@@ -44,7 +44,71 @@ const TARGETS = [
   { table: "co_pro_partnerships", column: "partner_name", pattern: "E2E CoPro%" },
   { table: "vendors", column: "name", pattern: "E2E Vendor%" },
   { table: "availability_slots", column: "label", pattern: "E2E hold%" },
+  // project-roles.spec creates a throwaway project to exercise PROJECT_ROLES
+  // assignment; project_members cascade on delete. RLS scopes the delete to the
+  // owner fixture's test orgs.
+  { table: "projects", column: "name", pattern: "E2E ProjectRoles%" },
 ];
+
+// The deterministic marketplace talent fixture the e2e suite reads
+// (e2e/marketplace-canon-actions). Mirrors migration
+// 20260630174035_reseed_marketplace_talent_fixture — kept in sync by hand.
+const TALENT_FIXTURE = {
+  id: "aaaaaaaa-0001-4001-8001-000000000001",
+  org_id: "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7",
+  user_id: "781d6818-5f1b-4b41-b5a7-aa3b2cf1732a",
+  created_by: "781d6818-5f1b-4b41-b5a7-aa3b2cf1732a",
+  public_handle: "fixture-band-alpha-pro",
+  act_name: "Fixture Band Alpha",
+  tagline: "Deterministic e2e marketplace fixture.",
+  is_public: true,
+};
+
+/**
+ * Self-heal the marketplace talent fixture. The marketplace-canon mutation
+ * tests create "E2E Act …" talent and demote/rename/delete the shared fixture,
+ * which left the deterministic detail-page tests reading E2E residue instead of
+ * "Fixture Band Alpha". This purges the residue and restores the fixture.
+ *
+ * No service role needed: the fixture + residue live in the test-professional
+ * org (f4509a5f) and `talent_profiles` insert/update/delete RLS all admit
+ * `is_org_member(org_id)`, of which the owner fixture is a member — so the
+ * already-authenticated owner client can do it. Each step is isolated +
+ * best-effort so a partial failure never blocks the restore.
+ */
+async function healMarketplaceFixture(supabase) {
+  // 1. Purge "E2E Act …" residue (talent_offers reference acts → offers first).
+  try {
+    const { data: acts } = await supabase
+      .from("talent_profiles")
+      .select("id")
+      .like("act_name", "E2E Act%")
+      .neq("id", TALENT_FIXTURE.id);
+    const ids = (acts ?? []).map((a) => a.id);
+    if (ids.length) {
+      // FK children of talent_profiles.id: talent_offers + tours are RESTRICT
+      // (delete first); agency_artists + talent_riders CASCADE. Columns are
+      // `talent_profile_id`.
+      await supabase.from("talent_offers").delete().in("talent_profile_id", ids);
+      await supabase.from("tours").delete().in("talent_profile_id", ids);
+      const { data: removed, error } = await supabase.from("talent_profiles").delete().in("id", ids).select("id");
+      if (error) throw error;
+      console.log(`e2e:clean — talent_profiles: removed ${removed?.length ?? 0} "E2E Act%" row(s)`);
+    }
+  } catch (e) {
+    console.error(`e2e:clean — talent residue purge (ignored): ${e?.message ?? e}`);
+  }
+  // 2. Restore the fixture (idempotent upsert), un-demoting + un-deleting it.
+  try {
+    const { error } = await supabase
+      .from("talent_profiles")
+      .upsert({ ...TALENT_FIXTURE, verified_at: new Date().toISOString(), deleted_at: null }, { onConflict: "id" });
+    if (error) throw error;
+    console.log('e2e:clean — talent fixture "Fixture Band Alpha" restored.');
+  } catch (e) {
+    console.error(`e2e:clean — talent fixture restore (ignored): ${e?.message ?? e}`);
+  }
+}
 
 async function main() {
   if (!SUPABASE_URL || !ANON) {
@@ -77,6 +141,10 @@ async function main() {
     if (n) console.log(`e2e:clean — ${table}: removed ${n} "${pattern}" row(s)`);
   }
   console.log(`e2e:clean — done (${total} residual row(s) removed).`);
+
+  // Restore the shared marketplace fixture the mutation tests clobber. Runs on
+  // the still-authenticated owner client (org member of the fixture org).
+  await healMarketplaceFixture(supabase);
   await supabase.auth.signOut();
 }
 

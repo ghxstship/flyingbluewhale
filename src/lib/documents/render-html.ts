@@ -55,7 +55,7 @@ function blockHtml(b: DocBlock, resolve: Resolve): string {
             )
             .join("")}</div>`
         : "";
-      return `<div class="${b.accent ? "doc-cover doc-cover--accent" : "doc-cover"}"><div class="brandrow">${MK}<span class="wm doc-wm">A T L V S</span><span class="doc-clientmark"></span></div><p class="doctype">${esc(b.doctype)}</p><h1>${runHtml(b.title, resolve)}</h1>${b.sub ? `<p class="sub">${runHtml(b.sub, resolve)}</p>` : ""}${stamps}</div>`;
+      return `<div class="${b.accent ? "doc-cover doc-cover--accent" : "doc-cover"}"><div class="brandrow">${MK}<span class="wm doc-wm"></span><span class="doc-clientmark"></span></div><p class="doctype">${esc(b.doctype)}</p><h1>${runHtml(b.title, resolve)}</h1>${b.sub ? `<p class="sub">${runHtml(b.sub, resolve)}</p>` : ""}${stamps}</div>`;
     }
     case "head":
       return `<div class="doc-head"><div class="brandrow">${MK}<span class="doc-brandname"></span></div><div><div class="doctype">${esc(b.doctype)}</div><div class="docno">${runHtml(b.docno, resolve)}</div></div></div>`;

@@ -121,7 +121,7 @@ function Block({ block, resolve }: { block: DocBlock; resolve: Resolve }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/atlvs-mark-white.svg" alt="" width={19} height={19} aria-hidden="true" />
             </span>
-            <span className="wm doc-wm">A T L V S</span>
+            <span className="wm doc-wm" />
             <span className="doc-clientmark" />
           </div>
           <p className="doctype">{block.doctype}</p>

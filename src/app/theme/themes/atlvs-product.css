@@ -308,13 +308,13 @@
   --p-fs-display-l: 6rem; /* 96 */
   --p-fs-display-xl: 6.75rem; /* 108 */
 
-  /* Radii — productivity-tool friendly. v7.0 adds r-md (10px) + r-xl (16px);
-     modals/sheets ride r-xl. */
-  --p-r-sm: 6px;
-  --p-r: 8px;
-  --p-r-md: 10px;
-  --p-r-lg: 12px;
-  --p-r-xl: 16px;
+  /* Radii — v7.9 "machined" micro-scale (precision-milled, concentric-nesting;
+     supersedes the 6/8/10/12/16 scale). Modals/sheets ride r-xl (10px). */
+  --p-r-sm: 2px;
+  --p-r: 3px;
+  --p-r-md: 4px;
+  --p-r-lg: 6px;
+  --p-r-xl: 10px;
   --p-r-pill: 999px;
 
   /* Completed 4px-grid spacing scale (v7.0). */

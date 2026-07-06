@@ -11,7 +11,26 @@ version current at merge.
 
 ## [Unreleased]
 
+### Changed
+- **v8.1 parity landing (kit 23 · `REPO_PARITY_HANDOFF`)** — bring the repo's token
+  plumbing up to the kit's reconciled v8.1:
+  - **Radius → v7.9 "machined" micro-scale** (`r-sm 2 · r 3 · r-md 4 · r-lg 6 · r-xl 10 ·
+    r-pill 999`, was `6/8/10/12/16`) across `tokens.json#radii`, `atlvs-product.css`
+    `--p-r-*`, and the `globals.css @theme inline` shim (large radii no longer collapse to
+    `r-lg`). Modals/drawers already ride `--p-r-xl` (now 10px).
+  - **Breakpoint `sm` → 480** in the `globals.css` Tailwind mirror (was the Tailwind
+    default 640; SSOT `--bp-sm` was already 480), and the `.metric-grid-3/-5` `@media`
+    literals moved with it. `.page-content` / `.module-header-inner` max-width routed to
+    `var(--p-content-max)` (1200px, was 80rem/1280).
+  - **Elevation → full 5-step utility ladder** (`.elevation-xs` + `.elevation-2xl` added;
+    `.elevation-4`/`-float` now alias `-2xl`), matching the kit's 5-step token scale.
+  - Cold-start `:root` comment corrected (ATLVS volcanic-red house accent; house green is
+    retired for UI).
+  - `tokens.json` stamped with `typeSystem`/`radiusSystem` for the mirror guard.
+
 ### Added
+- **`src/lib/theme/kit-mirror.test.ts`** — repo⇄kit drift guard: pins the machined radii,
+  kit breakpoints, 5-step elevation, and version stamp across all three token sources.
 - Governance docs to close the design-system inventory gaps: this `CHANGELOG.md`, the
   terminology `GLOSSARY.md`, the `MICROCOPY.md` playbook, `PHOTOGRAPHY.md` direction,
   `CLEARSPACE.md` logo rules, and the `DO-DONT.md` gallery (`docs/design-system/`).

@@ -52,9 +52,14 @@ export default async function Page({
             : t("console.workforce.deployment.subtitleMany", { count: total }, `${total} Records`)
         }
         action={
-          <Button href="/studio/workforce/deployment/new" size="sm">
-            {t("console.workforce.deployment.planDeployment", undefined, "+ Plan deployment")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/studio/operations/schedule?lane=crew&group=location" size="sm" variant="secondary">
+              {t("console.workforce.deployment.openSchedule", undefined, "Open in Schedule")}
+            </Button>
+            <Button href="/studio/workforce/deployment/new" size="sm">
+              {t("console.workforce.deployment.planDeployment", undefined, "+ Plan deployment")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-3">

@@ -145,3 +145,8 @@ export { ListRow } from "./ListRow";
 export type { ListRowProps } from "./ListRow";
 export { RoleControl } from "./RoleControl";
 export type { RoleControlProps, RoleOption } from "./RoleControl";
+// Kit-vocabulary synonym (REPO_PARITY_HANDOFF_2 §4): the kit names this role
+// picker `RoleSelect`; alias so both vocabularies resolve rather than forking a
+// duplicate (mirrors the Coachmark/Tour dual-export above).
+export { RoleControl as RoleSelect } from "./RoleControl";
+export type { RoleControlProps as RoleSelectProps } from "./RoleControl";

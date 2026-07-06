@@ -1341,6 +1341,54 @@ export type Database = {
           },
         ]
       }
+      ai_risk_reports: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          model: string | null
+          org_id: string
+          project_id: string
+          prompt_context: Json
+          report_data: Json
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          model?: string | null
+          org_id: string
+          project_id: string
+          prompt_context?: Json
+          report_data?: Json
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          model?: string | null
+          org_id?: string
+          project_id?: string
+          prompt_context?: Json
+          report_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_risk_reports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_risk_reports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_schedule_suggestions: {
         Row: {
           applied_at: string | null
@@ -5203,51 +5251,6 @@ export type Database = {
           },
         ]
       }
-      chat_messages: {
-        Row: {
-          attachments: Json
-          author_id: string | null
-          body: string
-          created_at: string
-          id: string
-          org_id: string
-          room_id: string
-        }
-        Insert: {
-          attachments?: Json
-          author_id?: string | null
-          body: string
-          created_at?: string
-          id?: string
-          org_id: string
-          room_id: string
-        }
-        Update: {
-          attachments?: Json
-          author_id?: string | null
-          body?: string
-          created_at?: string
-          id?: string
-          org_id?: string
-          room_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_messages_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "chat_messages_room_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "chat_rooms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       chat_message_reactions: {
         Row: {
           created_at: string
@@ -5293,6 +5296,51 @@ export type Database = {
           },
           {
             foreignKeyName: "chat_message_reactions_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          attachments: Json
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          org_id: string
+          room_id: string
+        }
+        Insert: {
+          attachments?: Json
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          org_id: string
+          room_id: string
+        }
+        Update: {
+          attachments?: Json
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_room_id_fkey"
             columns: ["room_id"]
             isOneToOne: false
             referencedRelation: "chat_rooms"
@@ -5870,6 +5918,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "community_posts_accepted_comment_id_fkey"
+            columns: ["accepted_comment_id"]
+            isOneToOne: false
+            referencedRelation: "community_comments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "community_posts_org_id_fkey"
             columns: ["org_id"]
@@ -9593,6 +9648,54 @@ export type Database = {
           },
         ]
       }
+      deliverable_reviewers: {
+        Row: {
+          assigned_at: string
+          deliverable_id: string
+          id: string
+          note: string | null
+          org_id: string
+          review_state: Database["public"]["Enums"]["deliverable_review_state"]
+          reviewed_at: string | null
+          reviewer_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          deliverable_id: string
+          id?: string
+          note?: string | null
+          org_id: string
+          review_state?: Database["public"]["Enums"]["deliverable_review_state"]
+          reviewed_at?: string | null
+          reviewer_id: string
+        }
+        Update: {
+          assigned_at?: string
+          deliverable_id?: string
+          id?: string
+          note?: string | null
+          org_id?: string
+          review_state?: Database["public"]["Enums"]["deliverable_review_state"]
+          reviewed_at?: string | null
+          reviewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deliverable_reviewers_deliverable_id_fkey"
+            columns: ["deliverable_id"]
+            isOneToOne: false
+            referencedRelation: "deliverables"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverable_reviewers_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deliverable_state_transitions: {
         Row: {
           correlation_id: string | null
@@ -9637,54 +9740,6 @@ export type Database = {
           },
           {
             foreignKeyName: "deliverable_state_transitions_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      deliverable_reviewers: {
-        Row: {
-          assigned_at: string
-          deliverable_id: string
-          id: string
-          note: string | null
-          org_id: string
-          review_state: Database["public"]["Enums"]["deliverable_review_state"]
-          reviewed_at: string | null
-          reviewer_id: string
-        }
-        Insert: {
-          assigned_at?: string
-          deliverable_id: string
-          id?: string
-          note?: string | null
-          org_id: string
-          review_state?: Database["public"]["Enums"]["deliverable_review_state"]
-          reviewed_at?: string | null
-          reviewer_id: string
-        }
-        Update: {
-          assigned_at?: string
-          deliverable_id?: string
-          id?: string
-          note?: string | null
-          org_id?: string
-          review_state?: Database["public"]["Enums"]["deliverable_review_state"]
-          reviewed_at?: string | null
-          reviewer_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "deliverable_reviewers_deliverable_id_fkey"
-            columns: ["deliverable_id"]
-            isOneToOne: false
-            referencedRelation: "deliverables"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "deliverable_reviewers_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -11556,9 +11611,11 @@ export type Database = {
           event_state: Database["public"]["Enums"]["event_status"]
           id: string
           location_id: string | null
+          location_kind: Database["public"]["Enums"]["location_kind"] | null
           name: string
           org_id: string
           project_id: string | null
+          resource_ref: string | null
           starts_at: string
           updated_at: string
         }
@@ -11571,9 +11628,11 @@ export type Database = {
           event_state?: Database["public"]["Enums"]["event_status"]
           id?: string
           location_id?: string | null
+          location_kind?: Database["public"]["Enums"]["location_kind"] | null
           name: string
           org_id: string
           project_id?: string | null
+          resource_ref?: string | null
           starts_at: string
           updated_at?: string
         }
@@ -11586,9 +11645,11 @@ export type Database = {
           event_state?: Database["public"]["Enums"]["event_status"]
           id?: string
           location_id?: string | null
+          location_kind?: Database["public"]["Enums"]["location_kind"] | null
           name?: string
           org_id?: string
           project_id?: string | null
+          resource_ref?: string | null
           starts_at?: string
           updated_at?: string
         }
@@ -32731,6 +32792,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tasks_period_id_fkey"
+            columns: ["period_id"]
+            isOneToOne: false
+            referencedRelation: "accounting_periods"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "tasks_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
@@ -42614,6 +42682,7 @@ export type Database = {
         | "proposal"
         | "contract"
         | "file"
+        | "kb_article"
       envelope_provider:
         | "docusign"
         | "adobe_sign"
@@ -42776,6 +42845,14 @@ export type Database = {
         | "released"
         | "voided"
       lien_waiver_type: "conditional" | "unconditional"
+      location_kind:
+        | "venue"
+        | "vessel"
+        | "hotel_block"
+        | "warehouse"
+        | "office"
+        | "greenroom"
+        | "vehicle"
       marketplace_inquiry_state: "new" | "responded" | "closed" | "withdrawn"
       marketplace_inquiry_subject:
         | "vendor"
@@ -42980,6 +43057,8 @@ export type Database = {
         | "meeting"
         | "training"
         | "run_of_show"
+        | "rehearsal"
+        | "changeover"
       settlement_status: "draft" | "reconciling" | "final" | "disputed"
       share_link_role: "viewer" | "commenter"
       sheet_callout_target_type:
@@ -43794,6 +43873,7 @@ export const Constants = {
         "proposal",
         "contract",
         "file",
+        "kb_article",
       ],
       envelope_provider: [
         "docusign",
@@ -43968,6 +44048,15 @@ export const Constants = {
         "voided",
       ],
       lien_waiver_type: ["conditional", "unconditional"],
+      location_kind: [
+        "venue",
+        "vessel",
+        "hotel_block",
+        "warehouse",
+        "office",
+        "greenroom",
+        "vehicle",
+      ],
       marketplace_inquiry_state: ["new", "responded", "closed", "withdrawn"],
       marketplace_inquiry_subject: [
         "vendor",
@@ -44195,6 +44284,8 @@ export const Constants = {
         "meeting",
         "training",
         "run_of_show",
+        "rehearsal",
+        "changeover",
       ],
       settlement_status: ["draft", "reconciling", "final", "disputed"],
       share_link_role: ["viewer", "commenter"],

@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1168 · **API route handlers:** 145 · **Distinct nav hrefs:** 510
+**Page routes:** 1169 · **API route handlers:** 145 · **Distinct nav hrefs:** 511
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 778 | 243 | 534 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 779 | 244 | 533 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 41 | 21 | 20 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1168** | **484** | **644** | **0** | **40** |
+| **TOTAL** | | **1169** | **485** | **643** | **0** | **41** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,13 +49,14 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (40) — intentional non-nav, with reasons
+## · Exempt routes (41) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
 | Match | Type | Reason |
 |-------|------|--------|
 | `/studio/advancing/request` | exact | One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu. |
+| `/studio/operations/dispatch` | exact | Dispatch Matrix redirect — promoted to the unified /studio/operations/schedule; keeps old links resolving. |
 | `/p/[slug]` | exact | Portal gateway — persona picker / redirect to the viewer's persona home. |
 | `/p/select` | exact | Org/slug picker — reached when a portal user has no resolved slug. |
 | `/p` | exact | GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item). |
@@ -93,7 +94,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-778 routes — ● 243 nav · ○ 534 linked · ⚠ 0 orphan
+779 routes — ● 244 nav · ○ 533 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -690,13 +691,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>operations</code> · 17 routes</summary>
+<details><summary><code>operations</code> · 18 routes</summary>
 
 ○ `/studio/operations`
 ● `/studio/operations/daily-log`
 ○ `/studio/operations/daily-log/[id]`
 ○ `/studio/operations/daily-log/new`
-○ `/studio/operations/dispatch`
+· `/studio/operations/dispatch`
 ● `/studio/operations/incidents`
 ○ `/studio/operations/incidents/[incidentId]`
 ○ `/studio/operations/incidents/[incidentId]/edit`
@@ -709,6 +710,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/operations/reservations/[id]`
 ○ `/studio/operations/reservations/new`
 ○ `/studio/operations/reservations/tables/new`
+● `/studio/operations/schedule`
 
 </details>
 

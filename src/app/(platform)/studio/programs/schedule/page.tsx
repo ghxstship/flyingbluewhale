@@ -74,9 +74,18 @@ export default async function Page() {
         title={t("console.programs.schedule.title", undefined, "Master Schedule")}
         subtitle={`${rows.length} ${rows.length === 1 ? t("console.programs.schedule.eventSingular", undefined, "Event") : t("console.programs.schedule.eventPlural", undefined, "Events")} · ${upcoming} ${t("console.programs.schedule.upcoming", undefined, "Upcoming")} · ${live} ${t("console.programs.schedule.live", undefined, "Live")}`}
         action={
-          <Button href="/studio/events/new" size="sm">
-            {t("console.programs.schedule.newEvent", undefined, "+ New Event")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              href="/studio/operations/schedule?kind=rehearsal,sound_check,changeover,run_of_show"
+              size="sm"
+              variant="secondary"
+            >
+              {t("console.programs.schedule.openTimeline", undefined, "Open in Timeline")}
+            </Button>
+            <Button href="/studio/events/new" size="sm">
+              {t("console.programs.schedule.newEvent", undefined, "+ New Event")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-5">

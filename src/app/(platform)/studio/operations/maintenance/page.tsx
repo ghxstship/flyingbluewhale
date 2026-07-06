@@ -147,9 +147,14 @@ export default async function Page() {
           `${overdueCount} overdue · ${next7} due in 7 days · ${all.length} Total upcoming`,
         )}
         action={
-          <Button href="/studio/operations/maintenance/schedules/new" size="sm">
-            {t("console.operations.maintenance.newSchedule", undefined, "+ New Schedule")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/studio/operations/schedule?lane=warehouse&kind=maintenance" size="sm" variant="secondary">
+              {t("console.operations.maintenance.openSchedule", undefined, "Open in Schedule")}
+            </Button>
+            <Button href="/studio/operations/maintenance/schedules/new" size="sm">
+              {t("console.operations.maintenance.newSchedule", undefined, "+ New Schedule")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-5">

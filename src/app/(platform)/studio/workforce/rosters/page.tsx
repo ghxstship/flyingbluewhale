@@ -52,9 +52,14 @@ export default async function Page({
             : t("console.workforce.rosters.subtitleOther", { count: total }, `${total} Records`)
         }
         action={
-          <Button href="/studio/workforce/rosters/new" size="sm">
-            {t("console.workforce.rosters.newRoster", undefined, "+ New Roster")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/studio/operations/schedule?lane=crew&kind=shift" size="sm" variant="secondary">
+              {t("console.workforce.rosters.openSchedule", undefined, "Open in Schedule")}
+            </Button>
+            <Button href="/studio/workforce/rosters/new" size="sm">
+              {t("console.workforce.rosters.newRoster", undefined, "+ New Roster")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-3">

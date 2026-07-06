@@ -594,6 +594,12 @@
               ]
             },
             {
+              "path": "/studio/operations/schedule",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
               "path": "/studio/tasks",
               "arch": [
                 "LIST"

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -95,6 +96,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                 { count: members.length, date: dateStr },
                 `${members.length} members on shift · ${dateStr}`,
               )
+        }
+        action={
+          <Button href="/studio/operations/schedule?lane=crew&group=location" size="sm" variant="secondary">
+            {t("console.workforce.callSheets.openSchedule", undefined, "Open in Schedule")}
+          </Button>
         }
       />
       <div className="page-content space-y-4">

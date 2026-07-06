@@ -35,6 +35,8 @@ export const SCHEDULE_EVENT_KIND_LABELS: Record<ScheduleEventKind, string> = {
   meeting: "Meeting",
   training: "Training",
   run_of_show: "Run Of Show",
+  rehearsal: "Rehearsal",
+  changeover: "Changeover",
 };
 
 export function scheduleKindLabel(kind: string): string {

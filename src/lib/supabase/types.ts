@@ -134,7 +134,18 @@ export type ScheduleEventKind =
   | "shift"
   | "meeting"
   | "training"
-  | "run_of_show";
+  | "run_of_show"
+  | "rehearsal"
+  | "changeover";
+/** Unified-schedule polymorphic lane kind (migration 20260706183521). */
+export type LocationKind =
+  | "venue"
+  | "vessel"
+  | "hotel_block"
+  | "warehouse"
+  | "office"
+  | "greenroom"
+  | "vehicle";
 export type AnnotationKind = "flag" | "note" | "comment" | "tag";
 export type AnnotationSeverity = "info" | "warning" | "critical";
 export type AnnotationStatus = "open" | "acknowledged" | "resolved" | "dismissed";
@@ -637,6 +648,10 @@ export type EventRow = {
   location_id: string | null;
   event_state: EventStatus;
   event_kind: ScheduleEventKind;
+  /** Unified-schedule lane kind (migration 20260706183521). */
+  location_kind: LocationKind | null;
+  /** Unified-schedule resource binding (crew / asset / space). */
+  resource_ref: string | null;
   description: string | null;
   created_by: string | null;
   created_at: string;

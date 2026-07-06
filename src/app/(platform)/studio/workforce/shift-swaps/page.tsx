@@ -1,6 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -125,6 +126,15 @@ export default async function Page() {
           { pending, approved, total: rows.length },
           `${pending} Pending · ${approved} Approved · ${rows.length} Total`,
         )}
+        action={
+          <Button
+            href="/studio/operations/schedule?lane=crew&kind=shift&state=swap_requested"
+            size="sm"
+            variant="secondary"
+          >
+            {t("console.workforce.shiftSwaps.openSchedule", undefined, "Open in Schedule")}
+          </Button>
+        }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

@@ -110,6 +110,13 @@ export default async function Page() {
         )}
         action={
           <div className="flex items-center gap-2">
+            <Button
+              href="/studio/operations/schedule?lane=venue&kind=reservation"
+              size="sm"
+              variant="secondary"
+            >
+              {t("console.reservations.openSchedule", undefined, "Open in Schedule")}
+            </Button>
             <Button href="/studio/operations/reservations/tables/new" size="sm" variant="secondary">
               {t("console.reservations.newTable", undefined, "+ New Table")}
             </Button>

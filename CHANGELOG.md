@@ -29,11 +29,40 @@ version current at merge.
   - `tokens.json` stamped with `typeSystem`/`radiusSystem` for the mirror guard.
 
 ### Added
+- **Unified Schedule (CP·3 + CP·4 · `REPO_UNIFIED_SCHEDULE_HANDOFF`)** — promotes the
+  read-only Dispatch Matrix into the writable operational timeline at
+  `/studio/operations/schedule`. Unions the `events` schedule store (typed activities) with
+  shifts (crew), dispatch_runs (fleet), reservations (spaces), maintenance_jobs (asset service
+  windows) and tasks onto one hour grid, grouped by lane kind; accepts `?day/lane/kind/state`
+  deep-links. `operations/dispatch` now 301s here (sitemap-EXEMPT); a `Dispatch` rail item
+  lands in the Operations group. **Drag-to-reschedule** (`ScheduleBlock.tsx`): events-sourced
+  blocks drag horizontally (15-min snap) and commit via the reschedule action with the
+  guardrail warn→override confirm inline.
+  - **Store decision:** the facets land on **`events`** (the real "One Schedule Store"), not
+    the CPM `schedule_activities` the handoff named — backfilling shifts/reservations into the
+    baseline store would duplicate those nouns (violating the 3NF law the handoff invokes) and
+    can't satisfy its NOT NULL `baseline_id`/`code`/`duration_days`. Migration
+    `20260706183521_unified_schedule_events_facets` adds the `location_kind` enum +
+    `location_kind`/`resource_ref` columns + two indexes, and extends `schedule_event_kind`
+    with `rehearsal`/`changeover`. **No backfill / no duplication** — operational stores stay
+    canonical and are read-projected onto the timeline.
+  - **Guardrails (CP·4):** `src/lib/schedule/guardrails.ts` — expired-credential + cross-location
+    double-book (block), minimum-rest + fair-workweek cap (warn); enforced in the create/
+    reschedule server actions before write and surfaced as an in-grid digest. Guarded by
+    `guardrails.test.ts`.
+  - **Crew-writable:** migration `20260706183539_unified_schedule_events_rls_crew_grant` admits
+    `crew` to the `events` insert/update bands (same app-vs-RLS inversion fixed for the
+    compvss-field surfaces); guarded by `src/lib/schedule-rls-crew-canon.test.ts`. DELETE stays
+    owner/admin.
+  - Entry points: "Open in Schedule" actions on all six source surfaces — rosters,
+    shift-swaps, deployment, call-sheets, reservations, maintenance (+ "Open in Timeline" on
+    the programs Master Schedule), each deep-linking its lane/kind/state lens.
 - **`src/lib/theme/kit-mirror.test.ts`** — repo⇄kit drift guard: pins the machined radii,
   kit breakpoints, 5-step elevation, and version stamp across all three token sources.
-- Governance docs to close the design-system inventory gaps: this `CHANGELOG.md`, the
-  terminology `GLOSSARY.md`, the `MICROCOPY.md` playbook, `PHOTOGRAPHY.md` direction,
-  `CLEARSPACE.md` logo rules, and the `DO-DONT.md` gallery (`docs/design-system/`).
+- Governance docs to close the design-system inventory gaps: this `CHANGELOG.md` (repo
+  root); the terminology `GLOSSARY.md`, the `MICROCOPY.md` playbook, `PHOTOGRAPHY.md`
+  direction, and `CLEARSPACE.md` logo rules (`docs/brand/`); and the `DO-DONT.md` gallery
+  (`docs/design-system/`, alongside `INVENTORY.md`).
 - Brand visual library: tiling patterns (`grid`, `dots`, `diagonal`) and geometric spot
   art (`waypoint`, `signal`, `build`) under `public/brand/`, plus a brand-asset index
   (`public/brand/README.md`).

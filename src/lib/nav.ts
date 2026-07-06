@@ -443,6 +443,12 @@ export const platformNavDomain: NavGroup[] = [
         icon: "CalendarDays",
         sub: "One Schedule Store · Events & Meetings",
       },
+      {
+        label: "Dispatch",
+        href: "/studio/operations/schedule",
+        icon: "CalendarRange",
+        sub: "Unified Ops Timeline · Crew · Fleet · Spaces",
+      },
       { label: "Tasks", href: "/studio/tasks", icon: "ListChecks", sub: "Phase × Department Work Items" },
       { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ClipboardList", sub: "The Signed Site Diary" },
       { label: "Transport", href: "/studio/logistics/freight", icon: "Truck", sub: "Freight & Ground Movement" },

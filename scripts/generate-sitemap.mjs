@@ -199,6 +199,13 @@ const EXEMPT = [
     type: "exact",
     reason: "One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu.",
   },
+  // Unified Schedule (CP·3) — the Dispatch Matrix was promoted to
+  // /studio/operations/schedule; this route now 301s there (fleet/crew lens).
+  {
+    path: "/studio/operations/dispatch",
+    type: "exact",
+    reason: "Dispatch Matrix redirect — promoted to the unified /studio/operations/schedule; keeps old links resolving.",
+  },
   // Portal infra — persona routing, not a nav target.
   {
     path: "/p/[slug]",

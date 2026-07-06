@@ -7,7 +7,7 @@
 
 | Field | Value |
 |---|---|
-| system | ATLVS Technologies — Monument 2.0 |
+| system | ATLVS Technologies — Monument (palette-locked, OKLCH) |
 | version | v8.1 (palette-locked, OKLCH) |
 | namespace | `--p-*` (tokens) · `.ps-*` (primitives) |
 | owner | GHXSTSHIP |

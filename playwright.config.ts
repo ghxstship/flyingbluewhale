@@ -45,6 +45,10 @@ export default defineConfig({
   // inside its own timeout budget. Skipped against a prod server (already
   // compiled). See e2e/helpers/global-setup.ts.
   globalSetup: REMOTE ? undefined : "./e2e/helpers/global-setup.ts",
+  // After every run (local OR remote), purge accumulated E2E create-flow residue
+  // from the shared fixtures so it can't trip an app cap and break the next run.
+  // Best-effort — never throws. See e2e/helpers/global-teardown.ts.
+  globalTeardown: "./e2e/helpers/global-teardown.ts",
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   timeout: REMOTE ? 45000 : 90000, // dev cold-compiles need more headroom
   use: {

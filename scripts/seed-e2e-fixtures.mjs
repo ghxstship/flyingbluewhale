@@ -94,6 +94,19 @@ const PAT_FIXTURES = [
   { name: "E2E reports:read", token: "sk_e2erpt0r_reportsreadtokensecret000001", scopes: ["reports:read"] },
 ];
 
+// A proposal on the fixture project carrying a PENDING approval — the surface
+// for the proposals:approve sign-off boundary (see e2e/portal-proposal-approve
+// .spec.ts). Fixed ids so the spec + this seeder agree; reset to pending on
+// re-run so the fixture survives an accidental sign.
+const PROPOSAL_FIXTURE_ID = "c2000000-0000-4000-8000-000000000001";
+const APPROVAL_FIXTURE_ID = "c2000000-0000-4000-8000-000000000002";
+
+// A party-bound advancing assignment: an `issued` credential whose party is
+// test+crew, on the fixture project. Lets the C3 spec assert the party sees
+// THEIR assignment across the COMPVSS + GVTEWAY shells. Fixed ids.
+const CATALOG_ITEM_FIXTURE_ID = "c3000000-0000-4000-8000-000000000001";
+const ASSIGNMENT_FIXTURE_ID = "c3000000-0000-4000-8000-000000000002";
+
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
 async function userIdViaSignIn(email) {
@@ -195,6 +208,100 @@ async function ensurePats(ownerId) {
   console.log(`    ✓ PAT fixtures: ${PAT_FIXTURES.map((p) => p.name).join(", ")}`);
 }
 
+// Seed (or reset to pending) the proposal + approval sign-off fixture on the
+// Professional-org fixture project. Idempotent via the primary-key upserts.
+async function ensureProposalApproval() {
+  const { data: project } = await admin
+    .from("projects")
+    .select("id")
+    .eq("org_id", PROFESSIONAL_ORG)
+    .eq("slug", FIXTURE_PROJECT_SLUG)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!project) {
+    console.warn("    ! proposal-approval skipped — fixture project missing");
+    return;
+  }
+  const { error: pErr } = await admin.from("proposals").upsert(
+    {
+      id: PROPOSAL_FIXTURE_ID,
+      org_id: PROFESSIONAL_ORG,
+      project_id: project.id,
+      title: "E2E Proposal — Client Sign-off Fixture",
+      proposal_state: "sent",
+      deleted_at: null,
+    },
+    { onConflict: "id" },
+  );
+  if (pErr) {
+    console.warn(`    ! proposal fixture: ${pErr.message}`);
+    return;
+  }
+  const { error: aErr } = await admin.from("proposal_approvals").upsert(
+    {
+      id: APPROVAL_FIXTURE_ID,
+      proposal_id: PROPOSAL_FIXTURE_ID,
+      org_id: PROFESSIONAL_ORG,
+      kind: "signature",
+      title: "E2E Countersignature",
+      body: "Sign to accept the proposal terms (e2e fixture — kept pending).",
+      state: "pending",
+      signed_at: null,
+      signed_by: null,
+      signed_label: null,
+      decline_reason: null,
+    },
+    { onConflict: "id" },
+  );
+  if (aErr) console.warn(`    ! approval fixture: ${aErr.message}`);
+  else console.log("    ✓ proposal + pending approval fixture (proposals:approve boundary)");
+}
+
+// Seed a party-bound advancing assignment (crew, issued credential) on the
+// fixture project. Idempotent via primary-key upserts.
+async function ensureAdvancingAssignment(userIds) {
+  const crewId = userIds.crew;
+  if (!crewId) {
+    console.warn("    ! advancing skipped — crew id unresolved");
+    return;
+  }
+  const { data: project } = await admin
+    .from("projects")
+    .select("id")
+    .eq("org_id", PROFESSIONAL_ORG)
+    .eq("slug", FIXTURE_PROJECT_SLUG)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!project) {
+    console.warn("    ! advancing skipped — fixture project missing");
+    return;
+  }
+  const { error: cErr } = await admin.from("master_catalog_items").upsert(
+    { id: CATALOG_ITEM_FIXTURE_ID, org_id: PROFESSIONAL_ORG, kind: "credential", code: "E2E-CRED", name: "E2E Crew Credential", active: true },
+    { onConflict: "id" },
+  );
+  if (cErr) {
+    console.warn(`    ! catalog fixture: ${cErr.message}`);
+    return;
+  }
+  const { error: aErr } = await admin.from("assignments").upsert(
+    {
+      id: ASSIGNMENT_FIXTURE_ID,
+      org_id: PROFESSIONAL_ORG,
+      project_id: project.id,
+      catalog_item_id: CATALOG_ITEM_FIXTURE_ID,
+      catalog_kind: "credential",
+      party_kind: "user",
+      party_user_id: crewId,
+      fulfillment_state: "issued",
+      title: "E2E Crew Credential",
+    },
+    { onConflict: "id" },
+  );
+  if (aErr) console.warn(`    ! assignment fixture: ${aErr.message}`);
+  else console.log("    ✓ advancing assignment fixture (crew, issued credential)");
+}
+
 console.log("Seeding E2E fixture users…");
 const userIds = {};
 for (const role of Object.keys(ROLES)) {
@@ -204,7 +311,9 @@ for (const role of Object.keys(ROLES)) {
     await ensureMemberships(id, role).catch((e) => console.warn(`    ! ${role}: ${e.message}`));
   }
 }
-console.log("Seeding project-role + PAT fixtures…");
+console.log("Seeding project-role + PAT + proposal-approval fixtures…");
 await ensureProjectRoles(userIds);
 await ensurePats(userIds.owner);
+await ensureProposalApproval();
+await ensureAdvancingAssignment(userIds);
 console.log("✓ Done. Fixture users provisioned for:", Object.keys(ROLES).join(", "));

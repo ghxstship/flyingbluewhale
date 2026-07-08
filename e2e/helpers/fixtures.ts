@@ -56,3 +56,35 @@ export const PAT_FIXTURES = {
 export function bearer(token: string): { Authorization: string } {
   return { Authorization: `Bearer ${token}` };
 }
+
+/**
+ * A proposal on FIXTURE_PROJECT carrying a PENDING approval — the surface for
+ * the proposals:approve sign-off boundary (client/viewer may sign; crew/member/
+ * contractor may not). Kept pending: the C2 spec probes the capability gate
+ * non-destructively (whitespace name → server-side "type your name" for those
+ * who pass the gate, APPROVE_DENIED for those who don't), so it never signs.
+ */
+export const PROPOSAL_APPROVAL_FIXTURE = {
+  projectSlug: FIXTURE_PROJECT.slug,
+  orgId: TEST_ORGS.professional,
+  proposalId: "c2000000-0000-4000-8000-000000000001",
+  approvalId: "c2000000-0000-4000-8000-000000000002",
+} as const;
+
+/**
+ * A party-bound advancing assignment: an `issued` credential whose party is
+ * test+crew, on FIXTURE_PROJECT. The advancing lifecycle drives one domain
+ * across three shells; this fixture lets the C3 spec assert the party sees
+ * THEIR assignment on both the COMPVSS field shell (/m/advances) and the
+ * GVTEWAY portal (/p/[slug]/crew/advances), and that another member does not
+ * (party_user_id scoping). Title is the unambiguous assertion handle.
+ */
+export const ADVANCING_FIXTURE = {
+  orgId: TEST_ORGS.professional,
+  projectSlug: FIXTURE_PROJECT.slug,
+  partyRole: "crew",
+  catalogItemId: "c3000000-0000-4000-8000-000000000001",
+  assignmentId: "c3000000-0000-4000-8000-000000000002",
+  title: "E2E Crew Credential",
+  fulfillmentState: "issued",
+} as const;

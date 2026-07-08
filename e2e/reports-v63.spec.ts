@@ -46,6 +46,9 @@ test.describe("v6.3 reports — console", () => {
     await expect(doc).toHaveAttribute("data-brand", "white");
     await page.getByRole("button", { name: "ATLVS", exact: true }).click();
     await expect(doc).toHaveAttribute("data-brand", "atlvs");
+    // M10 — the co-brand variant (the third mode, previously untested).
+    await page.getByRole("button", { name: "Co-brand" }).click();
+    await expect(doc).toHaveAttribute("data-brand", "co");
   });
 });
 

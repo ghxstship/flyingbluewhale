@@ -58,5 +58,8 @@ test.describe("V6 documents", () => {
     const doc = page.locator('.doc[data-doc="proposal"]');
     await page.getByRole("button", { name: "White-label" }).click();
     await expect(doc).toHaveAttribute("data-brand", "white");
+    // M10 — the co-brand variant (the third mode, previously untested).
+    await page.getByRole("button", { name: "Co-brand" }).click();
+    await expect(doc).toHaveAttribute("data-brand", "co");
   });
 });

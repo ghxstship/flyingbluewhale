@@ -5,7 +5,7 @@
  * persona that lands in the platform shell (resolveShell → /studio):
  *
  *   owner · admin · developer (role=admin) · manager · controller (role=manager)
- *   · collaborator (role=member + persona=collaborator)
+ *   · collaborator · contractor · member (all role=member, distinct personas)
  *
  * The console authorizes mutations by ROLE BAND (not the persona capability
  * matrix — 108 studio action files gate on `isManagerPlus`, 0 on `can()`), so
@@ -26,11 +26,14 @@ import { expect, test, type Page } from "playwright/test";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 
-type Tier = "admin" | "manager" | "collaborator";
+type Tier = "admin" | "manager" | "collaborator" | "member";
 type Operator = { fixture: string; tier: Tier };
 
 // Resolved from the live DB: developer→role=admin, controller→role=manager,
-// collaborator→role=member+persona=collaborator.
+// collaborator/contractor/member→role=member with distinct personas. The three
+// role=member personas share the SAME role band (neither manager+ nor admin),
+// so each must be BLOCKED from Project create / Finance / Settings — H3 closes
+// the audit gap that contractor + bare member never reached /studio at all.
 const OPERATORS: Operator[] = [
   { fixture: "owner", tier: "admin" },
   { fixture: "admin", tier: "admin" },
@@ -38,6 +41,8 @@ const OPERATORS: Operator[] = [
   { fixture: "manager", tier: "manager" },
   { fixture: "controller", tier: "manager" },
   { fixture: "collaborator", tier: "collaborator" },
+  { fixture: "contractor", tier: "member" },
+  { fixture: "member", tier: "member" },
 ];
 
 const isManagerPlus = (t: Tier) => t === "admin" || t === "manager";

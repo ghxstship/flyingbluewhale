@@ -3,16 +3,20 @@ import { test as base } from "playwright/test";
 /**
  * Shared Playwright `test` with a resilient `page.goto`.
  *
- * Against a REMOTE target (E2E_BASE_URL / prod) a navigation is occasionally
- * superseded by a middleware redirect / Supabase session-cookie refresh, which
- * aborts the in-flight navigation → `net::ERR_ABORTED`. It recovers immediately
- * on a re-issue, so we wrap `goto` to retry that ONE transient rather than let
- * it leak as a test failure. Every other error propagates unchanged. Local dev
- * never hits this, so the wrapper is a no-op there.
+ * Against a REMOTE target (E2E_BASE_URL / prod) a navigation occasionally hits a
+ * TRANSIENT network failure — the in-flight nav is superseded by a middleware
+ * redirect / Supabase session-cookie refresh (`net::ERR_ABORTED`), or the
+ * connection to the edge times out / resets (`ERR_TIMED_OUT`,
+ * `ERR_CONNECTION_*`, `ERR_HTTP2_*`, …). These recover on a re-issue, so we wrap
+ * `goto` to retry exactly this class and let every other error propagate. Local
+ * dev never hits them, so the wrapper is a no-op there.
  *
  * All specs import { test, expect } from this module instead of directly from
  * "playwright/test" so the whole suite gets deterministic navigation.
  */
+// Transient, retry-worthy navigation failures (connection-level, not app-level).
+const TRANSIENT_NET = /ERR_(ABORTED|TIMED_OUT|CONNECTION_|NETWORK_CHANGED|HTTP2_|EMPTY_RESPONSE|SOCKET_)/;
+
 export const test = base.extend({
   page: async ({ page }, use) => {
     const orig = page.goto.bind(page);
@@ -24,8 +28,8 @@ export const test = base.extend({
         } catch (e) {
           lastErr = e;
           const msg = e instanceof Error ? e.message : String(e);
-          if (!msg.includes("ERR_ABORTED")) throw e;
-          await page.waitForTimeout(400);
+          if (!TRANSIENT_NET.test(msg)) throw e;
+          await page.waitForTimeout(500 * (attempt + 1));
         }
       }
       throw lastErr;

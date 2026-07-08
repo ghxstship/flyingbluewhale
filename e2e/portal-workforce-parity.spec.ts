@@ -14,7 +14,7 @@
  * (some surfaces may legitimately empty-state or 404 for the demo slug, so we
  * accept < 500 rather than demanding a 200).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 const PROJECT_SLUG = "test-professional-show";

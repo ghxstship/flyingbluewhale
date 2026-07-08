@@ -9,7 +9,7 @@
  *     authed authed-mutations spec where a seeded fixture guarantees a
  *     cacheable 201 response.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 function key() {
   return `idem-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;

@@ -10,7 +10,7 @@
  * remaining `required` field by input type, so the form passes client + server
  * validation without hard-coding every field.
  */
-import { expect, test, type Page, type Locator } from "playwright/test";
+import { expect, test, type Page, type Locator } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 const stamp = () => `${Date.now()}`;

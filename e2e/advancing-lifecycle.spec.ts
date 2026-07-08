@@ -1,4 +1,4 @@
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { ADVANCING_FIXTURE as A } from "./helpers/fixtures";
 

@@ -7,7 +7,7 @@
  *   - Web app manifest is served and parseable.
  *   - Canonical link tag present on marketing pages.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 const MARKETING = [
   "/",

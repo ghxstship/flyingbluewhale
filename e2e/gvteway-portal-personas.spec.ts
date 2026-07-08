@@ -39,7 +39,7 @@
  * Rail sub-routes are derived live from `portalNav(slug, persona)` (the nav
  * SSOT) so this spec can never drift from what the rail actually renders.
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 import { PORTAL_PERSONAS, portalNav, type PortalPersona, type NavGroup } from "../src/lib/nav";

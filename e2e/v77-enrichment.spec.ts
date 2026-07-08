@@ -8,7 +8,7 @@
  * (auth held, h1 present, no crash). Navigation is throttle-resilient (a deployed
  * target sheds some requests under load — retry once before failing).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 const THROTTLE = /ERR_ABORTED|ERR_NETWORK_CHANGED|ERR_CONNECTION|Timeout|interrupted/i;

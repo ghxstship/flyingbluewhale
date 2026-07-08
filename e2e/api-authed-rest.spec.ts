@@ -10,7 +10,7 @@
  * Uses the shared seeded fixture password + the `test+<role>@flyingbluewhale.app`
  * naming established by roles.spec.ts and compliance-flow.spec.ts.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 test.describe("authed REST round-trips (owner)", () => {

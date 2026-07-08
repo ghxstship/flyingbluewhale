@@ -10,7 +10,7 @@
  *   - /me/submissions/[id] applicant view
  *   - Agency roster entry detail + end-relationship
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 
 const TEST_ORG_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";

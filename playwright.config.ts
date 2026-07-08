@@ -50,7 +50,7 @@ export default defineConfig({
   // Best-effort — never throws. See e2e/helpers/global-teardown.ts.
   globalTeardown: "./e2e/helpers/global-teardown.ts",
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
-  timeout: REMOTE ? 45000 : 90000, // dev cold-compiles need more headroom
+  timeout: REMOTE ? 60000 : 90000, // remote: heavy console aggregation pages + create→edit chains
   use: {
     // localhost works because tests run with NEXT_PUBLIC_USE_SUBDOMAINS=0
     // (path-prefix mode — /console, /p, /m). For local dev with
@@ -60,7 +60,7 @@ export default defineConfig({
     // integrations, AI, portal personas) in 30–50s on first hit. Give dev a
     // 60s nav budget (matches the sitemap-crawl harness); a prod server serves
     // pre-compiled routes instantly, so 30s is plenty there.
-    navigationTimeout: REMOTE ? 30000 : 60000,
+    navigationTimeout: REMOTE ? 60000 : 60000,
     trace: TUTORIAL ? "on" : "on-first-retry",
     // Tutorial capture: a video of every action + a final screenshot per test.
     screenshot: TUTORIAL ? "on" : "off",

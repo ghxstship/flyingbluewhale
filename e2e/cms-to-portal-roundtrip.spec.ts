@@ -1,4 +1,4 @@
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 
 // test-professional-show lives in the Test Professional org. Pinning both the

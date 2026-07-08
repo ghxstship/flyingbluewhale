@@ -1,4 +1,4 @@
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 import { TEST_ORGS } from "./helpers/fixtures";

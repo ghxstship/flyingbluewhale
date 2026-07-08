@@ -7,7 +7,7 @@
  * chrome, which also carry `Hint` tooltips. This guards that the anchors ship,
  * the tour launches + completes, and the Help entry point works.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 test.describe("Console tour + chrome tooltips (owner)", () => {

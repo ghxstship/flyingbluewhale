@@ -19,7 +19,7 @@
  * fixture purge (scripts/e2e-clean-fixtures.mjs) removes it (project_members
  * cascade), keeping the shared prod fixtures clean.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 import { FIXTURE_PROJECT } from "./helpers/fixtures";
@@ -158,15 +158,21 @@ test.describe.serial("ATLVS project roles — non-manager project authority (D1)
     const crew = () => page.locator(`select[aria-label="Role for ${CREW}"]`);
     await expect(crew()).toBeVisible({ timeout: 10_000 });
     await crew().selectOption("editor");
-    await expect(crew(), "select re-enables once the update action settles").toBeEnabled({ timeout: 10_000 });
-    await page.reload();
-    await expect(crew(), "project-lead write persisted through RLS").toHaveValue("editor", { timeout: 10_000 });
+    // The role select auto-saves via an async server action; the disabled→enabled
+    // window is too brief to gate on reliably (on a remote target the write is
+    // still in flight when the select re-enables). Poll instead: reload + read
+    // until the write is server-visible — deterministic regardless of latency.
+    await expect(async () => {
+      await page.reload();
+      await expect(crew(), "project-lead write persisted through RLS").toHaveValue("editor", { timeout: 5_000 });
+    }).toPass({ timeout: 60_000 });
 
     // Restore the seeded state so the shared fixture stays clean.
     await crew().selectOption("contributor");
-    await expect(crew()).toBeEnabled({ timeout: 10_000 });
-    await page.reload();
-    await expect(crew()).toHaveValue("contributor", { timeout: 10_000 });
+    await expect(async () => {
+      await page.reload();
+      await expect(crew()).toHaveValue("contributor", { timeout: 5_000 });
+    }).toPass({ timeout: 60_000 });
   });
 
   test("a project viewer (platform member) is denied roster management, in UI and at the write", async ({ page }) => {

@@ -14,7 +14,7 @@
  * specific to the endpoint (new row persists, state mutation sticks,
  * bad input is rejected with the canonical `bad_request` code, etc.).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 test.describe("new API routes — authed happy paths", () => {

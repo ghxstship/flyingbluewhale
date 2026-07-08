@@ -8,7 +8,7 @@
  *  - Rate-limit 429 responses carry retry-after + x-ratelimit-* headers.
  *  - Different routes get different request_ids (ids are per-request, not per-session).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 test.describe("request correlation headers", () => {
   test("caller x-request-id is echoed on app routes", async ({ request }) => {

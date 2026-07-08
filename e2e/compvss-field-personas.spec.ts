@@ -21,7 +21,7 @@
  * Fixture: the seeded `test+crew@flyingbluewhale.app` user (persona=crew,
  * member of "Test Professional Org", which is its last_org_id → active org).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 const ERROR_BOUNDARY = /something went wrong|application error|unhandled|digest:/i;

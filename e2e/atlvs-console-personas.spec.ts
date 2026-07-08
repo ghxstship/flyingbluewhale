@@ -22,7 +22,7 @@
  * the Test Professional Show org). AccessDenied renders EmptyState
  * "You Don't Have Access" (src/components/ui/AccessDenied.tsx).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

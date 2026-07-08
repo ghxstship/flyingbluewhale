@@ -4,7 +4,7 @@
  * console-core-flows.spec.ts. Each test creates a record as `owner`, lands on
  * its detail page, drives a transition, and asserts the new state.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

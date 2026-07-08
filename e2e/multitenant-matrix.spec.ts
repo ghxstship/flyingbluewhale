@@ -20,7 +20,7 @@
  * user is NOT a member of is rejected at the boundary (403 forbidden), never
  * silently honored.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 type Workspace = { id: string; name: string; role: string };

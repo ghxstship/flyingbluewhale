@@ -5,7 +5,7 @@
  * unknown doc id must 404. Drives the same templates the kit ships as built
  * reference docs.
  */
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { DOC_TEMPLATES } from "../src/lib/documents/registry";
 

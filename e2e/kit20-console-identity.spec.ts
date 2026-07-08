@@ -9,7 +9,7 @@
  * zero-training contract), so the spec runs against any seeded target
  * including prod via E2E_BASE_URL.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 

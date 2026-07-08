@@ -20,7 +20,7 @@
  * Canonical paths are `/studio/*` (the operator console moved off `/console`
  * in ADR-0011; `/console/*` only survives as a permanent redirect).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 type Surface = { href: string; form?: boolean };

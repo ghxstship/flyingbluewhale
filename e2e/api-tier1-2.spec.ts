@@ -10,7 +10,7 @@
  * and FSM-guarded, so we assert input validation + the canonical error codes
  * (the happy-path punch needs a seeded `scheduled` shift, covered separately).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 const ZERO_UUID = "00000000-0000-0000-0000-000000000000";

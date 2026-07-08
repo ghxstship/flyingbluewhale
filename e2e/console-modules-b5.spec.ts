@@ -12,7 +12,7 @@
  * (party), maintenance schedules (target), takeoffs (site plan), site-plans
  * (composite code) — are intentionally left to fixture-seeded specs.
  */
-import { test } from "playwright/test";
+import { test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

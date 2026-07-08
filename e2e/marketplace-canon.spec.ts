@@ -10,7 +10,7 @@
  * Schema is exercised through the public_* views (anon GRANT SELECT) so a
  * 200 here also proves the migration's RLS / view definitions are intact.
  */
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 
 type Surface = { path: string; expectedH1?: RegExp; allowRedirect?: boolean };
 

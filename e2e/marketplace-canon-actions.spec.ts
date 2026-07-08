@@ -17,7 +17,7 @@
  * Authed tests log in as test+owner@flyingbluewhale.app — owner of the
  * test-professional org (org_id f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 
 // Lock the session to test-professional so fixture UUIDs resolve. The

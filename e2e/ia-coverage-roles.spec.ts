@@ -25,7 +25,7 @@
  * org; internal roles are developer/owner/admin/controller/collaborator, field
  * are crew/contractor, external are client/viewer/community.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import {
   platformNavDomain,

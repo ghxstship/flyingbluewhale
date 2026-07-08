@@ -24,7 +24,7 @@
  * failures are collected before the assertion, so a single run surfaces every
  * broken surface in that group at once (not just the first).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup, dismissConsent } from "./helpers/auth";
 import {
   platformNavDomain,

@@ -6,7 +6,7 @@
  * These are distinct signals: a failing readiness must NOT restart the pod,
  * and a failing liveness must NOT be used for traffic routing decisions.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 test.describe("health probes", () => {
   test("liveness always 200 with envelope + probe=liveness", async ({ request }) => {

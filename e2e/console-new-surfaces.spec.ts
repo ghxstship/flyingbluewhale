@@ -17,7 +17,7 @@
  * pages additionally must mount a <form>. Full detail-page (`[id]`) coverage is
  * provided by the opt-in sitemap crawl (CRAWL=1).
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 type Surface = { href: string; form?: boolean; link?: string };

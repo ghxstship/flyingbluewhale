@@ -5,7 +5,7 @@
  * content in <main>, so the FormShell submits via the same requestSubmit path the
  * console creates use.
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 

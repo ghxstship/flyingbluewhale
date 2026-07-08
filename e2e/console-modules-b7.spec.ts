@@ -8,7 +8,7 @@
  * each test fills the primary field it knows + auto-satisfies the rest by input
  * type, then asserts the create redirected off /new with no error surface.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

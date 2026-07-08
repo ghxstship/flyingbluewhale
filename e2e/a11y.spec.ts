@@ -1,4 +1,4 @@
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import AxeBuilder from "@axe-core/playwright";
 import { dismissConsent } from "./helpers/auth";
 

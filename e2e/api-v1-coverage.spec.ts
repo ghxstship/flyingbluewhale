@@ -12,7 +12,7 @@
  * Designed to stay green without needing a session — happy-path auth'd
  * behaviors live in separate spec files.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 

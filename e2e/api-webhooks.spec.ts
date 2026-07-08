@@ -10,7 +10,7 @@
  * The second mode only runs when the env var is actually set — CI should set
  * it; local dev usually doesn't.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { createHmac } from "node:crypto";
 
 function sign(payload: string, secret: string, ts = Math.floor(Date.now() / 1000)): string {

@@ -14,7 +14,7 @@
  * on these surfaces are RLS-enforced (org member + role); role-band negative cases
  * are covered broadly by atlvs-console-personas + rls-boundaries.
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup, dismissConsent } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

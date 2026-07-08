@@ -43,7 +43,7 @@
  * idempotent re-runs (upsert / dedup-by-stamp) with no durable cross-tenant
  * pollution.
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 import { personalNavGroups } from "../src/lib/nav";

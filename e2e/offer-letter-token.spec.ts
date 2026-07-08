@@ -1,4 +1,4 @@
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import { dismissConsent } from "./helpers/auth";
 import { OFFER_LETTER_FIXTURE as O } from "./helpers/fixtures";
 

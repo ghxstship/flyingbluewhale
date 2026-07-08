@@ -23,7 +23,7 @@
  * Anon tests set the consent cookie (atlvs_consent) so the cookie banner doesn't
  * intercept CTA clicks — same idiom as helpers/auth.ts#dismissConsent.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup, dismissConsent } from "./helpers/auth";
 
 const ERROR_BOUNDARY = /application error|something went wrong|unhandled|digest:|client-side exception/i;

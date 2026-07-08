@@ -4,7 +4,7 @@
  * Each report must render the `.doc--report` artifact with KPI tiles (proving
  * ReportEngine + kit-reports.css + the metric resolvers resolve end-to-end).
  */
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import { authedSetup, dismissConsent, loginAs } from "./helpers/auth";
 import { REPORTS_LIST } from "../src/lib/reports/registry";
 

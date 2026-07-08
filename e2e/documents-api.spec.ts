@@ -8,7 +8,7 @@
  *
  * Logs in as the seeded owner and exercises discovery + external generation.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 test.describe("documents generation API", () => {

@@ -1,4 +1,4 @@
-import { expect, test, type Page, type APIRequestContext } from "playwright/test";
+import { expect, test, type Page, type APIRequestContext } from "./helpers/base";
 import { dismissConsent } from "./helpers/auth";
 
 /**

@@ -1,4 +1,4 @@
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import { PAT_FIXTURES, bearer } from "./helpers/fixtures";
 
 /**

@@ -39,7 +39,7 @@
  * Rail surfaces are derived live from `legendNav` (the nav SSOT) so the render
  * sweep can never drift from what the LEG3ND sidebar actually exposes.
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 import { legendNav, type NavGroup } from "../src/lib/nav";

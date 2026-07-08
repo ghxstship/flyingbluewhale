@@ -8,7 +8,7 @@
  * first non-empty option when given the select's field name). Fully
  * self-contained.
  */
-import { test } from "playwright/test";
+import { test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

@@ -6,7 +6,7 @@
  * people, procurement RFQs, and programs. Uses the shared form helper; each test
  * asserts the create redirected off /new with no error surface.
  */
-import { test } from "playwright/test";
+import { test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

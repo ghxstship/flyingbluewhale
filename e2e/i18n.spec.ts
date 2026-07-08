@@ -1,4 +1,4 @@
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 // Scope cookies to the active target host (baseURL) — NOT a hardcoded
 // `domain: "localhost"`, which silently isn't sent when the suite runs against a

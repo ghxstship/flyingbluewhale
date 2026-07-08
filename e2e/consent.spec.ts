@@ -1,4 +1,4 @@
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 test.describe("cookie consent", () => {
   test.beforeEach(async ({ context }) => {

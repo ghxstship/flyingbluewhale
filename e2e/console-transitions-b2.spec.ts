@@ -5,7 +5,7 @@
  * transition, and assert the next state surfaces — exercising the actual
  * server-action transition path, not just the create).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 

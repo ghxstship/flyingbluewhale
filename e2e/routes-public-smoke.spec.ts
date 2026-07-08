@@ -8,7 +8,7 @@
  * Keeps `roles.spec.ts` focused on authed shells and `marketing.spec.ts`
  * focused on content assertions; this file is for "does anything 500".
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent } from "./helpers/auth";
 
 const MARKETING = [

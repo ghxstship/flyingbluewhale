@@ -9,7 +9,7 @@
  * test-professional-show project (Test Professional org). The client fixture
  * user is a member of that org, so RLS resolves the proposal context.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 

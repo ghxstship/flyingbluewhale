@@ -1,4 +1,4 @@
-import { test, expect } from "playwright/test";
+import { test, expect } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 import { JOB_POSTING_FIXTURE as G } from "./helpers/fixtures";
 

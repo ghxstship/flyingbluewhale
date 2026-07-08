@@ -9,7 +9,7 @@
  *  - W76 portal chooser (/p/select) renders for portal personas.
  *  - W45 marketplace apply page bounces logged-out visitors through login.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, fixtureEmail, loginAs, TEST_PASSWORD } from "./helpers/auth";
 
 test.describe("admin view gates (P1-A)", () => {

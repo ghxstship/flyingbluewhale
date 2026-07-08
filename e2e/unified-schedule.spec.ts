@@ -13,7 +13,7 @@
  * src/lib/schedule-rls-crew-canon.test.ts (crew lands in /m, not /studio, so
  * there is no operator-shell surface to assert here).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 const SCHEDULE = "/studio/operations/schedule";

@@ -25,7 +25,7 @@
  * "New ticket type" action returns "Only manager+ can add ticket types" for a
  * collaborator (role=member), surfaced by FormShell as an Alert (role="alert").
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 

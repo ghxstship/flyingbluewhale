@@ -10,7 +10,7 @@
  * Heavy by design — gated behind CRAWL=1 so it never runs in the normal suite.
  *   CRAWL=1 E2E_PROD=1 npx playwright test sitemap-crawl
  */
-import { test, expect, type Page } from "playwright/test";
+import { test, expect, type Page } from "./helpers/base";
 import { readdirSync, statSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";

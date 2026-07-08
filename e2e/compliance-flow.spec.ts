@@ -7,7 +7,7 @@
  * legend-personas.spec.ts respectively. Named "compliance-flow" for historical
  * reasons — read it as "privacy-flow".
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 test.describe("privacy/GDPR compliance — data-subject export", () => {

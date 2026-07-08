@@ -6,7 +6,7 @@
  *  - Non-JSON bodies on JSON endpoints return 400.
  *  - HTTP methods not listed in the spec return 405 or 404 (not 500).
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 test.describe("OAuth `next` same-origin enforcement", () => {
   const CASES: Array<{ label: string; next: string }> = [

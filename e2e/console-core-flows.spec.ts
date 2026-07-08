@@ -14,7 +14,7 @@
  * post-submit state (URL change / heading / status badge) rather than exact
  * pixel output, so the specs survive copy tweaks.
  */
-import { expect, test, type Page } from "playwright/test";
+import { expect, test, type Page } from "./helpers/base";
 import { authedSetup } from "./helpers/auth";
 
 const stamp = () => `${Date.now()}`;

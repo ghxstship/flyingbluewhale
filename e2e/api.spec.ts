@@ -1,4 +1,4 @@
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 test("api v1 health", async ({ request }) => {
   const r = await request.get("/api/v1/health");

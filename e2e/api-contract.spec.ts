@@ -7,7 +7,7 @@
  * fails this suite. Paired with the eslint `no-restricted-syntax` rule on
  * `NextResponse.json` so the contract can't drift out of the lib/api helpers.
  */
-import { expect, test } from "playwright/test";
+import { expect, test } from "./helpers/base";
 
 const ALLOWED_ERROR_CODES = new Set([
   "bad_request",

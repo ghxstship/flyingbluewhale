@@ -34,7 +34,9 @@ let projectId = "";
 let projectOrgId = "";
 
 test.describe.serial("ATLVS project roles — member assignment across PROJECT_ROLES", () => {
-  test.describe.configure({ timeout: 180_000 });
+  // 300s: the 5-role assignment loop is a heavy multi-step UI flow; on a remote
+  // target each add + revalidation is markedly slower than local.
+  test.describe.configure({ timeout: 300_000 });
 
   test("owner creates a project and assigns all five project roles", async ({ page }) => {
     await authedSetup(page, "owner");
@@ -55,13 +57,18 @@ test.describe.serial("ATLVS project roles — member assignment across PROJECT_R
     // Each member row renders a `<select aria-label="Role for <email>">` whose
     // value is that member's role — count those to confirm each add landed
     // (unambiguous, unlike matching the role word which also hits <option>s).
-    await page.goto(`/studio/projects/${projectId}/members`);
     const memberRoleSelects = page.locator('select[aria-label*="Role for"]');
+    await page.goto(`/studio/projects/${projectId}/members`);
     let count = await memberRoleSelects.count(); // dynamic baseline (0 or auto-added creator)
 
     for (const role of PROJECT_ROLES) {
+      // Reload a CLEAN form each iteration. The in-place revalidation after an add
+      // re-renders the AddMemberForm (shrinking candidate list), which on a remote
+      // target leaves the submit button transiently unstable; a fresh page load
+      // gives a settled form and makes the loop deterministic.
+      await page.goto(`/studio/projects/${projectId}/members`);
       const userSelect = page.locator('form select[name="userId"]');
-      await expect(userSelect, "manager+ sees the add-member control").toBeVisible({ timeout: 10_000 });
+      await expect(userSelect, "manager+ sees the add-member control").toBeVisible({ timeout: 20_000 });
 
       // First non-empty candidate (the list shrinks as members are added).
       const value = await userSelect
@@ -75,7 +82,7 @@ test.describe.serial("ATLVS project roles — member assignment across PROJECT_R
 
       // Revalidation adds the member row — wait for the count to grow.
       count += 1;
-      await expect(memberRoleSelects, `member added as ${role}`).toHaveCount(count, { timeout: 15_000 });
+      await expect(memberRoleSelects, `member added as ${role}`).toHaveCount(count, { timeout: 20_000 });
     }
 
     // 3. Every ProjectRole is represented among the persisted member rows.

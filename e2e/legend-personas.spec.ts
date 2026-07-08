@@ -274,7 +274,7 @@ test.describe("LEG3ND · learner CRUD (crew)", () => {
     await expect(
       page.getByText(/redeemed|already redeemed|credits added/i).first(),
       "voucher redemption produced a result (success or already-redeemed)",
-    ).toBeVisible({ timeout: 15_000 });
+    ).toBeVisible({ timeout: 20_000 });
     await expect(
       page.getByText(RLS_ERROR),
       "voucher redemption surfaced no RLS / not-found error",

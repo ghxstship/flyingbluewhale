@@ -71,6 +71,13 @@ export async function loginAs(page: Page, role: string): Promise<void> {
   await page.getByRole("textbox", { name: "Password" }).fill(TEST_PASSWORD);
   await page.getByRole("button", { name: /^sign in$/i }).click();
   await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 25000 });
+  // Settle the post-login navigation BEFORE returning. `waitForURL` resolves the
+  // instant the URL changes — but the destination page is still loading (and, on
+  // the real prod domain, the proxy middleware is still refreshing the session
+  // cookie). If a test fires `page.goto(...)` while that nav is in flight, the new
+  // navigation aborts the in-flight one → net::ERR_ABORTED (the dominant source of
+  // remote-target flakiness). Waiting for the load event closes that race.
+  await page.waitForLoadState("load").catch(() => {});
 }
 
 /**

@@ -1,7 +1,16 @@
+/**
+ * SCOPE: GDPR / data-subject PRIVACY compliance — the /api/v1/me/export data
+ * bundle, /me/privacy, preferences round-trip, auth rate-limit. This is NOT the
+ * operational/regulatory compliance surface: the ATLVS ops compliance hub
+ * (/studio/compliance, permits) and the LEG3ND XMCE engine (/legend/engine,
+ * /legend/compliance) are covered by kit20-console-identity.spec.ts and
+ * legend-personas.spec.ts respectively. Named "compliance-flow" for historical
+ * reasons — read it as "privacy-flow".
+ */
 import { expect, test } from "playwright/test";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
-test.describe("compliance — data export", () => {
+test.describe("privacy/GDPR compliance — data-subject export", () => {
   test.beforeEach(async ({ page }) => {
     await dismissConsent(page);
     await loginAs(page, "viewer");

@@ -65,7 +65,7 @@ test.describe("marketing · visitor (anon) — conversion journeys", () => {
     await expect(page.getByRole("table").first()).toBeVisible({ timeout: 15_000 });
   });
 
-  for (const product of ["atlvs", "compvss", "gvteway"] as const) {
+  for (const product of ["atlvs", "compvss", "gvteway", "legend"] as const) {
     test(`solutions/${product} product page renders`, async ({ page }) => {
       const r = await page.goto(`/solutions/${product}`);
       expect(r?.status() ?? 0, `/solutions/${product} is not a 5xx`).toBeLessThan(500);

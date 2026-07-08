@@ -62,10 +62,8 @@ test.describe.serial("ATLVS project roles — member assignment across PROJECT_R
     let count = await memberRoleSelects.count(); // dynamic baseline (0 or auto-added creator)
 
     for (const role of PROJECT_ROLES) {
-      // Reload a CLEAN form each iteration. The in-place revalidation after an add
-      // re-renders the AddMemberForm (shrinking candidate list), which on a remote
-      // target leaves the submit button transiently unstable; a fresh page load
-      // gives a settled form and makes the loop deterministic.
+      // Fresh, settled form each iteration (the in-place revalidation after an add
+      // leaves the submit button transiently unstable on a remote target).
       await page.goto(`/studio/projects/${projectId}/members`);
       const userSelect = page.locator('form select[name="userId"]');
       await expect(userSelect, "manager+ sees the add-member control").toBeVisible({ timeout: 20_000 });
@@ -80,9 +78,15 @@ test.describe.serial("ATLVS project roles — member assignment across PROJECT_R
       await page.locator('form select[name="role"]').selectOption(role);
       await page.getByRole("button", { name: /^add$/i }).click();
 
-      // Revalidation adds the member row — wait for the count to grow.
+      // Confirm the add landed by reading SERVER truth (reload), not the in-place
+      // revalidation — the latter is slow/racy on a remote target. Poll until the
+      // reloaded roster shows the grown count.
       count += 1;
-      await expect(memberRoleSelects, `member added as ${role}`).toHaveCount(count, { timeout: 20_000 });
+      const want = count;
+      await expect(async () => {
+        await page.goto(`/studio/projects/${projectId}/members`);
+        await expect(memberRoleSelects, `member added as ${role}`).toHaveCount(want, { timeout: 5_000 });
+      }).toPass({ timeout: 40_000 });
     }
 
     // 3. Every ProjectRole is represented among the persisted member rows.

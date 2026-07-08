@@ -69,6 +69,9 @@ export async function createInModule(page: Page, route: string, fields: Record<s
     .locator("main form")
     .first()
     .evaluate((f: HTMLFormElement) => f.requestSubmit());
-  await expect(page).not.toHaveURL(/\/new(\?|$)/, { timeout: 35000 });
+  // Redirect-off-/new can be slow on a remote target (create action + server
+  // round-trip + revalidation); give it headroom so heavy create flows don't
+  // flake on prod first-hit.
+  await expect(page).not.toHaveURL(/\/new(\?|$)/, { timeout: 50000 });
   await expect(page.getByRole("alert").filter({ hasText: /error|failed|invalid/i })).toHaveCount(0);
 }

@@ -103,3 +103,15 @@ export const DISPATCH_FIXTURE = {
   blockedVendorName: "E2E Blocked Sub",
   eligibleVendorName: "E2E Eligible Sub",
 } as const;
+
+/**
+ * A `sent` public offer letter with a known token + access code (cloned from a
+ * real frozen snapshot so LetterDocument renders complete). Drives the H7
+ * /offer/[token] unlock gate: wrong code refused, right code opens the letter +
+ * accept/decline controls. Kept `sent` (the spec never accepts/declines).
+ */
+export const OFFER_LETTER_FIXTURE = {
+  orgId: TEST_ORGS.professional,
+  token: "c6000000-0000-4000-8000-0000000000ff",
+  accessCode: "E2ECODE",
+} as const;

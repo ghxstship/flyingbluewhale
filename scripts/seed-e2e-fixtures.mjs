@@ -115,6 +115,12 @@ const WO_ELIGIBLE_VENDOR_ID = "c5000000-0000-4000-8000-000000000002";
 const WO_FIXTURE_ID = "c5000000-0000-4000-8000-000000000010";
 const WO_TRADE = "e2e-trade";
 
+// A `sent` public offer letter with a known token + code, cloned from a real
+// frozen snapshot so LetterDocument renders complete. Drives the H7 unlock gate.
+const OFFER_LETTER_FIXTURE_ID = "c6000000-0000-4000-8000-000000000001";
+const OFFER_LETTER_TOKEN = "c6000000-0000-4000-8000-0000000000ff";
+const OFFER_LETTER_CODE = "E2ECODE";
+
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
 async function userIdViaSignIn(email) {
@@ -354,6 +360,55 @@ async function ensureDispatchGate() {
   console.log("    ✓ dispatch eligibility-gate fixture (blocked + eligible subs)");
 }
 
+// Best-effort: clone a real frozen offer-letter snapshot into a `sent` fixture
+// with a known token + code. Skips if no source snapshot exists on a fresh DB.
+async function ensureOfferLetter() {
+  const { data: src } = await admin
+    .from("offer_letters")
+    .select("crew_member_id, role_id, employer, classification, snapshot")
+    .not("snapshot", "is", null)
+    .limit(1)
+    .maybeSingle();
+  if (!src) {
+    console.warn("    ! offer letter skipped — no source snapshot to clone");
+    return;
+  }
+  const { data: project } = await admin
+    .from("projects")
+    .select("id")
+    .eq("org_id", PROFESSIONAL_ORG)
+    .eq("slug", FIXTURE_PROJECT_SLUG)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!project) {
+    console.warn("    ! offer letter skipped — fixture project missing");
+    return;
+  }
+  const { error } = await admin.from("offer_letters").upsert(
+    {
+      id: OFFER_LETTER_FIXTURE_ID,
+      org_id: PROFESSIONAL_ORG,
+      project_id: project.id,
+      crew_member_id: src.crew_member_id,
+      role_id: src.role_id,
+      employer: src.employer,
+      classification: src.classification,
+      public_token: OFFER_LETTER_TOKEN,
+      access_code: OFFER_LETTER_CODE,
+      letter_state: "sent",
+      snapshot: src.snapshot,
+      snapshot_at: new Date().toISOString(),
+      token_expires_at: null,
+      accepted_at: null,
+      declined_at: null,
+      withdrawn_at: null,
+    },
+    { onConflict: "id" },
+  );
+  if (error) console.warn(`    ! offer letter fixture: ${error.message}`);
+  else console.log("    ✓ offer-letter unlock fixture (sent, token + code)");
+}
+
 console.log("Seeding E2E fixture users…");
 const userIds = {};
 for (const role of Object.keys(ROLES)) {
@@ -369,4 +424,5 @@ await ensurePats(userIds.owner);
 await ensureProposalApproval();
 await ensureAdvancingAssignment(userIds);
 await ensureDispatchGate();
+await ensureOfferLetter();
 console.log("✓ Done. Fixture users provisioned for:", Object.keys(ROLES).join(", "));

@@ -68,7 +68,7 @@ export type FormSection = {
 };
 
 export type FormSchema = {
-  /** Schema version. Absent or 1 means v1 (legacy flat fields). 2 enables sections + conditions. */
+  /** Schema version. Absent or 1 = the v1 flat-fields shape. 2 enables sections + conditions. */
   version?: 1 | 2;
   sections?: FormSection[];
   fields: PublicFormField[];

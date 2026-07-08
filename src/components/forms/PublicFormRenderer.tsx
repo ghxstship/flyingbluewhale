@@ -20,7 +20,7 @@ type Translator = (key: string, vars?: Record<string, string | number>, fallback
  * persisting attachments needs Supabase Storage signed-URL upload, which lives
  * in the submission server action.
  *
- * Backwards-compatible with the legacy v1 schema (flat fields, no sections).
+ * Backwards-compatible with the v1 flat-fields schema (no sections).
  */
 
 export type PublicFormRendererProps = {

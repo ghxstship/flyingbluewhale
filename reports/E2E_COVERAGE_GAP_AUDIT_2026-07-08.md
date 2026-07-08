@@ -102,17 +102,15 @@ These are code/config defects the audit surfaced. They matter more than any miss
 - **Defects:** D1 `hasProjectRole` wired (page+action+RLS), D2 legend engine/compliance gated, D3 crew/advances nav orphan.
 - **Fixtures:** project roles on non-manager users, 3 scoped PATs, pending proposal approval, crew-bound assignment — seeded live + reproduced in `seed-e2e-fixtures.mjs` + `e2e/helpers/fixtures.ts`.
 - **Critical:** C1 project-role authz, C2 proposals:approve, C3 advancing cross-shell, C4 PAT scopes.
-- **High:** H1 per-role tenant isolation, H2 finance/procurement denials, H3 contractor/member console breadth, H4 XMCE rule CRUD. H8 satisfied by C3.
+- **High (H1–H7 all resolved):** H1 per-role tenant isolation · H2 finance/procurement denials · H3 contractor/member console breadth · H4 XMCE rule CRUD · **H5 eligibility-gated dispatch** (blocked vs eligible sub → disabled/enabled Award) · **H7 offer-letter token gate** (`/offer/[token]` wrong-code refused, right-code opens accept/decline). H8 satisfied by C3.
 - **Harness:** `authz-matrix.spec.ts` — role×route denial (asserts denial, not just no-crash).
-- **Hygiene:** L1 dead-route false positives, L2 misnamed compliance-flow suite, L3 solutions/legend page.
+- **Hygiene / cleanup:** L1 dead-route false positives, L2 misnamed compliance-flow suite, L3 solutions/legend page, **removed the dead legacy v1 form renderer** (`PublicFormSubmit` + the `useV2` fork; 0/37 form_defs have fields, 2 submissions ever — single v2 render path now).
 
 **Resolved as not-a-gap:**
 - **H6 (documents/reports negative authz)** — verified there is NO capability gate on the documents/reports console or API (`grep assertCapability|can(session` → empty). They are org-scoped reads by design (any org member may read their org's docs). The real negatives — PAT scope denial (C4), unauthenticated 401 (C4), cross-tenant (H1) — are covered. No member-denial exists to assert.
 
-**Deferred (need multi-entity fixtures + unrunnable UI flows — not landed to avoid low-confidence specs):**
-- **H5 (eligibility-gated dispatch)** — the gate is real and action-level (`awardWorkOrder` checks `v_sub_eligibility`, blocks on missing/expired compliance docs). A test needs a seeded work-order + a `blocked`-verdict vendor + the award UI flow.
-- **H7 (public-forms positive paths)** — needs a published `/forms/[slug]` fixture (with fields + submission handling) and an `/offer/[token]` offer-letter fixture to drive the insert/accept/decline the audit flagged.
-- **M-tier** — portal sub-persona workflows, marketplace submit side + reviews release, console zero-training surfaces, COMPVSS tabs/inbox/realtime/scan. Breadth, lower severity; each needs live-run iteration.
+**Deferred (breadth, lower severity; each needs live-run iteration):**
+- **M-tier** — portal sub-persona workflows, marketplace submit side + reviews release, console zero-training surfaces, COMPVSS tabs/inbox/realtime/scan.
 
 **Caveat:** the new e2e specs compile + lint clean but have **not been executed** (no dev server + seeded DB in this environment). They should get one Playwright run from the seeded fixtures to confirm green and catch selector drift before the deferred tier is layered on.
 

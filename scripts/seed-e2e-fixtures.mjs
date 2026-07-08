@@ -107,6 +107,14 @@ const APPROVAL_FIXTURE_ID = "c2000000-0000-4000-8000-000000000002";
 const CATALOG_ITEM_FIXTURE_ID = "c3000000-0000-4000-8000-000000000001";
 const ASSIGNMENT_FIXTURE_ID = "c3000000-0000-4000-8000-000000000002";
 
+// Subcontractor eligibility-gated dispatch fixture: a posted work order on a
+// unique trade (requires a COI) with a BLOCKED sub (W9 only) + an ELIGIBLE sub
+// (current COI). Drives v_sub_eligibility → the H5 award gate.
+const WO_BLOCKED_VENDOR_ID = "c5000000-0000-4000-8000-000000000001";
+const WO_ELIGIBLE_VENDOR_ID = "c5000000-0000-4000-8000-000000000002";
+const WO_FIXTURE_ID = "c5000000-0000-4000-8000-000000000010";
+const WO_TRADE = "e2e-trade";
+
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
 async function userIdViaSignIn(email) {
@@ -302,6 +310,50 @@ async function ensureAdvancingAssignment(userIds) {
   else console.log("    ✓ advancing assignment fixture (crew, issued credential)");
 }
 
+// Seed the eligibility-gated dispatch fixture. Idempotent via upserts + a
+// doc reset so the derived v_sub_eligibility verdicts stay deterministic.
+async function ensureDispatchGate() {
+  const { error: vErr } = await admin.from("vendors").upsert(
+    [
+      { id: WO_BLOCKED_VENDOR_ID, org_id: PROFESSIONAL_ORG, name: "E2E Blocked Sub" },
+      { id: WO_ELIGIBLE_VENDOR_ID, org_id: PROFESSIONAL_ORG, name: "E2E Eligible Sub" },
+    ],
+    { onConflict: "id" },
+  );
+  if (vErr) {
+    console.warn(`    ! dispatch vendors: ${vErr.message}`);
+    return;
+  }
+  await admin
+    .from("trade_requirements")
+    .upsert({ org_id: PROFESSIONAL_ORG, trade: WO_TRADE, doc_kind: "coi" }, { onConflict: "org_id,trade,doc_kind" });
+  await admin.from("compliance_documents").delete().in("vendor_id", [WO_BLOCKED_VENDOR_ID, WO_ELIGIBLE_VENDOR_ID]);
+  await admin.from("compliance_documents").insert([
+    { org_id: PROFESSIONAL_ORG, vendor_id: WO_BLOCKED_VENDOR_ID, doc_kind: "w9", expires_on: null },
+    { org_id: PROFESSIONAL_ORG, vendor_id: WO_ELIGIBLE_VENDOR_ID, doc_kind: "coi", expires_on: "2030-01-01" },
+  ]);
+  await admin.from("work_orders").upsert(
+    {
+      id: WO_FIXTURE_ID,
+      org_id: PROFESSIONAL_ORG,
+      title: "E2E Dispatch Gate",
+      trade: WO_TRADE,
+      work_order_state: "posted",
+      visibility: "private",
+      awarded_vendor_id: null,
+    },
+    { onConflict: "id" },
+  );
+  await admin.from("work_order_bids").upsert(
+    [
+      { org_id: PROFESSIONAL_ORG, work_order_id: WO_FIXTURE_ID, vendor_id: WO_BLOCKED_VENDOR_ID, amount_cents: 100000 },
+      { org_id: PROFESSIONAL_ORG, work_order_id: WO_FIXTURE_ID, vendor_id: WO_ELIGIBLE_VENDOR_ID, amount_cents: 110000 },
+    ],
+    { onConflict: "work_order_id,vendor_id" },
+  );
+  console.log("    ✓ dispatch eligibility-gate fixture (blocked + eligible subs)");
+}
+
 console.log("Seeding E2E fixture users…");
 const userIds = {};
 for (const role of Object.keys(ROLES)) {
@@ -316,4 +368,5 @@ await ensureProjectRoles(userIds);
 await ensurePats(userIds.owner);
 await ensureProposalApproval();
 await ensureAdvancingAssignment(userIds);
+await ensureDispatchGate();
 console.log("✓ Done. Fixture users provisioned for:", Object.keys(ROLES).join(", "));

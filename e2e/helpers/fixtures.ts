@@ -88,3 +88,18 @@ export const ADVANCING_FIXTURE = {
   title: "E2E Crew Credential",
   fulfillmentState: "issued",
 } as const;
+
+/**
+ * Subcontractor eligibility-gated dispatch (v7.5 headline). A posted work order
+ * on a unique trade (e2e-trade, which requires a COI) with two bidding vendors:
+ * a BLOCKED sub (has a W9 but no COI → missing required doc → v_sub_eligibility
+ * verdict 'blocked') and an ELIGIBLE sub (current COI). The H5 spec asserts the
+ * award gate — blocked bid = disabled Award control, eligible bid = enabled.
+ */
+export const DISPATCH_FIXTURE = {
+  orgId: TEST_ORGS.professional,
+  workOrderId: "c5000000-0000-4000-8000-000000000010",
+  trade: "e2e-trade",
+  blockedVendorName: "E2E Blocked Sub",
+  eligibleVendorName: "E2E Eligible Sub",
+} as const;

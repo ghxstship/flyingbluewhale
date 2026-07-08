@@ -183,3 +183,30 @@ test.describe("cross-tenant: marketplace public surfaces expose only published c
     }
   });
 });
+
+test.describe("cross-tenant: per-role API isolation (H1)", () => {
+  // Every fixture user belongs ONLY to the four test orgs — never `demo` (Org B).
+  // The audit found all isolation ran as owner; these prove the *application
+  // surface* scoping holds for the non-owner bands too. Each role here holds
+  // projects:read, so a foreign-tenant id is a clean org-scoped 404 (not a
+  // capability 403) — isolating the tenant boundary from the capability gate.
+  for (const role of ["member", "collaborator", "contractor", "viewer"]) {
+    test(`${role}: GET Org B project → 404 not_found, no leak`, async ({ page }) => {
+      await dismissConsent(page);
+      await loginAs(page, role);
+      const r = await page.request.get(`/api/v1/projects/${ORG_B.projectId}`);
+      expect(r.status(), `${role} must not read a foreign-tenant project`).toBe(404);
+      const body = await r.json();
+      expect(body.ok).toBe(false);
+      expect(body.error.code).toBe("not_found");
+      // The error envelope must carry zero Org B data.
+      expect(JSON.stringify(body).toLowerCase()).not.toContain("hialeah");
+    });
+  }
+
+  test("member: Org B project studio detail → not-found UI, no record leak", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAs(page, "member");
+    await expectStudioNotFound(page, `/studio/projects/${ORG_B.projectId}`);
+  });
+});

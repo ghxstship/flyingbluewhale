@@ -36,3 +36,33 @@ test.describe("global app rail · ATLVS console · owner", () => {
     await expect(soon.getByText(/soon/i)).toBeVisible();
   });
 });
+
+/**
+ * M6 — entitlement resolution is per-session, not a constant. The audit found
+ * every app-rail assertion ran as owner. GET /api/v1/me/entitlements resolves
+ * each product's access from the caller's role/persona (productAccess): an
+ * owner OPERATES ATLVS (full) while a viewer is read-only-or-less. Asserting the
+ * differentiation (owner=full vs viewer≠full) proves the API keys off the
+ * session, robustly across the exact ro/null value.
+ */
+test.describe("app rail entitlements · per-role (M6)", () => {
+  test.describe.configure({ timeout: 90_000 });
+
+  async function atlvsAccess(page: import("playwright/test").Page): Promise<string | null | undefined> {
+    const r = await page.request.get("/api/v1/me/entitlements");
+    expect(r.status(), "entitlements resolve for an authed session").toBe(200);
+    const apps = ((await r.json())?.data?.apps ?? []) as { id: string; access: string | null }[];
+    return apps.find((a) => a.id === "atlvs")?.access;
+  }
+
+  test("owner operates ATLVS (full access)", async ({ page }) => {
+    await authedSetup(page, "owner");
+    expect(await atlvsAccess(page), "owner gets full ATLVS access").toBe("full");
+  });
+
+  test("viewer does not get full ATLVS operator access", async ({ page }) => {
+    await authedSetup(page, "viewer");
+    // Read-only (ro) or none — the point is it is NOT the operator's `full`.
+    expect(await atlvsAccess(page), "viewer is more restricted than owner").not.toBe("full");
+  });
+});

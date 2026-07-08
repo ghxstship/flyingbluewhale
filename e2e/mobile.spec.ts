@@ -27,6 +27,11 @@ test.describe("mobile field shell", () => {
     "/m/guide",
     "/m/clock",
     "/m/advances",
+    // M4 — the four bottom-tab destinations that had no smoke coverage.
+    "/m/schedule",
+    "/m/onsite",
+    "/m/inventory",
+    "/m/more",
     "/m/inventory/scan",
     "/m/incidents/new",
     "/m/settings",

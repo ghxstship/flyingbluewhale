@@ -121,6 +121,10 @@ const OFFER_LETTER_FIXTURE_ID = "c6000000-0000-4000-8000-000000000001";
 const OFFER_LETTER_TOKEN = "c6000000-0000-4000-8000-0000000000ff";
 const OFFER_LETTER_CODE = "E2ECODE";
 
+// A published marketplace gig (public job board) for the applicant-submit spec.
+const JOB_POSTING_FIXTURE_ID = "c7000000-0000-4000-8000-000000000001";
+const JOB_POSTING_SLUG = "e2e-gig";
+
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
 async function userIdViaSignIn(email) {
@@ -409,6 +413,23 @@ async function ensureOfferLetter() {
   else console.log("    ✓ offer-letter unlock fixture (sent, token + code)");
 }
 
+// A published gig on the public job board for the marketplace applicant-submit
+// spec. Idempotent via the primary-key upsert.
+async function ensureJobPosting() {
+  const { error } = await admin.from("job_postings").upsert(
+    {
+      id: JOB_POSTING_FIXTURE_ID,
+      org_id: PROFESSIONAL_ORG,
+      title: "E2E Gig · Stagehand",
+      public_slug: JOB_POSTING_SLUG,
+      job_posting_phase: "published",
+    },
+    { onConflict: "id" },
+  );
+  if (error) console.warn(`    ! job posting fixture: ${error.message}`);
+  else console.log("    ✓ published gig fixture (marketplace apply)");
+}
+
 console.log("Seeding E2E fixture users…");
 const userIds = {};
 for (const role of Object.keys(ROLES)) {
@@ -425,4 +446,5 @@ await ensureProposalApproval();
 await ensureAdvancingAssignment(userIds);
 await ensureDispatchGate();
 await ensureOfferLetter();
+await ensureJobPosting();
 console.log("✓ Done. Fixture users provisioned for:", Object.keys(ROLES).join(", "));

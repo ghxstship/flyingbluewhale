@@ -115,3 +115,15 @@ export const OFFER_LETTER_FIXTURE = {
   token: "c6000000-0000-4000-8000-0000000000ff",
   accessCode: "E2ECODE",
 } as const;
+
+/**
+ * A published marketplace gig (public job board) an applicant can apply to — the
+ * SUBMIT side of the marketplace the audit found untested (only operator-side
+ * flows were covered). The M2 spec applies as a marketplace persona; the apply
+ * action's duplicate guard makes re-runs idempotent.
+ */
+export const JOB_POSTING_FIXTURE = {
+  orgId: TEST_ORGS.professional,
+  slug: "e2e-gig",
+  title: "E2E Gig · Stagehand",
+} as const;

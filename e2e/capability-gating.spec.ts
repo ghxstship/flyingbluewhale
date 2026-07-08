@@ -110,3 +110,57 @@ test.describe("capability/invoices:write", () => {
     }
   });
 });
+
+test.describe("capability/invoices:write — finance boundary (H2)", () => {
+  // Only owner/admin/manager hold invoices:write. Collaborator (co-producer)
+  // explicitly does NOT — a deliberate seam in CAPABILITIES_BY_PERSONA and the
+  // whole reason the persona exists; neither do member, contractor, or crew.
+  // This is the negative half the audit found missing (only `client` was
+  // asserted denied before).
+  const UNAUTHORIZED = ["member", "contractor", "collaborator", "crew"];
+  for (const role of UNAUTHORIZED) {
+    test(`${role} cannot POST /api/v1/stripe/checkout → denied (never 2xx)`, async ({ page }) => {
+      await dismissConsent(page);
+      await login(page, role);
+      const r = await page.request.post("/api/v1/stripe/checkout", {
+        data: { invoiceId: "00000000-0000-0000-0000-000000000000" },
+      });
+      // 403 when the capability gate fires (expected); 401 only if the session
+      // lapsed between login and call. Never a 2xx — a lower role must not
+      // initiate billing.
+      expect([401, 403]).toContain(r.status());
+      if (r.status() === 403) {
+        const body = await r.json();
+        expect(body.error.code).toBe("forbidden");
+        expect(body.error.message).toContain("invoices:write");
+      }
+    });
+  }
+});
+
+test.describe("capability/procurement:read — procurement boundary (H2)", () => {
+  // manager holds procurement:* ; collaborator/member/contractor/crew/client/
+  // viewer/community do not. A minimal csv body ("x") satisfies the request
+  // schema so the request reaches the capability gate, but never parses into a
+  // vendor row — so authorized roles pass the gate WITHOUT importing anything.
+  const UNAUTHORIZED = ["collaborator", "member", "contractor", "crew", "client", "viewer", "community"];
+  for (const role of UNAUTHORIZED) {
+    test(`${role} cannot POST /api/v1/import/vendors → 403 forbidden`, async ({ page }) => {
+      await dismissConsent(page);
+      await login(page, role);
+      const r = await page.request.post("/api/v1/import/vendors", { data: { csv: "x" } });
+      expect(r.status()).toBe(403);
+      const body = await r.json();
+      expect(body.error.code).toBe("forbidden");
+      expect(body.error.message).toContain("procurement:read");
+    });
+  }
+
+  test("manager passes the procurement gate (not forbidden)", async ({ page }) => {
+    await dismissConsent(page);
+    await login(page, "manager");
+    const r = await page.request.post("/api/v1/import/vendors", { data: { csv: "x" } });
+    // Past the gate → fails on the unparseable csv (bad_request), never 403.
+    expect(r.status()).not.toBe(403);
+  });
+});

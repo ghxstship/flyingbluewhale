@@ -119,7 +119,7 @@ const WO_TRADE = "e2e-trade";
 // frozen snapshot so LetterDocument renders complete. Drives the H7 unlock gate.
 const OFFER_LETTER_FIXTURE_ID = "c6000000-0000-4000-8000-000000000001";
 const OFFER_LETTER_TOKEN = "c6000000-0000-4000-8000-0000000000ff";
-const OFFER_LETTER_CODE = "E2ECODE";
+const OFFER_LETTER_CODE = "E2CODE"; // exactly 6 chars — unlock input is maxLength=6
 
 // A published marketplace gig (public job board) for the applicant-submit spec.
 const JOB_POSTING_FIXTURE_ID = "c7000000-0000-4000-8000-000000000001";

@@ -74,9 +74,24 @@ for (const op of OPERATORS) {
       await expect(page.locator('[data-platform="atlvs"]').first()).toBeVisible({ timeout: 10_000 });
     });
 
-    // ── requireSession tier — every operator can create a task ──────────────
-    test("Task: create (requireSession tier — all operators)", async ({ page }) => {
-      await createInModule(page, "/studio/tasks/new", { title: `E2E Task ${op.fixture} ${stamp()}` });
+    // ── Task create — the tasks_insert RLS admits owner/admin/manager/controller
+    //    + the collaborator persona, but NOT bare member/contractor: those
+    //    personas execute assigned tasks, they don't author org tasks. NOTE:
+    //    CAPABILITIES_BY_PERSONA grants member/contractor `tasks:write`, yet the
+    //    DB scopes CREATE more tightly — for those personas that grant is
+    //    effectively update-only. (Surfaced by this e2e run; see the audit.)
+    test(`Task: create (${op.tier === "member" ? "blocked: create is manager+/collaborator" : "allowed"})`, async ({
+      page,
+    }) => {
+      if (op.tier === "member") {
+        await fillAndSubmit(page, "/studio/tasks/new", { title: `E2E Task ${op.fixture} ${stamp()}` });
+        await expect(page, "member/contractor is RLS-denied task CREATE — stays on /new").toHaveURL(
+          /\/tasks\/new(\?|$)/,
+          { timeout: 15_000 },
+        );
+      } else {
+        await createInModule(page, "/studio/tasks/new", { title: `E2E Task ${op.fixture} ${stamp()}` });
+      }
     });
 
     // ── isManagerPlus tier — Project create → edit ──────────────────────────

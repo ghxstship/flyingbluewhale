@@ -113,7 +113,9 @@ export const DISPATCH_FIXTURE = {
 export const OFFER_LETTER_FIXTURE = {
   orgId: TEST_ORGS.professional,
   token: "c6000000-0000-4000-8000-0000000000ff",
-  accessCode: "E2ECODE",
+  // Exactly 6 chars — the unlock input is maxLength=6 and the action rejects
+  // anything else (offer/[token]/actions.ts).
+  accessCode: "E2CODE",
 } as const;
 
 /**

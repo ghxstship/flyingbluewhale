@@ -144,11 +144,14 @@ test.describe("cross-tenant: portal (/p/<slug>) does not expose foreign private 
     // only ever surface the caller's own (or zero) POs, never demo's.
     const resp = await page.goto(`/p/${ORG_B.portalSlug}/vendor/purchase-orders`);
     expect(resp?.status(), "portal child must not 500").toBeLessThan(500);
+    // The portal resolves the slug → project chrome via an anon-readable policy,
+    // so the masthead + content legitimately show the PUBLIC project name — that
+    // is NOT a leak. The real guarantee is that demo's PRIVATE procurement data
+    // (vendor identities + PO numbers, org-scoped out by `.eq org_id = caller`)
+    // never renders. Assert those specific private markers are absent.
     const body = (await page.locator("body").innerText()).toLowerCase();
-    // Demo project headline content must never render on a data surface for a
-    // non-member. The published guide is public; private ops are not.
-    expect(body).not.toContain("hialeah");
-    expect(body).not.toContain("racetrack");
+    expect(body, "no demo vendor identity leaks").not.toContain("julia valler");
+    expect(body, "no demo PO number leaks").not.toContain("po-2652936");
   });
 
   test("Org A user on Org B vendor invoices sees no demo invoices", async ({ page }) => {
@@ -156,9 +159,10 @@ test.describe("cross-tenant: portal (/p/<slug>) does not expose foreign private 
     await loginAs(page, "owner");
     const resp = await page.goto(`/p/${ORG_B.portalSlug}/vendor/invoices`);
     expect(resp?.status(), "portal child must not 500").toBeLessThan(500);
+    // Private-marker check (the public project name is not a leak — see above).
     const body = (await page.locator("body").innerText()).toLowerCase();
-    expect(body).not.toContain("hialeah");
-    expect(body).not.toContain("racetrack");
+    expect(body, "no demo vendor identity leaks").not.toContain("julia valler");
+    expect(body, "no demo vendor identity leaks").not.toContain("edc lv");
   });
 
   test("anon hitting unknown portal slug → 404 (slug enumeration closed)", async ({ request }) => {

@@ -34,7 +34,7 @@ test.describe("Public offer letter — token unlock gate (H7)", () => {
     await page.locator('input[name="access_code"]').fill("WRONGCODE");
     await page.getByRole("button", { name: /open letter/i }).click();
     await expect(
-      page.getByText(/invalid token or access code|withdrawn/i),
+      page.getByText(/invalid token or access code|withdrawn/i).first(),
       "the gate refuses a wrong code",
     ).toBeVisible({ timeout: 10_000 });
   });

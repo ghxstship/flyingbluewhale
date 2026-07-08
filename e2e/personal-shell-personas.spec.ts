@@ -102,8 +102,22 @@ async function fillAndSubmit(page: Page, fields: Record<string, string>): Promis
   await expect(page.getByText(RLS_ERROR), "self-service save surfaced no RLS error").toHaveCount(0);
 }
 
-// ── Render sweep across the personas that land in /me ───────────────────────
-for (const fixture of ["owner", "member", "community"] as const) {
+// ── Render sweep across the personas that reach /me ─────────────────────────
+// /me is the personal shell for ANY authed user, so every non-anon persona must
+// render its surfaces. M7 — previously only owner/member/community were swept
+// (3 of ~11); this covers the internal bands + the portal/field personas too.
+for (const fixture of [
+  "owner",
+  "admin",
+  "manager",
+  "member",
+  "collaborator",
+  "contractor",
+  "crew",
+  "client",
+  "viewer",
+  "community",
+] as const) {
   test.describe(`personal /me · ${fixture}`, () => {
     test.describe.configure({ timeout: 240_000 });
     test.beforeEach(async ({ page }) => authedSetup(page, fixture));

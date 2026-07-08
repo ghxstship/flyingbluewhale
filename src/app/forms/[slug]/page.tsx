@@ -5,7 +5,6 @@ import type { Json } from "@/lib/supabase/database.types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { coerceFormSchema } from "@/lib/forms/types";
 import { PublicFormRenderer } from "@/components/forms/PublicFormRenderer";
-import { PublicFormSubmit, type PublicFormField } from "./PublicFormSubmit";
 import { submitFormAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -19,23 +18,6 @@ type FormDef = {
   status: string;
   schema: Json;
 };
-
-function legacyFieldsFromSchema(schema: Json): PublicFormField[] {
-  if (!schema || typeof schema !== "object" || Array.isArray(schema)) return [];
-  const fields = (schema as { fields?: unknown }).fields;
-  if (!Array.isArray(fields)) return [];
-  return fields
-    .filter((f): f is Record<string, unknown> => typeof f === "object" && f !== null)
-    .map((f) => ({
-      key: String(f.key ?? ""),
-      label: String(f.label ?? ""),
-      type: (f.type as PublicFormField["type"]) ?? "text",
-      required: Boolean(f.required),
-      placeholder: typeof f.placeholder === "string" ? f.placeholder : undefined,
-      options: Array.isArray(f.options) ? (f.options as string[]) : undefined,
-    }))
-    .filter((f) => f.key && f.label);
-}
 
 async function loadForm(slug: string): Promise<FormDef | null> {
   if (!isServiceClientAvailable()) return null;
@@ -82,15 +64,6 @@ export default async function Page({
     if (typeof value === "string") prefill[key] = value;
   }
 
-  // Render path:
-  //   v2 (or any schema with sections / antiSpam / submit / payment) → PublicFormRenderer
-  //   v1 plain fields → legacy PublicFormSubmit (unchanged)
-  const useV2 =
-    schema.version === 2 ||
-    Boolean(schema.sections?.length) ||
-    Boolean(schema.antiSpam?.captcha) ||
-    Boolean(schema.submit?.redirectUrl);
-
   return (
     <main className={`mx-auto max-w-2xl px-6 ${embed ? "py-4" : "py-12 sm:py-16"}`}>
       {!embed && (
@@ -103,7 +76,7 @@ export default async function Page({
 
       {schema.fields.length === 0 ? (
         <EmptyState title="No fields yet" description="This form is being prepared. Check back soon." />
-      ) : useV2 ? (
+      ) : (
         <PublicFormRenderer
           slug={slug}
           schema={schema}
@@ -112,8 +85,6 @@ export default async function Page({
           turnstileSiteKey={turnstileSiteKey}
           embed={embed}
         />
-      ) : (
-        <PublicFormSubmit slug={slug} fields={legacyFieldsFromSchema(form.schema)} />
       )}
     </main>
   );

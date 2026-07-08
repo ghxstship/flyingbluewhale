@@ -101,17 +101,9 @@ export type FormSchema = {
   };
 };
 
-/** Legacy v1 shape kept for the existing inline `PublicFormSubmit` consumer. */
-export type LegacyPublicFormField = {
-  key: string;
-  label: string;
-  type: "text" | "textarea" | "email" | "url" | "number" | "date" | "select" | "checkbox";
-  required?: boolean;
-  placeholder?: string;
-  options?: string[];
-};
-
-/** Coerce raw JSONB into a normalized FormSchema. Tolerant of v1. */
+/** Coerce raw JSONB into a normalized FormSchema. Tolerant of the old flat v1
+ * shape (a bare `fields[]` with no version/sections) — it normalizes into the
+ * same FormSchema the single renderer consumes. */
 export function coerceFormSchema(raw: unknown): FormSchema {
   if (!raw || typeof raw !== "object") return { fields: [] };
   const r = raw as Record<string, unknown>;

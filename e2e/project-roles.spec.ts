@@ -22,6 +22,7 @@
 import { expect, test } from "playwright/test";
 import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
+import { FIXTURE_PROJECT } from "./helpers/fixtures";
 
 const PROJECT_ROLES = ["lead", "editor", "contributor", "viewer", "vendor"] as const;
 
@@ -107,5 +108,84 @@ test.describe.serial("ATLVS project roles — member assignment across PROJECT_R
     await expect(page.locator('form select[name="userId"]'), "no add-member control for non-manager").toHaveCount(0);
     const fatal = errors.filter((e) => !e.includes("favicon") && !e.includes("404"));
     expect(fatal, "the gate must not crash the render").toEqual([]);
+  });
+});
+
+/**
+ * D1 — project-role ENFORCEMENT (the axis the audit found unwired: hasProjectRole
+ * had zero call sites). These bind to the durable FIXTURE_PROJECT, where four
+ * platform-`member` users hold distinct project roles (member=lead, crew=
+ * contributor, contractor=viewer, vendor=vendor — see e2e/helpers/fixtures.ts).
+ *
+ * Unlike the block above (which drives the management gate as a manager+), these
+ * prove per-project authority for NON-manager users end-to-end:
+ *   - a project LEAD gains roster management AND a real write persists;
+ *   - a project VIEWER is denied — both in the UI (no add control) and, decisively,
+ *     at the data layer: the RLS write policy (has_project_role(project_id,['lead']))
+ *     rejects their change, so it never persists.
+ *
+ * Self-restoring: the lead test flips crew's role and sets it back; the viewer
+ * test's write is rejected, so the fixture is unchanged either way.
+ */
+test.describe.serial("ATLVS project roles — non-manager project authority (D1)", () => {
+  test.describe.configure({ timeout: 120_000 });
+  const CREW = "test+crew@flyingbluewhale.app"; // seeded contributor on FIXTURE_PROJECT
+  const VENDOR = "test+vendor@flyingbluewhale.app"; // seeded vendor on FIXTURE_PROJECT
+  const membersUrl = `/studio/projects/${FIXTURE_PROJECT.id}/members`;
+
+  test("a project lead (platform member) manages the roster and the write persists", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAndSwitchWorkspace(page, "member", FIXTURE_PROJECT.orgId);
+    await page.goto(membersUrl);
+
+    // The management control denied to the collaborator/viewer is now offered to
+    // the project lead — D1 wired hasProjectRole into the page gate.
+    await expect(
+      page.locator('form select[name="userId"]'),
+      "project lead sees the add-member control",
+    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/view this roster/i), "no view-only notice for the lead").toHaveCount(0);
+
+    // Real WRITE authority (member action + project_members RLS), reversibly:
+    // flip crew contributor→editor, confirm it persisted across a reload, restore.
+    const crew = () => page.locator(`select[aria-label="Role for ${CREW}"]`);
+    await expect(crew()).toBeVisible({ timeout: 10_000 });
+    await crew().selectOption("editor");
+    await expect(crew(), "select re-enables once the update action settles").toBeEnabled({ timeout: 10_000 });
+    await page.reload();
+    await expect(crew(), "project-lead write persisted through RLS").toHaveValue("editor", { timeout: 10_000 });
+
+    // Restore the seeded state so the shared fixture stays clean.
+    await crew().selectOption("contributor");
+    await expect(crew()).toBeEnabled({ timeout: 10_000 });
+    await page.reload();
+    await expect(crew()).toHaveValue("contributor", { timeout: 10_000 });
+  });
+
+  test("a project viewer (platform member) is denied roster management, in UI and at the write", async ({ page }) => {
+    await dismissConsent(page);
+    await loginAndSwitchWorkspace(page, "contractor", FIXTURE_PROJECT.orgId);
+    await page.goto(membersUrl);
+
+    // Management gate: no add-member control; the view-only notice is shown.
+    await expect(page.getByRole("heading", { name: /members/i }).first()).toBeVisible({ timeout: 10_000 });
+    await expect(
+      page.locator('form select[name="userId"]'),
+      "no add-member control for a project viewer",
+    ).toHaveCount(0);
+    await expect(page.getByText(/view this roster/i), "view-only notice shown to the viewer").toBeVisible();
+
+    // Write DENIAL at the data layer: the role <select> is still rendered, but a
+    // viewer's change must NOT persist — the project_members RLS write policy
+    // (has_project_role(project_id,['lead'])) rejects it, so it snaps back.
+    const vendor = () => page.locator(`select[aria-label="Role for ${VENDOR}"]`);
+    await expect(vendor()).toBeVisible({ timeout: 10_000 });
+    await expect(vendor()).toHaveValue("vendor");
+    await vendor().selectOption("editor");
+    await page.waitForTimeout(1500); // allow the (rejected) update action to round-trip
+    await page.reload();
+    await expect(vendor(), "viewer write was rejected by RLS — no persistence").toHaveValue("vendor", {
+      timeout: 10_000,
+    });
   });
 });

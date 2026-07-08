@@ -3,7 +3,8 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { requireSession } from "@/lib/auth";
+import { AccessDenied } from "@/components/ui/AccessDenied";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -26,6 +27,9 @@ export default async function RuleDetailPage({ params }: { params: Promise<{ id:
   }
   const { id } = await params;
   const session = await requireSession();
+  if (!isManagerPlus(session)) {
+    return <AccessDenied requiredRole="Manager" backHref="/legend" />;
+  }
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const { data: ruleData } = await db

@@ -2,7 +2,8 @@ import { ModuleHeader } from "@/components/Shell";
 import { Avatar } from "@/components/ui/Avatar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
-import { requireSession } from "@/lib/auth";
+import { AccessDenied } from "@/components/ui/AccessDenied";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -54,6 +55,9 @@ export default async function ComplianceMatrixPage() {
     );
   }
   const session = await requireSession();
+  if (!isManagerPlus(session)) {
+    return <AccessDenied requiredRole="Manager" backHref="/legend" />;
+  }
   const db = (await createClient()) as unknown as LooseSupabase;
   const now = new Date();
 

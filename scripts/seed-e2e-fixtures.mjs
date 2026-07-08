@@ -25,6 +25,7 @@
  */
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 
 const envtxt = readFileSync(new URL("../.env.local", import.meta.url), "utf8");
 const get = (k) => process.env[k] || envtxt.match(new RegExp(`^${k}=(.*)$`, "m"))?.[1]?.trim();
@@ -63,7 +64,35 @@ const ROLES = {
   collaborator: { role: "member", persona: "collaborator" },
   controller: { role: "admin", persona: "controller" },
   developer: { role: "admin", persona: "developer" },
+  vendor: { role: "member", persona: "vendor" },
+  guest: { role: "member", persona: "guest" },
 };
+
+// The Professional test org + its stable fixture project (mirrors
+// e2e/helpers/fixtures.ts). Project-role + PAT fixtures hang off these.
+const PROFESSIONAL_ORG = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
+const FIXTURE_PROJECT_SLUG = "test-professional-show";
+
+// Project-role assignments on the fixture project, keyed by role suffix. All
+// are platform `member`, so hasProjectRole's project_members branch (not the
+// manager+ bypass) is what these exercise — the axis that makes project-role
+// authz testable end-to-end. See src/lib/auth.ts#hasProjectRole.
+const PROJECT_ROLE_FIXTURES = {
+  member: "lead",
+  crew: "contributor",
+  contractor: "viewer",
+  vendor: "vendor",
+};
+
+// Scoped PAT fixtures (Professional org, created_by=owner). scopes[] gate
+// independently of role, exercising grant + denial at the /api/v1 boundary.
+// Token format sk_<8hex>_<secret>; hashed_secret = sha256(token). Mirrors
+// e2e/helpers/fixtures.ts#PAT_FIXTURES + src/lib/api-keys.ts.
+const PAT_FIXTURES = [
+  { name: "E2E documents:read", token: "sk_e2edoc0r_documentsreadtokensecret0001", scopes: ["documents:read"] },
+  { name: "E2E documents:write", token: "sk_e2edoc0w_documentswritetokensecret001", scopes: ["documents:read", "documents:write"] },
+  { name: "E2E reports:read", token: "sk_e2erpt0r_reportsreadtokensecret000001", scopes: ["reports:read"] },
+];
 
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
@@ -117,9 +146,65 @@ async function ensureMemberships(userId, role) {
   console.log(`    ✓ memberships (${platformRole}/${persona}) across ${TEST_ORGS.length} test orgs`);
 }
 
+// Seed project-role rows on the fixture project for the given {suffix→role}
+// map. Idempotent via the (project_id,user_id) unique key.
+async function ensureProjectRoles(userIds) {
+  const { data: project } = await admin
+    .from("projects")
+    .select("id")
+    .eq("org_id", PROFESSIONAL_ORG)
+    .eq("slug", FIXTURE_PROJECT_SLUG)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!project) {
+    console.warn(`    ! project-roles skipped — no project ${FIXTURE_PROJECT_SLUG} in Professional org`);
+    return;
+  }
+  for (const [suffix, role] of Object.entries(PROJECT_ROLE_FIXTURES)) {
+    const userId = userIds[suffix];
+    if (!userId) continue;
+    const { error } = await admin
+      .from("project_members")
+      .upsert({ project_id: project.id, user_id: userId, role }, { onConflict: "project_id,user_id" });
+    if (error) console.warn(`    ! project-role ${suffix}=${role}: ${error.message}`);
+  }
+  console.log(`    ✓ project roles on ${FIXTURE_PROJECT_SLUG}: ${Object.entries(PROJECT_ROLE_FIXTURES).map(([s, r]) => `${s}→${r}`).join(", ")}`);
+}
+
+// Seed the scoped PATs (created_by=owner). No unique constraint on prefix, so
+// delete-then-insert for idempotency.
+async function ensurePats(ownerId) {
+  if (!ownerId) {
+    console.warn("    ! PATs skipped — owner id unresolved");
+    return;
+  }
+  for (const pat of PAT_FIXTURES) {
+    const prefix = pat.token.slice(0, pat.token.indexOf("_", 3)); // sk_<8hex>
+    const hashedSecret = createHash("sha256").update(pat.token).digest("hex");
+    await admin.from("api_keys").delete().eq("prefix", prefix);
+    const { error } = await admin.from("api_keys").insert({
+      org_id: PROFESSIONAL_ORG,
+      name: pat.name,
+      prefix,
+      hashed_secret: hashedSecret,
+      scopes: pat.scopes,
+      created_by: ownerId,
+    });
+    if (error) console.warn(`    ! PAT ${pat.name}: ${error.message}`);
+  }
+  console.log(`    ✓ PAT fixtures: ${PAT_FIXTURES.map((p) => p.name).join(", ")}`);
+}
+
 console.log("Seeding E2E fixture users…");
+const userIds = {};
 for (const role of Object.keys(ROLES)) {
   const id = await ensureUser(role);
-  if (id) await ensureMemberships(id, role).catch((e) => console.warn(`    ! ${role}: ${e.message}`));
+  if (id) {
+    userIds[role] = id;
+    await ensureMemberships(id, role).catch((e) => console.warn(`    ! ${role}: ${e.message}`));
+  }
 }
+console.log("Seeding project-role + PAT fixtures…");
+await ensureProjectRoles(userIds);
+await ensurePats(userIds.owner);
 console.log("✓ Done. Fixture users provisioned for:", Object.keys(ROLES).join(", "));

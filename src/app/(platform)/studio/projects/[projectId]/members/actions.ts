@@ -2,17 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { isManagerPlus, requireSession } from "@/lib/auth";
+import { hasProjectRole, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { PROJECT_ROLES } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
 import { formFail } from "@/lib/forms/fail";
 
-// Adding an existing org member to a project. Project_members RLS already
-// constrains writes to is_org_manager_plus(project.org_id), so a normal
-// server-side Supabase client (carrying the session cookie) can do the
-// INSERT/UPDATE/DELETE directly — no SECURITY DEFINER bypass needed.
+// Adding an existing org member to a project. Project-role authority is the
+// gate: platform manager+ (auto-bypass) OR the project's `lead` may manage the
+// roster. Wired through hasProjectRole so a project lead can run their own
+// project's membership without a platform-manager grant — the matching
+// project_members RLS write policies (has_project_role(project_id,['lead']))
+// let the cookie-session client do the INSERT/UPDATE/DELETE directly.
 const AddSchema = z.object({
   userId: z.string().uuid("Pick a user"),
   role: z.enum(PROJECT_ROLES),
@@ -20,7 +22,7 @@ const AddSchema = z.object({
 
 async function loadProjectForSession(projectId: string) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) {
+  if (!(await hasProjectRole(session, projectId, ["lead"]))) {
     return { session, project: null as null | { id: string; name: string; org_id: string } };
   }
   const supabase = await createClient();

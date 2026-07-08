@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1169 · **API route handlers:** 145 · **Distinct nav hrefs:** 511
+**Page routes:** 1169 · **API route handlers:** 145 · **Distinct nav hrefs:** 512
 
 ## Legend
 
@@ -27,12 +27,12 @@
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 779 | 244 | 533 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 150 | 127 | 20 | 0 | 3 |
+| GVTEWAY — External Portal | portalNav rail | 150 | 128 | 19 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 41 | 21 | 20 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1169** | **485** | **643** | **0** | **41** |
+| **TOTAL** | | **1169** | **486** | **642** | **0** | **41** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1580,7 +1580,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-150 routes — ● 127 nav · ○ 20 linked · ⚠ 0 orphan
+150 routes — ● 128 nav · ○ 19 linked · ⚠ 0 orphan
 
 <details><summary><code>[slug]</code> · 2 routes</summary>
 
@@ -1652,7 +1652,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>crew</code> · 14 routes</summary>
 
 ● `/p/[slug]/crew`
-○ `/p/[slug]/crew/advances`
+● `/p/[slug]/crew/advances`
 ● `/p/[slug]/crew/call-sheet`
 ● `/p/[slug]/crew/chat`
 ● `/p/[slug]/crew/directory`

@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { isManagerPlus, requireSession } from "@/lib/auth";
+import { hasProjectRole, requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import type { ProjectRole } from "@/lib/supabase/types";
@@ -55,7 +55,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     }))
     .sort((a, b) => (a.name ?? a.email).localeCompare(b.name ?? b.email));
 
-  const isAdmin = isManagerPlus(session);
+  // Roster management authority: platform manager+ (auto-bypass) OR the
+  // project's `lead` — the same gate the member actions enforce. Keeps the UI
+  // (add form + view-only notice) in lockstep with hasProjectRole + the
+  // project_members RLS write policies.
+  const canManage = await hasProjectRole(session, projectId, ["lead"]);
 
   return (
     <>
@@ -78,16 +82,16 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         ]}
       />
       <div className="page-content max-w-4xl space-y-6">
-        {!isAdmin && (
+        {!canManage && (
           <div className="surface p-4 text-sm text-[var(--p-text-2)]">
             {t(
               "console.projects.members.viewOnlyNotice",
               undefined,
-              "You can view this roster but only owners, admins, and managers can change it.",
+              "You can view this roster but only owners, admins, managers, and the project lead can change it.",
             )}
           </div>
         )}
-        {isAdmin && <AddMemberForm projectId={projectId} candidates={candidates} />}
+        {canManage && <AddMemberForm projectId={projectId} candidates={candidates} />}
         {members.length === 0 ? (
           <EmptyState
             title={t("console.projects.members.emptyTitle", undefined, "No Project Members")}

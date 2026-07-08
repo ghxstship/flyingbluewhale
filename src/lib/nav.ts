@@ -1469,6 +1469,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
     // Crew/Engagement + Crew/Operations sub-sections.
     crew: [
       { label: "Call Sheet", href: `${base}/call-sheet` },
+      { label: "Advances", href: `${base}/advances` },
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Time", href: `${base}/time` },
       { label: "Timesheets", href: `${base}/timesheets` },

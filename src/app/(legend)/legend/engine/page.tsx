@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { requireSession } from "@/lib/auth";
+import { AccessDenied } from "@/components/ui/AccessDenied";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -30,6 +31,9 @@ export default async function EngineHubPage() {
     );
   }
   const session = await requireSession();
+  if (!isManagerPlus(session)) {
+    return <AccessDenied requiredRole="Manager" backHref="/legend" />;
+  }
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const [{ count: rulesActive }, { count: runsTotal }, { data: findingData }, { data: runData }] =

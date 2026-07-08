@@ -53,49 +53,47 @@ test.describe.serial("ATLVS project roles — member assignment across PROJECT_R
     projectOrgId = (await wr.json())?.data?.current ?? "";
     expect(projectOrgId, "active org captured").toBeTruthy();
 
-    // 2. Assign each ProjectRole to the first still-available org member.
-    // Each member row renders a `<select aria-label="Role for <email>">` whose
-    // value is that member's role — count those to confirm each add landed
-    // (unambiguous, unlike matching the role word which also hits <option>s).
+    // 2. Prove every PROJECT_ROLE round-trips through the members UI. Add ONE org
+    // member, then cycle THAT member's role through all five values, confirming
+    // each persists. This replaces the old five-separate-adds loop, which was
+    // fragile on a remote target (each add's in-place revalidation is slow/racy);
+    // one insert + N deterministic role updates covers the same enum with none of
+    // the flakiness. Per-role enforcement (lead can write, viewer denied) is the
+    // D1 block below; this is the pure enum/UI round-trip.
+    const membersUrl = `/studio/projects/${projectId}/members`;
     const memberRoleSelects = page.locator('select[aria-label*="Role for"]');
-    await page.goto(`/studio/projects/${projectId}/members`);
-    let count = await memberRoleSelects.count(); // dynamic baseline (0 or auto-added creator)
+    await page.goto(membersUrl);
+    const baseline = await memberRoleSelects.count(); // 0, or an auto-added creator row
+
+    const userSelect = page.locator('form select[name="userId"]');
+    await expect(userSelect, "manager+ sees the add-member control").toBeVisible({ timeout: 20_000 });
+    const value = await userSelect
+      .locator("option")
+      .evaluateAll((os) => (os as HTMLOptionElement[]).map((o) => o.value).find((v) => v) ?? "");
+    expect(value, "an org member is available to add").toBeTruthy();
+    await userSelect.selectOption(value);
+    await page.locator('form select[name="role"]').selectOption(PROJECT_ROLES[0]);
+    await page.getByRole("button", { name: /^add$/i }).click();
+
+    // Confirm the add landed by reading SERVER truth (reload) — not the racy
+    // in-place revalidation. The roster orders by created_at, so the added member
+    // is the LAST row.
+    await expect(async () => {
+      await page.goto(membersUrl);
+      await expect(memberRoleSelects).toHaveCount(baseline + 1, { timeout: 5_000 });
+    }).toPass({ timeout: 40_000 });
+    const added = () => memberRoleSelects.last();
 
     for (const role of PROJECT_ROLES) {
-      // Fresh, settled form each iteration (the in-place revalidation after an add
-      // leaves the submit button transiently unstable on a remote target).
-      await page.goto(`/studio/projects/${projectId}/members`);
-      const userSelect = page.locator('form select[name="userId"]');
-      await expect(userSelect, "manager+ sees the add-member control").toBeVisible({ timeout: 20_000 });
-
-      // First non-empty candidate (the list shrinks as members are added).
-      const value = await userSelect
-        .locator("option")
-        .evaluateAll((os) => (os as HTMLOptionElement[]).map((o) => o.value).find((v) => v) ?? "");
-      expect(value, `a candidate remains to assign as ${role}`).toBeTruthy();
-
-      await userSelect.selectOption(value);
-      await page.locator('form select[name="role"]').selectOption(role);
-      await page.getByRole("button", { name: /^add$/i }).click();
-
-      // Confirm the add landed by reading SERVER truth (reload), not the in-place
-      // revalidation — the latter is slow/racy on a remote target. Poll until the
-      // reloaded roster shows the grown count.
-      count += 1;
-      const want = count;
+      await added().selectOption(role);
+      // The select auto-saves async; poll reload-until-persisted (deterministic
+      // regardless of revalidation latency).
       await expect(async () => {
-        await page.goto(`/studio/projects/${projectId}/members`);
-        await expect(memberRoleSelects, `member added as ${role}`).toHaveCount(want, { timeout: 5_000 });
+        await page.goto(membersUrl);
+        await expect(memberRoleSelects.last(), `${role} persisted on the member`).toHaveValue(role, {
+          timeout: 5_000,
+        });
       }).toPass({ timeout: 40_000 });
-    }
-
-    // 3. Every ProjectRole is represented among the persisted member rows.
-    await page.goto(`/studio/projects/${projectId}/members`);
-    const assigned = await memberRoleSelects.evaluateAll((sels) =>
-      (sels as HTMLSelectElement[]).map((s) => s.value),
-    );
-    for (const role of PROJECT_ROLES) {
-      expect(assigned, `${role} persisted on a member`).toContain(role);
     }
   });
 

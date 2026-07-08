@@ -109,8 +109,11 @@ These are code/config defects the audit surfaced. They matter more than any miss
 **Resolved as not-a-gap:**
 - **H6 (documents/reports negative authz)** — verified there is NO capability gate on the documents/reports console or API (`grep assertCapability|can(session` → empty). They are org-scoped reads by design (any org member may read their org's docs). The real negatives — PAT scope denial (C4), unauthenticated 401 (C4), cross-tenant (H1) — are covered. No member-denial exists to assert.
 
-**Deferred (breadth, lower severity; each needs live-run iteration):**
-- **M-tier** — portal sub-persona workflows, marketplace submit side + reviews release, console zero-training surfaces, COMPVSS tabs/inbox/realtime/scan.
+**M-tier — robust/cheap items landed:**
+- **M4** COMPVSS bottom tabs (/m/schedule·onsite·inventory·more) · **M6** per-role app-rail entitlements (owner full vs viewer restricted via the entitlements API) · **M9** LEG3ND signage CRUD (create→register→delete) · **M10** co-brand white-label variant (documents + reports). **M8** `/studio/compliance` resolved as a non-gap (requireSession-only, org-scoped read like documents/reports).
+
+**Deferred (UI/fixture-heavy breadth, lower severity; best done after a green e2e run):**
+- **M1** portal sub-persona *workflows* (13/15 are render-smoke) · **M2** marketplace submit side (job application / open-call submission — needs external-applicant fixtures) + reviews mutual-release · **M3** console zero-training surfaces (Event Spine, ⌘K CreateMenu, My Work, approvals decision, offer-letter `letter_state`, requisition→PO/CO transitions) · **M7** `/me` landing personas + offers/applications/reviews lifecycles. **M5** (breadth crawls assert only no-crash) is partially addressed by `authz-matrix.spec.ts`.
 
 **Caveat:** the new e2e specs compile + lint clean but have **not been executed** (no dev server + seeded DB in this environment). They should get one Playwright run from the seeded fixtures to confirm green and catch selector drift before the deferred tier is layered on.
 

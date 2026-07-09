@@ -69,9 +69,10 @@ export async function createInModule(page: Page, route: string, fields: Record<s
     .locator("main form")
     .first()
     .evaluate((f: HTMLFormElement) => f.requestSubmit());
-  // Redirect-off-/new can be slow on a remote target (create action + server
-  // round-trip + revalidation); give it headroom so heavy create flows don't
-  // flake on prod first-hit.
-  await expect(page).not.toHaveURL(/\/new(\?|$)/, { timeout: 50000 });
+  // Redirect-off-/new can be slow on a remote target: the FIRST create against a
+  // heavy surface pays a serverless cold-start (observed ~54s for a cold finance
+  // invoice create; the same create is ~5s warm). 75s clears the cold case; it's
+  // a ceiling, not a delay, so warm creates still return in <1s.
+  await expect(page).not.toHaveURL(/\/new(\?|$)/, { timeout: 75000 });
   await expect(page.getByRole("alert").filter({ hasText: /error|failed|invalid/i })).toHaveCount(0);
 }

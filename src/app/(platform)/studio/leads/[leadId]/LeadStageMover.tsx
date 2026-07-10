@@ -25,8 +25,7 @@ export function LeadStageMover({ leadId, stage }: { leadId: string; stage: LeadS
           if (res?.error) toast.error(res.error);
           else
             // F-22 action-undo pattern — the success toast carries the
-            // inverse commit (move back to the pre-advance stage). See the
-            // undo-tier docs on src/lib/hooks/useEditHistory.ts.
+            // inverse commit (move back to the pre-advance stage).
             toast.success(t("console.leads.stageMover.movedToast", { stage: next }, `Moved to ${next}`), {
               action: {
                 label: t("console.leads.stageMover.undo", undefined, "Undo"),

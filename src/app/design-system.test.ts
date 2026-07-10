@@ -42,10 +42,7 @@ describe("Design system — component primitive adoption", () => {
       "src/components/ui/ThemeToggle.tsx",
       "src/components/ui/Checkbox.tsx",
       // Controlled state indicators (not buttons)
-      "src/components/mobile/FAB.tsx",
       "src/components/NotificationsBell.tsx",
-      // Calendar day-cell highlight (today marker — semantic indicator, not a button)
-      "src/app/(platform)/studio/schedule/ScheduleCalendar.tsx",
       // Phase-stepper active-step dot (XPMS Axis B chrome — semantic indicator, not a button)
       "src/components/xpms/PhaseStepper.tsx",
       // Sign / Decline mode toggle (segmented-control pattern, not a primary button)

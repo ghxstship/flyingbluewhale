@@ -7,14 +7,13 @@ import { useId, useRef, useState, type CSSProperties, type PointerEvent as React
  * with a Clear control. Fires onChange with a PNG data URL at the end of each
  * stroke. Ported from the ATLVS kit (kits/core/components/input/SignaturePad.d.ts).
  *
- * Distinct from src/components/SignatureField.tsx (a hidden-input form field) —
- * this is the raw drawing primitive.
+ * This is the raw drawing primitive.
  *
  * A11y PAIRING RULE (F-17): a freehand canvas is inherently pointer-only, so
- * this primitive must NEVER be the sole way to sign. Always mount it through
- * (or alongside) `SignatureField`'s TYPED mode, which provides the keyboard /
- * assistive-tech alternative — the pad here carries `role="img"` + a name and
- * announces that a typed path exists, but it cannot capture keyboard strokes.
+ * this primitive must NEVER be the sole way to sign. Always mount it alongside
+ * a typed-signature input, which provides the keyboard / assistive-tech
+ * alternative — the pad here carries `role="img"` + a name and announces that
+ * a typed path exists, but it cannot capture keyboard strokes.
  */
 export function SignaturePad({
   height = 180,

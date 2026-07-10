@@ -11,8 +11,7 @@ import { toast } from "@/lib/hooks/useToast";
  * This is the reusable, zero-blast-radius building block for inline editing:
  * it composes onto any detail surface or bespoke table without touching the
  * shared DataTableInteractive (whose opaque pre-rendered cell model makes a
- * safe in-place retrofit a separately-scoped change). Pair with
- * `useEditHistory` for multi-step Cmd+Z/Cmd+Shift+Z stacks on richer screens.
+ * safe in-place retrofit a separately-scoped change).
  *
  * Commit contract: `onCommit(next)` persists the value and returns
  * `{ error }` on failure (kept in edit mode) or void/null on success (shows

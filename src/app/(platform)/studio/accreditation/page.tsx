@@ -78,7 +78,7 @@ export default async function Page() {
       "accreditation_changes",
     ] as const;
     const results = await Promise.all(tables.map((table) => countOrgScoped(table, session.orgId)));
-    results.forEach((count, i) => counts.set(tables[i], count));
+    tables.forEach((table, i) => counts.set(table, results[i] ?? 0));
   }
 
   return (

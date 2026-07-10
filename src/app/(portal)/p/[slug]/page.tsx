@@ -189,7 +189,8 @@ export default async function PortalGateway({
   ];
   // Sanity: keep the grid in lockstep with the canonical persona list.
   const covered = new Set(groups.flatMap((g) => g.personas));
-  for (const p of PORTAL_PERSONAS) if (!covered.has(p)) groups[groups.length - 1].personas.push(p);
+  const lastGroup = groups[groups.length - 1];
+  if (lastGroup) for (const p of PORTAL_PERSONAS) if (!covered.has(p)) lastGroup.personas.push(p);
 
   return (
     <div className="min-h-screen">

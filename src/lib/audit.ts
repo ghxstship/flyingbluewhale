@@ -35,6 +35,7 @@ export type AuditAction =
   | "auth.member.removed"
   | "auth.member.restored"
   | "auth.invite.created"
+  | "auth.invite.resent"
   | "auth.invite.revoked"
   | "auth.invite.accepted"
   // Project membership lifecycle.

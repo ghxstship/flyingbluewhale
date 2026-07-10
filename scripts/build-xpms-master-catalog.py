@@ -20,7 +20,7 @@ FP = "/Users/julianclarkson/Documents/FrozenPhoenix/supabase/migrations"
 ROOT = "/Users/julianclarkson/Documents/flyingbluewhale"
 ORG = "68672cc3-0667-4234-ad77-49325e173175"  # demo org
 
-# ── SQL parse helpers (shared shape with export-advancing-catalog.py) ─────────
+# ── SQL parse helpers ──────────────────────────────────────────────────────────
 def split_top(s):
     out, buf, depth, instr = [], [], 0, False; i = 0
     while i < len(s):

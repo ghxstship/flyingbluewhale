@@ -28,8 +28,5 @@ e2e/.auth/
 # SEA TRIAL run artifacts (screenshots, results, saved auth sessions)
 docs/audits/evidence/sea-trial/
 
-# Workflow audit run artifact (regenerate via scripts/workflow-audit.mjs)
-docs/audits/workflow-audit.json
-
 # vitest coverage output
 coverage/

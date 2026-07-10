@@ -1,7 +1,6 @@
 import "server-only";
-import type { MetricResolver, ResolverMap } from "./types";
+import type { DB, MetricResolver, ResolverMap } from "./types";
 import { countWhere, NOT_COMPUTED } from "./types";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
  * GVTEWAY (Public Interface & Marketplace) metric resolvers — kit v6.3 Reports
@@ -25,12 +24,8 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
  * Units: currency → dollars (minor/100); pct → 0–100; ratio/float → raw; int.
  */
 
-// Dynamic table names → sanctioned LooseSupabase escape hatch (RLS stays the
-// authz boundary), same contract as `countWhere`. No raw `any`.
-type Db = LooseSupabase;
-
 /** Sum of converted-cart line value (qty * unit_price_cents), in cents. */
-async function convertedGmvCents(db: Db, orgId: string): Promise<number | null> {
+async function convertedGmvCents(db: DB, orgId: string): Promise<number | null> {
   const { data: carts, error: cErr } = await db
     .from("store_carts")
     .select("id")
@@ -53,7 +48,7 @@ async function convertedGmvCents(db: Db, orgId: string): Promise<number | null> 
 }
 
 /** Count converted carts (= "orders") for the org. */
-async function orderCount(db: Db, orgId: string): Promise<number | null> {
+async function orderCount(db: DB, orgId: string): Promise<number | null> {
   const { count, error } = await db
     .from("store_carts")
     .select("*", { count: "exact", head: true })
@@ -67,15 +62,15 @@ async function orderCount(db: Db, orgId: string): Promise<number | null> {
 
 /** GMV — gross merchandise value of converted carts, in dollars. */
 const gmv: MetricResolver = async ({ db, orgId }) => {
-  const cents = await convertedGmvCents(db as unknown as Db, orgId);
+  const cents = await convertedGmvCents(db, orgId);
   return cents === null ? null : cents / 100;
 };
 
 /** Average order value — GMV / order count, in dollars. */
 const aov: MetricResolver = async ({ db, orgId }) => {
-  const cents = await convertedGmvCents(db as unknown as Db, orgId);
+  const cents = await convertedGmvCents(db, orgId);
   if (cents === null) return null;
-  const orders = await orderCount(db as unknown as Db, orgId);
+  const orders = await orderCount(db, orgId);
   if (orders === null || orders === 0) return null;
   return cents / 100 / orders;
 };
@@ -103,7 +98,11 @@ const cart_abandonment: MetricResolver = async ({ db, orgId }) => {
   const base = db.from("store_carts").select("*", { count: "exact", head: true }).eq("org_id", orgId);
   const [aband, conv] = await Promise.all([
     base.eq("cart_state", "abandoned"),
-    db.from("store_carts").select("*", { count: "exact", head: true }).eq("org_id", orgId).eq("cart_state", "converted"),
+    db
+      .from("store_carts")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", orgId)
+      .eq("cart_state", "converted"),
   ]);
   if (aband.error || conv.error) return null;
   const a = aband.count ?? 0;
@@ -186,7 +185,7 @@ const no_show_rate: MetricResolver = async (ctx) => {
 
 /** Per-cap spend — GMV / tickets sold, in dollars per attendee. */
 const per_cap_spend: MetricResolver = async (ctx) => {
-  const cents = await convertedGmvCents(ctx.db as unknown as Db, ctx.orgId);
+  const cents = await convertedGmvCents(ctx.db, ctx.orgId);
   if (cents === null) return null;
   const tickets = await countWhere(ctx, "assignments", { catalog_kind: "ticket", deleted_at: null });
   if (tickets === null || tickets === 0) return null;

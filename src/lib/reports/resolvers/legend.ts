@@ -7,29 +7,26 @@
  * by `assignment_id IN (...)`. Resolvers return `null` when the source data
  * doesn't exist in the live schema — never a fabricated number.
  */
-import type { MetricResolver, ResolverMap } from "./types";
+import type { DB, MetricResolver, ResolverMap } from "./types";
 import { countWhere, NOT_COMPUTED } from "./types";
-import type { LooseSupabase } from "@/lib/supabase/loose";
-
-// Dynamic table names → sanctioned LooseSupabase escape hatch (RLS stays the
-// authz boundary), same contract as `countWhere`. No raw `any`.
-type AnyDB = LooseSupabase;
 
 /** All `course_assignments.id` for this org (the LMS enrollment set). */
-async function orgAssignmentIds(db: AnyDB, orgId: string): Promise<string[] | null> {
-  const { data, error } = await db
-    .from("course_assignments")
-    .select("id")
-    .eq("org_id", orgId);
+async function orgAssignmentIds(db: DB, orgId: string): Promise<string[] | null> {
+  const { data, error } = await db.from("course_assignments").select("id").eq("org_id", orgId);
   if (error) return null;
-  return (data ?? []).map((r: { id: string }) => r.id);
+  return (data ?? []).map((r) => r.id);
 }
 
 /** Completion rows for the org, joined via the assignment id set. */
 async function orgCompletions(
-  db: AnyDB,
+  db: DB,
   orgId: string,
-): Promise<Array<{ assignment_id: string | null; score_pct: number | null; passed: boolean | null; completed_at: string | null }> | null> {
+): Promise<Array<{
+  assignment_id: string | null;
+  score_pct: number | null;
+  passed: boolean | null;
+  completed_at: string | null;
+}> | null> {
   const ids = await orgAssignmentIds(db, orgId);
   if (ids === null) return null;
   if (ids.length === 0) return [];
@@ -45,11 +42,11 @@ const DAY_MS = 1000 * 60 * 60 * 24;
 
 /** course_completion | pct | transcript,syllabus — % of enrolled learners who have a completion row. */
 const course_completion: MetricResolver = async (ctx) => {
-  const ids = await orgAssignmentIds(ctx.db as unknown as AnyDB, ctx.orgId);
+  const ids = await orgAssignmentIds(ctx.db, ctx.orgId);
   if (ids === null) return null;
   const enrolled = ids.length;
   if (enrolled === 0) return 0;
-  const completions = await orgCompletions(ctx.db as unknown as AnyDB, ctx.orgId);
+  const completions = await orgCompletions(ctx.db, ctx.orgId);
   if (completions === null) return null;
   const completedAssignments = new Set(
     completions.filter((c) => c.completed_at != null && c.assignment_id != null).map((c) => c.assignment_id),
@@ -59,7 +56,7 @@ const course_completion: MetricResolver = async (ctx) => {
 
 /** pass_rate | pct | transcript — passed / total completions. */
 const pass_rate: MetricResolver = async (ctx) => {
-  const completions = await orgCompletions(ctx.db as unknown as AnyDB, ctx.orgId);
+  const completions = await orgCompletions(ctx.db, ctx.orgId);
   if (completions === null) return null;
   if (completions.length === 0) return 0;
   const passed = completions.filter((c) => c.passed === true).length;
@@ -72,7 +69,7 @@ const ceus_awarded: MetricResolver = NOT_COMPUTED;
 /** active_certs | int | certificate — credentials not past their expiry (null expiry = non-expiring). */
 const active_certs: MetricResolver = async (ctx) => {
   const today = new Date().toISOString().slice(0, 10);
-  const { count, error } = await (ctx.db as unknown as AnyDB)
+  const { count, error } = await ctx.db
     .from("credentials")
     .select("*", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -86,7 +83,7 @@ const expiring_certs: MetricResolver = async (ctx) => {
   const now = new Date();
   const today = now.toISOString().slice(0, 10);
   const horizon = new Date(now.getTime() + 90 * DAY_MS).toISOString().slice(0, 10);
-  const { count, error } = await (ctx.db as unknown as AnyDB)
+  const { count, error } = await ctx.db
     .from("credentials")
     .select("*", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -103,7 +100,7 @@ const expiring_certs: MetricResolver = async (ctx) => {
  * per-role "required training" matrix, so we measure currency of held creds.
  */
 const compliance_rate: MetricResolver = async (ctx) => {
-  const db = ctx.db as unknown as AnyDB;
+  const db = ctx.db;
   const { count: total, error: tErr } = await db
     .from("certification_holders")
     .select("*", { count: "exact", head: true })
@@ -125,7 +122,7 @@ const enrollment: MetricResolver = (ctx) => countWhere(ctx, "course_assignments"
 
 /** avg_quiz_score | pct | transcript — mean of completion score_pct. */
 const avg_quiz_score: MetricResolver = async (ctx) => {
-  const completions = await orgCompletions(ctx.db as unknown as AnyDB, ctx.orgId);
+  const completions = await orgCompletions(ctx.db, ctx.orgId);
   if (completions === null) return null;
   const scores = completions.map((c) => c.score_pct).filter((s): s is number => s != null);
   if (scores.length === 0) return 0;
@@ -135,7 +132,7 @@ const avg_quiz_score: MetricResolver = async (ctx) => {
 
 /** time_to_complete | days | transcript — avg (completed_at − assigned_at) across completed assignments. */
 const time_to_complete: MetricResolver = async (ctx) => {
-  const { data: assignments, error: aErr } = await (ctx.db as unknown as AnyDB)
+  const { data: assignments, error: aErr } = await ctx.db
     .from("course_assignments")
     .select("id, assigned_at")
     .eq("org_id", ctx.orgId);
@@ -143,7 +140,7 @@ const time_to_complete: MetricResolver = async (ctx) => {
   const rows = (assignments ?? []) as Array<{ id: string; assigned_at: string | null }>;
   if (rows.length === 0) return 0;
   const assignedAt = new Map(rows.map((r) => [r.id, r.assigned_at]));
-  const completions = await orgCompletions(ctx.db as unknown as AnyDB, ctx.orgId);
+  const completions = await orgCompletions(ctx.db, ctx.orgId);
   if (completions === null) return null;
   const durations: number[] = [];
   for (const c of completions) {
@@ -160,14 +157,12 @@ const time_to_complete: MetricResolver = async (ctx) => {
 
 /** learner_engagement | pct | syllabus — % of enrolled assignments with any completion attempt logged. */
 const learner_engagement: MetricResolver = async (ctx) => {
-  const ids = await orgAssignmentIds(ctx.db as unknown as AnyDB, ctx.orgId);
+  const ids = await orgAssignmentIds(ctx.db, ctx.orgId);
   if (ids === null) return null;
   if (ids.length === 0) return 0;
-  const completions = await orgCompletions(ctx.db as unknown as AnyDB, ctx.orgId);
+  const completions = await orgCompletions(ctx.db, ctx.orgId);
   if (completions === null) return null;
-  const engaged = new Set(
-    completions.filter((c) => c.assignment_id != null).map((c) => c.assignment_id),
-  );
+  const engaged = new Set(completions.filter((c) => c.assignment_id != null).map((c) => c.assignment_id));
   return Math.round((engaged.size / ids.length) * 1000) / 10;
 };
 
@@ -181,7 +176,7 @@ const content_usage: MetricResolver = (ctx) => countWhere(ctx, "kb_articles", {}
  * Capped at 100 (a referenced SKU may have since been deactivated).
  */
 const catalog_adoption: MetricResolver = async (ctx) => {
-  const db = ctx.db as unknown as AnyDB;
+  const db = ctx.db;
   const { count: available, error: aErr } = await db
     .from("master_catalog_items")
     .select("*", { count: "exact", head: true })
@@ -196,23 +191,21 @@ const catalog_adoption: MetricResolver = async (ctx) => {
     .eq("org_id", ctx.orgId)
     .not("catalog_item_id", "is", null);
   if (error) return null;
-  const referenced = new Set((data ?? []).map((r: { catalog_item_id: string | null }) => r.catalog_item_id));
+  const referenced = new Set((data ?? []).map((r) => r.catalog_item_id));
   return Math.min(100, Math.round((referenced.size / available) * 1000) / 10);
 };
 
 /** instructor_rating | score | syllabus — mean published course review rating (1–5) from legend_course_reviews. */
 const instructor_rating: MetricResolver = async (ctx) => {
-  const { data, error } = await (ctx.db as unknown as AnyDB)
+  const { data, error } = await ctx.db
     .from("legend_course_reviews")
     .select("rating")
     .eq("org_id", ctx.orgId)
     .not("rating", "is", null);
   if (error) return null;
-  const ratings = (data ?? [])
-    .map((r: { rating: number | null }) => r.rating)
-    .filter((n: number | null): n is number => n != null);
+  const ratings = (data ?? []).map((r) => r.rating).filter((n): n is number => n != null);
   if (ratings.length === 0) return 0;
-  return Math.round((ratings.reduce((a: number, b: number) => a + b, 0) / ratings.length) * 10) / 10;
+  return Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10;
 };
 
 /** onboarding_ramp | days | transcript,certificate — no onboarding-start anchor distinct from assignment in schema. */

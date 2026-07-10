@@ -96,7 +96,8 @@ export async function resolveMetrics(orgId: string, ids: string[]): Promise<Metr
 
   const cached = unstable_cache(
     async () => {
-      const db = createServiceClient() as unknown as ResolverCtx["db"];
+      // Same createServerClient<Database> shape as the request client — no cast needed (HP-16).
+      const db = createServiceClient();
       return computeMetrics(db, orgId, sortedIds);
     },
     ["reports", "metrics", orgId, sortedIds.join(",")],

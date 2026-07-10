@@ -143,24 +143,34 @@ export async function runCpm(fd: FormData): Promise<void> {
 
   if ("error" in result) return;
 
-  // Update each activity row with its computed values. Sequential to keep
-  // the action self-contained; for large schedules a future revision can
-  // batch via RPC.
-  for (const a of result.activities) {
-    const { error } = await supabase
-      .from("schedule_activities")
-      .update({
-        early_start: a.early_start,
-        early_finish: a.early_finish,
-        late_start: a.late_start,
-        late_finish: a.late_finish,
-        total_float_days: a.total_float_days,
-        free_float_days: a.free_float_days,
-        is_critical: a.is_critical,
-      })
-      .eq("id", a.id)
-      .eq("org_id", session.orgId);
-    if (error) throw new Error(`Could not update schedule activity: ${error.message}`);
+  // Update each activity row with its computed values. Batched Promise.all
+  // (HP-11): each row still gets its own UPDATE (per-row computed values,
+  // no RPC/migration), but they fly CHUNK-at-a-time instead of one
+  // sequential round trip per activity — a 1,000-activity baseline drops
+  // from 1,000 serial round trips to ~40 batched ones.
+  const CPM_WRITE_CHUNK = 25;
+  for (let i = 0; i < result.activities.length; i += CPM_WRITE_CHUNK) {
+    const chunk = result.activities.slice(i, i + CPM_WRITE_CHUNK);
+    const outcomes = await Promise.all(
+      chunk.map((a) =>
+        supabase
+          .from("schedule_activities")
+          .update({
+            early_start: a.early_start,
+            early_finish: a.early_finish,
+            late_start: a.late_start,
+            late_finish: a.late_finish,
+            total_float_days: a.total_float_days,
+            free_float_days: a.free_float_days,
+            is_critical: a.is_critical,
+          })
+          .eq("id", a.id)
+          .eq("org_id", session.orgId),
+      ),
+    );
+    for (const { error } of outcomes as Array<{ error: { message: string } | null }>) {
+      if (error) throw new Error(`Could not update schedule activity: ${error.message}`);
+    }
   }
 
   revalidatePath(`/studio/schedule/baselines/${parsed.data.baseline_id}`);

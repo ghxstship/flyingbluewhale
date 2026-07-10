@@ -22,8 +22,14 @@ export async function generateOrgWipSnapshots(): Promise<void> {
     .is("deleted_at", null);
   type Row = { id: string };
   const list = (projects ?? []) as Row[];
-  for (const p of list) {
-    await supabase.rpc("generate_wip_snapshot_for_project", { p_project_id: p.id });
+  // Batched Promise.all (HP-11): the RPC is per-project by contract (and
+  // idempotent via its (project_id, snapshot_date) UPSERT), so calls are
+  // independent — run them CHUNK-at-a-time instead of one sequential
+  // round trip per project in the org.
+  const WIP_RPC_CHUNK = 10;
+  for (let i = 0; i < list.length; i += WIP_RPC_CHUNK) {
+    const chunk = list.slice(i, i + WIP_RPC_CHUNK);
+    await Promise.all(chunk.map((p) => supabase.rpc("generate_wip_snapshot_for_project", { p_project_id: p.id })));
   }
 
   revalidatePath("/studio/finance/wip");

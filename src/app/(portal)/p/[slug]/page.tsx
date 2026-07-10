@@ -67,16 +67,19 @@ export default async function PortalGateway({
   params: Promise<{ slug: string }>;
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { slug } = await params;
-  const { t } = await getRequestT();
-
-  const loaded = await loadProject(slug);
-  if (!loaded) notFound();
-  const { project, venue } = loaded;
+  // Request context in one parallel round, then the project + session reads
+  // (independent of each other) in a second (HP-12).
+  const [{ slug }, { t }, sp] = await Promise.all([
+    params,
+    getRequestT(),
+    searchParams ? searchParams : Promise.resolve({} as { [key: string]: string | string[] | undefined }),
+  ]);
 
   // Logged-out visitors get the public event lobby (the GVTEWAY growth/share
   // surface). Authenticated collaborators get the persona gateway.
-  const session = await getSession();
+  const [loaded, session] = await Promise.all([loadProject(slug), getSession()]);
+  if (!loaded) notFound();
+  const { project, venue } = loaded;
   if (!session) {
     const lineup = hasSupabase && project.id ? await listSetTimesForProject(await createClient(), project.id) : [];
     return (
@@ -95,7 +98,6 @@ export default async function PortalGateway({
   // Viewers whose session persona maps to a portal sub-persona go straight
   // to their home — the picker grid is an operator/preview affordance
   // (`?view=all` keeps it reachable for anyone).
-  const sp = searchParams ? await searchParams : {};
   const showAll = sp?.view === "all";
   const mine = portalPersonaForSession(session.persona);
   if (mine && !showAll) redirect(`/p/${slug}/${mine}`);

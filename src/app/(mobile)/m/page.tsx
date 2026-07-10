@@ -28,40 +28,42 @@ export default async function MobileHome() {
   const fmt = await getRequestFormatters();
   const nowIso = new Date().toISOString();
 
-  // Open tasks assigned to me (anything not yet done).
-  const { count: openTasks } = await supabase
-    .from("tasks")
-    .select("id", { count: "exact", head: true })
-    .eq("org_id", session.orgId)
-    .eq("assigned_to", session.userId)
-    .neq("task_state", "done");
-
-  // My assignments (advancing — tickets/credentials/etc.).
-  const { count: myAdvances } = await supabase
-    .from("assignments")
-    .select("id", { count: "exact", head: true })
-    .eq("org_id", session.orgId)
-    .eq("party_user_id", session.userId)
-    .is("deleted_at", null);
-
-  // Recent chat messages (last 7 days) as the "unread" proxy — no per-user
-  // read cursor join here; the inbox surface owns precise unread accounting.
+  // The four dashboard reads are independent of each other — run them in
+  // one parallel round (HP-12); this is the field PWA home, often on a bad
+  // network, so serial waterfalls hurt the most here.
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const { count: unread } = await supabase
-    .from("chat_messages")
-    .select("id", { count: "exact", head: true })
-    .eq("org_id", session.orgId)
-    .gte("created_at", sevenDaysAgo);
-
-  // Next upcoming event.
-  const { data: ev } = await supabase
-    .from("events")
-    .select("id, name, starts_at, event_state")
-    .eq("org_id", session.orgId)
-    .gte("starts_at", nowIso)
-    .order("starts_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }] = await Promise.all([
+    // Open tasks assigned to me (anything not yet done).
+    supabase
+      .from("tasks")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("assigned_to", session.userId)
+      .neq("task_state", "done"),
+    // My assignments (advancing — tickets/credentials/etc.).
+    supabase
+      .from("assignments")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("party_user_id", session.userId)
+      .is("deleted_at", null),
+    // Recent chat messages (last 7 days) as the "unread" proxy — no per-user
+    // read cursor join here; the inbox surface owns precise unread accounting.
+    supabase
+      .from("chat_messages")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .gte("created_at", sevenDaysAgo),
+    // Next upcoming event.
+    supabase
+      .from("events")
+      .select("id, name, starts_at, event_state")
+      .eq("org_id", session.orgId)
+      .gte("starts_at", nowIso)
+      .order("starts_at", { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+  ]);
 
   const nextShift: HomeData["nextShift"] = ev
     ? {

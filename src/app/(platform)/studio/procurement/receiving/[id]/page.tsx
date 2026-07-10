@@ -39,21 +39,38 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .maybeSingle();
   if (!receipt) notFound();
 
-  // PO header for context.
-  const { data: po } = await supabase
-    .from("purchase_orders")
-    .select("id, number, title, amount_cents, currency, po_state, vendor_id")
-    .eq("id", receipt.po_id)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
-
-  // Line items belonging to this receipt's PO — the pickable lines for the
-  // add-line form, and the join source for receipt-line descriptions.
-  const { data: poLineData } = await supabase
-    .from("po_line_items")
-    .select("id, description, quantity, unit_price_cents, currency")
-    .eq("purchase_order_id", receipt.po_id)
-    .order("position");
+  // Everything below depends only on the receipt row — the PO header,
+  // its line items, the receipt lines, and the match history are mutually
+  // independent, so they run as one parallel round (HP-12). Only the
+  // candidate-invoice query truly chains (it needs po.vendor_id).
+  const [{ data: po }, { data: poLineData }, { data: lineData }, { data: matchData }] = await Promise.all([
+    // PO header for context.
+    supabase
+      .from("purchase_orders")
+      .select("id, number, title, amount_cents, currency, po_state, vendor_id")
+      .eq("id", receipt.po_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle(),
+    // Line items belonging to this receipt's PO — the pickable lines for the
+    // add-line form, and the join source for receipt-line descriptions.
+    supabase
+      .from("po_line_items")
+      .select("id, description, quantity, unit_price_cents, currency")
+      .eq("purchase_order_id", receipt.po_id)
+      .order("position"),
+    // Receipt lines (no org_id — scoped via receipt_id, RLS is the boundary).
+    supabase
+      .from("goods_receipt_lines")
+      .select("id, po_line_item_id, qty_received, qty_rejected, notes")
+      .eq("receipt_id", receipt.id),
+    // 3-way match rows for the PO.
+    supabase
+      .from("po_invoice_matches")
+      .select("id, match_status, variance_minor, resolved_at, created_at, invoice:invoice_id(id, number)")
+      .eq("org_id", session.orgId)
+      .eq("po_id", receipt.po_id)
+      .order("created_at", { ascending: false }),
+  ]);
   const poLines = (poLineData ?? []) as {
     id: string;
     description: string;
@@ -63,11 +80,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   }[];
   const poLineById = new Map(poLines.map((l) => [l.id, l]));
 
-  // Receipt lines (no org_id — scoped via receipt_id, RLS is the boundary).
-  const { data: lineData } = await supabase
-    .from("goods_receipt_lines")
-    .select("id, po_line_item_id, qty_received, qty_rejected, notes")
-    .eq("receipt_id", receipt.id);
   const lines = (lineData ?? []) as {
     id: string;
     po_line_item_id: string;
@@ -76,13 +88,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     notes: string | null;
   }[];
 
-  // 3-way match rows for the PO.
-  const { data: matchData } = await supabase
-    .from("po_invoice_matches")
-    .select("id, match_status, variance_minor, resolved_at, created_at, invoice:invoice_id(id, number)")
-    .eq("org_id", session.orgId)
-    .eq("po_id", receipt.po_id)
-    .order("created_at", { ascending: false });
   const matches = (matchData ?? []) as unknown as {
     id: string;
     match_status: string;

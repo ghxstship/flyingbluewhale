@@ -70,14 +70,14 @@ export default async function GuidePage({
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const { slug } = await params;
-  const sp = await searchParams;
-  const { t } = await getRequestT();
+  // Request context in one parallel round (HP-12)…
+  const [{ slug }, sp, { t }] = await Promise.all([params, searchParams, getRequestT()]);
   if (!hasSupabase) notFound();
-  const project = await projectIdFromSlug(slug);
+  // …then the project, session, and cookie jar — mutually independent —
+  // in a second round. Only the token verify (needs project.id) and the
+  // guide fetch (needs the resolved persona) genuinely chain.
+  const [project, session, cookieStore] = await Promise.all([projectIdFromSlug(slug), getSession(), cookies()]);
   if (!project) notFound();
-
-  const session = await getSession();
   const isOrgMemberOfProject = !!session && session.orgId === project.org_id;
   const sessionPersona: GuidePersona = session ? mapSessionToGuidePersona(session.persona) : "guest";
   // No dev-mode bypass: when there's no session the viewer IS the guest
@@ -90,7 +90,6 @@ export default async function GuidePage({
   // Read the per-project access cookie up front. If present + valid, the
   // bearer has redeemed one or more codes and can view those personas
   // without auth.
-  const cookieStore = await cookies();
   const accessToken = cookieStore.get(guideCookieName(project.id))?.value ?? null;
   const verified = await verifyGuideAccessToken(accessToken, project.id);
   const unlockedPersonas = new Set<GuidePersona>(verified?.personas ?? []);

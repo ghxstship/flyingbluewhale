@@ -39,23 +39,21 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   const session = await requireSession();
   const { t } = await getRequestT();
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("talent_offers")
-    .select("*")
-    .eq("id", offerId)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
+  // The settlement lookup keys on the same offerId the offer read does —
+  // independent queries, one parallel round (HP-12).
+  const [{ data }, settlementResp] = await Promise.all([
+    supabase.from("talent_offers").select("*").eq("id", offerId).eq("org_id", session.orgId).maybeSingle(),
+    supabase
+      .from("settlements")
+      .select("id, settlement_state")
+      .eq("talent_offer_id", offerId)
+      .eq("org_id", session.orgId)
+      .maybeSingle(),
+  ]);
   if (!data) return notFound();
   // Cast through unknown — the typed row's narrow type doesn't overlap
   // with the local Deal alias because Deal is a hand-written subset.
   const d = data as unknown as Deal;
-
-  const settlementResp = await supabase
-    .from("settlements")
-    .select("id, settlement_state")
-    .eq("talent_offer_id", d.id)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
   const settlement = settlementResp.data as { id: string; settlement_state: string } | null;
 
   // Break-even compute. Estimate total expenses + guarantee, divide by avg

@@ -54,6 +54,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
     supabase
       .from("invoices")
       .select("amount_cents, invoice_state")
+      .is("deleted_at", null)
       .eq("org_id", session.orgId)
       .eq("project_id", project.id),
   ]);

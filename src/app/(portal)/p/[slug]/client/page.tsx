@@ -24,7 +24,11 @@ export default async function ClientHome({ params }: { params: Promise<{ slug: s
   // reduced to head-only counts.
   const [{ count: proposals }, { count: deliverables }, { count: openInvoices }, { data: proposalRows }] =
     await Promise.all([
-      supabase.from("proposals").select("id", { count: "exact", head: true }).eq("project_id", project.id),
+      supabase
+        .from("proposals")
+        .select("id", { count: "exact", head: true })
+        .is("deleted_at", null)
+        .eq("project_id", project.id),
       supabase
         .from("deliverables")
         .select("id", { count: "exact", head: true })
@@ -38,7 +42,7 @@ export default async function ClientHome({ params }: { params: Promise<{ slug: s
         .eq("project_id", project.id)
         .is("deleted_at", null)
         .in("invoice_state", ["sent", "overdue"]),
-      supabase.from("proposals").select("id").eq("project_id", project.id).limit(200),
+      supabase.from("proposals").select("id").is("deleted_at", null).eq("project_id", project.id).limit(200),
     ]);
   const proposalIds = ((proposalRows ?? []) as Array<{ id: string }>).map((p) => p.id);
   const { count: pendingApprovals } = proposalIds.length

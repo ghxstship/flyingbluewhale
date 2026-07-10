@@ -116,13 +116,13 @@ export async function getCartLines(cartId: string): Promise<CartLineDisplay[]> {
   const productIds = [...new Set(rows.map((r) => r.product_id))];
   const variantIds = [...new Set(rows.map((r) => r.variant_id).filter(Boolean))] as string[];
 
-  const { data: products } = await supabase.from("store_products").select("*").in("id", productIds);
+  const { data: products } = await supabase.from("store_products").select("*").is("deleted_at", null).in("id", productIds);
   const productList = (products ?? []) as StoreProduct[];
   const productMap = new Map<string, StoreProduct>(productList.map((p) => [p.id, p]));
 
   const variantMap = new Map<string, StoreProductVariant>();
   if (variantIds.length > 0) {
-    const { data: variants } = await supabase.from("store_product_variants").select("*").in("id", variantIds);
+    const { data: variants } = await supabase.from("store_product_variants").select("*").is("deleted_at", null).in("id", variantIds);
     const variantList = (variants ?? []) as StoreProductVariant[];
     for (const v of variantList) variantMap.set(v.id, v);
   }

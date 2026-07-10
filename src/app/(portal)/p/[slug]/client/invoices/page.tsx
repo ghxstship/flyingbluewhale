@@ -22,6 +22,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         await supabase
           .from("invoices")
           .select("*")
+          .is("deleted_at", null)
           // Clients see outbound (AR) billing only — vendor payables that
           // share the merged invoices store are not theirs to browse.
           .eq("source", "ar")

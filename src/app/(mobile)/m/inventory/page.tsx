@@ -58,6 +58,7 @@ export default async function InventoryPage() {
       .from("assets")
       .select("id, asset_kind, display_name, state, serial, asset_tag")
       .eq("org_id", session.orgId)
+      .is("deleted_at", null)
       .is("retired_at", null)
       .order("display_name", { ascending: true })
       .limit(2000),

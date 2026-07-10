@@ -21,6 +21,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         await supabase
           .from("proposals")
           .select("*")
+          .is("deleted_at", null)
           .eq("project_id", project.id)
           .order("created_at", { ascending: false })
       ).data as unknown as Proposal[]) ?? [])

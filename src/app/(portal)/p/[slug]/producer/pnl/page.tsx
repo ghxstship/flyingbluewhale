@@ -54,6 +54,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
     supabase
       .from("invoices")
       .select("amount_cents, invoice_state")
+      .is("deleted_at", null)
       .eq("org_id", session.orgId)
       .eq("project_id", project.id),
   ]);

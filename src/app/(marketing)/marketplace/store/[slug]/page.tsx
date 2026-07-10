@@ -18,6 +18,7 @@ async function fetchProduct(slug: string): Promise<{ product: StoreProduct; vari
   const { data } = await supabase
     .from("store_products")
     .select("*")
+    .is("deleted_at", null)
     .eq("slug", slug)
     .eq("product_state", "published")
     .maybeSingle();
@@ -26,6 +27,7 @@ async function fetchProduct(slug: string): Promise<{ product: StoreProduct; vari
   const { data: vData } = await supabase
     .from("store_product_variants")
     .select("*")
+    .is("deleted_at", null)
     .eq("product_id", product.id)
     .order("sort_order", { ascending: true });
   return { product, variants: (vData ?? []) as StoreProductVariant[] };

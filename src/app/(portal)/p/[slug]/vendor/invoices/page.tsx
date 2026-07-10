@@ -20,6 +20,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     supabase
       .from("invoices")
       .select("id, number, title, amount_cents, invoice_state, issued_at, due_at")
+      .is("deleted_at", null)
       .eq("org_id", session.orgId)
       .eq("created_by", session.userId)
       .order("issued_at", { ascending: false })
@@ -28,6 +29,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     supabase
       .from("purchase_orders")
       .select("id, number, title")
+      .is("deleted_at", null)
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false })
       .limit(50),

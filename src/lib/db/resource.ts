@@ -157,6 +157,53 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
   "video_call_participants",
 ]);
 
+/** Options for {@link fromScoped}. */
+export type FromScopedOpts = {
+  /**
+   * Include soft-deleted rows. Explicit opt-out for Trash/restore/admin
+   * surfaces — everything else gets the `deleted_at IS NULL` gate for free.
+   */
+  withArchived?: boolean;
+};
+
+/**
+ * HP-10 — the soft-delete READ chokepoint for raw PostgREST chains.
+ *
+ * The audit found 400+ raw `.from("<soft-deletable>").select(...)` chains
+ * that bypass the guard baked into listOrgScoped/getOrgScoped, so archived
+ * rows leaked into live lists (portal invoices, P&L rollups, the public
+ * store). Route raw reads through this helper instead: it pre-applies
+ * `.is("deleted_at", null)` whenever the table is in
+ * {@link SOFT_DELETABLE_TABLES}, and is a transparent pass-through for
+ * everything else. Pass `{ withArchived: true }` for Trash/restore views.
+ *
+ * Read-oriented by design — only `select` is exposed, so writes keep going
+ * through the typed client / server actions.
+ *
+ * The companion canon suite `src/lib/db/soft-delete-canon.test.ts` flags
+ * new raw `.from()` select chains on soft-deletable tables that carry
+ * neither an inline `deleted_at` filter nor this chokepoint.
+ */
+export function fromScoped(
+  client: unknown,
+  table: string,
+  opts: FromScopedOpts = {},
+): {
+  select: (
+    columns?: string,
+    selectOpts?: { count?: "exact" | "planned" | "estimated"; head?: boolean },
+  ) => ReturnType<ReturnType<LooseSupabase["from"]>["select"]>;
+} {
+  const builder = (client as LooseSupabase).from(table);
+  const guarded = SOFT_DELETABLE_TABLES.has(table) && !opts.withArchived;
+  return {
+    select: (columns = "*", selectOpts) => {
+      const q = builder.select(columns, selectOpts);
+      return guarded ? q.is("deleted_at", null) : q;
+    },
+  };
+}
+
 async function anyFrom(t: string) {
   const supabase = await createClient();
   // Dynamic table name → typed client's `from()` collapses to `never`.

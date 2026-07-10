@@ -29,6 +29,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   const { data } = await supabase
     .from("invoices")
     .select("id,number,title,amount_cents,invoice_state,issued_at,due_at,paid_at")
+    .is("deleted_at", null)
     .eq("org_id", session.orgId)
     .eq("client_id", clientId)
     .order("issued_at", { ascending: false, nullsFirst: false });

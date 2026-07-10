@@ -27,6 +27,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   const { data } = await supabase
     .from("proposals")
     .select("id,title,amount_cents,proposal_state,sent_at,signed_at")
+    .is("deleted_at", null)
     .eq("org_id", session.orgId)
     .eq("client_id", clientId)
     .order("created_at", { ascending: false });

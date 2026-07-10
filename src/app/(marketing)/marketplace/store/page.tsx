@@ -27,6 +27,7 @@ export default async function StorePage() {
     const { data } = await supabase
       .from("store_products")
       .select("*")
+      .is("deleted_at", null)
       .eq("product_state", "published")
       .order("published_at", { ascending: false })
       .limit(60);

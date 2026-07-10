@@ -36,11 +36,13 @@ export default async function Page() {
     supabase
       .from("job_postings")
       .select("id", { count: "exact", head: true })
+      .is("deleted_at", null)
       .eq("org_id", session.orgId)
       .eq("job_posting_phase", "published"),
     supabase
       .from("open_calls")
       .select("id", { count: "exact", head: true })
+      .is("deleted_at", null)
       .eq("org_id", session.orgId)
       .eq("open_call_phase", "published"),
     supabase

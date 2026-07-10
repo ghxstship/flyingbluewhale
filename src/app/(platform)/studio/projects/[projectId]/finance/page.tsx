@@ -65,6 +65,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       supabase
         .from("invoices")
         .select("id, number, title, amount_cents, invoice_state, due_at")
+        .is("deleted_at", null)
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("created_at", { ascending: false }),
@@ -77,6 +78,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       supabase
         .from("purchase_orders")
         .select("id, number, title, amount_cents, po_state, created_at")
+        .is("deleted_at", null)
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("created_at", { ascending: false }),

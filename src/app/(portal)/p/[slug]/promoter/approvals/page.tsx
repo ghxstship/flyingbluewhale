@@ -43,7 +43,12 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
   const project = await projectIdFromSlug(slug);
 
   const { data: proposals } = project
-    ? await supabase.from("proposals").select("id, title").eq("org_id", session.orgId).eq("project_id", project.id)
+    ? await supabase
+        .from("proposals")
+        .select("id, title")
+        .is("deleted_at", null)
+        .eq("org_id", session.orgId)
+        .eq("project_id", project.id)
     : { data: [] };
   const propMap = new Map(((proposals ?? []) as Array<{ id: string; title: string }>).map((p) => [p.id, p.title]));
   const propIds = Array.from(propMap.keys());

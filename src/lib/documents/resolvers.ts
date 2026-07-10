@@ -1,5 +1,6 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
+import { effectiveLineTotal } from "@/lib/db/estimates";
 import type { OrgBrand, ClientBrand } from "@/components/documents/DocEngine";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { partitionBlocks } from "@/lib/proposals/validate";
@@ -112,7 +113,7 @@ const resolvers: Record<string, DocResolver> = {
     const [{ data: lines }, client, { data: org }] = await Promise.all([
       db
         .from("estimate_lines")
-        .select("description, line_total, ordinal")
+        .select("description, line_total, ordinal, quantity, unit_cost, waste_factor, markup_pct")
         .eq("estimate_id", id)
         .order("ordinal", { ascending: true }),
       clientForProject(db, est.project_id),
@@ -120,14 +121,26 @@ const resolvers: Record<string, DocResolver> = {
     ]);
     // estimate_lines.line_total / estimates.total_with_markup are numeric(14,2)
     // MAJOR units (dollars); money() expects minor units (cents) — convert.
+    // HP-14: neither column has a maintaining writer, so the document total
+    // is derived from the line rows when they exist (effectiveLineTotal
+    // falls back to base × (1 + markup) for never-written line_total); the
+    // stored header only stands in for a line-less estimate.
     const cur = org?.default_currency ?? undefined;
     const toCents = (n: number | string | null | undefined) => Math.round(Number(n ?? 0) * 100);
+    const lineRows = (lines ?? []).map((l) => ({
+      desc: l.description,
+      totalDollars: effectiveLineTotal({ estimate_id: id, ...l }),
+    }));
+    const totalDollars =
+      lineRows.length > 0
+        ? lineRows.reduce((s, l) => s + l.totalDollars, 0)
+        : Number(est.total_with_markup ?? 0);
     return {
       quote: {
         number: est.name,
         validUntil: date(est.baseline_at),
-        lines: (lines ?? []).map((l) => ({ desc: l.description, amount: money(toCents(l.line_total), cur) })),
-        total: money(toCents(est.total_with_markup), cur),
+        lines: lineRows.map((l) => ({ desc: l.desc, amount: money(toCents(l.totalDollars), cur) })),
+        total: money(toCents(totalDollars), cur),
       },
       client: { name: client?.name },
     };

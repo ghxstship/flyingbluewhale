@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { computeEstimateTotals } from "@/lib/db/estimates";
 import { emitAudit } from "@/lib/audit";
 
 export type ConvertEstimateState = { error?: string } | null;
@@ -49,9 +50,18 @@ export async function convertEstimateToBudgetAction(estimateId: string): Promise
   }
 
   // Estimate totals are stored in dollars (see the detail page's
-  // fmtMoney); budgets are cents.
-  const amountCents = Math.round(Number(estimate.total_with_markup) * 100);
-  const subtotalCents = Math.round(Number(estimate.subtotal_cost) * 100);
+  // fmtMoney); budgets are cents. HP-14: the stored header totals have no
+  // maintaining writer — derive the converted amounts from live
+  // estimate_lines (the stored header stands in when the estimate has no
+  // lines).
+  const totals = await computeEstimateTotals(supabase, session.orgId, [estimate]);
+  const money = totals.get(estimateId) ?? {
+    subtotalCost: Number(estimate.subtotal_cost),
+    totalWithMarkup: Number(estimate.total_with_markup),
+    lineCount: 0,
+  };
+  const amountCents = Math.round(money.totalWithMarkup * 100);
+  const subtotalCents = Math.round(money.subtotalCost * 100);
 
   const { data: budget, error: insertError } = await supabase
     .from("budgets")

@@ -17,7 +17,6 @@ type Campaign = {
   campaign_state: string;
   starts_on: string | null;
   ends_on: string | null;
-  spent_cents: number | null;
 };
 
 export default async function PromoterMarketing({ params }: { params: Promise<{ slug: string }> }) {
@@ -37,9 +36,14 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
   // campaigns are org-scoped — no project_id column. The promoter
   // typically only has visibility into a single project's org via
   // their share-link, so all active campaigns are relevant.
+  // HP-14: campaigns.spent_cents is a dead denorm — nothing in the app or DB
+  // ever writes it (the sync_campaign_spent() its column comment names does
+  // not exist), so it is frozen at 0. Rendering it as money showed promoters
+  // a fake $0.00 spend; the column is no longer read and the Spend cell says
+  // "Not tracked" until a real spend source lands.
   const { data } = await supabase
     .from("campaigns")
-    .select("id, name, channel, campaign_state, starts_on, ends_on, spent_cents")
+    .select("id, name, channel, campaign_state, starts_on, ends_on")
     .eq("org_id", session.orgId)
     .order("starts_on", { ascending: true, nullsFirst: false });
   const rows = (data ?? []) as Campaign[];
@@ -89,8 +93,8 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
                     {c.starts_on ? fmt.date(c.starts_on) : "—"}
                     {c.ends_on ? ` → ${fmt.date(c.ends_on)}` : ""}
                   </td>
-                  <td className="font-mono text-xs">
-                    {c.spent_cents != null ? fmt.money(c.spent_cents, "USD") : "—"}
+                  <td className="text-xs text-[var(--p-text-2)]">
+                    {t("p.promoter.marketing.spendNotTracked", undefined, "Not tracked")}
                   </td>
                   <td>
                     <Badge

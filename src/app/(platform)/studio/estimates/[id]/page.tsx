@@ -9,6 +9,7 @@ import { RecordActionButton } from "@/components/RecordActionButton";
 import { convertEstimateToBudgetAction } from "../actions";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { computeEstimateTotals } from "@/lib/db/estimates";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo, toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
@@ -28,13 +29,23 @@ export default async function EstimateDetail({ params }: { params: Promise<{ id:
 
   let projectName: string | null = null;
   const supabase = (await createClient()) as unknown as LooseSupabase;
-  const { data: project } = await supabase
-    .from("projects")
-    .select("name")
-    .eq("id", estimate.project_id)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
+  const [{ data: project }, totals] = await Promise.all([
+    supabase
+      .from("projects")
+      .select("name")
+      .eq("id", estimate.project_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle(),
+    // HP-14: subtotal_cost / total_with_markup have no maintaining writer —
+    // derive the displayed money from live estimate_lines.
+    computeEstimateTotals(supabase, session.orgId, [estimate]),
+  ]);
   projectName = (project as { name: string | null } | null)?.name ?? null;
+  const money = totals.get(id) ?? {
+    subtotalCost: Number(estimate.subtotal_cost),
+    totalWithMarkup: Number(estimate.total_with_markup),
+    lineCount: 0,
+  };
 
   function fmtMoney(n: number): string {
     return fmt.money(Math.round(n * 100));
@@ -93,10 +104,10 @@ export default async function EstimateDetail({ params }: { params: Promise<{ id:
             {`${(Number(estimate.default_waste_factor) * 100).toFixed(1)}%`}
           </Field>
           <Field label={t("console.estimates.detail.field.subtotal", undefined, "Subtotal")}>
-            {fmtMoney(Number(estimate.subtotal_cost))}
+            {fmtMoney(money.subtotalCost)}
           </Field>
           <Field label={t("console.estimates.detail.field.total", undefined, "Total with markup")}>
-            {fmtMoney(Number(estimate.total_with_markup))}
+            {fmtMoney(money.totalWithMarkup)}
           </Field>
           <Field label={t("console.estimates.detail.field.created", undefined, "Created")}>
             {timeAgo(estimate.created_at)}

@@ -49,8 +49,11 @@ export default async function Page({
   const total = result.totalCount;
 
   const live = rows.filter((r) => r.campaign_state === "live").length;
+  // HP-14: campaigns.spent_cents has no writer anywhere (no trigger, no app
+  // code — the sync_campaign_spent() its column comment names does not
+  // exist), so every row is frozen at 0. Rendering it as "spent" money was
+  // dishonest; the header and column now show budget only.
   const totalBudget = rows.reduce((s, r) => s + (r.budget_cents ?? 0), 0);
-  const totalSpent = rows.reduce((s, r) => s + (r.spent_cents ?? 0), 0);
 
   const campaignNoun = t(
     total === 1 ? "console.campaigns.nounSingular" : "console.campaigns.nounPlural",
@@ -58,15 +61,14 @@ export default async function Page({
     total === 1 ? "Campaign" : "Campaigns",
   );
   const liveLabel = t("console.campaigns.liveLabel", undefined, "Live");
-  const ofLabel = t("console.campaigns.ofLabel", undefined, "of");
-  const spentLabel = t("console.campaigns.spentLabel", undefined, "Spent");
+  const budgetedLabel = t("console.campaigns.budgetedLabel", undefined, "Budgeted");
 
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.campaigns.eyebrow", undefined, "Workspace")}
         title={t("console.campaigns.title", undefined, "Campaigns")}
-        subtitle={`${total} ${campaignNoun} · ${live} ${liveLabel} · ${formatMoney(totalSpent)} ${ofLabel} ${formatMoney(totalBudget)} ${spentLabel}`}
+        subtitle={`${total} ${campaignNoun} · ${live} ${liveLabel} · ${formatMoney(totalBudget)} ${budgetedLabel}`}
         action={
           <Button href="/studio/campaigns/new" size="sm">
             {t("console.campaigns.newCampaign", undefined, "+ New Campaign")}
@@ -121,9 +123,9 @@ export default async function Page({
             {
               key: "budget",
               header: t("console.campaigns.columns.budget", undefined, "Budget"),
-              render: (r) => `${formatMoney(r.spent_cents)} / ${formatMoney(r.budget_cents)}`,
+              render: (r) => formatMoney(r.budget_cents),
               className: "font-mono text-xs",
-              accessor: (r) => Number(r.spent_cents ?? 0),
+              accessor: (r) => Number(r.budget_cents ?? 0),
             },
             {
               key: "campaign_state",

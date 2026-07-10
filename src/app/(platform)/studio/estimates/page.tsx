@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { computeEstimateTotals } from "@/lib/db/estimates";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
@@ -59,7 +60,17 @@ export default async function Page() {
     .order("created_at", { ascending: false })
     .limit(200);
 
-  const rows = (data ?? []) as unknown as Row[];
+  const stored = (data ?? []) as unknown as Row[];
+
+  // HP-14: the stored header totals have no maintaining writer — derive the
+  // displayed money from live estimate_lines (stored header only stands in
+  // when an estimate has no lines).
+  const totals = await computeEstimateTotals(supabase, session.orgId, stored);
+  const rows = stored.map((r) => ({
+    ...r,
+    subtotal_cost: totals.get(r.id)?.subtotalCost ?? Number(r.subtotal_cost),
+    total_with_markup: totals.get(r.id)?.totalWithMarkup ?? Number(r.total_with_markup),
+  }));
 
   const wonCount = rows.filter((r) => r.estimate_state === "won").length;
   const inFlightCount = rows.filter((r) => ["draft", "in_review", "submitted"].includes(r.estimate_state)).length;

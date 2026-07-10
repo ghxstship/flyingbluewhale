@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 type Row = {
   id: string;
   snapshot_date: string;
+  project_id: string | null;
   contract_amount: number;
   approved_change_orders: number;
   revised_contract_amount: number;
@@ -28,8 +29,10 @@ type Row = {
   project: { name: string | null } | null;
 };
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ scope?: string }> }) {
   const { t } = await getRequestT();
+  const { scope } = await searchParams;
+  const tourScope = scope === "tour";
   if (!hasSupabase) {
     return (
       <>
@@ -54,13 +57,31 @@ export default async function Page() {
   const { data } = await supabase
     .from("wip_snapshots")
     .select(
-      "id, snapshot_date, contract_amount, approved_change_orders, revised_contract_amount, costs_to_date, estimated_cost_to_complete, estimated_at_completion, percent_complete, earned_revenue, billed_to_date, over_under_billed, bonded, project:project_id(name)",
+      "id, snapshot_date, project_id, contract_amount, approved_change_orders, revised_contract_amount, costs_to_date, estimated_cost_to_complete, estimated_at_completion, percent_complete, earned_revenue, billed_to_date, over_under_billed, bonded, project:project_id(name)",
     )
     .eq("org_id", session.orgId)
     .order("snapshot_date", { ascending: false })
     .limit(500);
 
-  const rows = (data ?? []) as unknown as Row[];
+  let rows = (data ?? []) as unknown as Row[];
+
+  // Tour Settlement lens — money consolidates in Finance, so a tour's per-show
+  // P&L is a FILTERED view of WIP, never a parallel table. Restrict to the
+  // projects a tour-scoped booking promoted into (talent_offers.project_id where
+  // tour_id is set) — the "confirmed hold promotes into the advancing project"
+  // link (kit 26). No tour dates → an honest empty lens, not fabricated rows.
+  if (tourScope) {
+    const { data: tourOffers } = await supabase
+      .from("talent_offers")
+      .select("project_id")
+      .eq("org_id", session.orgId)
+      .not("tour_id", "is", null)
+      .not("project_id", "is", null);
+    const tourProjectIds = new Set(
+      ((tourOffers ?? []) as Array<{ project_id: string | null }>).map((o) => o.project_id).filter(Boolean),
+    );
+    rows = rows.filter((r) => tourProjectIds.has((r as unknown as { project_id?: string }).project_id ?? ""));
+  }
 
   const overBilled = rows
     .filter((r) => Number(r.over_under_billed) > 0)
@@ -78,12 +99,24 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow={t("console.finance.wip.eyebrow", undefined, "Finance")}
-        title={t("console.finance.wip.title", undefined, "WIP")}
-        subtitle={t(
-          "console.finance.wip.subtitle",
-          undefined,
-          "Work-in-progress snapshots. One row per project per snapshot date. Required for surety / bonding review.",
-        )}
+        title={
+          tourScope
+            ? t("console.finance.wip.tourTitle", undefined, "Tour Settlement")
+            : t("console.finance.wip.title", undefined, "WIP")
+        }
+        subtitle={
+          tourScope
+            ? t(
+                "console.finance.wip.tourSubtitle",
+                undefined,
+                "Per-show P&L across the run · every routed date that promoted into an advancing project.",
+              )
+            : t(
+                "console.finance.wip.subtitle",
+                undefined,
+                "Work-in-progress snapshots. One row per project per snapshot date. Required for surety / bonding review.",
+              )
+        }
         action={
           <div className="flex items-center gap-2">
             <form action={generateOrgWipSnapshots}>

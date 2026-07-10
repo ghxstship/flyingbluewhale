@@ -22,6 +22,11 @@ export const SCHEDULE_EVENT_KINDS = [
   "meeting",
   "training",
   "run_of_show",
+  // Tour Management (kit 26) run-of-show set times — the show-day arc.
+  "doors",
+  "set",
+  "changeover",
+  "curfew",
 ] as const satisfies readonly ScheduleEventKind[];
 
 export const SCHEDULE_EVENT_KIND_LABELS: Record<ScheduleEventKind, string> = {
@@ -37,6 +42,9 @@ export const SCHEDULE_EVENT_KIND_LABELS: Record<ScheduleEventKind, string> = {
   run_of_show: "Run Of Show",
   rehearsal: "Rehearsal",
   changeover: "Changeover",
+  doors: "Doors",
+  set: "Set",
+  curfew: "Curfew",
 };
 
 export function scheduleKindLabel(kind: string): string {

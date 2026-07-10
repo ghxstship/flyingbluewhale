@@ -9564,6 +9564,87 @@ export type Database = {
         }
         Relationships: []
       }
+      day_sheets: {
+        Row: {
+          city: string | null
+          created_at: string
+          created_by: string | null
+          crew_call: string | null
+          curfew: string | null
+          deleted_at: string | null
+          doors: string | null
+          headline_set: string | null
+          id: string
+          notes: string | null
+          org_id: string
+          owner_id: string | null
+          project_id: string | null
+          published_at: string | null
+          sheet_date: string | null
+          sheet_state: Database["public"]["Enums"]["day_sheet_state"]
+          tour_id: string | null
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_call?: string | null
+          curfew?: string | null
+          deleted_at?: string | null
+          doors?: string | null
+          headline_set?: string | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          owner_id?: string | null
+          project_id?: string | null
+          published_at?: string | null
+          sheet_date?: string | null
+          sheet_state?: Database["public"]["Enums"]["day_sheet_state"]
+          tour_id?: string | null
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_call?: string | null
+          curfew?: string | null
+          deleted_at?: string | null
+          doors?: string | null
+          headline_set?: string | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          owner_id?: string | null
+          project_id?: string | null
+          published_at?: string | null
+          sheet_date?: string | null
+          sheet_state?: Database["public"]["Enums"]["day_sheet_state"]
+          tour_id?: string | null
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "day_sheets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "day_sheets_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deliverable_comments: {
         Row: {
           body: string
@@ -42618,6 +42699,7 @@ export type Database = {
         | "partial"
         | "failed"
       crm_record_kind: "deal" | "lead" | "rfp"
+      day_sheet_state: "not_started" | "draft" | "published" | "updated"
       deal_type:
         | "flat"
         | "door"
@@ -43059,6 +43141,9 @@ export type Database = {
         | "run_of_show"
         | "rehearsal"
         | "changeover"
+        | "doors"
+        | "set"
+        | "curfew"
       settlement_status: "draft" | "reconciling" | "final" | "disputed"
       share_link_role: "viewer" | "commenter"
       sheet_callout_target_type:
@@ -43804,6 +43889,7 @@ export const Constants = {
       ],
       corpus_run_state: ["queued", "running", "succeeded", "partial", "failed"],
       crm_record_kind: ["deal", "lead", "rfp"],
+      day_sheet_state: ["not_started", "draft", "published", "updated"],
       deal_type: [
         "flat",
         "door",
@@ -44286,6 +44372,9 @@ export const Constants = {
         "run_of_show",
         "rehearsal",
         "changeover",
+        "doors",
+        "set",
+        "curfew",
       ],
       settlement_status: ["draft", "reconciling", "final", "disputed"],
       share_link_role: ["viewer", "commenter"],

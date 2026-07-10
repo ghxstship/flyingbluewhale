@@ -31,6 +31,9 @@ const ACTIVITY_KINDS: Array<{ value: string; label: string }> = [
   { value: "meeting", label: "Meeting" },
   { value: "training", label: "Training" },
   { value: "run_of_show", label: "Run Of Show" },
+  { value: "doors", label: "Doors" },
+  { value: "set", label: "Set" },
+  { value: "curfew", label: "Curfew" },
 ];
 
 const LOCATION_KINDS: Array<{ value: string; label: string }> = [

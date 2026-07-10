@@ -326,6 +326,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Operations"
   },
   {
+    "href": "/studio/operations/day-sheets/new",
+    "label": "New Day Sheet",
+    "group": "Operations"
+  },
+  {
     "href": "/studio/operations/incidents/new",
     "label": "New Incident",
     "group": "Operations"

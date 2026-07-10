@@ -136,7 +136,10 @@ export type ScheduleEventKind =
   | "training"
   | "run_of_show"
   | "rehearsal"
-  | "changeover";
+  | "changeover"
+  | "doors"
+  | "set"
+  | "curfew";
 /** Unified-schedule polymorphic lane kind (migration 20260706183521). */
 export type LocationKind =
   | "venue"

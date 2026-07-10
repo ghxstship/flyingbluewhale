@@ -9,6 +9,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { getRequestT } from "@/lib/i18n/request";
+import { DAY_SHEET_STATE_LABELS, DAY_SHEET_STATE_TONE, type DaySheetState } from "@/lib/db/day-sheets";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -36,6 +37,14 @@ type Leg = {
   tour_leg_index: number | null;
 };
 
+type DaySheet = {
+  id: string;
+  city: string | null;
+  venue: string | null;
+  sheet_date: string | null;
+  sheet_state: DaySheetState;
+};
+
 export default async function Page({ params }: { params: Promise<{ tourId: string }> }) {
   const { tourId } = await params;
   if (!hasSupabase) return notFound();
@@ -43,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
   const supabase = await createClient();
   const { t } = await getRequestT();
 
-  const [pnlResp, legsResp] = await Promise.all([
+  const [pnlResp, legsResp, sheetsResp] = await Promise.all([
     supabase.from("tour_p_and_l").select("*").eq("tour_id", tourId).eq("org_id", session.orgId).maybeSingle(),
     supabase
       .from("talent_offers")
@@ -51,10 +60,18 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
       .eq("tour_id", tourId)
       .eq("org_id", session.orgId)
       .order("performance_date", { ascending: true }),
+    supabase
+      .from("day_sheets")
+      .select("id, city, venue, sheet_date, sheet_state")
+      .eq("tour_id", tourId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("sheet_date", { ascending: true, nullsFirst: false }),
   ]);
   if (!pnlResp.data) return notFound();
   const pnl = pnlResp.data as PnL;
   const legs = (legsResp.data ?? []) as Leg[];
+  const sheets = (sheetsResp.data ?? []) as DaySheet[];
 
   return (
     <>
@@ -124,6 +141,46 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
                     </Badge>
                     <Link href={`/studio/bookings/deals/${l.id}`} className="text-xs text-[var(--brand-color)]">
                       {t("console.agency.tours.detail.legs.open", undefined, "Open →")}
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="surface p-5">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.agency.tours.detail.daySheets.heading", undefined, "Day Sheets")}
+            </h2>
+            <Link
+              href="/studio/operations/day-sheets/new"
+              className="text-xs text-[var(--brand-color)] underline-offset-2 hover:underline"
+            >
+              {t("console.agency.tours.detail.daySheets.new", undefined, "New Day Sheet →")}
+            </Link>
+          </div>
+          {sheets.length === 0 ? (
+            <p className="text-sm text-[var(--p-text-2)]">
+              {t(
+                "console.agency.tours.detail.daySheets.empty",
+                undefined,
+                "No day sheets yet. Compose one per date and publish it to the field crew.",
+              )}
+            </p>
+          ) : (
+            <ul className="divide-y divide-[var(--border-subtle)]">
+              {sheets.map((s) => (
+                <li key={s.id} className="flex items-center justify-between py-2 text-sm">
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">{s.sheet_date ?? "—"}</span>
+                    <span>{[s.city, s.venue].filter(Boolean).join(" · ") || "—"}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Badge variant={DAY_SHEET_STATE_TONE[s.sheet_state]}>{DAY_SHEET_STATE_LABELS[s.sheet_state]}</Badge>
+                    <Link href={`/studio/operations/day-sheets/${s.id}`} className="text-xs text-[var(--brand-color)]">
+                      {t("console.agency.tours.detail.daySheets.open", undefined, "Open →")}
                     </Link>
                   </div>
                 </li>

@@ -407,13 +407,13 @@
               ]
             },
             {
-              "path": "/studio/marketplace/calls",
+              "path": "/studio/agency/tours",
               "arch": [
-                "SHOP"
+                "LIST"
               ]
             },
             {
-              "path": "/studio/marketplace/submissions",
+              "path": "/studio/marketplace/calls",
               "arch": [
                 "SHOP"
               ]
@@ -606,6 +606,12 @@
               ]
             },
             {
+              "path": "/studio/operations/day-sheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/operations/daily-log",
               "arch": [
                 "FIELD"
@@ -771,18 +777,6 @@
               ]
             },
             {
-              "path": "/studio/marketplace/talent",
-              "arch": [
-                "SHOP"
-              ]
-            },
-            {
-              "path": "/studio/bookings",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/studio/marketplace/calls",
               "arch": [
                 "SHOP"
@@ -792,6 +786,18 @@
               "path": "/studio/marketplace/submissions",
               "arch": [
                 "SHOP"
+              ]
+            },
+            {
+              "path": "/studio/agency/tours",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/studio/agency/tours/routing",
+              "arch": [
+                "LIST"
               ]
             },
             {
@@ -1336,6 +1342,12 @@
               ]
             },
             {
+              "path": "/studio/finance/wip?scope=tour",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/studio/finance/periods",
               "arch": [
                 "LIST"
@@ -1600,12 +1612,6 @@
             },
             {
               "path": "/studio/campaigns",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/studio/agency/tours",
               "arch": [
                 "LIST"
               ]

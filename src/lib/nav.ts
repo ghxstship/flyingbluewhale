@@ -122,6 +122,7 @@ export type IconName =
   // GVTEWAY consumer nav
   | "List"
   | "UserCircle"
+  | "FileClock"
   // Kit 20 console-identity rail (verbatim prototype icons)
   | "House"
   | "SquareCheck"
@@ -311,16 +312,16 @@ export const platformNavDomain: NavGroup[] = [
         sub: "Holds & Offers · Confirmed Books Spawn The Advance Chain",
       },
       {
-        label: "Casting Calls",
+        label: "Tours",
+        href: "/studio/agency/tours",
+        icon: "Route",
+        sub: "Routed Runs Of Dates · Legs, Advancing & Settlement",
+      },
+      {
+        label: "Casting",
         href: "/studio/marketplace/calls",
         icon: "Clapperboard",
         sub: "Post A Role · Submissions Queue Per Role",
-      },
-      {
-        label: "Submissions",
-        href: "/studio/marketplace/submissions",
-        icon: "Video",
-        sub: "Applicants Against Roles · Book To Roster",
       },
     ],
   },
@@ -450,6 +451,12 @@ export const platformNavDomain: NavGroup[] = [
         sub: "Unified Ops Timeline · Crew · Fleet · Spaces",
       },
       { label: "Tasks", href: "/studio/tasks", icon: "ListChecks", sub: "Phase × Department Work Items" },
+      {
+        label: "Day Sheets",
+        href: "/studio/operations/day-sheets",
+        icon: "FileClock",
+        sub: "One Composed Page Per Date · Publish To Field",
+      },
       { label: "Daily Log", href: "/studio/operations/daily-log", icon: "ClipboardList", sub: "The Signed Site Diary" },
       { label: "Transport", href: "/studio/logistics/freight", icon: "Truck", sub: "Freight & Ground Movement" },
       {
@@ -519,13 +526,24 @@ export const platformTabs: PlatformTabFamily[] = [
     ],
   },
   {
-    owner: "/studio/marketplace/talent",
+    // Casting is the one Talent workspace with real sub-entity tabs: a call
+    // RECEIVES submissions. (The old rail-mirror family was collapsed — sidebar
+    // is the noun, tabs are lenses/sub-entities that live only inside it.)
+    owner: "/studio/marketplace/calls",
     eyebrow: "Talent · Book",
     tabs: [
-      { label: "Roster", href: "/studio/marketplace/talent" },
-      { label: "Artist Offers & Holds", href: "/studio/bookings" },
-      { label: "Casting Calls", href: "/studio/marketplace/calls" },
+      { label: "Calls", href: "/studio/marketplace/calls" },
       { label: "Submissions", href: "/studio/marketplace/submissions" },
+    ],
+  },
+  {
+    // Tours cockpit — Routing is the one lens (all routed dates across the run);
+    // Settlement lives in Finance (Finance · Settle → Tour Settlement).
+    owner: "/studio/agency/tours",
+    eyebrow: "Talent · Book",
+    tabs: [
+      { label: "Tours", href: "/studio/agency/tours" },
+      { label: "Routing", href: "/studio/agency/tours/routing" },
     ],
   },
   {
@@ -742,6 +760,7 @@ export const platformTabs: PlatformTabFamily[] = [
       { label: "Profitability", href: "/studio/finance/reports" },
       { label: "Scenario", href: "/studio/finance/forecasts" },
       { label: "Settlement", href: "/studio/finance/wip" },
+      { label: "Tour Settlement", href: "/studio/finance/wip?scope=tour" },
       { label: "Close", href: "/studio/finance/periods" },
     ],
   },
@@ -848,7 +867,6 @@ export const platformUtility: NavItem[] = [
   { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck", sub: "Award & Track Badges" },
   { label: "Sales", href: "/studio/sales", icon: "TrendingUp", sub: "The Sales & CRM Hub" },
   { label: "Campaigns", href: "/studio/campaigns", icon: "Star", sub: "Campaign Planning & Results" },
-  { label: "Tours", href: "/studio/agency/tours", icon: "Route", sub: "Multi-Stop Tour Routing" },
   { label: "Agency Roster", href: "/studio/agency/roster", icon: "Users", sub: "Represented Artists" },
   { label: "Offers", href: "/studio/marketplace/offers", icon: "Gavel", sub: "Booking Offers · 60/40 Terms" },
   { label: "Inquiries", href: "/studio/marketplace/inquiries", icon: "Inbox", sub: "Inbound Booking Interest" },

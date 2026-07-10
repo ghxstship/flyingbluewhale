@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1169 · **API route handlers:** 145 · **Distinct nav hrefs:** 512
+**Page routes:** 1173 · **API route handlers:** 145 · **Distinct nav hrefs:** 514
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 779 | 244 | 533 | 0 | 2 |
+| ATLVS — Operator Console | platformNav rail | 783 | 246 | 535 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 150 | 128 | 19 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 41 | 21 | 20 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1169** | **486** | **642** | **0** | **41** |
+| **TOTAL** | | **1173** | **488** | **644** | **0** | **41** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -94,7 +94,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-779 routes — ● 244 nav · ○ 533 linked · ⚠ 0 orphan
+783 routes — ● 246 nav · ○ 535 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -149,7 +149,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>agency</code> · 7 routes</summary>
+<details><summary><code>agency</code> · 8 routes</summary>
 
 ○ `/studio/agency`
 ○ `/studio/agency/commissions`
@@ -158,6 +158,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/studio/agency/tours`
 ○ `/studio/agency/tours/[tourId]`
 ○ `/studio/agency/tours/new`
+● `/studio/agency/tours/routing`
 
 </details>
 
@@ -691,12 +692,15 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>operations</code> · 18 routes</summary>
+<details><summary><code>operations</code> · 21 routes</summary>
 
 ○ `/studio/operations`
 ● `/studio/operations/daily-log`
 ○ `/studio/operations/daily-log/[id]`
 ○ `/studio/operations/daily-log/new`
+● `/studio/operations/day-sheets`
+○ `/studio/operations/day-sheets/[daySheetId]`
+○ `/studio/operations/day-sheets/new`
 · `/studio/operations/dispatch`
 ● `/studio/operations/incidents`
 ○ `/studio/operations/incidents/[incidentId]`

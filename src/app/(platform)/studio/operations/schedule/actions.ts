@@ -37,6 +37,9 @@ const ACTIVITY_KINDS = [
   "run_of_show",
   "rehearsal",
   "changeover",
+  "doors",
+  "set",
+  "curfew",
 ] as const;
 
 const CreateSchema = z.object({

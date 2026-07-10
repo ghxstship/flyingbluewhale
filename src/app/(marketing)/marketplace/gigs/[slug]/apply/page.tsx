@@ -51,7 +51,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     },
   ];
 
-  const { data } = await supabase.from("public_job_board").select("*").eq("public_slug", slug).maybeSingle();
+  const { data } = await supabase
+    .from("public_job_board")
+    // Explicit render-contract columns (HP-13): the local Row type is the
+    // page's exact contract — a future column added to the public view must
+    // be opted into here rather than flowing to anonymous visitors silently.
+    .select("id, public_slug, title, day_rate_min_cents, day_rate_max_cents, currency, org_name")
+    .eq("public_slug", slug)
+    .maybeSingle();
   if (!data) {
     return (
       <>

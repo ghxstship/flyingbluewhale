@@ -58,7 +58,16 @@ type Row = {
 const getGig = cache(async (slug: string): Promise<Row | null> => {
   if (!hasSupabase) return null;
   const supabase = await createClient();
-  const { data } = await supabase.from("public_job_board").select("*").eq("public_slug", slug).maybeSingle();
+  const { data } = await supabase
+    .from("public_job_board")
+    // Explicit render-contract columns (HP-13): the local Row type is the
+    // page's exact contract — a future column added to the public view must
+    // be opted into here rather than flowing to anonymous visitors silently.
+    .select(
+      "id, public_slug, title, description, role_taxonomy, region, city, country, employment_type, day_rate_min_cents, day_rate_max_cents, currency, posting_type, union_required, certs_required, travel_paid, lodging_provided, applicant_count, expires_at, published_at, org_name, org_slug",
+    )
+    .eq("public_slug", slug)
+    .maybeSingle();
   return (data as Row | null) ?? null;
 });
 
@@ -100,8 +109,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           data={[
             jobPostingSchema({
               title: r.title,
-              description:
-                r.description ?? `${r.org_name} is hiring for ${r.title} through the ATLVS marketplace.`,
+              description: r.description ?? `${r.org_name} is hiring for ${r.title} through the ATLVS marketplace.`,
               url: urlFor("marketing", `/marketplace/gigs/${r.public_slug}`),
               datePosted: r.published_at,
               employmentType: EMPLOYMENT_TYPE_MAP[r.employment_type?.toLowerCase()] ?? "CONTRACTOR",

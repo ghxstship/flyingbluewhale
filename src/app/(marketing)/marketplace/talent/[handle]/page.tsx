@@ -39,7 +39,16 @@ type Row = {
 const getTalent = cache(async (handle: string): Promise<Row | null> => {
   if (!hasSupabase) return null;
   const supabase = await createClient();
-  const { data } = await supabase.from("public_talent_directory").select("*").eq("public_handle", handle).maybeSingle();
+  const { data } = await supabase
+    .from("public_talent_directory")
+    // Explicit render-contract columns (HP-13): the local Row type is the
+    // page's exact contract — a future column added to the public view must
+    // be opted into here rather than flowing to anonymous visitors silently.
+    .select(
+      "id, public_handle, act_name, tagline, bio, genre_tags, photo_url, hero_url, video_reel_url, fee_min_cents, fee_max_cents, currency, travel_radius_km, monthly_listeners, follower_count, rating_avg, rating_count, is_verified",
+    )
+    .eq("public_handle", handle)
+    .maybeSingle();
   return (data as Row | null) ?? null;
 });
 

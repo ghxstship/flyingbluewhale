@@ -38,7 +38,16 @@ type Row = {
 const getCall = cache(async (slug: string): Promise<Row | null> => {
   if (!hasSupabase) return null;
   const supabase = await createClient();
-  const { data } = await supabase.from("public_open_calls").select("*").eq("public_slug", slug).maybeSingle();
+  const { data } = await supabase
+    .from("public_open_calls")
+    // Explicit render-contract columns (HP-13): the local Row type is the
+    // page's exact contract — a future column added to the public view must
+    // be opted into here rather than flowing to anonymous visitors silently.
+    .select(
+      "id, public_slug, kind, title, description, genre_tags, trade_categories, region, venue_type, performance_date, fee_min_cents, fee_max_cents, currency, deadline_at, eligibility, submission_count, org_name",
+    )
+    .eq("public_slug", slug)
+    .maybeSingle();
   return (data as Row | null) ?? null;
 });
 
@@ -94,8 +103,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {c.venue_type && <Badge variant="muted">{c.venue_type}</Badge>}
           {c.deadline_at && (
             <Badge variant="warning">
-              {t("marketing.pages.marketplace.calls.detail.closesPrefix")}{" "}
-              {fmt.date(new Date(c.deadline_at))}
+              {t("marketing.pages.marketplace.calls.detail.closesPrefix")} {fmt.date(new Date(c.deadline_at))}
             </Badge>
           )}
         </div>

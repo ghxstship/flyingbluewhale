@@ -33,7 +33,16 @@ type Rfq = {
 const getRfq = cache(async (slug: string): Promise<Rfq | null> => {
   if (!hasSupabase) return null;
   const supabase = await createClient();
-  const { data } = await supabase.from("public_rfq_marketplace").select("*").eq("public_slug", slug).maybeSingle();
+  const { data } = await supabase
+    .from("public_rfq_marketplace")
+    // Explicit render-contract columns (HP-13): the local Row type is the
+    // page's exact contract — a future column added to the public view must
+    // be opted into here rather than flowing to anonymous visitors silently.
+    .select(
+      "id, public_slug, title, description, trade_categories, region, budget_band, due_at, requires_prequalification, requires_insurance, requires_w9, nda_required, org_name, org_slug",
+    )
+    .eq("public_slug", slug)
+    .maybeSingle();
   return (data as Rfq | null) ?? null;
 });
 

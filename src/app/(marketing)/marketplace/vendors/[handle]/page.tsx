@@ -33,7 +33,16 @@ type Row = {
 const getVendor = cache(async (handle: string): Promise<Row | null> => {
   if (!hasSupabase) return null;
   const supabase = await createClient();
-  const { data } = await supabase.from("public_vendor_directory").select("*").eq("public_handle", handle).maybeSingle();
+  const { data } = await supabase
+    .from("public_vendor_directory")
+    // Explicit render-contract columns (HP-13): the local Row type is the
+    // page's exact contract — a future column added to the public view must
+    // be opted into here rather than flowing to anonymous visitors silently.
+    .select(
+      "id, public_handle, name, tagline, bio, logo_url, hero_url, website_url, trade_categories, regions, rating_avg, rating_count, is_verified, year_founded",
+    )
+    .eq("public_handle", handle)
+    .maybeSingle();
   return (data as Row | null) ?? null;
 });
 

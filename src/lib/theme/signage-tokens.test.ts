@@ -7,9 +7,9 @@ import { CATEGORY_FALLBACK_SYMBOL, CATEGORY_TONE, SIGNAGE_CATEGORIES, SIGN_TONES
 /**
  * Signage token contract — guards that the LEG3ND wayfinding SSOT in
  * `tokens.json#signage` and its implementation in `kit-signage.css` can't fork
- * (the signage analogue of tokens-contract.test.ts). The generator
- * (gen-theme-tokens.mjs) only emits brand/surface/accent, so the `--sign-*`
- * layer is hand-authored — this test is what keeps it honest.
+ * (the signage analogue of tokens-contract.test.ts). The theme's
+ * brand/surface/accent layer is hand-authored (v8.1 OKLCH), and so is the
+ * `--sign-*` layer — this test is what keeps it honest.
  */
 const ROOT = process.cwd();
 const TOKENS = JSON.parse(readFileSync(join(ROOT, "src/app/theme/tokens.json"), "utf8"));

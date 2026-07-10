@@ -10,8 +10,6 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "gen:theme": "node scripts/gen-theme-tokens.mjs --write",
-    "gen:theme:check": "node scripts/gen-theme-tokens.mjs --check",
     "gen:sitemap": "node scripts/generate-sitemap.mjs",
     "gen:sitemap:check": "node scripts/generate-sitemap.mjs --check",
     "gen:ia-map": "node scripts/gen-ia-map.mjs",

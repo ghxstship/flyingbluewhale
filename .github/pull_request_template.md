@@ -19,7 +19,7 @@
 - [ ] `npx vitest run` passes (and new behavior has coverage)
 - [ ] **Nav/routes:** new routes are wired into a `src/lib/nav.ts` export (or added to `EXEMPT` in `scripts/generate-sitemap.mjs` with a reason) — `npm run gen:sitemap` is clean and `docs/ia/SITEMAP.md` is committed
 - [ ] **Schema:** new columns follow LDP naming (`*_phase` / `*_state`, never `status`); migrations applied via the Supabase MCP, not hand-edited
-- [ ] **Brand/theme:** no retired tokens/fonts; theme changes go through `tokens.json` (`npm run gen:theme`)
+- [ ] **Brand/theme:** no retired tokens/fonts; color changes are hand-authored in `src/app/theme/themes/atlvs-product.css` (OKLCH) with `tokens.json` kept as the sRGB mirror (guarded by `tokens-contract.test.ts` / `contrast.test.ts`)
 - [ ] **URLs:** cross-shell links use `urlFor(...)`; no hardcoded `*.atlvs.pro`
 - [ ] Docs/CLAUDE.md updated if behavior or conventions changed
 

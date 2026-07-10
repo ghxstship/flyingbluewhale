@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { urlFor } from "@/lib/urls";
 import { emitAudit } from "@/lib/audit";
 import type { FormState } from "@/components/FormShell";
+import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "@/lib/validation/constraints";
 
 // NOTE: Next.js server-action files (`"use server"`) cannot re-export types —
 // every export becomes an RPC endpoint, and a type re-export crashes at runtime
@@ -34,7 +35,7 @@ function safeNextPath(raw: string | undefined): string | null {
 const SignupSchema = z.object({
   name: z.string().min(1, "Name is required").max(120),
   email: z.string().email("Enter a valid work email"),
-  password: z.string().min(8, "At least 8 characters").max(128),
+  password: z.string().min(PASSWORD_MIN_LENGTH, `At least ${PASSWORD_MIN_LENGTH} characters`).max(PASSWORD_MAX_LENGTH),
   orgName: z.string().max(120).optional(),
   // E-17: plan intent carried from the pricing CTA (`/signup?plan=`). Stored
   // as user metadata and later stamped onto the created org — intent only,
@@ -298,7 +299,10 @@ export async function magicLinkAction(_: FormState, formData: FormData): Promise
 
 const ResetPasswordSchema = z
   .object({
-    password: z.string().min(8, "At least 8 characters").max(128),
+    password: z
+      .string()
+      .min(PASSWORD_MIN_LENGTH, `At least ${PASSWORD_MIN_LENGTH} characters`)
+      .max(PASSWORD_MAX_LENGTH),
     password_confirm: z.string(),
   })
   .refine((v) => v.password === v.password_confirm, {

@@ -7,6 +7,7 @@ import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { MyOfferActions } from "./MyOfferActions";
+import { DEPOSIT_PCT_DEFAULT, BALANCE_PCT_DEFAULT } from "@/lib/payment-terms";
 
 export const dynamic = "force-dynamic";
 
@@ -29,10 +30,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
 
-  const profilesResp = await supabase
-    .from("talent_profiles")
-    .select("id, act_name")
-    .eq("user_id", session.userId);
+  const profilesResp = await supabase.from("talent_profiles").select("id, act_name").eq("user_id", session.userId);
   const profiles = (profilesResp.data ?? []) as Array<{ id: string; act_name: string }>;
   const profileIds = profiles.map((p) => p.id);
   const actNameByProfile = new Map(profiles.map((p) => [p.id, p.act_name]));
@@ -79,7 +77,7 @@ export default async function Page() {
         {t(
           "me.offers.subtitle",
           undefined,
-          "Offers sent to acts you're attached to. Default 60/40, balance on load-in.",
+          `Offers sent to acts you're attached to. Default ${DEPOSIT_PCT_DEFAULT}/${BALANCE_PCT_DEFAULT}, balance on load-in.`,
         )}
       </p>
 
@@ -90,24 +88,21 @@ export default async function Page() {
             description={t(
               "me.offers.empty.description",
               undefined,
-              "Booking offers sent to your acts will appear here. Default terms: 60% deposit on signature, 40% balance on load-in.",
+              `Booking offers sent to your acts will appear here. Default terms: ${DEPOSIT_PCT_DEFAULT}% deposit on signature, ${BALANCE_PCT_DEFAULT}% balance on load-in.`,
             )}
           />
         </div>
       ) : (
         <ul className="mt-6 space-y-2">
           {offers.map((o) => {
-            const actName =
-              actNameByProfile.get(o.talent_profile_id) ?? t("me.offers.yourAct", undefined, "Your act");
+            const actName = actNameByProfile.get(o.talent_profile_id) ?? t("me.offers.yourAct", undefined, "Your act");
             const buyerName =
               buyerNameByOrg.get(o.org_id) ?? t("me.offers.unknownBuyer", undefined, "the sending organization");
             const feeLabel = fmt.money(o.fee_cents, o.currency);
             // performance_date is a DATE column ("YYYY-MM-DD"); anchor it to
             // noon UTC so localized formatting can't slip it a calendar day.
             const dateLabel = fmt.date(
-              /^\d{4}-\d{2}-\d{2}$/.test(o.performance_date)
-                ? `${o.performance_date}T12:00:00Z`
-                : o.performance_date,
+              /^\d{4}-\d{2}-\d{2}$/.test(o.performance_date) ? `${o.performance_date}T12:00:00Z` : o.performance_date,
               "long",
             );
             return (

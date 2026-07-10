@@ -11,6 +11,7 @@ import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { signupAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "@/lib/validation/constraints";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 const PLAN_LABELS: Record<string, string> = {
@@ -31,7 +32,11 @@ export function SignupForm({ plan }: { plan?: string }) {
   return (
     <AuthShell
       title={t("auth.signup.title", undefined, "Start building your world")}
-      subtitle={t("auth.signup.subtitle", undefined, "Free forever on the Access tier. No credit card. Be running in minutes.")}
+      subtitle={t(
+        "auth.signup.subtitle",
+        undefined,
+        "Free forever on the Access tier. No credit card. Be running in minutes.",
+      )}
       footer={
         <>
           {t("auth.signup.haveAccount", undefined, "Already have an account?")}{" "}
@@ -64,7 +69,8 @@ export function SignupForm({ plan }: { plan?: string }) {
           name="password"
           label={t("auth.signup.password", undefined, "Password")}
           required
-          minLength={8}
+          minLength={PASSWORD_MIN_LENGTH}
+          maxLength={PASSWORD_MAX_LENGTH}
           autoComplete="new-password"
           showStrength
           hint={t("auth.signup.passwordHelp", undefined, "At least 8 characters")}

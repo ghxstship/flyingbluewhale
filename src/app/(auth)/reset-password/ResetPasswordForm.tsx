@@ -9,6 +9,7 @@ import { PasswordField } from "@/components/auth/PasswordField";
 import { Alert } from "@/components/ui/Alert";
 import { resetPasswordAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "@/lib/validation/constraints";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function ResetPasswordForm() {
@@ -34,7 +35,8 @@ export function ResetPasswordForm() {
           name="password"
           label={t("auth.resetPassword.newPassword", undefined, "New password")}
           required
-          minLength={8}
+          minLength={PASSWORD_MIN_LENGTH}
+          maxLength={PASSWORD_MAX_LENGTH}
           autoComplete="new-password"
           showStrength
           hint={t("auth.signup.passwordHelp", undefined, "At least 8 characters")}
@@ -44,7 +46,8 @@ export function ResetPasswordForm() {
           name="password_confirm"
           label={t("auth.resetPassword.confirmPassword", undefined, "Confirm password")}
           required
-          minLength={8}
+          minLength={PASSWORD_MIN_LENGTH}
+          maxLength={PASSWORD_MAX_LENGTH}
           autoComplete="new-password"
           error={state?.fieldErrors?.password_confirm}
         />

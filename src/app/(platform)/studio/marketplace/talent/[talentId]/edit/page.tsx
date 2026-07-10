@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { updateTalentAction } from "./actions";
 import { getRequestT } from "@/lib/i18n/request";
+import { DEPOSIT_PCT_MIN, DEPOSIT_PCT_MAX } from "@/lib/payment-terms";
 
 type Talent = {
   id: string;
@@ -113,8 +114,8 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
               label={t("console.marketplace.talent.edit.depositPct", undefined, "Deposit %")}
               name="deposit_pct"
               type="number"
-              min={0}
-              max={100}
+              min={DEPOSIT_PCT_MIN}
+              max={DEPOSIT_PCT_MAX}
               defaultValue={talent.deposit_pct}
             />
           </div>

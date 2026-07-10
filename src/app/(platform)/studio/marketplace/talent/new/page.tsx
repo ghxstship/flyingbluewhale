@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { getRequestT } from "@/lib/i18n/request";
-import { DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
+import { DEPOSIT_PCT_DEFAULT, DEPOSIT_PCT_MIN, DEPOSIT_PCT_MAX } from "@/lib/payment-terms";
 import { createTalentAction } from "./actions";
 
 export default async function Page() {
@@ -76,8 +76,8 @@ export default async function Page() {
               name="deposit_pct"
               type="number"
               defaultValue={DEPOSIT_PCT_DEFAULT}
-              min={0}
-              max={100}
+              min={DEPOSIT_PCT_MIN}
+              max={DEPOSIT_PCT_MAX}
             />
           </div>
           <Input

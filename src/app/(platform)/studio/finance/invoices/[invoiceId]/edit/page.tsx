@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { updateInvoice, type State } from "./actions";
+import { INVOICE_TITLE_MAX_LENGTH } from "@/lib/validation/constraints";
 import { InvoiceLineItemsEditor, type LineItemRow } from "./InvoiceLineItemsEditor";
 
 export const dynamic = "force-dynamic";
@@ -57,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
             name="title"
             defaultValue={row.title}
             required
-            maxLength={200}
+            maxLength={INVOICE_TITLE_MAX_LENGTH}
           />
           <Input
             label={t("console.finance.invoices.edit.fields.number", undefined, "Number")}

@@ -8,9 +8,10 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
+import { INVOICE_TITLE_MAX_LENGTH } from "@/lib/validation/constraints";
 
 const Schema = z.object({
-  title: z.string().min(1).max(200),
+  title: z.string().min(1).max(INVOICE_TITLE_MAX_LENGTH),
   number: z.string().min(1).max(80),
   // Integer cents from MoneyInput's hidden field — never a dollar string.
   amount_cents: moneyCentsString({ allowEmpty: true }),

@@ -44,10 +44,16 @@ export const DEPOSIT_TERMS_LABEL_DEFAULT = "Due on contract signature";
 /** Human label for the default balance milestone (BALANCE_TERMS_DEFAULT). */
 export const BALANCE_TERMS_LABEL_DEFAULT = "Due on load-in";
 
+/** Valid deposit-percentage range — shared by the clamp below AND the client
+ * `<input min max>` attributes (HP-15: one home for the numbers, no
+ * re-typed literals on either side). */
+export const DEPOSIT_PCT_MIN = 0;
+export const DEPOSIT_PCT_MAX = 100;
+
 /** Clamp a user/template-supplied deposit percentage to a whole [0, 100]. */
 export function clampDepositPct(pct: number | null | undefined): number | null {
   if (pct == null || Number.isNaN(Number(pct))) return null;
-  return Math.min(100, Math.max(0, Math.round(Number(pct))));
+  return Math.min(DEPOSIT_PCT_MAX, Math.max(DEPOSIT_PCT_MIN, Math.round(Number(pct))));
 }
 
 /**

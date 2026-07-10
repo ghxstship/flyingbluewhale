@@ -9,10 +9,11 @@ import { generateNumber } from "@/lib/format";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
+import { INVOICE_TITLE_MAX_LENGTH } from "@/lib/validation/constraints";
 
 const Schema = z
   .object({
-    title: z.string().min(1).max(200),
+    title: z.string().min(1).max(INVOICE_TITLE_MAX_LENGTH),
     client_id: z.string().uuid().optional().or(z.literal("")),
     project_id: z.string().uuid().optional().or(z.literal("")),
     // Sea Trial R3 FINDING-019: invoices must be a positive amount.

@@ -6,6 +6,7 @@ import { MoneyInput } from "@/components/ui/MoneyInput";
 import { RecordCombobox } from "@/components/RecordCombobox";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createInvoiceAction } from "../actions";
+import { INVOICE_TITLE_MAX_LENGTH } from "@/lib/validation/constraints";
 
 export function NewInvoiceForm({
   defaultClientId,
@@ -25,7 +26,7 @@ export function NewInvoiceForm({
         label={t("console.finance.invoices.new.title", undefined, "Title")}
         name="title"
         required
-        maxLength={200}
+        maxLength={INVOICE_TITLE_MAX_LENGTH}
         placeholder={t("console.finance.invoices.new.titlePlaceholder", undefined, "Event production retainer")}
       />
       <div className="grid gap-4 sm:grid-cols-2">

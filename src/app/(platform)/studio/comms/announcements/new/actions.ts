@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { isManagerPlus, requireSession } from "@/lib/auth";
+import { ADMIN_BAND_ROLES, isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { writeInbox, writeInboxBulk } from "@/lib/inbox";
 import { actionFail, formFail } from "@/lib/forms/fail";
@@ -92,7 +92,7 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       parsed.data.audience === "all"
         ? null
         : parsed.data.audience === "admins"
-          ? ["owner", "admin"]
+          ? [...ADMIN_BAND_ROLES]
           : parsed.data.audience === "crew"
             ? ["member"]
             : null;

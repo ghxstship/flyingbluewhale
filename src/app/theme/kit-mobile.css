@@ -1,22 +1,23 @@
-/* COMPVSS mobile kit — ported from the COMPVSS Design System kit (index.html <style>), 2026-06-21. Scoped under .mobile-shell. Uses only --p-* tokens; dark mode + accent come from the repo theme + data-product="compvss". */
+/* COMPVSS mobile kit — ported from the COMPVSS Design System kit (index.html <style>), 2026-06-21. Scoped under .mobile-shell. Uses only --p-* tokens; dark mode + accent come from the repo theme + data-product="compvss".
+   Type floor (2026-07-10, MONUMENT canon): every font-size below 11px was raised to 11px — no UI text under 11px, sunlight legibility for the field audience. Keep new rules at >= 11px. */
 
 /* NFT / digital-wallet style pass card */
 .mobile-shell .pass-wallet { position: relative; border-radius: 22px; overflow: hidden; padding: 20px; margin-bottom: var(--p-4); min-height: 196px; display: flex; flex-direction: column; justify-content: space-between; color: #fff; background: linear-gradient(140deg, #241606 0%, #2c1c0b 42%, #0c0e12 100%); border: 1px solid rgba(255,255,255,.09); box-shadow: var(--p-elev-2, var(--p-elev-1)); cursor: pointer; }
 .mobile-shell .pass-wallet::before { content: ""; position: absolute; inset: 0; background: radial-gradient(130% 90% at 100% 0%, color-mix(in oklab, var(--p-accent) 60%, transparent), transparent 58%); pointer-events: none; }
 .mobile-shell .pass-wallet .pw-sheen { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 32%, rgba(255,255,255,.08) 48%, transparent 62%); pointer-events: none; }
 .mobile-shell .pass-wallet .pw-row { position: relative; display: flex; justify-content: space-between; }
-.mobile-shell .pass-wallet .pw-eye { font-family: var(--p-mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: var(--p-2); white-space: nowrap; }
+.mobile-shell .pass-wallet .pw-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: var(--p-2); white-space: nowrap; }
 .mobile-shell .pass-wallet .pw-wm { font-family: var(--p-wordmark); font-weight: 500; letter-spacing: 0.28em; font-size: 14px; color: rgba(255,255,255,.85); }
 .mobile-shell .pass-wallet .pw-name { font-family: var(--p-heading); text-transform: uppercase; font-size: 27px; line-height: 1; margin-top: var(--p-2); }
 .mobile-shell .pass-wallet .pw-role { font-size: 12.5px; color: rgba(255,255,255,.72); margin-top: 4px; }
 .mobile-shell .pass-wallet .pw-qr { width: 62px; height: 62px; border-radius: 13px; background: #fff; display: flex; align-items: center; justify-content: center; color: #0c0e12; flex: none; }
 .mobile-shell .pass-wallet .pw-id { font-family: var(--p-mono); font-size: 15px; letter-spacing: 0.16em; margin-top: var(--p-1); }
-.mobile-shell .pass-wallet .pw-chip { font-family: var(--p-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; padding: 4px var(--p-2); border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); }
+.mobile-shell .pass-wallet .pw-chip { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; padding: 4px var(--p-2); border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); }
 .mobile-shell .pass-wallet .pw-chip.live { background: color-mix(in oklab, var(--p-success) 88%, #000); border-color: transparent; }
 .mobile-shell .te-clock { background: #0c0e12; color: #fff; border-radius: 18px; padding: var(--p-6); text-align: center; margin-bottom: var(--p-4); }
 .mobile-shell .te-clock .tcv { font-family: var(--p-heading); font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; margin: var(--p-2) 0 var(--p-4); }
 .mobile-shell .qa .qi { position: relative; }
-.mobile-shell .qa-badge { position: absolute; top: -5px; right: -5px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 8px; background: var(--p-danger); color: #fff; font-family: var(--p-mono); font-size: 9px; font-weight: 700; line-height: 16px; text-align: center; }
+.mobile-shell .qa-badge { position: absolute; top: -5px; right: -5px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 8px; background: var(--p-danger); color: #fff; font-family: var(--p-mono); font-size: 11px; font-weight: 700; line-height: 16px; text-align: center; }
 .mobile-shell .qa-edit-row { display: flex; align-items: center; gap: var(--p-3); padding: var(--p-2) 2px; border-bottom: 1px solid var(--p-border); }
 .mobile-shell .qa-edit-row .qi { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex: none; }
 .mobile-shell .qa-edit-row .reorder { display: flex; gap: 2px; }
@@ -40,7 +41,7 @@
 .mobile-shell .lc-dot { width: 27px; height: 27px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--p-mono); font-size: 12px; font-weight: 700; background: var(--p-surface); border: 2px solid var(--p-border); color: var(--p-text-3); }
 .mobile-shell .lc-dot.done { background: var(--p-success); border-color: var(--p-success); color: #fff; }
 .mobile-shell .lc-dot.next { border-color: var(--p-accent); color: var(--p-accent-text); }
-.mobile-shell .lc-l { font-size: 10px; font-weight: 600; color: var(--p-text-2); text-align: center; line-height: 1.2; }
+.mobile-shell .lc-l { font-size: 11px; font-weight: 600; color: var(--p-text-2); text-align: center; line-height: 1.2; }
 .mobile-shell .unit-chip { font-family: var(--p-mono); font-size: 11px; font-weight: 700; padding: 4px var(--p-2); border-radius: 7px; background: color-mix(in oklab, var(--p-success) 14%, transparent); color: var(--p-success); display: inline-flex; align-items: center; gap: 4px; }
 .mobile-shell .pass-hero-ic { width: 54px; height: 54px; border-radius: 14px; flex: none; display: flex; align-items: center; justify-content: center; color: #fff; background: linear-gradient(135deg, #a83c08, #ed6a1e 52%, #ffb24d); }
 .mobile-shell .widgets { display: grid; grid-template-columns: 1fr 1fr; gap: var(--p-3); margin: 2px 0 var(--p-2); }
@@ -54,14 +55,14 @@
 .mobile-shell .toolcard .tc-ic { width: 38px; height: 38px; border-radius: 11px; flex: none; display: flex; align-items: center; justify-content: center; }
 .mobile-shell .toolcard .tc-body { display: flex; flex-direction: column; min-width: 0; }
 .mobile-shell .toolcard .tc-t { font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--p-text-1); }
-.mobile-shell .toolcard .tc-s { font-size: 10.5px; color: var(--p-text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobile-shell .toolcard .tc-s { font-size: 11px; color: var(--p-text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mobile-shell .tool-out { font-family: var(--p-heading); text-transform: uppercase; font-size: 36px; text-align: center; margin: 16px 0; font-variant-numeric: tabular-nums; }
 .mobile-shell .tool-out span { font-family: var(--p-font); text-transform: none; font-size: 15px; font-weight: 600; color: var(--p-text-3); }
 .mobile-shell .tool-code { font-family: var(--p-mono); font-size: 11px; font-weight: 700; color: var(--p-accent-text); background: color-mix(in oklab, var(--p-accent) 14%, transparent); padding: 4px var(--p-2); border-radius: 6px; flex: none; }
 .mobile-shell .w { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 16px; padding: var(--p-4); box-shadow: var(--p-elev-1); position: relative; }
 .mobile-shell .w.full { grid-column: 1 / -1; }
 .mobile-shell .w.tap { cursor: pointer; }
-.mobile-shell .w .wl { font-family: var(--p-mono); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--p-text-3); display: flex; align-items: center; gap: var(--p-2); white-space: nowrap; }
+.mobile-shell .w .wl { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--p-text-3); display: flex; align-items: center; gap: var(--p-2); white-space: nowrap; }
 .mobile-shell .w .wtop { display: flex; align-items: flex-start; justify-content: space-between; }
 .mobile-shell .w .wic { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; flex: none; }
 .mobile-shell .w .wnav { color: var(--p-text-3); flex: none; }
@@ -74,7 +75,7 @@
 .mobile-shell .chips::-webkit-scrollbar { display: none; }
 .mobile-shell .chip { flex: none; font-size: 12px; font-weight: 600; padding: var(--p-2) var(--p-3); border-radius: 999px; border: 1px solid var(--p-border); background: var(--p-surface); color: var(--p-text-2); cursor: pointer; white-space: nowrap; }
 .mobile-shell .chip.on { background: var(--p-text-1); border-color: var(--p-text-1); color: var(--p-bg); }
-.mobile-shell .typetag { font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; padding: 2px var(--p-2); border-radius: 5px; }
+.mobile-shell .typetag { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; padding: 2px var(--p-2); border-radius: 5px; }
 .mobile-shell .pass-card { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 22px; box-shadow: var(--p-elev-2, var(--p-elev-1)); overflow: hidden; margin-bottom: 16px; }
 .mobile-shell .pass-head { background: #0c0e12; color: #fff; padding: 16px var(--p-4); display: flex; align-items: center; gap: 12px; }
 .mobile-shell .pass-head .pa { width: 42px; height: 42px; border-radius: 50%; background: var(--p-accent); color: #0c0e12; display: flex; align-items: center; justify-content: center; font-family: var(--p-mono); font-weight: 700; font-size: 14px; flex: none; }
@@ -83,7 +84,7 @@
 .mobile-shell .qr-ttl { width: 100%; max-width: 208px; margin-top: 4px; }
 .mobile-shell .qr-ttl-bar { height: 4px; border-radius: 2px; background: var(--p-border); overflow: hidden; }
 .mobile-shell .qr-ttl-bar span { display: block; height: 100%; background: var(--p-success); border-radius: 2px; transition: width 1s linear; }
-.mobile-shell .qr-ttl-l { display: flex; align-items: center; justify-content: center; gap: var(--p-1); font-family: var(--p-mono); font-size: 10px; letter-spacing: 0.04em; color: var(--p-text-3); margin-top: var(--p-2); }
+.mobile-shell .qr-ttl-l { display: flex; align-items: center; justify-content: center; gap: var(--p-1); font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--p-text-3); margin-top: var(--p-2); }
 .mobile-shell .pass-id { font-family: var(--p-mono); font-size: 12px; letter-spacing: 0.18em; color: var(--p-text-2); }
 .mobile-shell .sheet { position: absolute; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; }
 .mobile-shell .sheet-bg { position: absolute; inset: 0; background: rgba(8,10,16,.46); }
@@ -108,7 +109,7 @@
 .mobile-shell .weekstrip { display: flex; gap: var(--p-1); margin-bottom: var(--p-4); }
 .mobile-shell .wday { flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--p-1); padding: var(--p-2) 2px var(--p-2); border: 1px solid var(--p-border); background: var(--p-surface); border-radius: 13px; cursor: pointer; }
 .mobile-shell .wday.on { background: var(--p-text-1); border-color: var(--p-text-1); }
-.mobile-shell .wday .wd { font-family: var(--p-mono); font-size: 8.5px; letter-spacing: 0.06em; color: var(--p-text-3); }
+.mobile-shell .wday .wd { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--p-text-3); }
 .mobile-shell .wday.on .wd { color: color-mix(in oklab, var(--p-bg) 70%, transparent); }
 .mobile-shell .wday .wn { font-family: var(--p-heading); font-size: 16px; line-height: 1; color: var(--p-text-1); width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 .mobile-shell .wday.on .wn { color: var(--p-bg); }
@@ -126,15 +127,15 @@
 .mobile-shell .qa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .mobile-shell .qa button { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-3) 4px; display: flex; flex-direction: column; align-items: center; gap: var(--p-2); cursor: pointer; box-shadow: var(--p-elev-1); }
 .mobile-shell .qa .qi { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
-.mobile-shell .qa .ql { font-size: 9.5px; font-weight: 700; color: var(--p-text-2); text-align: center; line-height: 1.15; }
+.mobile-shell .qa .ql { font-size: 11px; font-weight: 700; color: var(--p-text-2); text-align: center; line-height: 1.15; }
 .mobile-shell .backbtn { display: flex; align-items: center; gap: var(--p-1); background: none; border: none; padding: 4px 0; margin: 0 0 2px -3px; color: var(--p-text-2); font-size: 13px; font-weight: 600; cursor: pointer; }
 .mobile-shell .metarow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: var(--p-4); }
 .mobile-shell .metarow .m { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 12px; padding: var(--p-3) 12px; box-shadow: var(--p-elev-1); }
-.mobile-shell .metarow .m .k { font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
+.mobile-shell .metarow .m .k { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
 .mobile-shell .metarow .m .v { font-size: 13px; font-weight: 700; margin-top: var(--p-1); }
 .mobile-shell .thumbrow { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
 .mobile-shell .thumb { width: 66px; height: 66px; border-radius: 11px; border: 1px solid var(--p-border); background-color: var(--p-surface); background-image: repeating-linear-gradient(45deg, var(--p-border) 0 1px, transparent 1px 8px); display: flex; align-items: flex-end; padding: var(--p-1); box-sizing: border-box; }
-.mobile-shell .thumb span { font-family: var(--p-mono); font-size: 7.5px; line-height: 1.15; color: var(--p-text-3); text-transform: uppercase; }
+.mobile-shell .thumb span { font-family: var(--p-mono); font-size: 11px; line-height: 1.15; color: var(--p-text-3); text-transform: uppercase; }
 .mobile-shell .thumb.add { align-items: center; justify-content: center; border-style: dashed; background-image: none; color: var(--p-text-3); cursor: pointer; }
 .mobile-shell .tl { position: relative; margin: 2px 0 4px var(--p-1); padding-left: var(--p-4); }
 .mobile-shell .tl::before { content: ""; position: absolute; left: var(--p-1); top: 8px; bottom: var(--p-3); width: 2px; background: var(--p-border); }
@@ -154,7 +155,7 @@
 .mobile-shell .pill { display: inline-flex; align-items: center; gap: var(--p-2); padding: 8px var(--p-3); border-radius: 999px; border: 1px solid var(--p-border); background: var(--p-surface); color: var(--p-text-2); font-size: 12.5px; font-weight: 600; font-family: inherit; cursor: pointer; white-space: nowrap; }
 .mobile-shell .pill[data-active] { border-color: var(--p-accent); background: color-mix(in oklab, var(--p-accent) 14%, var(--p-surface)); color: var(--p-accent-text); }
 .mobile-shell .pill.ico { position: relative; padding: 0; width: 38px; height: 38px; justify-content: center; gap: 0; flex: none; }
-.mobile-shell .pill.ico .acount { position: absolute; top: -5px; right: -5px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 8px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 9.5px; font-weight: 700; line-height: 16px; text-align: center; border: 2px solid var(--p-surface); }
+.mobile-shell .pill.ico .acount { position: absolute; top: -5px; right: -5px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 8px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 11px; font-weight: 700; line-height: 16px; text-align: center; border: 2px solid var(--p-surface); }
 .mobile-shell .actionbar { display: flex; align-items: center; gap: 8px; margin-bottom: var(--p-4); }
 .mobile-shell .searchbar { display: flex; align-items: center; gap: 8px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 11px; padding: var(--p-2) 12px; margin: 0; color: var(--p-text-3); flex: 1; min-width: 0; }
 .mobile-shell .clusters { display: flex; align-items: center; gap: var(--p-2); margin: 0; flex: none; }
@@ -174,7 +175,7 @@
 .mobile-shell .grp-all:hover { color: var(--p-accent-text); }
 .mobile-shell .dt-wrap { overflow-x: auto; border: 1px solid var(--p-border); border-radius: 12px; margin-bottom: 4px; -webkit-overflow-scrolling: touch; }
 .mobile-shell .dt { border-collapse: collapse; width: max-content; min-width: 100%; font-size: 12.5px; }
-.mobile-shell .dt th { text-align: left; font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-text-3); padding: var(--p-2) 12px; border-bottom: 1px solid var(--p-border); white-space: nowrap; background: var(--p-surface); }
+.mobile-shell .dt th { text-align: left; font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-text-3); padding: var(--p-2) 12px; border-bottom: 1px solid var(--p-border); white-space: nowrap; background: var(--p-surface); }
 .mobile-shell .dt td { padding: var(--p-3) 12px; border-bottom: 1px solid var(--p-border); white-space: nowrap; color: var(--p-text-1); }
 .mobile-shell .dt tbody tr:last-child td { border-bottom: none; }
 .mobile-shell .dt tbody tr { cursor: pointer; }
@@ -193,7 +194,7 @@
 .mobile-shell .swipehint { display: flex; align-items: center; justify-content: center; gap: var(--p-2); font-size: 11.5px; color: var(--p-text-3); margin: 2px 0 4px; }
 /* ── dense mobile table ── */
 .mobile-shell .dtbl { border: 1px solid var(--p-border); border-radius: 14px; overflow: hidden; background: var(--p-surface); }
-.mobile-shell .dtbl-head { display: flex; align-items: center; padding: var(--p-2) var(--p-4); background: var(--p-bg); border-bottom: 1px solid var(--p-border); font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
+.mobile-shell .dtbl-head { display: flex; align-items: center; padding: var(--p-2) var(--p-4); background: var(--p-bg); border-bottom: 1px solid var(--p-border); font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
 .mobile-shell .dtbl-head .sp { flex: 1; }
 .mobile-shell .dtbl-row { display: flex; align-items: center; gap: var(--p-3); padding: 12px var(--p-4); border-bottom: 1px solid var(--p-border); cursor: pointer; }
 .mobile-shell .dtbl-row:last-child { border-bottom: none; }
@@ -207,14 +208,14 @@
 .mobile-shell .avatar-sm { width: 38px; height: 38px; border-radius: 50%; background: var(--p-bg); border: 1px solid var(--p-border); display: flex; align-items: center; justify-content: center; font-family: var(--p-mono); font-size: 12px; font-weight: 700; color: var(--p-text-2); flex: none; position: relative; }
 .mobile-shell .avatar-sm .on { position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 50%; background: var(--p-success); border: 2px solid var(--p-surface); }
 .mobile-shell .chan { width: 38px; height: 38px; border-radius: 11px; background: color-mix(in oklab, var(--p-accent) 16%, transparent); color: var(--p-accent-text); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; flex: none; }
-.mobile-shell .unread { min-width: 19px; height: 19px; padding: 0 var(--p-1); border-radius: 10px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+.mobile-shell .unread { min-width: 19px; height: 19px; padding: 0 var(--p-1); border-radius: 10px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
 .mobile-shell .bubbles { display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
-.mobile-shell .daysep { text-align: center; font-family: var(--p-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); margin: var(--p-2) 0; }
+.mobile-shell .daysep { text-align: center; font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); margin: var(--p-2) 0; }
 .mobile-shell .bub { max-width: 80%; padding: var(--p-2) 12px; border-radius: 15px; font-size: 13.5px; line-height: 1.4; }
 .mobile-shell .bub.them { background: var(--p-surface); border: 1px solid var(--p-border); align-self: flex-start; border-bottom-left-radius: 5px; }
 .mobile-shell .bub.me { background: var(--p-accent); color: #0c0e12; align-self: flex-end; border-bottom-right-radius: 5px; }
-.mobile-shell .bub .who { font-size: 10px; font-weight: 700; opacity: 0.6; margin-bottom: 2px; }
-.mobile-shell .bub .bt { font-family: var(--p-mono); font-size: 9px; opacity: 0.55; margin-top: var(--p-1); text-align: right; }
+.mobile-shell .bub .who { font-size: 11px; font-weight: 700; opacity: 0.6; margin-bottom: 2px; }
+.mobile-shell .bub .bt { font-family: var(--p-mono); font-size: 11px; opacity: 0.55; margin-top: var(--p-1); text-align: right; }
 .mobile-shell .composer { display: flex; gap: 8px; align-items: center; padding: var(--p-3) 0 4px; }
 .mobile-shell .chatview { display: flex; flex-direction: column; min-height: 100%; }
 /* Record-ref chip in a field message (kit 21 R1). Inline mono pill; a linked
@@ -226,7 +227,11 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .composer .box { flex: 1; border: 1px solid var(--p-border); border-radius: 20px; padding: var(--p-3) var(--p-4); font-size: 13.5px; background: var(--p-surface); color: var(--p-text-3); }
 .mobile-shell .composer button { border: none; background: var(--p-accent); color: #0c0e12; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex: none; }
 /* ── forms ── */
-.mobile-shell .formscreen { position: absolute; inset: 0; z-index: 30; background: var(--p-bg); overflow-y: auto; padding: var(--p-12) var(--p-4) 28px; }
+/* The formscreen is an absolute full-viewport takeover (inset:0), so it extends
+ * UNDER the fixed MobileTabBar (both z-30; the bar paints later in DOM order).
+ * Its bottom padding must therefore clear the bar (~4rem) + safe-area, or the
+ * scrolled-to-end Submit CTA sits beneath the bar and can't be tapped. */
+.mobile-shell .formscreen { position: absolute; inset: 0; z-index: 30; background: var(--p-bg); overflow-y: auto; padding: var(--p-12) var(--p-4) calc(env(safe-area-inset-bottom, 0px) + 6.5rem); }
 .mobile-shell .fld { margin-bottom: 16px; }
 /* `.fld-label` = the same voice for group headings (segmented buttons) that
    have no single labelable control — a real <label> there fails a11y. */
@@ -247,18 +252,18 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .form-actions { display: flex; gap: var(--p-3); margin-top: var(--p-6); }
 .mobile-shell .pricetag { font-family: var(--p-heading); font-size: 17px; color: var(--p-text-1); }
 .mobile-shell .job-logo { width: 38px; height: 38px; border-radius: 9px; flex: none; background: var(--p-bg); border: 1px solid var(--p-border); display: flex; align-items: center; justify-content: center; font-family: var(--p-mono); font-weight: 700; font-size: 12px; color: var(--p-text-2); }
-.mobile-shell .job-cert { display: inline-flex; align-items: center; gap: var(--p-1); font-size: 10px; font-weight: 700; padding: var(--p-1) var(--p-2); border-radius: 6px; background: color-mix(in oklab, var(--p-success) 14%, transparent); color: var(--p-success); }
-.mobile-shell .job-flag { display: inline-flex; align-items: center; gap: var(--p-1); font-size: 10px; font-weight: 700; padding: var(--p-1) var(--p-2); border-radius: 6px; background: color-mix(in oklab, var(--p-warning) 16%, transparent); color: var(--p-warning); }
+.mobile-shell .job-cert { display: inline-flex; align-items: center; gap: var(--p-1); font-size: 11px; font-weight: 700; padding: var(--p-1) var(--p-2); border-radius: 6px; background: color-mix(in oklab, var(--p-success) 14%, transparent); color: var(--p-success); }
+.mobile-shell .job-flag { display: inline-flex; align-items: center; gap: var(--p-1); font-size: 11px; font-weight: 700; padding: var(--p-1) var(--p-2); border-radius: 6px; background: color-mix(in oklab, var(--p-warning) 16%, transparent); color: var(--p-warning); }
 .mobile-shell .mkt { display: grid; grid-template-columns: 1fr 1fr; gap: var(--p-3); }
 .mobile-shell .gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .mobile-shell .gal-card { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-4) 8px 12px; box-shadow: var(--p-elev-1); cursor: pointer; }
 .mobile-shell .gal-av { width: 48px; height: 48px; border-radius: 50%; background: var(--p-bg); border: 1px solid var(--p-border); display: flex; align-items: center; justify-content: center; font-family: var(--p-mono); font-size: 14px; font-weight: 700; color: var(--p-text-2); position: relative; }
 .mobile-shell .gal-av .on { position: absolute; right: 0; bottom: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--p-success); border: 2px solid var(--p-surface); }
 .mobile-shell .logo-tile { width: 40px; height: 40px; border-radius: 11px; flex: none; background: var(--p-bg); border: 1px solid var(--p-border); display: flex; align-items: center; justify-content: center; font-family: var(--p-wordmark); font-weight: 500; letter-spacing: 0.04em; font-size: 14px; color: var(--p-text-1); }
-.mobile-shell .vchip { font-family: var(--p-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px var(--p-2); border-radius: 6px; background: color-mix(in oklab, var(--p-accent) 13%, transparent); color: var(--p-accent-text); white-space: nowrap; }
+.mobile-shell .vchip { font-family: var(--p-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px var(--p-2); border-radius: 6px; background: color-mix(in oklab, var(--p-accent) 13%, transparent); color: var(--p-accent-text); white-space: nowrap; }
 .mobile-shell .mcard { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-3); box-shadow: var(--p-elev-1); cursor: pointer; }
 .mobile-shell .mthumb { position: relative; aspect-ratio: 4/3; border-radius: 10px; background: var(--p-bg); border: 1px solid var(--p-border); display: flex; align-items: center; justify-content: center; }
-.mobile-shell .mthumb .mtag { position: absolute; top: var(--p-2); left: var(--p-2); font-family: var(--p-mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; padding: 2px var(--p-2); border-radius: 5px; background: var(--p-surface); border: 1px solid var(--p-border); color: var(--p-text-2); }
+.mobile-shell .mthumb .mtag { position: absolute; top: var(--p-2); left: var(--p-2); font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; padding: 2px var(--p-2); border-radius: 5px; background: var(--p-surface); border: 1px solid var(--p-border); color: var(--p-text-2); }
 .mobile-shell .inlsel { border: 1px solid var(--p-border); background: var(--p-bg); color: var(--p-text-1); border-radius: 9px; padding: var(--p-2) var(--p-3); font-size: 13px; font-family: inherit; font-weight: 600; }
 .mobile-shell .more-ic { width: 38px; height: 38px; border-radius: 11px; background: var(--p-bg); border: 1px solid var(--p-border); display: flex; align-items: center; justify-content: center; color: var(--p-text-2); flex: none; }
 .mobile-shell .cart-qty { font-family: var(--p-mono); font-weight: 700; font-size: 13px; color: var(--p-accent-text); background: color-mix(in oklab, var(--p-accent) 14%, transparent); padding: 4px 8px; border-radius: 7px; flex: none; }
@@ -279,7 +284,7 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .emerg-station .es-manning { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--p-border); }
 .mobile-shell .emerg-station .es-id { font-family: var(--p-heading); font-size: 26px; line-height: 1; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; margin-top: var(--p-1); }
 .mobile-shell .emerg-station .es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.mobile-shell .emerg-station .es-k { font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
+.mobile-shell .emerg-station .es-k { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
 .mobile-shell .emerg-station .es-v { font-size: 13px; font-weight: 700; margin-top: var(--p-1); }
 .mobile-shell .emerg-list { border: 1px solid var(--p-border); border-radius: 14px; overflow: hidden; background: var(--p-surface); }
 .mobile-shell .emerg-row { display: flex; align-items: center; gap: var(--p-3); width: 100%; text-align: left; padding: var(--p-3) 12px; border: none; border-bottom: 1px solid var(--p-border); background: var(--p-surface); cursor: pointer; }
@@ -291,8 +296,8 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 4px; }
 .mobile-shell .badge-card { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: 12px var(--p-2); box-shadow: var(--p-elev-1); display: flex; flex-direction: column; align-items: center; gap: var(--p-1); cursor: pointer; }
 .mobile-shell .badge-ic { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid; display: flex; align-items: center; justify-content: center; }
-.mobile-shell .badge-name { font-size: 10px; font-weight: 700; text-align: center; line-height: 1.15; }
-.mobile-shell .badge-tier { font-family: var(--p-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+.mobile-shell .badge-name { font-size: 11px; font-weight: 700; text-align: center; line-height: 1.15; }
+.mobile-shell .badge-tier { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 .mobile-shell .composer-cta { display: flex; align-items: center; gap: var(--p-3); background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-3) 12px; box-shadow: var(--p-elev-1); margin-bottom: 12px; cursor: pointer; }
 .mobile-shell .composer-cta .cc-box { flex: 1; color: var(--p-text-3); font-size: 13.5px; }
 .mobile-shell .post { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 16px; padding: var(--p-4); box-shadow: var(--p-elev-1); margin-bottom: 12px; }
@@ -309,17 +314,17 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .frow .fld { flex: 1; }
 .mobile-shell .rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
 .mobile-shell .rec-cell { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 12px; padding: var(--p-3) var(--p-3); box-shadow: var(--p-elev-1); }
-.mobile-shell .rec-k { font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
+.mobile-shell .rec-k { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
 .mobile-shell .rec-v { font-size: 13.5px; font-weight: 700; margin-top: 4px; color: var(--p-text-1); }
 .mobile-shell .iconbtn { position: relative; background: none; border: none; padding: var(--p-2); margin: 0; color: var(--p-text-2); cursor: pointer; display: flex; }
-.mobile-shell .iconbtn .dot { position: absolute; top: 0; right: 0; min-width: 15px; height: 15px; padding: 0 var(--p-1); box-sizing: border-box; border-radius: 8px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 9px; font-weight: 700; line-height: 15px; text-align: center; }
+.mobile-shell .iconbtn .dot { position: absolute; top: 0; right: 0; min-width: 15px; height: 15px; padding: 0 var(--p-1); box-sizing: border-box; border-radius: 8px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 11px; font-weight: 700; line-height: 15px; text-align: center; }
 .mobile-shell .iconbtn[data-active] { color: var(--p-accent-text); }
 .mobile-shell .avatar { width: 30px; height: 30px; border-radius: 50%; border: none; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .mobile-shell .avatar[data-active] { box-shadow: 0 0 0 2px var(--p-bg), 0 0 0 4px var(--p-accent); }
 .mobile-shell .check { width: 22px; height: 22px; flex: none; border-radius: 7px; border: 2px solid var(--p-border); display: flex; align-items: center; justify-content: center; color: #0c0e12; }
 .mobile-shell .check[data-on] { background: var(--p-success); border-color: var(--p-success); }
 .mobile-shell .screen { flex: 1; overflow-y: auto; padding: var(--p-2) var(--p-4) 96px; }
-.mobile-shell .scr-eye { font-family: var(--p-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--p-accent-text); }
+.mobile-shell .scr-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--p-accent-text); }
 .mobile-shell .scr-h { font-family: var(--p-heading); text-transform: uppercase; font-size: 30px; line-height: 1; margin: var(--p-3) 0 16px; }
 .mobile-shell .fab { position: absolute; right: 16px; bottom: var(--p-24); z-index: 25; width: 54px; height: 54px; border-radius: 50%; border: none; background: var(--p-accent); color: #1f0e03; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--p-elev-2, var(--p-elev-1)); transition: transform .12s cubic-bezier(.34,1.56,.64,1); }
 .mobile-shell .fab:active { transform: scale(.9); }
@@ -336,7 +341,7 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .sec-act { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--p-border); background: var(--p-surface); color: var(--p-text-2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .mobile-shell .sec-act:hover { color: var(--p-accent-text); border-color: var(--p-accent); }
 .mobile-shell .notif-matrix { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-2) 12px; box-shadow: var(--p-elev-1); margin-bottom: var(--p-3); }
-.mobile-shell .notif-matrix .nm-head { display: flex; align-items: center; padding: 8px 0 var(--p-2); border-bottom: 1px solid var(--p-border); font-family: var(--p-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-text-3); }
+.mobile-shell .notif-matrix .nm-head { display: flex; align-items: center; padding: 8px 0 var(--p-2); border-bottom: 1px solid var(--p-border); font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-text-3); }
 .mobile-shell .notif-matrix .nm-head span:not(:first-child) { width: 44px; text-align: center; }
 .mobile-shell .notif-matrix .nm-row { display: flex; align-items: center; padding: var(--p-2) 0; border-bottom: 1px solid var(--p-border); }
 .mobile-shell .notif-matrix .nm-row:last-child { border-bottom: none; }
@@ -365,13 +370,13 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .item .sp { flex: 1; }
 .mobile-shell .item .time { font-family: var(--p-mono); font-size: 12px; font-weight: 700; color: var(--p-text-2); }
 .mobile-shell .tabbar { position: absolute; bottom: 16px; left: 12px; right: 12px; height: 62px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 20px; display: flex; z-index: 15; box-shadow: var(--p-elev-2, var(--p-elev-1)); }
-.mobile-shell .tb { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10px; font-weight: 700; color: var(--p-text-3); cursor: pointer; border-radius: 20px; }
+.mobile-shell .tb { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--p-text-3); cursor: pointer; border-radius: 20px; }
 .mobile-shell .tb.on { color: var(--p-accent-text); }
 .mobile-shell .tb .badge { position: absolute; }
 /* ── swipe-to-action rows ── */
 .mobile-shell .swipe { position: relative; margin-bottom: var(--p-3); }
 .mobile-shell .swipe-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; border-radius: 14px; overflow: hidden; }
-.mobile-shell .swa { width: 74px; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--p-1); color: #fff; font-size: 10px; font-weight: 700; cursor: pointer; }
+.mobile-shell .swa { width: 74px; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--p-1); color: #fff; font-size: 11px; font-weight: 700; cursor: pointer; }
 .mobile-shell .swipe-face { position: relative; z-index: 1; touch-action: pan-y; }
 .mobile-shell .swipe-face .item { margin-bottom: 0; }
 /* ── premium motion layer ── */

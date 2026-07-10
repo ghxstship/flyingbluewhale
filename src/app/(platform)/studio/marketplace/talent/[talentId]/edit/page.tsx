@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             />
           </div>
           <Input
-            label={t("console.marketplace.talent.edit.genreTags", undefined, "Genre Tags — Comma-separated")}
+            label={t("console.marketplace.talent.edit.genreTags", undefined, "Genre Tags (Comma-separated)")}
             name="genre_tags"
             defaultValue={talent.genre_tags.join(", ")}
           />
@@ -104,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label={t("console.marketplace.talent.edit.travelRadius", undefined, "Travel Radius — km")}
+              label={t("console.marketplace.talent.edit.travelRadius", undefined, "Travel Radius (km)")}
               name="travel_radius_km"
               type="number"
               defaultValue={talent.travel_radius_km ?? ""}

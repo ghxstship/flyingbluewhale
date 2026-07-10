@@ -78,6 +78,7 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
             <DeleteForm
               action={deleteResourceAction.bind(null, resource.id)}
               confirm={`Delete resource "${resource.title}"?`}
+              undo={{ table: "resources", id: resource.id, redirectTo: "/legend/resources" }}
             />
           </div>
         }

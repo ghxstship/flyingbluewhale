@@ -28,20 +28,33 @@ export default async function XpmsOverviewPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
-  const [atoms, variance, comp] = await Promise.all([
-    supabase.from("xpms_atoms").select("class_code, state, phase").eq("org_id", session.orgId),
-    supabase.from("xpms_variance_ledger").select("id, reason").eq("org_id", session.orgId),
-    supabase.from("xpms_project_composition").select("tier, share").limit(1000),
+  // B-22: server-side aggregates — `count: "exact", head: true` per tile
+  // instead of fetching every atom/ledger row just to count in JS.
+  const [atomsTotal, atomsUac, variance, comp, ...classCounts] = await Promise.all([
+    supabase.from("xpms_atoms").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
+    supabase
+      .from("xpms_atoms")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("state", "uac"),
+    supabase.from("xpms_variance_ledger").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
+    supabase.from("xpms_project_composition").select("project_id", { count: "exact", head: true }),
+    ...XPMS_CLASSES.map((c) =>
+      supabase
+        .from("xpms_atoms")
+        .select("id", { count: "exact", head: true })
+        .eq("org_id", session.orgId)
+        .eq("class_code", c.code),
+    ),
   ]);
 
   const byClass = new Map<number, number>();
-  let uacCount = 0,
-    tpcCount = 0;
-  (atoms.data ?? []).forEach((a: { class_code: number; state: string }) => {
-    byClass.set(a.class_code, (byClass.get(a.class_code) ?? 0) + 1);
-    if (a.state === "uac") uacCount++;
-    else tpcCount++;
+  XPMS_CLASSES.forEach((c, i) => {
+    byClass.set(c.code, classCounts[i]?.count ?? 0);
   });
+  const totalAtoms = atomsTotal.count ?? 0;
+  const uacCount = atomsUac.count ?? 0;
+  const tpcCount = Math.max(0, totalAtoms - uacCount);
 
   return (
     <>
@@ -52,15 +65,19 @@ export default async function XpmsOverviewPage() {
       />
       <div className="page-content">
         <div className="metric-grid mb-6">
+          <MetricCard label={t("console.xpms.metric.atoms", undefined, "Atoms")} value={String(totalAtoms)} />
+          {/* B-34: plain word first, acronym in parentheses — no dashes. */}
           <MetricCard
-            label={t("console.xpms.metric.atoms", undefined, "Atoms")}
-            value={String(atoms.data?.length ?? 0)}
+            label={t("console.xpms.metric.uacPlanned", undefined, "Planned (UAC)")}
+            value={String(uacCount)}
           />
-          <MetricCard label={t("console.xpms.metric.uac", undefined, "UAC — Planned")} value={String(uacCount)} />
-          <MetricCard label={t("console.xpms.metric.tpc", undefined, "TPC — Deployed")} value={String(tpcCount)} />
+          <MetricCard
+            label={t("console.xpms.metric.tpcDeployed", undefined, "Deployed (TPC)")}
+            value={String(tpcCount)}
+          />
           <MetricCard
             label={t("console.xpms.metric.variance", undefined, "Variance entries")}
-            value={String(variance.data?.length ?? 0)}
+            value={String(variance.count ?? 0)}
           />
         </div>
 
@@ -70,7 +87,7 @@ export default async function XpmsOverviewPage() {
             subtitle={t(
               "console.xpms.classes.subtitle",
               undefined,
-              "Class is collection and code — one taxonomy, two faces.",
+              "Class is collection and code: one taxonomy, two faces.",
             )}
           />
           <CardBody>
@@ -82,7 +99,7 @@ export default async function XpmsOverviewPage() {
                   className="surface hover-lift block rounded-md p-4"
                   style={{ borderTop: `3px solid ${c.accent}` }}
                 >
-                  <div className="font-mono text-[10px] tracking-widest text-[var(--p-text-2)]">{c.code}000</div>
+                  <div className="font-mono text-[11px] tracking-widest text-[var(--p-text-2)]">{c.code}000</div>
                   <div className="mt-1 text-sm font-semibold">{c.name}</div>
                   <div className="mt-2 line-clamp-2 text-xs text-[var(--p-text-2)]">{c.oneLine}</div>
                   <div className="mt-3 font-mono text-xs">
@@ -105,7 +122,7 @@ export default async function XpmsOverviewPage() {
               subtitle={t(
                 "console.xpms.tiers.subtitle",
                 undefined,
-                "The second axis — what kind of human encounter the atom delivers.",
+                "The second axis: what kind of human encounter the atom delivers.",
               )}
             />
             <CardBody>
@@ -113,7 +130,7 @@ export default async function XpmsOverviewPage() {
                 {XPMS_TIERS.map((tier) => (
                   <li key={tier.id} className="flex items-center justify-between">
                     <span>
-                      <span className="me-2 font-mono text-[10px] text-[var(--p-text-2)]">{tier.num}</span>
+                      <span className="me-2 font-mono text-[11px] text-[var(--p-text-2)]">{tier.num}</span>
                       {tier.label}
                     </span>
                     <span className="text-xs text-[var(--p-text-2)]">
@@ -139,7 +156,7 @@ export default async function XpmsOverviewPage() {
                 {XPMS_ATOM_PHASES.map((p) => (
                   <li key={p.id} className="flex items-center justify-between">
                     <span>
-                      <span className="me-2 font-mono text-[10px] text-[var(--p-text-2)]">{p.num}</span>
+                      <span className="me-2 font-mono text-[11px] text-[var(--p-text-2)]">{p.num}</span>
                       {p.label}
                     </span>
                     <span className="text-[11px] text-[var(--p-text-2)]">{p.platform}</span>
@@ -158,10 +175,10 @@ export default async function XpmsOverviewPage() {
         <div className="mt-6 text-xs text-[var(--p-text-2)]">
           {t(
             "console.xpms.footer.compositionRows",
-            { count: comp.data?.length ?? 0 },
-            `Composition rows on file: ${comp.data?.length ?? 0}.`,
+            { count: comp.count ?? 0 },
+            `Composition rows on file: ${comp.count ?? 0}.`,
           )}{" "}
-          {t("console.xpms.footer.codebookNote", undefined, "Codebook is global and append-only — see")}{" "}
+          {t("console.xpms.footer.codebookNote", undefined, "Codebook is global and append-only. See")}{" "}
           <Link href="/studio/xpms/codebook" className="text-[var(--p-accent)]">
             {t("console.xpms.footer.codebookLink", undefined, "XTC codebook")}
           </Link>

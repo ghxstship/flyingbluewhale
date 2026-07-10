@@ -238,10 +238,32 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
-# Uncomment to customize email template
-# [auth.email.template.invite]
-# subject = "You have been invited"
-# content_path = "./supabase/templates/invite.html"
+# Branded auth email templates (E-07). Authored from the ATLVS email kit's
+# visual language (src/components/email — inline hex, table layout, the
+# spaced wordmark header + powered-by footer). These blocks apply to the
+# LOCAL stack (supabase start); the HOSTED project reads its templates from
+# project config — apply the same files via the dashboard (Auth → Email
+# Templates) or the Management API (PATCH /v1/projects/{ref}/config/auth,
+# mailer_templates_*_content fields).
+[auth.email.template.invite]
+subject = "You've been invited to ATLVS"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your ATLVS email"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your ATLVS password"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Your ATLVS sign-in link"
+content_path = "./supabase/templates/magic_link.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your new ATLVS email"
+content_path = "./supabase/templates/email_change.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]

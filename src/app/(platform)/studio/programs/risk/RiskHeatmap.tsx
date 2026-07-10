@@ -60,7 +60,7 @@ export function RiskHeatmap({
           {likelihood.map((l) => (
             <div
               key={l}
-              className="px-1.5 py-1 text-center text-[10px] font-medium tracking-[0.16em] text-[var(--p-text-2)] uppercase"
+              className="px-1.5 py-1 text-center text-[11px] font-medium tracking-[0.16em] text-[var(--p-text-2)] uppercase"
             >
               {pretty(l)}
             </div>
@@ -69,7 +69,7 @@ export function RiskHeatmap({
           {/* Body — impact rows reversed (severe at top) */}
           {[...impact].reverse().map((impactRow) => (
             <React.Fragment key={impactRow}>
-              <div className="flex items-center justify-end pe-2 text-[10px] font-medium tracking-[0.16em] text-[var(--p-text-2)] uppercase">
+              <div className="flex items-center justify-end pe-2 text-[11px] font-medium tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {pretty(impactRow)}
               </div>
               {likelihood.map((likeCol) => {
@@ -104,7 +104,7 @@ export function RiskHeatmap({
           ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-end gap-3 text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
+        <div className="mt-3 flex items-center justify-end gap-3 text-[11px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
           <Legend
             tone="bg-[var(--p-success)]"
             label={t("console.programs.risk.heatmap.legend.low", undefined, "Low")}
@@ -130,7 +130,7 @@ export function RiskHeatmap({
           >
             <div className="mb-2 flex items-center justify-between">
               <h4 className="text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
-                {pretty(open.likelihood)} × {pretty(open.impact)} —{" "}
+                {pretty(open.likelihood)} × {pretty(open.impact)} ·{" "}
                 {open.risks.length === 1
                   ? t(
                       "console.programs.risk.heatmap.riskCount.one",

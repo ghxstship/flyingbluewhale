@@ -36,7 +36,7 @@ export default async function Page() {
             label={t("console.safety.guardTours.new.nameLabel", undefined, "Name")}
             name="name"
             maxLength={200}
-            placeholder={t("console.safety.guardTours.new.namePlaceholder", undefined, "Perimeter sweep — Stadium A")}
+            placeholder={t("console.safety.guardTours.new.namePlaceholder", undefined, "Perimeter sweep · Stadium A")}
             required
           />
           <div>
@@ -61,7 +61,7 @@ export default async function Page() {
             </label>
             <select name="venue_id" defaultValue="" className="ps-input mt-1.5 w-full">
               <option value="">
-                {t("console.safety.guardTours.new.venueNone", undefined, "— None / multi-venue —")}
+                {t("console.safety.guardTours.new.venueNone", undefined, "None / multi-venue")}
               </option>
               {venues.map((v) => (
                 <option key={v.id} value={v.id}>
@@ -71,7 +71,7 @@ export default async function Page() {
             </select>
           </div>
           <Input
-            label={t("console.safety.guardTours.new.cadenceLabel", undefined, "Cadence — Minutes")}
+            label={t("console.safety.guardTours.new.cadenceLabel", undefined, "Cadence (Minutes)")}
             name="cadence_minutes"
             type="number"
             min={0}

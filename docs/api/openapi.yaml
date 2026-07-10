@@ -322,16 +322,19 @@ components:
 paths:
   /api/v1/health:
     get:
+      operationId: getHealth
       summary: Legacy composite health ping (kept for backwards compat).
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
   /api/v1/health/liveness:
     get:
+      operationId: getHealthLiveness
       summary: Liveness probe. Always 200 if the process is up.
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
   /api/v1/health/readiness:
     get:
+      operationId: getHealthReadiness
       summary: Readiness probe. 200 iff DB reachable + env complete.
       responses:
         "200": { description: ready, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
@@ -339,33 +342,42 @@ paths:
 
   /api/v1/setup:
     get:
+      operationId: getSetup
       summary: Org activation checklist (create project → import → invite → go live), derived live from real data.
       responses:
         "200": { description: activation progress, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "401": { description: unauthorized, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/inbox:
     get:
+      operationId: getInbox
       summary: Unified per-user triage inbox — unread notifications + the viewer's own not-done tasks.
       responses:
         "200": { description: inbox items, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "401": { description: unauthorized, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/ai/copilot:
     post:
+      operationId: postAiCopilot
       summary: Grounded Copilot answer — answers only from the org's indexed RAG corpus, with real citations + a confidence grade.
       responses:
         "200": { description: grounded answer, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "401": { description: unauthorized, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
         "503": { description: AI not configured, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/telemetry/marketing:
     post:
+      operationId: postTelemetryMarketing
       summary: Anonymous marketing telemetry beacon (M3-05 / IK-039). Writes events into usage_events under the system org.
       security: []
       responses:
         "200": { description: received, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "400": { description: invalid event or payload too large, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/projects:
     get:
@@ -451,6 +463,7 @@ paths:
                       data: { $ref: "#/components/schemas/Project" }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     patch:
       summary: Update a project (partial).
       operationId: updateProject
@@ -482,69 +495,290 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/notifications/actions:
-    post: { summary: Execute an actionable-notification action (approve/decline time-off, approve deliverable). Called by the service worker on action-button tap. P2.a. }
+    post:
+      summary: Execute an actionable-notification action (approve/decline time-off, approve deliverable). Called by the service worker on action-button tap. P2.a.
+      operationId: postNotificationsActions
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/scan:
-    post: { summary: Scan an assignment code (any catalog kind — ticket, credential, wristband, vehicle, etc.). Race-safe via assignment_scan_codes unique partial index. }
+    post:
+      summary: Scan an assignment code (any catalog kind — ticket, credential, wristband, vehicle, etc.). Race-safe via assignment_scan_codes unique partial index.
+      operationId: postScan
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/equipment/scan:
-    post: { summary: Scan an equipment asset tag to toggle / check-in / check-out. Emits status updates. }
+    post:
+      summary: Scan an equipment asset tag to toggle / check-in / check-out. Emits status updates.
+      operationId: postEquipmentScan
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/deliverables/{id}/download:
-    get: { summary: Redirect to a signed URL for a deliverable file. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Redirect to a signed URL for a deliverable file.
+      operationId: getDeliverablesByIdDownload
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/deliverables/{id}/transition:
-    post: { summary: Drive a deliverable through the advancing state machine (submitted → in_review → approved / rejected / revision_requested / fulfilled). Producer-side personas only. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      summary: Drive a deliverable through the advancing state machine (canonical NEXT_FULFILLMENT_STATES map, e.g. submitted → in_review → approved → delivered). Producer-side personas only.
+      operationId: postDeliverablesByIdTransition
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/ai/chat:
-    post: { summary: Streaming chat completion. }
+    post:
+      summary: Streaming chat completion.
+      operationId: postAiChat
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/ai/propose:
-    post: { summary: Generate an AI proposal draft (persists an ai_proposal_drafts row). }
+    post:
+      summary: Generate an AI proposal draft (persists an ai_proposal_drafts row).
+      operationId: postAiPropose
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/ai/conversations:
-    get: { summary: List conversations for the session. Creation is implicit via /api/v1/ai/chat. }
+    get:
+      summary: List conversations for the session. Creation is implicit via /api/v1/ai/chat.
+      operationId: getAiConversations
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/ai/conversations/{id}:
-    get:    { summary: Get a conversation + messages. }
-    delete: { summary: Delete a conversation. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Get a conversation + messages.
+      operationId: getAiConversationsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      summary: Delete a conversation.
+      operationId: deleteAiConversationsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/schedule.ics:
-    get: { summary: iCalendar feed for the session's events. }
+    get:
+      summary: iCalendar feed for the session's events.
+      operationId: getScheduleIcs
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/webhooks/stripe:
-    post: { summary: Stripe webhook receiver (HMAC-verified, idempotent). }
+    post:
+      summary: Stripe webhook receiver (HMAC-verified, idempotent).
+      operationId: postWebhooksStripe
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/webhooks/endpoints:
-    get:  { summary: List outbound webhook endpoints registered for the caller's org. }
-    post: { summary: Register a new outbound webhook endpoint; returns the HMAC signing secret once. }
+    get:
+      summary: List outbound webhook endpoints registered for the caller's org.
+      operationId: getWebhooksEndpoints
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Register a new outbound webhook endpoint; returns the HMAC signing secret once.
+      operationId: postWebhooksEndpoints
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/webhooks/endpoints/{id}:
-    patch:  { summary: Update an endpoint's URL, event allowlist, description, or active flag. }
-    delete: { summary: Soft-delete a webhook endpoint. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    patch:
+      summary: Update an endpoint's URL, event allowlist, description, or active flag.
+      operationId: patchWebhooksEndpointsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      summary: Soft-delete a webhook endpoint.
+      operationId: deleteWebhooksEndpointsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/auth/oauth:
-    get: { summary: Initiate Supabase OAuth; redirects to provider. }
+    get:
+      summary: Initiate Supabase OAuth; redirects to provider.
+      operationId: getAuthOauth
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/auth/webauthn/register/options:
-    post: { summary: Generate WebAuthn registration options + challenge. }
+    post:
+      summary: Generate WebAuthn registration options + challenge.
+      operationId: postAuthWebauthnRegisterOptions
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/auth/webauthn/register/verify:
-    post: { summary: Verify WebAuthn attestation + persist credential. }
+    post:
+      summary: Verify WebAuthn attestation + persist credential.
+      operationId: postAuthWebauthnRegisterVerify
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/auth/webauthn/credentials:
-    get:    { summary: List the session's registered passkeys. }
-    delete: { summary: Revoke a passkey by credential id. }
+    get:
+      summary: List the session's registered passkeys.
+      operationId: getAuthWebauthnCredentials
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    delete:
+      summary: Revoke a passkey by credential id.
+      operationId: deleteAuthWebauthnCredentials
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/stripe/checkout:
-    post: { summary: Create a Checkout Session (idempotent). }
+    post:
+      summary: Create a Checkout Session (idempotent).
+      operationId: postStripeCheckout
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/stripe/credits-checkout:
-    post: { summary: "LEG3ND credit-pack self-serve checkout (idempotent): records a pending credit_orders row for the given creditProductId and returns a Stripe Checkout session URL; the webhook credits the ledger on payment." }
+    post:
+      summary: "LEG3ND credit-pack self-serve checkout (idempotent): records a pending credit_orders row for the given creditProductId and returns a Stripe Checkout session URL; the webhook credits the ledger on payment."
+      operationId: postStripeCreditsCheckout
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/stripe/connect/onboarding:
-    post: { summary: Create a Connect Express onboarding link (idempotent). }
+    post:
+      summary: Create a Connect Express onboarding link (idempotent).
+      operationId: postStripeConnectOnboarding
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/stripe/portal:
-    post: { summary: Mint a Stripe Billing Portal session for the caller's org and return its URL. Owners/admins only; lazy-creates a Stripe customer if the org hasn't transacted yet. }
+    post:
+      summary: Mint a Stripe Billing Portal session for the caller's org and return its URL. Owners/admins only; lazy-creates a Stripe customer if the org hasn't transacted yet.
+      operationId: postStripePortal
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/locations:
-    get: { summary: Typeahead lookup over the org's saved locations. `?q=<search>` matches name/address/city; up to 25 results. }
+    get:
+      summary: Typeahead lookup over the org's saved locations. `?q=<search>` matches name/address/city; up to 25 results.
+      operationId: getLocations
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/guides/comments:
-    get:  { summary: List comments for a guide section. }
-    post: { summary: Post a comment to a guide section. }
+    get:
+      summary: List comments for a guide section.
+      operationId: getGuidesComments
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Post a comment to a guide section.
+      operationId: postGuidesComments
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/guides/unlock:
-    post: { summary: Redeem an access code for an internal-persona guide; sets a signed httpOnly cookie that unlocks that persona on /p/<slug>/guide. Rate-limited; tier-5 (guest/custom) personas are rejected. }
+    post:
+      summary: Redeem an access code for an internal-persona guide; sets a signed httpOnly cookie that unlocks that persona on /p/<slug>/guide. Rate-limited; tier-5 (guest/custom) personas are rejected.
+      operationId: postGuidesUnlock
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/me/api-keys:
     get:
@@ -570,6 +804,7 @@ paths:
                             type: array
                             items: { $ref: "#/components/schemas/ApiKey" }
         "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
     post:
       summary: Issue a new personal access token. Plaintext returned ONCE; cookie-auth only.
       operationId: createApiKey
@@ -600,6 +835,7 @@ paths:
         "400": { $ref: "#/components/responses/BadRequest" }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/me/api-keys/{id}:
     parameters:
       - name: id
@@ -629,123 +865,620 @@ paths:
                           revoked: { type: boolean, enum: [true] }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/me:
-    get: { summary: "Canonical session payload — userId, email, orgId, role, persona, tier — or 401 if signed out." }
+    get:
+      summary: "Canonical session payload — userId, email, orgId, role, persona, tier — or 401 if signed out."
+      operationId: getMe
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/me/preferences:
-    get:   { summary: Read the session's UI + locale preferences. }
-    patch: { summary: Merge-update the session's preferences. }
+    get:
+      summary: Read the session's UI + locale preferences.
+      operationId: getMePreferences
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    patch:
+      summary: Merge-update the session's preferences.
+      operationId: patchMePreferences
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/me/workspaces:
-    get:   { summary: List every workspace the session user is a member of, plus the currently active one. }
-    patch: { summary: Switch the active workspace by updating `last_org_id` on the user's preferences. }
+    get:
+      summary: List every workspace the session user is a member of, plus the currently active one.
+      operationId: getMeWorkspaces
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    patch:
+      summary: Switch the active workspace by updating `last_org_id` on the user's preferences.
+      operationId: patchMeWorkspaces
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/me/entitlements:
-    get: { summary: "Ecosystem app entitlements for the global App Rail — the apps the session user can reach with access level ({ apps: [{id, access}] }). SSOT for the cross-product switcher." }
+    get:
+      summary: "Ecosystem app entitlements for the global App Rail — the apps the session user can reach with access level ({ apps: [{id, access}] }). SSOT for the cross-product switcher."
+      operationId: getMeEntitlements
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/me/export:
-    get: { summary: Download a GDPR JSON export of the session's data. }
+    get:
+      summary: Download a GDPR JSON export of the session's data.
+      operationId: getMeExport
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/me/delete:
-    post: { summary: Request account deletion with a 30-day grace window. }
+    post:
+      summary: Request account deletion with a 30-day grace window.
+      operationId: postMeDelete
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/invoices/{invoiceId}/pdf:
-    get: { summary: Render an invoice to PDF and 302-redirect to a signed download URL. }
+    parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Render an invoice to PDF and 302-redirect to a signed download URL.
+      operationId: getInvoicesByInvoiceIdPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/guides/{guideId}/pdf:
-    get: { summary: Render an event guide to PDF (persona-scoped boarding pass) and 302-redirect to a signed download URL. }
+    parameters:
+      - name: guideId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Render an event guide to PDF (persona-scoped boarding pass) and 302-redirect to a signed download URL.
+      operationId: getGuidesByGuideIdPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/deliverables/{id}/pdf:
-    get: { summary: Render a single deliverable (rider, plot, list, etc.) to a type-canonical PDF. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Render a single deliverable (rider, plot, list, etc.) to a type-canonical PDF.
+      operationId: getDeliverablesByIdPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/projects/{projectId}/advance-book:
-    get: { summary: Compile every approved/submitted deliverable on a project into one branded advance-book PDF. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Compile every approved/submitted deliverable on a project into one branded advance-book PDF.
+      operationId: getProjectsByProjectIdAdvanceBook
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/exports:
-    get:  { summary: List the caller org's recent export runs. }
-    post: { summary: Kick off a synchronous CSV or JSON export for a registry-whitelisted table. }
+    get:
+      summary: List the caller org's recent export runs.
+      operationId: getExports
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Kick off a synchronous CSV or JSON export for a registry-whitelisted table.
+      operationId: postExports
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/exports/{id}/download:
-    get: { summary: Re-mint a short-lived signed URL for a completed export run. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Re-mint a short-lived signed URL for a completed export run.
+      operationId: getExportsByIdDownload
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/exports/osha:
-    get: { summary: OSHA 300/300A/301-aligned CSV export of recordable incidents for the requested calendar `?year=`. Header row plus one CSV row per incident. }
+    get:
+      summary: OSHA 300/300A/301-aligned CSV export of recordable incidents for the requested calendar `?year=`. Header row plus one CSV row per incident.
+      operationId: getExportsOsha
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/import/crew-members:
-    post: { summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone). }
+    post:
+      summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone).
+      operationId: postImportCrewMembers
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/projects/{projectId}/call-sheet:
-    get: { summary: Daily call sheet PDF — events + crew + venue + weather. `?variant=full|labor`. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Daily call sheet PDF — events + crew + venue + weather. `?variant=full|labor`.
+      operationId: getProjectsByProjectIdCallSheet
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/projects/{projectId}/expense-report:
-    get: { summary: Expense + time + mileage report PDF for a date range. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Expense + time + mileage report PDF for a date range.
+      operationId: getProjectsByProjectIdExpenseReport
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/projects/{projectId}/task-report:
-    get: { summary: Project task list / punch list PDF. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Project task list / punch list PDF.
+      operationId: getProjectsByProjectIdTaskReport
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/projects/{projectId}/signage-grid:
-    get: { summary: Project-wide signage grid PDF aggregated from every signage_grid deliverable. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Project-wide signage grid PDF aggregated from every signage_grid deliverable.
+      operationId: getProjectsByProjectIdSignageGrid
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/projects/{projectId}/wristbands:
-    get: { summary: Printable 10-up QR wristband sheet for active tickets. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Printable 10-up QR wristband sheet for active tickets.
+      operationId: getProjectsByProjectIdWristbands
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/rentals/{rentalId}/pull-sheet:
-    get: { summary: Rental checkout / equipment pull sheet PDF. }
+    parameters:
+      - name: rentalId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Rental checkout / equipment pull sheet PDF.
+      operationId: getRentalsByRentalIdPullSheet
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/compliance/audit-export:
-    get: { summary: Branded PDF dump of audit_log for a date range / actor filter — SOC-2 export shape. }
+    get:
+      summary: Branded PDF dump of audit_log for a date range / actor filter — SOC-2 export shape.
+      operationId: getComplianceAuditExport
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/brand-kit:
-    get: { summary: Per-org brand kit PDF — accent color, typography, legal footer. }
+    get:
+      summary: Per-org brand kit PDF — accent color, typography, legal footer.
+      operationId: getBrandKit
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/procurement/vendors/{vendorId}/rfp:
-    post: { summary: Generate a branded Request-for-Proposal PDF for a vendor scoped to a project. }
+    parameters:
+      - name: vendorId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      summary: Generate a branded Request-for-Proposal PDF for a vendor scoped to a project.
+      operationId: postProcurementVendorsByVendorIdRfp
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/deliverables/{id}/version-diff:
-    get: { summary: Structured diff of a deliverable's data jsonb between two audit-log snapshots. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Structured diff of a deliverable's data jsonb between two audit-log snapshots.
+      operationId: getDeliverablesByIdVersionDiff
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/users/{userId}/calendar.ics:
-    get: { summary: Personal ICS subscribe URL — every event across the user's org memberships. }
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Personal ICS subscribe URL — every event across the user's org memberships.
+      operationId: getUsersByUserIdCalendarIcs
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/projects/{projectId}/archive:
-    get: { summary: ZIP bundle — every org-scoped table's project rows + manifest.json. Opp #9. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: ZIP bundle — every org-scoped table's project rows + manifest.json. Opp #9.
+      operationId: getProjectsByProjectIdArchive
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/projects/{projectId}/sponsor-deck:
-    post: { summary: Generate a branded PPTX sponsor activation recap. Opp #23. }
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      summary: Generate a branded PPTX sponsor activation recap. Opp #23.
+      operationId: postProjectsByProjectIdSponsorDeck
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/import/tasks:
-    post: { summary: Bulk-import a CSV of tasks into a project. }
+    post:
+      summary: Bulk-import a CSV of tasks into a project.
+      operationId: postImportTasks
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/import/vendors:
-    post: { summary: Bulk-import a CSV of vendors into the caller's org. }
+    post:
+      summary: Bulk-import a CSV of vendors into the caller's org.
+      operationId: postImportVendors
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/deliverable-templates:
-    get:  { summary: List deliverable (rider / plot / list) templates visible to the caller. Opp #12. }
-    post: { summary: Create an org-scoped deliverable template. }
+    get:
+      summary: List deliverable (rider / plot / list) templates visible to the caller. Opp #12.
+      operationId: getDeliverableTemplates
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Create an org-scoped deliverable template.
+      operationId: postDeliverableTemplates
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/stage-plots:
-    get:  { summary: List stage plots for a project. Opp #11. }
-    post: { summary: Create a stage plot row with interactive-editor state. }
+    get:
+      summary: List stage plots for a project. Opp #11.
+      operationId: getStagePlots
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Create a stage plot row with interactive-editor state.
+      operationId: postStagePlots
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/stage-plots/{id}:
-    get:    { summary: Get a single stage plot. }
-    patch:  { summary: Update a stage plot's name, dimensions, elements, or notes (editor save). }
-    delete: { summary: Soft-delete a stage plot. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Get a single stage plot.
+      operationId: getStagePlotsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      summary: Update a stage plot's name, dimensions, elements, or notes (editor save).
+      operationId: patchStagePlotsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      summary: Soft-delete a stage plot.
+      operationId: deleteStagePlotsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/incidents:
-    get:  { summary: List incidents for the caller's org (optionally filtered by project). Opp #18. }
-    post: { summary: Log a new incident report with optional photo references. }
+    get:
+      summary: List incidents for the caller's org (optionally filtered by project). Opp #18.
+      operationId: getIncidents
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Log a new incident report with optional photo references.
+      operationId: postIncidents
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/incidents/photo-upload:
-    post: { summary: Issue a signed upload URL into the `incident-photos` bucket scoped to a draft id. }
+    post:
+      summary: Issue a signed upload URL into the `incident-photos` bucket scoped to a draft id.
+      operationId: postIncidentsPhotoUpload
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/branding/upload:
-    post: { summary: Issue a signed upload URL into the public `branding` bucket and return the public logo URL for org/client/project/proposal co-branding. }
+    post:
+      summary: Issue a signed upload URL into the public `branding` bucket and return the public logo URL for org/client/project/proposal co-branding.
+      operationId: postBrandingUpload
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/email-templates:
-    get:  { summary: List the org's transactional email templates. Opp #21. }
-    post: { summary: Create an org-scoped email template with merge-tag schema. }
+    get:
+      summary: List the org's transactional email templates. Opp #21.
+      operationId: getEmailTemplates
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Create an org-scoped email template with merge-tag schema.
+      operationId: postEmailTemplates
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/email-templates/{id}:
-    patch:  { summary: Update an org-scoped email template's name, subject, body, merge tags, or active flag. }
-    delete: { summary: Soft-delete an org-scoped email template. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    patch:
+      summary: Update an org-scoped email template's name, subject, body, merge tags, or active flag.
+      operationId: patchEmailTemplatesById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      summary: Soft-delete an org-scoped email template.
+      operationId: deleteEmailTemplatesById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/credentials/extract:
-    post: { summary: AI-extract structured fields from COI or W-9 text. Opp #10. }
+    post:
+      summary: AI-extract structured fields from COI or W-9 text. Opp #10.
+      operationId: postCredentialsExtract
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/notifications:
-    get:   { summary: List the session user's 50 most recent notifications + unread count. }
-    patch: { summary: Mark notifications as read by `ids[]` or `readAll=true`. }
+    get:
+      summary: List the session user's 50 most recent notifications + unread count.
+      operationId: getNotifications
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    patch:
+      summary: Mark notifications as read by `ids[]` or `readAll=true`.
+      operationId: patchNotifications
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/risks:
-    get:  { summary: List RAID-register rows (risks/assumptions/issues/dependencies) for the caller's org. WF-006. }
-    post: { summary: Create a new RAID entry with likelihood × impact scoring. WF-006. }
+    get:
+      summary: List RAID-register rows (risks/assumptions/issues/dependencies) for the caller's org. WF-006.
+      operationId: getRisks
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Create a new RAID entry with likelihood × impact scoring. WF-006.
+      operationId: postRisks
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/accreditation/scan:
-    post: { summary: Decision endpoint for COMPVSS gate scans — validates barcode, category, and zone privileges; writes access_scans audit row. WF-053. }
+    post:
+      summary: Decision endpoint for COMPVSS gate scans — validates barcode, category, and zone privileges; writes access_scans audit row. WF-053.
+      operationId: postAccreditationScan
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/crisis/alerts:
-    get:  { summary: List crisis mass-notifications for the caller's org. WF-252. }
-    post: { summary: Create and fan out a crisis alert to push/SMS/email channels by audience filter. WF-252. }
+    get:
+      summary: List crisis mass-notifications for the caller's org. WF-252.
+      operationId: getCrisisAlerts
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Create and fan out a crisis alert to push/SMS/email channels by audience filter. WF-252.
+      operationId: postCrisisAlerts
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/privacy/dsar:
-    get:  { summary: List DSAR requests visible to the caller (org members see all; data subjects see their own). WF-232. }
-    post: { summary: Intake a new Data Subject Access Request with auto-computed 30-day SLA. WF-232. }
+    get:
+      summary: List DSAR requests visible to the caller (org members see all; data subjects see their own). WF-232.
+      operationId: getPrivacyDsar
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Intake a new Data Subject Access Request with auto-computed 30-day SLA. WF-232.
+      operationId: postPrivacyDsar
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/shifts/checkin:
-    post: { summary: Record a shift check-in / check-out / break-start / break-end on COMPVSS. WF-197. }
+    post:
+      summary: Record a shift check-in / check-out / break-start / break-end on COMPVSS. WF-197.
+      operationId: postShiftsCheckin
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+
+  /api/v1/time/clock:
+    post:
+      summary: Free personal time-clock punch (COMPVSS /m/clock + /m/punch) — opens/closes a bare time_entries row for the caller, no scheduled shift required. Offline-queueable; optional lat/lng drives geofence zone classification.
+      operationId: postTimeClock
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/marketplace-listings:
     get:
@@ -806,6 +1539,7 @@ paths:
         "400": { $ref: "#/components/responses/BadRequest" }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/marketplace-listings/{id}:
     parameters:
       - name: id
@@ -864,6 +1598,7 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
     delete:
       summary: "Soft-delete a marketplace listing. Scope: marketplace:write."
       operationId: deleteMarketplaceListing
@@ -874,6 +1609,7 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/handovers:
     get:
@@ -930,6 +1666,7 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/handovers/{id}:
     parameters:
       - name: id
@@ -1017,6 +1754,7 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/tasks/{taskId}/comments:
     parameters:
@@ -1074,6 +1812,7 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/tasks/{taskId}/events:
     parameters:
       - name: taskId
@@ -1104,107 +1843,470 @@ paths:
         "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/openapi.json:
-    get: { summary: Public OpenAPI 3.1 spec (this document) — cacheable for 5 min on browsers, 10 min on the edge. }
+    get:
+      summary: Public OpenAPI 3.1 spec (this document) — cacheable for 5 min on browsers, 10 min on the edge.
+      operationId: getOpenapiJson
+      security: []
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
 
   /api/v1/automations/{automationId}/webhook:
-    post: { summary: Inbound webhook trigger that fires the named automation (HMAC-signed; payload becomes the run input). }
+    parameters:
+      - name: automationId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      summary: Inbound webhook trigger that fires the named automation (HMAC-signed; payload becomes the run input).
+      operationId: postAutomationsByAutomationIdWebhook
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/internal/automations/dispatch:
-    post: { summary: Internal cron entrypoint — drains the automation run queue. Authenticated via cron token, not user session. }
+    post:
+      summary: Internal cron entrypoint — drains the automation run queue. Authenticated via cron token, not user session.
+      operationId: postInternalAutomationsDispatch
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/internal/automations/schedule:
-    post: { summary: Internal cron entrypoint — fires scheduled-trigger automations whose next-run time is due. }
+    post:
+      summary: Internal cron entrypoint — fires scheduled-trigger automations whose next-run time is due.
+      operationId: postInternalAutomationsSchedule
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/share-links:
-    get:  { summary: List active share links scoped to the caller's org. WF-share-1. }
-    post: { summary: Mint a new share link (resource_table + resource_id + scopes + optional expiry/password). }
+    get:
+      summary: List active share links scoped to the caller's org. WF-share-1.
+      operationId: getShareLinks
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Mint a new share link (resource_table + resource_id + scopes + optional expiry/password).
+      operationId: postShareLinks
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/share-links/{id}:
-    delete: { summary: Revoke a share link. Subsequent lookups return 410 Gone. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    delete:
+      summary: Revoke a share link. Subsequent lookups return 410 Gone.
+      operationId: deleteShareLinksById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/push/subscriptions:
-    get:    { summary: List the caller's web-push endpoints (one per browser/device). }
-    post:   { summary: Register a new web-push endpoint (subscribed via the in-page push prompt). }
-    delete: { summary: Unsubscribe a single endpoint by id, or `?all=1` to clear every endpoint for the caller. }
+    get:
+      summary: List the caller's web-push endpoints (one per browser/device).
+      operationId: getPushSubscriptions
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Register a new web-push endpoint (subscribed via the in-page push prompt).
+      operationId: postPushSubscriptions
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      summary: Unsubscribe a single endpoint by id, or `?all=1` to clear every endpoint for the caller.
+      operationId: deletePushSubscriptions
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/push/test:
-    post: { summary: Send a test push to every active endpoint for the caller — verifies VAPID + subscription health. }
+    post:
+      summary: Send a test push to every active endpoint for the caller — verifies VAPID + subscription health.
+      operationId: postPushTest
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/integrations/slack/install:
-    get: { summary: Begin the Slack OAuth install flow — redirects the user to slack.com with the workspace's state token. }
+    get:
+      summary: Begin the Slack OAuth install flow — redirects the user to slack.com with the workspace's state token.
+      operationId: getIntegrationsSlackInstall
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/integrations/slack/callback:
-    get: { summary: Slack OAuth callback. Exchanges code → bot token, persists workspace, redirects to /console/integrations. }
+    get:
+      summary: Slack OAuth callback. Exchanges code → bot token, persists workspace, redirects to /console/integrations.
+      operationId: getIntegrationsSlackCallback
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/integrations/slack/uninstall:
-    post: { summary: Disconnect the calling org from its Slack workspace and revoke the stored bot token. }
+    post:
+      summary: Disconnect the calling org from its Slack workspace and revoke the stored bot token.
+      operationId: postIntegrationsSlackUninstall
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/integrations/slack/events:
-    post: { summary: Slack Events API receiver. Verifies HMAC signature; handles url_verification, app_uninstalled, message events. }
+    post:
+      summary: Slack Events API receiver. Verifies HMAC signature; handles url_verification, app_uninstalled, message events.
+      operationId: postIntegrationsSlackEvents
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/zapier/auth/test:
-    get: { summary: Zapier auth-test endpoint — validates the Bearer PAT and returns the resolved org name + user email. }
+    get:
+      summary: Zapier auth-test endpoint — validates the Bearer PAT and returns the resolved org name + user email.
+      operationId: getZapierAuthTest
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/zapier/actions/create-project:
-    post: { summary: Zapier action — create a project in the caller's org. }
+    post:
+      summary: Zapier action — create a project in the caller's org.
+      operationId: postZapierActionsCreateProject
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/zapier/actions/create-task:
-    post: { summary: Zapier action — create a task (optionally scoped to a project). }
+    post:
+      summary: Zapier action — create a task (optionally scoped to a project).
+      operationId: postZapierActionsCreateTask
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/zapier/triggers/projects:
-    get: { summary: Zapier polling trigger — recent projects for the caller's org. }
+    get:
+      summary: Zapier polling trigger — recent projects for the caller's org.
+      operationId: getZapierTriggersProjects
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/zapier/triggers/deliverables:
-    get: { summary: Zapier polling trigger — recent deliverables for the caller's org. }
+    get:
+      summary: Zapier polling trigger — recent deliverables for the caller's org.
+      operationId: getZapierTriggersDeliverables
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/zapier/triggers/invoices:
-    get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
+    get:
+      summary: Zapier polling trigger — recent invoices for the caller's org.
+      operationId: getZapierTriggersInvoices
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/zapier/triggers/assignment-scans:
-    get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+    get:
+      summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind).
+      operationId: getZapierTriggersAssignmentScans
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/graphql:
-    get:  { summary: GraphiQL explorer (dev only) — disabled in production. }
-    post: { summary: GraphQL endpoint for partner integrations — session-authenticated reads over the canonical org-scoped entities. GraphQL-spec response shape, not the ATLVS envelope. }
+    get:
+      summary: GraphiQL explorer (dev only) — disabled in production.
+      operationId: getGraphql
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: GraphQL endpoint for partner integrations — session-authenticated reads over the canonical org-scoped entities. GraphQL-spec response shape, not the ATLVS envelope.
+      operationId: postGraphql
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/ai/embed-source:
-    post: { summary: Ingest a source document into the org's AI embedding index for retrieval. }
+    post:
+      summary: Ingest a source document into the org's AI embedding index for retrieval.
+      operationId: postAiEmbedSource
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/bim/{modelId}/download:
-    get: { summary: 302-redirect to a signed download URL for a BIM/IFC model file. }
+    parameters:
+      - name: modelId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: 302-redirect to a signed download URL for a BIM/IFC model file.
+      operationId: getBimByModelIdDownload
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
 
   /api/v1/daily-logs/{id}/refresh-weather:
-    post: { summary: Re-fetch and persist the weather snapshot on a daily log. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      summary: Re-fetch and persist the weather snapshot on a daily log.
+      operationId: postDailyLogsByIdRefreshWeather
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/drawings/{siteplanId}/markups:
-    get:  { summary: List visible markups on a drawing sheet, colored by layer. }
-    post: { summary: Create a markup (shape/annotation) on a drawing sheet. }
+    parameters:
+      - name: siteplanId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: List visible markups on a drawing sheet, colored by layer.
+      operationId: getDrawingsBySiteplanIdMarkups
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    post:
+      summary: Create a markup (shape/annotation) on a drawing sheet.
+      operationId: postDrawingsBySiteplanIdMarkups
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/drawings/markups/{id}:
-    patch:  { summary: Update a markup's geometry, layer, or note. }
-    delete: { summary: Delete a markup. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    patch:
+      summary: Update a markup's geometry, layer, or note.
+      operationId: patchDrawingsMarkupsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+    delete:
+      summary: Delete a markup.
+      operationId: deleteDrawingsMarkupsById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/integrations/{system}/sync:
-    post: { summary: Trigger an inbound sync pull from a connected accounting system. }
+    parameters:
+      - name: system
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      summary: Trigger an inbound sync pull from a connected accounting system.
+      operationId: postIntegrationsBySystemSync
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/integrations/fx/refresh:
-    post: { summary: Refresh cached FX rates for the org's enabled currencies. }
+    post:
+      summary: Refresh cached FX rates for the org's enabled currencies.
+      operationId: postIntegrationsFxRefresh
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/integrations/qb-online/oauth-start:
-    get: { summary: Begin the QuickBooks Online OAuth consent flow — redirects to Intuit. }
+    get:
+      summary: Begin the QuickBooks Online OAuth consent flow — redirects to Intuit.
+      operationId: getIntegrationsQbOnlineOauthStart
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/integrations/qb-online/callback:
-    get: { summary: QuickBooks Online OAuth callback. Exchanges code for tokens, persists the connection, redirects to accounting settings. }
+    get:
+      summary: QuickBooks Online OAuth callback. Exchanges code for tokens, persists the connection, redirects to accounting settings.
+      operationId: getIntegrationsQbOnlineCallback
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/integrations/qb-online/sync:
-    post: { summary: Pull vendors / accounts / cost codes from the connected QuickBooks realm. }
+    post:
+      summary: Pull vendors / accounts / cost codes from the connected QuickBooks realm.
+      operationId: postIntegrationsQbOnlineSync
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/integrations/qb-online/push:
-    post: { summary: Push org invoices to the connected QuickBooks realm. }
+    post:
+      summary: Push org invoices to the connected QuickBooks realm.
+      operationId: postIntegrationsQbOnlinePush
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/me/restore:
-    post: { summary: Cancel a pending account deletion within the 30-day grace window. }
+    post:
+      summary: Cancel a pending account deletion within the 30-day grace window.
+      operationId: postMeRestore
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/pay-apps/{payAppId}/pdf:
-    get: { summary: Render a payment application (G702/G703-style) to PDF. }
+    parameters:
+      - name: payAppId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Render a payment application (G702/G703-style) to PDF.
+      operationId: getPayAppsByPayAppIdPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/payroll-runs/{runId}/pdf:
-    get: { summary: Render a payroll run summary to PDF. }
+    parameters:
+      - name: runId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Render a payroll run summary to PDF.
+      operationId: getPayrollRunsByRunIdPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/payroll-runs/{runId}/state-xml:
-    get: { summary: State payroll filing XML export for a payroll run. }
+    parameters:
+      - name: runId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: State payroll filing XML export for a payroll run.
+      operationId: getPayrollRunsByRunIdStateXml
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/site-plans/{id}/pdf:
-    get: { summary: Render a site plan with its markup layers to PDF. }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: Render a site plan with its markup layers to PDF.
+      operationId: getSitePlansByIdPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/wip/snapshot-pdf:
-    get: { summary: Work-in-progress (WIP) financial snapshot report PDF. }
+    get:
+      summary: Work-in-progress (WIP) financial snapshot report PDF.
+      operationId: getWipSnapshotPdf
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
 
   /api/v1/webhooks/docusign:
-    post: { summary: DocuSign Connect webhook receiver. HMAC-verified; advances contract envelope state on signer/completion events. }
+    post:
+      summary: DocuSign Connect webhook receiver. HMAC-verified; advances contract envelope state on signer/completion events.
+      operationId: postWebhooksDocusign
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/webhooks/ses-inbound:
-    post: { summary: AWS SES inbound-email webhook. Shared-secret header auth; routes messages to the matching project email inbox. }
+    post:
+      summary: AWS SES inbound-email webhook. Shared-secret header auth; routes messages to the matching project email inbox.
+      operationId: postWebhooksSesInbound
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/documents:
     get:
+      operationId: getDocuments
       summary: "List every generatable document type (id, app, OpenAPI schema name, record-binding support). Discovery entry point for the documents system. Scope: documents:read."
       responses:
         "200":
@@ -1223,8 +2325,16 @@ paths:
                         app: { type: string }
                         schema: { type: string }
                         recordBinding: { type: boolean }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/documents/{docType}:
+    parameters:
+      - name: docType
+        in: path
+        required: true
+        schema: { type: string }
     get:
+      operationId: getDocumentsByDocType
       summary: "Machine-readable data contract for one document type — JSON Schema, sample data object, and merge-field paths. Scope: documents:read."
       responses:
         "200":
@@ -1238,7 +2348,11 @@ paths:
                   schema: { type: object }
                   sample: { type: object }
                   paths: { type: array, items: { type: string } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
     post:
+      operationId: postDocumentsByDocType
       summary: "Generate a document. Body { data } (external — any doc type) or { recordId } (internal — record-bound types). Returns rendered .doc HTML + resolved data; no mutation. Scope: documents:write."
       requestBody:
         required: true
@@ -1267,9 +2381,14 @@ paths:
                   brand: { type: string }
                   html: { type: string }
                   data: { type: object }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/metrics:
     get:
+      operationId: getMetrics
       summary: "Canonical metric catalog (kit v6.3) — 77 KPI definitions across the 4 apps + whether each is computed live. Scope: reports:read."
       responses:
         "200":
@@ -1293,8 +2412,16 @@ paths:
                         direction: { type: string, enum: [up, down] }
                         confidence: { type: string }
                         computed: { type: boolean }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/metrics/{metricId}:
+    parameters:
+      - name: metricId
+        in: path
+        required: true
+        schema: { type: string }
     get:
+      operationId: getMetricsByMetricId
       summary: "One metric definition + its value computed live from the caller's org data (null when source data is absent). Scope: reports:read."
       responses:
         "200":
@@ -1307,8 +2434,12 @@ paths:
                   id: { type: string }
                   value: { type: number, nullable: true }
                   computed: { type: boolean }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/reports:
     get:
+      operationId: getReports
       summary: "The 43-report library (definitions) — each binds metric ids from the registry. Scope: reports:read."
       responses:
         "200":
@@ -1328,8 +2459,16 @@ paths:
                         title: { type: string }
                         kind: { type: string }
                         metrics: { type: array, items: { type: string } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/reports/{reportId}:
+    parameters:
+      - name: reportId
+        in: path
+        required: true
+        schema: { type: string }
     get:
+      operationId: getReportsByReportId
       summary: "A report definition + its metric values resolved live from org data. Scope: reports:read."
       responses:
         "200":
@@ -1341,8 +2480,17 @@ paths:
                 properties:
                   report: { type: object }
                   metrics: { type: object }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/reports/{reportId}/snapshot:
+    parameters:
+      - name: reportId
+        in: path
+        required: true
+        schema: { type: string }
     get:
+      operationId: getReportsByReportIdSnapshot
       summary: "Timestamped live read of a report (definition + resolved metric values + capturedAt). Computed on demand; not persisted. Scope: reports:read."
       responses:
         "200":
@@ -1355,37 +2503,125 @@ paths:
                   report: { type: object }
                   metrics: { type: object }
                   capturedAt: { type: string, format: date-time }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/admin/impersonate:
     post:
+      operationId: postAdminImpersonate
       summary: "Developer Act-As: start impersonating a user by id (mints the target's real Supabase session so RLS evaluates as the target). Internal, isDeveloper-gated; not for external consumers."
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
     delete:
+      operationId: deleteAdminImpersonate
       summary: "Developer Act-As: stop impersonating and restore the developer session. Trusts only the HMAC-signed impersonator cookie."
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/admin/sandbox-user:
     post:
+      operationId: postAdminSandboxUser
       summary: "Developer-only: spawn a throwaway sandbox user with a chosen role and persona in an org, for testing. isDeveloper-gated; users carry user_metadata.sandbox for cull."
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
     delete:
+      operationId: deleteAdminSandboxUser
       summary: "Developer-only: cull all sandbox users (user_metadata.sandbox=true) and their memberships."
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/work-orders:
-    get: { summary: "List the org's subcontractor work orders (newest first). Optional state filter." }
-    post: { summary: "Create a draft work order to dispatch a trade crew." }
+    get:
+      summary: "List the org's subcontractor work orders (newest first). Optional state filter."
+      operationId: getWorkOrders
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "Create a draft work order to dispatch a trade crew."
+      operationId: postWorkOrders
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/work-orders/{id}:
-    get: { summary: "A work order with its bids and change orders. Org-scoped." }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: "A work order with its bids and change orders. Org-scoped."
+      operationId: getWorkOrdersById
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/compliance:
-    get: { summary: "Derived subcontractor eligibility verdicts (blocked/expiring/eligible) per vendor x trade. Optional trade filter." }
+    get:
+      summary: "Derived subcontractor eligibility verdicts (blocked/expiring/eligible) per vendor x trade. Optional trade filter."
+      operationId: getCompliance
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/work-orders/{id}/messages:
-    get: { summary: "Messages on a work order's coordination thread (oldest first)." }
-    post: { summary: "Post a message to a work order thread (author = caller)." }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: "Messages on a work order's coordination thread (oldest first)."
+      operationId: getWorkOrdersByIdMessages
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    post:
+      summary: "Post a message to a work order thread (author = caller)."
+      operationId: postWorkOrdersByIdMessages
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/sub-invoices:
-    get: { summary: "Inbound subcontractor payment applications — an AP lens on the merged invoices store (source=ap_sub, with retainage + lien-waiver state). Optional state filter." }
+    get:
+      summary: "Inbound subcontractor payment applications — an AP lens on the merged invoices store (source=ap_sub, with retainage + lien-waiver state). Optional state filter."
+      operationId: getSubInvoices
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/job-templates:
-    get: { summary: "Reusable scope-checklist templates with step counts." }
+    get:
+      summary: "Reusable scope-checklist templates with step counts."
+      operationId: getJobTemplates
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/scorecard:
-    get: { summary: "Vendor performance composite rollup (on-time, quality, disputes)." }
+    get:
+      summary: "Vendor performance composite rollup (on-time, quality, disputes)."
+      operationId: getScorecard
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }

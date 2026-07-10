@@ -92,14 +92,14 @@ export default async function PrintSheetPage() {
                 <div className="flex h-full flex-col">
                   <div className="flex items-start justify-between">
                     <div>
-                      <div className="text-[8px] font-semibold tracking-[0.2em] text-black/60 uppercase">
+                      <div className="text-[11px] font-semibold tracking-[0.2em] text-black/60 uppercase">
                         {c.delegation?.code ??
                           c.delegation?.name ??
                           t("console.accreditation.print.sheet.orgFallback", undefined, "Org")}
                       </div>
                       <div className="mt-1 text-base leading-tight font-bold">{c.person_name}</div>
                       {c.category && (
-                        <div className="mt-1 inline-block rounded bg-black px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-white uppercase">
+                        <div className="mt-1 inline-block rounded bg-black px-1.5 py-0.5 text-[11px] font-bold tracking-wider text-white uppercase">
                           {c.category.code}
                         </div>
                       )}
@@ -109,7 +109,7 @@ export default async function PrintSheetPage() {
                       <img src={c.qrDataUrl} alt="" className="h-16 w-16" />
                     )}
                   </div>
-                  <div className="mt-auto flex items-end justify-between text-[8px] text-black/60">
+                  <div className="mt-auto flex items-end justify-between text-[11px] text-black/60">
                     <span className="font-mono">{c.card_barcode ?? c.id.slice(0, 12)}</span>
                     {c.valid_to && (
                       <span>

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDateParts } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
@@ -23,7 +24,7 @@ type EventRow = {
 const CEREMONY_PATTERN = /(ceremony|ceremon|opening|closing|victory|medal|mixed[ -]?zone|torch|flame)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -71,7 +72,7 @@ export default async function Page() {
         subtitle={t(
           rows.length === 1 ? "console.programs.ceremonies.subtitle.one" : "console.programs.ceremonies.subtitle.other",
           { count: rows.length },
-          `${rows.length} ceremon${rows.length === 1 ? "y" : "ies"} — opening, closing, victory, mixed-zone`,
+          `${rows.length} ceremon${rows.length === 1 ? "y" : "ies"} · opening, closing, victory, mixed-zone`,
         )}
         action={
           <Button href="/studio/production/ros" size="sm">

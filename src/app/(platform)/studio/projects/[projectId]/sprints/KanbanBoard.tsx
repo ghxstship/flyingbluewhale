@@ -26,17 +26,17 @@ export function KanbanBoard({
       {STORY_STATES.map((state) => (
         <div key={state} className="surface-inset rounded-md p-3">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-[10px] font-medium tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+            <span className="text-[11px] font-medium tracking-[0.18em] text-[var(--p-text-2)] uppercase">
               {STORY_STATE_LABELS[state]}
             </span>
-            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{cols[state].length}</span>
+            <span className="font-mono text-[11px] text-[var(--p-text-2)]">{cols[state].length}</span>
           </div>
           <ul className="space-y-2">
             {cols[state].map((story) => (
               <li key={story.id} className="surface rounded-md p-2.5 text-sm">
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-[var(--p-text-1)]">{story.title}</span>
-                  <span className="shrink-0 rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
+                  <span className="shrink-0 rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
                     {story.points}
                   </span>
                 </div>
@@ -77,7 +77,7 @@ function MoveButton({
       <input type="hidden" name="story_state" value={target} />
       <button
         type="submit"
-        className="press-scale rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[10px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
+        className="press-scale rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[11px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
       >
         → {STORY_STATE_LABELS[target]}
       </button>

@@ -1,5 +1,14 @@
 import { ResetPasswordForm } from "./ResetPasswordForm";
 
+import type { Metadata } from "next";
+import { getRequestT } from "@/lib/i18n/request";
+
+// E-14: every auth page carries its own title instead of the root default.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return { title: t("auth.resetPassword.pageTitle", undefined, "Set a New Password") };
+}
+
 /**
  * User lands here after Supabase verifies the password-reset token from the
  * email. The verification flow goes:

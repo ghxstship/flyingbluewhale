@@ -88,7 +88,7 @@ export default async function SubscriptionsPage() {
           emptyDescription={t(
             "console.subscriptions.emptyDescription",
             undefined,
-            "Track recurring relationships — members, retainers, and recurring sponsors — with billing state that advances automatically from Stripe.",
+            "Track recurring relationships (members, retainers, and recurring sponsors) with billing state that advances automatically from Stripe.",
           )}
           emptyAction={
             <Button href="/studio/subscriptions/new" size="sm">

@@ -111,7 +111,7 @@ export default async function Page() {
             accent
           />
           <MetricCard
-            label={t("console.sitePlans.issuedIfc", undefined, "Issued — IFC")}
+            label={t("console.sitePlans.issuedIfc", undefined, "Issued (IFC)")}
             value={fmt.number(issuedCount)}
           />
           <MetricCard
@@ -141,7 +141,7 @@ export default async function Page() {
               render: (r) =>
                 r.atom_id ?? (
                   <span className="text-[var(--p-text-2)]">
-                    {t("console.sitePlans.pending", undefined, "— pending —")}
+                    {t("console.sitePlans.pending", undefined, "pending")}
                   </span>
                 ),
               accessor: (r) => r.atom_id,

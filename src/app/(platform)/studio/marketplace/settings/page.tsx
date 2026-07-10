@@ -79,7 +79,7 @@ export default async function Page() {
           </fieldset>
 
           <Input
-            label={t("console.marketplace.settings.takeRateLabel", undefined, "Take Rate — bps")}
+            label={t("console.marketplace.settings.takeRateLabel", undefined, "Take Rate (bps)")}
             name="marketplace_take_rate_bps"
             type="number"
             min={0}

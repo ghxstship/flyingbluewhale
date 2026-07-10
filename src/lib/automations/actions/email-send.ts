@@ -31,7 +31,10 @@ registerAction({
     if (!result.ok) {
       throw new Error(result.error ?? "email send failed");
     }
-    return { output: { sent: true, providerId: result.id ?? null } };
+    // E-21 — `skipped: true` means RESEND_API_KEY isn't configured: the
+    // run "succeeded" but nothing was delivered. Surface that honestly in
+    // the run output instead of claiming a send.
+    return { output: { sent: !result.skipped, skipped: result.skipped ?? false, providerId: result.id ?? null } };
   },
 });
 

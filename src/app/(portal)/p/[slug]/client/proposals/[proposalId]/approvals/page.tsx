@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+                      <span className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                         {toTitle(a.kind)}
                       </span>
                       <Badge variant={APPROVAL_STATE_VARIANT[a.state]}>{APPROVAL_STATE_LABEL[a.state]}</Badge>

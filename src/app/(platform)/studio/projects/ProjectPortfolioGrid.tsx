@@ -63,7 +63,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
       empty={enriched.length === 0}
       height={undefined as unknown as number}
       actions={
-        <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
+        <div className="flex items-center gap-3 text-[11px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
           <Legend
             tone="bg-[var(--p-success)]"
             label={t("console.projects.portfolio.legend.onTrack", { count: counts.green }, `On track ${counts.green}`)}
@@ -90,7 +90,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <div className="truncate text-sm font-semibold text-[var(--p-text-1)]">{p.name}</div>
-                <div className="mt-0.5 text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">{p.status}</div>
+                <div className="mt-0.5 text-[11px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">{p.status}</div>
               </div>
               <span className={`mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full ${tone(p.health).dot}`} aria-hidden />
             </div>

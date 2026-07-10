@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { LiveDispatchMap, type DispatchPoint } from "./LiveDispatchMap";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,7 @@ export const dynamic = "force-dynamic";
  */
 export default async function LiveDispatchPage() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <>
@@ -160,15 +161,13 @@ export default async function LiveDispatchPage() {
                       </Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {p.actualDepart
-                        ? new Date(p.actualDepart).toLocaleTimeString()
-                        : new Date(p.scheduledDepart).toLocaleTimeString()}
+                      {p.actualDepart ? fmt.time(new Date(p.actualDepart)) : fmt.time(new Date(p.scheduledDepart))}
                     </td>
                     <td className="font-mono text-xs">
                       {p.actualArrive
-                        ? new Date(p.actualArrive).toLocaleTimeString()
+                        ? fmt.time(new Date(p.actualArrive))
                         : p.scheduledArrive
-                          ? new Date(p.scheduledArrive).toLocaleTimeString()
+                          ? fmt.time(new Date(p.scheduledArrive))
                           : "—"}
                     </td>
                   </tr>

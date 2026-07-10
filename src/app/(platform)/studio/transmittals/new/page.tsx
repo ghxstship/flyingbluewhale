@@ -77,7 +77,7 @@ export default async function Page() {
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>{t("console.transmittals.new.bodyMarkdown", undefined, "Body — Markdown")}</span>
+            <span className={LBL}>{t("console.transmittals.new.bodyMarkdown", undefined, "Body (Markdown)")}</span>
             <textarea
               name="body_md"
               rows={6}

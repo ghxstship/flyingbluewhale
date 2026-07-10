@@ -13,14 +13,14 @@ const PLATFORM_ROLES_INFO: { role: string; description: string; tier: "all" | "p
   { role: "owner", description: "Billing · delete org · everything else", tier: "all" },
   { role: "admin", description: "Full org control except billing + org delete", tier: "all" },
   { role: "manager", description: "Manage projects + people, no billing or org settings", tier: "all" },
-  { role: "member", description: "Default — access governed by per-project membership", tier: "all" },
+  { role: "member", description: "Default (access governed by per-project membership)", tier: "all" },
 ];
 
 const PROJECT_ROLES_INFO: { role: string; description: string }[] = [
-  { role: "lead", description: "Producer/PM — full project control, approve, close" },
-  { role: "editor", description: "Read/write team work — tasks, deliverables, schedule" },
+  { role: "lead", description: "Producer/PM (full project control, approve, close)" },
+  { role: "editor", description: "Read/write team work (tasks, deliverables, schedule)" },
   { role: "contributor", description: "Write own work, read project (crew, contractors)" },
-  { role: "viewer", description: "Read-only — clients, sponsors, observers" },
+  { role: "viewer", description: "Read-only (clients, sponsors, observers)" },
   { role: "vendor", description: "Scoped to their own POs, deliverables, invoices" },
 ];
 
@@ -57,7 +57,7 @@ export default async function RolesPage() {
         subtitle={t(
           "console.people.roles.subtitle",
           undefined,
-          "Platform Roles — Billing · Project Roles — Operations · Custom Overlays",
+          "Platform Roles (Billing) · Project Roles (Operations) · Custom Overlays",
         )}
       />
       <div className="page-content max-w-5xl space-y-6">
@@ -66,7 +66,7 @@ export default async function RolesPage() {
             {t(
               "console.people.roles.platformHeading",
               undefined,
-              "Platform roles — org-level, govern billing & access",
+              "Platform roles (org-level, govern billing & access)",
             )}
           </h3>
           <div className="overflow-x-auto">
@@ -98,7 +98,7 @@ export default async function RolesPage() {
             {t(
               "console.people.roles.projectHeading",
               undefined,
-              "Project roles — per-project, govern operational access",
+              "Project roles (per-project, govern operational access)",
             )}
           </h3>
           <div className="overflow-x-auto">

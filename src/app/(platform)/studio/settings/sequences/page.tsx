@@ -6,7 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { formatSequencePreview } from "@/lib/sequences";
 import { resetSequence, upsertSequence } from "./actions";
 
@@ -56,6 +56,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const [{ data: rows }, { data: org }] = await Promise.all([
     supabase
@@ -105,7 +106,7 @@ export default async function Page() {
               "Each scope is a monotonic counter scoped to your org. The format string is templated when",
             )}{" "}
             <code className="font-mono">nextSequence()</code>{" "}
-            {t("console.settings.sequences.activeIntroFiresTokens", undefined, "fires — tokens:")}{" "}
+            {t("console.settings.sequences.activeIntroFiresTokens", undefined, "fires · tokens:")}{" "}
             <code className="font-mono">{"{seq}"}</code>, <code className="font-mono">{"{seq:N}"}</code>,{" "}
             <code className="font-mono">{"{YYYY}"}</code>, <code className="font-mono">{"{YY}"}</code>,{" "}
             <code className="font-mono">{"{MM}"}</code>, <code className="font-mono">{"{DD}"}</code>,{" "}
@@ -133,7 +134,7 @@ export default async function Page() {
               {
                 key: "current_val",
                 header: t("console.settings.sequences.columnCurrent", undefined, "Current"),
-                render: (r) => <span className="font-mono text-xs">{r.current_val.toLocaleString()}</span>,
+                render: (r) => <span className="font-mono text-xs">{fmt.number(r.current_val)}</span>,
                 accessor: (r) => r.current_val,
               },
               {
@@ -173,7 +174,7 @@ export default async function Page() {
             {t(
               "console.settings.sequences.editIntro",
               undefined,
-              "Upsert a scope — set its format and (optionally) jump the counter forward to align with a legacy numbering scheme.",
+              "Upsert a scope. Set its format and (optionally) jump the counter forward to align with a legacy numbering scheme.",
             )}
           </p>
           <form

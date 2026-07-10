@@ -58,7 +58,7 @@ export default async function NewGuestListPage() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.boxOffice.new.fields.event", undefined, "Event — Optional")}
+              {t("console.boxOffice.new.fields.event", undefined, "Event (Optional)")}
             </label>
             <select name="event_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">{t("console.boxOffice.new.event.none", undefined, "No event")}</option>

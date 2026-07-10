@@ -35,14 +35,14 @@ export default async function Page() {
             <input
               name="title"
               required
-              placeholder="Production sync — June 14"
+              placeholder="Production sync · June 14"
               className="ps-input focus-ring w-full"
             />
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>Linked meeting (optional)</span>
             <select name="meeting_id" className="ps-input focus-ring w-full" defaultValue="">
-              <option value="">— standalone note —</option>
+              <option value="">standalone note</option>
               {((meetings ?? []) as Array<{ id: string; title: string }>).map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.title}
@@ -59,8 +59,8 @@ export default async function Page() {
               className="ps-input focus-ring w-full font-mono text-xs"
             />
           </label>
-          <p className="text-[10px] text-[var(--p-text-2)]">
-            Transcript is text only today — live audio capture and speech-to-text are a planned future enhancement.
+          <p className="text-[11px] text-[var(--p-text-2)]">
+            Transcript is text only today. Live audio capture and speech-to-text are a planned future enhancement.
             After creating, open the note and run Summarize to generate an AI recap and extract action items.
           </p>
         </FormShell>

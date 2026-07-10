@@ -80,7 +80,7 @@ export default async function NewChannelPage() {
               {t("console.comms.channels.new.projectLabel", undefined, "Project")}
             </label>
             <select name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
-              <option value="">{t("console.comms.channels.new.projectNone", undefined, "— None —")}</option>
+              <option value="">{t("console.comms.channels.new.projectNone", undefined, "None")}</option>
               {projectRows.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name ?? p.id}

@@ -21,7 +21,7 @@ export function SubscriptionStateControls({
   if (allowedNext.length === 0) {
     return (
       <p className="text-sm text-[var(--p-text-2)]">
-        {t("console.subscriptions.stateControls.terminal", undefined, "Terminal state — no further transitions.")}
+        {t("console.subscriptions.stateControls.terminal", undefined, "Terminal state. No further transitions.")}
       </p>
     );
   }

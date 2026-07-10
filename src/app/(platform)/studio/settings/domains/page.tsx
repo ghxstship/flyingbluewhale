@@ -94,7 +94,7 @@ export default async function DomainsPage() {
                             : t("console.settings.domains.statusPending", undefined, "Pending")}
                         </Badge>
                       </td>
-                      <td className="font-mono text-[10px] text-[var(--p-text-2)]">
+                      <td className="font-mono text-[11px] text-[var(--p-text-2)]">
                         TXT _atlvs-verify.{d.hostname} = {d.verification_token}
                       </td>
                       <td className="space-x-2 whitespace-nowrap">

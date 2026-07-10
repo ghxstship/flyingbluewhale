@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * WH-347 Certified Payroll PDF generator (Davis-Bacon federal form).
@@ -71,11 +72,8 @@ function money(amount: number): string {
 
 function fmtDate(d: string | null | undefined): string {
   if (!d) return "—";
-  try {
-    return new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-  } catch {
-    return d;
-  }
+  const formatted = formatDateParts(d, { year: "numeric", month: "short", day: "numeric" });
+  return formatted === "—" ? d : formatted;
 }
 
 export function WH347Pdf({ brand, t = identityT, payroll, project, contractor, certifiedBy, lines }: WH347Input) {

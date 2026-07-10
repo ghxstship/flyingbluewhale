@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { STATUS_TONE } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +30,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const [slotsResp, milestonesResp] = await Promise.all([
     supabase
@@ -86,7 +87,7 @@ export default async function Page() {
                   )}
                   <span className="text-sm">{it.row.label ?? "—"}</span>
                 </div>
-                <span className="font-mono text-xs text-[var(--p-text-2)]">{new Date(it.date).toLocaleString()}</span>
+                <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.dateTime(new Date(it.date))}</span>
               </li>
             ))}
           </ul>

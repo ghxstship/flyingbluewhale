@@ -52,12 +52,12 @@ export default async function Page({ params }: { params: Promise<{ metricId: str
               {t("console.sustainability.carbon.edit.scope", undefined, "Scope")}
             </label>
             <select name="scope" defaultValue={String(r.scope ?? 1)} className="ps-input mt-1.5 w-full">
-              <option value="1">{t("console.sustainability.carbon.edit.scope1", undefined, "Scope 1 — direct")}</option>
+              <option value="1">{t("console.sustainability.carbon.edit.scope1", undefined, "Scope 1 (direct)")}</option>
               <option value="2">
-                {t("console.sustainability.carbon.edit.scope2", undefined, "Scope 2 — purchased energy")}
+                {t("console.sustainability.carbon.edit.scope2", undefined, "Scope 2 (purchased energy)")}
               </option>
               <option value="3">
-                {t("console.sustainability.carbon.edit.scope3", undefined, "Scope 3 — value chain")}
+                {t("console.sustainability.carbon.edit.scope3", undefined, "Scope 3 (value chain)")}
               </option>
             </select>
           </div>

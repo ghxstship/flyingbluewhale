@@ -1,10 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
-import { requestPermission } from "@/lib/native/permissions";
-import { scanCode, type ScanState } from "./actions";
+import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
 
 export type RecentScan = {
   id: string;
@@ -27,6 +26,8 @@ export type InventoryScanLabels = {
   recentTitle: string;
   recentEmpty: string;
   logged: string;
+  queuedTitle?: string;
+  queuedBody?: string;
 };
 
 const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
@@ -39,9 +40,11 @@ const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
 };
 
 /**
- * COMPVSS inventory scanner. Kit `.scanframe` reticle plus a manual asset-tag
- * entry form, both resolving through the surviving `scanCode` action (which
- * journals via `scanAssignment`). Recent activity is server-fetched scan events.
+ * COMPVSS inventory scanner. A REAL camera decoder (shared `CameraScanner`
+ * behind a tap-to-enable gate) plus a manual asset-tag entry form, both
+ * submitting through `useScanSubmit` → the queueable `/api/v1/scan` endpoint,
+ * so an offline scan is durably queued and replayed on reconnect. Haptic +
+ * beep feedback per outcome. Recent activity is server-fetched scan events.
  */
 export function InventoryScanner({
   recent,
@@ -51,7 +54,14 @@ export function InventoryScanner({
   labels: InventoryScanLabels;
 }) {
   const [code, setCode] = useState("");
-  const [state, formAction, pending] = useActionState<ScanState, FormData>(scanCode, null);
+  const { submit, pending, outcome } = useScanSubmit();
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (pending) return;
+    void submit(code);
+    setCode("");
+  };
 
   return (
     <>
@@ -63,15 +73,16 @@ export function InventoryScanner({
         {labels.title}
       </h1>
 
-      <CameraReticle
+      <GatedCameraScanner
+        onScan={(scanned) => void submit(scanned.value)}
         enableLabel={labels.enableCamera ?? "Enable Camera"}
-        deniedLabel={labels.cameraDenied ?? "Camera Unavailable — Use Manual Entry"}
+        deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
       />
       <div className="scanhint">
         <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {labels.hint}
       </div>
 
-      <form action={formAction}>
+      <form onSubmit={onSubmit}>
         <div className="fld" style={{ marginTop: 6 }}>
           <label className="wl" htmlFor="code">
             {labels.manualLabel}
@@ -97,20 +108,31 @@ export function InventoryScanner({
         </button>
       </form>
 
-      {state && state.ok && (
+      {outcome?.kind === "result" && (
         <div className="item" style={{ marginTop: 14 }}>
-          <span className={`ps-badge ps-badge--${RESULT_TONE[state.result.result] ?? "neutral"}`}>
-            {state.result.result}
+          <span className={`ps-badge ps-badge--${RESULT_TONE[outcome.result.result] ?? "neutral"}`}>
+            {outcome.result.result}
           </span>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="t">{("title" in state.result && state.result.title) || labels.logged}</div>
+            <div className="t">{("title" in outcome.result && outcome.result.title) || labels.logged}</div>
           </div>
         </div>
       )}
-      {state && !state.ok && (
+      {outcome?.kind === "queued" && (
+        <div className="item" style={{ marginTop: 14 }}>
+          <span className="ps-badge ps-badge--warn">{labels.queuedTitle ?? "Recorded"}</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t" style={{ fontFamily: "var(--p-mono)" }}>{outcome.code}</div>
+            <div className="s">
+              {labels.queuedBody ?? "Saved on this device. It will sync and verify when you're back online."}
+            </div>
+          </div>
+        </div>
+      )}
+      {outcome?.kind === "error" && (
         <div className="import-note" style={{ marginTop: 14 }}>
           <KIcon name="TriangleAlert" size={15} style={{ color: "var(--p-danger)" }} />
-          <span style={{ fontSize: 12 }}>{state.error}</span>
+          <span style={{ fontSize: 12 }}>{outcome.message}</span>
         </div>
       )}
 
@@ -146,78 +168,5 @@ export function InventoryScanner({
         })
       )}
     </>
-  );
-}
-
-/**
- * Live camera reticle. Before grant, shows the static reticle with an "Enable
- * Camera" affordance; on grant, lights the frame with a `getUserMedia` preview.
- * The stream is torn down on unmount. Manual asset-tag entry stays available
- * regardless — this only lights the frame where camera access is granted.
- */
-function CameraReticle({ enableLabel, deniedLabel }: { enableLabel: string; deniedLabel: string }) {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const [state, setState] = useState<"idle" | "requesting" | "live" | "denied">("idle");
-
-  const stop = () => {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-  };
-
-  useEffect(() => stop, []);
-
-  const enable = async () => {
-    setState("requesting");
-    const res = await requestPermission("camera");
-    if (!res.granted) {
-      setState("denied");
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play().catch(() => {});
-      }
-      setState("live");
-    } catch {
-      setState("denied");
-    }
-  };
-
-  return (
-    <div className="scanframe" style={{ position: "relative", overflow: "hidden" }}>
-      {state === "live" && (
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          autoPlay
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      )}
-      <div className="reticle">
-        <span className="cnr tl" />
-        <span className="cnr tr" />
-        <span className="cnr bl" />
-        <span className="cnr br" />
-        <span className="laser" />
-      </div>
-      {state !== "live" && (
-        <button
-          type="button"
-          className="ps-btn ps-btn--cta"
-          onClick={enable}
-          disabled={state === "requesting"}
-          style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}
-        >
-          <KIcon name="Camera" size={16} /> {state === "denied" ? deniedLabel : enableLabel}
-        </button>
-      )}
-    </div>
   );
 }

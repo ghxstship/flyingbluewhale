@@ -149,7 +149,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.punch.lists.emptyDescription",
             undefined,
-            "Create a list below to group items by milestone, area, or trade — easier to track 'all items for load-out' or 'closeout punch' than scrolling a flat 200-row list.",
+            "Create a list below to group items by milestone, area, or trade. Easier to track 'all items for load-out' or 'closeout punch' than scrolling a flat 200-row list.",
           )}
           columns={[
             {
@@ -250,7 +250,7 @@ export default async function Page() {
             {t(
               "console.punch.lists.createHelp",
               undefined,
-              "Lists let you group items by milestone (Pre-Show / Show-Ready / Closeout), area (Stage A / Stage B), or trade (Electrical / Rigging). Items keep their existing fields — the list is just a grouping.",
+              "Lists let you group items by milestone (Pre-Show / Show-Ready / Closeout), area (Stage A / Stage B), or trade (Electrical / Rigging). Items keep their existing fields. The list is just a grouping.",
             )}
           </p>
           <form
@@ -266,7 +266,7 @@ export default async function Page() {
             />
             <select name="project_id" required defaultValue="" className="ps-input sm:col-span-2">
               <option value="" disabled>
-                {t("console.punch.lists.projectPlaceholder", undefined, "— Project —")}
+                {t("console.punch.lists.projectPlaceholder", undefined, "Project")}
               </option>
               {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                 <option key={p.id} value={p.id}>

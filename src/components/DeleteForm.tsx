@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import {
   Dialog,
@@ -13,15 +13,16 @@ import {
   DialogTitle,
 } from "@/components/ui/Dialog";
 import { restoreOrgScoped } from "@/app/(platform)/studio/actions/restore";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type DeleteFormProps = {
   /** Server action bound to the resource id. */
   action: () => Promise<void>;
   /** Confirmation prompt shown in the dialog body. */
   confirm: string;
-  /** Optional dialog title; defaults to "Confirm delete". */
+  /** Optional dialog title; defaults to the localized "Confirm delete". */
   title?: string;
-  /** Optional label override; defaults to "Delete". */
+  /** Optional label override; defaults to the localized "Delete". */
   label?: ReactNode;
   /** Button size; defaults to "sm". */
   size?: "sm" | "md" | "lg";
@@ -53,17 +54,14 @@ type DeleteFormProps = {
  * redirect to the list page) — we don't render success state here. With
  * `undo`, the action must NOT redirect; see the prop doc above.
  */
-export function DeleteForm({
-  action,
-  confirm,
-  title = "Confirm delete",
-  label = "Delete",
-  size = "sm",
-  undo,
-}: DeleteFormProps) {
+export function DeleteForm({ action, confirm, title, label, size = "sm", undo }: DeleteFormProps) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+
+  const resolvedTitle = title ?? t("deleteForm.title", undefined, "Confirm delete");
+  const resolvedLabel = label ?? t("deleteForm.delete", undefined, "Delete");
 
   const runDelete = () => {
     if (!undo) {
@@ -76,14 +74,14 @@ export function DeleteForm({
     const { table, id, redirectTo } = undo;
     startTransition(async () => {
       await action();
-      toast("Deleted", {
+      toast(t("deleteForm.deleted", undefined, "Deleted"), {
         action: {
-          label: "Undo",
+          label: t("deleteForm.undo", undefined, "Undo"),
           onClick: () => {
             void restoreOrgScoped(table, id, redirectTo).then((res) => {
               if (res?.error) toast.error(res.error);
               else {
-                toast.success("Restored");
+                toast.success(t("deleteForm.restored", undefined, "Restored"));
                 router.refresh();
               }
             });
@@ -97,18 +95,18 @@ export function DeleteForm({
   return (
     <>
       <Button type="button" variant="danger" size={size} onClick={() => setOpen(true)} loading={pending}>
-        {pending ? "Deleting" : label}
+        {pending ? t("deleteForm.deleting", undefined, "Deleting") : resolvedLabel}
       </Button>
 
       <Dialog open={open} onOpenChange={(o) => (!pending ? setOpen(o) : null)}>
         <DialogContent size="sm">
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle>{resolvedTitle}</DialogTitle>
             <DialogDescription>{confirm}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button type="button" variant="secondary" onClick={() => setOpen(false)} disabled={pending}>
-              Cancel
+              {t("common.cancel", undefined, "Cancel")}
             </Button>
             <Button
               type="button"
@@ -119,7 +117,7 @@ export function DeleteForm({
                 setOpen(false);
               }}
             >
-              {label}
+              {resolvedLabel}
             </Button>
           </DialogFooter>
         </DialogContent>

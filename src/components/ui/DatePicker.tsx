@@ -220,7 +220,7 @@ function Calendar_({
           <ChevronRight size={14} />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-[var(--p-text-2)] uppercase">
+      <div className="grid grid-cols-7 gap-0.5 text-center text-[11px] font-semibold text-[var(--p-text-2)] uppercase">
         {weekdayLabels.map((w, i) => (
           <div key={i}>{w}</div>
         ))}

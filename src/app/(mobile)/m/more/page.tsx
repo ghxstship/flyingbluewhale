@@ -40,7 +40,11 @@ export default async function MorePage() {
       links: [
         { href: "/m/clock", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
         { href: "/m/requests", icon: "CheckCheck", labelKey: "m.more.approvals", label: "Approvals", subKey: "m.more.approvalsSub", sub: "Review & Action Requests", managerOnly: true },
+        { href: "/m/time-off", icon: "CalendarOff", labelKey: "m.more.timeOff", label: "Time Off", subKey: "m.more.timeOffSub", sub: "Requests & Balances" },
         { href: "/m/docs", icon: "FolderOpen", labelKey: "m.more.documents", label: "Documents", subKey: "m.more.documentsSub", sub: "Site Docs, Filtered To You" },
+        { href: "/m/handover", icon: "ArrowLeftRight", labelKey: "m.more.handover", label: "Handover", subKey: "m.more.handoverSub", sub: "Shift Notes & Handoffs" },
+        { href: "/m/daily-log", icon: "NotebookPen", labelKey: "m.more.dailyLog", label: "Daily Log", subKey: "m.more.dailyLogSub", sub: "Site Diary, Day By Day" },
+        { href: "/m/coc", icon: "FileCheck", labelKey: "m.more.coc", label: "Chain of Custody", subKey: "m.more.cocSub", sub: "Asset Transfers, Signed" },
         { href: "/m/inventory", icon: "PackageSearch", labelKey: "m.more.inventory", label: "Inventory", subKey: "m.more.inventorySub", sub: "On-Hand Gear & Stock" },
         { href: "/m/catalog", icon: "Boxes", labelKey: "m.more.catalog", label: "Catalog", subKey: "m.more.catalogSub", sub: "Browse & Request From XPMS" },
       ],
@@ -68,6 +72,9 @@ export default async function MorePage() {
       label: t("m.more.account", undefined, "Account"),
       links: [
         { href: "/m/profile", icon: "User", labelKey: "m.more.profile", label: "Profile", subKey: "m.more.profileSub", sub: "Your Badges, Reviews & EPK" },
+        { href: "/m/wallet", icon: "ShieldCheck", labelKey: "m.more.wallet", label: "Wallet", subKey: "m.more.walletSub", sub: "Your Rose & Credentials" },
+        { href: "/m/alerts", icon: "Bell", labelKey: "m.more.alerts", label: "Alerts", subKey: "m.more.alertsSub", sub: "Broadcasts & Notifications" },
+        { href: "/m/emergency", icon: "Siren", labelKey: "m.more.emergency", label: "Emergency", subKey: "m.more.emergencySub", sub: "Your Muster Card & Codes" },
         { href: "/m/activity", icon: "History", labelKey: "m.more.activity", label: "Activity History", subKey: "m.more.activitySub", sub: "Scans, Access, Reports & More" },
         { href: "/m/referrals", icon: "Gift", labelKey: "m.more.referrals", label: "Referrals & Rewards", subKey: "m.more.referralsSub", sub: "Refer Crew, Earn Rewards" },
         { href: "/m/settings", icon: "Settings", labelKey: "m.more.settings", label: "Settings", subKey: "m.more.settingsSub", sub: "App Preferences" },

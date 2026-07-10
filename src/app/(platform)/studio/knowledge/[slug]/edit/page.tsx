@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.knowledge.edit.fields.body.label", undefined, "Body — Markdown")}
+              {t("console.knowledge.edit.fields.body.label", undefined, "Body (Markdown)")}
             </span>
             <textarea
               name="body_markdown"

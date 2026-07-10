@@ -75,7 +75,7 @@ export function AssignmentsKanban({
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
             <span className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.title ?? "Untitled"}</span>
-            <span className="shrink-0 font-mono text-[10px] text-[var(--p-text-2)]">{r.kindLabel}</span>
+            <span className="shrink-0 font-mono text-[11px] text-[var(--p-text-2)]">{r.kindLabel}</span>
           </div>
           <div className="flex items-center justify-between gap-2 text-xs text-[var(--p-text-2)]">
             {r.party_kind === "external_holder" ? (
@@ -83,7 +83,7 @@ export function AssignmentsKanban({
             ) : (
               <span className="truncate">{r.party}</span>
             )}
-            {r.deadline ? <span className="shrink-0 font-mono text-[10px]">{r.deadline.slice(0, 10)}</span> : null}
+            {r.deadline ? <span className="shrink-0 font-mono text-[11px]">{r.deadline.slice(0, 10)}</span> : null}
           </div>
         </div>
       )}

@@ -97,7 +97,7 @@ export default async function Page() {
             </FormField>
           </div>
           <FormField
-            label={t("console.takeoffs.new.fields.calibration", undefined, "Calibration — Inches per Foot")}
+            label={t("console.takeoffs.new.fields.calibration", undefined, "Calibration (Inches per Foot)")}
             hint={t(
               "console.takeoffs.new.hints.calibration",
               undefined,

@@ -4,6 +4,7 @@ import React from "react";
 import { Text } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * Call Sheet PDF — Opportunity #6 (+ #13 labor variant via `labor` prop).
@@ -46,7 +47,7 @@ export type CallSheetInput = {
 
 function fmtTime(iso: string): string {
   try {
-    return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    return formatDateParts(new Date(iso), { hour: "numeric", minute: "2-digit" });
   } catch {
     return iso;
   }

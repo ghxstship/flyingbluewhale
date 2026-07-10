@@ -43,7 +43,7 @@ export default async function Page() {
             <textarea name="bio" rows={6} maxLength={8000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.marketplace.talent.new.genreTags", undefined, "Genre Tags — Comma-separated")}
+            label={t("console.marketplace.talent.new.genreTags", undefined, "Genre Tags (Comma-separated)")}
             name="genre_tags"
             placeholder={t("console.marketplace.talent.new.genreTagsPlaceholder", undefined, "indie-rock, post-punk")}
           />
@@ -67,7 +67,7 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label={t("console.marketplace.talent.new.travelRadius", undefined, "Travel Radius — km")}
+              label={t("console.marketplace.talent.new.travelRadius", undefined, "Travel Radius (km)")}
               name="travel_radius_km"
               type="number"
             />

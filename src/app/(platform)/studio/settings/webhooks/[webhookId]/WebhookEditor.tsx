@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import {
@@ -127,7 +127,7 @@ export function WebhookEditor({
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={isActive} onChange={(e) => setActive(e.target.checked)} />
         <span>
-          {t("console.settings.webhooks.editor.activeLabel", undefined, "Active — deliver events to this endpoint")}
+          {t("console.settings.webhooks.editor.activeLabel", undefined, "Active (deliver events to this endpoint)")}
         </span>
       </label>
 
@@ -173,7 +173,7 @@ export function WebhookEditor({
               {t(
                 "console.settings.webhooks.editor.confirmDescription",
                 undefined,
-                "Deliveries stop immediately. The signing secret cannot be recovered — a replacement endpoint gets a new one.",
+                "Deliveries stop immediately. The signing secret cannot be recovered. A replacement endpoint gets a new one.",
               )}
             </DialogDescription>
           </DialogHeader>

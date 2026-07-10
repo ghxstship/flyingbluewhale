@@ -82,7 +82,7 @@ export default async function TemplatePreviewPage({ params }: { params: Promise<
             <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {i + 1} · {BLOCK_LABELS[block.type]}
               {"anchorId" in block && block.anchorId ? (
-                <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">#{block.anchorId}</span>
+                <span className="ms-2 font-mono text-[11px] text-[var(--p-text-2)]">#{block.anchorId}</span>
               ) : null}
             </div>
             <div className="mt-1 text-sm">{describeBlock(block)}</div>
@@ -106,7 +106,7 @@ function describeBlock(b: ProposalBlock): string {
     case "callout":
       return b.title ?? b.body.slice(0, 80);
     case "phase":
-      return `${b.num} · ${b.name}${b.xpmsPhase ? ` (${b.xpmsPhase})` : ""}${b.deliverables?.length ? ` — ${b.deliverables.length} deliverable(s)` : ""}`;
+      return `${b.num} · ${b.name}${b.xpmsPhase ? ` (${b.xpmsPhase})` : ""}${b.deliverables?.length ? ` · ${b.deliverables.length} deliverable(s)` : ""}`;
     case "investment_table":
       return `${b.groups.length} group(s) · total ${b.total.cents / 100}`;
     case "engagement_split":

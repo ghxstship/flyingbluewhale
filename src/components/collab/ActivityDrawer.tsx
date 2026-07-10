@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/Sheet";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatDateParts } from "@/lib/i18n/format";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
 import { ActivityItem } from "./ActivityItem";
 
@@ -48,7 +49,7 @@ function dayLabel(iso: string, t: Translator, now: number | null): string {
     if (item === today - DAY_MS) return t("components.activityDrawer.yesterday", undefined, "Yesterday");
   }
   const today = now !== null ? startOfDay(new Date(now)) : item;
-  return new Date(iso).toLocaleDateString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",

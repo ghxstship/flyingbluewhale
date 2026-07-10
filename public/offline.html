@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Offline — COMPVSS</title>
+    <title>Offline · COMPVSS</title>
     <style>
+      /* Static fallback page: token values are hardcoded because the app CSS
+         is unreachable offline. Mirrors the live COMPVSS accent (#FFC400,
+         v8.0 palette-locked) on the dark neutral base (#111318). */
       body {
         margin: 0;
         min-height: 100vh;
@@ -12,8 +15,8 @@
         align-items: center;
         justify-content: center;
         font-family: system-ui, -apple-system, sans-serif;
-        background: #14100a;
-        color: #f5f2ec;
+        background: #111318;
+        color: #f2f4f8;
         text-align: center;
         padding: 24px;
       }
@@ -23,17 +26,19 @@
         font-weight: 600;
         letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: #e9a23b;
+        color: #ffc400;
         margin-bottom: 12px;
       }
       h1 { font-size: 26px; margin: 0 0 12px; line-height: 1.15; }
-      p { font-size: 14px; color: #c9c2b4; margin: 0 0 20px; }
+      p { font-size: 14px; color: #b8bdc7; margin: 0 0 20px; }
       button {
-        padding: 10px 18px;
-        font-size: 14px;
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px 22px;
+        font-size: 15px;
         font-weight: 600;
-        background: #e9a23b;
-        color: #1b1305;
+        background: #ffc400;
+        color: #231a00;
         border: none;
         border-radius: 6px;
         cursor: pointer;
@@ -45,8 +50,8 @@
       <div class="eyebrow">C O M P V S S</div>
       <h1>You're Offline</h1>
       <p>
-        No connection right now. Clock punches and scans you submit are queued on this device and will sync
-        automatically when you're back online.
+        No connection right now. Clock punches and scans you already submitted are saved on this device
+        and will sync automatically once you're back online. This page needs a connection to load.
       </p>
       <button onclick="location.reload()">Try Again</button>
     </main>

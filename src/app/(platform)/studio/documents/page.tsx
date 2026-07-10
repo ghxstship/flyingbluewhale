@@ -26,14 +26,12 @@ export default function DocumentsHubPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-8">
       <header className="border-ink mb-8 border-b-3 pb-6">
-        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-          Documents
-        </div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Documents</div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">DOCUMENT LIBRARY</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
-          {total} canonical document types across the four apps. Every document is both the on-screen
-          view and the print/PDF artifact, drives off a <code>data-path</code> merge contract, and
-          white-labels through three brand modes — ATLVS, co-brand, or full white-label.
+          {total} canonical document types across the four apps. Every document is both the on-screen view and the
+          print/PDF artifact, drives off a <code>data-path</code> merge contract, and white-labels through three brand
+          modes: ATLVS, co-brand, or full white-label.
         </p>
       </header>
 
@@ -59,11 +57,9 @@ export default function DocumentsHubPage() {
                     <span className="flex items-center gap-2 font-semibold tracking-tight">
                       {tpl.title}
                       {supportsRecordBinding(tpl.id) && (
-                        <span
-                          className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--p-accent)]"
-                          title="Binds live records via ?recordId"
-                          aria-label="Supports live record binding"
-                        />
+                        <Badge variant="brand" aria-label="Binds live org records via the record picker or ?recordId">
+                          Record-backed
+                        </Badge>
                       )}
                     </span>
                     <span className="font-mono text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">

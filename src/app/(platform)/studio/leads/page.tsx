@@ -5,10 +5,12 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { createClient } from "@/lib/supabase/server";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { CrmRecord } from "@/lib/supabase/types";
+import { bulkLoseLeads, bulkQualifyLeads, editLeadCell } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -30,10 +32,23 @@ export default async function LeadsPage() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("opportunities", session.orgId, {
-    orderBy: "updated_at",
-    filters: [{ column: "kind", op: "eq", value: "lead" }],
-  })) as unknown as CrmRecord[];
+  const supabase = await createClient();
+  // Exact kind-filtered count alongside the capped table page (audit
+  // A-05/A-07) — subtitle and truncation indicator stay honest past the
+  // 100-row cap. countOrgScoped can't carry the kind filter, so this is a
+  // narrow head-only count.
+  const [rows, { count }] = await Promise.all([
+    listOrgScoped("opportunities", session.orgId, {
+      orderBy: "updated_at",
+      filters: [{ column: "kind", op: "eq", value: "lead" }],
+    }) as unknown as Promise<CrmRecord[]>,
+    supabase
+      .from("opportunities")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("kind", "lead"),
+  ]);
+  const totalCount = count ?? rows.length;
 
   return (
     <>
@@ -41,22 +56,49 @@ export default async function LeadsPage() {
         eyebrow={t("console.leads.eyebrow", undefined, "Sales")}
         title={t("console.leads.title", undefined, "Leads")}
         subtitle={
-          rows.length === 1
-            ? t("console.leads.subtitle.one", { count: rows.length }, `${rows.length} Lead`)
-            : t("console.leads.subtitle.other", { count: rows.length }, `${rows.length} Leads`)
+          totalCount === 1
+            ? t("console.leads.subtitle.one", { count: totalCount }, `${totalCount} Lead`)
+            : t("console.leads.subtitle.other", { count: totalCount }, `${totalCount} Leads`)
         }
         action={<Button href="/studio/leads/new">{t("console.leads.newLead", undefined, "+ New Lead")}</Button>}
       />
       <div className="page-content">
         <DataTable<CrmRecord>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(row) => `/studio/leads/${row.id}`}
+          emptyLabel={t("console.leads.emptyLabel", undefined, "No leads yet")}
+          emptyDescription={t(
+            "console.leads.emptyDescription",
+            undefined,
+            "Log an inbound inquiry or prospect; qualified leads convert to proposals and deals.",
+          )}
+          emptyAction={
+            <Button href="/studio/leads/new" size="sm">
+              {t("console.leads.newLead", undefined, "+ New Lead")}
+            </Button>
+          }
+          bulkActions={[
+            {
+              id: "qualify",
+              label: t("console.leads.bulk.qualify", undefined, "Mark Qualified"),
+              perform: bulkQualifyLeads,
+            },
+            {
+              id: "lose",
+              label: t("console.leads.bulk.lose", undefined, "Mark Lost"),
+              variant: "danger",
+              perform: bulkLoseLeads,
+            },
+          ]}
+          onCellEdit={editLeadCell}
           columns={[
             {
               key: "name",
               header: t("console.leads.columns.name", undefined, "Name"),
               render: (row) => row.title,
               accessor: (row) => row.title,
+              editable: true,
             },
             {
               key: "stage",
@@ -65,6 +107,7 @@ export default async function LeadsPage() {
               accessor: (row) => row.lead_phase ?? "new",
               filterable: true,
               groupable: true,
+              editable: true,
             },
             {
               key: "value",

@@ -72,7 +72,7 @@ export default async function AnnouncementsPage() {
           emptyDescription={t(
             "console.comms.announcements.emptyDescription",
             undefined,
-            "Push org-wide updates to crew, contractors, vendors, or admins — published announcements land in the COMPVSS field feed.",
+            "Push org-wide updates to crew, contractors, vendors, or admins. Published announcements land in the COMPVSS field feed.",
           )}
           emptyAction={
             <Button href="/studio/comms/announcements/new" size="sm">

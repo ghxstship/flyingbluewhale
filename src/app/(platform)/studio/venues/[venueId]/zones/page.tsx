@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.zones.eyebrow", undefined, "Venue")}
-        title={t("console.venues.zones.titleWithName", { name: venue.name }, `${venue.name} — Zones`)}
+        title={t("console.venues.zones.titleWithName", { name: venue.name }, `${venue.name} · Zones`)}
         subtitle={t(
           "console.venues.zones.subtitle",
           { count: zones.length },
@@ -125,7 +125,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         />
 
         <p className="text-xs text-[var(--p-text-2)]">
-          Zones drive the accreditation policy matrix. Edit the allowed categories list to grant access — the policy
+          Zones drive the accreditation policy matrix. Edit the allowed categories list to grant access. The policy
           matrix renders the result.
         </p>
       </div>

@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                           `${personaLabel} portal`,
                         )}
                       </div>
-                      <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                      <div className="mt-1 font-mono text-[11px] text-[var(--p-text-2)]">
                         /p/{project.slug}/{p.slug}
                       </div>
                     </div>

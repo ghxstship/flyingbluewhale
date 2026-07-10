@@ -160,7 +160,7 @@ export default async function SolutionsIndex() {
                     accent color. <Wordmark> carries its own aria-label (solid
                     name) and renders the spaced crossbar-less treatment. */}
                 <Wordmark word={a.name} style={{ color: "var(--p-accent-text)", fontSize: 13 }} />
-                <span className="font-mono text-[10px] text-[var(--p-text-2)]">{a.tier}</span>
+                <span className="font-mono text-[11px] text-[var(--p-text-2)]">{a.tier}</span>
               </div>
               <h3 className="mt-3 text-lg font-semibold tracking-tight">{a.title}</h3>
               <p className="mt-2 text-sm text-[var(--p-text-2)]">{a.body}</p>

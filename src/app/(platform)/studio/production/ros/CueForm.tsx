@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { createCueAction, setCueStatus, deleteCue, type State } from "./actions";
 import type { Cue } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 export function CueForm() {
   const t = useT();
@@ -45,7 +45,7 @@ export function CueForm() {
         placeholder={t("console.production.ros.cueForm.labelPlaceholder", undefined, "e.g. House lights down")}
       />
       <Input
-        label={t("console.production.ros.cueForm.durationSec", undefined, "Duration — Sec")}
+        label={t("console.production.ros.cueForm.durationSec", undefined, "Duration (Sec)")}
         name="duration_seconds"
         type="number"
         min={0}
@@ -84,6 +84,7 @@ const NEXT_STATUS: Record<Cue["cue_state"], { to: Cue["cue_state"]; label: strin
 
 export function CueRow({ cue }: { cue: Cue }) {
   const t = useT();
+  const fmt = useFormatters();
   const [pendingTo, setPendingTo] = React.useState<string | null>(null);
   const buttons = NEXT_STATUS[cue.cue_state] ?? [];
   return (
@@ -92,7 +93,7 @@ export function CueRow({ cue }: { cue: Cue }) {
           the server (UTC) and the client — suppress the expected hydration
           text mismatch (was surfacing as React #418 on /studio/production/ros). */}
       <td className="font-mono text-xs" suppressHydrationWarning>
-        {new Date(cue.scheduled_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        {fmt.time(new Date(cue.scheduled_at))}
         {cue.duration_seconds ? ` · ${formatDuration(cue.duration_seconds)}` : ""}
       </td>
       <td>

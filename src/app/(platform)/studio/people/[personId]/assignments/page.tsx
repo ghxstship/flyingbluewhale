@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
           emptyDescription={t(
             "console.people.assignments.emptyDescription",
             undefined,
-            "This person has no crew records yet. Assignments link a person to project crew slots — create one from the Crew register.",
+            "This person has no crew records yet. Assignments link a person to project crew slots. Create one from the Crew register.",
           )}
           columns={[
             {

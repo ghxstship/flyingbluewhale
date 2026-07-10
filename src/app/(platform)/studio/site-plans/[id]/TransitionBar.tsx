@@ -17,7 +17,7 @@ export function TransitionBar({ sheetId, transitions, labels }: Props) {
     return (
       <section className="surface-inset flex items-center justify-between p-3 text-xs">
         <span className="text-[var(--p-text-2)]">
-          {t("console.sitePlans.transitionBar.terminal", undefined, "Terminal state — no transitions available.")}
+          {t("console.sitePlans.transitionBar.terminal", undefined, "Terminal state. No transitions available.")}
         </span>
       </section>
     );

@@ -117,7 +117,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.drawings.emptyDescription",
             undefined,
-            "Group individual sheets into a versioned package — e.g. 50% DD, 100% CD — and publish for slip-sheet diff.",
+            "Group individual sheets into a versioned package (e.g. 50% DD, 100% CD) and publish for slip-sheet diff.",
           )}
           emptyAction={
             <Button href="/studio/drawings/new" size="sm">
@@ -153,7 +153,7 @@ export default async function Page() {
               header: t("console.drawings.col.currentVersion", undefined, "Current Version"),
               render: (r) =>
                 r.current_version?.version_label ?? (
-                  <span className="text-[var(--p-text-2)]">{t("console.drawings.none", undefined, "— none —")}</span>
+                  <span className="text-[var(--p-text-2)]">{t("console.drawings.none", undefined, "none")}</span>
                 ),
               accessor: (r) => r.current_version?.version_label ?? null,
               className: "font-mono text-xs",

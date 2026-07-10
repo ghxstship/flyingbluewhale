@@ -7,6 +7,8 @@ import { submitSignatureAction, type State } from "./actions";
 
 export type PublicSignProps = {
   token: string;
+  /** Gate the submit until the signer has scrolled through the document. */
+  disabled?: boolean;
   labels: {
     nameLabel: string;
     titleLabel: string;
@@ -15,10 +17,12 @@ export type PublicSignProps = {
     submitting: string;
     noSignature: string;
     error: string;
+    consent: string;
+    docAriaLabel: string;
   };
 };
 
-export function PublicSign({ token, labels }: PublicSignProps) {
+export function PublicSign({ token, labels, disabled = false }: PublicSignProps) {
   const [image, setImage] = useState("");
   const [state, formAction, busy] = useActionState<State, FormData>(submitSignatureAction, null);
 
@@ -33,14 +37,16 @@ export function PublicSign({ token, labels }: PublicSignProps) {
           <input
             name="signed_name"
             required
-            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            disabled={disabled}
+            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm disabled:opacity-60"
           />
         </label>
         <label className="text-sm">
           <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">{labels.titleLabel}</span>
           <input
             name="signed_title"
-            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            disabled={disabled}
+            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm disabled:opacity-60"
           />
         </label>
       </div>
@@ -55,11 +61,15 @@ export function PublicSign({ token, labels }: PublicSignProps) {
         />
       </div>
 
+      {/* E-20: e-signature consent + evidence disclosure (ported from the
+          offer-letter flow). */}
+      <p className="text-xs leading-relaxed text-[var(--p-text-2)]">{labels.consent}</p>
+
       <div className="flex items-center gap-3">
-        <Button type="submit" variant="cta" disabled={busy || !image}>
+        <Button type="submit" variant="cta" disabled={busy || disabled || !image}>
           {busy ? labels.submitting : labels.submit}
         </Button>
-        {!image && <span className="text-xs text-[var(--p-text-3)]">{labels.noSignature}</span>}
+        {!image && !disabled && <span className="text-xs text-[var(--p-text-3)]">{labels.noSignature}</span>}
         {state?.error && <span className="text-sm text-[var(--p-danger-text)]">{state.error || labels.error}</span>}
       </div>
     </form>

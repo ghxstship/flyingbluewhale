@@ -38,7 +38,7 @@ export default async function CommunityPage() {
           emptyTitle={session ? "No activity yet" : "Sign in to see your friends’ activity"}
           emptyDescription={
             session
-              ? "Follow friends and scenes — their saves, RSVPs, and posts land here."
+              ? "Follow friends and scenes. Their saves, RSVPs, and posts land here."
               : "Once you’re in, the saves, RSVPs, and posts from people you follow show up here."
           }
         />
@@ -57,7 +57,7 @@ export default async function CommunityPage() {
         {scenes.length === 0 ? (
           <EmptyState
             title="No scenes yet"
-            description="Scenes are the communities behind the nights — they’ll show up here as they publish."
+            description="Scenes are the communities behind the nights. They’ll show up here as they publish."
           />
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2">

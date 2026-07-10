@@ -50,6 +50,7 @@ export default async function WhiteboardDetail({ params }: { params: Promise<{ i
               <DeleteForm
                 action={deleteWhiteboardAction.bind(null, board.id)}
                 confirm={`Delete whiteboard "${board.name}"?`}
+                undo={{ table: "whiteboards", id: board.id, redirectTo: "/studio/collaborate/whiteboards" }}
               />
             </div>
           ) : undefined

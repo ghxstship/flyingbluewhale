@@ -54,7 +54,7 @@ export async function addResponse(reqId: string, _: State, fd: FormData): Promis
     submitted_at: totalCents != null ? new Date().toISOString() : null,
   } as never);
   if (error) {
-    if (error.code === "23505") return { error: "This vendor already has a response — edit it instead." };
+    if (error.code === "23505") return { error: "This vendor already has a response. Edit it instead." };
     return actionFail(error.message, fd);
   }
   revalidatePath(`/studio/procurement/requisitions/${reqId}/leveling`);

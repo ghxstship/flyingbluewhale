@@ -42,7 +42,7 @@ export default async function Page() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.knowledge.new.bodyLabel", undefined, "Body — Markdown")}
+              {t("console.knowledge.new.bodyLabel", undefined, "Body (Markdown)")}
             </label>
             <textarea
               name="body_markdown"

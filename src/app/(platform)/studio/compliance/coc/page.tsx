@@ -160,7 +160,7 @@ export default async function Page() {
                       <Badge variant="muted">{r.target_table ?? "—"}</Badge>
                     </div>
                     {r.target_id && (
-                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{r.target_id.slice(0, 8)}</div>
+                      <div className="font-mono text-[11px] text-[var(--p-text-2)]">{r.target_id.slice(0, 8)}</div>
                     )}
                   </div>
                   <span className="font-mono text-xs text-[var(--p-text-2)]">{relativeTime(r.at)}</span>

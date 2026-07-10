@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <div className="font-medium">{c.category}</div>
                     {c.description && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{c.description}</p>}
-                    <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="mt-1 font-mono text-[11px] text-[var(--p-text-2)]">
                       {c.resolved_at
                         ? t(
                             "p.delegation.cases.timestamps.openedResolved",

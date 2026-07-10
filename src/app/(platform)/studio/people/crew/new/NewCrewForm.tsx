@@ -23,7 +23,7 @@ export function NewCrewForm() {
         <Input label={t("console.people.crew.new.phone", undefined, "Phone")} name="phone" />
       </div>
       <Input
-        label={t("console.people.crew.new.dayRate", undefined, "Day Rate — USD")}
+        label={t("console.people.crew.new.dayRate", undefined, "Day Rate (USD)")}
         name="day_rate"
         type="number"
         step="0.01"

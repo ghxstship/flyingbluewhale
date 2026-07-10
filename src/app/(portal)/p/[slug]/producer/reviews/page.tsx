@@ -67,7 +67,7 @@ export default async function ProducerReviews({ params }: { params: Promise<{ sl
                 <div className="flex items-center justify-between gap-3">
                   <div className="text-sm font-semibold">{r.title ?? t("p.producer.reviews.untitled", undefined, "Untitled review")}</div>
                   {r.scheduled_at && (
-                    <span className="font-mono text-[10px] text-[var(--p-text-2)]">{fmt.date(r.scheduled_at)}</span>
+                    <span className="font-mono text-[11px] text-[var(--p-text-2)]">{fmt.date(r.scheduled_at)}</span>
                   )}
                 </div>
                 {r.decisions && <p className="mt-1 text-xs text-[var(--p-text-2)]">{r.decisions}</p>}

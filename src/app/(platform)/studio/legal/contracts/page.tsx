@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
 import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { contractKindLabel, formatMinor, type ContractRow } from "@/lib/clm/queries";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +35,7 @@ export default async function Page({
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const { page, offset, pageSize } = parsePage(sp);
   const result = await listOrgScopedPage("contracts", session.orgId, {
@@ -114,7 +115,7 @@ export default async function Page({
             {
               key: "end_at",
               header: t("console.legal.contracts.columns.endAt", undefined, "Ends"),
-              render: (r) => (r.end_at ? new Date(r.end_at).toLocaleDateString("en-US") : "—"),
+              render: (r) => (r.end_at ? fmt.date(new Date(r.end_at)) : "—"),
               mono: true,
             },
           ]}

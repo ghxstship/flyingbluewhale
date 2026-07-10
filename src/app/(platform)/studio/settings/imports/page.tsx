@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -47,6 +48,14 @@ export default async function ImportsPage() {
         eyebrow={t("console.settings.imports.eyebrow", undefined, "Settings")}
         title={t("console.settings.imports.workspaceSettings", undefined, "Workspace Settings")}
         subtitle={t("console.settings.imports.title", undefined, "Imports")}
+        action={
+          <Link
+            href="/studio/import"
+            className="hover-lift surface inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
+          >
+            {t("console.settings.imports.viewHistory", undefined, "View import history")}
+          </Link>
+        }
       />
       <div className="page-content max-w-4xl space-y-6">
         <section className="surface p-5">

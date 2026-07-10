@@ -39,7 +39,7 @@ export function ImportScheduleClient({ baselineId }: { baselineId: string }) {
         </Button>
       </div>
       {fileName && (
-        <p className="text-[10px] text-[var(--p-text-2)]">
+        <p className="text-[11px] text-[var(--p-text-2)]">
           {t("console.schedule.baselines.import.selected", undefined, "Selected:")}{" "}
           <span className="font-mono">{fileName}</span> · {(fileText.length / 1024).toFixed(1)}{" "}
           {t("console.schedule.baselines.import.kb", undefined, "KB")}

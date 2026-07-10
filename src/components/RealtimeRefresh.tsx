@@ -13,6 +13,15 @@ import { createClient } from "@/lib/supabase/client";
  * Designed as a tiny island for surfaces that already render server-side
  * (chat rooms, updates feed) — we don't add a heavyweight realtime
  * cache, we just nudge the framework to re-fetch when the truth changes.
+ *
+ * COVERAGE (F-13, 2026-07-10) — mounted on:
+ *   • /m/inbox/[roomId] + ConsoleChat + portal messages (chat_messages)
+ *   • /m/feed (announcements + recognition_posts)
+ *   • FeedSurface — portal crew/vendor feeds (announcements)
+ *   • /studio/governance/approvals (approval_instances)
+ *   • /studio/tasks, /studio/operations/schedule
+ * Plus NotificationsBell + the audit viewer via their own subscriptions.
+ * When adding a mount, keep the channelName unique per surface × org.
  */
 export function RealtimeRefresh({
   table,

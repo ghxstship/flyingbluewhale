@@ -104,7 +104,7 @@ export function ConnectivityBanner() {
         {t(
           "ui.connectivity.offline",
           undefined,
-          "You're offline. Scans and clock punches will queue — everything else needs a connection.",
+          "You're offline. Clock punches and check-in scans will queue and sync automatically. Other changes need a connection.",
         )}
       </GlobalBanner>
     );
@@ -112,7 +112,7 @@ export function ConnectivityBanner() {
   if (justReconnected) {
     return (
       <GlobalBanner kind="online" persistent>
-        {t("ui.connectivity.backOnline", undefined, "Back online — syncing queued scans and punches…")}
+        {t("ui.connectivity.backOnline", undefined, "Back online. Syncing queued punches and scans…")}
       </GlobalBanner>
     );
   }

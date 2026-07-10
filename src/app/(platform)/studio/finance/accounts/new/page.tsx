@@ -51,7 +51,7 @@ export default async function NewAccountPage() {
             name="account_name"
             required
             maxLength={200}
-            placeholder="Cash — operating"
+            placeholder="Cash · operating"
           />
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
@@ -82,7 +82,7 @@ export default async function NewAccountPage() {
             </label>
             <select name="parent_account_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">
-                {t("console.finance.accounts.new.parentNone", undefined, "— None (top level) —")}
+                {t("console.finance.accounts.new.parentNone", undefined, "None (top level)")}
               </option>
               {parents.map((p) => (
                 <option key={p.id} value={p.id}>

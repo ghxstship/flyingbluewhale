@@ -1,4 +1,5 @@
-import { ModuleHeader } from "@/components/Shell";
+import { Suspense } from "react";
+import { ModuleHeader, PageSkeleton } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -7,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -35,18 +37,49 @@ const CLASS_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
 };
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleDateString();
+  return formatDate(new Date(iso));
 }
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ year?: string }> }) {
   const sp = await searchParams;
   if (!hasSupabase) return null;
-  const session = await requireSession();
-  const supabase = await createClient();
-
-  const fmtIntl = await getRequestFormatters();
   const { t } = await getRequestT();
   const year = sp.year ? Number(sp.year) : new Date().getFullYear();
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow={t("console.safety.osha.eyebrow", undefined, "Safety")}
+        title={t("console.safety.osha.title", { year }, `OSHA 300 · ${year}`)}
+        subtitle={t("console.safety.osha.subtitle", undefined, "OSHA-recordable incidents per 29 CFR 1904.")}
+        action={
+          <div className="flex items-center gap-2">
+            <Button href={`/studio/safety/osha?year=${year - 1}`} size="sm" variant="ghost">
+              ← {year - 1}
+            </Button>
+            <Button href={`/studio/safety/osha?year=${year + 1}`} size="sm" variant="ghost">
+              {year + 1} →
+            </Button>
+            <Button href={`/api/v1/exports/osha?year=${year}`} size="sm">
+              {t("console.safety.osha.exportCsv", undefined, "Export 300/300A/301 (CSV)")}
+            </Button>
+          </div>
+        }
+      />
+      {/* F-07 — documented heavy-aggregation hot route: stream the log body
+          under the instant header instead of blocking on the incidents scan. */}
+      <Suspense fallback={<PageSkeleton variant="table" rows={6} />}>
+        <OshaBody year={year} />
+      </Suspense>
+    </>
+  );
+}
+
+async function OshaBody({ year }: { year: number }) {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const fmtIntl = await getRequestFormatters();
+  const { t } = await getRequestT();
   const start = new Date(`${year}-01-01T00:00:00Z`).toISOString();
   const end = new Date(`${year + 1}-01-01T00:00:00Z`).toISOString();
 
@@ -68,24 +101,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
 
   return (
     <>
-      <ModuleHeader
-        eyebrow={t("console.safety.osha.eyebrow", undefined, "Safety")}
-        title={t("console.safety.osha.title", { year }, `OSHA 300 — ${year}`)}
-        subtitle={t("console.safety.osha.subtitle", undefined, "OSHA-recordable incidents per 29 CFR 1904.")}
-        action={
-          <div className="flex items-center gap-2">
-            <Button href={`/studio/safety/osha?year=${year - 1}`} size="sm" variant="ghost">
-              ← {year - 1}
-            </Button>
-            <Button href={`/studio/safety/osha?year=${year + 1}`} size="sm" variant="ghost">
-              {year + 1} →
-            </Button>
-            <Button href={`/api/v1/exports/osha?year=${year}`} size="sm">
-              {t("console.safety.osha.exportCsv", undefined, "Export 300/300A/301 — CSV")}
-            </Button>
-          </div>
-        }
-      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard

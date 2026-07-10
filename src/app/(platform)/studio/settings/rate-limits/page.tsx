@@ -6,7 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { deleteRateLimitOverride, upsertRateLimitOverride } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ function getBucketHint(
       description: t(
         "console.settings.rateLimits.bucket.ai.description",
         undefined,
-        "/api/v1/ai/* — Anthropic chat + tools",
+        "/api/v1/ai/* (Anthropic chat + tools)",
       ),
     },
     scan: {
@@ -91,6 +91,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data: rows } = await supabase
     .from("rate_limit_overrides")
     .select("id, bucket, limit_count, window_ms, created_at, updated_at")
@@ -124,7 +125,7 @@ export default async function Page() {
           emptyLabel={t(
             "console.settings.rateLimits.empty.label",
             undefined,
-            "No overrides — running platform defaults",
+            "No overrides (running platform defaults)",
           )}
           emptyDescription={t(
             "console.settings.rateLimits.empty.description",
@@ -138,7 +139,7 @@ export default async function Page() {
               render: (r) => (
                 <div>
                   <Badge variant="info">{BUCKET_HINT[r.bucket]?.label ?? r.bucket}</Badge>
-                  <div className="mt-1 text-[10px] text-[var(--p-text-2)]">
+                  <div className="mt-1 text-[11px] text-[var(--p-text-2)]">
                     {BUCKET_HINT[r.bucket]?.description ?? ""}
                   </div>
                 </div>
@@ -152,7 +153,7 @@ export default async function Page() {
               header: t("console.settings.rateLimits.column.limit", undefined, "Limit"),
               render: (r) => (
                 <span className="font-mono text-sm">
-                  {r.limit_count.toLocaleString()}{" "}
+                  {fmt.number(r.limit_count)}{" "}
                   <span className="text-[var(--p-text-2)]">
                     {t("console.settings.rateLimits.unit.req", undefined, "req")}
                   </span>
@@ -242,7 +243,7 @@ export default async function Page() {
               required
               min="1"
               max="3600"
-              placeholder={t("console.settings.rateLimits.upsert.windowPlaceholder", undefined, "Window — Sec")}
+              placeholder={t("console.settings.rateLimits.upsert.windowPlaceholder", undefined, "Window (Sec)")}
               defaultValue="60"
               className="ps-input sm:col-span-1"
             />

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -140,7 +140,7 @@ export function WebhookEndpointForm() {
         placeholder={t(
           "console.settings.webhooks.new.descriptionPlaceholder",
           undefined,
-          "Production — routes to PagerDuty on incidents",
+          "Production (routes to PagerDuty on incidents)",
         )}
       />
       <div>

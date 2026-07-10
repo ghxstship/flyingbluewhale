@@ -139,11 +139,11 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
                   {t(
                     "console.operations.maintenance.job.complete.outcome.partial",
                     undefined,
-                    "Partial — follow-up needed",
+                    "Partial (follow-up needed)",
                   )}
                 </option>
                 <option value="fail">
-                  {t("console.operations.maintenance.job.complete.outcome.fail", undefined, "Fail — action required")}
+                  {t("console.operations.maintenance.job.complete.outcome.fail", undefined, "Fail (action required)")}
                 </option>
               </select>
             </div>

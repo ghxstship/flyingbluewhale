@@ -157,7 +157,7 @@ export default async function RoadmapPage() {
             />
             <h2 className="hed-lg">{t(q.labelKey)}</h2>
             <span
-              className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
+              className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[11px] font-semibold tracking-wider uppercase"
               style={{ color: STATUS_COLOR[q.status] }}
             >
               {t(STATUS_LABEL_KEY[q.status])}
@@ -169,7 +169,7 @@ export default async function RoadmapPage() {
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{t(item.titleKey)}</div>
                   {item.tagKey ? (
-                    <span className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] font-medium text-[var(--p-text-2)]">
+                    <span className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[11px] font-medium text-[var(--p-text-2)]">
                       <Clock size={9} className="me-1 inline-block" aria-hidden="true" />
                       {t(item.tagKey)}
                     </span>

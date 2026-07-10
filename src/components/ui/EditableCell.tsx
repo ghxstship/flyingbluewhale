@@ -2,7 +2,7 @@
 
 import { useState, useRef, useTransition, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 
 /**
  * EditableCell (P3.a) — click-to-edit inline text with optimistic commit and

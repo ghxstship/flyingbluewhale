@@ -138,7 +138,7 @@ export async function bulkArchiveProjects(ids: string[]): Promise<BulkResult> {
     .is("deleted_at", null)
     .neq("project_state", "archived")
     .select("id");
-  if (error) return { error: `Could Not Archive — ${error.message}` };
+  if (error) return { error: `Could Not Archive: ${error.message}` };
 
   const archived = updated?.length ?? 0;
   const skipped = parsed.data.length - archived;

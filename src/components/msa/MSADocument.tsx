@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { IndependentContractorMsaResolved } from "@/lib/msa/types";
-import { formatDate, formatDateTime } from "@/lib/i18n/format";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/i18n/format";
 
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
@@ -218,9 +218,7 @@ export function MSADocument({
               {msa.nscb_monetary_limit_cents != null && (
                 <>
                   {` · ${t("legal.msaDocument.monetaryLimitLabel", undefined, "Monetary Limit:")} `}
-                  <strong>
-                    ${(msa.nscb_monetary_limit_cents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
-                  </strong>
+                  <strong>{formatMoney(msa.nscb_monetary_limit_cents, { fractionDigits: 0 })}</strong>
                 </>
               )}
             </div>

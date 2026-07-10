@@ -77,7 +77,7 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
         hint={t(
           "console.photos.upload.captionHint",
           undefined,
-          "Optional — same caption for all photos. Edit individually later.",
+          "Optional. Same caption for all photos. Edit individually later.",
         )}
       />
 

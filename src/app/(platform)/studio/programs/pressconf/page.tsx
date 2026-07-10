@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDateParts } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
@@ -23,7 +24,7 @@ type EventRow = {
 const PRESS_PATTERN = /(press[ -]?conference|pressconf|press[ -]?brief|media[ -]?brief|presser)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",

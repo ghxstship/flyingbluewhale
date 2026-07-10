@@ -72,7 +72,7 @@ export default async function ProducerReadiness({ params }: { params: Promise<{ 
               .filter((phase) => counts.has(phase))
               .map((phase) => (
                 <div key={phase} className="surface p-4">
-                  <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{toTitle(phase)}</div>
+                  <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{toTitle(phase)}</div>
                   <div className="mt-1 font-mono text-2xl font-semibold">{counts.get(phase)}</div>
                 </div>
               ))}

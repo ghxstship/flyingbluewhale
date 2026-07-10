@@ -7,9 +7,10 @@ export const dynamic = "force-dynamic";
 
 /**
  * /m/check-in — COMPVSS field Scan surface. Segmented Access / Asset / POS / NFC
- * scanner (kit `.scanframe` reticle + `.nfcframe`) with a manual code fallback,
- * resolving codes via the surviving `scanCode` action. Recent activity is the
- * org's latest `assignment_events` scan rows. Ref design: app.jsx 2527-2600.
+ * scanner (live camera decode + `.nfcframe`) with a manual code fallback, both
+ * submitting through the queueable /api/v1/scan endpoint (offline scans queue
+ * + replay). Recent activity is the org's latest `assignment_events` scan
+ * rows. Ref design: app.jsx 2527-2600.
  */
 export default async function CheckInPage() {
   const session = await requireSession();
@@ -53,7 +54,13 @@ export default async function CheckInPage() {
           scanHintCamera: t("m.checkin.scanHintCamera", undefined, "Reads QR & barcodes automatically"),
           scanHintAccess: t("m.checkin.scanHintAccess", undefined, "Scan the QR on the credential"),
           enableCamera: t("m.checkin.enableCamera", undefined, "Enable Camera"),
-          cameraDenied: t("m.checkin.cameraDenied", undefined, "Camera Unavailable — Use Manual Entry"),
+          cameraDenied: t("m.checkin.cameraDenied", undefined, "Camera Unavailable, Use Manual Entry"),
+          queuedTitle: t("m.checkin.queuedTitle", undefined, "Recorded"),
+          queuedBody: t(
+            "m.checkin.queuedBody",
+            undefined,
+            "Saved on this device. It will sync and verify when you're back online.",
+          ),
           nfcHint: t("m.checkin.nfcHint", undefined, "Hold the RFID credential or fob near the reader"),
           ctaAccess: t("m.checkin.ctaAccess", undefined, "Verify Credential"),
           ctaAsset: t("m.checkin.ctaAsset", undefined, "Check Out / In"),

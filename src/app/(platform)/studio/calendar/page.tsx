@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
  * /studio/schedule, which pairs a calendar with a tabular event list). Mounted
  * read-only here: drag-to-reschedule lives on the Schedule surface.
  */
-export default async function CalendarPage() {
+export default async function CalendarPage({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -28,9 +28,27 @@ export default async function CalendarPage() {
     );
   }
   const session = await requireSession();
+  const sp = await searchParams;
+
+  // Query a date window around the visible month instead of the whole table.
+  // <CalendarView> syncs its cursor to `?date=YYYY-MM-DD` (router.replace →
+  // RSC re-render), so navigating months re-runs this query for the new
+  // window. Window = the cursor's month padded by one month either side
+  // (covers the month grid's leading/trailing weeks and adjacent-week/day
+  // views). No row cap: the window bounds the result set instead — the old
+  // default limit of 100 silently pinned the calendar to the org's 100
+  // oldest events.
+  const cursor = sp.date && /^\d{4}-\d{2}-\d{2}$/.test(sp.date) ? new Date(`${sp.date}T00:00:00Z`) : new Date();
+  const windowStart = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() - 1, 1));
+  const windowEnd = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 2, 1));
   const rows = (await listOrgScoped("events", session.orgId, {
     orderBy: "starts_at",
     ascending: true,
+    limit: 0,
+    filters: [
+      { column: "starts_at", op: "gte", value: windowStart.toISOString() },
+      { column: "starts_at", op: "lte", value: windowEnd.toISOString() },
+    ],
   })) as EventRow[];
 
   const events: CalendarEvent[] = rows.map((e) => ({

@@ -20,7 +20,7 @@ export default async function Page() {
       body: t(
         "console.transport.sections.dispatch.body",
         undefined,
-        "Live ground transport dispatch — runs, drivers, vehicles, ETAs.",
+        "Live ground transport dispatch: runs, drivers, vehicles, ETAs.",
       ),
     },
     {

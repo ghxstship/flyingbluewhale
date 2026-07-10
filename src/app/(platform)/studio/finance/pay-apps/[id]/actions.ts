@@ -137,7 +137,7 @@ export async function transitionPayApp(id: string, to: "submitted" | "approved" 
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Pay app status changed concurrently — refresh and retry");
+    throw new Error("Pay app status changed concurrently. Refresh and retry");
   }
   revalidatePath(`/studio/finance/pay-apps/${id}`);
   revalidatePath("/studio/finance/pay-apps");

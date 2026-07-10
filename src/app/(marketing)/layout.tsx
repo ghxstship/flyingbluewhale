@@ -1,5 +1,6 @@
 import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
+import Image from "next/image";
 import {
   InstagramLogo,
   TiktokLogo,
@@ -56,8 +57,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
                 className="inline-flex items-end gap-2 whitespace-nowrap"
                 aria-label={t("marketing.layout.footer.brand.homeAriaLabel")}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
+                <Image src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
                 <Wordmark word="ATLVS" subtitle="TECHNOLOGIES" style={{ fontSize: 16, fontWeight: 500 }} />
               </Link>
               <p className="mt-3 text-xs text-[var(--p-text-2)]">{t("marketing.layout.footer.brand.tagline")}</p>
@@ -122,8 +122,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
               {/* GHXSTSHIP parent endorsement lockup — small ink-tile skull
                   paired with the Jost crossbar-less wordmark. The skull is
                   the parent-company mark, NEVER the ATLVS product icon. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/brand/logo-ghostship-skull.svg"
                 alt=""
                 width={14}

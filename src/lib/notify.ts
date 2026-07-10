@@ -1,8 +1,10 @@
 import "server-only";
 import { createServiceClient } from "./supabase/server";
+import { ADMIN_BAND_ROLES } from "./auth";
 import { log } from "./log";
-import { shouldNotify } from "./notify-resolver";
+import { bulkShouldNotify, shouldNotify } from "./notify-resolver";
 import { sendPushTo } from "./push/send";
+import { sendNotificationEmailToUsers } from "./email";
 import { emitDomainEvent } from "./automations/dispatch";
 
 /**
@@ -42,7 +44,14 @@ export type NotifyEvent =
   | "offer_letter.declined"
   | "job.failed"
   | "passkey.registered"
-  | "account.deletion_requested";
+  | "account.deletion_requested"
+  | "marketplace.inquiry_received";
+
+/** Readable eyebrow for the email rendering of an event type. */
+function eventEyebrow(eventType: NotifyEvent): string {
+  const noun = eventType.split(".")[0] ?? "notification";
+  return noun.charAt(0).toUpperCase() + noun.slice(1).replace(/_/g, " ");
+}
 
 export async function notify(args: {
   orgId: string;
@@ -88,6 +97,28 @@ export async function notify(args: {
         })
         .catch((err: unknown) => {
           log.warn("notify.push_send_failed", {
+            event: args.eventType,
+            err: (err as Error).message,
+          });
+        });
+
+      // F-03 — email channel. The /me/notifications matrix has always
+      // offered an Email column (default ON); this closes the loop.
+      // Fire-and-forget, gated per (event, email) on the same matrix.
+      const emailUserId = args.userId;
+      void shouldNotify(emailUserId, args.eventType, "email")
+        .then((allowEmail) => {
+          if (!allowEmail) return;
+          return sendNotificationEmailToUsers({
+            userIds: [emailUserId],
+            title: args.title,
+            body: args.body ?? null,
+            url: args.href ?? null,
+            eyebrow: eventEyebrow(args.eventType),
+          });
+        })
+        .catch((err: unknown) => {
+          log.warn("notify.email_send_failed", {
             event: args.eventType,
             err: (err as Error).message,
           });
@@ -174,7 +205,7 @@ export async function notifyOrgAdmins(args: {
     .from("memberships")
     .select("user_id, role")
     .eq("org_id", args.orgId)
-    .in("role", ["owner", "admin"])
+    .in("role", [...ADMIN_BAND_ROLES])
     .is("deleted_at", null);
   const userIds = (members ?? []).map((m) => m.user_id as string);
   if (userIds.length === 0) return;
@@ -228,7 +259,29 @@ export async function notifyOrgAdmins(args: {
       });
   }
 
-  // 3. ONE webhook + domain_event fan-out for the org as a whole. Calls
+  // 3. Email fan-out (F-03) — one kit-templated email per admin whose
+  //    matrix allows (event, email); default ON per the /me/notifications
+  //    matrix. Fire-and-forget.
+  void bulkShouldNotify(userIds, args.eventType, "email")
+    .then((allowedEmail) => {
+      const emailIds = userIds.filter((uid) => allowedEmail.has(uid));
+      if (emailIds.length === 0) return;
+      return sendNotificationEmailToUsers({
+        userIds: emailIds,
+        title: args.title,
+        body: args.body ?? null,
+        url: args.href ?? null,
+        eyebrow: eventEyebrow(args.eventType),
+      });
+    })
+    .catch((err: unknown) => {
+      log.warn("notify.admins_email_send_failed", {
+        event: args.eventType,
+        err: (err as Error).message,
+      });
+    });
+
+  // 4. ONE webhook + domain_event fan-out for the org as a whole. Calls
   //    notify() with userId=null so emit_notification creates a single
   //    webhook delivery per active endpoint rather than one per admin.
   await notify({ ...args, userId: null });

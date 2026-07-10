@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { pointsByUser } from "@/lib/db/legend-people";
 import { resolveTier } from "@/lib/legend_gamification";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,7 @@ export default async function ProfilePage() {
   }
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
+  const fmt = await getRequestFormatters();
 
   const [{ data: me }, points, { data: certData }, { count: badgesCount }, { data: enrollData }] = await Promise.all([
     db.from("users").select("id, name, avatar_url, email").eq("id", session.userId).maybeSingle(),
@@ -79,7 +81,7 @@ export default async function ProfilePage() {
       </div>
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Total XP" value={myPoints.toLocaleString()} />
+        <MetricCard label="Total XP" value={fmt.number(myPoints)} />
         <MetricCard label="Courses Completed" value={completedCount} />
         <MetricCard label="Certs Held" value={certsValidCount} />
         <MetricCard label="Badges" value={badgesCount ?? 0} />

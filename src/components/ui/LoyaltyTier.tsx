@@ -1,4 +1,5 @@
 import { ProgressBar } from "./ProgressBar";
+import { formatNumber } from "@/lib/i18n/format";
 
 /**
  * <LoyaltyTier> — the viewer's standing in the shared LEG3ND ⇄ COMPVSS
@@ -48,14 +49,14 @@ export function LoyaltyTier({
           <span className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-1)]">{tier}</span>
         </div>
         <span className="text-sm font-semibold tabular-nums text-[var(--p-text-1)]">
-          {points.toLocaleString()} <span className="text-xs font-normal text-[var(--p-text-2)]">pts</span>
+          {formatNumber(points)} <span className="text-xs font-normal text-[var(--p-text-2)]">pts</span>
         </span>
       </div>
       <div className="mt-3">
         <ProgressBar value={pct} aria-label={`Progress to ${nextTier ?? "max tier"}`} />
         <div className="mt-1 text-xs text-[var(--p-text-2)]">
           {hasNext
-            ? `${(nextThreshold! - points).toLocaleString()} pts to ${nextTier}`
+            ? `${formatNumber(nextThreshold! - points)} pts to ${nextTier}`
             : "Top tier reached"}
         </div>
       </div>

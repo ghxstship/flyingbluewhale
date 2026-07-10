@@ -3,17 +3,16 @@
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { MoneyInput } from "@/components/ui/MoneyInput";
+import { RecordCombobox } from "@/components/RecordCombobox";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createInvoiceAction } from "../actions";
 
 export function NewInvoiceForm({
-  clients,
-  projects,
   defaultClientId,
+  defaultClientName,
 }: {
-  clients: { id: string; name: string }[];
-  projects: { id: string; name: string }[];
   defaultClientId?: string;
+  defaultClientName?: string;
 }) {
   const t = useT();
   return (
@@ -30,32 +29,24 @@ export function NewInvoiceForm({
         placeholder={t("console.finance.invoices.new.titlePlaceholder", undefined, "Event production retainer")}
       />
       <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.finance.invoices.new.client", undefined, "Client")}
-          </label>
-          <select name="client_id" defaultValue={defaultClientId ?? ""} className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.finance.invoices.new.noClient", undefined, "— No client —")}</option>
-            {clients.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.finance.invoices.new.project", undefined, "Project")}
-          </label>
-          <select name="project_id" className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.finance.invoices.new.noProject", undefined, "— No project —")}</option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <RecordCombobox
+          table="clients"
+          name="client_id"
+          label={t("console.finance.invoices.new.client", undefined, "Client")}
+          noneLabel={t("console.finance.invoices.new.noClientOption", undefined, "No client")}
+          defaultValue={defaultClientId}
+          defaultLabel={defaultClientName}
+          searchPlaceholder={t("console.finance.invoices.new.searchClients", undefined, "Search clients…")}
+          emptyLabel={t("console.finance.invoices.new.noClientMatches", undefined, "No matching clients")}
+        />
+        <RecordCombobox
+          table="projects"
+          name="project_id"
+          label={t("console.finance.invoices.new.project", undefined, "Project")}
+          noneLabel={t("console.finance.invoices.new.noProjectOption", undefined, "No project")}
+          searchPlaceholder={t("console.finance.invoices.new.searchProjects", undefined, "Search projects…")}
+          emptyLabel={t("console.finance.invoices.new.noProjectMatches", undefined, "No matching projects")}
+        />
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <MoneyInput

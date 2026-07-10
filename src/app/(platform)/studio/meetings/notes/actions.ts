@@ -185,5 +185,6 @@ export async function deleteNote(id: string): Promise<void> {
     .eq("id", id)
     .eq("org_id", session.orgId);
   revalidatePath("/studio/meetings/notes");
-  redirect("/studio/meetings/notes");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

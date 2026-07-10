@@ -119,7 +119,7 @@ export default async function Page() {
             value={fmt.number(new Set(rows.map((r) => r.horizon)).size)}
           />
         </div>
-        <div className="text-[10px] text-[var(--p-text-2)]">
+        <div className="text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.workforce.forecast.description",
             undefined,

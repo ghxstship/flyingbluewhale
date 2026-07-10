@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -67,7 +67,7 @@ export function LogoUploader({
             // eslint-disable-next-line @next/next/no-img-element
             <img src={url} alt="" className="h-full w-full object-contain" />
           ) : (
-            <span className="text-[10px] text-[var(--p-text-2)]">{t("console.branding.uploader.none", undefined, "No logo")}</span>
+            <span className="text-[11px] text-[var(--p-text-2)]">{t("console.branding.uploader.none", undefined, "No logo")}</span>
           )}
         </div>
         <div className="flex-1 space-y-1.5">

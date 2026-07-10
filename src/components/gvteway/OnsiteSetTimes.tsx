@@ -1,6 +1,7 @@
 import { Radio, Clock, AlertTriangle } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * OnsiteSetTimes — the live "My Night" schedule for the Onsite surface
@@ -28,7 +29,7 @@ type Timed = { row: SetTimeRow; start: number; end: number };
 function fmtTime(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  return formatDateParts(d, { hour: "numeric", minute: "2-digit" });
 }
 
 function toTimed(rows: SetTimeRow[]): Timed[] {

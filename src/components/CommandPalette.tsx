@@ -486,7 +486,7 @@ export function CommandPalette({
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
               autoFocus
             />
-            <kbd className="hidden rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[10px] text-[var(--p-text-2)] sm:inline-block">
+            <kbd className="hidden rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[11px] text-[var(--p-text-2)] sm:inline-block">
               ESC
             </kbd>
           </div>
@@ -514,13 +514,13 @@ export function CommandPalette({
                       <span className="flex-1">{a.label}</span>
                       {a.hint && <span className="text-[11px] text-[var(--p-text-2)]">{a.hint}</span>}
                       {a.performAlt && (
-                        <span className="hidden items-center gap-1 text-[10px] text-[var(--p-text-2)] group-data-[selected=true]:inline-flex">
+                        <span className="hidden items-center gap-1 text-[11px] text-[var(--p-text-2)] group-data-[selected=true]:inline-flex">
                           <kbd className="font-mono">⌘↵</kbd>
                           <ExternalLink size={10} aria-hidden="true" />
                         </span>
                       )}
                       {a.shortcut && (
-                        <kbd className="rounded border border-[var(--p-border)] px-1 py-0.5 text-[10px] text-[var(--p-text-2)]">
+                        <kbd className="rounded border border-[var(--p-border)] px-1 py-0.5 text-[11px] text-[var(--p-text-2)]">
                           {a.shortcut}
                         </kbd>
                       )}
@@ -530,7 +530,7 @@ export function CommandPalette({
               </Command.Group>
             ))}
           </Command.List>
-          <div className="flex items-center justify-between border-t border-[var(--p-border)] px-4 py-2 text-[10px] text-[var(--p-text-2)]">
+          <div className="flex items-center justify-between border-t border-[var(--p-border)] px-4 py-2 text-[11px] text-[var(--p-text-2)]">
             <span>
               {t("commandPalette.footerHint", undefined, "↑↓ navigate · ↵ select · ⌘↵ open in new tab · esc close")}
             </span>
@@ -557,20 +557,33 @@ function iconForRoute(href: string): React.ComponentType<{ size?: number }> {
 
 export function CommandPaletteTrigger() {
   const t = useT();
+  const openPalette = () => {
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
+  };
   return (
-    <button
-      type="button"
-      data-tour="cmdk"
-      onClick={() => {
-        window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
-      }}
-      className="hidden items-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] sm:inline-flex"
-      aria-label={t("commandPalette.shortcut", undefined, "Open command palette")}
-    >
-      <Search size={12} />
-      <span>{t("commandPalette.searchLabel", undefined, "Search")}</span>
-      <kbd className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
-    </button>
+    <>
+      <button
+        type="button"
+        data-tour="cmdk"
+        onClick={openPalette}
+        className="hidden items-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] sm:inline-flex"
+        aria-label={t("commandPalette.shortcut", undefined, "Open command palette")}
+      >
+        <Search size={12} />
+        <span>{t("commandPalette.searchLabel", undefined, "Search")}</span>
+        <kbd className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[11px]">⌘K</kbd>
+      </button>
+      {/* Below sm the labeled trigger is hidden — this icon-only button keeps
+          a touch path to the palette on phones (A-26). h-8/w-8 = 32px target. */}
+      <button
+        type="button"
+        onClick={openPalette}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] sm:hidden"
+        aria-label={t("commandPalette.shortcut", undefined, "Open command palette")}
+      >
+        <Search size={14} />
+      </button>
+    </>
   );
 }
 

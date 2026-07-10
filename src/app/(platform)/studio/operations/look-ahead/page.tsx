@@ -22,7 +22,7 @@ export default async function Page() {
   const { t } = await getRequestT();
 
   function fmtDate(d: string): string {
-    return new Date(d).toLocaleString(undefined, {
+    return fmt.dateParts(new Date(d), {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -140,7 +140,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow={t("console.operations.lookAhead.eyebrow", undefined, "Operations")}
-        title={t("console.operations.lookAhead.title", undefined, "Look-ahead — next 21 days")}
+        title={t("console.operations.lookAhead.title", undefined, "Look-ahead (next 21 days)")}
         subtitle={t(
           items.length === 1
             ? "console.operations.lookAhead.subtitle_one"
@@ -175,7 +175,7 @@ export default async function Page() {
                       <span>{it.title}</span>
                       {it.project && <span className="text-xs text-[var(--p-text-2)]">· {it.project}</span>}
                     </div>
-                    <span className="font-mono text-[10px] text-[var(--p-text-2)]">{fmtDate(it.when)}</span>
+                    <span className="font-mono text-[11px] text-[var(--p-text-2)]">{fmtDate(it.when)}</span>
                   </li>
                 ))}
               </ul>

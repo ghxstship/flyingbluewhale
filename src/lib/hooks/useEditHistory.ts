@@ -15,6 +15,21 @@ import { useCallback, useEffect, useState } from "react";
  *
  * `bindKeys` (default true) wires Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z globally
  * while mounted.
+ *
+ * ── THE UNDO TIERS (F-22) — pick the lightest one that fits ────────────────
+ * 1. ACTION-UNDO TOAST — a single reversible mutation (state advance, quick
+ *    edit). Fire `toast.success(msg, { action: { label: "Undo", onClick:
+ *    inverseCommit } })` where `inverseCommit` calls the SAME server action
+ *    with the prior value. Example: LeadStageMover
+ *    (src/app/(platform)/studio/leads/[leadId]/LeadStageMover.tsx).
+ * 2. DELETE-UNDO — soft deletes. Use `<DeleteForm undo={{ table, id,
+ *    redirectTo }}>`; it wires the toast to `restoreOrgScoped` (REC-14).
+ *    Don't hand-roll restore toasts.
+ * 3. MULTI-STEP STACK (this hook) — surfaces where a user makes a SERIES of
+ *    edits and expects ⌘Z to walk back through them (inline table editing via
+ *    UndoStack/UndoBar in DataTableInteractive, rich editors, canvases).
+ *    Record every commit with its inverse; render `<UndoBar>` (or your own
+ *    canUndo/canRedo affordance) so the stack is discoverable.
  */
 export type EditEntry = {
   undo: () => void | Promise<void>;

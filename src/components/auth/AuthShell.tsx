@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { Sparkles, ShieldCheck, Zap, Globe } from "lucide-react";
 import { Wordmark } from "@/components/brand/Wordmark";
@@ -66,8 +67,7 @@ export function AuthShell({
             // ui_kits/atlvs/logo-kit.html "Primary Lockup". The auth
             // screens are the first product touch and carry the full
             // lockup, not just text.
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
+            <Image src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
           )}
           {rail?.productName ? (
             <span>{rail.productName}</span>

@@ -120,7 +120,7 @@ export async function setFabStatus(formData: FormData): Promise<void> {
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Status changed concurrently — refresh and retry");
+    throw new Error("Status changed concurrently. Refresh and retry");
   }
   revalidatePath("/studio/production/fabrication");
   revalidatePath(`/studio/production/fabrication/${id}`);

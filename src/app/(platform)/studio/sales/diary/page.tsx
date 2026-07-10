@@ -178,7 +178,7 @@ export default async function DiaryPage({
                                     <StatusBadge status={b.booking_state} />
                                   </div>
                                   <div className="mt-1 truncate text-[11px] font-medium">{b.title}</div>
-                                  <div className="text-[10px] text-[var(--p-text-2)]">
+                                  <div className="text-[11px] text-[var(--p-text-2)]">
                                     {timeLabel(b.starts_at)}–{timeLabel(b.ends_at)}
                                   </div>
                                 </Link>

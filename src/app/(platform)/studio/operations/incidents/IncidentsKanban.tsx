@@ -69,7 +69,7 @@ export function IncidentsKanban({ rows }: { rows: IncidentKanbanRow[] }): React.
             <StatusChip tone={SEVERITY_TONE[r.severity] ?? "neutral"}>{r.severity}</StatusChip>
           </div>
           <div className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.summary}</div>
-          {r.location && <div className="text-[10px] text-[var(--p-text-2)]">{r.location}</div>}
+          {r.location && <div className="text-[11px] text-[var(--p-text-2)]">{r.location}</div>}
         </div>
       )}
     />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
 import { PasswordField } from "@/components/auth/PasswordField";
@@ -13,7 +13,14 @@ import { signupAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
-export function SignupForm() {
+const PLAN_LABELS: Record<string, string> = {
+  free: "Free",
+  crew: "Crew",
+  production: "Production",
+  festival: "Festival",
+};
+
+export function SignupForm({ plan }: { plan?: string }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(signupAction, null);
 
@@ -65,6 +72,20 @@ export function SignupForm() {
         />
         {/* C7 — org capture deferred to /onboarding/org (which owns workspace
             creation). Fewer fields on the highest-friction screen. */}
+        {/* E-17: recorded plan intent from the pricing CTA. Honest copy — no
+            billing/trial mechanics exist yet, so nothing is promised. */}
+        {plan && (
+          <>
+            <input type="hidden" name="plan" value={plan} />
+            <p className="text-[11px] leading-relaxed text-[var(--p-text-2)]">
+              {t(
+                "auth.signup.planIntent",
+                { plan: PLAN_LABELS[plan] ?? plan },
+                `You picked the ${PLAN_LABELS[plan] ?? plan} plan. Every workspace starts on the free Access tier; we'll keep your choice with your new workspace so upgrading is one step.`,
+              )}
+            </p>
+          </>
+        )}
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <p className="text-[11px] leading-relaxed text-[var(--p-text-2)]">
           {t("auth.signup.tosPrefix", undefined, "By creating an account you agree to our")}{" "}

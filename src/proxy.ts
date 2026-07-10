@@ -135,6 +135,11 @@ export async function proxy(request: NextRequest) {
   // /api/v1/ `write` bucket lives at the bottom so it only triggers when no
   // tighter rule already accounted for the request. Without `break`, an
   // /api/v1/ai/* call would consume both the `ai` and `write` buckets.
+  //
+  // Captured on the ALLOWED path too so successful responses carry proactive
+  // quota headers (x-ratelimit-*, Stripe-style) — clients can back off before
+  // ever hitting a 429.
+  let rateInfo: { bucket: string; remaining: number; resetAt: number } | null = null;
   if (RATE_LIMITED_METHODS.has(request.method)) {
     for (const rule of PROTECTED) {
       if (!rule.match.test(pathname)) continue;
@@ -175,6 +180,7 @@ export async function proxy(request: NextRequest) {
         applyCors(request, res);
         return res;
       }
+      rateInfo = { bucket: rule.bucket, remaining: result.remaining, resetAt: result.resetAt };
       break;
     }
   }
@@ -295,6 +301,13 @@ export async function proxy(request: NextRequest) {
   }
 
   const mwDuration = Math.round((performance.now() - startedAt) * 10) / 10;
+  // Proactive quota headers on rate-limited buckets — the 429 branch above
+  // emits the same trio, so clients see one contract on success and denial.
+  if (rateInfo) {
+    response.headers.set("x-ratelimit-bucket", rateInfo.bucket);
+    response.headers.set("x-ratelimit-remaining", String(rateInfo.remaining));
+    response.headers.set("x-ratelimit-reset", String(rateInfo.resetAt));
+  }
   response.headers.set("x-request-id", requestId);
   response.headers.set("x-shell", shell);
   if (tenantSlug) response.headers.set("x-tenant-slug", tenantSlug);

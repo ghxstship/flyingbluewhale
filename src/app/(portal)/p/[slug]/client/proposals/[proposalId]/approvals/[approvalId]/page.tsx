@@ -32,7 +32,7 @@ export default async function Page({
 
       <header className="surface p-6">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+          <span className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
             {toTitle(approval.kind)}
           </span>
           <Badge variant={APPROVAL_STATE_VARIANT[approval.state]}>{APPROVAL_STATE_LABEL[approval.state]}</Badge>

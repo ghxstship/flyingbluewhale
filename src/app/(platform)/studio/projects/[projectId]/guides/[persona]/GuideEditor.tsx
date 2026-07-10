@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Input } from "@/components/ui/Input";
 import { FormShell, type FormState } from "@/components/FormShell";
 import { upsertGuideAction } from "../actions";
@@ -39,7 +39,7 @@ export function GuideEditor({
   const [jsonError, setJsonError] = useState<string | null>(null);
 
   const invalidJsonMessage = (detail: string) =>
-    t("console.projects.guides.editor.invalidJson", { detail }, `Config must be valid JSON — ${detail}`);
+    t("console.projects.guides.editor.invalidJson", { detail }, `Config must be valid JSON: ${detail}`);
 
   const action = async (prev: FormState, fd: FormData): Promise<FormState> => {
     // Client-side validation before the round trip — same check the server
@@ -83,11 +83,11 @@ export function GuideEditor({
       />
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="published" defaultChecked={defaultValues.published} />
-        {t("console.projects.guides.editor.publishedLabel", undefined, "Published — Visible in Portal + Mobile")}
+        {t("console.projects.guides.editor.publishedLabel", undefined, "Published (Visible in Portal + Mobile)")}
       </label>
       <div>
         <label className="text-xs font-medium text-[var(--p-text-2)]">
-          {t("console.projects.guides.editor.configLabel", undefined, "Config — JSON")}
+          {t("console.projects.guides.editor.configLabel", undefined, "Config (JSON)")}
         </label>
         <textarea
           name="config"

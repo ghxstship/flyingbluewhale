@@ -1,7 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { NewTaskForm, type AtomOptionWithProject } from "./NewTaskForm";
@@ -10,21 +9,18 @@ export const dynamic = "force-dynamic";
 
 export default async function NewTaskPage() {
   const { t } = await getRequestT();
-  let projects: { id: string; name: string }[] = [];
+  // Projects are searched on demand through RecordCombobox (audit A-06) —
+  // only the atom options for the picked project still preload.
   let atoms: AtomOptionWithProject[] = [];
   if (hasSupabase) {
     const session = await requireSession();
     const supabase = await createClient();
-    const [ps, { data: atomRows }] = await Promise.all([
-      listOrgScoped("projects", session.orgId, { orderBy: "name", ascending: true }),
-      supabase
-        .from("xpms_atoms")
-        .select("id, identifier, name, project_id, projects:projects!inner(id, name)")
-        .eq("org_id", session.orgId)
-        .not("project_id", "is", null)
-        .order("identifier", { ascending: true }),
-    ]);
-    projects = ps.map((p) => ({ id: p.id, name: p.name }));
+    const { data: atomRows } = await supabase
+      .from("xpms_atoms")
+      .select("id, identifier, name, project_id, projects:projects!inner(id, name)")
+      .eq("org_id", session.orgId)
+      .not("project_id", "is", null)
+      .order("identifier", { ascending: true });
     atoms = (
       (atomRows ?? []) as unknown as Array<{
         id: string;
@@ -48,7 +44,7 @@ export default async function NewTaskPage() {
         title={t("console.tasks.new.title", undefined, "New Task")}
       />
       <div className="page-content max-w-xl">
-        <NewTaskForm projects={projects} atoms={atoms} />
+        <NewTaskForm atoms={atoms} />
       </div>
     </>
   );

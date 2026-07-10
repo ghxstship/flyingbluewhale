@@ -175,10 +175,11 @@ export async function verifyChallengeAction(_: FormState, fd: FormData): Promise
     }
 
     // Limitation: we cannot elevate the session to aal2 from server-side
-    // without minting a custom JWT. Instead we land the user on the security
-    // page so they can re-enroll. Middleware exempts /me/security/two-factor
-    // from the MFA-required redirect.
-    redirect("/me/security/two-factor?recovery=1");
+    // without minting a custom JWT. E-27: land on the /mfa/recovery
+    // interstitial, which explains the consumed code + reduced assurance
+    // before routing to re-enrollment (middleware exempts
+    // /me/security/two-factor from the MFA-required redirect).
+    redirect("/mfa/recovery");
   }
 
   return { error: "Enter the 6-digit code from your app, or a recovery code." };

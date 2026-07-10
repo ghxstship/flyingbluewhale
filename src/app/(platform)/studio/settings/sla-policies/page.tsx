@@ -182,10 +182,10 @@ export default async function Page() {
             className="surface-inset mt-3 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-6"
           >
             <select name="severity" required defaultValue="P2" className="ps-input sm:col-span-1">
-              <option value="P1">{t("console.settings.slaPolicies.sev.p1", undefined, "P1 — Critical")}</option>
-              <option value="P2">{t("console.settings.slaPolicies.sev.p2", undefined, "P2 — High")}</option>
-              <option value="P3">{t("console.settings.slaPolicies.sev.p3", undefined, "P3 — Standard")}</option>
-              <option value="P4">{t("console.settings.slaPolicies.sev.p4", undefined, "P4 — Low")}</option>
+              <option value="P1">{t("console.settings.slaPolicies.sev.p1", undefined, "P1 (Critical)")}</option>
+              <option value="P2">{t("console.settings.slaPolicies.sev.p2", undefined, "P2 (High)")}</option>
+              <option value="P3">{t("console.settings.slaPolicies.sev.p3", undefined, "P3 (Standard)")}</option>
+              <option value="P4">{t("console.settings.slaPolicies.sev.p4", undefined, "P4 (Low)")}</option>
             </select>
             <input
               name="response_minutes"
@@ -193,7 +193,7 @@ export default async function Page() {
               required
               min="1"
               max="100000"
-              placeholder={t("console.settings.slaPolicies.placeholder.response", undefined, "Response — Min")}
+              placeholder={t("console.settings.slaPolicies.placeholder.response", undefined, "Response · Min")}
               className="ps-input sm:col-span-2"
             />
             <input
@@ -202,7 +202,7 @@ export default async function Page() {
               required
               min="1"
               max="1000000"
-              placeholder={t("console.settings.slaPolicies.placeholder.resolution", undefined, "Resolution — Min")}
+              placeholder={t("console.settings.slaPolicies.placeholder.resolution", undefined, "Resolution · Min")}
               className="ps-input sm:col-span-2"
             />
             <label className="flex items-center gap-2 text-xs sm:col-span-1">

@@ -33,7 +33,7 @@ import {
   Bookmark,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import {
   DndContext,
   closestCenter,
@@ -48,19 +48,31 @@ import { CSS } from "@dnd-kit/utilities";
 import type { ReactNode } from "react";
 import { useUrlState } from "@/lib/hooks/useUrlState";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
+import { useHotkeys, registerShortcut, type HotkeyBinding } from "@/lib/hooks/useHotkeys";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/lib/hooks/useToast";
 import { RowActions, type RowActionItem } from "@/components/ui/RowActions";
 import { Hint } from "@/components/ui/Tooltip";
 import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
 import { SavedViewSelector } from "@/components/views/SavedViewSelector";
 import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatNumber } from "@/lib/i18n/format";
+
+// ── Keyboard-traversal instance arbitration (F-04) ───────────────────────────
+// Module scope so pages that mount several DataTableInteractive instances
+// route j/k/x/Enter to exactly one: the last hovered/focused table, falling
+// back to the first mounted.
+const DT_MOUNTED: string[] = [];
+let dtActiveInstance: string | null = null;
 
 /**
  * Shared toolbar trigger className — every dropdown trigger and action
@@ -331,8 +343,11 @@ export function DataTableInteractive({
   // Inline cell editing (v7.7 engine depth). Edits are optimistic — an
   // `overrides` map shadows the server-rendered cell — and each commit is a
   // reversible UndoStack action (⌘Z / ⌘⇧Z via <UndoBar>). The actual persist
-  // is the caller's `onCellEdit` (a server action).
+  // is the caller's `onCellEdit` (a server action). The optimistic override
+  // AWAITS the persist: on rejection it rolls the cell back to the pre-edit
+  // value and toasts the failure so a dropped write can never lie in the UI.
   const undo = useUndoStack();
+  const toastApi = useToast();
   const [editing, setEditing] = React.useState<{ rowId: string; key: string } | null>(null);
   const [overrides, setOverrides] = React.useState<Record<string, string>>({});
   const editableKeys = React.useMemo(
@@ -340,21 +355,33 @@ export function DataTableInteractive({
     [columns],
   );
   const applyOverride = React.useCallback(
-    (rowId: string, key: string, value: string) => {
-      setOverrides((o) => ({ ...o, [`${rowId}::${key}`]: value }));
-      void onCellEdit?.(rowId, key, value);
+    async (rowId: string, key: string, value: string, rollbackTo: string) => {
+      const ovKey = `${rowId}::${key}`;
+      setOverrides((o) => ({ ...o, [ovKey]: value }));
+      try {
+        await onCellEdit?.(rowId, key, value);
+      } catch (err) {
+        // Persist failed — revert the optimistic cell and surface the error.
+        setOverrides((o) => ({ ...o, [ovKey]: rollbackTo }));
+        toastApi.error(
+          err instanceof Error && err.message
+            ? err.message
+            : t("dataTable.toast.cellEditFailed", undefined, "Could not save the edit"),
+        );
+      }
     },
-    [onCellEdit],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onCellEdit, t],
   );
   const commitEdit = React.useCallback(
     (rowId: string, key: string, value: string, oldValue: string) => {
       setEditing(null);
       if (value === oldValue) return;
-      applyOverride(rowId, key, value);
+      void applyOverride(rowId, key, value, oldValue);
       undo.push({
         label: key,
-        undo: () => applyOverride(rowId, key, oldValue),
-        redo: () => applyOverride(rowId, key, value),
+        undo: () => void applyOverride(rowId, key, oldValue, value),
+        redo: () => void applyOverride(rowId, key, value, oldValue),
       });
     },
     [applyOverride, undo],
@@ -664,6 +691,99 @@ export function DataTableInteractive({
     overscan: 10,
   });
 
+  // ── Keyboard traversal (F-04, Linear-style) ────────────────────────────────
+  // j/k move a row focus cursor, x toggles its selection, Enter opens its
+  // record. When several tables share a page, the last-hovered/focused
+  // instance owns the keys (first-mounted before any interaction).
+  const instanceId = React.useId();
+  const [kbdIdx, setKbdIdx] = React.useState(-1);
+  const kbdRefs = React.useRef({ flatVisible, kbdIdx, virtualized: !pageSizeEff && !grouped });
+  kbdRefs.current = { flatVisible, kbdIdx, virtualized: !pageSizeEff && !grouped };
+  const virtRef = React.useRef(virtualizer);
+  virtRef.current = virtualizer;
+
+  React.useEffect(() => {
+    DT_MOUNTED.push(instanceId);
+    return () => {
+      const ix = DT_MOUNTED.indexOf(instanceId);
+      if (ix !== -1) DT_MOUNTED.splice(ix, 1);
+      if (dtActiveInstance === instanceId) dtActiveInstance = null;
+    };
+  }, [instanceId]);
+
+  // Cheatsheet entries (ref-counted registry — safe with multiple tables).
+  React.useEffect(() => {
+    const unregister = [
+      registerShortcut("j", t("shortcuts.table.nextRow", undefined, "Next row"), "Table"),
+      registerShortcut("k", t("shortcuts.table.prevRow", undefined, "Previous row"), "Table"),
+      registerShortcut("x", t("shortcuts.table.toggleSelect", undefined, "Select / deselect focused row"), "Table"),
+      registerShortcut("enter", t("shortcuts.table.openRow", undefined, "Open focused row"), "Table"),
+    ];
+    return () => unregister.forEach((fn) => fn());
+  }, [t]);
+
+  // Clamp the cursor when filters/pagination shrink the visible set.
+  React.useEffect(() => {
+    setKbdIdx((i) => (i >= flatVisible.length ? flatVisible.length - 1 : i));
+  }, [flatVisible.length]);
+
+  const kbdBindings = React.useMemo<HotkeyBinding[]>(() => {
+    const isActive = () => (dtActiveInstance ?? DT_MOUNTED[0]) === instanceId;
+    // Don't hijack Enter/x from focused interactive elements (sort headers,
+    // links, menus) — only inputs are covered by skipWhenEditing.
+    const focusIsInteractive = () => {
+      const ae = document.activeElement;
+      return ae instanceof HTMLElement && Boolean(ae.closest("button, a, [role='button'], [role='menuitem']"));
+    };
+    const move = (delta: 1 | -1) => {
+      if (!isActive()) return;
+      const { flatVisible: rows_, kbdIdx: cur } = kbdRefs.current;
+      if (rows_.length === 0) return;
+      const next = cur < 0 ? (delta === 1 ? 0 : rows_.length - 1) : Math.min(rows_.length - 1, Math.max(0, cur + delta));
+      setKbdIdx(next);
+      if (kbdRefs.current.virtualized) virtRef.current.scrollToIndex(next);
+    };
+    return [
+      { combo: "j", skipWhenEditing: true, handler: () => move(1) },
+      { combo: "k", skipWhenEditing: true, handler: () => move(-1) },
+      {
+        combo: "x",
+        skipWhenEditing: true,
+        handler: () => {
+          if (!isActive() || focusIsInteractive()) return;
+          if (!bulkActions) return;
+          const { flatVisible: rows_, kbdIdx: cur } = kbdRefs.current;
+          const row = cur >= 0 ? rows_[cur] : undefined;
+          if (row) toggleOne(row.id);
+        },
+      },
+      {
+        combo: "enter",
+        skipWhenEditing: true,
+        preventDefault: false,
+        handler: () => {
+          if (!isActive() || focusIsInteractive()) return;
+          const { flatVisible: rows_, kbdIdx: cur } = kbdRefs.current;
+          const row = cur >= 0 ? rows_[cur] : undefined;
+          if (row?.href) router.push(row.href);
+        },
+      },
+    ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [instanceId, router]);
+
+  useHotkeys(kbdBindings);
+
+  const kbdFocusId = kbdIdx >= 0 ? flatVisible[kbdIdx]?.id : undefined;
+
+  // Keep the focused row in view (paginated/grouped branches render real rows).
+  React.useEffect(() => {
+    if (!kbdFocusId || kbdRefs.current.virtualized) return;
+    scrollRef.current
+      ?.querySelector('[data-kbd-focus="true"]')
+      ?.scrollIntoView({ block: "nearest" });
+  }, [kbdFocusId]);
+
   function toggleSort(key: string, e?: React.MouseEvent) {
     if (e?.shiftKey && sortKey && sortKey !== key) {
       // Add / cycle a secondary sort key
@@ -714,6 +834,24 @@ export function DataTableInteractive({
   const anySelected = selected.size > 0;
   const allVisibleSelected = flatVisible.length > 0 && flatVisible.every((r) => selected.has(r.id));
 
+  // Bulk-action execution. Danger-variant actions are gated behind a
+  // ConfirmDialog carrying the selection count (A-03) — default actions
+  // keep the direct-fire contract.
+  const [confirmBulk, setConfirmBulk] = React.useState<BulkAction | null>(null);
+  const runBulkAction = React.useCallback(
+    async (a: BulkAction) => {
+      try {
+        const res = await a.perform(Array.from(selected));
+        if (res?.error) toast.error(res.error);
+        else if (res?.message) toast.success(res.message);
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : t("dataTable.bulkFailed", undefined, "Bulk Action Failed"));
+      }
+      setSelected(new Set());
+    },
+    [selected, t],
+  );
+
   if (rows.length === 0) {
     return (
       <div className="px-6 py-10 text-center text-sm text-[var(--p-text-2)]">
@@ -735,7 +873,15 @@ export function DataTableInteractive({
     Boolean(groupBy);
 
   return (
-    <div className="space-y-3">
+    <div
+      className="space-y-3"
+      onPointerEnter={() => {
+        dtActiveInstance = instanceId;
+      }}
+      onFocusCapture={() => {
+        dtActiveInstance = instanceId;
+      }}
+    >
       {/* Toolbar — four-section layout (Discover | Shape | Actions | Display)
           per design canon. Borderless container; bottom 1px chrome rule
           separates the strip from the table body. Per-button borders
@@ -773,14 +919,14 @@ export function DataTableInteractive({
               )}
             </div>
           )}
-          <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">
+          <span className="font-mono text-[11px] text-[var(--p-text-2)] tabular-nums">
             {sorted.length}{" "}
             {sorted.length === 1
               ? t("dataTable.rowSingular", undefined, "row")
               : t("dataTable.rowPlural", undefined, "rows")}
           </span>
           {totalCount != null && totalCount > rows.length && (
-            <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">
+            <span className="font-mono text-[11px] text-[var(--p-text-2)] tabular-nums">
               ·{" "}
               {t(
                 "dataTable.showingFirst",
@@ -870,7 +1016,7 @@ export function DataTableInteractive({
           <Hint label={t("dataTable.exportCsv", undefined, "Export visible rows to CSV")}>
             <button
               type="button"
-              onClick={() => exportCsv(renderedCols, sorted, tableId)}
+              onClick={() => exportCsv(renderedCols, sorted, colIndexByKey, tableId)}
               aria-label={t("dataTable.exportCsv", undefined, "Export visible rows to CSV")}
               className={TOOLBAR_TRIGGER_BASE}
             >
@@ -1074,7 +1220,7 @@ export function DataTableInteractive({
                         >
                           {isCollapsed ? <ChevronRightIcon size={12} /> : <ChevronDown size={12} />}
                           {g.label}
-                          <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">{g.rows.length}</span>
+                          <span className="ms-2 font-mono text-[11px] text-[var(--p-text-2)]">{g.rows.length}</span>
                         </button>
                       </td>
                     </tr>
@@ -1090,6 +1236,7 @@ export function DataTableInteractive({
                           showActions={hasRowActions}
                           selected={selected.has(row.id)}
                           onSelect={toggleOne}
+                          kbdFocused={row.id === kbdFocusId}
                           editCtx={editCtx}
                         />
                       ))}
@@ -1129,43 +1276,68 @@ export function DataTableInteractive({
                     showActions={hasRowActions}
                     selected={selected.has(row.id)}
                     onSelect={toggleOne}
+                          kbdFocused={row.id === kbdFocusId}
                     editCtx={editCtx}
                   />
                 ))
               )
             ) : (
-              <>
-                {virtualizer.getVirtualItems().length === 0 && visible.length === 0 && (
-                  <FilteredEmptyRow
-                    query={String(query)}
-                    filterCount={Object.keys(filters).length}
-                    colSpan={renderedCols.length + (bulkActions ? 1 : 0) + (hasRowActions ? 1 : 0)}
-                    onClearFilters={() => {
-                      setQuery("");
-                      setFilters({});
-                    }}
-                  />
-                )}
-                {virtualizer.getVirtualItems().map((virtualRow) => {
-                  const row = visible[virtualRow.index];
-                  if (!row) return null;
-                  return (
-                    <TableRow
-                      key={row.id}
-                      row={row}
-                      cols={renderedCols}
-                      colIndexByKey={colIndexByKey}
-                      rowPad={rowPad}
-                      bulk={!!bulkActions}
-                      showActions={hasRowActions}
-                      selected={selected.has(row.id)}
-                      onSelect={toggleOne}
-                      editCtx={editCtx}
-                      style={{ height: `${virtualRow.size}px` }}
-                    />
-                  );
-                })}
-              </>
+              (() => {
+                // Virtualized branch — only in-view rows render, so spacer
+                // rows above and below restore the true scroll height (A-04,
+                // TanStack padding pattern). Without them the scrollbar lies
+                // and wheel-scroll treadmills on tall tables.
+                const vItems = virtualizer.getVirtualItems();
+                const spanAll = renderedCols.length + (bulkActions ? 1 : 0) + (hasRowActions ? 1 : 0);
+                const padTop = vItems.length > 0 ? vItems[0]!.start : 0;
+                const padBottom =
+                  vItems.length > 0 ? virtualizer.getTotalSize() - vItems[vItems.length - 1]!.end : 0;
+                return (
+                  <>
+                    {vItems.length === 0 && visible.length === 0 && (
+                      <FilteredEmptyRow
+                        query={String(query)}
+                        filterCount={Object.keys(filters).length}
+                        colSpan={spanAll}
+                        onClearFilters={() => {
+                          setQuery("");
+                          setFilters({});
+                        }}
+                      />
+                    )}
+                    {padTop > 0 && (
+                      <tr aria-hidden="true">
+                        <td colSpan={spanAll} style={{ height: `${padTop}px`, padding: 0, border: 0 }} />
+                      </tr>
+                    )}
+                    {vItems.map((virtualRow) => {
+                      const row = visible[virtualRow.index];
+                      if (!row) return null;
+                      return (
+                        <TableRow
+                          key={row.id}
+                          row={row}
+                          cols={renderedCols}
+                          colIndexByKey={colIndexByKey}
+                          rowPad={rowPad}
+                          bulk={!!bulkActions}
+                          showActions={hasRowActions}
+                          selected={selected.has(row.id)}
+                          onSelect={toggleOne}
+                          kbdFocused={row.id === kbdFocusId}
+                          editCtx={editCtx}
+                          style={{ height: `${virtualRow.size}px` }}
+                        />
+                      );
+                    })}
+                    {padBottom > 0 && (
+                      <tr aria-hidden="true">
+                        <td colSpan={spanAll} style={{ height: `${padBottom}px`, padding: 0, border: 0 }} />
+                      </tr>
+                    )}
+                  </>
+                );
+              })()
             )}
           </tbody>
           {hasAnyTotals && columnTotals && (
@@ -1219,22 +1391,32 @@ export function DataTableInteractive({
           aria-label={t("dataTable.bulkActions", undefined, "Bulk actions")}
           className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] px-4 py-2"
         >
-          <span className="text-xs text-[var(--p-text-2)]">{selected.size} selected</span>
+          {/* role=status: the count is a live region so screen-reader users
+              hear the selection grow/shrink as they check rows (A-17). */}
+          <span role="status" className="text-xs text-[var(--p-text-2)]">
+            {t("dataTable.selectedCount", { count: selected.size }, `${selected.size} selected`)}
+          </span>
+          {/* Select-all-matching escape hatch — select-all in the header only
+              covers loaded rows; when the filtered set is larger, offer the
+              whole matching population in one click (A-17). */}
+          {selected.size < sorted.length && (
+            <button
+              type="button"
+              onClick={() => setSelected(new Set(sorted.map((r) => r.id)))}
+              className="rounded px-2 py-1 text-xs text-[var(--p-accent)] hover:bg-[var(--p-surface-2)]"
+            >
+              {t("dataTable.selectAllMatching", { count: sorted.length }, `Select all ${sorted.length}`)}
+            </button>
+          )}
           {bulkActions.map((a) => (
             <button
               key={a.id}
               type="button"
-              onClick={async () => {
-                try {
-                  const res = await a.perform(Array.from(selected));
-                  if (res?.error) toast.error(res.error);
-                  else if (res?.message) toast.success(res.message);
-                } catch (err) {
-                  toast.error(
-                    err instanceof Error ? err.message : t("dataTable.bulkFailed", undefined, "Bulk Action Failed"),
-                  );
-                }
-                setSelected(new Set());
+              onClick={() => {
+                // Destructive bulk mutations require an explicit confirm
+                // carrying the selection count (A-03).
+                if (a.variant === "danger") setConfirmBulk(a);
+                else void runBulkAction(a);
               }}
               className={`rounded px-2 py-1 text-xs ${
                 a.variant === "danger"
@@ -1255,6 +1437,39 @@ export function DataTableInteractive({
           </button>
         </div>
       )}
+
+      {/* Danger bulk-action confirmation (A-03) */}
+      <ConfirmDialog
+        open={confirmBulk !== null}
+        onOpenChange={(o) => !o && setConfirmBulk(null)}
+        title={
+          confirmBulk
+            ? t("dataTable.bulkConfirm.title", { action: confirmBulk.label }, `Confirm ${confirmBulk.label}`)
+            : ""
+        }
+        description={
+          confirmBulk
+            ? selected.size === 1
+              ? t(
+                  "dataTable.bulkConfirm.bodySingular",
+                  { action: confirmBulk.label },
+                  `This will apply "${confirmBulk.label}" to 1 selected row.`,
+                )
+              : t(
+                  "dataTable.bulkConfirm.body",
+                  { action: confirmBulk.label, count: selected.size },
+                  `This will apply "${confirmBulk.label}" to ${selected.size} selected rows.`,
+                )
+            : undefined
+        }
+        confirmLabel={confirmBulk?.label}
+        tone="danger"
+        onConfirm={async () => {
+          const a = confirmBulk;
+          setConfirmBulk(null);
+          if (a) await runBulkAction(a);
+        }}
+      />
     </div>
   );
 }
@@ -1310,6 +1525,7 @@ function TableRow({
   onSelect,
   editCtx,
   style,
+  kbdFocused,
 }: {
   row: InteractiveRow;
   cols: InteractiveColumn[];
@@ -1321,17 +1537,35 @@ function TableRow({
   onSelect: (id: string) => void;
   editCtx?: EditCtx;
   style?: React.CSSProperties;
+  /** j/k row cursor (F-04) — draws a focus ring on the focused row. */
+  kbdFocused?: boolean;
 }) {
+  const t = useT();
   const trClass = [rowPad, selected ? "bg-[var(--p-surface-2)]" : "", row.className].filter(Boolean).join(" ");
+  const trStyle: React.CSSProperties | undefined = kbdFocused
+    ? { ...style, outline: "2px solid var(--p-focus)", outlineOffset: -2 }
+    : style;
+  // Accessible name for the row checkbox — the first visible cell's value
+  // (F-18), so a screen reader hears "Select Acme Corp" instead of a UUID.
+  const firstColIdx = cols.length > 0 ? colIndexByKey.get(cols[0]!.key) : undefined;
+  const firstValue = firstColIdx != null ? row.values?.[firstColIdx] : undefined;
+  const rowName = firstValue != null && String(firstValue).trim().length > 0 ? String(firstValue) : row.id;
   return (
-    <tr className={trClass} aria-selected={selected || undefined} style={style}>
+    // data-selected, not aria-selected: aria-selected is unsupported on a
+    // native-table <tr> outside role="grid" (A-28).
+    <tr
+      className={trClass}
+      data-selected={selected || undefined}
+      data-kbd-focus={kbdFocused || undefined}
+      style={trStyle}
+    >
       {bulk && (
         <td className="w-8 text-center">
           <input
             type="checkbox"
             checked={selected}
             onChange={() => onSelect(row.id)}
-            aria-label={`Select row ${row.id}`}
+            aria-label={t("dataTable.selectRow", { name: rowName }, `Select ${rowName}`)}
           />
         </td>
       )}
@@ -1419,7 +1653,7 @@ function toNumberOrNull(v: string | number | null | undefined): number | null {
 
 function defaultFormat(n: number, agg: "sum" | "avg" | "min" | "max" | "count"): string {
   if (agg === "count") return String(n);
-  return n.toLocaleString();
+  return formatNumber(n);
 }
 
 /**
@@ -1767,7 +2001,7 @@ function FilterAddMenu({
       <DropdownMenuContent align="end" className="max-h-80 w-64 overflow-auto">
         {!activeColumn ? (
           <>
-            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+            <div className="px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
               {t("dataTable.filter.filterBy", undefined, "Filter By")}
             </div>
             {filterable.map((c) => {
@@ -1783,7 +2017,7 @@ function FilterAddMenu({
                 >
                   <span className="truncate">{c.header}</span>
                   {count > 0 && (
-                    <span className="font-mono text-[10px] text-[var(--p-accent)] tabular-nums">{count}</span>
+                    <span className="font-mono text-[11px] text-[var(--p-accent)] tabular-nums">{count}</span>
                   )}
                 </DropdownMenuItem>
               );
@@ -1808,7 +2042,7 @@ function FilterAddMenu({
               >
                 <ChevronLeft size={12} aria-hidden="true" />
               </button>
-              <span className="text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+              <span className="text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
                 {activeColumn.header}
               </span>
             </div>
@@ -1824,25 +2058,26 @@ function FilterAddMenu({
                   const selected = filters[activeKey] ?? [];
                   const checked = selected.includes(val);
                   return (
-                    <DropdownMenuItem
+                    // Real menuitemcheckbox semantics (A-16) — Radix carries
+                    // aria-checked; preventDefault keeps the menu open for
+                    // multi-select.
+                    <DropdownMenuCheckboxItem
                       key={val}
-                      onSelect={(e) => {
-                        e.preventDefault();
-                        if (checked)
+                      checked={checked}
+                      onSelect={(e) => e.preventDefault()}
+                      onCheckedChange={(next) => {
+                        if (next) setColumnFilter(activeKey, [...selected, val]);
+                        else
                           setColumnFilter(
                             activeKey,
                             selected.filter((v) => v !== val),
                           );
-                        else setColumnFilter(activeKey, [...selected, val]);
                       }}
-                      className="flex items-center justify-between gap-2"
+                      className="justify-between gap-2"
                     >
-                      <span className="flex items-center gap-2 truncate">
-                        <input type="checkbox" checked={checked} readOnly className="pointer-events-none" />
-                        <span className="truncate">{val || "—"}</span>
-                      </span>
-                      <span className="font-mono text-[10px] text-[var(--p-text-2)]">{count}</span>
-                    </DropdownMenuItem>
+                      <span className="truncate">{val || "—"}</span>
+                      <span className="font-mono text-[11px] text-[var(--p-text-2)]">{count}</span>
+                    </DropdownMenuCheckboxItem>
                   );
                 })
             )}
@@ -1963,7 +2198,7 @@ function SortStackMenu({
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-72">
-        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+        <div className="px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
           {t("dataTable.sort.sortByLabel", undefined, "Sort By")}
         </div>
         {stack.length === 0 ? (
@@ -1974,7 +2209,7 @@ function SortStackMenu({
           stack.map((s, idx) => (
             <div key={`${s.key}-${idx}`} className="flex items-center justify-between gap-2 px-2 py-1 text-xs">
               <span className="flex items-center gap-2 truncate">
-                <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">{idx + 1}</span>
+                <span className="font-mono text-[11px] text-[var(--p-text-2)] tabular-nums">{idx + 1}</span>
                 <span className="truncate">{headerByKey.get(s.key) ?? s.key}</span>
               </span>
               <span className="flex items-center gap-1">
@@ -2005,7 +2240,7 @@ function SortStackMenu({
         {sortable.some((c) => !stackKeys.has(c.key)) && (
           <>
             <DropdownMenuSeparator />
-            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+            <div className="px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
               {t("dataTable.sort.addSortLabel", undefined, "Add Sort")}
             </div>
             {sortable
@@ -2069,7 +2304,7 @@ function ViewMenu({ customizationActive, onReset }: { customizationActive: boole
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-52">
-        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+        <div className="px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
           {t("dataTable.view.savedView", undefined, "Saved View")}
         </div>
         <DropdownMenuItem disabled className="opacity-60">
@@ -2112,7 +2347,8 @@ function ColumnFilterMenu({
         <button
           type="button"
           aria-label={t("dataTable.filterColumn", { header: columnHeader }, `Filter ${columnHeader}`)}
-          className={`inline-flex h-5 w-5 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] ${
+          // h-6/w-6 = 24px — the WCAG 2.2 §2.5.8 minimum target size (A-19).
+          className={`inline-flex h-6 w-6 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] ${
             activeCount ? "text-[var(--p-accent)]" : ""
           }`}
         >
@@ -2128,21 +2364,21 @@ function ColumnFilterMenu({
           sortedEntries.map(([val, count]) => {
             const checked = sel.has(val);
             return (
-              <DropdownMenuItem
+              // Real menuitemcheckbox semantics (A-16) — Radix carries
+              // aria-checked; preventDefault keeps the menu open.
+              <DropdownMenuCheckboxItem
                 key={val}
-                onSelect={(e: Event) => {
-                  e.preventDefault();
-                  if (checked) onChange(selected.filter((v) => v !== val));
-                  else onChange([...selected, val]);
+                checked={checked}
+                onSelect={(e: Event) => e.preventDefault()}
+                onCheckedChange={(next) => {
+                  if (next) onChange([...selected, val]);
+                  else onChange(selected.filter((v) => v !== val));
                 }}
-                className="flex items-center justify-between gap-2"
+                className="justify-between gap-2"
               >
-                <span className="flex items-center gap-2 truncate">
-                  <input type="checkbox" checked={checked} readOnly className="pointer-events-none" />
-                  <span className="truncate">{val || "—"}</span>
-                </span>
-                <span className="font-mono text-[10px] text-[var(--p-text-2)]">{count}</span>
-              </DropdownMenuItem>
+                <span className="truncate">{val || "—"}</span>
+                <span className="font-mono text-[11px] text-[var(--p-text-2)]">{count}</span>
+              </DropdownMenuCheckboxItem>
             );
           })
         )}
@@ -2340,19 +2576,23 @@ function SortableColumnRow({
 
 /**
  * Export the visible (filtered + sorted + currently-rendered) columns to a
- * CSV download. Uses `row.values[i]` for each column when present (so
- * server-rendered cells like `<Badge>` map to their underlying scalar);
- * falls back to a stripped string of the cell node otherwise.
+ * CSV download. `row.values` is indexed by the ORIGINAL column order, so
+ * each rendered column resolves its value through `colIndexByKey` (the
+ * original-position map) — hiding / reordering / pinning columns can never
+ * shift values under the wrong headers (A-02).
  */
-function exportCsv(cols: InteractiveColumn[], rows: InteractiveRow[], tableId?: string) {
-  const colKeyToIdx = new Map<string, number>();
-  cols.forEach((c, i) => colKeyToIdx.set(c.key, i));
+function exportCsv(
+  cols: InteractiveColumn[],
+  rows: InteractiveRow[],
+  colIndexByKey: Map<string, number>,
+  tableId?: string,
+) {
   const escape = (s: string) => (/[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
   const headerLine = cols.map((c) => escape(c.header)).join(",");
   const lines = rows.map((r) =>
     cols
       .map((c) => {
-        const i = colKeyToIdx.get(c.key);
+        const i = colIndexByKey.get(c.key);
         const value = i != null ? r.values?.[i] : undefined;
         if (value == null) return "";
         return escape(String(value));

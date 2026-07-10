@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
             maxLength={80}
           />
           <Input
-            label={t("console.procurement.purchaseOrders.edit.amountLabel", undefined, "Amount — Cents")}
+            label={t("console.procurement.purchaseOrders.edit.amountLabel", undefined, "Amount (Cents)")}
             name="amount_cents"
             type="number"
             defaultValue={String(row.amount_cents ?? 0)}

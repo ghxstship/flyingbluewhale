@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import type { State } from "./actions";
 
 const INPUT = "rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-xs";
-const LBL = "text-[10px] uppercase tracking-wide text-[var(--p-text-2)]";
+const LBL = "text-[11px] uppercase tracking-wide text-[var(--p-text-2)]";
 
 type SelectOption = { value: string; label: string };
 

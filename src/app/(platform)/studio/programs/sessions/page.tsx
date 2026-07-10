@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { formatDateParts } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
@@ -23,7 +24,7 @@ type EventRow = {
 const SESSION_PATTERN = /(session|heat|round|qualif|semi|final|medal|prelim)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -71,7 +72,7 @@ export default async function Page() {
         subtitle={t(
           "console.programs.sessions.subtitle",
           { count: rows.length, plural: rows.length === 1 ? "" : "s" },
-          `${rows.length} session${rows.length === 1 ? "" : "s"} — heats, rounds, medal sessions`,
+          `${rows.length} session${rows.length === 1 ? "" : "s"} · heats, rounds, medal sessions`,
         )}
         action={
           <Button href="/studio/events/new" size="sm">

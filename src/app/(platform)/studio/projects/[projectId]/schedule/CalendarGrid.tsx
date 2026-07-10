@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type CalendarEvent = {
   id: string;
@@ -35,13 +35,14 @@ export function CalendarGrid({
   initialMonth: string;
 }) {
   const t = useT();
+  const fmt = useFormatters();
   const [cursor, setCursor] = React.useState(() => parseMonth(initialMonth));
   // `today` is null until mount — `new Date()` during render runs at different
   // instants on server vs client and flips the "today" highlight, which
   // hydration-mismatches (React #418). The highlight appears after mount.
   const [today, setToday] = React.useState<Date | null>(null);
   React.useEffect(() => setToday(new Date()), []);
-  const monthLabel = cursor.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  const monthLabel = fmt.dateParts(cursor, { month: "long", year: "numeric" });
 
   const monthStart = startOfMonth(cursor);
   const monthEnd = endOfMonth(cursor);
@@ -75,7 +76,7 @@ export function CalendarGrid({
           →
         </button>
       </div>
-      <div className="grid grid-cols-7 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
+      <div className="grid grid-cols-7 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
         {[
           t("console.projects.schedule.calendar.weekday.sun", undefined, "Sun"),
           t("console.projects.schedule.calendar.weekday.mon", undefined, "Mon"),
@@ -104,7 +105,7 @@ export function CalendarGrid({
                 inMonth ? "" : "bg-[var(--p-surface-2)]/40 text-[var(--p-text-2)]"
               }`}
             >
-              <div className={`mb-1 font-mono text-[10px] ${isToday ? "font-semibold text-[var(--p-accent)]" : ""}`}>
+              <div className={`mb-1 font-mono text-[11px] ${isToday ? "font-semibold text-[var(--p-accent)]" : ""}`}>
                 {d.getDate()}
               </div>
               <ul className="space-y-1">
@@ -112,7 +113,7 @@ export function CalendarGrid({
                   <li key={`e-${e.id}`}>
                     <Link
                       href={`/studio/events/${e.id}`}
-                      className="block truncate rounded-sm bg-[var(--p-accent)]/15 px-1 py-0.5 text-[10px] hover:bg-[var(--p-accent)]/25"
+                      className="block truncate rounded-sm bg-[var(--p-accent)]/15 px-1 py-0.5 text-[11px] hover:bg-[var(--p-accent)]/25"
                       title={`${e.name} · ${e.status ?? t("console.projects.schedule.calendar.eventStatusDraft", undefined, "draft")}`}
                     >
                       {e.name}
@@ -123,7 +124,7 @@ export function CalendarGrid({
                   <li key={`t-${task.id}`}>
                     <Link
                       href={`/studio/tasks/${task.id}`}
-                      className="block truncate rounded-sm bg-[var(--p-surface-2)] px-1 py-0.5 text-[10px] hover:bg-[var(--p-surface)]"
+                      className="block truncate rounded-sm bg-[var(--p-surface-2)] px-1 py-0.5 text-[11px] hover:bg-[var(--p-surface)]"
                       title={`${task.title} · ${task.status ?? t("console.projects.schedule.calendar.taskStatusOpen", undefined, "open")}`}
                     >
                       ◇ {task.title}

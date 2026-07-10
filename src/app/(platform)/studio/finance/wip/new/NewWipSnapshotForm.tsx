@@ -24,7 +24,7 @@ export function NewWipSnapshotForm({ projects }: { projects: { id: string; name:
           </label>
           <select name="project_id" required defaultValue="" className="ps-input mt-1.5 w-full">
             <option value="" disabled>
-              {t("console.finance.wip.new.selectProject", undefined, "— Select a project —")}
+              {t("console.finance.wip.new.selectProject", undefined, "Select a project")}
             </option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>

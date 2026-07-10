@@ -198,7 +198,7 @@ export default async function Page() {
               },
               {
                 key: "recordable_30d",
-                header: t("console.dashboards.columns.recordables30d", undefined, "Recordables — 30d"),
+                header: t("console.dashboards.columns.recordables30d", undefined, "Recordables (30d)"),
                 render: (k) => k.recordable_30d,
                 accessor: (k) => k.recordable_30d,
                 tabular: true,
@@ -284,7 +284,7 @@ export default async function Page() {
               {t(
                 "console.dashboards.empty.noActiveProjectsHint",
                 undefined,
-                "No active projects yet — once a project moves to active status its KPIs roll up here.",
+                "No active projects yet. Once a project moves to active status its KPIs roll up here.",
               )}
             </div>
           </section>
@@ -315,8 +315,8 @@ function DashboardCard({
   return (
     <Link href={`/studio/dashboards/${dashboard.id}`} className="surface hover-lift block p-4">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{scopeLabel}</span>
-        <span className="text-[10px] text-[var(--p-text-2)]">{widgetLabel}</span>
+        <span className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{scopeLabel}</span>
+        <span className="text-[11px] text-[var(--p-text-2)]">{widgetLabel}</span>
       </div>
       <div className="mt-2 text-base font-semibold tracking-tight text-[var(--p-text-1)]">{dashboard.name}</div>
       {dashboard.description && (

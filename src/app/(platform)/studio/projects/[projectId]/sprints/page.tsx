@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <KanbanBoard projectId={projectId} stories={stories} canWrite={canWrite} />
                   <div className="surface-inset rounded-md p-3">
                     <div className="mb-1 flex items-center justify-between">
-                      <span className="text-[10px] font-medium tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+                      <span className="text-[11px] font-medium tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                         Burndown
                       </span>
                       {canWrite && (
@@ -145,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                           <input type="hidden" name="sprintId" value={sprint.id} />
                           <button
                             type="submit"
-                            className="press-scale rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[10px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
+                            className="press-scale rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[11px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
                           >
                             Snapshot Today
                           </button>

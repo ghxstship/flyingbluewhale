@@ -54,7 +54,7 @@ export default async function Page() {
           rows={rows}
           rowHref={(r) => `/studio/collaborate/sheets/${r.id}`}
           emptyLabel="No sheets yet"
-          emptyDescription="Build an Airtable-style grid — define columns, add rows, edit cells inline, and save in bulk."
+          emptyDescription="Build an Airtable-style grid: define columns, add rows, edit cells inline, and save in bulk."
           emptyAction={
             <Button href="/studio/collaborate/sheets/new" size="sm">
               + New Sheet

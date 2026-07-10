@@ -129,7 +129,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.finance.lienWaivers.empty.description",
             undefined,
-            "Statutory waivers — conditional/unconditional × partial/final. Collected from subs against pay-apps; release blocked until signed.",
+            "Statutory waivers. Conditional/unconditional × partial/final. Collected from subs against pay-apps; release blocked until signed.",
           )}
           emptyAction={
             <Button href="/studio/finance/lien-waivers/new" size="sm">

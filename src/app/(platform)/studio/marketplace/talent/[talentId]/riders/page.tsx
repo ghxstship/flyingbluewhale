@@ -7,7 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +29,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const [talentResp, ridersResp] = await Promise.all([
     supabase
@@ -67,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
         subtitle={t(
           "console.marketplace.talent.riders.subtitle",
           undefined,
-          "Tech, hospitality, input list — versioned.",
+          "Tech, hospitality, input list. Versioned.",
         )}
         action={
           <Button href={`/studio/marketplace/talent/${talent.id}/riders/new`} size="sm">
@@ -109,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
                         )}
                       </Link>
                       <span className="font-mono text-xs text-[var(--p-text-2)]">
-                        {new Date(r.created_at).toLocaleDateString()}
+                        {fmt.date(new Date(r.created_at))}
                       </span>
                     </li>
                   ))}

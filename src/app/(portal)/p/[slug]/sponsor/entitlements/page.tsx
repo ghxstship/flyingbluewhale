@@ -164,7 +164,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               header: t("p.sponsor.entitlements.col.evidence", undefined, "Evidence"),
               render: (r) =>
                 r.evidence_path ? (
-                  <span className="font-mono text-[10px] text-[var(--p-accent)]">
+                  <span className="font-mono text-[11px] text-[var(--p-accent)]">
                     {t("p.sponsor.entitlements.attached", undefined, "attached")}
                   </span>
                 ) : (

@@ -133,14 +133,14 @@ export default async function Page() {
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>{t("console.punch.new.fields.punchList", undefined, "Punch list")}</span>
             <select name="punch_list_id" className={INPUT} defaultValue="">
-              <option value="">{t("console.punch.new.unassignedOption", undefined, "— Unassigned —")}</option>
+              <option value="">{t("console.punch.new.unassignedOption", undefined, "Unassigned")}</option>
               {((lists ?? []) as Array<{ id: string; name: string; project_id: string }>).map((l) => (
                 <option key={l.id} value={l.id} data-project={l.project_id}>
                   {l.name}
                 </option>
               ))}
             </select>
-            <span className="text-[10px] text-[var(--p-text-2)]">
+            <span className="text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.punch.new.punchListHint",
                 undefined,

@@ -62,7 +62,7 @@ export default async function Page({
           emptyDescription={t(
             "console.venues.emptyDescription",
             undefined,
-            "Author each venue with its kind, cluster, and capacity — handover state then tracks readiness from build through bump-out.",
+            "Author each venue with its kind, cluster, and capacity. Handover state then tracks readiness from build through bump-out.",
           )}
           emptyAction={
             <Button href="/studio/venues/new" size="sm">

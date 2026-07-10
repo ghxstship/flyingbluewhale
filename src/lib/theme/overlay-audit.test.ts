@@ -22,7 +22,9 @@ const OVERLAY_FILES = [
   "src/components/ui/Select.tsx",
   "src/components/ui/Combobox.tsx",
   "src/components/ui/DatePicker.tsx",
-  "src/components/ui/Toast.tsx",
+  // ui/Toast.tsx deleted 2026-07-10 (F-06): its ToastProvider was never
+  // mounted and the barrel-exported useToast threw. Toasts are sonner's
+  // <Toaster> (root layout) behind @/lib/hooks/useToast.
   "src/components/ui/Coachmark.tsx",
   "src/components/ui/RowActions.tsx",
   "src/components/ui/ConfirmDialog.tsx",

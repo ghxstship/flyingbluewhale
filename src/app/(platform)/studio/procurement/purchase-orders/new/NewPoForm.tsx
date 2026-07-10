@@ -1,16 +1,11 @@
 "use client";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { RecordCombobox } from "@/components/RecordCombobox";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createPoAction } from "../actions";
 
-export function NewPoForm({
-  vendors,
-  projects,
-}: {
-  vendors: { id: string; name: string }[];
-  projects: { id: string; name: string }[];
-}) {
+export function NewPoForm() {
   const t = useT();
   return (
     <FormShell
@@ -20,37 +15,25 @@ export function NewPoForm({
     >
       <Input label={t("console.procurement.purchaseOrders.new.titleLabel", undefined, "Title")} name="title" required />
       <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.procurement.purchaseOrders.new.vendorLabel", undefined, "Vendor")}
-          </label>
-          <select name="vendor_id" className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.procurement.purchaseOrders.new.noVendor", undefined, "— No vendor —")}</option>
-            {vendors.map((v) => (
-              <option key={v.id} value={v.id}>
-                {v.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.procurement.purchaseOrders.new.projectLabel", undefined, "Project")}
-          </label>
-          <select name="project_id" className="ps-input mt-1.5 w-full">
-            <option value="">
-              {t("console.procurement.purchaseOrders.new.noProject", undefined, "— No project —")}
-            </option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <RecordCombobox
+          table="vendors"
+          name="vendor_id"
+          label={t("console.procurement.purchaseOrders.new.vendorLabel", undefined, "Vendor")}
+          noneLabel={t("console.procurement.purchaseOrders.new.noVendorOption", undefined, "No vendor")}
+          searchPlaceholder={t("console.procurement.purchaseOrders.new.searchVendors", undefined, "Search vendors…")}
+          emptyLabel={t("console.procurement.purchaseOrders.new.noVendorMatches", undefined, "No matching vendors")}
+        />
+        <RecordCombobox
+          table="projects"
+          name="project_id"
+          label={t("console.procurement.purchaseOrders.new.projectLabel", undefined, "Project")}
+          noneLabel={t("console.procurement.purchaseOrders.new.noProjectOption", undefined, "No project")}
+          searchPlaceholder={t("console.procurement.purchaseOrders.new.searchProjects", undefined, "Search projects…")}
+          emptyLabel={t("console.procurement.purchaseOrders.new.noProjectMatches", undefined, "No matching projects")}
+        />
       </div>
       <Input
-        label={t("console.procurement.purchaseOrders.new.amountLabel", undefined, "Amount — USD")}
+        label={t("console.procurement.purchaseOrders.new.amountLabel", undefined, "Amount (USD)")}
         name="amount"
         type="number"
         step="0.01"

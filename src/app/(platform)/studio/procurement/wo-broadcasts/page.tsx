@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDateParts, formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
@@ -26,7 +26,7 @@ type Row = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -60,7 +60,7 @@ export default async function Page() {
         subtitle={t(
           "console.procurement.woBroadcasts.subtitle",
           undefined,
-          "Open requests to the vendor pool — first qualified responder wins.",
+          "Open requests to the vendor pool. First qualified responder wins.",
         )}
         action={
           <Button href="/studio/procurement/wo-broadcasts/new" size="sm">

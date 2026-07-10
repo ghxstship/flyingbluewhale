@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <Badge variant={STATE_TONE[e.state]}>{toTitle(e.state)}</Badge>
           {e.file_name && <span className="font-mono text-[var(--p-text-2)]">{e.file_name}</span>}
           {e.model_version && (
-            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{e.model_version}</span>
+            <span className="font-mono text-[11px] text-[var(--p-text-2)]">{e.model_version}</span>
           )}
           {e.matched_vendor_id && (
             <a className="text-[var(--p-accent)] underline" href={`/studio/procurement/vendors/${e.matched_vendor_id}`}>

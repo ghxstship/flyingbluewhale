@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 {t("console.projects.edit.fields.client", undefined, "Client")}
               </span>
               <select name="client_id" defaultValue={row.client_id ?? ""} className="ps-input focus-ring w-full">
-                <option value="">{t("console.projects.edit.none", undefined, "— None —")}</option>
+                <option value="">{t("console.projects.edit.none", undefined, "None")}</option>
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 defaultValue={row.primary_venue_id ?? ""}
                 className="ps-input focus-ring w-full"
               >
-                <option value="">{t("console.projects.edit.none", undefined, "— None —")}</option>
+                <option value="">{t("console.projects.edit.none", undefined, "None")}</option>
                 {venues.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.name}

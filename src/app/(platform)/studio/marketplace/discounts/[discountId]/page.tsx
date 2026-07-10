@@ -76,6 +76,7 @@ export default async function DiscountDetail({ params }: { params: Promise<{ dis
             <DeleteForm
               action={deleteDiscountAction.bind(null, code.id)}
               confirm={`Delete discount code "${code.code}"?`}
+              undo={{ table: "discount_codes", id: code.id, redirectTo: "/studio/marketplace/discounts" }}
             />
           </div>
         }

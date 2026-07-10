@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { timeAgo, toTitle } from "@/lib/format";
 import { awardToInvite, inviteVendor, removeInvite, transitionBroadcast } from "./actions";
 import { toneFor } from "@/lib/tones";
@@ -43,6 +43,7 @@ type Invite = {
 export default async function Page({ params }: { params: Promise<{ broadcastId: string }> }) {
   const { broadcastId } = await params;
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase)
     return (
       <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
@@ -100,8 +101,8 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
               <span className="font-mono text-xs">
                 {t(
                   "console.procurement.woBroadcasts.detail.neededBy",
-                  { when: new Date(broadcast.needed_by).toLocaleString() },
-                  `needed by ${new Date(broadcast.needed_by).toLocaleString()}`,
+                  { when: fmt.dateTime(new Date(broadcast.needed_by)) },
+                  `needed by ${fmt.dateTime(new Date(broadcast.needed_by))}`,
                 )}
               </span>
             )}
@@ -238,7 +239,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                     <td>
                       <div className="text-sm">{i.vendor?.name ?? i.vendor_id.slice(0, 8)}</div>
                       {i.vendor?.email && (
-                        <div className="font-mono text-[10px] text-[var(--p-text-2)]">{i.vendor.email}</div>
+                        <div className="font-mono text-[11px] text-[var(--p-text-2)]">{i.vendor.email}</div>
                       )}
                     </td>
                     <td>
@@ -281,7 +282,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
               <input type="hidden" name="broadcastId" value={broadcastId} />
               <select name="vendor_id" required defaultValue="" className="ps-input min-w-[14rem] flex-1">
                 <option value="" disabled>
-                  {t("console.procurement.woBroadcasts.detail.addVendorPlaceholder", undefined, "— Add vendor —")}
+                  {t("console.procurement.woBroadcasts.detail.addVendorPlaceholder", undefined, "Add vendor")}
                 </option>
                 {candidateVendors.map((v) => (
                   <option key={v.id} value={v.id}>

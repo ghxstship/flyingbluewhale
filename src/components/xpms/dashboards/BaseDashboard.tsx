@@ -45,7 +45,7 @@ export function BaseDashboard({ classCode, title, subtitle, branding, sections, 
             />
           ) : null}
           <div className="min-w-0 flex-1">
-            <div className="font-mono text-[10px] font-semibold tracking-[0.18em]" style={{ color: accent }}>
+            <div className="font-mono text-[11px] font-semibold tracking-[0.18em]" style={{ color: accent }}>
               {String(classCode).padStart(1, "0")} · {xpmsClass.name}
             </div>
             <h1 className="mt-1 truncate text-2xl font-semibold text-[var(--p-text-1)]">{title}</h1>

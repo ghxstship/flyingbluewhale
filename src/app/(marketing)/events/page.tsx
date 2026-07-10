@@ -64,7 +64,7 @@ export default async function EventsPage() {
               <Link key={e.id} href={`/events/${e.slug}`} className="surface hover-lift flex flex-col gap-3 p-5">
                 {e.hero_image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={e.hero_image} alt={e.title} className="aspect-video w-full rounded-md object-cover" />
+                  <img src={e.hero_image} alt={e.title} loading="lazy" decoding="async" className="aspect-video w-full rounded-md object-cover" />
                 ) : (
                   <div className="surface-inset aspect-video w-full rounded-md" aria-hidden="true" />
                 )}

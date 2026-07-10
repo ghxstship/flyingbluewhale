@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
@@ -20,16 +20,21 @@ export default async function LocationsPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("locations", session.orgId, { orderBy: "name", ascending: true });
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows, totalCount } = await listOrgScopedWithCount("locations", session.orgId, {
+    orderBy: "name",
+    ascending: true,
+  });
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.locations.eyebrow", undefined, "Work")}
         title={t("console.locations.title", undefined, "Locations")}
         subtitle={
-          rows.length === 1
-            ? t("console.locations.subtitle.one", { count: rows.length }, `${rows.length} location`)
-            : t("console.locations.subtitle.other", { count: rows.length }, `${rows.length} locations`)
+          totalCount === 1
+            ? t("console.locations.subtitle.one", { count: totalCount }, `${totalCount} location`)
+            : t("console.locations.subtitle.other", { count: totalCount }, `${totalCount} locations`)
         }
         action={
           <Button href="/studio/locations/new">{t("console.locations.add", undefined, "+ Add location")}</Button>
@@ -38,12 +43,13 @@ export default async function LocationsPage() {
       <div className="page-content">
         <DataTable<Location>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(row) => `/studio/locations/${row.id}`}
           emptyLabel={t("console.locations.emptyLabel", undefined, "No locations yet")}
           emptyDescription={t(
             "console.locations.emptyDescription",
             undefined,
-            "Add the addresses your operations reference — venues, hotels, warehouses, depots.",
+            "Add the addresses your operations reference: venues, hotels, warehouses, depots.",
           )}
           emptyAction={
             <Button href="/studio/locations/new" size="sm">

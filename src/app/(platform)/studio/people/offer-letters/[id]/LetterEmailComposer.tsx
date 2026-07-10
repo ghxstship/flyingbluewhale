@@ -122,7 +122,7 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
         </pre>
       )}
       {tab === "html" && (
-        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4 font-mono text-[10px] whitespace-pre-wrap">
+        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4 font-mono text-[11px] whitespace-pre-wrap">
           {email.html}
         </pre>
       )}

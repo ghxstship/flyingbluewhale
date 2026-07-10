@@ -3,18 +3,17 @@
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { MoneyInput } from "@/components/ui/MoneyInput";
+import { RecordCombobox } from "@/components/RecordCombobox";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createProposalAction } from "../actions";
 
 export function NewProposalForm({
-  clients,
-  projects,
   defaultClientId,
+  defaultClientName,
   template,
 }: {
-  clients: { id: string; name: string }[];
-  projects: { id: string; name: string }[];
   defaultClientId?: string;
+  defaultClientName?: string;
   template?: { id: string; name: string; blockCount: number } | null;
 }) {
   const t = useT();
@@ -42,32 +41,24 @@ export function NewProposalForm({
       )}
       <Input label={t("console.proposals.new.title", undefined, "Title")} name="title" required maxLength={200} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.proposals.new.client", undefined, "Client")}
-          </label>
-          <select name="client_id" defaultValue={defaultClientId ?? ""} className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.proposals.new.noClient", undefined, "— No client —")}</option>
-            {clients.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.proposals.new.project", undefined, "Project")}
-          </label>
-          <select name="project_id" className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.proposals.new.noProject", undefined, "— No project —")}</option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <RecordCombobox
+          table="clients"
+          name="client_id"
+          label={t("console.proposals.new.client", undefined, "Client")}
+          noneLabel={t("console.proposals.new.noClientOption", undefined, "No client")}
+          defaultValue={defaultClientId}
+          defaultLabel={defaultClientName}
+          searchPlaceholder={t("console.proposals.new.searchClients", undefined, "Search clients…")}
+          emptyLabel={t("console.proposals.new.noClientMatches", undefined, "No matching clients")}
+        />
+        <RecordCombobox
+          table="projects"
+          name="project_id"
+          label={t("console.proposals.new.project", undefined, "Project")}
+          noneLabel={t("console.proposals.new.noProjectOption", undefined, "No project")}
+          searchPlaceholder={t("console.proposals.new.searchProjects", undefined, "Search projects…")}
+          emptyLabel={t("console.proposals.new.noProjectMatches", undefined, "No matching projects")}
+        />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <MoneyInput label={t("console.proposals.new.amount", undefined, "Amount")} name="amount_cents" />

@@ -268,7 +268,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t(
                 "console.operations.dailyLog.detail.noPhotos",
                 undefined,
-                "No site photos attached. Upload below — captioned photos land in the audit trail with the log.",
+                "No site photos attached. Upload below. Captioned photos land in the audit trail with the log.",
               )}
             </p>
           ) : (
@@ -293,7 +293,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <div className="flex items-start justify-between gap-2 p-2 text-xs">
                     <div>
                       {p.caption && <div className="font-medium">{p.caption}</div>}
-                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{fmt.dateTime(p.taken_at)}</div>
+                      <div className="font-mono text-[11px] text-[var(--p-text-2)]">{fmt.dateTime(p.taken_at)}</div>
                     </div>
                     {photosEditable && (
                       <form action={deleteDailyLogPhoto}>

@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span className="font-mono">{sp.atom_id}</span>
             ) : (
               <span className="text-[var(--p-text-2)]">
-                {t("console.sitePlans.detail.noAtomId", undefined, "— no atom id —")}
+                {t("console.sitePlans.detail.noAtomId", undefined, "no atom id")}
               </span>
             )}
             <span>·</span>
@@ -327,7 +327,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t(
                 "console.sitePlans.detail.noBands",
                 undefined,
-                "No bands yet. Bands are the canonical name for blue/orange lines — every linear surface is one.",
+                "No bands yet. Bands are the canonical name for blue/orange lines. Every linear surface is one.",
               )}
             </Empty>
           ) : (
@@ -645,7 +645,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 name: "loads",
-                label: t("console.sitePlans.detail.loadsComma", undefined, "Loads — Comma"),
+                label: t("console.sitePlans.detail.loadsComma", undefined, "Loads (Comma)"),
                 placeholder: "CONV-1, RI-REF",
                 maxLength: 400,
               },
@@ -668,7 +668,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t(
                 "console.sitePlans.detail.missingEdgesSuffix",
                 undefined,
-                "— all four cardinal edges must be declared before issue.",
+                "· all four cardinal edges must be declared before issue.",
               )}
             </div>
           )}
@@ -791,7 +791,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {(pins.data ?? []).map((pin) => {
                 return (
                   <li key={pin.id} className="surface-inset p-2 text-xs">
-                    <span className="font-mono text-[10px]">{pin.pin_type}</span> · {pin.label ?? "—"} ·
+                    <span className="font-mono text-[11px]">{pin.pin_type}</span> · {pin.label ?? "—"} ·
                     <span className="text-[var(--p-text-2)]">
                       {" "}
                       ({Number(pin.x_pct).toFixed(0)}%, {Number(pin.y_pct).toFixed(0)}%)
@@ -829,7 +829,7 @@ function Empty({ children }: { children: React.ReactNode }) {
 function SummaryItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{label}</dt>
+      <dt className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">{label}</dt>
       <dd className="mt-0.5">{value}</dd>
     </div>
   );

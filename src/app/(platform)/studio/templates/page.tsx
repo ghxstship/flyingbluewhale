@@ -44,7 +44,7 @@ export default async function TemplatesGalleryPage() {
           {t(
             "console.templates.description",
             undefined,
-            "Start a new project from a curated blueprint. Templates seed deliverables, tasks, and module enablement — one click to a working project.",
+            "Start a new project from a curated blueprint. Templates seed deliverables, tasks, and module enablement. One click to a working project.",
           )}
         </p>
       </header>
@@ -85,7 +85,7 @@ export default async function TemplatesGalleryPage() {
                       {tpl.blueprint.project.modules.slice(0, 6).map((m: string) => (
                         <span
                           key={m}
-                          className="border-ink rounded border px-1.5 py-0.5 text-[10px] tracking-wider uppercase"
+                          className="border-ink rounded border px-1.5 py-0.5 text-[11px] tracking-wider uppercase"
                         >
                           {m}
                         </span>

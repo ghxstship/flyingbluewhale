@@ -4,6 +4,7 @@ import { DataTable } from "@/components/DataTable";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -33,6 +34,7 @@ export default async function Page() {
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data } = await supabase
@@ -117,7 +119,7 @@ export default async function Page() {
             {
               key: "created",
               header: "Created",
-              render: (r) => new Date(r.created_at).toLocaleDateString(),
+              render: (r) => fmt.date(new Date(r.created_at)),
               accessor: (r) => r.created_at,
               className: "font-mono text-xs",
             },

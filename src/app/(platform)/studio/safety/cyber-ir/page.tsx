@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { SEVERITY_TONE, toneFor } from "@/lib/tones";
 
@@ -24,7 +25,7 @@ type IncidentRow = {
 const CYBER_PATTERN = /(cyber|breach|phish|ransom|malware|ddos|intrusion|credential|access\b|c2\b)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",

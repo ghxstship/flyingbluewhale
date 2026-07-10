@@ -206,7 +206,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   {t(
                     "console.settings.integrations.submissions.detail.publishLabel",
                     undefined,
-                    "Publish — Live on /integrations/partners",
+                    "Publish (Live on /integrations/partners)",
                   )}
                 </span>
                 <select

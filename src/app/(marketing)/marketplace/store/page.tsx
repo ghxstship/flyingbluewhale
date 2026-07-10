@@ -76,6 +76,8 @@ export default async function StorePage() {
                   <img
                     src={p.image_url}
                     alt={p.title}
+                    loading="lazy"
+                    decoding="async"
                     className="aspect-square w-full rounded-md object-cover"
                   />
                 ) : (

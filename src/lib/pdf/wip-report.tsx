@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * WIP (Work-In-Progress) Report PDF — surety / bonding format.
@@ -51,15 +52,10 @@ function money(n: number): string {
 }
 
 function fmtDate(d: string): string {
-  try {
-    return new Date(d + (d.length === 10 ? "T00:00:00" : "")).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  } catch {
-    return d;
-  }
+  // Date-only strings parse as UTC midnight and format in the UTC default
+  // timezone, so the rendered day never shifts.
+  const formatted = formatDateParts(d, { year: "numeric", month: "short", day: "numeric" });
+  return formatted === "—" ? d : formatted;
 }
 
 export function WipReportPdf({ brand, t = identityT, snapshot_date, org_name, rows }: WipReportInput) {

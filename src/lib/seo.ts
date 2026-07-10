@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { BRAND, PRODUCT_ACCENTS } from "@/lib/brand";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /** Canonical social profile URLs (parent GHXSTSHIP) — Organization `sameAs`. */
 export const SOCIAL_SAME_AS: readonly string[] = BRAND.socials.map((s) => s.href);
@@ -32,14 +34,13 @@ export const CANONICAL_CTAS = {
 export const CONTENT_REVISED = "2026-06-18";
 
 /** Localized long-date for a provenance dateline (e.g. "June 18, 2026"). */
-export function formatReviewedDate(iso: string = CONTENT_REVISED, locale = "en-US"): string {
+export function formatReviewedDate(iso: string = CONTENT_REVISED, locale: Locale = DEFAULT_LOCALE): string {
   // Parse as UTC midnight so the rendered day never shifts by timezone.
-  return new Date(`${iso}T00:00:00Z`).toLocaleDateString(locale, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
+  return formatDateParts(
+    `${iso}T00:00:00Z`,
+    { year: "numeric", month: "long", day: "numeric" },
+    { locale, timezone: "UTC" },
+  );
 }
 
 // Locale SSOT lives in `src/lib/i18n/config.ts`. The cookie-based switcher

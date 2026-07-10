@@ -146,6 +146,26 @@ const config = [
             "JSXAttribute[name.name='className'] TemplateElement[value.raw=/(?:^|[\\s:])-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|inset(?:-[xy])?|top|right|bottom|left|start|end|scroll-[pm][xytrbl]?|translate-[xy])-\\[(?!9999px\\])-?\\d+(?:\\.\\d+)?(?:px|rem)\\]/]",
           message: "Off-grid Tailwind arbitrary spacing. Snap to a 4px-scale utility (mt-2, gap-3, left-4) or a token (p-[var(--p-3)]). See MIGRATION.md remap.",
         },
+        // I18N SSOT (AUDIT F-05) — `toLocaleDateString` / `toLocaleTimeString` /
+        // `toLocaleString` hardcode the runtime locale/timezone and bypass the
+        // i18n SSOT. Use the formatters in src/lib/i18n/format.ts (formatDate /
+        // formatDateTime / formatTime / formatDateParts / formatNumber /
+        // formatMoney), or the pre-bound `await getRequestFormatters()`
+        // (@/lib/i18n/request, Server Components) / `useFormatters()`
+        // (@/lib/i18n/LocaleProvider, client components). The implementation
+        // itself (src/lib/i18n/**) is allowlisted below.
+        {
+          selector: "CallExpression[callee.property.name='toLocaleDateString']",
+          message: "Locale-fixed date formatting. Use formatDate / formatDateParts from @/lib/i18n/format, or fmt.date / fmt.dateParts via getRequestFormatters() (server) / useFormatters() (client).",
+        },
+        {
+          selector: "CallExpression[callee.property.name='toLocaleTimeString']",
+          message: "Locale-fixed time formatting. Use formatTime / formatDateParts from @/lib/i18n/format, or fmt.time / fmt.dateParts via getRequestFormatters() (server) / useFormatters() (client).",
+        },
+        {
+          selector: "CallExpression[callee.property.name='toLocaleString']",
+          message: "Locale-fixed formatting. Dates: formatDateTime / formatDateParts; numbers: formatNumber / formatMoney — from @/lib/i18n/format, or the pre-bound getRequestFormatters() (server) / useFormatters() (client).",
+        },
       ],
     },
   },
@@ -176,9 +196,24 @@ const config = [
     // The only legitimate bypass inside src/lib/api.ts itself is allowlisted below.
     files: ["src/app/api/**/*.{ts,tsx}"],
     rules: {
+      // NOTE: this scoped assignment REPLACES the base no-restricted-syntax
+      // array for api files, so the i18n selectors are repeated here.
       "no-restricted-syntax": ["error", {
         selector: "MemberExpression[object.name='NextResponse'][property.name='json']",
         message: "Do not use NextResponse.json in /api/v1 routes. Use apiOk / apiCreated / apiError from @/lib/api so the response envelope stays consistent. For file attachments use `new NextResponse(body, { headers })`.",
+      },
+      // I18N SSOT (AUDIT F-05) — same guard as the base block (see above).
+      {
+        selector: "CallExpression[callee.property.name='toLocaleDateString']",
+        message: "Locale-fixed date formatting. Use formatDate / formatDateParts from @/lib/i18n/format, or fmt.date / fmt.dateParts via getRequestFormatters().",
+      },
+      {
+        selector: "CallExpression[callee.property.name='toLocaleTimeString']",
+        message: "Locale-fixed time formatting. Use formatTime / formatDateParts from @/lib/i18n/format, or fmt.time / fmt.dateParts via getRequestFormatters().",
+      },
+      {
+        selector: "CallExpression[callee.property.name='toLocaleString']",
+        message: "Locale-fixed formatting. Dates: formatDateTime / formatDateParts; numbers: formatNumber / formatMoney — from @/lib/i18n/format, or getRequestFormatters().",
       }],
     },
   },
@@ -205,6 +240,20 @@ const config = [
       "src/components/mobile/kit/RoseCard.tsx",            // Rose ID-card artwork — fixed gradients + white QR quiet zone
       "src/components/mobile/onboarding/CompvssOnboarding.tsx", // Google/Bluesky brand SVGs + Rose card artwork + QR contrast pair
     ],
+    rules: {
+      "no-restricted-syntax": "off",
+    },
+  },
+  {
+    // I18N SSOT allowlist — the formatter implementation is the ONE place
+    // allowed to touch Intl/locale primitives directly (it also carries the
+    // guarded `toLocale*` mentions in its own docs/tests). Everything else
+    // goes through @/lib/i18n/format / getRequestFormatters / useFormatters.
+    // NOTE: src/components/ui/MoneyInput.tsx is also intentionally
+    // locale-fixed (en-US parse/format roundtrip) — it carries targeted
+    // inline disables rather than a whole-file exemption so the CHROMA /
+    // MOTION selectors in the same rule keep applying to it.
+    files: ["src/lib/i18n/**"],
     rules: {
       "no-restricted-syntax": "off",
     },
@@ -256,9 +305,14 @@ const config = [
   {
     // CLI scripts — stdout via console.log IS the program output (smoke
     // harnesses, seeders, i18n tooling). Same rationale as the e2e block.
+    // no-restricted-syntax off: the CHROMA/MOTION selectors are JSX-only and
+    // the i18n toLocale* guard targets app code — scripts run outside the
+    // request/locale context (export-offer-letters.mjs et al are en-US
+    // artifacts by design).
     files: ["scripts/**/*.{mjs,js,ts}"],
     rules: {
       "no-console": "off",
+      "no-restricted-syntax": "off",
     },
   },
   {

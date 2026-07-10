@@ -109,7 +109,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   >
                     {a.title}
                   </Link>
-                  <div className="flex items-center gap-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                  <div className="flex items-center gap-1 font-mono text-[11px] text-[var(--p-text-2)]">
                     {tagsOf(a.tags)
                       .slice(0, 3)
                       .map((tag) => (

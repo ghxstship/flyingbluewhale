@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               defaultValue={c.performance_date ?? ""}
             />
             <Input
-              label={t("console.marketplace.calls.edit.fields.slotLengthMin", undefined, "Slot — Min")}
+              label={t("console.marketplace.calls.edit.fields.slotLengthMin", undefined, "Slot (Min)")}
               name="slot_length_min"
               type="number"
               defaultValue={c.slot_length_min ?? ""}

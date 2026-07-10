@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -24,18 +24,24 @@ export default async function EventsPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("events", session.orgId, { orderBy: "starts_at", ascending: true });
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows, totalCount } = await listOrgScopedWithCount("events", session.orgId, {
+    orderBy: "starts_at",
+    ascending: true,
+  });
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.events.eyebrow", undefined, "Work")}
         title={t("console.events.title", undefined, "Events")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.events.subtitleEventSingular", undefined, "Event") : t("console.events.subtitleEventPlural", undefined, "Events")}`}
+        subtitle={`${totalCount} ${totalCount === 1 ? t("console.events.subtitleEventSingular", undefined, "Event") : t("console.events.subtitleEventPlural", undefined, "Events")}`}
         action={<Button href="/studio/events/new">{t("console.events.newEvent", undefined, "+ New Event")}</Button>}
       />
       <div className="page-content">
         <DataTable<EventRow>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(row) => (row.event_kind === "meeting" ? `/studio/meetings/${row.id}` : `/studio/events/${row.id}`)}
           emptyLabel={t("console.events.emptyLabel", undefined, "No events scheduled")}
           emptyDescription={t(

@@ -44,7 +44,7 @@ export default async function Page() {
               placeholder={t(
                 "console.safety.threats.new.placeholders.description",
                 undefined,
-                "Free-form context — distribution scoped by classification.",
+                "Free-form context. Distribution scoped by classification.",
               )}
             />
           </div>

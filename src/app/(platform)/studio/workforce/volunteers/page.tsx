@@ -67,7 +67,7 @@ export default async function Page({
           emptyDescription={t(
             "console.workforce.volunteers.emptyDescription",
             undefined,
-            "Volunteer roster — onboarding, role assignment, and shift acceptance live on the detail page.",
+            "Volunteer roster: onboarding, role assignment, and shift acceptance live on the detail page.",
           )}
           emptyAction={
             <Button href="/studio/workforce/volunteers/new" size="sm">

@@ -167,7 +167,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.meetings.metrics.total", undefined, "Total")} value={fmt.number(rows.length)} />
         </div>
-        <div className="text-[10px] text-[var(--p-text-2)]">
+        <div className="text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.meetings.description",
             undefined,

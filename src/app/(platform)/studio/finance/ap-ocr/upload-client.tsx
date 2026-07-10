@@ -43,7 +43,7 @@ export function UploadInvoiceClient() {
         </Button>
       </div>
       {fileName && (
-        <p className="text-[10px] text-[var(--p-text-2)]">
+        <p className="text-[11px] text-[var(--p-text-2)]">
           {t("console.finance.apOcr.upload.selectedLabel", undefined, "Selected:")}{" "}
           <span className="font-mono">{fileName}</span> · {(fileSize / 1024).toFixed(1)}{" "}
           {t("console.finance.apOcr.upload.kb", undefined, "KB")}

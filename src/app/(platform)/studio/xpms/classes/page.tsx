@@ -42,7 +42,7 @@ export default async function ClassesPage() {
         subtitle={t(
           "console.xpms.classes.subtitle",
           undefined,
-          "Ten classes — collection and code unified into a single taxonomy.",
+          "Ten classes. Collection and code unified into a single taxonomy.",
         )}
       />
       <div className="page-content grid grid-cols-1 gap-4 md:grid-cols-2">

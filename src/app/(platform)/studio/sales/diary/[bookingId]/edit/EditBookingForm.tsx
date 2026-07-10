@@ -121,7 +121,7 @@ export function EditBookingForm({
             {t("console.diary.field.project", undefined, "Project (optional)")}
           </label>
           <select name="project_id" defaultValue={initial.project_id ?? ""} className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.diary.field.none", undefined, "— None —")}</option>
+            <option value="">{t("console.diary.field.none", undefined, "None")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -134,7 +134,7 @@ export function EditBookingForm({
             {t("console.diary.field.client", undefined, "Client (optional)")}
           </label>
           <select name="client_id" defaultValue={initial.client_id ?? ""} className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.diary.field.none", undefined, "— None —")}</option>
+            <option value="">{t("console.diary.field.none", undefined, "None")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}

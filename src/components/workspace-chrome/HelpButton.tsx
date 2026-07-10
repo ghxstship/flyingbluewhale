@@ -85,7 +85,7 @@ export function HelpButton({ knowledgeUrl = "/studio/knowledge" }: { knowledgeUr
               <span>What's New</span>
             </span>
             {unseen && (
-              <span className="rounded-full bg-[var(--p-accent)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--p-accent-contrast,white)]">
+              <span className="rounded-full bg-[var(--p-accent)] px-1.5 py-0.5 text-[11px] font-semibold text-[var(--p-accent-contrast,white)]">
                 New
               </span>
             )}

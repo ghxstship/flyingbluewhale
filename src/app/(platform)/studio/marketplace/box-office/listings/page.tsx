@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/commerce_store";
+import { formatDateParts } from "@/lib/i18n/format";
 import { countLabel } from "@/lib/format";
 import {
   listFirstPartyListings,
@@ -30,7 +31,7 @@ type ListingRow = {
 
 function formatEventDate(value: string | null): string {
   if (!value) return "TBD";
-  return new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return formatDateParts(new Date(value), { month: "short", day: "numeric", year: "numeric" });
 }
 
 /**

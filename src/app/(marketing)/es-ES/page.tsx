@@ -14,6 +14,7 @@ import {
   CANONICAL_CTAS,
   SITE,
 } from "@/lib/seo";
+import { SetLocaleCta } from "./SetLocaleCta";
 
 export const metadata: Metadata = buildMetadata({
   title: "ATLVS — El motor que da vida a nuevos mundos",
@@ -116,6 +117,14 @@ export default function HomeES() {
           Gratis para siempre en el plan Access · Sin tarjeta · Precio por organización
         </p>
       </section>
+
+      {/* E-13: honest posture — this landing page is the only es-ES URL, but
+          el sitio completo se traduce vía la preferencia de idioma. */}
+      <SetLocaleCta
+        locale="es"
+        label="Ver todo el sitio en español"
+        note="Esta página es una introducción. Todo el sitio y el producto están traducidos al español: activa tu preferencia de idioma y navega el resto del sitio en español."
+      />
 
       <section className="mx-auto max-w-6xl px-6 py-16">
         <h2 className="hed-xl flex flex-wrap items-baseline gap-x-3">

@@ -141,7 +141,7 @@ export default async function Page() {
                 placeholder={t(
                   "console.sitePlans.new.placeholder.title",
                   undefined,
-                  "Salvage City — Kitchen Perp Tent",
+                  "Salvage City · Kitchen Perp Tent",
                 )}
               />
             </FormField>
@@ -201,13 +201,13 @@ export default async function Page() {
               </FormField>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              <FormField label={t("console.sitePlans.new.label.lengthIn", undefined, "Length — in")}>
+              <FormField label={t("console.sitePlans.new.label.lengthIn", undefined, "Length (in)")}>
                 <input name="shell_length_in" type="number" min={1} className="ps-input" placeholder="480" />
               </FormField>
-              <FormField label={t("console.sitePlans.new.label.widthIn", undefined, "Width — in")}>
+              <FormField label={t("console.sitePlans.new.label.widthIn", undefined, "Width (in)")}>
                 <input name="shell_width_in" type="number" min={1} className="ps-input" placeholder="120" />
               </FormField>
-              <FormField label={t("console.sitePlans.new.label.heightIn", undefined, "Height — in")}>
+              <FormField label={t("console.sitePlans.new.label.heightIn", undefined, "Height (in)")}>
                 <input name="shell_height_in" type="number" min={0} className="ps-input" placeholder="120" />
               </FormField>
               <FormField label={t("console.sitePlans.new.label.scale", undefined, "Scale")}>
@@ -223,7 +223,7 @@ export default async function Page() {
             </h3>
             <FormField label={t("console.sitePlans.new.label.preset", undefined, "Instantiate from Preset · Optional")}>
               <select name="preset_code" defaultValue="" className="ps-input">
-                <option value="">{t("console.sitePlans.new.option.none", undefined, "— None —")}</option>
+                <option value="">{t("console.sitePlans.new.option.none", undefined, "None")}</option>
                 {PRESETS.map((p) => (
                   <option key={p.code} value={p.code}>
                     {p.code} · {p.label}

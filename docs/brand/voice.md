@@ -47,8 +47,16 @@ This is the rule that protects everything else. Kill the slop tells:
 - **Where the wonder goes.** Invitations only — marketing, onboarding, the first empty
   screen, the help that teaches. In dense chrome and anything broken, drop it: errors stay
   flat and accountable, confirmations short. Nobody wants a tour guide when the bus is on fire.
-- **No comparison. Ever.** No "unlike," no "vs.", no competitor names. Capture intent
-  against the status quo instead ("moving off spreadsheets").
+- **No comparison in the product or primary narrative.** In console/portal/field copy,
+  the homepage, solutions, features, pricing, and every core marketing narrative: no
+  "unlike," no "vs.", no competitor names. Capture intent against the status quo instead
+  ("moving off spreadsheets").
+  **Carve-out — the SEO comparison surfaces.** `/compare/*` and `/alternatives/*`
+  (data: `src/lib/compare.ts`) exist to capture bottom-of-funnel search intent that
+  already names a competitor; they are the ONE sanctioned home for competitor names.
+  Rules inside the carve-out: factual and verifiable claims only, respectful tone, every
+  page carries an honest "when they win" section, and no disparagement. Competitor names
+  never leak from these pages into any other surface, nav label, or product copy.
 - **No emoji. Ever — anywhere.** Icons come from Lucide (UI) or the AIGA signs (wayfinding).
 - **Discretion.** Strategy and positioning notes are direction for how you write — never
   text to drop on the page.

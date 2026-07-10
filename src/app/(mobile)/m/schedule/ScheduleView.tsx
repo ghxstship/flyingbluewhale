@@ -8,6 +8,7 @@ import {
   type FieldDef,
 } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /** Plain event shape handed down from the server page. */
 export type SchedEvent = {
@@ -62,6 +63,7 @@ function badgeClass(tone: SchedEvent["tone"]): string {
 }
 
 export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels: Labels }) {
+  const fmt = useFormatters();
   const [query, setQuery] = useState("");
   const [view, setView] = useState<View>("list");
   const [group, setGroup] = useState("none");
@@ -250,7 +252,7 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
               // post-mount today key so the lone strip cell still labels a day.
               const key = d || todayKey;
               const dt = key ? new Date(key + "T00:00:00") : null;
-              const dow = dt ? dt.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase() : "";
+              const dow = dt ? fmt.dateParts(dt, { weekday: "short" }).toUpperCase() : "";
               const dnum = dt ? dt.getDate() : "";
               const isToday = key !== "" && key === todayKey;
               return (

@@ -40,7 +40,7 @@ export default async function Page() {
             </div>
           </Link>
           <Link className="surface hover-lift p-4" href="/studio/ops/toc">
-            <div className="text-sm font-medium">{t("console.operations.toc.title", undefined, "TOC — ITIL")}</div>
+            <div className="text-sm font-medium">{t("console.operations.toc.title", undefined, "TOC (ITIL)")}</div>
           </Link>
           <Link className="surface hover-lift p-4" href="/studio/safety/incidents">
             <div className="text-sm font-medium">

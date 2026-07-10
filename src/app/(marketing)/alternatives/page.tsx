@@ -5,10 +5,10 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { COMPARE_LIST } from "@/lib/compare";
-import { getRequestT } from "@/lib/i18n/request";
+import { getStaticEnT } from "../_lib/static-t";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getRequestT();
+  const { t } = await getStaticEnT();
   return buildMetadata({
     title: t("marketing.pages.alternatives.meta.title"),
     description: t("marketing.pages.alternatives.meta.description"),
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AlternativesIndex() {
-  const { t } = await getRequestT();
+  const { t } = await getStaticEnT();
   const crumbs = [
     { label: t("marketing.pages.alternatives.breadcrumbs.home"), href: "/" },
     { label: t("marketing.pages.alternatives.breadcrumbs.alternatives"), href: "/alternatives" },

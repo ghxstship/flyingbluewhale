@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { ADMIN_BAND_ROLES, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { writeInbox, writeInboxBulk } from "@/lib/inbox";
 import { log } from "@/lib/log";
@@ -25,7 +25,13 @@ import { log } from "@/lib/log";
 
 export type State = { error?: string; ok?: true } | null;
 
-const Schema = z.object({ offer_id: z.string().uuid() });
+const Schema = z.object({
+  offer_id: z.string().uuid(),
+  /** Optional decline reason — relayed to the buyer in the decision
+   *  notification (talent_offers has no reason column; a counter is a new
+   *  versioned row, so the note travels with the inbox ping). */
+  reason: z.string().trim().max(500).optional().or(z.literal("")),
+});
 
 type OwnOffer = {
   id: string;
@@ -68,7 +74,12 @@ async function loadOwnOffer(offerId: string, userId: string): Promise<OwnOffer |
 }
 
 /** Best-effort in-app ping to the org side after a talent decision. */
-async function notifyOrgOfDecision(offer: OwnOffer, actorId: string, decision: "accepted" | "declined"): Promise<void> {
+async function notifyOrgOfDecision(
+  offer: OwnOffer,
+  actorId: string,
+  decision: "accepted" | "declined",
+  reason?: string,
+): Promise<void> {
   try {
     const title = decision === "accepted" ? "Booking Offer Accepted" : "Booking Offer Declined";
     const entry = {
@@ -78,7 +89,9 @@ async function notifyOrgOfDecision(offer: OwnOffer, actorId: string, decision: "
       sourceId: offer.id,
       actorId,
       title,
-      body: `${offer.act_name} ${decision} the offer for ${offer.performance_date}.`,
+      body: `${offer.act_name} ${decision} the offer for ${offer.performance_date}.${
+        reason ? ` Reason: ${reason}` : ""
+      }`,
       href: `/studio/marketplace/offers/${offer.id}`,
       push: false,
     };
@@ -93,7 +106,7 @@ async function notifyOrgOfDecision(offer: OwnOffer, actorId: string, decision: "
         .from("memberships")
         .select("user_id")
         .eq("org_id", offer.org_id)
-        .in("role", ["owner", "admin"])
+        .in("role", [...ADMIN_BAND_ROLES])
         .is("deleted_at", null);
       const ids = ((admins ?? []) as Array<{ user_id: string }>).map((a) => a.user_id);
       if (ids.length > 0) await writeInboxBulk(ids, entry);
@@ -140,7 +153,12 @@ async function decide(prevState: State, fd: FormData, decision: "accepted" | "de
     return { error: "Only a sent or countered offer can be decided" };
   }
 
-  await notifyOrgOfDecision(offer, session.userId, decision);
+  await notifyOrgOfDecision(
+    offer,
+    session.userId,
+    decision,
+    decision === "declined" ? parsed.data.reason?.trim() || undefined : undefined,
+  );
 
   revalidatePath("/me/offers");
   return { ok: true };

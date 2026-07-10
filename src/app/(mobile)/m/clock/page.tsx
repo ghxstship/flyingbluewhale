@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { RefreshShell } from "@/components/mobile/RefreshShell";
 import { CheckInControls } from "./CheckInControls";
 import { ShiftNoteForm } from "./ShiftNoteForm";
 
@@ -96,7 +97,8 @@ export default async function MobileClockPage() {
       .eq("org_id", session.orgId)
       .in("time_entry_id", entryIds)
       .is("deleted_at", null)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: true })
+      .limit(500);
     const noteRows = (notes ?? []) as NoteRow[];
     const authorIds = Array.from(new Set(noteRows.map((n) => n.author_id).filter(Boolean) as string[]));
     const authorMap = new Map<string, string>();
@@ -122,6 +124,7 @@ export default async function MobileClockPage() {
   const onShift = openEntry != null;
 
   return (
+    <RefreshShell>
     <div className="screen screen-anim">
       <div className="scr-eye">
         {onShift ? t("m.clock.onClock", undefined, "On The Clock") : t("m.clock.offShift", undefined, "Off Shift")}
@@ -207,5 +210,6 @@ export default async function MobileClockPage() {
         })
       )}
     </div>
+    </RefreshShell>
   );
 }

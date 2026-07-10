@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -23,7 +23,9 @@ export default async function PayoutsPage() {
       </>
     );
   const session = await requireSession();
-  const vendors = await listOrgScoped("vendors", session.orgId);
+  // Exact count alongside the capped window (F-01) — the truncation
+  // indicator renders once the org passes the 100-row cap.
+  const { rows: vendors, totalCount } = await listOrgScopedWithCount("vendors", session.orgId);
   return (
     <>
       <ModuleHeader
@@ -34,6 +36,7 @@ export default async function PayoutsPage() {
       <div className="page-content">
         <DataTable<Vendor>
           rows={vendors}
+          totalCount={totalCount}
           columns={[
             {
               key: "name",

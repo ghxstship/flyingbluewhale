@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useAnnounce } from "@/components/ui/LiveRegion";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * FilterBar — a URL-backed facet strip for lists / boards / calendars. Each
@@ -10,6 +12,10 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
  * resets all facets. Distinct from DataTable's client-only column filters: this
  * is a first-class, linkable filter (§9 — e.g. the Class × Phase coordinate
  * facet). Token-only colors.
+ *
+ * A11y (F-23): applying a facet announces the new result count (when the host
+ * page passes `resultCount`) through the shared polite live region, so screen
+ * reader users hear the effect of the filter they just applied.
  */
 export type Facet = {
   param: string;
@@ -18,16 +24,43 @@ export type Facet = {
   allLabel?: string;
 };
 
-export function FilterBar({ facets, clearLabel = "Clear" }: { facets: Facet[]; clearLabel?: string }) {
+export function FilterBar({
+  facets,
+  clearLabel = "Clear",
+  resultCount,
+}: {
+  facets: Facet[];
+  clearLabel?: string;
+  /** Number of rows the current filter state yields — announced to AT after
+   *  each facet change. Re-rendered by the server on every URL rewrite. */
+  resultCount?: number;
+}) {
+  const t = useT();
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
+  const announce = useAnnounce();
+
+  // Announce once per user interaction, after the server round-trip lands the
+  // new count (the prop changes when the filtered page re-renders).
+  const interacted = React.useRef(false);
+  React.useEffect(() => {
+    if (!interacted.current) return;
+    interacted.current = false;
+    announce(
+      typeof resultCount === "number"
+        ? t("filterBar.results", { count: resultCount }, `${resultCount} results`)
+        : t("filterBar.updated", undefined, "Filters updated"),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resultCount, params]);
 
   const setParam = (param: string, value: string) => {
     const next = new URLSearchParams(params.toString());
     if (value) next.set(param, value);
     else next.delete(param);
     const qs = next.toString();
+    interacted.current = true;
     router.replace(qs ? `${pathname}?${qs}` : pathname);
   };
 
@@ -55,7 +88,10 @@ export function FilterBar({ facets, clearLabel = "Clear" }: { facets: Facet[]; c
       {anyActive && (
         <button
           type="button"
-          onClick={() => router.replace(pathname)}
+          onClick={() => {
+            interacted.current = true;
+            router.replace(pathname);
+          }}
           className="text-xs font-medium text-[var(--p-accent)]"
         >
           {clearLabel}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 
 type Provider = { id: "google" | "azure"; label: string; icon: () => React.ReactNode };
 
@@ -83,7 +83,7 @@ export function OAuthButtons({ next }: { next?: string }) {
 
 export function AuthDivider({ label = "or continue with email" }: { label?: string }) {
   return (
-    <div className="my-5 flex items-center gap-3 text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+    <div className="my-5 flex items-center gap-3 text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
       <div className="h-px flex-1 bg-[var(--p-border)]" />
       <span>{label}</span>
       <div className="h-px flex-1 bg-[var(--p-border)]" />

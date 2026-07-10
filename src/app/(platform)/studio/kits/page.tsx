@@ -81,7 +81,7 @@ export default async function Page() {
                   </dl>
 
                   <div className="mt-4 border-t border-[var(--p-border)] pt-3">
-                    <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+                    <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                       {t("console.kits.stat.totalEstimate", undefined, "Total Estimate")}
                     </div>
                     <div className="mt-0.5 font-mono text-base font-semibold text-[var(--p-text-1)] tabular-nums">
@@ -101,7 +101,7 @@ export default async function Page() {
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div>
-      <dt className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{label}</dt>
+      <dt className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{label}</dt>
       <dd className="mt-0.5 font-mono text-sm font-semibold text-[var(--p-text-1)] tabular-nums">{value}</dd>
     </div>
   );

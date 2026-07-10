@@ -19,7 +19,7 @@ export function WidgetPalette({
 }): React.ReactElement {
   return (
     <aside className="surface flex w-56 shrink-0 flex-col gap-2 p-3">
-      <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Widgets</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Widgets</div>
       {PALETTE.map((item) => (
         <PaletteItem
           key={item.type}
@@ -30,7 +30,7 @@ export function WidgetPalette({
           onClick={() => onAdd(item.type)}
         />
       ))}
-      <p className="mt-2 text-[10px] leading-relaxed text-[var(--p-text-2)]">
+      <p className="mt-2 text-[11px] leading-relaxed text-[var(--p-text-2)]">
         Drag a widget onto the canvas, or click to drop into the next open slot.
       </p>
     </aside>
@@ -103,7 +103,7 @@ function PaletteItem({
       </span>
       <span className="min-w-0 flex-1">
         <span className="block text-xs font-semibold tracking-tight text-[var(--p-text-1)]">{label}</span>
-        <span className="block text-[10px] leading-snug text-[var(--p-text-2)]">{description}</span>
+        <span className="block text-[11px] leading-snug text-[var(--p-text-2)]">{description}</span>
       </span>
     </button>
   );

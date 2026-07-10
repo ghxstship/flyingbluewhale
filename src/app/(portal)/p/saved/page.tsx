@@ -43,7 +43,7 @@ export default async function SavedPage() {
       {!session ? (
         <EmptyState
           title="Sign in to see your saves"
-          description="Bookmark any event or scene and it lands here — yours to revisit or drop into a shareable list."
+          description="Bookmark any event or scene and it lands here, yours to revisit or drop into a shareable list."
           action={
             <Link href="/login?next=/p/saved" className="font-medium text-[var(--p-accent-text)] hover:underline">
               Sign in
@@ -54,7 +54,7 @@ export default async function SavedPage() {
         <ActivityTimeline
           items={saved}
           emptyTitle="Nothing saved yet"
-          emptyDescription="Tap the bookmark on any event or scene and it lands here — yours to revisit or drop into a shareable list."
+          emptyDescription="Tap the bookmark on any event or scene and it lands here, yours to revisit or drop into a shareable list."
         />
       )}
     </div>

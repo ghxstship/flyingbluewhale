@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -23,7 +24,7 @@ type Row = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -167,7 +168,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "code",
               header: t("p.hospitality.guests.column.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-[10px]">{r.code ? r.code.slice(-8) : "—"}</span>,
+              render: (r) => <span className="font-mono text-[11px]">{r.code ? r.code.slice(-8) : "—"}</span>,
               accessor: (r) => r.code,
             },
             {

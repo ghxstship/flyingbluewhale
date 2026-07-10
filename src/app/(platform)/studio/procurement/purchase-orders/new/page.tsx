@@ -1,7 +1,4 @@
 import { ModuleHeader } from "@/components/Shell";
-import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
-import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { NewPoForm } from "./NewPoForm";
 
@@ -9,17 +6,8 @@ export const dynamic = "force-dynamic";
 
 export default async function NewPOPage() {
   const { t } = await getRequestT();
-  let vendors: { id: string; name: string }[] = [];
-  let projects: { id: string; name: string }[] = [];
-  if (hasSupabase) {
-    const session = await requireSession();
-    const [vs, ps] = await Promise.all([
-      listOrgScoped("vendors", session.orgId, { orderBy: "name", ascending: true }),
-      listOrgScoped("projects", session.orgId, { orderBy: "name", ascending: true }),
-    ]);
-    vendors = vs.map((v) => ({ id: v.id, name: v.name }));
-    projects = ps.map((p) => ({ id: p.id, name: p.name }));
-  }
+  // FK candidates (vendors, projects) are searched on demand through
+  // RecordCombobox (audit A-06) — no preloaded capped dump.
   return (
     <>
       <ModuleHeader
@@ -27,7 +15,7 @@ export default async function NewPOPage() {
         title={t("console.procurement.purchaseOrders.new.title", undefined, "New Purchase Order")}
       />
       <div className="page-content max-w-xl">
-        <NewPoForm vendors={vendors} projects={projects} />
+        <NewPoForm />
       </div>
     </>
   );

@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +35,7 @@ export default async function GuidesIndex() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("event_guides")
     .select("id, persona, project_id, updated_at, projects:project_id(name)")
@@ -66,7 +67,7 @@ export default async function GuidesIndex() {
             description={t(
               "console.guides.empty.description",
               undefined,
-              "Per-persona event guides — the Boarding Pass for crew, artists, vendors, sponsors, and guests — are authored from each project's detail page.",
+              "Per-persona event guides (the Boarding Pass for crew, artists, vendors, sponsors, and guests) are authored from each project's detail page.",
             )}
             action={
               <Link className="text-sm text-[var(--p-accent)]" href="/studio/projects">
@@ -93,7 +94,7 @@ export default async function GuidesIndex() {
                       <Badge variant="muted">{toTitle(g.persona)}</Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {g.updated_at ? new Date(g.updated_at).toLocaleDateString() : "—"}
+                      {g.updated_at ? fmt.date(new Date(g.updated_at)) : "—"}
                     </td>
                     <td>
                       <Link

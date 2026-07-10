@@ -66,7 +66,7 @@ export default async function FinanceAccountsPage() {
             description={t(
               "console.finance.accounts.empty.description",
               undefined,
-              "Build the chart of accounts — assets, liabilities, equity, revenue, expense — so journal entries can post against a canonical structure.",
+              "Build the chart of accounts (assets, liabilities, equity, revenue, expense) so journal entries can post against a canonical structure.",
             )}
             action={
               <Button href="/studio/finance/accounts/new" size="sm">

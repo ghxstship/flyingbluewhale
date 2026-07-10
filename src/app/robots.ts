@@ -21,7 +21,29 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   }
 
   return {
-    rules: [{ userAgent: "*", allow: ["/"], disallow: ["/studio", "/api", "/auth", "/m", "/me", "/p"] }],
+    rules: [
+      {
+        userAgent: "*",
+        allow: ["/"],
+        // Token-gated confidential flows (/proposals /sign /msa /share /offer
+        // /forms) are disallowed alongside the auth-walled shells — a leaked
+        // signing or share link must never enter an index (E-03).
+        disallow: [
+          "/studio",
+          "/api",
+          "/auth",
+          "/m",
+          "/me",
+          "/p",
+          "/proposals",
+          "/sign",
+          "/msa",
+          "/share",
+          "/offer",
+          "/forms",
+        ],
+      },
+    ],
     sitemap: `${base}/sitemap.xml`,
   };
 }

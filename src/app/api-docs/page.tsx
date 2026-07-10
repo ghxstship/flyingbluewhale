@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { buildOpenAPI } from "@/lib/openapi/build";
 import { SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { CurlExample } from "./CurlExample";
 // Side-effect import — populates the registry before we render.
 import "@/lib/openapi/all-endpoints";
 
@@ -64,6 +65,51 @@ function renderSchemaSummary(schema: Record<string, unknown> | undefined): strin
     return type;
   }
   return "any";
+}
+
+// Build a representative JSON value from a (already-dereferenced) schema so
+// the curl example carries a plausible `-d` body. Prefers explicit
+// `example`s, falls back to type-shaped placeholders.
+function sampleFromSchema(schema: Record<string, unknown> | undefined, depth = 0): unknown {
+  if (!schema || depth > 4) return null;
+  if (schema.example !== undefined) return schema.example;
+  if (Array.isArray(schema.enum) && schema.enum.length > 0) return (schema.enum as unknown[])[0];
+  const type = schema.type as string | undefined;
+  if (type === "object" || schema.properties) {
+    const props = (schema.properties as Record<string, Record<string, unknown>>) ?? {};
+    const required = (schema.required as string[]) ?? [];
+    const keys = required.length > 0 ? required.filter((k) => k in props) : Object.keys(props).slice(0, 4);
+    const out: Record<string, unknown> = {};
+    for (const k of keys) out[k] = sampleFromSchema(props[k], depth + 1);
+    return out;
+  }
+  if (type === "array") return [sampleFromSchema(schema.items as Record<string, unknown> | undefined, depth + 1)];
+  if (type === "integer" || type === "number") return 0;
+  if (type === "boolean") return false;
+  const format = schema.format as string | undefined;
+  if (format === "uuid") return "00000000-0000-0000-0000-000000000000";
+  if (format === "date") return "2026-01-01";
+  if (format === "date-time") return "2026-01-01T00:00:00Z";
+  return "string";
+}
+
+// Copy-paste-ready curl command for one operation, derived from the same
+// OpenAPI document the page renders (F-20).
+function curlFor(baseUrl: string, path: string, method: string, op: Operation): string {
+  const lines = [`curl -X ${method.toUpperCase()} '${baseUrl}${path}'`];
+  lines.push(`  -H 'Authorization: Bearer pat_xxxxxxxxxxxx'`);
+  const bodySchema = op.requestBody?.content?.["application/json"]?.schema;
+  if (bodySchema) {
+    lines.push(`  -H 'Content-Type: application/json'`);
+    const body = JSON.stringify(sampleFromSchema(bodySchema), null, 2) ?? "{}";
+    lines.push(`  -d '${body.replace(/'/g, "'\\''")}'`);
+  }
+  return lines.join(" \\\n");
+}
+
+// Stable per-operation anchor id, e.g. `get-api-v1-projects-projectId`.
+function anchorId(method: string, path: string): string {
+  return `${method}-${path.replace(/^\//, "").replace(/[^a-zA-Z0-9]+/g, "-").replace(/-+$/, "")}`;
 }
 
 const METHOD_ORDER = ["get", "post", "patch", "put", "delete"] as const;
@@ -150,13 +196,13 @@ export default async function ApiDocsPage() {
           </p>
           <ul className="mt-2 list-disc ps-5 text-sm text-[var(--p-text-2)]">
             <li>
-              <code>RateLimit-Limit</code>
+              <code>X-RateLimit-Bucket</code>
             </li>
             <li>
-              <code>RateLimit-Remaining</code>
+              <code>X-RateLimit-Remaining</code>
             </li>
             <li>
-              <code>RateLimit-Reset</code>
+              <code>X-RateLimit-Reset</code>
             </li>
             <li>
               <code>Retry-After</code> — {t("apiDocs.retryAfterNote", undefined, "only on 429")}
@@ -184,7 +230,11 @@ export default async function ApiDocsPage() {
         <section key={tag} id={tag.toLowerCase()} className="mb-16">
           <h2 className="mb-6 border-b border-[var(--p-border)] pb-2 text-2xl font-semibold">{tag}</h2>
           {byTag.get(tag)!.map(({ path, method, op }) => (
-            <article key={`${method}-${path}`} className="mb-6 rounded-lg border border-[var(--p-border)] p-5">
+            <article
+              key={`${method}-${path}`}
+              id={anchorId(method, path)}
+              className="mb-6 scroll-mt-6 rounded-lg border border-[var(--p-border)] p-5"
+            >
               <header className="mb-3 flex flex-wrap items-baseline gap-3">
                 <span
                   className="rounded px-2 py-0.5 font-mono text-xs font-bold text-white uppercase"
@@ -198,6 +248,13 @@ export default async function ApiDocsPage() {
                     {op["x-min-tier"]}+
                   </span>
                 )}
+                <a
+                  href={`#${anchorId(method, path)}`}
+                  className="ms-auto text-xs text-[var(--p-text-2)] hover:underline"
+                  aria-label={t("apiDocs.anchorLink", undefined, "Link to this operation")}
+                >
+                  #
+                </a>
               </header>
               <h3 className="mb-1 text-base font-medium">{op.summary}</h3>
               {op.description && <p className="mb-3 text-sm text-[var(--p-text-2)]">{op.description}</p>}
@@ -242,6 +299,13 @@ export default async function ApiDocsPage() {
                   </pre>
                 </div>
               )}
+
+              <CurlExample
+                command={curlFor(SITE.baseUrl, path, method, op)}
+                label={t("apiDocs.exampleRequest", undefined, "Example request")}
+                copyLabel={t("apiDocs.copy", undefined, "Copy")}
+                copiedLabel={t("apiDocs.copied", undefined, "Copied")}
+              />
 
               <div>
                 <h4 className="mb-1 text-xs font-semibold text-[var(--p-text-2)] uppercase">

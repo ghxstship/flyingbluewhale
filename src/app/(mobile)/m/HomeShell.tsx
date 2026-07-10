@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Client-only wall clock. Renders empty on the server and the client's first
@@ -10,14 +11,15 @@ import Link from "next/link";
  * which is React #418.
  */
 function LiveClock() {
+  const i18nFmt = useFormatters();
   const [time, setTime] = useState("");
   useEffect(() => {
     const fmt = () =>
-      new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+      i18nFmt.dateParts(new Date(), { hour: "2-digit", minute: "2-digit", hour12: false });
     setTime(fmt());
     const id = setInterval(() => setTime(fmt()), 10_000);
     return () => clearInterval(id);
-  }, []);
+  }, [i18nFmt]);
   return <>{time}</>;
 }
 import { KIcon, RoseCard, TOOLS, ToolSheet } from "@/components/mobile/kit";

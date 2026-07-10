@@ -1,8 +1,7 @@
 "use client";
 
-import { KIcon, RoseCard, RotatingQR } from "@/components/mobile/kit";
+import { KIcon, RoseCard, QR } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { mintGateToken } from "./actions";
 
 export type CredentialEntry = {
   id: string;
@@ -17,6 +16,9 @@ type Labels = {
   emptyTitle: string;
   emptyBody: string;
   help: string;
+  gateBody: string;
+  noCodeTitle: string;
+  noCodeBody: string;
 };
 
 // Fulfillment-state → tone for the access list. Live/usable states read "ok".
@@ -42,26 +44,52 @@ const titleCase = (s: string) =>
     .map((w) => w[0]?.toUpperCase() + w.slice(1))
     .join(" ");
 
+/**
+ * The COMPVSS Rose wallet. Renders the holder's REAL active
+ * `assignment_scan_codes` code as a genuine QR (on the Rose card's flip
+ * side and as a large gate pass) — the exact string a gate scanner
+ * resolves through the assignments domain. Honest model: no client-minted
+ * "single-use" tokens, no fake rotation. When the holder has no active
+ * code yet, the wallet says so instead of painting an unverifiable pass.
+ */
 export function WalletView({
   credentials,
-  passBase,
+  holderName,
+  activeCode,
   labels,
 }: {
   credentials: CredentialEntry[];
-  passBase: string;
+  holderName: string | null;
+  activeCode: string | null;
   labels: Labels;
 }) {
   return (
     <>
-      {/* Full Rose pass — flip-to-QR (kit RoseCard). */}
-      <RoseCard />
+      {/* Full Rose pass — flip-to-QR of the real active scan code. */}
+      <RoseCard
+        holderName={holderName}
+        code={activeCode}
+        credentialLabel={activeCode}
+        noCodeLabel={labels.noCodeBody}
+      />
 
-      {/* Live, single-use rotating gate token seeded from the viewer's active
-          scan code. The token is minted server-side (HMAC, 30s window, keyed by
-          a server-only secret) so it's gate-attestable, not a client random. */}
-      <div className="pass-qr" style={{ paddingTop: 4 }}>
-        <RotatingQR base={passBase} mintToken={mintGateToken} />
-      </div>
+      {/* Large gate pass: the holder's active scan code, verified against
+          the live roster at scan time by /api/v1/scan. */}
+      {activeCode ? (
+        <div className="pass-qr" style={{ paddingTop: 4, textAlign: "center" }}>
+          {/* No wrapper fill needed: the QR renders its own white field +
+              quiet zone so it stays scannable in dark mode. */}
+          <div style={{ display: "inline-flex", borderRadius: 14, overflow: "hidden" }}>
+            <QR value={activeCode} size={176} />
+          </div>
+          <div className="pass-id">{activeCode}</div>
+          <div className="hint" style={{ marginTop: 6 }}>
+            {labels.gateBody}
+          </div>
+        </div>
+      ) : (
+        <EmptyState size="compact" title={labels.noCodeTitle} description={labels.noCodeBody} />
+      )}
 
       <div className="sech">
         <h2>{labels.accessTitle}</h2>

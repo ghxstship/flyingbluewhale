@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { recordSalesSnapshotAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -36,6 +36,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const [connResp, snapshotsResp] = await Promise.all([
     supabase
@@ -74,8 +75,8 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
           c.last_synced_at
             ? t(
                 "console.settings.integrations.ticketing.connection.lastSync",
-                { time: new Date(c.last_synced_at).toLocaleString() },
-                `Last sync ${new Date(c.last_synced_at).toLocaleString()}`,
+                { time: fmt.dateTime(new Date(c.last_synced_at)) },
+                `Last sync ${fmt.dateTime(new Date(c.last_synced_at))}`,
               )
             : t("console.settings.integrations.ticketing.connection.neverSynced", undefined, "Never synced")
         }
@@ -108,7 +109,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
               <dt className="text-[var(--p-text-2)]">
                 {t("console.settings.integrations.ticketing.connection.asOf", undefined, "As of")}
               </dt>
-              <dd className="font-mono">{new Date(latest.snapshot_at).toLocaleString()}</dd>
+              <dd className="font-mono">{fmt.dateTime(new Date(latest.snapshot_at))}</dd>
             </dl>
           </section>
         )}
@@ -178,7 +179,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
               {snapshots.map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-sm">
                   <span className="font-mono text-xs text-[var(--p-text-2)]">
-                    {new Date(s.snapshot_at).toLocaleString()}
+                    {fmt.dateTime(new Date(s.snapshot_at))}
                   </span>
                   <span className="font-mono text-xs">
                     {t(

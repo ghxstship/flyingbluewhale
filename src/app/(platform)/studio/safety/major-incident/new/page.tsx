@@ -25,7 +25,7 @@ export default async function Page() {
             placeholder={t(
               "console.safety.majorIncident.new.namePlaceholder",
               undefined,
-              "e.g. Stand collapse — Stadium A",
+              "e.g. Stand collapse · Stadium A",
             )}
             required
           />

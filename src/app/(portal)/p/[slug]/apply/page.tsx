@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { FormShell } from "@/components/FormShell";
+import { FormField } from "@/components/ui/FormField";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { submitAccreditationApplication } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -63,12 +66,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     if (!iso) return t("common.emDash", undefined, "—");
     return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   }
-  const { data } = await supabase
-    .from("accreditations")
-    .select("id, person_name, state, vetting, issued_at, valid_from, valid_to, category:category_id(code, name)")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .order("created_at", { ascending: false });
+  const [{ data }, { data: categoryRows }] = await Promise.all([
+    supabase
+      .from("accreditations")
+      .select("id, person_name, state, vetting, issued_at, valid_from, valid_to, category:category_id(code, name)")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .order("created_at", { ascending: false })
+      .limit(100),
+    supabase
+      .from("accreditation_categories")
+      .select("id, code, name")
+      .eq("org_id", session.orgId)
+      .order("code", { ascending: true })
+      .limit(200),
+  ]);
+  const categories = (categoryRows ?? []) as Array<{ id: string; code: string; name: string }>;
 
   const apps = ((data ?? []) as unknown as Acc[]) ?? [];
   const issued = apps.filter((a) => a.state === "issued").length;
@@ -117,15 +130,51 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               "Apply for accreditation against any of the project's published categories. We verify identity, check zone access, and issue your card on approval.",
             )}
           </p>
+          {categories.length > 0 ? (
+            <div className="mt-4">
+              <FormShell
+                action={submitAccreditationApplication}
+                submitLabel={t("p.apply.form.submit", undefined, "Submit Application")}
+              >
+                <input type="hidden" name="slug" value={slug} />
+                <FormField label={t("p.apply.form.name", undefined, "Full name (as it should print on the card)")} required>
+                  <input name="personName" required maxLength={160} className="ps-input w-full" />
+                </FormField>
+                <FormField label={t("p.apply.form.category", undefined, "Category")} required>
+                  <select name="categoryId" required defaultValue="" className="ps-input w-full">
+                    <option value="" disabled>
+                      {t("p.apply.form.categoryPlaceholder", undefined, "Pick a category")}
+                    </option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.code} · {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </FormField>
+                <FormField label={t("p.apply.form.note", undefined, "Anything the team should know?")}>
+                  <textarea name="note" rows={3} maxLength={1000} className="ps-input w-full" />
+                </FormField>
+              </FormShell>
+            </div>
+          ) : (
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
+              {t(
+                "p.apply.form.noCategories",
+                undefined,
+                "Categories haven't been published for this event yet. Email the team below and they'll get you started.",
+              )}
+            </p>
+          )}
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href={`/p/${slug}/apply/changes`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("p.apply.start.requestChange", undefined, "Request a category change")}
             </Link>
             <Link
-              href={`mailto:accreditation@atlvs.pro?subject=New%20application%20—%20${slug}`}
-              className="ps-btn ps-btn--sm"
+              href={`mailto:accreditation@atlvs.pro?subject=${encodeURIComponent(`New application: ${slug}`)}`}
+              className="ps-btn ps-btn--ghost ps-btn--sm"
             >
-              {t("p.apply.start.emailProducer", undefined, "Email producer")}
+              {t("p.apply.start.emailProducer", undefined, "Email the accreditation team")}
             </Link>
           </div>
         </section>
@@ -142,7 +191,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={a.id} className="flex items-center justify-between py-3 text-sm">
                   <div>
                     <div className="font-medium">{a.person_name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {a.category?.code ?? t("common.emDash", undefined, "—")} · {a.category?.name ?? ""}
                       {a.valid_from && a.valid_to ? ` · ${fmtDate(a.valid_from)} – ${fmtDate(a.valid_to)}` : ""}
                     </div>

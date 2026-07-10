@@ -69,7 +69,7 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         >
           <Keyboard size={14} aria-hidden="true" />
           {t("avatarMenu.keyboardShortcuts", undefined, "Keyboard shortcuts")}
-          <kbd className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">?</kbd>
+          <kbd className="ms-auto font-mono text-[11px] text-[var(--p-text-2)]">?</kbd>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/help" className="flex items-center gap-2">

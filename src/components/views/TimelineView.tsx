@@ -367,7 +367,7 @@ export function TimelineView({
               style={{ height: HEADER_HEIGHT }}
             >
               <div
-                className="sticky start-0 z-30 flex shrink-0 items-center border-e border-[var(--p-border)] bg-[var(--p-surface)] px-3 text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase"
+                className="sticky start-0 z-30 flex shrink-0 items-center border-e border-[var(--p-border)] bg-[var(--p-surface)] px-3 text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase"
                 style={{ width: LANE_RAIL_WIDTH }}
               >
                 {t("components.timelineView.lane", undefined, "Lane")}
@@ -376,7 +376,7 @@ export function TimelineView({
                 {markers.map((m, i) => (
                   <div
                     key={`${m.date.toISOString()}-${i}`}
-                    className="absolute top-0 flex h-full items-center border-s border-[var(--p-border)] ps-1 font-mono text-[10px] text-[var(--p-text-2)]"
+                    className="absolute top-0 flex h-full items-center border-s border-[var(--p-border)] ps-1 font-mono text-[11px] text-[var(--p-text-2)]"
                     style={{ left: m.offset }}
                   >
                     {m.label}

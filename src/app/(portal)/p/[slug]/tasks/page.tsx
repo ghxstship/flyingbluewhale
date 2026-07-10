@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PortalRail } from "@/components/Shell";
-import { portalNav } from "@/lib/nav";
+import { portalNav, portalPersonaForSession } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -132,7 +132,10 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "crew")} title={t("p.shared.rail.title", undefined, "Portal")} />
+      <PortalRail
+        group={portalNav(slug, portalPersonaForSession(session.persona))}
+        title={t("p.shared.rail.title", undefined, "Portal")}
+      />
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">{t("p.shared.tasks.title", undefined, "My Tasks")}</h1>
@@ -140,7 +143,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
             {t(
               "p.shared.tasks.subtitle",
               undefined,
-              "What you owe the production team across this project — advancing items, approvals, and onboarding.",
+              "Everything waiting on you for this project: advancing items, approvals, and onboarding.",
             )}
           </p>
 
@@ -153,7 +156,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
                   description={t(
                     "p.shared.tasks.empty.description",
                     undefined,
-                    "Nothing waiting on you on this project. Check /p/[slug]/inbox for notifications.",
+                    "Nothing waiting on you on this project. Check your Inbox for notifications.",
                   )}
                 />
               </li>
@@ -171,7 +174,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
                           )}
                         </div>
                         <div className="mt-1 truncate text-sm font-semibold">{it.title}</div>
-                        <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                        <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                           {it.state}
                           {it.due
                             ? ` · ${t("p.shared.tasks.duePrefix", { date: fmt.date(it.due) }, `due ${fmt.date(it.due)}`)}`

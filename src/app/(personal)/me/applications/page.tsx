@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +34,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("job_applications")
     .select(
@@ -95,8 +96,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                   {t(
                     "me.applications.appliedOn",
-                    { date: new Date(r.applied_at).toLocaleDateString() },
-                    `Applied ${new Date(r.applied_at).toLocaleDateString()}`,
+                    { date: fmt.date(new Date(r.applied_at)) },
+                    `Applied ${fmt.date(new Date(r.applied_at))}`,
                   )}
                 </p>
               </div>

@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { writeInbox } from "@/lib/inbox";
 import { log } from "@/lib/log";
-import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_DEFAULT } from "@/lib/payment-terms";
+import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_DEFAULT, clampDepositPct } from "@/lib/payment-terms";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -79,7 +79,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
       slot_end: parsed.data.slot_end || null,
       fee_cents: feeCents,
       currency: parsed.data.currency,
-      deposit_pct: Math.min(100, Math.max(0, Math.round(Number(parsed.data.deposit_pct)))),
+      deposit_pct: clampDepositPct(Number(parsed.data.deposit_pct)) ?? DEPOSIT_PCT_DEFAULT,
       balance_terms: parsed.data.balance_terms,
       talent_offer_state: "draft",
       created_by: session.userId,

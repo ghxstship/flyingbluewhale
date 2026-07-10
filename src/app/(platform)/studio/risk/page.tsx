@@ -111,7 +111,7 @@ export default async function Page() {
             value={fmt.number(projectCount)}
           />
         </div>
-        <div className="text-[10px] text-[var(--p-text-2)]">
+        <div className="text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.risk.description",
             undefined,

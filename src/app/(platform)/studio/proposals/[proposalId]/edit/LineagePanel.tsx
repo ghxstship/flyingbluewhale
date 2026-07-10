@@ -59,7 +59,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
     return (
       <div className="surface-inset mt-2 space-y-3 p-3">
         <div>
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t(
               "console.proposals.edit.lineage.deliverablesHeader",
               undefined,
@@ -102,7 +102,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                     }}
                   >
                     <option value="">
-                      {t("console.proposals.edit.lineage.noTypeOption", undefined, "— no type (won't seed) —")}
+                      {t("console.proposals.edit.lineage.noTypeOption", undefined, "no type (won't seed)")}
                     </option>
                     {DELIVERABLE_TYPES.map((dt) => (
                       <option key={dt} value={dt}>
@@ -116,7 +116,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
           )}
         </div>
         <div>
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t(
               "console.proposals.edit.lineage.catalogItemsHeader",
               undefined,
@@ -165,7 +165,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                     }}
                   >
                     <option value="">
-                      {t("console.proposals.edit.lineage.noKindOption", undefined, "— no kind (won't seed) —")}
+                      {t("console.proposals.edit.lineage.noKindOption", undefined, "no kind (won't seed)")}
                     </option>
                     {CATALOG_KINDS.map((k) => (
                       <option key={k} value={k}>
@@ -185,7 +185,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
   if (block.type === "investment_table") {
     return (
       <div className="surface-inset mt-2 space-y-2 p-3">
-        <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+        <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.proposals.edit.lineage.groupsHeader", undefined, "Groups · seeded into public.budgets")}
         </div>
         {block.groups.map((g, i) => (

@@ -97,16 +97,16 @@ export function WorkspaceChrome({
 export function defaultSwitcherEntries(role: string | null, currentPortalSlug: string | null): AppSwitcherEntry[] {
   const entries: AppSwitcherEntry[] = [];
   if (role) {
-    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/studio") });
+    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform") });
   }
   if (role && role !== "viewer") {
     entries.push({
       shell: "portal",
       label: "GVTEWAY",
-      href: urlFor("portal", currentPortalSlug ? `/p/${currentPortalSlug}` : "/p"),
+      href: urlFor("portal", currentPortalSlug ? `/${currentPortalSlug}` : ""),
     });
   }
-  entries.push({ shell: "mobile", label: "COMPVSS", href: urlFor("mobile", "/m") });
+  entries.push({ shell: "mobile", label: "COMPVSS", href: urlFor("mobile") });
   return entries;
 }
 
@@ -146,7 +146,7 @@ export async function resolveSwitcherEntries(opts: {
   const { supabase, userId, role, currentPortalSlug } = opts;
   const entries: AppSwitcherEntry[] = [];
   if (role) {
-    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/studio") });
+    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform") });
   }
   let hasPortal = false;
   try {
@@ -166,9 +166,9 @@ export async function resolveSwitcherEntries(opts: {
     entries.push({
       shell: "portal",
       label: "GVTEWAY",
-      href: urlFor("portal", currentPortalSlug ? `/p/${currentPortalSlug}` : "/p"),
+      href: urlFor("portal", currentPortalSlug ? `/${currentPortalSlug}` : ""),
     });
   }
-  entries.push({ shell: "mobile", label: "COMPVSS", href: urlFor("mobile", "/m") });
+  entries.push({ shell: "mobile", label: "COMPVSS", href: urlFor("mobile") });
   return entries;
 }

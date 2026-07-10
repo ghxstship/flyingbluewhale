@@ -2,6 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { NavCountKey } from "@/lib/nav";
+import { MANAGER_BAND_ROLES } from "@/lib/auth";
 
 /**
  * Live sidebar count badges (kit 21 wave W1) — the three "needing you"
@@ -23,9 +24,10 @@ export type NavCounts = Partial<Record<NavCountKey, number>>;
 
 type Session = { userId: string; orgId: string; role: string | null };
 
-// Mirror isManagerPlus (src/lib/auth.ts) so the approvals badge scopes exactly
-// like the /studio/my-work and /studio/governance/approvals pages it counts.
-const MANAGER_PLUS = new Set(["owner", "admin", "manager"]);
+// Consume the canonical band tuple (src/lib/auth.ts) so the approvals badge
+// scopes exactly like the /studio/my-work and /studio/governance/approvals
+// pages it counts.
+const MANAGER_PLUS = new Set<string>(MANAGER_BAND_ROLES);
 
 export async function getNavCounts(
   supabase: SupabaseClient,

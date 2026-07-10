@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1173 · **API route handlers:** 145 · **Distinct nav hrefs:** 514
+**Page routes:** 1177 · **API route handlers:** 146 · **Distinct nav hrefs:** 515
 
 ## Legend
 
@@ -27,12 +27,12 @@
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 783 | 246 | 535 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 150 | 128 | 19 | 0 | 3 |
-| LEG3ND — Knowledge Shell | legendNav rail | 41 | 21 | 20 | 0 | 0 |
+| GVTEWAY — External Portal | portalNav rail | 151 | 129 | 19 | 0 | 3 |
+| LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
-| Auth | marketing header auth links + token flows | 13 | 2 | 0 | 0 | 11 |
-| **TOTAL** | | **1173** | **488** | **644** | **0** | **41** |
+| Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
+| **TOTAL** | | **1177** | **489** | **646** | **0** | **42** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (41) — intentional non-nav, with reasons
+## · Exempt routes (42) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -1584,7 +1584,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-150 routes — ● 128 nav · ○ 19 linked · ⚠ 0 orphan
+151 routes — ● 129 nav · ○ 19 linked · ⚠ 0 orphan
 
 <details><summary><code>[slug]</code> · 2 routes</summary>
 
@@ -1788,6 +1788,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>settings</code> · 1 route</summary>
+
+● `/p/[slug]/settings/notifications`
+
+</details>
+
 <details><summary><code>sponsor</code> · 6 routes</summary>
 
 ● `/p/[slug]/sponsor`
@@ -1878,7 +1884,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-41 routes — ● 21 nav · ○ 20 linked · ⚠ 0 orphan
+43 routes — ● 21 nav · ○ 22 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -1892,9 +1898,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>certifications</code> · 1 route</summary>
+<details><summary><code>certifications</code> · 3 routes</summary>
 
 ● `/legend/certifications`
+○ `/legend/certifications/[holderId]`
+○ `/legend/certifications/[holderId]/verify`
 
 </details>
 
@@ -2409,7 +2417,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## Auth
 
-13 routes — ● 2 nav · ○ 0 linked · ⚠ 0 orphan
+14 routes — ● 2 nav · ○ 0 linked · ⚠ 0 orphan
 
 <details><summary><code>accept-invite</code> · 1 route</summary>
 
@@ -2436,9 +2444,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>mfa</code> · 1 route</summary>
+<details><summary><code>mfa</code> · 2 routes</summary>
 
 · `/mfa/challenge`
+· `/mfa/recovery`
 
 </details>
 
@@ -2476,7 +2485,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 145 route handlers
+## API surface (`/api/v1`) — 146 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2890,6 +2899,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>/api/v1/telemetry</code> · 1</summary>
 
 - `/api/v1/telemetry/marketing`
+
+</details>
+
+<details><summary><code>/api/v1/time</code> · 1</summary>
+
+- `/api/v1/time/clock`
 
 </details>
 

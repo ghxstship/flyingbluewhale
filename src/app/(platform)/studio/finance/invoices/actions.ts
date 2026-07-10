@@ -161,7 +161,7 @@ export async function bulkVoidInvoices(ids: string[]): Promise<BulkResult> {
     .is("deleted_at", null)
     .not("invoice_state", "in", "(paid,voided)")
     .select("id");
-  if (error) return { error: `Could Not Void — ${error.message}` };
+  if (error) return { error: `Could Not Void: ${error.message}` };
 
   const voided = updated?.length ?? 0;
   const skipped = parsed.data.length - voided;

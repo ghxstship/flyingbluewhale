@@ -155,7 +155,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     <div className="font-medium">
                       {s.role ?? t("p.volunteer.schedule.volunteerShift", undefined, "Volunteer shift")}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} → {fmtTime(s.ends_at)}
                       {s.venue?.name ? ` · ${s.venue.name}` : ""}
                       {s.meal_credit ? ` · ${t("p.volunteer.schedule.mealCredit", undefined, "meal credit")}` : ""}
@@ -178,7 +178,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={s.id} className="flex items-center justify-between py-2 text-xs">
                   <div className="min-w-0">
                     <span className="font-medium">{s.role ?? t("p.volunteer.schedule.shift", undefined, "Shift")}</span>
-                    <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <span className="ms-2 font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)}
                     </span>
                   </div>

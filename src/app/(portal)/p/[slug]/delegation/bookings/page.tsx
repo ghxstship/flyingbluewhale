@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -22,7 +23,7 @@ type Booking = {
 const TRAIN_PATTERN = /(training|practice|warm[- ]?up|drill)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -124,7 +125,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={b.id} className="flex items-center justify-between py-2 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{b.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmt(b.starts_at)} → {fmt(b.ends_at)}
                       {b.location?.name ? ` · ${b.location.name}` : ""}
                     </div>

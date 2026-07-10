@@ -119,22 +119,20 @@ export { PinInput } from "./PinInput";
 export type { PinInputProps } from "./PinInput";
 export { RadioGroup } from "./RadioGroup";
 export type { RadioGroupProps, RadioOption } from "./RadioGroup";
-export { ToastProvider, useToast } from "./Toast";
-export type { ToastTone, ToastOptions, ToastRecord, ToastContextValue } from "./Toast";
+// Toast: the ui/Toast provider system was deleted in the 2026-07-10 audit
+// (F-06) — its ToastProvider was never mounted, so the barrel-exported
+// useToast threw at runtime. The one sanctioned toast API is
+// `@/lib/hooks/useToast` (sonner-backed; <Toaster> mounts in the root layout).
 export { ConfirmDialog, ConfirmDialogHost, useConfirm } from "./ConfirmDialog";
 export type { ConfirmTone, ConfirmDialogProps, ConfirmRequest } from "./ConfirmDialog";
 export { Meter } from "./Meter";
 export type { MeterTone, MeterVariant, MeterProps } from "./Meter";
 export { Coachmark, Tour } from "./Coachmark";
 export type { CoachmarkProps, TourStep, TourProps, CoachmarkBubbleContentProps } from "./Coachmark";
-export { Pagination } from "./Pagination";
-export type { PaginationProps } from "./Pagination";
-export { BulkActionBar } from "./BulkActionBar";
-export type { BulkActionBarProps, BulkAction, BulkActionTone } from "./BulkActionBar";
-export { ExportMenu } from "./ExportMenu";
-export type { ExportMenuProps, ExportFormat } from "./ExportMenu";
-export { ImportPanel } from "./ImportPanel";
-export type { ImportPanelProps, ImportColumn } from "./ImportPanel";
+// Pagination / BulkActionBar / ExportMenu / ImportPanel were removed in the
+// 2026-07-10 audit (A-15): dead duplicates with zero consumers — the DataTable
+// engine (DataTableInteractive) implements pagination, bulk actions, CSV
+// export, and import natively; server pages paginate with PagerNav.
 export { UploadZone } from "./UploadZone";
 export type { UploadZoneProps, UploadRejection } from "./UploadZone";
 export { MediaCard } from "./MediaCard";

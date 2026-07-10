@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { startRegistration, browserSupportsWebAuthn } from "@simplewebauthn/browser";
 import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/server";
 import { Fingerprint, Plus, Trash2 } from "lucide-react";
@@ -151,7 +151,7 @@ export function PasskeyManager() {
                 <div className="text-sm font-medium">
                   {c.device_name ?? t("me.security.passkeys.unnamedDevice", undefined, "Unnamed device")}
                 </div>
-                <div className="text-[10px] text-[var(--p-text-2)]">
+                <div className="text-[11px] text-[var(--p-text-2)]">
                   {t(
                     "me.security.passkeys.added",
                     { when: formatRelative(c.created_at) },

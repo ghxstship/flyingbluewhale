@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -51,46 +52,107 @@ function writeConsent(c: Consent) {
   window.dispatchEvent(new CustomEvent("consentchange", { detail: c }));
 }
 
+/**
+ * E-16: non-blocking bottom consent banner (Linear/Stripe pattern) replacing
+ * the full-screen blocking modal. The page stays fully usable behind it.
+ * Dismissing (X or Escape) is an explicit essential-only decision and is
+ * PERSISTED — the banner never re-opens on the next navigation. "Manage
+ * settings" opens the detailed dialog with per-category toggles.
+ */
 export function CookieConsent() {
   const t = useT();
   const [open, setOpen] = React.useState(false);
+  const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [analytics, setAnalytics] = React.useState(false);
   const [marketing, setMarketing] = React.useState(false);
-  const [showDetails, setShowDetails] = React.useState(false);
 
   React.useEffect(() => {
     if (!readConsent()) {
       // Defer slightly so it doesn't block first paint
-      const t = setTimeout(() => setOpen(true), 600);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setOpen(true), 600);
+      return () => clearTimeout(timer);
     }
   }, []);
 
-  function decide(opts: { analytics: boolean; marketing: boolean }) {
+  const decide = React.useCallback((opts: { analytics: boolean; marketing: boolean }) => {
     writeConsent({
       essential: true,
       analytics: opts.analytics,
       marketing: opts.marketing,
       decidedAt: new Date().toISOString(),
     });
+    setDetailsOpen(false);
     setOpen(false);
-  }
+  }, []);
+
+  // ESC anywhere while the banner shows = dismiss = essential-only, persisted.
+  React.useEffect(() => {
+    if (!open || detailsOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") decide({ analytics: false, marketing: false });
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, detailsOpen, decide]);
+
+  if (!open) return null;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent size="md" hideCloseButton>
-        <DialogHeader>
-          <DialogTitle>{t("cookieConsent.title", undefined, "Cookies & privacy")}</DialogTitle>
-          <DialogDescription>
-            {t(
-              "cookieConsent.description",
-              undefined,
-              "We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use analytics and marketing cookies to improve the product.",
-            )}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <section
+        aria-label={t("cookieConsent.title", undefined, "Cookies & privacy")}
+        className="fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--p-border)] bg-[var(--p-surface)] p-4 shadow-[var(--p-elev-xl,0_-4px_24px_rgba(0,0,0,0.12))] print:hidden"
+      >
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0 flex-1 basis-72">
+            <div className="text-sm font-semibold">{t("cookieConsent.title", undefined, "Cookies & privacy")}</div>
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
+              {t(
+                "cookieConsent.description",
+                undefined,
+                "We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use analytics and marketing cookies to improve the product.",
+              )}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setDetailsOpen(true)}
+              className="text-xs text-[var(--p-text-2)] underline-offset-4 hover:underline"
+            >
+              {t("cookieConsent.manageSettings", undefined, "Manage settings")}
+            </button>
+            <Button variant="ghost" size="sm" onClick={() => decide({ analytics: false, marketing: false })}>
+              {t("cookieConsent.rejectAll", undefined, "Reject All")}
+            </Button>
+            <Button size="sm" onClick={() => decide({ analytics: true, marketing: true })}>
+              {t("cookieConsent.acceptAll", undefined, "Accept All")}
+            </Button>
+            <button
+              type="button"
+              onClick={() => decide({ analytics: false, marketing: false })}
+              aria-label={t("cookieConsent.dismiss", undefined, "Dismiss and continue with essential cookies only")}
+              className="flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)]"
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </section>
 
-        {showDetails && (
+      <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+        <DialogContent size="md">
+          <DialogHeader>
+            <DialogTitle>{t("cookieConsent.title", undefined, "Cookies & privacy")}</DialogTitle>
+            <DialogDescription>
+              {t(
+                "cookieConsent.description",
+                undefined,
+                "We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use analytics and marketing cookies to improve the product.",
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
           <div className="mt-4 space-y-3 text-xs">
             <Row
               label={t("cookieConsent.essential.label", undefined, "Essential")}
@@ -129,35 +191,18 @@ export function CookieConsent() {
               onChange={setMarketing}
             />
           </div>
-        )}
 
-        <DialogFooter className="mt-6 flex flex-wrap items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={() => setShowDetails((v) => !v)}
-            className="text-xs text-[var(--p-text-2)] underline-offset-4 hover:underline"
-          >
-            {showDetails
-              ? t("cookieConsent.hideDetails", undefined, "Hide Details")
-              : t("cookieConsent.customize", undefined, "Customize")}
-          </button>
-          <div className="flex gap-2">
+          <DialogFooter className="mt-6 flex flex-wrap items-center justify-end gap-2">
             <Button variant="ghost" onClick={() => decide({ analytics: false, marketing: false })}>
               {t("cookieConsent.rejectAll", undefined, "Reject All")}
             </Button>
-            {showDetails ? (
-              <Button onClick={() => decide({ analytics, marketing })}>
-                {t("cookieConsent.savePreferences", undefined, "Save Preferences")}
-              </Button>
-            ) : (
-              <Button onClick={() => decide({ analytics: true, marketing: true })}>
-                {t("cookieConsent.acceptAll", undefined, "Accept All")}
-              </Button>
-            )}
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+            <Button onClick={() => decide({ analytics, marketing })}>
+              {t("cookieConsent.savePreferences", undefined, "Save Preferences")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

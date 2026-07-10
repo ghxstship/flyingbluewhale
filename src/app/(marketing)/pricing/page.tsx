@@ -32,8 +32,11 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-type TierT = (key: string) => string;
+type TierT = (key: string, vars?: undefined, fallback?: string) => string;
 
+// E-17: tier CTAs carry `?plan=` into signup so the chosen plan follows the
+// user into org creation, and the CTA labels are honest — there are no trial
+// mechanics wired today, so nothing promises a "14-day trial".
 const buildTiers = (t: TierT) => [
   {
     tier: t("marketing.pages.pricing.tiers.free.name"),
@@ -48,7 +51,7 @@ const buildTiers = (t: TierT) => [
       t("marketing.pages.pricing.tiers.free.features.communitySupport"),
     ],
     cta: t("marketing.pages.pricing.tiers.free.cta"),
-    href: "/signup",
+    href: "/signup?plan=free",
     highlight: false,
   },
   {
@@ -64,8 +67,8 @@ const buildTiers = (t: TierT) => [
       t("marketing.pages.pricing.tiers.crew.features.upTo2kCredentials"),
       t("marketing.pages.pricing.tiers.crew.features.emailSupport"),
     ],
-    cta: t("marketing.pages.pricing.tiers.crew.cta"),
-    href: "/signup",
+    cta: t("marketing.pages.pricing.tiers.crew.ctaStart", undefined, "Start with Crew"),
+    href: "/signup?plan=crew",
     highlight: false,
   },
   {
@@ -82,8 +85,8 @@ const buildTiers = (t: TierT) => [
       t("marketing.pages.pricing.tiers.production.features.unlimitedUsers"),
       t("marketing.pages.pricing.tiers.production.features.priorityConcierge"),
     ],
-    cta: t("marketing.pages.pricing.tiers.production.cta"),
-    href: "/signup",
+    cta: t("marketing.pages.pricing.tiers.production.ctaStart", undefined, "Start with Production"),
+    href: "/signup?plan=production",
     highlight: true,
   },
   {
@@ -100,7 +103,7 @@ const buildTiers = (t: TierT) => [
       t("marketing.pages.pricing.tiers.festival.features.customIntegrations"),
     ],
     cta: t("marketing.pages.pricing.tiers.festival.cta"),
-    href: "/contact",
+    href: "/contact?plan=festival",
     highlight: false,
   },
 ];

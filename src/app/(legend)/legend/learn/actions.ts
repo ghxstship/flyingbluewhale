@@ -119,6 +119,59 @@ export async function completeLessonAction(_: State, fd: FormData): Promise<Stat
 }
 
 /**
+ * Persist media playback position to `lesson_progress` (audit D-27) so
+ * resume survives across devices instead of living only in localStorage.
+ * Marks the lesson `in_progress`; never downgrades a completed lesson
+ * (auto-completion at >= 90% watched is the client's call into
+ * `completeLessonAction`). Fire-and-forget from a throttled timeupdate —
+ * failures are non-fatal.
+ */
+export async function saveLessonProgressAction(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = z
+    .object({
+      course_id: z.string().uuid(),
+      lesson_id: z.string().uuid(),
+      position_seconds: z.coerce.number().int().min(0),
+    })
+    .safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid lesson" };
+  const { course_id, lesson_id, position_seconds } = parsed.data;
+  const db = (await createClient()) as unknown as LooseSupabase;
+
+  const { data: enrollment } = await db
+    .from("course_enrollments")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .eq("course_id", course_id)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!enrollment) return { error: "Enroll before starting lessons" };
+
+  const { data: existing } = await db
+    .from("lesson_progress")
+    .select("id, progress_state")
+    .eq("enrollment_id", enrollment.id)
+    .eq("lesson_id", lesson_id)
+    .maybeSingle();
+  if (existing?.progress_state === "completed") return { ok: true };
+
+  const { error } = await db.from("lesson_progress").upsert(
+    {
+      org_id: session.orgId,
+      enrollment_id: enrollment.id,
+      lesson_id,
+      user_id: session.userId,
+      progress_state: "in_progress",
+      position_seconds,
+    },
+    { onConflict: "enrollment_id,lesson_id" },
+  );
+  if (error) return { error: error.message };
+  return { ok: true };
+}
+
+/**
  * Submit an assessment attempt. Scores server-side against the question
  * bank (client never sees correct_index), persists the attempt, and — on
  * a pass — issues the course's certification if one is configured.

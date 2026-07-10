@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +50,7 @@ const BUCKETS: Array<{
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <>
@@ -193,7 +194,7 @@ export default async function Page() {
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <Badge variant={KIND_TONE[j.kind]}>{toTitle(j.kind)}</Badge>
-                            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{j.target_kind}</span>
+                            <span className="font-mono text-[11px] text-[var(--p-text-2)]">{j.target_kind}</span>
                             {j.source === "credential" && (
                               <Badge variant="muted">
                                 {t("console.operations.maintenance.autoBadge", undefined, "auto")}
@@ -203,7 +204,7 @@ export default async function Page() {
                           <div className="mt-1 text-sm">{j.title}</div>
                         </div>
                         <span className="font-mono text-xs text-[var(--p-text-2)]">
-                          {new Date(j.due_at).toLocaleDateString()}
+                          {fmt.date(new Date(j.due_at))}
                         </span>
                       </Link>
                     </li>

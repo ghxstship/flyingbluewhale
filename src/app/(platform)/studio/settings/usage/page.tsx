@@ -4,11 +4,12 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { usageSeries, usageTotal, dailyTotals } from "@/lib/usage";
+import { formatNumber } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
 const WINDOW_DAYS = 14;
-const n = (x: number) => x.toLocaleString("en-US");
+const n = (x: number) => formatNumber(x);
 
 export default async function UsagePage() {
   if (!hasSupabase) {

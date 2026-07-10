@@ -6,7 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +40,7 @@ type Row = {
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -91,12 +92,12 @@ export default async function Page() {
                   r.venue_type,
                   r.performance_date
                     ? t("marketing.pages.marketplace.calls.card.show", {
-                        date: new Date(r.performance_date).toLocaleDateString(),
+                        date: fmt.date(new Date(r.performance_date)),
                       })
                     : null,
                   r.deadline_at
                     ? t("marketing.pages.marketplace.calls.card.closes", {
-                        date: new Date(r.deadline_at).toLocaleDateString(),
+                        date: fmt.date(new Date(r.deadline_at)),
                       })
                     : null,
                   formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),

@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           )}
           {w.envelope_id && (
-            <span className="font-mono text-[10px] text-[var(--p-text-2)]">
+            <span className="font-mono text-[11px] text-[var(--p-text-2)]">
               {t("console.finance.lienWaivers.detail.envelopeLabel", undefined, "Envelope")}{" "}
               {w.envelope_id.slice(0, 12)}…
             </span>
@@ -209,7 +209,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     {t(
                       "console.finance.lienWaivers.detail.releasePaymentCleared",
                       undefined,
-                      "Release — Payment Cleared",
+                      "Release (Payment Cleared)",
                     )}
                   </Button>
                 </form>

@@ -13,6 +13,8 @@
  * the view (30-day alert window).
  */
 
+import { formatMoney } from "@/lib/i18n/format";
+
 // ── Compliance ──────────────────────────────────────────────────────────
 export const COMPLIANCE_DOC_KINDS = ["coi", "w9", "license", "cert"] as const;
 export type ComplianceDocKind = (typeof COMPLIANCE_DOC_KINDS)[number] | (string & {});
@@ -227,5 +229,5 @@ export function compositeScore(onTimePct: number, qualityAvg: number, disputes: 
 /** Format integer cents as USD (mirrors the finance display convention). */
 export function formatCents(cents: number | null | undefined): string {
   if (cents == null) return "—";
-  return (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return formatMoney(cents, { fractionDigits: 0 });
 }

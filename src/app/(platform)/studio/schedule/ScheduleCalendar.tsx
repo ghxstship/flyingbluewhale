@@ -79,7 +79,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
       description={
         view === "month"
           ? t("console.schedule.calendar.descriptionMonth", undefined, "Click any event chip to open")
-          : t("console.schedule.calendar.descriptionWeek", undefined, "This week — events visible in their start day")
+          : t("console.schedule.calendar.descriptionWeek", undefined, "This week (events visible in their start day)")
       }
       empty={events.length === 0}
       emptyLabel={t("console.schedule.calendar.emptyLabel", undefined, "No scheduled events yet.")}
@@ -130,7 +130,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
           {WEEKDAYS.map((d) => (
             <div
               key={d}
-              className="px-2 py-1 text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase"
+              className="px-2 py-1 text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase"
             >
               {t(`console.schedule.calendar.weekday.${d.toLowerCase()}`, undefined, d)}
             </div>
@@ -151,7 +151,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
               >
                 <div className="mb-1 flex items-center justify-between">
                   <span
-                    className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-medium ${
+                    className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-medium ${
                       isTodayCell
                         ? "bg-[var(--p-accent)] text-white"
                         : inMonth
@@ -162,7 +162,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                     {day.getDate()}
                   </span>
                   {dayEvents.length > 0 && (
-                    <span className="font-mono text-[9px] text-[var(--p-text-2)]">{dayEvents.length}</span>
+                    <span className="font-mono text-[11px] text-[var(--p-text-2)]">{dayEvents.length}</span>
                   )}
                 </div>
                 <div className="flex flex-col gap-0.5">
@@ -170,14 +170,14 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                     <Link
                       key={e.id}
                       href={`/studio/events/${e.id}`}
-                      className={`truncate rounded px-1 py-0.5 text-[10px] ${eventTone(e.status)}`}
+                      className={`truncate rounded px-1 py-0.5 text-[11px] ${eventTone(e.status)}`}
                       title={e.name}
                     >
                       {e.name}
                     </Link>
                   ))}
                   {dayEvents.length > 3 && (
-                    <span className="px-1 text-[9px] text-[var(--p-text-2)]">
+                    <span className="px-1 text-[11px] text-[var(--p-text-2)]">
                       {t(
                         "console.schedule.calendar.moreEvents",
                         { count: dayEvents.length - 3 },

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -27,9 +28,9 @@ type DispatchRow = {
 };
 
 const FLEET_LABEL: Record<string, string> = {
-  t1: "T1 — Family of the Olympic Family",
-  t2: "T2 — IFs and accredited media",
-  t3: "T3 — Workforce shuttle",
+  t1: "T1 (Family of the Olympic Family)",
+  t2: "T2 (IFs and accredited media)",
+  t3: "T3 (Workforce shuttle)",
   media: "Media",
   workforce: "Workforce",
   spectator: "Spectator",
@@ -37,7 +38,7 @@ const FLEET_LABEL: Record<string, string> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -153,19 +154,19 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
           </h3>
           <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
             <dt className="text-[var(--p-text-2)]">
-              {t("console.production.dispatch.detail.departScheduled", undefined, "Depart — Scheduled")}
+              {t("console.production.dispatch.detail.departScheduled", undefined, "Depart (Scheduled)")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_depart)}</dd>
             <dt className="text-[var(--p-text-2)]">
-              {t("console.production.dispatch.detail.departActual", undefined, "Depart — Actual")}
+              {t("console.production.dispatch.detail.departActual", undefined, "Depart (Actual)")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_depart)}</dd>
             <dt className="text-[var(--p-text-2)]">
-              {t("console.production.dispatch.detail.arriveScheduled", undefined, "Arrive — Scheduled")}
+              {t("console.production.dispatch.detail.arriveScheduled", undefined, "Arrive (Scheduled)")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_arrive)}</dd>
             <dt className="text-[var(--p-text-2)]">
-              {t("console.production.dispatch.detail.arriveActual", undefined, "Arrive — Actual")}
+              {t("console.production.dispatch.detail.arriveActual", undefined, "Arrive (Actual)")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_arrive)}</dd>
           </dl>

@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { Hint } from "@/components/ui/Tooltip";
+import { CREATE_MENU_OPEN_EVENT } from "@/lib/create-menu-event";
 
 /**
  * One Front Door — the global "+" (v7.8 zero-training layer,
@@ -41,6 +42,14 @@ export function CreateMenu() {
   const [open, setOpen] = React.useState(false);
   const close = React.useCallback(() => setOpen(false), []);
 
+  // Imperative open path (F-04): the global `c` hotkey dispatches this window
+  // event from GlobalNavShortcuts (ShortcutDialog.tsx).
+  React.useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(CREATE_MENU_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(CREATE_MENU_OPEN_EVENT, onOpen);
+  }, []);
+
   const item = (e: MenuEntry, group: "request" | "create") => (
     <Link
       key={e.key}
@@ -72,12 +81,12 @@ export function CreateMenu() {
           sideOffset={6}
           className="z-40 w-72 rounded-lg border border-[var(--p-border)] bg-[var(--p-bg)] p-1 shadow-lg"
         >
-          <div className="px-2 pt-1.5 pb-1 font-mono text-[9px] font-bold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
+          <div className="px-2 pt-1.5 pb-1 font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
             {t("createMenu.requestHeader", undefined, "Request · One Front Door")}
           </div>
           {REQUEST_ENTRIES.map((e) => item(e, "request"))}
           <div className="my-1 border-t border-[var(--p-border)]" />
-          <div className="px-2 pt-1.5 pb-1 font-mono text-[9px] font-bold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
+          <div className="px-2 pt-1.5 pb-1 font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
             {t("createMenu.createHeader", undefined, "Create Record")}
           </div>
           {CREATE_ENTRIES.map((e) => item(e, "create"))}

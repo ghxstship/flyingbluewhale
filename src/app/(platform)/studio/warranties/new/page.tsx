@@ -41,7 +41,7 @@ export default async function Page() {
             <input
               name="name"
               required
-              placeholder={t("console.warranties.new.fields.namePlaceholder", undefined, "HVAC system — Trane RT-3")}
+              placeholder={t("console.warranties.new.fields.namePlaceholder", undefined, "HVAC system · Trane RT-3")}
               className={INPUT}
             />
           </label>
@@ -88,7 +88,7 @@ export default async function Page() {
               <input type="date" name="end_date" required className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.warranties.new.fields.duration", undefined, "Duration — Months")}</span>
+              <span className={LBL}>{t("console.warranties.new.fields.duration", undefined, "Duration (Months)")}</span>
               <input type="number" min="1" name="duration_months" className={INPUT} />
             </label>
           </div>
@@ -108,7 +108,7 @@ export default async function Page() {
           </div>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              {t("console.warranties.new.fields.coverageSummary", undefined, "Coverage Summary — Markdown")}
+              {t("console.warranties.new.fields.coverageSummary", undefined, "Coverage Summary (Markdown)")}
             </span>
             <textarea name="coverage_summary_md" rows={4} className={INPUT} />
           </label>

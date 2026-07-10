@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { FeedView, type FeedPost } from "./FeedView";
 
 export const dynamic = "force-dynamic";
@@ -141,6 +142,18 @@ export default async function MobileFeedPage() {
 
   return (
     <div className="screen screen-anim">
+      {/* F-13: restore the CLAUDE.md-documented realtime nudge — new
+          announcements and kudos surface without a manual reload. */}
+      <RealtimeRefresh
+        channelName={`m-feed-announcements-${session.orgId}`}
+        table="announcements"
+        filter={`org_id=eq.${session.orgId}`}
+      />
+      <RealtimeRefresh
+        channelName={`m-feed-kudos-${session.orgId}`}
+        table="recognition_posts"
+        filter={`org_id=eq.${session.orgId}`}
+      />
       <div className="scr-eye">
         {t("m.feed.eyebrow", { count: posts.length }, `${posts.length} Posts`)}
       </div>

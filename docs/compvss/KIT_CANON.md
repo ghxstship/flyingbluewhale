@@ -13,18 +13,21 @@ keep new work aligned.
 ## Brand canon
 - **Wordmark:** `COMPVSS` (stylized). Real-word spelling `compass` is used **only** for URLs /
   subdomains / bundle ids — never in user-facing copy. (`compvss.atlvs.pro`, `pro.atlvs.compvss`.)
-- **Sub-product:** _Site & Venue Operations_ — ConnectTeam-class field/venue workforce ops for
-  internal + external orgs. Audience: Crew · Vendors · Talent.
-- **Accent:** molten brass **amber `#E9A23B`**, applied via `data-product="compvss"`. CTAs =
-  amber fill + **dark ink** (`--p-accent-cta-contrast` / `#1f0e03`). Defined once in
-  `src/lib/brand.ts` (`PRODUCT_ACCENTS.compvss`) + the `--p-*` token layer. **No hardcoded amber
-  hex outside the token layer.**
+- **Sub-product:** _Site & Venue Operations_ — deskless-workforce-class field/venue workforce ops
+  for internal + external orgs. Audience: Crew · Vendors · Talent.
+- **Accent:** signal **yellow `#FFC400`** (v8.0 palette-locked, 2026-06-24 — supersedes the
+  retired molten-brass amber `#E9A23B`), applied via `data-product="compvss"`. CTAs = yellow
+  fill + **dark ink** (`--p-accent-cta-contrast`; bright accents carry a deepened ink for the
+  AA focus ring). Defined once in `src/lib/brand.ts` (`PRODUCT_ACCENTS.compvss`) + the `--p-*`
+  token layer. **No hardcoded accent hex outside the token layer.**
 - **Credential:** the **COMPVSS Rose** — one enduring credential, issued once and carried for
   life; access changes, the Rose does not. Flip-to-QR with a single-use, refresh-on-open token.
 
 ## IA / interaction canon
-- **Tab model:** `Home · Calendar · Tasks · Assets · Inbox · More` (`mobileTabs` in
-  `src/lib/nav.ts`). One tab set for every crew member — no persona-routed bars.
+- **Tab model:** `Home · Calendar · Tasks · Onsite · Assets · Inbox · More` (`mobileTabs` in
+  `src/lib/nav.ts`). Seven tabs: the kit's original six plus **Onsite**, the GVTEWAY consumer
+  live-event tab (design_handoff §2 — now/next set times, find-my-friends, read-only passes)
+  added 2026-06-23. One tab set for every crew member — no persona-routed bars.
 - **Canonical list header:** the shared **`ActionBar`** (search + icon-only View / Group / Sort /
   Filter cluster) on every list screen, with the views the kit shows for that screen
   (list / board / table / calendar / gallery).

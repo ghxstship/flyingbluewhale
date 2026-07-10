@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { isManagerPlus, requireSession } from "@/lib/auth";
+import { ADMIN_BAND_ROLES, isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { writeInboxBulk } from "@/lib/inbox";
 
@@ -37,7 +37,7 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
       u.audience === "all"
         ? null
         : u.audience === "admins"
-          ? ["owner", "admin"]
+          ? [...ADMIN_BAND_ROLES]
           : u.audience === "crew"
             ? ["member"]
             : null;

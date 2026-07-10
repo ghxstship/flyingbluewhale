@@ -25,7 +25,7 @@ export default async function HelpHubPage() {
       href: "/studio/help/whats-new",
       Icon: Sparkles,
       title: t("console.help.whatsNew.title", undefined, "What's New"),
-      body: t("console.help.hub.whatsNew.body", undefined, "Every release — features, improvements, and fixes."),
+      body: t("console.help.hub.whatsNew.body", undefined, "Every release: features, improvements, and fixes."),
     },
     {
       href: "/studio/help/status",
@@ -37,7 +37,7 @@ export default async function HelpHubPage() {
       href: "/studio/services/requests/new",
       Icon: LifeBuoy,
       title: t("console.help.hub.contact.title", undefined, "Contact Support"),
-      body: t("console.help.hub.contact.body", undefined, "Open a request — pick a severity, we'll respond on SLA."),
+      body: t("console.help.hub.contact.body", undefined, "Open a request. Pick a severity, we'll respond on SLA."),
     },
   ];
 

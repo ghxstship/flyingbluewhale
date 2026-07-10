@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { EmptyState } from "@/components/ui/EmptyState";
 import {
   COLUMN_TYPES,
@@ -56,6 +57,7 @@ export function SheetGrid({
   initialRows: SheetRow[];
   canEdit: boolean;
 }) {
+  const fmt = useFormatters();
   const [columns, setColumns] = useState<SheetColumn[]>(initialColumns);
   const [rows, setRows] = useState<GridRow[]>(
     initialRows.map((r) => ({ id: r.id, cells: { ...r.cells } })),
@@ -120,7 +122,7 @@ export function SheetGrid({
         return;
       }
       setDirty(false);
-      setSavedAt(new Date().toLocaleTimeString());
+      setSavedAt(fmt.time(new Date()));
     });
   }
 

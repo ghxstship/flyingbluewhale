@@ -169,6 +169,14 @@
         "legend": {
           "label": "LEG3ND pour le savoir",
           "description": "Savoir, LMS et conformité"
+        },
+        "ai": {
+          "label": "AI",
+          "description": "Drafts the paperwork, scoped to your tenant"
+        },
+        "integrations": {
+          "label": "Integrations",
+          "description": "Connect the tools you already run"
         }
       },
       "industries": {
@@ -191,7 +199,14 @@
         "changelog": {
           "label": "Journal des versions",
           "description": "Chaque version, datée"
+        },
+        "compare": {
+          "label": "Compare",
+          "description": "How ATLVS stacks up"
         }
+      },
+      "solutions": {
+        "label": "Solutions"
       }
     },
     "home": {
@@ -6394,7 +6409,8 @@
       "ref": "Réf : {digest}",
       "fallbackMessage": "Une erreur inattendue s'est produite.",
       "tryAgain": "Réessayer",
-      "backToWorkspace": "Retour à l'espace de travail"
+      "backToWorkspace": "Retour à l'espace de travail",
+      "segmentTitle": "This Section Hit A Snag"
     },
     "estimates": {
       "new": {
@@ -8052,7 +8068,8 @@
       "stageMover": {
         "movedToast": "Déplacé vers {stage}",
         "updating": "Mise à jour…",
-        "moveTo": "Déplacer vers {stage}"
+        "moveTo": "Déplacer vers {stage}",
+        "undo": "Undo"
       },
       "activity": {
         "eyebrow": "Piste",
@@ -9260,7 +9277,11 @@
           "startsAt": "Début",
           "endsAt": "Fin",
           "status": "Statut",
-          "event_state": "Statut"
+          "event_state": "Statut",
+          "location": "Location",
+          "meetingUrl": "Meeting URL",
+          "agenda": "Agenda (Markdown)",
+          "minutes": "Minutes (Markdown)"
         },
         "status": {
           "draft": "brouillon",
@@ -9350,7 +9371,9 @@
         "people": "Participants",
         "openActs": "Actions ouvertes",
         "state": "État"
-      }
+      },
+      "description": "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
+      "fullSchedule": "Full Schedule"
     },
     "notFound": {
       "eyebrow": "404",
@@ -22075,7 +22098,22 @@
     "hintOpen": "n'importe où pour ouvrir.",
     "hintPrefix": "Appuyez sur",
     "noMatch": "Aucun raccourci ne correspond à « {query} ».",
-    "title": "Raccourcis clavier"
+    "title": "Raccourcis clavier",
+    "nav": {
+      "goTo": "Go to {group}"
+    },
+    "createMenu": "Create or request (One Front Door)",
+    "table": {
+      "nextRow": "Next row",
+      "prevRow": "Previous row",
+      "toggleSelect": "Select / deselect focused row",
+      "openRow": "Open focused row"
+    },
+    "editor": {
+      "bold": "Bold (in editor)",
+      "italic": "Italic (in editor)",
+      "underline": "Underline (in editor)"
+    }
   },
   "ui": {
     "alert": {
@@ -23600,5 +23638,18 @@
     "requestBody": "Corps de requête",
     "responses": "Réponses",
     "footer": "OpenAPI 3.1 · {count} chemins · Généré à la requête depuis les schémas Zod enregistrés."
+  },
+  "filterBar": {
+    "results": "{count} results",
+    "updated": "Filters updated"
+  },
+  "rail": {
+    "nav": "Switch app",
+    "readOnly": "read-only",
+    "soon": "Soon",
+    "group": {
+      "products": "Products",
+      "extensions": "Extensions"
+    }
   }
 }

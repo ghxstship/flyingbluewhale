@@ -96,7 +96,7 @@ export default async function Page() {
             placeholder="legal@acme.example"
           />
           <Input
-            label={t("console.legal.contracts.new.totalValueLabel", undefined, "Total value — USD")}
+            label={t("console.legal.contracts.new.totalValueLabel", undefined, "Total value (USD)")}
             name="total_value_usd"
             type="number"
             step="0.01"

@@ -1,13 +1,24 @@
 /**
- * Offline write queue (kit 21 W8) — the COMPVSS field differentiator. A tiny
- * localStorage-backed FIFO of pending writes so a field submit made with no
- * signal isn't lost: it's optimistically enqueued and replayed on reconnect.
+ * Offline write queue (kit 21 W8). A tiny localStorage-backed FIFO of
+ * pending writes so a field submit made with no signal isn't lost: it's
+ * optimistically enqueued and replayed on reconnect.
+ *
+ * SCOPE: server-action payloads that need a caller-supplied `send` to
+ * replay (chat messages, daily-log forms). Field writes that map to a
+ * queueable POST endpoint (clock punches, gate/inventory scans) use the
+ * durable IndexedDB outbox instead — `src/lib/offline/outbox.ts`, drained
+ * by the service worker. The shell <SyncBanner> reports both queues as one
+ * combined pending count.
  *
  * Headless + framework-agnostic (React binding lives in `useOfflineQueue`).
- * Payloads are small JSON records (a chat body, a daily-log form) — this is
- * not a general-purpose sync engine, just a durable outbox. SSR-safe: every
- * accessor no-ops without `window`.
+ * Payloads are small JSON records — this is not a general-purpose sync
+ * engine, just a durable outbox. SSR-safe: every accessor no-ops without
+ * `window`. Writes dispatch OUTBOX_EVENT so shell chrome can refresh its
+ * pending count immediately.
  */
+
+/** window event dispatched whenever the outbox contents change. */
+export const OUTBOX_EVENT = "atlvs:offline-outbox";
 
 export type QueuedItem<T = unknown> = {
   /** Stable client id — dedupes optimistic UI + guards double-flush. */
@@ -41,6 +52,11 @@ function write(items: QueuedItem[]): void {
   } catch {
     // Storage full / blocked (private mode) — the write is lost rather than
     // throwing into the submit path. Acceptable for an outbox of last resort.
+  }
+  try {
+    window.dispatchEvent(new Event(OUTBOX_EVENT));
+  } catch {
+    /* ignore */
   }
 }
 

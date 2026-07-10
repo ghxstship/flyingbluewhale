@@ -2,7 +2,7 @@ import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 
@@ -48,6 +48,7 @@ export default async function MobileOnboardingPage() {
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const { data: assignments } = await supabase
     .from("new_hire_assignments")
@@ -90,7 +91,7 @@ export default async function MobileOnboardingPage() {
                 {flow?.description && <div className="s">{flow.description}</div>}
                 <div className="s">
                   {a.assigned_at
-                    ? new Date(a.assigned_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    ? fmt.dateParts(new Date(a.assigned_at), { month: "short", day: "numeric" })
                     : ""}
                 </div>
               </div>

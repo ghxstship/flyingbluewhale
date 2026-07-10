@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { actionFail, formFail } from "@/lib/forms/fail";
@@ -88,4 +88,43 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
   if (error) return actionFail(error.message, fd);
   revalidatePath("/studio/finance/expenses");
   redirect("/studio/finance/expenses");
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk approve / reject pending expenses from the list table (audit
+ * A-22). manager+ only; rows not in `pending` are skipped and reported.
+ */
+async function bulkSetExpenseState(ids: string[], next: "approved" | "rejected"): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Review Expenses" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("expenses")
+    .update({ expense_state: next })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .eq("expense_state", "pending")
+    .select("id");
+  if (error) return { error: `Could Not Update · ${error.message}` };
+  const done = updated?.length ?? 0;
+  const skipped = parsed.data.length - done;
+  revalidatePath("/studio/finance/expenses");
+  revalidatePath("/studio/finance");
+  const verb = next === "approved" ? "Approved" : "Rejected";
+  if (skipped > 0) return { error: `${done} ${verb} · ${skipped} Skipped (not pending)` };
+  return { message: `${done} ${done === 1 ? "Expense" : "Expenses"} ${verb}` };
+}
+
+export async function bulkApproveExpenses(ids: string[]): Promise<BulkResult> {
+  return bulkSetExpenseState(ids, "approved");
+}
+
+export async function bulkRejectExpenses(ids: string[]): Promise<BulkResult> {
+  return bulkSetExpenseState(ids, "rejected");
 }

@@ -114,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <div className="font-medium">{i.name}</div>
                     {i.description && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{i.description}</p>}
-                    <div className="mt-1 flex items-center gap-2 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="mt-1 flex items-center gap-2 font-mono text-[11px] text-[var(--p-text-2)]">
                       <Badge variant="muted">{i.catalog}</Badge>
                       <code>{i.sku}</code>
                     </div>

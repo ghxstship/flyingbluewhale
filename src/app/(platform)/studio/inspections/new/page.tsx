@@ -50,7 +50,7 @@ export default async function Page() {
               placeholder={t(
                 "console.inspections.new.fields.namePlaceholder",
                 undefined,
-                "Pre-doors rigging walk — Saturday",
+                "Pre-doors rigging walk · Saturday",
               )}
               className={INPUT}
             />

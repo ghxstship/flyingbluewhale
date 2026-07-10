@@ -83,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.closeout.eyebrow", undefined, "Venue")}
-        title={t("console.venues.closeout.headerTitle", { name: venue.name }, `${venue.name} — Closeout`)}
+        title={t("console.venues.closeout.headerTitle", { name: venue.name }, `${venue.name} · Closeout`)}
         subtitle={t(
           "console.venues.closeout.subtitle",
           { count: items.length, itemWord: items.length === 1 ? "Item" : "Items", done: complete },

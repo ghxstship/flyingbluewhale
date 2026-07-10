@@ -8,7 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -71,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const c = await getCall(slug);
   if (!c) return notFound();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -94,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {c.deadline_at && (
             <Badge variant="warning">
               {t("marketing.pages.marketplace.calls.detail.closesPrefix")}{" "}
-              {new Date(c.deadline_at).toLocaleDateString()}
+              {fmt.date(new Date(c.deadline_at))}
             </Badge>
           )}
         </div>
@@ -136,7 +137,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace.calls.detail.booking.deadline")}
                 </span>{" "}
-                {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
+                {c.deadline_at ? fmt.dateTime(new Date(c.deadline_at)) : "—"}
               </div>
               <div>
                 <span className="text-[var(--p-text-2)]">

@@ -7,6 +7,9 @@ import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/se
 import { ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { resolveProposalShareLink } from "@/lib/proposals/share";
 import { formFail } from "@/lib/forms/fail";
+import { notifyOrgAdmins } from "@/lib/notify";
+import { sendEmail, wrapEmailHtml } from "@/lib/email";
+import { log } from "@/lib/log";
 
 const SignSchema = z.object({
   token: z.string().min(8),
@@ -101,6 +104,7 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   // Insert the signature audit row + event ONLY after the proposal
   // claims the signature. This way a re-attempt doesn't leave orphan
   // signature rows or duplicate signature_completed events.
+  const userAgent = hdrs.get("user-agent");
   const { error: sigErr } = await svc.from("proposal_signatures").insert({
     proposal_id: resolved.link.proposal_id,
     share_token: parsed.data.token,
@@ -110,6 +114,9 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     signature_kind: parsed.data.kind,
     signature_hash: hash,
     signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
+    // E-20: signature evidence — the IP was already resolved for the
+    // ratelimit bucket above.
+    signer_ip: ip === "unknown" ? null : ip,
   });
   if (sigErr) return { error: sigErr.message };
 
@@ -117,9 +124,54 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     proposal_id: resolved.link.proposal_id,
     share_token: parsed.data.token,
     event_type: "signature_completed",
-    metadata: { name: parsed.data.name, kind: parsed.data.kind },
+    metadata: {
+      name: parsed.data.name,
+      kind: parsed.data.kind,
+      // E-20: user agent joins the evidence trail (no dedicated column).
+      user_agent: userAgent ? userAgent.slice(0, 500) : null,
+    },
   });
   if (eventErr) return { error: eventErr.message };
+
+  // ── E-04: close the loop on both sides. Best-effort — the signature is
+  // already committed; a notify/email failure must not surface as a sign
+  // failure to the signer.
+  try {
+    const { data: proposal } = await svc
+      .from("proposals")
+      .select("org_id, title, doc_number")
+      .eq("id", resolved.link.proposal_id)
+      .maybeSingle();
+    if (proposal) {
+      const label = proposal.doc_number ? `${proposal.doc_number} · ${proposal.title}` : proposal.title;
+      await notifyOrgAdmins({
+        orgId: proposal.org_id,
+        eventType: "proposal.signed",
+        title: "Proposal Signed",
+        body: `${parsed.data.name} signed "${label}".`,
+        href: `/studio/proposals/${resolved.link.proposal_id}`,
+        data: { targetTable: "proposals", targetId: resolved.link.proposal_id, hash },
+      });
+      if (parsed.data.email) {
+        const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        await sendEmail({
+          to: parsed.data.email,
+          subject: `Signed: ${label}`,
+          html: wrapEmailHtml(
+            `<h2 style="margin:0 0 12px">Your signature is recorded</h2>
+             <p style="margin:0 0 8px">Thank you, ${esc(parsed.data.name)}. You signed <strong>${esc(label)}</strong> on ${new Date(signedAt).toUTCString()}.</p>
+             <p style="margin:0;color:#666">Signature reference: <code>${hash}</code>. Keep this email as your receipt.</p>`,
+          ),
+          text: `Your signature is recorded.\n\n${parsed.data.name} signed "${label}" on ${new Date(signedAt).toUTCString()}.\nSignature reference: ${hash}`,
+        });
+      }
+    }
+  } catch (e) {
+    log.warn("proposal.sign_notify_failed", {
+      proposalId: resolved.link.proposal_id,
+      err: e instanceof Error ? e.message : String(e),
+    });
+  }
 
   revalidatePath(`/proposals/${parsed.data.token}`);
   return { ok: { hash, signedAt } };

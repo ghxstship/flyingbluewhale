@@ -10610,7 +10610,8 @@
       "stageMover": {
         "movedToast": "Moved to {stage}",
         "updating": "Updating…",
-        "moveTo": "Move to {stage}"
+        "moveTo": "Move to {stage}",
+        "undo": "Undo"
       },
       "activity": {
         "eyebrow": "Lead",
@@ -19254,6 +19255,7 @@
     "error": {
       "eyebrow": "Error",
       "title": "Something Went Wrong",
+      "segmentTitle": "This Section Hit A Snag",
       "ref": "Ref: {digest}",
       "fallbackMessage": "An unexpected error occurred.",
       "tryAgain": "Try Again",
@@ -22096,7 +22098,26 @@
     "filterPlaceholder": "Filter shortcuts…",
     "filterAria": "Filter shortcuts",
     "emptyRegistry": "No shortcuts registered yet.",
-    "noMatch": "No shortcuts match “{query}”."
+    "noMatch": "No shortcuts match “{query}”.",
+    "nav": {
+      "goTo": "Go to {group}"
+    },
+    "createMenu": "Create or request (One Front Door)",
+    "table": {
+      "nextRow": "Next row",
+      "prevRow": "Previous row",
+      "toggleSelect": "Select / deselect focused row",
+      "openRow": "Open focused row"
+    },
+    "editor": {
+      "bold": "Bold (in editor)",
+      "italic": "Italic (in editor)",
+      "underline": "Underline (in editor)"
+    }
+  },
+  "filterBar": {
+    "results": "{count} results",
+    "updated": "Filters updated"
   },
   "workspace": {
     "fallbackName": "Workspace",

@@ -69,7 +69,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
       <ModuleHeader
         eyebrow={t("console.people.teams.detail.eyebrow", undefined, "People · Teams")}
         title={team.name}
-        subtitle={`@team-${team.slug}${team.description ? ` — ${team.description}` : ""}`}
+        subtitle={`@team-${team.slug}${team.description ? ` · ${team.description}` : ""}`}
       />
 
       <div className="page-content space-y-6">

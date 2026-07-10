@@ -115,7 +115,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.bookings.deals.empty.description",
             undefined,
-            "A deal is the booking-side view of a talent offer — track fees, guarantees, deposits, and stage as each booking moves to contracted.",
+            "A deal is the booking-side view of a talent offer: track fees, guarantees, deposits, and stage as each booking moves to contracted.",
           )}
           emptyAction={
             <Button href="/studio/marketplace/offers/new" size="sm">

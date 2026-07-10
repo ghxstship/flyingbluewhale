@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +47,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data } = await supabase
     .from("availability_slots")
@@ -107,21 +108,21 @@ export default async function Page() {
             {
               key: "starts",
               header: t("console.bookings.holds.col.starts", undefined, "Starts"),
-              render: (r) => new Date(r.starts_at).toLocaleString(),
+              render: (r) => fmt.dateTime(new Date(r.starts_at)),
               accessor: (r) => r.starts_at,
               className: "font-mono text-xs",
             },
             {
               key: "ends",
               header: t("console.bookings.holds.col.ends", undefined, "Ends"),
-              render: (r) => new Date(r.ends_at).toLocaleString(),
+              render: (r) => fmt.dateTime(new Date(r.ends_at)),
               accessor: (r) => r.ends_at,
               className: "font-mono text-xs",
             },
             {
               key: "auto",
               header: t("console.bookings.holds.col.autoRelease", undefined, "Auto-release"),
-              render: (r) => (r.auto_release_on ? new Date(r.auto_release_on).toLocaleDateString() : "—"),
+              render: (r) => (r.auto_release_on ? fmt.date(new Date(r.auto_release_on)) : "—"),
               accessor: (r) => r.auto_release_on,
               className: "font-mono text-xs",
             },

@@ -103,7 +103,7 @@ export function NewEnvelopeForm({
             {t("console.envelopes.column.project", undefined, "Project")}
           </label>
           <select name="project_id" defaultValue={defaultProjectId ?? ""} className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.envelopes.new.noProject", undefined, "— No project —")}</option>
+            <option value="">{t("console.envelopes.new.noProject", undefined, "No project")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}

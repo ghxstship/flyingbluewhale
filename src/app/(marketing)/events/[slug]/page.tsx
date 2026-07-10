@@ -79,7 +79,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
       <article className="mx-auto max-w-4xl space-y-6 px-6 pt-6 pb-16">
         {listing.hero_image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={listing.hero_image} alt={listing.title} className="aspect-video w-full rounded-lg object-cover" />
+          <img src={listing.hero_image} alt={listing.title} decoding="async" className="aspect-video w-full rounded-lg object-cover" />
         ) : (
           <div className="surface-inset aspect-video w-full rounded-lg" aria-hidden="true" />
         )}

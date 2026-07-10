@@ -100,6 +100,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               undefined,
               "Soft-delete this announcement? It will stop appearing in /m/feed.",
             )}
+            undo={{ table: "announcements", id: a.id, redirectTo: "/studio/comms/announcements" }}
           />
         </div>
       </div>

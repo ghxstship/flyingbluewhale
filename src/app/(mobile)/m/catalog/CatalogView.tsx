@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ActionBar, GroupedList, KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { CatalogKind } from "@/lib/db/assignments";
+import { formatMoney } from "@/lib/i18n/format";
 
 export type CatalogEntry = {
   id: string;
@@ -26,7 +27,7 @@ export type CatalogLabels = {
 
 function money(cents: number | null): string {
   if (cents == null) return "";
-  return `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  return formatMoney(cents, { fractionDigits: 0 });
 }
 
 export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: CatalogLabels }) {

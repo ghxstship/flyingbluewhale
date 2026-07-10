@@ -67,7 +67,7 @@ export default async function MobileHome() {
     ? {
         id: ev.id,
         name: ev.name,
-        time: new Date(ev.starts_at).toLocaleTimeString("en-US", {
+        time: fmt.dateParts(new Date(ev.starts_at), {
           hour: "2-digit",
           minute: "2-digit",
           hour12: false,
@@ -84,7 +84,7 @@ export default async function MobileHome() {
     nextShift,
   };
 
-  const greeting = new Date().toLocaleDateString("en-US", {
+  const greeting = fmt.dateParts(new Date(), {
     weekday: "long",
     month: "short",
     day: "numeric",

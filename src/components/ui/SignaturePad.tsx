@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useId, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 
 /**
  * SignaturePad — freehand signature capture on a <canvas> via pointer events,
@@ -9,6 +9,12 @@ import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointer
  *
  * Distinct from src/components/SignatureField.tsx (a hidden-input form field) —
  * this is the raw drawing primitive.
+ *
+ * A11y PAIRING RULE (F-17): a freehand canvas is inherently pointer-only, so
+ * this primitive must NEVER be the sole way to sign. Always mount it through
+ * (or alongside) `SignatureField`'s TYPED mode, which provides the keyboard /
+ * assistive-tech alternative — the pad here carries `role="img"` + a name and
+ * announces that a typed path exists, but it cannot capture keyboard strokes.
  */
 export function SignaturePad({
   height = 180,
@@ -29,6 +35,7 @@ export function SignaturePad({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
   const [dirty, setDirty] = useState(false);
+  const hintId = useId();
 
   const ctx = () => {
     const canvas = canvasRef.current;
@@ -136,6 +143,9 @@ export function SignaturePad({
       </div>
       <canvas
         ref={canvasRef}
+        role="img"
+        aria-label={label ? `${label} signature drawing area` : "Signature drawing area"}
+        aria-describedby={hintId}
         onPointerDown={start}
         onPointerMove={move}
         onPointerUp={end}
@@ -152,6 +162,10 @@ export function SignaturePad({
           cursor: "crosshair",
         }}
       />
+      <span id={hintId} className="sr-only">
+        Freehand signature capture with a pointer. If you cannot draw, use the typed signature option provided by the
+        form.
+      </span>
     </div>
   );
 }

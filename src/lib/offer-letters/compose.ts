@@ -1,6 +1,7 @@
 import { urlFor } from "@/lib/urls";
 import type { OfferLetterResolved } from "./types";
 import { formatDateRange, formatDollars } from "./format";
+import { formatDateParts } from "@/lib/i18n/format";
 import { EMPLOYER_LABEL } from "./types";
 import { DEFAULT_SIGNING_AUTHORITY_NAME, DEFAULT_SIGNING_AUTHORITY_TITLE } from "./signing";
 
@@ -261,12 +262,8 @@ function renderHtml(a: HtmlArgs): string {
 }
 
 function formatShortDate(iso: string): string {
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return iso;
-  }
+  const formatted = formatDateParts(iso, { month: "short", day: "numeric", year: "numeric" });
+  return formatted === "—" ? iso : formatted;
 }
 
 function engagementWindowSummary(letter: OfferLetterResolved): {

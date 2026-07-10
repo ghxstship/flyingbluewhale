@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Lightweight SVG Gantt chart (gap D20 client / G-001 runtime UX).
@@ -58,6 +58,7 @@ function dayDiff(a: Date, b: Date): number {
 
 export default function GanttClient({ activities, dependencies }: Props) {
   const t = useT();
+  const fmt = useFormatters();
   const [lookahead, setLookahead] = useState<Lookahead>("all");
   const [showFloat, setShowFloat] = useState(true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -106,11 +107,11 @@ export default function GanttClient({ activities, dependencies }: Props) {
     for (let d = new Date(start); d <= latest; d.setUTCMonth(d.getUTCMonth() + 1)) {
       const x = LABEL_W + dayDiff(d, earliest) * DAY_W;
       if (x >= LABEL_W) {
-        marks.push({ x, label: d.toLocaleDateString("en-US", { month: "short", year: "2-digit" }) });
+        marks.push({ x, label: fmt.dateParts(d, { month: "short", year: "2-digit" }) });
       }
     }
     return marks;
-  }, [earliest, latest]);
+  }, [earliest, latest, fmt]);
 
   const xForDate = useCallback((s: string): number => LABEL_W + dayDiff(new Date(s), earliest) * DAY_W, [earliest]);
 
@@ -288,7 +289,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
         </svg>
       </div>
 
-      <div className="text-[10px] text-[var(--p-text-2)]">
+      <div className="text-[11px] text-[var(--p-text-2)]">
         {t(
           "console.schedule.baselines.gantt.legend",
           undefined,

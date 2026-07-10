@@ -77,6 +77,94 @@ describe("Voice guard — no em-dashes in UI copy", () => {
   }
 });
 
+// ── Voice: no em/en-dashes in (platform) console copy ────────────────────────
+const PLATFORM = join(REPO_ROOT, "src", "app", "(platform)");
+const PLATFORM_SRC = walk(PLATFORM).filter((f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f));
+
+// Sanctioned spans, stripped before flagging: comments, bare "—" empty-value
+// placeholder strings, separators joining two runtime values (`${a} — ${b}` /
+// JSX `{a} – {b}`), and JSX-text placeholder cells (`>—<`, or a lone "—" line).
+const DASH_LINE_STRIPS: RegExp[] = [
+  /(["'`])\s*[—–]\s*\1/g, // a string that IS just a dash — empty-value placeholder
+  /\}\s*[—–]\s*\$?\{/g, // data-join separator between two interpolations
+  />\s*[—–]\s*</g, // JSX-text placeholder cell
+];
+
+// String-aware comment stripper: `/*` or `//` INSIDE a string literal (glob
+// patterns like "/api/v1/ai/*", URLs) must not open a comment — the naive
+// regex approach silently swallowed the rest of such files. Comment bodies are
+// blanked but newlines kept so reported line numbers stay true.
+function stripComments(src: string): string {
+  let out = "";
+  let i = 0;
+  let mode: "code" | "line" | "block" | '"' | "'" | "`" = "code";
+  while (i < src.length) {
+    const ch = src[i];
+    const next = src[i + 1];
+    if (mode === "code") {
+      if (ch === "/" && next === "/") {
+        mode = "line";
+        i += 2;
+      } else if (ch === "/" && next === "*") {
+        mode = "block";
+        i += 2;
+      } else {
+        if (ch === '"' || ch === "'" || ch === "`") mode = ch;
+        out += ch;
+        i++;
+      }
+    } else if (mode === "line") {
+      if (ch === "\n") {
+        mode = "code";
+        out += ch;
+      }
+      i++;
+    } else if (mode === "block") {
+      if (ch === "*" && next === "/") {
+        mode = "code";
+        i += 2;
+      } else {
+        if (ch === "\n") out += ch;
+        i++;
+      }
+    } else {
+      // inside a string/template literal
+      if (ch === "\\") {
+        out += ch + (next ?? "");
+        i += 2;
+      } else {
+        if (ch === mode) mode = "code";
+        out += ch;
+        i++;
+      }
+    }
+  }
+  return out;
+}
+
+function platformDashOffenders(file: string): string[] {
+  const offenders: string[] = [];
+  stripComments(readFileSync(file, "utf8"))
+    .split("\n")
+    .forEach((raw, i) => {
+      let line = raw;
+      if (line.trim() === "—" || line.trim() === "–") return; // lone JSX-text placeholder line
+      for (const re of DASH_LINE_STRIPS) line = line.replace(re, " ");
+      if (DASH.test(line)) offenders.push(`${rel(file)}:${i + 1}`);
+    });
+  return offenders;
+}
+
+describe("Voice guard — no em-dashes in (platform) console copy", () => {
+  it("no unsanctioned em/en-dashes in string literals or JSX text", () => {
+    const offenders = PLATFORM_SRC.flatMap(platformDashOffenders);
+    expect(
+      offenders,
+      `Move the qualifier into subtitle/sub/hint, use "·" or "(…)", or restructure with a period/comma:\n${offenders.join("\n")}`,
+    ).toEqual([]);
+  });
+});
+
 // ── Voice: no AI-slop lexicon ────────────────────────────────────────────────
 const SLOP =
   /\b(synerg\w*|streamlines?|streamlining|seamless\w*|leverages?|leveraging|empowers?|empowering|best-in-class|enterprise-grade|cutting-edge|game-?chang\w*|revolutioniz\w*)\b/i;

@@ -146,11 +146,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             accent
           />
           <MetricCard
-            label={t("console.finance.wip.metric.overBilledLatest", undefined, "Over-billed — Latest")}
+            label={t("console.finance.wip.metric.overBilledLatest", undefined, "Over-billed (Latest)")}
             value={fmtMoney(overBilled)}
           />
           <MetricCard
-            label={t("console.finance.wip.metric.underBilledLatest", undefined, "Under-billed — Latest")}
+            label={t("console.finance.wip.metric.underBilledLatest", undefined, "Under-billed (Latest)")}
             value={fmtMoney(underBilled)}
           />
         </div>
@@ -160,7 +160,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
           emptyDescription={t(
             "console.finance.wip.emptyDescription",
             undefined,
-            "WIP snapshots are generated monthly per project. Engineering pass forthcoming — schema, RLS, and admin view are live.",
+            "WIP snapshots are generated monthly per project. Engineering pass forthcoming: schema, RLS, and admin view are live.",
           )}
           emptyAction={
             <Button href="/studio/finance/wip/new" size="sm">
@@ -186,7 +186,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             },
             {
               key: "contract",
-              header: t("console.finance.wip.col.contract", undefined, "Contract — Incl. CO"),
+              header: t("console.finance.wip.col.contract", undefined, "Contract (Incl. CO)"),
               render: (r) => fmtMoney(Number(r.revised_contract_amount)),
               accessor: (r) => Number(r.revised_contract_amount),
               className: "font-mono text-xs text-right",

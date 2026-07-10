@@ -89,6 +89,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <img
               src={product.image_url}
               alt={product.title}
+              decoding="async"
               className="aspect-square w-full rounded-md object-cover"
             />
           ) : (

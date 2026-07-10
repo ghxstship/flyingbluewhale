@@ -175,7 +175,7 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Settlement was finalized concurrently — refresh and retry" };
+    return { error: "Settlement was finalized concurrently. Refresh and retry" };
   }
   revalidatePath(`/studio/bookings/deals/${offerId}/settlement`);
   return { ok: true };

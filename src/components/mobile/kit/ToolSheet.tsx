@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
 import { useDismissable } from "./useDismissable";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type Toast = (t: { tone: string; title: string; message?: string }) => void;
 
@@ -99,6 +100,7 @@ export const OPS_CALCS: OpsCalcDef[] = [
 ];
 
 function OpsCalc({ id, back }: { id: string; back: () => void }) {
+  const fmt = useFormatters();
   const [a, setA] = useState("2000");
   const [b, setB] = useState("");
   const [factor, setFactor] = useState(5);
@@ -112,7 +114,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
   let flag: { t: string; tone: string } | null = null;
   let body: ReactNode = null;
   if (id === "occupancy") {
-    result = isNaN(n1) ? "—" : Math.floor(n1 / factor).toLocaleString();
+    result = isNaN(n1) ? "—" : fmt.number(Math.floor(n1 / factor));
     unit = "max occupants";
     hint = `Load factor ${factor} sq ft / person. Verify vs. posted certificate.`;
     body = (
@@ -131,7 +133,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     body = <div className="frow"><div className="fld"><label htmlFor="dn-people">People</label><input id="dn-people" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="dn-area">Area (m²)</label><input id="dn-area" type="number" value={b} onChange={(e) => setB(e.target.value)} /></div></div>;
   }
   if (id === "staffing") {
-    result = isNaN(n1) ? "—" : Math.ceil(n1 / ratio).toLocaleString();
+    result = isNaN(n1) ? "—" : fmt.number(Math.ceil(n1 / ratio));
     unit = "staff needed";
     hint = "Round up · add 10–15% relief for breaks.";
     body = (
@@ -145,7 +147,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     const lanes = n2 || 1;
     const perLaneRate = 20;
     const mins = isNaN(n1) ? NaN : n1 / (lanes * perLaneRate);
-    result = isNaN(mins) ? "—" : Math.ceil(mins).toLocaleString();
+    result = isNaN(mins) ? "—" : fmt.number(Math.ceil(mins));
     unit = "minutes to clear";
     hint = "Assumes ~20 scans/lane/min. Open more lanes to cut wait.";
     body = <div className="frow"><div className="fld"><label htmlFor="tp-crowd">Crowd Size</label><input id="tp-crowd" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="tp-lanes">Open Lanes</label><input id="tp-lanes" type="number" value={b} placeholder="1" onChange={(e) => setB(e.target.value)} /></div></div>;
@@ -161,9 +163,9 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
   if (id === "barstock") {
     const servings = isNaN(n1) ? NaN : Math.round(n1 * (n2 || 2));
     const cases = isNaN(servings) ? NaN : Math.ceil(servings / 24);
-    result = isNaN(cases) ? "—" : cases.toLocaleString();
+    result = isNaN(cases) ? "—" : fmt.number(cases);
     unit = "cases (24/ea)";
-    hint = isNaN(servings) ? "" : `~${servings.toLocaleString()} servings. Adjust drinks/guest for the crowd.`;
+    hint = isNaN(servings) ? "" : `~${fmt.number(servings)} servings. Adjust drinks/guest for the crowd.`;
     body = <div className="frow"><div className="fld"><label htmlFor="bs-guests">Guests</label><input id="bs-guests" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="bs-drinks">Drinks / Guest</label><input id="bs-drinks" type="number" value={b} placeholder="2" onChange={(e) => setB(e.target.value)} /></div></div>;
   }
   return (

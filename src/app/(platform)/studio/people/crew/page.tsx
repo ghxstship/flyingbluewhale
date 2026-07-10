@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -25,16 +25,21 @@ export default async function CrewPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("crew_members", session.orgId, { orderBy: "name", ascending: true });
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows, totalCount } = await listOrgScopedWithCount("crew_members", session.orgId, {
+    orderBy: "name",
+    ascending: true,
+  });
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.people.crew.eyebrow", undefined, "People")}
         title={t("console.people.crew.title", undefined, "Crew")}
         subtitle={
-          rows.length === 1
-            ? t("console.people.crew.subtitleSingular", { count: rows.length }, `${rows.length} Crew Member`)
-            : t("console.people.crew.subtitlePlural", { count: rows.length }, `${rows.length} Crew Members`)
+          totalCount === 1
+            ? t("console.people.crew.subtitleSingular", { count: totalCount }, `${totalCount} Crew Member`)
+            : t("console.people.crew.subtitlePlural", { count: totalCount }, `${totalCount} Crew Members`)
         }
         action={
           <Button href="/studio/people/crew/new">{t("console.people.crew.addCrew", undefined, "+ Add Crew")}</Button>
@@ -43,6 +48,7 @@ export default async function CrewPage() {
       <div className="page-content">
         <DataTable<CrewMember>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/people/crew/${r.id}`}
           columns={[
             {
@@ -87,6 +93,14 @@ export default async function CrewPage() {
           {t("console.people.crew.manageCertsPrompt", undefined, "Need to manage certifications?")}{" "}
           <Link href="/studio/people/credentials" className="text-[var(--p-accent)]">
             {t("console.people.crew.openCredentials", undefined, "Open credentials →")}
+          </Link>
+          {/* B-24: cross-links between the three people directories. */}{" "}
+          {t("console.people.crew.otherDirectoriesPrompt", undefined, "Looking for someone else?")}{" "}
+          <Link href="/studio/people" className="text-[var(--p-accent)]">
+            {t("console.people.crew.openPeople", undefined, "Team members →")}
+          </Link>{" "}
+          <Link href="/studio/workforce" className="text-[var(--p-accent)]">
+            {t("console.people.crew.openWorkforce", undefined, "Workforce directory →")}
           </Link>
         </div>
       </div>

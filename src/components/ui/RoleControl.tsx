@@ -59,7 +59,7 @@ export function RoleControl({
     <div className={`flex flex-col gap-1.5 ${className}`.trim()}>
       <label
         id={labelId}
-        className="font-[family-name:var(--p-mono)] text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase"
+        className="font-[family-name:var(--p-mono)] text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase"
       >
         {label}
       </label>

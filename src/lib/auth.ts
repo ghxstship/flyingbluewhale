@@ -286,17 +286,26 @@ export function resolveShell(persona: Persona): "/studio" | "/p" | "/m" | "/me" 
 
 // Platform-role band checks — the canonical helpers callers should use
 // instead of inlining `["owner","admin",...].includes(...)`.
+//
+// The band DEFINITIONS are exported as tuples so code that queries OTHER
+// users' membership rows (`.in("role", [...ADMIN_BAND_ROLES])`) shares the
+// same single source of truth as the session-shaped helpers below.
+/** Roles in the admin band — org-wide administrative authority. */
+export const ADMIN_BAND_ROLES = ["owner", "admin"] as const;
+/** Roles in the manager band — admin band + manager. */
+export const MANAGER_BAND_ROLES = ["owner", "admin", "manager"] as const;
+
 export function isOwner(session: Session | null): boolean {
   return session?.role === "owner";
 }
 
 export function isAdmin(session: Session | null): boolean {
-  return session?.role === "owner" || session?.role === "admin";
+  return (ADMIN_BAND_ROLES as readonly string[]).includes(session?.role ?? "");
 }
 
 export function isManagerPlus(session: Session | null): boolean {
   if (!session) return false;
-  return session.role === "owner" || session.role === "admin" || session.role === "manager";
+  return (MANAGER_BAND_ROLES as readonly string[]).includes(session.role ?? "");
 }
 
 export function isDeveloper(session: Session | null): boolean {

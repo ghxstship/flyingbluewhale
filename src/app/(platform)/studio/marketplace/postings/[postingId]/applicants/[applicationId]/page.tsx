@@ -8,7 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { JOB_APPLICATION_STATUSES, STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { transitionApplicationAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -32,6 +32,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const supabase = await createClient();
   const { data } = await supabase
     .from("job_applications")
@@ -50,8 +51,8 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         title={`#${a.id.slice(0, 8)}`}
         subtitle={t(
           "console.marketplace.postings.applicants.detail.appliedSubtitle",
-          { date: new Date(a.applied_at).toLocaleDateString() },
-          `Applied ${new Date(a.applied_at).toLocaleDateString()}`,
+          { date: fmt.date(new Date(a.applied_at)) },
+          `Applied ${fmt.date(new Date(a.applied_at))}`,
         )}
         action={
           <Badge variant={STATUS_TONE[a.job_application_state] ?? "muted"}>{toTitle(a.job_application_state)}</Badge>
@@ -151,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               </select>
             </div>
             <Input
-              label={t("console.marketplace.postings.applicants.detail.scoreInputLabel", undefined, "Score — 0-100")}
+              label={t("console.marketplace.postings.applicants.detail.scoreInputLabel", undefined, "Score (0-100)")}
               name="score"
               type="number"
               min={0}

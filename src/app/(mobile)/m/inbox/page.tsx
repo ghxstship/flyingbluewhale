@@ -32,7 +32,8 @@ export default async function InboxPage() {
   const { data: memberships } = await supabase
     .from("chat_room_members")
     .select("room_id, last_read_at")
-    .eq("user_id", session.userId);
+    .eq("user_id", session.userId)
+    .limit(200);
 
   const memberRows = (memberships ?? []) as Array<{ room_id: string; last_read_at: string | null }>;
   const roomIds = memberRows.map((m) => m.room_id);
@@ -49,7 +50,8 @@ export default async function InboxPage() {
       .in("id", roomIds)
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
-      .order("last_message_at", { ascending: false, nullsFirst: false });
+      .order("last_message_at", { ascending: false, nullsFirst: false })
+      .limit(200);
     rooms = (roomData ?? []) as RoomRow[];
 
     // Recent messages across these rooms — enough to derive a preview + unread

@@ -2,12 +2,13 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PortalRail } from "@/components/Shell";
-import { portalNav } from "@/lib/nav";
+import { portalNav, portalPersonaForSession } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -54,18 +55,55 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
     ]),
   );
 
-  // Pull last-message previews for the rooms that already exist.
+  // Pull last-message previews + unread counts for the rooms that already
+  // exist (C-10). Unread = messages from the other side created after the
+  // caller's chat_room_members.last_read_at.
   const roomIds = rows.map((r) => r.chat_room_id).filter((id): id is string => !!id);
-  const { data: rooms } = roomIds.length
-    ? await supabase.from("chat_rooms").select("id, last_message_at").in("id", roomIds)
-    : { data: [] };
+  const [{ data: rooms }, { data: myMemberships }, { data: recent }] = roomIds.length
+    ? await Promise.all([
+        supabase.from("chat_rooms").select("id, last_message_at").in("id", roomIds),
+        supabase
+          .from("chat_room_members")
+          .select("room_id, last_read_at")
+          .in("room_id", roomIds)
+          .eq("user_id", session.userId),
+        supabase
+          .from("chat_messages")
+          .select("room_id, author_id, body, created_at")
+          .in("room_id", roomIds)
+          .order("created_at", { ascending: false })
+          .limit(200),
+      ])
+    : [{ data: [] }, { data: [] }, { data: [] }];
   const roomMeta = new Map(
     ((rooms ?? []) as Array<{ id: string; last_message_at: string | null }>).map((r) => [r.id, r]),
   );
+  const lastReadByRoom = new Map(
+    ((myMemberships ?? []) as Array<{ room_id: string; last_read_at: string | null }>).map((m) => [
+      m.room_id,
+      m.last_read_at,
+    ]),
+  );
+  const snippetByRoom = new Map<string, { body: string; mine: boolean }>();
+  const unreadByRoom = new Map<string, number>();
+  for (const m of (recent ?? []) as Array<{
+    room_id: string;
+    author_id: string | null;
+    body: string;
+    created_at: string;
+  }>) {
+    if (!snippetByRoom.has(m.room_id)) {
+      snippetByRoom.set(m.room_id, { body: m.body, mine: m.author_id === session.userId });
+    }
+    const lastRead = lastReadByRoom.get(m.room_id);
+    if (m.author_id !== session.userId && (!lastRead || m.created_at > lastRead)) {
+      unreadByRoom.set(m.room_id, (unreadByRoom.get(m.room_id) ?? 0) + 1);
+    }
+  }
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "vendor")} title={t("p.shared.portal", undefined, "Portal")} />
+      <PortalRail group={portalNav(slug, portalPersonaForSession(session.persona))} title={t("p.shared.portal", undefined, "Portal")} />
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">{t("p.shared.messages.title", undefined, "Messages")}</h1>
@@ -93,17 +131,39 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
             ) : (
               rows.map((r) => {
                 const meta = r.chat_room_id ? roomMeta.get(r.chat_room_id) : null;
+                const snippet = r.chat_room_id ? snippetByRoom.get(r.chat_room_id) : null;
+                const unread = r.chat_room_id ? (unreadByRoom.get(r.chat_room_id) ?? 0) : 0;
                 return (
                   <li key={r.id} className="surface p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="truncate text-sm font-semibold">
-                          {managerMap.get(r.manager_user_id) ??
-                            t("p.shared.messages.accountManager", undefined, "Account Manager")}
+                        <div className="flex items-center gap-2">
+                          <span className="truncate text-sm font-semibold">
+                            {managerMap.get(r.manager_user_id) ??
+                              t("p.shared.messages.accountManager", undefined, "Account Manager")}
+                          </span>
+                          {unread > 0 && (
+                            <span
+                              className="rounded-full bg-[var(--p-accent)] px-1.5 py-0.5 text-[11px] font-semibold text-[var(--p-accent-contrast)]"
+                              aria-label={t(
+                                "p.shared.messages.unreadAria",
+                                { count: String(unread) },
+                                `${unread} unread messages`,
+                              )}
+                            >
+                              {unread}
+                            </span>
+                          )}
                         </div>
                         <Badge variant="muted" className="mt-1">
-                          {r.persona}
+                          {toTitle(r.persona)}
                         </Badge>
+                        {snippet && (
+                          <p className="mt-2 truncate text-xs text-[var(--p-text-2)]">
+                            {snippet.mine ? `${t("p.shared.messages.snippetYou", undefined, "You")}: ` : ""}
+                            {snippet.body}
+                          </p>
+                        )}
                       </div>
                       {meta?.last_message_at && (
                         <span className="font-mono text-xs text-[var(--p-text-2)]">

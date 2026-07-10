@@ -9,7 +9,8 @@ import { listOrgScoped, listOrgScopedPage } from "@/lib/db/resource";
 import { parsePage } from "@/lib/db/pagination";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatMoney } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ type LineRow = { journal_entry_id: string; debit_minor: number | null };
 
 /** bigint minor units → a USD display string. */
 function minorToUSD(minor: number): string {
-  return (minor / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
+  return formatMoney(minor, "USD");
 }
 
 export default async function LedgerPage({
@@ -52,6 +53,7 @@ export default async function LedgerPage({
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const { page, offset, pageSize } = parsePage(sp);
 
@@ -155,7 +157,7 @@ export default async function LedgerPage({
                     </td>
                     <td className="px-4 py-2.5 text-xs">{periodLabel.get(e.period_id) ?? "—"}</td>
                     <td className="px-4 py-2.5 font-mono text-xs">
-                      {e.posted_at ? new Date(e.posted_at).toLocaleDateString() : "—"}
+                      {e.posted_at ? fmt.date(new Date(e.posted_at)) : "—"}
                     </td>
                     <td className="px-4 py-2.5 text-right font-mono text-xs">
                       {minorToUSD(totalByEntry.get(e.id) ?? 0)}

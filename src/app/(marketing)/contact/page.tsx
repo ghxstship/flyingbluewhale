@@ -1,13 +1,11 @@
-// Static page — pre-render at build, no streaming Suspense on client nav.
-
 import type { Metadata } from "next";
 import { Mail, MessageCircle, Calendar, Building2 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
 import { BRAND } from "@/lib/brand";
+import { ContactForm } from "./ContactForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -21,8 +19,24 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ topic?: string; persona?: string; plan?: string }>;
+}) {
   const { t } = await getRequestT();
+  const sp = await searchParams;
+  const topic = sp.topic === "walkthrough" || sp.topic === "festival" ? sp.topic : undefined;
+  const persona = sp.persona?.slice(0, 60);
+  const plan = sp.plan?.slice(0, 40);
+  const walkthroughPreset =
+    topic === "walkthrough"
+      ? t(
+          "marketing.pages.contact.form.walkthroughPreset",
+          undefined,
+          "I'd like a walkthrough of the platform for my team.",
+        )
+      : undefined;
 
   const ROUTES = [
     {
@@ -112,58 +126,11 @@ export default async function ContactPage() {
 
       <section id="form" className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="hed-xl">
-          {t("marketing.pages.contact.form.heading")}
+          {topic === "walkthrough"
+            ? t("marketing.pages.contact.form.walkthroughHeading", undefined, "Request a walkthrough")
+            : t("marketing.pages.contact.form.heading")}
         </h2>
-        <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@atlvs.pro">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("marketing.pages.contact.form.fields.name")}
-              <input name="name" required className="ps-input mt-1.5 w-full" />
-            </label>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("marketing.pages.contact.form.fields.email")}
-              <input name="email" type="email" required className="ps-input mt-1.5 w-full" />
-            </label>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("marketing.pages.contact.form.fields.company")}
-              <input name="company" className="ps-input mt-1.5 w-full" />
-            </label>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("marketing.pages.contact.form.fields.scale")}
-              <select name="scale" className="ps-input mt-1.5 w-full">
-                <option>1–5</option>
-                <option>6–20</option>
-                <option>21–50</option>
-                <option>50+</option>
-              </select>
-            </label>
-          </div>
-          <label className="block text-xs font-medium text-[var(--p-text-2)]">
-            {t("marketing.pages.contact.form.fields.vertical")}
-            <select name="vertical" className="ps-input mt-1.5 w-full">
-              <option>{t("marketing.pages.contact.form.verticals.liveEvents")}</option>
-              <option>{t("marketing.pages.contact.form.verticals.touring")}</option>
-              <option>{t("marketing.pages.contact.form.verticals.corporate")}</option>
-              <option>{t("marketing.pages.contact.form.verticals.fabrication")}</option>
-              <option>{t("marketing.pages.contact.form.verticals.other")}</option>
-            </select>
-          </label>
-          <label className="block text-xs font-medium text-[var(--p-text-2)]">
-            {t("marketing.pages.contact.form.fields.message")}
-            <textarea name="message" rows={4} className="ps-input mt-1.5 w-full" />
-          </label>
-          <label className="flex items-center gap-2 text-xs text-[var(--p-text-2)]">
-            <input type="checkbox" name="demo" /> {t("marketing.pages.contact.form.fields.demoOptIn")}
-          </label>
-          <div className="flex items-center justify-end gap-2">
-            <Button href="/signup" variant="secondary">
-              {t("marketing.pages.contact.form.actions.signupInstead")}
-            </Button>
-            <Button type="submit">{t("marketing.pages.contact.form.actions.submit")}</Button>
-          </div>
-        </form>
+        <ContactForm topic={topic} persona={persona} plan={plan} initialMessage={walkthroughPreset} />
       </section>
 
       <FAQSection title={t("marketing.pages.contact.faqs.heading")} faqs={FAQS} />

@@ -26,6 +26,11 @@ import {
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+/** Sentinel `blockedUrl` value: the guard intercepted a browser Back
+ *  (popstate) rather than a link click. Not a routable path, so it can
+ *  never collide with a real href. */
+const BACK_NAVIGATION = "__back__";
+
 export type FormState = {
   error?: string;
   ok?: true;
@@ -88,6 +93,29 @@ export function FormShell({
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, [dirtyGuard, dirty, pending]);
+
+  // popstate interception — browser Back would otherwise silently discard
+  // edits (A-37). Once the form goes dirty we push a same-URL sentinel
+  // entry; the first Back pops the sentinel (staying on this page), the
+  // handler re-arms it and raises the leave dialog. "Leave anyway" then
+  // walks back past both entries via history.go(-2).
+  const backArmedRef = useRef(false);
+  useEffect(() => {
+    if (!dirtyGuard || !dirty || backArmedRef.current) return;
+    backArmedRef.current = true;
+    window.history.pushState(null, "", window.location.href);
+  }, [dirtyGuard, dirty]);
+  useEffect(() => {
+    if (!dirtyGuard) return;
+    function onPopState() {
+      if (!dirtyRef.current || !backArmedRef.current) return;
+      // Re-arm the sentinel so the page stays put while the dialog is up.
+      window.history.pushState(null, "", window.location.href);
+      setBlockedUrl(BACK_NAVIGATION);
+    }
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [dirtyGuard]);
 
   // Internal link click interceptor — catches next/link + <a> clicks when dirty
   useEffect(() => {
@@ -216,7 +244,12 @@ export function FormShell({
                 const href = blockedUrl;
                 setBlockedUrl(null);
                 setDirty(false);
-                if (href) {
+                if (href === BACK_NAVIGATION) {
+                  // Walk back past the re-armed sentinel AND the original
+                  // entry the user was trying to leave.
+                  backArmedRef.current = false;
+                  window.history.go(-2);
+                } else if (href) {
                   // Use router for in-app; fall back to assign
                   if (href.startsWith("/")) router.push(href);
                   else window.location.assign(href);

@@ -69,7 +69,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.agency.roster.emptyDescription",
             undefined,
-            "Sign a talent profile to this agency to set its commission and exclusivity — signed acts then appear on the roster here.",
+            "Sign a talent profile to this agency to set its commission and exclusivity. Signed acts then appear on the roster here.",
           )}
           emptyAction={
             <Button href="/studio/marketplace/talent/new" size="sm">

@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +38,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("ticketing_connections")
     .select("id, provider, external_event_id, label, is_active, last_synced_at")
@@ -101,7 +102,7 @@ export default async function Page() {
             {
               key: "sync",
               header: t("console.settings.integrations.ticketing.col.lastSync", undefined, "Last Sync"),
-              render: (r) => (r.last_synced_at ? new Date(r.last_synced_at).toLocaleString() : "—"),
+              render: (r) => (r.last_synced_at ? fmt.dateTime(new Date(r.last_synced_at)) : "—"),
               accessor: (r) => r.last_synced_at,
               className: "font-mono text-xs",
             },

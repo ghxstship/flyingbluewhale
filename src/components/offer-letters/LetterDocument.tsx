@@ -266,7 +266,7 @@ export function LetterDocument({
                   <tr key={i} className="border-t border-[var(--border-default)] align-top">
                     <td className="px-3 py-2">
                       <div className="font-medium">{d.day_label}</div>
-                      <div className="font-mono text-[10px] text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{d.date}</div>
+                      <div className="font-mono text-[11px] text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{d.date}</div>
                     </td>
                     <td className="px-3 py-2 font-mono">{d.call_time}</td>
                     <td className="px-3 py-2 font-mono">{d.wrap_time}</td>
@@ -301,7 +301,7 @@ export function LetterDocument({
             <li className="flex items-baseline gap-3 rounded border border-[var(--p-accent)] bg-[var(--p-surface-2)] p-3">
               <span
                 aria-hidden
-                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--p-accent)] text-[10px] font-semibold text-[var(--p-accent)]"
+                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--p-accent)] text-[11px] font-semibold text-[var(--p-accent)]"
               >
                 ★
               </span>
@@ -310,7 +310,7 @@ export function LetterDocument({
                   <strong>{t("legal.letterDocument.signMsa", undefined, "Sign your Master Services Agreement")}</strong>
                   <a
                     href={msaSignerUrl}
-                    className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
+                    className="ms-2 text-[11px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -334,7 +334,7 @@ export function LetterDocument({
               <li key={item.key} className="flex items-baseline gap-3">
                 <span
                   aria-hidden
-                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-default)] text-[10px]"
+                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-default)] text-[11px]"
                 >
                   {item.order}
                 </span>
@@ -346,7 +346,7 @@ export function LetterDocument({
                           <a
                             key={i}
                             href={l.url}
-                            className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
+                            className="ms-2 text-[11px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -356,7 +356,7 @@ export function LetterDocument({
                       : item.link && (
                           <a
                             href={item.link}
-                            className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
+                            className="ms-2 text-[11px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -372,7 +372,7 @@ export function LetterDocument({
             <li className="flex items-baseline gap-3">
               <span
                 aria-hidden
-                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-default)] text-[10px]"
+                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-default)] text-[11px]"
               >
                 ★
               </span>
@@ -381,7 +381,7 @@ export function LetterDocument({
                   {t("legal.letterDocument.reviewGuide", undefined, "Review the Salvage City Production Guide")}
                   <a
                     href={letter.guide_url}
-                    className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
+                    className="ms-2 text-[11px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                     target="_blank"
                     rel="noreferrer"
                   >

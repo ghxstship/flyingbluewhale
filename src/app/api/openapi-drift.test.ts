@@ -116,6 +116,41 @@ function operationsWithResponses(): Set<string> {
   return out;
 }
 
+// Map of `method path` → operationId (or null when the operation lacks one).
+// Handles both block form (6-space `operationId:` key) and inline flow maps
+// (`get: { summary: ..., operationId: ... }`).
+function operationIds(): Map<string, string | null> {
+  const text = readFileSync(OPENAPI_PATH, "utf8");
+  const lines = text.split("\n");
+  const pathsIdx = lines.findIndex((l) => /^paths\s*:\s*$/.test(l));
+  const out = new Map<string, string | null>();
+  let currentPath: string | null = null;
+  let currentKey: string | null = null;
+  for (let i = pathsIdx + 1; i < lines.length; i++) {
+    const line = lines[i]!;
+    if (!line.trim()) continue;
+    if (/^[^\s#]/.test(line)) break;
+    const pathMatch = line.match(/^ {2}(\/[^\s:]+):\s*$/);
+    if (pathMatch) {
+      currentPath = pathMatch[1]!;
+      currentKey = null;
+      continue;
+    }
+    const methodMatch = line.match(/^ {4}(get|post|put|patch|delete)\s*:(.*)$/);
+    if (methodMatch && currentPath) {
+      currentKey = `${methodMatch[1]} ${currentPath}`;
+      const inline = methodMatch[2]!.match(/operationId\s*:\s*([A-Za-z0-9_]+)/);
+      out.set(currentKey, inline ? inline[1]! : null);
+      continue;
+    }
+    if (currentKey) {
+      const block = line.match(/^ {6}operationId\s*:\s*([A-Za-z0-9_]+)\s*$/);
+      if (block) out.set(currentKey, block[1]!);
+    }
+  }
+  return out;
+}
+
 // Operations whose response body external consumers bind to — these MUST carry
 // a documented `responses` schema, not just a one-line summary (plumb-line
 // DOC-4 / RPT-3). Path+method-only coverage is not enough for these.
@@ -168,6 +203,21 @@ describe("OpenAPI drift", () => {
       }
     }
     expect(orphaned, `Documented but missing: ${orphaned.join(", ")}`).toEqual([]);
+  });
+
+  it("every documented operation carries a unique operationId (F-10)", () => {
+    const ids = operationIds();
+    const missing = [...ids.entries()].filter(([, id]) => !id).map(([k]) => k.toUpperCase());
+    expect(missing, `Operations missing an operationId: ${missing.join(", ")}`).toEqual([]);
+    const seen = new Map<string, string>();
+    const dupes: string[] = [];
+    for (const [key, id] of ids) {
+      if (!id) continue;
+      const prior = seen.get(id);
+      if (prior) dupes.push(`${id} (${prior} and ${key})`);
+      else seen.set(id, key);
+    }
+    expect(dupes, `Duplicate operationIds: ${dupes.join(", ")}`).toEqual([]);
   });
 
   it("contract-critical operations document a response body, not just a summary", () => {

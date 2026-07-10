@@ -12,7 +12,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts, formatMoney } from "@/lib/i18n/format";
 import { ASSET_CLASS_LABELS, ASSET_DISPOSITION_LABELS, CHECK_IN, CHECK_OUT, NEXT_UAL_STATES } from "@/lib/db/assets";
 import type { Asset, UalState } from "@/lib/supabase/types";
 import { addDepreciation, addMaintenance } from "./actions";
@@ -57,16 +58,17 @@ type RentalRow = {
 
 function money(minor: number | null, currency: string | null): string {
   if (minor == null) return "—";
-  return (minor / 100).toLocaleString("en-US", { style: "currency", currency: currency ?? "USD" });
+  return formatMoney(minor, currency ?? "USD");
 }
 
 function fmtDate(value: string | null): string {
   if (!value) return "—";
-  return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return formatDateParts(new Date(value), { year: "numeric", month: "short", day: "numeric" });
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase)
     return (
       <div className="page-content">
@@ -201,25 +203,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {/* Overview */}
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs sm:grid-cols-4">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.assets.detail.acquisition", undefined, "Acquisition")}
             </div>
             <div className="mt-1 font-mono">{money(asset.acquisition_cost_minor, asset.acquisition_currency)}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.assets.detail.dailyRate", undefined, "Daily rate")}
             </div>
             <div className="mt-1 font-mono">{money(asset.daily_rate_minor, asset.daily_rate_currency)}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.assets.detail.location", undefined, "Location")}
             </div>
             <div className="mt-1">{location?.name ?? "—"}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.assets.detail.acquired", undefined, "Acquired")}
             </div>
             <div className="mt-1 font-mono">{fmtDate(asset.acquired_at)}</div>
@@ -273,9 +275,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       <span className="text-[var(--p-text-2)]">
                         {t("console.assets.detail.ledger.by", { who }, `by ${who}`)}
                       </span>
-                      {m.notes && <span className="text-[var(--p-text-2)]">— {m.notes}</span>}
+                      {m.notes && <span className="text-[var(--p-text-2)]">· {m.notes}</span>}
                     </span>
-                    <span className="font-mono text-[var(--p-text-2)]">{new Date(m.occurred_at).toLocaleString()}</span>
+                    <span className="font-mono text-[var(--p-text-2)]">{fmt.dateTime(new Date(m.occurred_at))}</span>
                   </li>
                 );
               })}

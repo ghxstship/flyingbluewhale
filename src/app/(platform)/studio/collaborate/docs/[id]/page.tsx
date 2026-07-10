@@ -53,6 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 "Delete this document? This moves it to trash.",
               )}
               label={t("common.delete", undefined, "Delete")}
+              undo={{ table: "collab_docs", id: doc.id, redirectTo: "/studio/collaborate/docs" }}
             />
           </div>
         }

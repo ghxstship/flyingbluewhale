@@ -82,7 +82,7 @@ function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: strin
         <select name="role" className="ps-input focus-ring w-full" defaultValue="member">
           <option value="member">{t("console.people.teams.roles.member", undefined, "Member")}</option>
           <option value="admin">
-            {t("console.people.teams.addMember.adminOption", undefined, "Admin — Can Manage This Team's Members")}
+            {t("console.people.teams.addMember.adminOption", undefined, "Admin (Can Manage This Team's Members)")}
           </option>
         </select>
       </label>
@@ -116,7 +116,7 @@ function UpdateMemberRole({
         <option value="admin">{t("console.people.teams.roles.admin", undefined, "Admin")}</option>
       </select>
       {state?.error && (
-        <span role="alert" className="text-[10px] text-[var(--p-danger)]">
+        <span role="alert" className="text-[11px] text-[var(--p-danger)]">
           {state.error}
         </span>
       )}

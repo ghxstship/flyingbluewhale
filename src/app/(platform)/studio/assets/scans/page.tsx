@@ -5,7 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { urlFor } from "@/lib/urls";
 
@@ -19,6 +19,7 @@ export const dynamic = "force-dynamic";
  */
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const title = t("console.assets.scans.title", undefined, "Scan Sessions");
   if (!hasSupabase)
     return (
@@ -115,7 +116,7 @@ export default async function Page() {
                         <StatusBadge status={m.to_state} />
                       </span>
                     </td>
-                    <td className="text-end font-mono text-xs">{new Date(m.occurred_at).toLocaleString()}</td>
+                    <td className="text-end font-mono text-xs">{fmt.dateTime(new Date(m.occurred_at))}</td>
                   </tr>
                 ))}
               </tbody>

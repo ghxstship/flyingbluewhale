@@ -6,9 +6,9 @@ import { InventoryScanner, type RecentScan } from "./InventoryScanner";
 export const dynamic = "force-dynamic";
 
 /**
- * /m/inventory/scan — COMPVSS asset check-out / check-in scanner. Kit
- * `.scanframe` reticle + manual asset-tag entry, resolving codes through the
- * surviving `scanCode` action (which calls `scanAssignment`). Recent activity
+ * /m/inventory/scan — COMPVSS asset check-out / check-in scanner. Live camera
+ * decode + manual asset-tag entry, both submitting through the queueable
+ * /api/v1/scan endpoint (offline scans queue + replay). Recent activity
  * is the org's latest `assignment_events` scan rows.
  */
 export default async function InventoryScanPage() {
@@ -47,7 +47,13 @@ export default async function InventoryScanPage() {
           hint: t("m.inventoryScan.hint", undefined, "Point at an asset tag QR — reads automatically."),
           back: t("m.inventoryScan.back", undefined, "Assets"),
           enableCamera: t("m.inventoryScan.enableCamera", undefined, "Enable Camera"),
-          cameraDenied: t("m.inventoryScan.cameraDenied", undefined, "Camera Unavailable — Use Manual Entry"),
+          cameraDenied: t("m.inventoryScan.cameraDenied", undefined, "Camera Unavailable, Use Manual Entry"),
+          queuedTitle: t("m.inventoryScan.queuedTitle", undefined, "Recorded"),
+          queuedBody: t(
+            "m.inventoryScan.queuedBody",
+            undefined,
+            "Saved on this device. It will sync and verify when you're back online.",
+          ),
           manualLabel: t("m.inventoryScan.manualLabel", undefined, "Asset Tag"),
           manualPlaceholder: t("m.inventoryScan.manualPlaceholder", undefined, "e.g. R7-014"),
           cta: t("m.inventoryScan.cta", undefined, "Resolve Tag"),

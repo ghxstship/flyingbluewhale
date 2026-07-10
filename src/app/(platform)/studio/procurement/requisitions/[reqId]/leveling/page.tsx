@@ -9,7 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { awardResponse } from "./actions";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
 type ResponseRow = {
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const { data: req } = await supabase
     .from("requisitions")
@@ -66,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
         title={t(
           "console.procurement.requisitions.leveling.title",
           { title: req.title },
-          `Bid leveling — ${req.title}`,
+          `Bid leveling · ${req.title}`,
         )}
         subtitle={`${all.length} ${all.length === 1 ? t("console.procurement.requisitions.leveling.responseSingular", undefined, "Response") : t("console.procurement.requisitions.leveling.responsePlural", undefined, "Responses")} · ${responded.length} ${t("console.procurement.requisitions.leveling.priced", undefined, "Priced")} · ${t("console.procurement.requisitions.leveling.estLabel", undefined, "est.")} ${formatMoney(req.estimated_cents ?? 0)}`}
         action={
@@ -130,7 +131,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             {
               key: "submitted_at",
               header: t("console.procurement.requisitions.leveling.columns.submitted", undefined, "Submitted"),
-              render: (r) => (r.submitted_at ? new Date(r.submitted_at).toLocaleDateString() : "—"),
+              render: (r) => (r.submitted_at ? fmt.date(new Date(r.submitted_at)) : "—"),
               accessor: (r) => r.submitted_at ?? "",
               mono: true,
               sortable: true,

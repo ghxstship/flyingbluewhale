@@ -92,7 +92,7 @@ export function TimelineBar({
   const content = (
     <span className="flex h-full items-center gap-2 truncate px-2 text-[11px] font-medium text-[var(--p-text-1)]">
       <span className="truncate">{title}</span>
-      <span className="ms-auto truncate font-mono text-[10px] text-[var(--p-text-2)]" aria-hidden="true">
+      <span className="ms-auto truncate font-mono text-[11px] text-[var(--p-text-2)]" aria-hidden="true">
         {rangeLabel}
       </span>
     </span>

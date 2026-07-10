@@ -32,7 +32,7 @@ export async function createOrgAction(_: FormState, formData: FormData): Promise
     redirect("/login?next=/onboarding/org");
   }
 
-  const { error } = await (
+  const { data, error } = await (
     supabase.rpc as unknown as (
       fn: string,
       args: Record<string, unknown>,
@@ -41,6 +41,27 @@ export async function createOrgAction(_: FormState, formData: FormData): Promise
 
   if (error) {
     return { error: `Couldn't create workspace: ${error.message}` };
+  }
+
+  // E-17: stamp the plan intent captured at signup (`/signup?plan=`) onto the
+  // new org's metadata. Best-effort — recorded intent only, never a tier or
+  // billing change; a failure must not block workspace creation.
+  const orgId = data?.[0]?.org_id;
+  const pendingPlan = (userData.user?.user_metadata as { pending_plan?: string | null } | undefined)?.pending_plan;
+  if (orgId && pendingPlan && ["free", "crew", "production", "festival"].includes(pendingPlan)) {
+    try {
+      const { data: orgRow } = await supabase.from("orgs").select("datamap").eq("id", orgId).maybeSingle();
+      const datamap =
+        orgRow && typeof orgRow.datamap === "object" && orgRow.datamap !== null && !Array.isArray(orgRow.datamap)
+          ? (orgRow.datamap as Record<string, unknown>)
+          : {};
+      await supabase
+        .from("orgs")
+        .update({ datamap: { ...datamap, signup_plan_intent: pendingPlan, signup_plan_intent_at: new Date().toISOString() } })
+        .eq("id", orgId);
+    } catch {
+      // Recorded-intent write is advisory; ignore failures.
+    }
   }
 
   // /auth/resolve will now find the fresh owner membership and route to /studio.

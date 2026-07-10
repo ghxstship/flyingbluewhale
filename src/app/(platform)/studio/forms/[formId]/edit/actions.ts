@@ -16,7 +16,7 @@ const FieldSchema = z.object({
     .string()
     .min(1)
     .max(80)
-    .regex(/^[a-z][a-z0-9_]*$/, "key: lowercase letters, digits, underscore — must start with a letter"),
+    .regex(/^[a-z][a-z0-9_]*$/, "key: lowercase letters, digits, underscore (must start with a letter)"),
   label: z.string().min(1).max(200),
   type: z.enum(["text", "textarea", "email", "url", "number", "date", "select", "checkbox"]),
   required: z.boolean().optional().default(false),

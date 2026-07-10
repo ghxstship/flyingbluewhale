@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <div className="text-sm font-medium">{e.name}</div>
-                            <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                            <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                               {t("p.vip.itinerary.until", { time: fmtTime(e.ends_at) }, `until ${fmtTime(e.ends_at)}`)}
                               {e.location?.name ? ` · ${e.location.name}` : ""}
                             </div>

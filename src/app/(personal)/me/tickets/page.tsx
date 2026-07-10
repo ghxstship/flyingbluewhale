@@ -1,3 +1,4 @@
+import QRCode from "qrcode";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { DataTable } from "@/components/DataTable";
@@ -58,6 +59,20 @@ export default async function MyTicketsPage() {
     scan_code: codeMap.get(a.id) ?? null,
   }));
 
+  // C-05: render each active scan code as a real, gate-scannable QR (same
+  // `qrcode` pipeline as /m/wallet and the asset stickers) instead of a
+  // monospace string nobody can scan. The code text stays as the fallback.
+  const qrByCode = new Map<string, string>();
+  await Promise.all(
+    Array.from(new Set(rows.map((r) => r.scan_code).filter((c): c is string => !!c))).map(async (code) => {
+      try {
+        qrByCode.set(code, await QRCode.toDataURL(code, { margin: 1, width: 240 }));
+      } catch {
+        // Fall back to the plain code text below.
+      }
+    }),
+  );
+
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">{t("me.tickets.title", undefined, "My Tickets")}</h1>
@@ -71,8 +86,24 @@ export default async function MyTicketsPage() {
           columns={[
             {
               key: "code",
-              header: t("me.tickets.columns.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{r.scan_code ?? "—"}</span>,
+              header: t("me.tickets.columns.pass", undefined, "Pass"),
+              render: (r) => {
+                if (!r.scan_code) return <span className="font-mono text-xs">—</span>;
+                const qr = qrByCode.get(r.scan_code);
+                return (
+                  <div className="flex flex-col items-start gap-1 py-1">
+                    {qr && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={qr}
+                        alt={t("me.tickets.qrAlt", { code: r.scan_code }, `QR code for ticket ${r.scan_code}`)}
+                        className="h-20 w-20 rounded bg-white p-0.5"
+                      />
+                    )}
+                    <span className="font-mono text-[11px] text-[var(--p-text-2)]">{r.scan_code}</span>
+                  </div>
+                );
+              },
               accessor: (r) => r.scan_code ?? null,
             },
             {

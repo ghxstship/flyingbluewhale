@@ -47,7 +47,7 @@ export default async function ProjectOnboardingPage({ params }: { params: Promis
         title={t(
           "console.projects.onboarding.title",
           { name: (project as unknown as Project).name },
-          (project as unknown as Project).name + " — Onboarding",
+          (project as unknown as Project).name + " · Onboarding",
         )}
         subtitle={subtitle}
       />

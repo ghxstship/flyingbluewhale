@@ -76,7 +76,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Submission was updated concurrently — refresh and retry" };
+    return { error: "Submission was updated concurrently. Refresh and retry" };
   }
   revalidatePath(`/studio/marketplace/calls`);
   return { ok: true };

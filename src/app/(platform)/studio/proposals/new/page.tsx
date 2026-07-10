@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { getOrgScoped } from "@/lib/db/resource";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
@@ -17,17 +17,16 @@ export default async function NewProposalPage({
   const q = await searchParams;
   const defaultClientId = q.clientId;
   const templateId = q.templateId;
-  let clients: { id: string; name: string }[] = [];
-  let projects: { id: string; name: string }[] = [];
+  // FK candidates are searched on demand through RecordCombobox (audit
+  // A-06) — only the deep-linked default client's label resolves here.
+  let defaultClientName: string | undefined;
   let template: { id: string; name: string; blockCount: number } | null = null;
   if (hasSupabase) {
     const session = await requireSession();
-    const [cs, ps] = await Promise.all([
-      listOrgScoped("clients", session.orgId, { orderBy: "name", ascending: true }),
-      listOrgScoped("projects", session.orgId, { orderBy: "name", ascending: true }),
-    ]);
-    clients = cs.map((c) => ({ id: c.id, name: c.name }));
-    projects = ps.map((p) => ({ id: p.id, name: p.name }));
+    if (defaultClientId) {
+      const client = await getOrgScoped("clients", session.orgId, defaultClientId);
+      defaultClientName = client?.name;
+    }
     if (templateId) {
       const supabase = (await createClient()) as unknown as LooseSupabase;
       const { data: tpl } = await supabase
@@ -59,7 +58,11 @@ export default async function NewProposalPage({
         }
       />
       <div className="page-content max-w-2xl">
-        <NewProposalForm clients={clients} projects={projects} defaultClientId={defaultClientId} template={template} />
+        <NewProposalForm
+          defaultClientId={defaultClientName ? defaultClientId : undefined}
+          defaultClientName={defaultClientName}
+          template={template}
+        />
       </div>
     </>
   );

@@ -55,10 +55,20 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
   const fmt = await getRequestFormatters();
   const sp = await searchParams;
 
-  const { data: memberships } = await supabase
-    .from("chat_room_members")
-    .select("room_id, last_read_at, pinned_at, muted_at")
-    .eq("user_id", session.userId);
+  // A-10 — the page used to run ~8 queries strictly in sequence. Everything
+  // independent now runs in parallel: memberships + the org people directory
+  // first (neither depends on the other), then rooms, then the two
+  // rooms-dependent fetches together, then the three thread-dependent
+  // fetches together.
+  const [{ data: memberships }, { data: orgMembers }] = await Promise.all([
+    supabase.from("chat_room_members").select("room_id, last_read_at, pinned_at, muted_at").eq("user_id", session.userId),
+    supabase
+      .from("memberships")
+      .select("user_id, users:users!inner(id, name, email)")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .limit(200),
+  ]);
   const memberRows = (memberships ?? []) as MemberRow[];
   const roomIds = memberRows.map((m) => m.room_id);
   const readMap = new Map(memberRows.map((m) => [m.room_id, m.last_read_at]));
@@ -80,85 +90,98 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
     .slice()
     .sort((a, b) => Number(pinnedMap.get(b.id) ?? false) - Number(pinnedMap.get(a.id) ?? false));
 
+  // Selected thread — must be one of the caller's rooms.
+  const selected = sp?.room ? (rooms.find((r) => r.id === sp.room) ?? null) : null;
+
   // Direct rooms are unnamed — label them with the other party. One batched
-  // membership + user lookup covers every direct room in the list.
+  // membership + user lookup covers every direct room in the list. Runs in
+  // parallel with the thread-message window: both depend only on `rooms`.
   const directIds = rooms.filter((r) => r.room_kind === "direct").map((r) => r.id);
+  const [{ data: partners }, { data: msgs }] = await Promise.all([
+    directIds.length > 0
+      ? supabase
+          .from("chat_room_members")
+          .select("room_id, user_id, users:users!inner(name, email)")
+          .in("room_id", directIds)
+          .neq("user_id", session.userId)
+      : Promise.resolve({ data: [] }),
+    selected
+      ? supabase
+          .from("chat_messages")
+          .select("id, author_id, body, created_at")
+          .eq("room_id", selected.id)
+          .order("created_at", { ascending: false })
+          // One extra row past the window tells us whether older history
+          // exists — drives the "Load earlier messages" control (A-11).
+          .limit(PAGE_SIZE + 1)
+      : Promise.resolve({ data: [] }),
+  ]);
   const partnerName = new Map<string, string>();
-  if (directIds.length > 0) {
-    const { data: partners } = await supabase
-      .from("chat_room_members")
-      .select("room_id, user_id, users:users!inner(name, email)")
-      .in("room_id", directIds)
-      .neq("user_id", session.userId);
-    for (const p of (partners ?? []) as unknown as Array<{
-      room_id: string;
-      users: { name: string | null; email: string | null } | null;
-    }>) {
-      partnerName.set(p.room_id, p.users?.name ?? p.users?.email ?? "Direct Message");
-    }
+  for (const p of (partners ?? []) as unknown as Array<{
+    room_id: string;
+    users: { name: string | null; email: string | null } | null;
+  }>) {
+    partnerName.set(p.room_id, p.users?.name ?? p.users?.email ?? "Direct Message");
   }
   const roomLabel = (r: RoomRow) =>
     r.room_kind === "direct"
       ? (partnerName.get(r.id) ?? t("console.inbox.directMessage", undefined, "Direct Message"))
       : (r.name ?? t("console.inbox.untitledRoom", undefined, "Untitled Room"));
 
-  // Selected thread — must be one of the caller's rooms.
-  const selected = sp?.room ? (rooms.find((r) => r.id === sp.room) ?? null) : null;
-
   let thread: ConsoleMessage[] = [];
   let refs = {};
-  // last_read_at captured BEFORE the mark-read write below, so the client can
-  // draw the unread jump line at the first message newer than it.
+  let hasMoreEarlier = false;
+  // last_read_at drives the unread jump line; the read cursor itself is
+  // advanced by a client-fired action on thread mount (A-36) — never as a
+  // GET-render side effect.
   const selectedLastRead = selected ? (readMap.get(selected.id) ?? null) : null;
   if (selected) {
-    const { data: msgs } = await supabase
-      .from("chat_messages")
-      .select("id, author_id, body, created_at")
-      .eq("room_id", selected.id)
-      .order("created_at", { ascending: false })
-      .limit(PAGE_SIZE);
-    const ordered = ((msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; created_at: string }>)
-      .slice()
-      .reverse();
+    const raw = (msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; created_at: string }>;
+    hasMoreEarlier = raw.length > PAGE_SIZE;
+    const ordered = raw.slice(0, PAGE_SIZE).reverse();
 
     const authorIds = [...new Set(ordered.map((m) => m.author_id).filter((a): a is string => !!a))];
+    // Authors, record-ref chips, and reaction tallies are independent of
+    // one another — one parallel batch (A-10).
+    const [authorsRes, refsResolved, reactionsRes] = await Promise.all([
+      authorIds.length > 0
+        ? supabase.from("users").select("id, name, email").in("id", authorIds)
+        : Promise.resolve({ data: [] }),
+      resolveRecordRefs(
+        supabase,
+        session.orgId,
+        ordered.map((m) => m.body),
+        "platform",
+      ),
+      ordered.length > 0
+        ? supabase
+            .from("chat_message_reactions")
+            .select("message_id, emoji, user_id")
+            .in(
+              "message_id",
+              ordered.map((m) => m.id),
+            )
+        : Promise.resolve({ data: [] }),
+    ]);
+    refs = refsResolved;
     const nameById = new Map<string, string>();
-    if (authorIds.length > 0) {
-      const { data: authors } = await supabase.from("users").select("id, name, email").in("id", authorIds);
-      for (const a of (authors ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
-        nameById.set(a.id, a.name ?? a.email ?? "");
-      }
+    for (const a of (authorsRes.data ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+      nameById.set(a.id, a.name ?? a.email ?? "");
     }
-
-    refs = await resolveRecordRefs(
-      supabase,
-      session.orgId,
-      ordered.map((m) => m.body),
-      "platform",
-    );
 
     // Reactions for the visible messages, folded to per-message emoji tallies
     // (count + whether the caller reacted) for the composer.
     const reactionsByMessage = new Map<string, Map<string, { count: number; mine: boolean }>>();
-    if (ordered.length > 0) {
-      const { data: reactionRows } = await supabase
-        .from("chat_message_reactions")
-        .select("message_id, emoji, user_id")
-        .in(
-          "message_id",
-          ordered.map((m) => m.id),
-        );
-      for (const r of (reactionRows ?? []) as Array<{ message_id: string; emoji: string; user_id: string }>) {
-        let byEmoji = reactionsByMessage.get(r.message_id);
-        if (!byEmoji) {
-          byEmoji = new Map();
-          reactionsByMessage.set(r.message_id, byEmoji);
-        }
-        const cur = byEmoji.get(r.emoji) ?? { count: 0, mine: false };
-        cur.count += 1;
-        if (r.user_id === session.userId) cur.mine = true;
-        byEmoji.set(r.emoji, cur);
+    for (const r of (reactionsRes.data ?? []) as Array<{ message_id: string; emoji: string; user_id: string }>) {
+      let byEmoji = reactionsByMessage.get(r.message_id);
+      if (!byEmoji) {
+        byEmoji = new Map();
+        reactionsByMessage.set(r.message_id, byEmoji);
       }
+      const cur = byEmoji.get(r.emoji) ?? { count: 0, mine: false };
+      cur.count += 1;
+      if (r.user_id === session.userId) cur.mine = true;
+      byEmoji.set(r.emoji, cur);
     }
 
     thread = ordered.map((m) => ({
@@ -176,22 +199,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
         mine: v.mine,
       })),
     }));
-
-    // Mark read on render — keeps the badge honest (mirrors /m/inbox).
-    await supabase
-      .from("chat_room_members")
-      .update({ last_read_at: new Date().toISOString() })
-      .eq("room_id", selected.id)
-      .eq("user_id", session.userId);
   }
 
-  // People directory for the New DM picker (org members, minus me).
-  const { data: orgMembers } = await supabase
-    .from("memberships")
-    .select("user_id, users:users!inner(id, name, email)")
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .limit(200);
+  // People directory for the New DM picker (org members, minus me) —
+  // fetched up top in parallel with memberships.
   const people = (
     (orgMembers ?? []) as unknown as Array<{
       user_id: string;
@@ -259,7 +270,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                           {muted ? <BellOff size={12} className="shrink-0 text-[var(--p-text-3)]" /> : null}
                         </div>
                         {r.last_message_at ? (
-                          <div className="mt-1 font-mono text-[10px] text-[var(--p-text-3)]">
+                          <div className="mt-1 font-mono text-[11px] text-[var(--p-text-3)]">
                             {fmt.dateParts(r.last_message_at, {
                               month: "short",
                               day: "numeric",
@@ -320,6 +331,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                     messages={thread}
                     refs={refs}
                     lastReadAt={selectedLastRead}
+                    hasMoreEarlier={hasMoreEarlier}
                     people={people}
                     labels={{
                       placeholder: t("console.inbox.placeholder", undefined, "Message · Enter Sends"),
@@ -331,6 +343,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
                       addReaction: t("console.inbox.addReaction", undefined, "React"),
                       copy: t("console.inbox.copy", undefined, "Copy Text"),
                       copied: t("console.inbox.copied", undefined, "Copied"),
+                      loadEarlier: t("console.inbox.loadEarlier", undefined, "Load Earlier Messages"),
+                      loadingEarlier: t("console.inbox.loadingEarlier", undefined, "Loading…"),
                     }}
                   />
                 </>

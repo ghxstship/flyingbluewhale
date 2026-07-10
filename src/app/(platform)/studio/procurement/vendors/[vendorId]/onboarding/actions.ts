@@ -84,7 +84,7 @@ export async function renameOnboardingItem(vendorId: string, itemId: string, lab
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Manager access required" };
   const trimmed = label.trim();
-  if (!trimmed || trimmed.length > 160) return { error: "Label must be 1–160 characters" };
+  if (!trimmed || trimmed.length > 160) return { error: "Label must be 1-160 characters" };
   const db = (await createClient()) as unknown as LooseSupabase;
   const { error } = await db
     .from("vendor_onboarding_items")

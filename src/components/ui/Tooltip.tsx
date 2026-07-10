@@ -44,7 +44,7 @@ export function Hint({
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent side={side} className="inline-flex items-center gap-1.5">
           <span>{label}</span>
-          {kbd && <kbd className="rounded bg-[var(--p-bg)]/20 px-1 py-0.5 font-mono text-[10px]">{kbd}</kbd>}
+          {kbd && <kbd className="rounded bg-[var(--p-bg)]/20 px-1 py-0.5 font-mono text-[11px]">{kbd}</kbd>}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

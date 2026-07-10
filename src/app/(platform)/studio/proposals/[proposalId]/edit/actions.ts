@@ -44,7 +44,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   // malformed block is rejected at save time rather than discovered
   // mid-convert when the seeder iterates the array.
   const validation = validateBlocks(parsedBlocks);
-  if (!validation.ok) return { error: `Block validation failed — ${validation.error}` };
+  if (!validation.ok) return { error: `Block validation failed: ${validation.error}` };
   const blocks = validation.blocks as unknown as import("@/lib/supabase/database.types").Json;
 
   const supabase = await createClient();

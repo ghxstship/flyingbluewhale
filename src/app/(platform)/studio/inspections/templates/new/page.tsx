@@ -58,7 +58,7 @@ export default async function Page() {
               hint={t(
                 "console.inspections.templates.new.code.hint",
                 undefined,
-                "Short slug — uppercase, dashes ok. Used on inspection records.",
+                "Short slug. Uppercase, dashes ok. Used on inspection records.",
               )}
               style={{ textTransform: "uppercase" }}
             />

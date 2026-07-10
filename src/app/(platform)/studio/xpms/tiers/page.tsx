@@ -44,7 +44,7 @@ export default async function TierCompositionPage() {
         subtitle={t(
           "console.xpms.tiers.subtitle",
           undefined,
-          "Project portfolio composition — what kind of human encounter the work delivers.",
+          "Project portfolio composition. What kind of human encounter the work delivers.",
         )}
       />
       <div className="page-content space-y-4">
@@ -66,7 +66,7 @@ export default async function TierCompositionPage() {
                   <div key={tier.id}>
                     <div className="flex items-center justify-between text-sm">
                       <span>
-                        <span className="me-2 font-mono text-[10px] text-[var(--p-text-2)]">{tier.num}</span>
+                        <span className="me-2 font-mono text-[11px] text-[var(--p-text-2)]">{tier.num}</span>
                         {tier.label}
                       </span>
                       <span className="font-mono text-xs text-[var(--p-text-2)]">

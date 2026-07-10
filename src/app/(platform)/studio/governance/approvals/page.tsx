@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { DataTable } from "@/components/DataTable";
+import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function Page() {
     );
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data } = await supabase
     .from("approval_instances")
@@ -41,6 +43,13 @@ export default async function Page() {
 
   return (
     <>
+      {/* F-13: the approvals queue refreshes live — a decision made from a
+          record page or another operator's session appears without reload. */}
+      <RealtimeRefresh
+        channelName={`approvals-queue-${session.orgId}`}
+        table="approval_instances"
+        filter={`org_id=eq.${session.orgId}`}
+      />
       <ModuleHeader
         eyebrow={t("console.governance.approvals.eyebrow", undefined, "Governance")}
         title={t("console.governance.approvals.title", undefined, "Approvals")}
@@ -103,7 +112,7 @@ export default async function Page() {
               {
                 key: "initiated_at",
                 header: t("console.governance.approvals.columns.initiated", undefined, "Initiated"),
-                render: (r) => new Date(r.initiated_at).toLocaleDateString("en-US"),
+                render: (r) => fmt.date(new Date(r.initiated_at)),
                 mono: true,
               },
             ]}

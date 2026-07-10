@@ -1,19 +1,26 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 import { toTitle } from "@/lib/format";
-import { FULFILLMENT_STATES, NEXT_FULFILLMENT_STATES, type FulfillmentState } from "@/lib/db/assignments";
+import { log } from "@/lib/log";
+import { sendExternalAssignmentEmail } from "@/lib/email";
+import {
+  CATALOG_KIND_LABEL_SINGULAR,
+  FULFILLMENT_STATES,
+  NEXT_FULFILLMENT_STATES,
+  type CatalogKind,
+  type FulfillmentState,
+} from "@/lib/db/assignments";
 
 async function guardAssignment(projectId: string, assignmentId: string, orgId: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("assignments")
-    .select("id, catalog_kind, title, party_kind, party_user_id, fulfillment_state")
+    .select("id, catalog_kind, title, party_kind, party_user_id, party_external_id, fulfillment_state")
     .eq("id", assignmentId)
     .eq("project_id", projectId)
     .eq("org_id", orgId)
@@ -25,8 +32,59 @@ async function guardAssignment(projectId: string, assignmentId: string, orgId: s
     title: string | null;
     party_kind: "user" | "crew_member" | "external_holder";
     party_user_id: string | null;
+    party_external_id: string | null;
     fulfillment_state: FulfillmentState;
   } | null;
+}
+
+/**
+ * E-06 — the states an off-platform holder must hear about. Email is the
+ * ONLY channel an `assignment_external_holders` party has (no account, no
+ * push, no inbox), so externally-meaningful transitions send one.
+ */
+const EXTERNAL_HOLDER_EMAIL_STATES: readonly FulfillmentState[] = ["issued", "transferred", "voided"] as const;
+
+/**
+ * Resolve an external holder + context and send the kit-templated state
+ * email. Fire-and-forget friendly — never throws, logs failures.
+ */
+async function emailExternalHolder(opts: {
+  orgId: string;
+  projectId: string;
+  externalHolderId: string;
+  assignmentTitle: string | null;
+  catalogKind: string;
+  nextState: FulfillmentState;
+}): Promise<void> {
+  try {
+    const supabase = await createClient();
+    const [{ data: holder }, { data: project }, { data: org }] = await Promise.all([
+      supabase
+        .from("assignment_external_holders")
+        .select("holder_email, holder_name")
+        .eq("id", opts.externalHolderId)
+        .eq("org_id", opts.orgId)
+        .maybeSingle(),
+      supabase.from("projects").select("name").eq("id", opts.projectId).maybeSingle(),
+      supabase.from("orgs").select("name").eq("id", opts.orgId).maybeSingle(),
+    ]);
+    if (!holder?.holder_email) return;
+    const kindLabel = CATALOG_KIND_LABEL_SINGULAR[opts.catalogKind as CatalogKind] ?? "Assignment";
+    await sendExternalAssignmentEmail({
+      to: holder.holder_email,
+      holderName: holder.holder_name,
+      assignmentTitle: opts.assignmentTitle ?? kindLabel,
+      kindLabel,
+      stateLabel: toTitle(opts.nextState),
+      projectName: project?.name ?? null,
+      orgName: org?.name ?? null,
+    });
+  } catch (err) {
+    log.warn("assignments.external_holder_email_failed", {
+      externalHolderId: opts.externalHolderId,
+      err: (err as Error).message,
+    });
+  }
 }
 
 const AdvanceSchema = z.object({
@@ -69,7 +127,8 @@ export async function advanceState(fd: FormData): Promise<void> {
   });
   if (eventErr) throw new Error(`Could not record state change event: ${eventErr.message}`);
 
-  // Notify the assignee (user kind only — external holders aren't on the platform).
+  // Notify the assignee. Platform users get the inbox + push + (opt-in)
+  // email channels; external holders get email — their only channel.
   if (a.party_kind === "user" && a.party_user_id) {
     void writeInbox({
       userId: a.party_user_id,
@@ -81,6 +140,19 @@ export async function advanceState(fd: FormData): Promise<void> {
       title: `Assignment ${toTitle(parsed.data.next_state)}`,
       body: a.title ?? "",
       href: "/m/advances",
+    });
+  } else if (
+    a.party_kind === "external_holder" &&
+    a.party_external_id &&
+    EXTERNAL_HOLDER_EMAIL_STATES.includes(parsed.data.next_state)
+  ) {
+    void emailExternalHolder({
+      orgId: session.orgId,
+      projectId: parsed.data.projectId,
+      externalHolderId: a.party_external_id,
+      assignmentTitle: a.title,
+      catalogKind: a.catalog_kind,
+      nextState: parsed.data.next_state,
     });
   }
 
@@ -450,5 +522,6 @@ export async function deleteAssignment(projectId: string, assignmentId: string):
   if (deleteErr) throw new Error(`Could not delete assignment: ${deleteErr.message}`);
 
   revalidatePath(`/studio/projects/${projectId}/advancing/assignments`);
-  redirect(`/studio/projects/${projectId}/advancing/assignments`);
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

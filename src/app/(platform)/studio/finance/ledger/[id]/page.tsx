@@ -9,7 +9,8 @@ import { hasSupabase } from "@/lib/env";
 import { getOrgScoped, listOrgScoped } from "@/lib/db/resource";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatMoney } from "@/lib/i18n/format";
 import { addJournalLine } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -35,11 +36,12 @@ type Account = { id: string; account_code: string; account_name: string };
 type Period = { id: string; period_label: string };
 
 function minorToUSD(minor: number): string {
-  return (minor / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
+  return formatMoney(minor, "USD");
 }
 
 export default async function JournalEntryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <div className="page-content">
@@ -85,7 +87,7 @@ export default async function JournalEntryDetailPage({ params }: { params: Promi
             <span>{entry.description}</span>
             <Badge variant="muted">{periodLabel}</Badge>
             <span className="font-mono text-xs">
-              {entry.posted_at ? new Date(entry.posted_at).toLocaleDateString() : "—"}
+              {entry.posted_at ? fmt.date(new Date(entry.posted_at)) : "—"}
             </span>
           </span>
         }
@@ -94,13 +96,13 @@ export default async function JournalEntryDetailPage({ params }: { params: Promi
         <section className="surface flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
           <div className="flex flex-wrap items-center gap-6">
             <div>
-              <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                 {t("console.finance.ledger.detail.totalDebits", undefined, "Total debits")}
               </div>
               <div className="mt-1 font-mono">{minorToUSD(totalDebit)}</div>
             </div>
             <div>
-              <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                 {t("console.finance.ledger.detail.totalCredits", undefined, "Total credits")}
               </div>
               <div className="mt-1 font-mono">{minorToUSD(totalCredit)}</div>
@@ -213,7 +215,7 @@ export default async function JournalEntryDetailPage({ params }: { params: Promi
                 </select>
               </div>
               <Input
-                label={t("console.finance.ledger.detail.form.amount", undefined, "Amount — USD")}
+                label={t("console.finance.ledger.detail.form.amount", undefined, "Amount (USD)")}
                 name="amount_usd"
                 type="number"
                 step="0.01"

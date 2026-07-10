@@ -77,17 +77,17 @@ export default async function Page() {
                 {t(
                   "console.services.requests.new.severityP1",
                   undefined,
-                  "P1 — live-event blocker (5m ack, 1h resolve)",
+                  "P1 · live-event blocker (5m ack, 1h resolve)",
                 )}
               </option>
               <option value="P2">
-                {t("console.services.requests.new.severityP2", undefined, "P2 — Urgent · 15m Ack, 4h Resolve")}
+                {t("console.services.requests.new.severityP2", undefined, "P2 · Urgent · 15m Ack, 4h Resolve")}
               </option>
               <option value="P3">
-                {t("console.services.requests.new.severityP3", undefined, "P3 — Standard · 1h Ack, 1d Resolve")}
+                {t("console.services.requests.new.severityP3", undefined, "P3 · Standard · 1h Ack, 1d Resolve")}
               </option>
               <option value="P4">
-                {t("console.services.requests.new.severityP4", undefined, "P4 — Low · 4h Ack, 3d Resolve")}
+                {t("console.services.requests.new.severityP4", undefined, "P4 · Low · 4h Ack, 3d Resolve")}
               </option>
             </select>
           </div>
@@ -110,7 +110,7 @@ export default async function Page() {
                 {t("console.services.requests.new.projectLabel", undefined, "Project · Optional")}
               </label>
               <select name="project_id" defaultValue="" className="ps-input mt-1.5 w-full">
-                <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
+                <option value="">{t("console.services.requests.new.noneOption", undefined, "none")}</option>
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -125,7 +125,7 @@ export default async function Page() {
                 {t("console.services.requests.new.venueLabel", undefined, "Venue · Optional")}
               </label>
               <select name="venue_id" defaultValue="" className="ps-input mt-1.5 w-full">
-                <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
+                <option value="">{t("console.services.requests.new.noneOption", undefined, "none")}</option>
                 {venues.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.name}

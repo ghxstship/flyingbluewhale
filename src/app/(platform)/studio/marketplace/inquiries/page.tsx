@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { STATUS_TONE, type InquiryState, type InquirySubjectKind } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { setInquiryState } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +26,7 @@ type InquiryRow = {
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <>
@@ -87,13 +88,13 @@ export default async function Page() {
                     <Badge variant={STATUS_TONE[r.inquiry_state] ?? "muted"}>{toTitle(r.inquiry_state)}</Badge>
                   </div>
                   <p className="mt-1 text-xs text-[var(--p-text-2)]">
-                    {new Date(r.created_at).toLocaleDateString()}
+                    {fmt.date(new Date(r.created_at))}
                     {r.event_date
                       ? " · " +
                         t(
                           "console.marketplace.inquiries.eventOn",
-                          { date: new Date(`${r.event_date}T00:00:00`).toLocaleDateString() },
-                          `Event ${new Date(`${r.event_date}T00:00:00`).toLocaleDateString()}`,
+                          { date: fmt.date(new Date(`${r.event_date}T00:00:00`)) },
+                          `Event ${fmt.date(new Date(`${r.event_date}T00:00:00`))}`,
                         )
                       : ""}
                     {r.contact_email ? ` · ${r.contact_email}` : ""}

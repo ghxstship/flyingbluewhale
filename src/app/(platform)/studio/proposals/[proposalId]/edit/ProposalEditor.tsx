@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useMemo, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Trash2, Plus, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
@@ -57,7 +57,7 @@ const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
   payment_method: {
     type: "payment_method",
     method: "ach",
-    details: { Beneficiary: "Your Company LLC", Routing: "— wire on request", Account: "— wire on request" },
+    details: { Beneficiary: "Your Company LLC", Routing: "wire on request", Account: "wire on request" },
   },
   equipment_manifest: {
     type: "equipment_manifest",
@@ -81,7 +81,7 @@ const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
       {
         slug: "msa",
         label: "Master Services Agreement",
-        body: "MSA placeholder — replace with full text or a signed link.",
+        body: "MSA placeholder. Replace with full text or a signed link.",
       },
     ],
   },

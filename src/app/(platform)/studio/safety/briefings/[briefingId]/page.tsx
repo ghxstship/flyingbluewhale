@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { acknowledgeAttendee, addAttendee, markConducted, removeAttendee } from "./actions";
 import { toneFor } from "@/lib/tones";
 
@@ -30,7 +31,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -43,6 +44,7 @@ function fmt(iso: string | null): string {
 export default async function Page({ params }: { params: Promise<{ briefingId: string }> }) {
   const { briefingId } = await params;
   const { t } = await getRequestT();
+  const i18nFmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <>
@@ -158,7 +160,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                     : t(
                         "console.safety.briefings.detail.statusCancelled",
                         undefined,
-                        "Cancelled — no further action required.",
+                        "Cancelled. No further action required.",
                       )}
               </p>
             </div>
@@ -226,7 +228,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
               {t(
                 "console.safety.briefings.detail.noAttendees",
                 undefined,
-                "No attendees recorded. Add org members or crew below — they sign in by acknowledging the briefing.",
+                "No attendees recorded. Add org members or crew below. They sign in by acknowledging the briefing.",
               )}
             </p>
           ) : (
@@ -248,8 +250,8 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                         <Badge variant="success">
                           {t(
                             "console.safety.briefings.detail.signed",
-                            { date: new Date(a.acknowledged_at).toLocaleDateString() },
-                            `Signed ${new Date(a.acknowledged_at).toLocaleDateString()}`,
+                            { date: i18nFmt.date(new Date(a.acknowledged_at)) },
+                            `Signed ${i18nFmt.date(new Date(a.acknowledged_at))}`,
                           )}
                         </Badge>
                       ) : (
@@ -282,7 +284,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             <input type="hidden" name="briefingId" value={briefingId} />
             <select name="user_id" defaultValue="" className="ps-input">
               <option value="">
-                {t("console.safety.briefings.detail.orgMemberOption", undefined, "— Org member —")}
+                {t("console.safety.briefings.detail.orgMemberOption", undefined, "Org member")}
               </option>
               {orgMembers.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -292,7 +294,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             </select>
             <select name="crew_member_id" defaultValue="" className="ps-input">
               <option value="">
-                {t("console.safety.briefings.detail.crewMemberOption", undefined, "— Crew member —")}
+                {t("console.safety.briefings.detail.crewMemberOption", undefined, "Crew member")}
               </option>
               {crew.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -316,11 +318,11 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
               </Button>
             </div>
           </form>
-          <p className="mt-2 text-[10px] text-[var(--p-text-2)]">
+          <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
             {t(
               "console.safety.briefings.detail.pickOneHint",
               undefined,
-              "Pick exactly one of org member or crew member — both nullable but the schema requires one to be set.",
+              "Pick exactly one of org member or crew member. Both nullable but the schema requires one to be set.",
             )}
           </p>
         </section>

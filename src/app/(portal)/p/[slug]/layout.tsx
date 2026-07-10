@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
-import { portalPersonaForSession } from "@/lib/nav";
+import { portalNav, portalPersonaForSession } from "@/lib/nav";
+import { navGroupKey, navItemKey } from "@/lib/i18n/nav-label";
+import { PortalMobileNav, type PortalRailSection } from "@/components/PortalRailClient";
 import { WorkspaceChrome } from "@/components/workspace-chrome/WorkspaceChrome";
 import { AppRail } from "@/components/workspace-chrome/AppRail";
 import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
@@ -56,6 +58,20 @@ export default async function PortalSlugLayout({
       })
     : null;
 
+  // Mobile nav (C-01): the desktop persona rail is `hidden md:flex`, so
+  // below `md` this drawer is the only nav path in the portal. It renders
+  // the session persona's `portalNav` (neutral Workspace rail for
+  // operators), translated here so the client half stays serializable.
+  let mobileNavSections: PortalRailSection[] = [];
+  if (session) {
+    const group = portalNav(slug, portalPersonaForSession(session.persona));
+    const sections = group.sections?.length ? group.sections : [{ label: group.label, items: group.items }];
+    mobileNavSections = sections.map((section) => ({
+      label: section.label ? t(navGroupKey(section), undefined, section.label) : "",
+      items: section.items.map((i) => ({ href: i.href, label: t(navItemKey(i), undefined, i.label) })),
+    }));
+  }
+
   return (
     <div
       data-portal-slug={slug}
@@ -86,6 +102,7 @@ export default async function PortalSlugLayout({
         <main id="main" tabIndex={-1}>
           {children}
         </main>
+        {session ? <PortalMobileNav sections={mobileNavSections} title={data.name ?? slug} /> : null}
         <CommandPalette
           scope="portal"
           portalSlug={slug}

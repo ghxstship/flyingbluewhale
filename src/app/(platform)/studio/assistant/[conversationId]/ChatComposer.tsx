@@ -200,7 +200,7 @@ function ChatBubble({ messageRole, content }: { messageRole: string; content: st
         }
       >
         {!isUser ? (
-          <div className="mb-1 font-mono text-[10px] tracking-[0.12em] text-[var(--p-text-3)] uppercase">
+          <div className="mb-1 font-mono text-[11px] tracking-[0.12em] text-[var(--p-text-3)] uppercase">
             {messageRole}
           </div>
         ) : null}

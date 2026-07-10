@@ -62,7 +62,7 @@ export default async function Page() {
         subtitle={t(
           "console.daySheets.subtitle",
           undefined,
-          "One composed page per date · crew call, doors, set, curfew — publishes to the field",
+          "One composed page per date · crew call, doors, set, curfew. Publishes to the field",
         )}
         action={
           <Button href="/studio/operations/day-sheets/new" size="sm">

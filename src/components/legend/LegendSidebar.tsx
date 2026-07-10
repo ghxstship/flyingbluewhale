@@ -29,7 +29,7 @@ export function LegendSidebar({ groups }: { groups: NavGroup[] }) {
         <nav className="sticky top-14 max-h-[calc(100vh-3.5rem)] overflow-y-auto p-3">
           {groups.map((g) => (
             <div key={g.label} className="mb-4">
-              <div className="px-2 pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--p-text-3)]">
+              <div className="px-2 pb-1 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--p-text-3)]">
                 {g.label}
               </div>
               <ul className="space-y-0.5">

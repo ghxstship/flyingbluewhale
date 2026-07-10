@@ -9,6 +9,7 @@ import type { Json } from "@/lib/supabase/database.types";
 import { AutomationControls } from "./AutomationControls";
 import { WebhookSection } from "./WebhookSection";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { urlFor } from "@/lib/urls";
 import { StepBuilder, type AutomationStep } from "@/components/automations/StepBuilder";
 // Side-effect import — registers all built-in actions with the in-memory
@@ -44,7 +45,7 @@ const TRIGGER_TONE: Record<string, "muted" | "info" | "success"> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     year: "numeric",

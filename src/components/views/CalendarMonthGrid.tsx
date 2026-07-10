@@ -99,7 +99,7 @@ function DayCell({
     >
       <div className="mb-1 flex items-center justify-between">
         <span
-          className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-medium ${
+          className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-medium ${
             isToday ? "today-marker" : inMonth ? "text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"
           }`}
           style={
@@ -113,7 +113,7 @@ function DayCell({
         >
           {dayNumber}
         </span>
-        {events.length > 0 && <span className="font-mono text-[9px] text-[var(--p-text-2)]">{events.length}</span>}
+        {events.length > 0 && <span className="font-mono text-[11px] text-[var(--p-text-2)]">{events.length}</span>}
       </div>
       <div className="flex flex-col gap-0.5">
         {visible.map((event) => (
@@ -123,7 +123,7 @@ function DayCell({
           <button
             type="button"
             onClick={() => setShowOverflow((prev) => !prev)}
-            className="px-1 text-start text-[9px] text-[var(--p-text-2)] underline-offset-2 hover:underline"
+            className="px-1 text-start text-[11px] text-[var(--p-text-2)] underline-offset-2 hover:underline"
             aria-expanded={showOverflow}
           >
             +{overflow.length} more
@@ -141,12 +141,12 @@ function DayCell({
               <Link
                 key={event.id}
                 href={event.href}
-                className={`truncate rounded px-1 py-0.5 text-[10px] ${eventToneClass(event.tone)}`}
+                className={`truncate rounded px-1 py-0.5 text-[11px] ${eventToneClass(event.tone)}`}
               >
                 {event.title}
               </Link>
             ) : (
-              <span key={event.id} className={`truncate rounded px-1 py-0.5 text-[10px] ${eventToneClass(event.tone)}`}>
+              <span key={event.id} className={`truncate rounded px-1 py-0.5 text-[11px] ${eventToneClass(event.tone)}`}>
                 {event.title}
               </span>
             ),
@@ -154,7 +154,7 @@ function DayCell({
           <button
             type="button"
             onClick={() => setShowOverflow(false)}
-            className="self-end px-1 text-[9px] text-[var(--p-text-2)] hover:underline"
+            className="self-end px-1 text-[11px] text-[var(--p-text-2)] hover:underline"
           >
             Close
           </button>

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +26,7 @@ type EventRow = {
 const MEETING_PATTERN = /(meeting|chef[- ]de[- ]mission|cdm|technical brief|attaché|attache|delegation brief)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -121,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={m.id} className="flex items-center justify-between py-2 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{m.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmt(m.starts_at)}
                       {m.location?.name ? ` · ${m.location.name}` : ""}
                     </div>

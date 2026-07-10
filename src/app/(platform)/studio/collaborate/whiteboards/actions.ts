@@ -124,5 +124,6 @@ export async function deleteWhiteboardAction(id: string): Promise<void> {
     .is("deleted_at", null);
 
   revalidatePath("/studio/collaborate/whiteboards");
-  redirect("/studio/collaborate/whiteboards");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

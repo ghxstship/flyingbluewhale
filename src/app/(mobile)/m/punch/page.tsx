@@ -5,15 +5,16 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
+import { RefreshShell } from "@/components/mobile/RefreshShell";
 import { PunchControls } from "./PunchControls";
 
 export const dynamic = "force-dynamic";
 
 /**
- * COMPVSS · Punch — a focused punch in/out surface backed by `time_entries`.
- * Reuses the clock's `CheckInControls` timer + `clockIn`/`clockOut` actions
- * (one open entry per user, server-enforced) and shows today's punches. The
- * full timesheet history lives at /m/clock.
+ * COMPVSS · Punch — a focused punch in/out surface backed by `time_entries`
+ * via the queueable /api/v1/time/clock endpoint (one open entry per user,
+ * server-enforced; offline punches queue + replay) and shows today's
+ * punches. The full timesheet history lives at /m/clock.
  */
 type EntryRow = {
   id: string;
@@ -53,6 +54,7 @@ export default async function PunchPage() {
   const onClock = !!openRow;
 
   return (
+    <RefreshShell>
     <div className="screen screen-anim">
       <div className="scr-eye">
         {onClock ? t("m.punch.on", undefined, "On The Clock") : t("m.punch.off", undefined, "Off Shift")}
@@ -104,5 +106,6 @@ export default async function PunchPage() {
         <KIcon name="History" size={16} /> {t("m.punch.fullClock", undefined, "Full Timesheet")}
       </Link>
     </div>
+    </RefreshShell>
   );
 }

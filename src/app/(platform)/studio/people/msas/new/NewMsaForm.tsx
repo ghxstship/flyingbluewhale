@@ -39,7 +39,7 @@ export function NewMsaForm({ crew }: { crew: CrewMemberOption[] }) {
         {t(
           "console.people.msas.new.helperText",
           undefined,
-          "We’ll generate a private link and 6-character access code. Email those to the contractor — they fill Exhibits B/C and counter-sign. The MSA then applies to every future engagement letter we issue them.",
+          "We’ll generate a private link and 6-character access code. Email those to the contractor. They fill Exhibits B/C and counter-sign. The MSA then applies to every future engagement letter we issue them.",
         )}
       </p>
     </FormShell>

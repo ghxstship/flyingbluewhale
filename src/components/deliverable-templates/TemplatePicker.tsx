@@ -116,13 +116,13 @@ export function TemplatePicker({
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-medium text-[var(--p-text-1)]">{tpl.name}</span>
-                    <span className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <span className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
                       {tpl.type}
                     </span>
                   </div>
                   {tpl.description && <div className="mt-1 text-[var(--p-text-2)]">{tpl.description}</div>}
                   {tpl.is_global && (
-                    <div className="mt-1 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+                    <div className="mt-1 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                       {t("components.templatePicker.platformTemplate", undefined, "Platform template")}
                     </div>
                   )}

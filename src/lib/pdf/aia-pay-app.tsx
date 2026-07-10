@@ -4,6 +4,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * AIA G702 (Application + Certificate for Payment) + G703 (Continuation Sheet)
@@ -85,11 +86,8 @@ function money(cents: number, currency: string = "USD"): string {
 
 function fmtDate(d: string | null | undefined): string {
   if (!d) return "—";
-  try {
-    return new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-  } catch {
-    return d;
-  }
+  const formatted = formatDateParts(d, { year: "numeric", month: "short", day: "numeric" });
+  return formatted === "—" ? d : formatted;
 }
 
 function pct(n: number): string {

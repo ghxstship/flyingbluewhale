@@ -1,10 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { personalNavGroups } from "@/lib/nav";
+import { PersonalTabs } from "./PersonalTabs";
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
   // Outer auth guard — matches (platform) and (mobile) shell convention.
@@ -48,8 +50,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={tenant.branding.logoUrl} alt="" className="h-5 w-auto" />
               ) : isDefaultBrand ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src="/brand/atlvs-mark.svg" alt="" width={20} height={20} aria-hidden="true" />
+                <Image src="/brand/atlvs-mark.svg" alt="" width={20} height={20} aria-hidden="true" />
               ) : null}
               {isDefaultBrand ? (
                 <Wordmark word={brandName} style={{ fontSize: 14, fontWeight: 500 }} />
@@ -61,26 +62,10 @@ export default async function PersonalLayout({ children }: { children: React.Rea
           </div>
           {/* ADR-0010 three-area nav: section labels render as quiet
               eyebrows over each tab group; tabs themselves keep the
-              same `.nav-item` chrome the flat list used. */}
-          <nav className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-[var(--p-border)] pb-2">
-            {tabGroups.map((group, i) => (
-              <div key={group.label} className="flex flex-wrap items-center gap-1">
-                {i > 0 ? (
-                  <span aria-hidden="true" className="text-[var(--p-text-2)]">
-                    ·
-                  </span>
-                ) : null}
-                <span className="me-0.5 text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-                  {group.label}
-                </span>
-                {group.tabs.map((tab) => (
-                  <Link key={tab.href} href={tab.href} className="nav-item text-sm">
-                    {tab.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </nav>
+              same `.nav-item` chrome the flat list used. Client island
+              so the current route gets aria-current + the active class
+              (AUDIT C-27). */}
+          <PersonalTabs groups={tabGroups} />
         </div>
         <main id="main" tabIndex={-1} className="animate-page-enter mx-auto max-w-5xl px-6 py-8">
           {children}

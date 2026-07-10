@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState, useTransition } from "react";
 import { KIcon } from "@/components/mobile/kit";
 import { CameraScanner, type ScannedCode } from "@/components/scanners";
+import { scanFeedback } from "@/lib/haptics";
 import { redeemTicket, type DoorResult, type DoorScanRow } from "./actions";
 
 export type DoorListing = {
@@ -26,6 +27,10 @@ export type DoorLabels = {
   holder: string;
   seat: string;
   gatePlaceholder: string;
+  /** Honest offline copy — door redeems run an RPC and cannot queue. */
+  offlineError?: string;
+  /** Humanized, i18n'd scan-result labels; falls back to the raw enum. */
+  results?: Partial<Record<DoorResult, string>>;
 };
 
 const RESULT_TONE: Record<DoorResult, "ok" | "warn" | "danger"> = {
@@ -70,32 +75,58 @@ export function DoorScanner({
 }) {
   const [code, setCode] = useState("");
   const [last, setLast] = useState<DoorScanRow | null>(null);
+  const [offlineError, setOfflineError] = useState(false);
   const [recent, setRecent] = useState<SessionScan[]>([]);
   const [pending, startTransition] = useTransition();
   const inFlightRef = useRef(false);
+  // Decodes arriving while a redeem is in flight are buffered, not dropped —
+  // a gate line often produces back-to-back scans faster than the round trip.
+  const bufferRef = useRef<string[]>([]);
 
   const submit = useCallback(
     (raw: string) => {
       const value = raw.trim();
-      if (!value || inFlightRef.current) return;
+      if (!value) return;
+      if (inFlightRef.current) {
+        if (!bufferRef.current.includes(value)) bufferRef.current.push(value);
+        return;
+      }
       inFlightRef.current = true;
+      setOfflineError(false);
       const fd = new FormData();
       fd.set("code", value);
       fd.set("gate", gate);
       fd.set("location", listing.venueName ?? listing.title);
       startTransition(async () => {
-        const res = await redeemTicket(null, fd);
-        inFlightRef.current = false;
-        if (!res) return;
-        if (!res.ok) {
-          const miss: SessionScan = { result: "not_found", key: `${Date.now()}` };
-          setLast({ result: "not_found" });
-          setRecent((prev) => [miss, ...prev].slice(0, 12));
-          return;
+        try {
+          const res = await redeemTicket(null, fd);
+          if (!res) return;
+          if (!res.ok) {
+            scanFeedback("error");
+            const miss: SessionScan = { result: "not_found", key: `${Date.now()}` };
+            setLast({ result: "not_found" });
+            setRecent((prev) => [miss, ...prev].slice(0, 12));
+            return;
+          }
+          scanFeedback(
+            res.scan.result === "accepted" ? "success" : res.scan.result === "not_found" ? "error" : "warning",
+          );
+          setLast(res.scan);
+          setRecent((prev) => [{ ...res.scan, key: `${Date.now()}` }, ...prev].slice(0, 12));
+          setCode("");
+        } catch {
+          // Server-action fetch failed (offline / transient). Ticket redeems
+          // run an RPC that cannot be queued — be explicit that NOTHING was
+          // recorded rather than throwing into the error boundary.
+          scanFeedback("error");
+          setOfflineError(true);
+        } finally {
+          // Always release the single-flight guard — a throw used to leave it
+          // stuck true, bricking the scanner until reload.
+          inFlightRef.current = false;
+          const next = bufferRef.current.shift();
+          if (next) submit(next);
         }
-        setLast(res.scan);
-        setRecent((prev) => [{ ...res.scan, key: `${Date.now()}` }, ...prev].slice(0, 12));
-        setCode("");
       });
     },
     [gate, listing.venueName, listing.title],
@@ -104,6 +135,7 @@ export function DoorScanner({
   const onScan = useCallback((scanned: ScannedCode) => submit(scanned.value), [submit]);
 
   const lastTone = last ? RESULT_TONE[last.result] : null;
+  const resultLabel = (result: DoorResult) => labels.results?.[result] ?? result;
 
   return (
     <>
@@ -149,6 +181,16 @@ export function DoorScanner({
         </button>
       </form>
 
+      {offlineError && (
+        <div className="import-note" role="alert" style={{ marginTop: 14 }}>
+          <KIcon name="TriangleAlert" size={15} style={{ color: "var(--p-danger)" }} />
+          <span style={{ fontSize: 12 }}>
+            {labels.offlineError ??
+              "No connection. This scan was NOT recorded. Ticket redeems need a live connection; retry when back online."}
+          </span>
+        </div>
+      )}
+
       {last && lastTone && (
         <div
           className="item"
@@ -167,7 +209,7 @@ export function DoorScanner({
           />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="t" style={{ color: RESULT_TOKEN[lastTone] }}>
-              {last.result}
+              {resultLabel(last.result)}
             </div>
             <div className="s">
               {last.holder ? `${labels.holder}: ${last.holder}` : ""}
@@ -175,7 +217,7 @@ export function DoorScanner({
               {last.seat ? `${labels.seat}: ${last.seat}` : ""}
             </div>
           </div>
-          <span className={`ps-badge ps-badge--${RESULT_BADGE[lastTone]}`}>{last.result}</span>
+          <span className={`ps-badge ps-badge--${RESULT_BADGE[lastTone]}`}>{resultLabel(last.result)}</span>
         </div>
       )}
 
@@ -194,13 +236,13 @@ export function DoorScanner({
               <span className="bar" style={{ background: RESULT_TOKEN[tone] }} />
               <KIcon name="ScanLine" size={18} style={{ color: "var(--p-text-2)" }} />
               <div style={{ minWidth: 0, flex: 1 }}>
-                <div className="t">{s.holder ?? s.result}</div>
+                <div className="t">{s.holder ?? resultLabel(s.result)}</div>
                 <div className="s">
-                  {s.result}
+                  {resultLabel(s.result)}
                   {s.seat ? ` · ${labels.seat} ${s.seat}` : ""}
                 </div>
               </div>
-              <span className={`ps-badge ps-badge--${RESULT_BADGE[tone]}`}>{s.result}</span>
+              <span className={`ps-badge ps-badge--${RESULT_BADGE[tone]}`}>{resultLabel(s.result)}</span>
             </div>
           );
         })

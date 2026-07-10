@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { KIcon } from "@/components/mobile/kit";
+import { useClockPunch } from "@/components/mobile/useClockPunch";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { clockIn, clockOut } from "./actions";
 
 /** Format an elapsed millisecond span as HH:MM:SS. */
 function elapsed(fromIso: string | null): string {
@@ -20,8 +19,10 @@ function elapsed(fromIso: string | null): string {
 /**
  * The running time-clock face. Mirrors the kit `.te-clock` block: a live
  * HH:MM:SS counter ticking from the open entry's `started_at`, a zone
- * line, and a single clock-in / clock-out CTA wired to the surviving
- * `clockIn` / `clockOut` server actions.
+ * line, and a single clock-in / clock-out CTA wired through `useClockPunch`
+ * to the queueable `/api/v1/time/clock` endpoint — offline punches queue on
+ * the device and replay on reconnect; clock-in captures GPS (when granted)
+ * so the punch records its geofence zone.
  */
 export function CheckInControls({
   openSince,
@@ -31,9 +32,7 @@ export function CheckInControls({
   zoneName: string | null;
 }) {
   const t = useT();
-  const router = useRouter();
-  const [pending, start] = useTransition();
-  const [error, setError] = useState<string | null>(null);
+  const { punch, pending, outcome } = useClockPunch();
   // Seed a STABLE placeholder so SSR and the client's first render match —
   // computing `elapsed()` (Date.now()) in the initializer runs on both sides at
   // different instants and hydration-mismatches when the second ticks over
@@ -53,18 +52,14 @@ export function CheckInControls({
     return () => clearInterval(id);
   }, [openSince]);
 
-  const toggle = () => {
-    if (pending) return;
-    setError(null);
-    start(async () => {
-      const res = clockedIn ? await clockOut() : await clockIn();
-      if (res?.error) {
-        setError(res.error);
-        return;
-      }
-      router.refresh();
-    });
-  };
+  const zoneStatus =
+    outcome?.kind === "ok" && outcome.action === "clock_in"
+      ? outcome.geofenceState === "inside"
+        ? t("m.clock.zoneInside", { zone: outcome.zoneName ?? "" }, `In zone: ${outcome.zoneName ?? ""}`)
+        : outcome.geofenceState === "outside"
+          ? t("m.clock.zoneOutside", undefined, "Outside all zones. Recorded for review.")
+          : t("m.clock.zoneUnknown", undefined, "No location shared with this punch.")
+      : null;
 
   return (
     <div className="te-clock">
@@ -73,9 +68,29 @@ export function CheckInControls({
         {zoneName ?? t("m.clock.noZone", undefined, "No Zone Set")}
       </div>
       <div className="tcv">{now}</div>
-      {error && (
+      {outcome?.kind === "error" && (
         <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
-          {error}
+          {outcome.message}
+        </div>
+      )}
+      {outcome?.kind === "queued" && (
+        <div className="ps-alert" role="status" style={{ marginBottom: 12 }}>
+          {outcome.action === "clock_in"
+            ? t(
+                "m.clock.queuedIn",
+                undefined,
+                "Punch recorded on this device at the current time. It will sync when you're back online.",
+              )
+            : t(
+                "m.clock.queuedOut",
+                undefined,
+                "Clock-out recorded on this device at the current time. It will sync when you're back online.",
+              )}
+        </div>
+      )}
+      {zoneStatus && (
+        <div className="wl" style={{ justifyContent: "center", marginBottom: 10 }} role="status">
+          {zoneStatus}
         </div>
       )}
       <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
@@ -83,7 +98,7 @@ export function CheckInControls({
           type="button"
           className={clockedIn ? "ps-btn ps-btn--danger ps-btn--lg" : "ps-btn ps-btn--cta ps-btn--lg"}
           disabled={pending}
-          onClick={toggle}
+          onClick={() => void punch(clockedIn ? "clock_out" : "clock_in")}
         >
           {pending
             ? t("m.clock.working", undefined, "Working…")

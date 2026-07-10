@@ -177,7 +177,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
 
           <fieldset className="surface-inset p-3">
             <legend className="text-xs font-medium tracking-wide uppercase">
-              {t("console.bookings.deals.settlement.deductions", undefined, "Deductions — NBOR Inputs")}
+              {t("console.bookings.deals.settlement.deductions", undefined, "Deductions (NBOR Inputs)")}
             </legend>
             <div className="grid grid-cols-3 gap-3">
               <Input

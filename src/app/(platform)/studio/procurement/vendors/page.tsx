@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -29,20 +29,18 @@ export default async function VendorsPage() {
   // Newest-first (the listOrgScoped default): a name-asc sort + the 100-row cap
   // buries a just-created vendor past the loaded set. The DataTable is still
   // client-sortable by name, so alphabetical browsing is one click away.
-  const allRows = await listOrgScoped("vendors", session.orgId);
-  // `vendors` isn't in SOFT_DELETABLE_TABLES, so listOrgScoped doesn't
-  // auto-filter — hide soft-deleted rows here (the DB has `deleted_at`;
-  // it predates the typed Vendor row, so read it off the loose shape).
-  const rows = allRows.filter((r) => (r as Vendor & { deleted_at?: string | null }).deleted_at == null);
+  // Exact count alongside the capped window (F-01) — `vendors` is in
+  // SOFT_DELETABLE_TABLES, so both the rows and the count exclude archived.
+  const { rows, totalCount } = await listOrgScopedWithCount("vendors", session.orgId);
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.procurement.vendors.eyebrow", undefined, "Procurement")}
         title={t("console.procurement.vendors.title", undefined, "Vendors")}
         subtitle={
-          rows.length === 1
-            ? t("console.procurement.vendors.subtitleOne", { count: rows.length }, `${rows.length} Vendor`)
-            : t("console.procurement.vendors.subtitleOther", { count: rows.length }, `${rows.length} Vendors`)
+          totalCount === 1
+            ? t("console.procurement.vendors.subtitleOne", { count: totalCount }, `${totalCount} Vendor`)
+            : t("console.procurement.vendors.subtitleOther", { count: totalCount }, `${totalCount} Vendors`)
         }
         action={
           <Button href="/studio/procurement/vendors/new">
@@ -53,6 +51,7 @@ export default async function VendorsPage() {
       <div className="page-content">
         <DataTable<Vendor>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/procurement/vendors/${r.id}`}
           emptyLabel={t("console.procurement.vendors.emptyLabel", undefined, "No vendors yet")}
           emptyDescription={t(

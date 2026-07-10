@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -46,7 +47,7 @@ const RISK_TONE: Record<string, "muted" | "warning" | "error"> = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -125,7 +126,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.ops.toc.changes.empty.description",
             undefined,
-            "ITIL change management — author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan.",
+            "ITIL change management. Author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan.",
           )}
           emptyAction={
             <Link href="/studio/ops/toc/changes/new" className="ps-btn ps-btn--sm">

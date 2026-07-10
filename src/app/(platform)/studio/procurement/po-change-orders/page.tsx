@@ -137,7 +137,7 @@ export default async function Page() {
             },
             {
               key: "days",
-              header: t("console.procurement.poChangeOrders.col.scheduleDelta", undefined, "Schedule Δ — Days"),
+              header: t("console.procurement.poChangeOrders.col.scheduleDelta", undefined, "Schedule Δ (Days)"),
               render: (r) => r.schedule_impact_days.toString(),
               className: "font-mono text-xs",
               accessor: (r) => r.schedule_impact_days.toString ?? null,

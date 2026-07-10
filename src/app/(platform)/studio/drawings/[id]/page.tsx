@@ -201,7 +201,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="font-mono">
                     {v.version_label}
                     {sheetSet.current_version_id === v.id && (
-                      <span className="ms-2 text-[10px] text-[var(--p-success)] uppercase">
+                      <span className="ms-2 text-[11px] text-[var(--p-success)] uppercase">
                         {t("console.drawings.detail.active", undefined, "active")}
                       </span>
                     )}
@@ -209,7 +209,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="flex items-center gap-2">
                     <Badge variant={toneFor(v.set_state)}>{toTitle(v.set_state)}</Badge>
                     {v.published_at && (
-                      <span className="font-mono text-[10px] text-[var(--p-text-2)]">
+                      <span className="font-mono text-[11px] text-[var(--p-text-2)]">
                         {fmt.dateParts(v.published_at, { month: "short", day: "numeric", year: "numeric" })}
                       </span>
                     )}
@@ -319,7 +319,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 key: "rev",
-                header: t("console.drawings.detail.columnRev", undefined, "Rev — At Publish"),
+                header: t("console.drawings.detail.columnRev", undefined, "Rev (At Publish)"),
                 render: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? "—",
                 accessor: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? null,
                 className: "font-mono text-xs",
@@ -366,7 +366,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {t("console.drawings.detail.addSheet", undefined, "+ Add Sheet")}
               </Button>
             </form>
-            <p className="text-[10px] text-[var(--p-text-2)]">
+            <p className="text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.drawings.detail.revisionImmutableNote",
                 undefined,

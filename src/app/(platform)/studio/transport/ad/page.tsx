@@ -66,7 +66,7 @@ export default async function Page({
           emptyDescription={t(
             "console.transport.ad.emptyDescription",
             undefined,
-            "Track every athlete and Olympic-family arrival or departure — flight ref, carrier, party size.",
+            "Track every athlete and Olympic-family arrival or departure: flight ref, carrier, party size.",
           )}
           emptyAction={
             <Button href="/studio/transport/ad/new" size="sm">

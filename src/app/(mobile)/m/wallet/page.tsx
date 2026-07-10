@@ -9,12 +9,11 @@ export const dynamic = "force-dynamic";
 /**
  * /m/wallet — the COMPVSS Rose pass + the holder's credential entitlements.
  * Reads the caller's `assignments` (catalog_kind='credential'), enriches each
- * with `credential_assignment_details` (access level + expiry), and seeds the
- * rotating gate token off their first active `assignment_scan_codes` code.
- *
- * The surviving client `WalletView` renders the kit `RoseCard` (props
- * `{compact?, onClick}` only — no passBase) and a `RotatingQR base={passBase}`.
- * Design truth: prototype pass (app.jsx 2496-2526).
+ * with `credential_assignment_details` (access level + expiry), and resolves
+ * their first ACTIVE `assignment_scan_codes` code — the real, gate-scannable
+ * pass. `WalletView` renders that code as a genuine QR (RoseCard flip side +
+ * a large gate pass); no client-minted tokens, no fake rotation. When no
+ * active code exists the wallet says so honestly.
  */
 
 export default async function MobileWalletPage() {
@@ -31,6 +30,17 @@ export default async function MobileWalletPage() {
 
   const session = await requireSession();
   const supabase = await createClient();
+
+  // The holder's display identity for the card face.
+  const { data: userRow } = await supabase
+    .from("users")
+    .select("name, email")
+    .eq("id", session.userId)
+    .maybeSingle();
+  const holderName =
+    ((userRow as { name: string | null; email: string | null } | null)?.name ??
+      (userRow as { name: string | null; email: string | null } | null)?.email?.split("@")[0]) ||
+    null;
 
   const { data: assignments } = await supabase
     .from("assignments")
@@ -98,8 +108,6 @@ export default async function MobileWalletPage() {
     };
   });
 
-  const passBase = `COMPVSS:${activeCode ?? session.userId.slice(0, 8).toUpperCase()}`;
-
   const labels = {
     accessTitle: t("m.wallet.accessTitle", undefined, "Access & Permissions"),
     emptyTitle: t("m.wallet.empty.title", undefined, "No Credentials"),
@@ -109,6 +117,17 @@ export default async function MobileWalletPage() {
       "Credential entitlements appear here once issued. Reach out to your admin.",
     ),
     help: t("m.wallet.help", undefined, "Contact Admin For Help"),
+    gateBody: t(
+      "m.wallet.gateBody",
+      undefined,
+      "Present at the gate. Verified against the live roster at scan time.",
+    ),
+    noCodeTitle: t("m.wallet.noCode.title", undefined, "No Gate Code Yet"),
+    noCodeBody: t(
+      "m.wallet.noCode.body",
+      undefined,
+      "Your scannable gate code appears here once a credential with an active scan code is issued to you.",
+    ),
   };
 
   return (
@@ -117,7 +136,7 @@ export default async function MobileWalletPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.wallet.title", undefined, "The COMPVSS Rose")}
       </h1>
-      <WalletView credentials={credentials} passBase={passBase} labels={labels} />
+      <WalletView credentials={credentials} holderName={holderName} activeCode={activeCode} labels={labels} />
     </div>
   );
 }

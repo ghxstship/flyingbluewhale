@@ -43,7 +43,7 @@ export default async function WhiteboardsPage() {
           rows={boards}
           rowHref={(b) => `/studio/collaborate/whiteboards/${b.id}`}
           emptyLabel="No whiteboards yet"
-          emptyDescription="Create a board to sketch plots, seating, signal flow, or run-of-show — saved as a tldraw canvas."
+          emptyDescription="Create a board to sketch plots, seating, signal flow, or run-of-show. Saved as a tldraw canvas."
           columns={[
             {
               key: "name",

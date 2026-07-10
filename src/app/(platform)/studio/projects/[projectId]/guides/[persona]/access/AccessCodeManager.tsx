@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/Dialog";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatDateParts } from "@/lib/i18n/format";
 import { createCodeAction, revokeCodeAction, type CreateState } from "./actions";
 import type { GuideAccessCode } from "@/lib/db/guide-access";
 import type { GuidePersona } from "@/lib/supabase/types";
@@ -77,7 +78,7 @@ export function AccessCodeManager({
           </div>
           <div>
             <label className="text-xs text-[var(--p-text-2)]">
-              {t("console.projects.guides.access.expiresField", undefined, "Expires in — Days")}
+              {t("console.projects.guides.access.expiresField", undefined, "Expires in (Days)")}
             </label>
             <Input
               name="expires_in_days"
@@ -113,7 +114,7 @@ export function AccessCodeManager({
         {state && "ok" in state && state.ok && (
           <div className="surface-raised space-y-2 border border-[var(--p-accent)]/40 p-4">
             <div className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
-              {t("console.projects.guides.access.copyShareEyebrow", undefined, "Copy and share — shown once")}
+              {t("console.projects.guides.access.copyShareEyebrow", undefined, "Copy and share (shown once)")}
             </div>
             <div className="font-mono text-xl tracking-[0.25em]">{state.plainCode}</div>
             <div className="text-xs text-[var(--p-text-2)]">
@@ -331,7 +332,7 @@ export function AccessCodeManager({
 
 function fmtDate(s: string): string {
   try {
-    return new Date(s).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+    return formatDateParts(new Date(s), { month: "short", day: "numeric", year: "numeric" });
   } catch {
     return s;
   }
@@ -339,7 +340,7 @@ function fmtDate(s: string): string {
 
 function fmtDateTime(s: string): string {
   try {
-    return new Date(s).toLocaleString(undefined, {
+    return formatDateParts(new Date(s), {
       month: "short",
       day: "numeric",
       hour: "2-digit",

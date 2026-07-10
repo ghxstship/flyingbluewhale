@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { getSubscription, listSubscriptionTransitions, SUBSCRIPTION_TRANSITION_GRAPH } from "@/lib/subscriptions";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { SubscriptionStateControls } from "./SubscriptionStateControls";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +21,7 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
   const transitions = await listSubscriptionTransitions(session.orgId, subscriptionId);
   const allowedNext = SUBSCRIPTION_TRANSITION_GRAPH[sub.state];
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const cadenceLabel = sub.renewal_cadence_months
     ? t(
@@ -71,27 +72,27 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
           <dl className="grid grid-cols-2 gap-3 text-sm">
             <Field
               label={t("console.subscriptions.detail.started", undefined, "Started")}
-              value={sub.started_at ? new Date(sub.started_at).toLocaleString() : "—"}
+              value={sub.started_at ? fmt.dateTime(new Date(sub.started_at)) : "—"}
             />
             <Field
               label={t("console.subscriptions.detail.trialEnds", undefined, "Trial ends")}
-              value={sub.trial_ends_at ? new Date(sub.trial_ends_at).toLocaleString() : "—"}
+              value={sub.trial_ends_at ? fmt.dateTime(new Date(sub.trial_ends_at)) : "—"}
             />
             <Field
               label={t("console.subscriptions.detail.lastRenewed", undefined, "Last renewed")}
-              value={sub.renewed_at ? new Date(sub.renewed_at).toLocaleString() : "—"}
+              value={sub.renewed_at ? fmt.dateTime(new Date(sub.renewed_at)) : "—"}
             />
             <Field
               label={t("console.subscriptions.detail.lapsedAt", undefined, "Lapsed at")}
-              value={sub.lapsed_at ? new Date(sub.lapsed_at).toLocaleString() : "—"}
+              value={sub.lapsed_at ? fmt.dateTime(new Date(sub.lapsed_at)) : "—"}
             />
             <Field
               label={t("console.subscriptions.detail.reactivatedAt", undefined, "Reactivated at")}
-              value={sub.reactivated_at ? new Date(sub.reactivated_at).toLocaleString() : "—"}
+              value={sub.reactivated_at ? fmt.dateTime(new Date(sub.reactivated_at)) : "—"}
             />
             <Field
               label={t("console.subscriptions.detail.churnedAt", undefined, "Churned at")}
-              value={sub.churned_at ? new Date(sub.churned_at).toLocaleString() : "—"}
+              value={sub.churned_at ? fmt.dateTime(new Date(sub.churned_at)) : "—"}
             />
           </dl>
         </section>

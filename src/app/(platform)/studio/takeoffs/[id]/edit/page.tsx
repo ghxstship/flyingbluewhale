@@ -87,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </FormField>
           </div>
           <FormField
-            label={t("console.takeoffs.edit.fields.calibration", undefined, "Calibration — Inches per Foot")}
+            label={t("console.takeoffs.edit.fields.calibration", undefined, "Calibration (Inches per Foot)")}
             hint={t(
               "console.takeoffs.edit.hints.calibration",
               undefined,

@@ -5,7 +5,18 @@ import { FormField, TextInput } from "@/components/forms/FormField";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { unlockMsa } from "./actions";
 
-export function UnlockForm({ token, expired = false }: { token: string; expired?: boolean }) {
+export function UnlockForm({
+  token,
+  expired = false,
+  orgName,
+  supportEmail,
+}: {
+  token: string;
+  expired?: boolean;
+  /** E-05: derived from the MSA's org row — never hardcode a client name. */
+  orgName?: string | null;
+  supportEmail?: string | null;
+}) {
   const t = useT();
   const action = async (prev: FormState, fd: FormData) => {
     return (await unlockMsa(token, prev as never, fd)) as FormState;
@@ -14,9 +25,9 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
   return (
     <div className="mx-auto max-w-md space-y-6 py-12">
       <div className="space-y-2 text-center">
-        <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
-          GHXSTSHIP Industries LLC
-        </div>
+        {orgName && (
+          <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">{orgName}</div>
+        )}
         <h1 className="text-2xl font-semibold">{t("legal.msaUnlock.title", undefined, "Master Services Agreement")}</h1>
         <p className="text-sm text-[var(--p-text-2)]">
           {expired
@@ -49,12 +60,14 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
             className="ps-input focus-ring text-center font-mono text-2xl tracking-[0.4em] uppercase"
           />
         </FormField>
-        <p className="text-center text-xs text-[var(--p-text-2)]">
-          {t("legal.msaUnlock.troubleContact", undefined, "Trouble? Contact")}{" "}
-          <a className="underline" href="mailto:julian.clarkson@ghxstship.pro">
-            julian.clarkson@ghxstship.pro
-          </a>
-        </p>
+        {supportEmail && (
+          <p className="text-center text-xs text-[var(--p-text-2)]">
+            {t("legal.msaUnlock.troubleContact", undefined, "Trouble? Contact")}{" "}
+            <a className="underline" href={`mailto:${supportEmail}`}>
+              {supportEmail}
+            </a>
+          </p>
+        )}
       </FormShell>
     </div>
   );

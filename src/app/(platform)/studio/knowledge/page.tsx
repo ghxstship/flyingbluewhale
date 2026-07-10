@@ -156,7 +156,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
             {rows.map((a) => (
               <li key={a.id} className="surface hover-lift p-4">
                 <Link href={`/studio/knowledge/${a.slug}`} className="block">
-                  <div className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+                  <div className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                     /{a.slug} · v{a.version}
                   </div>
                   <div className="mt-1 flex items-center gap-2">
@@ -169,7 +169,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                         );
                       if (v.state === "stale")
                         return (
-                          <span className="shrink-0 rounded-full bg-[color:var(--p-warning)]/15 px-1.5 py-0.5 text-[9px] font-semibold text-[var(--p-warning-text)]">
+                          <span className="shrink-0 rounded-full bg-[color:var(--p-warning)]/15 px-1.5 py-0.5 text-[11px] font-semibold text-[var(--p-warning-text)]">
                             {t("console.knowledge.staleShort", undefined, "Stale")}
                           </span>
                         );
@@ -177,7 +177,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                     })()}
                   </div>
                   <p className="mt-2 line-clamp-3 text-xs text-[var(--p-text-2)]">{preview(a.body_markdown)}</p>
-                  <div className="mt-3 flex items-center justify-between text-[10px] text-[var(--p-text-2)]">
+                  <div className="mt-3 flex items-center justify-between text-[11px] text-[var(--p-text-2)]">
                     <div className="flex flex-wrap gap-1">
                       {(a.tags ?? []).slice(0, 4).map((tag) => (
                         <Badge key={tag} variant="muted">

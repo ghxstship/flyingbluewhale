@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { urlFor } from "@/lib/urls";
-import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/DataTable";
 import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { InviteForm } from "./InviteForm";
+import { InviteRowActions } from "./InviteRowActions";
 import { SCOPABLE_MODULES } from "./scopable-modules";
 
 type InviteRow = {
@@ -37,10 +38,11 @@ function relTime(iso: string): string {
 
 export const dynamic = "force-dynamic";
 
-export default async function InvitesPage() {
+export default async function InvitesPage({ searchParams }: { searchParams: Promise<{ emailFailed?: string }> }) {
   const { t } = await getRequestT();
   const session = await requireSession();
   const isAdmin = sessionIsAdmin(session);
+  const { emailFailed } = await searchParams;
 
   const supabase = await createClient();
   const [{ data: rawInvites }, { data: projects }] = await Promise.all([
@@ -70,6 +72,15 @@ export default async function InvitesPage() {
         subtitle={t("console.people.invites.subtitle", undefined, "Pending organization invitations")}
       />
       <div className="page-content space-y-6">
+        {emailFailed === "1" && (
+          <Alert kind="warning">
+            {t(
+              "console.people.invites.emailFailed",
+              undefined,
+              "The invite was created, but the invitation email could not be sent. Copy the link from the pending row below and share it directly, or use Resend once email delivery recovers.",
+            )}
+          </Alert>
+        )}
         {isAdmin && (
           <section className="surface p-5">
             <h3 className="text-sm font-semibold">
@@ -156,12 +167,14 @@ export default async function InvitesPage() {
                   accessor: (i) => i.expires_at,
                 },
                 {
-                  key: "link",
-                  header: t("console.people.invites.col.link", undefined, "Link"),
+                  key: "actions",
+                  header: t("console.people.invites.col.actions", undefined, "Actions"),
                   render: (i) => (
-                    <Button href={urlFor("marketing", `/accept-invite/${i.token}`)} variant="ghost" size="sm">
-                      {t("console.people.invites.copyLink", undefined, "Copy Link")}
-                    </Button>
+                    <InviteRowActions
+                      inviteId={i.id}
+                      acceptUrl={urlFor("auth", `/accept-invite/${i.token}`)}
+                      isAdmin={isAdmin}
+                    />
                   ),
                   sortable: false,
                 },

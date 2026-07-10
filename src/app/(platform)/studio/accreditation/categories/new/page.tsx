@@ -39,7 +39,7 @@ export default async function Page() {
             <textarea name="description" rows={3} maxLength={500} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.accreditation.categories.new.colorLabel", undefined, "Color — Hex or Token")}
+            label={t("console.accreditation.categories.new.colorLabel", undefined, "Color (Hex or Token)")}
             name="color"
             maxLength={20}
             placeholder={t("console.accreditation.categories.new.colorPlaceholder", undefined, "hex or var(--token)")}

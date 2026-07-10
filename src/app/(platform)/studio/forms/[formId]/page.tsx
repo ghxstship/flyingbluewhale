@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -26,7 +27,7 @@ type FormDefRow = {
 };
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -139,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
             {t(
               "console.forms.detail.shareUrlHint",
               undefined,
-              "Share this URL to collect submissions. Authoring lives in the editor — schema is stored as JSON.",
+              "Share this URL to collect submissions. Authoring lives in the editor. Schema is stored as JSON.",
             )}
           </p>
         </section>

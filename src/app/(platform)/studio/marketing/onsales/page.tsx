@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +30,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("event_milestones")
     .select("id, kind, occurs_at, label, visibility")
@@ -78,7 +79,7 @@ export default async function Page() {
             {
               key: "when",
               header: t("console.marketing.onsales.col.occurs", undefined, "Occurs"),
-              render: (r) => new Date(r.occurs_at).toLocaleString(),
+              render: (r) => fmt.dateTime(new Date(r.occurs_at)),
               accessor: (r) => r.occurs_at,
               className: "font-mono text-xs",
             },

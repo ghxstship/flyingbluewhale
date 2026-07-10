@@ -101,7 +101,9 @@ export const metadata: Metadata = {
     "COMPVSS",
     BRAND.legalName,
   ],
-  manifest: "/manifest.json",
+  // The PWA manifest is COMPVSS-only (start_url/scope /m, signal-yellow
+  // theme_color). It's declared by the (mobile) layout's metadata so the
+  // other shells don't advertise an installable app that opens /m.
   // Favicon/touch-icon wiring — src/app/icon.svg auto-loads via Next.js
   // convention for the standard favicon. The apple-touch-icon is a real
   // 180px PNG: iOS Safari does NOT render SVG touch icons (the previous

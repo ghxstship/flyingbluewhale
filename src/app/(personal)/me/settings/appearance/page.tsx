@@ -28,7 +28,7 @@ export default async function AppearancePage() {
 
       <section className="mt-10 grid gap-6 sm:grid-cols-2">
         <div className="surface p-5">
-          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             {t("me.appearance.colorMode.label", undefined, "Color mode")}
           </div>
           <div className="mt-3">
@@ -40,7 +40,7 @@ export default async function AppearancePage() {
         </div>
 
         <div className="surface p-5">
-          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             {t("me.appearance.density.label", undefined, "Density")}
           </div>
           <div className="mt-3">

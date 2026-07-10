@@ -6,7 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +27,7 @@ type Row = { id: string; kind: string; label: string | null; occurs_at: string; 
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -92,7 +93,7 @@ export default async function Page() {
                       <span>{r.label ?? r.org_name}</span>
                     </div>
                     <span className="font-mono text-xs text-[var(--p-text-2)]">
-                      {new Date(r.occurs_at).toLocaleTimeString()}
+                      {fmt.time(new Date(r.occurs_at))}
                     </span>
                   </li>
                 ))}

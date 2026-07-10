@@ -12,9 +12,10 @@ import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
  *
  * Unlike the `(platform)` shell this layout does NOT blanket-gate on a session:
  * LEG3ND's public funnel (logged-out marketing + catalog + standard/course
- * previews + the signage library + the institutions B2B capture) must render
- * for anonymous visitors. The authoring/compliance surfaces (engine / resources
- * / signage CRUD) gate themselves with `requireSession()` at the page level.
+ * previews + the institutions B2B capture) must render for anonymous visitors.
+ * The org-scoped surfaces (engine / resources / the signage library, which is
+ * an org's own sign register rather than public reference content) gate
+ * themselves with `requireSession()` at the page level.
  *
  * `data-product="legend"` paints Production Orange; `data-type="legend"` swaps
  * in the airport-signage type axis — LEG3ND is the one surface that changes the

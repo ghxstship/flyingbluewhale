@@ -15,7 +15,7 @@ import {
 } from "@/lib/production-phase";
 import { ProductionPhaseControls } from "./ProductionPhaseControls";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ orderId: string }> }) {
   const { orderId } = await params;
@@ -131,6 +131,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
   // LDP §2 Production Lifecycle — distinct from the workflow-execution `status`
   // shown above. Phase tracks design→install arc; status tracks workflow gate.
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const fab = await getFabricationOrder(orgId, orderId);
   if (!fab) return null;
   const transitions = await listProductionPhaseTransitions(orgId, orderId);
@@ -167,7 +168,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
                 {tr.from_phase
                   ? toTitle(tr.from_phase)
                   : t("console.production.fabrication.detail.phase.initial", undefined, "Initial")}{" "}
-                → <strong>{toTitle(tr.to_phase)}</strong> · {new Date(tr.transitioned_at).toLocaleDateString()}
+                → <strong>{toTitle(tr.to_phase)}</strong> · {fmt.date(new Date(tr.transitioned_at))}
                 {tr.reason ? <span className="ms-2">{tr.reason}</span> : null}
               </li>
             ))}
@@ -181,7 +182,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
+      <div className="text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{value}</div>
     </div>
   );

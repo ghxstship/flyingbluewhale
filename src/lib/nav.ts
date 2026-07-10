@@ -1211,20 +1211,23 @@ export const PORTAL_PERSONAS: readonly PortalPersona[] = [
  * full persona set.
  */
 export function portalPersonaForSession(persona: string | null | undefined): PortalPersona | null {
+  // A membership persona that IS a portal sub-persona maps to itself —
+  // covers orgs that store the granular persona (artist, sponsor, vip,
+  // …) directly on the membership row.
+  if (persona && (PORTAL_PERSONAS as readonly string[]).includes(persona)) {
+    return persona as PortalPersona;
+  }
   switch (persona) {
-    case "client":
-      return "client";
     case "contractor":
       return "vendor";
-    case "crew":
-      return "crew";
-    case "guest":
     case "member":
     case "viewer":
     case "community":
     case "visitor":
       return "guest";
     default:
+      // Operator personas (owner/admin/manager/collaborator) preview
+      // every persona's portal — callers fall back to the full set.
       return null;
   }
 }
@@ -1346,8 +1349,10 @@ const PERSONA_TITLE: Record<PortalPersona, string> = {
   vip: "VIP",
 };
 
-export function portalNav(slug: string, persona: PortalPersona): NavGroup {
-  const base = `/p/${slug}/${persona}`;
+export function portalNav(slug: string, persona: PortalPersona | null): NavGroup {
+  // `null` = no mapped sub-persona (operator preview / shared surfaces):
+  // render the neutral Workspace-only rail with Overview at the gateway.
+  const base = persona ? `/p/${slug}/${persona}` : `/p/${slug}`;
   const guide: NavItem = { label: "Guide", href: `/p/${slug}/guide` };
   const privacy: NavItem = { label: "Privacy", href: `${base}/privacy` };
   // Shared portal-wide surfaces (announcements + inbox) live above the
@@ -1365,6 +1370,9 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
   // Accreditation self-service (badge/credential applications). Portal-wide
   // surface above the persona slug; RLS gates what each viewer can request.
   const accreditation: NavItem = { label: "Accreditation", href: `/p/${slug}/apply` };
+  // Notification preferences — portal-wide, every persona manages their own
+  // per-kind matrix at the slug root (mirrors /m/settings/notifications).
+  const notifications: NavItem = { label: "Notifications", href: `/p/${slug}/settings/notifications` };
   // ADR-0005: workspace items (the shared 6) lift into their own section
   // so the persona-specific section stays inside Miller's band. Every
   // persona rail used to start with these 6, eating the operator's
@@ -1372,8 +1380,11 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
   const overview: NavItem = { label: "Overview", href: base };
   const workspaceSection: NavSection = {
     label: "Workspace",
-    items: [overview, guide, calendar, updates, inbox, tasks, messages, accreditation],
+    items: [overview, guide, calendar, updates, inbox, tasks, messages, accreditation, notifications],
   };
+  if (!persona) {
+    return { label: "Portal", items: [], sections: [workspaceSection] };
+  }
   // Only persona-specific items here — the shared 6 (Overview, Guide,
   // Updates, Inbox, Tasks, Messages) live in `workspaceSection` above
   // and render as a separate section in the rail. Privacy is included

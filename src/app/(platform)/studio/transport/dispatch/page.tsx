@@ -62,7 +62,7 @@ export default async function Page({
           emptyDescription={t(
             "console.transport.dispatch.emptyDescription",
             undefined,
-            "Schedule a vehicle from origin to destination — fleet T1/T2/T3, media, workforce, or spectator.",
+            "Schedule a vehicle from origin to destination: fleet T1/T2/T3, media, workforce, or spectator.",
           )}
           emptyAction={
             <Button href="/studio/transport/dispatch/new" size="sm">

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,7 @@ export default async function Page() {
   const assetName = new Map((assetRows ?? []).map((a) => [a.id, a] as const));
   const projectName = new Map((projectRows ?? []).map((p) => [p.id, p.name] as const));
   const fmt = (v: string | null) =>
-    v ? new Date(v).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—";
+    v ? formatDateParts(new Date(v), { month: "short", day: "numeric", year: "numeric" }) : "—";
 
   return (
     <>

@@ -85,7 +85,7 @@ export default async function PortalSelectPage() {
           description={t(
             "p.select.emptyDescription",
             undefined,
-            "Your account isn't attached to a project portal yet. If you're expecting access, ask the team that invited you — or reach out and we'll get you sorted.",
+            "Your account isn't attached to a project portal yet. If you're expecting access, ask the team that invited you, or reach out and we'll get you sorted.",
           )}
           action={
             <a className="underline" href={`mailto:${BRAND.emails.support}`}>

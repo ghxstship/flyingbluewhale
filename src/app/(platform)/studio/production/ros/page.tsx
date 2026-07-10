@@ -73,7 +73,7 @@ export default async function RunOfShowPage() {
 
         {grouped.size === 0 ? (
           <section className="surface p-8 text-center text-sm text-[var(--p-text-2)]">
-            {t("console.production.ros.empty", undefined, "No cues yet — author one above.")}
+            {t("console.production.ros.empty", undefined, "No cues yet. Author one above.")}
           </section>
         ) : (
           Array.from(grouped.entries()).map(([day, cues]) => (

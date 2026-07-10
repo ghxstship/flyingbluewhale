@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestFormatters } from "@/lib/i18n/request";
+import { resolveRecordRefs } from "./record-refs";
 
 /**
  * Console inbox write actions (kit 20 Inbox M-series). Mirrors the COMPVSS
@@ -272,4 +274,135 @@ export async function toggleReaction(messageId: string, emoji: string): Promise<
     });
   }
   revalidatePath("/studio/inbox");
+}
+
+// ── Thread pagination + read cursor (audit A-11 / A-36) ─────────────────────
+
+const THREAD_PAGE_SIZE = 80;
+
+/**
+ * Mark a room read (audit A-36) — fired from the client on thread mount
+ * instead of as a GET-render side effect. Membership-scoped: the explicit
+ * user_id filter means a caller only ever touches their own cursor. No
+ * revalidate on purpose — this is a read-cursor write; the room-list badge
+ * reconciles on the next natural refresh, and revalidating here would loop
+ * (render → mark read → render).
+ */
+export async function markRoomRead(roomId: string): Promise<void> {
+  const session = await requireSession();
+  const parsed = z.string().uuid().safeParse(roomId);
+  if (!parsed.success) return;
+  const supabase = await createClient();
+  await supabase
+    .from("chat_room_members")
+    .update({ last_read_at: new Date().toISOString() })
+    .eq("room_id", parsed.data)
+    .eq("user_id", session.userId);
+}
+
+export type EarlierMessagesResult =
+  | {
+      messages: import("./ConsoleChat").ConsoleMessage[];
+      refs: import("./record-ref-types").RecordRefMap;
+      hasMore: boolean;
+    }
+  | { error: string };
+
+/**
+ * Cursor page of thread history older than `beforeIso` (audit A-11) — the
+ * server half of the "Load earlier messages" control. Mirrors the page's
+ * message shape (author names, formatted times, reactions, record-ref
+ * chips) so older rows render identically to the initial window.
+ */
+export async function loadEarlierMessages(roomId: string, beforeIso: string): Promise<EarlierMessagesResult> {
+  const session = await requireSession();
+  const parsed = z
+    .object({ roomId: z.string().uuid(), beforeIso: z.string().datetime({ offset: true }) })
+    .safeParse({ roomId, beforeIso });
+  if (!parsed.success) return { error: "Invalid cursor" };
+  const supabase = await createClient();
+
+  // Deterministic membership check (RLS backstops the table).
+  const { data: member } = await supabase
+    .from("chat_room_members")
+    .select("room_id")
+    .eq("room_id", parsed.data.roomId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  if (!member) return { error: "Not a member of this room" };
+
+  const { data: msgs, error } = await supabase
+    .from("chat_messages")
+    .select("id, author_id, body, created_at")
+    .eq("room_id", parsed.data.roomId)
+    .lt("created_at", parsed.data.beforeIso)
+    .order("created_at", { ascending: false })
+    .limit(THREAD_PAGE_SIZE + 1);
+  if (error) return { error: error.message };
+  const raw = (msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; created_at: string }>;
+  const hasMore = raw.length > THREAD_PAGE_SIZE;
+  const ordered = raw.slice(0, THREAD_PAGE_SIZE).reverse();
+  if (ordered.length === 0) return { messages: [], refs: {}, hasMore: false };
+
+  const authorIds = [...new Set(ordered.map((m) => m.author_id).filter((a): a is string => !!a))];
+  const [fmt, authorsRes, refs, reactionsRes] = await Promise.all([
+    getRequestFormatters(),
+    authorIds.length > 0
+      ? supabase.from("users").select("id, name, email").in("id", authorIds)
+      : Promise.resolve({ data: [] }),
+    resolveRecordRefs(
+      supabase,
+      session.orgId,
+      ordered.map((m) => m.body),
+      "platform",
+    ),
+    supabase
+      .from("chat_message_reactions")
+      .select("message_id, emoji, user_id")
+      .in(
+        "message_id",
+        ordered.map((m) => m.id),
+      ),
+  ]);
+
+  const nameById = new Map<string, string>();
+  for (const a of (authorsRes.data ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+    nameById.set(a.id, a.name ?? a.email ?? "");
+  }
+  const reactionsByMessage = new Map<string, Map<string, { count: number; mine: boolean }>>();
+  for (const r of ((reactionsRes as { data: unknown }).data ?? []) as Array<{
+    message_id: string;
+    emoji: string;
+    user_id: string;
+  }>) {
+    let byEmoji = reactionsByMessage.get(r.message_id);
+    if (!byEmoji) {
+      byEmoji = new Map();
+      reactionsByMessage.set(r.message_id, byEmoji);
+    }
+    const cur = byEmoji.get(r.emoji) ?? { count: 0, mine: false };
+    cur.count += 1;
+    if (r.user_id === session.userId) cur.mine = true;
+    byEmoji.set(r.emoji, cur);
+  }
+
+  return {
+    hasMore,
+    refs,
+    messages: ordered.map((m) => ({
+      id: m.id,
+      authorId: m.author_id,
+      authorName: m.author_id ? (nameById.get(m.author_id) ?? "") : "",
+      body: m.body,
+      timeText: fmt.time(m.created_at),
+      dayKey: fmt.dateParts(m.created_at, { year: "numeric", month: "2-digit", day: "2-digit" }),
+      dayLabel: fmt.dateParts(m.created_at, { weekday: "short", month: "short", day: "numeric" }),
+      createdAt: m.created_at,
+      reactions: [...(reactionsByMessage.get(m.id)?.entries() ?? [])].map(([emoji, v]) => ({
+        emoji,
+        count: v.count,
+        mine: v.mine,
+      })),
+    })),
+  };
 }

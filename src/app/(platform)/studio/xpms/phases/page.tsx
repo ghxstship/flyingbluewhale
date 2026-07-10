@@ -41,7 +41,7 @@ export default async function PhasesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow={t("console.xpms.phases.eyebrow", undefined, "XPMS · 8PP — Eight Production Phases")}
+        eyebrow={t("console.xpms.phases.eyebrow", undefined, "XPMS · 8PP · Eight Production Phases")}
         title={t("console.xpms.phases.title", undefined, "Phases")}
         subtitle={t("console.xpms.phases.subtitle", undefined, "Temporal spine across project lifecycle.")}
       />

@@ -2,6 +2,7 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { formatMoney } from "@/lib/i18n/format";
 
 /**
  * Tax reference reads. The reference tables (jurisdictions / categories /
@@ -116,8 +117,5 @@ export function formatMinorAsMoney(
   currency: string | null | undefined,
 ): string {
   if (minor == null || !Number.isFinite(minor)) return "—";
-  return (minor / 100).toLocaleString("en-US", {
-    style: "currency",
-    currency: currency ?? "USD",
-  });
+  return formatMoney(minor, currency);
 }

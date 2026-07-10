@@ -1,3 +1,8 @@
+// Voice-canon note (E-28): docs/brand/voice.md bans competitor comparison in
+// product and primary-narrative copy, with an explicit carve-out for the
+// bottom-of-funnel SEO surfaces this file powers (/compare/* and
+// /alternatives/*). Keep every claim factual, keep the "whenTheyWin" section
+// honest, and never let these names leak into any other surface.
 export type CompareConfig = {
   slug: string;
   competitor: string;

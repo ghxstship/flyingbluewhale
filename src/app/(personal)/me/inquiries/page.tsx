@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
 import { STATUS_TONE, INQUIRY_SUBJECT_PATHS, type InquirySubjectKind, type InquiryState } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +36,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("marketplace_inquiries")
     .select("id, subject_kind, subject_name, subject_handle, inquiry_state, message, event_date, created_at")
@@ -94,15 +95,15 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                   {t(
                     "me.inquiries.sentOn",
-                    { date: new Date(r.created_at).toLocaleDateString() },
-                    `Sent ${new Date(r.created_at).toLocaleDateString()}`,
+                    { date: fmt.date(new Date(r.created_at)) },
+                    `Sent ${fmt.date(new Date(r.created_at))}`,
                   )}
                   {r.event_date
                     ? " · " +
                       t(
                         "me.inquiries.eventOn",
-                        { date: new Date(`${r.event_date}T00:00:00`).toLocaleDateString() },
-                        `Event ${new Date(`${r.event_date}T00:00:00`).toLocaleDateString()}`,
+                        { date: fmt.date(new Date(`${r.event_date}T00:00:00`)) },
+                        `Event ${fmt.date(new Date(`${r.event_date}T00:00:00`))}`,
                       )
                     : ""}
                 </p>

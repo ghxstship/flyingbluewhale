@@ -59,7 +59,7 @@ export function PhaseBlock({
         </span>
         <div className="flex-1">
           {block.tag && (
-            <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
               {block.tag}
             </div>
           )}
@@ -79,7 +79,7 @@ export function PhaseBlock({
 
           {block.core && block.core.length > 0 && (
             <div className="mt-5">
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">Included</div>
+              <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">Included</div>
               <ul className="mt-2 space-y-2">
                 {block.core.map((c, i) => (
                   <li
@@ -102,7 +102,7 @@ export function PhaseBlock({
 
           {block.addons && block.addons.length > 0 && (
             <div className="mt-6">
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
                 Add-ons{" "}
                 {addonTotalCents > 0 && (
                   <span className="ms-2 font-mono text-[var(--p-text-1)] normal-case">
@@ -147,7 +147,7 @@ export function PhaseBlock({
             <div className="mt-6 rounded-lg border border-dashed border-[var(--p-border)] p-4">
               <div className="flex items-center gap-2">
                 <span className="inline-block h-3 w-3 rotate-45" style={{ background: accent }} />
-                <div className="text-[10px] font-semibold tracking-widest uppercase">{block.gate.title}</div>
+                <div className="text-[11px] font-semibold tracking-widest uppercase">{block.gate.title}</div>
               </div>
               <ul className="mt-2 space-y-1 text-xs text-[var(--p-text-2)]">
                 {block.gate.items.map((i, idx) => (
@@ -165,9 +165,9 @@ export function PhaseBlock({
 
           {block.contractRefs && block.contractRefs.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1">
-              <span className="text-[10px] text-[var(--p-text-2)]">Contractual framework:</span>
+              <span className="text-[11px] text-[var(--p-text-2)]">Contractual framework:</span>
               {block.contractRefs.map((r) => (
-                <span key={r} className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 font-mono text-[10px]">
+                <span key={r} className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 font-mono text-[11px]">
                   {r}
                 </span>
               ))}

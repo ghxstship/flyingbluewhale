@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
@@ -100,7 +100,7 @@ export function SignatureBlock({
     return (
       <section className="print-hide-sibling mx-auto my-12 max-w-4xl px-8">
         <div className="surface p-8 text-center">
-          <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-success)] uppercase">
+          <div className="text-[11px] font-semibold tracking-[0.25em] text-[var(--p-success)] uppercase">
             {t("legal.proposalSignature.signedEyebrow", undefined, "Signed")}
           </div>
           <div className="font-display mt-3 text-4xl tracking-tight">
@@ -125,7 +125,7 @@ export function SignatureBlock({
   return (
     <section id="authorize" className="mx-auto my-12 max-w-4xl px-8">
       <div className="surface p-8">
-        <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+        <div className="text-[11px] font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
           {t("legal.proposalSignature.authorizeEyebrow", undefined, "Authorize")}
         </div>
         <h2 className="font-display mt-3 text-4xl tracking-tight">
@@ -205,6 +205,16 @@ export function SignatureBlock({
           )}
 
           {state?.error && <Alert kind="error">{state.error}</Alert>}
+
+          {/* E-20: e-signature consent + evidence disclosure (mirrors the
+              offer-letter flow's language). */}
+          <p className="text-xs leading-relaxed text-[var(--p-text-2)]">
+            {t(
+              "legal.proposalSignature.consent",
+              undefined,
+              "By signing, you consent to do business electronically and agree that your signature, name, IP address, and timestamp will be recorded as evidence of agreement, with the same legal effect as a handwritten signature.",
+            )}
+          </p>
 
           <div className="flex items-center justify-end gap-2">
             <Button type="submit" disabled={pending || (mode === "typed" ? !typed.trim() : !hasInk)}>

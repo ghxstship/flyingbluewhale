@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { MANAGER_BAND_ROLES, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { log } from "@/lib/log";
@@ -134,7 +134,7 @@ export async function requestAdvance(_prev: State, fd: FormData): Promise<State>
     .from("memberships")
     .select("user_id")
     .eq("org_id", session.orgId)
-    .in("role", ["owner", "admin", "manager"]);
+    .in("role", [...MANAGER_BAND_ROLES]);
   const managerIds = (managers ?? [])
     .map((m) => m.user_id as string)
     .filter((u) => u && u !== session.userId);

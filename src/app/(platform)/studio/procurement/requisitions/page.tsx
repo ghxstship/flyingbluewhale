@@ -3,12 +3,13 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Requisition } from "@/lib/supabase/types";
+import { bulkApproveRequisitions, bulkRejectRequisitions } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -26,13 +27,18 @@ export default async function RequisitionsPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("requisitions", session.orgId, { orderBy: "created_at" });
+  // Exact count alongside the capped table page (audit A-05/A-07) — the
+  // subtitle and truncation indicator stay honest past the 100-row cap.
+  const [rows, totalCount] = await Promise.all([
+    listOrgScoped("requisitions", session.orgId, { orderBy: "created_at" }),
+    countOrgScoped("requisitions", session.orgId),
+  ]);
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.procurement.requisitions.eyebrow", undefined, "Procurement · Source")}
         title={t("console.procurement.requisitions.title", undefined, "Requisitions")}
-        subtitle={t("console.procurement.requisitions.subtitle", { count: rows.length }, `${rows.length} Requests`)}
+        subtitle={t("console.procurement.requisitions.subtitle", { count: totalCount }, `${totalCount} Requests`)}
         action={
           <Button href="/studio/procurement/requisitions/new">
             {t("console.procurement.requisitions.newRequest", undefined, "+ New Request")}
@@ -42,7 +48,21 @@ export default async function RequisitionsPage() {
       <div className="page-content">
         <DataTable<Requisition>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/procurement/requisitions/${r.id}`}
+          bulkActions={[
+            {
+              id: "approve",
+              label: t("console.procurement.requisitions.bulk.approve", undefined, "Approve"),
+              perform: bulkApproveRequisitions,
+            },
+            {
+              id: "reject",
+              label: t("console.procurement.requisitions.bulk.reject", undefined, "Reject"),
+              variant: "danger",
+              perform: bulkRejectRequisitions,
+            },
+          ]}
           emptyLabel={t("console.procurement.requisitions.emptyLabel", undefined, "No requisitions")}
           emptyDescription={t(
             "console.procurement.requisitions.emptyDescription",

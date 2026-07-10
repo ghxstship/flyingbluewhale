@@ -10,7 +10,7 @@ export default async function ImportBudgetPage() {
     <>
       <ModuleHeader
         eyebrow={t("console.finance.budgets.import.eyebrow", undefined, "Finance")}
-        title={t("console.finance.budgets.import.title", undefined, "Import Budget — CSV / TSV")}
+        title={t("console.finance.budgets.import.title", undefined, "Import Budget (CSV / TSV)")}
         subtitle={t(
           "console.finance.budgets.import.subtitle",
           undefined,

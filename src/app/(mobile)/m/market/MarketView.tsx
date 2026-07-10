@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { FormScreen, KIcon, type FormDef } from "@/components/mobile/kit";
+import { ActionBar, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatMoney } from "@/lib/i18n/format";
 import { createListing, markSold, withdrawListing } from "./actions";
 
 export type Listing = {
@@ -40,7 +42,7 @@ function money(cents: number | null, currency: string): string {
       maximumFractionDigits: 0,
     }).format(cents / 100);
   } catch {
-    return `$${Math.round(cents / 100).toLocaleString()}`;
+    return formatMoney(cents, { fractionDigits: 0 });
   }
 }
 
@@ -51,11 +53,45 @@ function money(cents: number | null, currency: string): string {
  * `createListing` server action.
  */
 export function MarketView({ listings, labels }: { listings: Listing[]; labels: Labels }) {
+  const t = useT();
   const router = useRouter();
   const [formOpen, setFormOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTx] = useTransition();
+
+  // Kit ActionBar state (canon: ActionBar on every list screen).
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("recent");
+  const [mineOnly, setMineOnly] = useState(false);
+  const [conds, setConds] = useState<Set<string>>(new Set());
+  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+
+  const condList = useMemo(
+    () => Array.from(new Set(listings.map((l) => l.condition).filter(Boolean) as string[])).sort(),
+    [listings],
+  );
+  const toggleCond = (c: string) =>
+    setConds((s) => {
+      const n = new Set(s);
+      if (n.has(c)) n.delete(c);
+      else n.add(c);
+      return n;
+    });
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const filtered = listings.filter(
+      (l) =>
+        (!q || `${l.title} ${l.description ?? ""} ${l.category ?? ""} ${l.seller}`.toLowerCase().includes(q)) &&
+        (!mineOnly || l.isMine) &&
+        (conds.size === 0 || (l.condition != null && conds.has(l.condition))),
+    );
+    if (sort === "priceAsc") return filtered.slice().sort((a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity));
+    if (sort === "priceDesc") return filtered.slice().sort((a, b) => (b.priceCents ?? -1) - (a.priceCents ?? -1));
+    if (sort === "title") return filtered.slice().sort((a, b) => a.title.localeCompare(b.title));
+    return filtered;
+  }, [listings, query, sort, mineOnly, conds]);
 
   const flash = (msg: string) => {
     setToast(msg);
@@ -129,6 +165,32 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
         </div>
       )}
 
+      <ActionBar
+        k="mkt"
+        query={query}
+        setQuery={setQuery}
+        placeholder={t("m.market.search", undefined, "Search listings…")}
+        sort={sort}
+        setSort={setSort}
+        sortOpts={[
+          ["recent", t("m.market.sort.recent", undefined, "Recent")],
+          ["priceAsc", t("m.market.sort.priceAsc", undefined, "Price: Low First")],
+          ["priceDesc", t("m.market.sort.priceDesc", undefined, "Price: High First")],
+          ["title", t("m.market.sort.title", undefined, "Name")],
+        ]}
+        filterActive={conds.size + (mineOnly ? 1 : 0)}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        filterChildren={
+          <div>
+            <TogRow label={t("m.market.filter.mine", undefined, "My Listings")} on={mineOnly} set={() => setMineOnly((v) => !v)} />
+            {condList.map((c) => (
+              <TogRow key={c} label={c} on={conds.has(c)} set={() => toggleCond(c)} />
+            ))}
+          </div>
+        }
+      />
+
       <div style={{ marginBottom: 12 }}>
         <Button variant="cta" size="sm" onClick={() => setFormOpen(true)}>
           <KIcon name="Plus" size={14} /> {labels.listItem}
@@ -141,9 +203,13 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
           title={labels.emptyTitle}
           description={labels.empty}
         />
+      ) : visible.length === 0 ? (
+        <div className="s" style={{ color: "var(--p-text-3)", padding: "16px 4px" }}>
+          {t("m.market.noMatch", undefined, "Nothing matches your search.")}
+        </div>
       ) : (
         <div className="mkt">
-          {listings.map((l) => (
+          {visible.map((l) => (
             <div className="mcard" key={l.id}>
               <div className="mthumb">
                 <KIcon name="Package" size={30} style={{ color: "var(--p-text-3)" }} />

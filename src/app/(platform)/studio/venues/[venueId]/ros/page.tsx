@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <div className="text-sm font-medium">{c.label}</div>
-                            <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                            <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                               {c.lane}
                               {c.duration_seconds ? ` · ${fmtDuration(c.duration_seconds)}` : ""}
                               {c.event?.name ? ` · ${c.event.name}` : ""}

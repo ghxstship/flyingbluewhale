@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.handover.eyebrow", undefined, "Venue")}
-        title={t("console.venues.handover.titleWithVenue", { name: venue.name }, `${venue.name} — Handover`)}
+        title={t("console.venues.handover.titleWithVenue", { name: venue.name }, `${venue.name} · Handover`)}
         subtitle={
           items.length === 1
             ? t("console.venues.handover.subtitleOne", { count: items.length }, `${items.length} commissioning item`)
@@ -158,7 +158,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           emptyDescription={t(
             "console.venues.handover.empty.description",
             undefined,
-            "Author the commissioning checklist — overlay, MEP, IT, signage, broadcast, catering, medical, security, operations. Each item gets owned, due-dated, and signed off.",
+            "Author the commissioning checklist: overlay, MEP, IT, signage, broadcast, catering, medical, security, operations. Each item gets owned, due-dated, and signed off.",
           )}
           columns={[
             {

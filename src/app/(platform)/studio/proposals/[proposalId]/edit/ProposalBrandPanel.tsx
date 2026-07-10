@@ -46,7 +46,7 @@ export function ProposalBrandPanel({
         />
       </div>
       <div className="mt-4 rounded border border-[var(--p-border)] p-4">
-        <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+        <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
           {t("console.proposals.edit.brand.previewLabel", undefined, "Preview")}
         </div>
         <div className="mt-2 flex items-center gap-3">

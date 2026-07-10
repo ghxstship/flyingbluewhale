@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Expense } from "@/lib/supabase/types";
+import { bulkApproveExpenses, bulkRejectExpenses } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -71,6 +72,19 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
           rows={rows}
           totalCount={count}
           rowHref={(r) => `/studio/finance/expenses/${r.id}`}
+          bulkActions={[
+            {
+              id: "approve",
+              label: t("console.finance.expenses.bulk.approve", undefined, "Approve"),
+              perform: bulkApproveExpenses,
+            },
+            {
+              id: "reject",
+              label: t("console.finance.expenses.bulk.reject", undefined, "Reject"),
+              variant: "danger",
+              perform: bulkRejectExpenses,
+            },
+          ]}
           emptyLabel={t("console.finance.expenses.emptyLabel", undefined, "No expenses logged")}
           emptyDescription={t(
             "console.finance.expenses.emptyDescription",

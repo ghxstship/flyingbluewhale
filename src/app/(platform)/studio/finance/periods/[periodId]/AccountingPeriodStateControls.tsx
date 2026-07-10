@@ -21,7 +21,7 @@ export function AccountingPeriodStateControls({
   if (allowedNext.length === 0) {
     return (
       <p className="text-sm text-[var(--p-text-2)]">
-        {t("console.finance.periods.controls.terminal", undefined, "Terminal state — no further transitions.")}
+        {t("console.finance.periods.controls.terminal", undefined, "Terminal state. No further transitions.")}
       </p>
     );
   }

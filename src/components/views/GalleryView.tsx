@@ -116,6 +116,7 @@ function GalleryCard({ item }: { item: GalleryItem }): React.ReactElement {
             aria-hidden="true"
             className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
             loading="lazy"
+            decoding="async"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-[var(--p-text-2)]">

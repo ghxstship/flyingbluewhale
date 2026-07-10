@@ -141,7 +141,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               key: "window",
               header: t("p.vip.accommodation.col.window", undefined, "Window"),
               render: (r) => (
-                <span className="font-mono text-[10px]">
+                <span className="font-mono text-[11px]">
                   {fmt(r.starts_on)} – {fmt(r.ends_on)}
                 </span>
               ),

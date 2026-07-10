@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +30,7 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("event_milestones")
     .select("id, kind, occurs_at, label, visibility")
@@ -80,7 +81,7 @@ export default async function Page() {
                       <span>{r.label ?? "—"}</span>
                     </div>
                     <span className="font-mono text-xs text-[var(--p-text-2)]">
-                      {new Date(r.occurs_at).toLocaleTimeString()}
+                      {fmt.time(new Date(r.occurs_at))}
                     </span>
                   </li>
                 ))}

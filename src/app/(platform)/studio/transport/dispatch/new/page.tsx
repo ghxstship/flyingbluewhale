@@ -23,10 +23,10 @@ export default async function Page() {
               {t("console.transport.dispatch.new.fleetLabel", undefined, "Fleet")}
             </label>
             <select name="fleet" defaultValue="t1" className="ps-input mt-1.5 w-full">
-              <option value="t1">{t("console.transport.dispatch.new.fleet.t1", undefined, "T1 — Athletes")}</option>
-              <option value="t2">{t("console.transport.dispatch.new.fleet.t2", undefined, "T2 — Teams")}</option>
+              <option value="t1">{t("console.transport.dispatch.new.fleet.t1", undefined, "T1 (Athletes)")}</option>
+              <option value="t2">{t("console.transport.dispatch.new.fleet.t2", undefined, "T2 (Teams)")}</option>
               <option value="t3">
-                {t("console.transport.dispatch.new.fleet.t3", undefined, "T3 — Olympic Family")}
+                {t("console.transport.dispatch.new.fleet.t3", undefined, "T3 (Olympic Family)")}
               </option>
               <option value="media">{t("console.transport.dispatch.new.fleet.media", undefined, "Media")}</option>
               <option value="workforce">

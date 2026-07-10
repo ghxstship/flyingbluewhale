@@ -29,7 +29,7 @@ export default async function GuestHome({ params }: { params: Promise<{ slug: st
               {
                 href: `/p/${slug}/guest/tickets`,
                 label: t("p.guest.home.tickets.label", undefined, "Tickets"),
-                desc: t("p.guest.home.tickets.desc", undefined, "Buy · claim · transfer"),
+                desc: t("p.guest.home.tickets.desc", undefined, "Your passes and entry codes"),
               },
               {
                 href: `/p/${slug}/guest/schedule`,

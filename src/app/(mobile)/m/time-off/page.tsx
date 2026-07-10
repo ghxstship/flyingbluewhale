@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { CalendarOff } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
+import { TimeOffList, type TimeOffItem } from "./TimeOffList";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +46,7 @@ export default async function TimeOffPage() {
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const i18nFmt = await getRequestFormatters();
 
   const [{ data: reqData }, { data: balData }] = await Promise.all([
     supabase
@@ -88,36 +88,22 @@ export default async function TimeOffPage() {
       <div className="sech">
         <h2>{t("m.timeOff.requests", undefined, "Your Requests")}</h2>
       </div>
-      {requests.length === 0 ? (
-        <EmptyState
-          icon={<CalendarOff size={28} aria-hidden="true" />}
-          title={t("m.timeOff.emptyTitle", undefined, "No Requests")}
-          description={t("m.timeOff.emptyBody", undefined, "You haven't requested any time off.")}
-        />
-      ) : (
-        requests.map((r) => {
+      <TimeOffList
+        items={requests.map((r): TimeOffItem => {
           const tone = STATE_TONE[r.request_state ?? ""] ?? "neutral";
           const fmt = (d: string | null) =>
-            d ? new Date(d + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—";
-          return (
-            <div className="item" key={r.id}>
-              <span className="bar" style={{ background: TONE_VAR[tone] ?? "var(--p-accent)" }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">
-                  {fmt(r.starts_on)} – {fmt(r.ends_on)}
-                </div>
-                <div className="s">
-                  {r.hours_requested != null ? `${r.hours_requested}h` : ""}
-                  {r.reason ? ` · ${r.reason}` : ""}
-                </div>
-              </div>
-              <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
-                {r.request_state ?? "—"}
-              </span>
-            </div>
-          );
-        })
-      )}
+            d ? i18nFmt.dateParts(new Date(d + "T00:00:00"), { month: "short", day: "numeric" }) : "—";
+          return {
+            id: r.id,
+            range: `${fmt(r.starts_on)} to ${fmt(r.ends_on)}`,
+            meta: `${r.hours_requested != null ? `${r.hours_requested}h` : ""}${r.reason ? ` · ${r.reason}` : ""}`,
+            state: r.request_state ?? "—",
+            tone,
+            barColor: TONE_VAR[tone] ?? "var(--p-accent)",
+            sortAt: r.starts_on ?? "",
+          };
+        })}
+      />
 
       <Link href="/m/time-off/new" className="fab" aria-label={t("m.timeOff.newCta", undefined, "Request Time Off")}>
         <KIcon name="Plus" size={22} />

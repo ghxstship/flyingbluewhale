@@ -92,5 +92,6 @@ export async function deleteCollectionAction(id: string): Promise<void> {
   if (error) throw new Error(`Could not delete collection: ${error.message}`);
   revalidatePath("/legend/resources/collections");
   revalidatePath("/legend/resources");
-  redirect("/legend/resources/collections");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

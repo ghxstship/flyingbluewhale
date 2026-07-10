@@ -89,7 +89,7 @@ export function RowActions({
               >
                 <span>{it.label}</span>
                 {it.shortcut ? (
-                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">{it.shortcut}</span>
+                  <span className="font-mono text-[11px] text-[var(--p-text-2)]">{it.shortcut}</span>
                 ) : null}
               </DropdownMenu.Item>
             );

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -25,13 +25,17 @@ export default async function FabricationPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("fabrication_orders", session.orgId, { orderBy: "created_at" });
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows, totalCount } = await listOrgScopedWithCount("fabrication_orders", session.orgId, {
+    orderBy: "created_at",
+  });
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.production.fabrication.eyebrow", undefined, "Production")}
         title={t("console.production.fabrication.ordersTitle", undefined, "Fabrication Orders")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.production.fabrication.orderSingular", undefined, "Order") : t("console.production.fabrication.orderPlural", undefined, "Orders")}`}
+        subtitle={`${totalCount} ${totalCount === 1 ? t("console.production.fabrication.orderSingular", undefined, "Order") : t("console.production.fabrication.orderPlural", undefined, "Orders")}`}
         action={
           <Button href="/studio/production/fabrication/new" size="sm">
             {t("console.production.fabrication.newOrder", undefined, "+ New Order")}
@@ -41,12 +45,13 @@ export default async function FabricationPage() {
       <div className="page-content">
         <DataTable<Tables<"fabrication_orders">>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/production/fabrication/${r.id}`}
           emptyLabel={t("console.production.fabrication.emptyLabel", undefined, "No fabrication orders")}
           emptyDescription={t(
             "console.production.fabrication.emptyDescription",
             undefined,
-            "Custom-build work that goes to the shop — runs status from open through complete.",
+            "Custom-build work that goes to the shop. Runs status from open through complete.",
           )}
           emptyAction={
             <Button href="/studio/production/fabrication/new" size="sm">

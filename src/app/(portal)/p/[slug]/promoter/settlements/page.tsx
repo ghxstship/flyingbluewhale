@@ -92,21 +92,21 @@ export default async function PromoterSettlements({ params }: { params: Promise<
         <section className="mt-5 grid grid-cols-3 gap-2">
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">
-              {(totalGross / 100).toLocaleString("en-US", { style: "currency", currency: rows[0]?.currency ?? "USD" })}
+              {fmt.money(totalGross, rows[0]?.currency ?? "USD")}
             </div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.promoter.settlements.metrics.totalGross", undefined, "Total Gross")}
             </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{fmt.number(totalPaid)}</div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.promoter.settlements.metrics.paidAttendance", undefined, "Paid Attendance")}
             </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{rows.filter((r) => r.status === "final").length}</div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.promoter.settlements.metrics.finalized", undefined, "Finalized")}
             </div>
           </div>
@@ -144,18 +144,15 @@ export default async function PromoterSettlements({ params }: { params: Promise<
                 <tr key={s.id}>
                   <td className="font-mono text-xs">{fmt.date(s.show_date)}</td>
                   <td className="font-mono text-xs">
-                    {(s.gross_box_office_cents / 100).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: s.currency,
-                    })}
+                    {fmt.money(s.gross_box_office_cents, s.currency)}
                   </td>
                   <td className="font-mono text-xs">{fmt.number(s.paid_attendance)}</td>
                   <td className="font-mono text-xs">{fmt.number(s.comp_count)}</td>
                   <td className="font-mono text-xs">
-                    {(s.artist_payout_cents / 100).toLocaleString("en-US", { style: "currency", currency: s.currency })}
+                    {fmt.money(s.artist_payout_cents, s.currency)}
                   </td>
                   <td className="font-mono text-xs">
-                    {(s.balance_due_cents / 100).toLocaleString("en-US", { style: "currency", currency: s.currency })}
+                    {fmt.money(s.balance_due_cents, s.currency)}
                   </td>
                   <td>
                     <Badge variant={s.status === "final" ? "success" : "info"}>{toTitle(s.status)}</Badge>

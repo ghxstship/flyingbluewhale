@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
 import { timeAgo } from "@/lib/format";
+import { resolveNotificationHref } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { markReadAction, markAllReadAction, archiveAction, markDoneAction, snoozeAction, undoAction } from "./actions";
 
@@ -327,7 +328,10 @@ export function InboxClient({
                 <div className="min-w-0 flex-1">
                   {n.href ? (
                     <Link
-                      href={n.href}
+                      // Stored hrefs are internal route-group paths
+                      // (/studio/...); resolve to the owning shell's
+                      // canonical origin — this inbox renders on the apex.
+                      href={resolveNotificationHref(n.href)}
                       onClick={(e) => handleRowClick(n, e)}
                       className="block focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
@@ -389,7 +393,7 @@ export function InboxClient({
                                 disabled={pending}
                               >
                                 <span>{labels.label}</span>
-                                <span className="font-mono text-[10px] text-[var(--p-text-2)]">{labels.hint}</span>
+                                <span className="font-mono text-[11px] text-[var(--p-text-2)]">{labels.hint}</span>
                               </button>
                             );
                           })}
@@ -438,7 +442,7 @@ function NotificationBody({ notification }: { notification: InboxNotification })
         >
           {notification.title}
         </h3>
-        <Badge variant="muted" className="font-mono text-[10px]">
+        <Badge variant="muted" className="font-mono text-[11px]">
           {notification.kind}
         </Badge>
       </div>

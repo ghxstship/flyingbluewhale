@@ -47,8 +47,8 @@ export type { ViewToggleProps, ViewMode } from "./ViewToggle";
 export { ActionBar } from "./ActionBar";
 export type { ActionBarProps } from "./ActionBar";
 
-export { RoseCard, RotatingQR, QR, hashStr } from "./RoseCard";
-export type { RoseCardProps, RotatingQRProps, QRProps } from "./RoseCard";
+export { RoseCard, QR, hashStr } from "./RoseCard";
+export type { RoseCardProps, QRProps } from "./RoseCard";
 
 export { FORMS } from "./forms";
 export type { Forms, FormDef, FormField, FormFieldType } from "./forms";

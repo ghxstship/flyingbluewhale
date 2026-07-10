@@ -73,7 +73,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Application was updated concurrently — refresh and retry" };
+    return { error: "Application was updated concurrently. Refresh and retry" };
   }
   revalidatePath(`/studio/marketplace/postings`);
   return { ok: true };

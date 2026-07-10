@@ -39,7 +39,7 @@ const SEED_CONFIG = JSON.stringify(
         heading: "Key contacts",
         entries: [{ header: "Production" }, { role: "Stage manager", name: "TBD", phone: "555-0100" }],
       },
-      { type: "faq", heading: "FAQ", entries: [{ q: "Where do I park?", a: "Lot B — marked with pink cones." }] },
+      { type: "faq", heading: "FAQ", entries: [{ q: "Where do I park?", a: "Lot B. Marked with pink cones." }] },
     ],
   },
   null,

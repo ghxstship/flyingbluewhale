@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -22,7 +23,7 @@ type EventRow = {
 const TRAINING_PATTERN = /(training|practice|drill|warm-up|warmup|warm up)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -125,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={s.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{s.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmt(s.starts_at)} → {fmt(s.ends_at)}
                       {s.location?.name ? ` · ${s.location.name}` : ""}
                     </div>
@@ -147,7 +148,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={s.id} className="flex items-center justify-between py-2 text-xs">
                   <div className="min-w-0">
                     <span className="font-medium">{s.name}</span>
-                    <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">{fmt(s.starts_at)}</span>
+                    <span className="ms-2 font-mono text-[11px] text-[var(--p-text-2)]">{fmt(s.starts_at)}</span>
                   </div>
                   <Badge variant="muted">{toTitle(s.status)}</Badge>
                 </li>

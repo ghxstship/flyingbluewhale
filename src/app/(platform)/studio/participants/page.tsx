@@ -12,7 +12,7 @@ export default async function Page() {
       body: t(
         "console.participants.delegations.body",
         undefined,
-        "Country / org delegations — head of mission, registered party, accreditations.",
+        "Country / org delegations: head of mission, registered party, accreditations.",
       ),
     },
     {
@@ -30,7 +30,7 @@ export default async function Page() {
       body: t(
         "console.participants.visa.body",
         undefined,
-        "Visa workflow — invitation letters, application status, embassy correspondence.",
+        "Visa workflow: invitation letters, application status, embassy correspondence.",
       ),
     },
   ];

@@ -17,7 +17,7 @@ export default async function WhatsNewPage() {
       <ModuleHeader
         eyebrow={t("console.help.eyebrow", undefined, "Support")}
         title={t("console.help.whatsNew.title", undefined, "What's New")}
-        info={t("console.help.whatsNew.info", undefined, "Every release, newest first — features, improvements, and fixes.")}
+        info={t("console.help.whatsNew.info", undefined, "Every release, newest first: features, improvements, and fixes.")}
         breadcrumbs={[
           { label: t("console.help.hub.title", undefined, "Help"), href: "/studio/help" },
           { label: t("console.help.whatsNew.title", undefined, "What's New") },

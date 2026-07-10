@@ -35,7 +35,7 @@ export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<Up
 
   const sizeBytes = Number(parsed.data.size_bytes);
   if (!Number.isFinite(sizeBytes) || sizeBytes <= 0 || sizeBytes > 25 * 1024 * 1024) {
-    return { error: "File must be 1 byte – 25 MB" };
+    return { error: "File must be 1 byte to 25 MB" };
   }
 
   // Decode base64 → Uint8Array for upload + Vision input.

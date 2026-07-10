@@ -25,8 +25,9 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
-  // COMPVSS kit tab model (rebuild 2026-06-21): Home · Calendar · Tasks ·
-  // Assets · Inbox · More.
+  // COMPVSS kit tab model (rebuild 2026-06-21, +Onsite 2026-06-23): Home ·
+  // Calendar · Tasks · Onsite · Assets · Inbox · More (7 tabs — see
+  // docs/compvss/KIT_CANON.md §IA).
   "/m": Home,
   "/m/schedule": CalendarDays,
   "/m/tasks": ListChecks,
@@ -50,6 +51,19 @@ const ICONS: Record<string, typeof Home> = {
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {
   const pathname = usePathname();
   const t = useT();
+
+  // Mirror the total unread/open count onto the installed-app icon via the
+  // App Badging API (Chromium PWAs; silently unsupported elsewhere).
+  const totalBadge = Object.values(badges ?? {}).reduce((sum, n) => sum + (n > 0 ? n : 0), 0);
+  React.useEffect(() => {
+    const nav = navigator as Navigator & {
+      setAppBadge?: (n?: number) => Promise<void>;
+      clearAppBadge?: () => Promise<void>;
+    };
+    if (typeof nav.setAppBadge !== "function") return;
+    if (totalBadge > 0) void nav.setAppBadge(totalBadge).catch(() => {});
+    else void nav.clearAppBadge?.().catch(() => {});
+  }, [totalBadge]);
 
   // Root tabs match exactly only — the shell root (/m) and role homes
   // (/m/medic, /m/crew, …) are prefixes of every sibling tab's href, so
@@ -76,7 +90,8 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
               <Link
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className="relative flex flex-col items-center justify-center gap-1 py-2.5 text-[0.62rem] font-medium tracking-wide uppercase transition-colors"
+                // 0.6875rem = 11px — the MONUMENT type floor (no UI text below 11px).
+                className="relative flex flex-col items-center justify-center gap-1 py-2.5 text-[0.6875rem] font-medium tracking-wide uppercase transition-colors"
               >
                 {active && (
                   <span

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { listOrgScoped } from "@/lib/db/resource";
+import { formatMoney } from "@/lib/i18n/format";
 import type { Database } from "@/lib/supabase/types";
 
 type Tables = Database["public"]["Tables"];
@@ -157,5 +158,5 @@ export async function getKit(orgId: string, kitId: string): Promise<KitDetail | 
 /** cents → USD currency string. */
 export function formatCents(cents: number | null | undefined): string {
   if (cents == null) return "—";
-  return (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
+  return formatMoney(cents);
 }

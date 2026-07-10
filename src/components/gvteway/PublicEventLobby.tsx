@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MapPin, CalendarDays, Navigation, Users, ArrowRight, Ticket } from "lucide-react";
 import { OnsiteSetTimes, type SetTimeRow } from "@/components/gvteway/OnsiteSetTimes";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * PublicEventLobby — the logged-out public face of a project portal
@@ -30,11 +31,11 @@ function fmtDateRange(start?: string | null, end?: string | null): string | null
   const opts: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" };
   const s = new Date(start);
   if (Number.isNaN(s.getTime())) return null;
-  const sStr = s.toLocaleDateString([], opts);
+  const sStr = formatDateParts(s, opts);
   if (!end) return sStr;
   const e = new Date(end);
   if (Number.isNaN(e.getTime())) return sStr;
-  return `${s.toLocaleDateString([], { month: "short", day: "numeric" })} – ${e.toLocaleDateString([], opts)}`;
+  return `${formatDateParts(s, { month: "short", day: "numeric" })} – ${formatDateParts(e, opts)}`;
 }
 
 function directionsHref(venue: LobbyVenue): string | null {

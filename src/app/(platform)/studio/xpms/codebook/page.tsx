@@ -126,7 +126,7 @@ export default async function CodebookPage() {
                 <span className="text-xs">
                   {r.line_name}
                   {r.is_position_root ? (
-                    <span className="ms-2 text-[10px] text-[var(--p-text-2)]">
+                    <span className="ms-2 text-[11px] text-[var(--p-text-2)]">
                       {t("console.xpms.codebook.rootLabel", undefined, "root")}
                     </span>
                   ) : null}

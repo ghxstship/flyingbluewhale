@@ -1,20 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { create as createQrSymbol } from "qrcode";
 import { KIcon } from "./icon";
 
 /**
- * Deterministic QR-style matrix + rotating credential + the COMPVSS "Rose"
- * member card. Ported from the prototype `hashStr` / `QR` / `RotatingQR` /
- * `RoseCard`.
+ * Real QR renderer + the COMPVSS "Rose" member card.
  *
- * `RotatingQR` mints a fresh single-use token on mount and every TTL seconds.
- * It defaults to a client-side `Math.random()` token (fine — this is a
- * "use client" component that only runs in the browser), but accepts a
- * `mintToken` async hook so a server action can back it later.
+ * `QR` encodes its value as a genuine, scannable QR symbol (via the
+ * `qrcode` encoder — modules rendered as SVG rects), replacing the old
+ * decorative FNV-hash matrix that no scanner could read. `RoseCard`
+ * renders the holder's REAL active `assignment_scan_codes` code (fetched
+ * server-side by the caller, e.g. /m/wallet) so the flip-to-QR back of the
+ * card is verifiable at any gate scanner through the assignments domain.
+ * When no code exists the card says so honestly instead of painting a
+ * fake pass. The prototype's client-minted `Math.random()` "single-use
+ * token" (`RotatingQR`) is retired — it advertised a rotation no server
+ * could verify.
  */
 
-/** FNV-1a string hash → unsigned 32-bit seed. */
+/** FNV-1a string hash → unsigned 32-bit seed. (Kept for kit consumers that
+ * derive stable colors/ids from strings — no longer used for QR fakes.) */
 export function hashStr(s: string): number {
   let h = 2166136261;
   for (let i = 0; i < s.length; i++) {
@@ -31,127 +37,61 @@ export type QRProps = {
   bg?: string;
 };
 
-/** Deterministic matrix cells for a QR-style code. Pure — no render state. */
-function qrCells(value: string, n: number): Array<[number, number]> {
-  let seed = hashStr(value || "x");
-  const rnd = () => {
-    seed = (seed * 1664525 + 1013904223) >>> 0;
-    return seed / 4294967296;
-  };
-  const finders: Array<[number, number]> = [
-    [0, 0],
-    [n - 7, 0],
-    [0, n - 7],
-  ];
-  const inFinder = (x: number, y: number) =>
-    finders.some(([ox, oy]) => x >= ox - 1 && x < ox + 8 && y >= oy - 1 && y < oy + 8);
-  const cells: Array<[number, number]> = [];
-  for (let y = 0; y < n; y++)
-    for (let x = 0; x < n; x++) {
-      if (inFinder(x, y)) continue;
-      if (rnd() > 0.52) cells.push([x, y]);
-    }
-  return cells;
-}
-
+/** Scannable QR symbol as inline SVG. Encoding failures (empty value)
+ * render nothing rather than a decorative fake. */
 export function QR({ value, size = 184, fg = "#0c0e12", bg = "#fff" }: QRProps) {
-  const n = 25;
-  const finders: Array<[number, number]> = [
-    [0, 0],
-    [n - 7, 0],
-    [0, n - 7],
-  ];
-  const cells = qrCells(value, n);
+  const matrix = useMemo(() => {
+    if (!value) return null;
+    try {
+      const symbol = createQrSymbol(value, { errorCorrectionLevel: "M" });
+      return symbol.modules;
+    } catch {
+      return null;
+    }
+  }, [value]);
+
+  if (!matrix) return null;
+  const n = matrix.size;
+  const cells: Array<[number, number]> = [];
+  for (let y = 0; y < n; y++) {
+    for (let x = 0; x < n; x++) {
+      if (matrix.get(y, x)) cells.push([x, y]);
+    }
+  }
+  // Quiet zone on each side keeps renders scannable without a wrapper fill.
+  const q = 3;
   return (
-    <svg viewBox={`0 0 ${n} ${n}`} width={size} height={size} shapeRendering="crispEdges" style={{ display: "block" }}>
+    <svg
+      viewBox={`${-q} ${-q} ${n + 2 * q} ${n + 2 * q}`}
+      width={size}
+      height={size}
+      shapeRendering="crispEdges"
+      role="img"
+      aria-label="QR code"
+      style={{ display: "block" }}
+    >
+      <rect x={-q} y={-q} width={n + 2 * q} height={n + 2 * q} fill={bg} />
       {cells.map(([x, y], i) => (
         <rect key={i} x={x} y={y} width={1} height={1} fill={fg} />
       ))}
-      {finders.map(([fx, fy], i) => (
-        <g key={"f" + i}>
-          <rect x={fx} y={fy} width={7} height={7} fill={fg} />
-          <rect x={fx + 1} y={fy + 1} width={5} height={5} fill={bg} />
-          <rect x={fx + 2} y={fy + 2} width={3} height={3} fill={fg} />
-        </g>
-      ))}
     </svg>
-  );
-}
-
-function randomToken(): string {
-  return (
-    Math.random().toString(36).slice(2, 6).toUpperCase() +
-    Math.random().toString(36).slice(2, 6).toUpperCase()
-  );
-}
-
-export type RotatingQRProps = {
-  base: string;
-  size?: number;
-  ttl?: number;
-  /** Optional async token source; when provided it's awaited instead of Math.random. */
-  mintToken?: () => Promise<string>;
-};
-
-export function RotatingQR({ base, size = 176, ttl = 30, mintToken }: RotatingQRProps) {
-  // Start empty so the server and the client's first render match — minting a
-  // `Math.random()` token in the useState initializer runs on both sides and
-  // produces different values, which hydration-mismatches (React #418). The
-  // real token is minted client-side on mount in the effect below.
-  const [token, setToken] = useState<string>("");
-  const [left, setLeft] = useState(ttl);
-
-  const refresh = () => {
-    if (mintToken) {
-      void mintToken().then(setToken);
-    } else {
-      setToken(randomToken());
-    }
-  };
-
-  useEffect(() => {
-    refresh(); // mint the first real token client-side (post-hydration)
-    const tick = setInterval(() => {
-      setLeft((l) => {
-        if (l <= 1) {
-          refresh();
-          return ttl;
-        }
-        return l - 1;
-      });
-    }, 1000);
-    return () => clearInterval(tick);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ttl, mintToken]);
-
-  const regen = () => {
-    refresh();
-    setLeft(ttl);
-  };
-  const pct = (left / ttl) * 100;
-  return (
-    <>
-      <button type="button" className="qrbox" onClick={regen} aria-label="Refresh pass code" style={{ cursor: "pointer", position: "relative", border: "none", font: "inherit" }}>
-        <QR value={`${base}:${token}`} size={size} />
-      </button>
-      <div className="pass-id">
-        {base.split(":").pop()}-{token}
-      </div>
-      <div className="qr-ttl">
-        <div className="qr-ttl-bar">
-          <span style={{ width: pct + "%" }} />
-        </div>
-        <span className="qr-ttl-l">
-          <KIcon name="ShieldCheck" size={11} /> Single-use · refreshes in {left}s
-        </span>
-      </div>
-    </>
   );
 }
 
 export type RoseCardProps = {
   compact?: boolean;
   onClick?: () => void;
+  /** Holder display name (real session identity — no demo placeholder). */
+  holderName?: string | null;
+  /** The holder's ACTIVE assignment scan code. This exact string is what a
+   * gate scanner resolves through /api/v1/scan — the QR encodes it verbatim. */
+  code?: string | null;
+  /** Short credential label shown under the name (e.g. the code itself). */
+  credentialLabel?: string | null;
+  /** Member-since line, already formatted. */
+  memberSince?: string | null;
+  /** Copy for the no-code state, e.g. "No active gate code yet". */
+  noCodeLabel?: string;
 };
 
 /** COMPVSS Rose wordmark lockup. */
@@ -180,7 +120,15 @@ function Lock({ wm }: { wm: number }) {
   );
 }
 
-export function RoseCard({ compact, onClick }: RoseCardProps) {
+export function RoseCard({
+  compact,
+  onClick,
+  holderName,
+  code,
+  credentialLabel,
+  memberSince,
+  noCodeLabel = "No active gate code yet",
+}: RoseCardProps) {
   const [flip, setFlip] = useState(false);
   const skin: React.CSSProperties = {
     position: "relative",
@@ -224,12 +172,16 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
         {sheen}
         <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
           <Lock wm={12} />
-          <div style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 20, lineHeight: 1, marginTop: 7 }}>
-            Rio Tovar
-          </div>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 10, letterSpacing: "0.14em", color: "rgba(255,255,255,.6)", marginTop: 5 }}>
-            ID 0042 · RT4471
-          </div>
+          {holderName ? (
+            <div style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 20, lineHeight: 1, marginTop: 7 }}>
+              {holderName}
+            </div>
+          ) : null}
+          {credentialLabel ? (
+            <div style={{ fontFamily: "var(--p-mono)", fontSize: 10, letterSpacing: "0.14em", color: "rgba(255,255,255,.6)", marginTop: 5 }}>
+              {credentialLabel}
+            </div>
+          ) : null}
         </div>
         <span
           style={{
@@ -237,7 +189,7 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
             width: 46,
             height: 46,
             borderRadius: 11,
-            background: "#fff",
+            background: code ? "#fff" : "rgba(255,255,255,.12)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -246,7 +198,7 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
             boxSizing: "border-box",
           }}
         >
-          <QR value="COMPVSS:RT4471" size={36} />
+          {code ? <QR value={code} size={36} /> : <KIcon name="QrCode" size={20} />}
         </span>
       </button>
     );
@@ -312,27 +264,35 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
               opacity: 0.45,
             }}
           />
-          <span
-            style={{
-              width: 116,
-              height: 116,
-              borderRadius: 14,
-              background: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 8,
-              boxSizing: "border-box",
-            }}
-          >
-            <QR value="COMPVSS:RT4471" size={100} />
-          </span>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.7)" }}>
-            0042 · RT4471
-          </div>
-          <div style={{ fontSize: 10.5, color: "rgba(255,255,255,.45)", textAlign: "center" }}>
-            Scan to verify · single-use
-          </div>
+          {code ? (
+            <>
+              <span
+                style={{
+                  width: 116,
+                  height: 116,
+                  borderRadius: 14,
+                  background: "#fff",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 8,
+                  boxSizing: "border-box",
+                }}
+              >
+                <QR value={code} size={100} />
+              </span>
+              <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.7)" }}>
+                {code}
+              </div>
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,.45)", textAlign: "center" }}>
+                Scan to verify
+              </div>
+            </>
+          ) : (
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,.6)", textAlign: "center", maxWidth: 200 }}>
+              {noCodeLabel}
+            </div>
+          )}
         </div>
       )}
       <div style={{ position: "relative" }}>
@@ -359,9 +319,11 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
           <div style={{ fontFamily: "var(--p-mono)", fontSize: 7.5, letterSpacing: "0.22em", color: "rgba(244,205,191,.6)" }}>
             MEMBER
           </div>
-          <div style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 24, lineHeight: 1, marginTop: 3 }}>
-            Rio Tovar
-          </div>
+          {holderName ? (
+            <div style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 24, lineHeight: 1, marginTop: 3 }}>
+              {holderName}
+            </div>
+          ) : null}
           <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 9 }}>
             <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--p-accent)" }} />
             <span
@@ -373,7 +335,7 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
                 color: "rgba(255,255,255,.82)",
               }}
             >
-              Active
+              {code ? "Active" : "Pending"}
             </span>
           </div>
         </div>
@@ -392,14 +354,18 @@ export function RoseCard({ compact, onClick }: RoseCardProps) {
           <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
             CREDENTIAL ID
           </div>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 15, letterSpacing: "0.2em", marginTop: 3 }}>0042 · RT4471</div>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
-            MEMBER SINCE
+          <div style={{ fontFamily: "var(--p-mono)", fontSize: 15, letterSpacing: "0.2em", marginTop: 3 }}>
+            {credentialLabel ?? code ?? " "}
           </div>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 12, marginTop: 3 }}>06 / 26</div>
         </div>
+        {memberSince ? (
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
+              MEMBER SINCE
+            </div>
+            <div style={{ fontFamily: "var(--p-mono)", fontSize: 12, marginTop: 3 }}>{memberSince}</div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

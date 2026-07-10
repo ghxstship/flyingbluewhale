@@ -65,7 +65,7 @@ export default async function Page() {
                 placeholder={t(
                   "console.procurement.prequalification.questionnaires.new.field.namePlaceholder",
                   undefined,
-                  "General trades — annual prequal",
+                  "General trades · annual prequal",
                 )}
                 className={INPUT}
               />

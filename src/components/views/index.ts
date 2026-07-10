@@ -15,8 +15,12 @@ export { groupByLane } from "./groupByLane";
 export { CalendarView } from "./CalendarView";
 export type { CalendarViewProps, CalendarEvent, CalendarMode } from "./CalendarView";
 
-// Phase 3.4 — ChartView (+ heatmap primitive)
-export { ChartView, formatValue } from "./ChartView";
+// Phase 3.4 — ChartView (+ heatmap primitive). ChartView exports through the
+// lazy wrapper (F-19) so the recharts chunk never rides the barrel; the type
+// re-export is erased at compile time and formatValue lives in lib (no
+// recharts dependency).
+export { ChartView } from "./ChartViewLazy";
+export { formatValue } from "@/lib/views/format-value";
 export type { ChartViewProps } from "./ChartView";
 export { HeatmapGrid } from "./HeatmapGrid";
 export type { HeatmapGridProps, HeatmapCell } from "./HeatmapGrid";

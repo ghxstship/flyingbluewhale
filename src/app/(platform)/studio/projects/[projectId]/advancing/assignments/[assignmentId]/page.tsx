@@ -222,6 +222,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 undefined,
                 "Cancel this assignment? The assignee will no longer see it on their advancing surface.",
               )}
+              undo={{
+                table: "assignments",
+                id: a.id,
+                redirectTo: `/studio/projects/${projectId}/advancing/assignments`,
+              }}
             />
           </div>
         }
@@ -257,14 +262,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               />
               <DetailInput
                 name="zone_codes"
-                label={t("console.projects.assignments.detail.ticket.zones", undefined, "Zones — Comma")}
+                label={t("console.projects.assignments.detail.ticket.zones", undefined, "Zones (Comma)")}
                 className="sm:col-span-2"
                 defaultValue={((detail as TicketDetails | null)?.zone_codes ?? []).join(", ")}
                 placeholder="main_stage, bar_b"
               />
               <DetailInput
                 name="gate_codes"
-                label={t("console.projects.assignments.detail.ticket.gates", undefined, "Gates — Comma")}
+                label={t("console.projects.assignments.detail.ticket.gates", undefined, "Gates (Comma)")}
                 className="sm:col-span-2"
                 defaultValue={((detail as TicketDetails | null)?.gate_codes ?? []).join(", ")}
                 placeholder="gate_a, gate_c"
@@ -347,7 +352,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 label={t(
                   "console.projects.assignments.detail.credential.parent",
                   undefined,
-                  "Parent Credential — Assignment UUID",
+                  "Parent Credential (Assignment UUID)",
                 )}
                 className="sm:col-span-3"
                 defaultValue={(detail as CredentialDetails | null)?.parent_assignment_id ?? ""}
@@ -449,14 +454,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 label={t(
                   "console.projects.assignments.detail.lodging.roommate",
                   undefined,
-                  "Roommate — Assignment UUID",
+                  "Roommate (Assignment UUID)",
                 )}
                 className="sm:col-span-6"
                 defaultValue={(detail as LodgingDetails | null)?.roommate_assignment_id ?? ""}
                 placeholder={t(
                   "console.projects.assignments.detail.lodging.roommatePlaceholder",
                   undefined,
-                  "optional UUID — pairs two assignments to the same room",
+                  "optional UUID (pairs two assignments to the same room)",
                 )}
               />
               <div className="flex justify-end sm:col-span-6">
@@ -474,7 +479,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             description={t(
               "console.projects.assignments.detail.travel.description",
               undefined,
-              "One leg per assignment — multi-leg itineraries are multiple assignments grouped by atom_id.",
+              "One leg per assignment. Multi-leg itineraries are multiple assignments grouped by atom_id.",
             )}
           >
             <form action={upsertTravelDetails} className="grid grid-cols-1 gap-2 sm:grid-cols-6">

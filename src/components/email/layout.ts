@@ -38,6 +38,13 @@ export type EmailLayoutOptions = {
   orgName?: string;
   /** Optional footer postal address (CAN-SPAM friendly). */
   address?: string;
+  /**
+   * Absolute https URL for the recipient's notification preferences.
+   * Pass for notification-class mail (activity fan-out) so the footer
+   * carries a "manage notification emails" link; omit for strictly
+   * transactional sends (verification, receipts, invites).
+   */
+  prefsUrl?: string;
 };
 
 /** Escape preheader text for the hidden preview span. */
@@ -58,6 +65,7 @@ export function emailLayout({
   logoUrl,
   orgName = "ATLVS Technologies",
   address,
+  prefsUrl,
 }: EmailLayoutOptions): string {
   // The preheader trick: visible to inbox snippet, hidden in the body via
   // zero dimensions + matched colors, padded so it doesn't pull following
@@ -73,6 +81,8 @@ export function emailLayout({
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="x-apple-disable-message-reformatting" />
+  <meta name="color-scheme" content="light" />
+  <meta name="supported-color-schemes" content="light" />
   <title>${escapePreheader(orgName)}</title>
   <!--[if mso]><style>table,td,div,p,a{font-family:Arial,Helvetica,sans-serif!important;}</style><![endif]-->
 </head>
@@ -88,7 +98,7 @@ export function emailLayout({
               ${body}
             </td>
           </tr>
-          ${emailFooter(orgName, address)}
+          ${emailFooter(orgName, address, prefsUrl)}
         </table>
       </td>
     </tr>

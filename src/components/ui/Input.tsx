@@ -126,7 +126,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           />
           <label
             htmlFor={id}
-            className={`pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-xs text-[var(--p-text-2)] transition-[top,transform,font-size,color] duration-[var(--motion-fast)] ease-[var(--ease-out)] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-[var(--p-text-2)] peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px] ${hasPrefix ? "start-7" : ""}`}
+            className={`pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-xs text-[var(--p-text-2)] transition-[top,transform,font-size,color] duration-[var(--motion-fast)] ease-[var(--ease-out)] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[11px] peer-focus:text-[var(--p-text-2)] peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px] ${hasPrefix ? "start-7" : ""}`}
           >
             {label}
             {required && (
@@ -153,7 +153,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           {showCount && maxLength && (
             <span
               id={countId}
-              className={`shrink-0 font-mono text-[10px] ${
+              className={`shrink-0 font-mono text-[11px] ${
                 currentValue.length >= maxLength ? "text-[var(--p-danger)]" : "text-[var(--p-text-2)]"
               }`}
             >
@@ -217,7 +217,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           {showCount && maxLength && (
             <span
               id={countId}
-              className={`shrink-0 font-mono text-[10px] ${
+              className={`shrink-0 font-mono text-[11px] ${
                 currentValue.length >= maxLength ? "text-[var(--p-danger)]" : "text-[var(--p-text-2)]"
               }`}
             >

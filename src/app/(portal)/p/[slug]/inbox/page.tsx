@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { PortalRail } from "@/components/Shell";
-import { portalNav } from "@/lib/nav";
+import { portalNav, portalPersonaForSession } from "@/lib/nav";
 
 export const dynamic = "force-dynamic";
 
@@ -48,7 +48,10 @@ export default async function PortalInboxPage({ params }: { params: Promise<{ sl
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "crew")} title={t("p.shared.inbox.railTitle", undefined, "Portal")} />
+      <PortalRail
+        group={portalNav(slug, portalPersonaForSession(session.persona))}
+        title={t("p.shared.inbox.railTitle", undefined, "Portal")}
+      />
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">{t("p.shared.inbox.title", undefined, "Inbox")}</h1>

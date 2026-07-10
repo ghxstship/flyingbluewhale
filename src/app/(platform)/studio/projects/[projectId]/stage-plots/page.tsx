@@ -5,7 +5,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { NewStagePlotButton } from "@/components/stage-plots/NewStagePlotButton";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 
 /** Stage plot list for a project — Opportunity #11 UI surface. */
 
@@ -14,6 +14,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const [{ data: project }, { data: plots }] = await Promise.all([
     supabase
       .from("projects")
@@ -38,7 +39,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
         subtitle={t(
           "console.projects.stagePlots.subtitle",
           undefined,
-          "Interactive 2D Layouts — Mics, Amps, Risers, Truss",
+          "Interactive 2D Layouts (Mics, Amps, Risers, Truss)",
         )}
         breadcrumbs={[
           {
@@ -77,7 +78,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
                   <td className="font-mono text-xs">
                     {p.width_ft && p.depth_ft ? `${p.width_ft}′ × ${p.depth_ft}′` : "—"}
                   </td>
-                  <td className="font-mono text-xs">{new Date(p.updated_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{fmt.date(new Date(p.updated_at))}</td>
                 </tr>
               ))}
             </tbody>

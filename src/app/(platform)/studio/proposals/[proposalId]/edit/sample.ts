@@ -10,11 +10,11 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   {
     type: "hero",
     eyebrow: "Production proposal",
-    title: "Open Air — Hialeah",
+    title: "Open Air · Hialeah",
     subtitle: "Miami Music Week 2026 · Partnership proposal",
     partners: ["Black Coffee", "Hialeah Park", "ATLVS Technologies"],
     narrative:
-      "A turnkey production engagement to deliver Open Air at the Racetrack — 15,000 guests, three stages, and full advancing support.",
+      "A turnkey production engagement to deliver Open Air at the Racetrack: 15,000 guests, three stages, and full advancing support.",
     meta: [
       { label: "Document", value: "FBW-2026-001" },
       { label: "Location", value: "Hialeah Park Casino" },
@@ -72,7 +72,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     gate: {
       title: "Gate · approval to advance",
       items: ["Creative brief signed", "Venue scope confirmed", "Budget envelope acknowledged"],
-      unlocks: "Phase 2 — Advancing",
+      unlocks: "Phase 2 (Advancing)",
     },
     contractRefs: ["S2", "S6.2"],
   },
@@ -99,7 +99,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
     gate: {
       title: "Gate · approved to pull",
       items: ["Signed vendor contracts", "Advancing deliverables approved", "Ship-to-site confirmed"],
-      unlocks: "Phase 3 — Show week",
+      unlocks: "Phase 3 (Show week)",
     },
     contractRefs: ["S3", "S7"],
   },
@@ -246,7 +246,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
       {
         slug: "msa",
         label: "Master Services Agreement",
-        body: "MSA placeholder — replace with full text or a signed link.",
+        body: "MSA placeholder. Replace with full text or a signed link.",
       },
       { slug: "terms", label: "Terms & conditions", body: "Standard terms placeholder." },
       { slug: "privacy", label: "Privacy", body: "Privacy policy placeholder." },
@@ -255,7 +255,7 @@ export const SAMPLE_PROPOSAL_BLOCKS: ProposalBlock[] = [
   {
     type: "signature_block",
     parties: [
-      { role: "Client", name: "— to be completed —" },
+      { role: "Client", name: "to be completed" },
       { role: "Producer", name: "ATLVS Technologies Inc.", email: "producer@atlvs.pro" },
     ],
     instructions:

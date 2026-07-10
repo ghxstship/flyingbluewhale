@@ -5,7 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { isDocState } from "@/lib/collaborate";
 
@@ -38,6 +38,7 @@ export default async function Page() {
 
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   // `collab_docs` is not yet in the generated Database types (PENDING
   // migration), so go through the LooseSupabase cast until types regen.
   const { data } = await (supabase as unknown as LooseSupabase)
@@ -73,7 +74,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.collaborate.docs.emptyDescription",
             undefined,
-            "Create a block document to draft runbooks, briefs, and notes — with an AI callout that drafts a paragraph for you.",
+            "Create a block document to draft runbooks, briefs, and notes, with an AI callout that drafts a paragraph for you.",
           )}
           columns={[
             {
@@ -92,7 +93,7 @@ export default async function Page() {
             {
               key: "updated_at",
               header: t("console.collaborate.docs.columns.updated", undefined, "Updated"),
-              render: (r) => new Date(r.updated_at).toLocaleString(),
+              render: (r) => fmt.dateTime(new Date(r.updated_at)),
               sortable: true,
               accessor: (r) => r.updated_at,
             },

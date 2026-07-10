@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { OfferControls } from "./OfferControls";
@@ -33,6 +33,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   const { offerId } = await params;
   if (!hasSupabase) return notFound();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -94,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.slotLabel", undefined, "Slot")}
               </dt>
-              <dd>{o.slot_start ? `${new Date(o.slot_start).toLocaleString()}` : "—"}</dd>
+              <dd>{o.slot_start ? `${fmt.dateTime(new Date(o.slot_start))}` : "—"}</dd>
               <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.projectLabel", undefined, "Project")}
               </dt>
@@ -112,15 +113,15 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               </li>
               <li>
                 {t("console.marketplace.offers.detail.timelineSent", undefined, "Sent")} ·{" "}
-                {o.sent_at ? new Date(o.sent_at).toLocaleString() : "—"}
+                {o.sent_at ? fmt.dateTime(new Date(o.sent_at)) : "—"}
               </li>
               <li>
                 {t("console.marketplace.offers.detail.timelineAccepted", undefined, "Accepted")} ·{" "}
-                {o.accepted_at ? new Date(o.accepted_at).toLocaleString() : "—"}
+                {o.accepted_at ? fmt.dateTime(new Date(o.accepted_at)) : "—"}
               </li>
               <li>
                 {t("console.marketplace.offers.detail.timelineContracted", undefined, "Contracted")} ·{" "}
-                {o.contracted_at ? new Date(o.contracted_at).toLocaleString() : "—"}
+                {o.contracted_at ? fmt.dateTime(new Date(o.contracted_at)) : "—"}
               </li>
             </ul>
           </div>

@@ -7,7 +7,17 @@ import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 import { toTitle } from "@/lib/format";
 import { log } from "@/lib/log";
-import { FULFILLMENT_STATES, NEXT_FULFILLMENT_STATES, type FulfillmentState } from "@/lib/db/assignments";
+import { sendExternalAssignmentEmail } from "@/lib/email";
+import {
+  CATALOG_KIND_LABEL_SINGULAR,
+  FULFILLMENT_STATES,
+  NEXT_FULFILLMENT_STATES,
+  type CatalogKind,
+  type FulfillmentState,
+} from "@/lib/db/assignments";
+
+/** E-06 — externally-meaningful states; email is an external holder's only channel. */
+const EXTERNAL_HOLDER_EMAIL_STATES: readonly FulfillmentState[] = ["issued", "transferred", "voided"] as const;
 
 /**
  * Bulk fulfillment transitions (FE-2) — the list-page counterpart to the
@@ -45,18 +55,20 @@ export async function bulkAdvanceAssignments(
   const supabase = await createClient();
   const { data: rows, error: readErr } = await supabase
     .from("assignments")
-    .select("id, title, party_kind, party_user_id, fulfillment_state")
+    .select("id, title, party_kind, party_user_id, party_external_id, catalog_kind, fulfillment_state")
     .in("id", parsed.data.ids)
     .eq("project_id", parsed.data.projectId)
     .eq("org_id", session.orgId)
     .is("deleted_at", null);
-  if (readErr) return { error: `Could Not Load Assignments — ${readErr.message}` };
+  if (readErr) return { error: `Could Not Load Assignments: ${readErr.message}` };
 
   const found = (rows ?? []) as Array<{
     id: string;
     title: string | null;
     party_kind: "user" | "crew_member" | "external_holder";
     party_user_id: string | null;
+    party_external_id: string | null;
+    catalog_kind: CatalogKind;
     fulfillment_state: FulfillmentState;
   }>;
 
@@ -64,6 +76,8 @@ export async function bulkAdvanceAssignments(
   let transitioned = 0;
   // Missing / cross-project / deleted ids count as failures too.
   let failed = total - found.length;
+  // External holders whose transition landed — emailed in one pass below.
+  const externalToEmail: Array<{ holderId: string; title: string | null; catalogKind: CatalogKind }> = [];
 
   for (const a of found) {
     // Validate EVERY row's transition server-side against the canon.
@@ -108,8 +122,9 @@ export async function bulkAdvanceAssignments(
       });
     }
 
-    // Notify the assignee (user kind only — external holders aren't on
-    // the platform). Fire-and-forget, same as the single path.
+    // Notify the assignee. Platform users get inbox + push + (opt-in)
+    // email; external holders are collected for the email pass below —
+    // email is their only channel. Fire-and-forget, same as the single path.
     if (a.party_kind === "user" && a.party_user_id) {
       void writeInbox({
         userId: a.party_user_id,
@@ -122,8 +137,52 @@ export async function bulkAdvanceAssignments(
         body: a.title ?? "",
         href: "/m/advances",
       });
+    } else if (
+      a.party_kind === "external_holder" &&
+      a.party_external_id &&
+      EXTERNAL_HOLDER_EMAIL_STATES.includes(parsed.data.nextState)
+    ) {
+      externalToEmail.push({ holderId: a.party_external_id, title: a.title, catalogKind: a.catalog_kind });
     }
     transitioned++;
+  }
+
+  // E-06 — one holder/context read, one kit email per external holder whose
+  // transition landed. Fire-and-forget; a send failure never fails the batch.
+  if (externalToEmail.length > 0) {
+    void (async () => {
+      try {
+        const holderIds = [...new Set(externalToEmail.map((e) => e.holderId))];
+        const [{ data: holders }, { data: project }, { data: org }] = await Promise.all([
+          supabase
+            .from("assignment_external_holders")
+            .select("id, holder_email, holder_name")
+            .in("id", holderIds)
+            .eq("org_id", session.orgId),
+          supabase.from("projects").select("name").eq("id", parsed.data.projectId).maybeSingle(),
+          supabase.from("orgs").select("name").eq("id", session.orgId).maybeSingle(),
+        ]);
+        const byId = new Map((holders ?? []).map((h) => [h.id, h]));
+        await Promise.allSettled(
+          externalToEmail.map((e) => {
+            const holder = byId.get(e.holderId);
+            if (!holder?.holder_email) return Promise.resolve();
+            const kindLabel = CATALOG_KIND_LABEL_SINGULAR[e.catalogKind] ?? "Assignment";
+            return sendExternalAssignmentEmail({
+              to: holder.holder_email,
+              holderName: holder.holder_name,
+              assignmentTitle: e.title ?? kindLabel,
+              kindLabel,
+              stateLabel: toTitle(parsed.data.nextState),
+              projectName: project?.name ?? null,
+              orgName: org?.name ?? null,
+            });
+          }),
+        );
+      } catch (err) {
+        log.warn("assignments.bulk_external_holder_email_failed", { err: (err as Error).message });
+      }
+    })();
   }
 
   revalidatePath(`/studio/projects/${parsed.data.projectId}/advancing/assignments`);

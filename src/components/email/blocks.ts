@@ -104,15 +104,21 @@ export function emailButton({
   label,
   href,
   tone = "primary",
+  accent,
+  onAccent,
 }: {
   label: string;
   href: string;
   tone?: ButtonTone;
+  /** Optional co-brand fill override (literal hex) — producer-accent CTAs. */
+  accent?: string;
+  /** Foreground paired with `accent` (defaults to the house on-accent white). */
+  onAccent?: string;
 }): string {
-  const fill = tone === "primary" ? PALETTE.accent : PALETTE.surface;
-  const fg = tone === "primary" ? PALETTE.onAccent : PALETTE.accent;
+  const fill = tone === "primary" ? (accent ?? PALETTE.accent) : PALETTE.surface;
+  const fg = tone === "primary" ? (onAccent ?? PALETTE.onAccent) : (accent ?? PALETTE.accent);
   const border =
-    tone === "primary" ? PALETTE.accent : PALETTE.border;
+    tone === "primary" ? (accent ?? PALETTE.accent) : PALETTE.border;
   return `<a href="${href}" target="_blank" rel="noopener" style="display:inline-block;background:${fill};color:${fg};border:1px solid ${border};font-family:${FONTS.body};font-size:15px;font-weight:700;line-height:1;text-decoration:none;padding:14px 28px;border-radius:10px;mso-padding-alt:0;">${escapeHtml(
     label,
   )}</a>`;
@@ -191,19 +197,26 @@ export function emailHeader(logoUrl?: string): string {
 /**
  * The footer band — org name, optional postal address, and the legally
  * required "this is a transactional message" affordance. `orgName` and
- * `address` are escaped.
+ * `address` are escaped. `prefsUrl` (absolute https) adds a "manage
+ * notification emails" link — pass it for notification-class mail so
+ * recipients can tune delivery instead of marking spam; omit it for
+ * strictly transactional sends (verification, receipts).
  */
-export function emailFooter(orgName: string, address?: string): string {
+export function emailFooter(orgName: string, address?: string, prefsUrl?: string): string {
   const addr = address
     ? `<div style="margin-top:6px;color:${PALETTE.tertiary};">${escapeHtml(
         address,
       )}</div>`
+    : "";
+  const prefs = prefsUrl
+    ? `<div style="margin-top:10px;"><a href="${prefsUrl}" target="_blank" rel="noopener" style="color:${PALETTE.tertiary};text-decoration:underline;">Manage notification emails</a></div>`
     : "";
   return `<tr><td style="padding:22px 28px;border-top:1px solid ${PALETTE.border};background:${PALETTE.bg};font-family:${FONTS.mono};font-size:11px;line-height:1.6;letter-spacing:0.04em;color:${PALETTE.tertiary};text-align:center;">
     <div style="color:${PALETTE.muted};font-weight:700;text-transform:uppercase;letter-spacing:0.1em;">${escapeHtml(
       orgName,
     )}</div>
     ${addr}
+    ${prefs}
     <div style="margin-top:10px;">Powered by <a href="${BRAND.apexUrl}" target="_blank" rel="noopener" style="color:${PALETTE.accent};text-decoration:none;font-weight:700;">A T L V S</a></div>
   </td></tr>`;
 }

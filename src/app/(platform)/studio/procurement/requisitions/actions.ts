@@ -89,7 +89,7 @@ export async function convertRequisitionToPoAction(reqId: string): Promise<Conve
     .select("id");
   if (claimError) return { error: claimError.message };
   if (!claimed || claimed.length === 0) {
-    return { error: "Requisition changed concurrently — refresh and retry" };
+    return { error: "Requisition changed concurrently. Refresh and retry" };
   }
 
   const { data: po, error: insertError } = await supabase
@@ -201,4 +201,42 @@ export async function convertRequisitionToRfqAction(reqId: string): Promise<Conv
   revalidatePath(`/studio/procurement/requisitions/${reqId}`);
   revalidatePath("/studio/procurement/rfqs");
   redirect(`/studio/procurement/rfqs/${rfq.id}`);
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk approve / reject submitted requisitions (audit A-22). manager+
+ * only; rows not in `submitted` are skipped and reported.
+ */
+async function bulkSetRequisitionState(ids: string[], next: "approved" | "rejected"): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Review Requisitions" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("requisitions")
+    .update({ requisition_state: next })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .eq("requisition_state", "submitted")
+    .select("id");
+  if (error) return { error: `Could Not Update · ${error.message}` };
+  const done = updated?.length ?? 0;
+  const skipped = parsed.data.length - done;
+  revalidatePath("/studio/procurement/requisitions");
+  const verb = next === "approved" ? "Approved" : "Rejected";
+  if (skipped > 0) return { error: `${done} ${verb} · ${skipped} Skipped (not in submitted)` };
+  return { message: `${done} ${done === 1 ? "Requisition" : "Requisitions"} ${verb}` };
+}
+
+export async function bulkApproveRequisitions(ids: string[]): Promise<BulkResult> {
+  return bulkSetRequisitionState(ids, "approved");
+}
+
+export async function bulkRejectRequisitions(ids: string[]): Promise<BulkResult> {
+  return bulkSetRequisitionState(ids, "rejected");
 }

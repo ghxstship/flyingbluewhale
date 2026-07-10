@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { RecordActionButton } from "@/components/ui/RecordActionButton";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data } = await supabase
@@ -92,7 +94,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
             <DeleteForm
               action={deleteNote.bind(null, note.id)}
-              confirm="Delete this meeting note? This cannot be undone."
+              confirm="Delete this meeting note? It is soft-deleted and can be restored right after."
+              undo={{ table: "meeting_notes", id: note.id, redirectTo: "/studio/meetings/notes" }}
             />
           </div>
         }
@@ -109,11 +112,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           )}
           <span className="font-mono text-[var(--p-text-2)]">
-            Created {new Date(note.created_at).toLocaleDateString()}
+            Created {fmt.date(new Date(note.created_at))}
           </span>
           {note.summarized_at && (
             <span className="font-mono text-[var(--p-text-2)]">
-              Summarized {new Date(note.summarized_at).toLocaleDateString()}
+              Summarized {fmt.date(new Date(note.summarized_at))}
             </span>
           )}
           {!aiConfigured && <Badge variant="warning">AI not configured</Badge>}

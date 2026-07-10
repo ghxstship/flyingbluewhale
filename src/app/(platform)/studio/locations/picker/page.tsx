@@ -15,7 +15,7 @@ export default async function Page() {
       <ModuleHeader
         eyebrow={t("console.locations.picker.eyebrow", undefined, "Locations")}
         title={t("console.locations.picker.title", undefined, "Location Picker")}
-        subtitle={t("console.locations.picker.subtitle", undefined, "Async typeahead — paste this into any form")}
+        subtitle={t("console.locations.picker.subtitle", undefined, "Async typeahead (paste this into any form)")}
       />
       <div className="page-content max-w-2xl space-y-4">
         <LocationPickerDemo />

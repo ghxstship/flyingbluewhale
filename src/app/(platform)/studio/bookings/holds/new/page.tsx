@@ -52,7 +52,7 @@ export default async function Page() {
                 {t("console.bookings.holds.new.tierLabel", undefined, "Tier")}
               </label>
               <select name="tier" className="ps-input mt-1.5 w-full" defaultValue="1">
-                <option value="1">{t("console.bookings.holds.new.tier1", undefined, "Tier 1 — First Refusal")}</option>
+                <option value="1">{t("console.bookings.holds.new.tier1", undefined, "Tier 1 (First Refusal)")}</option>
                 <option value="2">{t("console.bookings.holds.new.tier2", undefined, "Tier 2")}</option>
                 <option value="3">{t("console.bookings.holds.new.tier3", undefined, "Tier 3")}</option>
                 <option value="4">{t("console.bookings.holds.new.tier4", undefined, "Tier 4")}</option>

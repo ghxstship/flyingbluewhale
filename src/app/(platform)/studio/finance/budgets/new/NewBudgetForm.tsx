@@ -105,7 +105,7 @@ export function NewBudgetForm() {
           />
           <Select label={t("console.finance.budgets.new.tier", undefined, "Tier")} name="tier" options={XPMS_TIERS} />
           <Select
-            label={t("console.finance.budgets.new.xyz", undefined, "XYZ — Cost Behaviour")}
+            label={t("console.finance.budgets.new.xyz", undefined, "XYZ (Cost Behaviour)")}
             name="xyz"
             options={XPMS_XYZ}
           />
@@ -121,7 +121,7 @@ export function NewBudgetForm() {
           {t(
             "console.finance.budgets.new.lineTypeHint",
             undefined,
-            "Fee & Contingency are LINE TYPE values — they roll up separately and never inflate a phase total.",
+            "Fee & Contingency are LINE TYPE values. They roll up separately and never inflate a phase total.",
           )}
         </p>
       </fieldset>
@@ -138,12 +138,12 @@ export function NewBudgetForm() {
             step="0.01"
           />
           <MoneyInput
-            label={t("console.finance.budgets.new.rate", undefined, "Rate — USD")}
+            label={t("console.finance.budgets.new.rate", undefined, "Rate (USD)")}
             name="rate_cents"
             hint={t("console.finance.budgets.new.rateHint", undefined, "Estimate = Quantity × Rate (computed by DB)")}
           />
           <MoneyInput
-            label={t("console.finance.budgets.new.amount", undefined, "Budget — USD")}
+            label={t("console.finance.budgets.new.amount", undefined, "Budget (USD)")}
             name="amount_cents"
             required
             hint={t("console.finance.budgets.new.amountHint", undefined, "The approved baseline")}

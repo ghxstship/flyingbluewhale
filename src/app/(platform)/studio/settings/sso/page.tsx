@@ -182,7 +182,7 @@ export default async function Page() {
               placeholder={t(
                 "console.settings.sso.form.namePlaceholder",
                 undefined,
-                'Display name (e.g. "Okta — Production")',
+                'Display name (e.g. "Okta Production")',
               )}
               className="ps-input sm:col-span-3"
             />
@@ -226,7 +226,7 @@ export default async function Page() {
               {t(
                 "console.settings.sso.form.enabledLabel",
                 undefined,
-                "Enabled on Save — Uncheck to Draft Without Activating",
+                "Enabled on Save (Uncheck to Draft Without Activating)",
               )}
             </label>
             <div className="flex justify-end sm:col-span-6">
@@ -235,7 +235,7 @@ export default async function Page() {
               </Button>
             </div>
           </form>
-          <p className="mt-2 text-[10px] text-[var(--p-text-2)]">
+          <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
             {t(
               "console.settings.sso.form.emailDomainsHint",
               undefined,

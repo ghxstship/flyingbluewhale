@@ -57,5 +57,6 @@ export async function deletePurchaseOrder(id: string): Promise<void> {
     .is("deleted_at", null);
   if (error) throw new Error(`Could not archive purchase order: ${error.message}`);
   revalidatePath("/studio/procurement/purchase-orders");
-  redirect("/studio/procurement/purchase-orders");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

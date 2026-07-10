@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { urlFor } from "@/lib/urls";
 import { PRIORITY_TONE, toneFor } from "@/lib/tones";
@@ -26,7 +27,7 @@ type RequestRow = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -128,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <div className="font-medium">{r.category}</div>
                     {r.description && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{r.description}</p>}
-                    <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="mt-1 font-mono text-[11px] text-[var(--p-text-2)]">
                       {t("p.athlete.requests.row.opened", { date: fmt(r.opened_at) }, `opened ${fmt(r.opened_at)}`)}
                       {r.resolved_at
                         ? t(

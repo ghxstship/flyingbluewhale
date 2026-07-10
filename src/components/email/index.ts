@@ -30,6 +30,9 @@ export {
   verifyEmail,
   inviteEmail,
   announcementEmail,
+  notificationEmail,
+  proposalShareEmail,
+  externalAssignmentEmail,
   type RenderedEmail,
 } from "./templates";
 

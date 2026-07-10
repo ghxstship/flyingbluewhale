@@ -68,8 +68,9 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
               confirm={t(
                 "console.operations.incidents.detail.deleteConfirm",
                 { summary },
-                `Delete incident "${summary}"? This cannot be undone.`,
+                `Delete incident "${summary}"?`,
               )}
+              undo={{ table: "incidents", id: p.incidentId, redirectTo: "/studio/operations/incidents" }}
             />
           </div>
         }

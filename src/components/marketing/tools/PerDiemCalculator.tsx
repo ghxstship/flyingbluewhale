@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Plus, X } from "lucide-react";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 type Leg = { id: string; city: string; days: number; rate: number; headcount: number };
 
@@ -37,6 +37,7 @@ function gsaTierPresets(t: Translator): Array<{ label: string; rate: number; hin
 
 export function PerDiemCalculator() {
   const t = useT();
+  const fmt = useFormatters();
   const GSA_TIER_PRESETS = gsaTierPresets(t);
   const [legs, setLegs] = useState<Leg[]>([{ id: "1", city: "", days: 5, rate: DEFAULT_RATE, headcount: 6 }]);
 
@@ -134,7 +135,7 @@ export function PerDiemCalculator() {
               <div className="sm:col-span-2">
                 <label className="eyebrow">{t("marketing.perDiemCalculator.legTotal", undefined, "Leg total")}</label>
                 <div className="mt-1 rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 font-mono text-sm">
-                  ${(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount)).toLocaleString()}
+                  ${fmt.number(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount))}
                 </div>
               </div>
             </div>
@@ -153,7 +154,7 @@ export function PerDiemCalculator() {
         <div className="flex items-center justify-between">
           <div>
             <div className="eyebrow">{t("marketing.perDiemCalculator.total", undefined, "Total")}</div>
-            <div className="mt-1 text-[10px] text-[var(--p-text-2)]">
+            <div className="mt-1 text-[11px] text-[var(--p-text-2)]">
               {legs.length === 1
                 ? t(
                     "marketing.perDiemCalculator.summaryOne",
@@ -167,7 +168,7 @@ export function PerDiemCalculator() {
                   )}
             </div>
           </div>
-          <div className="font-mono text-2xl font-semibold">${total.toLocaleString()}</div>
+          <div className="font-mono text-2xl font-semibold">${fmt.number(total)}</div>
         </div>
       </div>
     </div>

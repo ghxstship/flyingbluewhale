@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { SUBMISSION_STATUSES, STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { transitionSubmissionAction } from "./actions";
 import { BookOfferForm } from "./BookOfferForm";
 
@@ -32,6 +32,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const supabase = await createClient();
   const { data } = await supabase
     .from("open_call_submissions")
@@ -56,8 +57,8 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         title={`#${s.id.slice(0, 8)}`}
         subtitle={t(
           "console.marketplace.calls.submissions.detail.submittedAt",
-          { date: new Date(s.submitted_at).toLocaleString() },
-          `Submitted ${new Date(s.submitted_at).toLocaleString()}`,
+          { date: fmt.dateTime(new Date(s.submitted_at)) },
+          `Submitted ${fmt.dateTime(new Date(s.submitted_at))}`,
         )}
         action={<Badge variant={STATUS_TONE[s.submission_state] ?? "muted"}>{toTitle(s.submission_state)}</Badge>}
       />
@@ -155,7 +156,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               </select>
             </div>
             <Input
-              label={t("console.marketplace.calls.submissions.detail.scoreInputLabel", undefined, "Score — 0-100")}
+              label={t("console.marketplace.calls.submissions.detail.scoreInputLabel", undefined, "Score (0-100)")}
               name="score"
               type="number"
               min={0}

@@ -14,6 +14,8 @@ import { getRequestT } from "@/lib/i18n/request";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { XPMS_PHASES } from "@/lib/xpms";
+import { POST_LIST } from "@/lib/blog";
+import { CHANGELOG_ENTRIES } from "@/lib/changelog";
 
 // Trust-bar customers. `logo` points at a licensed grayscale asset under
 // public/brand/customers/<slug>.svg; until rights clear it stays undefined and
@@ -293,26 +295,31 @@ export default async function Home() {
     },
   ];
 
+  // E-25: the "Latest" rail reads the real content sources (blog registry +
+  // changelog) instead of hardcoded dates that are guaranteed to go stale.
+  const railDate = (iso: string) => iso.split("-").join(" · ");
+  const [latestPost, previousPost] = POST_LIST;
+  const latestChange = CHANGELOG_ENTRIES[0];
   const POSTS = [
-    {
-      date: "2026 · 05 · 28",
+    latestPost && {
+      date: railDate(latestPost.date),
       cat: t("marketing.pages.home.latest.posts.fieldNotes.cat"),
-      title: t("marketing.pages.home.latest.posts.fieldNotes.title"),
-      href: "/blog",
+      title: latestPost.title,
+      href: `/blog/${latestPost.slug}`,
     },
-    {
-      date: "2026 · 05 · 12",
+    latestChange && {
+      date: railDate(latestChange.date),
       cat: t("marketing.pages.home.latest.posts.release.cat"),
-      title: t("marketing.pages.home.latest.posts.release.title"),
+      title: latestChange.title,
       href: "/changelog",
     },
-    {
-      date: "2026 · 04 · 30",
-      cat: t("marketing.pages.home.latest.posts.careers.cat"),
-      title: t("marketing.pages.home.latest.posts.careers.title"),
-      href: "/careers",
+    previousPost && {
+      date: railDate(previousPost.date),
+      cat: t("marketing.pages.home.latest.posts.fieldNotes.cat"),
+      title: previousPost.title,
+      href: `/blog/${previousPost.slug}`,
     },
-  ];
+  ].filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
     <>

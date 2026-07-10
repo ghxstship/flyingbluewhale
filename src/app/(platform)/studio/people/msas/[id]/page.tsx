@@ -6,7 +6,7 @@ import { MSADocument } from "@/components/msa/MSADocument";
 import { LdpStateTimeline } from "@/components/ldp/LdpStateTimeline";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { getMsa } from "@/lib/msa/queries";
 import { MSA_STATUS_LABEL, MSA_STATUS_VARIANT } from "@/lib/msa/types";
 import { msaPublicUrl } from "@/lib/msa/format";
@@ -22,6 +22,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
   const { resolved } = result;
   const url = msaPublicUrl(resolved.public_token);
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -99,7 +100,7 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
             </h3>
             <div className="font-subdisplay text-2xl">{resolved.signed_signature}</div>
             <div className="text-xs text-[var(--p-text-2)]">
-              {resolved.signed_at ? new Date(resolved.signed_at).toLocaleString() : ""} ·{" "}
+              {resolved.signed_at ? fmt.dateTime(new Date(resolved.signed_at)) : ""} ·{" "}
               {t(
                 "console.people.msas.detail.ipLabel",
                 { ip: resolved.signed_ip ?? "—" },

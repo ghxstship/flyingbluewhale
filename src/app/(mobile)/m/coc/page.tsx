@@ -2,6 +2,7 @@ import { ScanLine } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 
@@ -75,13 +76,16 @@ export default async function CocPage() {
                   {e.body && <div className="hint">{e.body}</div>}
                   <div className="ttime">
                     {e.at
-                      ? new Date(e.at).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          timeZone: "UTC",
-                        })
+                      ? formatDateParts(
+                          new Date(e.at),
+                          {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          },
+                          { timezone: "UTC" },
+                        )
                       : ""}
                   </div>
                 </div>

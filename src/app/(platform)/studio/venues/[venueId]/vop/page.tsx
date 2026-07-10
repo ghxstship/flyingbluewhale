@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.vop.eyebrow", undefined, "Venue")}
-        title={t("console.venues.vop.headerTitle", { name: venue.name }, `${venue.name} — Venue Operations Plan`)}
+        title={t("console.venues.vop.headerTitle", { name: venue.name }, `${venue.name} · Venue Operations Plan`)}
         subtitle={t("console.venues.vop.headerSubtitle", { approved, total }, `${approved}/${total} sections approved`)}
         breadcrumbs={[
           { label: t("console.venues.breadcrumb", undefined, "Venues"), href: "/studio/venues" },
@@ -133,7 +133,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                     </div>
                     {s?.body && <p className="mt-0.5 line-clamp-2 text-xs text-[var(--p-text-2)]">{s.body}</p>}
                     {s?.approved_at && (
-                      <p className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
+                      <p className="mt-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
                         {t(
                           "console.venues.vop.approvedOn",
                           { date: fmtDate(s.approved_at) },
@@ -155,7 +155,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           {t(
             "console.venues.vop.footerLead",
             undefined,
-            "The Venue Operations Plan is the integrated operating manual for race-week. Each section above maps to a discipline lead — every section must reach",
+            "The Venue Operations Plan is the integrated operating manual for race-week. Each section above maps to a discipline lead. Every section must reach",
           )}{" "}
           <code>approved</code>{" "}
           {t("console.venues.vop.footerTrail", undefined, "before the venue is cleared for go-live.")}

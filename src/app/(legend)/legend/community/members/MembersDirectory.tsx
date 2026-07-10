@@ -2,6 +2,7 @@
 
 import { Avatar } from "@/components/ui/Avatar";
 import { DataView, type DataViewColumn } from "@/components/ui/DataView";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type DirectoryMember = {
   id: string;
@@ -17,6 +18,7 @@ export type DirectoryMember = {
  * table and an avatar card grid.
  */
 export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
+  const fmt = useFormatters();
   const columns: DataViewColumn<DirectoryMember>[] = [
     {
       key: "member",
@@ -29,7 +31,7 @@ export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
       ),
     },
     { key: "role", header: "Role", render: (m) => <span className="text-[var(--p-text-2)] capitalize">{m.role ?? "—"}</span> },
-    { key: "points", header: "Points", align: "right", render: (m) => <span className="tabular-nums font-medium">{m.points.toLocaleString()}</span> },
+    { key: "points", header: "Points", align: "right", render: (m) => <span className="tabular-nums font-medium">{fmt.number(m.points)}</span> },
   ];
 
   return (
@@ -44,7 +46,7 @@ export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
           <Avatar size="xl" name={m.name} src={m.avatar_url ?? undefined} />
           <div className="text-sm font-semibold text-[var(--p-text-1)]">{m.name}</div>
           {m.role && <div className="text-xs capitalize text-[var(--p-text-2)]">{m.role}</div>}
-          <div className="text-xs font-medium text-[var(--p-accent)]">{m.points.toLocaleString()} pts</div>
+          <div className="text-xs font-medium text-[var(--p-accent)]">{fmt.number(m.points)} pts</div>
         </div>
       )}
     />

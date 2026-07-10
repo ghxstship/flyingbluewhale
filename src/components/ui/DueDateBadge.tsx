@@ -132,7 +132,7 @@ export function DueDateBadge(props: DueDateBadgeProps): React.ReactElement | nul
   // Hide entirely when iconOnly + nothing meaningful to convey.
   if (iconOnly && resolved.variant === "muted" && !props.dueAt && !props.closedAt) return null;
 
-  const sizeClass = size === "sm" ? "text-[10px]" : "text-xs";
+  const sizeClass = size === "sm" ? "text-[11px]" : "text-xs";
 
   return (
     // resolve() reads `new Date()`, so the variant + relative label ("Overdue

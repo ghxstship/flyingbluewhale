@@ -51,7 +51,7 @@ export async function transitionPunchItem(
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Punch item status changed concurrently — refresh and retry");
+    throw new Error("Punch item status changed concurrently. Refresh and retry");
   }
   revalidatePath(`/studio/punch/${id}`);
   revalidatePath("/studio/punch");

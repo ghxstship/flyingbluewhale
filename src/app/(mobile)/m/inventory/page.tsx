@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
+import { RefreshShell } from "@/components/mobile/RefreshShell";
 import { InventoryView, type AssetUnit, type InventoryItem } from "./InventoryView";
 
 export const dynamic = "force-dynamic";
@@ -102,6 +103,7 @@ export default async function InventoryPage() {
   });
 
   return (
+    <RefreshShell>
     <div className="screen screen-anim">
       <InventoryView
         items={items}
@@ -126,5 +128,6 @@ export default async function InventoryPage() {
         }}
       />
     </div>
+    </RefreshShell>
   );
 }

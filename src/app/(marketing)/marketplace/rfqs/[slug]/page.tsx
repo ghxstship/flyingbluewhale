@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { notFound } from "next/navigation";
 import { buildMetadata, metaDescription } from "@/lib/seo";
 
@@ -65,6 +65,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const r = await getRfq(slug);
   if (!r) return notFound();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -88,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {r.due_at && (
             <Badge variant="warning">
               {t("marketing.pages.marketplace.rfqs.detail.header.dueBadge", {
-                date: new Date(r.due_at).toLocaleDateString(),
+                date: fmt.date(new Date(r.due_at)),
               })}
             </Badge>
           )}

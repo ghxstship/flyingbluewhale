@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 
@@ -57,6 +57,7 @@ export default async function MyIncidentPage() {
     .limit(100);
   const rows = (data ?? []) as IncidentRow[];
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   return (
     <div className="screen screen-anim">
@@ -83,7 +84,7 @@ export default async function MyIncidentPage() {
                 <div className="s">
                   {r.location ? `${r.location} · ` : ""}
                   {r.occurred_at
-                    ? new Date(r.occurred_at).toLocaleString("en-US", {
+                    ? fmt.dateParts(new Date(r.occurred_at), {
                         month: "short",
                         day: "numeric",
                         hour: "2-digit",

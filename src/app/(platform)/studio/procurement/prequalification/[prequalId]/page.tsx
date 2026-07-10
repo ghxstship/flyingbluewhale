@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
   expired: "muted",
 };
 
-const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString() : "—");
+const fmt = (d: string | null) => (d ? formatDate(new Date(d)) : "—");
 
 export default async function Page({ params }: { params: Promise<{ prequalId: string }> }) {
   if (!hasSupabase) return null;

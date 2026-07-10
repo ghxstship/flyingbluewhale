@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { projectIdFromSlug } from "@/lib/db/advancing";
 
 export const dynamic = "force-dynamic";
 
@@ -28,13 +29,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const project = await projectIdFromSlug(slug);
+  // Tickets are scoped to this project and to the viewer's own party —
+  // never an org-wide count on an external surface.
+  let ticketQuery = supabase
+    .from("assignments")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", session.orgId)
+    .eq("catalog_kind", "ticket")
+    .eq("party_user_id", session.userId)
+    .is("deleted_at", null);
+  if (project) ticketQuery = ticketQuery.eq("project_id", project.id);
   const [{ count: tickets }, { count: blocks }] = await Promise.all([
-    supabase
-      .from("assignments")
-      .select("id", { count: "exact", head: true })
-      .eq("org_id", session.orgId)
-      .eq("catalog_kind", "ticket")
-      .is("deleted_at", null),
+    ticketQuery,
     supabase.from("accommodation_blocks").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
   ]);
 
@@ -59,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         subtitle={t(
           "p.hospitality.subtitle",
           undefined,
-          "Premium guest experience — itinerary, transfers, dining, accommodation",
+          "Premium guest experience: itinerary, transfers, dining, accommodation",
         )}
         breadcrumbs={[
           { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
@@ -69,17 +76,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label={t("p.hospitality.metric.tickets", undefined, "Tickets")}
+            label={t("p.hospitality.metric.yourTickets", undefined, "Your Tickets")}
             value={fmt.number(tickets ?? 0)}
           />
           <MetricCard
             label={t("p.hospitality.metric.roomBlocks", undefined, "Room Blocks")}
             value={fmt.number(blocks ?? 0)}
-          />
-          <MetricCard
-            label={t("p.hospitality.metric.status", undefined, "Status")}
-            value={t("p.hospitality.metric.statusLive", undefined, "Live")}
-            accent
           />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -91,11 +93,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           ))}
         </div>
         <p className="text-xs text-[var(--p-text-2)]">
-          {t("p.hospitality.footer.prefix", undefined, "Need a change to your booking? Email")}{" "}
-          <a className="text-[var(--p-accent)]" href="mailto:hospitality@atlvs.pro">
-            hospitality@atlvs.pro
-          </a>{" "}
-          {t("p.hospitality.footer.suffix", undefined, "and reference your booking ID.")}
+          {t("p.hospitality.footer.messagePrefix", undefined, "Need a change to your booking?")}{" "}
+          <Link className="text-[var(--p-accent)] underline" href={`/p/${slug}/messages`}>
+            {t("p.hospitality.footer.messageLink", undefined, "Message your team")}
+          </Link>{" "}
+          {t("p.hospitality.footer.messageSuffix", undefined, "and reference your booking ID.")}
         </p>
       </div>
     </>

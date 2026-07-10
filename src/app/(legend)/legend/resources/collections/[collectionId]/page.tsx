@@ -59,6 +59,11 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
           <DeleteForm
             action={deleteCollectionAction.bind(null, collection.id)}
             confirm={`Delete collection "${collection.name}"? Its resources will become ungrouped.`}
+            undo={{
+              table: "resource_collections",
+              id: collection.id,
+              redirectTo: "/legend/resources/collections",
+            }}
           />
         }
       />

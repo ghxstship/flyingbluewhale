@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CameraScanner, type ScannedCode } from "@/components/scanners/CameraScanner";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { verifyAccessCode } from "./actions";
 import type { ScanResult } from "@/lib/db/assignments";
 
@@ -49,6 +50,7 @@ const TONE: Record<Verdict, { fg: string; bg: string }> = {
 };
 
 export function AccessControlScanner({ labels }: AccessControlScannerProps): React.ReactElement {
+  const fmt = useFormatters();
   const [log, setLog] = React.useState<Entry[]>([]);
   const seq = React.useRef(0);
   // Throttle duplicate decodes of the same code within a short window so the
@@ -95,12 +97,12 @@ export function AccessControlScanner({ labels }: AccessControlScannerProps): Rea
         verdict = res.result.result;
         if (res.result.result === "accepted") detail = res.result.title;
         else if (res.result.result === "duplicate" && res.result.redeemedAt) {
-          detail = new Date(res.result.redeemedAt).toLocaleTimeString();
+          detail = fmt.time(new Date(res.result.redeemedAt));
         }
       }
       setLog((cur) => cur.map((e) => (e.id === id ? { ...e, verdict, detail } : e)));
     });
-  }, []);
+  }, [fmt]);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,420px)_1fr]">

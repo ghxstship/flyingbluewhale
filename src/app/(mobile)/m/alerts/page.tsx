@@ -3,8 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
-import { KIcon } from "@/components/mobile/kit";
-import { AcknowledgeButton } from "./AcknowledgeButton";
+import { AlertsList, type AlertItem } from "./AlertsList";
 
 export const dynamic = "force-dynamic";
 
@@ -94,6 +93,21 @@ export default async function MobileAlertsPage() {
   const rows = (data ?? []) as AlertRow[];
   const unread = rows.filter((a) => a.read_at == null).length;
 
+  const items: AlertItem[] = rows.map((a) => {
+    const tone = KIND_TONE[a.kind] ?? "neutral";
+    return {
+      id: a.id,
+      title: a.title,
+      body: a.body || toTitle(a.kind),
+      tone,
+      color: TONE_VAR[tone] ?? "var(--p-text-3)",
+      iconName: TONE_ICON[tone] ?? "Bell",
+      when: relativeTime(a.created_at),
+      read: a.read_at != null,
+      sortAt: a.created_at,
+    };
+  });
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.alerts.eyebrow", { count: unread }, `${unread} New`)}</div>
@@ -101,35 +115,7 @@ export default async function MobileAlertsPage() {
         {t("m.alerts.title", undefined, "Notifications")}
       </h1>
 
-      {rows.length === 0 ? (
-        <div className="item">
-          <div className="s">{t("m.alerts.emptyTitle", undefined, "All clear. No alerts right now.")}</div>
-        </div>
-      ) : (
-        rows.map((a) => {
-          const tone = KIND_TONE[a.kind] ?? "neutral";
-          const color = TONE_VAR[tone] ?? "var(--p-text-3)";
-          const iconName = TONE_ICON[tone] ?? "Bell";
-          return (
-            <div className="item" key={a.id} style={{ display: "block", opacity: a.read_at ? 0.65 : 1 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span className="bar" style={{ background: color }} />
-                <KIcon name={iconName} size={18} style={{ color }} />
-                <div style={{ minWidth: 0, flex: 1 }}>
-                  <div className="t">{a.title}</div>
-                  <div className="s">{a.body || toTitle(a.kind)}</div>
-                </div>
-                <span className="time">{relativeTime(a.created_at)}</span>
-              </div>
-              {a.read_at == null && (
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
-                  <AcknowledgeButton alertId={a.id} />
-                </div>
-              )}
-            </div>
-          );
-        })
-      )}
+      <AlertsList items={items} />
     </div>
   );
 }

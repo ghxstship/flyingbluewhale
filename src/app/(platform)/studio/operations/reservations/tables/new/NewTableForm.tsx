@@ -46,7 +46,7 @@ export function NewTableForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label={t("console.reservations.tables.new.x", undefined, "Floor-plan X (0–100)")}
+          label={t("console.reservations.tables.new.x", undefined, "Floor-plan X (0-100)")}
           name="x"
           type="number"
           min={0}
@@ -55,7 +55,7 @@ export function NewTableForm() {
           defaultValue={50}
         />
         <Input
-          label={t("console.reservations.tables.new.y", undefined, "Floor-plan Y (0–60)")}
+          label={t("console.reservations.tables.new.y", undefined, "Floor-plan Y (0-60)")}
           name="y"
           type="number"
           min={0}

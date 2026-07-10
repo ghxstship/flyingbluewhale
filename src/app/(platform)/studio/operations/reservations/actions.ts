@@ -227,5 +227,6 @@ export async function deleteReservation(reservationId: string): Promise<void> {
     .eq("id", reservationId)
     .eq("org_id", session.orgId);
   revalidatePath("/studio/operations/reservations");
-  redirect("/studio/operations/reservations");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

@@ -50,7 +50,7 @@ export default async function Page() {
         subtitle={t(
           "console.commercial.subtitle",
           undefined,
-          "Revenue surfaces — sponsors, ticketing, hospitality, licensing, brand.",
+          "Revenue surfaces: sponsors, ticketing, hospitality, licensing, brand.",
         )}
       />
       <div className="page-content">

@@ -9,7 +9,11 @@ import { Button } from "@/components/ui/Button";
  * primitive (kit v7 §3). CameraScanner is the bare video + decode loop;
  * ScanCapture adds the operator chrome around it: a scan reticle, a manual
  * code-entry fallback, an in-session log of decoded codes, and a single
- * `onCapture(code)` callback the caller wires to a server action.
+ * `onCapture(code)` callback the caller wires to its submit path.
+ *
+ * `onCapture` may (async) return a `ScanEntryStatus` — the log row then
+ * shows the journaled outcome (accepted / duplicate / queued offline / …)
+ * next to the code instead of leaving captures unaccounted for.
  *
  * Generic + presentational — no Supabase, no i18n. Callers pass already
  * translated labels and an `onCapture` handler. Token-only colors.
@@ -24,10 +28,16 @@ export type ScanCaptureLabels = {
   recentEmpty: string;
 };
 
+export type ScanEntryStatus = {
+  label: string;
+  tone: "ok" | "warn" | "danger" | "neutral";
+};
+
 export type ScanCaptureProps = {
   labels: ScanCaptureLabels;
-  /** Fired once per accepted code (camera decode or manual submit). */
-  onCapture?: (value: string, source: "camera" | "manual") => void;
+  /** Fired once per accepted code (camera decode or manual submit). May
+   * resolve to a status shown on the log row. */
+  onCapture?: (value: string, source: "camera" | "manual") => void | Promise<ScanEntryStatus | void>;
   /** Restrict the camera to specific symbologies. */
   formats?: string[];
   /** Keep scanning after a hit. Default true. */
@@ -35,7 +45,22 @@ export type ScanCaptureProps = {
   className?: string;
 };
 
-type LogEntry = { value: string; source: "camera" | "manual"; at: number };
+type LogEntry = {
+  id: number;
+  value: string;
+  source: "camera" | "manual";
+  at: number;
+  status?: ScanEntryStatus;
+};
+
+const TONE_COLOR: Record<ScanEntryStatus["tone"], string> = {
+  ok: "var(--p-success-text, var(--p-success))",
+  warn: "var(--p-warning-text, var(--p-warning))",
+  danger: "var(--p-danger-text, var(--p-danger))",
+  neutral: "var(--p-text-3)",
+};
+
+let entrySeq = 0;
 
 export function ScanCapture({
   labels,
@@ -52,8 +77,17 @@ export function ScanCapture({
     (value: string, source: "camera" | "manual") => {
       const trimmed = value.trim();
       if (!trimmed) return;
-      setLog((prev) => [{ value: trimmed, source, at: Date.now() }, ...prev].slice(0, 10));
-      onCapture?.(trimmed, source);
+      const id = ++entrySeq;
+      setLog((prev) => [{ id, value: trimmed, source, at: Date.now() }, ...prev].slice(0, 10));
+      const maybe = onCapture?.(trimmed, source);
+      if (maybe && typeof (maybe as Promise<ScanEntryStatus | void>).then === "function") {
+        void (maybe as Promise<ScanEntryStatus | void>)
+          .then((status) => {
+            if (!status) return;
+            setLog((prev) => prev.map((e) => (e.id === id ? { ...e, status } : e)));
+          })
+          .catch(() => {});
+      }
     },
     [onCapture],
   );
@@ -116,14 +150,21 @@ export function ScanCapture({
         ) : (
           <ul className="divide-y divide-[var(--p-border)]">
             {log.map((e) => (
-              <li key={e.at} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
+              <li key={e.id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
                 <code
                   className="truncate font-mono text-[var(--p-text-1)]"
                   style={{ fontFamily: "var(--p-mono-data)" }}
                 >
                   {e.value}
                 </code>
-                <span className="shrink-0 text-xs text-[var(--p-text-3)]">{e.source}</span>
+                <span className="flex shrink-0 items-center gap-2 text-xs">
+                  {e.status && (
+                    <span className="font-medium" style={{ color: TONE_COLOR[e.status.tone] }}>
+                      {e.status.label}
+                    </span>
+                  )}
+                  <span className="text-[var(--p-text-3)]">{e.source}</span>
+                </span>
               </li>
             ))}
           </ul>

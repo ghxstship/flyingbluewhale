@@ -67,11 +67,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
             )}
             {serial && (
-              <div className="font-mono text-[10px] text-black/60">
+              <div className="font-mono text-[11px] text-black/60">
                 {t("console.assets.qr.serialLabel", { serial }, `SN: ${serial}`)}
               </div>
             )}
-            <div className="mt-1 font-mono text-[10px] text-black/40">{id.slice(0, 8)}…</div>
+            <div className="mt-1 font-mono text-[11px] text-black/40">{id.slice(0, 8)}…</div>
           </div>
         </div>
         <p className="mx-auto mt-4 max-w-md text-center text-xs text-[var(--p-text-2)] print:hidden">

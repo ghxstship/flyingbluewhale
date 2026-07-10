@@ -94,7 +94,7 @@ export function PasswordField({
               />
             ))}
           </div>
-          <div className="text-[10px] text-[var(--p-text-2)]">{labelForScore(score)}</div>
+          <div className="text-[11px] text-[var(--p-text-2)]">{labelForScore(score)}</div>
         </div>
       )}
       {error && (

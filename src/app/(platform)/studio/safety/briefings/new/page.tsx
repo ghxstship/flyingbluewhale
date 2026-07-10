@@ -45,7 +45,7 @@ export default async function Page() {
               placeholder={t(
                 "console.safety.briefings.new.topicPlaceholder",
                 undefined,
-                "Heat illness prevention — outdoor build days",
+                "Heat illness prevention · outdoor build days",
               )}
               className={INPUT}
             />

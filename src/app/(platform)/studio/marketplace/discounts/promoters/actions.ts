@@ -85,7 +85,8 @@ export async function deletePromoterAction(id: string): Promise<void> {
     .is("deleted_at", null);
   if (error) throw new Error(`Could not delete promoter: ${error.message}`);
   revalidatePath("/studio/marketplace/discounts/promoters");
-  redirect("/studio/marketplace/discounts/promoters");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }
 
 const AttributionSchema = z.object({

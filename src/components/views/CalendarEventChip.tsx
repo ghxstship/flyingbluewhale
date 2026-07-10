@@ -63,7 +63,7 @@ export function CalendarEventChip({ event, renderEvent }: Props) {
   }
 
   const tone = eventToneClass(event.tone);
-  const body = <span className={`block truncate rounded px-1 py-0.5 text-[10px] ${tone}`}>{event.title}</span>;
+  const body = <span className={`block truncate rounded px-1 py-0.5 text-[11px] ${tone}`}>{event.title}</span>;
 
   return (
     <div ref={setNodeRef} style={style} className="group/chip flex min-w-0 items-center gap-1">

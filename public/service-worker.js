@@ -7,20 +7,25 @@
 // the next reconnect via the background-sync event (or an explicit
 // QUEUE_DRAIN message from a client, for browsers without sync).
 
-const VERSION = "v5";
+const VERSION = "v6";
 const STATIC_CACHE = `atlvs-static-${VERSION}`;
 const RUNTIME_CACHE = `atlvs-runtime-${VERSION}`;
 const QUEUE_DB = "atlvs-punch-queue";
 const QUEUE_STORE = "punches";
 const SYNC_TAG = "punch-replay";
 const QUEUE_LIMIT = 500; // per-endpoint cap — oldest rows are evicted
+const CACHED_AT_HEADER = "x-sw-cached-at";
 
 // POST endpoints that get queue-and-replay treatment when the network
 // fails. Rows persisted by ≤v3 carry no `endpoint` field — they were
 // always clock punches, so they replay against PUNCH_ENDPOINT.
+// Keep in sync with src/lib/offline/outbox.ts (the window-side view of
+// the same queue — first-party field UIs submit through it).
 const PUNCH_ENDPOINT = "/api/v1/shifts/checkin";
+const CLOCK_ENDPOINT = "/api/v1/time/clock"; // free personal clock punch
 const QUEUEABLE_ENDPOINTS = [
   PUNCH_ENDPOINT,
+  CLOCK_ENDPOINT,
   "/api/v1/scan", // ticket / assignment check-in
   "/api/v1/accreditation/scan", // gate accreditation decisions
   "/api/v1/equipment/scan", // asset check-in / check-out
@@ -134,12 +139,12 @@ function getAllRows(db) {
   });
 }
 
-// The clock-punch API accepts an `at` timestamp (documented for offline
+// The clock-punch APIs accept an `at` timestamp (documented for offline
 // replay) — stamp the capture time so a late replay records the real
 // punch moment. The scan APIs record time server-side and accept no
 // client timestamp, so their bodies are replayed exactly as captured.
 function stampCaptureTime(endpoint, body) {
-  if (endpoint !== PUNCH_ENDPOINT) return body;
+  if (endpoint !== PUNCH_ENDPOINT && endpoint !== CLOCK_ENDPOINT) return body;
   try {
     const parsed = JSON.parse(body);
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed) && !parsed.at) {
@@ -316,7 +321,45 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Stale-while-revalidate for shell.
+  // Document / RSC data requests are NETWORK-FIRST with cache fallback:
+  // rosters, schedules, and task lists must be live whenever the network
+  // is reachable. Only when the fetch fails do we serve the cached copy,
+  // and then we tell the page it's looking at stale data (SERVED_STALE →
+  // SyncBanner renders an "offline copy, updated Xm ago" chip). Static
+  // assets (hashed /_next/static, images, fonts) keep the faster
+  // stale-while-revalidate path below — they are immutable-by-URL.
+  const isDocOrData =
+    req.mode === "navigate" ||
+    req.headers.get("RSC") === "1" ||
+    (req.headers.get("accept") || "").includes("text/html");
+
+  if (isDocOrData) {
+    event.respondWith(
+      (async () => {
+        try {
+          const res = await fetch(req);
+          if (url.origin === self.location.origin && res.ok && res.status === 200) {
+            putStamped(req, res.clone());
+          }
+          return res;
+        } catch {
+          const cached = await caches.match(req);
+          if (cached) {
+            notifyServedStale(event, url.pathname, cached.headers.get(CACHED_AT_HEADER));
+            return cached;
+          }
+          const offline = await caches.match("/offline.html");
+          return (
+            offline ||
+            new Response("Offline", { status: 503, headers: { "content-type": "text/plain" } })
+          );
+        }
+      })(),
+    );
+    return;
+  }
+
+  // Stale-while-revalidate for static shell assets.
   // Guards on cache.put: same-origin only (no third-party responses),
   // 200 OK only (a transient 500/404 page used to get cached and served
   // first on every later visit until revalidation won), and an entry cap
@@ -326,20 +369,7 @@ self.addEventListener("fetch", (event) => {
       const network = fetch(req)
         .then((res) => {
           if (url.origin === self.location.origin && res.ok && res.status === 200) {
-            const copy = res.clone();
-            caches
-              .open(RUNTIME_CACHE)
-              .then(async (cache) => {
-                await cache.put(req, copy);
-                const keys = await cache.keys();
-                if (keys.length > RUNTIME_CACHE_MAX_ENTRIES) {
-                  // FIFO trim — Cache API keys are insertion-ordered.
-                  await Promise.all(
-                    keys.slice(0, keys.length - RUNTIME_CACHE_MAX_ENTRIES).map((k) => cache.delete(k)),
-                  );
-                }
-              })
-              .catch(() => {});
+            putStamped(req, res.clone());
           }
           return res;
         })
@@ -348,6 +378,53 @@ self.addEventListener("fetch", (event) => {
     }),
   );
 });
+
+// Store a response in the runtime cache stamped with the capture time so a
+// later offline serve can say HOW stale the copy is. FIFO-trimmed.
+function putStamped(req, res) {
+  return caches
+    .open(RUNTIME_CACHE)
+    .then(async (cache) => {
+      const headers = new Headers(res.headers);
+      headers.set(CACHED_AT_HEADER, String(Date.now()));
+      const body = await res.blob();
+      await cache.put(req, new Response(body, { status: res.status, statusText: res.statusText, headers }));
+      const keys = await cache.keys();
+      if (keys.length > RUNTIME_CACHE_MAX_ENTRIES) {
+        // FIFO trim — Cache API keys are insertion-ordered.
+        await Promise.all(keys.slice(0, keys.length - RUNTIME_CACHE_MAX_ENTRIES).map((k) => cache.delete(k)));
+      }
+    })
+    .catch(() => {});
+}
+
+// Tell the (resulting) client it was just served a cached copy because the
+// network failed. For RSC fetches the requesting client already exists; for
+// hard navigations the resulting client appears shortly after respondWith
+// resolves, so poll briefly.
+function notifyServedStale(event, path, cachedAtHeader) {
+  const cachedAt = cachedAtHeader ? Number(cachedAtHeader) : null;
+  const message = { type: "SERVED_STALE", path, cachedAt: Number.isFinite(cachedAt) ? cachedAt : null };
+  event.waitUntil(
+    (async () => {
+      const id = event.clientId || event.resultingClientId;
+      for (let i = 0; i < 8; i++) {
+        const client =
+          (id && (await self.clients.get(id))) ||
+          (event.resultingClientId && (await self.clients.get(event.resultingClientId)));
+        if (client) {
+          client.postMessage(message);
+          return;
+        }
+        await new Promise((r) => setTimeout(r, 250));
+      }
+      // Last resort: broadcast — a stale banner on a sibling tab is better
+      // than an unmarked stale roster on the one that navigated.
+      const all = await self.clients.matchAll({ type: "window" });
+      for (const c of all) c.postMessage(message);
+    })().catch(() => {}),
+  );
+}
 
 // Web Push (Phase 2.3) — display a notification on incoming push.
 self.addEventListener("push", (event) => {

@@ -167,7 +167,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
                     <div className="min-w-0">
                       <div className="font-medium">{r.vendor?.name ?? "—"}</div>
-                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                      <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                         {r.submitted_at
                           ? fmt(r.submitted_at)
                           : t("console.procurement.rfqs.detail.pending", undefined, "Pending")}

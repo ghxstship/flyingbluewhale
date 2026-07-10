@@ -119,7 +119,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={o.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{o.catalog}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {t(
                         "p.delegation.ratecard.orders.placedAt",
                         { code: o.delegation?.code ?? "—", date: fmt(o.created_at) },

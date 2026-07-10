@@ -1,9 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { useHotkeys, useShortcutRegistry, registerShortcut } from "@/lib/hooks/useHotkeys";
+import { useHotkeys, useShortcutRegistry, registerShortcut, type HotkeyBinding } from "@/lib/hooks/useHotkeys";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
+import { platformNav } from "@/lib/nav";
+import { CREATE_MENU_OPEN_EVENT } from "@/lib/create-menu-event";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -20,6 +23,97 @@ import { useT } from "@/lib/i18n/LocaleProvider";
  */
 
 const GROUP_ORDER = ["Global", "Navigation", "Editor", "Table"];
+
+/**
+ * g+letter go-to chords for the 11 platform rail groups (F-04). Letters are
+ * Linear-style mnemonics; each chord lands on the group's first rail item.
+ * Derived from `platformNav` at runtime so the chords can never point at a
+ * route the rail doesn't carry.
+ */
+const NAV_CHORD_LETTERS: Record<string, string> = {
+  Home: "h",
+  Sales: "s",
+  Talent: "t",
+  Projects: "p",
+  Procurement: "v",
+  Production: "b",
+  People: "w",
+  Operations: "o",
+  Safety: "i",
+  Finance: "f",
+  Comms: "c",
+};
+
+type NavChord = { combo: string; label: string; href: string };
+
+function buildNavChords(): NavChord[] {
+  const chords: NavChord[] = [];
+  for (const group of platformNav) {
+    const letter = NAV_CHORD_LETTERS[group.label];
+    const first = group.items[0];
+    if (!letter || !first) continue;
+    chords.push({ combo: `g ${letter}`, label: group.label, href: first.href });
+  }
+  return chords;
+}
+
+/**
+ * Global keyboard inventory host (F-04) — mounts beside the cheatsheet in the
+ * root layout, but only arms itself when the platform console chrome is in
+ * the DOM (`[data-platform="atlvs"]`), so marketing / portal / mobile shells
+ * never hijack plain keys.
+ */
+function GlobalNavShortcuts() {
+  const t = useT();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isPlatform, setIsPlatform] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsPlatform(Boolean(document.querySelector('[data-platform="atlvs"]')));
+  }, [pathname]);
+
+  const chords = React.useMemo(buildNavChords, []);
+
+  // Cheatsheet registration — Navigation chords + the `c` front door.
+  React.useEffect(() => {
+    if (!isPlatform) return;
+    const unregister = [
+      ...chords.map((c) =>
+        registerShortcut(c.combo, t("shortcuts.nav.goTo", { group: c.label }, `Go to ${c.label}`), "Navigation"),
+      ),
+      registerShortcut("c", t("shortcuts.createMenu", undefined, "Create or request (One Front Door)"), "Global"),
+    ];
+    return () => unregister.forEach((fn) => fn());
+  }, [isPlatform, chords, t]);
+
+  const bindings = React.useMemo<HotkeyBinding[]>(() => {
+    if (!isPlatform) return [];
+    return [
+      ...chords.map((c) => ({
+        combo: c.combo,
+        skipWhenEditing: true,
+        handler: () => router.push(c.href),
+      })),
+      {
+        combo: "c",
+        skipWhenEditing: true,
+        handler: () => {
+          // Leave `c` alone when a menu/button/link has focus (Radix
+          // typeahead, form buttons) — only fire from page scope.
+          const ae = document.activeElement;
+          if (ae instanceof HTMLElement && ae.closest("button, a, [role='menu'], [role='menuitem'], [role='dialog']"))
+            return;
+          window.dispatchEvent(new CustomEvent(CREATE_MENU_OPEN_EVENT));
+        },
+      },
+    ];
+  }, [isPlatform, chords, router]);
+
+  useHotkeys(bindings);
+
+  return null;
+}
 
 export function ShortcutDialog() {
   const [open, setOpen] = React.useState(false);
@@ -67,8 +161,10 @@ export function ShortcutDialog() {
   }, [filtered]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent size="md">
+    <>
+      <GlobalNavShortcuts />
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
             {t("shortcuts.title", undefined, "Keyboard shortcuts")}
@@ -122,13 +218,22 @@ export function ShortcutDialog() {
             </div>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
 function formatCombo(combo: string): string {
   const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/i.test(navigator.platform);
+  // Two-key sequences ("g h") render as "G · H" — press one, then the other.
+  if (!combo.includes("+") && /\s/.test(combo.trim())) {
+    return combo
+      .trim()
+      .split(/\s+/)
+      .map((k) => k.toUpperCase())
+      .join(" · ");
+  }
   return combo
     .split("+")
     .map((p) => p.trim().toLowerCase())

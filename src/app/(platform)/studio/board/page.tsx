@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -34,11 +35,30 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
   const session = await requireSession();
   const sp = await searchParams;
   const view = VALID_VIEWS.has(sp.view ?? "") ? (sp.view as "board" | "list") : "board";
-  const rows = (await listOrgScoped("tasks", session.orgId, {
-    orderBy: "created_at",
-    ascending: false,
-  })) as Array<Task & { task_state: TaskStatus }>;
-  const open = rows.filter((r) => r.task_state !== "done").length;
+  const supabase = await createClient();
+  // Header metrics are exact server-side aggregates — the previous version
+  // derived open/done from the capped row fetch, silently under-counting
+  // any org past the cap.
+  const [rows, { count: openCount }, { count: doneCount }] = await Promise.all([
+    listOrgScoped("tasks", session.orgId, {
+      orderBy: "created_at",
+      ascending: false,
+      limit: 500,
+    }) as Promise<Array<Task & { task_state: TaskStatus }>>,
+    supabase
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .neq("task_state", "done"),
+    supabase
+      .from("tasks")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("task_state", "done"),
+  ]);
+  const open = openCount ?? 0;
+  const done = doneCount ?? 0;
+  const total = open + done;
 
   const tab = (key: "board" | "list", label: string) => (
     <a
@@ -57,7 +77,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
       <ModuleHeader
         eyebrow={t("console.board.eyebrow", undefined, "Work")}
         title={t("console.board.title", undefined, "Board")}
-        subtitle={t("console.board.subtitle", { open, done: rows.length - open }, "{open} open · {done} done")}
+        subtitle={t("console.board.subtitle", { open, done }, "{open} open · {done} done")}
         breadcrumbs={[{ label: "Work" }, { label: "Board" }]}
         action={<Button href="/studio/tasks/new">{t("console.board.newTask", undefined, "+ New Task")}</Button>}
       />
@@ -73,10 +93,22 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
             action={<Button href="/studio/tasks/new">{t("console.board.newTask", undefined, "+ New Task")}</Button>}
           />
         ) : view === "board" ? (
-          <TasksKanban rows={rows} />
+          <>
+            {total > rows.length && (
+              <p className="mb-2 text-xs text-[var(--p-text-2)]">
+                {t(
+                  "console.board.truncated",
+                  { shown: rows.length, total },
+                  `Showing the ${rows.length} most recent of ${total} tasks.`,
+                )}
+              </p>
+            )}
+            <TasksKanban rows={rows} />
+          </>
         ) : (
           <DataTable<Task>
             rows={rows}
+            totalCount={total}
             rowHref={(r) => `/studio/tasks/${r.id}`}
             columns={[
               {

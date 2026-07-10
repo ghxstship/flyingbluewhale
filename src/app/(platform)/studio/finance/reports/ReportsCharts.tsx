@@ -136,9 +136,9 @@ export function ReportsCharts({
                   fill={
                     a.bucket === "Current"
                       ? "var(--p-success)"
-                      : a.bucket === "1–30"
+                      : a.bucket === "1-30"
                         ? "var(--p-accent)"
-                        : a.bucket === "31–60"
+                        : a.bucket === "31-60"
                           ? "var(--p-warning)"
                           : "var(--p-danger)"
                   }
@@ -227,7 +227,7 @@ function DarkTooltip({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[10px]">
+    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[11px]">
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">

@@ -42,14 +42,14 @@ export function MapView({ pins }: { pins: MapPin[] }) {
           <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
             <MapPin size={14} className="text-[var(--p-accent)]" aria-hidden />
             {loc}
-            <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">{items.length}</span>
+            <span className="ms-auto font-mono text-[11px] text-[var(--p-text-2)]">{items.length}</span>
           </div>
           <ul className="space-y-1.5">
             {items.map((it) => (
               <li key={it.id}>
                 <Link href={`/studio/events/${it.id}`} className="block text-xs hover:underline">
                   <span className="font-medium">{it.name}</span>{" "}
-                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">{it.when}</span>
+                  <span className="font-mono text-[11px] text-[var(--p-text-2)]">{it.when}</span>
                 </Link>
               </li>
             ))}

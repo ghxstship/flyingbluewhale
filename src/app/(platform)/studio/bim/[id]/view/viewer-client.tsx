@@ -205,7 +205,7 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
             {t("console.bim.view.meshesCount", { count: elementCount }, `${elementCount} meshes`)}
           </span>
         )}
-        <span className="font-mono text-[10px] text-[var(--p-text-2)]">
+        <span className="font-mono text-[11px] text-[var(--p-text-2)]">
           {t("console.bim.view.modelLabel", { id: modelId.slice(0, 8) }, `model ${modelId.slice(0, 8)}…`)}
         </span>
       </div>
@@ -215,11 +215,11 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
         style={{ height: "75vh", touchAction: "none" }}
         aria-label={t("console.bim.view.canvasAriaLabel", undefined, "3D BIM viewer canvas")}
       />
-      <p className="text-[10px] text-[var(--p-text-2)]">
+      <p className="text-[11px] text-[var(--p-text-2)]">
         {t(
           "console.bim.view.hint",
           undefined,
-          "Drag to orbit, scroll to zoom. IFC parsing via web-ifc (WASM). For Revit / Navisworks, use Autodesk Forge — not bundled here.",
+          "Drag to orbit, scroll to zoom. IFC parsing via web-ifc (WASM). For Revit / Navisworks, use Autodesk Forge. Not bundled here.",
         )}
       </p>
     </div>

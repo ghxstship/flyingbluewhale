@@ -19,7 +19,7 @@ export default async function ApiSettingsPage() {
     [
       "GET",
       "/api/v1/projects",
-      t("console.settings.api.endpoints.listProjects", undefined, "List Projects — Org-scoped"),
+      t("console.settings.api.endpoints.listProjects", undefined, "List Projects (Org-scoped)"),
     ],
     ["POST", "/api/v1/projects", t("console.settings.api.endpoints.createProject", undefined, "Create Project")],
     ["GET", "/api/v1/projects/[id]", t("console.settings.api.endpoints.getProject", undefined, "Get a project")],
@@ -27,7 +27,7 @@ export default async function ApiSettingsPage() {
     [
       "POST",
       "/api/v1/scan",
-      t("console.settings.api.endpoints.scan", undefined, "Scan an Assignment Code — Race-safe, Any Catalog Kind"),
+      t("console.settings.api.endpoints.scan", undefined, "Scan an Assignment Code (Race-safe, Any Catalog Kind)"),
     ],
     ["POST", "/api/v1/risks", t("console.settings.api.endpoints.createRisk", undefined, "Create RAID register entry")],
     [
@@ -38,7 +38,7 @@ export default async function ApiSettingsPage() {
     [
       "GET",
       "/api/v1/deliverables/[id]/download",
-      t("console.settings.api.endpoints.deliverableDownload", undefined, "Signed Download URL — 60s"),
+      t("console.settings.api.endpoints.deliverableDownload", undefined, "Signed Download URL (60s)"),
     ],
     ["POST", "/api/v1/ai/chat", t("console.settings.api.endpoints.aiChat", undefined, "Streaming Anthropic chat")],
     [

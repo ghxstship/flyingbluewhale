@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { InboxItem } from "@/lib/db/inbox";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { markNotificationReadAction } from "./actions";
 
 type Labels = {
@@ -21,6 +22,7 @@ type Labels = {
  */
 export function InboxView({ items: initial, labels }: { items: InboxItem[]; labels: Labels }) {
   const router = useRouter();
+  const fmt = useFormatters();
   const [items, setItems] = useState(initial);
   const [sel, setSel] = useState(0);
   const [, startTransition] = useTransition();
@@ -123,7 +125,7 @@ export function InboxView({ items: initial, labels }: { items: InboxItem[]; labe
               dateTime={item.at}
               style={{ flex: "0 0 auto", fontSize: 12, color: "var(--p-text-3)", fontVariantNumeric: "tabular-nums" }}
             >
-              {new Date(item.at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+              {fmt.dateParts(new Date(item.at), { month: "short", day: "numeric" })}
             </time>
             <button
               type="button"

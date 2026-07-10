@@ -116,11 +116,11 @@ export default async function Page() {
             value={fmt.number(errorCount)}
           />
         </div>
-        <div className="text-[10px] text-[var(--p-text-2)]">
+        <div className="text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.settings.integrations.accounting.helper",
             undefined,
-            "Connect QuickBooks Online, Sage 300 CRE / 100 Contractor, Foundation, Viewpoint Vista / Spectrum, Acumatica, or Xero. The OAuth + sync worker is a separate service — this surface manages connection rows + field mapping rules.",
+            "Connect QuickBooks Online, Sage 300 CRE / 100 Contractor, Foundation, Viewpoint Vista / Spectrum, Acumatica, or Xero. The OAuth + sync worker is a separate service. This surface manages connection rows + field mapping rules.",
           )}
         </div>
         <DataTable<Row>

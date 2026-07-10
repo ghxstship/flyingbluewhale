@@ -112,6 +112,7 @@ export function KeyResultsPanel({
                         <DeleteForm
                           action={deleteKeyResultAction.bind(null, goalId, kr.id)}
                           confirm={`Delete key result "${kr.title}"?`}
+                          undo={{ table: "key_results", id: kr.id, redirectTo: `/studio/goals/${goalId}` }}
                         />
                       </div>
                     )}

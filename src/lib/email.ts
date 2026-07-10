@@ -53,7 +53,7 @@ export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent
   const wordmark = opts.brand?.producerName ?? BRAND.mark;
   const subline = opts.brand?.producerName ? "" : "Technologies";
   return `<!doctype html>
-<html><head><meta charset="utf-8"></head>
+<html><head><meta charset="utf-8"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"></head>
 <body style="margin:0;padding:0;background:#F7F8FA;font-family:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;color:#181B23">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7F8FA;padding:32px 16px">
     <tr><td align="center">
@@ -97,17 +97,83 @@ export type EmailPayload = {
   text?: string;
   replyTo?: string;
   attachments?: EmailAttachment[];
+  /**
+   * Inbox-snippet preview text. When the html body doesn't already carry a
+   * preheader (the email-kit `emailLayout` does), this is injected as a
+   * hidden div right after <body> so the snippet isn't the first body line.
+   */
+  preheader?: string;
+};
+
+export type SendEmailResult = {
+  ok: boolean;
+  id?: string;
+  error?: string;
+  /** True when RESEND_API_KEY is absent and the send was skipped, not delivered. */
+  skipped?: boolean;
 };
 
 /**
- * Send a transactional email via Resend. No-op when RESEND_API_KEY is absent
- * (dev + preview-only deploys). Swap for a queue-backed sender once volume warrants.
+ * Derive a readable plain-text alternative from an HTML body. Multipart
+ * text improves deliverability (spam filters distrust html-only mail) and
+ * covers text-only clients. Best-effort tag stripping — good enough for
+ * our table-based transactional markup, not a general HTML parser.
  */
-export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; id?: string; error?: string }> {
+export function htmlToText(html: string): string {
+  return (
+    html
+      // Hidden preheader spans/divs (display:none) would duplicate into text.
+      .replace(/<(div|span)[^>]*display\s*:\s*none[^>]*>[\s\S]*?<\/\1>/gi, "")
+      .replace(/<(style|script|head)[\s\S]*?<\/\1>/gi, "")
+      // Anchors → "label (url)" so CTAs survive the strip.
+      .replace(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, (_m, href: string, label: string) => {
+        const text = label.replace(/<[^>]+>/g, "").trim();
+        return text && text !== href ? `${text} (${href})` : href;
+      })
+      .replace(/<(br|\/p|\/h[1-6]|\/tr|\/table|\/div)[^>]*>/gi, "\n")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&#8203;/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/[ \t]+/g, " ")
+      .replace(/\s*\n\s*/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim()
+  );
+}
+
+/** Inject a hidden preheader div right after <body ...> (no-op if absent). */
+function injectPreheader(html: string, preheader: string): string {
+  const safe = preheader.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const div = `<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;opacity:0;">${safe}${"&#8203;&nbsp;".repeat(40)}</div>`;
+  const m = /<body[^>]*>/i.exec(html);
+  if (!m) return html;
+  const idx = m.index + m[0].length;
+  return html.slice(0, idx) + div + html.slice(idx);
+}
+
+/**
+ * Send a transactional email via Resend.
+ *
+ * When RESEND_API_KEY is absent (dev + preview-only deploys) the send is
+ * SKIPPED — the result carries `{ ok: true, skipped: true }` and a server
+ * warning is logged so operators can tell email is off (it is not silently
+ * "delivered"). Callers may surface `skipped` to the user.
+ *
+ * A plain-text alternative is auto-derived from the html body when the
+ * caller doesn't pass one (multipart best practice).
+ */
+export async function sendEmail(payload: EmailPayload): Promise<SendEmailResult> {
   if (!hasResend) {
-    console.info("[email noop]", payload.subject, payload.to);
-    return { ok: true };
+    console.warn("[email skipped] RESEND_API_KEY not configured — not delivered:", payload.subject, payload.to);
+    return { ok: true, skipped: true };
   }
+  const html = payload.html && payload.preheader ? injectPreheader(payload.html, payload.preheader) : payload.html;
+  const text = payload.text ?? (payload.html ? htmlToText(payload.html) : undefined);
   const res = await httpFetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -118,8 +184,8 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
       from: env.RESEND_FROM ?? `${BRAND.legalName} <${BRAND.emails.noReply}>`,
       to: Array.isArray(payload.to) ? payload.to : [payload.to],
       subject: payload.subject,
-      html: payload.html,
-      text: payload.text,
+      html,
+      text,
       reply_to: payload.replyTo,
       attachments: payload.attachments?.map((a) =>
         "content" in a
@@ -167,11 +233,13 @@ export async function renderOrgEmailTemplate(
   }
 }
 
-// Convenience: send a proposal share-link notification. When a producer
-// `brand` is passed, the email co-brands (header mark/logo + accent button)
-// and the from-name becomes the producer org; sender stays no-reply@atlvs.pro.
-// When `orgId` is passed and the org has an active `proposal_sent` template,
-// its subject + body (with merge tags) override the inline default.
+// Convenience: send a proposal share-link notification, rendered through
+// the ATLVS email kit (src/components/email). When a producer `brand` is
+// passed, the email co-brands (header logo, footer org name, accent CTA);
+// sender stays no-reply@atlvs.pro. When `orgId` is passed and the org has
+// an active `proposal_sent` template, its subject + body (with merge tags)
+// override the kit default — the stored body is the inner content, wrapped
+// in the kit layout so it still gets the chrome + preheader.
 export async function sendProposalShareEmail({
   to,
   proposalTitle,
@@ -187,12 +255,12 @@ export async function sendProposalShareEmail({
   brand?: EmailBrand;
   orgId?: string;
 }) {
-  const accent = brand?.accent ?? "#E23414";
-  const onAccent = pickReadableForeground(accent);
-  const fromName = brand?.producerName ?? senderName ?? BRAND.legalName;
+  const { proposalShareEmail, emailLayout } = await import("@/components/email");
   const sender = senderName ?? brand?.producerName ?? "The team";
+  const accent = brand?.accent;
+  const onAccent = accent ? pickReadableForeground(accent) : undefined;
 
-  // Per-org template override (Opp #21), else the inline default body.
+  // Per-org template override (Opp #21), else the kit default.
   const tpl = orgId
     ? await renderOrgEmailTemplate(orgId, "proposal_sent", {
         proposalTitle,
@@ -203,16 +271,139 @@ export async function sendProposalShareEmail({
       })
     : null;
 
-  const subject = tpl?.subject || `${fromName} sent you a proposal: ${proposalTitle}`;
-  const bodyHtml =
-    tpl?.bodyHtml ||
-    `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
-       <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase;color:#181B23">${proposalTitle}</h1>
-       <p style="color:#181b23;font-size:14px;margin:0 0 20px">${sender} shared a proposal with you.</p>
-       <p style="margin:0 0 20px"><a href="${url}" style="display:inline-block;background:${accent};color:${onAccent};padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
-       <p style="color:#8c95a3;font-size:12px;margin:0;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code style="word-break:break-all">${url}</code></p>`;
+  const rendered = tpl
+    ? {
+        subject: tpl.subject,
+        html: emailLayout({
+          preheader: `${sender} shared "${proposalTitle}" with you.`,
+          body: tpl.bodyHtml,
+          orgName: brand?.producerName,
+          logoUrl: brand?.producerLogoUrl ?? undefined,
+        }),
+      }
+    : proposalShareEmail({
+        proposalTitle,
+        senderName: sender,
+        url,
+        orgName: brand?.producerName,
+        logoUrl: brand?.producerLogoUrl ?? undefined,
+        accent,
+        onAccent,
+      });
 
-  return sendEmail({ to, subject, html: wrapEmailHtml(bodyHtml, { brand }) });
+  return sendEmail({ to, subject: rendered.subject, html: rendered.html });
+}
+
+/**
+ * E-06 — the off-platform channel. Emails an external holder (guest-ticket
+ * recipients and other `assignment_external_holders` parties, who have no
+ * account, no push, no inbox) when their assignment is issued or changes
+ * state. Kit-rendered, transactional (no prefs link — the recipient has no
+ * account to manage preferences with). Fire-and-forget friendly: never
+ * throws, returns the send result.
+ */
+export async function sendExternalAssignmentEmail({
+  to,
+  holderName,
+  assignmentTitle,
+  kindLabel,
+  stateLabel,
+  projectName,
+  orgName,
+  detailLines,
+  replyTo,
+}: {
+  to: string;
+  holderName?: string | null;
+  assignmentTitle: string;
+  kindLabel: string;
+  stateLabel: string;
+  projectName?: string | null;
+  orgName?: string | null;
+  detailLines?: string[];
+  replyTo?: string;
+}): Promise<SendEmailResult> {
+  try {
+    const { externalAssignmentEmail } = await import("@/components/email");
+    const rendered = externalAssignmentEmail({
+      holderName: holderName ?? undefined,
+      assignmentTitle,
+      kindLabel,
+      stateLabel,
+      projectName: projectName ?? undefined,
+      orgName: orgName ?? undefined,
+      detailLines,
+    });
+    return await sendEmail({ to, subject: rendered.subject, html: rendered.html, replyTo });
+  } catch (err) {
+    console.warn("[email] external assignment email failed:", (err as Error).message);
+    return { ok: false, error: (err as Error).message };
+  }
+}
+
+/**
+ * F-03 / E-06 — per-kind notification email fan-out. Resolves recipient
+ * addresses from `public.users`, renders the kit notification template
+ * (with the notification-preferences footer link), and sends one email per
+ * recipient. Callers are responsible for preference gating BEFORE calling
+ * (each store gates on its own matrix); this helper only resolves + sends.
+ * Never throws.
+ */
+export async function sendNotificationEmailToUsers({
+  userIds,
+  title,
+  body,
+  url,
+  eyebrow,
+  orgName,
+}: {
+  userIds: string[];
+  title: string;
+  body?: string | null;
+  /** In-app path (e.g. "/m/advances" or "/studio/...") or absolute URL. */
+  url?: string | null;
+  eyebrow?: string;
+  orgName?: string | null;
+}): Promise<{ sent: number; skipped: number; failed: number }> {
+  if (userIds.length === 0) return { sent: 0, skipped: 0, failed: 0 };
+  try {
+    const [{ notificationEmail }, { createServiceClient, isServiceClientAvailable }, { urlFor, resolveNotificationHref }] =
+      await Promise.all([import("@/components/email"), import("@/lib/supabase/server"), import("@/lib/urls")]);
+    if (!isServiceClientAvailable()) return { sent: 0, skipped: userIds.length, failed: 0 };
+    const svc = createServiceClient();
+    const { data: users } = await svc.from("users").select("id, email").in("id", userIds);
+    const emails = (users ?? []).map((u) => u.email).filter((e): e is string => !!e);
+    if (emails.length === 0) return { sent: 0, skipped: userIds.length, failed: 0 };
+
+    // Deep links in notification payloads are in-app paths; resolve them to
+    // an absolute URL on the shell that owns the path (shared resolver —
+    // the /me inbox renderer uses the same helper).
+    const ctaUrl = url ? resolveNotificationHref(url) : undefined;
+    const prefsUrl = urlFor("personal", "/me/notifications");
+    const rendered = notificationEmail({
+      eyebrow,
+      title,
+      body: body ?? undefined,
+      ctaUrl,
+      orgName: orgName ?? undefined,
+      prefsUrl,
+    });
+    const results = await Promise.allSettled(
+      emails.map((to) => sendEmail({ to, subject: rendered.subject, html: rendered.html })),
+    );
+    let sent = 0;
+    let skipped = 0;
+    let failed = 0;
+    for (const r of results) {
+      if (r.status !== "fulfilled" || !r.value.ok) failed += 1;
+      else if (r.value.skipped) skipped += 1;
+      else sent += 1;
+    }
+    return { sent, skipped, failed };
+  } catch (err) {
+    console.warn("[email] notification email fan-out failed:", (err as Error).message);
+    return { sent: 0, skipped: 0, failed: userIds.length };
+  }
 }
 
 /** WCAG-ish contrast pick: black or white text on a hex accent. */

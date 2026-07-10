@@ -1,9 +1,12 @@
+import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { SetActiveButton } from "./SetActiveButton";
 
 type Row = { id: string; role: string; orgs: { id: string; name: string; slug: string; tier: string } | null };
 
@@ -35,33 +38,51 @@ export default async function OrgsPage() {
         {t("me.organizations.title", undefined, "Organizations")}
       </h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
-        {t("me.organizations.subtitle", undefined, "Every org you're a member of")}
+        {t(
+          "me.organizations.switcherSubtitle",
+          undefined,
+          "Every organization you belong to. The active one decides which workspace your console, portals, and notifications resolve to.",
+        )}
       </p>
       {rows.length === 0 ? (
         <div className="mt-6">
           <EmptyState
             title={t("me.organizations.empty.title", undefined, "No memberships yet")}
             description={t(
-              "me.organizations.empty.description",
+              "me.organizations.empty.memberDescription",
               undefined,
-              "Create an organization from the console to get started.",
+              "You'll join an organization when a production team invites you. In the meantime, your marketplace profile and applications work without one.",
             )}
+            action={
+              <Link href="/marketplace" className="ps-btn ps-btn--sm">
+                {t("me.organizations.empty.browseMarketplace", undefined, "Browse the Marketplace")}
+              </Link>
+            }
           />
         </div>
       ) : (
         <div className="surface mt-6 divide-y divide-[var(--p-border)]">
-          {rows.map((r) => (
-            <div key={r.id} className="flex items-center justify-between p-5">
-              <div>
-                <div className="text-sm font-semibold">{r.orgs?.name ?? "—"}</div>
-                <div className="font-mono text-xs text-[var(--p-text-2)]">{r.orgs?.slug}</div>
+          {rows.map((r) => {
+            const isActive = r.orgs?.id === session.orgId;
+            return (
+              <div key={r.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-semibold">
+                    {r.orgs?.name ?? t("me.organizations.unknownOrg", undefined, "Unknown organization")}
+                    {isActive && (
+                      <Badge variant="success">{t("me.organizations.activeBadge", undefined, "Active")}</Badge>
+                    )}
+                  </div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{r.orgs?.slug}</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {r.orgs?.tier && <Badge variant="cyan">{toTitle(r.orgs.tier)}</Badge>}
+                  <Badge variant="brand">{toTitle(r.role)}</Badge>
+                  {!isActive && r.orgs && <SetActiveButton orgId={r.orgs.id} orgName={r.orgs.name} />}
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Badge variant="cyan">{r.orgs?.tier}</Badge>
-                <Badge variant="brand">{r.role}</Badge>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

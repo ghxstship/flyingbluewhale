@@ -169,6 +169,14 @@
         "legend": {
           "label": "LEG3ND: المعرفة",
           "description": "المعرفة وLMS والامتثال"
+        },
+        "ai": {
+          "label": "AI",
+          "description": "Drafts the paperwork, scoped to your tenant"
+        },
+        "integrations": {
+          "label": "Integrations",
+          "description": "Connect the tools you already run"
         }
       },
       "industries": {
@@ -191,7 +199,14 @@
         "changelog": {
           "label": "سجل التغييرات",
           "description": "كل إصدار، بتاريخه"
+        },
+        "compare": {
+          "label": "Compare",
+          "description": "How ATLVS stacks up"
         }
+      },
+      "solutions": {
+        "label": "Solutions"
       }
     },
     "home": {
@@ -11825,7 +11840,8 @@
       "stageMover": {
         "movedToast": "تم النقل إلى {stage}",
         "updating": "جارٍ التحديث…",
-        "moveTo": "نقل إلى {stage}"
+        "moveTo": "نقل إلى {stage}",
+        "undo": "Undo"
       },
       "activity": {
         "eyebrow": "عميل محتمل",
@@ -13033,7 +13049,11 @@
           "startsAt": "يبدأ في",
           "endsAt": "ينتهي في",
           "status": "الحالة",
-          "event_state": "الحالة"
+          "event_state": "الحالة",
+          "location": "Location",
+          "meetingUrl": "Meeting URL",
+          "agenda": "Agenda (Markdown)",
+          "minutes": "Minutes (Markdown)"
         },
         "status": {
           "draft": "مسودة",
@@ -13123,7 +13143,9 @@
         "people": "الأشخاص",
         "openActs": "الإجراءات المفتوحة",
         "state": "الحالة"
-      }
+      },
+      "description": "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
+      "fullSchedule": "Full Schedule"
     },
     "operations": {
       "dailyLog": {
@@ -20466,7 +20488,8 @@
       "ref": "المرجع: {digest}",
       "fallbackMessage": "حدث خطأ غير متوقع.",
       "tryAgain": "إعادة المحاولة",
-      "backToWorkspace": "العودة إلى مساحة العمل"
+      "backToWorkspace": "العودة إلى مساحة العمل",
+      "segmentTitle": "This Section Hit A Snag"
     },
     "layout": {
       "userFallback": "المستخدم"
@@ -23305,7 +23328,22 @@
     "filterPlaceholder": "تصفية الاختصارات…",
     "filterAria": "تصفية الاختصارات",
     "emptyRegistry": "لا اختصارات مسجلة بعد.",
-    "noMatch": "لا اختصارات تطابق “{query}”."
+    "noMatch": "لا اختصارات تطابق “{query}”.",
+    "nav": {
+      "goTo": "Go to {group}"
+    },
+    "createMenu": "Create or request (One Front Door)",
+    "table": {
+      "nextRow": "Next row",
+      "prevRow": "Previous row",
+      "toggleSelect": "Select / deselect focused row",
+      "openRow": "Open focused row"
+    },
+    "editor": {
+      "bold": "Bold (in editor)",
+      "italic": "Italic (in editor)",
+      "underline": "Underline (in editor)"
+    }
   },
   "workspace": {
     "fallbackName": "مساحة العمل",
@@ -23599,6 +23637,19 @@
         "org": "المشتركة",
         "public": "العامة"
       }
+    }
+  },
+  "filterBar": {
+    "results": "{count} results",
+    "updated": "Filters updated"
+  },
+  "rail": {
+    "nav": "Switch app",
+    "readOnly": "read-only",
+    "soon": "Soon",
+    "group": {
+      "products": "Products",
+      "extensions": "Extensions"
     }
   }
 }

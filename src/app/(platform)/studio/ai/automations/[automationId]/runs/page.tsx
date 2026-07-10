@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toneFor } from "@/lib/tones";
 
 /**
@@ -44,7 +45,7 @@ const STATUS_FILTERS: Array<{ key: "all" | RunRow["status"]; label: string }> = 
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -236,7 +237,7 @@ export default async function Page({
                         <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                         {r.status === "failed" && r.error_summary && (
                           <span
-                            className="ms-2 truncate font-mono text-[10px] text-[var(--p-danger)]"
+                            className="ms-2 truncate font-mono text-[11px] text-[var(--p-danger)]"
                             title={r.error_summary}
                           >
                             {r.error_summary.slice(0, 60)}

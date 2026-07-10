@@ -45,7 +45,7 @@ export function NewAnnouncementForm({
       </label>
 
       <fieldset className="space-y-3 rounded-md border border-[var(--p-border)] p-3">
-        <legend className="px-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <legend className="px-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
           {t("console.comms.announcements.new.audience", undefined, "Audience")}
         </legend>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -102,7 +102,7 @@ export function NewAnnouncementForm({
           {t(
             "console.comms.announcements.new.filtersHint",
             undefined,
-            "Filters AND together — recipients must match every populated filter. Leave Project + Team blank to reach the full role band.",
+            "Filters AND together. Recipients must match every populated filter. Leave Project + Team blank to reach the full role band.",
           )}
         </p>
       </fieldset>

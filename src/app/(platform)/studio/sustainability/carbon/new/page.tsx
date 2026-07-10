@@ -35,12 +35,12 @@ export default async function Page() {
               {t("console.sustainability.carbon.new.scope", undefined, "Scope")}
             </label>
             <select name="scope" defaultValue="1" className="ps-input mt-1.5 w-full">
-              <option value="1">{t("console.sustainability.carbon.new.scope1", undefined, "Scope 1 — direct")}</option>
+              <option value="1">{t("console.sustainability.carbon.new.scope1", undefined, "Scope 1 (direct)")}</option>
               <option value="2">
-                {t("console.sustainability.carbon.new.scope2", undefined, "Scope 2 — purchased energy")}
+                {t("console.sustainability.carbon.new.scope2", undefined, "Scope 2 (purchased energy)")}
               </option>
               <option value="3">
-                {t("console.sustainability.carbon.new.scope3", undefined, "Scope 3 — value chain")}
+                {t("console.sustainability.carbon.new.scope3", undefined, "Scope 3 (value chain)")}
               </option>
             </select>
           </div>

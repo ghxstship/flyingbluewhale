@@ -1,12 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { sanitizeHtml } from "@/lib/sanitize";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Email-template editor with merge-tag autocomplete.
@@ -53,6 +53,7 @@ function renderPreview(body: string): string {
 
 export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
   const t = useT();
+  const fmt = useFormatters();
   const [templates, setTemplates] = useState<Template[]>(initial);
   const [mode, setMode] = useState<"list" | "new" | { edit: string }>("list");
   const [form, setForm] = useState<Partial<Template>>({
@@ -190,7 +191,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
                   <td>{tpl.name}</td>
                   <td className="text-[var(--p-text-2)]">{tpl.subject}</td>
                   <td>{tpl.is_active ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</td>
-                  <td className="font-mono text-xs">{new Date(tpl.updated_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{fmt.date(new Date(tpl.updated_at))}</td>
                   <td>
                     <button
                       type="button"
@@ -271,13 +272,13 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
           {t("console.settings.emailTemplates.preview", undefined, "Preview")}
         </div>
         <div>
-          <div className="text-[10px] text-[var(--p-text-2)]">
+          <div className="text-[11px] text-[var(--p-text-2)]">
             {t("console.settings.emailTemplates.colSubject", undefined, "Subject")}
           </div>
           <div className="mt-0.5 text-[var(--p-text-1)]">{renderPreview(form.subject ?? "")}</div>
         </div>
         <div>
-          <div className="text-[10px] text-[var(--p-text-2)]">
+          <div className="text-[11px] text-[var(--p-text-2)]">
             {t("console.settings.emailTemplates.body", undefined, "Body")}
           </div>
           <div

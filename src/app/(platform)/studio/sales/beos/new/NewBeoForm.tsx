@@ -15,7 +15,7 @@ export function NewBeoForm({ clients, projects }: { clients: Option[]; projects:
         <div>
           <label htmlFor="client_id" className="text-xs font-medium text-[var(--p-text-2)]">Client</label>
           <select id="client_id" name="client_id" className="ps-input mt-1.5 w-full" defaultValue="">
-            <option value="">— None —</option>
+            <option value="">None</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -26,7 +26,7 @@ export function NewBeoForm({ clients, projects }: { clients: Option[]; projects:
         <div>
           <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">Project</label>
           <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
-            <option value="">— None —</option>
+            <option value="">None</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}

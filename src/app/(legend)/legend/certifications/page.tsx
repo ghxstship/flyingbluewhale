@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -88,11 +89,21 @@ export default async function CertificationsPage() {
                     </>
                   )}
                 </dl>
-                {recertable && (
-                  <div className="mt-1">
-                    <RecertButton holderId={h.id} label="Request recert" />
-                  </div>
-                )}
+                <div className="mt-1 flex flex-wrap items-center gap-3">
+                  <Link
+                    href={`/legend/certifications/${h.id}`}
+                    className="text-xs font-semibold text-[var(--p-accent-text)] hover:underline"
+                  >
+                    View certificate
+                  </Link>
+                  <Link
+                    href={`/legend/certifications/${h.id}/verify`}
+                    className="text-xs font-semibold text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
+                  >
+                    Verification record
+                  </Link>
+                  {recertable && <RecertButton holderId={h.id} label="Request recert" />}
+                </div>
               </div>
             );
           })}

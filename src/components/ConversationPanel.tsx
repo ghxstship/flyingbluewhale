@@ -1,8 +1,9 @@
 import { listMessagesFor, type ConversationRecordType } from "@/lib/db/conversations";
+import { formatDateParts } from "@/lib/i18n/format";
 import { ConversationComposer } from "./ConversationComposer";
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -42,7 +43,7 @@ export async function ConversationPanel({
               <span className="text-xs font-semibold text-[var(--p-text-1)]">
                 {m.author_name ?? m.author_email ?? "Someone"}
               </span>
-              <span className="font-mono text-[10px] text-[var(--p-text-2)]">{fmt(m.created_at)}</span>
+              <span className="font-mono text-[11px] text-[var(--p-text-2)]">{fmt(m.created_at)}</span>
             </div>
             <p className="mt-1 text-sm whitespace-pre-wrap">{m.body}</p>
           </div>

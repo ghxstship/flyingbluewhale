@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -5,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -23,7 +25,7 @@ type EventRow = {
 const PRESS_PATTERN = /(press[- ]?conference|pressconf|press[- ]?brief|media[- ]?brief|presser)/i;
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -124,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{c.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmt(c.starts_at)} → {fmt(c.ends_at)}
                       {c.location?.name ? ` · ${c.location.name}` : ""}
                     </div>
@@ -138,10 +140,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </section>
 
         <p className="text-xs text-[var(--p-text-2)]">
-          {t("p.media.pressconf.rsvp.prefix", undefined, "To RSVP, email")}{" "}
-          <a className="text-[var(--p-accent)]" href="mailto:press@atlvs.pro">
-            press@atlvs.pro
-          </a>{" "}
+          {t("p.media.pressconf.rsvp.messagePrefix", undefined, "To RSVP,")}{" "}
+          <Link className="text-[var(--p-accent)] underline" href={`/p/${slug}/messages`}>
+            {t("p.media.pressconf.rsvp.messageLink", undefined, "message the press office")}
+          </Link>{" "}
           {t("p.media.pressconf.rsvp.suffix", undefined, "with your accreditation number and the conference name.")}
         </p>
       </div>

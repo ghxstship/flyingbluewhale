@@ -80,7 +80,7 @@ async function ReportsBody({ orgId }: { orgId: string }) {
     <>
       <div className="metric-grid-3">
         <MetricCard
-          label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue — Paid")}
+          label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue (Paid)")}
           value={formatMoney(revenue)}
           sparkline={sparklineRevenue}
           accent
@@ -121,9 +121,9 @@ async function ReportsBody({ orgId }: { orgId: string }) {
                     variant={
                       b.bucket === "Current"
                         ? "success"
-                        : b.bucket === "1–30"
+                        : b.bucket === "1-30"
                           ? "info"
-                          : b.bucket === "31–60"
+                          : b.bucket === "31-60"
                             ? "warning"
                             : "error"
                     }
@@ -204,9 +204,9 @@ type AgingRow = { bucket: string; count: number; amount: number };
 function arAging(invoices: Invoice[]): AgingRow[] {
   const buckets: AgingRow[] = [
     { bucket: "Current", count: 0, amount: 0 },
-    { bucket: "1–30", count: 0, amount: 0 },
-    { bucket: "31–60", count: 0, amount: 0 },
-    { bucket: "61–90", count: 0, amount: 0 },
+    { bucket: "1-30", count: 0, amount: 0 },
+    { bucket: "31-60", count: 0, amount: 0 },
+    { bucket: "61-90", count: 0, amount: 0 },
     { bucket: "90+", count: 0, amount: 0 },
   ];
   const today = Date.now();

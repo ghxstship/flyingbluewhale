@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import { KIcon } from "@/components/mobile/kit";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
+import { ActionBar, KIcon, TogRow } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createPost, type State } from "./actions";
 
@@ -47,6 +47,29 @@ export function FeedView({
   const [state, formAction, pending] = useActionState<State, FormData>(createPost, null);
   const formRef = useRef<HTMLFormElement>(null);
 
+  // Kit ActionBar state (canon: ActionBar on every list screen).
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("newest");
+  const [tones, setTones] = useState<Set<FeedPost["tagTone"]>>(new Set());
+  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const toggleTone = (tone: FeedPost["tagTone"]) =>
+    setTones((s) => {
+      const n = new Set(s);
+      if (n.has(tone)) n.delete(tone);
+      else n.add(tone);
+      return n;
+    });
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const filtered = posts.filter(
+      (p) =>
+        (!q || `${p.who} ${p.body} ${p.tag}`.toLowerCase().includes(q)) &&
+        (tones.size === 0 || tones.has(p.tagTone)),
+    );
+    return sort === "oldest" ? filtered.slice().reverse() : filtered;
+  }, [posts, query, sort, tones]);
+
   useEffect(() => {
     if (!pending && state === null && open) {
       formRef.current?.reset();
@@ -56,6 +79,27 @@ export function FeedView({
 
   return (
     <>
+      <ActionBar
+        k="feed"
+        query={query}
+        setQuery={setQuery}
+        placeholder={t("m.feed.search", undefined, "Search the feed…")}
+        sort={sort}
+        setSort={setSort}
+        sortOpts={[
+          ["newest", t("m.feed.sort.newest", undefined, "Newest")],
+          ["oldest", t("m.feed.sort.oldest", undefined, "Oldest")],
+        ]}
+        filterActive={tones.size}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        filterChildren={
+          <div>
+            <TogRow label={t("m.feed.tag.kudos", undefined, "Kudos")} on={tones.has("ok")} set={() => toggleTone("ok")} />
+            <TogRow label={t("m.feed.tag.update", undefined, "Update")} on={tones.has("info")} set={() => toggleTone("info")} />
+          </div>
+        }
+      />
       {open ? (
         <form action={formAction} ref={formRef} className="surface" style={{ padding: 12, marginBottom: 14, borderRadius: "var(--p-r-md)" }}>
           <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
@@ -102,8 +146,13 @@ export function FeedView({
         </div>
       )}
 
+      {!eyebrowEmpty && visible.length === 0 && posts.length > 0 && (
+        <div className="s" style={{ color: "var(--p-text-3)", padding: "16px 4px" }}>
+          {t("m.feed.noMatch", undefined, "Nothing matches your search.")}
+        </div>
+      )}
       {!eyebrowEmpty &&
-        posts.map((p) => {
+        visible.map((p) => {
           const isLiked = liked.has(p.id);
           return (
             <div className="post" key={p.id}>

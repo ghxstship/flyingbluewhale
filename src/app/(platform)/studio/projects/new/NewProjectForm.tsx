@@ -37,7 +37,7 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
             {t("console.projects.new.client", undefined, "Client")}
           </label>
           <select name="clientId" className="ps-input mt-1.5 w-full" defaultValue="">
-            <option value="">{t("console.projects.new.none", undefined, "— None —")}</option>
+            <option value="">{t("console.projects.new.none", undefined, "None")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -50,7 +50,7 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
             {t("console.projects.new.primaryVenue", undefined, "Primary Venue")}
           </label>
           <select name="primaryVenueId" className="ps-input mt-1.5 w-full" defaultValue="">
-            <option value="">{t("console.projects.new.none", undefined, "— None —")}</option>
+            <option value="">{t("console.projects.new.none", undefined, "None")}</option>
             {venues.map((v) => (
               <option key={v.id} value={v.id}>
                 {v.name}
@@ -60,7 +60,7 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
         </div>
       </div>
       <Input
-        label={t("console.projects.new.budgetUsd", undefined, "Budget — USD")}
+        label={t("console.projects.new.budgetUsd", undefined, "Budget (USD)")}
         name="budget"
         type="number"
         min="0"

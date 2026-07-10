@@ -121,7 +121,7 @@ export default async function Page() {
                     <span>{r.label ?? "—"}</span>
                   </div>
                   <span className="font-mono text-xs text-[var(--p-text-2)]">
-                    {new Date(r.occurs_at).toLocaleString()}
+                    {fmt.dateTime(new Date(r.occurs_at))}
                   </span>
                 </li>
               ))}

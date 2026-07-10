@@ -4,7 +4,7 @@ import { MarketplaceCard } from "@/components/marketplace/MarketplaceCard";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +34,7 @@ type Row = {
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -85,7 +86,7 @@ export default async function Page() {
                   r.region,
                   r.budget_band,
                   r.due_at
-                    ? `${t("marketing.pages.marketplace.rfqs.card.dueLabel")} ${new Date(r.due_at).toLocaleDateString()}`
+                    ? `${t("marketing.pages.marketplace.rfqs.card.dueLabel")} ${fmt.date(new Date(r.due_at))}`
                     : null,
                   r.requires_prequalification ? t("marketing.pages.marketplace.rfqs.card.prequalRequired") : null,
                 ]}

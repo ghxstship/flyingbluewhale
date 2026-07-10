@@ -12,6 +12,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/commerce_store";
+import { formatDateParts } from "@/lib/i18n/format";
 import { timeAgo, toTitle } from "@/lib/format";
 import {
   getListing,
@@ -42,7 +43,7 @@ function readSeatZones(seatMap: unknown): SeatZone[] {
 
 function formatPayoutDate(value: string | null): string {
   if (!value) return "Pending";
-  return new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  return formatDateParts(new Date(value), { month: "short", day: "numeric", year: "numeric" });
 }
 
 /**

@@ -75,7 +75,7 @@ export default async function ProposalTemplatesPage() {
           emptyDescription={t(
             "console.proposals.templates.empty.description",
             undefined,
-            "The canonical 17-section template ships with every org. Reach out if it isn't showing — your migration may not have applied.",
+            "The canonical 17-section template ships with every org. Reach out if it isn't showing. Your migration may not have applied.",
           )}
           emptyAction={
             <Link className="text-sm text-[var(--p-accent)]" href="/studio/proposals/new">
@@ -115,7 +115,7 @@ export default async function ProposalTemplatesPage() {
               header: t("console.proposals.templates.col.source", undefined, "Source"),
               render: (r) =>
                 r.is_system ? (
-                  <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 text-[10px] tracking-wide uppercase">
+                  <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 text-[11px] tracking-wide uppercase">
                     {t("console.proposals.templates.source.system", undefined, "System")}
                   </span>
                 ) : (

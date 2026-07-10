@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { createDraw, deleteDraw, seedDefaultDraws, toggleDrawn, type State } from "./actions";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatMoney } from "@/lib/i18n/format";
 
 type DrawRow = {
   id: string;
@@ -26,7 +27,7 @@ function formatPct(p: number | null): string {
 }
 
 function formatMoneyCents(cents: number): string {
-  return `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return formatMoney(cents);
 }
 
 export function DrawScheduleClient({

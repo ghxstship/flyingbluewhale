@@ -110,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t(
               "p.hospitality.itinerary.empty",
               undefined,
-              "No events on your itinerary yet. Check back closer to the date — confirmed events publish here.",
+              "No events on your itinerary yet. Check back closer to the date; confirmed events publish here.",
             )}
           </div>
         ) : (
@@ -126,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <div className="text-sm font-medium">{e.name}</div>
-                            <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                            <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                               {t(
                                 "p.hospitality.itinerary.until",
                                 { time: fmtTime(e.ends_at) },

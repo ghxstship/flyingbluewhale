@@ -103,7 +103,7 @@ export function Badge({
     return (
       <span
         aria-label={ariaLabel}
-        className={`inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold tabular-nums ${PS_MOD[variant]} ${className}`}
+        className={`inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums ${PS_MOD[variant]} ${className}`}
       >
         {children}
       </span>

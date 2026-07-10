@@ -31,6 +31,7 @@ import {
   type KitRiderItem,
   emptyKitFrame,
 } from "./template";
+import { formatMoney } from "@/lib/i18n/format";
 
 export type VenueFrame = {
   zones: KitZone[];
@@ -189,7 +190,7 @@ export function kitToRows(
 
 export function summarize(a: AssembledKit): string {
   const k = a.blueprint.eventKit;
-  const fmt = (c: number) => `$${(c / 100).toLocaleString()}`;
+  const fmt = (c: number) => formatMoney(c, { fractionDigits: 0 });
   return [
     `${k.meta.event} (${k.meta.scale}) — ${k.meta.generatedFromParams.artist ?? ""}`.trim(),
     `  zones=${k.zones.length} touchpoints=${k.touchpoints.length} lines=${k.lines.length} ros=${k.ros.length} gates=${k.phaseGates.length} rider=${k.rider.length}`,

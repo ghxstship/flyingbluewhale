@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import { MANAGER_BAND_ROLES } from "@/lib/auth";
 
 /**
  * Return the user IDs of an org's manager-band members (owner / admin /
@@ -16,7 +17,7 @@ export async function managerUserIds(orgId: string, exclude?: string): Promise<s
     .from("memberships")
     .select("user_id, role")
     .eq("org_id", orgId)
-    .in("role", ["owner", "admin", "manager"])
+    .in("role", [...MANAGER_BAND_ROLES])
     .is("deleted_at", null);
   const rows = (data ?? []) as Array<{ user_id: string | null; role: string | null }>;
   return rows

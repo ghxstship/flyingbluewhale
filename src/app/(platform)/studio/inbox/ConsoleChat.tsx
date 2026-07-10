@@ -6,7 +6,7 @@ import { useActionState, useOptimistic } from "react";
 import { Copy } from "lucide-react";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { CHAT_URL_PATTERN, type RecordRefMap } from "./record-ref-types";
-import { sendConsoleMessage, toggleReaction, type State } from "./actions";
+import { loadEarlierMessages, markRoomRead, sendConsoleMessage, toggleReaction, type State } from "./actions";
 
 export type MessageReaction = { emoji: string; count: number; mine: boolean };
 
@@ -33,6 +33,8 @@ export type ConsoleChatLabels = {
   addReaction: string;
   copy: string;
   copied: string;
+  loadEarlier: string;
+  loadingEarlier: string;
 };
 
 /** The four curated reactions (kit 21 W5) — must match REACTION_EMOJI in actions.ts. */
@@ -52,6 +54,7 @@ export function ConsoleChat({
   messages,
   refs,
   lastReadAt,
+  hasMoreEarlier = false,
   people,
   labels,
 }: {
@@ -59,9 +62,14 @@ export function ConsoleChat({
   userId: string;
   messages: ConsoleMessage[];
   refs: RecordRefMap;
-  /** Caller's last_read_at captured before the mark-read write; the first
-   *  message newer than it (and not mine) gets the unread jump line. */
+  /** Caller's last_read_at captured server-side; the first message newer
+   *  than it (and not mine) gets the unread jump line. The read cursor is
+   *  advanced by a client-fired action on mount (audit A-36), never as a
+   *  GET-render side effect. */
   lastReadAt: string | null;
+  /** True when the initial window did not reach the start of the thread —
+   *  surfaces the "Load earlier messages" control (audit A-11). */
+  hasMoreEarlier?: boolean;
   /** Org people for @mention typeahead + highlight (kit 21 W5). */
   people: ChatMember[];
   labels: ConsoleChatLabels;
@@ -71,7 +79,56 @@ export function ConsoleChat({
   const [optimistic, addOptimistic] = useOptimistic(messages, (cur, next: ConsoleMessage) => [...cur, next]);
   const formRef = React.useRef<HTMLFormElement>(null);
   const endRef = React.useRef<HTMLDivElement>(null);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  // Older history loaded through the cursor action, prepended to the
+  // server-rendered window (audit A-11). Record-ref chips for those rows
+  // ride along in extraRefs.
+  const [earlier, setEarlier] = React.useState<ConsoleMessage[]>([]);
+  const [extraRefs, setExtraRefs] = React.useState<RecordRefMap>({});
+  const [hasMore, setHasMore] = React.useState(hasMoreEarlier);
+  const [loadingEarlier, setLoadingEarlier] = React.useState(false);
+
+  // Rooms are swapped in place via `?room=` — reset the pagination state
+  // when the thread changes.
+  React.useEffect(() => {
+    setEarlier([]);
+    setExtraRefs({});
+    setHasMore(hasMoreEarlier);
+  }, [roomId, hasMoreEarlier]);
+
+  // Advance my read cursor from the client (audit A-36): on mount, and
+  // again whenever new messages land while the thread is open.
+  React.useEffect(() => {
+    void markRoomRead(roomId);
+  }, [roomId, messages.length]);
+
+  const loadEarlier = async () => {
+    if (loadingEarlier) return;
+    const oldest = earlier[0]?.createdAt ?? messages[0]?.createdAt;
+    if (!oldest) return;
+    setLoadingEarlier(true);
+    try {
+      const result = await loadEarlierMessages(roomId, oldest);
+      if ("error" in result) return;
+      const el = scrollRef.current;
+      const prevHeight = el?.scrollHeight ?? 0;
+      setEarlier((cur) => [...result.messages, ...cur]);
+      setExtraRefs((cur) => ({ ...cur, ...result.refs }));
+      setHasMore(result.hasMore);
+      // Keep the viewport anchored on the message the reader was looking
+      // at — prepended content would otherwise shove it out of view.
+      requestAnimationFrame(() => {
+        if (el) el.scrollTop += el.scrollHeight - prevHeight;
+      });
+    } finally {
+      setLoadingEarlier(false);
+    }
+  };
+
+  const allRefs = React.useMemo(() => ({ ...extraRefs, ...refs }), [extraRefs, refs]);
+  const timeline = React.useMemo(() => [...earlier, ...optimistic], [earlier, optimistic]);
 
   // @mention typeahead — when the word at the caret starts with "@", surface
   // a member picker; selecting inserts "@Full Name ". `mentionNames` drives
@@ -153,14 +210,28 @@ export function ConsoleChat({
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <RealtimeRefresh table="chat_messages" filter={`room_id=eq.${roomId}`} channelName={`console-chat-${roomId}`} />
-      <div className="min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
-        {optimistic.length === 0 ? (
+      {/* role="log" + polite live region (audit A-12) — incoming messages
+          are announced to screen readers instead of landing silently. */}
+      <div ref={scrollRef} role="log" aria-live="polite" className="min-h-0 flex-1 space-y-1 overflow-y-auto pr-1">
+        {hasMore ? (
+          <div className="pb-1 text-center">
+            <button
+              type="button"
+              onClick={() => void loadEarlier()}
+              disabled={loadingEarlier}
+              className="ps-btn ps-btn--sm"
+            >
+              {loadingEarlier ? labels.loadingEarlier : labels.loadEarlier}
+            </button>
+          </div>
+        ) : null}
+        {timeline.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-1 text-center">
             <div className="text-sm font-semibold">{labels.empty}</div>
             <p className="text-xs text-[var(--p-text-2)]">{labels.emptyHint}</p>
           </div>
         ) : (
-          optimistic.map((m) => {
+          timeline.map((m) => {
             const divider = m.dayKey !== "pending" && m.dayKey !== lastDay ? m.dayLabel : null;
             if (m.dayKey !== "pending") lastDay = m.dayKey;
             const mine = m.authorId === userId;
@@ -189,7 +260,7 @@ export function ConsoleChat({
                     m={m}
                     mine={mine}
                     grouped={grouped}
-                    refs={refs}
+                    refs={allRefs}
                     mentionNames={mentionNames}
                     labels={labels}
                     isPending={m.dayKey === "pending"}
@@ -335,7 +406,7 @@ function Message({
             <div className="text-[11px] font-semibold text-[var(--p-text-2)]">{m.authorName}</div>
           ) : null}
           <MessageBody body={m.body} refs={refs} mine={mine} mentionNames={mentionNames} />
-          <div className={`mt-0.5 text-right font-mono text-[10px] ${mine ? "opacity-80" : "text-[var(--p-text-3)]"}`}>
+          <div className={`mt-0.5 text-right font-mono text-[11px] ${mine ? "opacity-80" : "text-[var(--p-text-3)]"}`}>
             {m.timeText}
           </div>
         </div>

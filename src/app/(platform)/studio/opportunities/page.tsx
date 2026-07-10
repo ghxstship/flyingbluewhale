@@ -76,7 +76,7 @@ export default async function OpportunitiesPage() {
         info={t(
           "console.opportunities.info",
           undefined,
-          "Public RFPs, invited bids, tenders, renewals, and partnerships — the pursuit pipeline before a deal exists. A lens over the CRM store (kind = RFP).",
+          "Public RFPs, invited bids, tenders, renewals, and partnerships. The pursuit pipeline before a deal exists. A lens over the CRM store (kind = RFP).",
         )}
       />
       <div className="page-content space-y-6">

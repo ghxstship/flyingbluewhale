@@ -65,5 +65,6 @@ export async function deleteStagePlot(projectId: string, id: string): Promise<vo
     .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not delete stage plot: ${error.message}`);
   revalidatePath(`/studio/projects/${projectId}/stage-plots`);
-  redirect(`/studio/projects/${projectId}/stage-plots`);
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

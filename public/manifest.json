@@ -1,13 +1,13 @@
 {
-  "name": "COMPVSS — ATLVS Technologies",
+  "name": "COMPVSS · ATLVS Technologies",
   "short_name": "COMPVSS",
-  "description": "ATLVS Technologies' field PWA for crew, vendors, and talent — clocks, advancing, comms, scans. Offline-first.",
+  "description": "ATLVS Technologies' field PWA for crew, vendors, and talent. Clocks, advancing, comms, scans. Offline-first.",
   "start_url": "/m",
   "scope": "/m",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F7F8FA",
-  "theme_color": "#E9A23B",
+  "theme_color": "#FFC400",
   "icons": [
     {
       "src": "/icon-192.png",

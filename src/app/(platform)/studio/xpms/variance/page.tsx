@@ -107,7 +107,7 @@ export default async function VariancePage() {
             },
             {
               key: "cost_delta",
-              header: t("console.xpms.variance.columns.costDelta", undefined, "Cost Δ — Cents"),
+              header: t("console.xpms.variance.columns.costDelta", undefined, "Cost Δ (Cents)"),
               render: (r) => r.cost_delta_cents_total ?? 0,
               accessor: (r) => Number(r.cost_delta_cents_total ?? 0),
               className: "text-right font-mono text-xs",

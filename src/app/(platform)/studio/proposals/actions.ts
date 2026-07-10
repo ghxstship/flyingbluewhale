@@ -179,7 +179,7 @@ export async function setProposalStatusAction(
     .eq("proposal_state", current as "draft")
     .select("id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "Proposal status changed concurrently — refresh and retry" };
+  if (!updated || updated.length === 0) return { error: "Proposal status changed concurrently. Refresh and retry" };
   if (status === "sent" || status === "signed") {
     const { notify } = await import("@/lib/notify");
     await notify({
@@ -344,7 +344,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
         project_id: projectId,
         client_id: proposal.client_id,
         number: `${numBase}-D`,
-        title: `${proposal.title} — Deposit (${depositPct}%)`,
+        title: `${proposal.title} · Deposit (${depositPct}%)`,
         amount_cents: depositCents,
         currency,
         invoice_state: "draft",
@@ -355,7 +355,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
         project_id: projectId,
         client_id: proposal.client_id,
         number: `${numBase}-B`,
-        title: `${proposal.title} — Balance on Load-In (${100 - depositPct}%)`,
+        title: `${proposal.title} · Balance on Load-In (${100 - depositPct}%)`,
         amount_cents: balanceCents,
         currency,
         invoice_state: "draft",
@@ -411,4 +411,35 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
   revalidatePath("/studio/proposals");
   revalidatePath(`/studio/proposals/${proposalId}`);
   redirect(`/studio/projects/${projectId}`);
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk-send draft proposals from the list table (audit A-22). manager+
+ * only; org-pinned; non-draft rows are skipped and reported. Stamps
+ * sent_at like the single-record transition.
+ */
+export async function bulkSendProposals(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Send Proposals" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("proposals")
+    .update({ proposal_state: "sent", sent_at: new Date().toISOString() })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .eq("proposal_state", "draft")
+    .select("id");
+  if (error) return { error: `Could Not Send · ${error.message}` };
+  const sent = updated?.length ?? 0;
+  const skipped = parsed.data.length - sent;
+  revalidatePath("/studio/proposals");
+  if (skipped > 0) return { error: `${sent} Sent · ${skipped} Skipped (not in draft)` };
+  return { message: `${sent} ${sent === 1 ? "Proposal" : "Proposals"} Sent` };
 }

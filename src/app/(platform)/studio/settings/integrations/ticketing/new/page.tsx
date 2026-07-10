@@ -55,7 +55,7 @@ export default async function Page() {
             )}
           />
           <Input
-            label={t("console.settings.integrations.ticketing.new.apiKeyLabel", undefined, "API Key — Encrypted")}
+            label={t("console.settings.integrations.ticketing.new.apiKeyLabel", undefined, "API Key (Encrypted)")}
             name="api_key"
             type="password"
             placeholder="••••"

@@ -53,7 +53,7 @@ export default async function Page() {
             </label>
             <select name="type" defaultValue="normal" className="ps-input mt-1.5 w-full">
               <option value="standard">
-                {t("console.ops.toc.changes.new.typeStandard", undefined, "Standard — Pre-approved")}
+                {t("console.ops.toc.changes.new.typeStandard", undefined, "Standard (Pre-approved)")}
               </option>
               <option value="normal">{t("console.ops.toc.changes.new.typeNormal", undefined, "Normal")}</option>
               <option value="emergency">

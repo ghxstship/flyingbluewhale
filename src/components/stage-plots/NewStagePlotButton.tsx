@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 

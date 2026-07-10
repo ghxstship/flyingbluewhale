@@ -78,7 +78,7 @@ export default async function ProjectDrawSchedulePage({ params }: { params: Prom
         subtitle={t(
           "console.projects.finance.draws.subtitle",
           { project: project.name },
-          `Project billing milestones — % of total contract for ${project.name}.`,
+          `Project billing milestones. % of total contract for ${project.name}.`,
         )}
       />
       <div className="page-content max-w-4xl">

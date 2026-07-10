@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatMoney } from "@/lib/i18n/format";
@@ -37,8 +37,8 @@ export default async function MileagePage() {
   // below stay on the capped listOrgScoped default, but reducing over
   // that capped list truncated the miles + reimbursement totals once
   // an org passed 100 logs.
-  const [rows, totals] = await Promise.all([
-    listOrgScoped("mileage_logs", session.orgId, { orderBy: "logged_on" }),
+  const [{ rows, totalCount }, totals] = await Promise.all([
+    listOrgScopedWithCount("mileage_logs", session.orgId, { orderBy: "logged_on" }),
     mileageTotals(session.orgId),
   ]);
   const totalMiles = totals.reduce((s, r) => s + Number(r.miles), 0);
@@ -62,6 +62,7 @@ export default async function MileagePage() {
       <div className="page-content">
         <DataTable<MileageLog>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/finance/mileage/${r.id}`}
           emptyLabel={t("console.finance.mileage.emptyLabel", undefined, "No mileage logged")}
           emptyDescription={t(

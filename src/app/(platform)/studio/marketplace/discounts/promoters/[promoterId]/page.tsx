@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { formatMoney } from "@/lib/i18n/format";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
   formatBps,
@@ -40,7 +41,7 @@ type Attribution = {
 };
 
 function dollars(cents: number): string {
-  return `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return formatMoney(cents);
 }
 
 export default async function PromoterDetail({ params }: { params: Promise<{ promoterId: string }> }) {
@@ -76,7 +77,7 @@ export default async function PromoterDetail({ params }: { params: Promise<{ pro
         eyebrow="Promoter"
         title={promoter.name}
         subtitle={`${formatBps(promoter.commission_bps)} commission${
-          promoter.ref_code ? ` — ${promoter.ref_code}` : ""
+          promoter.ref_code ? ` · ${promoter.ref_code}` : ""
         }`}
         breadcrumbs={[
           { label: "Marketplace", href: "/studio/marketplace" },
@@ -96,6 +97,11 @@ export default async function PromoterDetail({ params }: { params: Promise<{ pro
             <DeleteForm
               action={deletePromoterAction.bind(null, promoter.id)}
               confirm={`Delete promoter "${promoter.name}"? Attribution history is removed.`}
+              undo={{
+                table: "promoters",
+                id: promoter.id,
+                redirectTo: "/studio/marketplace/discounts/promoters",
+              }}
             />
           </div>
         }

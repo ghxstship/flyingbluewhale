@@ -82,11 +82,11 @@ export default async function Page() {
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
+            <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.settings.accountManagers.new.portalUserHint",
                 undefined,
-                "The portal-side user — vendor, sponsor, delegation contact, etc.",
+                "The portal-side user: vendor, sponsor, delegation contact, etc.",
               )}
             </p>
           </div>
@@ -128,7 +128,7 @@ export default async function Page() {
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
+            <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.settings.accountManagers.new.projectHint",
                 undefined,

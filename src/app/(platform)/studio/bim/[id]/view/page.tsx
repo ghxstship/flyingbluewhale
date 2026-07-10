@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t(
                 "console.bim.view.unsupportedSuffix",
                 undefined,
-                "— use the Autodesk Forge integration for Revit / Navisworks, or download and open locally.",
+                "· use the Autodesk Forge integration for Revit / Navisworks, or download and open locally.",
               )}
             </p>
           </div>

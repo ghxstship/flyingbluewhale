@@ -9,7 +9,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
@@ -51,6 +51,7 @@ export default async function Page() {
   // submissions are platform-wide. We require auth so anonymous folks
   // can't crawl this; ATLVS internal staff are the intended viewers.
   await requireSession();
+  const fmt = await getRequestFormatters();
   // The admin queue needs to see ALL submissions including submitted/
   // reviewing/rejected rows. The public RLS policy hides those, so we
   // use the service-role client when available. Without it, we fall
@@ -194,7 +195,7 @@ export default async function Page() {
             {
               key: "submitted",
               header: t("console.settings.integrations.submissions.col.submitted", undefined, "Submitted"),
-              render: (r) => new Date(r.created_at).toLocaleDateString(),
+              render: (r) => fmt.date(new Date(r.created_at)),
             },
           ]}
         />

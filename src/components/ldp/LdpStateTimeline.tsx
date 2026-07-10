@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { toTitle } from "@/lib/format";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 /**
  * Generic timeline renderer for any LDP `*_state_transitions` audit
@@ -69,6 +70,7 @@ export async function LdpStateTimeline({
   heading = "Lifecycle Timeline",
   subhead = "Append-only ledger — every state transition with actor + timestamp.",
 }: LdpStateTimelineProps) {
+  const fmt = await getRequestFormatters();
   const supabase = await createClient();
   // LooseSupabase: transition tables are passed as runtime strings so the
   // typed `from(t)` literal-narrowing can't help. RLS still gates the
@@ -142,7 +144,7 @@ export async function LdpStateTimeline({
                   <span className="text-[var(--p-text-2)]">by {who}</span>
                   {r.reason && <span className="text-[var(--p-text-2)]">— {r.reason}</span>}
                 </span>
-                <span className="font-mono text-[var(--p-text-2)]">{new Date(r.transitioned_at).toLocaleString()}</span>
+                <span className="font-mono text-[var(--p-text-2)]">{fmt.dateTime(new Date(r.transitioned_at))}</span>
               </li>
             );
           })}

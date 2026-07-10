@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
         title={t(
           "console.procurement.purchaseOrders.checklist.title",
           { number: po.number },
-          `PO ${po.number} — checklist`,
+          `PO ${po.number} · checklist`,
         )}
         subtitle={t(
           "console.procurement.purchaseOrders.checklist.subtitle",

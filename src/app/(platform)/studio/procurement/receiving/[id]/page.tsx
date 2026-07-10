@@ -8,17 +8,19 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatMoney } from "@/lib/i18n/format";
 import { addReceiptLine, matchReceiptToPoAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 function formatMinor(minor: number, currency = "USD"): string {
-  return (minor / 100).toLocaleString("en-US", { style: "currency", currency });
+  return formatMoney(minor, currency);
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase)
     return (
       <div className="page-content">
@@ -132,7 +134,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 ? t("console.procurement.receiving.detail.partial", undefined, "Partial")
                 : t("console.procurement.receiving.detail.complete", undefined, "Complete")}
             </Badge>
-            <span className="font-mono text-xs">{new Date(receipt.received_at).toLocaleDateString("en-US")}</span>
+            <span className="font-mono text-xs">{fmt.date(new Date(receipt.received_at))}</span>
           </span>
         }
       />
@@ -271,7 +273,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       </td>
                       <td className="font-mono">{formatMinor(m.variance_minor, poCurrency)}</td>
                       <td className="font-mono">
-                        {m.resolved_at ? new Date(m.resolved_at).toLocaleDateString("en-US") : "—"}
+                        {m.resolved_at ? fmt.date(new Date(m.resolved_at)) : "—"}
                       </td>
                     </tr>
                   ))}

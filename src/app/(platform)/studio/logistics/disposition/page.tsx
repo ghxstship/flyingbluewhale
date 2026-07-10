@@ -103,7 +103,7 @@ export default async function Page() {
             value={fmt.number(retired)}
           />
           <MetricCard
-            label={t("console.logistics.disposition.metric.replacementValue", undefined, "Replacement Value — Est.")}
+            label={t("console.logistics.disposition.metric.replacementValue", undefined, "Replacement Value (Est.)")}
             value={formatMoney(totalReplaceable)}
           />
         </div>

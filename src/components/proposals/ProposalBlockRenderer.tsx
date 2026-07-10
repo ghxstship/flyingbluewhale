@@ -187,7 +187,7 @@ function HeroBlock({
           <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
             {block.meta.map((m, i) => (
               <div key={i}>
-                <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+                <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
                   {m.label}
                 </div>
                 <div className="mt-1 font-mono text-sm">{m.value}</div>
@@ -264,7 +264,7 @@ function OverviewCards({
             <div key={i} className="surface relative overflow-hidden p-5 ps-6">
               <span className="absolute inset-y-0 start-0 w-1" style={{ background: a }} />
               {c.tag && (
-                <div className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: a }}>
+                <div className="text-[11px] font-semibold tracking-widest uppercase" style={{ color: a }}>
                   {c.tag}
                 </div>
               )}
@@ -375,7 +375,7 @@ function InvestmentTable({
                 <tr key={`h-${gi}`}>
                   <td
                     colSpan={2}
-                    className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase"
+                    className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase"
                   >
                     {g.label}
                   </td>
@@ -440,7 +440,7 @@ function EngagementSplit({
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="surface relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.primary }} />
-          <div className="text-[10px] font-semibold tracking-widest uppercase">
+          <div className="text-[11px] font-semibold tracking-widest uppercase">
             {t("components.proposalBlockRenderer.engagementDeposit", undefined, "Engagement deposit")}
           </div>
           <div className="font-display mt-3 text-4xl tabular-nums">{block.depositPercent}%</div>
@@ -451,7 +451,7 @@ function EngagementSplit({
         </div>
         <div className="surface relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.secondary }} />
-          <div className="text-[10px] font-semibold tracking-widest uppercase">
+          <div className="text-[11px] font-semibold tracking-widest uppercase">
             {t("components.proposalBlockRenderer.balance", undefined, "Balance")}
           </div>
           <div className="font-display mt-3 text-4xl tabular-nums">{block.balancePercent}%</div>
@@ -469,7 +469,7 @@ function PaymentMethodCard({ block, t }: { block: Extract<ProposalBlock, { type:
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface p-5">
-        <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+        <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
           {t("components.proposalBlockRenderer.paymentMethod", undefined, "Payment method")} ·{" "}
           {block.method.toUpperCase()}
         </div>
@@ -496,7 +496,7 @@ function EquipmentManifest({
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface p-5">
-        <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+        <div className="text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
           {t("components.proposalBlockRenderer.technicalPackage", undefined, "Technical production package")}
         </div>
         <ul className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
@@ -513,7 +513,7 @@ function EquipmentManifest({
                 ) : (
                   <span>{it.name}</span>
                 )}
-                {it.vendor && <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">{it.vendor}</span>}
+                {it.vendor && <span className="ms-2 font-mono text-[11px] text-[var(--p-text-2)]">{it.vendor}</span>}
               </span>
               <span className="font-mono text-xs text-[var(--p-text-2)]">×{it.quantity}</span>
             </li>
@@ -540,7 +540,7 @@ function ChangeOrders({
           <div key={i} className="rounded-lg border border-dashed border-[var(--p-border)] p-4">
             <div className="flex items-center justify-between">
               <div className="text-sm font-semibold">{it.name}</div>
-              <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+              <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 text-[11px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
                 {t("components.proposalBlockRenderer.available", undefined, "Available")}
               </span>
             </div>
@@ -574,7 +574,7 @@ function TermsGrid({ block }: { block: Extract<ProposalBlock, { type: "terms_gri
         {block.items.map((it, i) => (
           <div key={i} className="surface p-5">
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
+              <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
                 {it.section}
               </span>
               <span className="text-sm font-semibold">{it.title}</span>

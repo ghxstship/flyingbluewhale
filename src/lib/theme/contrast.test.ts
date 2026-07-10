@@ -23,6 +23,7 @@ const TOKENS = JSON.parse(
     surface: Record<"light" | "dark", Record<string, string>>;
     accent: Record<string, Record<"light" | "dark", Record<string, string>>>;
   };
+  chart: { series: Record<string, string> };
   contrast: { pairs: { id: string; value: string; on: string; ratio: number; min: number; wcag: string }[] };
 };
 
@@ -90,6 +91,81 @@ describe("Design tokens — WCAG contrast (Move D2)", () => {
           `${product}.cta.${mode} background must equal the accent-cta token`,
         ).toBe(norm(a[product]![mode]!["accent-cta"]!));
       }
+    }
+  });
+});
+
+/**
+ * F-14 — data-viz ramp certification (WCAG 1.4.11 non-text, 3:1).
+ *
+ * `--chart-1..8` (tokens.json#chart.series, mode-agnostic by design) are
+ * graphical objects — bars, lines, donut slices — so each series color must
+ * clear 3:1 against the page background of BOTH modes.
+ *
+ * Certified 2026-07-10: all 8 pass on the dark bg (#111318, 3.60–9.91:1);
+ * 6 of 8 pass on the light bg (#F7F8FA). KNOWN EXCEPTIONS (documented, not
+ * silently waived — fixing them means changing token values, which is a
+ * palette decision, out of scope for this guard):
+ *   • chart-4 #f0b255 on light = 1.76:1
+ *   • chart-7 #14b8a6 on light = 2.34:1
+ * Consumers should avoid chart-4/chart-7 for thin marks (1px lines, small
+ * points) on light surfaces, or pair them with the `[data-chart="safe"]`
+ * dash-pattern layer. If either token is retuned to clear 3:1, REMOVE it
+ * from CHART_LIGHT_EXCEPTIONS so the certification tightens.
+ */
+const CHART_LIGHT_EXCEPTIONS: Record<string, number> = {
+  "chart-4": 1.76,
+  "chart-7": 2.34,
+};
+
+describe("Data-viz ramp — non-text contrast (F-14)", () => {
+  const series = TOKENS.chart.series;
+  const lightBg = TOKENS.color.surface.light["bg"]!;
+  const darkBg = TOKENS.color.surface.dark["bg"]!;
+
+  it("carries the full 8-color series", () => {
+    expect(Object.keys(series).sort()).toEqual([
+      "chart-1",
+      "chart-2",
+      "chart-3",
+      "chart-4",
+      "chart-5",
+      "chart-6",
+      "chart-7",
+      "chart-8",
+    ]);
+  });
+
+  it("every series color clears 3:1 on the dark page bg", () => {
+    const offenders = Object.entries(series)
+      .map(([id, hex]) => ({ id, ratio: contrastRatio(hex, darkBg) }))
+      .filter((r) => r.ratio < 3);
+    expect(
+      offenders.map((r) => `${r.id}: ${r.ratio.toFixed(2)}:1 on ${darkBg}`),
+      "Chart series below 3:1 non-text contrast in dark mode",
+    ).toEqual([]);
+  });
+
+  it("every non-excepted series color clears 3:1 on the light page bg", () => {
+    const offenders = Object.entries(series)
+      .filter(([id]) => !(id in CHART_LIGHT_EXCEPTIONS))
+      .map(([id, hex]) => ({ id, ratio: contrastRatio(hex, lightBg) }))
+      .filter((r) => r.ratio < 3);
+    expect(
+      offenders.map((r) => `${r.id}: ${r.ratio.toFixed(2)}:1 on ${lightBg}`),
+      "Chart series below 3:1 non-text contrast in light mode (and not in the documented exception list)",
+    ).toEqual([]);
+  });
+
+  it("the light-mode exception list stays honest (entries below 3:1, ratios current)", () => {
+    for (const [id, declared] of Object.entries(CHART_LIGHT_EXCEPTIONS)) {
+      const hex = series[id]!;
+      const ratio = contrastRatio(hex, lightBg);
+      expect(ratio, `${id} was retuned and now clears 3:1 — remove it from CHART_LIGHT_EXCEPTIONS`).toBeLessThan(3);
+      expect(
+        Math.abs(ratio - declared),
+        `${id} exception ratio drifted (declared ${declared}, computes ${ratio.toFixed(2)}) — restamp the list`,
+      ).toBeLessThan(0.05);
     }
   });
 });

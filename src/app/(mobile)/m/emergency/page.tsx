@@ -123,9 +123,11 @@ export default async function EmergencyPage() {
         </div>
       </div>
 
-      {/* Quick-jump tiles. */}
+      {/* Quick-jump tiles — deep-link into the guide's semantic section
+          anchors (GuideView stamps `#guide-<type>` on the first section of
+          each type; a missing section degrades to the guide top). */}
       <div className="qa" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: 6 }}>
-        <Link href="/m/guide" style={{ textDecoration: "none" }}>
+        <Link href="/m/guide#guide-fire_safety" style={{ textDecoration: "none" }}>
           <span
             className="qi"
             style={{ background: "color-mix(in oklab, var(--p-warning) 16%, transparent)", color: "var(--p-warning)" }}
@@ -134,7 +136,7 @@ export default async function EmergencyPage() {
           </span>
           <span className="ql">{t("m.emergency.fire", undefined, "Fire Safety")}</span>
         </Link>
-        <Link href="/m/guide" style={{ textDecoration: "none" }}>
+        <Link href="/m/guide#guide-evacuation" style={{ textDecoration: "none" }}>
           <span
             className="qi"
             style={{ background: "color-mix(in oklab, var(--p-info) 14%, transparent)", color: "var(--p-info)" }}
@@ -143,7 +145,7 @@ export default async function EmergencyPage() {
           </span>
           <span className="ql">{t("m.emergency.evac", undefined, "Evacuate")}</span>
         </Link>
-        <Link href="/m/guide" style={{ textDecoration: "none" }}>
+        <Link href="/m/guide#guide-sops" style={{ textDecoration: "none" }}>
           <span
             className="qi"
             style={{ background: "color-mix(in oklab, var(--p-success) 14%, transparent)", color: "var(--p-success)" }}

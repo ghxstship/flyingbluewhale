@@ -185,7 +185,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
           <Bell size={16} aria-hidden="true" />
           {unread > 0 ? (
             <span
-              className="absolute -end-0.5 -top-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--p-danger)] px-1 text-[10px] font-semibold text-white"
+              className="absolute -end-0.5 -top-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--p-danger)] px-1 text-[11px] font-semibold text-white"
               aria-hidden="true"
             >
               {unread > 99 ? "99+" : unread}
@@ -243,7 +243,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
                         {n.title}
                       </p>
                       {n.body ? <p className="mt-0.5 line-clamp-2 text-xs text-[var(--p-text-2)]">{n.body}</p> : null}
-                      <p className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">{fmt.dateTime(n.created_at)}</p>
+                      <p className="mt-1 font-mono text-[11px] text-[var(--p-text-2)]">{fmt.dateTime(n.created_at)}</p>
                     </div>
                   </div>
                 );

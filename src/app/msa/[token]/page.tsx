@@ -5,10 +5,40 @@ import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
 import { getMsaByToken } from "@/lib/msa/queries";
 import { MSA_STATUS_LABEL, MSA_STATUS_VARIANT } from "@/lib/msa/types";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
+import { BRAND } from "@/lib/brand";
 import { UnlockForm } from "./UnlockForm";
 import { SignForm } from "./SignForm";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * E-05: resolve the issuing org's lockup + support email by token alone (the
+ * unlock screen renders before the access code exists). Only safe metadata is
+ * exposed pre-unlock; falls back to the platform brand.
+ */
+async function getUnlockLockup(token: string): Promise<{ orgName: string; supportEmail: string }> {
+  const fallback = { orgName: BRAND.legalName, supportEmail: BRAND.emails.support };
+  if (!isServiceClientAvailable()) return fallback;
+  try {
+    const svc = createServiceClient() as unknown as LooseSupabase;
+    const { data } = await svc
+      .from("independent_contractor_msas")
+      .select("org:org_id(name, name_override, support_email)")
+      .eq("public_token", token)
+      .maybeSingle();
+    const org = (data as { org?: { name: string; name_override: string | null; support_email: string | null } } | null)
+      ?.org;
+    if (!org) return fallback;
+    return {
+      orgName: org.name_override ?? org.name,
+      supportEmail: org.support_email ?? BRAND.emails.support,
+    };
+  } catch {
+    return fallback;
+  }
+}
 
 export default async function Page({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
@@ -18,12 +48,14 @@ export default async function Page({ params }: { params: Promise<{ token: string
   const code = c.get(`msa_${token}`)?.value;
 
   if (!code) {
-    return <UnlockForm token={token} />;
+    const lockup = await getUnlockLockup(token);
+    return <UnlockForm token={token} orgName={lockup.orgName} supportEmail={lockup.supportEmail} />;
   }
 
   const msa = await getMsaByToken(token, code);
   if (!msa || !msa.id) {
-    return <UnlockForm token={token} expired />;
+    const lockup = await getUnlockLockup(token);
+    return <UnlockForm token={token} expired orgName={lockup.orgName} supportEmail={lockup.supportEmail} />;
   }
 
   const role = (msa.crew_member_role ?? "").toLowerCase();

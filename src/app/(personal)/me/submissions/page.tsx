@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +25,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   if (!hasSupabase) return <div>{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("open_call_submissions")
     .select("id, submission_state, submitted_at, open_call:open_call_id(title, public_slug)")
@@ -82,8 +83,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                   {t(
                     "me.submissions.submittedOn",
-                    { date: new Date(r.submitted_at).toLocaleDateString() },
-                    `Submitted ${new Date(r.submitted_at).toLocaleDateString()}`,
+                    { date: fmt.date(new Date(r.submitted_at)) },
+                    `Submitted ${fmt.date(new Date(r.submitted_at))}`,
                   )}
                 </p>
               </div>

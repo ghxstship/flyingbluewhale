@@ -169,6 +169,14 @@
         "legend": {
           "label": "LEG3ND（ナレッジ）",
           "description": "ナレッジ・LMS・コンプライアンス"
+        },
+        "ai": {
+          "label": "AI",
+          "description": "Drafts the paperwork, scoped to your tenant"
+        },
+        "integrations": {
+          "label": "Integrations",
+          "description": "Connect the tools you already run"
         }
       },
       "industries": {
@@ -191,7 +199,14 @@
         "changelog": {
           "label": "変更履歴",
           "description": "すべてのリリースを日付つきで"
+        },
+        "compare": {
+          "label": "Compare",
+          "description": "How ATLVS stacks up"
         }
+      },
+      "solutions": {
+        "label": "Solutions"
       }
     },
     "home": {
@@ -8253,7 +8268,8 @@
       "ref": "参照: {digest}",
       "fallbackMessage": "予期しないエラーが発生しました。",
       "tryAgain": "再試行",
-      "backToWorkspace": "ワークスペースへ戻る"
+      "backToWorkspace": "ワークスペースへ戻る",
+      "segmentTitle": "This Section Hit A Snag"
     },
     "estimates": {
       "new": {
@@ -9911,7 +9927,8 @@
       "stageMover": {
         "movedToast": "{stage}に移動しました",
         "updating": "更新中…",
-        "moveTo": "{stage}に移動"
+        "moveTo": "{stage}に移動",
+        "undo": "Undo"
       },
       "activity": {
         "eyebrow": "リード",
@@ -11119,7 +11136,11 @@
           "startsAt": "開始日時",
           "endsAt": "終了日時",
           "status": "ステータス",
-          "event_state": "ステータス"
+          "event_state": "ステータス",
+          "location": "Location",
+          "meetingUrl": "Meeting URL",
+          "agenda": "Agenda (Markdown)",
+          "minutes": "Minutes (Markdown)"
         },
         "status": {
           "draft": "下書き",
@@ -11209,7 +11230,9 @@
         "people": "参加者",
         "openActs": "未完了アクション",
         "state": "状態"
-      }
+      },
+      "description": "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
+      "fullSchedule": "Full Schedule"
     },
     "notFound": {
       "eyebrow": "404",
@@ -22075,7 +22098,22 @@
     "hintOpen": "どこからでも開く。",
     "hintPrefix": "押す",
     "noMatch": "「{query}」に一致するショートカットはありません。",
-    "title": "キーボードショートカット"
+    "title": "キーボードショートカット",
+    "nav": {
+      "goTo": "Go to {group}"
+    },
+    "createMenu": "Create or request (One Front Door)",
+    "table": {
+      "nextRow": "Next row",
+      "prevRow": "Previous row",
+      "toggleSelect": "Select / deselect focused row",
+      "openRow": "Open focused row"
+    },
+    "editor": {
+      "bold": "Bold (in editor)",
+      "italic": "Italic (in editor)",
+      "underline": "Underline (in editor)"
+    }
   },
   "ui": {
     "alert": {
@@ -23600,5 +23638,18 @@
     "requestBody": "リクエストボディ",
     "responses": "レスポンス",
     "footer": "OpenAPI 3.1 · {count} パス · 登録済み Zod スキーマからリクエスト時に生成。"
+  },
+  "filterBar": {
+    "results": "{count} results",
+    "updated": "Filters updated"
+  },
+  "rail": {
+    "nav": "Switch app",
+    "readOnly": "read-only",
+    "soon": "Soon",
+    "group": {
+      "products": "Products",
+      "extensions": "Extensions"
+    }
   }
 }

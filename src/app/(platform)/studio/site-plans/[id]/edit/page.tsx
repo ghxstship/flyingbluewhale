@@ -208,7 +208,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
             <div className="grid grid-cols-4 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.edit.field.lengthIn", undefined, "Length — in")}</span>
+                <span className={LBL}>{t("console.sitePlans.edit.field.lengthIn", undefined, "Length (in)")}</span>
                 <input
                   name="shell_length_in"
                   type="number"
@@ -218,7 +218,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.edit.field.widthIn", undefined, "Width — in")}</span>
+                <span className={LBL}>{t("console.sitePlans.edit.field.widthIn", undefined, "Width (in)")}</span>
                 <input
                   name="shell_width_in"
                   type="number"
@@ -228,7 +228,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.edit.field.heightIn", undefined, "Height — in")}</span>
+                <span className={LBL}>{t("console.sitePlans.edit.field.heightIn", undefined, "Height (in)")}</span>
                 <input
                   name="shell_height_in"
                   type="number"

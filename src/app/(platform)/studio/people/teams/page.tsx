@@ -61,7 +61,7 @@ export default async function TeamsPage() {
         subtitle={t(
           "console.people.teams.subtitle",
           { count: rows.length, label: rows.length === 1 ? "team" : "teams" },
-          `${rows.length} team${rows.length === 1 ? "" : "s"} — addressable as @team-<slug> in mentions`,
+          `${rows.length} team${rows.length === 1 ? "" : "s"} · addressable as @team-<slug> in mentions`,
         )}
       />
       <div className="page-content space-y-6">

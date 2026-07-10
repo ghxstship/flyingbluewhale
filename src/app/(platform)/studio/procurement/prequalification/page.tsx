@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,7 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(new Date(d + "T00:00:00"));
 }
 
 export default async function Page() {
@@ -67,7 +68,7 @@ export default async function Page() {
         subtitle={t(
           "console.procurement.prequalification.subtitle",
           undefined,
-          "Vendor vetting — insurance, safety, financials, references.",
+          "Vendor vetting: insurance, safety, financials, references.",
         )}
         action={
           <div className="flex items-center gap-2">

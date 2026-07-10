@@ -85,7 +85,7 @@ export async function DirectorySurface({
               <MobileListRow
                 title={user.name ?? user.email}
                 meta={<span className="font-mono text-[11px]">{user.email}</span>}
-                trailing={<span className="font-mono text-[10px] text-[var(--p-text-2)] uppercase">{role}</span>}
+                trailing={<span className="font-mono text-[11px] text-[var(--p-text-2)] uppercase">{role}</span>}
               />
             </li>
           ))

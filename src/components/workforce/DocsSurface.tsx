@@ -110,7 +110,7 @@ export async function DocsSurface({
                 meta={
                   <span className="inline-flex items-center gap-2">
                     <Badge variant={KIND_TONE[d.doc_kind] ?? "muted"}>{d.doc_kind}</Badge>
-                    {d.mime_type && <span className="font-mono text-[10px]">{d.mime_type}</span>}
+                    {d.mime_type && <span className="font-mono text-[11px]">{d.mime_type}</span>}
                   </span>
                 }
                 trailing={<span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(d.uploaded_at)}</span>}

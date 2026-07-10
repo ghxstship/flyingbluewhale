@@ -93,7 +93,7 @@ export default async function Page() {
                 placeholder={t("console.estimates.new.defaultMarkupPctPlaceholder", undefined, "0.0700 for 7%")}
                 className={INPUT}
               />
-              <span className="text-[10px] text-[var(--p-text-2)]">
+              <span className="text-[11px] text-[var(--p-text-2)]">
                 {t("console.estimates.new.defaultMarkupHint", undefined, "Stored as a fraction (0.07 = 7%).")}
               </span>
             </label>

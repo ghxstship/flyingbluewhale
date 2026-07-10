@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { awardBadge, deleteBadge } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +15,7 @@ type Award = { id: string; user_id: string; note: string | null; awarded_at: str
 
 export default async function Page({ params }: { params: Promise<{ badgeId: string }> }) {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase)
     return <div className="page-content">{t("console.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const { badgeId } = await params;
@@ -149,8 +150,8 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
                     </div>
                     {a.note && <p className="text-[var(--p-text-2)]">{a.note}</p>}
                   </div>
-                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">
-                    {new Date(a.awarded_at).toLocaleDateString()}
+                  <span className="font-mono text-[11px] text-[var(--p-text-2)]">
+                    {fmt.date(a.awarded_at)}
                   </span>
                 </li>
               ))}

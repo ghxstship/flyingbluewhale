@@ -52,10 +52,10 @@ export default async function Page() {
               {t("console.ops.toc.problems.new.priorityLabel", undefined, "Priority")}
             </label>
             <select name="priority" defaultValue="P3" className="ps-input mt-1.5 w-full">
-              <option value="P1">{t("console.ops.toc.problems.new.priorityP1", undefined, "P1 — Critical")}</option>
-              <option value="P2">{t("console.ops.toc.problems.new.priorityP2", undefined, "P2 — High")}</option>
-              <option value="P3">{t("console.ops.toc.problems.new.priorityP3", undefined, "P3 — Medium")}</option>
-              <option value="P4">{t("console.ops.toc.problems.new.priorityP4", undefined, "P4 — Low")}</option>
+              <option value="P1">{t("console.ops.toc.problems.new.priorityP1", undefined, "P1 (Critical)")}</option>
+              <option value="P2">{t("console.ops.toc.problems.new.priorityP2", undefined, "P2 (High)")}</option>
+              <option value="P3">{t("console.ops.toc.problems.new.priorityP3", undefined, "P3 (Medium)")}</option>
+              <option value="P4">{t("console.ops.toc.problems.new.priorityP4", undefined, "P4 (Low)")}</option>
             </select>
           </div>
           <div>

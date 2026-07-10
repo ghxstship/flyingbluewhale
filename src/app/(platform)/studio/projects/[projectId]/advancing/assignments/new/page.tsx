@@ -118,7 +118,7 @@ export default async function Page({
                   {t(
                     "console.projects.advancing.assignments.new.pickCatalogItem",
                     undefined,
-                    "— Pick a catalog item —",
+                    "Pick a catalog item",
                   )}
                 </option>
                 {catalogItems.map((c) => (
@@ -128,7 +128,7 @@ export default async function Page({
                 ))}
               </select>
             )}
-            <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
+            <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.projects.advancing.assignments.new.catalogHint",
                 undefined,

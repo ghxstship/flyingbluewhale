@@ -1,4 +1,5 @@
 import { Avatar } from "./Avatar";
+import { formatNumber } from "@/lib/i18n/format";
 
 /**
  * <LeaderboardRow> — one ranked contributor on a LEG3ND / COMPVSS
@@ -53,7 +54,7 @@ export function LeaderboardRow({
         </span>
       )}
       <span className="shrink-0 text-sm font-semibold tabular-nums text-[var(--p-text-1)]">
-        {points.toLocaleString()}
+        {formatNumber(points)}
       </span>
     </div>
   );

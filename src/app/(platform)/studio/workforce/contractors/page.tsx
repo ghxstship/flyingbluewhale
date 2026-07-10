@@ -67,7 +67,7 @@ export default async function Page({
           emptyDescription={t(
             "console.workforce.contractors.emptyDescription",
             undefined,
-            "Independent contractors and freelancers — capture W-9/insurance and SOW deliverables.",
+            "Independent contractors and freelancers. Capture W-9/insurance and SOW deliverables.",
           )}
           emptyAction={
             <Button href="/studio/workforce/contractors/new" size="sm">

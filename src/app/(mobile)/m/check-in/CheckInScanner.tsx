@@ -1,10 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
-import { requestPermission } from "@/lib/native/permissions";
-import { scanCode, type CheckInState } from "./actions";
+import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
 
 export type RecentScan = {
   id: string;
@@ -39,6 +38,9 @@ export type CheckInLabels = {
   recentTitle: string;
   recentEmpty: string;
   logged: string;
+  /** Queued-offline result line. Optional so callers can roll out additively. */
+  queuedTitle?: string;
+  queuedBody?: string;
 };
 
 type Mode = "access" | "asset" | "pos" | "nfc";
@@ -53,11 +55,12 @@ const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
 };
 
 /**
- * COMPVSS field check-in scanner. Segmented Access / Asset / POS / NFC, kit
- * `.scanframe` reticle (camera modes) and `.nfcframe` (NFC tap), plus a manual
- * code-entry form. All modes resolve through the surviving `scanCode` action —
- * the unified assignments domain is mode-agnostic; `mode`/`slug` are carried
- * only for UI context. Ref design: app.jsx 2527-2600.
+ * COMPVSS field check-in scanner. Segmented Access / Asset / POS / NFC with a
+ * REAL camera decoder (shared `CameraScanner` behind a tap-to-enable gate) and
+ * a manual code-entry form. Both paths submit through `useScanSubmit`, which
+ * POSTs the queueable `/api/v1/scan` endpoint — so an offline gate scan is
+ * durably queued by the service worker and replayed on reconnect (shown as
+ * "recorded, will sync", never a false accept). Haptic + beep per outcome.
  */
 export function CheckInScanner({
   recent,
@@ -70,7 +73,7 @@ export function CheckInScanner({
 }) {
   const [mode, setMode] = useState<Mode>("access");
   const [code, setCode] = useState("");
-  const [state, formAction, pending] = useActionState<CheckInState, FormData>(scanCode, null);
+  const { submit, pending, outcome } = useScanSubmit();
 
   const modes = useMemo(
     () =>
@@ -93,6 +96,13 @@ export function CheckInScanner({
           ? labels.ctaPos
           : labels.ctaNfc;
   const scanHint = mode === "access" ? labels.scanHintAccess : labels.scanHintCamera;
+
+  const onManualSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (pending) return;
+    void submit(code);
+    setCode("");
+  };
 
   return (
     <>
@@ -131,9 +141,10 @@ export function CheckInScanner({
         </>
       ) : (
         <>
-          <CameraReticle
+          <GatedCameraScanner
+            onScan={(scanned) => void submit(scanned.value)}
             enableLabel={labels.enableCamera ?? "Enable Camera"}
-            deniedLabel={labels.cameraDenied ?? "Camera Unavailable — Use Manual Entry"}
+            deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
           />
           <div className="scanhint">
             <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {scanHint}
@@ -142,10 +153,9 @@ export function CheckInScanner({
       )}
 
       {/* Manual code entry — the camera/NFC bridge drops on native clients; the
-          form is the always-available resolver path. */}
-      <form action={formAction}>
-        <input type="hidden" name="mode" value={mode} />
-        {gateSlug && <input type="hidden" name="slug" value={gateSlug} />}
+          form is the always-available resolver path. Same submit path as the
+          camera, so the offline queue applies to typed codes too. */}
+      <form onSubmit={onManualSubmit}>
         <div className="fld" style={{ marginTop: 6 }}>
           <label className="wl" htmlFor="code">
             {labels.manualLabel}
@@ -181,20 +191,31 @@ export function CheckInScanner({
         </Link>
       )}
 
-      {state && state.ok && (
+      {outcome?.kind === "result" && (
         <div className="item" style={{ marginTop: 14 }}>
-          <span className={`ps-badge ps-badge--${RESULT_TONE[state.result.result] ?? "neutral"}`}>
-            {state.result.result}
+          <span className={`ps-badge ps-badge--${RESULT_TONE[outcome.result.result] ?? "neutral"}`}>
+            {outcome.result.result}
           </span>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="t">{("title" in state.result && state.result.title) || labels.logged}</div>
+            <div className="t">{("title" in outcome.result && outcome.result.title) || labels.logged}</div>
           </div>
         </div>
       )}
-      {state && !state.ok && (
+      {outcome?.kind === "queued" && (
+        <div className="item" style={{ marginTop: 14 }}>
+          <span className="ps-badge ps-badge--warn">{labels.queuedTitle ?? "Recorded"}</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t" style={{ fontFamily: "var(--p-mono)" }}>{outcome.code}</div>
+            <div className="s">
+              {labels.queuedBody ?? "Saved on this device. It will sync and verify when you're back online."}
+            </div>
+          </div>
+        </div>
+      )}
+      {outcome?.kind === "error" && (
         <div className="import-note" style={{ marginTop: 14 }}>
           <KIcon name="TriangleAlert" size={15} style={{ color: "var(--p-danger)" }} />
-          <span style={{ fontSize: 12 }}>{state.error}</span>
+          <span style={{ fontSize: 12 }}>{outcome.message}</span>
         </div>
       )}
 
@@ -230,78 +251,5 @@ export function CheckInScanner({
         })
       )}
     </>
-  );
-}
-
-/**
- * Live camera reticle. Before grant, shows the static reticle with an "Enable
- * Camera" affordance; on grant, lights the frame with a `getUserMedia` preview.
- * The stream is torn down on unmount. Manual entry (below) stays available
- * regardless — this only lights the frame where camera access is granted.
- */
-function CameraReticle({ enableLabel, deniedLabel }: { enableLabel: string; deniedLabel: string }) {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const [state, setState] = useState<"idle" | "requesting" | "live" | "denied">("idle");
-
-  const stop = () => {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-  };
-
-  useEffect(() => stop, []);
-
-  const enable = async () => {
-    setState("requesting");
-    const res = await requestPermission("camera");
-    if (!res.granted) {
-      setState("denied");
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play().catch(() => {});
-      }
-      setState("live");
-    } catch {
-      setState("denied");
-    }
-  };
-
-  return (
-    <div className="scanframe" style={{ position: "relative", overflow: "hidden" }}>
-      {state === "live" && (
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          autoPlay
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      )}
-      <div className="reticle">
-        <span className="cnr tl" />
-        <span className="cnr tr" />
-        <span className="cnr bl" />
-        <span className="cnr br" />
-        <span className="laser" />
-      </div>
-      {state !== "live" && (
-        <button
-          type="button"
-          className="ps-btn ps-btn--cta"
-          onClick={enable}
-          disabled={state === "requesting"}
-          style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}
-        >
-          <KIcon name="Camera" size={16} /> {state === "denied" ? deniedLabel : enableLabel}
-        </button>
-      )}
-    </div>
   );
 }

@@ -83,7 +83,7 @@ export async function addNextRound(submittalId: string): Promise<void> {
     .select("id");
   if (upErr) throw new Error(upErr.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Submittal round changed concurrently — refresh and retry");
+    throw new Error("Submittal round changed concurrently. Refresh and retry");
   }
 
   // Insert revision AFTER we own the round number (parent update won

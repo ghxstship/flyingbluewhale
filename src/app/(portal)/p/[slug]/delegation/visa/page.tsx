@@ -138,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "passport",
               header: t("p.delegation.visa.col.passport", undefined, "Passport"),
-              render: (r) => <span className="font-mono text-[10px]">{maskPassport(r.passport_no)}</span>,
+              render: (r) => <span className="font-mono text-[11px]">{maskPassport(r.passport_no)}</span>,
               accessor: (r) => r.passport_no ?? null,
             },
             {
@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               header: t("p.delegation.visa.col.letter", undefined, "Letter"),
               render: (r) =>
                 r.letter_path ? (
-                  <span className="font-mono text-[10px] text-[var(--p-accent)]">
+                  <span className="font-mono text-[11px] text-[var(--p-accent)]">
                     {t("p.delegation.visa.letter.onFile", undefined, "on file")}
                   </span>
                 ) : (

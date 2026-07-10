@@ -159,12 +159,19 @@ export default async function GuidePage({
           subtitle={t("p.guide.subtitle", undefined, "Your Know-Before-You-Go")}
         />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
-            {t(
-              "p.guide.unpublished",
-              undefined,
-              "The production team hasn't published a guide for your role yet. Check back soon.",
-            )}
+          <div className="surface p-6">
+            <p className="text-sm text-[var(--p-text-2)]">
+              {t(
+                "p.guide.unpublished",
+                undefined,
+                "The production team hasn't published a guide for your role yet. Check back soon.",
+              )}
+            </p>
+            <p className="mt-3 text-sm">
+              <Link href={`/p/${slug}/messages`} className="ps-btn ps-btn--ghost ps-btn--sm">
+                {t("p.guide.unpublishedContact", undefined, "Message the team")}
+              </Link>
+            </p>
           </div>
         </div>
       </>

@@ -145,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
 
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.forms.edit.fields.schemaJson", undefined, "Schema — JSON")}{" "}
+              {t("console.forms.edit.fields.schemaJson", undefined, "Schema (JSON)")}{" "}
               <span className="text-[var(--p-danger)]">*</span>
             </label>
             <textarea

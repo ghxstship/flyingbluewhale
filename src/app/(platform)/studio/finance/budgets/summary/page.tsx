@@ -156,20 +156,20 @@ export default async function BudgetSummaryPage() {
         subtitle={t(
           "console.finance.budgets.summary.subtitle",
           undefined,
-          "Live XPMS rollups. Phase curve = Scope only — Fee & Contingency roll up separately.",
+          "Live XPMS rollups. Phase curve = Scope only. Fee & Contingency roll up separately.",
         )}
       />
       <div className="page-content space-y-8">
         <RollupTable
           t={t}
-          title={t("console.finance.budgets.summary.byDepartment", undefined, "By Department — XPMS Class")}
+          title={t("console.finance.budgets.summary.byDepartment", undefined, "By Department (XPMS Class)")}
           rollups={byDept}
           totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
         />
         <RollupTable
           t={t}
-          title={t("console.finance.budgets.summary.byPhase", undefined, "By Phase — 8-Gate Lifecycle · Scope Only")}
+          title={t("console.finance.budgets.summary.byPhase", undefined, "By Phase · 8-Gate Lifecycle · Scope Only")}
           rollups={byPhase}
           totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
@@ -185,14 +185,14 @@ export default async function BudgetSummaryPage() {
         />
         <RollupTable
           t={t}
-          title={t("console.finance.budgets.summary.byDiscipline", undefined, "By Discipline — Scope Only")}
+          title={t("console.finance.budgets.summary.byDiscipline", undefined, "By Discipline (Scope Only)")}
           rollups={byDiscipline}
           totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
         />
         <RollupTable
           t={t}
-          title={t("console.finance.budgets.summary.byXyz", undefined, "By XYZ — Cost Behaviour · All-in")}
+          title={t("console.finance.budgets.summary.byXyz", undefined, "By XYZ · Cost Behaviour · All-in")}
           rollups={byXyz}
           totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}

@@ -54,8 +54,11 @@ export default async function SecurityPage() {
         <div className="flex items-center justify-between p-5">
           <div>
             <div className="text-sm font-semibold">{t("me.security.password.label", undefined, "Password")}</div>
+            {/* C-29: the old "Last changed when you signed up" line was a
+                hardcoded guess — the auth API exposes no password-change
+                timestamp, so say something honest instead of something fake. */}
             <div className="mt-1 text-xs text-[var(--p-text-2)]">
-              {t("me.security.password.hint", undefined, "Last changed when you signed up")}
+              {t("me.security.password.resetHint", undefined, "Change it any time with an email reset link.")}
             </div>
           </div>
           <Button href="/forgot-password" variant="secondary">
@@ -142,9 +145,9 @@ export default async function SecurityPage() {
             </div>
             <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
-                "me.security.apiTokens.hint",
+                "me.security.apiTokens.humanHint",
                 undefined,
-                "Personal access tokens for the API. For now, sign in via the web UI; service-to-service calls use Supabase service-role keys server-side.",
+                "Tokens for connecting other tools to your account are coming soon. Until then, everything you can do happens right here after signing in.",
               )}
             </div>
           </div>

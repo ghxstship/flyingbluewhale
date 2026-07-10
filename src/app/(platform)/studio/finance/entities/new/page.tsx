@@ -94,11 +94,11 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.finance.entities.new.fields.parentEntity", undefined, "Parent Entity — Consolidates Into")}
+                {t("console.finance.entities.new.fields.parentEntity", undefined, "Parent Entity (Consolidates Into)")}
               </span>
               <select name="parent_entity_id" className={INPUT}>
                 <option value="">
-                  {t("console.finance.entities.new.parent.topLevel", undefined, "— (top-level)")}
+                  {t("console.finance.entities.new.parent.topLevel", undefined, "(top-level)")}
                 </option>
                 {((parents ?? []) as Array<{ id: string; legal_name: string; short_code: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
@@ -112,7 +112,7 @@ export default async function Page() {
                 {t(
                   "console.finance.entities.new.fields.ownershipPct",
                   undefined,
-                  "Ownership % — This Entity in Parent",
+                  "Ownership % (This Entity in Parent)",
                 )}
               </span>
               <input

@@ -48,7 +48,7 @@ export function BrandingForm({
           hint={t(
             "console.projects.branding.accentColor.hint",
             undefined,
-            "Hex like #DC2626 — overrides --p-accent in portals.",
+            "Hex like #DC2626. Overrides --p-accent in portals.",
           )}
           placeholder="#DC2626"
         />
@@ -72,7 +72,7 @@ export function BrandingForm({
           hint={t(
             "console.projects.branding.secondaryColor.hint",
             undefined,
-            "Hex — the joint secondary accent (deck gradients, balance cards).",
+            "Hex. The joint secondary accent (deck gradients, balance cards).",
           )}
           placeholder="#6D4A2A"
         />
@@ -146,7 +146,7 @@ export function BrandingForm({
               {t(
                 "console.projects.branding.preview.sanitizedNote",
                 undefined,
-                "Inputs are sanitized — only #hex colors and https URLs are accepted.",
+                "Inputs are sanitized. Only #hex colors and https URLs are accepted.",
               )}
             </p>
           </div>

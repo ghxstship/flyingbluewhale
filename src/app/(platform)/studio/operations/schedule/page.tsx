@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { scheduleKindLabel } from "@/lib/schedule/kinds";
 import { evaluateGuardrails, type ScheduleActivityInput } from "@/lib/schedule/guardrails";
+import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { ScheduleComposer } from "./ScheduleComposer";
 import { ScheduleBlock } from "./ScheduleBlock";
 
@@ -24,15 +25,7 @@ export const dynamic = "force-dynamic";
 
 const HOURS = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23] as const;
 
-type LaneKind =
-  | "venue"
-  | "vehicle"
-  | "vessel"
-  | "hotel_block"
-  | "warehouse"
-  | "office"
-  | "greenroom"
-  | "unassigned";
+type LaneKind = "venue" | "vehicle" | "vessel" | "hotel_block" | "warehouse" | "office" | "greenroom" | "unassigned";
 
 const LANE_ORDER: LaneKind[] = [
   "venue",
@@ -149,9 +142,7 @@ export default async function Page({
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name").limit(200),
     supabase
       .from("events")
-      .select(
-        "id, name, starts_at, ends_at, event_kind, event_state, location_kind, location_id, resource_ref",
-      )
+      .select("id, name, starts_at, ends_at, event_kind, event_state, location_kind, location_id, resource_ref")
       .eq("org_id", session.orgId)
       .gte("starts_at", start)
       .lt("starts_at", end)
@@ -384,13 +375,9 @@ export default async function Page({
   // Apply the lane + kind filters (deep-links: ?lane=vehicle,crew&kind=shift…).
   let laneList = Array.from(lanes.values());
   if (laneFilter) {
-    laneList = laneList.filter(
-      (l) => laneFilter.has(l.kind) || (laneFilter.has("crew") && l.hasCrew),
-    );
+    laneList = laneList.filter((l) => laneFilter.has(l.kind) || (laneFilter.has("crew") && l.hasCrew));
   }
-  laneList.sort(
-    (a, b) => LANE_ORDER.indexOf(a.kind) - LANE_ORDER.indexOf(b.kind) || a.label.localeCompare(b.label),
-  );
+  laneList.sort((a, b) => LANE_ORDER.indexOf(a.kind) - LANE_ORDER.indexOf(b.kind) || a.label.localeCompare(b.label));
   const keptLaneIds = new Set(laneList.map((l) => l.id));
 
   const byLane = new Map<string, Block[]>();
@@ -420,6 +407,13 @@ export default async function Page({
 
   return (
     <>
+      {/* B-19: live ops timeline — new/rescheduled activities appear without a
+          manual reload on show day. Org-filtered so we only wake on our rows. */}
+      <RealtimeRefresh
+        table="events"
+        filter={`org_id=eq.${session.orgId}`}
+        channelName={`ops-schedule-events-${session.orgId}`}
+      />
       <ModuleHeader
         eyebrow={t("console.operations.eyebrow", undefined, "Operations")}
         title={t("console.schedule.opsTitle", undefined, "Schedule")}
@@ -485,7 +479,7 @@ export default async function Page({
           <div className="sticky top-0 flex border-b border-[var(--p-border)] bg-[var(--p-surface)]">
             <div
               style={{ width: 180 }}
-              className="shrink-0 border-e border-[var(--p-border)] px-3 py-2 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase"
+              className="shrink-0 border-e border-[var(--p-border)] px-3 py-2 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase"
             >
               {t("console.schedule.laneColumn", undefined, "Lane")}
             </div>
@@ -494,7 +488,7 @@ export default async function Page({
                 <div
                   key={h}
                   style={{ width: colWidth }}
-                  className="border-e border-[var(--p-border)] px-2 py-2 font-mono text-[10px] text-[var(--p-text-2)]"
+                  className="border-e border-[var(--p-border)] px-2 py-2 font-mono text-[11px] text-[var(--p-text-2)]"
                 >
                   {h.toString().padStart(2, "0")}:00
                 </div>
@@ -573,7 +567,7 @@ export default async function Page({
                             : "border-[var(--p-border)] bg-[var(--p-surface)]"
                         }`}
                         style={{ left: leftPx, width: widthPx }}
-                        title={b.conflicted ? `${b.label} — guardrail conflict` : b.label}
+                        title={b.conflicted ? `${b.label} · guardrail conflict` : b.label}
                       >
                         <span className={`me-1 inline-block h-1.5 w-1.5 rounded-sm ${toneClass[b.tone]}`} />
                         <span className="font-medium">{b.label}</span>

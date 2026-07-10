@@ -176,3 +176,163 @@ export function announcementEmail({
     }),
   };
 }
+
+/**
+ * Notification — the generic activity email behind the per-kind email
+ * channel of the notification matrix (assignment issued, inquiry received,
+ * invoice paid, ...). `title` + `body` are plain text (escaped); the footer
+ * carries the notification-preferences link so recipients tune delivery
+ * instead of reporting spam.
+ */
+export function notificationEmail({
+  eyebrow,
+  title,
+  body,
+  ctaLabel,
+  ctaUrl,
+  orgName,
+  prefsUrl,
+}: {
+  /** Small overline naming the event class, e.g. "Assignment". */
+  eyebrow?: string;
+  title: string;
+  body?: string;
+  ctaLabel?: string;
+  /** Absolute https deep link to the record. Omit for FYI-only mail. */
+  ctaUrl?: string;
+  orgName?: string;
+  /** Absolute https notification-preferences URL for the footer. */
+  prefsUrl?: string;
+}): RenderedEmail {
+  const parts = [
+    emailEyebrow(eyebrow ?? "Notification"),
+    emailHeading(title, 2),
+  ];
+  if (body) parts.push(emailText(escapeHtml(body)));
+  if (ctaUrl) {
+    parts.push(
+      emailSpacer(8),
+      emailButton({ label: ctaLabel ?? "Open in ATLVS", href: ctaUrl }),
+      fallbackUrlLine(ctaUrl),
+    );
+  }
+  return {
+    subject: title,
+    html: emailLayout({
+      preheader: body ? body.slice(0, 110) : title.slice(0, 110),
+      body: parts.join(""),
+      orgName,
+      prefsUrl,
+    }),
+  };
+}
+
+/**
+ * Proposal share — a producer sends a proposal link to a recipient.
+ * Optionally co-branded: producer name in the header/footer, producer
+ * logo, and a producer-accent CTA. Strictly transactional (no prefs link).
+ */
+export function proposalShareEmail({
+  proposalTitle,
+  senderName,
+  url,
+  orgName,
+  logoUrl,
+  accent,
+  onAccent,
+}: {
+  proposalTitle: string;
+  /** Person or org the recipient will recognize as the sender. */
+  senderName: string;
+  url: string;
+  orgName?: string;
+  /** Absolute https producer logo for the header band. */
+  logoUrl?: string;
+  /** Producer accent hex for the CTA fill. */
+  accent?: string;
+  /** Foreground paired with `accent`. */
+  onAccent?: string;
+}): RenderedEmail {
+  const body = [
+    emailEyebrow("Proposal"),
+    emailHeading(proposalTitle, 1),
+    emailText(
+      `<strong style="color:${PALETTE.text};">${escapeHtml(senderName)}</strong> shared a proposal with you. Review it and respond right from the document.`,
+    ),
+    emailSpacer(8),
+    emailButton({ label: "Open proposal", href: url, accent, onAccent }),
+    fallbackUrlLine(url),
+  ].join("");
+  return {
+    subject: `${senderName} sent you a proposal: ${proposalTitle}`,
+    html: emailLayout({
+      preheader: `${senderName} shared "${proposalTitle}" with you.`,
+      body,
+      orgName,
+      logoUrl,
+    }),
+  };
+}
+
+/**
+ * External assignment — the only channel an off-platform holder has.
+ * Sent when a ticket / credential / travel / lodging assignment is issued
+ * to (or changes state for) an `assignment_external_holders` party. No
+ * app CTA (they have no account); optional claim URL when one exists.
+ */
+export function externalAssignmentEmail({
+  holderName,
+  assignmentTitle,
+  kindLabel,
+  stateLabel,
+  projectName,
+  orgName,
+  detailLines = [],
+  claimUrl,
+}: {
+  holderName?: string;
+  assignmentTitle: string;
+  /** e.g. "Ticket", "Credential". */
+  kindLabel: string;
+  /** e.g. "Issued", "Voided". */
+  stateLabel: string;
+  projectName?: string;
+  orgName?: string;
+  /** Extra plain-text facts (seat, gate, check-in) — each escaped. */
+  detailLines?: string[];
+  /** Absolute https URL to view / claim, when a public surface exists. */
+  claimUrl?: string;
+}): RenderedEmail {
+  const greeting = holderName ? `Hi ${escapeHtml(holderName)},` : "Hi,";
+  const context = projectName
+    ? `Your ${escapeHtml(kindLabel.toLowerCase())} for <strong style="color:${PALETTE.text};">${escapeHtml(projectName)}</strong> is now ${escapeHtml(stateLabel.toLowerCase())}.`
+    : `Your ${escapeHtml(kindLabel.toLowerCase())} is now ${escapeHtml(stateLabel.toLowerCase())}.`;
+  const parts = [
+    emailEyebrow(`${kindLabel} ${stateLabel}`),
+    emailHeading(assignmentTitle, 1),
+    emailText(greeting),
+    emailText(context),
+  ];
+  if (detailLines.length > 0) {
+    parts.push(
+      emailText(detailLines.map((line) => escapeHtml(line)).join("<br />")),
+    );
+  }
+  if (claimUrl) {
+    parts.push(emailSpacer(8), emailButton({ label: `View ${kindLabel.toLowerCase()}`, href: claimUrl }), fallbackUrlLine(claimUrl));
+  }
+  parts.push(
+    emailDivider(),
+    emailText(
+      `<span style="color:${PALETTE.tertiary};font-size:13px;">Keep this email. It is your record${orgName ? ` from ${escapeHtml(orgName)}` : ""}. Questions? Reply and the sending team will see it.</span>`,
+    ),
+  );
+  return {
+    subject: `${kindLabel} ${stateLabel.toLowerCase()}: ${assignmentTitle}`,
+    html: emailLayout({
+      preheader: `${kindLabel} ${stateLabel.toLowerCase()} — ${assignmentTitle}`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}

@@ -5,6 +5,14 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
 import { getRequestT } from "@/lib/i18n/request";
 
+import type { Metadata } from "next";
+
+// E-14: every auth page carries its own title instead of the root default.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return { title: t("auth.magicLink.pageTitle", undefined, "Magic Link Sign-In") };
+}
+
 /**
  * Direct magic-link landing. Supabase normally bounces magic-link clicks
  * through /auth/callback?code=... — this route is a fallback for older

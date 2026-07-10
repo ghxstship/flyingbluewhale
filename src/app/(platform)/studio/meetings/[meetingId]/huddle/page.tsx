@@ -5,6 +5,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession, isManagerPlus } from "@/lib/auth";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, hasVideoProvider } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -46,6 +47,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
   }
 
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const canManage = isManagerPlus(session);
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
@@ -110,7 +112,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
             <p className="font-medium text-[var(--p-text-1)]">No video provider configured</p>
             <p className="text-xs text-[var(--p-text-2)]">
               Configure a video provider (set VIDEO_PROVIDER_URL + VIDEO_PROVIDER_KEY) to enable live media. The huddle
-              room, roster, and join/leave presence all work without it — live audio/video activates the moment a
+              room, roster, and join/leave presence all work without it. Live audio/video activates the moment a
               provider is wired.
             </p>
           </div>
@@ -144,7 +146,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
                       <Avatar name={name} src={p.user?.avatar_url} size="xl" presence="online" />
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm font-medium text-[var(--p-text-1)]">{name}</span>
-                        <span className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
+                        <span className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
                           {VIDEO_PARTICIPANT_ROLE_LABELS[p.role]}
                         </span>
                       </div>
@@ -191,9 +193,9 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
                         </td>
                         <td className="text-xs">{VIDEO_PARTICIPANT_ROLE_LABELS[p.role]}</td>
                         <td className="font-mono text-xs">
-                          {p.joined_at ? new Date(p.joined_at).toLocaleString() : "—"}
+                          {p.joined_at ? fmt.dateTime(new Date(p.joined_at)) : "—"}
                         </td>
-                        <td className="font-mono text-xs">{p.left_at ? new Date(p.left_at).toLocaleString() : "—"}</td>
+                        <td className="font-mono text-xs">{p.left_at ? fmt.dateTime(new Date(p.left_at)) : "—"}</td>
                       </tr>
                     );
                   })}

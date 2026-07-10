@@ -144,7 +144,7 @@ export async function ScheduleSurface({
                       {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
                       {s.role ? ` · ${s.role}` : wfm?.role ? ` · ${wfm.role}` : ""}
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-1.5 text-[10px]">
+                    <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
                       {s.break_minutes > 0 && (
                         <Badge variant="muted">
                           {t("m.shift.breakMinutes", { n: s.break_minutes }, `Break ${s.break_minutes}m`)}

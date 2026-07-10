@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { isManagerPlus, requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { listViewConfigs } from "@/lib/db/view-configs";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -30,7 +30,11 @@ export default async function ClientsPage() {
     );
   }
   const session = await requireSession();
-  const rows = await listOrgScoped("clients", session.orgId, { orderBy: "created_at" });
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows, totalCount } = await listOrgScopedWithCount("clients", session.orgId, {
+    orderBy: "created_at",
+  });
   const viewConfigs = await listViewConfigs({ orgId: session.orgId, tableId: CLIENTS_TABLE_ID });
   const allowedSaveScopes: ViewScope[] = isManagerPlus(session)
     ? ["private", "org", "public"]
@@ -42,9 +46,9 @@ export default async function ClientsPage() {
         eyebrow={t("console.clients.eyebrow", undefined, "Sales")}
         title={t("console.clients.title", undefined, "Clients")}
         subtitle={
-          rows.length === 1
-            ? t("console.clients.subtitleOne", { count: rows.length }, `${rows.length} Client`)
-            : t("console.clients.subtitleMany", { count: rows.length }, `${rows.length} Clients`)
+          totalCount === 1
+            ? t("console.clients.subtitleOne", { count: totalCount }, `${totalCount} Client`)
+            : t("console.clients.subtitleMany", { count: totalCount }, `${totalCount} Clients`)
         }
         action={
           <Button href="/studio/clients/new">{t("console.clients.newClient", undefined, "+ New Client")}</Button>
@@ -53,6 +57,7 @@ export default async function ClientsPage() {
       <div className="page-content">
         <DataTable<Client>
           rows={rows}
+          totalCount={totalCount}
           tableId={CLIENTS_TABLE_ID}
           rowHref={(r) => `/studio/clients/${r.id}`}
           viewConfigsForTable={viewConfigs}

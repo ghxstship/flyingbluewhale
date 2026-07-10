@@ -164,16 +164,14 @@ async function anyFrom(t: string) {
   return (supabase as unknown as LooseSupabase).from(t);
 }
 
-export async function listOrgScoped<T extends TableName>(
-  table: T,
-  orgId: string,
-  opts: ListOpts = {},
-): Promise<PublicTables[T]["Row"][]> {
-  // Empty orgId — guest / unscoped session. Return empty rather than letting
-  // PostgREST submit `org_id=eq.` and crash with 22P02 invalid uuid syntax.
-  if (!orgId) return [];
-  let q = (await anyFrom(table as string)).select("*").eq("org_id", orgId);
-  if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
+/** Shared query builder for the org-scoped list helpers — one place for the
+ * org filter, soft-delete gate, filter ops, and the deterministic default
+ * ordering, so {@link listOrgScoped} and {@link listOrgScopedWithCount}
+ * can never drift. */
+async function buildListQuery(table: string, orgId: string, opts: ListOpts, withCount: boolean) {
+  let q = (await anyFrom(table)).select("*", withCount ? { count: "exact" } : undefined);
+  q = q.eq("org_id", orgId);
+  if (SOFT_DELETABLE_TABLES.has(table) && !opts.includeArchived) {
     q = q.is("deleted_at", null);
   }
   for (const f of opts.filters ?? []) {
@@ -196,9 +194,70 @@ export async function listOrgScoped<T extends TableName>(
   // can pass `limit: 0` (interpreted as "no cap").
   const effectiveLimit = opts.limit === 0 ? null : (opts.limit ?? 100);
   if (effectiveLimit !== null) q = q.limit(effectiveLimit);
+  return q;
+}
+
+/**
+ * WARNING — SILENTLY CAPPED (AUDIT.md F-01). Returns at most `opts.limit`
+ * rows (default **100**) with NO signal that more exist. A page that renders
+ * this array and captions it with `rows.length` LIES once the org passes the
+ * cap: records silently disappear from the list.
+ *
+ * For any list-rendering surface, prefer one of the honest contracts:
+ *  - {@link listOrgScopedWithCount} — same capped window PLUS the exact
+ *    population count in one round trip; feed `totalCount` to the DataTable
+ *    truncation indicator and the header subtitle.
+ *  - {@link listOrgScopedPage} + `<PagerNav>` — full cursor/offset pagination.
+ *
+ * `listOrgScoped` remains appropriate for genuinely small vocabularies
+ * (enum-ish settings tables, per-project child rows) and for non-rendered
+ * lookups. The canon test `src/lib/db/list-honesty-canon.test.ts` enforces
+ * this at CI for `page.tsx` list surfaces.
+ */
+export async function listOrgScoped<T extends TableName>(
+  table: T,
+  orgId: string,
+  opts: ListOpts = {},
+): Promise<PublicTables[T]["Row"][]> {
+  // Empty orgId — guest / unscoped session. Return empty rather than letting
+  // PostgREST submit `org_id=eq.` and crash with 22P02 invalid uuid syntax.
+  if (!orgId) return [];
+  const q = await buildListQuery(table as string, orgId, opts, false);
   const { data, error } = await q;
   if (error) throw error;
   return (data ?? []) as PublicTables[T]["Row"][];
+}
+
+export type ListWithCount<Row> = {
+  /** The capped window of rows (same semantics as {@link listOrgScoped}). */
+  rows: Row[];
+  /** Exact population size under the same filters — NOT `rows.length`. */
+  totalCount: number;
+};
+
+/**
+ * The honest single-call list contract (F-01 remediation): the same capped
+ * row window as {@link listOrgScoped} PLUS the exact total count under the
+ * identical filters, in ONE PostgREST round trip (`count: "exact"` rides the
+ * data query). List pages render `rows` and pass `totalCount` to the
+ * DataTable truncation indicator / header subtitle, so the UI never presents
+ * a truncated window as the whole population.
+ *
+ * Upgrade path: when a surface needs to actually REACH rows past the cap,
+ * move it to {@link listOrgScopedPage} + `<PagerNav>` (see
+ * `src/lib/db/pagination.ts` for the searchParams pattern).
+ */
+export async function listOrgScopedWithCount<T extends TableName>(
+  table: T,
+  orgId: string,
+  opts: ListOpts = {},
+): Promise<ListWithCount<PublicTables[T]["Row"]>> {
+  if (!orgId) return { rows: [], totalCount: 0 };
+  const q = await buildListQuery(table as string, orgId, opts, true);
+  const { data, count, error } = await q;
+  if (error) throw error;
+  const rows = (data ?? []) as PublicTables[T]["Row"][];
+  return { rows, totalCount: count ?? rows.length };
 }
 
 /**
@@ -288,8 +347,10 @@ export type Page<T> = {
   pageSize: number;
 };
 
-const MAX_PAGE_SIZE = 200;
-const DEFAULT_PAGE_SIZE = 50;
+// Exported so alternate read surfaces (e.g. the GraphQL resolvers) share the
+// same pagination policy instead of forking their own clamp.
+export const MAX_PAGE_SIZE = 200;
+export const DEFAULT_PAGE_SIZE = 50;
 
 export function decodeCursor(cursor: string | null | undefined): number {
   if (!cursor) return 0;

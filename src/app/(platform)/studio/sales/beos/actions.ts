@@ -186,7 +186,7 @@ export async function setBeoStateAction(id: string, next: BeoState) {
     .eq("beo_state", current)
     .select("id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "BEO changed concurrently — refresh and retry" };
+  if (!updated || updated.length === 0) return { error: "BEO changed concurrently. Refresh and retry" };
 
   revalidatePath(`/studio/sales/beos/${id}`);
   revalidatePath("/studio/sales/beos");

@@ -4,6 +4,14 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
 import { getRequestT } from "@/lib/i18n/request";
 
+import type { Metadata } from "next";
+
+// E-14: every auth page carries its own title instead of the root default.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return { title: t("auth.resetPassword.pageTitle", undefined, "Set a New Password") };
+}
+
 /**
  * Direct recovery-token landing. Supabase normally bounces password-reset
  * clicks through /auth/callback?code=... → /reset-password — this route

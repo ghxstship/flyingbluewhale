@@ -41,7 +41,7 @@ export function CartItemRow({
     <div className="flex items-center gap-4 p-4">
       {imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={imageUrl} alt={title} className="h-16 w-16 rounded-md object-cover" />
+        <img src={imageUrl} alt={title} loading="lazy" decoding="async" className="h-16 w-16 rounded-md object-cover" />
       ) : (
         <div className="surface-inset h-16 w-16 rounded-md" aria-hidden="true" />
       )}

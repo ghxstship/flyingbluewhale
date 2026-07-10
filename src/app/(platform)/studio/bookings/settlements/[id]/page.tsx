@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { addSettlementLine, deleteSettlementLine } from "./actions";
 
 const LINE_KIND_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
@@ -50,6 +50,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   if (!hasSupabase) return notFound();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -94,8 +95,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           s.finalized_at
             ? t(
                 "console.bookings.settlements.detail.finalizedAt",
-                { when: new Date(s.finalized_at).toLocaleString() },
-                `Finalized ${new Date(s.finalized_at).toLocaleString()}`,
+                { when: fmt.dateTime(new Date(s.finalized_at)) },
+                `Finalized ${fmt.dateTime(new Date(s.finalized_at))}`,
               )
             : t("console.bookings.settlements.detail.draftReconciling", undefined, "Draft / reconciling")
         }
@@ -325,7 +326,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t(
                 "console.bookings.settlements.detail.finalizedLocked",
                 undefined,
-                "Settlement is finalized — line items are locked.",
+                "Settlement is finalized. Line items are locked.",
               )}
             </p>
           )}

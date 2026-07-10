@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +31,7 @@ type RunRow = {
 const VIP_CODES = ["VIP", "VVIP", "DIGNITARY", "PROTOCOL", "OFFICIAL", "T3"];
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -149,7 +150,7 @@ export default async function Page() {
 
         <section>
           <h3 className="text-sm font-semibold">
-            {t("console.programs.protocol.t3FleetHeading", undefined, "T3 fleet — next 14 days")}
+            {t("console.programs.protocol.t3FleetHeading", undefined, "T3 fleet (next 14 days)")}
           </h3>
           {runs.length === 0 ? (
             <EmptyState

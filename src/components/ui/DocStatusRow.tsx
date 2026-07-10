@@ -43,7 +43,7 @@ export function DocStatusRow({ name, expiresOn, status, remainingPct, required, 
         <div className="flex items-center gap-2">
           <span className="truncate text-sm font-medium text-[var(--p-text-1)]">{name}</span>
           {required && (
-            <span className="font-mono text-[10px] tracking-wide text-[var(--p-text-3)] uppercase">Required</span>
+            <span className="font-mono text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">Required</span>
           )}
         </div>
         {expiresOn && (

@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toggleActive, deleteAssignment } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +22,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data } = await supabase
     .from("account_manager_assignments")
@@ -110,19 +111,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-2xl space-y-3">
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.portalUserLabel", undefined, "Portal user")}
             </div>
             <div className="mt-1 font-mono">{portal?.email ?? a.portal_user_id}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.managerLabel", undefined, "Manager")}
             </div>
             <div className="mt-1 font-mono">{manager?.email ?? a.manager_user_id}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.chatRoomLabel", undefined, "Chat room")}
             </div>
             <div className="mt-1 font-mono">
@@ -131,15 +132,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 : t(
                     "console.settings.accountManagers.detail.chatRoomPending",
                     undefined,
-                    "— (created on first /messages/start)",
+                    "(created on first /messages/start)",
                   )}
             </div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.createdLabel", undefined, "Created")}
             </div>
-            <div className="mt-1 font-mono">{new Date(a.created_at).toLocaleString()}</div>
+            <div className="mt-1 font-mono">{fmt.dateTime(new Date(a.created_at))}</div>
           </div>
         </section>
       </div>

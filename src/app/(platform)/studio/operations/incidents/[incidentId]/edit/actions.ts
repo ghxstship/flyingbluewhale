@@ -49,8 +49,17 @@ export async function updateIncident(incidentId: string, _: State, fd: FormData)
 export async function deleteIncident(incidentId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  const { error } = await supabase.from("incidents").delete().eq("id", incidentId).eq("org_id", session.orgId);
+  // SOFT delete (A-21) — `incidents` is in SOFT_DELETABLE_TABLES; preserves
+  // the record for Trash/undo and keeps safety history intact. The
+  // .is("deleted_at", null) filter makes the action idempotent.
+  const { error } = await supabase
+    .from("incidents")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", incidentId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
   if (error) throw new Error(`Could not delete incident: ${error.message}`);
   revalidatePath("/studio/operations/incidents");
-  redirect("/studio/operations/incidents");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

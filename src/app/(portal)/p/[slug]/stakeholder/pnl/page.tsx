@@ -4,7 +4,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { urlFor } from "@/lib/urls";
 
@@ -23,6 +23,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const project = await projectIdFromSlug(slug);
 
   if (!project) {
@@ -71,7 +72,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
     .filter((i) => i.invoice_state === "paid")
     .reduce((s, i) => s + (i.amount_cents ?? 0), 0);
   const margin = invoiceTotal - expenseTotal;
-  const fmtMoney = (cents: number) => (cents / 100).toLocaleString("en-US", { style: "currency", currency });
+  const fmtMoney = (cents: number) => fmt.money(cents, currency);
 
   return (
     <div className="flex min-h-screen">
@@ -84,7 +85,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
 
         <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.stakeholder.pnl.metrics.budget", undefined, "Budget")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
@@ -92,7 +93,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.stakeholder.pnl.metrics.spent", undefined, "Spent")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
@@ -100,13 +101,13 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
-              {t("p.stakeholder.pnl.metrics.revenuePaid", undefined, "Revenue — Paid")}
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+              {t("p.stakeholder.pnl.metrics.revenuePaid", undefined, "Revenue (Paid)")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(invoiceTotal)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.stakeholder.pnl.metrics.margin", undefined, "Margin")}
             </div>
             <div

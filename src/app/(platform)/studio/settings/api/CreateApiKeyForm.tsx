@@ -33,7 +33,7 @@ export function CreateApiKeyForm() {
         toast.success(t("console.settings.api.copiedToast", undefined, "Copied to clipboard"));
       })
       .catch(() => {
-        toast.error(t("console.settings.api.copyFailedToast", undefined, "Copy failed — select the key manually"));
+        toast.error(t("console.settings.api.copyFailedToast", undefined, "Copy failed. Select the key manually"));
       });
   }
 
@@ -51,7 +51,7 @@ export function CreateApiKeyForm() {
             {t(
               "console.settings.api.createDescription",
               undefined,
-              "We will show the secret exactly once — store it somewhere safe.",
+              "We will show the secret exactly once. Store it somewhere safe.",
             )}
           </DialogDescription>
         </DialogHeader>
@@ -84,7 +84,7 @@ export function CreateApiKeyForm() {
               hint={t(
                 "console.settings.api.scopesHint",
                 undefined,
-                "Comma-separated; leave blank for full access. Capability strings — projects:read, projects:write, tasks:write, deliverables:read, invoices:read, etc.",
+                "Comma-separated; leave blank for full access. Capability strings: projects:read, projects:write, tasks:write, deliverables:read, invoices:read, etc.",
               )}
             />
             <details className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-2 text-xs">
@@ -94,21 +94,21 @@ export function CreateApiKeyForm() {
               <ul className="mt-2 space-y-1 font-mono">
                 <li>
                   <code className="text-[var(--p-text-2)]">projects:read, tasks:read</code>{" "}
-                  {t("console.settings.api.scopeReadOnly", undefined, "— read-only reporter")}
+                  {t("console.settings.api.scopeReadOnly", undefined, "· read-only reporter")}
                 </li>
                 <li>
                   <code className="text-[var(--p-text-2)]">tasks:write, time:write</code>{" "}
-                  {t("console.settings.api.scopeFieldClockIn", undefined, "— field clock-in")}
+                  {t("console.settings.api.scopeFieldClockIn", undefined, "· field clock-in")}
                 </li>
                 <li>
                   <code className="text-[var(--p-text-2)]">deliverables:read, deliverables:write</code>{" "}
-                  {t("console.settings.api.scopeAdvancing", undefined, "— advancing pipeline")}
+                  {t("console.settings.api.scopeAdvancing", undefined, "· advancing pipeline")}
                 </li>
                 <li>
                   <code className="text-[var(--p-text-2)]">
                     {t("console.settings.api.scopeBlank", undefined, "(blank)")}
                   </code>{" "}
-                  {t("console.settings.api.scopeFullAccess", undefined, "— full access of the issuing user")}
+                  {t("console.settings.api.scopeFullAccess", undefined, "· full access of the issuing user")}
                 </li>
               </ul>
             </details>

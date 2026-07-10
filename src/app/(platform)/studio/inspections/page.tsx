@@ -1,4 +1,5 @@
-import { ModuleHeader } from "@/components/Shell";
+import { Suspense } from "react";
+import { ModuleHeader, PageSkeleton } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -7,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -25,7 +27,7 @@ type Row = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -50,6 +52,35 @@ export default async function Page() {
       </>
     );
   }
+  return (
+    <>
+      <ModuleHeader
+        eyebrow={t("console.inspections.eyebrow", undefined, "Safety")}
+        title={t("console.inspections.title", undefined, "Inspections")}
+        subtitle={t("console.inspections.subtitle", undefined, "Template-driven safety + compliance checklists.")}
+        action={
+          <div className="flex items-center gap-2">
+            <Button href="/studio/inspections/templates" size="sm" variant="ghost">
+              {t("console.inspections.templatesLabel", undefined, "Templates")}
+            </Button>
+            <Button href="/studio/inspections/new" size="sm">
+              {t("console.inspections.newInspection", undefined, "+ New Inspection")}
+            </Button>
+          </div>
+        }
+      />
+      {/* F-07 — stream the data body under the instant header: this route is
+          on the documented heavy-aggregation hot list (playwright.config.ts),
+          so the query must not block first paint. */}
+      <Suspense fallback={<PageSkeleton variant="table" rows={6} />}>
+        <InspectionsBody />
+      </Suspense>
+    </>
+  );
+}
+
+async function InspectionsBody() {
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const fmtIntl = await getRequestFormatters();
@@ -69,21 +100,6 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow={t("console.inspections.eyebrow", undefined, "Safety")}
-        title={t("console.inspections.title", undefined, "Inspections")}
-        subtitle={t("console.inspections.subtitle", undefined, "Template-driven safety + compliance checklists.")}
-        action={
-          <div className="flex items-center gap-2">
-            <Button href="/studio/inspections/templates" size="sm" variant="ghost">
-              {t("console.inspections.templatesLabel", undefined, "Templates")}
-            </Button>
-            <Button href="/studio/inspections/new" size="sm">
-              {t("console.inspections.newInspection", undefined, "+ New Inspection")}
-            </Button>
-          </div>
-        }
-      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard

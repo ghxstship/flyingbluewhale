@@ -51,7 +51,7 @@ export async function transitionInspection(
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Inspection status changed concurrently — refresh and retry");
+    throw new Error("Inspection status changed concurrently. Refresh and retry");
   }
   revalidatePath(`/studio/inspections/${id}`);
   revalidatePath("/studio/inspections");

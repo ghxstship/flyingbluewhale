@@ -5,6 +5,14 @@ import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
 import { getRequestT } from "@/lib/i18n/request";
 
+import type { Metadata } from "next";
+
+// E-14: every auth page carries its own title instead of the root default.
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return { title: t("auth.sso.pageTitle", undefined, "Single Sign-On") };
+}
+
 const SUPPORTED_PROVIDERS = ["google", "azure", "apple", "linkedin_oidc"] as const;
 type SupportedProvider = (typeof SUPPORTED_PROVIDERS)[number];
 

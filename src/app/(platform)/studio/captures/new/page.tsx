@@ -48,7 +48,7 @@ export default async function Page() {
             <input
               name="name"
               required
-              placeholder={t("console.captures.new.namePlaceholder", undefined, "L3 Mech Room walk — 2026-05-24")}
+              placeholder={t("console.captures.new.namePlaceholder", undefined, "L3 Mech Room walk · 2026-05-24")}
               className={INPUT}
             />
           </label>
@@ -100,7 +100,7 @@ export default async function Page() {
               <input type="date" name="capture_date" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.captures.new.panoramas", undefined, "Panoramas — Approx")}</span>
+              <span className={LBL}>{t("console.captures.new.panoramas", undefined, "Panoramas (Approx)")}</span>
               <input type="number" min="0" name="panorama_count" className={INPUT} />
             </label>
           </div>
@@ -110,7 +110,7 @@ export default async function Page() {
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              {t("console.captures.new.externalId", undefined, "External ID — Vendor's Job/Space ID")}
+              {t("console.captures.new.externalId", undefined, "External ID (Vendor's Job/Space ID)")}
             </span>
             <input name="external_id" className={`${INPUT} font-mono text-xs`} />
           </label>

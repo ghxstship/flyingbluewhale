@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Lock, Trophy } from "lucide-react";
+import { formatNumber } from "@/lib/i18n/format";
 
 /**
  * <AchievementBadge> — one earned/locked achievement medallion.
@@ -62,7 +63,7 @@ export function AchievementBadge({
         {description && <div className="truncate text-xs text-[var(--p-text-2)]">{description}</div>}
         {points != null && (
           <div className="mt-0.5 text-xs font-medium" style={{ color: earned ? field : "var(--p-text-3)" }}>
-            {points.toLocaleString()} pts
+            {formatNumber(points)} pts
           </div>
         )}
       </div>

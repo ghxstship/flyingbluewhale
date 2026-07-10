@@ -55,7 +55,7 @@ export function ProposalTopBar({ proposal, blocks }: { proposal: Proposal; block
           <a
             key={s.i}
             href={`#section-${s.i}`}
-            className={`shrink-0 rounded-full px-3 py-1 text-[10px] font-semibold tracking-widest uppercase ${active === s.i ? "bg-[var(--p-accent)]/10 text-[var(--p-accent)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
+            className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold tracking-widest uppercase ${active === s.i ? "bg-[var(--p-accent)]/10 text-[var(--p-accent)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
           >
             {s.label}
           </a>
@@ -63,7 +63,7 @@ export function ProposalTopBar({ proposal, blocks }: { proposal: Proposal; block
         <button
           type="button"
           onClick={() => window.print()}
-          className="print-hide ms-2 shrink-0 rounded-full border border-[var(--p-border)] px-3 py-1 text-[10px] font-semibold tracking-widest uppercase hover:bg-[var(--p-surface)]"
+          className="print-hide ms-2 shrink-0 rounded-full border border-[var(--p-border)] px-3 py-1 text-[11px] font-semibold tracking-widest uppercase hover:bg-[var(--p-surface)]"
         >
           Print / PDF
         </button>

@@ -65,7 +65,7 @@ function FieldRow({
         </span>
       )}
       {showHints && (field.type === "text" || field.type === "textarea") && (
-        <span className="ms-auto rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
+        <span className="ms-auto rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
           {"{{trigger.field}}"}
         </span>
       )}

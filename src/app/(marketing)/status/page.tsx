@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
-import { buildMetadata, breadcrumbSchema, SITE } from "@/lib/seo";
+import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { env, hasSupabase } from "@/lib/env";
+
+// E-09: the page renders live probe results — never cache an "operational"
+// claim.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -17,29 +22,47 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-type ServiceRow = { name: string; descriptionKey: string; state: "operational" | "degraded" | "outage" };
+type ProbeState = "operational" | "degraded" | "outage" | "unknown";
 
-const SERVICES: ServiceRow[] = [
-  { name: "ATLVS", descriptionKey: "marketing.pages.status.services.atlvs", state: "operational" },
-  { name: "GVTEWAY Portal", descriptionKey: "marketing.pages.status.services.gvteway", state: "operational" },
-  { name: "COMPVSS Field", descriptionKey: "marketing.pages.status.services.compvss", state: "operational" },
-  { name: "Marketing + Auth", descriptionKey: "marketing.pages.status.services.marketing", state: "operational" },
-  { name: "Webhooks", descriptionKey: "marketing.pages.status.services.webhooks", state: "operational" },
-  { name: "AI Assistant", descriptionKey: "marketing.pages.status.services.ai", state: "operational" },
-  { name: "Stripe Connect", descriptionKey: "marketing.pages.status.services.stripe", state: "operational" },
-];
+type ProbeRow = {
+  name: string;
+  description: string;
+  state: ProbeState;
+  detail: string | null;
+};
 
-const STATE_COLOR: Record<ServiceRow["state"], string> = {
+const STATE_COLOR: Record<ProbeState, string> = {
   operational: "var(--p-success)",
   degraded: "var(--p-warning)",
   outage: "var(--p-danger)",
+  unknown: "var(--p-text-3)",
 };
 
-const STATE_LABEL_KEY: Record<ServiceRow["state"], string> = {
-  operational: "marketing.pages.status.stateLabel.operational",
-  degraded: "marketing.pages.status.stateLabel.degraded",
-  outage: "marketing.pages.status.stateLabel.outage",
-};
+/**
+ * E-09: a real reachability probe against the backing Supabase project's
+ * health endpoint. 3.5s budget; a timeout reads as an outage from where this
+ * page runs, a slow-but-alive response as degraded, and a missing
+ * configuration as honestly unknown.
+ */
+async function probeSupabase(): Promise<{ state: ProbeState; detail: string | null }> {
+  if (!hasSupabase) return { state: "unknown", detail: null };
+  const started = Date.now();
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3500);
+    const res = await fetch(`${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/health`, {
+      cache: "no-store",
+      signal: controller.signal,
+      headers: { apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY },
+    });
+    clearTimeout(timer);
+    const ms = Date.now() - started;
+    if (!res.ok) return { state: "degraded", detail: `HTTP ${res.status}` };
+    return ms > 2000 ? { state: "degraded", detail: `${ms}ms` } : { state: "operational", detail: `${ms}ms` };
+  } catch {
+    return { state: "outage", detail: "unreachable" };
+  }
+}
 
 export default async function StatusPage() {
   const { t } = await getRequestT();
@@ -47,6 +70,60 @@ export default async function StatusPage() {
     { label: t("marketing.pages.status.breadcrumbs.home"), href: "/" },
     { label: t("marketing.pages.status.breadcrumbs.status"), href: "/status" },
   ];
+
+  const db = await probeSupabase();
+
+  const STATE_LABEL: Record<ProbeState, string> = {
+    operational: t("marketing.pages.status.stateLabel.operational"),
+    degraded: t("marketing.pages.status.stateLabel.degraded"),
+    outage: t("marketing.pages.status.stateLabel.outage"),
+    unknown: t("marketing.pages.status.stateLabel.unknown", undefined, "Not yet monitored"),
+  };
+
+  // Only claim what this request can actually observe: the web tier proved
+  // itself by rendering this page; the database/API tier is probed live; the
+  // rest is honestly labeled as not yet monitored — no fabricated green dots.
+  const ROWS: ProbeRow[] = [
+    {
+      name: t("marketing.pages.status.probes.web.name", undefined, "Web application"),
+      description: t(
+        "marketing.pages.status.probes.web.description",
+        undefined,
+        "Marketing, auth, console, portal, and field shells. Serving this page counts as the check.",
+      ),
+      state: "operational",
+      detail: null,
+    },
+    {
+      name: t("marketing.pages.status.probes.db.name", undefined, "Database & platform API"),
+      description: t(
+        "marketing.pages.status.probes.db.description",
+        undefined,
+        "The backing data platform, probed live from this request.",
+      ),
+      state: db.state,
+      detail: db.detail,
+    },
+    {
+      name: t("marketing.pages.status.probes.integrations.name", undefined, "Payments, webhooks & AI"),
+      description: t(
+        "marketing.pages.status.probes.integrations.description",
+        undefined,
+        "Third-party dependencies. Per-component monitoring is not wired yet, so no claim is made here.",
+      ),
+      state: "unknown",
+      detail: null,
+    },
+  ];
+
+  const anyOutage = ROWS.some((r) => r.state === "outage");
+  const anyDegraded = ROWS.some((r) => r.state === "degraded");
+  const overallState: ProbeState = anyOutage ? "outage" : anyDegraded ? "degraded" : "operational";
+  const overallLabel = anyOutage
+    ? t("marketing.pages.status.hero.badgeOutage", undefined, "Service disruption detected")
+    : anyDegraded
+      ? t("marketing.pages.status.hero.badgeDegraded", undefined, "Degraded performance detected")
+      : t("marketing.pages.status.hero.badgeChecked", undefined, "Monitored components responding normally");
 
   return (
     <div>
@@ -58,32 +135,40 @@ export default async function StatusPage() {
         <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-1.5">
           <span
             className="inline-block h-2 w-2 rounded-full"
-            style={{ background: "var(--p-success)" }}
+            style={{ background: STATE_COLOR[overallState] }}
             aria-hidden="true"
           />
-          <span className="text-xs font-medium">{t("marketing.pages.status.hero.badge")}</span>
+          <span className="text-xs font-medium">{overallLabel}</span>
         </div>
+        <p className="mt-3 text-xs text-[var(--p-text-3)]">
+          {t(
+            "marketing.pages.status.hero.checkedNote",
+            undefined,
+            "Checked live when this page loaded. Refresh for a fresh probe.",
+          )}
+        </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface overflow-hidden">
-          {SERVICES.map((s, i) => (
+          {ROWS.map((s, i) => (
             <div
               key={s.name}
-              className={`flex items-center justify-between p-5 ${i < SERVICES.length - 1 ? "border-b border-[var(--p-border)]" : ""}`}
+              className={`flex items-center justify-between gap-4 p-5 ${i < ROWS.length - 1 ? "border-b border-[var(--p-border)]" : ""}`}
             >
               <div>
                 <div className="text-sm font-semibold">{s.name}</div>
-                <div className="mt-1 text-xs text-[var(--p-text-2)]">{t(s.descriptionKey)}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex shrink-0 items-center gap-2">
+                {s.detail && <span className="font-mono text-[11px] text-[var(--p-text-3)]">{s.detail}</span>}
                 <span
                   className="inline-block h-2 w-2 rounded-full"
                   style={{ background: STATE_COLOR[s.state] }}
                   aria-hidden="true"
                 />
                 <span className="text-xs font-medium" style={{ color: STATE_COLOR[s.state] }}>
-                  {t(STATE_LABEL_KEY[s.state])}
+                  {STATE_LABEL[s.state]}
                 </span>
               </div>
             </div>
@@ -93,11 +178,18 @@ export default async function StatusPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8 md:p-10">
-          <div className="eyebrow eyebrow-brand">{t("marketing.pages.status.comingSoon.eyebrow")}</div>
-          <h2 className="hed-lg mt-3">{t("marketing.pages.status.comingSoon.title")}</h2>
-          <p className="mt-3 text-sm text-[var(--p-text-2)]">
-            {t("marketing.pages.status.comingSoon.body")}
-            <span className="font-mono"> status.{SITE.domain}</span>.
+          <div className="eyebrow eyebrow-brand">
+            {t("marketing.pages.status.incidents.eyebrow", undefined, "Incident History")}
+          </div>
+          <h2 className="hed-lg mt-3">
+            {t("marketing.pages.status.incidents.title", undefined, "No published incidents yet")}
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
+            {t(
+              "marketing.pages.status.incidents.body",
+              undefined,
+              "We have not yet published a formal incident log. This section will carry dated incident reports and postmortems once the first one exists. If something looks wrong right now, tell us and a human will look.",
+            )}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="/contact" variant="secondary">

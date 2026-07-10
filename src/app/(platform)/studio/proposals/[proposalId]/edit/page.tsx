@@ -153,7 +153,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
                 {t(
                   "console.proposals.edit.noShareLinks",
                   undefined,
-                  "No share links yet — generate one to send the proposal to a client.",
+                  "No share links yet. Generate one to send the proposal to a client.",
                 )}
               </p>
             )}

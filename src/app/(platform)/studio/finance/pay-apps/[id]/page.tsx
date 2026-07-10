@@ -5,7 +5,7 @@ import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { formatMoney } from "@/lib/i18n/format";
+import { formatDate, formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { transitionPayApp, updatePayAppLine } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 const INPUT = "w-24 rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs";
 
 function fmt(d: string): string {
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(new Date(d + "T00:00:00"));
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -165,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         />
                         <button
                           type="submit"
-                          className="rounded border border-[var(--p-border)] px-2 py-0.5 text-[10px]"
+                          className="rounded border border-[var(--p-border)] px-2 py-0.5 text-[11px]"
                         >
                           {t("console.finance.payApps.detail.set", undefined, "set")}
                         </button>

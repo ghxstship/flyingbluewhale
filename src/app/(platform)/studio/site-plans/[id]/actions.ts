@@ -59,7 +59,7 @@ export async function transitionSheet(_: State, fd: FormData): Promise<State> {
 
 const RegionSchema = z.object({
   sheet_id: z.string().uuid(),
-  code: z.string().regex(/^[A-Z0-9_]{1,16}$/, "code = UPPER alphanumerics/underscore (1–16)"),
+  code: z.string().regex(/^[A-Z0-9_]{1,16}$/, "code = UPPER alphanumerics/underscore (1-16)"),
   label: z.string().min(1).max(80),
   class_tag: z.coerce.number().int().min(0).max(9).optional(),
   notes: z.string().max(500).optional(),

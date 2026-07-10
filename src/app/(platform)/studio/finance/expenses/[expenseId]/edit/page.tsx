@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
               into budgets.actual_cents. */}
           <div className="grid gap-3 sm:grid-cols-2">
             <XpmsSelect
-              label={t("console.finance.expenses.edit.departmentLabel", undefined, "Department — XPMS")}
+              label={t("console.finance.expenses.edit.departmentLabel", undefined, "Department (XPMS)")}
               name="department"
               options={XPMS_DEPARTMENTS}
               defaultValue={(row as { department?: string | null }).department ?? ""}
@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
               maxLength={160}
             />
             <Input
-              label={t("console.finance.expenses.edit.categoryLabel", undefined, "Category — Legacy")}
+              label={t("console.finance.expenses.edit.categoryLabel", undefined, "Category (Legacy)")}
               name="category"
               defaultValue={row.category ?? ""}
               maxLength={120}

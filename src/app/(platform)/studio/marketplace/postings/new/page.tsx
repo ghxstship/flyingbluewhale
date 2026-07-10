@@ -87,7 +87,7 @@ export default async function Page() {
             />
           </div>
           <Input
-            label={t("console.marketplace.postings.new.fields.roles", undefined, "Roles — Comma-separated")}
+            label={t("console.marketplace.postings.new.fields.roles", undefined, "Roles (Comma-separated)")}
             name="role_taxonomy"
             placeholder={t(
               "console.marketplace.postings.new.placeholders.roles",
@@ -148,7 +148,7 @@ export default async function Page() {
               {t(
                 "console.marketplace.postings.new.provided.vettedOnly",
                 undefined,
-                "Vetted-only — Verified-creds Candidates",
+                "Vetted-only (Verified-creds Candidates)",
               )}
             </label>
           </fieldset>

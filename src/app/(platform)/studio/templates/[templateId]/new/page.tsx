@@ -92,7 +92,7 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
                 <ul className="mt-1.5 list-disc ps-5 text-sm text-[var(--p-text-2)]">
                   {tpl.blueprint.deliverables.map((d, i) => (
                     <li key={i}>
-                      <span className="font-mono text-[10px] tracking-wider uppercase">{d.kind}</span>
+                      <span className="font-mono text-[11px] tracking-wider uppercase">{d.kind}</span>
                       {" — "}
                       {d.title}
                     </li>

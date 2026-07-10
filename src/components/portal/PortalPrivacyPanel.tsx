@@ -185,7 +185,7 @@ export async function PortalPrivacyPanel({
                 <li key={d.id} className="flex items-center justify-between py-2 text-sm">
                   <div>
                     <div className="font-medium">{toTitle(d.kind)}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {t("components.portalPrivacyPanel.filed", { date: fmt(d.created_at) }, "filed {date}")}
                       {d.due_by
                         ? ` · ${t("components.portalPrivacyPanel.due", { date: fmt(d.due_by) }, "due {date}")}`
@@ -220,7 +220,7 @@ export async function PortalPrivacyPanel({
                 <li key={c.id} className="flex items-center justify-between py-2 text-sm">
                   <div>
                     <div className="font-medium">{c.purpose}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {c.granted_at
                         ? t("components.portalPrivacyPanel.granted", { date: fmt(c.granted_at) }, "granted {date}")
                         : "—"}

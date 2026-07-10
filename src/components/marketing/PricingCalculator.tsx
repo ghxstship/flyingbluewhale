@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { Calculator, ArrowRight } from "lucide-react";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
+import { formatNumber } from "@/lib/i18n/format";
 
 /**
  * `<PricingCalculator>` — total-cost-of-ownership calculator for /pricing.
@@ -26,7 +27,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 const ATLVS_PRODUCTION_ANNUAL = 199 * 12; // $2,388/yr
 
 function formatUsd(n: number) {
-  return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  return `$${formatNumber(n, { maximumFractionDigits: 0 })}`;
 }
 
 export function PricingCalculator() {
@@ -161,7 +162,7 @@ export function PricingCalculator() {
           </div>
 
           <div className="mt-5 flex items-center justify-between border-t border-[var(--p-border)] pt-4">
-            <div className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
+            <div className="font-mono text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
               {t("marketing.pricingCalculator.ratio", undefined, "Stack ÷ ATLVS")}
             </div>
             <div className="font-mono text-2xl font-semibold text-[var(--p-accent)]">
@@ -201,13 +202,14 @@ function Field({
   prefix?: string;
   suffix?: string;
 }) {
+  const fmt = useFormatters();
   return (
     <div>
       <div className="flex items-baseline justify-between">
         <label className="text-xs font-semibold tracking-tight">{label}</label>
         <div className="font-mono text-sm tabular-nums">
           {prefix}
-          {value.toLocaleString()}
+          {fmt.number(value)}
           {suffix && <span className="ms-1 text-[var(--p-text-2)]">{suffix}</span>}
         </div>
       </div>
@@ -250,7 +252,7 @@ function Row({
 function Tile({ label, value, tone }: { label: string; value: string; tone?: "accent" }) {
   return (
     <div>
-      <div className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{label}</div>
+      <div className="font-mono text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">{label}</div>
       <div
         className={`mt-1 font-mono tabular-nums ${tone === "accent" ? "text-[var(--p-accent-text)]" : ""} text-lg font-semibold`}
       >

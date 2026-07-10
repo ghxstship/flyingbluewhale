@@ -30,24 +30,35 @@ export default async function Page() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
+  // B-22: server-side aggregates — `count: "exact", head: true` per tile
+  // instead of fetching every row across four tables just to count in JS.
   const [postings, calls, offers, applications] = await Promise.all([
-    supabase.from("job_postings").select("id, job_posting_phase").eq("org_id", session.orgId),
-    supabase.from("open_calls").select("id, open_call_phase").eq("org_id", session.orgId),
-    supabase.from("talent_offers").select("id, talent_offer_state").eq("org_id", session.orgId),
-    supabase.from("job_applications").select("id, job_application_state").eq("org_id", session.orgId),
+    supabase
+      .from("job_postings")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("job_posting_phase", "published"),
+    supabase
+      .from("open_calls")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("open_call_phase", "published"),
+    supabase
+      .from("talent_offers")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .in("talent_offer_state", ["sent", "countered"]),
+    supabase
+      .from("job_applications")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("job_application_state", "new"),
   ]);
 
-  const postingRows = (postings.data ?? []) as Array<{ job_posting_phase: string }>;
-  const callRows = (calls.data ?? []) as Array<{ open_call_phase: string }>;
-  const offerRows = (offers.data ?? []) as Array<{ talent_offer_state: string }>;
-  const appRows = (applications.data ?? []) as Array<{ job_application_state: string }>;
-
-  const publishedPostings = postingRows.filter((r) => r.job_posting_phase === "published").length;
-  const publishedCalls = callRows.filter((r) => r.open_call_phase === "published").length;
-  const liveOffers = offerRows.filter(
-    (r) => r.talent_offer_state === "sent" || r.talent_offer_state === "countered",
-  ).length;
-  const newApplicants = appRows.filter((r) => r.job_application_state === "new").length;
+  const publishedPostings = postings.count ?? 0;
+  const publishedCalls = calls.count ?? 0;
+  const liveOffers = offers.count ?? 0;
+  const newApplicants = applications.count ?? 0;
 
   return (
     <>
@@ -57,7 +68,7 @@ export default async function Page() {
         subtitle={t(
           "console.marketplace.subtitle",
           undefined,
-          "Public surfaces — RFQs, crew gigs, talent calls, offers.",
+          "Public surfaces: RFQs, crew gigs, talent calls, offers.",
         )}
         action={
           <Button href="/studio/marketplace/settings" size="sm" variant="ghost">
@@ -161,7 +172,7 @@ export default async function Page() {
             blurb={t(
               "console.marketplace.tiles.reviews.blurb",
               undefined,
-              "Bidirectional reviews. Hidden until both sides post — no retaliation surface.",
+              "Bidirectional reviews. Hidden until both sides post, so there is no retaliation surface.",
             )}
           />
         </div>

@@ -82,6 +82,18 @@ export default async function DoorPage({
     holder: t("m.door.holder", undefined, "Holder"),
     seat: t("m.door.seat", undefined, "Seat"),
     gatePlaceholder: t("m.door.gate", undefined, "Main Gate"),
+    offlineError: t(
+      "m.door.offlineError",
+      undefined,
+      "No connection. This scan was NOT recorded. Ticket redeems need a live connection; retry when back online.",
+    ),
+    results: {
+      accepted: t("m.door.result.accepted", undefined, "Accepted"),
+      duplicate: t("m.door.result.duplicate", undefined, "Already redeemed"),
+      refunded: t("m.door.result.refunded", undefined, "Refunded"),
+      voided: t("m.door.result.voided", undefined, "Voided"),
+      not_found: t("m.door.result.notFound", undefined, "Not found"),
+    },
   };
 
   return (

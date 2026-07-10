@@ -26,7 +26,7 @@ export default async function Page() {
               placeholder="evacuation-stadium-a"
               required
             />
-            <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
+            <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.safety.playbooks.new.slugHint",
                 undefined,
@@ -53,7 +53,7 @@ export default async function Page() {
               placeholder={t(
                 "console.safety.playbooks.new.summaryPlaceholder",
                 undefined,
-                "One paragraph — when to invoke, who's accountable, what triggers it.",
+                "One paragraph: when to invoke, who's accountable, what triggers it.",
               )}
             />
           </div>

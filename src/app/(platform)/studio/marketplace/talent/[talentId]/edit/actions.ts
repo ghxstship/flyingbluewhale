@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { DEPOSIT_PCT_DEFAULT, clampDepositPct } from "@/lib/payment-terms";
 
 const Schema = z.object({
   talent_id: z.string().uuid(),
@@ -62,9 +63,7 @@ export async function updateTalentAction(_: State, fd: FormData): Promise<State>
       fee_max_cents: toCents(parsed.data.fee_max),
       currency: parsed.data.currency,
       travel_radius_km: parsed.data.travel_radius_km ? Math.round(Number(parsed.data.travel_radius_km)) : null,
-      deposit_pct: parsed.data.deposit_pct
-        ? Math.min(100, Math.max(0, Math.round(Number(parsed.data.deposit_pct))))
-        : 60,
+      deposit_pct: clampDepositPct(parsed.data.deposit_pct ? Number(parsed.data.deposit_pct) : null) ?? DEPOSIT_PCT_DEFAULT,
       agent_email: parsed.data.agent_email || null,
       agent_name: parsed.data.agent_name || null,
       video_reel_url: parsed.data.video_reel_url || null,

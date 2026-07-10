@@ -3,6 +3,7 @@ import webpush from "web-push";
 import { createServiceClient } from "../supabase/server";
 import type { Json, TablesInsert } from "../supabase/types";
 import { log } from "../log";
+import { sendNotificationEmailToUsers } from "../email";
 import { hasVapid, vapid } from "./vapid";
 
 /**
@@ -330,6 +331,74 @@ async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined):
   return excluded;
 }
 
+/** Human eyebrow for the email rendering of a push kind. */
+const KIND_EMAIL_LABEL: Record<PushKind, string> = {
+  announcement: "Announcement",
+  chat: "New Message",
+  kudos: "Recognition",
+  badge: "Badge Awarded",
+  assignment: "Assignment",
+  assignment_state: "Assignment Update",
+  assignment_scan: "Assignment Scan",
+  shift_swap: "Shift Swap",
+  time_off: "Time Off",
+  course: "Course",
+  incident: "Incident",
+};
+
+/**
+ * F-03 — the email channel of the per-kind delivery matrix. The
+ * `/m/notifications` matrix has always offered an Email column; this is
+ * the fan-out that makes it real. OPT-IN semantics: a user is emailed
+ * only when their `notification_preferences.matrix[kind].email` is
+ * explicitly true (the matrix UI renders email default-off, so a missing
+ * cell means "never opted in"). Kind-less system pings never email.
+ * Returns the opted-in subset.
+ */
+async function filterByEmailOptIn(userIds: string[], kind: PushKind | undefined): Promise<string[]> {
+  if (!kind || userIds.length === 0) return [];
+  try {
+    const supabase = createServiceClient();
+    const { data } = await supabase
+      .from("notification_preferences")
+      .select("user_id, matrix")
+      .in("user_id", userIds)
+      .returns<Array<{ user_id: string; matrix: Record<string, { email?: boolean }> | null }>>();
+    const optedIn: string[] = [];
+    for (const row of data ?? []) {
+      if (row.matrix?.[kind]?.email === true) optedIn.push(row.user_id);
+    }
+    return optedIn;
+  } catch (err) {
+    log.warn("push.email_optin_fetch_exception", { err: (err as Error).message });
+    return [];
+  }
+}
+
+/**
+ * Fire-and-forget email fan-out for a push payload — one kit-templated
+ * notification email per opted-in recipient. Never blocks or fails the
+ * push path.
+ */
+function fanOutEmail(userIds: string[], payload: PushPayload): void {
+  if (!payload.kind || userIds.length === 0) return;
+  const kind = payload.kind;
+  void filterByEmailOptIn(userIds, kind)
+    .then((optedIn) => {
+      if (optedIn.length === 0) return;
+      return sendNotificationEmailToUsers({
+        userIds: optedIn,
+        title: payload.title,
+        body: payload.body,
+        url: payload.url ?? null,
+        eyebrow: KIND_EMAIL_LABEL[kind],
+      });
+    })
+    .catch((err: unknown) => {
+      log.warn("push.email_fanout_failed", { kind, err: (err as Error).message });
+    });
+}
+
 export async function sendPushTo(
   userId: string,
   payload: PushPayload,
@@ -340,6 +409,9 @@ export async function sendPushTo(
   // the user has push delivery enabled for this kind. Bell on every
   // shell reads from here; push is the optional channel.
   if (opts?.recordBell !== false) await recordNotifications([userId], payload);
+  // F-03 email channel — independent of push availability (VAPID) and of
+  // the push pref gate below; gated on its own matrix column. Fire-and-forget.
+  fanOutEmail([userId], payload);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: if the user has toggled this kind off, short-circuit
   // (push channel only — the notifications row above is already written).
@@ -374,6 +446,9 @@ export async function sendPushBulk(
   // before the push-pref gate. Single batch insert; bell on every shell
   // reads from here regardless of push delivery state.
   if (opts?.recordBell !== false) await recordNotifications(userIds, payload);
+  // F-03 email channel — independent of push availability (VAPID) and of
+  // the push pref gate below; gated on its own matrix column. Fire-and-forget.
+  fanOutEmail(userIds, payload);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: drop users who've toggled this kind off before we hit
   // the push_subscriptions read (push channel only).

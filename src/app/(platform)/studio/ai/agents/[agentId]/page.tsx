@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { AgentControls } from "./AgentControls";
 import { deleteAgentAction } from "./actions";
 
@@ -30,7 +31,7 @@ type AgentRow = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -179,25 +180,25 @@ export default async function Page({ params }: { params: Promise<{ agentId: stri
 
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.ai.agents.detail.createdBy", undefined, "Created By")}
             </div>
             <div className="mt-1">{createdByLabel ?? "—"}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.ai.agents.detail.createdAt", undefined, "Created")}
             </div>
             <div className="mt-1 font-mono">{fmt(agent.created_at)}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.ai.agents.detail.maxTokens", undefined, "Max Tokens")}
             </div>
             <div className="mt-1 font-mono">{agent.max_tokens}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.ai.agents.detail.autoRefresh", undefined, "Auto Refresh")}
             </div>
             <div className="mt-1">

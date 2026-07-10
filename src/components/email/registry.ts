@@ -13,6 +13,9 @@ import {
   verifyEmail,
   inviteEmail,
   announcementEmail,
+  notificationEmail,
+  proposalShareEmail,
+  externalAssignmentEmail,
   type RenderedEmail,
 } from "./templates";
 
@@ -20,7 +23,10 @@ export type EmailTemplateId =
   | "welcome"
   | "verify"
   | "invite"
-  | "announcement";
+  | "announcement"
+  | "notification"
+  | "proposal_share"
+  | "external_assignment";
 
 export type EmailTemplateEntry = {
   /** Human-readable label for pickers / admin UIs. */
@@ -80,6 +86,69 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
       body: "Forty-three reports, computed from your real data. No setup, no spreadsheets — just open the hub and read your show.",
       ctaLabel: "See the reports",
       ctaUrl: urlFor("platform", "/reports"),
+    },
+  },
+  notification: {
+    label: "Notification",
+    description: "Per-kind activity email behind the notification matrix's Email column.",
+    render: (p) =>
+      notificationEmail({
+        eyebrow: p.eyebrow,
+        title: p.title ?? "",
+        body: p.body,
+        ctaLabel: p.ctaLabel,
+        ctaUrl: p.ctaUrl,
+        orgName: p.orgName,
+        prefsUrl: p.prefsUrl,
+      }),
+    sample: {
+      eyebrow: "Assignment",
+      title: "New credential assigned",
+      body: "All-areas access for MMW26 Hialeah, load-in through strike.",
+      ctaLabel: "Open in ATLVS",
+      ctaUrl: urlFor("mobile", "/advances"),
+      prefsUrl: urlFor("personal", "/me/notifications"),
+    },
+  },
+  proposal_share: {
+    label: "Proposal share",
+    description: "A producer sends a proposal link; optionally co-branded.",
+    render: (p) =>
+      proposalShareEmail({
+        proposalTitle: p.proposalTitle ?? "",
+        senderName: p.senderName ?? "The team",
+        url: p.url ?? "",
+        orgName: p.orgName,
+        logoUrl: p.logoUrl,
+        accent: p.accent,
+        onAccent: p.onAccent,
+      }),
+    sample: {
+      proposalTitle: "MMW26 Hialeah Production Services",
+      senderName: "Dana Cruz",
+      url: urlFor("marketing", "/proposals/sample-token"),
+      orgName: "Meridian Live",
+    },
+  },
+  external_assignment: {
+    label: "External assignment",
+    description: "State email to an off-platform holder, their only channel.",
+    render: (p) =>
+      externalAssignmentEmail({
+        holderName: p.holderName,
+        assignmentTitle: p.assignmentTitle ?? "",
+        kindLabel: p.kindLabel ?? "Ticket",
+        stateLabel: p.stateLabel ?? "Issued",
+        projectName: p.projectName,
+        orgName: p.orgName,
+      }),
+    sample: {
+      holderName: "Sam Ortiz",
+      assignmentTitle: "GA Weekend Pass",
+      kindLabel: "Ticket",
+      stateLabel: "Issued",
+      projectName: "MMW26 Hialeah",
+      orgName: "Meridian Live",
     },
   },
 };

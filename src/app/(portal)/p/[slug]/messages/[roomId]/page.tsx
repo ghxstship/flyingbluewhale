@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PortalRail } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { portalNav } from "@/lib/nav";
+import { portalNav, portalPersonaForSession } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -10,6 +10,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { postPortalMessage, markPortalRoomRead } from "./actions";
+import { ScrollToLatest } from "./ScrollToLatest";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +30,24 @@ type Msg = {
   created_at: string;
 };
 
-export default async function PortalRoomPage({ params }: { params: Promise<{ slug: string; roomId: string }> }) {
+const PAGE_SIZE = 100;
+
+export default async function PortalRoomPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string; roomId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return <div className="page-content">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const { slug, roomId } = await params;
+  const sp = await searchParams;
+  // "Load earlier" cursor — an ISO timestamp; we only show messages created
+  // strictly before it. Absent = the live newest page.
+  const beforeRaw = typeof sp.before === "string" ? sp.before : undefined;
+  const before = beforeRaw && !Number.isNaN(Date.parse(beforeRaw)) ? beforeRaw : undefined;
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -61,13 +75,20 @@ export default async function PortalRoomPage({ params }: { params: Promise<{ slu
     .maybeSingle();
   if (!member) notFound();
 
-  const { data: msgs } = await supabase
+  // C-09: fetch newest-first with a limit, then reverse for display — the
+  // old oldest-first + limit(200) query silently stopped rendering NEW
+  // messages once a thread passed 200 rows. `before` pages backwards.
+  let msgQuery = supabase
     .from("chat_messages")
     .select("id, author_id, body, created_at")
     .eq("room_id", roomId)
-    .order("created_at", { ascending: true })
-    .limit(200);
-  const messages = (msgs ?? []) as Msg[];
+    .order("created_at", { ascending: false })
+    .limit(PAGE_SIZE);
+  if (before) msgQuery = msgQuery.lt("created_at", before);
+  const { data: msgs } = await msgQuery;
+  const messages = ((msgs ?? []) as Msg[]).slice().reverse();
+  const hasEarlier = messages.length === PAGE_SIZE;
+  const oldest = messages[0]?.created_at;
 
   // Author names for the thread — the portal user sees who on the org side
   // is talking to them.
@@ -88,7 +109,7 @@ export default async function PortalRoomPage({ params }: { params: Promise<{ slu
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "vendor")} title={t("p.shared.portal", undefined, "Portal")} />
+      <PortalRail group={portalNav(slug, portalPersonaForSession(session.persona))} title={t("p.shared.portal", undefined, "Portal")} />
       <div className="flex-1">
         <div className="page-content">
           <Link href={`/p/${slug}/messages`} className="text-xs text-[var(--p-text-2)] hover:underline">
@@ -112,7 +133,25 @@ export default async function PortalRoomPage({ params }: { params: Promise<{ slu
             event="INSERT"
           />
 
-          <ul className="mt-5 space-y-2">
+          <div className="mt-5 flex items-center justify-between gap-2">
+            {hasEarlier && oldest ? (
+              <Link
+                href={`/p/${slug}/messages/${roomId}?before=${encodeURIComponent(oldest)}`}
+                className="ps-btn ps-btn--ghost ps-btn--sm"
+              >
+                {t("p.shared.messages.room.loadEarlier", undefined, "Load earlier messages")}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {before && (
+              <Link href={`/p/${slug}/messages/${roomId}`} className="ps-btn ps-btn--ghost ps-btn--sm">
+                {t("p.shared.messages.room.backToLatest", undefined, "Back to latest")}
+              </Link>
+            )}
+          </div>
+
+          <ul className="mt-3 space-y-2">
             {messages.length === 0 ? (
               <li>
                 <EmptyState
@@ -138,19 +177,20 @@ export default async function PortalRoomPage({ params }: { params: Promise<{ slu
                       }
                     >
                       {!mine && m.author_id && (
-                        <span className="mb-1 block text-[10px] font-semibold opacity-80">
+                        <span className="mb-1 block text-[11px] font-semibold opacity-80">
                           {authorMap.get(m.author_id) ??
                             t("p.shared.messages.accountManager", undefined, "Account Manager")}
                         </span>
                       )}
                       <p className="whitespace-pre-wrap">{m.body}</p>
-                      <span className="mt-1 block text-[10px] opacity-70">{fmt.time(m.created_at)}</span>
+                      <span className="mt-1 block text-[11px] opacity-70">{fmt.time(m.created_at)}</span>
                     </div>
                   </li>
                 );
               })
             )}
           </ul>
+          {!before && <ScrollToLatest />}
 
           <form
             action={postPortalMessage}
@@ -162,6 +202,7 @@ export default async function PortalRoomPage({ params }: { params: Promise<{ slu
               type="text"
               name="body"
               placeholder={t("p.shared.messages.room.messagePlaceholder", undefined, "Message")}
+              aria-label={t("p.shared.messages.room.composerAria", undefined, "Write a message")}
               required
               maxLength={4000}
               className="flex-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"

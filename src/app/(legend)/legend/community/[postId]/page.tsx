@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
-import { requireSession } from "@/lib/auth";
+import { MANAGER_BAND_ROLES, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -58,7 +58,9 @@ export default async function CommunityPostPage({ params }: { params: Promise<{ 
   const comments = (commentData ?? []) as Comment[];
   const memberMap = new Map(members.map((m) => [m.id, m]));
   // Team badge — the answerer holds a manager+ org role.
-  const staffIds = new Set(members.filter((m) => ["owner", "admin", "manager"].includes(m.role ?? "")).map((m) => m.id));
+  const staffIds = new Set(
+    members.filter((m) => (MANAGER_BAND_ROLES as readonly string[]).includes(m.role ?? "")).map((m) => m.id),
+  );
 
   const isQuestion = post.category === "questions";
   const isAuthor = post.author_id === session.userId;

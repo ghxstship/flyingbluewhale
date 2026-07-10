@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     <div className="text-sm font-medium">
                       {f.title ?? t("console.projects.files.untitled", undefined, "Untitled")}
                     </div>
-                    <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+                    <div className="font-mono text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                       {f.type}
                     </div>
                   </div>

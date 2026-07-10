@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
 import { Alert } from "@/components/ui/Alert";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
@@ -34,6 +35,13 @@ export async function GuideView({
   const { t } = await getRequestT();
   const sections = config.sections ?? [];
   const lastUpdated = updatedAt ? formatLastUpdated(updatedAt) : null;
+  // Semantic deep-link anchors (audit D-20): the first section of each type
+  // gets a stable `#guide-<type>` id so surfaces like /m/emergency can jump
+  // straight to Fire Safety / Evacuation instead of the guide top.
+  const firstOfType = new Map<string, number>();
+  sections.forEach((s, i) => {
+    if (!firstOfType.has(s.type)) firstOfType.set(s.type, i);
+  });
 
   return (
     <article className="space-y-10">
@@ -67,7 +75,7 @@ export async function GuideView({
           <a
             key={i}
             href={`#section-${i}`}
-            className="shrink-0 rounded-full px-3 py-1 font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
+            className="shrink-0 rounded-full px-3 py-1 font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
           >
             {(i + 1).toString().padStart(2, "0")} · {s.heading}
           </a>
@@ -75,7 +83,7 @@ export async function GuideView({
       </nav>
 
       {sections.map((s, i) => (
-        <SectionWrapper key={i} index={i} section={s} t={t} />
+        <SectionWrapper key={i} index={i} section={s} t={t} anchorId={firstOfType.get(s.type) === i ? `guide-${s.type}` : undefined} />
       ))}
 
       {comments && <div className="border-t border-[var(--p-border)] pt-6">{comments}</div>}
@@ -83,9 +91,21 @@ export async function GuideView({
   );
 }
 
-function SectionWrapper({ index, section, t }: { index: number; section: GuideSection; t: Translator }) {
+function SectionWrapper({
+  index,
+  section,
+  t,
+  anchorId,
+}: {
+  index: number;
+  section: GuideSection;
+  t: Translator;
+  /** Stable type-keyed anchor (`guide-<type>`) for the first section of each type. */
+  anchorId?: string;
+}) {
   return (
     <section id={`section-${index}`} className="space-y-4">
+      {anchorId && <span id={anchorId} aria-hidden="true" />}
       <div className="flex items-baseline gap-4">
         <span className="font-mono text-5xl font-light text-[var(--p-text-2)] opacity-30">
           {(index + 1).toString().padStart(2, "0")}
@@ -425,7 +445,7 @@ function SectionBody({ section, t }: { section: GuideSection; t: Translator }) {
 
 function formatLastUpdated(iso: string): string {
   try {
-    return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    return formatDateParts(new Date(iso), { month: "short", day: "numeric", year: "numeric" });
   } catch {
     return iso;
   }

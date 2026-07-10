@@ -154,14 +154,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                     <span className="font-mono text-base font-semibold">{callTime ? fmt.time(callTime) : "—"}</span>
                   </div>
                   {first && last && first !== last && (
-                    <div className="mt-1 flex items-baseline justify-between text-[10px]">
+                    <div className="mt-1 flex items-baseline justify-between text-[11px]">
                       <span className="text-[var(--p-text-2)]">
                         {t("console.workforce.callSheets.wrap", undefined, "Wrap")}
                       </span>
                       <span className="font-mono">{fmt.time(last.ends_at)}</span>
                     </div>
                   )}
-                  <div className="mt-2 font-mono text-[10px] text-[var(--p-text-2)]">
+                  <div className="mt-2 font-mono text-[11px] text-[var(--p-text-2)]">
                     {ms.length === 1
                       ? t("console.workforce.callSheets.shiftOne", { count: ms.length }, `${ms.length} shift`)
                       : t("console.workforce.callSheets.shiftMany", { count: ms.length }, `${ms.length} shifts`)}

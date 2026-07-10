@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 const FLEETS_TABLE_ID = "console:transport:fleets";
 
@@ -16,9 +16,9 @@ function getFleetLabels(
   t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
 ): Record<string, string> {
   return {
-    t1: t("console.transport.fleets.label.t1", undefined, "T1 — VIP"),
-    t2: t("console.transport.fleets.label.t2", undefined, "T2 — Athletes / officials"),
-    t3: t("console.transport.fleets.label.t3", undefined, "T3 — Workforce"),
+    t1: t("console.transport.fleets.label.t1", undefined, "T1 (VIP)"),
+    t2: t("console.transport.fleets.label.t2", undefined, "T2 (Athletes / officials)"),
+    t3: t("console.transport.fleets.label.t3", undefined, "T3 (Workforce)"),
     media: t("console.transport.fleets.label.media", undefined, "Media"),
     workforce: t("console.transport.fleets.label.workforce", undefined, "Workforce"),
     spectator: t("console.transport.fleets.label.spectator", undefined, "Spectator"),
@@ -45,6 +45,7 @@ type VehicleRow = {
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <>
@@ -148,7 +149,7 @@ export default async function Page() {
               key: "latest",
               header: t("console.transport.fleets.latestRun", undefined, "Latest run"),
               render: (r) =>
-                new Date(r.latestDepart).toLocaleString(undefined, {
+                fmt.dateParts(r.latestDepart, {
                   month: "short",
                   day: "numeric",
                   hour: "2-digit",

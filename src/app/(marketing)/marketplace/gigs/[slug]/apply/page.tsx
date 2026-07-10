@@ -10,6 +10,14 @@ import { formatFeeRange } from "@/lib/marketplace";
 import { getRequestT } from "@/lib/i18n/request";
 import { applyToGig } from "./actions";
 
+import type { Metadata } from "next";
+
+// E-23: user-specific form surface — explicit noindex.
+export const metadata: Metadata = {
+  title: "Gig Application",
+  robots: { index: false, follow: false },
+};
+
 export const dynamic = "force-dynamic";
 
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";

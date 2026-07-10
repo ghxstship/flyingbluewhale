@@ -8,8 +8,16 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { submitToCall } from "./actions";
+
+import type { Metadata } from "next";
+
+// E-23: user-specific form surface — explicit noindex.
+export const metadata: Metadata = {
+  title: "Open Call Submission",
+  robots: { index: false, follow: false },
+};
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +42,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const crumbs = [
     {
@@ -142,7 +151,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {c.deadline_at && (
             <Badge variant="warning">
               {t("marketing.pages.marketplace.calls.submit.hero.closesPrefix", undefined, "Closes")}{" "}
-              {new Date(c.deadline_at).toLocaleDateString()}
+              {fmt.date(new Date(c.deadline_at))}
             </Badge>
           )}
         </div>

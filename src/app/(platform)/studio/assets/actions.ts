@@ -84,7 +84,7 @@ async function transitionAsset(
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Asset state changed concurrently — refresh and retry" };
+    return { error: "Asset state changed concurrently. Refresh and retry" };
   }
 
   // Append the ledger row. Ledger failure surfaces (the transition already
@@ -145,7 +145,7 @@ export async function bulkDeleteAssets(ids: string[]): Promise<BulkResult> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .select("id");
-  if (error) return { error: `Could Not Delete — ${error.message}` };
+  if (error) return { error: `Could Not Delete: ${error.message}` };
 
   const deleted = updated?.length ?? 0;
   const skipped = parsed.data.length - deleted;

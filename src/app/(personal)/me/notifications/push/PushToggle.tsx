@@ -288,7 +288,7 @@ export function PushToggle({
                       `Last seen ${timeAgo(d.last_seen_at)} · added ${timeAgo(d.created_at)}`,
                     )}
                   </p>
-                  <p className="mt-1 truncate font-mono text-[10px] text-[var(--p-text-2)]">{d.endpoint}</p>
+                  <p className="mt-1 truncate font-mono text-[11px] text-[var(--p-text-2)]">{d.endpoint}</p>
                 </div>
                 <Button
                   variant="ghost"

@@ -49,7 +49,7 @@ export default async function Page() {
             <textarea name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.logistics.ratecard.new.fields.unitPrice", undefined, "Unit Price — USD")}
+            label={t("console.logistics.ratecard.new.fields.unitPrice", undefined, "Unit Price (USD)")}
             name="unit_price"
             type="number"
             required

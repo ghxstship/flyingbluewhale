@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Share2, Link2, Check } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/Sheet";
 import { Button } from "@/components/ui/Button";
 

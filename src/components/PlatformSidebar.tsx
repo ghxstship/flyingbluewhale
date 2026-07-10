@@ -8,6 +8,7 @@ import { Search, PanelLeftClose, PanelLeftOpen, Pin, PinOff, ChevronRight, Chevr
 import {
   NAV_LENSES,
   NAV_LENS_ORDER,
+  platformUtility,
   type NavCountKey,
   type NavGroup,
   type NavItem,
@@ -169,11 +170,14 @@ export function PlatformSidebar({
   }, [groups, lens, pathname]);
 
   // Filter groups by query — when sections are present, filter them
-  // section-by-section so empty sections drop out.
+  // section-by-section so empty sections drop out. Search also spans the
+  // platformUtility surfaces the rail doesn't carry (A-31), synthesized as
+  // a trailing "Utility" group, so "/" finds the same set ⌘K does.
   const filtered = React.useMemo<NavGroup[]>(() => {
     if (!query) return lensed;
     const q = query.toLowerCase();
-    return lensed
+    const railHrefs = new Set(groups.flatMap((g) => itemsOf(g)).map((i) => i.href));
+    const out = lensed
       .map((g) => {
         if (g.sections && g.sections.length > 0) {
           const sections = g.sections
@@ -184,7 +188,12 @@ export function PlatformSidebar({
         return { ...g, items: g.items.filter((i) => i.label.toLowerCase().includes(q)) };
       })
       .filter((g) => itemsOf(g).length > 0);
-  }, [lensed, query, itemsOf]);
+    const utilityMatches = platformUtility.filter(
+      (i) => i.label.toLowerCase().includes(q) && !railHrefs.has(i.href),
+    );
+    if (utilityMatches.length > 0) out.push({ label: "Utility", items: utilityMatches });
+    return out;
+  }, [lensed, groups, query, itemsOf]);
 
   // Pinned items as a synthesized group
   const pinnedItems: NavItem[] = React.useMemo(() => {
@@ -272,7 +281,7 @@ export function PlatformSidebar({
                   <Search size={12} aria-hidden="true" />
                   <span>{t("shell.sidebar.search", undefined, "Search")}</span>
                 </span>
-                <kbd className="font-mono text-[10px]">/</kbd>
+                <kbd className="font-mono text-[11px]">/</kbd>
               </button>
             )}
           </div>
@@ -284,7 +293,7 @@ export function PlatformSidebar({
           <div className="flex items-center gap-2 border-b border-[var(--p-border)] px-3 py-1.5">
             <label
               htmlFor="sidebar-role-lens"
-              className="font-mono text-[9px] tracking-[0.14em] text-[var(--p-text-3)] uppercase"
+              className="font-mono text-[11px] tracking-[0.14em] text-[var(--p-text-3)] uppercase"
             >
               {t("shell.sidebar.lens", undefined, "Lens")}
             </label>
@@ -406,7 +415,7 @@ export function PlatformSidebar({
                 <div className="truncate text-sm font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--p-text-1))]">
                   {BRAND.products.console.name}
                 </div>
-                <div className="truncate font-mono text-[8px] tracking-[0.1em] text-[var(--p-text-3,var(--p-text-2))] uppercase">
+                <div className="truncate font-mono text-[11px] tracking-[0.1em] text-[var(--p-text-3,var(--p-text-2))] uppercase">
                   {BRAND.products.console.subtitle}
                 </div>
               </div>
@@ -420,17 +429,34 @@ export function PlatformSidebar({
         )}
       </div>
 
-      {/* Resize handle */}
+      {/* Resize handle — pointer drag OR keyboard: focusable separator with
+          arrow-key width steps (WCAG 2.1.1, A-18). */}
       {!collapsed && (
         <div
           role="separator"
+          tabIndex={0}
           aria-orientation="vertical"
           aria-label={t("shell.sidebar.resize", undefined, "Resize sidebar")}
-          className="absolute inset-y-0 end-0 w-1 cursor-col-resize hover:bg-[var(--p-accent)]/30 active:bg-[var(--p-accent)]"
+          aria-valuemin={MIN_WIDTH}
+          aria-valuemax={MAX_WIDTH}
+          aria-valuenow={width}
+          className="absolute inset-y-0 end-0 w-1 cursor-col-resize hover:bg-[var(--p-accent)]/30 focus-visible:bg-[var(--p-accent)] focus-visible:outline-none active:bg-[var(--p-accent)]"
           onPointerDown={onResizeStart}
           onPointerMove={onResizeMove}
           onPointerUp={onResizeEnd}
           onPointerCancel={onResizeEnd}
+          onKeyDown={(e) => {
+            const step = 16;
+            let next: number | null = null;
+            if (e.key === "ArrowRight" || e.key === "ArrowUp") next = Math.min(MAX_WIDTH, width + step);
+            else if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = Math.max(MIN_WIDTH, width - step);
+            else if (e.key === "Home") next = MIN_WIDTH;
+            else if (e.key === "End") next = MAX_WIDTH;
+            if (next == null || next === width) return;
+            e.preventDefault();
+            setWidth(next);
+            void setPrefs({ sidebar_width: next });
+          }}
         />
       )}
     </aside>
@@ -543,7 +569,7 @@ function SidebarGroup({
             {sections.map((s) => (
               <div key={s.label}>
                 {!collapsed && (
-                  <div className="mt-1.5 mb-0.5 px-2 text-[10px] font-medium tracking-[0.14em] text-[var(--p-text-2)]/70 uppercase">
+                  <div className="mt-1.5 mb-0.5 px-2 text-[11px] font-medium tracking-[0.14em] text-[var(--p-text-2)]/70 uppercase">
                     {t(navGroupKey(s), undefined, s.label)}
                   </div>
                 )}
@@ -615,7 +641,7 @@ function SidebarItems({
             // v7.8 nav-hover subtitle — teaches the noun without a click.
             title={item.sub ? `${itemLabel} · ${item.sub}` : undefined}
             className={`flex items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
-              collapsed ? "" : "pe-7"
+              collapsed ? "" : "pe-8"
             } ${
               active
                 ? "bg-[var(--p-surface)] font-medium text-[var(--p-text-1)]"
@@ -650,9 +676,11 @@ function SidebarItems({
                 <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
               ) : null}
               {!collapsed && <span className="truncate">{itemLabel}</span>}
+              {/* Count pill stays visible on hover (A-30) — the link's pe-8
+                  reserves the pin-toggle slot, so no overlap to hide from. */}
               {!collapsed && count > 0 && (
                 <span
-                  className="ms-auto shrink-0 rounded-full bg-[var(--p-accent)] px-1.5 py-0.5 text-[10px] leading-none font-semibold text-[var(--p-accent-contrast,white)] tabular-nums group-hover:opacity-0"
+                  className="ms-auto shrink-0 rounded-full bg-[var(--p-accent)] px-1.5 py-0.5 text-[11px] leading-none font-semibold text-[var(--p-accent-contrast,white)] tabular-nums"
                   aria-label={`${badgeText} ${itemLabel}`}
                 >
                   {badgeText}
@@ -683,7 +711,8 @@ function SidebarItems({
                     ? t("nav.unpin", { name: itemLabel }, `Unpin ${itemLabel}`)
                     : t("nav.pin", { name: itemLabel }, `Pin ${itemLabel}`)
                 }
-                className={`absolute end-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+                // h-6/w-6 = 24px hit area — WCAG 2.2 §2.5.8 minimum (A-19).
+                className={`absolute end-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
                   isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }`}
               >

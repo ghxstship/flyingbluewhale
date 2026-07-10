@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
@@ -38,7 +38,7 @@ export function DoorScanner({ listId }: { listId: string }) {
         {last && (
           <Badge variant={GUEST_SCAN_RESULT_TONE[last.result]}>
             {GUEST_SCAN_RESULT_LABELS[last.result]}
-            {last.guestName ? ` — ${last.guestName}` : ""}
+            {last.guestName ? ` · ${last.guestName}` : ""}
           </Badge>
         )}
       </div>

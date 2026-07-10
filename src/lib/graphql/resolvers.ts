@@ -1,5 +1,6 @@
 import "server-only";
 
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, SOFT_DELETABLE_TABLES } from "@/lib/db/resource";
 import type { GqlContext } from "./context";
 
 /**
@@ -7,6 +8,9 @@ import type { GqlContext } from "./context";
  *
  * Org-scoped reads. Every resolver applies .eq("org_id", session.orgId)
  * to defend against schema drift; RLS at the DB layer is the second guard.
+ * Soft-delete + pagination follow the canonical org-scoped read contract
+ * in `@/lib/db/resource` (SOFT_DELETABLE_TABLES, DEFAULT/MAX_PAGE_SIZE)
+ * so GraphQL can't drift from what REST/console return.
  *
  * Field naming converts snake_case (Postgres) to camelCase (GraphQL).
  */
@@ -14,7 +18,7 @@ import type { GqlContext } from "./context";
 type Page = { limit?: number | null; offset?: number | null } | null | undefined;
 
 function paginate<T extends { range: (from: number, to: number) => T }>(qb: T, page: Page): T {
-  const limit = Math.min(Math.max(page?.limit ?? 50, 1), 200);
+  const limit = Math.min(Math.max(page?.limit ?? DEFAULT_PAGE_SIZE, 1), MAX_PAGE_SIZE);
   const offset = Math.max(page?.offset ?? 0, 0);
   return qb.range(offset, offset + limit - 1);
 }
@@ -33,12 +37,11 @@ function camelAll<T extends Record<string, unknown>>(rows: T[] | null | undefine
 }
 
 async function fetchOne(ctx: GqlContext, table: string, id: string, cols: string) {
-  const { data } = await ctx.supabase
-    .from(table)
-    .select(cols)
-    .eq("id", id)
-    .eq("org_id", ctx.session.orgId)
-    .maybeSingle();
+  let qb = ctx.supabase.from(table).select(cols).eq("id", id).eq("org_id", ctx.session.orgId);
+  // Same soft-delete contract as getOrgScoped — soft-deleted rows are
+  // invisible to reads (e.g. site_plans carries deleted_at).
+  if (SOFT_DELETABLE_TABLES.has(table)) qb = qb.is("deleted_at", null);
+  const { data } = await qb.maybeSingle();
   return data ? camel(data as Record<string, unknown>) : null;
 }
 
@@ -48,6 +51,8 @@ async function fetchMany(ctx: GqlContext, table: string, cols: string, projectId
     .select(cols)
     .eq("org_id", ctx.session.orgId)
     .order("created_at", { ascending: false });
+  // Same soft-delete contract as listOrgScoped/listOrgScopedPage.
+  if (SOFT_DELETABLE_TABLES.has(table)) qb = qb.is("deleted_at", null);
   if (projectId) qb = qb.eq("project_id", projectId);
   qb = paginate(qb, page);
   const { data } = await qb;

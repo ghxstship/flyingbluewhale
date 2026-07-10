@@ -165,7 +165,7 @@ export default async function Page() {
                           {asset.display_name}
                         </Link>
                       </div>
-                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                      <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                         {asset.asset_tag ?? "—"} {asset.asset_kind ? `· ${asset.asset_kind}` : ""}
                       </div>
                     </td>

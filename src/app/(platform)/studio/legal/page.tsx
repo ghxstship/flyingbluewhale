@@ -31,7 +31,7 @@ const SECTIONS: Section[] = [
     titleKey: "console.legal.sections.dsar.title",
     titleFallback: "DSAR Requests",
     bodyKey: "console.legal.sections.dsar.body",
-    bodyFallback: "Data subject access requests — intake, fulfillment, audit trail.",
+    bodyFallback: "Data subject access requests: intake, fulfillment, audit trail.",
   },
   {
     href: "/studio/legal/privacy/consent",

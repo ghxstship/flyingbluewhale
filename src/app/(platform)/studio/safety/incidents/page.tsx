@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { SEVERITY_TONE, toneFor } from "@/lib/tones";
 
@@ -23,7 +24,7 @@ type IncidentRow = {
 };
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -53,11 +54,22 @@ export default async function Page() {
 
   const fmtIntl = await getRequestFormatters();
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ data: incidents }, { count: medCount }, { count: cyberCount }] = await Promise.all([
+  // Metric tiles are exact server-side aggregates on real columns
+  // (incident_state / severity) — never derived from the capped row fetch,
+  // and never string-matched from free text (the old "cyber" tile counted
+  // ilike '%cyber%' over summaries, a pseudo-taxonomy).
+  const [
+    { data: incidents },
+    { count: medCount },
+    { count: totalCount },
+    { count: openCount },
+    { count: criticalCount },
+  ] = await Promise.all([
     supabase
       .from("incidents")
       .select("id, occurred_at, location, summary, severity, incident_state")
       .eq("org_id", session.orgId)
+      .is("deleted_at", null)
       .gte("occurred_at", since)
       .order("occurred_at", { ascending: false })
       .limit(200),
@@ -70,20 +82,34 @@ export default async function Page() {
       .from("incidents")
       .select("*", { count: "exact", head: true })
       .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .gte("occurred_at", since),
+    supabase
+      .from("incidents")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
       .gte("occurred_at", since)
-      .ilike("summary", "%cyber%"),
+      .not("incident_state", "in", "(resolved,closed)"),
+    supabase
+      .from("incidents")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .gte("occurred_at", since)
+      .eq("severity", "critical"),
   ]);
 
   const rows = (incidents ?? []) as IncidentRow[];
-  const open = rows.filter((r) => !["resolved", "closed"].includes(r.incident_state)).length;
-  const critical = rows.filter((r) => r.severity === "critical").length;
-  const totalThirtyDay = rows.length;
+  const open = openCount ?? 0;
+  const critical = criticalCount ?? 0;
+  const totalThirtyDay = totalCount ?? 0;
 
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.safety.incidents.eyebrow", undefined, "Safety")}
-        title={t("console.safety.incidents.unifiedTitle", undefined, "Incidents — Unified")}
+        title={t("console.safety.incidents.unifiedTitle", undefined, "Incidents")}
         subtitle={t("console.safety.incidents.subtitle", undefined, "Cross-domain incident feed.")}
         action={
           <Button href="/studio/operations/incidents/new" size="sm">
@@ -134,9 +160,9 @@ export default async function Page() {
                 </div>
                 <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
-                    "console.safety.incidents.cyberIr.subtitle",
-                    { count: cyberCount ?? 0 },
-                    `${cyberCount ?? 0} incidents flagged cyber`,
+                    "console.safety.incidents.cyberIr.staticSubtitle",
+                    undefined,
+                    "Security incident response workspace",
                   )}
                 </div>
               </Link>
@@ -160,12 +186,13 @@ export default async function Page() {
 
         <DataTable<IncidentRow>
           rows={rows}
+          totalCount={totalThirtyDay}
           rowHref={(r) => `/studio/operations/incidents/${r.id}`}
           emptyLabel={t("console.safety.incidents.empty", undefined, "No Incidents in the Last 30 Days")}
           emptyDescription={t(
             "console.safety.incidents.emptyDescription",
             undefined,
-            "This is your unified feed of safety, operations, cyber, and medical incidents — file one to start the record.",
+            "This is your unified feed of safety, operations, cyber, and medical incidents. File one to start the record.",
           )}
           emptyAction={
             <Button href="/studio/operations/incidents/new" size="sm">

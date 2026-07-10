@@ -31,7 +31,7 @@ export default async function Page() {
         subtitle={t(
           "console.finance.forecasts.new.subtitle",
           undefined,
-          "A forecast snapshot — per-cost-code committed + incurred + forecast-to-complete rollup with variance.",
+          "A forecast snapshot. Per-cost-code committed + incurred + forecast-to-complete rollup with variance.",
         )}
       />
       <div className="page-content max-w-2xl">

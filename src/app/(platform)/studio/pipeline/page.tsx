@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
@@ -9,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { PipelineKanban, type PipelineCard, type PipelineLane } from "./PipelineKanban";
 
 export const dynamic = "force-dynamic";
 
@@ -42,7 +42,7 @@ type OpportunityRow = {
   account: { party: { display_name: string } | null } | null;
 };
 
-function stageTone(stage: StageRow): "muted" | "info" | "success" | "error" {
+function stageTone(stage: StageRow): PipelineLane["tone"] {
   if (stage.is_won) return "success";
   if (stage.is_terminal) return "error";
   return "info";
@@ -135,12 +135,23 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
     .filter((o) => wonStageIds.has(o.current_stage_id))
     .reduce((sum, o) => sum + (o.estimated_value_minor ?? 0), 0);
 
-  const byStage = new Map<string, OpportunityRow[]>();
-  for (const stage of stages) byStage.set(stage.id, []);
-  for (const opp of opportunities) {
-    const lane = byStage.get(opp.current_stage_id);
-    if (lane) lane.push(opp);
-  }
+  // Display-ready cards for the client kanban island (audit A-23) — money,
+  // relative time, and account names are formatted server-side so the
+  // client never re-derives locale or currency.
+  const stageIds = new Set(stages.map((s) => s.id));
+  const lanes: PipelineLane[] = stages.map((s) => ({ id: s.id, title: s.name, tone: stageTone(s) }));
+  const cards: PipelineCard[] = opportunities
+    .filter((o) => stageIds.has(o.current_stage_id))
+    .map((o) => ({
+      id: o.id,
+      title: o.title,
+      stageId: o.current_stage_id,
+      valueText: formatMoney(o.estimated_value_minor, o.estimated_value_currency ?? undefined),
+      probability: o.probability,
+      account: o.account?.party?.display_name ?? null,
+      closeDate: o.expected_close,
+      updatedText: t("console.pipeline.opp.updated", { time: timeAgo(o.updated_at) }, `· updated ${timeAgo(o.updated_at)}`),
+    }));
 
   return (
     <>
@@ -183,7 +194,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
             accent
           />
           <MetricCard
-            label={t("console.pipeline.metrics.wonOpen", undefined, "Won — Open")}
+            label={t("console.pipeline.metrics.wonOpen", undefined, "Won (Open)")}
             value={formatMoney(wonValue)}
           />
         </div>
@@ -198,77 +209,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
             )}
           />
         ) : (
-          <div className="space-y-4">
-            {stages.map((stage) => {
-              const lane = byStage.get(stage.id) ?? [];
-              const laneValue = lane.reduce((sum, o) => sum + (o.estimated_value_minor ?? 0), 0);
-              return (
-                <section key={stage.id} className="surface p-4">
-                  <header className="flex items-center justify-between border-b border-[var(--p-border)] pb-2">
-                    <div className="flex items-center gap-2">
-                      <Badge variant={stageTone(stage)}>{stage.name}</Badge>
-                      <span className="font-mono text-[11px] text-[var(--p-text-2)]">
-                        {t(
-                          lane.length === 1 ? "console.pipeline.lane.deals.one" : "console.pipeline.lane.deals.other",
-                          { count: lane.length },
-                          `${lane.length} deal${lane.length === 1 ? "" : "s"}`,
-                        )}
-                      </span>
-                    </div>
-                    <span className="font-mono text-xs">{formatMoney(laneValue)}</span>
-                  </header>
-                  {lane.length === 0 ? (
-                    <p className="py-4 text-center text-xs text-[var(--p-text-2)]">
-                      {t("console.pipeline.lane.empty", undefined, "No deals in this stage.")}
-                    </p>
-                  ) : (
-                    <ul className="mt-2 divide-y divide-[var(--p-border)]">
-                      {lane.map((o) => (
-                        <li key={o.id}>
-                          <Link
-                            href={`/studio/pipeline/${o.id}`}
-                            className="hover-lift -mx-2 flex items-start justify-between gap-3 rounded px-2 py-3"
-                          >
-                            <div className="min-w-0 flex-1">
-                              <div className="truncate text-sm font-medium">{o.title}</div>
-                              <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10px] text-[var(--p-text-2)]">
-                                {o.account?.party?.display_name && <span>{o.account.party.display_name}</span>}
-                                {o.expected_close && (
-                                  <span>
-                                    {t(
-                                      "console.pipeline.opp.close",
-                                      { date: o.expected_close },
-                                      `· close ${o.expected_close}`,
-                                    )}
-                                  </span>
-                                )}
-                                {o.source && <span>· {o.source}</span>}
-                                <span>
-                                  {t(
-                                    "console.pipeline.opp.updated",
-                                    { time: timeAgo(o.updated_at) },
-                                    `· updated ${timeAgo(o.updated_at)}`,
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="font-mono text-sm">
-                                {formatMoney(o.estimated_value_minor, o.estimated_value_currency ?? undefined)}
-                              </div>
-                              {o.probability != null && (
-                                <div className="font-mono text-[10px] text-[var(--p-text-2)]">{o.probability}%</div>
-                              )}
-                            </div>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </section>
-              );
-            })}
-          </div>
+          <PipelineKanban cards={cards} lanes={lanes} />
         )}
       </div>
     </>

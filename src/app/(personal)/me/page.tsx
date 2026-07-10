@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
+import { toTitle } from "@/lib/format";
 import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
@@ -38,8 +39,16 @@ export default async function MePage() {
   // an inexpensive single-org query — RLS limits to the session's user_id /
   // talent_profile recipients automatically.
   const supabase = await createClient();
-  const [appsResp, talentResp, offersResp, slotsResp] = await Promise.all([
-    supabase.from("job_applications").select("id, job_application_state").eq("applicant_user_id", session.userId),
+  // Head-only exact counts (P2 unbounded-select remediation): these tiles
+  // only need cardinalities, so no row payload crosses the wire and the
+  // counts stay exact at any scale (the old shape selected every row).
+  const [userResp, appsResp, talentResp, offersResp, slotsResp] = await Promise.all([
+    supabase.from("users").select("name").eq("id", session.userId).maybeSingle(),
+    supabase
+      .from("job_applications")
+      .select("id", { count: "exact", head: true })
+      .eq("applicant_user_id", session.userId)
+      .neq("job_application_state", "withdrawn"),
     supabase
       .from("talent_profiles")
       .select("id, is_public")
@@ -48,17 +57,23 @@ export default async function MePage() {
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .limit(1),
-    supabase.from("open_call_submissions").select("id, submission_state").eq("submitter_user_id", session.userId),
-    supabase.from("availability_slots").select("id, kind").eq("user_id", session.userId),
+    supabase
+      .from("open_call_submissions")
+      .select("id", { count: "exact", head: true })
+      .eq("submitter_user_id", session.userId)
+      .neq("submission_state", "withdrawn"),
+    supabase
+      .from("availability_slots")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", session.userId),
   ]);
-  const appCount = ((appsResp.data ?? []) as Array<{ job_application_state: string }>).filter(
-    (r) => r.job_application_state !== "withdrawn",
-  ).length;
-  const submissionCount = ((offersResp.data ?? []) as Array<{ submission_state: string }>).filter(
-    (r) => r.submission_state !== "withdrawn",
-  ).length;
-  const slotCount = (slotsResp.data ?? []).length;
+  const appCount = appsResp.count ?? 0;
+  const submissionCount = offersResp.count ?? 0;
+  const slotCount = slotsResp.count ?? 0;
   const talent = ((talentResp.data ?? []) as Array<{ is_public: boolean }>)[0] ?? null;
+  // C-26: lead with the person's name; the email is a sub-line. Only fall
+  // back to the raw email when no display name has been set yet.
+  const displayName = (userResp.data as { name: string | null } | null)?.name?.trim() || null;
 
   return (
     <div>
@@ -67,7 +82,10 @@ export default async function MePage() {
           <div className="text-label text-[var(--p-text-3)]">
             {t("me.dashboard.eyebrow", undefined, "My dashboard")}
           </div>
-          <h1 className="mt-1 truncate text-xl font-semibold">{session.email}</h1>
+          <h1 className="mt-1 truncate text-xl font-semibold">{displayName ?? session.email}</h1>
+          {displayName && (
+            <p className="mt-0.5 truncate font-mono text-xs text-[var(--p-text-2)]">{session.email}</p>
+          )}
         </div>
         <form action="/auth/signout" method="post">
           <button className="ps-btn ps-btn--ghost text-xs" type="submit">
@@ -82,7 +100,7 @@ export default async function MePage() {
             {t("me.dashboard.role", undefined, "Role")}
           </div>
           <div className="mt-2">
-            <Badge variant="info">{session.role}</Badge>
+            <Badge variant="info">{toTitle(session.role)}</Badge>
           </div>
         </div>
         <div className="card-elevated p-4">
@@ -90,7 +108,7 @@ export default async function MePage() {
             {t("me.dashboard.tier", undefined, "Tier")}
           </div>
           <div className="mt-2">
-            <Badge variant="cyan">{session.tier}</Badge>
+            <Badge variant="cyan">{toTitle(session.tier)}</Badge>
           </div>
         </div>
         <div className="card-elevated p-4">
@@ -114,7 +132,7 @@ export default async function MePage() {
                 {t("me.dashboard.consoleBlurb", undefined, "Projects, finance, procurement, production, people, AI.")}
               </p>
             </div>
-            <Badge variant="info">{session.role}</Badge>
+            <Badge variant="info">{toTitle(session.role)}</Badge>
           </Link>
         </div>
       )}
@@ -161,7 +179,7 @@ export default async function MePage() {
         <MeCard
           href="/me/reviews"
           label={t("me.cards.reviews.label", undefined, "My Reviews")}
-          blurb={t("me.cards.reviews.blurb", undefined, "Bidirectional reviews — released after counterpart posts.")}
+          blurb={t("me.cards.reviews.blurbPlain", undefined, "Reviews go live once both sides have posted.")}
         />
       </div>
 

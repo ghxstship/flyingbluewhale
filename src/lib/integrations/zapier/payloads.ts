@@ -169,7 +169,7 @@ export function toZapierAssignmentScan(row: AssignmentScanRow): ZapierAssignment
     result: row.result ?? "unknown",
     scanned_at: row.at,
     location: parseLocation(row.location),
-    url: urlFor("platform", `/studio/settings/catalog`),
+    url: urlFor("platform", `/settings/catalog`),
   };
 }
 
@@ -359,7 +359,7 @@ export const ZAPIER_SAMPLES = {
     result: "accepted",
     scanned_at: "2026-03-21T19:04:11.000Z",
     location: { lat: 25.8576, lng: -80.2781 },
-    url: "https://app.atlvs.pro/studio/settings/catalog",
+    url: "https://app.atlvs.pro/settings/catalog",
   } satisfies ZapierAssignmentScan,
   deliverable: {
     id: "00000000-0000-0000-0000-000000000005",

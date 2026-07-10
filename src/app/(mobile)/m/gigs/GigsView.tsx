@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { KIcon } from "@/components/mobile/kit";
+import { useActionState, useMemo, useState } from "react";
+import { ActionBar, KIcon, TogRow } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { applyToJob, type State } from "./actions";
 
@@ -48,23 +48,56 @@ function ApplyButton({ gig }: { gig: Gig }) {
 export function GigsView({ gigs }: { gigs: Gig[] }) {
   const t = useT();
   const [q, setQ] = useState("");
-  const items = gigs.filter(
-    (g) => !q || (g.role + " " + g.org + " " + g.tags.join(" ")).toLowerCase().includes(q.toLowerCase()),
-  );
+  const [sort, setSort] = useState("recent");
+  const [types, setTypes] = useState<Set<string>>(new Set());
+  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+
+  const typeList = useMemo(() => Array.from(new Set(gigs.map((g) => g.employmentType))).sort(), [gigs]);
+  const toggleType = (ty: string) =>
+    setTypes((s) => {
+      const n = new Set(s);
+      if (n.has(ty)) n.delete(ty);
+      else n.add(ty);
+      return n;
+    });
+
+  const items = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    const filtered = gigs.filter(
+      (g) =>
+        (!needle || (g.role + " " + g.org + " " + g.tags.join(" ")).toLowerCase().includes(needle)) &&
+        (types.size === 0 || types.has(g.employmentType)),
+    );
+    if (sort === "role") return filtered.slice().sort((a, b) => a.role.localeCompare(b.role));
+    if (sort === "applicants") return filtered.slice().sort((a, b) => b.applicants - a.applicants);
+    return filtered;
+  }, [gigs, q, sort, types]);
 
   return (
     <>
-      <div className="actionbar" style={{ marginBottom: 12 }}>
-        <div className="searchbar">
-          <KIcon name="Search" size={16} />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t("m.gigs.search", undefined, "Search jobs…")}
-            aria-label={t("m.gigs.search", undefined, "Search jobs…")}
-          />
-        </div>
-      </div>
+      <ActionBar
+        k="gigs"
+        query={q}
+        setQuery={setQ}
+        placeholder={t("m.gigs.search", undefined, "Search jobs…")}
+        sort={sort}
+        setSort={setSort}
+        sortOpts={[
+          ["recent", t("m.gigs.sort.recent", undefined, "Recent")],
+          ["role", t("m.gigs.sort.role", undefined, "Role")],
+          ["applicants", t("m.gigs.sort.applicants", undefined, "Applicants")],
+        ]}
+        filterActive={types.size}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        filterChildren={
+          <div>
+            {typeList.map((ty) => (
+              <TogRow key={ty} label={ty} on={types.has(ty)} set={() => toggleType(ty)} />
+            ))}
+          </div>
+        }
+      />
 
       <div className="composer-cta" style={{ marginBottom: 12 }} role="button" tabIndex={0}>
         <span className="more-ic">

@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <div>
                     <div className="text-sm font-medium">{b.name}</div>
                     {b.category && (
-                      <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{b.category}</div>
+                      <div className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{b.category}</div>
                     )}
                   </div>
                   <div className="text-right text-xs">

@@ -69,7 +69,7 @@ export default async function JobTemplatesPage() {
                   <span className="font-semibold">{r.name}</span>
                   {r.trade && <Badge variant="muted">{r.trade}</Badge>}
                 </div>
-                <div className="mt-0.5 font-mono text-[10px] text-[var(--p-text-3)]">
+                <div className="mt-0.5 font-mono text-[11px] text-[var(--p-text-3)]">
                   {r.last_used_at
                     ? t(
                         "console.settings.jobTemplates.lastUsed",

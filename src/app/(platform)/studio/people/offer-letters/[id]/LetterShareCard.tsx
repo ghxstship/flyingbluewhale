@@ -52,7 +52,7 @@ export function LetterShareCard({
         </div>
         <Badge variant={status === "draft" ? "muted" : "info"}>
           {status === "draft"
-            ? t("console.people.offerLetters.share.statusDraft", undefined, "Draft — not yet sent")
+            ? t("console.people.offerLetters.share.statusDraft", undefined, "Draft (not yet sent)")
             : t("console.people.offerLetters.share.statusActive", undefined, "Public link active")}
         </Badge>
       </div>

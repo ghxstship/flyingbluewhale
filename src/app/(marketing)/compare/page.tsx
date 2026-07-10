@@ -6,10 +6,10 @@ import type { Metadata } from "next";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
-import { getRequestT } from "@/lib/i18n/request";
+import { getStaticEnT } from "../_lib/static-t";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getRequestT();
+  const { t } = await getStaticEnT();
   return buildMetadata({
     title: t("marketing.pages.compare.meta.title"),
     description: t("marketing.pages.compare.meta.description"),
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ComparePage() {
-  const { t } = await getRequestT();
+  const { t } = await getStaticEnT();
   return (
     <div>
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-12">

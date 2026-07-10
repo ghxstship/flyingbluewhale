@@ -61,8 +61,10 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{p.subhero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={`${CANONICAL_CTAS.primary.href}?from=demo-${p.slug}`}>{CANONICAL_CTAS.primary.label}</Button>
-          <Button href={`${CANONICAL_CTAS.secondary.href}?from=demo-${p.slug}`} variant="secondary">
-            {CANONICAL_CTAS.secondary.label}
+          {/* E-18: no circular loop — this lands on the live contact form with a
+              walkthrough preset carrying the persona context. */}
+          <Button href={`/contact?topic=walkthrough&persona=${encodeURIComponent(p.slug)}#form`} variant="secondary">
+            {t("marketing.pages.demo-persona.hero.walkthroughCta", undefined, "Request a walkthrough")}
           </Button>
         </div>
       </section>

@@ -5,6 +5,7 @@ import { SceneDetailTabs } from "@/components/gvteway/SceneDetailTabs";
 import { Avatar } from "@/components/ui/Avatar";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestFormatters } from "@/lib/i18n/request";
 import { getSceneBySlug, listScenePosts, listSceneMembers, getSceneEvents } from "@/lib/gvteway";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +30,7 @@ export default async function SceneDetailPage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   if (!hasSupabase) notFound();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const scene = await getSceneBySlug(supabase, slug);
   if (!scene) notFound();
@@ -85,7 +87,7 @@ export default async function SceneDetailPage({ params }: { params: Promise<{ sl
                 <span className="block truncate text-sm font-semibold text-[var(--p-text-1)]">{e.name}</span>
                 {e.startDate && (
                   <span className="block font-mono text-[11px] text-[var(--p-text-3)]">
-                    {new Date(e.startDate).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}
+                    {fmt.dateParts(new Date(e.startDate), { month: "short", day: "numeric", year: "numeric" })}
                   </span>
                 )}
               </span>

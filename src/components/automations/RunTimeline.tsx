@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { formatTime } from "@/lib/i18n/format";
 
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
@@ -67,11 +68,7 @@ export type RunTimelineProps = {
 
 function fmtTime(iso?: string): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  return formatTime(new Date(iso), { seconds: true });
 }
 
 function fmtLatency(ms?: number): string {
@@ -99,7 +96,7 @@ function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: 
 
   if (isEmpty) {
     return (
-      <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
+      <div className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
         {t("components.runTimeline.empty", { label }, "{label}: empty")}
       </div>
     );
@@ -109,7 +106,7 @@ function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: 
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase hover:text-[var(--p-text-1)]"
+        className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase hover:text-[var(--p-text-1)]"
       >
         {open ? "▾" : "▸"} {label}
       </button>
@@ -148,7 +145,7 @@ export function RunTimeline({ steps }: RunTimelineProps) {
                 {s.actionType || t("components.runTimeline.unknownAction", undefined, "Unknown")}
               </span>
               <Badge variant={STATUS_TONE[s.status]}>{statusLabel(s.status, t)}</Badge>
-              <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">
+              <span className="ms-auto font-mono text-[11px] text-[var(--p-text-2)]">
                 {fmtTime(s.startedAt)} · {fmtLatency(s.latencyMs)}
               </span>
             </div>

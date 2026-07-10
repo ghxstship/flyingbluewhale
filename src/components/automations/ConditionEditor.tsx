@@ -208,7 +208,7 @@ function RuleRow({ rule, onChange }: { rule: ConditionRule; onChange: (patch: Pa
   return (
     <div className="flex flex-1 flex-wrap items-end gap-2">
       <div className="flex min-w-[10rem] flex-1 flex-col gap-1">
-        <label htmlFor={fieldId} className="text-[10px] font-medium text-[var(--p-text-2)]">
+        <label htmlFor={fieldId} className="text-[11px] font-medium text-[var(--p-text-2)]">
           Field
         </label>
         <Input
@@ -221,7 +221,7 @@ function RuleRow({ rule, onChange }: { rule: ConditionRule; onChange: (patch: Pa
       </div>
 
       <div className="flex min-w-[9rem] flex-col gap-1">
-        <label htmlFor={opId} className="text-[10px] font-medium text-[var(--p-text-2)]">
+        <label htmlFor={opId} className="text-[11px] font-medium text-[var(--p-text-2)]">
           Operator
         </label>
         <select
@@ -241,7 +241,7 @@ function RuleRow({ rule, onChange }: { rule: ConditionRule; onChange: (patch: Pa
 
       {!nullary && (
         <div className="flex min-w-[10rem] flex-1 flex-col gap-1">
-          <label htmlFor={valueId} className="text-[10px] font-medium text-[var(--p-text-2)]">
+          <label htmlFor={valueId} className="text-[11px] font-medium text-[var(--p-text-2)]">
             {list ? "Value (comma-separated)" : "Value"}
           </label>
           <Input

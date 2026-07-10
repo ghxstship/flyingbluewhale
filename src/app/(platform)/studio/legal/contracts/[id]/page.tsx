@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDate } from "@/lib/i18n/format";
 import {
   contractBillingLabel,
   contractKindLabel,
@@ -29,7 +30,7 @@ import { addMilestone, addObligation, addParty, addTerm, addVersion, recordSigna
 export const dynamic = "force-dynamic";
 
 function fmtDate(s: string | null): string {
-  return s ? new Date(s).toLocaleDateString("en-US") : "—";
+  return s ? formatDate(new Date(s)) : "—";
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -166,7 +167,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Input label={t("console.legal.contracts.detail.col.label", undefined, "Label")} name="label" required maxLength={200} />
             <Input label={t("console.legal.contracts.detail.col.trigger", undefined, "Trigger kind")} name="trigger_kind" required maxLength={80} placeholder="on_signature" />
             <Input label={t("console.legal.contracts.detail.col.due", undefined, "Due")} name="due_at" type="date" />
-            <Input label={t("console.legal.contracts.detail.col.paymentUsd", undefined, "Payment — USD")} name="payment_usd" type="number" step="0.01" min="0" />
+            <Input label={t("console.legal.contracts.detail.col.paymentUsd", undefined, "Payment (USD)")} name="payment_usd" type="number" step="0.01" min="0" />
           </FormShell>
         </Card>
 
@@ -425,7 +426,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{label}</div>
+      <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1">{children}</div>
     </div>
   );

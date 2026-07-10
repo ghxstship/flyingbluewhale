@@ -448,7 +448,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           {t("console.sitePlans.markup.renderError", { error }, "PDF render error: {error}")}
         </div>
       )}
-      <div className="text-[10px] text-[var(--p-text-2)]">
+      <div className="text-[11px] text-[var(--p-text-2)]">
         {t(
           "console.sitePlans.markup.summary",
           {

@@ -81,7 +81,7 @@ export default async function Page({
           emptyDescription={t(
             "console.campaigns.emptyDescription",
             undefined,
-            "Marketing + comms campaigns live here. Author one per launch, ticket window, or stakeholder push — channel + kind drive segmentation.",
+            "Marketing + comms campaigns live here. Author one per launch, ticket window, or stakeholder push. Channel + kind drive segmentation.",
           )}
           emptyAction={
             <Button href="/studio/campaigns/new" size="sm">

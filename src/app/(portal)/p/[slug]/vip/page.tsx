@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
-  const [{ count: blocks }, { count: runs }] = await Promise.all([
+  const [{ count: blocks }, { count: runs }, { count: upcoming }] = await Promise.all([
     supabase
       .from("accommodation_blocks")
       .select("id", { count: "exact", head: true })
@@ -36,6 +36,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       .select("id", { count: "exact", head: true })
       .eq("org_id", session.orgId)
       .eq("fleet", "t1"),
+    supabase
+      .from("dispatch_runs")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("fleet", "t1")
+      .gte("scheduled_depart", new Date().toISOString()),
   ]);
 
   const tiles = [
@@ -70,11 +76,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard label={t("p.vip.metrics.suites", undefined, "Suites")} value={fmt.number(blocks ?? 0)} />
-          <MetricCard label={t("p.vip.metrics.t1Runs", undefined, "T1 Runs")} value={fmt.number(runs ?? 0)} />
           <MetricCard
-            label={t("p.vip.metrics.status", undefined, "Status")}
-            value={t("p.vip.metrics.statusLive", undefined, "Live")}
-            accent
+            label={t("p.vip.metrics.transportRuns", undefined, "Transport Runs")}
+            value={fmt.number(runs ?? 0)}
+          />
+          <MetricCard
+            label={t("p.vip.metrics.upcomingRuns", undefined, "Upcoming Departures")}
+            value={fmt.number(upcoming ?? 0)}
           />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -87,10 +95,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
         <p className="text-xs text-[var(--p-text-2)]">
           {t("p.vip.concierge.label", undefined, "Concierge:")}{" "}
-          <a className="text-[var(--p-accent)]" href="mailto:vip@atlvs.pro">
-            vip@atlvs.pro
-          </a>{" "}
-          {t("p.vip.concierge.window", undefined, "— 24/7 during event window.")}
+          <Link className="text-[var(--p-accent)] underline" href={`/p/${slug}/messages`}>
+            {t("p.vip.concierge.message", undefined, "Message your team")}
+          </Link>{" "}
+          {t("p.vip.concierge.window", undefined, "Available 24/7 during the event window.")}
         </p>
       </div>
     </>

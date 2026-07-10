@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/Sheet";
@@ -75,8 +76,7 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
               aria-hidden
               className="grid h-7 w-7 flex-none place-items-center rounded-[7px] bg-[var(--p-accent,var(--p-accent))]"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/atlvs-mark-white.svg" alt="" width={18} height={18} />
+              <Image src="/brand/atlvs-mark-white.svg" alt="" width={18} height={18} />
             </span>
             <Wordmark word="ATLVS" className="text-[var(--p-text-1)]" style={{ fontSize: 16, fontWeight: 500 }} />
           </div>

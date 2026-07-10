@@ -66,7 +66,7 @@ export default async function Page({
           emptyDescription={t(
             "console.commercial.sponsors.emptyDescription",
             undefined,
-            "Track contracted deliverables — signage, hospitality counts, on-air mentions — and status against fulfilment.",
+            "Track contracted deliverables (signage, hospitality counts, on-air mentions) and status against fulfilment.",
           )}
           emptyAction={
             <Button href="/studio/commercial/sponsors/new" size="sm">

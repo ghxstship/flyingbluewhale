@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateTime } from "@/lib/i18n/format";
 import { postWorkOrderMessageAction } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 type Msg = { id: string; body: string; author_id: string | null; created_at: string };
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+  return formatDateTime(new Date(iso));
 }
 
 export default async function WorkOrderThread({ params }: { params: Promise<{ id: string }> }) {
@@ -80,7 +81,7 @@ export default async function WorkOrderThread({ params }: { params: Promise<{ id
               <li key={m.id} className="surface rounded-[var(--p-r-md)] border border-[var(--p-border)] p-3">
                 <div className="mb-1 flex items-center justify-between gap-2">
                   <span className="text-sm font-semibold">{m.author_id ? nameById.get(m.author_id) ?? "Member" : "Member"}</span>
-                  <span className="font-mono text-[10px] text-[var(--p-text-3)]">{fmt(m.created_at)}</span>
+                  <span className="font-mono text-[11px] text-[var(--p-text-3)]">{fmt(m.created_at)}</span>
                 </div>
                 <p className="text-sm whitespace-pre-wrap text-[var(--p-text-1)]">{m.body}</p>
               </li>

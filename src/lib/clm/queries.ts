@@ -2,6 +2,7 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { formatMoney } from "@/lib/i18n/format";
 
 /**
  * Contracts / CLM shared types + read helpers.
@@ -253,5 +254,5 @@ export function contractBillingLabel(method: string): string {
 /** Minor units (cents) → display dollars string. */
 export function formatMinor(minor: number | null, currency: string | null): string {
   if (minor == null) return "—";
-  return (minor / 100).toLocaleString("en-US", { style: "currency", currency: currency ?? "USD" });
+  return formatMoney(minor, currency ?? "USD");
 }

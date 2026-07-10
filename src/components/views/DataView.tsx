@@ -225,7 +225,7 @@ export function DataView<Row extends { id: string }>({
                       className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent-text)] hover:underline"
                     >
                       Open Full
-                      <kbd className="rounded bg-[var(--p-surface-2,var(--p-bg))] px-1 py-0.5 font-mono text-[10px] text-[var(--p-text-3)]">
+                      <kbd className="rounded bg-[var(--p-surface-2,var(--p-bg))] px-1 py-0.5 font-mono text-[11px] text-[var(--p-text-3)]">
                         ⌘↵
                       </kbd>
                     </a>

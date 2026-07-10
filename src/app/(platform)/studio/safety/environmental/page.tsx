@@ -66,7 +66,7 @@ export default async function Page({
           emptyDescription={t(
             "console.safety.environmental.emptyDescription",
             undefined,
-            "Heat/cold/wind/storm windows and wildlife/biohazard incidents — drives op-pause + protocol triggers.",
+            "Heat/cold/wind/storm windows and wildlife/biohazard incidents. Drives op-pause + protocol triggers.",
           )}
           emptyAction={
             <Button href="/studio/safety/environmental/new" size="sm">

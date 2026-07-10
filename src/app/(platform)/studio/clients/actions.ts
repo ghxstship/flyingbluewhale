@@ -70,7 +70,7 @@ export async function bulkDeleteClients(ids: string[]): Promise<BulkResult> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .select("id");
-  if (error) return { error: `Could Not Delete — ${error.message}` };
+  if (error) return { error: `Could Not Delete: ${error.message}` };
 
   const deleted = updated?.length ?? 0;
   const skipped = parsed.data.length - deleted;

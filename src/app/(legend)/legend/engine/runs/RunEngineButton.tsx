@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { COMPLIANCE_SCOPE_KINDS, SCOPE_KIND_LABELS } from "@/lib/xmce_engine";
 import { runEngineAction } from "./actions";

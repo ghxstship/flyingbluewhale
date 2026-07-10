@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import type { SavedViewWidget as SavedViewWidgetConfig } from "@/lib/dashboards/types";
 import type { SavedView, ViewConfigRow } from "@/lib/views/types";
+import { formatDate } from "@/lib/i18n/format";
 
 /**
  * SavedViewWidget — embeds a `view_configs` row's saved view as a read-only
@@ -60,13 +61,13 @@ export function SavedViewWidget({
             {widget.title ?? view.name}
           </div>
           {widget.title && view.name !== widget.title && (
-            <div className="truncate text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{view.name}</div>
+            <div className="truncate text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{view.name}</div>
           )}
         </div>
         {href && (
           <Link
             href={href}
-            className="shrink-0 text-[10px] font-medium tracking-wider text-[var(--p-accent)] uppercase hover:underline"
+            className="shrink-0 text-[11px] font-medium tracking-wider text-[var(--p-accent)] uppercase hover:underline"
           >
             Open
           </Link>
@@ -79,7 +80,7 @@ export function SavedViewWidget({
               {columns.map((col) => (
                 <th
                   key={col}
-                  className="border-b border-[var(--p-border)] px-2 py-1.5 text-start text-[10px] font-medium tracking-wider text-[var(--p-text-2)] uppercase"
+                  className="border-b border-[var(--p-border)] px-2 py-1.5 text-start text-[11px] font-medium tracking-wider text-[var(--p-text-2)] uppercase"
                 >
                   {col}
                 </th>
@@ -108,7 +109,7 @@ export function SavedViewWidget({
         </table>
       </div>
       {rows.length > visibleRows.length && (
-        <div className="mt-2 text-[10px] text-[var(--p-text-2)]">
+        <div className="mt-2 text-[11px] text-[var(--p-text-2)]">
           Showing {visibleRows.length} of {rows.length} rows.
         </div>
       )}
@@ -141,7 +142,7 @@ function formatCell(value: unknown): string {
   if (typeof value === "boolean") return value ? "Yes" : "No";
   if (typeof value === "number") return Number.isInteger(value) ? String(value) : value.toFixed(2);
   if (typeof value === "string") return value;
-  if (value instanceof Date) return value.toLocaleDateString();
+  if (value instanceof Date) return formatDate(value);
   try {
     return JSON.stringify(value);
   } catch {

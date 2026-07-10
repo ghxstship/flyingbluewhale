@@ -34,7 +34,7 @@ export default async function Page() {
             placeholder={t(
               "console.operations.maintenance.schedules.new.name.placeholder",
               undefined,
-              "e.g. Scaffold load check — Stage A",
+              "e.g. Scaffold load check · Stage A",
             )}
             required
           />
@@ -47,28 +47,28 @@ export default async function Page() {
                 {t(
                   "console.operations.maintenance.schedules.new.kind.inspection",
                   undefined,
-                  "Inspection — Safety Walk, Scaffold Check",
+                  "Inspection (Safety Walk, Scaffold Check)",
                 )}
               </option>
               <option value="service">
                 {t(
                   "console.operations.maintenance.schedules.new.kind.service",
                   undefined,
-                  "Service — Pre-show Diagnostic, Calibration",
+                  "Service (Pre-show Diagnostic, Calibration)",
                 )}
               </option>
               <option value="cert_renewal">
                 {t(
                   "console.operations.maintenance.schedules.new.kind.certRenewal",
                   undefined,
-                  "Cert Renewal — Re-issuance, Re-test",
+                  "Cert Renewal (Re-issuance, Re-test)",
                 )}
               </option>
               <option value="compliance">
                 {t(
                   "console.operations.maintenance.schedules.new.kind.compliance",
                   undefined,
-                  "Compliance — Audit, Regulator Submission",
+                  "Compliance (Audit, Regulator Submission)",
                 )}
               </option>
             </select>
@@ -94,7 +94,7 @@ export default async function Page() {
                 {t(
                   "console.operations.maintenance.schedules.new.targetKind.custom",
                   undefined,
-                  "Custom — No Target Binding",
+                  "Custom (No Target Binding)",
                 )}
               </option>
             </select>
@@ -112,7 +112,7 @@ export default async function Page() {
             label={t(
               "console.operations.maintenance.schedules.new.cadence.label",
               undefined,
-              "Cadence — Days Between Runs",
+              "Cadence (Days Between Runs)",
             )}
             name="cadence_days"
             type="number"

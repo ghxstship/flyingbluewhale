@@ -174,7 +174,7 @@ export default async function Page() {
             emptyDescription={t(
               "console.assistant.emptyConversationsDescription",
               undefined,
-              "The assistant grounds answers on the project corpus — every claim cites the source it came from.",
+              "The assistant grounds answers on the project corpus. Every claim cites the source it came from.",
             )}
             columns={[
               {

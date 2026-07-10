@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { urlFor } from "@/lib/urls";
 import { toneFor } from "@/lib/tones";
@@ -22,7 +23,7 @@ type Report = {
 };
 
 function fmt(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return formatDateParts(new Date(iso), { month: "short", day: "numeric", year: "numeric" });
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
@@ -90,15 +91,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t(
               "p.athlete.safeguarding.channelDescription",
               undefined,
-              "Use this channel for any concerns about welfare, harassment, abuse, doping, or unsafe behaviour. Reports are routed to a dedicated safeguarding lead. Your identity is protected — reports are visible only to the assigned investigator.",
+              "Use this channel for any concerns about welfare, harassment, abuse, doping, or unsafe behaviour. Reports are routed to a dedicated safeguarding lead. Your identity is protected; reports are visible only to the assigned investigator.",
             )}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <Link
-              href={`mailto:safeguarding@atlvs.pro?subject=Safeguarding%20report%20—%20${slug}`}
-              className="ps-btn ps-btn--sm"
-            >
-              {t("p.athlete.safeguarding.emailLead", undefined, "Email safeguarding lead")}
+            <Link href={`/p/${slug}/messages`} className="ps-btn ps-btn--sm">
+              {t("p.athlete.safeguarding.messageLead", undefined, "Message the safeguarding lead")}
             </Link>
             <Link
               href={urlFor("mobile", "/incidents/new?kind=safeguarding")}
@@ -142,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                       {r.subject_ref ?? t("p.athlete.safeguarding.confidential", undefined, "Confidential")}
                     </div>
                     <p className="mt-0.5 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.narrative}</p>
-                    <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="mt-1 font-mono text-[11px] text-[var(--p-text-2)]">
                       {t(
                         "p.athlete.safeguarding.filedUpdated",
                         { filed: fmt(r.created_at), updated: fmt(r.updated_at) },

@@ -35,7 +35,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const [{ count: entries }, { count: visas }, { count: orders }, { count: blocks }] = await Promise.all([
     supabase.from("delegation_entries").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
     supabase.from("visa_cases").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
-    supabase.from("rate_card_orders").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
+    supabase
+      .from("rate_card_orders")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("requester_id", session.userId),
     supabase.from("accommodation_blocks").select("id", { count: "exact", head: true }).eq("org_id", session.orgId),
   ]);
 
@@ -112,7 +116,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             label={t("p.delegation.metrics.visaCases", undefined, "Visa Cases")}
             value={fmt.number(visas ?? 0)}
           />
-          <MetricCard label={t("p.delegation.metrics.orders", undefined, "Orders")} value={fmt.number(orders ?? 0)} />
+          <MetricCard
+            label={t("p.delegation.metrics.yourOrders", undefined, "Your Orders")}
+            value={fmt.number(orders ?? 0)}
+          />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {tiles.map((tile) => (

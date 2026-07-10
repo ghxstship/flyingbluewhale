@@ -36,6 +36,10 @@ const SignupSchema = z.object({
   email: z.string().email("Enter a valid work email"),
   password: z.string().min(8, "At least 8 characters").max(128),
   orgName: z.string().max(120).optional(),
+  // E-17: plan intent carried from the pricing CTA (`/signup?plan=`). Stored
+  // as user metadata and later stamped onto the created org — intent only,
+  // no billing/tier mechanics.
+  plan: z.enum(["free", "crew", "production", "festival"]).optional(),
 });
 
 const EmailOnlySchema = z.object({
@@ -89,7 +93,13 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
     email: parsed.data.email,
     password: parsed.data.password,
     options: {
-      data: { name: parsed.data.name, pending_org_name: orgName || null },
+      data: {
+        name: parsed.data.name,
+        pending_org_name: orgName || null,
+        // E-17: survives the email-confirmation hop; consumed by
+        // /onboarding/org's createOrgAction.
+        pending_plan: parsed.data.plan ?? null,
+      },
       emailRedirectTo,
     },
   });

@@ -18,15 +18,15 @@ export function InviteForm({ projects, modules }: { projects: ProjectOption[]; m
   const ROLES: { value: "admin" | "manager" | "member"; label: string }[] = [
     {
       value: "admin",
-      label: t("console.people.invites.role.admin", undefined, "Admin — full org control except billing"),
+      label: t("console.people.invites.role.admin", undefined, "Admin (full org control except billing)"),
     },
     {
       value: "manager",
-      label: t("console.people.invites.role.manager", undefined, "Manager — projects + people, no billing"),
+      label: t("console.people.invites.role.manager", undefined, "Manager (projects + people, no billing)"),
     },
     {
       value: "member",
-      label: t("console.people.invites.role.member", undefined, "Member — access via per-project membership"),
+      label: t("console.people.invites.role.member", undefined, "Member (access via per-project membership)"),
     },
   ];
 
@@ -59,7 +59,7 @@ export function InviteForm({ projects, modules }: { projects: ProjectOption[]; m
           {t("console.people.invites.persona", undefined, "Portal persona · Optional")}
         </span>
         <select name="persona" defaultValue="" className="ps-input focus-ring w-full">
-          <option value="">{t("console.people.invites.personaAuto", undefined, "— Derive from role —")}</option>
+          <option value="">{t("console.people.invites.personaAuto", undefined, "Derive from role")}</option>
           {PORTAL_PERSONAS.map((p) => (
             <option key={p} value={p}>
               {p.charAt(0).toUpperCase() + p.slice(1)}
@@ -78,7 +78,7 @@ export function InviteForm({ projects, modules }: { projects: ProjectOption[]; m
           onChange={(e) => setProjectId(e.target.value)}
           className="ps-input focus-ring w-full"
         >
-          <option value="">{t("console.people.invites.orgWide", undefined, "— Org-wide invite —")}</option>
+          <option value="">{t("console.people.invites.orgWide", undefined, "Org-wide invite")}</option>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}

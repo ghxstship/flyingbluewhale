@@ -49,7 +49,7 @@ export function LetterLifecycleActions({
         {status === "draft" && (
           <>
             <Button onClick={send} loading={pending} disabled={sendDisabled}>
-              {t("console.people.offerLetters.lifecycle.markSent", undefined, "Mark Sent — Activate Public Link")}
+              {t("console.people.offerLetters.lifecycle.markSent", undefined, "Mark Sent (Activate Public Link)")}
             </Button>
             {sendDisabled && (
               <div className="rounded border border-[var(--p-warning)]/40 bg-[var(--p-warning)]/10 p-3 text-xs leading-relaxed">

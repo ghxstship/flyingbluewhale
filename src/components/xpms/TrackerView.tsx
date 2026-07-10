@@ -212,9 +212,9 @@ export async function TrackerView({
               <>
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">{row.wbs_path}</div>
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">{row.wbs_path}</div>
                     <div className="mt-0.5 truncate text-sm font-medium">{row.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">{row.identifier}</div>
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">{row.identifier}</div>
                   </div>
                   <Badge variant={row.state === "tpc" ? "brand" : "muted"}>{row.state.toUpperCase()}</Badge>
                 </div>
@@ -250,7 +250,7 @@ export async function TrackerView({
           <div className="ps-table">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+                <tr className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                   <th className="px-4 py-3 text-start">
                     {tr("components.trackerView.colWbsAtom", undefined, "WBS / Atom")}
                   </th>
@@ -293,14 +293,14 @@ export async function TrackerView({
                     <tr key={row.atom_id} className="border-t border-[var(--p-border)]">
                       <td className="px-4 py-3">
                         <div className="flex items-start gap-2" style={{ paddingLeft: `${indent * 16}px` }}>
-                          <span className="font-mono text-[10px] text-[var(--p-text-2)]">{row.wbs_path}</span>
+                          <span className="font-mono text-[11px] text-[var(--p-text-2)]">{row.wbs_path}</span>
                         </div>
                         <div className="mt-0.5 flex items-center gap-2">
                           {nameEl}
                           <Badge variant={row.state === "tpc" ? "brand" : "muted"}>{row.state.toUpperCase()}</Badge>
                         </div>
                         <div
-                          className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]"
+                          className="mt-0.5 font-mono text-[11px] text-[var(--p-text-2)]"
                           style={{ paddingLeft: `${indent * 16}px` }}
                         >
                           {row.identifier}

@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +37,7 @@ type Row = {
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -92,7 +93,7 @@ export default async function Page() {
                     ? `${r.travel_radius_km} ${t("marketing.pages.marketplace.talent.meta.kmRadius")}`
                     : null,
                   r.monthly_listeners
-                    ? `${r.monthly_listeners.toLocaleString()} ${t("marketing.pages.marketplace.talent.meta.monthlyListeners")}`
+                    ? `${fmt.number(r.monthly_listeners)} ${t("marketing.pages.marketplace.talent.meta.monthlyListeners")}`
                     : null,
                 ]}
                 rating={{ avg: r.rating_avg, count: r.rating_count }}

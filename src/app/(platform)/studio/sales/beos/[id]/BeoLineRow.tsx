@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { formatMoney } from "@/lib/i18n/format";
 import { lineTotalCents, type BeoLineItem } from "@/lib/beos";

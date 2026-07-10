@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getCourse } from "../../../sample";
 import type { Lesson } from "@/lib/legend_learning";
 import { LessonComplete } from "./LessonComplete";
+import { LessonMedia } from "./LessonMedia";
 
 export const dynamic = "force-dynamic";
 
@@ -103,15 +104,17 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
   if (!lesson) notFound();
   const next = lessons[index + 1];
 
-  // completion state for this lesson
+  // completion + resume state for this lesson (position persists server-side
+  // so resume works across devices — audit D-27)
   const { data: prog } = await db
     .from("lesson_progress")
-    .select("progress_state")
+    .select("progress_state, position_seconds")
     .eq("org_id", session.orgId)
     .eq("lesson_id", lesson.id)
     .eq("user_id", session.userId)
     .maybeSingle();
   const alreadyDone = prog?.progress_state === "completed";
+  const serverPosition = alreadyDone ? 0 : ((prog?.position_seconds as number | null) ?? 0);
 
   const nextHref = next ? `/legend/learn/${courseParam}/lesson/${next.id}` : `/legend/learn/${courseParam}`;
 
@@ -128,12 +131,15 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
       </nav>
 
       {(lesson.kind === "video" || lesson.kind === "audio") && lesson.media_url ? (
-        <MediaPlayer
+        <LessonMedia
+          courseId={courseParam}
+          lessonId={lesson.id}
           src={lesson.media_url}
           kind={lesson.kind}
           eyebrow={`Lesson ${index + 1} / ${lessons.length}`}
           title={lesson.title}
-          resumeKey={`legend:${courseParam}:${lesson.id}`}
+          serverPositionSeconds={serverPosition}
+          alreadyDone={alreadyDone}
         />
       ) : (
         <article className="surface prose-sm max-w-none p-5">

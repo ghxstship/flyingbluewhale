@@ -29,7 +29,7 @@ export function OnsiteWayfinding() {
           className="surface flex flex-col items-center gap-1 rounded-[var(--p-r-md)] p-2 text-[var(--p-text-1)]"
         >
           <SignIcon name={s.id} size={28} title={s.label} />
-          <span className="text-[10px] font-medium text-[var(--p-text-2)]">{s.label}</span>
+          <span className="text-[11px] font-medium text-[var(--p-text-2)]">{s.label}</span>
         </li>
       ))}
     </ul>

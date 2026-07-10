@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button, type ButtonVariant, type ButtonSize } from "@/components/ui/Button";
 import {
   Dialog,

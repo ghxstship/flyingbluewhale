@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type ActivityRow = {
   id: string;
@@ -16,6 +17,7 @@ export type ActivityRow = {
 type Labels = { search: string; emptyTitle: string; emptyBody: string };
 
 export function ActivityView({ rows, labels }: { rows: ActivityRow[]; labels: Labels }) {
+  const fmt = useFormatters();
   const [query, setQuery] = useState("");
   const [types, setTypes] = useState<Set<string>>(new Set());
 
@@ -34,7 +36,7 @@ export function ActivityView({ rows, labels }: { rows: ActivityRow[]; labels: La
 
   const rel = (iso: string) => {
     if (!iso) return "";
-    return new Date(iso).toLocaleString(undefined, {
+    return fmt.dateParts(new Date(iso), {
       month: "short",
       day: "numeric",
       hour: "numeric",

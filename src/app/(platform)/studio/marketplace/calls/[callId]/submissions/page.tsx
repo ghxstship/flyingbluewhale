@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const [callResp, subsResp] = await Promise.all([
     supabase
@@ -73,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             {
               key: "when",
               header: t("console.marketplace.calls.submissions.col.submitted", undefined, "Submitted"),
-              render: (r) => new Date(r.submitted_at).toLocaleDateString(),
+              render: (r) => fmt.date(new Date(r.submitted_at)),
               accessor: (r) => r.submitted_at,
               className: "font-mono text-xs",
             },

@@ -20,7 +20,7 @@ export default async function ScenesPage() {
       <header className="space-y-2">
         <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
         <h1 className="text-3xl font-bold tracking-tight">Scenes</h1>
-        <p className="text-[var(--p-text-2)]">The communities behind the nights — find yours.</p>
+        <p className="text-[var(--p-text-2)]">The communities behind the nights. Find yours.</p>
       </header>
 
       {scenes.length === 0 ? (

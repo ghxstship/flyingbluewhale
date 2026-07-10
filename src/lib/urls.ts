@@ -107,6 +107,29 @@ export function urlFor(shell: Shell, path: string = ""): string {
 }
 
 /**
+ * Resolve a stored in-app href (e.g. `notifications.href`, push/email deep
+ * links — written as internal route-group paths like `/studio/finance/...`)
+ * to an absolute URL on the shell that owns the path.
+ *
+ * Stored data keeps the internal path shape; every RENDERER of a stored
+ * href must route it through this helper so the click lands on the shell's
+ * canonical origin (app./gvteway./compvss. in subdomain mode) instead of
+ * being served raw off whichever shell rendered it. Absolute URLs pass
+ * through untouched. Prefix matching is exact-segment (`/m` or `/m/...`),
+ * so `/me/...` and `/marketplace/...` correctly fall through to the apex.
+ */
+export function resolveNotificationHref(href: string): string {
+  if (/^https?:\/\//.test(href)) return href;
+  const owns = (prefix: string) => href === prefix || href.startsWith(`${prefix}/`);
+  if (owns("/studio")) return urlFor("platform", href.slice("/studio".length));
+  if (owns("/legend")) return urlFor("legend", href.slice("/legend".length));
+  if (owns("/m")) return urlFor("mobile", href.slice("/m".length));
+  if (owns("/p")) return urlFor("portal", href.slice("/p".length));
+  // Apex shells (marketing / auth / personal) share the bare origin.
+  return urlFor("marketing", href);
+}
+
+/**
  * Convert an incoming public path (as the user types it, with the shell
  * subdomain) into the internal route-group path the Next.js app router
  * expects. Used by the root middleware.

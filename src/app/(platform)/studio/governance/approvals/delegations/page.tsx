@@ -5,7 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { DELEGATION_SCOPE_LABEL, type DelegationScope } from "@/lib/approvals/queries";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +31,7 @@ export default async function Page() {
     );
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data } = await supabase
     .from("approval_delegations")
@@ -84,13 +85,13 @@ export default async function Page() {
             {
               key: "starts_at",
               header: t("console.governance.approvals.delegations.columns.starts", undefined, "Starts"),
-              render: (r) => new Date(r.starts_at).toLocaleDateString("en-US"),
+              render: (r) => fmt.date(new Date(r.starts_at)),
               mono: true,
             },
             {
               key: "ends_at",
               header: t("console.governance.approvals.delegations.columns.ends", undefined, "Ends"),
-              render: (r) => (r.ends_at ? new Date(r.ends_at).toLocaleDateString("en-US") : "—"),
+              render: (r) => (r.ends_at ? fmt.date(new Date(r.ends_at)) : "—"),
               mono: true,
             },
             {

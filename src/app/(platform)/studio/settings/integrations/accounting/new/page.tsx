@@ -84,7 +84,7 @@ export default async function Page() {
             {t(
               "console.settings.integrations.accounting.new.manualHelp",
               undefined,
-              "These systems are provisioned by the implementations team — credentials are exchanged out-of-band, not captured in this UI.",
+              "These systems are provisioned by the implementations team. Credentials are exchanged out-of-band, not captured in this UI.",
             )}
           </p>
           <ul className="flex flex-wrap gap-2">

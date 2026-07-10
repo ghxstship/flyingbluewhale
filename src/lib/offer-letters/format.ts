@@ -1,4 +1,5 @@
 import { urlFor } from "@/lib/urls";
+import { formatDateParts, formatMoney } from "@/lib/i18n/format";
 import type { OfferLetterResolved, CompensationBasis } from "./types";
 
 export function offerPublicUrl(token: string): string {
@@ -9,20 +10,15 @@ export function offerPublicUrl(token: string): string {
 
 export function formatDateRange(start: string | null, end: string | null): string {
   if (!start && !end) return "TBD";
-  const fmt = (iso: string) => {
-    const d = new Date(iso + "T00:00:00");
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  };
+  const fmt = (iso: string) =>
+    // Parse as UTC midnight so the rendered day never shifts by timezone.
+    formatDateParts(iso + "T00:00:00Z", { month: "short", day: "numeric", year: "numeric" });
   if (start && end) return `${fmt(start)} – ${fmt(end)}`;
   return fmt((start ?? end)!);
 }
 
 export function formatDollars(cents: number): string {
-  return (cents / 100).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
+  return formatMoney(cents, { fractionDigits: 0 });
 }
 
 /** The (compensation-only) slice of a resolved letter that drives the comp

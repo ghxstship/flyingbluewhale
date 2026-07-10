@@ -68,25 +68,25 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           </div>
           <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+              <dt className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {t("console.projects.overview.starts", undefined, "Starts")}
               </dt>
               <dd className="mt-1 text-sm">{fmtDate(project.start_date)}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+              <dt className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {t("console.projects.overview.ends", undefined, "Ends")}
               </dt>
               <dd className="mt-1 text-sm">{fmtDate(project.end_date)}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+              <dt className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {t("console.projects.overview.tasks", undefined, "Tasks")}
               </dt>
               <dd className="mt-1 text-sm">{taskCount ?? 0}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+              <dt className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {t("console.projects.overview.events", undefined, "Events")}
               </dt>
               <dd className="mt-1 text-sm">{eventCount ?? 0}</dd>
@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <Link href={`/studio/projects/${projectId}/budget`} className="surface hover-lift p-5">
-            <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               {t("console.projects.overview.budget", undefined, "Budget")}
             </div>
             <div className="mt-2 text-2xl font-semibold">{money(totalBudget)}</div>
@@ -104,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </div>
           </Link>
           <Link href={`/studio/projects/${projectId}/advancing`} className="surface hover-lift p-5">
-            <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               {t("console.projects.overview.deliverables", undefined, "Deliverables")}
             </div>
             <div className="mt-2 text-2xl font-semibold">
@@ -123,8 +123,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         {rollups.open.total > 0 && (
           <div className="surface p-5">
             <div className="mb-3 flex items-center justify-between">
-              <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-                {t("console.projects.overview.position", undefined, "Position — Class × Phase")}
+              <div className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+                {t("console.projects.overview.position", undefined, "Position (Class × Phase)")}
               </div>
               <Link href="/studio/position" className="text-xs font-medium text-[var(--p-accent)]">
                 {t("console.projects.overview.portfolio", undefined, "Portfolio →")}

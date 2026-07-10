@@ -95,7 +95,7 @@ export default async function Page({
       <div className="page-content max-w-2xl">
         <div className="surface space-y-6 p-6 print:border-0 print:p-0 print:shadow-none">
           <header className="border-b border-[var(--p-border)] pb-4">
-            <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] font-semibold tracking-[0.25em] text-[var(--p-text-2)] uppercase">
               Call sheet · {dateStr}
             </div>
             <div className="mt-1 text-2xl font-bold">{member.full_name}</div>
@@ -108,11 +108,11 @@ export default async function Page({
 
           <section className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">Call</div>
+              <div className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">Call</div>
               <div className="mt-1 font-mono text-2xl font-semibold">{callTime ? fmt.time(callTime) : "—"}</div>
             </div>
             <div>
-              <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">Wrap</div>
+              <div className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">Wrap</div>
               <div className="mt-1 font-mono text-2xl font-semibold">{wrapTime ? fmt.time(wrapTime) : "—"}</div>
             </div>
           </section>
@@ -144,7 +144,7 @@ export default async function Page({
                       </div>
                     )}
                     {s.break_minutes > 0 && (
-                      <div className="mt-1 text-[10px] text-[var(--p-text-2)]">{s.break_minutes}m break</div>
+                      <div className="mt-1 text-[11px] text-[var(--p-text-2)]">{s.break_minutes}m break</div>
                     )}
                   </li>
                 ))}
@@ -152,7 +152,7 @@ export default async function Page({
             )}
           </section>
 
-          <footer className="border-t border-[var(--p-border)] pt-3 text-[10px] text-[var(--p-text-2)]">
+          <footer className="border-t border-[var(--p-border)] pt-3 text-[11px] text-[var(--p-text-2)]">
             Generated {fmt.dateTime(new Date())} · Check{" "}
             <Link href={urlFor("mobile", "/clock")} className="text-[var(--p-accent)] underline">
               /m/clock

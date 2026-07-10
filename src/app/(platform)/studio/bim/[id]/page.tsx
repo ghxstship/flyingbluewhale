@@ -132,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </span>
           {m.version_label && <span className="font-mono text-[var(--p-text-2)]">{m.version_label}</span>}
           {m.forge_urn && (
-            <span className="font-mono text-[10px] text-[var(--p-text-2)]">
+            <span className="font-mono text-[11px] text-[var(--p-text-2)]">
               {t("console.bim.detail.urnPrefix", undefined, "URN")} {m.forge_urn.slice(0, 16)}…
             </span>
           )}
@@ -150,11 +150,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="surface space-y-2 p-4">
           <h2 className="text-sm font-semibold">{t("console.bim.detail.storageHeading", undefined, "Storage")}</h2>
           <p className="font-mono text-xs text-[var(--p-text-2)]">{m.storage_path}</p>
-          <p className="text-[10px] text-[var(--p-text-2)]">
+          <p className="text-[11px] text-[var(--p-text-2)]">
             {t(
               "console.bim.detail.storageBlurb",
               undefined,
-              "Click “Download” above to fetch the file via a 60-second signed URL. The web-based 3D viewer (web-ifc / Forge SDK) is the next engineering pass — element-link management below works against the existing metadata.",
+              "Click “Download” above to fetch the file via a 60-second signed URL. The web-based 3D viewer (web-ifc / Forge SDK) is the next engineering pass. Element-link management below works against the existing metadata.",
             )}
           </p>
         </section>
@@ -180,7 +180,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   </Badge>
                   <span className="font-mono text-[var(--p-text-2)]">{l.element_global_id}</span>
                   <span className="text-[var(--p-text-2)]">→ {l.target_id.slice(0, 8)}…</span>
-                  {l.note && <span className="text-[var(--p-text-2)]">— {l.note}</span>}
+                  {l.note && <span className="text-[var(--p-text-2)]">· {l.note}</span>}
                   <form action={deleteBimModelLink} className="ms-auto">
                     <input type="hidden" name="link_id" value={l.id} />
                     <input type="hidden" name="model_id" value={m.id} />

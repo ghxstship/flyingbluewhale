@@ -7,7 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { CallControls } from "./CallControls";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("open_calls")
     .select("*")
@@ -108,7 +109,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.detail.deadline", undefined, "Deadline")}
               </dt>
-              <dd>{c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}</dd>
+              <dd>{c.deadline_at ? fmt.dateTime(new Date(c.deadline_at)) : "—"}</dd>
             </dl>
           </div>
           <div className="surface p-5">

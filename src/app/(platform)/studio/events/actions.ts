@@ -101,7 +101,7 @@ export async function bulkCancelEvents(ids: string[]): Promise<BulkResult> {
     .eq("org_id", session.orgId)
     .not("event_state", "in", "(cancelled,complete)")
     .select("id");
-  if (error) return { error: `Could Not Cancel — ${error.message}` };
+  if (error) return { error: `Could Not Cancel: ${error.message}` };
 
   const cancelled = updated?.length ?? 0;
   const skipped = parsed.data.length - cancelled;

@@ -59,7 +59,7 @@ export default async function MobileSchedulePage() {
       id: e.id,
       name: e.name,
       type: "shift",
-      time: start.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }),
+      time: fmt.dateParts(start, { hour: "2-digit", minute: "2-digit", hour12: false }),
       dateKey: e.starts_at.slice(0, 10),
       sub: e.description ?? fmt.date(e.starts_at),
       state: toTitle(e.event_state),

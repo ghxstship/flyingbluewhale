@@ -5,7 +5,11 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit, type AuditAction } from "@/lib/audit";
 import { log } from "@/lib/log";
-import type { FulfillmentState } from "@/lib/supabase/types";
+import {
+  FULFILLMENT_STATES,
+  NEXT_FULFILLMENT_STATES,
+  type FulfillmentState,
+} from "@/lib/db/assignments";
 
 /**
  * POST /api/v1/deliverables/:id/transition
@@ -17,27 +21,16 @@ import type { FulfillmentState } from "@/lib/supabase/types";
  * The contract is intentionally narrow — every transition is one verb,
  * the body carries an optional `note` that lands in audit_log under the
  * `before/after` envelope so the audit log diff viewer surfaces it.
+ *
+ * Allowed transitions come from the canonical NEXT_FULFILLMENT_STATES map
+ * in `@/lib/db/assignments` (CLAUDE.md Advancing canon) — never fork a
+ * local copy here.
  */
 
 const Body = z.object({
-  to: z.enum(["in_review", "approved", "rejected", "revision_requested", "fulfilled"]),
+  to: z.enum(FULFILLMENT_STATES),
   note: z.string().max(2000).optional(),
 });
-
-const ALLOWED: Record<string, string[]> = {
-  submitted: ["in_review", "approved", "rejected", "revision_requested"],
-  in_review: ["approved", "rejected", "revision_requested"],
-  approved: ["fulfilled", "revision_requested"],
-  revision_requested: ["in_review", "rejected"],
-  rejected: ["revision_requested"],
-  fulfilled: [],
-  draft: [],
-};
-
-// `fulfilled` isn't in the column enum yet; we map it onto `approved` +
-// data.fulfilled_at = now() so we don't break existing schema. Future
-// migration can split it out properly.
-type DeliverableData = { fulfilled_at?: string; [key: string]: unknown };
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -49,14 +42,14 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const supabase = await createClient();
     const { data: row, error } = await supabase
       .from("deliverables")
-      .select("id, fulfillment_state, data")
+      .select("id, fulfillment_state")
       .eq("org_id", session.orgId)
       .eq("id", id)
       .maybeSingle();
     if (error) return apiError("internal", error.message);
     if (!row) return apiError("not_found", "Deliverable not found");
 
-    const allowed = ALLOWED[row.fulfillment_state] ?? [];
+    const allowed = NEXT_FULFILLMENT_STATES[row.fulfillment_state as FulfillmentState] ?? [];
     if (!allowed.includes(input.to)) {
       return apiError(
         "conflict",
@@ -64,13 +57,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       );
     }
 
-    const before = { status: row.fulfillment_state, fulfilled_at: (row.data as DeliverableData)?.fulfilled_at ?? null };
+    const before = { status: row.fulfillment_state };
 
-    let nextStatus: FulfillmentState = input.to === "fulfilled" ? "approved" : (input.to as FulfillmentState);
-    let nextData: DeliverableData = (row.data as DeliverableData) ?? {};
-    if (input.to === "fulfilled") {
-      nextData = { ...nextData, fulfilled_at: new Date().toISOString() };
-    }
+    const nextStatus: FulfillmentState = input.to;
 
     // Conditional update: only land if the row is still in the state we
     // observed above. Closes the TOCTOU between the SELECT and the
@@ -80,7 +69,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       .from("deliverables")
       .update({
         fulfillment_state: nextStatus,
-        data: nextData as never,
         reviewed_by: session.userId,
         reviewed_at: new Date().toISOString(),
       })
@@ -93,7 +81,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       return apiError("conflict", "Deliverable was modified concurrently — refresh and retry");
     }
 
-    const after = { status: nextStatus, fulfilled_at: nextData.fulfilled_at ?? null };
+    const after = { status: nextStatus };
 
     // LDP §4 Deliverable Lifecycle — append a typed row to the
     // fulfillment_state_transitions log alongside the generic audit_log
@@ -125,6 +113,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       requestId: req.headers.get("x-request-id"),
     });
 
-    return apiOk({ id, status: nextStatus, data: nextData });
+    return apiOk({ id, status: nextStatus });
   });
 }

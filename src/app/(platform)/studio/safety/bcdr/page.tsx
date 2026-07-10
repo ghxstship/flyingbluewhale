@@ -124,7 +124,7 @@ export default async function Page() {
                   description={t(
                     "console.safety.bcdr.empty.runbooks.description",
                     undefined,
-                    "Author crisis-tagged playbooks (evac, weather hold, IT outage) — they appear here.",
+                    "Author crisis-tagged playbooks (evac, weather hold, IT outage). They appear here.",
                   )}
                   action={
                     <Link href="/studio/safety/playbooks/new" className="ps-btn ps-btn--ghost ps-btn--sm">

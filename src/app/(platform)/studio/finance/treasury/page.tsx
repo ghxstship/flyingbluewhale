@@ -112,7 +112,7 @@ export default async function Page() {
       description: t(
         "console.finance.treasury.tiles.invoices.description",
         undefined,
-        "Receivables — issued, sent, paid",
+        "Receivables (issued, sent, paid)",
       ),
     },
     {

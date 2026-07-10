@@ -38,8 +38,15 @@ function fire(kind: "default" | "success" | "error" | "warning" | "info", messag
   });
 }
 
-export function useToast() {
-  return {
+/**
+ * Module-level toast (F-06). Same wrapper, callable outside React render —
+ * the codemod target for every former `import { toast } from "sonner"` site.
+ * Call shape matches sonner's for the surface this codebase uses:
+ * `toast("msg")`, `toast.success/error/warning/info(msg, opts)`.
+ */
+export const toast = Object.assign(
+  (message: string, opts?: ToastOpts) => fire("default", message, opts),
+  {
     success: (message: string, opts?: ToastOpts) => fire("success", message, opts),
     error: (message: string, opts?: ToastOpts) => fire("error", message, opts),
     warning: (message: string, opts?: ToastOpts) => fire("warning", message, opts),
@@ -48,7 +55,11 @@ export function useToast() {
     dismiss: (id?: string | number) => sonnerToast.dismiss(id),
     promise: <T>(p: Promise<T>, msgs: { loading: string; success: string; error: string }) =>
       sonnerToast.promise(p, msgs),
-  };
+  },
+);
+
+export function useToast() {
+  return toast;
 }
 
 export type Toast = ReturnType<typeof useToast>;

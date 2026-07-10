@@ -54,20 +54,20 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             </label>
             <select name="visibility" className="ps-input mt-1.5 w-full" defaultValue={r.visibility}>
               <option value="private">
-                {t("console.procurement.rfqs.publish.visibility.private", undefined, "Private — invited vendors only")}
+                {t("console.procurement.rfqs.publish.visibility.private", undefined, "Private (invited vendors only)")}
               </option>
               <option value="network">
                 {t(
                   "console.procurement.rfqs.publish.visibility.network",
                   undefined,
-                  "Network — your prequalified pool",
+                  "Network (your prequalified pool)",
                 )}
               </option>
               <option value="public">
                 {t(
                   "console.procurement.rfqs.publish.visibility.public",
                   undefined,
-                  "Public — listed in /marketplace/rfqs",
+                  "Public (listed in /marketplace/rfqs)",
                 )}
               </option>
             </select>
@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             label={t(
               "console.procurement.rfqs.publish.tradeCategoriesLabel",
               undefined,
-              "Trade Categories — Comma-separated",
+              "Trade Categories (Comma-separated)",
             )}
             name="trade_categories"
             defaultValue={r.trade_categories.join(", ")}
@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
               label={t("console.procurement.rfqs.publish.budgetBandLabel", undefined, "Budget Band")}
               name="budget_band"
               defaultValue={r.budget_band ?? ""}
-              placeholder="$10k–$25k"
+              placeholder="$10k-$25k"
             />
           </div>
           <Input

@@ -55,7 +55,7 @@ export default async function Page() {
             name="name"
             required
             maxLength={200}
-            placeholder="Main array — 5-year manufacturer warranty"
+            placeholder="Main array · 5-year manufacturer warranty"
           />
           <Input
             label={t("console.assets.warranties.new.warrantorNameLabel", undefined, "Warrantor name")}

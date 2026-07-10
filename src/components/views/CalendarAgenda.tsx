@@ -40,7 +40,7 @@ export function CalendarAgenda({ cursor, eventsByKey, today, windowDays = 30 }: 
           <li key={key} className="px-4 py-3">
             <div className="mb-2 flex items-baseline justify-between">
               <h3 className="eyebrow">{labelForDay(day, today)}</h3>
-              <span className="font-mono text-[10px] text-[var(--p-text-2)]">
+              <span className="font-mono text-[11px] text-[var(--p-text-2)]">
                 {events.length} {events.length === 1 ? "event" : "events"}
               </span>
             </div>
@@ -61,7 +61,7 @@ function AgendaRow({ event, day }: { event: CalendarEvent; day: Date }) {
   const time = formatTimeRange(event, day);
   const body = (
     <span className={`inline-flex items-center gap-2 rounded px-1.5 py-0.5 ${tone}`}>
-      {time && <span className="font-mono text-[10px] opacity-80">{time}</span>}
+      {time && <span className="font-mono text-[11px] opacity-80">{time}</span>}
       <span className="text-xs font-medium">{event.title}</span>
     </span>
   );

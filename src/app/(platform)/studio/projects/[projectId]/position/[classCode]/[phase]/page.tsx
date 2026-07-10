@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { Coordinate } from "@/components/ui/CoordinateMatrix";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { XPMS_CLASS_BY_CODE, XPMS_ATOM_PHASES, type XpmsAtomPhase } from "@/lib/xpms";
 import { listCellAtoms } from "@/lib/xpms/coordinate";
 
@@ -29,6 +29,7 @@ export default async function CellPage({
   if (!cls || !phaseDef) notFound();
 
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -64,7 +65,7 @@ export default async function CellPage({
           <MetricCard label={t("console.position.cell.atoms", undefined, "Atoms")} value={String(cell.atoms.length)} />
           <MetricCard
             label={t("console.position.cell.cost", undefined, "Cost")}
-            value={`$${Math.round(cell.costTotal).toLocaleString()}`}
+            value={`$${fmt.number(Math.round(cell.costTotal))}`}
           />
           <MetricCard label={t("console.position.cell.class", undefined, "Class")} value={`${code} · ${cls.name}`} />
         </div>
@@ -87,7 +88,7 @@ export default async function CellPage({
                   <span className="font-mono text-xs text-[var(--p-text-3)]">{a.identifier}</span>
                 </span>
                 <span className="shrink-0 font-mono text-xs text-[var(--p-text-2)]">
-                  {a.cost_cents != null ? `$${Math.round(a.cost_cents / 100).toLocaleString()}` : "—"}
+                  {a.cost_cents != null ? `$${fmt.number(Math.round(a.cost_cents / 100))}` : "—"}
                 </span>
               </li>
             ))}

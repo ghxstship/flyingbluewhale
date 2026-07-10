@@ -62,7 +62,7 @@ export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatu
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Change order status changed concurrently — refresh and retry");
+    throw new Error("Change order status changed concurrently. Refresh and retry");
   }
 
   // Now safe to roll the approved amount onto the parent PO. The CO
@@ -99,7 +99,7 @@ export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatu
       // Sibling rollup landed first — re-read and retry.
     }
     if (attempts >= 5) {
-      throw new Error("PO amount rollup contended — refresh and retry");
+      throw new Error("PO amount rollup contended. Refresh and retry");
     }
   }
 
@@ -177,7 +177,7 @@ export async function executeCoPostToBudgetAction(id: string): Promise<RouteCoSt
     .maybeSingle();
   if (!co) return { error: "Change order not found" };
   if (co.change_order_state !== "approved") {
-    return { error: "Only an approved change order can post to budget — route it through approvals first" };
+    return { error: "Only an approved change order can post to budget. Route it through approvals first" };
   }
 
   const marker = `[po_change_order:${id}]`;

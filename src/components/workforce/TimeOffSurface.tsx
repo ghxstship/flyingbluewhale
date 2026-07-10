@@ -119,7 +119,7 @@ export async function TimeOffSurface({
                     <div className="font-mono text-base font-semibold">
                       {t("m.timeOff.hours", { hours: b.balance_hours }, `${b.balance_hours}h`)}
                     </div>
-                    <div className="text-[10px] text-[var(--p-text-2)]">
+                    <div className="text-[11px] text-[var(--p-text-2)]">
                       {t("m.timeOff.available", undefined, "available")}
                     </div>
                   </div>

@@ -63,8 +63,9 @@ export default async function DemoIndex() {
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.demo.hero.subtitle")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
-          <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
-            {CANONICAL_CTAS.secondary.label}
+          {/* E-18: route straight into the live walkthrough-request form. */}
+          <Button href="/contact?topic=walkthrough#form" variant="secondary">
+            {t("marketing.pages.demo.hero.walkthroughCta", undefined, "Request a walkthrough")}
           </Button>
         </div>
       </section>

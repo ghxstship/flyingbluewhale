@@ -4,6 +4,7 @@ import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
+import { formatDateParts } from "@/lib/i18n/format";
 
 /**
  * Map an audit `action` to a human verb phrase.
@@ -60,7 +61,7 @@ function formatRelative(iso: string, now: number): string {
 }
 
 function formatAbsolute(iso: string): string {
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -119,7 +120,7 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
             </>
           )}
         </p>
-        <p className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]" title={formatAbsolute(item.occurredAt)}>
+        <p className="mt-0.5 font-mono text-[11px] text-[var(--p-text-2)]" title={formatAbsolute(item.occurredAt)}>
           {now === null ? formatAbsolute(item.occurredAt) : formatRelative(item.occurredAt, now)}
         </p>
         {hasDiff && (
@@ -140,7 +141,7 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
               if (!entry) return null;
               return (
                 <div key={field} className="surface-inset px-2 py-1">
-                  <dt className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{field}</dt>
+                  <dt className="font-mono text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">{field}</dt>
                   <dd className="mt-0.5 flex flex-wrap items-center gap-1 font-mono text-[11px]">
                     <span className="text-[var(--p-text-2)] line-through">{renderValue(entry.before)}</span>
                     <span aria-hidden="true">→</span>

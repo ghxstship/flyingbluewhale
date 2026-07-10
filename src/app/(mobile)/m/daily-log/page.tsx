@@ -2,7 +2,7 @@ import Link from "next/link";
 import { NotebookPen } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 
@@ -33,6 +33,7 @@ export default async function DailyLogPage() {
   const session = await requireSession();
   const rows = (await listOrgScoped("daily_logs", session.orgId)) as unknown as LogRow[];
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const logs = rows
     .slice()
@@ -64,7 +65,7 @@ export default async function DailyLogPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="t">
                   {r.log_date
-                    ? new Date(r.log_date + "T00:00:00").toLocaleDateString("en-US", {
+                    ? fmt.dateParts(new Date(r.log_date + "T00:00:00"), {
                         weekday: "short",
                         month: "short",
                         day: "numeric",

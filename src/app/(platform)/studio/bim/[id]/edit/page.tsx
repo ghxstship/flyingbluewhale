@@ -33,14 +33,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const SOURCE_TYPES = [
     { value: "ifc", label: t("console.bim.new.sourceType.ifc", undefined, "IFC") },
-    { value: "ifc_zip", label: t("console.bim.new.sourceType.ifcZip", undefined, "IFC — Zipped") },
-    { value: "rvt", label: t("console.bim.new.sourceType.rvt", undefined, "Revit — RVT") },
-    { value: "nwd", label: t("console.bim.new.sourceType.nwd", undefined, "Navisworks — NWD") },
-    { value: "nwc", label: t("console.bim.new.sourceType.nwc", undefined, "Navisworks Cache — NWC") },
-    { value: "glb", label: t("console.bim.new.sourceType.glb", undefined, "glTF Binary — GLB") },
+    { value: "ifc_zip", label: t("console.bim.new.sourceType.ifcZip", undefined, "IFC (Zipped)") },
+    { value: "rvt", label: t("console.bim.new.sourceType.rvt", undefined, "Revit (RVT)") },
+    { value: "nwd", label: t("console.bim.new.sourceType.nwd", undefined, "Navisworks (NWD)") },
+    { value: "nwc", label: t("console.bim.new.sourceType.nwc", undefined, "Navisworks Cache (NWC)") },
+    { value: "glb", label: t("console.bim.new.sourceType.glb", undefined, "glTF Binary (GLB)") },
     { value: "gltf", label: t("console.bim.new.sourceType.gltf", undefined, "glTF") },
     { value: "fbx", label: t("console.bim.new.sourceType.fbx", undefined, "FBX") },
-    { value: "dwg", label: t("console.bim.new.sourceType.dwg", undefined, "AutoCAD — DWG") },
+    { value: "dwg", label: t("console.bim.new.sourceType.dwg", undefined, "AutoCAD (DWG)") },
   ];
 
   const DISCIPLINES = [
@@ -170,7 +170,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               maxLength={400}
               className={`${INPUT} font-mono text-xs`}
             />
-            <span className="text-[10px] text-[var(--p-text-2)]">
+            <span className="text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.bim.new.storagePathHint",
                 undefined,

@@ -115,7 +115,7 @@ export async function setPoStatusAction(
     .eq("po_state", current as "draft")
     .select("id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "PO status changed concurrently — refresh and retry" };
+  if (!updated || updated.length === 0) return { error: "PO status changed concurrently. Refresh and retry" };
   revalidatePath(`/studio/procurement/purchase-orders/${id}`);
   revalidatePath("/studio/procurement/purchase-orders");
   return { ok: true as const };
@@ -169,4 +169,60 @@ export async function routePoToApprovalsAction(poId: string): Promise<RoutePoSta
   revalidatePath(`/studio/procurement/purchase-orders/${poId}`);
   revalidatePath("/studio/governance/approvals");
   redirect(`/studio/governance/approvals/${routed.id}`);
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk-send draft purchase orders (audit A-22). manager+ only; org-pinned;
+ * non-draft rows are skipped and reported.
+ */
+export async function bulkSendPos(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Send Purchase Orders" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("purchase_orders")
+    .update({ po_state: "sent" })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .eq("po_state", "draft")
+    .select("id");
+  if (error) return { error: `Could Not Send · ${error.message}` };
+  const sent = updated?.length ?? 0;
+  const skipped = parsed.data.length - sent;
+  revalidatePath("/studio/procurement/purchase-orders");
+  if (skipped > 0) return { error: `${sent} Sent · ${skipped} Skipped (not in draft)` };
+  return { message: `${sent} ${sent === 1 ? "PO" : "POs"} Sent` };
+}
+
+/**
+ * Bulk-cancel purchase orders (audit A-22). manager+ only; fulfilled or
+ * already-cancelled rows are skipped and reported.
+ */
+export async function bulkCancelPos(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Cancel Purchase Orders" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("purchase_orders")
+    .update({ po_state: "cancelled" })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .not("po_state", "in", "(fulfilled,cancelled)")
+    .select("id");
+  if (error) return { error: `Could Not Cancel · ${error.message}` };
+  const cancelled = updated?.length ?? 0;
+  const skipped = parsed.data.length - cancelled;
+  revalidatePath("/studio/procurement/purchase-orders");
+  if (skipped > 0) return { error: `${cancelled} Cancelled · ${skipped} Skipped (fulfilled or already cancelled)` };
+  return { message: `${cancelled} ${cancelled === 1 ? "PO" : "POs"} Cancelled` };
 }

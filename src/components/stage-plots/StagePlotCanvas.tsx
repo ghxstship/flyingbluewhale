@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Music, Mic, Speaker, Drum, Guitar, Radio, Lightbulb, Square, Trash2, Save, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -336,7 +336,7 @@ export function StagePlotCanvas({
               <span>{labelForKind(p.kind)}</span>
             </button>
           ))}
-          <p className="mt-2 text-[10px] leading-relaxed text-[var(--p-text-2)]">
+          <p className="mt-2 text-[11px] leading-relaxed text-[var(--p-text-2)]">
             {t(
               "components.stagePlotCanvas.paletteHelp",
               undefined,

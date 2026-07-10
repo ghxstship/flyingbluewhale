@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Bookmark, Check, Edit3, Plus, Star, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -119,7 +119,7 @@ export function SavedViewSelector({
                   {t("savedViews.selector.defaultView", undefined, "Default View")}
                 </span>
               </span>
-              <span className="text-[10px] text-[var(--p-text-2)]">
+              <span className="text-[11px] text-[var(--p-text-2)]">
                 {t("savedViews.selector.autoSaved", undefined, "Auto-Saved")}
               </span>
             </span>
@@ -131,7 +131,7 @@ export function SavedViewSelector({
             return (
               <React.Fragment key={scope}>
                 <DropdownMenuSeparator />
-                <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+                <div className="px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
                   {headingForScope(scope, t)}
                 </div>
                 {rows.map((view) => (
@@ -244,7 +244,7 @@ function SavedViewRow({
         {view.isDefault && <Star size={10} aria-hidden="true" className="text-[var(--p-accent)]" />}
         {view.isLocked && (
           <span
-            className="text-[10px] text-[var(--p-text-2)]"
+            className="text-[11px] text-[var(--p-text-2)]"
             aria-label={t("savedViews.selector.lockedAria", undefined, "Locked view")}
           >
             {t("savedViews.selector.locked", undefined, "(locked)")}

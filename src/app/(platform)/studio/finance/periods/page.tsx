@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listAccountingPeriods, type AccountingPeriod } from "@/lib/accounting-periods";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +25,7 @@ export default async function FinancePeriodsPage() {
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const rows = await listAccountingPeriods(session.orgId);
   const open = rows.filter((r) => r.state === "OPEN" || r.state === "IN_PERIOD").length;
   const closed = rows.filter((r) => r.state === "CLOSED" || r.state === "AUDITED").length;
@@ -72,7 +73,7 @@ export default async function FinancePeriodsPage() {
             {
               key: "closed",
               header: t("console.finance.periods.cols.closed", undefined, "Closed"),
-              render: (r) => (r.closed_at ? new Date(r.closed_at).toLocaleDateString() : "—"),
+              render: (r) => (r.closed_at ? fmt.date(new Date(r.closed_at)) : "—"),
               className: "text-xs text-[var(--p-text-2)]",
               accessor: (r) => r.closed_at,
             },

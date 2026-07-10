@@ -9,6 +9,12 @@ import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
   invoiceId: z.string().uuid(),
+  // Portal payer flow (C-07): when set, success/cancel return to the client
+  // portal's invoice list instead of the operator console.
+  portalSlug: z
+    .string()
+    .regex(/^[a-z0-9-]{1,64}$/)
+    .optional(),
 });
 
 async function handler(req: Request) {
@@ -17,11 +23,13 @@ async function handler(req: Request) {
 
   return withAuth(async (session) => {
     // Creating a Stripe checkout is a billing action — controller/owner/admin
-    // only. Clients can pay (via the resulting URL) but can't initiate.
+    // only... with one carve-out: a payer settling an invoice issued TO them.
+    // Without `invoices:write`, the caller falls into payer mode — they can
+    // only start checkout on an RLS-readable, open, outbound (AR) invoice.
     // Gate BEFORE the Stripe env check so an unprivileged caller never gets
-    // to probe whether secrets are configured.
+    // to probe whether secrets are configured on invoices they can't see.
     const denial = assertCapability(session, "invoices:write");
-    if (denial) return denial;
+    const payerMode = denial !== null;
     if (!env.STRIPE_SECRET_KEY) return apiError("service_unavailable", "STRIPE_SECRET_KEY is not configured");
     const supabase = await createClient();
     const { data: invoice } = await supabase
@@ -31,6 +39,15 @@ async function handler(req: Request) {
       .eq("id", input.invoiceId)
       .maybeSingle();
     if (!invoice) return apiError("not_found", "Invoice not found");
+    if (payerMode && (invoice.source !== "ar" || !["sent", "overdue"].includes(invoice.invoice_state))) {
+      // Payers can settle open receivables only — drafts, AP payables, and
+      // settled invoices still require the billing capability.
+      return denial!;
+    }
+
+    const returnBase = input.portalSlug
+      ? { shell: "portal" as const, path: `/${input.portalSlug}/client/invoices` }
+      : { shell: "platform" as const, path: `/finance/invoices/${invoice.id}` };
 
     const form = new URLSearchParams();
     form.set("mode", "payment");
@@ -38,8 +55,8 @@ async function handler(req: Request) {
     form.set("line_items[0][price_data][currency]", invoice.currency.toLowerCase());
     form.set("line_items[0][price_data][product_data][name]", `Invoice ${invoice.number}`);
     form.set("line_items[0][price_data][unit_amount]", invoice.amount_cents.toString());
-    form.set("success_url", urlFor("platform", `/finance/invoices/${invoice.id}?paid=1`));
-    form.set("cancel_url", urlFor("platform", `/finance/invoices/${invoice.id}?cancelled=1`));
+    form.set("success_url", urlFor(returnBase.shell, `${returnBase.path}?paid=1`));
+    form.set("cancel_url", urlFor(returnBase.shell, `${returnBase.path}?cancelled=1`));
     form.set("metadata[invoice_id]", invoice.id);
 
     const res = await httpFetch("https://api.stripe.com/v1/checkout/sessions", {
@@ -54,7 +71,10 @@ async function handler(req: Request) {
     if (!res.ok) return apiError("internal", `Stripe checkout: ${await res.text()}`);
     const s = (await res.json()) as { id: string; url: string; payment_intent?: string };
 
-    if (s.payment_intent) {
+    if (s.payment_intent && !payerMode) {
+      // (Payer mode skips this write: the invoice is already sent/overdue and
+      // the payer's RLS band couldn't update it anyway — the webhook records
+      // the payment intent when the payment lands.)
       // Conditional update — never regress an already-paid invoice back to
       // "sent". The webhook handler may have flipped it to paid between
       // our checkout-session create and this update; without the guard we

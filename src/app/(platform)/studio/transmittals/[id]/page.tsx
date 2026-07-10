@@ -297,7 +297,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
               <span className="grid grid-cols-3 gap-2">
                 <select name="user_id" className={`${INPUT} text-xs`}>
-                  <option value="">{t("console.transmittals.detail.userOption", undefined, "— user —")}</option>
+                  <option value="">{t("console.transmittals.detail.userOption", undefined, "user")}</option>
                   {users.map((u) => (
                     <option key={u.id} value={u.id}>
                       {u.name ?? u.email ?? u.id}
@@ -305,7 +305,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   ))}
                 </select>
                 <select name="vendor_id" className={`${INPUT} text-xs`}>
-                  <option value="">{t("console.transmittals.detail.vendorOption", undefined, "— vendor —")}</option>
+                  <option value="">{t("console.transmittals.detail.vendorOption", undefined, "vendor")}</option>
                   {vendors.map((v) => (
                     <option key={v.id} value={v.id}>
                       {v.name}

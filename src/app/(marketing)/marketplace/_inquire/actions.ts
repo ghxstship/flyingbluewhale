@@ -3,8 +3,10 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { notifyOrgAdmins } from "@/lib/notify";
+import { log } from "@/lib/log";
 import type { FormState } from "@/components/FormShell";
 import { INQUIRY_SUBJECT_KINDS, type InquirySubjectKind } from "@/lib/marketplace";
 
@@ -42,7 +44,7 @@ export async function submitMarketplaceInquiry(
   // Default the reply address to the account email so the operator always
   // has a way to respond, even when the optional contact fields are blank.
   const contactEmail = parsed.data.contact_email || session.email;
-  const { error } = await supabase.rpc("submit_marketplace_inquiry", {
+  const { data: inquiryId, error } = await supabase.rpc("submit_marketplace_inquiry", {
     p_subject_kind: kind,
     p_handle: handle,
     p_message: parsed.data.message,
@@ -58,6 +60,36 @@ export async function submitMarketplaceInquiry(
       return actionFail("This listing is no longer accepting inquiries.", fd);
     }
     return actionFail(error.message, fd);
+  }
+
+  // E-22 — inbound demand must reach the subject org, not sit unseen in a
+  // console list. Resolve the inquiry the RPC just wrote (the public
+  // directory views hide org_id, so the row is the only org source) and
+  // fan out to the org's owners/admins: bell + push + email (each gated
+  // per-admin by the notification matrix) + one org webhook. Best-effort:
+  // a notify failure never fails the submission the visitor just made.
+  if (inquiryId && isServiceClientAvailable()) {
+    try {
+      const svc = createServiceClient();
+      const { data: inquiry } = await svc
+        .from("marketplace_inquiries")
+        .select("id, org_id, subject_kind, subject_name, message, event_date")
+        .eq("id", inquiryId)
+        .maybeSingle();
+      if (inquiry) {
+        const preview = inquiry.message.length > 180 ? `${inquiry.message.slice(0, 177)}...` : inquiry.message;
+        await notifyOrgAdmins({
+          orgId: inquiry.org_id,
+          eventType: "marketplace.inquiry_received",
+          title: `New marketplace inquiry for ${inquiry.subject_name}`,
+          body: inquiry.event_date ? `${preview} (event date ${inquiry.event_date})` : preview,
+          href: "/studio/marketplace/inquiries",
+          data: { targetTable: "marketplace_inquiries", targetId: inquiry.id, subjectKind: inquiry.subject_kind },
+        });
+      }
+    } catch (err) {
+      log.warn("marketplace.inquiry_notify_failed", { inquiryId, err: (err as Error).message });
+    }
   }
 
   redirect("/me/inquiries?sent=1");

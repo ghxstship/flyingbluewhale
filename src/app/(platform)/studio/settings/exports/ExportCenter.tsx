@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusChip } from "@/components/ui/StatusChip";
@@ -105,7 +105,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
         return;
       }
       if (body.data?.queued) {
-        toast.success(t("console.settings.exports.toast.queued", undefined, "Export queued — polling for completion"));
+        toast.success(t("console.settings.exports.toast.queued", undefined, "Export queued. Polling for completion"));
       } else {
         toast.success(t("console.settings.exports.toast.complete", undefined, "Export complete"));
         if (body.data?.signedUrl) {
@@ -232,7 +232,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                         {r.status}
                       </StatusChip>
                       {r.status === "failed" && r.last_error && (
-                        <div className="mt-1 max-w-xs truncate text-[10px] text-[var(--p-danger)]" title={r.last_error}>
+                        <div className="mt-1 max-w-xs truncate text-[11px] text-[var(--p-danger)]" title={r.last_error}>
                           {r.last_error}
                         </div>
                       )}
@@ -243,7 +243,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                           type="button"
                           onClick={() => redownload(r)}
                           aria-label={t("console.settings.exports.downloadAgain", undefined, "Download Again")}
-                          className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-[10px] hover:bg-[var(--p-surface-2)]"
+                          className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-[11px] hover:bg-[var(--p-surface-2)]"
                         >
                           <Download size={10} /> {t("console.settings.exports.download", undefined, "Download")}
                         </button>

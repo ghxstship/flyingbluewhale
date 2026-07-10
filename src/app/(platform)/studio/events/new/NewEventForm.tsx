@@ -54,7 +54,7 @@ export function NewEventForm({
             {t("console.events.new.projectLabel", undefined, "Project")}
           </label>
           <select name="project_id" className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.events.new.noProject", undefined, "— No project —")}</option>
+            <option value="">{t("console.events.new.noProject", undefined, "No project")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -67,7 +67,7 @@ export function NewEventForm({
             {t("console.events.new.locationLabel", undefined, "Location")}
           </label>
           <select name="location_id" className="ps-input mt-1.5 w-full">
-            <option value="">{t("console.events.new.noLocation", undefined, "— No location —")}</option>
+            <option value="">{t("console.events.new.noLocation", undefined, "No location")}</option>
             {locations.map((l) => (
               <option key={l.id} value={l.id}>
                 {l.name}

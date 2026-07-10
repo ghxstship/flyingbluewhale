@@ -43,16 +43,16 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
               className="ps-input mt-1.5 w-full"
             >
               <option value="green">
-                {t("console.safety.medical.encounters.edit.triageGreen", undefined, "Green — Minor")}
+                {t("console.safety.medical.encounters.edit.triageGreen", undefined, "Green (Minor)")}
               </option>
               <option value="yellow">
-                {t("console.safety.medical.encounters.edit.triageYellow", undefined, "Yellow — Urgent")}
+                {t("console.safety.medical.encounters.edit.triageYellow", undefined, "Yellow (Urgent)")}
               </option>
               <option value="red">
-                {t("console.safety.medical.encounters.edit.triageRed", undefined, "Red — Immediate")}
+                {t("console.safety.medical.encounters.edit.triageRed", undefined, "Red (Immediate)")}
               </option>
               <option value="black">
-                {t("console.safety.medical.encounters.edit.triageBlack", undefined, "Black — Deceased")}
+                {t("console.safety.medical.encounters.edit.triageBlack", undefined, "Black (Deceased)")}
               </option>
             </select>
           </div>

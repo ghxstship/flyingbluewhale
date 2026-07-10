@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.build.eyebrow", undefined, "Venue")}
-        title={t("console.venues.build.titleWithName", { name: venue.name }, `${venue.name} — Build`)}
+        title={t("console.venues.build.titleWithName", { name: venue.name }, `${venue.name} · Build`)}
         subtitle={
           logs.length === 1
             ? t("console.venues.build.subtitleOne", { count: logs.length }, `${logs.length} log entry`)
@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {t(
               "console.venues.build.emptyState",
               undefined,
-              "No build-log entries yet. The construction lead should add a daily entry summarising trades on site, progress, and blockers — these feed the project's burndown.",
+              "No build-log entries yet. The construction lead should add a daily entry summarising trades on site, progress, and blockers. These feed the project's burndown.",
             )}
           </div>
         ) : (
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                       </p>
                     )}
                   </div>
-                  <div className="flex flex-col items-end gap-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                  <div className="flex flex-col items-end gap-1 font-mono text-[11px] text-[var(--p-text-2)]">
                     {l.trades_onsite != null && (
                       <span>
                         {t("console.venues.build.tradesCount", { count: l.trades_onsite }, `${l.trades_onsite} trades`)}

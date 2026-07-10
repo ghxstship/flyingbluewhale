@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{KIND_LABEL[c.kind] ?? c.kind}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {c.accreditation?.person_name ?? "—"} ·{" "}
                       {t("p.apply.changes.filed", { date: fmtDate(c.created_at) }, `filed ${fmtDate(c.created_at)}`)}
                       {c.decided_at

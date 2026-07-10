@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { stampRevision, addNextRound, closeSubmittal } from "./actions";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +20,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const { data: sub } = await supabase
     .from("submittals")
@@ -91,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {all.map((r) => (
                 <tr key={r.id}>
                   <td className="font-mono text-xs">#{r.round}</td>
-                  <td className="font-mono text-xs">{new Date(r.submitted_at).toLocaleDateString()}</td>
+                  <td className="font-mono text-xs">{fmt.date(new Date(r.submitted_at))}</td>
                   <td>
                     <Badge variant={toneFor(r.stamp)}>{toTitle(r.stamp)}</Badge>
                   </td>

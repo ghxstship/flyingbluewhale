@@ -6,6 +6,7 @@
  * and dashboards read the same ids. Mirrors the documents registry shape.
  */
 import raw from "./metrics.json";
+import { formatNumber } from "@/lib/i18n/format";
 
 export type MetricFormat = "currency" | "days" | "float" | "int" | "pct" | "ratio" | "score";
 export type MetricApp = "ATLVS" | "COMPVSS" | "GVTEWAY" | "LEG3ND" | "ALL";
@@ -102,7 +103,7 @@ export function formatMetricValue(value: number | null | undefined, def: Pick<Me
       const abs = Math.abs(value);
       if (abs >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
       if (abs >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
-      return `$${value.toLocaleString("en-US")}`;
+      return `$${formatNumber(value)}`;
     }
     case "pct":
       return `${value.toFixed(value % 1 === 0 ? 0 : 1)}%`;
@@ -113,9 +114,9 @@ export function formatMetricValue(value: number | null | undefined, def: Pick<Me
     case "score":
       return value.toFixed(0);
     case "int":
-      return Math.round(value).toLocaleString("en-US");
+      return formatNumber(Math.round(value), { maximumFractionDigits: 0 });
     case "float":
     default:
-      return value.toLocaleString("en-US", { maximumFractionDigits: 1 });
+      return formatNumber(value, { maximumFractionDigits: 1 });
   }
 }

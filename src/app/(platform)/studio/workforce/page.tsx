@@ -2,7 +2,10 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
+import { listOrgScopedPage } from "@/lib/db/resource";
+import { parsePage } from "@/lib/db/pagination";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -26,8 +29,13 @@ const KIND_LABEL: Record<string, string> = {
   official: "Officials",
 };
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ kind?: string }> }) {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const sp = await searchParams;
+  const kindParam = Array.isArray(sp.kind) ? sp.kind[0] : sp.kind;
   const { t } = await getRequestT();
   const KIND_LABEL_I18N: Record<string, string> = {
     paid_staff: t("console.workforce.kind.paidStaff", undefined, "Paid Staff"),
@@ -73,6 +81,18 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
       label: t("console.workforce.related.services.label", undefined, "Services"),
       sub: t("console.workforce.related.services.sub", undefined, "Service requests"),
     },
+    // B-24: cross-links between the three people directories — workforce
+    // members here, org members under People, crew under People > Crew.
+    {
+      href: "/studio/people",
+      label: t("console.workforce.related.people.label", undefined, "Team Members"),
+      sub: t("console.workforce.related.people.sub", undefined, "Org accounts and roles"),
+    },
+    {
+      href: "/studio/people/crew",
+      label: t("console.workforce.related.crew.label", undefined, "Crew Directory"),
+      sub: t("console.workforce.related.crew.sub", undefined, "Freelance crew and day rates"),
+    },
   ];
   if (!hasSupabase) {
     return (
@@ -89,24 +109,39 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
   const session = await requireSession();
   const supabase = await createClient();
 
-  let q = supabase
-    .from("workforce_members")
-    .select("id,full_name,email,phone,role,kind,venue_id")
-    .eq("org_id", session.orgId)
-    .order("full_name", { ascending: true });
   type WorkforceKind = "paid_staff" | "volunteer" | "contractor" | "official";
-  const activeKind = sp.kind && Object.keys(KIND_LABEL).includes(sp.kind) ? (sp.kind as WorkforceKind) : null;
-  if (activeKind) q = q.eq("kind", activeKind);
-  const { data } = await q;
-  const rows = (data ?? []) as Row[];
+  const activeKind = kindParam && Object.keys(KIND_LABEL).includes(kindParam) ? (kindParam as WorkforceKind) : null;
 
-  // Per-kind counts so the filter chips show inventory at a glance.
-  const { data: allRows } = await supabase.from("workforce_members").select("kind").eq("org_id", session.orgId);
-  const counts = (allRows ?? []).reduce<Record<string, number>>((acc, r) => {
-    acc[r.kind] = (acc[r.kind] ?? 0) + 1;
+  // B-23: server-side pagination — this is exactly the directory where
+  // thousands of rows live, so we page on the server instead of shipping
+  // the whole table. Filter chips get head-only counts (no rows fetched).
+  const { page, offset, pageSize } = parsePage(sp);
+  const kinds = Object.keys(KIND_LABEL) as WorkforceKind[];
+  const [result, kindCounts] = await Promise.all([
+    listOrgScopedPage("workforce_members", session.orgId, {
+      orderBy: "full_name",
+      ascending: true,
+      pageSize,
+      cursor: String(offset),
+      ...(activeKind ? { filters: [{ column: "kind", op: "eq" as const, value: activeKind }] } : {}),
+    }),
+    Promise.all(
+      kinds.map((kind) =>
+        supabase
+          .from("workforce_members")
+          .select("id", { count: "exact", head: true })
+          .eq("org_id", session.orgId)
+          .eq("kind", kind),
+      ),
+    ),
+  ]);
+  const rows = result.rows as Row[];
+  const counts = kinds.reduce<Record<string, number>>((acc, kind, i) => {
+    acc[kind] = kindCounts[i]?.count ?? 0;
     return acc;
   }, {});
-  const totalCount = (allRows ?? []).length;
+  const totalCount = kinds.reduce((sum, kind) => sum + (counts[kind] ?? 0), 0);
+  const filteredTotal = result.totalCount;
 
   return (
     <>
@@ -117,8 +152,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
           activeKind
             ? t(
                 "console.workforce.subtitle.filtered",
-                { count: rows.length, kind: (KIND_LABEL_I18N[activeKind] ?? activeKind).toLowerCase() },
-                `${rows.length} ${(KIND_LABEL_I18N[activeKind] ?? activeKind).toLowerCase()}`,
+                { count: filteredTotal, kind: (KIND_LABEL_I18N[activeKind] ?? activeKind).toLowerCase() },
+                `${filteredTotal} ${(KIND_LABEL_I18N[activeKind] ?? activeKind).toLowerCase()}`,
               )
             : t(
                 "console.workforce.subtitle.all",
@@ -158,6 +193,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
 
         <DataTable<Row>
           rows={rows}
+          totalCount={filteredTotal}
           emptyLabel={
             activeKind
               ? t(
@@ -203,6 +239,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
               mono: true,
             },
           ]}
+        />
+
+        <PagerNav
+          page={page}
+          total={filteredTotal}
+          pageSize={pageSize}
+          basePath="/studio/workforce"
+          searchParams={sp}
         />
 
         <section>

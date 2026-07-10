@@ -9,7 +9,7 @@ import { parsePage } from "@/lib/db/pagination";
 import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function Page({
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const { page, offset, pageSize } = parsePage(sp);
   const result = await listOrgScopedPage("guard_tours", session.orgId, {
@@ -117,7 +118,7 @@ export default async function Page({
               header: t("console.safety.guardTours.col.nextRun", undefined, "Next Run"),
               render: (r) =>
                 r.next_run_at
-                  ? new Date(String(r.next_run_at)).toLocaleString(undefined, {
+                  ? fmt.dateParts(new Date(String(r.next_run_at)), {
                       month: "short",
                       day: "numeric",
                       hour: "2-digit",

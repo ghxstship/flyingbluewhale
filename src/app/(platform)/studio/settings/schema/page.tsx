@@ -48,7 +48,7 @@ export default async function SchemaBuilderPage({ searchParams }: { searchParams
         info={t(
           "console.settings.schema.info",
           undefined,
-          "The derived JSON Schema + generated create form for every document type. Read-only — the documents registry is the source of truth.",
+          "The derived JSON Schema + generated create form for every document type. Read-only. The documents registry is the source of truth.",
         )}
         breadcrumbs={[
           { label: t("console.settings.eyebrow", undefined, "Settings"), href: "/studio/settings" },
@@ -105,7 +105,7 @@ export default async function SchemaBuilderPage({ searchParams }: { searchParams
                 const kind = inputKind(leafOf(path));
                 return (
                   <label key={path} className="block text-xs font-medium">
-                    <span className="mb-1 block font-mono text-[10px] text-[var(--p-text-3)]">{path}</span>
+                    <span className="mb-1 block font-mono text-[11px] text-[var(--p-text-3)]">{path}</span>
                     <input type={kind} disabled placeholder={kind} className="ps-input w-full opacity-70" />
                   </label>
                 );
@@ -118,7 +118,7 @@ export default async function SchemaBuilderPage({ searchParams }: { searchParams
             <h3 className="mb-3 text-sm font-semibold">
               {t("console.settings.schema.jsonSchema", undefined, "JSON Schema")}
             </h3>
-            <pre className="max-h-96 overflow-auto rounded bg-[var(--p-bg)] p-3 font-mono text-[10px] text-[var(--p-text-2)]">
+            <pre className="max-h-96 overflow-auto rounded bg-[var(--p-bg)] p-3 font-mono text-[11px] text-[var(--p-text-2)]">
               {JSON.stringify(contract.jsonSchema, null, 2)}
             </pre>
           </div>

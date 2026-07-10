@@ -51,7 +51,7 @@ export function DiffViewer({
   return (
     <div className={`overflow-hidden rounded-md border border-[var(--p-border)] ${className}`}>
       <table className="w-full text-xs">
-        <thead className="bg-[var(--p-surface-2)] text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+        <thead className="bg-[var(--p-surface-2)] text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
           <tr>
             <th className="px-3 py-1.5 text-start">Field</th>
             <th className="px-3 py-1.5 text-start">Before</th>
@@ -62,7 +62,7 @@ export function DiffViewer({
           {rows.map((r, i) => (
             <tr key={i} className="border-t border-[var(--p-border)]">
               <td
-                className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--p-text-2)]"
+                className="px-3 py-1.5 align-top font-mono text-[11px] text-[var(--p-text-2)]"
                 style={{ fontFamily: "var(--p-mono-data)" }}
               >
                 {r.path}

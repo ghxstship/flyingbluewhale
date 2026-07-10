@@ -71,7 +71,7 @@ export async function transitionDailyLog(id: string, to: "submitted" | "approved
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Daily log status changed concurrently — refresh and retry");
+    throw new Error("Daily log status changed concurrently. Refresh and retry");
   }
   revalidatePath(`/studio/operations/daily-log/${id}`);
   revalidatePath("/studio/operations/daily-log");

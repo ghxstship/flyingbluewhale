@@ -26,7 +26,7 @@ export function LinkAssetForm({
         </label>
         <select name="assignment_id" required className="ps-input mt-1.5 w-full">
           <option value="">
-            {t("console.people.credentials.assetLinker.form.assignmentPlaceholder", undefined, "— Select —")}
+            {t("console.people.credentials.assetLinker.form.assignmentPlaceholder", undefined, "Select")}
           </option>
           {assignments.map((a) => (
             <option key={a.id} value={a.id}>

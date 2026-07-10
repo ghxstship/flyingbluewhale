@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("open_call_submissions")
     .select("*")
@@ -49,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         {t(
           "me.submissions.detail.submittedAt",
-          { when: new Date(s.submitted_at).toLocaleString() },
+          { when: fmt.dateTime(new Date(s.submitted_at)) },
           "Submitted {when}",
         )}
       </p>

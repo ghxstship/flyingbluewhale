@@ -85,6 +85,7 @@ export default async function GoalDetail({ params }: { params: Promise<{ id: str
               <DeleteForm
                 action={deleteGoalAction.bind(null, goal.id)}
                 confirm={`Delete goal "${goal.title}"?`}
+                undo={{ table: "goals", id: goal.id, redirectTo: "/studio/goals" }}
               />
             </div>
           ) : undefined

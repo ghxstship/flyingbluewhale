@@ -5,7 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +20,7 @@ type ReceiptRow = {
 
 export default async function Page() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <>
@@ -100,7 +101,7 @@ export default async function Page() {
             {
               key: "received_at",
               header: t("console.procurement.receiving.columns.receivedAt", undefined, "Received"),
-              render: (r) => new Date(r.received_at).toLocaleDateString("en-US"),
+              render: (r) => fmt.date(new Date(r.received_at)),
               mono: true,
             },
             {

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtDateTime } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
 import { WebhookEditor } from "./WebhookEditor";
+import { DeliveryActions } from "./DeliveryActions";
 
 export default async function Page({ params }: { params: Promise<{ webhookId: string }> }) {
   const { webhookId } = await params;
@@ -63,13 +64,16 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
         />
 
         <section className="surface">
-          <div className="border-b border-[var(--p-border)] px-5 py-3">
-            <h3 className="text-sm font-semibold">
-              {t("console.settings.webhooks.detail.recentDeliveries", undefined, "Recent Deliveries")}
-            </h3>
-            <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
-              {t("console.settings.webhooks.detail.last25", undefined, "Last 25 attempts")}
-            </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--p-border)] px-5 py-3">
+            <div>
+              <h3 className="text-sm font-semibold">
+                {t("console.settings.webhooks.detail.recentDeliveries", undefined, "Recent Deliveries")}
+              </h3>
+              <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
+                {t("console.settings.webhooks.detail.last25", undefined, "Last 25 attempts")}
+              </p>
+            </div>
+            <DeliveryActions endpointId={endpoint.id} hasDeliveries={rows.length > 0} />
           </div>
           {rows.length === 0 ? (
             <div className="p-5 text-sm text-[var(--p-text-2)]">

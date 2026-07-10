@@ -45,7 +45,7 @@ export default async function BlogIndex() {
                   {p.keywords.slice(0, 4).map((k) => (
                     <span
                       key={k}
-                      className="rounded-full bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] text-[var(--p-text-2)]"
+                      className="rounded-full bg-[var(--p-surface-2)] px-2 py-0.5 text-[11px] text-[var(--p-text-2)]"
                     >
                       {k}
                     </span>

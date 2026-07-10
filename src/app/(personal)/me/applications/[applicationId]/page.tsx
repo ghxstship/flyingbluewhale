@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("job_applications")
     .select("*")
@@ -49,8 +50,8 @@ export default async function Page({ params }: { params: Promise<{ applicationId
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         {t(
           "me.applications.detail.appliedAt",
-          { when: new Date(a.applied_at).toLocaleString() },
-          `Applied ${new Date(a.applied_at).toLocaleString()}`,
+          { when: fmt.dateTime(new Date(a.applied_at)) },
+          `Applied ${fmt.dateTime(new Date(a.applied_at))}`,
         )}
       </p>
 

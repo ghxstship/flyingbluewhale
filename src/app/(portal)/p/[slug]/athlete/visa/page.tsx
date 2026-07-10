@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -124,17 +125,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{c.person_name}</div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {c.nationality ?? "—"} · {t("p.athlete.visa.passportLabel", undefined, "passport")}{" "}
                       {maskPassport(c.passport_no)}
                       {c.delegation?.name ? ` · ${c.delegation.name}` : ""}
                     </div>
                     {c.letter_path && (
-                      <div className="mt-1 font-mono text-[10px] text-[var(--p-accent)]">
+                      <div className="mt-1 font-mono text-[11px] text-[var(--p-accent)]">
                         {t("p.athlete.visa.letterOnFile", undefined, "letter on file")}
                       </div>
                     )}
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {t("p.athlete.visa.updated", { date: fmtDate(c.updated_at) }, `updated ${fmtDate(c.updated_at)}`)}
                     </div>
                   </div>
@@ -147,14 +148,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <p className="text-xs text-[var(--p-text-2)]">
           {t(
-            "p.athlete.visa.footer.prefix",
+            "p.athlete.visa.footer.messagePrefix",
             undefined,
-            "Passport numbers are masked on screen but retained for letter generation. Email",
+            "Passport numbers are masked on screen but retained for letter generation.",
           )}{" "}
-          <a className="text-[var(--p-accent)]" href="mailto:visas@atlvs.pro">
-            visas@atlvs.pro
-          </a>{" "}
-          {t("p.athlete.visa.footer.suffix", undefined, "if your case isn't progressing.")}
+          <Link className="text-[var(--p-accent)] underline" href={`/p/${slug}/messages`}>
+            {t("p.athlete.visa.footer.messageLink", undefined, "Message the team")}
+          </Link>{" "}
+          {t("p.athlete.visa.footer.messageSuffix", undefined, "if your case isn't progressing.")}
         </p>
       </div>
     </>

@@ -114,7 +114,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                             <div className="mt-1 flex items-center gap-2">
                               {p.xpms_phase && <Badge variant="muted">{toTitle(p.xpms_phase)}</Badge>}
                               {p.start_date && (
-                                <span className="font-mono text-[10px] text-[var(--p-text-2)]">
+                                <span className="font-mono text-[11px] text-[var(--p-text-2)]">
                                   {fmt.date(p.start_date)}
                                   {p.end_date ? ` → ${fmt.date(p.end_date)}` : ""}
                                 </span>

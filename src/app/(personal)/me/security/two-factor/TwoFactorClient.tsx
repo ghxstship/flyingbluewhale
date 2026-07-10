@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Copy, Download, KeyRound, ShieldCheck, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
@@ -259,7 +259,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                           : t("me.security.twoFactor.factor.statusPending", undefined, "Pending")}
                       </Badge>
                     </div>
-                    <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">
+                    <div className="mt-0.5 text-[11px] text-[var(--p-text-2)]">
                       {t(
                         "me.security.twoFactor.factor.addedAt",
                         { when: formatRelative(f.createdAt) },

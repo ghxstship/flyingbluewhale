@@ -28,7 +28,7 @@ import {
   SITE,
 } from "@/lib/seo";
 import { COMPARE, COMPARE_LIST } from "@/lib/compare";
-import { getRequestT } from "@/lib/i18n/request";
+import { getStaticEnT } from "../../_lib/static-t";
 
 export function generateStaticParams() {
   return COMPARE_LIST.map((c) => ({ competitor: c.slug }));
@@ -37,7 +37,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ competitor: string }> }): Promise<Metadata> {
   const { competitor } = await params;
   const c = COMPARE[competitor];
-  const { t } = await getRequestT();
+  const { t } = await getStaticEnT();
   if (!c)
     return buildMetadata({
       title: t("marketing.pages.alternatives.competitor.metadata.fallbackTitle"),
@@ -63,7 +63,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
   const { competitor } = await params;
   const c = COMPARE[competitor];
   if (!c) notFound();
-  const { t, locale } = await getRequestT();
+  const { t, locale } = await getStaticEnT();
 
   const crumbs = [
     { label: t("marketing.pages.alternatives.competitor.crumbs.home"), href: "/" },

@@ -36,10 +36,9 @@ export async function submitPasscode(prev: PasscodeFormState, fd: FormData): Pro
     return { error: "Link not valid" };
   }
 
-  // Successful claim — route to the resource's destination. For resources
-  // we don't have a wired renderer yet, the resolver returns the same
-  // /share/[token] page with `?unlocked=1` so the page renders an inline
-  // placeholder card.
+  // Successful claim — bounce back to /share/[token]?unlocked=1; the page
+  // dispatches to the resource's read-only renderer (proposal document,
+  // guide view, or the honest summary card) without consuming a second use.
   const dest = resolveResourceUrl(result.resource.table, result.resource.id, token);
   redirect(dest);
 }

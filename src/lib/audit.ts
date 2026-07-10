@@ -137,6 +137,12 @@ export type AuditAction =
   | "notification.read"
   | "notification.preferences_updated"
   // ────────────────────────────────────────────────────────────────
+  // Outbound webhook console actions (F-11) — manual test pings +
+  // redeliveries fired from /studio/settings/webhooks.
+  // ────────────────────────────────────────────────────────────────
+  | "webhook.test_sent"
+  | "webhook.redelivered"
+  // ────────────────────────────────────────────────────────────────
   // Privacy / GDPR — DSAR + data-export surfaces. These are the events
   // most likely to be litigated (Art. 15 access, Art. 17 erasure,
   // Art. 20 portability), so each create/fulfil/export is audited with

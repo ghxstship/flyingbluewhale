@@ -5,6 +5,7 @@
  * (legend_live_sessions, legend_session_registrations).
  */
 import type { StateTone } from "@/lib/tones";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const SESSION_KINDS = ["webinar", "hands_on", "workshop", "cohort"] as const;
 export type SessionKind = (typeof SESSION_KINDS)[number];
@@ -59,9 +60,8 @@ export type LiveSession = {
 
 /** Format an ISO timestamp → "Mon, Jun 23 · 16:00" (deterministic; `now` not needed). */
 export function formatSessionTime(iso: string): string {
-  const d = new Date(iso);
-  const date = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-  const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+  const date = formatDateParts(iso, { weekday: "short", month: "short", day: "numeric" });
+  const time = formatDateParts(iso, { hour: "2-digit", minute: "2-digit", hour12: false });
   return `${date} · ${time}`;
 }
 

@@ -21,6 +21,11 @@ export const dynamic = "force-dynamic";
 // share a single invoices query instead of issuing it twice.
 const getInvoices = cache((orgId: string) => listOrgScoped("invoices", orgId, { orderBy: "created_at" }));
 
+// Shared exact count — the subtitle already showed the true total while the
+// table silently rendered the first 100 (audit A-07); the table now gets the
+// same count so its truncation indicator renders.
+const getInvoiceCount = cache((orgId: string) => countOrgScoped("invoices", orgId));
+
 // Narrow, uncapped aggregate source for the header totals. getInvoices
 // runs through listOrgScoped, which silently caps at 100 rows — fine for
 // the table island, but reducing over it truncated the outstanding/paid
@@ -81,7 +86,7 @@ export default async function InvoicesPage() {
 async function InvoiceSummary({ orgId }: { orgId: string }) {
   const [{ t }, count, amounts] = await Promise.all([
     getRequestT(),
-    countOrgScoped("invoices", orgId),
+    getInvoiceCount(orgId),
     getInvoiceAmounts(orgId),
   ]);
   const outstanding = amounts
@@ -101,11 +106,23 @@ async function InvoiceSummary({ orgId }: { orgId: string }) {
 
 /** Streaming island — the invoices data table. */
 async function InvoiceTable({ orgId }: { orgId: string }) {
-  const [{ t }, rows] = await Promise.all([getRequestT(), getInvoices(orgId)]);
+  const [{ t }, rows, totalCount] = await Promise.all([getRequestT(), getInvoices(orgId), getInvoiceCount(orgId)]);
   return (
     <DataTable<Invoice>
       rows={rows}
+      totalCount={totalCount}
       rowHref={(r) => `/studio/finance/invoices/${r.id}`}
+      emptyLabel={t("console.finance.invoices.emptyLabel", undefined, "No invoices yet")}
+      emptyDescription={t(
+        "console.finance.invoices.emptyDescription",
+        undefined,
+        "Bill a client to start the receivables ledger; sent invoices track through paid.",
+      )}
+      emptyAction={
+        <Button href="/studio/finance/invoices/new" size="sm">
+          {t("console.finance.invoices.newLabel", undefined, "+ New Invoice")}
+        </Button>
+      }
       bulkActions={[
         {
           id: "void",

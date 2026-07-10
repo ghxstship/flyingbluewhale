@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import {
   BOOKING_STATE_LABELS,
   NEXT_BOOKING_STATES,
@@ -30,6 +30,7 @@ export default async function BookingDetail({ params }: { params: Promise<{ book
   const booking = await getOrgScoped("function_bookings", session.orgId, bookingId);
   if (!booking) notFound();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const [space, project, client] = await Promise.all([
     getOrgScoped("function_spaces", session.orgId, booking.space_id),
@@ -99,10 +100,10 @@ export default async function BookingDetail({ params }: { params: Promise<{ book
             {timeLabel(booking.starts_at)}–{timeLabel(booking.ends_at)}
           </Field>
           <Field label={t("console.diary.detail.field.starts", undefined, "Starts")}>
-            {new Date(booking.starts_at).toLocaleString()}
+            {fmt.dateTime(new Date(booking.starts_at))}
           </Field>
           <Field label={t("console.diary.detail.field.ends", undefined, "Ends")}>
-            {new Date(booking.ends_at).toLocaleString()}
+            {fmt.dateTime(new Date(booking.ends_at))}
           </Field>
           <Field label={t("console.diary.detail.field.headcount", undefined, "Headcount")}>
             {booking.headcount ?? "—"}

@@ -224,7 +224,7 @@ function FieldRenderer({
     <label className="text-xs font-medium text-[var(--p-text-2)]">
       {field.label}
       {field.required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
-      {field.help ? <span className="ms-2 text-[10px] font-normal text-[var(--p-text-2)]">{field.help}</span> : null}
+      {field.help ? <span className="ms-2 text-[11px] font-normal text-[var(--p-text-2)]">{field.help}</span> : null}
     </label>
   );
 

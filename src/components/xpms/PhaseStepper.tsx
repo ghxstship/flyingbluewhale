@@ -65,7 +65,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
             <span className={`flex items-center gap-1.5 ${stateClass}`}>
               <span
                 aria-hidden="true"
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[10px] font-semibold ${dotClass}`}
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[11px] font-semibold ${dotClass}`}
               >
                 {phase.num}
               </span>

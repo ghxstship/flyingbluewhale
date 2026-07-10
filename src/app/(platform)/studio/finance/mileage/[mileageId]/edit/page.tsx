@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
             {/* Dollar-denominated entry; MoneyInput submits canonical
                 integer cents via its hidden `rate_cents` field. */}
             <MoneyInput
-              label={t("console.finance.mileage.edit.rate", undefined, "Rate — Per Mile")}
+              label={t("console.finance.mileage.edit.rate", undefined, "Rate (Per Mile)")}
               name="rate_cents"
               defaultCents={row.rate_cents ?? 0}
             />

@@ -222,7 +222,7 @@ function RunStrip({
     <span className="inline-flex items-center gap-0.5" aria-label="Recent runs">
       {chrono.map((run, i) => {
         const g = RUN_GLYPH[run.state] ?? { ch: "·", cls: "text-[var(--p-text-3)]" };
-        const tip = `${run.state}${run.error ? ` — ${run.error}` : ""}`;
+        const tip = `${run.state}${run.error ? `: ${run.error}` : ""}`;
         return (
           <span key={i} className={g.cls} title={tip} aria-hidden="true">
             {g.ch}

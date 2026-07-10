@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.design.eyebrow", undefined, "Venue")}
-        title={t("console.venues.design.headerTitle", { name: venue.name }, `${venue.name} — Design`)}
+        title={t("console.venues.design.headerTitle", { name: venue.name }, `${venue.name} · Design`)}
         subtitle={
           specs.length === 1
             ? t(
@@ -169,7 +169,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               header: t("console.venues.design.col.bom", undefined, "BOM"),
               render: (r) =>
                 r.bom_requisition_id ? (
-                  <span className="font-mono text-[10px] text-[var(--p-accent)]">
+                  <span className="font-mono text-[11px] text-[var(--p-accent)]">
                     {t("console.venues.design.bom.linked", undefined, "linked")}
                   </span>
                 ) : (

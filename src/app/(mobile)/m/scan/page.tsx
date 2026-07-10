@@ -1,15 +1,16 @@
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
-import { ScanCapture } from "@/components/scanners/ScanCapture";
+import { QuickScan } from "./QuickScan";
 
 export const dynamic = "force-dynamic";
 
 /**
- * /m/scan — COMPVSS quick-scan capture surface (kit v7 §3). Mounts the new
- * <ScanCapture> wrapper over the CameraScanner primitive: a reticle, a manual
- * code fallback, and an in-session capture log. Distinct from /m/check-in (the
- * mode-segmented gate scanner that resolves codes through the assignments
- * domain) — this is the lightweight, generic decode surface.
+ * /m/scan — COMPVSS quick-scan capture surface (kit v7 §3). Mounts the
+ * <QuickScan> island: <ScanCapture> (reticle + manual fallback + session log)
+ * with `onCapture` wired to the queueable /api/v1/scan endpoint — every
+ * capture is journaled through the assignments domain (or durably queued
+ * offline) and the log row shows the verdict. Distinct from /m/check-in (the
+ * mode-segmented gate scanner) — this is the lightweight generic surface.
  */
 export default async function ScanPage() {
   await requireSession();
@@ -25,7 +26,7 @@ export default async function ScanPage() {
           {t("m.scan.title", undefined, "Scan a code")}
         </h1>
       </header>
-      <ScanCapture
+      <QuickScan
         labels={{
           hint: t("m.scan.hint", undefined, "Point the camera at a QR or barcode — it reads automatically."),
           manualToggle: t("m.scan.manualToggle", undefined, "Enter code manually"),
@@ -34,6 +35,15 @@ export default async function ScanPage() {
           manualSubmit: t("m.scan.manualSubmit", undefined, "Capture"),
           recentTitle: t("m.scan.recentTitle", undefined, "Captured this session"),
           recentEmpty: t("m.scan.recentEmpty", undefined, "No codes captured yet"),
+          results: {
+            accepted: t("m.scan.result.accepted", undefined, "Accepted"),
+            duplicate: t("m.scan.result.duplicate", undefined, "Already scanned"),
+            expired: t("m.scan.result.expired", undefined, "Expired"),
+            voided: t("m.scan.result.voided", undefined, "Voided"),
+            not_found: t("m.scan.result.notFound", undefined, "Not found"),
+          },
+          queued: t("m.scan.result.queued", undefined, "Queued, syncs when online"),
+          failed: t("m.scan.result.failed", undefined, "Not recorded"),
         }}
       />
     </div>

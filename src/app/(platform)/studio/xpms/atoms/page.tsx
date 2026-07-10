@@ -74,6 +74,7 @@ export default async function AtomsPage({
       <div className="page-content">
         <FilterBar
           clearLabel={t("console.xpms.atoms.filter.clear", undefined, "Clear")}
+          resultCount={rows.length}
           facets={[
             {
               param: "class",
@@ -147,7 +148,7 @@ export default async function AtomsPage({
               header: t("console.xpms.atoms.columns.phase", undefined, "Phase"),
               render: (r) => (
                 <span className="text-xs">
-                  <span className="me-1 font-mono text-[10px] text-[var(--p-text-2)]">{PHASE_NUM[r.phase] ?? "?"}</span>
+                  <span className="me-1 font-mono text-[11px] text-[var(--p-text-2)]">{PHASE_NUM[r.phase] ?? "?"}</span>
                   {r.phase}
                 </span>
               ),

@@ -72,7 +72,7 @@ export default async function GoalsHubPage() {
         {rows.length === 0 ? (
           <EmptyState
             title="No goals yet"
-            description="Set org objectives and track measurable key results — progress rolls up from each key result automatically."
+            description="Set org objectives and track measurable key results. Progress rolls up from each key result automatically."
             action={<Button href="/studio/goals/new">+ New Goal</Button>}
           />
         ) : (

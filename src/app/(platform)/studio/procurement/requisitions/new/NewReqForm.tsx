@@ -20,7 +20,7 @@ export function NewReqForm() {
         <textarea name="description" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
       <Input
-        label={t("console.procurement.requisitions.new.estimatedCost", undefined, "Estimated Cost — USD")}
+        label={t("console.procurement.requisitions.new.estimatedCost", undefined, "Estimated Cost (USD)")}
         name="estimated"
         type="number"
         step="0.01"

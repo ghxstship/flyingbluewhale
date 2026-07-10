@@ -55,7 +55,7 @@ export function LetterEditor({
             {t(
               "console.people.offerLetters.editor.lockedNotice",
               { status: raw.status },
-              `This letter is ${raw.status}. Edits are disabled — the snapshot is frozen.`,
+              `This letter is ${raw.status}. Edits are disabled. The snapshot is frozen.`,
             )}
           </p>
         )}
@@ -104,7 +104,7 @@ export function LetterEditor({
               >
                 <NativeSelect name="reports_to_crew_member_id" defaultValue={raw.reports_to_crew_member_id ?? ""}>
                   <option value="">
-                    {t("console.people.offerLetters.editor.identity.none", undefined, "— None —")}
+                    {t("console.people.offerLetters.editor.identity.none", undefined, "None")}
                   </option>
                   {crew.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -119,7 +119,7 @@ export function LetterEditor({
               >
                 <NativeSelect name="venue_id" defaultValue={raw.venue_id ?? ""}>
                   <option value="">
-                    {t("console.people.offerLetters.editor.identity.none", undefined, "— None —")}
+                    {t("console.people.offerLetters.editor.identity.none", undefined, "None")}
                   </option>
                   {venues.map((v) => (
                     <option key={v.id} value={v.id}>
@@ -176,7 +176,7 @@ export function LetterEditor({
               >
                 <NativeSelect name="rate_card_item_id" defaultValue={raw.rate_card_item_id ?? ""}>
                   <option value="">
-                    {t("console.people.offerLetters.editor.identity.none", undefined, "— None —")}
+                    {t("console.people.offerLetters.editor.identity.none", undefined, "None")}
                   </option>
                   {rates.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -198,7 +198,7 @@ export function LetterEditor({
               >
                 <NativeSelect name="per_diem_rate_card_item_id" defaultValue={raw.per_diem_rate_card_item_id ?? ""}>
                   <option value="">
-                    {t("console.people.offerLetters.editor.identity.none", undefined, "— None —")}
+                    {t("console.people.offerLetters.editor.identity.none", undefined, "None")}
                   </option>
                   {rates.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -216,7 +216,7 @@ export function LetterEditor({
                     {t(
                       "console.people.offerLetters.editor.compensation.basis.perDay",
                       undefined,
-                      "Per Day — Rate × Engagement Days",
+                      "Per Day (Rate × Engagement Days)",
                     )}
                   </option>
                   <option value="per_show_day">
@@ -226,7 +226,7 @@ export function LetterEditor({
                     {t(
                       "console.people.offerLetters.editor.compensation.basis.flatFee",
                       undefined,
-                      "Flat Project Fee — Uses Rate Card Unit Price",
+                      "Flat Project Fee (Uses Rate Card Unit Price)",
                     )}
                   </option>
                   <option value="hourly">
@@ -242,7 +242,7 @@ export function LetterEditor({
                 label={t(
                   "console.people.offerLetters.editor.compensation.overrideTotal",
                   undefined,
-                  "Override Total — USD",
+                  "Override Total (USD)",
                 )}
                 hint={t(
                   "console.people.offerLetters.editor.compensation.overrideTotalHint",
@@ -263,7 +263,7 @@ export function LetterEditor({
                 label={t(
                   "console.people.offerLetters.editor.compensation.overridePerDiem",
                   undefined,
-                  "Override Per Diem — USD/Day",
+                  "Override Per Diem (USD/Day)",
                 )}
                 hint={t(
                   "console.people.offerLetters.editor.compensation.overridePerDiemHint",
@@ -392,7 +392,7 @@ export function LetterEditor({
               hint={t(
                 "console.people.offerLetters.editor.inclusions.extraHint",
                 undefined,
-                "One per line — appended to org defaults",
+                "One per line (appended to org defaults)",
               )}
             >
               <TextArea name="extra_inclusions" rows={3} defaultValue={(raw.extra_inclusions ?? []).join("\n")} />
@@ -437,7 +437,7 @@ function TriStateSelect({ name, label, value }: { name: string; label: string; v
     <FormField name={name} label={label}>
       <NativeSelect name={name} defaultValue={v}>
         <option value="">
-          {t("console.people.offerLetters.editor.triState.inherit", undefined, "Inherit — Org Default")}
+          {t("console.people.offerLetters.editor.triState.inherit", undefined, "Inherit (Org Default)")}
         </option>
         <option value="true">{t("common.yes", undefined, "Yes")}</option>
         <option value="false">{t("common.no", undefined, "No")}</option>

@@ -222,7 +222,7 @@ export default async function ProfilePage() {
                 defaultValue={profile?.bio ?? ""}
                 placeholder={t("me.profile.public.bio.placeholder", undefined, "A few paragraphs about your practice.")}
               />
-              <span className="text-[10px] text-[var(--p-text-2)]">
+              <span className="text-[11px] text-[var(--p-text-2)]">
                 {t("me.profile.public.bio.hint", undefined, "Markdown not parsed — plain text only.")}
               </span>
             </label>
@@ -262,7 +262,7 @@ export default async function ProfilePage() {
                 defaultValue={linksToText(profile?.links)}
                 placeholder={"Website|https://lunarose.studio\nInstagram|https://instagram.com/lunarose"}
               />
-              <span className="text-[10px] text-[var(--p-text-2)]">
+              <span className="text-[11px] text-[var(--p-text-2)]">
                 {t("me.profile.public.links.hint.before", undefined, "One per line as ")}
                 <code>Label|URL</code>
                 {t("me.profile.public.links.hint.after", undefined, ". Label optional (defaults to the host).")}

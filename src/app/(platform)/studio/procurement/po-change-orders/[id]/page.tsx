@@ -17,7 +17,7 @@ import {
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const { data: co } = await supabase
     .from("po_change_orders")
@@ -137,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="text-xs text-[var(--p-text-2)]">
               {t("console.procurement.poChangeOrders.detail.proposed", undefined, "Proposed")}
             </div>
-            <div className="text-lg font-semibold">{new Date(co.proposed_at).toLocaleDateString()}</div>
+            <div className="text-lg font-semibold">{fmt.date(new Date(co.proposed_at))}</div>
           </div>
         </section>
         {co.reason && (
@@ -168,7 +169,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t(
                 "console.procurement.poChangeOrders.detail.mismatchWarning",
                 { sum: formatMoney(linesTotal), amount: formatMoney(co.amount_cents) },
-                `the line-item sum (${formatMoney(linesTotal)}) doesn’t match the CO amount (${formatMoney(co.amount_cents)}). Reconcile before approving — approval rolls the CO amount onto the parent PO.`,
+                `the line-item sum (${formatMoney(linesTotal)}) doesn’t match the CO amount (${formatMoney(co.amount_cents)}). Reconcile before approving. Approval rolls the CO amount onto the parent PO.`,
               )}
             </div>
           )}

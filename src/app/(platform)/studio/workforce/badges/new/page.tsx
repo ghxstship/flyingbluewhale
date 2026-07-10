@@ -23,7 +23,7 @@ export default async function Page() {
             name="code"
             required
             maxLength={40}
-            hint={t("console.workforce.badges.new.codeHint", undefined, "Short identifier — lowercase, dashes ok.")}
+            hint={t("console.workforce.badges.new.codeHint", undefined, "Short identifier. Lowercase, dashes ok.")}
             placeholder="safety-star"
           />
           <Input
@@ -34,7 +34,7 @@ export default async function Page() {
             placeholder="Safety Star"
           />
           <Input
-            label={t("console.workforce.badges.new.iconLabel", undefined, "Icon — Emoji")}
+            label={t("console.workforce.badges.new.iconLabel", undefined, "Icon (Emoji)")}
             name="icon"
             maxLength={4}
             placeholder="🛡️"

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
@@ -32,21 +32,25 @@ export default async function BeosPage() {
     );
   }
   const session = await requireSession();
-  const rows = (await listOrgScoped("beos", session.orgId, {
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows: rawRows, totalCount } = await listOrgScopedWithCount("beos", session.orgId, {
     orderBy: "event_date",
-  })) as unknown as BeoRow[];
+  });
+  const rows = rawRows as unknown as BeoRow[];
 
   return (
     <>
       <ModuleHeader
         eyebrow="Sales"
         title="BEOs"
-        subtitle={rows.length === 1 ? "1 Banquet Event Order" : `${rows.length} Banquet Event Orders`}
+        subtitle={totalCount === 1 ? "1 Banquet Event Order" : `${totalCount} Banquet Event Orders`}
         action={<Button href="/studio/sales/beos/new">+ New BEO</Button>}
       />
       <div className="page-content">
         <DataTable<BeoRow>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/sales/beos/${r.id}`}
           columns={[
             {

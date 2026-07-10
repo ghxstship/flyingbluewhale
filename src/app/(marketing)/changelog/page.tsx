@@ -80,7 +80,7 @@ export default async function ChangelogPage() {
               <li key={e.version} className="surface p-6">
                 <div className="flex flex-wrap items-center gap-3">
                   <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase ${kind.className}`}
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold tracking-wider uppercase ${kind.className}`}
                   >
                     <Icon size={10} /> {kind.label}
                   </span>

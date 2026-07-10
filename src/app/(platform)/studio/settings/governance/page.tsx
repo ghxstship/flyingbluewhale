@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ export default async function GovernancePage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
   const [{ data: committees }, { data: policies }] = await Promise.all([
     supabase
       .from("governance_committees")
@@ -118,7 +119,7 @@ export default async function GovernancePage() {
                       </Badge>
                     </td>
                     <td className="font-mono text-xs">
-                      {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}
+                      {p.next_review_at ? fmt.date(new Date(p.next_review_at)) : "—"}
                     </td>
                   </tr>
                 ))

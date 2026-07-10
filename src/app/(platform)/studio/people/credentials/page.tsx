@@ -61,7 +61,7 @@ export default async function CredentialsPage() {
           emptyDescription={t(
             "console.people.credentials.emptyDescription",
             undefined,
-            "First-aid, working-at-height, security badges — track expiry to flag re-cert ahead of deployment.",
+            "First-aid, working-at-height, security badges. Track expiry to flag re-cert ahead of deployment.",
           )}
           emptyAction={
             <Button href="/studio/people/credentials/new" size="sm">

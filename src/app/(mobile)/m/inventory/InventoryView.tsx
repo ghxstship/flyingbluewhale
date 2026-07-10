@@ -13,6 +13,7 @@ import {
 } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { CatalogKind } from "@/lib/db/assignments";
+import { formatMoney } from "@/lib/i18n/format";
 
 export type AssetUnit = {
   tag: string;
@@ -55,7 +56,7 @@ export type InventoryLabels = {
 
 function money(cents: number | null): string {
   if (cents == null) return "—";
-  return `$${(cents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+  return formatMoney(cents, { fractionDigits: 0 });
 }
 
 function qtyTone(qty: number | null): "ok" | "warn" | "neutral" {

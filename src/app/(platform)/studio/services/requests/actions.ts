@@ -137,7 +137,7 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Service request status changed concurrently — refresh and retry");
+    throw new Error("Service request status changed concurrently. Refresh and retry");
   }
 
   const { error: insertError } = await supabase.from("service_request_events").insert({

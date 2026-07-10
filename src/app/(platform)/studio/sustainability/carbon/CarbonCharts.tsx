@@ -45,7 +45,7 @@ export function CarbonCharts({
         description={t(
           "console.sustainability.carbon.charts.monthly.description",
           undefined,
-          "kg CO₂e — actual area + target line",
+          "kg CO₂e (actual area + target line)",
         )}
         empty={byMonth.length === 0}
         emptyLabel={t("console.sustainability.carbon.charts.monthly.empty", undefined, "No measurements yet.")}
@@ -73,7 +73,7 @@ export function CarbonCharts({
             />
             <Line
               dataKey="target"
-              name={t("console.sustainability.carbon.charts.monthly.target", undefined, "Target — 5% Reduction")}
+              name={t("console.sustainability.carbon.charts.monthly.target", undefined, "Target (5% Reduction)")}
               type="monotone"
               stroke="var(--p-text-2)"
               strokeDasharray="4 4"
@@ -139,7 +139,7 @@ function DarkTooltip({
   const fmt = useFormatters();
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[10px]">
+    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[11px]">
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">

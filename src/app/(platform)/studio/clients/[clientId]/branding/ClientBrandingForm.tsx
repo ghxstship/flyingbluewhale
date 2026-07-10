@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { useT } from "@/lib/i18n/LocaleProvider";

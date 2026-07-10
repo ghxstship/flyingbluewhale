@@ -201,7 +201,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                 return (
                   <li key={e.id} className="flex items-start gap-3">
                     <span className="font-mono text-[var(--p-text-2)]">
-                      {new Date(e.occurred_at).toLocaleTimeString()}
+                      {fmt.time(new Date(e.occurred_at))}
                     </span>
                     <span className="flex-1">
                       <Badge variant="muted">{toTitle(e.kind)}</Badge>

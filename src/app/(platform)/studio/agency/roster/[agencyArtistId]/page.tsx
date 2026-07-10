@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ agencyArtistI
         <FormShell action={updateAgencyArtistAction} submitLabel={t("common.save", undefined, "Save")}>
           <input type="hidden" name="agency_artist_id" value={e.id} />
           <Input
-            label={t("console.agency.roster.detail.commissionLabel", undefined, "Commission — bps · 1000 = 10%")}
+            label={t("console.agency.roster.detail.commissionLabel", undefined, "Commission (bps) · 1000 = 10%")}
             name="commission_bps"
             type="number"
             min={0}

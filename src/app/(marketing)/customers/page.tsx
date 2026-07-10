@@ -86,7 +86,7 @@ export default async function CustomersHub() {
                 <div className="eyebrow eyebrow-accent">
                   {INDUSTRIES[s.industry]?.name ?? s.industry}
                 </div>
-                <div className="inline-flex items-center gap-1 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] font-medium text-[var(--p-text-2)]">
+                <div className="inline-flex items-center gap-1 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[11px] font-medium text-[var(--p-text-2)]">
                   <Clock size={10} aria-hidden="true" />
                   {s.expectedPublish}
                 </div>
@@ -96,7 +96,7 @@ export default async function CustomersHub() {
               <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-[var(--p-border)] pt-4">
                 {s.metrics.map((m) => (
                   <div key={m.label}>
-                    <dt className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{m.label}</dt>
+                    <dt className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">{m.label}</dt>
                     <dd className="mt-1 font-mono text-base font-semibold">{m.value}</dd>
                   </div>
                 ))}

@@ -115,7 +115,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.services.requests.emptyDescription",
             undefined,
-            "Triage queue for live-event service tickets — AV breakdowns, cleaning, repairs, hospitality, IT, security. P1 unacknowledged past the response SLA escalates to a crisis alert.",
+            "Triage queue for live-event service tickets: AV breakdowns, cleaning, repairs, hospitality, IT, security. P1 unacknowledged past the response SLA escalates to a crisis alert.",
           )}
           emptyAction={
             <Button href="/studio/services/requests/new" size="sm">

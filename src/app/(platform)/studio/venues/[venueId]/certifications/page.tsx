@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     <>
       <ModuleHeader
         eyebrow={t("console.venues.certifications.eyebrow", undefined, "Venue")}
-        title={t("console.venues.certifications.headerTitle", { name: venue.name }, `${venue.name} — Certifications`)}
+        title={t("console.venues.certifications.headerTitle", { name: venue.name }, `${venue.name} · Certifications`)}
         subtitle={
           certs.length === 1
             ? t(
@@ -179,7 +179,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               header: t("console.venues.certifications.columns.file", undefined, "File"),
               render: (r) =>
                 r.file_path ? (
-                  <code className="font-mono text-[10px]">{r.file_path.slice(0, 40)}…</code>
+                  <code className="font-mono text-[11px]">{r.file_path.slice(0, 40)}…</code>
                 ) : (
                   <span className="text-[var(--p-text-2)]">—</span>
                 ),

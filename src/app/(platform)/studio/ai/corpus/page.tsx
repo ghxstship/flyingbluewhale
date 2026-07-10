@@ -59,7 +59,7 @@ export default async function Page() {
         <Alert kind="info" title="Manual indexing only">
           Reindex walks this org&apos;s deliverables, submittals, and RFIs and feeds each to the
           embedding worker on demand. Continuous, scheduled indexing requires a cron registration
-          (a scheduled job that calls an authenticated batch route) — not yet wired. An embedding
+          (a scheduled job that calls an authenticated batch route). Not yet wired. An embedding
           provider key (OPENAI_API_KEY or VOYAGE_API_KEY) must be configured for embeddings to be
           written.
         </Alert>

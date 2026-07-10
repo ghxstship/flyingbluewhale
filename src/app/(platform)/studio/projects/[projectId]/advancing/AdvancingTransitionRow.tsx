@@ -52,26 +52,24 @@ const NEXT_BUTTONS: Record<
   ],
   approved: [
     {
-      to: "fulfilled",
-      labelKey: "console.projects.advancing.transition.markFulfilled",
-      labelFallback: "Mark Fulfilled",
+      to: "delivered",
+      labelKey: "console.projects.advancing.transition.markDelivered",
+      labelFallback: "Mark Delivered",
       variant: "default",
     },
   ],
   revision_requested: [
     {
-      to: "in_review",
-      labelKey: "console.projects.advancing.transition.resumeReview",
-      labelFallback: "Resume Review",
+      to: "submitted",
+      labelKey: "console.projects.advancing.transition.resubmit",
+      labelFallback: "Resubmit",
       variant: "default",
     },
-  ],
-  rejected: [
     {
-      to: "revision_requested",
-      labelKey: "console.projects.advancing.transition.reopen",
-      labelFallback: "Reopen",
-      variant: "default",
+      to: "rejected",
+      labelKey: "console.projects.advancing.transition.reject",
+      labelFallback: "Reject",
+      variant: "danger",
     },
   ],
 };

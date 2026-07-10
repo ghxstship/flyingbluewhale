@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate, formatMoney } from "@/lib/i18n/format";
@@ -26,7 +26,11 @@ export default async function RentalsPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("rentals", session.orgId, { orderBy: "starts_at" });
+  // Exact count alongside the capped window (F-01) — subtitle + truncation
+  // indicator stay honest past the 100-row cap.
+  const { rows, totalCount } = await listOrgScopedWithCount("rentals", session.orgId, {
+    orderBy: "starts_at",
+  });
   const supabase = await createClient();
   const assetIds = Array.from(new Set(rows.map((r) => r.asset_id).filter(Boolean)));
   const { data: assets } = assetIds.length
@@ -38,7 +42,7 @@ export default async function RentalsPage() {
       <ModuleHeader
         eyebrow={t("console.production.rentals.eyebrow", undefined, "Production")}
         title={t("console.production.rentals.title", undefined, "Sub-Rentals")}
-        subtitle={t("console.production.rentals.subtitle", { count: rows.length }, `${rows.length} Active  rentals`)}
+        subtitle={t("console.production.rentals.subtitle", { count: totalCount }, `${totalCount} Active  rentals`)}
         action={
           <Button href="/studio/production/rentals/new">
             {t("console.production.rentals.newRental", undefined, "+ New Rental")}
@@ -48,6 +52,7 @@ export default async function RentalsPage() {
       <div className="page-content">
         <DataTable<Rental>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/production/rentals/${r.id}`}
           emptyLabel={t("console.production.rentals.emptyLabel", undefined, "No active rentals")}
           emptyDescription={t(

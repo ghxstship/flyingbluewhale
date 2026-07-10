@@ -143,7 +143,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
+      <div className="text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{value}</div>
     </div>
   );

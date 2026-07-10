@@ -129,7 +129,7 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
               <div className="mt-2 space-y-1 text-sm">
                 <div>{accountName}</div>
                 {deal.account?.account_kind && (
-                  <div className="font-mono text-[10px] text-[var(--p-text-2)]">{deal.account.account_kind}</div>
+                  <div className="font-mono text-[11px] text-[var(--p-text-2)]">{deal.account.account_kind}</div>
                 )}
                 {deal.party?.primary_email && (
                   <div className="font-mono text-xs text-[var(--p-text-2)]">{deal.party.primary_email}</div>
@@ -191,9 +191,9 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Badge variant="muted">{a.activity_kind}</Badge>
-                      {a.outcome && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{a.outcome}</span>}
+                      {a.outcome && <span className="font-mono text-[11px] text-[var(--p-text-2)]">{a.outcome}</span>}
                     </div>
-                    <span className="font-mono text-[10px] text-[var(--p-text-2)]">{timeAgo(a.occurred_at)}</span>
+                    <span className="font-mono text-[11px] text-[var(--p-text-2)]">{timeAgo(a.occurred_at)}</span>
                   </div>
                   {a.notes && <p className="mt-1 whitespace-pre-wrap text-[var(--p-text-2)]">{a.notes}</p>}
                 </li>

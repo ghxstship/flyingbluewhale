@@ -194,7 +194,7 @@ function AiCallout({ onInsert }: { onInsert: (text: string) => void }) {
   return (
     <div className="surface-raised rounded-md p-3">
       <div className="flex items-center gap-2 text-xs font-medium text-[var(--p-text-2)]">
-        AI callout — draft a paragraph
+        AI callout · draft a paragraph
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2">
         <input

@@ -62,7 +62,7 @@ export default async function ProvenancePage() {
           emptyDescription={t(
             "console.xpms.provenance.emptyDescription",
             undefined,
-            "Edges appear as records reference each other across classes — assignments, authoring, and downstream consumers.",
+            "Edges appear as records reference each other across classes: assignments, authoring, and downstream consumers.",
           )}
           columns={[
             {
@@ -79,7 +79,7 @@ export default async function ProvenancePage() {
               header: t("console.xpms.provenance.columns.fromAtom", undefined, "From atom"),
               render: (e) => e.from_atom_id,
               accessor: (e) => e.from_atom_id,
-              className: "font-mono text-[10px]",
+              className: "font-mono text-[11px]",
               sortable: true,
             },
             {
@@ -87,7 +87,7 @@ export default async function ProvenancePage() {
               header: t("console.xpms.provenance.columns.toAtom", undefined, "To atom"),
               render: (e) => e.to_atom_id,
               accessor: (e) => e.to_atom_id,
-              className: "font-mono text-[10px]",
+              className: "font-mono text-[11px]",
               sortable: true,
             },
             {

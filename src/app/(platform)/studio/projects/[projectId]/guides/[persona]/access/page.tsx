@@ -51,7 +51,7 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
           title={t(
             "console.projects.guides.access.publicTitle",
             { persona: labelFor(persona, t) },
-            `${labelFor(persona, t)} — access`,
+            `${labelFor(persona, t)} · access`,
           )}
           subtitle={t(
             "console.projects.guides.access.subtitle",
@@ -62,7 +62,7 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
         <div className="page-content max-w-3xl">
           <div className="surface space-y-3 p-6">
             <Badge variant="success">
-              {t("console.projects.guides.access.publicBadge", undefined, "Public — no code required")}
+              {t("console.projects.guides.access.publicBadge", undefined, "Public (no code required)")}
             </Badge>
             <p className="text-sm text-[var(--p-text-2)]">
               {t(
@@ -103,7 +103,7 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
         title={t(
           "console.projects.guides.access.codesTitle",
           { persona: labelFor(persona, t) },
-          `${labelFor(persona, t)} — access codes`,
+          `${labelFor(persona, t)} · access codes`,
         )}
         subtitle={t(
           "console.projects.guides.access.subtitle",

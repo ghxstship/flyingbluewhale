@@ -4,6 +4,14 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { InquirePanel } from "../../../_inquire/InquirePanel";
 
+import type { Metadata } from "next";
+
+// E-23: user-specific form surface — explicit noindex.
+export const metadata: Metadata = {
+  title: "Crew Inquiry",
+  robots: { index: false, follow: false },
+};
+
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ handle: string }> }) {

@@ -22,7 +22,7 @@ import {
 } from "@/lib/seo";
 import { Button } from "@/components/ui/Button";
 import { COMPARE, COMPARE_LIST } from "@/lib/compare";
-import { getRequestT } from "@/lib/i18n/request";
+import { getStaticEnT } from "../../_lib/static-t";
 
 export function generateStaticParams() {
   return COMPARE_LIST.map((c) => ({ competitor: c.slug }));
@@ -30,7 +30,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ competitor: string }> }): Promise<Metadata> {
   const { competitor } = await params;
-  const { t } = await getRequestT();
+  const { t } = await getStaticEnT();
   const c = COMPARE[competitor];
   if (!c)
     return buildMetadata({
@@ -61,7 +61,7 @@ function CellMark({ value, yesLabel, noLabel }: { value: string | boolean; yesLa
 
 export default async function CompareDetail({ params }: { params: Promise<{ competitor: string }> }) {
   const { competitor } = await params;
-  const { t, locale } = await getRequestT();
+  const { t, locale } = await getStaticEnT();
   const c = COMPARE[competitor];
   if (!c) notFound();
 

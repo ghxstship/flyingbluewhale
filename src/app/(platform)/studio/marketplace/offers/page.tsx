@@ -22,6 +22,7 @@ type OfferRow = {
   talent_profile_id: string;
   sent_at: string | null;
   accepted_at: string | null;
+  talent_profiles: { act_name: string | null; public_handle: string | null } | null;
 };
 
 export default async function Page() {
@@ -43,16 +44,18 @@ export default async function Page() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  // Join the talent profile so the pipeline shows WHO each offer books —
+  // the list used to render date/fee/state with no counterparty at all.
   const { data } = await supabase
     .from("talent_offers")
     .select(
-      "id, performance_date, fee_cents, currency, talent_offer_state, deposit_pct, talent_profile_id, sent_at, accepted_at",
+      "id, performance_date, fee_cents, currency, talent_offer_state, deposit_pct, talent_profile_id, sent_at, accepted_at, talent_profiles(act_name, public_handle)",
     )
     .eq("org_id", session.orgId)
     .order("performance_date", { ascending: false })
     .limit(500);
 
-  const rows = (data ?? []) as OfferRow[];
+  const rows = (data ?? []) as unknown as OfferRow[];
   const live = rows.filter((r) => r.talent_offer_state === "sent" || r.talent_offer_state === "countered").length;
 
   return (
@@ -87,6 +90,18 @@ export default async function Page() {
             </Button>
           }
           columns={[
+            {
+              key: "talent",
+              header: t("console.marketplace.offers.columns.talent", undefined, "Talent"),
+              render: (r) => (
+                <span className="font-medium">
+                  {r.talent_profiles?.act_name ??
+                    t("console.marketplace.offers.talentFallback", undefined, "Unknown talent")}
+                </span>
+              ),
+              accessor: (r) => r.talent_profiles?.act_name ?? "",
+              filterable: true,
+            },
             {
               key: "date",
               header: t("console.marketplace.offers.columns.performance", undefined, "Performance"),

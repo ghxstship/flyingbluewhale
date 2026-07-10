@@ -155,3 +155,78 @@ export async function createProposalFromLeadAction(leadId: string): Promise<Crea
   revalidatePath("/studio/leads");
   redirect(`/studio/proposals/${proposal.id}`);
 }
+
+const LEAD_STAGES = ["new", "qualified", "contacted", "proposal", "won", "lost"] as const;
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/** Bulk stage move over the merged CRM store (audit A-22). Org-pinned and
+ *  kind-pinned to leads; rows already at the target stage are skipped. */
+async function bulkSetLeadStage(ids: string[], stage: (typeof LEAD_STAGES)[number]): Promise<BulkResult> {
+  const session = await requireSession();
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("opportunities")
+    .update({ lead_phase: stage })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .eq("kind", "lead")
+    .neq("lead_phase", stage)
+    .select("id");
+  if (error) return { error: `Could Not Update · ${error.message}` };
+  const moved = updated?.length ?? 0;
+  const skipped = parsed.data.length - moved;
+  revalidatePath("/studio/leads");
+  revalidatePath("/studio/crm");
+  const label = stage.charAt(0).toUpperCase() + stage.slice(1);
+  if (skipped > 0) return { error: `${moved} Marked ${label} · ${skipped} Skipped (already there or not found)` };
+  return { message: `${moved} ${moved === 1 ? "Lead" : "Leads"} Marked ${label}` };
+}
+
+export async function bulkQualifyLeads(ids: string[]): Promise<BulkResult> {
+  return bulkSetLeadStage(ids, "qualified");
+}
+
+export async function bulkLoseLeads(ids: string[]): Promise<BulkResult> {
+  return bulkSetLeadStage(ids, "lost");
+}
+
+/**
+ * Inline cell edit for the leads list (audit A-13). Whitelisted columns
+ * only; the stage enum is validated server-side. Throws on rejection so
+ * the table's optimistic override rolls back.
+ */
+export async function editLeadCell(rowId: string, columnKey: string, value: string): Promise<void> {
+  const session = await requireSession();
+  const id = z.string().uuid().parse(rowId);
+  let patch: { title: string } | { lead_phase: (typeof LEAD_STAGES)[number] };
+  if (columnKey === "name") {
+    const title = value.trim();
+    if (!title || title.length > 120) throw new Error("Name must be 1 to 120 characters");
+    patch = { title };
+  } else if (columnKey === "stage") {
+    const next = value.trim().toLowerCase();
+    if (!(LEAD_STAGES as readonly string[]).includes(next)) {
+      throw new Error(`Stage must be one of: ${LEAD_STAGES.join(", ")}`);
+    }
+    patch = { lead_phase: next as (typeof LEAD_STAGES)[number] };
+  } else {
+    throw new Error("Column is not editable");
+  }
+  const supabase = await createClient();
+  const { data: updated, error } = await supabase
+    .from("opportunities")
+    .update(patch)
+    .eq("org_id", session.orgId)
+    .eq("kind", "lead")
+    .eq("id", id)
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!updated?.length) throw new Error("Lead not found");
+  revalidatePath("/studio/leads");
+  revalidatePath("/studio/crm");
+}

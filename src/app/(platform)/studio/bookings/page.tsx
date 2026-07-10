@@ -90,7 +90,7 @@ export default async function Page() {
             blurb={t(
               "console.bookings.tiles.deals.blurb",
               undefined,
-              "Pipeline view of every deal — draft, sent, countered, accepted, contracted.",
+              "Pipeline view of every deal: draft, sent, countered, accepted, contracted.",
             )}
           />
           <Tile
@@ -137,7 +137,7 @@ export default async function Page() {
             blurb={t(
               "console.bookings.tiles.insights.blurb",
               undefined,
-              "Anonymized booking pool — opt-in only, k≥3 floor.",
+              "Anonymized booking pool. Opt-in only, k≥3 floor.",
             )}
           />
           <Tile

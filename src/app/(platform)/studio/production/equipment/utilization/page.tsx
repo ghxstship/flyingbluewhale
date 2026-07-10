@@ -90,11 +90,11 @@ export default async function Page() {
             value={fmt.money(totalIdleRevenue)}
           />
         </div>
-        <div className="text-[10px] text-[var(--p-text-2)]">
+        <div className="text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.production.equipment.utilization.helpText",
             undefined,
-            "Rolled up from asset_movements. Under-utilized = < 25% over the last 30 days. Idle revenue = (30 − reserved_days) × daily_rate — what could have been earned had the asset been on a job.",
+            "Rolled up from asset_movements. Under-utilized = < 25% over the last 30 days. Idle revenue = (30 − reserved_days) × daily_rate. What could have been earned had the asset been on a job.",
           )}
         </div>
         <DataTable

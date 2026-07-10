@@ -49,6 +49,7 @@ export default async function POPage({ params }: { params: Promise<{ poId: strin
                 { number: po.number },
                 `Delete PO "${po.number}"? This cannot be undone.`,
               )}
+              undo={{ table: "purchase_orders", id: poId, redirectTo: "/studio/procurement/purchase-orders" }}
             />
           </div>
         }

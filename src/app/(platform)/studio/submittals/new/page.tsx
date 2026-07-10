@@ -47,7 +47,7 @@ export default async function Page() {
               placeholder={t(
                 "console.submittals.new.fields.titlePlaceholder",
                 undefined,
-                "LED wall — vendor cut sheets",
+                "LED wall · vendor cut sheets",
               )}
               className={INPUT}
             />

@@ -136,7 +136,7 @@ export default async function TakeoffDetail({ params }: { params: Promise<{ id: 
           <DataTable<Item>
             rows={items}
             emptyLabel={t("console.takeoffs.detail.emptyLabel", undefined, "No measurements yet")}
-            emptyDescription={t("console.takeoffs.detail.emptyDescription", undefined, "Items captured against this takeoff — counts, lengths, areas, volumes — roll up into the total above.")}
+            emptyDescription={t("console.takeoffs.detail.emptyDescription", undefined, "Items captured against this takeoff (counts, lengths, areas, volumes) roll up into the total above.")}
             columns={[
               {
                 key: "label",

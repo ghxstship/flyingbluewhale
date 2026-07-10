@@ -84,7 +84,7 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
           placeholder="0.00"
         />
       </div>
-      {hint && <span className="text-[10px] text-[var(--p-text-2)]">{hint}</span>}
+      {hint && <span className="text-[11px] text-[var(--p-text-2)]">{hint}</span>}
       {/* Hidden field carries the canonical cents integer to server actions. */}
       <input type="hidden" name={name} value={cents} />
     </label>
@@ -100,9 +100,14 @@ function toCents(input: string): string {
   return String(Math.round(num * 100));
 }
 
+// Intentionally locale-FIXED (en-US): `toCents` re-parses the displayed text
+// positionally ("," group / "." decimal), so the format side must emit the
+// same shape regardless of the viewer's locale — routing this pair through
+// the i18n formatters would break the parse/format roundtrip.
 function formatFromCents(cents: string): string {
   const n = Number(cents) / 100;
   if (!Number.isFinite(n)) return "";
+  // eslint-disable-next-line no-restricted-syntax -- locale-fixed input roundtrip (see above)
   return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
@@ -110,5 +115,6 @@ function formatDisplay(dollars: string): string {
   if (!dollars) return "";
   const n = Number(dollars);
   if (!Number.isFinite(n)) return dollars;
+  // eslint-disable-next-line no-restricted-syntax -- locale-fixed input roundtrip (see above)
   return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

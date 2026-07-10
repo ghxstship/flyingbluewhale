@@ -45,6 +45,7 @@ import {
   type Tone,
 } from "@/lib/views/chart-config";
 import { pivotForChart } from "@/lib/views/chart-aggregate";
+import { formatValue } from "@/lib/views/format-value";
 import { HeatmapGrid, type HeatmapCell } from "./HeatmapGrid";
 
 export type ChartViewProps<T extends Record<string, unknown> = Record<string, unknown>> = {
@@ -546,7 +547,7 @@ function TooltipContent({
 }: TooltipContentProps): React.ReactElement | null {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[10px] shadow-sm">
+    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[11px] shadow-sm">
       {label !== undefined && label !== null && (
         <div className="mb-1 font-medium text-[var(--p-text-1)]">
           {formatValue(label, xAxis.format ?? "auto", xAxis.currency)}
@@ -571,38 +572,9 @@ function TooltipContent({
 }
 
 // ──────────────────────────────────────────────────────────────────────
-// Value formatting
+// Value formatting — lives in src/lib/views/format-value.ts (F-19) so the
+// views barrel can export it without statically pulling this recharts-backed
+// module. Re-exported here for direct importers.
 // ──────────────────────────────────────────────────────────────────────
 
-export function formatValue(v: unknown, format: ChartAxis["format"] = "auto", currency = "USD"): string {
-  if (v === null || v === undefined || v === "") return "";
-  if (typeof v !== "number") {
-    if (format === "date" && typeof v === "string") {
-      const d = new Date(v);
-      if (!Number.isNaN(d.getTime())) return d.toLocaleDateString();
-    }
-    return String(v);
-  }
-  switch (format) {
-    case "currency":
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2,
-      }).format(v);
-    case "percent":
-      return new Intl.NumberFormat("en-US", {
-        style: "percent",
-        maximumFractionDigits: 1,
-      }).format(Math.abs(v) > 1 ? v / 100 : v);
-    case "date":
-      return new Date(v).toLocaleDateString();
-    case "number":
-      return new Intl.NumberFormat("en-US").format(v);
-    case "auto":
-    default:
-      if (Math.abs(v) >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
-      if (Math.abs(v) >= 1_000) return `${(v / 1_000).toFixed(1)}k`;
-      return Number.isInteger(v) ? String(v) : v.toFixed(2);
-  }
-}
+export { formatValue } from "@/lib/views/format-value";

@@ -59,7 +59,7 @@ export function KanbanLane({
     >
       <header className="sticky top-0 z-10 flex items-center justify-between gap-2 rounded-t-md border-b border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 backdrop-blur">
         <div className="flex min-w-0 items-center gap-2">
-          <Badge variant={variant} className="text-[10px] tracking-wide uppercase">
+          <Badge variant={variant} className="text-[11px] tracking-wide uppercase">
             {title}
           </Badge>
           <span className="font-mono text-xs text-[var(--p-text-2)] tabular-nums">{count}</span>
@@ -68,7 +68,7 @@ export function KanbanLane({
           <Badge
             variant={overLimit ? "error" : "muted"}
             aria-label={`WIP limit ${wipLimit}${overLimit ? ", over limit" : ""}`}
-            className="text-[10px]"
+            className="text-[11px]"
           >
             {overLimit ? `Over WIP ${wipLimit}` : `WIP ${wipLimit}`}
           </Badge>

@@ -9,6 +9,7 @@
 
 import * as React from "react";
 import { GalleryView, type GalleryItem } from "@/components/views";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type CatalogGalleryItem = {
   id: string;
@@ -31,6 +32,7 @@ export function CatalogGallery({
   emptyTitle?: string;
   emptyDescription?: string;
 }): React.ReactElement {
+  const fmt = useFormatters();
   const galleryItems: GalleryItem[] = items.map((it) => ({
     id: it.id,
     title: it.title,
@@ -41,12 +43,7 @@ export function CatalogGallery({
     meta: (
       <div className="flex items-center justify-between gap-2 font-mono">
         <span>
-          {it.unitCostCents != null
-            ? (it.unitCostCents / 100).toLocaleString("en-US", {
-                style: "currency",
-                currency: it.currency ?? "USD",
-              })
-            : "—"}
+          {it.unitCostCents != null ? fmt.money(it.unitCostCents, it.currency ?? "USD") : "—"}
         </span>
         <span>{it.inventoryQty != null ? `${it.inventoryQty} on hand` : "—"}</span>
       </div>

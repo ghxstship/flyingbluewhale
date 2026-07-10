@@ -79,7 +79,7 @@ export default async function Page() {
             </span>
             <select name="to_user_id" required className="ps-input focus-ring w-full" defaultValue="">
               <option value="" disabled>
-                {t("console.workforce.recognition.new.pickTeammate", undefined, "— Pick A Teammate —")}
+                {t("console.workforce.recognition.new.pickTeammate", undefined, "Pick A Teammate")}
               </option>
               {recipients.map((r) => (
                 <option key={r.id} value={r.id}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";

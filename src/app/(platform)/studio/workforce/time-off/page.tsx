@@ -25,7 +25,7 @@ type Row = {
   created_at: string;
 };
 
-export default async function TimeOffAdminPage() {
+export default async function TimeOffAdminPage({ searchParams }: { searchParams: Promise<{ denyNote?: string }> }) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -45,13 +45,39 @@ export default async function TimeOffAdminPage() {
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
+  const sp = await searchParams;
+  // Optional decision note applied to BULK deny actions (single-row deny
+  // collects its own note inline). Set via the small GET form above the
+  // table; server actions can't collect input through the bulk toolbar.
+  const bulkDenyNote = (sp.denyNote ?? "").trim().slice(0, 500) || null;
 
-  const { data: requests } = await supabase
-    .from("time_off_requests")
-    .select("id, user_id, policy_id, starts_on, ends_on, hours_requested, request_state, reason, created_at")
-    .eq("org_id", session.orgId)
-    .order("created_at", { ascending: false })
-    .limit(500);
+  const stateCount = (state: string) =>
+    supabase
+      .from("time_off_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .eq("request_state", state);
+
+  // Metric tiles are exact aggregates — the previous version derived them
+  // from the 500-row capped fetch, silently under-counting larger orgs.
+  const [
+    { data: requests },
+    { count: pendingCount },
+    { count: approvedCount },
+    { count: deniedCount },
+    { count: allCount },
+  ] = await Promise.all([
+    supabase
+      .from("time_off_requests")
+      .select("id, user_id, policy_id, starts_on, ends_on, hours_requested, request_state, reason, created_at")
+      .eq("org_id", session.orgId)
+      .order("created_at", { ascending: false })
+      .limit(500),
+    stateCount("pending"),
+    stateCount("approved"),
+    stateCount("denied"),
+    supabase.from("time_off_requests").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
+  ]);
 
   const raw = (requests ?? []) as Array<{
     id: string;
@@ -64,9 +90,9 @@ export default async function TimeOffAdminPage() {
     reason: string | null;
     created_at: string;
   }>;
-  const pending = raw.filter((r) => r.request_state === "pending").length;
-  const approved = raw.filter((r) => r.request_state === "approved").length;
-  const denied = raw.filter((r) => r.request_state === "denied").length;
+  const pending = pendingCount ?? 0;
+  const approved = approvedCount ?? 0;
+  const denied = deniedCount ?? 0;
 
   const policyIds = Array.from(new Set(raw.map((r) => r.policy_id)));
   const userIds = Array.from(new Set(raw.map((r) => r.user_id)));
@@ -123,20 +149,47 @@ export default async function TimeOffAdminPage() {
             value={fmt.number(denied)}
           />
         </div>
+        <form method="get" className="surface flex flex-wrap items-center gap-2 p-3">
+          <label htmlFor="denyNote" className="text-xs font-medium text-[var(--p-text-2)]">
+            {t("console.workforce.timeOff.bulkNote.label", undefined, "Bulk decision note (optional)")}
+          </label>
+          <input
+            id="denyNote"
+            name="denyNote"
+            type="text"
+            maxLength={500}
+            defaultValue={bulkDenyNote ?? ""}
+            placeholder={t(
+              "console.workforce.timeOff.bulkNote.placeholder",
+              undefined,
+              "Sent to requesters with bulk decisions",
+            )}
+            className="ps-input ps-input--sm min-w-64 flex-1"
+          />
+          <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
+            {t("console.workforce.timeOff.bulkNote.apply", undefined, "Set note")}
+          </button>
+          {bulkDenyNote && (
+            <span className="text-xs text-[var(--p-text-2)]">
+              {t("console.workforce.timeOff.bulkNote.active", undefined, "Note will ride along with bulk decisions.")}
+            </span>
+          )}
+        </form>
         <DataTable<Row>
           tableId="workforce.time_off"
           rows={rows}
+          totalCount={allCount ?? rows.length}
           bulkActions={[
             {
               id: "approve",
               label: t("console.workforce.timeOff.action.approve", undefined, "Approve"),
-              perform: bulkDecideTimeOff.bind(null, "approved"),
+              perform: bulkDecideTimeOff.bind(null, "approved", bulkDenyNote),
             },
             {
               id: "deny",
               label: t("console.workforce.timeOff.action.deny", undefined, "Deny"),
               variant: "danger",
-              perform: bulkDecideTimeOff.bind(null, "denied"),
+              perform: bulkDecideTimeOff.bind(null, "denied", bulkDenyNote),
             },
           ]}
           emptyLabel={t("console.workforce.timeOff.emptyLabel", undefined, "No time-off requests")}
@@ -199,6 +252,13 @@ export default async function TimeOffAdminPage() {
                     requestId={r.id}
                     approveLabel={t("console.workforce.timeOff.action.approve", undefined, "Approve")}
                     denyLabel={t("console.workforce.timeOff.action.deny", undefined, "Deny")}
+                    notePlaceholder={t(
+                      "console.workforce.timeOff.action.notePlaceholder",
+                      undefined,
+                      "Reason (optional)",
+                    )}
+                    confirmDenyLabel={t("console.workforce.timeOff.action.confirmDeny", undefined, "Confirm deny")}
+                    cancelLabel={t("console.workforce.timeOff.action.cancel", undefined, "Cancel")}
                   />
                 ) : (
                   <span className="text-xs text-[var(--p-text-2)]">—</span>

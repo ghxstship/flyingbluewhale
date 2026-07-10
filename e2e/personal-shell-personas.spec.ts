@@ -227,8 +227,13 @@ test.describe("personal /me · marketplace CRUD (member)", () => {
     const row = page.locator("li").filter({ hasText: label }).first();
     await expect(row, "the added availability slot persisted").toBeVisible({ timeout: 15_000 });
 
-    // Delete leg — the per-row Remove button fires deleteAvailabilityAction.
+    // Delete leg — the per-row Remove button opens a ConfirmDialog
+    // (role=alertdialog); deleteAvailabilityAction fires on its confirm
+    // button, so a second Remove click is required.
     await row.getByRole("button", { name: /remove/i }).click();
+    const confirmDialog = page.getByRole("alertdialog");
+    await expect(confirmDialog, "the remove confirm dialog opened").toBeVisible({ timeout: 15_000 });
+    await confirmDialog.getByRole("button", { name: /remove/i }).click();
     await expect(page.getByText(RLS_ERROR), "availability delete surfaced no RLS error").toHaveCount(0);
     await page.reload();
     await expectPersonalRender(page, "/me/availability");

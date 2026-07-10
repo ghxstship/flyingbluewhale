@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <div className="text-xs font-medium">
                     {r.caption ?? t("console.projects.photos.untitled", undefined, "Untitled")}
                   </div>
-                  <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                  <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                     {r.album ? `${r.album} · ` : ""}
                     {formatDate(r.taken_at)}
                   </div>

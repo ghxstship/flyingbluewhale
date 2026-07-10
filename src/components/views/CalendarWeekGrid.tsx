@@ -54,7 +54,7 @@ export function CalendarWeekGrid({
               role="columnheader"
               className="flex flex-col items-center justify-center gap-0.5 border-e border-b border-[var(--p-border)] py-2"
             >
-              <span className="text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
+              <span className="text-[11px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {WEEKDAY_SHORT[day.getUTCDay()]}
               </span>
               <span
@@ -65,7 +65,7 @@ export function CalendarWeekGrid({
               >
                 {day.getUTCDate()}
               </span>
-              <span className="text-[10px] text-[var(--p-text-2)]">{MONTH_SHORT[day.getUTCMonth()]}</span>
+              <span className="text-[11px] text-[var(--p-text-2)]">{MONTH_SHORT[day.getUTCMonth()]}</span>
             </div>
           );
         })}
@@ -75,7 +75,7 @@ export function CalendarWeekGrid({
           {HOURS.map((h) => (
             <div
               key={h}
-              className="flex items-start justify-end pe-1 font-mono text-[9px] text-[var(--p-text-2)]"
+              className="flex items-start justify-end pe-1 font-mono text-[11px] text-[var(--p-text-2)]"
               style={{ height: `${HOUR_HEIGHT_PX}px` }}
             >
               {h.toString().padStart(2, "0")}:00

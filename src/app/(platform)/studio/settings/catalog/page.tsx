@@ -5,7 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { DataViewSwitcher } from "@/components/views/DataViewSwitcher";
 import { resolveDataView } from "@/components/views/resolveDataView";
 import type { DataViewKind } from "@/components/views/DataViewKind";
@@ -48,6 +48,7 @@ export default async function Page({
   searchParams: Promise<{ view?: string }>;
 }) {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const view = resolveDataView<CatalogView>(sp, CATALOG_VIEWS, "table");
   if (!hasSupabase) {
@@ -173,13 +174,7 @@ export default async function Page({
             {
               key: "unit_cost_cents",
               header: t("console.settings.catalog.columns.unit", undefined, "Unit"),
-              render: (r) =>
-                r.unit_cost_cents != null
-                  ? (r.unit_cost_cents / 100).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: r.currency ?? "USD",
-                    })
-                  : "—",
+              render: (r) => (r.unit_cost_cents != null ? fmt.money(r.unit_cost_cents, r.currency ?? "USD") : "—"),
               mono: true,
             },
             {

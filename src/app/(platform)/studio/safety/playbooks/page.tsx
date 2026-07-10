@@ -90,7 +90,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.safety.playbooks.emptyDescription",
             undefined,
-            "ConOps playbooks render in the Guide layout. Author one per scenario — crisis comms, evacuation, weather hold, dignitary visit.",
+            "ConOps playbooks render in the Guide layout. Author one per scenario: crisis comms, evacuation, weather hold, dignitary visit.",
           )}
           emptyAction={
             <Button href="/studio/safety/playbooks/new" size="sm">

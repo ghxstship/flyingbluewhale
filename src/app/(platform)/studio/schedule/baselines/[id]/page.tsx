@@ -229,14 +229,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             },
             {
               key: "duration",
-              header: t("console.schedule.baselines.detail.table.duration", undefined, "Dur — d"),
+              header: t("console.schedule.baselines.detail.table.duration", undefined, "Dur (d)"),
               render: (a) => Number(a.duration_days).toFixed(1),
               accessor: (a) => Number(a.duration_days),
               className: "font-mono text-xs text-right",
             },
             {
               key: "float",
-              header: t("console.schedule.baselines.detail.table.float", undefined, "Float — d"),
+              header: t("console.schedule.baselines.detail.table.float", undefined, "Float (d)"),
               render: (a) => (a.total_float_days != null ? Number(a.total_float_days).toFixed(1) : "—"),
               accessor: (a) => a.total_float_days,
               className: "font-mono text-xs text-right",

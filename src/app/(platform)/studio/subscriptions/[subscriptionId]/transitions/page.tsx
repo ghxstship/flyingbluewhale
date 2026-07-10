@@ -5,7 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { getSubscription, listSubscriptionTransitions } from "@/lib/subscriptions";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +17,7 @@ export default async function SubscriptionTransitionsPage({ params }: { params: 
   if (!sub) notFound();
   const transitions = await listSubscriptionTransitions(session.orgId, subscriptionId);
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -51,7 +52,7 @@ export default async function SubscriptionTransitionsPage({ params }: { params: 
             <tbody>
               {transitions.map((row) => (
                 <tr key={row.id}>
-                  <td className="font-mono text-xs">{new Date(row.transitioned_at).toLocaleString()}</td>
+                  <td className="font-mono text-xs">{fmt.dateTime(new Date(row.transitioned_at))}</td>
                   <td className="font-mono text-xs">
                     {row.from_state ?? t("console.subscriptions.transitions.initial", undefined, "(initial)")}
                   </td>

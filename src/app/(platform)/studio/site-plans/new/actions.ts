@@ -24,11 +24,11 @@ const Schema = z.object({
   venue_id: z.string().uuid().optional().or(z.literal("")),
   event_id: z.string().uuid().optional().or(z.literal("")),
   // Atom-ID segments
-  org_code: z.string().regex(/^[A-Z0-9]{2,4}$/, "ORG must be 2–4 alphanumerics (UPPER)"),
-  evt_code: z.string().regex(/^[A-Z0-9]{3,5}$/, "EVT must be 3–5 alphanumerics (UPPER)"),
+  org_code: z.string().regex(/^[A-Z0-9]{2,4}$/, "ORG must be 2-4 alphanumerics (UPPER)"),
+  evt_code: z.string().regex(/^[A-Z0-9]{3,5}$/, "EVT must be 3-5 alphanumerics (UPPER)"),
   year: z.string().regex(/^[0-9]{2}([0-9]{2})?$/, "YY must be 2 or 4 digits"),
-  ven_code: z.string().regex(/^[A-Z0-9]{3,5}$/, "VEN must be 3–5 alphanumerics (UPPER)"),
-  zon_code: z.string().regex(/^[A-Z0-9]{4,8}$/, "ZON must be 4–8 alphanumerics (UPPER)"),
+  ven_code: z.string().regex(/^[A-Z0-9]{3,5}$/, "VEN must be 3-5 alphanumerics (UPPER)"),
+  zon_code: z.string().regex(/^[A-Z0-9]{4,8}$/, "ZON must be 4-8 alphanumerics (UPPER)"),
   seq: z.coerce.number().int().min(1).max(999).default(1),
   // Structural
   sheet_type: z.enum(SITEPLAN_SHEET_TYPES),

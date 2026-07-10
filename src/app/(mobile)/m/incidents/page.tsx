@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
-import { getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
+import { IncidentsList, type IncidentItem } from "./IncidentsList";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +12,9 @@ export const dynamic = "force-dynamic";
  *
  * Server component: reads `incidents` org-scoped, maps each row to the kit
  * incident concept (summary · severity · incident_state · occurred_at ·
- * photos). The "File Report" FAB routes to the kit `incident` FormScreen.
+ * photos) and hands plain rows to the `IncidentsList` client leaf (kit
+ * ActionBar: search + sort + severity/state filters). The "File Report" FAB
+ * routes to the kit `incident` FormScreen.
  */
 type IncidentRow = {
   id: string;
@@ -56,10 +57,32 @@ export default async function IncidentsPage() {
   const session = await requireSession();
   const rows = (await listOrgScoped("incidents", session.orgId)) as unknown as IncidentRow[];
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
-  const incidents = rows
-    .slice()
-    .sort((a, b) => String(b.occurred_at ?? "").localeCompare(String(a.occurred_at ?? "")));
+  const items: IncidentItem[] = rows.map((r) => {
+    const sevTone = SEV_TONE[r.severity ?? ""] ?? "neutral";
+    const stTone = STATE_TONE[r.incident_state ?? ""] ?? "neutral";
+    const pc = photoCount(r.photos);
+    const when = r.occurred_at
+      ? fmt.dateParts(new Date(r.occurred_at), {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "—";
+    return {
+      id: r.id,
+      title: r.summary ?? t("m.incidents.untitled", undefined, "Untitled Incident"),
+      meta: `${r.location ? `${r.location} · ` : ""}${when}${pc > 0 ? ` · ${pc} ${t("m.incidents.photos", undefined, "photos")}` : ""}`,
+      severity: r.severity ?? "—",
+      state: r.incident_state ?? "—",
+      sevTone,
+      stTone,
+      barColor: TONE_VAR[sevTone] ?? "var(--p-accent)",
+      sortAt: r.occurred_at ?? "",
+    };
+  });
 
   return (
     <div className="screen screen-anim">
@@ -68,43 +91,7 @@ export default async function IncidentsPage() {
         {t("m.incidents.title", undefined, "Incidents")}
       </h1>
 
-      {incidents.length === 0 ? (
-        <EmptyState
-          icon={<ShieldCheck size={28} aria-hidden="true" />}
-          title={t("m.incidents.emptyTitle", undefined, "All Clear")}
-          description={t("m.incidents.emptyBody", undefined, "No incidents logged for this org yet.")}
-        />
-      ) : (
-        incidents.map((r) => {
-          const sevTone = SEV_TONE[r.severity ?? ""] ?? "neutral";
-          const stTone = STATE_TONE[r.incident_state ?? ""] ?? "neutral";
-          const pc = photoCount(r.photos);
-          return (
-            <div className="item" key={r.id}>
-              <span className="bar" style={{ background: TONE_VAR[sevTone] ?? "var(--p-accent)" }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{r.summary ?? t("m.incidents.untitled", undefined, "Untitled Incident")}</div>
-                <div className="s">
-                  {r.location ? `${r.location} · ` : ""}
-                  {r.occurred_at
-                    ? new Date(r.occurred_at).toLocaleString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    : "—"}
-                  {pc > 0 ? ` · ${pc} ${t("m.incidents.photos", undefined, "photos")}` : ""}
-                </div>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end", flex: "none" }}>
-                <span className={`ps-badge ps-badge--${sevTone}`}>{r.severity ?? "—"}</span>
-                <span className={`ps-badge ps-badge--${stTone}`}>{r.incident_state ?? "—"}</span>
-              </div>
-            </div>
-          );
-        })
-      )}
+      <IncidentsList items={items} />
 
       <Link href="/m/incidents/new" className="fab" aria-label={t("m.incidents.file", undefined, "File Report")}>
         <KIcon name="Plus" size={22} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { moveLeadStageAction } from "../actions";
@@ -23,7 +23,20 @@ export function LeadStageMover({ leadId, stage }: { leadId: string; stage: LeadS
         start(async () => {
           const res = await moveLeadStageAction(leadId, next);
           if (res?.error) toast.error(res.error);
-          else toast.success(t("console.leads.stageMover.movedToast", { stage: next }, `Moved to ${next}`));
+          else
+            // F-22 action-undo pattern — the success toast carries the
+            // inverse commit (move back to the pre-advance stage). See the
+            // undo-tier docs on src/lib/hooks/useEditHistory.ts.
+            toast.success(t("console.leads.stageMover.movedToast", { stage: next }, `Moved to ${next}`), {
+              action: {
+                label: t("console.leads.stageMover.undo", undefined, "Undo"),
+                onClick: () => {
+                  void moveLeadStageAction(leadId, stage).then((r) => {
+                    if (r?.error) toast.error(r.error);
+                  });
+                },
+              },
+            });
         })
       }
     >

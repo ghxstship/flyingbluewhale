@@ -86,7 +86,7 @@ export function AuditLogViewer({
       <div className="flex flex-wrap items-end gap-2 border-b border-[var(--p-border)] px-4 py-3">
         <div className="min-w-[180px] flex-1">
           <Input
-            label={t("console.settings.audit.actorLabel", undefined, "Actor — UUID Prefix")}
+            label={t("console.settings.audit.actorLabel", undefined, "Actor (UUID Prefix)")}
             value={actorFilter}
             onChange={(e) => setActorFilter(e.target.value)}
             placeholder="af75a33d…"
@@ -196,7 +196,7 @@ export function AuditLogViewer({
                               after={(r.metadata as { after?: unknown }).after}
                             />
                           ) : (
-                            <pre className="overflow-x-auto rounded bg-[var(--p-surface)] p-2 font-mono text-[10px] text-[var(--p-text-2)]">
+                            <pre className="overflow-x-auto rounded bg-[var(--p-surface)] p-2 font-mono text-[11px] text-[var(--p-text-2)]">
                               {JSON.stringify(r.metadata ?? {}, null, 2)}
                             </pre>
                           )}

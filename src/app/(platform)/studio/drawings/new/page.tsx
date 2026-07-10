@@ -109,7 +109,7 @@ export default async function Page() {
               )}
               className={INPUT}
             />
-            <span className="text-[10px] text-[var(--p-text-2)]">
+            <span className="text-[11px] text-[var(--p-text-2)]">
               {t(
                 "console.drawings.new.hints.initialVersionLabel",
                 undefined,

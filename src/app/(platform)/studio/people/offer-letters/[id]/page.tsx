@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t(
               "console.people.offerLetters.detail.printHint",
               undefined,
-              "Bare-bones print view — browser's Save-as-PDF target produces a clean document.",
+              "Bare-bones print view. Browser's Save-as-PDF target produces a clean document.",
             )}
           </span>
         </div>
@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t(
               "console.people.offerLetters.detail.snapshotNote",
               undefined,
-              "The letter below renders from the frozen snapshot — even if rate cards, roles, or settings change later, the signed document stays the same.",
+              "The letter below renders from the frozen snapshot: even if rate cards, roles, or settings change later, the signed document stays the same.",
             )}
           </div>
         )}

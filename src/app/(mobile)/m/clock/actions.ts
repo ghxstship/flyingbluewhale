@@ -7,72 +7,10 @@ import { log } from "@/lib/log";
 
 export type State = { error?: string; ok?: boolean } | null;
 
-/**
- * Open a time entry for the signed-in user. No-op if one is already open
- * (server-enforced so a stale tab can't double-punch).
- */
-export async function clockIn(): Promise<State> {
-  const session = await requireSession();
-  const supabase = await createClient();
-
-  const { data: open } = await supabase
-    .from("time_entries")
-    .select("id")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .is("ended_at", null)
-    .maybeSingle();
-  if (open) return { error: "You're already clocked in." };
-
-  const { error } = await supabase.from("time_entries").insert({
-    org_id: session.orgId,
-    user_id: session.userId,
-    started_at: new Date().toISOString(),
-    activity_category: "shift",
-  });
-  if (error) {
-    log.error("m.clock.clock_in_failed", { err: error.message });
-    return { error: error.message };
-  }
-  revalidatePath("/m/clock");
-  return { ok: true };
-}
-
-/**
- * Close the user's currently-open time entry, computing duration_minutes.
- */
-export async function clockOut(): Promise<State> {
-  const session = await requireSession();
-  const supabase = await createClient();
-
-  const { data: open } = await supabase
-    .from("time_entries")
-    .select("id, started_at")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .is("ended_at", null)
-    .order("started_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (!open) return { error: "You're not clocked in." };
-
-  const endedAt = new Date();
-  const startedAt = new Date(open.started_at as string);
-  const durationMinutes = Math.max(0, Math.round((endedAt.getTime() - startedAt.getTime()) / 60000));
-
-  const { error } = await supabase
-    .from("time_entries")
-    .update({ ended_at: endedAt.toISOString(), duration_minutes: durationMinutes })
-    .eq("id", open.id as string)
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId);
-  if (error) {
-    log.error("m.clock.clock_out_failed", { err: error.message });
-    return { error: error.message };
-  }
-  revalidatePath("/m/clock");
-  return { ok: true };
-}
+// Clock in / out moved to the queueable POST /api/v1/time/clock endpoint
+// (see src/components/mobile/useClockPunch.ts) so offline punches are
+// buffered by the service worker and replayed on reconnect — a server
+// action fetch can't be intercepted and simply throws when offline.
 
 /**
  * Attach a shift note to a time entry. Persisted to the dedicated 3NF

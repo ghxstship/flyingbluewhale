@@ -309,7 +309,7 @@ export function Tour({ steps, open, onClose, index, onIndexChange, spotlight = t
   const isLast = current >= steps.length - 1;
   const footer = (
     <div className="flex items-center justify-between gap-2">
-      <span className="font-mono text-[10px] text-[var(--p-text-3)]" aria-live="polite">
+      <span className="font-mono text-[11px] text-[var(--p-text-3)]" aria-live="polite">
         {t("ui.tour.progress", { current: current + 1, total: steps.length }, "{current} / {total}")}
       </span>
       <div className="flex items-center gap-1.5">

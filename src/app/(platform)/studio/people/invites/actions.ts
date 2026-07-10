@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { sendEmail } from "@/lib/email";
+import { sendEmail, wrapEmailHtml } from "@/lib/email";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
@@ -105,23 +105,21 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
 
   if (!invite) return { error: "Failed to create invite" };
 
-  // Fire-and-forget the invitation email; failure to send doesn't undo the
-  // row — admin can copy the link from the list view if email delivery is
-  // down. The table is the source of truth.
+  // Send the invitation email and remember whether it landed; failure to
+  // send doesn't undo the row — the table is the source of truth and the
+  // admin can copy the link from the list view — but the failure must be
+  // SURFACED (it used to be void-discarded, so delivery outages looked
+  // like sent invites).
   // /accept-invite lives on the apex (auth shell) — same origin as login.
   const acceptUrl = urlFor("auth", `/accept-invite/${invite.token}`);
-  void sendEmail({
+  const sent = await sendEmail({
     to: parsed.data.email,
-    subject: `You're invited to join a ATLVS Technologies workspace`,
-    html: `
-      <div style="font-family:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
-        <p style="color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Invitation</p>
-        <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase">You've been invited</h1>
-        <p style="color:#181b23;font-size:14px">${session.email} invited you to join their workspace as ${parsed.data.role}.</p>
-        <p><a href="${acceptUrl}" style="display:inline-block;background:${PRODUCT_ACCENTS.atlvs};color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Accept invitation</a></p>
-        <p style="color:#8c95a3;font-size:12px;margin-top:24px;font-family:'Space Mono','Courier New',monospace">Link expires in 7 days. If the button doesn't work:<br/><code>${acceptUrl}</code></p>
-      </div>`,
+    subject: `You're invited to join an ATLVS Technologies workspace`,
+    html: inviteEmailHtml(session.email, parsed.data.role, acceptUrl),
   });
+  if (!sent.ok) {
+    console.error("[invite email] send failed:", sent.error);
+  }
 
   await emitAudit({
     actorId: session.userId,
@@ -142,7 +140,76 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   });
 
   revalidatePath("/studio/people/invites");
-  redirect("/studio/people/invites");
+  // Surface a send failure on the list: the invite exists (copy the link),
+  // but the email never went out.
+  redirect(sent.ok ? "/studio/people/invites" : "/studio/people/invites?emailFailed=1");
+}
+
+/**
+ * Invite email body — the recipient-facing content only; the canonical
+ * transactional chrome (header band, endorsement footer) comes from
+ * `wrapEmailHtml`, same as every other transactional sender.
+ */
+function inviteEmailHtml(inviterEmail: string, role: string, acceptUrl: string): string {
+  return wrapEmailHtml(`
+      <p style="color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace;margin:0">Invitation</p>
+      <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase">You've been invited</h1>
+      <p style="color:#181b23;font-size:14px">${inviterEmail} invited you to join their workspace as ${role}.</p>
+      <p><a href="${acceptUrl}" style="display:inline-block;background:${PRODUCT_ACCENTS.atlvs};color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Accept invitation</a></p>
+      <p style="color:#8c95a3;font-size:12px;margin-top:24px;font-family:'Space Mono','Courier New',monospace">Link expires in 7 days. If the button doesn't work:<br/><code>${acceptUrl}</code></p>`);
+}
+
+/**
+ * Re-send the invitation email for a still-pending invite. If the invite
+ * has expired, the window is extended by 7 days first so the re-sent link
+ * actually works. Admin-only, same as create/revoke.
+ */
+export async function resendInviteAction(id: string): Promise<FormState> {
+  const session = await requireSession();
+  if (!isAdmin(session)) return { error: "Only owners and admins can resend." };
+
+  const supabase = await createClient();
+  const { data: invite, error: readErr } = await supabase
+    .from("invites")
+    .select("id, email, role, token, expires_at, invite_state")
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (readErr) return { error: readErr.message };
+  if (!invite || invite.invite_state !== "pending") {
+    return { error: "Only a pending invite can be resent" };
+  }
+
+  if (new Date(invite.expires_at).getTime() < Date.now()) {
+    const { error: extendErr } = await supabase
+      .from("invites")
+      .update({ expires_at: new Date(Date.now() + 7 * 86_400_000).toISOString() })
+      .eq("id", id)
+      .eq("org_id", session.orgId)
+      .eq("invite_state", "pending");
+    if (extendErr) return { error: extendErr.message };
+  }
+
+  const acceptUrl = urlFor("auth", `/accept-invite/${invite.token}`);
+  const sent = await sendEmail({
+    to: invite.email,
+    subject: `You're invited to join an ATLVS Technologies workspace`,
+    html: inviteEmailHtml(session.email, invite.role, acceptUrl),
+  });
+  if (!sent.ok) return { error: `Email could not be sent: ${sent.error ?? "delivery failed"}` };
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.invite.resent",
+    targetTable: "invites",
+    targetId: id,
+    metadata: { email: invite.email },
+  });
+
+  revalidatePath("/studio/people/invites");
+  return { ok: true };
 }
 
 export async function revokeInviteAction(id: string): Promise<FormState> {

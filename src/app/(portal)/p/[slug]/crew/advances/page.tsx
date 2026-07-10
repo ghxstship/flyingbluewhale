@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PortalSubpage } from "@/components/PortalSubpage";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -43,33 +44,28 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
   }
 
   return (
-    <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
-        {t("p.crew.advances.eyebrow", undefined, "Portal")}
-      </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("p.crew.advances.title", undefined, "My Assignments")}</h1>
-      <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t(
-          "p.crew.advances.subtitle",
-          undefined,
-          "Your tickets, credentials, catering, radios, tools, uniforms, travel, lodging, and vehicles for this show.",
-        )}
-      </p>
-
+    <PortalSubpage
+      slug={slug}
+      persona="crew"
+      title={t("p.crew.advances.title", undefined, "My Assignments")}
+      subtitle={t(
+        "p.crew.advances.subtitle",
+        undefined,
+        "Your tickets, credentials, catering, radios, tools, uniforms, travel, lodging, and vehicles for this show.",
+      )}
+    >
       {rows.length === 0 ? (
-        <div className="mt-5">
-          <EmptyState
-            size="compact"
-            title={t("p.crew.advances.empty.title", undefined, "Nothing Assigned Yet")}
-            description={t(
-              "p.crew.advances.empty.description",
-              undefined,
-              "When your production team pins something to you, it lands here.",
-            )}
-          />
-        </div>
+        <EmptyState
+          size="compact"
+          title={t("p.crew.advances.empty.title", undefined, "Nothing Assigned Yet")}
+          description={t(
+            "p.crew.advances.empty.description",
+            undefined,
+            "When your production team pins something to you, it lands here.",
+          )}
+        />
       ) : (
-        <div className="mt-5 space-y-5">
+        <div className="space-y-5">
           {CATALOG_KINDS.filter((k) => byKind.has(k)).map((kind) => {
             const items = byKind.get(kind) ?? [];
             return (
@@ -85,7 +81,7 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
                           <div className="truncate text-sm font-semibold">
                             {d.title ?? t("p.crew.advances.item.untitled", undefined, "Untitled")}
                           </div>
-                          <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                          <div className="mt-1 font-mono text-[11px] text-[var(--p-text-2)]">
                             v{d.version}
                             {d.deadline
                               ? ` · ${t("p.crew.advances.item.due", { date: fmt.date(d.deadline) }, `due ${fmt.date(d.deadline)}`)}`
@@ -114,6 +110,6 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
         </Link>
         .
       </p>
-    </div>
+    </PortalSubpage>
   );
 }

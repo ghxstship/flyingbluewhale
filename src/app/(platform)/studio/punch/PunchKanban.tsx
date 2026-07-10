@@ -52,7 +52,7 @@ export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactEl
       renderCard={(r) => (
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
-            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{r.code}</span>
+            <span className="font-mono text-[11px] text-[var(--p-text-2)]">{r.code}</span>
             {r.show_ready_gate && (
               <span
                 title={t("console.punch.kanban.showReadyGate", undefined, "Show-ready gate")}
@@ -62,7 +62,7 @@ export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactEl
           </div>
           <div className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.title}</div>
           <div className="flex items-center justify-between gap-2">
-            <Badge variant={PRIORITY_TONE[r.priority] ?? "default"} className="text-[10px] uppercase">
+            <Badge variant={PRIORITY_TONE[r.priority] ?? "default"} className="text-[11px] uppercase">
               {r.priority}
             </Badge>
             <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} size="sm" />

@@ -32,7 +32,7 @@ export function AddStepMenu({
         </Button>
       </PopoverTrigger>
       <PopoverContent align="center" className="w-80 p-1">
-        <div className="px-2 pt-2 pb-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+        <div className="px-2 pt-2 pb-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
           {t("components.addStepMenu.actions", undefined, "ACTIONS")}
         </div>
         <ul className="grid gap-0.5">
@@ -53,7 +53,7 @@ export function AddStepMenu({
               >
                 <div className="text-sm font-medium text-[var(--p-text-1)]">{a.label}</div>
                 <div className="text-[11px] text-[var(--p-text-2)]">{a.description}</div>
-                <div className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">{a.type}</div>
+                <div className="mt-0.5 font-mono text-[11px] text-[var(--p-text-2)]">{a.type}</div>
               </button>
             </li>
           ))}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +13,11 @@ export const dynamic = "force-dynamic";
  */
 export default async function LegendHubPage() {
   const { t } = await getRequestT();
+  // Cross-shell tiles route through `urlFor("platform", …)` (URL canon) so
+  // the subdomain/path-prefix decision stays in one place.
   const tiles = [
     {
-      href: "/studio/knowledge",
+      href: urlFor("platform", "/knowledge"),
       title: t("console.legend.tiles.standard.title", undefined, "The Standard"),
       blurb: t("console.legend.tiles.standard.blurb", undefined, "Knowledge base — the canonical how-we-work reference."),
     },
@@ -34,7 +37,7 @@ export default async function LegendHubPage() {
       blurb: t("console.legend.tiles.resources.blurb", undefined, "Curated documents, links, templates, and references."),
     },
     {
-      href: "/studio/settings/catalog",
+      href: urlFor("platform", "/settings/catalog"),
       title: t("console.legend.tiles.catalog.title", undefined, "Catalog"),
       blurb: t("console.legend.tiles.catalog.blurb", undefined, "The priced atom / URID master catalog."),
     },
@@ -49,7 +52,7 @@ export default async function LegendHubPage() {
       blurb: t("console.legend.tiles.engine.blurb", undefined, "XMCE — author rules, run checks, triage findings."),
     },
     {
-      href: "/studio/safety/incidents",
+      href: urlFor("platform", "/safety/incidents"),
       title: t("console.legend.tiles.safety.title", undefined, "Safety"),
       blurb: t("console.legend.tiles.safety.blurb", undefined, "Incidents, crisis, medical, and safeguarding."),
     },

@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -72,6 +72,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const t = await getTalent(handle);
   if (!t) return notFound();
   const { t: tr } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   return (
     <>
@@ -143,13 +144,13 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                 <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.reach.monthlyListenersLabel")}
                 </span>{" "}
-                {t.monthly_listeners?.toLocaleString() ?? "—"}
+                {t.monthly_listeners == null ? "—" : fmt.number(t.monthly_listeners)}
               </div>
               <div>
                 <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.reach.followersLabel")}
                 </span>{" "}
-                {t.follower_count?.toLocaleString() ?? "—"}
+                {t.follower_count == null ? "—" : fmt.number(t.follower_count)}
               </div>
               <div>
                 <span className="text-[var(--p-text-2)]">

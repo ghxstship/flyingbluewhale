@@ -52,14 +52,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           />
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label={t("console.projects.stagePlots.edit.widthLabel", undefined, "Width — ft")}
+              label={t("console.projects.stagePlots.edit.widthLabel", undefined, "Width (ft)")}
               name="width_ft"
               type="number"
               step="any"
               defaultValue={row.width_ft != null ? String(row.width_ft) : ""}
             />
             <Input
-              label={t("console.projects.stagePlots.edit.depthLabel", undefined, "Depth — ft")}
+              label={t("console.projects.stagePlots.edit.depthLabel", undefined, "Depth (ft)")}
               name="depth_ft"
               type="number"
               step="any"

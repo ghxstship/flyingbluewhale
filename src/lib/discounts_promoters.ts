@@ -8,6 +8,8 @@
  * `as const` → derived types → label maps + small pure helpers.
  */
 
+import { formatMoney, formatNumber } from "@/lib/i18n/format";
+
 // ============================================================
 // Discount codes
 // ============================================================
@@ -48,9 +50,9 @@ export const PROMOTER_STATE_LABELS: Record<PromoterState, string> = {
  *  (value is basis points); fixed → "$12.50" (value is cents). */
 export function formatDiscountValue(kind: DiscountKind, value: number): string {
   if (kind === "percent") {
-    return `${(value / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}%`;
+    return `${formatNumber(value / 100, { maximumFractionDigits: 2 })}%`;
   }
-  return `$${(value / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return formatMoney(value);
 }
 
 /** Apply a discount to an order subtotal (in cents). Never returns a
@@ -94,7 +96,7 @@ export function commissionCents(amountCents: number, commissionBps: number): num
 
 /** "1500" bps → "15%" for display. */
 export function formatBps(bps: number): string {
-  return `${(bps / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}%`;
+  return `${formatNumber(bps / 100, { maximumFractionDigits: 2 })}%`;
 }
 
 /** Normalize a user-entered code/ref to the canonical stored form:

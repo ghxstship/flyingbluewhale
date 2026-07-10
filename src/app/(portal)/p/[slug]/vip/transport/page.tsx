@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -23,7 +24,7 @@ type Run = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -119,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     <div className="font-medium">
                       {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmt(r.scheduled_depart)}
                       {r.vehicle_ref ? ` · ${r.vehicle_ref}` : ""}
                     </div>

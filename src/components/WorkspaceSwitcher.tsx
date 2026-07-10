@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { useRouter } from "next/navigation";
 import { ChevronsUpDown, Check, Plus } from "lucide-react";
 import {
@@ -238,7 +238,7 @@ function WorkspaceMenu({
               <WorkspaceTile name={w.name} logoUrl={w.logoUrl} size={20} />
               <span className="flex-1 truncate">
                 <span className="text-[var(--p-text-1)]">{w.name}</span>
-                <span className="ms-2 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{w.role}</span>
+                <span className="ms-2 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{w.role}</span>
               </span>
               {isActive && <Check size={12} className="text-[var(--p-accent)]" aria-hidden />}
             </DropdownMenuItem>

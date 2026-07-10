@@ -32,7 +32,7 @@ export default async function Page() {
             <select name="trigger_kind" defaultValue="manual" className="ps-input mt-1.5 w-full">
               <option value="manual">{t("console.ai.automations.new.triggerManual", undefined, "Manual")}</option>
               <option value="schedule">
-                {t("console.ai.automations.new.triggerSchedule", undefined, "Schedule — Cron")}
+                {t("console.ai.automations.new.triggerSchedule", undefined, "Schedule (Cron)")}
               </option>
               <option value="webhook">{t("console.ai.automations.new.triggerWebhook", undefined, "Webhook")}</option>
               <option value="event">{t("console.ai.automations.new.triggerEvent", undefined, "Event")}</option>

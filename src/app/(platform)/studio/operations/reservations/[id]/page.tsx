@@ -84,6 +84,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 { name: res.guest_name },
                 `Delete reservation for "${res.guest_name}"?`,
               )}
+              undo={{ table: "reservations", id: res.id, redirectTo: "/studio/operations/reservations" }}
             />
           </div>
         }

@@ -71,7 +71,7 @@ export function StepCard({
           <div className="flex items-center gap-2">
             <Badge variant="muted">{`Step ${index + 1}`}</Badge>
             <span className="text-sm font-semibold text-[var(--p-text-1)]">{label}</span>
-            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{type}</span>
+            <span className="font-mono text-[11px] text-[var(--p-text-2)]">{type}</span>
           </div>
           {description && <p className="mt-1 text-[11px] text-[var(--p-text-2)]">{description}</p>}
         </div>

@@ -46,7 +46,7 @@ export default async function NewSubscriptionPage() {
             </label>
             <label className="block">
               <span className="text-sm font-medium">
-                {t("console.subscriptions.new.party", undefined, "Party — Optional UUID")}
+                {t("console.subscriptions.new.party", undefined, "Party (Optional UUID)")}
               </span>
               <Input
                 name="party_id"
@@ -59,7 +59,7 @@ export default async function NewSubscriptionPage() {
             </label>
             <label className="block">
               <span className="text-sm font-medium">
-                {t("console.subscriptions.new.renewalCadence", undefined, "Renewal Cadence — Months")}
+                {t("console.subscriptions.new.renewalCadence", undefined, "Renewal Cadence (Months)")}
               </span>
               <Input
                 name="renewal_cadence_months"

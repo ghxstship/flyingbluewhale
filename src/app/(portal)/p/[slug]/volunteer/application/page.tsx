@@ -114,10 +114,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <dd>{member.role ?? t("p.volunteer.application.tbd", undefined, "TBD")}</dd>
             </dl>
             <p className="mt-4 text-xs text-[var(--p-text-2)]">
-              {t("p.volunteer.application.profile.updatePrompt", undefined, "Need to update your details? Email")}{" "}
-              <a className="text-[var(--p-accent)]" href="mailto:volunteers@atlvs.pro">
-                volunteers@atlvs.pro
-              </a>
+              {t(
+                "p.volunteer.application.profile.updatePromptMessage",
+                undefined,
+                "Need to update your details?",
+              )}{" "}
+              <Link className="text-[var(--p-accent)] underline" href={`/p/${slug}/messages`}>
+                {t("p.volunteer.application.profile.messageTeam", undefined, "Message the team")}
+              </Link>
               .
             </p>
           </section>
@@ -130,15 +134,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t(
                 "p.volunteer.application.submit.description",
                 undefined,
-                "We're recruiting volunteers for the upcoming event window. Applications take ~10 minutes — you'll need your contact details, availability, and any relevant skills.",
+                "We're recruiting volunteers for the upcoming event window. Applications take about 10 minutes. You'll need your contact details, availability, and any relevant skills.",
               )}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link
-                href={`mailto:volunteers@atlvs.pro?subject=Volunteer%20application%20—%20${slug}`}
-                className="ps-btn ps-btn--sm"
-              >
-                {t("p.volunteer.application.submit.emailCta", undefined, "Email volunteer team")}
+              <Link href={`/p/${slug}/messages`} className="ps-btn ps-btn--sm">
+                {t("p.volunteer.application.submit.messageCta", undefined, "Message the volunteer team")}
               </Link>
             </div>
           </section>

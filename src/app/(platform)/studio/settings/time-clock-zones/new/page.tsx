@@ -48,7 +48,7 @@ export default async function Page() {
             </label>
             <select name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">
-                {t("console.settings.timeClockZones.new.projectNone", undefined, "None — org-wide")}
+                {t("console.settings.timeClockZones.new.projectNone", undefined, "None (org-wide)")}
               </option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -81,7 +81,7 @@ export default async function Page() {
             required
           />
           <Input
-            label={t("console.settings.timeClockZones.new.radius", undefined, "Radius — Meters")}
+            label={t("console.settings.timeClockZones.new.radius", undefined, "Radius (Meters)")}
             name="radius_m"
             type="number"
             step="1"

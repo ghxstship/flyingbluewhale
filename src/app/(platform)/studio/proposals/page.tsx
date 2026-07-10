@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Tables } from "@/lib/supabase/types";
+import { bulkSendProposals } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,12 @@ export default async function ProposalsPage() {
     );
   }
   const session = await requireSession();
-  const rows = await listOrgScoped("proposals", session.orgId, { orderBy: "updated_at" });
+  // Exact count alongside the capped table page (audit A-05/A-07) — the
+  // subtitle and truncation indicator stay honest past the 100-row cap.
+  const [rows, totalCount] = await Promise.all([
+    listOrgScoped("proposals", session.orgId, { orderBy: "updated_at" }),
+    countOrgScoped("proposals", session.orgId),
+  ]);
 
   return (
     <>
@@ -32,9 +38,9 @@ export default async function ProposalsPage() {
         eyebrow={t("console.proposals.eyebrow", undefined, "Sales")}
         title={t("console.proposals.title", undefined, "Proposals")}
         subtitle={
-          rows.length === 1
-            ? t("console.proposals.countOne", { count: rows.length }, `${rows.length} Proposal`)
-            : t("console.proposals.countOther", { count: rows.length }, `${rows.length} Proposals`)
+          totalCount === 1
+            ? t("console.proposals.countOne", { count: totalCount }, `${totalCount} Proposal`)
+            : t("console.proposals.countOther", { count: totalCount }, `${totalCount} Proposals`)
         }
         action={
           <Button href="/studio/proposals/new">{t("console.proposals.newAction", undefined, "+ New Proposal")}</Button>
@@ -43,7 +49,26 @@ export default async function ProposalsPage() {
       <div className="page-content">
         <DataTable<Tables<"proposals">>
           rows={rows}
+          totalCount={totalCount}
           rowHref={(r) => `/studio/proposals/${r.id}`}
+          emptyLabel={t("console.proposals.emptyLabel", undefined, "No proposals yet")}
+          emptyDescription={t(
+            "console.proposals.emptyDescription",
+            undefined,
+            "Draft a proposal to put numbers in front of a client; signed proposals convert to projects.",
+          )}
+          emptyAction={
+            <Button href="/studio/proposals/new" size="sm">
+              {t("console.proposals.newAction", undefined, "+ New Proposal")}
+            </Button>
+          }
+          bulkActions={[
+            {
+              id: "send",
+              label: t("console.proposals.bulk.send", undefined, "Mark Sent"),
+              perform: bulkSendProposals,
+            },
+          ]}
           columns={[
             {
               key: "title",

@@ -142,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           if (items.length === 0) return null;
           return (
             <section className="surface p-4">
-              <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                 XPMS Classification
               </div>
               <div className="mt-2 flex flex-wrap gap-1.5">
@@ -159,17 +159,17 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.budget", undefined, "Budget")}
               </div>
               <div className="mt-1 text-lg font-semibold">{money(budget.amount_cents)}</div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.computedActual", undefined, "Computed actual")}
               </div>
               <div className="mt-1 text-lg font-semibold">{money(recomputed)}</div>
-              <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">
+              <div className="mt-0.5 text-[11px] text-[var(--p-text-2)]">
                 {t(
                   "console.finance.budgets.detail.storedLabel",
                   { amount: money(budget.spent_cents) },
@@ -178,7 +178,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.remaining", undefined, "Remaining")}
               </div>
               <div
@@ -190,7 +190,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+              <div className="text-[11px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.varianceVsStored", undefined, "Variance vs stored")}
               </div>
               <div
@@ -205,7 +205,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
                 {variance === 0 ? "—" : `${variance > 0 ? "+" : ""}${money(variance)}`}
               </div>
               {variance !== 0 && (
-                <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">
+                <div className="mt-0.5 text-[11px] text-[var(--p-text-2)]">
                   {t("console.finance.budgets.detail.reconcileToClear", undefined, "Reconcile to clear")}
                 </div>
               )}

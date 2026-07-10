@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { BEO_STATE_LABELS, NEXT_BEO_STATES, type BeoState } from "@/lib/beos";
 import { setBeoStateAction } from "../actions";

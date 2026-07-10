@@ -113,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     >
                       {c.title}
                     </Link>
-                    <div className="mt-1 flex flex-wrap items-center gap-1 font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="mt-1 flex flex-wrap items-center gap-1 font-mono text-[11px] text-[var(--p-text-2)]">
                       {tags.slice(0, 4).map((tag) => (
                         <Badge key={tag} variant="muted">
                           {tag}

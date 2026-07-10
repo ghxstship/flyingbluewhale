@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { archiveZone, reactivateZone } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +18,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data } = await supabase
     .from("time_clock_zones")
@@ -109,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 }>
               ).map((p) => (
                 <li key={p.id} className="flex items-center justify-between text-xs">
-                  <span className="font-mono">{new Date(p.started_at).toLocaleString()}</span>
+                  <span className="font-mono">{fmt.dateTime(new Date(p.started_at))}</span>
                   <span className="flex items-center gap-2">
                     <Badge
                       variant={

@@ -23,7 +23,7 @@ export function SettingsSidebar({ role }: { role?: string | null }) {
         <div className="border-b border-[var(--p-border)] px-3 py-3">
           <Link
             href="/studio"
-            className="inline-flex items-center gap-1 text-[10px] font-semibold tracking-[0.28em] text-[var(--p-text-2)] uppercase hover:text-[var(--p-text-1)]"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-[0.28em] text-[var(--p-text-2)] uppercase hover:text-[var(--p-text-1)]"
           >
             <ChevronLeft size={12} aria-hidden="true" />
             {t("console.settings.sidebar.backToWorkspace", undefined, "Back to Workspace")}
@@ -35,7 +35,7 @@ export function SettingsSidebar({ role }: { role?: string | null }) {
         <nav className="flex-1 overflow-y-auto p-2">
           {groups.map((g) => (
             <div key={g.label} className="mb-3">
-              <div className="px-2 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+              <div className="px-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {g.label}
               </div>
               <ul className="mt-0.5 space-y-0.5">

@@ -110,7 +110,7 @@ export default async function Page() {
               <thead>
                 <tr>
                   <th className="text-start">
-                    {t("console.accreditation.policy.zoneVenueHeader", undefined, "Zone — Venue")}
+                    {t("console.accreditation.policy.zoneVenueHeader", undefined, "Zone / Venue")}
                   </th>
                   {categories.map((c) => (
                     <th key={c.id} className="text-center">
@@ -132,7 +132,7 @@ export default async function Page() {
                     <tr key={z.id}>
                       <td>
                         <div className="text-sm font-medium">{z.name}</div>
-                        <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                        <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                           {z.code} · {z.venue?.name ?? "—"}
                         </div>
                       </td>
@@ -167,7 +167,7 @@ export default async function Page() {
           {t(
             "console.accreditation.policy.footnote",
             undefined,
-            "A green cell means cardholders of the column's category are allowed in the row's zone. To edit, open the venue and use its Zones tab — each zone's allowed-categories list drives this matrix.",
+            "A green cell means cardholders of the column's category are allowed in the row's zone. To edit, open the venue and use its Zones tab. Each zone's allowed-categories list drives this matrix.",
           )}
         </p>
       </div>

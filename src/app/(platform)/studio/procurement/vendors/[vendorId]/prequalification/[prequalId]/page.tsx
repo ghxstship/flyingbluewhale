@@ -229,7 +229,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
               {t(
                 "console.procurement.vendors.prequalification.detail.noQuestions",
                 undefined,
-                "No questions in this questionnaire — nothing to render.",
+                "No questions in this questionnaire. Nothing to render.",
               )}
             </p>
           ) : (
@@ -280,7 +280,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                           ? t(
                               "console.procurement.vendors.prequalification.detail.requiredMissing",
                               undefined,
-                              "No response — required answer missing.",
+                              "No response. Required answer missing.",
                             )
                           : t(
                               "console.procurement.vendors.prequalification.detail.notAnswered",

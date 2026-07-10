@@ -100,7 +100,7 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
                       {propMap.get(a.proposal_id) ?? t("p.promoter.approvals.proposalFallback", undefined, "Proposal")}{" "}
                       — {a.title ?? a.kind}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {a.kind} · {fmt.date(a.created_at)}
                       {a.due_at
                         ? ` · ${t("p.promoter.approvals.due", { date: fmt.date(a.due_at) }, `due ${fmt.date(a.due_at)}`)}`

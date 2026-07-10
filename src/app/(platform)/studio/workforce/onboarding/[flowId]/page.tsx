@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { addStep, publishFlow, assignFlow } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +29,7 @@ type Assignment = {
 
 export default async function Page({ params }: { params: Promise<{ flowId: string }> }) {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase)
     return (
       <div className="page-content">
@@ -197,11 +198,11 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                       {memberMap.get(a.assignee_id) ??
                         t("console.workforce.onboarding.flow.unknownAssignee", undefined, "Unknown")}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
+                    <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {t(
                         "console.workforce.onboarding.flow.assignedOn",
-                        { date: new Date(a.assigned_at).toLocaleDateString() },
-                        `assigned ${new Date(a.assigned_at).toLocaleDateString()}`,
+                        { date: fmt.date(a.assigned_at) },
+                        `assigned ${fmt.date(a.assigned_at)}`,
                       )}
                     </div>
                   </div>

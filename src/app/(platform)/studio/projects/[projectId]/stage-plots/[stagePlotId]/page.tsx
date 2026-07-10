@@ -87,6 +87,11 @@ export default async function StagePlotDetailPage({
                 { name: plot.name },
                 `Delete stage plot "${plot.name}"? It will be soft-deleted.`,
               )}
+              undo={{
+                table: "stage_plots",
+                id: stagePlotId,
+                redirectTo: `/studio/projects/${projectId}/stage-plots`,
+              }}
             />
           </div>
         }

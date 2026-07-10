@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
 
@@ -29,7 +30,7 @@ type Row = {
 
 function fmt(d: string | null): string {
   if (!d) return "—";
-  return new Date(d + "T00:00:00").toLocaleDateString();
+  return formatDate(new Date(d + "T00:00:00"));
 }
 
 export default async function Page() {
@@ -101,7 +102,7 @@ export default async function Page() {
           emptyDescription={t(
             "console.submittals.emptyDescription",
             undefined,
-            "Vendor packages, technical specs, brand approvals — track them with stamps and revision rounds.",
+            "Vendor packages, technical specs, brand approvals. Track them with stamps and revision rounds.",
           )}
           emptyAction={
             <Button href="/studio/submittals/new" size="sm">

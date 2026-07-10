@@ -61,7 +61,7 @@ export function AuthCard({
       )}
 
       {providers && providers.length > 0 && children && (
-        <div className="my-5 flex items-center gap-3 text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+        <div className="my-5 flex items-center gap-3 text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
           <div className="h-px flex-1 bg-[var(--p-border)]" />
           <span>{dividerLabel}</span>
           <div className="h-px flex-1 bg-[var(--p-border)]" />

@@ -91,7 +91,7 @@ export default async function Page() {
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.procurement.poChangeOrders.new.scheduleImpact", undefined, "Schedule Impact — Days")}
+                {t("console.procurement.poChangeOrders.new.scheduleImpact", undefined, "Schedule Impact (Days)")}
               </span>
               <input type="number" name="schedule_impact_days" defaultValue="0" className={INPUT} />
             </label>

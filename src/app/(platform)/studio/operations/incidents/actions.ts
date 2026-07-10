@@ -61,7 +61,7 @@ export async function setIncidentStatus(id: string, to: IncidentStatus): Promise
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
-    throw new Error("Incident status changed concurrently — refresh and retry");
+    throw new Error("Incident status changed concurrently. Refresh and retry");
   }
   revalidatePath("/studio/operations/incidents");
 }
@@ -90,7 +90,7 @@ export async function createCorrectiveTaskAction(incidentId: string): Promise<Co
     .maybeSingle();
   if (!incident) return { error: "Incident not found" };
   if (incident.incident_state === "closed") {
-    return { error: "Incident is closed — reopen it before adding corrective work" };
+    return { error: "Incident is closed. Reopen it before adding corrective work" };
   }
 
   // Idempotency: the lineage marker is unique per incident.

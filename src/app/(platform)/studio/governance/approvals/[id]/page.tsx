@@ -6,7 +6,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { DECISION_KINDS, DECISION_LABEL, ROUTING_LABEL, type RoutingKind } from "@/lib/approvals/queries";
 import { recordDecision } from "./actions";
 
@@ -48,6 +48,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data: instanceData } = await supabase
     .from("approval_instances")
@@ -92,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <span className="font-mono text-xs">
               {instance.subject_table}/{instance.subject_id.slice(0, 8)}
             </span>
-            <span className="font-mono text-xs">{new Date(instance.initiated_at).toLocaleString("en-US")}</span>
+            <span className="font-mono text-xs">{fmt.dateTime(new Date(instance.initiated_at))}</span>
           </span>
         }
       />
@@ -147,7 +148,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="flex items-center gap-2">
                     <StatusBadge status={d.decision} />
                     <span className="font-mono text-[var(--p-text-2)]">
-                      {new Date(d.decided_at).toLocaleString("en-US")}
+                      {fmt.dateTime(new Date(d.decided_at))}
                     </span>
                   </span>
                   {d.notes && <span className="whitespace-pre-wrap text-[var(--p-text-2)]">{d.notes}</span>}

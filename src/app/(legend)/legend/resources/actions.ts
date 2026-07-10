@@ -114,5 +114,6 @@ export async function deleteResourceAction(id: string): Promise<void> {
     .is("deleted_at", null);
   if (error) throw new Error(`Could not delete resource: ${error.message}`);
   revalidatePath("/legend/resources");
-  redirect("/legend/resources");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

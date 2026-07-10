@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toggleActive, deleteItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const { data } = await supabase
     .from("master_catalog_items")
@@ -99,7 +100,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               confirm={t(
                 "console.settings.catalog.detail.deleteConfirm",
                 undefined,
-                "Soft-delete this catalog item? Existing assignments keep their catalog_item_id; new assignments can't pick it.",
+                "Remove this catalog item? Existing assignments keep their link to it for history; new assignments won't be able to pick it.",
               )}
               undo={{ table: "master_catalog_items", id: item.id, redirectTo: "/studio/settings/catalog" }}
             />
@@ -110,20 +111,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {item.description && <section className="surface p-4 text-sm whitespace-pre-wrap">{item.description}</section>}
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.catalog.detail.unitCost", undefined, "Unit Cost")}
             </div>
             <div className="mt-1 font-mono">
-              {item.unit_cost_cents != null
-                ? (item.unit_cost_cents / 100).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: item.currency ?? "USD",
-                  })
-                : "—"}
+              {item.unit_cost_cents != null ? fmt.money(item.unit_cost_cents, item.currency ?? "USD") : "—"}
             </div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.catalog.detail.inventory", undefined, "Inventory")}
             </div>
             <div className="mt-1 font-mono">{item.inventory_qty ?? "—"}</div>

@@ -91,7 +91,7 @@ export async function awardRfqAction(rfqId: string, _prev: State, fd: FormData):
     .select("id");
   if (claimError) return { error: claimError.message };
   if (!claimed || claimed.length === 0) {
-    return { error: "RFQ changed concurrently — refresh and retry" };
+    return { error: "RFQ changed concurrently. Refresh and retry" };
   }
 
   const { data: po, error: insertError } = await supabase

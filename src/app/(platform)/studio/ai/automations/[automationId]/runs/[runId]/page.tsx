@@ -9,6 +9,7 @@ import { toTitle } from "@/lib/format";
 import { RunTimeline, type RunTimelineStep } from "@/components/automations/RunTimeline";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 import { toneFor } from "@/lib/tones";
 
 /**
@@ -51,7 +52,7 @@ type StepRow = {
 
 function fmt(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleString(undefined, {
+  return formatDateParts(new Date(iso), {
     month: "short",
     day: "numeric",
     year: "numeric",

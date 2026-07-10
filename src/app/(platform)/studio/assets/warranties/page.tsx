@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { formatDateParts } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ type WarrantyRow = {
 
 function fmtDate(value: string | null): string {
   if (!value) return "—";
-  return new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+  return formatDateParts(new Date(value), { year: "numeric", month: "short", day: "numeric" });
 }
 
 export default async function Page() {

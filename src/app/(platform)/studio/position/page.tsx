@@ -4,7 +4,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import Link from "next/link";
 import { rollupCoordinate, rollupToData, COORDINATE_METRIC_LABELS, COORDINATE_METRICS } from "@/lib/xpms/coordinate";
 import { XPMS_CLASS_BY_CODE, XPMS_ATOM_PHASES } from "@/lib/xpms";
@@ -19,6 +19,7 @@ import { PositionMatrix } from "@/components/coordinate/PositionMatrix";
 export default async function PositionPage() {
   const session = await requireSession();
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
 
   const rollups = await rollupCoordinate(session.orgId);
   const open = rollups.open;
@@ -45,7 +46,7 @@ export default async function PositionPage() {
             description={t(
               "console.position.emptyDescription",
               undefined,
-              "Once projects carry XPMS atoms (class × phase), the portfolio heat grid lights up here — each hot cell a precise bottleneck.",
+              "Once projects carry XPMS atoms (class × phase), the portfolio heat grid lights up here. Each hot cell a precise bottleneck.",
             )}
           />
         ) : (
@@ -54,7 +55,7 @@ export default async function PositionPage() {
               <MetricCard label={t("console.position.metricItems", undefined, "Open items")} value={String(open.total)} />
               <MetricCard
                 label={t("console.position.metricValue", undefined, "$ exposure")}
-                value={`$${Math.round(value.total).toLocaleString()}`}
+                value={`$${fmt.number(Math.round(value.total))}`}
               />
               <MetricCard label={t("console.position.metricPeak", undefined, "Hottest cell")} value={peakLabel} />
             </div>

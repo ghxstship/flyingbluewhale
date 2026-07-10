@@ -97,12 +97,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         ) : (
           order.map((q) => (
             <section key={q} className="surface p-5">
-              <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{q}</div>
+              <div className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{q}</div>
               <ul className="mt-3 divide-y divide-[var(--p-border)]">
                 {(byQuarter.get(q) ?? []).map((i) => (
                   <li key={`${i.kind}-${i.id}`} className="flex items-center justify-between py-2 text-sm">
                     <span>
-                      <span className="me-2 inline-block rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 text-[9px] tracking-wider text-[var(--p-text-2)] uppercase">
+                      <span className="me-2 inline-block rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                         {i.kind === "task"
                           ? t("console.projects.roadmap.kindTask", undefined, "task")
                           : t("console.projects.roadmap.kindMilestone", undefined, "milestone")}

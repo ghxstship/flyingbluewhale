@@ -53,7 +53,7 @@ export default async function Page() {
             <textarea name="description" rows={3} maxLength={1000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.settings.catalog.new.unitCostLabel", undefined, "Unit Cost — USD")}
+            label={t("console.settings.catalog.new.unitCostLabel", undefined, "Unit Cost (USD)")}
             name="unit_cost_usd"
             type="number"
             step="0.01"

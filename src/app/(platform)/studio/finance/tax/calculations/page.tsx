@@ -5,7 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listOrgScoped } from "@/lib/db/resource";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { jurisdictionNameMap, categoryNameMap, formatRatePercent, formatMinorAsMoney } from "@/lib/tax/queries";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +42,7 @@ export default async function TaxCalculationsPage() {
     );
   }
   const session = await requireSession();
+  const fmt = await getRequestFormatters();
 
   const [rowsRaw, jMap, cMap] = await Promise.all([
     listOrgScoped("tax_calculations", session.orgId, { orderBy: "computed_at", ascending: false }),
@@ -124,7 +125,7 @@ export default async function TaxCalculationsPage() {
             {
               key: "computed_at",
               header: t("console.finance.tax.calculations.cols.computedAt", undefined, "Computed"),
-              render: (r) => (r.computed_at ? new Date(r.computed_at).toLocaleString() : "—"),
+              render: (r) => (r.computed_at ? fmt.dateTime(new Date(r.computed_at)) : "—"),
               className: "text-xs text-[var(--p-text-2)]",
               accessor: (r) => r.computed_at,
             },

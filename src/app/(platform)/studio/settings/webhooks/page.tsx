@@ -113,18 +113,18 @@ export default async function WebhooksPage() {
                         {r.url}
                       </div>
                       {r.description && (
-                        <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">{r.description}</div>
+                        <div className="mt-0.5 text-[11px] text-[var(--p-text-2)]">{r.description}</div>
                       )}
                     </td>
                     <td>
                       <div className="flex flex-wrap gap-1">
                         {r.events.slice(0, 3).map((e) => (
-                          <span key={e} className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px]">
+                          <span key={e} className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[11px]">
                             {e}
                           </span>
                         ))}
                         {r.events.length > 3 && (
-                          <span className="font-mono text-[10px] text-[var(--p-text-2)]">+{r.events.length - 3}</span>
+                          <span className="font-mono text-[11px] text-[var(--p-text-2)]">+{r.events.length - 3}</span>
                         )}
                       </div>
                     </td>

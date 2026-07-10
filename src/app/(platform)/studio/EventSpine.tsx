@@ -132,11 +132,11 @@ export async function EventSpine({ orgId }: { orgId: string }) {
   return (
     <section className="surface p-4" aria-label={t("console.spine.aria", undefined, "Event Spine lifecycle checklist")}>
       <div className="flex flex-wrap items-center gap-2 pb-3">
-        <span className="font-mono text-[10px] font-bold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
+        <span className="font-mono text-[11px] font-bold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
           {t("console.spine.eyebrow", undefined, "Event Spine · Sell → Settle")}
         </span>
         <span className="flex-1" />
-        <span className="truncate font-mono text-[10px] tracking-[0.08em] text-[var(--p-text-3)] uppercase">
+        <span className="truncate font-mono text-[11px] tracking-[0.08em] text-[var(--p-text-3)] uppercase">
           {project
             ? t(
                 "console.spine.activeProduction",
@@ -160,7 +160,7 @@ export async function EventSpine({ orgId }: { orgId: string }) {
               <Link href={ph.href} className="flex items-center gap-2 hover:text-[var(--p-text-1)]">
                 <span
                   aria-hidden
-                  className={`grid h-5 w-5 flex-none place-items-center rounded-full text-[10px] font-bold ${
+                  className={`grid h-5 w-5 flex-none place-items-center rounded-full text-[11px] font-bold ${
                     state === "done"
                       ? "bg-[var(--p-success)] text-white"
                       : state === "current"
@@ -187,7 +187,7 @@ export async function EventSpine({ orgId }: { orgId: string }) {
                       >
                         <span
                           aria-hidden
-                          className={`flex-none text-[10px] ${done ? "text-[var(--p-success)]" : "text-[var(--p-text-3)]"}`}
+                          className={`flex-none text-[11px] ${done ? "text-[var(--p-success)]" : "text-[var(--p-text-3)]"}`}
                         >
                           {done ? "✓" : "○"}
                         </span>

@@ -90,7 +90,10 @@ export async function loginAs(page: Page, role: string): Promise<void> {
   await page.getByRole("textbox", { name: "Email" }).fill(fixtureEmail(role));
   await page.getByRole("textbox", { name: "Password" }).fill(TEST_PASSWORD);
   await page.getByRole("button", { name: /^sign in$/i }).click();
-  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 25000 });
+  // 45s: the /auth/resolve redirect can stall well past 25s when a long serial
+  // run keeps the dev server recompiling heavy routes between tests — the 25s
+  // budget produced cascade beforeEach failures in the deep-coverage suites.
+  await page.waitForURL((u) => !u.toString().includes("/login"), { timeout: 45000 });
   // Settle the post-login navigation BEFORE returning. `waitForURL` resolves the
   // instant the URL changes — but the destination page is still loading (and, on
   // the real prod domain, the proxy middleware is still refreshing the session

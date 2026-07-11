@@ -38,6 +38,8 @@
  * an already-registered fixture email (Supabase returns "already" → no new user);
  * the store test only READS + adds to an anon cookie cart.
  */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { expect, test } from "./helpers/base";
 import { dismissConsent, fixtureEmail, loginAs, TEST_PASSWORD } from "./helpers/auth";
 
@@ -276,6 +278,27 @@ test.describe("Marketing + Auth deep coverage (marketplace public views + SEO)",
   });
 
   test("anon cookie-scoped store cart persists across navigations", async ({ page }) => {
+    // addToCart runs on the SERVICE client (anon carts bypass RLS via
+    // createServiceClient), so without SUPABASE_SERVICE_ROLE_KEY in the target
+    // environment the action THROWS a 500 with no UI feedback (verified live:
+    // POST /marketplace/store/merch-1 returned 500 "Service client requires
+    // SUPABASE_SERVICE_ROLE_KEY"). Local .env.local deliberately omits the key,
+    // so skip loudly there; against a deployed target (E2E_BASE_URL) the key
+    // exists server-side and the flow runs.
+    const envtxt = (() => {
+      try {
+        return readFileSync(join(process.cwd(), ".env.local"), "utf8");
+      } catch {
+        return "";
+      }
+    })();
+    const hasServiceKey =
+      Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY) || /^SUPABASE_SERVICE_ROLE_KEY=./m.test(envtxt);
+    test.skip(
+      !process.env.E2E_BASE_URL && !hasServiceKey,
+      "SUPABASE_SERVICE_ROLE_KEY absent locally: the anon-cart service-client action 500s by design in this env",
+    );
+
     await page.goto("/marketplace/store");
     await expect(page.locator("h1").first()).toBeVisible({ timeout: 15_000 });
     // Guard on a seeded published product — skip cleanly if the store is empty.
@@ -293,21 +316,39 @@ test.describe("Marketing + Auth deep coverage (marketplace public views + SEO)",
     const addBtn = page.getByRole("button", { name: /^add to cart$/i });
     await expect(addBtn, "the product exposes an add-to-cart action").toBeVisible({ timeout: 15_000 });
     await addBtn.click();
-    // addToCart ends in redirect("/marketplace/store/cart") on success — the
+    // addToCart ends in redirect("/marketplace/store/cart") on success: the
     // click ITSELF lands the cart. Navigating away before the action settles
     // aborts the in-flight POST (the anon cart's Set-Cookie never lands), so
-    // wait for the action's own redirect — or its error Alert (unavailable /
-    // out-of-stock product) — before reading anything.
+    // wait for the action's own redirect, or its error Alert (unavailable /
+    // out-of-stock product), before reading anything.
     const addError = page.getByText(/out of stock|not available|invalid request/i).first();
+    const cartUrl = /\/marketplace\/store\/cart(\?|$)/;
     await Promise.race([
-      page.waitForURL(/\/marketplace\/store\/cart(\?|$)/, { timeout: 30_000 }),
-      addError.waitFor({ state: "visible", timeout: 30_000 }),
+      page.waitForURL(cartUrl, { timeout: 15_000 }),
+      addError.waitFor({ state: "visible", timeout: 15_000 }),
     ]).catch(() => {});
+    // AddToCartForm is a useActionState form: a click that lands before it
+    // hydrates is queued by React and stranded if hydration stalls under
+    // dev-server compile pressure (the live failure: 35s on the product page
+    // with neither redirect nor alert). If nothing surfaced, click once more
+    // now that the page is warm; the action upserts the same line, so a
+    // double submit only bumps quantity and cannot break the assertions.
+    if (!cartUrl.test(page.url()) && !(await addError.isVisible().catch(() => false))) {
+      await addBtn.click({ timeout: 5_000 }).catch(() => {});
+      await Promise.race([
+        page.waitForURL(cartUrl, { timeout: 30_000 }),
+        addError.waitFor({ state: "visible", timeout: 30_000 }),
+      ]).catch(() => {});
+    }
     if (await addError.isVisible().catch(() => false)) {
       test.skip(true, `seeded store product is not addable: "${(await addError.innerText()).trim()}"`);
       return;
     }
-    await expect(page, "the add-to-cart action redirected to the cart").toHaveURL(/\/marketplace\/store\/cart(\?|$)/);
+    // The server action + RSC redirect can exceed the 5s expect default on a
+    // dev server; give the final assert its own budget.
+    await expect(page, "the add-to-cart action redirected to the cart").toHaveURL(cartUrl, {
+      timeout: 20_000,
+    });
     // Now prove PERSISTENCE across navigations: leave the cart and come back —
     // the httpOnly store_cart cookie must re-resolve the same open cart.
     await page.goto("/marketplace/store");

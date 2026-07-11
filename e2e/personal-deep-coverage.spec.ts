@@ -26,9 +26,9 @@
  *   8. Privacy — the self-service GDPR data export returns the caller's own data.
  *
  * Personas mirror the existing spec: `community` (marketplace-capable authed
- * user), `member` (plain authed user), and `owner` (operator; the Fixture Band
- * Alpha talent_profile is linked to the owner user, so booking offers to that
- * act surface on the owner's /me/offers).
+ * user), `member` (plain authed user), `owner` (operator, seeds the offer), and
+ * `developer` (user_id on the professional-org Fixture Band Alpha profile, so
+ * the talent-side accept phase runs on ITS /me/offers).
  *
  * Idempotency: the review-write test self-heals by deleting its own prior review
  * (the reviewer may delete their own row under RLS — `reviews_delete`) so the
@@ -40,7 +40,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient as createSbClient } from "@supabase/supabase-js";
 import { expect, test, type Page } from "./helpers/base";
-import { authedSetup, dismissConsent, fixtureEmail, loginAndSwitchWorkspace, TEST_PASSWORD } from "./helpers/auth";
+import { authedSetup, dismissConsent, fixtureEmail, loginAndSwitchWorkspace, loginAs, TEST_PASSWORD } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 
 // ── Durable fixtures (mirror e2e/helpers/fixtures.ts + marketplace_test_fixtures) ─
@@ -48,7 +48,7 @@ const PROF_ORG = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 const GIG_SLUG = "e2e-gig"; // JOB_POSTING_FIXTURE — a published gig the community persona can apply to
 const CALL_SLUG = "fixture-festival-headliner-casting-pro"; // a published open call
 const TALENT_HANDLE = "fixture-band-alpha-pro"; // Fixture Band Alpha public handle
-const TALENT_PROFILE_ID = "aaaaaaaa-0001-4001-8001-000000000001"; // Fixture Band Alpha, owned by test+owner
+const TALENT_PROFILE_ID = "aaaaaaaa-0001-4001-8001-000000000001"; // Fixture Band Alpha (professional org), user_id = test+developer
 // A seeded job_application whose applicant is the OWNER fixture — a member must 404 on its detail.
 const FOREIGN_APP_ID = "dddddddd-0001-4001-8001-000000000001";
 
@@ -460,7 +460,7 @@ test.describe("personal /me deep · booking offers (owner)", () => {
     });
     await dismissConsent(page);
     // Fixture Band Alpha lives in the professional org; lock the workspace so the
-    // studio offer form lists it and /me/offers resolves the owner's own talent.
+    // studio offer form lists it; the /me/offers accept phase re-logs-in as developer (the profile owner).
     await loginAndSwitchWorkspace(page, "owner", PROF_ORG);
   });
 
@@ -469,6 +469,13 @@ test.describe("personal /me deep · booking offers (owner)", () => {
     // (never mutate the shared FX.offer — prior runs may have decided it). A
     // unique far-future performance_date is the row handle on /me/offers.
     const perfDate = new Date(Date.now() + (4000 + (Date.now() % 3000)) * 86_400_000).toISOString().slice(0, 10);
+    // /me/offers never prints the ISO date; it renders
+    // fmt.date(`${perfDate}T12:00:00Z`, "long") (Intl dateStyle:"long", locale
+    // "en" → e.g. "July 25, 2038"). Match the rendered label, not the ISO
+    // string (the ISO handle was the deep-e2e-rerun failure: row never found).
+    const perfDateLabel = new Intl.DateTimeFormat("en", { dateStyle: "long", timeZone: "UTC" }).format(
+      new Date(`${perfDate}T12:00:00Z`),
+    );
 
     await page.goto("/studio/marketplace/offers/new");
     await page.locator('select[name="talent_profile_id"]').selectOption(TALENT_PROFILE_ID);
@@ -478,22 +485,53 @@ test.describe("personal /me deep · booking offers (owner)", () => {
     // trips strict mode whenever the dev-tools error indicator is present.
     await page.locator('input[name="fee"]').fill("4200");
     await page.getByRole("button", { name: /^Save Draft$/i }).click();
-    await page.waitForURL(/\/studio\/marketplace\/offers\/[0-9a-f-]+$/, { timeout: 30_000 });
+    // 90s: the createOfferAction round-trip lands on the offers/[offerId]
+    // detail route, whose first compile on a cold dev server has blown the old
+    // 30s budget (deep-e2e-rerun failure 13, attempt 1; the retry was warm and
+    // sailed through). A ceiling, not a delay: warm runs return in ~1s.
+    await page.waitForURL(/\/studio\/marketplace\/offers\/[0-9a-f-]+$/, { timeout: 90_000 });
     await page.getByRole("button", { name: /Send Offer/i }).click();
     await page.waitForLoadState("load");
     await expect(page.getByText("sent").first(), "the seeded offer is now sent").toBeVisible({ timeout: 15_000 });
 
-    // Talent-side accept on /me/offers.
+    // Talent-side accept on /me/offers. The professional-org Fixture Band Alpha
+    // profile carries user_id = test+developer (NOT test+owner — verified live),
+    // and /me/offers scopes to talent_profiles.user_id = session user. So the
+    // accept phase must run as the profile's actual owner: re-login as developer.
+    await loginAs(page, "developer");
     await page.goto("/me/offers");
-    const row = page.locator("li").filter({ hasText: perfDate }).first();
+    const row = page.locator("li").filter({ hasText: perfDateLabel }).first();
     await expect(row, "the sent offer surfaces on /me/offers").toBeVisible({ timeout: 15_000 });
     await expect(row.getByRole("button", { name: /^Accept$/i }), "the Accept control shows for a sent offer").toBeVisible();
+    // Accepting is a binding commitment, so MyOfferActions interposes a
+    // confirmation alertdialog. The row button only OPENS it; the real
+    // acceptOfferAction fires from the dialog's "Accept Offer" CTA.
     await row.getByRole("button", { name: /^Accept$/i }).click();
-    await page.waitForLoadState("load");
+    const confirm = page.getByRole("alertdialog");
+    await expect(confirm, "the accept confirmation sheet opens").toBeVisible({ timeout: 15_000 });
+    await confirm.getByRole("button", { name: /^Accept Offer$/i }).click();
+    // decide() requires the SERVICE client (the state-machine UPDATE runs on
+    // createServiceClient), so on a target without SUPABASE_SERVICE_ROLE_KEY
+    // it deliberately returns "Offer decisions are not available in this
+    // environment" and the dialog stays open. Detect that exact copy and skip
+    // loudly; on a real target (prod E2E_BASE_URL) the key exists and the
+    // dialog-close wait is the success signal.
+    const envBlocked = page.getByText(/not available in this environment/i).first();
+    await Promise.race([
+      confirm.waitFor({ state: "hidden", timeout: 20_000 }),
+      envBlocked.waitFor({ state: "visible", timeout: 20_000 }),
+    ]).catch(() => {});
+    test.skip(
+      await envBlocked.isVisible().catch(() => false),
+      "SUPABASE_SERVICE_ROLE_KEY absent locally: offer decisions are service-client-gated in this env",
+    );
+    // On success the action state flips ok and the dialog closes; on any other
+    // error it stays open (the error surfaces as a toast), so this fails loudly.
+    await expect(confirm, "the accept action committed (dialog closed)").toBeHidden({ timeout: 5_000 });
 
     // Read server truth — the transition flipped and the controls are gone.
     await page.reload();
-    const row2 = page.locator("li").filter({ hasText: perfDate }).first();
+    const row2 = page.locator("li").filter({ hasText: perfDateLabel }).first();
     await expect(row2, "the offer row is still present after accept").toBeVisible({ timeout: 15_000 });
     await expect(row2.getByText(/Accepted/i), "the offer badge reads Accepted").toBeVisible({ timeout: 15_000 });
     await expect(

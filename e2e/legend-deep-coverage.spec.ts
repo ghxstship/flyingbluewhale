@@ -283,9 +283,38 @@ test.describe("LEG3ND deep coverage (operator · owner)", () => {
     const collectionName = `E2E Refile Collection ${s}`;
     await createInModule(page, "/legend/resources/collections/new", { name: collectionName });
 
-    // A resource to move.
+    // A resource to move. Inlined (vs createInModule) after a live failure
+    // mode: the helper's programmatic requestSubmit can fire before the
+    // FormShell hydrates; React queues pre-hydration form actions, and when a
+    // loaded dev server stalls hydration the queued submit is stranded, so
+    // the page sat on /new for the full 75s with NO insert and NO alert
+    // (title is the only required field and the identical create passes in
+    // warm runs). Click the real submit and retry until the create actually
+    // round-trips; a server-side refusal surfaces its alert text loudly.
     const title = `E2E Resource ${s}`;
-    await createInModule(page, "/legend/resources/new", { title });
+    await page.goto("/legend/resources/new");
+    const titleInput = page.locator('main [name="title"]');
+    await expect(titleInput).toBeVisible({ timeout: 15_000 });
+    await titleInput.fill(title); // uncontrolled input: the value survives hydration
+    const createBtn = page.getByRole("button", { name: "Create Resource" });
+    const createAlert = page
+      .getByRole("alert")
+      .filter({ hasText: /error|failed|invalid|only manager/i })
+      .first();
+    const offNew = () => !/\/new$/.test(new URL(page.url()).pathname);
+    for (let attempt = 0; attempt < 3 && !offNew(); attempt++) {
+      await createBtn.click({ timeout: 5_000 }).catch(() => {});
+      await Promise.race([
+        page.waitForURL((u) => !/\/new$/.test(u.pathname), { timeout: 25_000 }),
+        createAlert.waitFor({ state: "visible", timeout: 25_000 }),
+      ]).catch(() => {});
+      if (await createAlert.isVisible().catch(() => false)) {
+        throw new Error(`resource create failed server-side: "${(await createAlert.innerText()).trim()}"`);
+      }
+    }
+    await expect(page, "the resource create redirected off /new").not.toHaveURL(/\/new(\?|$)/, {
+      timeout: 5_000,
+    });
     const resourceId = idFromUrl(page);
 
     // Edit: assign the collection, publish, rename.

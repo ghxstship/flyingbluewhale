@@ -46,6 +46,11 @@ export function FeedView({
   const [liked, setLiked] = useState<Set<string>>(new Set());
   const [state, formAction, pending] = useActionState<State, FormData>(createPost, null);
   const formRef = useRef<HTMLFormElement>(null);
+  // createPost's success value is `null` — the same as useActionState's INITIAL
+  // value, so `state === null` alone can't mean "posted". Track that a submit
+  // actually ran, or the close-composer effect fires the instant the composer
+  // opens and it can never be used.
+  const submitRan = useRef(false);
 
   // Kit ActionBar state (canon: ActionBar on every list screen).
   const [query, setQuery] = useState("");
@@ -71,7 +76,12 @@ export function FeedView({
   }, [posts, query, sort, tones]);
 
   useEffect(() => {
-    if (!pending && state === null && open) {
+    if (pending) {
+      submitRan.current = true;
+      return;
+    }
+    if (submitRan.current && state === null && open) {
+      submitRan.current = false;
       formRef.current?.reset();
       setOpen(false);
     }

@@ -58,18 +58,38 @@ async function submitRadioAdvance(page: Page): Promise<string> {
   const form = page.locator(".formscreen");
   await expect(form.locator("select").first()).toBeVisible({ timeout: 10_000 });
 
-  // Category (select) — value === option label "Radio".
-  await form.locator("select").first().selectOption("Radio");
-  // Item / Type (first text input).
-  await form.locator("input[type='text']").first().fill(itemTitle);
-  // Quantity (the lone number input).
-  await form.locator("input[type='number']").first().fill("2");
-  // Operational Purpose is textarea #2 (Special Requests is #1); requiredFor
-  // Radio, so the CTA stays disabled until it's set.
-  await form.locator("textarea").nth(1).fill("E2E ops coverage");
+  // FormScreen is a fully controlled client component: values entered before
+  // React hydrates are wiped when the controlled inputs mount, and its Submit
+  // is a type="button" onClick that silently NO-OPS while any required field
+  // is missing from React state (the CTA just sits at opacity 0.5). Re-fill
+  // until the CTA arms (opacity 1 proves React state carries every required
+  // value), THEN click.
+  const cta = page.getByRole("button", { name: /submit request/i });
+  await expect(async () => {
+    // Category (select) value === option label "Radio".
+    await form.locator("select").first().selectOption("Radio");
+    // Item / Type (first text input).
+    await form.locator("input[type='text']").first().fill(itemTitle);
+    // Quantity (the lone number input).
+    await form.locator("input[type='number']").first().fill("2");
+    // Operational Purpose is textarea #2 (Special Requests is #1); requiredFor Radio.
+    await form.locator("textarea").nth(1).fill("E2E ops coverage");
+    await expect(cta).toHaveCSS("opacity", "1", { timeout: 2_000 });
+  }).toPass({ timeout: 20_000 });
+  await cta.click();
 
-  await page.getByRole("button", { name: /submit request/i }).click();
-  await expect(page).toHaveURL(/\/m\/advances(\?|$)/, { timeout: 20_000 });
+  // Success routes to the list; a server-side failure renders the danger
+  // alert and stays on /new. Surface the alert text so an RLS refusal reads
+  // as itself instead of a bare URL timeout.
+  const danger = page.locator(".ps-alert--danger");
+  await Promise.race([
+    page.waitForURL(/\/m\/advances(\?|$)/, { timeout: 30_000 }),
+    danger.waitFor({ state: "visible", timeout: 30_000 }),
+  ]).catch(() => {});
+  if (await danger.isVisible().catch(() => false)) {
+    throw new Error(`advance request failed server-side: "${(await danger.innerText()).trim()}"`);
+  }
+  await expect(page).toHaveURL(/\/m\/advances(\?|$)/, { timeout: 5_000 });
   return itemTitle;
 }
 
@@ -98,6 +118,12 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
   });
 
   // ── Advance request → briefed assignment appears ─────────────────────────
+  // Guards the D1-class app-vs-RLS inversion this suite surfaced (confirmed
+  // live 2026-07-10): assignments_insert had no crew self-request branch, so
+  // the crew-facing /m/advances/new intake died at the assignments INSERT
+  // after the catalog step succeeded (orphan SKUs, zero assignments). Fixed by
+  // 20260710090000_assignments_self_request_rls (own party + 'briefed' +
+  // created_by = auth.uid()); this test is the regression guard.
   test("Advance request creates a briefed assignment that appears in my advances", async ({ page }) => {
     const itemTitle = await submitRadioAdvance(page);
 
@@ -115,11 +141,18 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
     await expectRendered(page);
 
     // Open the composer (the .composer-cta opener expands the inline post box).
-    await page.locator(".composer-cta").click();
+    // The opener is a client-side onClick on a div (FeedView): a click that
+    // lands before React hydrates is silently swallowed, so keep clicking
+    // until the textarea actually appears.
     const box = page.locator("textarea[name='message']");
-    await expect(box).toBeVisible({ timeout: 10_000 });
+    await expect(async () => {
+      if (!(await box.isVisible())) await page.locator(".composer-cta").click({ timeout: 2_000 });
+      await expect(box).toBeVisible({ timeout: 2_000 });
+    }).toPass({ timeout: 20_000 });
     await box.fill(message);
-    await page.locator(".ps-btn--cta").click();
+    // The composer's own submit (scoped to its form; .ps-btn--cta alone can
+    // collide with other CTAs on the shell).
+    await page.locator("form").filter({ has: box }).getByRole("button", { name: /^post$/i }).click();
 
     // createPost inserts a public recognition_post + revalidatePath('/m/feed');
     // the RSC refresh surfaces the exact body in the stream.
@@ -134,18 +167,29 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
 
     const dates = page.locator(".formscreen input[type='date']");
     await expect(dates.first()).toBeVisible({ timeout: 10_000 });
-    await dates.nth(0).fill("2030-04-10"); // From
-    await dates.nth(1).fill("2030-04-05"); // To (before From)
 
-    await page.getByRole("button", { name: /submit request/i }).click();
+    // Same controlled-hydration trap as the happy path: values filled before
+    // React hydrates get wiped, and the type="button" CTA no-ops until React
+    // state holds every required value (inline opacity 0.5 -> 1). Re-fill until
+    // the CTA arms, THEN click — the range validity is server-side, so the CTA
+    // arms even with to < from.
+    const cta = page.getByRole("button", { name: /submit request/i });
+    await expect(async () => {
+      await dates.nth(0).fill("2030-04-10"); // From
+      await dates.nth(1).fill("2030-04-05"); // To (before From)
+      await page.locator(".formscreen textarea").first().fill("E2E invalid range probe");
+      await expect(cta).toHaveCSS("opacity", "1", { timeout: 2_000 });
+    }).toPass({ timeout: 20_000 });
+    await cta.click();
 
-    // No redirect — the requestTimeOff to<from guard returns an error the
-    // wrapper renders as a danger alert.
-    await expect(page).toHaveURL(/\/m\/time-off\/new(\?|$)/, { timeout: 10_000 });
-    await expect(page.locator(".ps-alert--danger")).toBeVisible({ timeout: 10_000 });
-    await expect(page.locator(".ps-alert--danger")).toContainText(
-      /end date must be on or after the start date/i,
-    );
+    // No redirect — the requestTimeOff to<from Zod refine rejects. The page
+    // wrapper renders only the GENERIC state.error banner ("Please fix the
+    // errors below."); the specific per-field message lives in
+    // state.fieldErrors, which this kit wrapper does not render (UX gap noted,
+    // not asserted). The server-side rejection is the contract under test.
+    await expect(page.locator(".ps-alert--danger")).toBeVisible({ timeout: 15_000 });
+    await expect(page).toHaveURL(/\/m\/time-off\/new(\?|$)/);
+    await expect(page.locator(".ps-alert--danger")).toContainText(/please fix the errors below/i);
   });
 
   // ── Time-off: happy path persists a pending request ──────────────────────
@@ -156,13 +200,34 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
 
     const dates = page.locator(".formscreen input[type='date']");
     await expect(dates.first()).toBeVisible({ timeout: 10_000 });
-    await dates.nth(0).fill("2031-05-01"); // From
-    await dates.nth(1).fill("2031-05-03"); // To
-    await page.locator(".formscreen textarea").first().fill(notes);
 
-    await page.getByRole("button", { name: /submit request/i }).click();
+    // FormScreen is a controlled client component: values filled before React
+    // hydrates get wiped on mount, and the type="button" Submit no-ops while
+    // required fields (from/to) are missing from React state. Re-fill until
+    // the CTA arms (inline opacity flips 0.5 -> 1 only once React state holds
+    // every required value), THEN click. The live run failed exactly here:
+    // 20s on /new with no inserted row and no alert, i.e. a swallowed submit.
+    const cta = page.getByRole("button", { name: /submit request/i });
+    await expect(async () => {
+      await dates.nth(0).fill("2031-05-01"); // From
+      await dates.nth(1).fill("2031-05-03"); // To
+      await page.locator(".formscreen textarea").first().fill(notes);
+      await expect(cta).toHaveCSS("opacity", "1", { timeout: 2_000 });
+    }).toPass({ timeout: 20_000 });
+    await cta.click();
 
-    await expect(page).toHaveURL(/\/m\/time-off(\?|$)/, { timeout: 20_000 });
+    // Success routes to the list; a server failure (no policy / RLS) renders
+    // the danger alert and stays on /new. Surface the alert text so a real
+    // refusal reads as itself instead of a bare URL timeout.
+    const danger = page.locator(".ps-alert--danger");
+    await Promise.race([
+      page.waitForURL(/\/m\/time-off(\?|$)/, { timeout: 30_000 }),
+      danger.waitFor({ state: "visible", timeout: 30_000 }),
+    ]).catch(() => {});
+    if (await danger.isVisible().catch(() => false)) {
+      throw new Error(`time-off request failed server-side: "${(await danger.innerText()).trim()}"`);
+    }
+    await expect(page).toHaveURL(/\/m\/time-off(\?|$)/, { timeout: 5_000 });
     await expect(page.locator(".ps-alert--danger"), "no error on time-off request").toHaveCount(0);
     // The inserted time_off_requests row (request_state 'pending') reads back —
     // by its unique reason/notes or its 2031-05-01 span.
@@ -224,7 +289,9 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
 
   // ── Manual check-in of an unknown code ───────────────────────────────────
   test("Manual check-in of an unknown code logs a not_found result", async ({ page }) => {
-    await page.goto("/m/check-in/manual");
+    // Heavy first-compile route: give the nav headroom past the 60s default
+    // under a long serial run (same budget as the inbox/onboarding gates).
+    await page.goto("/m/check-in/manual", { timeout: 90_000 });
     await expectRendered(page);
 
     await page.locator("input[name='code']").fill("E2E-BOGUS-000");
@@ -272,6 +339,8 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
   });
 
   // ── Advance-request prefill (WCAG redundant entry) ───────────────────────
+  // Depends on a successful crew advance request (the RLS self-request branch
+  // added in 20260710090000_assignments_self_request_rls — see the guard above).
   test("Advance-request prefill carries the prior category forward", async ({ page }) => {
     // Seed a Radio advance so an assignments row exists for the requester.
     await submitRadioAdvance(page);

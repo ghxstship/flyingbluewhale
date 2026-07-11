@@ -108,19 +108,20 @@ test.describe("GVTEWAY portal deep coverage (client · revision decisions)", () 
     await expect(decide, "the round is decidable (open)").toBeVisible({ timeout: 15_000 });
     await decide.getByRole("button", { name: /submit decision/i }).click();
 
+    // Success signal: decideRevisionAction revalidates THIS detail path, so
+    // the action round-trip swaps in the decided RSC tree: the page stops
+    // rendering <RevisionDecision> (state is no longer open/client_review) and
+    // the header badge flips. The component's transient "Decision recorded."
+    // alert unmounts with it in the same round-trip and is NOT a reliable
+    // signal; assert the durable server truth instead. On failure the block
+    // stays mounted with its inline error Alert, so this waits fail loudly.
     await expect(
-      page.getByText("Decision recorded.", { exact: false }),
-      "the approve decision was recorded",
-    ).toBeVisible({ timeout: 15_000 });
-    // NOTE: the portal shell always mounts an (empty) sr-only role="alert"
-    // live region (LiveRegionProvider), so a bare getByRole("alert") count is
-    // never 0 — filter to error-ish text like every other alert assertion.
-    await expect(
-      page.getByRole("alert").filter({ hasText: /error|failed|not authorized/i }),
-      "no error alert on approve",
-    ).toHaveCount(0);
+      page.locator("header").getByText("Approved", { exact: true }),
+      "the approve decision was recorded (header badge flipped to Approved)",
+    ).toBeVisible({ timeout: 20_000 });
+    await expect(decide, "the decided round is no longer decidable").toHaveCount(0);
 
-    // Server truth: reload; approved is no longer decidable, badge flips.
+    // Server truth survives a full reload.
     await page.reload();
     await expect(page.locator("header").getByText("Approved", { exact: true })).toBeVisible({ timeout: 15_000 });
   });
@@ -135,12 +136,14 @@ test.describe("GVTEWAY portal deep coverage (client · revision decisions)", () 
     await decide.locator("textarea[name='note']").fill("Please tighten act two and re-key the palette.");
     await decide.getByRole("button", { name: /submit decision/i }).click();
 
-    await expect(page.getByText("Decision recorded.", { exact: false })).toBeVisible({ timeout: 15_000 });
-    // Filtered for the same always-mounted sr-only live-region reason as above.
+    // Same server-truth signal as the approve test: the revalidated RSC tree
+    // unmounts the decision block (killing its transient success alert) and
+    // flips the header badge in one action round-trip.
     await expect(
-      page.getByRole("alert").filter({ hasText: /error|failed|not authorized/i }),
-      "no error alert on changes_requested",
-    ).toHaveCount(0);
+      page.locator("header").getByText("Changes Requested", { exact: true }),
+      "the changes_requested decision was recorded (header badge flipped)",
+    ).toBeVisible({ timeout: 20_000 });
+    await expect(decide, "the decided round is no longer decidable").toHaveCount(0);
 
     await page.reload();
     await expect(page.locator("header").getByText("Changes Requested", { exact: true })).toBeVisible({
@@ -181,7 +184,13 @@ test.describe("GVTEWAY portal deep coverage (client · sign-off transitions)", (
       const approveBtn = page.getByRole("button", { name: /approve change/i });
       if (await approveBtn.count()) {
         await approveBtn.first().click();
-        await expect(page.getByText("Decision recorded.", { exact: false })).toBeVisible({ timeout: 15_000 });
+        // decideChangeOrderAction revalidates this CO detail path, so the
+        // decision block (and its transient "Decision recorded." alert)
+        // unmounts in the action round-trip; assert the badge flip instead.
+        await expect(
+          page.locator("header").getByText("Approved", { exact: true }),
+          "the CO approve was recorded (header badge flipped)",
+        ).toBeVisible({ timeout: 20_000 });
         await page.reload();
         await expect(page.locator("header").getByText("Approved", { exact: true })).toBeVisible({ timeout: 15_000 });
         decided = true;
@@ -214,11 +223,16 @@ test.describe("GVTEWAY portal deep coverage (client · sign-off transitions)", (
     await block.locator("textarea[name='reason']").fill("Budget exceeds the approved ceiling; re-scope first.");
     await block.getByRole("button", { name: /decline approval/i }).click();
 
-    await expect(page.getByText("Recorded.", { exact: false })).toBeVisible({ timeout: 15_000 });
+    // declineApprovalAction revalidates this approval detail path, and the sign
+    // block only renders while state === 'pending', so the revalidated RSC
+    // tree unmounts it (and its transient "Recorded." alert) in the action
+    // round-trip. Block-gone IS the success signal; an APPROVE_DENIED or any
+    // other failure leaves the block mounted with its inline error Alert.
+    await expect(block, "the sign block unmounted (approval left pending)").toHaveCount(0, { timeout: 20_000 });
     await expect(
-      page.getByRole("alert").filter({ hasText: /not authorized/i }),
-      "no APPROVE_DENIED on the client decline",
-    ).toHaveCount(0);
+      page.getByText("Declined", { exact: false }).first(),
+      "the declined state renders after the transition",
+    ).toBeVisible({ timeout: 15_000 });
 
     await page.reload();
     await expect(page.getByText("Declined", { exact: false }).first()).toBeVisible({ timeout: 15_000 });

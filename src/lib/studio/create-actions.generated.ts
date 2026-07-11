@@ -91,6 +91,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "group": "Commercial"
   },
   {
+    "href": "/studio/comms/advances/new",
+    "label": "New Advance",
+    "group": "Comms"
+  },
+  {
     "href": "/studio/comms/announcements/new",
     "label": "New Announcement",
     "group": "Comms"
@@ -549,6 +554,11 @@ export const CONSOLE_CREATE_ACTIONS: CreateAction[] = [
     "href": "/studio/schedule/baselines/new",
     "label": "New Baseline",
     "group": "Schedule"
+  },
+  {
+    "href": "/studio/scheduler/new",
+    "label": "New Scheduler",
+    "group": "Scheduler"
   },
   {
     "href": "/studio/services/requests/new",

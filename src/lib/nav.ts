@@ -31,6 +31,7 @@ export type IconName =
   | "Telescope"
   | "ScrollText"
   | "ListTodo"
+  | "CalendarClock"
   | "CalendarDays"
   | "Play"
   | "MessageCircleQuestion"
@@ -786,6 +787,7 @@ export const platformTabs: PlatformTabFamily[] = [
     tabs: [
       { label: "Communications", href: "/studio/comms/announcements" },
       { label: "Channel Plan", href: "/studio/comms/channels" },
+      { label: "Advance Sends", href: "/studio/comms/advances" },
     ],
   },
   {
@@ -918,6 +920,9 @@ export const platformUtility: NavItem[] = [
   { label: "Meeting Notes", href: "/studio/meetings/notes", icon: "FileText", sub: "Minutes & Decisions" },
   { label: "Polls", href: "/studio/comms/polls", icon: "BarChart3", sub: "Quick Votes" },
   { label: "Surveys", href: "/studio/comms/surveys", icon: "ClipboardCheck", sub: "Structured Feedback Runs" },
+  // Kit 27 — the advancing merge engine's send console + bespoke scheduler.
+  { label: "Advance Sends", href: "/studio/comms/advances", icon: "Send", sub: "Packet Merge & Tracking Board" },
+  { label: "Scheduler", href: "/studio/scheduler", icon: "CalendarClock", sub: "Bookable Event Types & Availability" },
   { label: "Email Inbox", href: "/studio/email-inbox", icon: "Inbox", sub: "Shared Org Mailbox" },
   { label: "Service Desk", href: "/studio/services/requests", icon: "ConciergeBell", sub: "IT & Facilities Tickets" },
   { label: "TOC — ITIL", href: "/studio/ops/toc", icon: "Network", sub: "Tech Ops Center · Service Health" },
@@ -1062,6 +1067,7 @@ export const settingsNav: NavGroup[] = [
       { label: "Branding", href: "/studio/settings/branding", minRole: "admin" },
       { label: "Domains", href: "/studio/settings/domains", minRole: "admin" },
       { label: "Email Templates", href: "/studio/settings/email-templates", minRole: "manager" },
+      { label: "Advancing", href: "/studio/settings/advancing", minRole: "manager" },
       { label: "Locations", href: "/studio/locations" },
       { label: "Marketplace", href: "/studio/marketplace/settings", minRole: "admin" },
     ],
@@ -1378,9 +1384,12 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
   // persona rail used to start with these 6, eating the operator's
   // recognition budget before any persona-specific work appeared.
   const overview: NavItem = { label: "Overview", href: base };
+  // Kit 27 — the shared advance-packet surface. Token recipients arrive by
+  // emailed link; org members get the read-only outline preview.
+  const advancing: NavItem = { label: "Advancing", href: `/p/${slug}/advancing` };
   const workspaceSection: NavSection = {
     label: "Workspace",
-    items: [overview, guide, calendar, updates, inbox, tasks, messages, accreditation, notifications],
+    items: [overview, guide, calendar, updates, inbox, tasks, messages, advancing, accreditation, notifications],
   };
   if (!persona) {
     return { label: "Portal", items: [], sections: [workspaceSection] };

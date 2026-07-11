@@ -24,6 +24,7 @@ import {
   FONTS,
 } from "./blocks";
 import { emailLayout } from "./layout";
+import { advanceSubject } from "@/lib/advancing/merge";
 
 export type RenderedEmail = { subject: string; html: string };
 
@@ -331,6 +332,374 @@ export function externalAssignmentEmail({
     subject: `${kindLabel} ${stateLabel.toLowerCase()}: ${assignmentTitle}`,
     html: emailLayout({
       preheader: `${kindLabel} ${stateLabel.toLowerCase()} — ${assignmentTitle}`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}
+
+// ─── Advance email set (kit 27) ─────────────────────────────────────────────
+//
+// The merge engine's outbound surface. Subject grammar is the established
+// campaign convention: `{ProjectCode} Advance | {Team} · {Company}` — the
+// emoji prefix appears ONLY when the packet voice is not neutral
+// (decision #3: neutral default, per-project flair opt-in). The voice
+// setting alters greeting/sign-off strings only, never layout.
+
+function advanceGreeting(voice: string | undefined, name?: string): string {
+  const who = name ? escapeHtml(name) : "there";
+  return voice === "flair" ? `${who}, good to have you on this one.` : `Hi ${who},`;
+}
+
+function advanceSignOff(voice: string | undefined): string {
+  return voice === "flair" ? "See you on site." : "Questions? Reply to this thread and the advance team will see it.";
+}
+
+export type AdvanceChecklistLine = {
+  label: string;
+  requirement: "required" | "optional";
+  dueLabel?: string;
+};
+
+function checklistHtml(lines: AdvanceChecklistLine[]): string {
+  return lines
+    .map((line) => {
+      const req = line.requirement === "required" ? "Required" : "Optional";
+      const due = line.dueLabel ? ` · due ${escapeHtml(line.dueLabel)}` : "";
+      return `<strong style="color:${PALETTE.text};">${escapeHtml(line.label)}</strong> · ${req}${due}`;
+    })
+    .join("<br />");
+}
+
+/**
+ * Advance invite — the send. Email is the invite, the portal is the packet:
+ * greeting, checklist summary, Contract ID, deadline, one CTA.
+ */
+export function advanceInviteEmail({
+  recipientName,
+  projectCode,
+  projectName,
+  team,
+  company,
+  voice,
+  contractId,
+  checklist = [],
+  deadlineLabel,
+  portalUrl,
+  supportOwner,
+  orgName,
+}: {
+  recipientName?: string;
+  projectCode: string;
+  projectName: string;
+  team?: string | null;
+  company: string;
+  voice?: string;
+  contractId?: string | null;
+  checklist?: AdvanceChecklistLine[];
+  deadlineLabel?: string | null;
+  portalUrl: string;
+  supportOwner?: string | null;
+  orgName?: string;
+}): RenderedEmail {
+  const parts = [
+    emailEyebrow("Project Advance"),
+    emailHeading(projectName, 1),
+    emailText(advanceGreeting(voice, recipientName)),
+    emailText(
+      `Everything your team needs to advance <strong style="color:${PALETTE.text};">${escapeHtml(projectName)}</strong> is in your packet: overview, schedule, worksheets, and scheduling. Submit through the portal. No copies, no attachments.`,
+    ),
+  ];
+  if (checklist.length > 0) {
+    parts.push(emailText(checklistHtml(checklist)));
+  }
+  if (deadlineLabel) {
+    parts.push(
+      emailText(
+        `<strong style="color:${PALETTE.text};">Advance submission deadline: ${escapeHtml(deadlineLabel)}.</strong>`,
+      ),
+    );
+  }
+  if (contractId) {
+    parts.push(emailText("Your Contract ID. Quote it in every thread:"), emailCodePanel(contractId));
+  }
+  parts.push(emailSpacer(8), emailButton({ label: "Open your advance packet", href: portalUrl }), fallbackUrlLine(portalUrl));
+  parts.push(
+    emailDivider(),
+    emailText(
+      `<span style="color:${PALETTE.tertiary};font-size:13px;">${advanceSignOff(voice)}${supportOwner ? ` Your contact: ${escapeHtml(supportOwner)}.` : ""}</span>`,
+    ),
+  );
+  return {
+    subject: advanceSubject({ projectCode, team, company, voice }),
+    html: emailLayout({
+      preheader: `Your ${projectName} advance packet is ready.`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}
+
+/**
+ * Advance reminder — T-5 / T-2 variants, outstanding sections only.
+ */
+export function advanceReminderEmail({
+  variant,
+  recipientName,
+  projectCode,
+  projectName,
+  team,
+  company,
+  voice,
+  outstanding = [],
+  deadlineLabel,
+  portalUrl,
+  orgName,
+}: {
+  variant: "t5" | "t2";
+  recipientName?: string;
+  projectCode: string;
+  projectName: string;
+  team?: string | null;
+  company: string;
+  voice?: string;
+  outstanding?: AdvanceChecklistLine[];
+  deadlineLabel?: string | null;
+  portalUrl: string;
+  orgName?: string;
+}): RenderedEmail {
+  const window = variant === "t5" ? "five days" : "two days";
+  const parts = [
+    emailEyebrow(variant === "t5" ? "Advance Reminder · T-5" : "Advance Reminder · T-2"),
+    emailHeading(projectName, 1),
+    emailText(advanceGreeting(voice, recipientName)),
+    emailText(
+      deadlineLabel
+        ? `Your advance deadline is <strong style="color:${PALETTE.text};">${escapeHtml(deadlineLabel)}</strong>, ${window} out. These sections are still open:`
+        : `Your advance deadline is ${window} out. These sections are still open:`,
+    ),
+  ];
+  if (outstanding.length > 0) parts.push(emailText(checklistHtml(outstanding)));
+  parts.push(emailSpacer(8), emailButton({ label: "Finish your advance", href: portalUrl }), fallbackUrlLine(portalUrl));
+  parts.push(
+    emailDivider(),
+    emailText(`<span style="color:${PALETTE.tertiary};font-size:13px;">${advanceSignOff(voice)}</span>`),
+  );
+  return {
+    subject: `Reminder ${variant === "t5" ? "T-5" : "T-2"} | ${advanceSubject({ projectCode, team, company, voice: "neutral" })}`,
+    html: emailLayout({
+      preheader: `Advance sections still open for ${projectName}.`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}
+
+/**
+ * Advance lapse — dual audience: the packet owner gets the alert, the
+ * recipient gets the late flag with the on-site consequence.
+ */
+export function advanceLapseEmail({
+  audience,
+  recipientName,
+  company,
+  team,
+  projectCode,
+  projectName,
+  voice,
+  outstanding = [],
+  portalUrl,
+  orgName,
+}: {
+  audience: "owner" | "recipient";
+  recipientName?: string;
+  company: string;
+  team?: string | null;
+  projectCode: string;
+  projectName: string;
+  voice?: string;
+  outstanding?: AdvanceChecklistLine[];
+  portalUrl: string;
+  orgName?: string;
+}): RenderedEmail {
+  const isOwner = audience === "owner";
+  const parts = [
+    emailEyebrow("Advance Lapsed"),
+    emailHeading(projectName, 1),
+    emailText(
+      isOwner
+        ? `The advance for <strong style="color:${PALETTE.text};">${escapeHtml(team ? `${team} · ${company}` : company)}</strong> lapsed with sections still open.`
+        : advanceGreeting(voice, recipientName),
+    ),
+    emailText(
+      isOwner
+        ? "No chasing threads required. The open sections are listed below and on the tracking board."
+        : `Your advance deadline for <strong style="color:${PALETTE.text};">${escapeHtml(projectName)}</strong> has passed with sections still open. Teams without a completed advance are not permitted to work on site.`,
+    ),
+  ];
+  if (outstanding.length > 0) parts.push(emailText(checklistHtml(outstanding)));
+  parts.push(
+    emailSpacer(8),
+    emailButton({ label: isOwner ? "Open the tracking board" : "Complete your advance now", href: portalUrl }),
+    fallbackUrlLine(portalUrl),
+  );
+  return {
+    subject: `Lapsed | ${advanceSubject({ projectCode, team, company, voice: "neutral" })}`,
+    html: emailLayout({
+      preheader: `Advance lapsed · ${team ? `${team} · ${company}` : company}.`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}
+
+/**
+ * Allocation confirmation — sent T-2 before each team's arrival: parking
+ * zones, credentials, wifi, catering counts. Thin wrapper over the
+ * external-assignment details pattern.
+ */
+export function advanceAllocationEmail({
+  recipientName,
+  projectCode,
+  projectName,
+  team,
+  company,
+  voice,
+  allocationLines = [],
+  arrivalLabel,
+  portalUrl,
+  orgName,
+}: {
+  recipientName?: string;
+  projectCode: string;
+  projectName: string;
+  team?: string | null;
+  company: string;
+  voice?: string;
+  /** Plain-text allocation facts (each escaped): "Parking · Zone C × 4". */
+  allocationLines?: string[];
+  arrivalLabel?: string | null;
+  portalUrl?: string;
+  orgName?: string;
+}): RenderedEmail {
+  const parts = [
+    emailEyebrow("Allocations Confirmed"),
+    emailHeading(projectName, 1),
+    emailText(advanceGreeting(voice, recipientName)),
+    emailText(
+      arrivalLabel
+        ? `Your team arrives <strong style="color:${PALETTE.text};">${escapeHtml(arrivalLabel)}</strong>. Here is what is confirmed and waiting for you:`
+        : "Here is what is confirmed and waiting for your team on site:",
+    ),
+  ];
+  if (allocationLines.length > 0) {
+    parts.push(emailText(allocationLines.map((line) => escapeHtml(line)).join("<br />")));
+  }
+  if (portalUrl) {
+    parts.push(emailSpacer(8), emailButton({ label: "View your packet", href: portalUrl }), fallbackUrlLine(portalUrl));
+  }
+  parts.push(
+    emailDivider(),
+    emailText(`<span style="color:${PALETTE.tertiary};font-size:13px;">${advanceSignOff(voice)}</span>`),
+  );
+  return {
+    subject: `Confirmed | ${advanceSubject({ projectCode, team, company, voice: "neutral" }).replace(" Advance |", " Allocations |")}`,
+    html: emailLayout({
+      preheader: `Allocations confirmed for ${team ? `${team} · ${company}` : company}.`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}
+
+/**
+ * Scheduler booking confirmation — reschedule/cancel links in every email
+ * (Calendly parity); the ICS attachment rides the sender payload.
+ */
+export function schedulerBookingEmail({
+  inviteeName,
+  eventName,
+  whenLabel,
+  durationMinutes,
+  locationLabel,
+  rescheduleUrl,
+  cancelUrl,
+  orgName,
+}: {
+  inviteeName?: string;
+  eventName: string;
+  /** Localized "Tue, May 6 · 11:00 EDT" line — preformatted by the caller. */
+  whenLabel: string;
+  durationMinutes: number;
+  locationLabel?: string;
+  rescheduleUrl: string;
+  cancelUrl: string;
+  orgName?: string;
+}): RenderedEmail {
+  const parts = [
+    emailEyebrow("Booking Confirmed"),
+    emailHeading(eventName, 1),
+    emailText(inviteeName ? `Hi ${escapeHtml(inviteeName)},` : "Hi,"),
+    emailText(
+      `You're booked: <strong style="color:${PALETTE.text};">${escapeHtml(whenLabel)}</strong> · ${durationMinutes} min${locationLabel ? ` · ${escapeHtml(locationLabel)}` : ""}. A calendar invite is attached.`,
+    ),
+    emailSpacer(8),
+    emailButton({ label: "Reschedule", href: rescheduleUrl }),
+    emailText(
+      `<a href="${cancelUrl}" target="_blank" rel="noopener" style="color:${PALETTE.tertiary};font-size:13px;text-decoration:underline;">Cancel this booking</a>`,
+    ),
+    emailDivider(),
+    emailText(
+      `<span style="color:${PALETTE.tertiary};font-size:13px;">Need a different time? Rescheduling keeps your place in the advance.</span>`,
+    ),
+  ];
+  return {
+    subject: `Booked: ${eventName} · ${whenLabel}`,
+    html: emailLayout({
+      preheader: `Confirmed · ${eventName}, ${whenLabel}.`,
+      body: parts.join(""),
+      orgName,
+    }),
+  };
+}
+
+/**
+ * Scheduler reminder — sent ahead of the booking, same links.
+ */
+export function schedulerReminderEmail({
+  inviteeName,
+  eventName,
+  whenLabel,
+  locationLabel,
+  rescheduleUrl,
+  cancelUrl,
+  orgName,
+}: {
+  inviteeName?: string;
+  eventName: string;
+  whenLabel: string;
+  locationLabel?: string;
+  rescheduleUrl: string;
+  cancelUrl: string;
+  orgName?: string;
+}): RenderedEmail {
+  const parts = [
+    emailEyebrow("Upcoming Booking"),
+    emailHeading(eventName, 1),
+    emailText(inviteeName ? `Hi ${escapeHtml(inviteeName)},` : "Hi,"),
+    emailText(
+      `A reminder: <strong style="color:${PALETTE.text};">${escapeHtml(whenLabel)}</strong>${locationLabel ? ` · ${escapeHtml(locationLabel)}` : ""}.`,
+    ),
+    emailSpacer(8),
+    emailButton({ label: "Reschedule", href: rescheduleUrl }),
+    emailText(
+      `<a href="${cancelUrl}" target="_blank" rel="noopener" style="color:${PALETTE.tertiary};font-size:13px;text-decoration:underline;">Cancel this booking</a>`,
+    ),
+  ];
+  return {
+    subject: `Reminder: ${eventName} · ${whenLabel}`,
+    html: emailLayout({
+      preheader: `Coming up · ${eventName}, ${whenLabel}.`,
       body: parts.join(""),
       orgName,
     }),

@@ -11,6 +11,7 @@ import "./actions/email-send";
 import "./actions/webhook-send";
 import "./actions/record-update";
 import "./actions/delay";
+import "./actions/advance-escalate";
 
 /**
  * Automation step interpreter — Phase 4.1 of the SmartSuite parity roadmap.

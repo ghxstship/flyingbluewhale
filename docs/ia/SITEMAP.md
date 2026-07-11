@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1177 · **API route handlers:** 146 · **Distinct nav hrefs:** 515
+**Page routes:** 1187 · **API route handlers:** 148 · **Distinct nav hrefs:** 519
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 783 | 246 | 535 | 0 | 2 |
+| ATLVS — Operator Console | platformNav rail | 791 | 249 | 540 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 151 | 129 | 19 | 0 | 3 |
+| GVTEWAY — External Portal | portalNav rail | 152 | 130 | 19 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1177** | **489** | **646** | **0** | **42** |
+| **TOTAL** | | **1187** | **493** | **651** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -49,7 +49,7 @@ _None — every nav href resolves to a page._
 
 _None — every role/phase priority href is a registered `mobileSurfaces` entry._
 
-## · Exempt routes (42) — intentional non-nav, with reasons
+## · Exempt routes (43) — intentional non-nav, with reasons
 
 Reached by redirect, emailed/shared token link, locale routing, or contextual entry — never a nav click. Defined in `EXEMPT` in the generator.
 
@@ -69,6 +69,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/pitch` | prefix | pitch deck presenter surface |
 | `/forms` | prefix | Embedded campaign/SEO form pages. |
 | `/offer` | prefix | Token-gated offer flow. |
+| `/book` | prefix | Token-gated public scheduler booking flow (emailed / packet link). |
 | `/proposals` | prefix | Token-gated proposal flow. |
 | `/msa` | prefix | Token-gated MSA flow. |
 | `/share` | prefix | Token-gated share link. |
@@ -94,7 +95,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-783 routes — ● 246 nav · ○ 535 linked · ⚠ 0 orphan
+791 routes — ● 249 nav · ○ 540 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -297,8 +298,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>comms</code> · 13 routes</summary>
+<details><summary><code>comms</code> · 16 routes</summary>
 
+● `/studio/comms/advances`
+○ `/studio/comms/advances/[batchId]`
+○ `/studio/comms/advances/new`
 ● `/studio/comms/announcements`
 ○ `/studio/comms/announcements/[id]`
 ○ `/studio/comms/announcements/[id]/edit`
@@ -915,7 +919,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>projects</code> · 34 routes</summary>
+<details><summary><code>projects</code> · 35 routes</summary>
 
 ● `/studio/projects`
 ○ `/studio/projects/[projectId]`
@@ -923,6 +927,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/projects/[projectId]/advancing/assignments`
 ○ `/studio/projects/[projectId]/advancing/assignments/[assignmentId]`
 ○ `/studio/projects/[projectId]/advancing/assignments/new`
+○ `/studio/projects/[projectId]/advancing/packet`
 ○ `/studio/projects/[projectId]/branding`
 ○ `/studio/projects/[projectId]/budget`
 ○ `/studio/projects/[projectId]/crew`
@@ -1074,6 +1079,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>scheduler</code> · 3 routes</summary>
+
+● `/studio/scheduler`
+○ `/studio/scheduler/[eventTypeId]`
+○ `/studio/scheduler/new`
+
+</details>
+
 <details><summary><code>services</code> · 4 routes</summary>
 
 ● `/studio/services`
@@ -1083,12 +1096,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>settings</code> · 45 routes</summary>
+<details><summary><code>settings</code> · 46 routes</summary>
 
 ○ `/studio/settings`
 ● `/studio/settings/account-managers`
 ○ `/studio/settings/account-managers/[id]`
 ○ `/studio/settings/account-managers/new`
+● `/studio/settings/advancing`
 ● `/studio/settings/api`
 ● `/studio/settings/audit`
 ● `/studio/settings/billing`
@@ -1584,12 +1598,18 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-151 routes — ● 129 nav · ○ 19 linked · ⚠ 0 orphan
+152 routes — ● 130 nav · ○ 19 linked · ⚠ 0 orphan
 
 <details><summary><code>[slug]</code> · 2 routes</summary>
 
 ○ `/p/lists/[slug]`
 ○ `/p/scenes/[slug]`
+
+</details>
+
+<details><summary><code>advancing</code> · 1 route</summary>
+
+● `/p/[slug]/advancing`
 
 </details>
 
@@ -2485,7 +2505,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 146 route handlers
+## API surface (`/api/v1`) — 148 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2498,6 +2518,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 - `/api/v1/admin/impersonate`
 - `/api/v1/admin/sandbox-user`
+
+</details>
+
+<details><summary><code>/api/v1/advance-batches</code> · 1</summary>
+
+- `/api/v1/advance-batches/[id]`
 
 </details>
 
@@ -2776,11 +2802,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/projects</code> · 10</summary>
+<details><summary><code>/api/v1/projects</code> · 11</summary>
 
 - `/api/v1/projects`
 - `/api/v1/projects/[projectId]`
 - `/api/v1/projects/[projectId]/advance-book`
+- `/api/v1/projects/[projectId]/advance-packets`
 - `/api/v1/projects/[projectId]/archive`
 - `/api/v1/projects/[projectId]/call-sheet`
 - `/api/v1/projects/[projectId]/expense-report`

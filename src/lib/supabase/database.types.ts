@@ -950,6 +950,706 @@ export type Database = {
           },
         ]
       }
+      advance_audiences: {
+        Row: {
+          company: string
+          contacts: Json
+          contract_id: string | null
+          created_at: string
+          deleted_at: string | null
+          department: string | null
+          external_scheduler_url: string | null
+          id: string
+          org_id: string
+          packet_id: string
+          role: string | null
+          scope: string | null
+          team: string | null
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          contacts?: Json
+          contract_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          department?: string | null
+          external_scheduler_url?: string | null
+          id?: string
+          org_id: string
+          packet_id: string
+          role?: string | null
+          scope?: string | null
+          team?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          contacts?: Json
+          contract_id?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          department?: string | null
+          external_scheduler_url?: string | null
+          id?: string
+          org_id?: string
+          packet_id?: string
+          role?: string | null
+          scope?: string | null
+          team?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_audiences_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_audiences_packet_id_fkey"
+            columns: ["packet_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_deadline_events: {
+        Row: {
+          audience_id: string | null
+          created_at: string
+          due_at: string
+          event_kind: Database["public"]["Enums"]["advance_deadline_kind"]
+          id: string
+          org_id: string
+          packet_id: string
+          processed_at: string | null
+          section_assignment_id: string | null
+        }
+        Insert: {
+          audience_id?: string | null
+          created_at?: string
+          due_at: string
+          event_kind: Database["public"]["Enums"]["advance_deadline_kind"]
+          id?: string
+          org_id: string
+          packet_id: string
+          processed_at?: string | null
+          section_assignment_id?: string | null
+        }
+        Update: {
+          audience_id?: string | null
+          created_at?: string
+          due_at?: string
+          event_kind?: Database["public"]["Enums"]["advance_deadline_kind"]
+          id?: string
+          org_id?: string
+          packet_id?: string
+          processed_at?: string | null
+          section_assignment_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_deadline_events_audience_id_fkey"
+            columns: ["audience_id"]
+            isOneToOne: false
+            referencedRelation: "advance_audiences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_deadline_events_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_deadline_events_packet_id_fkey"
+            columns: ["packet_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_deadline_events_section_assignment_id_fkey"
+            columns: ["section_assignment_id"]
+            isOneToOne: false
+            referencedRelation: "advance_section_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_packet_sections: {
+        Row: {
+          body: Json
+          created_at: string
+          deleted_at: string | null
+          deliverable_types: string[]
+          id: string
+          org_id: string
+          packet_id: string
+          section_key: Database["public"]["Enums"]["advance_section_key"]
+          sort_order: number
+          submission_schema_key: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: Json
+          created_at?: string
+          deleted_at?: string | null
+          deliverable_types?: string[]
+          id?: string
+          org_id: string
+          packet_id: string
+          section_key: Database["public"]["Enums"]["advance_section_key"]
+          sort_order?: number
+          submission_schema_key?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: Json
+          created_at?: string
+          deleted_at?: string | null
+          deliverable_types?: string[]
+          id?: string
+          org_id?: string
+          packet_id?: string
+          section_key?: Database["public"]["Enums"]["advance_section_key"]
+          sort_order?: number
+          submission_schema_key?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_packet_sections_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_packet_sections_packet_id_fkey"
+            columns: ["packet_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_packet_state_transitions: {
+        Row: {
+          from_state: Database["public"]["Enums"]["advance_packet_state"] | null
+          id: string
+          org_id: string
+          packet_id: string
+          reason: string | null
+          to_state: Database["public"]["Enums"]["advance_packet_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          from_state?:
+            | Database["public"]["Enums"]["advance_packet_state"]
+            | null
+          id?: string
+          org_id: string
+          packet_id: string
+          reason?: string | null
+          to_state: Database["public"]["Enums"]["advance_packet_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          from_state?:
+            | Database["public"]["Enums"]["advance_packet_state"]
+            | null
+          id?: string
+          org_id?: string
+          packet_id?: string
+          reason?: string | null
+          to_state?: Database["public"]["Enums"]["advance_packet_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_packet_state_transitions_packet_id_fkey"
+            columns: ["packet_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_packets: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          job_id: string | null
+          org_id: string
+          packet_state: Database["public"]["Enums"]["advance_packet_state"]
+          project_id: string
+          support_contact: Json
+          updated_at: string
+          version: number
+          voice: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          job_id?: string | null
+          org_id: string
+          packet_state?: Database["public"]["Enums"]["advance_packet_state"]
+          project_id: string
+          support_contact?: Json
+          updated_at?: string
+          version?: number
+          voice?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          job_id?: string | null
+          org_id?: string
+          packet_state?: Database["public"]["Enums"]["advance_packet_state"]
+          project_id?: string
+          support_contact?: Json
+          updated_at?: string
+          version?: number
+          voice?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_packets_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "requisitions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_packets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_packets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_recipient_state_transitions: {
+        Row: {
+          from_state:
+            | Database["public"]["Enums"]["advance_delivery_state"]
+            | null
+          id: string
+          org_id: string
+          reason: string | null
+          recipient_id: string
+          to_state: Database["public"]["Enums"]["advance_delivery_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          from_state?:
+            | Database["public"]["Enums"]["advance_delivery_state"]
+            | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          recipient_id: string
+          to_state: Database["public"]["Enums"]["advance_delivery_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          from_state?:
+            | Database["public"]["Enums"]["advance_delivery_state"]
+            | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          recipient_id?: string
+          to_state?: Database["public"]["Enums"]["advance_delivery_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_recipient_state_transitions_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "advance_send_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_section_assignments: {
+        Row: {
+          assigned_via: Database["public"]["Enums"]["advance_assigned_via"]
+          audience_id: string
+          created_at: string
+          deleted_at: string | null
+          due_at: string | null
+          id: string
+          org_id: string
+          requirement: Database["public"]["Enums"]["advance_requirement"]
+          section_id: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_via?: Database["public"]["Enums"]["advance_assigned_via"]
+          audience_id: string
+          created_at?: string
+          deleted_at?: string | null
+          due_at?: string | null
+          id?: string
+          org_id: string
+          requirement?: Database["public"]["Enums"]["advance_requirement"]
+          section_id: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_via?: Database["public"]["Enums"]["advance_assigned_via"]
+          audience_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          due_at?: string | null
+          id?: string
+          org_id?: string
+          requirement?: Database["public"]["Enums"]["advance_requirement"]
+          section_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_section_assignments_audience_id_fkey"
+            columns: ["audience_id"]
+            isOneToOne: false
+            referencedRelation: "advance_audiences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_section_assignments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_section_assignments_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packet_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_send_batch_state_transitions: {
+        Row: {
+          batch_id: string
+          from_state: Database["public"]["Enums"]["advance_batch_state"] | null
+          id: string
+          org_id: string
+          reason: string | null
+          to_state: Database["public"]["Enums"]["advance_batch_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          batch_id: string
+          from_state?: Database["public"]["Enums"]["advance_batch_state"] | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          to_state: Database["public"]["Enums"]["advance_batch_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          batch_id?: string
+          from_state?: Database["public"]["Enums"]["advance_batch_state"] | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          to_state?: Database["public"]["Enums"]["advance_batch_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_send_batch_state_transitions_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "advance_send_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_send_batches: {
+        Row: {
+          batch_state: Database["public"]["Enums"]["advance_batch_state"]
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          org_id: string
+          packet_id: string
+          scheduled_at: string | null
+          sent_at: string | null
+          subject: string | null
+          template_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          batch_state?: Database["public"]["Enums"]["advance_batch_state"]
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          packet_id: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          subject?: string | null
+          template_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          batch_state?: Database["public"]["Enums"]["advance_batch_state"]
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          packet_id?: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          subject?: string | null
+          template_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_send_batches_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_send_batches_packet_id_fkey"
+            columns: ["packet_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_send_batches_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_send_recipients: {
+        Row: {
+          audience_id: string | null
+          batch_id: string
+          contact: Json
+          created_at: string
+          deleted_at: string | null
+          delivery_state: Database["public"]["Enums"]["advance_delivery_state"]
+          id: string
+          late_flagged_at: string | null
+          org_id: string
+          portal_token: string
+          render_snapshot: Json | null
+          updated_at: string
+        }
+        Insert: {
+          audience_id?: string | null
+          batch_id: string
+          contact?: Json
+          created_at?: string
+          deleted_at?: string | null
+          delivery_state?: Database["public"]["Enums"]["advance_delivery_state"]
+          id?: string
+          late_flagged_at?: string | null
+          org_id: string
+          portal_token?: string
+          render_snapshot?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          audience_id?: string | null
+          batch_id?: string
+          contact?: Json
+          created_at?: string
+          deleted_at?: string | null
+          delivery_state?: Database["public"]["Enums"]["advance_delivery_state"]
+          id?: string
+          late_flagged_at?: string | null
+          org_id?: string
+          portal_token?: string
+          render_snapshot?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_send_recipients_audience_id_fkey"
+            columns: ["audience_id"]
+            isOneToOne: false
+            referencedRelation: "advance_audiences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_send_recipients_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "advance_send_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_send_recipients_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_submission_state_transitions: {
+        Row: {
+          from_state:
+            | Database["public"]["Enums"]["advance_submission_state"]
+            | null
+          id: string
+          org_id: string
+          reason: string | null
+          submission_id: string
+          to_state: Database["public"]["Enums"]["advance_submission_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          from_state?:
+            | Database["public"]["Enums"]["advance_submission_state"]
+            | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          submission_id: string
+          to_state: Database["public"]["Enums"]["advance_submission_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          from_state?:
+            | Database["public"]["Enums"]["advance_submission_state"]
+            | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          submission_id?: string
+          to_state?: Database["public"]["Enums"]["advance_submission_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_submission_state_transitions_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "advance_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      advance_submissions: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          org_id: string
+          received_via: Database["public"]["Enums"]["advance_received_via"]
+          recipient_id: string
+          rows: Json
+          schema_key: string
+          section_id: string
+          submission_state: Database["public"]["Enums"]["advance_submission_state"]
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          received_via?: Database["public"]["Enums"]["advance_received_via"]
+          recipient_id: string
+          rows?: Json
+          schema_key: string
+          section_id: string
+          submission_state?: Database["public"]["Enums"]["advance_submission_state"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          received_via?: Database["public"]["Enums"]["advance_received_via"]
+          recipient_id?: string
+          rows?: Json
+          schema_key?: string
+          section_id?: string
+          submission_state?: Database["public"]["Enums"]["advance_submission_state"]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advance_submissions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_submissions_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "advance_send_recipients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advance_submissions_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "advance_packet_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agencies: {
         Row: {
           bio: string | null
@@ -20142,6 +20842,50 @@ export type Database = {
           },
         ]
       }
+      org_advance_presets: {
+        Row: {
+          audience_type: string
+          created_at: string
+          deleted_at: string | null
+          due_offset_days: number | null
+          id: string
+          org_id: string
+          requirement: Database["public"]["Enums"]["advance_requirement"]
+          section_key: Database["public"]["Enums"]["advance_section_key"]
+          updated_at: string
+        }
+        Insert: {
+          audience_type: string
+          created_at?: string
+          deleted_at?: string | null
+          due_offset_days?: number | null
+          id?: string
+          org_id: string
+          requirement?: Database["public"]["Enums"]["advance_requirement"]
+          section_key: Database["public"]["Enums"]["advance_section_key"]
+          updated_at?: string
+        }
+        Update: {
+          audience_type?: string
+          created_at?: string
+          deleted_at?: string | null
+          due_offset_days?: number | null
+          id?: string
+          org_id?: string
+          requirement?: Database["public"]["Enums"]["advance_requirement"]
+          section_key?: Database["public"]["Enums"]["advance_section_key"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_advance_presets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       org_domains: {
         Row: {
           created_at: string
@@ -22933,6 +23677,60 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      project_advance_presets: {
+        Row: {
+          audience_type: string
+          created_at: string
+          deleted_at: string | null
+          due_offset_days: number | null
+          id: string
+          org_id: string
+          project_id: string
+          requirement: Database["public"]["Enums"]["advance_requirement"]
+          section_key: Database["public"]["Enums"]["advance_section_key"]
+          updated_at: string
+        }
+        Insert: {
+          audience_type: string
+          created_at?: string
+          deleted_at?: string | null
+          due_offset_days?: number | null
+          id?: string
+          org_id: string
+          project_id: string
+          requirement?: Database["public"]["Enums"]["advance_requirement"]
+          section_key: Database["public"]["Enums"]["advance_section_key"]
+          updated_at?: string
+        }
+        Update: {
+          audience_type?: string
+          created_at?: string
+          deleted_at?: string | null
+          due_offset_days?: number | null
+          id?: string
+          org_id?: string
+          project_id?: string
+          requirement?: Database["public"]["Enums"]["advance_requirement"]
+          section_key?: Database["public"]["Enums"]["advance_section_key"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_advance_presets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_advance_presets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       project_billing_draws: {
         Row: {
@@ -28133,6 +28931,269 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduler_availability: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          end_minute: number
+          event_type_id: string
+          id: string
+          is_open: boolean
+          org_id: string
+          override_date: string | null
+          start_minute: number
+          updated_at: string
+          weekday: number | null
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          end_minute?: number
+          event_type_id: string
+          id?: string
+          is_open?: boolean
+          org_id: string
+          override_date?: string | null
+          start_minute?: number
+          updated_at?: string
+          weekday?: number | null
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          end_minute?: number
+          event_type_id?: string
+          id?: string
+          is_open?: boolean
+          org_id?: string
+          override_date?: string | null
+          start_minute?: number
+          updated_at?: string
+          weekday?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduler_availability_event_type_id_fkey"
+            columns: ["event_type_id"]
+            isOneToOne: false
+            referencedRelation: "scheduler_event_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduler_availability_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduler_booking_state_transitions: {
+        Row: {
+          booking_id: string
+          from_state:
+            | Database["public"]["Enums"]["scheduler_booking_state"]
+            | null
+          id: string
+          org_id: string
+          reason: string | null
+          to_state: Database["public"]["Enums"]["scheduler_booking_state"]
+          transitioned_at: string
+          transitioned_by: string | null
+        }
+        Insert: {
+          booking_id: string
+          from_state?:
+            | Database["public"]["Enums"]["scheduler_booking_state"]
+            | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          to_state: Database["public"]["Enums"]["scheduler_booking_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Update: {
+          booking_id?: string
+          from_state?:
+            | Database["public"]["Enums"]["scheduler_booking_state"]
+            | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          to_state?: Database["public"]["Enums"]["scheduler_booking_state"]
+          transitioned_at?: string
+          transitioned_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduler_booking_state_transitions_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "scheduler_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduler_bookings: {
+        Row: {
+          assigned_host_id: string | null
+          booking_state: Database["public"]["Enums"]["scheduler_booking_state"]
+          cancel_token: string
+          created_at: string
+          deleted_at: string | null
+          ends_at: string
+          event_type_id: string
+          external_calendar_id: string | null
+          id: string
+          invitee_email: string
+          invitee_name: string | null
+          invitee_timezone: string | null
+          notes: string | null
+          org_id: string
+          recipient_id: string | null
+          reschedule_token: string
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_host_id?: string | null
+          booking_state?: Database["public"]["Enums"]["scheduler_booking_state"]
+          cancel_token?: string
+          created_at?: string
+          deleted_at?: string | null
+          ends_at: string
+          event_type_id: string
+          external_calendar_id?: string | null
+          id?: string
+          invitee_email: string
+          invitee_name?: string | null
+          invitee_timezone?: string | null
+          notes?: string | null
+          org_id: string
+          recipient_id?: string | null
+          reschedule_token?: string
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_host_id?: string | null
+          booking_state?: Database["public"]["Enums"]["scheduler_booking_state"]
+          cancel_token?: string
+          created_at?: string
+          deleted_at?: string | null
+          ends_at?: string
+          event_type_id?: string
+          external_calendar_id?: string | null
+          id?: string
+          invitee_email?: string
+          invitee_name?: string | null
+          invitee_timezone?: string | null
+          notes?: string | null
+          org_id?: string
+          recipient_id?: string | null
+          reschedule_token?: string
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduler_bookings_event_type_id_fkey"
+            columns: ["event_type_id"]
+            isOneToOne: false
+            referencedRelation: "scheduler_event_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduler_bookings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduler_bookings_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "advance_send_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scheduler_event_types: {
+        Row: {
+          buffer_after_minutes: number
+          buffer_before_minutes: number
+          created_at: string
+          deleted_at: string | null
+          description: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          location_kind: Database["public"]["Enums"]["scheduler_location_kind"]
+          max_per_day: number | null
+          min_notice_minutes: number
+          name: string
+          org_id: string
+          owner_id: string | null
+          public_token: string
+          redirect_url: string | null
+          round_robin_pool: string[]
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          buffer_after_minutes?: number
+          buffer_before_minutes?: number
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          location_kind?: Database["public"]["Enums"]["scheduler_location_kind"]
+          max_per_day?: number | null
+          min_notice_minutes?: number
+          name: string
+          org_id: string
+          owner_id?: string | null
+          public_token?: string
+          redirect_url?: string | null
+          round_robin_pool?: string[]
+          timezone?: string
+          updated_at?: string
+        }
+        Update: {
+          buffer_after_minutes?: number
+          buffer_before_minutes?: number
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          location_kind?: Database["public"]["Enums"]["scheduler_location_kind"]
+          max_per_day?: number | null
+          min_notice_minutes?: number
+          name?: string
+          org_id?: string
+          owner_id?: string | null
+          public_token?: string
+          redirect_url?: string | null
+          round_robin_pool?: string[]
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduler_event_types_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -42576,6 +43637,41 @@ export type Database = {
         | "revoked"
         | "expired"
       action_item_state: "open" | "in_progress" | "closed" | "cancelled"
+      advance_assigned_via:
+        | "org_preset"
+        | "project_preset"
+        | "manual"
+        | "contract_override"
+      advance_batch_state: "draft" | "scheduled" | "sending" | "sent" | "failed"
+      advance_deadline_kind:
+        | "t5_reminder"
+        | "t2_reminder"
+        | "lapse"
+        | "allocation_confirm"
+      advance_delivery_state:
+        | "queued"
+        | "delivered"
+        | "bounced"
+        | "opened"
+        | "started"
+        | "submitted"
+        | "complete"
+      advance_packet_state: "draft" | "live" | "archived"
+      advance_received_via: "portal" | "email_ingest"
+      advance_requirement: "required" | "optional" | "hidden"
+      advance_section_key:
+        | "overview"
+        | "schedule_milestones"
+        | "crew_list"
+        | "production_advance"
+        | "travel_lodging"
+        | "safety"
+        | "parking_load_in"
+        | "tech"
+        | "catering"
+        | "credentials"
+        | "custom"
+      advance_submission_state: "draft" | "submitted" | "accepted" | "returned"
       ai_scope: "global" | "project" | "document"
       annotation_kind: "flag" | "note" | "comment" | "tag"
       annotation_severity: "info" | "warning" | "critical"
@@ -43175,6 +44271,12 @@ export type Database = {
         | "doors"
         | "set"
         | "curfew"
+      scheduler_booking_state:
+        | "booked"
+        | "rescheduled"
+        | "cancelled"
+        | "no_show"
+      scheduler_location_kind: "call" | "on_site"
       settlement_status: "draft" | "reconciling" | "final" | "disputed"
       share_link_role: "viewer" | "commenter"
       sheet_callout_target_type:
@@ -43754,6 +44856,45 @@ export const Constants = {
         "expired",
       ],
       action_item_state: ["open", "in_progress", "closed", "cancelled"],
+      advance_assigned_via: [
+        "org_preset",
+        "project_preset",
+        "manual",
+        "contract_override",
+      ],
+      advance_batch_state: ["draft", "scheduled", "sending", "sent", "failed"],
+      advance_deadline_kind: [
+        "t5_reminder",
+        "t2_reminder",
+        "lapse",
+        "allocation_confirm",
+      ],
+      advance_delivery_state: [
+        "queued",
+        "delivered",
+        "bounced",
+        "opened",
+        "started",
+        "submitted",
+        "complete",
+      ],
+      advance_packet_state: ["draft", "live", "archived"],
+      advance_received_via: ["portal", "email_ingest"],
+      advance_requirement: ["required", "optional", "hidden"],
+      advance_section_key: [
+        "overview",
+        "schedule_milestones",
+        "crew_list",
+        "production_advance",
+        "travel_lodging",
+        "safety",
+        "parking_load_in",
+        "tech",
+        "catering",
+        "credentials",
+        "custom",
+      ],
+      advance_submission_state: ["draft", "submitted", "accepted", "returned"],
       ai_scope: ["global", "project", "document"],
       annotation_kind: ["flag", "note", "comment", "tag"],
       annotation_severity: ["info", "warning", "critical"],
@@ -44407,6 +45548,13 @@ export const Constants = {
         "set",
         "curfew",
       ],
+      scheduler_booking_state: [
+        "booked",
+        "rescheduled",
+        "cancelled",
+        "no_show",
+      ],
+      scheduler_location_kind: ["call", "on_site"],
       settlement_status: ["draft", "reconciling", "final", "disputed"],
       share_link_role: ["viewer", "commenter"],
       sheet_callout_target_type: [

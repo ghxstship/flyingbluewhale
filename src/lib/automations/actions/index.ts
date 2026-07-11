@@ -14,5 +14,6 @@ import "./email-send";
 import "./webhook-send";
 import "./record-update";
 import "./delay";
+import "./advance-escalate";
 
 export {};

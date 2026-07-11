@@ -187,8 +187,10 @@ describe("ADR-0005 super-persona collapse", () => {
       // Workspace section is the shared set — same across every persona.
       // Calendar (project events) + Accreditation (badge self-service) lifted
       // here from orphaned persona-less routes during the IA-alignment pass;
-      // Notifications (per-kind preference matrix) added in the C-31 pass.
-      expect(workspace?.items).toHaveLength(9);
+      // Notifications (per-kind preference matrix) added in the C-31 pass;
+      // Advancing (the kit-27 token-scoped packet surface, with an operator
+      // outline preview for org members) added in the merge-engine pass.
+      expect(workspace?.items).toHaveLength(10);
       expect(workspace?.items.map((i) => i.label)).toEqual([
         "Overview",
         "Guide",
@@ -197,6 +199,7 @@ describe("ADR-0005 super-persona collapse", () => {
         "Inbox",
         "Tasks",
         "Messages",
+        "Advancing",
         "Accreditation",
         "Notifications",
       ]);

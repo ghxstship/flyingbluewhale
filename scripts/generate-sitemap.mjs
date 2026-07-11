@@ -227,6 +227,7 @@ const EXEMPT = [
   { path: "/forms", type: "prefix", reason: "Embedded campaign/SEO form pages." },
   // Token-gated flows — entered via an emailed/shared link, never nav.
   { path: "/offer", type: "prefix", reason: "Token-gated offer flow." },
+  { path: "/book", type: "prefix", reason: "Token-gated public scheduler booking flow (emailed / packet link)." },
   { path: "/proposals", type: "prefix", reason: "Token-gated proposal flow." },
   { path: "/msa", type: "prefix", reason: "Token-gated MSA flow." },
   { path: "/share", type: "prefix", reason: "Token-gated share link." },

@@ -137,5 +137,97 @@ export async function POST(req: Request) {
     return apiError("internal", error.message);
   }
 
+  // Kit 27 — email-ingest fallback: a reply to the advance thread from a
+  // known packet recipient is mirrored into their submission record,
+  // flagged `received_via='email_ingest'`, so attachments never escape
+  // into an inbox (the LPS failure mode). The row lands on the
+  // recipient's first schema-bearing section as a manifest line; the
+  // operator reviews it on the tracking board.
+  try {
+    await mirrorAdvanceReply(supabase, {
+      orgId: projectEmail.org_id,
+      fromEmail,
+      subject: headers.subject ?? null,
+      messageId: headers.messageId ?? evt.mail.messageId,
+      receivedAt: evt.mail.timestamp,
+    });
+  } catch (err) {
+    log.warn("ses_inbound.advance_mirror_failed", {
+      err: err instanceof Error ? err.message : String(err),
+    });
+  }
+
   return apiOk({ matched: true, project_id: projectEmail.project_id });
+}
+
+async function mirrorAdvanceReply(
+  supabase: LooseSupabase,
+  input: { orgId: string; fromEmail: string; subject: string | null; messageId: string; receivedAt: string },
+): Promise<void> {
+  const email = input.fromEmail.toLowerCase();
+  const { data: recipients } = (await supabase
+    .from("advance_send_recipients")
+    .select("id, org_id, contact, audience_id")
+    .eq("org_id", input.orgId)
+    .is("deleted_at", null)
+    .contains("contact", { email })
+    .limit(1)) as {
+    data: Array<{ id: string; org_id: string; audience_id: string | null }> | null;
+  };
+  const recipient = recipients?.[0];
+  if (!recipient) return;
+
+  // Land on the recipient's first schema-bearing assigned section (their
+  // structured-return home); fall back to any schema-bearing section of
+  // the packet when the audience has no explicit assignments.
+  let sectionId: string | null = null;
+  if (recipient.audience_id) {
+    const { data: assigned } = (await supabase
+      .from("advance_section_assignments")
+      .select("section_id, advance_packet_sections!inner(submission_schema_key)")
+      .eq("audience_id", recipient.audience_id)
+      .not("advance_packet_sections.submission_schema_key", "is", null)
+      .is("deleted_at", null)
+      .limit(1)) as { data: Array<{ section_id: string }> | null };
+    sectionId = assigned?.[0]?.section_id ?? null;
+  }
+  if (!sectionId) return;
+
+  const manifestRow = {
+    source: "email",
+    message_id: input.messageId,
+    subject: input.subject,
+    received_at: input.receivedAt,
+  };
+  const { data: existing } = (await supabase
+    .from("advance_submissions")
+    .select("id, rows, submission_state")
+    .eq("recipient_id", recipient.id)
+    .eq("section_id", sectionId)
+    .is("deleted_at", null)
+    .maybeSingle()) as {
+    data: { id: string; rows: Array<Record<string, unknown>>; submission_state: string } | null;
+  };
+  if (existing) {
+    if (existing.submission_state === "accepted") return;
+    await supabase
+      .from("advance_submissions")
+      .update({ rows: [...(existing.rows ?? []), manifestRow] })
+      .eq("id", existing.id);
+  } else {
+    const { data: section } = (await supabase
+      .from("advance_packet_sections")
+      .select("submission_schema_key")
+      .eq("id", sectionId)
+      .is("deleted_at", null)
+      .maybeSingle()) as { data: { submission_schema_key: string | null } | null };
+    await supabase.from("advance_submissions").insert({
+      org_id: recipient.org_id,
+      recipient_id: recipient.id,
+      section_id: sectionId,
+      schema_key: section?.submission_schema_key ?? "rider_upload",
+      rows: [manifestRow],
+      received_via: "email_ingest",
+    });
+  }
 }

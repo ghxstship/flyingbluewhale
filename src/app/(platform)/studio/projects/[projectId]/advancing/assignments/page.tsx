@@ -167,6 +167,10 @@ export default async function Page({
               label: t("console.projects.advancing.tabs.assignments", undefined, "Assignments"),
               href: `/studio/projects/${projectId}/advancing/assignments`,
             },
+            {
+              label: t("console.projects.advancing.tabs.packet", undefined, "Packet"),
+              href: `/studio/projects/${projectId}/advancing/packet`,
+            },
           ]}
           className="border-b border-[var(--p-border)]"
         />

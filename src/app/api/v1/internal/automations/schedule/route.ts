@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { apiError, apiOk } from "@/lib/api";
 import { evaluateSchedules } from "@/lib/automations/schedule";
+import { evaluateAdvanceDeadlines } from "@/lib/automations/advance-deadlines";
 
 function tokensMatch(provided: string, expected: string): boolean {
   // Constant-time — string `===` short-circuits on first mismatch
@@ -27,5 +28,9 @@ export async function POST(req: NextRequest) {
   if (!tokensMatch(provided, expected)) return apiError("forbidden", "Invalid worker token");
 
   const result = await evaluateSchedules();
-  return apiOk(result);
+  // Kit 27 — the advance chase ladder rides the same worker tick: due
+  // advance_deadline_events emit advance.deadline.* domain events, which
+  // the dispatch drain fans out to the seeded chase automations.
+  const advance = await evaluateAdvanceDeadlines();
+  return apiOk({ ...result, advance });
 }

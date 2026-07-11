@@ -51,12 +51,78 @@ export default async function MobileAdvancesPage() {
     project: projectMap.get(r.project_id) ?? null,
   }));
 
+  // Kit 27 — the field view of the advance packet: a card per live packet
+  // on the caller's projects with the PPE gate (safety section) and their
+  // credential status, derived from the same assignment rows below.
+  type PacketCard = { projectId: string; packetId: string; ppe: string | null };
+  const packetCards: PacketCard[] = [];
+  if (projectIds.length) {
+    const { data: packets } = await supabase
+      .from("advance_packets")
+      .select("id, project_id")
+      .eq("org_id", session.orgId)
+      .eq("packet_state", "live")
+      .in("project_id", projectIds)
+      .is("deleted_at", null)
+      .limit(50);
+    const packetRows = (packets ?? []) as Array<{ id: string; project_id: string }>;
+    if (packetRows.length) {
+      const { data: safetySections } = await supabase
+        .from("advance_packet_sections")
+        .select("packet_id, body")
+        .in(
+          "packet_id",
+          packetRows.map((p) => p.id),
+        )
+        .eq("section_key", "safety")
+        .is("deleted_at", null)
+        .limit(50);
+      const ppeByPacket = new Map<string, string | null>();
+      for (const s of (safetySections ?? []) as Array<{ packet_id: string; body: { text?: string } | null }>) {
+        ppeByPacket.set(s.packet_id, s.body?.text ?? null);
+      }
+      for (const p of packetRows) {
+        packetCards.push({ projectId: p.project_id, packetId: p.id, ppe: ppeByPacket.get(p.id) ?? null });
+      }
+    }
+  }
+  const credentialSummary = (projectId: string): string => {
+    const creds = assignments.filter((a) => a.project_id === projectId && a.catalog_kind === "credential");
+    if (creds.length === 0) return t("m.advances.packet.noCredentials", undefined, "No credentials assigned yet");
+    const issued = creds.filter((a) => ["issued", "transferred", "redeemed"].includes(a.fulfillment_state)).length;
+    return t(
+      "m.advances.packet.credentialSummary",
+      { issued, total: creds.length },
+      `${issued} of ${creds.length} credentials issued`,
+    );
+  };
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.advances.eyebrow", undefined, "Field")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.advances.title", undefined, "Advances")}
       </h1>
+      {packetCards.length > 0 && (
+        <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
+          {packetCards.map((card) => (
+            <div key={card.packetId} className="item" style={{ flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span className="t">{projectMap.get(card.projectId) ?? "Project"}</span>
+                <span className="ps-badge ps-badge--ok" style={{ flex: "none" }}>
+                  {t("m.advances.packet.live", undefined, "Advance Live")}
+                </span>
+              </div>
+              <div className="s">{credentialSummary(card.projectId)}</div>
+              {card.ppe && (
+                <div className="s">
+                  {t("m.advances.packet.ppe", undefined, "PPE")} · {card.ppe}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
       <AdvancesView rows={rows} />
     </div>
   );

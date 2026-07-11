@@ -1390,6 +1390,13 @@
               ]
             },
             {
+              "path": "/studio/comms/advances",
+              "arch": [
+                "COMM",
+                "FIELD"
+              ]
+            },
+            {
               "path": "/studio/production/ros",
               "arch": [
                 "LIST"
@@ -1804,6 +1811,19 @@
               ]
             },
             {
+              "path": "/studio/comms/advances",
+              "arch": [
+                "COMM",
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/scheduler",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
               "path": "/studio/email-inbox",
               "arch": [
                 "COMM"
@@ -1888,6 +1908,12 @@
             },
             {
               "path": "/studio/settings/email-templates",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/advancing",
               "arch": [
                 "SET"
               ]

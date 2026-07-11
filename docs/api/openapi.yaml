@@ -991,6 +991,68 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
+  /api/v1/projects/{projectId}/advance-packets:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: "The project's advance packet graph: packet, sections, audiences, and the section × audience assignment matrix. Scope: advancing:read."
+      operationId: getProjectsByProjectIdAdvancePackets
+      responses:
+        "200":
+          description: Advance packet graph (packet is null when none exists).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  packet: { type: object, nullable: true }
+                  sections: { type: array, items: { type: object } }
+                  audiences: { type: array, items: { type: object } }
+                  assignments: { type: array, items: { type: object } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "Create the project's advance packet shell (one packet per project, versioned). Scope: advancing:write, manager+."
+      operationId: postProjectsByProjectIdAdvancePackets
+      responses:
+        "201":
+          description: Created packet.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  packet: { type: object }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /api/v1/advance-batches/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      summary: "One merge run's tracking board: batch header plus per-recipient delivery funnel state (portal tokens are never exposed). Scope: advancing:read."
+      operationId: getAdvanceBatchesById
+      responses:
+        "200":
+          description: Batch with recipients.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batch: { type: object }
+                  recipients: { type: array, items: { type: object } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
   /api/v1/exports:
     get:
       summary: List the caller org's recent export runs.

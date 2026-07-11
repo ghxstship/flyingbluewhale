@@ -14,7 +14,7 @@
  * fixtures inserted directly into test-professional.
  */
 import { expect, test, type Page } from "./helpers/base";
-import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
+import { dismissConsent, loginAndSwitchWorkspace, suppressTour } from "./helpers/auth";
 
 const TEST_ORG_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 
@@ -46,6 +46,13 @@ const CONSOLE_SURFACES = [
   { path: "/studio/settings/integrations/ticketing", h1: /Ticketing/i },
   { path: "/studio/settings/integrations/ticketing/new", h1: /New Ticketing Connection/i },
 ];
+
+// Suppress the first-run ConsoleTour scrim before any describe-scoped
+// setup navigates (pre-existing e2e-infra gap: this overlay intercepts
+// clicks on /studio form submits). File-scoped so it covers every test.
+test.beforeEach(async ({ page }) => {
+  await suppressTour(page);
+});
 
 test.describe("Booking canon · public surfaces render", () => {
   for (const s of PUBLIC_SURFACES) {
@@ -154,21 +161,22 @@ test.describe("Booking canon · IA — Bookings group + ticketing in settings", 
     await loginAsOwner(page);
     await page.goto("/studio/bookings");
     // Kit-20 rail: /studio/bookings ("Artist Offers & Holds") lives in the
-    // TALENT group (src/lib/nav.ts §298), alongside Artist Roster / Casting
-    // Calls / Submissions. The sidebar is group-scoped, so landing on
-    // /studio/bookings force-opens the Talent group — those sibling entries are
-    // what the primary sidebar exposes (Deals/Holds/Calendar/Settlements are
-    // tabs under the hub, not sidebar rows).
+    // TALENT group (src/lib/nav.ts §298), alongside Artist Roster and Casting.
+    // The sidebar is group-scoped, so landing on /studio/bookings force-opens
+    // the Talent group — those sibling ROWS are what the primary sidebar
+    // exposes. Submissions is NOT a sidebar row: it is a sub-entity TAB under
+    // the Casting hub (platformTabs, owner `/studio/marketplace/calls`) — a
+    // call RECEIVES submissions — so it is reached from Casting, not the rail.
     for (const path of [
       "/studio/bookings",
       "/studio/marketplace/talent",
       "/studio/marketplace/calls",
-      "/studio/marketplace/submissions",
     ]) {
       await expect(page.locator(`aside a[href="${path}"]`).first()).toBeVisible();
     }
-    // The consolidated sub-tabs still render as pages under the hub.
-    for (const tab of ["/studio/bookings/deals", "/studio/bookings/holds"]) {
+    // Submissions + the consolidated sub-tabs still render as pages under
+    // their hubs (reached via tabs, not the rail).
+    for (const tab of ["/studio/marketplace/submissions", "/studio/bookings/deals", "/studio/bookings/holds"]) {
       await page.goto(tab);
       await expect(page.locator("h1").first()).toBeVisible({ timeout: 15000 });
     }

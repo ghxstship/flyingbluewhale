@@ -110,6 +110,34 @@ async function healMarketplaceFixture(supabase) {
   }
 }
 
+/**
+ * Reset the owner fixture's sidebar nav lens to the "All" default. The lens
+ * persists to user_preferences.ui_state.nav_lens the moment a human clicks
+ * the sidebar Lens selector in a dev session; a stale non-default value
+ * (e.g. "Crew") filters the rail and breaks tests that assert default
+ * group visibility (booking-canon "Bookings group surfaces in primary
+ * sidebar"). No e2e test sets the lens, so a one-time clear is durable —
+ * this is belt-and-suspenders so the fixture heals itself on every run.
+ */
+async function resetOwnerNavLens(supabase, userId) {
+  try {
+    const { data: pref } = await supabase
+      .from("user_preferences")
+      .select("ui_state")
+      .eq("user_id", userId)
+      .maybeSingle();
+    const ui = pref?.ui_state;
+    if (ui && typeof ui === "object" && "nav_lens" in ui) {
+      const next = { ...ui };
+      delete next.nav_lens;
+      await supabase.from("user_preferences").update({ ui_state: next }).eq("user_id", userId);
+      console.log("e2e:clean — owner nav_lens reset to default.");
+    }
+  } catch (e) {
+    console.error(`e2e:clean — nav_lens reset (ignored): ${e?.message ?? e}`);
+  }
+}
+
 async function main() {
   if (!SUPABASE_URL || !ANON) {
     console.error("e2e:clean — missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY; skipping.");
@@ -118,7 +146,7 @@ async function main() {
   const supabase = createClient(SUPABASE_URL, ANON, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
-  const { error: authErr } = await supabase.auth.signInWithPassword({
+  const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
     email: OWNER_EMAIL,
     password: OWNER_PASSWORD,
   });
@@ -126,6 +154,8 @@ async function main() {
     console.error(`e2e:clean — owner sign-in failed (${authErr.message}); skipping cleanup.`);
     return;
   }
+  const ownerId = authData?.user?.id;
+  if (ownerId) await resetOwnerNavLens(supabase, ownerId);
 
   let total = 0;
   for (const { table, column, pattern } of TARGETS) {

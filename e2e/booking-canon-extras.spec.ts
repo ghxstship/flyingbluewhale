@@ -11,7 +11,7 @@
  *   - Agency roster entry detail + end-relationship
  */
 import { expect, test, type Page } from "./helpers/base";
-import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
+import { dismissConsent, loginAndSwitchWorkspace, suppressTour } from "./helpers/auth";
 
 const TEST_ORG_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
 
@@ -28,6 +28,13 @@ const FX = {
 async function loginAsOwner(page: Page) {
   await loginAndSwitchWorkspace(page, "owner", TEST_ORG_ID);
 }
+
+// Suppress the first-run ConsoleTour scrim before any describe-scoped
+// setup navigates (pre-existing e2e-infra gap: this overlay intercepts
+// clicks on /studio form submits). File-scoped so it covers every test.
+test.beforeEach(async ({ page }) => {
+  await suppressTour(page);
+});
 
 test.describe("Booking canon · extras", () => {
   test.beforeEach(async ({ page }) => {

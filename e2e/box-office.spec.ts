@@ -26,7 +26,7 @@
  * collaborator (role=member), surfaced by FormShell as an Alert (role="alert").
  */
 import { expect, test } from "./helpers/base";
-import { authedSetup, dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
+import { authedSetup, dismissConsent, loginAndSwitchWorkspace, suppressTour } from "./helpers/auth";
 import { stamp } from "./helpers/forms";
 
 const SLUG = "e2e-warehouse-02";
@@ -178,6 +178,13 @@ for (const op of OPERATORS) {
 }
 
 // ── COMPVSS field · door scanner ────────────────────────────────────────────
+// Suppress the first-run ConsoleTour scrim before any describe-scoped
+// setup navigates (pre-existing e2e-infra gap: this overlay intercepts
+// clicks on /studio form submits). File-scoped so it covers every test.
+test.beforeEach(async ({ page }) => {
+  await suppressTour(page);
+});
+
 test.describe("box office · COMPVSS field · door scanner", () => {
   test.describe.configure({ timeout: 180_000 });
   test.beforeEach(async ({ page }) => authedSetup(page, "crew"));

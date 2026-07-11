@@ -27,6 +27,26 @@ export function fixtureEmail(role: string): string {
 }
 
 /**
+/**
+ * Suppress the first-run ConsoleTour overlay (a full-viewport scrim,
+ * z-[var(--p-z-tour)], that intercepts clicks on the /studio shell). Uses
+ * addInitScript so the flag is set on every navigation in this context,
+ * including /login. Call in a file-scoped `test.beforeEach` (runs before
+ * describe-scoped hooks) so it lands before the first `page.goto`. Do NOT
+ * fold this into `dismissConsent` — `console-tour.spec.ts` needs the tour
+ * to actually appear.
+ */
+export async function suppressTour(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    try {
+      window.localStorage.setItem("atlvs.tour.console.v1", "done");
+    } catch {
+      /* storage may be unavailable pre-navigation; the goto retries it */
+    }
+  });
+}
+
+/**
  * Set the consent cookie so the cookie banner doesn't intercept clicks.
  * Essential-only, no analytics or marketing — the test always opts in
  * to the minimum. Run before `page.goto()` calls.

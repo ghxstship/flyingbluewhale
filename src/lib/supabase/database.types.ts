@@ -9478,6 +9478,101 @@ export type Database = {
           },
         ]
       }
+      day_sheets: {
+        Row: {
+          city: string | null
+          created_at: string
+          created_by: string | null
+          crew_call: string | null
+          curfew: string | null
+          deleted_at: string | null
+          doors: string | null
+          headline_set: string | null
+          id: string
+          notes: string | null
+          org_id: string
+          owner_id: string | null
+          project_id: string | null
+          published_at: string | null
+          sheet_date: string | null
+          sheet_state: Database["public"]["Enums"]["day_sheet_state"]
+          tour_id: string | null
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_call?: string | null
+          curfew?: string | null
+          deleted_at?: string | null
+          doors?: string | null
+          headline_set?: string | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          owner_id?: string | null
+          project_id?: string | null
+          published_at?: string | null
+          sheet_date?: string | null
+          sheet_state?: Database["public"]["Enums"]["day_sheet_state"]
+          tour_id?: string | null
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_call?: string | null
+          curfew?: string | null
+          deleted_at?: string | null
+          doors?: string | null
+          headline_set?: string | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          owner_id?: string | null
+          project_id?: string | null
+          published_at?: string | null
+          sheet_date?: string | null
+          sheet_state?: Database["public"]["Enums"]["day_sheet_state"]
+          tour_id?: string | null
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "day_sheets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "day_sheets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "day_sheets_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tour_p_and_l"
+            referencedColumns: ["tour_id"]
+          },
+          {
+            foreignKeyName: "day_sheets_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       delegation_entries: {
         Row: {
           created_at: string
@@ -9563,87 +9658,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      day_sheets: {
-        Row: {
-          city: string | null
-          created_at: string
-          created_by: string | null
-          crew_call: string | null
-          curfew: string | null
-          deleted_at: string | null
-          doors: string | null
-          headline_set: string | null
-          id: string
-          notes: string | null
-          org_id: string
-          owner_id: string | null
-          project_id: string | null
-          published_at: string | null
-          sheet_date: string | null
-          sheet_state: Database["public"]["Enums"]["day_sheet_state"]
-          tour_id: string | null
-          updated_at: string
-          venue: string | null
-        }
-        Insert: {
-          city?: string | null
-          created_at?: string
-          created_by?: string | null
-          crew_call?: string | null
-          curfew?: string | null
-          deleted_at?: string | null
-          doors?: string | null
-          headline_set?: string | null
-          id?: string
-          notes?: string | null
-          org_id: string
-          owner_id?: string | null
-          project_id?: string | null
-          published_at?: string | null
-          sheet_date?: string | null
-          sheet_state?: Database["public"]["Enums"]["day_sheet_state"]
-          tour_id?: string | null
-          updated_at?: string
-          venue?: string | null
-        }
-        Update: {
-          city?: string | null
-          created_at?: string
-          created_by?: string | null
-          crew_call?: string | null
-          curfew?: string | null
-          deleted_at?: string | null
-          doors?: string | null
-          headline_set?: string | null
-          id?: string
-          notes?: string | null
-          org_id?: string
-          owner_id?: string | null
-          project_id?: string | null
-          published_at?: string | null
-          sheet_date?: string | null
-          sheet_state?: Database["public"]["Enums"]["day_sheet_state"]
-          tour_id?: string | null
-          updated_at?: string
-          venue?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "day_sheets_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "day_sheets_tour_id_fkey"
-            columns: ["tour_id"]
-            isOneToOne: false
-            referencedRelation: "tours"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       deliverable_comments: {
         Row: {
@@ -42490,6 +42504,23 @@ export type Database = {
           table_name: string
         }
         Returns: string
+      }
+      verify_certification: {
+        Args: { p_holder_id: string }
+        Returns: {
+          accreditation_state: string
+          certification_code: string
+          certification_name: string
+          course_title: string
+          expires_on: string
+          holder_id: string
+          holder_name: string
+          issued_at: string
+          last_recert_at: string
+          next_recert_due: string
+          org_name: string
+          recert_window_days: number
+        }[]
       }
       xpms_build_identifier: {
         Args: {

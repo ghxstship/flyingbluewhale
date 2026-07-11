@@ -1,7 +1,5 @@
 {
   "common": {
-    "appName": "ATLVS Technologies",
-    "appNameStylized": "A T L V S",
     "save": "保存",
     "cancel": "キャンセル",
     "delete": "削除",
@@ -9,39 +7,18 @@
     "create": "作成",
     "submit": "送信",
     "close": "閉じる",
-    "confirm": "確認",
     "loading": "読み込み中…",
-    "search": "検索",
-    "filter": "絞り込み",
-    "sort": "並び替え",
-    "export": "エクスポート",
-    "import": "インポート",
     "settings": "設定",
     "help": "ヘルプ",
     "signOut": "ログアウト",
-    "signIn": "ログイン",
-    "signUp": "登録",
     "startFree": "無料で構築をはじめる",
     "back": "戻る",
-    "next": "次へ",
-    "previous": "前へ",
     "done": "完了",
-    "skip": "スキップ",
     "retry": "再試行",
     "copy": "コピー",
-    "copied": "コピーしました",
-    "copyLink": "リンクをコピー",
     "all": "すべて",
-    "none": "なし",
     "yes": "はい",
     "no": "いいえ",
-    "optional": "任意",
-    "required": "必須",
-    "required_field": "{field}は必須です",
-    "pending": "保留中",
-    "accepted": "承諾済み",
-    "revoked": "取り消し済み",
-    "expired": "期限切れ",
     "actions": "アクション",
     "add": "追加",
     "and": "および",
@@ -52,19 +29,13 @@
     "download": "ダウンロード",
     "emDash": "—",
     "home": "ホーム",
-    "justNow": "たった今",
     "loadingEllipsis": "…",
     "name": "名前",
-    "networkError": "ネットワークエラー",
     "notes": "メモ",
     "open": "開く",
     "openArrow": "開く →",
-    "processing": "処理中…",
     "reactivate": "再有効化",
     "reject": "却下",
-    "relativeTime": {
-      "justNow": "たった今"
-    },
     "remove": "削除",
     "saveChanges": "変更を保存",
     "savedToast": "保存しました",
@@ -72,12 +43,6 @@
     "selectEllipsis": "選択…",
     "selectPlaceholder": "選択してください…",
     "send": "送信",
-    "time": {
-      "justNow": "たった今",
-      "minutesShort": "{n}分",
-      "hoursShort": "{n}時間",
-      "daysShort": "{n}日"
-    },
     "tryAgain": "再試行",
     "untitled": "無題",
     "update": "更新",
@@ -134,8 +99,6 @@
   "marketing": {
     "header": {
       "login": "ログイン",
-      "signup": "新規登録",
-      "themes": "テーマ",
       "language": "言語",
       "theme": "テーマ",
       "openMenu": "メニューを開く",
@@ -179,9 +142,6 @@
           "description": "Connect the tools you already run"
         }
       },
-      "industries": {
-        "label": "業界"
-      },
       "resources": {
         "label": "リソース",
         "blog": {
@@ -209,12 +169,6 @@
         "label": "Solutions"
       }
     },
-    "home": {
-      "cta": {
-        "primary": "無料で構築をはじめる",
-        "secondary": "デモを予約"
-      }
-    },
     "industries": {
       "live-events": "ライブイベント",
       "concerts": "コンサート",
@@ -225,25 +179,10 @@
       "theatrical-performances": "舞台公演",
       "broadcast-tv-film": "放送・テレビ・映画"
     },
-    "footer": {
-      "copyright": "© {year} ATLVS Technologies",
-      "trademark": "ATLVS、GVTEWAY、COMPVSS、LEG3ND は、G H X S T S H I P Industries グループの ATLVS Technologies の登録商標です。",
-      "tagline": "ATLVS、GVTEWAY、COMPVSS、LEG3ND。プロダクションチームのための、つながった4つのアプリ。",
-      "ctaTired": "ガムテープで現場を持たせるのに、もう疲れたプロダクションチームのために。"
-    },
-    "cta": {
-      "startFree": "無料で構築をはじめる",
-      "bookDemo": "デモを予約",
-      "viewDocs": "ドキュメントを見る",
-      "startFreeForLife": "無料で構築をはじめる",
-      "contactSales": "営業に問い合わせ",
-      "pitchStory": "ストーリーを提案"
-    },
     "layout": {
       "footer": {
         "product": {
           "heading": "プロダクト",
-          "solutions": "ソリューション",
           "atlvs": "ATLVS",
           "gvteway": "GVTEWAY",
           "compvss": "COMPVSS",
@@ -323,10 +262,6 @@
           "homeAriaLabel": "ATLVS Technologies ホーム",
           "tagline": "プロダクションのためのエコシステム。4つのアプリ、ひとつの信頼できる唯一の情報源。"
         },
-        "social": {
-          "twitter": "Twitter",
-          "github": "GitHub"
-        },
         "copyright": "© {year} ATLVS Technologies",
         "tagline": "The World Builder's Ecosystem",
         "trademarkPrefix": "ATLVS、GVTEWAY、COMPVSS、LEG3NDは、",
@@ -340,10 +275,6 @@
           "description": "ATLVS Technologies は、プロダクションのためのエコシステムをつくります。ATLVS、GVTEWAY、COMPVSS、LEG3ND の4つのアプリと、ひとつの信頼できる唯一の情報源。現場を回してきたオペレーターが届けます。",
           "ogImageEyebrow": "スタジオ",
           "ogImageTitle": "現場を回す人たちが、つくった。"
-        },
-        "breadcrumbs": {
-          "home": "ホーム",
-          "about": "私たちについて"
         },
         "hero": {
           "eyebrow": "スタジオ",
@@ -609,10 +540,6 @@
           "description": "プロダクション運用、プラットフォームアーキテクチャ、そしてガムテープに頼らずショーを動かすことについてのエッセイ。ATLVS Technologiesチームより。",
           "ogEyebrow": "ブログ",
           "ogTitle": "チームからのディスパッチ。"
-        },
-        "breadcrumbs": {
-          "home": "ホーム",
-          "blog": "ブログ"
         },
         "hero": {
           "eyebrow": "ブログ",
@@ -890,10 +817,6 @@
           "security": "セキュリティ",
           "performance": "パフォーマンス"
         },
-        "crumbs": {
-          "home": "ホーム",
-          "changelog": "変更履歴"
-        },
         "hero": {
           "eyebrow": "変更履歴",
           "title": "リリースされたもの。",
@@ -940,10 +863,6 @@
           "description": "ATLVS、COMPVSS、GVTEWAY、LEG3ND でプロダクションを動かすフェスティバル、ツアー、エージェンシー、ファブリケーションショップたち。メンバーのストーリー、数字、そして実際に送り出しているもの。",
           "ogImageEyebrow": "コミュニティ",
           "ogImageTitle": "ATLVS で動くプロダクションチームたち。"
-        },
-        "breadcrumbs": {
-          "home": "ホーム",
-          "community": "コミュニティ"
         },
         "hero": {
           "eyebrow": "コミュニティ",
@@ -1015,10 +934,6 @@
           "ogImageEyebrow": "カテゴリーノート",
           "ogImageTitle": "比較はしない。定義する。"
         },
-        "breadcrumbs": {
-          "home": "ホーム",
-          "current": "汎用ツールから"
-        },
         "hero": {
           "eyebrow": "カテゴリーノート",
           "title": "比較はしない。定義する。",
@@ -1041,10 +956,6 @@
           "description": "直通の窓口。デモ、パートナーシップ、コンシェルジュサポート、Festival アクセス。現場を仕切ってきたプロデューサーへ直接つながります。",
           "ogImageEyebrow": "お問い合わせ",
           "ogImageTitle": "スタジオに相談する。"
-        },
-        "breadcrumbs": {
-          "home": "ホーム",
-          "contact": "お問い合わせ"
         },
         "hero": {
           "eyebrow": "お問い合わせ",
@@ -1405,10 +1316,6 @@
           "ogImageEyebrow": "ガイド",
           "ogImageTitle": "オペレーターによる執筆。"
         },
-        "crumbs": {
-          "home": "ホーム",
-          "guides": "ガイド"
-        },
         "hero": {
           "eyebrow": "ガイド",
           "title": "オペレーターが書いた。",
@@ -1667,7 +1574,6 @@
           "title": "マーケットプレイス。ライブ制作クルー、タレント、RFQ",
           "description": "ATLVS ネットワーク全体から、募集中の制作ギグ、キャスティングコール、タレント、審査済みクルー、ライブRFQを見つけましょう。"
         },
-        "breadcrumb": "マーケットプレイス",
         "hero": {
           "eyebrow": "マーケットプレイス",
           "title": "仕事を見つける。クルーを見つける。アクトを見つける。",
@@ -1732,7 +1638,6 @@
               "nda": "NDA 承諾"
             },
             "cta": {
-              "bid": "このRFQに入札する",
               "signup": "アカウントが必要ですか？",
               "expressInterest": "関心を表明"
             }
@@ -2153,16 +2058,10 @@
           "title": "フィールドノートとリリース。",
           "posts": {
             "fieldNotes": {
-              "cat": "フィールドノート",
-              "title": "8フェーズ・ライフサイクルがビルドを軌道に乗せ続ける仕組み"
+              "cat": "フィールドノート"
             },
             "release": {
-              "cat": "リリース",
-              "title": "アドバンシング v2。16種類の型付きデリバラブルを提供開始"
-            },
-            "careers": {
-              "cat": "採用",
-              "title": "採用中。エンジニア、PM、デザイナー"
+              "cat": "リリース"
             }
           }
         },
@@ -2289,10 +2188,6 @@
           "ogEyebrow": "料金",
           "ogTitle": "組織単位。決してシート単位ではない。"
         },
-        "breadcrumbs": {
-          "home": "ホーム",
-          "pricing": "料金"
-        },
         "hero": {
           "eyebrow": "料金",
           "title": "組織単位。決してシート単位ではない。",
@@ -2326,8 +2221,7 @@
               "upTo10Users": "最大10ユーザー",
               "upTo2kCredentials": "プロジェクトごとに最大2,000件のポータルクレデンシャル",
               "emailSupport": "メールサポート"
-            },
-            "cta": "14日間トライアル"
+            }
           },
           "production": {
             "name": "Production",
@@ -2342,8 +2236,7 @@
               "kbygGuides": "KBYGイベントガイド",
               "unlimitedUsers": "ユーザー数無制限",
               "priorityConcierge": "優先コンシェルジュ＋オンボーディング"
-            },
-            "cta": "14日間トライアル"
+            }
           },
           "festival": {
             "name": "Festival",
@@ -2960,10 +2853,6 @@
           "title": "ソリューション。4つのアプリ。1つのスキーマ。",
           "description": "ATLVS はプロダクションオペレーションコンソール。COMPVSS はオフラインファーストの現場 PWA。GVTEWAY はステークホルダーポータル＆マーケットプレイス。LEG3ND はナレッジ、LMS、リソース。オフィスからも、ゲートからも、ステークホルダーからも、標準からも、同じレコードを参照。"
         },
-        "crumbs": {
-          "home": "ホーム",
-          "solutions": "ソリューション"
-        },
         "hero": {
           "eyebrow": "ソリューション",
           "title": "4つのアプリ。1つの信頼できる唯一の情報源。",
@@ -3078,101 +2967,6 @@
           "title": "ATLVS、始動。",
           "primaryLabel": "無料で構築をはじめる",
           "secondaryLabel": "デモを予約"
-        },
-        "legend": {
-          "meta": {
-            "title": "LEG3ND。ナレッジ、LMS、コンプライアンス",
-            "description": "世界を支えるナレッジ。Standard、コース、認定、カタログ、そしてコンプライアンスエンジン。XPMS 2.0 プロトコル上で動く、ATLVS world engine のナレッジレイヤー。",
-            "ogImageEyebrow": "LEG3ND",
-            "ogImageTitle": "世界を支えるナレッジ。"
-          },
-          "crumbs": {
-            "home": "ホーム",
-            "solutions": "ソリューション"
-          },
-          "jsonLd": {
-            "description": "世界を支えるナレッジ。Standard、コース、認定、カタログ、そしてコンプライアンスエンジン。"
-          },
-          "hero": {
-            "title": "世界を支えるナレッジ。",
-            "body": "世界を支えるナレッジ。Standard、コース、認定、カタログ、そしてコンプライアンスエンジン。これは ATLVS world engine のナレッジレイヤー。Standard、LMS、認定、価格付きカタログ、コンプライアンスエンジン、そのすべてが XPMS 2.0 プロトコル上で動く。",
-            "ctaPrimary": "無料で構築をはじめる",
-            "ctaSecondary": "デモを予約"
-          },
-          "pillars": {
-            "title": "ひとつのライブラリ。すべての領域へ。",
-            "body": "他のすべてのアプリが参照するリファレンスレイヤー。一度オーサリングし、一箇所でガバナンスし、コードのようにバージョン管理する。",
-            "standard": {
-              "title": "スタンダード",
-              "body": "正規のナレッジベース。仕事が実際にどう回るのかを書き起こし、検索可能にする。"
-            },
-            "courses": {
-              "title": "コース & LMS",
-              "body": "レッスン、クイズ、修了トラッキングを備えた体系的な学習。オンボーディングから熟達まで。"
-            },
-            "certifications": {
-              "title": "認定",
-              "body": "資格を発行し、追跡し、失効させる。同じ認定が COMPVSS のゲートでスキャンを制御する。"
-            },
-            "resources": {
-              "title": "リソースハブ",
-              "body": "テンプレート、SOPs、リファレンス文書。すべてがひとつの場所に。共有ドライブの発掘作業はもう要らない。"
-            },
-            "catalog": {
-              "title": "カタログ",
-              "body": "価格付きアトムと URIDs。見積もりと調達が参照する、コスト化されたビルディングブロック。"
-            },
-            "signage": {
-              "title": "サイネージライブラリ",
-              "body": "ISO 7010、DOT-AIGA、ISA のピクトグラム。現場投入できる安全誘導を、標準化して。"
-            },
-            "xmce": {
-              "title": "XMCE コンプライアンスエンジン",
-              "body": "機械チェック可能なコンプライアンス。ルールはバインダーではなく、ライブの記録に対して評価される。"
-            },
-            "safety": {
-              "title": "安全",
-              "body": "RAMS、ブリーフィング、緊急対応計画を、それに依存するプロジェクトへ直結する。"
-            }
-          },
-          "protocol": {
-            "eyebrow": "XPMS 2.0 プロトコル上で",
-            "title": "世界の他のすべてが読むナレッジ。",
-            "body": "LEG3ND は脇に取り付けた wiki ではない。認定が現場スキャンを制御する。カタログアトムが見積もりに価格を与える。コンプライアンスルールがライブのプロジェクトに対して評価される。ナレッジレイヤーは、エコシステム全体が動くのと同じ記録ストアに直結している。",
-            "items": {
-              "standard": "The Standard（正規でバージョン管理されたひとつのナレッジベース）",
-              "courses": "クイズと修了バッジを備えたコース & LMS",
-              "certifications": "COMPVSS のゲートスキャンを制御する認定",
-              "catalog": "見積もりと調達を支える価格付きカタログアトム",
-              "signage": "ISO 7010 / DOT-AIGA / ISA のサイネージピクトグラム",
-              "xmce": "ライブの記録に対する XMCE 機械チェック可能なコンプライアンス"
-            }
-          },
-          "faq": {
-            "title": "LEG3ND · FAQ",
-            "q1": {
-              "q": "LEG3ND とは？",
-              "a": "ATLVS エコシステムのナレッジレイヤー。Standard（ナレッジベース）、コース & LMS、認定、リソースハブ、価格付きカタログ、サイネージライブラリ、XMCE コンプライアンスエンジン、そして安全。そのすべてが XPMS 2.0 プロトコル上で動く。"
-            },
-            "q2": {
-              "q": "wiki や独立した LMS と何が違うのか？",
-              "a": "エコシステムの他の部分と同じ記録ストアを共有する。認定が COMPVSS の現場スキャンを制御し、カタログアトムが ATLVS の見積もりに価格を与え、コンプライアンスルールがライブのプロジェクトに対して評価される。単独の wiki や LMS にはできないことだ。"
-            },
-            "q3": {
-              "q": "サイネージライブラリとは？",
-              "a": "安全誘導のための ISO 7010、DOT-AIGA、ISA ピクトグラムの、現場投入できるセット。標準化されているから、すべての現場が同じ視覚言語で語る。"
-            },
-            "q4": {
-              "q": "コンプライアンスエンジンは何をチェックするのか？",
-              "a": "XMCE は静的なバインダーではなく、ライブの記録に対して機械チェック可能なルールを評価する。だからコンプライアンスの状態は、いつでもプロジェクトの実際の状態を映し出す。"
-            }
-          },
-          "cta": {
-            "title": "次の世界を、共有されたナレッジの体系の上に築く。",
-            "subtitle": "Access ティアは永久無料。そこから先は org 単位の価格で。",
-            "primaryLabel": "無料で構築をはじめる",
-            "secondaryLabel": "デモを予約"
-          }
         }
       },
       "status": {
@@ -3189,17 +2983,7 @@
         "hero": {
           "eyebrow": "ステータス",
           "title": "全システム正常稼働中。",
-          "body": "ATLVS、GVTEWAY、COMPVSS、LEG3ND、マーケティングサーフェスを横断したリアルタイムのエコシステム健全性。メールまたはWebhookでインシデント通知を購読できます。",
-          "badge": "全システム正常稼働中 · 過去30日間"
-        },
-        "services": {
-          "atlvs": "プロダクションオペレーションワークスペース（app.atlvs.pro）",
-          "gvteway": "ステークホルダーポータル（gvteway.atlvs.pro）",
-          "compvss": "オフラインファーストPWA（compvss.atlvs.pro）",
-          "marketing": "atlvs.pro ＋認証フロー",
-          "webhooks": "アウトバウンド＋インバウンドのWebhook配信",
-          "ai": "Anthropic Claude連携",
-          "stripe": "ベンダー支払いレール"
+          "body": "ATLVS、GVTEWAY、COMPVSS、LEG3ND、マーケティングサーフェスを横断したリアルタイムのエコシステム健全性。メールまたはWebhookでインシデント通知を購読できます。"
         },
         "stateLabel": {
           "operational": "正常稼働",
@@ -3207,9 +2991,6 @@
           "outage": "大規模障害"
         },
         "comingSoon": {
-          "eyebrow": "近日公開",
-          "title": "ライブステータスページ。",
-          "body": "上のボードは現在の状態を表示しています。まもなく、サービスごとの90日間稼働率、ポストモーテム付きインシデント履歴、メールおよびWebhookによる通知購読を提供します。第4四半期のローンチを予定。対象日：",
           "cta": "ローンチ時に通知を受け取る"
         },
         "cta": {
@@ -4034,13 +3815,10 @@
       "subtitle": "おかえりなさい。あなたの世界は、去ったときのまま、そこにあります。",
       "email": "メールアドレス",
       "password": "パスワード",
-      "rememberMe": "ログイン状態を保持",
       "forgotPassword": "パスワードをお忘れですか？",
       "emailMeALink": "リンクをメールで送る",
       "noAccount": "アカウントをお持ちでないですか？",
       "createOne": "作成する",
-      "orContinueWith": "または以下で続行",
-      "orContinueWithEmail": "またはメールで続行",
       "submit": "ログイン",
       "submitting": "ログイン中…"
     },
@@ -4055,27 +3833,8 @@
       "signIn": "ログイン",
       "submit": "アカウントを作成",
       "submitting": "アカウント作成中…",
-      "passwordStrength": {
-        "veryWeak": "非常に弱い",
-        "weak": "弱い",
-        "fair": "普通",
-        "strong": "強い",
-        "veryStrong": "非常に強い"
-      },
-      "organization": "組織",
-      "organizationHelp": "後から設定で作成できます。",
       "tosPrefix": "アカウントを作成することで、以下に同意したものとみなされます",
       "privacyPolicy": "プライバシーポリシー"
-    },
-    "oauth": {
-      "continueWith": "{provider}で続行",
-      "google": "Google",
-      "github": "GitHub",
-      "microsoft": "Microsoft",
-      "couldntStart": "{provider}サインインを開始できませんでした",
-      "notConfigured": "OAuthプロバイダーが設定されていません",
-      "invalidProvider": "無効なプロバイダー",
-      "missingCode": "サインインが完了しませんでした。もう一度お試しください"
     },
     "magicLink": {
       "title": "マジックリンクを送る",
@@ -4114,12 +3873,8 @@
       "subtitle": "以前に使ったことのないパスワードを選んでください。",
       "newPassword": "新しいパスワード",
       "confirmPassword": "パスワードの確認",
-      "hint": "8文字以上",
       "submit": "パスワードを更新",
       "submitting": "更新中",
-      "mismatch": "パスワードが一致しません",
-      "expired": "リセットリンクの期限が切れたか認識されません。「パスワードをお忘れですか」から新規にリクエストしてください。",
-      "backToLogin": "ログインに戻る",
       "expiredTitle": "リセットリンクの有効期限が切れています",
       "expiredSubtitle": "パスワードリセットのセッションを開けませんでした。",
       "requestNew": "新しいリセットリンクを発行する"
@@ -4130,19 +3885,7 @@
       "body": "ATLVS Technologies のワークスペースに招待されました。下で承諾するとそのままアクセスできます。",
       "submit": "招待を承諾",
       "submitting": "参加中…",
-      "signInInstead": "代わりにログイン",
-      "invalidOrExpired": "この招待は無効、期限切れ、または別のメール宛です。組織の管理者に再送を依頼してください。",
-      "joinFailed": "組織への参加に失敗しました：{message}",
-      "updateFailed": "メンバーシップは作成されましたが招待の更新に失敗しました：{message}"
-    },
-    "errors": {
-      "invalidCredentials": "メールまたはパスワードが無効です",
-      "accountExists": "このメールのアカウントが既に存在します。ログインをお試しください",
-      "duplicateEmail": "このメールは既に登録されています",
-      "weakPassword": "パスワードは8文字以上である必要があります",
-      "notConfigured": "Supabase が未設定です。NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY を設定してください。",
-      "signupNoUser": "登録に失敗しました。ユーザーが返されませんでした。",
-      "unknown": "問題が発生しました。もう一度お試しください"
+      "signInInstead": "代わりにログイン"
     },
     "error": {
       "title": "サインインエラー",
@@ -4170,8 +3913,6 @@
       "workspaceNameHint": "後から設定画面で変更できます。",
       "submitting": "ワークスペースを作成中",
       "submit": "ワークスペースを作成",
-      "ownerNotePrefix": "あなたがオーナーになります。チームメンバーの招待は",
-      "ownerNoteSuffix": "ログイン後に行えます。",
       "subtitle": "{email} としてサインイン中。あと一歩です。プロダクションが息づくワークスペースに名前を付けましょう。",
       "ownerNote": "あなたがオーナーになります。参加後は、チーム設定からメンバーを招待できます。"
     },
@@ -4181,97 +3922,18 @@
       "noRedirect": "リダイレクトURLが返されませんでした。"
     }
   },
-  "invites": {
-    "moduleHeader": {
-      "eyebrow": "メンバー",
-      "title": "招待",
-      "subtitle": "保留中の組織招待"
-    },
-    "form": {
-      "heading": "メンバーを招待",
-      "description": "承諾用リンクのメールが届きます。7日で期限切れ。",
-      "email": "メールアドレス",
-      "role": "役割",
-      "submit": "招待を送信",
-      "submitting": "送信中…"
-    },
-    "roles": {
-      "admin": "管理者（組織の完全制御）",
-      "controller": "コントローラー（財務と運営）",
-      "collaborator": "コラボレーター（読み書き運営）",
-      "contractor": "請負業者（限定アクセス）",
-      "crew": "クルー（現場 / モバイル）",
-      "client": "クライアント（外部ポータル）",
-      "viewer": "閲覧者（読み取り専用）",
-      "community": "コミュニティ（最小権限）"
-    },
-    "pending": {
-      "heading": "保留中（{count}）",
-      "emptyAdmin": "上から1件送って始めましょう。",
-      "emptyMember": "管理者に新メンバーの招待を依頼してください。",
-      "columns": {
-        "email": "メール",
-        "role": "役割",
-        "expires": "期限",
-        "link": "リンク"
-      }
-    },
-    "history": {
-      "heading": "履歴",
-      "columns": {
-        "email": "メール",
-        "role": "役割",
-        "status": "ステータス",
-        "when": "日時"
-      }
-    },
-    "emailSubject": "ATLVS Technologies のワークスペースに招待されました",
-    "emailHeading": "招待が届いています",
-    "emailBody": "{inviter} があなたを {role} としてワークスペースに招待しました。",
-    "emailCta": "招待を承諾",
-    "emailExpiry": "リンクは7日で期限切れになります。ボタンが動作しない場合：",
-    "errors": {
-      "onlyAdmins": "招待できるのはオーナー、管理者、開発者のみです。",
-      "pendingExists": "このメールには保留中の招待が既に存在します。",
-      "invalidToken": "無効な招待トークン",
-      "validationGeneric": "無効な入力"
-    }
-  },
   "theme": {
-    "sheet": {
-      "title": "デザインテーマを選択",
-      "description": "8つの完成されたテーマ。選択は全ページに即時反映、再読み込みも登録も不要。このデバイスで記憶されます。",
-      "appearanceHeading": "外観",
-      "appearanceSubtitle": "ワークスペースの見た目を選んでください。すべての場所に即時反映されます。",
-      "matchSystem": "システムに合わせる",
-      "matchingSystem": "システムに合わせ中",
-      "currentlyLabel": "現在：",
-      "upsell": "気に入りましたか？アカウントを作成して全デバイスでテーマを同期しましょう。",
-      "upsellCta": "アカウントを作成"
-    },
     "toggle": {
       "light": "ライト",
       "dark": "ダーク",
       "system": "システムに合わせる",
-      "themes": "テーマ",
       "colorTheme": "カラーテーマ"
     }
   },
   "footerUtility": {
-    "designThemes": "デザインテーマ",
     "changeLanguage": "言語を変更"
   },
   "shell": {
-    "platform": {
-      "brand": "ATLVS"
-    },
-    "portal": {
-      "brand": "GVTEWAY"
-    },
-    "mobile": {
-      "brand": "COMPVSS",
-      "aboutSuffix": "· v{version}"
-    },
     "nav": {
       "openNavigation": "ナビゲーションを開く",
       "closeNavigation": "ナビゲーションを閉じる"
@@ -4294,220 +3956,20 @@
     }
   },
   "a11y": {
-    "skipToContent": "本文へスキップ",
-    "closeDialog": "ダイアログを閉じる",
-    "toggleTheme": "テーマを切り替え",
-    "toggleMenu": "メニューを切り替え",
-    "openMenu": "メニューを開く",
-    "homeAriaLabel": "ATLVS Technologies ホーム",
-    "loading": "読み込み中",
-    "saving": "保存中",
-    "saved": "保存しました",
-    "error": "エラー",
-    "expandSidebar": "サイドバーを展開",
-    "collapseSidebar": "サイドバーを折りたたむ"
-  },
-  "community": {
-    "meta": {
-      "title": "コミュニティ。ATLVS で構築するプロダクションチーム",
-      "description": "ATLVS、GVTEWAY、COMPVSS でプロダクションを動かすフェスティバル、ツアー、エージェンシー、製作会社。メンバーの事例、数字、実際にデリバリーするもの。"
-    },
-    "hero": {
-      "eyebrow": "コミュニティ",
-      "title": "プロダクションチーム、公開の場で構築。",
-      "subtitle": "ATLVS Technologies でショーを動かすフェスティバル、ツアー、エージェンシー、製作会社。実ワークフロー。実数字。実証拠。"
-    },
-    "metrics": {
-      "productionTeams": "プロダクションチーム",
-      "ticketsScanned": "スキャンしたチケット",
-      "showsAdvanced": "進めたショー",
-      "countries": "カ国"
-    },
-    "stories": {
-      "heading": "メンバーの事例",
-      "subtitle": "以前何を使っていたか、何を変えたか、何が定量的に改善したか。"
-    },
-    "join": {
-      "eyebrow": "リスターに参加",
-      "title": "あなたのチームを、ここに。",
-      "body": "ATLVS Technologies で実ショーをデリバリーしていますか？常に新しいメンバー事例を募集中。短いインタビュー、匿名化された数字、あなたの言葉。"
-    },
-    "finalCta": {
-      "title": "次の事例になる",
-      "subtitle": "無料で開始。ショーを届ける。あとで話しましょう。"
-    }
-  },
-  "rate": {
-    "tooMany": "リクエストが多すぎます。しばらくしてから再試行してください",
-    "retryIn": "{seconds}秒後に再試行"
-  },
-  "errors": {
-    "generic": "問題が発生しました",
-    "notFound": "見つかりません",
-    "forbidden": "アクセス権限がありません",
-    "unauthorized": "続行するにはログインしてください",
-    "offline": "オフラインです。キューに入った操作は再接続時に同期されます"
-  },
-  "bookings": {
-    "title": "予約",
-    "overview": "概要",
-    "dealTracker": "ディール トラッカー",
-    "deals": "ディール",
-    "holds": "ホールド",
-    "calendar": "カレンダー",
-    "settlements": "精算",
-    "tours": "ツアー",
-    "marketing": "マーケティング",
-    "insights": "インサイト",
-    "newDeal": "新規ディール",
-    "newHold": "新規ホールド",
-    "newTour": "新規ツアー",
-    "tier": "ティア",
-    "firstRefusal": "第一優先",
-    "autoReleaseOn": "自動解放日",
-    "stuck": "停滞",
-    "active": "アクティブ",
-    "live": "ライブ",
-    "subtitle": "ショー経済:ディール、ホールド、精算、ツアー、マーケティング、インサイト。"
-  },
-  "settlement": {
-    "title": "精算",
-    "subtitle": "ショー後の精算。NBORは自動計算、保存時に残高が再計算されます。",
-    "gbor": "総興行収入",
-    "nbor": "純興行収入",
-    "salesTax": "売上税",
-    "amusementTax": "娯楽税",
-    "ccFee": "カード手数料",
-    "paidAttendance": "有料観客",
-    "comps": "招待",
-    "walkouts": "途中退場",
-    "barRevenue": "バー収入",
-    "merchRevenue": "物販収入",
-    "otherRevenue": "その他収入",
-    "artistPayout": "アーティスト報酬",
-    "agentCommission": "エージェント手数料",
-    "supportAct": "サポート アクト",
-    "depositReceived": "受領済み手付金",
-    "balanceDue": "残高",
-    "finalize": "精算を確定",
-    "draft": "下書き",
-    "reconciling": "照合中",
-    "final": "最終",
-    "disputed": "係争中"
-  },
-  "agency": {
-    "title": "エージェンシー",
-    "overview": "概要",
-    "roster": "ロスター",
-    "tours": "ツアー",
-    "commissions": "手数料",
-    "newTour": "新規ツアー",
-    "subtitle": "ロスター + ツアー + 手数料追跡。",
-    "exclusive": "専属",
-    "tour": "ツアー",
-    "leg": "公演",
-    "legs": "公演数",
-    "totalGbor": "総興行収入",
-    "artistPayouts": "アーティスト報酬",
-    "agentCommissions": "エージェント手数料",
-    "ancillary": "付随",
-    "totalBooked": "予約総額",
-    "finalized": "確定",
-    "pending": "保留中"
-  },
-  "marketplaceCanon": {
-    "agencies": "エージェンシー",
-    "agencyDirectory": "エージェンシー ディレクトリ",
-    "rosterSize": "ロスター数",
-    "defaultCommission": "デフォルト手数料",
-    "eventCalendar": "イベント カレンダー",
-    "calendarSubtitle": "今後のオンセール日、プレセール期間、発表。"
-  },
-  "marketingCanon": {
-    "title": "マーケティング",
-    "onsales": "オンセール",
-    "calendar": "マーケティング カレンダー",
-    "milestone": {
-      "announce": "発表",
-      "presale_start": "プレセール開始",
-      "presale_end": "プレセール終了",
-      "onsale": "オンセール",
-      "sold_out": "完売",
-      "press_embargo": "報道解禁"
-    },
-    "visibility": {
-      "public": "公開",
-      "partners": "パートナー",
-      "internal": "内部"
-    }
-  },
-  "insightsPool": {
-    "title": "インサイト",
-    "subtitle": "ジャンル別の月次匿名化集計。オプトイン、k≥3 匿名性下限。",
-    "contributing": "参加中",
-    "notContributing": "未参加",
-    "month": "月",
-    "genre": "ジャンル",
-    "shows": "公演数",
-    "avgGross": "平均総収入",
-    "avgAttendance": "平均観客数",
-    "avgArtistPayout": "平均アーティスト報酬",
-    "optInPrompt": "あなたの組織はプールに参加していません。オプトインを有効にすると、匿名化された精算集計を共有し、ネットワーク横断ベンチマークを解放できます。"
-  },
-  "ticketing": {
-    "title": "チケッティング",
-    "subtitle": "Etix · DICE · Tixr · Eventbrite · SeeTickets · AXS",
-    "newConnection": "新規接続",
-    "connect": "接続",
-    "provider": "プロバイダー",
-    "externalEventId": "外部イベントID",
-    "label": "ラベル",
-    "apiKey": "APIキー (暗号化)",
-    "lastSync": "最終同期",
-    "active": "有効",
-    "off": "無効"
+    "skipToContent": "本文へスキップ"
   },
   "m": {
     "clock": {
-      "error": {
-        "couldntUpdate": "更新できませんでした",
-        "network": "ネットワークエラー"
-      },
-      "toast": {
-        "queued": "{label}（キュー登録済み、オンライン復帰時に同期します）",
-        "checkedIn": "チェックイン完了",
-        "breakStarted": "休憩を開始しました",
-        "clockedOut": "退勤しました",
-        "backFromBreak": "休憩から復帰しました",
-        "clockedIn": "出勤しました"
-      },
-      "shiftClosed": "シフトを終了しました。",
       "working": "勤務中…",
       "clockIn": "出勤",
-      "startBreak": "休憩開始",
       "clockOut": "退勤",
-      "endBreak": "休憩終了",
       "configureSupabase": "Supabase を設定してください。",
       "eyebrow": "現場",
       "title": "チェックイン",
       "empty": {
         "title": "本日のシフトはありません",
-        "description": "ロスター登録後にもう一度ご確認ください。",
         "body": "クロックインして勤務時間の記録を開始します。"
       },
-      "unassignedVenue": "会場未割当",
-      "inLabel": "入",
-      "outLabel": "出",
-      "status": {
-        "clockedIn": "出勤中",
-        "readyToStart": "開始準備完了"
-      },
-      "action": {
-        "clockOut": "退勤",
-        "clockIn": "出勤"
-      },
-      "subtitle": "位置情報認証付き勤怠管理",
-      "noWorkforceProfile": "あなたのワークフォースプロファイルはまだこのアカウントにリンクされていません。スーパーバイザーにクルー記録をログインへ接続するよう依頼してください。",
       "active": "アクティブ",
       "addNote": "メモを追加",
       "asManager": "マネージャーとして",
@@ -4519,33 +3981,12 @@
       "onClock": "勤務中",
       "recent": "最近"
     },
-    "ad": {
-      "eyebrow": "モバイル",
-      "title": "到着・出発",
-      "todayPrefix": "本日",
-      "arrivalsHeading": "到着",
-      "noArrivals": "本日の到着はありません",
-      "eta": "到着予定",
-      "partyOf": "{count}名",
-      "landedAt": "{time}着",
-      "departuresHeading": "出発",
-      "noDepartures": "本日の出発はありません",
-      "etd": "出発予定",
-      "departedAt": "{time}発"
-    },
     "advances": {
       "eyebrow": "モバイル",
       "title": "あなたのアサインメント",
       "empty": {
         "title": "まだ何もアサインされていません",
         "body": "あなたに割り当てられた機材・クレデンシャル・サービスがここに表示されます。"
-      },
-      "untitled": "無題",
-      "projectFallback": "プロジェクト",
-      "singleShow": {
-        "prompt": "単発のショーで稼働中ですか？",
-        "link": "シフトを開く",
-        "suffix": "本日のコールを確認できます。"
       },
       "detail": {
         "due": "期限",
@@ -4587,140 +4028,24 @@
     "alerts": {
       "eyebrow": "モバイル",
       "title": "アラート",
-      "noneActive": "有効なアラートはありません。",
-      "empty": {
-        "title": "有効なアラートなし"
-      },
-      "scheduled": "予定",
-      "acknowledgedAt": "{time} に確認済み",
       "acknowledge": "確認する",
       "acknowledging": "確認中…",
       "emptyTitle": "問題ありません。現在アラートはありません。"
     },
-    "checkIn": {
-      "announce": {
-        "error": "エラー: {message}",
-        "accepted": "受付完了: {name}",
-        "duplicate": "重複チケット。既にスキャン済み",
-        "voided": "無効チケット。拒否",
-        "notFound": "チケットが見つかりません"
-      },
-      "guest": "ゲスト",
-      "toast": {
-        "alreadyScanned": "既にスキャン済み",
-        "voided": "無効チケット",
-        "notFound": "見つかりません",
-        "networkError": "ネットワークエラー"
-      },
-      "counts": {
-        "ok": "OK",
-        "dup": "重複",
-        "void": "無効",
-        "miss": "未検出"
-      },
-      "tablist": {
-        "ariaLabel": "スキャナー入力モード"
-      },
-      "mode": {
-        "wedge": "キーボードウェッジ",
-        "camera": "カメラ"
-      },
-      "ticketCode": "チケットコード",
-      "placeholder": "スキャンまたは入力",
-      "validating": "検証中…",
-      "validate": "検証",
-      "camera": {
-        "hint": "チケットのQRに向けてください。検出時に自動で検証します。"
-      },
-      "recent": "最近のスキャン",
-      "empty": {
-        "title": "まだスキャンがありません"
-      },
-      "result": {
-        "accepted": "受理",
-        "duplicate": "重複",
-        "voided": "無効",
-        "notFound": "not_found"
-      },
-      "manual": {
-        "eyebrow": "現場",
-        "title": "手動照会",
-        "subtitle": "QRが読み取れない場合はチケットコードを入力してください",
-        "backToScanner": "スキャナーに戻る →"
-      },
-      "eyebrow": "現場チェックイン",
-      "title": "チケットをスキャン",
-      "scan": {
-        "eyebrow": "スキャン中 · {slug}",
-        "title": "QRスキャン"
-      },
-      "configureSupabase": "Supabaseを設定してください。",
-      "subtitlePrefix": "本日の打刻履歴、休憩、ミール控除。実際の打刻には",
-      "subtitleSuffix": "をご利用ください。",
-      "stats": {
-        "today": "本日",
-        "meals": "ミール",
-        "breakMin": "休憩(分)"
-      },
-      "unassignedVenue": "未割当の会場",
-      "badge": {
-        "mealCredited": "ミール控除済み",
-        "breakMinutes": "休憩 {minutes}分"
-      }
-    },
     "coc": {
       "eyebrow": "現場",
       "title": "管理連鎖",
-      "actions": {
-        "logIncident": "+ インシデントを記録",
-        "scanAsset": "資産をスキャン"
-      },
-      "recent": {
-        "heading": "最近の管理イベント"
-      },
-      "empty": {
-        "title": "過去7日間に記録なし"
-      },
-      "badge": {
-        "audit": "監査"
-      },
-      "desktopPrompt": "デスクトップ表示が必要ですか?",
-      "desktopLink": "管理連鎖を開く",
       "asset": "アセット",
       "emptyBody": "スキャンとアセットの引き継ぎがタイムラインとしてここに表示されます。",
       "emptyTitle": "管理イベントなし",
       "scan": "スキャン"
     },
     "common": {
-      "configureSupabase": "Supabaseを設定してください。",
-      "eyebrow": "モバイル",
-      "mobileEyebrow": "モバイル"
-    },
-    "crew": {
-      "eyebrow": "現場",
-      "title": "本日",
-      "subtitle": "コールシートと出退勤コントロール",
-      "clock": {
-        "title": "勤怠",
-        "subtitle": "出勤／退勤"
-      },
-      "tasks": {
-        "title": "タスク",
-        "subtitle": "本日"
-      }
+      "eyebrow": "モバイル"
     },
     "dailyLog": {
       "eyebrow": "現場",
       "title": "日報",
-      "subtitle": "現場からの即時記録",
-      "todaysLog": "本日の日報（{date}）",
-      "selectProject": "プロジェクトを選択…",
-      "weatherPlaceholder": "天候(例:26℃、晴れ)",
-      "saveLog": "日報を保存",
-      "recent": "最近の記録",
-      "empty": {
-        "title": "ログはまだありません"
-      },
       "back": "デイリーログ",
       "emptyBody": "天候とメモからその日のログを始めましょう。",
       "emptyTitle": "ログはまだありません",
@@ -4776,21 +4101,6 @@
         "opening": "開いています…",
         "label": "ダウンロード"
       },
-      "new": {
-        "configureSupabase": "Supabaseを設定してください。",
-        "title": "ドキュメントをアップロード",
-        "label": "ラベル",
-        "labelPlaceholder": "例:運転免許証",
-        "kind": "種別",
-        "kindId": "身分証明書",
-        "kindLicense": "免許 / 認定証",
-        "kindTax": "税務書類",
-        "kindContract": "契約書",
-        "kindMedical": "医療関連",
-        "kindOther": "その他",
-        "file": "ファイル",
-        "upload": "アップロード"
-      },
       "eyebrow": "モバイル",
       "title": "マイ ドキュメント",
       "uploadCta": "+ アップロード",
@@ -4807,37 +4117,6 @@
         "cat": "カテゴリ",
         "name": "名前",
         "updated": "更新日"
-      }
-    },
-    "driver": {
-      "eyebrow": "モバイル",
-      "title": "ドライバー",
-      "subtitle": "本日担当の運行一覧。タップしてマニフェストと経由地を確認。",
-      "upcoming": "今後の予定",
-      "empty": {
-        "title": "本日予定されている運行はありません"
-      },
-      "depart": "出発",
-      "eta": "到着予定",
-      "completed": "完了",
-      "cancelled": "キャンセル済み",
-      "run": {
-        "departing": "出発処理中…",
-        "markDeparted": "出発を記録",
-        "arriving": "到着処理中…",
-        "markArrived": "到着を記録",
-        "cancelling": "キャンセル中…",
-        "cancelRun": "運行をキャンセル",
-        "configureSupabase": "Supabaseを設定してください。",
-        "backToToday": "← 本日の運行へ戻る",
-        "eyebrow": "運行",
-        "depart": "出発",
-        "arrive": "到着",
-        "manifestHeading": "マニフェスト · {count}",
-        "noPassengers": "搭乗者の登録はありません。",
-        "passengerFallback": "搭乗者 {index}",
-        "pickupPrefix": "ピックアップ {location}",
-        "dropoffPrefix": "ドロップオフ {location}"
       }
     },
     "error": {
@@ -4871,61 +4150,9 @@
         "update": "アップデート"
       }
     },
-    "gate": {
-      "configureSupabase": "Supabaseを設定してください。",
-      "eyebrow": "現場",
-      "title": "ゲート",
-      "noScansYet": "本日のスキャン履歴はまだありません。",
-      "openScanner": "スキャナーを開く",
-      "recentScans": "最近のスキャン",
-      "empty": {
-        "title": "本日のスキャン記録はありません"
-      },
-      "gateFallback": "ゲート",
-      "scan": {
-        "announce": {
-          "error": "エラー：{message}",
-          "warn": "警告：{reason}",
-          "deny": "拒否：{reason}"
-        },
-        "result": {
-          "allow": "許可"
-        },
-        "reason": {
-          "review": "要確認",
-          "denied": "拒否"
-        },
-        "badge": {
-          "allow": "許可",
-          "warn": "警告",
-          "deny": "拒否"
-        },
-        "mode": {
-          "ariaLabel": "スキャナー入力モード",
-          "wedge": "キーボードウェッジ",
-          "camera": "カメラ"
-        },
-        "cardBarcode": {
-          "label": "カードバーコード",
-          "placeholder": "スキャンまたは入力"
-        },
-        "validating": "検証中…",
-        "validate": "検証",
-        "recent": "最近",
-        "empty": {
-          "title": "スキャン履歴はまだありません"
-        },
-        "eyebrow": "ゲート",
-        "title": "認証のスキャン"
-      }
-    },
     "gigs": {
       "eyebrow": "マーケットプレイス",
       "title": "公開中の案件",
-      "countOne": "ネットワーク全体で{count}件の公開中案件。",
-      "countOther": "ネットワーク全体で{count}件の公開中案件。",
-      "empty": "現在公開中の案件はありません。",
-      "travelPaid": "交通費支給",
       "applicants": "{count}件の応募",
       "applied": "応募済み",
       "apply": "応募",
@@ -4938,38 +4165,8 @@
       "rateTbd": "レート未定",
       "search": "求人を検索…"
     },
-    "guard": {
-      "configureSupabase": "Supabaseを設定してください。",
-      "eyebrow": "現場",
-      "title": "警備",
-      "noToursAssigned": "割り当てられた巡回はありません。",
-      "empty": {
-        "title": "割り当て済み巡回なし",
-        "action": "警備巡回を開く"
-      },
-      "venue": {
-        "assigned": "担当会場",
-        "any": "全会場"
-      },
-      "cadenceSuffix": " · {minutes}分ごと",
-      "badge": {
-        "next": "次回 {time}"
-      }
-    },
     "guide": {
       "eyebrow": "フィールドガイド",
-      "noActiveProject": {
-        "title": "アクティブなプロジェクトなし",
-        "body": "ショーにアサインされたら再度ご確認ください。"
-      },
-      "pending": {
-        "title": "ガイド準備中",
-        "body": "プロダクションはまだあなたの役割向けのガイドを公開していません。"
-      },
-      "downloadPdf": {
-        "ariaLabel": "このガイドをPDFとしてダウンロード",
-        "label": "PDFをダウンロード"
-      },
       "empty": "ガイドはまだありません",
       "emptyBody": "プロダクションチームはまだあなたの役割向けのガイドを公開していません。",
       "title": "ガイド"
@@ -4977,13 +4174,6 @@
     "handover": {
       "eyebrow": "モバイル",
       "title": "引き渡し",
-      "needsWalk": "ウォークスルー要",
-      "empty": {
-        "title": "全会場の引き渡し完了",
-        "description": "本日の保留事項はありません。"
-      },
-      "capAbbrev": "収容",
-      "handedOver": "引き渡し済み",
       "assets": "アセット / 鍵",
       "emptyBody": "シフト終了時の引き継ぎを提出して記録を始めましょう。",
       "emptyTitle": "引き継ぎなし",
@@ -4995,123 +4185,10 @@
         "allClear": "問題なし",
         "issues": "問題あり",
         "watchItems": "要注意項目"
-      },
-      "untitled": "引き継ぎ"
+      }
     },
     "home": {
-      "tabs": {
-        "ariaLabel": "モバイルホームセクション",
-        "today": "本日",
-        "tools": "ツール",
-        "reports": "レポート"
-      },
-      "today": {
-        "checkIn": {
-          "label": "チェックイン",
-          "sub": "チケットスキャン"
-        },
-        "tasks": {
-          "label": "タスク",
-          "sub": "本日のキュー"
-        },
-        "clock": {
-          "label": "打刻",
-          "sub": "出勤 / 退勤"
-        },
-        "inventory": {
-          "label": "在庫",
-          "sub": "機材スキャン"
-        },
-        "incident": {
-          "label": "インシデント",
-          "sub": "安全報告"
-        },
-        "settings": {
-          "label": "設定",
-          "sub": "オフライン、権限"
-        }
-      },
-      "tools": {
-        "gate": {
-          "label": "ゲートスキャン",
-          "sub": "入場チェックイン"
-        },
-        "wallet": {
-          "label": "ウォレット",
-          "sub": "パス + 支払"
-        },
-        "wms": {
-          "label": "倉庫",
-          "sub": "在庫移動"
-        },
-        "driver": {
-          "label": "ドライバー",
-          "sub": "運行シート"
-        },
-        "ad": {
-          "label": "A&D",
-          "sub": "到着 / 出発"
-        },
-        "ros": {
-          "label": "ラン・オブ・ショー",
-          "sub": "キュー単位"
-        },
-        "guard": {
-          "label": "警備",
-          "sub": "巡回ログ"
-        },
-        "safeguarding": {
-          "label": "セーフガーディング",
-          "sub": "ウェルフェア"
-        },
-        "medic": {
-          "label": "メディック",
-          "sub": "患者ログ"
-        },
-        "coc": {
-          "label": "管理連鎖",
-          "sub": "資産トレース"
-        },
-        "handover": {
-          "label": "引き継ぎ",
-          "sub": "シフト交代"
-        },
-        "wayfind": {
-          "label": "ウェイファインド",
-          "sub": "サイトマップ"
-        },
-        "gigs": {
-          "label": "オープンギグ",
-          "sub": "次の仕事を探す"
-        }
-      },
-      "reports": {
-        "dailyLog": {
-          "label": "デイリーログ",
-          "sub": "本日のエントリー"
-        },
-        "punch": {
-          "label": "パンチリスト",
-          "sub": "未完了項目"
-        },
-        "incidents": {
-          "label": "インシデント",
-          "sub": "全レポート"
-        },
-        "requests": {
-          "label": "リクエスト",
-          "sub": "サービスデスク"
-        },
-        "notifications": {
-          "label": "通知",
-          "sub": "全アラート"
-        }
-      },
-      "eyebrow": "フィールド",
       "title": "本日",
-      "fab": {
-        "scanTicket": "チケットスキャン"
-      },
       "clock": {
         "sub": "クロックイン",
         "title": "現地時間"
@@ -5152,12 +4229,6 @@
     },
     "inbox": {
       "room": {
-        "directMessage": "ダイレクトメッセージ",
-        "messagePlaceholder": "メッセージ",
-        "emptyDescription": "挨拶して会話を始めましょう。",
-        "emptyTitle": "メッセージがまだありません",
-        "loadOlder": "過去を読み込む",
-        "loadingOlder": "読み込み中…",
         "channel": "チャンネル",
         "direct": "ダイレクトメッセージ",
         "empty": "メッセージはまだありません",
@@ -5183,23 +4254,9 @@
       "unread": "未読"
     },
     "incident": {
-      "new": {
-        "eyebrow": "現場",
-        "title": "クイック起票",
-        "openFullForm": "詳細フォームを開く",
-        "summaryLabel": "何が起きましたか？",
-        "fileNow": "今すぐ起票",
-        "subtitle": "安全上の問題を記録します。管理者とEHSリードに即時通知されます。",
-        "filing": "提出中…"
-      },
       "eyebrow": "現場",
       "title": "自分のインシデント",
-      "subtitle": "あなたが起票した報告です。未対応は{count}件。組織全体のキューはこちら：",
       "quickFile": "クイック起票（1項目）",
-      "fullReport": "詳細報告",
-      "empty": {
-        "title": "報告はまだありません"
-      },
       "back": "マイインシデント",
       "emptyBody": "インシデント報告はまだ提出していません。",
       "emptyTitle": "未提出",
@@ -5218,13 +4275,6 @@
     "incidents": {
       "eyebrow": "現場",
       "title": "インシデント",
-      "noneLast30": "直近30日間にインシデントの記録はありません。",
-      "summary": "直近30日で{count}件 · 未対応{open}件",
-      "criticalSuffix": "重大{critical}件",
-      "reportCta": "+ インシデントを報告",
-      "empty": {
-        "title": "異常なし"
-      },
       "emptyBody": "この組織にはまだインシデントの記録がありません。",
       "emptyTitle": "問題なし",
       "file": "報告を提出",
@@ -5232,31 +4282,6 @@
       "untitled": "名称未設定のインシデント"
     },
     "inventory": {
-      "scan": {
-        "toast": {
-          "failed": "スキャンに失敗しました",
-          "notFound": "そのタグの機材は見つかりません"
-        },
-        "announce": {
-          "notFound": "アセットが見つかりません"
-        },
-        "assetTag": "アセットタグ",
-        "placeholder": "スキャンまたは入力",
-        "toggle": "切替",
-        "checkIn": "チェックイン",
-        "checkOut": "チェックアウト",
-        "recent": "最近",
-        "empty": {
-          "title": "スキャン履歴なし"
-        },
-        "badge": {
-          "notFound": "見つかりません",
-          "error": "エラー"
-        },
-        "eyebrow": "現場",
-        "title": "在庫スキャン",
-        "subtitle": "アセットタグをスキャンまたは入力してチェックイン／チェックアウト。"
-      },
       "available": "利用可能",
       "colCategory": "カテゴリ",
       "colCode": "コード",
@@ -5292,12 +4317,6 @@
       "reactWith": "{emoji} でリアクション"
     },
     "learning": {
-      "course": {
-        "lessonLabel": "レッスン {ordinal}",
-        "quizHeading": "クイズ",
-        "passed": "合格",
-        "didNotPass": "不合格"
-      },
       "title": "ラーニング",
       "coursesAssigned": "{count} 件のコースが割り当てられています",
       "empty": {
@@ -5307,59 +4326,6 @@
       "dueDate": "期限 {date}",
       "courseFallback": "コース"
     },
-    "medic": {
-      "new": {
-        "triage": {
-          "green": {
-            "label": "グリーン",
-            "hint": "軽症（非緊急）"
-          },
-          "yellow": {
-            "label": "イエロー",
-            "hint": "準緊急（30分以内）"
-          },
-          "red": {
-            "label": "レッド",
-            "hint": "最優先（生命の危険あり）"
-          },
-          "black": {
-            "label": "ブラック",
-            "hint": "死亡 / 救命困難"
-          }
-        },
-        "triageLegend": "トリアージ *",
-        "patientRef": {
-          "label": "患者識別番号",
-          "placeholder": "匿名ID（氏名は使用しないでください）"
-        },
-        "chiefComplaint": {
-          "label": "主訴 *",
-          "placeholder": "患者の症状は何ですか?"
-        },
-        "disposition": {
-          "label": "転帰"
-        },
-        "signature": {
-          "label": "対応者署名"
-        },
-        "submit": {
-          "loading": "記録中…",
-          "idle": "対応を記録"
-        },
-        "eyebrow": "メディック",
-        "title": "新規対応記録"
-      },
-      "eyebrow": "フィールド",
-      "title": "メディック",
-      "empty24h": "過去24時間の対応記録はありません。",
-      "countIn24h": "過去24時間で{count}件",
-      "openCount": "{count}件対応中",
-      "newEncounter": "+ 新規対応",
-      "emptyState": {
-        "title": "対応記録なし"
-      },
-      "anonPatient": "匿名患者"
-    },
     "notFound": {
       "title": "画面が見つかりません",
       "description": "このモバイル画面はマニフェストに登録されていません。",
@@ -5368,11 +4334,6 @@
     "notifications": {
       "eyebrow": "モバイル",
       "title": "通知",
-      "allCaughtUp": "すべて確認済みです。",
-      "settingsLink": "設定",
-      "empty": {
-        "title": "通知はありません"
-      },
       "channel": {
         "email": "メール",
         "push": "プッシュ",
@@ -5388,10 +4349,6 @@
       "completed": "✓ 完了",
       "finish": "オンボーディングを終了",
       "eyebrow": "モバイル",
-      "empty": {
-        "title": "実行中のフローはありません"
-      },
-      "fallbackFlowName": "オンボーディング",
       "detail": {
         "empty": {
           "title": "ステップがまだありません",
@@ -5564,26 +4521,8 @@
         "title": "ようこそ"
       }
     },
-    "polls": {
-      "title": "投票",
-      "empty": {
-        "title": "実施中の投票はありません",
-        "description": "ライブ投票はここに表示されます。"
-      },
-      "liveBadge": "ライブ",
-      "voteButton": "投票する"
-    },
     "punch": {
-      "eyebrow": "現場",
       "title": "パンチリスト",
-      "noOpenItems": "あなたに割り当てられた未対応項目はありません。",
-      "openCount": "{count} 件未対応",
-      "empty": {
-        "title": "パンチリストは完了済み",
-        "action": "未対応タスクを開く"
-      },
-      "overdue": "期限超過",
-      "due": "期限 {date}",
       "active": "アクティブ",
       "closed": "クローズ",
       "emptyBody": "パンチインしてシフトを開始します。",
@@ -5599,49 +4538,10 @@
       "today": "本日のパンチ"
     },
     "requests": {
-      "detail": {
-        "back": "← リクエスト",
-        "opened": "起票日時",
-        "responseSla": "応答SLA",
-        "update": "更新"
-      },
-      "new": {
-        "backLink": "← リクエスト",
-        "title": "リクエストを起票",
-        "submit": "起票",
-        "severity": {
-          "label": "重大度",
-          "p1": "P1（本番イベント停止）",
-          "p2": "P2（緊急）",
-          "p3": "P3（通常）",
-          "p4": "P4（低）"
-        },
-        "category": {
-          "label": "カテゴリ",
-          "av": "AV",
-          "cleaning": "清掃",
-          "repair": "修理",
-          "it": "IT",
-          "hospitality": "ホスピタリティ",
-          "security": "警備",
-          "other": "その他"
-        },
-        "summary": {
-          "label": "概要",
-          "placeholder": "一行で。何が起きていますか?"
-        },
-        "detail": {
-          "label": "詳細",
-          "placeholder": "場所、内容、影響を受けている人"
-        }
-      },
       "eyebrow": "現場",
       "title": "サービスリクエスト",
-      "openCta": "+ 起票",
-      "subtitle": "組織全体のアクティブなリクエスト。",
       "empty": {
         "title": "未対応はありません",
-        "description": "現在、すべて静かです。",
         "body": "休暇申請とシフト交代のリクエストがここに表示されます。"
       },
       "approve": "承認",
@@ -5672,87 +4572,12 @@
         "timeOff": "休暇"
       }
     },
-    "ros": {
-      "show": {
-        "configureSupabase": "Supabaseを設定してください。",
-        "backToAll": "← すべてのキュー",
-        "eyebrow": "ショー",
-        "liveLabel": "ライブ",
-        "startedAt": "{time}に開始",
-        "upcomingHeading": "今後の予定 · {count}",
-        "noMoreCues": "キュー待ちはありません。",
-        "completedHeading": "完了 · {count}",
-        "doneBadge": "完了"
-      },
-      "eyebrow": "モバイル",
-      "title": "ラン・オブ・ショー",
-      "noneToday": "本日予定のキューはありません。",
-      "empty": {
-        "title": "本日のキューなし"
-      }
-    },
-    "safeguarding": {
-      "eyebrow": "モバイル",
-      "title": "セーフガーディング",
-      "fileNew": "新規報告を提出",
-      "reportsFiledHeading": "提出済みの報告",
-      "empty": {
-        "title": "提出済みの報告はありません"
-      },
-      "subjectLabel": "対象:"
-    },
     "settings": {
-      "notifications": {
-        "eyebrow": "設定",
-        "title": "通知",
-        "pushSettingsLink": "設定 → プッシュ通知",
-        "digest": {
-          "heading": "ダイジェスト",
-          "immediate": "即時",
-          "hourly": "毎時ダイジェスト",
-          "daily": "日次ダイジェスト"
-        },
-        "perKind": {
-          "heading": "種別ごとの切替",
-          "colKind": "種別",
-          "colPush": "プッシュ",
-          "colEmail": "メール"
-        },
-        "savePreferences": "設定を保存"
-      },
       "eyebrow": "現場",
       "title": "設定",
-      "language": {
-        "title": "言語",
-        "description": "アプリ内のすべてのラベル、日付、数値に反映されます。"
-      },
-      "push": {
-        "title": "プッシュ通知",
-        "managePreferences": "種別ごとの通知設定を管理 →",
-        "missingVapid": "プッシュ通知はまだ設定されていません。管理者に有効化を依頼してください。"
-      },
-      "offline": {
-        "title": "オフラインモード",
-        "serviceWorker": "Service Worker キャッシュ",
-        "ready": "準備完了"
-      },
-      "camera": {
-        "title": "カメラ",
-        "description": "スキャンおよびインシデント報告に必要です。"
-      },
-      "location": {
-        "title": "位置情報",
-        "description": "ジオ認証付き出退勤打刻に使用します。"
-      },
       "signOut": "サインアウト",
       "account": {
-        "archive": "アーカイブ",
-        "archiveDesc": "アクセスの無効化を申請します。記録は保持されます。",
-        "archived": "申請済み",
         "heading": "アカウント",
-        "pause": "一時停止",
-        "pauseDesc": "スケジュールから非表示にします。記録は保持されます。",
-        "paused": "一時停止中",
         "status": "アカウント状態"
       },
       "appearance": {
@@ -5761,9 +4586,7 @@
         "theme": "テーマ"
       },
       "certs": {
-        "heading": "認定資格",
-        "label": "認定資格",
-        "none": "登録済みの認定資格はありません。"
+        "label": "認定資格"
       },
       "contact": {
         "city": "市区町村",
@@ -5839,46 +4662,13 @@
       "mealCredit": "食事クレジット",
       "upcomingThisWeek": "今週の予定",
       "checkIn": "チェックイン",
-      "swapShift": "シフト交代",
-      "swap": {
-        "eyebrow": "フィールド",
-        "title": "シフト交代",
-        "empty": {
-          "title": "交代可能な予定シフトがありません",
-          "action": "シフトを開く"
-        },
-        "unassignedVenue": "会場未割当",
-        "reasonPlaceholder": "交代の理由…",
-        "requestButton": "交代を申請"
-      }
-    },
-    "surveys": {
-      "title": "アンケート",
-      "empty": {
-        "title": "実施中のアンケートはありません",
-        "description": "公開中のアンケートはここに表示されます。"
-      },
-      "badge": {
-        "submitted": "提出済み",
-        "open": "公開中",
-        "anonymous": "匿名"
-      },
-      "closesAt": "{date}に締切",
-      "detail": {
-        "empty": {
-          "title": "質問がまだありません"
-        }
-      }
+      "swapShift": "シフト交代"
     },
     "tasks": {
       "eyebrow": "現場",
       "title": "マイタスク",
       "empty": "割り当てられたタスクはありません",
-      "dueLabel": "期限 {date}",
       "detail": {
-        "back": "← タスク",
-        "dueLabel": "期限 {date}",
-        "updateStatus": "ステータスを更新",
         "actAssigned": "タスクを再割り当てしました",
         "actAttached": "添付ファイルを追加しました",
         "actCommented": "コメントしました",
@@ -5888,8 +4678,6 @@
         "activity": "アクティビティ",
         "activityEmpty": "アクティビティはまだありません。",
         "assignee": "担当者",
-        "checklist": "チェックリスト",
-        "checklistEmpty": "チェックリスト項目がありません。",
         "created": "作成日",
         "description": "説明",
         "descriptionEmpty": "説明なし。",
@@ -5938,17 +4726,6 @@
       "unassigned": "未割り当て"
     },
     "timeOff": {
-      "new": {
-        "title": "新規休暇申請",
-        "policy": "ポリシー",
-        "startsOn": "開始日",
-        "endsOn": "終了日",
-        "hoursRequested": "申請時間数",
-        "reason": "理由",
-        "empty": {
-          "title": "休暇ポリシーがありません"
-        }
-      },
       "title": "休暇",
       "balancesHeading": "残高（{year}年）",
       "noPolicies": "ポリシーが未割当です。",
@@ -5969,75 +4746,16 @@
       "newCta": "休暇を申請",
       "requests": "あなたのリクエスト"
     },
-    "tracker": {
-      "configureSupabase": "Supabaseを設定してください。",
-      "title": "トラッカー",
-      "projectSingular": "プロジェクト",
-      "projectPlural": "プロジェクト",
-      "atomSingular": "アトム",
-      "atomPlural": "アトム",
-      "empty": {
-        "title": "プロジェクトはまだありません"
-      },
-      "metric": {
-        "budget": "予算",
-        "actual": "実績",
-        "variance": "差異"
-      }
-    },
     "wallet": {
-      "configureSupabase": "Supabase を設定してください。",
       "eyebrow": "モバイル",
       "title": "マイ クレデンシャル",
-      "subtitle": "ゲートでこの画面を提示してください。シフト終了までアクティブのままにしてください。",
       "empty": {
         "title": "発行済みクレデンシャルなし",
         "body": "クレデンシャルの権限は発行されるとここに表示されます。管理者にお問い合わせください。"
       },
-      "defaultCategoryCode": "ACC",
-      "cardBarcode": "カード バーコード",
-      "validFrom": "有効開始日",
-      "validTo": "有効終了日",
-      "otherCards": "その他のカード",
-      "openProfile": "プロフィールを開く →",
       "accessTitle": "アクセスと権限",
       "credential": "クレデンシャル",
       "help": "サポートは管理者へ連絡"
-    },
-    "wayfind": {
-      "otherCluster": "その他",
-      "eyebrow": "現場",
-      "title": "ウェイファインディング",
-      "subtitle": "会場を選択して、ゾーン、ゲート、集合場所を表示します。",
-      "empty": {
-        "title": "会場はまだありません",
-        "action": "会場を開く"
-      }
-    },
-    "wms": {
-      "eyebrow": "現場",
-      "title": "倉庫",
-      "subtitle": "スキャンでピック、棚入れ、チェックイン/アウト。",
-      "scanAsset": "資産をスキャン",
-      "assetRegister": "資産台帳",
-      "inMaintenance": "整備中",
-      "empty": {
-        "maintenance": "整備中の品目はありません",
-        "returns": "返却予定はありません"
-      },
-      "noTag": "タグなし",
-      "returnsDue": "返却期限",
-      "due": "期限 {date}"
-    },
-    "offline": {
-      "queuedToast": "キューに追加。オンライン時に同期します",
-      "queuedDetail": "オフライン。同期待ち",
-      "queuedBadge": "キュー済み",
-      "pendingBadge": "{count} 件保留中。オンライン時に同期"
-    },
-    "checkInSummary": {
-      "eyebrow": "フィールド",
-      "title": "チェックインサマリー"
     },
     "account": {
       "archive": {
@@ -6130,7 +4848,6 @@
       "empty": "ピープルなし",
       "emptyBody": "この組織にはまだ他のクルーがいません。ネットワークが広がると候補がここに表示されます。",
       "network": "マイネットワーク",
-      "pending": "保留中",
       "pendingSection": "保留中のリクエスト",
       "remove": "削除",
       "requestSent": "リクエスト送信済み",
@@ -6207,7 +4924,6 @@
       "step2s": "ATLVS ネットワークにサインアップ",
       "step3": "あなたが獲得",
       "step3s": "相手が採用されるとポイント + 現金",
-      "tier": "スターター",
       "title": "紹介と報酬",
       "yours": "あなたの紹介"
     },
@@ -6236,10 +4952,7 @@
       "musterTo": "集合先: {to}",
       "position": "ポジション",
       "project": "プロジェクト",
-      "reportTo": "報告先",
-      "role": "緊急時の役割",
       "shelter": "避難所",
-      "team": "チーム",
       "title": "緊急カード",
       "unassigned": "割り当て待ち"
     },
@@ -6454,12 +5167,6 @@
           "statusLabel": "ステータス",
           "noteLabel": "備考"
         },
-        "status": {
-          "pending": "保留中",
-          "approved": "承認済み",
-          "rejected": "却下",
-          "applied": "適用済み"
-        },
         "detail": {
           "title": "レコード",
           "configureSupabase": "Supabase を設定してください。",
@@ -6642,7 +5349,6 @@
           "show": "公演",
           "commission": "コミッション",
           "artistPayout": "アーティスト支払",
-          "status": "ステータス",
           "settlement_state": "ステータス"
         }
       },
@@ -6922,7 +5628,6 @@
       "detail": {
         "dueLabel": "期限",
         "severity": "重大度",
-        "status": "ステータス",
         "target": "対象",
         "confirmation": "確認",
         "confirmed": "確認済み",
@@ -6943,7 +5648,6 @@
         "kind": "種別",
         "title": "タイトル",
         "target": "対象",
-        "status": "ステータス",
         "due": "期限",
         "confirm": "確認",
         "created": "作成日",
@@ -6964,7 +5668,6 @@
     "assistant": {
       "eyebrow": "AI",
       "title": "アシスタント",
-      "configureSupabase": "Supabaseを構成してください。",
       "chunksIndexedAcross": "チャンクをインデックス済み(対象:",
       "sourceType": "ソース種別",
       "sourceTypes": "ソース種別",
@@ -7345,7 +6048,6 @@
           "artistPayout": "アーティスト支払い",
           "balanceDue": "未払残高",
           "paidAtt": "有料入場",
-          "status": "ステータス",
           "settlement_state": "ステータス"
         }
       }
@@ -7388,8 +6090,6 @@
       "title": "キャンペーン",
       "configureSupabase": "Supabaseを設定してください。",
       "liveLabel": "稼働中",
-      "ofLabel": "/",
-      "spentLabel": "消化",
       "newCampaign": "+ 新規キャンペーン",
       "emptyLabel": "キャンペーンはありません",
       "columns": {
@@ -7398,7 +6098,6 @@
         "kind": "種別",
         "window": "期間",
         "budget": "予算",
-        "status": "ステータス",
         "campaign_state": "ステータス"
       }
     },
@@ -7429,7 +6128,6 @@
       },
       "eyebrow": "現場",
       "title": "リアリティキャプチャ",
-      "configureSupabase": "Supabaseを設定してください。",
       "registerCapture": "+ キャプチャを登録",
       "metrics": {
         "total": "合計",
@@ -7520,7 +6218,6 @@
         "emptyLabel": "提案書なし",
         "col": {
           "title": "件名",
-          "status": "ステータス",
           "sent": "送付日",
           "signed": "署名日",
           "amount": "金額",
@@ -7538,7 +6235,6 @@
         "title": "新規クライアント"
       },
       "title": "クライアント",
-      "configureSupabase": "Supabaseを構成してクライアントを読み込んでください。",
       "eyebrow": "セールス",
       "subtitleOne": "{count}件のクライアント",
       "subtitleMany": "{count}件のクライアント",
@@ -7645,9 +6341,6 @@
         "hospitality": {
           "title": "ホスピタリティ"
         },
-        "tickets": {
-          "title": "チケッティング"
-        },
         "licensing": {
           "title": "ライセンシング"
         },
@@ -7667,7 +6360,6 @@
             "title": "タイトル",
             "quantity": "数量",
             "delivered": "提供済",
-            "status": "ステータス",
             "dueBy": "期限",
             "entitlement_state": "ステータス"
           }
@@ -7925,54 +6617,6 @@
       }
     },
     "configureSupabase": "Supabase を構成してください。",
-    "contracts": {
-      "eyebrow": "調達",
-      "title": "契約",
-      "configureSupabase": "Supabaseを設定してください。",
-      "contractWordSingular": "契約",
-      "contractWordPlural": "契約",
-      "newContract": "+ 新規契約",
-      "metrics": {
-        "activeAll": "進行中(全体)",
-        "activeConstruction": "進行中(建設)",
-        "paidYtd": "年初来支払額"
-      },
-      "scope": {
-        "all": "すべて",
-        "constructionOnly": "建設のみ"
-      },
-      "emptyLabel": "契約はまだありません",
-      "columns": {
-        "code": "コード",
-        "title": "件名",
-        "kind": "種別",
-        "counterparty": "相手方",
-        "billing": "請求",
-        "value": "金額",
-        "paid": "支払済",
-        "retainage": "留保率",
-        "state": "状態"
-      },
-      "edit": {
-        "title": "契約を編集"
-      },
-      "fields": {
-        "counterpartyEmail": "相手方メール",
-        "currency": "通貨",
-        "description": "説明",
-        "end": "終了",
-        "notes": "メモ",
-        "number": "番号",
-        "signed": "署名済み",
-        "start": "開始"
-      },
-      "new": {
-        "numberPlaceholder": "空欄の場合は自動生成",
-        "submit": "契約を作成",
-        "title": "新しい契約",
-        "titlePlaceholder": "スポンサーシップ · MMW26"
-      }
-    },
     "dashboard": {
       "tabs": {
         "overview": "概要",
@@ -8347,7 +6991,6 @@
         "description": "概要",
         "startsAt": "開始日時",
         "endsAt": "終了日時",
-        "status": "ステータス",
         "statusDraft": "下書き",
         "statusScheduled": "予定済み",
         "statusLive": "進行中",
@@ -8363,7 +7006,6 @@
           "fallback": "イベント"
         },
         "fields": {
-          "status": "ステータス",
           "starts": "開始",
           "ends": "終了",
           "description": "概要",
@@ -8384,7 +7026,6 @@
         "title": "新規イベント"
       },
       "title": "イベント",
-      "configureSupabase": "Supabase を構成してください。",
       "eyebrow": "ワーク",
       "subtitleEventSingular": "イベント",
       "subtitleEventPlural": "イベント",
@@ -8394,7 +7035,6 @@
         "name": "名称",
         "starts": "開始",
         "ends": "終了",
-        "status": "ステータス",
         "event_state": "ステータス"
       },
       "bulk": {
@@ -8465,8 +7105,6 @@
           "title": "{name}を編集",
           "submit": "変更を保存",
           "name": "名称",
-          "category": "カテゴリー",
-          "amountCents": "金額(セント)",
           "activation": "アクティベーション",
           "amount": "予算（USD）",
           "class": "クラス",
@@ -8514,7 +7152,6 @@
           "submit": "予算を作成",
           "name": "名称",
           "amount": "金額(USD)",
-          "category": "カテゴリー",
           "eyebrow": "ファイナンス",
           "title": "新規予算",
           "activation": "アクティベーション",
@@ -8544,8 +7181,6 @@
         "newBudget": "+ 新規予算",
         "col": {
           "name": "名称",
-          "category": "カテゴリー",
-          "spent": "消化済",
           "budget": "予算",
           "utilization": "消化率",
           "actual": "実績",
@@ -8621,7 +7256,6 @@
           "ownership": "持分比率"
         },
         "empty": {
-          "prefix": "エンティティはまだありません。次の場所で作成してください:",
           "cta": "新規エンティティ",
           "title": "エンティティがまだありません"
         }
@@ -8721,7 +7355,6 @@
           "eyebrow": "経費",
           "title": "{description}を編集",
           "descriptionLabel": "摘要",
-          "amountCentsLabel": "金額(セント)",
           "currencyLabel": "通貨",
           "categoryLabel": "カテゴリー",
           "statusLabel": "ステータス",
@@ -8733,21 +7366,13 @@
           "phaseLabel": "フェーズ（8ゲート）",
           "vendorLabel": "ベンダー"
         },
-        "status": {
-          "pending": "保留中",
-          "approved": "承認済",
-          "rejected": "却下",
-          "reimbursed": "精算済"
-        },
         "detail": {
           "eyebrow": "ファイナンス",
           "uncategorized": "未分類",
           "fallbackTitle": "経費",
           "fields": {
-            "status": "ステータス",
             "amount": "金額",
             "currency": "通貨",
-            "category": "カテゴリー",
             "spentOn": "発生日",
             "receipt": "領収書",
             "department": "部門",
@@ -8788,9 +7413,7 @@
         "emptyLabel": "経費の記録はありません",
         "columns": {
           "description": "摘要",
-          "category": "カテゴリー",
           "amount": "金額",
-          "status": "ステータス",
           "date": "日付",
           "department": "部門",
           "expense_state": "ステータス"
@@ -8868,7 +7491,6 @@
           "fields": {
             "title": "タイトル",
             "number": "番号",
-            "amountCents": "金額(セント)",
             "currency": "通貨",
             "issued": "発行日",
             "due": "支払期日",
@@ -8923,9 +7545,7 @@
           "title": "新しい請求書",
           "titlePlaceholder": "イベント制作リテイナー",
           "client": "クライアント",
-          "noClient": "（クライアントなし）",
           "project": "プロジェクト",
-          "noProject": "（プロジェクトなし）",
           "amount": "金額",
           "currency": "通貨",
           "due": "支払期日",
@@ -9018,7 +7638,6 @@
           "origin": "出発地",
           "destination": "到着地",
           "miles": "マイル",
-          "rateCents": "レート(セント/マイル)",
           "loggedOn": "記録日",
           "notes": "備考",
           "rate": "レート（マイル単価）"
@@ -9615,7 +8234,6 @@
           "title": "タイトル",
           "slug": "スラッグ",
           "description": "説明",
-          "status": "ステータス",
           "schemaJson": "スキーマ (JSON)",
           "schemaShapeLabel": "形状:",
           "form_state": "ステータス"
@@ -9654,7 +8272,6 @@
       "column": {
         "title": "タイトル",
         "slug": "スラッグ",
-        "status": "ステータス",
         "updated": "更新日",
         "form_state": "ステータス"
       },
@@ -9723,11 +8340,6 @@
       "eyebrow": "ホーム",
       "title": "マイ受信箱",
       "configureSupabase": "Supabase を構成してください。",
-      "conversationCount": {
-        "one": "{count} 件のスレッド",
-        "other": "{count} 件のスレッド"
-      },
-      "unreadSuffix": "未読 {count} 件",
       "empty": {
         "title": "スレッドはまだありません",
         "description": "上の新規メッセージからダイレクトメッセージまたはチャンネルを開始できます。ポータルの連絡スレッドもここに届きます。"
@@ -9738,7 +8350,6 @@
     "insights": {
       "eyebrow": "インサイト",
       "title": "ブッキングプール",
-      "configureSupabase": "Supabase を構成してください。",
       "subtitle": "ジャンル別の匿名化された月次集計。",
       "contributing": "提供中",
       "notContributing": "未提供",
@@ -9950,7 +8561,6 @@
           "email": "メールアドレス",
           "phone": "電話番号",
           "source": "ソース",
-          "estimatedValueCents": "推定金額(セント)",
           "notes": "メモ",
           "estimatedValue": "見積価値"
         },
@@ -10084,7 +8694,6 @@
           "mark": "標章",
           "jurisdiction": "管轄",
           "registrationNo": "登録番号",
-          "status": "ステータス",
           "statusPending": "保留中",
           "statusRegistered": "登録済",
           "statusAbandoned": "放棄",
@@ -10361,7 +8970,6 @@
         "title": "ロケーションを追加"
       },
       "title": "ロケーション",
-      "configureSupabase": "Supabaseを設定してください。",
       "eyebrow": "ワーク",
       "subtitle": {
         "one": "{count}件のロケーション",
@@ -10404,7 +9012,6 @@
           "tag": "タグ",
           "category": "カテゴリ",
           "dailyRate": "日額レート",
-          "status": "ステータス",
           "equipment_state": "ステータス"
         }
       },
@@ -10416,7 +9023,6 @@
           "fields": {
             "title": "タイトル",
             "number": "番号",
-            "status": "ステータス",
             "amountCents": "金額(セント)",
             "currency": "通貨",
             "po_state": "ステータス"
@@ -10454,7 +9060,6 @@
             "scheduled": "予定",
             "actual": "実績",
             "party": "関係者",
-            "status": "ステータス",
             "order_state": "ステータス"
           }
         },
@@ -10511,7 +9116,6 @@
           "unitCents": "単価 ¢"
         }
       },
-      "eyebrow": "ロジスティクス",
       "dispositionLabel": "処分",
       "freightLabel": "貨物",
       "services": {
@@ -10536,42 +9140,6 @@
         "title": "サービス"
       },
       "servicesLabel": "サービス",
-      "warehouse": {
-        "byStatus": "ステータス別",
-        "drillIn": "ドリルイン",
-        "metrics": {
-          "assets": "資産",
-          "inMaintenance": "メンテナンス中",
-          "locations": "ロケーション"
-        },
-        "mobileScanButton": "モバイルスキャン",
-        "subtitle": "FF&E + 中央倉庫 + 会場倉庫",
-        "tiles": {
-          "availability": {
-            "description": "7日間マトリクス",
-            "label": "稼働状況"
-          },
-          "disposition": {
-            "description": "退役 + メンテナンス",
-            "label": "処分"
-          },
-          "equipment": {
-            "label": "機材"
-          },
-          "mobileScan": {
-            "label": "モバイルスキャン"
-          },
-          "rentals": {
-            "description": "予約 + 受け渡し台帳",
-            "label": "レンタル"
-          },
-          "services": {
-            "description": "廃棄物 + 清掃リクエスト",
-            "label": "サービス"
-          }
-        },
-        "title": "倉庫"
-      },
       "warehouseLabel": "倉庫"
     },
     "marketing": {
@@ -11135,19 +9703,11 @@
           "description": "説明",
           "startsAt": "開始日時",
           "endsAt": "終了日時",
-          "status": "ステータス",
           "event_state": "ステータス",
           "location": "Location",
           "meetingUrl": "Meeting URL",
           "agenda": "Agenda (Markdown)",
           "minutes": "Minutes (Markdown)"
-        },
-        "status": {
-          "draft": "下書き",
-          "scheduled": "予定済み",
-          "live": "進行中",
-          "complete": "完了",
-          "cancelled": "キャンセル"
         },
         "event_state": {
           "cancelled": "キャンセル",
@@ -11290,20 +9850,6 @@
       },
       "dispatch": {
         "title": "ディスパッチ",
-        "unassigned": "未割当",
-        "shiftLabel": "シフト",
-        "runLabel": "ラン",
-        "matrixTitle": "ディスパッチマトリクス",
-        "legend": {
-          "shift": "シフト",
-          "task": "タスク",
-          "dispatch": "ディスパッチ"
-        },
-        "laneColumn": "レーン",
-        "laneKind": {
-          "venue": "ベニュー",
-          "vehicle": "車両"
-        },
         "description": "本日のクルー・ベニュー・車両を一望"
       },
       "eyebrow": "オペレーション",
@@ -11444,7 +9990,6 @@
       }
     },
     "ops": {
-      "title": "オペレーション",
       "problems": "問題",
       "changes": "変更",
       "integrations": "連携",
@@ -11653,7 +10198,6 @@
           "personName": "氏名",
           "nationality": "国籍",
           "passportNo": "旅券番号",
-          "status": "ステータス",
           "statusPending": "保留中",
           "statusSubmitted": "提出済み",
           "statusApproved": "承認済み",
@@ -11808,7 +10352,6 @@
         "emptyLabel": "ドキュメントなし",
         "col": {
           "classification": "分類",
-          "status": "ステータス",
           "engagementStarts": "エンゲージメント開始",
           "sent": "送信日",
           "accepted": "承諾日",
@@ -11938,8 +10481,6 @@
           "email": "メール",
           "role": "役割",
           "expires": "失効",
-          "link": "リンク",
-          "status": "ステータス",
           "when": "日時",
           "invite_state": "ステータス"
         },
@@ -12313,9 +10854,6 @@
       },
       "noStages": {
         "title": "ステージがありません"
-      },
-      "lane": {
-        "empty": "このステージにディールはありません。"
       }
     },
     "procurement": {
@@ -12331,7 +10869,6 @@
           "name": "名称",
           "assetTag": "資産タグ",
           "dailyRate": "日額レート",
-          "status": "ステータス",
           "equipment_state": "ステータス",
           "category": "カテゴリ"
         }
@@ -12552,7 +11089,6 @@
           "currencyLabel": "通貨"
         },
         "detail": {
-          "status": "ステータス",
           "amount": "金額",
           "created": "作成日",
           "updated": "更新日",
@@ -12562,9 +11098,7 @@
           "submit": "POを作成",
           "titleLabel": "タイトル",
           "vendorLabel": "ベンダー",
-          "noVendor": "（ベンダーなし）",
           "projectLabel": "プロジェクト",
-          "noProject": "（プロジェクトなし）",
           "amountLabel": "金額(USD)",
           "eyebrow": "調達",
           "title": "新規発注書"
@@ -12575,7 +11109,6 @@
           "number": "番号",
           "title": "タイトル",
           "amount": "金額",
-          "status": "ステータス",
           "created": "作成日",
           "po_state": "ステータス"
         }
@@ -12589,7 +11122,6 @@
             "title": "タイトル",
             "description": "説明",
             "estimatedCents": "見積額(セント)",
-            "status": "ステータス",
             "requisition_state": "ステータス"
           }
         },
@@ -12646,7 +11178,6 @@
         "col": {
           "title": "タイトル",
           "estimated": "見積額",
-          "status": "ステータス",
           "created": "作成日",
           "requisition_state": "ステータス"
         }
@@ -12863,7 +11394,6 @@
           "col": {
             "number": "番号",
             "title": "タイトル",
-            "status": "ステータス",
             "amount": "金額",
             "po_state": "ステータス"
           }
@@ -12883,7 +11413,6 @@
           "columns": {
             "submitted": "提出日",
             "approved": "承認日",
-            "status": "ステータス",
             "score": "スコア"
           }
         },
@@ -12909,7 +11438,6 @@
             "code": "コード",
             "title": "タイトル",
             "spec": "仕様",
-            "status": "ステータス",
             "submittal_state": "ステータス"
           }
         },
@@ -13064,7 +11592,6 @@
           "tag": "タグ",
           "category": "カテゴリ",
           "serial": "シリアル",
-          "status": "ステータス",
           "equipment_state": "ステータス"
         },
         "footnoteSuffix": ")。"
@@ -13138,109 +11665,6 @@
       },
       "breadcrumb": "プロダクション",
       "equipment": {
-        "edit": {
-          "eyebrow": "機材",
-          "title": "{name}を編集",
-          "submit": "変更を保存",
-          "fields": {
-            "name": "名称",
-            "category": "カテゴリ",
-            "assetTag": "アセットタグ",
-            "serial": "シリアル",
-            "dailyRateCents": "日額(セント)",
-            "notes": "備考"
-          }
-        },
-        "detail": {
-          "tabs": {
-            "overview": "概要",
-            "maintenance": "メンテナンス",
-            "rentals": "レンタル",
-            "qr": "QR"
-          },
-          "notFound": "見つかりません。",
-          "markStatus": "{status}にマーク",
-          "qr": "QR",
-          "field": {
-            "status": "ステータス",
-            "category": "カテゴリ",
-            "assetTag": "アセットタグ",
-            "serial": "シリアル",
-            "dailyRate": "日額",
-            "created": "作成日",
-            "equipment_state": "ステータス"
-          },
-          "ledger": {
-            "title": "移動台帳",
-            "system": "システム",
-            "initial": "初期",
-            "by": "{who}による"
-          },
-          "lifecycle": "ライフサイクル",
-          "retireRemove": "退役・削除"
-        },
-        "maintenance": {
-          "eyebrow": "機材",
-          "title": "メンテナンス",
-          "emptyLabel": "メンテナンス案件なし",
-          "columns": {
-            "kind": "種別",
-            "due": "期日",
-            "completed": "完了",
-            "outcome": "結果"
-          },
-          "scheduleHintPrefix": "案件のスケジュールはこちらから",
-          "maintenanceModuleLink": "メンテナンスモジュール"
-        },
-        "eyebrow": "プロダクション",
-        "title": "機材",
-        "qr": {
-          "defaultName": "機材",
-          "eyebrow": "機材 · QRステッカー",
-          "downloadPng": "PNGをダウンロード",
-          "printHint": "印刷は⌘P",
-          "qrAlt": "{name}のQRコード",
-          "assetLabel": "アセット: {assetTag}",
-          "serialLabel": "シリアル：{serial}"
-        },
-        "rentals": {
-          "eyebrow": "機材",
-          "title": "レンタル",
-          "subtitle": "このアセットの予約履歴。",
-          "emptyLabel": "レンタルなし",
-          "col": {
-            "starts": "開始",
-            "ends": "終了",
-            "dayRate": "日額",
-            "notes": "備考"
-          }
-        },
-        "new": {
-          "submit": "機材を追加",
-          "name": "名称",
-          "category": "カテゴリ",
-          "categoryPlaceholder": "照明、音響、映像…",
-          "assetTag": "アセットタグ",
-          "serial": "シリアル",
-          "dailyRate": "日額(USD)",
-          "eyebrow": "プロダクション",
-          "title": "機材を追加"
-        },
-        "configureSupabase": "Supabaseを構成してください。",
-        "itemSingular": "アイテム",
-        "itemPlural": "アイテム",
-        "available": "利用可能",
-        "addEquipment": "+ 機材を追加",
-        "emptyLabel": "機材はまだありません",
-        "addEquipmentLower": "+ 機材を追加",
-        "columns": {
-          "name": "名称",
-          "category": "カテゴリ",
-          "assetTag": "アセットタグ",
-          "status": "ステータス",
-          "dailyRate": "日額",
-          "equipment_state": "ステータス"
-        },
         "utilization": {
           "eyebrow": "プロダクション",
           "title": "機材稼働率",
@@ -13264,9 +11688,6 @@
             "util90d": "稼働率 90日",
             "idleRev30d": "遊休収益 30日"
           }
-        },
-        "bulk": {
-          "delete": "削除"
         }
       },
       "fabrication": {
@@ -13287,7 +11708,6 @@
           "notFound": "見つかりません。",
           "breadcrumbProduction": "プロダクション",
           "fields": {
-            "status": "ステータス",
             "due": "期日",
             "created": "作成日",
             "production_phase": "ステータス"
@@ -13317,7 +11737,6 @@
         "emptyLabel": "製作オーダーはありません",
         "col": {
           "title": "タイトル",
-          "status": "ステータス",
           "due": "期日",
           "production_phase": "ステータス"
         }
@@ -13373,9 +11792,7 @@
             "title": "表示する機材がありません"
           },
           "col": {
-            "asset": "アセット",
-            "status": "ステータス",
-            "equipment_state": "ステータス"
+            "asset": "アセット"
           },
           "day": {
             "free": "空き",
@@ -13385,8 +11802,6 @@
         },
         "new": {
           "submit": "予約する",
-          "equipmentLabel": "機材",
-          "equipmentPlaceholder": "機材を選択",
           "startsLabel": "開始",
           "endsLabel": "終了",
           "projectLabel": "プロジェクト",
@@ -13402,7 +11817,6 @@
         "newRental": "+ 新規レンタル",
         "emptyLabel": "稼働中のレンタルはありません",
         "columns": {
-          "equipment": "機材",
           "starts": "開始",
           "ends": "終了",
           "rate": "レート"
@@ -13441,82 +11855,10 @@
           "time": "時刻",
           "lane": "レーン",
           "cue": "キュー",
-          "status": "ステータス",
           "actions": "アクション",
           "cue_state": "ステータス"
         }
       },
-      "warehouse": {
-        "inventory": {
-          "eyebrow": "プロダクション · 倉庫",
-          "title": "在庫",
-          "configureSupabase": "Supabaseを構成してください。",
-          "unassigned": "未割当",
-          "assetSingular": "アセット",
-          "assetPlural": "アセット",
-          "locationSingular": "拠点",
-          "locationPlural": "拠点",
-          "newItem": "+ 新規アイテム",
-          "byStatus": "ステータス別",
-          "byLocation": "拠点別",
-          "emptyLabel": "在庫にアセットはありません",
-          "columns": {
-            "name": "名称",
-            "tag": "タグ",
-            "category": "カテゴリ",
-            "location": "拠点",
-            "serial": "シリアル",
-            "status": "ステータス"
-          },
-          "footerPrefix": "在庫はすべての",
-          "equipmentBadge": "機材"
-        },
-        "locations": {
-          "eyebrow": "プロダクション · 倉庫",
-          "title": "拠点",
-          "configureSupabase": "Supabaseを構成してください。",
-          "newLocation": "+ 新規拠点",
-          "emptyLabel": "登録済みの拠点はありません",
-          "columns": {
-            "name": "名称",
-            "city": "都市",
-            "country": "国",
-            "assets": "アセット"
-          }
-        },
-        "title": "倉庫",
-        "configureSupabase": "Supabaseを構成してください。",
-        "tiles": {
-          "inventory": {
-            "label": "在庫"
-          },
-          "locations": {
-            "label": "拠点"
-          },
-          "equipment": {
-            "label": "機材"
-          },
-          "rentals": {
-            "label": "レンタル"
-          },
-          "availability": {
-            "label": "稼働状況",
-            "description": "7日間マトリクス"
-          },
-          "mobileScan": {
-            "label": "モバイルスキャン"
-          }
-        },
-        "subtitle": "中央 + 会場倉庫ハブ",
-        "metrics": {
-          "assets": "アセット",
-          "locations": "拠点",
-          "activeRentals": "稼働中レンタル"
-        },
-        "byStatus": "ステータス別",
-        "drillIn": "ドリルダウン"
-      },
-      "eyebrow": "プロダクション",
       "hub": {
         "eyebrow": "プロダクション",
         "title": "プロダクション",
@@ -13527,8 +11869,6 @@
           "show": "ショー"
         },
         "cards": {
-          "equipment": "機材",
-          "equipmentDesc": "保有資産 + メンテナンス",
           "equipmentUtil": "機材稼働率",
           "equipmentUtilDesc": "30/90日ロールアップ + 遊休収益",
           "avInventory": "AV インベントリ",
@@ -13571,15 +11911,7 @@
             "description": "説明",
             "startsAt": "開始日時",
             "endsAt": "終了日時",
-            "status": "ステータス",
             "event_state": "ステータス"
-          },
-          "status": {
-            "draft": "下書き",
-            "scheduled": "予定済み",
-            "live": "進行中",
-            "complete": "完了",
-            "cancelled": "キャンセル"
           },
           "event_state": {
             "cancelled": "キャンセル済み",
@@ -14211,7 +12543,6 @@
           "publishedLabel": "公開済み(ポータルおよびモバイルに表示)",
           "configLabel": "設定(JSON)",
           "sectionsLabel": "セクション:",
-          "saving": "保存中…",
           "saveButton": "ガイドを保存",
           "invalidJson": "設定は有効なJSONである必要があります：{detail}"
         },
@@ -14599,9 +12930,7 @@
           "title": "タイトル",
           "docNumber": "ドキュメント番号",
           "currency": "通貨",
-          "depositPercent": "デポジット率",
-          "themePrimary": "テーマ プライマリ",
-          "themeSecondary": "テーマ セカンダリ"
+          "depositPercent": "デポジット率"
         },
         "mode": {
           "outline": "アウトライン",
@@ -14649,7 +12978,6 @@
         "editDocument": "ドキュメントを編集",
         "viewProject": "プロジェクトを表示",
         "fields": {
-          "status": "ステータス",
           "amount": "金額",
           "sent": "送信日",
           "signed": "署名日",
@@ -14668,9 +12996,7 @@
         "blocks": "ブロック",
         "title": "新しい提案",
         "client": "クライアント",
-        "noClient": "（クライアントなし）",
         "project": "プロジェクト",
-        "noProject": "（プロジェクトなし）",
         "amount": "金額(USD)",
         "expires": "有効期限",
         "notes": "メモ / スコープ",
@@ -14678,7 +13004,6 @@
         "prefilledFrom": "「{name}」から自動入力済み"
       },
       "title": "提案書",
-      "configureSupabase": "Supabase を設定してください。",
       "eyebrow": "セールス",
       "countOne": "{count} 件の提案書",
       "countOther": "{count} 件の提案書",
@@ -14686,7 +13011,6 @@
       "columns": {
         "title": "タイトル",
         "amount": "金額",
-        "status": "ステータス",
         "expires": "有効期限",
         "updated": "更新日",
         "proposal_state": "ステータス"
@@ -15174,7 +13498,6 @@
           "name": "名称",
           "cadence": "頻度",
           "nextRun": "次回実施",
-          "status": "ステータス",
           "tour_state": "ステータス"
         },
         "cadence": {
@@ -15544,14 +13867,6 @@
       "threatsLabel": "脅威"
     },
     "schedule": {
-      "calendar": {
-        "descriptionMonth": "イベントチップをクリックして開きます",
-        "descriptionWeek": "今週。開始日に表示されるイベント",
-        "emptyLabel": "予定されているイベントはまだありません。",
-        "viewMonth": "月",
-        "viewWeek": "週",
-        "today": "本日"
-      },
       "baselines": {
         "gantt": {
           "projectFallback": "プロジェクト",
@@ -15639,7 +13954,6 @@
         "name": "名前",
         "starts": "開始",
         "ends": "終了",
-        "status": "ステータス",
         "event_state": "ステータス"
       }
     },
@@ -15692,7 +14006,6 @@
           "severity": "重大度",
           "category": "カテゴリ",
           "summary": "概要",
-          "status": "ステータス",
           "opened": "受付日時",
           "request_state": "ステータス"
         }
@@ -15831,21 +14144,14 @@
         "title": "請求",
         "configureSupabase": "Supabaseを構成してください。",
         "eyebrow": "設定",
-        "workspaceTitle": "ワークスペース設定",
-        "subtitle": "請求",
         "stripeNotConfigured": "Stripeは未構成です。",
         "stripeNotConfiguredHintBefore": "次を設定してください",
         "plan": "プラン",
-        "plansHeading": "プラン",
-        "current": "現在",
-        "recentInvoices": "最近の請求書",
-        "viewAll": "すべて表示 →",
         "table": {
           "number": "番号",
           "status": "ステータス",
           "amount": "金額",
-          "issued": "発行日",
-          "due": "期日"
+          "issued": "発行日"
         },
         "noInvoices": "請求書はまだありません。"
       },
@@ -16101,7 +14407,6 @@
           "cadence": "頻度",
           "charter": "憲章",
           "category": "カテゴリ",
-          "status": "ステータス",
           "nextReview": "次回レビュー",
           "policy_state": "ステータス"
         },
@@ -16141,7 +14446,6 @@
           "source": "ソース",
           "imported": "インポート済み",
           "failed": "失敗",
-          "status": "ステータス",
           "started": "開始日時",
           "run_state": "ステータス"
         },
@@ -16353,54 +14657,6 @@
         "fieldDefaultBalanceTerms": "残額支払い条件",
         "fieldDefaultDepositPct": "既定の手付金 %",
         "paymentTermsHeading": "支払い条件（テンプレート）"
-      },
-      "tiles": {
-        "organization": {
-          "label": "組織",
-          "description": "名前、ティア、メンバー管理"
-        },
-        "billing": {
-          "label": "請求"
-        },
-        "integrations": {
-          "label": "連携"
-        },
-        "api": {
-          "label": "APIキー",
-          "description": "プログラマティックアクセスとレート制限"
-        },
-        "webhooks": {
-          "label": "Webhook",
-          "description": "送信イベント通知"
-        },
-        "audit": {
-          "label": "監査ログ",
-          "description": "全ミューテーション、クエリ可能"
-        },
-        "compliance": {
-          "label": "コンプライアンス",
-          "description": "保持期間、DPA、データエクスポート"
-        },
-        "branding": {
-          "label": "ブランディング",
-          "description": "ポータルとメールの外観"
-        },
-        "domains": {
-          "label": "ドメイン",
-          "description": "ポータル用カスタムドメイン"
-        },
-        "sequences": {
-          "label": "自動採番"
-        },
-        "slaPolicies": {
-          "label": "SLAポリシー"
-        },
-        "sso": {
-          "label": "シングルサインオン"
-        },
-        "rateLimits": {
-          "label": "レート制限"
-        }
       },
       "title": "ワークスペース設定",
       "subtitle": "組織を構成",
@@ -17264,7 +15520,6 @@
         "priorityP3": "P3 · 通常",
         "priorityP4": "P4 · 低",
         "project": "プロジェクト",
-        "noProject": "（プロジェクトなし）",
         "eyebrow": "ワーク"
       },
       "title": "タスク",
@@ -17504,12 +15759,9 @@
         "runPlural": "便",
         "onFile": "登録済み",
         "scheduleRun": "+ 便をスケジュール",
-        "vehicleSingular": "台",
-        "vehiclePlural": "台",
         "vehicle": "車両",
         "totalRuns": "総便数",
         "latestRun": "最新便",
-        "status": "ステータス",
         "run_state": "ステータス",
         "col": {
           "fleet": "車両群"
@@ -17539,7 +15791,6 @@
         "empty": {
           "title": "ワークフォース シャトルの予定はまだありません"
         },
-        "runCountOne": "{count} 便",
         "col": {
           "depart": "出発",
           "arrive": "到着",
@@ -17835,7 +16086,6 @@
         "configureSupabase": "Supabaseを設定してください。",
         "detail": {
           "eyebrow": "バッジ",
-          "awardedOne": "{count} 件授与",
           "awardedMany": "{count} 件授与",
           "deleteConfirm": "このバッジを完全削除しますか?授与履歴もすべて削除されます。",
           "awardThis": "このバッジを授与",
@@ -17887,71 +16137,6 @@
         "columnName": "氏名",
         "columnRole": "役割",
         "columnEmail": "メール"
-      },
-      "courses": {
-        "detail": {
-          "configureSupabase": "Supabaseを設定してください。",
-          "eyebrow": "コース",
-          "publish": "公開",
-          "completionBadge": {
-            "title": "修了バッジ",
-            "none": "（なし）"
-          },
-          "save": "保存",
-          "lessons": {
-            "title": "レッスン",
-            "titlePlaceholder": "レッスンのタイトル",
-            "bodyPlaceholder": "レッスンの本文",
-            "addLesson": "+ レッスンを追加"
-          },
-          "quiz": {
-            "title": "クイズ設問",
-            "promptPlaceholder": "設問文",
-            "addQuestion": "+ 設問を追加"
-          },
-          "assignees": {
-            "title": "割当先",
-            "unknown": "不明",
-            "assign": "+ 割り当て"
-          }
-        },
-        "new": {
-          "eyebrow": "トレーニング",
-          "title": "新規コース",
-          "submit": "コースを作成",
-          "fields": {
-            "title": "タイトル",
-            "summary": "概要",
-            "duration": "所要時間（分）",
-            "requiredForRole": "必須役割"
-          }
-        },
-        "eyebrow": "ワークフォース",
-        "title": "コース",
-        "configureSupabase": "Supabaseを設定してください。",
-        "subtitleOne": "{count} 件のコース",
-        "subtitleOther": "{count} 件のコース",
-        "newCourse": "+ 新規コース",
-        "emptyLabel": "コースはまだありません",
-        "columns": {
-          "title": "タイトル",
-          "state": "ステート",
-          "duration": "所要時間",
-          "role": "役割"
-        },
-        "createFirst": "最初のコースを作成",
-        "edit": {
-          "crumb": "編集",
-          "eyebrow": "コース",
-          "fields": {
-            "duration": "所要時間（分）",
-            "requiredForRole": "ロールに必須",
-            "summary": "概要",
-            "title": "タイトル"
-          },
-          "submit": "変更を保存",
-          "title": "{title}を編集"
-        }
       },
       "deployment": {
         "edit": {
@@ -18518,8 +16703,6 @@
       "subtitle": "アトミック・プロダクション・カタログ。",
       "metric": {
         "atoms": "アトム",
-        "uac": "UAC（計画）",
-        "tpc": "TPC（展開済）",
         "variance": "バリアンス・エントリ"
       },
       "tiers": {
@@ -18586,8 +16769,6 @@
           "revenue": "収益"
         },
         "cards": {
-          "leads": "リード",
-          "leadsDesc": "パイプラインかんばん + 保存ビュー",
           "clients": "クライアント",
           "sponsors": "スポンサー",
           "marketing": "マーケティング",
@@ -19182,10 +17363,7 @@
     },
     "assets": {
       "columns": {
-        "cost": "取得",
         "kind": "種別",
-        "name": "アセット",
-        "serial": "シリアル / タグ",
         "state": "状態"
       },
       "configureSupabase": "Supabase を設定してください。",
@@ -19207,7 +17385,6 @@
         },
         "depreciationEmpty": "減価償却スケジュールなし",
         "depreciationTitle": "減価償却",
-        "eyebrow": "アセット",
         "maint": {
           "cost": "費用",
           "date": "実施日",
@@ -19215,10 +17392,8 @@
           "outcome": "結果"
         },
         "maintenanceEmpty": "メンテナンスの記録なし",
-        "maintenanceTitle": "メンテナンス履歴",
-        "retired": "廃棄"
+        "maintenanceTitle": "メンテナンス履歴"
       },
-      "emptyTitle": "アセットはまだありません",
       "eyebrow": "アセットとロジスティクス",
       "new": {
         "acquiredAtLabel": "取得日",
@@ -19233,7 +17408,6 @@
         "serialLabel": "シリアル",
         "title": "新規アセット"
       },
-      "newAsset": "+ 新規アセット",
       "title": "アセット",
       "warranties": {
         "assetsLink": "アセット",
@@ -19262,8 +17436,7 @@
         },
         "newWarranty": "+ 新規保証",
         "title": "保証"
-      },
-      "warrantiesLink": "保証"
+      }
     },
     "position": {
       "cell": {
@@ -19346,12 +17519,6 @@
       "ends": "終了",
       "allDay": "終日",
       "upcoming": "今後の予定",
-      "empty": "稼働枠はまだ登録されていません。",
-      "kind": {
-        "block": "ブロック（対応不可）",
-        "confirm": "確定（ロック済み）",
-        "hold": "ホールド（TTLで自動解除）"
-      },
       "kindLabel": "種別"
     },
     "cards": {
@@ -19378,8 +17545,7 @@
         "blurb": "所属するアクト宛てのオファー。"
       },
       "reviews": {
-        "label": "レビュー",
-        "blurb": "双方向レビュー。相手方の投稿後に公開されます。"
+        "label": "レビュー"
       },
       "profile": {
         "label": "プロフィール",
@@ -19566,11 +17732,9 @@
     },
     "notifications": {
       "title": "通知",
-      "subtitle": "各ワークスペースイベントの通知方法を選択してください。",
       "inboxPrompt": "受信トレイをお探しですか？",
       "openInbox": "受信トレイを開く",
       "pushDevices": "プッシュデバイス",
-      "savePreferences": "設定を保存",
       "columns": {
         "event": "イベント"
       },
@@ -19630,7 +17794,6 @@
     "organizations": {
       "title": "組織",
       "configureSupabase": "Supabase を設定してください。",
-      "subtitle": "あなたが所属するすべての組織",
       "empty": {
         "title": "メンバーシップはまだありません"
       }
@@ -19847,7 +18010,6 @@
       "title": "セキュリティ",
       "password": {
         "label": "パスワード",
-        "hint": "サインアップ時から変更されていません",
         "reset": "リセット"
       },
       "totp": {
@@ -19962,8 +18124,6 @@
       "configureSupabase": "Supabaseを設定してください。",
       "eyebrow": "マイタレントプロフィール",
       "title": "EPK",
-      "descriptionPrefix": "切り替えで公開。発見経路は",
-      "liveAt": "公開URL",
       "liveBadge": "公開中",
       "publishedNotice": "EPKを公開しました。",
       "submit": "EPKを保存",
@@ -19971,11 +18131,9 @@
         "actName": "アクト名",
         "tagline": "タグライン",
         "bio": "プロフィール",
-        "genreTags": "ジャンルタグ（カンマ区切り）",
         "feeMin": "最低フィー",
         "feeMax": "最高フィー",
-        "reelUrl": "リールURL",
-        "publishToMarketplace": "/marketplace/talent に公開"
+        "reelUrl": "リールURL"
       }
     },
     "tickets": {
@@ -19984,7 +18142,6 @@
       "subtitle": "{email} に発行されたチケット",
       "empty": "チケットはまだありません",
       "columns": {
-        "code": "コード",
         "tier": "ティア",
         "state": "ステート",
         "issued": "発行日",
@@ -20264,7 +18421,6 @@
         "crumbAthlete": "アスリート",
         "crumbSafeguarding": "セーフガーディング",
         "channelTitle": "秘匿レポーティングチャネル",
-        "emailLead": "セーフガーディング担当者にメール",
         "fileViaMobile": "モバイルから提出",
         "metricOpen": "未対応",
         "metricClosed": "クローズ済み",
@@ -20309,10 +18465,7 @@
         },
         "passportLabel": "パスポート",
         "letterOnFile": "レター保管済み",
-        "updated": "更新 {date}",
-        "footer": {
-          "suffix": "案件が進展しない場合は。"
-        }
+        "updated": "更新 {date}"
       },
       "breadcrumbLabel": "アスリート"
     },
@@ -20344,7 +18497,6 @@
           "number": "番号",
           "title": "タイトル",
           "amount": "金額",
-          "status": "ステータス",
           "due": "支払期日",
           "pdf": "PDF",
           "invoice_state": "ステータス"
@@ -20545,7 +18697,6 @@
         "col": {
           "title": "タイトル",
           "amount": "金額",
-          "status": "ステータス",
           "sent": "送信日",
           "proposal_state": "ステータス"
         },
@@ -20608,7 +18759,6 @@
     "crew": {
       "advances": {
         "configureSupabase": "Supabaseを設定してください。",
-        "eyebrow": "ポータル",
         "title": "マイアサインメント",
         "empty": {
           "title": "未割当"
@@ -20818,8 +18968,7 @@
       "subtitle": "デリゲーション・アタッシェ向けオペレーションダッシュボード",
       "metrics": {
         "entries": "エントリー",
-        "visaCases": "ビザ案件",
-        "orders": "発注"
+        "visaCases": "ビザ案件"
       },
       "docVault": {
         "title": "ドキュメント保管庫",
@@ -20931,14 +19080,7 @@
       "tickets": {
         "title": "チケット",
         "subtitle": "本イベントのチケット",
-        "projectNotFound": "プロジェクトが見つかりません。",
-        "empty": "チケットはまだありません。購入または受取から始めてください",
-        "columns": {
-          "code": "コード",
-          "tier": "ティア",
-          "holder": "保持者",
-          "state": "状態"
-        }
+        "projectNotFound": "プロジェクトが見つかりません。"
       }
     },
     "guide": {
@@ -21020,14 +19162,7 @@
         }
       },
       "metric": {
-        "tickets": "チケット",
-        "roomBlocks": "ルームブロック",
-        "status": "ステータス",
-        "statusLive": "ライブ"
-      },
-      "footer": {
-        "prefix": "ご予約の変更が必要ですか? メール:",
-        "suffix": "予約 ID をご記載ください。"
+        "roomBlocks": "ルームブロック"
       }
     },
     "media": {
@@ -21137,7 +19272,6 @@
           "heading": "スケジュール"
         },
         "rsvp": {
-          "prefix": "RSVPは下記までメールしてください",
           "suffix": "認定番号と会見名を明記してください。"
         },
         "eyebrowLabel": "ポータル・メディア"
@@ -21189,11 +19323,6 @@
     "notFound": {
       "eyebrow": "見つかりません",
       "title": "プロジェクトをご利用いただけません"
-    },
-    "overview": {
-      "title": "プロジェクト概要",
-      "subtitle": "続行するポータルをお選びください",
-      "openPortal": "{persona}ポータルを開く →"
     },
     "producer": {
       "approvals": {
@@ -21262,7 +19391,6 @@
           "impact": "影響度",
           "owner": "担当者",
           "due": "期限",
-          "status": "ステータス",
           "risk_state": "ステータス"
         }
       },
@@ -21324,7 +19452,6 @@
           "showDate": "公演日",
           "guarantee": "ギャランティー",
           "doorPct": "ドア取り分 %",
-          "status": "ステータス",
           "talent_offer_state": "ステータス"
         }
       },
@@ -21340,7 +19467,6 @@
           "channel": "チャネル",
           "dates": "期間",
           "spend": "支出",
-          "status": "ステータス",
           "campaign_state": "ステータス"
         }
       },
@@ -21725,7 +19851,6 @@
           "number": "#",
           "title": "タイトル",
           "amount": "金額",
-          "status": "ステータス",
           "issued": "発行日",
           "due": "支払期日",
           "invoice_state": "ステータス"
@@ -21765,7 +19890,6 @@
           "number": "#",
           "title": "タイトル",
           "amount": "金額",
-          "status": "ステータス",
           "created": "作成日",
           "po_state": "ステータス"
         }
@@ -21882,10 +20006,7 @@
         "vip": "VIP"
       },
       "metrics": {
-        "suites": "スイート",
-        "t1Runs": "T1運行",
-        "status": "ステータス",
-        "statusLive": "稼働中"
+        "suites": "スイート"
       },
       "concierge": {
         "label": "コンシェルジュ:",
@@ -21947,12 +20068,10 @@
           "name": "氏名",
           "email": "メール",
           "phone": "電話",
-          "role": "役割",
-          "updatePrompt": "情報を更新する場合は次までメール送信:"
+          "role": "役割"
         },
         "submit": {
-          "title": "申請を送信",
-          "emailCta": "ボランティアチームへメール"
+          "title": "申請を送信"
         }
       },
       "eyebrow": "ポータル",
@@ -22108,11 +20227,6 @@
       "prevRow": "Previous row",
       "toggleSelect": "Select / deselect focused row",
       "openRow": "Open focused row"
-    },
-    "editor": {
-      "bold": "Bold (in editor)",
-      "italic": "Italic (in editor)",
-      "underline": "Underline (in editor)"
     }
   },
   "ui": {
@@ -22140,10 +20254,6 @@
     },
     "sortable": {
       "dragToReorder": "ドラッグして並べ替え"
-    },
-    "toast": {
-      "dismiss": "通知を閉じる",
-      "region": "通知"
     },
     "confirm": {
       "cancel": "キャンセル",
@@ -22186,8 +20296,6 @@
       "label": "マーケティング",
       "description": "マーケティングサイトのコンバージョントラッキング。プロダクト内では使用しません。"
     },
-    "customize": "カスタマイズ",
-    "hideDetails": "詳細を隠す",
     "rejectAll": "すべて拒否",
     "savePreferences": "設定を保存",
     "acceptAll": "すべて許可",
@@ -22409,75 +20517,12 @@
       }
     }
   },
-  "shareDialog": {
-    "shareButton": "共有",
-    "expiry": {
-      "1h": "1時間",
-      "24h": "24時間",
-      "7d": "7日",
-      "30d": "30日",
-      "never": "無期限"
-    },
-    "errors": {
-      "loadFailed": "リンクの読み込みに失敗しました",
-      "createFailed": "リンクの作成に失敗しました",
-      "revokeFailed": "取り消しに失敗しました"
-    },
-    "title": "{label} を共有",
-    "titleFallback": "このリソース",
-    "description": "URL を知っていれば誰でも開ける公開リンクを作成します。パスコードや有効期限でアクセスを絞れます。",
-    "createHeading": "リンクを作成",
-    "labelField": "ラベル · 任意",
-    "labelPlaceholder": "例: プロデューサープレビュー",
-    "expiresIn": "有効期限",
-    "passcodeField": "パスコード · 任意",
-    "passcodePlaceholder": "なしの場合は空欄",
-    "maxUsesField": "最大使用回数 · 任意",
-    "maxUsesPlaceholder": "無制限",
-    "access": "アクセス",
-    "roleViewer": "閲覧者 · 読み取り専用",
-    "roleCommenter": "コメンター · 注釈を残せます",
-    "copy": "コピー",
-    "createLink": "リンクを作成",
-    "activeHeading": "有効なリンク",
-    "loading": "読み込み中…",
-    "noLinks": "有効なリンクはまだありません。",
-    "unlabeled": "(ラベルなし)",
-    "passcodeBadge": "パスコード",
-    "useSingular": "{count} 回使用",
-    "usePlural": "{count} 回使用",
-    "maxSuffix": " / {max}",
-    "expiresSuffix": " · 期限 {date}",
-    "noExpiry": " · 無期限",
-    "revokeAria": "リンク {name} を取り消す",
-    "revoke": "取り消す",
-    "done": "完了"
-  },
   "components": {
     "stickyCta": {
       "region": "クイックアクセス",
       "open": "ATLVS はオープン。",
       "tagline": "小規模チームは無料。カード不要。",
       "dismiss": "閉じる"
-    },
-    "signatureField": {
-      "label": "署名",
-      "placeholder": "フルネームを入力",
-      "type": "入力",
-      "draw": "手書き",
-      "clear": "クリア",
-      "captured": "取得済み",
-      "signAbove": "上に署名してください"
-    },
-    "addressField": {
-      "street": "番地と通り",
-      "street2": "部屋番号、スイート、階",
-      "streetLabel": "番地",
-      "street2Label": "部屋 / スイート · 任意",
-      "city": "市区町村",
-      "region": "州 / 地域",
-      "postalCode": "郵便番号",
-      "country": "国"
     },
     "datePicker": {
       "placeholder": "日付を選択",
@@ -22500,16 +20545,12 @@
       "kindLabel": "種類",
       "kindAria": "トリガー種類",
       "manualNote": "追加の設定はありません。コントロール下の「今すぐ実行」ボタンで実行をトリガーしてください。",
-      "comingSoon": "近日公開",
-      "scheduleSoon": "スケジュールトリガーはフェーズ 4.3 で着地します。",
       "rruleLabel": "RRULE / cron",
       "rruleHint": "iCal RRULE 構文。今すぐ保存され、ランナーは P4.3 で有効化されます。",
-      "webhookSoon": "受信エンドポイントはフェーズ 4.3 で着地します。",
       "inboundUrl": "受信 URL",
       "secretLabel": "共有シークレット（HMAC）",
       "secretPlaceholder": "任意。オートメーション単位のシークレットにフォールバック",
       "secretHint": "設定すると、ランナーはディスパッチ前に x-lyt-signature を検証します。",
-      "eventSoon": "イベントサブスクリプションはフェーズ 4.5 で着地します。",
       "targetTable": "対象テーブル",
       "targetTableAria": "対象テーブル",
       "selectPlaceholder": "選択…",
@@ -22879,29 +20920,6 @@
       "subtotal": "小計",
       "taxesFees": "税 / 手数料",
       "notes": "備考"
-    },
-    "proposal": {
-      "eyebrow": "提案書",
-      "statusSigned": "署名済み",
-      "classificationExecuted": "締結済み",
-      "summary": "サマリー",
-      "proposalNumber": "提案書番号",
-      "status": "ステータス",
-      "total": "合計",
-      "deposit": "デポジット",
-      "sent": "送付日",
-      "expires": "有効期限",
-      "notes": "備考",
-      "signatures": "署名",
-      "signature": "署名",
-      "signedFromLine": "{date} に {ip} から署名",
-      "signaturePending": "保留中。共有リンクで提案書に署名すると締結されます。",
-      "sectionFallback": "セクション",
-      "colItem": "項目",
-      "colDescription": "内容",
-      "colAmount": "金額",
-      "colMilestone": "マイルストーン",
-      "colDate": "日付"
     },
     "reports": {
       "expense": {
@@ -23600,15 +21618,6 @@
       "footerConfidential": "機密",
       "footerConfidentialBody": "{client} 宛に作成。価格と構造の詳細は当事者間の機密です。© {year} {producer}。"
     }
-  },
-  "publicFormSubmit": {
-    "submitted": "送信済み",
-    "thankYouTitle": "ありがとうございます。受け付けました。",
-    "thankYouBody": "回答が記録されました。このタブは閉じて構いません。",
-    "leaveBlank": "空欄のまま",
-    "selectPlaceholder": "選択…",
-    "submitting": "送信中",
-    "submit": "送信"
   },
   "apiDocs": {
     "meta": {

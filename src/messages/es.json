@@ -1,7 +1,5 @@
 {
   "common": {
-    "appName": "ATLVS Technologies",
-    "appNameStylized": "A T L V S",
     "save": "Guardar",
     "cancel": "Cancelar",
     "delete": "Eliminar",
@@ -9,39 +7,18 @@
     "create": "Crear",
     "submit": "Enviar",
     "close": "Cerrar",
-    "confirm": "Confirmar",
     "loading": "Cargando…",
-    "search": "Buscar",
-    "filter": "Filtrar",
-    "sort": "Ordenar",
-    "export": "Exportar",
-    "import": "Importar",
     "settings": "Configuración",
     "help": "Ayuda",
     "signOut": "Cerrar sesión",
-    "signIn": "Iniciar sesión",
-    "signUp": "Registrarse",
     "startFree": "Empieza a construir gratis",
     "back": "Atrás",
-    "next": "Siguiente",
-    "previous": "Anterior",
     "done": "Listo",
-    "skip": "Omitir",
     "retry": "Reintentar",
     "copy": "Copiar",
-    "copied": "Copiado",
-    "copyLink": "Copiar enlace",
     "all": "Todos",
-    "none": "Ninguno",
     "yes": "Sí",
     "no": "No",
-    "optional": "Opcional",
-    "required": "Obligatorio",
-    "required_field": "{field} es obligatorio",
-    "pending": "Pendiente",
-    "accepted": "Aceptado",
-    "revoked": "Revocado",
-    "expired": "Caducado",
     "actions": "Acciones",
     "add": "Añadir",
     "and": "y",
@@ -52,19 +29,13 @@
     "download": "Descargar",
     "emDash": "—",
     "home": "Inicio",
-    "justNow": "ahora mismo",
     "loadingEllipsis": "…",
     "name": "Nombre",
-    "networkError": "Error de red",
     "notes": "Notas",
     "open": "Abrir",
     "openArrow": "Abrir →",
-    "processing": "Procesando…",
     "reactivate": "Reactivar",
     "reject": "Rechazar",
-    "relativeTime": {
-      "justNow": "ahora mismo"
-    },
     "remove": "Eliminar",
     "saveChanges": "Guardar cambios",
     "savedToast": "Guardado",
@@ -72,12 +43,6 @@
     "selectEllipsis": "Seleccionar…",
     "selectPlaceholder": "Seleccionar…",
     "send": "Enviar",
-    "time": {
-      "justNow": "ahora mismo",
-      "minutesShort": "{n}m",
-      "hoursShort": "{n}h",
-      "daysShort": "{n}d"
-    },
     "tryAgain": "Reintentar",
     "untitled": "Sin título",
     "update": "Actualizar",
@@ -134,8 +99,6 @@
   "marketing": {
     "header": {
       "login": "Iniciar sesión",
-      "signup": "Registrarse",
-      "themes": "Temas",
       "language": "Idioma",
       "theme": "Tema",
       "openMenu": "Abrir menú",
@@ -179,9 +142,6 @@
           "description": "Connect the tools you already run"
         }
       },
-      "industries": {
-        "label": "Industrias"
-      },
       "resources": {
         "label": "Recursos",
         "blog": {
@@ -209,12 +169,6 @@
         "label": "Solutions"
       }
     },
-    "home": {
-      "cta": {
-        "primary": "Empieza a construir gratis",
-        "secondary": "Solicita una demo"
-      }
-    },
     "industries": {
       "live-events": "Eventos en vivo",
       "concerts": "Conciertos",
@@ -225,25 +179,10 @@
       "theatrical-performances": "Espectáculos teatrales",
       "broadcast-tv-film": "Broadcast, TV y cine"
     },
-    "footer": {
-      "copyright": "© {year} ATLVS Technologies",
-      "trademark": "ATLVS, GVTEWAY, COMPVSS y LEG3ND son marcas registradas de ATLVS Technologies, una empresa de G H X S T S H I P Industries.",
-      "tagline": "ATLVS, GVTEWAY, COMPVSS y LEG3ND: cuatro apps conectadas para equipos de producción.",
-      "ctaTired": "Hecho para equipos de producción cansados de sostenerlo todo con cinta gaffer."
-    },
-    "cta": {
-      "startFree": "Empieza a construir gratis",
-      "bookDemo": "Solicita una demo",
-      "viewDocs": "Ver la documentación",
-      "startFreeForLife": "Empieza a construir gratis",
-      "contactSales": "Contactar a ventas",
-      "pitchStory": "Propón una historia"
-    },
     "layout": {
       "footer": {
         "product": {
           "heading": "Producto",
-          "solutions": "Soluciones",
           "atlvs": "ATLVS",
           "gvteway": "GVTEWAY",
           "compvss": "COMPVSS",
@@ -323,10 +262,6 @@
           "homeAriaLabel": "ATLVS Technologies: inicio",
           "tagline": "El ecosistema para la producción. Cuatro apps, una sola fuente de verdad."
         },
-        "social": {
-          "twitter": "Twitter",
-          "github": "GitHub"
-        },
         "copyright": "© {year} ATLVS Technologies",
         "tagline": "The World Builder's Ecosystem",
         "trademarkPrefix": "ATLVS, GVTEWAY, COMPVSS y LEG3ND son marcas registradas de ATLVS Technologies, una empresa",
@@ -340,10 +275,6 @@
           "description": "ATLVS Technologies construye el ecosistema para la producción. ATLVS, GVTEWAY, COMPVSS, LEG3ND: cuatro apps, una sola fuente de verdad. Creada por operadores que han dirigido la sala.",
           "ogImageEyebrow": "El Estudio",
           "ogImageTitle": "Hecho por quienes dirigen el show."
-        },
-        "breadcrumbs": {
-          "home": "Inicio",
-          "about": "Acerca de"
         },
         "hero": {
           "eyebrow": "El Estudio",
@@ -609,10 +540,6 @@
           "description": "Ensayos sobre operaciones de producción, arquitectura de plataforma y cómo producir shows con menos cinta adhesiva. Del equipo de ATLVS Technologies.",
           "ogEyebrow": "Blog",
           "ogTitle": "Apuntes del equipo."
-        },
-        "breadcrumbs": {
-          "home": "Inicio",
-          "blog": "Blog"
         },
         "hero": {
           "eyebrow": "Blog",
@@ -890,10 +817,6 @@
           "security": "Seguridad",
           "performance": "Rendimiento"
         },
-        "crumbs": {
-          "home": "Inicio",
-          "changelog": "Registro de cambios"
-        },
         "hero": {
           "eyebrow": "Registro de cambios",
           "title": "Lo que se lanzó.",
@@ -940,10 +863,6 @@
           "description": "Los festivales, giras, agencias y talleres de fabricación que operan su producción en ATLVS, COMPVSS, GVTEWAY y LEG3ND. Historias de miembros, cifras y lo que realmente producen.",
           "ogImageEyebrow": "Comunidad",
           "ogImageTitle": "Equipos de producción operando en ATLVS."
-        },
-        "breadcrumbs": {
-          "home": "Inicio",
-          "community": "Comunidad"
         },
         "hero": {
           "eyebrow": "Comunidad",
@@ -1015,10 +934,6 @@
           "ogImageEyebrow": "Notas de categoría",
           "ogImageTitle": "No comparamos. Definimos."
         },
-        "breadcrumbs": {
-          "home": "Inicio",
-          "current": "Desde herramientas de propósito general"
-        },
         "hero": {
           "eyebrow": "Notas de categoría",
           "title": "No comparamos. Definimos.",
@@ -1041,10 +956,6 @@
           "description": "Línea directa. Demos, alianzas, soporte concierge, acceso Festival. Atendido por productores que han manejado la sala.",
           "ogImageEyebrow": "Contacto",
           "ogImageTitle": "Habla con el estudio."
-        },
-        "breadcrumbs": {
-          "home": "Inicio",
-          "contact": "Contacto"
         },
         "hero": {
           "eyebrow": "Contacto",
@@ -1405,10 +1316,6 @@
           "ogImageEyebrow": "Guías",
           "ogImageTitle": "Escritas por operadores."
         },
-        "crumbs": {
-          "home": "Inicio",
-          "guides": "Guías"
-        },
         "hero": {
           "eyebrow": "Guías",
           "title": "Escritas por operadores.",
@@ -1667,7 +1574,6 @@
           "title": "Marketplace: Crew, talento y RFQ de producción en vivo",
           "description": "Encuentra gigs de producción abiertos, convocatorias de casting, talento, crew verificado y RFQ en vivo en toda la red de ATLVS."
         },
-        "breadcrumb": "Marketplace",
         "hero": {
           "eyebrow": "Marketplace",
           "title": "Encuentra el trabajo. Encuentra el crew. Encuentra el acto.",
@@ -1732,7 +1638,6 @@
               "nda": "Aceptación de NDA"
             },
             "cta": {
-              "bid": "Ofertar en este RFQ",
               "signup": "¿Necesitas una cuenta?",
               "expressInterest": "Expresar interés"
             }
@@ -2153,16 +2058,10 @@
           "title": "Notas de campo y lanzamientos.",
           "posts": {
             "fieldNotes": {
-              "cat": "Notas de campo",
-              "title": "Cómo el ciclo de vida de 8 fases mantiene un montaje en rumbo"
+              "cat": "Notas de campo"
             },
             "release": {
-              "cat": "Lanzamiento",
-              "title": "Advancing v2: se entregan 16 deliverables tipados"
-            },
-            "careers": {
-              "cat": "Empleo",
-              "title": "Buscamos: ingenieros, PM, diseñadores"
+              "cat": "Lanzamiento"
             }
           }
         },
@@ -2289,10 +2188,6 @@
           "ogEyebrow": "Precios",
           "ogTitle": "Por organización. Nunca por asiento."
         },
-        "breadcrumbs": {
-          "home": "Inicio",
-          "pricing": "Precios"
-        },
         "hero": {
           "eyebrow": "Precios",
           "title": "Por organización. Nunca por asiento.",
@@ -2326,8 +2221,7 @@
               "upTo10Users": "Hasta 10 usuarios",
               "upTo2kCredentials": "Hasta 2.000 credenciales de portal por proyecto",
               "emailSupport": "Soporte por correo"
-            },
-            "cta": "Prueba de 14 días"
+            }
           },
           "production": {
             "name": "Producción",
@@ -2342,8 +2236,7 @@
               "kbygGuides": "Guías de evento KBYG",
               "unlimitedUsers": "Usuarios ilimitados",
               "priorityConcierge": "Concierge prioritario y onboarding"
-            },
-            "cta": "Prueba de 14 días"
+            }
           },
           "festival": {
             "name": "Festival",
@@ -2960,10 +2853,6 @@
           "title": "Soluciones: Cuatro apps. Un esquema.",
           "description": "ATLVS: consola de operaciones de producción. COMPVSS: PWA de terreno offline-first. GVTEWAY: portal y marketplace para stakeholders. LEG3ND: conocimiento, LMS y recursos. El mismo registro desde la oficina, la puerta, el stakeholder y el estándar."
         },
-        "crumbs": {
-          "home": "Inicio",
-          "solutions": "Soluciones"
-        },
         "hero": {
           "eyebrow": "Soluciones",
           "title": "Cuatro apps. Una única fuente de verdad.",
@@ -3078,101 +2967,6 @@
           "title": "ATLVS está abierto.",
           "primaryLabel": "Empieza a construir gratis",
           "secondaryLabel": "Agenda una demostración"
-        },
-        "legend": {
-          "meta": {
-            "title": "LEG3ND: Conocimiento, LMS y Cumplimiento",
-            "description": "El conocimiento sobre el que se construye el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento. La capa de conocimiento del motor de mundos ATLVS, sobre el protocolo XPMS 2.0.",
-            "ogImageEyebrow": "LEG3ND",
-            "ogImageTitle": "El conocimiento sobre el que se construye el mundo."
-          },
-          "crumbs": {
-            "home": "Inicio",
-            "solutions": "Soluciones"
-          },
-          "jsonLd": {
-            "description": "El conocimiento sobre el que se construye el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento."
-          },
-          "hero": {
-            "title": "El conocimiento sobre el que se construye el mundo.",
-            "body": "El conocimiento sobre el que se construye el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento. Es la capa de conocimiento del motor de mundos ATLVS, con el Standard, el LMS, las certificaciones, el catálogo con precios y el motor de cumplimiento, todo sobre el protocolo XPMS 2.0.",
-            "ctaPrimary": "Empieza a construir gratis",
-            "ctaSecondary": "Reserva una demo"
-          },
-          "pillars": {
-            "title": "Una biblioteca. Cada disciplina.",
-            "body": "La capa de referencia que leen todas las demás apps: escrita una vez, gobernada en un solo lugar, versionada como código.",
-            "standard": {
-              "title": "El Standard",
-              "body": "La base de conocimiento canónica: cómo se ejecuta realmente el trabajo, escrito y disponible para búsqueda."
-            },
-            "courses": {
-              "title": "Cursos y LMS",
-              "body": "Aprendizaje estructurado con lecciones, cuestionarios y seguimiento de finalización, del onboarding al dominio."
-            },
-            "certifications": {
-              "title": "Certificaciones",
-              "body": "Emite, rastrea y vence credenciales. Las mismas certificaciones controlan los escaneos en COMPVSS en la puerta."
-            },
-            "resources": {
-              "title": "Centro de recursos",
-              "body": "Plantillas, SOPs y documentos de referencia en un solo hogar. Se acabó la arqueología en unidades compartidas."
-            },
-            "catalog": {
-              "title": "Catálogo",
-              "body": "Átomos con precio y URIDs: los bloques de construcción con coste de los que parten estimaciones y compras."
-            },
-            "signage": {
-              "title": "Biblioteca de señalética",
-              "body": "Pictogramas ISO 7010, DOT-AIGA e ISA: señalización de seguridad lista para producción, estandarizada."
-            },
-            "xmce": {
-              "title": "Motor de cumplimiento XMCE",
-              "body": "Cumplimiento verificable por máquina: reglas evaluadas contra el registro vivo, no contra una carpeta."
-            },
-            "safety": {
-              "title": "Seguridad",
-              "body": "RAMS, briefings y planes de respuesta ante emergencias conectados a los proyectos que dependen de ellos."
-            }
-          },
-          "protocol": {
-            "eyebrow": "Sobre el protocolo XPMS 2.0",
-            "title": "Conocimiento que lee el resto del mundo.",
-            "body": "LEG3ND no es una wiki pegada al margen. Las certificaciones controlan los escaneos en campo. Los átomos del catálogo ponen precio a las estimaciones. Las reglas de cumplimiento se evalúan contra proyectos vivos. La capa de conocimiento está cableada al mismo almacén de registros sobre el que funciona todo el ecosistema.",
-            "items": {
-              "standard": "El Standard: una base de conocimiento canónica y versionada",
-              "courses": "Cursos y LMS con cuestionarios e insignias de finalización",
-              "certifications": "Certificaciones que controlan los escaneos de puerta de COMPVSS",
-              "catalog": "Átomos de catálogo con precio que alimentan estimaciones y compras",
-              "signage": "Pictogramas de señalética ISO 7010 / DOT-AIGA / ISA",
-              "xmce": "Cumplimiento XMCE verificable por máquina contra el registro vivo"
-            }
-          },
-          "faq": {
-            "title": "LEG3ND · Preguntas frecuentes",
-            "q1": {
-              "q": "¿Qué es LEG3ND?",
-              "a": "La capa de conocimiento del ecosistema ATLVS: el Standard (base de conocimiento), Cursos y LMS, Certificaciones, un centro de recursos, un catálogo con precios, la biblioteca de señalética, el motor de cumplimiento XMCE y Seguridad, todo sobre el protocolo XPMS 2.0."
-            },
-            "q2": {
-              "q": "¿En qué se diferencia de una wiki o un LMS independiente?",
-              "a": "Comparte el mismo almacén de registros que el resto del ecosistema. Las certificaciones controlan los escaneos en campo en COMPVSS, los átomos del catálogo ponen precio a las estimaciones en ATLVS, y las reglas de cumplimiento se evalúan contra proyectos vivos. Nada de eso puede hacerlo una wiki o un LMS aislado."
-            },
-            "q3": {
-              "q": "¿Qué es la biblioteca de señalética?",
-              "a": "Un conjunto listo para producción de pictogramas ISO 7010, DOT-AIGA e ISA para señalización de seguridad, estandarizado para que cada sitio hable el mismo lenguaje visual."
-            },
-            "q4": {
-              "q": "¿Qué verifica el motor de cumplimiento?",
-              "a": "XMCE evalúa reglas verificables por máquina contra el registro vivo en lugar de una carpeta estática, de modo que el estado de cumplimiento refleja el estado real de un proyecto en cualquier momento."
-            }
-          },
-          "cta": {
-            "title": "Construye tu próximo mundo sobre un cuerpo de conocimiento compartido.",
-            "subtitle": "Gratis para siempre en el plan Access. Precio por organización a partir de ahí.",
-            "primaryLabel": "Empieza a construir gratis",
-            "secondaryLabel": "Reserva una demo"
-          }
         }
       },
       "status": {
@@ -3189,17 +2983,7 @@
         "hero": {
           "eyebrow": "Estado",
           "title": "Todos los sistemas operativos.",
-          "body": "Salud del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete para recibir alertas de incidencias por correo o webhook.",
-          "badge": "Todos los sistemas operativos · últimos 30 días"
-        },
-        "services": {
-          "atlvs": "Espacio de operaciones de producción (app.atlvs.pro)",
-          "gvteway": "Portales de actores clave (gvteway.atlvs.pro)",
-          "compvss": "PWA con prioridad sin conexión (compvss.atlvs.pro)",
-          "marketing": "atlvs.pro + flujos de autenticación",
-          "webhooks": "Entrega de webhooks salientes + entrantes",
-          "ai": "Integración con Anthropic Claude",
-          "stripe": "Canal de pagos a proveedores"
+          "body": "Salud del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete para recibir alertas de incidencias por correo o webhook."
         },
         "stateLabel": {
           "operational": "Operativo",
@@ -3207,9 +2991,6 @@
           "outage": "Interrupción mayor"
         },
         "comingSoon": {
-          "eyebrow": "Muy pronto",
-          "title": "Página de estado en vivo.",
-          "body": "El panel de arriba muestra el estado actual. Pronto: disponibilidad de 90 días por servicio, historial de incidencias con análisis posteriores, suscripción por correo y webhook para alertas. Lanzamiento previsto para el Q4 en",
           "cta": "Recibe aviso en el lanzamiento"
         },
         "cta": {
@@ -4034,13 +3815,10 @@
       "subtitle": "Bienvenido de nuevo. Tu mundo sigue justo donde lo dejaste.",
       "email": "Correo electrónico",
       "password": "Contraseña",
-      "rememberMe": "Recordarme",
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "emailMeALink": "Enviarme un enlace",
       "noAccount": "¿No tienes cuenta?",
       "createOne": "Crear una",
-      "orContinueWith": "O continuar con",
-      "orContinueWithEmail": "O continuar con correo",
       "submit": "Iniciar sesión",
       "submitting": "Iniciando sesión…"
     },
@@ -4055,27 +3833,8 @@
       "signIn": "Iniciar sesión",
       "submit": "Crear cuenta",
       "submitting": "Creando cuenta…",
-      "passwordStrength": {
-        "veryWeak": "Muy débil",
-        "weak": "Débil",
-        "fair": "Aceptable",
-        "strong": "Fuerte",
-        "veryStrong": "Muy fuerte"
-      },
-      "organization": "Organización",
-      "organizationHelp": "Puedes crearla más tarde desde ajustes.",
       "tosPrefix": "Al crear una cuenta aceptas nuestra",
       "privacyPolicy": "Política de Privacidad"
-    },
-    "oauth": {
-      "continueWith": "Continuar con {provider}",
-      "google": "Google",
-      "github": "GitHub",
-      "microsoft": "Microsoft",
-      "couldntStart": "No se pudo iniciar el inicio de sesión con {provider}",
-      "notConfigured": "Proveedor de OAuth no configurado",
-      "invalidProvider": "Proveedor inválido",
-      "missingCode": "El inicio de sesión no se completó. Inténtalo de nuevo"
     },
     "magicLink": {
       "title": "Enviarme un enlace mágico",
@@ -4114,12 +3873,8 @@
       "subtitle": "Elige una contraseña que no hayas usado antes.",
       "newPassword": "Nueva contraseña",
       "confirmPassword": "Confirmar contraseña",
-      "hint": "Al menos 8 caracteres",
       "submit": "Actualizar contraseña",
       "submitting": "Actualizando",
-      "mismatch": "Las contraseñas no coinciden",
-      "expired": "Tu enlace de restablecimiento caducó o no se reconoce. Solicita uno nuevo desde Olvidé mi contraseña.",
-      "backToLogin": "Volver al inicio de sesión",
       "expiredTitle": "Enlace de restablecimiento caducado",
       "expiredSubtitle": "No pudimos abrir tu sesión de restablecimiento de contraseña.",
       "requestNew": "Solicitar un nuevo enlace de restablecimiento"
@@ -4130,19 +3885,7 @@
       "body": "Has sido invitado a un espacio de trabajo de ATLVS Technologies. Acepta abajo y te llevaremos directamente.",
       "submit": "Aceptar invitación",
       "submitting": "Uniéndose…",
-      "signInInstead": "Iniciar sesión en su lugar",
-      "invalidOrExpired": "Esta invitación es inválida, caducó o se envió a otro correo. Pide al administrador que la reenvíe.",
-      "joinFailed": "No se pudo unir a la organización: {message}",
-      "updateFailed": "Membresía creada pero la actualización de la invitación falló: {message}"
-    },
-    "errors": {
-      "invalidCredentials": "Correo o contraseña inválidos",
-      "accountExists": "Ya existe una cuenta con este correo. Inicia sesión",
-      "duplicateEmail": "Este correo ya está registrado",
-      "weakPassword": "La contraseña debe tener al menos 8 caracteres",
-      "notConfigured": "Supabase no configurado. Define NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
-      "signupNoUser": "El registro falló: no se devolvió usuario.",
-      "unknown": "Algo salió mal. Inténtalo de nuevo"
+      "signInInstead": "Iniciar sesión en su lugar"
     },
     "error": {
       "title": "Error de inicio de sesión",
@@ -4170,8 +3913,6 @@
       "workspaceNameHint": "Puedes renombrarlo más tarde desde Ajustes.",
       "submitting": "Creando espacio de trabajo",
       "submit": "Crear espacio de trabajo",
-      "ownerNotePrefix": "Te convertirás en el propietario. Podrás invitar a tu equipo desde",
-      "ownerNoteSuffix": "una vez dentro.",
       "subtitle": "Sesión iniciada como {email}. Un paso más: pon nombre al espacio donde vivirán tus producciones.",
       "ownerNote": "Te convertirás en el propietario. Una vez dentro, podrás invitar a tu equipo desde los ajustes del equipo."
     },
@@ -4181,97 +3922,18 @@
       "noRedirect": "No se devolvió ninguna URL de redirección."
     }
   },
-  "invites": {
-    "moduleHeader": {
-      "eyebrow": "Personas",
-      "title": "Invitaciones",
-      "subtitle": "Invitaciones a la organización pendientes"
-    },
-    "form": {
-      "heading": "Invitar a alguien",
-      "description": "Recibirán un correo con un enlace para aceptar. Caduca en 7 días.",
-      "email": "Correo electrónico",
-      "role": "Rol",
-      "submit": "Enviar invitación",
-      "submitting": "Enviando…"
-    },
-    "roles": {
-      "admin": "Administrador: control total de la organización",
-      "controller": "Controller: finanzas y operaciones",
-      "collaborator": "Colaborador: operaciones lectura/escritura",
-      "contractor": "Contratista: acceso limitado",
-      "crew": "Equipo: campo / móvil",
-      "client": "Cliente: portal externo",
-      "viewer": "Visor: solo lectura",
-      "community": "Comunidad: mínimo"
-    },
-    "pending": {
-      "heading": "Pendientes ({count})",
-      "emptyAdmin": "Envía una arriba para empezar.",
-      "emptyMember": "Pide a un administrador que invite a nuevos miembros.",
-      "columns": {
-        "email": "Correo",
-        "role": "Rol",
-        "expires": "Caduca",
-        "link": "Enlace"
-      }
-    },
-    "history": {
-      "heading": "Historial",
-      "columns": {
-        "email": "Correo",
-        "role": "Rol",
-        "status": "Estado",
-        "when": "Cuándo"
-      }
-    },
-    "emailSubject": "Estás invitado a unirte a un espacio de trabajo de ATLVS Technologies",
-    "emailHeading": "Has sido invitado",
-    "emailBody": "{inviter} te invitó a unirte a su espacio de trabajo como {role}.",
-    "emailCta": "Aceptar invitación",
-    "emailExpiry": "El enlace caduca en 7 días. Si el botón no funciona:",
-    "errors": {
-      "onlyAdmins": "Solo propietarios, administradores y desarrolladores pueden invitar.",
-      "pendingExists": "Ya existe una invitación pendiente para este correo.",
-      "invalidToken": "Token de invitación inválido",
-      "validationGeneric": "Entrada inválida"
-    }
-  },
   "theme": {
-    "sheet": {
-      "title": "Elige un tema de diseño",
-      "description": "Ocho temas completamente realizados. Tu elección se aplica al instante en cada página, sin recarga y sin registro. Lo recordaremos en este dispositivo.",
-      "appearanceHeading": "Apariencia",
-      "appearanceSubtitle": "Elige un estilo para tu espacio de trabajo. Se aplica al instante en todas partes.",
-      "matchSystem": "Coincidir con el sistema",
-      "matchingSystem": "Coincidiendo con el sistema",
-      "currentlyLabel": "Actualmente:",
-      "upsell": "¿Te gusta lo que ves? Crea una cuenta para sincronizar temas en todos tus dispositivos.",
-      "upsellCta": "Crear una cuenta"
-    },
     "toggle": {
       "light": "Claro",
       "dark": "Oscuro",
       "system": "Coincidir con el sistema",
-      "themes": "Temas",
       "colorTheme": "Tema de color"
     }
   },
   "footerUtility": {
-    "designThemes": "Temas de diseño",
     "changeLanguage": "Cambiar idioma"
   },
   "shell": {
-    "platform": {
-      "brand": "ATLVS"
-    },
-    "portal": {
-      "brand": "GVTEWAY"
-    },
-    "mobile": {
-      "brand": "COMPVSS",
-      "aboutSuffix": "· v{version}"
-    },
     "nav": {
       "openNavigation": "Abrir navegación",
       "closeNavigation": "Cerrar navegación"
@@ -4294,178 +3956,7 @@
     }
   },
   "a11y": {
-    "skipToContent": "Saltar al contenido",
-    "closeDialog": "Cerrar diálogo",
-    "toggleTheme": "Cambiar tema",
-    "toggleMenu": "Alternar menú",
-    "openMenu": "Abrir menú",
-    "homeAriaLabel": "ATLVS Technologies: inicio",
-    "loading": "Cargando",
-    "saving": "Guardando",
-    "saved": "Guardado",
-    "error": "Error",
-    "expandSidebar": "Expandir barra lateral",
-    "collapseSidebar": "Contraer barra lateral"
-  },
-  "community": {
-    "meta": {
-      "title": "Comunidad: los equipos de producción que construyen sobre ATLVS",
-      "description": "Los festivales, giras, agencias y talleres que ejecutan su producción en ATLVS, GVTEWAY y COMPVSS. Historias de miembros, números y lo que realmente entregan."
-    },
-    "hero": {
-      "eyebrow": "Comunidad",
-      "title": "Equipos de producción, construyendo en público.",
-      "subtitle": "Los festivales, giras, agencias y talleres que ejecutan sus shows en ATLVS Technologies. Flujos reales. Números reales. Recibos reales."
-    },
-    "metrics": {
-      "productionTeams": "equipos de producción",
-      "ticketsScanned": "boletos escaneados",
-      "showsAdvanced": "shows avanzados",
-      "countries": "países"
-    },
-    "stories": {
-      "heading": "Historias de miembros",
-      "subtitle": "Qué usaban antes, qué cambiaron, qué mejoró de forma medible."
-    },
-    "join": {
-      "eyebrow": "Únete a la lista",
-      "title": "Tu equipo, aquí.",
-      "body": "¿Entregando shows reales en ATLVS Technologies? Siempre buscamos documentar nuevas historias de miembros. Una entrevista breve, números anonimizados, tus palabras."
-    },
-    "finalCta": {
-      "title": "Sé la próxima historia",
-      "subtitle": "Empieza gratis. Entrega un show. Hablamos después."
-    }
-  },
-  "rate": {
-    "tooMany": "Demasiadas solicitudes. Inténtalo de nuevo en breve",
-    "retryIn": "Reintentar en {seconds}s"
-  },
-  "errors": {
-    "generic": "Algo salió mal",
-    "notFound": "No encontrado",
-    "forbidden": "No tienes acceso a esto",
-    "unauthorized": "Inicia sesión para continuar",
-    "offline": "Estás sin conexión. Las acciones en cola se sincronizarán al volver"
-  },
-  "bookings": {
-    "title": "Reservas",
-    "overview": "Resumen",
-    "dealTracker": "Seguimiento de Tratos",
-    "deals": "Tratos",
-    "holds": "Reservas",
-    "calendar": "Calendario",
-    "settlements": "Liquidaciones",
-    "tours": "Giras",
-    "marketing": "Marketing",
-    "insights": "Información",
-    "newDeal": "Nuevo Trato",
-    "newHold": "Nueva Reserva",
-    "newTour": "Nueva Gira",
-    "tier": "Nivel",
-    "firstRefusal": "primera opción",
-    "autoReleaseOn": "Auto-liberación el",
-    "stuck": "Atascado",
-    "active": "Activo",
-    "live": "En Vivo",
-    "subtitle": "Economía del show: tratos, reservas, liquidación, giras, marketing, información."
-  },
-  "settlement": {
-    "title": "Liquidación",
-    "subtitle": "Reconciliación post-show. NBOR auto-calculado; el balance se recalcula al guardar.",
-    "gbor": "Recaudación Bruta",
-    "nbor": "Recaudación Neta",
-    "salesTax": "IVA",
-    "amusementTax": "Impuesto de Diversión",
-    "ccFee": "Comisiones de Tarjeta",
-    "paidAttendance": "Asistencia Pagada",
-    "comps": "Cortesías",
-    "walkouts": "Abandonos",
-    "barRevenue": "Ingresos del Bar",
-    "merchRevenue": "Mercancía",
-    "otherRevenue": "Otros Ingresos",
-    "artistPayout": "Pago al Artista",
-    "agentCommission": "Comisión del Agente",
-    "supportAct": "Acto de Apertura",
-    "depositReceived": "Depósito Recibido",
-    "balanceDue": "Saldo Pendiente",
-    "finalize": "Finalizar Liquidación",
-    "draft": "Borrador",
-    "reconciling": "Reconciliando",
-    "final": "Final",
-    "disputed": "Disputada"
-  },
-  "agency": {
-    "title": "Agencia",
-    "overview": "Resumen",
-    "roster": "Lista",
-    "tours": "Giras",
-    "commissions": "Comisiones",
-    "newTour": "Nueva Gira",
-    "subtitle": "Lista + giras + seguimiento de comisiones.",
-    "exclusive": "Exclusivo",
-    "tour": "Gira",
-    "leg": "Etapa",
-    "legs": "Etapas",
-    "totalGbor": "Recaudación Total",
-    "artistPayouts": "Pagos a Artistas",
-    "agentCommissions": "Comisiones de Agente",
-    "ancillary": "Adicional",
-    "totalBooked": "Total Reservado",
-    "finalized": "Finalizado",
-    "pending": "Pendiente"
-  },
-  "marketplaceCanon": {
-    "agencies": "Agencias",
-    "agencyDirectory": "Directorio de Agencias",
-    "rosterSize": "Tamaño de la lista",
-    "defaultCommission": "Comisión por defecto",
-    "eventCalendar": "Calendario de Eventos",
-    "calendarSubtitle": "Próximas fechas de venta, ventanas de preventa, anuncios."
-  },
-  "marketingCanon": {
-    "title": "Marketing",
-    "onsales": "Ventas",
-    "calendar": "Calendario de Marketing",
-    "milestone": {
-      "announce": "Anunciar",
-      "presale_start": "Inicio de Preventa",
-      "presale_end": "Fin de Preventa",
-      "onsale": "A la Venta",
-      "sold_out": "Agotado",
-      "press_embargo": "Embargo de Prensa"
-    },
-    "visibility": {
-      "public": "Público",
-      "partners": "Socios",
-      "internal": "Interno"
-    }
-  },
-  "insightsPool": {
-    "title": "Información",
-    "subtitle": "Agregados mensuales anonimizados por género: opt-in, mínimo k≥3.",
-    "contributing": "contribuyendo",
-    "notContributing": "no contribuyendo",
-    "month": "Mes",
-    "genre": "Género",
-    "shows": "Shows",
-    "avgGross": "Bruto Prom.",
-    "avgAttendance": "Asistencia Prom.",
-    "avgArtistPayout": "Pago Prom. Artista",
-    "optInPrompt": "Tu organización no contribuye al pool. Activa la opción para compartir agregados de liquidación anónimos y desbloquear benchmarks cruzados."
-  },
-  "ticketing": {
-    "title": "Ticketing",
-    "subtitle": "Etix · DICE · Tixr · Eventbrite · SeeTickets · AXS",
-    "newConnection": "Nueva Conexión",
-    "connect": "Conectar",
-    "provider": "Proveedor",
-    "externalEventId": "ID Externo del Evento",
-    "label": "Etiqueta",
-    "apiKey": "Clave API (cifrada)",
-    "lastSync": "Última Sincronización",
-    "active": "Activo",
-    "off": "Inactivo"
+    "skipToContent": "Saltar al contenido"
   },
   "avatarMenu": {
     "account": "Cuenta",
@@ -4594,12 +4085,6 @@
           "kindLabel": "Tipo",
           "statusLabel": "Estado",
           "noteLabel": "Nota"
-        },
-        "status": {
-          "pending": "pendiente",
-          "approved": "aprobado",
-          "rejected": "rechazado",
-          "applied": "aplicado"
         },
         "detail": {
           "title": "Registro",
@@ -4783,7 +4268,6 @@
           "show": "Show",
           "commission": "Comisión",
           "artistPayout": "Pago al artista",
-          "status": "Estado",
           "settlement_state": "Estado"
         }
       },
@@ -5063,7 +4547,6 @@
       "detail": {
         "dueLabel": "vence",
         "severity": "Severidad",
-        "status": "Estado",
         "target": "Objetivo",
         "confirmation": "Confirmación",
         "confirmed": "Confirmado",
@@ -5084,7 +4567,6 @@
         "kind": "Tipo",
         "title": "Título",
         "target": "Objetivo",
-        "status": "Estado",
         "due": "Vencimiento",
         "confirm": "Confirmar",
         "created": "Creado",
@@ -5105,7 +4587,6 @@
     "assistant": {
       "eyebrow": "IA",
       "title": "Asistente",
-      "configureSupabase": "Configura Supabase.",
       "chunksIndexedAcross": "fragmentos indexados en",
       "sourceType": "tipo de fuente",
       "sourceTypes": "tipos de fuente",
@@ -5486,7 +4967,6 @@
           "artistPayout": "Pago al Artista",
           "balanceDue": "Saldo Pendiente",
           "paidAtt": "Asist. Pagada",
-          "status": "Estado",
           "settlement_state": "Estado"
         }
       }
@@ -5529,8 +5009,6 @@
       "title": "Campañas",
       "configureSupabase": "Configura Supabase.",
       "liveLabel": "En vivo",
-      "ofLabel": "de",
-      "spentLabel": "Gastado",
       "newCampaign": "+ Nueva campaña",
       "emptyLabel": "Sin campañas",
       "columns": {
@@ -5539,7 +5017,6 @@
         "kind": "Tipo",
         "window": "Ventana",
         "budget": "Presupuesto",
-        "status": "Estado",
         "campaign_state": "Estado"
       }
     },
@@ -5570,7 +5047,6 @@
       },
       "eyebrow": "Campo",
       "title": "Capturas de realidad",
-      "configureSupabase": "Configura Supabase.",
       "registerCapture": "+ Registrar captura",
       "metrics": {
         "total": "Total",
@@ -5661,7 +5137,6 @@
         "emptyLabel": "Sin propuestas",
         "col": {
           "title": "Título",
-          "status": "Estado",
           "sent": "Enviada",
           "signed": "Firmada",
           "amount": "Importe",
@@ -5679,7 +5154,6 @@
         "title": "Nuevo cliente"
       },
       "title": "Clientes",
-      "configureSupabase": "Configura Supabase para cargar clientes.",
       "eyebrow": "Ventas",
       "subtitleOne": "{count} cliente",
       "subtitleMany": "{count} clientes",
@@ -5786,9 +5260,6 @@
         "hospitality": {
           "title": "Hospitalidad"
         },
-        "tickets": {
-          "title": "Boletería"
-        },
         "licensing": {
           "title": "Licencias"
         },
@@ -5808,7 +5279,6 @@
             "title": "Título",
             "quantity": "Cantidad",
             "delivered": "Entregados",
-            "status": "Estado",
             "dueBy": "Vence el",
             "entitlement_state": "Estado"
           }
@@ -6066,54 +5536,6 @@
       }
     },
     "configureSupabase": "Configura Supabase.",
-    "contracts": {
-      "eyebrow": "Compras",
-      "title": "Contratos",
-      "configureSupabase": "Configura Supabase.",
-      "contractWordSingular": "contrato",
-      "contractWordPlural": "contratos",
-      "newContract": "+ Nuevo Contrato",
-      "metrics": {
-        "activeAll": "Activos (todos)",
-        "activeConstruction": "Activos (Construcción)",
-        "paidYtd": "Pagado en el año"
-      },
-      "scope": {
-        "all": "Todos",
-        "constructionOnly": "Solo Construcción"
-      },
-      "emptyLabel": "Aún no hay contratos",
-      "columns": {
-        "code": "Código",
-        "title": "Título",
-        "kind": "Tipo",
-        "counterparty": "Contraparte",
-        "billing": "Facturación",
-        "value": "Valor",
-        "paid": "Pagado",
-        "retainage": "% Ret.",
-        "state": "Estado"
-      },
-      "edit": {
-        "title": "Editar contrato"
-      },
-      "fields": {
-        "counterpartyEmail": "Correo de la contraparte",
-        "currency": "Moneda",
-        "description": "Descripción",
-        "end": "Fin",
-        "notes": "Notas",
-        "number": "Número",
-        "signed": "Firmado",
-        "start": "Inicio"
-      },
-      "new": {
-        "numberPlaceholder": "Se genera automáticamente si se deja en blanco",
-        "submit": "Crear contrato",
-        "title": "Nuevo contrato",
-        "titlePlaceholder": "Patrocinio MMW26"
-      }
-    },
     "dashboard": {
       "tabs": {
         "overview": "Vista general",
@@ -6488,7 +5910,6 @@
         "description": "Descripción",
         "startsAt": "Comienza",
         "endsAt": "Termina",
-        "status": "Estado",
         "statusDraft": "borrador",
         "statusScheduled": "programado",
         "statusLive": "en vivo",
@@ -6504,7 +5925,6 @@
           "fallback": "Evento"
         },
         "fields": {
-          "status": "Estado",
           "starts": "Comienza",
           "ends": "Termina",
           "description": "Descripción",
@@ -6525,7 +5945,6 @@
         "title": "Nuevo evento"
       },
       "title": "Eventos",
-      "configureSupabase": "Configura Supabase.",
       "eyebrow": "Trabajo",
       "subtitleEventSingular": "Evento",
       "subtitleEventPlural": "Eventos",
@@ -6535,7 +5954,6 @@
         "name": "Nombre",
         "starts": "Comienza",
         "ends": "Termina",
-        "status": "Estado",
         "event_state": "Estado"
       },
       "bulk": {
@@ -6606,8 +6024,6 @@
           "title": "Editar {name}",
           "submit": "Guardar Cambios",
           "name": "Nombre",
-          "category": "Categoría",
-          "amountCents": "Importe (céntimos)",
           "activation": "Activación",
           "amount": "Presupuesto (USD)",
           "class": "Clase",
@@ -6655,7 +6071,6 @@
           "submit": "Crear Presupuesto",
           "name": "Nombre",
           "amount": "Importe (USD)",
-          "category": "Categoría",
           "eyebrow": "Finanzas",
           "title": "Nuevo Presupuesto",
           "activation": "Activación",
@@ -6685,8 +6100,6 @@
         "newBudget": "+ Nuevo Presupuesto",
         "col": {
           "name": "Nombre",
-          "category": "Categoría",
-          "spent": "Gastado",
           "budget": "Presupuesto",
           "utilization": "Utilización",
           "actual": "Real",
@@ -6762,7 +6175,6 @@
           "ownership": "Participación"
         },
         "empty": {
-          "prefix": "Aún no hay entidades. Crea una en",
           "cta": "Nueva entidad",
           "title": "Aún no hay entidades"
         }
@@ -6862,7 +6274,6 @@
           "eyebrow": "Gasto",
           "title": "Editar {description}",
           "descriptionLabel": "Descripción",
-          "amountCentsLabel": "Importe (céntimos)",
           "currencyLabel": "Moneda",
           "categoryLabel": "Categoría",
           "statusLabel": "Estado",
@@ -6874,21 +6285,13 @@
           "phaseLabel": "Fase (8 puertas)",
           "vendorLabel": "Proveedor"
         },
-        "status": {
-          "pending": "pendiente",
-          "approved": "aprobado",
-          "rejected": "rechazado",
-          "reimbursed": "reembolsado"
-        },
         "detail": {
           "eyebrow": "Finanzas",
           "uncategorized": "sin categorizar",
           "fallbackTitle": "Gasto",
           "fields": {
-            "status": "Estado",
             "amount": "Importe",
             "currency": "Moneda",
-            "category": "Categoría",
             "spentOn": "Gastado El",
             "receipt": "Recibo",
             "department": "Departamento",
@@ -6929,9 +6332,7 @@
         "emptyLabel": "Sin gastos registrados",
         "columns": {
           "description": "Descripción",
-          "category": "Categoría",
           "amount": "Importe",
-          "status": "Estado",
           "date": "Fecha",
           "department": "Departamento",
           "expense_state": "Estado"
@@ -7009,7 +6410,6 @@
           "fields": {
             "title": "Título",
             "number": "Número",
-            "amountCents": "Importe (centavos)",
             "currency": "Divisa",
             "issued": "Emitida",
             "due": "Vencimiento",
@@ -7064,9 +6464,7 @@
           "title": "Nueva factura",
           "titlePlaceholder": "Anticipo de producción del evento",
           "client": "Cliente",
-          "noClient": "Sin cliente",
           "project": "Proyecto",
-          "noProject": "Sin proyecto",
           "amount": "Importe",
           "currency": "Divisa",
           "due": "Vencimiento",
@@ -7159,7 +6557,6 @@
           "origin": "Origen",
           "destination": "Destino",
           "miles": "Millas",
-          "rateCents": "Tarifa (centavos/milla)",
           "loggedOn": "Registrado el",
           "notes": "Notas",
           "rate": "Tarifa por milla"
@@ -7756,7 +7153,6 @@
           "title": "Título",
           "slug": "Slug",
           "description": "Descripción",
-          "status": "Estado",
           "schemaJson": "Esquema (JSON)",
           "schemaShapeLabel": "Forma:",
           "form_state": "Estado"
@@ -7795,7 +7191,6 @@
       "column": {
         "title": "Título",
         "slug": "Slug",
-        "status": "Estado",
         "updated": "Actualizado",
         "form_state": "Estado"
       },
@@ -7864,11 +7259,6 @@
       "eyebrow": "Inicio",
       "title": "Mi Bandeja De Entrada",
       "configureSupabase": "Configura Supabase.",
-      "conversationCount": {
-        "one": "{count} conversación",
-        "other": "{count} conversaciones"
-      },
-      "unreadSuffix": "{count} sin leer",
       "empty": {
         "title": "Aún No Hay Conversaciones",
         "description": "Inicia un mensaje directo o un canal con Nuevo Mensaje arriba; los hilos de contacto del portal también llegan aquí."
@@ -7879,7 +7269,6 @@
     "insights": {
       "eyebrow": "Análisis",
       "title": "Grupo de reservas",
-      "configureSupabase": "Configura Supabase.",
       "subtitle": "Agregados mensuales anonimizados por género.",
       "contributing": "contribuyendo",
       "notContributing": "sin contribuir",
@@ -8091,7 +7480,6 @@
           "email": "Correo electrónico",
           "phone": "Teléfono",
           "source": "Origen",
-          "estimatedValueCents": "Valor estimado (centavos)",
           "notes": "Notas",
           "estimatedValue": "Valor estimado"
         },
@@ -8225,7 +7613,6 @@
           "mark": "Marca",
           "jurisdiction": "Jurisdicción",
           "registrationNo": "N.º de registro",
-          "status": "Estado",
           "statusPending": "pendiente",
           "statusRegistered": "registrada",
           "statusAbandoned": "abandonada",
@@ -8502,7 +7889,6 @@
         "title": "Añadir ubicación"
       },
       "title": "Ubicaciones",
-      "configureSupabase": "Configura Supabase.",
       "eyebrow": "Trabajo",
       "subtitle": {
         "one": "{count} ubicación",
@@ -8545,7 +7931,6 @@
           "tag": "Etiqueta",
           "category": "Categoría",
           "dailyRate": "Tarifa diaria",
-          "status": "Estado",
           "equipment_state": "Estado"
         }
       },
@@ -8557,7 +7942,6 @@
           "fields": {
             "title": "Título",
             "number": "Número",
-            "status": "Estado",
             "amountCents": "Importe (centavos)",
             "currency": "Moneda",
             "po_state": "Estado"
@@ -8595,7 +7979,6 @@
             "scheduled": "Programado",
             "actual": "Real",
             "party": "Parte",
-            "status": "Estado",
             "order_state": "Estado"
           }
         },
@@ -8652,7 +8035,6 @@
           "unitCents": "Unidad ¢"
         }
       },
-      "eyebrow": "Logística",
       "dispositionLabel": "Disposición",
       "freightLabel": "Carga",
       "services": {
@@ -8677,42 +8059,6 @@
         "title": "Servicios"
       },
       "servicesLabel": "Servicios",
-      "warehouse": {
-        "byStatus": "Por estado",
-        "drillIn": "Detallar",
-        "metrics": {
-          "assets": "Activos",
-          "inMaintenance": "En mantenimiento",
-          "locations": "Ubicaciones"
-        },
-        "mobileScanButton": "Escaneo móvil",
-        "subtitle": "FF&E + central + almacenaje en sede",
-        "tiles": {
-          "availability": {
-            "description": "Matriz de 7 días",
-            "label": "Disponibilidad"
-          },
-          "disposition": {
-            "description": "Retirados + mantenimiento",
-            "label": "Disposición"
-          },
-          "equipment": {
-            "label": "Equipamiento"
-          },
-          "mobileScan": {
-            "label": "Escaneo móvil"
-          },
-          "rentals": {
-            "description": "Libro de reservas + entregas",
-            "label": "Alquileres"
-          },
-          "services": {
-            "description": "Solicitudes de residuos + limpieza",
-            "label": "Servicios"
-          }
-        },
-        "title": "Almacén"
-      },
       "warehouseLabel": "Almacén"
     },
     "marketing": {
@@ -9276,19 +8622,11 @@
           "description": "Descripción",
           "startsAt": "Inicia",
           "endsAt": "Finaliza",
-          "status": "Estado",
           "event_state": "Estado",
           "location": "Location",
           "meetingUrl": "Meeting URL",
           "agenda": "Agenda (Markdown)",
           "minutes": "Minutes (Markdown)"
-        },
-        "status": {
-          "draft": "borrador",
-          "scheduled": "programada",
-          "live": "en vivo",
-          "complete": "completada",
-          "cancelled": "cancelada"
         },
         "event_state": {
           "cancelled": "cancelado",
@@ -9431,20 +8769,6 @@
       },
       "dispatch": {
         "title": "Despacho",
-        "unassigned": "Sin asignar",
-        "shiftLabel": "Turno",
-        "runLabel": "Recorrido",
-        "matrixTitle": "Matriz de Despacho",
-        "legend": {
-          "shift": "Turno",
-          "task": "Tarea",
-          "dispatch": "Despacho"
-        },
-        "laneColumn": "Carril",
-        "laneKind": {
-          "venue": "recinto",
-          "vehicle": "vehículo"
-        },
         "description": "Hoy, en cuadrillas, venues y vehículos"
       },
       "eyebrow": "Operaciones",
@@ -9585,7 +8909,6 @@
       }
     },
     "ops": {
-      "title": "Operaciones",
       "problems": "Incidencias",
       "changes": "Cambios",
       "integrations": "Integraciones",
@@ -9794,7 +9117,6 @@
           "personName": "Nombre de la Persona",
           "nationality": "Nacionalidad",
           "passportNo": "Pasaporte n.º",
-          "status": "Estado",
           "statusPending": "pendiente",
           "statusSubmitted": "enviado",
           "statusApproved": "aprobado",
@@ -9949,7 +9271,6 @@
         "emptyLabel": "Sin Documentos",
         "col": {
           "classification": "Clasificación",
-          "status": "Estado",
           "engagementStarts": "Inicio del Engagement",
           "sent": "Enviado",
           "accepted": "Aceptado",
@@ -10079,8 +9400,6 @@
           "email": "Email",
           "role": "Rol",
           "expires": "Vence",
-          "link": "Enlace",
-          "status": "Estado",
           "when": "Cuándo",
           "invite_state": "Estado"
         },
@@ -10454,9 +9773,6 @@
       },
       "noStages": {
         "title": "Sin Etapas"
-      },
-      "lane": {
-        "empty": "Sin oportunidades en esta etapa."
       }
     },
     "procurement": {
@@ -10472,7 +9788,6 @@
           "name": "Nombre",
           "assetTag": "Etiqueta de Activo",
           "dailyRate": "Tarifa Diaria",
-          "status": "Estado",
           "equipment_state": "Estado",
           "category": "Categoría"
         }
@@ -10693,7 +10008,6 @@
           "currencyLabel": "Moneda"
         },
         "detail": {
-          "status": "Estado",
           "amount": "Monto",
           "created": "Creado",
           "updated": "Actualizado",
@@ -10703,9 +10017,7 @@
           "submit": "Crear OC",
           "titleLabel": "Título",
           "vendorLabel": "Proveedor",
-          "noVendor": "Sin proveedor",
           "projectLabel": "Proyecto",
-          "noProject": "Sin proyecto",
           "amountLabel": "Monto (USD)",
           "eyebrow": "Compras",
           "title": "Nueva Orden de Compra"
@@ -10716,7 +10028,6 @@
           "number": "Número",
           "title": "Título",
           "amount": "Monto",
-          "status": "Estado",
           "created": "Creado",
           "po_state": "Estado"
         }
@@ -10730,7 +10041,6 @@
             "title": "Título",
             "description": "Descripción",
             "estimatedCents": "Estimado (centavos)",
-            "status": "Estado",
             "requisition_state": "Estado"
           }
         },
@@ -10787,7 +10097,6 @@
         "col": {
           "title": "Título",
           "estimated": "Estimado",
-          "status": "Estado",
           "created": "Creada",
           "requisition_state": "Estado"
         }
@@ -11004,7 +10313,6 @@
           "col": {
             "number": "Número",
             "title": "Título",
-            "status": "Estado",
             "amount": "Monto",
             "po_state": "Estado"
           }
@@ -11024,7 +10332,6 @@
           "columns": {
             "submitted": "Enviada",
             "approved": "Aprobada",
-            "status": "Estado",
             "score": "Puntuación"
           }
         },
@@ -11050,7 +10357,6 @@
             "code": "Código",
             "title": "Título",
             "spec": "Especificación",
-            "status": "Estado",
             "submittal_state": "Estado"
           }
         },
@@ -11205,7 +10511,6 @@
           "tag": "Etiqueta",
           "category": "Categoría",
           "serial": "Serie",
-          "status": "Estado",
           "equipment_state": "Estado"
         },
         "footnoteSuffix": ")."
@@ -11279,109 +10584,6 @@
       },
       "breadcrumb": "Producción",
       "equipment": {
-        "edit": {
-          "eyebrow": "Equipo",
-          "title": "Editar {name}",
-          "submit": "Guardar Cambios",
-          "fields": {
-            "name": "Nombre",
-            "category": "Categoría",
-            "assetTag": "Etiqueta de Activo",
-            "serial": "Serie",
-            "dailyRateCents": "Tarifa Diaria (Centavos)",
-            "notes": "Notas"
-          }
-        },
-        "detail": {
-          "tabs": {
-            "overview": "Resumen",
-            "maintenance": "Mantenimiento",
-            "rentals": "Rentas",
-            "qr": "QR"
-          },
-          "notFound": "No encontrado.",
-          "markStatus": "Marcar {status}",
-          "qr": "QR",
-          "field": {
-            "status": "Estado",
-            "category": "Categoría",
-            "assetTag": "Etiqueta de Activo",
-            "serial": "Serie",
-            "dailyRate": "Tarifa Diaria",
-            "created": "Creado",
-            "equipment_state": "Estado"
-          },
-          "ledger": {
-            "title": "Bitácora de Movimientos",
-            "system": "sistema",
-            "initial": "inicial",
-            "by": "por {who}"
-          },
-          "lifecycle": "Ciclo de Vida",
-          "retireRemove": "Retirar y eliminar"
-        },
-        "maintenance": {
-          "eyebrow": "Equipo",
-          "title": "Mantenimiento",
-          "emptyLabel": "Sin Órdenes de Mantenimiento",
-          "columns": {
-            "kind": "Tipo",
-            "due": "Vence",
-            "completed": "Completado",
-            "outcome": "Resultado"
-          },
-          "scheduleHintPrefix": "Programa órdenes desde el",
-          "maintenanceModuleLink": "módulo de Mantenimiento"
-        },
-        "eyebrow": "Producción",
-        "title": "Equipo",
-        "qr": {
-          "defaultName": "Equipo",
-          "eyebrow": "Equipo · Etiqueta QR",
-          "downloadPng": "Descargar PNG",
-          "printHint": "⌘P para imprimir",
-          "qrAlt": "Código QR para {name}",
-          "assetLabel": "Activo: {assetTag}",
-          "serialLabel": "N.º serie: {serial}"
-        },
-        "rentals": {
-          "eyebrow": "Equipo",
-          "title": "Rentas",
-          "subtitle": "Historial de reservas de este activo.",
-          "emptyLabel": "Sin Rentas",
-          "col": {
-            "starts": "Inicia",
-            "ends": "Termina",
-            "dayRate": "Tarifa Diaria",
-            "notes": "Notas"
-          }
-        },
-        "new": {
-          "submit": "Agregar Equipo",
-          "name": "Nombre",
-          "category": "Categoría",
-          "categoryPlaceholder": "Iluminación, audio, video…",
-          "assetTag": "Etiqueta de Activo",
-          "serial": "Serie",
-          "dailyRate": "Tarifa Diaria (USD)",
-          "eyebrow": "Producción",
-          "title": "Agregar Equipo"
-        },
-        "configureSupabase": "Configura Supabase.",
-        "itemSingular": "Artículo",
-        "itemPlural": "Artículos",
-        "available": "Disponible",
-        "addEquipment": "+ Agregar Equipo",
-        "emptyLabel": "Aún no hay equipo",
-        "addEquipmentLower": "+ Agregar equipo",
-        "columns": {
-          "name": "Nombre",
-          "category": "Categoría",
-          "assetTag": "Etiqueta de Activo",
-          "status": "Estado",
-          "dailyRate": "Tarifa Diaria",
-          "equipment_state": "Estado"
-        },
         "utilization": {
           "eyebrow": "Producción",
           "title": "Utilización de Equipo",
@@ -11405,9 +10607,6 @@
             "util90d": "Util. 90d",
             "idleRev30d": "Ing. Inactivo 30d"
           }
-        },
-        "bulk": {
-          "delete": "Eliminar"
         }
       },
       "fabrication": {
@@ -11428,7 +10627,6 @@
           "notFound": "No encontrado.",
           "breadcrumbProduction": "Producción",
           "fields": {
-            "status": "Estado",
             "due": "Vence",
             "created": "Creado",
             "production_phase": "Estado"
@@ -11458,7 +10656,6 @@
         "emptyLabel": "Sin órdenes de fabricación",
         "col": {
           "title": "Título",
-          "status": "Estado",
           "due": "Vence",
           "production_phase": "Estado"
         }
@@ -11514,9 +10711,7 @@
             "title": "Sin Equipo para Mostrar"
           },
           "col": {
-            "asset": "Activo",
-            "status": "Estado",
-            "equipment_state": "Estado"
+            "asset": "Activo"
           },
           "day": {
             "free": "libre",
@@ -11526,8 +10721,6 @@
         },
         "new": {
           "submit": "Reservar",
-          "equipmentLabel": "Equipo",
-          "equipmentPlaceholder": "Selecciona equipo",
           "startsLabel": "Inicia",
           "endsLabel": "Termina",
           "projectLabel": "Proyecto",
@@ -11543,7 +10736,6 @@
         "newRental": "+ Nueva Renta",
         "emptyLabel": "Sin rentas activas",
         "columns": {
-          "equipment": "Equipo",
           "starts": "Inicia",
           "ends": "Termina",
           "rate": "Tarifa"
@@ -11582,82 +10774,10 @@
           "time": "Hora",
           "lane": "Carril",
           "cue": "Cue",
-          "status": "Estado",
           "actions": "Acciones",
           "cue_state": "Estado"
         }
       },
-      "warehouse": {
-        "inventory": {
-          "eyebrow": "Producción · Almacén",
-          "title": "Inventario",
-          "configureSupabase": "Configura Supabase.",
-          "unassigned": "Sin asignar",
-          "assetSingular": "Activo",
-          "assetPlural": "Activos",
-          "locationSingular": "ubicación",
-          "locationPlural": "ubicaciones",
-          "newItem": "+ Nuevo Artículo",
-          "byStatus": "Por Estado",
-          "byLocation": "Por Ubicación",
-          "emptyLabel": "Sin activos en inventario",
-          "columns": {
-            "name": "Nombre",
-            "tag": "Etiqueta",
-            "category": "Categoría",
-            "location": "Ubicación",
-            "serial": "Serie",
-            "status": "Estado"
-          },
-          "footerPrefix": "El inventario es un consolidado de cada ",
-          "equipmentBadge": "Equipo"
-        },
-        "locations": {
-          "eyebrow": "Producción · Almacén",
-          "title": "Ubicaciones",
-          "configureSupabase": "Configura Supabase.",
-          "newLocation": "+ Nueva Ubicación",
-          "emptyLabel": "Sin ubicaciones registradas",
-          "columns": {
-            "name": "Nombre",
-            "city": "Ciudad",
-            "country": "País",
-            "assets": "Activos"
-          }
-        },
-        "title": "Almacén",
-        "configureSupabase": "Configura Supabase.",
-        "tiles": {
-          "inventory": {
-            "label": "Inventario"
-          },
-          "locations": {
-            "label": "Ubicaciones"
-          },
-          "equipment": {
-            "label": "Equipo"
-          },
-          "rentals": {
-            "label": "Rentas"
-          },
-          "availability": {
-            "label": "Disponibilidad",
-            "description": "Matriz de 7 días"
-          },
-          "mobileScan": {
-            "label": "Escaneo Móvil"
-          }
-        },
-        "subtitle": "Hub central + almacenes de venue",
-        "metrics": {
-          "assets": "Activos",
-          "locations": "Ubicaciones",
-          "activeRentals": "Rentas Activas"
-        },
-        "byStatus": "Por Estado",
-        "drillIn": "Profundizar"
-      },
-      "eyebrow": "Producción",
       "hub": {
         "eyebrow": "Producción",
         "title": "Producción",
@@ -11668,8 +10788,6 @@
           "show": "Show"
         },
         "cards": {
-          "equipment": "Equipos",
-          "equipmentDesc": "Activos propios + mantenimiento",
           "equipmentUtil": "Utilización de Equipos",
           "equipmentUtilDesc": "Rollup de 30/90 días + ingreso ocioso",
           "avInventory": "Inventario AV",
@@ -11712,15 +10830,7 @@
             "description": "Descripción",
             "startsAt": "Inicia",
             "endsAt": "Termina",
-            "status": "Estado",
             "event_state": "Estado"
-          },
-          "status": {
-            "draft": "borrador",
-            "scheduled": "programada",
-            "live": "en vivo",
-            "complete": "completada",
-            "cancelled": "cancelada"
           },
           "event_state": {
             "cancelled": "cancelado",
@@ -12352,7 +11462,6 @@
           "publishedLabel": "Publicada (visible en portal + móvil)",
           "configLabel": "Config (JSON)",
           "sectionsLabel": "Secciones:",
-          "saving": "Guardando…",
           "saveButton": "Guardar guía",
           "invalidJson": "La configuración debe ser JSON válido: {detail}"
         },
@@ -12740,9 +11849,7 @@
           "title": "Título",
           "docNumber": "N.º de Documento",
           "currency": "Moneda",
-          "depositPercent": "% de Depósito",
-          "themePrimary": "Color Primario del Tema",
-          "themeSecondary": "Color Secundario del Tema"
+          "depositPercent": "% de Depósito"
         },
         "mode": {
           "outline": "Esquema",
@@ -12790,7 +11897,6 @@
         "editDocument": "Editar Documento",
         "viewProject": "Ver Proyecto",
         "fields": {
-          "status": "Estado",
           "amount": "Monto",
           "sent": "Enviada",
           "signed": "Firmada",
@@ -12809,9 +11915,7 @@
         "blocks": "bloques",
         "title": "Nueva propuesta",
         "client": "Cliente",
-        "noClient": "Sin cliente",
         "project": "Proyecto",
-        "noProject": "Sin proyecto",
         "amount": "Monto (USD)",
         "expires": "Vence",
         "notes": "Notas / alcance",
@@ -12819,7 +11923,6 @@
         "prefilledFrom": "Precargado desde \"{name}\""
       },
       "title": "Propuestas",
-      "configureSupabase": "Configura Supabase.",
       "eyebrow": "Ventas",
       "countOne": "{count} Propuesta",
       "countOther": "{count} Propuestas",
@@ -12827,7 +11930,6 @@
       "columns": {
         "title": "Título",
         "amount": "Monto",
-        "status": "Estado",
         "expires": "Vence",
         "updated": "Actualizada",
         "proposal_state": "Estado"
@@ -13315,7 +12417,6 @@
           "name": "Nombre",
           "cadence": "Cadencia",
           "nextRun": "Próxima",
-          "status": "Estado",
           "tour_state": "Estado"
         },
         "cadence": {
@@ -13685,14 +12786,6 @@
       "threatsLabel": "Amenazas"
     },
     "schedule": {
-      "calendar": {
-        "descriptionMonth": "Haz clic en cualquier evento para abrirlo",
-        "descriptionWeek": "Esta semana: eventos visibles en su día de inicio",
-        "emptyLabel": "Aún no hay eventos programados.",
-        "viewMonth": "Mes",
-        "viewWeek": "Semana",
-        "today": "Hoy"
-      },
       "baselines": {
         "gantt": {
           "projectFallback": "Proyecto",
@@ -13780,7 +12873,6 @@
         "name": "Nombre",
         "starts": "Inicia",
         "ends": "Termina",
-        "status": "Estado",
         "event_state": "Estado"
       }
     },
@@ -13833,7 +12925,6 @@
           "severity": "Grav.",
           "category": "Categoría",
           "summary": "Resumen",
-          "status": "Estado",
           "opened": "Abierta",
           "request_state": "Estado"
         }
@@ -13972,21 +13063,14 @@
         "title": "Facturación",
         "configureSupabase": "Configura Supabase.",
         "eyebrow": "Ajustes",
-        "workspaceTitle": "Ajustes del Workspace",
-        "subtitle": "Facturación",
         "stripeNotConfigured": "Stripe no está configurado.",
         "stripeNotConfiguredHintBefore": "Define",
         "plan": "Plan",
-        "plansHeading": "Planes",
-        "current": "Actual",
-        "recentInvoices": "Facturas recientes",
-        "viewAll": "Ver todas →",
         "table": {
           "number": "Número",
           "status": "Estado",
           "amount": "Importe",
-          "issued": "Emitida",
-          "due": "Vence"
+          "issued": "Emitida"
         },
         "noInvoices": "Aún no hay facturas."
       },
@@ -14242,7 +13326,6 @@
           "cadence": "Cadencia",
           "charter": "Estatuto",
           "category": "Categoría",
-          "status": "Estado",
           "nextReview": "Próxima revisión",
           "policy_state": "Estado"
         },
@@ -14282,7 +13365,6 @@
           "source": "Origen",
           "imported": "Importadas",
           "failed": "Fallidas",
-          "status": "Estado",
           "started": "Iniciada",
           "run_state": "Estado"
         },
@@ -14494,54 +13576,6 @@
         "fieldDefaultBalanceTerms": "Términos del saldo",
         "fieldDefaultDepositPct": "% de depósito predeterminado",
         "paymentTermsHeading": "Términos de pago (plantillas)"
-      },
-      "tiles": {
-        "organization": {
-          "label": "Organización",
-          "description": "Nombre, tier, gestión de miembros"
-        },
-        "billing": {
-          "label": "Facturación"
-        },
-        "integrations": {
-          "label": "Integraciones"
-        },
-        "api": {
-          "label": "Claves de API",
-          "description": "Acceso programático y límites de tasa"
-        },
-        "webhooks": {
-          "label": "Webhooks",
-          "description": "Notificaciones salientes de eventos"
-        },
-        "audit": {
-          "label": "Registro de auditoría",
-          "description": "Cada mutación, consultable"
-        },
-        "compliance": {
-          "label": "Cumplimiento",
-          "description": "Retención, DPA, exportación de datos"
-        },
-        "branding": {
-          "label": "Identidad de marca",
-          "description": "Apariencia del portal y emails"
-        },
-        "domains": {
-          "label": "Dominios",
-          "description": "Dominios personalizados para portales"
-        },
-        "sequences": {
-          "label": "Auto-Numeración"
-        },
-        "slaPolicies": {
-          "label": "Políticas SLA"
-        },
-        "sso": {
-          "label": "Inicio de sesión único"
-        },
-        "rateLimits": {
-          "label": "Límites de Tasa"
-        }
       },
       "title": "Ajustes del Workspace",
       "subtitle": "Configura tu organización",
@@ -15405,7 +14439,6 @@
         "priorityP3": "P3 · Normal",
         "priorityP4": "P4 · Baja",
         "project": "Proyecto",
-        "noProject": "Sin Proyecto",
         "eyebrow": "Trabajo"
       },
       "title": "Tareas",
@@ -15645,12 +14678,9 @@
         "runPlural": "despachos",
         "onFile": "registrados",
         "scheduleRun": "+ Programar Despacho",
-        "vehicleSingular": "vehículo",
-        "vehiclePlural": "vehículos",
         "vehicle": "Vehículo",
         "totalRuns": "Despachos totales",
         "latestRun": "Último despacho",
-        "status": "Estado",
         "run_state": "Estado",
         "col": {
           "fleet": "Flota"
@@ -15680,7 +14710,6 @@
         "empty": {
           "title": "No Hay Shuttles del Personal Programados"
         },
-        "runCountOne": "{count} despacho",
         "col": {
           "depart": "Sale",
           "arrive": "Llega",
@@ -15976,7 +15005,6 @@
         "configureSupabase": "Configura Supabase.",
         "detail": {
           "eyebrow": "Insignia",
-          "awardedOne": "{count} otorgada",
           "awardedMany": "{count} otorgadas",
           "deleteConfirm": "¿Eliminar definitivamente esta insignia? También se eliminará todo el historial de otorgamientos.",
           "awardThis": "Otorgar Esta Insignia",
@@ -16028,71 +15056,6 @@
         "columnName": "Nombre",
         "columnRole": "Rol",
         "columnEmail": "Correo"
-      },
-      "courses": {
-        "detail": {
-          "configureSupabase": "Configura Supabase.",
-          "eyebrow": "Curso",
-          "publish": "Publicar",
-          "completionBadge": {
-            "title": "Insignia de Finalización",
-            "none": "Ninguna"
-          },
-          "save": "Guardar",
-          "lessons": {
-            "title": "Lecciones",
-            "titlePlaceholder": "Título de la lección",
-            "bodyPlaceholder": "Cuerpo de la lección",
-            "addLesson": "+ Añadir Lección"
-          },
-          "quiz": {
-            "title": "Preguntas del Cuestionario",
-            "promptPlaceholder": "Enunciado de la pregunta",
-            "addQuestion": "+ Añadir Pregunta"
-          },
-          "assignees": {
-            "title": "Asignados",
-            "unknown": "Desconocido",
-            "assign": "+ Asignar"
-          }
-        },
-        "new": {
-          "eyebrow": "Capacitación",
-          "title": "Nuevo Curso",
-          "submit": "Crear Curso",
-          "fields": {
-            "title": "Título",
-            "summary": "Resumen",
-            "duration": "Duración (minutos)",
-            "requiredForRole": "Obligatorio para el rol"
-          }
-        },
-        "eyebrow": "Personal",
-        "title": "Cursos",
-        "configureSupabase": "Configura Supabase.",
-        "subtitleOne": "{count} curso",
-        "subtitleOther": "{count} cursos",
-        "newCourse": "+ Nuevo Curso",
-        "emptyLabel": "Aún sin cursos",
-        "columns": {
-          "title": "Título",
-          "state": "Estado",
-          "duration": "Duración",
-          "role": "Rol"
-        },
-        "createFirst": "Crea tu primer curso",
-        "edit": {
-          "crumb": "Editar",
-          "eyebrow": "Curso",
-          "fields": {
-            "duration": "Duración (Minutos)",
-            "requiredForRole": "Obligatorio para el rol",
-            "summary": "Resumen",
-            "title": "Título"
-          },
-          "submit": "Guardar cambios",
-          "title": "Editar {title}"
-        }
       },
       "deployment": {
         "edit": {
@@ -16659,8 +15622,6 @@
       "subtitle": "Catálogo atómico de producción.",
       "metric": {
         "atoms": "Átomos",
-        "uac": "UAC (planificado)",
-        "tpc": "TPC (desplegado)",
         "variance": "Entradas de variación"
       },
       "tiers": {
@@ -16727,8 +15688,6 @@
           "revenue": "Ingresos"
         },
         "cards": {
-          "leads": "Clientes potenciales",
-          "leadsDesc": "Kanban de pipeline + vistas guardadas",
           "clients": "Clientes",
           "sponsors": "Patrocinadores",
           "marketing": "Marketing",
@@ -17323,10 +16282,7 @@
     },
     "assets": {
       "columns": {
-        "cost": "Adquisición",
         "kind": "Tipo",
-        "name": "Activo",
-        "serial": "Serie / Etiqueta",
         "state": "Estado"
       },
       "configureSupabase": "Configura Supabase.",
@@ -17348,7 +16304,6 @@
         },
         "depreciationEmpty": "Sin programa de depreciación",
         "depreciationTitle": "Depreciación",
-        "eyebrow": "Activo",
         "maint": {
           "cost": "Costo",
           "date": "Realizado",
@@ -17356,10 +16311,8 @@
           "outcome": "Resultado"
         },
         "maintenanceEmpty": "Sin mantenimiento registrado",
-        "maintenanceTitle": "Historial de mantenimiento",
-        "retired": "Retirado"
+        "maintenanceTitle": "Historial de mantenimiento"
       },
-      "emptyTitle": "Aún no hay activos",
       "eyebrow": "Activos y logística",
       "new": {
         "acquiredAtLabel": "Adquirido",
@@ -17374,7 +16327,6 @@
         "serialLabel": "Serie",
         "title": "Nuevo activo"
       },
-      "newAsset": "+ Nuevo activo",
       "title": "Activos",
       "warranties": {
         "assetsLink": "Activos",
@@ -17403,8 +16355,7 @@
         },
         "newWarranty": "+ Nueva garantía",
         "title": "Garantías"
-      },
-      "warrantiesLink": "Garantías"
+      }
     },
     "position": {
       "cell": {
@@ -17461,10 +16412,6 @@
     "sortable": {
       "dragToReorder": "Arrastra para reordenar"
     },
-    "toast": {
-      "dismiss": "Descartar notificación",
-      "region": "Notificaciones"
-    },
     "confirm": {
       "cancel": "Cancelar",
       "confirm": "Confirmar"
@@ -17498,33 +16445,12 @@
     }
   },
   "m": {
-    "ad": {
-      "eyebrow": "Móvil",
-      "title": "Llegadas y salidas",
-      "todayPrefix": "Hoy",
-      "arrivalsHeading": "Llegadas",
-      "noArrivals": "Sin Llegadas Hoy",
-      "eta": "ETA",
-      "partyOf": "Grupo de {count}",
-      "landedAt": "aterrizó {time}",
-      "departuresHeading": "Salidas",
-      "noDepartures": "Sin Salidas Hoy",
-      "etd": "ETD",
-      "departedAt": "salió {time}"
-    },
     "advances": {
       "eyebrow": "Móvil",
       "title": "Mis Asignaciones",
       "empty": {
         "title": "Aún Sin Asignaciones",
         "body": "El equipo, las credenciales y los servicios asignados a ti aparecen aquí."
-      },
-      "untitled": "Sin Título",
-      "projectFallback": "Proyecto",
-      "singleShow": {
-        "prompt": "¿Trabajando un solo show?",
-        "link": "Abre tu turno",
-        "suffix": "para ver el call de hoy."
       },
       "detail": {
         "due": "Vence",
@@ -17566,127 +16492,21 @@
     "alerts": {
       "eyebrow": "Móvil",
       "title": "Alertas",
-      "noneActive": "Sin alertas activas.",
-      "empty": {
-        "title": "Sin Alertas Activas"
-      },
-      "scheduled": "programada",
-      "acknowledgedAt": "Confirmada {time}",
       "acknowledge": "Confirmar",
       "acknowledging": "Confirmando…",
       "emptyTitle": "Todo despejado. No hay alertas ahora mismo."
     },
-    "checkIn": {
-      "announce": {
-        "error": "Error: {message}",
-        "accepted": "Aceptado: {name}",
-        "duplicate": "Ticket duplicado: ya escaneado",
-        "voided": "Ticket anulado: denegado",
-        "notFound": "Ticket no encontrado"
-      },
-      "guest": "Invitado",
-      "toast": {
-        "alreadyScanned": "Ya escaneado",
-        "voided": "Ticket anulado",
-        "notFound": "No encontrado",
-        "networkError": "Error de red"
-      },
-      "counts": {
-        "ok": "OK",
-        "dup": "Dup.",
-        "void": "Anul",
-        "miss": "Falla"
-      },
-      "tablist": {
-        "ariaLabel": "Modo de entrada del escáner"
-      },
-      "mode": {
-        "wedge": "Teclado wedge",
-        "camera": "Cámara"
-      },
-      "ticketCode": "Código del ticket",
-      "placeholder": "Escanea o escribe",
-      "validating": "Validando…",
-      "validate": "Validar",
-      "camera": {
-        "hint": "Apunta a un QR de ticket. Valida automáticamente al detectarlo."
-      },
-      "recent": "Recientes",
-      "empty": {
-        "title": "Sin escaneos todavía"
-      },
-      "result": {
-        "accepted": "aceptado",
-        "duplicate": "duplicado",
-        "voided": "anulado",
-        "notFound": "no_encontrado"
-      },
-      "manual": {
-        "eyebrow": "Campo",
-        "title": "Búsqueda manual",
-        "subtitle": "Escribe un código de ticket cuando el QR no se pueda leer",
-        "backToScanner": "Volver al escáner →"
-      },
-      "eyebrow": "Check-In de campo",
-      "title": "Escanear tickets",
-      "scan": {
-        "eyebrow": "Escaneando · {slug}",
-        "title": "Escaneo QR"
-      },
-      "configureSupabase": "Configura Supabase.",
-      "subtitlePrefix": "Actividad de reloj, descansos y créditos de comida de hoy. Usa",
-      "subtitleSuffix": "para fichar entrada o salida.",
-      "stats": {
-        "today": "Hoy",
-        "meals": "Comidas",
-        "breakMin": "Min descanso"
-      },
-      "unassignedVenue": "Sede sin asignar",
-      "badge": {
-        "mealCredited": "Comida acreditada",
-        "breakMinutes": "{minutes}m descanso"
-      }
-    },
     "clock": {
-      "error": {
-        "couldntUpdate": "No se pudo actualizar",
-        "network": "Error de red"
-      },
-      "toast": {
-        "queued": "{label} (en cola, se sincronizará al volver en línea)",
-        "checkedIn": "Check-in realizado",
-        "breakStarted": "Descanso iniciado",
-        "clockedOut": "Salida fichada",
-        "backFromBreak": "De vuelta del descanso",
-        "clockedIn": "Entrada fichada"
-      },
-      "shiftClosed": "Turno cerrado.",
       "working": "Trabajando…",
       "clockIn": "Fichar entrada",
-      "startBreak": "Iniciar descanso",
       "clockOut": "Fichar salida",
-      "endBreak": "Terminar descanso",
       "configureSupabase": "Configura Supabase.",
       "eyebrow": "Campo",
       "title": "Check-in",
       "empty": {
         "title": "Sin Turnos Hoy",
-        "description": "Vuelve cuando estés en la lista.",
         "body": "Ficha la entrada para empezar a registrar tu tiempo."
       },
-      "unassignedVenue": "Sede sin asignar",
-      "inLabel": "Entrada",
-      "outLabel": "Salida",
-      "status": {
-        "clockedIn": "Fichado",
-        "readyToStart": "Listo para Empezar"
-      },
-      "action": {
-        "clockOut": "Fichar salida",
-        "clockIn": "Fichar entrada"
-      },
-      "subtitle": "Control horario geo-verificado",
-      "noWorkforceProfile": "Tu perfil de personal aún no está vinculado a esta cuenta. Pídele a tu supervisor que conecte tu registro de equipo con tu acceso.",
       "active": "Activo",
       "addNote": "Añadir nota",
       "asManager": "Como gerente",
@@ -17701,56 +16521,17 @@
     "coc": {
       "eyebrow": "Campo",
       "title": "Cadena de custodia",
-      "actions": {
-        "logIncident": "+ Registrar incidente",
-        "scanAsset": "Escanear activo"
-      },
-      "recent": {
-        "heading": "Mis eventos de custodia recientes"
-      },
-      "empty": {
-        "title": "Nada en los últimos 7 días"
-      },
-      "badge": {
-        "audit": "Auditoría"
-      },
-      "desktopPrompt": "¿Necesitas la vista de escritorio?",
-      "desktopLink": "Abrir Cadena de custodia",
       "asset": "Activo",
       "emptyBody": "Los escaneos y entregas de activos aparecerán aquí como una línea de tiempo.",
       "emptyTitle": "Sin eventos de custodia",
       "scan": "Escanear"
     },
     "common": {
-      "configureSupabase": "Configura Supabase.",
-      "eyebrow": "Móvil",
-      "mobileEyebrow": "Móvil"
-    },
-    "crew": {
-      "eyebrow": "Campo",
-      "title": "Hoy",
-      "subtitle": "Tu call sheet y controles de fichaje",
-      "clock": {
-        "title": "Fichaje",
-        "subtitle": "Entrada / salida"
-      },
-      "tasks": {
-        "title": "Tareas",
-        "subtitle": "Hoy"
-      }
+      "eyebrow": "Móvil"
     },
     "dailyLog": {
       "eyebrow": "Campo",
       "title": "Bitácora Diaria",
-      "subtitle": "Captura rápida desde el piso",
-      "todaysLog": "Bitácora de hoy: {date}",
-      "selectProject": "Selecciona un proyecto…",
-      "weatherPlaceholder": "Clima (p. ej. 78°F, soleado)",
-      "saveLog": "Guardar bitácora",
-      "recent": "Recientes",
-      "empty": {
-        "title": "Aún no hay registros"
-      },
       "back": "Registros diarios",
       "emptyBody": "Inicia el registro del día con el clima y las notas.",
       "emptyTitle": "Aún no hay registros",
@@ -17806,21 +16587,6 @@
         "opening": "Abriendo…",
         "label": "Descargar"
       },
-      "new": {
-        "configureSupabase": "Configura Supabase.",
-        "title": "Subir Documento",
-        "label": "Etiqueta",
-        "labelPlaceholder": "p. ej. Licencia de Conducir",
-        "kind": "Tipo",
-        "kindId": "Identificación",
-        "kindLicense": "Licencia / certificación",
-        "kindTax": "Formulario fiscal",
-        "kindContract": "Contrato",
-        "kindMedical": "Médico",
-        "kindOther": "Otro",
-        "file": "Archivo",
-        "upload": "Subir"
-      },
       "eyebrow": "Móvil",
       "title": "Mis Documentos",
       "uploadCta": "+ Subir",
@@ -17837,37 +16603,6 @@
         "cat": "Categoría",
         "name": "Nombre",
         "updated": "Actualizado"
-      }
-    },
-    "driver": {
-      "eyebrow": "Móvil",
-      "title": "Conductor",
-      "subtitle": "Tus trayectos asignados de hoy. Toca un trayecto para ver el manifiesto y los puntos de ruta.",
-      "upcoming": "Próximos",
-      "empty": {
-        "title": "Sin Trayectos Programados Hoy"
-      },
-      "depart": "salida",
-      "eta": "ETA",
-      "completed": "Completado",
-      "cancelled": "Cancelado",
-      "run": {
-        "departing": "Saliendo…",
-        "markDeparted": "Marcar salida",
-        "arriving": "Llegando…",
-        "markArrived": "Marcar llegada",
-        "cancelling": "Cancelando…",
-        "cancelRun": "Cancelar trayecto",
-        "configureSupabase": "Configura Supabase.",
-        "backToToday": "← Trayectos de hoy",
-        "eyebrow": "Trayecto",
-        "depart": "Salida",
-        "arrive": "Llegada",
-        "manifestHeading": "Manifiesto · {count}",
-        "noPassengers": "Sin pasajeros listados.",
-        "passengerFallback": "Pasajero {index}",
-        "pickupPrefix": "recogida {location}",
-        "dropoffPrefix": "entrega {location}"
       }
     },
     "error": {
@@ -17901,61 +16636,9 @@
         "update": "Actualización"
       }
     },
-    "gate": {
-      "configureSupabase": "Configura Supabase.",
-      "eyebrow": "Campo",
-      "title": "Acceso",
-      "noScansYet": "Aún no hay escaneos hoy.",
-      "openScanner": "Abrir escáner",
-      "recentScans": "Escaneos Recientes",
-      "empty": {
-        "title": "No Hay Escaneos Registrados Hoy"
-      },
-      "gateFallback": "Acceso",
-      "scan": {
-        "announce": {
-          "error": "Error: {message}",
-          "warn": "Aviso: {reason}",
-          "deny": "Denegado: {reason}"
-        },
-        "result": {
-          "allow": "Permitir"
-        },
-        "reason": {
-          "review": "revisar",
-          "denied": "denegado"
-        },
-        "badge": {
-          "allow": "Permitir",
-          "warn": "Aviso",
-          "deny": "Denegar"
-        },
-        "mode": {
-          "ariaLabel": "Modo de Entrada del Escáner",
-          "wedge": "Wedge de Teclado",
-          "camera": "Cámara"
-        },
-        "cardBarcode": {
-          "label": "Código de Barras de Tarjeta",
-          "placeholder": "Escanea o escribe"
-        },
-        "validating": "Validando…",
-        "validate": "Validar",
-        "recent": "Recientes",
-        "empty": {
-          "title": "Aún No Hay Escaneos"
-        },
-        "eyebrow": "Acceso",
-        "title": "Escanear Acreditación"
-      }
-    },
     "gigs": {
       "eyebrow": "Marketplace",
       "title": "Gigs Abiertos",
-      "countOne": "{count} gig activo en la red.",
-      "countOther": "{count} gigs activos en la red.",
-      "empty": "No hay gigs activos en este momento.",
-      "travelPaid": "viaje pagado",
       "applicants": "{count} postulados",
       "applied": "Postulado",
       "apply": "Postular",
@@ -17968,38 +16651,8 @@
       "rateTbd": "Tarifa por definir",
       "search": "Buscar trabajos…"
     },
-    "guard": {
-      "configureSupabase": "Configura Supabase.",
-      "eyebrow": "Campo",
-      "title": "Guardia",
-      "noToursAssigned": "No tienes rondas asignadas.",
-      "empty": {
-        "title": "Sin Rondas Asignadas",
-        "action": "Abrir Rondas De Guard"
-      },
-      "venue": {
-        "assigned": "Sede asignada",
-        "any": "Cualquier sede"
-      },
-      "cadenceSuffix": " · cada {minutes}m",
-      "badge": {
-        "next": "Próxima {time}"
-      }
-    },
     "guide": {
       "eyebrow": "Guía de Campo",
-      "noActiveProject": {
-        "title": "Sin Proyecto Activo",
-        "body": "Vuelve cuando estés asignado a un show."
-      },
-      "pending": {
-        "title": "Guía Pendiente",
-        "body": "Producción aún no ha publicado una guía para tu rol."
-      },
-      "downloadPdf": {
-        "ariaLabel": "Descarga esta guía en PDF",
-        "label": "Descargar PDF"
-      },
       "empty": "Aún no hay guía",
       "emptyBody": "El equipo de producción aún no ha publicado una guía para tu puesto.",
       "title": "Guía"
@@ -18007,13 +16660,6 @@
     "handover": {
       "eyebrow": "Móvil",
       "title": "Entrega",
-      "needsWalk": "Requiere recorrido",
-      "empty": {
-        "title": "Todos los Venues Entregados",
-        "description": "Nada pendiente hoy."
-      },
-      "capAbbrev": "cap.",
-      "handedOver": "Entregado",
       "assets": "Activos / Llaves",
       "emptyBody": "Envía un traspaso de fin de turno para iniciar el registro.",
       "emptyTitle": "Sin traspasos",
@@ -18025,123 +16671,10 @@
         "allClear": "Todo despejado",
         "issues": "Incidencias",
         "watchItems": "Puntos a vigilar"
-      },
-      "untitled": "Traspaso"
+      }
     },
     "home": {
-      "tabs": {
-        "ariaLabel": "Secciones de inicio móvil",
-        "today": "Hoy",
-        "tools": "Herramientas",
-        "reports": "Reportes"
-      },
-      "today": {
-        "checkIn": {
-          "label": "Check-in",
-          "sub": "Escanear tickets"
-        },
-        "tasks": {
-          "label": "Tareas",
-          "sub": "Cola de hoy"
-        },
-        "clock": {
-          "label": "Reloj",
-          "sub": "Entrada / salida"
-        },
-        "inventory": {
-          "label": "Inventario",
-          "sub": "Escaneo de equipo"
-        },
-        "incident": {
-          "label": "Incidente",
-          "sub": "Reporte de seguridad"
-        },
-        "settings": {
-          "label": "Ajustes",
-          "sub": "Offline, permisos"
-        }
-      },
-      "tools": {
-        "gate": {
-          "label": "Escaneo en Puerta",
-          "sub": "Check-in de acceso"
-        },
-        "wallet": {
-          "label": "Cartera",
-          "sub": "Pase + pagos"
-        },
-        "wms": {
-          "label": "Almacén",
-          "sub": "Movimientos de stock"
-        },
-        "driver": {
-          "label": "Conductor",
-          "sub": "Hoja de ruta"
-        },
-        "ad": {
-          "label": "A&D",
-          "sub": "Llegada / salida"
-        },
-        "ros": {
-          "label": "Run of Show",
-          "sub": "Pista por pista"
-        },
-        "guard": {
-          "label": "Vigilancia",
-          "sub": "Bitácora de patrullaje"
-        },
-        "safeguarding": {
-          "label": "Salvaguarda",
-          "sub": "Bienestar"
-        },
-        "medic": {
-          "label": "Médico",
-          "sub": "Bitácora de pacientes"
-        },
-        "coc": {
-          "label": "Cadena de Custodia",
-          "sub": "Trazabilidad de activos"
-        },
-        "handover": {
-          "label": "Entrega de Turno",
-          "sub": "Transferencia de turno"
-        },
-        "wayfind": {
-          "label": "Orientación",
-          "sub": "Mapa del sitio"
-        },
-        "gigs": {
-          "label": "Gigs Abiertos",
-          "sub": "Encuentra tu próximo trabajo"
-        }
-      },
-      "reports": {
-        "dailyLog": {
-          "label": "Bitácora Diaria",
-          "sub": "Entradas de hoy"
-        },
-        "punch": {
-          "label": "Punch List",
-          "sub": "Pendientes abiertos"
-        },
-        "incidents": {
-          "label": "Incidentes",
-          "sub": "Todos los reportes"
-        },
-        "requests": {
-          "label": "Solicitudes",
-          "sub": "Mesa de servicio"
-        },
-        "notifications": {
-          "label": "Notificaciones",
-          "sub": "Todas las alertas"
-        }
-      },
-      "eyebrow": "Campo",
       "title": "Hoy",
-      "fab": {
-        "scanTicket": "Escanear Ticket"
-      },
       "clock": {
         "sub": "Fichar entrada",
         "title": "Hora local"
@@ -18182,12 +16715,6 @@
     },
     "inbox": {
       "room": {
-        "directMessage": "Mensaje directo",
-        "messagePlaceholder": "Mensaje",
-        "emptyDescription": "Saluda para comenzar.",
-        "emptyTitle": "Aún no hay mensajes",
-        "loadOlder": "Cargar más antiguos",
-        "loadingOlder": "Cargando…",
         "channel": "Canal",
         "direct": "Mensaje directo",
         "empty": "Aún no hay mensajes",
@@ -18213,23 +16740,9 @@
       "unread": "Sin leer"
     },
     "incident": {
-      "new": {
-        "eyebrow": "Campo",
-        "title": "Reporte Rápido",
-        "openFullForm": "Ábrelo",
-        "summaryLabel": "¿Qué pasó?",
-        "fileNow": "Reportar Ahora",
-        "subtitle": "Registra una incidencia de seguridad: admin y EHS lead reciben aviso al instante.",
-        "filing": "Registrando…"
-      },
       "eyebrow": "Campo",
       "title": "Mis Reportes",
-      "subtitle": "Reportes que presentaste. {count} abiertos. Consulta la cola global en",
       "quickFile": "Reporte Rápido (un campo)",
-      "fullReport": "Reporte Completo",
-      "empty": {
-        "title": "Aún Sin Reportes"
-      },
       "back": "Mis incidentes",
       "emptyBody": "No has presentado ningún reporte de incidente.",
       "emptyTitle": "Nada presentado",
@@ -18248,13 +16761,6 @@
     "incidents": {
       "eyebrow": "Campo",
       "title": "Incidente",
-      "noneLast30": "Sin incidentes registrados en los últimos 30 días.",
-      "summary": "{count} en los últimos 30 días · {open} abiertos",
-      "criticalSuffix": "{critical} críticos",
-      "reportCta": "+ Reportar incidente",
-      "empty": {
-        "title": "Todo en Calma"
-      },
       "emptyBody": "Aún no hay incidentes registrados para esta organización.",
       "emptyTitle": "Todo despejado",
       "file": "Presentar reporte",
@@ -18262,31 +16768,6 @@
       "untitled": "Incidente sin título"
     },
     "inventory": {
-      "scan": {
-        "toast": {
-          "failed": "Escaneo fallido",
-          "notFound": "Ningún equipo con esa etiqueta"
-        },
-        "announce": {
-          "notFound": "Activo no encontrado"
-        },
-        "assetTag": "Etiqueta de Activo",
-        "placeholder": "Escanea o escribe",
-        "toggle": "Alternar",
-        "checkIn": "Registrar entrada",
-        "checkOut": "Registrar salida",
-        "recent": "Recientes",
-        "empty": {
-          "title": "Aún Sin Escaneos"
-        },
-        "badge": {
-          "notFound": "no encontrado",
-          "error": "error"
-        },
-        "eyebrow": "Campo",
-        "title": "Escaneo de Inventario",
-        "subtitle": "Escanea o escribe una etiqueta de activo para registrar entrada / salida."
-      },
       "available": "Disponible",
       "colCategory": "Categoría",
       "colCode": "Código",
@@ -18322,12 +16803,6 @@
       "reactWith": "Reaccionar con {emoji}"
     },
     "learning": {
-      "course": {
-        "lessonLabel": "Lección {ordinal}",
-        "quizHeading": "Cuestionario",
-        "passed": "Aprobado",
-        "didNotPass": "No Aprobado"
-      },
       "title": "Formación",
       "coursesAssigned": "{count} cursos asignados",
       "empty": {
@@ -18337,59 +16812,6 @@
       "dueDate": "vence {date}",
       "courseFallback": "Curso"
     },
-    "medic": {
-      "new": {
-        "triage": {
-          "green": {
-            "label": "Verde",
-            "hint": "Leve: no urgente"
-          },
-          "yellow": {
-            "label": "Amarillo",
-            "hint": "Urgente: dentro de 30 min"
-          },
-          "red": {
-            "label": "Rojo",
-            "hint": "Inmediato: riesgo vital"
-          },
-          "black": {
-            "label": "Negro",
-            "hint": "Fallecido / sin expectativa"
-          }
-        },
-        "triageLegend": "Triaje *",
-        "patientRef": {
-          "label": "Referencia del Paciente",
-          "placeholder": "ID seudónimo, nunca un nombre"
-        },
-        "chiefComplaint": {
-          "label": "Motivo Principal *",
-          "placeholder": "¿Con qué se presenta el paciente?"
-        },
-        "disposition": {
-          "label": "Disposición"
-        },
-        "signature": {
-          "label": "Firma del Clínico"
-        },
-        "submit": {
-          "loading": "Registrando…",
-          "idle": "Registrar encuentro"
-        },
-        "eyebrow": "Médico",
-        "title": "Nuevo Encuentro"
-      },
-      "eyebrow": "Campo",
-      "title": "Médico",
-      "empty24h": "Sin encuentros registrados en las últimas 24h.",
-      "countIn24h": "{count} en últimas 24h",
-      "openCount": "{count} abiertos",
-      "newEncounter": "+ Nuevo Encuentro",
-      "emptyState": {
-        "title": "Aún Sin Encuentros"
-      },
-      "anonPatient": "Paciente anónimo"
-    },
     "notFound": {
       "title": "Superficie no encontrada",
       "description": "Esta pantalla móvil no está en el manifiesto.",
@@ -18398,11 +16820,6 @@
     "notifications": {
       "eyebrow": "Móvil",
       "title": "Notificaciones",
-      "allCaughtUp": "Todo al día.",
-      "settingsLink": "ajustes",
-      "empty": {
-        "title": "Sin Notificaciones"
-      },
       "channel": {
         "email": "Correo",
         "push": "Push",
@@ -18418,10 +16835,6 @@
       "completed": "✓ Completado",
       "finish": "Finalizar incorporación",
       "eyebrow": "Móvil",
-      "empty": {
-        "title": "Sin flujos activos"
-      },
-      "fallbackFlowName": "Incorporación",
       "detail": {
         "empty": {
           "title": "Aún no hay pasos",
@@ -18594,26 +17007,8 @@
         "title": "Bienvenido a bordo"
       }
     },
-    "polls": {
-      "title": "Encuestas",
-      "empty": {
-        "title": "Sin Encuestas Activas",
-        "description": "Las encuestas en vivo aparecerán aquí."
-      },
-      "liveBadge": "En Vivo",
-      "voteButton": "Votar"
-    },
     "punch": {
-      "eyebrow": "Campo",
       "title": "Punch List",
-      "noOpenItems": "No tienes elementos abiertos asignados.",
-      "openCount": "{count} abiertos",
-      "empty": {
-        "title": "Punch List Despejada",
-        "action": "Tareas Abiertas"
-      },
-      "overdue": "Vencido",
-      "due": "Vence {date}",
       "active": "Activo",
       "closed": "Cerrado",
       "emptyBody": "Ficha la entrada para empezar tu turno.",
@@ -18629,49 +17024,10 @@
       "today": "Fichajes de hoy"
     },
     "requests": {
-      "detail": {
-        "back": "← Solicitudes",
-        "opened": "Abierta",
-        "responseSla": "SLA de Respuesta",
-        "update": "Actualizar"
-      },
-      "new": {
-        "backLink": "← Solicitudes",
-        "title": "Abrir Solicitud",
-        "submit": "Abrir",
-        "severity": {
-          "label": "Severidad",
-          "p1": "P1: bloqueador en directo",
-          "p2": "P2: urgente",
-          "p3": "P3: estándar",
-          "p4": "P4: baja"
-        },
-        "category": {
-          "label": "Categoría",
-          "av": "AV",
-          "cleaning": "Limpieza",
-          "repair": "Reparación",
-          "it": "IT",
-          "hospitality": "Hospitalidad",
-          "security": "Seguridad",
-          "other": "Otro"
-        },
-        "summary": {
-          "label": "Resumen",
-          "placeholder": "Una línea: ¿qué falla?"
-        },
-        "detail": {
-          "label": "Detalle",
-          "placeholder": "Dónde, qué, a quién afecta"
-        }
-      },
       "eyebrow": "Campo",
       "title": "Solicitudes de Servicio",
-      "openCta": "+ Abrir",
-      "subtitle": "Solicitudes activas en toda la organización.",
       "empty": {
         "title": "Nada Abierto",
-        "description": "Todo en calma ahora mismo.",
         "body": "Las solicitudes de tiempo libre y de cambio de turno aparecen aquí."
       },
       "approve": "Aprobar",
@@ -18702,87 +17058,12 @@
         "timeOff": "Tiempo libre"
       }
     },
-    "ros": {
-      "show": {
-        "configureSupabase": "Configura Supabase.",
-        "backToAll": "← Todas las señales",
-        "eyebrow": "Show",
-        "liveLabel": "En vivo",
-        "startedAt": "iniciado {time}",
-        "upcomingHeading": "Próximas · {count}",
-        "noMoreCues": "No hay más señales en cola.",
-        "completedHeading": "Completadas · {count}",
-        "doneBadge": "Listo"
-      },
-      "eyebrow": "Móvil",
-      "title": "Run of Show",
-      "noneToday": "No hay señales programadas hoy.",
-      "empty": {
-        "title": "Sin Señales Hoy"
-      }
-    },
-    "safeguarding": {
-      "eyebrow": "Móvil",
-      "title": "Protección",
-      "fileNew": "Presentar nuevo reporte",
-      "reportsFiledHeading": "Reportes que has presentado",
-      "empty": {
-        "title": "Sin reportes presentados"
-      },
-      "subjectLabel": "Asunto:"
-    },
     "settings": {
-      "notifications": {
-        "eyebrow": "Ajustes",
-        "title": "Notificaciones",
-        "pushSettingsLink": "Ajustes → Notificaciones Push",
-        "digest": {
-          "heading": "Resumen",
-          "immediate": "Inmediato",
-          "hourly": "Resumen Cada Hora",
-          "daily": "Resumen Diario"
-        },
-        "perKind": {
-          "heading": "Conmutadores Por Tipo",
-          "colKind": "Tipo",
-          "colPush": "Push",
-          "colEmail": "Correo"
-        },
-        "savePreferences": "Guardar Preferencias"
-      },
       "eyebrow": "Campo",
       "title": "Ajustes",
-      "language": {
-        "title": "Idioma",
-        "description": "Afecta a cada etiqueta, fecha y número de la app."
-      },
-      "push": {
-        "title": "Notificaciones Push",
-        "managePreferences": "Gestionar preferencias de notificación por tipo →",
-        "missingVapid": "Las notificaciones push aún no están configuradas. Pídele a un administrador que las active."
-      },
-      "offline": {
-        "title": "Modo Sin Conexión",
-        "serviceWorker": "Caché del service worker",
-        "ready": "Listo"
-      },
-      "camera": {
-        "title": "Cámara",
-        "description": "Necesaria para escaneos e informes de incidentes."
-      },
-      "location": {
-        "title": "Ubicación",
-        "description": "Se usa para fichar entrada/salida con geo-verificación."
-      },
       "signOut": "Cerrar Sesión",
       "account": {
-        "archive": "Archivar",
-        "archiveDesc": "Solicitar revocación de acceso. Registros conservados.",
-        "archived": "Solicitado",
         "heading": "Cuenta",
-        "pause": "Pausar",
-        "pauseDesc": "Ocultar de la programación. Conserva tus registros.",
-        "paused": "Pausada",
         "status": "Estado de la cuenta"
       },
       "appearance": {
@@ -18791,9 +17072,7 @@
         "theme": "Tema"
       },
       "certs": {
-        "heading": "Certificaciones",
-        "label": "Certificaciones",
-        "none": "No hay certificaciones registradas."
+        "label": "Certificaciones"
       },
       "contact": {
         "city": "Ciudad",
@@ -18869,46 +17148,13 @@
       "mealCredit": "Crédito de Comida",
       "upcomingThisWeek": "Próximos esta semana",
       "checkIn": "Fichar entrada",
-      "swapShift": "Cambiar turno",
-      "swap": {
-        "eyebrow": "Campo",
-        "title": "Cambiar Turno",
-        "empty": {
-          "title": "Sin Turnos Próximos para Cambiar",
-          "action": "Abrir turno"
-        },
-        "unassignedVenue": "Sede sin asignar",
-        "reasonPlaceholder": "Motivo del cambio…",
-        "requestButton": "Solicitar cambio"
-      }
-    },
-    "surveys": {
-      "title": "Encuestas",
-      "empty": {
-        "title": "Sin encuestas activas",
-        "description": "Las encuestas abiertas aparecerán aquí."
-      },
-      "badge": {
-        "submitted": "Enviada",
-        "open": "Abierta",
-        "anonymous": "Anónima"
-      },
-      "closesAt": "cierra {date}",
-      "detail": {
-        "empty": {
-          "title": "Aún no hay preguntas"
-        }
-      }
+      "swapShift": "Cambiar turno"
     },
     "tasks": {
       "eyebrow": "Campo",
       "title": "Mis Tareas",
       "empty": "Sin tareas asignadas",
-      "dueLabel": "Vence {date}",
       "detail": {
-        "back": "← Tareas",
-        "dueLabel": "Vence {date}",
-        "updateStatus": "Actualizar Estado",
         "actAssigned": "reasignó la tarea",
         "actAttached": "añadió un adjunto",
         "actCommented": "comentó",
@@ -18918,8 +17164,6 @@
         "activity": "Actividad",
         "activityEmpty": "Aún no hay actividad.",
         "assignee": "Responsable",
-        "checklist": "Lista de verificación",
-        "checklistEmpty": "Sin elementos en la lista de verificación.",
         "created": "Creada",
         "description": "Descripción",
         "descriptionEmpty": "Sin descripción.",
@@ -18968,17 +17212,6 @@
       "unassigned": "Sin asignar"
     },
     "timeOff": {
-      "new": {
-        "title": "Nueva Solicitud de Tiempo Libre",
-        "policy": "Política",
-        "startsOn": "Comienza el",
-        "endsOn": "Termina el",
-        "hoursRequested": "Horas Solicitadas",
-        "reason": "Motivo",
-        "empty": {
-          "title": "Sin políticas de tiempo libre"
-        }
-      },
       "title": "Tiempo Libre",
       "balancesHeading": "Saldos ({year})",
       "noPolicies": "Aún no hay políticas asignadas.",
@@ -18999,75 +17232,16 @@
       "newCta": "Solicitar tiempo libre",
       "requests": "Tus solicitudes"
     },
-    "tracker": {
-      "configureSupabase": "Configura Supabase.",
-      "title": "Seguimiento",
-      "projectSingular": "proyecto",
-      "projectPlural": "proyectos",
-      "atomSingular": "átomo",
-      "atomPlural": "átomos",
-      "empty": {
-        "title": "Aún no hay proyectos"
-      },
-      "metric": {
-        "budget": "Presupuesto",
-        "actual": "Real",
-        "variance": "Variación"
-      }
-    },
     "wallet": {
-      "configureSupabase": "Configura Supabase.",
       "eyebrow": "Móvil",
       "title": "Mi Credencial",
-      "subtitle": "Muestra esta pantalla en el acceso. Mantenla activa hasta el final de tu turno.",
       "empty": {
         "title": "Sin Credencial Emitida",
         "body": "Los derechos de credencial aparecen aquí una vez emitidos. Contacta a tu administrador."
       },
-      "defaultCategoryCode": "ACC",
-      "cardBarcode": "Código de Barras",
-      "validFrom": "Válida Desde",
-      "validTo": "Válida Hasta",
-      "otherCards": "Otras Tarjetas",
-      "openProfile": "Abrir perfil →",
       "accessTitle": "Acceso y permisos",
       "credential": "Credencial",
       "help": "Contactar al administrador para ayuda"
-    },
-    "wayfind": {
-      "otherCluster": "Otros",
-      "eyebrow": "Campo",
-      "title": "Orientación",
-      "subtitle": "Elige una sede para ver sus zonas, accesos y puntos de encuentro.",
-      "empty": {
-        "title": "Aún No Hay Sedes",
-        "action": "Abrir Sedes"
-      }
-    },
-    "wms": {
-      "eyebrow": "Campo",
-      "title": "Almacén",
-      "subtitle": "Picking, ubicación y check-in/out por escaneo.",
-      "scanAsset": "Escanear Activo",
-      "assetRegister": "Registro de Activos",
-      "inMaintenance": "En Mantenimiento",
-      "empty": {
-        "maintenance": "Sin Artículos en Mantenimiento",
-        "returns": "Sin Devoluciones Programadas"
-      },
-      "noTag": "sin etiqueta",
-      "returnsDue": "Devoluciones Pendientes",
-      "due": "Vence {date}"
-    },
-    "offline": {
-      "queuedToast": "En cola: se sincronizará al volver online",
-      "queuedDetail": "offline: sincronización pendiente",
-      "queuedBadge": "En Cola",
-      "pendingBadge": "{count} Pendientes: Se Sincronizarán al Volver Online"
-    },
-    "checkInSummary": {
-      "eyebrow": "Campo",
-      "title": "Resumen de Check-in"
     },
     "account": {
       "archive": {
@@ -19160,7 +17334,6 @@
       "empty": "Sin personas",
       "emptyBody": "Aún no hay otro personal en esta organización: las sugerencias aparecen aquí a medida que crece tu red.",
       "network": "Mi red",
-      "pending": "Pendiente",
       "pendingSection": "Solicitudes pendientes",
       "remove": "Eliminar",
       "requestSent": "Solicitud enviada",
@@ -19237,7 +17410,6 @@
       "step2s": "Se registran en la red ATLVS",
       "step3": "Ganas",
       "step3s": "Puntos y efectivo cuando los contratan",
-      "tier": "Inicial",
       "title": "Referidos y recompensas",
       "yours": "Tus referidos"
     },
@@ -19266,10 +17438,7 @@
       "musterTo": "Concentración: {to}",
       "position": "Posición",
       "project": "Proyecto",
-      "reportTo": "Reportar a",
-      "role": "Rol de emergencia",
       "shelter": "Refugio",
-      "team": "Equipo",
       "title": "Tarjeta de emergencia",
       "unassigned": "A la espera de asignación"
     },
@@ -19401,12 +17570,6 @@
       "ends": "Finaliza",
       "allDay": "Todo el Día",
       "upcoming": "Próximos",
-      "empty": "Aún no hay bloques de disponibilidad.",
-      "kind": {
-        "block": "Bloqueo: No disponible",
-        "confirm": "Confirmar: Bloqueado",
-        "hold": "Reserva: Liberación automática al expirar el TTL"
-      },
       "kindLabel": "Tipo"
     },
     "cards": {
@@ -19433,8 +17596,7 @@
         "blurb": "Ofertas dirigidas a los actos a los que estás vinculado."
       },
       "reviews": {
-        "label": "Mis Reseñas",
-        "blurb": "Reseñas bidireccionales: se publican cuando la contraparte responde."
+        "label": "Mis Reseñas"
       },
       "profile": {
         "label": "Perfil",
@@ -19621,11 +17783,9 @@
     },
     "notifications": {
       "title": "Notificaciones",
-      "subtitle": "Elige cómo recibes actualizaciones para cada evento del espacio de trabajo.",
       "inboxPrompt": "¿Buscas tu bandeja de entrada?",
       "openInbox": "Abrir Bandeja de Entrada",
       "pushDevices": "Dispositivos Push",
-      "savePreferences": "Guardar Preferencias",
       "columns": {
         "event": "Evento"
       },
@@ -19685,7 +17845,6 @@
     "organizations": {
       "title": "Organizaciones",
       "configureSupabase": "Configura Supabase.",
-      "subtitle": "Cada organización de la que eres miembro",
       "empty": {
         "title": "Aún sin membresías"
       }
@@ -19902,7 +18061,6 @@
       "title": "Seguridad",
       "password": {
         "label": "Contraseña",
-        "hint": "Modificada por última vez al registrarte",
         "reset": "Restablecer"
       },
       "totp": {
@@ -20017,8 +18175,6 @@
       "configureSupabase": "Configura Supabase.",
       "eyebrow": "Mi perfil de talento",
       "title": "EPK",
-      "descriptionPrefix": "Público al activarlo. Descubierto vía",
-      "liveAt": "En vivo en",
       "liveBadge": "en vivo",
       "publishedNotice": "Tu EPK está publicado.",
       "submit": "Guardar EPK",
@@ -20026,11 +18182,9 @@
         "actName": "Nombre Artístico",
         "tagline": "Lema",
         "bio": "Biografía",
-        "genreTags": "Etiquetas de Género (separadas por comas)",
         "feeMin": "Caché Mínimo",
         "feeMax": "Caché Máximo",
-        "reelUrl": "URL del Reel",
-        "publishToMarketplace": "Publicar en /marketplace/talent"
+        "reelUrl": "URL del Reel"
       }
     },
     "tickets": {
@@ -20039,7 +18193,6 @@
       "subtitle": "Tickets emitidos a {email}",
       "empty": "Aún no hay tickets",
       "columns": {
-        "code": "Código",
         "tier": "Nivel",
         "state": "Estado",
         "issued": "Emitido",
@@ -20319,7 +18472,6 @@
         "crumbAthlete": "Atleta",
         "crumbSafeguarding": "Protección",
         "channelTitle": "Canal de reporte confidencial",
-        "emailLead": "Enviar correo al responsable de protección",
         "fileViaMobile": "Presentar desde móvil",
         "metricOpen": "Abiertos",
         "metricClosed": "Cerrados",
@@ -20364,10 +18516,7 @@
         },
         "passportLabel": "pasaporte",
         "letterOnFile": "carta registrada",
-        "updated": "actualizado {date}",
-        "footer": {
-          "suffix": "si tu caso no avanza."
-        }
+        "updated": "actualizado {date}"
       },
       "breadcrumbLabel": "Atleta"
     },
@@ -20399,7 +18548,6 @@
           "number": "Número",
           "title": "Título",
           "amount": "Importe",
-          "status": "Estado",
           "due": "Vence",
           "pdf": "PDF",
           "invoice_state": "Estado"
@@ -20600,7 +18748,6 @@
         "col": {
           "title": "Título",
           "amount": "Importe",
-          "status": "Estado",
           "sent": "Enviada",
           "proposal_state": "Estado"
         },
@@ -20663,7 +18810,6 @@
     "crew": {
       "advances": {
         "configureSupabase": "Configura Supabase.",
-        "eyebrow": "Portal",
         "title": "Mis Asignaciones",
         "empty": {
           "title": "Aún Nada Asignado"
@@ -20873,8 +19019,7 @@
       "subtitle": "Panel operativo para los attachés de delegación",
       "metrics": {
         "entries": "Inscripciones",
-        "visaCases": "Casos de Visa",
-        "orders": "Pedidos"
+        "visaCases": "Casos de Visa"
       },
       "docVault": {
         "title": "Bóveda de Documentos",
@@ -20986,14 +19131,7 @@
       "tickets": {
         "title": "Boletos",
         "subtitle": "Tus boletos para este evento",
-        "projectNotFound": "Proyecto no encontrado.",
-        "empty": "Aún no hay boletos. Compra o reclama para comenzar",
-        "columns": {
-          "code": "Código",
-          "tier": "Categoría",
-          "holder": "Titular",
-          "state": "Estado"
-        }
+        "projectNotFound": "Proyecto no encontrado."
       }
     },
     "guide": {
@@ -21075,14 +19213,7 @@
         }
       },
       "metric": {
-        "tickets": "Entradas",
-        "roomBlocks": "Bloques de Habitaciones",
-        "status": "Estado",
-        "statusLive": "En Vivo"
-      },
-      "footer": {
-        "prefix": "¿Necesitas cambiar tu reserva? Escribe a",
-        "suffix": "y menciona tu ID de reserva."
+        "roomBlocks": "Bloques de Habitaciones"
       }
     },
     "media": {
@@ -21192,7 +19323,6 @@
           "heading": "Calendario"
         },
         "rsvp": {
-          "prefix": "Para confirmar asistencia, escribe a",
           "suffix": "con tu número de acreditación y el nombre de la rueda de prensa."
         },
         "eyebrowLabel": "Portal · Media"
@@ -21244,11 +19374,6 @@
     "notFound": {
       "eyebrow": "No Encontrado",
       "title": "Proyecto No Disponible"
-    },
-    "overview": {
-      "title": "Resumen del proyecto",
-      "subtitle": "Elige tu portal para continuar",
-      "openPortal": "Abrir portal {persona} →"
     },
     "producer": {
       "approvals": {
@@ -21317,7 +19442,6 @@
           "impact": "Impacto",
           "owner": "Responsable",
           "due": "Vence",
-          "status": "Estado",
           "risk_state": "Estado"
         }
       },
@@ -21379,7 +19503,6 @@
           "showDate": "Fecha del Show",
           "guarantee": "Garantía",
           "doorPct": "% Taquilla",
-          "status": "Estado",
           "talent_offer_state": "Estado"
         }
       },
@@ -21395,7 +19518,6 @@
           "channel": "Canal",
           "dates": "Fechas",
           "spend": "Inversión",
-          "status": "Estado",
           "campaign_state": "Estado"
         }
       },
@@ -21780,7 +19902,6 @@
           "number": "#",
           "title": "Título",
           "amount": "Monto",
-          "status": "Estado",
           "issued": "Emitida",
           "due": "Vence",
           "invoice_state": "Estado"
@@ -21820,7 +19941,6 @@
           "number": "#",
           "title": "Título",
           "amount": "Monto",
-          "status": "Estado",
           "created": "Creada",
           "po_state": "Estado"
         }
@@ -21937,10 +20057,7 @@
         "vip": "VIP"
       },
       "metrics": {
-        "suites": "Suites",
-        "t1Runs": "Trayectos T1",
-        "status": "Estado",
-        "statusLive": "En Vivo"
+        "suites": "Suites"
       },
       "concierge": {
         "label": "Conserje:",
@@ -22002,12 +20119,10 @@
           "name": "Nombre",
           "email": "Correo",
           "phone": "Teléfono",
-          "role": "Rol",
-          "updatePrompt": "¿Necesitas actualizar tus datos? Escribe a"
+          "role": "Rol"
         },
         "submit": {
-          "title": "Envía Tu Solicitud",
-          "emailCta": "Escribir al equipo de voluntariado"
+          "title": "Envía Tu Solicitud"
         }
       },
       "eyebrow": "Portal",
@@ -22163,11 +20278,6 @@
       "prevRow": "Previous row",
       "toggleSelect": "Select / deselect focused row",
       "openRow": "Open focused row"
-    },
-    "editor": {
-      "bold": "Bold (in editor)",
-      "italic": "Italic (in editor)",
-      "underline": "Underline (in editor)"
     }
   },
   "cookieConsent": {
@@ -22186,8 +20296,6 @@
       "label": "Marketing",
       "description": "Tracking de conversión para el sitio de marketing. Ninguna dentro del producto."
     },
-    "customize": "Personalizar",
-    "hideDetails": "Ocultar Detalles",
     "rejectAll": "Rechazar Todas",
     "savePreferences": "Guardar Preferencias",
     "acceptAll": "Aceptar Todas",
@@ -22409,75 +20517,12 @@
       }
     }
   },
-  "shareDialog": {
-    "shareButton": "Compartir",
-    "expiry": {
-      "1h": "1 hora",
-      "24h": "24 horas",
-      "7d": "7 días",
-      "30d": "30 días",
-      "never": "Nunca caduca"
-    },
-    "errors": {
-      "loadFailed": "Error al cargar enlaces",
-      "createFailed": "Error al crear el enlace",
-      "revokeFailed": "Error al revocar"
-    },
-    "title": "Compartir {label}",
-    "titleFallback": "este recurso",
-    "description": "Crea un enlace público que cualquiera con la URL puede abrir. Añade un código o caducidad para acotar el acceso.",
-    "createHeading": "Crear un enlace",
-    "labelField": "Etiqueta · Opcional",
-    "labelPlaceholder": "p. ej. Vista previa del productor",
-    "expiresIn": "Caduca en",
-    "passcodeField": "Código de Acceso · Opcional",
-    "passcodePlaceholder": "Deja en blanco para ninguno",
-    "maxUsesField": "Usos Máximos · Opcional",
-    "maxUsesPlaceholder": "Ilimitado",
-    "access": "Acceso",
-    "roleViewer": "Visor · Solo Lectura",
-    "roleCommenter": "Comentarista · Puede Dejar Anotaciones",
-    "copy": "Copiar",
-    "createLink": "Crear enlace",
-    "activeHeading": "Enlaces activos",
-    "loading": "Cargando…",
-    "noLinks": "Aún no hay enlaces activos.",
-    "unlabeled": "Sin etiqueta",
-    "passcodeBadge": "código",
-    "useSingular": "{count} uso",
-    "usePlural": "{count} usos",
-    "maxSuffix": " / {max}",
-    "expiresSuffix": " · caduca {date}",
-    "noExpiry": " · sin caducidad",
-    "revokeAria": "Revocar enlace {name}",
-    "revoke": "Revocar",
-    "done": "Listo"
-  },
   "components": {
     "stickyCta": {
       "region": "Acceso rápido",
       "open": "ATLVS es abierto.",
       "tagline": "Gratis para equipos pequeños. Sin tarjeta.",
       "dismiss": "Descartar"
-    },
-    "signatureField": {
-      "label": "Firma",
-      "placeholder": "Escribe tu nombre completo",
-      "type": "Escribir",
-      "draw": "Dibujar",
-      "clear": "Limpiar",
-      "captured": "Capturada",
-      "signAbove": "Firma arriba"
-    },
-    "addressField": {
-      "street": "Calle y número",
-      "street2": "Depto, suite, piso",
-      "streetLabel": "Calle",
-      "street2Label": "Depto / Suite · Opcional",
-      "city": "Ciudad",
-      "region": "Estado / Región",
-      "postalCode": "Código postal",
-      "country": "País"
     },
     "datePicker": {
       "placeholder": "Seleccionar fecha",
@@ -22500,16 +20545,12 @@
       "kindLabel": "Tipo",
       "kindAria": "Tipo de disparador",
       "manualNote": "Sin configuración adicional. Usa el botón Ejecutar ahora bajo Controles para disparar una ejecución.",
-      "comingSoon": "Próximamente",
-      "scheduleSoon": "El disparador por programación llega en la Fase 4.3.",
       "rruleLabel": "RRULE / cron",
       "rruleHint": "Sintaxis RRULE de iCal. Se guarda ahora; el runner la habilita en P4.3.",
-      "webhookSoon": "El endpoint entrante llega en la Fase 4.3.",
       "inboundUrl": "URL Entrante",
       "secretLabel": "Secreto Compartido (HMAC)",
       "secretPlaceholder": "Opcional: usa el secreto por automatización como fallback",
       "secretHint": "Si se define, el runner verifica x-lyt-signature antes del despacho.",
-      "eventSoon": "La suscripción a eventos llega en la Fase 4.5.",
       "targetTable": "Tabla Objetivo",
       "targetTableAria": "Tabla objetivo",
       "selectPlaceholder": "Seleccionar…",
@@ -22879,29 +20920,6 @@
       "subtotal": "Subtotal",
       "taxesFees": "Impuestos / cargos",
       "notes": "Notas"
-    },
-    "proposal": {
-      "eyebrow": "Propuesta",
-      "statusSigned": "FIRMADA",
-      "classificationExecuted": "EJECUTADA",
-      "summary": "Resumen",
-      "proposalNumber": "Propuesta #",
-      "status": "Estado",
-      "total": "Total",
-      "deposit": "Depósito",
-      "sent": "Enviada",
-      "expires": "Caduca",
-      "notes": "Notas",
-      "signatures": "Firmas",
-      "signature": "Firma",
-      "signedFromLine": "Firmada {date} desde {ip}",
-      "signaturePending": "Pendiente: firma la propuesta en el enlace compartido para ejecutarla.",
-      "sectionFallback": "Sección",
-      "colItem": "Ítem",
-      "colDescription": "Descripción",
-      "colAmount": "Monto",
-      "colMilestone": "Hito",
-      "colDate": "Fecha"
     },
     "reports": {
       "expense": {
@@ -23600,15 +21618,6 @@
       "footerConfidential": "Confidencial",
       "footerConfidentialBody": "Preparado para {client}. Los precios y el detalle estructural son confidenciales entre las partes. © {year} {producer}."
     }
-  },
-  "publicFormSubmit": {
-    "submitted": "Enviado",
-    "thankYouTitle": "Gracias, lo recibimos.",
-    "thankYouBody": "Tu respuesta quedó registrada. Puedes cerrar esta pestaña.",
-    "leaveBlank": "Dejar en blanco",
-    "selectPlaceholder": "Seleccionar…",
-    "submitting": "Enviando",
-    "submit": "Enviar"
   },
   "apiDocs": {
     "meta": {

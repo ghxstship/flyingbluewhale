@@ -73,7 +73,7 @@ function GlobalNavShortcuts() {
     setIsPlatform(Boolean(document.querySelector('[data-platform="atlvs"]')));
   }, [pathname]);
 
-  const chords = React.useMemo(buildNavChords, []);
+  const chords = React.useMemo(() => buildNavChords(), []);
 
   // Cheatsheet registration — Navigation chords + the `c` front door.
   React.useEffect(() => {

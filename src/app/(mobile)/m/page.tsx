@@ -32,7 +32,9 @@ export default async function MobileHome() {
   // one parallel round (HP-12); this is the field PWA home, often on a bad
   // network, so serial waterfalls hurt the most here.
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }] = await Promise.all([
+  const today = nowIso.slice(0, 10);
+  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: sheetRows }] =
+    await Promise.all([
     // Open tasks assigned to me (anything not yet done).
     supabase
       .from("tasks")
@@ -63,6 +65,17 @@ export default async function MobileHome() {
       .order("starts_at", { ascending: true })
       .limit(1)
       .maybeSingle(),
+    // Today's (or the next) PUBLISHED day sheet — the kit 26 push-to-field
+    // artifact. Published/updated only: drafts never reach the crew.
+    supabase
+      .from("day_sheets")
+      .select("id, city, venue, sheet_date, crew_call, doors, headline_set, curfew, sheet_state")
+      .eq("org_id", session.orgId)
+      .in("sheet_state", ["published", "updated"])
+      .gte("sheet_date", today)
+      .is("deleted_at", null)
+      .order("sheet_date", { ascending: true })
+      .limit(1),
   ]);
 
   const nextShift: HomeData["nextShift"] = ev
@@ -79,11 +92,36 @@ export default async function MobileHome() {
       }
     : null;
 
+  const sheet = ((sheetRows ?? []) as Array<{
+    id: string;
+    city: string | null;
+    venue: string | null;
+    sheet_date: string | null;
+    crew_call: string | null;
+    doors: string | null;
+    headline_set: string | null;
+    curfew: string | null;
+    sheet_state: string;
+  }>)[0];
+  const trim = (v: string | null) => (v ? v.slice(0, 5) : null); // HH:MM from HH:MM:SS time columns
+  const daySheet: HomeData["daySheet"] = sheet
+    ? {
+        where: [sheet.city, sheet.venue].filter(Boolean).join(" · ") || t("m.home.daySheet.fallbackWhere", undefined, "Show Day"),
+        date: sheet.sheet_date ? fmt.date(sheet.sheet_date) : "",
+        call: trim(sheet.crew_call),
+        doors: trim(sheet.doors),
+        set: sheet.headline_set,
+        curfew: trim(sheet.curfew),
+        updated: sheet.sheet_state === "updated",
+      }
+    : null;
+
   const data: HomeData = {
     openTasks: openTasks ?? 0,
     myAdvances: myAdvances ?? 0,
     unread: unread ?? 0,
     nextShift,
+    daySheet,
   };
 
   const greeting = fmt.dateParts(new Date(), {
@@ -110,6 +148,12 @@ export default async function MobileHome() {
     viewAll: t("m.home.viewAll", undefined, "View All Upcoming Events"),
     noShift: t("m.home.noShift", undefined, "Nothing Scheduled"),
     noShiftBody: t("m.home.noShiftBody", undefined, "Your next call lands here."),
+    daySheet: t("m.home.daySheet", undefined, "Day Sheet"),
+    dsUpdated: t("m.home.daySheet.updated", undefined, "Updated"),
+    dsCall: t("m.home.daySheet.call", undefined, "Crew Call"),
+    dsDoors: t("m.home.daySheet.doors", undefined, "Doors"),
+    dsSet: t("m.home.daySheet.set", undefined, "Set"),
+    dsCurfew: t("m.home.daySheet.curfew", undefined, "Curfew"),
     newSheet: t("m.home.newSheet", undefined, "Create"),
     newSheetBody: t("m.home.newSheetBody", undefined, "What Do You Need?"),
     qaReport: t("m.home.qa.report", undefined, "Report"),

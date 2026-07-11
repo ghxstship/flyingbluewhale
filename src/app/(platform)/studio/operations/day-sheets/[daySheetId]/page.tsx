@@ -9,6 +9,7 @@ import { getRequestT } from "@/lib/i18n/request";
 import { scheduleKindLabel } from "@/lib/schedule/kinds";
 import { DAY_SHEET_STATE_LABELS, DAY_SHEET_STATE_TONE, type DaySheetState } from "@/lib/db/day-sheets";
 import { DaySheetPublishBar } from "./DaySheetPublishBar";
+import { DaySheetPrintButton } from "./DaySheetPrintButton";
 
 export const dynamic = "force-dynamic";
 
@@ -83,7 +84,12 @@ export default async function Page({ params }: { params: Promise<{ daySheetId: s
         eyebrow={t("console.daySheets.eyebrow", undefined, "Operations")}
         title={sheet.city ?? t("console.daySheets.detail.untitled", undefined, "Day Sheet")}
         subtitle={[sheet.venue, sheet.sheet_date].filter(Boolean).join(" · ") || undefined}
-        action={<DaySheetPublishBar daySheetId={sheet.id} state={sheet.sheet_state} />}
+        action={
+          <div className="flex items-center gap-2">
+            <DaySheetPrintButton />
+            <DaySheetPublishBar daySheetId={sheet.id} state={sheet.sheet_state} />
+          </div>
+        }
       />
       <div className="page-content space-y-5">
         <div className="flex flex-wrap items-center gap-3">

@@ -1128,6 +1128,101 @@
         "transcript",
         "certificate"
       ]
+    },
+    "tours_active": {
+      "app": "ATLVS",
+      "label": "Active Tours",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "up",
+      "confidence": "PUBLISHED",
+      "formula": "tours in planning / routing / confirmed (not deleted)",
+      "sources": [
+        "tours"
+      ]
+    },
+    "tour_routed_dates": {
+      "app": "ATLVS",
+      "label": "Routed Dates",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "up",
+      "confidence": "PUBLISHED",
+      "formula": "talent_offers rows carrying a tour_id (legs across every run)",
+      "sources": [
+        "talent_offers",
+        "tours"
+      ]
+    },
+    "tour_gbor": {
+      "app": "ATLVS",
+      "label": "Tour GBOR",
+      "unit": "$",
+      "format": "currency",
+      "grain": "org",
+      "direction": "up",
+      "confidence": "PUBLISHED",
+      "formula": "sum of tour_p_and_l.gross_box_office_cents across tours",
+      "sources": [
+        "tour_p_and_l",
+        "settlements"
+      ]
+    },
+    "tour_settlement_progress": {
+      "app": "ATLVS",
+      "label": "Settlement Progress",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 100,
+      "confidence": "PUBLISHED",
+      "formula": "settled legs / total legs across active tours",
+      "sources": [
+        "tour_p_and_l"
+      ]
+    },
+    "day_sheets_total": {
+      "app": "ATLVS",
+      "label": "Day Sheets",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "up",
+      "confidence": "PUBLISHED",
+      "formula": "day_sheets rows (not deleted)",
+      "sources": [
+        "day_sheets"
+      ]
+    },
+    "day_sheets_published": {
+      "app": "ATLVS",
+      "label": "Published Sheets",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "up",
+      "confidence": "PUBLISHED",
+      "formula": "day_sheets in published or updated",
+      "sources": [
+        "day_sheets"
+      ]
+    },
+    "day_sheet_publish_rate": {
+      "app": "ATLVS",
+      "label": "Publish Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 90,
+      "confidence": "PUBLISHED",
+      "formula": "published or updated day sheets / all day sheets",
+      "sources": [
+        "day_sheets"
+      ]
     }
   },
   "reports": {
@@ -1720,6 +1815,35 @@
       "metrics": [
         "ceus_awarded",
         "active_certs"
+      ],
+      "status": "preconfigured"
+    },
+    "tourstatus": {
+      "app": "ATLVS",
+      "title": "Tour Status",
+      "doc": "report-tour-status.html",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "tours_active",
+        "tour_routed_dates",
+        "tour_gbor",
+        "tour_settlement_progress"
+      ],
+      "status": "preconfigured"
+    },
+    "daysheets": {
+      "app": "ATLVS",
+      "title": "Day Sheet Status",
+      "doc": "report-day-sheets.html",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "day_sheets_total",
+        "day_sheets_published",
+        "day_sheet_publish_rate"
       ],
       "status": "preconfigured"
     }

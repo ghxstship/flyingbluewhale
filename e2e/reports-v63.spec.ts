@@ -58,19 +58,21 @@ test.describe("v6.3 reports — API", () => {
     await loginAs(page, "owner");
   });
 
-  test("GET /api/v1/metrics returns the 77-metric catalog", async ({ page }) => {
+  test("GET /api/v1/metrics returns the 84-metric catalog", async ({ page }) => {
     const resp = await page.request.get("/api/v1/metrics");
     expect(resp.status()).toBe(200);
     const { data } = await resp.json();
-    expect(data.metrics).toHaveLength(77);
+    // 77 + the 7 kit-26 touring metrics (tours / day sheets).
+    expect(data.metrics).toHaveLength(84);
     expect(data.metrics.every((m: { id: string; format: string }) => m.id && m.format)).toBe(true);
   });
 
-  test("GET /api/v1/reports returns the 43-report library", async ({ page }) => {
+  test("GET /api/v1/reports returns the 45-report library", async ({ page }) => {
     const resp = await page.request.get("/api/v1/reports");
     expect(resp.status()).toBe(200);
     const { data } = await resp.json();
-    expect(data.reports).toHaveLength(43);
+    // 43 + the 2 kit-26 touring reports (Tour Status, Day Sheet Status).
+    expect(data.reports).toHaveLength(45);
   });
 
   test("GET /api/v1/reports/{id} resolves metric values for the org", async ({ page }) => {

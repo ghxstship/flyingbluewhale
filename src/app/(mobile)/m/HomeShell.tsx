@@ -36,6 +36,16 @@ export type HomeData = {
     day: string;
     sub: string;
   } | null;
+  /** Today's (or the next) PUBLISHED day sheet — kit 26 push-to-field. */
+  daySheet: {
+    where: string;
+    date: string;
+    call: string | null;
+    doors: string | null;
+    set: string | null;
+    curfew: string | null;
+    updated: boolean;
+  } | null;
 };
 
 export type HomeLabels = {
@@ -56,6 +66,12 @@ export type HomeLabels = {
   viewAll: string;
   noShift: string;
   noShiftBody: string;
+  daySheet: string;
+  dsUpdated: string;
+  dsCall: string;
+  dsDoors: string;
+  dsSet: string;
+  dsCurfew: string;
   newSheet: string;
   newSheetBody: string;
   qaReport: string;
@@ -307,6 +323,44 @@ export function HomeShell({
           </button>
         ))}
       </div>
+
+      {/* Today's published day sheet (kit 26 push-to-field). Field-first UX:
+          the essentials render inline — no extra tap on a loading dock. */}
+      {data.daySheet && (
+        <>
+          <div className="sech">
+            <h2>{L.daySheet}</h2>
+          </div>
+          <div className="item" style={{ flexDirection: "column", alignItems: "stretch", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+              <div className="t">{data.daySheet.where}</div>
+              <div className="s" style={{ whiteSpace: "nowrap" }}>
+                {data.daySheet.updated ? `${L.dsUpdated} · ` : ""}
+                {data.daySheet.date}
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+              {(
+                [
+                  [L.dsCall, data.daySheet.call],
+                  [L.dsDoors, data.daySheet.doors],
+                  [L.dsSet, data.daySheet.set],
+                  [L.dsCurfew, data.daySheet.curfew],
+                ] as Array<[string, string | null]>
+              ).map(([label, value]) => (
+                <div key={label} style={{ minWidth: 0 }}>
+                  <div className="s" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                    {label}
+                  </div>
+                  <div className="time" style={{ fontSize: 15, overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {value ?? "—"}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Next upcoming event. */}
       <div className="sech">

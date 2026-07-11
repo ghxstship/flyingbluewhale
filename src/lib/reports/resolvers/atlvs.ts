@@ -327,6 +327,56 @@ const risk_exposure: MetricResolver = async (ctx) => {
   return exposureCents / 100;
 };
 
+// ===========================================================================
+// TOURING (kit 26 — Tour Status / Day Sheet Status reports)
+// ===========================================================================
+
+/** Tours still on the arc (planning / routing / confirmed), not soft-deleted. */
+const tours_active: MetricResolver = async (ctx) => {
+  const t = await rows(ctx, "tours", "tour_state", { isNull: ["deleted_at"] });
+  if (!t) return null;
+  const ACTIVE = new Set(["planning", "routing", "confirmed"]);
+  return t.filter((r) => ACTIVE.has(String(r.tour_state))).length;
+};
+
+/** Routed dates = talent_offers legs carrying a tour_id, across every run. */
+const tour_routed_dates: MetricResolver = async (ctx) => {
+  const legs = await rows(ctx, "talent_offers", "id", { notNull: ["tour_id"] });
+  return legs ? legs.length : null;
+};
+
+/** Gross box office across tours, from the tour_p_and_l roll-up view. */
+const tour_gbor: MetricResolver = async (ctx) => {
+  const pnl = await rows(ctx, "tour_p_and_l", "gross_box_office_cents");
+  if (!pnl || pnl.length === 0) return null;
+  return sum(pnl, "gross_box_office_cents") / 100;
+};
+
+/** Settled legs / total legs across tours (0-100). */
+const tour_settlement_progress: MetricResolver = async (ctx) => {
+  const pnl = await rows(ctx, "tour_p_and_l", "leg_count,settled_legs");
+  if (!pnl) return null;
+  const total = sum(pnl, "leg_count");
+  if (total === 0) return null;
+  return (sum(pnl, "settled_legs") / total) * 100;
+};
+
+const day_sheets_total: MetricResolver = async (ctx) => countWhere(ctx, "day_sheets", { deleted_at: null });
+
+/** Sheets the field can see: published or re-published (updated). */
+const day_sheets_published: MetricResolver = async (ctx) => {
+  const sheets = await rows(ctx, "day_sheets", "sheet_state", { isNull: ["deleted_at"] });
+  if (!sheets) return null;
+  return sheets.filter((r) => r.sheet_state === "published" || r.sheet_state === "updated").length;
+};
+
+const day_sheet_publish_rate: MetricResolver = async (ctx) => {
+  const sheets = await rows(ctx, "day_sheets", "sheet_state", { isNull: ["deleted_at"] });
+  if (!sheets || sheets.length === 0) return null;
+  const live = sheets.filter((r) => r.sheet_state === "published" || r.sheet_state === "updated").length;
+  return (live / sheets.length) * 100;
+};
+
 export const atlvsResolvers: ResolverMap = {
   on_time_delivery,
   milestone_completion,
@@ -349,4 +399,11 @@ export const atlvsResolvers: ResolverMap = {
   win_rate,
   vendor_otd,
   risk_exposure,
+  tours_active,
+  tour_routed_dates,
+  tour_gbor,
+  tour_settlement_progress,
+  day_sheets_total,
+  day_sheets_published,
+  day_sheet_publish_rate,
 };

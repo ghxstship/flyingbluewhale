@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { canTransitionDaySheet, DAY_SHEET_STATES, type DaySheetState } from "@/lib/db/day-sheets";
+import { sendPushBulk } from "@/lib/push/send";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -28,7 +29,7 @@ export async function transitionDaySheetAction(_: State, fd: FormData): Promise<
 
   const { data: sheet } = await supabase
     .from("day_sheets")
-    .select("id, sheet_state")
+    .select("id, sheet_state, project_id, city, venue, sheet_date")
     .eq("id", parsed.data.day_sheet_id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -51,6 +52,35 @@ export async function transitionDaySheetAction(_: State, fd: FormData): Promise<
     .eq("id", parsed.data.day_sheet_id)
     .eq("org_id", session.orgId);
   if (error) return { error: error.message };
+
+  // Push-to-field (kit 26): publishing a sheet notifies the date's project
+  // crew on the COMPVSS PWA. Best-effort — a push failure never blocks the
+  // state transition the operator just made.
+  const typedSheet = sheet as {
+    project_id: string | null;
+    city: string | null;
+    venue: string | null;
+    sheet_date: string | null;
+  };
+  if (publishing && typedSheet.project_id) {
+    const { data: members } = await supabase
+      .from("project_members")
+      .select("user_id")
+      .eq("project_id", typedSheet.project_id);
+    const userIds = [...new Set(((members ?? []) as Array<{ user_id: string }>).map((m) => m.user_id))];
+    if (userIds.length > 0) {
+      const where = [typedSheet.city, typedSheet.venue].filter(Boolean).join(" · ");
+      await sendPushBulk(userIds, {
+        title: to === "updated" ? "Day Sheet Updated" : "Day Sheet Published",
+        body: [where || "Your show day", typedSheet.sheet_date].filter(Boolean).join(" · "),
+        url: "/m",
+        kind: "announcement",
+        scope: "mobile",
+        projectId: typedSheet.project_id,
+        orgId: session.orgId,
+      }).catch(() => {});
+    }
+  }
 
   revalidatePath(`/studio/operations/day-sheets/${parsed.data.day_sheet_id}`);
   revalidatePath("/studio/operations/day-sheets");

@@ -19,9 +19,11 @@ import {
 const FORMATS: MetricFormat[] = ["currency", "days", "float", "int", "pct", "ratio", "score"];
 
 describe("reports registry", () => {
-  it("loads 77 metrics and 43 reports", () => {
-    expect(METRIC_IDS).toHaveLength(77);
-    expect(REPORTS_LIST).toHaveLength(43);
+  it("loads 84 metrics and 45 reports", () => {
+    // 77 + 7 touring metrics / 43 + 2 touring reports (kit 26 Tour Status +
+    // Day Sheet Status — the deferred report templates, honestly computed).
+    expect(METRIC_IDS).toHaveLength(84);
+    expect(REPORTS_LIST).toHaveLength(45);
   });
 
   it("every report references only real metric ids (no dangling)", () => {
@@ -49,9 +51,10 @@ describe("reports registry", () => {
     expect(getMetric("nope")).toBeUndefined();
   });
 
-  it("8 turnkey templates + 35 preconfigured", () => {
+  it("8 turnkey templates + 37 preconfigured", () => {
     expect(REPORTS_LIST.filter((r) => r.status === "template")).toHaveLength(8);
-    expect(REPORTS_LIST.filter((r) => r.status === "preconfigured")).toHaveLength(35);
+    // 35 + the 2 kit-26 touring reports (Tour Status, Day Sheet Status).
+    expect(REPORTS_LIST.filter((r) => r.status === "preconfigured")).toHaveLength(37);
   });
 
   it("formats values per type, and renders — for null", () => {

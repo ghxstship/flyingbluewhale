@@ -1,17 +1,29 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { SelectableCard } from "@/components/ui/SelectableCard";
 import { decideChangeOrderAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
 
 export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; proposalId: string; coId: string }) {
   const t = useT();
+  const toast = useToast();
   const [state, formAction, pending] = useActionState<FormState, FormData>(decideChangeOrderAction, null);
   const [decision, setDecision] = useState<"approved" | "rejected">("approved");
+
+  // revalidatePath unmounts this block in the same round-trip once the CO
+  // leaves its decidable state — the toast survives where the inline alert
+  // below does not.
+  useEffect(() => {
+    if (state?.ok) {
+      toast.success(t("p.client.changeOrders.decision.recorded", undefined, "Decision recorded."));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.ok]);
 
   return (
     <form action={formAction} className="surface space-y-3 p-6">

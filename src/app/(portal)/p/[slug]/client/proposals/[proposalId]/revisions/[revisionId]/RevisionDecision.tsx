@@ -1,19 +1,31 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { SelectableCard, type SelectableCardTone } from "@/components/ui/SelectableCard";
 import { decideRevisionAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
 
 type Decision = "approved" | "changes_requested" | "rejected";
 
 export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; proposalId: string; roundId: string }) {
   const t = useT();
+  const toast = useToast();
   const [state, formAction, pending] = useActionState<FormState, FormData>(decideRevisionAction, null);
   const [decision, setDecision] = useState<Decision>("approved");
+
+  // The action's revalidatePath re-renders the page past the decidable state,
+  // unmounting this block in the SAME round-trip — so the inline success alert
+  // below is never reliably visible. The toast lives in the shell and survives.
+  useEffect(() => {
+    if (state?.ok) {
+      toast.success(t("p.client.proposals.revisions.decision.recorded", undefined, "Decision recorded."));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.ok]);
 
   const OPTIONS: { value: Decision; title: string; sub: string; tone: SelectableCardTone }[] = [
     {

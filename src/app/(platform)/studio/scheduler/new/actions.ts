@@ -14,7 +14,12 @@ const Schema = z.object({
   buffer_before_minutes: z.coerce.number().int().min(0).max(120).default(0),
   buffer_after_minutes: z.coerce.number().int().min(0).max(120).default(0),
   min_notice_minutes: z.coerce.number().int().min(0).max(20160).default(240),
-  max_per_day: z.coerce.number().int().min(1).max(48).optional(),
+  // Optional numeric: an untouched input posts "" — coerce would turn that
+  // into 0 and trip min(1). Empty means "no cap".
+  max_per_day: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.coerce.number().int().min(1).max(48).optional(),
+  ),
   location_kind: z.enum(["call", "on_site"]).default("call"),
   timezone: z.string().min(1).max(64).default("UTC"),
   redirect_url: z.string().url().max(500).optional().or(z.literal("")),

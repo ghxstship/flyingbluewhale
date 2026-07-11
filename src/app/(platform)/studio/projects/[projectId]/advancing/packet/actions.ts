@@ -151,15 +151,19 @@ export async function transitionPacketAction(projectId: string, fd: FormData): P
 
   // Going live arms the machine: the reminder schedule is materialized and
   // the default chase ladder is seeded (idempotent) into Automation Studio.
+  // Runs on the session's RLS client (manager+ write policies cover both
+  // stores), so it works on targets without a service-role key.
   if (to === "live") {
     const label = (updated as unknown as { projects: { name: string } | null }).projects?.name ?? packet_id.slice(0, 8);
+    const rlsClient = supabase as unknown as import("@/lib/supabase/loose").LooseSupabase;
     try {
-      await materializeDeadlineEvents({ orgId: guard.orgId, packetId: packet_id });
+      await materializeDeadlineEvents({ orgId: guard.orgId, packetId: packet_id, client: rlsClient });
       await seedAdvanceChaseAutomations({
         orgId: guard.orgId,
         packetId: packet_id,
         packetLabel: label,
         userId: guard.userId,
+        client: rlsClient,
       });
     } catch {
       // Best-effort: the packet is live either way; the ladder can be

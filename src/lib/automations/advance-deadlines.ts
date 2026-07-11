@@ -1,6 +1,6 @@
 import "server-only";
 import { createServiceClient } from "@/lib/supabase/server";
-import { emitDomainEvent, subscribeAutomationToEvent } from "./dispatch";
+import { emitDomainEvent } from "./dispatch";
 import { log } from "@/lib/log";
 import { urlFor } from "@/lib/urls";
 import { formatDateParts } from "@/lib/i18n/format";
@@ -246,14 +246,20 @@ async function emitForEvent(
  * automation name). Four enabled event automations, packet-scoped via the
  * subscription's source_id, each sending the pre-rendered email from the
  * trigger payload; the lapse rung also escalates to the packet owner.
+ *
+ * `client` lets the go-live server action pass its RLS session client
+ * (manager+ write policies cover automations + subscriptions), so seeding
+ * works on targets without a service-role key; headless callers omit it
+ * and get the service client.
  */
 export async function seedAdvanceChaseAutomations(opts: {
   orgId: string;
   packetId: string;
   packetLabel: string;
   userId?: string;
+  client?: import("@/lib/supabase/loose").LooseSupabase;
 }): Promise<void> {
-  const svc = createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase;
+  const svc = opts.client ?? (createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase);
 
   const emailStep = {
     type: "email.send",
@@ -306,13 +312,20 @@ export async function seedAdvanceChaseAutomations(opts: {
       log.warn("advance_deadlines.seed_failed", { rung: rung.name, err: error?.message });
       continue;
     }
-    await subscribeAutomationToEvent({
-      orgId: opts.orgId,
-      automationId: created.id,
-      eventType: rung.eventType,
-      sourceTable: "advance_packets",
-      sourceId: opts.packetId,
-    });
+    // Same upsert as subscribeAutomationToEvent, on the caller's client so
+    // RLS-session seeding works without a service key.
+    const { error: subError } = (await svc.from("automation_subscriptions").upsert(
+      {
+        org_id: opts.orgId,
+        automation_id: created.id,
+        event_type: rung.eventType,
+        source_table: "advance_packets",
+        source_id: opts.packetId,
+        enabled: true,
+      },
+      { onConflict: "automation_id,event_type,source_table,source_id" },
+    )) as { error: { message: string } | null };
+    if (subError) log.warn("advance_deadlines.subscribe_failed", { rung: rung.name, err: subError.message });
   }
 }
 
@@ -323,8 +336,12 @@ export async function seedAdvanceChaseAutomations(opts: {
  * a per-team arrival date exists on the audience model). Idempotent: rows
  * are only inserted for (assignment × kind) pairs not already present.
  */
-export async function materializeDeadlineEvents(opts: { orgId: string; packetId: string }): Promise<number> {
-  const svc = createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase;
+export async function materializeDeadlineEvents(opts: {
+  orgId: string;
+  packetId: string;
+  client?: import("@/lib/supabase/loose").LooseSupabase;
+}): Promise<number> {
+  const svc = opts.client ?? (createServiceClient() as unknown as import("@/lib/supabase/loose").LooseSupabase);
 
   const { data: rawAudiences } = (await svc
     .from("advance_audiences")

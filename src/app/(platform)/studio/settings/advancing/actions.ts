@@ -17,7 +17,12 @@ const Schema = z.object({
     .transform((v) => v.trim().toLowerCase().replace(/\s+/g, "_")),
   section_key: z.enum(ADVANCE_SECTION_KEYS),
   requirement: z.enum(ADVANCE_REQUIREMENTS),
-  due_offset_days: z.coerce.number().int().min(0).max(365).optional(),
+  // Optional numeric: an untouched input posts "" — coerce would store 0
+  // instead of "no offset". Empty means null.
+  due_offset_days: z.preprocess(
+    (v) => (v === "" || v == null ? undefined : v),
+    z.coerce.number().int().min(0).max(365).optional(),
+  ),
 });
 
 export type State = {

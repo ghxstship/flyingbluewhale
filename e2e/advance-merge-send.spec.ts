@@ -34,7 +34,7 @@ test.describe("Advance merge engine — authoring + console (kit 27)", () => {
     await dismissConsent(page);
     await loginAndSwitchWorkspace(page, "owner", FIXTURE_PROJECT.orgId);
     await page.goto(`/studio/projects/${FIXTURE_PROJECT.id}/advancing`);
-    await expect(page.getByRole("link", { name: "Packet", exact: true }), "third tab present").toBeVisible({
+    await expect(page.getByRole("tab", { name: "Packet", exact: true }), "third tab present").toBeVisible({
       timeout: 15_000,
     });
   });
@@ -43,7 +43,7 @@ test.describe("Advance merge engine — authoring + console (kit 27)", () => {
     await dismissConsent(page);
     await loginAndSwitchWorkspace(page, "owner", FIXTURE_PROJECT.orgId);
     await page.goto("/studio/comms/advances");
-    await expect(page.getByRole("heading", { name: "Advance Sends" }), "console renders").toBeVisible({
+    await expect(page.getByRole("heading", { name: "Advance Sends", exact: true }), "console renders").toBeVisible({
       timeout: 15_000,
     });
   });

@@ -48,6 +48,10 @@ const TARGETS = [
   // assignment; project_members cascade on delete. RLS scopes the delete to the
   // owner fixture's test orgs.
   { table: "projects", column: "name", pattern: "E2E ProjectRoles%" },
+  // Kit 27 scheduler residue (advance-engine-deep.spec). Bookings BEFORE event
+  // types: scheduler_bookings.event_type_id is ON DELETE RESTRICT.
+  { table: "scheduler_bookings", column: "invitee_email", pattern: "e2e-book-%" },
+  { table: "scheduler_event_types", column: "name", pattern: "E2E Scheduler%" },
 ];
 
 // The deterministic marketplace talent fixture the e2e suite reads
@@ -138,6 +142,50 @@ async function resetOwnerNavLens(supabase, userId) {
   }
 }
 
+/**
+ * Purge the kit-27 advance-engine residue (advance-engine-deep.spec). The
+ * whole packet graph on the fixture project — sections, audiences, section
+ * assignments, send batches, recipients, submissions, deadline events —
+ * hangs off `advance_packets` with ON DELETE CASCADE, so one delete wipes
+ * the run. The go-live step also seeds four chase-ladder automations
+ * (subscribed to the deleted packet's id, so they'd be dead weight);
+ * purge those by their seeded names.
+ */
+const FIXTURE_PROJECT_ID = "f62d1228-dd83-49bf-baa4-b82242bd3056";
+async function purgeAdvanceEngine(supabase) {
+  try {
+    const { data: removed, error } = await supabase
+      .from("advance_packets")
+      .delete()
+      .eq("project_id", FIXTURE_PROJECT_ID)
+      .select("id");
+    if (error) throw error;
+    if (removed?.length) {
+      console.log(`e2e:clean — advance_packets: removed ${removed.length} fixture-project packet(s) (cascade).`);
+    }
+  } catch (e) {
+    console.error(`e2e:clean — advance packet purge (ignored): ${e?.message ?? e}`);
+  }
+  try {
+    const { data: ladders } = await supabase
+      .from("automations")
+      .select("id, name")
+      .or("name.like.Advance Chase · %,name.like.Advance Confirm · %");
+    const ids = (ladders ?? []).map((a) => a.id);
+    if (ids.length) {
+      // Children of automations.id: subscriptions/schedules/runs. Best-effort
+      // pre-delete in case any FK is RESTRICT rather than CASCADE.
+      await supabase.from("automation_subscriptions").delete().in("automation_id", ids);
+      await supabase.from("automation_schedules").delete().in("automation_id", ids);
+      const { data: removed, error } = await supabase.from("automations").delete().in("id", ids).select("id");
+      if (error) throw error;
+      console.log(`e2e:clean — automations: removed ${removed?.length ?? 0} seeded chase-ladder row(s).`);
+    }
+  } catch (e) {
+    console.error(`e2e:clean — chase ladder purge (ignored): ${e?.message ?? e}`);
+  }
+}
+
 async function main() {
   if (!SUPABASE_URL || !ANON) {
     console.error("e2e:clean — missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY; skipping.");
@@ -175,6 +223,8 @@ async function main() {
   // Restore the shared marketplace fixture the mutation tests clobber. Runs on
   // the still-authenticated owner client (org member of the fixture org).
   await healMarketplaceFixture(supabase);
+  // Kit 27 — wipe the advance-engine graph + seeded chase ladder.
+  await purgeAdvanceEngine(supabase);
   await supabase.auth.signOut();
 }
 

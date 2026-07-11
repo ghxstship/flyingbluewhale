@@ -178,7 +178,6 @@ function scanFile(fullPath: string): Offense[] {
  */
 const LEGACY_ALLOWLIST: Record<string, number> = {
   "src/app/(legend)/legend/certifications/[holderId]/page.tsx": 1,
-  "src/app/(legend)/legend/certifications/[holderId]/verify/page.tsx": 1,
   "src/app/(legend)/legend/engine/rules/actions.ts": 1,
   "src/app/(legend)/legend/engine/runs/[id]/page.tsx": 1,
   "src/app/(legend)/legend/learn/[course]/page.tsx": 1,

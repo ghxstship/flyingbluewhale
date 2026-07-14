@@ -2,7 +2,13 @@
  * Regression tests for the Sentry PII scrubber (H2-06 / IK-041).
  */
 import { describe, it, expect } from "vitest";
-import { scrubString, scrubCookieHeader, scrubSentryEvent } from "./sentry-scrub";
+import {
+  scrubString,
+  scrubCookieHeader,
+  scrubSentryEvent,
+  isBenignStreamAbort,
+  isBenignStreamAbortEvent,
+} from "./sentry-scrub";
 
 describe("scrubString", () => {
   it("redacts UUIDs", () => {
@@ -29,6 +35,35 @@ describe("scrubString", () => {
   it("passes through null / undefined", () => {
     expect(scrubString(null)).toBe(null);
     expect(scrubString(undefined)).toBe(undefined);
+  });
+});
+
+describe("isBenignStreamAbort", () => {
+  it("matches the Node TransformStream cancel/write race", () => {
+    expect(isBenignStreamAbort(new TypeError("controller[kState].transformAlgorithm is not a function"))).toBe(true);
+  });
+  it("matches when handed a bare string or message-shaped object", () => {
+    expect(isBenignStreamAbort("controller[kState].transformAlgorithm is not a function")).toBe(true);
+    expect(isBenignStreamAbort({ message: "x.transformAlgorithm is not a function" })).toBe(true);
+  });
+  it("does not match unrelated errors", () => {
+    expect(isBenignStreamAbort(new Error("Service client requires SUPABASE_SERVICE_ROLE_KEY."))).toBe(false);
+    expect(isBenignStreamAbort(null)).toBe(false);
+    expect(isBenignStreamAbort(undefined)).toBe(false);
+  });
+});
+
+describe("isBenignStreamAbortEvent", () => {
+  it("matches a Sentry event carrying the stream-abort exception", () => {
+    const event = { exception: { values: [{ value: "controller[kState].transformAlgorithm is not a function" }] } };
+    expect(isBenignStreamAbortEvent(event)).toBe(true);
+  });
+  it("does not match events with other or missing exceptions", () => {
+    expect(isBenignStreamAbortEvent({ exception: { values: [{ value: "ReferenceError: x is not defined" }] } })).toBe(
+      false,
+    );
+    expect(isBenignStreamAbortEvent({ message: "generic warning" })).toBe(false);
+    expect(isBenignStreamAbortEvent(null)).toBe(false);
   });
 });
 

@@ -16,6 +16,11 @@ export async function onRequestError(
   request: Request,
   context: { routerKind: "Pages Router" | "App Router"; routePath: string; routeType: "render" | "route" | "action" | "middleware" },
 ) {
+  // Benign Node TransformStream cancel/write race on aborted streamed
+  // responses (uptime monitors closing the connection mid-flight). Not an app
+  // fault; reporting it only buries real errors. See `isBenignStreamAbort`.
+  const { isBenignStreamAbort } = await import("@/lib/sentry-scrub");
+  if (isBenignStreamAbort(error)) return;
   // Lazy-import so we don't pay the cost in builds that don't use Sentry
   const Sentry = await import("@sentry/nextjs").catch(() => null);
   if (!Sentry) return;

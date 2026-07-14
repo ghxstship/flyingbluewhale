@@ -36,6 +36,42 @@ const SENSITIVE_COOKIE_NAMES = [
   /^atlvs_session$/i,
 ];
 
+/**
+ * Node's `TransformStream` cancel/write race. When a client — in practice an
+ * uptime monitor, bot, or scanner — requests a streamed (force-dynamic /
+ * Suspense) response and closes the connection mid-flight, `reader.cancel()`
+ * clears the controller's algorithms while a still-pending `write()` reaches
+ * `transformStreamDefaultControllerPerformTransform`, which then invokes the
+ * now-undefined `transformAlgorithm()`. It surfaces as
+ * `controller[kState].transformAlgorithm is not a function` from ignore-listed
+ * framework/Node frames — never from app code. It's a benign teardown race
+ * (fixed upstream in nodejs/node#62040; see vercel/next.js#75994), not a fault
+ * in our render, and it does not affect real users — reporting it only buries
+ * genuine errors. Matched narrowly on the signature so real failures still flow.
+ */
+const BENIGN_STREAM_ABORT_RE = /transformAlgorithm is not a function/;
+
+function messageOf(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  const m = (error as { message?: unknown } | null)?.message;
+  return typeof m === "string" ? m : "";
+}
+
+/** True for a raw thrown value that is the benign Node stream-abort race. */
+export function isBenignStreamAbort(error: unknown): boolean {
+  return BENIGN_STREAM_ABORT_RE.test(messageOf(error));
+}
+
+/** True for a Sentry event whose exception is the benign stream-abort race. */
+export function isBenignStreamAbortEvent(event: unknown): boolean {
+  const values = (event as { exception?: { values?: Array<{ value?: unknown }> } } | null)?.exception?.values;
+  return (
+    Array.isArray(values) &&
+    values.some((v) => typeof v?.value === "string" && BENIGN_STREAM_ABORT_RE.test(v.value))
+  );
+}
+
 export function scrubString(s: MaybeString): MaybeString {
   if (!s) return s;
   return s

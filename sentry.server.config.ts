@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
-import { scrubSentryEvent } from "@/lib/sentry-scrub";
+import { isBenignStreamAbortEvent, scrubSentryEvent } from "@/lib/sentry-scrub";
 
 const dsn = process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN;
 
@@ -14,6 +14,9 @@ if (dsn) {
     // request_id. See docs/audit/06-hardening-report.md IK-041.
     sendDefaultPii: false,
     beforeSend(event) {
+      // Drop the benign Node stream-abort race before it burns quota / buries
+      // real errors (see `isBenignStreamAbortEvent`); scrub everything else.
+      if (isBenignStreamAbortEvent(event)) return null;
       return scrubSentryEvent(event);
     },
   });

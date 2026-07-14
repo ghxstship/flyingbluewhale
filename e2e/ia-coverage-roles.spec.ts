@@ -132,9 +132,25 @@ const chunks = <T,>(arr: T[], size: number): T[][] => {
   return out;
 };
 
-// ── Console surface as each non-owner internal role ──────────────────────────
-// owner is already covered (strong gate) by ia-coverage.spec.ts.
-for (const role of ["admin", "controller", "collaborator"] as const) {
+// ── Console surface as EVERY non-owner role ──────────────────────────────────
+// owner is already covered (strong gate) by ia-coverage.spec.ts. This walks the
+// full console union as every other seeded persona — internal, field, AND
+// external — so the "no role crashes any surface" gate holds for the complete
+// persona set (not just the three privileged internal roles it started with).
+// Lower/external roles will legitimately be gated on most console routes (4xx /
+// redirect / empty state — all PASS); only a 5xx or uncaught crash fails.
+const CONSOLE_ROLES = [
+  "developer",
+  "admin",
+  "controller",
+  "collaborator",
+  "contractor",
+  "crew",
+  "client",
+  "viewer",
+  "community",
+] as const;
+for (const role of CONSOLE_ROLES) {
   test.describe(`IA role-matrix — console as ${role}`, () => {
     test.describe.configure({ timeout: 180000 });
     test.beforeEach(async ({ page }) => authedSetup(page, role));
@@ -150,7 +166,9 @@ for (const role of ["admin", "controller", "collaborator"] as const) {
 
 // ── Personal (/me) as field + external roles (per-user, should serve anyone) ──
 const ME_ROUTES = dedupe(personalNavGroups.flatMap((g) => g.items.map((it) => ({ label: it.fallback, href: it.href }))));
-for (const role of ["crew", "client"] as const) {
+// /me is per-user and must serve ANY authenticated persona — walk it as every
+// seeded role (owner is covered by ia-coverage's strong gate).
+for (const role of ["admin", "controller", "collaborator", "contractor", "crew", "client", "viewer", "community"] as const) {
   test.describe(`IA role-matrix — /me as ${role}`, () => {
     test.describe.configure({ timeout: 120000 });
     test.beforeEach(async ({ page }) => authedSetup(page, role));
@@ -160,15 +178,17 @@ for (const role of ["crew", "client"] as const) {
   });
 }
 
-// ── Mobile (/m, COMPVSS field) as crew — the deskless field role ─────────────
+// ── Mobile (/m, COMPVSS field) as every deskless field role ───────────────────
 const MOBILE_ROUTES = dedupe([...flatItemRoutes(mobileTabs), ...flatItemRoutes(mobileSurfaces)]);
-test.describe("IA role-matrix — mobile (/m) as crew", () => {
-  test.describe.configure({ timeout: 240000 });
-  test.beforeEach(async ({ page }) => authedSetup(page, "crew"));
-  chunks(MOBILE_ROUTES, CHUNK).forEach((slice, i) => {
-    const from = i * CHUNK + 1;
-    test(`crew: mobile surfaces ${from}–${from + slice.length - 1} never crash`, async ({ page }) => {
-      await assertNoCrash(page, `crew /m ${from}–${from + slice.length - 1}`, slice);
+for (const role of ["crew", "contractor"] as const) {
+  test.describe(`IA role-matrix — mobile (/m) as ${role}`, () => {
+    test.describe.configure({ timeout: 240000 });
+    test.beforeEach(async ({ page }) => authedSetup(page, role));
+    chunks(MOBILE_ROUTES, CHUNK).forEach((slice, i) => {
+      const from = i * CHUNK + 1;
+      test(`${role}: mobile surfaces ${from}–${from + slice.length - 1} never crash`, async ({ page }) => {
+        await assertNoCrash(page, `${role} /m ${from}–${from + slice.length - 1}`, slice);
+      });
     });
   });
-});
+}

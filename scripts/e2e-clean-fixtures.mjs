@@ -52,6 +52,11 @@ const TARGETS = [
   // types: scheduler_bookings.event_type_id is ON DELETE RESTRICT.
   { table: "scheduler_bookings", column: "invitee_email", pattern: "e2e-book-%" },
   { table: "scheduler_event_types", column: "name", pattern: "E2E Scheduler%" },
+  // Sales & CRM behavioral coverage (atlvs-sales-crm-coverage.spec). Proposals
+  // BEFORE leads — a lead→proposal conversion titles the proposal "Proposal for
+  // <lead>", and clearing the derived record first keeps the purge FK-safe.
+  { table: "proposals", column: "title", pattern: "Proposal for E2E Lead%" },
+  { table: "leads", column: "title", pattern: "E2E Lead%" },
 ];
 
 // The deterministic marketplace talent fixture the e2e suite reads

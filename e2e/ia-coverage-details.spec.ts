@@ -66,7 +66,8 @@ async function firstDetailHref(
     .locator(`a[href^="${listRoute}/"]`)
     .evaluateAll((els) => els.map((e) => e.getAttribute("href")).filter((h): h is string => !!h));
   for (const raw of hrefs) {
-    const href = raw.split("?")[0].split("#")[0].replace(/\/$/, "");
+    const base = (raw.split("?")[0] ?? raw).split("#")[0] ?? raw;
+    const href = base.replace(/\/$/, "");
     const rest = href.slice(listRoute.length + 1);
     if (!rest || rest.includes("/")) continue; // exactly one segment deeper
     if (NON_ID.has(rest)) continue;

@@ -57,6 +57,15 @@ const TARGETS = [
   // <lead>", and clearing the derived record first keeps the purge FK-safe.
   { table: "proposals", column: "title", pattern: "Proposal for E2E Lead%" },
   { table: "leads", column: "title", pattern: "E2E Lead%" },
+  // Sales & CRM behavioral coverage extensions (atlvs-sales-crm-coverage.spec):
+  // derived/child rows BEFORE their parents for FK safety.
+  { table: "beo_line_items", column: "name", pattern: "E2E Line %" },
+  { table: "beos", column: "event_name", pattern: "E2E BEO %" },
+  { table: "budgets", column: "name", pattern: "E2E Estimate %" }, // convert names the budget after the estimate
+  { table: "estimates", column: "name", pattern: "E2E Estimate %" },
+  { table: "clients", column: "name", pattern: "E2E Client %" },
+  { table: "function_bookings", column: "title", pattern: "E2E Booking %" },
+  { table: "function_spaces", column: "name", pattern: "E2E Space %" },
 ];
 
 // The deterministic marketplace talent fixture the e2e suite reads

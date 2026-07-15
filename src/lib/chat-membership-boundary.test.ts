@@ -46,6 +46,7 @@ const CHAT_TABLES = ["chat_rooms", "chat_room_members", "chat_messages"] as cons
  * qual is not null` = 0, which is worth re-running after any RLS migration.
  */
 const GUARDED_TABLES = [
+  "shifts",
   ...CHAT_TABLES,
   "time_off_requests",
   "time_off_balances",
@@ -234,6 +235,50 @@ describe("chat membership boundary canon (ADR-0008 Amendment 5)", () => {
       "approve_time_off_request must refuse self-approval. Managers file leave too, and their own request " +
         "is precisely the one they must not be able to sign off.",
     ).toBe(true);
+  });
+
+  it("every chat membership helper pins to live org membership", () => {
+    // Amendment 5 part 3. Without this, a soft-deleted `memberships` row does not
+    // revoke chat: the user's chat_room_members rows ARE read access, and the
+    // offboard cascade sweeping them is the only thing that revokes. A teardown
+    // is not a boundary. The pin lives in the helpers rather than each policy
+    // because every chat policy routes through them — including future ones.
+    const files = migrationFiles();
+    for (const fn of ["is_room_member", "is_room_admin", "is_room_creator"] as const) {
+      let body: string | null = null;
+      for (const name of files) {
+        const txt = readFileSync(join(MIGRATIONS_DIR, name), "utf8");
+        const re = new RegExp(`create\\s+or\\s+replace\\s+function\\s+private\\.${fn}[\\s\\S]*?\\$\\$;`, "gi");
+        const all = txt.match(re);
+        if (all?.length) body = all[all.length - 1]!;
+      }
+      expect(body, `private.${fn} must be defined in a migration`).toBeTruthy();
+      expect(
+        /is_org_member/i.test(stripSql(body!)),
+        `private.${fn} lost its is_org_member pin. An offboarded user's chat_room_members rows would ` +
+          `again be live chat access, making the offboard cascade the only lock (ADR-0008 Am. 5 part 3).`,
+      ).toBe(true);
+    }
+  });
+
+  it("the shifts staff band names manager, and not the dead `controller` string", () => {
+    // Amendment 5 part 3. The old band was ['owner','admin','controller',
+    // 'collaborator'] and leaned on an is_org_member disjunct to let managers
+    // through. `controller` is neither a role nor a persona (see
+    // policy-vocabulary-canon.test.ts), so dropping is_org_member without adding
+    // `manager` would have cut every manager off from every shift.
+    const body = lastPolicyBody("shifts", "shifts_select_consolidated");
+    expect(body, "shifts_select_consolidated must exist").toBeTruthy();
+    const src = stripSql(body!);
+    expect(
+      /'manager'/i.test(src),
+      "shifts SELECT dropped 'manager' from its staff band — managers lose the schedule entirely.",
+    ).toBe(true);
+    expect(
+      /is_org_member/i.test(src),
+      "shifts SELECT regained an is_org_member disjunct, which subsumes every other clause — that is " +
+        "the org-wide read that let the vendor persona enumerate the whole schedule.",
+    ).toBe(false);
   });
 
   it("chat_rooms still has no project_id, so Amendment 5's rationale still holds", () => {

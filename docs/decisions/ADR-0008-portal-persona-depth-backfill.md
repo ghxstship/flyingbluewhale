@@ -587,13 +587,109 @@ guards the static half over the tables involved.
   genuinely fine, and one (schedule) is an open product question. **"The app
   filters it" was never evidence about the database**, and this ADR asserted it
   four times.
-- The remaining known gap is `shifts` / `workforce_members` org-wide read on the
-  vendor portal. Deliberate, documented, unresolved.
+- ~~The remaining known gap is `shifts` / `workforce_members` org-wide read on the
+  vendor portal. Deliberate, documented, unresolved.~~ **`shifts` closed in part 3**
+  below, once the concurrent `controller` finding supplied the fact that made
+  narrowing safe rather than an outage. `workforce_members` stands.
 - `chat_messages` gating on room membership with no org check is now load-bearing
   in a way it was not designed to be: it is why offboarding must clear room
   memberships. An `is_org_member(org_id)` conjunct on the SELECT policy would make
   the offboard cascade a defence-in-depth measure rather than the only lock.
-  Deferred, and worth its own look.
+  ~~Deferred, and worth its own look.~~ **Done in part 3 below.**
+
+## Amendment 5, part 3 (2026-07-15) — the last two flags
+
+`20260715210000_amendment5_remaining_flags.sql`. Both flags part 2 deferred are
+closed. One of them was only safe to close because a *concurrent* session found
+the fact I was missing.
+
+### Chat reads are pinned to live org membership
+
+Part 2 left `chat_messages` gating on room membership alone, with no org check.
+That made the offboard cascade the **only** thing revoking a departed user's
+chat: soft-delete their `memberships` row and the `chat_room_members` rows they
+still held *were* read access. Fixing the cascade (part 2) made it correct; it
+did not stop it being the single point of failure. A teardown that has never yet
+been skipped is not a boundary — it is a to-do list.
+
+The pin lives inside `private.is_room_member`, not in each policy, because that
+helper is the one predicate every chat policy already routes through
+(`chat_rooms`, `chat_messages`, `chat_room_members`, `chat_message_reactions`).
+One edit; every chat read inherits it, including reads a future table adds.
+`is_room_admin` / `is_room_creator` got the same treatment so an offboarded
+room-admin cannot keep managing a roster in an org they have left, and
+`chat_rooms_select`'s `created_by` disjunct is pinned explicitly since it does not
+route through the helper.
+
+Verified by simulation: soft-delete a live member's `memberships` row while
+leaving their `chat_room_members` row in place → room visible 1 → **0**, messages
+1 → **0**, all chat → **0**. Membership restored, and every ordinary chat flow
+(create room + `RETURNING`, creator bootstrap, post, read back, list) still works.
+
+### shifts: the leak was real, and the obvious fix was an outage
+
+Part 2 called this a product decision and deferred it. It was half right. The leak
+was real and measured — **every persona, including `crew`, could read all 16
+shifts** via PostgREST; ScheduleSurface is mounted at `/p/[slug]/vendor/schedule`,
+and its `.eq("workforce_member_id", …)` app filter was the only thing narrowing
+it. Same shape as everything else in this ADR: the app filters, the database
+does not.
+
+What part 2 got wrong was calling it *only* a product question. It was also a
+question I could not safely answer yet, and the missing fact arrived from another
+session's `controller` finding (956b29c4): `shifts_select_consolidated`'s staff
+band is `['owner','admin','controller','collaborator']`, where **`controller` is
+neither a role nor a persona and can never match**, and **`manager` is absent**.
+The policy's three disjuncts also collapse — `is_org_member` subsumes both others
+— so it is exactly `is_org_member(org_id)` wearing three clauses.
+
+Which means the obvious fix, "drop the `is_org_member` disjunct so the narrow ones
+matter", would have left the band as `{owner, admin, collaborator}` and **cut every
+manager off from every shift**. A real outage, shipped as a security fix, and the
+reasoning would have looked impeccable in review. Deferring on a vague product
+worry turned out to be right for a reason I had not identified.
+
+The new policy is staff (`owner|admin|manager` roles + `collaborator` persona —
+`manager` is new, and the dead string is not carried forward) **or** the person the
+shift belongs to, by **either** linkage: `shifts` currently has both
+`workforce_member_id` and `crew_member_id`, NULL on all 16 rows, because a
+concurrent session is mid-merge. Keying on one would break when that lands or is
+reverted.
+
+Verified: owner/admin/**manager** still see 16; `crew` 16 → **0**. Nothing
+observable changes for crew or vendor today — no shift has a person, so their app
+queries already returned zero — but the enumeration closes, and the policy is
+correct for the day the merge assigns people.
+
+Incidentally this closes a second hole: `POST /api/v1/shifts/checkin` gates on the
+`time:write` capability but **never checks the shift is the caller's**, so any org
+member could punch any shift. The read now refuses first. That is a side effect,
+not a substitute for the ownership check the route still ought to make.
+
+### What stands, deliberately
+
+`workforce_members` keeps its org-wide read. It is the store being retired by that
+merge; all 105 rows are e2e debris with **no login** (so `user_id = auth.uid()`
+matches nothing — self-scoping it would break the volunteer surfaces rather than
+protect anything) and they live in orgs disjoint from every shift. Narrowing a
+table mid-retirement is churn against a moving target. It stays flagged.
+
+### Consequences
+
+- Every flag this ADR opened is now closed or explicitly standing with a reason.
+  The count for the record: Amendment 1 audited four shared surfaces and cleared
+  them; **three of the four were hiding live escalations** (chat self-join,
+  time-off self-approval, shifts enumeration) and one (`personal_documents`) was
+  genuinely fine.
+- The pattern behind all three is one sentence: **"the app filters it" was never
+  evidence about the database.** Every instance was found by asking the same
+  question — what does a normal login see through PostgREST? — and none needed
+  anything more exotic than that.
+- The `controller` string is why a security fix should not be written from a
+  policy's apparent intent. `shifts_select_consolidated` *read* as "staff, or org
+  members, or the owner". It *meant* "any org member", and its staff band did not
+  include managers. Read what a predicate does, not what its argument list
+  suggests.
 
 ## Amendment 6 (2026-07-15) — the open questions, closed
 

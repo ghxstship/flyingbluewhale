@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1199 · **API route handlers:** 152 · **Distinct nav hrefs:** 525
+**Page routes:** 1199 · **API route handlers:** 156 · **Distinct nav hrefs:** 525
 
 ## Legend
 
@@ -2532,7 +2532,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 152 route handlers
+## API surface (`/api/v1`) — 156 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2810,6 +2810,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>/api/v1/pay-periods</code> · 2</summary>
+
+- `/api/v1/pay-periods`
+- `/api/v1/pay-periods/[periodId]/compile`
+
+</details>
+
 <details><summary><code>/api/v1/payroll-runs</code> · 3</summary>
 
 - `/api/v1/payroll-runs/[runId]/export`
@@ -2957,16 +2964,18 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/time</code> · 3</summary>
+<details><summary><code>/api/v1/time</code> · 4</summary>
 
 - `/api/v1/time/clock`
 - `/api/v1/time/corrections`
 - `/api/v1/time/corrections/[id]`
+- `/api/v1/time/entries/[id]`
 
 </details>
 
-<details><summary><code>/api/v1/timesheets</code> · 1</summary>
+<details><summary><code>/api/v1/timesheets</code> · 2</summary>
 
+- `/api/v1/timesheets/[id]/post`
 - `/api/v1/timesheets/[id]/submit`
 
 </details>

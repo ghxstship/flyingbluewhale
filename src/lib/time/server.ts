@@ -21,7 +21,9 @@ type Db = Awaited<ReturnType<typeof createClient>>;
 export async function loadOrgTimeSettings(supabase: Db, orgId: string): Promise<OrgTimeSettings> {
   const { data } = await supabase
     .from("org_time_settings")
-    .select("geofence_policy, accuracy_threshold_m, grace_radius_m, allow_offline_punch_when_blocking")
+    .select(
+      "geofence_policy, accuracy_threshold_m, grace_radius_m, allow_offline_punch_when_blocking, ot_rule_set, pay_period_kind, pay_period_anchor",
+    )
     .eq("org_id", orgId)
     .maybeSingle();
   if (!data) return DEFAULT_ORG_TIME_SETTINGS;
@@ -30,6 +32,9 @@ export async function loadOrgTimeSettings(supabase: Db, orgId: string): Promise<
     accuracy_threshold_m: data.accuracy_threshold_m,
     grace_radius_m: data.grace_radius_m,
     allow_offline_punch_when_blocking: data.allow_offline_punch_when_blocking,
+    ot_rule_set: data.ot_rule_set as OrgTimeSettings["ot_rule_set"],
+    pay_period_kind: data.pay_period_kind as OrgTimeSettings["pay_period_kind"],
+    pay_period_anchor: data.pay_period_anchor,
   };
 }
 

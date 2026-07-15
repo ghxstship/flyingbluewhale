@@ -236,6 +236,13 @@ describe("time capabilities — separation of duties", () => {
     }
   });
 
+  it("lets a manager see whether the hours they approved reached payroll", () => {
+    // Read only, and it must match the payroll_exports RLS — a ledger the
+    // route says no to but the database says yes to is worse than either.
+    expect(can(asRole("manager", "manager"), "payroll:read")).toBe(true);
+    expect(can(asRole("member", "crew"), "payroll:read")).toBe(false);
+  });
+
   it("reserves posting payroll for the admin band — approving hours is not paying them", () => {
     expect(can(asRole("manager", "manager"), "payroll:post")).toBe(false);
     expect(can(asRole("member", "collaborator"), "payroll:post")).toBe(false);

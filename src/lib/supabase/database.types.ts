@@ -43601,6 +43601,17 @@ export type Database = {
         | { Args: { schema_name: string; table_name: string }; Returns: string }
         | { Args: { table_name: string }; Returns: string }
       effective_capabilities: { Args: { p_org_id: string }; Returns: string[] }
+      edit_time_entry: {
+        Args: {
+          p_clear_exception?: boolean
+          p_ended_at?: string
+          p_entry_id: string
+          p_reason: string
+          p_started_at?: string
+          p_zone_id?: string
+        }
+        Returns: Json
+      }
       emit_notification: {
         Args: {
           p_body?: string

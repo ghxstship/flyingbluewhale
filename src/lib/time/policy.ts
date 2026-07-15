@@ -1,4 +1,5 @@
 import { resolveZoneForPunch, type PunchGeofenceState, type ZoneCandidate } from "@/lib/workforce";
+import type { OtRuleSet } from "./overtime";
 
 /**
  * Geofence enforcement policy — the decision layer over
@@ -33,7 +34,16 @@ export type OrgTimeSettings = {
   accuracy_threshold_m: number;
   grace_radius_m: number;
   allow_offline_punch_when_blocking: boolean;
+  /** Which overtime rules the posting step applies. Only `flsa` and `ca`
+   *  are implemented; every other jurisdiction must run `none` and let the
+   *  HR system split the hours. See src/lib/time/overtime.ts. */
+  ot_rule_set: OtRuleSet;
+  pay_period_kind: PayPeriodKind;
+  pay_period_anchor: string;
 };
+
+export const PAY_PERIOD_KINDS = ["weekly", "biweekly", "semimonthly", "monthly"] as const;
+export type PayPeriodKind = (typeof PAY_PERIOD_KINDS)[number];
 
 /**
  * The defaults an org gets with no `org_time_settings` row. These
@@ -46,6 +56,9 @@ export const DEFAULT_ORG_TIME_SETTINGS: OrgTimeSettings = {
   accuracy_threshold_m: 100,
   grace_radius_m: 50,
   allow_offline_punch_when_blocking: true,
+  ot_rule_set: "flsa",
+  pay_period_kind: "weekly",
+  pay_period_anchor: "2026-01-04",
 };
 
 /** A zone plus its optional per-zone policy overrides. */

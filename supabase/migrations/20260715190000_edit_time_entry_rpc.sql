@@ -1,0 +1,14 @@
+-- edit_time_entry — the manager's audited punch edit (plan item 4 of
+-- docs/compvss/TIME_MANAGEMENT_LIFECYCLE_PLAN.md).
+--
+-- `time:edit` was granted in Phase 2 and no route used it, so a manager who
+-- needed to fix a punch had no path but a correction request the worker had
+-- to file for them.
+--
+-- Why an RPC rather than an UPDATE: tg_audit_time_entry reads the reason
+-- from the transaction-scoped `app.edit_reason` GUC. Making the reason a
+-- NOT NULL argument is what makes an unattributed edit structurally
+-- impossible instead of merely discouraged. The posted-sheet lock still
+-- applies and rolls the whole call back.
+--
+-- Applied to the live DB as migration `edit_time_entry_rpc`.

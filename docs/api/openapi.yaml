@@ -1605,6 +1605,159 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
 
+  /api/v1/pay-periods:
+    get:
+      summary: "The org's pay calendar. A period is the unit a timesheet is compiled for. Scope: time:read."
+      operationId: listPayPeriods
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema: { type: string, enum: [open, locked, posted] }
+      responses:
+        "200":
+          description: Pay periods, newest first.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          payPeriods: { type: array, items: { type: object } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+    post:
+      summary: "Open a pay period. Admin band — managers approve hours, they don't decide which week those hours belong to. Scope: payroll:post."
+      operationId: createPayPeriod
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [periodStart, periodEnd]
+              properties:
+                periodStart: { type: string, format: date }
+                periodEnd: { type: string, format: date }
+      responses:
+        "201": { description: The pay period. }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409": { description: That pay period already exists. }
+
+  /api/v1/pay-periods/{periodId}/compile:
+    post:
+      summary: "Gather closed punches into one timesheet per worker for the period, stamping time_entries.timesheet_id. Idempotent — safe and intended to re-run as late offline punches replay. Scope: time:approve."
+      operationId: compilePayPeriod
+      parameters:
+        - name: periodId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: How many sheets and entries the compile touched.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          compiled:
+                            type: object
+                            properties:
+                              sheets: { type: integer }
+                              entries_linked: { type: integer }
+                          message: { type: string }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { description: Pay period not found. }
+        "409": { description: The period is locked or posted. }
+
+  /api/v1/time/entries/{id}:
+    patch:
+      summary: "Manager punch edit. The reason is mandatory and lands on the append-only audit row. Refused on a posted timesheet — re-open it first. Scope: time:edit."
+      operationId: editTimeEntry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason: { type: string, minLength: 10, maxLength: 2000 }
+                startedAt: { type: string, format: date-time }
+                endedAt: { type: string, format: date-time, nullable: true }
+                zoneId: { type: string, format: uuid }
+                clearException:
+                  type: boolean
+                  description: Clear a quarantined/warned geofence exception as part of the edit.
+      responses:
+        "200": { description: Edited, and audited. }
+        "400": { description: No reason, nothing to change, or the shift would end before it starts. }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { description: Not a manager, or the entry belongs to a posted timesheet. }
+        "404": { description: Time entry not found. }
+
+  /api/v1/timesheets/{id}/post:
+    post:
+      summary: "Post an approved timesheet to a payroll run, computing the REG/OT/DT split under the org's ot_rule_set and writing payroll_run_lines. Admin band. Re-posting replaces that sheet's lines rather than appending. Scope: payroll:post."
+      operationId: postTimesheet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [payrollRunId]
+              properties:
+                payrollRunId: { type: string, format: uuid }
+                timeZone:
+                  type: string
+                  description: IANA zone the worker's days are measured in. Wrong here means wrong daily-overtime boundaries under CA rules, so it is explicit rather than guessed.
+                weekStartsOn: { type: integer, minimum: 0, maximum: 6 }
+      responses:
+        "200":
+          description: Posted, with the hour split that was written.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          result: { type: object }
+                          totalHours: { type: number }
+                          otRuleSet:
+                            type: string
+                            enum: [flsa, ca, none]
+                            description: Which rules produced this split. `none` means the hours are raw and your HR system owes the overtime calculation.
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { description: Posting is admin band. }
+        "404": { description: Timesheet not found. }
+        "409": { description: Not approved, no closed entries, or no payable hours. }
+
   /api/v1/payroll-runs/{runId}/export:
     get:
       summary: "The run's export history, newest first. Scope: payroll:read."

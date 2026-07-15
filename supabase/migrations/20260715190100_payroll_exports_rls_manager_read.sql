@@ -1,0 +1,11 @@
+-- Reconcile the export ledger's RLS with the route that reads it.
+--
+-- The ledger shipped with SELECT granted to any org member, while
+-- GET /api/v1/payroll-runs/{runId}/export asserts `payroll:read`, which only
+-- the owner/admin band held. Two gates, two answers: the database said yes
+-- to a crew member the route said no to. Settled at the least-privilege
+-- reading — the MANAGER band — and `payroll:read` was granted to managers in
+-- src/lib/auth.ts to match. A manager who approved the hours needs to see
+-- whether they were exported; a crew member has no business in the ledger.
+--
+-- Applied to the live DB as migration `payroll_exports_rls_manager_read`.

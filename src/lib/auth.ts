@@ -367,6 +367,12 @@ const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
     "expenses:*",
     "budgets:read",
     "time:*",
+    // A manager who approved the hours needs to see whether they reached
+    // payroll. Read only: `payroll:post` and `payroll:export` stay in the
+    // admin band, because approving hours and paying them are separate
+    // authorities. Matches the payroll_exports RLS, so the ledger and the
+    // route that reads it can not give different answers.
+    "payroll:read",
     "mileage:*",
     "procurement:*",
   ],

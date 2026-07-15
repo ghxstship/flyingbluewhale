@@ -8,13 +8,24 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
-import { list } from "@/lib/offline/queue";
+import { enqueue, list } from "@/lib/offline/queue";
 import { getPosition } from "@/lib/geo/position";
 import { geoKeyFor, type PhotoFix } from "@/lib/mobile/photo-geo";
-import { dropPhotos, putPhotos, readPhotos, sweepOrphans, type PhotoMeta } from "@/lib/offline/photo-blobs";
+import {
+  dropPhotos,
+  isPersisted,
+  PhotoBudgetExceededError,
+  putPhotos,
+  readPhotos,
+  sweepOrphans,
+  type PhotoMeta,
+} from "@/lib/offline/photo-blobs";
 import { saveDailyLog } from "../actions";
 
 export type ProjectOpt = { id: string; name: string };
+
+/** Queue channel. One constant so the sweep, the enqueue and the drain agree. */
+const QUEUE_KIND = "daily-log";
 
 /**
  * Sidecar bookkeeping smuggled through the queue's JSON payload.
@@ -60,8 +71,7 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
     online,
     pending: queued,
     syncing,
-    submit: queueSubmit,
-  } = useOfflineQueue<Record<string, string>>("daily-log", async (payload) => {
+  } = useOfflineQueue<Record<string, string>>(QUEUE_KIND, async (payload) => {
     const fd = new FormData();
     for (const [k, v] of Object.entries(payload)) {
       if (k === PHOTOS_KEY || k === ITEM_ID_KEY) continue; // sidecar bookkeeping, not form fields
@@ -101,8 +111,31 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
    * still queued.
    */
   useEffect(() => {
-    void sweepOrphans(list("daily-log").map((i) => i.id));
+    void sweepOrphans(list(QUEUE_KIND).map((i) => i.id));
   }, []);
+
+  /**
+   * Don't promise durability the browser hasn't granted.
+   *
+   * If storage isn't persisted, the UA may evict a queued log's photos under
+   * pressure — silently, after we've told the crew member it's saved. That's
+   * the same overclaim as the phantom photos, so when there IS something
+   * waiting and we DON'T have the grant, say so.
+   */
+  const [evictable, setEvictable] = useState(false);
+  useEffect(() => {
+    if (queued === 0) {
+      setEvictable(false);
+      return;
+    }
+    let alive = true;
+    void isPersisted().then((ok) => {
+      if (alive) setEvictable(!ok);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [queued]);
 
   /**
    * Geotag at pick time, not submit time — the fix has to describe where the
@@ -128,48 +161,75 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
     if (pending) return;
     setError(null);
 
-    // Photos now ride the queue like everything else. The bytes go to an
-    // IndexedDB sidecar (`photo-blobs`) keyed by this submission's id; the
-    // JSON payload carries only the manifest. A log shot in a dead loading
-    // dock is durable, and the geotag was captured at pick time, so a replay
-    // an hour later still records where the photo was actually taken — not
-    // where the phone found signal again.
     const photos = fd.getAll("photo").filter((f): f is File => f instanceof File && f.size > 0);
+    const fixes = photoFixes.slice(0, photos.length);
 
     const payload: Record<string, string> = {};
     for (const [k, v] of fd.entries()) {
-      if (v instanceof File) continue; // the bytes go to the sidecar, not here
-      if (k === geoKeyFor("photo")) continue; // travels inside the manifest
+      if (v instanceof File) continue; // bytes travel separately
+      if (k === geoKeyFor("photo")) continue; // rebuilt from the fixes below
       payload[k] = String(v);
     }
-    const id = `daily-log-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const id = `${QUEUE_KIND}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-    startTransition(async () => {
+    /** The live send: files straight from memory, nothing persisted. */
+    const sendNow = () => {
+      const direct = new FormData();
+      for (const [k, v] of Object.entries(payload)) direct.set(k, v);
+      for (const f of photos) direct.append("photo", f);
+      if (photos.length) direct.set(geoKeyFor("photo"), JSON.stringify(fixes));
+      return saveDailyLog(null, direct);
+    };
+
+    /**
+     * The durable path: park the bytes, then enqueue. Only reached when we
+     * genuinely cannot deliver now, so IndexedDB is never touched by a
+     * connected submit — which keeps megabytes off the flash on every save,
+     * and means a device where IDB is blocked (private mode) is refused ONLY
+     * when queueing was the only option left.
+     */
+    const queueForReplay = async (): Promise<boolean> => {
       if (photos.length > 0) {
         try {
-          const metas = await putPhotos(id, photos, photoFixes.slice(0, photos.length));
+          const metas = await putPhotos(id, photos, fixes);
           payload[PHOTOS_KEY] = JSON.stringify(metas);
           payload[ITEM_ID_KEY] = id;
-        } catch {
-          // No IndexedDB (private mode, quota, blocked). Say so rather than
-          // queue a log whose photos we cannot actually store — the whole
-          // point of this path is to stop lying about saved evidence.
+        } catch (err) {
           setError(
-            "This device can't store photos offline. Submit while you have signal, or remove the photos to save the log now.",
+            err instanceof PhotoBudgetExceededError
+              ? "Too many photos are already waiting to sync. Reconnect to clear them, or remove the photos to save this log now."
+              : "You're offline and this device can't store photos. Reconnect to submit, or remove the photos to save the log now.",
           );
-          return;
+          return false;
         }
       }
+      enqueue({ id, kind: QUEUE_KIND, payload, queuedAt: Date.now() });
+      return true;
+    };
 
-      const status = await queueSubmit(id, payload);
-      if (status === "failed") {
-        // Not queued, so nothing will ever come back for these bytes.
-        await dropPhotos(id);
-        return; // error already surfaced by the handler
+    startTransition(async () => {
+      // Online: deliver it. The sidecar exists for replay, and a submit that
+      // is about to succeed has nothing to replay.
+      if (navigator.onLine) {
+        try {
+          const res = await sendNow();
+          if (res?.error) {
+            setError(res.error);
+            return;
+          }
+          if (res?.warning) {
+            setError(res.warning);
+            return;
+          }
+          router.push("/m/daily-log");
+          router.refresh();
+          return;
+        } catch {
+          // Signal died mid-send. We still hold the bytes — fall through and
+          // make them durable rather than lose the submit.
+        }
       }
-      if (status === "sent") router.refresh();
-      // Sent or queued → back to the list (a queued log syncs on reconnect).
-      router.push("/m/daily-log");
+      if (await queueForReplay()) router.push("/m/daily-log");
     });
   }
 
@@ -193,6 +253,16 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
           syncing: t("m.offline.syncing", undefined, "Syncing…"),
         }}
       />
+
+      {evictable && (
+        <div className="ps-alert ps-alert--warning" style={{ marginBottom: 12 }}>
+          {t(
+            "m.offline.evictable",
+            undefined,
+            "Your device hasn't guaranteed this storage. Don't clear your browser data before these sync.",
+          )}
+        </div>
+      )}
 
       {projects.length === 0 ? (
         <EmptyState

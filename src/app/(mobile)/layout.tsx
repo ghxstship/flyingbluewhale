@@ -4,6 +4,7 @@ import { CommandPalette } from "@/components/CommandPalette";
 import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { SyncBanner } from "@/components/mobile/SyncBanner";
 import { InstallPrompt } from "@/components/mobile/InstallPrompt";
+import { StoragePersistence } from "@/components/mobile/StoragePersistence";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { mobileTabs } from "@/lib/nav";
@@ -117,6 +118,7 @@ export default async function MobileLayout({ children }: { children: React.React
           {children}
         </main>
         <InstallPrompt />
+        <StoragePersistence />
         <MobileTabBar items={mobileTabs} badges={badges} />
         <CommandPalette scope="mobile" />
       </div>

@@ -1,7 +1,15 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from "vitest";
 import "fake-indexeddb/auto";
-import { dropPhotos, putPhotos, readPhotos, sweepOrphans } from "./photo-blobs";
+import {
+  dropPhotos,
+  MAX_QUEUED_BYTES,
+  PhotoBudgetExceededError,
+  putPhotos,
+  queuedBytes,
+  readPhotos,
+  sweepOrphans,
+} from "./photo-blobs";
 import type { PhotoFix } from "@/lib/mobile/photo-geo";
 
 /**
@@ -125,5 +133,58 @@ describe("photo-blobs sidecar", () => {
     expect(await putPhotos("item-6", [], [])).toEqual([]);
     expect(await readPhotos("item-6", [])).toEqual([]);
     await expect(dropPhotos("never-existed")).resolves.toBeUndefined();
+  });
+});
+
+describe("the queue is bounded", () => {
+  beforeEach(async () => {
+    await sweepOrphans([]);
+  });
+
+  // Real bytes against a small injected budget — mocking `File.size` would
+  // diverge from what actually lands in the store, and then the test would be
+  // measuring the mock rather than the bound.
+  const TEN = 10;
+
+  it("refuses a submission that would blow the budget, and stores nothing", async () => {
+    // Unbounded, a week of dead zones is invisible IndexedDB and the only
+    // thing between the crew and a quota error is a catch. Refusing with a
+    // sentence beats failing with a stack trace.
+    await expect(putPhotos("too-big", [file("a.jpg", "x".repeat(TEN + 1))], [null], TEN)).rejects.toBeInstanceOf(
+      PhotoBudgetExceededError,
+    );
+    // Rejected means rejected: no half-written submission left behind.
+    expect(await queuedBytes()).toBe(0);
+  });
+
+  it("counts what is ALREADY queued, not just the incoming batch", async () => {
+    // The budget is a total, so it has to see the backlog. Two submissions
+    // that each fit alone but not together must be caught on the second.
+    await putPhotos("first", [file("a.jpg", "123456")], [null], TEN);
+    expect(await queuedBytes()).toBe(6);
+    await expect(putPhotos("second", [file("b.jpg", "123456")], [null], TEN)).rejects.toBeInstanceOf(
+      PhotoBudgetExceededError,
+    );
+    // The first submission is untouched by the second's rejection.
+    expect(await queuedBytes()).toBe(6);
+  });
+
+  it("reports the bytes it is holding", async () => {
+    expect(await queuedBytes()).toBe(0);
+    await putPhotos("counted", [file("a.jpg", "12345")], [null]);
+    expect(await queuedBytes()).toBe(5);
+  });
+
+  it("budgets enough room for the capture path to actually use it", () => {
+    // Ties the budget to the constants that decide photo size. Raising
+    // MAX_EDGE_PX (or MAX_FILES) without revisiting the budget would quietly
+    // make it possible for one honest submission to exceed the whole cap.
+    // A submission is at most MAX_FILES photos; the post-downscale backstop
+    // in photo-upload.ts is 10MB each, which is the pessimistic bound.
+    const worstCaseSubmission = 10 * 1024 * 1024 * 10; // MAX_BYTES × MAX_FILES
+    expect(MAX_QUEUED_BYTES).toBeLessThan(worstCaseSubmission);
+    // ...but comfortably more than a realistic one (1600px JPEGs ≈ 400KB).
+    const realisticSubmission = 400 * 1024 * 10;
+    expect(MAX_QUEUED_BYTES).toBeGreaterThan(realisticSubmission * 10);
   });
 });

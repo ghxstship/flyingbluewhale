@@ -38,6 +38,7 @@ export default async function MorePage() {
       key: "tools",
       label: t("m.more.tools", undefined, "Tools"),
       links: [
+        { href: "/m/my-work", icon: "ListChecks", labelKey: "m.more.myWork", label: "My Work", subKey: "m.more.myWorkSub", sub: "What You Owe & What Waits On You" },
         { href: "/m/clock", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
         { href: "/m/punch", icon: "Fingerprint", labelKey: "m.more.punch", label: "Punch Clock", subKey: "m.more.punchSub", sub: "Clock In & Out" },
         { href: "/m/requests", icon: "CheckCheck", labelKey: "m.more.approvals", label: "Approvals", subKey: "m.more.approvalsSub", sub: "Review & Action Requests", managerOnly: true },
@@ -76,7 +77,7 @@ export default async function MorePage() {
       label: t("m.more.people", undefined, "People"),
       links: [
         { href: "/m/directory", icon: "Users", labelKey: "m.more.roster", label: "Team Roster", subKey: "m.more.rosterSub", sub: "Org & Project Crew" },
-        { href: "/m/directory/companies", icon: "Building2", labelKey: "m.more.vendors", label: "Vendors", subKey: "m.more.vendorsSub", sub: "All Orgs On This Project" },
+        { href: "/m/companies", icon: "Building2", labelKey: "m.more.vendors", label: "Vendors", subKey: "m.more.vendorsSub", sub: "All Orgs On This Project" },
         { href: "/m/connections", icon: "Network", labelKey: "m.more.connections", label: "Connections", subKey: "m.more.connectionsSub", sub: "Your ATLVS Network" },
       ],
     },
@@ -85,7 +86,7 @@ export default async function MorePage() {
       label: t("m.more.network", undefined, "Network"),
       links: [
         { href: "/m/feed", icon: "Megaphone", labelKey: "m.more.community", label: "Community", subKey: "m.more.communitySub", sub: "Your Professional Feed" },
-        { href: "/m/gigs", icon: "Briefcase", labelKey: "m.more.jobs", label: "Jobs", subKey: "m.more.jobsSub", sub: "Open Shifts & Gigs" },
+        { href: "/m/jobs", icon: "Briefcase", labelKey: "m.more.jobs", label: "Jobs", subKey: "m.more.jobsSub", sub: "Open Shifts & Gigs" },
         { href: "/m/market", icon: "Tag", labelKey: "m.more.market", label: "Marketplace", subKey: "m.more.marketSub", sub: "Buy, Sell & Trade Gear" },
       ],
     },
@@ -94,7 +95,7 @@ export default async function MorePage() {
       label: t("m.more.account", undefined, "Account"),
       links: [
         { href: "/m/profile", icon: "User", labelKey: "m.more.profile", label: "Profile", subKey: "m.more.profileSub", sub: "Your Badges, Reviews & EPK" },
-        { href: "/m/wallet", icon: "ShieldCheck", labelKey: "m.more.wallet", label: "Wallet", subKey: "m.more.walletSub", sub: "Your Rose & Credentials" },
+        { href: "/m/pass", icon: "ShieldCheck", labelKey: "m.more.pass", label: "The Rose", subKey: "m.more.passSub", sub: "Your Credential & Access" },
         { href: "/m/alerts", icon: "Bell", labelKey: "m.more.alerts", label: "Alerts", subKey: "m.more.alertsSub", sub: "Broadcasts & Notifications" },
         { href: "/m/notifications", icon: "BellRing", labelKey: "m.more.notifications", label: "Notifications", subKey: "m.more.notificationsSub", sub: "Choose What Pings You" },
         { href: "/m/emergency", icon: "Siren", labelKey: "m.more.emergency", label: "Emergency", subKey: "m.more.emergencySub", sub: "Your Muster Card & Codes" },

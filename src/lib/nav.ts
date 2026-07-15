@@ -1041,6 +1041,11 @@ export const portalConsumerNav: NavGroup[] = [
     label: "GVTEWAY",
     items: [
       { label: "Discover", href: "/p/discover", icon: "Compass" },
+      // The live-event center (design_handoff §2): now/next set times,
+      // find-my-friends, order-to-seat, read-only linked passes, gamification.
+      // Rehomed from the COMPVSS tab bar 2026-07-15 — the audience is the
+      // ticket-holder, not the crew member working the show.
+      { label: "Onsite", href: "/p/onsite", icon: "MapPin" },
       { label: "Community", href: "/p/community", icon: "Users" },
       { label: "Scenes", href: "/p/scenes", icon: "Radio" },
       { label: "Lists", href: "/p/lists", icon: "ListOrdered" },
@@ -1494,7 +1499,6 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
       { label: "Time Off", href: `${base}/time-off` },
       { label: "Feed", href: `${base}/feed` },
       { label: "Chat", href: `${base}/chat` },
-      { label: "Kudos", href: `${base}/kudos` },
       { label: "Docs", href: `${base}/docs` },
       { label: "Directory", href: `${base}/directory` },
       privacy,
@@ -1505,6 +1509,12 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
     // (ADR-0008 Move 1) lifts the rendering pattern in a follow-up. v1
     // at 11 items is over Miller's ceiling — future cut splits into
     // Crew/Engagement + Crew/Operations sub-sections.
+    //
+    // Kudos is NOT here: peer recognition is org-internal COMPVSS/crew
+    // tooling, and it lives in the COMPVSS feed (`/m/feed`, which renders
+    // `recognition_posts` beside announcements). It briefly existed only in
+    // this portal — org-wide, writable, to external counterparties — and was
+    // removed 2026-07-15. Don't backfill it here.
     crew: [
       { label: "Call Sheet", href: `${base}/call-sheet` },
       { label: "Advances", href: `${base}/advances` },
@@ -1515,7 +1525,6 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
       { label: "Feed", href: `${base}/feed` },
       { label: "Chat", href: `${base}/chat` },
       { label: "Learning", href: `${base}/learning` },
-      { label: "Kudos", href: `${base}/kudos` },
       { label: "Docs", href: `${base}/docs` },
       { label: "Directory", href: `${base}/directory` },
       privacy,
@@ -1549,7 +1558,7 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
   // ADR-0008 Move 3 §Open questions #1 — vendor at 14 items breaks
   // Miller's 9-item ceiling. Split into Engagement (the procurement-side
   // workflow: PO/invoice/credentials/training/time-off/submissions) +
-  // Operations (the Workforce-parity day-to-day: feed/chat/kudos/docs/
+  // Operations (the Workforce-parity day-to-day: feed/chat/docs/
   // directory/schedule/equipment-pull). Other personas keep the single
   // persona section since they're already under 10.
   if (persona === "vendor") {
@@ -1563,7 +1572,7 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
     };
     const operations: NavSection = {
       label: "Vendor / Operations",
-      items: [...pick(["equipment-pull-list", "schedule", "feed", "chat", "kudos", "docs", "directory", "privacy"])],
+      items: [...pick(["equipment-pull-list", "schedule", "feed", "chat", "docs", "directory", "privacy"])],
     };
     return {
       label: SUPER_PERSONA_LABEL[superPersonaOf(persona)],
@@ -1597,13 +1606,15 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
 // bar is Home · Calendar · Tasks · Assets · Inbox, then More. Replaced the prior
 // Home·Inbox·Shift·Alerts·Me deskless default. Icons resolve via the
 // MobileTabBar ICONS map (keyed by href).
+//
+// Crew-only by construction: the crew entitlement band carries no GVTEWAY reach
+// (`entitlements.json`), so no consumer surface belongs in this bar. The GVTEWAY
+// Onsite tab that shipped here 2026-06-23 was rehomed to `/p/onsite` (the
+// consumer shell its audience actually lands in) 2026-07-15.
 export const mobileTabs: NavItem[] = [
   { label: "Home", href: "/m" },
   { label: "Calendar", href: "/m/schedule" },
   { label: "Tasks", href: "/m/tasks" },
-  // GVTEWAY consumer Onsite — the live-event center tab (design_handoff §2):
-  // now/next set times, find-my-friends, read-only passes, gamification.
-  { label: "Onsite", href: "/m/onsite" },
   { label: "Assets", href: "/m/inventory" },
   { label: "Inbox", href: "/m/inbox" },
   { label: "More", href: "/m/more" },
@@ -1634,6 +1645,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Door Scanner", href: "/m/door" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Time", href: "/m/clock" },
+  { label: "My Work", href: "/m/my-work" },
   { label: "Requests", href: "/m/requests" },
   { label: "New Task", href: "/m/tasks/new" },
   { label: "Documents", href: "/m/docs" },
@@ -1651,14 +1663,14 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Guide", href: "/m/guide" },
   // People.
   { label: "Team Roster", href: "/m/directory" },
-  { label: "Vendors", href: "/m/directory/companies" },
+  { label: "Vendors", href: "/m/companies" },
   { label: "Connections", href: "/m/connections" },
   // Network.
   { label: "Community", href: "/m/feed" },
-  { label: "Jobs", href: "/m/gigs" },
+  { label: "Jobs", href: "/m/jobs" },
   { label: "Marketplace", href: "/m/market" },
   // Account / credential.
-  { label: "Wallet", href: "/m/wallet" },
+  { label: "The Rose", href: "/m/pass" },
   { label: "Time Off", href: "/m/time-off" },
   { label: "Profile", href: "/m/profile" },
   { label: "Activity History", href: "/m/activity" },

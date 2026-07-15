@@ -4895,7 +4895,9 @@
    "people": "People",
    "network": "Network",
    "account": "Account",
-   "eyebrow": "Workspace"
+   "eyebrow": "Workspace",
+   "myWork": "My Work",
+   "myWorkSub": "What You Owe & What Waits On You"
   },
   "activity": {
    "count": "{n} Events",
@@ -5064,6 +5066,23 @@
    "eyebrow": "Account Status",
    "title": "Account",
    "intro": "Manage your account status. Step away for a while or request archival."
+  },
+  "myWork": {
+   "title": "My Work",
+   "eyebrow": "{count} Open Items",
+   "eyebrowOne": "1 Open Item",
+   "tasks": "Assigned To You",
+   "approvalsManager": "Waiting On Your Decision",
+   "approvalsMine": "Approvals You Raised",
+   "requests": "Your Pending Requests",
+   "noTasks": "No open tasks.",
+   "noApprovals": "Nothing in the approval queue.",
+   "noRequests": "No pending requests.",
+   "due": "Due {date}",
+   "noDue": "No due date",
+   "awaitingDecision": "Awaiting a decision",
+   "clearTitle": "You're Clear",
+   "clearBody": "Nothing assigned to you, nothing waiting on your decision, nothing pending."
   }
  },
  "me": {

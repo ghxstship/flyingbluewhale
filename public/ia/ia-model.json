@@ -1944,6 +1944,12 @@
               ]
             },
             {
+              "path": "/studio/settings/capabilities",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
               "path": "/studio/people/invites",
               "arch": [
                 "AUTH"

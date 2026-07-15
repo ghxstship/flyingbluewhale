@@ -73,7 +73,7 @@ const TARGETS = [
   { table: "rfqs", column: "title", pattern: "E2E ReqRFQ %" },
   { table: "requisitions", column: "title", pattern: "E2E ReqRFQ %" },
   { table: "purchase_orders", column: "title", pattern: "E2E PO %" },
-  { table: "assets", column: "display_name", pattern: "E2E Asset%" },
+  // NOTE: `assets` is NOT here — four FKs block a bare delete. See purgeE2EAssets.
   { table: "fabrication_orders", column: "title", pattern: "E2E Fab%" },
   { table: "sheet_sets", column: "name", pattern: "E2E Sheet Set%" },
   { table: "cues", column: "label", pattern: "E2E Cue%" },
@@ -320,6 +320,51 @@ async function purgeApprovalInstances(supabase) {
   }
 }
 
+/**
+ * Purge the E2E `assets` residue. This can't ride the TARGETS loop: `assets` is
+ * the unified physical-asset store (kit 20 Phase A), and of the 13 FKs pointing
+ * at it, four do NOT cascade — `event_resources` (RESTRICT) plus `rentals`,
+ * `goods_receipt_lines` and `uqm_incidents` (NO ACTION). A bare delete therefore
+ * dies on the first dependent (in practice `rentals_asset_id_fkey`) and every
+ * "E2E Asset%" row survives the run. The other nine FKs are ON DELETE CASCADE or
+ * SET NULL and need no help here.
+ *
+ * So: resolve the E2E asset ids, clear the four non-cascading dependents, then
+ * delete the assets. Each step is best-effort — a dependent the owner client
+ * can't see under RLS shouldn't abort the rest of the cleanup.
+ *
+ * Derived from the live schema, not assumed; re-check with:
+ *   SELECT conrelid::regclass, confdeltype FROM pg_constraint
+ *   WHERE contype='f' AND confrelid='public.assets'::regclass;
+ */
+const ASSET_BLOCKING_DEPENDENTS = ["event_resources", "rentals", "goods_receipt_lines", "uqm_incidents"];
+async function purgeE2EAssets(supabase) {
+  try {
+    const { data: rows, error: findErr } = await supabase
+      .from("assets")
+      .select("id")
+      .like("display_name", "E2E Asset%");
+    if (findErr) throw findErr;
+    const ids = (rows ?? []).map((r) => r.id);
+    if (!ids.length) return;
+
+    for (const table of ASSET_BLOCKING_DEPENDENTS) {
+      try {
+        const { error } = await supabase.from(table).delete().in("asset_id", ids);
+        if (error) throw error;
+      } catch (e) {
+        console.error(`e2e:clean — assets dependent ${table} (ignored): ${e?.message ?? e}`);
+      }
+    }
+
+    const { data: removed, error } = await supabase.from("assets").delete().in("id", ids).select("id");
+    if (error) throw error;
+    if (removed?.length) console.log(`e2e:clean — assets: removed ${removed.length} "E2E Asset%" row(s).`);
+  } catch (e) {
+    console.error(`e2e:clean — assets purge (ignored): ${e?.message ?? e}`);
+  }
+}
+
 async function main() {
   if (!SUPABASE_URL || !ANON) {
     console.error("e2e:clean — missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY; skipping.");
@@ -363,6 +408,8 @@ async function main() {
   await purgeAdvanceEngine(supabase);
   // Route-to-approvals — wipe orphaned approval_instances (no FK back to the PO).
   await purgeApprovalInstances(supabase);
+  // Unified assets — clear the four non-cascading dependents, then the assets.
+  await purgeE2EAssets(supabase);
   await supabase.auth.signOut();
 }
 

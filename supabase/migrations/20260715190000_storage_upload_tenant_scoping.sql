@@ -92,8 +92,15 @@ CREATE POLICY "storage_org_scoped_upload" ON "storage"."objects"
     "bucket_id" = ANY (ARRAY[
       'advancing',          -- portal advancing uploads
       'incident-photos',    -- COMPVSS incident + lost & found capture
-      'procore-parity',     -- daily-log photos, site photo log
-      'branding'            -- org logo (public READ; write stays org-scoped)
+      'procore-parity',     -- daily-log photos, site photo log, handover
+      'branding',           -- org logo (public READ; write stays org-scoped)
+      -- Added after the fact: a concurrent session created this bucket an
+      -- hour before this migration landed, so this list could not have known
+      -- about it, and the DROP/CREATE below silently removed it from the
+      -- policy — breaking /m/market uploads in production. Restored live by
+      -- 20260715220000; kept here so a replay of this file doesn't break it
+      -- again.
+      'listing-photos'      -- COMPVSS marketplace listing photos
     ])
     AND "storage"."caller_owns_org_prefix"("name")
   );

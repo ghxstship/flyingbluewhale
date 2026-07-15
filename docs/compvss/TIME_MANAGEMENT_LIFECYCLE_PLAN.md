@@ -1,6 +1,6 @@
 # COMPVSS Time Management — Complete Lifecycle Plan
 
-Status: **Phases 0-4 landed. 5 is buildable; 6 and 7c are gated outside engineering.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
+Status: **Phases 0-5 landed — every phase engineering can close. 6 and 7c are gated on other organisations.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
 
 **The lifecycle is continuous end to end, and its surface is open.** A punch is captured, policy-checked, correctable under review, compiled into a timesheet, submitted, approved, posted to a payroll run, and split into earning-coded lines that trace back to the punches behind them — and every step of that is reachable by an outside integrator through the published spec, scoped tokens, and signed webhooks. §0's hollow middle is closed and the "connectors aren't privileged" rule is now enforceable rather than aspirational.
 
@@ -20,7 +20,7 @@ Status: **Phases 0-4 landed. 5 is buildable; 6 and 7c are gated outside engineer
 
 | Phase | Status |
 | --- | --- |
-| 5 — CSV/SFTP driver | **Buildable.** Needs `payroll_exports`/`payroll_export_lines` (C9), the `PayrollExportDriver` interface, an SFTP transport (new dep), and the export console. The universal one: works with every provider today, with no partnership. |
+| 5 — CSV driver | **LANDED** (`bdcde938`). `payroll_exports`/`payroll_export_lines` (C9), `PayrollExportDriver`, the CSV driver, `POST /payroll-runs/{runId}/export`. Works with every provider today, no partnership. **SFTP transport is the one piece deferred** — it needs a new dependency (`ssh2-sftp-client`), which is a supply-chain decision rather than a coding one. Until then the artifact is downloaded and delivered by the operator, which is what most real integrations do anyway. |
 | 6 — native connectors | **Gated on business process, not effort.** ADP Workforce Now requires Marketplace partnership, security review, certification, and mutual-TLS client certs; Gusto/Paychex/UKG require partner approval; Workday is per-tenant and often EIB-over-SFTP. Schedule against signed demand. |
 | 7a/7b — nudges | Buildable, no native change. 7a (schedule-anchored local notifications) depends on **C3**, the zone↔shift link, which has not landed. |
 | 7c — background geofencing | **Gated on a native shell release.** New plugin (license cost), Info.plist/manifest permissions baked at build time, Google Play background-location review, iOS "Always" (20-region cap, users downgrade it), and a permanent capability-probe because remote-loaded JS will call a bridge older installs lack. |

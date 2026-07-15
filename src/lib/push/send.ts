@@ -35,7 +35,26 @@ export type PushKind =
   | "shift_swap"
   | "time_off"
   | "course"
-  | "incident";
+  | "incident"
+  // Safety-critical broadcast. Carries a kind (so the row is tagged and the
+  // field's alert surface can tone it) but is exempt from the opt-out
+  // matrix — see UNSILENCEABLE_KINDS.
+  | "crisis";
+
+/**
+ * Kinds a user may NOT switch off.
+ *
+ * The per-kind opt-out matrix is right for announcements, kudos and chat.
+ * It is wrong for a declared crisis: the whole point is that it reaches
+ * everyone, and someone who muted "alerts" three months ago has not
+ * consented to missing an evacuation.
+ *
+ * The alternative — omitting `kind` entirely, which already bypasses the
+ * gate — would leave the notification row tagged with the column's
+ * 'system' default and lose the crisis tone the field's alert surface
+ * already renders. So the kind stays and the exemption is explicit.
+ */
+export const UNSILENCEABLE_KINDS: ReadonlySet<PushKind> = new Set<PushKind>(["crisis"]);
 
 export type PushPayload = {
   title: string;
@@ -316,6 +335,8 @@ async function sendOne(
 async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined): Promise<Set<string>> {
   // No kind → broadcast to everyone (system-level pings).
   if (!kind || userIds.length === 0) return new Set();
+  // Safety-critical kinds ignore the opt-out matrix entirely.
+  if (UNSILENCEABLE_KINDS.has(kind)) return new Set();
   const supabase = createServiceClient();
   const { data } = await supabase
     .from("notification_preferences")
@@ -344,6 +365,7 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   time_off: "Time Off",
   course: "Course",
   incident: "Incident",
+  crisis: "Crisis Alert",
 };
 
 /**

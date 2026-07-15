@@ -58,13 +58,32 @@ function isAllowed(v: number): boolean {
   return NAMED.has(v);
 }
 
+/**
+ * Per-line escape hatch: `/* grid-exempt: <reason> *\/` on the same line.
+ *
+ * The grid is a LAYOUT scale. A fixed-size component's INTERNAL geometry is a
+ * different thing wearing the same property names, and snapping it to 4px
+ * doesn't tidy it — it breaks it. The COMPVSS switch is the proof: a 46×27
+ * track with a 21px knob centres at exactly 3px, and 3→4 / 22→24 left the knob
+ * 4px from the top and 2px from the bottom, 1px from the right rail when on.
+ * The toggle rendered visibly crooked, and the guard was the reason.
+ *
+ * Same spirit as the border-width / font-size / radius carve-outs above: those
+ * are separate scales, and so is this. Narrow by construction — the annotation
+ * names a reason and covers one line.
+ */
+const GRID_EXEMPT = /\/\*\s*grid-exempt:/;
+
 function scan(rel: string): string[] {
   const raw = readFileSync(join(ROOT, rel), "utf8");
+  // Keep the raw lines so the exemption annotation survives comment-stripping.
+  const rawLines = raw.split("\n");
   // strip comments so digits inside /* ... */ aren't matched
   const src = raw.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
   const offenders: string[] = [];
   const lines = src.split("\n");
   lines.forEach((line, i) => {
+    if (GRID_EXEMPT.test(rawLines[i] ?? "")) return;
     let d: RegExpExecArray | null;
     DECL.lastIndex = 0;
     while ((d = DECL.exec(line)) !== null) {

@@ -6,13 +6,13 @@
 .mobile-shell .pass-wallet::before { content: ""; position: absolute; inset: 0; background: radial-gradient(130% 90% at 100% 0%, color-mix(in oklab, var(--p-accent) 60%, transparent), transparent 58%); pointer-events: none; }
 .mobile-shell .pass-wallet .pw-sheen { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 32%, rgba(255,255,255,.08) 48%, transparent 62%); pointer-events: none; }
 .mobile-shell .pass-wallet .pw-row { position: relative; display: flex; justify-content: space-between; }
-.mobile-shell .pass-wallet .pw-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: var(--p-2); white-space: nowrap; }
+.mobile-shell .pass-wallet .pw-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: var(--p-2); white-space: nowrap; }
 .mobile-shell .pass-wallet .pw-wm { font-family: var(--p-wordmark); font-weight: 500; letter-spacing: 0.28em; font-size: 14px; color: rgba(255,255,255,.85); }
 .mobile-shell .pass-wallet .pw-name { font-family: var(--p-heading); text-transform: uppercase; font-size: 27px; line-height: 1; margin-top: var(--p-2); }
 .mobile-shell .pass-wallet .pw-role { font-size: 12.5px; color: rgba(255,255,255,.72); margin-top: 4px; }
 .mobile-shell .pass-wallet .pw-qr { width: 62px; height: 62px; border-radius: 13px; background: #fff; display: flex; align-items: center; justify-content: center; color: #0c0e12; flex: none; }
 .mobile-shell .pass-wallet .pw-id { font-family: var(--p-mono); font-size: 15px; letter-spacing: 0.16em; margin-top: var(--p-1); }
-.mobile-shell .pass-wallet .pw-chip { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; padding: 4px var(--p-2); border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); }
+.mobile-shell .pass-wallet .pw-chip { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; padding: 4px var(--p-2); border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); }
 .mobile-shell .pass-wallet .pw-chip.live { background: color-mix(in oklab, var(--p-success) 88%, #000); border-color: transparent; }
 .mobile-shell .te-clock { background: #0c0e12; color: #fff; border-radius: 18px; padding: var(--p-6); text-align: center; margin-bottom: var(--p-4); }
 .mobile-shell .te-clock .tcv { font-family: var(--p-heading); font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; margin: var(--p-2) 0 var(--p-4); }
@@ -246,8 +246,8 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .seg2 button.on { background: var(--p-text-1); color: var(--p-bg); border-color: var(--p-text-1); }
 .mobile-shell .switch { width: 46px; height: 27px; border-radius: 14px; background: var(--p-border); position: relative; cursor: pointer; transition: background 0.15s; flex: none; }
 .mobile-shell .switch[data-on] { background: var(--p-success); }
-.mobile-shell .switch .knob { position: absolute; top: var(--p-1); left: var(--p-1); width: 21px; height: 21px; border-radius: 50%; background: #fff; transition: left 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
-.mobile-shell .switch[data-on] .knob { left: var(--p-6); }
+.mobile-shell .switch .knob { position: absolute; top: 3px; left: 3px; /* grid-exempt: centres a 21px knob in a 27px track — (27-21)/2 = 3; 4px sits it crooked */ width: 21px; height: 21px; border-radius: 50%; background: #fff; transition: left 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.mobile-shell .switch[data-on] .knob { left: 22px; /* grid-exempt: 46 - 21 - 3 = 22 keeps the 3px rail symmetric; 24px overhangs to 1px */ }
 .mobile-shell .dropz { border: 1.5px dashed var(--p-border); border-radius: 12px; padding: 20px; text-align: center; color: var(--p-text-3); font-size: 12.5px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .mobile-shell .form-actions { display: flex; gap: var(--p-3); margin-top: var(--p-6); }
 .mobile-shell .pricetag { font-family: var(--p-heading); font-size: 17px; color: var(--p-text-1); }
@@ -316,6 +316,25 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .rec-cell { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 12px; padding: var(--p-3) var(--p-3); box-shadow: var(--p-elev-1); }
 .mobile-shell .rec-k { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--p-text-3); }
 .mobile-shell .rec-v { font-size: 13.5px; font-weight: 700; margin-top: 4px; color: var(--p-text-1); }
+/* ── App bar (kit 28 `.appbar`) ─────────────────────────────────────────────
+   The COMPVSS top bar: brand/Copilot button · org+project context switcher ·
+   spacer · search · bell · avatar. Ported from the kit prototype
+   (design_handoff_compvss_field/apps/field/index.html:99-108) — it had never
+   been ported at all; the mobile shell substituted the shared WorkspaceChrome,
+   which is the console's header and renders nothing like this.
+
+   The prototype's `.statusbar` / `.notch` are deliberately NOT ported: they
+   draw a fake iPhone frame around the demo. A real PWA gets the status bar and
+   the notch from the OS. Same rule that dropped `.phone` in the first port. */
+.mobile-shell .appbar { flex: none; padding: var(--p-2) var(--p-4) var(--p-3); display: flex; align-items: center; gap: var(--p-3); }
+.mobile-shell .appbar .sp { flex: 1; }
+.mobile-shell .brandbtn { background: none; border: none; padding: 0; margin: 0; cursor: pointer; display: flex; flex: none; border-radius: var(--p-r-md); position: relative; }
+.mobile-shell .ctx { display: flex; align-items: center; gap: var(--p-2); background: none; border: none; padding: var(--p-1) var(--p-2) var(--p-1) var(--p-1); margin: 0; cursor: pointer; text-align: left; border-radius: var(--p-r-md); min-width: 0; }
+.mobile-shell .ctx:hover { background: var(--p-surface-2); }
+.mobile-shell .ctx .org { font-family: var(--p-wordmark); font-weight: 500; letter-spacing: 0.14em; font-size: 13px; color: var(--p-text-1); line-height: 1.1; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobile-shell .ctx .proj { font-size: 11px; color: var(--p-text-3); margin-top: 2px; display: flex; align-items: center; gap: var(--p-1); }
+.mobile-shell .ctx .live { width: 6px; height: 6px; border-radius: 50%; background: var(--p-success); flex: none; }
+
 .mobile-shell .iconbtn { position: relative; background: none; border: none; padding: var(--p-2); margin: 0; color: var(--p-text-2); cursor: pointer; display: flex; }
 .mobile-shell .iconbtn .dot { position: absolute; top: 0; right: 0; min-width: 15px; height: 15px; padding: 0 var(--p-1); box-sizing: border-box; border-radius: 8px; background: var(--p-accent); color: #0c0e12; font-family: var(--p-mono); font-size: 11px; font-weight: 700; line-height: 15px; text-align: center; }
 .mobile-shell .iconbtn[data-active] { color: var(--p-accent-text); }
@@ -324,9 +343,9 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .check { width: 22px; height: 22px; flex: none; border-radius: 7px; border: 2px solid var(--p-border); display: flex; align-items: center; justify-content: center; color: #0c0e12; }
 .mobile-shell .check[data-on] { background: var(--p-success); border-color: var(--p-success); }
 .mobile-shell .screen { flex: 1; overflow-y: auto; padding: var(--p-2) var(--p-4) 96px; }
-.mobile-shell .scr-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--p-accent-text); }
-.mobile-shell .scr-h { font-family: var(--p-heading); text-transform: uppercase; font-size: 30px; line-height: 1; margin: var(--p-3) 0 16px; }
-.mobile-shell .fab { position: absolute; right: 16px; bottom: var(--p-24); z-index: 25; width: 54px; height: 54px; border-radius: 50%; border: none; background: var(--p-accent); color: #1f0e03; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--p-elev-2, var(--p-elev-1)); transition: transform .12s cubic-bezier(.34,1.56,.64,1); }
+.mobile-shell .scr-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-accent-text); }
+.mobile-shell .scr-h { font-family: var(--p-heading); text-transform: uppercase; font-size: 32px; line-height: 1; margin: var(--p-3) 0 16px; }
+.mobile-shell .fab { position: absolute; right: 16px; bottom: 92px; /* grid-exempt: clears the tab bar exactly; 96px floats it off the rail */ z-index: 25; width: 54px; height: 54px; border-radius: 50%; border: none; background: var(--p-accent); color: #1f0e03; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--p-elev-2, var(--p-elev-1)); transition: transform .12s cubic-bezier(.34,1.56,.64,1); }
 .mobile-shell .fab:active { transform: scale(.9); }
 .mobile-shell .tag-chip { font-family: var(--p-mono); font-size: 11px; font-weight: 700; padding: 4px var(--p-2); border-radius: 7px; background: color-mix(in oklab, var(--p-accent) 14%, transparent); color: var(--p-accent-text); display: inline-flex; align-items: center; gap: 4px; }
 .mobile-shell .clock { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 18px; padding: 20px; box-shadow: var(--p-elev-1); text-align: center; margin-bottom: var(--p-4); }

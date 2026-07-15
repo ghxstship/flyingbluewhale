@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { HomeShell, type HomeData, type HomeLabels } from "./HomeShell";
+import { resolveEmergencyStation } from "@/lib/mobile/emergency-station";
 
 export const dynamic = "force-dynamic";
 
@@ -32,8 +33,7 @@ export default async function MobileHome() {
   // one parallel round (HP-12); this is the field PWA home, often on a bad
   // network, so serial waterfalls hurt the most here.
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const today = nowIso.slice(0, 10);
-  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: sheetRows }] =
+  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, station] =
     await Promise.all([
     // Open tasks assigned to me (anything not yet done).
     supabase
@@ -65,17 +65,12 @@ export default async function MobileHome() {
       .order("starts_at", { ascending: true })
       .limit(1)
       .maybeSingle(),
-    // Today's (or the next) PUBLISHED day sheet — the kit 26 push-to-field
-    // artifact. Published/updated only: drafts never reach the crew.
-    supabase
-      .from("day_sheets")
-      .select("id, city, venue, sheet_date, crew_call, doors, headline_set, curfew, sheet_state")
-      .eq("org_id", session.orgId)
-      .in("sheet_state", ["published", "updated"])
-      .gte("sheet_date", today)
-      .is("deleted_at", null)
-      .order("sheet_date", { ascending: true })
-      .limit(1),
+    // The viewer's emergency station — the kit's home Emergency Card. Shared
+    // resolver with /m/emergency so the two can't drift.
+    resolveEmergencyStation(session.orgId, session.userId, {
+      unassigned: t("m.emergency.unassigned", undefined, "Awaiting Assignment"),
+      musterTo: (to: string) => t("m.emergency.musterTo", { to }, `Muster: ${to}`),
+    }),
   ]);
 
   const nextShift: HomeData["nextShift"] = ev
@@ -92,36 +87,18 @@ export default async function MobileHome() {
       }
     : null;
 
-  const sheet = ((sheetRows ?? []) as Array<{
-    id: string;
-    city: string | null;
-    venue: string | null;
-    sheet_date: string | null;
-    crew_call: string | null;
-    doors: string | null;
-    headline_set: string | null;
-    curfew: string | null;
-    sheet_state: string;
-  }>)[0];
-  const trim = (v: string | null) => (v ? v.slice(0, 5) : null); // HH:MM from HH:MM:SS time columns
-  const daySheet: HomeData["daySheet"] = sheet
-    ? {
-        where: [sheet.city, sheet.venue].filter(Boolean).join(" · ") || t("m.home.daySheet.fallbackWhere", undefined, "Show Day"),
-        date: sheet.sheet_date ? fmt.date(sheet.sheet_date) : "",
-        call: trim(sheet.crew_call),
-        doors: trim(sheet.doors),
-        set: sheet.headline_set,
-        curfew: trim(sheet.curfew),
-        updated: sheet.sheet_state === "updated",
-      }
-    : null;
-
   const data: HomeData = {
     openTasks: openTasks ?? 0,
     myAdvances: myAdvances ?? 0,
     unread: unread ?? 0,
     nextShift,
-    daySheet,
+    station: {
+      manningId: station.manningId,
+      assembly: station.assembly,
+      // The kit's card names the crew member's emergency ROLE. The station
+      // resolver calls the same fact `position` (their assignment title).
+      emergencyRole: station.position,
+    },
   };
 
   const greeting = fmt.dateParts(new Date(), {
@@ -132,28 +109,11 @@ export default async function MobileHome() {
 
   const labels: HomeLabels = {
     title: t("m.home.title", undefined, "Dashboard"),
-    clockTitle: t("m.home.clock.title", undefined, "Local Time"),
-    clockSub: t("m.home.clock.sub", undefined, "Clock In"),
-    copilotTitle: t("m.home.copilot.title", undefined, "Field Copilot"),
-    copilotSub: t("m.home.copilot.sub", undefined, "Ask · Report · Get Unstuck"),
-    widgets: t("m.home.widgets", undefined, "Today"),
-    wTasks: t("m.home.w.tasks", undefined, "Open Tasks"),
-    wTasksSub: t("m.home.w.tasksSub", undefined, "Assigned To You"),
-    wAdvances: t("m.home.w.advances", undefined, "Assignments"),
-    wAdvancesSub: t("m.home.w.advancesSub", undefined, "Across Every Show"),
-    wUnread: t("m.home.w.unread", undefined, "Messages"),
-    wUnreadSub: t("m.home.w.unreadSub", undefined, "Recent Activity"),
     quickActions: t("m.home.quickActions", undefined, "Quick Actions"),
     upcoming: t("m.home.upcomingLabel", undefined, "Upcoming"),
     viewAll: t("m.home.viewAll", undefined, "View All Upcoming Events"),
     noShift: t("m.home.noShift", undefined, "Nothing Scheduled"),
     noShiftBody: t("m.home.noShiftBody", undefined, "Your next call lands here."),
-    daySheet: t("m.home.daySheet", undefined, "Day Sheet"),
-    dsUpdated: t("m.home.daySheet.updated", undefined, "Updated"),
-    dsCall: t("m.home.daySheet.call", undefined, "Crew Call"),
-    dsDoors: t("m.home.daySheet.doors", undefined, "Doors"),
-    dsSet: t("m.home.daySheet.set", undefined, "Set"),
-    dsCurfew: t("m.home.daySheet.curfew", undefined, "Curfew"),
     newSheet: t("m.home.newSheet", undefined, "Create"),
     newSheetBody: t("m.home.newSheetBody", undefined, "What Do You Need?"),
     qaReport: t("m.home.qa.report", undefined, "Report"),
@@ -165,6 +125,14 @@ export default async function MobileHome() {
     qaLostFound: t("m.home.qa.lostFound", undefined, "Lost & Found"),
     qaSwap: t("m.home.qa.swap", undefined, "Swap"),
     qaInvite: t("m.home.qa.invite", undefined, "Invite"),
+    emergencyCard: t("m.home.emergencyCard", undefined, "Emergency Card"),
+    esManning: t("m.home.es.manning", undefined, "Manning Position"),
+    esAssembly: t("m.home.es.assembly", undefined, "Assembly Point"),
+    esRole: t("m.home.es.role", undefined, "Emergency Role"),
+    esCodes: t("m.home.es.codes", undefined, "Codes"),
+    esFire: t("m.home.es.fire", undefined, "Fire Safety"),
+    esEvacuate: t("m.home.es.evacuate", undefined, "Evacuate"),
+    esShelter: t("m.home.es.shelter", undefined, "Shelter"),
   };
 
   return <HomeShell data={data} greeting={greeting} labels={labels} />;

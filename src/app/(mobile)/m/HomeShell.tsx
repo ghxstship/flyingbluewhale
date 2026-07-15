@@ -1,27 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
-/**
- * Client-only wall clock. Renders empty on the server and the client's first
- * render (so they match), then fills in the local time after mount — rendering
- * `new Date()` during SSR hydration-mismatches (server TZ/instant ≠ client),
- * which is React #418.
- */
-function LiveClock() {
-  const i18nFmt = useFormatters();
-  const [time, setTime] = useState("");
-  useEffect(() => {
-    const fmt = () =>
-      i18nFmt.dateParts(new Date(), { hour: "2-digit", minute: "2-digit", hour12: false });
-    setTime(fmt());
-    const id = setInterval(() => setTime(fmt()), 10_000);
-    return () => clearInterval(id);
-  }, [i18nFmt]);
-  return <>{time}</>;
-}
 import { KIcon, RoseCard, TOOLS, ToolSheet } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 
@@ -36,42 +17,21 @@ export type HomeData = {
     day: string;
     sub: string;
   } | null;
-  /** Today's (or the next) PUBLISHED day sheet — kit 26 push-to-field. */
-  daySheet: {
-    where: string;
-    date: string;
-    call: string | null;
-    doors: string | null;
-    set: string | null;
-    curfew: string | null;
-    updated: boolean;
-  } | null;
+  /** The viewer's emergency station — kit 28 home §"Emergency Card". */
+  station: {
+    manningId: string;
+    assembly: string;
+    emergencyRole: string;
+  };
 };
 
 export type HomeLabels = {
   title: string;
-  clockTitle: string;
-  clockSub: string;
-  copilotTitle: string;
-  copilotSub: string;
-  widgets: string;
-  wTasks: string;
-  wTasksSub: string;
-  wAdvances: string;
-  wAdvancesSub: string;
-  wUnread: string;
-  wUnreadSub: string;
   quickActions: string;
   upcoming: string;
   viewAll: string;
   noShift: string;
   noShiftBody: string;
-  daySheet: string;
-  dsUpdated: string;
-  dsCall: string;
-  dsDoors: string;
-  dsSet: string;
-  dsCurfew: string;
   newSheet: string;
   newSheetBody: string;
   qaReport: string;
@@ -83,44 +43,15 @@ export type HomeLabels = {
   qaLostFound: string;
   qaSwap: string;
   qaInvite: string;
+  emergencyCard: string;
+  esManning: string;
+  esAssembly: string;
+  esRole: string;
+  esCodes: string;
+  esFire: string;
+  esEvacuate: string;
+  esShelter: string;
 };
-
-/** A single tinted-icon count widget (`.w`). */
-function Widget({
-  href,
-  icon,
-  tint,
-  label,
-  value,
-  sub,
-}: {
-  href: string;
-  icon: string;
-  tint: string;
-  label: string;
-  value: number;
-  sub: string;
-}) {
-  return (
-    <Link className="w tap" href={href} style={{ display: "block", textDecoration: "none" }}>
-      <div className="wtop">
-        <span
-          className="wic"
-          style={{
-            background: `color-mix(in oklab, var(--p-${tint}) 16%, transparent)`,
-            color: tint === "accent" ? "var(--p-accent-text)" : `var(--p-${tint})`,
-          }}
-        >
-          <KIcon name={icon} size={19} />
-        </span>
-        <KIcon name="ChevronRight" size={16} className="wnav" />
-      </div>
-      <div className="wl">{label}</div>
-      <div className="wv">{value}</div>
-      <div className="wsub">{sub}</div>
-    </Link>
-  );
-}
 
 /** Quick-action tile linking to a destination form/route. */
 function QA({
@@ -188,103 +119,14 @@ export function HomeShell({
       <div className="scr-eye">{greeting}</div>
       <h1 className="scr-h">{L.title}</h1>
 
-      {/* Clock widget — links to the punch surface. */}
-      <Link href="/m/clock" className="te-clock tap" style={{ display: "block", textDecoration: "none" }}>
-        <div
-          className="wl"
-          style={{
-            justifyContent: "center",
-            color: "rgba(255,255,255,.6)",
-            fontFamily: "var(--p-mono)",
-            fontSize: 9.5,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-          }}
-        >
-          {L.clockTitle}
-        </div>
-        <div className="tcv">
-          <LiveClock />
-        </div>
-        <span className="ps-btn ps-btn--cta" style={{ pointerEvents: "none" }}>
-          <KIcon name="Play" size={16} /> {L.clockSub}
-        </span>
-      </Link>
-
-      {/* AI Copilot row — links to the assistant. */}
-      <Link href="/m/inbox" className="copilot tap" style={{ textDecoration: "none" }}>
-        <span
-          className="qi"
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: 11,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flex: "none",
-            background: "color-mix(in oklab, var(--p-accent) 18%, transparent)",
-            color: "var(--p-accent-text)",
-          }}
-        >
-          <KIcon name="Sparkles" size={19} />
-        </span>
-        <div style={{ flex: 1 }}>
-          <div className="cop-t">{L.copilotTitle}</div>
-          <div className="cop-s">{L.copilotSub}</div>
-        </div>
-        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
-      </Link>
-
-      {/* Count widgets. */}
-      <div className="sech">
-        <h2>{L.widgets}</h2>
-      </div>
-      <div className="widgets">
-        <Widget
-          href="/m/tasks"
-          icon="ListChecks"
-          tint="info"
-          label={L.wTasks}
-          value={data.openTasks}
-          sub={L.wTasksSub}
-        />
-        <Widget
-          href="/m/advances"
-          icon="ClipboardList"
-          tint="warning"
-          label={L.wAdvances}
-          value={data.myAdvances}
-          sub={L.wAdvancesSub}
-        />
-        <Widget
-          href="/m/inbox"
-          icon="MessageSquare"
-          tint="accent"
-          label={L.wUnread}
-          value={data.unread}
-          sub={L.wUnreadSub}
-        />
-        <Widget
-          href="/m/pass"
-          icon="Wallet"
-          tint="success"
-          label="Wallet"
-          value={data.myAdvances}
-          sub="Passes · Credentials"
-        />
-      </div>
-
-      {/* COMPVSS Rose — links to the wallet. */}
-      <div className="sech">
-        <h2>Member Pass</h2>
-      </div>
+      {/* COMPVSS Rose — the hero card. No section heading: in the kit it sits
+          directly under the page title as the first thing on the screen. */}
       <Link href="/m/pass" style={{ textDecoration: "none", display: "block" }}>
         <RoseCard compact />
       </Link>
 
       {/* Quick actions. */}
-      <div className="sech">
+      <div className="sech" style={{ marginTop: 14 }}>
         <h2>{L.quickActions}</h2>
       </div>
       <div className="qa">
@@ -306,65 +148,29 @@ export function HomeShell({
       <div className="sech">
         <h2>Toolbox</h2>
       </div>
-      <div className="qa">
+      {/* `.toolgrid` / `.toolcard`, not `.qa`. The Toolbox is a two-up grid of
+          bordered cards with the icon beside the label — the kit's own CSS for
+          it was ported and then used by nothing, while this rendered as
+          quick-action tiles (icon above a centred caption). Wrong primitive,
+          wrong shape, wrong icon size. Kit: runtime/app.jsx home §Toolbox. */}
+      <div className="toolgrid">
         {TOOLS.map((tool) => (
-          <button
-            key={tool.id}
-            type="button"
-            onClick={() => setActiveTool(tool.id)}
-            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-          >
+          <button key={tool.id} type="button" className="toolcard" onClick={() => setActiveTool(tool.id)}>
             <span
-              className="qi"
+              className="tc-ic"
               style={{
-                background: `color-mix(in oklab, var(--p-${tool.tint}) ${tool.tint === "accent" ? 20 : 14}%, transparent)`,
+                background: `color-mix(in oklab, var(--p-${tool.tint}) 16%, transparent)`,
                 color: tool.tint === "accent" ? "var(--p-accent-text)" : `var(--p-${tool.tint})`,
               }}
             >
-              <KIcon name={tool.icon} size={18} />
+              <KIcon name={tool.icon} size={19} />
             </span>
-            <span className="ql">{tool.label}</span>
+            <span className="tc-body">
+              <span className="tc-t">{tool.label}</span>
+            </span>
           </button>
         ))}
       </div>
-
-      {/* Today's published day sheet (kit 26 push-to-field). Field-first UX:
-          the essentials render inline — no extra tap on a loading dock. */}
-      {data.daySheet && (
-        <>
-          <div className="sech">
-            <h2>{L.daySheet}</h2>
-          </div>
-          <div className="item" style={{ flexDirection: "column", alignItems: "stretch", gap: 8 }}>
-            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
-              <div className="t">{data.daySheet.where}</div>
-              <div className="s" style={{ whiteSpace: "nowrap" }}>
-                {data.daySheet.updated ? `${L.dsUpdated} · ` : ""}
-                {data.daySheet.date}
-              </div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
-              {(
-                [
-                  [L.dsCall, data.daySheet.call],
-                  [L.dsDoors, data.daySheet.doors],
-                  [L.dsSet, data.daySheet.set],
-                  [L.dsCurfew, data.daySheet.curfew],
-                ] as Array<[string, string | null]>
-              ).map(([label, value]) => (
-                <div key={label} style={{ minWidth: 0 }}>
-                  <div className="s" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                    {label}
-                  </div>
-                  <div className="time" style={{ fontSize: 15, overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {value ?? "—"}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
 
       {/* Next upcoming event. */}
       <div className="sech">
@@ -392,6 +198,39 @@ export function HomeShell({
       <Link href="/m/schedule" className="viewall">
         {L.viewAll} <KIcon name="ArrowRight" size={15} />
       </Link>
+
+      {/* Emergency Card (kit 28 home §"Emergency Card"). The muster card the
+          crew member carries: manning position, where to go, what they do when
+          it happens. It belongs on Home and not one tap away — on the day it
+          matters nobody is browsing a hub. Whole card opens /m/emergency. */}
+      <div className="sech">
+        <h2>{L.emergencyCard}</h2>
+      </div>
+      <Link href="/m/emergency" className="emerg-station tap" style={{ textDecoration: "none", display: "block" }}>
+        <div className="es-manning">
+          <div>
+            <div className="es-k">{L.esManning}</div>
+            <div className="es-id">{data.station.manningId}</div>
+          </div>
+          <KIcon name="ChevronRight" size={18} style={{ color: "var(--p-text-3)" }} />
+        </div>
+        <div className="es-grid">
+          <div>
+            <div className="es-k">{L.esAssembly}</div>
+            <div className="es-v">{data.station.assembly}</div>
+          </div>
+          <div>
+            <div className="es-k">{L.esRole}</div>
+            <div className="es-v">{data.station.emergencyRole}</div>
+          </div>
+        </div>
+      </Link>
+      <div className="qa" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
+        <QA href="/m/emergency#codes" icon="Siren" tint="danger" label={L.esCodes} />
+        <QA href="/m/emergency#fire" icon="Flame" tint="warning" label={L.esFire} />
+        <QA href="/m/emergency#evacuate" icon="LogOut" tint="info" label={L.esEvacuate} />
+        <QA href="/m/emergency#shelter" icon="Shield" tint="success" label={L.esShelter} />
+      </div>
 
       {/* FAB → "new" sheet. */}
       <button type="button" className="fab" onClick={() => setNewOpen(true)} aria-label={L.newSheet}>

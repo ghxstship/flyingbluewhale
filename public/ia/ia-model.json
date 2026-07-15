@@ -2362,15 +2362,15 @@
               ]
             },
             {
-              "path": "/m/inventory",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/m/inbox",
               "arch": [
                 "COMM"
+              ]
+            },
+            {
+              "path": "/m/assets",
+              "arch": [
+                "LIST"
               ]
             },
             {

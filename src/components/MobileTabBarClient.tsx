@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
+  Palmtree,
+  MoreVertical,
   Clock,
   Bell,
   User,
@@ -16,7 +18,6 @@ import {
   ListChecks,
   Package,
   MessageSquare,
-  MoreHorizontal,
 } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
@@ -24,15 +25,17 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
-  // COMPVSS kit tab model (rebuild 2026-06-21, Onsite rehomed to /p/onsite
-  // 2026-07-15): Home · Calendar · Tasks · Assets · Inbox · More (6 tabs — see
-  // docs/compvss/KIT_CANON.md §IA).
-  "/m": Home,
+  // COMPVSS kit tab model — the kit's TABS array verbatim (kit 28,
+  // design_handoff_compvss_field/runtime/app.jsx:796): Home · Calendar ·
+  // Tasks · Inbox · Assets · More (6 tabs). Icons are the kit's too: Home is
+  // Palmtree, not Home, and More is MoreVertical, not MoreHorizontal.
+  "/m": Palmtree,
   "/m/schedule": CalendarDays,
   "/m/tasks": ListChecks,
-  "/m/inventory": Package,
   "/m/inbox": MessageSquare,
-  "/m/more": MoreHorizontal,
+  "/m/assets": Package,
+  "/m/more": MoreVertical,
+  "/m/inventory": Package,
   // Secondary surfaces — reachable from /m/more and cmd-K (icons used when a
   // surface appears in a bar/list that resolves through this map).
   "/m/settings": User,

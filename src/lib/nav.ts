@@ -1638,12 +1638,16 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
 // (`entitlements.json`), so no consumer surface belongs in this bar. The GVTEWAY
 // Onsite tab that shipped here 2026-06-23 was rehomed to `/p/onsite` (the
 // consumer shell its audience actually lands in) 2026-07-15.
+// Order and hrefs are the kit's TABS array verbatim (kit 28,
+// design_handoff_compvss_field/runtime/app.jsx:796). Inbox is 4th and Assets
+// 5th — the repo had them transposed, and "Assets" pointed at /m/inventory,
+// which is the stock-on-hand surface, not the crew member's own assigned gear.
 export const mobileTabs: NavItem[] = [
   { label: "Home", href: "/m" },
   { label: "Calendar", href: "/m/schedule" },
   { label: "Tasks", href: "/m/tasks" },
-  { label: "Assets", href: "/m/inventory" },
   { label: "Inbox", href: "/m/inbox" },
+  { label: "Assets", href: "/m/assets" },
   { label: "More", href: "/m/more" },
 ];
 

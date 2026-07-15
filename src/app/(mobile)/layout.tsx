@@ -6,7 +6,8 @@ import { SyncBanner } from "@/components/mobile/SyncBanner";
 import { InstallPrompt } from "@/components/mobile/InstallPrompt";
 import { StoragePersistence } from "@/components/mobile/StoragePersistence";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
-import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { MobileAppBar } from "@/components/mobile/MobileAppBar";
+import type { SwitcherOrg, SwitcherProject } from "@/components/mobile/MobileSwitcherSheet";
 import { mobileTabs } from "@/lib/nav";
 import { getSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -63,12 +64,6 @@ export default async function MobileLayout({ children }: { children: React.React
 
   const tenant = await resolveTenant();
   const supabase = await createClient();
-  const switcherEntries = await resolveSwitcherEntries({
-    supabase,
-    userId: session.userId,
-    role: session.role,
-    currentPortalSlug: null,
-  });
 
   // Tab-bar badges — real reads, same semantics as the /m home widgets:
   // Tasks = my open tasks; Inbox = recent org chat activity (7-day proxy —
@@ -94,6 +89,92 @@ export default async function MobileLayout({ children }: { children: React.React
     if (unread) badges["/m/inbox"] = unread;
   }
 
+  // App-bar data. The kit's context row names the ORG and the ACTIVE PROJECT
+  // with a live dot — the two facts a crew member needs to know they're
+  // looking at the right world before they read anything else.
+  // The user's real orgs — from their memberships. (`resolveSwitcherEntries`
+  // is the cross-PRODUCT switcher, ATLVS/GVTEWAY/COMPVSS; it is not this.)
+  const orgLabel = tenant.orgName ?? "Workspace";
+  let switcherOrgs: SwitcherOrg[] = [{ id: session.orgId, name: orgLabel, sub: "Organization" }];
+
+  let switcherProjects: SwitcherProject[] = [];
+  let activeProject: { id: string; name: string; live: boolean } | null = null;
+  let bellUnread = 0;
+  if (hasSupabase) {
+    // The kit's project row reads `name / client · venue / location · sub`, so
+    // client and venue are joins. Resolved in a second pass rather than an
+    // embed: the FK-hinted `locations!projects_primary_venue_id_fkey(...)`
+    // form overflows PostgREST's generic inference (TS2589), and two indexed
+    // reads are cheaper to understand than a cast that hides the shape.
+    const [{ data: projectRows }, { count: notifCount }, { data: memberRows }] = await Promise.all([
+      supabase
+        .from("projects")
+        .select("id, name, project_state, start_date, client_id, primary_venue_id")
+        .eq("org_id", session.orgId)
+        .is("deleted_at", null)
+        .order("start_date", { ascending: false, nullsFirst: false })
+        .limit(50),
+      supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", session.userId)
+        .is("read_at", null)
+        .is("deleted_at", null),
+      supabase
+        .from("memberships")
+        .select("org_id, orgs(name, tier)")
+        .eq("user_id", session.userId)
+        .is("deleted_at", null),
+    ]);
+    bellUnread = notifCount ?? 0;
+
+    const orgList = ((memberRows ?? []) as unknown as { org_id: string; orgs: { name?: string; tier?: string } | null }[])
+      .filter((m) => m.orgs?.name)
+      .map((m) => ({ id: m.org_id, name: m.orgs!.name!, sub: m.orgs?.tier ? `${m.orgs.tier} plan` : "Organization" }));
+    if (orgList.length) switcherOrgs = orgList;
+
+    const projRows = projectRows ?? [];
+    const clientIds = Array.from(new Set(projRows.map((p) => p.client_id).filter(Boolean))) as string[];
+    const venueIds = Array.from(new Set(projRows.map((p) => p.primary_venue_id).filter(Boolean))) as string[];
+    const [{ data: clientRows }, { data: venueRows }] = await Promise.all([
+      clientIds.length
+        ? supabase.from("clients").select("id, name").in("id", clientIds).is("deleted_at", null)
+        : Promise.resolve({ data: [] as { id: string; name: string }[] }),
+      venueIds.length
+        ? supabase.from("locations").select("id, name, city, country").in("id", venueIds)
+        : Promise.resolve({ data: [] as { id: string; name: string; city: string | null; country: string | null }[] }),
+    ]);
+    const clientById = new Map((clientRows ?? []).map((c) => [c.id, c.name]));
+    const venueById = new Map((venueRows ?? []).map((v) => [v.id, v]));
+
+    switcherProjects = projRows.map((p) => {
+      // Kit chips are exactly Live / Planning / Closed — map project_state onto
+      // those three rather than inventing a fourth the filter can't reach.
+      const status: SwitcherProject["status"] =
+        p.project_state === "active" ? "Live" : p.project_state === "draft" || p.project_state === "paused" ? "Planning" : "Closed";
+      const venue = p.primary_venue_id ? venueById.get(p.primary_venue_id) : null;
+      const place = [venue?.city, venue?.country].filter(Boolean).join(", ");
+      return {
+        id: p.id,
+        name: p.name,
+        client: (p.client_id ? clientById.get(p.client_id) : null) ?? "—",
+        venue: venue?.name ?? "—",
+        location: place || "—",
+        status,
+        sub: status === "Live" ? "Live Now" : (p.start_date ?? status),
+      };
+    });
+    const live = switcherProjects.find((p) => p.status === "Live");
+    if (live) activeProject = { id: live.id, name: live.name, live: true };
+  }
+
+  // Kit avatar is initials, mono, on accent (`JG` for Joshamee Gibbs).
+  const initials = ((session.email ?? "?").split("@")[0] ?? "?")
+    .split(/[._-]+/)
+    .slice(0, 2)
+    .map((s) => s.charAt(0).toUpperCase())
+    .join("") || "?";
+
   return (
     <TenantShell tenant={tenant}>
       <div
@@ -105,14 +186,21 @@ export default async function MobileLayout({ children }: { children: React.React
       >
         <ConnectivityBanner />
         <SyncBanner />
-        {/* Slim mobile chrome: app switcher + bell + messages + avatar. The
-            org/project switcher re-scopes the data layer. */}
-        <WorkspaceChrome
-          shell="mobile"
-          workspaceLabel={tenant.orgName}
-          userEmail={session.email}
-          messagesHref="/m/inbox"
-          switcherEntries={switcherEntries}
+        {/* The kit's own app bar (kit 28 `.appbar`): brand/Copilot · org +
+            project context · search · bell · avatar. This shell used to render
+            WorkspaceChrome, which is the CONSOLE's header — different
+            structure, different controls, and no COMPVSS context row at all.
+            The kit is the SSOT for this shell, so the kit's bar is what ships. */}
+        <MobileAppBar
+          orgName={orgLabel}
+          projectName={activeProject?.name ?? null}
+          projectLive={activeProject?.live ?? false}
+          initials={initials}
+          unread={bellUnread}
+          orgs={switcherOrgs}
+          projects={switcherProjects}
+          currentOrgId={session.orgId}
+          currentProjectId={activeProject?.id ?? null}
         />
         <main id="main" tabIndex={-1} className="animate-fade-in">
           {children}

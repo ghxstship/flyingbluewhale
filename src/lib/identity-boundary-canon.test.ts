@@ -234,6 +234,49 @@ describe("identity boundary canon (ADR-0008 Amendment 7)", () => {
 
   // ── redeem_voucher: SECURITY DEFINER does its own checks ─────────────────
 
+  // ── the mirror-image class: FOR ALL admin policies that also gate SELECT ──
+  //
+  // Every other case here is a leak. This one refuses a read the app expects:
+  // `FOR ALL USING private.is_org_admin(org_id)` gates SELECT too, and
+  // is_org_admin is `role in ('owner','admin')` — no persona branch, no
+  // `manager`. So the manager band read ZERO rows and /studio/pipeline rendered
+  // its own "No Pipelines" empty state: indistinguishable from an org that has
+  // none, no error, nothing to notice. Confirmed live (owner 5/30, manager 0/0),
+  // fixed additively in 20260715234500_for_all_admin_read_lockout.sql.
+  //
+  // The band is staff, NOT is_org_member, and that is the load-bearing part:
+  // portal personas are ordinary memberships rows, so is_org_member would admit
+  // client/contractor/guest/viewer to the org's CRM pipeline and depreciation
+  // schedules — re-opening as a "fix" the exposure this ADR exists to close.
+
+  for (const { table, policy } of [
+    { table: "pipeline_definitions", policy: "pipeline_definitions_staff_read" },
+    { table: "pipeline_stages", policy: "pipeline_stages_staff_read" },
+    { table: "asset_depreciation_schedule", policy: "asset_depreciation_schedule_staff_read" },
+  ] as const) {
+    it(`${table} has a staff SELECT policy, so managers are not silently locked out`, () => {
+      const sql = stripSql(lastPolicyBody(table, policy) ?? "");
+      expect(
+        sql,
+        `${policy} is gone. Its FOR ALL is_org_admin policy gates SELECT as well as writes, and ` +
+          `is_org_admin excludes 'manager' — without this read policy the manager band sees an empty ` +
+          `board with no error (confirmed live: owner 5, manager 0).`,
+      ).toBeTruthy();
+
+      expect(/\bfor\s+select\b/i.test(sql), `${policy} must be FOR SELECT — writes stay admin-only.`).toBe(true);
+      expect(
+        bandsOf(sql),
+        `${policy} must admit 'manager' — being locked out of the Deals board is the entire defect.`,
+      ).toContain("manager");
+      expect(
+        /is_org_member/i.test(sql),
+        `${policy} must NOT widen to is_org_member. Portal personas (client/contractor/guest/viewer) are ` +
+          `ordinary memberships rows and the (platform) shell has no role gate of its own, so that would ` +
+          `hand external parties the org's CRM pipeline and depreciation schedules. Staff band only.`,
+      ).toBe(false);
+    });
+  }
+
   it("redeem_voucher refuses to credit a user other than the caller", () => {
     const sql = migrationFiles()
       .map((n) => readFileSync(join(MIGRATIONS_DIR, n), "utf8"))

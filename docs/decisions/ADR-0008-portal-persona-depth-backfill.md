@@ -1,6 +1,6 @@
 # ADR-0008 — GVTEWAY portal: crew + vendor persona depth backfill
 
-**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
+**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented; Amendment 7 has two parts). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
 **Date:** 2026-06-04
 **Owner:** Platform engineering
 **Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
@@ -935,3 +935,96 @@ Live invariant re-run after the migration:
   are org-readable with correct self-pinned writes; whether an external `vendor`
   persona should read the org's expense log is the same product question
   `shifts` was, and is not one to answer inside a security migration.
+
+## Amendment 7, part 2 (2026-07-15) — the same root cause, opposite sign
+
+`20260715234500_for_all_admin_read_lockout.sql`. Handed over from the concurrent
+approvals-RLS session, which found the class and filed it; the three live cases
+below were re-confirmed here rather than inherited.
+
+Every other finding in this ADR is a leak. This one is the mirror image: **the
+database refuses a read the app fully expects, and nothing errors.** Same
+sentence underneath — the app and the DB disagree — so it belongs in the same
+amendment.
+
+A policy written `FOR ALL USING private.is_org_admin(org_id)` (no cmd ⇒ ALL)
+gates SELECT as well as writes. `private.is_org_admin` is
+`role in ('owner','admin')` — no persona branch and, decisively, **no
+`manager`**. The 2026-06-25 `rls_manager_grant_sweep` only rewrote
+INSERT/UPDATE/ALL _bands_, so it never looked at these; and the whole thing is
+masked for owner/admin personas, which is why it survived. Confirmed live:
+
+|                               | owner | admin | manager | crew |
+| ----------------------------- | ----- | ----- | ------- | ---- |
+| `pipeline_definitions`        | 5     | 5     | **0**   | 0    |
+| `pipeline_stages`             | 30    | 30    | **0**   | 0    |
+| `asset_depreciation_schedule` | 12    | —     | **0**   | 0    |
+
+A manager opening `/studio/pipeline` got the page's own **"No Pipelines"** empty
+state. Not an error — the same screen an org with no pipelines would see. That is
+what makes this class survive: it looks like data, not like a bug.
+
+### Intent first, because "the DB is wrong" is only half the answer
+
+The other half is "the app is missing a gate", and picking wrong ships the
+opposite defect. The evidence says the surface is for any operator:
+`/studio/pipeline` gates on `requireSession()` only; `nav.ts` lists it under
+Sales as **Deals** with no role gate, so a manager sees the link;
+`asset_depreciation_schedule` is read at `studio/assets/[id]/page.tsx:89`, whose
+page uses `isManagerPlus` **only to decide whether to render the write
+affordance** — which is affirmative evidence that managers are meant to see the
+panel. Nav and gate agree; the DB is the outlier, so the DB changed.
+
+### The band is staff, and deliberately NOT `is_org_member`
+
+The handoff proposed `FOR SELECT USING is_org_member(org_id)`, mirroring the
+`approval_policies` fix in `20260714120000`. Declined, for the reason this ADR
+has spent seven amendments on: **portal personas are ordinary `memberships`
+rows**, so `is_org_member` includes `client`, `contractor`, `guest`, `viewer` and
+`community` — and the `(platform)` shell has no role gate of its own. That fix
+would hand external contractors and guests the org's CRM deal pipeline and its
+asset depreciation schedules. The exposure this document exists to close,
+re-opened as a remediation.
+
+The proven defect is narrow — the manager band is locked out of an operator
+console — so the fix is narrow: the same staff band established for
+`time_entries` SELECT (`owner|admin|manager` roles + `collaborator` persona).
+Nobody who was not demonstrably locked out gains a row. Permissive policies OR,
+so the additive `FOR SELECT` widens reads while the untouched `FOR ALL` keeps
+every write admin-only.
+
+Verified: manager **0 → 5/30** pipelines and **0 → 12** depreciation rows; crew
+stays at **0** (the band did its job — `is_org_member` would have given them the
+board); manager INSERT refused, manager UPDATE refused (HTTP 204, name unchanged
+on read-back — the trap, one more time).
+
+### Triage, and what was left alone
+
+13 policies match `cmd='ALL' AND qual LIKE '%is_org_admin%'` with no sibling
+SELECT. Only three are defects. The rest divide cleanly:
+
+- **Legitimately admin-only** (`integration_credentials`,
+  `integration_webhook_endpoints`, `audit_redaction_log`,
+  `sync_conflict_log`, `notification_suppression_list`) — secrets and audit
+  trails; the lockout is the feature.
+- **Already carry a self OR-branch** (`uas_del_self`, `uwz_inst_self`,
+  `ulc_tz_self`) — fine.
+- **No app reader at all** (`policy_rules`, `overtime_rules`) — nothing is
+  silently empty, because nothing reads them. Not a defect until something does.
+
+The rule the count illustrates: a raw structural query is a _candidate list_, not
+a finding list. 13 hits, 3 defects — the difference is entirely "does a real app
+surface read this, and who is meant to open it".
+
+### Consequences
+
+- The sweep question has two directions, and only one had been asked. "Does RLS
+  agree?" catches leaks; **"does RLS agree the other way?"** catches silent
+  empties. The second is harder to notice precisely because it degrades into an
+  empty state instead of an error, and empty states are designed to look calm.
+- `is_org_admin` (role-only, owner/admin) and `has_org_role` (role **or**
+  persona) are not interchangeable, and the difference is invisible at the call
+  site. Every `is_org_admin` policy silently excludes `manager`.
+- Guarded by three more invariants in `identity-boundary-canon.test.ts`,
+  including the one that matters most: the read policy must **not** widen to
+  `is_org_member`.

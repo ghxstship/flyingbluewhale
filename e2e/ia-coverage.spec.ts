@@ -24,6 +24,31 @@
  * Grouped one test per nav group: every route in the group is visited and ALL
  * failures are collected before the assertion, so a single run surfaces every
  * broken surface in that group at once (not just the first).
+ *
+ * ── Triaging a red run ───────────────────────────────────────────────────────
+ * This gate reports EVERY uncaught error, tagged by the URL that fired it (see
+ * `recordPageErrors`). It is deliberately more sensitive than the per-route
+ * listener it replaced, which charged a route's late hydration error to its
+ * NEIGHBOUR, dropped the last route's errors entirely, and reported at most one
+ * error per route. Red here can therefore mean "previously swallowed", not
+ * "newly broken" — triage before reverting.
+ *
+ * Do NOT trust a local dev run: the dev server manufactures failures under this
+ * serial sweep (spurious 500s, /login bounces, timeouts, and bogus compile
+ * errors — one run blamed the Pages Router in this App-Router-only repo). Two
+ * runs of the same tree gave 9 vs 5 near-disjoint failures. Confirm against a
+ * compiled target first: `E2E_BASE_URL=https://atlvs.pro npx playwright test
+ * e2e/ia-coverage.spec.ts`.
+ *
+ * Known-good baseline vs prod, 2026-07-15 (main @ 77 commits unpushed): 27
+ * passed / 5 failed / 1 flaky, and every failure was DEPLOY SKEW, not a defect
+ * — this spec enumerates routes from the LOCAL nav.ts but probes the DEPLOYED
+ * app, so routes that exist locally and aren't shipped yet read as HTTP 404
+ * (/m/pass, /m/my-work, /m/requisitions*, /m/mileage*, /m/jobs, /m/companies,
+ * /m/lost-found, /m/docs/new, /m/settings/team*, /p/onsite,
+ * /studio/settings/capabilities). Zero `→ uncaught:` failures. Expect those
+ * 404s to clear once main ships; a route 404ing here that DOES exist under
+ * src/app is that skew, not a broken surface.
  */
 import { expect, test } from "./helpers/base";
 import { authedSetup, dismissConsent } from "./helpers/auth";

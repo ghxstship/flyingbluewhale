@@ -70,6 +70,17 @@ const BEHAVIORAL_DOMAINS = [
   "personal",
 ];
 
+// The lifecycle tier: the destructive identity paths. These are NOT per-domain
+// crawls — they're the irreversible chains (membership teardown, account
+// deletion, the auth-callback failure branches) that the 2026-07 lifecycle
+// audit found shipping entirely untested, precisely because they're the
+// hardest to fixture safely. Deleting one of these silently restores that gap.
+const LIFECYCLE_SPECS = [
+  "lifecycle-invite-accept.spec.ts",
+  "lifecycle-account-delete-restore.spec.ts",
+  "auth-edges.spec.ts",
+];
+
 describe("e2e coverage manifest — every surface stays covered", () => {
   it("keeps all three render-tier crawlers", () => {
     for (const f of RENDER_SPECS) {
@@ -100,6 +111,12 @@ describe("e2e coverage manifest — every surface stays covered", () => {
         existsSync(e2ePath(`${d}-coverage.spec.ts`)),
         `missing behavioral coverage spec e2e/${d}-coverage.spec.ts`,
       ).toBe(true);
+    }
+  });
+
+  it("keeps the lifecycle tier — the destructive identity paths", () => {
+    for (const f of LIFECYCLE_SPECS) {
+      expect(existsSync(e2ePath(f)), `missing lifecycle spec e2e/${f}`).toBe(true);
     }
   });
 });

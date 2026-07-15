@@ -116,6 +116,69 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  // 4. The DISPOSABLE user — deliberately NOT in the ROLES loop above.
+  //
+  // e2e/lifecycle-account-delete-restore.spec.ts exercises /api/v1/me/delete,
+  // which is not org-scoped: it revokes the caller's membership in EVERY org.
+  // Every ROLES user is a member of all four test orgs, so pointing that chain
+  // at one would rip a shared fixture out of orgs dozens of specs depend on —
+  // and a mid-chain failure would strand it there (a member cannot restore
+  // their own soft-deleted membership; that write is service-role only).
+  //
+  // So this user gets exactly ONE membership, in Starter, at the lowest role.
+  // That single row IS its blast radius. Keep it out of the loop.
+  {
+    const email = "test+disposable@flyingbluewhale.app";
+    const { data: list } = await supabase.auth.admin.listUsers({ page: 1, perPage: 200 });
+    let user = list?.users.find((u: { email?: string }) => u.email === email);
+    if (!user) {
+      const { data, error } = await supabase.auth.admin.createUser({
+        email,
+        password: PASSWORD,
+        email_confirm: true,
+        user_metadata: { name: "Test Disposable" },
+      });
+      if (error) {
+        return new Response(JSON.stringify({ ok: false, step: "user:disposable", error: error.message }), {
+          status: 500,
+        });
+      }
+      user = data.user!;
+    } else {
+      // Re-seeding after an interrupted run: the account may be left
+      // soft-deleted (deleted_at = purge date) with its membership revoked.
+      // Clear both so the suite starts from a live account, which is what its
+      // first assertion requires.
+      await supabase.auth.admin.updateUserById(user.id, { password: PASSWORD, email_confirm: true });
+      await supabase.from("users").update({ deleted_at: null, email, name: "Test Disposable" }).eq("id", user.id);
+    }
+    created.users = [...(created.users as unknown[]), { id: user.id, email, role: "disposable" }];
+
+    const starterOrgId = orgsByTier["starter"];
+    const { data: existing } = await supabase
+      .from("memberships")
+      .select("id")
+      .eq("org_id", starterOrgId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (existing) {
+      await supabase.from("memberships").update({ deleted_at: null }).eq("id", (existing as { id: string }).id);
+    } else {
+      const { error } = await supabase
+        .from("memberships")
+        .insert({ org_id: starterOrgId, user_id: user.id, role: "member" });
+      if (error && !error.message.includes("duplicate")) {
+        return new Response(JSON.stringify({ ok: false, step: "membership:disposable@starter", error: error.message }), {
+          status: 500,
+        });
+      }
+      created.memberships = [
+        ...(created.memberships as unknown[]),
+        { user_email: email, org_tier: "starter", role: "member" },
+      ];
+    }
+  }
+
   return new Response(
     JSON.stringify(
       {

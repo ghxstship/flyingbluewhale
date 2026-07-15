@@ -110,7 +110,7 @@ const KIT = join(ROOT, "src/components/mobile/kit");
  *  joining the list. Each of these has a persistence target already waiting
  *  (`maintenance_jobs.photos`, `expenses.receipt_path`), so they are wiring
  *  jobs, not deletions. */
-const UNMOUNTED_PHOTO_SPECS = ["maintenance", "expense", "post"] as const;
+const UNMOUNTED_PHOTO_SPECS = ["maintenance", "post"] as const;
 
 /** Parse `FORMS` into per-id source blocks. */
 function formBlocks(): Map<string, string> {

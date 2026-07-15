@@ -207,7 +207,10 @@ export const FORMS: Forms = {
     fields: [
       { id: "category", label: "Category", type: "select", required: true, options: ["Travel", "Lodging", "Meals", "Fuel", "Supplies", "Equipment", "Other"] },
       { id: "amount", label: "Amount (USD)", type: "text", placeholder: "0.00", required: true, half: true },
-      { id: "date", label: "Date", type: "time", half: true },
+      // `date`, not `time` — this is the day the money was spent, and a
+      // time-of-day picker cannot express it. It was typed "time" while the
+      // form was mounted nowhere, so nothing ever surfaced it.
+      { id: "date", label: "Date", type: "date", half: true },
       { id: "merchant", label: "Merchant", type: "text", placeholder: "Where was it spent?", required: true },
       { id: "receipt", label: "Receipt", type: "photo" },
       { id: "billable", label: "Billable To Client", type: "switch" },

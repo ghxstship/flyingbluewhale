@@ -48,6 +48,7 @@ export default async function MorePage() {
         { href: "/m/mileage", icon: "Truck", labelKey: "m.more.mileage", label: "Mileage", subKey: "m.more.mileageSub", sub: "Log Drives For Reimbursement" },
         { href: "/m/requisitions", icon: "ShoppingCart", labelKey: "m.more.reqs", label: "Purchase Requests", subKey: "m.more.reqsSub", sub: "Ask The Org To Buy Something" },
         { href: "/m/time-off", icon: "CalendarOff", labelKey: "m.more.timeOff", label: "Time Off", subKey: "m.more.timeOffSub", sub: "Requests & Balances" },
+        { href: "/m/expenses", icon: "Receipt", labelKey: "m.more.expenses", label: "Expenses", subKey: "m.more.expensesSub", sub: "Shoot The Receipt, File It" },
         { href: "/m/advances", icon: "ClipboardList", labelKey: "m.more.advances", label: "Advancing", subKey: "m.more.advancesSub", sub: "What You've Been Issued" },
         { href: "/m/onboarding", icon: "UserCheck", labelKey: "m.more.onboarding", label: "Onboarding", subKey: "m.more.onboardingSub", sub: "Finish Getting Set Up" },
         { href: "/m/docs", icon: "FolderOpen", labelKey: "m.more.documents", label: "Documents", subKey: "m.more.documentsSub", sub: "Site Docs, Filtered To You" },

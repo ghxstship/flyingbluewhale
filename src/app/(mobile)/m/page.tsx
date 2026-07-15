@@ -161,6 +161,7 @@ export default async function MobileHome() {
     qaClock: t("m.home.qa.clock", undefined, "Clock"),
     qaAdvance: t("m.home.qa.advance", undefined, "Advances"),
     qaApprove: t("m.home.qa.approve", undefined, "Approve"),
+    qaExpense: t("m.home.qa.expense", undefined, "Expense"),
     qaLostFound: t("m.home.qa.lostFound", undefined, "Lost & Found"),
     qaSwap: t("m.home.qa.swap", undefined, "Swap"),
     qaInvite: t("m.home.qa.invite", undefined, "Invite"),

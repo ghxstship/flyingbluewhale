@@ -2445,6 +2445,18 @@
               ]
             },
             {
+              "path": "/m/expenses",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/expenses/new",
+              "arch": [
+                "FORM"
+              ]
+            },
+            {
               "path": "/m/mileage",
               "arch": [
                 "LIST"

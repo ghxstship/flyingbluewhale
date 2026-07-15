@@ -218,13 +218,17 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
  * gloves, glare, and one-handed use. Photos downscale on device before they
  * ever touch the network.
  *
- * Photos are geotagged at pick time (`getPosition`), index-aligned with the
- * files and carried to the server under the `{id}__geo` sibling key. The fix
- * is best-effort by design: a denial, an indoor dead-zone, or a device
- * without GPS records "no location" and never blocks the submit — a safety
- * report from a concrete loading dock must still file. The chip below the
- * control tells the worker which of those two happened, so location capture
- * is something they can see rather than something done to them.
+ * Photos are geotagged at pick time (`getPosition`) when — and only when —
+ * the field opts in with `geotag: true`, index-aligned with the files and
+ * carried to the server under the `{id}__geo` sibling key. Opt-in matters:
+ * tagging every photo field would record where a crew member's personal
+ * property is when they list a bike for sale, which nothing needs.
+ *
+ * The fix is best-effort by design: a denial, an indoor dead-zone, or a
+ * device without GPS records "no location" and never blocks the submit — a
+ * safety report from a concrete loading dock must still file. The chip below
+ * the control tells the worker which of those two happened, so location
+ * capture is something they can see rather than something done to them.
  */
 function FileField({
   f,
@@ -238,6 +242,7 @@ function FileField({
   setSibling?: (suffix: string, v: unknown) => void;
 }) {
   const isPhoto = f.type === "photo";
+  const geotag = isPhoto && f.geotag === true;
   const files = Array.isArray(value) ? (value as File[]) : [];
   const [busy, setBusy] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -260,7 +265,7 @@ function FileField({
   function commit(nextFiles: File[], nextFixes: (PhotoFix | null)[]) {
     setFixes(nextFixes);
     setValue(nextFiles);
-    if (isPhoto) setSibling?.("geo", JSON.stringify(nextFixes));
+    if (geotag) setSibling?.("geo", JSON.stringify(nextFixes));
   }
 
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
@@ -270,7 +275,7 @@ function FileField({
     try {
       // Fix and downscale race each other — both are slow, neither depends
       // on the other, and the worker is waiting on the pair.
-      const fixPromise = isPhoto ? getPosition() : Promise.resolve(null);
+      const fixPromise = geotag ? getPosition() : Promise.resolve(null);
       const processed = isPhoto ? await downscaleAll(picked) : picked;
       const fix = await fixPromise;
       const capturedAt = new Date().toISOString();
@@ -318,7 +323,7 @@ function FileField({
         </span>
       </label>
 
-      {isPhoto && files.length > 0 && (
+      {geotag && files.length > 0 && (
         <div
           className="hint"
           style={{

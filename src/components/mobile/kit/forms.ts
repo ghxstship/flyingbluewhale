@@ -32,6 +32,18 @@ export type FormField = {
   default?: string;
   half?: boolean;
   hint?: string;
+  /**
+   * Capture the device's position with each photo (`type: "photo"` only).
+   *
+   * Opt-in, and deliberately not the default. Geotagging earns its keep where
+   * "where did this happen" IS the report — incidents, lost property, kit
+   * faults, shift handovers. It has no business on a crew member selling a
+   * bike: that would record where someone's personal property is, which is
+   * surveillance dressed as metadata. Off unless a surface can say why.
+   *
+   * Always best-effort even when on — see FileField.
+   */
+  geotag?: boolean;
 };
 
 export type FormDef = {
@@ -70,7 +82,7 @@ export const FORMS: Forms = {
       { id: "when", label: "Time Of Incident", type: "time" },
       { id: "what", label: "What Happened", type: "textarea", placeholder: "Describe the incident…", required: true },
       { id: "action", label: "Immediate Action Taken", type: "textarea", placeholder: "What did you do?" },
-      { id: "photo", label: "Photos", type: "photo" },
+      { id: "photo", label: "Photos", type: "photo", geotag: true },
       { id: "anon", label: "Submit Anonymously", type: "switch" },
     ],
   },
@@ -83,7 +95,7 @@ export const FORMS: Forms = {
       { id: "where", label: "Location", type: "text", placeholder: "Where it was found / lost", required: true },
       { id: "what", label: "Description", type: "textarea", placeholder: "Color, brand, contents…", required: true },
       { id: "holding", label: "Now Held At", type: "text", placeholder: "e.g. Gate office" },
-      { id: "photo", label: "Photos", type: "photo" },
+      { id: "photo", label: "Photos", type: "photo", geotag: true },
     ],
   },
   maintenance: {
@@ -95,7 +107,7 @@ export const FORMS: Forms = {
       { id: "where", label: "Location", type: "text", placeholder: "Where is it?", required: true },
       { id: "what", label: "Issue", type: "textarea", placeholder: "Describe the problem…", required: true },
       { id: "hazard", label: "Safety Hazard", type: "switch" },
-      { id: "photo", label: "Photos", type: "photo" },
+      { id: "photo", label: "Photos", type: "photo", geotag: true },
     ],
   },
   event: {
@@ -170,7 +182,7 @@ export const FORMS: Forms = {
       { id: "summary", label: "Shift Summary", type: "textarea", placeholder: "What happened, headcounts, incidents…", required: true },
       { id: "open", label: "Open Items For Next Crew", type: "textarea", placeholder: "Anything outstanding to hand off" },
       { id: "assets", label: "Assets / Keys Passed", type: "text", placeholder: "Radios, credentials, keys returned or passed" },
-      { id: "photo", label: "Photos", type: "photo" },
+      { id: "photo", label: "Photos", type: "photo", geotag: true },
     ],
   },
   reqinfo: {

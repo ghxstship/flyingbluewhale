@@ -6,8 +6,12 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
+import { filesFrom, fixesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
 
-export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
+
+/** Same bucket the daily log uses — both are site-state evidence, not incidents. */
+const HANDOVER_PHOTO_BUCKET = "procore-parity";
 
 /** Map the kit `status` seg labels → the `handovers.post_state` enum. */
 const POST_STATE: Record<string, "all_clear" | "watch_items" | "issues"> = {
@@ -40,7 +44,11 @@ const Input = z.object({
  */
 export async function submitHandover(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  const parsed = Input.safeParse(Object.fromEntries(fd));
+  // Files first: Object.fromEntries would coerce a File to "[object File]".
+  // The form has always sent these; nothing here ever read them, so a crew
+  // member's end-of-shift photos were discarded while the UI confirmed them.
+  const photoFiles = filesFrom(fd, "photo");
+  const parsed = Input.safeParse(Object.fromEntries(Array.from(fd.entries()).filter(([, v]) => typeof v === "string")));
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
     for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
@@ -74,6 +82,18 @@ export async function submitHandover(_prev: State, fd: FormData): Promise<State>
 
   const postState = POST_STATE[v.status ?? "All Clear"] ?? "all_clear";
 
+  // Site photos are the handover's evidence — the state of the post you're
+  // passing on. Uploaded before the insert so the row lands with them
+  // attached; a partial failure is a warning, never a lost handover.
+  const upload = await uploadFieldPhotos(
+    supabase,
+    HANDOVER_PHOTO_BUCKET,
+    session.orgId,
+    session.userId,
+    photoFiles,
+    fixesFrom(fd, "photo", photoFiles.length),
+  );
+
   const { error } = await supabase.from("handovers").insert({
     org_id: session.orgId,
     project_id: projectId,
@@ -83,6 +103,7 @@ export async function submitHandover(_prev: State, fd: FormData): Promise<State>
     summary: v.summary,
     open_items: v.open ?? null,
     assets_passed: v.assets ?? null,
+    photos: upload.refs,
   });
   if (error) return { error: error.message };
 
@@ -99,5 +120,7 @@ export async function submitHandover(_prev: State, fd: FormData): Promise<State>
   }
 
   revalidatePath("/m/handover");
-  return null;
+  // Never let the worker believe photos are attached that aren't — that
+  // belief is the whole defect this surface used to ship.
+  return upload.error ? { warning: `Handover submitted. ${upload.error}` } : null;
 }

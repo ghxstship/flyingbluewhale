@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
+import { toFormData } from "@/lib/mobile/form-data";
 import { createListing, markSold, withdrawListing } from "./actions";
 
 export type Listing = {
@@ -107,12 +108,18 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
   const onSubmit = (_def: FormDef, vals: Record<string, unknown>) => {
     if (pending) return;
     setError(null);
-    // Kit `listing` form ids: item, price, cond, desc, photo.
-    const payload = fd({
-      title: String(vals.item ?? ""),
-      price: String(vals.price ?? ""),
-      condition: String(vals.cond ?? ""),
-      description: String(vals.desc ?? ""),
+    // Kit `listing` ids (item/price/cond/desc/photo) → the action's names.
+    // Built with toFormData, not the `fd` helper above: that one is typed
+    // Record<string, string>, which is exactly why `photo` used to be left
+    // out of this object — the File[] had nowhere to go, so a listing's
+    // photos were dropped here, before the network, while the form said
+    // "2 photos attached". A listing with no picture is one nobody answers.
+    const payload = toFormData({
+      title: vals.item ?? "",
+      price: vals.price ?? "",
+      condition: vals.cond ?? "",
+      description: vals.desc ?? "",
+      photo: vals.photo,
     });
     startTx(async () => {
       const res = await createListing(null, payload);

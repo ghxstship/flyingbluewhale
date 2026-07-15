@@ -9064,6 +9064,7 @@ export type Database = {
           gear_owned: Json
           id: string
           is_public_profile: boolean
+          metadata: Json
           name: string
           notes: string | null
           org_id: string
@@ -9077,12 +9078,15 @@ export type Database = {
           roles: string[]
           separated_at: string | null
           separation_reason: string | null
+          skills: Json
           tagline: string | null
           travel_radius_km: number | null
           unions: string[]
           updated_at: string
           user_id: string | null
+          venue_id: string | null
           verified_at: string | null
+          workforce_kind: Database["public"]["Enums"]["workforce_kind"]
           xpms_atom_id: string | null
           xtc_code: number | null
         }
@@ -9101,6 +9105,7 @@ export type Database = {
           gear_owned?: Json
           id?: string
           is_public_profile?: boolean
+          metadata?: Json
           name: string
           notes?: string | null
           org_id: string
@@ -9114,12 +9119,15 @@ export type Database = {
           roles?: string[]
           separated_at?: string | null
           separation_reason?: string | null
+          skills?: Json
           tagline?: string | null
           travel_radius_km?: number | null
           unions?: string[]
           updated_at?: string
           user_id?: string | null
+          venue_id?: string | null
           verified_at?: string | null
+          workforce_kind?: Database["public"]["Enums"]["workforce_kind"]
           xpms_atom_id?: string | null
           xtc_code?: number | null
         }
@@ -9138,6 +9146,7 @@ export type Database = {
           gear_owned?: Json
           id?: string
           is_public_profile?: boolean
+          metadata?: Json
           name?: string
           notes?: string | null
           org_id?: string
@@ -9151,12 +9160,15 @@ export type Database = {
           roles?: string[]
           separated_at?: string | null
           separation_reason?: string | null
+          skills?: Json
           tagline?: string | null
           travel_radius_km?: number | null
           unions?: string[]
           updated_at?: string
           user_id?: string | null
+          venue_id?: string | null
           verified_at?: string | null
+          workforce_kind?: Database["public"]["Enums"]["workforce_kind"]
           xpms_atom_id?: string | null
           xtc_code?: number | null
         }
@@ -9180,6 +9192,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
             referencedColumns: ["id"]
           },
           {
@@ -11355,50 +11374,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      earning_codes: {
-        Row: {
-          code: string
-          created_at: string
-          id: string
-          is_worked_time: boolean
-          label: string
-          lifecycle_state: string
-          multiplier: number
-          org_id: string
-          updated_at: string
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          id?: string
-          is_worked_time?: boolean
-          label: string
-          lifecycle_state?: string
-          multiplier?: number
-          org_id: string
-          updated_at?: string
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          id?: string
-          is_worked_time?: boolean
-          label?: string
-          lifecycle_state?: string
-          multiplier?: number
-          org_id?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "earning_codes_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       email_templates: {
         Row: {
@@ -14266,6 +14241,7 @@ export type Database = {
           id: string
           open_items: string | null
           org_id: string
+          photos: Json
           post_state: string
           project_id: string | null
           relief_label: string | null
@@ -14281,6 +14257,7 @@ export type Database = {
           id?: string
           open_items?: string | null
           org_id: string
+          photos?: Json
           post_state?: string
           project_id?: string | null
           relief_label?: string | null
@@ -14296,6 +14273,7 @@ export type Database = {
           id?: string
           open_items?: string | null
           org_id?: string
+          photos?: Json
           post_state?: string
           project_id?: string | null
           relief_label?: string | null
@@ -14316,57 +14294,6 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      hr_worker_links: {
-        Row: {
-          created_at: string
-          external_employee_id: string
-          external_position_id: string | null
-          id: string
-          link_state: string
-          org_id: string
-          party_id: string
-          provider: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          external_employee_id: string
-          external_position_id?: string | null
-          id?: string
-          link_state?: string
-          org_id: string
-          party_id: string
-          provider: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          external_employee_id?: string
-          external_position_id?: string | null
-          id?: string
-          link_state?: string
-          org_id?: string
-          party_id?: string
-          provider?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "hr_worker_links_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "orgs"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "hr_worker_links_party_id_fkey"
-            columns: ["party_id"]
-            isOneToOne: false
-            referencedRelation: "parties"
             referencedColumns: ["id"]
           },
         ]
@@ -18625,6 +18552,7 @@ export type Database = {
           item_condition: string | null
           listing_state: string
           org_id: string
+          photos: Json
           price_cents: number | null
           seller_user_id: string
           title: string
@@ -18640,6 +18568,7 @@ export type Database = {
           item_condition?: string | null
           listing_state?: string
           org_id: string
+          photos?: Json
           price_cents?: number | null
           seller_user_id: string
           title: string
@@ -18655,6 +18584,7 @@ export type Database = {
           item_condition?: string | null
           listing_state?: string
           org_id?: string
+          photos?: Json
           price_cents?: number | null
           seller_user_id?: string
           title?: string
@@ -22389,10 +22319,8 @@ export type Database = {
       payroll_run_lines: {
         Row: {
           classification: string
-          cost_center_id: string | null
           created_at: string
           deductions: Json
-          earning_code_id: string | null
           fringes_cash: number
           fringes_to_plans: number
           gross: number
@@ -22408,9 +22336,7 @@ export type Database = {
           rate_dt: number
           rate_ot: number
           rate_st: number
-          source_entry_ids: string[] | null
           ssn_last_4: string | null
-          timesheet_id: string | null
           updated_at: string
           user_id: string | null
           wage_determination_id: string | null
@@ -22418,10 +22344,8 @@ export type Database = {
         }
         Insert: {
           classification: string
-          cost_center_id?: string | null
           created_at?: string
           deductions?: Json
-          earning_code_id?: string | null
           fringes_cash?: number
           fringes_to_plans?: number
           gross?: number
@@ -22437,9 +22361,7 @@ export type Database = {
           rate_dt?: number
           rate_ot?: number
           rate_st?: number
-          source_entry_ids?: string[] | null
           ssn_last_4?: string | null
-          timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
           wage_determination_id?: string | null
@@ -22447,10 +22369,8 @@ export type Database = {
         }
         Update: {
           classification?: string
-          cost_center_id?: string | null
           created_at?: string
           deductions?: Json
-          earning_code_id?: string | null
           fringes_cash?: number
           fringes_to_plans?: number
           gross?: number
@@ -22466,9 +22386,7 @@ export type Database = {
           rate_dt?: number
           rate_ot?: number
           rate_st?: number
-          source_entry_ids?: string[] | null
           ssn_last_4?: string | null
-          timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
           wage_determination_id?: string | null
@@ -30639,6 +30557,7 @@ export type Database = {
           checked_in_at: string | null
           checked_out_at: string | null
           created_at: string
+          crew_member_id: string | null
           ends_at: string
           id: string
           meal_credit: boolean
@@ -30657,6 +30576,7 @@ export type Database = {
           checked_in_at?: string | null
           checked_out_at?: string | null
           created_at?: string
+          crew_member_id?: string | null
           ends_at: string
           id?: string
           meal_credit?: boolean
@@ -30675,6 +30595,7 @@ export type Database = {
           checked_in_at?: string | null
           checked_out_at?: string | null
           created_at?: string
+          crew_member_id?: string | null
           ends_at?: string
           id?: string
           meal_credit?: boolean
@@ -30688,6 +30609,20 @@ export type Database = {
           zone_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "shifts_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shifts_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "public_crew_directory"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "shifts_roster_id_fkey"
             columns: ["roster_id"]
@@ -31942,6 +31877,210 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      space_memberships: {
+        Row: {
+          joined_at: string
+          last_read_at: string | null
+          muted: boolean
+          role: string
+          space_id: string
+          user_id: string
+        }
+        Insert: {
+          joined_at?: string
+          last_read_at?: string | null
+          muted?: boolean
+          role?: string
+          space_id: string
+          user_id: string
+        }
+        Update: {
+          joined_at?: string
+          last_read_at?: string | null
+          muted?: boolean
+          role?: string
+          space_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "space_memberships_space_id_fkey"
+            columns: ["space_id"]
+            isOneToOne: false
+            referencedRelation: "spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      space_post_comments: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          post_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          post_id: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "space_post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "space_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      space_post_reactions: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "space_post_reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "space_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      space_posts: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          org_id: string
+          space_id: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          space_id: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          space_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "space_posts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "space_posts_space_id_fkey"
+            columns: ["space_id"]
+            isOneToOne: false
+            referencedRelation: "spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spaces: {
+        Row: {
+          about: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          gated_credential: string | null
+          icon: string | null
+          id: string
+          kind: string
+          name: string
+          org_id: string
+          project_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          about?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          gated_credential?: string | null
+          icon?: string | null
+          id?: string
+          kind: string
+          name: string
+          org_id: string
+          project_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          gated_credential?: string | null
+          icon?: string | null
+          id?: string
+          kind?: string
+          name?: string
+          org_id?: string
+          project_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spaces_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spaces_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -35491,7 +35630,15 @@ export type Database = {
           total_minutes?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "timesheets_pay_period_id_fkey"
+            columns: ["pay_period_id"]
+            isOneToOne: false
+            referencedRelation: "pay_periods"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       timezone_overrides: {
         Row: {
@@ -43082,6 +43229,10 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      compile_timesheets: {
+        Args: { p_org_id: string; p_pay_period_id: string }
+        Returns: Json
+      }
       compute_risk_scores_for_org: {
         Args: { org: string }
         Returns: {
@@ -43186,18 +43337,6 @@ export type Database = {
         }[]
       }
       current_request_id: { Args: never; Returns: string }
-      compile_timesheets: {
-        Args: { p_org_id: string; p_pay_period_id: string }
-        Returns: Json
-      }
-      post_timesheet: {
-        Args: { p_lines: Json; p_payroll_run_id: string; p_timesheet_id: string }
-        Returns: Json
-      }
-      recompute_timesheet_totals: {
-        Args: { p_timesheet_id: string }
-        Returns: undefined
-      }
       decline_offer_letter: {
         Args: { p_code: string; p_reason: string; p_token: string }
         Returns: Json
@@ -43480,6 +43619,10 @@ export type Database = {
       postgis_version: { Args: never; Returns: string }
       postgis_wagyu_version: { Args: never; Returns: string }
       reclaim_stuck_jobs: { Args: never; Returns: number }
+      recompute_timesheet_totals: {
+        Args: { p_timesheet_id: string }
+        Returns: undefined
+      }
       record_approval_decision: {
         Args: {
           p_decision: string

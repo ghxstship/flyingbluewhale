@@ -260,6 +260,30 @@ async function purgeAdvanceEngine(supabase) {
   }
 }
 
+/**
+ * Purge the "Route To Approvals" residue (atlvs-procurement-coverage.spec). Each
+ * PO / PO change-order route opens an `approval_instances` row (subject_table +
+ * subject_id, NO FK back to the PO), so deleting the E2E PO leaves the instance
+ * orphaned — it can't be caught by the subject-table TARGETS loop. The route
+ * action stamps `metadata.title` with the PO/CO title ("E2E …"), so match on that
+ * jsonb path. Deletable by the owner client via the admin DELETE policy added in
+ * 20260714120000_approval_instances_write_rls.sql (owner = is_org_admin).
+ */
+async function purgeApprovalInstances(supabase) {
+  try {
+    const { data, error } = await supabase
+      .from("approval_instances")
+      .delete()
+      .in("subject_table", ["purchase_orders", "po_change_orders"])
+      .like("metadata->>title", "E2E %")
+      .select("id");
+    if (error) throw error;
+    if (data?.length) console.log(`e2e:clean — approval_instances: removed ${data.length} "E2E %" route row(s).`);
+  } catch (e) {
+    console.error(`e2e:clean — approval_instances purge (ignored): ${e?.message ?? e}`);
+  }
+}
+
 async function main() {
   if (!SUPABASE_URL || !ANON) {
     console.error("e2e:clean — missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY; skipping.");
@@ -299,6 +323,8 @@ async function main() {
   await healMarketplaceFixture(supabase);
   // Kit 27 — wipe the advance-engine graph + seeded chase ladder.
   await purgeAdvanceEngine(supabase);
+  // Route-to-approvals — wipe orphaned approval_instances (no FK back to the PO).
+  await purgeApprovalInstances(supabase);
   await supabase.auth.signOut();
 }
 

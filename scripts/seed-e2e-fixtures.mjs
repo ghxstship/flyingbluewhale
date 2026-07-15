@@ -125,6 +125,16 @@ const OFFER_LETTER_CODE = "E2CODE"; // exactly 6 chars — unlock input is maxLe
 const JOB_POSTING_FIXTURE_ID = "c7000000-0000-4000-8000-000000000001";
 const JOB_POSTING_SLUG = "e2e-gig";
 
+// Active approval policies so the "Route To Approvals" record action can open an
+// approval_instances row for a PO / PO change order. `routeToApprovals`
+// (src/lib/approvals/route.ts) bails with "No approval policy covers <table>"
+// unless an active approval_policies row matches applies_to = the subject table.
+// approval_policies insert is is_org_admin-only, so a manager can't self-seed it
+// in-test — these live here (service role). Durable fixtures (NOT E2E-stamped, so
+// the "E2E Policy%" teardown pattern leaves them in place).
+const APPROVAL_POLICY_PO_ID = "c8000000-0000-4000-8000-000000000001";
+const APPROVAL_POLICY_PO_CO_ID = "c8000000-0000-4000-8000-000000000002";
+
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
 async function userIdViaSignIn(email) {
@@ -273,6 +283,38 @@ async function ensureProposalApproval() {
   );
   if (aErr) console.warn(`    ! approval fixture: ${aErr.message}`);
   else console.log("    ✓ proposal + pending approval fixture (proposals:approve boundary)");
+}
+
+// Seed the active approval policies the "Route To Approvals" record action needs
+// (PO + PO change order). Without an active approval_policies row matching the
+// subject table, routeToApprovals returns "No approval policy covers …" and the
+// action never redirects. Idempotent via primary-key upserts.
+async function ensureApprovalPolicies() {
+  const rows = [
+    {
+      id: APPROVAL_POLICY_PO_ID,
+      org_id: PROFESSIONAL_ORG,
+      slug: "po-route-fixture",
+      name: "Purchase Order Approvals (e2e fixture)",
+      description: "Routes purchase orders into the approvals engine. Seeded for e2e route-to-approvals coverage.",
+      applies_to: "purchase_orders",
+      version: 1,
+      active: true,
+    },
+    {
+      id: APPROVAL_POLICY_PO_CO_ID,
+      org_id: PROFESSIONAL_ORG,
+      slug: "po-co-route-fixture",
+      name: "PO Change Order Approvals (e2e fixture)",
+      description: "Routes PO change orders into the approvals engine. Seeded for e2e route-to-approvals coverage.",
+      applies_to: "po_change_orders",
+      version: 1,
+      active: true,
+    },
+  ];
+  const { error } = await admin.from("approval_policies").upsert(rows, { onConflict: "id" });
+  if (error) console.warn(`    ! approval policy fixtures: ${error.message}`);
+  else console.log("    ✓ approval policy fixtures (purchase_orders + po_change_orders route-to-approvals)");
 }
 
 // Seed a party-bound advancing assignment (crew, issued credential) on the
@@ -443,6 +485,7 @@ console.log("Seeding project-role + PAT + proposal-approval fixtures…");
 await ensureProjectRoles(userIds);
 await ensurePats(userIds.owner);
 await ensureProposalApproval();
+await ensureApprovalPolicies();
 await ensureAdvancingAssignment(userIds);
 await ensureDispatchGate();
 await ensureOfferLetter();

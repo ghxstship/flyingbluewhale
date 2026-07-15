@@ -39,6 +39,12 @@ const MIGRATIONS_DIR = join(process.cwd(), "supabase/migrations");
 // gate on private.is_org_member, which already admits a manager — there is no
 // 4-role band to widen, so they carry no manager-specific guard.
 const GUARDED_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> = [
+  // approval_instances had RLS on with ONLY a SELECT policy — every insert was
+  // denied, so the v7.8 "Route To Approvals" record action (isManagerPlus-gated)
+  // could never open an approval. Fixed in 20260714120000_approval_instances_
+  // write_rls.sql; guarded here so a future migration can't drop manager out of
+  // the new INSERT band.
+  { table: "approval_instances", policy: "approval_instances_insert" },
   { table: "proposals", policy: "proposals_insert" },
   { table: "proposals", policy: "proposals_update" },
   { table: "projects", policy: "projects_insert" },

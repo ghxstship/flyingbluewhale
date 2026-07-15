@@ -18,6 +18,8 @@ Status: **Phases 0-5 landed — every phase engineering can close. 6 and 7c are 
 
 ### Remaining
 
+**The canonical list is [`TIME_LIFECYCLE_BACKLOG.md`](./TIME_LIFECYCLE_BACKLOG.md)** — 14 items, split by what engineering can schedule (P1-P3) versus what waits on other organisations (P4-P5). Summary:
+
 | Phase | Status |
 | --- | --- |
 | 5 — CSV driver | **LANDED** (`bdcde938`). `payroll_exports`/`payroll_export_lines` (C9), `PayrollExportDriver`, the CSV driver, `POST /payroll-runs/{runId}/export`. Works with every provider today, no partnership. **SFTP transport is the one piece deferred** — it needs a new dependency (`ssh2-sftp-client`), which is a supply-chain decision rather than a coding one. Until then the artifact is downloaded and delivered by the operator, which is what most real integrations do anyway. |

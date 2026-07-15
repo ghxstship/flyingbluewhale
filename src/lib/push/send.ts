@@ -34,6 +34,7 @@ export type PushKind =
   | "assignment_scan"
   | "shift_swap"
   | "time_off"
+  | "timesheet"
   | "course"
   | "incident"
   // Safety-critical broadcast. Carries a kind (so the row is tagged and the
@@ -360,6 +361,7 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   chat: "New Message",
   kudos: "Recognition",
   badge: "Badge Awarded",
+  timesheet: "Timesheet",
   assignment: "Assignment",
   assignment_state: "Assignment Update",
   assignment_scan: "Assignment Scan",

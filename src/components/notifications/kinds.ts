@@ -28,6 +28,7 @@ export const NOTIF_KINDS = [
   "assignment_scan",
   "shift_swap",
   "time_off",
+  "timesheet",
   "course",
   "incident",
 ] as const satisfies readonly PushKind[];
@@ -64,6 +65,7 @@ export const NOTIF_KIND_FALLBACKS: NotifKindRow[] = [
   { kind: "assignment_scan", label: "Scans", description: "Your ticket or credential was scanned" },
   { kind: "shift_swap", label: "Shift Swap", description: "Swap request decisions" },
   { kind: "time_off", label: "Time Off", description: "Time-off request decisions" },
+  { kind: "timesheet", label: "Timesheets", description: "Timesheet submissions and decisions" },
   { kind: "course", label: "Courses", description: "Course assignments + pass results" },
   { kind: "incident", label: "Incidents", description: "Field incident updates (manager+ only)" },
 ];

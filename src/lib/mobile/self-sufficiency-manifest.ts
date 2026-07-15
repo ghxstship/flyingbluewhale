@@ -158,7 +158,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Turn my punches into a timesheet",
     state: "gap",
     roles: ALL,
-    note: "G22. Punch ≠ payroll: /m/clock writes time_entries only; `timesheets` is never read or written on mobile.",
+    note: "G22. BUILT: /m/timesheets lists my periods (party resolved via parties.auth_user_id — no FK is registered to timesheets.party_id) and submits them. The blocker was NOT the surface: `timesheets` RLS lets a worker INSERT and SELECT their own sheet but reserves UPDATE for the manager band (utt_ts_admin_update), and submitting is a state change — so a worker could never submit, and the FSM's whole `open` branch was dead code (its own docblock says the lifecycle was 'unreachable from its own initial state'). Closed with the `submit_timesheet` SECURITY DEFINER RPC (20260715240000), not by widening the UPDATE policy: a row policy has no column-level predicate, so 'let workers submit' would have silently become 'let workers rewrite total_minutes'. The RPC touches state only, re-checks ownership (the sole guard, since DEFINER bypasses RLS — DB-verified refusing a non-owner on all 3 open sheets), and honours SUBMITTABLE_STATES so a corrected rejection can go back. REMAINING for 'shipped': an e2e that punches, submits, and asserts the manager sees it.",
   },
   {
     id: "approval.clear",

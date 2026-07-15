@@ -2457,6 +2457,12 @@
               ]
             },
             {
+              "path": "/m/timesheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/mileage",
               "arch": [
                 "LIST"

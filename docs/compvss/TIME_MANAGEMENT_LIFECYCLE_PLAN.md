@@ -1,6 +1,8 @@
 # COMPVSS Time Management — Complete Lifecycle Plan
 
-Status: **Phases 0-2 landed; 3-7 outstanding.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
+Status: **Phases 0-3 landed; 4-7 outstanding.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
+
+**The lifecycle is now continuous end to end.** A punch is captured, policy-checked, correctable under review, compiled into a timesheet, submitted, approved, posted to a payroll run, and split into earning-coded lines that trace back to the punches behind them. §0's hollow middle is closed. What remains is the *outward* half: the open surface (Phase 4) and the connectors on top of it (5-6).
 
 ## Landed
 
@@ -10,7 +12,14 @@ Status: **Phases 0-2 landed; 3-7 outstanding.** Date: 2026-07-15. Scope: capture
 | 1 — geofence policy | `7783e243` | `block`/`warn`/`record_only` resolving zone → org → `record_only` (the default, so no existing org changed). Migrations `20260715150000` + `20260715150100`. 422 (not 409 — the outbox drops 409 as a dedupe). Accuracy capture + gate, departure GPS, grace radius, `enforcement_state` ledger. Proven live: outside → 422 with distance/nearest-zone/override, inside → clean, override → quarantined, 900 m fix → quarantined `low_accuracy`. |
 | 2 — corrections + audit | `2ddc53dc`, `584dc09c` | `time_entry_corrections` FSM, the `tg_audit_time_entry` **trigger** (proven to fire on raw psql with zero app code), posted-sheet freeze, `apply_time_correction` RPC (one transaction; rolls back whole against a posted sheet). SoD enforced at route + RLS + DB CHECK. `time:read`/`time:approve`/`time:edit`; `collaborator` narrowed off `time:*`. OpenAPI documented. |
 
-**Not started: Phases 3-7.** Phase 3 (the compile/post spine) remains the highest-value item and the blocker for everything downstream — see §0. Phase 6 (ADP et al.) is gated on partnership/certification and Phase 7c (background geofencing) on a native shell release and Play/App Store review; neither is closable by engineering effort alone.
+| 3 — **the spine** | `4ac11487` | The §0 hollow middle, closed. `pay_periods` + `compile_timesheets` (idempotent by construction, so late offline replays re-run safely) + `recompute_timesheet_totals` with a live trigger (an applied correction or replayed punch re-rolls the sheet; posting freezes it) + `POST /timesheets/{id}/submit` (the lifecycle was unreachable from `open`) + `post_timesheet` (admin band, `approved`-gated, re-post replaces rather than double-pays) + earning codes + `hr_worker_links` + `source_entry_ids` lineage. Overtime: **`flsa` and `ca` only**, everything else must use `none` — see `src/lib/time/overtime.ts` for the limits of even those two. Verified live: rollup 14h, late punch 14h→16h, posted totals frozen. |
+
+**Remaining: Phases 4-7.** Phase 4 (open surface: OpenAPI registry, `API_SCOPES`, webhook events, Zapier, dev docs) is next and gates 5-6 — the rule that a native connector may do nothing an external integrator can't. Phase 6 (ADP et al.) is gated on partnership/certification and Phase 7c (background geofencing) on a native shell release and Play/App Store review; **neither is closable by engineering effort alone.**
+
+### Carried forward from building this
+
+- `payroll_run_lines` was never empty — it holds 6 demo rows seeded 2026-06-24. The accurate statement is that **no application code wrote it** until `post_timesheet`; the exporters were rendering seed data.
+- `database.types.ts` is `.prettierignore`d generator-owned output. Never run prettier on it, and never trust the working tree's copy: verify a commit in an isolated worktree, because a concurrent session's uncommitted regen will mask a missing type (this shipped a broken `main` once — `584dc09c`).
 
 ---
 

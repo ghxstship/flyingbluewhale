@@ -130,14 +130,19 @@ export const FORMS: Forms = {
     ],
   },
   task: {
+    // Prototype debris cleaned out when this was finally mounted at
+    // /m/tasks/new: the assignee select offered "Cy R." / "Lo M." /
+    // "Load-out crew" — invented people, not a real roster read — and
+    // `due` was typed `time`, so a due DATE could only ever be an hour.
+    // Field tasks assign to the caller (see createFieldTask); reassignment
+    // is a console concern.
     title: "New Task", icon: "ListPlus", submit: "Create Task",
+    intro: "Assigned to you. Reassign from the console if it belongs to someone else.",
     fields: [
       { id: "title", label: "Task", type: "text", placeholder: "What needs doing?", required: true },
       { id: "priority", label: "Priority", type: "seg", options: ["High", "Medium", "Low"], default: "Medium" },
-      { id: "due", label: "Due", type: "time", half: true },
-      { id: "assignee", label: "Assignee", type: "select", half: true, options: ["Me", "Cy R.", "Lo M.", "Load-out crew"] },
-      { id: "location", label: "Location", type: "text", placeholder: "e.g. Stage L" },
-      { id: "notes", label: "Details", type: "textarea" },
+      { id: "due", label: "Due", type: "date" },
+      { id: "notes", label: "Details", type: "textarea", placeholder: "Anything the next person needs to know…" },
     ],
   },
   access: {

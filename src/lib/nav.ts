@@ -1635,6 +1635,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Advancing", href: "/m/advances" },
   { label: "Time", href: "/m/clock" },
   { label: "Requests", href: "/m/requests" },
+  { label: "New Task", href: "/m/tasks/new" },
   { label: "Documents", href: "/m/docs" },
   { label: "Upload Document", href: "/m/docs/new" },
   { label: "Handover", href: "/m/handover" },

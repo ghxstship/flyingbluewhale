@@ -6,6 +6,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import type { EventRow } from "@/lib/supabase/types";
 import { ScheduleView, type SchedEvent } from "./ScheduleView";
+import { MyShifts, type MyShift } from "./MyShifts";
 
 export const dynamic = "force-dynamic";
 
@@ -43,8 +44,60 @@ export default async function MobileSchedulePage() {
   }
 
   const session = await requireSession();
-  await createClient();
+  const supabase = await createClient();
   const fmt = await getRequestFormatters();
+
+  // The viewer's OWN shifts. `/m/schedule` previously listed org-wide
+  // `events` with no user predicate and called every row a shift, so the
+  // field app could not tell a crew member when or where they work — the
+  // one question the device in their pocket exists to answer. `shifts` is
+  // keyed by workforce_member, so resolve the caller's membership first.
+  const { data: wfm } = await supabase
+    .from("workforce_members")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .maybeSingle();
+
+  let myShifts: MyShift[] = [];
+  if (wfm?.id) {
+    const now = new Date();
+    const from = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+    const to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7).toISOString();
+    const { data: shiftRows } = await supabase
+      .from("shifts")
+      .select("id, starts_at, ends_at, attendance, role, venue:venue_id(name)")
+      .eq("org_id", session.orgId)
+      .eq("workforce_member_id", wfm.id)
+      .gte("starts_at", from)
+      .lt("starts_at", to)
+      .order("starts_at", { ascending: true });
+
+    const todayKey = now.toDateString();
+    const tomorrowKey = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toDateString();
+    myShifts = (shiftRows ?? []).map((s) => {
+      const start = new Date(s.starts_at as string);
+      const key = start.toDateString();
+      const venueName = (s.venue as { name: string | null } | null)?.name ?? null;
+      return {
+        id: s.id as string,
+        isToday: key === todayKey,
+        dayLabel:
+          key === todayKey
+            ? t("m.schedule.today", undefined, "Today")
+            : key === tomorrowKey
+              ? t("m.schedule.tomorrow", undefined, "Tomorrow")
+              : fmt.dateParts(start, { weekday: "short", month: "short", day: "numeric" }),
+        time: `${fmt.dateParts(start, { hour: "2-digit", minute: "2-digit", hour12: false })}–${fmt.dateParts(
+          new Date(s.ends_at as string),
+          { hour: "2-digit", minute: "2-digit", hour12: false },
+        )}`,
+        role: (s.role as string | null) ?? null,
+        venue: venueName,
+        attendance: (s.attendance as string) ?? "scheduled",
+      };
+    });
+  }
 
   const rows = (await listOrgScoped("events", session.orgId, {
     orderBy: "starts_at",
@@ -90,14 +143,37 @@ export default async function MobileSchedulePage() {
     colStatus: t("m.schedule.col.status", undefined, "Status"),
   };
 
+  // This shell has no ICU plural support (src/lib/i18n/t.ts), so the
+  // singular gets its own key rather than a fabricated "1 Shifts".
+  const todayCount = myShifts.filter((s) => s.isToday).length;
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">
-        {t("m.schedule.eyebrow", { count: events.length }, `Today · ${events.length} Events`)}
+        {todayCount === 1
+          ? t("m.schedule.eyebrowOne", undefined, "Today · 1 Shift")
+          : t("m.schedule.eyebrow", { count: todayCount }, `Today · ${todayCount} Shifts`)}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.schedule.title", undefined, "Calendar")}
       </h1>
+
+      {/* Your own shifts first. The org calendar below is context; this is
+          the part that tells you whether to get in the van. */}
+      <MyShifts
+        shifts={myShifts}
+        labels={{
+          heading: t("m.schedule.myShift", undefined, "Your Shift Today"),
+          none: t("m.schedule.noShift", undefined, "No Shift Today"),
+          noneBody: t("m.schedule.noShiftBody", undefined, "Nothing rostered for you today. Check upcoming below."),
+          clockIn: t("m.schedule.clockIn", undefined, "Clock In"),
+          upcoming: t("m.schedule.upcomingShifts", undefined, "Your Next 7 Days"),
+        }}
+      />
+
+      <div className="sech">
+        <h2>{t("m.schedule.orgCalendar", undefined, "Production Calendar")}</h2>
+      </div>
       <ScheduleView events={events} labels={labels} />
     </div>
   );

@@ -197,6 +197,15 @@ These are not parity gaps. They are live bugs, all personally verified against s
 | **G31** | **Permit check.** Note: the register is reference-only (ADR-0014) — no operational permit store exists, so "verify a permit" is impossible on **either** shell. Mobile read access is the honest gap. | MISSING | 3 | 2 | 2 | 3 | **10** | M | `studio/compliance/permits/page.tsx:22-29,51-55` → zero `dim_permit` hits |
 | **G37** | **`/m/onboarding` + 9 more surfaces unreachable from the More hub.** In `mobileSurfaces` but absent from `m/more`'s four groups; only reachable via ⌘K or a phase float. A new hire outside `advance`/`wrap` phase cannot find onboarding. Also affects `/m/punch`, `/m/incidents`, `/m/incident`, `/m/guide`, `/m/scan`, `/m/door`, `/m/check-in`, `/m/notifications`, `/m/advances`. | DEAD-END (nav) | 3 | 3 | 5 | 2 | **13** | S | `nav.ts:1663` vs `m/more/page.tsx:36-81`; `CommandPalette.tsx:313`; `nav.ts:1685,1689` |
 
+### 3.2b Found during remediation (not in the original audit)
+
+Both surfaced by building the thing, not by reading the code — recorded because an audit that only lists what it predicted is marking its own homework.
+
+| ID | Defect | Crit | Freq | Brd | Wk | **Impact** | Effort | Evidence |
+| --- | --- | :-: | :-: | :-: | :-: | :-: | :-: | --- |
+| **D15** | **Crew cannot create a task, and cannot finish one assigned to them.** `tasks_insert` excluded the `member` band outright, so `/m/tasks/new` failed with `new row violates row-level security policy` the moment it existed. Worse, `tasks_update` excludes members too — while `m/tasks/[taskId]/actions.ts:44` explicitly permits the ASSIGNEE to transition state. So a manager assigning a task to a member gives them a UI that offers "Mark Done" and a database that refuses it. Latent only because no member-band user currently has a task assigned. Fixed in `20260715140000_tasks_field_rls` — members may create only as themselves, assigned to themselves, and may update only while it stays theirs. | 5 | 4 | 4 | 5 | **18** | S | policy read at `pg_policies`; caught by `e2e/compvss-field-loop.spec.ts` |
+| **D16** | **"My Tasks" showed everyone's tasks, and hid the viewer's own.** `/m/tasks` ran `listOrgScoped("tasks", orgId)` with no assignee predicate: on the seeded org, 201 rows of which 2 were the viewer's. Because tasks with no due date sort last under `orderBy: due_at`, the viewer's own work fell past the list cap — the page named for them could not display them. The home widget one tap earlier counts "tasks assigned to me", so the list contradicted its own entry point. Same class as D6; RLS is `is_org_member`, so no backstop. | 4 | 5 | 5 | 3 | **17** | S | `m/tasks/page.tsx` vs `m/page.tsx:38`; guarded by `src/lib/mobile/personal-scope.test.ts` |
+
 ### 3.3 Structural / platform-hygiene findings
 
 | ID | Finding | Impact | Effort | Evidence |
@@ -415,7 +424,7 @@ Recorded so they are not re-audited. Each was checked against source.
 
 Stated explicitly rather than assumed:
 
-- Whether `shifts` rows exist in the prod seed (would change G7 from "no writer" to "no *UI* writer"). Swept `src/` only.
+- ~~Whether `shifts` rows exist in the prod seed (would change G7 from "no writer" to "no *UI* writer"). Swept `src/` only.~~ **Resolved 2026-07-15**: 16 `shifts` rows exist in prod, none in the next 7 days. So G7 is confirmed as "no UI writer, seed-only rows" — the table is populated but nothing in any shell can create or assign a shift.
 - Whether `assets.asset_tag` values are ever mirrored into `assignment_scan_codes` (would partially rescue D9). No code path does so; the live DB was not queried.
 - Whether OSHA columns are seed-populated by design (G40).
 - Whether the retired `/m/kudos` function was absorbed by `/m/feed` (`createPost` writes `recognition_posts`, which suggests yes, but the trace was not completed).

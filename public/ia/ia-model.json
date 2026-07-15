@@ -2427,6 +2427,12 @@
               ]
             },
             {
+              "path": "/m/tasks/new",
+              "arch": [
+                "FORM"
+              ]
+            },
+            {
               "path": "/m/docs",
               "arch": [
                 "LIST"

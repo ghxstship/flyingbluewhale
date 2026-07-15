@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ActionBar, GroupedList, KIcon, SwipeRow } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -14,6 +15,7 @@ import {
 
 export type TasksLabels = {
   eyebrow: string;
+  newTask: string;
   title: string;
   search: string;
   empty: string;
@@ -192,6 +194,14 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {L.title}
       </h1>
+
+      <Link
+        href="/m/tasks/new"
+        className="ps-btn ps-btn--cta ps-btn--lg"
+        style={{ width: "100%", justifyContent: "center", marginBottom: 12, textDecoration: "none" }}
+      >
+        <KIcon name="Plus" size={16} /> {L.newTask}
+      </Link>
 
       <ActionBar<KitTask>
         k="tk"

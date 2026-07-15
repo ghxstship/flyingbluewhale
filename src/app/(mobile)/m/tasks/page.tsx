@@ -34,9 +34,17 @@ export default async function MobileTasks() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
+  // "My Tasks" means MY tasks. This read was org-wide with no assignee
+  // predicate: on the seeded Test Professional Org it returned 201 rows of
+  // which 2 belonged to the viewer. Worse, tasks with no due date sort last
+  // under `orderBy: due_at`, so a crew member's own work fell past the list
+  // cap and off the screen entirely — the page named for them could not
+  // show them. The home widget one tap earlier counts
+  // `tasks assigned to me`, so the list contradicted its own entry point.
   const rows = (await listOrgScoped("tasks", session.orgId, {
     orderBy: "due_at",
     ascending: true,
+    filters: [{ column: "assigned_to", op: "eq", value: session.userId }],
   })) as Task[];
 
   // Hydrate assignee display names in one round-trip.
@@ -66,6 +74,7 @@ export default async function MobileTasks() {
   const labels: TasksLabels = {
     eyebrow: t("m.tasks.eyebrow", { done: doneCount, total: tasks.length }, `${doneCount} of ${tasks.length} Done`),
     title: t("m.tasks.title", undefined, "My Tasks"),
+    newTask: t("m.tasks.new", undefined, "New Task"),
     search: t("m.tasks.search", undefined, "Search Tasks…"),
     empty: t("m.tasks.empty", undefined, "No Tasks"),
     emptyBody: t("m.tasks.emptyBody", undefined, "Nothing matches these filters."),

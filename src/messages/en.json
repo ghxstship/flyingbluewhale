@@ -4682,7 +4682,8 @@
     "due": "Due"
    },
    "noTasksInLane": "No tasks",
-   "swipeHint": "Swipe between lanes"
+   "swipeHint": "Swipe between lanes",
+   "new": "New Task"
   },
   "timeOff": {
    "title": "Time Off",
@@ -4799,8 +4800,17 @@
     "detail": "Detail",
     "status": "Status"
    },
-   "eyebrow": "Today · {count} Events",
-   "title": "Calendar"
+   "eyebrow": "Today · {count} Shifts",
+   "title": "Calendar",
+   "today": "Today",
+   "tomorrow": "Tomorrow",
+   "myShift": "Your Shift Today",
+   "noShift": "No Shift Today",
+   "noShiftBody": "Nothing rostered for you today. Check upcoming below.",
+   "clockIn": "Clock In",
+   "upcomingShifts": "Your Next 7 Days",
+   "orgCalendar": "Production Calendar",
+   "eyebrowOne": "Today · 1 Shift"
   },
   "checkin": {
    "gate": {

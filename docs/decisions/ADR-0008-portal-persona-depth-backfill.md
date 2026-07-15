@@ -321,51 +321,6 @@ The lesson is the cheap one: one red run plus one green retry is a hypothesis,
 not a defect, and this repo already had a memory note warning that e2e
 `pageerror` gates mis-attribute to neighbouring routes.
 
-## Amendment 6 (2026-07-15) — the open questions, closed
-
-### 1. Miller's band is now enforced, not intended
-
-Question 1 asked whether to split the 14-item vendor rail; the recommendation was
-"split", and vendor duly got `Vendor / Engagement` + `Vendor / Operations`. Crew
-did not. It was left at 11 items behind a code comment promising a "future cut",
-and drifted to 12 as the backfill landed — so the acceptance check "persona rails
-respect Miller's band per section (max 10 items)" was **failing in production for
-weeks** while its checkbox sat unticked in this document.
-
-Nothing caught it because nothing counted. Both personas are split now via a
-single data-driven `SPLITS` map in `nav.ts` (the vendor branch was bespoke), on
-one consistent cut:
-
-- **`<Title> / Engagement`** — the paperwork you have _with_ the org: terms,
-  money, compliance, training.
-- **`<Title> / Operations`** — the day-to-day of doing the work: where to be, who
-  with, what changed.
-
-`src/lib/portal-rail-canon.test.ts` counts every section of every persona rail,
-so the next persona to outgrow the band fails CI. It also guards the split
-mechanics: `pick()` drops unresolved slugs silently, so a renamed route would
-otherwise vanish from the rail without a word.
-
-Note the ceiling is **per section, not per rail** — a 13-item rail in two
-labelled halves is fine; a 12-item undivided one is not. The point is what a
-reader scans at once.
-
-### 2. Volunteer + media stay deferred, but the reason has changed
-
-Question 2 deferred the volunteer + media backfill on the grounds that "the
-crew/vendor wins prove the pattern first." **That precondition is now met** —
-Amendment 4 finished the pattern, and the surfaces are shared, typed, and
-guarded, so the work is now small and mechanical:
-
-- `volunteer` (5 items today: Application · Training · Schedule · Uniform · Privacy) → add Feed + Learning.
-- `media` (6 items today: Services · Accommodation · Transport · Press Conferences · Info-On-Demand · Privacy) → add Feed + Directory.
-
-Both land well inside Miller's band, so neither needs a split. It is deferred
-only because it is net-new persona surface area rather than remediation of a
-defect, and this amendment's job was to close flags. Tracked separately; the
-`FeedSurface`/`DirectorySurface` portal arms already require `projectId`, so
-whoever builds it cannot repeat Amendment 1's mistake.
-
 ## Amendment 5 (2026-07-15) — chat is not project-scoped, on purpose
 
 Resolves the `ChatSurface` item flagged in Amendment 4 §Consequences. **Chat stays
@@ -493,3 +448,194 @@ rationale expires and should be reconsidered on purpose).
   `DocsSurface` all rest on `.eq("user_id", session.userId)`. That is an app-level
   filter with the same question underneath it — does RLS hold the line if someone skips
   the app? Not audited here; worth its own pass.
+
+## Amendment 5, part 2 (2026-07-15) — the three flags, resolved
+
+Amendment 5 shipped with three loose ends. Closing them turned up a second live
+cluster of the same defect and one regression Amendment 5 itself introduced.
+
+### Flag 1 — "a no-op write returns no error" is not trivia
+
+Noted as probe hygiene: an RLS `DELETE`/`UPDATE` that matches zero rows is not an
+error. PostgREST returns success. It bit three times in one day:
+
+1. the chat probe's cleanup reported "delete ok" and left orphan rooms;
+2. the time-off verification probe reported `*** VULNERABLE ***` for two vectors
+   that were in fact **refused** — the UPDATE matched nothing and returned no
+   error, and the probe read that as success. The fix was to assert on the row's
+   state afterwards (`rows_returned=0`, `request_state` still `pending`) rather
+   than on the absence of an error object;
+3. and, not as a probe artifact at all, in `offboardMembershipInOrg` — below.
+
+The rule this leaves behind: **a security check that reads an error object is
+not a check.** Read the row back. Both directions of every probe in this
+amendment now assert on observed state.
+
+### Flag 2 — chat_rooms DELETE
+
+`chat_rooms_delete` requires `is_room_admin(id)`, so a creator who has left their
+own room can no longer delete it. Resolved as **intentional, and inert**: no app
+path deletes a `chat_rooms` row (the table has a `deleted_at` column and nothing
+writes it either). Room deletion is a latent admin capability, not a user-facing
+feature, and `created_by` is deliberately NOT a DELETE key — "I made this room a
+year ago" should not confer the power to destroy a conversation and cascade its
+messages after leaving it. Kept admin-only.
+
+### Flag 3 — the three surfaces Amendment 1 waved through
+
+Amendment 1 audited `ScheduleSurface` / `TimeOffSurface` / `DocsSurface` and said
+"already user-scoped (`.eq("user_id", session.userId)`)". That audited the APP
+filter. Asking whether RLS agreed produced:
+
+- **`DocsSurface` → `personal_documents`: clean.** `personal_documents_self_rw` is
+  `user_id = auth.uid()` in both USING and WITH CHECK. The DB genuinely agrees.
+- **`TimeOffSurface` → a second live hole.** Fixed in
+  `20260715152918_time_off_self_approval_boundary.sql`; see below.
+- **`ScheduleSurface` → `shifts` / `workforce_members`: org-member-readable,
+  left alone deliberately.** Both are `is_org_member(org_id)` on SELECT, so the
+  app filter is the only thing narrowing them to the caller. Unlike time-off this
+  is not obviously wrong: it matches the co-member visibility model the ADR
+  already documents for `memberships`, and it is load-bearing — `shifts` is read
+  org-wide by shift-swap browsing, the volunteer surfaces, call sheets, and the
+  ops schedule board. Narrowing it is a product decision about whether a
+  **vendor** should see the org's shift pattern (both surfaces are mounted at
+  `/p/[slug]/vendor/*`), not a bug fix, and it is not one to make on a guess
+  inside a security migration. **Flagged, not fixed** — and flagged with the
+  reason, which is what Amendment 4 should have done for chat.
+
+### The second cluster: you could approve your own time off
+
+Confirmed as `crew@gvteway.test` (`member` band) over PostgREST, with a normal
+login: read 10 other people's `time_off_requests` **including the free-text
+`reason`**, read 4 others' balances, file a request and flip it to `approved`
+with a plain UPDATE, approve it again through the RPC, set my own `balance_hours`
+to 9999, and write **another user's** balance row. Both surfaces are mounted on
+the `vendor` persona, so an external contractor could do all of it.
+
+Two independent causes, both the Amendment 5 shape — the gate is in the app:
+
+1. `time_off_requests_org_rw` / `time_off_balances_self_or_org` were FOR ALL with
+   `is_org_member(org_id)` as the WITH CHECK. Any org member could write any row.
+2. `approve_time_off_request` is SECURITY DEFINER, `EXECUTE` granted to
+   `authenticated`, and checked only `private.is_org_member`. Its own comment said
+   so. Being in the org is not authority to decide leave.
+
+Meanwhile `decideTimeOffRequest` carries the comment *"Re-checked here rather than
+trusted from the caller so neither shell can skip the gate by hiding a button."*
+True of both shells. A PostgREST call is not a shell.
+
+Fixed: per-command policies with the manager band (`owner|admin|manager`, matching
+`MANAGER_BAND_ROLES` exactly) in the database; self-filed rows pinned to
+`request_state='pending'` so a member cannot INSERT a row that is born approved;
+balances writable only by managers (the RPC is SECURITY DEFINER and does its own
+decrement); and the RPC taught the same band **plus an explicit self-approval
+refusal** — managers file leave too, and their own request is the one they must
+not be able to sign off. Verified both ways: every vector refused, and a manager
+can still see the 15-request queue, approve, and deny.
+
+### The regression Amendment 5 introduced
+
+Narrowing `chat_rooms` SELECT to members broke `offboardMembershipInOrg`. Step ④
+enumerates `chat_rooms` by org to drop a departing user's room memberships; under
+the new policy an org admin sees only rooms they are IN — typically none — so
+`roomIds` came back empty, the `if (roomIds.length > 0)` guard skipped the delete,
+and the user was removed from **zero** rooms. Silently. Measured on the live DB:
+the org has 2 rooms and 6 memberships; the admin's offboard path enumerated 0.
+
+That is not cosmetic. `chat_messages` gates on room membership alone with **no org
+check**, so a soft-deleted `memberships` row does not revoke chat. A user
+offboarded through the console kept reading org threads — the exact "alternate
+channel" step ④ exists to close.
+
+Root cause is worth naming, because it is not really about chat: **every step of
+that cascade sweeps by org and then filters by what the caller can see.** Under
+RLS it clears the intersection and reports success. `leaveOrg` already passed a
+service client and said why ("this only elevates the teardown, not the decision");
+`removePerson` passed the admin's user client, and nothing in the type system or
+the diff distinguished them.
+
+Fixed by removing the choice: `offboardMembershipInOrg(userId, orgId)` now builds
+its own service client and throws if the key is absent. A parameter that is only
+ever correct with one argument is a footgun. Callers still own the decision.
+
+This is also the honest lesson of Amendment 5's own audit: the sweep that
+concluded "every `chat_rooms` consumer is already membership-scoped" was
+truncated (`head -30`) and missed `offboard.ts`. Re-run exhaustively, there was
+exactly one offender, and it was the one that mattered.
+
+### The mechanism, closed repo-wide
+
+A live sweep after both fixes found 3 policies still relying on the FOR ALL
+write-check inheritance, out of 357: `ai_proposal_drafts`, `ai_risk_reports`,
+`ai_schedule_suggestions`, all `org_members_all` USING `is_org_member(org_id)`.
+None is a vulnerability — for org-scoped data with no per-user distinction the
+inherited check is the one you would write. `20260715153252_explicit_write_checks.sql`
+sets `with check` to that identical expression anyway: a no-op, spent so the
+invariant can be absolute rather than carrying three exceptions.
+
+    select count(*) from pg_policies
+     where schemaname='public' and cmd='ALL'
+       and with_check is null and qual is not null;   -- now 0, was 5
+
+Worth re-running after any RLS migration. `chat-membership-boundary.test.ts`
+guards the static half over the tables involved.
+
+### Consequences
+
+- Amendment 1's "audited and already user-scoped" verdict covered four surfaces.
+  Two of them (chat, time-off) were hiding live escalations, one (docs) was
+  genuinely fine, and one (schedule) is an open product question. **"The app
+  filters it" was never evidence about the database**, and this ADR asserted it
+  four times.
+- The remaining known gap is `shifts` / `workforce_members` org-wide read on the
+  vendor portal. Deliberate, documented, unresolved.
+- `chat_messages` gating on room membership with no org check is now load-bearing
+  in a way it was not designed to be: it is why offboarding must clear room
+  memberships. An `is_org_member(org_id)` conjunct on the SELECT policy would make
+  the offboard cascade a defence-in-depth measure rather than the only lock.
+  Deferred, and worth its own look.
+
+## Amendment 6 (2026-07-15) — the open questions, closed
+
+### 1. Miller's band is now enforced, not intended
+
+Question 1 asked whether to split the 14-item vendor rail; the recommendation was
+"split", and vendor duly got `Vendor / Engagement` + `Vendor / Operations`. Crew
+did not. It was left at 11 items behind a code comment promising a "future cut",
+and drifted to 12 as the backfill landed — so the acceptance check "persona rails
+respect Miller's band per section (max 10 items)" was **failing in production for
+weeks** while its checkbox sat unticked in this document.
+
+Nothing caught it because nothing counted. Both personas are split now via a
+single data-driven `SPLITS` map in `nav.ts` (the vendor branch was bespoke), on
+one consistent cut:
+
+- **`<Title> / Engagement`** — the paperwork you have _with_ the org: terms,
+  money, compliance, training.
+- **`<Title> / Operations`** — the day-to-day of doing the work: where to be, who
+  with, what changed.
+
+`src/lib/portal-rail-canon.test.ts` counts every section of every persona rail,
+so the next persona to outgrow the band fails CI. It also guards the split
+mechanics: `pick()` drops unresolved slugs silently, so a renamed route would
+otherwise vanish from the rail without a word.
+
+Note the ceiling is **per section, not per rail** — a 13-item rail in two
+labelled halves is fine; a 12-item undivided one is not. The point is what a
+reader scans at once.
+
+### 2. Volunteer + media stay deferred, but the reason has changed
+
+Question 2 deferred the volunteer + media backfill on the grounds that "the
+crew/vendor wins prove the pattern first." **That precondition is now met** —
+Amendment 4 finished the pattern, and the surfaces are shared, typed, and
+guarded, so the work is now small and mechanical:
+
+- `volunteer` (5 items today: Application · Training · Schedule · Uniform · Privacy) → add Feed + Learning.
+- `media` (6 items today: Services · Accommodation · Transport · Press Conferences · Info-On-Demand · Privacy) → add Feed + Directory.
+
+Both land well inside Miller's band, so neither needs a split. It is deferred
+only because it is net-new persona surface area rather than remediation of a
+defect, and this amendment's job was to close flags. Tracked separately; the
+`FeedSurface`/`DirectorySurface` portal arms already require `projectId`, so
+whoever builds it cannot repeat Amendment 1's mistake.

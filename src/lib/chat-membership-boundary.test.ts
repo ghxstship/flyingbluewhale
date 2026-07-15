@@ -31,6 +31,29 @@ import { join } from "node:path";
 const MIGRATIONS_DIR = join(process.cwd(), "supabase/migrations");
 const CHAT_TABLES = ["chat_rooms", "chat_room_members", "chat_messages"] as const;
 
+/**
+ * Tables whose policies must not rely on the FOR ALL write-check inheritance.
+ *
+ * Chat is where it bit; time-off is where the same audit found it again (any
+ * org member could approve their own leave and set their own balance); the
+ * `ai_*` trio were the last three FOR ALL policies in the live DB relying on
+ * the inheritance — harmless there (their USING is the write check you'd write
+ * anyway), made explicit so this rule has no "known exceptions".
+ *
+ * Not the whole schema: the baseline's 357 FOR ALL policies are not all
+ * re-declared in a form this text scan can resolve. The live invariant is
+ * `select count(*) from pg_policies where cmd='ALL' and with_check is null and
+ * qual is not null` = 0, which is worth re-running after any RLS migration.
+ */
+const GUARDED_TABLES = [
+  ...CHAT_TABLES,
+  "time_off_requests",
+  "time_off_balances",
+  "ai_proposal_drafts",
+  "ai_risk_reports",
+  "ai_schedule_suggestions",
+] as const;
+
 function migrationFiles(): string[] {
   return readdirSync(MIGRATIONS_DIR)
     .filter((n) => n.endsWith(".sql"))
@@ -38,18 +61,23 @@ function migrationFiles(): string[] {
 }
 
 /**
- * The LIVE policies on a table: replay every create/drop across the migrations
- * in order and keep what survives.
+ * The LIVE policies on a table: replay every create/alter/drop across the
+ * migrations in order and keep what survives.
  *
  * Replaying drops is the whole point — a policy that a later migration dropped
  * is not the schema, and a guard that reads dropped policies as live would fail
  * on the very migrations that fixed the thing it guards.
+ *
+ * `alter policy` is appended to the create rather than replacing it, because an
+ * ALTER may restate only some clauses. Concatenating means a `with check` added
+ * by a later ALTER counts, without the create's own clauses being lost.
  */
 function livePolicies(table: string): Map<string, string> {
   const live = new Map<string, string>();
   const stmt = new RegExp(
     `drop\\s+policy\\s+(?:if\\s+exists\\s+)?"?([a-z0-9_]+)"?\\s+on\\s+"?public"?\\."?${table}"?\\s*;` +
-      `|create\\s+policy\\s+"?([a-z0-9_]+)"?\\s+on\\s+"?public"?\\."?${table}"?[\\s\\S]*?;`,
+      `|create\\s+policy\\s+"?([a-z0-9_]+)"?\\s+on\\s+"?public"?\\."?${table}"?[\\s\\S]*?;` +
+      `|alter\\s+policy\\s+"?([a-z0-9_]+)"?\\s+on\\s+"?public"?\\."?${table}"?[\\s\\S]*?;`,
     "gi",
   );
   for (const name of migrationFiles()) {
@@ -57,6 +85,11 @@ function livePolicies(table: string): Map<string, string> {
     for (const m of txt.matchAll(stmt)) {
       if (m[1]) live.delete(m[1].toLowerCase());
       else if (m[2]) live.set(m[2].toLowerCase(), m[0]);
+      else if (m[3]) {
+        const key = m[3].toLowerCase();
+        const prior = live.get(key);
+        if (prior) live.set(key, `${prior}\n${m[0]}`);
+      }
     }
   }
   return live;
@@ -92,7 +125,7 @@ describe("chat membership boundary canon (ADR-0008 Amendment 5)", () => {
     // cannot become a write rule by omission.
     const offenders: string[] = [];
     const live = new Map<string, string>();
-    for (const table of CHAT_TABLES) {
+    for (const table of GUARDED_TABLES) {
       for (const [policy, body] of livePolicies(table)) live.set(`${table}.${policy}`, body);
     }
 
@@ -146,6 +179,60 @@ describe("chat membership boundary canon (ADR-0008 Amendment 5)", () => {
       /is_org_member/i.test(check ?? ""),
       "chat_messages INSERT lost its is_org_member(org_id) pin — a member could post a message " +
         "carrying a forged org_id. The R-15 recursion fix dropped this once already.",
+    ).toBe(true);
+  });
+
+  it("time-off writes are manager-gated, and self-filing cannot be born approved", () => {
+    // Same class as the chat self-join, found by the same audit: the app's
+    // isManagerPlus gate was the only thing stopping a member approving their
+    // own leave. RLS admitted any org member to write any request or balance.
+    const upd = withCheckOf(stripSql(lastPolicyBody("time_off_requests", "time_off_requests_update") ?? ""));
+    expect(
+      /has_org_role/i.test(upd ?? ""),
+      "time_off_requests UPDATE must be manager-gated in the DB, not just in decideTimeOffRequest — " +
+        "a PostgREST call never runs the app's isManagerPlus check.",
+    ).toBe(true);
+
+    const ins = withCheckOf(stripSql(lastPolicyBody("time_off_requests", "time_off_requests_insert") ?? ""));
+    expect(
+      /request_state\s*=\s*'pending'/i.test(ins ?? ""),
+      "time_off_requests INSERT must pin self-filed rows to request_state='pending'. Without it a member " +
+        "can INSERT a row that is already 'approved' and skip the decision entirely.",
+    ).toBe(true);
+
+    for (const cmd of ["insert", "update", "delete"] as const) {
+      const body = lastPolicyBody("time_off_balances", `time_off_balances_${cmd}`);
+      expect(body, `time_off_balances_${cmd} policy must exist`).toBeTruthy();
+      expect(
+        /has_org_role/i.test(stripSql(body!)),
+        `time_off_balances ${cmd.toUpperCase()} must be manager-gated — members could otherwise set their ` +
+          `own balance_hours (and everyone else's). The approve RPC is SECURITY DEFINER and does the ` +
+          `decrement itself, so members never need write access here.`,
+      ).toBe(true);
+    }
+  });
+
+  it("approve_time_off_request enforces the manager band and refuses self-approval", () => {
+    // SECURITY DEFINER + EXECUTE granted to `authenticated` means RLS is bypassed
+    // and every check must be inside the body. It used to check only
+    // is_org_member, which is not authority to decide leave.
+    const files = migrationFiles();
+    let body: string | null = null;
+    for (const name of files) {
+      const txt = readFileSync(join(MIGRATIONS_DIR, name), "utf8");
+      const m = txt.match(/create\s+or\s+replace\s+function\s+"?public"?\.?"?approve_time_off_request[\s\S]*?\$\$;/i);
+      if (m) body = m[0];
+    }
+    expect(body, "approve_time_off_request must be defined in a migration").toBeTruthy();
+    const src = stripSql(body!);
+    expect(
+      /has_org_role\s*\(\s*v_req\.org_id/i.test(src),
+      "approve_time_off_request must check the manager band before mutating — it bypasses RLS.",
+    ).toBe(true);
+    expect(
+      /v_req\.user_id\s*=\s*\(\s*select\s+auth\.uid\(\)/i.test(src),
+      "approve_time_off_request must refuse self-approval. Managers file leave too, and their own request " +
+        "is precisely the one they must not be able to sign off.",
     ).toBe(true);
   });
 

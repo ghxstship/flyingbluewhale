@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { offboardMembershipInOrg } from "@/lib/db/offboard";
 import { emitAudit } from "@/lib/audit";
 
@@ -102,17 +102,21 @@ export async function leaveOrgAction(_prev: State, fd: FormData): Promise<State>
     }
   }
 
-  // Self-departure is a PRIVILEGED anti-bricking flow and must run on the
-  // service client: `memberships_update_admin` gates UPDATE on
-  // has_org_role(owner|admin), so a member soft-deleting their OWN membership
-  // is RLS-denied and the leave silently no-ops. (Same reason /api/v1/me/delete
-  // revokes memberships with the service client.) The authorization check above
-  // — a live membership, and the last-owner guard — already ran on the caller's
-  // own session, so this only elevates the teardown, not the decision.
+  // Self-departure is a PRIVILEGED anti-bricking flow and must run elevated:
+  // `memberships_update_admin` gates UPDATE on has_org_role(owner|admin), so a
+  // member soft-deleting their OWN membership is RLS-denied and the leave
+  // silently no-ops. (Same reason /api/v1/me/delete revokes memberships with the
+  // service client.) The authorization check above — a live membership, and the
+  // last-owner guard — already ran on the caller's own session, so only the
+  // teardown elevates, not the decision.
+  //
+  // `offboardMembershipInOrg` now owns that elevation itself, so this pre-check
+  // exists only to turn a missing key into a readable message instead of the
+  // throw it would otherwise raise.
   if (!isServiceClientAvailable()) {
     return { error: "Leaving an organization requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment." };
   }
-  const left = await offboardMembershipInOrg(createServiceClient(), session.userId, orgId);
+  const left = await offboardMembershipInOrg(session.userId, orgId);
   if (!left) return { error: "You are not a member of that workspace." };
 
   await emitAudit({

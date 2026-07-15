@@ -1,7 +1,5 @@
 import "server-only";
-import type { createClient } from "@/lib/supabase/server";
-
-type Client = Awaited<ReturnType<typeof createClient>>;
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 
 /**
  * Soft-delete a user's membership in one org and cascade every surface that
@@ -15,9 +13,39 @@ type Client = Awaited<ReturnType<typeof createClient>>;
  * (`leaveOrg`). Callers own the authorization gate, the last-owner guard, and
  * the audit emit (the action label differs); this only performs the teardown.
  *
+ * ## Why this builds its own client instead of taking one
+ *
+ * The teardown MUST run elevated, and it used to accept whatever client the
+ * caller handed it. `leaveOrg` correctly passed a service client (a member
+ * cannot soft-delete their own membership under `memberships_update_admin`);
+ * `removePerson` passed the admin's user client, and the difference was
+ * invisible — every step still "succeeded", it just did less.
+ *
+ * The failure mode is silent by construction. Each cascade step sweeps by org
+ * (`.eq("org_id", orgId)` → `.in(...)`), so under RLS it clears the
+ * intersection of "what the org has" and "what this caller can see", then
+ * reports success. Step ④ was the live case: chat RLS only shows rooms you are
+ * IN (ADR-0008 Amendment 5), an org admin is typically in none, so `roomIds`
+ * came back empty, the delete was skipped, and the offboarded user kept their
+ * `chat_room_members` rows. `chat_messages` gates on room membership alone with
+ * no org check, so those rows are live read access — the exact alternate
+ * channel this function exists to close.
+ *
+ * A parameter that is only ever correct with one argument is a footgun, so it
+ * is gone: the elevation is now a property of the teardown rather than
+ * something each call site has to remember. Callers still own the DECISION
+ * (gate, last-owner guard, audit) on their own session — that has not moved.
+ *
+ * @throws if the service-role key is absent — half-offboarding someone is worse
+ *   than failing loudly. Pre-check with `isServiceClientAvailable()` if you need
+ *   to surface a friendly message instead.
  * @returns true if a live membership was found and soft-deleted, else false.
  */
-export async function offboardMembershipInOrg(supabase: Client, userId: string, orgId: string): Promise<boolean> {
+export async function offboardMembershipInOrg(userId: string, orgId: string): Promise<boolean> {
+  if (!isServiceClientAvailable()) {
+    throw new Error("Offboarding requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.");
+  }
+  const supabase = createServiceClient();
   // SOFT delete (preserve the row for the offboard timestamp + audit_log
   // target_id references) — access is revoked immediately regardless.
   const { error: memErr, data: removed } = await supabase

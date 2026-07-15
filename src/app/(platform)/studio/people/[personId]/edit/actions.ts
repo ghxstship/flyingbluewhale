@@ -143,7 +143,22 @@ export async function removePerson(userId: string): Promise<void> {
   // Soft-delete the membership + cascade every alternate-channel surface
   // (project roles, PATs, chat, push, AM routing), scoped to this org. Shared
   // with the self-departure `leaveOrg` flow — see offboardMembershipInOrg.
-  const removed = await offboardMembershipInOrg(supabase, userId, session.orgId);
+  //
+  // The teardown elevates itself (see offboardMembershipInOrg) — this call site
+  // used to hand it the admin's user client, which silently under-performed the
+  // cascade: RLS scoped each org-wide sweep to what the ADMIN could see rather
+  // than what the ORG has, so the departing user kept their chat room
+  // memberships and, with them, live read access to org threads.
+  //
+  // The decision stays here on the caller's session: the isAdmin gate, the
+  // self-removal refusal, and the last-owner guard above.
+  //
+  // No service-key pre-check: this action returns void (it is bound straight to
+  // a form), so it has nowhere to put a friendly message, and the teardown
+  // throws on a missing key by design. A half-offboard must not look like a
+  // success — the other guards here no-op silently because a no-op leaves the
+  // member correctly in place; this one would leave them partly removed.
+  const removed = await offboardMembershipInOrg(userId, session.orgId);
 
   // Explicit audit emit — offboard symmetry with /auth/resolve emitting
   // `auth.login`. Compliance reviewers want both endpoints visible.

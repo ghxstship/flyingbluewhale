@@ -1,4 +1,4 @@
-import type { PushKind } from "@/lib/push/send";
+import type { PushKind, UnsilenceableKind } from "@/lib/push/send";
 
 /**
  * Client-safe mirror of the `PushKind` union (src/lib/push/send.ts) — the
@@ -10,6 +10,13 @@ import type { PushKind } from "@/lib/push/send";
  *
  * The `satisfies` check below keeps this tuple in lockstep with the union:
  * add a kind to one without the other and the build fails.
+ *
+ * NOT every PushKind belongs here. This tuple is the kinds a user MAY
+ * TOGGLE, and `UnsilenceableKind` (currently `crisis`) is deliberately
+ * absent: those ignore the matrix entirely, so listing them would render a
+ * switch that does nothing — a placebo, which is exactly what the note
+ * above warns against. The assertion below encodes that rule rather than
+ * quietly widening to accommodate it.
  */
 export const NOTIF_KINDS = [
   "announcement",
@@ -27,8 +34,10 @@ export const NOTIF_KINDS = [
 
 export type NotifKind = (typeof NOTIF_KINDS)[number];
 
-// Exhaustiveness in the other direction: every PushKind appears in the tuple.
-type AssertAllKinds = Exclude<PushKind, NotifKind> extends never ? true : never;
+// Exhaustiveness in the other direction: every PushKind is either
+// toggleable (in the tuple) or deliberately unsilenceable. A new kind that
+// is neither fails the build — which is how `crisis` was caught.
+type AssertAllKinds = Exclude<PushKind, NotifKind | UnsilenceableKind> extends never ? true : never;
 const _allKindsCovered: AssertAllKinds = true;
 void _allKindsCovered;
 

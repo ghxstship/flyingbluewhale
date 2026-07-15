@@ -54,7 +54,9 @@ export type PushKind =
  * 'system' default and lose the crisis tone the field's alert surface
  * already renders. So the kind stays and the exemption is explicit.
  */
-export const UNSILENCEABLE_KINDS: ReadonlySet<PushKind> = new Set<PushKind>(["crisis"]);
+export type UnsilenceableKind = "crisis";
+
+export const UNSILENCEABLE_KINDS: ReadonlySet<PushKind> = new Set<UnsilenceableKind>(["crisis"]);
 
 export type PushPayload = {
   title: string;

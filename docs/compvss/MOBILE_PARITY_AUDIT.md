@@ -14,12 +14,16 @@ Every claim below cites the file that proves it. Nothing is reported closed or n
 | --- | --- | --- |
 | **0 · Stop the bleeding** | **DONE** — 14 shipped defects | `0a69feda` |
 | **1 · Capture layer** | **DONE** — verified end-to-end against prod storage | `e31bf21a` |
-| **2 · Daily field loop** | **PARTIAL** — G6, G13, G9, G8 done (+D15, D16 found while building) | `3ce6d8ea`, `cee52fde`, `3481cef5` |
-| **3 · Manager band** | not started | — |
-| **4 · Safety depth** | not started | — |
+| **2 · Daily field loop** | **PARTIAL** — G6, G13, G9, G8, G3 done (+D15, D16 found while building) | `3ce6d8ea`, `cee52fde`, `3481cef5`, `e0da4b03` |
+| **3 · Manager band** | **PARTIAL** — G14 done; G1 RLS half done (surface pending) | `3ee2a153`, `01ab00dc` |
+| **4 · Safety depth** | **STARTED** — D8 crisis fan-out done | `cb6e8e57` |
 | **5 · Admin tail + exit test** | not started | — |
 
-**Phase 2 remaining**: G3 asset custody (**blocked on a policy decision** — `transitionAsset` refuses the member band, so "may crew take custody themselves?" is a product call, not a code one), G10 punch list, G23 onboarding artifacts, G36 offline durability (+ S5 queue unification, moved here from Phase 1).
+**Phase 2 remaining**: G10 punch list, G23 onboarding artifacts (**target file was deleted by a concurrent refactor** — re-verify before starting), G36 offline durability (+ S5 queue unification, moved here from Phase 1).
+
+**G3 disposition**: the parity half SHIPPED (`e0da4b03`) — mobile now mirrors the console's existing manager+ gate exactly, via a shared `transitionAssetState`. **Still open, and genuinely a product decision:** may CREW take custody of their own gear? That is a new authorization model, not a port, and was deliberately not smuggled in behind the refactor.
+
+**The RLS pattern is systemic, not incidental.** `tasks_insert` and `expenses_insert` both excluded the `member` band — the console's authoring model was never reconciled with who actually does the work. Both are fixed (`20260715140000`, `20260715150000`). **Assume every other `*_insert` policy backing a field surface has the same defect until checked**: requisitions, service_requests, mileage_logs are the likely next three.
 
 **Read the Corrections section (§5b) before trusting any remaining MISSING.** Two entries were wrong because they were scored from a grep count rather than the render path. Every untouched MISSING that rests on the same evidence needs re-verification before anyone builds against it. Four gaps found *while building* (D15, D16 + the two corrections) versus one predicted-and-confirmed suggests the register understates as often as it overstates.
 

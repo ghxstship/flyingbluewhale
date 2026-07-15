@@ -4,8 +4,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { filesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
 
-export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
 
 const Input = z.object({
   // kit `lostfound` form field ids
@@ -30,7 +31,10 @@ const Input = z.object({
  */
 export async function fileLostFound(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  const parsed = Input.safeParse(Object.fromEntries(fd));
+  // Files first — Object.fromEntries would stringify them.
+  const photoFiles = filesFrom(fd, "photo");
+  const scalars = Object.fromEntries(Array.from(fd.entries()).filter(([, v]) => typeof v === "string"));
+  const parsed = Input.safeParse(scalars);
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
     for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
@@ -42,6 +46,11 @@ export async function fileLostFound(_prev: State, fd: FormData): Promise<State> 
   const description = [v.what, v.holding ? `Now held at: ${v.holding}` : null].filter(Boolean).join("\n\n");
 
   const supabase = await createClient();
+
+  // A photo of the item is the whole point of a found-property report —
+  // it's how the owner identifies it at the gate office.
+  const upload = await uploadFieldPhotos(supabase, "incident-photos", session.orgId, session.userId, photoFiles);
+
   const { error } = await supabase.from("incidents").insert({
     org_id: session.orgId,
     project_id: v.projectId ?? null,
@@ -53,12 +62,13 @@ export async function fileLostFound(_prev: State, fd: FormData): Promise<State> 
     incident_state: "open",
     location: v.where,
     occurred_at: new Date().toISOString(),
-    photos: [],
+    photos: upload.paths,
     injury_type: null,
     report_kind: "lost_property",
   });
   if (error) return { error: error.message };
 
   revalidatePath("/m/lost-found");
+  if (upload.error) return { warning: `Report filed. ${upload.error}` };
   return null;
 }

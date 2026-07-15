@@ -34,10 +34,12 @@ export async function quickFileIncident(_prev: State, fd: FormData): Promise<Sta
     severity: "minor",
     incident_state: "open",
     occurred_at: new Date().toISOString(),
-    photos: [],
-    // Express capture is the safety intake. Without this the row would
-    // default-in as safety anyway, but state it explicitly so the intent
-    // survives a future default change.
+    // `photos` is intentionally omitted, not set to []: express capture is a
+    // single-field surface with no photo picker, and the column already
+    // defaults to '[]'. Restating the default here reads as "we considered
+    // photos and there are none", which is the exact ambiguity that let the
+    // full incident form hard-code an empty array while its UI promised
+    // evidence. Full capture lives at /m/incidents/new.
     report_kind: "safety",
   });
   if (error) return { error: error.message };

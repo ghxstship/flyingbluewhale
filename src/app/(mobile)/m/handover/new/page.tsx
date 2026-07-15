@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FormScreen, type FormDef } from "@/components/mobile/kit";
+import { toFormData } from "@/lib/mobile/form-data";
 import { submitHandover } from "../actions";
 
 /**
@@ -16,11 +17,7 @@ export default function NewHandoverPage() {
 
   function onSubmit(_def: FormDef, vals: Record<string, unknown>) {
     if (pending) return;
-    const fd = new FormData();
-    for (const [k, val] of Object.entries(vals)) {
-      if (val == null) continue;
-      fd.set(k, typeof val === "boolean" ? (val ? "1" : "") : String(val));
-    }
+    const fd = toFormData(vals);
     startTransition(async () => {
       const res = await submitHandover(null, fd);
       if (res?.error) {

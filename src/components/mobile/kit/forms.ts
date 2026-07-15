@@ -14,6 +14,11 @@ export type FormFieldType =
   | "number"
   | "photo"
   | "file"
+  // Freehand signature + typed fallback, captured as a PNG File. Field
+  // sign-off (briefing acknowledgement, delivery receipt, daily-log
+  // sign-out) had no mobile surface at all: SignaturePad shipped but was
+  // mounted only in the offer/msa/personal shells.
+  | "sign"
   | "avatar";
 
 export type FormField = {

@@ -6,6 +6,8 @@
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { KIcon } from "./icon";
+import { downscaleAll, downscaleImage } from "@/lib/mobile/image";
+import { SignaturePad } from "@/components/ui/SignaturePad";
 import { FORMS } from "./forms";
 import type { FormDef, FormField } from "./forms";
 
@@ -17,7 +19,9 @@ export const TIER_COLOR: Record<string, [string, string]> = {
   Low: ["#edc23a", "#241a04"],
 };
 
-type AvatarValue = { img: boolean; zoom: number; pos: number } | null;
+// The avatar now carries the actual picked File, not a boolean claiming
+// one exists. `img: boolean` was the whole bug.
+type AvatarValue = { file: File; zoom: number; pos: number } | null;
 
 // Type-to-search combobox: filter a list of options as you type.
 function ComboField({
@@ -85,18 +89,55 @@ function ComboField({
   );
 }
 
-// Avatar upload with an inline crop/save flow.
+/**
+ * Avatar upload with an inline crop/save flow.
+ *
+ * The crop stage used to pose over a CSS-painted `.ac-photo` div with no file
+ * input anywhere — "Upload Photo" opened a zoom slider for an image that did
+ * not exist. It now picks a real file and crops the real pixels.
+ */
 function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknown) => void }) {
   const [stage, setStage] = useState<"view" | "crop">("view");
   const [zoom, setZoom] = useState(1.2);
   const [pos, setPos] = useState(0);
+  const [pending, setPending] = useState<File | null>(null);
+  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
   const av = (value as AvatarValue) || null;
-  const has = !!(av && av.img);
+  const has = !!(av && av.file);
+
+  useEffect(() => {
+    if (!pending) {
+      setPendingUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(pending);
+    setPendingUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [pending]);
+
+  const currentUrl = pendingUrl ?? (av?.file ? URL.createObjectURL(av.file) : null);
+
+  async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setPending(await downscaleImage(file, 640));
+    setStage("crop");
+  }
+
   if (stage === "crop") {
     return (
       <div className="avatar-crop">
         <div className="ac-stage">
-          <div className="ac-photo" style={{ transform: `translateX(${pos}px) scale(${zoom})` }} />
+          <div
+            className="ac-photo"
+            style={{
+              transform: `translateX(${pos}px) scale(${zoom})`,
+              ...(currentUrl
+                ? { backgroundImage: `url(${currentUrl})`, backgroundSize: "cover", backgroundPosition: "center" }
+                : {}),
+            }}
+          />
           <div className="ac-mask" />
         </div>
         <div className="fld" style={{ marginBottom: 8 }}>
@@ -108,22 +149,264 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
           <input id="ac-pos" type="range" min="-60" max="60" step="1" value={pos} onChange={(e) => setPos(parseInt(e.target.value))} />
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={() => setStage("view")}>Cancel</button>
-          <button type="button" className="ps-btn ps-btn--cta ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={() => { setValue({ img: true, zoom, pos }); setStage("view"); }}><KIcon name="Check" size={15} /> Save</button>
+          <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={() => { setPending(null); setStage("view"); }}>Cancel</button>
+          <button
+            type="button"
+            className="ps-btn ps-btn--cta ps-btn--lg"
+            style={{ flex: 1, justifyContent: "center", opacity: pending || av?.file ? 1 : 0.5 }}
+            disabled={!pending && !av?.file}
+            onClick={() => {
+              const file = pending ?? av?.file ?? null;
+              if (!file) return;
+              setValue({ file, zoom, pos });
+              setPending(null);
+              setStage("view");
+            }}
+          >
+            <KIcon name="Check" size={15} /> Save
+          </button>
         </div>
       </div>
     );
   }
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-      <button type="button" className="avatar-up" aria-label={has ? "Change photo" : "Upload photo"} onClick={() => setStage("crop")} style={{ border: "none", padding: 0 }}>
-        {has ? <span className="avatar-up-img" style={{ transform: `translateX(${av!.pos}px) scale(${av!.zoom})` }} /> : <span style={{ fontFamily: "var(--p-mono)", fontWeight: 700 }}>RT</span>}
+      <input id="avatar-pick" type="file" accept="image/*" onChange={onPick} style={{ display: "none" }} />
+      <label className="avatar-up" htmlFor="avatar-pick" aria-label={has ? "Change photo" : "Upload photo"} style={{ cursor: "pointer" }}>
+        {has && currentUrl ? (
+          <span
+            className="avatar-up-img"
+            style={{
+              transform: `translateX(${av!.pos}px) scale(${av!.zoom})`,
+              backgroundImage: `url(${currentUrl})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+        ) : (
+          <span style={{ fontFamily: "var(--p-mono)", fontWeight: 700 }}>
+            <KIcon name="User" size={20} />
+          </span>
+        )}
         <span className="avatar-up-badge"><KIcon name="Camera" size={13} /></span>
-      </button>
+      </label>
       <div>
-        <button type="button" className="ps-btn ps-btn--secondary" onClick={() => setStage("crop")}><KIcon name="Upload" size={14} /> {has ? "Change Photo" : "Upload Photo"}</button>
+        <label className="ps-btn ps-btn--secondary" htmlFor="avatar-pick" style={{ cursor: "pointer" }}>
+          <KIcon name="Upload" size={14} /> {has ? "Change Photo" : "Upload Photo"}
+        </label>
         {has && <button type="button" className="ac-remove" onClick={() => setValue(null)}>Remove</button>}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Real photo / file capture.
+ *
+ * This control used to be a lie: a button whose only effect was
+ * `setValue(n + 1)`, rendering "3 photos added" while capturing nothing.
+ * Seven form specs referenced it — incident, lost & found, maintenance,
+ * receipt among them — and the incident action hard-coded `photos: []`, so a
+ * worker documenting an injury got a UI that confirmed their evidence and a
+ * database row with none of it.
+ *
+ * Now: a real file input. No custom camera code — `accept="image/*"` lets the
+ * OS picker offer camera, library, and (on iOS) the document scanner, which
+ * is more capable than anything we'd hand-roll and already understands
+ * gloves, glare, and one-handed use. Photos downscale on device before they
+ * ever touch the network.
+ */
+function FileField({ f, value, setValue }: { f: FormField; value: unknown; setValue: (v: unknown) => void }) {
+  const isPhoto = f.type === "photo";
+  const files = Array.isArray(value) ? (value as File[]) : [];
+  const [busy, setBusy] = useState(false);
+  const [previews, setPreviews] = useState<string[]>([]);
+  const inputId = `ff-${f.id}`;
+
+  // Object URLs must be revoked or the page leaks a few MB per capture.
+  useEffect(() => {
+    const urls = files.filter((x) => x.type.startsWith("image/")).map((x) => URL.createObjectURL(x));
+    setPreviews(urls);
+    return () => urls.forEach((u) => URL.revokeObjectURL(u));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
+    const picked = Array.from(e.target.files ?? []);
+    if (!picked.length) return;
+    setBusy(true);
+    try {
+      const processed = isPhoto ? await downscaleAll(picked) : picked;
+      setValue([...files, ...processed]);
+    } finally {
+      setBusy(false);
+      // Reset so picking the same file twice still fires onChange.
+      e.target.value = "";
+    }
+  }
+
+  const remove = (i: number) => setValue(files.filter((_, idx) => idx !== i));
+
+  return (
+    <div>
+      <input
+        id={inputId}
+        type="file"
+        accept={isPhoto ? "image/*" : "image/*,application/pdf"}
+        multiple
+        onChange={onPick}
+        style={{ display: "none" }}
+      />
+      <label htmlFor={inputId} className="dropz" style={{ width: "100%", cursor: "pointer", display: "flex" }}>
+        <KIcon name={isPhoto ? "Camera" : "Paperclip"} size={22} />
+        <span>
+          {busy
+            ? "Processing…"
+            : files.length
+              ? `${files.length} ${isPhoto ? "photo" : "file"}${files.length > 1 ? "s" : ""} attached · tap to add`
+              : `Tap to ${isPhoto ? "capture or upload" : "attach"}`}
+        </span>
+      </label>
+
+      {files.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+          {files.map((file, i) => (
+            <div key={`${file.name}-${i}`} style={{ position: "relative" }}>
+              {previews[i] ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={previews[i]}
+                  alt={file.name}
+                  style={{ width: 72, height: 72, objectFit: "cover", borderRadius: 8, display: "block" }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: 8,
+                    border: "1px solid var(--p-border)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <KIcon name="FileText" size={20} />
+                </div>
+              )}
+              <button
+                type="button"
+                aria-label={`Remove ${file.name}`}
+                onClick={() => remove(i)}
+                style={{
+                  position: "absolute",
+                  top: -8,
+                  right: -8,
+                  width: 44,
+                  height: 44,
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-end",
+                  padding: 0,
+                }}
+              >
+                <span
+                  style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: 999,
+                    background: "var(--p-danger)",
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <KIcon name="X" size={12} />
+                </span>
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Signature capture for the field.
+ *
+ * Honours the SignaturePad a11y pairing rule (F-17): the freehand canvas is
+ * pointer-only, so a typed-name input sits beside it as the keyboard /
+ * assistive-tech path. Either one produces the same thing — a PNG File — so
+ * downstream code has one shape to handle.
+ *
+ * Sized for a gloved finger: a wide canvas and a thick stroke, because a
+ * gloved fingertip is a broad, imprecise brush and a 1px line from a stylus
+ * design is unusable on a loading dock.
+ */
+function SignField({ f, value, setValue }: { f: FormField; value: unknown; setValue: (v: unknown) => void }) {
+  const [typed, setTyped] = useState("");
+  const signed = value instanceof File;
+
+  const fromDataUrl = async (dataUrl: string) => {
+    const blob = await (await fetch(dataUrl)).blob();
+    setValue(new File([blob], `${f.id}-signature.png`, { type: "image/png" }));
+  };
+
+  // Render the typed name to a PNG so a keyboard signer and a freehand
+  // signer produce the identical artifact.
+  const fromTyped = (name: string) => {
+    setTyped(name);
+    if (!name.trim()) {
+      setValue(null);
+      return;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = 600;
+    canvas.height = 160;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000";
+    ctx.font = "48px cursive, serif";
+    ctx.textBaseline = "middle";
+    ctx.fillText(name, 24, canvas.height / 2);
+    canvas.toBlob((blob) => {
+      if (blob) setValue(new File([blob], `${f.id}-signature.png`, { type: "image/png" }));
+    }, "image/png");
+  };
+
+  return (
+    <div>
+      <SignaturePad
+        height={180}
+        label={f.label}
+        onChange={(dataUrl) => {
+          setTyped("");
+          void fromDataUrl(dataUrl);
+        }}
+        onClear={() => setValue(null)}
+      />
+      <div className="fld" style={{ marginTop: 8 }}>
+        <label htmlFor={`sign-typed-${f.id}`}>Or type your full name</label>
+        <input
+          id={`sign-typed-${f.id}`}
+          value={typed}
+          onChange={(e) => fromTyped(e.target.value)}
+          placeholder="Your full name"
+          autoComplete="name"
+        />
+      </div>
+      {signed && (
+        <div className="hint" style={{ color: "var(--p-success)" }}>
+          Signature captured.
+        </div>
+      )}
     </div>
   );
 }
@@ -135,6 +418,7 @@ function Field({ f, value, setValue }: { f: FormField; value: unknown; setValue:
   };
   let control: React.ReactNode;
   if (f.type === "avatar") control = <AvatarField value={value} setValue={setValue} />;
+  else if (f.type === "sign") control = <SignField f={f} value={value} setValue={setValue} />;
   else if (f.type === "textarea") control = <textarea {...common} placeholder={f.placeholder} />;
   else if (f.type === "select")
     control = (
@@ -173,12 +457,7 @@ function Field({ f, value, setValue }: { f: FormField; value: unknown; setValue:
       </button>
     );
   else if (f.type === "photo" || f.type === "file")
-    control = (
-      <button type="button" className="dropz" onClick={() => setValue(((value as number) || 0) + 1)} style={{ width: "100%", font: "inherit", background: "none" }}>
-        <KIcon name={f.type === "photo" ? "Camera" : "Paperclip"} size={22} />
-        <span>{value ? `${value} ${f.type === "photo" ? "photo" : "file"}${(value as number) > 1 ? "s" : ""} added` : `Tap to ${f.type === "photo" ? "capture or upload" : "attach"}`}</span>
-      </button>
-    );
+    control = <FileField f={f} value={value} setValue={setValue} />;
   else control = <input type={f.type === "number" ? "number" : f.type === "date" ? "date" : f.type === "time" ? "time" : "text"} {...common} placeholder={f.placeholder} />;
 
   if (f.type === "switch") {
@@ -223,7 +502,11 @@ export function FormScreen({
   if (!def) return null;
   const setV = (id: string, v: unknown) => setVals((p) => ({ ...p, [id]: v }));
   const isReq = (f: FormField) => f.required || (f.requiredFor && f.requiredFor.includes(vals.cat as string));
-  const missing = def.fields.filter((f) => isReq(f) && !vals[f.id]);
+  // `!value` is wrong for the file fields: an empty array is truthy, so a
+  // required photo field would satisfy itself with zero photos. Treat an
+  // empty array as absent.
+  const isEmpty = (v: unknown) => (Array.isArray(v) ? v.length === 0 : !v);
+  const missing = def.fields.filter((f) => isReq(f) && isEmpty(vals[f.id]));
   const submit = () => {
     if (missing.length) return;
     onSubmit(def, vals);

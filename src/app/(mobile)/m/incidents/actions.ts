@@ -6,8 +6,9 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
+import { filesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
 
-export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
 
 /** Kit `incident` form severity seg → DB incident_severity enum. */
 const SEVERITY_MAP: Record<string, "near_miss" | "minor" | "major" | "critical"> = {
@@ -36,7 +37,12 @@ const Input = z.object({
  */
 export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  const parsed = Input.safeParse(Object.fromEntries(fd));
+  // Object.fromEntries collapses the repeated `photo` keys and would coerce
+  // a File into "[object File]" — pull the files off first, then parse the
+  // scalar fields from what's left.
+  const photoFiles = filesFrom(fd, "photo");
+  const scalars = Object.fromEntries(Array.from(fd.entries()).filter(([, v]) => typeof v === "string"));
+  const parsed = Input.safeParse(scalars);
   if (!parsed.success) {
     const fieldErrors: Record<string, string> = {};
     for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
@@ -55,6 +61,13 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
   const injuryType = v.injury ? "reported" : null;
 
   const supabase = await createClient();
+
+  // Upload evidence BEFORE the insert so the row lands with its photos
+  // attached. A failed upload must not lose the report, so a partial
+  // failure is carried through as a warning rather than an abort — the
+  // incident is the thing that matters; the attachment is corroboration.
+  const upload = await uploadFieldPhotos(supabase, "incident-photos", session.orgId, session.userId, photoFiles);
+
   const { error } = await supabase.from("incidents").insert({
     org_id: session.orgId,
     project_id: v.projectId ?? null,
@@ -65,7 +78,7 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
     incident_state: "open",
     location: v.where || null,
     occurred_at: new Date().toISOString(),
-    photos: [],
+    photos: upload.paths,
     injury_type: injuryType,
     // This intake is the safety intake. Lost property comes through the
     // lost & found intake, which sets `lost_property`.
@@ -89,5 +102,9 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
   }
 
   revalidatePath("/m/incidents");
+  // The report landed. If some evidence didn't, say so rather than letting
+  // the worker believe photos are attached that aren't — that belief is
+  // exactly the failure this whole change exists to end.
+  if (upload.error) return { warning: `Report filed. ${upload.error}` };
   return null;
 }

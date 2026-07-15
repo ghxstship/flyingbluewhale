@@ -281,9 +281,9 @@ The second structural node is **offline durability** (G36). It is deliberately *
 | **D13 → real avatar upload** | File input behind the existing crop/zoom UI. | Queue. | Photo persists to storage. |
 | **G35 → signature on mobile** | Mount `SignaturePad`. Landscape-hinted, full-width canvas, thick stroke (a gloved finger is a wide brush), Clear + Confirm as thumb-reachable bottom bar. | Sign offline, queue the artifact. | A briefing ack signed on mobile writes `signature_path`. |
 | **D11 → wire `uploadPersonalDoc`** | `/m/docs/new` with the file input. | Queue. | A doc uploaded from the field appears in `/m/docs` and the console. |
-| **S5 → unify the queues** | Fold `lib/offline/queue.ts` (localStorage, evictable) into the IndexedDB outbox. One queue, one banner, one drain. | — | A queued server action survives memory pressure + app kill. |
-
 **Exit**: no faked capture control remains in `components/mobile/kit/**`; a grep for the counter pattern returns zero.
+
+**Moved to Phase 2 — S5 (unify the queues) + offline photo durability.** These were originally scoped here. They belong with G36 (universal offline), and doing them properly means changing `lib/offline/queue.ts` from a synchronous localStorage API to an async IndexedDB one, which ripples into every consumer (chat, daily-log, SyncBanner, useOfflineQueue). Bundling that with the capture rewrite would have put two independent risks in one commit and jeopardised the offline paths that already work. Capture is now real and online-verified; durability follows in Phase 2 as one deliberate change.
 
 ---
 

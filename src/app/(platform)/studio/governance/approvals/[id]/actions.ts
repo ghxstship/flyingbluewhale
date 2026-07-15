@@ -49,11 +49,15 @@ export async function recordDecision(_: State, fd: FormData): Promise<State> {
   });
   if (error) return actionFail(error.message, fd);
 
-  // Best-effort instance-state advance from the decision.
+  // Advance the instance state from the decision. NOT best-effort: swallowing
+  // this error is what hid the missing approval_instances UPDATE policy — the
+  // decision recorded but the instance silently stayed open forever. The
+  // decision row is already written at this point, so a failure here leaves the
+  // pair inconsistent; surface it loudly rather than reporting success.
   const nextState = instanceStateForDecision(parsed.data.decision);
   if (nextState) {
     const isClosing = nextState === "approved" || nextState === "rejected";
-    await supabase
+    const { error: advanceError } = await supabase
       .from("approval_instances")
       .update({
         state: nextState,
@@ -61,6 +65,12 @@ export async function recordDecision(_: State, fd: FormData): Promise<State> {
       })
       .eq("id", parsed.data.instance_id)
       .eq("org_id", session.orgId);
+    if (advanceError) {
+      return actionFail(
+        `Decision recorded, but advancing the approval to "${nextState}" failed: ${advanceError.message}`,
+        fd,
+      );
+    }
   }
 
   revalidatePath(`/studio/governance/approvals/${parsed.data.instance_id}`);

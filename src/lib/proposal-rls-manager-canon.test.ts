@@ -45,6 +45,13 @@ const GUARDED_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> =
   // write_rls.sql; guarded here so a future migration can't drop manager out of
   // the new INSERT band.
   { table: "approval_instances", policy: "approval_instances_insert" },
+  // approval_instances UPDATE + approval_decisions INSERT: the other half of the
+  // engine (recordDecision). The instance had no UPDATE policy at all, and
+  // uas_dec_decider only admitted a parties.id while the action writes the auth
+  // uid — so no decision could be recorded, by anyone. Fixed in
+  // 20260715130000_approvals_decision_rls.sql.
+  { table: "approval_instances", policy: "approval_instances_update" },
+  { table: "approval_decisions", policy: "approval_decisions_insert" },
   { table: "proposals", policy: "proposals_insert" },
   { table: "proposals", policy: "proposals_update" },
   { table: "projects", policy: "projects_insert" },

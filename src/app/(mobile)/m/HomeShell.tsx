@@ -265,7 +265,7 @@ export function HomeShell({
           sub={L.wUnreadSub}
         />
         <Widget
-          href="/m/wallet"
+          href="/m/pass"
           icon="Wallet"
           tint="success"
           label="Wallet"
@@ -278,7 +278,7 @@ export function HomeShell({
       <div className="sech">
         <h2>Member Pass</h2>
       </div>
-      <Link href="/m/wallet" style={{ textDecoration: "none", display: "block" }}>
+      <Link href="/m/pass" style={{ textDecoration: "none", display: "block" }}>
         <RoseCard compact />
       </Link>
 

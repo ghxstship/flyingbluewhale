@@ -11,7 +11,7 @@ import { KIcon } from "./icon";
  * `qrcode` encoder — modules rendered as SVG rects), replacing the old
  * decorative FNV-hash matrix that no scanner could read. `RoseCard`
  * renders the holder's REAL active `assignment_scan_codes` code (fetched
- * server-side by the caller, e.g. /m/wallet) so the flip-to-QR back of the
+ * server-side by the caller, e.g. /m/pass) so the flip-to-QR back of the
  * card is verifiable at any gate scanner through the assignments domain.
  * When no code exists the card says so honestly instead of painting a
  * fake pass. The prototype's client-minted `Math.random()` "single-use

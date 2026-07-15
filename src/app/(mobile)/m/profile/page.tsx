@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
  * writes (`user_profiles`, `user_social_links`, `emergency_contacts`,
  * `user_travel_profiles`, `user_uniform_sizes`, `user_certifications`,
  * `user_skills`) plus earned `badge_awards`→`badges` and received `reviews`.
- * Editing lives in `/m/settings`; "My Rose" is `/m/wallet`. No mock data — each
+ * Editing lives in `/m/settings`; "My Rose" is `/m/pass`. No mock data — each
  * section simply omits itself when its backing table is empty.
  */
 
@@ -161,7 +161,7 @@ export default async function MobileProfilePage() {
 
       {/* Primary actions. */}
       <div style={{ display: "flex", gap: 10, margin: "8px 0 6px" }}>
-        <Link href="/m/wallet" className="ps-btn ps-btn--cta ps-btn--lg" style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}>
+        <Link href="/m/pass" className="ps-btn ps-btn--cta ps-btn--lg" style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}>
           <KIcon name="QrCode" size={16} /> {t("m.profile.rose", undefined, "My Rose")}
         </Link>
         <Link href="/m/settings" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}>

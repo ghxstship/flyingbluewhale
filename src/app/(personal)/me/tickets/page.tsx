@@ -60,7 +60,7 @@ export default async function MyTicketsPage() {
   }));
 
   // C-05: render each active scan code as a real, gate-scannable QR (same
-  // `qrcode` pipeline as /m/wallet and the asset stickers) instead of a
+  // `qrcode` pipeline as /m/pass and the asset stickers) instead of a
   // monospace string nobody can scan. The code text stays as the fallback.
   const qrByCode = new Map<string, string>();
   await Promise.all(

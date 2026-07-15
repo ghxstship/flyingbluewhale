@@ -37,7 +37,12 @@ export type QueueableEndpoint = (typeof QUEUEABLE_ENDPOINTS)[number];
 export type FieldWriteResult<T> =
   | { status: "ok"; data: T }
   | { status: "queued" }
-  | { status: "error"; message: string };
+  /** `code`/`details` carry the API envelope's machine-readable error so a
+   *  caller can branch on a specific rejection instead of matching on
+   *  message text — e.g. a geofence-blocked punch (422 `geofence_blocked`)
+   *  is a prompt, not a failure. Both are absent for transport-level
+   *  failures, which have no envelope. */
+  | { status: "error"; message: string; code?: string; details?: unknown };
 
 function openQueueDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -166,13 +171,23 @@ export async function postFieldWrite<T>(
       body: raw,
     });
     const json = (await res.json().catch(() => null)) as
-      | { ok?: boolean; queued?: boolean; data?: T; error?: { message?: string } }
+      | {
+          ok?: boolean;
+          queued?: boolean;
+          data?: T;
+          error?: { message?: string; code?: string; details?: { code?: string } & Record<string, unknown> };
+        }
       | null;
     if (res.status === 202 && json?.queued) return { status: "queued" };
     if (res.ok && json?.ok) return { status: "ok", data: json.data as T };
     return {
       status: "error",
       message: json?.error?.message ?? `Request failed (${res.status})`,
+      // Prefer the specific cause in `details.code` (e.g. "geofence_blocked")
+      // over the envelope's coarse `code` ("unprocessable"), which only
+      // names the HTTP class.
+      code: json?.error?.details?.code ?? json?.error?.code,
+      details: json?.error?.details,
     };
   } catch {
     // Network failure with no SW interception — queue it ourselves in the

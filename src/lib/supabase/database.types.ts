@@ -21385,6 +21385,53 @@ export type Database = {
           },
         ]
       }
+      org_time_settings: {
+        Row: {
+          accuracy_threshold_m: number
+          allow_offline_punch_when_blocking: boolean
+          created_at: string
+          geofence_policy: string
+          grace_radius_m: number
+          org_id: string
+          ot_rule_set: string
+          pay_period_anchor: string
+          pay_period_kind: string
+          updated_at: string
+        }
+        Insert: {
+          accuracy_threshold_m?: number
+          allow_offline_punch_when_blocking?: boolean
+          created_at?: string
+          geofence_policy?: string
+          grace_radius_m?: number
+          org_id: string
+          ot_rule_set?: string
+          pay_period_anchor?: string
+          pay_period_kind?: string
+          updated_at?: string
+        }
+        Update: {
+          accuracy_threshold_m?: number
+          allow_offline_punch_when_blocking?: boolean
+          created_at?: string
+          geofence_policy?: string
+          grace_radius_m?: number
+          org_id?: string
+          ot_rule_set?: string
+          pay_period_anchor?: string
+          pay_period_kind?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_time_settings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: true
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orgs: {
         Row: {
           branding: Json
@@ -28506,6 +28553,56 @@ export type Database = {
         }
         Relationships: []
       }
+      scan_unknowns: {
+        Row: {
+          code: string
+          first_seen: string
+          format: string | null
+          id: string
+          last_actor_user_id: string | null
+          last_seen: string
+          mode: string | null
+          org_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          seen_count: number
+        }
+        Insert: {
+          code: string
+          first_seen?: string
+          format?: string | null
+          id?: string
+          last_actor_user_id?: string | null
+          last_seen?: string
+          mode?: string | null
+          org_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          seen_count?: number
+        }
+        Update: {
+          code?: string
+          first_seen?: string
+          format?: string | null
+          id?: string
+          last_actor_user_id?: string | null
+          last_seen?: string
+          mode?: string | null
+          org_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          seen_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_unknowns_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scene: {
         Row: {
           created_at: string
@@ -34456,10 +34553,13 @@ export type Database = {
       }
       time_clock_zones: {
         Row: {
+          accuracy_threshold_m: number | null
           center_lat: number
           center_lng: number
           created_at: string
           deleted_at: string | null
+          geofence_policy: string | null
+          grace_radius_m: number | null
           id: string
           lifecycle_state: string
           name: string
@@ -34469,10 +34569,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          accuracy_threshold_m?: number | null
           center_lat: number
           center_lng: number
           created_at?: string
           deleted_at?: string | null
+          geofence_policy?: string | null
+          grace_radius_m?: number | null
           id?: string
           lifecycle_state?: string
           name: string
@@ -34482,10 +34585,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          accuracy_threshold_m?: number | null
           center_lat?: number
           center_lng?: number
           created_at?: string
           deleted_at?: string | null
+          geofence_policy?: string | null
+          grace_radius_m?: number | null
           id?: string
           lifecycle_state?: string
           name?: string
@@ -34521,23 +34627,32 @@ export type Database = {
           description: string | null
           duration_minutes: number | null
           ended_at: string | null
+          enforcement_reason: string | null
+          enforcement_state: string
+          geofence_out_state: string | null
           geofence_state: string | null
           id: string
           org_id: string
           project_id: string | null
           pulse_note: string | null
           pulse_rating: number | null
+          punch_accuracy_m: number | null
           punch_lat: number | null
           punch_lng: number | null
+          punch_out_accuracy_m: number | null
+          punch_out_lat: number | null
+          punch_out_lng: number | null
           rate_cents: number | null
           shift_id: string | null
           shift_tags: string[]
+          source_channel: string
           started_at: string
           timesheet_id: string | null
           updated_at: string
           user_id: string | null
           xtc_code: number | null
           zone_id: string | null
+          zone_out_id: string | null
         }
         Insert: {
           activity_category?: string
@@ -34548,23 +34663,32 @@ export type Database = {
           description?: string | null
           duration_minutes?: number | null
           ended_at?: string | null
+          enforcement_reason?: string | null
+          enforcement_state?: string
+          geofence_out_state?: string | null
           geofence_state?: string | null
           id?: string
           org_id: string
           project_id?: string | null
           pulse_note?: string | null
           pulse_rating?: number | null
+          punch_accuracy_m?: number | null
           punch_lat?: number | null
           punch_lng?: number | null
+          punch_out_accuracy_m?: number | null
+          punch_out_lat?: number | null
+          punch_out_lng?: number | null
           rate_cents?: number | null
           shift_id?: string | null
           shift_tags?: string[]
+          source_channel?: string
           started_at: string
           timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
           xtc_code?: number | null
           zone_id?: string | null
+          zone_out_id?: string | null
         }
         Update: {
           activity_category?: string
@@ -34575,23 +34699,32 @@ export type Database = {
           description?: string | null
           duration_minutes?: number | null
           ended_at?: string | null
+          enforcement_reason?: string | null
+          enforcement_state?: string
+          geofence_out_state?: string | null
           geofence_state?: string | null
           id?: string
           org_id?: string
           project_id?: string | null
           pulse_note?: string | null
           pulse_rating?: number | null
+          punch_accuracy_m?: number | null
           punch_lat?: number | null
           punch_lng?: number | null
+          punch_out_accuracy_m?: number | null
+          punch_out_lat?: number | null
+          punch_out_lng?: number | null
           rate_cents?: number | null
           shift_id?: string | null
           shift_tags?: string[]
+          source_channel?: string
           started_at?: string
           timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
           xtc_code?: number | null
           zone_id?: string | null
+          zone_out_id?: string | null
         }
         Relationships: [
           {
@@ -42421,6 +42554,16 @@ export type Database = {
         Args: { p_project_id?: string; p_reason: string }
         Returns: undefined
       }
+      bump_scan_unknown: {
+        Args: {
+          p_actor?: string
+          p_code: string
+          p_format?: string
+          p_mode?: string
+          p_org_id: string
+        }
+        Returns: undefined
+      }
       can_record: {
         Args: { p_id: string; p_op: string; p_table: string }
         Returns: boolean
@@ -42836,6 +42979,33 @@ export type Database = {
       postgis_version: { Args: never; Returns: string }
       postgis_wagyu_version: { Args: never; Returns: string }
       reclaim_stuck_jobs: { Args: never; Returns: number }
+      record_approval_decision: {
+        Args: {
+          p_decision: string
+          p_instance_id: string
+          p_notes?: string
+          p_step_id: string
+        }
+        Returns: {
+          closed_at: string | null
+          current_step_id: string | null
+          id: string
+          initiated_at: string
+          initiated_by: string | null
+          metadata: Json
+          org_id: string
+          policy_id: string
+          state: string
+          subject_id: string
+          subject_table: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "approval_instances"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       record_msa_view: {
         Args: { p_code: string; p_token: string }
         Returns: undefined

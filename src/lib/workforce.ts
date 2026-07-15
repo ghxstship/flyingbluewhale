@@ -51,6 +51,11 @@ export type ZoneResolution = {
   nearestZone: ZoneCandidate | null;
   /** Meters to `nearestZone`'s center. Null when nothing to compare. */
   distanceM: number | null;
+  /** True when the punch only counts as inside because of the grace
+   *  radius — i.e. it fell outside `radius_m` but within
+   *  `radius_m + graceM`. Callers tag these `warned` rather than `clean`:
+   *  accepted, but worth an operator's eye. */
+  viaGrace: boolean;
 };
 
 /**
@@ -69,19 +74,28 @@ export type ZoneResolution = {
  *     attributed nondeterministically. A punch inside a large zone is
  *     inside it even when a smaller zone's center sits closer; among
  *     several containing zones the nearest center wins.
+ *
+ * `opts.graceM` widens every zone by a fixed slack to absorb urban-canyon
+ * drift. A true containment always wins over a grace containment, so a
+ * punch that is genuinely inside one zone is never attributed to another
+ * it merely grazes.
  */
 export function resolveZoneForPunch(
   punch: { lat: number; lng: number } | null,
   zones: readonly ZoneCandidate[],
+  opts?: { graceM?: number },
 ): ZoneResolution {
   if (!punch || zones.length === 0) {
-    return { state: "unknown", zone: null, nearestZone: null, distanceM: null };
+    return { state: "unknown", zone: null, nearestZone: null, distanceM: null, viaGrace: false };
   }
+  const graceM = Math.max(0, opts?.graceM ?? 0);
 
   let nearest: ZoneCandidate | null = null;
   let nearestDistance = Number.POSITIVE_INFINITY;
   let inside: ZoneCandidate | null = null;
   let insideDistance = Number.POSITIVE_INFINITY;
+  let grace: ZoneCandidate | null = null;
+  let graceDistance = Number.POSITIVE_INFINITY;
 
   for (const zone of zones) {
     const d = metersBetween(punch, { lat: zone.center_lat, lng: zone.center_lng });
@@ -89,15 +103,24 @@ export function resolveZoneForPunch(
       nearest = zone;
       nearestDistance = d;
     }
-    if (d <= zone.radius_m && d < insideDistance) {
-      inside = zone;
-      insideDistance = d;
+    if (d <= zone.radius_m) {
+      if (d < insideDistance) {
+        inside = zone;
+        insideDistance = d;
+      }
+    } else if (graceM > 0 && d <= zone.radius_m + graceM && d < graceDistance) {
+      grace = zone;
+      graceDistance = d;
     }
   }
 
-  return inside
-    ? { state: "inside", zone: inside, nearestZone: nearest, distanceM: nearestDistance }
-    : { state: "outside", zone: null, nearestZone: nearest, distanceM: nearestDistance };
+  if (inside) {
+    return { state: "inside", zone: inside, nearestZone: nearest, distanceM: nearestDistance, viaGrace: false };
+  }
+  if (grace) {
+    return { state: "inside", zone: grace, nearestZone: nearest, distanceM: nearestDistance, viaGrace: true };
+  }
+  return { state: "outside", zone: null, nearestZone: nearest, distanceM: nearestDistance, viaGrace: false };
 }
 
 // ============================================================

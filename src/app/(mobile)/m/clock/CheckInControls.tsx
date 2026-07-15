@@ -21,8 +21,13 @@ function elapsed(fromIso: string | null): string {
  * HH:MM:SS counter ticking from the open entry's `started_at`, a zone
  * line, and a single clock-in / clock-out CTA wired through `useClockPunch`
  * to the queueable `/api/v1/time/clock` endpoint — offline punches queue on
- * the device and replay on reconnect; clock-in captures GPS (when granted)
- * so the punch records its geofence zone.
+ * the device and replay on reconnect; both directions capture GPS (when
+ * granted) so the punch records its geofence zone.
+ *
+ * When the org runs a blocking geofence policy, an off-site punch comes back
+ * refused with an override path rather than a dead end: the worker states a
+ * reason and the punch lands flagged for a manager. A geofence must never
+ * leave someone unable to record time they worked.
  */
 export function CheckInControls({
   openSince,
@@ -32,7 +37,8 @@ export function CheckInControls({
   zoneName: string | null;
 }) {
   const t = useT();
-  const { punch, pending, outcome } = useClockPunch();
+  const { punch, pending, outcome, clearOutcome } = useClockPunch();
+  const [overrideReason, setOverrideReason] = useState("");
   // Seed a STABLE placeholder so SSR and the client's first render match —
   // computing `elapsed()` (Date.now()) in the initializer runs on both sides at
   // different instants and hydration-mismatches when the second ticks over
@@ -61,6 +67,16 @@ export function CheckInControls({
           : t("m.clock.zoneUnknown", undefined, "No location shared with this punch.")
       : null;
 
+  const blocked = outcome?.kind === "blocked" ? outcome : null;
+  const flagged = outcome?.kind === "ok" && outcome.enforcementState === "quarantined";
+  const canOverride = overrideReason.trim().length >= 10;
+
+  function submitOverride() {
+    if (!blocked || !canOverride) return;
+    void punch(blocked.action, { overrideReason: overrideReason.trim() });
+    setOverrideReason("");
+  }
+
   return (
     <div className="te-clock">
       <div className="wl" style={{ justifyContent: "center" }}>
@@ -86,6 +102,57 @@ export function CheckInControls({
                 undefined,
                 "Clock-out recorded on this device at the current time. It will sync when you're back online.",
               )}
+        </div>
+      )}
+      {flagged && (
+        <div className="ps-alert ps-alert--warn" role="status" style={{ marginBottom: 12 }}>
+          {t(
+            "m.clock.flaggedForReview",
+            undefined,
+            "Punch recorded and sent to your supervisor to confirm. You're on the clock.",
+          )}
+        </div>
+      )}
+      {blocked && (
+        <div className="ps-alert ps-alert--warn" role="alert" style={{ marginBottom: 12, textAlign: "left" }}>
+          <div style={{ marginBottom: 8 }}>{blocked.message}</div>
+          <label
+            htmlFor="clock-override-reason"
+            className="ps-caption"
+            style={{ display: "block", marginBottom: 4 }}
+          >
+            {t("m.clock.overrideLabel", undefined, "Why are you clocking in from here?")}
+          </label>
+          <textarea
+            id="clock-override-reason"
+            className="ps-input"
+            rows={2}
+            value={overrideReason}
+            onChange={(e) => setOverrideReason(e.target.value)}
+            placeholder={t("m.clock.overridePlaceholder", undefined, "Gate 3 closed, crew staged at the north lot")}
+            style={{ width: "100%", marginBottom: 8 }}
+          />
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              type="button"
+              className="ps-btn ps-btn--sm"
+              disabled={pending || !canOverride}
+              onClick={submitOverride}
+            >
+              {t("m.clock.overrideSubmit", undefined, "Clock in anyway")}
+            </button>
+            <button
+              type="button"
+              className="ps-btn ps-btn--tertiary ps-btn--sm"
+              disabled={pending}
+              onClick={() => {
+                setOverrideReason("");
+                clearOutcome();
+              }}
+            >
+              {t("m.clock.overrideCancel", undefined, "Cancel")}
+            </button>
+          </div>
         </div>
       )}
       {zoneStatus && (

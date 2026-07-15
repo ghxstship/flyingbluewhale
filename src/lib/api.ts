@@ -7,6 +7,7 @@ export type ApiErrorCode =
   | "forbidden"
   | "not_found"
   | "conflict"
+  | "unprocessable"
   | "rate_limited"
   | "internal"
   | "service_unavailable";
@@ -17,6 +18,12 @@ const STATUS: Record<ApiErrorCode, number> = {
   forbidden: 403,
   not_found: 404,
   conflict: 409,
+  // 422: the request is well-formed and the caller is allowed, but a
+  // policy refuses it — currently a geofence-blocked punch. Deliberately
+  // NOT 409: the offline outbox treats 409 as a terminal duplicate-drop
+  // (public/service-worker.js), so reusing it would make a policy refusal
+  // indistinguishable from a dedupe and silently discard the write.
+  unprocessable: 422,
   rate_limited: 429,
   internal: 500,
   service_unavailable: 503,

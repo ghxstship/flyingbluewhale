@@ -3,7 +3,9 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { resolveZoneForPunch, type ZoneCandidate } from "@/lib/workforce";
+import { evaluatePunch } from "@/lib/time/policy";
+import { loadPunchPolicyContext } from "@/lib/time/server";
+import { resolveZoneForPunch } from "@/lib/workforce";
 
 /** /api/v1/shifts/checkin — COMPVSS shift T&A (WF-197).
  *
@@ -27,6 +29,9 @@ const PostSchema = z.object({
   // desktop test) send neither — we record geofence_state='unknown'.
   lat: z.number().min(-90).max(90).optional(),
   lng: z.number().min(-180).max(180).optional(),
+  /** GeolocationCoordinates.accuracy, metres. Lets the policy tell "not
+   *  here" from "can't tell" instead of treating a vague fix as absence. */
+  accuracy: z.number().min(0).max(100_000).optional(),
 });
 
 type Attendance = "scheduled" | "checked_in" | "on_break" | "checked_out";
@@ -81,6 +86,10 @@ export async function POST(req: NextRequest) {
     }
 
     const nowIso = input.at ?? new Date().toISOString();
+    const fix =
+      typeof input.lat === "number" && typeof input.lng === "number"
+        ? { lat: input.lat, lng: input.lng, accuracyM: input.accuracy ?? null }
+        : null;
     const patch: Record<string, string | null> = {};
 
     if (input.action === "check_in") {
@@ -113,22 +122,17 @@ export async function POST(req: NextRequest) {
     // No project_id linkage here yet (shifts.venue_id maps to a venue,
     // not a project). Admins can attribute via the timesheet view.
     if (input.action === "check_in") {
-      // Resolve the punch against the org's active zones. A GPS-less
-      // punch, or an org with no zones configured, records 'unknown' so
-      // we still have an audit trail.
-      const punch =
-        typeof input.lat === "number" && typeof input.lng === "number"
-          ? { lat: input.lat, lng: input.lng }
-          : null;
-      const { data: zones } = punch
-        ? await supabase
-            .from("time_clock_zones")
-            .select("id, name, center_lat, center_lng, radius_m")
-            .eq("org_id", session.orgId)
-            .eq("lifecycle_state", "active")
-            .is("deleted_at", null)
-        : { data: [] };
-      const resolved = resolveZoneForPunch(punch, (zones ?? []) as ZoneCandidate[]);
+      // Same policy evaluation as /api/v1/time/clock — one decision
+      // function, so a shift punch and a personal punch can never disagree
+      // about whether a worker is on site. A GPS-less punch, or an org with
+      // no zones configured, records 'unknown' so we still have a trail.
+      //
+      // NOTE: the shift attendance FSM has already advanced to checked_in
+      // above, so a refusal here would strand the shift. This route
+      // therefore records the verdict (including quarantine) but does not
+      // refuse; the blocking prompt lives on the /m/clock path.
+      const { settings, zones } = await loadPunchPolicyContext(supabase, session.orgId);
+      const verdict = evaluatePunch({ fix, zones, settings });
 
       await supabase.from("time_entries").insert({
         org_id: session.orgId,
@@ -137,10 +141,13 @@ export async function POST(req: NextRequest) {
         started_at: nowIso,
         billable: true,
         description: "Shift punch",
-        zone_id: resolved.zone?.id ?? null,
+        zone_id: verdict.zoneId,
         punch_lat: input.lat ?? null,
         punch_lng: input.lng ?? null,
-        geofence_state: resolved.state,
+        punch_accuracy_m: input.accuracy ?? null,
+        geofence_state: verdict.geofenceState,
+        enforcement_state: verdict.enforcementState,
+        enforcement_reason: verdict.enforcementState === "clean" ? null : verdict.reason,
       });
     } else if (input.action === "check_out") {
       // Close the open time_entries row for this shift (ended_at is null).
@@ -157,9 +164,22 @@ export async function POST(req: NextRequest) {
       if (open) {
         // duration_minutes is derived by the existing
         // tg_compute_time_entry_duration trigger.
+        //
+        // The departure fix is recorded, never enforced — refusing a
+        // check-out would strand a worker on the clock, which is worse
+        // than the problem it solves.
+        const zones = fix ? (await loadPunchPolicyContext(supabase, session.orgId)).zones : [];
+        const outResolution = resolveZoneForPunch(fix, zones);
         await supabase
           .from("time_entries")
-          .update({ ended_at: nowIso })
+          .update({
+            ended_at: nowIso,
+            punch_out_lat: input.lat ?? null,
+            punch_out_lng: input.lng ?? null,
+            punch_out_accuracy_m: input.accuracy ?? null,
+            geofence_out_state: outResolution.state,
+            zone_out_id: outResolution.zone?.id ?? null,
+          })
           .eq("id", (open as { id: string }).id);
       }
     }

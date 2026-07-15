@@ -149,9 +149,9 @@ export const WORKFLOWS: readonly Workflow[] = [
   {
     id: "mileage.log",
     label: "Log a drive",
-    state: "gap",
+    state: "shipped",
     roles: WORKS_ON_SITE,
-    note: "G21. RLS half shipped (20260715160000, verified). Surface not built. GPS + metersBetween already exist.",
+    provenBy: "e2e/compvss-field-intake.spec.ts · G21 (DB-verified: 12.4mi at the default 67c rate, driver bound by RLS; rate is never a form field)",
   },
   {
     id: "timesheet.submit",

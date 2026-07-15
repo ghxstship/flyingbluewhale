@@ -4901,7 +4901,9 @@
    "team": "Team",
    "teamSub": "Invite People & Change Roles",
    "reqs": "Purchase Requests",
-   "reqsSub": "Ask The Org To Buy Something"
+   "reqsSub": "Ask The Org To Buy Something",
+   "mileage": "Mileage",
+   "mileageSub": "Log Drives For Reimbursement"
   },
   "activity": {
    "count": "{n} Events",
@@ -5112,6 +5114,13 @@
    "new": "Request A Purchase",
    "emptyTitle": "Nothing Requested",
    "emptyBody": "Need something bought for the job? Raise it here and your manager picks it up."
+  },
+  "mileage": {
+   "title": "Mileage",
+   "eyebrow": "{miles} Miles Logged",
+   "new": "Log A Drive",
+   "emptyTitle": "No Drives Logged",
+   "emptyBody": "Log a trip while you remember it. Your manager approves it later."
   }
  },
  "me": {

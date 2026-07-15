@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1199 · **API route handlers:** 156 · **Distinct nav hrefs:** 525
+**Page routes:** 1201 · **API route handlers:** 156 · **Distinct nav hrefs:** 527
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 792 | 249 | 541 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 61 | 46 | 14 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 63 | 48 | 14 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1199** | **499** | **657** | **0** | **43** |
+| **TOTAL** | | **1201** | **501** | **657** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1351,7 +1351,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-61 routes — ● 46 nav · ○ 14 linked · ⚠ 0 orphan
+63 routes — ● 48 nav · ○ 14 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1506,6 +1506,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>market</code> · 1 route</summary>
 
 ● `/m/market`
+
+</details>
+
+<details><summary><code>mileage</code> · 2 routes</summary>
+
+● `/m/mileage`
+● `/m/mileage/new`
 
 </details>
 

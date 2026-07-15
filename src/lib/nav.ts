@@ -1663,6 +1663,8 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Time", href: "/m/clock" },
   { label: "My Work", href: "/m/my-work" },
   { label: "Requests", href: "/m/requests" },
+  { label: "Mileage", href: "/m/mileage" },
+  { label: "Log A Drive", href: "/m/mileage/new" },
   { label: "Purchase Requests", href: "/m/requisitions" },
   { label: "Request A Purchase", href: "/m/requisitions/new" },
   { label: "New Task", href: "/m/tasks/new" },

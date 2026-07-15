@@ -36,20 +36,43 @@ function loadImage(file: File): Promise<HTMLImageElement> {
   });
 }
 
+/** iOS hands back HEIC when a photo comes from the library. */
+export function isHeic(file: File): boolean {
+  return /^image\/hei[cf]$/i.test(file.type) || /\.hei[cf]$/i.test(file.name);
+}
+
 /**
  * Downscale `file` so its longest edge is at most `maxEdge`, re-encoding as
  * JPEG. Images already under the cap are returned untouched — re-encoding a
  * small image only loses quality and gains nothing.
+ *
+ * HEIC is the exception on both counts, and both of this function's early
+ * returns used to leak it through: a HEIC under the cap was returned as-is,
+ * and — because HEIC is a more efficient codec than JPEG — a transcode is
+ * frequently LARGER than the original, so the "did it help?" check handed the
+ * HEIC back even for oversized images. Either way the bytes reached storage
+ * still HEIC, and nothing on the reviewing end can decode them: the upload
+ * routes accept image/heic, but no console surface, no <img>, and no PDF
+ * export can render it. An accepted HEIC was evidence nobody could open.
+ *
+ * So HEIC is always transcoded, regardless of size or byte win. A slightly
+ * bigger JPEG that a reviewer can actually see beats a smaller file that
+ * nobody can. Safari can decode HEIC natively — which is exactly where HEIC
+ * comes from — so the conversion happens on the one device guaranteed to have
+ * a decoder. Elsewhere (Chrome has none) `loadImage` throws and we fall back
+ * to the original bytes, because a file we can't convert is still evidence.
  */
 export async function downscaleImage(file: File, maxEdge = MAX_EDGE_PX): Promise<File> {
-  if (!file.type.startsWith("image/")) return file;
+  if (!file.type.startsWith("image/") && !isHeic(file)) return file;
+  const heic = isHeic(file);
 
   try {
     const img = await loadImage(file);
     const longest = Math.max(img.naturalWidth, img.naturalHeight);
-    if (longest <= maxEdge) return file;
+    if (longest <= maxEdge && !heic) return file;
 
-    const scale = maxEdge / longest;
+    // A HEIC under the cap still needs re-encoding, just not shrinking.
+    const scale = Math.min(1, maxEdge / longest);
     const w = Math.round(img.naturalWidth * scale);
     const h = Math.round(img.naturalHeight * scale);
 
@@ -63,8 +86,9 @@ export async function downscaleImage(file: File, maxEdge = MAX_EDGE_PX): Promise
     const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY));
     if (!blob) return file;
 
-    // Only take the downscaled version if it actually helped.
-    if (blob.size >= file.size) return file;
+    // Only take the downscaled version if it actually helped — unless the
+    // point was the format, not the size.
+    if (!heic && blob.size >= file.size) return file;
 
     const name = file.name.replace(/\.[^.]+$/, "") + ".jpg";
     return new File([blob], name, { type: "image/jpeg", lastModified: Date.now() });

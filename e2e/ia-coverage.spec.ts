@@ -68,15 +68,63 @@ function navGroupRoutes(group: NavGroup): Route[] {
 
 const flatItemRoutes = (items: NavItem[]): Route[] => dedupe(items.map((it) => ({ label: it.label, href: it.href })));
 
-/** Visit one route and return a failure string, or null if it rendered. */
+/** An uncaught page exception, tagged with the URL the page was actually on
+ *  when it fired. */
+type PageError = { url: string; message: string };
+
+/**
+ * Record uncaught exceptions for a whole group, tagging each with `page.url()`
+ * at fire time.
+ *
+ * Why not a listener per route: `probe()` returns as soon as the route hits
+ * `domcontentloaded` + paints an <h1> — which is BEFORE hydration finishes. A
+ * route's hydration error therefore often fires while the NEXT route's goto is
+ * already in flight. A per-route listener charges that error to whichever probe
+ * happens to hold the listener, so the blame lands on the neighbouring route
+ * (and the LAST route's errors were dropped entirely — nothing was listening).
+ * Tagging at fire time and reconciling once, after the group has settled, puts
+ * every error on the route that actually produced it.
+ *
+ * This is not hypothetical: a `/p/community` "router-init race" was chased at
+ * length on the strength of a single mis-attributed sighting that never
+ * reproduced. See the memory note "Portal consumer e2e gap".
+ */
+function recordPageErrors(page: import("playwright/test").Page): {
+  errors: PageError[];
+  dispose: () => void;
+} {
+  const errors: PageError[] = [];
+  const onError = (e: Error) => errors.push({ url: page.url(), message: e.message });
+  page.on("pageerror", onError);
+  return { errors, dispose: () => page.off("pageerror", onError) };
+}
+
+/** Resolve a fire-time URL back to the group's route that owns it. */
+function attribute(url: string, routes: Route[]): string {
+  let pathname: string;
+  try {
+    pathname = new URL(url).pathname;
+  } catch {
+    return url;
+  }
+  // Longest match wins so a shallow href doesn't swallow a deeper one when a
+  // group carries both.
+  const hit = routes
+    .filter((r) => pathname === r.href || pathname.startsWith(`${r.href}/`))
+    .sort((a, b) => b.href.length - a.href.length)[0];
+  return hit ? hit.href : url;
+}
+
+/**
+ * Visit one route and return a failure string, or null if it rendered.
+ * Uncaught exceptions are NOT checked here — see `recordPageErrors`; the group
+ * reconciles them once at the end, by fire-time URL.
+ */
 async function probe(
   page: import("playwright/test").Page,
   route: Route,
   opts: { public?: boolean } = {},
 ): Promise<string | null> {
-  const pageErrors: string[] = [];
-  const onError = (e: Error) => pageErrors.push(e.message);
-  page.on("pageerror", onError);
   try {
     const res = await page.goto(route.href, { waitUntil: "domcontentloaded", timeout: 30000 });
     const status = res?.status() ?? 0;
@@ -86,12 +134,9 @@ async function probe(
     if (status >= 400) return `${route.href} → HTTP ${status}`;
     const h1 = page.locator("h1").first();
     await expect(h1, `${route.href} has no <h1>`).toBeVisible({ timeout: 15000 });
-    if (pageErrors.length) return `${route.href} → uncaught: ${pageErrors[0]}`;
     return null;
   } catch (e) {
     return `${route.href} → ${e instanceof Error ? e.message.split("\n")[0] : String(e)}`;
-  } finally {
-    page.off("pageerror", onError);
   }
 }
 
@@ -102,9 +147,20 @@ async function assertGroup(
   opts: { public?: boolean } = {},
 ) {
   const failures: string[] = [];
-  for (const route of routes) {
-    const fail = await probe(page, route, opts);
-    if (fail) failures.push(fail);
+  const recorder = recordPageErrors(page);
+  try {
+    for (const route of routes) {
+      const fail = await probe(page, route, opts);
+      if (fail) failures.push(fail);
+    }
+    // Let the final route finish hydrating before draining, so its late errors
+    // are seen at all rather than racing the end of the test.
+    await page.waitForLoadState("load").catch(() => {});
+    for (const err of recorder.errors) {
+      failures.push(`${attribute(err.url, routes)} → uncaught: ${err.message}`);
+    }
+  } finally {
+    recorder.dispose();
   }
   expect(failures, `Broken routes in "${label}":\n${failures.join("\n")}`).toEqual([]);
 }

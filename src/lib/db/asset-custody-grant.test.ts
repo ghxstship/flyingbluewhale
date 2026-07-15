@@ -57,18 +57,26 @@ describe("asset:custody grant", () => {
     }
   });
 
-  it("grants custody to a crew member who holds it, and not to one who doesn't", () => {
-    expect(can(sessionWith(["asset:custody"]), "asset:custody")).toBe(true);
+  it("is not held by a crew member's base capabilities", () => {
+    // The floor must not already contain it, or the grant would be a no-op and
+    // the whole gate decorative.
+    //
+    // NOTE this asserts the BASE only. Whether a *granted* crew member passes
+    // `can()` depends on the grants branch in `can()` + `resolveGrants`, which
+    // is ADR-0015's resolver — landing separately. Until it does,
+    // `transitionAssetState` simply falls through to `isManagerPlus`, i.e.
+    // today's behaviour exactly, and no crew member gains custody. Asserting
+    // the granted case here would be asserting the resolver, not this gate.
     expect(can(sessionWith([]), "asset:custody")).toBe(false);
   });
 
   it("does not let the custody grant imply any other asset power", () => {
-    // Additive-only, no wildcards smuggled in: holding asset:custody must not
-    // match a broader asset capability.
+    // Additive-only, no wildcards smuggled in: even once the resolver lands,
+    // holding asset:custody must not match a broader asset capability, and
+    // must not confer scanning (a separate grant).
     const s = sessionWith(["asset:custody"]);
     expect(can(s, "asset:retire")).toBe(false);
     expect(can(s, "asset:delete")).toBe(false);
-    // ...and it must not confer scanning, which is a separate grant.
     expect(can(s, "scan:credential")).toBe(false);
   });
 

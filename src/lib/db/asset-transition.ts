@@ -45,6 +45,18 @@ import { CHECK_IN, CHECK_OUT, NEXT_UAL_STATES, movementKindFor } from "./assets"
  * the caller's intent is not checkable: `allowedFrom` is an optional
  * argument, so a custody-granted user calling with `to: "retired"` and no
  * `allowedFrom` must still be refused.
+ *
+ * NOT YET LIVE, and deliberately harmless until it is. `can()` has no grants
+ * branch and `resolveGrants` doesn't exist in HEAD (ADR-0015 is "Accepted,
+ * partially implemented" — the DATA half is still to land). So today the
+ * `can()` arm is always false and this falls through to `isManagerPlus`:
+ * exactly the behaviour that shipped, no crew member gains custody. When the
+ * resolver lands, this gate starts working with no change here.
+ *
+ * The grant is administrable now — /studio/settings/capabilities — which was
+ * the genuinely missing piece: ADR-0015 shipped enforced but unadministered,
+ * both grant tables had zero consumers, so turning a capability on for a
+ * customer meant SQL against production.
  */
 
 export type AssetTransitionResult = { ok: true } | { ok: false; error: string };

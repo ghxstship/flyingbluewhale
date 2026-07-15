@@ -194,3 +194,76 @@ describe("a form that advertises photos actually persists them", () => {
     expect(unmounted.sort()).toEqual([...UNMOUNTED_PHOTO_SPECS].sort());
   });
 });
+
+/**
+ * The last link: a photo that is captured, uploaded, stored — and rendered
+ * nowhere.
+ *
+ * This is the same defect one step further down the chain, and it is the
+ * easiest of the three to ship, because everything "works": the picker
+ * captures, the upload succeeds, the row has its refs. It just can't be
+ * looked at. `incidents.photos` sat in exactly this state — written by two
+ * actions, read by nothing, surfacing as a JSON blob in a generic field dump.
+ * Then handover and listing were given photo columns and immediately repeated
+ * it. Evidence nobody can see is the same as no evidence, one step later.
+ *
+ * Every photo bucket is private, so the render side is not optional: a stored
+ * path is unusable until something signs it. That makes "is this bucket ever
+ * signed?" a cheap check for "can anyone actually see these?".
+ *
+ * KNOW WHAT THIS DOES NOT CATCH. The check is per BUCKET, not per surface. A
+ * new writer pointed at a bucket someone else already renders passes here
+ * while its own photos go unseen — which is exactly how handover shipped
+ * (procore-parity was already signed by the studio daily-log page). Catching
+ * that properly means tracing column → reader, and the readers take photos as
+ * props rather than querying the table, so there is no honest static path to
+ * it. This guard catches a NEW bucket with no reader at all; the per-surface
+ * case still needs a human to ask "and where does this show up?".
+ */
+describe("photos that are stored can be looked at", () => {
+  const SIGNERS = /signPhotoRefs\(|signPhotoRefsFor\(|createSignedUrl\(/;
+
+  /** Buckets written via the shared field-photo uploader → the writing file. */
+  function bucketsWritten(): Map<string, string> {
+    const out = new Map<string, string>();
+    for (const file of walk(MOBILE_APP)) {
+      const src = readFileSync(file, "utf8");
+      if (!/uploadFieldPhotos\(/.test(src)) continue;
+      // Arg 2 is the bucket: uploadFieldPhotos(supabase, bucket, org, user, files, fixes)
+      for (const m of src.matchAll(/uploadFieldPhotos\(\s*[\w.]+\s*,\s*([^,\s]+)\s*,/g)) {
+        const arg = m[1]!;
+        const literal = arg.match(/^"([^"]+)"$/)?.[1];
+        // Resolve `const X = "bucket"` declared in the same module.
+        const resolved = literal ?? src.match(new RegExp(`const ${arg} = "([^"]+)"`))?.[1];
+        if (resolved) out.set(resolved, relative(ROOT, file));
+      }
+    }
+    return out;
+  }
+
+  /** Files that sign a URL for a given bucket, anywhere in the app. */
+  function readersOf(bucket: string): string[] {
+    return [...walk(join(ROOT, "src"))].filter((f) => {
+      if (/capture-honesty\.test\.ts$/.test(f)) return false;
+      const src = readFileSync(f, "utf8");
+      return src.includes(`"${bucket}"`) && SIGNERS.test(src);
+    });
+  }
+
+  const written = bucketsWritten();
+
+  it("finds the buckets the field writes photos to", () => {
+    expect([...written.keys()].length).toBeGreaterThan(0);
+  });
+
+  it.each([...written.entries()])("%s: something signs it for display", (bucket, writer) => {
+    const readers = readersOf(bucket).map((f) => relative(ROOT, f));
+    expect(
+      readers,
+      readers.length
+        ? undefined
+        : `"${bucket}" is written by ${writer}, but nothing signs a URL for it — every photo bucket is ` +
+            `private, so these photos exist and cannot be viewed by anyone. Render them, or stop collecting them.`,
+    ).not.toEqual([]);
+  });
+});

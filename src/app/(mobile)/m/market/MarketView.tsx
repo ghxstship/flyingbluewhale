@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
 import { toFormData } from "@/lib/mobile/form-data";
+import type { StripPhoto } from "@/components/media/PhotoStrip";
 import { createListing, markSold, withdrawListing } from "./actions";
 
 export type Listing = {
@@ -20,6 +21,9 @@ export type Listing = {
   category: string | null;
   seller: string;
   isMine: boolean;
+  /** Signed by the page — `listing-photos` is private, and this view is a
+   *  client component with no route to storage. `[]` when none. */
+  photos: StripPhoto[];
 };
 
 type Labels = {
@@ -218,8 +222,25 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
         <div className="mkt">
           {visible.map((l) => (
             <div className="mcard" key={l.id}>
+              {/* The thumb slot always rendered a Package glyph, because a
+                  listing's photos were dropped before they reached the
+                  server. Now it shows the thing being sold. */}
               <div className="mthumb">
-                <KIcon name="Package" size={30} style={{ color: "var(--p-text-3)" }} />
+                {l.photos[0]?.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={l.photos[0].url}
+                    alt={l.title}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                ) : (
+                  <KIcon name="Package" size={30} style={{ color: "var(--p-text-3)" }} />
+                )}
+                {l.photos.length > 1 && (
+                  <span className="mtag" style={{ left: 6, right: "auto" }}>
+                    {l.photos.length}
+                  </span>
+                )}
                 {l.category && <span className="mtag">{l.category}</span>}
               </div>
               <div className="t" style={{ fontSize: 13, marginTop: 7 }}>

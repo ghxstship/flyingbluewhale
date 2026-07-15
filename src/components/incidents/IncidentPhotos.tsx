@@ -1,5 +1,6 @@
-import { createServiceClient } from "@/lib/supabase/server";
-import { normalisePhotoRefs, type PhotoRef } from "@/lib/mobile/photo-geo";
+import { createClient } from "@/lib/supabase/server";
+import { signPhotoRefs, type SignedPhoto } from "@/lib/mobile/photo-sign";
+import type { PhotoRef } from "@/lib/mobile/photo-geo";
 
 /**
  * Incident evidence panel — the reviewer half of field photo capture.
@@ -10,20 +11,15 @@ import { normalisePhotoRefs, type PhotoRef } from "@/lib/mobile/photo-geo";
  * stopped there. Capturing evidence nobody can look at is the same failure as
  * not capturing it, one step later.
  *
- * `incident-photos` is a private bucket, so each path is signed for a short
- * read window. Signing is best-effort per photo: one unreachable object must
- * not blank the whole panel on a safety record.
+ * `incident-photos` is private, so paths are signed through `signPhotoRefs`
+ * — the one signing path, shared with the handover and marketplace surfaces.
  */
-
-/** How long a reviewer's image URLs stay valid. Long enough to read a
- *  report, short enough that a copied URL isn't a durable leak. */
-const SIGN_TTL_SECONDS = 600;
-
-type SignedPhoto = PhotoRef & { signedUrl: string | null };
 
 /** Metres above which a fix locates a neighbourhood, not a place. Past this
  *  we still show the coordinates but stop implying they pinpoint anything. */
 const VAGUE_FIX_M = 100;
+
+const BUCKET = "incident-photos";
 
 function mapsHref(lat: number, lng: number): string {
   return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -38,23 +34,9 @@ function formatFix(p: PhotoRef): { text: string; precise: boolean } | null {
 }
 
 export async function IncidentPhotos({ photos }: { photos: unknown }) {
-  const refs = normalisePhotoRefs(photos);
-  if (refs.length === 0) return null;
-
-  let signed: SignedPhoto[] = refs.map((p) => ({ ...p, signedUrl: null }));
-  try {
-    const service = createServiceClient();
-    signed = await Promise.all(
-      refs.map(async (p) => {
-        const { data } = await service.storage.from("incident-photos").createSignedUrl(p.path, SIGN_TTL_SECONDS);
-        return { ...p, signedUrl: data?.signedUrl ?? null };
-      }),
-    );
-  } catch {
-    // Storage or service config unavailable — render the geotags and the
-    // filenames rather than nothing. A reviewer can still see that four
-    // photos exist and where they were taken.
-  }
+  const supabase = await createClient();
+  const signed: SignedPhoto[] = await signPhotoRefs(supabase, BUCKET, photos);
+  if (signed.length === 0) return null;
 
   return (
     <section className="surface p-5">
@@ -64,11 +46,11 @@ export async function IncidentPhotos({ photos }: { photos: unknown }) {
           const fix = formatFix(p);
           return (
             <li key={p.path} className="overflow-hidden rounded-md border border-[var(--p-border)]">
-              {p.signedUrl ? (
-                <a href={p.signedUrl} target="_blank" rel="noreferrer">
+              {p.url ? (
+                <a href={p.url} target="_blank" rel="noreferrer">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={p.signedUrl}
+                    src={p.url}
                     alt={p.caption ?? "Incident photo"}
                     className="aspect-video w-full bg-[var(--p-surface-2)] object-cover"
                   />

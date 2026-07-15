@@ -5,8 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
+import { PhotoStrip } from "@/components/media/PhotoStrip";
+import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
 
 export const dynamic = "force-dynamic";
+
+/** Must match the bucket `submitHandover` uploads to. */
+const HANDOVER_PHOTO_BUCKET = "procore-parity";
 
 /**
  * COMPVSS · Shift Handover — end-of-shift report passing status, open items and
@@ -22,6 +27,7 @@ type HandoverRow = {
   summary: string;
   open_items: string | null;
   assets_passed: string | null;
+  photos: unknown;
   created_at: string;
 };
 
@@ -46,12 +52,18 @@ export default async function HandoverPage() {
 
   const { data } = await supabase
     .from("handovers")
-    .select("id, from_user_id, to_user_id, relief_label, post_state, summary, open_items, assets_passed, created_at")
+    .select(
+      "id, from_user_id, to_user_id, relief_label, post_state, summary, open_items, assets_passed, photos, created_at",
+    )
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(60);
   const handovers = (data ?? []) as HandoverRow[];
+
+  // Sign every handover's photos in one pass — the state of the post you're
+  // being handed is the thing the next crew most needs to SEE, not read.
+  const photosById = await signPhotoRefsFor(supabase, HANDOVER_PHOTO_BUCKET, handovers, (h) => h.photos);
 
   // Resolve who handed off each report.
   const userIds = Array.from(new Set(handovers.map((h) => h.from_user_id).filter(Boolean) as string[]));
@@ -119,6 +131,10 @@ export default async function HandoverPage() {
                     {t("m.handover.assets", undefined, "Assets / Keys")}: {h.assets_passed}
                   </div>
                 ) : null}
+                <PhotoStrip
+                  photos={photosById.get(h.id) ?? []}
+                  label={t("m.handover.photoAlt", undefined, "Handover photo")}
+                />
                 <div className="hint" style={{ marginTop: 4 }}>{meta}</div>
               </div>
               <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>

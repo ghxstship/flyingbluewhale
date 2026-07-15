@@ -1,9 +1,13 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
+import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
 import { MarketView, type Listing } from "./MarketView";
 
 export const dynamic = "force-dynamic";
+
+/** Must match the bucket `createListing` uploads to. */
+const LISTING_PHOTO_BUCKET = "listing-photos";
 
 const CONDITION_LABEL: Record<string, string> = {
   new: "New",
@@ -27,7 +31,7 @@ export default async function MarketPage() {
   const { data } = await supabase
     .from("marketplace_listings")
     .select(
-      "id, seller_user_id, title, description, price_cents, currency, item_condition, category, listing_state, created_at",
+      "id, seller_user_id, title, description, price_cents, currency, item_condition, category, listing_state, photos, created_at",
     )
     .eq("org_id", session.orgId)
     .eq("listing_state", "active")
@@ -48,6 +52,11 @@ export default async function MarketPage() {
     for (const u of users ?? []) nameById.set(u.id, u.name || u.email || "Member");
   }
 
+  // Sign here rather than in MarketView: the bucket is private, and the view
+  // is a client component that can't reach storage. A listing photographed
+  // but never shown is a listing nobody answers.
+  const photosById = await signPhotoRefsFor(supabase, LISTING_PHOTO_BUCKET, rows, (r) => r.photos);
+
   const listings: Listing[] = rows.map((r) => ({
     id: r.id,
     title: r.title,
@@ -58,6 +67,7 @@ export default async function MarketPage() {
     category: r.category ?? null,
     seller: nameById.get(r.seller_user_id) ?? t("m.market.member", undefined, "Member"),
     isMine: r.seller_user_id === session.userId,
+    photos: (photosById.get(r.id) ?? []).map((p) => ({ path: p.path, url: p.url, lat: p.lat })),
   }));
 
   return (

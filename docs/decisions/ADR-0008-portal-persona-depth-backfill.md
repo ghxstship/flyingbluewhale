@@ -1,6 +1,6 @@
 # ADR-0008 — GVTEWAY portal: crew + vendor persona depth backfill
 
-**Status:** Accepted, amended 2026-07-15 (see §Amendments — 6 of them, all implemented). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4).
+**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
 **Date:** 2026-06-04
 **Owner:** Platform engineering
 **Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
@@ -755,3 +755,183 @@ only because it is net-new persona surface area rather than remediation of a
 defect, and this amendment's job was to close flags. Tracked separately; the
 `FeedSurface`/`DirectorySurface` portal arms already require `projectId`, so
 whoever builds it cannot repeat Amendment 1's mistake.
+
+## Amendment 7 (2026-07-15) — the same question, asked of the whole app
+
+`20260715230000_identity_boundary_sweep.sql`. Amendment 5 asked one question of
+four surfaces and found three live escalations. This amendment asks it of
+everything: **does RLS agree, if you skip the app and call PostgREST directly?**
+
+### Method, and the thing that makes it tractable
+
+An app-level identity filter is a claim. Enumerating them mechanically gives the
+candidate list: 253 server-side reads narrow by identity in application code
+(`.eq("user_id", session.userId)` and 18 sibling columns — `submitted_by`,
+`requester_id`, `assigned_to`, `party_user_id`, `reviewer_user_id`, …) across
+**65 tables**. Each was mapped to its backing table, checked against the live
+policy, and — where the policy looked permissive — **proven over PostgREST** as
+`crew@gvteway.test` (`member` role / `crew` persona). Nothing below is inferred
+from a predicate.
+
+The triage that matters, and the reason this is not "ban `is_org_member`":
+
+> An app-level identity filter is sometimes a **view** and sometimes a
+> **boundary**.
+
+`tasks`, `invoices`, `requisitions`, `crew_members` are org-readable on purpose —
+an operator console is the point, and `.eq("assigned_to", me)` there means "my
+work", not "only I may see this". Narrowing them would be an outage dressed as a
+fix. **21 tables** had no self-scoped read policy at all; most are that shape and
+were deliberately left alone. Four were different — each carried a privacy or
+authority claim the database was not holding.
+
+`mfa_recovery_codes` is worth naming as the false positive that proves the
+method: it has no `auth.uid()` in its policy, so a mechanical scan flags it. Its
+predicate is `USING false`. Reading the predicate is not optional.
+
+### 1. time_entries — payroll was writable by anyone, for anyone
+
+The sharpest, and the exact Amendment 5 shape one layer down. Proven as crew:
+
+- **UPDATE another user's entry**, setting `rate_cents = 123456` — read back,
+  confirmed landed. (`duration_minutes` bounced back: a trigger recomputes it
+  from the timestamps. A real defence — it just does not cover the pay rate.)
+- **INSERT an 8-hour entry attributed to another user** at rate 99999 —
+  fabricated payroll for a third party.
+- **SELECT** another user's entry (`rate_cents`, punch GPS, `pulse_note`).
+
+`time_entries_update` granted `['owner','admin','manager','controller',
+'collaborator','crew']` with **no `user_id` pin at all**. The band is why it
+worked: `private.has_org_role` matches `role::text = any(required) OR persona =
+any(required)`, so the **`crew` persona** matched on a plain `member` role.
+`/p/[slug]/crew/time` is portal-mounted, so this was reachable by portal
+personas — the Amendment 5 audience.
+
+The fix was not invented. `mileage_logs` and `expenses` — the two sibling tables
+of the same shape — **already carry the correct predicate**
+(`has_org_role(staff) OR (is_org_member AND <self> = auth.uid())`).
+`time_entries` was the outlier; it now matches its own neighbours. `controller`
+is dropped (dead text), `collaborator` is **kept** (removing a band on a guess is
+how a security fix becomes an outage), and `crew` moves from the staff band to
+the self clause — which is the entire hole. Every persona that punches its own
+time still matches the self clause, so the band question is moot for own-row
+writes.
+
+SELECT narrows to staff-or-self on the `shifts` precedent, and more safely:
+every `time_entries` row **has** a `user_id`, where all 16 shifts had NULL. One
+honest consequence, stated rather than discovered later: the `/studio` home strip
+counts open entries org-wide, so a non-staff persona on the operator Home now
+sees only their own count. Cosmetic, and limited to a persona that is not that
+tile's audience.
+
+### 2. reviews — any member could rewrite or delete reputation
+
+Every `reviews` policy led with `is_org_member(org_id)`, which **subsumes** the
+narrow `reviewer_user_id = auth.uid()` disjunct beside it — the same
+collapsing-disjuncts shape as `shifts_select_consolidated`. Proven as crew:
+rewrote another person's review **4 stars to 1**, body replaced (restored), and
+read an **unreleased** review as a third party who was neither its reviewer nor
+its subject. DELETE was equally open: remove the bad review about yourself.
+`tg_reviews_aggregate` rolls `rating_avg` onto the subject, so this is public
+reputation, not private notes.
+
+The blind is a documented invariant, and **the app already enforces it** —
+`/me/reviews` reads received reviews with `.not("released_at","is",null)`. The
+database now says the same thing. Moderation moves from "any member" to the staff
+band: being in the org is not authority to moderate, exactly as being in the org
+was not authority to decide leave.
+
+**The fact that made this safe:** both `tg_reviews_release_pair` and
+`tg_reviews_aggregate` are SECURITY DEFINER. The release trigger UPDATEs the
+_counterpart_ row, whose reviewer is someone else — under a narrowed UPDATE
+policy that write would have been refused had the trigger run as the invoker, and
+mutual release would have silently stopped working. Checked before writing the
+migration, then verified after: crew files the counterpart, and both rows flip to
+released. A non-DEFINER trigger here would have made the obvious fix an outage —
+the `controller` lesson in a different costume.
+
+### 3. redeem_voucher — SECURITY DEFINER that checked nothing
+
+The `approve_time_off_request` shape, found by auditing the 66 SECURITY DEFINER
+functions (37 executable by `authenticated`). `redeem_voucher(p_org_id,
+p_user_id, p_code)` verified neither that `auth.uid() = p_user_id` nor that the
+caller belonged to `p_org_id`. The app passes `session.userId`; a PostgREST
+caller passes whatever it likes. Proven: as crew, redeemed a voucher **crediting
+a different user's ledger** and burning its only redemption. The code is the
+credential (gift-card model) — but who it credits is not the caller's choice.
+
+`verify_certification` is the counter-example that kept this honest: it _sounds_
+like a mutation and has no role check, but its body is a read keyed on an
+unguessable UUID — a capability-URL verification lookup, working as designed. Read
+the body, not the name.
+
+### 4. badge_awards / achievement_awards — self-grant
+
+`badge_awards_org_rw` was FOR ALL `is_org_member` both ways. Proven: awarded
+myself a badge as a plain member. Low severity — recognition, not money — but the
+entire meaning of an award is that **someone else gave it to you**. Awarding is
+now the staff band; reads stay org-wide, because the wall is meant to be seen.
+That is a view, not a boundary.
+
+### The trap, one more time
+
+Every refusal in this amendment's verification returned **HTTP 204**. Narrowing
+`time_entries`, then re-running the write vector: `http=204`, clean success — and
+`rate_cents` still `null` on read-back. Same for the review tamper and the review
+delete. An RLS write matching zero rows is not an error, so a probe that reads the
+error object reports the fix didn't work — or, worse in the other direction,
+reports a hole that isn't there. **A security check that reads an error object is
+not a check.** Both directions of every vector here assert on observed state.
+
+### Verified
+
+Both directions, after applying:
+
+| vector (as `member`/`crew`)                 | before      | after                                 |
+| ------------------------------------------- | ----------- | ------------------------------------- |
+| read others' time entries                   | 1           | **0**                                 |
+| write another's `rate_cents`                | landed      | refused (204, unchanged on read-back) |
+| forge entry as another user                 | inserted    | refused                               |
+| **file own** time entry                     | ok          | **ok**                                |
+| read unreleased review                      | visible     | **0**                                 |
+| rewrite another's review                    | 4→1 landed  | refused (204, still 4)                |
+| delete a review                             | —           | refused (204, row still there)        |
+| forge review authorship                     | —           | refused                               |
+| **mutual release** (crew files counterpart) | ok          | **both rows released**                |
+| voucher: credit another user                | `{ok:true}` | `{ok:false, forbidden}`               |
+| **voucher: credit self**                    | ok          | **ok**                                |
+| self-grant a badge                          | landed      | refused                               |
+| **manager awards a badge**                  | ok          | **ok**                                |
+| read the badge wall                         | 5           | **5**                                 |
+
+And the band that Amendment 5 part 3 warned about: owner / admin / **manager**
+all still read `time_entries`; only non-staff narrowed. The `is_org_member`
+disjunct was not blindly removed anywhere.
+
+Live invariant re-run after the migration:
+`cmd='ALL' and with_check is null and qual is not null` = **0** (of 357).
+
+### Consequences
+
+- Amendment 5's sentence generalises: **"the app filters it" was never evidence
+  about the database** — seven confirmed escalations now, across three
+  amendments, and every one found by asking a normal login what it can see.
+- The rule needs its companion, or it becomes the cargo cult Amendment 5 warned
+  about in the other direction: **an app-level identity filter is a boundary only
+  when the data carries a privacy or authority claim.** `tasks` and `invoices`
+  are org-readable on purpose. Ask what the filter is _for_ before narrowing it.
+- `src/lib/identity-boundary-canon.test.ts` (11 invariants) pins all four fixes
+  using the established replay-the-migrations idiom, including the
+  SECURITY-DEFINER-trigger precondition that makes the reviews narrowing safe.
+- **Standing, deliberately:** ~50 UPDATE policies declare USING with no WITH
+  CHECK. This is NOT the FOR ALL trap and was not treated as one: for UPDATE the
+  inherited check means the row must still satisfy USING afterwards, which is a
+  sane default that prevents moving a row out of your own scope. Named here so
+  the next sweep does not re-derive it, or "fix" it into churn.
+- **Standing, flagged:** `workforce_members` keeps its org-wide read (unchanged
+  from part 3 — still mid-retirement). `api_keys` is org-readable, exposing
+  `prefix`/`scopes`/`hashed_secret`; the secret is a hash, so it is a disclosure
+  worth noting rather than a key leak. `expenses`/`mileage_logs`/`crew_members`
+  are org-readable with correct self-pinned writes; whether an external `vendor`
+  persona should read the org's expense log is the same product question
+  `shifts` was, and is not one to answer inside a security migration.

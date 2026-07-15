@@ -86,7 +86,7 @@ export async function decideCorrection(_: State, fd: FormData): Promise<State> {
   return {
     ok:
       result?.reopened_timesheet === true
-        ? "Applied. The timesheet went back to open — its hours changed, so it needs approving again."
+        ? "Applied. Its hours changed, so the timesheet went back to open and needs approving again."
         : decision === "approved"
           ? "Applied."
           : "Denied.",

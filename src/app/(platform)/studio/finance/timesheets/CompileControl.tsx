@@ -29,7 +29,7 @@ export function CompileControl({ periods }: { periods: Array<{ id: string; label
         {t(
           "console.finance.timesheets.compile.noPeriods",
           undefined,
-          "No open pay period. Open one before compiling — a period is the week a timesheet covers.",
+          "No open pay period. A period is the week a timesheet covers, so open one before compiling.",
         )}
       </p>
     );
@@ -87,7 +87,7 @@ export function CompileControl({ periods }: { periods: Array<{ id: string; label
         {t(
           "console.finance.timesheets.compile.hint",
           undefined,
-          "Safe to run again — late punches from the field get picked up, and sheets already submitted are left alone.",
+          "Safe to run again. Late punches from the field get picked up, and sheets already submitted are left alone.",
         )}
       </p>
       {msg && <Alert kind={msg.kind === "error" ? "error" : "success"}>{msg.text}</Alert>}

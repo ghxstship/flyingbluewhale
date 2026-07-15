@@ -46,7 +46,13 @@ Audited all seven field-facing intakes. Four were fine, four were not — this w
 
 All four fixes are narrow and identical in shape: the manager band keeps what it had, and a member may additionally write **only in their own name** (`created_by`/`submitter_id`/`requester_id`/`user_id` = `auth.uid()`), enforced in `WITH CHECK` so it stays true after the write. Each was verified by behaviour under a real member JWT — self-insert succeeds, impersonation is refused — not by reading policy text.
 
-**`'controller'` appears in many policies and matches nothing.** It is neither a `PlatformRole` nor a `Persona`. Harmless today (it only ever widens), but it is dead vocabulary in a security-critical list and should be removed or made real.
+**`'controller'` appears in 405 of 1571 public policies and matches nothing.** Neither a `PlatformRole` nor a `Persona`.
+
+**Remediated 2026-07-15 — as a guard, not a sweep.** It is *provably* inert: `platform_role` is a Postgres enum (owner|admin|manager|member) that rejects the literal outright, and `memberships.persona` carries a CHECK omitting it. Both verified against the live schema; nothing can hold `controller`.
+
+The hazard is what happens if that stops being true. Adding `'controller'` to either vocabulary — a one-line change that reads as entirely reasonable — silently activates **a quarter of the authorization surface** at once, and nobody would connect the two edits.
+
+Sweeping 405 policies is the wrong trade: high blast radius, zero behaviour change, and it collides with a concurrent refactor. `src/lib/db/policy-vocabulary-canon.test.ts` guards the invariant instead — if someone ever needs a controller role, the build fails first and forces those 405 policies to be a decision rather than a side effect. Verified failing on the trap before passing.
 
 **Read the Corrections section (§5b) before trusting any remaining MISSING.** Two entries were wrong because they were scored from a grep count rather than the render path. Every untouched MISSING that rests on the same evidence needs re-verification before anyone builds against it. Four gaps found *while building* (D15, D16 + the two corrections) versus one predicted-and-confirmed suggests the register understates as often as it overstates.
 

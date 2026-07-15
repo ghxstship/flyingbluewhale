@@ -1679,6 +1679,8 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Alerts", href: "/m/alerts" },
   { label: "Notifications", href: "/m/notifications" },
   { label: "Onboarding", href: "/m/onboarding" },
+  { label: "Team", href: "/m/settings/team" },
+  { label: "Invite Someone", href: "/m/settings/team/invite" },
   { label: "Settings", href: "/m/settings" },
 ];
 

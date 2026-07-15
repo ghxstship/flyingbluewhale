@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireSession, isManagerPlus } from "@/lib/auth";
+import { requireSession, isManagerPlus, isAdmin } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
 
@@ -24,6 +24,8 @@ type MoreLink = {
   sub: string;
   /** Manager+ only (hiding is UX; the surface re-checks server-side). */
   managerOnly?: boolean;
+  /** Owner/admin only — same contract: hiding is UX, the surface re-checks. */
+  adminOnly?: boolean;
 };
 
 type Group = { key: string; label: string; links: MoreLink[] };
@@ -31,6 +33,7 @@ type Group = { key: string; label: string; links: MoreLink[] };
 export default async function MorePage() {
   const session = await requireSession();
   const canApprove = isManagerPlus(session);
+  const canAdmin = isAdmin(session);
   const { t } = await getRequestT();
 
   const groups: Group[] = [
@@ -101,6 +104,7 @@ export default async function MorePage() {
         { href: "/m/emergency", icon: "Siren", labelKey: "m.more.emergency", label: "Emergency", subKey: "m.more.emergencySub", sub: "Your Muster Card & Codes" },
         { href: "/m/activity", icon: "History", labelKey: "m.more.activity", label: "Activity History", subKey: "m.more.activitySub", sub: "Scans, Access, Reports & More" },
         { href: "/m/referrals", icon: "Gift", labelKey: "m.more.referrals", label: "Referrals & Rewards", subKey: "m.more.referralsSub", sub: "Refer Crew, Earn Rewards" },
+        { href: "/m/settings/team", icon: "UserCog", labelKey: "m.more.team", label: "Team", subKey: "m.more.teamSub", sub: "Invite People & Change Roles", adminOnly: true },
         { href: "/m/settings", icon: "Settings", labelKey: "m.more.settings", label: "Settings", subKey: "m.more.settingsSub", sub: "App Preferences" },
       ],
     },
@@ -114,7 +118,7 @@ export default async function MorePage() {
       </h1>
 
       {groups.map((g) => {
-        const links = g.links.filter((l) => !l.managerOnly || canApprove);
+        const links = g.links.filter((l) => (!l.managerOnly || canApprove) && (!l.adminOnly || canAdmin));
         if (!links.length) return null;
         return (
           <div key={g.key}>

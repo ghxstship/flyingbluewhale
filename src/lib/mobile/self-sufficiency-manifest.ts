@@ -230,9 +230,9 @@ export const WORKFLOWS: readonly Workflow[] = [
   {
     id: "org.invite",
     label: "Invite a member or change their role",
-    state: "gap",
+    state: "shipped",
     roles: ["owner", "admin"],
-    note: "G18/G26. Zero admin surface on mobile — there is no isAdmin/isOwner call site anywhere in (mobile). An owner on site can do nothing administrative.",
+    provenBy: "e2e/compvss-admin.spec.ts · G18/S1 (both the admin path AND the crew refusal)",
   },
   {
     id: "org.zones",

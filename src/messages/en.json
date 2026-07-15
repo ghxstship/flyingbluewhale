@@ -4897,7 +4897,9 @@
    "account": "Account",
    "eyebrow": "Workspace",
    "myWork": "My Work",
-   "myWorkSub": "What You Owe & What Waits On You"
+   "myWorkSub": "What You Owe & What Waits On You",
+   "team": "Team",
+   "teamSub": "Invite People & Change Roles"
   },
   "activity": {
    "count": "{n} Events",
@@ -5083,6 +5085,23 @@
    "awaitingDecision": "Awaiting a decision",
    "clearTitle": "You're Clear",
    "clearBody": "Nothing assigned to you, nothing waiting on your decision, nothing pending."
+  },
+  "team": {
+   "eyebrow": "Workspace",
+   "title": "Team",
+   "eyebrowOne": "1 Member",
+   "eyebrowCount": "{count} Members",
+   "invite": "Invite Someone",
+   "you": "You",
+   "change": "Change Role",
+   "cancel": "Cancel",
+   "save": "Save",
+   "selfNote": "Use the leave-org flow to change your own role.",
+   "lastOwner": "The only owner can't be demoted. Promote someone first.",
+   "joined": "Updated {when}",
+   "back": "Back",
+   "noAccessTitle": "Owners And Admins Only",
+   "noAccessBody": "Inviting people and changing roles is limited to owners and admins."
   }
  },
  "me": {

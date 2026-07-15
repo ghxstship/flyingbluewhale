@@ -6,7 +6,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { applyToJob, type State } from "./actions";
 
 /**
- * GigsView — Jobs client leaf. Search + the job cards with cert/flag chips, rate
+ * JobsView — Jobs client leaf. Search + the job cards with cert/flag chips, rate
  * tag, and an Apply button per row (routes through applyToJob). Includes a
  * Post-a-Job CTA placeholder.
  *
@@ -45,7 +45,7 @@ function ApplyButton({ gig }: { gig: Gig }) {
   );
 }
 
-export function GigsView({ gigs }: { gigs: Gig[] }) {
+export function JobsView({ gigs }: { gigs: Gig[] }) {
   const t = useT();
   const [q, setQ] = useState("");
   const [sort, setSort] = useState("recent");

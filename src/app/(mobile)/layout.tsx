@@ -15,11 +15,14 @@ import CompvssOnboarding from "@/components/mobile/onboarding/CompvssOnboarding"
 /**
  * COMPVSS field shell — the offline-first venue/field workforce PWA, rebuilt to
  * the COMPVSS Design System kit (2026-06-21). The bottom bar is the kit's
- * Home · Calendar · Tasks · Onsite · Assets · Inbox · More model (`mobileTabs`
- * — seven tabs; Onsite is the GVTEWAY consumer live-event tab added 2026-06-23,
- * documented in docs/compvss/KIT_CANON.md); the persona-routed /m/[role] tab
- * bars were retired with the role surfaces, so the shell renders one tab set
- * for every crew member.
+ * Home · Calendar · Tasks · Assets · Inbox · More model (`mobileTabs` — six
+ * tabs, documented in docs/compvss/KIT_CANON.md); the persona-routed /m/[role]
+ * tab bars were retired with the role surfaces, so the shell renders one tab
+ * set for every crew member.
+ *
+ * Crew-only by construction: the crew entitlement band carries no GVTEWAY reach
+ * (`entitlements.json`), so consumer surfaces do not belong here. The GVTEWAY
+ * Onsite tab added 2026-06-23 was rehomed to `/p/onsite` on 2026-07-15.
  *
  * Auth gate: an unauthenticated visitor gets the **kit's own auth + onboarding
  * flow** (`CompvssOnboarding` — splash → sign up/in → verify → profile → join →

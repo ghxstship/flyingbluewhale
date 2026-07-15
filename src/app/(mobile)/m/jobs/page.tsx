@@ -3,15 +3,15 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { formatFeeRange } from "@/lib/marketplace";
-import { GigsView, type Gig } from "./GigsView";
+import { JobsView, type Gig } from "./JobsView";
 
 export const dynamic = "force-dynamic";
 
 /**
- * /m/gigs — open roles across the org's job board, formatted for thumb reach.
+ * /m/jobs — open roles across the org's job board, formatted for thumb reach.
  * Reads published `job_postings`, dedupes against the caller's own
  * `job_applications` (so already-applied gigs render the "Applied" pill), and
- * hands plain rows to the surviving client `GigsView`. Apply routes through
+ * hands plain rows to the surviving client `JobsView`. Apply routes through
  * `applyToJob`. Design truth: prototype jobs tab (app.jsx 2236-2283).
  */
 
@@ -22,7 +22,7 @@ const EMPLOYMENT_LABEL: Record<string, string> = {
   contract: "Contract",
 };
 
-export default async function MobileGigsPage() {
+export default async function MobileJobsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -104,7 +104,7 @@ export default async function MobileGigsPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.gigs.title", undefined, "Jobs")}
       </h1>
-      <GigsView gigs={gigs} />
+      <JobsView gigs={gigs} />
     </div>
   );
 }

@@ -213,6 +213,12 @@ const EXEMPT = [
     reason: "Portal gateway — persona picker / redirect to the viewer's persona home.",
   },
   { path: "/p/select", type: "exact", reason: "Org/slug picker — reached when a portal user has no resolved slug." },
+  {
+    path: "/p/[slug]/onboarding",
+    type: "prefix",
+    reason:
+      "Onboarding assignment — reached from the /p/[slug]/tasks list that surfaces it, never a rail item (ADR-0008 Amendment 4: this is where the /m/onboarding/[id] handoff landed).",
+  },
   { path: "/p", type: "exact", reason: "GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item)." },
   // Marketing home — reached via the logo lockup, not a nav item.
   { path: "/", type: "exact", reason: "Home — reached via the logo, not a nav entry." },
@@ -243,8 +249,8 @@ const EXEMPT = [
   { path: "/verify-email", type: "prefix", reason: "Auth email verification." },
   { path: "/onboarding", type: "prefix", reason: "Post-signup org onboarding flow." },
   { path: "/home", type: "exact", reason: "Post-auth app launcher — reached via auth redirect, not a nav click." },
-  // COMPVSS settings sub-page — reached from the More/Settings surface, not a primary tab.
-  { path: "/m/changelog", type: "exact", reason: "COMPVSS What's New — reached from Settings, not a nav tab." },
+  // Changelog moved to /m/settings/changelog (kit 28) and is now genuinely
+  // linked from the Settings screen, so it needs no exemption.
   {
     path: "/m/settings/account",
     type: "exact",

@@ -91,6 +91,8 @@ type Labels = {
   account: string;
   accountStatus: string;
   accountStatusDesc: string;
+  changelog: string;
+  changelogDesc: string;
   signOut: string;
 };
 
@@ -302,6 +304,19 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">{labels.accountStatus}</div>
           <div className="s">{labels.accountStatusDesc}</div>
+        </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
+      </a>
+
+      {/* ── What's New — the kit's Changelog surface. This link is the ONLY
+           thing that makes /m/settings/changelog reachable: the sitemap marks
+           it `linked` merely because /m/settings is in nav, so the generator
+           would report 0 orphans even with no route into it. ── */}
+      <a className="item tap" href="/m/settings/changelog" style={{ cursor: "pointer" }}>
+        <KIcon name="Sparkles" size={18} style={{ color: "var(--p-text-2)" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{labels.changelog}</div>
+          <div className="s">{labels.changelogDesc}</div>
         </div>
         <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
       </a>

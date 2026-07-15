@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1191 · **API route handlers:** 148 · **Distinct nav hrefs:** 522
+**Page routes:** 1195 · **API route handlers:** 150 · **Distinct nav hrefs:** 521
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 792 | 249 | 541 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 56 | 41 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 153 | 131 | 19 | 0 | 3 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 57 | 42 | 14 | 0 | 1 |
+| GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1191** | **496** | **652** | **0** | **43** |
+| **TOTAL** | | **1195** | **495** | **657** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -59,6 +59,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/studio/operations/dispatch` | exact | Dispatch Matrix redirect — promoted to the unified /studio/operations/schedule; keeps old links resolving. |
 | `/p/[slug]` | exact | Portal gateway — persona picker / redirect to the viewer's persona home. |
 | `/p/select` | exact | Org/slug picker — reached when a portal user has no resolved slug. |
+| `/p/[slug]/onboarding` | prefix | Onboarding assignment — reached from the /p/[slug]/tasks list that surfaces it, never a rail item (ADR-0008 Amendment 4: this is where the /m/onboarding/[id] handoff landed). |
 | `/p` | exact | GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item). |
 | `/` | exact | Home — reached via the logo, not a nav entry. |
 | `/es-ES` | prefix | i18n locale root. |
@@ -84,7 +85,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 | `/verify-email` | prefix | Auth email verification. |
 | `/onboarding` | prefix | Post-signup org onboarding flow. |
 | `/home` | exact | Post-auth app launcher — reached via auth redirect, not a nav click. |
-| `/m/changelog` | exact | COMPVSS What's New — reached from Settings, not a nav tab. |
 | `/m/settings/account` | exact | account lifecycle sub-screen, reached from /m/settings |
 | `/social` | prefix | social image asset endpoint |
 | `/studio/settings/impersonate` | exact | dev-only impersonation console (isDeveloper-gated, notFound otherwise) |
@@ -1351,7 +1351,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-56 routes — ● 41 nav · ○ 13 linked · ⚠ 0 orphan
+57 routes — ● 42 nav · ○ 14 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1379,12 +1379,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>changelog</code> · 1 route</summary>
-
-· `/m/changelog`
-
-</details>
-
 <details><summary><code>check-in</code> · 4 routes</summary>
 
 ● `/m/check-in`
@@ -1406,6 +1400,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>companies</code> · 1 route</summary>
+
+● `/m/companies`
+
+</details>
+
 <details><summary><code>connections</code> · 1 route</summary>
 
 ● `/m/connections`
@@ -1419,10 +1419,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>directory</code> · 2 routes</summary>
+<details><summary><code>directory</code> · 1 route</summary>
 
 ● `/m/directory`
-● `/m/directory/companies`
 
 </details>
 
@@ -1448,12 +1447,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>feed</code> · 1 route</summary>
 
 ● `/m/feed`
-
-</details>
-
-<details><summary><code>gigs</code> · 1 route</summary>
-
-● `/m/gigs`
 
 </details>
 
@@ -1498,6 +1491,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>jobs</code> · 1 route</summary>
+
+● `/m/jobs`
+
+</details>
+
 <details><summary><code>lost-found</code> · 1 route</summary>
 
 ● `/m/lost-found`
@@ -1516,6 +1515,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>my-work</code> · 1 route</summary>
+
+● `/m/my-work`
+
+</details>
+
 <details><summary><code>notifications</code> · 1 route</summary>
 
 ● `/m/notifications`
@@ -1526,6 +1531,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/m/onboarding`
 ○ `/m/onboarding/[assignmentId]`
+
+</details>
+
+<details><summary><code>pass</code> · 1 route</summary>
+
+● `/m/pass`
 
 </details>
 
@@ -1565,10 +1576,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>settings</code> · 2 routes</summary>
+<details><summary><code>settings</code> · 3 routes</summary>
 
 ● `/m/settings`
 · `/m/settings/account`
+○ `/m/settings/changelog`
 
 </details>
 
@@ -1587,12 +1599,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>wallet</code> · 1 route</summary>
-
-● `/m/wallet`
-
-</details>
-
 <details><summary><code>·root</code> · 1 route</summary>
 
 ● `/m`
@@ -1601,7 +1607,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-153 routes — ● 131 nav · ○ 19 linked · ⚠ 0 orphan
+156 routes — ● 129 nav · ○ 23 linked · ⚠ 0 orphan
 
 <details><summary><code>[slug]</code> · 2 routes</summary>
 
@@ -1676,7 +1682,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>crew</code> · 14 routes</summary>
+<details><summary><code>crew</code> · 15 routes</summary>
 
 ● `/p/[slug]/crew`
 ● `/p/[slug]/crew/advances`
@@ -1684,13 +1690,14 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/p/[slug]/crew/chat`
 ● `/p/[slug]/crew/directory`
 ● `/p/[slug]/crew/docs`
+○ `/p/[slug]/crew/docs/new`
 ● `/p/[slug]/crew/feed`
-● `/p/[slug]/crew/kudos`
 ● `/p/[slug]/crew/learning`
 ● `/p/[slug]/crew/privacy`
 ● `/p/[slug]/crew/schedule`
 ● `/p/[slug]/crew/time`
 ● `/p/[slug]/crew/time-off`
+○ `/p/[slug]/crew/time-off/new`
 ● `/p/[slug]/crew/timesheets`
 
 </details>
@@ -1779,6 +1786,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>onboarding</code> · 1 route</summary>
+
+· `/p/[slug]/onboarding/[assignmentId]`
+
+</details>
+
 <details><summary><code>producer</code> · 9 routes</summary>
 
 ● `/p/[slug]/producer`
@@ -1852,22 +1865,23 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>vendor</code> · 16 routes</summary>
+<details><summary><code>vendor</code> · 17 routes</summary>
 
 ● `/p/[slug]/vendor`
 ● `/p/[slug]/vendor/chat`
 ● `/p/[slug]/vendor/credentials`
 ● `/p/[slug]/vendor/directory`
 ● `/p/[slug]/vendor/docs`
+○ `/p/[slug]/vendor/docs/new`
 ● `/p/[slug]/vendor/equipment-pull-list`
 ● `/p/[slug]/vendor/feed`
 ● `/p/[slug]/vendor/invoices`
-● `/p/[slug]/vendor/kudos`
 ● `/p/[slug]/vendor/privacy`
 ● `/p/[slug]/vendor/purchase-orders`
 ● `/p/[slug]/vendor/schedule`
 ● `/p/[slug]/vendor/submissions`
 ● `/p/[slug]/vendor/time-off`
+○ `/p/[slug]/vendor/time-off/new`
 ● `/p/[slug]/vendor/training`
 ○ `/p/[slug]/vendor/training/[course]`
 
@@ -2509,7 +2523,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 148 route handlers
+## API surface (`/api/v1`) — 150 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2933,9 +2947,11 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/time</code> · 1</summary>
+<details><summary><code>/api/v1/time</code> · 3</summary>
 
 - `/api/v1/time/clock`
+- `/api/v1/time/corrections`
+- `/api/v1/time/corrections/[id]`
 
 </details>
 

@@ -7,7 +7,7 @@ import { CompaniesView, type Vendor } from "./CompaniesView";
 export const dynamic = "force-dynamic";
 
 /**
- * /m/directory/companies — Vendors.
+ * /m/companies — Vendors.
  *
  * COMPVSS kit `tab==="company"` (design truth app.jsx 2394-2442). Reads org
  * `vendors` (category / trade_categories / rating). The prototype's per-vendor

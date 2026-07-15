@@ -11,17 +11,25 @@ import { markAnnouncementRead } from "./feed-action";
 /**
  * Shared announcements feed (ADR-0008 Move 1 — proof of pattern).
  *
- * Same query + render across COMPVSS (`/m/feed`) and the portal crew
- * persona (`/p/[slug]/crew/feed`). Caller passes the variant (drives a
- * subtle layout/spacing difference) + the revalidate path the
- * markRead form should re-render after upsert.
+ * Same render across COMPVSS (`/m/feed`) and the portal crew/vendor personas
+ * (`/p/[slug]/{crew,vendor}/feed`), but NOT the same scope:
  *
- * The shared the deskless-workforce suite component pattern this file proves: extract
- * the surface body into a server component under
- * `src/components/workforce/`, parameterize per-shell concerns (path
- * for revalidate, eyebrow label), let both shells mount the same
- * component. Remaining 7 surfaces (chat, kudos, learning, time-off,
- * docs, directory, schedule) follow this template in dedicated PRs.
+ *   • `/m` (no projectId) — every published org announcement. COMPVSS is the
+ *     internal workforce app; org-wide updates are the point.
+ *   • `/p/[slug]` (projectId required) — only announcements attached to THAT
+ *     project (`announcements.project_id`). Org-wide announcements (project_id
+ *     IS NULL) are internal comms and are deliberately EXCLUDED: portal
+ *     personas are external counterparties holding ordinary org memberships,
+ *     so nothing filters them out downstream. ADR-0008 specified project
+ *     scope; org-wide was the implementation drifting from its own spec.
+ *     Fixed 2026-07-15.
+ *
+ * `projectId` is required on the portal variant at the type level, so a new
+ * portal feed page cannot forget it and silently widen the audience.
+ *
+ * The shared component pattern this file proves: extract the surface body into
+ * a server component under `src/components/workforce/`, parameterize per-shell
+ * concerns (revalidate path, eyebrow label, scope), let both shells mount it.
  */
 
 type Row = {
@@ -33,13 +41,7 @@ type Row = {
   published_at: string | null;
 };
 
-export async function FeedSurface({
-  variant,
-  revalidatePath: revalidate,
-  eyebrowLabel,
-  titleLabel,
-}: {
-  variant: "mobile" | "portal";
+type FeedProps = {
   /** Path to revalidate after a mark-as-read action — typically the same
    *  page the surface is mounted on. */
   revalidatePath: string;
@@ -48,7 +50,18 @@ export async function FeedSurface({
   eyebrowLabel?: string;
   /** Title text (e.g. "Updates" or "Feed"). */
   titleLabel?: string;
-}) {
+} & (
+  | { variant: "mobile"; projectId?: never }
+  | { variant: "portal"; projectId: string }
+);
+
+export async function FeedSurface({
+  variant,
+  projectId,
+  revalidatePath: revalidate,
+  eyebrowLabel,
+  titleLabel,
+}: FeedProps) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -61,13 +74,18 @@ export async function FeedSurface({
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
+  let announcementQuery = supabase
+    .from("announcements")
+    .select("id, title, body, audience, pinned, published_at")
+    .eq("org_id", session.orgId)
+    .eq("publish_state", "published")
+    .is("deleted_at", null);
+  // Portal: this project's announcements only. Org-wide (project_id IS NULL)
+  // stays internal — see the docblock.
+  if (projectId) announcementQuery = announcementQuery.eq("project_id", projectId);
+
   const [{ data: announcements }, { data: reads }] = await Promise.all([
-    supabase
-      .from("announcements")
-      .select("id, title, body, audience, pinned, published_at")
-      .eq("org_id", session.orgId)
-      .eq("publish_state", "published")
-      .is("deleted_at", null)
+    announcementQuery
       .order("pinned", { ascending: false })
       .order("published_at", { ascending: false, nullsFirst: false })
       .limit(50),
@@ -84,10 +102,13 @@ export async function FeedSurface({
 
   return (
     <div className={containerClass}>
+      {/* Subscribe on the same axis the list is scoped to: an org-wide filter
+          on the portal would stream row payloads for projects this user has no
+          business seeing. */}
       <RealtimeRefresh
-        channelName={`feed-${variant}-${session.orgId}`}
+        channelName={projectId ? `feed-${variant}-${projectId}` : `feed-${variant}-${session.orgId}`}
         table="announcements"
-        filter={`org_id=eq.${session.orgId}`}
+        filter={projectId ? `project_id=eq.${projectId}` : `org_id=eq.${session.orgId}`}
       />
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>

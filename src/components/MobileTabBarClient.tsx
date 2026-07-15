@@ -16,8 +16,7 @@ import {
   ListChecks,
   Package,
   MessageSquare,
-  Menu,
-  Radio,
+  MoreHorizontal,
 } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
@@ -25,16 +24,15 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
-  // COMPVSS kit tab model (rebuild 2026-06-21, +Onsite 2026-06-23): Home ·
-  // Calendar · Tasks · Onsite · Assets · Inbox · More (7 tabs — see
+  // COMPVSS kit tab model (rebuild 2026-06-21, Onsite rehomed to /p/onsite
+  // 2026-07-15): Home · Calendar · Tasks · Assets · Inbox · More (6 tabs — see
   // docs/compvss/KIT_CANON.md §IA).
   "/m": Home,
   "/m/schedule": CalendarDays,
   "/m/tasks": ListChecks,
-  "/m/onsite": Radio,
   "/m/inventory": Package,
   "/m/inbox": MessageSquare,
-  "/m/more": Menu,
+  "/m/more": MoreHorizontal,
   // Secondary surfaces — reachable from /m/more and cmd-K (icons used when a
   // surface appears in a bar/list that resolves through this map).
   "/m/settings": User,
@@ -45,7 +43,7 @@ const ICONS: Record<string, typeof Home> = {
   "/m/notifications": Bell,
   "/m/incidents": Siren,
   "/m/incident": Siren,
-  "/m/wallet": ShieldCheck,
+  "/m/pass": ShieldCheck,
 };
 
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {

@@ -2,16 +2,16 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { WalletView, type CredentialEntry } from "./WalletView";
+import { RoseView, type CredentialEntry } from "./RoseView";
 
 export const dynamic = "force-dynamic";
 
 /**
- * /m/wallet — the COMPVSS Rose pass + the holder's credential entitlements.
+ * /m/pass — the COMPVSS Rose pass + the holder's credential entitlements.
  * Reads the caller's `assignments` (catalog_kind='credential'), enriches each
  * with `credential_assignment_details` (access level + expiry), and resolves
  * their first ACTIVE `assignment_scan_codes` code — the real, gate-scannable
- * pass. `WalletView` renders that code as a genuine QR (RoseCard flip side +
+ * pass. `RoseView` renders that code as a genuine QR (RoseCard flip side +
  * a large gate pass); no client-minted tokens, no fake rotation. When no
  * active code exists the wallet says so honestly.
  */
@@ -136,7 +136,7 @@ export default async function MobileWalletPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.wallet.title", undefined, "The COMPVSS Rose")}
       </h1>
-      <WalletView credentials={credentials} holderName={holderName} activeCode={activeCode} labels={labels} />
+      <RoseView credentials={credentials} holderName={holderName} activeCode={activeCode} labels={labels} />
     </div>
   );
 }

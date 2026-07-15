@@ -166,6 +166,8 @@ export default async function MobileSettingsPage() {
       undefined,
       "Pause or archive · reversible pause, records preserved",
     ),
+    changelog: t("m.settings.changelog.title", undefined, "What's New"),
+    changelogDesc: t("m.settings.changelog.desc", undefined, "Recent Releases & Field Notes"),
     signOut: t("m.settings.signOut", undefined, "Sign Out"),
   };
 

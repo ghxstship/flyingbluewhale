@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * /m/gigs write actions. applyToJob inserts a job_application for the caller
+ * /m/jobs write actions. applyToJob inserts a job_application for the caller
  * against a published job_posting in their org. Idempotent — re-applying is a
  * no-op. RLS re-checked server-side.
  */
@@ -53,6 +53,6 @@ export async function applyToJob(_prev: State, fd: FormData): Promise<State> {
   });
   if (error) return { error: error.message };
 
-  revalidatePath("/m/gigs");
+  revalidatePath("/m/jobs");
   return { ok: "applied" };
 }

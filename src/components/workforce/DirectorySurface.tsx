@@ -6,14 +6,25 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 
 /**
- * Shared org directory surface (ADR-0008 Move 1).
+ * Shared directory surface (ADR-0008 Move 1).
  *
- * Same query + render across COMPVSS (`/m/directory`) and the portal
- * crew persona (`/p/[slug]/crew/directory`). Org-scoped roster — the
- * crew variant currently shows the full org because project-scoped
- * filtering needs project_members data the portal layout doesn't yet
- * thread through. Future enhancement: accept an optional projectId
- * prop to filter to `project_members.project_id = projectId`.
+ * Same render across COMPVSS (`/m/directory`) and the portal crew/vendor
+ * personas (`/p/[slug]/{crew,vendor}/directory`), but NOT the same scope:
+ *
+ *   • `/m` (no projectId) — the full org roster. COMPVSS is an internal
+ *     workforce app; every caller is an org member and co-member visibility
+ *     is the intended model.
+ *   • `/p/[slug]` (projectId required) — the roster of THAT PROJECT only,
+ *     via `project_members`. Portal personas are ordinary `memberships` rows
+ *     in the org, so an external contractor mapped to `vendor` renders this
+ *     too. Without the project filter they read every org member's name +
+ *     email, which RLS permits (`memberships_select` allows any org member;
+ *     `users_select_self` allows any co-member) and therefore will not catch.
+ *     ADR-0008 specified a "project-scoped roster"; org-wide was the
+ *     implementation drifting from its own spec. Fixed 2026-07-15.
+ *
+ * `projectId` is required on the portal variant at the type level, so a new
+ * portal directory page cannot forget it and silently widen the audience.
  */
 
 type Member = {
@@ -22,15 +33,11 @@ type Member = {
   name: string | null;
 };
 
-export async function DirectorySurface({
-  variant,
-  eyebrowLabel,
-  titleLabel,
-}: {
-  variant: "mobile" | "portal";
-  eyebrowLabel?: string;
-  titleLabel?: string;
-}) {
+type DirectoryProps =
+  | { variant: "mobile"; projectId?: never; eyebrowLabel?: string; titleLabel?: string }
+  | { variant: "portal"; projectId: string; eyebrowLabel?: string; titleLabel?: string };
+
+export async function DirectorySurface({ variant, projectId, eyebrowLabel, titleLabel }: DirectoryProps) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -41,11 +48,26 @@ export async function DirectorySurface({
   const session = await requireSession();
   const supabase = await createClient();
 
-  const { data: memberships } = await supabase
+  // Portal: resolve the project's roster first and let it gate the query. An
+  // empty roster must render an empty directory, never fall through to the
+  // org-wide list — `.in("user_id", [])` returns nothing, which is the correct
+  // and safe degenerate case.
+  let projectUserIds: string[] | null = null;
+  if (projectId) {
+    const { data: projectMembers } = await supabase
+      .from("project_members")
+      .select("user_id")
+      .eq("project_id", projectId);
+    projectUserIds = (projectMembers ?? []).map((m) => m.user_id as string);
+  }
+
+  let query = supabase
     .from("memberships")
     .select("user_id, role, users:users!inner(id, email, name)")
     .eq("org_id", session.orgId)
     .is("deleted_at", null);
+  if (projectUserIds) query = query.in("user_id", projectUserIds);
+  const { data: memberships } = await query;
 
   const members = (
     (memberships ?? []) as unknown as Array<{
@@ -67,7 +89,13 @@ export async function DirectorySurface({
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">
-        {t("m.directory.peopleCount", { count: members.length }, `${members.length} people in your org`)}
+        {projectId
+          ? t(
+              "p.directory.peopleCount",
+              { count: members.length },
+              `${members.length} people on this project`,
+            )
+          : t("m.directory.peopleCount", { count: members.length }, `${members.length} people in your org`)}
       </p>
 
       <ul className="mt-5 space-y-2">

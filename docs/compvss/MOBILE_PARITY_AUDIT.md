@@ -23,7 +23,30 @@ Every claim below cites the file that proves it. Nothing is reported closed or n
 
 **G3 disposition**: the parity half SHIPPED (`e0da4b03`) — mobile now mirrors the console's existing manager+ gate exactly, via a shared `transitionAssetState`. **Still open, and genuinely a product decision:** may CREW take custody of their own gear? That is a new authorization model, not a port, and was deliberately not smuggled in behind the refactor.
 
-**The RLS pattern is systemic, not incidental.** `tasks_insert` and `expenses_insert` both excluded the `member` band — the console's authoring model was never reconciled with who actually does the work. Both are fixed (`20260715140000`, `20260715150000`). **Assume every other `*_insert` policy backing a field surface has the same defect until checked**: requisitions, service_requests, mileage_logs are the likely next three.
+**The RLS pattern is systemic — and the mechanism explains why it hides.** `private.has_org_role(org_id, required[])` matches
+
+```sql
+role::text = any(required) OR persona = any(required)
+```
+
+so those policy lists **mix two vocabularies**. `owner`/`admin`/`manager` are ROLES; `crew`/`collaborator` are PERSONAS; `controller` is neither and matches nothing at all. A field crew member is `role=member` + `persona=crew`, so a list that omits `'crew'` silently excludes them while *looking* comprehensive.
+
+Audited all seven field-facing intakes. Four were fine, four were not — this was a real 4/7 hit rate, not a hunch:
+
+| Store | Before | Verdict |
+| --- | --- | --- |
+| `daily_logs` | manager band **+ `crew`** | correct — this is the pattern to copy |
+| `handovers` | `is_org_member AND from_user_id = self` | correct — the best of the set |
+| `incidents` | `is_org_member` | correct |
+| `service_requests` | `is_org_member` | correct (my prediction here was **wrong**) |
+| `tasks` | manager band only | **excluded crew** — fixed `20260715140000` |
+| `expenses` | manager band only | **excluded crew** — fixed `20260715150000` |
+| `requisitions` | manager band only | **excluded crew** — fixed `20260715160000` |
+| `mileage_logs` | manager band only | **excluded crew** — fixed `20260715160000` |
+
+All four fixes are narrow and identical in shape: the manager band keeps what it had, and a member may additionally write **only in their own name** (`created_by`/`submitter_id`/`requester_id`/`user_id` = `auth.uid()`), enforced in `WITH CHECK` so it stays true after the write. Each was verified by behaviour under a real member JWT — self-insert succeeds, impersonation is refused — not by reading policy text.
+
+**`'controller'` appears in many policies and matches nothing.** It is neither a `PlatformRole` nor a `Persona`. Harmless today (it only ever widens), but it is dead vocabulary in a security-critical list and should be removed or made real.
 
 **Read the Corrections section (§5b) before trusting any remaining MISSING.** Two entries were wrong because they were scored from a grep count rather than the render path. Every untouched MISSING that rests on the same evidence needs re-verification before anyone builds against it. Four gaps found *while building* (D15, D16 + the two corrections) versus one predicted-and-confirmed suggests the register understates as often as it overstates.
 

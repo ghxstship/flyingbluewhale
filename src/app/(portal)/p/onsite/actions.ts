@@ -9,7 +9,7 @@ import { listFollowedPresence } from "@/lib/gvteway";
  * Onsite gamification + order-to-seat actions (design_handoff §3). Points are
  * awarded ONLY through the `award_onsite_points` SECURITY DEFINER RPC (fixed
  * value per reason — a client can't mint points). Each action revalidates
- * `/m/onsite` so the tier/achievements/passes refresh.
+ * `/p/onsite` so the tier/achievements/passes refresh.
  */
 export async function checkInAction(): Promise<void> {
   const session = await requireSession();
@@ -24,7 +24,7 @@ export async function checkInAction(): Promise<void> {
   await supabase
     .from("activity")
     .insert({ actor_id: session.userId, verb: "attended", object_kind: "event", object_ref: "Onsite check-in" });
-  revalidatePath("/m/onsite");
+  revalidatePath("/p/onsite");
 }
 
 export async function catchSetAction(formData: FormData): Promise<void> {
@@ -37,7 +37,7 @@ export async function catchSetAction(formData: FormData): Promise<void> {
       .from("activity")
       .insert({ actor_id: session.userId, verb: "attended", object_kind: "set", object_ref: performer });
   }
-  revalidatePath("/m/onsite");
+  revalidatePath("/p/onsite");
 }
 
 export async function placeOrderAction(formData: FormData): Promise<void> {
@@ -63,5 +63,5 @@ export async function placeOrderAction(formData: FormData): Promise<void> {
     p_reason: "order_placed",
     p_project_id: item.project_id ?? undefined,
   });
-  revalidatePath("/m/onsite");
+  revalidatePath("/p/onsite");
 }

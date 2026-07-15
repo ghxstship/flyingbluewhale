@@ -13,10 +13,14 @@ const Schema = z.object({
 });
 
 /**
- * Desktop counterpart to src/app/(mobile)/m/kudos/actions.ts#createKudos.
+ * Desktop counterpart to src/app/(mobile)/m/feed/actions.ts#postKudos.
  * Same write + push fan-out; separate action so the desktop redirect
  * after success returns to /studio/workforce/recognition (the admin
- * landing) rather than the mobile /m/kudos feed.
+ * landing) rather than the COMPVSS feed.
+ *
+ * (The `/m/kudos` route this once named was folded into `/m/feed` by the
+ * 2026-06-21 kit rebuild; peer recognition is COMPVSS/crew + console only,
+ * never the external portal — see `portalNav` in src/lib/nav.ts.)
  */
 export async function createKudosFromConsole(fd: FormData): Promise<void> {
   const session = await requireSession();

@@ -453,7 +453,7 @@ test.describe("Marketplace canon · navigation", () => {
 // 7. IA HOLD-THE-LINE — wayfinder remediation: 10 console groups; the
 //    marketplace items live INSIDE Commerce, Reviews + Settings live in
 //    settingsNav. Marketing header surfaces /marketplace as a top-level.
-//    /me + /m/gigs add applicant-side discoverability.
+//    /me + /m/jobs add applicant-side discoverability.
 // ────────────────────────────────────────────────────────────────────
 
 test.describe("Marketplace canon · IA discoverability", () => {
@@ -512,11 +512,11 @@ test.describe("Marketplace canon · IA discoverability", () => {
     }
   });
 
-  test("/m/gigs renders the public_job_board with seeded data", async ({ page }) => {
+  test("/m/jobs renders the public_job_board with seeded data", async ({ page }) => {
     // Mobile shell requires an authenticated session.
     await dismissConsent(page);
     await loginAsOwner(page);
-    const r = await page.goto("/m/gigs");
+    const r = await page.goto("/m/jobs");
     expect(r?.status()).toBe(200);
     await expect(page.locator("h1")).toContainText("Open Gigs");
     // Fixture posting (or any cross-org fixture) must appear.

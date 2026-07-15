@@ -24,10 +24,20 @@ keep new work aligned.
   life; access changes, the Rose does not. Flip-to-QR with a single-use, refresh-on-open token.
 
 ## IA / interaction canon
-- **Tab model:** `Home · Calendar · Tasks · Onsite · Assets · Inbox · More` (`mobileTabs` in
-  `src/lib/nav.ts`). Seven tabs: the kit's original six plus **Onsite**, the GVTEWAY consumer
-  live-event tab (design_handoff §2 — now/next set times, find-my-friends, read-only passes)
-  added 2026-06-23. One tab set for every crew member — no persona-routed bars.
+- **Tab model:** `Home · Calendar · Tasks · Assets · Inbox · More` (`mobileTabs` in
+  `src/lib/nav.ts`). The kit's original six tabs. One tab set for every crew member — no
+  persona-routed bars.
+- **Crew-only by construction:** COMPVSS carries no consumer/fan surfaces. The crew
+  entitlement band has no GVTEWAY reach at all (`src/lib/entitlements.json` — `crew` is
+  `{compvss: full, gvlley: ro, legend: ro}`), so a GVTEWAY surface in this app is
+  unreachable-by-entitlement for the people it renders to. The **Onsite** tab (design_handoff
+  §2 — now/next set times, find-my-friends, order-to-seat, read-only linked passes,
+  gamification) shipped here 2026-06-23 and was **rehomed to `/p/onsite`** in the GVTEWAY
+  consumer shell on 2026-07-15. Do not reintroduce it, and do not add fan-facing surfaces
+  here: the product switch is the App Rail, not the tab bar. Note the crew credential wallet
+  (`/m/wallet`, reading `assignments` + `assignment_scan_codes`) is **not** the fan pass
+  wallet (`linked_pass`, at `/p/onsite` + `/p/account`) — those are different objects for
+  different people, and both are correctly placed.
 - **Canonical list header:** the shared **`ActionBar`** (search + icon-only View / Group / Sort /
   Filter cluster) on every list screen, with the views the kit shows for that screen
   (list / board / table / calendar / gallery).

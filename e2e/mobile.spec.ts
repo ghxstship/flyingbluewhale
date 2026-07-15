@@ -27,9 +27,9 @@ test.describe("mobile field shell", () => {
     "/m/guide",
     "/m/clock",
     "/m/advances",
-    // M4 — the four bottom-tab destinations that had no smoke coverage.
+    // M4 — the bottom-tab destinations that had no smoke coverage. (Onsite was
+    // rehomed to the GVTEWAY consumer shell at /p/onsite on 2026-07-15.)
     "/m/schedule",
-    "/m/onsite",
     "/m/inventory",
     "/m/more",
     "/m/inventory/scan",

@@ -23,6 +23,7 @@ const RESERVED_PORTAL_SEGMENTS = new Set([
   "undefined",
   "null",
   "discover",
+  "onsite",
   "community",
   "scenes",
   "lists",

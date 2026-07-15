@@ -23,8 +23,8 @@ import { checkInAction, catchSetAction, placeOrderAction } from "./actions";
 export const dynamic = "force-dynamic";
 
 /**
- * /m/onsite — the live-event Onsite center tab (design_handoff §2/§3). The
- * guest's "I'm at the venue" home, fully wired to real Supabase:
+ * /p/onsite — the live-event Onsite center (design_handoff §2/§3). The guest's
+ * "I'm at the venue" home, fully wired to real Supabase:
  *   • now/next set times + clash detection + per-set "Catch" ← `set_time`
  *   • coarse find-my-friends ← `presence` (RLS: self + followed), the GUEST
  *     plan via `<VenueMap>` — NOT the operator `<FloorPlan>`
@@ -32,6 +32,11 @@ export const dynamic = "force-dynamic";
  *   • read-only linked-pass wallet ← `linked_pass`
  *   • gamification ← `onsite_points` ledger → tier + earned achievements; points
  *     awarded only via the `award_onsite_points` SECURITY DEFINER RPC
+ *
+ * Lives in the GVTEWAY consumer shell beside Discover/Community/Scenes: the
+ * audience is the ticket-holder, and the crew band carries no GVTEWAY reach
+ * (`entitlements.json`). It shipped in the COMPVSS tab bar 2026-06-23 and was
+ * rehomed here 2026-07-15; the crew credential wallet stays at `/m/pass`.
  *
  * The AR overlay sits behind `NEXT_PUBLIC_ONSITE_AR` and is off by default.
  */
@@ -47,7 +52,7 @@ const ZERO_SCORE: OnsiteScore = {
 
 const money = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
-export default async function MobileOnsitePage() {
+export default async function PortalOnsitePage() {
   const session = await requireSession();
   const supabase = hasSupabase ? await createClient() : null;
 
@@ -62,18 +67,16 @@ export default async function MobileOnsitePage() {
     : [[], [], [], [], ZERO_SCORE];
 
   return (
-    <div className="screen screen-anim space-y-8">
-      <header className="space-y-1">
-        <div className="scr-eye">Onsite</div>
-        <h1 className="scr-h" style={{ marginBottom: 4 }}>
-          My Night
-        </h1>
-        <p className="form-intro">Set times, your people, and your passes — all in one place.</p>
+    <div className="mx-auto max-w-5xl space-y-8 px-6 py-8">
+      <header className="space-y-2">
+        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
+        <h1 className="text-3xl font-bold tracking-tight">My Night</h1>
+        <p className="text-[var(--p-text-2)]">Set times, your people, and your passes — all in one place.</p>
       </header>
 
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
             <ScanLine size={13} aria-hidden="true" /> Live schedule
           </h2>
           {score.achievements.checkIn ? (
@@ -95,12 +98,12 @@ export default async function MobileOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Find your friends</h2>
+        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Find your friends</h2>
         <VenueMap zones={zones} sharing={zones.length > 0} />
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
           <Compass size={13} aria-hidden="true" /> Getting around
         </h2>
         {/* Wayfinding speaks the shared AIGA signage language (§3). */}
@@ -108,7 +111,7 @@ export default async function MobileOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
           <UtensilsCrossed size={13} aria-hidden="true" /> Order to your seat
         </h2>
         {menu.length === 0 ? (
@@ -148,7 +151,7 @@ export default async function MobileOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
           <Ticket size={13} aria-hidden="true" /> Your passes
         </h2>
         {passes.length === 0 ? (
@@ -179,7 +182,7 @@ export default async function MobileOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
           <Trophy size={13} aria-hidden="true" /> Tonight
         </h2>
         {/* Real points ledger (`onsite_points`) → tier + earned achievements. */}
@@ -210,7 +213,7 @@ export default async function MobileOnsitePage() {
 
       {AR_ENABLED && (
         <section className="space-y-3">
-          <h2 className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
             <Sparkles size={13} aria-hidden="true" /> AR view
           </h2>
           <OnsiteARLauncher />

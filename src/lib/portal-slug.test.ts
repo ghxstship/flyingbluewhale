@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { extractPortalSlug, escapeHtml } from "./portal-slug";
+import { portalConsumerNav } from "./nav";
 
 describe("extractPortalSlug", () => {
   it("returns the slug for a real /p/<slug>/<page> path", () => {
@@ -33,6 +34,28 @@ describe("extractPortalSlug", () => {
   it("returns null when there's no slug segment", () => {
     expect(extractPortalSlug("/p/")).toBeNull();
     expect(extractPortalSlug("/p")).toBeNull();
+  });
+
+  // The reserved-segment set in portal-slug.ts is a hand-maintained mirror of
+  // the GVTEWAY consumer routes. Miss an entry and the proxy's slug pre-check
+  // DB-resolves the route name as a tenant slug, finds nothing, and serves a
+  // hard 404 — the real route never gets a chance to render. That failure is
+  // invisible to `gen:sitemap` (the file exists and is nav-reached), so it
+  // needs its own guard. Caught /p/onsite in exactly this state on 2026-07-15.
+  it("reserves every top-level portalConsumerNav route", () => {
+    const consumerSegments = portalConsumerNav
+      .flatMap((g) => g.items)
+      .map((i) => i.href)
+      .filter((href) => /^\/p\/[^/]+$/.test(href));
+
+    // Guard the guard: if the nav shape changes and this filter stops
+    // matching, the loop below would vacuously pass.
+    expect(consumerSegments.length).toBeGreaterThan(5);
+
+    for (const href of consumerSegments) {
+      expect(extractPortalSlug(href), `${href} must be a reserved segment`).toBeNull();
+      expect(extractPortalSlug(`${href}/nested`), `${href}/nested must be reserved`).toBeNull();
+    }
   });
 });
 

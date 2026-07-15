@@ -52,7 +52,7 @@ const titleCase = (s: string) =>
  * "single-use" tokens, no fake rotation. When the holder has no active
  * code yet, the wallet says so instead of painting an unverifiable pass.
  */
-export function WalletView({
+export function RoseView({
   credentials,
   holderName,
   activeCode,

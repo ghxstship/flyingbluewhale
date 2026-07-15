@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { archiveOwnAccount } from "@/lib/db/account-archive";
 
 export type AccountActionState = { error?: string; ok?: true } | null;
 
@@ -15,10 +16,9 @@ export type AccountActionState = { error?: string; ok?: true } | null;
  * - PAUSE is reversible (hides the user from scheduling/rosters, mutes
  *   notifications). `paused_until` / `pause_reason` are optional. resumeAccount
  *   flips back to `active` and clears those.
- * - ARCHIVE is a self-serve REQUEST: this surface sets `account_state =
- *   'archived'` + `archive_requested_at` but NEVER hard-revokes the caller's own
- *   access. A privileged admin flow completes the revoke + anonymization (see
- *   requestArchive's contract comment).
+ * - ARCHIVE runs the real archive contract (shared with the web self-delete
+ *   API) — soft-delete + 30-day grace + PII scrub + membership revoke. See
+ *   requestArchive.
  */
 
 const PauseSchema = z.object({
@@ -69,25 +69,43 @@ export async function resumeAccount(): Promise<AccountActionState> {
 }
 
 /**
- * REQUEST ARCHIVE — records intent (account_state='archived' +
- * `archive_requested_at`). This surface deliberately does NOT revoke the
- * caller's own access or anonymize their data.
+ * ARCHIVE — executes the real contract via the shared `archiveOwnAccount()`:
+ * soft-delete `users` with a 30-day grace, scrub PII, and revoke every
+ * membership so access dies immediately; operational records (shifts, time
+ * logs, incidents, approvals, asset chain-of-custody) are preserved for
+ * compliance retention. Reversible by signing in within the grace window
+ * (/api/v1/me/restore).
  *
- * Full archive contract (out of scope here, handled by a later admin flow):
- *   On admin confirmation, a privileged/server flow:
- *     1. Sets `users.deleted_at` (soft delete; the data layer already filters
- *        on it, which revokes app access) and revokes memberships; stamps
- *        `user_account_status.archived_at`.
- *     2. Anonymizes personal profile fields (name → "Archived Member"; clears
- *        email/phone/avatar/bio on `users` + `user_profiles`, and the
- *        sensitive 3NF rows — travel/emergency_contacts).
- *     3. PRESERVES operational records — shifts, time logs, incidents,
- *        approvals, asset chain-of-custody — for legal/compliance retention.
- *   None of that destructive work happens from this self-serve mobile action.
+ * This previously only recorded intent (`archive_requested_at`) and deferred
+ * the destructive work to "a later admin flow" that was never built — so the
+ * request went nowhere. It now runs the SAME pipeline as the web self-delete
+ * API, making the field surface a first-class archive rather than a dead-end
+ * flag (2026-07 lifecycle audit).
  */
 export async function requestArchive(): Promise<AccountActionState> {
-  return setAccountState({
-    account_state: "archived",
-    archive_requested_at: new Date().toISOString(),
-  });
+  const session = await requireSession();
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+
+  const archived = await archiveOwnAccount(session.userId);
+  if (!archived.ok) return { error: archived.message };
+
+  // Stamp the lifecycle row directly rather than via setAccountState — that
+  // re-runs requireSession(), which no longer resolves once the memberships
+  // are revoked. RLS here is `user_id = auth.uid()`, which still holds until
+  // we sign out below. `archived_at` records that the archive actually RAN.
+  const { error } = await supabase
+    .from("user_account_status")
+    .upsert(
+      { user_id: session.userId, account_state: "archived", archive_requested_at: now, archived_at: now },
+      { onConflict: "user_id" },
+    );
+  if (error) return { error: error.message };
+
+  // Access is already revoked server-side; drop the session so the PWA lands
+  // on the onboarding gate instead of a half-authed shell.
+  await supabase.auth.signOut();
+  revalidatePath("/m/settings/account");
+  revalidatePath("/m/settings");
+  return { ok: true };
 }

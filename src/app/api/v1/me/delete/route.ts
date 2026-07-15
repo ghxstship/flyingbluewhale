@@ -4,7 +4,8 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { emitAudit } from "@/lib/audit";
 import { getSession } from "@/lib/auth";
 import { formatDate } from "@/lib/i18n/format";
-import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
+import { archiveOwnAccount } from "@/lib/db/account-archive";
 
 /**
  * Account deletion request — soft-delete with a 30-day grace window.
@@ -33,31 +34,18 @@ export async function POST(req: NextRequest) {
   }
   const userId = userData.user.id;
 
-  // Soft-delete user with 30-day grace. .is(deleted_at, null) makes
-  // a re-submit idempotent — without it a double-POST would re-stamp
-  // deleted_at and push the purge clock forward by another 30 days,
-  // and would re-scrub already-scrubbed PII (no-op but noisy).
-  const purgeAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  const { data: scrubbed, error: upErr } = await supabase
-    .from("users")
-    .update({
-      deleted_at: purgeAt,
-      // Scrub PII immediately
-      email: `deleted-${userId}@deleted.invalid`,
-      name: "Deleted user",
-      avatar_url: null,
-    })
-    .eq("id", userId)
-    .is("deleted_at", null)
-    .select("id");
-
-  if (upErr) {
-    return apiError("internal", "Couldn't process deletion request");
+  // The archive contract (soft-delete + 30-day grace + PII scrub + membership
+  // revoke) is shared with the COMPVSS field action — see archiveOwnAccount.
+  const archived = await archiveOwnAccount(userId);
+  if (!archived.ok) {
+    return archived.error === "service_unavailable"
+      ? apiError("service_unavailable", archived.message)
+      : apiError("internal", archived.message);
   }
   // No-op = already deleted. Sign the user out and return the
   // idempotent success — they may have hit retry; we shouldn't
   // confuse them with a non-deterministic error.
-  if (!scrubbed || scrubbed.length === 0) {
+  if (archived.alreadyRequested) {
     await supabase.auth.signOut();
     return apiOk({
       message: "Account already scheduled for deletion. Sign in within the grace window to cancel.",
@@ -65,28 +53,7 @@ export async function POST(req: NextRequest) {
       alreadyRequested: true,
     });
   }
-
-  // Revoke memberships immediately. Same idempotency guard — only
-  // soft-delete rows that aren't already deleted, preserving the
-  // original offboard timestamps.
-  //
-  // Service-role: post-migration 0063, the RLS helpers `has_org_role` and
-  // `is_org_member` filter `deleted_at IS NULL` — meaning the session
-  // client can no longer update memberships for a user who is being
-  // soft-deleted (they're not an owner/admin of their own org for
-  // policy purposes once we soft-delete one). Self-offboard is a
-  // privileged anti-bricking flow; use the service client so a missing
-  // SUPABASE_SERVICE_ROLE_KEY surfaces a clean 503 instead of a silent
-  // RLS rejection.
-  if (!isServiceClientAvailable()) {
-    return apiError(
-      "service_unavailable",
-      "Account deletion requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
-    );
-  }
-  const svcForDelete = createServiceClient();
-  const nowIso = new Date().toISOString();
-  await svcForDelete.from("memberships").update({ deleted_at: nowIso }).eq("user_id", userId).is("deleted_at", null);
+  const purgeAt = archived.purgeAt;
 
   // H2-07 — audit the deletion request BEFORE we sign out so the
   // actor is still on the session used by emitAudit().

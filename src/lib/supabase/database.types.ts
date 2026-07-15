@@ -11356,6 +11356,50 @@ export type Database = {
         }
         Relationships: []
       }
+      earning_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_worked_time: boolean
+          label: string
+          lifecycle_state: string
+          multiplier: number
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_worked_time?: boolean
+          label: string
+          lifecycle_state?: string
+          multiplier?: number
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_worked_time?: boolean
+          label?: string
+          lifecycle_state?: string
+          multiplier?: number
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "earning_codes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_templates: {
         Row: {
           body_html: string
@@ -14272,6 +14316,57 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_worker_links: {
+        Row: {
+          created_at: string
+          external_employee_id: string
+          external_position_id: string | null
+          id: string
+          link_state: string
+          org_id: string
+          party_id: string
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          external_employee_id: string
+          external_position_id?: string | null
+          id?: string
+          link_state?: string
+          org_id: string
+          party_id: string
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          external_employee_id?: string
+          external_position_id?: string | null
+          id?: string
+          link_state?: string
+          org_id?: string
+          party_id?: string
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_worker_links_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_worker_links_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
             referencedColumns: ["id"]
           },
         ]
@@ -21900,6 +21995,44 @@ export type Database = {
           },
         ]
       }
+      pay_periods: {
+        Row: {
+          created_at: string
+          id: string
+          org_id: string
+          period_end: string
+          period_start: string
+          period_state: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          org_id: string
+          period_end: string
+          period_start: string
+          period_state?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          org_id?: string
+          period_end?: string
+          period_start?: string
+          period_state?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pay_periods_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pay_rates: {
         Row: {
           effective_from: string
@@ -22256,8 +22389,10 @@ export type Database = {
       payroll_run_lines: {
         Row: {
           classification: string
+          cost_center_id: string | null
           created_at: string
           deductions: Json
+          earning_code_id: string | null
           fringes_cash: number
           fringes_to_plans: number
           gross: number
@@ -22273,7 +22408,9 @@ export type Database = {
           rate_dt: number
           rate_ot: number
           rate_st: number
+          source_entry_ids: string[] | null
           ssn_last_4: string | null
+          timesheet_id: string | null
           updated_at: string
           user_id: string | null
           wage_determination_id: string | null
@@ -22281,8 +22418,10 @@ export type Database = {
         }
         Insert: {
           classification: string
+          cost_center_id?: string | null
           created_at?: string
           deductions?: Json
+          earning_code_id?: string | null
           fringes_cash?: number
           fringes_to_plans?: number
           gross?: number
@@ -22298,7 +22437,9 @@ export type Database = {
           rate_dt?: number
           rate_ot?: number
           rate_st?: number
+          source_entry_ids?: string[] | null
           ssn_last_4?: string | null
+          timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
           wage_determination_id?: string | null
@@ -22306,8 +22447,10 @@ export type Database = {
         }
         Update: {
           classification?: string
+          cost_center_id?: string | null
           created_at?: string
           deductions?: Json
+          earning_code_id?: string | null
           fringes_cash?: number
           fringes_to_plans?: number
           gross?: number
@@ -22323,7 +22466,9 @@ export type Database = {
           rate_dt?: number
           rate_ot?: number
           rate_st?: number
+          source_entry_ids?: string[] | null
           ssn_last_4?: string | null
+          timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
           wage_determination_id?: string | null
@@ -35280,53 +35425,71 @@ export type Database = {
         Row: {
           approval_instance_id: string | null
           billable_minutes: number
+          compiled_at: string | null
           created_at: string
           id: string
           invoice_tx_id: string | null
           org_id: string
           party_id: string
+          pay_period_id: string | null
           period_end: string
           period_start: string
           posted_at: string | null
+          posted_by: string | null
           project_id: string | null
           state: Database["public"]["Enums"]["utt_timesheet_state"]
+          submitted_at: string | null
+          submitted_by: string | null
           total_amount_currency: string | null
           total_amount_minor: number
           total_minutes: number
+          updated_at: string
         }
         Insert: {
           approval_instance_id?: string | null
           billable_minutes?: number
+          compiled_at?: string | null
           created_at?: string
           id?: string
           invoice_tx_id?: string | null
           org_id: string
           party_id: string
+          pay_period_id?: string | null
           period_end: string
           period_start: string
           posted_at?: string | null
+          posted_by?: string | null
           project_id?: string | null
           state?: Database["public"]["Enums"]["utt_timesheet_state"]
+          submitted_at?: string | null
+          submitted_by?: string | null
           total_amount_currency?: string | null
           total_amount_minor?: number
           total_minutes?: number
+          updated_at?: string
         }
         Update: {
           approval_instance_id?: string | null
           billable_minutes?: number
+          compiled_at?: string | null
           created_at?: string
           id?: string
           invoice_tx_id?: string | null
           org_id?: string
           party_id?: string
+          pay_period_id?: string | null
           period_end?: string
           period_start?: string
           posted_at?: string | null
+          posted_by?: string | null
           project_id?: string | null
           state?: Database["public"]["Enums"]["utt_timesheet_state"]
+          submitted_at?: string | null
+          submitted_by?: string | null
           total_amount_currency?: string | null
           total_amount_minor?: number
           total_minutes?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -43023,6 +43186,18 @@ export type Database = {
         }[]
       }
       current_request_id: { Args: never; Returns: string }
+      compile_timesheets: {
+        Args: { p_org_id: string; p_pay_period_id: string }
+        Returns: Json
+      }
+      post_timesheet: {
+        Args: { p_lines: Json; p_payroll_run_id: string; p_timesheet_id: string }
+        Returns: Json
+      }
+      recompute_timesheet_totals: {
+        Args: { p_timesheet_id: string }
+        Returns: undefined
+      }
       decline_offer_letter: {
         Args: { p_code: string; p_reason: string; p_token: string }
         Returns: Json

@@ -1,0 +1,10 @@
+-- Earning codes, worker links, and the post step — Phase 3 (part 2) of
+-- docs/compvss/TIME_MANAGEMENT_LIFECYCLE_PLAN.md.
+--
+-- Closes the last hole in the spine: nothing wrote `payroll_run_lines`, so
+-- both certified-payroll exporters read a table only the demo seed had ever
+-- populated. `post_timesheet` is the first thing in the app's history that
+-- writes one.
+--
+-- Applied to the live DB as migration `payroll_earning_codes_and_post`.
+-- See that migration for the full body; this file is the repo's record.

@@ -1579,6 +1579,41 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
 
+  /api/v1/timesheets/{id}/submit:
+    post:
+      summary: "Hand a timesheet in for review (open|rejected -> submitted). The worker's own act; a manager may submit on their behalf. Refused while the sheet has corrections awaiting a decision. Scope: time:write."
+      operationId: submitTimesheet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: The submitted sheet, with its derived totals.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          timesheet:
+                            type: object
+                            properties:
+                              id: { type: string, format: uuid }
+                              state: { type: string, enum: [submitted] }
+                              submitted_at: { type: string, format: date-time }
+                              total_minutes: { type: integer }
+                              billable_minutes: { type: integer }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { description: You can only submit your own timesheet. }
+        "404": { description: Timesheet not found. }
+        "409": { description: Not submittable from its current state, or corrections are still pending. }
+
   /api/v1/time/corrections:
     get:
       summary: "List time-correction requests. A worker sees their own; the manager band sees the org queue (pass `?mine=1` to narrow to their own). Optional `?state=` filter. Scope: time:read."

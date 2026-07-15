@@ -52,10 +52,15 @@ export const DECISION_TARGET_STATE: Record<TimesheetDecision, TimesheetState> = 
 };
 
 /**
- * Allowed manager decisions per current state. A submitted sheet can be
+ * Allowed manager DECISIONS per current state. A submitted sheet can be
  * approved / rejected / returned; an already-approved sheet can still be
  * returned (re-open) or rejected before posting. Terminal states
  * (posted / archived) accept no further approval decisions.
+ *
+ * `open: []` is correct and is NOT the lifecycle's dead end it looks like:
+ * leaving `open` is a SUBMISSION, not a manager decision, so it lives in
+ * `canSubmit` below rather than here. Until Phase 3 nothing submitted, which
+ * is what made the lifecycle unreachable from its own initial state.
  */
 export const ALLOWED_DECISIONS: Record<TimesheetState, readonly TimesheetDecision[]> = {
   open: [],
@@ -68,6 +73,24 @@ export const ALLOWED_DECISIONS: Record<TimesheetState, readonly TimesheetDecisio
 
 export function canDecide(state: TimesheetState, decision: TimesheetDecision): boolean {
   return ALLOWED_DECISIONS[state].includes(decision);
+}
+
+/**
+ * States a worker can submit from. `rejected` is included on purpose: a
+ * rejected sheet the worker has since corrected must be re-submittable, or
+ * the rejection is a dead end for them.
+ */
+export const SUBMITTABLE_STATES = ["open", "rejected"] as const satisfies readonly TimesheetState[];
+
+export function canSubmit(state: TimesheetState): boolean {
+  return (SUBMITTABLE_STATES as readonly TimesheetState[]).includes(state);
+}
+
+/** States an admin can post to payroll from. Approval is the gate. */
+export const POSTABLE_STATES = ["approved"] as const satisfies readonly TimesheetState[];
+
+export function canPost(state: TimesheetState): boolean {
+  return (POSTABLE_STATES as readonly TimesheetState[]).includes(state);
 }
 
 export const TIMESHEET_DECISION_LABEL: Record<TimesheetDecision, string> = {

@@ -98,7 +98,10 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     await expect(page).toHaveURL(/\/edit$/, { timeout: 30000 });
     const edited = `E2E Cred Edited ${stamp()}`;
     await page.locator('main [name="kind"]').first().fill(edited);
-    await page.locator("main form").first().evaluate((f: HTMLFormElement) => f.requestSubmit());
+    await page
+      .locator("main form")
+      .first()
+      .evaluate((f: HTMLFormElement) => f.requestSubmit());
     await expect(page).toHaveURL(new RegExp(`/studio/people/credentials/${UUID.source}$`), { timeout: 90000 });
     await expect(page.getByText(edited).first()).toBeVisible({ timeout: 15000 });
   });
@@ -128,7 +131,10 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     await expect(page).toHaveURL(/\/edit$/, { timeout: 30000 });
     const edited = `E2E Crew Edited ${stamp()}`;
     await page.locator('main [name="name"]').first().fill(edited);
-    await page.locator("main form").first().evaluate((f: HTMLFormElement) => f.requestSubmit());
+    await page
+      .locator("main form")
+      .first()
+      .evaluate((f: HTMLFormElement) => f.requestSubmit());
     await expect(page).toHaveURL(new RegExp(`/studio/people/crew/${UUID.source}$`), { timeout: 90000 });
     await expect(page.getByText(edited).first()).toBeVisible({ timeout: 15000 });
   });
@@ -205,12 +211,16 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
 
   // MEDIUM — the team membership FSM: manager creates a team (auto-joined as
   // admin), adds an org member, removes them, then deletes the team.
-  // DEFERRED (task_ tracked): the team create→detail redirect does not settle on
-  // the serverless prod target and the list-row/member read-backs never stabilise
-  // even under reload-retry — RLS is verified correct (manager is in teams_admin_insert),
-  // so this needs live-browser debugging of the createTeam form-submit path, not a
-  // spec tweak. Skipped to keep the suite green until then.
-  test.skip("manager: team create, add member, remove member, delete", async ({ page }) => {
+  // Was skipped: createTeam inserts the team (org-role gated, fine) then
+  // auto-adds the creator as an admin member — and team_members had a
+  // self-referential RLS cycle (team_members_admin_insert's inline
+  // `EXISTS (SELECT … FROM team_members …)`) that Postgres rejected with 42P17
+  // ("infinite recursion detected in policy for relation team_members"). The
+  // action swallowed that raw PostgrestError as a generic "Failed to create
+  // team" and never redirected. Migration 20260715120000 routes the check
+  // through the SECURITY DEFINER helper private.is_team_admin(), breaking the
+  // cycle — the create now redirects to the detail as intended.
+  test("manager: team create, add member, remove member, delete", async ({ page }) => {
     await authedSetup(page, "manager");
     const s = stamp();
     const teamName = `E2E Team ${s}`;
@@ -228,7 +238,10 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     await page.goto("/studio/people/teams");
     await page.locator('main [name="slug"]').first().fill(`e2e-team-${s}`);
     await page.locator('main [name="name"]').first().fill(teamName);
-    await page.locator("main form").first().evaluate((f: HTMLFormElement) => f.requestSubmit());
+    await page
+      .locator("main form")
+      .first()
+      .evaluate((f: HTMLFormElement) => f.requestSubmit());
     const onDetail = await page
       .waitForURL(new RegExp(`/studio/people/teams/${UUID.source}`), { timeout: 20000 })
       .then(() => true)
@@ -273,7 +286,10 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
       await expect(remove).toBeVisible({ timeout: 8000 });
     }).toPass({ timeout: 120000 });
     await remove.click();
-    await page.getByRole("dialog").getByRole("button", { name: /^remove$/i }).click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: /^remove$/i })
+      .click();
     await expect(page.getByRole("dialog")).toHaveCount(0, { timeout: 15000 });
 
     // Delete the team — deleteTeamAction (via DeleteForm's direct action call)
@@ -281,7 +297,10 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     // class of behavior as the create above), fall back to a materialized-state
     // check: reload the list and assert the deleted team's row is gone.
     await page.getByRole("button", { name: /^delete team$/i }).click();
-    await page.getByRole("dialog").getByRole("button", { name: /^delete team$/i }).click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: /^delete team$/i })
+      .click();
     const backOnList = await page
       .waitForURL(/\/studio\/people\/teams$/, { timeout: 30000 })
       .then(() => true)
@@ -325,10 +344,17 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     await row.getByRole("button", { name: /^revoke$/i }).click();
     // The revoke confirm is a ConfirmDialog, which renders role="alertdialog"
     // (NOT "dialog") — scope the confirm button to the alertdialog.
-    await page.getByRole("alertdialog").getByRole("button", { name: /^revoke$/i }).click();
+    await page
+      .getByRole("alertdialog")
+      .getByRole("button", { name: /^revoke$/i })
+      .click();
     // The invite moves out of Pending into history with a Revoked state.
     await expect(
-      page.locator("tr").filter({ hasText: email }).filter({ hasText: /revoked/i }).first(),
+      page
+        .locator("tr")
+        .filter({ hasText: email })
+        .filter({ hasText: /revoked/i })
+        .first(),
     ).toBeVisible({ timeout: 30000 });
   });
 
@@ -359,7 +385,10 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     await expect(page.getByText(note).first()).toBeVisible({ timeout: 30000 });
 
     await page.getByRole("button", { name: /^delete$/i }).click();
-    await page.getByRole("dialog").getByRole("button", { name: /^delete$/i }).click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: /^delete$/i })
+      .click();
     await expect(page).toHaveURL(/\/studio\/workforce\/badges$/, { timeout: 90000 });
   });
 
@@ -404,9 +433,7 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     const PHASE = /not_started|in_progress|completed|abandoned/i;
     const beforeCount = await page.getByText(PHASE).count();
     await page.getByRole("button", { name: /\+ assign/i }).click();
-    await expect
-      .poll(async () => page.getByText(PHASE).count(), { timeout: 30000 })
-      .toBeGreaterThan(beforeCount);
+    await expect.poll(async () => page.getByText(PHASE).count(), { timeout: 30000 }).toBeGreaterThan(beforeCount);
   });
 
   // MEDIUM — the manager+ gate on createFlowAction: a member gets "Only
@@ -431,12 +458,18 @@ test.describe("ATLVS People & Workforce — behavioral coverage", () => {
     await expect(page).toHaveURL(/\/edit$/, { timeout: 30000 });
     const edited = `E2E Roster Edited ${stamp()}`;
     await page.locator('main [name="name"]').first().fill(edited);
-    await page.locator("main form").first().evaluate((f: HTMLFormElement) => f.requestSubmit());
+    await page
+      .locator("main form")
+      .first()
+      .evaluate((f: HTMLFormElement) => f.requestSubmit());
     await expect(page).toHaveURL(new RegExp(`/studio/workforce/rosters/${UUID.source}$`), { timeout: 90000 });
     await expect(page.getByText(edited).first()).toBeVisible({ timeout: 15000 });
 
     await page.getByRole("button", { name: /^delete$/i }).click();
-    await page.getByRole("dialog").getByRole("button", { name: /^delete$/i }).click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: /^delete$/i })
+      .click();
     await expect(page).toHaveURL(/\/studio\/workforce\/rosters$/, { timeout: 90000 });
   });
 });

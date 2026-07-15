@@ -136,12 +136,13 @@ test.describe("ATLVS Production & Assets — behavioral coverage", () => {
   // `admin`: asset_maintenance_history insert is org-member-gated, but
   // asset_depreciation_schedule insert is `is_org_admin` (owner/admin only) —
   // a bare `manager` role is RLS-denied on the depreciation write.
-  // DEFERRED (task_ tracked): the maintenance/depreciation sub-record inserts
-  // never surface on the detail even under reload-retry — RLS verified correct
-  // (admin is org-member + is_org_admin in every test org), so this needs live-
-  // browser debugging of the addMaintenance/addDepreciation form-submit path (the
-  // mutateAndReload interaction), not a spec tweak. Skipped to keep the suite green.
-  test.skip("admin: log maintenance and add depreciation on an asset", async ({ page }) => {
+  // Was skipped: the maintenance `outcome` field rendered as a free-text Input,
+  // but asset_maintenance_history.outcome carries a CHECK constraint
+  // (completed|failed|deferred). Any descriptive value hard-failed with a raw
+  // check-constraint violation, so the insert never surfaced. `outcome` is now a
+  // select of the three allowed results and the free-text detail lives in
+  // `notes` (which is what we stamp + assert on here).
+  test("admin: log maintenance and add depreciation on an asset", async ({ page }) => {
     await authedSetup(page, "admin");
     // Depreciation insert is is_org_admin-gated (owner/admin) — pin to the org
     // where test+admin is a real admin so the write isn't RLS-denied.
@@ -149,17 +150,19 @@ test.describe("ATLVS Production & Assets — behavioral coverage", () => {
     await createInModule(page, "/studio/assets/new", { display_name: `E2E Asset ${stamp()}` });
     await expect(page).toHaveURL(new RegExp(`/studio/assets/${UUID.source}`), { timeout: 90000 });
 
-    // Maintenance (performed_at + outcome required).
-    const outcome = `E2E Maint ${stamp()}`;
+    // Maintenance: performed_at + outcome (enum select) required; the stamped
+    // free-text detail goes in `notes` (that's the assertion handle).
+    const note = `E2E Maint ${stamp()}`;
     await page.locator('main [name="performed_at"]').fill("2030-02-02");
-    await page.locator('main [name="outcome"]').fill(outcome);
+    await page.locator('main select[name="outcome"]').selectOption("completed");
+    await page.locator('main [name="notes"]').fill(note);
     await mutateAndReload(page, () => page.getByRole("button", { name: /log maintenance/i }).click());
     // Read-after-write race on a serverless prod target: the maintenance-table
     // re-render can lag the insert past the mutateAndReload settle. Reload-retry
-    // until the stamped outcome materialises.
+    // until the stamped note materialises.
     await expect(async () => {
       await page.reload();
-      await expect(page.getByText(outcome)).toBeVisible({ timeout: 8000 });
+      await expect(page.getByText(note)).toBeVisible({ timeout: 8000 });
     }).toPass({ timeout: 120000 });
 
     // Depreciation (useful_life_months + start_at required; method defaults).
@@ -233,11 +236,14 @@ test.describe("ATLVS Production & Assets — behavioral coverage", () => {
   // as `admin`: the cues insert/update policies are
   // has_org_role(owner/admin/controller/collaborator/crew) — the `manager` role
   // is not in that write band, so a manager cue insert is RLS-denied.
-  // DEFERRED (task_ tracked): the createCue insert + per-row state advances never
-  // surface even under reload-retry — RLS verified correct (admin is in the
-  // cues has_org_role band), so this needs live-browser debugging of the add-cue
-  // form-submit path, not a spec tweak. Skipped to keep the suite green.
-  test.skip("admin: author a run-of-show cue and advance its state", async ({ page }) => {
+  // Was skipped: the per-row transition buttons (Standby/GO/Done/…) disabled
+  // themselves inside their own onClick (`disabled={pendingTo !== null}` +
+  // `onClick={() => setPendingTo(b.to)}`) — disabling a submit control in the
+  // same click aborts the native form submission, so the setCueStatus POST never
+  // fired and the state never advanced (createCue itself was fine). The button
+  // now derives pending from useFormStatus (flips true only after dispatch), so
+  // the transitions submit as intended.
+  test("admin: author a run-of-show cue and advance its state", async ({ page }) => {
     await authedSetup(page, "admin");
     // cue insert/update is has_org_role(owner/admin/controller/collaborator/crew)
     // — `manager` is NOT in the band. Pin to the org where test+admin is a real

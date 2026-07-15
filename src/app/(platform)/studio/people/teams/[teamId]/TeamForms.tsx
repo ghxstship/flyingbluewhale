@@ -29,7 +29,7 @@ import {
  * `(state, fd) => Promise<State>` — what `useActionState` + `FormShell` expect.
  */
 
-function EditTeam({
+export function EditTeam({
   teamId,
   defaultName,
   defaultDescription,
@@ -59,7 +59,7 @@ function EditTeam({
   );
 }
 
-function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: string; label: string }[] }) {
+export function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: string; label: string }[] }) {
   const t = useT();
   const bound = addMemberAction.bind(null, teamId);
   return (
@@ -90,7 +90,7 @@ function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: strin
   );
 }
 
-function UpdateMemberRole({
+export function UpdateMemberRole({
   teamId,
   userId,
   defaultRole,
@@ -124,7 +124,7 @@ function UpdateMemberRole({
   );
 }
 
-function RemoveMember({ teamId, userId }: { teamId: string; userId: string }) {
+export function RemoveMember({ teamId, userId }: { teamId: string; userId: string }) {
   const t = useT();
   // CN-9 — accessible confirm dialog replaces native confirm(). Inline
   // Dialog rather than DeleteForm so the trigger keeps its ghost variant.
@@ -167,7 +167,7 @@ function RemoveMember({ teamId, userId }: { teamId: string; userId: string }) {
   );
 }
 
-function DeleteTeam({ teamId }: { teamId: string }) {
+export function DeleteTeam({ teamId }: { teamId: string }) {
   const t = useT();
   // CN-9 — DeleteForm provides the accessible confirm dialog; the bound
   // action revalidates + redirects server-side (legacy contract, no undo).
@@ -185,10 +185,9 @@ function DeleteTeam({ teamId }: { teamId: string }) {
   );
 }
 
-export const TeamForms = {
-  EditTeam,
-  AddMember,
-  UpdateMemberRole,
-  RemoveMember,
-  DeleteTeam,
-};
+// NOTE: each form is exported as a top-level NAMED export above — NOT bundled
+// into a `TeamForms` object. A Server Component importing a "use client" module
+// only receives client references for the module's own exports; a nested
+// component reached via `Obj.Component` is NOT a client reference and resolves
+// to `undefined` on the client (React "Element type is invalid"). Import the
+// named components directly instead.

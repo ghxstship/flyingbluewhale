@@ -158,44 +158,44 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           isManagerPlus(session) ? (
-          <div className="flex flex-wrap items-center gap-1">
-            {canCheckOut && (
-              <RecordActionButton
-                action={checkOutAsset.bind(null, asset.id)}
-                label={t("console.assets.detail.checkOut", undefined, "Check Out")}
-                pendingLabel={t("console.assets.detail.checkOutPending", undefined, "Checking Out…")}
-              />
-            )}
-            {canCheckIn && (
-              <RecordActionButton
-                action={checkInAsset.bind(null, asset.id)}
-                label={t("console.assets.detail.checkIn", undefined, "Check In")}
-                pendingLabel={t("console.assets.detail.checkInPending", undefined, "Checking In…")}
-              />
-            )}
-            {transitions.map((to) => (
-              <form key={to} action={setAssetState} className="inline">
-                <input type="hidden" name="id" value={asset.id} />
-                <input type="hidden" name="state" value={to} />
-                <button
-                  type="submit"
-                  className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
-                    to === "retired" || to === "lost"
-                      ? "text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
-                      : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
-                  }`}
-                >
-                  {t("console.assets.detail.markState", { state: toTitle(to) }, `Mark ${toTitle(to)}`)}
-                </button>
-              </form>
-            ))}
-            <a href={`/studio/assets/${asset.id}/qr`} className="ps-btn ps-btn--ghost ps-btn--sm">
-              {t("console.assets.detail.qr", undefined, "QR")}
-            </a>
-            <a href={`/studio/assets/${asset.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
-              {t("common.edit", undefined, "Edit")}
-            </a>
-          </div>
+            <div className="flex flex-wrap items-center gap-1">
+              {canCheckOut && (
+                <RecordActionButton
+                  action={checkOutAsset.bind(null, asset.id)}
+                  label={t("console.assets.detail.checkOut", undefined, "Check Out")}
+                  pendingLabel={t("console.assets.detail.checkOutPending", undefined, "Checking Out…")}
+                />
+              )}
+              {canCheckIn && (
+                <RecordActionButton
+                  action={checkInAsset.bind(null, asset.id)}
+                  label={t("console.assets.detail.checkIn", undefined, "Check In")}
+                  pendingLabel={t("console.assets.detail.checkInPending", undefined, "Checking In…")}
+                />
+              )}
+              {transitions.map((to) => (
+                <form key={to} action={setAssetState} className="inline">
+                  <input type="hidden" name="id" value={asset.id} />
+                  <input type="hidden" name="state" value={to} />
+                  <button
+                    type="submit"
+                    className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
+                      to === "retired" || to === "lost"
+                        ? "text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
+                        : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
+                    }`}
+                  >
+                    {t("console.assets.detail.markState", { state: toTitle(to) }, `Mark ${toTitle(to)}`)}
+                  </button>
+                </form>
+              ))}
+              <a href={`/studio/assets/${asset.id}/qr`} className="ps-btn ps-btn--ghost ps-btn--sm">
+                {t("console.assets.detail.qr", undefined, "QR")}
+              </a>
+              <a href={`/studio/assets/${asset.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
+                {t("common.edit", undefined, "Edit")}
+              </a>
+            </div>
           ) : undefined
         }
       />
@@ -440,18 +440,31 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 min="0"
               />
             </div>
-            <Input
-              label={t("console.assets.detail.maint.outcome", undefined, "Outcome")}
-              name="outcome"
-              required
-              maxLength={200}
-              placeholder="Replaced capsule; passed bench test"
-            />
+            <div>
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.assets.detail.maint.outcome", undefined, "Outcome")}
+              </label>
+              <select name="outcome" required className="ps-input mt-1.5 w-full" defaultValue="completed">
+                <option value="completed">
+                  {t("console.assets.detail.maint.outcomeCompleted", undefined, "Completed")}
+                </option>
+                <option value="failed">{t("console.assets.detail.maint.outcomeFailed", undefined, "Failed")}</option>
+                <option value="deferred">
+                  {t("console.assets.detail.maint.outcomeDeferred", undefined, "Deferred")}
+                </option>
+              </select>
+            </div>
             <div>
               <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.detail.maint.notes", undefined, "Notes")}
               </label>
-              <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+              <textarea
+                name="notes"
+                rows={3}
+                maxLength={2000}
+                className="ps-input mt-1.5 w-full"
+                placeholder="Replaced capsule; passed bench test"
+              />
             </div>
           </FormShell>
         </section>

@@ -9,7 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
-import { TeamForms } from "./TeamForms";
+import { AddMember, DeleteTeam, EditTeam, RemoveMember, UpdateMemberRole } from "./TeamForms";
 
 export const dynamic = "force-dynamic";
 
@@ -88,11 +88,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
               {t("console.people.teams.detail.editTeamHintSuffix", undefined, " handle.")}
             </p>
             <div className="mt-4">
-              <TeamForms.EditTeam
-                teamId={team.id}
-                defaultName={team.name}
-                defaultDescription={team.description ?? ""}
-              />
+              <EditTeam teamId={team.id} defaultName={team.name} defaultDescription={team.description ?? ""} />
             </div>
           </section>
         )}
@@ -142,7 +138,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
                     </td>
                     <td>
                       {canManage ? (
-                        <TeamForms.UpdateMemberRole teamId={team.id} userId={m.userId} defaultRole={m.role} />
+                        <UpdateMemberRole teamId={team.id} userId={m.userId} defaultRole={m.role} />
                       ) : (
                         <Badge variant={m.role === "admin" ? "brand" : "muted"}>{m.role}</Badge>
                       )}
@@ -150,7 +146,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
                     <td className="font-mono text-xs text-[var(--p-text-2)]">{timeAgo(m.addedAt)}</td>
                     {canManage && (
                       <td className="text-right">
-                        <TeamForms.RemoveMember teamId={team.id} userId={m.userId} />
+                        <RemoveMember teamId={team.id} userId={m.userId} />
                       </td>
                     )}
                   </tr>
@@ -173,7 +169,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
               )}
             </p>
             <div className="mt-4">
-              <TeamForms.AddMember teamId={team.id} eligible={eligibleToAdd} />
+              <AddMember teamId={team.id} eligible={eligibleToAdd} />
             </div>
           </section>
         )}
@@ -191,7 +187,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
               )}
             </p>
             <div className="mt-4">
-              <TeamForms.DeleteTeam teamId={team.id} />
+              <DeleteTeam teamId={team.id} />
             </div>
           </section>
         )}

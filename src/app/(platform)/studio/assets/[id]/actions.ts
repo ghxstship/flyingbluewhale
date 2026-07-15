@@ -59,10 +59,15 @@ export async function addDepreciation(_: State, fd: FormData): Promise<State> {
   return { ok: true };
 }
 
+// `outcome` is a constrained result on asset_maintenance_history
+// (CHECK completed|failed|deferred) — NOT a free-text description. The
+// human-readable detail ("Replaced capsule; passed bench test") belongs in
+// `notes`. Validate the enum here so a bad value fails as a field error
+// instead of a raw DB check-constraint violation.
 const MaintenanceSchema = z.object({
   asset_id: z.string().uuid(),
   performed_at: z.string().min(1),
-  outcome: z.string().min(1).max(200),
+  outcome: z.enum(["completed", "failed", "deferred"]),
   cost_usd: z.string().optional().or(z.literal("")),
   notes: z.string().max(2000).optional().or(z.literal("")),
 });

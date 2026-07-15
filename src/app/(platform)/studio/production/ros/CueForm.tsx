@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
@@ -82,10 +82,34 @@ const NEXT_STATUS: Record<Cue["cue_state"], { to: Cue["cue_state"]; label: strin
   skipped: [{ to: "pending", label: "Reopen" }],
 };
 
+/**
+ * Submit button that reflects its OWN form's pending state via useFormStatus.
+ * Crucially, `pending` flips true only AFTER React begins dispatching the form
+ * action — so disabling the button here never cancels the in-flight submit.
+ * (The previous pattern set a `disabled`-driving state inside the button's own
+ * onClick, which disabled the submit control in the same click and silently
+ * aborted the server-action POST — the cue transition never fired.)
+ */
+function CueTransitionButton({ label, live }: { label: string; live: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={`rounded px-2 py-0.5 text-[11px] font-medium transition-colors disabled:opacity-60 ${
+        live
+          ? "bg-[var(--p-success)] text-white hover:bg-[color-mix(in_srgb,var(--p-success)_85%,black)]"
+          : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
+      }`}
+    >
+      {pending ? "…" : label}
+    </button>
+  );
+}
+
 export function CueRow({ cue }: { cue: Cue }) {
   const t = useT();
   const fmt = useFormatters();
-  const [pendingTo, setPendingTo] = React.useState<string | null>(null);
   const buttons = NEXT_STATUS[cue.cue_state] ?? [];
   return (
     <tr>
@@ -112,18 +136,10 @@ export function CueRow({ cue }: { cue: Cue }) {
             <form key={b.to} action={setCueStatus} className="inline">
               <input type="hidden" name="id" value={cue.id} />
               <input type="hidden" name="cue_state" value={b.to} />
-              <button
-                type="submit"
-                disabled={pendingTo !== null}
-                onClick={() => setPendingTo(b.to)}
-                className={`rounded px-2 py-0.5 text-[11px] font-medium transition-colors ${
-                  b.to === "live"
-                    ? "bg-[var(--p-success)] text-white hover:bg-[color-mix(in_srgb,var(--p-success)_85%,black)]"
-                    : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
-                }`}
-              >
-                {pendingTo === b.to ? "…" : t(`console.production.ros.cueForm.action.${b.to}`, undefined, b.label)}
-              </button>
+              <CueTransitionButton
+                live={b.to === "live"}
+                label={t(`console.production.ros.cueForm.action.${b.to}`, undefined, b.label)}
+              />
             </form>
           ))}
           <form action={deleteCue} className="inline">

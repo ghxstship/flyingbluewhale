@@ -1,0 +1,14 @@
+-- C3: the zone <-> shift link — Phase 7a of
+-- docs/compvss/TIME_MANAGEMENT_LIFECYCLE_PLAN.md.
+--
+-- Zones carry `project_id`; shifts carry `venue_id` ("shifts.venue_id maps
+-- to a venue, not a project" — /api/v1/shifts/checkin). So there was no way
+-- to ask "does this worker have a shift AT this zone", which is the gate
+-- every arrival nudge depends on: without it a reminder fires for every
+-- worker near any zone regardless of whether they work there, which is how
+-- a helpful nudge becomes noise people turn off.
+--
+-- Bridging on venue_id rather than project_id is the smaller change and
+-- matches how shifts actually resolve location.
+--
+-- Applied to the live DB as migration `zone_venue_link`.

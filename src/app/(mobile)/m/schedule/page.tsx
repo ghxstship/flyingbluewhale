@@ -7,6 +7,8 @@ import { toTitle } from "@/lib/format";
 import type { EventRow } from "@/lib/supabase/types";
 import { ScheduleView, type SchedEvent } from "./ScheduleView";
 import { MyShifts, type MyShift } from "./MyShifts";
+import { ShiftReminderScheduler } from "@/components/mobile/ShiftReminderScheduler";
+import type { ShiftReminder } from "@/lib/native/shift-reminders";
 
 export const dynamic = "force-dynamic";
 
@@ -47,20 +49,22 @@ export default async function MobileSchedulePage() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
-  // The viewer's OWN shifts. `/m/schedule` previously listed org-wide
-  // `events` with no user predicate and called every row a shift, so the
-  // field app could not tell a crew member when or where they work — the
-  // one question the device in their pocket exists to answer. `shifts` is
-  // keyed by workforce_member, so resolve the caller's membership first.
-  const { data: wfm } = await supabase
-    .from("workforce_members")
+  // The viewer's OWN shifts, resolved through `crew_members` — the person SSOT.
+  //
+  // This used to resolve through `workforce_members`, which is why the surface
+  // was empty for EVERY user: nothing ever set `workforce_members.user_id`
+  // (0 of 105 rows). `crew_members.user_id` is populated by /me/crew and, since
+  // ADR-0015, by the invite-accept claim — so this lookup can actually succeed.
+  const { data: crew } = await supabase
+    .from("crew_members")
     .select("id")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
     .maybeSingle();
 
   let myShifts: MyShift[] = [];
-  if (wfm?.id) {
+  let reminders: ShiftReminder[] = [];
+  if (crew?.id) {
     const now = new Date();
     const from = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
     const to = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7).toISOString();
@@ -68,13 +72,22 @@ export default async function MobileSchedulePage() {
       .from("shifts")
       .select("id, starts_at, ends_at, attendance, role, venue:venue_id(name)")
       .eq("org_id", session.orgId)
-      .eq("workforce_member_id", wfm.id)
+      .eq("crew_member_id", crew.id)
       .gte("starts_at", from)
       .lt("starts_at", to)
       .order("starts_at", { ascending: true });
 
     const todayKey = now.toDateString();
     const tomorrowKey = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).toDateString();
+    // The OS fires local notifications with the app closed, so opening the
+    // schedule is the moment to hand it the list. Time-based reminders, not
+    // arrival detection — see src/lib/native/shift-reminders.ts.
+    reminders = (shiftRows ?? []).map((s) => ({
+      shiftId: s.id as string,
+      startsAt: s.starts_at as string,
+      endsAt: (s.ends_at as string | null) ?? null,
+      venueName: (s.venue as { name: string | null } | null)?.name ?? null,
+    }));
     myShifts = (shiftRows ?? []).map((s) => {
       const start = new Date(s.starts_at as string);
       const key = start.toDateString();
@@ -149,6 +162,9 @@ export default async function MobileSchedulePage() {
 
   return (
     <div className="screen screen-anim">
+      {/* Renders nothing — hands the OS the reminder schedule so it can fire
+          with the app closed. */}
+      <ShiftReminderScheduler shifts={reminders} />
       <div className="scr-eye">
         {todayCount === 1
           ? t("m.schedule.eyebrowOne", undefined, "Today · 1 Shift")

@@ -27,6 +27,14 @@ Status: **Phases 0-5 landed — every phase engineering can close. 6 and 7c are 
 
 Phases 6 and 7c cannot be closed by writing code. Anyone reading this as "80% done, two phases left" has the wrong picture: what remains is one buildable driver and two dependencies on other organisations.
 
+### The defect I reproduced
+
+Phase 3 shipped `compile_timesheets` and `post_timesheet` as real, tested, applied RPCs — **and nothing called them**. The spine was continuous in the database and unreachable from the app: nothing created a timesheet, nothing wrote a `payroll_run_line`, and the Phase 5 export would have exported an empty table. That is §0's hollow middle exactly, one layer up, written by the same hand that wrote §0.
+
+Closed in `f85d499b` (compile/post/pay-period routes, plan item 4's manager edit, the `ot_rule_set` the settings loader never returned, and a `payroll:read` that meant one thing in RLS and another in the route). `e2e/time-lifecycle-spine.spec.ts` now walks punch → compile → submit → approve → post → export as a chain, because every other spec tests a link, and links that each work while joined to nothing is the failure mode this whole plan exists to fix.
+
+**The lesson worth keeping:** "the migration applied and the tests pass" is not evidence the feature exists. Grep for a caller.
+
 ### Carried forward from building this
 
 - `payroll_run_lines` was never empty — it holds 6 demo rows seeded 2026-06-24. The accurate statement is that **no application code wrote it** until `post_timesheet`; the exporters were rendering seed data.

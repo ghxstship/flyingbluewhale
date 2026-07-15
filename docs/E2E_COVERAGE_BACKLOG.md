@@ -33,6 +33,30 @@ coarse persona (Crew / Vendors / Talent), not per-role routes.
 **Blocked on:** the COMPVSS rewrite settling. Re-check `/m` route reality
 before authoring — do not trust this doc's route list.
 
+**What "the rewrite" actually is (added 2026-07-15, by the time-lifecycle
+session).** "Parallel sessions" was doing a lot of work in that sentence, and
+whoever picks this up can't tell when it's unblocked. Concretely, the churn is
+the *mobile self-sufficiency parity* effort: `/m/wallet` → `/m/pass`, `/m/gigs`
+→ `/m/jobs`, `/m/directory/companies` → `/m/companies`, `m/onsite` deleted
+(moved to `/p/onsite`), plus new `/m/my-work` and `/m/settings/team`. That is
+what has to settle. It is **not** the time-lifecycle work, which was additive
+and is done.
+
+**Not blocked, author against these now:** `/m/clock` and `/m/schedule` are
+outside the rename set and are stable. They already have live coverage —
+`e2e/time-geofence-policy.spec.ts`, `e2e/time-corrections.spec.ts`,
+`e2e/time-lifecycle-spine.spec.ts` — so check those before writing anything
+overlapping. Two gotchas they encode, both of which read as flakes if you
+rediscover them the hard way:
+
+- The seeded owner carries **3 open `time_entries`** from the base fixture and
+  `clock_out` closes only the newest, so a single-shot cleanup leaves the user
+  "already clocked in" and every subsequent `clock_in` 409s. Drain in a loop
+  until the API says nothing is open.
+- First-hit Turbopack compiles of a new route take 25-45s. Attempt 1 fails,
+  the retry passes in ~5s. That is the documented cold-compile, not a real
+  flake — `playwright.config.ts` already carries retries for it.
+
 ## 2. SCIM deprovision
 
 **Investigated 2026-07-15 — the security hypothesis was REFUTED, don't re-raise it.**

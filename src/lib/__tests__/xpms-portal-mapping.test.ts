@@ -177,11 +177,13 @@ describe("ADR-0005 super-persona collapse", () => {
       const group = portalNav("demo", p);
       expect(group.label).toBe(SUPER_PERSONA_LABEL[superPersonaOf(p)]);
       expect(group.sections).toBeDefined();
-      // ADR-0008 Move 3: vendor (14 items) splits its persona section
-      // into Engagement + Operations to stay inside Miller's 9-item
-      // ceiling — 3 sections total. Every other persona keeps the
-      // single persona section — 2 sections total.
-      expect(group.sections).toHaveLength(p === "vendor" ? 3 : 2);
+      // ADR-0008 Move 3 + Amendment 6: both Workforce-parity personas split
+      // their persona section into Engagement + Operations to stay inside
+      // Miller's ceiling — 3 sections total. Vendor split first at 14 items;
+      // crew joined it at 12 via the data-driven SPLITS map. Every other
+      // persona keeps the single persona section — 2 sections total. Section
+      // sizes themselves are guarded by portal-rail-canon.test.ts.
+      expect(group.sections).toHaveLength(p === "vendor" || p === "crew" ? 3 : 2);
       const [workspace, ...personaSections] = group.sections!;
       expect(workspace?.label).toBe("Workspace");
       // Workspace section is the shared set — same across every persona.

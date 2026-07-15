@@ -147,7 +147,12 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(platform)/studio/governance/approvals/policies/[policyId]/page.tsx",
   ]);
 
-  const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f));
+  // Test files are excluded: this guard is about SURFACES that render empty
+  // copy to an operator, and a spec never renders to anyone. Co-located
+  // component tests legitimately carry empty-state strings in their label
+  // fixtures (e.g. CheckInScanner.test.tsx's `recentEmpty`), which is not the
+  // hand-rolled-empty-state defect this rule exists to catch.
+  const candidates = ALL_FILES.filter((f) => /\.(ts|tsx)$/.test(f) && !/\.(test|spec)\.tsx?$/.test(f));
 
   it("files rendering canonical empty-state copy import <EmptyState>", () => {
     const offenders: string[] = [];
@@ -160,9 +165,15 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
       // hand off empty-state rendering to the receiving component, which
       // already enforces the primitive internally (DataTable, VirtualList,
       // KanbanBoard, etc.).
+      //
+      // Comment-only lines are stripped too: prose never renders, so a comment
+      // reading "nothing here ever read them" is not a hand-rolled empty state.
+      // Copy on a line with code (`const s = "No results"; // why`) still
+      // counts — only the wholly-commented line is dropped.
       const stripped = txt
         .split("\n")
         .filter((l) => !/\b(emptyLabel|emptyText|emptyMessage|emptyTitle|emptyDescription)\s*=/.test(l))
+        .filter((l) => !/^\s*(\/\/|\/\*|\*)/.test(l))
         .join("\n");
       if (!EMPTY_COPY_RE.test(stripped)) continue;
       if (!/from\s+["']@\/components\/ui\/EmptyState["']/.test(stripped)) {

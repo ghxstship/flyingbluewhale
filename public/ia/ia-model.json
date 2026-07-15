@@ -2179,6 +2179,12 @@
               ]
             },
             {
+              "path": "/p/onsite",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/p/community",
               "arch": [
                 "LIST"
@@ -2339,12 +2345,6 @@
             },
             {
               "path": "/m/tasks",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/m/onsite",
               "arch": [
                 "LIST"
               ]

@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1190 · **API route handlers:** 148 · **Distinct nav hrefs:** 522
+**Page routes:** 1191 · **API route handlers:** 148 · **Distinct nav hrefs:** 522
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 791 | 249 | 540 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 57 | 42 | 13 | 0 | 2 |
-| GVTEWAY — External Portal | portalNav rail | 152 | 130 | 19 | 0 | 3 |
+| ATLVS — Operator Console | platformNav rail | 792 | 249 | 541 | 0 | 2 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 56 | 41 | 13 | 0 | 2 |
+| GVTEWAY — External Portal | portalNav rail | 153 | 131 | 19 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1190** | **496** | **651** | **0** | **43** |
+| **TOTAL** | | **1191** | **496** | **652** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -95,7 +95,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-791 routes — ● 249 nav · ○ 540 linked · ⚠ 0 orphan
+792 routes — ● 249 nav · ○ 541 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -397,7 +397,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>finance</code> · 65 routes</summary>
+<details><summary><code>finance</code> · 66 routes</summary>
 
 ○ `/studio/finance`
 ● `/studio/finance/accounts`
@@ -446,6 +446,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/finance/pay-apps/new`
 ● `/studio/finance/payouts`
 ● `/studio/finance/payroll`
+○ `/studio/finance/payroll/[runId]`
 ○ `/studio/finance/payroll/new`
 ● `/studio/finance/periods`
 ○ `/studio/finance/periods/[periodId]`
@@ -1350,7 +1351,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-57 routes — ● 42 nav · ○ 13 linked · ⚠ 0 orphan
+56 routes — ● 41 nav · ○ 13 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1528,12 +1529,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>onsite</code> · 1 route</summary>
-
-● `/m/onsite`
-
-</details>
-
 <details><summary><code>profile</code> · 1 route</summary>
 
 ● `/m/profile`
@@ -1606,7 +1601,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — External Portal (`/p/[slug]`)
 
-152 routes — ● 130 nav · ○ 19 linked · ⚠ 0 orphan
+153 routes — ● 131 nav · ○ 19 linked · ⚠ 0 orphan
 
 <details><summary><code>[slug]</code> · 2 routes</summary>
 
@@ -1899,11 +1894,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>·root</code> · 6 routes</summary>
+<details><summary><code>·root</code> · 7 routes</summary>
 
 · `/p`
 · `/p/[slug]`
 ● `/p/lists`
+● `/p/onsite`
 ● `/p/saved`
 ● `/p/scenes`
 · `/p/select`

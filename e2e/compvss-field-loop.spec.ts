@@ -107,3 +107,35 @@ test.describe("COMPVSS daily field loop", () => {
     await expect(page.locator('img[alt="evidence.png"]')).toBeVisible();
   });
 });
+
+test.describe("COMPVSS daily log", () => {
+  test.beforeEach(async ({ page }) => {
+    await authedSetup(page, "crew");
+  });
+
+  test("G9 · a draft log can be submitted from the field", async ({ page }) => {
+    await page.goto("/m/daily-log/new");
+    await expectNoError(page);
+
+    // The form is a native multipart form, so the photo field must be a
+    // real input — the site diary is the one artifact the phone should be
+    // best at.
+    await expect(page.locator('input[type="file"][name="photo"]')).toHaveCount(1);
+
+    const notes = `E2E daily log ${Date.now()}`;
+    await page.locator('textarea[name="notes"]').fill(notes);
+    await page.getByRole("button", { name: /save log/i }).click();
+
+    await expect(page).toHaveURL(/\/m\/daily-log$/, { timeout: 15_000 });
+
+    // A draft must offer Submit — that path did not exist on mobile at all,
+    // so a log authored on site had to wait for a desktop.
+    const submit = page.getByRole("button", { name: /^submit$/i }).first();
+    await expect(submit).toBeVisible();
+    await submit.click();
+
+    // The row leaves draft. Approval is the console's step, so the field
+    // must NOT be offered it.
+    await expect(page.getByText("submitted").first()).toBeVisible({ timeout: 15_000 });
+  });
+});

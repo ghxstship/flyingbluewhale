@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { transitionDailyLogState } from "@/lib/db/daily-log";
 import { log } from "@/lib/log";
 import { DAILY_LOG_SECTIONS } from "./sections";
 
@@ -24,55 +25,15 @@ function safePhotoFilename(name: string): string {
   return cleaned || "photo";
 }
 
-type DailyLogStatus = "draft" | "submitted" | "approved";
 
 // Daily-log FSM: draft → submitted → approved. Approved is terminal —
-// double-approving would clobber the original approver attribution +
-// timestamp.
-const DAILY_LOG_TRANSITIONS: Record<DailyLogStatus, readonly DailyLogStatus[]> = {
-  draft: ["submitted"],
-  submitted: ["approved"],
-  approved: [],
-};
-
 export async function transitionDailyLog(id: string, to: "submitted" | "approved"): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-
-  const { data: row } = await supabase
-    .from("daily_logs")
-    .select("log_state")
-    .eq("org_id", session.orgId)
-    .eq("id", id)
-    .maybeSingle();
-  if (!row) throw new Error("Daily log not found");
-  const current = (row as { log_state: DailyLogStatus }).log_state;
-  const allowed = DAILY_LOG_TRANSITIONS[current] ?? [];
-  if (!allowed.includes(to)) {
-    throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
-  }
-
-  const now = new Date().toISOString();
-  const patch: Record<string, unknown> = { log_state: to };
-  if (to === "submitted") {
-    patch.submitted_by = session.userId;
-    patch.submitted_at = now;
-  }
-  if (to === "approved") {
-    patch.approved_by = session.userId;
-    patch.approved_at = now;
-  }
-  const { data: updated, error } = await supabase
-    .from("daily_logs")
-    .update(patch as never)
-    .eq("org_id", session.orgId)
-    .eq("id", id)
-    .eq("log_state", current as "draft")
-    .select("id");
-  if (error) throw new Error(error.message);
-  if (!updated || updated.length === 0) {
-    throw new Error("Daily log status changed concurrently. Refresh and retry");
-  }
+  // FSM + CAS guard live in the shared decider so COMPVSS can't fork them
+  // (it already had: the field could only ever write `draft`).
+  const result = await transitionDailyLogState(supabase, session, id, to);
+  if (!result.ok) throw new Error(result.error);
   revalidatePath(`/studio/operations/daily-log/${id}`);
   revalidatePath("/studio/operations/daily-log");
 }

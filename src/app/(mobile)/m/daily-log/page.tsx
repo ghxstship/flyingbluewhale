@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SubmitLogButton } from "./SubmitLogButton";
 import { NotebookPen } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -80,6 +81,11 @@ export default async function DailyLogPage() {
               <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
                 {r.log_state ?? "—"}
               </span>
+              {/* Only a draft is the field's to move. submitted → approved
+                  is the console's step, per the shared FSM. */}
+              {r.log_state === "draft" && (
+                <SubmitLogButton id={r.id} label={t("m.dailyLog.submit", undefined, "Submit")} />
+              )}
             </div>
           );
         })

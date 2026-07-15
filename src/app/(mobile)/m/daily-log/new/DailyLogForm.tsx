@@ -45,8 +45,44 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
   function onSubmit(fd: FormData) {
     if (pending) return;
     setError(null);
+
+    // Photos can't ride the offline queue: it's a localStorage FIFO of JSON
+    // records, and the payload builder below does `String(v)` — which turns
+    // a File into the literal "[object File]". Queueing a log with photos
+    // would therefore silently discard exactly the evidence the crew member
+    // stopped to capture. Until the queue is blob-capable (audit S5/G36),
+    // a log WITH photos takes the direct path and says so when offline; a
+    // log without them queues as before. Never pretend a photo was saved.
+    const photos = fd.getAll("photo").filter((f): f is File => f instanceof File && f.size > 0);
+
+    if (photos.length > 0) {
+      if (!online) {
+        setError(
+          "You're offline and this log has photos. Photos can't be saved offline yet — remove them to save the log now, or submit when you're back on signal.",
+        );
+        return;
+      }
+      startTransition(async () => {
+        const res = await saveDailyLog(null, fd);
+        if (res?.error) {
+          setError(res.error);
+          return;
+        }
+        if (res?.warning) {
+          setError(res.warning);
+          return;
+        }
+        router.push("/m/daily-log");
+        router.refresh();
+      });
+      return;
+    }
+
     const payload: Record<string, string> = {};
-    for (const [k, v] of fd.entries()) payload[k] = String(v);
+    for (const [k, v] of fd.entries()) {
+      if (v instanceof File) continue; // never stringify a File into the queue
+      payload[k] = String(v);
+    }
     const id = `daily-log-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     startTransition(async () => {
       const status = await queueSubmit(id, payload);
@@ -130,6 +166,23 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
               name="notes"
               placeholder={t("m.dailyLog.new.notesPh", undefined, "Headcounts, deliveries, blockers, incidents…")}
             />
+          </div>
+          <div className="fld">
+            <label htmlFor="dl-photo">{t("m.dailyLog.new.photos", undefined, "Site Photos")}</label>
+            {/* Native multipart form, so a real file input is all this needs —
+                the OS picker brings the camera. A site diary the field can
+                write but not photograph is a paragraph, not a record. */}
+            <input
+              id="dl-photo"
+              type="file"
+              name="photo"
+              accept="image/*"
+              multiple
+              style={{ paddingTop: 11, paddingBottom: 11 }}
+            />
+            <div className="hint">
+              {t("m.dailyLog.new.photosHint", undefined, "Optional. Attach what you saw.")}
+            </div>
           </div>
           {error && (
             <div className="ps-alert ps-alert--danger" style={{ marginBottom: 12 }}>

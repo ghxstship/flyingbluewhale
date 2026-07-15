@@ -4118,13 +4118,16 @@
     "notesPh": "Headcounts, deliveries, blockers, incidents…",
     "cancel": "Cancel",
     "saving": "Saving…",
-    "submit": "Save Log"
+    "submit": "Save Log",
+    "photos": "Site Photos",
+    "photosHint": "Optional. Attach what you saw."
    },
    "emptyBody": "Start the day's log with weather and notes.",
    "untitled": "Untitled Log",
    "noWeather": "No weather logged",
    "emptyTitle": "No Logs Yet",
-   "newCta": "New Log"
+   "newCta": "New Log",
+   "submit": "Submit"
   },
   "docs": {
    "download": {

@@ -33,6 +33,7 @@ export type AuditAction =
   // platform-level capabilities. Always log it.
   | "auth.role.changed"
   | "auth.member.removed"
+  | "auth.member.left"
   | "auth.member.restored"
   | "auth.invite.created"
   | "auth.invite.resent"

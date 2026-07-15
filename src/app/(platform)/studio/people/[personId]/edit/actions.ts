@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { offboardMembershipInOrg } from "@/lib/db/offboard";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { emitAudit } from "@/lib/audit";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
@@ -139,100 +140,10 @@ export async function removePerson(userId: string): Promise<void> {
     if ((ownerCount ?? 0) <= 1) return;
   }
 
-  // SOFT delete (set deleted_at) rather than hard delete. Hard delete
-  // erased the row and lost the offboard timestamp + audit_log
-  // target_id references; soft delete preserves the record while
-  // immediately revoking access (every session/api-key/calendar.ics/
-  // workspace-switch path already filters .is("deleted_at", null)).
-  const { error: updateError3, data: removed } = await supabase
-    .from("memberships")
-    .update({ deleted_at: new Date().toISOString() })
-    .eq("user_id", userId)
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .select("id")
-    .maybeSingle();
-  if (updateError3) throw new Error(`Could not update membership: ${updateError3.message}`);
-
-  // Cascade everything that survives a membership soft-delete and would
-  // either resurrect on re-invite OR keep working through alternate
-  // channels (chat, push, PATs, AM routing). The pattern is the same as
-  // the project_members fix: scope to this org's rows and hard-delete /
-  // revoke. We DON'T touch the user's other-org data — only this org's
-  // surfaces.
-  //
-  // RLS on these tables is mostly `is_org_member` or `is_org_manager_plus`
-  // gated on the row's org_id; the session client suffices for the writes.
-  if (removed) {
-    // ① project_members — re-invite would silently resurrect per-project
-    //    roles. Hard-delete keyed to projects in THIS org.
-    const { data: orgProjectIds } = await supabase.from("projects").select("id").eq("org_id", session.orgId);
-    const projectIds = ((orgProjectIds ?? []) as Array<{ id: string }>).map((p) => p.id);
-    if (projectIds.length > 0) {
-      const { error: deleteError2 } = await supabase
-        .from("project_members")
-        .delete()
-        .eq("user_id", userId)
-        .in("project_id", projectIds);
-      if (deleteError2) throw new Error(`Could not delete project member: ${deleteError2.message}`);
-    }
-
-    // ② api_keys — PATs minted by the offboarded user in this org. The
-    //    verifyApiKey membership join already rejects them while the
-    //    membership is soft-deleted, but a re-invite restores them; the
-    //    deliberate offboard intent is lost. Explicit revoke captures the
-    //    decision permanently.
-    const { error: updateError2 } = await supabase
-      .from("api_keys")
-      .update({ revoked_at: new Date().toISOString() })
-      .eq("created_by", userId)
-      .eq("org_id", session.orgId)
-      .is("revoked_at", null);
-    if (updateError2) throw new Error(`Could not update api key: ${updateError2.message}`);
-
-    // ③ account_manager_assignments — the user is either a portal_user
-    //    or a manager_user on some assignments in this org. Deactivate
-    //    (not hard-delete) so the chat_room thread history is preserved
-    //    on the chat_room_id pointer.
-    const { error: updateError } = await supabase
-      .from("account_manager_assignments")
-      .update({ active: false })
-      .eq("org_id", session.orgId)
-      .or(`portal_user_id.eq.${userId},manager_user_id.eq.${userId}`)
-      .eq("active", true);
-    if (updateError) throw new Error(`Could not update account manager assignment: ${updateError.message}`);
-
-    // ④ chat_room_members — drop the offboarded user from every chat
-    //    room owned by this org. Cross-org rooms (portal threads to
-    //    other orgs) are untouched.
-    const { data: orgRoomIds } = await supabase.from("chat_rooms").select("id").eq("org_id", session.orgId);
-    const roomIds = ((orgRoomIds ?? []) as Array<{ id: string }>).map((r) => r.id);
-    if (roomIds.length > 0) {
-      const { error: deleteError } = await supabase
-        .from("chat_room_members")
-        .delete()
-        .eq("user_id", userId)
-        .in("room_id", roomIds);
-      if (deleteError) throw new Error(`Could not delete chat room member: ${deleteError.message}`);
-    }
-
-    // ⑤ push_subscriptions — only safe to disable if the user has no
-    //    OTHER active org membership; otherwise they'd lose pushes from
-    //    their other workspaces. Check first.
-    const { data: otherMemberships } = await supabase
-      .from("memberships")
-      .select("org_id")
-      .eq("user_id", userId)
-      .is("deleted_at", null);
-    if (!otherMemberships || otherMemberships.length === 0) {
-      const { error } = await supabase
-        .from("push_subscriptions")
-        .update({ disabled_at: new Date().toISOString() })
-        .eq("user_id", userId)
-        .is("disabled_at", null);
-      if (error) throw new Error(`Could not update push subscription: ${error.message}`);
-    }
-  }
+  // Soft-delete the membership + cascade every alternate-channel surface
+  // (project roles, PATs, chat, push, AM routing), scoped to this org. Shared
+  // with the self-departure `leaveOrg` flow — see offboardMembershipInOrg.
+  const removed = await offboardMembershipInOrg(supabase, userId, session.orgId);
 
   // Explicit audit emit — offboard symmetry with /auth/resolve emitting
   // `auth.login`. Compliance reviewers want both endpoints visible.

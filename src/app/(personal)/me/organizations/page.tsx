@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { SetActiveButton } from "./SetActiveButton";
+import { LeaveOrgButton } from "./LeaveOrgButton";
 
 type Row = { id: string; role: string; orgs: { id: string; name: string; slug: string; tier: string } | null };
 
@@ -79,6 +80,7 @@ export default async function OrgsPage() {
                   {r.orgs?.tier && <Badge variant="cyan">{toTitle(r.orgs.tier)}</Badge>}
                   <Badge variant="brand">{toTitle(r.role)}</Badge>
                   {!isActive && r.orgs && <SetActiveButton orgId={r.orgs.id} orgName={r.orgs.name} />}
+                  {r.orgs && <LeaveOrgButton orgId={r.orgs.id} orgName={r.orgs.name} />}
                 </div>
               </div>
             );

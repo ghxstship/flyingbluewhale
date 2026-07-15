@@ -52,34 +52,20 @@ the bug: those are only reachable via the loose policy.
 **No other tenant's data was read at any point.** An insert probe was sufficient to
 establish the hole and the investigation stopped there.
 
-## Residue to clean up
+## Residue — CLEARED
 
-**Six metadata-only rows** remain — no file content (direct `storage.objects` inserts,
-not Storage API uploads), all under the demo org prefix
-`68672cc3-0667-4234-ad77-49325e173175/`:
+All probe rows removed 2026-07-15 and verified gone. Nothing this investigation
+created remains in storage.
 
-| bucket | name | from |
-| --- | --- | --- |
-| `incident-photos` | `…/probe-i.jpg` | discovery probe |
-| `procore-parity` | `…/probe-p.jpg` | discovery probe |
-| `receipts` | `…/probe-r.jpg` | discovery probe |
-| `incident-photos` | `…/ok-i.jpg` | fix verification |
-| `procore-parity` | `…/ok-p.jpg` | fix verification |
-| `branding` | `…/ok-b.png` | fix verification |
+`storage.protect_delete()` blocks SQL deletion by design and disabling the trigger
+needs table ownership, so SQL was the wrong tool. The right one was the Storage API,
+signed in as the SAME test user that created the objects — `storage_owner_delete`
+then applies. No service key needed and no token harvesting: the objects were the
+caller's own.
 
-Cleanup was approved but **could not be completed from here**: `storage.protect_delete()`
-blocks SQL deletion by design, and disabling the trigger needs table ownership
-(`must be owner of table objects`). They need the Storage API or a service-role script:
-
-```ts
-await svc.storage.from("incident-photos").remove(["<org>/probe-i.jpg", "<org>/ok-i.jpg"]);
-await svc.storage.from("procore-parity").remove(["<org>/probe-p.jpg", "<org>/ok-p.jpg"]);
-await svc.storage.from("receipts").remove(["<org>/probe-r.jpg"]);
-await svc.storage.from("branding").remove(["<org>/ok-b.png"]);
-```
-
-Also present and legitimate: one real 18KB `…/1784121616330-0-evidence.jpg` in
-`incident-photos` from the Phase 1 capture verification. Same cleanup applies.
+Removed: 6 metadata-only probe rows (`probe-i/p/r`, `ok-i/p/b`) across
+`incident-photos` / `procore-parity` / `receipts` / `branding`, plus the real 18KB
+`…-evidence.jpg` from the Phase 1 capture verification.
 
 ## The fix (applied)
 

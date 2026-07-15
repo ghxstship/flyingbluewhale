@@ -85,6 +85,40 @@ kit surfaces:
 Cross-shell links from `console`/`portal` into these were repointed accordingly
 (2026-06-21 dead-link sweep).
 
+## Console-only by decision — NOT gaps (2026-07-15)
+
+The self-sufficiency question is "can every role do their work on COMPVSS
+with no desktop?" (`MOBILE_PARITY_AUDIT.md`). The answer must distinguish
+two things that look identical from the outside: **a surface we haven't
+built yet**, and **a surface we deliberately won't**.
+
+Everything below is the second kind. Each is console-only on purpose, with
+the reason. An undocumented absence reads as an oversight forever and gets
+re-litigated at every audit; a documented one is a decision that can be
+revisited on evidence. **If you disagree with one of these, change it here
+first** — do not quietly build the mobile surface.
+
+| Surface | Why the field doesn't get it |
+| --- | --- |
+| Billing · subscriptions · seats | Org treasury. Nobody buys seats on a loading dock, and the blast radius of a fat-fingered plan change on a 5-inch screen in sunlight is the whole org. |
+| Chart of accounts · GL · entities · tax | Accounting structure, not field work. Editing it needs the context of a spreadsheet and a second opinion. |
+| RFQ / ITB / sourcing authoring | Composing a bid package is desk work with attachments and long-form terms. **Vendor RESPONSE is a different question** — if vendors start bidding from phones, that is a real gap and belongs in the audit, not here. |
+| Org branding · domains · email templates | Set once, at a desk, with a designer. Zero field urgency. |
+| Integrations · webhooks · API keys · schema | Configuration with credentials in it. See the prohibition on entering API keys on a phone; also nobody debugs a webhook on a phone by choice. |
+| Impersonation (`Act As`) | Developer tooling with a real audit trail. Not a field capability at any role. |
+| Report AUTHORING + the 43-report library | The `.rpt-grid` print canvas is desk-shaped by design. A field-relevant KPI subset is a genuine gap (audit G33) — *authoring* is not. |
+| Project / program planning (WBS, atoms, estimating) | Planning is where the desk earns its keep. The field executes the plan and reports against it; both of those it now has. |
+
+**Deliberately NOT on this list**, because they are real gaps and are
+tracked as such: expenses + receipt capture, requisitions, mileage,
+timesheets, goods receiving, incident triage, briefing sign-in, guard
+tours, occupancy, credential issue, safeguarding, member invite / role
+change / zone config, and a field-relevant report subset.
+
+The line between the two lists is roughly: **does the work happen where the
+person is standing?** If yes, the field needs it. If it happens at a desk
+regardless of who does it, the console keeps it.
+
 ## Alignment status (audit 2026-06-21)
 Wordmark ✓ · color/tokens ✓ · marketing positioning ✓ · proxy/subdomain ✓ · types/nav ✓ ·
 no duplicate kit components ✓. The only divergence found — 10 dead `/m/*` console/portal

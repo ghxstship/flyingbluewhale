@@ -170,8 +170,8 @@ These are not parity gaps. They are live bugs, all personally verified against s
 | **G13** | **Task create.** Mobile is complete-only. (Completion itself is a non-gap: `[taskId]/actions.ts` has correct RBAC + journaling.) | MISSING | 3 | 5 | 5 | 3 | **16** | M | `studio/tasks/new/`, `actions.ts:25` → no `m/tasks/new/` |
 | **G14** | **My Work personal spine.** No single "what do I owe / what owes me" view on mobile. Nearest is `/m/tasks` + `/m/time-off`. | MISSING | 3 | 5 | 5 | 3 | **16** | M | `studio/my-work/page.tsx` (unions 7 stores) → absent |
 | **G20** | **IT & Facilities ticket.** The deskless worker is exactly who hits a broken radio or toilet. One of the 5 desktop One Front Door intakes. | MISSING | 4 | 3 | 5 | 4 | **16** | M | `studio/services/requests/{page,actions,[requestId]}`; `CreateMenu.tsx:28` → absent |
-| **G24** | **Call sheet.** Portal crew has it; the field PWA does not. | MISSING | 4 | 5 | 4 | 3 | **16** | S | `studio/workforce/call-sheets/`, `api/v1/projects/[projectId]/call-sheet/`; `p/[slug]/crew/call-sheet/page.tsx:38` → absent |
-| **G25** | **Day sheets / run-of-show.** Kit 26 day sheets reach the portal, not COMPVSS. | MISSING | 4 | 5 | 4 | 3 | **16** | M | `studio/operations/day-sheets/**`, `studio/operations/ros` → zero hits in `(mobile)` |
+| ~~**G24**~~ | ~~**Call sheet.** Portal crew has it; the field PWA does not.~~ **CORRECTED 2026-07-15 — overstated.** The mobile home renders the next event as a shift card (`m/page.tsx:81` → `HomeShell.tsx` "Upcoming"). The real remainder is narrower: the portal lists the next **5** events + **5** day sheets, mobile shows **1** of each, and there is no dedicated call-sheet surface. Rescored as a depth gap, not an absence. | PARTIAL | 2 | 4 | 3 | 2 | **11** | S | `p/[slug]/crew/call-sheet/page.tsx:38` vs `m/page.tsx:81`, `HomeShell.tsx:331` |
+| ~~**G25**~~ | ~~**Day sheets / run-of-show.** Kit 26 day sheets reach the portal, not COMPVSS.~~ **CORRECTED 2026-07-15 — wrong.** Day sheets **do** reach COMPVSS: `m/page.tsx:70-78` reads `day_sheets` filtered to `published`/`updated` (drafts correctly never reach crew) and `HomeShell.tsx:331-340` renders venue, crew call, doors, headline set, curfew, with an "updated" flag. The original finding cited "grep → `m/page.tsx` only" and I misread that as absence — `m/page.tsx` **is** the mobile surface. Only run-of-show detail (`studio/operations/ros`) is genuinely absent. | PARTIAL | 3 | 3 | 3 | 2 | **11** | M | `m/page.tsx:70-78`; `HomeShell.tsx:331-340` |
 | **G39** | **Emergency is read-only.** No declare, no panic, no muster acknowledge, no mark-self-safe. The `CODES` array is static reference; rows render a `ChevronRight` that is not a link. | READ-ONLY | 5 | 2 | 5 | 4 | **16** | M | `studio/safety/crisis/new/`, `major-incident/new/` → `m/emergency/page.tsx` (no `actions.ts`, `:177`) |
 | **G7** | **Shift create / assign / reassign — no writer in ANY shell.** `shifts.workforce_member_id` has no writer; the only write repo-wide is an attendance patch. Rows can only originate from seed/SQL. Root cause of G6/G8, not a mobile-only defect. | DEAD-END (cross-shell) | 4 | 4 | 3 | 5 | **16** | XL | sole write `api/v1/shifts/checkin/route.ts:95`; all other `from("shifts")` are `.select` |
 | **G4** | **Incident triage / investigate / close.** Mobile is file-and-forget; list rows are not even links. The FSM `open→investigating→resolved→closed` is desktop-only. | MISSING | 4 | 4 | 3 | 4 | **15** | L | `studio/operations/incidents/actions.ts:17-67` → no `/m/incidents/[id]`; `IncidentsList.tsx:107` |
@@ -419,6 +419,17 @@ Recorded so they are not re-audited. Each was checked against source.
 - **`/m/guide`** renders real persona-scoped `event_guides` (`m/guide/page.tsx:43-56`) and **`/m/emergency`** reads real assignment + evacuation data rather than fabricating a station (`m/emergency/page.tsx:55-81`).
 - **No keyboard-only affordances** in the mobile tree — all `onKeyDown` are a11y Enter/Space handlers on `role=button` rows, not shortcuts.
 - **Shift-swap decide works on mobile** (both enum values legal); **poll on the console**, RFQ/ITB/sourcing, billing/subscriptions are defensible console-only scope pending the Phase 5 documentation decision.
+
+## 5b. Corrections to this audit
+
+Kept in the document rather than quietly edited away — a register that only accumulates confirmations is marking its own homework.
+
+| ID | Original claim | Reality | Why it slipped |
+| --- | --- | --- | --- |
+| **G25** | "Day sheets / run-of-show absent on mobile." | Wrong. `m/page.tsx:70-78` reads published day sheets and `HomeShell.tsx:331-340` renders them (venue · crew call · doors · headline set · curfew, plus an updated flag). Only run-of-show detail is absent. | The finding cited `grep day_sheets in (mobile) → m/page.tsx only` and I read "only" as "not really there". `m/page.tsx` **is** the mobile home. A grep hit is evidence *for* a surface, not against it. |
+| **G24** | "Call sheet absent on mobile." | Overstated. The home renders the next event as a shift card. The genuine remainder is depth (1 event vs the portal's 5) and the lack of a dedicated surface. | Same root: judged from a grep count rather than reading the render path. |
+
+Both were rescored (16 → 11) rather than deleted: a depth gap is still a gap, just not the one originally claimed. The lesson generalises — every remaining MISSING in §3.2 that rests on a grep count alone should be confirmed against the render path before anyone builds against it.
 
 ## 6. Unverified
 

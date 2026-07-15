@@ -20,9 +20,10 @@ const Schema = z.object({
 
 /**
  * Manager+ approval transition for a timesheet. Validates the decision is
- * legal for the sheet's current `state`, writes an append-only
- * `timesheet_approvals` audit row, then advances `timesheets.state` to the
- * decision's target. RLS additionally gates both writes to org managers.
+ * legal for the sheet's current `state`, refuses self-approval, claims the
+ * transition with a state-predicated update, then writes an append-only
+ * `timesheet_approvals` audit row. RLS additionally gates both writes to
+ * org managers.
  */
 export async function decideTimesheet(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -39,7 +40,7 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
   // before we touch anything — a stale tab can't post an illegal jump.
   const { data: sheet, error: loadErr } = await supabase
     .from("timesheets")
-    .select("id, state")
+    .select("id, state, party_id")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -65,21 +66,48 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
     return { error: "Your account is not linked to a party record in this organization." };
   }
 
+  // Separation of duties: a manager cannot bless their own hours. Nothing
+  // prevented this before — the manager band could approve the very sheet
+  // that pays them.
+  if (sheet.party_id && sheet.party_id === approver.id) {
+    return { error: "You can't review your own timesheet. Another manager has to decide this one." };
+  }
+
+  // Claim the transition first, predicated on the state we validated
+  // against. Without the `.eq("state", currentState)` guard two managers
+  // deciding concurrently both pass `canDecide` on a stale read and the
+  // last write wins, silently discarding the other's decision — the exact
+  // race UNDECIDED_SWAP_STATES warns about in src/lib/workforce.ts.
+  //
+  // Claim-before-audit ordering matters: the audit insert used to run
+  // first, so a losing racer left behind a `timesheet_approvals` row for a
+  // decision that never took effect. Only the racer that actually moves
+  // the state records one.
+  const target = DECISION_TARGET_STATE[decision];
+  const { data: moved, error: updErr } = await supabase
+    .from("timesheets")
+    .update({ state: target })
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .eq("state", currentState)
+    .select("id")
+    .maybeSingle();
+  if (updErr) return { error: `Could not update timesheet state: ${updErr.message}` };
+  if (!moved) {
+    return { error: "This timesheet was decided by someone else. Refresh and review the current state." };
+  }
+
   const { error: insErr } = await supabase.from("timesheet_approvals").insert({
     timesheet_id: id,
     approver_party_id: approver.id,
     decision,
     notes,
   });
-  if (insErr) return { error: `Could not record decision: ${insErr.message}` };
-
-  const target = DECISION_TARGET_STATE[decision];
-  const { error: updErr } = await supabase
-    .from("timesheets")
-    .update({ state: target })
-    .eq("id", id)
-    .eq("org_id", session.orgId);
-  if (updErr) return { error: `Could not update timesheet state: ${updErr.message}` };
+  // The state has already moved; surface the audit failure rather than
+  // reporting a clean success. Closing this window entirely needs both
+  // writes in one transaction (a SECURITY DEFINER RPC) — tracked with the
+  // approval-engine consolidation, not worth a schema change here.
+  if (insErr) return { error: `Decision applied but the audit row failed to record: ${insErr.message}` };
 
   revalidatePath(`/studio/finance/timesheets/${id}`);
   revalidatePath("/studio/finance/timesheets");

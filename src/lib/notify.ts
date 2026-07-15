@@ -6,6 +6,7 @@ import { bulkShouldNotify, shouldNotify } from "./notify-resolver";
 import { sendPushTo } from "./push/send";
 import { sendNotificationEmailToUsers } from "./email";
 import { emitDomainEvent } from "./automations/dispatch";
+import type { WebhookEvent } from "./webhooks/events";
 
 /**
  * Notification + webhook emitter — resolves audit B1/B2.
@@ -27,25 +28,13 @@ import { emitDomainEvent } from "./automations/dispatch";
  *   });
  */
 
-export type NotifyEvent =
-  | "project.created"
-  | "project.status_changed"
-  | "invoice.sent"
-  | "invoice.paid"
-  | "proposal.sent"
-  | "proposal.signed"
-  | "deliverable.submitted"
-  | "deliverable.approved"
-  | "assignment.scanned"
-  | "po.acknowledged"
-  | "po.fulfilled"
-  | "incident.filed"
-  | "offer_letter.accepted"
-  | "offer_letter.declined"
-  | "job.failed"
-  | "passkey.registered"
-  | "account.deletion_requested"
-  | "marketplace.inquiry_received";
+/**
+ * The events this emitter can fire. Sourced from the shared registry in
+ * `./webhooks/events` so the subscribe-side list in
+ * `/api/v1/webhooks/endpoints` cannot drift from it again — the two were
+ * hand-synced and had already diverged.
+ */
+export type NotifyEvent = WebhookEvent;
 
 /** Readable eyebrow for the email rendering of an event type. */
 function eventEyebrow(eventType: NotifyEvent): string {

@@ -5,6 +5,7 @@ import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { validateOutboundUrl } from "@/lib/http-ssrf";
+import { ACCEPTED_EVENT_INPUTS, normalizeWebhookEvent } from "@/lib/webhooks/events";
 
 /**
  * /api/v1/webhooks/endpoints — outbound webhook registrations.
@@ -12,29 +13,18 @@ import { validateOutboundUrl } from "@/lib/http-ssrf";
  * freshly-minted HMAC secret (returned once; never re-exposed).
  */
 
-const EVENTS = [
-  "project.created",
-  "project.status_changed",
-  "invoice.sent",
-  "invoice.paid",
-  "proposal.sent",
-  "proposal.signed",
-  "deliverable.submitted",
-  "deliverable.approved",
-  "ticket.scanned",
-  "po.acknowledged",
-  "po.fulfilled",
-  "incident.filed",
-  "job.failed",
-  "passkey.registered",
-  "account.deletion_requested",
-  "*",
-] as const;
-
+/**
+ * Subscribable events come from the shared registry — this route used to
+ * carry its own hand-synced copy that had drifted from the emitter
+ * (`ticket.scanned` was subscribable but could never fire; `offer_letter.*`
+ * and `marketplace.inquiry_received` fired but weren't subscribable).
+ * Deprecated names are still accepted and normalized on write so stored
+ * integrator config keeps working.
+ */
 const PostSchema = z.object({
   url: z.string().url().startsWith("https://", "Use HTTPS (production). For local dev, register via SQL."),
   description: z.string().max(200).optional(),
-  events: z.array(z.enum(EVENTS)).min(1).max(EVENTS.length),
+  events: z.array(z.enum(ACCEPTED_EVENT_INPUTS)).min(1).max(ACCEPTED_EVENT_INPUTS.length),
 });
 
 export async function GET() {
@@ -74,13 +64,17 @@ export async function POST(req: NextRequest) {
 
     const supabase = await createClient();
     const secret = `whsec_${randomBytes(32).toString("base64url")}`;
+    // Store the live event names. A subscriber posting a retired alias
+    // gets the working equivalent persisted rather than a subscription
+    // that silently never fires.
+    const events = Array.from(new Set(input.events.map(normalizeWebhookEvent)));
     const { data, error } = await supabase
       .from("webhook_endpoints")
       .insert({
         org_id: session.orgId,
         url: input.url,
         description: input.description ?? null,
-        events: input.events as unknown as string[],
+        events,
         secret,
         created_by: session.userId,
       })

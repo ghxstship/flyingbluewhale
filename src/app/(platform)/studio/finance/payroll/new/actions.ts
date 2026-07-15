@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { can, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
@@ -31,8 +31,18 @@ export type State = {
   values?: Record<string, string>;
 } | null;
 
+/**
+ * Open a certified-payroll run. Admin band only: `payroll:post` resolves
+ * through the owner/admin `"*"` grant and is absent from every manager,
+ * member, and persona list — paying hours is a separate authority from
+ * approving them (separation of duties). This gated on authentication
+ * alone before.
+ */
 export async function createPayrollRun(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!can(session, "payroll:post")) {
+    return { error: "Only owners and admins can open a payroll run." };
+  }
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;

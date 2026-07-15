@@ -1,9 +1,9 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { classifyPunch } from "@/lib/workforce";
+import { resolveZoneForPunch, type ZoneCandidate } from "@/lib/workforce";
 
 /** /api/v1/shifts/checkin — COMPVSS shift T&A (WF-197).
  *
@@ -11,10 +11,10 @@ import { classifyPunch } from "@/lib/workforce";
  *   1. Updates the schedule shift's attendance FSM (scheduled →
  *      checked_in → on_break/checked_out).
  *   2. On `check_in` opens a `time_entries` row stamped with the punch
- *      lat/lng + classified zone. On `check_out` closes the open row.
- *      The geofence classification is informational — we don't block
- *      `check_in` on an outside-the-zone punch; instead the row carries
- *      `geofence_state='outside'` and admins can audit. */
+ *      lat/lng + resolved zone (`resolveZoneForPunch`). On `check_out`
+ *      closes the open row. The geofence classification is informational
+ *      — we don't block `check_in` on an outside-the-zone punch; instead
+ *      the row carries `geofence_state='outside'` and admins can audit. */
 
 const PostSchema = z.object({
   shiftId: z.string().uuid(),
@@ -50,6 +50,11 @@ export async function POST(req: NextRequest) {
   }
 
   return withAuth(async (session) => {
+    // A shift punch opens/closes a time_entries row, so it carries the
+    // same authority as POST /api/v1/time/clock and must assert the same
+    // capability — this route previously gated on authentication alone.
+    const denial = assertCapability(session, "time:write");
+    if (denial) return denial;
     const supabase = await createClient();
 
     const { data: row, error: readErr } = await supabase
@@ -108,43 +113,23 @@ export async function POST(req: NextRequest) {
     // No project_id linkage here yet (shifts.venue_id maps to a venue,
     // not a project). Admins can attribute via the timesheet view.
     if (input.action === "check_in") {
-      // Resolve a zone: pick the nearest active zone in the org. If
-      // lat/lng absent we still create the time_entry with
-      // geofence_state='unknown' so we have an audit trail.
-      let zoneId: string | null = null;
-      let geoState: "inside" | "outside" | "unknown" = "unknown";
-      if (typeof input.lat === "number" && typeof input.lng === "number") {
-        const { data: zones } = await supabase
-          .from("time_clock_zones")
-          .select("id, center_lat, center_lng, radius_m")
-          .eq("org_id", session.orgId)
-          .eq("lifecycle_state", "active")
-          .is("deleted_at", null);
-        const candidates = (zones ?? []) as Array<{
-          id: string;
-          center_lat: number;
-          center_lng: number;
-          radius_m: number;
-        }>;
-        for (const z of candidates) {
-          const state = classifyPunch(
-            { lat: input.lat, lng: input.lng },
-            {
-              center_lat: z.center_lat,
-              center_lng: z.center_lng,
-              radius_m: z.radius_m,
-            },
-          );
-          if (state === "inside") {
-            zoneId = z.id;
-            geoState = "inside";
-            break;
-          }
-        }
-        // If we didn't land inside any active zone, leave zoneId null
-        // and tag as outside (we have GPS but it's not in any zone).
-        if (geoState !== "inside") geoState = "outside";
-      }
+      // Resolve the punch against the org's active zones. A GPS-less
+      // punch, or an org with no zones configured, records 'unknown' so
+      // we still have an audit trail.
+      const punch =
+        typeof input.lat === "number" && typeof input.lng === "number"
+          ? { lat: input.lat, lng: input.lng }
+          : null;
+      const { data: zones } = punch
+        ? await supabase
+            .from("time_clock_zones")
+            .select("id, name, center_lat, center_lng, radius_m")
+            .eq("org_id", session.orgId)
+            .eq("lifecycle_state", "active")
+            .is("deleted_at", null)
+        : { data: [] };
+      const resolved = resolveZoneForPunch(punch, (zones ?? []) as ZoneCandidate[]);
+
       await supabase.from("time_entries").insert({
         org_id: session.orgId,
         user_id: session.userId,
@@ -152,10 +137,10 @@ export async function POST(req: NextRequest) {
         started_at: nowIso,
         billable: true,
         description: "Shift punch",
-        zone_id: zoneId,
+        zone_id: resolved.zone?.id ?? null,
         punch_lat: input.lat ?? null,
         punch_lng: input.lng ?? null,
-        geofence_state: geoState,
+        geofence_state: resolved.state,
       });
     } else if (input.action === "check_out") {
       // Close the open time_entries row for this shift (ended_at is null).

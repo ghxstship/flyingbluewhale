@@ -3,7 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { classifyPunch } from "@/lib/workforce";
+import { resolveZoneForPunch } from "@/lib/workforce";
 
 /** /api/v1/time/clock — the free personal time-clock punch (COMPVSS
  * /m/clock + /m/punch). Distinct from /api/v1/shifts/checkin, which drives
@@ -13,8 +13,9 @@ import { classifyPunch } from "@/lib/workforce";
  * Queueable: listed in the service worker's QUEUEABLE_ENDPOINTS so an
  * offline punch is buffered in IndexedDB and replayed on reconnect. The
  * optional `at` carries the true capture moment for late replays; `lat` /
- * `lng` (when the device grants geolocation) drive `classifyPunch` zone
- * classification, recorded as `geofence_state` + `zone_id` on the entry.
+ * `lng` (when the device grants geolocation) drive `resolveZoneForPunch`
+ * zone classification, recorded as `geofence_state` + `zone_id` on the
+ * entry.
  */
 
 const PostSchema = z.object({
@@ -61,32 +62,22 @@ export async function POST(req: NextRequest) {
       // is dropped rather than retried forever).
       if (open) return apiError("conflict", "You're already clocked in.");
 
-      // Zone classification mirrors /api/v1/shifts/checkin: nearest active
-      // zone containing the punch wins; GPS-less punches record 'unknown'.
-      let zoneId: string | null = null;
-      let zoneName: string | null = null;
-      let geoState: "inside" | "outside" | "unknown" = "unknown";
-      if (typeof input.lat === "number" && typeof input.lng === "number") {
-        const { data: zones } = await supabase
-          .from("time_clock_zones")
-          .select("id, name, center_lat, center_lng, radius_m")
-          .eq("org_id", session.orgId)
-          .eq("lifecycle_state", "active")
-          .is("deleted_at", null);
-        for (const zone of (zones ?? []) as Zone[]) {
-          const state = classifyPunch(
-            { lat: input.lat, lng: input.lng },
-            { center_lat: zone.center_lat, center_lng: zone.center_lng, radius_m: zone.radius_m },
-          );
-          if (state === "inside") {
-            zoneId = zone.id;
-            zoneName = zone.name;
-            geoState = "inside";
-            break;
-          }
-        }
-        if (geoState !== "inside") geoState = "outside";
-      }
+      // Zone classification mirrors /api/v1/shifts/checkin — one shared
+      // resolver: containment beats proximity, and an org with no zones
+      // (or a GPS-less punch) records 'unknown' rather than 'outside'.
+      const punch =
+        typeof input.lat === "number" && typeof input.lng === "number"
+          ? { lat: input.lat, lng: input.lng }
+          : null;
+      const { data: zones } = punch
+        ? await supabase
+            .from("time_clock_zones")
+            .select("id, name, center_lat, center_lng, radius_m")
+            .eq("org_id", session.orgId)
+            .eq("lifecycle_state", "active")
+            .is("deleted_at", null)
+        : { data: [] };
+      const resolved = resolveZoneForPunch(punch, (zones ?? []) as Zone[]);
 
       const { data: entry, error } = await supabase
         .from("time_entries")
@@ -95,25 +86,31 @@ export async function POST(req: NextRequest) {
           user_id: session.userId,
           started_at: nowIso,
           activity_category: "shift",
-          zone_id: zoneId,
+          zone_id: resolved.zone?.id ?? null,
           punch_lat: input.lat ?? null,
           punch_lng: input.lng ?? null,
-          geofence_state: geoState,
+          geofence_state: resolved.state,
         })
         .select("id, started_at")
         .maybeSingle();
       if (error) return apiError("internal", error.message);
-      return apiOk({ action: "clock_in" as const, entry, geofenceState: geoState, zoneName });
+      return apiOk({
+        action: "clock_in" as const,
+        entry,
+        geofenceState: resolved.state,
+        zoneName: resolved.zone?.name ?? null,
+      });
     }
 
-    // clock_out
+    // clock_out. duration_minutes is derived by the
+    // tg_compute_time_entry_duration trigger, whose contract is explicit:
+    // "Do not set duration_minutes explicitly when ended_at is present."
+    // Writing it here duplicated the trigger's arithmetic and would drift
+    // from it the moment either side changed.
     if (!open) return apiError("conflict", "You're not clocked in.");
-    const startedAt = new Date(open.started_at as string);
-    const endedAt = new Date(nowIso);
-    const durationMinutes = Math.max(0, Math.round((endedAt.getTime() - startedAt.getTime()) / 60000));
     const { data: entry, error } = await supabase
       .from("time_entries")
-      .update({ ended_at: nowIso, duration_minutes: durationMinutes })
+      .update({ ended_at: nowIso })
       .eq("id", open.id as string)
       .eq("org_id", session.orgId)
       .eq("user_id", session.userId)

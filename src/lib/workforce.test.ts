@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { metersBetween, classifyPunch, scoreQuiz, daysBetween } from "./workforce";
+import {
+  metersBetween,
+  classifyPunch,
+  resolveZoneForPunch,
+  scoreQuiz,
+  daysBetween,
+  type ZoneCandidate,
+} from "./workforce";
 
 describe("the deskless-workforce suite helpers", () => {
   describe("metersBetween", () => {
@@ -52,6 +59,85 @@ describe("the deskless-workforce suite helpers", () => {
       expect(classifyPunch(null, zone)).toBe("unknown");
       expect(classifyPunch({ lat: 25.7617, lng: -80.1918 }, null)).toBe("unknown");
       expect(classifyPunch(null, null)).toBe("unknown");
+    });
+  });
+
+  describe("resolveZoneForPunch", () => {
+    const gate: ZoneCandidate = {
+      id: "gate",
+      name: "Load-In Gate",
+      center_lat: 25.7617,
+      center_lng: -80.1918,
+      radius_m: 150,
+    };
+    const center = { lat: 25.7617, lng: -80.1918 };
+
+    it("resolves a punch inside a zone to that zone", () => {
+      const r = resolveZoneForPunch(center, [gate]);
+      expect(r.state).toBe("inside");
+      expect(r.zone?.id).toBe("gate");
+      expect(r.distanceM).toBeCloseTo(0, 1);
+    });
+
+    it("resolves a punch beyond the radius to outside, with no zone attributed", () => {
+      const r = resolveZoneForPunch({ lat: 25.7635, lng: -80.1918 }, [gate]);
+      expect(r.state).toBe("outside");
+      expect(r.zone).toBeNull();
+    });
+
+    it("reports the nearest zone and distance even when outside, for operator copy", () => {
+      const r = resolveZoneForPunch({ lat: 25.7635, lng: -80.1918 }, [gate]);
+      expect(r.nearestZone?.name).toBe("Load-In Gate");
+      expect(r.distanceM).toBeGreaterThan(150);
+    });
+
+    // The zero-zone defect. An org that never configured zones has nothing
+    // for a punch to be outside OF; tagging these 'outside' would lock out
+    // every worker the moment a block policy is enabled.
+    it("returns 'unknown' when the org has no zones, never 'outside'", () => {
+      const r = resolveZoneForPunch(center, []);
+      expect(r.state).toBe("unknown");
+      expect(r.zone).toBeNull();
+      expect(r.nearestZone).toBeNull();
+      expect(r.distanceM).toBeNull();
+    });
+
+    it("returns 'unknown' for a GPS-less punch even when zones exist", () => {
+      const r = resolveZoneForPunch(null, [gate]);
+      expect(r.state).toBe("unknown");
+      expect(r.zone).toBeNull();
+    });
+
+    // The first-inside-wins defect: callers took the first containing zone
+    // in arbitrary DB order, so overlapping zones attributed
+    // nondeterministically. Containment must beat proximity, and among
+    // containing zones the nearest center wins — regardless of input order.
+    it("prefers a containing zone over a nearer non-containing one", () => {
+      // Punch sits inside the big zone but outside the tiny one, whose
+      // center is closer.
+      const punch = { lat: 25.765, lng: -80.1918 };
+      const big: ZoneCandidate = { id: "big", center_lat: 25.7617, center_lng: -80.1918, radius_m: 1000 };
+      const tiny: ZoneCandidate = { id: "tiny", center_lat: 25.7655, center_lng: -80.1918, radius_m: 20 };
+      expect(metersBetween(punch, { lat: tiny.center_lat, lng: tiny.center_lng })).toBeGreaterThan(tiny.radius_m);
+
+      expect(resolveZoneForPunch(punch, [tiny, big]).zone?.id).toBe("big");
+      expect(resolveZoneForPunch(punch, [big, tiny]).zone?.id).toBe("big");
+    });
+
+    it("picks the nearest containing zone when several overlap, order-independently", () => {
+      const punch = { lat: 25.7617, lng: -80.1918 };
+      const near: ZoneCandidate = { id: "near", center_lat: 25.7618, center_lng: -80.1918, radius_m: 500 };
+      const far: ZoneCandidate = { id: "far", center_lat: 25.764, center_lng: -80.1918, radius_m: 500 };
+
+      expect(resolveZoneForPunch(punch, [far, near]).zone?.id).toBe("near");
+      expect(resolveZoneForPunch(punch, [near, far]).zone?.id).toBe("near");
+    });
+
+    it("treats a punch exactly on the boundary as inside", () => {
+      const r = resolveZoneForPunch({ lat: 25.7617, lng: -80.1918 }, [
+        { id: "z", center_lat: 25.7617, center_lng: -80.1918, radius_m: 0 },
+      ]);
+      expect(r.state).toBe("inside");
     });
   });
 

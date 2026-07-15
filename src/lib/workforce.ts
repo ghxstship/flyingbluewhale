@@ -34,6 +34,72 @@ export function classifyPunch(
   return d <= zone.radius_m ? "inside" : "outside";
 }
 
+export type ZoneCandidate = {
+  id: string;
+  name?: string | null;
+  center_lat: number;
+  center_lng: number;
+  radius_m: number;
+};
+
+export type ZoneResolution = {
+  state: PunchGeofenceState;
+  /** The zone containing the punch. Null when outside or unknown. */
+  zone: ZoneCandidate | null;
+  /** Closest zone by center distance regardless of containment — drives
+   *  operator-facing copy ("you're 340 m from Load-In Gate"). */
+  nearestZone: ZoneCandidate | null;
+  /** Meters to `nearestZone`'s center. Null when nothing to compare. */
+  distanceM: number | null;
+};
+
+/**
+ * Resolve a punch against every active zone in one pass. The single
+ * classification path for `/api/v1/time/clock` and `/api/v1/shifts/checkin`.
+ *
+ * Two rules the per-zone `classifyPunch` can't express on its own:
+ *
+ *  1. No zones configured => 'unknown', not 'outside'. An org that never
+ *     set up zones has nothing for a punch to be outside OF. Tagging those
+ *     punches 'outside' is harmless while the geofence is informational,
+ *     but it locks out every worker in the org the moment a block policy
+ *     is enabled. Mirrors classifyPunch's own null-zone contract.
+ *  2. Containment beats proximity. Callers previously took the first zone
+ *     that contained the punch in arbitrary DB order, so overlapping zones
+ *     attributed nondeterministically. A punch inside a large zone is
+ *     inside it even when a smaller zone's center sits closer; among
+ *     several containing zones the nearest center wins.
+ */
+export function resolveZoneForPunch(
+  punch: { lat: number; lng: number } | null,
+  zones: readonly ZoneCandidate[],
+): ZoneResolution {
+  if (!punch || zones.length === 0) {
+    return { state: "unknown", zone: null, nearestZone: null, distanceM: null };
+  }
+
+  let nearest: ZoneCandidate | null = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+  let inside: ZoneCandidate | null = null;
+  let insideDistance = Number.POSITIVE_INFINITY;
+
+  for (const zone of zones) {
+    const d = metersBetween(punch, { lat: zone.center_lat, lng: zone.center_lng });
+    if (d < nearestDistance) {
+      nearest = zone;
+      nearestDistance = d;
+    }
+    if (d <= zone.radius_m && d < insideDistance) {
+      inside = zone;
+      insideDistance = d;
+    }
+  }
+
+  return inside
+    ? { state: "inside", zone: inside, nearestZone: nearest, distanceM: nearestDistance }
+    : { state: "outside", zone: null, nearestZone: nearest, distanceM: nearestDistance };
+}
+
 // ============================================================
 // Shift swaps
 // ============================================================

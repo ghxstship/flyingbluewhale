@@ -1,8 +1,8 @@
 # COMPVSS Time Management — Complete Lifecycle Plan
 
-Status: **Phases 0-3 landed; 4-7 outstanding.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
+Status: **Phases 0-4 landed. 5 is buildable; 6 and 7c are gated outside engineering.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
 
-**The lifecycle is now continuous end to end.** A punch is captured, policy-checked, correctable under review, compiled into a timesheet, submitted, approved, posted to a payroll run, and split into earning-coded lines that trace back to the punches behind them. §0's hollow middle is closed. What remains is the *outward* half: the open surface (Phase 4) and the connectors on top of it (5-6).
+**The lifecycle is continuous end to end, and its surface is open.** A punch is captured, policy-checked, correctable under review, compiled into a timesheet, submitted, approved, posted to a payroll run, and split into earning-coded lines that trace back to the punches behind them — and every step of that is reachable by an outside integrator through the published spec, scoped tokens, and signed webhooks. §0's hollow middle is closed and the "connectors aren't privileged" rule is now enforceable rather than aspirational.
 
 ## Landed
 
@@ -14,7 +14,18 @@ Status: **Phases 0-3 landed; 4-7 outstanding.** Date: 2026-07-15. Scope: capture
 
 | 3 — **the spine** | `4ac11487` | The §0 hollow middle, closed. `pay_periods` + `compile_timesheets` (idempotent by construction, so late offline replays re-run safely) + `recompute_timesheet_totals` with a live trigger (an applied correction or replayed punch re-rolls the sheet; posting freezes it) + `POST /timesheets/{id}/submit` (the lifecycle was unreachable from `open`) + `post_timesheet` (admin band, `approved`-gated, re-post replaces rather than double-pays) + earning codes + `hr_worker_links` + `source_entry_ids` lineage. Overtime: **`flsa` and `ca` only**, everything else must use `none` — see `src/lib/time/overtime.ts` for the limits of even those two. Verified live: rollup 14h, late punch 14h→16h, posted totals frozen. |
 
-**Remaining: Phases 4-7.** Phase 4 (open surface: OpenAPI registry, `API_SCOPES`, webhook events, Zapier, dev docs) is next and gates 5-6 — the rule that a native connector may do nothing an external integrator can't. Phase 6 (ADP et al.) is gated on partnership/certification and Phase 7c (background geofencing) on a native shell release and Play/App Store review; **neither is closable by engineering effort alone.**
+| 4 — open surface | `404523d5` | The time surface registered in the **served** spec (`/api/v1/openapi.json` carried 22 endpoints, no time/payroll, and nothing validated it — `served-spec.test.ts` does now). `API_SCOPES` — the vocabulary that did not exist: scopes are required, validated with a did-you-mean, and a full-access token must say `["*"]` rather than being what you get by omission. Seven time/pay webhook events, **wired** (declaring without firing is the `ticket.scanned` bug). `docs/api/PAYROLL_CONNECTORS.md`, including what the platform does NOT do. |
+
+### Remaining
+
+| Phase | Status |
+| --- | --- |
+| 5 — CSV/SFTP driver | **Buildable.** Needs `payroll_exports`/`payroll_export_lines` (C9), the `PayrollExportDriver` interface, an SFTP transport (new dep), and the export console. The universal one: works with every provider today, with no partnership. |
+| 6 — native connectors | **Gated on business process, not effort.** ADP Workforce Now requires Marketplace partnership, security review, certification, and mutual-TLS client certs; Gusto/Paychex/UKG require partner approval; Workday is per-tenant and often EIB-over-SFTP. Schedule against signed demand. |
+| 7a/7b — nudges | Buildable, no native change. 7a (schedule-anchored local notifications) depends on **C3**, the zone↔shift link, which has not landed. |
+| 7c — background geofencing | **Gated on a native shell release.** New plugin (license cost), Info.plist/manifest permissions baked at build time, Google Play background-location review, iOS "Always" (20-region cap, users downgrade it), and a permanent capability-probe because remote-loaded JS will call a bridge older installs lack. |
+
+Phases 6 and 7c cannot be closed by writing code. Anyone reading this as "80% done, two phases left" has the wrong picture: what remains is one buildable driver and two dependencies on other organisations.
 
 ### Carried forward from building this
 

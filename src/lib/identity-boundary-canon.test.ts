@@ -38,7 +38,7 @@ const MIGRATIONS_DIR = join(process.cwd(), "supabase/migrations");
  * FOR ALL policy with `is_org_member` on both sides, which let a plain member
  * award themselves a badge (confirmed live, then removed).
  */
-const GUARDED_TABLES = ["time_entries", "reviews", "badge_awards", "achievement_awards"] as const;
+const GUARDED_TABLES = ["time_entries", "reviews", "badge_awards", "achievement_awards", "announcements"] as const;
 
 function migrationFiles(): string[] {
   return readdirSync(MIGRATIONS_DIR)
@@ -233,6 +233,60 @@ describe("identity boundary canon (ADR-0008 Amendment 7)", () => {
   }
 
   // ── redeem_voucher: SECURITY DEFINER does its own checks ─────────────────
+
+  // ── announcements: publishing is an authority act ────────────────────────
+  //
+  // The class the Amendment 7 sweep could not see. That sweep enumerated tables
+  // where the APP asserts an identity boundary and asked whether RLS agreed.
+  // `announcements` never made that promise — org-wide reads are the documented
+  // design (Amendment 1) — so a table with deliberately wide READS and
+  // authority-bearing WRITES was invisible to it.
+  //
+  // The live `with_check is null` invariant missed it too, and that is the
+  // transferable half: `announcements_org_rw` was FOR ALL with a WITH CHECK
+  // PRESENT — just `is_org_member(org_id)`, identical to its USING. Same outcome
+  // as the chat self-join, different mechanism. A null check cannot see a write
+  // check that merely fails to be stricter than the read check.
+  //
+  // Confirmed live: a member-band account published an org-wide broadcast
+  // (project_id NULL, publish_state 'published') and HARD-deleted an
+  // announcement it did not author — while every app writer says, in literal
+  // user-facing copy, "Only manager+ can publish announcements".
+
+  it("announcements writes are manager-gated, and the write check is stricter than the read", () => {
+    const read = stripSql(lastPolicyBody("announcements", "announcements_select") ?? "");
+    expect(read, "announcements_select must exist — the feed is org-wide by design").toBeTruthy();
+    expect(
+      /is_org_member/i.test(read),
+      "announcements SELECT must stay org-wide (Amendment 1). Narrowing it breaks the crew, vendor, " +
+        "volunteer and media feeds this table exists to serve.",
+    ).toBe(true);
+
+    // The generalizable rule. Writing to this table is an authority act, so its
+    // write check must be STRONGER than its read check — not merely present.
+    for (const policy of ["announcements_insert", "announcements_update", "announcements_delete"] as const) {
+      const sql = stripSql(lastPolicyBody("announcements", policy) ?? "");
+      expect(sql, `${policy} must exist`).toBeTruthy();
+      expect(
+        /has_org_role/i.test(sql) && !/is_org_member/i.test(sql),
+        `${policy} must be a role band, not is_org_member. Portal personas are ordinary memberships ` +
+          `rows, so is_org_member lets an external contractor broadcast to the whole company and delete ` +
+          `other people's announcements (both confirmed live). The app already refuses this in three ` +
+          `places — "Only manager+ can publish announcements" — but a PostgREST call is not a shell.`,
+      ).toBe(true);
+    }
+
+    // DELETE is narrower than the app's own gate on purpose: deleteAnnouncement
+    // is a SOFT delete (update ... set deleted_at), so no app path hard-deletes.
+    // A probe exercising that capability destroyed a real row — it exists only
+    // because nothing had taken it away.
+    expect(
+      bandsOf(stripSql(lastPolicyBody("announcements", "announcements_delete") ?? "")),
+      "announcements DELETE is the admin band deliberately: the product only ever soft-deletes, so a " +
+        "hard DELETE reachable by the manager band is capability nothing uses and can destroy a " +
+        "company-wide communication irreversibly.",
+    ).not.toContain("manager");
+  });
 
   // ── the mirror-image class: FOR ALL admin policies that also gate SELECT ──
   //

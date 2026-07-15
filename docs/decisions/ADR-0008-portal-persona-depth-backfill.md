@@ -1,6 +1,6 @@
 # ADR-0008 — GVTEWAY portal: crew + vendor persona depth backfill
 
-**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented; Amendment 7 has two parts). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
+**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented; Amendment 7 has three parts). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
 **Date:** 2026-06-04
 **Owner:** Platform engineering
 **Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
@@ -1028,3 +1028,121 @@ surface read this, and who is meant to open it".
 - Guarded by three more invariants in `identity-boundary-canon.test.ts`,
   including the one that matters most: the read policy must **not** widen to
   `is_org_member`.
+
+## Amendment 7, part 3 (2026-07-15) — the table the sweep could not see
+
+`20260716000500_announcements_publish_authority.sql`. Handed over by the
+volunteer/media backfill session (ADR Q2), which probed `announcements` and
+`project_members` and found this while widening the _audience_ of surfaces that
+sit on the same table. Re-confirmed here rather than inherited.
+
+### Why part 1's method was structurally blind to it
+
+Part 1 enumerated tables where **the app asserts an identity boundary** — 253
+`.eq("user_id", session.userId)`-class filters across 65 tables — and asked
+whether RLS agreed. `announcements` was never a candidate, and correctly so: the
+app does not narrow it by identity, because org-wide reads are the documented
+design (Amendment 1).
+
+That is the blind spot, stated plainly: **the sweep looked for broken promises,
+and this table never made one.** A table whose reads are deliberately wide, but
+whose _writes_ carry authority, cannot be found by asking "is the app's filter
+real?" — there is no filter to check. It has to be found by asking a different
+question: _who is allowed to write this, and does the DB know?_
+
+The live invariant missed it too, and that half generalises further:
+
+```
+select count(*) from pg_policies
+ where cmd='ALL' and with_check is null and qual is not null;   -- 0, and still 0
+```
+
+`announcements_org_rw` was FOR ALL with a WITH CHECK **present** — just
+`is_org_member(org_id)`, identical to its USING. Same outcome as the chat
+self-join, different mechanism: not an inherited write check, but a write check
+that is **no stricter than the read check**. A `with_check IS NULL` audit cannot
+see that, and this ADR has now been caught twice by trusting one structural
+query. The predicate that actually matters:
+
+> **Is the write check stronger than the read check, on a table where writing is
+> an authority act?**
+
+### The defect
+
+Confirmed live as `crew@gvteway.test` (`member` role / `crew` persona), and
+independently by the backfill session against a `vendor`-persona contractor in a
+different org:
+
+- **INSERT** `publish_state='published'`, `project_id=NULL` — an org-wide
+  broadcast to the entire company, authored by a member-band account.
+- **DELETE** an announcement they did not author — a **hard** delete. Row gone.
+
+Every app writer disagrees, in literal user-facing copy:
+
+```
+new/actions.ts        if (!isManagerPlus(session)) return { error: "Only manager+ can publish announcements" }
+[id]/edit/actions.ts  if (!isManagerPlus(session)) return { error: "Only manager+ can edit announcements" }
+[id]/actions.ts       if (!isManagerPlus(session)) return;   // delete + archive
+```
+
+This is the time-off shape exactly, down to the reasoning: `decideTimeOffRequest`
+carried the comment _"Re-checked here rather than trusted from the caller so
+neither shell can skip the gate by hiding a button."_ True of both shells. **A
+PostgREST call is not a shell, and a string in a server action is not a
+boundary.** `/m/feed` and `/p/[slug]/announcements` only ever READ; no shell has
+offered these personas a compose box. The database did.
+
+Blast radius is every org member, so it predates the volunteer/media backfill
+entirely — the shipped crew and vendor feeds sit on the same table. That session
+widened the _audience of a surface_; the write hole was already under it.
+
+### The fix, and the one deliberate asymmetry
+
+Reads are **unchanged** — org-wide `is_org_member` is the documented model and
+narrowing it would break the very feeds this table exists to serve. Only writes
+move, to the band the app already claims: INSERT/UPDATE = `owner|admin|manager`
+(matching `isManagerPlus` exactly).
+
+DELETE is the **admin** band — narrower than the app's own gate — because
+`deleteAnnouncement` is a _soft_ delete (`update … set deleted_at`). **No app
+path hard-deletes an announcement, ever.** The hard DELETE is a capability the
+product does not use, kept as a latent admin capability rather than dropped, the
+same disposition `chat_rooms` DELETE got in Amendment 5 part 2 and for the same
+reason: destroying a company-wide communication and its read receipts should not
+be reachable from a surface that only ever meant to hide it.
+
+Verified both directions: crew broadcast **refused**; crew hard-delete
+**refused** (HTTP 204, row survives on read-back); crew edit **refused** (204,
+title unchanged); crew and manager both still read the feed (6 rows); **a manager
+can still publish**.
+
+### A probe destroyed a row, and that is part of the finding
+
+Demonstrating the DELETE vector hard-deleted a real seed row in the demo org —
+`"EDC LV — Inbox Roundtrip Test"` — and it is **not recoverable**: no audit trail
+covers `announcements`, no orphaned `announcement_reads` survived it, and no repo
+seed or fixture defines it (its sibling `"EDC LV — Inbox Roundtrip v3"` remains,
+which suggests it was ad-hoc test debris, but that is an inference, not a fact).
+It was not reconstructed, because inventing an author and body would put fabricated
+data in the database wearing the costume of real data.
+
+The backfill session's method was better and is the standard going forward: it
+**seeded its own rows** for both directions and restored exact pre-seed baselines
+(announcements 8, project_members 16, projects 118). Read-only vectors can be
+proven against existing data; **destructive vectors must be proven against rows
+the probe created.** The irony is not lost — the row died to a capability that
+this migration establishes nothing in the product ever needed.
+
+### Also confirmed, and NOT a defect
+
+The backfill session re-probed the reads behind `FeedSurface`/`DirectorySurface`:
+3 of 3 announcements readable including an org-wide internal one, and the roster
+of a project the user is not on. **This is Amendment 1 working as designed**, not
+a false clearance — Amendment 1 said explicitly that `memberships`/`announcements`
+have no per-row grant for RLS to key on, so the app is the only place the boundary
+can exist, which is why `projectId` went into the props.
+
+Worth stating once, plainly, since it is easy to misread: the project-scoped
+roster is a **UI property, not a security property**. `projectId` compiling is not
+evidence of scoping. That is the precondition Amendment 5 attached to the rule,
+and it still holds.

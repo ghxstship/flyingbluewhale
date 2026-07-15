@@ -827,6 +827,16 @@ export const platformTabs: PlatformTabFamily[] = [
 ];
 
 export const platformUtility: NavItem[] = [
+  // Utility, not rail: the kit 20 rail is the acceptance fixture and must
+  // not grow without a kit revision. The corrections queue is where a
+  // worker's disputed punch lands for a manager — without it, separation of
+  // duties is a rule nobody can act on.
+  {
+    label: "Time Corrections",
+    href: "/studio/finance/timesheets/corrections",
+    icon: "CheckSquare",
+    sub: "Approve The Field's Time Fixes",
+  },
   { label: "Assistant", href: "/studio/assistant", icon: "Bot", sub: "Free-Form AI Chat" },
   { label: "Copilot", href: "/studio/copilot", icon: "Sparkles", sub: "Grounded Answers With Citations" },
   { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox", sub: "Cross-App Activity Feed" },

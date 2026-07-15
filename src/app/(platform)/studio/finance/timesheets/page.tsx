@@ -1,12 +1,14 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate, money } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
 import { formatMinutes } from "@/lib/db/timesheets";
+import { CompileControl } from "./CompileControl";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +68,23 @@ export default async function TimesheetsPage() {
     for (const p of parties ?? []) nameById.set(p.id, p.display_name);
   }
 
+  // Open pay periods drive the compile control. A period is the week a
+  // timesheet covers, so without one there is nothing to gather punches
+  // into — and until Phase 3 nothing gathered them at all.
+  const { data: periodRows } = await supabase
+    .from("pay_periods")
+    .select("id, period_start, period_end")
+    .eq("org_id", session.orgId)
+    .eq("period_state", "open")
+    .order("period_start", { ascending: false })
+    .limit(12);
+  const periods = ((periodRows ?? []) as Array<{ id: string; period_start: string; period_end: string }>).map((p) => ({
+    id: p.id,
+    label: `${fmtDate(p.period_start)} – ${fmtDate(p.period_end)}`,
+  }));
+
+  const manager = isManagerPlus(session);
+
   const dash = t("console.finance.timesheets.unknownWorker", undefined, "—");
   const rows: Row[] = sheets.map((r) => ({
     id: r.id,
@@ -89,6 +108,19 @@ export default async function TimesheetsPage() {
         subtitle={`${rows.length} ${t("console.finance.timesheets.total", undefined, "Total")} · ${pending} ${t("console.finance.timesheets.awaitingReview", undefined, "Awaiting review")}`}
       />
       <div className="page-content space-y-3">
+        {manager && (
+          <section className="surface space-y-3 p-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
+                {t("console.finance.timesheets.compile.heading", undefined, "Gather the week's punches")}
+              </h2>
+              <Link className="ps-link text-xs" href="/studio/finance/timesheets/corrections">
+                {t("console.finance.timesheets.correctionsLink", undefined, "Time corrections")}
+              </Link>
+            </div>
+            <CompileControl periods={periods} />
+          </section>
+        )}
         <DataTable<Row>
           rows={rows}
           totalCount={rows.length}
@@ -97,7 +129,7 @@ export default async function TimesheetsPage() {
           emptyDescription={t(
             "console.finance.timesheets.emptyDescription",
             undefined,
-            "Submitted timesheets route here for manager approval before they post to payroll.",
+            "Gather a pay period's punches above to compile them into timesheets. Once a worker submits, the sheet lands here for approval before it posts to payroll.",
           )}
           columns={[
             {

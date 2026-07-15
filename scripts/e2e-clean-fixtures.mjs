@@ -56,7 +56,7 @@ const TARGETS = [
   // BEFORE leads — a lead→proposal conversion titles the proposal "Proposal for
   // <lead>", and clearing the derived record first keeps the purge FK-safe.
   { table: "proposals", column: "title", pattern: "Proposal for E2E Lead%" },
-  { table: "leads", column: "title", pattern: "E2E Lead%" },
+  { table: "opportunities", column: "title", pattern: "E2E Lead%" },
   // Sales & CRM behavioral coverage extensions (atlvs-sales-crm-coverage.spec):
   // derived/child rows BEFORE their parents for FK safety.
   { table: "beo_line_items", column: "name", pattern: "E2E Line %" },
@@ -118,7 +118,7 @@ const TARGETS = [
   { table: "community_posts", column: "title", pattern: "E2E Legend Post%" },
   { table: "compliance_findings", column: "detail", pattern: "%E2E Rule%" },
   { table: "compliance_rules", column: "code", pattern: "E2E-RULE-%" },
-  { table: "leads", column: "title", pattern: "E2E Contact %" },
+  { table: "opportunities", column: "title", pattern: "E2E Contact %" },
   { table: "partner_integrations", column: "name", pattern: "E2E Integration %" },
   // Shared parents LAST — children above must clear first (ON DELETE RESTRICT).
   { table: "events", column: "name", pattern: "E2E Event %" },
@@ -197,6 +197,42 @@ async function healMarketplaceFixture(supabase) {
  * sidebar"). No e2e test sets the lens, so a one-time clear is durable —
  * this is belt-and-suspenders so the fixture heals itself on every run.
  */
+/**
+ * Restore the viewer fixture's Starter-org membership.
+ *
+ * lifecycle-invite-accept.spec drives a deliberate round-trip: the viewer LEAVES
+ * the Starter org, gets re-invited, and the accept restores the membership — so
+ * a completed run is idempotent. A mid-chain failure (before the accept) would
+ * strand the viewer OUT of the org and break the next run's precondition, so we
+ * un-soft-delete it here. Same self-heal contract as the marketplace talent
+ * fixture. No-ops when the membership is already live.
+ */
+async function healViewerStarterMembership(supabase) {
+  const VIEWER_EMAIL = "test+viewer@flyingbluewhale.app";
+  const STARTER_ORG = "0443cdf4-384c-44ea-8de7-25e5de77d2c8";
+  const { data: viewer, error: uErr } = await supabase
+    .from("users")
+    .select("id")
+    .eq("email", VIEWER_EMAIL)
+    .maybeSingle();
+  if (uErr || !viewer) {
+    if (uErr) console.error(`e2e:clean — viewer lookup: ${uErr.message}`);
+    return;
+  }
+  const { data: restored, error } = await supabase
+    .from("memberships")
+    .update({ deleted_at: null })
+    .eq("user_id", viewer.id)
+    .eq("org_id", STARTER_ORG)
+    .not("deleted_at", "is", null)
+    .select("id");
+  if (error) {
+    console.error(`e2e:clean — viewer Starter membership: ${error.message}`);
+    return;
+  }
+  if (restored?.length) console.log(`e2e:clean — restored the viewer fixture's Starter-org membership`);
+}
+
 async function resetOwnerNavLens(supabase, userId) {
   try {
     const { data: pref } = await supabase
@@ -321,6 +357,8 @@ async function main() {
   // Restore the shared marketplace fixture the mutation tests clobber. Runs on
   // the still-authenticated owner client (org member of the fixture org).
   await healMarketplaceFixture(supabase);
+  // Put the viewer back in the Starter org if the lifecycle round-trip stranded them.
+  await healViewerStarterMembership(supabase);
   // Kit 27 — wipe the advance-engine graph + seeded chase ladder.
   await purgeAdvanceEngine(supabase);
   // Route-to-approvals — wipe orphaned approval_instances (no FK back to the PO).

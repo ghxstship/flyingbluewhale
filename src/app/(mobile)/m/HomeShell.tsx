@@ -43,6 +43,9 @@ export type HomeLabels = {
   qaLostFound: string;
   qaSwap: string;
   qaInvite: string;
+  qaCustomize: string;
+  qaCustomizeSoon: string;
+  qaCustomizeClose: string;
   emergencyCard: string;
   esManning: string;
   esAssembly: string;
@@ -94,6 +97,7 @@ export function HomeShell({
   labels: HomeLabels;
 }) {
   const [newOpen, setNewOpen] = useState(false);
+  const [qaEdit, setQaEdit] = useState(false);
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const t = useToast();
   // Adapt the canonical sonner toast to the kit ToolSheet's {tone,title,message} shape.
@@ -141,7 +145,42 @@ export function HomeShell({
         <QA href="/m/expenses/new" icon="Receipt" tint="info" label={L.qaExpense} />
         <QA href="/m/lost-found" icon="Search" tint="warning" label={L.qaLostFound} />
         <QA href="/m/connections" icon="UserPlus" tint="accent" label={L.qaInvite} />
+        {/* Customize — the kit's `.qa-add` tile (dashed icon well). Its CSS was
+            ported and rendered by nothing, so the grid ended a tile short. */}
+        <button type="button" className="qa-add" onClick={() => setQaEdit(true)}>
+          <span className="qi">
+            <KIcon name="Plus" size={18} />
+          </span>
+          <span className="ql">{L.qaCustomize}</span>
+        </button>
       </div>
+
+      {qaEdit && (
+        <div className="sheet" role="dialog" aria-modal="true" aria-label={L.qaCustomize}>
+          <div className="sheet-bg" onClick={() => setQaEdit(false)} />
+          <div className="sheet-panel">
+            <div className="sheet-grip" />
+            <div className="sech" style={{ margin: "0 0 8px" }}>
+              <h2>{L.qaCustomize}</h2>
+            </div>
+            {/* Honest placeholder: the kit lets a crew member pick which
+                actions sit on their home. Persisting that needs a
+                user_preferences key and a kit-sanctioned action registry —
+                neither exists yet, so this says so rather than pretending. */}
+            <p className="form-intro" style={{ margin: "0 0 12px" }}>
+              {L.qaCustomizeSoon}
+            </p>
+            <button
+              type="button"
+              className="ps-btn ps-btn--cta ps-btn--lg"
+              style={{ width: "100%", justifyContent: "center" }}
+              onClick={() => setQaEdit(false)}
+            >
+              {L.qaCustomizeClose}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Toolbox — field utilities (unit/ops/OSHA/weather/radio/checklists) in a
           bottom sheet. Mirrors the kit reference's home Toolbox grid. */}

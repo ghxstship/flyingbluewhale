@@ -125,7 +125,8 @@
 .mobile-shell .dc-ev .s { font-size: 12px; color: var(--p-text-3); margin-top: 2px; }
 @keyframes scanmove { 0%,100% { top: 12%; } 50% { top: 86%; } }
 .mobile-shell .qa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.mobile-shell .qa button { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-3) 4px; display: flex; flex-direction: column; align-items: center; gap: var(--p-2); cursor: pointer; box-shadow: var(--p-elev-1); }
+.mobile-shell .qa button,
+.mobile-shell .qa > a { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 14px; padding: var(--p-3) 4px; display: flex; flex-direction: column; align-items: center; gap: var(--p-2); cursor: pointer; box-shadow: var(--p-elev-1); text-decoration: none; }
 .mobile-shell .qa .qi { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
 .mobile-shell .qa .ql { font-size: 11px; font-weight: 700; color: var(--p-text-2); text-align: center; line-height: 1.15; }
 .mobile-shell .backbtn { display: flex; align-items: center; gap: var(--p-1); background: none; border: none; padding: 4px 0; margin: 0 0 2px -3px; color: var(--p-text-2); font-size: 13px; font-weight: 600; cursor: pointer; }
@@ -470,11 +471,27 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
    ::after that overhangs to 44×44. WCAG 2.5.5/2.5.8 asks the target to be
    44×44 — it does not ask the ink to be. */
 .mobile-shell .pill.ico,
-.mobile-shell .qa .qi {
+.mobile-shell .qa .qi,
+.mobile-shell .avatar,
+.mobile-shell .brandbtn,
+.mobile-shell .iconbtn,
+.mobile-shell .ctx,
+.mobile-shell .vtog button {
   min-width: 0;
   min-height: 0;
 }
-.mobile-shell .pill.ico::after {
+/* The floor's input selector carries four :not() clauses — specificity (0,5,1).
+   A plain `.mobile-shell .searchbar input` is (0,2,1) and loses, which left the
+   search field 62px tall against the kit's 38. Match the chain to win it. */
+.mobile-shell
+  .searchbar
+  input:not([type="hidden"]):not([type="range"]):not([type="checkbox"]):not([type="radio"]) {
+  min-height: 0;
+}
+.mobile-shell .pill.ico::after,
+.mobile-shell .avatar::after,
+.mobile-shell .brandbtn::after,
+.mobile-shell .iconbtn::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -482,4 +499,9 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
   width: 44px;
   height: 44px;
   transform: translate(-50%, -50%);
+}
+.mobile-shell .avatar,
+.mobile-shell .brandbtn,
+.mobile-shell .iconbtn {
+  position: relative;
 }

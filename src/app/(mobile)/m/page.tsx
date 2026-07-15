@@ -125,6 +125,13 @@ export default async function MobileHome() {
     qaLostFound: t("m.home.qa.lostFound", undefined, "Lost & Found"),
     qaSwap: t("m.home.qa.swap", undefined, "Swap"),
     qaInvite: t("m.home.qa.invite", undefined, "Invite"),
+    qaCustomize: t("m.home.qa.customize", undefined, "Customize"),
+    qaCustomizeSoon: t(
+      "m.home.qa.customizeSoon",
+      undefined,
+      "Choosing which actions live here is coming. For now every crew member gets the same set.",
+    ),
+    qaCustomizeClose: t("m.home.qa.customizeClose", undefined, "Got It"),
     emergencyCard: t("m.home.emergencyCard", undefined, "Emergency Card"),
     esManning: t("m.home.es.manning", undefined, "Manning Position"),
     esAssembly: t("m.home.es.assembly", undefined, "Assembly Point"),

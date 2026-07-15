@@ -345,7 +345,7 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .screen { flex: 1; overflow-y: auto; padding: var(--p-2) var(--p-4) 96px; }
 .mobile-shell .scr-eye { font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-accent-text); }
 .mobile-shell .scr-h { font-family: var(--p-heading); text-transform: uppercase; font-size: 32px; line-height: 1; margin: var(--p-3) 0 16px; }
-.mobile-shell .fab { position: absolute; right: 16px; bottom: 92px; /* grid-exempt: clears the tab bar exactly; 96px floats it off the rail */ z-index: 25; width: 54px; height: 54px; border-radius: 50%; border: none; background: var(--p-accent); color: #1f0e03; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--p-elev-2, var(--p-elev-1)); transition: transform .12s cubic-bezier(.34,1.56,.64,1); }
+.mobile-shell .fab { position: fixed; right: 16px; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); /* grid-exempt: clears the 62px bar + its 16px inset exactly; 96px floats it off the rail */ z-index: 25; width: 54px; height: 54px; border-radius: 50%; border: none; background: var(--p-accent); color: #1f0e03; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--p-elev-2, var(--p-elev-1)); transition: transform .12s cubic-bezier(.34,1.56,.64,1); }
 .mobile-shell .fab:active { transform: scale(.9); }
 .mobile-shell .tag-chip { font-family: var(--p-mono); font-size: 11px; font-weight: 700; padding: 4px var(--p-2); border-radius: 7px; background: color-mix(in oklab, var(--p-accent) 14%, transparent); color: var(--p-accent-text); display: inline-flex; align-items: center; gap: 4px; }
 .mobile-shell .clock { background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 18px; padding: 20px; box-shadow: var(--p-elev-1); text-align: center; margin-bottom: var(--p-4); }
@@ -388,7 +388,7 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .item .s { font-size: 12px; color: var(--p-text-3); margin-top: 2px; }
 .mobile-shell .item .sp { flex: 1; }
 .mobile-shell .item .time { font-family: var(--p-mono); font-size: 12px; font-weight: 700; color: var(--p-text-2); }
-.mobile-shell .tabbar { position: absolute; bottom: 16px; left: 12px; right: 12px; height: 62px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 20px; display: flex; z-index: 15; box-shadow: var(--p-elev-2, var(--p-elev-1)); }
+.mobile-shell .tabbar { position: fixed; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 12px; right: 12px; height: 62px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 20px; display: flex; z-index: 15; box-shadow: var(--p-elev-2, var(--p-elev-1)); }
 .mobile-shell .tb { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--p-text-3); cursor: pointer; border-radius: 20px; }
 .mobile-shell .tb.on { color: var(--p-accent-text); }
 .mobile-shell .tb .badge { position: absolute; }
@@ -441,9 +441,8 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell textarea {
   min-height: 44px;
 }
-/* Icon-only controls also need width — quick-action tiles, segmented buttons,
-   the tab bar, and toggles. */
-.mobile-shell .qa .qi,
+/* Icon-only controls also need width — segmented buttons, the tab bar, and
+   toggles. */
 .mobile-shell .seg2 button,
 .mobile-shell .modal-x,
 .mobile-shell [data-tab],
@@ -451,4 +450,36 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .tabbar button {
   min-width: 44px;
   min-height: 44px;
+}
+
+/* ── The floor must not repaint the kit ─────────────────────────────────────
+   A touch target and a painted box are different things, and conflating them
+   distorted two controls:
+
+   `.pill.ico` is the ActionBar's control cluster — a 38×38 circle in the kit.
+   It is a <button>, so the blanket `min-height: 44px` above applied, and
+   min-height beats height: it rendered 38 wide × 44 tall. An oval. Every list
+   screen in the app has four of them.
+
+   `.qa .qi` is the quick-action icon tile — 34×34 in the kit. It was forced to
+   44×44 for accessibility it cannot provide: `.qi` is a <span> INSIDE the
+   tappable link, so the link is the target and is already well over 44px tall.
+   Inflating the tile bought nothing and blew out the grid.
+
+   So: paint at the kit's size, and hand the target back via a transparent
+   ::after that overhangs to 44×44. WCAG 2.5.5/2.5.8 asks the target to be
+   44×44 — it does not ask the ink to be. */
+.mobile-shell .pill.ico,
+.mobile-shell .qa .qi {
+  min-width: 0;
+  min-height: 0;
+}
+.mobile-shell .pill.ico::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
 }

@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronsUpDown, Search, Bell, Sparkles } from "lucide-react";
 import { MobileSwitcherSheet, type SwitcherOrg, type SwitcherProject } from "./MobileSwitcherSheet";
+import { MobileSearchSheet } from "./MobileSearchSheet";
 
 /**
  * COMPVSS app bar — kit 28 `.appbar`
@@ -46,6 +47,7 @@ export function MobileAppBar({
   const router = useRouter();
   const pathname = usePathname();
   const [switcherOpen, setSwitcherOpen] = React.useState(false);
+  const [searchOpen, setSearchOpen] = React.useState(false);
   const onIdentity = pathname === "/m/profile" || pathname.startsWith("/m/settings");
 
   return (
@@ -97,7 +99,7 @@ export function MobileAppBar({
 
         <span className="sp" />
 
-        <button type="button" className="iconbtn" onClick={() => router.push("/m/search")} aria-label="Search">
+        <button type="button" className="iconbtn" onClick={() => setSearchOpen(true)} aria-label="Search">
           <Search size={19} />
         </button>
         <button type="button" className="iconbtn" onClick={() => router.push("/m/notifications")} aria-label="Notifications">
@@ -114,6 +116,8 @@ export function MobileAppBar({
           {initials}
         </button>
       </div>
+
+      <MobileSearchSheet open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       <MobileSwitcherSheet
         open={switcherOpen}

@@ -30,6 +30,33 @@ function fmt(iso: string): string {
   });
 }
 
+/**
+ * A `file` answer is stored as `{ path, name, size, type }` — the bytes live
+ * in the private `forms` bucket, so the payload alone is unopenable.
+ * `renderValue` used to JSON.stringify it, which showed a reviewer a storage
+ * path and no way to reach the document someone actually submitted.
+ */
+type FileAnswer = { path: string; name: string; size?: number; type?: string };
+
+function asFileAnswer(value: Json): FileAnswer | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const v = value as Record<string, Json>;
+  if (typeof v.path !== "string" || !v.path || typeof v.name !== "string") return null;
+  return {
+    path: v.path,
+    name: v.name,
+    size: typeof v.size === "number" ? v.size : undefined,
+    type: typeof v.type === "string" ? v.type : undefined,
+  };
+}
+
+function formatBytes(n: number | undefined): string | null {
+  if (n == null) return null;
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 function renderValue(value: Json): string {
   if (value === null || value === undefined) return "—";
   if (typeof value === "string") return value;
@@ -86,6 +113,20 @@ export default async function Page({
     payload && typeof payload === "object" && !Array.isArray(payload)
       ? Object.entries(payload as Record<string, Json>)
       : [];
+
+  // Sign the file answers so a reviewer can open what was submitted. The
+  // `forms` bucket is private and the object path is org-prefixed, so the
+  // caller's own client can sign it — RLS stays the gate. Best-effort: a
+  // missing object renders as its filename rather than blanking the answer.
+  const signedFiles = new Map<string, string>();
+  await Promise.all(
+    entries.map(async ([key, value]) => {
+      const file = asFileAnswer(value);
+      if (!file) return;
+      const { data } = await supabase.storage.from("forms").createSignedUrl(file.path, 600);
+      if (data?.signedUrl) signedFiles.set(key, data.signedUrl);
+    }),
+  );
 
   return (
     <>
@@ -157,12 +198,45 @@ export default async function Page({
             </p>
           ) : (
             <dl className="mt-3 divide-y divide-[var(--p-border)]">
-              {entries.map(([key, value]) => (
-                <div key={key} className="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
-                  <dt className="text-xs font-medium text-[var(--p-text-2)]">{toTitle(key)}</dt>
-                  <dd className="whitespace-pre-wrap text-sm sm:col-span-2">{renderValue(value)}</dd>
-                </div>
-              ))}
+              {entries.map(([key, value]) => {
+                const file = asFileAnswer(value);
+                const href = file ? signedFiles.get(key) : undefined;
+                const meta = file ? [file.type, formatBytes(file.size)].filter(Boolean).join(" · ") : "";
+                return (
+                  <div key={key} className="grid gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                    <dt className="text-xs font-medium text-[var(--p-text-2)]">{toTitle(key)}</dt>
+                    <dd className="whitespace-pre-wrap text-sm sm:col-span-2">
+                      {file ? (
+                        <span className="flex flex-wrap items-baseline gap-2">
+                          {href ? (
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[var(--p-accent-text)] underline"
+                            >
+                              {file.name}
+                            </a>
+                          ) : (
+                            // The row says a file was submitted; if we can't
+                            // reach it, say that plainly rather than render a
+                            // dead link or a storage path.
+                            <span>{file.name}</span>
+                          )}
+                          {meta && <span className="text-xs text-[var(--p-text-3)]">{meta}</span>}
+                          {!href && (
+                            <span className="text-xs text-[var(--p-warning)]">
+                              {t("console.forms.submissions.detail.fileUnavailable", undefined, "File unavailable")}
+                            </span>
+                          )}
+                        </span>
+                      ) : (
+                        renderValue(value)
+                      )}
+                    </dd>
+                  </div>
+                );
+              })}
             </dl>
           )}
         </section>

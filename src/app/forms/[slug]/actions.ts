@@ -102,7 +102,13 @@ export async function submitFormAction(slug: string, _: SubmitState, fd: FormDat
           return { error: `Field "${f.label}": unsupported file type ${mime}` };
         }
         const safeName = raw.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-200);
-        const path = `form-uploads/${form.id}/${crypto.randomUUID()}/${f.key}-${safeName}`;
+        // Org id FIRST. The old layout (`form-uploads/<form_id>/...`) had no
+        // org segment, so `storage_org_scoped_read` — which gates on
+        // foldername[1] = your org — could never match it, and the console
+        // would have had no way to read a submitted file back even once the
+        // bucket existed. Every other bucket in this codebase is org-prefixed
+        // for exactly this reason.
+        const path = `${form.org_id}/form-uploads/${form.id}/${crypto.randomUUID()}/${f.key}-${safeName}`;
         const { error: upErr } = await supabase.storage.from("forms").upload(path, raw, {
           contentType: raw.type || "application/octet-stream",
           upsert: false,

@@ -1,7 +1,7 @@
 # SECURITY — `storage_service_role_buckets_upload` applies to every authenticated user
 
 **Found**: 2026-07-15, while building COMPVSS receipt capture (parity audit G1).
-**Status**: **OPEN — not fixed.** Deliberately left for a human decision.
+**Status**: **FIXED** 2026-07-15 (`20260715190000_storage_upload_tenant_scoping`), approved by the repo owner. Verified closed by re-running the probe that found it.
 **Severity**: cross-tenant write. High.
 **Provenance**: pre-existing. Not introduced by the parity work or the concurrent session.
 
@@ -54,20 +54,87 @@ establish the hole and the investigation stopped there.
 
 ## Residue to clean up
 
-Three **metadata-only** rows remain (no file content was uploaded — these were direct
-`storage.objects` inserts, not Storage API uploads), under the demo org prefix
+**Six metadata-only rows** remain — no file content (direct `storage.objects` inserts,
+not Storage API uploads), all under the demo org prefix
 `68672cc3-0667-4234-ad77-49325e173175/`:
 
-| bucket | name |
-| --- | --- |
-| `incident-photos` | `…/probe-i.jpg` |
-| `procore-parity` | `…/probe-p.jpg` |
-| `receipts` | `…/probe-r.jpg` |
+| bucket | name | from |
+| --- | --- | --- |
+| `incident-photos` | `…/probe-i.jpg` | discovery probe |
+| `procore-parity` | `…/probe-p.jpg` | discovery probe |
+| `receipts` | `…/probe-r.jpg` | discovery probe |
+| `incident-photos` | `…/ok-i.jpg` | fix verification |
+| `procore-parity` | `…/ok-p.jpg` | fix verification |
+| `branding` | `…/ok-b.png` | fix verification |
 
-`storage.protect_delete()` blocks SQL deletion by design, so they need the Storage API
-(or a service-role script) to remove. Harmless, but they should not be left to rot.
+Cleanup was approved but **could not be completed from here**: `storage.protect_delete()`
+blocks SQL deletion by design, and disabling the trigger needs table ownership
+(`must be owner of table objects`). They need the Storage API or a service-role script:
 
-## Why it is not fixed here
+```ts
+await svc.storage.from("incident-photos").remove(["<org>/probe-i.jpg", "<org>/ok-i.jpg"]);
+await svc.storage.from("procore-parity").remove(["<org>/probe-p.jpg", "<org>/ok-p.jpg"]);
+await svc.storage.from("receipts").remove(["<org>/probe-r.jpg"]);
+await svc.storage.from("branding").remove(["<org>/ok-b.png"]);
+```
+
+Also present and legitimate: one real 18KB `…/1784121616330-0-evidence.jpg` in
+`incident-photos` from the Phase 1 capture verification. Same cleanup applies.
+
+## The fix (applied)
+
+`service_role` has `rolbypassrls = true` — verified against `pg_roles`. RLS policies
+**do not apply to it**. So a policy named for the service role and granted to
+`authenticated` never did anything for service callers; it was pure liability, and
+could be dropped outright.
+
+Audited every writer into the six buckets first, because a policy change is only safe
+once you know who it breaks:
+
+| Bucket | Writer | Client | Effect of the fix |
+| --- | --- | --- | --- |
+| `receipts` | ap-ocr, vendor-invoices | service | unaffected (bypasses RLS) |
+| `personal-documents` | workforce/docs-action | service | unaffected |
+| `proposals` | *no upload caller* | — | unaffected |
+| `credentials` | *no upload caller* | — | unaffected |
+| `procore-parity` | daily-log photo, photos/upload | **user** | needs a policy — already writes `{org_id}/…` |
+| `branding` | api/v1/branding/upload | **user** | needs a policy — already writes `{org_id}/…` |
+
+No application change was required: both user-client buckets already put the org at
+path segment 1.
+
+Applied:
+
+1. **`private.caller_owns_org_prefix(name)`** — tenant isolation expressed once:
+   `storage.foldername(name)[1]` must be an org the caller is an **active** member of
+   (soft-deleted membership = offboarded = nothing). Lives beside
+   `private.has_org_role` / `private.is_org_member`.
+2. **`storage_org_scoped_upload`** rewritten to cover the four USER-writable buckets
+   (`advancing`, `incident-photos`, `procore-parity`, `branding`) and gate every one on
+   the helper.
+3. **`storage_service_role_buckets_upload` DROPPED** — the hole.
+4. **`branding_authenticated_write` DROPPED** — same shape, smaller radius
+   (`bucket_id='branding'`, no tenant check: any user could overwrite any org's logo).
+
+Service-only buckets now have **no authenticated policy at all**, which is the correct
+end state: a policy for a role that bypasses RLS is decoration at best.
+
+### Verified closed
+
+Re-ran the discovery probe under the same member JWT:
+
+- **Refused**: `receipts`, `credentials`, `personal-documents`, `proposals`
+- **Refused**: `procore-parity` under *another org's* prefix (cross-tenant)
+- **Still works**: `procore-parity`, `incident-photos`, `branding` under the caller's own org
+
+### Guarded
+
+`src/lib/db/storage-tenant-scoping.test.ts` watches the *shape*, not the name — names
+drift, and this one drifted. It fails if an authenticated INSERT policy filters on
+`bucket_id` without routing through the helper, or if a service-only bucket appears in
+one.
+
+## Why it was not fixed unilaterally at first (historical)
 
 Tightening this is a security change with real blast radius, and it is a decision with
 a human's name on it rather than a side effect of a parity commit:
@@ -87,11 +154,21 @@ a human's name on it rather than a side effect of a parity commit:
 
 ## Bearing on the parity work
 
-This is why COMPVSS receipt capture (G1) is **not** built yet even though its RLS half
-shipped (`20260715150000`, verified). The feature needs to write to `receipts`, and the
-only path that currently permits it is the hole. Building on it would have meant
-shipping a feature that works *because* of a security bug — and then quietly breaking
-the feature when the bug is fixed.
+G1 (COMPVSS receipt capture) was blocked on this: the feature must write to `receipts`,
+and the only path that permitted it *was the hole*. Building on it would have shipped a
+feature that worked **because** of a security bug and broke the moment the bug was
+fixed.
+
+That is now resolved, and the answer changed the design. `receipts` is **service-only**
+— correctly, since a receipt is money evidence and should not be writable by a client
+that a user controls. So G1's surface must upload via a **server action using the
+service client**, exactly as `workforce/docs-action` already does for
+`personal-documents`, rather than the caller's client used for `incident-photos`.
+
+Concretely, `uploadFieldPhotos` (`src/lib/mobile/photo-upload.ts`) takes the caller's
+client on purpose and is right for `incident-photos`. It is the WRONG tool for
+`receipts`. G1 needs a service-client path with the org prefix asserted server-side
+from the session — never from the form.
 
 `expenses.receipt_path` is still populated by **no surface in the repo**, console
 included. That column has been waiting for this to be resolved.

@@ -14659,6 +14659,7 @@ export type Database = {
           osha_recordable: boolean
           photos: Json
           project_id: string | null
+          report_kind: string
           reporter_id: string
           severity: Database["public"]["Enums"]["incident_severity"]
           summary: string
@@ -14685,6 +14686,7 @@ export type Database = {
           osha_recordable?: boolean
           photos?: Json
           project_id?: string | null
+          report_kind?: string
           reporter_id: string
           severity?: Database["public"]["Enums"]["incident_severity"]
           summary: string
@@ -14711,6 +14713,7 @@ export type Database = {
           osha_recordable?: boolean
           photos?: Json
           project_id?: string | null
+          report_kind?: string
           reporter_id?: string
           severity?: Database["public"]["Enums"]["incident_severity"]
           summary?: string

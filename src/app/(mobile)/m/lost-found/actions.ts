@@ -1,0 +1,64 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+
+const Input = z.object({
+  // kit `lostfound` form field ids
+  kind: z.string().optional(),
+  item: z.string().min(1, "Name the item."),
+  where: z.string().min(1, "Where was it lost or found?"),
+  what: z.string().min(1, "Describe the item."),
+  holding: z.string().optional(),
+  projectId: z.string().uuid().optional(),
+});
+
+/**
+ * File a lost / found property report.
+ *
+ * Lands in `incidents` with `report_kind = 'lost_property'` — the
+ * discriminator the console's Lost & Found lens filters on (ADR-0014: one
+ * store, honest filtered aliases, no parallel lost-found table).
+ *
+ * Deliberately does NOT notify the manager band: lost property is not a
+ * safety event, and paging Ops for every dropped lanyard is how people
+ * learn to ignore the pager.
+ */
+export async function fileLostFound(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = Input.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
+    return { error: "Please fix the errors below.", fieldErrors };
+  }
+  const v = parsed.data;
+  const lost = (v.kind ?? "Found").toLowerCase() === "lost";
+
+  const description = [v.what, v.holding ? `Now held at: ${v.holding}` : null].filter(Boolean).join("\n\n");
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("incidents").insert({
+    org_id: session.orgId,
+    project_id: v.projectId ?? null,
+    reporter_id: session.userId,
+    summary: `${lost ? "Lost" : "Found"}: ${v.item}`.slice(0, 140),
+    description,
+    // Property reports carry no injury and no safety severity weight.
+    severity: "near_miss",
+    incident_state: "open",
+    location: v.where,
+    occurred_at: new Date().toISOString(),
+    photos: [],
+    injury_type: null,
+    report_kind: "lost_property",
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/m/lost-found");
+  return null;
+}

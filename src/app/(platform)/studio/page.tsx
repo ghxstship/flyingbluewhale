@@ -19,6 +19,7 @@ import { WorldClocks } from "@/components/home/WorldClocks";
 import { ShowDayToggle } from "@/components/home/ShowDayToggle";
 import { CopilotSuggests, type CopilotSuggestion } from "@/components/home/CopilotSuggests";
 import { Badge } from "@/components/ui/Badge";
+import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 
 // Dashboard hub tabs — folds the previous Dashboard sidebar group
 // (Overview, Portfolio, Action Items, Command Palette) into one record-
@@ -130,7 +131,7 @@ export default async function ConsoleDashboard() {
       .from("approval_instances")
       .select("id", { count: "exact", head: true })
       .eq("org_id", session.orgId)
-      .eq("state", "pending"),
+      .in("state", [...OPEN_INSTANCE_STATES]),
     supabase
       .from("incidents")
       .select("id", { count: "exact", head: true })

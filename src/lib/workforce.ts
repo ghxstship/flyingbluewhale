@@ -40,6 +40,13 @@ export function classifyPunch(
 export const SWAP_STATES = ["requested", "accepted", "declined", "approved", "cancelled"] as const;
 export type SwapState = (typeof SWAP_STATES)[number];
 
+/**
+ * The states a swap can still be decided from. Every decide path must
+ * predicate its UPDATE on these, or a concurrent approve+decline across
+ * two shells last-write-wins and loses the audit attribution.
+ */
+export const UNDECIDED_SWAP_STATES = ["requested", "accepted"] as const satisfies readonly SwapState[];
+
 // ============================================================
 // Announcements / updates feed
 // ============================================================

@@ -22,6 +22,22 @@ export const INSTANCE_STATES = [
 ] as const;
 export type InstanceState = (typeof INSTANCE_STATES)[number];
 
+/**
+ * The states an instance is still awaiting a decision in — i.e. what
+ * "pending approvals" actually means.
+ *
+ * There is NO `pending` state: the CHECK constraint doesn't allow it and
+ * `routeToApprovals` inserts `initiated`. Three surfaces nonetheless
+ * queried `.eq("state", "pending")` and so counted zero forever — the
+ * approvals tile, the Home strip, and the nav badge were all structurally
+ * empty. Filter on this tuple instead of inventing a state.
+ */
+export const OPEN_INSTANCE_STATES = [
+  "initiated",
+  "in_review",
+  "escalated",
+] as const satisfies readonly InstanceState[];
+
 // approval_decisions.decision — note: NO "abstain"; the recusal value is
 // "recused".
 export const DECISION_KINDS = ["approved", "rejected", "returned", "recused"] as const;

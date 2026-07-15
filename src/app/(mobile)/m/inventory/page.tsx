@@ -112,7 +112,7 @@ export default async function InventoryPage() {
           eyebrow: t("m.inventory.eyebrow", undefined, "On-Hand Catalog"),
           title: t("m.inventory.title", undefined, "Assets"),
           search: t("m.inventory.search", undefined, "Search assets…"),
-          scan: t("m.inventory.scanCta", undefined, "Scan To Check Out / In"),
+          scan: t("m.inventory.scanCta", undefined, "Scan A Code"),
           empty: t("m.inventory.empty", undefined, "No assets"),
           emptyHint: t("m.inventory.emptyHint", undefined, "Nothing matches these filters."),
           units: t("m.inventory.units", undefined, "Units"),

@@ -25,6 +25,7 @@ const STATE_TONE: Record<string, string> = {
   requested: "warn",
   approved: "ok",
   declined: "danger",
+  denied: "danger",
   cancelled: "neutral",
   expired: "neutral",
 };
@@ -76,14 +77,23 @@ export function RequestsView({
       return next;
     });
 
-  const decide = (r: RequestRow, decision: "approved" | "declined") => {
+  // The two stores spell rejection differently and both spellings are
+  // load-bearing: time_off_requests CHECK allows `denied` (not `declined`),
+  // shift_swaps allows `declined` (not `denied`). Send each its own verb.
+  const decide = (r: RequestRow, outcome: "approve" | "reject") => {
     if (pending) return;
     setError(null);
     const fd = new FormData();
     fd.set("id", r.id);
-    fd.set("decision", decision);
     startTransition(async () => {
-      const res = r.kind === "time_off" ? await decideTimeOff(null, fd) : await decideSwap(null, fd);
+      let res;
+      if (r.kind === "time_off") {
+        fd.set("decision", outcome === "approve" ? "approved" : "denied");
+        res = await decideTimeOff(null, fd);
+      } else {
+        fd.set("decision", outcome === "approve" ? "approved" : "declined");
+        res = await decideSwap(null, fd);
+      }
       if (res?.error) {
         setError(res.error);
         return;
@@ -147,7 +157,7 @@ export function RequestsView({
               className="ps-btn ps-btn--cta ps-btn--lg"
               style={{ flex: 1, justifyContent: "center" }}
               disabled={pending}
-              onClick={() => decide(r, "approved")}
+              onClick={() => decide(r, "approve")}
             >
               <KIcon name="Check" size={15} /> {t("m.requests.approve", undefined, "Approve")}
             </button>
@@ -156,7 +166,7 @@ export function RequestsView({
               className="ps-btn ps-btn--danger ps-btn--lg"
               style={{ flex: 1, justifyContent: "center" }}
               disabled={pending}
-              onClick={() => decide(r, "declined")}
+              onClick={() => decide(r, "reject")}
             >
               <KIcon name="X" size={15} /> {t("m.requests.decline", undefined, "Decline")}
             </button>

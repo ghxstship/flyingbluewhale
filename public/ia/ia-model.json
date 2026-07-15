@@ -2433,6 +2433,12 @@
               ]
             },
             {
+              "path": "/m/docs/new",
+              "arch": [
+                "FORM"
+              ]
+            },
+            {
               "path": "/m/handover",
               "arch": [
                 "FIELD"
@@ -2464,6 +2470,12 @@
             },
             {
               "path": "/m/incident",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/lost-found",
               "arch": [
                 "LIST"
               ]

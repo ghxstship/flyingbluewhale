@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { ActionBar, GroupedList, KIcon, TogRow } from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -86,6 +87,14 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
       <div className="scr-eye">{eyebrow}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>{title}</h1>
 
+      <Link
+        href="/m/docs/new"
+        className="ps-btn ps-btn--cta ps-btn--lg"
+        style={{ width: "100%", justifyContent: "center", marginBottom: 12 }}
+      >
+        <KIcon name="Upload" size={15} /> {t("m.docs.upload", undefined, "Upload Document")}
+      </Link>
+
       <ActionBar
         k="dc"
         query={query}
@@ -123,7 +132,16 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
         <EmptyState
           size="compact"
           title={t("m.docs.empty.title", undefined, "No Documents")}
-          description={t("m.docs.empty.body", undefined, "Project documents you can access and your personal files land here.")}
+          description={t(
+            "m.docs.empty.body",
+            undefined,
+            "Project documents you can access land here. Upload your own tickets, licenses and certifications to keep them on you.",
+          )}
+          action={
+            <Link href="/m/docs/new" className="ps-btn ps-btn--cta">
+              <KIcon name="Upload" size={15} /> {t("m.docs.upload", undefined, "Upload Document")}
+            </Link>
+          }
         />
       ) : group === "cat" ? (
         <GroupedList

@@ -42,9 +42,9 @@ export default async function InventoryScanPage() {
       <InventoryScanner
         recent={recent}
         labels={{
-          eyebrow: t("m.inventoryScan.eyebrow", undefined, "Asset Tag"),
-          title: t("m.inventoryScan.title", undefined, "Scan To Check Out / In"),
-          hint: t("m.inventoryScan.hint", undefined, "Point at an asset tag QR — reads automatically."),
+          eyebrow: t("m.inventoryScan.eyebrow", undefined, "Scan"),
+          title: t("m.inventoryScan.title", undefined, "Scan A Code"),
+          hint: t("m.inventoryScan.hint", undefined, "Point at an assignment QR or barcode. Reads automatically."),
           back: t("m.inventoryScan.back", undefined, "Assets"),
           enableCamera: t("m.inventoryScan.enableCamera", undefined, "Enable Camera"),
           cameraDenied: t("m.inventoryScan.cameraDenied", undefined, "Camera Unavailable, Use Manual Entry"),
@@ -54,9 +54,9 @@ export default async function InventoryScanPage() {
             undefined,
             "Saved on this device. It will sync and verify when you're back online.",
           ),
-          manualLabel: t("m.inventoryScan.manualLabel", undefined, "Asset Tag"),
-          manualPlaceholder: t("m.inventoryScan.manualPlaceholder", undefined, "e.g. R7-014"),
-          cta: t("m.inventoryScan.cta", undefined, "Resolve Tag"),
+          manualLabel: t("m.inventoryScan.manualLabel", undefined, "Code"),
+          manualPlaceholder: t("m.inventoryScan.manualPlaceholder", undefined, "Type the code"),
+          cta: t("m.inventoryScan.cta", undefined, "Resolve Code"),
           scanning: t("m.inventoryScan.scanning", undefined, "Checking…"),
           recentTitle: t("m.inventoryScan.recentTitle", undefined, "Recent Activity"),
           recentEmpty: t("m.inventoryScan.recentEmpty", undefined, "No Scans Yet"),

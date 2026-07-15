@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1187 · **API route handlers:** 148 · **Distinct nav hrefs:** 519
+**Page routes:** 1189 · **API route handlers:** 148 · **Distinct nav hrefs:** 521
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 791 | 249 | 540 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 54 | 39 | 13 | 0 | 2 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 56 | 41 | 13 | 0 | 2 |
 | GVTEWAY — External Portal | portalNav rail | 152 | 130 | 19 | 0 | 3 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1187** | **493** | **651** | **0** | **43** |
+| **TOTAL** | | **1189** | **495** | **651** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1350,7 +1350,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-54 routes — ● 39 nav · ○ 13 linked · ⚠ 0 orphan
+56 routes — ● 41 nav · ○ 13 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1425,9 +1425,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>docs</code> · 1 route</summary>
+<details><summary><code>docs</code> · 2 routes</summary>
 
 ● `/m/docs`
+● `/m/docs/new`
 
 </details>
 
@@ -1493,6 +1494,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/m/inventory`
 ● `/m/inventory/scan`
+
+</details>
+
+<details><summary><code>lost-found</code> · 1 route</summary>
+
+● `/m/lost-found`
 
 </details>
 

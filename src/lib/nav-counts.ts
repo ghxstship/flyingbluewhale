@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { NavCountKey } from "@/lib/nav";
 import { MANAGER_BAND_ROLES } from "@/lib/auth";
+import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 
 /**
  * Live sidebar count badges (kit 21 wave W1) — the three "needing you"
@@ -83,7 +84,7 @@ async function pendingApprovalCount(supabase: SupabaseClient, session: Session):
     .from("approval_instances")
     .select("id", { count: "exact", head: true })
     .eq("org_id", session.orgId)
-    .eq("state", "pending");
+    .in("state", [...OPEN_INSTANCE_STATES]);
   if (!MANAGER_PLUS.has(session.role ?? "")) query = query.eq("initiated_by", session.userId);
   const { count } = await query;
   return count ?? 0;

@@ -79,7 +79,7 @@ export type HomeLabels = {
   qaClock: string;
   qaAdvance: string;
   qaApprove: string;
-  qaExpense: string;
+  qaLostFound: string;
   qaSwap: string;
   qaInvite: string;
 };
@@ -292,8 +292,10 @@ export function HomeShell({
         <QA href="/m/clock" icon="Timer" tint="info" label={L.qaClock} />
         <QA href="/m/advances" icon="ClipboardList" tint="warning" label={L.qaAdvance} />
         <QA href="/m/requests" icon="CheckCheck" tint="success" label={L.qaApprove} badge={data.openTasks || undefined} />
-        <QA href="/m/expenses" icon="Receipt" tint="info" label={L.qaExpense} />
-        <QA href="/m/swaps" icon="ArrowLeftRight" tint="info" label={L.qaSwap} />
+        {/* Swaps are decided on the Approvals queue — there is no /m/swaps
+            route, and this tile 404'd for every role until it was repointed. */}
+        <QA href="/m/requests" icon="ArrowLeftRight" tint="info" label={L.qaSwap} />
+        <QA href="/m/lost-found" icon="Search" tint="warning" label={L.qaLostFound} />
         <QA href="/m/connections" icon="UserPlus" tint="accent" label={L.qaInvite} />
       </div>
 

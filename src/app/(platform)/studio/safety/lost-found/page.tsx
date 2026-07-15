@@ -25,10 +25,15 @@ type Row = {
 /**
  * Lost & Found (kit 20 Safety · Protect tab) — the property lens over the
  * incidents store. There is no separate lost-found table (ADR-0014): field
- * crews file "Report It · Lost" through the incident intake, which lands
- * here as a non-injury report. This page filters `incidents` to rows with
- * no injury classification — the honest filtered-alias pattern, not a
- * parallel store.
+ * crews file "Report It · Lost" through the lost & found intake
+ * (`/m/lost-found`), which lands here as a `report_kind = 'lost_property'`
+ * row. The honest filtered-alias pattern, not a parallel store.
+ *
+ * This used to filter on `injury_type IS NULL` and call that "the property
+ * lens". It wasn't: spills, near-misses and equipment damage all have a
+ * null injury_type, and the COMPVSS intake never wrote the column at all,
+ * so every field-filed report — injuries included — showed up here as lost
+ * property. Filter on the discriminator, never on the absence of an injury.
  */
 export default async function Page() {
   const { t } = await getRequestT();
@@ -55,7 +60,7 @@ export default async function Page() {
     .from("incidents")
     .select("id, summary, severity, incident_state, occurred_at, closed_at, location")
     .eq("org_id", session.orgId)
-    .is("injury_type", null)
+    .eq("report_kind", "lost_property")
     .is("deleted_at", null)
     .order("occurred_at", { ascending: false })
     .limit(200);

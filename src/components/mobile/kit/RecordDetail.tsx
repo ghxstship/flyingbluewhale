@@ -202,9 +202,9 @@ export function RecordDetail({
             </div>
           )}
           <div className="composer" style={{ position: "static", borderTop: "none", padding: 0, marginTop: 4, display: "flex", gap: 8, alignItems: "center" }}>
-            <button type="button" onClick={() => setTagOpen((o) => !o)} aria-label="Tag people" style={{ flex: "none", width: 40, height: 40, borderRadius: 50, border: "1px solid var(--p-border)", background: tagOpen ? "var(--p-accent)" : "var(--p-surface)", color: tagOpen ? "var(--p-accent-cta-contrast)" : "var(--p-text-2)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><KIcon name="AtSign" size={17} /></button>
+            <button type="button" onClick={() => setTagOpen((o) => !o)} aria-label="Tag people" style={{ flex: "none", width: 44, height: 44, borderRadius: 50, border: "1px solid var(--p-border)", background: tagOpen ? "var(--p-accent)" : "var(--p-surface)", color: tagOpen ? "var(--p-accent-cta-contrast)" : "var(--p-text-2)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><KIcon name="AtSign" size={17} /></button>
             <input className="box" value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") postComment(); }} placeholder="Add a comment…" style={{ flex: 1, border: "1px solid var(--p-border)", borderRadius: 20, padding: "10px 15px", fontSize: 13.5, background: "var(--p-surface)" }} />
-            <button type="button" onClick={postComment} aria-label="Post" style={{ flex: "none", border: "none", background: "var(--p-accent)", color: "var(--p-accent-cta-contrast)", width: 40, height: 40, borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><KIcon name="ArrowUp" size={18} /></button>
+            <button type="button" onClick={postComment} aria-label="Post" style={{ flex: "none", border: "none", background: "var(--p-accent)", color: "var(--p-accent-cta-contrast)", width: 44, height: 44, borderRadius: 50, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><KIcon name="ArrowUp" size={18} /></button>
           </div>
         </div>
       )}

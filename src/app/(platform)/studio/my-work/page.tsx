@@ -7,6 +7,7 @@ import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 
 /**
  * My Work — the one personal spine (v7.8 zero-training layer).
@@ -46,7 +47,7 @@ export default async function MyWorkPage() {
     .from("approval_instances")
     .select("id, subject_table, subject_id, state, initiated_at, policy:approval_policies(name)", { count: "exact" })
     .eq("org_id", session.orgId)
-    .eq("state", "pending")
+    .in("state", [...OPEN_INSTANCE_STATES])
     .order("initiated_at", { ascending: false })
     .limit(8);
   if (!managerPlus) approvalsQuery = approvalsQuery.eq("initiated_by", session.userId);

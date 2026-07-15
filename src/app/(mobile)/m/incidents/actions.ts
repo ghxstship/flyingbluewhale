@@ -44,13 +44,15 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
   }
   const v = parsed.data;
   const severity = SEVERITY_MAP[v.severity ?? "Medium"] ?? "minor";
-  const description = [
-    v.what,
-    v.action ? `Immediate action: ${v.action}` : null,
-    v.injury ? "Injuries involved." : null,
-  ]
-    .filter(Boolean)
-    .join("\n\n");
+  const description = [v.what, v.action ? `Immediate action: ${v.action}` : null].filter(Boolean).join("\n\n");
+
+  // The injury switch has to reach a column, not just prose. It used to
+  // only append "Injuries involved." to the description, which meant
+  // injury_type stayed null — and the Lost & Found lens (which keyed off
+  // exactly that) swallowed every field-filed injury. `reported` is the
+  // honest value the intake can assert; the specific injury type is
+  // classified downstream on the console.
+  const injuryType = v.injury ? "reported" : null;
 
   const supabase = await createClient();
   const { error } = await supabase.from("incidents").insert({
@@ -64,6 +66,10 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
     location: v.where || null,
     occurred_at: new Date().toISOString(),
     photos: [],
+    injury_type: injuryType,
+    // This intake is the safety intake. Lost property comes through the
+    // lost & found intake, which sets `lost_property`.
+    report_kind: "safety",
   });
   if (error) return { error: error.message };
 

@@ -35,6 +35,10 @@ export async function quickFileIncident(_prev: State, fd: FormData): Promise<Sta
     incident_state: "open",
     occurred_at: new Date().toISOString(),
     photos: [],
+    // Express capture is the safety intake. Without this the row would
+    // default-in as safety anyway, but state it explicitly so the intent
+    // survives a future default change.
+    report_kind: "safety",
   });
   if (error) return { error: error.message };
 

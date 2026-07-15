@@ -1636,12 +1636,17 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Time", href: "/m/clock" },
   { label: "Requests", href: "/m/requests" },
   { label: "Documents", href: "/m/docs" },
+  { label: "Upload Document", href: "/m/docs/new" },
   { label: "Handover", href: "/m/handover" },
   { label: "Daily Log", href: "/m/daily-log" },
-  { label: "Punch", href: "/m/punch" },
+  // "Punch Clock", not "Punch" — /m/punch is the time-clock punch surface.
+  // The bare label read as the construction punch list (/studio/punch),
+  // which is a different thing entirely and has no mobile surface yet.
+  { label: "Punch Clock", href: "/m/punch" },
   { label: "Chain of Custody", href: "/m/coc" },
   { label: "Incidents", href: "/m/incidents" },
   { label: "My Incidents", href: "/m/incident" },
+  { label: "Lost & Found", href: "/m/lost-found" },
   { label: "Guide", href: "/m/guide" },
   // People.
   { label: "Team Roster", href: "/m/directory" },

@@ -50,20 +50,28 @@ export default async function MobileRequestsPage() {
   const fmt = await getRequestFormatters();
   const manager = isManagerPlus(session);
 
-  const [timeOffRes, swapRes] = await Promise.all([
-    supabase
-      .from("time_off_requests")
-      .select("id, user_id, request_state, reason, starts_on, ends_on, hours_requested, created_at")
-      .eq("org_id", session.orgId)
-      .order("created_at", { ascending: false })
-      .limit(100),
-    supabase
-      .from("shift_swaps")
-      .select("id, requested_by, target_user_id, swap_state, reason, created_at")
-      .eq("org_id", session.orgId)
-      .order("created_at", { ascending: false })
-      .limit(100),
-  ]);
+  // Non-managers see only their own rows. `manager` used to gate the
+  // decision buttons but not the QUERY, so any member reaching this route
+  // (home quick action, ⌘K, direct URL) read every colleague's time-off
+  // reason in the org. RLS is `is_org_member`, so it is no backstop here —
+  // the filter has to be explicit, exactly as /studio/my-work does it.
+  let timeOffQuery = supabase
+    .from("time_off_requests")
+    .select("id, user_id, request_state, reason, starts_on, ends_on, hours_requested, created_at")
+    .eq("org_id", session.orgId)
+    .order("created_at", { ascending: false })
+    .limit(100);
+  if (!manager) timeOffQuery = timeOffQuery.eq("user_id", session.userId);
+
+  let swapQuery = supabase
+    .from("shift_swaps")
+    .select("id, requested_by, target_user_id, swap_state, reason, created_at")
+    .eq("org_id", session.orgId)
+    .order("created_at", { ascending: false })
+    .limit(100);
+  if (!manager) swapQuery = swapQuery.eq("requested_by", session.userId);
+
+  const [timeOffRes, swapRes] = await Promise.all([timeOffQuery, swapQuery]);
 
   const timeOff = (timeOffRes.data ?? []) as TimeOffRow[];
   const swaps = (swapRes.data ?? []) as SwapRow[];

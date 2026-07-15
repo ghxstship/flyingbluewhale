@@ -18,7 +18,7 @@ Status: **Phases 0-5 landed — every phase engineering can close. 6 and 7c are 
 
 ### Remaining
 
-**The canonical list is [`TIME_LIFECYCLE_BACKLOG.md`](./TIME_LIFECYCLE_BACKLOG.md)** — 14 items, split by what engineering can schedule (P1-P3) versus what waits on other organisations (P4-P5). Summary:
+**The canonical list is [`TIME_LIFECYCLE_BACKLOG.md`](./TIME_LIFECYCLE_BACKLOG.md)** — 17 items, split by what engineering can schedule (P1-P3) versus what waits on other organisations (P4-P5). Summary:
 
 | Phase | Status |
 | --- | --- |

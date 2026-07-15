@@ -27,6 +27,21 @@ Status: **Phases 0-5 landed — every phase engineering can close. 6 and 7c are 
 
 Phases 6 and 7c cannot be closed by writing code. Anyone reading this as "80% done, two phases left" has the wrong picture: what remains is one buildable driver and two dependencies on other organisations.
 
+### Remediation pass (after Phases 0-5)
+
+Auditing my own work, not the original code, turned up more than the audit of the original did:
+
+| Flag | Was | Now |
+| --- | --- | --- |
+| `compile_timesheets` / `post_timesheet` | **Zero callers.** Real, tested, applied RPCs wired to nothing — the spine was continuous in the DB and unreachable from the app | `POST /pay-periods`, `/pay-periods/{id}/compile`, `/timesheets/{id}/post` (`f85d499b`) |
+| Plan item 4 (manager punch edit) | `time:edit` granted in Phase 2, no route used it | `PATCH /time/entries/{id}` via `edit_time_entry`, reason a NOT NULL argument (`f85d499b`) |
+| `ot_rule_set` | Column declared in Phase 1, never surfaced by the settings loader, so posting couldn't know which rules applied | Returned and used (`f85d499b`) |
+| `payroll:read` | RLS said any member, the route said owner/admin — the DB said yes to a crew member the route said no to | Manager band in both (`f85d499b`) |
+| Console | **Everything was API-only.** No operator could compile, see a correction, or decide one | Corrections queue + compile control (`8e94afda`) |
+| Certified payroll FEIN/license (defect #17) | Every CA DIR / NY PWA / WA L&I filing shipped `fein=""` | Columns added, wired, and the export **refuses** rather than filing blank (`77a6f30e`) |
+| C3 zone↔shift link | Zones carry `project_id`, shifts `venue_id`, nothing joined them | `time_clock_zones.venue_id` (`ac87c964`) |
+| Phase 7a nudges | Not started | Schedule-anchored local notifications, no native change (`ac87c964`) |
+
 ### The defect I reproduced
 
 Phase 3 shipped `compile_timesheets` and `post_timesheet` as real, tested, applied RPCs — **and nothing called them**. The spine was continuous in the database and unreachable from the app: nothing created a timesheet, nothing wrote a `payroll_run_line`, and the Phase 5 export would have exported an empty table. That is §0's hollow middle exactly, one layer up, written by the same hand that wrote §0.

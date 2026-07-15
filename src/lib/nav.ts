@@ -1091,6 +1091,7 @@ export const settingsNav: NavGroup[] = [
     label: "Team & Access",
     items: [
       { label: "Roles", href: "/studio/people/roles", minRole: "admin" },
+      { label: "Capabilities", href: "/studio/settings/capabilities", minRole: "admin" },
       { label: "Invites", href: "/studio/people/invites", minRole: "admin" },
       { label: "Account Managers", href: "/studio/settings/account-managers", minRole: "admin" },
       { label: "Governance", href: "/studio/settings/governance", minRole: "admin" },

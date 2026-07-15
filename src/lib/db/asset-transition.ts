@@ -1,7 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Session } from "@/lib/auth";
-import { isManagerPlus } from "@/lib/auth";
+import { can, isManagerPlus } from "@/lib/auth";
 import { emitAudit } from "@/lib/audit";
 import type { UalState } from "@/lib/supabase/types";
 import { CHECK_IN, CHECK_OUT, NEXT_UAL_STATES, movementKindFor } from "./assets";
@@ -25,35 +25,36 @@ import { CHECK_IN, CHECK_OUT, NEXT_UAL_STATES, movementKindFor } from "./assets"
  * silent gap in the custody trail is worse than an error), and the audit
  * emit.
  *
- * AUTHORIZATION. `isManagerPlus` — the gate the console has always
- * enforced ("Only manager+ can move assets"). Mirroring it on mobile is
- * parity, which is what shipped.
+ * AUTHORIZATION. Two tiers, split by what the move actually means.
  *
- * CREW SELF-CHECKOUT IS DECIDED BUT NOT BUILT HERE. The product call
- * (2026-07-15) is that it should be *assignable*, not a global rule — one
- * customer's stagehands self-serve from a cage, another's want a storeman
- * in the loop, and both are right about their own site.
+ * CUSTODY (check-out → `in_use`, check-in → `available`) is manager+ OR
+ * anyone holding the `asset:custody` grant. Crew self-checkout was DECIDED
+ * (2026-07-15) as *assignable*, not a global rule — one customer's
+ * stagehands self-serve from a cage, another's want a storeman in the loop,
+ * and both are right about their own site. ADR-0015's capability-grant layer
+ * is that mechanism, and is strictly better than an org-level flag (one was
+ * built and reverted): it assigns by role, by person, and for a time window,
+ * which is exactly the cover-shift case.
  *
- * The mechanism for that is ADR-0015's capability-grant layer
- * (`role_capability_grants` + `user_capability_grants` → `can()`), which is
- * strictly better than an org-level flag: it assigns by role, by person,
- * and for a time window, which is exactly the cover-shift case. Its own ADR
- * says it plainly — "the next add-on feature reuses this rather than
- * growing a second RBAC system" — and this IS the next add-on feature.
+ * EVERYTHING ELSE (retire, write off, maintenance, lost) stays manager+
+ * however the grant is assigned. Taking a radio off a shelf is custody;
+ * writing off a forklift is not. The grant deliberately cannot reach those —
+ * see `ASSET_CAPABILITIES` in @/lib/rbac/capabilities.
  *
- * It is not wired here yet only because `session.grants` is still `[]`
- * (ADR-0015 is "Accepted, partially implemented"). When the resolver lands,
- * the change here is one line:
- *
- *   if (!isManagerPlus(session) && !can(session, "asset:custody")) → refuse
- *
- * plus `asset:custody` in the capability catalog, and it must stay NARROW:
- * check-out and check-in only. Retire and maintenance remain manager+
- * however the grant is assigned — taking a radio off a shelf is custody;
- * writing off a forklift is not.
+ * The gate is on the TARGET state rather than the caller's intent, because
+ * the caller's intent is not checkable: `allowedFrom` is an optional
+ * argument, so a custody-granted user calling with `to: "retired"` and no
+ * `allowedFrom` must still be refused.
  */
 
 export type AssetTransitionResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * The two moves the `asset:custody` grant may perform. Everything else is
+ * manager+ only. Derived from the CHECK_OUT / CHECK_IN targets so this can't
+ * drift from the constants the surfaces actually call with.
+ */
+const CUSTODY_TARGETS: readonly UalState[] = [CHECK_OUT.to, CHECK_IN.to];
 
 export async function transitionAssetState(
   supabase: SupabaseClient,
@@ -62,7 +63,16 @@ export async function transitionAssetState(
   to: UalState,
   allowedFrom?: readonly UalState[],
 ): Promise<AssetTransitionResult> {
-  if (!isManagerPlus(session)) return { ok: false, error: "Only manager+ can move assets" };
+  const isCustodyMove = CUSTODY_TARGETS.includes(to);
+  const allowed = isManagerPlus(session) || (isCustodyMove && can(session, "asset:custody"));
+  if (!allowed) {
+    return {
+      ok: false,
+      error: isCustodyMove
+        ? "You do not have permission to check gear out or in"
+        : "Only manager+ can retire or service assets",
+    };
+  }
 
   const { data: row } = await supabase
     .from("assets")

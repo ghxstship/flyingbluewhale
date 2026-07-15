@@ -32,6 +32,15 @@ export type AuditAction =
   // security-sensitive write in the console — it grants or revokes
   // platform-level capabilities. Always log it.
   | "auth.role.changed"
+  // Capability grants (ADR-0015). Same family as `auth.role.changed` and for
+  // the same reason: grants are additive with no denies, so a grant row hands
+  // out authority the base role never had. A permission change nobody can
+  // attribute is a permission change you can't answer questions about.
+  | "capability.role_granted"
+  | "capability.role_revoked"
+  | "capability.user_granted"
+  | "capability.user_revoked"
+  | "capability.enforcement_changed"
   | "auth.member.removed"
   | "auth.member.left"
   | "auth.member.restored"
@@ -123,6 +132,7 @@ export type AuditAction =
   | "shift_swap.accepted"
   | "shift_swap.declined"
   | "incident.filed"
+  | "incident.state_changed"
   | "onboarding.assigned"
   | "onboarding.completed"
   | "personal_document.uploaded"

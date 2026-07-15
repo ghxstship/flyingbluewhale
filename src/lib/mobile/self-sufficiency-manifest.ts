@@ -119,9 +119,9 @@ export const WORKFLOWS: readonly Workflow[] = [
   {
     id: "asset.custody",
     label: "Take and return custody of gear",
-    state: "blocked",
+    state: "gap",
     roles: WORKS_ON_SITE,
-    note: "G3. Manager+ custody SHIPPED (e0da4b03) — mobile mirrors the console's gate via the shared transitionAssetState, DB-verified writing an asset_movements checkout row. Crew self-checkout is DECIDED ('assignable', 2026-07-15) but blocked on ADR-0015's capability-grant layer landing: session.grants is still [] so can() can't carry it. Do NOT build a second mechanism — an org-level feature flag was tried and reverted for exactly that reason. See OPEN_DECISIONS.",
+    note: "G3. Manager+ custody SHIPPED (e0da4b03) — mobile mirrors the console's gate via the shared transitionAssetState, DB-verified writing an asset_movements checkout row. Crew self-checkout is no longer BLOCKED: session.grants resolves (auth.ts#resolveGrants via effective_capabilities), `asset:custody` is in the catalog, transitionAssetState gates the two custody targets on can() while retire/maintenance stay manager+ (src/lib/db/asset-custody-grant.test.ts pins the narrowness), and the grant is administrable at /studio/settings/capabilities — which did not exist: the grant tables had ZERO consumers, so the only way to turn a capability on was SQL against prod. REMAINING: an e2e that grants asset:custody to a crew fixture and checks gear out end-to-end. Until that spec exists this stays a gap, because nobody has watched it work.",
   },
   {
     id: "punchlist.raise",
@@ -271,6 +271,6 @@ export const OPEN_DECISIONS: readonly { id: string; question: string }[] = [
   {
     id: "asset.custody",
     question:
-      "Crew self-checkout is DECIDED — 'assignable', not a global rule (2026-07-15). It is not BUILT because the right mechanism is ADR-0015's capability grants (role/person/time-boxed), and that layer is only partially implemented: session.grants is still []. When the resolver lands, add `asset:custody` to the capability catalog and gate transitionAssetState on can(session, 'asset:custody') — NARROW: check-out/check-in only, never retire or maintenance. An org-level feature flag was built and reverted; ADR-0015 says the next add-on feature reuses the grant layer rather than growing a second RBAC system, and this is that feature.",
+      "RESOLVED 2026-07-15 — nothing left to decide, only to prove. The resolver had in fact landed (auth.ts#resolveGrants), so the 'session.grants is []' blocker was stale. `asset:custody` is now in the catalog, transitionAssetState gates the two custody targets on can() (retire/maintenance stay manager+, pinned by asset-custody-grant.test.ts), and /studio/settings/capabilities administers the grant. That surface is the part nobody had noticed was missing: ADR-0015 shipped fully ENFORCED and completely UNADMINISTERED — both grant tables had zero consumers outside the catalog and the generated types, so turning a capability on for a customer meant writing SQL against production. Writing grants also narrowed from the manager band to admin (20260715230000): grants are additive with no denies, so whoever writes a grant row can hand out any capability — and a manager's base has no scan:* at all, making 'manager grants their own role scan:credential' a real escalation, not a theoretical one.",
   },
 ];

@@ -161,6 +161,16 @@ other projects' row payloads.
 `ScheduleSurface`, `ChatSurface`, `TimeOffSurface`, `DocsSurface` were audited and are
 already user-scoped (`.eq("user_id", session.userId)` / room membership). No change.
 
+> **⚠ This paragraph is wrong, and it is the most expensive sentence in this
+> document — see Amendment 5 and 5.2 before relying on it.** The audit behind it
+> checked the APP's filter and never asked whether the DB agreed. Three of the four
+> were hiding live escalations reachable by the `vendor` persona: chat (self-join any
+> room), time-off (read everyone's requests, approve your own leave, write anyone's
+> balance), and shifts (every persona read every shift). Only `DocsSurface` was
+> genuinely self-scoped at the DB. Left in place rather than rewritten because the
+> claim is the finding: "the app filters it" was never evidence about the database,
+> and reading it as a clearance is what let the holes sit.
+
 ### 2. Kudos is removed from the portal (resolves Open question 3: **no**)
 
 Open question 3 asked whether a vendor should see kudos across personas and said
@@ -295,6 +305,16 @@ separate form."
   and the flag was wrong** — see it for why (membership is a per-row grant and
   is strictly _finer_ than project scope; scoping by project would leak and
   over-hide at the same time). It found a real RLS hole instead.
+- **One instance of this defect is knowingly still open**: `/p/[slug]/crew/timesheets`
+  is read-only and its empty state promises a pipeline ("once a pay period is
+  compiled and submitted…") that no portal or `/m` surface can reach.
+  `POST /api/v1/timesheets/{id}/submit` exists and works, so the promise is keepable
+  and submitting a timesheet is a form — which under this amendment's rule puts it in
+  the portal. Not built here only because it landed from a concurrent session after
+  this amendment shipped; tracked as P2 item 7 in `docs/compvss/TIME_LIFECYCLE_BACKLOG.md`.
+  Naming it because "the surface promises a write the reader cannot perform" is exactly
+  the defect class Amendment 4 exists to close, and an unclosed instance inside the
+  amendment's own lane should not have to be rediscovered.
 
 ### Correction: the `/p/community` "router-init race" was not real
 
@@ -520,8 +540,8 @@ Two independent causes, both the Amendment 5 shape — the gate is in the app:
    `authenticated`, and checked only `private.is_org_member`. Its own comment said
    so. Being in the org is not authority to decide leave.
 
-Meanwhile `decideTimeOffRequest` carries the comment *"Re-checked here rather than
-trusted from the caller so neither shell can skip the gate by hiding a button."*
+Meanwhile `decideTimeOffRequest` carries the comment _"Re-checked here rather than
+trusted from the caller so neither shell can skip the gate by hiding a button."_
 True of both shells. A PostgREST call is not a shell.
 
 Fixed: per-command policies with the manager band (`owner|admin|manager`, matching
@@ -600,7 +620,7 @@ guards the static half over the tables involved.
 ## Amendment 5, part 3 (2026-07-15) — the last two flags
 
 `20260715210000_amendment5_remaining_flags.sql`. Both flags part 2 deferred are
-closed. One of them was only safe to close because a *concurrent* session found
+closed. One of them was only safe to close because a _concurrent_ session found
 the fact I was missing.
 
 ### Chat reads are pinned to live org membership
@@ -608,7 +628,7 @@ the fact I was missing.
 Part 2 left `chat_messages` gating on room membership alone, with no org check.
 That made the offboard cascade the **only** thing revoking a departed user's
 chat: soft-delete their `memberships` row and the `chat_room_members` rows they
-still held *were* read access. Fixing the cascade (part 2) made it correct; it
+still held _were_ read access. Fixing the cascade (part 2) made it correct; it
 did not stop it being the single point of failure. A teardown that has never yet
 been skipped is not a boundary — it is a to-do list.
 
@@ -635,7 +655,7 @@ and its `.eq("workforce_member_id", …)` app filter was the only thing narrowin
 it. Same shape as everything else in this ADR: the app filters, the database
 does not.
 
-What part 2 got wrong was calling it *only* a product question. It was also a
+What part 2 got wrong was calling it _only_ a product question. It was also a
 question I could not safely answer yet, and the missing fact arrived from another
 session's `controller` finding (956b29c4): `shifts_select_consolidated`'s staff
 band is `['owner','admin','controller','collaborator']`, where **`controller` is
@@ -686,8 +706,8 @@ table mid-retirement is churn against a moving target. It stays flagged.
   question — what does a normal login see through PostgREST? — and none needed
   anything more exotic than that.
 - The `controller` string is why a security fix should not be written from a
-  policy's apparent intent. `shifts_select_consolidated` *read* as "staff, or org
-  members, or the owner". It *meant* "any org member", and its staff band did not
+  policy's apparent intent. `shifts_select_consolidated` _read_ as "staff, or org
+  members, or the owner". It _meant_ "any org member", and its staff band did not
   include managers. Read what a predicate does, not what its argument list
   suggests.
 

@@ -42833,6 +42833,33 @@ export type Database = {
       postgis_version: { Args: never; Returns: string }
       postgis_wagyu_version: { Args: never; Returns: string }
       reclaim_stuck_jobs: { Args: never; Returns: number }
+      record_approval_decision: {
+        Args: {
+          p_decision: string
+          p_instance_id: string
+          p_notes?: string
+          p_step_id: string
+        }
+        Returns: {
+          closed_at: string | null
+          current_step_id: string | null
+          id: string
+          initiated_at: string
+          initiated_by: string | null
+          metadata: Json
+          org_id: string
+          policy_id: string
+          state: string
+          subject_id: string
+          subject_table: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "approval_instances"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       record_msa_view: {
         Args: { p_code: string; p_token: string }
         Returns: undefined

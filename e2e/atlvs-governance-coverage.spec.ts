@@ -80,13 +80,17 @@ test.describe("ATLVS Governance, Comms & Advancing-merge — behavioral coverage
   // MEDIUM — create an approval delegation → redirect back to the delegations
   // list. scope_ref carries the stamp so teardown can purge it.
   //
-  // Persona is ADMIN: `approval_delegations` row-security (uas_del_self) only
-  // admits the INSERT when delegator_party_id is one of the caller's
-  // parties.id OR is_org_admin. createDelegation writes session.userId (the
-  // auth uid, NOT a parties.id) as delegator_party_id, so the sole passing
-  // path is the is_org_admin branch — a manager's INSERT is RLS-rejected.
-  test("admin: create an approval delegation", async ({ page }) => {
-    await authedSetup(page, "admin");
+  // Persona is MANAGER, and that is the point of the test. uas_del_self admitted
+  // its self branch only when delegator_party_id was one of the caller's
+  // parties.id, but createDelegation writes session.userId (the auth uid) — and
+  // always the caller's, since the delegator isn't selectable. So the self
+  // branch never matched and the policy fell through to is_org_admin: delegating
+  // was admin-only despite the app gate being isManagerPlus, and this test had to
+  // run as admin to pass. 20260715140000 taught the self branch the auth uid (and
+  // org-scoped it), so a manager can now delegate their OWN authority — the last
+  // of the three *_party_id inversions (see also uas_dec_decider, 20260715130000).
+  test("manager: create an approval delegation", async ({ page }) => {
+    await authedSetup(page, "manager");
     await createInModule(page, "/studio/governance/approvals/delegations/new", {
       scope_ref: `E2E Delegation ${stamp()}`,
     });

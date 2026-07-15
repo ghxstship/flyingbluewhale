@@ -5,7 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
-import { DECISION_KINDS, instanceStateForDecision } from "@/lib/approvals/queries";
+import { DECISION_KINDS } from "@/lib/approvals/queries";
 
 const Schema = z.object({
   instance_id: z.string().uuid(),
@@ -28,50 +28,21 @@ export async function recordDecision(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
-  // Confirm the instance is org-scoped (approval_decisions has no org_id —
-  // scope via its parent instance).
-  const { data: instance } = await supabase
-    .from("approval_instances")
-    .select("id")
-    .eq("id", parsed.data.instance_id)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
-  if (!instance) return { error: "Approval instance not found" };
-
-  // party_id columns have no FK → map to the current user.
-  const { error } = await supabase.from("approval_decisions").insert({
-    instance_id: parsed.data.instance_id,
-    step_id: parsed.data.step_id,
-    decider_party_id: session.userId,
-    decision: parsed.data.decision,
-    notes: parsed.data.notes || null,
-    // decided_at defaults now()
+  // ONE call, ONE transaction. The decision row and the instance state advance
+  // must commit together — as two PostgREST statements they couldn't, so a
+  // failure between them left a decision on record against a still-open
+  // instance. record_approval_decision (20260715140000) does both inside a
+  // plpgsql function; it re-checks manager-band authority on the instance's org
+  // itself (SECURITY DEFINER bypasses RLS), rejects an already-terminal
+  // instance, and verifies the step belongs to this instance's policy — so the
+  // org/authority pre-read this action used to do is now redundant.
+  const { error } = await supabase.rpc("record_approval_decision", {
+    p_instance_id: parsed.data.instance_id,
+    p_step_id: parsed.data.step_id,
+    p_decision: parsed.data.decision,
+    p_notes: parsed.data.notes || undefined,
   });
   if (error) return actionFail(error.message, fd);
-
-  // Advance the instance state from the decision. NOT best-effort: swallowing
-  // this error is what hid the missing approval_instances UPDATE policy — the
-  // decision recorded but the instance silently stayed open forever. The
-  // decision row is already written at this point, so a failure here leaves the
-  // pair inconsistent; surface it loudly rather than reporting success.
-  const nextState = instanceStateForDecision(parsed.data.decision);
-  if (nextState) {
-    const isClosing = nextState === "approved" || nextState === "rejected";
-    const { error: advanceError } = await supabase
-      .from("approval_instances")
-      .update({
-        state: nextState,
-        ...(isClosing ? { closed_at: new Date().toISOString() } : {}),
-      })
-      .eq("id", parsed.data.instance_id)
-      .eq("org_id", session.orgId);
-    if (advanceError) {
-      return actionFail(
-        `Decision recorded, but advancing the approval to "${nextState}" failed: ${advanceError.message}`,
-        fd,
-      );
-    }
-  }
 
   revalidatePath(`/studio/governance/approvals/${parsed.data.instance_id}`);
   revalidatePath("/studio/governance/approvals");

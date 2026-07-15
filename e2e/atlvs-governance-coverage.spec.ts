@@ -258,13 +258,12 @@ test.describe("ATLVS Governance, Comms & Advancing-merge — behavioral coverage
   // MEDIUM — create a message channel under the Channel Plan → redirect to
   // the channel detail.
   //
-  // SKIPPED (app/DB defect, not a test bug): public.message_channels has RLS
-  // enabled with ONLY a FOR SELECT policy (ums_ch_member) — no INSERT/ALL
-  // policy exists in any migration. So createChannel's insert is row-security
-  // rejected for EVERY console persona (owner/admin included) and the form can
-  // never redirect off /new. This flow is unexercisable until a migration adds
-  // an INSERT policy granting manager+ (or admin) the channel write.
-  test.skip("manager: create a message channel", async ({ page }) => {
+  // Persona is MANAGER: the app-layer gate is isManagerPlus and migration
+  // 20260714130000_message_channels_write_rls added the matching INSERT policy
+  // (ums_ch_insert, with-check is_org_manager_plus) plus extended the SELECT
+  // carve-out (ums_ch_member) from admin-only to manager+ so the insert's
+  // RETURNING and the detail read resolve for a plain manager.
+  test("manager: create a message channel", async ({ page }) => {
     await authedSetup(page, "manager");
     await createInModule(page, "/studio/comms/channels/new", { name: `E2E Channel ${stamp()}` });
     await expect(page).toHaveURL(new RegExp(`/studio/comms/channels/${UUID.source}`), { timeout: 90000 });

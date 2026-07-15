@@ -480,7 +480,11 @@ registerEndpoint({
       schema: okEnvelope(
         z.object({
           eligibility: z.array(
-            z.object({ vendor_id: z.string().uuid(), trade: z.string(), verdict: z.enum(["eligible", "expiring", "blocked"]) }),
+            z.object({
+              vendor_id: z.string().uuid(),
+              trade: z.string(),
+              verdict: z.enum(["eligible", "expiring", "blocked"]),
+            }),
           ),
         }),
       ),
@@ -561,6 +565,122 @@ registerEndpoint({
   tags: ["Scorecard"],
   responses: {
     200: { description: "Vendor scores", schema: okEnvelope(z.object({ scores: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+// ─── Time & pay ──────────────────────────────────────────────────────
+// The surface an external HR/payroll connector builds against. Until
+// Phase 4 the SERVED spec (this registry) carried no time or payroll
+// endpoints at all — so a third party fetching /api/v1/openapi.json, the
+// machine-readable contract, saw none of it and had nothing to build on.
+// The rule these exist to keep: anything a native ADP-style connector can
+// do must also be doable by an outside integrator through the public API.
+
+const TimesheetShape = z.object({
+  id: z.string().uuid(),
+  org_id: z.string().uuid(),
+  party_id: z.string().uuid(),
+  pay_period_id: z.string().uuid().nullable(),
+  period_start: z.string(),
+  period_end: z.string(),
+  state: z.enum(["open", "submitted", "approved", "rejected", "posted", "archived"]),
+  total_minutes: z.number().int(),
+  billable_minutes: z.number().int(),
+  submitted_at: z.string().datetime().nullable(),
+  posted_at: z.string().datetime().nullable(),
+});
+
+registerEndpoint({
+  method: "POST",
+  path: "/time/clock",
+  summary: "Clock in or out",
+  description:
+    "The personal time-clock punch. Optional lat/lng/accuracy drive geofence classification; under a blocking zone policy an off-site punch returns 422 `geofence_blocked` with `overrideAvailable`, and supplying `overrideReason` records the punch flagged for a manager rather than refusing it. Offline-queueable.",
+  tags: ["Time"],
+  responses: {
+    200: {
+      description: "Punch recorded",
+      schema: okEnvelope(
+        z.object({
+          action: z.enum(["clock_in", "clock_out"]),
+          entry: z.unknown(),
+          geofenceState: z.enum(["inside", "outside", "unknown"]).nullable(),
+          zoneName: z.string().nullable(),
+          enforcementState: z.enum(["clean", "warned", "quarantined", "overridden"]).optional(),
+        }),
+      ),
+    },
+    409: { description: "Already clocked in, or not clocked in", schema: ErrorEnvelope },
+    422: { description: "Refused by the org's geofence policy", schema: ErrorEnvelope },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "GET",
+  path: "/time/corrections",
+  summary: "List time-correction requests",
+  description: "A worker sees their own; the manager band sees the org queue. Scope: time:read.",
+  tags: ["Time"],
+  queryParams: {
+    state: z.enum(["requested", "approved", "denied", "applied", "withdrawn"]).optional(),
+    mine: z.literal("1").optional(),
+  },
+  responses: {
+    200: { description: "Correction requests", schema: okEnvelope(z.object({ corrections: z.array(z.unknown()) })) },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "POST",
+  path: "/time/corrections",
+  summary: "File a time-correction request",
+  description:
+    "Propose a fix to your own punch. Never mutates the entry — a manager must approve it, and no one may approve their own. Scope: time:write.",
+  tags: ["Time"],
+  responses: {
+    201: {
+      description: "Request filed; the punch is unchanged",
+      schema: okEnvelope(z.object({ correction: z.unknown() })),
+    },
+    403: { description: "You can only request corrections to your own entries", schema: ErrorEnvelope },
+    409: { description: "A request is already pending for this shift", schema: ErrorEnvelope },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "PATCH",
+  path: "/time/corrections/{id}",
+  summary: "Decide a time correction",
+  description:
+    "Approve or deny. Approving applies the change in one transaction (entry mutation + audit + re-open of an approved timesheet). Manager band only, and never your own request. Scope: time:approve.",
+  tags: ["Time"],
+  responses: {
+    200: { description: "Decision applied", schema: okEnvelope(z.object({ result: z.unknown() })) },
+    403: { description: "Not a manager, or you are the requester", schema: ErrorEnvelope },
+    409: { description: "Already decided", schema: ErrorEnvelope },
+    401: { description: "Unauthorized", schema: ErrorEnvelope },
+  },
+  auth: "session",
+});
+
+registerEndpoint({
+  method: "POST",
+  path: "/timesheets/{id}/submit",
+  summary: "Submit a timesheet for review",
+  description:
+    "Hand a sheet in (open|rejected -> submitted). Refused while corrections are still pending on it. Fires the `timesheet.submitted` webhook. Scope: time:write.",
+  tags: ["Timesheets"],
+  responses: {
+    200: { description: "Submitted", schema: okEnvelope(z.object({ timesheet: TimesheetShape.partial() })) },
+    409: { description: "Not submittable, or corrections pending", schema: ErrorEnvelope },
     401: { description: "Unauthorized", schema: ErrorEnvelope },
   },
   auth: "session",

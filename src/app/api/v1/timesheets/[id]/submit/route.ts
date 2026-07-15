@@ -2,7 +2,8 @@ import { type NextRequest } from "next/server";
 import { apiError, apiOk } from "@/lib/api";
 import { assertCapability, isManagerPlus, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { canSubmit, type TimesheetState } from "@/lib/db/timesheets";
+import { notifyOrgAdmins } from "@/lib/notify";
+import { canSubmit, formatMinutes, type TimesheetState } from "@/lib/db/timesheets";
 
 /**
  * POST /api/v1/timesheets/{id}/submit — the worker hands their sheet in.
@@ -82,6 +83,19 @@ export async function POST(_req: NextRequest, ctx: { params: Promise<{ id: strin
       .maybeSingle();
     if (updErr) return apiError("internal", updErr.message);
     if (!moved) return apiError("conflict", "This timesheet changed while you were looking at it. Refresh and retry.");
+
+    // Tell the org's managers, and fan out to any subscribed webhook — this
+    // is the hook an external payroll connector waits on rather than polling.
+    // `targetTable`/`targetId` are what let an automation bind to the row;
+    // without them emitDomainEvent records a null source.
+    await notifyOrgAdmins({
+      orgId: session.orgId,
+      eventType: "timesheet.submitted",
+      title: "Timesheet submitted",
+      body: `${formatMinutes(moved.total_minutes)} for review`,
+      href: `/studio/finance/timesheets/${id}`,
+      data: { targetTable: "timesheets", targetId: id, totalMinutes: moved.total_minutes },
+    });
 
     return apiOk({ timesheet: moved });
   });

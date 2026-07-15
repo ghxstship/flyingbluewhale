@@ -36,6 +36,18 @@ export const WEBHOOK_EVENTS = [
   "passkey.registered",
   "account.deletion_requested",
   "marketplace.inquiry_received",
+
+  // Time & pay (TIME_MANAGEMENT_LIFECYCLE_PLAN.md Phase 4). These are the
+  // hooks an external payroll connector subscribes to instead of polling —
+  // the rule being that anything the native connectors can do, an outside
+  // integrator can do through the same public surface.
+  "timesheet.submitted",
+  "timesheet.approved",
+  "timesheet.rejected",
+  "timesheet.posted",
+  "payroll.posted",
+  "time.correction_requested",
+  "time.correction_decided",
 ] as const;
 
 export type WebhookEvent = (typeof WEBHOOK_EVENTS)[number];

@@ -4,10 +4,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { notify, type NotifyEvent } from "@/lib/notify";
 import {
   TIMESHEET_DECISIONS,
   DECISION_TARGET_STATE,
   canDecide,
+  type TimesheetDecision,
   type TimesheetState,
 } from "@/lib/db/timesheets";
 
@@ -108,6 +110,36 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
   // writes in one transaction (a SECURITY DEFINER RPC) — tracked with the
   // approval-engine consolidation, not worth a schema change here.
   if (insErr) return { error: `Decision applied but the audit row failed to record: ${insErr.message}` };
+
+  // Fan out the decision. `timesheet.approved` is the hook an external
+  // payroll connector subscribes to rather than polling for postable sheets
+  // — the whole point of the open surface is that a third party can build
+  // what a native connector would.
+  const EVENT: Record<TimesheetDecision, NotifyEvent> = {
+    approved: "timesheet.approved",
+    rejected: "timesheet.rejected",
+    // A return is a rejection from the worker's point of view: their sheet
+    // came back. No separate event until someone needs to tell them apart.
+    returned: "timesheet.rejected",
+  };
+  // timesheets key on party_id, notifications on auth user — and no FK is
+  // registered between them, so this is a lookup rather than an embed.
+  const { data: worker } = await supabase
+    .from("parties")
+    .select("auth_user_id")
+    .eq("id", sheet.party_id)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+
+  await notify({
+    orgId: session.orgId,
+    userId: worker?.auth_user_id ?? null,
+    eventType: EVENT[decision],
+    title: `Timesheet ${decision === "returned" ? "returned for changes" : decision}`,
+    body: notes,
+    href: `/studio/finance/timesheets/${id}`,
+    data: { targetTable: "timesheets", targetId: id, decision },
+  });
 
   revalidatePath(`/studio/finance/timesheets/${id}`);
   revalidatePath("/studio/finance/timesheets");

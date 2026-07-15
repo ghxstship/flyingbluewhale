@@ -176,6 +176,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   // headers. Stamped onto the two inline bootstrap scripts below so they
   // satisfy `script-src 'nonce-<n>'` without the production CSP needing
   // 'unsafe-inline'. Undefined in contexts with no middleware (e.g. tests).
+  //
+  // The two <script nonce> tags below carry `suppressHydrationWarning`. Per the
+  // CSP spec the browser HIDES the nonce: on insertion it blanks the content
+  // attribute (so it can't be exfiltrated with a CSS attribute selector) and
+  // keeps the value only on the `.nonce` IDL property. React hydrates against
+  // the content attribute, reads "", compares it to the real nonce in the
+  // payload and reports an attribute mismatch — on EVERY page load, in every
+  // shell. Verified in-browser: getAttribute("nonce") === "" while
+  // script.nonce === "<the nonce>", so CSP still matches and the scripts run.
+  // React says "this won't be patched up" (attribute mismatches don't trigger
+  // recovery or a client re-render), so the warning is pure console noise that
+  // buries real hydration errors. Suppressing is the sanctioned escape hatch
+  // for a legitimate server/client difference; it changes no CSP behaviour.
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
@@ -189,7 +202,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       suppressHydrationWarning
     >
       <head>
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* M2-04 — Organization schema appears on every page so Google's
             knowledge panel can resolve the brand. Populates once at the root
             and inherits across every route. */}
@@ -253,7 +266,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             },
           }}
         />
-        <script nonce={nonce} dangerouslySetInnerHTML={{ __html: swRegister }} />
+        <script nonce={nonce} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: swRegister }} />
       </body>
     </html>
   );

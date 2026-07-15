@@ -61,7 +61,13 @@ test.describe("Lifecycle — leave org, re-invite, accept, restore", () => {
 
     await page.goto("/studio/people/invites");
     await page.locator('main [name="email"]').first().fill(VIEWER_EMAIL);
-    await page.locator('main select[name="role"]').first().selectOption("viewer");
+    // `member` is this fixture's ACTUAL role in the Starter org (the email
+    // suffix is not the DB role) AND one of the three roles the invite form
+    // offers (admin|manager|member — there is no `viewer` option). Matching it
+    // matters: accept_invite upserts the membership with the INVITE's role, so
+    // inviting at any other level would rewrite the fixture's role instead of
+    // restoring it, and the round-trip would stop being self-healing.
+    await page.locator('main select[name="role"]').first().selectOption("member");
     await page
       .locator("main form")
       .first()

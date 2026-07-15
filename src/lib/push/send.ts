@@ -34,14 +34,15 @@ export type PushKind =
   | "assignment_scan"
   | "shift_swap"
   | "time_off"
-  | "timesheet"
   | "course"
   | "incident"
-  // Time & pay. `notify()` maps its timesheet/payroll/correction events onto
-  // these (NOTIFY_EVENT_PUSH_KIND, src/lib/notify.ts) so a worker can mute
-  // them from the same matrix as everything else. Before that map existed the
-  // events reached sendPushTo with no kind at all, and notify() gated them on
-  // a retired store whose push default was false — so they never sent.
+  // Time & pay. Two paths land on `timesheet`: /m/timesheets/notify.ts calls
+  // sendPushBulk with the kind directly, and notify() maps its timesheet/
+  // payroll/correction events onto these (NOTIFY_EVENT_PUSH_KIND,
+  // src/lib/notify.ts) so a worker can mute them from the same matrix as
+  // everything else. Before that map existed the notify() events reached
+  // sendPushTo with no kind at all, and notify() gated them on a retired store
+  // whose push default was false — so they never sent.
   | "timesheet"
   | "payroll"
   | "time_correction"
@@ -369,7 +370,6 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   chat: "New Message",
   kudos: "Recognition",
   badge: "Badge Awarded",
-  timesheet: "Timesheet",
   assignment: "Assignment",
   assignment_state: "Assignment Update",
   assignment_scan: "Assignment Scan",

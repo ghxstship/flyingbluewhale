@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pushKindForEvent } from "./notify";
-import { NOTIF_KINDS } from "@/components/notifications/kinds";
+import { NOTIF_KINDS, NOTIF_KIND_FALLBACKS } from "@/components/notifications/kinds";
 
 /**
  * Guards the fix for TIME_LIFECYCLE_BACKLOG #11.
@@ -49,6 +49,28 @@ describe("notify push-kind map", () => {
     // The map is opt-in on purpose: handing sendPushTo an undefined kind makes
     // filterByPushPrefs exclude nobody, i.e. an unmutable push.
     expect(pushKindForEvent("invoice.paid" as never)).toBeUndefined();
+  });
+
+  it("lists each kind exactly once", () => {
+    // Two sessions added `timesheet` minutes apart and git auto-merged both
+    // additions with NO conflict. The duplicate object key was a type error
+    // (TS1117), but a duplicate tuple entry and a duplicate fallback row are
+    // both type-LEGAL — they render the same switch twice. tsc cannot see
+    // this; only an assertion can.
+    expect(NOTIF_KINDS.length, "duplicate kind in NOTIF_KINDS").toBe(new Set(NOTIF_KINDS).size);
+    const fallbackKinds = NOTIF_KIND_FALLBACKS.map((r) => r.kind);
+    expect(fallbackKinds.length, "duplicate kind in NOTIF_KIND_FALLBACKS").toBe(new Set(fallbackKinds).size);
+  });
+
+  it("gives every toggleable kind a fallback row", () => {
+    // The matrix renders from the view; the fallbacks are what a user sees
+    // when that read fails. A kind missing here renders no switch on a blip.
+    for (const kind of NOTIF_KINDS) {
+      expect(
+        NOTIF_KIND_FALLBACKS.some((r) => r.kind === kind),
+        `${kind} has no fallback row`,
+      ).toBe(true);
+    }
   });
 
   it("keeps the catalog view in lockstep with NOTIF_KINDS", () => {

@@ -28,7 +28,6 @@ export const NOTIF_KINDS = [
   "assignment_scan",
   "shift_swap",
   "time_off",
-  "timesheet",
   "course",
   "incident",
   "timesheet",
@@ -68,10 +67,12 @@ export const NOTIF_KIND_FALLBACKS: NotifKindRow[] = [
   { kind: "assignment_scan", label: "Scans", description: "Your ticket or credential was scanned" },
   { kind: "shift_swap", label: "Shift Swap", description: "Swap request decisions" },
   { kind: "time_off", label: "Time Off", description: "Time-off request decisions" },
-  { kind: "timesheet", label: "Timesheets", description: "Timesheet submissions and decisions" },
   { kind: "course", label: "Courses", description: "Course assignments + pass results" },
   { kind: "incident", label: "Incidents", description: "Field incident updates (manager+ only)" },
-  { kind: "timesheet", label: "Timesheets", description: "Your timesheet was submitted, approved, rejected, or posted" },
+  // Covers both directions: the worker's own sheet events (notify(), via
+  // NOTIFY_EVENT_PUSH_KIND) and the manager-band submission alert
+  // (/m/timesheets/notify.ts, sendPushBulk). One kind, one switch.
+  { kind: "timesheet", label: "Timesheets", description: "Timesheet submissions and decisions" },
   { kind: "payroll", label: "Payroll", description: "A payroll run covering your time was posted" },
   { kind: "time_correction", label: "Time Corrections", description: "Decisions on time corrections you requested" },
 ];

@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
+import { IncidentPhotos } from "@/components/incidents/IncidentPhotos";
 import { RecordActionButton } from "@/components/RecordActionButton";
 import { createCorrectiveTaskAction } from "../actions";
 import { deleteIncident } from "./edit/actions";
@@ -84,15 +85,21 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             </span>
           </div>
         </div>
+        <IncidentPhotos photos={fields["photos"]} />
         <dl className="surface grid grid-cols-1 gap-3 p-6 sm:grid-cols-2">
-          {Object.entries(fields).map(([k, v]) => (
-            <div key={k} className="flex flex-col gap-1">
-              <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">{toTitle(k)}</dt>
-              <dd className="font-mono text-xs break-all">
-                {v === null || v === undefined ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v)}
-              </dd>
-            </div>
-          ))}
+          {Object.entries(fields)
+            // `photos` renders as the evidence panel above. Left in this
+            // generic dump it was a JSON blob of storage paths — present,
+            // unreadable, and impossible to actually look at.
+            .filter(([k]) => k !== "photos")
+            .map(([k, v]) => (
+              <div key={k} className="flex flex-col gap-1">
+                <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">{toTitle(k)}</dt>
+                <dd className="font-mono text-xs break-all">
+                  {v === null || v === undefined ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v)}
+                </dd>
+              </div>
+            ))}
         </dl>
       </div>
     </>

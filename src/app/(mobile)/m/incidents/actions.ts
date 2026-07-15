@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
-import { filesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
+import { filesFrom, fixesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
 
 export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
 
@@ -66,7 +66,14 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
   // attached. A failed upload must not lose the report, so a partial
   // failure is carried through as a warning rather than an abort — the
   // incident is the thing that matters; the attachment is corroboration.
-  const upload = await uploadFieldPhotos(supabase, "incident-photos", session.orgId, session.userId, photoFiles);
+  const upload = await uploadFieldPhotos(
+    supabase,
+    "incident-photos",
+    session.orgId,
+    session.userId,
+    photoFiles,
+    fixesFrom(fd, "photo", photoFiles.length),
+  );
 
   const { error } = await supabase.from("incidents").insert({
     org_id: session.orgId,
@@ -78,7 +85,10 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
     incident_state: "open",
     location: v.where || null,
     occurred_at: new Date().toISOString(),
-    photos: upload.paths,
+    // Store refs, not bare paths: where a photo was taken is often the whole
+    // question on a safety claim, and the coordinates are worthless if they
+    // aren't attached to the specific image they belong to.
+    photos: upload.refs,
     injury_type: injuryType,
     // This intake is the safety intake. Lost property comes through the
     // lost & found intake, which sets `lost_property`.

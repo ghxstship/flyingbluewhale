@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { KIcon } from "./icon";
 import { downscaleAll, downscaleImage } from "@/lib/mobile/image";
+import { getPosition } from "@/lib/geo/position";
+import type { PhotoFix } from "@/lib/mobile/photo-geo";
 import { SignaturePad } from "@/components/ui/SignaturePad";
 import { FORMS } from "./forms";
 import type { FormDef, FormField } from "./forms";
@@ -215,12 +217,35 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
  * is more capable than anything we'd hand-roll and already understands
  * gloves, glare, and one-handed use. Photos downscale on device before they
  * ever touch the network.
+ *
+ * Photos are geotagged at pick time (`getPosition`), index-aligned with the
+ * files and carried to the server under the `{id}__geo` sibling key. The fix
+ * is best-effort by design: a denial, an indoor dead-zone, or a device
+ * without GPS records "no location" and never blocks the submit — a safety
+ * report from a concrete loading dock must still file. The chip below the
+ * control tells the worker which of those two happened, so location capture
+ * is something they can see rather than something done to them.
  */
-function FileField({ f, value, setValue }: { f: FormField; value: unknown; setValue: (v: unknown) => void }) {
+function FileField({
+  f,
+  value,
+  setValue,
+  setSibling,
+}: {
+  f: FormField;
+  value: unknown;
+  setValue: (v: unknown) => void;
+  setSibling?: (suffix: string, v: unknown) => void;
+}) {
   const isPhoto = f.type === "photo";
   const files = Array.isArray(value) ? (value as File[]) : [];
   const [busy, setBusy] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
+  // Fixes are held here, index-aligned with `files`, and mirrored into the
+  // form's values on every mutation. Local state is the source of truth: a
+  // File cannot carry custom properties through FormData, so the geotag has
+  // nowhere else to live.
+  const [fixes, setFixes] = useState<(PhotoFix | null)[]>([]);
   const inputId = `ff-${f.id}`;
 
   // Object URLs must be revoked or the page leaks a few MB per capture.
@@ -231,13 +256,30 @@ function FileField({ f, value, setValue }: { f: FormField; value: unknown; setVa
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  /** Mirror files + fixes into the form together so they can never diverge. */
+  function commit(nextFiles: File[], nextFixes: (PhotoFix | null)[]) {
+    setFixes(nextFixes);
+    setValue(nextFiles);
+    if (isPhoto) setSibling?.("geo", JSON.stringify(nextFixes));
+  }
+
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
     const picked = Array.from(e.target.files ?? []);
     if (!picked.length) return;
     setBusy(true);
     try {
+      // Fix and downscale race each other — both are slow, neither depends
+      // on the other, and the worker is waiting on the pair.
+      const fixPromise = isPhoto ? getPosition() : Promise.resolve(null);
       const processed = isPhoto ? await downscaleAll(picked) : picked;
-      setValue([...files, ...processed]);
+      const fix = await fixPromise;
+      const capturedAt = new Date().toISOString();
+      // One fix for the batch: picking 5 photos is one act in one place, and
+      // 5 sequential GPS waits would be a 20s stall for identical answers.
+      const batchFixes = processed.map(() =>
+        fix ? { lat: fix.lat, lng: fix.lng, accuracyM: fix.accuracy, capturedAt } : null,
+      );
+      commit([...files, ...processed], [...fixes, ...batchFixes]);
     } finally {
       setBusy(false);
       // Reset so picking the same file twice still fires onChange.
@@ -245,7 +287,15 @@ function FileField({ f, value, setValue }: { f: FormField; value: unknown; setVa
     }
   }
 
-  const remove = (i: number) => setValue(files.filter((_, idx) => idx !== i));
+  const remove = (i: number) =>
+    commit(
+      files.filter((_, idx) => idx !== i),
+      fixes.filter((_, idx) => idx !== i),
+    );
+
+  // Report on what we actually hold, not on what we hoped for: only count
+  // fixes belonging to files still attached.
+  const located = fixes.slice(0, files.length).filter(Boolean).length;
 
   return (
     <div>
@@ -267,6 +317,28 @@ function FileField({ f, value, setValue }: { f: FormField; value: unknown; setVa
               : `Tap to ${isPhoto ? "capture or upload" : "attach"}`}
         </span>
       </label>
+
+      {isPhoto && files.length > 0 && (
+        <div
+          className="hint"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            marginTop: 6,
+            color: located ? "var(--p-success)" : "var(--p-text-3)",
+          }}
+        >
+          <KIcon name={located ? "MapPin" : "MapPinOff"} size={13} />
+          <span>
+            {located === files.length
+              ? "Location attached"
+              : located
+                ? `Location attached to ${located} of ${files.length}`
+                : "No location — your device didn't provide one"}
+          </span>
+        </div>
+      )}
 
       {files.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
@@ -411,7 +483,19 @@ function SignField({ f, value, setValue }: { f: FormField; value: unknown; setVa
   );
 }
 
-function Field({ f, value, setValue }: { f: FormField; value: unknown; setValue: (v: unknown) => void }) {
+function Field({
+  f,
+  value,
+  setValue,
+  setSibling,
+}: {
+  f: FormField;
+  value: unknown;
+  setValue: (v: unknown) => void;
+  /** Write a companion value under `{f.id}__{suffix}`. Used by photo capture
+   *  to carry per-file geotags, which have nowhere to live on a File. */
+  setSibling?: (suffix: string, v: unknown) => void;
+}) {
   const common = {
     value: (value as string | number | undefined) ?? "",
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setValue(e.target.value),
@@ -457,7 +541,7 @@ function Field({ f, value, setValue }: { f: FormField; value: unknown; setValue:
       </button>
     );
   else if (f.type === "photo" || f.type === "file")
-    control = <FileField f={f} value={value} setValue={setValue} />;
+    control = <FileField f={f} value={value} setValue={setValue} setSibling={setSibling} />;
   else control = <input type={f.type === "number" ? "number" : f.type === "date" ? "date" : f.type === "time" ? "time" : "text"} {...common} placeholder={f.placeholder} />;
 
   if (f.type === "switch") {
@@ -533,13 +617,13 @@ export function FormScreen({
           if (f.half && next && next.half) {
             out.push(
               <div className="frow" key={i}>
-                <Field f={f} value={vals[f.id]} setValue={(v) => setV(f.id, v)} />
-                <Field f={next} value={vals[next.id]} setValue={(v) => setV(next.id, v)} />
+                <Field f={f} value={vals[f.id]} setValue={(v) => setV(f.id, v)} setSibling={(s, v) => setV(`${f.id}__${s}`, v)} />
+                <Field f={next} value={vals[next.id]} setValue={(v) => setV(next.id, v)} setSibling={(s, v) => setV(`${next.id}__${s}`, v)} />
               </div>
             );
             i += 2;
           } else {
-            out.push(<Field key={i} f={f} value={vals[f.id]} setValue={(v) => setV(f.id, v)} />);
+            out.push(<Field key={i} f={f} value={vals[f.id]} setValue={(v) => setV(f.id, v)} setSibling={(s, v) => setV(`${f.id}__${s}`, v)} />);
             i += 1;
           }
         }

@@ -9054,6 +9054,7 @@ export type Database = {
           bio: string | null
           certifications: string[]
           created_at: string
+          crew_role_id: string | null
           day_rate_cents: number | null
           day_rate_currency: string
           day_rate_max_cents: number | null
@@ -9090,6 +9091,7 @@ export type Database = {
           bio?: string | null
           certifications?: string[]
           created_at?: string
+          crew_role_id?: string | null
           day_rate_cents?: number | null
           day_rate_currency?: string
           day_rate_max_cents?: number | null
@@ -9126,6 +9128,7 @@ export type Database = {
           bio?: string | null
           certifications?: string[]
           created_at?: string
+          crew_role_id?: string | null
           day_rate_cents?: number | null
           day_rate_currency?: string
           day_rate_max_cents?: number | null
@@ -9158,6 +9161,13 @@ export type Database = {
           xtc_code?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "crew_members_crew_role_id_fkey"
+            columns: ["crew_role_id"]
+            isOneToOne: false
+            referencedRelation: "crew_roles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "crew_members_org_id_fkey"
             columns: ["org_id"]
@@ -9283,6 +9293,44 @@ export type Database = {
             columns: ["rated_by_user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_roles: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          name: string
+          org_id: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          name: string
+          org_id: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_roles_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -9784,31 +9832,40 @@ export type Database = {
       }
       daily_log_photos: {
         Row: {
+          accuracy_m: number | null
           caption: string | null
           created_at: string
           daily_log_id: string
           file_path: string
           id: string
+          lat: number | null
+          lng: number | null
           org_id: string
           taken_at: string
           taken_by: string | null
         }
         Insert: {
+          accuracy_m?: number | null
           caption?: string | null
           created_at?: string
           daily_log_id: string
           file_path: string
           id?: string
+          lat?: number | null
+          lng?: number | null
           org_id: string
           taken_at?: string
           taken_by?: string | null
         }
         Update: {
+          accuracy_m?: number | null
           caption?: string | null
           created_at?: string
           daily_log_id?: string
           file_path?: string
           id?: string
+          lat?: number | null
+          lng?: number | null
           org_id?: string
           taken_at?: string
           taken_by?: string | null
@@ -21435,6 +21492,7 @@ export type Database = {
       orgs: {
         Row: {
           branding: Json
+          capability_grants_enforced: boolean
           compliance_settings: Json
           created_at: string
           datamap: Json
@@ -21461,6 +21519,7 @@ export type Database = {
         }
         Insert: {
           branding?: Json
+          capability_grants_enforced?: boolean
           compliance_settings?: Json
           created_at?: string
           datamap?: Json
@@ -21487,6 +21546,7 @@ export type Database = {
         }
         Update: {
           branding?: Json
+          capability_grants_enforced?: boolean
           compliance_settings?: Json
           created_at?: string
           datamap?: Json
@@ -23997,6 +24057,7 @@ export type Database = {
       }
       project_photos: {
         Row: {
+          accuracy_m: number | null
           album: string | null
           caption: string | null
           created_at: string
@@ -24011,6 +24072,7 @@ export type Database = {
           taken_by: string | null
         }
         Insert: {
+          accuracy_m?: number | null
           album?: string | null
           caption?: string | null
           created_at?: string
@@ -24025,6 +24087,7 @@ export type Database = {
           taken_by?: string | null
         }
         Update: {
+          accuracy_m?: number | null
           album?: string | null
           caption?: string | null
           created_at?: string
@@ -27954,6 +28017,51 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      role_capability_grants: {
+        Row: {
+          capability: string
+          created_at: string
+          created_by: string | null
+          crew_role_id: string
+          id: string
+          org_id: string
+          shift_derivable: boolean
+        }
+        Insert: {
+          capability: string
+          created_at?: string
+          created_by?: string | null
+          crew_role_id: string
+          id?: string
+          org_id: string
+          shift_derivable?: boolean
+        }
+        Update: {
+          capability?: string
+          created_at?: string
+          created_by?: string | null
+          crew_role_id?: string
+          id?: string
+          org_id?: string
+          shift_derivable?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_capability_grants_crew_role_id_fkey"
+            columns: ["crew_role_id"]
+            isOneToOne: false
+            referencedRelation: "crew_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_capability_grants_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       role_certifications: {
         Row: {
@@ -34804,6 +34912,13 @@ export type Database = {
             referencedRelation: "time_clock_zones"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "time_entries_zone_out_id_fkey"
+            columns: ["zone_out_id"]
+            isOneToOne: false
+            referencedRelation: "time_clock_zones"
+            referencedColumns: ["id"]
+          },
         ]
       }
       time_entry_audit: {
@@ -36421,6 +36536,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_capability_grants: {
+        Row: {
+          capability: string
+          created_at: string
+          granted_by: string | null
+          id: string
+          org_id: string
+          reason: string | null
+          revoked_at: string | null
+          user_id: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          capability: string
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          org_id: string
+          reason?: string | null
+          revoked_at?: string | null
+          user_id: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          capability?: string
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          org_id?: string
+          reason?: string | null
+          revoked_at?: string | null
+          user_id?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_capability_grants_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_certifications: {
         Row: {
@@ -42675,6 +42837,10 @@ export type Database = {
             }
             Returns: string
           }
+      apply_time_correction: {
+        Args: { p_correction_id: string; p_decision: string; p_notes?: string }
+        Returns: Json
+      }
       approve_time_off_request: {
         Args: {
           p_decider_id: string
@@ -42857,10 +43023,6 @@ export type Database = {
         }[]
       }
       current_request_id: { Args: never; Returns: string }
-      apply_time_correction: {
-        Args: { p_correction_id: string; p_decision: string; p_notes?: string }
-        Returns: Json
-      }
       decline_offer_letter: {
         Args: { p_code: string; p_reason: string; p_token: string }
         Returns: Json
@@ -42896,6 +43058,7 @@ export type Database = {
           }
         | { Args: { schema_name: string; table_name: string }; Returns: string }
         | { Args: { table_name: string }; Returns: string }
+      effective_capabilities: { Args: { p_org_id: string }; Returns: string[] }
       emit_notification: {
         Args: {
           p_body?: string
@@ -43296,6 +43459,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      slugify_role: { Args: { raw: string }; Returns: string }
       st_3dclosestpoint: {
         Args: { geom1: unknown; geom2: unknown }
         Returns: unknown

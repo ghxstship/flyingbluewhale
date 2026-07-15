@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { postFieldWrite } from "@/lib/offline/outbox";
+import { getPosition } from "@/lib/geo/position";
 import { haptic } from "@/lib/haptics";
 
 /**
@@ -60,52 +61,6 @@ type BlockDetails = {
   nearestZone?: { id: string; name: string | null } | null;
   overrideAvailable?: boolean;
 };
-
-type Fix = { lat: number; lng: number; accuracy: number | null };
-
-/** Best-effort position fix. Resolves null on denial, timeout, or absence —
- * never rejects, never blocks the punch for more than ~4s. */
-function getPosition(): Promise<Fix | null> {
-  return new Promise((resolve) => {
-    if (typeof navigator === "undefined" || !("geolocation" in navigator)) {
-      resolve(null);
-      return;
-    }
-    let settled = false;
-    const done = (value: Fix | null) => {
-      if (!settled) {
-        settled = true;
-        resolve(value);
-      }
-    };
-    // Belt-and-suspenders timeout — some browsers hang instead of honoring
-    // the positionOptions timeout when permission UI is pending.
-    const timer = setTimeout(() => done(null), 4500);
-    try {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          clearTimeout(timer);
-          done({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            // Accuracy is what lets the server tell "not here" from "can't
-            // tell". Without it a vague fix reads as absence and a blocking
-            // zone would punish bad signal.
-            accuracy: typeof pos.coords.accuracy === "number" ? pos.coords.accuracy : null,
-          });
-        },
-        () => {
-          clearTimeout(timer);
-          done(null);
-        },
-        { enableHighAccuracy: true, timeout: 4000, maximumAge: 60_000 },
-      );
-    } catch {
-      clearTimeout(timer);
-      done(null);
-    }
-  });
-}
 
 export function useClockPunch() {
   const router = useRouter();

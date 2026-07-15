@@ -1,5 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { geoKeyFor, parsePhotoFixes, type PhotoFix, type PhotoRef } from "./photo-geo";
 
 /**
  * Field photo upload — the server half of the capture layer.
@@ -18,7 +19,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 const MAX_BYTES = 10 * 1024 * 1024; // post-downscale backstop
 const MAX_FILES = 10;
 
-export type PhotoUploadResult = { paths: string[]; error?: string };
+export type PhotoUploadResult = {
+  /** Storage paths of everything that landed, in order. */
+  paths: string[];
+  /** The same uploads carrying their capture geotag, for callers persisting
+   *  to a column that can hold one. */
+  refs: PhotoRef[];
+  error?: string;
+};
 
 function safeName(name: string): string {
   return (name || "photo.jpg").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
@@ -32,6 +40,12 @@ function safeName(name: string): string {
  * caller decides whether that blocks the submit — for incidents it must not
  * (the report matters more than the attachment), so it surfaces as a
  * warning alongside a successful insert.
+ *
+ * `fixes` is the per-file capture geotag, index-aligned with `files` (see
+ * `parsePhotoFixes`). It is paired with its file BEFORE any filtering, so an
+ * oversized or failed photo cannot shift the remaining coordinates onto the
+ * wrong images — that would silently place an incident at a location nobody
+ * photographed, which is worse than having no geotag at all.
  */
 export async function uploadFieldPhotos(
   supabase: SupabaseClient,
@@ -39,15 +53,20 @@ export async function uploadFieldPhotos(
   orgId: string,
   userId: string,
   files: File[],
+  fixes: (PhotoFix | null)[] = [],
 ): Promise<PhotoUploadResult> {
-  const usable = files.filter((f) => f && f.size > 0).slice(0, MAX_FILES);
-  if (!usable.length) return { paths: [] };
+  // Pair before filtering — index alignment must survive every drop below.
+  const usable = files
+    .map((file, i) => ({ file, fix: fixes[i] ?? null }))
+    .filter(({ file }) => file && file.size > 0)
+    .slice(0, MAX_FILES);
+  if (!usable.length) return { paths: [], refs: [] };
 
-  const paths: string[] = [];
+  const refs: PhotoRef[] = [];
   const failed: string[] = [];
   const stamp = Date.now();
 
-  for (const [i, file] of usable.entries()) {
+  for (const [i, { file, fix }] of usable.entries()) {
     if (file.size > MAX_BYTES) {
       failed.push(file.name);
       continue;
@@ -60,19 +79,37 @@ export async function uploadFieldPhotos(
       upsert: false,
     });
     if (error) failed.push(file.name);
-    else paths.push(path);
+    else
+      refs.push({
+        path,
+        lat: fix?.lat ?? null,
+        lng: fix?.lng ?? null,
+        accuracyM: fix?.accuracyM ?? null,
+        capturedAt: fix?.capturedAt ?? null,
+      });
   }
+
+  const paths = refs.map((r) => r.path);
 
   if (failed.length) {
     return {
       paths,
+      refs,
       error: `${failed.length} of ${usable.length} photo${usable.length > 1 ? "s" : ""} could not be uploaded.`,
     };
   }
-  return { paths };
+  return { paths, refs };
 }
 
 /** Pull `File`s off a FormData key that the kit FileField serialised. */
 export function filesFrom(fd: FormData, key: string): File[] {
   return fd.getAll(key).filter((v): v is File => v instanceof File && v.size > 0);
+}
+
+/**
+ * Pull the capture geotags the kit FileField sent alongside `key`, normalised
+ * to one entry per file. Pass the result straight to `uploadFieldPhotos`.
+ */
+export function fixesFrom(fd: FormData, key: string, count: number): (PhotoFix | null)[] {
+  return parsePhotoFixes(fd.get(geoKeyFor(key)), count);
 }

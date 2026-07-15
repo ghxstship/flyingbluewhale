@@ -8,6 +8,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
+import { getPosition } from "@/lib/geo/position";
+import { geoKeyFor, type PhotoFix } from "@/lib/mobile/photo-geo";
 import { saveDailyLog } from "../actions";
 
 export type ProjectOpt = { id: string; name: string };
@@ -22,6 +24,10 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
   const t = useT();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  // Capture fixes for the currently-picked photos, index-aligned with the
+  // file input's FileList.
+  const [photoFixes, setPhotoFixes] = useState<(PhotoFix | null)[]>([]);
+  const located = photoFixes.filter(Boolean).length;
   const today = new Date().toISOString().slice(0, 10);
 
   // Offline outbox — the send handler rebuilds FormData from the queued record
@@ -41,6 +47,26 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
     }
     return true;
   });
+
+  /**
+   * Geotag at pick time, not submit time — the fix has to describe where the
+   * photo was taken, and a crew member can walk a long way between shooting
+   * a hazard and finishing the notes field.
+   *
+   * Each change fully replaces the selection (a multi-select input reports
+   * its whole FileList), so the fixes replace wholesale too and stay aligned
+   * by construction.
+   */
+  async function onPhotoPick(e: React.ChangeEvent<HTMLInputElement>) {
+    const picked = Array.from(e.target.files ?? []);
+    if (!picked.length) {
+      setPhotoFixes([]);
+      return;
+    }
+    const fix = await getPosition();
+    const capturedAt = new Date().toISOString();
+    setPhotoFixes(picked.map(() => (fix ? { lat: fix.lat, lng: fix.lng, accuracyM: fix.accuracy, capturedAt } : null)));
+  }
 
   function onSubmit(fd: FormData) {
     if (pending) return;
@@ -62,6 +88,9 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
         );
         return;
       }
+      // Carry the capture fixes alongside the files. Only on this path: the
+      // queue path below has no photos, so it has nothing to geotag.
+      fd.set(geoKeyFor("photo"), JSON.stringify(photoFixes.slice(0, photos.length)));
       startTransition(async () => {
         const res = await saveDailyLog(null, fd);
         if (res?.error) {
@@ -178,11 +207,32 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
               name="photo"
               accept="image/*"
               multiple
+              onChange={onPhotoPick}
               style={{ paddingTop: 11, paddingBottom: 11 }}
             />
             <div className="hint">
               {t("m.dailyLog.new.photosHint", undefined, "Optional. Attach what you saw.")}
             </div>
+            {photoFixes.length > 0 && (
+              <div
+                className="hint"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: located ? "var(--p-success)" : "var(--p-text-3)",
+                }}
+              >
+                <KIcon name={located ? "MapPin" : "MapPinOff"} size={13} />
+                <span>
+                  {located === photoFixes.length
+                    ? t("m.dailyLog.new.geoOn", undefined, "Location attached")
+                    : located
+                      ? t("m.dailyLog.new.geoPartial", undefined, "Location attached to some photos")
+                      : t("m.dailyLog.new.geoOff", undefined, "No location — your device didn't provide one")}
+                </span>
+              </div>
+            )}
           </div>
           {error && (
             <div className="ps-alert ps-alert--danger" style={{ marginBottom: 12 }}>

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { filesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
+import { filesFrom, fixesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
 
 export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
 
@@ -48,8 +48,17 @@ export async function fileLostFound(_prev: State, fd: FormData): Promise<State> 
   const supabase = await createClient();
 
   // A photo of the item is the whole point of a found-property report —
-  // it's how the owner identifies it at the gate office.
-  const upload = await uploadFieldPhotos(supabase, "incident-photos", session.orgId, session.userId, photoFiles);
+  // it's how the owner identifies it at the gate office. The geotag answers
+  // the other half: where it was actually picked up, which the free-text
+  // "where" field routinely gets wrong at 2am on a load-out.
+  const upload = await uploadFieldPhotos(
+    supabase,
+    "incident-photos",
+    session.orgId,
+    session.userId,
+    photoFiles,
+    fixesFrom(fd, "photo", photoFiles.length),
+  );
 
   const { error } = await supabase.from("incidents").insert({
     org_id: session.orgId,
@@ -62,7 +71,7 @@ export async function fileLostFound(_prev: State, fd: FormData): Promise<State> 
     incident_state: "open",
     location: v.where,
     occurred_at: new Date().toISOString(),
-    photos: upload.paths,
+    photos: upload.refs,
     injury_type: null,
     report_kind: "lost_property",
   });

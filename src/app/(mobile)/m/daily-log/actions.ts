@@ -5,7 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { transitionDailyLogState } from "@/lib/db/daily-log";
-import { filesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
+import { filesFrom, fixesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
 
 export type State = { error?: string; warning?: string; ok?: boolean; fieldErrors?: Record<string, string> } | null;
 
@@ -81,14 +81,26 @@ export async function saveDailyLog(_prev: State, fd: FormData): Promise<State> {
   const photoFiles = filesFrom(fd, "photo");
   let warning: string | undefined;
   if (saved?.id && photoFiles.length) {
-    const upload = await uploadFieldPhotos(supabase, DAILY_LOG_PHOTO_BUCKET, session.orgId, session.userId, photoFiles);
-    if (upload.paths.length) {
+    const upload = await uploadFieldPhotos(
+      supabase,
+      DAILY_LOG_PHOTO_BUCKET,
+      session.orgId,
+      session.userId,
+      photoFiles,
+      fixesFrom(fd, "photo", photoFiles.length),
+    );
+    if (upload.refs.length) {
       const { error: insErr } = await supabase.from("daily_log_photos").insert(
-        upload.paths.map((p) => ({
+        upload.refs.map((r) => ({
           org_id: session.orgId,
           daily_log_id: saved.id as string,
-          file_path: p,
+          file_path: r.path,
           taken_by: session.userId,
+          // Where the phone said it was when the photo was attached. NULL
+          // when the device gave no fix — never guessed from the project.
+          lat: r.lat,
+          lng: r.lng,
+          accuracy_m: r.accuracyM,
         })),
       );
       if (insErr) warning = "Log saved, but the photos could not be attached.";

@@ -33,11 +33,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const fmt = await getRequestFormatters();
   const [{ data: meRows }] = await Promise.all([
     supabase
-      .from("workforce_members")
-      .select("id, full_name, role, kind, venue_id")
+      .from("crew_members")
+      .select("id, full_name:name, role, kind:workforce_kind, venue_id")
       .eq("org_id", session.orgId)
       .eq("user_id", session.userId)
-      .eq("kind", "volunteer")
+      .eq("workforce_kind", "volunteer")
       .limit(1),
   ]);
 
@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       .from("shifts")
       .select("id", { count: "exact", head: true })
       .eq("org_id", session.orgId)
-      .eq("workforce_member_id", me.id)
+      .eq("crew_member_id", me.id)
       .gte("starts_at", new Date().toISOString());
     upcomingShifts = count ?? 0;
   }

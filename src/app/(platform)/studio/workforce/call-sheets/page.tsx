@@ -15,7 +15,7 @@ type ShiftRow = {
   id: string;
   starts_at: string;
   ends_at: string;
-  workforce_member_id: string | null;
+  crew_member_id: string | null;
   venue_id: string | null;
   role: string | null;
 };
@@ -51,29 +51,29 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
 
   const { data: shifts } = await supabase
     .from("shifts")
-    .select("id, starts_at, ends_at, workforce_member_id, venue_id, role")
+    .select("id, starts_at, ends_at, crew_member_id, venue_id, role")
     .eq("org_id", session.orgId)
     .gte("starts_at", start)
     .lt("starts_at", end)
     .order("starts_at", { ascending: true });
   const rows = (shifts ?? []) as ShiftRow[];
 
-  const memberIds = Array.from(new Set(rows.map((s) => s.workforce_member_id).filter(Boolean) as string[]));
+  const memberIds = Array.from(new Set(rows.map((s) => s.crew_member_id).filter(Boolean) as string[]));
   let members: WfMember[] = [];
   if (memberIds.length > 0) {
     const { data: m } = await supabase
-      .from("workforce_members")
-      .select("id, full_name, role, email, phone")
+      .from("crew_members")
+      .select("id, full_name:name, role, email, phone")
       .eq("org_id", session.orgId)
       .in("id", memberIds);
     members = (m ?? []) as WfMember[];
   }
   const byMember = new Map<string, ShiftRow[]>();
   for (const s of rows) {
-    if (!s.workforce_member_id) continue;
-    const list = byMember.get(s.workforce_member_id) ?? [];
+    if (!s.crew_member_id) continue;
+    const list = byMember.get(s.crew_member_id) ?? [];
     list.push(s);
-    byMember.set(s.workforce_member_id, list);
+    byMember.set(s.crew_member_id, list);
   }
 
   const prevDate = new Date(focusDate.getTime() - 86400_000).toISOString().slice(0, 10);

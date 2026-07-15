@@ -947,7 +947,7 @@ export type Shift = {
   id: string;
   org_id: string;
   roster_id: string | null;
-  workforce_member_id: string | null;
+  crew_member_id: string | null;
   venue_id: string | null;
   zone_id: string | null;
   starts_at: string;

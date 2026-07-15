@@ -54,8 +54,8 @@ export default async function Page({
 
   const fmt = await getRequestFormatters();
   const { data: m } = await supabase
-    .from("workforce_members")
-    .select("id, full_name, role, email, phone")
+    .from("crew_members")
+    .select("id, full_name:name, role, email, phone")
     .eq("org_id", session.orgId)
     .eq("id", memberId)
     .maybeSingle();
@@ -67,7 +67,7 @@ export default async function Page({
     .from("shifts")
     .select("id, starts_at, ends_at, role, meal_credit, break_minutes, venue:venue_id(name, locations(address, city))")
     .eq("org_id", session.orgId)
-    .eq("workforce_member_id", memberId)
+    .eq("crew_member_id", memberId)
     .gte("starts_at", start)
     .lt("starts_at", end)
     .order("starts_at", { ascending: true });

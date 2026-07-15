@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     const { data: row, error: readErr } = await supabase
       .from("shifts")
-      .select("id, attendance, venue_id, workforce_member_id")
+      .select("id, attendance, venue_id, crew_member_id")
       .eq("id", input.shiftId)
       .eq("org_id", session.orgId)
       .maybeSingle();
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       id: string;
       attendance: Attendance;
       venue_id: string | null;
-      workforce_member_id: string | null;
+      crew_member_id: string | null;
     };
     const current = shift.attendance ?? "scheduled";
     const allowedFrom = REQUIRED_FROM[input.action];

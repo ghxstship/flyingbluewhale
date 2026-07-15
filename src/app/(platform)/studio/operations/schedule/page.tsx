@@ -149,7 +149,7 @@ export default async function Page({
       .order("starts_at", { ascending: true }),
     supabase
       .from("shifts")
-      .select("id, starts_at, ends_at, role, venue_id, workforce_member_id")
+      .select("id, starts_at, ends_at, role, venue_id, crew_member_id")
       .eq("org_id", session.orgId)
       .gte("starts_at", start)
       .lt("starts_at", end),
@@ -271,13 +271,13 @@ export default async function Page({
     ends_at: string;
     role: string | null;
     venue_id: string | null;
-    workforce_member_id: string | null;
+    crew_member_id: string | null;
   }>) {
     const laneId = s.venue_id ? `venue:${s.venue_id}` : UNASSIGNED;
     const label = s.venue_id
       ? (venueName.get(s.venue_id) ?? LANE_KIND_LABEL.venue)
       : t("console.schedule.unassigned", undefined, "Unassigned");
-    ensureLane(laneId, s.venue_id ? "venue" : "unassigned", label, Boolean(s.workforce_member_id));
+    ensureLane(laneId, s.venue_id ? "venue" : "unassigned", label, Boolean(s.crew_member_id));
     blocks.push({
       laneId,
       startHour: asHour(s.starts_at, focus),

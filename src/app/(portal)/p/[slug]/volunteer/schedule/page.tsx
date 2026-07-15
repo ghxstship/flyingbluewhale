@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const fmtDate = (iso: string): string => fmt.dateParts(iso, { weekday: "short", month: "short", day: "numeric" });
   // Resolve workforce member from auth user, then list their shifts.
   const { data: meRows } = await supabase
-    .from("workforce_members")
+    .from("crew_members")
     .select("id")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         "id, starts_at, ends_at, role, attendance, break_minutes, meal_credit, checked_in_at, checked_out_at, venue:venue_id(name)",
       )
       .eq("org_id", session.orgId)
-      .eq("workforce_member_id", me.id)
+      .eq("crew_member_id", me.id)
       .order("starts_at", { ascending: true })
       .limit(100);
     shifts = ((data ?? []) as unknown as Shift[]) ?? [];

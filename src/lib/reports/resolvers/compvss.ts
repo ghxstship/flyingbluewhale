@@ -11,7 +11,7 @@ import { countWhere, NOT_COMPUTED } from "./types";
  *
  * Source-table notes (verified against the live schema):
  *  - roster/staffing fill is modeled by `public.shifts` (one row per scheduled
- *    workforce slot; `attendance` enum, `workforce_member_id` = the filled seat).
+ *    workforce slot; `attendance` enum, `crew_member_id` = the filled seat).
  *  - There are no `pull_sheets`, `maintenance_logs`/maintenance-schedule, waste,
  *    energy, turnaround, or overtime-flag tables — metrics that depend on those
  *    return `null` rather than fabricating a number.
@@ -26,9 +26,9 @@ const labor_fill_rate: MetricResolver = async (ctx) => {
   if (!total) return null;
   const filledTotal = await ctx.db
     .from("shifts")
-    .select("workforce_member_id", { count: "exact", head: true })
+    .select("crew_member_id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
-    .not("workforce_member_id", "is", null);
+    .not("crew_member_id", "is", null);
   if (filledTotal.error) return null;
   const filled = filledTotal.count ?? 0;
   return (filled / total) * 100;

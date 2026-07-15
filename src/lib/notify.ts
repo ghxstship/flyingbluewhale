@@ -3,7 +3,7 @@ import { createServiceClient } from "./supabase/server";
 import { ADMIN_BAND_ROLES } from "./auth";
 import { log } from "./log";
 import { bulkShouldNotify, shouldNotify } from "./notify-resolver";
-import { sendPushTo } from "./push/send";
+import { sendPushTo, type PushKind } from "./push/send";
 import { sendNotificationEmailToUsers } from "./email";
 import { emitDomainEvent } from "./automations/dispatch";
 import type { WebhookEvent } from "./webhooks/events";
@@ -36,6 +36,44 @@ import type { WebhookEvent } from "./webhooks/events";
  */
 export type NotifyEvent = WebhookEvent;
 
+/**
+ * NotifyEvent -> PushKind. The ONLY events `notify()` pushes for.
+ *
+ * Why a map and not a passthrough. Two stores exist and they are not the
+ * same store:
+ *   - `notification_preferences.matrix`, keyed by PushKind, is LIVE — both
+ *     /me/notifications and /m/settings/notifications write it, and
+ *     `filterByPushPrefs` gates delivery on it.
+ *   - `user_preferences.ui_state.notifications`, keyed by NotifyEvent, was
+ *     RETIRED as a placebo (AUDIT C-22 / F-02). `shouldNotify` still reads
+ *     it, and its push default is FALSE — so gating push on it meant notify()
+ *     sent no push at all, to anyone (1 of 31 prod rows even had the key).
+ *     That is why push is resolved here, off the live taxonomy, instead.
+ *
+ * Unmapped events send NO push — deliberately. `filterByPushPrefs` treats a
+ * missing kind as "exclude nobody", so handing it an unmapped event would
+ * make that push UNMUTABLE, which is the exact defect this map exists to
+ * fix. Adding an event here is opt-in, and every kind it names must be
+ * toggleable (NOTIF_KINDS) so the switch is real.
+ *
+ * in_app and email are unaffected and still resolve through shouldNotify:
+ * their defaults are true, so the retired store falls back open.
+ */
+const NOTIFY_EVENT_PUSH_KIND: Partial<Record<NotifyEvent, PushKind>> = {
+  "timesheet.submitted": "timesheet",
+  "timesheet.approved": "timesheet",
+  "timesheet.rejected": "timesheet",
+  "timesheet.posted": "timesheet",
+  "payroll.posted": "payroll",
+  "time.correction_requested": "time_correction",
+  "time.correction_decided": "time_correction",
+};
+
+/** The PushKind for an event, or undefined when it must not push. */
+export function pushKindForEvent(eventType: NotifyEvent): PushKind | undefined {
+  return NOTIFY_EVENT_PUSH_KIND[eventType];
+}
+
 /** Readable eyebrow for the email rendering of an event type. */
 function eventEyebrow(eventType: NotifyEvent): string {
   const noun = eventType.split(".")[0] ?? "notification";
@@ -63,33 +101,35 @@ export async function notify(args: {
     }
 
     // Fan out to Web Push in parallel — fire-and-forget so the originating
-    // request never blocks on the push provider. Gated on the user's
-    // notification matrix; defaults to off (see notify-resolver).
-    if (args.userId) {
+    // request never blocks on the push provider. Only mapped events push,
+    // and sendPushTo gates the kind on the live prefs matrix; see
+    // NOTIFY_EVENT_PUSH_KIND for why this does not route through
+    // shouldNotify like the in_app/email channels do.
+    const pushKind = pushKindForEvent(args.eventType);
+    if (args.userId && pushKind) {
       const pushUserId = args.userId;
-      void shouldNotify(pushUserId, args.eventType, "push")
-        .then((allowPush) => {
-          if (!allowPush) return;
-          // recordBell: false — the emit_notification RPC below writes
-          // the notifications row (gated on the in_app preference).
-          return sendPushTo(
-            pushUserId,
-            {
-              title: args.title,
-              body: args.body ?? "",
-              url: args.href ?? undefined,
-              tag: args.eventType,
-              data: { event: args.eventType, ...(args.data ?? {}) },
-            },
-            { recordBell: false },
-          );
-        })
-        .catch((err: unknown) => {
-          log.warn("notify.push_send_failed", {
-            event: args.eventType,
-            err: (err as Error).message,
-          });
+      // recordBell: false — the emit_notification RPC below writes
+      // the notifications row (gated on the in_app preference).
+      void sendPushTo(
+        pushUserId,
+        {
+          title: args.title,
+          body: args.body ?? "",
+          url: args.href ?? undefined,
+          tag: args.eventType,
+          kind: pushKind,
+          data: { event: args.eventType, ...(args.data ?? {}) },
+        },
+        { recordBell: false },
+      ).catch((err: unknown) => {
+        log.warn("notify.push_send_failed", {
+          event: args.eventType,
+          err: (err as Error).message,
         });
+      });
+    }
+
+    if (args.userId) {
 
       // F-03 — email channel. The /me/notifications matrix has always
       // offered an Email column (default ON); this closes the loop.
@@ -219,33 +259,33 @@ export async function notifyOrgAdmins(args: {
     }
   }
 
-  // 2. Per-user push fan-out — same preference gate as the single-user
-  //    notify() path. Fire-and-forget.
-  for (const uid of userIds) {
-    void shouldNotify(uid, args.eventType, "push")
-      .then((allowPush) => {
-        if (!allowPush) return;
-        // recordBell: false — step 1's bulk insert is this event's
-        // notifications row (already filtered by the in_app pref).
-        return sendPushTo(
-          uid,
-          {
-            title: args.title,
-            body: args.body ?? "",
-            url: args.href ?? undefined,
-            tag: args.eventType,
-            data: { event: args.eventType, ...(args.data ?? {}) },
-          },
-          { recordBell: false },
-        );
-      })
-      .catch((err: unknown) => {
+  // 2. Per-user push fan-out — same kind gate as the single-user notify()
+  //    path: only mapped events push, and sendPushTo excludes the users who
+  //    muted the kind. Fire-and-forget.
+  const adminPushKind = pushKindForEvent(args.eventType);
+  if (adminPushKind) {
+    for (const uid of userIds) {
+      // recordBell: false — step 1's bulk insert is this event's
+      // notifications row (already filtered by the in_app pref).
+      void sendPushTo(
+        uid,
+        {
+          title: args.title,
+          body: args.body ?? "",
+          url: args.href ?? undefined,
+          tag: args.eventType,
+          kind: adminPushKind,
+          data: { event: args.eventType, ...(args.data ?? {}) },
+        },
+        { recordBell: false },
+      ).catch((err: unknown) => {
         log.warn("notify.admins_push_send_failed", {
           event: args.eventType,
           uid,
           err: (err as Error).message,
         });
       });
+    }
   }
 
   // 3. Email fan-out (F-03) — one kit-templated email per admin whose

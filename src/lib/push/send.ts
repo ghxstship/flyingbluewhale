@@ -36,6 +36,14 @@ export type PushKind =
   | "time_off"
   | "course"
   | "incident"
+  // Time & pay. `notify()` maps its timesheet/payroll/correction events onto
+  // these (NOTIFY_EVENT_PUSH_KIND, src/lib/notify.ts) so a worker can mute
+  // them from the same matrix as everything else. Before that map existed the
+  // events reached sendPushTo with no kind at all, and notify() gated them on
+  // a retired store whose push default was false — so they never sent.
+  | "timesheet"
+  | "payroll"
+  | "time_correction"
   // Safety-critical broadcast. Carries a kind (so the row is tagged and the
   // field's alert surface can tone it) but is exempt from the opt-out
   // matrix — see UNSILENCEABLE_KINDS.
@@ -367,6 +375,9 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   time_off: "Time Off",
   course: "Course",
   incident: "Incident",
+  timesheet: "Timesheet",
+  payroll: "Payroll",
+  time_correction: "Time Correction",
   crisis: "Crisis Alert",
 };
 

@@ -91,8 +91,8 @@ export async function ScheduleSurface(props: ScheduleProps) {
   const fmtTime = (iso: string): string => fmt.time(iso);
   const fmtDate = (iso: string): string => fmt.dateParts(iso, { weekday: "short", month: "short", day: "numeric" });
   const { data: wfm } = await supabase
-    .from("workforce_members")
-    .select("id, full_name, role")
+    .from("crew_members")
+    .select("id, full_name:name, role")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
     .maybeSingle();
@@ -108,7 +108,11 @@ export async function ScheduleSurface(props: ScheduleProps) {
         "id, starts_at, ends_at, attendance, role, break_minutes, meal_credit, checked_in_at, checked_out_at, venue:venue_id(name)",
       )
       .eq("org_id", session.orgId)
-      .eq("workforce_member_id", wfm.id)
+      // crew_member_id, not workforce_member_id: the reader was repointed to
+      // crew_members (the SSOT, per the workforce_members merge) but the join
+      // key wasn't, and shifts.workforce_member_id is null on every row — so
+      // this matched nothing and the surface rendered zero shifts for everyone.
+      .eq("crew_member_id", wfm.id)
       .gte("starts_at", startOfWindow)
       .lt("starts_at", endOfWindow)
       .order("starts_at", { ascending: true });

@@ -60,21 +60,26 @@ export async function requestSwap(_prev: State, fd: FormData): Promise<State> {
   // check any member could file a swap against a colleague's shift —
   // RLS here is only `is_org_member`, so it is no backstop.
   const { data: wfm } = await supabase
-    .from("workforce_members")
+    .from("crew_members")
     .select("id")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
     .maybeSingle();
   if (!wfm?.id) return { error: "You don't have a workforce profile in this org yet." };
 
+  // crew_member_id, not workforce_member_id. The lookup above was repointed to
+  // crew_members (the SSOT, per the workforce_members merge) without the join
+  // key following it, and shifts.workforce_member_id is null on every row — so
+  // this compared a crew_members.id against null and every swap came back
+  // "That isn't your shift."
   const { data: shift } = await supabase
     .from("shifts")
-    .select("id, workforce_member_id")
+    .select("id, crew_member_id")
     .eq("id", parsed.data.shiftId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!shift) return { error: "Shift not found." };
-  if (shift.workforce_member_id !== wfm.id) return { error: "That isn't your shift." };
+  if (shift.crew_member_id !== wfm.id) return { error: "That isn't your shift." };
 
   // One open ask per shift. Without this, tapping twice on a bad signal
   // files two swaps and the manager queue shows a duplicate.

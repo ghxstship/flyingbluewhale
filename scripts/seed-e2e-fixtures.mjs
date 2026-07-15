@@ -134,6 +134,13 @@ const JOB_POSTING_SLUG = "e2e-gig";
 // the "E2E Policy%" teardown pattern leaves them in place).
 const APPROVAL_POLICY_PO_ID = "c8000000-0000-4000-8000-000000000001";
 const APPROVAL_POLICY_PO_CO_ID = "c8000000-0000-4000-8000-000000000002";
+// One routing step per policy. routeToApprovals seeds the instance's
+// current_step_id from the policy's lowest step_number, and the approvals detail
+// page only renders the "Record a decision" form when a step resolves
+// (decisionStepId = current_step_id ?? steps[0] ?? null) — a stepless policy
+// yields an instance nobody can decide on.
+const APPROVAL_STEP_PO_ID = "c8000000-0000-4000-8000-000000000011";
+const APPROVAL_STEP_PO_CO_ID = "c8000000-0000-4000-8000-000000000012";
 
 // Recover an existing user's id without listUsers() (which 500s here): sign in
 // with the canonical fixture password via the anon endpoint.
@@ -313,8 +320,31 @@ async function ensureApprovalPolicies() {
     },
   ];
   const { error } = await admin.from("approval_policies").upsert(rows, { onConflict: "id" });
-  if (error) console.warn(`    ! approval policy fixtures: ${error.message}`);
-  else console.log("    ✓ approval policy fixtures (purchase_orders + po_change_orders route-to-approvals)");
+  if (error) {
+    console.warn(`    ! approval policy fixtures: ${error.message}`);
+    return;
+  }
+  // decider_resolution is NOT NULL but free-form jsonb — nothing reads it for
+  // gating (the console gate is isManagerPlus), so it just records intent.
+  const steps = [
+    {
+      id: APPROVAL_STEP_PO_ID,
+      policy_id: APPROVAL_POLICY_PO_ID,
+      step_number: 1,
+      routing_kind: "sequential",
+      decider_resolution: { kind: "role", role: "manager" },
+    },
+    {
+      id: APPROVAL_STEP_PO_CO_ID,
+      policy_id: APPROVAL_POLICY_PO_CO_ID,
+      step_number: 1,
+      routing_kind: "sequential",
+      decider_resolution: { kind: "role", role: "manager" },
+    },
+  ];
+  const { error: sErr } = await admin.from("approval_steps").upsert(steps, { onConflict: "id" });
+  if (sErr) console.warn(`    ! approval step fixtures: ${sErr.message}`);
+  else console.log("    ✓ approval policy + step fixtures (purchase_orders + po_change_orders route-to-approvals)");
 }
 
 // Seed a party-bound advancing assignment (crew, issued credential) on the

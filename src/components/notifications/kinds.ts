@@ -31,6 +31,9 @@ export const NOTIF_KINDS = [
   "timesheet",
   "course",
   "incident",
+  "timesheet",
+  "payroll",
+  "time_correction",
 ] as const satisfies readonly PushKind[];
 
 export type NotifKind = (typeof NOTIF_KINDS)[number];
@@ -68,4 +71,7 @@ export const NOTIF_KIND_FALLBACKS: NotifKindRow[] = [
   { kind: "timesheet", label: "Timesheets", description: "Timesheet submissions and decisions" },
   { kind: "course", label: "Courses", description: "Course assignments + pass results" },
   { kind: "incident", label: "Incidents", description: "Field incident updates (manager+ only)" },
+  { kind: "timesheet", label: "Timesheets", description: "Your timesheet was submitted, approved, rejected, or posted" },
+  { kind: "payroll", label: "Payroll", description: "A payroll run covering your time was posted" },
+  { kind: "time_correction", label: "Time Corrections", description: "Decisions on time corrections you requested" },
 ];

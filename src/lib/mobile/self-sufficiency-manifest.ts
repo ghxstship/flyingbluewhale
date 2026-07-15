@@ -137,7 +137,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Photograph a receipt and file the expense",
     state: "gap",
     roles: ALL,
-    note: "G1 — the flagship gap. RLS HALF SHIPPED (20260715150000, verified under a real member JWT): a member may now file as themselves. The SURFACE is not built. expenses.receipt_path is still populated by NO surface in the repo, console included.",
+    note: "G1 — the flagship gap. RLS half SHIPPED (20260715150000, verified under a real member JWT). The SURFACE is BLOCKED on a security finding, not on effort: the `receipts` bucket is only writable today via `storage_service_role_buckets_upload`, which is granted to {authenticated} with no org scoping — a cross-tenant write hole (docs/compvss/SECURITY_FINDING_storage_upload_policy.md). Building receipt capture on that would ship a feature that works BECAUSE of the bug, and breaks when it is fixed. expenses.receipt_path is still populated by NO surface in the repo, console included.",
   },
   {
     id: "requisition.raise",

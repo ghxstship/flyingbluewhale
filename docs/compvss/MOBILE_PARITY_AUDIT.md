@@ -8,6 +8,25 @@ Every claim below cites the file that proves it. Nothing is reported closed or n
 
 ---
 
+## Remediation status (live)
+
+| Phase | State | Commits |
+| --- | --- | --- |
+| **0 · Stop the bleeding** | **DONE** — 14 shipped defects | `0a69feda` |
+| **1 · Capture layer** | **DONE** — verified end-to-end against prod storage | `e31bf21a` |
+| **2 · Daily field loop** | **PARTIAL** — G6, G13, G9 done (+D15, D16 found while building) | `3ce6d8ea`, `cee52fde` |
+| **3 · Manager band** | not started | — |
+| **4 · Safety depth** | not started | — |
+| **5 · Admin tail + exit test** | not started | — |
+
+**Phase 2 remaining**: G3 asset custody (**blocked on a policy decision** — `transitionAsset` refuses the member band, so "may crew take custody themselves?" is a product call, not a code one), G10 punch list, G8 swap request, G23 onboarding artifacts, G36 offline durability (+ S5 queue unification, moved here from Phase 1).
+
+**Read the Corrections section (§5b) before trusting any remaining MISSING.** Two entries were wrong because they were scored from a grep count rather than the render path. Every untouched MISSING that rests on the same evidence needs re-verification before anyone builds against it. Four gaps found *while building* (D15, D16 + the two corrections) versus one predicted-and-confirmed suggests the register understates as often as it overstates.
+
+**Defects found by remediation, not by the audit**: D15, D16 (§3.2b). Both were invisible until a surface existed to hit them — the pattern will repeat in every remaining phase.
+
+---
+
 ## 0. Surface asymmetry (the baseline fact)
 
 | Shell | Pages | `actions.ts` (mutation surfaces) |

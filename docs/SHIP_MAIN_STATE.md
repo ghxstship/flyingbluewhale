@@ -1,8 +1,70 @@
-# Shipping main — state as of 2026-07-15 13:30
+# Shipping main — state as of 2026-07-15 13:30, SHIPPED 14:00
+
+> **UPDATE 2026-07-15 14:00 — main WAS pushed, by a later session, on Julian's
+> instruction.** `origin/main` is now `96a6500e`. The four blockers below were
+> not overridden; three were resolved and one was found to be already satisfied.
+> The body of this document is preserved as written — its traps are still true
+> and still worth reading. Corrections are in this block.
+>
+> **What shipped:** `77f412cd` — a MERGE of committed main (77 commits) with
+> origin's 2. Deployed READY; apex + all three subdomains return 200. Then
+> `96a6500e` (notify push-kind fix).
+>
+> **Disposition of the four blockers:**
+>
+> 1. _Phase B unfinished (13 `from("workforce_members")` readers)._ **Not a
+>    deploy blocker, and shipping was the correct next step.** Verified against
+>    prod at push time: the table EXISTS, `shifts.workforce_member_id` EXISTS,
+>    `shifts.crew_member_id` EXISTS, and `20260715220000_retire_workforce_members`
+>    is **UNAPPLIED (0 rows)**. The 13 readers therefore still resolve. Per this
+>    doc's own "deploy first, migrate second" rule, deploying the readers while
+>    the table stands is the safe half of the order. **The hazard is now
+>    live-and-waiting, not gone — see the standing warning below.**
+> 2. _Tree in flight (~5 sessions, 72 dirty files)._ Sidestepped, not waited out:
+>    a SHA was pinned and validated in an isolated worktree. **None of the dirty
+>    tree was shipped** — typecheck passing without it proves the shipped tree is
+>    self-consistent.
+> 3. _origin's 2 commits not integrated._ Resolved. This doc was right that
+>    rebasing 72 commits under five sessions is destructive — so they were
+>    **merged**, not rebased. No SHA any worktree references was rewritten, and
+>    `a84da8d3` + `8dd7eb89` are ancestors of `origin/main` (verified by
+>    ancestry, not grep). One conflict, `database.types.ts`: HEAD added
+>    `recompute_timesheet_totals`, origin's generated copy predated it. Resolved
+>    by keeping HEAD — the live DB has the function. **It was NOT regenerated
+>    wholesale**: the DB is ahead of both branches (it already carries
+>    `identity_boundary_sweep`, `for_all_admin_read_lockout`,
+>    `announcements_publish_authority` from unshipped sessions), so a regen would
+>    have swept unreviewed schema into the push.
+> 4. _Breaking change must be surfaced._ Surfaced, and it is the migration
+>    ordering in item 1. Nothing else in the 77 was a schema break.
+>
+> **The near-miss this doc did not catch.** `cool-aryabhata-262d6c`'s tip
+> (`69732c81`) was **3 commits behind** the primary checkout's main. Had it
+> pushed its own tip, `ce5a7a47` (the CSP nonce hydration fix, firing on every
+> page load), `0cedc39b` (RBAC capability grants admin) and `320fc199` would not
+> have shipped. Blob hashes, not grep, settled it: that worktree's
+> `src/app/layout.tsx` was `372ceebf` where main's was `26d90e06` — yet a grep
+> for `suppressHydrationWarning` hits in **both** (a different instance), so the
+> obvious check gives a false pass. This is the second time that
+> `reset HEAD~1` + amend flow dropped the CSP fix. **Add "compare blob hashes
+> between the ref you are about to push and the ref you think you have" to the
+> checklist, next to "grep the ref, never the tree".**
+>
+> ## ⚠ STANDING HAZARD — do NOT apply `20260715220000_retire_workforce_members`
+>
+> It is committed on `claude/infallible-leakey-5365a2` and deliberately
+> unapplied. Shipped main still has **13 `from("workforce_members")` readers
+> across 11 files** (`git grep 'from("workforce_members")' origin/main -- src`).
+> Applying it now drops the table those readers select from, and PostgREST errors
+> on a missing relation: **the volunteer portal, call sheets and the operations
+> schedule go down.** Finish the Phase B table readers, deploy them, verify the
+> deployed ref, and only then migrate.
+
+---
 
 Written by the session tasked with validating main before a push. **main was not
-pushed.** Push = prod deploy. This is what is true, what got fixed, and what is
-still in the way.
+pushed** _(at the time of writing — see the update above)_. Push = prod deploy.
+This is what is true, what got fixed, and what is still in the way.
 
 ## The headline
 

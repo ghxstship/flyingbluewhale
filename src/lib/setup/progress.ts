@@ -95,7 +95,9 @@ export async function getSetupProgress(orgId: string): Promise<SetupProgress> {
       id: "invite_team",
       labelKey: "console.setup.inviteTeam",
       fallbackLabel: "Invite your team",
-      href: "/studio/settings/members",
+      // Invites live at people/invites; /studio/settings/members never existed
+      // (dead activation link — surfaced by the 2026-07 lifecycle audit).
+      href: "/studio/people/invites",
       // The owner is always a member; a second membership means a real invite.
       done: members > 1,
     },

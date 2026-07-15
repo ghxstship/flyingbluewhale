@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { deleteStaffMember } from "./edit/actions";
+import { deleteStaffMember, separateStaffMember, reinstateStaffMember } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ staffId: stri
   const row = await getOrgScoped("workforce_members", session.orgId, p.staffId);
   if (!row) notFound();
   const title = (row as Record<string, unknown>)["full_name"] as string | undefined;
+  const engagementState = (row as Record<string, unknown>)["engagement_state"] as string | undefined;
   return (
     <>
       <ModuleHeader
@@ -41,6 +42,26 @@ export default async function Page({ params }: { params: Promise<{ staffId: stri
             <Button href={`/studio/workforce/staff/${p.staffId}/edit`} size="sm">
               {t("console.workforce.staff.detail.edit", undefined, "Edit")}
             </Button>
+            {/* Separation is the offboarding mirror of onboarding — it PRESERVES
+                the record (with the date + reason) so history survives and
+                re-engagement is a state flip. Delete stays for genuine mistakes. */}
+            {engagementState === "separated" ? (
+              <form action={reinstateStaffMember.bind(null, p.staffId)}>
+                <Button type="submit" size="sm" variant="secondary">
+                  {t("console.workforce.staff.detail.reinstate", undefined, "Reinstate")}
+                </Button>
+              </form>
+            ) : (
+              <DeleteForm
+                action={separateStaffMember.bind(null, p.staffId, undefined)}
+                label={t("console.workforce.staff.detail.separate", undefined, "Separate")}
+                confirm={t(
+                  "console.workforce.staff.detail.separateConfirm",
+                  undefined,
+                  "Separate this person? Their record and history are kept; they can be reinstated later.",
+                )}
+              />
+            )}
             <DeleteForm
               action={deleteStaffMember.bind(null, p.staffId)}
               confirm={t(

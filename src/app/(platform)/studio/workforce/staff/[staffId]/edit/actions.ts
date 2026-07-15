@@ -52,3 +52,45 @@ export async function deleteStaffMember(id: string): Promise<void> {
   revalidatePath("/studio/workforce/staff");
   redirect("/studio/workforce/staff");
 }
+
+/**
+ * SEPARATE — the offboarding mirror of onboarding (new_hire_flows had no
+ * counterpart; separation used to be a plain DELETE, which erased the person
+ * along with any record that they ever worked here).
+ *
+ * Preserves the row and stamps WHEN + WHY, so history survives for compliance
+ * and re-engagement is a state flip rather than a re-create. LDP:
+ * `engagement_state` is the cyclical lifecycle (active <-> separated).
+ */
+export async function separateStaffMember(id: string, reason?: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("workforce_members")
+    .update({
+      engagement_state: "separated",
+      separated_at: new Date().toISOString(),
+      separation_reason: reason?.trim() || null,
+    })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not separate workforce member: ${error.message}`);
+  revalidatePath(`/studio/workforce/staff/${id}`);
+  revalidatePath("/studio/workforce/staff");
+  redirect(`/studio/workforce/staff/${id}`);
+}
+
+/** REINSTATE — re-engagement flips the state back and clears the separation stamps. */
+export async function reinstateStaffMember(id: string): Promise<void> {
+  const session = await requireSession();
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("workforce_members")
+    .update({ engagement_state: "active", separated_at: null, separation_reason: null })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not reinstate workforce member: ${error.message}`);
+  revalidatePath(`/studio/workforce/staff/${id}`);
+  revalidatePath("/studio/workforce/staff");
+  redirect(`/studio/workforce/staff/${id}`);
+}

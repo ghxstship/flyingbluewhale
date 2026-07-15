@@ -6,7 +6,7 @@ import { DetailShell, money } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
 import { getRequestT } from "@/lib/i18n/request";
-import { deleteCrewMember } from "./edit/actions";
+import { deleteCrewMember, separateCrewMember, reinstateCrewMember } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ crewId: string }> }) {
   const { crewId } = await params;
@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: Promise<{ crewId: strin
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("crew_members")
-    .select("id, name, role, email, phone, day_rate_cents, notes")
+    .select("id, name, role, email, phone, day_rate_cents, notes, engagement_state, separated_at, separation_reason")
     .eq("org_id", session.orgId)
     .eq("id", crewId)
     .maybeSingle();
@@ -56,6 +56,19 @@ export default async function Page({ params }: { params: Promise<{ crewId: strin
                 label: t("console.people.crew.detail.fields.dayRate", undefined, "Day Rate"),
                 value: money(row.day_rate_cents),
               },
+              {
+                label: t("console.people.crew.detail.fields.engagement", undefined, "Engagement"),
+                value:
+                  row.engagement_state === "separated"
+                    ? row.separation_reason
+                      ? t(
+                          "console.people.crew.detail.separatedWithReason",
+                          { reason: row.separation_reason },
+                          `Separated · ${row.separation_reason}`,
+                        )
+                      : t("console.people.crew.detail.separated", undefined, "Separated")
+                    : t("console.people.crew.detail.active", undefined, "Active"),
+              },
               { label: t("console.people.crew.detail.fields.notes", undefined, "Notes"), value: row.notes ?? "—" },
             ]
           : undefined
@@ -71,6 +84,26 @@ export default async function Page({ params }: { params: Promise<{ crewId: strin
             <Button href={`/studio/people/crew/${crewId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>
+            {/* Separation is the offboarding mirror of onboarding — it PRESERVES
+                the roster row (with the date + reason) so history survives and
+                re-engagement is a state flip. Delete stays for genuine mistakes. */}
+            {row.engagement_state === "separated" ? (
+              <form action={reinstateCrewMember.bind(null, crewId)}>
+                <Button type="submit" size="sm" variant="secondary">
+                  {t("console.people.crew.detail.reinstate", undefined, "Reinstate")}
+                </Button>
+              </form>
+            ) : (
+              <DeleteForm
+                action={separateCrewMember.bind(null, crewId, undefined)}
+                label={t("console.people.crew.detail.separate", undefined, "Separate")}
+                confirm={t(
+                  "console.people.crew.detail.separateConfirm",
+                  { name: row.name },
+                  `Separate "${row.name}"? Their roster record and history are kept; they can be reinstated later.`,
+                )}
+              />
+            )}
             <DeleteForm
               action={deleteCrewMember.bind(null, crewId)}
               confirm={t(

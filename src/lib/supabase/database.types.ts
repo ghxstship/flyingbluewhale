@@ -9059,6 +9059,7 @@ export type Database = {
           day_rate_max_cents: number | null
           day_rate_min_cents: number | null
           email: string | null
+          engagement_state: string
           gear_owned: Json
           id: string
           is_public_profile: boolean
@@ -9073,6 +9074,8 @@ export type Database = {
           reel_url: string | null
           role: string | null
           roles: string[]
+          separated_at: string | null
+          separation_reason: string | null
           tagline: string | null
           travel_radius_km: number | null
           unions: string[]
@@ -9092,6 +9095,7 @@ export type Database = {
           day_rate_max_cents?: number | null
           day_rate_min_cents?: number | null
           email?: string | null
+          engagement_state?: string
           gear_owned?: Json
           id?: string
           is_public_profile?: boolean
@@ -9106,6 +9110,8 @@ export type Database = {
           reel_url?: string | null
           role?: string | null
           roles?: string[]
+          separated_at?: string | null
+          separation_reason?: string | null
           tagline?: string | null
           travel_radius_km?: number | null
           unions?: string[]
@@ -9125,6 +9131,7 @@ export type Database = {
           day_rate_max_cents?: number | null
           day_rate_min_cents?: number | null
           email?: string | null
+          engagement_state?: string
           gear_owned?: Json
           id?: string
           is_public_profile?: boolean
@@ -9139,6 +9146,8 @@ export type Database = {
           reel_url?: string | null
           role?: string | null
           roles?: string[]
+          separated_at?: string | null
+          separation_reason?: string | null
           tagline?: string | null
           travel_radius_km?: number | null
           unions?: string[]
@@ -39456,6 +39465,7 @@ export type Database = {
         Row: {
           created_at: string
           email: string | null
+          engagement_state: string
           full_name: string
           id: string
           kind: Database["public"]["Enums"]["workforce_kind"]
@@ -39463,6 +39473,8 @@ export type Database = {
           org_id: string
           phone: string | null
           role: string | null
+          separated_at: string | null
+          separation_reason: string | null
           skills: Json
           updated_at: string
           user_id: string | null
@@ -39471,6 +39483,7 @@ export type Database = {
         Insert: {
           created_at?: string
           email?: string | null
+          engagement_state?: string
           full_name: string
           id?: string
           kind?: Database["public"]["Enums"]["workforce_kind"]
@@ -39478,6 +39491,8 @@ export type Database = {
           org_id: string
           phone?: string | null
           role?: string | null
+          separated_at?: string | null
+          separation_reason?: string | null
           skills?: Json
           updated_at?: string
           user_id?: string | null
@@ -39486,6 +39501,7 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string | null
+          engagement_state?: string
           full_name?: string
           id?: string
           kind?: Database["public"]["Enums"]["workforce_kind"]
@@ -39493,6 +39509,8 @@ export type Database = {
           org_id?: string
           phone?: string | null
           role?: string | null
+          separated_at?: string | null
+          separation_reason?: string | null
           skills?: Json
           updated_at?: string
           user_id?: string | null

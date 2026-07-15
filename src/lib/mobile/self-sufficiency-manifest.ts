@@ -142,9 +142,9 @@ export const WORKFLOWS: readonly Workflow[] = [
   {
     id: "requisition.raise",
     label: "Raise a purchase requisition from site",
-    state: "gap",
+    state: "shipped",
     roles: ALL,
-    note: "G19. RLS half shipped (20260715160000, verified). Surface not built.",
+    provenBy: "e2e/compvss-field-intake.spec.ts · G19 (DB-verified: £40 → 4000 cents, draft, requester bound to caller by RLS)",
   },
   {
     id: "mileage.log",

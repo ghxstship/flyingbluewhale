@@ -4899,7 +4899,9 @@
    "myWork": "My Work",
    "myWorkSub": "What You Owe & What Waits On You",
    "team": "Team",
-   "teamSub": "Invite People & Change Roles"
+   "teamSub": "Invite People & Change Roles",
+   "reqs": "Purchase Requests",
+   "reqsSub": "Ask The Org To Buy Something"
   },
   "activity": {
    "count": "{n} Events",
@@ -5102,6 +5104,14 @@
    "back": "Back",
    "noAccessTitle": "Owners And Admins Only",
    "noAccessBody": "Inviting people and changing roles is limited to owners and admins."
+  },
+  "reqs": {
+   "title": "Purchase Requests",
+   "eyebrow": "{count} Requests",
+   "eyebrowOne": "1 Request",
+   "new": "Request A Purchase",
+   "emptyTitle": "Nothing Requested",
+   "emptyBody": "Need something bought for the job? Raise it here and your manager picks it up."
   }
  },
  "me": {

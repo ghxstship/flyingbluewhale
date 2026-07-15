@@ -45,6 +45,7 @@ export default async function MorePage() {
         { href: "/m/clock", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
         { href: "/m/punch", icon: "Fingerprint", labelKey: "m.more.punch", label: "Punch Clock", subKey: "m.more.punchSub", sub: "Clock In & Out" },
         { href: "/m/requests", icon: "CheckCheck", labelKey: "m.more.approvals", label: "Approvals", subKey: "m.more.approvalsSub", sub: "Review & Action Requests", managerOnly: true },
+        { href: "/m/requisitions", icon: "ShoppingCart", labelKey: "m.more.reqs", label: "Purchase Requests", subKey: "m.more.reqsSub", sub: "Ask The Org To Buy Something" },
         { href: "/m/time-off", icon: "CalendarOff", labelKey: "m.more.timeOff", label: "Time Off", subKey: "m.more.timeOffSub", sub: "Requests & Balances" },
         { href: "/m/advances", icon: "ClipboardList", labelKey: "m.more.advances", label: "Advancing", subKey: "m.more.advancesSub", sub: "What You've Been Issued" },
         { href: "/m/onboarding", icon: "UserCheck", labelKey: "m.more.onboarding", label: "Onboarding", subKey: "m.more.onboardingSub", sub: "Finish Getting Set Up" },

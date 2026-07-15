@@ -83,6 +83,9 @@ export default async function Page() {
   const ids = [...new Set(rows.map((r) => r.requester_id))];
   const nameById = new Map<string, string>();
   if (ids.length) {
+    // soft-delete-exempt: display-name hydration by id for requesters already
+    // on the rows above. An archived requester still needs their name on the
+    // correction they filed; gating here would blank it out.
     const { data: users } = await db.from("users").select("id, name, email").in("id", ids);
     for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
       nameById.set(u.id, u.name ?? u.email ?? "");

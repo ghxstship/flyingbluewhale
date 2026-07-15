@@ -70,6 +70,9 @@ export async function OnboardingSurface({
   };
 
   const [{ data: flow }, { data: steps }] = await Promise.all([
+    // soft-delete-exempt: resolves the flow named by an assignment the caller
+    // already holds. Archiving a flow retires it from new assignments; it must
+    // not blank the header of one already in progress.
     supabase.from("new_hire_flows").select("name, description").eq("id", a.flow_id).maybeSingle(),
     supabase
       .from("new_hire_flow_steps")

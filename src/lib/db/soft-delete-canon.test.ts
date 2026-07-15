@@ -198,7 +198,6 @@ const LEGACY_ALLOWLIST: Record<string, number> = {
   "src/app/(mobile)/m/handover/actions.ts": 1,
   "src/app/(mobile)/m/handover/page.tsx": 1,
   "src/app/(mobile)/m/market/page.tsx": 1,
-  "src/app/(mobile)/m/onboarding/[assignmentId]/page.tsx": 1,
   "src/app/(mobile)/m/onboarding/page.tsx": 1,
   "src/app/(mobile)/m/profile/page.tsx": 2,
   "src/app/(mobile)/m/requests/page.tsx": 1,

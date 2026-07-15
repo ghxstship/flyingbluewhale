@@ -124,7 +124,10 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
   };
   // timesheets key on party_id, notifications on auth user — and no FK is
   // registered between them, so this is a lookup rather than an embed.
+  // Gating on deleted_at would silently drop the decision notice for anyone
+  // archived between filing and approval.
   const { data: worker } = await supabase
+    // soft-delete-exempt: one party by id, to route a notification.
     .from("parties")
     .select("auth_user_id")
     .eq("id", sheet.party_id)

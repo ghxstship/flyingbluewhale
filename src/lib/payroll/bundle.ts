@@ -33,7 +33,10 @@ export async function loadPayrollRunBundle(
   const [{ data: org }, { data: project }, { data: lineRows }] = await Promise.all([
     supabase.from("orgs").select("name").eq("id", orgId).maybeSingle(),
     run.project_id
-      ? supabase.from("projects").select("name").eq("id", run.project_id).maybeSingle()
+      ? // soft-delete-exempt: names the project a completed payroll run was
+        // costed to. The run is history; archiving the project later must not
+        // rewrite what the bundle says it paid for.
+        supabase.from("projects").select("name").eq("id", run.project_id).maybeSingle()
       : Promise.resolve({ data: null }),
     supabase
       .from("payroll_run_lines")

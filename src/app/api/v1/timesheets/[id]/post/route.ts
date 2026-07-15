@@ -78,6 +78,9 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
     }
 
     // The worker's identity for the line. timesheets key on party_id.
+    // soft-delete-exempt: resolves one party by id to name a payroll line.
+    // Payroll is a historical record — an archived worker must still post with
+    // their name, not an empty string.
     const { data: party } = await supabase
       .from("parties")
       .select("id, display_name, auth_user_id")

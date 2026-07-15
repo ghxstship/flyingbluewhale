@@ -4813,7 +4813,15 @@
    "clockIn": "Clock In",
    "upcomingShifts": "Your Next 7 Days",
    "orgCalendar": "Production Calendar",
-   "eyebrowOne": "Today · 1 Shift"
+   "eyebrowOne": "Today · 1 Shift",
+   "swap": {
+    "cta": "Can't Make It",
+    "reason": "Why?",
+    "placeholder": "Your manager will see this.",
+    "send": "Send",
+    "cancel": "Cancel",
+    "sent": "Swap requested. Your manager has been notified."
+   }
   },
   "checkin": {
    "gate": {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
+import { SwapButton } from "./SwapButton";
 
 export type MyShift = {
   id: string;
@@ -49,6 +50,7 @@ export function MyShifts({
     noneBody: string;
     clockIn: string;
     upcoming: string;
+    swap: { cta: string; reason: string; placeholder: string; send: string; cancel: string; sent: string };
   };
 }) {
   const today = shifts.filter((s) => s.isToday);
@@ -90,6 +92,7 @@ export function MyShifts({
             <Link href="/m/clock" className="ps-btn ps-btn--cta" style={{ textDecoration: "none" }}>
               <KIcon name="Play" size={16} /> {labels.clockIn}
             </Link>
+            <SwapButton shiftId={s.id} labels={labels.swap} />
           </div>
         ))
       )}
@@ -115,6 +118,7 @@ export function MyShifts({
                   {attLabel(s.attendance)}
                 </span>
               </div>
+              <SwapButton shiftId={s.id} labels={labels.swap} />
             </div>
           ))}
         </>

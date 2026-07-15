@@ -139,3 +139,32 @@ test.describe("COMPVSS daily log", () => {
     await expect(page.getByText("submitted").first()).toBeVisible({ timeout: 15_000 });
   });
 });
+
+test.describe("COMPVSS shift swap", () => {
+  test.beforeEach(async ({ page }) => {
+    await authedSetup(page, "crew");
+  });
+
+  test("G8 · the swap ask exists on the viewer's own shift, or there is no shift to ask about", async ({ page }) => {
+    await page.goto("/m/schedule");
+    await expectNoError(page);
+
+    // Both shells could DECIDE a swap and neither could FILE one — every
+    // shift_swaps call site was a select or an update. The ask now hangs
+    // off the shift card itself.
+    const swapCta = page.getByRole("button", { name: /can't make it/i });
+    const noShift = page.getByText(/no shift today/i);
+
+    if ((await swapCta.count()) === 0) {
+      // Honest branch: no rostered shift for this fixture user, so there is
+      // nothing to swap. The card must say so rather than offer a dead CTA.
+      await expect(noShift).toBeVisible();
+      return;
+    }
+
+    // Two-tap: the CTA opens a reason field, not an immediate file.
+    await swapCta.first().click();
+    await expect(page.getByRole("button", { name: /^send$/i })).toBeVisible();
+    await expect(page.locator('textarea[id^="swap-reason-"]')).toBeVisible();
+  });
+});

@@ -168,6 +168,14 @@ export default async function MobileSchedulePage() {
           noneBody: t("m.schedule.noShiftBody", undefined, "Nothing rostered for you today. Check upcoming below."),
           clockIn: t("m.schedule.clockIn", undefined, "Clock In"),
           upcoming: t("m.schedule.upcomingShifts", undefined, "Your Next 7 Days"),
+          swap: {
+            cta: t("m.schedule.swap.cta", undefined, "Can't Make It"),
+            reason: t("m.schedule.swap.reason", undefined, "Why?"),
+            placeholder: t("m.schedule.swap.placeholder", undefined, "Your manager will see this."),
+            send: t("m.schedule.swap.send", undefined, "Send"),
+            cancel: t("m.schedule.swap.cancel", undefined, "Cancel"),
+            sent: t("m.schedule.swap.sent", undefined, "Swap requested. Your manager has been notified."),
+          },
         }}
       />
 

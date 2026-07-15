@@ -1,6 +1,6 @@
 # ADR-0008 — GVTEWAY portal: crew + vendor persona depth backfill
 
-**Status:** Accepted, amended 2026-07-15 (see §Amendments — 4 of them, all implemented). Superseded in part: Kudos is out. **No open questions remain.**
+**Status:** Accepted, amended 2026-07-15 (see §Amendments — 4 of them, all implemented). Superseded in part: Kudos is out. **The COMPVSS-handoff question is closed (Amendment 4).** §Open questions 1 (vendor rail size) and 2 (volunteer/media timing) are untouched by the amendments and remain open; question 3 was answered "no" by Amendment 2.
 **Date:** 2026-06-04
 **Owner:** Platform engineering
 **Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
@@ -279,3 +279,131 @@ separate form."
   here too. Out of scope for this amendment (it needs a look at whether portal
   rooms are project-scopeable at all) and **tracked separately** — flagging it
   here so it isn't rediscovered as a surprise.
+
+## Amendment 5 (2026-07-15) — chat is not project-scoped, on purpose
+
+Resolves the `ChatSurface` item flagged in Amendment 4 §Consequences. **Chat stays
+unscoped by project. Membership is the boundary** — and this amendment makes that
+true in the database, where it was not.
+
+This is the third pass over the same surface, and the ADR has been arguing with
+itself. Amendment 1 audited `ChatSurface` and concluded "already user-scoped
+(… room membership). **No change**." Amendment 4 then called it "the last unscoped
+shared surface" and flagged it as a probable Amendment 1 omission. Amendment 1 was
+right. Writing down *why* is the point of this amendment.
+
+### Why the Amendment 1 reasoning does not transfer
+
+Amendment 1's rule reads like it should apply here, and doesn't, for a reason worth
+stating precisely:
+
+> **RLS does not and will not catch this**: `memberships_select` permits any org
+> member […] the app is the only place the boundary can exist.
+
+That sentence is the whole justification for putting scope in a React component's
+props. It is true of `memberships` and `announcements`: those are org-wide reads with
+**no per-row grant**, so every org member sees every row by default and the DB has
+nothing to key a policy on. Project scope was the nearest available boundary, and the
+compiler was the only place left to enforce it.
+
+Chat is the opposite shape. A `chat_rooms` row is reachable only through an explicit
+`chat_room_members` row — a **positive, per-row, deliberate grant**, exactly the thing
+`memberships` lacks. So the boundary *can* live in RLS, which means it *should*: a
+props-level filter would be a worse version of a constraint the database can hold.
+
+Membership is also **strictly finer than project scope**, not a weaker substitute for
+it. Being on a project does not entitle you to a DM between two other people on that
+project. Project-scoping the room list would simultaneously leak (rooms in your project
+you were never added to) and over-hide (a room you were deliberately added to that
+spans projects — which is most of them). It would be a worse boundary wearing the
+right-looking union.
+
+And `chat_rooms` has **no `project_id`** (`org_id`, `name`, `room_kind`, `created_by`,
+`last_message_at`, timestamps — see the baseline). Adding one would mean answering
+"which project does a DM belong to?", which has no honest answer. That is the same
+schema fact that decided Amendment 2, but it lands somewhere different: Kudos was
+deleted because `recognition_posts` had no `project_id` **and** no membership grant, so
+there was no boundary available at any layer. Chat has the better boundary already.
+
+### The precondition: membership was not actually a boundary
+
+The argument above is only sound if you cannot grant yourself membership. **You could.**
+Confirmed against the live DB with nothing but a normal login — `crew@gvteway.test`,
+`member` band, a member of zero rooms:
+
+1. `chat_rooms_org_rw` USING `is_org_member(org_id)` → SELECT every room in the org,
+   pick "Festival Ops".
+2. `chat_room_members_self_rw` WITH CHECK `user_id = auth.uid() OR …` → INSERT a
+   self-issued membership row for it.
+3. `chat_messages_member_rw` USING `is_room_member(room_id)` → read the entire thread
+   and the 6-person roster.
+
+Nobody intended step 2. The baseline spelled the roster rule as "owner/admin may add
+members"; the `user_id = auth.uid()` disjunct beside it existed so a room's **creator**
+could seed their own first membership row. But a WITH CHECK cannot distinguish "adding
+myself to the room I just made" from "adding myself to your DM" — both are
+`user_id = auth.uid()`. The bootstrap clause was load-bearing and, read literally,
+universal.
+
+`20260611055842_chat_rls_recursion_fix` then widened it, despite its header saying "no
+new access is introduced". It recreated both policies with `USING` and **no
+`WITH CHECK`**; they are `FOR ALL` policies, and Postgres reuses `USING` as the write
+check when `WITH CHECK` is omitted. So the baseline's `member_role IN ('owner','admin')`
+requirement for adding *other* people silently became "any member may add anyone", and
+`chat_messages` lost its `is_org_member(org_id)` write pin. That migration was fixing a
+real BLOCKER (policy recursion) and its stated semantics were correct — it just wrote
+them into `USING` only and let the `FOR ALL` fallback do the rest quietly.
+
+Note what project-scoping `ChatSurface` would have done about any of this: **nothing**.
+The attack is a PostgREST call. It never renders a React component. Amendment 1's move
+was the right tool for `memberships`, where the app is genuinely the only available
+boundary; reaching for it here would have added a `projectId` prop, closed no hole, and
+left the ADR feeling finished.
+
+### What shipped
+
+`20260715180000_chat_membership_boundary.sql` replaces the implicit `FOR ALL` fallbacks
+with explicit per-command policies, so a write check can never again be inherited from a
+read check by accident:
+
+- **`chat_room_members` INSERT** — the room's **creator** (bootstrap) or an
+  **owner/admin**. `user_id = auth.uid()` is gone; that was the hole. Creator-bootstrap
+  covers every legitimate insert path in the app, including the two that add *other*
+  people (`startDmAction` adds the DM partner, the portal AM route adds the manager) —
+  all three create the room first, so `created_by` is already the caller.
+- **`chat_rooms` SELECT** — members, or the creator (the latter keeps
+  `INSERT … RETURNING` working, since PostgREST re-reads the new row before any
+  membership row exists). Closes the enumeration in step 1. Every real reader is already
+  membership-scoped (`.in("id", roomIds)`, or `.eq("id", roomId)` + an explicit
+  membership check + `notFound()`), so no supported behaviour changes.
+- **`chat_rooms` INSERT** — `created_by` must be the caller. `is_room_creator` is only a
+  safe bootstrap key if `created_by` can't be forged.
+- **`chat_messages` INSERT** — restores the `is_org_member(org_id)` pin.
+- **`tg_chat_member_role_guard`** — a member may write their own row (that is how
+  pin/mute/`last_read_at` work), and "their own row" includes `member_role`. Without the
+  trigger a plain member could self-promote to owner and then add outsiders — narrower
+  than the self-join, but it would hollow out the admin-only roster rule this migration
+  just established. It needs a trigger because `WITH CHECK` sees only `NEW` and cannot
+  say "`member_role` is unchanged".
+
+`ChatSurface` itself is **unchanged apart from its docblock**, which now carries this
+reasoning so the next audit finds the answer at the call site instead of re-deriving it.
+`chat-membership-boundary.test.ts` guards the two facts that would silently un-decide
+this: that no chat policy reintroduces a self-service join, and that `chat_rooms` still
+has no `project_id` (if a future migration adds one, the "not scopeable" half of this
+rationale expires and should be reconsidered on purpose).
+
+### Consequences
+
+- `ChatSurface` is no longer "the last unscoped shared surface" — it is the one shared
+  surface whose boundary is enforced a layer *below* the props, which is better.
+  Amendment 4 §Consequences is superseded on this point.
+- The Amendment 1 rule is now stated with its precondition: **put scope in the props
+  only when there is no per-row grant for RLS to key on.** Directory and Feed qualify;
+  chat does not. Applied without that precondition the rule is cargo cult, and here it
+  would have shipped a `projectId` prop over a live read-any-DM hole.
+- The four surfaces Amendment 1 waved through as "already user-scoped" were audited for
+  *scope* but not for *whether the DB agreed*. `ScheduleSurface`, `TimeOffSurface` and
+  `DocsSurface` all rest on `.eq("user_id", session.userId)`. That is an app-level
+  filter with the same question underneath it — does RLS hold the line if someone skips
+  the app? Not audited here; worth its own pass.

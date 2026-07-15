@@ -8,7 +8,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import type { PortalHref } from "./shell-contract";
 
 /**
- * Shared chat rooms list (ADR-0008 Move 1, Amendment 4).
+ * Shared chat rooms list (ADR-0008 Move 1, Amendments 4 + 5).
  *
  * Lists the caller's chat rooms ordered by last-message-at. Same query
  * + render across COMPVSS (`/m/inbox`) and the portal crew/vendor personas.
@@ -19,6 +19,42 @@ import type { PortalHref } from "./shell-contract";
  * name hydration, inbox fan-out on send). The portal was deep-linking into
  * COMPVSS to render a room it already had; the only thing missing was the
  * `slug` needed to build the URL.
+ *
+ * ## Why there is no `projectId` here (ADR-0008 Amendment 5 — settled twice)
+ *
+ * `DirectorySurface` and `FeedSurface` take a `projectId` that is REQUIRED on
+ * the `variant: "portal"` arm. This surface deliberately does not, and that is
+ * not an omission — Amendment 1 audited it and said "no change", Amendment 4
+ * re-flagged it as "the last unscoped shared surface", and Amendment 5 settled
+ * it. If you are about to add one, read this first.
+ *
+ * Amendment 1's rule exists because of its precondition: `memberships` and
+ * `announcements` are org-wide reads with **no per-row grant**, so RLS has
+ * nothing to key on ("`memberships_select` permits any org member") and the
+ * app is the only place a boundary can live. Project scope was the nearest
+ * available line, and the compiler was the last place to hold it.
+ *
+ * Chat is the opposite shape. A room is reachable only through an explicit
+ * `chat_room_members` row — a positive, per-row, deliberate grant. The
+ * boundary lives in RLS (`private.is_room_member`), a layer BELOW these props,
+ * which is why the query below filters on membership and not on a project:
+ *
+ *   • Membership is strictly FINER than project scope. Being on a project does
+ *     not entitle you to a DM between two other people on it. Scoping by
+ *     project would leak (rooms in your project you were never added to) and
+ *     over-hide (rooms you WERE added to that span projects — most of them).
+ *   • `chat_rooms` has no `project_id` at all, and "which project does a DM
+ *     belong to?" has no honest answer. (Same schema fact as Amendment 2's
+ *     Kudos deletion, different outcome: `recognition_posts` had no project_id
+ *     AND no membership grant, so it had no boundary at any layer. Chat has a
+ *     better one already.)
+ *
+ * Amendment 5 is also where membership became a real boundary rather than a
+ * claimed one: until `20260715180000_chat_membership_boundary.sql`, any org
+ * member could INSERT their own `chat_room_members` row into any room and read
+ * it, so "you only see rooms you were added to" was false. Note that a
+ * `projectId` prop here would have fixed exactly none of that — the attack is a
+ * PostgREST call and never renders this component.
  */
 
 type RoomRow = {

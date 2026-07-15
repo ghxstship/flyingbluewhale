@@ -9,13 +9,19 @@ import {
   ItemUnits,
   KIcon,
   type FieldDef,
+  type Unit as KitUnit,
   type ViewMode,
 } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { CatalogKind } from "@/lib/db/assignments";
 import { formatMoney } from "@/lib/i18n/format";
+import { CustodySheet, type CustodyTarget } from "./CustodySheet";
 
 export type AssetUnit = {
+  /** The `assets` row — required to act on the unit, not just show it. */
+  id: string;
+  /** Raw UAL state (the `status` field above is its display label). */
+  state: string;
   tag: string;
   status: string;
   holder: string;
@@ -38,6 +44,7 @@ export type InventoryLabels = {
   eyebrow: string;
   title: string;
   search: string;
+  custody: { take: string; ret: string; cancel: string; managerOnly: string };
   scan: string;
   empty: string;
   emptyHint: string;
@@ -67,6 +74,7 @@ function qtyTone(qty: number | null): "ok" | "warn" | "neutral" {
 
 export function InventoryView({ items, labels }: { items: InventoryItem[]; labels: InventoryLabels }) {
   const [q, setQ] = useState("");
+  const [custody, setCustody] = useState<CustodyTarget | null>(null);
   const [view, setView] = useState<ViewMode>("list");
   const [group, setGroup] = useState("none");
   const [sort, setSort] = useState("name");
@@ -121,7 +129,7 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
     // summary derived from inventory_qty — labeled as the available count, not
     // fabricated serial numbers.
     const hasRealUnits = x.units.length > 0;
-    const units = hasRealUnits
+    const units: KitUnit[] = hasRealUnits
       ? x.units
       : x.qty != null && x.qty > 0
         ? [
@@ -170,7 +178,24 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
             <div className="wl" style={{ marginBottom: 6 }}>
               {hasRealUnits ? labels.serialized : labels.units}
             </div>
-            <ItemUnits units={units} onToast={() => {}} />
+            <ItemUnits
+              units={units}
+              onToast={(u) => {
+                // Tapping a unit used to call a literal no-op. It now opens
+                // the custody control for that specific asset.
+                const { id, state } = u;
+                // Presentational units (no backing asset row) stay inert.
+                if (!id || !state) return;
+                setCustody((cur) => (cur?.id === id ? null : { id, tag: u.tag, state, status: u.status }));
+              }}
+            />
+            {custody && units.some((u) => u.id === custody.id) && (
+              <CustodySheet
+                target={custody}
+                onClose={() => setCustody(null)}
+                labels={labels.custody}
+              />
+            )}
           </div>
         )}
       </div>

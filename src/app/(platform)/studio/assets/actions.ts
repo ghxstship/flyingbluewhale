@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
-import { emitAudit } from "@/lib/audit";
 import { createClient } from "@/lib/supabase/server";
-import { NEXT_UAL_STATES, UAL_STATES, CHECK_IN, CHECK_OUT, movementKindFor } from "@/lib/db/assets";
+import { transitionAssetState } from "@/lib/db/asset-transition";
+import { UAL_STATES, CHECK_IN, CHECK_OUT } from "@/lib/db/assets";
 import type { UalState } from "@/lib/supabase/types";
 
 const StateEnum = z.enum(UAL_STATES);
@@ -50,64 +50,12 @@ async function transitionAsset(
   allowedFrom?: readonly UalState[],
 ): Promise<{ error?: string } | void> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can move assets" };
   const supabase = await createClient();
-
-  const { data: row } = await supabase
-    .from("assets")
-    .select("state")
-    .eq("id", id)
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (!row) return { error: "Asset not found" };
-  const current = row.state as UalState;
-  // Idempotency: a double-click lands here after the first click already
-  // moved the asset — treat as success rather than shouting at the user.
-  if (current === to) return;
-  if (allowedFrom && !allowedFrom.includes(current)) {
-    return { error: `Not ${to === "in_use" ? "checkout" : "check-in"}-eligible from ${current}` };
-  }
-  if (!NEXT_UAL_STATES[current]?.includes(to)) {
-    return {
-      error: `Cannot move ${current} → ${to}. Allowed: ${NEXT_UAL_STATES[current]?.join(", ") || "(terminal)"}`,
-    };
-  }
-
-  // Conditional update closes the TOCTOU between SELECT and write.
-  const { data: updated, error } = await supabase
-    .from("assets")
-    .update({ state: to, ...(to === "retired" ? { retired_at: new Date().toISOString() } : {}) })
-    .eq("id", id)
-    .eq("org_id", session.orgId)
-    .eq("state", current)
-    .select("id");
-  if (error) return { error: error.message };
-  if (!updated || updated.length === 0) {
-    return { error: "Asset state changed concurrently. Refresh and retry" };
-  }
-
-  // Append the ledger row. Ledger failure surfaces (the transition already
-  // happened, but a silent gap in the audit trail is worse than an error).
-  const { error: mvError } = await supabase.from("asset_movements").insert({
-    asset_id: id,
-    movement_kind: movementKindFor(current, to),
-    from_state: current,
-    to_state: to,
-    recorded_by: session.userId,
-  });
-  if (mvError) return { error: `State moved but ledger write failed: ${mvError.message}` };
-
-  await emitAudit({
-    actorId: session.userId,
-    orgId: session.orgId,
-    actorEmail: session.email,
-    action: to === "in_use" ? "asset.checked_out" : to === "available" ? "asset.checked_in" : "asset.state_changed",
-    targetTable: "assets",
-    targetId: id,
-    metadata: { fromState: current, toState: to },
-  });
-
+  // Gate, FSM, TOCTOU-safe write, ledger and audit all live in the shared
+  // transition now, so COMPVSS moves an asset through the identical path
+  // instead of a second implementation that drifts.
+  const result = await transitionAssetState(supabase, session, id, to, allowedFrom);
+  if (!result.ok) return { error: result.error };
   revalidateAssetSurfaces(id);
 }
 

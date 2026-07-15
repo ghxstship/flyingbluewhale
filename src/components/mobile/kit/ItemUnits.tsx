@@ -15,6 +15,11 @@ import { useDismissable } from "./useDismissable";
 export type UnitTone = "ok" | "warn" | "danger" | "info" | "accent" | "neutral";
 
 export type Unit = {
+  /** Backing record id, when the unit is actionable (e.g. an `assets` row).
+   *  Optional so the kit stays presentational for callers with no store. */
+  id?: string;
+  /** Raw lifecycle state; `status` above is its display label. */
+  state?: string;
   tag: string;
   status: string;
   holder: string;

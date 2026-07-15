@@ -84,6 +84,8 @@ export default async function InventoryPage() {
     // Prefer a name match (more specific); fall back to kind match.
     const matched = byName.get(rawName.toLowerCase()) ?? byKind.get(String(kind).toLowerCase()) ?? [];
     const units: AssetUnit[] = matched.map((a) => ({
+      id: a.id,
+      state: a.state,
       tag: a.asset_tag || a.serial || a.display_name || a.id.slice(0, 8),
       status: ASSET_STATE_LABEL[a.state] ?? a.state,
       holder: a.serial ? `S/N ${a.serial}` : cat,
@@ -111,6 +113,12 @@ export default async function InventoryPage() {
         labels={{
           eyebrow: t("m.inventory.eyebrow", undefined, "On-Hand Catalog"),
           title: t("m.inventory.title", undefined, "Assets"),
+          custody: {
+            take: t("m.inventory.custody.take", undefined, "Take Custody"),
+            ret: t("m.inventory.custody.return", undefined, "Return"),
+            cancel: t("m.inventory.custody.cancel", undefined, "Cancel"),
+            managerOnly: t("m.inventory.custody.blocked", undefined, "This unit can't be moved from its current state."),
+          },
           search: t("m.inventory.search", undefined, "Search assets…"),
           scan: t("m.inventory.scanCta", undefined, "Scan A Code"),
           empty: t("m.inventory.empty", undefined, "No assets"),

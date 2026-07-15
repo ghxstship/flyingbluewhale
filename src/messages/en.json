@@ -4265,7 +4265,13 @@
    "untracked": "Untracked",
    "scanCta": "Scan To Check Out / In",
    "serialized": "Serialized Units",
-   "available": "Available"
+   "available": "Available",
+   "custody": {
+    "take": "Take Custody",
+    "return": "Return",
+    "cancel": "Cancel",
+    "blocked": "This unit can't be moved from its current state."
+   }
   },
   "kudos": {
    "title": "Kudos",

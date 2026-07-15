@@ -28,10 +28,57 @@ import { TEST_ORGS } from "./helpers/fixtures";
 
 const VIEWER_EMAIL = fixtureEmail("viewer");
 const TARGET_ORG = "Test Starter Org";
+const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/;
+
+type Pg = import("playwright/test").Page;
 
 /** The /me/organizations membership rows are direct children of the surface. */
-const orgRow = (page: import("playwright/test").Page) =>
-  page.locator(".surface > div").filter({ hasText: TARGET_ORG });
+const orgRow = (page: Pg) => page.locator(".surface > div").filter({ hasText: TARGET_ORG });
+
+/** Sign in as the admin and pin the active workspace to the target org. */
+async function adminInTargetOrg(page: Pg) {
+  await authedSetup(page, "admin");
+  const pin = await page.request.patch("/api/v1/me/workspaces", { data: { orgId: TEST_ORGS.starter } });
+  expect(pin.ok(), "workspace pin to the Starter org failed — reseed fixtures").toBeTruthy();
+}
+
+/**
+ * Admin re-invites the viewer into the target org and returns the accept URL.
+ * `member` is the fixture's ACTUAL role there (the email suffix is not the DB
+ * role) and one of the three the form offers (admin|manager|member — no
+ * `viewer`). Matching it matters: accept_invite upserts with the INVITE's role,
+ * so any other level would rewrite the fixture's role while still passing.
+ */
+async function reinvite(page: Pg): Promise<string> {
+  await page.goto("/studio/people/invites");
+  await page.locator('main [name="email"]').first().fill(VIEWER_EMAIL);
+  await page.locator('main select[name="role"]').first().selectOption("member");
+  await page
+    .locator("main form")
+    .first()
+    .evaluate((f: HTMLFormElement) => f.requestSubmit());
+
+  const inviteRow = page.locator("tr").filter({ hasText: VIEWER_EMAIL }).first();
+  await expect(inviteRow, "the pending invite row appears").toBeVisible({ timeout: 60000 });
+  // "Copy Link" writes the accept URL to the CLIPBOARD (deliberately not an
+  // <a href>, so an admin can't navigate into the invitee's flow).
+  await inviteRow.getByRole("button", { name: /copy link/i }).click();
+  const acceptUrl = await page.evaluate(() => navigator.clipboard.readText());
+  expect(acceptUrl, "the copied link is an accept-invite URL").toContain("/accept-invite/");
+  return acceptUrl;
+}
+
+/** The viewer redeems the token, then we assert server truth: the membership is
+ *  back in their own list (accept_invite cleared the deleted_at). */
+async function acceptAndAssertRestored(page: Pg, acceptUrl: string) {
+  await authedSetup(page, "viewer");
+  await page.goto(acceptUrl);
+  await page.getByRole("button", { name: /accept/i }).first().click();
+  await expect(async () => {
+    await page.goto("/me/organizations");
+    await expect(orgRow(page).first()).toBeVisible({ timeout: 8000 });
+  }).toPass({ timeout: 120000 });
+}
 
 test.describe("Lifecycle — leave org, re-invite, accept, restore", () => {
   // login → leave → switch-org → invite → accept → verify runs long on prod.
@@ -55,42 +102,58 @@ test.describe("Lifecycle — leave org, re-invite, accept, restore", () => {
     await expect(orgRow(page), "the org is gone after leaving").toHaveCount(0, { timeout: 60000 });
 
     // ── 2. ADMIN re-invites them into that same org ──────────────────────────
-    await authedSetup(page, "admin");
-    const pin = await page.request.patch("/api/v1/me/workspaces", { data: { orgId: TEST_ORGS.starter } });
-    expect(pin.ok(), "workspace pin to the Starter org failed — reseed fixtures").toBeTruthy();
+    await adminInTargetOrg(page);
+    const acceptUrl = await reinvite(page);
 
-    await page.goto("/studio/people/invites");
-    await page.locator('main [name="email"]').first().fill(VIEWER_EMAIL);
-    // `member` is this fixture's ACTUAL role in the Starter org (the email
-    // suffix is not the DB role) AND one of the three roles the invite form
-    // offers (admin|manager|member — there is no `viewer` option). Matching it
-    // matters: accept_invite upserts the membership with the INVITE's role, so
-    // inviting at any other level would rewrite the fixture's role instead of
-    // restoring it, and the round-trip would stop being self-healing.
-    await page.locator('main select[name="role"]').first().selectOption("member");
-    await page
-      .locator("main form")
-      .first()
-      .evaluate((f: HTMLFormElement) => f.requestSubmit());
+    // ── 3+4. ACCEPT → the membership is restored (server truth) ──────────────
+    await acceptAndAssertRestored(page, acceptUrl);
+  });
 
-    // The pending invite lands in the table; copy its accept link.
-    const inviteRow = page.locator("tr").filter({ hasText: VIEWER_EMAIL }).first();
-    await expect(inviteRow, "the pending invite row appears").toBeVisible({ timeout: 60000 });
-    await inviteRow.getByRole("button", { name: /copy link/i }).click();
-    const acceptUrl = await page.evaluate(() => navigator.clipboard.readText());
-    expect(acceptUrl, "the copied link is an accept-invite URL").toContain("/accept-invite/");
+  // The ADMIN-driven offboard — `removePerson`, the most thorough server action
+  // in the repo (soft-delete + a five-table cascade + audit) and, per the 2026-07
+  // audit, entirely untested. This drives it for real and asserts the thing that
+  // actually matters: the removed member's ACCESS DIES (every session /
+  // api-key / workspace-switch path filters `deleted_at IS NULL`).
+  test("admin removes a member, their access dies, and a re-invite restores it", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 
-    // ── 3. ACCEPT: the invitee redeems the token ─────────────────────────────
+    // ── 0. Resolve the member's user id from their OWN session ───────────────
+    // Not via the roster search: that column's accessor is `name ?? email`, so
+    // an email search silently matches nothing for anyone who has a name.
     await authedSetup(page, "viewer");
-    await page.goto(acceptUrl);
-    await page.getByRole("button", { name: /accept/i }).first().click();
+    const meRes = await page.request.get("/api/v1/me");
+    expect(meRes.ok(), "/api/v1/me resolves the member's session").toBeTruthy();
+    const viewerId = ((await meRes.json()) as { data: { userId: string } }).data.userId;
+    expect(viewerId).toMatch(UUID);
 
-    // ── 4. SERVER TRUTH: the membership is restored ──────────────────────────
-    // accept_invite upserts the membership, clearing the deleted_at the leave
-    // stamped — the org is back in the viewer's own list.
+    // ── 1. ADMIN removes the member from the org ─────────────────────────────
+    await adminInTargetOrg(page);
+    await page.goto(`/studio/people/${viewerId}`);
+    await expect(page).toHaveURL(new RegExp(`/studio/people/${UUID.source}`), { timeout: 30000 });
+
+    // DeleteForm → confirm. removePerson soft-deletes the membership and
+    // cascades project_members / api_keys / AM assignments / chat rooms / push.
+    await page.getByRole("button", { name: /^(remove|delete)/i }).first().click();
+    await page
+      .getByRole("dialog")
+      .getByRole("button", { name: /^(remove|delete|confirm)/i })
+      .first()
+      .click()
+      .catch(async () => {
+        // Some DeleteForm variants confirm inline rather than in a dialog.
+        await page.getByRole("button", { name: /^(remove|delete|confirm)/i }).nth(1).click();
+      });
+
+    // ── 2. ACCESS DIES: the org vanishes from the removed member's own list ──
+    await authedSetup(page, "viewer");
     await expect(async () => {
       await page.goto("/me/organizations");
-      await expect(orgRow(page).first()).toBeVisible({ timeout: 8000 });
+      await expect(orgRow(page)).toHaveCount(0, { timeout: 8000 });
     }).toPass({ timeout: 120000 });
+
+    // ── 3. RE-INVITE + ACCEPT restores them (leaves the fixture as found) ────
+    await adminInTargetOrg(page);
+    const acceptUrl = await reinvite(page);
+    await acceptAndAssertRestored(page, acceptUrl);
   });
 });

@@ -2791,12 +2791,20 @@ paths:
         required: true
         schema: { type: string }
     get:
-      summary: State payroll filing XML export for a payroll run.
+      summary: State payroll filing XML export for a payroll run (CA DIR eCPR, NY PWA, WA L&I). WH-347 is the /pdf path, not this one.
       operationId: getPayrollRunsByRunIdStateXml
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
+        "422":
+          description: >
+            The org is missing a statutory identifier this agency requires —
+            `federal_ein` (CA DIR, NY PWA) or `contractor_license_number`
+            (CA DIR, WA L&I). `error.details.missing` names which. The export
+            refuses rather than emitting a blank identifier: an agency filing
+            with an empty EIN is rejected on upload or, worse, accepted and
+            non-compliant.
         "404": { $ref: "#/components/responses/NotFound" }
   /api/v1/site-plans/{id}/pdf:
     parameters:

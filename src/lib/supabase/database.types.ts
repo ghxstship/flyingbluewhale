@@ -21614,6 +21614,8 @@ export type Database = {
           branding: Json
           capability_grants_enforced: boolean
           compliance_settings: Json
+          contractor_address: string | null
+          contractor_license_number: string | null
           created_at: string
           datamap: Json
           default_balance_terms: string | null
@@ -21621,6 +21623,7 @@ export type Database = {
           default_deposit_pct: number | null
           default_locale: string
           default_timezone: string
+          federal_ein: string | null
           id: string
           insights_opt_in: boolean
           is_top_organizer: boolean
@@ -21641,6 +21644,8 @@ export type Database = {
           branding?: Json
           capability_grants_enforced?: boolean
           compliance_settings?: Json
+          contractor_address?: string | null
+          contractor_license_number?: string | null
           created_at?: string
           datamap?: Json
           default_balance_terms?: string | null
@@ -21648,6 +21653,7 @@ export type Database = {
           default_deposit_pct?: number | null
           default_locale?: string
           default_timezone?: string
+          federal_ein?: string | null
           id?: string
           insights_opt_in?: boolean
           is_top_organizer?: boolean
@@ -21668,6 +21674,8 @@ export type Database = {
           branding?: Json
           capability_grants_enforced?: boolean
           compliance_settings?: Json
+          contractor_address?: string | null
+          contractor_license_number?: string | null
           created_at?: string
           datamap?: Json
           default_balance_terms?: string | null
@@ -21675,6 +21683,7 @@ export type Database = {
           default_deposit_pct?: number | null
           default_locale?: string
           default_timezone?: string
+          federal_ein?: string | null
           id?: string
           insights_opt_in?: boolean
           is_top_organizer?: boolean

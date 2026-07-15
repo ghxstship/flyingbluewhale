@@ -1,0 +1,16 @@
+-- Contractor identifiers for certified payroll.
+--
+-- Every CA DIR eCPR, NY PWA, and WA L&I export shipped `fein=""` and
+-- `licenseNumber=""`, because the route only ever passed `{ name: org.name }`
+-- and there was nowhere for the identifiers to come from — orgs carried no
+-- EIN, no license, no contractor address.
+--
+-- These are STATUTORY fields on a filing to a state labour agency. A filing
+-- missing them is rejected on upload or — worse — accepted and
+-- non-compliant, which the operator discovers at audit. The exporter now
+-- refuses (422 `missing_contractor_identifiers`) rather than emitting an
+-- empty attribute, so the failure happens at export time instead of months
+-- later. Latent until now: no agency-typed payroll run existed yet, so no
+-- blank filing had actually gone out.
+--
+-- Applied to the live DB as migration `org_contractor_identifiers`.

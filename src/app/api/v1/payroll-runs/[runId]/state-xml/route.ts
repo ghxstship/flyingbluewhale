@@ -62,12 +62,49 @@ export async function GET(req: Request, ctx: { params: Promise<{ runId: string }
         "worker_name, user_id, ssn_last_4, classification, hours_by_day, hours_st, hours_ot, hours_dt, rate_st, rate_ot, rate_dt, gross, fringes_cash, fringes_to_plans, deductions, net",
       )
       .eq("payroll_run_id", r.id),
-    supabase.from("orgs").select("name").eq("id", session.orgId).maybeSingle(),
+    supabase
+      .from("orgs")
+      .select("name, federal_ein, contractor_license_number, contractor_address")
+      .eq("id", session.orgId)
+      .maybeSingle(),
     supabase.from("projects").select("name, address").eq("id", r.project_id).maybeSingle(),
   ]);
 
   if (!org) return apiError("internal", "Missing organization row");
   if (!project) return apiError("internal", "Missing project row");
+
+  // These are statutory identifiers on a filing to a state labour agency,
+  // and every export until now shipped them EMPTY — the route passed only
+  // `{ name: org.name }`, so `fein=""` and `licenseNumber=""` went out on
+  // real CA DIR / NY PWA / WA L&I filings. Such a filing is either rejected
+  // on upload or accepted and non-compliant, which the operator discovers at
+  // audit. Refuse here instead: a filing that half-works is worse than one
+  // that doesn't run.
+  const contractor = org as {
+    name: string;
+    federal_ein: string | null;
+    contractor_license_number: string | null;
+    contractor_address: string | null;
+  };
+  const REQUIRED_IDENTIFIERS: Record<"ca_dir" | "ny_pwa" | "wa_lni", Array<"federal_ein" | "contractor_license_number">> = {
+    ca_dir: ["federal_ein", "contractor_license_number"],
+    ny_pwa: ["federal_ein"],
+    wa_lni: ["contractor_license_number"],
+  };
+  const LABEL: Record<string, string> = {
+    federal_ein: "federal EIN",
+    contractor_license_number: "state contractor license number",
+  };
+  const missing = (REQUIRED_IDENTIFIERS[r.agency_report_type as keyof typeof REQUIRED_IDENTIFIERS] ?? []).filter(
+    (k) => !contractor[k]?.trim(),
+  );
+  if (missing.length > 0) {
+    return apiError(
+      "unprocessable",
+      `This filing needs your ${missing.map((k) => LABEL[k]).join(" and ")}. Add ${missing.length === 1 ? "it" : "them"} in Settings before exporting — an agency filing with a blank identifier is rejected or, worse, accepted and non-compliant.`,
+      { code: "missing_contractor_identifiers", missing },
+    );
+  }
 
   type LineRow = {
     worker_name: string | null;
@@ -104,8 +141,13 @@ export async function GET(req: Request, ctx: { params: Promise<{ runId: string }
   try {
     xml = renderCertifiedPayrollXml({
       agency: r.agency_report_type,
-      org_name: (org as { name: string }).name,
-      contractor: { name: (org as { name: string }).name },
+      org_name: contractor.name,
+      contractor: {
+        name: contractor.name,
+        fein: contractor.federal_ein ?? undefined,
+        license_number: contractor.contractor_license_number ?? undefined,
+        address: contractor.contractor_address ?? undefined,
+      },
       project: { name: proj.name, address: proj.address ?? undefined },
       payroll: {
         week_ending: r.week_ending,

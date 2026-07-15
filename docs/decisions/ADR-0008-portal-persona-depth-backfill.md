@@ -1,6 +1,6 @@
 # ADR-0008 — GVTEWAY portal: crew + vendor persona depth backfill
 
-**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented; Amendment 7 has three parts). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
+**Status:** Accepted, amended 2026-07-15 (see §Amendments — 7 of them, all implemented; Amendment 7 has four parts). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4). Amendment 7 generalises Amendment 5's question — "does RLS agree, if you skip the app?" — across all 65 identity-filtered tables; four more live escalations, all fixed and guarded.
 **Date:** 2026-06-04
 **Owner:** Platform engineering
 **Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
@@ -1146,3 +1146,128 @@ Worth stating once, plainly, since it is easy to misread: the project-scoped
 roster is a **UI property, not a security property**. `projectId` compiling is not
 evidence of scoping. That is the precondition Amendment 5 attached to the rule,
 and it still holds.
+
+## Amendment 7, part 4 (2026-07-15) — two handoffs, and a design owed back
+
+Housekeeping and a design note. No code or policy ships in this part.
+
+### Numbering: this is Amendment 7; the shift-punch amendment is 8
+
+The shift check-in session (worktree `stoic-mcclintock-d3d6ed`) wrote its own
+**Amendment 7** against this file at the same time. Both branched from main at
+Amendment 6, so both appended a "7". Resolved as: **this one keeps 7, theirs
+becomes 8** — on one asymmetry rather than seniority.
+
+The three migrations in parts 1 to 3 are **applied**, and their bodies say
+"Amendment 7" inside `supabase_migrations.schema_migrations.statements`.
+Renumbering this one would permanently desync applied migration history from the
+document. Theirs was 91 lines across three uncommitted files. Cheapest correct
+edit wins; the finding is no less important for being numbered 8.
+
+Whoever merges: expect a textual conflict at the end of this file. Both sections
+are straight appends and neither depends on the other.
+
+### Their finding, and the correction it makes to Amendment 5 part 3
+
+`POST /api/v1/shifts/checkin` gated on `assertCapability(session, "time:write")`
+and then loaded the shift by id and org, never checking **whose** it was. Any
+holder could punch a colleague's shift and write a `time_entries` row into
+payroll. They fixed it with an explicit ownership check plus a 403.
+
+It belongs in this arc, and it names the class better than parts 1 to 3 did:
+**a capability reads like an authorization without being one.** `time:write`
+says "this person may punch a clock". It never says "may punch THIS shift".
+Every finding in parts 1 to 3 was _the app filters it_; this one is _the
+capability names it_, and the second is harder to see precisely because the
+check is right there in the route, doing something.
+
+It also corrects this ADR. Amendment 5 part 3 narrowed
+`shifts_select_consolidated` and noted the check-in route as an incidental
+beneficiary, hedged as "a side effect, not a substitute for the ownership check
+the route still ought to make". The hedge was right and still undersold it:
+**staff bypass the ownership disjunct entirely**, and staff are most of the
+`time:write` holders, so the read narrowing protected approximately nobody who
+mattered. Their session verified `mgmt@` and `admin@` both punching `crew@`'s
+shift, 200, row moved to checked_in.
+
+### Item 9, verified here: the worker cannot punch their own shift
+
+The mirror, again, and the seventh instance of the 204 trap. Confirmed live with
+rows seeded and removed for the purpose (part 3's lesson: **destructive and
+mutating vectors get probe-seeded rows, never existing data**):
+
+- Exhaustively, exactly **one** policy can permit an UPDATE on `shifts`:
+  `shifts_admin__update` — staff band, no self clause, `crew` absent
+  (`controller` present and dead, as ever).
+- Seeded a `crew_members` row and a shift for `crew@gvteway.test` in the demo
+  org. The worker **sees** their shift (`visible: 1` — the part 3 read disjunct
+  works), then punches it: **HTTP 204**, and read-back says `checked_in_at IS
+NULL`. A silent no-op, which is why the route blamed a concurrent edit.
+
+So the endpoint now works **only** for staff punching their own shift, and is
+broken for the workers it exists for. Read says yes; write says no.
+
+### The design owed back (theirs to implement; item 9 in TIME_LIFECYCLE_BACKLOG.md)
+
+A plain `using (the shift is mine)` UPDATE policy is the obvious fix and is
+wrong, for a reason worth writing down: **a row-level UPDATE policy cannot scope
+columns.** Grant the worker their own row and you have granted them their own
+`starts_at`, `role` and `venue_id` — self-assigning a better shift. A column
+GRANT cannot rescue it, because staff and crew share the `authenticated` DB role.
+So the punch has to go through a function:
+
+```sql
+create or replace function public.check_in_shift(p_shift_id uuid)
+returns jsonb
+language plpgsql
+security definer
+set search_path to 'public'
+as $$
+declare v_shift record;
+begin
+  -- SECURITY DEFINER bypasses RLS, so every check the policy would have made
+  -- lives here. is_org_member is NOT one of them: being in the org is not
+  -- authority to punch this shift (approve_time_off_request was that mistake).
+  select s.id, s.checked_in_at, cm.user_id as owner_uid
+    into v_shift
+    from public.shifts s
+    join public.crew_members cm on cm.id = s.crew_member_id
+   where s.id = p_shift_id
+   for update;
+
+  if v_shift.id is null then
+    return jsonb_build_object('ok', false, 'reason', 'not_found');
+  end if;
+  -- Ownership. Not membership, not capability.
+  if v_shift.owner_uid is distinct from (select auth.uid()) then
+    return jsonb_build_object('ok', false, 'reason', 'forbidden');
+  end if;
+  if v_shift.checked_in_at is not null then
+    return jsonb_build_object('ok', false, 'reason', 'already_checked_in');
+  end if;
+
+  -- The column scoping a policy could not express: this statement is the ONLY
+  -- thing a worker may do to their shift. starts_at/role/venue_id are untouched
+  -- because they are not in this UPDATE.
+  update public.shifts set checked_in_at = now() where id = p_shift_id;
+  return jsonb_build_object('ok', true);
+end $$;
+```
+
+- `for update` locks the row so a double-punch cannot race past the
+  `already_checked_in` guard.
+- Return a result object rather than raising, so the route maps `forbidden` to
+  403 and **keeps** its app-layer `isShiftMine`. Both: the RPC is the boundary,
+  the app check is the honest error message.
+- Leave `shifts_admin__update` untouched. This is additive — staff keep editing
+  shifts through the policy, workers punch through the RPC, and no worker ever
+  receives a row-level UPDATE grant.
+- Do not grant EXECUTE to `anon`. Use `select auth.uid()` (subquery form), the
+  repo's initplan convention.
+- Their "staff may NOT punch on a worker's behalf" call is right, and this
+  enforces it structurally rather than by policy: the ownership check refuses a
+  supervisor, so the `time_entries.user_id = session.userId` mis-stamping they
+  documented cannot arise.
+- Verify it by **reading the row back**, not by checking for an error object.
+  Every refusal across parts 1 to 3 returned a clean 204 with the value
+  unchanged; an error-object check gives a false green in both directions.

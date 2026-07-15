@@ -9,11 +9,14 @@
  *
  * Fixture hygiene: every record this file creates is stamped
  * `E2E <Thing> <ts>` (policy / delegation / committee / gov-policy /
- * announcement / poll / survey / channel / channel-message) so
+ * announcement / poll / survey / channel / channel-message, plus the
+ * `E2E PO Decide` purchase order the decision flow routes) so
  * scripts/e2e-clean-fixtures.mjs (global teardown) purges it and repeated
  * prod runs never accumulate. Child rows (approval_steps, poll_options,
  * survey_questions, messages-in-my-channel) ON DELETE CASCADE from their
- * stamped parent, so only the parents need teardown targets.
+ * stamped parent, so only the parents need teardown targets. The
+ * approval_instances row the decision flow opens has NO FK back to the PO —
+ * teardown purges it on its metadata title (see purgeApprovalInstances).
  */
 import { expect, test } from "./helpers/base";
 import { authedSetup, suppressTour } from "./helpers/auth";
@@ -77,17 +80,66 @@ test.describe("ATLVS Governance, Comms & Advancing-merge — behavioral coverage
   // MEDIUM — create an approval delegation → redirect back to the delegations
   // list. scope_ref carries the stamp so teardown can purge it.
   //
-  // Persona is ADMIN: `approval_delegations` row-security (uas_del_self) only
-  // admits the INSERT when delegator_party_id is one of the caller's
-  // parties.id OR is_org_admin. createDelegation writes session.userId (the
-  // auth uid, NOT a parties.id) as delegator_party_id, so the sole passing
-  // path is the is_org_admin branch — a manager's INSERT is RLS-rejected.
-  test("admin: create an approval delegation", async ({ page }) => {
-    await authedSetup(page, "admin");
+  // Persona is MANAGER, and that is the point of the test. uas_del_self admitted
+  // its self branch only when delegator_party_id was one of the caller's
+  // parties.id, but createDelegation writes session.userId (the auth uid) — and
+  // always the caller's, since the delegator isn't selectable. So the self
+  // branch never matched and the policy fell through to is_org_admin: delegating
+  // was admin-only despite the app gate being isManagerPlus, and this test had to
+  // run as admin to pass. 20260715140000 taught the self branch the auth uid (and
+  // org-scoped it), so a manager can now delegate their OWN authority — the last
+  // of the three *_party_id inversions (see also uas_dec_decider, 20260715130000).
+  test("manager: create an approval delegation", async ({ page }) => {
+    await authedSetup(page, "manager");
     await createInModule(page, "/studio/governance/approvals/delegations/new", {
       scope_ref: `E2E Delegation ${stamp()}`,
     });
     await expect(page).toHaveURL(/\/studio\/governance\/approvals\/delegations$/, { timeout: 90000 });
+  });
+
+  // HIGH — the OTHER half of the approvals engine: recording a decision on an
+  // open instance and advancing its state. Chain: manager creates a PO → routes
+  // it (opens an instance seeded at the fixture policy's step #1) → approves it
+  // on the governance detail.
+  //
+  // Proves both halves of 20260715130000_approvals_decision_rls.sql, each with
+  // its own assertion below:
+  //   · approval_decisions INSERT — uas_dec_decider admitted ONLY a parties.id
+  //     while recordDecision writes the auth uid, so NO persona could record a
+  //     decision (a parties.id never equals an auth uid).
+  //   · approval_instances UPDATE — no policy existed, so the state advance was
+  //     RLS-denied and silently swallowed: the instance stayed open forever.
+  // Persona is MANAGER (not admin like the policy-authoring tests above): the
+  // decision path is isManagerPlus-gated and now RLS-matches that band.
+  test("manager: record a decision on a routed approval, advancing its state", async ({ page }) => {
+    await authedSetup(page, "manager");
+
+    // Open an instance: a draft PO routed against the seeded purchase_orders policy.
+    await createInModule(page, "/studio/procurement/purchase-orders/new", {
+      title: `E2E PO Decide ${stamp()}`,
+      amount: "3200",
+    });
+    await expect(page).toHaveURL(new RegExp(`/studio/procurement/purchase-orders/${UUID.source}`), { timeout: 90000 });
+    await page.getByRole("button", { name: /route to approvals/i }).click();
+    await expect(page).toHaveURL(new RegExp(`/studio/governance/approvals/${UUID.source}`), { timeout: 90000 });
+
+    // The instance is open at step #1, so "Record a decision" renders.
+    const decisionForm = page.locator("main form").filter({ has: page.locator('select[name="decision"]') });
+    await expect(decisionForm).toBeVisible({ timeout: 30000 });
+    await decisionForm.locator('select[name="decision"]').selectOption("approved");
+    await decisionForm.locator('textarea[name="notes"]').fill(`E2E Decision ${stamp()}`);
+    await decisionForm.evaluate((f: HTMLFormElement) => f.requestSubmit());
+
+    // No error surface: recordDecision now RETURNS the state-advance failure
+    // instead of swallowing it, so a regression on either policy lands here.
+    await expect(page.getByRole("alert").filter({ hasText: /failed|error|violates/i })).toHaveCount(0, {
+      timeout: 30000,
+    });
+    // The decision row landed → approval_decisions INSERT passed.
+    await expect(page.getByText(/no decisions recorded yet/i)).toHaveCount(0, { timeout: 30000 });
+    // The instance closed (state=approved ⇒ `open` false ⇒ the form unmounts) →
+    // approval_instances UPDATE passed. A silent no-op would leave it rendered.
+    await expect(decisionForm).toHaveCount(0, { timeout: 30000 });
   });
 
   // MEDIUM — the app manager+ gate on policy authoring is honored for a

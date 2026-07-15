@@ -70,16 +70,10 @@ export const DELEGATION_SCOPE_LABEL: Record<DelegationScope, string> = {
   project: "A project",
 };
 
-/** Map a decision → the instance state it implies (best-effort transition). */
-export function instanceStateForDecision(decision: DecisionKind): InstanceState | null {
-  switch (decision) {
-    case "approved":
-      return "approved";
-    case "rejected":
-      return "rejected";
-    case "returned":
-      return "returned";
-    default:
-      return null; // recused leaves the instance open
-  }
-}
+// The decision → instance-state mapping used to live here, applied by the
+// client after inserting the decision. It now lives INSIDE
+// public.record_approval_decision (migration 20260715140000), which writes the
+// decision and advances the state in one transaction. Deriving the target state
+// server-side is also why it can't live in both places: a second copy here
+// would be free to drift from the SQL, and letting the client name the target
+// state would let a crafted POST pick it.

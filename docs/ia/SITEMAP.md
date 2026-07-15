@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1197 · **API route handlers:** 151 · **Distinct nav hrefs:** 523
+**Page routes:** 1197 · **API route handlers:** 152 · **Distinct nav hrefs:** 523
 
 ## Legend
 
@@ -2525,7 +2525,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 151 route handlers
+## API surface (`/api/v1`) — 152 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2803,8 +2803,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/payroll-runs</code> · 2</summary>
+<details><summary><code>/api/v1/payroll-runs</code> · 3</summary>
 
+- `/api/v1/payroll-runs/[runId]/export`
 - `/api/v1/payroll-runs/[runId]/pdf`
 - `/api/v1/payroll-runs/[runId]/state-xml`
 

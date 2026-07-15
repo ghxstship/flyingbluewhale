@@ -1,0 +1,15 @@
+-- Payroll export ledger — Phase 5 of docs/compvss/TIME_MANAGEMENT_LIFECYCLE_PLAN.md.
+--
+-- Payroll is the one place a duplicate costs real money, so idempotency is a
+-- UNIQUE constraint rather than a convention: `payroll_exports` is keyed on
+-- (org_id, provider, idempotency_key), where the key is derived from the
+-- run's payable CONTENT. Retrying unchanged content collides and returns the
+-- existing export; changing an hour mints a new key so a genuine correction
+-- isn't swallowed as a duplicate.
+--
+-- `payroll_export_lines` records per-line outcomes, because providers reject
+-- individual lines and a retry must re-send ONLY the rejected ones —
+-- re-sending an accepted line is how someone gets paid twice.
+--
+-- Applied to the live DB as migration `payroll_exports_ledger`; this file is
+-- the repo's record.

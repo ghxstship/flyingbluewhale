@@ -11375,6 +11375,50 @@ export type Database = {
         }
         Relationships: []
       }
+      earning_codes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_worked_time: boolean
+          label: string
+          lifecycle_state: string
+          multiplier: number
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_worked_time?: boolean
+          label: string
+          lifecycle_state?: string
+          multiplier?: number
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_worked_time?: boolean
+          label?: string
+          lifecycle_state?: string
+          multiplier?: number
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "earning_codes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_templates: {
         Row: {
           body_html: string
@@ -14294,6 +14338,57 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_worker_links: {
+        Row: {
+          created_at: string
+          external_employee_id: string
+          external_position_id: string | null
+          id: string
+          link_state: string
+          org_id: string
+          party_id: string
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          external_employee_id: string
+          external_position_id?: string | null
+          id?: string
+          link_state?: string
+          org_id: string
+          party_id: string
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          external_employee_id?: string
+          external_position_id?: string | null
+          id?: string
+          link_state?: string
+          org_id?: string
+          party_id?: string
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_worker_links_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_worker_links_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
             referencedColumns: ["id"]
           },
         ]
@@ -22312,6 +22407,135 @@ export type Database = {
             columns: ["transaction_id"]
             isOneToOne: false
             referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_export_lines: {
+        Row: {
+          created_at: string
+          error_code: string | null
+          error_message: string | null
+          export_id: string
+          external_line_id: string | null
+          id: string
+          line_state: string
+          payroll_run_line_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          error_code?: string | null
+          error_message?: string | null
+          export_id: string
+          external_line_id?: string | null
+          id?: string
+          line_state?: string
+          payroll_run_line_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          error_code?: string | null
+          error_message?: string | null
+          export_id?: string
+          external_line_id?: string | null
+          id?: string
+          line_state?: string
+          payroll_run_line_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_export_lines_export_id_fkey"
+            columns: ["export_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_exports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_export_lines_payroll_run_line_id_fkey"
+            columns: ["payroll_run_line_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_run_lines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_exports: {
+        Row: {
+          accepted_count: number | null
+          attempts: number
+          confirmed_at: string | null
+          created_at: string
+          created_by: string | null
+          export_state: string
+          external_batch_id: string | null
+          id: string
+          idempotency_key: string
+          last_error: string | null
+          line_count: number | null
+          org_id: string
+          payroll_run_id: string
+          provider: string
+          rejected_count: number | null
+          request_digest: string | null
+          sent_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          accepted_count?: number | null
+          attempts?: number
+          confirmed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          export_state?: string
+          external_batch_id?: string | null
+          id?: string
+          idempotency_key: string
+          last_error?: string | null
+          line_count?: number | null
+          org_id: string
+          payroll_run_id: string
+          provider: string
+          rejected_count?: number | null
+          request_digest?: string | null
+          sent_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accepted_count?: number | null
+          attempts?: number
+          confirmed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          export_state?: string
+          external_batch_id?: string | null
+          id?: string
+          idempotency_key?: string
+          last_error?: string | null
+          line_count?: number | null
+          org_id?: string
+          payroll_run_id?: string
+          provider?: string
+          rejected_count?: number | null
+          request_digest?: string | null
+          sent_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_exports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_exports_payroll_run_id_fkey"
+            columns: ["payroll_run_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_runs"
             referencedColumns: ["id"]
           },
         ]
@@ -43337,6 +43561,10 @@ export type Database = {
         }[]
       }
       current_request_id: { Args: never; Returns: string }
+      post_timesheet: {
+        Args: { p_lines: Json; p_payroll_run_id: string; p_timesheet_id: string }
+        Returns: Json
+      }
       decline_offer_letter: {
         Args: { p_code: string; p_reason: string; p_token: string }
         Returns: Json

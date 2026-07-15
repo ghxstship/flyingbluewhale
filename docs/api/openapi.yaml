@@ -44,6 +44,32 @@ components:
       name: Idempotency-Key
 
   schemas:
+    PayrollExport:
+      type: object
+      description: >
+        One attempt to send a payroll run to a provider. Keyed on the run's
+        payable content, so a retry after a timeout — the case where you
+        don't know whether the provider received it — collides rather than
+        paying twice.
+      properties:
+        id: { type: string, format: uuid }
+        provider: { type: string }
+        export_state:
+          type: string
+          enum: [queued, sent, confirmed, partial, failed, cancelled]
+          description: >
+            `partial` is distinct from `failed`: some lines were accepted and
+            are already paid. Retry only the rejected ones — never re-send an
+            accepted line.
+        attempts: { type: integer }
+        external_batch_id: { type: string, nullable: true }
+        line_count: { type: integer, nullable: true }
+        accepted_count: { type: integer, nullable: true }
+        rejected_count: { type: integer, nullable: true }
+        last_error: { type: string, nullable: true }
+        sent_at: { type: string, format: date-time, nullable: true }
+        confirmed_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
     TimeCorrection:
       type: object
       description: >
@@ -1578,6 +1604,104 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
+
+  /api/v1/payroll-runs/{runId}/export:
+    get:
+      summary: "The run's export history, newest first. Scope: payroll:read."
+      operationId: listPayrollExports
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Past exports of this run.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          exports:
+                            type: array
+                            items: { $ref: "#/components/schemas/PayrollExport" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "Export a payroll run to a provider. Idempotent on the run's payable CONTENT: re-exporting unchanged content returns the existing export (200) and never sends twice; changing an hour mints a new export (201). Admin band. Scope: payroll:export."
+      operationId: exportPayrollRun
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                provider:
+                  type: string
+                  default: csv
+                  description: >
+                    `csv` is the universal driver — it works with every payroll
+                    system today, with no partnership or certification. Native
+                    API drivers register as they clear those gates.
+      responses:
+        "200":
+          description: >
+            This exact content was already exported. The original export is
+            returned and nothing was sent again — `idempotent` is true.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          export: { $ref: "#/components/schemas/PayrollExport" }
+                          idempotent: { type: boolean, enum: [true] }
+                          message: { type: string }
+        "201":
+          description: Exported. File-drop drivers return the artifact to deliver.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          export: { $ref: "#/components/schemas/PayrollExport" }
+                          artifact:
+                            type: object
+                            nullable: true
+                            properties:
+                              filename: { type: string }
+                              contentType: { type: string }
+                              body: { type: string }
+                          idempotent: { type: boolean, enum: [false] }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { description: Exporting is admin band — approving hours and paying them are separate authorities. }
+        "404": { description: Payroll run not found. }
+        "422":
+          description: >
+            Refused before sending. Typically a worker with no
+            `hr_worker_links` entry for this provider, a run with no lines, or
+            a zero-hour line. A payroll import that half-works is worse than
+            one that doesn't run.
 
   /api/v1/timesheets/{id}/submit:
     post:

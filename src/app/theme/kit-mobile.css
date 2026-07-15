@@ -86,7 +86,13 @@
 .mobile-shell .qr-ttl-bar span { display: block; height: 100%; background: var(--p-success); border-radius: 2px; transition: width 1s linear; }
 .mobile-shell .qr-ttl-l { display: flex; align-items: center; justify-content: center; gap: var(--p-1); font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--p-text-3); margin-top: var(--p-2); }
 .mobile-shell .pass-id { font-family: var(--p-mono); font-size: 12px; letter-spacing: 0.18em; color: var(--p-text-2); }
-.mobile-shell .sheet { position: absolute; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; }
+/* `fixed`, not the kit's `absolute`: same prototype-frame port bug as the tab
+   bar. `absolute; inset:0` resolved against `.phone` in the kit (a 390x844
+   frame). Here the nearest positioned ancestor is `.screen` — a tall scrolling
+   div — so a drawer covered the SCREEN's box, not the viewport: it opened below
+   the fold and read as "the button does nothing", and never responded to the
+   browser viewport at all. */
+.mobile-shell .sheet { position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; }
 .mobile-shell .sheet-bg { position: absolute; inset: 0; background: rgba(8,10,16,.46); }
 .mobile-shell .sheet-panel { position: relative; background: var(--p-bg); border-radius: 22px 22px 0 0; padding: 8px var(--p-4) 28px; max-height: 78%; overflow-y: auto; }
 .mobile-shell .sheet-grip { width: 38px; height: 4px; border-radius: 3px; background: var(--p-border); margin: 8px auto var(--p-4); }
@@ -232,7 +238,8 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
  * UNDER the fixed MobileTabBar (both z-30; the bar paints later in DOM order).
  * Its bottom padding must therefore clear the bar (~4rem) + safe-area, or the
  * scrolled-to-end Submit CTA sits beneath the bar and can't be tapped. */
-.mobile-shell .formscreen { position: absolute; inset: 0; z-index: 30; background: var(--p-bg); overflow-y: auto; padding: var(--p-12) var(--p-4) calc(env(safe-area-inset-bottom, 0px) + 6.5rem); }
+/* Same fix as `.sheet` — see above. The global search drawer is a formscreen. */
+.mobile-shell .formscreen { position: fixed; inset: 0; z-index: 30; background: var(--p-bg); overflow-y: auto; padding: var(--p-12) var(--p-4) calc(env(safe-area-inset-bottom, 0px) + 6.5rem); }
 .mobile-shell .fld { margin-bottom: 16px; }
 /* `.fld-label` = the same voice for group headings (segmented buttons) that
    have no single labelable control — a real <label> there fails a11y. */

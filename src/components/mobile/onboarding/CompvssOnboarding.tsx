@@ -1006,7 +1006,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                   <div className="wm" style={{ fontSize: 13, color: "rgba(255,255,255,.85)", paddingTop: 2 }}>
                     COMPVSS
                   </div>
-                  <span style={{ fontFamily: "'Pinyon Script', cursive", fontSize: 44, lineHeight: 1, marginLeft: -26, marginTop: -2, background: "linear-gradient(135deg, #f4cdbf, #d9a08e 45%, #b76e79)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
+                  <span style={{ fontFamily: "var(--font-pinyon), 'Pinyon Script', cursive", fontSize: 44, lineHeight: 1, marginLeft: -26, marginTop: -2, background: "linear-gradient(135deg, #f4cdbf, #d9a08e 45%, #b76e79)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                     Rose
                   </span>
                 </div>

@@ -14,6 +14,12 @@ import {
   Hanken_Grotesk,
   Space_Mono,
   Jost,
+  // The COMPVSS Rose lockup — the script half of "COMPVSS Rose" on the
+  // credential card. The kit loads it from Google Fonts (kit 28
+  // apps/field/index.html:9); the repo referenced it in RoseCard and the
+  // onboarding and never loaded it, so it fell back to the browser's generic
+  // cursive and the card read as unfinished. Rose lockup only — not a text face.
+  Pinyon_Script,
   // LEG3ND "legend" type axis (v5) — Airport (Matthew Carter's London Airport
   // signage face) is LICENSED (Revolver Type) and mounted via @font-face when
   // obtained; until then the legend type degrades to these fallbacks.
@@ -61,6 +67,12 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 // Jost — wordmark face only. Light weights for the crossbar-less spaced caps.
+const pinyon = Pinyon_Script({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-pinyon",
+  display: "swap",
+});
 const jost = Jost({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
@@ -198,7 +210,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       data-theme={ssrTheme}
       data-ui="saas"
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${anton.variable} ${bebas.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable} ${firaSans.variable} ${ibmPlexMono.variable}`}
+      className={`h-full ${anton.variable} ${bebas.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable} ${pinyon.variable} ${firaSans.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
       <head>

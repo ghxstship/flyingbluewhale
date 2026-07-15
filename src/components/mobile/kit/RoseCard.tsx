@@ -103,7 +103,7 @@ function Lock({ wm }: { wm: number }) {
       </div>
       <span
         style={{
-          fontFamily: "'Pinyon Script', cursive",
+          fontFamily: "var(--font-pinyon), 'Pinyon Script', cursive",
           fontSize: wm * 3.15,
           lineHeight: 1,
           marginLeft: -wm * 1.7,

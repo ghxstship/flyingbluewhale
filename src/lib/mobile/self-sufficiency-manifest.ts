@@ -121,7 +121,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Take and return custody of gear",
     state: "blocked",
     roles: WORKS_ON_SITE,
-    note: "G3. The parity half SHIPPED — mobile mirrors the console's manager+ gate via the shared transitionAssetState, verified writing an asset_movements ledger row. BLOCKED on a product decision for the rest: may CREW take custody of their own gear? That is a new authorization model, not a port.",
+    note: "G3. Manager+ custody SHIPPED (e0da4b03) — mobile mirrors the console's gate via the shared transitionAssetState, DB-verified writing an asset_movements checkout row. Crew self-checkout is DECIDED ('assignable', 2026-07-15) but blocked on ADR-0015's capability-grant layer landing: session.grants is still [] so can() can't carry it. Do NOT build a second mechanism — an org-level feature flag was tried and reverted for exactly that reason. See OPEN_DECISIONS.",
   },
   {
     id: "punchlist.raise",
@@ -271,6 +271,6 @@ export const OPEN_DECISIONS: readonly { id: string; question: string }[] = [
   {
     id: "asset.custody",
     question:
-      "May CREW take custody of their own gear, or is asset movement manager-device only? transitionAsset has always refused the member band; mobile now mirrors that exactly. Changing it is a new policy.",
+      "Crew self-checkout is DECIDED — 'assignable', not a global rule (2026-07-15). It is not BUILT because the right mechanism is ADR-0015's capability grants (role/person/time-boxed), and that layer is only partially implemented: session.grants is still []. When the resolver lands, add `asset:custody` to the capability catalog and gate transitionAssetState on can(session, 'asset:custody') — NARROW: check-out/check-in only, never retire or maintenance. An org-level feature flag was built and reverted; ADR-0015 says the next add-on feature reuses the grant layer rather than growing a second RBAC system, and this is that feature.",
   },
 ];

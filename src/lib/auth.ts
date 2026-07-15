@@ -370,7 +370,10 @@ const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
     "mileage:*",
     "procurement:*",
   ],
-  member: ["projects:read", "tasks:read", "tasks:write", "time:write", "check-in:*"],
+  // `time:read` lets a worker see their own punches and correction
+  // requests. Deliberately no `time:approve` or `time:edit`: a worker
+  // requests a correction, a manager decides it (separation of duties).
+  member: ["projects:read", "tasks:read", "tasks:write", "time:read", "time:write", "check-in:*"],
 };
 
 // Per-persona overlay (granular). Bug #13 / Workstream A1 — the 4-value
@@ -394,13 +397,21 @@ const CAPABILITIES_BY_PERSONA: Partial<Record<Persona, readonly string[]>> = {
     "crew:*",
     "proposals:read",
     "clients:read",
-    "time:*",
+    // Narrowed from `time:*` when time:approve/time:edit were introduced.
+    // A collaborator is role=member, so `isManagerPlus` rejects them —
+    // leaving the wildcard would have let them pass `can()` for approval
+    // while failing every isManagerPlus gate, which is the inconsistency
+    // to avoid. Approving hours is supervisory; co-producing isn't.
+    "time:read",
+    "time:write",
     "mileage:*",
   ],
   // Outside contributor with task-write but no project-write.
-  contractor: ["projects:read", "tasks:read", "tasks:write", "time:write"],
+  contractor: ["projects:read", "tasks:read", "tasks:write", "time:read", "time:write"],
   // Field operator. Scanning is the defining capability.
-  crew: ["check-in:*", "tasks:read", "tasks:write", "time:write"],
+  // `time:read` is what lets crew see their own punches and the correction
+  // requests they filed — without it the worker half of the loop 403s.
+  crew: ["check-in:*", "tasks:read", "tasks:write", "time:read", "time:write"],
   // Proposal recipient / portal viewer. Read-only on the data layer, PLUS
   // `proposals:approve` — the one binding write the client persona is
   // *supposed* to perform: signing / declining the proposal approvals,

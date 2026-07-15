@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { RefreshShell } from "@/components/mobile/RefreshShell";
 import { CheckInControls } from "./CheckInControls";
 import { ShiftNoteForm } from "./ShiftNoteForm";
+import { CorrectionRequest } from "./CorrectionRequest";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,9 @@ type EntryRow = {
  * /m/clock — the personal time clock. Reads the caller's open entry (if
  * any) to drive the running counter, the matching zone name, and recent
  * history. The face + clock-in/out CTA is the client `CheckInControls`;
- * each history row carries a `ShiftNoteForm` to log a note against it.
+ * each history row carries a `ShiftNoteForm` to log a note against it, and
+ * a closed row carries a `CorrectionRequest` so a worker who clocked in
+ * wrong can propose a fix for their supervisor to approve.
  */
 export default async function MobileClockPage() {
   const { t } = await getRequestT();
@@ -121,6 +124,23 @@ export default async function MobileClockPage() {
     }
   }
 
+  // Open correction requests for the visible entries, so a shift already
+  // under review shows that instead of offering a second request (the DB's
+  // partial unique index would refuse it anyway).
+  const pendingCorrectionByEntry = new Map<string, string>();
+  if (entryIds.length) {
+    const { data: corrections } = await supabase
+      .from("time_entry_corrections")
+      .select("time_entry_id, correction_kind")
+      .eq("org_id", session.orgId)
+      .eq("requester_id", session.userId)
+      .eq("correction_state", "requested")
+      .in("time_entry_id", entryIds);
+    for (const c of (corrections ?? []) as Array<{ time_entry_id: string | null; correction_kind: string }>) {
+      if (c.time_entry_id) pendingCorrectionByEntry.set(c.time_entry_id, c.correction_kind);
+    }
+  }
+
   const onShift = openEntry != null;
 
   return (
@@ -205,6 +225,15 @@ export default async function MobileClockPage() {
               <div style={{ marginTop: 10 }}>
                 <ShiftNoteForm entryId={e.id} entryLabel={label} />
               </div>
+              {/* A running shift has nothing to correct yet — clock out first. */}
+              {!active && (
+                <CorrectionRequest
+                  entryId={e.id}
+                  startedAt={e.started_at}
+                  endedAt={e.ended_at}
+                  pendingKind={pendingCorrectionByEntry.get(e.id) ?? null}
+                />
+              )}
             </div>
           );
         })

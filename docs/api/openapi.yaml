@@ -44,6 +44,43 @@ components:
       name: Idempotency-Key
 
   schemas:
+    TimeCorrection:
+      type: object
+      description: >
+        A worker-initiated request to correct a time entry. Filing one never
+        mutates the punch; a manager decides it and the applier writes the
+        entry in one transaction. `applied` is deliberately distinct from
+        `approved` — approval is a decision, application is a database effect
+        that can fail (e.g. the sheet was posted).
+      properties:
+        id: { type: string, format: uuid }
+        time_entry_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Null only for `missing_entry`, where no punch exists yet.
+        timesheet_id: { type: string, format: uuid, nullable: true }
+        requester_id: { type: string, format: uuid }
+        correction_kind:
+          type: string
+          enum: [edit_in, edit_out, edit_both, missing_entry, delete_entry, zone_override]
+        correction_state:
+          type: string
+          enum: [requested, approved, denied, applied, withdrawn]
+        reason: { type: string }
+        original_started_at: { type: string, format: date-time, nullable: true }
+        original_ended_at: { type: string, format: date-time, nullable: true }
+        proposed_started_at: { type: string, format: date-time, nullable: true }
+        proposed_ended_at: { type: string, format: date-time, nullable: true }
+        decided_by:
+          type: string
+          format: uuid
+          nullable: true
+          description: Never equal to `requester_id` — separation of duties is enforced at the database.
+        decided_at: { type: string, format: date-time, nullable: true }
+        decision_notes: { type: string, nullable: true }
+        applied_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
     ApiEnvelope:
       oneOf:
         - $ref: "#/components/schemas/ApiOk"
@@ -1541,6 +1578,131 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
+
+  /api/v1/time/corrections:
+    get:
+      summary: "List time-correction requests. A worker sees their own; the manager band sees the org queue (pass `?mine=1` to narrow to their own). Optional `?state=` filter. Scope: time:read."
+      operationId: listTimeCorrections
+      parameters:
+        - name: state
+          in: query
+          required: false
+          schema: { type: string, enum: [requested, approved, denied, applied, withdrawn] }
+          description: Filter by correction_state.
+        - name: mine
+          in: query
+          required: false
+          schema: { type: string, enum: ["1"] }
+          description: Manager-band callers only — narrow the org queue to their own requests.
+      responses:
+        "200":
+          description: The caller's visible correction requests.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          corrections:
+                            type: array
+                            items: { $ref: "#/components/schemas/TimeCorrection" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: "File a time-correction request against your own punch. Never mutates the entry — it proposes a change a manager must approve. Scope: time:write."
+      operationId: createTimeCorrection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind, reason]
+              properties:
+                timeEntryId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  description: Required for every kind except `missing_entry`, which has no entry yet.
+                kind:
+                  type: string
+                  enum: [edit_in, edit_out, edit_both, missing_entry, delete_entry, zone_override]
+                reason:
+                  type: string
+                  minLength: 10
+                  maxLength: 2000
+                  description: What happened, in the worker's words. Enforced at the database, not just here.
+                proposedStartedAt: { type: string, format: date-time, nullable: true }
+                proposedEndedAt: { type: string, format: date-time, nullable: true }
+                proposedZoneId: { type: string, format: uuid, nullable: true }
+      responses:
+        "201":
+          description: The filed request. The punch is unchanged.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          correction: { $ref: "#/components/schemas/TimeCorrection" }
+        "400": { description: The request shape or reason is unusable. }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { description: You can only request corrections to your own time entries. }
+        "404": { description: Time entry not found. }
+        "409": { description: You already have a pending request for this shift. }
+
+  /api/v1/time/corrections/{id}:
+    patch:
+      summary: "Decide a time correction. Approving applies it in the same transaction (entry mutation + audit reason + re-open of an approved timesheet). Manager band only, and never your own request. Scope: time:approve."
+      operationId: decideTimeCorrection
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision: { type: string, enum: [approved, denied] }
+                notes: { type: string, maxLength: 2000 }
+      responses:
+        "200":
+          description: The applied result.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          result:
+                            type: object
+                            properties:
+                              state: { type: string, enum: [applied, denied] }
+                              reopened_timesheet:
+                                type: boolean
+                                description: True when applying returned an already-approved timesheet to `open`, because the hours it blessed just changed.
+                              time_entry_id: { type: string, format: uuid, nullable: true }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { description: Not a manager, or you are the requester (separation of duties). }
+        "404": { description: Correction not found. }
+        "409": { description: Already decided. }
 
   /api/v1/marketplace-listings:
     get:

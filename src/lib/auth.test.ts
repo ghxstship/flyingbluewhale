@@ -175,3 +175,77 @@ describe("can (per-persona overlay — Bug #13 / Workstream A1)", () => {
     expect(can(s, "procurement:write")).toBe(true);
   });
 });
+
+/**
+ * The time-management separation-of-duties matrix (Phase 2 of
+ * docs/compvss/TIME_MANAGEMENT_LIFECYCLE_PLAN.md).
+ *
+ * Payroll fraud is the threat model, so the split between "can record
+ * time", "can approve time", and "can pay time" is pinned here rather than
+ * left to whichever wildcard happens to match. A `time:*` grant silently
+ * conferring approval authority on a non-supervisor is exactly the
+ * regression this catches.
+ */
+describe("time capabilities — separation of duties", () => {
+  const asRole = (role: Session["role"], persona: Session["persona"]) => baseSession({ role, persona });
+
+  it("lets every worker record their own time and read it back", () => {
+    for (const [role, persona] of [
+      ["member", "member"],
+      ["member", "crew"],
+      ["member", "contractor"],
+      ["member", "collaborator"],
+      ["manager", "manager"],
+      ["admin", "admin"],
+      ["owner", "owner"],
+    ] as const) {
+      const s = asRole(role, persona);
+      expect(can(s, "time:write"), `${persona} time:write`).toBe(true);
+      expect(can(s, "time:read"), `${persona} time:read`).toBe(true);
+    }
+  });
+
+  it("does not let a worker approve or edit time", () => {
+    for (const persona of ["member", "crew", "contractor", "collaborator"] as const) {
+      const s = asRole("member", persona);
+      expect(can(s, "time:approve"), `${persona} must not approve`).toBe(false);
+      expect(can(s, "time:edit"), `${persona} must not edit`).toBe(false);
+    }
+  });
+
+  // collaborator held `time:*`, which matched time:approve while
+  // isManagerPlus (keyed on ROLE) rejected them — a capability the rest of
+  // the stack would never honour.
+  it("keeps collaborator out of approval, despite its broad project authority", () => {
+    const s = asRole("member", "collaborator");
+    expect(can(s, "projects:write")).toBe(true);
+    expect(can(s, "time:approve")).toBe(false);
+    expect(isManagerPlus(s)).toBe(false);
+  });
+
+  it("lets the manager band approve and edit time", () => {
+    for (const [role, persona] of [
+      ["manager", "manager"],
+      ["admin", "admin"],
+      ["owner", "owner"],
+    ] as const) {
+      const s = asRole(role, persona);
+      expect(can(s, "time:approve"), `${persona} approve`).toBe(true);
+      expect(can(s, "time:edit"), `${persona} edit`).toBe(true);
+      expect(isManagerPlus(s), `${persona} isManagerPlus`).toBe(true);
+    }
+  });
+
+  it("reserves posting payroll for the admin band — approving hours is not paying them", () => {
+    expect(can(asRole("manager", "manager"), "payroll:post")).toBe(false);
+    expect(can(asRole("member", "collaborator"), "payroll:post")).toBe(false);
+    expect(can(asRole("admin", "admin"), "payroll:post")).toBe(true);
+    expect(can(asRole("owner", "owner"), "payroll:post")).toBe(true);
+  });
+
+  it("never grants a time capability to a logged-out caller", () => {
+    for (const cap of ["time:read", "time:write", "time:approve", "time:edit", "payroll:post"]) {
+      expect(can(null, cap), cap).toBe(false);
+    }
+  });
+});

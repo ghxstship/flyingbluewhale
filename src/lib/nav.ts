@@ -1555,29 +1555,45 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
       privacy,
     ],
   };
-  // ADR-0008 Move 3 §Open questions #1 — vendor at 14 items breaks
-  // Miller's 9-item ceiling. Split into Engagement (the procurement-side
-  // workflow: PO/invoice/credentials/training/time-off/submissions) +
-  // Operations (the Workforce-parity day-to-day: feed/chat/docs/
-  // directory/schedule/equipment-pull). Other personas keep the single
-  // persona section since they're already under 10.
-  if (persona === "vendor") {
-    const items = personaSubItems.vendor;
-    const byHref = new Map(items.map((i) => [i.href, i] as const));
+  // ADR-0008 §Open questions #1 (resolved 2026-07-15) — the two Workforce-
+  // parity personas outgrew Miller's band once the backfill landed, so each
+  // splits into Engagement (the paperwork you have WITH the org: terms,
+  // money, compliance, training) + Operations (the day-to-day of doing the
+  // work: where to be, who with, what's changed).
+  //
+  // Vendor was split when it hit 14. Crew was left at 11 with a comment
+  // promising a "future cut" and quietly drifted to 12 — so the ADR's own
+  // acceptance check ("rails respect Miller's band per section, max 10") had
+  // been failing in production ever since. Both are split now, and
+  // `portal-rail-canon.test.ts` enforces the ceiling so the next persona to
+  // outgrow it fails CI instead of shipping.
+  //
+  // Personas under the ceiling keep a single section — a split that isn't
+  // needed is just two headings where one would do.
+  const SPLITS: Partial<Record<PortalPersona, { engagement: string[]; operations: string[] }>> = {
+    vendor: {
+      engagement: ["submissions", "purchase-orders", "invoices", "credentials", "training", "time-off"],
+      operations: ["equipment-pull-list", "schedule", "feed", "chat", "docs", "directory", "privacy"],
+    },
+    crew: {
+      engagement: ["advances", "time", "timesheets", "time-off", "learning"],
+      operations: ["call-sheet", "schedule", "feed", "chat", "docs", "directory", "privacy"],
+    },
+  };
+  const split = SPLITS[persona];
+  if (split) {
+    const byHref = new Map(personaSubItems[persona].map((i) => [i.href, i] as const));
     const pick = (slugs: string[]): NavItem[] =>
       slugs.map((s) => byHref.get(`${base}/${s}`)).filter((v): v is NavItem => !!v);
-    const engagement: NavSection = {
-      label: "Vendor / Engagement",
-      items: [...pick(["submissions", "purchase-orders", "invoices", "credentials", "training", "time-off"])],
-    };
-    const operations: NavSection = {
-      label: "Vendor / Operations",
-      items: [...pick(["equipment-pull-list", "schedule", "feed", "chat", "docs", "directory", "privacy"])],
-    };
+    const title = PERSONA_TITLE[persona];
     return {
       label: SUPER_PERSONA_LABEL[superPersonaOf(persona)],
       items: [],
-      sections: [workspaceSection, engagement, operations],
+      sections: [
+        workspaceSection,
+        { label: `${title} / Engagement`, items: pick(split.engagement) },
+        { label: `${title} / Operations`, items: pick(split.operations) },
+      ],
     };
   }
   const personaSection: NavSection = {
@@ -1647,6 +1663,8 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Time", href: "/m/clock" },
   { label: "My Work", href: "/m/my-work" },
   { label: "Requests", href: "/m/requests" },
+  { label: "Purchase Requests", href: "/m/requisitions" },
+  { label: "Request A Purchase", href: "/m/requisitions/new" },
   { label: "New Task", href: "/m/tasks/new" },
   { label: "Documents", href: "/m/docs" },
   { label: "Upload Document", href: "/m/docs/new" },

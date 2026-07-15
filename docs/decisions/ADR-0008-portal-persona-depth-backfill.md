@@ -1,6 +1,6 @@
 # ADR-0008 — GVTEWAY portal: crew + vendor persona depth backfill
 
-**Status:** Accepted, amended 2026-07-15 (see §Amendments — 4 of them, all implemented). Superseded in part: Kudos is out. **The COMPVSS-handoff question is closed (Amendment 4).** §Open questions 1 (vendor rail size) and 2 (volunteer/media timing) are untouched by the amendments and remain open; question 3 was answered "no" by Amendment 2.
+**Status:** Accepted, amended 2026-07-15 (see §Amendments — 6 of them, all implemented). Superseded in part: Kudos is out. **All three §Open questions are closed and every acceptance check is verified and guarded.** The one deliberate carve-out is the shift punch, which stays in COMPVSS by rule, not by omission (Amendment 4).
 **Date:** 2026-06-04
 **Owner:** Platform engineering
 **Relates to:** ADR-0005 (super-persona collapse), CLAUDE.md §"Workforce parity (0046–0048)"
@@ -54,7 +54,15 @@ vendor persona rail:
              Chat · Kudos · Docs · Directory · Privacy
 ```
 
-Both stay within Miller's band per section (12 + 6 for crew; 14 + 6 for vendor — vendor borderline, captured in §Open questions).
+> **Superseded — this composition is the June 2026 plan, kept for the record.**
+> Two things about it were wrong. Kudos is not in either rail (Amendment 2
+> deleted the surface). And "both stay within Miller's band (12 + 6 for crew;
+> 14 + 6 for vendor — vendor borderline)" was simply false: the band is max 10
+> per section, so crew at 12 was already over it and vendor at 14 was not
+> "borderline" but well past. That sentence is why the acceptance check went
+> unenforced for weeks — the document asserted the property it was supposed to
+> be testing. Both rails are split now, and `portal-rail-canon.test.ts` counts
+> them rather than trusting this paragraph. See Amendment 6.
 
 ### What about the other 13 personas?
 
@@ -82,17 +90,27 @@ Backfilled pages use the persona-scoped path (`/p/[slug]/crew/schedule`) rather 
 
 ## Acceptance checks
 
-- [ ] Crew on desktop can do everything COMPVSS lets them do without installing the PWA.
-- [ ] Vendor on desktop can do everything their workflow requires (review POs, submit invoices, check schedule, post kudos) without leaving the portal.
-- [ ] Realtime updates flow between portal and mobile within 1s (no second polling layer).
-- [ ] Persona rails respect Miller's band per section (max 10 items).
-- [ ] `npm run gen:types` + typecheck + build clean after each Move.
+Verified 2026-07-15 (Amendment 6). Each line names what actually checks it —
+a checkbox nobody runs is an intention, not an acceptance check, and check 4
+proves the point: it sat unticked and **failing in production for weeks**.
+
+- [x] **Crew on desktop can do everything COMPVSS lets them do without installing the PWA** — with one deliberate exception, the shift punch (Amendment 4: it needs geofence truth + offline durability, so a desktop punch would be a worse punch, not parity). Every other write is portal-native. Guarded by `src/components/workforce/shell-contract.test.ts`.
+- [x] **Vendor on desktop can do everything their workflow requires without leaving the portal** — and this one was the sharpest failure: the `partner` band has no COMPVSS reach at all, so the portal was linking vendors into a locked door (Amendment 4). "post kudos" is struck from the requirement — Amendment 2 removed the surface. Guarded by the rendered-DOM assertions in `e2e/portal-workforce-parity.spec.ts`.
+- [x] **Realtime updates flow between portal and mobile within 1s (no second polling layer)** — `<RealtimeRefresh />` subscribes to the same filtered table in both shells; Amendment 1 narrowed the Feed channel to the project so it can't stream other projects' payloads. No polling layer was added.
+- [x] **Persona rails respect Miller's band per section (max 10 items)** — **was failing.** Vendor was split at 14; crew was left at 11 behind a comment promising a "future cut" and drifted to 12. Both are split now, and `src/lib/portal-rail-canon.test.ts` counts every section so the next persona to outgrow the band fails CI instead of shipping.
+- [x] **Typecheck + build clean** — `gen:types` is not an npm script in this repo (types are regenerated via the Supabase MCP); the schema is untouched by this ADR anyway, per Migration rule 1.
 
 ## Open questions
 
-1. **Vendor persona at 14 items is over Miller's ceiling.** Split into `Vendor / Engagement` (Submissions, POs, Invoices, Credentials, Training, Time Off) and `Vendor / Operations` (Schedule, Equipment Pull List, Feed, Chat, Kudos, Docs, Directory)? Recommend: split.
-2. **Volunteer + media backfill timing** — defer to Move 4 or do as part of Move 2/3? Recommend: defer; they're lower-leverage and the crew/vendor wins prove the pattern first.
-3. **Cross-persona kudos visibility** — should a vendor see kudos posted to crew (and vice versa) on the same project? Probably yes — recognition is a team thing. Confirm policy with org admin.
+_All three are resolved. Kept with their answers rather than deleted — the
+reasoning is why the code looks the way it does._
+
+1. ~~**Vendor persona at 14 items is over Miller's ceiling.** Split into `Vendor / Engagement` and `Vendor / Operations`? Recommend: split.~~
+   **Resolved 2026-07-15 (Amendment 6): split, and the ceiling is now enforced rather than intended.**
+2. ~~**Volunteer + media backfill timing** — defer to Move 4 or do as part of Move 2/3? Recommend: defer.~~
+   **Resolved 2026-07-15 (Amendment 6): still deferred, but the stated precondition has now been met — see below.**
+3. ~~**Cross-persona kudos visibility** — should a vendor see kudos posted to crew? Probably yes.~~
+   **Resolved 2026-07-15 (Amendment 2): no. The surface is deleted.**
 
 ## Out of scope
 
@@ -168,13 +186,13 @@ no vendor needs Kudos.
 The ADR's goal is desktop parity "without installing the PWA". But the shipped portal
 renders CTAs that eject users straight into `/m/**`:
 
-| Portal surface | CTA | Target |
-| --- | --- | --- |
+| Portal surface           | CTA             | Target                     |
+| ------------------------ | --------------- | -------------------------- |
 | `{crew,vendor}/schedule` | Clock in · Swap | `/m/clock` · `/m/requests` |
-| `{crew,vendor}/time-off` | New request | `/m/time-off/new` |
-| `{crew,vendor}/docs` | Upload | `/m/docs/new` |
-| `{crew,vendor}/chat` | Open room | `/m/inbox/[id]` |
-| `[slug]/tasks` | Onboarding | `/m/onboarding/[id]` |
+| `{crew,vendor}/time-off` | New request     | `/m/time-off/new`          |
+| `{crew,vendor}/docs`     | Upload          | `/m/docs/new`              |
+| `{crew,vendor}/chat`     | Open room       | `/m/inbox/[id]`            |
+| `[slug]/tasks`           | Onboarding      | `/m/onboarding/[id]`       |
 
 So the read is on desktop and every write is in the PWA — the exact friction this ADR
 set out to remove. Worse for `vendor`: the `partner` entitlement band is
@@ -193,36 +211,36 @@ that none of the three options had the shape to express: the clock punch.
 
 Amendment 3's three options all asked "which personas get the handoff?" The
 investigation that closed it found that was the wrong axis. Sorting the five
-handoffs by *what they actually need* separates them cleanly, and the split
+handoffs by _what they actually need_ separates them cleanly, and the split
 does not fall along persona lines at all:
 
-| Handoff | Needs a field capability? | Disposition |
-| --- | --- | --- |
-| Chat room (`/m/inbox/[id]`) | No | **Already existed portal-side.** `/p/[slug]/messages/[roomId]` is a complete room — and richer than the mobile one (cursor pagination, author-name hydration, inbox fan-out on send). The portal was ejecting users into COMPVSS to render a room it already had; the only thing missing was the `slug` to build the URL. |
-| Time off (`/m/time-off/new`) | No | Portal-native form. It's a date range and a reason. |
-| Docs upload (`/m/docs/new`) | No | Portal-native form. Reads as camera-bound, isn't: the mobile input carries **no `capture` attribute** on purpose, so it's an OS file picker — which every desktop has. |
-| Onboarding (`/m/onboarding/[id]`) | No | Portal-native. Ticking a step is a form; the page was already built on portal-neutral primitives. |
-| Swap (`/m/requests`) | No | Portal-native, filed inline on the shift card. **This CTA was also broken** — see below. |
-| **Clock in (`/m/clock`)** | **Yes** | **Stays in COMPVSS.** |
+| Handoff                           | Needs a field capability? | Disposition                                                                                                                                                                                                                                                                                                               |
+| --------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chat room (`/m/inbox/[id]`)       | No                        | **Already existed portal-side.** `/p/[slug]/messages/[roomId]` is a complete room — and richer than the mobile one (cursor pagination, author-name hydration, inbox fan-out on send). The portal was ejecting users into COMPVSS to render a room it already had; the only thing missing was the `slug` to build the URL. |
+| Time off (`/m/time-off/new`)      | No                        | Portal-native form. It's a date range and a reason.                                                                                                                                                                                                                                                                       |
+| Docs upload (`/m/docs/new`)       | No                        | Portal-native form. Reads as camera-bound, isn't: the mobile input carries **no `capture` attribute** on purpose, so it's an OS file picker — which every desktop has.                                                                                                                                                    |
+| Onboarding (`/m/onboarding/[id]`) | No                        | Portal-native. Ticking a step is a form; the page was already built on portal-neutral primitives.                                                                                                                                                                                                                         |
+| Swap (`/m/requests`)              | No                        | Portal-native, filed inline on the shift card. **This CTA was also broken** — see below.                                                                                                                                                                                                                                  |
+| **Clock in (`/m/clock`)**         | **Yes**                   | **Stays in COMPVSS.**                                                                                                                                                                                                                                                                                                     |
 
 So the rule, which decides future cases instead of just these five:
 
 > **The portal/mobile boundary is capability, not device.** A write belongs in
-> the portal unless it *requires* a field capability the browser cannot
+> the portal unless it _requires_ a field capability the browser cannot
 > honestly provide: geofence truth, offline durability, or the camera as a
 > sensor (not as a file picker).
 
 Exactly one write in the codebase qualifies. The punch needs `navigator.geolocation`
 for `geofence_state` **and** the service-worker/IndexedDB outbox for durability —
 `POST /api/v1/time/clock` is a route handler rather than a server action
-*specifically* so the SW can intercept it (`src/lib/offline/outbox.ts`,
+_specifically_ so the SW can intercept it (`src/lib/offline/outbox.ts`,
 `QUEUEABLE_ENDPOINTS`). A desktop punch would have neither. Porting it would not
 be parity; it would be buddy-punching with a nicer layout. Saying "punches happen
 in COMPVSS, and here's why" is more useful to a crew lead than a button that
 silently records a worse punch.
 
 This does not reopen the "your job, not your device" principle — it sharpens it.
-COMPVSS is the field-optimized view; the one thing that is *genuinely* about the
+COMPVSS is the field-optimized view; the one thing that is _genuinely_ about the
 field stays there, and nothing else hides behind it.
 
 ### What shipped
@@ -249,16 +267,16 @@ field stays there, and nothing else hides behind it.
   per shell. Mobile call sites are behaviourally unchanged.
 - **`shell-contract.test.ts`** — canon guard. `PortalHref` can't see a `<Link href="/m/...">`
   hardcoded into a portal page, and hardcoded deep links are how the drift got in
-  the first time. The guard also asserts the *premise*: if a future kit revision
+  the first time. The guard also asserts the _premise_: if a future kit revision
   grants the `partner` band COMPVSS reach, it fails loudly so `clockIn: "none"`
   gets revisited on purpose rather than quietly staying wrong.
 
 ### A live defect this surfaced
 
 The "Swap shift" CTA pointed at `/m/requests` **for both personas — including
-crew**. `/m/requests` is the *manager approvals queue*; for the crew member being
+crew**. `/m/requests` is the _manager approvals queue_; for the crew member being
 shown the button it is a read-only list of their own asks with **no create
-affordance**. The swap *create* only ever existed on the shift card at
+affordance**. The swap _create_ only ever existed on the shift card at
 `/m/schedule`. So the portal's swap button did nothing but land people on an
 empty page — an entitlement-independent bug that the persona framing of
 Amendment 3 would not have caught. Filing now happens on the card in both shells,
@@ -270,15 +288,83 @@ separate form."
 
 - `recognition_reactions` still has no UI writer (Amendment 2, unchanged).
 - The `/p/[slug]/tasks` onboarding row is now the only cross-shell link that was
-  *removed* without a portal-side rebuild being needed — the page was already
+  _removed_ without a portal-side rebuild being needed — the page was already
   shell-neutral.
-- `ChatSurface` remains the **last unscoped shared surface**: it lists rooms for
-  the caller's whole `session.orgId`, so a room from a different project in the
-  same org renders for a vendor. `DirectorySurface` and `FeedSurface` were both
-  narrowed to project scope in Amendment 1 for a reason that appears to apply
-  here too. Out of scope for this amendment (it needs a look at whether portal
-  rooms are project-scopeable at all) and **tracked separately** — flagging it
-  here so it isn't rediscovered as a surprise.
+- `ChatSurface` was flagged here as "the last unscoped shared surface" that
+  probably needed `projectId` like Directory/Feed. **Amendment 5 investigated
+  and the flag was wrong** — see it for why (membership is a per-row grant and
+  is strictly _finer_ than project scope; scoping by project would leak and
+  over-hide at the same time). It found a real RLS hole instead.
+
+### Correction: the `/p/community` "router-init race" was not real
+
+The Amendment 4 session reported that the new `portalConsumerNav` sweep caught a
+`Router action dispatched before initialization` error on `/p/community` on its
+first run, and filed it as a defect. **It does not reproduce** — ~14 runs and
+100+ route loads later (warm and cold `.next`, authed and anonymous, `retries=0`)
+produced zero page errors, and every lead in the original report was disproven:
+`TasteOnboarding`'s only `router.push` is behind an onClick and it mounts solely
+at `/p/welcome`, which sorts _after_ `/p/community` and cannot precede it;
+`ActivityTimeline` does have `Date.now()`-in-render but is a pure server
+component, so it never hydrates and no mismatch is possible.
+
+The error was **mis-attributed by the spec itself**: `probe()` attached and
+detached its `pageerror` listener per route while `waitUntil: "domcontentloaded"`
+returns before hydration finishes, so a late error from route N fired during
+route N+1's `goto` and was charged to N+1. `probe()` is hardened now (errors are
+tagged with `page.url()` at fire time and reconciled per group).
+
+Recorded here because the claim also went into `99fc4e99`'s commit message,
+which can't be reworded — other sessions have built on it, and rewriting shared
+history in a tree with live concurrent sessions is worse than a wrong sentence.
+The lesson is the cheap one: one red run plus one green retry is a hypothesis,
+not a defect, and this repo already had a memory note warning that e2e
+`pageerror` gates mis-attribute to neighbouring routes.
+
+## Amendment 6 (2026-07-15) — the open questions, closed
+
+### 1. Miller's band is now enforced, not intended
+
+Question 1 asked whether to split the 14-item vendor rail; the recommendation was
+"split", and vendor duly got `Vendor / Engagement` + `Vendor / Operations`. Crew
+did not. It was left at 11 items behind a code comment promising a "future cut",
+and drifted to 12 as the backfill landed — so the acceptance check "persona rails
+respect Miller's band per section (max 10 items)" was **failing in production for
+weeks** while its checkbox sat unticked in this document.
+
+Nothing caught it because nothing counted. Both personas are split now via a
+single data-driven `SPLITS` map in `nav.ts` (the vendor branch was bespoke), on
+one consistent cut:
+
+- **`<Title> / Engagement`** — the paperwork you have _with_ the org: terms,
+  money, compliance, training.
+- **`<Title> / Operations`** — the day-to-day of doing the work: where to be, who
+  with, what changed.
+
+`src/lib/portal-rail-canon.test.ts` counts every section of every persona rail,
+so the next persona to outgrow the band fails CI. It also guards the split
+mechanics: `pick()` drops unresolved slugs silently, so a renamed route would
+otherwise vanish from the rail without a word.
+
+Note the ceiling is **per section, not per rail** — a 13-item rail in two
+labelled halves is fine; a 12-item undivided one is not. The point is what a
+reader scans at once.
+
+### 2. Volunteer + media stay deferred, but the reason has changed
+
+Question 2 deferred the volunteer + media backfill on the grounds that "the
+crew/vendor wins prove the pattern first." **That precondition is now met** —
+Amendment 4 finished the pattern, and the surfaces are shared, typed, and
+guarded, so the work is now small and mechanical:
+
+- `volunteer` (5 items today: Application · Training · Schedule · Uniform · Privacy) → add Feed + Learning.
+- `media` (6 items today: Services · Accommodation · Transport · Press Conferences · Info-On-Demand · Privacy) → add Feed + Directory.
+
+Both land well inside Miller's band, so neither needs a split. It is deferred
+only because it is net-new persona surface area rather than remediation of a
+defect, and this amendment's job was to close flags. Tracked separately; the
+`FeedSurface`/`DirectorySurface` portal arms already require `projectId`, so
+whoever builds it cannot repeat Amendment 1's mistake.
 
 ## Amendment 5 (2026-07-15) — chat is not project-scoped, on purpose
 
@@ -290,7 +376,7 @@ This is the third pass over the same surface, and the ADR has been arguing with
 itself. Amendment 1 audited `ChatSurface` and concluded "already user-scoped
 (… room membership). **No change**." Amendment 4 then called it "the last unscoped
 shared surface" and flagged it as a probable Amendment 1 omission. Amendment 1 was
-right. Writing down *why* is the point of this amendment.
+right. Writing down _why_ is the point of this amendment.
 
 ### Why the Amendment 1 reasoning does not transfer
 
@@ -308,7 +394,7 @@ compiler was the only place left to enforce it.
 
 Chat is the opposite shape. A `chat_rooms` row is reachable only through an explicit
 `chat_room_members` row — a **positive, per-row, deliberate grant**, exactly the thing
-`memberships` lacks. So the boundary *can* live in RLS, which means it *should*: a
+`memberships` lacks. So the boundary _can_ live in RLS, which means it _should_: a
 props-level filter would be a worse version of a constraint the database can hold.
 
 Membership is also **strictly finer than project scope**, not a weaker substitute for
@@ -349,7 +435,7 @@ universal.
 new access is introduced". It recreated both policies with `USING` and **no
 `WITH CHECK`**; they are `FOR ALL` policies, and Postgres reuses `USING` as the write
 check when `WITH CHECK` is omitted. So the baseline's `member_role IN ('owner','admin')`
-requirement for adding *other* people silently became "any member may add anyone", and
+requirement for adding _other_ people silently became "any member may add anyone", and
 `chat_messages` lost its `is_org_member(org_id)` write pin. That migration was fixing a
 real BLOCKER (policy recursion) and its stated semantics were correct — it just wrote
 them into `USING` only and let the `FOR ALL` fallback do the rest quietly.
@@ -368,7 +454,7 @@ read check by accident:
 
 - **`chat_room_members` INSERT** — the room's **creator** (bootstrap) or an
   **owner/admin**. `user_id = auth.uid()` is gone; that was the hole. Creator-bootstrap
-  covers every legitimate insert path in the app, including the two that add *other*
+  covers every legitimate insert path in the app, including the two that add _other_
   people (`startDmAction` adds the DM partner, the portal AM route adds the manager) —
   all three create the room first, so `created_by` is already the caller.
 - **`chat_rooms` SELECT** — members, or the creator (the latter keeps
@@ -396,14 +482,14 @@ rationale expires and should be reconsidered on purpose).
 ### Consequences
 
 - `ChatSurface` is no longer "the last unscoped shared surface" — it is the one shared
-  surface whose boundary is enforced a layer *below* the props, which is better.
+  surface whose boundary is enforced a layer _below_ the props, which is better.
   Amendment 4 §Consequences is superseded on this point.
 - The Amendment 1 rule is now stated with its precondition: **put scope in the props
   only when there is no per-row grant for RLS to key on.** Directory and Feed qualify;
   chat does not. Applied without that precondition the rule is cargo cult, and here it
   would have shipped a `projectId` prop over a live read-any-DM hole.
 - The four surfaces Amendment 1 waved through as "already user-scoped" were audited for
-  *scope* but not for *whether the DB agreed*. `ScheduleSurface`, `TimeOffSurface` and
+  _scope_ but not for _whether the DB agreed_. `ScheduleSurface`, `TimeOffSurface` and
   `DocsSurface` all rest on `.eq("user_id", session.userId)`. That is an app-level
   filter with the same question underneath it — does RLS hold the line if someone skips
   the app? Not audited here; worth its own pass.

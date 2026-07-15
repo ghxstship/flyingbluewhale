@@ -5,15 +5,20 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import type { PortalHref } from "./shell-contract";
 
 /**
- * Shared chat rooms list (ADR-0008 Move 1).
+ * Shared chat rooms list (ADR-0008 Move 1, Amendment 4).
  *
  * Lists the caller's chat rooms ordered by last-message-at. Same query
- * + render across COMPVSS (`/m/inbox`) and the portal crew persona
- * (`/p/[slug]/crew/chat`). The room-detail href is parameterized so
- * the mobile variant links to `/m/inbox/[roomId]` while the portal can
- * link to its own room detail page or deep-link back to mobile.
+ * + render across COMPVSS (`/m/inbox`) and the portal crew/vendor personas.
+ *
+ * The portal arm returns a `PortalHref`, and the room it points at already
+ * existed: `/p/[slug]/messages/[roomId]` is a complete portal-native room —
+ * in fact a richer one than `/m/inbox/[roomId]` (cursor pagination, author
+ * name hydration, inbox fan-out on send). The portal was deep-linking into
+ * COMPVSS to render a room it already had; the only thing missing was the
+ * `slug` needed to build the URL.
  */
 
 type RoomRow = {
@@ -23,17 +28,15 @@ type RoomRow = {
   last_message_at: string | null;
 };
 
-export async function ChatSurface({
-  variant,
-  roomHref,
-  eyebrowLabel,
-  titleLabel,
-}: {
-  variant: "mobile" | "portal";
-  roomHref: (roomId: string) => string;
+type ChatProps = {
   eyebrowLabel?: string;
   titleLabel?: string;
-}) {
+} & (
+  | { variant: "mobile"; roomHref: (roomId: string) => string }
+  | { variant: "portal"; roomHref: (roomId: string) => PortalHref }
+);
+
+export async function ChatSurface({ variant, roomHref, eyebrowLabel, titleLabel }: ChatProps) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (

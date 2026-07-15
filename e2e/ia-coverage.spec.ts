@@ -12,6 +12,7 @@
  *   - settings   (/studio/settings)  — settingsNav
  *   - legend     (/legend, authed)   — legendNav
  *   - personal   (/me, authed)       — personalNavGroups
+ *   - portal     (/p, authed)        — portalConsumerNav
  *   - mobile     (/m, authed)        — mobileTabs + mobileSurfaces
  *
  * Per route we assert (kit MIGRATION.md §7 render gates):
@@ -35,6 +36,7 @@ import {
   marketingHeaderGroups,
   marketingFooterGroups,
   personalNavGroups,
+  portalConsumerNav,
   type NavGroup,
   type NavItem,
 } from "../src/lib/nav";
@@ -64,8 +66,7 @@ function navGroupRoutes(group: NavGroup): Route[] {
   return dedupe(out);
 }
 
-const flatItemRoutes = (items: NavItem[]): Route[] =>
-  dedupe(items.map((it) => ({ label: it.label, href: it.href })));
+const flatItemRoutes = (items: NavItem[]): Route[] => dedupe(items.map((it) => ({ label: it.label, href: it.href })));
 
 /** Visit one route and return a failure string, or null if it rendered. */
 async function probe(
@@ -174,6 +175,24 @@ test.describe("IA coverage — personal (/me)", () => {
     if (routes.length === 0) continue;
     test(`me "${group.fallback}" — ${routes.length} route(s) render`, async ({ page }) => {
       await assertGroup(page, group.fallback, routes);
+    });
+  }
+});
+
+// ── Portal consumer (/p, authed) ─────────────────────────────────────────────
+// The slug-free GVTEWAY consumer surfaces (RESERVED_PORTAL_SEGMENTS): discover,
+// onsite, community, scenes, lists, saved, account, welcome. `/p/onsite` was
+// rehomed here from the COMPVSS tab bar 2026-07-15 — this block is now its only
+// coverage.
+test.describe("IA coverage — portal consumer (GVTEWAY /p)", () => {
+  test.describe.configure({ timeout: 180000 });
+  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+
+  for (const group of portalConsumerNav) {
+    const routes = navGroupRoutes(group);
+    if (routes.length === 0) continue;
+    test(`portal "${group.label}" — ${routes.length} route(s) render`, async ({ page }) => {
+      await assertGroup(page, group.label, routes);
     });
   }
 });

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { KIcon } from "@/components/mobile/kit";
-import { requestSwap } from "./actions";
+import { requestSwap } from "@/components/workforce/swap-action";
 
 /**
  * "Can't make it" — file a swap ask against your own shift.
@@ -36,6 +36,7 @@ export function SwapButton({
     setError(null);
     const fd = new FormData();
     fd.set("shiftId", shiftId);
+    fd.set("revalidate", "/m/schedule");
     if (reason.trim()) fd.set("reason", reason.trim());
     startTransition(async () => {
       const res = await requestSwap(null, fd);

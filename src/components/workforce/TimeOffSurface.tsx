@@ -5,14 +5,17 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import type { PortalHref } from "./shell-contract";
 
 /**
- * Shared time-off balances + recent-requests surface (ADR-0008 Move 1).
+ * Shared time-off balances + recent-requests surface (ADR-0008 Move 1,
+ * Amendment 4).
  *
  * Same query + render across COMPVSS (`/m/time-off`) and the portal
- * crew persona (`/p/[slug]/crew/time-off`). `newRequestHref` lets the
- * caller route the "New Request" CTA to its own form (or to /m/time-off/new
- * as a cross-shell deep link until portal-side authoring lifts).
+ * crew/vendor personas. `newRequestHref` routes the "New Request" CTA to
+ * each shell's own form — on the portal arm it is a `PortalHref`, so the
+ * old `/m/time-off/new` deep link is now a compile error rather than a
+ * comment promising it'll be lifted "in a future PR".
  */
 
 type RequestRow = {
@@ -36,17 +39,12 @@ type BalanceRow = {
 
 type PolicyRow = { id: string; name: string; policy_kind: string };
 
-export async function TimeOffSurface({
-  variant,
-  newRequestHref,
-  eyebrowLabel,
-  titleLabel,
-}: {
-  variant: "mobile" | "portal";
-  newRequestHref: string;
+type TimeOffProps = {
   eyebrowLabel?: string;
   titleLabel?: string;
-}) {
+} & ({ variant: "mobile"; newRequestHref: string } | { variant: "portal"; newRequestHref: PortalHref });
+
+export async function TimeOffSurface({ variant, newRequestHref, eyebrowLabel, titleLabel }: TimeOffProps) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (

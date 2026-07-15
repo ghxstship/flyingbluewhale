@@ -4,11 +4,16 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FormScreen, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
-import { requestTimeOff } from "../actions";
+import { requestTimeOff } from "@/components/workforce/time-off-action";
 
 /**
  * COMPVSS · Request Time Off — client wrapper over the kit `timeoff`
  * FormScreen. Serialises kit values → FormData → `requestTimeOff` action.
+ *
+ * The action moved to `src/components/workforce/` in ADR-0008 Amendment 4 so
+ * the portal can file a request too (filing time off needs no field
+ * capability). Behaviour here is unchanged — this page just names the
+ * revalidate path the action used to hardcode.
  */
 export default function NewTimeOffPage() {
   const router = useRouter();
@@ -19,6 +24,7 @@ export default function NewTimeOffPage() {
   function onSubmit(_def: FormDef, vals: Record<string, unknown>) {
     if (pending) return;
     const fd = toFormData(vals);
+    fd.set("revalidate", "/m/time-off");
     startTransition(async () => {
       const res = await requestTimeOff(null, fd);
       if (res?.error) {

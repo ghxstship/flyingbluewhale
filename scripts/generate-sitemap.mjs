@@ -197,14 +197,16 @@ const EXEMPT = [
   {
     path: "/studio/advancing/request",
     type: "exact",
-    reason: "One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu.",
+    reason:
+      "One Front Door redirect — resolves the active production's advancing intake; reached from the global + menu.",
   },
   // Unified Schedule (CP·3) — the Dispatch Matrix was promoted to
   // /studio/operations/schedule; this route now 301s there (fleet/crew lens).
   {
     path: "/studio/operations/dispatch",
     type: "exact",
-    reason: "Dispatch Matrix redirect — promoted to the unified /studio/operations/schedule; keeps old links resolving.",
+    reason:
+      "Dispatch Matrix redirect — promoted to the unified /studio/operations/schedule; keeps old links resolving.",
   },
   // Portal infra — persona routing, not a nav target.
   {
@@ -219,7 +221,12 @@ const EXEMPT = [
     reason:
       "Onboarding assignment — reached from the /p/[slug]/tasks list that surfaces it, never a rail item (ADR-0008 Amendment 4: this is where the /m/onboarding/[id] handoff landed).",
   },
-  { path: "/p", type: "exact", reason: "GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item)." },
+  {
+    path: "/p",
+    type: "exact",
+    reason:
+      "GVTEWAY home — the discovery/marketplace, reached via the gvteway.atlvs.pro subdomain root (not a path-prefix nav item).",
+  },
   // Marketing home — reached via the logo lockup, not a nav item.
   { path: "/", type: "exact", reason: "Home — reached via the logo, not a nav entry." },
   // i18n locale roots.

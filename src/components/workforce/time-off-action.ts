@@ -1,12 +1,27 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
+
+/**
+ * Shared `requestTimeOff` action (ADR-0008 Amendment 4).
+ *
+ * Lifted verbatim from `src/app/(mobile)/m/time-off/actions.ts` so the
+ * portal can file a request without deep-linking into COMPVSS. Filing time
+ * off needs no geofence and no offline durability — it is a form — so under
+ * the capability rule it belongs in both shells (see `shell-contract.ts`).
+ *
+ * Callers pass a `revalidate` field with the path to re-render, the same
+ * contract `feed-action.ts` uses: /m/time-off/new sends "/m/time-off",
+ * /p/[slug]/crew/time-off/new sends its own portal path. One action, so the
+ * policy-resolution and manager-notify rules cannot drift per shell.
+ */
 
 export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
 
@@ -17,6 +32,13 @@ const Input = z
     to: z.string().min(1, "Pick an end date."),
     type: z.string().optional(),
     notes: z.string().optional(),
+    revalidate: z.string().min(1).max(200),
+    // Optional: a plain <form action> has no way to navigate itself on
+    // success, so the portal names where to land. The mobile page drives its
+    // own `router.push` from a transition and omits this — which is why the
+    // success return stays `null` rather than becoming a redirect for
+    // everyone.
+    redirectTo: z.string().min(1).max(200).optional(),
   })
   // HP-15: the end>=start rule previously lived as a hand-rolled inline
   // check below — single-sourced through the shared refine (same module
@@ -93,6 +115,7 @@ export async function requestTimeOff(_prev: State, fd: FormData): Promise<State>
     });
   }
 
-  revalidatePath("/m/time-off");
+  revalidatePath(v.revalidate);
+  if (v.redirectTo) redirect(v.redirectTo);
   return null;
 }

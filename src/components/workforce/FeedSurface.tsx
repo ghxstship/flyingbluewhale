@@ -50,10 +50,7 @@ type FeedProps = {
   eyebrowLabel?: string;
   /** Title text (e.g. "Updates" or "Feed"). */
   titleLabel?: string;
-} & (
-  | { variant: "mobile"; projectId?: never }
-  | { variant: "portal"; projectId: string }
-);
+} & ({ variant: "mobile"; projectId?: never } | { variant: "portal"; projectId: string });
 
 export async function FeedSurface({
   variant,

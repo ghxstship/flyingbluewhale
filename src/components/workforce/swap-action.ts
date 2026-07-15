@@ -8,26 +8,42 @@ import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
 import { UNDECIDED_SWAP_STATES } from "@/lib/workforce";
 
+/**
+ * Shared `requestSwap` action (ADR-0008 Amendment 4).
+ *
+ * Lifted from `src/app/(mobile)/m/schedule/actions.ts`. Filing a swap is a
+ * form with a reason field — no geofence, no offline requirement — so under
+ * the capability rule (`shell-contract.ts`) it belongs in both shells.
+ *
+ * This also fixes a live defect the amendment surfaced. The portal's "Swap
+ * shift" CTA pointed at `/m/requests`, which is the MANAGER APPROVALS QUEUE.
+ * For the crew member being shown the button, `/m/requests` is a read-only
+ * list of their own asks with no create affordance — so the CTA landed them
+ * on an empty page. The swap *create* only ever existed on the shift card
+ * itself (`/m/schedule` → `SwapButton`). Filing now happens inline on the
+ * card in both shells, which is where the mobile action's own docblock said
+ * it belonged: "A crew member finding out they can't make Thursday is
+ * looking at Thursday, not hunting a separate form."
+ */
+
 export type State = { error?: string; ok?: boolean } | null;
 
 const Input = z.object({
   shiftId: z.string().uuid(),
   reason: z.string().trim().max(500).optional(),
+  revalidate: z.string().min(1).max(200),
 });
 
 /**
+ * The manager approvals queue, refreshed on every file regardless of which
+ * shell filed it. A swap raised from a laptop still has to appear in the
+ * manager's mobile queue — the caller's own `revalidate` path can't know
+ * that, so it isn't the caller's to pass.
+ */
+const MANAGER_QUEUE_PATH = "/m/requests";
+
+/**
  * Ask to be swapped off a shift.
- *
- * Both shells could DECIDE a swap and neither could FILE one: every
- * `from("shift_swaps")` call site in the repo was a select or an update,
- * so `shift_swaps` rows could only ever originate from seed data or a
- * hand-written INSERT. The console's approve/decline queue was a UI for
- * an event no user could produce.
- *
- * The entry point is the shift itself — "Can't make it" on the card that
- * already tells you when and where you're working. A crew member finding
- * out they can't make Thursday is looking at Thursday, not hunting a
- * separate form.
  *
  * `target_user_id` stays null: this is an open ask to the manager band,
  * not a private handoff. Naming a replacement is a rostering decision and
@@ -89,14 +105,14 @@ export async function requestSwap(_prev: State, fd: FormData): Promise<State> {
     await sendPushBulk(managers, {
       title: "Shift Swap Requested",
       body: parsed.data.reason?.slice(0, 120) || "A crew member asked to be swapped off a shift.",
-      url: "/m/requests",
+      url: MANAGER_QUEUE_PATH,
       kind: "shift_swap",
       scope: "mobile",
       orgId: session.orgId,
     });
   }
 
-  revalidatePath("/m/schedule");
-  revalidatePath("/m/requests");
+  revalidatePath(parsed.data.revalidate);
+  if (parsed.data.revalidate !== MANAGER_QUEUE_PATH) revalidatePath(MANAGER_QUEUE_PATH);
   return { ok: true };
 }

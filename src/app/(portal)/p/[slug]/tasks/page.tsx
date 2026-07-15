@@ -116,7 +116,10 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
         title: flowMap.get(o.flow_id) ?? t("p.shared.tasks.onboardingFallback", undefined, "Onboarding"),
         state: o.assignment_phase,
         due: null,
-        href: `/m/onboarding/${o.id}`,
+        // Portal-native as of ADR-0008 Amendment 4. This used to eject to
+        // /m/onboarding/[id] — out of the shell that had just listed the
+        // task, and into an app the vendor persona can't open at all.
+        href: `/p/${slug}/onboarding/${o.id}`,
       });
     }
   }

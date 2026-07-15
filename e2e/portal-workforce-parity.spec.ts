@@ -53,7 +53,12 @@ async function check(page: Page, p: Probe): Promise<string | null> {
     const res = await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30000 });
     const status = res?.status() ?? 0;
     if (status >= 500) return `${href} → HTTP ${status}`;
-    const body = (await page.locator("body").innerText().catch(() => "")).slice(0, 1500);
+    const body = (
+      await page
+        .locator("body")
+        .innerText()
+        .catch(() => "")
+    ).slice(0, 1500);
     if (/application error|unhandled runtime|digest:/i.test(body)) return `${href} → error boundary rendered`;
     if (errs.length) return `${href} → uncaught: ${errs[0]}`;
     return null;
@@ -81,15 +86,12 @@ test.describe("portal — the shell contract (ADR-0008 Amendment 4)", () => {
       await page.goto(href, { waitUntil: "domcontentloaded", timeout: 30000 });
       // The one legitimate exception is the crew clock-in signpost, which is
       // asserted on purpose in the next test.
-      const mobileLinks = await page.locator('a[href^="/m/"]:not([href="/m/clock"])').evaluateAll((els) =>
-        els.map((e) => (e as HTMLAnchorElement).getAttribute("href") ?? ""),
-      );
+      const mobileLinks = await page
+        .locator('a[href^="/m/"]:not([href="/m/clock"])')
+        .evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute("href") ?? ""));
       if (mobileLinks.length) offenders.push(`${href} → ${[...new Set(mobileLinks)].join(", ")}`);
     }
-    expect(
-      offenders,
-      `Portal surfaces rendered links into COMPVSS:\n${offenders.join("\n")}`,
-    ).toEqual([]);
+    expect(offenders, `Portal surfaces rendered links into COMPVSS:\n${offenders.join("\n")}`).toEqual([]);
   });
 
   test("vendor is never pointed at COMPVSS; crew gets the clock-in signpost", async ({ page }) => {

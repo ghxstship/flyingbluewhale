@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
-import { uploadPersonalDoc, type State } from "../actions";
+import { uploadPersonalDoc, type State } from "@/components/workforce/docs-action";
 
 /**
  * COMPVSS · Upload Document.
@@ -48,6 +48,12 @@ export default function NewDocPage() {
       )}
 
       <form action={formAction} encType="multipart/form-data">
+        {/* The action is shared with the portal (ADR-0008 Amendment 4), so each
+            shell names its own list to return to rather than the action
+            hardcoding COMPVSS's. */}
+        <input type="hidden" name="revalidate" value="/m/docs" />
+        <input type="hidden" name="redirectTo" value="/m/docs" />
+
         <div className="fld">
           <label className="lbl" htmlFor="label">
             Label

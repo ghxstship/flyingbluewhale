@@ -7,15 +7,21 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { DocDownloadLink } from "@/app/(mobile)/m/docs/DocDownloadLink";
+import type { PortalHref } from "./shell-contract";
 
 /**
- * Shared personal documents surface (ADR-0008 Move 1).
+ * Shared personal documents surface (ADR-0008 Move 1, Amendment 4).
  *
- * Same query + render across COMPVSS (`/m/docs`) and the portal crew
- * persona (`/p/[slug]/crew/docs`). DocDownloadLink is reused from the
- * mobile module — it's a small client island that hits the
+ * Same query + render across COMPVSS (`/m/docs`) and the portal
+ * crew/vendor personas. DocDownloadLink is reused from the mobile module —
+ * it's a small client island that hits the
  * `/api/v1/me/documents/[id]/download` signed-URL endpoint, shared
  * across shells regardless of where it's mounted.
+ *
+ * `uploadHref` is a `PortalHref` on the portal arm. Upload reads like a
+ * camera flow, but the form carries no `capture` attribute — it's an OS file
+ * picker, which every desktop has — so it is not capability-bound and the
+ * portal owns its own upload form.
  */
 
 type Doc = {
@@ -36,17 +42,12 @@ const KIND_TONE: Record<string, "info" | "success" | "warning" | "muted"> = {
   other: "muted",
 };
 
-export async function DocsSurface({
-  variant,
-  uploadHref,
-  eyebrowLabel,
-  titleLabel,
-}: {
-  variant: "mobile" | "portal";
-  uploadHref: string;
+type DocsProps = {
   eyebrowLabel?: string;
   titleLabel?: string;
-}) {
+} & ({ variant: "mobile"; uploadHref: string } | { variant: "portal"; uploadHref: PortalHref });
+
+export async function DocsSurface({ variant, uploadHref, eyebrowLabel, titleLabel }: DocsProps) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (

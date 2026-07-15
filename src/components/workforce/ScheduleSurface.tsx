@@ -6,15 +6,23 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { SwapRequestButton } from "./SwapRequestButton";
+import { COMPVSS_CLOCK_HREF, type ClockInDisposition, type PortalHref } from "./shell-contract";
 
 /**
- * Shared schedule surface (ADR-0008 Move 1).
+ * Shared schedule surface (ADR-0008 Move 1, Amendment 4).
  *
  * Today + upcoming-this-week shifts for the signed-in user. Same query
- * + render across COMPVSS (`/m/shift`) and the portal crew persona
- * (`/p/[slug]/crew/schedule`). Caller passes the clock-in and
- * shift-swap CTA hrefs so portal-side can route to its own forms (or
- * cross-shell-deep-link to mobile until lifted).
+ * + render across COMPVSS (`/m/shift`) and the portal crew/vendor personas.
+ *
+ * The two CTAs this surface carries land on opposite sides of the capability
+ * rule (`shell-contract.ts`), which is why the props are a union rather than
+ * two strings:
+ *
+ * - **Swap** is a form. It files in-place on the card, in both shells.
+ * - **Clock-in** needs geofence truth + offline durability, so the portal
+ *   never punches. It states a `clockIn` disposition instead of an href:
+ *   signpost COMPVSS for an audience entitled to it, or say nothing.
  */
 
 type ShiftRow = {
@@ -38,19 +46,36 @@ const ATT_TONE: Record<string, "muted" | "success" | "warning" | "info" | "error
   no_show: "error",
 };
 
-export async function ScheduleSurface({
-  variant,
-  clockInHref,
-  swapHref,
-  eyebrowLabel,
-  titleLabel,
-}: {
-  variant: "mobile" | "portal";
-  clockInHref: string;
-  swapHref: string;
+type ScheduleProps = {
   eyebrowLabel?: string;
   titleLabel?: string;
-}) {
+} & (
+  | {
+      variant: "mobile";
+      /** COMPVSS punches in-app; the field shell is where the geofence + outbox live. */
+      clockInHref: string;
+      /** COMPVSS files swaps on the card at /m/schedule; /m/shift links across to it. */
+      swapHref: string;
+      clockIn?: never;
+      revalidate?: never;
+    }
+  | {
+      variant: "portal";
+      /**
+       * Required, and deliberately not an href — see `ClockInDisposition`.
+       * A portal page must state whether its audience can even reach COMPVSS;
+       * there is no default that silently advertises an app they can't open.
+       */
+      clockIn: ClockInDisposition;
+      /** Portal path to re-render after an inline swap. `PortalHref` makes `/m/**` a type error. */
+      revalidate: PortalHref;
+      clockInHref?: never;
+      swapHref?: never;
+    }
+);
+
+export async function ScheduleSurface(props: ScheduleProps) {
+  const { variant, eyebrowLabel, titleLabel } = props;
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -106,11 +131,17 @@ export async function ScheduleSurface({
         {wfm
           ? t("m.shift.greeting", { name: wfm.full_name }, `Hello, ${wfm.full_name}.`)
           : t("m.shift.welcome", undefined, "Welcome.")}{" "}
-        {t("m.shift.useBefore", undefined, "Use")}{" "}
-        <Link href={clockInHref} className="text-[var(--p-accent)]">
-          {t("m.shift.useLink", undefined, "check-in")}
-        </Link>{" "}
-        {t("m.shift.useAfter", undefined, "to clock in / out and take breaks.")}
+        {props.variant === "mobile" ? (
+          <>
+            {t("m.shift.useBefore", undefined, "Use")}{" "}
+            <Link href={props.clockInHref} className="text-[var(--p-accent)]">
+              {t("m.shift.useLink", undefined, "check-in")}
+            </Link>{" "}
+            {t("m.shift.useAfter", undefined, "to clock in / out and take breaks.")}
+          </>
+        ) : (
+          t("p.shift.portalIntro", undefined, "Your shifts for the week ahead.")
+        )}
       </p>
 
       {!wfm && (
@@ -157,6 +188,9 @@ export async function ScheduleSurface({
                   </div>
                   <Badge variant={ATT_TONE[s.attendance] ?? "muted"}>{toTitle(s.attendance)}</Badge>
                 </div>
+                {/* Filing happens on the card — the shift you're looking at is
+                    the one you can't make. */}
+                {props.variant === "portal" && <SwapRequestButton shiftId={s.id} revalidate={props.revalidate} />}
               </li>
             ))
           )}
@@ -170,30 +204,52 @@ export async function ScheduleSurface({
           </h2>
           <ul className="mt-3 space-y-2">
             {upcoming.map((s) => (
-              <li key={s.id} className="surface flex items-center justify-between p-3">
-                <div className="text-sm">
-                  <div className="font-medium">
-                    {s.venue?.name ?? t("m.shift.unassignedVenue", undefined, "Unassigned venue")}
+              <li key={s.id} className="surface p-3">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm">
+                    <div className="font-medium">
+                      {s.venue?.name ?? t("m.shift.unassignedVenue", undefined, "Unassigned venue")}
+                    </div>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">
+                      {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
+                    </div>
                   </div>
-                  <div className="font-mono text-xs text-[var(--p-text-2)]">
-                    {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
-                  </div>
+                  <Badge variant="muted">{toTitle(s.attendance)}</Badge>
                 </div>
-                <Badge variant="muted">{toTitle(s.attendance)}</Badge>
+                {props.variant === "portal" && <SwapRequestButton shiftId={s.id} revalidate={props.revalidate} />}
               </li>
             ))}
           </ul>
         </section>
       )}
 
-      <div className="mt-8 grid grid-cols-2 gap-2">
-        <Link href={clockInHref} className="ps-btn">
-          {t("m.shift.checkIn", undefined, "Check in")}
-        </Link>
-        <Link href={swapHref} className="ps-btn ps-btn--ghost">
-          {t("m.shift.swapShift", undefined, "Swap shift")}
-        </Link>
-      </div>
+      {props.variant === "mobile" ? (
+        <div className="mt-8 grid grid-cols-2 gap-2">
+          <Link href={props.clockInHref} className="ps-btn">
+            {t("m.shift.checkIn", undefined, "Check in")}
+          </Link>
+          <Link href={props.swapHref} className="ps-btn ps-btn--ghost">
+            {t("m.shift.swapShift", undefined, "Swap shift")}
+          </Link>
+        </div>
+      ) : (
+        props.clockIn === "compvss" && (
+          /* A signpost, not a CTA. The punch is in COMPVSS because it needs a
+             geofence fix and an offline queue, and saying so is more useful
+             than a button that would silently record a worse punch. Only
+             rendered for audiences that actually hold COMPVSS reach. */
+          <div className="surface-inset mt-8 p-4">
+            <h2 className="text-sm font-semibold">Clocking in</h2>
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
+              Punches happen in COMPVSS on your phone — it records where you are and still works when the signal
+              doesn&rsquo;t. Everything else on this page you can do right here.
+            </p>
+            <Link href={COMPVSS_CLOCK_HREF} className="ps-btn ps-btn--tertiary ps-btn--sm mt-3">
+              Open COMPVSS
+            </Link>
+          </div>
+        )
+      )}
     </div>
   );
 }

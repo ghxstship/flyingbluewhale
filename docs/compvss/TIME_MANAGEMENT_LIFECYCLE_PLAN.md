@@ -1,6 +1,19 @@
 # COMPVSS Time Management — Complete Lifecycle Plan
 
-Status: **proposal**. Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
+Status: **Phases 0-2 landed; 3-7 outstanding.** Date: 2026-07-15. Scope: capture → geofence enforcement → correction/approval → payroll → external HR export.
+
+## Landed
+
+| Phase | Commit | What shipped |
+| --- | --- | --- |
+| 0 — defect sweep | `abc5e665` | All 10 items. Zero-zone → `unknown` (this had to land first: `block` on a zone-less org would lock out every worker), containment-beats-proximity attribution, `decideTimesheet` last-write-wins race + claim-before-audit ordering, self-approval of own timesheet, unverifiable `as_manager`, two unguarded mutations, the dead `ticket.scanned` event (one shared registry now), the payroll `[runId]` 404, `duration_minutes` trigger contract, and guard tests for both duplicated lists (each verified to fail on the reintroduced defect). |
+| 1 — geofence policy | `7783e243` | `block`/`warn`/`record_only` resolving zone → org → `record_only` (the default, so no existing org changed). Migrations `20260715150000` + `20260715150100`. 422 (not 409 — the outbox drops 409 as a dedupe). Accuracy capture + gate, departure GPS, grace radius, `enforcement_state` ledger. Proven live: outside → 422 with distance/nearest-zone/override, inside → clean, override → quarantined, 900 m fix → quarantined `low_accuracy`. |
+| 2 — corrections + audit | `2ddc53dc`, `584dc09c` | `time_entry_corrections` FSM, the `tg_audit_time_entry` **trigger** (proven to fire on raw psql with zero app code), posted-sheet freeze, `apply_time_correction` RPC (one transaction; rolls back whole against a posted sheet). SoD enforced at route + RLS + DB CHECK. `time:read`/`time:approve`/`time:edit`; `collaborator` narrowed off `time:*`. OpenAPI documented. |
+
+**Not started: Phases 3-7.** Phase 3 (the compile/post spine) remains the highest-value item and the blocker for everything downstream — see §0. Phase 6 (ADP et al.) is gated on partnership/certification and Phase 7c (background geofencing) on a native shell release and Play/App Store review; neither is closable by engineering effort alone.
+
+---
+
 
 Every current-state claim below cites a file/route. Where a capability is absent, this document says so plainly rather than describing intent as implementation.
 

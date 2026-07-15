@@ -262,7 +262,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Work through a dead zone without losing what I typed",
     state: "gap",
     roles: ALL,
-    note: "G36 + S5. Only 5 fetch endpoints queue durably (IndexedDB outbox). Every mobile server action outside them loses the submission. Photos can't queue at all — the localStorage queue does String(v), which is the same coercion that produced the phantom photos; the daily-log form now refuses honestly rather than pretending.",
+    note: "G36 + S5. Only 5 fetch endpoints queue durably (IndexedDB outbox). Every mobile server action outside them loses the submission. Photos NO LONGER block a queued daily log: `lib/offline/photo-blobs` parks the bytes in an IndexedDB sidecar keyed by the queue item, and the payload carries a manifest — so the localStorage String(v) coercion never sees a File. The daily log is the only surface wired to it; incidents, lost & found, handover and market still take the direct path and fail outright with no signal, which is the remaining half of this gap.",
   },
 ];
 

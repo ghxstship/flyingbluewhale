@@ -1,18 +1,42 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FolderOpen } from "lucide-react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
+import { list } from "@/lib/offline/queue";
 import { getPosition } from "@/lib/geo/position";
 import { geoKeyFor, type PhotoFix } from "@/lib/mobile/photo-geo";
+import { dropPhotos, putPhotos, readPhotos, sweepOrphans, type PhotoMeta } from "@/lib/offline/photo-blobs";
 import { saveDailyLog } from "../actions";
 
 export type ProjectOpt = { id: string; name: string };
+
+/**
+ * Sidecar bookkeeping smuggled through the queue's JSON payload.
+ *
+ * `useOfflineQueue`'s `send` receives only the payload — not the item id — so
+ * the id rides inside it. Underscore-prefixed and stripped before the
+ * FormData is built, so the server action never sees them as fields.
+ */
+const PHOTOS_KEY = "__photos";
+const ITEM_ID_KEY = "__itemId";
+
+/** A malformed manifest degrades to "no photos" rather than throwing mid-replay
+ *  and wedging the whole queue behind one bad row. */
+function parsePhotoMetas(raw: string | undefined): PhotoMeta[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as PhotoMeta[]) : [];
+  } catch {
+    return [];
+  }
+}
 
 /**
  * COMPVSS · New Daily Log — project + date + weather + notes. Submits to the
@@ -39,14 +63,46 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
     submit: queueSubmit,
   } = useOfflineQueue<Record<string, string>>("daily-log", async (payload) => {
     const fd = new FormData();
-    for (const [k, v] of Object.entries(payload)) fd.set(k, v);
+    for (const [k, v] of Object.entries(payload)) {
+      if (k === PHOTOS_KEY || k === ITEM_ID_KEY) continue; // sidecar bookkeeping, not form fields
+      fd.set(k, v);
+    }
+
+    // Rehydrate the photos from the IndexedDB sidecar. `send` isn't given the
+    // queue item's id, so the payload carries it — that keeps this working
+    // without changing the shared queue's contract.
+    const itemId = payload[ITEM_ID_KEY];
+    const metas = parsePhotoMetas(payload[PHOTOS_KEY]);
+    if (itemId && metas.length) {
+      const files = await readPhotos(itemId, metas);
+      for (const f of files) fd.append("photo", f);
+      // Fixes stay index-aligned with the files we actually recovered.
+      fd.set(geoKeyFor("photo"), JSON.stringify(metas.slice(0, files.length).map((m) => m.fix)));
+    }
+
     const res = await saveDailyLog(null, fd);
     if (res?.error) {
       setError(res.error);
       return false; // business/validation error — do not queue-retry
     }
+    // The row is gone from the queue the moment this returns true, so the
+    // bytes must go with it or they're orphaned megabytes nothing references.
+    if (itemId) await dropPhotos(itemId);
     return true;
   });
+
+  /**
+   * Reclaim bytes whose queue row is gone.
+   *
+   * The queue lives in localStorage and the photos live in IndexedDB, so the
+   * two drift: a cleared store, a tab killed mid-drain, an item removed by a
+   * path that knew nothing about photos. Orphaned megabytes are invisible to
+   * the user and permanent. Runs once on mount against whatever is actually
+   * still queued.
+   */
+  useEffect(() => {
+    void sweepOrphans(list("daily-log").map((i) => i.id));
+  }, []);
 
   /**
    * Geotag at pick time, not submit time — the fix has to describe where the
@@ -72,50 +128,45 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
     if (pending) return;
     setError(null);
 
-    // Photos can't ride the offline queue: it's a localStorage FIFO of JSON
-    // records, and the payload builder below does `String(v)` — which turns
-    // a File into the literal "[object File]". Queueing a log with photos
-    // would therefore silently discard exactly the evidence the crew member
-    // stopped to capture. Until the queue is blob-capable (audit S5/G36),
-    // a log WITH photos takes the direct path and says so when offline; a
-    // log without them queues as before. Never pretend a photo was saved.
+    // Photos now ride the queue like everything else. The bytes go to an
+    // IndexedDB sidecar (`photo-blobs`) keyed by this submission's id; the
+    // JSON payload carries only the manifest. A log shot in a dead loading
+    // dock is durable, and the geotag was captured at pick time, so a replay
+    // an hour later still records where the photo was actually taken — not
+    // where the phone found signal again.
     const photos = fd.getAll("photo").filter((f): f is File => f instanceof File && f.size > 0);
-
-    if (photos.length > 0) {
-      if (!online) {
-        setError(
-          "You're offline and this log has photos. Photos can't be saved offline yet — remove them to save the log now, or submit when you're back on signal.",
-        );
-        return;
-      }
-      // Carry the capture fixes alongside the files. Only on this path: the
-      // queue path below has no photos, so it has nothing to geotag.
-      fd.set(geoKeyFor("photo"), JSON.stringify(photoFixes.slice(0, photos.length)));
-      startTransition(async () => {
-        const res = await saveDailyLog(null, fd);
-        if (res?.error) {
-          setError(res.error);
-          return;
-        }
-        if (res?.warning) {
-          setError(res.warning);
-          return;
-        }
-        router.push("/m/daily-log");
-        router.refresh();
-      });
-      return;
-    }
 
     const payload: Record<string, string> = {};
     for (const [k, v] of fd.entries()) {
-      if (v instanceof File) continue; // never stringify a File into the queue
+      if (v instanceof File) continue; // the bytes go to the sidecar, not here
+      if (k === geoKeyFor("photo")) continue; // travels inside the manifest
       payload[k] = String(v);
     }
     const id = `daily-log-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
     startTransition(async () => {
+      if (photos.length > 0) {
+        try {
+          const metas = await putPhotos(id, photos, photoFixes.slice(0, photos.length));
+          payload[PHOTOS_KEY] = JSON.stringify(metas);
+          payload[ITEM_ID_KEY] = id;
+        } catch {
+          // No IndexedDB (private mode, quota, blocked). Say so rather than
+          // queue a log whose photos we cannot actually store — the whole
+          // point of this path is to stop lying about saved evidence.
+          setError(
+            "This device can't store photos offline. Submit while you have signal, or remove the photos to save the log now.",
+          );
+          return;
+        }
+      }
+
       const status = await queueSubmit(id, payload);
-      if (status === "failed") return; // error already surfaced by the handler
+      if (status === "failed") {
+        // Not queued, so nothing will ever come back for these bytes.
+        await dropPhotos(id);
+        return; // error already surfaced by the handler
+      }
       if (status === "sent") router.refresh();
       // Sent or queued → back to the list (a queued log syncs on reconnect).
       router.push("/m/daily-log");

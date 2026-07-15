@@ -1686,8 +1686,9 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Purchase Requests", href: "/m/requisitions" },
   { label: "Request A Purchase", href: "/m/requisitions/new" },
   { label: "New Task", href: "/m/tasks/new" },
-  { label: "Documents", href: "/m/docs" },
-  { label: "Upload Document", href: "/m/docs/new" },
+  { label: "Documents", href: "/m/documents" },
+  { label: "Upload Document", href: "/m/documents/new" },
+  { label: "Time", href: "/m/time" },
   { label: "Handover", href: "/m/handover" },
   { label: "Daily Log", href: "/m/daily-log" },
   // "Punch Clock", not "Punch" — /m/punch is the time-clock punch surface.
@@ -1739,8 +1740,8 @@ export const mobileSurfaces: NavItem[] = [
 const PHASE_PRIORITY_HREFS: Record<string, string[]> = {
   discovery: ["/m/directory", "/m/feed"],
   concept: ["/m/feed", "/m/directory"],
-  development: ["/m/feed", "/m/docs"],
-  advance: ["/m/onboarding", "/m/advances", "/m/docs", "/m/directory"],
+  development: ["/m/feed", "/m/documents"],
+  advance: ["/m/onboarding", "/m/advances", "/m/documents", "/m/directory"],
   build: ["/m/punch", "/m/daily-log", "/m/handover", "/m/coc"],
   show: ["/m/check-in", "/m/incidents", "/m/clock", "/m/alerts"],
   strike: ["/m/punch", "/m/daily-log", "/m/handover", "/m/coc"],

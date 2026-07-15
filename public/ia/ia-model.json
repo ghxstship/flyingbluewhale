@@ -2493,15 +2493,22 @@
               ]
             },
             {
-              "path": "/m/docs",
+              "path": "/m/documents",
               "arch": [
-                "LIST"
+                "DOC"
               ]
             },
             {
-              "path": "/m/docs/new",
+              "path": "/m/documents/new",
               "arch": [
-                "FORM"
+                "FORM",
+                "DOC"
+              ]
+            },
+            {
+              "path": "/m/time",
+              "arch": [
+                "LIST"
               ]
             },
             {

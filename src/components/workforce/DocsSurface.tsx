@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { DocDownloadLink } from "@/app/(mobile)/m/docs/DocDownloadLink";
+import { DocDownloadLink } from "@/app/(mobile)/m/documents/DocDownloadLink";
 import type { PortalHref } from "./shell-contract";
 
 /**

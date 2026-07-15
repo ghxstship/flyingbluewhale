@@ -5,6 +5,17 @@ import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { DocsView, type DocItem, type DocScope } from "./DocsView";
 
+/**
+ * COMPVSS · Documents — kit 28 `documents` (More hub → Documents).
+ *
+ * "SiteDocs, filtered to your RBAC scope (All / Team / Role / You /
+ * Restricted)." This surface already existed at `/m/docs` — which is the KIT'S
+ * OTHER surface: kit `/m/docs` is Knowledge (offline-cached SOPs & policies
+ * with must-read acknowledgement). The repo had two kit surfaces conflated
+ * into one route, which is why `/m/documents` read as a 404 while its scope
+ * chips (All/Team/Role/You/Restricted — verbatim the documents spec) were
+ * sitting on `/m/docs`. Moved here; Knowledge is still to build.
+ */
 export const dynamic = "force-dynamic";
 
 type DeliverableRow = {
@@ -54,8 +65,8 @@ export default async function MobileDocsPage() {
   if (!hasSupabase) {
     return (
       <div className="screen screen-anim">
-        <div className="scr-eye">{t("m.docs.eyebrow", undefined, "Field")}</div>
-        <h1 className="scr-h">{t("m.docs.title", undefined, "Documents")}</h1>
+        <div className="scr-eye">{t("m.documents.eyebrow", undefined, "Field")}</div>
+        <h1 className="scr-h">{t("m.documents.title", undefined, "Documents")}</h1>
         <p className="form-intro">{t("common.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
@@ -112,8 +123,8 @@ export default async function MobileDocsPage() {
   return (
     <DocsView
       items={items}
-      eyebrow={t("m.docs.eyebrow", undefined, "Field")}
-      title={t("m.docs.title", undefined, "Documents")}
+      eyebrow={t("m.documents.eyebrow", undefined, "Field")}
+      title={t("m.documents.title", undefined, "Documents")}
     />
   );
 }

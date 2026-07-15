@@ -88,7 +88,7 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
       <h1 className="scr-h" style={{ marginBottom: 12 }}>{title}</h1>
 
       <Link
-        href="/m/docs/new"
+        href="/m/documents/new"
         className="ps-btn ps-btn--cta ps-btn--lg"
         style={{ width: "100%", justifyContent: "center", marginBottom: 12 }}
       >
@@ -138,7 +138,7 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
             "Project documents you can access land here. Upload your own tickets, licenses and certifications to keep them on you.",
           )}
           action={
-            <Link href="/m/docs/new" className="ps-btn ps-btn--cta">
+            <Link href="/m/documents/new" className="ps-btn ps-btn--cta">
               <KIcon name="Upload" size={15} /> {t("m.docs.upload", undefined, "Upload Document")}
             </Link>
           }

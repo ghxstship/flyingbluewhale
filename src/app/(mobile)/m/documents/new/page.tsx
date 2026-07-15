@@ -51,8 +51,8 @@ export default function NewDocPage() {
         {/* The action is shared with the portal (ADR-0008 Amendment 4), so each
             shell names its own list to return to rather than the action
             hardcoding COMPVSS's. */}
-        <input type="hidden" name="revalidate" value="/m/docs" />
-        <input type="hidden" name="redirectTo" value="/m/docs" />
+        <input type="hidden" name="revalidate" value="/m/documents" />
+        <input type="hidden" name="redirectTo" value="/m/documents" />
 
         <div className="fld">
           <label className="lbl" htmlFor="label">
@@ -107,7 +107,7 @@ export default function NewDocPage() {
         </div>
 
         <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-          <Link href="/m/docs" className="ps-btn ps-btn--tertiary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }}>
+          <Link href="/m/documents" className="ps-btn ps-btn--tertiary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }}>
             Cancel
           </Link>
           <button

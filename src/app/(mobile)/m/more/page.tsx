@@ -42,7 +42,8 @@ export default async function MorePage() {
       label: t("m.more.tools", undefined, "Tools"),
       links: [
         { href: "/m/my-work", icon: "ListChecks", labelKey: "m.more.myWork", label: "My Work", subKey: "m.more.myWorkSub", sub: "What You Owe & What Waits On You" },
-        { href: "/m/clock", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
+        { href: "/m/clock", icon: "Timer", labelKey: "m.more.clock", label: "Time Clock", subKey: "m.more.clockSub", sub: "Clock In, Out & Breaks" },
+        { href: "/m/time", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
         { href: "/m/punch", icon: "Fingerprint", labelKey: "m.more.punch", label: "Punch Clock", subKey: "m.more.punchSub", sub: "Clock In & Out" },
         { href: "/m/requests", icon: "CheckCheck", labelKey: "m.more.approvals", label: "Approvals", subKey: "m.more.approvalsSub", sub: "Review & Action Requests", managerOnly: true },
         { href: "/m/mileage", icon: "Truck", labelKey: "m.more.mileage", label: "Mileage", subKey: "m.more.mileageSub", sub: "Log Drives For Reimbursement" },
@@ -52,7 +53,7 @@ export default async function MorePage() {
         { href: "/m/timesheets", icon: "Timer", labelKey: "m.more.timesheets", label: "Timesheets", subKey: "m.more.timesheetsSub", sub: "Turn Punches Into Pay" },
         { href: "/m/advances", icon: "ClipboardList", labelKey: "m.more.advances", label: "Advancing", subKey: "m.more.advancesSub", sub: "What You've Been Issued" },
         { href: "/m/onboarding", icon: "UserCheck", labelKey: "m.more.onboarding", label: "Onboarding", subKey: "m.more.onboardingSub", sub: "Finish Getting Set Up" },
-        { href: "/m/docs", icon: "FolderOpen", labelKey: "m.more.documents", label: "Documents", subKey: "m.more.documentsSub", sub: "Site Docs, Filtered To You" },
+        { href: "/m/documents", icon: "FolderOpen", labelKey: "m.more.documents", label: "Documents", subKey: "m.more.documentsSub", sub: "Site Docs, Filtered To You" },
         { href: "/m/handover", icon: "ArrowLeftRight", labelKey: "m.more.handover", label: "Handover", subKey: "m.more.handoverSub", sub: "Shift Notes & Handoffs" },
         { href: "/m/daily-log", icon: "NotebookPen", labelKey: "m.more.dailyLog", label: "Daily Log", subKey: "m.more.dailyLogSub", sub: "Site Diary, Day By Day" },
         { href: "/m/coc", icon: "FileCheck", labelKey: "m.more.coc", label: "Chain of Custody", subKey: "m.more.cocSub", sub: "Asset Transfers, Signed" },

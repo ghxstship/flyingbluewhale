@@ -34806,6 +34806,165 @@ export type Database = {
           },
         ]
       }
+      time_entry_audit: {
+        Row: {
+          actor_id: string | null
+          after_row: Json | null
+          audit_action: string
+          before_row: Json | null
+          changed_fields: string[] | null
+          id: string
+          occurred_at: string
+          org_id: string
+          reason: string | null
+          time_entry_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          after_row?: Json | null
+          audit_action: string
+          before_row?: Json | null
+          changed_fields?: string[] | null
+          id?: string
+          occurred_at?: string
+          org_id: string
+          reason?: string | null
+          time_entry_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          after_row?: Json | null
+          audit_action?: string
+          before_row?: Json | null
+          changed_fields?: string[] | null
+          id?: string
+          occurred_at?: string
+          org_id?: string
+          reason?: string | null
+          time_entry_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_entry_audit_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      time_entry_corrections: {
+        Row: {
+          applied_at: string | null
+          approval_instance_id: string | null
+          correction_kind: string
+          correction_state: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          id: string
+          org_id: string
+          original_ended_at: string | null
+          original_started_at: string | null
+          proposed_ended_at: string | null
+          proposed_started_at: string | null
+          proposed_zone_id: string | null
+          reason: string
+          requester_id: string
+          time_entry_id: string | null
+          timesheet_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          applied_at?: string | null
+          approval_instance_id?: string | null
+          correction_kind: string
+          correction_state?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          id?: string
+          org_id: string
+          original_ended_at?: string | null
+          original_started_at?: string | null
+          proposed_ended_at?: string | null
+          proposed_started_at?: string | null
+          proposed_zone_id?: string | null
+          reason: string
+          requester_id: string
+          time_entry_id?: string | null
+          timesheet_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          applied_at?: string | null
+          approval_instance_id?: string | null
+          correction_kind?: string
+          correction_state?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          id?: string
+          org_id?: string
+          original_ended_at?: string | null
+          original_started_at?: string | null
+          proposed_ended_at?: string | null
+          proposed_started_at?: string | null
+          proposed_zone_id?: string | null
+          reason?: string
+          requester_id?: string
+          time_entry_id?: string | null
+          timesheet_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_entry_corrections_approval_instance_id_fkey"
+            columns: ["approval_instance_id"]
+            isOneToOne: false
+            referencedRelation: "approval_instances"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entry_corrections_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entry_corrections_proposed_zone_id_fkey"
+            columns: ["proposed_zone_id"]
+            isOneToOne: false
+            referencedRelation: "time_clock_zones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entry_corrections_time_entry_id_fkey"
+            columns: ["time_entry_id"]
+            isOneToOne: false
+            referencedRelation: "gdpr_user_time_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entry_corrections_time_entry_id_fkey"
+            columns: ["time_entry_id"]
+            isOneToOne: false
+            referencedRelation: "time_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entry_corrections_timesheet_id_fkey"
+            columns: ["timesheet_id"]
+            isOneToOne: false
+            referencedRelation: "timesheets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       time_off_balances: {
         Row: {
           accrued_ytd_hours: number
@@ -42698,6 +42857,10 @@ export type Database = {
         }[]
       }
       current_request_id: { Args: never; Returns: string }
+      apply_time_correction: {
+        Args: { p_correction_id: string; p_decision: string; p_notes?: string }
+        Returns: Json
+      }
       decline_offer_letter: {
         Args: { p_code: string; p_reason: string; p_token: string }
         Returns: Json

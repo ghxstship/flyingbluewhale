@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import { KIcon } from "@/components/mobile/kit";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
@@ -99,8 +101,8 @@ export default async function ConnectionsPage() {
       .not("user_id", "is", null)
       .limit(80),
     supabase
-      .from("workforce_members")
-      .select("user_id, full_name, role")
+      .from("crew_members")
+      .select("user_id, full_name:name, role")
       .eq("org_id", session.orgId)
       .not("user_id", "is", null)
       .limit(80),
@@ -166,6 +168,11 @@ export default async function ConnectionsPage() {
           connected: t("m.connections.connected", undefined, "Connected"),
         }}
       />
+      {/* Kit FAB: Add Connection — the kit routes it to the invite form, which
+          is the referrals surface here (invite by link / email). */}
+      <Link href="/m/referrals" className="fab" aria-label={t("m.connections.add", undefined, "Add Connection")}>
+        <KIcon name="Plus" size={24} />
+      </Link>
     </div>
   );
 }

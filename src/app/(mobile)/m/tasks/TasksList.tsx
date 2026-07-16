@@ -195,14 +195,6 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
         {L.title}
       </h1>
 
-      <Link
-        href="/m/tasks/new"
-        className="ps-btn ps-btn--cta ps-btn--lg"
-        style={{ width: "100%", justifyContent: "center", marginBottom: 12, textDecoration: "none" }}
-      >
-        <KIcon name="Plus" size={16} /> {L.newTask}
-      </Link>
-
       <ActionBar<KitTask>
         k="tk"
         query={query}
@@ -356,6 +348,10 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
       )}
 
       {!entries.length && <EmptyState title={L.empty} description={L.emptyBody} />}
+      {/* Kit FAB: New Task (CREATE map, runtime/app.jsx). */}
+      <Link href="/m/tasks/new" className="fab" aria-label={L.newTask}>
+        <KIcon name="Plus" size={24} />
+      </Link>
     </div>
   );
 }

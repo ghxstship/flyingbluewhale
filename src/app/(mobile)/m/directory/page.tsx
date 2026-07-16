@@ -1,4 +1,6 @@
-import { requireSession } from "@/lib/auth";
+import Link from "next/link";
+import { requireSession, isManagerPlus } from "@/lib/auth";
+import { KIcon } from "@/components/mobile/kit";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -43,20 +45,16 @@ export default async function MobileDirectoryPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
-  const [{ data: crew }, { data: workforce }] = await Promise.all([
-    supabase
-      .from("crew_members")
-      .select("id, name, role, phone, email, certifications, availability_open, verified_at")
-      .eq("org_id", session.orgId)
-      .order("name", { ascending: true })
-      .limit(200),
-    supabase
-      .from("workforce_members")
-      .select("id, full_name, role, phone, email, kind")
-      .eq("org_id", session.orgId)
-      .order("full_name", { ascending: true })
-      .limit(200),
-  ]);
+  // ONE query. This surface used to union `crew_members` (the crew bench) with
+  // `workforce_members` (deskless staff) because they were two tables. They are
+  // one table now (ADR-0015 Addendum 2) — keeping the union would list every
+  // person twice, once under each old label.
+  const { data: crew } = await supabase
+    .from("crew_members")
+    .select("id, name, role, phone, email, certifications, availability_open, verified_at, workforce_kind")
+    .eq("org_id", session.orgId)
+    .order("name", { ascending: true })
+    .limit(400);
 
   type CrewRow = {
     id: string;
@@ -67,14 +65,7 @@ export default async function MobileDirectoryPage() {
     certifications: string[];
     availability_open: boolean;
     verified_at: string | null;
-  };
-  type WorkforceRow = {
-    id: string;
-    full_name: string;
-    role: string | null;
-    phone: string | null;
-    email: string | null;
-    kind: string;
+    workforce_kind: string;
   };
 
   const crewLabel = t("m.directory.team.crew", undefined, "Crew");
@@ -82,12 +73,15 @@ export default async function MobileDirectoryPage() {
   const verifiedLabel = t("m.directory.status.active", undefined, "Active");
   const offLabel = t("m.directory.status.off", undefined, "Off Site");
 
-  const people: RosterPerson[] = [
-    ...((crew ?? []) as CrewRow[]).map((c): RosterPerson => ({
+  const people: RosterPerson[] = ((crew ?? []) as CrewRow[])
+    .map((c): RosterPerson => ({
       id: `crew:${c.id}`,
       name: c.name,
-      role: c.role ?? crewLabel,
-      team: crewLabel,
+      // The person's own role wins; `workforce_kind` is the fallback label —
+      // it is how a volunteer or contractor is told apart from paid staff now
+      // that they share a table.
+      role: c.role ?? WORKFORCE_KIND_TEAM[c.workforce_kind] ?? crewLabel,
+      team: WORKFORCE_KIND_TEAM[c.workforce_kind] ?? crewLabel,
       av: initials(c.name),
       on: c.availability_open,
       status: c.availability_open ? availableLabel : c.verified_at ? verifiedLabel : offLabel,
@@ -95,21 +89,8 @@ export default async function MobileDirectoryPage() {
       email: c.email ?? "",
       certs: c.certifications ?? [],
       source: "crew",
-    })),
-    ...((workforce ?? []) as WorkforceRow[]).map((w): RosterPerson => ({
-      id: `wf:${w.id}`,
-      name: w.full_name,
-      role: w.role ?? (WORKFORCE_KIND_TEAM[w.kind] ?? "Staff"),
-      team: WORKFORCE_KIND_TEAM[w.kind] ?? "Staff",
-      av: initials(w.full_name),
-      on: false,
-      status: verifiedLabel,
-      phone: w.phone ?? "",
-      email: w.email ?? "",
-      certs: [],
-      source: "workforce",
-    })),
-  ].sort((a, b) => a.name.localeCompare(b.name));
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const labels = {
     search: t("m.directory.search", undefined, "Search crew, role, team…"),
@@ -129,6 +110,14 @@ export default async function MobileDirectoryPage() {
         {t("m.directory.title", undefined, "Team Roster")}
       </h1>
       <DirectoryView people={people} labels={labels} />
+      {/* Kit FAB: Invite Crew — perm "assign" in the kit's CREATE map, which is
+          the manager band here. The gate is UX only; the invite surface
+          re-checks server-side. */}
+      {isManagerPlus(session) && (
+        <Link href="/m/settings/team/invite" className="fab" aria-label={t("m.directory.invite", undefined, "Invite Crew")}>
+          <KIcon name="Plus" size={24} />
+        </Link>
+      )}
     </div>
   );
 }

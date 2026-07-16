@@ -4,7 +4,6 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ActionBar, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
 import { toFormData } from "@/lib/mobile/form-data";
@@ -202,11 +201,6 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
         }
       />
 
-      <div style={{ marginBottom: 12 }}>
-        <Button variant="cta" size="sm" onClick={() => setFormOpen(true)}>
-          <KIcon name="Plus" size={14} /> {labels.listItem}
-        </Button>
-      </div>
 
       {listings.length === 0 ? (
         <EmptyState

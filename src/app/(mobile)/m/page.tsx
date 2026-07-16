@@ -114,8 +114,6 @@ export default async function MobileHome() {
     viewAll: t("m.home.viewAll", undefined, "View All Upcoming Events"),
     noShift: t("m.home.noShift", undefined, "Nothing Scheduled"),
     noShiftBody: t("m.home.noShiftBody", undefined, "Your next call lands here."),
-    newSheet: t("m.home.newSheet", undefined, "Create"),
-    newSheetBody: t("m.home.newSheetBody", undefined, "What Do You Need?"),
     qaReport: t("m.home.qa.report", undefined, "Report"),
     qaScan: t("m.home.qa.scan", undefined, "Scan"),
     qaClock: t("m.home.qa.clock", undefined, "Clock"),

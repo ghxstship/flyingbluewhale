@@ -32,8 +32,6 @@ export type HomeLabels = {
   viewAll: string;
   noShift: string;
   noShiftBody: string;
-  newSheet: string;
-  newSheetBody: string;
   qaReport: string;
   qaScan: string;
   qaClock: string;
@@ -96,7 +94,6 @@ export function HomeShell({
   greeting: string;
   labels: HomeLabels;
 }) {
-  const [newOpen, setNewOpen] = useState(false);
   const [qaEdit, setQaEdit] = useState(false);
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const t = useToast();
@@ -109,14 +106,6 @@ export function HomeShell({
     else t.info(title, opts);
   };
 
-  const newLinks: { href: string; icon: string; label: string }[] = [
-    { href: "/m/incidents/new", icon: "TriangleAlert", label: L.qaReport },
-    { href: "/m/advances", icon: "ClipboardList", label: L.qaAdvance },
-    { href: "/m/clock", icon: "Timer", label: L.qaClock },
-    { href: "/m/time-off", icon: "CalendarOff", label: "Time Off" },
-    { href: "/m/handover", icon: "ArrowLeftRight", label: "Handover" },
-    { href: "/m/daily-log", icon: "StickyNote", label: "Daily Log" },
-  ];
 
   return (
     <div className="screen screen-anim" style={{ position: "relative" }}>
@@ -270,63 +259,6 @@ export function HomeShell({
         <QA href="/m/emergency#evacuate" icon="LogOut" tint="info" label={L.esEvacuate} />
         <QA href="/m/emergency#shelter" icon="Shield" tint="success" label={L.esShelter} />
       </div>
-
-      {/* FAB → "new" sheet. */}
-      <button type="button" className="fab" onClick={() => setNewOpen(true)} aria-label={L.newSheet}>
-        <KIcon name="Plus" size={24} />
-      </button>
-
-      {newOpen ? (
-        // Scrim — a pointer-only duplicate of the close affordance; the links
-        // inside the sheet remain the keyboard path, so it stays presentational.
-        <div
-          role="presentation"
-          onClick={() => setNewOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 40,
-            background: "rgba(0,0,0,.45)",
-            display: "flex",
-            alignItems: "flex-end",
-          }}
-        >
-          <div
-            role="presentation"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: "100%",
-              background: "var(--p-surface)",
-              borderTopLeftRadius: 22,
-              borderTopRightRadius: 22,
-              padding: "18px 18px calc(env(safe-area-inset-bottom, 0px) + 18px)",
-              boxShadow: "var(--p-elev-2, var(--p-elev-1))",
-            }}
-          >
-            <div className="scr-eye">{L.newSheetBody}</div>
-            <h2 className="scr-h" style={{ fontSize: 22, margin: "8px 0 14px" }}>
-              {L.newSheet}
-            </h2>
-            <div className="qa" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-              {newLinks.map((l) => (
-                <Link key={l.href} href={l.href} style={{ textDecoration: "none" }} onClick={() => setNewOpen(false)}>
-                  <span
-                    className="qi"
-                    style={{
-                      background: "var(--p-bg)",
-                      border: "1px solid var(--p-border)",
-                      color: "var(--p-text-2)",
-                    }}
-                  >
-                    <KIcon name={l.icon} size={18} />
-                  </span>
-                  <span className="ql">{l.label}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : null}
 
       {activeTool ? (
         <ToolSheet toolId={activeTool} onClose={() => setActiveTool(null)} toast={toolToast} />

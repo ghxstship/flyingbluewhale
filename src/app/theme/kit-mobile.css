@@ -432,7 +432,13 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 @keyframes ccFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ccSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes ccPageIn { from { transform: translateX(20px); } to { transform: translateX(0); } }
-@keyframes ccScreenIn { from { transform: translateY(9px); } to { transform: translateY(0); } }
+/* margin-top, not transform: an animating transform on the PAGE CONTAINER
+   makes it the containing block for every `fixed` descendant — the FAB, the
+   sheets, the search overlay — so for the animation's 340ms they positioned
+   against the screen box instead of the viewport. Same 9px slide, no trap.
+   (ccSheetUp/ccPageIn are safe: they animate the overlay itself, not an
+   ancestor of anything fixed.) */
+@keyframes ccScreenIn { from { margin-top: 9px; /* grid-exempt: the kit's 9px slide-in distance — animation geometry, not layout spacing */ } to { margin-top: 0; } }
 @keyframes ccPop { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: scale(1); } }
 @keyframes ccBub { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 /* @media (max-width: 440px): all original rules (body / .phone / .notch / .statusbar) are

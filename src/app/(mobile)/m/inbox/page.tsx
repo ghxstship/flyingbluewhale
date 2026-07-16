@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { InboxView, type InboxRow } from "./InboxView";
 
 export const dynamic = "force-dynamic";
 
@@ -81,77 +80,26 @@ export default async function InboxPage() {
       .map((w) => w[0]?.toUpperCase() ?? "")
       .join("") || "?";
 
-  const channels = rooms.filter((r) => (r.room_kind ?? "") === "channel");
-  const dms = rooms.filter((r) => (r.room_kind ?? "") !== "channel");
-
-  const row = (r: RoomRow) => {
+  const viewRows: InboxRow[] = rooms.map((r) => {
     const last = lastByRoom.get(r.id);
-    const unread = unreadByRoom.get(r.id) ?? 0;
-    const isChannel = (r.room_kind ?? "") === "channel";
-    const stamp = last?.created_at ?? r.last_message_at;
-    return (
-      <Link
-        key={r.id}
-        href={`/m/inbox/${r.id}`}
-        className="item tap"
-        style={{ margin: 0, cursor: "pointer", textDecoration: "none", color: "inherit" }}
-      >
-        {isChannel ? (
-          <span className="chan">#</span>
-        ) : (
-          <span className="avatar-sm">{initials(r.name)}</span>
-        )}
-        <div style={{ minWidth: 0, flex: 1 }}>
-          <div className="t">{r.name ?? t("m.inbox.directMessage", undefined, "Direct Message")}</div>
-          <div
-            className="s"
-            style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-          >
-            {last?.body ?? t("m.inbox.noMessages", undefined, "No messages yet")}
-          </div>
-        </div>
-        <span style={{ textAlign: "right", flex: "none" }}>
-          {stamp && <div className="time">{fmt.relative(stamp)}</div>}
-          {unread > 0 && (
-            <div className="unread" style={{ marginTop: 5, marginLeft: "auto" }}>
-              {unread}
-            </div>
-          )}
-        </span>
-      </Link>
-    );
-  };
+    const stampIso = last?.created_at ?? r.last_message_at;
+    return {
+      id: r.id,
+      name: r.name ?? t("m.inbox.directMessage", undefined, "Direct Message"),
+      kind: (r.room_kind ?? "") === "channel" ? "channel" : "dm",
+      last: last?.body ?? t("m.inbox.noMessages", undefined, "No messages yet"),
+      time: stampIso ? fmt.relative(stampIso) : "",
+      stamp: stampIso ? new Date(stampIso).getTime() : 0,
+      unread: unreadByRoom.get(r.id) ?? 0,
+      initials: initials(r.name),
+    };
+  });
 
   return (
-    <div className="screen screen-anim">
-      <div className="scr-eye">
-        {totalUnread} {t("m.inbox.unread", undefined, "Unread")}
-      </div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.inbox.title", undefined, "My Inbox")}
-      </h1>
-
-      {rooms.length === 0 ? (
-        <EmptyState
-          title={t("m.inbox.emptyTitle", undefined, "No Conversations")}
-          description={t("m.inbox.emptyHint", undefined, "Channels and direct messages land here.")}
-        />
-      ) : (
-        <>
-          {channels.length > 0 && (
-            <div className="sech" style={{ marginTop: 0 }}>
-              <h2>{t("m.inbox.channels", undefined, "Channels")}</h2>
-            </div>
-          )}
-          {channels.map(row)}
-          {dms.length > 0 && (
-            <div className="sech">
-              <h2>{t("m.inbox.directMessages", undefined, "Direct Messages")}</h2>
-            </div>
-          )}
-          {dms.map(row)}
-        </>
-      )}
-    </div>
+    <InboxView
+      rows={viewRows}
+      eyebrow={t("m.inbox.unreadEyebrow", { count: totalUnread }, `${totalUnread} Unread`)}
+      title={t("m.inbox.title", undefined, "My Inbox")}
+    />
   );
 }

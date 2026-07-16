@@ -2463,6 +2463,13 @@
               ]
             },
             {
+              "path": "/m/inbox/new",
+              "arch": [
+                "FORM",
+                "COMM"
+              ]
+            },
+            {
               "path": "/m/mileage",
               "arch": [
                 "LIST"

@@ -19,7 +19,15 @@ export type MenuItem = {
   onSelect: () => void;
 };
 
-/** Internal: the `.ps-menu pop` list both PillMenu and the legacy menu use. */
+/** Internal: the `.ps-menu pop` list both PillMenu and the legacy menu use.
+ *
+ * Items are `.mi` — the design system's menu-item class (atlvs-product.css
+ * §menu/dropdown), which is what paints the flex row, padding and hover. This
+ * component originally invented `ps-menu-item`/`ps-menu-ico`, classes that
+ * exist in NO stylesheet: the panel painted (`.ps-menu` is global) while the
+ * items rendered as bare inline UA buttons, so "List / Board / Table" read as
+ * the single word "ListBoardTable". If a class name is new, grep the theme for
+ * it before shipping — a missing rule fails silently. */
 function MenuList({
   items,
   className = "",
@@ -32,8 +40,8 @@ function MenuList({
   return (
     <div ref={menuRef} className={`ps-menu ${className}`.trim()} role="menu">
       {items.map((it, i) => (
-        <button key={i} type="button" className="ps-menu-item" role="menuitem" onClick={it.onSelect}>
-          {it.icon != null && <span className="ps-menu-ico">{it.icon}</span>}
+        <button key={i} type="button" className="mi" role="menuitem" onClick={it.onSelect}>
+          {it.icon != null && <span style={{ display: "flex", flex: "none" }}>{it.icon}</span>}
           <span>{it.label}</span>
         </button>
       ))}

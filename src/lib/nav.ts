@@ -1681,6 +1681,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Expenses", href: "/m/expenses" },
   { label: "File An Expense", href: "/m/expenses/new" },
   { label: "Timesheets", href: "/m/timesheets" },
+  { label: "New Message", href: "/m/inbox/new" },
   { label: "Mileage", href: "/m/mileage" },
   { label: "Log A Drive", href: "/m/mileage/new" },
   { label: "Purchase Requests", href: "/m/requisitions" },

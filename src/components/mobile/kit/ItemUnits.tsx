@@ -116,8 +116,8 @@ export function ItemUnits({ units, onToast }: ItemUnitsProps) {
               <button type="button" className="menu-back" aria-label="Close sort menu" onClick={() => setSortOpen(false)} />
               <div ref={sortRef} className="ps-menu pop" role="menu">
                 {sortItems.map((it, i) => (
-                  <button key={i} type="button" className="ps-menu-item" role="menuitem" onClick={it.onSelect}>
-                    {it.icon != null && <span className="ps-menu-ico">{it.icon}</span>}
+                  <button key={i} type="button" className="mi" role="menuitem" onClick={it.onSelect}>
+                    {it.icon != null && <span style={{ display: "flex", flex: "none" }}>{it.icon}</span>}
                     <span>{it.label}</span>
                   </button>
                 ))}

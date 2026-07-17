@@ -18408,7 +18408,9 @@
   "m": {
     "advances": {
       "eyebrow": "Mobil",
+      "title": "Advances",
       "empty": {
+        "title": "Keine Advances",
         "body": "Equipment, Credentials und Services, die Ihnen zugewiesen sind, erscheinen hier."
       },
       "detail": {
@@ -18450,6 +18452,7 @@
     },
     "alerts": {
       "eyebrow": "Mobil",
+      "title": "Benachrichtigungen",
       "acknowledge": "Bestätigen",
       "acknowledging": "Wird bestätigt…",
       "emptyTitle": "Alles in Ordnung. Derzeit keine Warnungen."
@@ -18460,7 +18463,9 @@
       "clockOut": "Ausstempeln",
       "configureSupabase": "Supabase konfigurieren.",
       "eyebrow": "Feld",
+      "title": "Stempeluhr",
       "empty": {
+        "title": "Noch keine Einträge",
         "body": "Stempeln Sie sich ein, um Ihre Zeit zu erfassen."
       },
       "active": "Aktiv",
@@ -18476,6 +18481,7 @@
     },
     "coc": {
       "eyebrow": "Feld",
+      "title": "Chain of Custody",
       "asset": "Asset",
       "emptyBody": "Scans und Asset-Übergaben erscheinen hier als Zeitleiste.",
       "emptyTitle": "Keine Verwahrungsereignisse",
@@ -18486,6 +18492,7 @@
     },
     "dailyLog": {
       "eyebrow": "Feld",
+      "title": "Tagesprotokoll",
       "back": "Tagesberichte",
       "emptyBody": "Beginnen Sie den Tagesbericht mit Wetter und Notizen.",
       "emptyTitle": "Noch keine Berichte",
@@ -18512,8 +18519,10 @@
     },
     "directory": {
       "eyebrow": "Mobil",
+      "title": "Team-Roster",
       "peopleCount": "{count} Personen in deiner Organisation",
       "empty": {
+        "title": "Keine Treffer",
         "description": "Org-Mitglieder erscheinen hier, sobald sie hinzugefügt sind.",
         "body": "Niemand auf dem Dienstplan entspricht den Kriterien."
       },
@@ -18540,6 +18549,7 @@
         "label": "Download"
       },
       "eyebrow": "Mobile",
+      "title": "Wissen",
       "uploadCta": "+ Hochladen",
       "empty": {
         "title": "Keine Dokumente",
@@ -18566,6 +18576,7 @@
     },
     "feed": {
       "eyebrow": "Mobil",
+      "title": "Community",
       "noUpdatesYet": "Noch keine Updates.",
       "unreadOfTotal": "{unread} ungelesen von {total}",
       "empty": {
@@ -18588,6 +18599,7 @@
     },
     "gigs": {
       "eyebrow": "Marketplace",
+      "title": "Jobs",
       "applicants": "{count} beworben",
       "applied": "Beworben",
       "apply": "Bewerben",
@@ -18708,6 +18720,7 @@
     },
     "incidents": {
       "eyebrow": "Feld",
+      "title": "Vorfälle",
       "emptyBody": "Für diese Org wurden noch keine Vorfälle erfasst.",
       "emptyTitle": "Alles in Ordnung",
       "file": "Bericht einreichen",
@@ -18724,6 +18737,7 @@
       "empty": "Keine Assets",
       "emptyHint": "Nichts entspricht diesen Filtern.",
       "eyebrow": "Bestandskatalog",
+      "title": "Inventar",
       "onHand": "auf Lager",
       "scanCta": "Scannen zum Aus- / Einchecken",
       "search": "Assets suchen…",
@@ -18954,6 +18968,7 @@
       }
     },
     "punch": {
+      "title": "Stechuhr",
       "active": "Aktiv",
       "closed": "Geschlossen",
       "emptyBody": "Stempeln Sie sich ein, um Ihre Schicht zu beginnen.",
@@ -18970,7 +18985,9 @@
     },
     "requests": {
       "eyebrow": "Feld",
+      "title": "Genehmigungen",
       "empty": {
+        "title": "Alles in Ordnung",
         "body": "Abwesenheits- und Schichttausch-Anfragen erscheinen hier."
       },
       "approve": "Genehmigen",
@@ -19177,7 +19194,9 @@
     },
     "wallet": {
       "eyebrow": "Mobil",
+      "title": "Die COMPVSS Rose",
       "empty": {
+        "title": "Keine Ausweise",
         "body": "Credential-Berechtigungen erscheinen hier, sobald sie ausgestellt sind. Wenden Sie sich an Ihren Admin."
       },
       "accessTitle": "Zugriff & Berechtigungen",
@@ -19224,6 +19243,7 @@
       "cta": "Tag auflösen",
       "enableCamera": "Kamera aktivieren",
       "eyebrow": "Asset-Tag",
+      "title": "Code scannen",
       "hint": "Auf einen Asset-Tag-QR richten, wird automatisch gelesen.",
       "logged": "Erfasst",
       "manualLabel": "Asset-Tag",
@@ -19269,6 +19289,7 @@
       "connect": "Verbinden",
       "connected": "Verbunden",
       "count": "{n} vorgeschlagen",
+      "title": "Verbindungen",
       "crew": "Crew",
       "decline": "Ablehnen",
       "empty": "Keine Personen",

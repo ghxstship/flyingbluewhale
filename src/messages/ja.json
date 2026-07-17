@@ -3965,7 +3965,9 @@
       "clockOut": "退勤",
       "configureSupabase": "Supabase を設定してください。",
       "eyebrow": "現場",
+      "title": "タイムクロック",
       "empty": {
+        "title": "まだ記録がありません",
         "body": "クロックインして勤務時間の記録を開始します。"
       },
       "active": "アクティブ",
@@ -3981,7 +3983,9 @@
     },
     "advances": {
       "eyebrow": "モバイル",
+      "title": "アドバンシング",
       "empty": {
+        "title": "アドバンシングなし",
         "body": "あなたに割り当てられた機材・クレデンシャル・サービスがここに表示されます。"
       },
       "detail": {
@@ -4023,12 +4027,14 @@
     },
     "alerts": {
       "eyebrow": "モバイル",
+      "title": "通知",
       "acknowledge": "確認する",
       "acknowledging": "確認中…",
       "emptyTitle": "問題ありません。現在アラートはありません。"
     },
     "coc": {
       "eyebrow": "現場",
+      "title": "管理連鎖",
       "asset": "アセット",
       "emptyBody": "スキャンとアセットの引き継ぎがタイムラインとしてここに表示されます。",
       "emptyTitle": "管理イベントなし",
@@ -4039,6 +4045,7 @@
     },
     "dailyLog": {
       "eyebrow": "現場",
+      "title": "日報",
       "back": "デイリーログ",
       "emptyBody": "天候とメモからその日のログを始めましょう。",
       "emptyTitle": "ログはまだありません",
@@ -4065,8 +4072,10 @@
     },
     "directory": {
       "eyebrow": "モバイル",
+      "title": "チームロスター",
       "peopleCount": "組織に{count}名",
       "empty": {
+        "title": "該当なし",
         "description": "組織メンバーを追加するとここに表示されます。",
         "body": "名簿に一致する人がいません。"
       },
@@ -4093,6 +4102,7 @@
         "label": "ダウンロード"
       },
       "eyebrow": "モバイル",
+      "title": "ナレッジ",
       "uploadCta": "+ アップロード",
       "empty": {
         "title": "ドキュメントなし",
@@ -4119,6 +4129,7 @@
     },
     "feed": {
       "eyebrow": "モバイル",
+      "title": "コミュニティ",
       "noUpdatesYet": "アップデートはまだありません。",
       "unreadOfTotal": "{total}件中{unread}件未読",
       "empty": {
@@ -4141,6 +4152,7 @@
     },
     "gigs": {
       "eyebrow": "マーケットプレイス",
+      "title": "求人",
       "applicants": "{count}件の応募",
       "applied": "応募済み",
       "apply": "応募",
@@ -4261,6 +4273,7 @@
     },
     "incidents": {
       "eyebrow": "現場",
+      "title": "インシデント",
       "emptyBody": "この組織にはまだインシデントの記録がありません。",
       "emptyTitle": "問題なし",
       "file": "報告を提出",
@@ -4277,6 +4290,7 @@
       "empty": "アセットなし",
       "emptyHint": "これらのフィルターに一致するものがありません。",
       "eyebrow": "在庫カタログ",
+      "title": "インベントリ",
       "onHand": "在庫",
       "scanCta": "スキャンしてチェックアウト / イン",
       "search": "アセットを検索…",
@@ -4507,6 +4521,7 @@
       }
     },
     "punch": {
+      "title": "パンチクロック",
       "active": "アクティブ",
       "closed": "クローズ",
       "emptyBody": "パンチインしてシフトを開始します。",
@@ -4523,7 +4538,9 @@
     },
     "requests": {
       "eyebrow": "現場",
+      "title": "承認",
       "empty": {
+        "title": "問題なし",
         "body": "休暇申請とシフト交代のリクエストがここに表示されます。"
       },
       "approve": "承認",
@@ -4730,7 +4747,9 @@
     },
     "wallet": {
       "eyebrow": "モバイル",
+      "title": "COMPVSS Rose",
       "empty": {
+        "title": "クレデンシャルなし",
         "body": "クレデンシャルの権限は発行されるとここに表示されます。管理者にお問い合わせください。"
       },
       "accessTitle": "アクセスと権限",
@@ -4777,6 +4796,7 @@
       "cta": "タグを解決",
       "enableCamera": "カメラを有効化",
       "eyebrow": "アセットタグ",
+      "title": "コードをスキャン",
       "hint": "アセットタグのQRにかざすと自動で読み取ります。",
       "logged": "記録しました",
       "manualLabel": "アセットタグ",
@@ -4822,6 +4842,7 @@
       "connect": "つながる",
       "connected": "つながり済み",
       "count": "{n} 件の候補",
+      "title": "コネクション",
       "crew": "クルー",
       "decline": "辞退",
       "empty": "ピープルなし",

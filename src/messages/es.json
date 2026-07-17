@@ -16447,7 +16447,9 @@
   "m": {
     "advances": {
       "eyebrow": "Móvil",
+      "title": "Avances",
       "empty": {
+        "title": "Sin Avances",
         "body": "El equipo, las credenciales y los servicios asignados a ti aparecen aquí."
       },
       "detail": {
@@ -16489,6 +16491,7 @@
     },
     "alerts": {
       "eyebrow": "Móvil",
+      "title": "Notificaciones",
       "acknowledge": "Confirmar",
       "acknowledging": "Confirmando…",
       "emptyTitle": "Todo despejado. No hay alertas ahora mismo."
@@ -16499,7 +16502,9 @@
       "clockOut": "Fichar salida",
       "configureSupabase": "Configura Supabase.",
       "eyebrow": "Campo",
+      "title": "Control Horario",
       "empty": {
+        "title": "Aún Sin Registros",
         "body": "Ficha la entrada para empezar a registrar tu tiempo."
       },
       "active": "Activo",
@@ -16515,6 +16520,7 @@
     },
     "coc": {
       "eyebrow": "Campo",
+      "title": "Cadena de custodia",
       "asset": "Activo",
       "emptyBody": "Los escaneos y entregas de activos aparecerán aquí como una línea de tiempo.",
       "emptyTitle": "Sin eventos de custodia",
@@ -16525,6 +16531,7 @@
     },
     "dailyLog": {
       "eyebrow": "Campo",
+      "title": "Bitácora Diaria",
       "back": "Registros diarios",
       "emptyBody": "Inicia el registro del día con el clima y las notas.",
       "emptyTitle": "Aún no hay registros",
@@ -16551,8 +16558,10 @@
     },
     "directory": {
       "eyebrow": "Móvil",
+      "title": "Plantilla del Equipo",
       "peopleCount": "{count} personas en tu organización",
       "empty": {
+        "title": "Sin Coincidencias",
         "description": "Los miembros de la organización aparecen aquí una vez agregados.",
         "body": "Nadie en la lista de personal coincide."
       },
@@ -16579,6 +16588,7 @@
         "label": "Descargar"
       },
       "eyebrow": "Móvil",
+      "title": "Conocimiento",
       "uploadCta": "+ Subir",
       "empty": {
         "title": "Sin Documentos",
@@ -16605,6 +16615,7 @@
     },
     "feed": {
       "eyebrow": "Móvil",
+      "title": "Comunidad",
       "noUpdatesYet": "Sin novedades aún.",
       "unreadOfTotal": "{unread} sin leer de {total}",
       "empty": {
@@ -16627,6 +16638,7 @@
     },
     "gigs": {
       "eyebrow": "Marketplace",
+      "title": "Trabajos",
       "applicants": "{count} postulados",
       "applied": "Postulado",
       "apply": "Postular",
@@ -16747,6 +16759,7 @@
     },
     "incidents": {
       "eyebrow": "Campo",
+      "title": "Incidentes",
       "emptyBody": "Aún no hay incidentes registrados para esta organización.",
       "emptyTitle": "Todo despejado",
       "file": "Presentar reporte",
@@ -16763,6 +16776,7 @@
       "empty": "Sin activos",
       "emptyHint": "Nada coincide con estos filtros.",
       "eyebrow": "Catálogo en existencia",
+      "title": "Inventario",
       "onHand": "en existencia",
       "scanCta": "Escanear para entrega/devolución",
       "search": "Buscar activos…",
@@ -16993,6 +17007,7 @@
       }
     },
     "punch": {
+      "title": "Reloj de Fichaje",
       "active": "Activo",
       "closed": "Cerrado",
       "emptyBody": "Ficha la entrada para empezar tu turno.",
@@ -17009,7 +17024,9 @@
     },
     "requests": {
       "eyebrow": "Campo",
+      "title": "Aprobaciones",
       "empty": {
+        "title": "Todo despejado",
         "body": "Las solicitudes de tiempo libre y de cambio de turno aparecen aquí."
       },
       "approve": "Aprobar",
@@ -17216,7 +17233,9 @@
     },
     "wallet": {
       "eyebrow": "Móvil",
+      "title": "La COMPVSS Rose",
       "empty": {
+        "title": "Sin Credenciales",
         "body": "Los derechos de credencial aparecen aquí una vez emitidos. Contacta a tu administrador."
       },
       "accessTitle": "Acceso y permisos",
@@ -17263,6 +17282,7 @@
       "cta": "Resolver etiqueta",
       "enableCamera": "Activar cámara",
       "eyebrow": "Etiqueta de activo",
+      "title": "Escanear un código",
       "hint": "Apunta a una etiqueta QR de activo: se lee automáticamente.",
       "logged": "Registrado",
       "manualLabel": "Etiqueta de activo",
@@ -17308,6 +17328,7 @@
       "connect": "Conectar",
       "connected": "Conectado",
       "count": "{n} sugeridos",
+      "title": "Conexiones",
       "crew": "Equipo",
       "decline": "Rechazar",
       "empty": "Sin personas",

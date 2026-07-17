@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1210 · **API route handlers:** 156 · **Distinct nav hrefs:** 535
+**Page routes:** 1215 · **API route handlers:** 156 · **Distinct nav hrefs:** 538
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 794 | 251 | 541 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 70 | 54 | 15 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 75 | 57 | 17 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1210** | **509** | **658** | **0** | **43** |
+| **TOTAL** | | **1215** | **512** | **660** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1353,7 +1353,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-70 routes — ● 54 nav · ○ 15 linked · ⚠ 0 orphan
+75 routes — ● 57 nav · ○ 17 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1433,6 +1433,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>docs</code> · 2 routes</summary>
+
+● `/m/docs`
+○ `/m/docs/[id]`
+
+</details>
+
 <details><summary><code>documents</code> · 2 routes</summary>
 
 ● `/m/documents`
@@ -1449,6 +1456,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>emergency</code> · 1 route</summary>
 
 ● `/m/emergency`
+
+</details>
+
+<details><summary><code>engagement</code> · 1 route</summary>
+
+● `/m/engagement`
 
 </details>
 
@@ -1614,6 +1627,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/m/settings/changelog`
 ● `/m/settings/team`
 ● `/m/settings/team/invite`
+
+</details>
+
+<details><summary><code>spaces</code> · 2 routes</summary>
+
+● `/m/spaces`
+○ `/m/spaces/[id]`
 
 </details>
 

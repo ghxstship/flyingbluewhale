@@ -57,6 +57,7 @@ export async function searchMobile(qRaw: string): Promise<{ groups: SearchGroup[
       .from("job_postings")
       .select("id, title, employment_type")
       .eq("org_id", session.orgId)
+      .is("deleted_at", null)
       .ilike("title", like)
       .limit(LIMIT),
   ]);

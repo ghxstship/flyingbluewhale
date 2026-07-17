@@ -25,6 +25,7 @@ export async function createChannelRoom(
   name: string,
 ): Promise<RoomResult> {
   const { data: roomRow, error } = await supabase
+    // soft-delete-exempt: insert-returning — .select("id") reads back the row just created
     .from("chat_rooms")
     .insert({
       org_id: session.orgId,
@@ -93,6 +94,7 @@ export async function findOrCreateDirectRoom(
   }
 
   const { data: roomRow, error } = await supabase
+    // soft-delete-exempt: insert-returning — .select("id") reads back the row just created
     .from("chat_rooms")
     .insert({
       org_id: session.orgId,

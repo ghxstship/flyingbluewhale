@@ -94,6 +94,9 @@ export default async function MorePage() {
       label: t("m.more.network", undefined, "Network"),
       links: [
         { href: "/m/feed", icon: "Megaphone", labelKey: "m.more.community", label: "Community", subKey: "m.more.communitySub", sub: "Your Professional Feed" },
+        { href: "/m/spaces", icon: "Sparkles", labelKey: "m.more.spaces", label: "Spaces & Clubs", subKey: "m.more.spacesSub", sub: "Team, Trade, Location & Club Channels" },
+        { href: "/m/docs", icon: "BookOpen", labelKey: "m.more.knowledge", label: "Knowledge", subKey: "m.more.knowledgeSub", sub: "SOPs & Policies, Must-Reads Flagged" },
+        { href: "/m/engagement", icon: "TrendingUp", labelKey: "m.more.engagement", label: "Engagement", subKey: "m.more.engagementSub", sub: "Reach & Adoption Analytics", managerOnly: true },
         { href: "/m/jobs", icon: "Briefcase", labelKey: "m.more.jobs", label: "Jobs", subKey: "m.more.jobsSub", sub: "Open Shifts & Gigs" },
         { href: "/m/market", icon: "Tag", labelKey: "m.more.market", label: "Marketplace", subKey: "m.more.marketSub", sub: "Buy, Sell & Trade Gear" },
       ],

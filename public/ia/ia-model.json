@@ -2470,6 +2470,24 @@
               ]
             },
             {
+              "path": "/m/spaces",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/docs",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/engagement",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/mileage",
               "arch": [
                 "LIST"

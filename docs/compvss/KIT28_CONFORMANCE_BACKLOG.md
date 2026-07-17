@@ -6,6 +6,18 @@
 
 Everything below is open as of the date above. Items are grouped by what unblocks them, not by feature area, because that is how they'll actually get picked up.
 
+> **Branch disposition (2026-07-17, ship pass):** the `worktree-kit28-compvss-conformance`
+> branch (tip `2656d7a4`, 11 commits, based on `77a6f30e` / 07-15) is a **superseded
+> draft** and was deliberately NOT merged. Its surfaces (Assets tab, Knowledge/Documents
+> split, Spaces & Clubs + gate, Engagement, kit-28 app bar) were re-landed on main in
+> newer form on 07-17 (`1f295c19` … `2c3ac9a1`), and its two migrations were recovered
+> into the aligned ledger under their applied stamps (`20260715151130_kb_must_read_acks`,
+> `20260715152619_spaces_gate_fk`). Its one genuinely unlanded change — rewriting
+> `kit-mobile.css` back to the kit's sub-11px/off-grid literals ("kit 28 is the floor")
+> — is exactly §4's "~90-rule policy drift" item, which **needs Julian's ruling** before
+> anyone lands it. If the ruling adopts the kit floor, cherry-pick `b3b889e4` from the
+> branch rather than re-deriving the 199 declarations.
+
 ---
 
 ## 1. Built, unproven — needs an e2e spec, nothing else

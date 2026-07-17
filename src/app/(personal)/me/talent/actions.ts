@@ -24,6 +24,11 @@ const Schema = z.object({
   fee_min: z.string().optional().or(z.literal("")),
   fee_max: z.string().optional().or(z.literal("")),
   video_reel_url: z.string().url().optional().or(z.literal("")),
+  // Audience stats — self-reported EPK numbers. These columns previously had
+  // NO writer anywhere (2026-07-17 FK/3NF audit: "follower_count never
+  // synced"), so the public directory rendered permanent dashes.
+  monthly_listeners: z.string().optional().or(z.literal("")),
+  follower_count: z.string().optional().or(z.literal("")),
   is_public: z.string().optional(),
 });
 
@@ -43,6 +48,17 @@ function parseFee(v: string | undefined): { cents: number | null } | { error: st
   if (!Number.isFinite(n)) return { error: "Enter a number, like 2500" };
   if (n <= 0) return { error: "Must be greater than zero" };
   return { cents: Math.round(n * 100) };
+}
+
+/** Parse an audience-count input (monthly listeners / followers). Whole
+ *  numbers only; commas tolerated ("1,200,000"). Same explicit-error shape
+ *  as parseFee — garbage never silently saves as null. */
+function parseCount(v: string | undefined): { count: number | null } | { error: string } {
+  if (!v || !v.trim()) return { count: null };
+  const n = Number(v.replace(/[,\s]/g, ""));
+  if (!Number.isFinite(n) || !Number.isInteger(n)) return { error: "Enter a whole number, like 12000" };
+  if (n < 0) return { error: "Cannot be negative" };
+  return { count: n };
 }
 
 const toArray = (v: string | undefined): string[] =>
@@ -77,8 +93,12 @@ export async function upsertMyTalentAction(_: State, fd: FormData): Promise<Stat
   const fieldErrors: Record<string, string> = {};
   const feeMin = parseFee(parsed.data.fee_min);
   const feeMax = parseFee(parsed.data.fee_max);
+  const listeners = parseCount(parsed.data.monthly_listeners);
+  const followers = parseCount(parsed.data.follower_count);
   if ("error" in feeMin) fieldErrors.fee_min = feeMin.error;
   if ("error" in feeMax) fieldErrors.fee_max = feeMax.error;
+  if ("error" in listeners) fieldErrors.monthly_listeners = listeners.error;
+  if ("error" in followers) fieldErrors.follower_count = followers.error;
   if (
     !("error" in feeMin) &&
     !("error" in feeMax) &&
@@ -168,6 +188,8 @@ export async function upsertMyTalentAction(_: State, fd: FormData): Promise<Stat
     genre_tags: toArray(parsed.data.genre_tags),
     fee_min_cents: "cents" in feeMin ? feeMin.cents : null,
     fee_max_cents: "cents" in feeMax ? feeMax.cents : null,
+    monthly_listeners: "count" in listeners ? listeners.count : null,
+    follower_count: "count" in followers ? followers.count : null,
     video_reel_url: parsed.data.video_reel_url || null,
     is_public: parsed.data.is_public === "on",
     public_handle: handle,

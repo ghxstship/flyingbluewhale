@@ -63,6 +63,7 @@ export async function transitionIncident(
     .select("incident_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
+    .is("deleted_at", null)
     .maybeSingle();
   if (!row) return { ok: false, error: "Incident not found." };
 
@@ -87,6 +88,7 @@ export async function transitionIncident(
     .eq("org_id", session.orgId)
     .eq("id", id)
     .eq("incident_state", current)
+    .is("deleted_at", null)
     .select("id");
   if (error) return { ok: false, error: error.message };
   if (!updated || updated.length === 0) {

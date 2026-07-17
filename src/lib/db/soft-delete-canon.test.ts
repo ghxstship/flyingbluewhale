@@ -288,7 +288,6 @@ const LEGACY_ALLOWLIST: Record<string, number> = {
   // 0 was another session's UNCOMMITTED edit in the shared working tree — the
   // committed file still had 2, so the pushed commit failed its own guard in
   // isolation. Ratchet only against `git show HEAD:<path>`, never the disk.
-  "src/app/(platform)/studio/operations/incidents/actions.ts": 2,
   "src/app/(platform)/studio/operations/incidents/page.tsx": 1,
   "src/app/(platform)/studio/operations/reservations/actions.ts": 3,
   "src/app/(platform)/studio/operations/schedule/page.tsx": 1,

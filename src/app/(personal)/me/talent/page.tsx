@@ -19,6 +19,8 @@ type Talent = {
   genre_tags: string[];
   fee_min_cents: number | null;
   fee_max_cents: number | null;
+  monthly_listeners: number | null;
+  follower_count: number | null;
   is_public: boolean;
   video_reel_url: string | null;
   photo_url: string | null;
@@ -34,7 +36,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("talent_profiles")
     .select(
-      "id, public_handle, act_name, tagline, bio, genre_tags, fee_min_cents, fee_max_cents, is_public, video_reel_url, photo_url",
+      "id, public_handle, act_name, tagline, bio, genre_tags, fee_min_cents, fee_max_cents, monthly_listeners, follower_count, is_public, video_reel_url, photo_url",
     )
     .eq("user_id", session.userId)
     .eq("org_id", session.orgId)
@@ -175,6 +177,27 @@ export default async function Page() {
             placeholder="7500"
             hint={t("me.talent.fields.feeHint", undefined, "In dollars, numbers only")}
             defaultValue={talent?.fee_max_cents ? String(talent.fee_max_cents / 100) : ""}
+          />
+        </div>
+        {/* Audience stats — these columns had no writer anywhere (2026-07-17
+            FK/3NF audit), so the public directory rendered permanent dashes.
+            Self-reported EPK numbers, like the rest of this form. */}
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            label={t("me.talent.fields.monthlyListeners", undefined, "Monthly Listeners")}
+            name="monthly_listeners"
+            inputMode="numeric"
+            placeholder="120000"
+            hint={t("me.talent.fields.countHint", undefined, "Whole number, commas OK")}
+            defaultValue={talent?.monthly_listeners != null ? String(talent.monthly_listeners) : ""}
+          />
+          <Input
+            label={t("me.talent.fields.followerCount", undefined, "Followers")}
+            name="follower_count"
+            inputMode="numeric"
+            placeholder="45000"
+            hint={t("me.talent.fields.countHint", undefined, "Whole number, commas OK")}
+            defaultValue={talent?.follower_count != null ? String(talent.follower_count) : ""}
           />
         </div>
         <Input

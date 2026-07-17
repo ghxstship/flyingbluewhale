@@ -6,6 +6,7 @@ import { getRequestT } from "@/lib/i18n/request";
 import { listMyAssignments } from "@/lib/db/assignments";
 import type { GuideConfig } from "@/lib/guides/types";
 import { KIcon } from "@/components/mobile/kit";
+import { CrisisPanel, type ActiveCrisis } from "./CrisisPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,16 @@ export const dynamic = "force-dynamic";
  */
 
 const NA = "—";
+
+/**
+ * How long a declared crisis counts as ACTIVE on the field surface.
+ * `crisis_alerts` has no stand-down lifecycle column (see migration
+ * 20260717130103's header) — recency is the honest proxy: the fan-out fires
+ * the moment the console declares, and a code from last week is history, not
+ * an instruction. When a real `alert_state` lands console-side, this window
+ * dies and the query filters on it instead.
+ */
+const CRISIS_ACTIVE_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 /** Code → semantic token tint + dark-ink flag, mapped off the kit colorway. */
 const CODES: { code: string; trigger: string; tint: string; ink?: "dark" }[] = [
@@ -52,8 +63,45 @@ export default async function EmergencyPage() {
     assembly: NA,
     reportTo: NA,
   };
+  // Active declared crisis (crisis.respond) — the console's `crisis_alerts`
+  // row, org-scoped by RLS, plus the caller's own response receipts so a
+  // reload doesn't re-arm buttons they already pressed.
+  let crisis: ActiveCrisis | null = null;
+  let musterAckAt: string | null = null;
+  let safeAt: string | null = null;
+
   if (hasSupabase) {
     const supabase = await createClient();
+
+    const since = new Date(Date.now() - CRISIS_ACTIVE_WINDOW_MS).toISOString();
+    const { data: alerts } = await supabase
+      .from("crisis_alerts")
+      .select("id, title, body, severity, created_at")
+      .eq("org_id", session.orgId)
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(1);
+    const alert = alerts?.[0];
+    if (alert) {
+      crisis = {
+        id: alert.id,
+        title: alert.title,
+        body: alert.body,
+        severity: alert.severity,
+        createdAt: alert.created_at,
+      };
+      const { data: receipts } = await supabase
+        .from("crisis_alert_receipts")
+        .select("channel, acknowledged_at")
+        .eq("alert_id", alert.id)
+        .eq("user_id", session.userId)
+        .in("channel", ["muster_ack", "self_safe"]);
+      for (const r of receipts ?? []) {
+        if (r.channel === "muster_ack") musterAckAt = r.acknowledged_at;
+        if (r.channel === "self_safe") safeAt = r.acknowledged_at;
+      }
+    }
+
     const assignments = await listMyAssignments(session.orgId, session.userId);
     const dead = new Set(["voided", "expired", "returned", "rejected"]);
     const active = assignments.find((a) => !dead.has(a.fulfillment_state)) ?? assignments[0];
@@ -100,6 +148,24 @@ export default async function EmergencyPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.emergency.title", undefined, "Emergency Card")}
       </h1>
+
+      {/* Crisis first: on the day this page matters, the declared code and
+          the response buttons outrank everything below them. All-clear is
+          stated, not implied — an empty space reads as "not wired", not
+          "nothing happening". */}
+      {crisis ? (
+        <CrisisPanel alert={crisis} initialMusterAckAt={musterAckAt} initialSafeAt={safeAt} />
+      ) : (
+        <div className="item">
+          <span className="bar" style={{ background: "var(--p-success)" }} />
+          <div>
+            <div className="t">{t("m.emergency.allClear", undefined, "No Active Crisis")}</div>
+            <div className="s">
+              {t("m.emergency.allClearBody", undefined, "If a code is declared, it appears here with your response actions.")}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Station / manning card — wired to the holder's real deployment. */}
       <div className="emerg-station">

@@ -65,10 +65,15 @@ test.describe("manifest proofs · crew", () => {
     await expect(row.getByText(/No receipt/i)).toHaveCount(0);
   });
 
-  test("timesheet.submit — the open week submits and leaves the submittable set", async ({ page }) => {
-    // Self-sufficient: guarantee a submittable sheet by punching a real
-    // in/out pair first (the first prod run found the fixture week EMPTY —
-    // no sheet, nothing to submit, nothing submitted — and failed honestly).
+  test("timesheet.submit — punch, compile, submit: the full spine", async ({ page, browser }) => {
+    // The REAL pipeline (learned from two honest failures on prod): a punch
+    // creates a time_entry, but a timesheets ROW only exists after a
+    // manager-side compile (compile_timesheets via
+    // POST /api/v1/pay-periods/{id}/compile). So the proof walks the actual
+    // three-step workflow: crew punches → manager compiles the period
+    // covering today → crew submits from /m/timesheets.
+
+    // 1. Crew: punch a real in/out pair.
     await page.goto("/m/clock");
     await expect(page.locator(".scr-h, h1").first()).toBeVisible({ timeout: 20_000 });
     const clockIn = page.getByRole("button", { name: /clock in/i }).first();
@@ -82,25 +87,43 @@ test.describe("manifest proofs · crew", () => {
       await expect(page.getByRole("button", { name: /clock in/i }).first()).toBeVisible({ timeout: 20_000 });
     }
 
+    // 2. Manager: compile the pay period that covers today.
+    const mgr = await browser.newContext();
+    const mgrPage = await mgr.newPage();
+    try {
+      await authedSetup(mgrPage, "manager");
+      const list = await mgrPage.request.get("/api/v1/pay-periods");
+      expect(list.status(), "pay-periods list must serve the manager").toBeLessThan(300);
+      const periods = (await list.json())?.data ?? [];
+      const today = new Date().toISOString().slice(0, 10);
+      const current = periods.find(
+        (p: { id: string; period_start: string; period_end: string }) =>
+          p.period_start <= today && p.period_end >= today,
+      );
+      expect(current, `no pay period covers ${today} — seed one before blaming the spine`).toBeTruthy();
+      const compiled = await mgrPage.request.post(`/api/v1/pay-periods/${current.id}/compile`);
+      expect(compiled.status(), "compile must succeed for the manager").toBeLessThan(300);
+    } finally {
+      await mgr.close();
+    }
+
+    // 3. Crew: the compiled sheet is now submittable.
     await page.goto("/m/timesheets");
     await expect(page.locator(".scr-h, h1").first()).toBeVisible({ timeout: 20_000 });
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
 
     const submit = page.getByRole("button", { name: /Submit For Approval|Submit Again/ }).first();
     if ((await submit.count()) === 0) {
-      // The punch above guarantees hours this week, so no-CTA now means the
-      // sheet is already past open — assert the submitted state is visible.
+      // Compiled + hours exist, so no-CTA means the sheet is already past
+      // open — the submitted state must be visible.
       await expect(
         page.getByText(/submitted|approved|pending/i).first(),
-        "hours exist this week but neither a submit CTA nor a submitted state rendered",
+        "compiled sheet exists but neither a submit CTA nor a submitted state rendered",
       ).toBeVisible({ timeout: 15_000 });
       return;
     }
 
     await submit.click();
-    // The state flips server-side and the row re-renders without the CTA
-    // (canSubmit reads the FSM's submittable set) — or with "Submit Again"
-    // gone and a submitted badge present.
     await expect(page.getByText(/submitted/i).first()).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
   });

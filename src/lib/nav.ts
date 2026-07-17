@@ -1099,8 +1099,12 @@ export const settingsNav: NavGroup[] = [
       { label: "Crew Roles", href: "/studio/settings/capabilities/roles", minRole: "manager" },
       { label: "Scan Misses", href: "/studio/settings/capabilities/scan-misses", minRole: "manager" },
       // The enforcement flip is its own surface so it can never happen
-      // without the who-loses-access preview (backlog P2.4).
-      { label: "Enforcement", href: "/studio/settings/capabilities/enforcement", minRole: "admin" },
+      // without the who-loses-access preview (backlog P2.4). Readable by the
+      // manager band: the diff is exactly what a manager studies before
+      // asking for the flip; the switch itself stays admin (form + action +
+      // RLS all re-check). The settings LAYOUT enforces this minRole
+      // server-side, so this line is an access decision, not just nav.
+      { label: "Enforcement", href: "/studio/settings/capabilities/enforcement", minRole: "manager" },
       { label: "Invites", href: "/studio/people/invites", minRole: "admin" },
       { label: "Account Managers", href: "/studio/settings/account-managers", minRole: "admin" },
       { label: "Governance", href: "/studio/settings/governance", minRole: "admin" },

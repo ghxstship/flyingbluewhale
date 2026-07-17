@@ -73,7 +73,7 @@ test.describe("capabilities admin · member is out", () => {
       const deniedByStatus = status === 403 || status === 404;
       if (!deniedByRedirect && !deniedByStatus) {
         await expect(
-          page.getByText(/not authorized|no access|permission|denied/i).first(),
+          page.getByText(/not authorized|no access|don.t have access|permission|denied/i).first(),
           `${path} rendered for a member with no deny signal`,
         ).toBeVisible({ timeout: 15_000 });
       }

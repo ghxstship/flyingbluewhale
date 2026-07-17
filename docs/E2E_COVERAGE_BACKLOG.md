@@ -142,4 +142,4 @@ Either the fixture's `last_org_id` points at an org where it holds member,
 or persona derivation changed in the capture sweep. Denial is intact either
 way; capability-gating.spec.ts now asserts the audit property (a resolved
 persona/role + the capability are named) instead of pinning the login
-suffix. Worth one look at the fixture's memberships before assuming drift.
+suffix. ANSWERED (same day): the fixture held a stray persona='member' membership in Test Starter Org (seeding slip, every other org said viewer) and the session resolved there — member's floor carries check-in:*, which also explains the viewer scan 200. The membership row is corrected to viewer; the product authz map was never wrong.

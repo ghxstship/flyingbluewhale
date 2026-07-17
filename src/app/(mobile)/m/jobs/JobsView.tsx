@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
-import { ActionBar, KIcon, TogRow } from "@/components/mobile/kit";
+import { useActionState, useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { ActionBar, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
+import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { applyToJob, type State } from "./actions";
+import { applyToJob, postJob, type State } from "./actions";
 
 /**
  * JobsView — Jobs client leaf. Search + the job cards with cert/flag chips, rate
@@ -45,7 +47,27 @@ function ApplyButton({ gig }: { gig: Gig }) {
   );
 }
 
-export function JobsView({ gigs }: { gigs: Gig[] }) {
+export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) {
+  const router = useRouter();
+  const [postOpen, setPostOpen] = useState(false);
+  const [postPending, startPost] = useTransition();
+  const [postError, setPostError] = useState<string | null>(null);
+
+  function onPost(_def: FormDef, vals: Record<string, unknown>) {
+    if (postPending) return;
+    const fd = toFormData(vals);
+    startPost(async () => {
+      const res = await postJob(null, fd);
+      if (res?.error) {
+        setPostError(res.error);
+        return;
+      }
+      setPostError(null);
+      setPostOpen(false);
+      router.refresh();
+    });
+  }
+
   const t = useT();
   const [q, setQ] = useState("");
   const [sort, setSort] = useState("recent");
@@ -145,6 +167,27 @@ export function JobsView({ gigs }: { gigs: Gig[] }) {
         <div className="s" style={{ color: "var(--p-text-3)", padding: "16px 4px" }}>
           {t("m.gigs.noMatch", undefined, "Nothing matches your search.")}
         </div>
+      )}
+      {/* Kit FAB: Post Job — perm `approve` in the kit's CREATE map, the
+          manager band here. The action re-checks server-side. */}
+      {canPost && (
+        <button type="button" className="fab" aria-label="Post Job" onClick={() => setPostOpen(true)}>
+          <KIcon name="Plus" size={24} />
+        </button>
+      )}
+      {postOpen && (
+        <>
+          {postError && (
+            <div
+              className="ps-alert ps-alert--danger"
+              role="alert"
+              style={{ position: "fixed", top: 12, left: 18, right: 18, zIndex: 46 }}
+            >
+              {postError}
+            </div>
+          )}
+          <FormScreen formId="job" onClose={() => setPostOpen(false)} onSubmit={onPost} />
+        </>
       )}
     </>
   );

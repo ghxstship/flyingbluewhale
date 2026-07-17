@@ -259,7 +259,7 @@ const LEGACY_ALLOWLIST: Record<string, number> = {
   "src/app/(platform)/studio/goals/[id]/page.tsx": 1,
   "src/app/(platform)/studio/goals/actions.ts": 1,
   "src/app/(platform)/studio/guides/page.tsx": 1,
-  "src/app/(platform)/studio/inbox/actions.ts": 4,
+  "src/app/(platform)/studio/inbox/actions.ts": 2,
   "src/app/(platform)/studio/inbox/page.tsx": 1,
   "src/app/(platform)/studio/inspections/[id]/edit/page.tsx": 2,
   "src/app/(platform)/studio/inspections/new/page.tsx": 1,

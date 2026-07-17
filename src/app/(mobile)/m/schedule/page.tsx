@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/auth";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -6,6 +6,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import type { EventRow } from "@/lib/supabase/types";
 import { ScheduleView, type SchedEvent } from "./ScheduleView";
+import { ScheduleFab } from "./ScheduleFab";
 import { MyShifts, type MyShift } from "./MyShifts";
 import { ShiftReminderScheduler } from "@/components/mobile/ShiftReminderScheduler";
 import type { ShiftReminder } from "@/lib/native/shift-reminders";
@@ -199,6 +200,10 @@ export default async function MobileSchedulePage() {
         <h2>{t("m.schedule.orgCalendar", undefined, "Production Calendar")}</h2>
       </div>
       <ScheduleView events={events} labels={labels} />
+      {/* Kit FAB: Schedule Event — manager band only, matching the events
+          INSERT policy's EFFECTIVE band (its wider role array names roles
+          memberships.role can never hold). */}
+      {isManagerPlus(session) && <ScheduleFab />}
     </div>
   );
 }

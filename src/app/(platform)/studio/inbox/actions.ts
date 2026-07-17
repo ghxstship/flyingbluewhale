@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { resolveRecordRefs } from "./record-refs";
+import { createChannelRoom, findOrCreateDirectRoom } from "@/lib/db/chat-rooms";
 
 /**
  * Console inbox write actions (kit 20 Inbox M-series). Mirrors the COMPVSS
@@ -74,27 +75,13 @@ export async function createChannelAction(_prev: State, fd: FormData): Promise<S
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
-  const { data: roomRow, error } = await supabase
-    .from("chat_rooms")
-    .insert({
-      org_id: session.orgId,
-      room_kind: "channel",
-      name: parsed.data.name,
-      created_by: session.userId,
-      last_message_at: new Date().toISOString(),
-    })
-    .select("id")
-    .single();
-  if (error || !roomRow) return { error: error?.message ?? "Could not create the channel" };
-  const roomId = (roomRow as { id: string }).id;
-
-  const { error: memberError } = await supabase
-    .from("chat_room_members")
-    .insert({ room_id: roomId, user_id: session.userId, member_role: "owner" });
-  if (memberError) return { error: memberError.message };
+  // Shared with /m/inbox/new (src/lib/db/chat-rooms.ts) — one create path,
+  // two shells, so they can't fork the way time-off did.
+  const result = await createChannelRoom(supabase, session, parsed.data.name);
+  if ("error" in result) return { error: result.error };
 
   revalidatePath("/studio/inbox");
-  redirect(`/studio/inbox?room=${roomId}`);
+  redirect(`/studio/inbox?room=${result.roomId}`);
 }
 
 const DmSchema = z.object({ userId: z.string().uuid() });
@@ -103,65 +90,15 @@ export async function startDmAction(_prev: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   const parsed = DmSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Pick a person" };
-  const otherId = parsed.data.userId;
-  if (otherId === session.userId) return { error: "Pick someone other than yourself" };
   const supabase = await createClient();
 
-  // The other party must be a member of this org — no cross-org DMs.
-  const { data: otherMember } = await supabase
-    .from("memberships")
-    .select("user_id")
-    .eq("org_id", session.orgId)
-    .eq("user_id", otherId)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (!otherMember) return { error: "That person is not in this workspace" };
-
-  // Find-or-create: an existing direct room whose membership is exactly us two.
-  const { data: myRooms } = await supabase.from("chat_room_members").select("room_id").eq("user_id", session.userId);
-  const myRoomIds = ((myRooms ?? []) as Array<{ room_id: string }>).map((r) => r.room_id);
-
-  if (myRoomIds.length > 0) {
-    const { data: directRooms } = await supabase
-      .from("chat_rooms")
-      .select("id")
-      .eq("org_id", session.orgId)
-      .eq("room_kind", "direct")
-      .is("deleted_at", null)
-      .in("id", myRoomIds);
-    const directIds = ((directRooms ?? []) as Array<{ id: string }>).map((r) => r.id);
-    if (directIds.length > 0) {
-      const { data: partners } = await supabase
-        .from("chat_room_members")
-        .select("room_id, user_id")
-        .in("room_id", directIds)
-        .eq("user_id", otherId);
-      const existing = ((partners ?? []) as Array<{ room_id: string }>)[0]?.room_id;
-      if (existing) redirect(`/studio/inbox?room=${existing}`);
-    }
-  }
-
-  const { data: roomRow, error } = await supabase
-    .from("chat_rooms")
-    .insert({
-      org_id: session.orgId,
-      room_kind: "direct",
-      created_by: session.userId,
-      last_message_at: new Date().toISOString(),
-    })
-    .select("id")
-    .single();
-  if (error || !roomRow) return { error: error?.message ?? "Could not start the conversation" };
-  const roomId = (roomRow as { id: string }).id;
-
-  const { error: memberError } = await supabase.from("chat_room_members").insert([
-    { room_id: roomId, user_id: session.userId, member_role: "owner" },
-    { room_id: roomId, user_id: otherId, member_role: "member" },
-  ]);
-  if (memberError) return { error: memberError.message };
+  // Shared find-or-create with /m/inbox/new — the org-membership check and
+  // the exactly-us-two dedupe live in src/lib/db/chat-rooms.ts.
+  const result = await findOrCreateDirectRoom(supabase, session, parsed.data.userId);
+  if ("error" in result) return { error: result.error };
 
   revalidatePath("/studio/inbox");
-  redirect(`/studio/inbox?room=${roomId}`);
+  redirect(`/studio/inbox?room=${result.roomId}`);
 }
 
 // ── Thread management (kit 21 W5) — pin/mute/leave/mark-unread + reactions.

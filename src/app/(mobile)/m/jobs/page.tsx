@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/auth";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -104,7 +104,7 @@ export default async function MobileJobsPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.gigs.title", undefined, "Jobs")}
       </h1>
-      <JobsView gigs={gigs} />
+      <JobsView gigs={gigs} canPost={isManagerPlus(session)} />
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * /m/alerts write actions. acknowledgeAlert marks an org broadcast/alert
+ * /m/notifications (bell feed) write actions. acknowledgeAlert marks an org broadcast/alert
  * notification as read for the caller by stamping `notifications.read_at`.
  * Org-pinned so a member can't acknowledge another tenant's row.
  */

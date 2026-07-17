@@ -39,7 +39,7 @@ export async function createCrisisAlertAction(_: State, fd: FormData): Promise<S
 
   // Tell the field. This used to insert the row and stop — the console
   // could declare a crisis and nobody was notified, so the workforce found
-  // out by opening the app and happening to look. `/m/alerts` even ships a
+  // out by opening the app and happening to look. The field even shipped a
   // tone for `crisis`, which nothing had ever been able to produce.
   //
   // Fans out to every active member, not the manager band: an evacuation is
@@ -56,7 +56,9 @@ export async function createCrisisAlertAction(_: State, fd: FormData): Promise<S
       await sendPushBulk(recipients, {
         title: parsed.data.title,
         body: parsed.data.body.slice(0, 160),
-        url: "/m/notifications",
+        // Kit 29: /m/alerts is the crisis surface — the declaration, the
+        // response actions, and the response-plan link, not the routine bell.
+        url: "/m/alerts",
         kind: "crisis",
         scope: "all",
         orgId: session.orgId,

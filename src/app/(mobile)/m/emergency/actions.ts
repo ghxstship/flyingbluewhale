@@ -71,6 +71,9 @@ export async function respondToCrisisAction(input: {
   );
   if (error) return { error: error.message };
 
+  // Both crisis surfaces render the caller's receipts: the Emergency card's
+  // panel and the /m/alerts crisis log (kit 29).
   revalidatePath("/m/emergency");
+  revalidatePath("/m/alerts");
   return { ok: true };
 }

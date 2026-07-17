@@ -7,6 +7,7 @@ import { KIcon } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
 import { respondToCrisisAction } from "./actions";
+import { crisisSeverityTone } from "./crisis";
 
 /** Queue channel — one constant so enqueue and drain agree (kit 21 W8). */
 const QUEUE_KIND = "crisis-respond";
@@ -90,12 +91,7 @@ export function CrisisPanel({
     }
   }
 
-  const sevTone =
-    alert.severity === "critical"
-      ? "var(--p-danger)"
-      : alert.severity === "warn"
-        ? "var(--p-warning)"
-        : "var(--p-info)";
+  const sevTone = crisisSeverityTone(alert.severity);
   const sevLabel =
     alert.severity === "critical"
       ? t("m.emergency.crisis.critical", undefined, "Critical")

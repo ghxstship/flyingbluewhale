@@ -7,6 +7,7 @@ import { listMyAssignments } from "@/lib/db/assignments";
 import type { GuideConfig } from "@/lib/guides/types";
 import { KIcon } from "@/components/mobile/kit";
 import { CrisisPanel, type ActiveCrisis } from "./CrisisPanel";
+import { CRISIS_ACTIVE_WINDOW_MS } from "./crisis";
 
 export const dynamic = "force-dynamic";
 
@@ -25,16 +26,6 @@ export const dynamic = "force-dynamic";
  */
 
 const NA = "—";
-
-/**
- * How long a declared crisis counts as ACTIVE on the field surface.
- * `crisis_alerts` has no stand-down lifecycle column (see migration
- * 20260717130103's header) — recency is the honest proxy: the fan-out fires
- * the moment the console declares, and a code from last week is history, not
- * an instruction. When a real `alert_state` lands console-side, this window
- * dies and the query filters on it instead.
- */
-const CRISIS_ACTIVE_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 /** Code → semantic token tint + dark-ink flag, mapped off the kit colorway. */
 const CODES: { code: string; trigger: string; tint: string; ink?: "dark" }[] = [

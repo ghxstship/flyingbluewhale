@@ -315,9 +315,9 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
       </a>
 
       {/* Notification preferences — the per-kind matrix. It wore the bell's
-          route (/m/notifications) for months while the actual feed sat on
-          /m/alerts; now the feed owns the bell and the matrix lives here,
-          which is where its own docblock always said it belonged. */}
+          route (/m/notifications) for months; kit 28 gave the feed the bell
+          and moved the matrix here, which is where its own docblock always
+          said it belonged. */}
       <a className="item tap" href="/m/settings/notifications" style={{ cursor: "pointer" }}>
         <KIcon name="Bell" size={18} style={{ color: "var(--p-text-2)" }} />
         <div style={{ flex: 1, minWidth: 0 }}>

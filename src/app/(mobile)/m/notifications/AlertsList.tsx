@@ -6,7 +6,9 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { AcknowledgeButton } from "./AcknowledgeButton";
 
 /**
- * AlertsList — client leaf for /m/alerts. Adds the kit ActionBar (search +
+ * AlertsList — client leaf for /m/notifications (the bell feed; it wore
+ * /m/alerts before kit 28, and kit 29 gave that path to the crisis alert
+ * log). Adds the kit ActionBar (search +
  * sort + unread/tone filter cluster) over the notification rows the server
  * page shapes (audit D-22; KIT_CANON: ActionBar on every list screen).
  */

@@ -9,7 +9,8 @@ import { UNSILENCEABLE_KINDS } from "./send";
  * `createCrisisAlertAction` inserted a `crisis_alerts` row and stopped. No
  * notification, no push. The console could declare an emergency and the
  * workforce would find out by opening the app and happening to look —
- * while `/m/alerts` shipped a `crisis` tone that nothing could produce.
+ * while the field's alert feed shipped a `crisis` tone that nothing could
+ * produce.
  *
  * Two properties, both safety-critical, both easy to undo by accident:
  *

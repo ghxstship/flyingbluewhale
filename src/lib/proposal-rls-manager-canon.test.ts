@@ -278,8 +278,9 @@ const GUARDED_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> =
   { table: "venue_vop_sections", policy: "venue_vop_update" },
   { table: "work_order_broadcasts", policy: "wob_insert" },
   { table: "work_order_broadcasts", policy: "wob_update" },
-  { table: "workforce_members", policy: "workforce_members_admin__insert" },
-  { table: "workforce_members", policy: "workforce_members_admin__update" },
+  // workforce_members dropped (20260717130551_drop_workforce_members.sql, the
+  // crew_members merge P3.6) — its two policies go with the table, so they are
+  // no longer guarded here.
   { table: "xpms_atom_tiers", policy: "xpms_atom_tiers_write__insert" },
   { table: "xpms_atom_tiers", policy: "xpms_atom_tiers_write__update" },
   { table: "xpms_atoms", policy: "xpms_atoms_write__insert" },

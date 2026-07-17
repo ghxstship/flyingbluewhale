@@ -109,6 +109,35 @@ export const SHIFT_DERIVABLE_BY_DEFAULT: readonly GrantableCapability[] = [
   "scan:document",
 ];
 
+/**
+ * Capabilities that may NEVER be shift-derived, whatever the
+ * `shift_derivable` flag on the grant row says.
+ *
+ * This is stronger than being absent from `SHIFT_DERIVABLE_BY_DEFAULT` (a UI
+ * default an admin can override per row — `asset:custody` is exactly that
+ * case). `scan:credential` is derivation-EXCLUDED: gate access must come from
+ * a deliberate, attributable grant, never as a side effect of rostering. The
+ * SQL resolver (`effective_capabilities`, migration
+ * `20260717130531_shift_derived_grants.sql`) hard-codes the same exclusion in
+ * its shift-derived branch; this constant is the TS mirror, and the grant
+ * admin action refuses to set `shift_derivable` on an excluded capability so
+ * the flag can't be configured into a no-op.
+ */
+export const SHIFT_DERIVATION_EXCLUDED: readonly GrantableCapability[] = ["scan:credential"];
+
+/**
+ * May a role grant for `capability` confer that capability via a shift?
+ * True only for real grantable capabilities outside the exclusion list —
+ * the row's `shift_derivable` flag is then the org's per-(role, capability)
+ * decision; this predicate is the ceiling it operates under.
+ */
+export function isShiftDerivable(capability: string): boolean {
+  return (
+    isGrantableCapability(capability) &&
+    !(SHIFT_DERIVATION_EXCLUDED as readonly string[]).includes(capability)
+  );
+}
+
 /** The `ScanMode` → capability map. `any` is not a capability; see resolveScan. */
 export const SCAN_MODE_CAPABILITY = {
   access: "scan:credential",

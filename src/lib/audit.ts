@@ -41,6 +41,7 @@ export type AuditAction =
   | "capability.user_granted"
   | "capability.user_revoked"
   | "capability.enforcement_changed"
+  | "capability.shift_derivable_changed"
   | "auth.member.removed"
   | "auth.member.left"
   | "auth.member.restored"

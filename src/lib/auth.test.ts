@@ -91,6 +91,14 @@ describe("can (capability gating)", () => {
     expect(can(s, "procurement:read")).toBe(true);
     expect(can(s, "billing:read")).toBe(false);
   });
+  it("manager can check in — supervising a gate includes working it (P3.8)", () => {
+    // SCANNING_RBAC_BACKLOG P3.8, ratified 2026-07-17. Before this, a manager
+    // was refused by /api/v1/scan while a plain member was accepted — the
+    // supervisor was the only band that couldn't run the gate they supervise.
+    const s = baseSession({ role: "manager", persona: "manager" });
+    expect(can(s, "check-in:write")).toBe(true);
+    expect(can(s, "check-in:read")).toBe(true);
+  });
   it("member (default persona) can read projects + write tasks/time", () => {
     const s = baseSession({ role: "member", persona: "member" });
     expect(can(s, "projects:read")).toBe(true);

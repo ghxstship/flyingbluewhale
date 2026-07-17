@@ -56,36 +56,52 @@ client.
    **Do not flip it from SQL.** It needs an admin surface that first shows *who
    would lose access*, because flipping before grants are configured locks out
    every scanner in the org. Depends on P1 #1.
-5. **Shift-derived grants** — now **unblocked**. Phase C gave `shifts` a writer,
-   so `shifts.crew_member_id` and `shifts.role` carry real data (verified
-   end-to-end: rostering a crew member with a login makes the shift resolvable
-   from `/m/schedule`, and the role is readable). Turning them on is a resolver
-   change in `effective_capabilities()`, not a data problem.
-   **Read `shift_derivable` before writing it**: it is per-(role, capability) on
-   purpose, and `scan:credential` is excluded from `SHIFT_DERIVABLE_BY_DEFAULT`.
-   Shift-derived grants make **the scheduler an authorization surface** — whoever
-   can roster Bob onto a warehouse shift hands him that role's capabilities. That
-   is the intended ergonomics for gear and stock and is unacceptable for gate
-   access.
+5. **Shift-derived grants** — **BUILT (2026-07-17), migration pending apply.**
+   The resolver change landed as
+   `supabase/migrations/20260717130531_shift_derived_grants.sql` (written, NOT
+   yet applied): `effective_capabilities()` gains a third UNION branch — a crew
+   member rostered on an ACTIVE shift (`starts_at <= now() < ends_at`,
+   attendance scheduled/checked_in/on_break, not separated) derives the
+   capabilities of the role the SHIFT names (`shifts.role` → `slugify_role` →
+   `crew_roles.slug`), for grant rows flagged `shift_derivable`. The
+   per-(role, capability) flag is honored; **`scan:credential` is hard-excluded
+   in the SQL even if a row is flagged**, mirrored by
+   `SHIFT_DERIVATION_EXCLUDED` / `isShiftDerivable()` in
+   `src/lib/rbac/capabilities.ts`, and the grant admin action now refuses to
+   set `shift_derivable` on an excluded capability so the flag can't be
+   configured into a no-op. Pinned by `src/lib/rbac/capabilities.test.ts`.
+   The scheduler-as-authorization-surface rationale above stands: derivation is
+   the intended ergonomics for gear and stock, never for gate access.
 
 ## P3 — Finish the merge
 
-6. **Drop `workforce_members` + `shifts.workforce_member_id`.** The code no
-   longer reads either — every query is repointed at `crew_members`, the last
-   seven `workforce_member_id` filters were swept in `c809cfb6`, and only
-   comments name the old table now. Deliberately left in place for one deploy of
-   confidence; the 105 rows are e2e debris (verified: 105/105 `E2E %`-prefixed, 0
-   with a login/venue/skills/metadata), so nothing is lost. Small migration,
-   irreversible, no rush.
+6. **Drop `workforce_members` + `shifts.workforce_member_id`** — **migration
+   WRITTEN (2026-07-17), pending apply:**
+   `supabase/migrations/20260717130551_drop_workforce_members.sql`. Re-verified
+   before writing (both greps run separately, against the REF): the table name
+   and the column name survive only in comments plus the RLS-canon test list
+   (entries removed alongside). The migration rewrites
+   `shifts_select_consolidated` first (keeping `manager` in the band, no
+   `is_org_member` return — the chat-membership-boundary guard reads this as
+   the last policy body), then drops the column, then the table, with apply-time
+   guards re-asserting the e2e-debris verdict (0 linked shifts, 0 rows with a
+   user_id) and 0 inbound FKs. Supersedes the branch-only
+   `20260715220000_retire_workforce_members.sql`. **Apply only after the
+   deployed ref is verified clean of readers** — code-then-migration is the
+   zero-downtime order.
 7. **`workforce_deployments` is named "Shifts" in the rail.** `/studio/workforce/
    deployment` is a *different table* from `shifts`. Harmless today, actively
    misleading now that shifts are real and rostered somewhere else
    (`/studio/workforce/rosters/[rosterId]`). Rename the nav entry or reconcile
    the two concepts.
-8. **`manager` holds no `check-in` grant** (`auth.ts` role map). So a manager
-   persona is refused by `/api/v1/scan` while a plain `member` is accepted.
-   Almost certainly unintentional; surfaced while decomposing the capability, not
-   fixed because changing a role's floor is a decision, not a cleanup.
+8. ~~**`manager` holds no `check-in` grant**~~ **DONE (2026-07-17).** The gap:
+   a manager persona was refused by `/api/v1/scan` while a plain `member` was
+   accepted. **Decision, ratified this pass: managers supervise gates, so the
+   manager band gets `check-in:*`** — added to `CAPABILITIES.manager` in
+   `src/lib/auth.ts`, pinned by `src/lib/auth.test.ts`. Grandfather interplay
+   is deliberate: while `capability_grants_enforced` is false, `resolveGrants`
+   keys the legacy scan blanket on `check-in:write`, so managers now pick up
+   the synthesized `scan:*` alongside members and crew.
 
 ## P4 — Product data — **gated on a legal answer, not on engineering**
 

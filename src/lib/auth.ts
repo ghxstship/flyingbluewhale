@@ -446,6 +446,13 @@ const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
     "payroll:read",
     "mileage:*",
     "procurement:*",
+    // SCANNING_RBAC_BACKLOG P3.8 (ratified 2026-07-17): managers supervise
+    // gates. Without this a manager persona was refused by /api/v1/scan while
+    // a plain member was accepted — the only role band that could NOT scan.
+    // Note the grandfather interplay: while capability_grants_enforced is
+    // false, resolveGrants keys the legacy scan blanket on check-in:write, so
+    // managers also pick up scan:* alongside members and crew. Intended.
+    "check-in:*",
   ],
   // `time:read` lets a worker see their own punches and correction
   // requests. Deliberately no `time:approve` or `time:edit`: a worker

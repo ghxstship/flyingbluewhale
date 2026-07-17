@@ -53,6 +53,28 @@ Recommended order by field stakes (crisis first — on the day it matters nobody
 
 Console-only by documented decision (not gaps): `org.billing`, `reports.author`.
 
+## 3a. §3 disposition (2026-07-17 ship pass)
+
+Worked this pass: **crisis.respond** (built + receipts INSERT policy applied —
+`20260717130103_crisis_field_response`), **briefing.signin**,
+**approval.clear**, **onboard.complete**, **punchlist.raise** (in flight this
+same pass — see their manifest cells for the honest landed state).
+
+Deliberately deferred, with reasons — do not read these as skipped-by-neglect:
+
+- **`offline.durable`** — wrapping *every* mobile server action in the outbox
+  is an architecture-wide change (IndexedDB outbox S5 + evictable-queue fold).
+  Rushing it into a same-day prod push risks every /m form at once; the
+  incremental pattern (each new capability adopts the outbox, as
+  crisis.respond just did) keeps coverage growing without a big-bang risk.
+  Schedule as its own cycle with the airplane-mode exit test as the gate.
+- **`shift.assign`** — the backlog itself says build desktop-first ("a
+  cross-shell feature, not a mobile port") and no writer exists in ANY shell.
+  That is a designed feature (rostering UX, conflict rules, notification
+  fan-out), not a gap-fill.
+- **`org.zones`** — queued behind the capabilities admin surface (same
+  /studio/settings territory, same session would collide); next pass.
+
 ## 4. Kit-side flags — the kit must move first (governance rule 3)
 
 | Flag | Detail |

@@ -76,12 +76,16 @@ describe("notify push-kind map", () => {
   it("keeps the catalog view in lockstep with NOTIF_KINDS", () => {
     // The third leg of the mirror. send.ts <-> kinds.ts is compiler-enforced
     // (`satisfies` + the Exclude assertion); the view is not, so assert it.
+    // Reads the EFFECTIVE view definition: 20260715181012 superseded the
+    // original time-and-pay catalog (which the migration-ledger alignment
+    // also renamed 20260716010000 -> 20260715175152), and it authors the
+    // kind literals in the `::text`-cast form the mirror test requires.
     const sql = readFileSync(
-      join(process.cwd(), "supabase/migrations/20260716010000_notification_kinds_time_and_pay.sql"),
+      join(process.cwd(), "supabase/migrations/20260715181012_notification_kinds_reconcile.sql"),
       "utf8",
     );
     for (const kind of NOTIF_KINDS) {
-      expect(sql, `${kind} missing from notification_kind_catalog`).toContain(`('${kind}',`);
+      expect(sql, `${kind} missing from notification_kind_catalog`).toContain(`('${kind}'::text,`);
     }
   });
 });

@@ -97,6 +97,7 @@ vi.mock("@/lib/log", () => ({
 }));
 
 import { sendPushTo, sendPushBulk } from "./send";
+import { pushKindForEvent } from "../notify";
 
 function seedSub(userId: string, id = `sub-${userId}`): void {
   fake.state.subs.push({
@@ -149,6 +150,31 @@ describe("sendPushTo — preference gating", () => {
     const result = await sendPushTo("u1", { title: "T", body: "B", kind: "assignment" });
     expect(result).toEqual({ sent: 1, failed: 0, disabled: 0 });
     expect(sendNotificationMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("delivers a time & pay event to a user with NO preference row (TIME_LIFECYCLE_BACKLOG #11)", async () => {
+    // The regression this pins: notify() used to gate push on the retired
+    // user_preferences.ui_state store, whose push default was FALSE — so
+    // timesheet/payroll pushes never fired for anyone, and a user with no
+    // preference row was silence, not default-on. The fixed path is
+    // notify() -> NOTIFY_EVENT_PUSH_KIND -> sendPushTo(kind), where the live
+    // matrix is default-on and only an explicit push:false excludes. This
+    // test walks that exact chain: the real event->kind map feeding the real
+    // pref gate, with zero notification_preferences rows seeded.
+    seedSub("u1");
+    const kind = pushKindForEvent("timesheet.submitted");
+    expect(kind).toBe("timesheet");
+
+    const result = await sendPushTo("u1", { title: "Timesheet submitted", body: "40h", kind });
+
+    expect(result).toEqual({ sent: 1, failed: 0, disabled: 0 });
+    expect(sendNotificationMock).toHaveBeenCalledTimes(1);
+    // And the mute switch stays real: an explicit opt-out silences the kind.
+    sendNotificationMock.mockClear();
+    fake.state.prefs.push({ user_id: "u1", matrix: { timesheet: { push: false } } });
+    const muted = await sendPushTo("u1", { title: "Timesheet submitted", body: "40h", kind });
+    expect(muted.sent).toBe(0);
+    expect(sendNotificationMock).not.toHaveBeenCalled();
   });
 
   it("defaults to allowed when the matrix has no entry for the kind", async () => {

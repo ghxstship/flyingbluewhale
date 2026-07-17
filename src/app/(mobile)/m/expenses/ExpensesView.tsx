@@ -94,6 +94,11 @@ export function ExpensesView({
           </div>
         ))
       )}
+
+      {/* Kit-29 spec: FAB = New Expense. */}
+      <Link href="/m/expenses/new" className="fab" aria-label={t("m.expenses.new", undefined, "File An Expense")}>
+        <KIcon name="Plus" size={22} />
+      </Link>
     </div>
   );
 }

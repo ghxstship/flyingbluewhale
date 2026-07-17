@@ -101,6 +101,15 @@ export default async function RequisitionsPage() {
           </div>
         ))
       )}
+
+      {/* Kit-29 spec: FAB = New Requisition. */}
+      <Link
+        href="/m/requisitions/new"
+        className="fab"
+        aria-label={t("m.requisitions.newCta", undefined, "Request A Purchase")}
+      >
+        <KIcon name="Plus" size={22} />
+      </Link>
     </div>
   );
 }

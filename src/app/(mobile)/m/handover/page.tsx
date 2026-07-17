@@ -144,6 +144,11 @@ export default async function HandoverPage() {
           );
         })
       )}
+
+      {/* Kit-29 spec: FAB = New Handover (FormScreen). */}
+      <Link href="/m/handover/new" className="fab" aria-label={t("m.handover.newCta", undefined, "New Handover")}>
+        <KIcon name="Plus" size={22} />
+      </Link>
     </div>
   );
 }

@@ -91,6 +91,11 @@ export default async function MileagePage() {
           );
         })
       )}
+
+      {/* Kit-29 spec: FAB = New Mileage. */}
+      <Link href="/m/mileage/new" className="fab" aria-label={t("m.mileage.newCta", undefined, "Log A Drive")}>
+        <KIcon name="Plus" size={22} />
+      </Link>
     </div>
   );
 }

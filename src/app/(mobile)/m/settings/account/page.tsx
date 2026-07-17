@@ -1,9 +1,11 @@
 import { requireSession } from "@/lib/auth";
+import { urlFor } from "@/lib/urls";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
 import { AccountActions } from "./AccountActions";
+import { SignOutEverywhere } from "./SignOutEverywhere";
 
 export const dynamic = "force-dynamic";
 
@@ -98,6 +100,24 @@ export default async function MobileAccountPage() {
           <div className="s">{email}</div>
         </div>
       </div>
+
+      {/* ── Credentials & Sessions (kit 29 account spec) ── */}
+      <div className="sech">
+        <h2>{t("m.account.security.heading", undefined, "Credentials & Sessions")}</h2>
+      </div>
+      {/* Cross-shell: the auth flow lives on the apex, never hardcode the
+          path from the PWA subdomain (urlFor is the single switch). */}
+      <a className="item tap" href={urlFor("auth", "/forgot-password")} style={{ cursor: "pointer" }}>
+        <KIcon name="KeyRound" size={18} style={{ color: "var(--p-text-2)" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{t("m.account.security.password", undefined, "Change Password")}</div>
+          <div className="s">
+            {t("m.account.security.passwordDesc", undefined, "We send a reset link to your email")}
+          </div>
+        </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
+      </a>
+      <SignOutEverywhere />
 
       {/* ── Data Export (kit 29 — app-store requirement) ── */}
       <div className="sech">

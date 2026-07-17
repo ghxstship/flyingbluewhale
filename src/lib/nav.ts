@@ -1713,10 +1713,11 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Time", href: "/m/time" },
   { label: "Handover", href: "/m/handover" },
   { label: "Daily Log", href: "/m/daily-log" },
-  // "Punch Clock", not "Punch" — /m/punch is the time-clock punch surface.
-  // The bare label read as the construction punch list (/studio/punch),
-  // which is a different thing entirely and has no mobile surface yet.
-  { label: "Punch Clock", href: "/m/punch" },
+  // Kit 29 (ratified 2026-07-17): /m/punch IS the inspection punch list —
+  // the field view of the /studio/punch `punch_items` store. The former
+  // occupant (a duplicate punch-in/out time surface) yielded; punching in
+  // and out lives on /m/clock (Time Clock).
+  { label: "Punch List", href: "/m/punch" },
   { label: "Chain of Custody", href: "/m/coc" },
   // Kit-28 §3 capabilities landed 2026-07-17: briefing sign-in + snag capture.
   { label: "Safety Briefings", href: "/m/briefings" },
@@ -1725,6 +1726,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Incidents", href: "/m/incidents" },
   { label: "My Incidents", href: "/m/incident" },
   { label: "Lost & Found", href: "/m/lost-found" },
+  { label: "Log Lost Item", href: "/m/lost-found/new" },
   { label: "Guide", href: "/m/guide" },
   // People.
   { label: "Team Roster", href: "/m/directory" },
@@ -1741,6 +1743,9 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Activity History", href: "/m/activity" },
   { label: "Referrals & Rewards", href: "/m/referrals" },
   { label: "Emergency", href: "/m/emergency" },
+  // Kit 29: mass-notify crisis alert log with acknowledge actions. Distinct
+  // from Notifications (the bell), which carries the routine per-person feed.
+  { label: "Crisis Alerts", href: "/m/alerts" },
   { label: "Notifications", href: "/m/notifications" },
   { label: "Notification Preferences", href: "/m/settings/notifications" },
   { label: "Onboarding", href: "/m/onboarding" },

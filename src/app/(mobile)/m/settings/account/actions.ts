@@ -69,6 +69,20 @@ export async function resumeAccount(): Promise<AccountActionState> {
 }
 
 /**
+ * SIGN OUT EVERYWHERE — revokes every refresh token for the caller
+ * (kit-29 account spec: "sessions"). Supabase has no per-device session
+ * list for a client, so the honest session control is the global revoke:
+ * every device, including this one, is signed out and must log back in.
+ */
+export async function signOutEverywhere(): Promise<AccountActionState> {
+  await requireSession();
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut({ scope: "global" });
+  if (error) return { error: error.message };
+  return { ok: true };
+}
+
+/**
  * ARCHIVE — executes the real contract via the shared `archiveOwnAccount()`:
  * soft-delete `users` with a 30-day grace, scrub PII, and revoke every
  * membership so access dies immediately; operational records (shifts, time

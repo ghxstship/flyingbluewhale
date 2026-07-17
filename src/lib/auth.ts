@@ -453,6 +453,14 @@ const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
     // false, resolveGrants keys the legacy scan blanket on check-in:write, so
     // managers also pick up scan:* alongside members and crew. Intended.
     "check-in:*",
+    // Kit 30 lifecycle surfaces. people:manage = roster/assign/reporting/
+    // packet administration (the manager band already holds crew:* — this is
+    // the named capability the lock screens cite). advance:request assembles
+    // an advance cart for a person; advance:approve moves lines
+    // requested → approved on the fulfillment queue.
+    "people:manage",
+    "advance:request",
+    "advance:approve",
   ],
   // `time:read` lets a worker see their own punches and correction
   // requests. Deliberately no `time:approve` or `time:edit`: a worker

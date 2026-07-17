@@ -3919,6 +3919,8 @@ export type Database = {
           deadline: string | null
           deleted_at: string | null
           fulfilled_at: string | null
+          fulfilled_by: string | null
+          fulfilled_via: string | null
           fulfillment_state: Database["public"]["Enums"]["fulfillment_state"]
           id: string
           issued_at: string | null
@@ -3945,6 +3947,8 @@ export type Database = {
           deadline?: string | null
           deleted_at?: string | null
           fulfilled_at?: string | null
+          fulfilled_by?: string | null
+          fulfilled_via?: string | null
           fulfillment_state?: Database["public"]["Enums"]["fulfillment_state"]
           id?: string
           issued_at?: string | null
@@ -3971,6 +3975,8 @@ export type Database = {
           deadline?: string | null
           deleted_at?: string | null
           fulfilled_at?: string | null
+          fulfilled_by?: string | null
+          fulfilled_via?: string | null
           fulfillment_state?: Database["public"]["Enums"]["fulfillment_state"]
           id?: string
           issued_at?: string | null
@@ -5852,6 +5858,93 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_item_gtins: {
+        Row: {
+          bound_at: string
+          bound_by: string | null
+          catalog_item_id: string
+          gtin14: string
+          org_id: string
+        }
+        Insert: {
+          bound_at?: string
+          bound_by?: string | null
+          catalog_item_id: string
+          gtin14: string
+          org_id: string
+        }
+        Update: {
+          bound_at?: string
+          bound_by?: string | null
+          catalog_item_id?: string
+          gtin14?: string
+          org_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_item_gtins_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "master_catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_item_gtins_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "v_catalog_inventory"
+            referencedColumns: ["catalog_item_id"]
+          },
+          {
+            foreignKeyName: "catalog_item_gtins_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catering_assignment_details: {
+        Row: {
+          assignment_id: string
+          created_at: string
+          ends_on: string | null
+          every_contract_day: boolean
+          excluded_dates: string[]
+          meal_periods: string[]
+          starts_on: string | null
+          updated_at: string
+        }
+        Insert: {
+          assignment_id: string
+          created_at?: string
+          ends_on?: string | null
+          every_contract_day?: boolean
+          excluded_dates?: string[]
+          meal_periods?: string[]
+          starts_on?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assignment_id?: string
+          created_at?: string
+          ends_on?: string | null
+          every_contract_day?: boolean
+          excluded_dates?: string[]
+          meal_periods?: string[]
+          starts_on?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catering_assignment_details_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: true
+            referencedRelation: "assignments"
             referencedColumns: ["id"]
           },
         ]

@@ -280,6 +280,15 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
           ))}
         </div>
       )}
+
+      {/* The listing trigger. `labels.listItem` was passed in but consumed
+          NOWHERE after the kit-28 port — setFormOpen(true) had zero callers,
+          so the FormScreen below was unreachable and nobody could sell
+          anything (found by the deployed-target e2e waiting 300s for this
+          button). Kit CREATE map: Marketplace → FAB. */}
+      <button type="button" className="fab" aria-label={labels.listItem} onClick={() => setFormOpen(true)}>
+        <KIcon name="Plus" size={22} />
+      </button>
     </>
   );
 }

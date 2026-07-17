@@ -132,3 +132,14 @@ untested on purpose; not a gap to close.
   error" is indistinguishable from "the broken path never ran."
 - **Prod e2e tests the DEPLOYED code.** A local fix cannot turn a prod e2e
   green — push, wait for Vercel, then re-run. Budget ~5 min per cycle.
+
+## Open question from the 2026-07-17 prod run — viewer resolves as member
+
+`POST /api/v1/projects` as the `test+viewer` fixture denies correctly (403,
+`projects:write` named) but the deny echo reads `Persona "member" (role
+"member")` — the fixture's active org resolved a member role, not viewer.
+Either the fixture's `last_org_id` points at an org where it holds member,
+or persona derivation changed in the capture sweep. Denial is intact either
+way; capability-gating.spec.ts now asserts the audit property (a resolved
+persona/role + the capability are named) instead of pinning the login
+suffix. Worth one look at the fixture's memberships before assuming drift.

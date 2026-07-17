@@ -17,7 +17,7 @@ test.describe("COMPVSS purchase requests", () => {
 
   test("G19 · a crew member raises a purchase requisition from site", async ({ page }) => {
     await page.goto("/m/requisitions");
-    await page.getByRole("link", { name: /request a purchase/i }).click();
+    await page.getByRole("link", { name: /request a purchase/i }).first().click();
     await expect(page).toHaveURL(/\/m\/requisitions\/new$/, { timeout: 20_000 });
 
     const title = `E2E req ${Date.now()}`;
@@ -48,7 +48,7 @@ test.describe("COMPVSS mileage", () => {
 
   test("G21 · a crew member logs a drive from the vehicle", async ({ page }) => {
     await page.goto("/m/mileage");
-    await page.getByRole("link", { name: /log a drive/i }).click();
+    await page.getByRole("link", { name: /log a drive/i }).first().click();
     await expect(page).toHaveURL(/\/m\/mileage\/new$/, { timeout: 20_000 });
 
     const origin = `E2E yard ${Date.now()}`;

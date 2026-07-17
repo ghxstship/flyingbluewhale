@@ -66,19 +66,33 @@ test.describe("manifest proofs · crew", () => {
   });
 
   test("timesheet.submit — the open week submits and leaves the submittable set", async ({ page }) => {
+    // Self-sufficient: guarantee a submittable sheet by punching a real
+    // in/out pair first (the first prod run found the fixture week EMPTY —
+    // no sheet, nothing to submit, nothing submitted — and failed honestly).
+    await page.goto("/m/clock");
+    await expect(page.locator(".scr-h, h1").first()).toBeVisible({ timeout: 20_000 });
+    const clockIn = page.getByRole("button", { name: /clock in/i }).first();
+    if (await clockIn.isVisible({ timeout: 5_000 }).catch(() => false)) {
+      await clockIn.click();
+      await expect(page.getByRole("button", { name: /clock out/i }).first()).toBeVisible({ timeout: 20_000 });
+    }
+    const clockOut = page.getByRole("button", { name: /clock out/i }).first();
+    if (await clockOut.isVisible({ timeout: 5_000 }).catch(() => false)) {
+      await clockOut.click();
+      await expect(page.getByRole("button", { name: /clock in/i }).first()).toBeVisible({ timeout: 20_000 });
+    }
+
     await page.goto("/m/timesheets");
     await expect(page.locator(".scr-h, h1").first()).toBeVisible({ timeout: 20_000 });
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
 
     const submit = page.getByRole("button", { name: /Submit For Approval|Submit Again/ }).first();
-    const count = await submit.count();
-    if (count === 0) {
-      // Nothing submittable this week — an earlier run already submitted it.
-      // That state is itself proof the journey completes: assert a submitted/
-      // approved sheet exists rather than silently passing an empty page.
+    if ((await submit.count()) === 0) {
+      // The punch above guarantees hours this week, so no-CTA now means the
+      // sheet is already past open — assert the submitted state is visible.
       await expect(
         page.getByText(/submitted|approved|pending/i).first(),
-        "no submittable sheet AND no submitted sheet — the spine rendered nothing",
+        "hours exist this week but neither a submit CTA nor a submitted state rendered",
       ).toBeVisible({ timeout: 15_000 });
       return;
     }

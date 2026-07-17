@@ -128,13 +128,13 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/app/(marketing)/marketplace/vendors/[handle]/page.tsx",
     // COMPVSS kit (rebuild 2026-06-21): these server pages hold the empty-state
     // copy only as i18n fallback LABELS handed to the kit client renderer
-    // (CheckInScanner / ChatRoom / ScheduleView / InventoryScanner), which owns
-    // and renders the zero-state — the same hand-off the `emptyLabel=` strip
-    // above exempts, just passed as a labels object rather than a JSX prop.
-    "src/app/(mobile)/m/check-in/page.tsx",
-    "src/app/(mobile)/m/check-in/scan/[slug]/page.tsx",
+    // (CheckInScanner / ChatRoom / ScheduleView), which owns and renders the
+    // zero-state — the same hand-off the `emptyLabel=` strip above exempts,
+    // just passed as a labels object rather than a JSX prop. The kit-29 §C
+    // alias consolidation moved the scan labels out of the per-route pages
+    // into the ONE shared ScanSurface server component.
+    "src/app/(mobile)/m/check-in/ScanSurface.tsx",
     "src/app/(mobile)/m/inbox/[roomId]/page.tsx",
-    "src/app/(mobile)/m/inventory/scan/page.tsx",
     "src/app/(mobile)/m/schedule/page.tsx",
     "src/app/(mobile)/m/market/page.tsx",
     "src/app/(mobile)/m/tasks/[taskId]/page.tsx",

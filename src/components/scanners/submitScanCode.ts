@@ -14,11 +14,12 @@ import type { ResolvedScan } from "@/lib/scan/types";
  *
  *   `useScanSubmit`  — stateful. Single-flight with a FIFO buffer, exposes the
  *                      latest outcome as React state. Right for a surface with
- *                      one live outcome card (/m/check-in, /m/inventory/scan).
- *   `QuickScan`      — per-code. `ScanCapture` patches a status onto the log
- *                      ROW for the code that produced it, so it needs a result
- *                      per call. The hook's buffer deliberately returns early
- *                      for a buffered code, which would leave that row with no
+ *                      one live outcome card (the shared ScanSurface behind
+ *                      /m/check-in, /m/scan and /m/inventory/scan).
+ *   `ScanCapture`    — per-code callers. It patches a status onto the log ROW
+ *                      for the code that produced it, so it needs a result per
+ *                      call. The hook's buffer deliberately returns early for
+ *                      a buffered code, which would leave that row with no
  *                      status forever.
  *
  * Factoring the core out is what removes the real duplication (the GTIN guard,

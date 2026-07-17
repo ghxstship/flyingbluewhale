@@ -76,12 +76,20 @@ export function CheckInScanner({
   recent,
   labels,
   gateSlug,
+  initialMode,
+  backHref,
+  backLabel,
 }: {
   recent: RecentScan[];
   labels: CheckInLabels;
   gateSlug?: string;
+  /** Preset segment — the §C Inventory preset opens on Asset. Default Access. */
+  initialMode?: Mode;
+  /** Optional back link rendered above the surface (Inventory preset → Assets). */
+  backHref?: string;
+  backLabel?: string;
 }) {
-  const [mode, setMode] = useState<Mode>("access");
+  const [mode, setMode] = useState<Mode>(initialMode ?? "access");
   const [code, setCode] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const { submit, pending, outcome } = useScanSubmit(mode);
@@ -120,6 +128,11 @@ export function CheckInScanner({
 
   return (
     <>
+      {backHref && backLabel && (
+        <Link href={backHref} className="backbtn">
+          <KIcon name="ChevronLeft" size={17} /> {backLabel}
+        </Link>
+      )}
       <div className="scr-eye">{labels.eyebrow}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {gateSlug ? `${labels.title} · ${gateSlug}` : labels.title}
@@ -203,7 +216,9 @@ export function CheckInScanner({
         <div className="item" style={{ marginTop: 14 }}>
           <span className="ps-badge ps-badge--warn">{labels.queuedTitle ?? "Recorded"}</span>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="t" style={{ fontFamily: "var(--p-mono)" }}>{outcome.code}</div>
+            <div className="t" style={{ fontFamily: "var(--p-mono)" }}>
+              {outcome.code}
+            </div>
             <div className="s">
               {labels.queuedBody ?? "Saved on this device. It will sync and verify when you're back online."}
             </div>

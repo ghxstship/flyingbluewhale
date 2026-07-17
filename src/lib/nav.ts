@@ -1661,6 +1661,13 @@ export const mobileTabs: NavItem[] = [
  * /m/checkin is the meal-credit read view, /m/check-in is the ticket
  * scanner. Labels rewritten so operators can tell them apart at a
  * glance without having to remember which dash spelling does what.
+ *
+ * Kit 29 §C route policy (directive 2026-07-17: no live surface is
+ * deleted; alias pairs render ONE shared surface): /m/scan is an alias
+ * of /m/check-in (both render the shared ScanSurface), /m/inventory/scan
+ * renders it preset to the Asset (inventory) mode, and /m/incident is an
+ * alias of /m/incidents (shared IncidentSurface, preset to My Reports).
+ * All four hrefs stay listed here so every live route remains navigable.
  */
 // COMPVSS kit More-hub surfaces (rebuild 2026-06-21). Every secondary
 // destination reachable from the More tab (/m/more), the org/project switcher,

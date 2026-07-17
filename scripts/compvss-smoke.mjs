@@ -80,7 +80,9 @@ const ROUTES = [
   { path: "/m/check-in", label: "Check-in", expect: "scan ticket|check in|check-in" },
   { path: "/m/incidents", label: "Incidents", expect: "incident" },
   { path: "/m/incidents/new", label: "Incident form", expect: "incident report|new incident|report incident" },
-  { path: "/m/incident", label: "My incidents", expect: "my incidents" },
+  // Kit 29 §C: /m/incident is an alias of /m/incidents — one shared surface
+  // (the alias opens preset to the "My Reports" filter, applied client-side).
+  { path: "/m/incident", label: "My incidents (alias)", expect: "incident" },
   { path: "/m/incident/new", label: "Quick-file incident", expect: "quick file" },
   { path: "/m/checkin", label: "Check-in summary", expect: "check-in summary" },
   { path: "/m/medic", label: "Medic", expect: "medic" },

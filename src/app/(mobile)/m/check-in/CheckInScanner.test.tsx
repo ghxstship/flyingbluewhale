@@ -76,6 +76,18 @@ describe("CheckInScanner — per-mode symbologies (§1.3)", () => {
   });
 });
 
+describe("CheckInScanner — alias presets (kit 29 §C)", () => {
+  it("initialMode='asset' opens on the Asset segment with asset symbologies", () => {
+    render(<CheckInScanner recent={[]} labels={labels} initialMode="asset" />);
+    // The Inventory preset (/m/inventory/scan, /m/check-in?mode=inventory)
+    // is a PRESET, not a lock — the segment is selected, not removed.
+    expect(screen.getByRole("button", { name: "Asset" }).className).toContain("on");
+    const formats = scannerProps.current?.formats as string[];
+    expect(formats).toContain("code_39"); // industrial asset tagging
+    expect(formats).not.toContain("pdf417"); // not the credential set
+  });
+});
+
 describe("CheckInScanner — HID keyboard-wedge (§1.6)", () => {
   it("auto-focuses the manual input so a Bluetooth sled can type into it", () => {
     renderScanner();

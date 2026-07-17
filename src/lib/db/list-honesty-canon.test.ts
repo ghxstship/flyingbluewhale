@@ -38,7 +38,8 @@ const ALLOWLIST = new Map<string, string>([
   //    current-project slice; kit client components own the layout and a
   //    pager does not exist in the COMPVSS kit yet (KIT_CANON.md).
   ["src/app/(mobile)/m/daily-log/page.tsx", "field surface; per-project daily logs, small window"],
-  ["src/app/(mobile)/m/incidents/page.tsx", "field org queue; kit list, recent-incident window"],
+  // /m/incidents left this list with the kit-29 §C alias consolidation: the
+  // shared IncidentSurface reads uncapped (no listOrgScoped default cap).
   ["src/app/(mobile)/m/schedule/page.tsx", "field schedule; date-window bounded by nature"],
   ["src/app/(mobile)/m/tasks/page.tsx", "field task list; kit client (TasksList) owns rendering"],
   // -- Print / detail / calendar shapes (not open-ended list tables).

@@ -24,18 +24,34 @@ export type IncidentItem = {
   stTone: string;
   barColor: string;
   sortAt: string;
+  /** Filed by the current viewer — drives the "My Reports" filter. */
+  mine: boolean;
 };
 
-export function IncidentsList({ items }: { items: IncidentItem[] }) {
+export function IncidentsList({
+  items,
+  initialMine = false,
+}: {
+  items: IncidentItem[];
+  /** Seed the "My Reports" filter — the /m/incident alias opens preset to it. */
+  initialMine?: boolean;
+}) {
   const t = useT();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("newest");
+  const [mineOnly, setMineOnly] = useState(initialMine);
   const [sevs, setSevs] = useState<Set<string>>(new Set());
   const [states, setStates] = useState<Set<string>>(new Set());
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
 
-  const sevList = useMemo(() => Array.from(new Set(items.map((i) => i.severity).filter((s) => s !== "—"))).sort(), [items]);
-  const stateList = useMemo(() => Array.from(new Set(items.map((i) => i.state).filter((s) => s !== "—"))).sort(), [items]);
+  const sevList = useMemo(
+    () => Array.from(new Set(items.map((i) => i.severity).filter((s) => s !== "—"))).sort(),
+    [items],
+  );
+  const stateList = useMemo(
+    () => Array.from(new Set(items.map((i) => i.state).filter((s) => s !== "—"))).sort(),
+    [items],
+  );
 
   const toggle = (set: Dispatch<SetStateAction<Set<string>>>) => (v: string) =>
     set((s) => {
@@ -52,13 +68,14 @@ export function IncidentsList({ items }: { items: IncidentItem[] }) {
     const filtered = items.filter(
       (i) =>
         (!q || `${i.title} ${i.meta}`.toLowerCase().includes(q)) &&
+        (!mineOnly || i.mine) &&
         (sevs.size === 0 || sevs.has(i.severity)) &&
         (states.size === 0 || states.has(i.state)),
     );
     if (sort === "oldest") return filtered.slice().sort((a, b) => a.sortAt.localeCompare(b.sortAt));
     if (sort === "severity") return filtered.slice().sort((a, b) => a.severity.localeCompare(b.severity));
     return filtered.slice().sort((a, b) => b.sortAt.localeCompare(a.sortAt));
-  }, [items, query, sort, sevs, states]);
+  }, [items, query, sort, mineOnly, sevs, states]);
 
   if (items.length === 0) {
     return (
@@ -84,11 +101,16 @@ export function IncidentsList({ items }: { items: IncidentItem[] }) {
           ["oldest", t("m.incidents.sort.oldest", undefined, "Oldest")],
           ["severity", t("m.incidents.sort.severity", undefined, "Severity")],
         ]}
-        filterActive={sevs.size + states.size}
+        filterActive={sevs.size + states.size + (mineOnly ? 1 : 0)}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
         filterChildren={
           <div>
+            <TogRow
+              label={t("m.incidents.filter.mine", undefined, "My Reports Only")}
+              on={mineOnly}
+              set={() => setMineOnly((v) => !v)}
+            />
             {sevList.map((s) => (
               <TogRow key={`sev-${s}`} label={s} on={sevs.has(s)} set={() => toggleSev(s)} />
             ))}

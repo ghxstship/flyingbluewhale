@@ -1925,6 +1925,55 @@
   color: var(--p-text-1);
   min-width: 280px;
 }
+
+/* ---- alert — inline toned message box ----
+   49 surfaces were already authored against .ps-alert / .ps-alert--{tone}
+   but NO layer ever defined it (found 2026-07-17 while building the
+   briefing sign-in) — every error/success callout rendered as bare text.
+   v7.0 tone convention: tint fill from the semantic color, text from the
+   AA --p-{semantic}-text ink. Both --warn and --warning appear at call
+   sites; both are honored. Container radius per the kit-29 corner canon. */
+[data-ui="saas"] .ps-alert,
+[data-theme="atlvs-product"] .ps-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px var(--p-3);
+  border-radius: var(--p-r-md);
+  border: 1px solid var(--p-border);
+  background: var(--p-surface-2);
+  font-size: 13px;
+  line-height: var(--p-lh-snug, 1.4);
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-alert--danger,
+[data-theme="atlvs-product"] .ps-alert--danger {
+  background: color-mix(in oklab, var(--p-danger) 10%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-danger) 35%, var(--p-border));
+  color: var(--p-danger-text);
+}
+[data-ui="saas"] .ps-alert--warn,
+[data-ui="saas"] .ps-alert--warning,
+[data-theme="atlvs-product"] .ps-alert--warn,
+[data-theme="atlvs-product"] .ps-alert--warning {
+  background: color-mix(in oklab, var(--p-warning) 10%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-warning) 35%, var(--p-border));
+  color: var(--p-warning-text);
+}
+[data-ui="saas"] .ps-alert--ok,
+[data-ui="saas"] .ps-alert--success,
+[data-theme="atlvs-product"] .ps-alert--ok,
+[data-theme="atlvs-product"] .ps-alert--success {
+  background: color-mix(in oklab, var(--p-success) 10%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-success) 35%, var(--p-border));
+  color: var(--p-success-text);
+}
+[data-ui="saas"] .ps-alert--info,
+[data-theme="atlvs-product"] .ps-alert--info {
+  background: color-mix(in oklab, var(--p-info) 10%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-info) 35%, var(--p-border));
+  color: var(--p-info-text);
+}
 [data-ui="saas"] .ps-tip,
 [data-theme="atlvs-product"] .ps-tip {
   position: relative;

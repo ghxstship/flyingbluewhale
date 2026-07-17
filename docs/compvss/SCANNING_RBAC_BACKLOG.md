@@ -24,42 +24,54 @@ The data layer, the guards, and the API exist and are verified. These are the
 operator surfaces that make them usable by someone who is not holding a SQL
 client.
 
-1. **Grant admin** — the whole RBAC layer is **SQL/API-only**. `crew_roles`,
-   `role_capability_grants` and `user_capability_grants` are live, indexed,
-   RLS'd and manager-gated, and `public.effective_capabilities()` resolves them
-   per request. Nothing renders them. Until this exists, "grant Bob asset
-   scanning for tonight's cover shift" is an `INSERT`, which means it will not
-   happen. Needs: per-role capability matrix, per-person grant with
-   `valid_from`/`valid_until` + `reason`, and a live "who holds what" view. This
-   is **the single highest-value item on the list** — everything else in ADR-0015
-   is configuration-gated behind it.
-2. **Role catalog editor** — `crew_roles` was backfilled from the free text (22
-   roles, 26 crew linked, 0 orphans) but `slugify_role()` is deliberately
-   **never fuzzy**, so `Stage Manager` and `Stage Manager — cosmicMEADOW` are
-   two roles. They are plausibly one job. Merging them is a judgement about an
-   org's operations and **merging two roles merges their permissions** — so it
-   needs an operator, not a regex. No surface exists to do it.
-3. **`scan_unknowns` console lens** — every unresolved code now lands in the miss
-   queue with a `seen_count`, ranked, and `scan_unknowns_org_open_idx` exists for
-   exactly this read. Nothing lists it. This queue is the **measurement
-   instrument for P4**: it is the only thing that can answer "is a paid product
-   database worth buying", and it answers it with data instead of opinion.
-   Cheap, and it unblocks a purchasing decision.
+1. **Grant admin** — **BUILT (2026-07-17).** `/studio/settings/capabilities`
+   (settingsNav · Team & Access, readable manager+, writes admin per the RLS
+   band) now carries all three pieces: (a) the role × capability **matrix**
+   over `crew_roles` × `role_capability_grants` (grant/revoke per cell +
+   per-row `shift_derivable` toggle, derivation-excluded capabilities
+   refused), (b) **per-person grants** with `valid_from`/`valid_until` +
+   `reason` and liveness badges (Active/Scheduled/Lapsed), and (c) the live
+   **"who holds what"** view — resolved through the same logic as
+   `effective_capabilities()` + the static floor via `src/lib/rbac/holders.ts`
+   (which borrows the REAL `can()` matcher rather than re-implementing it),
+   including blanket attribution while grandfathered. Pinned by
+   `src/lib/rbac/holders.test.ts`.
+2. **Role catalog editor** — **BUILT (2026-07-17).**
+   `/studio/settings/capabilities/roles`: list with crew counts + grants,
+   create/rename (manager+, rename touches the display name only — the slug
+   is the stable key), and **merge** (admin, because it moves permission
+   rows): pick From/Into, both roles' grants render **side by side with the
+   merged result** before an acknowledged confirm. Merge copies grants
+   (target's `shift_derivable` wins on collision), repoints
+   `crew_members.crew_role_id`, drops the source's grant rows, soft-deletes
+   the source. `slugify_role()` stays never-fuzzy; the TS mirror is
+   `src/lib/rbac/slugify-role.ts` (parity-pinned in holders.test.ts).
+3. **`scan_unknowns` console lens** — **BUILT (2026-07-17).**
+   `/studio/settings/capabilities/scan-misses`: open misses ranked by
+   `seen_count` (rides `scan_unknowns_org_open_idx`), last-seen/last-actor,
+   stat tiles (open · scans represented · repeats), manager+ resolve
+   (resolved_at/resolved_by — never deleted), recently-resolved tail. The P4
+   measurement instrument now has a readout.
 
 ## P2 — Flip the switch
 
-4. **`orgs.capability_grants_enforced`** defaults FALSE, so the legacy
-   `check-in:*` blanket is still synthesized as `scan:*` and **every crew member
-   can still scan credentials at a gate**. That is deliberate — grandfathering is
-   what let this ship without locking the field out — but the security win is not
-   realised until an org flips it.
-   **Do not flip it from SQL.** It needs an admin surface that first shows *who
-   would lose access*, because flipping before grants are configured locks out
-   every scanner in the org. Depends on P1 #1.
-5. **Shift-derived grants** — **BUILT (2026-07-17), migration pending apply.**
-   The resolver change landed as
-   `supabase/migrations/20260717130531_shift_derived_grants.sql` (written, NOT
-   yet applied): `effective_capabilities()` gains a third UNION branch — a crew
+4. **`orgs.capability_grants_enforced`** — **surface BUILT (2026-07-17); the
+   per-org flip itself remains an operator decision.**
+   `/studio/settings/capabilities/enforcement` is now the ONLY write path in
+   the console: it renders the who-would-lose-access diff (legacy blanket
+   synthesis vs configured grants, computed by
+   `computeEnforcementDiff` in `src/lib/rbac/holders.ts`) BEFORE offering the
+   switch, requires an acknowledgement checkbox past a non-empty loss list,
+   and the action **re-measures the diff server-side at submit time** so a
+   stale tab still gets an honest refusal. Disabling shows who would regain
+   the blanket. Both directions audited
+   (`capability.enforcement_changed`, with the loser count in metadata).
+   The old one-click toggle on the capabilities page was removed.
+   **Still true: no org has flipped yet** — the security win lands when an
+   org configures grants and walks through this page.
+5. **Shift-derived grants** — **BUILT + APPLIED (2026-07-17).**
+   The resolver change landed AND is live as
+   `supabase/migrations/20260717130531_shift_derived_grants.sql`: `effective_capabilities()` gains a third UNION branch — a crew
    member rostered on an ACTIVE shift (`starts_at <= now() < ends_at`,
    attendance scheduled/checked_in/on_break, not separated) derives the
    capabilities of the role the SHIFT names (`shifts.role` → `slugify_role` →

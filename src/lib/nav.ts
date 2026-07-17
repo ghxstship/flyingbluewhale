@@ -1091,7 +1091,16 @@ export const settingsNav: NavGroup[] = [
     label: "Team & Access",
     items: [
       { label: "Roles", href: "/studio/people/roles", minRole: "admin" },
-      { label: "Capabilities", href: "/studio/settings/capabilities", minRole: "admin" },
+      // Capabilities (ADR-0015 grant admin) is readable by the manager band —
+      // seeing who holds what is how a shift supervisor answers "why was Bob
+      // refused at the gate" — while every write stays admin (the RLS agrees:
+      // 20260715171424_capability_grants_admin_band).
+      { label: "Capabilities", href: "/studio/settings/capabilities", minRole: "manager" },
+      { label: "Crew Roles", href: "/studio/settings/capabilities/roles", minRole: "manager" },
+      { label: "Scan Misses", href: "/studio/settings/capabilities/scan-misses", minRole: "manager" },
+      // The enforcement flip is its own surface so it can never happen
+      // without the who-loses-access preview (backlog P2.4).
+      { label: "Enforcement", href: "/studio/settings/capabilities/enforcement", minRole: "admin" },
       { label: "Invites", href: "/studio/people/invites", minRole: "admin" },
       { label: "Account Managers", href: "/studio/settings/account-managers", minRole: "admin" },
       { label: "Governance", href: "/studio/settings/governance", minRole: "admin" },
@@ -1709,6 +1718,10 @@ export const mobileSurfaces: NavItem[] = [
   // which is a different thing entirely and has no mobile surface yet.
   { label: "Punch Clock", href: "/m/punch" },
   { label: "Chain of Custody", href: "/m/coc" },
+  // Kit-28 §3 capabilities landed 2026-07-17: briefing sign-in + snag capture.
+  { label: "Safety Briefings", href: "/m/briefings" },
+  { label: "My Snags", href: "/m/snags" },
+  { label: "Report A Snag", href: "/m/snags/new" },
   { label: "Incidents", href: "/m/incidents" },
   { label: "My Incidents", href: "/m/incident" },
   { label: "Lost & Found", href: "/m/lost-found" },

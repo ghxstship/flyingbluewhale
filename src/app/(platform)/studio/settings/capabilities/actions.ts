@@ -5,7 +5,7 @@ import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
-import { GRANTABLE_CAPABILITIES } from "@/lib/rbac/capabilities";
+import { GRANTABLE_CAPABILITIES, isShiftDerivable } from "@/lib/rbac/capabilities";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -41,6 +41,16 @@ export async function grantRoleCapability(_prev: State, fd: FormData): Promise<S
   if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
   const parsed = RoleGrant.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid grant" };
+
+  // Derivation-excluded capabilities (scan:credential) may be granted to the
+  // role, but never shift-derived — the resolver would ignore the flag, so a
+  // row carrying it would look configured and do nothing. Refuse instead.
+  if (parsed.data.shift_derivable && !isShiftDerivable(parsed.data.capability)) {
+    return {
+      error:
+        "Credential scanning can't be conferred by a shift. Grant it to the role or the person explicitly instead",
+    };
+  }
 
   const supabase = await createClient();
   // The role must be this org's — a crew_role_id from another tenant would
@@ -223,38 +233,74 @@ export async function revokeUserCapability(_prev: State, fd: FormData): Promise<
   return { ok: true };
 }
 
-const EnforceSchema = z.object({ enforced: z.coerce.boolean() });
+// The enforcement flip deliberately does NOT live here. Flipping
+// `orgs.capability_grants_enforced` is the one write on this surface that can
+// lock the field out, so it goes through /studio/settings/capabilities/
+// enforcement — a page that first computes who would lose access and refuses
+// to flip past a non-empty loss list without an explicit acknowledgement.
+// See enforcement/actions.ts.
+
+const ShiftDerivable = z.object({
+  id: z.string().uuid(),
+  shift_derivable: z.coerce.boolean(),
+});
 
 /**
- * Flip the grandfather rule.
- *
- * While `capability_grants_enforced` is false, `resolveGrants` synthesizes
- * the legacy blanket — anyone who can scan today keeps scanning everything —
- * so nothing changes for an org that hasn't configured grants. Flipping it on
- * is the moment the new capabilities actually bite, and it will lock people
- * out if the grants aren't configured first. That's the intent; the UI says so.
+ * Toggle `shift_derivable` on an existing role grant — the matrix's third
+ * state. When on, anyone rostered onto a shift for the role picks the
+ * capability up for that shift window, which makes the SCHEDULER an
+ * authorization surface. Fine for gear and stock; derivation-excluded
+ * capabilities (scan:credential) are refused below, matching the guard on
+ * grantRoleCapability and the hard exclusion in the SQL resolver.
  */
-export async function setGrantsEnforced(_prev: State, fd: FormData): Promise<State> {
+export async function setRoleGrantShiftDerivable(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
-  const parsed = EnforceSchema.safeParse(Object.fromEntries(fd));
+  const parsed = ShiftDerivable.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid request" };
 
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("orgs")
-    .update({ capability_grants_enforced: parsed.data.enforced })
-    .eq("id", session.orgId);
+
+  if (parsed.data.shift_derivable) {
+    // Same refusal as grantRoleCapability: a flagged-but-excluded row would
+    // look configured and do nothing, the worst failure mode for a
+    // permission system. Read first so the refusal names the real reason
+    // rather than relying on the client to have sent the capability along.
+    const { data: existing } = await supabase
+      .from("role_capability_grants")
+      .select("capability")
+      .eq("id", parsed.data.id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (!existing) return { error: "Grant not found" };
+    if (!isShiftDerivable((existing as { capability: string }).capability)) {
+      return {
+        error:
+          "Credential scanning can't be conferred by a shift. Grant it to the role or the person explicitly instead",
+      };
+    }
+  }
+
+  const { data: updated, error } = await supabase
+    .from("role_capability_grants")
+    .update({ shift_derivable: parsed.data.shift_derivable })
+    .eq("id", parsed.data.id)
+    .eq("org_id", session.orgId)
+    .select("capability, crew_role_id");
   if (error) return { error: error.message };
+  if (!updated || updated.length === 0) return { error: "Grant not found" };
 
   await emitAudit({
     actorId: session.userId,
     orgId: session.orgId,
     actorEmail: session.email,
-    action: "capability.enforcement_changed",
-    targetTable: "orgs",
-    targetId: session.orgId,
-    metadata: { enforced: parsed.data.enforced },
+    action: "capability.shift_derivable_changed",
+    targetTable: "role_capability_grants",
+    targetId: parsed.data.id,
+    metadata: {
+      capability: (updated[0] as { capability: string }).capability,
+      shiftDerivable: parsed.data.shift_derivable,
+    },
   });
 
   revalidatePath("/studio/settings/capabilities");

@@ -4,20 +4,24 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { isShiftDerivable } from "@/lib/rbac/capabilities";
 import {
   grantRoleCapability,
   grantUserCapability,
   revokeRoleCapability,
   revokeUserCapability,
-  setGrantsEnforced,
+  setRoleGrantShiftDerivable,
 } from "./actions";
 
-export type RoleGrantRow = {
-  id: string;
-  capability: string;
+export type MatrixCell = { grantId: string; shiftDerivable: boolean } | null;
+
+export type MatrixRow = {
+  roleId: string;
   roleName: string;
-  shiftDerivable: boolean;
-  created: string;
+  /** Number of crew currently catalogued under this role. */
+  crewCount: number;
+  /** capability value → cell, in catalog order. */
+  cells: Record<string, MatrixCell>;
 };
 
 export type UserGrantRow = {
@@ -32,21 +36,23 @@ export type UserGrantRow = {
 
 type CatalogEntry = { value: string; label: string; description: string };
 
+/**
+ * The grant admin controls: the role × capability matrix (P1.1a) and the
+ * per-person time-boxed grants (P1.1b). The read-side companions — the
+ * "who holds what" view and the enforcement flip — are server-rendered by
+ * the page and the enforcement subpage.
+ */
 export function CapabilitiesClient({
   canEdit,
-  enforced,
   catalog,
-  roles,
+  matrix,
   members,
-  roleGrants,
   userGrants,
 }: {
   canEdit: boolean;
-  enforced: boolean;
   catalog: CatalogEntry[];
-  roles: { id: string; name: string }[];
+  matrix: MatrixRow[];
   members: { id: string; email: string }[];
-  roleGrants: RoleGrantRow[];
   userGrants: UserGrantRow[];
 }) {
   const router = useRouter();
@@ -76,115 +82,111 @@ export function CapabilitiesClient({
         </div>
       )}
 
-      {/* Enforcement. Deliberately first and deliberately blunt: this is the
-          switch that can lock the field out, and an operator should meet the
-          consequence before the controls, not after. */}
+      {/* Role × capability matrix. One glance answers "what does this role
+          hand out", one click changes it. */}
       <div className="surface p-5">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="max-w-xl">
-            <h2 className="text-sm font-semibold">Enforcement</h2>
-            <p className="mt-1 text-xs text-[var(--p-text-2)]">
-              {enforced
-                ? "Grants are live. People hold what their role gives them, plus what is granted below, and nothing else."
-                : "Grants are not enforced yet. Everyone who can scan today still scans everything, so nothing below has bitten. Configure the grants you want first, then turn this on."}
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Badge variant={enforced ? "success" : "muted"}>{enforced ? "Enforced" : "Grandfathered"}</Badge>
-            {canEdit && (
-              <Button
-                size="sm"
-                variant={enforced ? "tertiary" : "cta"}
-                disabled={pending}
-                onClick={() => {
-                  const fd = new FormData();
-                  fd.set("enforced", enforced ? "" : "1");
-                  run(setGrantsEnforced, fd);
-                }}
-              >
-                {enforced ? "Turn Off" : "Turn On"}
-              </Button>
-            )}
-          </div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="text-sm font-semibold">By Role</h2>
+          <a className="text-xs underline text-[var(--p-text-2)]" href="/studio/settings/capabilities/roles">
+            Manage the role catalog
+          </a>
         </div>
-      </div>
-
-      {/* Role grants. */}
-      <div className="surface p-5">
-        <h2 className="text-sm font-semibold">By Role</h2>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
-          Everyone working this role gets the capability. This is the usual way to turn a feature on for a crew.
+          Everyone working the role gets the capability. Shift cover means anyone rostered onto a shift for the role
+          also picks it up for that shift window; credential scanning never derives from a shift.
         </p>
 
-        {canEdit && roles.length > 0 && (
-          <form
-            className="mt-4 flex flex-wrap items-end gap-3"
-            action={(fd) => run(grantRoleCapability, fd)}
-          >
-            <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">Role</span>
-              <select name="crew_role_id" className="ps-input ps-input--sm" required>
-                {roles.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name}
-                  </option>
+        {matrix.length === 0 ? (
+          <p className="mt-4 text-xs text-[var(--p-text-3)]">No roles in the catalog yet.</p>
+        ) : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="ps-table w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="text-left">Role</th>
+                  {catalog.map((c) => (
+                    <th key={c.value} className="text-center" title={c.description}>
+                      {c.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {matrix.map((row) => (
+                  <tr key={row.roleId}>
+                    <td>
+                      <span className="font-medium">{row.roleName}</span>
+                      <span className="ml-2 text-xs text-[var(--p-text-3)]">
+                        {row.crewCount === 1 ? "1 crew" : `${row.crewCount} crew`}
+                      </span>
+                    </td>
+                    {catalog.map((c) => {
+                      const cell = row.cells[c.value] ?? null;
+                      return (
+                        <td key={c.value} className="text-center align-middle">
+                          {cell ? (
+                            <div className="inline-flex flex-col items-center gap-1">
+                              <button
+                                type="button"
+                                disabled={!canEdit || pending}
+                                title={canEdit ? "Granted. Click to revoke." : "Granted"}
+                                className="ps-badge ps-badge--ok cursor-pointer disabled:cursor-default"
+                                onClick={() => {
+                                  if (!canEdit) return;
+                                  const fd = new FormData();
+                                  fd.set("id", cell.grantId);
+                                  run(revokeRoleCapability, fd);
+                                }}
+                              >
+                                Granted
+                              </button>
+                              {isShiftDerivable(c.value) && (
+                                <label
+                                  className="flex items-center gap-1 text-[11px] text-[var(--p-text-3)]"
+                                  title="Anyone rostered onto a shift for this role gets the capability for that shift window."
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={cell.shiftDerivable}
+                                    disabled={!canEdit || pending}
+                                    onChange={(e) => {
+                                      const fd = new FormData();
+                                      fd.set("id", cell.grantId);
+                                      fd.set("shift_derivable", e.target.checked ? "1" : "");
+                                      run(setRoleGrantShiftDerivable, fd);
+                                    }}
+                                  />
+                                  Shift cover
+                                </label>
+                              )}
+                            </div>
+                          ) : canEdit ? (
+                            <Button
+                              size="sm"
+                              variant="tertiary"
+                              disabled={pending}
+                              title={`Grant ${labelFor(c.value)} to ${row.roleName}`}
+                              onClick={() => {
+                                const fd = new FormData();
+                                fd.set("crew_role_id", row.roleId);
+                                fd.set("capability", c.value);
+                                run(grantRoleCapability, fd);
+                              }}
+                            >
+                              Grant
+                            </Button>
+                          ) : (
+                            <span className="text-[var(--p-text-3)]">—</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
                 ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">Capability</span>
-              <select name="capability" className="ps-input ps-input--sm" required>
-                {catalog.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex items-center gap-2 pb-2 text-xs">
-              <input type="checkbox" name="shift_derivable" value="1" />
-              {/* The scheduler becomes an authorization surface when this is on
-                  — worth saying in the UI, not just the ADR. */}
-              <span title="Anyone rostered onto a shift for this role gets the capability for that shift.">
-                Also while covering a shift
-              </span>
-            </label>
-            <Button type="submit" size="sm" disabled={pending}>
-              Grant
-            </Button>
-          </form>
+              </tbody>
+            </table>
+          </div>
         )}
-
-        <div className="mt-4">
-          {roleGrants.length === 0 ? (
-            <p className="text-xs text-[var(--p-text-3)]">No role grants yet.</p>
-          ) : (
-            <ul className="divide-y divide-[var(--p-border)]">
-              {roleGrants.map((g) => (
-                <li key={g.id} className="flex flex-wrap items-center gap-3 py-2.5">
-                  <span className="text-sm font-medium">{g.roleName}</span>
-                  <Badge variant="brand">{labelFor(g.capability)}</Badge>
-                  {g.shiftDerivable && <Badge variant="muted">Shift cover too</Badge>}
-                  <span className="ml-auto text-xs text-[var(--p-text-3)]">{g.created}</span>
-                  {canEdit && (
-                    <Button
-                      size="sm"
-                      variant="tertiary"
-                      disabled={pending}
-                      onClick={() => {
-                        const fd = new FormData();
-                        fd.set("id", g.id);
-                        run(revokeRoleCapability, fd);
-                      }}
-                    >
-                      Revoke
-                    </Button>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
       </div>
 
       {/* Individual grants. */}
@@ -252,7 +254,9 @@ export function CapabilitiesClient({
                   {/* A row can exist and not be live. Saying "Active" for a
                       lapsed grant is how an operator concludes the permission
                       system is broken. */}
-                  <Badge variant={g.live ? "success" : "muted"}>{g.live ? "Active" : g.lapsed ? "Lapsed" : "Scheduled"}</Badge>
+                  <Badge variant={g.live ? "success" : "muted"}>
+                    {g.live ? "Active" : g.lapsed ? "Lapsed" : "Scheduled"}
+                  </Badge>
                   <span className="text-xs text-[var(--p-text-3)]">{g.window}</span>
                   {g.reason && <span className="text-xs text-[var(--p-text-2)]">{g.reason}</span>}
                   {canEdit && (

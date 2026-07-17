@@ -224,3 +224,30 @@ export const NEW_HIRE_STEP_KINDS = ["read", "sign", "upload", "quiz", "course", 
 export type NewHireStepKind = (typeof NEW_HIRE_STEP_KINDS)[number];
 export const NEW_HIRE_ASSIGNMENT_PHASES = ["not_started", "in_progress", "completed", "abandoned"] as const;
 export type NewHireAssignmentPhase = (typeof NEW_HIRE_ASSIGNMENT_PHASES)[number];
+
+/**
+ * A `new_hire_assignments.progress` value. Historically every step wrote a
+ * bare `true`; the branched kinds (`upload`/`sign`) now record the artifact
+ * that completed them so the tick carries evidence:
+ *
+ *   upload → { done, kind: "upload", path }         (personal-documents object)
+ *   sign   → { done, kind: "sign", path?, signedAs? } (signature PNG and/or typed name)
+ *
+ * Readers must treat the two shapes as equivalent — `isNewHireStepDone` is
+ * the one place that knows both.
+ */
+export type NewHireStepProgress =
+  | boolean
+  | {
+      done: boolean;
+      kind?: NewHireStepKind;
+      /** Storage path of the completing artifact (personal-documents bucket). */
+      path?: string | null;
+      /** Typed-name signature (the keyboard alternative to drawn ink). */
+      signedAs?: string | null;
+    };
+
+export function isNewHireStepDone(value: NewHireStepProgress | undefined | null): boolean {
+  if (value == null) return false;
+  return typeof value === "object" ? !!value.done : value;
+}

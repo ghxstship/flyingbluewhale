@@ -1950,6 +1950,25 @@
               ]
             },
             {
+              "path": "/studio/settings/capabilities/roles",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/capabilities/scan-misses",
+              "arch": [
+                "SET",
+                "FIELD"
+              ]
+            },
+            {
+              "path": "/studio/settings/capabilities/enforcement",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
               "path": "/studio/people/invites",
               "arch": [
                 "AUTH"
@@ -2564,6 +2583,24 @@
               "path": "/m/coc",
               "arch": [
                 "LIST"
+              ]
+            },
+            {
+              "path": "/m/briefings",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/snags",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/snags/new",
+              "arch": [
+                "FORM"
               ]
             },
             {

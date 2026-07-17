@@ -5,7 +5,14 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { FinalizeButton, MarkStepDoneButton } from "@/app/(mobile)/m/onboarding/[assignmentId]/AssignmentActions";
+import {
+  FinalizeButton,
+  MarkStepDoneButton,
+  ReadStepGate,
+  SignStepForm,
+  UploadStepForm,
+} from "@/app/(mobile)/m/onboarding/[assignmentId]/AssignmentActions";
+import { isNewHireStepDone, type NewHireStepProgress } from "@/lib/workforce";
 
 /**
  * Shared onboarding-assignment surface (ADR-0008 Amendment 4).
@@ -65,7 +72,7 @@ export async function OnboardingSurface({
     id: string;
     flow_id: string;
     assignment_phase: string;
-    progress: Record<string, boolean>;
+    progress: Record<string, NewHireStepProgress>;
     completed_at: string | null;
   };
 
@@ -81,8 +88,8 @@ export async function OnboardingSurface({
       .order("ordinal"),
   ]);
   const stepList = (steps ?? []) as Step[];
-  const progress = (a.progress ?? {}) as Record<string, boolean>;
-  const requiredDone = stepList.filter((s) => s.required).every((s) => progress[s.id]);
+  const progress = (a.progress ?? {}) as Record<string, NewHireStepProgress>;
+  const requiredDone = stepList.filter((s) => s.required).every((s) => isNewHireStepDone(progress[s.id]));
 
   const containerClass = variant === "mobile" ? "px-4 pt-6 pb-24" : "page-content";
 
@@ -119,7 +126,11 @@ export async function OnboardingSurface({
       ) : (
         <ol className="mt-5 space-y-3">
           {stepList.map((s) => {
-            const done = !!progress[s.id];
+            const done = isNewHireStepDone(progress[s.id]);
+            const actionable = !done && a.assignment_phase !== "completed";
+            // A read step's description IS the content behind the scroll
+            // gate — don't render it twice while the gate is up.
+            const gatedRead = actionable && s.step_kind === "read";
             return (
               <li key={s.id} className={`surface p-4 ${done ? "opacity-60" : ""}`}>
                 <div className="flex items-center justify-between">
@@ -127,10 +138,17 @@ export async function OnboardingSurface({
                   <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.ordinal}</span>
                 </div>
                 <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
-                {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
-                {!done && a.assignment_phase !== "completed" && (
-                  <MarkStepDoneButton assignmentId={a.id} stepId={s.id} />
-                )}
+                {s.description && !gatedRead && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
+                {actionable &&
+                  (s.step_kind === "upload" ? (
+                    <UploadStepForm assignmentId={a.id} stepId={s.id} />
+                  ) : s.step_kind === "sign" ? (
+                    <SignStepForm assignmentId={a.id} stepId={s.id} />
+                  ) : s.step_kind === "read" ? (
+                    <ReadStepGate assignmentId={a.id} stepId={s.id} content={s.description ?? ""} />
+                  ) : (
+                    <MarkStepDoneButton assignmentId={a.id} stepId={s.id} />
+                  ))}
                 {done && (
                   <p className="mt-2 text-xs text-[var(--p-success)]">
                     {t("m.onboarding.completed", undefined, "✓ Completed")}

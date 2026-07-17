@@ -42,6 +42,15 @@ export type AuditAction =
   | "capability.user_revoked"
   | "capability.enforcement_changed"
   | "capability.shift_derivable_changed"
+  // Crew role catalog (backlog P1.2). A merge belongs in this family because
+  // merging two roles merges their permissions — everyone catalogued under
+  // the retired role inherits the surviving role's grants.
+  | "crew_role.created"
+  | "crew_role.renamed"
+  | "crew_role.merged"
+  // Scan miss queue (backlog P1.3): resolution closes a measurement row, and
+  // the queue is never deleted, so the audit row is the who/when of closure.
+  | "scan_miss.resolved"
   | "auth.member.removed"
   | "auth.member.left"
   | "auth.member.restored"

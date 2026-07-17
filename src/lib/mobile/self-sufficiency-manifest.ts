@@ -63,7 +63,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Finish onboarding, including signing and uploading what's asked for",
     state: "gap",
     roles: ["crew", "contractor"],
-    note: "G23. Every step_kind (read|sign|upload|quiz|course|form) renders as one self-attest checkbox; completeStep writes progress[stepId]=true with no artifact. The kit `sign` field and a real file input now exist (Phase 1) but are not wired into the step machine.",
+    note: "G23. BUILT (kit 28 backlog §3 item 5): the step machine branches on step_kind — upload → completeUploadStep (a real file, stored via the uploadPersonalDoc precedent under the org-scoped path + mirrored into personal_documents so it's visible in My Documents), sign → completeSignStep (SignaturePad PNG and/or typed name, never pad-only), read → a client scroll-gate before the attest. completeStep REJECTS upload/sign so a hand-rolled POST can't tick past an artifact step; the blanket self-attest checkbox survives only for the un-branched kinds (quiz|course|form). REMAINING for 'shipped': an e2e that walks one flow with all three branched kinds and asserts the artifacts land (file path recorded, signature stored, read gated).",
   },
 
   // ── Daily operations ────────────────────────────────────────────────
@@ -128,7 +128,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Raise or close a snag",
     state: "gap",
     roles: WORKS_ON_SITE,
-    note: "G10. /studio/punch is unreachable from the field. Note /m/punch is the TIME CLOCK — the name collision is fixed (Phase 0) but the surface isn't built.",
+    note: "G10. BUILT (raise half): /m/snags/new is photo-first capture into the SAME punch_items store /studio/punch reads — photo REQUIRED and first (capture=environment; a failed upload fails the submit, because unlike an expense the photo IS the report), where/what/severity mapped onto the real columns (no location column exists, so 'Where:' leads the description; severity IS punch_items.priority), per-org PUNCH-code from the shared generator with one 23505 retry. /m/snags lists MY raised snags (explicit created_by predicate — punch_items is org-member-readable, so the whole-org queue is one missing predicate away; that queue is the console's). NO RLS migration was needed: punch_items_insert has been is_org_member since baseline — the field intake was missing, not forbidden. Photos ride procore-parity via the caller-client uploadFieldPhotos path (the receipts service-side detour exists only because that bucket is service-only), and the list signs them so the evidence can be looked at. NOT built: the close half — item transitions stay on /studio/punch; and the route is named /m/snags because /m/punch is the Punch Clock and /m/punch-list would re-create the collision one hyphen away. REMAINING for 'shipped': an e2e that raises a snag with a photo and asserts the row + photo_path land where the console reads them.",
   },
 
   // ── Money ───────────────────────────────────────────────────────────
@@ -209,7 +209,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Receive a toolbox talk and sign in",
     state: "gap",
     roles: WORKS_ON_SITE,
-    note: "G11. The console's own empty state promises 'Crew acknowledges via mobile'. No such surface exists; an operator proxy-signs every attendee by hand. SignaturePad is now mounted in the kit (Phase 1) and unblocks this.",
+    note: "G11. BUILT (kit 28 backlog §3.2): /m/briefings (today's + this week's talks, org-scoped like the site-wide record it is) + /m/briefings/[briefingId] — the deliverer (manager band) starts the talk from the field (read-back guarded: an RLS-refused update returns zero rows, not an error) and shows a QR of the sign-in URL; crew sign on their own device (scan or list) or on the deliverer's ('pass the phone': pick your roster name, sign, hand it on — crew_member_id rows, the console's own shape). Signature = SignaturePad PNG + the typed-name fallback (the pad is never the sole path), uploaded via the CALLER'S client to incident-photos under the org prefix — storage_org_scoped_upload already admits it, no service key in a field form — and a failed upload degrades to a warning: the acknowledgment is the perishable part. Sign-ins queue offline (localStorage queue, daily-log idiom minus the photo sidecar — a data-URL signature is strings all the way down) and the action is replay-idempotent: an already-signed row is success, not an error. This is the FIRST writer of safety_briefing_attendees.signature_path anywhere. Console attendance roll reads the same rows unchanged. RLS: works under the live org-member-wide policies, but those policies also let any member spoof/tamper a peer's attendance — 20260717130951_briefing_signin_rls.sql (WRITTEN, NOT APPLIED) tightens writes to self-or-roster-or-manager; needs review because it narrows member-role console proxy-signing. REMAINING for 'shipped': the nav.ts mobileSurfaces entry ('Safety Briefings' -> /m/briefings, held by the nav owner) + an e2e that signs in as crew and asserts acknowledged_at + signature_path land.",
   },
   {
     id: "lostfound.file",

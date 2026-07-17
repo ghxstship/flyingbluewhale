@@ -67,11 +67,20 @@ test.describe("COMPVSS — Connecteam-parity surfaces", () => {
       expect(real, real.join("\n")).toEqual([]);
     });
 
-    test("/m/notifications exposes the per-channel preference matrix (PushToggle)", async ({ page }) => {
-      // The notification preference matrix moved from /m/settings to its own
-      // /m/notifications surface in the kit rebuild.
-      const res = await page.goto("/m/notifications", { waitUntil: "domcontentloaded" });
-      expect(res?.status()).toBeLessThan(500);
+    test("the per-kind preference matrix lives at /m/settings/notifications; the bell feed owns /m/notifications", async ({
+      page,
+    }) => {
+      // Route history: the matrix wore /m/notifications for months while the
+      // actual feed sat on /m/alerts; the kit-28 reconciliation gave the feed
+      // the bell route and moved the matrix under Settings where its own
+      // docblock always said it belonged (192fc7a9). Assert BOTH ends so a
+      // regression in either direction fails loudly.
+      const matrix = await page.goto("/m/settings/notifications", { waitUntil: "domcontentloaded" });
+      expect(matrix?.status()).toBeLessThan(500);
+      await expect(page.locator("h1").first()).toBeVisible({ timeout: 10_000 });
+
+      const feed = await page.goto("/m/notifications", { waitUntil: "domcontentloaded" });
+      expect(feed?.status()).toBeLessThan(500);
       await expect(page.locator("h1").first()).toBeVisible({ timeout: 10_000 });
     });
   });

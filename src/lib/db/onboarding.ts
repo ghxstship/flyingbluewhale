@@ -94,6 +94,84 @@ export async function listOnboardingByProject(
   return out;
 }
 
+// ── Kit 30 — lifecycle onboarding packet template ───────────────────────────
+// The 4-doc packet every engagement ships with. ★ critical-path docs gate
+// arrival; Pre-Arrival Confirmation stays `blocked` until Know Before You Go
+// completes (the dependency is recorded in metadata.blocked_by and released
+// by `unblockDependentSteps`). No new engine — these are ordinary
+// onboarding_steps rows riding the existing pending / in_progress / done /
+// waived / blocked states.
+
+export type LifecyclePacketDoc = {
+  step_key: string;
+  title: string;
+  category: string;
+  critical_path: boolean;
+  sort_order: number;
+  /** step_key of the doc that must complete before this one unlocks. */
+  blocked_by: string | null;
+};
+
+export const LIFECYCLE_PACKET: readonly LifecyclePacketDoc[] = [
+  { step_key: "job_description", title: "Job Description", category: "packet", critical_path: false, sort_order: 10, blocked_by: null },
+  { step_key: "offer_letter", title: "Offer Letter", category: "packet", critical_path: true, sort_order: 20, blocked_by: null },
+  { step_key: "know_before_you_go", title: "Know Before You Go", category: "packet", critical_path: false, sort_order: 30, blocked_by: null },
+  { step_key: "pre_arrival_confirmation", title: "Pre-Arrival Confirmation", category: "packet", critical_path: true, sort_order: 40, blocked_by: "know_before_you_go" },
+] as const;
+
+/**
+ * Idempotently seed the 4-doc lifecycle packet onto an offer letter.
+ * Existing steps (any origin) are left untouched; only missing packet
+ * docs are inserted, so the assign flow can call this on every save.
+ * Uniqueness rides the (offer_letter_id, step_key) constraint.
+ */
+export async function ensureLifecyclePacket(orgId: string, letterId: string): Promise<void> {
+  const supabase = await createClient();
+  const { data: existing, error } = await supabase
+    .from("onboarding_steps")
+    .select("step_key")
+    .eq("offer_letter_id", letterId);
+  if (error) throw error;
+  const have = new Set(((existing ?? []) as Array<{ step_key: string }>).map((s) => s.step_key));
+  const missing = LIFECYCLE_PACKET.filter((d) => !have.has(d.step_key));
+  if (missing.length === 0) return;
+
+  const { error: insertErr } = await supabase.from("onboarding_steps").insert(
+    missing.map((d) => ({
+      org_id: orgId,
+      offer_letter_id: letterId,
+      step_key: d.step_key,
+      title: d.title,
+      category: d.category,
+      critical_path: d.critical_path,
+      sort_order: d.sort_order,
+      step_state: d.blocked_by ? ("blocked" as const) : ("pending" as const),
+      metadata: d.blocked_by ? { blocked_by: d.blocked_by } : {},
+    })),
+  );
+  if (insertErr) throw insertErr;
+}
+
+/**
+ * Release steps blocked on `completedStepKey` (metadata.blocked_by) once it
+ * reaches a terminal state. blocked → pending, ledgered like every other
+ * transition.
+ */
+export async function unblockDependentSteps(letterId: string, completedStepKey: string): Promise<void> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("onboarding_steps")
+    .select("id, step_state, metadata")
+    .eq("offer_letter_id", letterId)
+    .eq("step_state", "blocked");
+  if (error) throw error;
+  const blocked = (data ?? []) as Array<{ id: string; step_state: OnboardingStepState; metadata: Record<string, unknown> | null }>;
+  for (const step of blocked) {
+    if ((step.metadata as { blocked_by?: string } | null)?.blocked_by !== completedStepKey) continue;
+    await setStepState(step.id, "pending");
+  }
+}
+
 export async function setStepState(stepId: string, nextState: OnboardingStepState, userId?: string): Promise<void> {
   const supabase = await createClient();
   const terminal = nextState === "done" || nextState === "waived";
@@ -161,4 +239,27 @@ export async function recordCheckIn(letterId: string, ip: string | null, userAge
       });
     }
   }
+}
+
+/**
+ * Kit 30 (additive) — stamp a reminder on a step without touching its state.
+ * `metadata.last_reminded_at` is what the packet screens render as
+ * "Reminder Sent <date>"; the push itself is the caller's job (the lib stays
+ * transport-free). Merges into the existing metadata rather than replacing it
+ * so `blocked_by` and friends survive.
+ */
+export async function recordStepReminder(stepId: string): Promise<void> {
+  const supabase = await createClient();
+  const { data: prior, error: readErr } = await supabase
+    .from("onboarding_steps")
+    .select("metadata")
+    .eq("id", stepId)
+    .maybeSingle();
+  if (readErr) throw readErr;
+  const metadata = {
+    ...(((prior?.metadata ?? {}) as Record<string, unknown>) || {}),
+    last_reminded_at: new Date().toISOString(),
+  };
+  const { error } = await supabase.from("onboarding_steps").update({ metadata }).eq("id", stepId);
+  if (error) throw error;
 }

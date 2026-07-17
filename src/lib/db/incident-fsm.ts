@@ -21,29 +21,18 @@ import { emitAudit } from "@/lib/audit";
  * tightened, tighten it once, here, and both shells follow.
  */
 
-export const INCIDENT_STATES = ["open", "investigating", "resolved", "closed"] as const;
-export type IncidentState = (typeof INCIDENT_STATES)[number];
-
-/**
- * open → investigating → resolved → closed, with re-opening allowed from
- * resolved/investigating because an incident popping back up is ordinary.
- * `closed` is terminal.
- */
-export const INCIDENT_TRANSITIONS: Record<IncidentState, readonly IncidentState[]> = {
-  open: ["investigating", "resolved", "closed"],
-  investigating: ["open", "resolved", "closed"],
-  resolved: ["investigating", "closed"],
-  closed: [],
-};
-
-export const INCIDENT_STATE_LABEL: Record<IncidentState, string> = {
-  open: "Open",
-  investigating: "Investigating",
-  resolved: "Resolved",
-  closed: "Closed",
-};
-
-export type IncidentTransitionResult = { ok: true } | { ok: false; error: string };
+/* The lifecycle DATA (states, transition map, labels) lives in
+   incident-states.ts so client components can import it without dragging
+   this server-only executor into their graph. Re-exported here so server
+   callers keep one import path. */
+export {
+  INCIDENT_STATES,
+  INCIDENT_TRANSITIONS,
+  INCIDENT_STATE_LABEL,
+  type IncidentState,
+  type IncidentTransitionResult,
+} from "./incident-states";
+import { INCIDENT_TRANSITIONS, type IncidentState, type IncidentTransitionResult } from "./incident-states";
 
 /**
  * Move an incident to `to`, enforcing the FSM.

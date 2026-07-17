@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { KIcon } from "@/components/mobile/kit";
-import { INCIDENT_STATE_LABEL, type IncidentState } from "@/lib/db/incident-fsm";
+import { INCIDENT_STATE_LABEL, type IncidentState } from "@/lib/db/incident-states";
 import { moveIncident } from "./actions";
 
 /**

@@ -94,7 +94,8 @@ test.describe("manifest proofs · crew", () => {
       await authedSetup(mgrPage, "manager");
       const list = await mgrPage.request.get("/api/v1/pay-periods");
       expect(list.status(), "pay-periods list must serve the manager").toBeLessThan(300);
-      const periods = (await list.json())?.data ?? [];
+      const listBody = await list.json();
+      const periods = listBody?.data?.payPeriods ?? listBody?.data ?? [];
       const today = new Date().toISOString().slice(0, 10);
       const current = periods.find(
         (p: { id: string; period_start: string; period_end: string }) =>

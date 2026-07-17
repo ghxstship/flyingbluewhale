@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
+import { log } from "@/lib/log";
 
 /**
  * Party resolution — the ONE place auth users are translated into `parties`
@@ -119,6 +120,19 @@ export async function ensurePartyForMember(orgId: string, targetUserId: string):
       .eq("auth_user_id", targetUserId)
       .is("deleted_at", null)
       .maybeSingle();
+    if (!raced.data) {
+      // A silent null here surfaces to callers as "not a member of this
+      // workspace" — which is a LIE when the person IS a member and the
+      // insert failed for another reason. The 2026-07-17 prod e2e chased
+      // exactly that phantom (direct REST insert succeeded 201 while this
+      // path nulled). Log the truth so the next occurrence names itself.
+      log.warn("parties.ensure_for_member_failed", {
+        org_id: orgId,
+        target_user_id: targetUserId,
+        err: error.message,
+        code: error.code,
+      });
+    }
     return raced.data?.id ?? null;
   }
   return data.id;

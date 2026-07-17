@@ -28,7 +28,8 @@ let projectId = "";
 
 async function resolveFixtureProjectId(page: Page): Promise<string> {
   const r = await page.request.get("/api/v1/projects");
-  const rows = (await r.json())?.data ?? [];
+  const body = await r.json();
+  const rows = body?.data?.projects ?? body?.data ?? [];
   const p = rows.find((x: { name?: string }) => /fixture|e2e/i.test(x.name ?? "")) ?? rows[0];
   expect(p?.id, "the fixture org must expose at least one project").toBeTruthy();
   return p.id;

@@ -2,6 +2,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
+import { ensureMyPartyId } from "@/lib/db/parties";
 import { createClient } from "@/lib/supabase/server";
 import { blockMessage, evaluatePunch } from "@/lib/time/policy";
 import { loadPunchPolicyContext } from "@/lib/time/server";
@@ -87,6 +88,15 @@ export async function POST(req: NextRequest) {
         overrideReason: input.overrideReason,
         isReplay: input.replay === true,
       });
+
+      // Get-or-create the puncher's party NOW, not at compile time:
+      // compile_timesheets keys sheets on parties(auth_user_id, org_id), so a
+      // worker with no party row punches into a void — their entries close but
+      // never gather into a submittable sheet, and /m/timesheets reads as
+      // "not linked to a worker record". A punch is a write path, and write
+      // paths get-or-create (src/lib/db/parties.ts canon). Best-effort: a
+      // party failure must never refuse the punch itself.
+      await ensureMyPartyId(session.orgId, session.userId, session.email);
 
       if (verdict.outcome === "block") {
         // 422, NOT 409 — the outbox drops 409 terminally as a dedupe, so a

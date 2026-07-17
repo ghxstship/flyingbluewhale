@@ -365,6 +365,39 @@ async function purgeE2EAssets(supabase) {
   }
 }
 
+/**
+ * Kit 30 — the jack-sparrow lifecycle cast. Their names don't fit the "E2E
+ * Crew%" TARGETS pattern, and `offer_letters.crew_member_id` is ON DELETE
+ * RESTRICT, so the contracts (and their onboarding packets, which cascade
+ * from the letter) must go before the crew rows can.
+ */
+const LIFECYCLE_CAST_PATTERNS = [
+  "E2E Jack Sparrow%",
+  "E2E Captain America%",
+  "E2E Spiderman%",
+  "E2E Wonder Woman%",
+];
+
+async function purgeLifecycleCast(supabase) {
+  try {
+    const ids = [];
+    for (const pattern of LIFECYCLE_CAST_PATTERNS) {
+      const { data, error } = await supabase.from("crew_members").select("id").like("name", pattern);
+      if (error) throw error;
+      ids.push(...(data ?? []).map((r) => r.id));
+    }
+    if (!ids.length) return;
+
+    const { error: letterErr } = await supabase.from("offer_letters").delete().in("crew_member_id", ids);
+    if (letterErr) console.error(`e2e:clean — lifecycle offer_letters (ignored): ${letterErr.message}`);
+    const { data: removed, error } = await supabase.from("crew_members").delete().in("id", ids).select("id");
+    if (error) throw error;
+    if (removed?.length) console.log(`e2e:clean — lifecycle cast: removed ${removed.length} crew row(s).`);
+  } catch (e) {
+    console.error(`e2e:clean — lifecycle cast purge (ignored): ${e?.message ?? e}`);
+  }
+}
+
 async function main() {
   if (!SUPABASE_URL || !ANON) {
     console.error("e2e:clean — missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY; skipping.");
@@ -410,6 +443,8 @@ async function main() {
   await purgeApprovalInstances(supabase);
   // Unified assets — clear the four non-cascading dependents, then the assets.
   await purgeE2EAssets(supabase);
+  // Kit 30 — the jack-sparrow cast (offer_letters RESTRICT before crew rows).
+  await purgeLifecycleCast(supabase);
   await supabase.auth.signOut();
 }
 

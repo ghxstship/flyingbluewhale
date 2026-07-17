@@ -38,8 +38,13 @@ async function resolveFixtureProjectId(page: Page): Promise<string> {
 async function assignPerson(page: Page, person: string, title: string, reportsToLabel?: string) {
   await page.goto(`/studio/projects/${projectId}/roster?assign=1`);
   const dialog = page.getByRole("dialog", { name: /assign to project/i }).or(page.locator("main"));
-  await expect(dialog.locator('select[name="crewMemberId"]')).toBeVisible({ timeout: 20_000 });
-  await dialog.locator('select[name="crewMemberId"]').selectOption({ label: person });
+  const crewSelect = dialog.locator('select[name="crewMemberId"]');
+  await expect(crewSelect).toBeVisible({ timeout: 20_000 });
+  // Options render as "{name} · {role}" when a role is set, so a bare-name
+  // label match never resolves — pick by the option's value instead.
+  const crewValue = await crewSelect.locator("option").filter({ hasText: person }).first().getAttribute("value");
+  expect(crewValue, `the drawer must list ${person}`).toBeTruthy();
+  await crewSelect.selectOption(crewValue!);
   // Manual position path — no dependency on the org's role catalog.
   const manualToggle = page.getByText(/enter position manually|position · manual/i).first();
   if (await manualToggle.isVisible({ timeout: 2_000 }).catch(() => false)) await manualToggle.click();
@@ -47,8 +52,11 @@ async function assignPerson(page: Page, person: string, title: string, reportsTo
   await dialog.locator('input[name="startDate"], [name="startDate"]').first().fill("2026-10-01");
   await dialog.locator('input[name="endDate"], [name="endDate"]').first().fill("2026-10-20");
   if (reportsToLabel) {
+    // Same "{name} · {role}" label shape as the crew select — resolve by value.
     const rt = dialog.locator('select[name="reportsTo"]');
-    if (await rt.count()) await rt.selectOption({ label: reportsToLabel }).catch(() => {});
+    const rtValue = await rt.locator("option").filter({ hasText: reportsToLabel }).first().getAttribute("value");
+    expect(rtValue, `the reports-to select must list ${reportsToLabel}`).toBeTruthy();
+    await rt.selectOption(rtValue!);
   }
   await dialog.getByRole("button", { name: /assign/i }).first().click();
   await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);

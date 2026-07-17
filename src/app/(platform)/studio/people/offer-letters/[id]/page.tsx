@@ -12,7 +12,7 @@ import {
   listVenues,
   listRateCardItems,
 } from "@/lib/offer-letters/queries";
-import { offerPublicUrl } from "@/lib/offer-letters/format";
+import { formatCompensation, formatDateRange, offerPublicUrl } from "@/lib/offer-letters/format";
 import { getActiveMsaForCrew } from "@/lib/msa/queries";
 import { msaPublicUrl } from "@/lib/msa/format";
 import {
@@ -108,6 +108,99 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
       />
       <div className="page-content space-y-8">
+        {/* Kit 30 — engagement status track: Draft → Sent → Accepted with the
+            dates each stage was reached. Declined / withdrawn / expired stay
+            on the header badge; the track shows how far the letter got. */}
+        <div className="surface flex flex-wrap items-center gap-2 px-4 py-3">
+          {(
+            [
+              {
+                key: "draft",
+                label: t("console.people.offerLetters.detail.track.draft", undefined, "Draft"),
+                at: raw.created_at,
+                reached: true,
+              },
+              {
+                key: "sent",
+                label: t("console.people.offerLetters.detail.track.sent", undefined, "Sent"),
+                at: raw.sent_at,
+                reached: !!raw.sent_at,
+              },
+              {
+                key: "accepted",
+                label: t("console.people.offerLetters.detail.track.accepted", undefined, "Accepted"),
+                at: raw.accepted_at,
+                reached: !!raw.accepted_at,
+              },
+            ] as const
+          ).map((step, i, steps) => {
+            const nextReached = steps[i + 1]?.reached ?? false;
+            const variant = step.reached ? (nextReached ? "success" : "brand") : "muted";
+            return (
+              <Badge key={step.key} variant={variant}>
+                {step.reached && step.at ? `${step.label} · ${fmt.date(step.at)}` : step.label}
+              </Badge>
+            );
+          })}
+        </div>
+
+        {/* Kit 30 — Terms / Signature two-card layout. */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <section className="surface space-y-3 p-5">
+            <h3 className="text-sm font-semibold tracking-wider uppercase">
+              {t("console.people.offerLetters.detail.termsCard", undefined, "Terms")}
+            </h3>
+            <DefRow k={t("console.people.offerLetters.detail.termsRole", undefined, "Role")} v={resolved.role_title} />
+            <DefRow
+              k={t("console.people.offerLetters.detail.termsDates", undefined, "Contract Dates")}
+              v={formatDateRange(resolved.effective_onsite_start, resolved.effective_onsite_end)}
+            />
+            <DefRow
+              k={t("console.people.offerLetters.detail.termsCompensation", undefined, "Compensation")}
+              v={formatCompensation(resolved)}
+            />
+            <DefRow
+              k={t("console.people.offerLetters.detail.termsPayment", undefined, "Payment")}
+              v={resolved.effective_payment_schedule}
+            />
+          </section>
+          <section className="surface space-y-3 p-5">
+            <h3 className="text-sm font-semibold tracking-wider uppercase">
+              {t("console.people.offerLetters.detail.signatureCard", undefined, "Signature & Acceptance")}
+            </h3>
+            <div className="flex items-baseline gap-3 text-xs">
+              <div className="w-32 shrink-0 tracking-wider text-[var(--p-text-2)] uppercase">
+                {t("console.people.offerLetters.detail.signatureStatus", undefined, "Status")}
+              </div>
+              <Badge variant={raw.accepted_at ? "success" : STATUS_VARIANT[raw.status]}>
+                {raw.accepted_at
+                  ? t("console.people.offerLetters.detail.signatureSigned", undefined, "Signed")
+                  : STATUS_LABEL[raw.status]}
+              </Badge>
+            </div>
+            <DefRow
+              k={t("console.people.offerLetters.detail.signatureWhen", undefined, "Signed")}
+              v={raw.accepted_at ? fmt.dateTime(raw.accepted_at) : "—"}
+            />
+            <DefRow
+              k={t("console.people.offerLetters.detail.signatureBy", undefined, "Signature")}
+              v={raw.accepted_signature ?? "—"}
+            />
+            <div className="flex items-baseline gap-3 text-xs">
+              <div className="w-32 shrink-0 tracking-wider text-[var(--p-text-2)] uppercase">
+                {t("console.people.offerLetters.detail.signatureDocument", undefined, "Document")}
+              </div>
+              {raw.accepted_at ? (
+                <a href={printUrl} target="_blank" rel="noreferrer" className="font-mono underline">
+                  {t("console.people.offerLetters.detail.signedPdf", undefined, "Signed PDF ↗")}
+                </a>
+              ) : (
+                <span className="font-mono">—</span>
+              )}
+            </div>
+          </section>
+        </div>
+
         <LetterShareCard letterId={raw.id} accessCode={raw.access_code} publicUrl={publicUrl} status={raw.status} />
 
         <div className="flex flex-wrap items-center gap-3 text-xs">

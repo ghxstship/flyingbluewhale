@@ -105,9 +105,21 @@ export async function advanceState(fd: FormData): Promise<void> {
   if (!NEXT_FULFILLMENT_STATES[a.fulfillment_state]?.includes(parsed.data.next_state as FulfillmentState)) return;
 
   const supabase = await createClient();
+  // Kit 30 — fulfillment provenance. The first time a line reaches
+  // delivered/issued through the console we record WHO fulfilled it, WHEN,
+  // and that a human (not a POS scan) did it. The scan path writes
+  // fulfilled_via='scan' itself; re-transitions never overwrite provenance
+  // because the conditional UPDATE below only fires on the first legal jump
+  // out of the prior state.
+  const reachesFulfilled = parsed.data.next_state === "delivered" || parsed.data.next_state === "issued";
   const { data: updated, error: updateErr } = await supabase
     .from("assignments")
-    .update({ fulfillment_state: parsed.data.next_state })
+    .update({
+      fulfillment_state: parsed.data.next_state,
+      ...(reachesFulfilled
+        ? { fulfilled_at: new Date().toISOString(), fulfilled_by: session.userId, fulfilled_via: "manual" }
+        : {}),
+    })
     .eq("id", parsed.data.assignmentId)
     .eq("org_id", session.orgId)
     .eq("fulfillment_state", a.fulfillment_state)

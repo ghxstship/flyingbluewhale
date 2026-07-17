@@ -2,6 +2,18 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
 
+// Kit 30 — catering meal-period derivation. Canonical export lives here;
+// the pure math sits in ./catering-summary so client components (the
+// Advance Cart) can import it without tripping `server-only`.
+export {
+  MEAL_PERIODS,
+  MEAL_PERIOD_LABEL,
+  deriveMealSummary,
+  type MealPeriod,
+  type CateringSummaryInput,
+  type CateringSummary,
+} from "./catering-summary";
+
 // ──────────────────────────────────────────────────────────────
 // Catalog kinds — the things you can assign to a party.
 // Mirrors public.catalog_kind in the database (0067; 'labor' added

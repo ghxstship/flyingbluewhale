@@ -1,0 +1,39 @@
+-- Covering indexes for the 36 pre-existing FKs the performance advisor still
+-- flagged unindexed after the 2026-07-17 FK canon batches (none of the 237 new
+-- FKs were flagged; these are older constraints that shipped without indexes).
+create index if not exists advance_deadline_events_audience_id_idx on public.advance_deadline_events (audience_id);
+create index if not exists advance_deadline_events_section_assignment_id_idx on public.advance_deadline_events (section_assignment_id);
+create index if not exists advance_packets_created_by_idx on public.advance_packets (created_by);
+create index if not exists advance_packets_job_id_idx on public.advance_packets (job_id);
+create index if not exists advance_packets_project_id_idx on public.advance_packets (project_id);
+create index if not exists advance_send_batches_created_by_idx on public.advance_send_batches (created_by);
+create index if not exists advance_send_batches_template_id_idx on public.advance_send_batches (template_id);
+create index if not exists chat_message_reactions_org_id_idx on public.chat_message_reactions (org_id);
+create index if not exists chat_message_reactions_room_id_idx on public.chat_message_reactions (room_id);
+create index if not exists chat_message_reactions_user_id_idx on public.chat_message_reactions (user_id);
+create index if not exists community_posts_accepted_comment_id_idx on public.community_posts (accepted_comment_id);
+create index if not exists compliance_documents_vendor_id_idx on public.compliance_documents (vendor_id);
+create index if not exists daily_log_signoffs_org_id_idx on public.daily_log_signoffs (org_id);
+create index if not exists daily_log_signoffs_signed_by_idx on public.daily_log_signoffs (signed_by);
+create index if not exists day_sheets_created_by_idx on public.day_sheets (created_by);
+create index if not exists day_sheets_owner_id_idx on public.day_sheets (owner_id);
+create index if not exists day_sheets_project_id_idx on public.day_sheets (project_id);
+create index if not exists day_sheets_tour_id_idx on public.day_sheets (tour_id);
+create index if not exists deliverable_reviewers_org_id_idx on public.deliverable_reviewers (org_id);
+create index if not exists deliverable_reviewers_reviewer_id_idx on public.deliverable_reviewers (reviewer_id);
+create index if not exists event_payouts_transaction_id_idx on public.event_payouts (transaction_id);
+create index if not exists event_ticket_scans_org_id_idx on public.event_ticket_scans (org_id);
+create index if not exists event_ticket_scans_scanned_by_idx on public.event_ticket_scans (scanned_by);
+create index if not exists event_tickets_ticket_type_id_idx on public.event_tickets (ticket_type_id);
+create index if not exists kb_articles_verified_by_idx on public.kb_articles (verified_by);
+create index if not exists meeting_event_details_recorded_by_idx on public.meeting_event_details (recorded_by);
+create index if not exists scheduler_bookings_assigned_host_id_idx on public.scheduler_bookings (assigned_host_id);
+create index if not exists scheduler_event_types_owner_id_idx on public.scheduler_event_types (owner_id);
+create index if not exists time_clock_zones_venue_id_idx on public.time_clock_zones (venue_id);
+create index if not exists time_entry_corrections_approval_instance_id_idx on public.time_entry_corrections (approval_instance_id);
+create index if not exists vendor_scores_vendor_id_idx on public.vendor_scores (vendor_id);
+create index if not exists work_order_bids_vendor_id_idx on public.work_order_bids (vendor_id);
+create index if not exists work_order_change_orders_org_id_idx on public.work_order_change_orders (org_id);
+create index if not exists work_order_messages_author_id_idx on public.work_order_messages (author_id);
+create index if not exists work_order_messages_org_id_idx on public.work_order_messages (org_id);
+create index if not exists work_orders_created_by_idx on public.work_orders (created_by);

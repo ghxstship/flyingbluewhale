@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
+import { ensureMyPartyId } from "@/lib/db/parties";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
@@ -30,10 +31,14 @@ export async function postMessage(_: State, fd: FormData): Promise<State> {
   const channel = await getOrgScoped("message_channels", session.orgId, parsed.data.channel_id);
   if (!channel) return actionFail("Channel not found", fd);
 
+  // author_party_id is a parties.id, not an auth uid — the FK rejects raw uids.
+  const authorPartyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
+  if (!authorPartyId) return actionFail("Could not resolve your party record in this workspace", fd);
+
   const supabase = await createClient();
   const { error } = await supabase.from("messages").insert({
     channel_id: parsed.data.channel_id,
-    author_party_id: session.userId,
+    author_party_id: authorPartyId,
     body_markdown: parsed.data.body_markdown,
   });
   if (error) return actionFail(error.message, fd);

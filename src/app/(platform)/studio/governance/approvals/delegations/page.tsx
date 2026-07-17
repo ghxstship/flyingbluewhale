@@ -41,6 +41,17 @@ export default async function Page() {
     .limit(500);
   const rows = (data ?? []) as Row[];
 
+  // *_party_id columns hold parties.id — resolve display names.
+  const partyIds = [...new Set(rows.flatMap((r) => [r.delegator_party_id, r.delegatee_party_id]))];
+  const partyRows =
+    partyIds.length === 0
+      ? []
+      : // soft-delete-exempt: name-resolution for historical rows — a departed
+        // member still held the authority the ledger says they held.
+        ((await supabase.from("parties").select("id, display_name").eq("org_id", session.orgId).in("id", partyIds))
+          .data ?? []);
+  const partyName = (pid: string) => partyRows.find((p) => p.id === pid)?.display_name ?? pid.slice(0, 8);
+
   return (
     <>
       <ModuleHeader
@@ -70,7 +81,7 @@ export default async function Page() {
             {
               key: "delegatee_party_id",
               header: t("console.governance.approvals.delegations.columns.delegatee", undefined, "Delegatee"),
-              render: (r) => <span className="font-mono text-xs">{r.delegatee_party_id.slice(0, 8)}</span>,
+              render: (r) => <span className="text-xs">{partyName(r.delegatee_party_id)}</span>,
             },
             {
               key: "scope",
@@ -78,7 +89,9 @@ export default async function Page() {
               render: (r) => (
                 <span>
                   {DELEGATION_SCOPE_LABEL[r.scope as DelegationScope] ?? r.scope}
-                  {r.scope_ref ? <span className="ml-1 font-mono text-xs text-[var(--p-text-2)]">{r.scope_ref}</span> : null}
+                  {r.scope_ref ? (
+                    <span className="ml-1 font-mono text-xs text-[var(--p-text-2)]">{r.scope_ref}</span>
+                  ) : null}
                 </span>
               ),
             },

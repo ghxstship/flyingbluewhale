@@ -5,11 +5,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { ensureMyPartyId, ensurePartyForMember } from "@/lib/db/parties";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { DELEGATION_SCOPES } from "@/lib/approvals/queries";
 
 const Schema = z.object({
-  delegatee_party_id: z.string().uuid("Pick a delegatee or paste a valid user id"),
+  delegatee_user_id: z.string().uuid("Pick a delegatee"),
   scope: z.enum(DELEGATION_SCOPES),
   scope_ref: z.string().max(200).optional().or(z.literal("")),
   starts_at: z.string().optional().or(z.literal("")),
@@ -30,11 +31,17 @@ export async function createDelegation(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
+  // Both columns hold parties.id — resolve through the party layer. The
+  // delegatee must be a member of this org (org-checked in the helper).
+  const delegatorPartyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
+  if (!delegatorPartyId) return actionFail("Could not resolve your party record in this workspace", fd);
+  const delegateePartyId = await ensurePartyForMember(session.orgId, parsed.data.delegatee_user_id);
+  if (!delegateePartyId) return actionFail("Selected delegatee is not a member of this workspace", fd);
+
   const { error } = await supabase.from("approval_delegations").insert({
     org_id: session.orgId,
-    // party_id columns have no FK → delegator maps to the current user.
-    delegator_party_id: session.userId,
-    delegatee_party_id: parsed.data.delegatee_party_id,
+    delegator_party_id: delegatorPartyId,
+    delegatee_party_id: delegateePartyId,
     scope: parsed.data.scope,
     scope_ref: parsed.data.scope_ref || null,
     // starts_at defaults now() when omitted; active defaults true.

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { ensureMyPartyId } from "@/lib/db/parties";
 import { notify, type NotifyEvent } from "@/lib/notify";
 import {
   TIMESHEET_DECISIONS,
@@ -55,23 +56,18 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
   }
 
   // Resolve the approver's party row (timesheet_approvals.approver_party_id
-  // is NOT NULL and FKs to parties). Parties are org-scoped, keyed off the
-  // signed-in auth user.
-  const { data: approver } = await supabase
-    .from("parties")
-    .select("id")
-    .eq("org_id", session.orgId)
-    .eq("auth_user_id", session.userId)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (!approver) {
+  // is NOT NULL and FKs to parties). Get-or-create via the canonical helper —
+  // a membership does not imply a party, and a missing row is not a state the
+  // approver can fix themselves.
+  const approverPartyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
+  if (!approverPartyId) {
     return { error: "Your account is not linked to a party record in this organization." };
   }
 
   // Separation of duties: a manager cannot bless their own hours. Nothing
   // prevented this before — the manager band could approve the very sheet
   // that pays them.
-  if (sheet.party_id && sheet.party_id === approver.id) {
+  if (sheet.party_id && sheet.party_id === approverPartyId) {
     return { error: "You can't review your own timesheet. Another manager has to decide this one." };
   }
 
@@ -101,7 +97,7 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
 
   const { error: insErr } = await supabase.from("timesheet_approvals").insert({
     timesheet_id: id,
-    approver_party_id: approver.id,
+    approver_party_id: approverPartyId,
     decision,
     notes,
   });

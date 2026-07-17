@@ -53,7 +53,7 @@ export default async function Page() {
             <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.governance.approvals.delegations.new.delegateeLabel", undefined, "Delegatee")}
             </label>
-            <select name="delegatee_party_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+            <select name="delegatee_user_id" required className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="" disabled>
                 {t("console.governance.approvals.delegations.new.delegateePlaceholder", undefined, "Select a member…")}
               </option>
@@ -97,17 +97,17 @@ export default async function Page() {
             label={t("console.governance.approvals.delegations.new.startsLabel", undefined, "Starts at")}
             name="starts_at"
             type="date"
-            hint={t(
-              "console.governance.approvals.delegations.new.startsHint",
-              undefined,
-              "Optional. Defaults to now.",
-            )}
+            hint={t("console.governance.approvals.delegations.new.startsHint", undefined, "Optional. Defaults to now.")}
           />
           <Input
             label={t("console.governance.approvals.delegations.new.endsLabel", undefined, "Ends at")}
             name="ends_at"
             type="date"
-            hint={t("console.governance.approvals.delegations.new.endsHint", undefined, "Optional. Open-ended if blank.")}
+            hint={t(
+              "console.governance.approvals.delegations.new.endsHint",
+              undefined,
+              "Optional. Open-ended if blank.",
+            )}
           />
         </FormShell>
       </div>

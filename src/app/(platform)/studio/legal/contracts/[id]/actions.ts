@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
+import { ensureMyPartyId, ensurePartyForMember } from "@/lib/db/parties";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { maxVersion } from "@/lib/clm/queries";
@@ -110,8 +111,12 @@ export async function addParty(_: State, fd: FormData): Promise<State> {
   if (!("ok" in g)) return g;
   const d = parsed.data;
   const session = await requireSession();
-  // party_id has no FK — default to the current user when no member chosen.
-  const partyId = d.party_user_id || session.userId;
+  // The form selects a MEMBER (auth user); contract_parties.party_id is a
+  // parties.id — resolve through the party layer (get-or-create, org-checked).
+  const partyId = d.party_user_id
+    ? await ensurePartyForMember(session.orgId, d.party_user_id)
+    : await ensureMyPartyId(session.orgId, session.userId, session.email);
+  if (!partyId) return actionFail("Selected person is not a member of this workspace", fd);
   const { error } = await g.sb.from("contract_parties").insert({
     contract_id: d.contract_id,
     party_id: partyId,
@@ -174,7 +179,7 @@ export async function addVersion(_: State, fd: FormData): Promise<State> {
 const SignatureSchema = z.object({
   contract_id: z.string().uuid(),
   version_id: z.string().uuid("Add a version first"),
-  signer_party_id: z.string().min(1),
+  signer_user_id: z.string().uuid("Pick a signer"),
   signing_role: z.string().min(1).max(80),
   signature_method: z.string().min(1).max(40),
 });
@@ -185,10 +190,14 @@ export async function recordSignature(_: State, fd: FormData): Promise<State> {
   const g = await guard(parsed.data.contract_id);
   if (!("ok" in g)) return g;
   const d = parsed.data;
+  const session = await requireSession();
+  // The form selects a MEMBER (auth user); signer_party_id is a parties.id.
+  const signerPartyId = await ensurePartyForMember(session.orgId, d.signer_user_id);
+  if (!signerPartyId) return actionFail("Selected signer is not a member of this workspace", fd);
   const { error } = await g.sb.from("contract_signatures").insert({
     contract_id: d.contract_id,
     version_id: d.version_id,
-    signer_party_id: d.signer_party_id,
+    signer_party_id: signerPartyId,
     signing_role: d.signing_role,
     signature_method: d.signature_method,
     state: "signed", // NOT-NULL, no DB default.

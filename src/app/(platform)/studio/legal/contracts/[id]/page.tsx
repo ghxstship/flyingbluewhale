@@ -61,6 +61,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     listVersions(id),
   ]);
 
+  // party_id / signer_party_id hold parties.id — resolve display names from
+  // the party layer (org-scoped; archived parties still resolve for history).
+  const partyIds = [...new Set([...parties.map((p) => p.party_id), ...signatures.map((s) => s.signer_party_id)])];
+  const partyRows =
+    partyIds.length === 0
+      ? []
+      : // soft-delete-exempt: name-resolution for historical rows — an archived
+        // party still signed what it signed.
+        ((await supabase.from("parties").select("id, display_name").eq("org_id", session.orgId).in("id", partyIds))
+          .data ?? []);
+  const partyName = (pid: string) => partyRows.find((p) => p.id === pid)?.display_name ?? pid.slice(0, 8);
+
   const memberList = (
     (members.data ?? []) as unknown as Array<{
       user_id: string;
@@ -70,10 +82,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .map((m) => m.users)
     .filter((u): u is { id: string; email: string; name: string | null } => !!u)
     .sort((a, b) => (a.name ?? a.email).localeCompare(b.name ?? b.email));
-  const memberName = (uid: string) => {
-    const m = memberList.find((u) => u.id === uid);
-    return m ? (m.name ?? m.email) : uid;
-  };
   const versionLabel = (vid: string) => {
     const v = versions.find((x) => x.id === vid);
     return v ? `v${v.version}` : "—";
@@ -124,9 +132,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </Fact>
         </section>
 
-        {contract.notes && (
-          <section className="surface p-4 text-sm whitespace-pre-wrap">{contract.notes}</section>
-        )}
+        {contract.notes && <section className="surface p-4 text-sm whitespace-pre-wrap">{contract.notes}</section>}
 
         {/* Milestones */}
         <Card className={sectionCardClass}>
@@ -162,12 +168,34 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </tbody>
             </table>
           )}
-          <FormShell action={addMilestone} dirtyGuard={false} className="grid grid-cols-2 gap-3" submitLabel={t("common.add", undefined, "Add")}>
+          <FormShell
+            action={addMilestone}
+            dirtyGuard={false}
+            className="grid grid-cols-2 gap-3"
+            submitLabel={t("common.add", undefined, "Add")}
+          >
             <input type="hidden" name="contract_id" value={cid} />
-            <Input label={t("console.legal.contracts.detail.col.label", undefined, "Label")} name="label" required maxLength={200} />
-            <Input label={t("console.legal.contracts.detail.col.trigger", undefined, "Trigger kind")} name="trigger_kind" required maxLength={80} placeholder="on_signature" />
+            <Input
+              label={t("console.legal.contracts.detail.col.label", undefined, "Label")}
+              name="label"
+              required
+              maxLength={200}
+            />
+            <Input
+              label={t("console.legal.contracts.detail.col.trigger", undefined, "Trigger kind")}
+              name="trigger_kind"
+              required
+              maxLength={80}
+              placeholder="on_signature"
+            />
             <Input label={t("console.legal.contracts.detail.col.due", undefined, "Due")} name="due_at" type="date" />
-            <Input label={t("console.legal.contracts.detail.col.paymentUsd", undefined, "Payment (USD)")} name="payment_usd" type="number" step="0.01" min="0" />
+            <Input
+              label={t("console.legal.contracts.detail.col.paymentUsd", undefined, "Payment (USD)")}
+              name="payment_usd"
+              type="number"
+              step="0.01"
+              min="0"
+            />
           </FormShell>
         </Card>
 
@@ -205,9 +233,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </tbody>
             </table>
           )}
-          <FormShell action={addObligation} dirtyGuard={false} className="grid grid-cols-2 gap-3" submitLabel={t("common.add", undefined, "Add")}>
+          <FormShell
+            action={addObligation}
+            dirtyGuard={false}
+            className="grid grid-cols-2 gap-3"
+            submitLabel={t("common.add", undefined, "Add")}
+          >
             <input type="hidden" name="contract_id" value={cid} />
-            <Input label={t("console.legal.contracts.detail.col.kind", undefined, "Obligation kind")} name="ob_kind" required maxLength={80} placeholder="reporting" />
+            <Input
+              label={t("console.legal.contracts.detail.col.kind", undefined, "Obligation kind")}
+              name="ob_kind"
+              required
+              maxLength={80}
+              placeholder="reporting"
+            />
             <Input label={t("console.legal.contracts.detail.col.due", undefined, "Due")} name="due_at" type="date" />
             <div className="col-span-2">
               <label className="text-xs font-medium text-[var(--p-text-2)]">
@@ -226,7 +265,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <Card className={sectionCardClass}>
           <SectionTitle>{t("console.legal.contracts.detail.parties", undefined, "Parties")}</SectionTitle>
           {parties.length === 0 ? (
-            <EmptyState size="compact" title={t("console.legal.contracts.detail.partiesEmpty", undefined, "No parties")} />
+            <EmptyState
+              size="compact"
+              title={t("console.legal.contracts.detail.partiesEmpty", undefined, "No parties")}
+            />
           ) : (
             <table className={tableClass}>
               <thead>
@@ -239,7 +281,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <tbody>
                 {parties.map((p) => (
                   <tr key={p.id}>
-                    <td>{memberName(p.party_id)}</td>
+                    <td>{partyName(p.party_id)}</td>
                     <td>{p.role}</td>
                     <td>{p.signing_capacity ?? "—"}</td>
                   </tr>
@@ -247,14 +289,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </tbody>
             </table>
           )}
-          <FormShell action={addParty} dirtyGuard={false} className="grid grid-cols-3 gap-3" submitLabel={t("common.add", undefined, "Add")}>
+          <FormShell
+            action={addParty}
+            dirtyGuard={false}
+            className="grid grid-cols-3 gap-3"
+            submitLabel={t("common.add", undefined, "Add")}
+          >
             <input type="hidden" name="contract_id" value={cid} />
             <div>
               <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.legal.contracts.detail.col.party", undefined, "Party")}
               </label>
               <select name="party_user_id" className="ps-input mt-1.5 w-full" defaultValue="">
-                <option value="">{t("console.legal.contracts.detail.partySelf", undefined, "Me (current user)")}</option>
+                <option value="">
+                  {t("console.legal.contracts.detail.partySelf", undefined, "Me (current user)")}
+                </option>
                 {memberList.map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.name ?? m.email}
@@ -262,8 +311,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 ))}
               </select>
             </div>
-            <Input label={t("console.legal.contracts.detail.col.role", undefined, "Role")} name="role" required maxLength={80} placeholder="signatory" />
-            <Input label={t("console.legal.contracts.detail.col.capacity", undefined, "Signing capacity")} name="signing_capacity" maxLength={120} placeholder="Authorized officer" />
+            <Input
+              label={t("console.legal.contracts.detail.col.role", undefined, "Role")}
+              name="role"
+              required
+              maxLength={80}
+              placeholder="signatory"
+            />
+            <Input
+              label={t("console.legal.contracts.detail.col.capacity", undefined, "Signing capacity")}
+              name="signing_capacity"
+              maxLength={120}
+              placeholder="Authorized officer"
+            />
           </FormShell>
         </Card>
 
@@ -292,9 +352,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </tbody>
             </table>
           )}
-          <FormShell action={addTerm} dirtyGuard={false} className="grid grid-cols-2 gap-3" submitLabel={t("common.add", undefined, "Add")}>
+          <FormShell
+            action={addTerm}
+            dirtyGuard={false}
+            className="grid grid-cols-2 gap-3"
+            submitLabel={t("common.add", undefined, "Add")}
+          >
             <input type="hidden" name="contract_id" value={cid} />
-            <Input label={t("console.legal.contracts.detail.col.kind", undefined, "Term kind")} name="term_kind" required maxLength={80} placeholder="exclusivity" />
+            <Input
+              label={t("console.legal.contracts.detail.col.kind", undefined, "Term kind")}
+              name="term_kind"
+              required
+              maxLength={80}
+              placeholder="exclusivity"
+            />
             <div className="col-span-2">
               <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.legal.contracts.detail.col.description", undefined, "Description")}
@@ -308,7 +379,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <Card className={sectionCardClass}>
           <SectionTitle>{t("console.legal.contracts.detail.versions", undefined, "Versions")}</SectionTitle>
           {versions.length === 0 ? (
-            <EmptyState size="compact" title={t("console.legal.contracts.detail.versionsEmpty", undefined, "No versions")} />
+            <EmptyState
+              size="compact"
+              title={t("console.legal.contracts.detail.versionsEmpty", undefined, "No versions")}
+            />
           ) : (
             <table className={tableClass}>
               <thead>
@@ -329,7 +403,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </tbody>
             </table>
           )}
-          <FormShell action={addVersion} dirtyGuard={false} className="space-y-3" submitLabel={t("console.legal.contracts.detail.addVersion", undefined, "Add version")}>
+          <FormShell
+            action={addVersion}
+            dirtyGuard={false}
+            className="space-y-3"
+            submitLabel={t("console.legal.contracts.detail.addVersion", undefined, "Add version")}
+          >
             <input type="hidden" name="contract_id" value={cid} />
             <div>
               <label className="text-xs font-medium text-[var(--p-text-2)]">
@@ -344,7 +423,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <Card className={sectionCardClass}>
           <SectionTitle>{t("console.legal.contracts.detail.signatures", undefined, "Signatures")}</SectionTitle>
           {signatures.length === 0 ? (
-            <EmptyState size="compact" title={t("console.legal.contracts.detail.signaturesEmpty", undefined, "No signatures")} />
+            <EmptyState
+              size="compact"
+              title={t("console.legal.contracts.detail.signaturesEmpty", undefined, "No signatures")}
+            />
           ) : (
             <table className={tableClass}>
               <thead>
@@ -360,7 +442,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <tbody>
                 {signatures.map((s) => (
                   <tr key={s.id}>
-                    <td>{memberName(s.signer_party_id)}</td>
+                    <td>{partyName(s.signer_party_id)}</td>
                     <td className="font-mono text-xs">{versionLabel(s.version_id)}</td>
                     <td>{s.signing_role}</td>
                     <td className="font-mono text-xs">{s.signature_method}</td>
@@ -375,16 +457,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           )}
           {versions.length === 0 ? (
             <p className="text-xs text-[var(--p-text-2)]">
-              {t("console.legal.contracts.detail.signatureNeedsVersion", undefined, "Add a version before recording signatures.")}
+              {t(
+                "console.legal.contracts.detail.signatureNeedsVersion",
+                undefined,
+                "Add a version before recording signatures.",
+              )}
             </p>
           ) : (
-            <FormShell action={recordSignature} dirtyGuard={false} className="grid grid-cols-2 gap-3" submitLabel={t("console.legal.contracts.detail.recordSignature", undefined, "Record signature")}>
+            <FormShell
+              action={recordSignature}
+              dirtyGuard={false}
+              className="grid grid-cols-2 gap-3"
+              submitLabel={t("console.legal.contracts.detail.recordSignature", undefined, "Record signature")}
+            >
               <input type="hidden" name="contract_id" value={cid} />
               <div>
                 <label className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.legal.contracts.detail.col.signer", undefined, "Signer")}
                 </label>
-                <select name="signer_party_id" required className="ps-input mt-1.5 w-full" defaultValue={session.userId}>
+                <select name="signer_user_id" required className="ps-input mt-1.5 w-full" defaultValue={session.userId}>
                   {memberList.map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.name ?? m.email}
@@ -404,15 +495,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   ))}
                 </select>
               </div>
-              <Input label={t("console.legal.contracts.detail.col.signingRole", undefined, "Signing role")} name="signing_role" required maxLength={80} placeholder="counterparty" />
+              <Input
+                label={t("console.legal.contracts.detail.col.signingRole", undefined, "Signing role")}
+                name="signing_role"
+                required
+                maxLength={80}
+                placeholder="counterparty"
+              />
               <div>
                 <label className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.legal.contracts.detail.col.method", undefined, "Method")}
                 </label>
                 <select name="signature_method" required className="ps-input mt-1.5 w-full" defaultValue="electronic">
-                  <option value="electronic">{t("console.legal.contracts.detail.methodElectronic", undefined, "Electronic")}</option>
+                  <option value="electronic">
+                    {t("console.legal.contracts.detail.methodElectronic", undefined, "Electronic")}
+                  </option>
                   <option value="wet">{t("console.legal.contracts.detail.methodWet", undefined, "Wet ink")}</option>
-                  <option value="docusign">{t("console.legal.contracts.detail.methodDocusign", undefined, "DocuSign")}</option>
+                  <option value="docusign">
+                    {t("console.legal.contracts.detail.methodDocusign", undefined, "DocuSign")}
+                  </option>
                 </select>
               </div>
             </FormShell>

@@ -65,7 +65,7 @@ export default async function MobileHome() {
       .order("starts_at", { ascending: true })
       .limit(1)
       .maybeSingle(),
-    supabase.from("users").select("name").eq("id", session.userId).maybeSingle(),
+    supabase.from("users").select("name").eq("id", session.userId).is("deleted_at", null).maybeSingle(),
     // The viewer's emergency station — the kit's home Emergency Card. Shared
     // resolver with /m/emergency so the two can't drift.
     resolveEmergencyStation(session.orgId, session.userId, {

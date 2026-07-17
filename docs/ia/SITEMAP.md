@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1228 · **API route handlers:** 156 · **Distinct nav hrefs:** 549
+**Page routes:** 1238 · **API route handlers:** 156 · **Distinct nav hrefs:** 552
 
 ## Legend
 
@@ -25,14 +25,14 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 797 | 254 | 541 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 85 | 65 | 19 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 91 | 68 | 22 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1228** | **523** | **662** | **0** | **43** |
+| **TOTAL** | | **1238** | **526** | **669** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -95,7 +95,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-797 routes — ● 254 nav · ○ 541 linked · ⚠ 0 orphan
+801 routes — ● 254 nav · ○ 545 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -921,7 +921,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>projects</code> · 35 routes</summary>
+<details><summary><code>projects</code> · 39 routes</summary>
 
 ● `/studio/projects`
 ○ `/studio/projects/[projectId]`
@@ -929,6 +929,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/projects/[projectId]/advancing/assignments`
 ○ `/studio/projects/[projectId]/advancing/assignments/[assignmentId]`
 ○ `/studio/projects/[projectId]/advancing/assignments/new`
+○ `/studio/projects/[projectId]/advancing/cart`
+○ `/studio/projects/[projectId]/advancing/fulfillment`
 ○ `/studio/projects/[projectId]/advancing/packet`
 ○ `/studio/projects/[projectId]/branding`
 ○ `/studio/projects/[projectId]/budget`
@@ -947,6 +949,8 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/projects/[projectId]/portal-preview`
 ○ `/studio/projects/[projectId]/position/[classCode]/[phase]`
 ○ `/studio/projects/[projectId]/roadmap`
+○ `/studio/projects/[projectId]/roster`
+○ `/studio/projects/[projectId]/roster/reporting`
 ○ `/studio/projects/[projectId]/schedule`
 ○ `/studio/projects/[projectId]/sprints`
 ○ `/studio/projects/[projectId]/sprints/new`
@@ -1356,7 +1360,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-85 routes — ● 65 nav · ○ 19 linked · ⚠ 0 orphan
+91 routes — ● 68 nav · ○ 22 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1617,6 +1621,17 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/m/requisitions`
 ● `/m/requisitions/new`
+
+</details>
+
+<details><summary><code>roster</code> · 6 routes</summary>
+
+● `/m/roster`
+○ `/m/roster/[engagementId]/advance`
+○ `/m/roster/[engagementId]/contract`
+○ `/m/roster/[engagementId]/onboarding`
+● `/m/roster/assign`
+● `/m/roster/reporting`
 
 </details>
 

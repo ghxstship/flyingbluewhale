@@ -2640,6 +2640,24 @@
               ]
             },
             {
+              "path": "/m/roster",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/roster/assign",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/m/roster/reporting",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
               "path": "/m/companies",
               "arch": [
                 "LIST"

@@ -1734,6 +1734,10 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Guide", href: "/m/guide" },
   // People.
   { label: "Team Roster", href: "/m/directory" },
+  // Kit 30 lifecycle suite (manager-gated people:manage surfaces).
+  { label: "Project Roster", href: "/m/roster" },
+  { label: "Assign To Project", href: "/m/roster/assign" },
+  { label: "Reporting Structure", href: "/m/roster/reporting" },
   { label: "Vendors", href: "/m/companies" },
   { label: "Connections", href: "/m/connections" },
   // Network.

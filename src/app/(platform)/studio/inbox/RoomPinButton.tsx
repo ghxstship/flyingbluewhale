@@ -25,7 +25,7 @@ export function RoomPinButton({ roomId, pinned, labels }: { roomId: string; pinn
             setBusy(false);
           });
         }}
-        className={`rounded p-1 text-[var(--p-text-3)] transition-opacity hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+        className={`rounded p-1 text-[var(--p-text-3)] transition-opacity hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)] ${
           pinned ? "opacity-100 text-[var(--p-accent-text)]" : "opacity-0 group-hover:opacity-100"
         }`}
       >

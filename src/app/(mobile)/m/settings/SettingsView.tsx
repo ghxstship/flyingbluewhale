@@ -95,6 +95,10 @@ type Labels = {
   accountStatusDesc: string;
   changelog: string;
   changelogDesc: string;
+  about: string;
+  aboutDesc: string;
+  support: string;
+  supportDesc: string;
   signOut: string;
 };
 
@@ -332,6 +336,26 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">{labels.changelog}</div>
           <div className="s">{labels.changelogDesc}</div>
+        </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
+      </a>
+
+      {/* ── Help & Support + About · Legal — kit 29 standalone-app surfaces
+           (app-store requirements). Support is the FAQ/contact/report hub;
+           About renders version, licenses, privacy & terms in-app. ── */}
+      <a className="item tap" href="/m/support" style={{ cursor: "pointer" }}>
+        <KIcon name="LifeBuoy" size={18} style={{ color: "var(--p-text-2)" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{labels.support}</div>
+          <div className="s">{labels.supportDesc}</div>
+        </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
+      </a>
+      <a className="item tap" href="/m/settings/about" style={{ cursor: "pointer" }}>
+        <KIcon name="Info" size={18} style={{ color: "var(--p-text-2)" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{labels.about}</div>
+          <div className="s">{labels.aboutDesc}</div>
         </div>
         <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
       </a>

@@ -32,12 +32,13 @@ export default async function MarketingLayout({ children }: { children: React.Re
   const { t } = await getRequestT();
   // Single-skin lock: the marketing site uses the same neutral SaaS skin as the
   // console (Hanken Grotesk body, Anton display, soft elevation, neutral
-  // surfaces). It is ECOSYSTEM marketing, not a product surface, so it carries
-  // the GHXSTSHIP house accent — ATLVS volcanic red (v8 palette-locked; retired
-  // the house green, which read poorly in light mode). The per-product hues
+  // surfaces). It is ECOSYSTEM marketing, not a product surface, and there is
+  // no GHXSTSHIP theme (ratified 2026-07-17: two theming systems only —
+  // GHXSTSHIP is an identity mark), so it carries NO data-product and resolves
+  // to the ATLVS cold-start default (volcanic red). The per-product hues
   // (COMPVSS yellow, GVTEWAY blue, …) appear only on the product cards/consoles.
   return (
-    <div data-ui="saas" data-theme="atlvs-product" data-product="ghxstship" data-platform="ghxstship" className="page-shell">
+    <div data-ui="saas" data-theme="atlvs-product" className="page-shell">
       <MarketingHeader />
       <WebVitalsReporter />
       <main id="main" tabIndex={-1}>

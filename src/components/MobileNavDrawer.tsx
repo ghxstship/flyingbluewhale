@@ -48,7 +48,7 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
         <button
           type="button"
           aria-label={t("shell.nav.openNavigation", undefined, "Open navigation")}
-          className="-ms-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] md:hidden"
+          className="-ms-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)] md:hidden"
         >
           <Menu size={18} aria-hidden="true" />
         </button>

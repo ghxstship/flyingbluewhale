@@ -386,8 +386,10 @@ describe("Design system — component primitive adoption", () => {
 
     // Positive assertion: as of v8.1 the color layer is authored in OKLCH +
     // light-dark(). The ATLVS volcanic-red seed (sRGB-equal of #e23414) is the
-    // base accent AND the GHXSTSHIP house accent (which aliases it). The retired
-    // house green (#2edb3a, or its OKLCH hue ~143) must not survive.
+    // base accent and the cold-start default for house/marketing surfaces.
+    // Ratified 2026-07-17: there is NO GHXSTSHIP theme (identity mark only) —
+    // no --brand-ghxstship* seeds, no ghxstship product/platform scopes. The
+    // retired house green (#2edb3a, or its OKLCH hue ~143) must not survive.
     const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
     expect(theme, "ATLVS volcanic-red OKLCH seed must be present").toMatch(
       /--brand-atlvs:\s*oklch\(0\.5964 0\.2136 32\.25\)/i,
@@ -395,13 +397,11 @@ describe("Design system — component primitive adoption", () => {
     expect(theme, "ATLVS product accent must resolve from the ATLVS seed").toMatch(
       /\[data-product="atlvs"\][\s\S]*?--p-accent:\s*light-dark\(var\(--brand-atlvs\)/i,
     );
-    expect(theme, "GHXSTSHIP house accent must alias ATLVS red (no green)").toContain(
-      "--brand-ghxstship:           var(--brand-atlvs)",
+    expect(theme, "no GHXSTSHIP theming — --brand-ghxstship* seeds are removed").not.toMatch(/--brand-ghxstship/i);
+    expect(theme, "no GHXSTSHIP theming — product/platform scopes are removed").not.toMatch(
+      /data-(?:product|platform)="ghxstship"/i,
     );
     expect(theme, "retired house green #2edb3a must not survive").not.toMatch(/#2edb3a/i);
-    expect(theme, "retired house-green OKLCH hue (~143) must not seed ghxstship").not.toMatch(
-      /--brand-ghxstship:\s*oklch\([^)]*\b14[0-9]/i,
-    );
   });
 
   it("no bare legacy color tokens — --success/--warning/--danger/--info must be --p-*", () => {

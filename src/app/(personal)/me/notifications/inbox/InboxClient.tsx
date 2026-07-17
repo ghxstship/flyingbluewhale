@@ -333,7 +333,7 @@ export function InboxClient({
                       // canonical origin — this inbox renders on the apex.
                       href={resolveNotificationHref(n.href)}
                       onClick={(e) => handleRowClick(n, e)}
-                      className="block focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:outline-none"
+                      className="block focus-visible:ring-2 focus-visible:ring-[var(--p-focus)] focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                       <NotificationBody notification={n} />
                     </Link>

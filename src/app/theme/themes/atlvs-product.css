@@ -19,7 +19,10 @@
  *
  *   Per-product accent reads data-product (kit canon) OR data-platform
  *   (existing codebase convention). Core: atlvs · compvss · gvteway · legend;
- *   extensions: cvrgo · opvs · gvlley · vault; house: ghxstship (= ATLVS red).
+ *   extensions: cvrgo · opvs · gvlley · vault. Two theming systems only
+ *   (ratified 2026-07-17): the ATLVS Ecosystem default + Full System
+ *   Whitelabel. GHXSTSHIP is an identity mark (logo/skull), never a theme —
+ *   house surfaces resolve to the ATLVS cold-start default.
  */
 
 /* ============================================================================
@@ -37,9 +40,10 @@
    exact OKLCH equivalents of the v8.0 hex canon (zero change on sRGB displays).
    Seven roles per product: base · hover · cta (AA filled-btn bg) · text (AA link
    ink) · on (ink on fill) · lift (dark-mode fill) · lift-text (AA on dark).
-   HOUSE RULE (v8.0 palette-locked): the GHXSTSHIP house/master-brand accent is
-   ATLVS volcanic red — green is the logo/identity mark only, never a UI accent —
-   so --brand-ghxstship* alias the ATLVS-red ramp. Do NOT restore house green.
+   HOUSE RULE (ratified 2026-07-17, supersedes the v8.0 house alias): there is
+   NO GHXSTSHIP theme. GHXSTSHIP is an identity mark only; house/marketing
+   surfaces carry no data-product and resolve to the ATLVS cold-start default
+   (volcanic red). Do NOT reintroduce house brand seeds or a house green.
    ---------------------------------------------------------------------------- */
 :root {
   /* ---- ATLVS — volcanic red (also the HOUSE / cold-start accent) ---- */
@@ -114,16 +118,6 @@
   --brand-vault-lift:      var(--brand-atlvs-lift);
   --brand-vault-lift-text: var(--brand-atlvs-lift-text);
 
-  /* ---- GHXSTSHIP — HOUSE/master brand = ATLVS volcanic red (v8.0 palette-lock).
-     Green is the logo/identity mark only; the UI accent is ATLVS red. ---- */
-  --brand-ghxstship:           var(--brand-atlvs);
-  --brand-ghxstship-hover:     var(--brand-atlvs-hover);
-  --brand-ghxstship-cta:       var(--brand-atlvs-cta);
-  --brand-ghxstship-text:      var(--brand-atlvs-text);
-  --brand-ghxstship-on:        var(--brand-atlvs-on);
-  --brand-ghxstship-lift:      var(--brand-atlvs-lift);
-  --brand-ghxstship-lift-text: var(--brand-atlvs-lift-text);
-
   /* Back-compat alias: -ink = the AA-safe cta value (legacy consumers). */
   --brand-atlvs-ink:     var(--brand-atlvs-cta);
   --brand-compvss-ink:   var(--brand-compvss-cta);
@@ -133,7 +127,6 @@
   --brand-opvs-ink:      var(--brand-opvs-cta);
   --brand-vault-ink:     var(--brand-vault-cta);
   --brand-gvlley-ink:    var(--brand-gvlley-cta);
-  --brand-ghxstship-ink: var(--brand-ghxstship-cta);
 
   /* ---- 12-step neutral surface ramp — light (-l-) + dark (-d-) seeds. Exact
      OKLCH equivalents of the v8.0 hexes (text-3 holds the AA floor at step 600). */
@@ -210,9 +203,6 @@
     --brand-opvs-lift: oklch(0.709 0.1942 293.54);
     --brand-gvlley: oklch(0.5916 0.266 0.58);
     --brand-gvlley-lift: oklch(0.7095 0.2488 357.91);
-    /* GHXSTSHIP house = ATLVS red (no green) — alias the ATLVS P3 lift. */
-    --brand-ghxstship: oklch(0.5964 0.2606 32.25);
-    --brand-ghxstship-lift: oklch(0.6794 0.2571 33.24);
   }
 }
 
@@ -348,33 +338,38 @@
      adjacency contrast; -grid/-axis/-label are the chart chrome (mode-aware via
      --p-* fallbacks). Mode-agnostic series; semantic up/down stay
      --p-success/--p-danger. Mirrored in tokens.json#chart. */
-  --chart-1: #2563eb;
-  --chart-2: #e8500a;
-  --chart-3: #1f8a5b;
-  --chart-4: #f0b255;
-  --chart-5: #8b5cf6;
-  --chart-6: #ec4899;
-  --chart-7: #14b8a6;
-  --chart-8: #64748b;
+  /* Authored in OKLCH (kit-29 alignment) — exact equivalents of the v8.0
+     hexes (#2563eb #e8500a #1f8a5b #f0b255 #8b5cf6 #ec4899 #14b8a6 #64748b);
+     zero visual change on sRGB, P3-ready. */
+  --chart-1: oklch(0.5461 0.2152 262.88);
+  --chart-2: oklch(0.6334 0.199 39.09);
+  --chart-3: oklch(0.563 0.1191 158.94);
+  --chart-4: oklch(0.804 0.1307 74.97);
+  --chart-5: oklch(0.6056 0.2189 292.72);
+  --chart-6: oklch(0.6559 0.2118 354.31);
+  --chart-7: oklch(0.7038 0.123 182.5);
+  --chart-8: oklch(0.5544 0.0407 257.42);
   --chart-grid: color-mix(in oklab, var(--p-border, #e4e7ec) 70%, transparent);
   --chart-axis: var(--p-text-3, #656d7a);
   --chart-label: var(--p-text-2, #5b6472);
 
-  /* Elevation — v7.0 5-step layered scale (elev-xs → elev-2xl), each pairing an
-     ambient (soft, wide) + a direct (tight, contact) shadow. The legacy
-     --p-shadow-sm / --p-shadow / --p-shadow-lg names are ALIASES of the scale.
-     Dark mode re-tunes --p-elev-1/2/3 below (neutral shadows vanish on dark).
-     Mirrored in tokens.json#elevation. */
-  --p-elev-xs: 0 1px 2px rgba(16, 20, 30, 0.06);
-  --p-elev-1: 0 1px 2px rgba(16, 20, 30, 0.05), 0 2px 6px rgba(16, 20, 30, 0.06);
-  --p-elev-2: 0 2px 4px rgba(16, 20, 30, 0.06), 0 6px 16px rgba(16, 20, 30, 0.08);
-  --p-elev-3: 0 8px 28px rgba(16, 20, 30, 0.14);
-  --p-elev-2xl: 0 12px 24px rgba(16, 20, 30, 0.12), 0 24px 56px rgba(16, 20, 30, 0.18);
+  /* Elevation — DS recipe (kit-29 alignment; the authored scale the DS cards
+     render). 5 steps, each pairing an ambient (soft, wide) + a direct (tight,
+     contact) shadow. The legacy --p-shadow-sm / --p-shadow / --p-shadow-lg
+     names are ALIASES of the scale. Dark mode re-tunes --p-elev-1/2/3 below
+     (neutral shadows vanish on dark). Mirrored in tokens.json#elevation. */
+  --p-elev-xs: 0 1px 1px rgba(16, 20, 30, 0.04);
+  --p-elev-1: 0 1px 2px rgba(16, 20, 30, 0.06), 0 1px 1px rgba(16, 20, 30, 0.04);
+  --p-elev-2: 0 2px 4px rgba(16, 20, 30, 0.05), 0 8px 16px rgba(16, 20, 30, 0.08);
+  --p-elev-3: 0 4px 8px rgba(16, 20, 30, 0.06), 0 16px 32px rgba(16, 20, 30, 0.14);
+  --p-elev-2xl: 0 8px 16px rgba(16, 20, 30, 0.08), 0 32px 56px rgba(16, 20, 30, 0.18);
   /* Back-compat aliases — point the old names at the new scale. */
   --p-shadow-sm: var(--p-elev-xs);
   --p-shadow: var(--p-elev-1);
   --p-shadow-lg: var(--p-elev-3);
-  --p-ease: 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  /* Composed from the motion scale (kit-29: no literal that shadows a token) —
+     resolves to the same 140ms cubic-bezier(0.2,0.7,0.2,1) inside kit scope. */
+  --p-ease: var(--motion-hover) var(--ease-hover);
 
   /* Semantic signals — mode-agnostic fills/dots/icons. v7.0 retune: warning
      (#e0a12b → #c8841a) off the COMPVSS amber, info (#3b82e0 → #2596c4) off the
@@ -510,17 +505,6 @@
   --p-accent-cta-contrast: light-dark(var(--brand-legend-on), var(--ink-on-dark));
   --p-focus: var(--p-accent-cta);
 }
-/* GHXSTSHIP — HOUSE = ATLVS volcanic red (no green; v8.0 palette-lock) */
-[data-ui="saas"][data-product="ghxstship"],
-[data-theme="atlvs-product"][data-platform="ghxstship"] {
-  --p-accent:          light-dark(var(--brand-ghxstship),      var(--brand-ghxstship-lift));
-  --p-accent-hover:    var(--brand-ghxstship-hover);
-  --p-accent-text:     light-dark(var(--brand-ghxstship-text), var(--brand-ghxstship-lift-text));
-  --p-accent-weak:     light-dark(color-mix(in srgb, var(--brand-ghxstship) 12%, transparent), color-mix(in srgb, var(--brand-ghxstship) 18%, transparent));
-  --p-accent-cta:          light-dark(var(--brand-ghxstship-cta), var(--brand-ghxstship-lift));
-  --p-accent-cta-contrast: light-dark(var(--brand-ghxstship-on), var(--ink-on-dark));
-  --p-focus: var(--p-accent);
-}
 /* CVRGO — cargo cyan (extension product) */
 [data-ui="saas"][data-product="cvrgo"],
 [data-theme="atlvs-product"][data-platform="cvrgo"] {
@@ -582,9 +566,6 @@
 [data-ui="saas"][data-product="legend"], [data-theme="atlvs-product"][data-platform="legend"] {
   --k-acc: var(--brand-legend); --k-acc-text: light-dark(var(--brand-legend-text), var(--brand-legend-lift-text));
 }
-[data-ui="saas"][data-product="ghxstship"], [data-theme="atlvs-product"][data-platform="ghxstship"] {
-  --k-acc: var(--brand-ghxstship); --k-acc-text: light-dark(var(--brand-ghxstship-text), var(--brand-ghxstship-lift-text));
-}
 [data-ui="saas"][data-product="cvrgo"], [data-theme="atlvs-product"][data-platform="cvrgo"] {
   --k-acc: var(--brand-cvrgo); --k-acc-text: light-dark(var(--brand-cvrgo-text), var(--brand-cvrgo-lift-text));
 }
@@ -604,69 +585,73 @@
    mode-scoped), so they live OUTSIDE the @gen markers.
    ========================================================================== */
 
-/* §2 · Per-product accent RAMP — derived from the resolved --k-acc by tinting
-   toward --p-surface (50→400) and shading toward --p-text-1 (600→900); 500 is
-   the base accent. Mode-aware (surface/text-1 follow the mode). Reference named
-   steps for tint backgrounds / borders / pressed states instead of inline math. */
+/* §2 · Per-product accent RAMP — DS v7.3 hue-locked recipe (kit-29 alignment,
+   supersedes the drifting oklab-toward-surface mixes). Tints (50→400) mix in
+   OKLCH toward a HUE-STRIPPED surface target (oklch(from … l 0 none)) so warm
+   accents can't rotate orange/magenta through the tints; 500 is the base
+   accent; 600 ≡ hover (parity); shades (700→900) mix in OKLAB toward text-1.
+   Mode-aware (surface/text-1 follow the mode). Reference named steps for tint
+   backgrounds / borders / pressed states instead of inline math. */
 [data-ui="saas"],
 [data-theme="atlvs-product"] {
-  --p-accent-50: color-mix(in oklab, var(--k-acc) 12%, var(--p-surface));
-  --p-accent-100: color-mix(in oklab, var(--k-acc) 20%, var(--p-surface));
-  --p-accent-200: color-mix(in oklab, var(--k-acc) 36%, var(--p-surface));
-  --p-accent-300: color-mix(in oklab, var(--k-acc) 56%, var(--p-surface));
-  --p-accent-400: color-mix(in oklab, var(--k-acc) 78%, var(--p-surface));
-  --p-accent-500: var(--k-acc);
-  --p-accent-600: color-mix(in oklab, var(--k-acc) 86%, var(--p-text-1));
-  --p-accent-700: color-mix(in oklab, var(--k-acc) 72%, var(--p-text-1));
-  --p-accent-800: color-mix(in oklab, var(--k-acc) 58%, var(--p-text-1));
-  --p-accent-900: color-mix(in oklab, var(--k-acc) 44%, var(--p-text-1));
+  --p-accent-50: color-mix(in oklch, var(--k-acc, var(--p-accent)) 8%, oklch(from var(--p-surface) l 0 none));
+  --p-accent-100: color-mix(in oklch, var(--k-acc, var(--p-accent)) 16%, oklch(from var(--p-surface) l 0 none));
+  --p-accent-200: color-mix(in oklch, var(--k-acc, var(--p-accent)) 30%, oklch(from var(--p-surface) l 0 none));
+  --p-accent-300: color-mix(in oklch, var(--k-acc, var(--p-accent)) 48%, oklch(from var(--p-surface) l 0 none));
+  --p-accent-400: color-mix(in oklch, var(--k-acc, var(--p-accent)) 70%, oklch(from var(--p-surface) l 0 none));
+  --p-accent-500: var(--k-acc, var(--p-accent));
+  --p-accent-600: var(--p-accent-hover, oklch(from var(--p-accent) calc(l * 0.92) c h));
+  --p-accent-700: color-mix(in oklab, var(--k-acc, var(--p-accent)) 78%, var(--p-text-1));
+  --p-accent-800: color-mix(in oklab, var(--k-acc, var(--p-accent)) 62%, var(--p-text-1));
+  --p-accent-900: color-mix(in oklab, var(--k-acc, var(--p-accent)) 46%, var(--p-text-1));
 }
 
-/* §6 · Semantic-text inks + §7 button-hover filter — LIGHT scope. */
+/* §6 · Semantic-text inks — ONE light-dark() layer over the --sem-* seeds
+   (kit-29 alignment: collapses the former light-scope + dark-scope + OS-dark
+   hex triplication; the seeds are the OKLCH equivalents of those hexes, so
+   there is zero visual change and the modes can never desync). */
+[data-ui="saas"],
+[data-theme="atlvs-product"] {
+  --p-success-text: light-dark(var(--sem-success-text), var(--sem-success-text-dark));
+  --p-warning-text: light-dark(var(--sem-warning-text), var(--sem-warning-text-dark));
+  --p-danger-text: light-dark(var(--sem-danger-text), var(--sem-danger-text-dark));
+  --p-info-text: light-dark(var(--sem-info-text), var(--sem-info-text-dark));
+}
+
+/* §7 · Button-hover filter — LIGHT scope (filters aren't colors, so they keep
+   the mode scopes + the OS mirror below). */
 [data-ui="saas"],
 [data-ui="saas"][data-mode="light"],
 [data-theme="atlvs-product"],
 [data-mode="light"] [data-theme="atlvs-product"] {
-  --p-success-text: #1f7d4d;
-  --p-warning-text: #92610f;
-  --p-danger-text: #c4322f;
-  --p-info-text: #1c6f96;
   /* Filled-button hover — darken in light mode. */
   --p-btn-hover-filter: brightness(0.92);
 }
 
-/* §6 · Semantic-text inks + §7 button-hover filter + §5 elevation — DARK scope. */
+/* §7 button-hover filter + §5 elevation — DARK scope. */
 [data-ui="saas"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"],
 [data-mode="dark"] [data-theme="atlvs-product"] {
-  --p-success-text: #45c585;
-  --p-warning-text: #e6b25a;
-  --p-danger-text: #f08a8d;
-  --p-info-text: #5cc0e8;
   /* Filled-button hover — lighten in dark mode (darkening reads as "disabled"). */
   --p-btn-hover-filter: brightness(1.12);
-  /* §5 · Dark elevation — neutral light-mode shadows are invisible on dark.
-     Stronger alpha + a 1px top inner highlight to read the lift. */
-  --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  --p-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --p-elev-3: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  /* §5 · Dark elevation — DS recipe (kit-29). Neutral light-mode shadows are
+     invisible on dark: stronger alpha + a 1px top inner highlight for lift. */
+  --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --p-elev-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --p-elev-3: 0 12px 36px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-/* §OS-dark parity (v8.1) — surfaces/accents already track the OS via light-dark();
-   the semantic-text inks, button-hover filter, and elevation aren't colors, so
+/* §OS-dark parity (v8.1) — surfaces/accents/semantic inks already track the OS
+   via light-dark(); the button-hover filter and elevation aren't colors, so
    they need this media mirror to follow OS-dark too. Skips surfaces explicitly
    pinned to light, so [data-mode="light"] stays light even on an OS-dark host. */
 @media (prefers-color-scheme: dark) {
   [data-ui="saas"]:not([data-mode="light"]),
   [data-theme="atlvs-product"]:not([data-mode="light"]) {
-    --p-success-text: #45c585;
-    --p-warning-text: #e6b25a;
-    --p-danger-text: #f08a8d;
-    --p-info-text: #5cc0e8;
     --p-btn-hover-filter: brightness(1.12);
-    --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    --p-elev-2: 0 2px 6px rgba(0, 0, 0, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    --p-elev-3: 0 12px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    --p-elev-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --p-elev-3: 0 12px 36px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 }
 
@@ -687,23 +672,36 @@
    TYPE AXIS (v5) — data-type swaps the type system kit-wide.
    Default (no attribute / data-type="monument") keeps MONUMENT from the base
    block above (Anton / Hanken Grotesk / Space Mono / Jost).
-   data-type="legend" swaps to the LEG3ND airport-signage type:
-     DISPLAY = Airport (Matthew Carter's 1961 London Airport signage face,
-       digital revival by Revolver Type — LICENSED; mount its woff2 via an
-       @font-face block + /fonts when obtained). Large x-height, Title Case
-       (NOT uppercase — the x-height does the work).
-     TEXT/UI = Airport X (small x-height cut). MONO = IBM Plex Mono.
-   Until Airport is licensed/mounted the stack degrades to Fira Sans /
-   Helvetica Neue (loaded fallbacks), which preserve the humanist-signage feel.
+   data-type="legend" swaps to the LEG3ND airport-signage type — FRUTIGER
+   (kit-29 alignment: the DS ships the face; mounted below from
+   ../assets/fonts/Frutiger*.woff2). Humanist signage: large x-height, Title
+   Case (NOT uppercase — the x-height does the work). MONO = IBM Plex Mono.
+   Fira Sans / Helvetica Neue stay as loaded fallbacks. Supersede with the
+   Airport / Airport X faces (Matthew Carter's 1961 London Airport signage
+   revival, Revolver Type) only if that license lands.
    ========================================================================== */
+@font-face {
+  font-family: "Frutiger";
+  src: url("../assets/fonts/Frutiger.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Frutiger";
+  src: url("../assets/fonts/Frutiger-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 [data-ui="saas"][data-type="legend"],
 [data-theme="atlvs-product"][data-type="legend"] {
-  --p-font: "Airport X", "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Arial, sans-serif;
-  --p-heading: "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --p-font: "Frutiger", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Arial, sans-serif;
+  --p-heading: "Frutiger", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* v8.0 · REC 06 — legend keeps ONE signage face across the whole stack: the
-     display treatments (.ps-hero / .hed-*) ride the SAME Airport face here, not
-     Anton, so a heading hierarchy never spans two unrelated faces. */
-  --p-display: "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+     display treatments (.ps-hero / .hed-*) ride the SAME Frutiger face here,
+     not Anton, so a heading hierarchy never spans two unrelated faces. */
+  --p-display: "Frutiger", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --p-heading-weight: 700;
   --p-heading-stretch: normal;
   --p-heading-ls: 0;
@@ -768,15 +766,16 @@
   /* Workspace-identity discriminator palette — 8 hash buckets so each org
      tile is stable across sessions before its logoUrl loads. Pure
      discriminators (like GitHub's avatar tints) — NOT part of the
-     semantic palette. */
-  --p-avatar-1: #0ea5e9;
-  --p-avatar-2: #8b5cf6;
-  --p-avatar-3: #10b981;
-  --p-avatar-4: #f59e0b;
-  --p-avatar-5: #ef4444;
-  --p-avatar-6: #ec4899;
-  --p-avatar-7: #6366f1;
-  --p-avatar-8: #14b8a6;
+     semantic palette. Kit-29: routed through the --identity-* seeds (the
+     white-label rebrand surface) instead of restating the hexes. */
+  --p-avatar-1: var(--identity-1);
+  --p-avatar-2: var(--identity-2);
+  --p-avatar-3: var(--identity-3);
+  --p-avatar-4: var(--identity-4);
+  --p-avatar-5: var(--identity-5);
+  --p-avatar-6: var(--identity-6);
+  --p-avatar-7: var(--identity-7);
+  --p-avatar-8: var(--identity-8);
 
   /* Motion tokens — paired with reduced-motion handling in globals.css.
      Used by .hover-lift / .press-scale / animations. */
@@ -938,7 +937,9 @@
 [data-theme="atlvs-product"] .ps-card {
   background: var(--p-surface);
   border: 1px solid var(--p-border);
-  border-radius: var(--p-r);
+  /* Corner canon (kit-29): containers ride --p-r-lg (6px); controls stay on
+     --p-r-sm/--p-r; chips pill; geometry 999px/50%. */
+  border-radius: var(--p-r-lg);
   box-shadow: var(--p-elev-1);
   transition:
     box-shadow var(--p-ease),
@@ -1748,7 +1749,8 @@
   border-collapse: collapse;
   background: var(--p-surface);
   border: 1px solid var(--p-border);
-  border-radius: var(--p-r);
+  /* Corner canon (kit-29): containers = --p-r-lg (6px). */
+  border-radius: var(--p-r-lg);
   overflow: hidden;
 }
 [data-ui="saas"] .ps-table thead th,

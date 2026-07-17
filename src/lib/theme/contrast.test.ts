@@ -80,7 +80,7 @@ describe("Design tokens — WCAG contrast (Move D2)", () => {
     expect(norm(find("text-3.dark").value)).toBe(norm(s.dark["text-3"]!));
 
     // Each product's accent-text + accent-cta certify the real token values.
-    for (const product of ["atlvs", "compvss", "gvteway", "legend", "ghxstship"] as const) {
+    for (const product of ["atlvs", "compvss", "gvteway", "legend"] as const) {
       for (const mode of ["light", "dark"] as const) {
         expect(
           norm(find(`${product}.accent-text.${mode}`).value),

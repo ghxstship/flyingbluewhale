@@ -166,10 +166,14 @@ export default async function MobileSettingsPage() {
     accountStatusDesc: t(
       "m.settings.account.statusDesc",
       undefined,
-      "Pause or archive · reversible pause, records preserved",
+      "Pause, export or delete · reversible pause, records preserved",
     ),
     changelog: t("m.settings.changelog.title", undefined, "What's New"),
     changelogDesc: t("m.settings.changelog.desc", undefined, "Recent Releases & Field Notes"),
+    about: t("m.settings.about.title", undefined, "About · Legal"),
+    aboutDesc: t("m.settings.about.desc", undefined, "Version, licenses, privacy & terms"),
+    support: t("m.settings.support.title", undefined, "Help & Support"),
+    supportDesc: t("m.settings.support.desc", undefined, "FAQs, contact, report a problem"),
     signOut: t("m.settings.signOut", undefined, "Sign Out"),
   };
 

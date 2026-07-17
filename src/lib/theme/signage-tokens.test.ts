@@ -43,11 +43,14 @@ describe("signage token contract (tokens.json ↔ kit-signage.css)", () => {
     expect(missing, `Function-map token(s) missing in kit-signage.css:\n${missing.join("\n")}`).toEqual([]);
   });
 
-  it("the legend type face does NOT redistribute the licensed Frutiger/Airport face", () => {
-    // License canon: the airport face degrades to the data-type=legend fallback
-    // until a licensed face is mounted via @font-face in /fonts.
-    expect(TOKENS.signage.typography.font).not.toMatch(/frutiger|airport/i);
-    expect(CSS_CODE).not.toMatch(/@font-face|frutiger|\.ttf/i);
+  it("the signage face is the DS-mounted Frutiger, with loaded fallbacks", () => {
+    // Kit-29: the DS ships Frutiger (woff2, @font-face mounted once in
+    // themes/atlvs-product.css). --sign-font leads with it and keeps the
+    // Fira Sans / Helvetica Neue fallbacks. kit-signage.css itself still
+    // declares no @font-face and ships no raw .ttf.
+    expect(TOKENS.signage.typography.font).toMatch(/^"Frutiger", "Fira Sans"/);
+    expect(CSS_CODE).toMatch(/--sign-font:\s*"Frutiger", "Fira Sans"/);
+    expect(CSS_CODE).not.toMatch(/@font-face|\.ttf/i);
   });
 
   it("the legibility scale (sm·md·lg·xl) is present in both SSOT and CSS", () => {

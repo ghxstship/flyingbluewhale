@@ -42,12 +42,15 @@
      `--motion-*` / `--ease-*` inside the [data-ui="saas"] scope; that
      scoped declaration WINS on cascade for kit-attributed subtrees,
      while these :root defaults paint pre-kit SSR cold-start. */
+  /* Kit-29 alignment: these cold-start values MATCH the kit scope in
+     atlvs-product.css (320ms / 1400ms / 0.98 / the kit ease-out curve) so
+     pre-hydration frames animate identically to post-kit frames. */
   --motion-fast: 120ms;
   --motion-normal: 200ms;
-  --motion-slow: 360ms;
-  --motion-skeleton: 1500ms;
+  --motion-slow: 320ms;
+  --motion-skeleton: 1400ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
@@ -56,7 +59,7 @@
   --ease-hover: var(--ease-out);
   --hover-lift-y: -2px;
   --hover-scale: 1;
-  --press-scale: 0.97;
+  --press-scale: 0.98;
 
   /* Tailwind v4 default-transition overrides — all `transition-*`
      utilities (transition-colors, transition-transform, etc.) read these

@@ -26,12 +26,34 @@ describe("breakpoint tokens (tokens.json ↔ atlvs-product.css)", () => {
   });
 });
 
+/**
+ * Kit-29: the CSS chart ramp is authored in OKLCH (P3-ready); tokens.json#chart
+ * stays the sRGB reference mirror. This table is the certified hex ⇄ OKLCH
+ * equivalence (exact conversions, zero visual change on sRGB) — if either side
+ * changes independently, the lookup misses and the test fails.
+ */
+const CHART_OKLCH: Record<string, string> = {
+  "#2563eb": "oklch(0.5461 0.2152 262.88)",
+  "#e8500a": "oklch(0.6334 0.199 39.09)",
+  "#1f8a5b": "oklch(0.563 0.1191 158.94)",
+  "#f0b255": "oklch(0.804 0.1307 74.97)",
+  "#8b5cf6": "oklch(0.6056 0.2189 292.72)",
+  "#ec4899": "oklch(0.6559 0.2118 354.31)",
+  "#14b8a6": "oklch(0.7038 0.123 182.5)",
+  "#64748b": "oklch(0.5544 0.0407 257.42)",
+};
+
 describe("data-viz chart ramp (tokens.json ↔ atlvs-product.css)", () => {
-  it("all 8 series colors are authored verbatim in the theme", () => {
+  it("all 8 series colors are authored as the certified OKLCH equivalents of the sRGB mirror", () => {
     const series = TOKENS.chart.series as Record<string, string>;
     const missing: string[] = [];
     for (const [name, value] of Object.entries(series)) {
-      if (!cssN.includes(`--${name}: ${value};`)) missing.push(`--${name}: ${value}`);
+      const oklch = CHART_OKLCH[value.toLowerCase()];
+      if (!oklch) {
+        missing.push(`--${name}: ${value} has no certified OKLCH equivalent — update CHART_OKLCH`);
+        continue;
+      }
+      if (!cssN.includes(`--${name}: ${oklch};`)) missing.push(`--${name}: ${oklch}`);
     }
     expect(missing, `Chart series missing/forked in atlvs-product.css:\n${missing.join("\n")}`).toEqual([]);
   });

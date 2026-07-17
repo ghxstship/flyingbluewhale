@@ -30,7 +30,7 @@ export const TabsTrigger = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-[var(--p-text-2)] transition-colors outline-none hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--p-bg)] data-[state=active]:border-[var(--p-accent)] data-[state=active]:text-[var(--p-text-1)] ${className}`}
+      className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-[var(--p-text-2)] transition-colors outline-none hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--p-bg)] data-[state=active]:border-[var(--p-accent)] data-[state=active]:text-[var(--p-text-1)] ${className}`}
       {...props}
     />
   );
@@ -43,7 +43,7 @@ export const TabsContent = React.forwardRef<
   return (
     <TabsPrimitive.Content
       ref={ref}
-      className={`outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] ${className}`}
+      className={`outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-focus)] ${className}`}
       {...props}
     />
   );

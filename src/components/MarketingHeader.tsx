@@ -44,7 +44,7 @@ function NavDropdown({ group }: { group: MarketingNavGroup }) {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="nav-item inline-flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]"
+          className="nav-item inline-flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-focus)]"
         >
           {groupLabel}
           <ChevronDown size={12} aria-hidden="true" className="text-[var(--p-text-2)]" />

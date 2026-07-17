@@ -107,7 +107,7 @@ export function TimelineBar({
       style={style}
       className={[
         "absolute top-1 h-7 rounded-md border-[3px] select-none",
-        "focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--p-bg)] focus-visible:outline-none",
+        "focus-visible:ring-2 focus-visible:ring-[var(--p-focus)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--p-bg)] focus-visible:outline-none",
         "hover:[--bar-shadow:inset_0_0_0_1px_var(--p-surface)]",
         className,
       ].join(" ")}

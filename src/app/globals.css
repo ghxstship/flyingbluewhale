@@ -901,7 +901,7 @@ pre,
   /* Audit T2: the px values inside @media expressions are intentionally
      literal because CSS `@media` cannot read CSS custom properties. They
      match the `--breakpoint-{sm,md,lg}` tokens registered in `@theme inline`
-     above (640 / 768 / 1024). Update both sites if the breakpoint contract
+     above (480 / 768 / 1024). Update both sites if the breakpoint contract
      changes. */
   .metric-grid {
     display: grid;

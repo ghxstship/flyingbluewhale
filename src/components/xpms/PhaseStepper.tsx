@@ -83,7 +83,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
               {href ? (
                 <Link
                   href={href}
-                  className="flex min-w-0 items-center rounded px-1 py-0.5 hover:bg-[var(--p-surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+                  className="flex min-w-0 items-center rounded px-1 py-0.5 hover:bg-[var(--p-surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
                   aria-current={isCurrent ? "step" : undefined}
                   aria-label={`Phase ${phase.num}: ${phase.label}`}
                 >

@@ -69,7 +69,7 @@ export function CreateMenu() {
             type="button"
             data-tour="create"
             aria-label={t("createMenu.trigger", undefined, "Create or request")}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--p-accent)] text-[var(--p-accent-contrast)] transition-transform hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--p-accent)] text-[var(--p-accent-contrast)] transition-transform hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
           >
             <Plus size={16} aria-hidden="true" />
           </button>

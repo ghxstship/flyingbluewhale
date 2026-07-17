@@ -33,7 +33,7 @@ const TOKENS = JSON.parse(readFileSync(join(process.cwd(), "src/app/theme/tokens
 
 const CORE_PRODUCTS = ["atlvs", "compvss", "gvteway", "legend"] as const;
 const EXTENSION_PRODUCTS = ["cvrgo", "opvs", "gvlley", "vault"] as const;
-const ALL_PRODUCTS = [...CORE_PRODUCTS, ...EXTENSION_PRODUCTS, "ghxstship"] as const;
+const ALL_PRODUCTS = [...CORE_PRODUCTS, ...EXTENSION_PRODUCTS] as const;
 
 describe("OKLCH color layer contract (v8.1)", () => {
   it("the brand seed layer is authored in OKLCH (not legacy hex)", () => {
@@ -59,13 +59,13 @@ describe("OKLCH color layer contract (v8.1)", () => {
     }
   });
 
-  it("v8.0 palette-lock — GHXSTSHIP house accent is ATLVS red, NOT green", () => {
-    // House aliases the ATLVS-red ramp.
-    expect(CSS).toContain("--brand-ghxstship:           var(--brand-atlvs)");
-    // The retired house-green hue (oklch …143.x) must never seed --brand-ghxstship.
-    expect(/--brand-ghxstship:\s*oklch\([^)]*\b14[0-9](\.\d+)?\)/i.test(CSS), "retired house green must not seed ghxstship").toBe(
-      false,
-    );
+  it("ratified 2026-07-17 — there is NO GHXSTSHIP theme (identity mark only)", () => {
+    // Two theming systems only: ATLVS Ecosystem default + Full System
+    // Whitelabel. No --brand-ghxstship* seeds, no product/platform scopes —
+    // house surfaces resolve to the ATLVS cold-start default.
+    expect(cssLower).not.toContain("--brand-ghxstship");
+    expect(cssLower).not.toContain('[data-product="ghxstship"]');
+    expect(cssLower).not.toContain('[data-platform="ghxstship"]');
   });
 
   it("every product emits the --p-accent contract via a data-product block", () => {
@@ -75,6 +75,51 @@ describe("OKLCH color layer contract (v8.1)", () => {
       if (!block.test(CSS)) missing.push(product);
     }
     expect(missing, `products without a --p-accent block:\n${missing.join(", ")}`).toEqual([]);
+  });
+
+  it("kit-29 — the accent ramp is the DS v7.3 hue-locked recipe", () => {
+    // Tints mix in OKLCH toward a HUE-STRIPPED surface target so warm accents
+    // can't rotate through the tints; 600 ≡ hover; shades mix in OKLAB.
+    expect(cssLower).toContain(
+      "--p-accent-50: color-mix(in oklch, var(--k-acc, var(--p-accent)) 8%, oklch(from var(--p-surface) l 0 none))",
+    );
+    expect(cssLower).toContain(
+      "--p-accent-400: color-mix(in oklch, var(--k-acc, var(--p-accent)) 70%, oklch(from var(--p-surface) l 0 none))",
+    );
+    expect(cssLower).toContain("--p-accent-600: var(--p-accent-hover,");
+    expect(cssLower).toContain("--p-accent-900: color-mix(in oklab, var(--k-acc, var(--p-accent)) 46%, var(--p-text-1))");
+    // The superseded drifting recipe (oklab tints toward the un-stripped
+    // surface) must not linger.
+    expect(cssLower).not.toContain("--p-accent-50: color-mix(in oklab,");
+  });
+
+  it("kit-29 — the elevation scale is the DS recipe (light + dark)", () => {
+    expect(cssLower).toContain("--p-elev-xs: 0 1px 1px rgba(16, 20, 30, 0.04)");
+    expect(cssLower).toContain("--p-elev-3: 0 4px 8px rgba(16, 20, 30, 0.06), 0 16px 32px rgba(16, 20, 30, 0.14)");
+    expect(cssLower).toContain("--p-elev-2xl: 0 8px 16px rgba(16, 20, 30, 0.08), 0 32px 56px rgba(16, 20, 30, 0.18)");
+    // Dark recipe (both the data-mode scope and the OS-dark mirror carry it).
+    const darkElev3 = "--p-elev-3: 0 12px 36px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06)";
+    expect(cssLower.split(darkElev3).length - 1).toBeGreaterThanOrEqual(2);
+  });
+
+  it("kit-29 — no literal shadows a token (--p-ease, chart OKLCH, avatar → identity seeds)", () => {
+    expect(cssLower).toContain("--p-ease: var(--motion-hover) var(--ease-hover)");
+    expect(cssLower).toContain("--chart-1: oklch(");
+    expect(cssLower).toContain("--p-avatar-1: var(--identity-1)");
+    // Semantic-text inks resolve through ONE light-dark() layer over seeds.
+    expect(cssLower).toContain("--p-success-text: light-dark(var(--sem-success-text), var(--sem-success-text-dark))");
+  });
+
+  it("kit-29 — corner canon: containers (.ps-card/.ps-table) ride --p-r-lg", () => {
+    const card = /\.ps-card\s*\{[^}]*border-radius:\s*var\(--p-r-lg\)/s;
+    const table = /\.ps-table\s*\{[^}]*border-radius:\s*var\(--p-r-lg\)/s;
+    expect(card.test(cssLower), ".ps-card must ride --p-r-lg (6px)").toBe(true);
+    expect(table.test(cssLower), ".ps-table must ride --p-r-lg (6px)").toBe(true);
+  });
+
+  it("kit-29 — the legend type axis renders the DS-mounted Frutiger", () => {
+    expect(cssLower).toContain('font-family: "frutiger"');
+    expect(cssLower).toMatch(/\[data-type="legend"\][^}]*\{[^}]*--p-font:\s*"frutiger"/s);
   });
 
   it("the core surface contract resolves through light-dark()", () => {
@@ -90,9 +135,11 @@ describe("OKLCH color layer contract (v8.1)", () => {
     // Still stamped v8.x and still carries the per-product accent hexes the
     // contrast / brand-accent guards recompute against.
     expect(TOKENS.version.startsWith("8.")).toBe(true);
-    for (const product of [...CORE_PRODUCTS, "ghxstship"] as const) {
+    for (const product of CORE_PRODUCTS) {
       expect(TOKENS.color.accent[product]?.light?.accent, `tokens.json#color.accent.${product} missing`).toBeTruthy();
     }
+    // The retired ghxstship theme must not linger in the mirror either.
+    expect(TOKENS.color.accent["ghxstship"], "tokens.json#color.accent.ghxstship must be removed").toBeUndefined();
   });
 });
 

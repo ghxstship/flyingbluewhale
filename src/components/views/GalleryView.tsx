@@ -143,7 +143,7 @@ function GalleryCard({ item }: { item: GalleryItem }): React.ReactElement {
   );
 
   const cardClass =
-    "surface hover-lift group flex flex-col overflow-hidden text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+    "surface hover-lift group flex flex-col overflow-hidden text-start focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]";
 
   if (item.onClick) {
     return (

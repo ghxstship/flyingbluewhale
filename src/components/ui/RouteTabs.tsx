@@ -16,7 +16,7 @@ export type RouteTab = { label: string; href: string };
 const VISIBLE_CAP = 6;
 
 const TAB_BASE_CLASS =
-  "relative inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]";
+  "relative inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-focus)]";
 const TAB_ACTIVE_CLASS = "border-[var(--p-accent)] font-medium text-[var(--p-text-1)]";
 const TAB_INACTIVE_CLASS = "border-transparent text-[var(--p-text-2)] hover:text-[var(--p-text-1)]";
 

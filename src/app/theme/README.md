@@ -5,7 +5,7 @@ One canonical kit skin (`atlvs-product`). Mode (light/dark), density (compact/co
 ## Contract
 
 - **Slug is immutable:** `atlvs-product` (the design_handoff_atlvs_kit). Used verbatim in `data-theme`, `localStorage` key `chroma.theme`, cookie `chroma_theme`.
-- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (volcanic red — also the house / cold-start default), `compvss` (signal yellow), `gvteway` (blue), `legend` (molten orange), plus extension products `cvrgo`/`opvs`/`gvlley`/`vault` and `ghxstship` (house = ATLVS red).
+- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (volcanic red — also the house / cold-start default), `compvss` (signal yellow), `gvteway` (blue), `legend` (molten orange), plus extension products `cvrgo`/`opvs`/`gvlley`/`vault`. There is **no GHXSTSHIP theme** (ratified 2026-07-17: two theming systems only — the ATLVS Ecosystem default + Full System Whitelabel; GHXSTSHIP is an identity mark). House/marketing surfaces carry no `data-product` and resolve to the ATLVS cold-start default.
 - **Mode** (`light`/`dark`/`system`) lives on `data-mode`, set by `theme-script.ts` before first paint.
 - **Density** (`compact`/`cozy`/`spacious`) lives on `data-density`; `cozy` is the default and strips the attribute.
 - **Accent intensity** (`soft`/`default`/`vivid`) lives on `data-accent`; `default` is implicit and strips the attribute.

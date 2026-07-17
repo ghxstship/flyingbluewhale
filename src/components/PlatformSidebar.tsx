@@ -235,7 +235,7 @@ export function PlatformSidebar({
                   setCollapsed(true);
                   void setPrefs({ sidebar_collapsed: true });
                 }}
-                className="shrink-0 rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+                className="shrink-0 rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
                 aria-label={t("shell.sidebar.collapse", undefined, "Collapse sidebar")}
               >
                 <PanelLeftClose size={14} />
@@ -305,7 +305,7 @@ export function PlatformSidebar({
                 setLens(next);
                 void setPrefs({ nav_lens: next });
               }}
-              className="w-full cursor-pointer rounded-md bg-transparent py-0.5 text-xs text-[var(--p-text-2)] outline-none hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+              className="w-full cursor-pointer rounded-md bg-transparent py-0.5 text-xs text-[var(--p-text-2)] outline-none hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
             >
               {NAV_LENS_ORDER.map((l) => (
                 <option key={l} value={l}>
@@ -383,7 +383,7 @@ export function PlatformSidebar({
                 setCollapsed(false);
                 void setPrefs({ sidebar_collapsed: false });
               }}
-              className="flex w-full items-center justify-center border-t border-[var(--p-border)] py-3 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+              className="flex w-full items-center justify-center border-t border-[var(--p-border)] py-3 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
               aria-label={t("shell.sidebar.expand", undefined, "Expand sidebar")}
             >
               <PanelLeftOpen size={14} />
@@ -504,7 +504,7 @@ function SidebarGroup({
   const useSections = sections && sections.length > 0;
   const headerActive = !!href && matchRoute(pathname ?? "", href).isActive;
   const headerClass =
-    "group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface)] hover:text-[var(--p-text-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+    "group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface)] hover:text-[var(--p-text-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]";
   const chevron = (
     <ChevronDown
       size={10}
@@ -538,7 +538,7 @@ function SidebarGroup({
                 aria-expanded={isOpen}
                 aria-controls={`${headerId}-items`}
                 aria-label={t("shell.sidebar.toggleGroup", { name: groupLabelDisplay }, "Toggle {name}")}
-                className="shrink-0 rounded p-0.5 hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+                className="shrink-0 rounded p-0.5 hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
               >
                 {chevron}
               </button>
@@ -640,7 +640,7 @@ function SidebarItems({
             aria-current={active ? "page" : undefined}
             // v7.8 nav-hover subtitle — teaches the noun without a click.
             title={item.sub ? `${itemLabel} · ${item.sub}` : undefined}
-            className={`flex items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+            className={`flex items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)] ${
               collapsed ? "" : "pe-8"
             } ${
               active
@@ -712,7 +712,7 @@ function SidebarItems({
                     : t("nav.pin", { name: itemLabel }, `Pin ${itemLabel}`)
                 }
                 // h-6/w-6 = 24px hit area — WCAG 2.2 §2.5.8 minimum (A-19).
-                className={`absolute end-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+                className={`absolute end-1 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)] ${
                   isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }`}
               >

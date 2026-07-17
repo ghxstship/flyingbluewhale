@@ -1,22 +1,23 @@
 import type { ReactNode, ButtonHTMLAttributes } from "react";
 import Link from "next/link";
-import { Spinner } from "./Spinner";
 
-export type ButtonVariant = "primary" | "cta" | "secondary" | "ghost" | "tertiary" | "link" | "danger";
+export type ButtonVariant = "primary" | "cta" | "secondary" | "ghost" | "soft" | "tertiary" | "link" | "danger";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 // Map this React API onto the kit's .ps-btn classes
 // (design_handoff_atlvs_kit/components.html). Primary = filled accent-cta;
 // cta = the deliberate hero CTA (same AA-safe --p-accent-cta fill, exposed as
 // an explicit intent — parity item 7 / audit A-4); secondary/ghost =
-// bordered/transparent ghost; danger = filled red; icon = the kit's square
-// icon button. The "soft" variant is intentionally not exposed in this React
-// API yet — add it only if a consumer needs it.
+// bordered/transparent ghost; soft = the kit's accent-tint fill (kit-29 API
+// union — the reconciled variant vocabulary is
+// primary·cta·secondary·ghost·soft·tertiary·link·danger × sm·md·lg·icon);
+// danger = filled red; icon = the kit's square icon button.
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   primary: "ps-btn",
   cta: "ps-btn ps-btn--cta",
   secondary: "ps-btn ps-btn--ghost",
   ghost: "ps-btn ps-btn--ghost",
+  soft: "ps-btn ps-btn--soft",
   tertiary: "ps-btn ps-btn--tertiary",
   link: "ps-btn ps-btn--link",
   danger: "ps-btn ps-btn--danger",
@@ -91,7 +92,11 @@ export function Button(props: ButtonProps) {
     href?: string;
   } & Record<string, unknown>;
 
-  const cls = buttonVariants({ variant, size, className });
+  // Kit-29: loading rides the kit's canonical .ps-btn--loading class — the
+  // CSS turns the label transparent (preserving the button's width) and
+  // paints a centered spinner via ::after; pointer-events are disabled at
+  // the CSS layer and the button is disabled + aria-busy at the DOM layer.
+  const cls = buttonVariants({ variant, size, className: `${loading ? "ps-btn--loading " : ""}${className}` });
 
   // Dev-only enforcement: icon-only buttons MUST have aria-label.
   if (process.env.NODE_ENV !== "production") {
@@ -102,14 +107,7 @@ export function Button(props: ButtonProps) {
     }
   }
 
-  const content = loading ? (
-    <>
-      <Spinner size="md" />
-      <span className="ms-1.5">{children}</span>
-    </>
-  ) : (
-    children
-  );
+  const content = children;
 
   if ("href" in props && props.href) {
     const { href, target, rel } = props as AsLink;

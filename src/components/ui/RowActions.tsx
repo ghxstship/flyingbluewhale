@@ -55,7 +55,7 @@ export function RowActions({
         <button
           type="button"
           aria-label={label}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-1 focus-visible:outline-none"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-focus)] focus-visible:ring-offset-1 focus-visible:outline-none"
           onClick={(e) => e.stopPropagation()}
         >
           <MoreHorizontal size={14} aria-hidden="true" />

@@ -30,7 +30,7 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         <button
           type="button"
           aria-label={t("avatarMenu.openAriaLabel", undefined, "Open account menu")}
-          className="rounded-full ring-offset-2 ring-offset-[var(--p-bg)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-accent)]"
+          className="rounded-full ring-offset-2 ring-offset-[var(--p-bg)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-focus)]"
         >
           <Avatar name={name} src={src} size="sm" />
         </button>

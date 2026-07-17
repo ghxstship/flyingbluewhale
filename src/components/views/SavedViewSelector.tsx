@@ -29,7 +29,7 @@ type Translator = (key: string, vars?: Record<string, string | number>, fallback
  */
 
 const TRIGGER_BASE =
-  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]";
 const TRIGGER_ACTIVE = "bg-[var(--p-surface-2)] text-[var(--p-text-1)]";
 
 export type SavedViewSelectorProps = {

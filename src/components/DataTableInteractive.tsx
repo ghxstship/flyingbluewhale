@@ -85,7 +85,7 @@ let dtActiveInstance: string | null = null;
  * input affordance or a group of related options.
  */
 const TOOLBAR_TRIGGER_BASE =
-  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]";
 const TOOLBAR_TRIGGER_ACTIVE = "bg-[var(--p-surface-2)] text-[var(--p-text-1)]";
 
 function ToolbarDivider() {
@@ -1926,7 +1926,7 @@ function ToolbarIconButton({
         type="button"
         onClick={onClick}
         aria-label={label}
-        className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+        className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
       >
         <Icon size={12} aria-hidden="true" className={spinning ? "motion-safe:animate-spin" : undefined} />
       </button>
@@ -2482,7 +2482,7 @@ function ColumnMenu({
           <button
             type="button"
             aria-label={t("dataTable.columns.settingsAria", undefined, "Column settings")}
-            className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+            className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
           >
             <SlidersHorizontal size={12} aria-hidden="true" />
           </button>

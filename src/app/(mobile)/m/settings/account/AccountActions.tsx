@@ -27,7 +27,7 @@ export function AccountActions({
   const [pausePending, startPause] = useTransition();
   const [archivePending, startArchive] = useTransition();
 
-  const confirmed = confirmText.trim().toUpperCase() === "ARCHIVE";
+  const confirmed = confirmText.trim().toUpperCase() === "DELETE";
 
   return (
     <>
@@ -109,15 +109,18 @@ export function AccountActions({
         </div>
       )}
 
-      {/* ── Archive Account (destructive) ── */}
+      {/* ── Delete Account (destructive) — kit 29: the spec'd account-deletion
+          entry (app-store requirement). Runs the shared archive contract:
+          soft-delete + PII scrub + immediate access revoke, with a 30-day
+          restore grace window. ── */}
       <div className="sech">
-        <h2>{t("m.account.archive.heading", undefined, "Archive Account")}</h2>
+        <h2>{t("m.account.delete.heading", undefined, "Delete Account")}</h2>
       </div>
       <p className="form-intro" style={{ marginBottom: 10 }}>
         {t(
-          "m.account.archive.intro",
+          "m.account.delete.intro",
           undefined,
-          "This requests permanent deactivation and revokes all access. It can't be undone from the app — an org admin must complete and restore it.",
+          "Deletes your account: your profile is anonymized and all access is revoked immediately. You can restore it by signing back in within 30 days — after that it's permanent.",
         )}
       </p>
       <div
@@ -159,20 +162,20 @@ export function AccountActions({
           <KIcon name="CircleCheck" size={16} style={{ color: "var(--p-success)" }} />
           <div className="s" style={{ color: "var(--p-text-2)" }}>
             {t(
-              "m.account.archive.requested",
+              "m.account.delete.requested",
               undefined,
-              "Archive requested. An org admin will complete the revoke. You still have access until they do.",
+              "Account deletion is in progress. Sign back in within 30 days to restore it.",
             )}
           </div>
         </div>
       ) : (
         <>
           <div className="fld">
-            <label>{t("m.account.archive.confirmLabel", undefined, "Type ARCHIVE to confirm")}</label>
+            <label>{t("m.account.delete.confirmLabel", undefined, "Type DELETE to confirm")}</label>
             <input
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
-              placeholder="ARCHIVE"
+              placeholder="DELETE"
               autoCapitalize="characters"
               autoCorrect="off"
               spellCheck={false}
@@ -192,7 +195,7 @@ export function AccountActions({
               });
             }}
           >
-            <KIcon name="Archive" size={15} /> {t("m.account.archive.cta", undefined, "Request Archive")}
+            <KIcon name="UserX" size={15} /> {t("m.account.delete.cta", undefined, "Delete My Account")}
           </button>
         </>
       )}

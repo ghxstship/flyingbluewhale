@@ -177,7 +177,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
           <button
             type="button"
             aria-label={switchAriaLabel}
-            className="flex w-full items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]"
+            className="flex w-full items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-focus)]"
           >
             <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={28} />
           </button>
@@ -193,7 +193,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
         <button
           type="button"
           aria-label={switchAriaLabel}
-          className="flex w-full items-center gap-2 rounded px-1 py-1 text-sm font-semibold tracking-tight hover:bg-[var(--p-surface-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+          className="flex w-full items-center gap-2 rounded px-1 py-1 text-sm font-semibold tracking-tight hover:bg-[var(--p-surface-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
         >
           <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={24} />
           <span className="truncate">{activeName}</span>

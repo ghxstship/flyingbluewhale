@@ -81,7 +81,7 @@ export function DataViewSwitcher<T extends DataViewKind>({
             aria-selected={active}
             type="button"
             onClick={() => go(v)}
-            className={`inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+            className={`inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)] ${
               active
                 ? "bg-[var(--p-surface)] text-[var(--p-text-1)] shadow-sm"
                 : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"

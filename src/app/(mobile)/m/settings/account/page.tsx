@@ -95,6 +95,26 @@ export default async function MobileAccountPage() {
         </div>
       </div>
 
+      {/* ── Data Export (kit 29 — app-store requirement) ── */}
+      <div className="sech">
+        <h2>{t("m.account.export.heading", undefined, "Data Export")}</h2>
+      </div>
+      <p className="form-intro" style={{ marginBottom: 10 }}>
+        {t(
+          "m.account.export.intro",
+          undefined,
+          "Download everything we hold about you — profile, time logs, submissions, messages — as a single JSON bundle. Do this before deleting your account.",
+        )}
+      </p>
+      <a
+        className="ps-btn ps-btn--secondary"
+        href="/api/v1/me/export"
+        download="compvss-data-export.json"
+        style={{ width: "100%", justifyContent: "center" }}
+      >
+        <KIcon name="Download" size={15} /> {t("m.account.export.cta", undefined, "Export My Data")}
+      </a>
+
       <AccountActions
         initialPaused={accountState === "paused"}
         initialArchiveRequested={

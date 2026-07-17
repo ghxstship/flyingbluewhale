@@ -125,12 +125,12 @@
 
   /* ----------------------------------------------------------------------
      4. TYPOGRAPHY — the airport-signage face. Mixed case for word-shape
-        recognition (NOT all-caps); tracking opens at small sizes. The
-        licensed Frutiger/Airport face is NOT redistributed here — this
-        degrades to the LEG3ND `data-type="legend"` fallback stack until a
-        licensed face is mounted via @font-face in /fonts.
+        recognition (NOT all-caps); tracking opens at small sizes. Kit-29:
+        Frutiger is mounted (DS-shipped woff2, @font-face in
+        themes/atlvs-product.css) and leads the stack; Fira Sans /
+        Helvetica Neue remain the loaded fallbacks.
      ---------------------------------------------------------------------- */
-  --sign-font: "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --sign-font: "Frutiger", "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --sign-legend-weight: 600;
   --sign-legend-case: none; /* mixed case — do not uppercase */
   --sign-legend-tracking: 0.01em;

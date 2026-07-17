@@ -418,7 +418,7 @@ function Message({
                 type="button"
                 onClick={() => react(emoji)}
                 aria-label={`${labels.addReaction} ${emoji}`}
-                className="rounded p-0.5 text-xs leading-none hover:bg-[var(--p-surface-2,var(--p-bg))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+                className="rounded p-0.5 text-xs leading-none hover:bg-[var(--p-surface-2,var(--p-bg))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
               >
                 {emoji}
               </button>
@@ -427,7 +427,7 @@ function Message({
               type="button"
               onClick={copy}
               aria-label={copied ? labels.copied : labels.copy}
-              className="rounded p-0.5 text-[var(--p-text-3)] hover:bg-[var(--p-surface-2,var(--p-bg))] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+              className="rounded p-0.5 text-[var(--p-text-3)] hover:bg-[var(--p-surface-2,var(--p-bg))] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
             >
               <Copy size={12} />
             </button>

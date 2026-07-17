@@ -1668,6 +1668,8 @@ export const mobileTabs: NavItem[] = [
 // labels; middot `·` only inside headers, never here.
 export const mobileSurfaces: NavItem[] = [
   // Tools.
+  // Kit 29: Global Search is a first-class route (top-bar search button).
+  { label: "Search", href: "/m/search" },
   { label: "Catalog", href: "/m/catalog" },
   { label: "Inventory", href: "/m/inventory" },
   { label: "Inventory Scan", href: "/m/inventory/scan" },
@@ -1725,6 +1727,9 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Team", href: "/m/settings/team" },
   { label: "Invite Someone", href: "/m/settings/team/invite" },
   { label: "Settings", href: "/m/settings" },
+  // Kit 29 standalone-app surfaces (app-store requirements).
+  { label: "Help & Support", href: "/m/support" },
+  { label: "About & Legal", href: "/m/settings/about" },
 ];
 
 /**

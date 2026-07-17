@@ -210,7 +210,7 @@ export function SaveViewDialog({
                 id="save-view-type"
                 value={type}
                 onChange={(e) => setType(e.target.value as ViewType)}
-                className="w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
+                className="w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-focus)]"
               >
                 {VIEW_TYPES.map((vt) => (
                   <option key={vt} value={vt}>

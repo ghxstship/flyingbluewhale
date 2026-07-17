@@ -175,7 +175,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
         <button
           type="button"
           data-tour="notifications"
-          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-1 focus-visible:outline-none"
+          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-focus)] focus-visible:ring-offset-1 focus-visible:outline-none"
           aria-label={
             unread > 0
               ? t("notifications.bellAriaUnread", { count: unread }, `Notifications — ${unread} unread`)

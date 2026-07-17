@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
@@ -41,6 +42,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 { count: crew?.length ?? 0 },
                 `${crew?.length ?? 0} Roster Members`,
               )
+        }
+        action={
+          <Button href={`/studio/projects/${projectId}/roster`} variant="secondary">
+            {t("console.projects.crew.rosterLink", undefined, "Project Roster")}
+          </Button>
         }
         breadcrumbs={[
           { label: t("console.projects.crew.breadcrumbProjects", undefined, "Projects"), href: "/studio/projects" },

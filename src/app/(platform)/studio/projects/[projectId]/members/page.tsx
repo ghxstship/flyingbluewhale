@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { hasProjectRole, requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
@@ -74,6 +75,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 { count: members.length },
                 `${members.length} Project Members`,
               )
+        }
+        action={
+          <Button href={`/studio/projects/${projectId}/roster`} variant="secondary">
+            {t("console.projects.members.rosterLink", undefined, "Project Roster")}
+          </Button>
         }
         breadcrumbs={[
           { label: t("console.projects.breadcrumb", undefined, "Projects"), href: "/studio/projects" },

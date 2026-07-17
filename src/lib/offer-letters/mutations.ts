@@ -1,7 +1,113 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
-import type { OfferLetter, OfferLetterStatus } from "./types";
+import type { CompensationBasis, OfferLetter, OfferLetterStatus } from "./types";
+
+/** Fields the roster assign flow (kit 30) supplies when creating a letter. */
+export type CreateOfferLetterInput = {
+  project_id: string;
+  crew_member_id: string;
+  role_id: string;
+  reports_to_crew_member_id?: string | null;
+  rate_card_item_id?: string | null;
+  compensation_basis?: CompensationBasis;
+  onsite_start_date?: string | null;
+  onsite_end_date?: string | null;
+  expectations_override?: string | null;
+  created_by?: string | null;
+};
+
+/**
+ * Kit 30 (additive) — the canonical CREATE path for offer letters. Before
+ * this the table was seeded out-of-band; the project-roster Assign drawer is
+ * the first in-app author. Employer/classification default from
+ * org_offer_letter_settings (falling back to the schema's most common
+ * pairing), the access code comes from the same RPC the rotate flow uses,
+ * and the letter lands in `draft` so the existing send flow stays the one
+ * state machine.
+ */
+export async function createOfferLetter(
+  orgId: string,
+  input: CreateOfferLetterInput,
+  actorLabel?: string,
+): Promise<OfferLetter> {
+  const supabase = await createClient();
+
+  const { data: settings } = await supabase
+    .from("org_offer_letter_settings")
+    .select("default_employer, default_classification")
+    .eq("org_id", orgId)
+    .maybeSingle();
+
+  const { data: code, error: codeError } = await supabase.rpc("generate_offer_access_code");
+  if (codeError) throw new Error(codeError.message);
+
+  const { data, error } = await supabase
+    .from("offer_letters")
+    .insert({
+      org_id: orgId,
+      project_id: input.project_id,
+      crew_member_id: input.crew_member_id,
+      role_id: input.role_id,
+      reports_to_crew_member_id: input.reports_to_crew_member_id ?? null,
+      rate_card_item_id: input.rate_card_item_id ?? null,
+      compensation_basis: input.compensation_basis ?? "tbd",
+      onsite_start_date: input.onsite_start_date ?? null,
+      onsite_end_date: input.onsite_end_date ?? null,
+      expectations_override: input.expectations_override ?? null,
+      created_by: input.created_by ?? null,
+      access_code: code as unknown as string,
+      employer: settings?.default_employer ?? "ghxstship",
+      classification: settings?.default_classification ?? "1099",
+    })
+    .select("*")
+    .single();
+  if (error) throw new Error(error.message);
+  const letter = data as unknown as OfferLetter;
+  await logActivity(orgId, letter.id, "created", "Letter created from the project roster.", actorLabel);
+  return letter;
+}
+
+/**
+ * Kit 30 (additive) — repoint the reporting edge on a person's live letters
+ * for one project. Deliberately NOT routed through `updateOfferLetter`: that
+ * helper hard-guards `letter_state = 'draft'`, while the reporting line is an
+ * operational edge the org restructures after signature (the reporting-tree
+ * surface exists precisely for that). Only `reports_to_crew_member_id`
+ * moves; every touched letter gets an activity row.
+ */
+export async function setOfferLetterReportsTo(
+  orgId: string,
+  projectId: string,
+  crewMemberIds: string[],
+  reportsToCrewMemberId: string | null,
+  actorLabel?: string,
+): Promise<number> {
+  if (crewMemberIds.length === 0) return 0;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("offer_letters")
+    .update({ reports_to_crew_member_id: reportsToCrewMemberId })
+    .eq("org_id", orgId)
+    .eq("project_id", projectId)
+    .in("crew_member_id", crewMemberIds)
+    .in("letter_state", ["draft", "sent", "viewed", "accepted", "countersigned", "active"])
+    .select("id");
+  if (error) throw new Error(error.message);
+  const rows = (data ?? []) as Array<{ id: string }>;
+  await Promise.all(
+    rows.map((r) =>
+      logActivity(
+        orgId,
+        r.id,
+        "reports_to_updated",
+        reportsToCrewMemberId ? "Reporting line updated from the project roster." : "Reporting line cleared.",
+        actorLabel,
+      ),
+    ),
+  );
+  return rows.length;
+}
 
 /** Editable FK columns + per-letter overrides (NOT the joined display fields). */
 type UpdatePayload = Partial<

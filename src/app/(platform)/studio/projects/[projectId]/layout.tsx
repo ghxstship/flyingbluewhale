@@ -79,6 +79,7 @@ export default async function ProjectLayout({
     { label: t("console.projects.tabs.finance", undefined, "P&L"), href: `/studio/projects/${projectId}/finance` },
     { label: t("console.projects.tabs.crew", undefined, "Crew"), href: `/studio/projects/${projectId}/crew` },
     { label: t("console.projects.tabs.members", undefined, "Members"), href: `/studio/projects/${projectId}/members` },
+    { label: t("console.projects.tabs.roster", undefined, "Roster"), href: `/studio/projects/${projectId}/roster` },
     {
       label: t("console.projects.tabs.advancing", undefined, "Advancing"),
       href: `/studio/projects/${projectId}/advancing`,

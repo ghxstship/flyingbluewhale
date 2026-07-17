@@ -3968,7 +3968,7 @@
    "backHome": "Back To Home"
   },
   "home": {
-   "title": "Today",
+   "title": "Dashboard",
    "upcoming": {
     "sub": "Upcoming Event"
    },
@@ -3980,7 +3980,6 @@
     "title": "Field Copilot",
     "sub": "Ask · Report · Get Unstuck"
    },
-   "widgets": "Today",
    "w": {
     "tasks": "Open Tasks",
     "tasksSub": "Assigned To You",
@@ -4205,7 +4204,7 @@
    },
    "configureSupabase": "Configure Supabase.",
    "eyebrow": "Mobile",
-   "title": "Inbox",
+   "title": "My Inbox",
    "count": "{n} conversations",
    "empty": {
     "title": "No Conversations"

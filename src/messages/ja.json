@@ -4188,7 +4188,7 @@
       }
     },
     "home": {
-      "title": "本日",
+      "title": "ダッシュボード",
       "clock": {
         "sub": "クロックイン",
         "title": "現地時間"
@@ -4224,8 +4224,7 @@
         "tasksSub": "あなたに割り当て済み",
         "unread": "メッセージ",
         "unreadSub": "最近のアクティビティ"
-      },
-      "widgets": "今日"
+      }
     },
     "inbox": {
       "room": {
@@ -4238,7 +4237,7 @@
       },
       "configureSupabase": "Supabase を構成してください。",
       "eyebrow": "モバイル",
-      "title": "受信トレイ",
+      "title": "マイ受信箱",
       "count": "{n} 件の会話",
       "empty": {
         "title": "会話なし"

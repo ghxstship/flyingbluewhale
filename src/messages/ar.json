@@ -5099,7 +5099,7 @@
       "ref": "المرجع: {digest}"
     },
     "home": {
-      "title": "اليوم",
+      "title": "لوحة التحكم",
       "clock": {
         "sub": "تسجيل الدخول",
         "title": "التوقيت المحلي"
@@ -5135,8 +5135,7 @@
         "tasksSub": "مخصصة لك",
         "unread": "الرسائل",
         "unreadSub": "النشاط الأخير"
-      },
-      "widgets": "اليوم"
+      }
     },
     "advances": {
       "eyebrow": "الجوال",
@@ -5322,7 +5321,7 @@
       },
       "configureSupabase": "اضبط إعداد Supabase.",
       "eyebrow": "الجوال",
-      "title": "البريد الوارد",
+      "title": "صندوقي",
       "count": "{n} محادثات",
       "empty": {
         "title": "لا محادثات"

@@ -17,6 +17,9 @@ export type HomeData = {
     day: string;
     sub: string;
   } | null;
+  /** Rose hero card: the holder's name + credential line (kit shows
+      J. GIBBS · ID 0731 — ours is the real user + their manning id). */
+  rose: { holderName: string; credentialLabel: string | null };
   /** The viewer's emergency station — kit 28 home §"Emergency Card". */
   station: {
     manningId: string;
@@ -115,7 +118,7 @@ export function HomeShell({
       {/* COMPVSS Rose — the hero card. No section heading: in the kit it sits
           directly under the page title as the first thing on the screen. */}
       <Link href="/m/pass" style={{ textDecoration: "none", display: "block" }}>
-        <RoseCard compact />
+        <RoseCard compact holderName={data.rose.holderName} credentialLabel={data.rose.credentialLabel ?? undefined} />
       </Link>
 
       {/* Quick actions. */}

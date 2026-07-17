@@ -33,7 +33,7 @@ export default async function MobileHome() {
   // one parallel round (HP-12); this is the field PWA home, often on a bad
   // network, so serial waterfalls hurt the most here.
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, station] =
+  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: me }, station] =
     await Promise.all([
     // Open tasks assigned to me (anything not yet done).
     supabase
@@ -65,6 +65,7 @@ export default async function MobileHome() {
       .order("starts_at", { ascending: true })
       .limit(1)
       .maybeSingle(),
+    supabase.from("users").select("name").eq("id", session.userId).maybeSingle(),
     // The viewer's emergency station — the kit's home Emergency Card. Shared
     // resolver with /m/emergency so the two can't drift.
     resolveEmergencyStation(session.orgId, session.userId, {
@@ -87,11 +88,22 @@ export default async function MobileHome() {
       }
     : null;
 
+  const displayName =
+    ((me as { name: string | null } | null)?.name ?? "").trim() ||
+    ((session.email ?? "").split("@")[0] ?? "").replace(/[._-]+/g, " ").trim() ||
+    "Crew";
+
   const data: HomeData = {
     openTasks: openTasks ?? 0,
     myAdvances: myAdvances ?? 0,
     unread: unread ?? 0,
     nextShift,
+    rose: {
+      // users.name when set; the email local-part otherwise — never blank,
+      // the Rose is the identity card.
+      holderName: displayName,
+      credentialLabel: station.manningId !== "—" ? `ID ${station.manningId}` : null,
+    },
     station: {
       manningId: station.manningId,
       assembly: station.assembly,

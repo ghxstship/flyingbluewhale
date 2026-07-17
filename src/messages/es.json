@@ -16674,7 +16674,7 @@
       }
     },
     "home": {
-      "title": "Hoy",
+      "title": "Panel",
       "clock": {
         "sub": "Fichar entrada",
         "title": "Hora local"
@@ -16710,8 +16710,7 @@
         "tasksSub": "Asignadas a ti",
         "unread": "Mensajes",
         "unreadSub": "Actividad reciente"
-      },
-      "widgets": "Hoy"
+      }
     },
     "inbox": {
       "room": {
@@ -16724,7 +16723,7 @@
       },
       "configureSupabase": "Configura Supabase.",
       "eyebrow": "Móvil",
-      "title": "Bandeja de entrada",
+      "title": "Mi Bandeja",
       "count": "{n} conversaciones",
       "empty": {
         "title": "Sin Conversaciones"

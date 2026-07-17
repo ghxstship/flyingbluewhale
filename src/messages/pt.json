@@ -16623,7 +16623,7 @@
       }
     },
     "home": {
-      "title": "Hoje",
+      "title": "Painel",
       "clock": {
         "sub": "Registrar entrada",
         "title": "Hora local"
@@ -16659,8 +16659,7 @@
         "tasksSub": "Atribuídas a você",
         "unread": "Mensagens",
         "unreadSub": "Atividade recente"
-      },
-      "widgets": "Hoje"
+      }
     },
     "inbox": {
       "room": {
@@ -16673,7 +16672,7 @@
       },
       "configureSupabase": "Configure o Supabase.",
       "eyebrow": "Mobile",
-      "title": "Caixa de entrada",
+      "title": "Minha Caixa",
       "count": "{n} conversas",
       "empty": {
         "title": "Nenhuma conversa"

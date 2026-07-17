@@ -18635,7 +18635,7 @@
       }
     },
     "home": {
-      "title": "Heute",
+      "title": "Dashboard",
       "clock": {
         "sub": "Einstempeln",
         "title": "Ortszeit"
@@ -18671,8 +18671,7 @@
         "tasksSub": "Ihnen zugewiesen",
         "unread": "Nachrichten",
         "unreadSub": "Letzte Aktivität"
-      },
-      "widgets": "Heute"
+      }
     },
     "inbox": {
       "room": {
@@ -18685,7 +18684,7 @@
       },
       "configureSupabase": "Supabase konfigurieren.",
       "eyebrow": "Mobile",
-      "title": "Posteingang",
+      "title": "Mein Posteingang",
       "count": "{n} Konversationen",
       "empty": {
         "title": "Keine Konversationen"

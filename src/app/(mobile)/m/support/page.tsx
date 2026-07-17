@@ -36,7 +36,7 @@ export default async function MobileSupportPage() {
       t(
         "m.support.faq.rose.a",
         undefined,
-        "Raise your screen brightness and try again. If the gate still rejects it, the scan journal shows the reason (expired, wrong zone, duplicate) — ask the gate lead, or reach the team below.",
+        "Raise your screen brightness and try again. If the gate still rejects it, the scan journal shows the reason (expired, wrong zone, duplicate). Ask the gate lead, or reach the team below.",
       ),
     ],
     [
@@ -44,7 +44,7 @@ export default async function MobileSupportPage() {
       t(
         "m.support.faq.notifications.a",
         undefined,
-        "Every notification kind has its own toggle in Settings · Notification Preferences. Push needs the one-time browser permission — re-enable it from Settings if you dismissed it.",
+        "Every notification kind has its own toggle in Settings · Notification Preferences. Push needs the one-time browser permission. Re-enable it from Settings if you dismissed it.",
       ),
     ],
     [
@@ -77,7 +77,7 @@ export default async function MobileSupportPage() {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">{t("m.support.report.safety", undefined, "Safety Issue")}</div>
           <div className="s">
-            {t("m.support.report.safetyDesc", undefined, "Injuries, hazards, security — files an incident report")}
+            {t("m.support.report.safetyDesc", undefined, "Injuries, hazards, security. Files an incident report")}
           </div>
         </div>
         <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
@@ -91,7 +91,7 @@ export default async function MobileSupportPage() {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">{t("m.support.report.app", undefined, "App Problem")}</div>
           <div className="s">
-            {t("m.support.report.appDesc", undefined, "Something broken or confusing — tell the product team")}
+            {t("m.support.report.appDesc", undefined, "Something broken or confusing. Tell the product team")}
           </div>
         </div>
         <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />

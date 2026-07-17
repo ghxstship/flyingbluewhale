@@ -96,10 +96,10 @@ export default async function CrisisAlertsPage() {
 
   const sevLabel = (severity: string) =>
     severity === "critical"
-      ? t("m.alerts.critical", undefined, "Critical")
+      ? t("m.crisisAlerts.critical", undefined, "Critical")
       : severity === "warn"
-        ? t("m.alerts.warn", undefined, "Warning")
-        : t("m.alerts.info", undefined, "Info");
+        ? t("m.crisisAlerts.warn", undefined, "Warning")
+        : t("m.crisisAlerts.info", undefined, "Info");
 
   const when = (iso: string) => {
     const d = new Date(iso);
@@ -111,19 +111,19 @@ export default async function CrisisAlertsPage() {
   return (
     <div className="screen screen-anim">
       <Link href="/m" className="backbtn">
-        <KIcon name="ChevronLeft" size={17} /> {t("m.alerts.back", undefined, "Home")}
+        <KIcon name="ChevronLeft" size={17} /> {t("m.crisisAlerts.back", undefined, "Home")}
       </Link>
-      <div className="scr-eye">{t("m.alerts.eyebrow", undefined, "Safety")}</div>
+      <div className="scr-eye">{t("m.crisisAlerts.eyebrow", undefined, "Safety")}</div>
       <h1 className="scr-h" style={{ marginBottom: 6 }}>
-        {t("m.alerts.title", undefined, "Crisis Alerts")}
+        {t("m.crisisAlerts.title", undefined, "Crisis Alerts")}
       </h1>
 
       {/* The bell distinction, stated up front: this is the crisis channel,
           not the routine feed. */}
       <div className="hint" style={{ marginBottom: 12 }}>
-        {t("m.alerts.bellNote", undefined, "Org-wide crisis broadcasts only. Routine updates stay in Notifications under the bell.")}{" "}
+        {t("m.crisisAlerts.bellNote", undefined, "Org-wide crisis broadcasts only. Routine updates stay in Notifications under the bell.")}{" "}
         <Link href="/m/notifications" style={{ color: "var(--p-text-2)" }}>
-          {t("m.alerts.bellLink", undefined, "Open Notifications")}
+          {t("m.crisisAlerts.bellLink", undefined, "Open Notifications")}
         </Link>
       </div>
 
@@ -139,9 +139,9 @@ export default async function CrisisAlertsPage() {
         <div className="item">
           <span className="bar" style={{ background: "var(--p-success)" }} />
           <div>
-            <div className="t">{t("m.alerts.allClear", undefined, "No Active Crisis")}</div>
+            <div className="t">{t("m.crisisAlerts.allClear", undefined, "No Active Crisis")}</div>
             <div className="s">
-              {t("m.alerts.allClearBody", undefined, "If a code is declared, it appears here with your response actions.")}
+              {t("m.crisisAlerts.allClearBody", undefined, "If a code is declared, it appears here with your response actions.")}
             </div>
           </div>
         </div>
@@ -152,9 +152,9 @@ export default async function CrisisAlertsPage() {
       <Link href="/m/emergency" className="item tap" style={{ cursor: "pointer", textDecoration: "none" }}>
         <KIcon name="Shield" size={18} style={{ color: "var(--p-text-2)" }} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="t">{t("m.alerts.planTitle", undefined, "Response Plan")}</div>
+          <div className="t">{t("m.crisisAlerts.planTitle", undefined, "Response Plan")}</div>
           <div className="s">
-            {t("m.alerts.planBody", undefined, "Your Emergency Card: muster station, evacuation routes, and venue codes.")}
+            {t("m.crisisAlerts.planBody", undefined, "Your Emergency Card: muster station, evacuation routes, and venue codes.")}
           </div>
         </div>
         <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
@@ -164,7 +164,7 @@ export default async function CrisisAlertsPage() {
           acknowledged state. History is read-only; the response actions
           belong to the active alert above. */}
       <div className="sech">
-        <h2>{t("m.alerts.log", undefined, "Alert Log")}</h2>
+        <h2>{t("m.crisisAlerts.log", undefined, "Alert Log")}</h2>
       </div>
       {log.length === 0 ? (
         <div className="item">
@@ -172,8 +172,8 @@ export default async function CrisisAlertsPage() {
           <div>
             <div className="t">
               {alerts.length === 0
-                ? t("m.alerts.emptyLog", undefined, "No crisis alerts have been declared.")
-                : t("m.alerts.emptyEarlier", undefined, "No earlier alerts.")}
+                ? t("m.crisisAlerts.emptyLog", undefined, "No crisis alerts have been declared.")
+                : t("m.crisisAlerts.emptyEarlier", undefined, "No earlier alerts.")}
             </div>
           </div>
         </div>
@@ -207,7 +207,7 @@ export default async function CrisisAlertsPage() {
                       gap: 4,
                     }}
                   >
-                    <KIcon name="Check" size={12} /> {t("m.alerts.acked", undefined, "Acknowledged")}
+                    <KIcon name="Check" size={12} /> {t("m.crisisAlerts.acked", undefined, "Acknowledged")}
                   </div>
                 )}
               </div>

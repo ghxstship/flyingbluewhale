@@ -1937,8 +1937,8 @@
 [data-theme="atlvs-product"] .ps-alert {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  padding: 10px var(--p-3);
+  gap: var(--p-2);
+  padding: var(--p-2) var(--p-3);
   border-radius: var(--p-r-md);
   border: 1px solid var(--p-border);
   background: var(--p-surface-2);

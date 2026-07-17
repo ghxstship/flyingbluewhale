@@ -49,7 +49,7 @@ const REGISTER: Array<{
   },
   {
     domain: "Workforce",
-    table: "workforce_members",
+    table: "crew_members",
     category: "personal",
     processors: ["Supabase"],
     retention: "7 years (employment record)",

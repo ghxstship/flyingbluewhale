@@ -51,11 +51,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const fmt = await getRequestFormatters();
   const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data } = await supabase
-    .from("workforce_members")
-    .select("id, full_name, email, phone, role, kind, venue_id, created_at")
+    .from("crew_members")
+    .select("id, full_name:name, email, phone, role, kind:workforce_kind, venue_id, created_at")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
-    .eq("kind", "volunteer")
+    .eq("workforce_kind", "volunteer")
     .maybeSingle();
 
   const member = data as Member | null;

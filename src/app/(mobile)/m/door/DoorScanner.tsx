@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState, useTransition } from "react";
 import { KIcon } from "@/components/mobile/kit";
 import { CameraScanner, type ScannedCode } from "@/components/scanners";
+import { formatsForMode } from "@/lib/scan/formats";
 import { scanFeedback } from "@/lib/haptics";
 import { redeemTicket, type DoorResult, type DoorScanRow } from "./actions";
 
@@ -145,7 +146,7 @@ export function DoorScanner({
       </h1>
 
       <div className="scanframe" style={{ position: "relative", overflow: "hidden" }}>
-        <CameraScanner onScan={onScan} formats={["qr_code", "code_128"]} className="!rounded-none" />
+        <CameraScanner onScan={onScan} formats={formatsForMode("access")} className="!rounded-none" />
       </div>
       <div className="scanhint">
         <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {labels.scanHint}

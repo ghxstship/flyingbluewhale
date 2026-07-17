@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
+import { formatsForMode } from "@/lib/scan/formats";
 
 export type RecentScan = {
   id: string;
@@ -32,6 +33,8 @@ export type InventoryScanLabels = {
 
 const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
   accepted: "ok",
+  // resolver 2 identified an asset — a hit, though not an entitlement accept.
+  asset: "ok",
   duplicate: "warn",
   expired: "warn",
   wrong_zone: "warn",
@@ -54,7 +57,7 @@ export function InventoryScanner({
   labels: InventoryScanLabels;
 }) {
   const [code, setCode] = useState("");
-  const { submit, pending, outcome } = useScanSubmit();
+  const { submit, pending, outcome } = useScanSubmit("asset");
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,7 +77,8 @@ export function InventoryScanner({
       </h1>
 
       <GatedCameraScanner
-        onScan={(scanned) => void submit(scanned.value)}
+        onScan={(scanned) => void submit(scanned.value, scanned.format)}
+        formats={formatsForMode("asset")}
         enableLabel={labels.enableCamera ?? "Enable Camera"}
         deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
       />

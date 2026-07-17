@@ -5,21 +5,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { transitionIncident } from "@/lib/db/incident-fsm";
 import { emitAudit } from "@/lib/audit";
 
 const StatusSchema = z.enum(["open", "investigating", "resolved", "closed"]);
 
 export type IncidentStatus = z.infer<typeof StatusSchema>;
-
-// Incident FSM: open → investigating → resolved → closed. Re-opening
-// from resolved/closed back to investigating is operationally common
-// (incident pops back up). Closed is terminal.
-const INCIDENT_TRANSITIONS: Record<IncidentStatus, readonly IncidentStatus[]> = {
-  open: ["investigating", "resolved", "closed"],
-  investigating: ["open", "resolved", "closed"],
-  resolved: ["investigating", "closed"],
-  closed: [],
-};
 
 /**
  * Update an incident's status only — used by the Kanban board's onMove
@@ -30,52 +21,16 @@ export async function setIncidentStatus(id: string, to: IncidentStatus): Promise
   if (!parsed.success) throw new Error("Invalid incident status");
   const session = await requireSession();
   const supabase = await createClient();
-
-  // Read current incident_state so we can validate the transition AND scope the
-  // conditional update — Kanban drag-drop is the canonical
-  // double-trigger path and we don't want a stale board to "re-open" an
-  // incident that ops already closed.
-  const { data: row } = await supabase
-    .from("incidents")
-    .select("incident_state")
-    .eq("org_id", session.orgId)
-    .eq("id", id)
-    .maybeSingle();
-  if (!row) throw new Error("Incident not found");
-  const current = (row as { incident_state: IncidentStatus }).incident_state;
-  const allowed = INCIDENT_TRANSITIONS[current] ?? [];
-  if (current !== parsed.data && !allowed.includes(parsed.data)) {
-    throw new Error(`Cannot move ${current} → ${parsed.data}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
-  }
-
-  const patch: Record<string, unknown> = { incident_state: parsed.data };
-  if (parsed.data === "closed") {
-    patch.closed_at = new Date().toISOString();
-  }
-  const { data: updated, error } = await supabase
-    .from("incidents")
-    .update(patch as never)
-    .eq("org_id", session.orgId)
-    .eq("id", id)
-    .eq("incident_state", current as "open")
-    .select("id");
-  if (error) throw new Error(error.message);
-  if (!updated || updated.length === 0) {
-    throw new Error("Incident status changed concurrently. Refresh and retry");
-  }
+  // FSM + CAS guard + audit live in the shared transition so COMPVSS moves
+  // an incident through the identical path (it previously had none at all).
+  const result = await transitionIncident(supabase, session, id, parsed.data);
+  if (!result.ok) throw new Error(result.error);
   revalidatePath("/studio/operations/incidents");
+  revalidatePath(`/studio/operations/incidents/${id}`);
 }
 
 export type CorrectiveTaskState = { error?: string } | null;
 
-/**
- * v7.8 record action — "Create Corrective Task". Closes the
- * incident → remediation loop: spawns a tasks row pre-filled from the
- * incident (title, context, project, severity-weighted priority) and
- * back-linked via an `[incident:<id>]` marker in the description
- * (tasks has no incident FK; the marker doubles as the idempotency
- * probe so a double-click reuses the first task).
- */
 export async function createCorrectiveTaskAction(incidentId: string): Promise<CorrectiveTaskState> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can create corrective tasks" };

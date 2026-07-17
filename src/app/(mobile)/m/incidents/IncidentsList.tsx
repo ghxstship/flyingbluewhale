@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import { ShieldCheck } from "lucide-react";
 import { ActionBar, TogRow } from "@/components/mobile/kit";
@@ -103,8 +104,15 @@ export function IncidentsList({ items }: { items: IncidentItem[] }) {
           {t("m.incidents.noMatch", undefined, "Nothing matches your search.")}
         </div>
       ) : (
+        // A filed incident has to be openable. These rows were plain divs,
+        // so mobile could report a thing and then never look at it again.
         visible.map((r) => (
-          <div className="item" key={r.id}>
+          <Link
+            className="item tap"
+            key={r.id}
+            href={`/m/incidents/${r.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             <span className="bar" style={{ background: r.barColor }} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="t">{r.title}</div>
@@ -114,7 +122,7 @@ export function IncidentsList({ items }: { items: IncidentItem[] }) {
               <span className={`ps-badge ps-badge--${r.sevTone}`}>{r.severity}</span>
               <span className={`ps-badge ps-badge--${r.stTone}`}>{r.state}</span>
             </div>
-          </div>
+          </Link>
         ))
       )}
     </>

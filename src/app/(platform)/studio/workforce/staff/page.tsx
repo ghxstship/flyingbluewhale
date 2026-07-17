@@ -33,14 +33,21 @@ export default async function Page({
   const session = await requireSession();
   const sp = await searchParams;
   const { page, offset, pageSize } = parsePage(sp);
-  const result = await listOrgScopedPage("workforce_members", session.orgId, {
+  const result = await listOrgScopedPage("crew_members", session.orgId, {
     orderBy: "created_at",
     ascending: false,
     pageSize,
     cursor: String(offset),
-    filters: [{ column: "kind", op: "eq", value: "paid_staff" }],
+    filters: [{ column: "workforce_kind", op: "eq", value: "paid_staff" }],
   });
-  const rows = result.rows;
+  // Deskless staff now live in crew_members (the person SSOT) — see ADR-0015
+  // Addendum 2. The helper selects "*", so alias on the way out to keep the
+  // column keys below unchanged.
+  const rows = (result.rows as unknown as Array<Record<string, unknown>>).map((r) => ({
+    ...r,
+    full_name: r.name,
+    kind: r.workforce_kind,
+  })) as unknown as Array<{ id: string } & Record<string, unknown>>;
   const total = result.totalCount;
   return (
     <>

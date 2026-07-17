@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
+import { formatsForMode } from "@/lib/scan/formats";
 
 export type RecentScan = {
   id: string;
@@ -18,18 +19,14 @@ export type CheckInLabels = {
   access: string;
   asset: string;
   pos: string;
-  nfc: string;
-  rfid: string;
   qr: string;
   scanHintCamera: string;
   scanHintAccess: string;
   enableCamera?: string;
   cameraDenied?: string;
-  nfcHint: string;
   ctaAccess: string;
   ctaAsset: string;
   ctaPos: string;
-  ctaNfc: string;
   manual: string;
   manualLabel: string;
   manualPlaceholder: string;
@@ -43,10 +40,12 @@ export type CheckInLabels = {
   queuedBody?: string;
 };
 
-type Mode = "access" | "asset" | "pos" | "nfc";
+type Mode = "access" | "asset" | "pos";
 
 const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
   accepted: "ok",
+  // resolver 2 identified an asset — a hit, though not an entitlement accept.
+  asset: "ok",
   duplicate: "warn",
   expired: "warn",
   wrong_zone: "warn",
@@ -55,9 +54,20 @@ const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
 };
 
 /**
- * COMPVSS field check-in scanner. Segmented Access / Asset / POS / NFC with a
- * REAL camera decoder (shared `CameraScanner` behind a tap-to-enable gate) and
- * a manual code-entry form. Both paths submit through `useScanSubmit`, which
+ * COMPVSS field check-in scanner. Segmented Access / Asset / POS over a REAL
+ * camera decoder (shared `CameraScanner` behind a tap-to-enable gate) and a
+ * manual code-entry form.
+ *
+ * `mode` is a CONSTRAINT, not decoration: it selects the symbology set the
+ * camera will decode (`formatsForMode`) and is sent to the server, which
+ * refuses to resolve a retail barcode on an access surface. It previously
+ * changed only labels — all three modes hit the same resolver.
+ *
+ * There is no NFC mode. It rendered animated rings and read nothing: Web NFC
+ * is unavailable in WKWebView and, on Android, the System WebView never plumbs
+ * the `nfc` permission — so it cannot work in the Capacitor shell on either
+ * platform. Real NFC needs a native plugin. See
+ * docs/compvss/SCANNING_UNIVERSAL_CAPTURE_PLAN.md §1.5. Both paths submit through `useScanSubmit`, which
  * POSTs the queueable `/api/v1/scan` endpoint — so an offline gate scan is
  * durably queued by the service worker and replayed on reconnect (shown as
  * "recorded, will sync", never a false accept). Haptic + beep per outcome.
@@ -73,7 +83,8 @@ export function CheckInScanner({
 }) {
   const [mode, setMode] = useState<Mode>("access");
   const [code, setCode] = useState("");
-  const { submit, pending, outcome } = useScanSubmit();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { submit, pending, outcome } = useScanSubmit(mode);
 
   const modes = useMemo(
     () =>
@@ -81,20 +92,20 @@ export function CheckInScanner({
         ["access", labels.access],
         ["asset", labels.asset],
         ["pos", labels.pos],
-        ["nfc", labels.nfc],
       ] as Array<[Mode, string]>,
     [labels],
   );
 
-  const isNfc = mode === "nfc";
-  const cta =
-    mode === "access"
-      ? labels.ctaAccess
-      : mode === "asset"
-        ? labels.ctaAsset
-        : mode === "pos"
-          ? labels.ctaPos
-          : labels.ctaNfc;
+  const cta = mode === "access" ? labels.ctaAccess : mode === "asset" ? labels.ctaAsset : labels.ctaPos;
+
+  // Keep the manual field focused. This IS the RFID/UHF story: no phone reads
+  // UHF, but a Bluetooth sled in HID keyboard-wedge mode types the tag EPC into
+  // whatever has focus — so an auto-focused input makes sleds work today on
+  // both platforms with no plugin and no native-shell change.
+  // `preventScroll` keeps the reticle in view when focus lands.
+  useEffect(() => {
+    inputRef.current?.focus({ preventScroll: true });
+  }, [mode]);
   const scanHint = mode === "access" ? labels.scanHintAccess : labels.scanHintCamera;
 
   const onManualSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -102,6 +113,9 @@ export function CheckInScanner({
     if (pending) return;
     void submit(code);
     setCode("");
+    // Re-focus so a wedge scanner can fire the next tag straight into the field
+    // without a tap. Harmless for humans, load-bearing for sleds.
+    inputRef.current?.focus();
   };
 
   return (
@@ -111,7 +125,7 @@ export function CheckInScanner({
         {gateSlug ? `${labels.title} · ${gateSlug}` : labels.title}
       </h1>
 
-      <div className="seg2" style={{ marginBottom: 14, display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+      <div className="seg2" style={{ marginBottom: 14, display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
         {modes.map(([id, label]) => (
           <button
             key={id}
@@ -125,42 +139,26 @@ export function CheckInScanner({
         ))}
       </div>
 
-      {isNfc ? (
-        <>
-          <div className="nfcframe">
-            <span className="nfc-ring r3" />
-            <span className="nfc-ring r2" />
-            <span className="nfc-ring r1" />
-            <span className="nfc-core">
-              <KIcon name="Nfc" size={30} />
-            </span>
-          </div>
-          <div className="scanhint">
-            <KIcon name="Radio" size={14} /> {labels.nfcHint}
-          </div>
-        </>
-      ) : (
-        <>
-          <GatedCameraScanner
-            onScan={(scanned) => void submit(scanned.value)}
-            enableLabel={labels.enableCamera ?? "Enable Camera"}
-            deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
-          />
-          <div className="scanhint">
-            <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {scanHint}
-          </div>
-        </>
-      )}
+      <GatedCameraScanner
+        onScan={(scanned) => void submit(scanned.value, scanned.format)}
+        formats={formatsForMode(mode)}
+        enableLabel={labels.enableCamera ?? "Enable Camera"}
+        deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
+      />
+      <div className="scanhint">
+        <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {scanHint}
+      </div>
 
-      {/* Manual code entry — the camera/NFC bridge drops on native clients; the
-          form is the always-available resolver path. Same submit path as the
-          camera, so the offline queue applies to typed codes too. */}
+      {/* Manual code entry — the always-available resolver path, and the
+          Bluetooth-sled (HID keyboard-wedge) input surface. Same submit path as
+          the camera, so the offline queue applies to typed codes too. */}
       <form onSubmit={onManualSubmit}>
         <div className="fld" style={{ marginTop: 6 }}>
           <label className="wl" htmlFor="code">
             {labels.manualLabel}
           </label>
           <input
+            ref={inputRef}
             id="code"
             name="code"
             className="ps-input"
@@ -177,7 +175,7 @@ export function CheckInScanner({
           style={{ width: "100%", justifyContent: "center", marginTop: 12 }}
           disabled={pending}
         >
-          <KIcon name={isNfc ? "Nfc" : "ScanLine"} size={16} /> {pending ? labels.scanning : cta}
+          <KIcon name="ScanLine" size={16} /> {pending ? labels.scanning : cta}
         </button>
       </form>
 

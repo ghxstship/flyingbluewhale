@@ -27,11 +27,13 @@ export async function createStaff(_: State, fd: FormData): Promise<State> {
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("workforce_members")
+    // Deskless staff now live in crew_members (the person SSOT) — see ADR-0015
+    // Addendum 2. Inserts take the real column names.
+    .from("crew_members")
     .insert({
       org_id: session.orgId,
-      kind: "paid_staff",
-      full_name: parsed.data.full_name,
+      workforce_kind: "paid_staff",
+      name: parsed.data.full_name,
       email: parsed.data.email || null,
       phone: parsed.data.phone || null,
       role: parsed.data.role || null,

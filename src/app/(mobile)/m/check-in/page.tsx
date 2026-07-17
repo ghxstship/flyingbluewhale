@@ -6,8 +6,9 @@ import { CheckInScanner, type RecentScan } from "./CheckInScanner";
 export const dynamic = "force-dynamic";
 
 /**
- * /m/check-in — COMPVSS field Scan surface. Segmented Access / Asset / POS / NFC
- * scanner (live camera decode + `.nfcframe`) with a manual code fallback, both
+ * /m/check-in — COMPVSS field Scan surface. Segmented Access / Asset / POS
+ * scanner (live camera decode, per-mode symbologies) with a manual code
+ * fallback (also the HID keyboard-wedge input for Bluetooth sleds), both
  * submitting through the queueable /api/v1/scan endpoint (offline scans queue
  * + replay). Recent activity is the org's latest `assignment_events` scan
  * rows. Ref design: app.jsx 2527-2600.
@@ -48,8 +49,6 @@ export default async function CheckInPage() {
           access: t("m.checkin.access", undefined, "Access"),
           asset: t("m.checkin.asset", undefined, "Asset"),
           pos: t("m.checkin.pos", undefined, "POS"),
-          nfc: t("m.checkin.nfc", undefined, "NFC"),
-          rfid: t("m.checkin.rfid", undefined, "RFID / NFC"),
           qr: t("m.checkin.qr", undefined, "QR Code"),
           scanHintCamera: t("m.checkin.scanHintCamera", undefined, "Reads QR & barcodes automatically"),
           scanHintAccess: t("m.checkin.scanHintAccess", undefined, "Scan the QR on the credential"),
@@ -61,11 +60,9 @@ export default async function CheckInPage() {
             undefined,
             "Saved on this device. It will sync and verify when you're back online.",
           ),
-          nfcHint: t("m.checkin.nfcHint", undefined, "Hold the RFID credential or fob near the reader"),
           ctaAccess: t("m.checkin.ctaAccess", undefined, "Verify Credential"),
           ctaAsset: t("m.checkin.ctaAsset", undefined, "Check Out / In"),
           ctaPos: t("m.checkin.ctaPos", undefined, "Scan Product"),
-          ctaNfc: t("m.checkin.ctaNfc", undefined, "Tap To Read"),
           manual: t("m.checkin.manual", undefined, "Enter Code Manually"),
           manualLabel: t("m.checkin.manualLabel", undefined, "Code"),
           manualPlaceholder: t("m.checkin.manualPlaceholder", undefined, "e.g. R7-014"),

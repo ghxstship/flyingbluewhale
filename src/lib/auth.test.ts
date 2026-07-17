@@ -12,6 +12,11 @@ const baseSession = (overrides: Partial<Session> = {}): Session => ({
   tier: "access",
   persona: "admin",
   ...overrides,
+  // After the spread, and coalesced: `Partial<Session>` types `grants` as
+  // `string[] | undefined`, so spreading it over a required field would widen
+  // it back to optional. Callers that omit grants get none, which is the
+  // correct default — a session with no add-on grants.
+  grants: overrides.grants ?? [],
 });
 
 describe("personaForRole", () => {
@@ -254,5 +259,67 @@ describe("time capabilities — separation of duties", () => {
     for (const cap of ["time:read", "time:write", "time:approve", "time:edit", "payroll:post"]) {
       expect(can(null, cap), cap).toBe(false);
     }
+  });
+});
+
+
+describe("can() — add-on capability grants", () => {
+  // Grants are the DATA half of RBAC: role-derived, individual, or time-boxed
+  // for a cover shift. They are additive over the static role/persona floor.
+  // See src/lib/rbac/capabilities.ts.
+
+  it("a grant adds a capability the base floor does not have", () => {
+    const crew = baseSession({ role: "member", persona: "crew", grants: [] });
+    expect(can(crew, "scan:asset")).toBe(false);
+
+    const granted = baseSession({ role: "member", persona: "crew", grants: ["scan:asset"] });
+    expect(can(granted, "scan:asset")).toBe(true);
+  });
+
+  it("a grant is NARROW — it does not leak to sibling capabilities", () => {
+    // The whole point of decomposing check-in:* — a warehouse hand who may
+    // scan assets must NOT thereby be able to verify passes at a gate.
+    const s = baseSession({ role: "member", persona: "crew", grants: ["scan:asset"] });
+    expect(can(s, "scan:asset")).toBe(true);
+    expect(can(s, "scan:credential")).toBe(false);
+    expect(can(s, "scan:product")).toBe(false);
+  });
+
+  it("a domain wildcard grant covers the domain", () => {
+    const s = baseSession({ role: "member", persona: "crew", grants: ["scan:*"] });
+    expect(can(s, "scan:asset")).toBe(true);
+    expect(can(s, "scan:credential")).toBe(true);
+  });
+
+  it("grants never widen beyond their domain", () => {
+    // A scan grant must not become a project grant.
+    const s = baseSession({ role: "member", persona: "crew", grants: ["scan:*"] });
+    expect(can(s, "projects:write")).toBe(false);
+    expect(can(s, "invoices:write")).toBe(false);
+  });
+
+  it("grants are additive — they never REMOVE base capability", () => {
+    // There is no deny path by design. An empty grant list must leave the
+    // static floor untouched, or every existing caller regresses.
+    const crew = baseSession({ role: "member", persona: "crew", grants: [] });
+    expect(can(crew, "check-in:write")).toBe(true); // the legacy floor
+    expect(can(crew, "tasks:write")).toBe(true);
+  });
+
+  it("owner keeps the * wildcard regardless of grants", () => {
+    const owner = baseSession({ role: "owner", persona: "owner", grants: [] });
+    expect(can(owner, "scan:credential")).toBe(true);
+    expect(can(owner, "anything:at:all")).toBe(true);
+  });
+
+  it("a grant cannot rescue a null session", () => {
+    expect(can(null, "scan:asset")).toBe(false);
+  });
+
+  it("an unknown capability string grants nothing", () => {
+    // A typo'd grant row must fail closed, not open.
+    const s = baseSession({ role: "member", persona: "crew", grants: ["scan:evrything"] });
+    expect(can(s, "scan:everything")).toBe(false);
+    expect(can(s, "scan:asset")).toBe(false);
   });
 });

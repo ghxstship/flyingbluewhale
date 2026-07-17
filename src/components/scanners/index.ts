@@ -4,4 +4,5 @@ export { ScanCapture } from "./ScanCapture";
 export type { ScanCaptureProps, ScanCaptureLabels, ScanEntryStatus } from "./ScanCapture";
 export { GatedCameraScanner } from "./GatedCameraScanner";
 export { useScanSubmit } from "./useScanSubmit";
-export type { ScanOutcome } from "./useScanSubmit";
+export { submitScanCode, MISREAD_MESSAGE, RESULT_FEEDBACK } from "./submitScanCode";
+export type { ScanOutcome } from "./submitScanCode";

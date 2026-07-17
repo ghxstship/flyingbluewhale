@@ -3,6 +3,8 @@
 import * as React from "react";
 import type { ReactNode } from "react";
 
+import { formatsForMode, needsConfirmation } from "@/lib/scan/formats";
+
 /**
  * Reusable camera-based barcode/QR scanner primitive.
  *
@@ -71,8 +73,12 @@ export type ScannedCode = {
 export type CameraScannerProps = {
   /** Fired on each successful decode. Caller debounces / dedupes. */
   onScan: (code: ScannedCode) => void;
-  /** Optional: restrict to specific formats. Defaults to ["qr_code", "code_128"]. */
-  formats?: string[];
+  /**
+   * Restrict to specific symbologies. Defaults to the full `any` union from
+   * `@/lib/scan/formats` — callers should pass the set for their mode
+   * (`formatsForMode("access")` etc.) rather than hand-rolling an array.
+   */
+  formats?: readonly string[];
   /** Whether to keep scanning after a hit. Default true. */
   continuous?: boolean;
   /** Camera facing — default "environment". */
@@ -89,13 +95,20 @@ type DedupeEntry = { value: string; at: number };
 const DEDUPE_TTL_MS = 1500;
 const DEDUPE_MAX = 3;
 
+/** Pending sightings of a checksum-less 1D code, awaiting confirmation. */
+type PendingEntry = { value: string; at: number; seen: number };
+/** How many agreeing reads a checksum-less 1D code needs before we trust it. */
+const CONFIRM_READS = 2;
+/** Window in which those reads must agree. */
+const CONFIRM_TTL_MS = 2000;
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export function CameraScanner({
   onScan,
-  formats = ["qr_code", "code_128"],
+  formats = formatsForMode("any"),
   continuous = true,
   facingMode = "environment",
   renderError,
@@ -106,6 +119,7 @@ export function CameraScanner({
   const rafRef = React.useRef<number | null>(null);
   const zxingControlsRef = React.useRef<{ stop: () => void } | null>(null);
   const dedupeRef = React.useRef<DedupeEntry[]>([]);
+  const pendingRef = React.useRef<PendingEntry[]>([]);
   const stoppedRef = React.useRef(false);
   const onScanRef = React.useRef(onScan);
 
@@ -125,6 +139,27 @@ export function CameraScanner({
 
   const emitIfFresh = React.useCallback((code: ScannedCode) => {
     const now = Date.now();
+
+    // Checksum-less 1D (code_39 / codabar / itf) carries no integrity check, so
+    // a misread is structurally indistinguishable from a good read — ITF worst
+    // of all, where a partial scan across a truncated bar field decodes as a
+    // shorter, perfectly valid code. Require N agreeing reads inside a short
+    // window before trusting one. Everything else (2D, and 1D with a check
+    // digit) emits on first sight, so the common path is unchanged.
+    if (needsConfirmation(code.format)) {
+      pendingRef.current = pendingRef.current.filter((p) => now - p.at < CONFIRM_TTL_MS);
+      const prior = pendingRef.current.find((p) => p.value === code.value);
+      if (prior) {
+        prior.seen += 1;
+        prior.at = now;
+        if (prior.seen < CONFIRM_READS) return;
+        pendingRef.current = pendingRef.current.filter((p) => p.value !== code.value);
+      } else {
+        pendingRef.current.push({ value: code.value, at: now, seen: 1 });
+        return;
+      }
+    }
+
     // Drop expired dedupe entries.
     dedupeRef.current = dedupeRef.current.filter((d) => now - d.at < DEDUPE_TTL_MS);
     if (dedupeRef.current.some((d) => d.value === code.value)) return;
@@ -313,7 +348,22 @@ export function CameraScanner({
       try {
         const [browserMod, libMod] = await Promise.all([import("@zxing/browser"), import("@zxing/library")]);
         if (cancelled || stoppedRef.current) return;
-        const reader = new browserMod.BrowserMultiFormatReader();
+
+        // Bind `formats` on this path too. Without hints, BrowserMultiFormatReader
+        // decodes every symbology it supports — which meant iOS (no
+        // BarcodeDetector in WebKit) silently accepted retail barcodes at gates
+        // while Android honoured the allowlist. Map our lowercase format names
+        // onto zxing's BarcodeFormat enum; unknown names are ignored rather
+        // than throwing, so a caller can't break the scanner with a typo.
+        const hints = new Map<number, unknown>();
+        const possible = formats
+          .map((f) => libMod.BarcodeFormat[f.toUpperCase() as keyof typeof libMod.BarcodeFormat])
+          .filter((v): v is number => typeof v === "number");
+        if (possible.length > 0) {
+          hints.set(libMod.DecodeHintType.POSSIBLE_FORMATS, possible);
+        }
+
+        const reader = new browserMod.BrowserMultiFormatReader(hints);
         const video = videoRef.current;
         if (!video) {
           cleanup();

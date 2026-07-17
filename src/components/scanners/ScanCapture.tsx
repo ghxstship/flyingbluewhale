@@ -36,10 +36,16 @@ export type ScanEntryStatus = {
 export type ScanCaptureProps = {
   labels: ScanCaptureLabels;
   /** Fired once per accepted code (camera decode or manual submit). May
-   * resolve to a status shown on the log row. */
-  onCapture?: (value: string, source: "camera" | "manual") => void | Promise<ScanEntryStatus | void>;
+   * resolve to a status shown on the log row. `format` is the decoded
+   * symbology when the camera knows it (absent for manual entry) — callers
+   * need it to validate GTIN-bearing codes before they resolve. */
+  onCapture?: (
+    value: string,
+    source: "camera" | "manual",
+    format?: string,
+  ) => void | Promise<ScanEntryStatus | void>;
   /** Restrict the camera to specific symbologies. */
-  formats?: string[];
+  formats?: readonly string[];
   /** Keep scanning after a hit. Default true. */
   continuous?: boolean;
   className?: string;
@@ -74,12 +80,12 @@ export function ScanCapture({
   const [log, setLog] = React.useState<LogEntry[]>([]);
 
   const capture = React.useCallback(
-    (value: string, source: "camera" | "manual") => {
+    (value: string, source: "camera" | "manual", format?: string) => {
       const trimmed = value.trim();
       if (!trimmed) return;
       const id = ++entrySeq;
       setLog((prev) => [{ id, value: trimmed, source, at: Date.now() }, ...prev].slice(0, 10));
-      const maybe = onCapture?.(trimmed, source);
+      const maybe = onCapture?.(trimmed, source, format);
       if (maybe && typeof (maybe as Promise<ScanEntryStatus | void>).then === "function") {
         void (maybe as Promise<ScanEntryStatus | void>)
           .then((status) => {
@@ -92,7 +98,7 @@ export function ScanCapture({
     [onCapture],
   );
 
-  const onScan = React.useCallback((code: ScannedCode) => capture(code.value, "camera"), [capture]);
+  const onScan = React.useCallback((code: ScannedCode) => capture(code.value, "camera", code.format), [capture]);
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>

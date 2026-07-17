@@ -143,6 +143,18 @@ export async function verifyApiKey(authorizationHeader: string | null | undefine
     isDeveloper: mem.is_developer,
     tier,
     persona: personaForRole(role),
+    /**
+     * No data-sourced grants for a token session, deliberately.
+     *
+     * Add-on grants are attached to a PERSON — "Bob may scan assets while he
+     * covers tonight's warehouse shift". A machine token has no shift and no
+     * cover, and `effective_capabilities()` resolves off `auth.uid()`, which a
+     * service-role token call does not carry. A token therefore gets exactly
+     * its static role floor, narrowed further by its own `scopes`. If a token
+     * ever needs an add-on capability, that is a scope to mint, not a grant to
+     * inherit from whoever created the key.
+     */
+    grants: [],
     // Propagate the stored scopes. Cookie sessions leave this undefined
     // (= wildcard). Tokens minted with no scopes also surface an empty
     // array which `assertScope` treats as wildcard, matching mint UX.

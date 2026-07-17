@@ -58,8 +58,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
 
   const { data } = await supabase
-    .from("workforce_members")
-    .select("id, full_name, metadata")
+    .from("crew_members")
+    .select("id, full_name:name, metadata")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
     .maybeSingle();

@@ -8,6 +8,8 @@ import { useScanSubmit } from "@/components/scanners";
 
 const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
   accepted: "ok",
+  // resolver 2 identified an asset — a hit, though not an entitlement accept.
+  asset: "ok",
   duplicate: "warn",
   voided: "danger",
   expired: "warn",

@@ -228,6 +228,22 @@ export type ScanResult =
  * loud (logged with full context) even though we don't fail the scan
  * itself: the field UX prefers a logged gap over re-banding a guest.
  */
+/**
+ * Human-readable label for a scan event row.
+ *
+ * The field surfaces render `body ?? result` as the row's title, so without a
+ * body every entry in "Recent Activity" was titled with the bare verdict and
+ * the subtitle repeated it — a list of rows reading "accepted / accepted".
+ * `catalog_kind` + `title` is what an operator actually needs to recognise the
+ * scan they just made.
+ *
+ * `·` separator, not a dash — house rule.
+ */
+export function scanEventBody(catalogKind: string | null, title: string | null): string | null {
+  if (catalogKind && title) return `${catalogKind} · ${title}`;
+  return title ?? catalogKind ?? null;
+}
+
 async function logScanEvent(
   supabase: Awaited<ReturnType<typeof createClient>>,
   row: {
@@ -235,8 +251,19 @@ async function logScanEvent(
     org_id: string;
     actor_user_id: string;
     scan_code_id: string | null;
+    /**
+     * Mirrors the `assignment_scan_result` DB enum — the JOURNAL's vocabulary,
+     * which is deliberately wider than `ScanResult` (the RESOLVER's return
+     * vocabulary). `wrong_zone` is reachable in the enum and in this journal,
+     * but no resolver produces it today: zone enforcement lives in the separate
+     * accreditation flow. That mismatch is correct, not a defect — do not
+     * "fix" it by adding an unreachable variant to `ScanResult` that every
+     * consumer would then have to render.
+     */
     result: "accepted" | "duplicate" | "voided" | "not_found" | "expired" | "wrong_zone";
     location: { lat: number; lng: number; accuracy?: number } | null;
+    /** Row title for the field surfaces. Null when the parent isn't loaded. */
+    body?: string | null;
   },
 ): Promise<void> {
   const { error } = await supabase.from("assignment_events").insert({
@@ -247,6 +274,7 @@ async function logScanEvent(
     scan_code_id: row.scan_code_id,
     result: row.result,
     location: row.location,
+    body: row.body ?? null,
   });
   if (error) {
     log.error("assignments.scan_journal_failed", {
@@ -318,6 +346,7 @@ export async function scanAssignment(input: {
       scan_code_id: scanCode.id,
       result: "voided",
       location: input.location ?? null,
+      body: scanEventBody(catalogKind, title),
     });
     return { result: "voided", assignmentId: a.id };
   }
@@ -330,6 +359,7 @@ export async function scanAssignment(input: {
       scan_code_id: scanCode.id,
       result: "expired",
       location: input.location ?? null,
+      body: scanEventBody(catalogKind, title),
     });
     return { result: "expired", assignmentId: a.id };
   }
@@ -342,6 +372,7 @@ export async function scanAssignment(input: {
       scan_code_id: scanCode.id,
       result: "duplicate",
       location: input.location ?? null,
+      body: scanEventBody(catalogKind, title),
     });
     return { result: "duplicate", assignmentId: a.id, redeemedAt: a.fulfilled_at as string | null };
   }
@@ -372,6 +403,7 @@ export async function scanAssignment(input: {
       scan_code_id: scanCode.id,
       result: "duplicate",
       location: input.location ?? null,
+      body: scanEventBody(catalogKind, title),
     });
     return { result: "duplicate", assignmentId: a.id, redeemedAt: (latest?.fulfilled_at as string | null) ?? now };
   }
@@ -383,6 +415,7 @@ export async function scanAssignment(input: {
     scan_code_id: scanCode.id,
     result: "accepted",
     location: input.location ?? null,
+    body: scanEventBody(catalogKind, title),
   });
 
   return { result: "accepted", assignmentId: a.id, scanCodeId: scanCode.id, catalogKind, title };

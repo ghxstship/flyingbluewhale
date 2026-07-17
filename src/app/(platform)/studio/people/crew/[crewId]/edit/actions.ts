@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { dependentsBlockMessage, isDependentsBlock } from "@/lib/db/separation";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -46,11 +47,23 @@ export async function updateCrewMember(id: string, _: State, fd: FormData): Prom
   redirect(`/studio/people/crew/${id}`);
 }
 
+/**
+ * DELETE — only for a record that never engaged.
+ *
+ * A crew member with history is archived via `separateCrewMember`, not erased:
+ * deleting one CASCADES their credentials, certifications, ratings and MSA, and
+ * SET NULLs their assignments, shifts and safety briefings. The rule is enforced
+ * by a BEFORE DELETE trigger in the database (see @/lib/db/separation) — this is
+ * only the translation of its refusal into something an operator can act on.
+ */
 export async function deleteCrewMember(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
   const { error } = await supabase.from("crew_members").delete().eq("id", id).eq("org_id", session.orgId);
-  if (error) throw new Error(`Could not delete crew member: ${error.message}`);
+  if (error) {
+    if (isDependentsBlock(error)) throw new Error(dependentsBlockMessage(error));
+    throw new Error(`Could not delete crew member: ${error.message}`);
+  }
   revalidatePath("/studio/people/crew");
   redirect("/studio/people/crew");
 }

@@ -25,8 +25,13 @@ export default async function Page({ params }: { params: Promise<{ staffId: stri
       </>
     );
   const session = await requireSession();
-  const row = await getOrgScoped("workforce_members", session.orgId, p.staffId);
-  if (!row) notFound();
+  // Deskless staff now live in crew_members (the person SSOT) — see ADR-0015
+  // Addendum 2. getOrgScoped selects "*", so alias on the way out to keep this
+  // surface's field names unchanged.
+  const dbRow = await getOrgScoped("crew_members", session.orgId, p.staffId);
+  if (!dbRow) notFound();
+  const { name, workforce_kind, ...restRow } = dbRow;
+  const row = { ...restRow, full_name: name, kind: workforce_kind };
   const title = (row as Record<string, unknown>)["full_name"] as string | undefined;
   const engagementState = (row as Record<string, unknown>)["engagement_state"] as string | undefined;
   return (

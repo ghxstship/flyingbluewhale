@@ -39,6 +39,9 @@ function sessionWith(persona: Session["persona"], role: Session["role"]): Sessio
     orgId: "o",
     orgSlug: "demo",
     role,
+    // No add-on grants: this canon test asserts the STATIC floor, which is
+    // exactly what a session with no grants exercises.
+    grants: [],
     isDeveloper: false,
     tier: "access",
     persona,

@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { apiError } from "./api";
 import { createClient } from "./supabase/server";
 import { hasSupabase } from "./env";
+import { log } from "./log";
+import { SCAN_CAPABILITIES } from "./rbac/capabilities";
 import { urlFor } from "./urls";
 import type { Persona, PlatformRole, ProjectRole, Tier } from "./supabase/types";
 
@@ -42,6 +44,19 @@ export type Session = {
    * that want to gate beyond persona/role.
    */
   scopes?: string[];
+  /**
+   * Data-sourced capability grants for this user in this org, resolved per
+   * request from `public.effective_capabilities()` — role-derived, individual,
+   * and time-boxed (cover shifts). Additive on top of the static role/persona
+   * floor; see `can()`.
+   *
+   * Resolved per request rather than carried in the JWT ON PURPOSE: a claim
+   * would go stale, so a time-boxed grant wouldn't expire and a revoke wouldn't
+   * bite until the token refreshed — which defeats the entire feature. The cost
+   * is one indexed query, and `getSession` is `cache()`d so it's once per
+   * request, not per call.
+   */
+  grants: string[];
   /**
    * When the request is a developer "Act As" impersonation, this is the REAL
    * developer's email (the impersonator) — read from the HMAC-signed
@@ -105,7 +120,7 @@ async function resolveSession(): Promise<Session | null> {
     // Persona column added in migration `memberships_persona_column`.
     // Cast through unknown until gen:types refreshes; the value is one of
     // the PERSONAS literals enforced by the SQL CHECK constraint.
-    .select("org_id, role, persona, is_developer, orgs(slug, tier)")
+    .select("org_id, role, persona, is_developer, orgs(slug, tier, capability_grants_enforced)")
     .eq("user_id", user.id)
     // Soft-deleted memberships (set by /api/v1/me/delete or admin removal)
     // must not resolve to an active session — otherwise an offboarded
@@ -119,7 +134,7 @@ async function resolveSession(): Promise<Session | null> {
     role: PlatformRole;
     persona: Persona | null;
     is_developer: boolean;
-    orgs: { slug: string; tier: Tier } | null;
+    orgs: { slug: string; tier: Tier; capability_grants_enforced: boolean | null } | null;
   };
   const rows = (memberships ?? []) as unknown as Row[];
 
@@ -177,6 +192,13 @@ async function resolveSession(): Promise<Session | null> {
     // No cookie / no signing secret / outside request scope — not impersonating.
   }
 
+  const persona = chosen.persona ?? (isGuest ? "guest" : personaForRole(chosen.role));
+  const grants = await resolveGrants(supabase, chosen.org_id, {
+    role: chosen.role,
+    persona,
+    enforced: chosen.orgs?.capability_grants_enforced ?? false,
+  });
+
   return {
     userId: user.id,
     impersonatedBy,
@@ -186,14 +208,62 @@ async function resolveSession(): Promise<Session | null> {
     role: chosen.role,
     isDeveloper: chosen.is_developer,
     tier: chosen.orgs?.tier ?? "access",
+    grants,
     // Persona-first: prefer the per-membership persona (granular: crew /
     // client / contractor / etc.) and fall back to role-based mapping for
     // pre-migration rows or memberships that opted not to set it. The
     // demo-only fallback to "guest" only fires when persona is *unset* —
     // an explicit persona on a seeded demo-org membership is honored so
     // dev/test workflows can land in /studio, /p, or /m as configured.
-    persona: chosen.persona ?? (isGuest ? "guest" : personaForRole(chosen.role)),
+    persona,
   };
+}
+
+/**
+ * Resolve the DATA half of a session's capabilities: role-derived grants,
+ * individual grants, and any that are live inside a time window right now.
+ *
+ * Also carries the grandfather rule. `crew` and `member` hold `check-in:*`
+ * today, which means every crew member can scan anything, credentials at a gate
+ * included. Decomposing that into `scan:credential` / `scan:asset` /
+ * `scan:product` would revoke it from everyone the moment this deploys, and
+ * lock the field out until an admin configured grants. So while an org has
+ * `capability_grants_enforced = false` (the default), the legacy blanket is
+ * synthesized as grants and nothing changes. An org flips the flag once its
+ * grants are configured; only then do the new capabilities actually bite.
+ *
+ * Never throws: a failure here must degrade to the static floor, not 500 a
+ * request. The floor is the pre-existing behaviour, so a grant-table outage is
+ * a loss of add-on access, not a loss of the app.
+ */
+async function resolveGrants(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  orgId: string,
+  ctx: { role: PlatformRole; persona: Persona; enforced: boolean },
+): Promise<string[]> {
+  const grants = new Set<string>();
+
+  if (!ctx.enforced) {
+    // Legacy blanket: anyone who can scan today keeps scanning everything.
+    const floor = CAPABILITIES_BY_PERSONA[ctx.persona] ?? CAPABILITIES[ctx.role] ?? [];
+    if (matchCapability(floor, "check-in:write")) {
+      for (const c of SCAN_CAPABILITIES) grants.add(c);
+    }
+  }
+
+  try {
+    const { data, error } = await supabase.rpc("effective_capabilities", { p_org_id: orgId });
+    if (error) {
+      log.error("auth.grants_resolve_failed", { org_id: orgId, err: error.message });
+    } else if (Array.isArray(data)) {
+      for (const c of data as unknown as string[]) if (typeof c === "string") grants.add(c);
+    }
+  } catch (err) {
+    // Degrade to the floor rather than fail the request.
+    log.error("auth.grants_resolve_threw", { err: err instanceof Error ? err.message : String(err) });
+  }
+
+  return [...grants];
 }
 
 /**
@@ -206,6 +276,7 @@ function guestSession(userId: string, email: string): Session {
   return {
     userId,
     email,
+    grants: [],
     orgId: "",
     orgSlug: "",
     role: "member",
@@ -371,7 +442,7 @@ const CAPABILITIES: Record<PlatformRole, readonly string[]> = {
     // payroll. Read only: `payroll:post` and `payroll:export` stay in the
     // admin band, because approving hours and paying them are separate
     // authorities. Matches the payroll_exports RLS, so the ledger and the
-    // route that reads it can not give different answers.
+    // route that reads it can't give different answers.
     "payroll:read",
     "mileage:*",
     "procurement:*",
@@ -414,9 +485,9 @@ const CAPABILITIES_BY_PERSONA: Partial<Record<Persona, readonly string[]>> = {
   ],
   // Outside contributor with task-write but no project-write.
   contractor: ["projects:read", "tasks:read", "tasks:write", "time:read", "time:write"],
-  // Field operator. Scanning is the defining capability.
-  // `time:read` is what lets crew see their own punches and the correction
-  // requests they filed — without it the worker half of the loop 403s.
+  // Field operator. Scanning is the defining capability. `time:read` is
+  // what lets crew see their own punches and the correction requests they
+  // filed — without it the worker half of the correction loop 403s.
   crew: ["check-in:*", "tasks:read", "tasks:write", "time:read", "time:write"],
   // Proposal recipient / portal viewer. Read-only on the data layer, PLUS
   // `proposals:approve` — the one binding write the client persona is
@@ -456,14 +527,38 @@ function matchCapability(caps: readonly string[], capability: string): boolean {
   return caps.some((c) => c === capability || c === `${domain}:*`);
 }
 
-export function can(session: Session | null, capability: string): boolean {
-  if (!session) return false;
+/**
+ * The static floor for a session — role/persona only, no data grants.
+ *
+ * Split out from `can()` so the grant resolver can ask "what would this
+ * session have WITHOUT grants?" without recursing through `can()`.
+ */
+function baseCapabilities(session: Session): readonly string[] {
   // Persona-first lookup. Empty array is meaningful — "explicitly nothing".
   const personaCaps = CAPABILITIES_BY_PERSONA[session.persona];
-  if (personaCaps !== undefined) return matchCapability(personaCaps, capability);
+  if (personaCaps !== undefined) return personaCaps;
   // Persona has no per-persona overlay — fall back to platform role.
-  const roleCaps = CAPABILITIES[session.role] ?? [];
-  return matchCapability(roleCaps, capability);
+  return CAPABILITIES[session.role] ?? [];
+}
+
+/**
+ * May this session do `capability`?
+ *
+ * Two sources, unioned, additive:
+ *   BASE   — the static role/persona maps above. Code. The floor.
+ *   GRANTS — `session.grants`, resolved per request from the grant tables
+ *            (role-derived + individual + time-boxed). Data.
+ *
+ * There is no deny path, deliberately — see `@/lib/rbac/capabilities`. Removing
+ * access means not granting it, which is why the base must stay narrow.
+ */
+export function can(session: Session | null, capability: string): boolean {
+  if (!session) return false;
+  // Grants first: cheapest to match, and the common case for add-on features.
+  if (session.grants && session.grants.length > 0 && matchCapability(session.grants, capability)) {
+    return true;
+  }
+  return matchCapability(baseCapabilities(session), capability);
 }
 
 /**

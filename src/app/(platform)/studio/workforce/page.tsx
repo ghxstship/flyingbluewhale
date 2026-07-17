@@ -118,24 +118,31 @@ export default async function Page({
   const { page, offset, pageSize } = parsePage(sp);
   const kinds = Object.keys(KIND_LABEL) as WorkforceKind[];
   const [result, kindCounts] = await Promise.all([
-    listOrgScopedPage("workforce_members", session.orgId, {
-      orderBy: "full_name",
+    listOrgScopedPage("crew_members", session.orgId, {
+      orderBy: "name",
       ascending: true,
       pageSize,
       cursor: String(offset),
-      ...(activeKind ? { filters: [{ column: "kind", op: "eq" as const, value: activeKind }] } : {}),
+      ...(activeKind ? { filters: [{ column: "workforce_kind", op: "eq" as const, value: activeKind }] } : {}),
     }),
     Promise.all(
       kinds.map((kind) =>
         supabase
-          .from("workforce_members")
+          .from("crew_members")
           .select("id", { count: "exact", head: true })
           .eq("org_id", session.orgId)
-          .eq("kind", kind),
+          .eq("workforce_kind", kind),
       ),
     ),
   ]);
-  const rows = result.rows as Row[];
+  // Deskless staff now live in crew_members (the person SSOT) — see ADR-0015
+  // Addendum 2. listOrgScopedPage selects "*", so PostgREST aliasing isn't
+  // available here; alias on the way out instead, keeping the row shape below
+  // (and the DataTable keys) unchanged.
+  const rows = (result.rows as unknown as Array<Record<string, unknown>>).map((r): Row => {
+    const { name, workforce_kind, ...rest } = r;
+    return { ...rest, full_name: name as string, kind: workforce_kind as string } as Row;
+  });
   const counts = kinds.reduce<Record<string, number>>((acc, kind, i) => {
     acc[kind] = kindCounts[i]?.count ?? 0;
     return acc;

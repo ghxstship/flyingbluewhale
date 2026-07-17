@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { CameraScanner, type ScannedCode } from "@/components/scanners/CameraScanner";
+import { formatsForMode } from "@/lib/scan/formats";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { verifyAccessCode } from "./actions";
 import type { ScanResult } from "@/lib/db/assignments";
@@ -108,7 +109,7 @@ export function AccessControlScanner({ labels }: AccessControlScannerProps): Rea
     <div className="grid gap-6 lg:grid-cols-[minmax(0,420px)_1fr]">
       <div className="space-y-3">
         <div className="relative overflow-hidden rounded-[var(--p-r-lg,12px)] border border-[var(--p-border)] bg-[var(--p-surface)]">
-          <CameraScanner onScan={onScan} formats={["qr_code", "code_128", "code_39", "pdf417"]} />
+          <CameraScanner onScan={onScan} formats={formatsForMode("access")} />
           <div aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <div className="h-2/3 w-2/3 rounded-[var(--p-r,8px)] border-2 border-[var(--p-accent)]/70" />
           </div>

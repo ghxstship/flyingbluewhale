@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { can, requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
+import { RosterShifts, type CrewOption, type ShiftRow } from "./RosterShifts";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { deleteRoster } from "./edit/actions";
@@ -28,6 +30,47 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
   const row = await getOrgScoped("rosters", session.orgId, p.rosterId);
   if (!row) notFound();
   const title = (row as Record<string, unknown>)["name"] as string | undefined;
+  const dayOf = ((row as Record<string, unknown>)["day_of"] as string | undefined) ?? "";
+
+  // The roster's shifts, and the crew who could work them. Before this the page
+  // dumped Object.entries(row) as key/value pairs and showed no shifts at all —
+  // a roster you could not put anybody on.
+  const supabase = await createClient();
+  const [{ data: shiftRows }, { data: crewRows }] = await Promise.all([
+    supabase
+      .from("shifts")
+      .select("id, starts_at, ends_at, role, attendance, checked_in_at, crew:crew_member_id(name)")
+      .eq("org_id", session.orgId)
+      .eq("roster_id", p.rosterId)
+      .order("starts_at", { ascending: true }),
+    supabase
+      .from("crew_members")
+      .select("id, name, role")
+      .eq("org_id", session.orgId)
+      .eq("engagement_state", "active")
+      .order("name", { ascending: true })
+      .limit(500),
+  ]);
+
+  const shifts: ShiftRow[] = (shiftRows ?? []).map((r) => {
+    const rec = r as unknown as Record<string, unknown>;
+    const crewJoin = rec["crew"] as { name?: string } | null;
+    return {
+      id: String(rec["id"]),
+      starts_at: String(rec["starts_at"]),
+      ends_at: String(rec["ends_at"]),
+      role: (rec["role"] as string | null) ?? null,
+      attendance: String(rec["attendance"] ?? "scheduled"),
+      checked_in_at: (rec["checked_in_at"] as string | null) ?? null,
+      crew_name: crewJoin?.name ?? null,
+    };
+  });
+  const crew: CrewOption[] = (crewRows ?? []).map((c) => {
+    const rec = c as unknown as Record<string, unknown>;
+    return { id: String(rec["id"]), name: String(rec["name"]), role: (rec["role"] as string | null) ?? null };
+  });
+  const canRoster = can(session, "schedule:write");
+
   return (
     <>
       <ModuleHeader
@@ -53,16 +96,7 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
         }
       />
       <div className="page-content">
-        <dl className="surface grid grid-cols-1 gap-3 p-6 sm:grid-cols-2">
-          {Object.entries(row as Record<string, unknown>).map(([k, v]) => (
-            <div key={k} className="flex flex-col gap-1">
-              <dt className="text-xs tracking-wide text-[var(--muted)] uppercase">{k}</dt>
-              <dd className="font-mono text-xs break-all">
-                {v === null || v === undefined ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v)}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <RosterShifts rosterId={p.rosterId} shifts={shifts} crew={crew} dayOf={dayOf} canRoster={canRoster} />
       </div>
     </>
   );

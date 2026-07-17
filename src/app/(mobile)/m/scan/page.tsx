@@ -37,11 +37,13 @@ export default async function ScanPage() {
           recentEmpty: t("m.scan.recentEmpty", undefined, "No codes captured yet"),
           results: {
             accepted: t("m.scan.result.accepted", undefined, "Accepted"),
+            asset: t("m.scan.result.asset", undefined, "Asset found"),
             duplicate: t("m.scan.result.duplicate", undefined, "Already scanned"),
             expired: t("m.scan.result.expired", undefined, "Expired"),
             voided: t("m.scan.result.voided", undefined, "Voided"),
             not_found: t("m.scan.result.notFound", undefined, "Not found"),
           },
+          misread: t("m.scan.result.misread", undefined, "Misread barcode, scan again"),
           queued: t("m.scan.result.queued", undefined, "Queued, syncs when online"),
           failed: t("m.scan.result.failed", undefined, "Not recorded"),
         }}

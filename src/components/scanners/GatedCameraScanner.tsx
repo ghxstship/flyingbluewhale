@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Camera } from "lucide-react";
 import { requestPermission } from "@/lib/native/permissions";
+import { formatsForMode } from "@/lib/scan/formats";
 import { CameraScanner, type ScannedCode } from "./CameraScanner";
 
 /**
@@ -16,12 +17,12 @@ import { CameraScanner, type ScannedCode } from "./CameraScanner";
  */
 export function GatedCameraScanner({
   onScan,
-  formats = ["qr_code", "code_128"],
+  formats = formatsForMode("any"),
   enableLabel,
   deniedLabel,
 }: {
   onScan: (code: ScannedCode) => void;
-  formats?: string[];
+  formats?: readonly string[];
   enableLabel: string;
   deniedLabel: string;
 }) {

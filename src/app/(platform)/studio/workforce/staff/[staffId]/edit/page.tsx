@@ -14,8 +14,13 @@ export default async function Page({ params }: { params: Promise<{ staffId: stri
   const p = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
-  const row = await getOrgScoped("workforce_members", session.orgId, p.staffId);
-  if (!row) notFound();
+  // Deskless staff now live in crew_members (the person SSOT) — see ADR-0015
+  // Addendum 2. getOrgScoped selects "*", so alias on the way out to keep the
+  // form's field names unchanged.
+  const dbRow = await getOrgScoped("crew_members", session.orgId, p.staffId);
+  if (!dbRow) notFound();
+  const { name, workforce_kind, ...restRow } = dbRow;
+  const row = { ...restRow, full_name: name, kind: workforce_kind };
   const r = row as Record<string, unknown>;
   void r;
   const { t } = await getRequestT();

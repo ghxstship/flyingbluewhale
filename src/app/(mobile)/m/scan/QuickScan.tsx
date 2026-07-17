@@ -1,31 +1,30 @@
 "use client";
 
 import { useCallback } from "react";
-import { ScanCapture, type ScanCaptureLabels, type ScanEntryStatus } from "@/components/scanners";
-import type { ScanResult } from "@/lib/db/assignments";
-import { postFieldWrite } from "@/lib/offline/outbox";
-import { scanFeedback } from "@/lib/haptics";
+import {
+  MISREAD_MESSAGE,
+  ScanCapture,
+  submitScanCode,
+  type ScanCaptureLabels,
+  type ScanEntryStatus,
+} from "@/components/scanners";
+import type { ResolvedScan } from "@/lib/scan/types";
 
 export type QuickScanLabels = ScanCaptureLabels & {
-  results: Record<ScanResult["result"], string>;
+  results: Record<ResolvedScan["result"], string>;
   queued: string;
   failed: string;
+  /** Shown when a retail barcode fails its own check digit — a misread. */
+  misread?: string;
 };
 
-const RESULT_TONE: Record<ScanResult["result"], ScanEntryStatus["tone"]> = {
+const RESULT_TONE: Record<ResolvedScan["result"], ScanEntryStatus["tone"]> = {
   accepted: "ok",
+  asset: "ok",
   duplicate: "warn",
   expired: "warn",
   voided: "danger",
   not_found: "neutral",
-};
-
-const RESULT_FEEDBACK: Record<ScanResult["result"], "success" | "warning" | "error"> = {
-  accepted: "success",
-  duplicate: "warning",
-  expired: "warning",
-  voided: "error",
-  not_found: "error",
 };
 
 /**
@@ -34,24 +33,33 @@ const RESULT_FEEDBACK: Record<ScanResult["result"], "success" | "warning" | "err
  * journal (or the offline queue) instead of evaporating in a session log.
  * The per-row status shows the journaled verdict; a scan made offline shows
  * "queued" and replays on reconnect.
+ *
+ * This is the `any`-mode lookup surface: it decodes the full symbology union
+ * (a lookup tool, not an authorization decision) and therefore validates GTIN
+ * check digits before submitting. See
+ * docs/compvss/SCANNING_UNIVERSAL_CAPTURE_PLAN.md §1.3.
  */
 export function QuickScan({ labels }: { labels: QuickScanLabels }) {
   const onCapture = useCallback(
-    async (value: string): Promise<ScanEntryStatus> => {
-      const res = await postFieldWrite<ScanResult>("/api/v1/scan", { code: value });
-      if (res.status === "ok") {
-        scanFeedback(RESULT_FEEDBACK[res.data.result] ?? "warning");
+    async (value: string, _source: "camera" | "manual", format?: string): Promise<ScanEntryStatus> => {
+      // `submitScanCode` owns the GTIN check-digit guard, the POST, and the
+      // haptic feedback — shared with `useScanSubmit`. Quick Scan calls it
+      // per-code rather than through that hook because ScanCapture patches a
+      // status onto the log ROW that produced the code, and the hook's
+      // single-flight buffer deliberately returns early for a buffered code.
+      const outcome = await submitScanCode(value, { format, mode: "any" });
+      if (!outcome) return { label: labels.failed, tone: "danger" };
+      if (outcome.kind === "result") {
         return {
-          label: labels.results[res.data.result] ?? res.data.result,
-          tone: RESULT_TONE[res.data.result] ?? "neutral",
+          label: labels.results[outcome.result.result] ?? outcome.result.result,
+          tone: RESULT_TONE[outcome.result.result] ?? "neutral",
         };
       }
-      if (res.status === "queued") {
-        scanFeedback("warning");
-        return { label: labels.queued, tone: "warn" };
-      }
-      scanFeedback("error");
-      return { label: labels.failed, tone: "danger" };
+      if (outcome.kind === "queued") return { label: labels.queued, tone: "warn" };
+      return {
+        label: outcome.message === MISREAD_MESSAGE ? (labels.misread ?? labels.failed) : labels.failed,
+        tone: "danger",
+      };
     },
     [labels],
   );

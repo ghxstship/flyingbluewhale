@@ -6,6 +6,7 @@ import { z } from "zod";
 import { can, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { createOfferLetter, markOfferLetterSent } from "@/lib/offer-letters/mutations";
+import { ensureLifecyclePacket } from "@/lib/db/onboarding";
 import { BASIS_LABEL, type CompensationBasis } from "@/lib/offer-letters/types";
 import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
@@ -177,6 +178,9 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
       actorLabel,
     );
     letterId = letter.id;
+    // Kit-30 parity seam: the mobile assign flow seeds the 4-doc packet on
+    // save; the console flow must match (idempotent, so re-assigns no-op).
+    await ensureLifecyclePacket(session.orgId, letter.id);
   } catch (e) {
     return actionFail(e instanceof Error ? e.message : "Could not create the offer letter.", fd);
   }

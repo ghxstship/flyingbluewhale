@@ -58,7 +58,7 @@ test.describe("ATLVS Talent & Casting — behavioral coverage", () => {
     await page.getByRole("button", { name: /save profile/i }).click();
     // App-layer denial surfaces as the FormShell error alert; still on /new.
     await expect(
-      page.getByRole("alert").filter({ hasText: /only manager\+ can create talent profiles/i }),
+      page.getByRole("alert").filter({ hasText: /only manager\+ can create talent profiles/i }).first(),
     ).toBeVisible({ timeout: 30000 });
     await expect(page).toHaveURL(/\/studio\/marketplace\/talent\/new/);
   });
@@ -143,7 +143,7 @@ test.describe("ATLVS Talent & Casting — behavioral coverage", () => {
     await page.locator('main [name="title"]').fill(`E2E Call ${stamp()}`);
     await page.getByRole("button", { name: /save draft/i }).click();
     await expect(
-      page.getByRole("alert").filter({ hasText: /only manager\+ can post open calls/i }),
+      page.getByRole("alert").filter({ hasText: /only manager\+ can post open calls/i }).first(),
     ).toBeVisible({ timeout: 30000 });
     await expect(page).toHaveURL(/\/studio\/marketplace\/calls\/new/);
   });

@@ -47,7 +47,24 @@ export async function createInModule(page: Page, route: string, fields: Record<s
   await page.goto(route);
   for (const [name, value] of Object.entries(fields)) {
     const el = page.locator(`main [name="${name}"]`).first();
-    if (await el.count()) await fillSmart(el, value);
+    if (!(await el.count())) continue;
+    // RecordCombobox (audit A-06) renders the named field as a HIDDEN input
+    // beside a cmdk combobox — fillSmart would wait forever on visibility
+    // (this ate the PO chain on prod, 2026-07-17). Drive the combobox: open
+    // the trigger in the same container, type the label, pick the option.
+    if ((await el.getAttribute("type")) === "hidden") {
+      const wrapper = el.locator("xpath=..");
+      await wrapper.locator('button[role="combobox"]').first().click();
+      const search = page.locator('[cmdk-input], input[cmdk-input=""], [role="dialog"] input, [data-radix-popper-content-wrapper] input').first();
+      await search.fill(value);
+      await page
+        .locator('[cmdk-item], [role="option"]')
+        .filter({ hasText: value })
+        .first()
+        .click({ timeout: 15_000 });
+      continue;
+    }
+    await fillSmart(el, value);
   }
   const required = await page.locator("main form [required]").all();
   for (const el of required) {

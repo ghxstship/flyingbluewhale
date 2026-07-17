@@ -25,7 +25,12 @@ export default async function Page() {
     .from("memberships")
     .select("user_id, users:users!inner(id, email, name)")
     .eq("org_id", session.orgId)
-    .is("deleted_at", null);
+    .is("deleted_at", null)
+    // The joined USER must be live too: an archived user's membership row can
+    // linger, which listed them as a delegatee option that the action then
+    // rightly refused ("not a member") — the option should never render.
+    // Found by the 2026-07-17 prod e2e picking exactly such a residue row.
+    .is("users.deleted_at", null);
 
   const memberList = (
     (members ?? []) as unknown as Array<{

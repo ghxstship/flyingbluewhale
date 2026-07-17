@@ -2622,6 +2622,12 @@
               ]
             },
             {
+              "path": "/m/lost-found/new",
+              "arch": [
+                "FORM"
+              ]
+            },
+            {
               "path": "/m/guide",
               "arch": [
                 "LIST"
@@ -2695,6 +2701,12 @@
             },
             {
               "path": "/m/emergency",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/alerts",
               "arch": [
                 "LIST"
               ]

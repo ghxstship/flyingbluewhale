@@ -109,7 +109,7 @@ export default async function MobileAboutPage() {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">COMPVSS</div>
           <div className="s">
-            {t("m.about.version", { version: VERSION, build: BUILD }, "Version {version} · Build {build}")}
+            {t("m.about.version", { version: VERSION, build: BUILD }, `Version ${VERSION} · Build ${BUILD}`)}
           </div>
         </div>
       </div>

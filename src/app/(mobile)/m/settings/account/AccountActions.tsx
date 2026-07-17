@@ -60,9 +60,11 @@ export function AccountActions({
         ))}
       </div>
       {paused ? (
+        /* `ps-btn--secondary` is not a kit class (the bordered variant is
+           `--ghost`) — the phantom modifier fell through to the filled base. */
         <button
           type="button"
-          className="ps-btn ps-btn--secondary"
+          className="ps-btn ps-btn--ghost"
           disabled={pausePending}
           style={{ width: "100%", justifyContent: "center" }}
           onClick={() => {
@@ -143,7 +145,7 @@ export function AccountActions({
         {(
           [
             ["Download", t("m.account.archive.export", undefined, "Export your data first"), "success"],
-            ["UserX", t("m.account.archive.revoke", undefined, "Access revoked on admin confirmation"), "warning"],
+            ["UserX", t("m.account.delete.revoke", undefined, "Access revoked immediately"), "warning"],
             ["FileLock2", t("m.account.archive.preserve", undefined, "Operational records preserved"), "info"],
           ] as const
         ).map(([icon, label, tone]) => (

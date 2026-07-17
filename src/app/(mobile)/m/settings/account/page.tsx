@@ -67,7 +67,11 @@ export default async function MobileAccountPage() {
         {t("m.account.title", undefined, "Account")}
       </h1>
       <p className="form-intro">
-        {t("m.account.intro", undefined, "Manage your account status — step away for a while or request archival.")}
+        {t(
+          "m.account.intro2",
+          undefined,
+          "Manage your account — pause for a while, export your data, or delete it.",
+        )}
       </p>
 
       {/* ── Identity summary ── */}
@@ -107,7 +111,7 @@ export default async function MobileAccountPage() {
         )}
       </p>
       <a
-        className="ps-btn ps-btn--secondary"
+        className="ps-btn ps-btn--ghost"
         href="/api/v1/me/export"
         download="compvss-data-export.json"
         style={{ width: "100%", justifyContent: "center" }}

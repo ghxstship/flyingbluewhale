@@ -2385,6 +2385,12 @@
           "label": "Surfaces",
           "routes": [
             {
+              "path": "/m/search",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/catalog",
               "arch": [
                 "SHOP"
@@ -2690,6 +2696,18 @@
             },
             {
               "path": "/m/settings",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/m/support",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/settings/about",
               "arch": [
                 "SET"
               ]

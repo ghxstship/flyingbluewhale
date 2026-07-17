@@ -165,7 +165,7 @@ export const WORKFLOWS: readonly Workflow[] = [
     label: "Clear the approval queue",
     state: "gap",
     roles: MANAGER_UP,
-    note: "G2. /m/requests is a hand-rolled two-table queue (time-off + swaps), not the approval_instances engine. D7 (Phase 0) unblocked it — the queue no longer reads structurally zero.",
+    note: "G2. BUILT (kit 28 backlog §3 item 3): /m/requests IS the approval_instances engine now — the two-table time-off/swap queue is gone (those decisions live on their own console surfaces). Manager band gets a decision deck (oldest open instance on top, filtered on OPEN_INSTANCE_STATES — the 'pending' bug D7 fixed); members get their own initiated instances read-only, the exact My Work split. The ONLY write path is the record_approval_decision RPC (20260715140000) — one transaction, manager-band re-checked inside (SECURITY DEFINER), terminal instances refused, step verified against the instance's policy — so mobile and console cannot drift. Approve/Decline are large .ps-btn thumb targets (no swipe lib exists; buttons are the honest UX); decisions queue offline via useOfflineQueue with a stable per-instance slot, and a stale replay against an already-decided instance resolves as superseded instead of parking the outbox. Stepless-policy instances (undecidable ANYWHERE — the RPC requires a policy step) render as a read-only 'waiting on policy setup' list rather than being hidden. REMAINING for 'shipped': a proving e2e that seeds a policy + routed instance, approves it from the deck, and asserts the instance state flipped (the coverage spec currently proves render + the member gated-denial only).",
   },
   {
     id: "mywork.see",

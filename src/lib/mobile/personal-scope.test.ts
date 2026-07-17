@@ -16,6 +16,9 @@ import { join } from "node:path";
  *               cap — the page named for them could not show them.
  *   /m/requests read every colleague's time-off reason for non-managers;
  *               only the decision buttons were gated (fixed in Phase 0).
+ *               The surface is now the approval_instances engine
+ *               (approval.clear) — same invariant, new predicate: members
+ *               see only the instances they initiated.
  *
  * RLS is `is_org_member` on both tables, so it is NOT a backstop here: the
  * filter has to be explicit in the query. This guard is a cheap ratchet
@@ -31,10 +34,12 @@ describe("COMPVSS personal-scope reads are filtered to the viewer", () => {
     expect(src).toMatch(/column:\s*"assigned_to"[\s\S]{0,60}session\.userId/);
   });
 
-  it("/m/requests filters time off + swaps to the viewer for non-managers", () => {
+  it("/m/requests binds non-manager reads to the viewer's own instances", () => {
     const src = readFileSync(join(ROOT, "src/app/(mobile)/m/requests/page.tsx"), "utf8");
-    // Both queries must narrow when the viewer isn't a manager.
-    expect(src).toMatch(/if\s*\(!manager\)\s*timeOffQuery\s*=\s*timeOffQuery\.eq\("user_id",\s*session\.userId\)/);
-    expect(src).toMatch(/if\s*\(!manager\)\s*swapQuery\s*=\s*swapQuery\.eq\("requested_by",\s*session\.userId\)/);
+    // The engine read must branch on the band, and the non-manager branch
+    // must carry the initiated_by predicate bound to the session (RLS is
+    // is_org_member, so without it every member reads the whole org queue).
+    expect(src).toMatch(/if\s*\(manager\)\s*\{/);
+    expect(src).toMatch(/query\s*=\s*query\.eq\("initiated_by",\s*session\.userId\)/);
   });
 });

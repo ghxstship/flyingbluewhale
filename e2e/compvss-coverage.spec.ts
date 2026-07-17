@@ -79,59 +79,34 @@ test.describe("COMPVSS · mobile /m — behavioral coverage", () => {
     await expect(page.getByText(title)).toHaveCount(0, { timeout: 30000 });
   });
 
-  // MEDIUM — the manager approvals FSM (decideTimeOff pending → approved). A
-  // manager files a time-off request, then approves it on /m/requests; the row's
-  // state flips and the decision affordances retire. isManagerPlus permits
-  // self-decision (no self-block), so this is a single-persona chain.
+  // MEDIUM — /m/requests is now the REAL approvals engine (approval.clear):
+  // a decision deck over `approval_instances`, no longer the retired two-table
+  // time-off/swap queue. Fixture-free render assertion: the manager band gets
+  // the deck (either the top card with its Approve/Decline thumb targets, or
+  // the honest "All Clear" empty state) — never the old time-off rows.
   //
-  // Guarded: requestTimeOff needs a `time_off_policies` row in the org. If none
-  // is seeded the action surfaces "No time-off policy…"; we detect that and skip
-  // the approval leg (nothing to approve) rather than fail on missing seed.
-  test("manager: file time-off then approve it on the requests queue", async ({ page }) => {
+  // The full decide flow (seed policy + instance → approve → state flip via
+  // record_approval_decision) needs a service-client approvals fixture that
+  // doesn't exist yet; that spec is the manifest cell's REMAINING item.
+  test("manager: /m/requests renders the approvals deck (approval_instances)", async ({ page }) => {
     await authedSetup(page, "manager");
-    const note = `E2E TimeOff ${stamp()}`;
-
-    await page.goto("/m/time-off/new");
-    await expect(page.locator(".formscreen")).toBeVisible({ timeout: 30000 });
-
-    // from + to (the two date inputs, both required) arm the CTA; type defaults
-    // to "Unpaid".
-    const dates = page.locator('.formscreen input[type="date"]');
-    await dates.nth(0).fill("2030-06-01");
-    await dates.nth(1).fill("2030-06-03");
-    // notes (only textarea) — stamp it so the request is findable + purgeable.
-    await page.locator(".formscreen textarea").first().fill(note);
-
-    await page.getByRole("button", { name: /submit request/i }).click();
-
-    // Either the redirect (policy present → row created) or the policy-missing
-    // error banner. Without a seeded policy there is nothing to approve.
-    const redirected = await page
-      .waitForURL(/\/m\/time-off(\?|$)/, { timeout: 30000 })
-      .then(() => true)
-      .catch(() => false);
-    if (!redirected) return; // no time-off policy seeded — skip the approval leg
-
-    // Approve it from the field approvals queue (manager sees org-wide rows).
     await page.goto("/m/requests");
-    const row = page.locator(".item").filter({ hasText: note });
-    await expect(row).toBeVisible({ timeout: 30000 });
+    await expect(page.locator(".scr-h").first()).toBeVisible({ timeout: 30000 });
 
-    const approve = row.getByRole("button", { name: /approve/i });
-    await expect(approve).toBeVisible({ timeout: 15000 });
-    await approve.click();
-
-    // request_state flips approved → the row's decision buttons retire and the
-    // approved badge shows.
-    await expect(page.locator(".item").filter({ hasText: note }).getByText(/approved/i).first()).toBeVisible({
-      timeout: 30000,
-    });
+    // Deck with a card → both decision buttons render; empty org queue → the
+    // empty state renders. Either is the engine; neither is the old queue.
+    const approve = page.getByRole("button", { name: /^approve$/i });
+    const emptyState = page.getByText(/all clear/i).first();
+    await expect(approve.or(emptyState).first()).toBeVisible({ timeout: 30000 });
+    if ((await approve.count()) > 0) {
+      await expect(page.getByRole("button", { name: /^decline$/i }).first()).toBeVisible();
+    }
   });
 
-  // LOW (gated-denial) — /m/requests is a manager approvals inbox. A bare member
-  // (crew band) sees NO approve/decline affordances: the decision controls only
-  // render for isManagerPlus. Defence-in-depth over the server-side decideTimeOff
-  // / decideSwap "Not authorized" gate.
+  // LOW (gated-denial) — members get the read-only "your submissions" view of
+  // their own initiated instances: NO approve/decline affordances anywhere.
+  // Defence-in-depth over the server gates (isManagerPlus in the action AND the
+  // manager-band re-check inside the record_approval_decision RPC).
   test("crew: requests queue exposes no approve/decline controls", async ({ page }) => {
     await authedSetup(page, "crew");
     await page.goto("/m/requests");

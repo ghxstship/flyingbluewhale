@@ -94,6 +94,10 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
     "src/components/deliverable-templates/TemplatePicker.tsx",
     // Self-reference: this spec mentions the copy patterns in its own docstring.
     "src/app/ia-lint.test.ts",
+    // "No messages yet" is a per-room last-message PLACEHOLDER on the room
+    // list rows, not a page empty state (InboxView renders the page-level
+    // void with <EmptyState>).
+    "src/app/(mobile)/m/inbox/page.tsx",
     // Detail-page in-section inline empties (sub-cards / tabs that render a
     // 1-line "No X yet" inside their own surface). Migrating to <EmptyState
     // size="compact"> would be a visual change inside dense detail layouts;

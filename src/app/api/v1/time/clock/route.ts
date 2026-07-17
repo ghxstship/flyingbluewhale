@@ -8,7 +8,7 @@ import { loadPunchPolicyContext } from "@/lib/time/server";
 import { resolveZoneForPunch } from "@/lib/workforce";
 
 /** /api/v1/time/clock — the free personal time-clock punch (COMPVSS
- * /m/clock + /m/punch). Distinct from /api/v1/shifts/checkin, which drives
+ * /m/clock). Distinct from /api/v1/shifts/checkin, which drives
  * a scheduled shift's attendance FSM: this endpoint opens/closes a bare
  * `time_entries` row for the signed-in user with no shift required.
  *

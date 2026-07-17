@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1225 · **API route handlers:** 156 · **Distinct nav hrefs:** 547
+**Page routes:** 1228 · **API route handlers:** 156 · **Distinct nav hrefs:** 549
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 797 | 254 | 541 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 82 | 63 | 18 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 85 | 65 | 19 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1225** | **521** | **661** | **0** | **43** |
+| **TOTAL** | | **1228** | **523** | **662** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1356,7 +1356,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-82 routes — ● 63 nav · ○ 18 linked · ⚠ 0 orphan
+85 routes — ● 65 nav · ○ 19 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1369,6 +1369,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/m/advances`
 ○ `/m/advances/[assignmentId]`
 ○ `/m/advances/new`
+
+</details>
+
+<details><summary><code>alerts</code> · 1 route</summary>
+
+● `/m/alerts`
 
 </details>
 
@@ -1531,9 +1537,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>lost-found</code> · 1 route</summary>
+<details><summary><code>lost-found</code> · 2 routes</summary>
 
 ● `/m/lost-found`
+● `/m/lost-found/new`
 
 </details>
 
@@ -1587,9 +1594,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>punch</code> · 1 route</summary>
+<details><summary><code>punch</code> · 2 routes</summary>
 
 ● `/m/punch`
+○ `/m/punch/[itemId]`
 
 </details>
 

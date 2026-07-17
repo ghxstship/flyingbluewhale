@@ -93,7 +93,7 @@ const ROUTES = [
   { path: "/m/ros", label: "Run of Show", expect: "run of show|ros" },
   { path: "/m/guard", label: "Guard", expect: "guard" },
   { path: "/m/wms", label: "Warehouse", expect: "warehouse|wms|stock" },
-  { path: "/m/punch", label: "Punch", expect: "punch" },
+  { path: "/m/punch", label: "Punch list", expect: "punch list" },
   { path: "/m/daily-log", label: "Daily log", expect: "daily log" },
   { path: "/m/handover", label: "Handover", expect: "handover" },
   { path: "/m/requests", label: "Requests", expect: "request" },

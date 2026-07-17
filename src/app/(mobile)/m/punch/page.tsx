@@ -1,111 +1,173 @@
 import Link from "next/link";
-import { Clock } from "lucide-react";
+import { ClipboardCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
+import { hasSupabase } from "@/lib/env";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
-import { RefreshShell } from "@/components/mobile/RefreshShell";
-import { PunchControls } from "./PunchControls";
+import { PhotoStrip } from "@/components/media/PhotoStrip";
+import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
 
 export const dynamic = "force-dynamic";
 
+/** Must match the bucket `raiseSnag` (/m/snags) uploads to. */
+const PUNCH_PHOTO_BUCKET = "procore-parity";
+
 /**
- * COMPVSS · Punch — a focused punch in/out surface backed by `time_entries`
- * via the queueable /api/v1/time/clock endpoint (one open entry per user,
- * server-enforced; offline punches queue + replay) and shows today's
- * punches. The full timesheet history lives at /m/clock.
+ * COMPVSS · Punch List — the org-wide inspection punch list, the field view
+ * of the SAME `punch_items` store the console reads at /studio/punch.
+ *
+ * Kit 29 ratified this route as the punch LIST: items with status tones,
+ * photo evidence, assignee, row opens the record. The previous occupant of
+ * this route was a duplicate punch-in/out time surface; punching in and out
+ * lives on /m/clock (the spec's Time Clock), so the time twin yielded.
+ *
+ * Deliberately org-wide (RLS: punch_items select is org-member-readable).
+ * The MY-raised slice lives at /m/snags; this is the whole queue. No
+ * `deleted_at` guard — punch_items has no soft-delete column.
  */
-type EntryRow = {
+type PunchRow = {
   id: string;
-  started_at: string | null;
-  ended_at: string | null;
-  duration_minutes: number | null;
+  code: string;
+  title: string;
+  item_state: string;
+  priority: string;
+  photo_path: string | null;
+  due_at: string | null;
+  created_at: string;
+  project: { name: string | null } | null;
+  assignee: { name: string | null; email: string | null } | null;
 };
 
-export default async function PunchPage() {
+// Kit 29 semantic-tone convention for this surface: open reads info,
+// in-flight reads warning, closed reads success. Void is a neutral tombstone.
+const STATE_TONE: Record<string, string> = {
+  open: "info",
+  in_progress: "warn",
+  ready_for_review: "warn",
+  complete: "ok",
+  void: "neutral",
+};
+
+const PRIORITY_TONE: Record<string, string> = {
+  low: "neutral",
+  normal: "neutral",
+  high: "warn",
+  urgent: "danger",
+};
+
+export default async function PunchListPage() {
+  const { t } = await getRequestT();
+  if (!hasSupabase) {
+    return <div className="screen">{t("m.punchList.configureSupabase", undefined, "Configure Supabase.")}</div>;
+  }
   const session = await requireSession();
   const supabase = await createClient();
-  const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
-  const { data: openRow } = await supabase
-    .from("time_entries")
-    .select("id, started_at")
+  const { data } = await supabase
+    .from("punch_items")
+    .select(
+      "id, code, title, item_state, priority, photo_path, due_at, created_at, project:project_id(name), assignee:assignee_id(name, email)",
+    )
     .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .is("ended_at", null)
-    .order("started_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .order("created_at", { ascending: false })
+    .limit(100);
+  const items = (data ?? []) as unknown as PunchRow[];
 
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
-  const { data: today } = await supabase
-    .from("time_entries")
-    .select("id, started_at, ended_at, duration_minutes")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .gte("started_at", startOfDay.toISOString())
-    .order("started_at", { ascending: false })
-    .limit(50);
-  const entries = (today ?? []) as EntryRow[];
+  // Sign the photo evidence — same idiom as /m/snags: the caller's client
+  // signs, so RLS stays the gate.
+  const photosById = await signPhotoRefsFor(supabase, PUNCH_PHOTO_BUCKET, items, (i) =>
+    i.photo_path ? [i.photo_path] : [],
+  );
 
-  const onClock = !!openRow;
+  const STATE_LABEL: Record<string, string> = {
+    open: t("m.punchList.state.open", undefined, "Open"),
+    in_progress: t("m.punchList.state.inProgress", undefined, "In Progress"),
+    ready_for_review: t("m.punchList.state.readyForReview", undefined, "In Review"),
+    complete: t("m.punchList.state.complete", undefined, "Closed"),
+    void: t("m.punchList.state.void", undefined, "Void"),
+  };
+  const PRIORITY_LABEL: Record<string, string> = {
+    low: t("m.punchList.priority.low", undefined, "Low"),
+    normal: t("m.punchList.priority.normal", undefined, "Normal"),
+    high: t("m.punchList.priority.high", undefined, "High"),
+    urgent: t("m.punchList.priority.urgent", undefined, "Urgent"),
+  };
+
+  const openCount = items.filter((i) => !["complete", "void"].includes(i.item_state)).length;
 
   return (
-    <RefreshShell>
     <div className="screen screen-anim">
-      <div className="scr-eye">
-        {onClock ? t("m.punch.on", undefined, "On The Clock") : t("m.punch.off", undefined, "Off Shift")}
-      </div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.punch.title", undefined, "Punch Clock")}
+      <div className="scr-eye">{t("m.punchList.eyebrow", undefined, "Site")}</div>
+      <h1 className="scr-h" style={{ marginBottom: 4 }}>
+        {t("m.punchList.title", undefined, "Punch List")}
       </h1>
-
-      <PunchControls openStartedAt={(openRow?.started_at as string | undefined) ?? null} />
-
-      <div className="sech" style={{ marginTop: 16 }}>
-        <h2>{t("m.punch.today", undefined, "Today's Punches")}</h2>
+      <div className="s" style={{ marginBottom: 12 }}>
+        {t("m.punchList.openCount", { n: openCount }, `${openCount} Open`)}
       </div>
-      {entries.length === 0 ? (
+
+      {items.length === 0 ? (
         <EmptyState
-          icon={<Clock size={28} aria-hidden="true" />}
-          title={t("m.punch.emptyTitle", undefined, "No Punches")}
-          description={t("m.punch.emptyBody", undefined, "Punch in to start your shift.")}
+          size="compact"
+          icon={<ClipboardCheck size={28} aria-hidden="true" />}
+          title={t("m.punchList.empty.title", undefined, "Nothing On The List")}
+          description={t(
+            "m.punchList.empty.body",
+            undefined,
+            "Inspection items land here as they are raised. Spot something wrong? Raise a snag and it joins the queue.",
+          )}
         />
       ) : (
-        entries.map((e) => {
-          const ended = e.ended_at;
-          const mins = e.duration_minutes;
-          const hrs = mins != null ? `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}` : null;
-          return (
-            <div className="item" key={e.id}>
-              <span className="bar" style={{ background: ended ? "var(--p-border)" : "var(--p-success)" }} />
+        items.map((i) => (
+          <Link
+            href={`/m/punch/${i.id}`}
+            className="item tap"
+            key={i.id}
+            style={{ display: "block", textDecoration: "none", color: "inherit" }}
+          >
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">
-                  {e.started_at ? fmt.time(e.started_at) : "—"}
-                  {" – "}
-                  {ended ? fmt.time(ended) : t("m.punch.now", undefined, "now")}
+                <div className="t">{i.title}</div>
+                <div className="s">
+                  {i.code}
+                  {i.project?.name ? ` · ${i.project.name}` : ""}
+                  {` · ${fmt.date(i.created_at)}`}
                 </div>
-                <div className="s">{hrs ? `${hrs} ${t("m.punch.hrs", undefined, "hrs")}` : t("m.punch.open", undefined, "Open")}</div>
+                <div className="s">
+                  {i.assignee
+                    ? t(
+                        "m.punchList.assignedTo",
+                        { name: i.assignee.name ?? i.assignee.email ?? "" },
+                        `Assigned · ${i.assignee.name ?? i.assignee.email ?? ""}`,
+                      )
+                    : t("m.punchList.unassigned", undefined, "Unassigned")}
+                </div>
               </div>
-              <span className={`ps-badge ps-badge--${ended ? "neutral" : "ok"}`} style={{ flex: "none" }}>
-                {ended ? t("m.punch.closed", undefined, "Closed") : t("m.punch.active", undefined, "Active")}
-              </span>
+              <div style={{ textAlign: "right", flex: "none", display: "grid", gap: 4, justifyItems: "end" }}>
+                <span className={`ps-badge ps-badge--${STATE_TONE[i.item_state] ?? "neutral"}`}>
+                  {STATE_LABEL[i.item_state] ?? i.item_state}
+                </span>
+                {(i.priority === "high" || i.priority === "urgent") && (
+                  <span className={`ps-badge ps-badge--${PRIORITY_TONE[i.priority] ?? "neutral"}`}>
+                    {PRIORITY_LABEL[i.priority] ?? i.priority}
+                  </span>
+                )}
+              </div>
             </div>
-          );
-        })
+            <PhotoStrip photos={photosById.get(i.id) ?? []} label={i.title} />
+          </Link>
+        ))
       )}
 
       <Link
-        href="/m/clock"
+        href="/m/snags/new"
         className="ps-btn ps-btn--secondary ps-btn--lg"
         style={{ width: "100%", justifyContent: "center", marginTop: 16 }}
       >
-        <KIcon name="History" size={16} /> {t("m.punch.fullClock", undefined, "Full Timesheet")}
+        <KIcon name="Camera" size={16} /> {t("m.punchList.raiseSnag", undefined, "Raise A Snag")}
       </Link>
     </div>
-    </RefreshShell>
   );
 }

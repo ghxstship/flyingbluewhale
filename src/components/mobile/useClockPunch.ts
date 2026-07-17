@@ -7,7 +7,8 @@ import { getPosition } from "@/lib/geo/position";
 import { haptic } from "@/lib/haptics";
 
 /**
- * Shared clock-in / clock-out submit path for /m/clock and /m/punch.
+ * Clock-in / clock-out submit path for /m/clock (the kit-29 Time Clock;
+ * /m/punch is the inspection punch list, not a time surface).
  *
  * Punches POST the queueable `/api/v1/time/clock` endpoint via client fetch
  * so the service worker's offline queue applies: an offline punch is durably

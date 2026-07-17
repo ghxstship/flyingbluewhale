@@ -44,7 +44,7 @@ export default async function MorePage() {
         { href: "/m/my-work", icon: "ListChecks", labelKey: "m.more.myWork", label: "My Work", subKey: "m.more.myWorkSub", sub: "What You Owe & What Waits On You" },
         { href: "/m/clock", icon: "Timer", labelKey: "m.more.clock", label: "Time Clock", subKey: "m.more.clockSub", sub: "Clock In, Out & Breaks" },
         { href: "/m/time", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
-        { href: "/m/punch", icon: "Fingerprint", labelKey: "m.more.punch", label: "Punch Clock", subKey: "m.more.punchSub", sub: "Clock In & Out" },
+        { href: "/m/punch", icon: "ClipboardCheck", labelKey: "m.more.punchList", label: "Punch List", subKey: "m.more.punchListSub", sub: "Inspection Items, Org Wide" },
         { href: "/m/requests", icon: "CheckCheck", labelKey: "m.more.approvals", label: "Approvals", subKey: "m.more.approvalsSub", sub: "Review & Action Requests", managerOnly: true },
         { href: "/m/mileage", icon: "Truck", labelKey: "m.more.mileage", label: "Mileage", subKey: "m.more.mileageSub", sub: "Log Drives For Reimbursement" },
         { href: "/m/requisitions", icon: "ShoppingCart", labelKey: "m.more.reqs", label: "Purchase Requests", subKey: "m.more.reqsSub", sub: "Ask The Org To Buy Something" },

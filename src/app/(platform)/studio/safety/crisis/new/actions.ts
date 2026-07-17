@@ -56,7 +56,7 @@ export async function createCrisisAlertAction(_: State, fd: FormData): Promise<S
       await sendPushBulk(recipients, {
         title: parsed.data.title,
         body: parsed.data.body.slice(0, 160),
-        url: "/m/alerts",
+        url: "/m/notifications",
         kind: "crisis",
         scope: "all",
         orgId: session.orgId,

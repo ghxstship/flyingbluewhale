@@ -4008,9 +4008,9 @@
   },
   "advances": {
    "eyebrow": "Mobile",
-   "title": "My Assignments",
+   "title": "Advances",
    "empty": {
-    "title": "Nothing Assigned Yet",
+    "title": "No Advances",
     "body": "Gear, credentials and services assigned to you appear here."
    },
    "search": "Search Advances…",
@@ -4052,7 +4052,7 @@
   },
   "alerts": {
    "eyebrow": "Mobile",
-   "title": "Alerts",
+   "title": "Notifications",
    "acknowledge": "Acknowledge",
    "acknowledging": "Acknowledging…",
    "emptyTitle": "All clear. No alerts right now."
@@ -4074,9 +4074,9 @@
    "clockOut": "Clock out",
    "configureSupabase": "Configure Supabase.",
    "eyebrow": "Field",
-   "title": "Check-in",
+   "title": "Time Clock",
    "empty": {
-    "title": "No Shifts Today",
+    "title": "No Entries Yet",
     "body": "Clock in to start tracking your time."
    },
    "addNote": "Add Note",
@@ -4136,7 +4136,7 @@
     "label": "Download"
    },
    "eyebrow": "Mobile",
-   "title": "My Documents",
+   "title": "Knowledge",
    "uploadCta": "+ Upload",
    "empty": {
     "title": "No Documents",
@@ -4155,7 +4155,7 @@
   },
   "gigs": {
    "eyebrow": "Marketplace",
-   "title": "Open Gigs",
+   "title": "Jobs",
    "applied": "Applied",
    "applying": "Applying…",
    "apply": "Apply",
@@ -4240,7 +4240,7 @@
   },
   "incidents": {
    "eyebrow": "Field",
-   "title": "Incident",
+   "title": "Incidents",
    "emptyBody": "No incidents logged for this org yet.",
    "untitled": "Untitled Incident",
    "photos": "photos",
@@ -4249,7 +4249,7 @@
   },
   "inventory": {
    "eyebrow": "On-Hand Catalog",
-   "title": "Assets",
+   "title": "Inventory",
    "search": "Search assets…",
    "empty": "No assets",
    "emptyHint": "Nothing matches these filters.",
@@ -4489,7 +4489,7 @@
    }
   },
   "punch": {
-   "title": "Punch List",
+   "title": "Punch Clock",
    "out": "Punch Out",
    "in": "Punch In",
    "on": "On The Clock",
@@ -4506,9 +4506,9 @@
   },
   "requests": {
    "eyebrow": "Field",
-   "title": "Service Requests",
+   "title": "Approvals",
    "empty": {
-    "title": "Nothing Open",
+    "title": "All Clear",
     "body": "Time-off and shift-swap requests appear here."
    },
    "chain": {
@@ -4716,9 +4716,9 @@
   },
   "wallet": {
    "eyebrow": "Mobile",
-   "title": "My Credential",
+   "title": "The COMPVSS Rose",
    "empty": {
-    "title": "No Issued Credential",
+    "title": "No Credentials",
     "body": "Credential entitlements appear here once issued. Reach out to your admin."
    },
    "credential": "Credential",
@@ -4732,10 +4732,10 @@
   },
   "directory": {
    "eyebrow": "Mobile",
-   "title": "Directory",
+   "title": "Team Roster",
    "peopleCount": "{count} people in your org",
    "empty": {
-    "title": "No Members",
+    "title": "No Matches",
     "description": "Org members appear here once added.",
     "body": "Nobody on the roster matches."
    },
@@ -4756,7 +4756,7 @@
   },
   "feed": {
    "eyebrow": "Mobile",
-   "title": "Updates",
+   "title": "Community",
    "noUpdatesYet": "No updates yet.",
    "unreadOfTotal": "{unread} unread of {total}",
    "empty": {
@@ -5007,7 +5007,7 @@
    "unnamed": "Unnamed",
    "crew": "Crew",
    "count": "{n} Suggested",
-   "title": "My Connections",
+   "title": "Connections",
    "search": "Search By Name, Trade, Skill, Cert…",
    "empty": "No People",
    "emptyBody": "No other crew in this org yet. Suggestions appear here as your network grows.",
@@ -5023,7 +5023,7 @@
   },
   "inventoryScan": {
    "eyebrow": "Asset Tag",
-   "title": "Scan To Check Out / In",
+   "title": "Scan A Code",
    "hint": "Point at an asset tag QR. It reads automatically.",
    "back": "Assets",
    "manualLabel": "Asset Tag",

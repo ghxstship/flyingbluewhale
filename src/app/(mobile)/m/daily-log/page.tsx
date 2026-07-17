@@ -44,7 +44,7 @@ export default async function DailyLogPage() {
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.dailyLog.eyebrow", undefined, "Site")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.dailyLog.title", undefined, "Daily Logs")}
+        {t("m.dailyLog.title", undefined, "Daily Log")}
       </h1>
 
       {logs.length === 0 ? (

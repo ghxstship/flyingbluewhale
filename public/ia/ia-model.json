@@ -2657,15 +2657,15 @@
               ]
             },
             {
-              "path": "/m/alerts",
+              "path": "/m/notifications",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/m/notifications",
+              "path": "/m/settings/notifications",
               "arch": [
-                "LIST"
+                "SET"
               ]
             },
             {

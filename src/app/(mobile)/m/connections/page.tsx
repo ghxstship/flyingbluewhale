@@ -143,7 +143,7 @@ export default async function ConnectionsPage() {
         {t("m.connections.count", { n: network.length }, `${network.length} Connected`)}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.connections.title", undefined, "My Network")}
+        {t("m.connections.title", undefined, "Connections")}
       </h1>
       <ConnectionsView
         network={network}

@@ -3,21 +3,47 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
-import { KIcon } from "@/components/mobile/kit";
-import { NotifMatrix, type MatrixState } from "./NotifMatrix";
-import { CATEGORIES, CHANNELS } from "./constants";
+import { AlertsList, type AlertItem } from "./AlertsList";
 
 export const dynamic = "force-dynamic";
 
 /**
- * /m/notifications — per-channel notification preference matrix + a recent
- * activity list. The matrix reads `notification_preferences.matrix` (jsonb,
- * keyed `[category][channel] = boolean`) and persists single-cell toggles via
- * the surviving `toggleNotifPref` action. Below it, recent `notifications`
- * render as tone-coded rows.
+ * /m/notifications — org broadcast & alert notifications, tone-coded with a leading
+ * color bar (kit `.bar`). Reads `notifications` for the caller's org (own +
+ * org-wide broadcasts where user_id is null), most urgent first. Each unread
+ * row carries an Acknowledge button that stamps `notifications.read_at`.
  *
- * Design truth: prototype settings notif-matrix (app.jsx 3306-3704).
+ * Design truth: prototype alerts tab (app.jsx 2443-2495). Rebuilt from scratch
+ * (this route was fully reverted with no surviving siblings).
  */
+
+// Alert-flavoured kinds map onto a tone (warn = urgent, ok = approvals,
+// info = updates, neutral = general). Everything else falls to neutral.
+const KIND_TONE: Record<string, "warn" | "ok" | "info" | "neutral"> = {
+  alert: "warn",
+  emergency: "warn",
+  crisis: "warn",
+  incident: "warn",
+  approval: "ok",
+  assignment_state: "ok",
+  announcement: "info",
+  assignment: "info",
+  assignment_scan: "info",
+};
+
+const TONE_VAR: Record<string, string> = {
+  warn: "var(--p-warning)",
+  ok: "var(--p-success)",
+  info: "var(--p-info)",
+  neutral: "var(--p-text-3)",
+};
+
+const TONE_ICON: Record<string, string> = {
+  warn: "TriangleAlert",
+  ok: "CircleCheck",
+  info: "Info",
+  neutral: "Bell",
+};
 
 function relativeTime(iso: string): string {
   const ms = Date.now() - new Date(iso).getTime();
@@ -31,13 +57,13 @@ function relativeTime(iso: string): string {
   return `${Math.floor(day / 7)}w`;
 }
 
-export default async function MobileNotificationsPage() {
+export default async function MobileAlertsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <div className="screen screen-anim">
-        <div className="scr-eye">{t("m.notifications.eyebrow", undefined, "Settings")}</div>
-        <h1 className="scr-h">{t("m.notifications.title", undefined, "Notifications")}</h1>
+        <div className="scr-eye">{t("m.alerts.eyebrow", undefined, "Alerts")}</div>
+        <h1 className="scr-h">{t("m.alerts.title", undefined, "Notifications")}</h1>
         <p className="form-intro">{t("common.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
@@ -46,34 +72,17 @@ export default async function MobileNotificationsPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
-  const [{ data: prefs }, { data: recent }] = await Promise.all([
-    supabase
-      .from("notification_preferences")
-      .select("matrix")
-      .eq("user_id", session.userId)
-      .maybeSingle(),
-    supabase
-      .from("notifications")
-      .select("id, kind, title, body, created_at, read_at")
-      .eq("org_id", session.orgId)
-      .eq("user_id", session.userId)
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false })
-      .limit(20),
-  ]);
+  // Own notifications + org-wide broadcasts (user_id null), org-pinned.
+  const { data } = await supabase
+    .from("notifications")
+    .select("id, kind, title, body, created_at, read_at, user_id")
+    .eq("org_id", session.orgId)
+    .or(`user_id.eq.${session.userId},user_id.is.null`)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(60);
 
-  // Seed the matrix UI with the persisted prefs, defaulting any missing cell
-  // to a sensible on/off (push on, email/text off) so the grid is never empty.
-  const stored = (prefs?.matrix as Record<string, Record<string, boolean>> | null) ?? {};
-  const initial: MatrixState = {};
-  for (const cat of CATEGORIES) {
-    initial[cat] = {};
-    for (const ch of CHANNELS) {
-      initial[cat][ch] = stored[cat]?.[ch] ?? ch === "push";
-    }
-  }
-
-  type NotifRow = {
+  type AlertRow = {
     id: string;
     kind: string;
     title: string;
@@ -81,55 +90,32 @@ export default async function MobileNotificationsPage() {
     created_at: string;
     read_at: string | null;
   };
-  const rows = (recent ?? []) as NotifRow[];
-  const unread = rows.filter((n) => n.read_at == null).length;
+  const rows = (data ?? []) as AlertRow[];
+  const unread = rows.filter((a) => a.read_at == null).length;
 
-  const labels = {
-    heading: t("m.notifications.matrixHeading", undefined, "Delivery"),
-    push: t("m.notifications.channel.push", undefined, "Push"),
-    email: t("m.notifications.channel.email", undefined, "Email"),
-    text: t("m.notifications.channel.text", undefined, "Text"),
-  };
+  const items: AlertItem[] = rows.map((a) => {
+    const tone = KIND_TONE[a.kind] ?? "neutral";
+    return {
+      id: a.id,
+      title: a.title,
+      body: a.body || toTitle(a.kind),
+      tone,
+      color: TONE_VAR[tone] ?? "var(--p-text-3)",
+      iconName: TONE_ICON[tone] ?? "Bell",
+      when: relativeTime(a.created_at),
+      read: a.read_at != null,
+      sortAt: a.created_at,
+    };
+  });
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">
-        {t("m.notifications.eyebrow", { count: unread }, `${unread} New`)}
-      </div>
+      <div className="scr-eye">{t("m.alerts.eyebrow", { count: unread }, `${unread} New`)}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.notifications.title", undefined, "Notifications")}
+        {t("m.alerts.title", undefined, "Notifications")}
       </h1>
 
-      <NotifMatrix categories={CATEGORIES} channels={CHANNELS} initial={initial} labels={labels} />
-
-      <div className="sech">
-        <h2>{t("m.notifications.recentHeading", undefined, "Recent")}</h2>
-        {rows.length > 0 && (
-          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--p-text-3)" }}>{rows.length}</span>
-        )}
-      </div>
-
-      {rows.length === 0 ? (
-        <div className="item">
-          <div className="s">{t("m.notifications.emptyTitle", undefined, "You're all caught up.")}</div>
-        </div>
-      ) : (
-        rows.map((n) => (
-          <div className="item" key={n.id} style={{ opacity: n.read_at ? 0.65 : 1 }}>
-            <span
-              className="bar"
-              style={{ background: n.read_at ? "var(--p-text-3)" : "var(--p-accent)" }}
-            />
-            <KIcon name="Bell" size={18} style={{ color: "var(--p-text-2)" }} />
-            <div style={{ minWidth: 0 }}>
-              <div className="t">{n.title}</div>
-              <div className="s">{n.body || toTitle(n.kind)}</div>
-            </div>
-            <span className="sp" />
-            <span className="time">{relativeTime(n.created_at)}</span>
-          </div>
-        ))
-      )}
+      <AlertsList items={items} />
     </div>
   );
 }

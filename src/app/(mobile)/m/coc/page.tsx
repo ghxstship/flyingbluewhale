@@ -45,7 +45,7 @@ export default async function CocPage() {
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.coc.eyebrow", undefined, "Assets")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.coc.title", undefined, "Chain Of Custody")}
+        {t("m.coc.title", undefined, "Chain of Custody")}
       </h1>
 
       {events.length === 0 ? (

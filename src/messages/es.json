@@ -16447,9 +16447,7 @@
   "m": {
     "advances": {
       "eyebrow": "Móvil",
-      "title": "Mis Asignaciones",
       "empty": {
-        "title": "Aún Sin Asignaciones",
         "body": "El equipo, las credenciales y los servicios asignados a ti aparecen aquí."
       },
       "detail": {
@@ -16491,7 +16489,6 @@
     },
     "alerts": {
       "eyebrow": "Móvil",
-      "title": "Alertas",
       "acknowledge": "Confirmar",
       "acknowledging": "Confirmando…",
       "emptyTitle": "Todo despejado. No hay alertas ahora mismo."
@@ -16502,9 +16499,7 @@
       "clockOut": "Fichar salida",
       "configureSupabase": "Configura Supabase.",
       "eyebrow": "Campo",
-      "title": "Check-in",
       "empty": {
-        "title": "Sin Turnos Hoy",
         "body": "Ficha la entrada para empezar a registrar tu tiempo."
       },
       "active": "Activo",
@@ -16520,7 +16515,6 @@
     },
     "coc": {
       "eyebrow": "Campo",
-      "title": "Cadena de custodia",
       "asset": "Activo",
       "emptyBody": "Los escaneos y entregas de activos aparecerán aquí como una línea de tiempo.",
       "emptyTitle": "Sin eventos de custodia",
@@ -16531,7 +16525,6 @@
     },
     "dailyLog": {
       "eyebrow": "Campo",
-      "title": "Bitácora Diaria",
       "back": "Registros diarios",
       "emptyBody": "Inicia el registro del día con el clima y las notas.",
       "emptyTitle": "Aún no hay registros",
@@ -16558,10 +16551,8 @@
     },
     "directory": {
       "eyebrow": "Móvil",
-      "title": "Directorio",
       "peopleCount": "{count} personas en tu organización",
       "empty": {
-        "title": "Sin Miembros",
         "description": "Los miembros de la organización aparecen aquí una vez agregados.",
         "body": "Nadie en la lista de personal coincide."
       },
@@ -16588,7 +16579,6 @@
         "label": "Descargar"
       },
       "eyebrow": "Móvil",
-      "title": "Mis Documentos",
       "uploadCta": "+ Subir",
       "empty": {
         "title": "Sin Documentos",
@@ -16615,7 +16605,6 @@
     },
     "feed": {
       "eyebrow": "Móvil",
-      "title": "Novedades",
       "noUpdatesYet": "Sin novedades aún.",
       "unreadOfTotal": "{unread} sin leer de {total}",
       "empty": {
@@ -16638,7 +16627,6 @@
     },
     "gigs": {
       "eyebrow": "Marketplace",
-      "title": "Gigs Abiertos",
       "applicants": "{count} postulados",
       "applied": "Postulado",
       "apply": "Postular",
@@ -16759,7 +16747,6 @@
     },
     "incidents": {
       "eyebrow": "Campo",
-      "title": "Incidente",
       "emptyBody": "Aún no hay incidentes registrados para esta organización.",
       "emptyTitle": "Todo despejado",
       "file": "Presentar reporte",
@@ -16780,7 +16767,6 @@
       "scanCta": "Escanear para entrega/devolución",
       "search": "Buscar activos…",
       "serialized": "Unidades serializadas",
-      "title": "Activos",
       "tracked": "Rastreado",
       "units": "Unidades",
       "untracked": "Sin rastrear"
@@ -17007,7 +16993,6 @@
       }
     },
     "punch": {
-      "title": "Punch List",
       "active": "Activo",
       "closed": "Cerrado",
       "emptyBody": "Ficha la entrada para empezar tu turno.",
@@ -17024,9 +17009,7 @@
     },
     "requests": {
       "eyebrow": "Campo",
-      "title": "Solicitudes de Servicio",
       "empty": {
-        "title": "Nada Abierto",
         "body": "Las solicitudes de tiempo libre y de cambio de turno aparecen aquí."
       },
       "approve": "Aprobar",
@@ -17233,9 +17216,7 @@
     },
     "wallet": {
       "eyebrow": "Móvil",
-      "title": "Mi Credencial",
       "empty": {
-        "title": "Sin Credencial Emitida",
         "body": "Los derechos de credencial aparecen aquí una vez emitidos. Contacta a tu administrador."
       },
       "accessTitle": "Acceso y permisos",
@@ -17288,8 +17269,7 @@
       "manualPlaceholder": "p. ej. R7-014",
       "recentEmpty": "Aún no hay escaneos",
       "recentTitle": "Actividad reciente",
-      "scanning": "Verificando…",
-      "title": "Escanear para entrega/devolución"
+      "scanning": "Verificando…"
     },
     "more": {
       "account": "Cuenta",
@@ -17338,7 +17318,6 @@
       "requestSent": "Solicitud enviada",
       "search": "Buscar por nombre, oficio, habilidad, certificación…",
       "suggestions": "Sugerencias",
-      "title": "Mis conexiones",
       "unnamed": "Sin nombre"
     },
     "activity": {

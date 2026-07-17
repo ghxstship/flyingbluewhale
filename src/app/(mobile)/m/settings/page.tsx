@@ -161,6 +161,8 @@ export default async function MobileSettingsPage() {
     density: t("m.settings.appearance.density", undefined, "Density"),
     account: t("m.settings.account.heading", undefined, "Account"),
     accountStatus: t("m.settings.account.status", undefined, "Account Status"),
+    notifPrefs: t("m.settings.notifPrefs", undefined, "Notification Preferences"),
+    notifPrefsDesc: t("m.settings.notifPrefsDesc", undefined, "Choose What Pings You, Per Kind"),
     accountStatusDesc: t(
       "m.settings.account.statusDesc",
       undefined,

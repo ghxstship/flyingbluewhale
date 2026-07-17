@@ -90,6 +90,8 @@ type Labels = {
   density: string;
   account: string;
   accountStatus: string;
+  notifPrefs: string;
+  notifPrefsDesc: string;
   accountStatusDesc: string;
   changelog: string;
   changelogDesc: string;
@@ -304,6 +306,19 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">{labels.accountStatus}</div>
           <div className="s">{labels.accountStatusDesc}</div>
+        </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
+      </a>
+
+      {/* Notification preferences — the per-kind matrix. It wore the bell's
+          route (/m/notifications) for months while the actual feed sat on
+          /m/alerts; now the feed owns the bell and the matrix lives here,
+          which is where its own docblock always said it belonged. */}
+      <a className="item tap" href="/m/settings/notifications" style={{ cursor: "pointer" }}>
+        <KIcon name="Bell" size={18} style={{ color: "var(--p-text-2)" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{labels.notifPrefs}</div>
+          <div className="s">{labels.notifPrefsDesc}</div>
         </div>
         <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)" }} />
       </a>

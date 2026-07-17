@@ -16396,9 +16396,7 @@
   "m": {
     "advances": {
       "eyebrow": "Mobile",
-      "title": "Minhas Atribuições",
       "empty": {
-        "title": "Nada Atribuído Ainda",
         "body": "Equipamentos, credenciais e serviços atribuídos a você aparecem aqui."
       },
       "detail": {
@@ -16440,7 +16438,6 @@
     },
     "alerts": {
       "eyebrow": "Mobile",
-      "title": "Alertas",
       "acknowledge": "Confirmar",
       "acknowledging": "Confirmando…",
       "emptyTitle": "Tudo certo. Nenhum alerta no momento."
@@ -16451,9 +16448,7 @@
       "clockOut": "Bater ponto de saída",
       "configureSupabase": "Configurar Supabase.",
       "eyebrow": "Campo",
-      "title": "Check-in",
       "empty": {
-        "title": "Sem Turnos Hoje",
         "body": "Registre a entrada para começar a controlar seu tempo."
       },
       "active": "Ativo",
@@ -16469,7 +16464,6 @@
     },
     "coc": {
       "eyebrow": "Campo",
-      "title": "Cadeia de Custódia",
       "asset": "Ativo",
       "emptyBody": "Leituras e transferências de ativos aparecerão aqui como uma linha do tempo.",
       "emptyTitle": "Nenhum evento de custódia",
@@ -16480,7 +16474,6 @@
     },
     "dailyLog": {
       "eyebrow": "Campo",
-      "title": "Diário de Bordo",
       "back": "Diários de obra",
       "emptyBody": "Inicie o diário do dia com clima e observações.",
       "emptyTitle": "Nenhum diário ainda",
@@ -16507,10 +16500,8 @@
     },
     "directory": {
       "eyebrow": "Mobile",
-      "title": "Diretório",
       "peopleCount": "{count} pessoas na sua org",
       "empty": {
-        "title": "Sem Membros",
         "description": "Membros da org aparecem aqui após serem adicionados.",
         "body": "Ninguém na escala corresponde."
       },
@@ -16537,7 +16528,6 @@
         "label": "Baixar"
       },
       "eyebrow": "Mobile",
-      "title": "Meus Documentos",
       "uploadCta": "+ Enviar",
       "empty": {
         "title": "Sem Documentos",
@@ -16564,7 +16554,6 @@
     },
     "feed": {
       "eyebrow": "Mobile",
-      "title": "Atualizações",
       "noUpdatesYet": "Nenhuma atualização ainda.",
       "unreadOfTotal": "{unread} não lidas de {total}",
       "empty": {
@@ -16587,7 +16576,6 @@
     },
     "gigs": {
       "eyebrow": "Marketplace",
-      "title": "Gigs Abertos",
       "applicants": "{count} candidaturas",
       "applied": "Candidatado",
       "apply": "Candidatar-se",
@@ -16708,7 +16696,6 @@
     },
     "incidents": {
       "eyebrow": "Campo",
-      "title": "Incidentes",
       "emptyBody": "Nenhum incidente registrado para esta organização ainda.",
       "emptyTitle": "Tudo certo",
       "file": "Registrar relatório",
@@ -16729,7 +16716,6 @@
       "scanCta": "Escanear para retirar / devolver",
       "search": "Buscar ativos…",
       "serialized": "Unidades serializadas",
-      "title": "Ativos",
       "tracked": "Rastreado",
       "units": "Unidades",
       "untracked": "Não rastreado"
@@ -16956,7 +16942,6 @@
       }
     },
     "punch": {
-      "title": "Lista de Pendências",
       "active": "Ativo",
       "closed": "Encerrado",
       "emptyBody": "Registre a entrada para começar seu turno.",
@@ -16973,9 +16958,7 @@
     },
     "requests": {
       "eyebrow": "Campo",
-      "title": "Chamados de Serviço",
       "empty": {
-        "title": "Nada Aberto",
         "body": "Solicitações de folga e de troca de turno aparecem aqui."
       },
       "approve": "Aprovar",
@@ -17182,9 +17165,7 @@
     },
     "wallet": {
       "eyebrow": "Mobile",
-      "title": "Minha Credencial",
       "empty": {
-        "title": "Nenhuma Credencial Emitida",
         "body": "As permissões de credencial aparecem aqui após a emissão. Fale com o seu admin."
       },
       "accessTitle": "Acesso e permissões",
@@ -17237,8 +17218,7 @@
       "manualPlaceholder": "ex.: R7-014",
       "recentEmpty": "Nenhuma leitura ainda",
       "recentTitle": "Atividade recente",
-      "scanning": "Verificando…",
-      "title": "Escanear para retirar / devolver"
+      "scanning": "Verificando…"
     },
     "more": {
       "account": "Conta",
@@ -17287,7 +17267,6 @@
       "requestSent": "Solicitação enviada",
       "search": "Buscar por nome, atividade, habilidade, cert.…",
       "suggestions": "Sugestões",
-      "title": "Minhas conexões",
       "unnamed": "Sem nome"
     },
     "activity": {

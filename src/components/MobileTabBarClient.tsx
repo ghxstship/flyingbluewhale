@@ -42,7 +42,6 @@ const ICONS: Record<string, typeof Home> = {
   "/m/check-in": QrCode,
   "/m/guide": BookOpen,
   "/m/clock": Clock,
-  "/m/alerts": Bell,
   "/m/notifications": Bell,
   "/m/incidents": Siren,
   "/m/incident": Siren,

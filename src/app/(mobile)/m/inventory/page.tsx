@@ -112,7 +112,7 @@ export default async function InventoryPage() {
         items={items}
         labels={{
           eyebrow: t("m.inventory.eyebrow", undefined, "On-Hand Catalog"),
-          title: t("m.inventory.title", undefined, "Assets"),
+          title: t("m.inventory.title", undefined, "Inventory"),
           custody: {
             take: t("m.inventory.custody.take", undefined, "Take Custody"),
             ret: t("m.inventory.custody.return", undefined, "Return"),

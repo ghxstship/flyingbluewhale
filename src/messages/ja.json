@@ -3965,9 +3965,7 @@
       "clockOut": "退勤",
       "configureSupabase": "Supabase を設定してください。",
       "eyebrow": "現場",
-      "title": "チェックイン",
       "empty": {
-        "title": "本日のシフトはありません",
         "body": "クロックインして勤務時間の記録を開始します。"
       },
       "active": "アクティブ",
@@ -3983,9 +3981,7 @@
     },
     "advances": {
       "eyebrow": "モバイル",
-      "title": "あなたのアサインメント",
       "empty": {
-        "title": "まだ何もアサインされていません",
         "body": "あなたに割り当てられた機材・クレデンシャル・サービスがここに表示されます。"
       },
       "detail": {
@@ -4027,14 +4023,12 @@
     },
     "alerts": {
       "eyebrow": "モバイル",
-      "title": "アラート",
       "acknowledge": "確認する",
       "acknowledging": "確認中…",
       "emptyTitle": "問題ありません。現在アラートはありません。"
     },
     "coc": {
       "eyebrow": "現場",
-      "title": "管理連鎖",
       "asset": "アセット",
       "emptyBody": "スキャンとアセットの引き継ぎがタイムラインとしてここに表示されます。",
       "emptyTitle": "管理イベントなし",
@@ -4045,7 +4039,6 @@
     },
     "dailyLog": {
       "eyebrow": "現場",
-      "title": "日報",
       "back": "デイリーログ",
       "emptyBody": "天候とメモからその日のログを始めましょう。",
       "emptyTitle": "ログはまだありません",
@@ -4072,10 +4065,8 @@
     },
     "directory": {
       "eyebrow": "モバイル",
-      "title": "ディレクトリ",
       "peopleCount": "組織に{count}名",
       "empty": {
-        "title": "メンバーなし",
         "description": "組織メンバーを追加するとここに表示されます。",
         "body": "名簿に一致する人がいません。"
       },
@@ -4102,7 +4093,6 @@
         "label": "ダウンロード"
       },
       "eyebrow": "モバイル",
-      "title": "マイ ドキュメント",
       "uploadCta": "+ アップロード",
       "empty": {
         "title": "ドキュメントなし",
@@ -4129,7 +4119,6 @@
     },
     "feed": {
       "eyebrow": "モバイル",
-      "title": "アップデート",
       "noUpdatesYet": "アップデートはまだありません。",
       "unreadOfTotal": "{total}件中{unread}件未読",
       "empty": {
@@ -4152,7 +4141,6 @@
     },
     "gigs": {
       "eyebrow": "マーケットプレイス",
-      "title": "公開中の案件",
       "applicants": "{count}件の応募",
       "applied": "応募済み",
       "apply": "応募",
@@ -4273,7 +4261,6 @@
     },
     "incidents": {
       "eyebrow": "現場",
-      "title": "インシデント",
       "emptyBody": "この組織にはまだインシデントの記録がありません。",
       "emptyTitle": "問題なし",
       "file": "報告を提出",
@@ -4294,7 +4281,6 @@
       "scanCta": "スキャンしてチェックアウト / イン",
       "search": "アセットを検索…",
       "serialized": "シリアル管理ユニット",
-      "title": "アセット",
       "tracked": "追跡対象",
       "units": "ユニット",
       "untracked": "追跡対象外"
@@ -4521,7 +4507,6 @@
       }
     },
     "punch": {
-      "title": "パンチリスト",
       "active": "アクティブ",
       "closed": "クローズ",
       "emptyBody": "パンチインしてシフトを開始します。",
@@ -4538,9 +4523,7 @@
     },
     "requests": {
       "eyebrow": "現場",
-      "title": "サービスリクエスト",
       "empty": {
-        "title": "未対応はありません",
         "body": "休暇申請とシフト交代のリクエストがここに表示されます。"
       },
       "approve": "承認",
@@ -4747,9 +4730,7 @@
     },
     "wallet": {
       "eyebrow": "モバイル",
-      "title": "マイ クレデンシャル",
       "empty": {
-        "title": "発行済みクレデンシャルなし",
         "body": "クレデンシャルの権限は発行されるとここに表示されます。管理者にお問い合わせください。"
       },
       "accessTitle": "アクセスと権限",
@@ -4802,8 +4783,7 @@
       "manualPlaceholder": "例: R7-014",
       "recentEmpty": "スキャンはまだありません",
       "recentTitle": "最近のアクティビティ",
-      "scanning": "確認中…",
-      "title": "スキャンしてチェックアウト / イン"
+      "scanning": "確認中…"
     },
     "more": {
       "account": "アカウント",
@@ -4852,7 +4832,6 @@
       "requestSent": "リクエスト送信済み",
       "search": "名前・職種・スキル・資格で検索…",
       "suggestions": "候補",
-      "title": "マイコネクション",
       "unnamed": "名称未設定"
     },
     "activity": {

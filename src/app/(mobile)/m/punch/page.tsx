@@ -60,7 +60,7 @@ export default async function PunchPage() {
         {onClock ? t("m.punch.on", undefined, "On The Clock") : t("m.punch.off", undefined, "Off Shift")}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.punch.title", undefined, "Punch")}
+        {t("m.punch.title", undefined, "Punch Clock")}
       </h1>
 
       <PunchControls openStartedAt={(openRow?.started_at as string | undefined) ?? null} />

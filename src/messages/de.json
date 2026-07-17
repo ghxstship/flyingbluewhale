@@ -18408,9 +18408,7 @@
   "m": {
     "advances": {
       "eyebrow": "Mobil",
-      "title": "Meine Zuweisungen",
       "empty": {
-        "title": "Noch nichts zugewiesen",
         "body": "Equipment, Credentials und Services, die Ihnen zugewiesen sind, erscheinen hier."
       },
       "detail": {
@@ -18452,7 +18450,6 @@
     },
     "alerts": {
       "eyebrow": "Mobil",
-      "title": "Alarme",
       "acknowledge": "Bestätigen",
       "acknowledging": "Wird bestätigt…",
       "emptyTitle": "Alles in Ordnung. Derzeit keine Warnungen."
@@ -18463,9 +18460,7 @@
       "clockOut": "Ausstempeln",
       "configureSupabase": "Supabase konfigurieren.",
       "eyebrow": "Feld",
-      "title": "Check-in",
       "empty": {
-        "title": "Heute Keine Schichten",
         "body": "Stempeln Sie sich ein, um Ihre Zeit zu erfassen."
       },
       "active": "Aktiv",
@@ -18481,7 +18476,6 @@
     },
     "coc": {
       "eyebrow": "Feld",
-      "title": "Chain of Custody",
       "asset": "Asset",
       "emptyBody": "Scans und Asset-Übergaben erscheinen hier als Zeitleiste.",
       "emptyTitle": "Keine Verwahrungsereignisse",
@@ -18492,7 +18486,6 @@
     },
     "dailyLog": {
       "eyebrow": "Feld",
-      "title": "Tagesprotokoll",
       "back": "Tagesberichte",
       "emptyBody": "Beginnen Sie den Tagesbericht mit Wetter und Notizen.",
       "emptyTitle": "Noch keine Berichte",
@@ -18519,10 +18512,8 @@
     },
     "directory": {
       "eyebrow": "Mobil",
-      "title": "Verzeichnis",
       "peopleCount": "{count} Personen in deiner Organisation",
       "empty": {
-        "title": "Keine Mitglieder",
         "description": "Org-Mitglieder erscheinen hier, sobald sie hinzugefügt sind.",
         "body": "Niemand auf dem Dienstplan entspricht den Kriterien."
       },
@@ -18549,7 +18540,6 @@
         "label": "Download"
       },
       "eyebrow": "Mobile",
-      "title": "Meine Dokumente",
       "uploadCta": "+ Hochladen",
       "empty": {
         "title": "Keine Dokumente",
@@ -18576,7 +18566,6 @@
     },
     "feed": {
       "eyebrow": "Mobil",
-      "title": "Updates",
       "noUpdatesYet": "Noch keine Updates.",
       "unreadOfTotal": "{unread} ungelesen von {total}",
       "empty": {
@@ -18599,7 +18588,6 @@
     },
     "gigs": {
       "eyebrow": "Marketplace",
-      "title": "Offene Gigs",
       "applicants": "{count} beworben",
       "applied": "Beworben",
       "apply": "Bewerben",
@@ -18720,7 +18708,6 @@
     },
     "incidents": {
       "eyebrow": "Feld",
-      "title": "Vorfall",
       "emptyBody": "Für diese Org wurden noch keine Vorfälle erfasst.",
       "emptyTitle": "Alles in Ordnung",
       "file": "Bericht einreichen",
@@ -18741,7 +18728,6 @@
       "scanCta": "Scannen zum Aus- / Einchecken",
       "search": "Assets suchen…",
       "serialized": "Serialisierte Einheiten",
-      "title": "Assets",
       "tracked": "Verfolgt",
       "units": "Einheiten",
       "untracked": "Nicht verfolgt"
@@ -18968,7 +18954,6 @@
       }
     },
     "punch": {
-      "title": "Punch-Liste",
       "active": "Aktiv",
       "closed": "Geschlossen",
       "emptyBody": "Stempeln Sie sich ein, um Ihre Schicht zu beginnen.",
@@ -18985,9 +18970,7 @@
     },
     "requests": {
       "eyebrow": "Feld",
-      "title": "Service-Anfragen",
       "empty": {
-        "title": "Nichts Offen",
         "body": "Abwesenheits- und Schichttausch-Anfragen erscheinen hier."
       },
       "approve": "Genehmigen",
@@ -19194,9 +19177,7 @@
     },
     "wallet": {
       "eyebrow": "Mobil",
-      "title": "Mein Ausweis",
       "empty": {
-        "title": "Kein ausgestellter Ausweis",
         "body": "Credential-Berechtigungen erscheinen hier, sobald sie ausgestellt sind. Wenden Sie sich an Ihren Admin."
       },
       "accessTitle": "Zugriff & Berechtigungen",
@@ -19249,8 +19230,7 @@
       "manualPlaceholder": "z. B. R7-014",
       "recentEmpty": "Noch keine Scans",
       "recentTitle": "Letzte Aktivität",
-      "scanning": "Wird geprüft…",
-      "title": "Scannen zum Aus- / Einchecken"
+      "scanning": "Wird geprüft…"
     },
     "more": {
       "account": "Konto",
@@ -19299,7 +19279,6 @@
       "requestSent": "Anfrage gesendet",
       "search": "Nach Name, Gewerk, Fähigkeit, Cert suchen…",
       "suggestions": "Vorschläge",
-      "title": "Meine Verbindungen",
       "unnamed": "Unbenannt"
     },
     "activity": {

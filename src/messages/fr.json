@@ -16396,9 +16396,7 @@
   "m": {
     "advances": {
       "eyebrow": "Mobile",
-      "title": "Mes affectations",
       "empty": {
-        "title": "Rien d'assigné pour l'instant",
         "body": "Le matériel, les accréditations et les services qui vous sont attribués apparaissent ici."
       },
       "detail": {
@@ -16440,7 +16438,6 @@
     },
     "alerts": {
       "eyebrow": "Mobile",
-      "title": "Alertes",
       "acknowledge": "Acquitter",
       "acknowledging": "Accusé de réception…",
       "emptyTitle": "Tout va bien. Aucune alerte pour l'instant."
@@ -16451,9 +16448,7 @@
       "clockOut": "Pointer en sortie",
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "Terrain",
-      "title": "Pointage",
       "empty": {
-        "title": "Aucun Service Aujourd'hui",
         "body": "Pointez pour commencer à suivre votre temps."
       },
       "active": "Actif",
@@ -16469,7 +16464,6 @@
     },
     "coc": {
       "eyebrow": "Terrain",
-      "title": "Chaîne de traçabilité",
       "asset": "Actif",
       "emptyBody": "Les scans et transferts d'actifs apparaîtront ici sous forme de chronologie.",
       "emptyTitle": "Aucun événement de garde",
@@ -16480,7 +16474,6 @@
     },
     "dailyLog": {
       "eyebrow": "Terrain",
-      "title": "Journal Quotidien",
       "back": "Journaux quotidiens",
       "emptyBody": "Commencez le journal du jour avec la météo et des notes.",
       "emptyTitle": "Aucun journal",
@@ -16507,10 +16500,8 @@
     },
     "directory": {
       "eyebrow": "Mobile",
-      "title": "Annuaire",
       "peopleCount": "{count} personnes dans votre organisation",
       "empty": {
-        "title": "Aucun membre",
         "description": "Les membres de l'organisation apparaissent ici une fois ajoutés.",
         "body": "Personne dans les effectifs ne correspond."
       },
@@ -16537,7 +16528,6 @@
         "label": "Télécharger"
       },
       "eyebrow": "Mobile",
-      "title": "Mes Documents",
       "uploadCta": "+ Téléverser",
       "empty": {
         "title": "Aucun Document",
@@ -16564,7 +16554,6 @@
     },
     "feed": {
       "eyebrow": "Mobile",
-      "title": "Actualités",
       "noUpdatesYet": "Aucune actualité pour le moment.",
       "unreadOfTotal": "{unread} non lues sur {total}",
       "empty": {
@@ -16587,7 +16576,6 @@
     },
     "gigs": {
       "eyebrow": "Marketplace",
-      "title": "Missions ouvertes",
       "applicants": "{count} candidatures",
       "applied": "Candidature envoyée",
       "apply": "Postuler",
@@ -16708,7 +16696,6 @@
     },
     "incidents": {
       "eyebrow": "Terrain",
-      "title": "Incident",
       "emptyBody": "Aucun incident consigné pour cette org pour l'instant.",
       "emptyTitle": "Tout est en ordre",
       "file": "Déposer un rapport",
@@ -16729,7 +16716,6 @@
       "scanCta": "Scanner pour sortir / rentrer",
       "search": "Rechercher des actifs…",
       "serialized": "Unités sérialisées",
-      "title": "Actifs",
       "tracked": "Suivis",
       "units": "Unités",
       "untracked": "Non suivis"
@@ -16956,7 +16942,6 @@
       }
     },
     "punch": {
-      "title": "Liste de réserves",
       "active": "Actif",
       "closed": "Clôturé",
       "emptyBody": "Pointez pour démarrer votre shift.",
@@ -16973,9 +16958,7 @@
     },
     "requests": {
       "eyebrow": "Terrain",
-      "title": "Requêtes de Service",
       "empty": {
-        "title": "Rien d'Ouvert",
         "body": "Les demandes de congés et d'échange de shift apparaissent ici."
       },
       "approve": "Approuver",
@@ -17182,9 +17165,7 @@
     },
     "wallet": {
       "eyebrow": "Mobile",
-      "title": "Mon Accréditation",
       "empty": {
-        "title": "Aucune Accréditation Émise",
         "body": "Les droits d'accréditation apparaissent ici une fois émis. Contactez votre admin."
       },
       "accessTitle": "Accès et autorisations",
@@ -17237,8 +17218,7 @@
       "manualPlaceholder": "ex. R7-014",
       "recentEmpty": "Aucun scan",
       "recentTitle": "Activité récente",
-      "scanning": "Vérification…",
-      "title": "Scanner pour sortir / rentrer"
+      "scanning": "Vérification…"
     },
     "more": {
       "account": "Compte",
@@ -17287,7 +17267,6 @@
       "requestSent": "Demande envoyée",
       "search": "Rechercher par nom, métier, compétence, cert…",
       "suggestions": "Suggestions",
-      "title": "Mes connexions",
       "unnamed": "Sans nom"
     },
     "activity": {

@@ -107,8 +107,6 @@ export default async function MorePage() {
       links: [
         { href: "/m/profile", icon: "User", labelKey: "m.more.profile", label: "Profile", subKey: "m.more.profileSub", sub: "Your Badges, Reviews & EPK" },
         { href: "/m/pass", icon: "ShieldCheck", labelKey: "m.more.pass", label: "The Rose", subKey: "m.more.passSub", sub: "Your Credential & Access" },
-        { href: "/m/alerts", icon: "Bell", labelKey: "m.more.alerts", label: "Alerts", subKey: "m.more.alertsSub", sub: "Broadcasts & Notifications" },
-        { href: "/m/notifications", icon: "BellRing", labelKey: "m.more.notifications", label: "Notifications", subKey: "m.more.notificationsSub", sub: "Choose What Pings You" },
         { href: "/m/emergency", icon: "Siren", labelKey: "m.more.emergency", label: "Emergency", subKey: "m.more.emergencySub", sub: "Your Muster Card & Codes" },
         { href: "/m/activity", icon: "History", labelKey: "m.more.activity", label: "Activity History", subKey: "m.more.activitySub", sub: "Scans, Access, Reports & More" },
         { href: "/m/referrals", icon: "Gift", labelKey: "m.more.referrals", label: "Referrals & Rewards", subKey: "m.more.referralsSub", sub: "Refer Crew, Earn Rewards" },

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { isAdmin, isManagerPlus, requireSession } from "@/lib/auth";
+import { AccessGate } from "../AccessGate";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -38,6 +39,7 @@ export default async function Page() {
   }
 
   const session = await requireSession();
+  if (!isManagerPlus(session)) return <AccessGate need="manager" />;
   const canManage = isManagerPlus(session);
   const canMerge = isAdmin(session);
   const supabase = await createClient();

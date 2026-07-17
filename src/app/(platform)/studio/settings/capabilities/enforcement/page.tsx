@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { isAdmin, requireSession } from "@/lib/auth";
+import { isManagerPlus } from "@/lib/auth";
+import { AccessGate } from "../AccessGate";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -48,6 +50,10 @@ export default async function Page() {
   }
 
   const session = await requireSession();
+  // Managers may STUDY the who-loses-access diff (it is the answer to "what
+  // happens if we flip"); the flip control itself stays admin (canEdit) and
+  // the action re-checks server-side. Members are refused outright.
+  if (!isManagerPlus(session)) return <AccessGate need="manager" />;
   const canEdit = isAdmin(session);
   const supabase = await createClient();
   const graph = await fetchCapabilityGraph(supabase, session.orgId);

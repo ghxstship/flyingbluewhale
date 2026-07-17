@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { isAdmin, requireSession } from "@/lib/auth";
+import { isAdmin, isManagerPlus, requireSession } from "@/lib/auth";
+import { AccessGate } from "./AccessGate";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -62,10 +63,11 @@ export default async function Page() {
   const session = await requireSession();
   const fmt = await getRequestFormatters();
 
-  // Read-only for the manager band and below: seeing which capabilities the
-  // org hands out is not sensitive, but handing them out is admin-only — and
-  // the RLS agrees (20260715171424_capability_grants_admin_band), so this
-  // isn't a UI-only gate.
+  // Reads are MANAGER-band ("why was Bob refused at the gate"), writes admin
+  // (RLS: 20260715171424_capability_grants_admin_band). Nav hides the entry
+  // below manager, but the deployed-target e2e walked a member straight to
+  // the URL and the whole grant graph rendered — so the page refuses too.
+  if (!isManagerPlus(session)) return <AccessGate need="manager" />;
   const canEdit = isAdmin(session);
   const supabase = await createClient();
 

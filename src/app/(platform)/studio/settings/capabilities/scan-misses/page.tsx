@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { isManagerPlus, requireSession } from "@/lib/auth";
+import { AccessGate } from "../AccessGate";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -56,6 +57,7 @@ export default async function Page() {
 
   const session = await requireSession();
   const fmt = await getRequestFormatters();
+  if (!isManagerPlus(session)) return <AccessGate need="manager" />;
   const canResolve = isManagerPlus(session);
   const supabase = await createClient();
 

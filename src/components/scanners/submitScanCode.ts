@@ -27,7 +27,17 @@ import type { ResolvedScan } from "@/lib/scan/types";
  */
 
 export type ScanOutcome =
-  | { kind: "result"; result: ResolvedScan }
+  | {
+      kind: "result";
+      result: ResolvedScan;
+      /**
+       * The code as submitted (trimmed). Carried so a surface can act on the
+       * VERDICT + the code together — e.g. offering "Bind To Catalog Item"
+       * when a valid GTIN comes back `not_found` on a POS surface.
+       */
+      code: string;
+      format?: string;
+    }
   | { kind: "queued"; code: string }
   | { kind: "error"; message: string };
 
@@ -40,6 +50,8 @@ export type ScanOutcome =
 export const RESULT_FEEDBACK: Record<ResolvedScan["result"], "success" | "warning" | "error"> = {
   accepted: "success",
   asset: "success",
+  // resolver 3 matched a catalog GTIN binding — an identification hit.
+  product: "success",
   duplicate: "warning",
   expired: "warning",
   voided: "error",
@@ -77,7 +89,7 @@ export async function submitScanCode(
 
   if (res.status === "ok") {
     scanFeedback(RESULT_FEEDBACK[res.data.result] ?? "warning");
-    return { kind: "result", result: res.data };
+    return { kind: "result", result: res.data, code, format: opts.format };
   }
   if (res.status === "queued") {
     // Recorded on-device, unverified until replay — cautionary cue, never an

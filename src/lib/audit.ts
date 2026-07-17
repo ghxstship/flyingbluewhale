@@ -51,6 +51,10 @@ export type AuditAction =
   // Scan miss queue (backlog P1.3): resolution closes a measurement row, and
   // the queue is never deleted, so the audit row is the who/when of closure.
   | "scan_miss.resolved"
+  // GTIN → catalog binding (kit 30): teaches the org's POS resolver what a
+  // retail barcode is. Attributable because a wrong binding silently mislabels
+  // every future scan of that code.
+  | "catalog_gtin.bound"
   | "auth.member.removed"
   | "auth.member.left"
   | "auth.member.restored"

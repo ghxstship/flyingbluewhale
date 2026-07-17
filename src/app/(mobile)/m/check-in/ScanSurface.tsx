@@ -1,7 +1,9 @@
-import { requireSession } from "@/lib/auth";
+import { can, isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
 import { CheckInScanner, type RecentScan } from "./CheckInScanner";
+import type { BindableCatalogItem } from "./ProductMatchCard";
 
 /**
  * The ONE shared Scan surface (kit 29 §C route policy, directive 2026-07-17).
@@ -61,6 +63,28 @@ export async function ScanSurface({
     .order("at", { ascending: false })
     .limit(8);
 
+  // POS product-match affordances (kit 30). Fulfillment confirmation mirrors
+  // the advancing transition actions (manager+); binding an unknown GTIN is
+  // the `people:manage` band, matching the catalog_item_gtins RLS write
+  // policy. The bind picker's catalog list is only fetched when it can render.
+  const canFulfill = isManagerPlus(session);
+  const canBind = canFulfill || can(session, "people:manage");
+  let catalogItems: BindableCatalogItem[] = [];
+  if (canBind) {
+    const { data: items } = await supabase
+      .from("master_catalog_items")
+      .select("id, name, kind")
+      .eq("org_id", session.orgId)
+      .eq("active", true)
+      .is("deleted_at", null)
+      .order("name")
+      .limit(300);
+    catalogItems = ((items ?? []) as Array<{ id: string; name: string; kind: string }>).map((i) => ({
+      id: i.id,
+      label: `${CATALOG_KIND_LABEL_SINGULAR[i.kind as CatalogKind] ?? i.kind} · ${i.name}`,
+    }));
+  }
+
   const recent: RecentScan[] = (
     (data ?? []) as Array<{
       id: string;
@@ -83,6 +107,30 @@ export async function ScanSurface({
         initialMode={initialMode}
         backHref={backHref}
         backLabel={backLabel}
+        canFulfill={canFulfill}
+        canBind={canBind}
+        catalogItems={catalogItems}
+        productLabels={{
+          match: t("m.checkin.product.match", undefined, "Match"),
+          matchedCatalog: t("m.checkin.product.matchedCatalog", undefined, "Matched Catalog"),
+          approved: t("m.checkin.product.approved", undefined, "Approved"),
+          fulfilled: t("m.checkin.product.fulfilled", undefined, "Fulfilled"),
+          confirm: t("m.checkin.product.confirm", undefined, "Confirm Fulfillment"),
+          confirming: t("m.checkin.product.confirming", undefined, "Confirming…"),
+          confirmed: t("m.checkin.product.confirmed", undefined, "Fulfillment Confirmed"),
+          noLines: t("m.checkin.product.noLines", undefined, "No Open Advance Lines For This Item"),
+          bindHint: t(
+            "m.checkin.product.bindHint",
+            undefined,
+            "Unknown product code. Bind it to a catalog item so the next scan resolves.",
+          ),
+          bindItemLabel: t("m.checkin.product.bindItemLabel", undefined, "Catalog Item"),
+          bindSearchPlaceholder: t("m.checkin.product.bindSearch", undefined, "Search The Catalog…"),
+          bindEmpty: t("m.checkin.product.bindEmpty", undefined, "No Catalog Items Match"),
+          bindCta: t("m.checkin.product.bindCta", undefined, "Bind To Catalog Item"),
+          binding: t("m.checkin.product.binding", undefined, "Binding…"),
+          bound: t("m.checkin.product.bound", undefined, "Bound, Scan It Again To Resolve"),
+        }}
         labels={{
           eyebrow: gateSlug
             ? t("m.checkin.gate.eyebrow", { slug: gateSlug }, `Gate · ${gateSlug}`)

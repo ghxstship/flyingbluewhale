@@ -571,7 +571,7 @@ paths:
         "429": { $ref: "#/components/responses/RateLimited" }
   /api/v1/scan:
     post:
-      summary: Scan an assignment code (any catalog kind — ticket, credential, wristband, vehicle, etc.). Race-safe via assignment_scan_codes unique partial index.
+      summary: Unified scan resolver. Resolves assignment codes (any catalog kind — ticket, credential, wristband, vehicle, etc.; race-safe via assignment_scan_codes unique partial index), asset tags (read-only identification), and — in pos/any mode with scan:product — retail GTINs via catalog_item_gtins, returning `result:"product"` with the matched catalog item (gtin14, displayName, matchSource) plus its open approved advance lines (openLines[] with party/project names). Unknown codes journal to scan_unknowns.
       operationId: postScan
       responses:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }

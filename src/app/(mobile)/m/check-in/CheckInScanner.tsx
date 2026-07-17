@@ -5,6 +5,8 @@ import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
 import { formatsForMode } from "@/lib/scan/formats";
+import { posGtinCandidate } from "@/lib/scan/product";
+import { BindGtinCard, ProductMatchCard, type BindableCatalogItem, type ProductLabels } from "./ProductMatchCard";
 
 export type RecentScan = {
   id: string;
@@ -46,6 +48,8 @@ const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
   accepted: "ok",
   // resolver 2 identified an asset — a hit, though not an entitlement accept.
   asset: "ok",
+  // resolver 3 matched a catalog GTIN binding (rendered by ProductMatchCard).
+  product: "ok",
   duplicate: "warn",
   expired: "warn",
   wrong_zone: "warn",
@@ -79,6 +83,10 @@ export function CheckInScanner({
   initialMode,
   backHref,
   backLabel,
+  productLabels,
+  canFulfill = false,
+  canBind = false,
+  catalogItems = [],
 }: {
   recent: RecentScan[];
   labels: CheckInLabels;
@@ -88,6 +96,14 @@ export function CheckInScanner({
   /** Optional back link rendered above the surface (Inventory preset → Assets). */
   backHref?: string;
   backLabel?: string;
+  /** POS product-match card copy. Optional so callers roll out additively. */
+  productLabels?: ProductLabels;
+  /** Manager-band: may flip an approved advance line to delivered on-scan. */
+  canFulfill?: boolean;
+  /** Manager-band (`people:manage`): may bind an unknown GTIN to a catalog item. */
+  canBind?: boolean;
+  /** Org catalog items for the bind picker. Only sent when `canBind`. */
+  catalogItems?: BindableCatalogItem[];
 }) {
   const [mode, setMode] = useState<Mode>(initialMode ?? "access");
   const [code, setCode] = useState("");
@@ -202,16 +218,36 @@ export function CheckInScanner({
         </Link>
       )}
 
-      {outcome?.kind === "result" && (
-        <div className="item" style={{ marginTop: 14 }}>
-          <span className={`ps-badge ps-badge--${RESULT_TONE[outcome.result.result] ?? "neutral"}`}>
-            {outcome.result.result}
-          </span>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="t">{("title" in outcome.result && outcome.result.title) || labels.logged}</div>
+      {outcome?.kind === "result" && outcome.result.result === "product" && productLabels ? (
+        <ProductMatchCard
+          key={`${outcome.result.gtin14}:${outcome.code}`}
+          product={outcome.result}
+          canFulfill={canFulfill}
+          labels={productLabels}
+        />
+      ) : (
+        outcome?.kind === "result" && (
+          <div className="item" style={{ marginTop: 14 }}>
+            <span className={`ps-badge ps-badge--${RESULT_TONE[outcome.result.result] ?? "neutral"}`}>
+              {outcome.result.result}
+            </span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="t">{("title" in outcome.result && outcome.result.title) || labels.logged}</div>
+            </div>
           </div>
-        </div>
+        )
       )}
+      {/* Unknown GTIN on the POS segment: the miss is journaled server-side;
+          a manager can bind it to a catalog item right here so the next scan
+          resolves. Keyed by code so a new scan resets the picker. */}
+      {outcome?.kind === "result" &&
+        outcome.result.result === "not_found" &&
+        mode === "pos" &&
+        canBind &&
+        productLabels &&
+        posGtinCandidate(outcome.code) && (
+          <BindGtinCard key={outcome.code} code={outcome.code} catalogItems={catalogItems} labels={productLabels} />
+        )}
       {outcome?.kind === "queued" && (
         <div className="item" style={{ marginTop: 14 }}>
           <span className="ps-badge ps-badge--warn">{labels.queuedTitle ?? "Recorded"}</span>

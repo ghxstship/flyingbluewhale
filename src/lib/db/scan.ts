@@ -5,8 +5,9 @@ import { createClient } from "@/lib/supabase/server";
 import { isOutOfScopeForMode, type ScanMode } from "@/lib/scan/formats";
 import type { ScanCapability } from "@/lib/rbac/capabilities";
 import { classifyGtinScope, isGtinFormat, isUnresolvableCode } from "@/lib/scan/gtin";
-import type { ResolvedScan } from "@/lib/scan/types";
-import { scanAssignment } from "./assignments";
+import { bindingMatches, posGtinCandidate, productDisplayName } from "@/lib/scan/product";
+import type { ProductAdvanceLine, ResolvedScan } from "@/lib/scan/types";
+import { CATALOG_KIND_LABEL_SINGULAR, scanAssignment, type CatalogKind } from "./assignments";
 
 /**
  * The scan resolver chain — one entry point, ordered attempts, first hit wins.
@@ -27,7 +28,14 @@ import { scanAssignment } from "./assignments";
  *   1. assignment_scan_codes — entitlements. Narrowest, most authoritative,
  *      and the only resolver that may answer an `access` surface.
  *   2. assets.asset_tag — gear/fleet/lots. READ-ONLY here; see below.
- *   3. miss → scan_unknowns. An unresolved code is data, not silence.
+ *   3. catalog_item_gtins — retail products (kit 30). Only consulted on a
+ *      POS-capable surface (`pos`/`any` + scan:product) and only for a code
+ *      that normalizes to a valid GTIN. Identification only, like resolver 2:
+ *      it also reports the item's open approved advance lines, but the
+ *      approved → delivered flip stays behind its own explicit action.
+ *   4. miss → scan_unknowns. An unresolved code is data, not silence — and an
+ *      unknown GTIN still journals here, which is what feeds the console
+ *      bind queue.
  *
  * ── Why resolver 2 does not toggle state ──────────────────────────────────
  * `/api/v1/equipment/scan` toggles `assets.state` between available/in_use and
@@ -146,9 +154,154 @@ export async function resolveScan(input: {
     }
   }
 
+  // ── Resolver 3: products (org GTIN → catalog item bindings) ─────────────
+  // Only a POS-capable surface consults the binding table, and only for a
+  // code that IS a well-formed GTIN — an asset tag or wristband payload never
+  // reaches it. A GTIN that has no binding falls through to the miss journal
+  // below unchanged: the unknown-GTIN path is the console bind queue's feed.
+  if ((mode === "pos" || mode === "any") && mayResolve("scan:product")) {
+    const product = await resolveProductBinding(input.orgId, input.code);
+    if (product) return product;
+  }
+
   // ── Miss ────────────────────────────────────────────────────────────────
   await recordUnknownSafe(input, mode);
   return { result: "not_found", source: "unknown" };
+}
+
+/**
+ * Resolve a code against the org's `catalog_item_gtins` bindings.
+ *
+ * Returns the matched catalog item (name as `Kind · Name`) plus its OPEN
+ * advance lines — `assignments` rows on this org whose `catalog_item_id`
+ * matches and whose `fulfillment_state` is `approved`, hydrated with the
+ * party's display name and the project name so the field card can render
+ * "Vehicle · Golf Cart · Jack Sparrow · III Points" without more queries.
+ *
+ * Null on any miss (not a GTIN, no binding, item soft-deleted) so the caller
+ * falls through to the miss journal.
+ */
+async function resolveProductBinding(orgId: string, code: string): Promise<ResolvedScan | null> {
+  const gtin14 = posGtinCandidate(code);
+  if (!gtin14) return null;
+
+  const supabase = await createClient();
+  const { data: binding } = await supabase
+    .from("catalog_item_gtins")
+    .select("org_id, gtin14, catalog_item_id")
+    .eq("org_id", orgId)
+    .eq("gtin14", gtin14)
+    .maybeSingle();
+  // The query already scopes both keys; re-asserting keeps the org boundary a
+  // tested property (see bindingMatches).
+  if (!binding || !bindingMatches(binding, orgId, gtin14)) return null;
+
+  const { data: item } = await supabase
+    .from("master_catalog_items")
+    .select("id, name, kind")
+    .eq("id", binding.catalog_item_id)
+    .eq("org_id", orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!item) return null;
+
+  const kindLabel = CATALOG_KIND_LABEL_SINGULAR[item.kind as CatalogKind] ?? item.kind;
+  return {
+    result: "product",
+    source: "product",
+    gtin14,
+    matchSource: "catalog_binding",
+    catalogItemId: item.id,
+    catalogKind: item.kind,
+    displayName: productDisplayName(kindLabel, item.name),
+    openLines: await listOpenAdvanceLines(supabase, orgId, item.id),
+  };
+}
+
+/** Approved advance lines for a catalog item, party + project names hydrated. */
+async function listOpenAdvanceLines(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  orgId: string,
+  catalogItemId: string,
+): Promise<ProductAdvanceLine[]> {
+  const { data } = await supabase
+    .from("assignments")
+    .select("id, title, project_id, party_kind, party_user_id, party_crew_id, party_external_id, deadline")
+    .eq("org_id", orgId)
+    .eq("catalog_item_id", catalogItemId)
+    .eq("fulfillment_state", "approved")
+    .is("deleted_at", null)
+    .order("deadline", { ascending: true, nullsFirst: false })
+    .limit(20);
+  const rows = (data ?? []) as Array<{
+    id: string;
+    title: string | null;
+    project_id: string | null;
+    party_user_id: string | null;
+    party_crew_id: string | null;
+    party_external_id: string | null;
+    deadline: string | null;
+  }>;
+  if (rows.length === 0) return [];
+
+  const ids = (vals: Array<string | null>) => [...new Set(vals.filter((v): v is string => Boolean(v)))];
+  const userIds = ids(rows.map((r) => r.party_user_id));
+  const crewIds = ids(rows.map((r) => r.party_crew_id));
+  const externalIds = ids(rows.map((r) => r.party_external_id));
+  const projectIds = ids(rows.map((r) => r.project_id));
+
+  const [users, crews, externals, projects] = await Promise.all([
+    userIds.length
+      ? // soft-delete-exempt: display-name hydration for parties referenced by
+        // LIVE assignments — a deactivated user's line still needs its name.
+        supabase.from("users").select("id, name, email").in("id", userIds)
+      : Promise.resolve({ data: [] }),
+    crewIds.length
+      ? supabase.from("crew_members").select("id, name").eq("org_id", orgId).in("id", crewIds)
+      : Promise.resolve({ data: [] }),
+    externalIds.length
+      ? supabase
+          .from("assignment_external_holders")
+          .select("id, holder_name, holder_email")
+          .eq("org_id", orgId)
+          .in("id", externalIds)
+      : Promise.resolve({ data: [] }),
+    projectIds.length
+      ? // soft-delete-exempt: name hydration for projects referenced by live
+        // assignment lines — filtering would blank the label, not hide the line.
+        supabase.from("projects").select("id, name").eq("org_id", orgId).in("id", projectIds)
+      : Promise.resolve({ data: [] }),
+  ]);
+
+  const userName = new Map(
+    ((users.data ?? []) as Array<{ id: string; name: string | null; email: string }>).map((u) => [
+      u.id,
+      u.name ?? u.email,
+    ]),
+  );
+  const crewName = new Map(
+    ((crews.data ?? []) as Array<{ id: string; name: string }>).map((c) => [c.id, c.name]),
+  );
+  const externalName = new Map(
+    ((externals.data ?? []) as Array<{ id: string; holder_name: string | null; holder_email: string | null }>).map(
+      (h) => [h.id, h.holder_name ?? h.holder_email],
+    ),
+  );
+  const projectName = new Map(
+    ((projects.data ?? []) as Array<{ id: string; name: string }>).map((p) => [p.id, p.name]),
+  );
+
+  return rows.map((r) => ({
+    assignmentId: r.id,
+    title: r.title,
+    partyName:
+      (r.party_user_id && userName.get(r.party_user_id)) ||
+      (r.party_crew_id && crewName.get(r.party_crew_id)) ||
+      (r.party_external_id && externalName.get(r.party_external_id)) ||
+      null,
+    projectName: (r.project_id && projectName.get(r.project_id)) || null,
+    deadline: r.deadline,
+  }));
 }
 
 /**

@@ -8,6 +8,9 @@ import { AccessGate } from "../AccessGate";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
+import { posGtinCandidate } from "@/lib/scan/product";
+import { BindMissButton } from "./BindMissButton";
 import { ResolveMissButton } from "./ResolveMissButton";
 
 /**
@@ -61,7 +64,7 @@ export default async function Page() {
   const canResolve = isManagerPlus(session);
   const supabase = await createClient();
 
-  const [openRes, resolvedRes, membersRes] = await Promise.all([
+  const [openRes, resolvedRes, membersRes, catalogRes] = await Promise.all([
     supabase
       .from("scan_unknowns")
       .select("id, code, format, mode, seen_count, first_seen, last_seen, last_actor_user_id, resolved_at")
@@ -83,7 +86,23 @@ export default async function Page() {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .limit(500),
+    supabase
+      .from("master_catalog_items")
+      .select("id, name, kind")
+      .eq("org_id", session.orgId)
+      .eq("active", true)
+      .is("deleted_at", null)
+      .order("name")
+      .limit(300),
   ]);
+
+  // GTIN-shaped misses get the kit 30 fast path: bind straight to a catalog
+  // item (writes catalog_item_gtins + resolves the row) instead of the
+  // two-step "add to catalog elsewhere, then resolve here".
+  const catalogItems = ((catalogRes.data ?? []) as Array<{ id: string; name: string; kind: string }>).map((i) => ({
+    id: i.id,
+    label: `${CATALOG_KIND_LABEL_SINGULAR[i.kind as CatalogKind] ?? i.kind} · ${i.name}`,
+  }));
 
   const emailByUser = new Map<string, string>();
   for (const m of (membersRes.data ?? []) as { user_id: string; users: { email?: string | null } | null }[]) {
@@ -171,7 +190,12 @@ export default async function Page() {
                       </td>
                       {canResolve && (
                         <td className="text-right">
-                          <ResolveMissButton id={r.id} />
+                          <span className="inline-flex items-center gap-2">
+                            {catalogItems.length > 0 && posGtinCandidate(r.code) && (
+                              <BindMissButton code={r.code} catalogItems={catalogItems} />
+                            )}
+                            <ResolveMissButton id={r.id} />
+                          </span>
                         </td>
                       )}
                     </tr>

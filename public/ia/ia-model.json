@@ -2387,7 +2387,7 @@
               ]
             },
             {
-              "path": "/m/assets",
+              "path": "/m/aurora",
               "arch": [
                 "LIST"
               ]
@@ -2404,6 +2404,18 @@
           "label": "Surfaces",
           "routes": [
             {
+              "path": "/m/aurora",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/assets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/search",
               "arch": [
                 "LIST"
@@ -2417,6 +2429,36 @@
             },
             {
               "path": "/m/inventory",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/reports",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
+              "path": "/m/inspections",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
+              "path": "/m/logistics",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/permits",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/travel",
               "arch": [
                 "LIST"
               ]

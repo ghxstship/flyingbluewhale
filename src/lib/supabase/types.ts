@@ -640,6 +640,18 @@ export type Task = {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  // Kit 31 (live-test resolution #14) — construction-grade facets.
+  trade: string | null;
+  cost_center_id: string | null;
+  vendor_id: string | null;
+  location: string | null;
+  ppe: string[];
+  permit_required: boolean;
+  percent_complete: number | null;
+  checklist: unknown;
+  // Kit 31 (v2.7 swipe-action canon) — flag/archive facets.
+  flagged_at: string | null;
+  archived_at: string | null;
 };
 export type EventRow = {
   id: string;

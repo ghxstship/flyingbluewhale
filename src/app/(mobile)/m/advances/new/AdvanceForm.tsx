@@ -12,12 +12,21 @@ import { requestAdvance } from "../actions";
  * values, serializes to FormData and calls the `requestAdvance` server
  * action, then navigates back to the advances list on success.
  */
-export function AdvanceForm({ initial }: { initial?: Record<string, unknown> }) {
+export function AdvanceForm({
+  initial,
+  catalogItemId,
+  fromCatalog = false,
+}: {
+  initial?: Record<string, unknown>;
+  /** Kit 31 #3 — the concrete SKU the catalog CTA handed through. */
+  catalogItemId?: string;
+  fromCatalog?: boolean;
+}) {
   const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const prefilled = !!initial && Object.keys(initial).length > 0;
+  const prefilled = !fromCatalog && !!initial && Object.keys(initial).length > 0;
 
   const close = () => router.push("/m/advances");
 
@@ -28,6 +37,7 @@ export function AdvanceForm({ initial }: { initial?: Record<string, unknown> }) 
     for (const [k, v] of Object.entries(vals)) {
       if (v != null) fd.set(k, String(v));
     }
+    if (catalogItemId) fd.set("catalogItemId", catalogItemId);
     startTransition(async () => {
       const res = await requestAdvance(null, fd);
       if (res?.error) {
@@ -45,6 +55,11 @@ export function AdvanceForm({ initial }: { initial?: Record<string, unknown> }) 
         <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
           {error}
         </div>
+      )}
+      {fromCatalog && (
+        <p className="hint" style={{ marginBottom: 8 }}>
+          {t("m.advances.new.fromCatalog", undefined, "Prefilled from the catalog — set the dates and quantity.")}
+        </p>
       )}
       {prefilled && (
         <p className="hint" style={{ marginBottom: 8 }}>

@@ -22,14 +22,22 @@ const CATEGORY_TO_KIND: Record<string, CatalogKind> = {
   Other: "equipment",
 };
 
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+
 const Input = z.object({
   cat: z.string().min(1, "Category is required."),
   type: z.string().min(1, "Item / Type is required."),
   qty: z.coerce.number().int().positive().optional(),
-  needed: z.string().optional(),
+  // Kit 31 (live-test resolution #4): every advance line carries its window.
+  start: z.string().regex(DATE, "Start date is required."),
+  end: z.string().regex(DATE, "End date is required."),
   special: z.string().optional(),
   purpose: z.string().optional(),
   notes: z.string().optional(),
+  // Kit 31 (live-test resolution #3): the catalog's "Add To Request" CTA
+  // hands the concrete SKU through so the request binds to it directly
+  // instead of find-or-creating by name.
+  catalogItemId: z.string().uuid().optional().or(z.literal("")),
 });
 
 /**
@@ -44,8 +52,11 @@ export async function requestAdvance(_prev: State, fd: FormData): Promise<State>
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Please fix the errors below." };
   }
-  const { cat, type, qty, needed, special, purpose, notes } = parsed.data;
-  const kind: CatalogKind = CATEGORY_TO_KIND[cat] ?? "equipment";
+  const { cat, type, qty, start, end, special, purpose, notes, catalogItemId } = parsed.data;
+  if (end < start) {
+    return { error: "End date can't be before the start date." };
+  }
+  let kind: CatalogKind = CATEGORY_TO_KIND[cat] ?? "equipment";
 
   const supabase = await createClient();
 
@@ -77,21 +88,39 @@ export async function requestAdvance(_prev: State, fd: FormData): Promise<State>
     return { error: "No project available to request against." };
   }
 
-  // Find-or-create the catalog SKU for this item (org-scoped, by kind+name).
-  let catalogItemId: string | null = null;
-  const { data: existing } = await supabase
-    .from("master_catalog_items")
-    .select("id")
-    .eq("org_id", session.orgId)
-    .eq("kind", kind)
-    .ilike("name", type)
-    .is("deleted_at", null)
-    .limit(1)
-    .maybeSingle();
-  catalogItemId = (existing?.id as string | undefined) ?? null;
+  // Resolve the catalog SKU. A CTA-supplied id (catalog → Add To Request)
+  // binds directly; otherwise find-or-create org-scoped by kind+name.
+  let itemId: string | null = null;
+  if (catalogItemId) {
+    const { data: picked } = await supabase
+      .from("master_catalog_items")
+      .select("id, kind")
+      .eq("id", catalogItemId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!picked) return { error: "That catalog item is no longer available." };
+    itemId = picked.id as string;
+    // The SKU is the SSOT for its kind — the category select is display-side.
+    kind = picked.kind as CatalogKind;
+  }
 
-  if (!catalogItemId) {
+  if (!itemId) {
+    const { data: existing } = await supabase
+      .from("master_catalog_items")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("kind", kind)
+      .ilike("name", type)
+      .is("deleted_at", null)
+      .limit(1)
+      .maybeSingle();
+    itemId = (existing?.id as string | undefined) ?? null;
+  }
+
+  if (!itemId) {
     const code = `${kind.slice(0, 3).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+    // soft-delete-exempt: insert-returning chain — never reads existing rows.
     const { data: created, error: catErr } = await supabase
       .from("master_catalog_items")
       .insert({ org_id: session.orgId, kind, code, name: type })
@@ -101,7 +130,7 @@ export async function requestAdvance(_prev: State, fd: FormData): Promise<State>
       log.error("m.advances.catalog_create_failed", { err: catErr?.message });
       return { error: catErr?.message ?? "Could not create the catalog item." };
     }
-    catalogItemId = created.id as string;
+    itemId = created.id as string;
   }
 
   const data: { [key: string]: Json } = {};
@@ -109,24 +138,50 @@ export async function requestAdvance(_prev: State, fd: FormData): Promise<State>
   if (special) data.special = special;
   if (purpose) data.purpose = purpose;
   if (notes) data.notes = notes;
+  // The advance window rides the sanctioned per-kind jsonb, same shape the
+  // ATLVS cart writes (starts_on/ends_on) so every queue reads one contract.
+  data.starts_on = start;
+  data.ends_on = end;
 
-  const { error: insErr } = await supabase.from("assignments").insert({
-    org_id: session.orgId,
-    project_id: projectId,
-    catalog_item_id: catalogItemId,
-    catalog_kind: kind,
-    party_kind: "user",
-    party_user_id: session.userId,
-    fulfillment_state: "briefed",
-    title: type,
-    notes: purpose || notes || null,
-    deadline: needed ? new Date(needed).toISOString() : null,
-    data,
-    created_by: session.userId,
-  });
-  if (insErr) {
-    log.error("m.advances.insert_failed", { err: insErr.message });
-    return { error: insErr.message };
+  // soft-delete-exempt: insert-returning chain — never reads existing rows.
+  const { data: createdAssignment, error: insErr } = await supabase
+    .from("assignments")
+    .insert({
+      org_id: session.orgId,
+      project_id: projectId,
+      catalog_item_id: itemId,
+      catalog_kind: kind,
+      party_kind: "user",
+      party_user_id: session.userId,
+      fulfillment_state: "briefed",
+      title: type,
+      notes: purpose || notes || null,
+      deadline: end,
+      data,
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
+  if (insErr || !createdAssignment) {
+    log.error("m.advances.insert_failed", { err: insErr?.message });
+    return { error: insErr?.message ?? "Could not submit the request." };
+  }
+
+  // Catering keeps its structured sibling row (kit 30) so the fulfillment
+  // queue and roster advance cards derive meal summaries from one store.
+  if (kind === "catering") {
+    const { error: detailErr } = await supabase.from("catering_assignment_details").insert({
+      assignment_id: createdAssignment.id as string,
+      meal_periods: [],
+      starts_on: start,
+      ends_on: end,
+      every_contract_day: false,
+      excluded_dates: [],
+    });
+    if (detailErr) {
+      // The line itself landed — don't fail the request over the sibling.
+      log.error("m.advances.catering_detail_failed", { err: detailErr.message });
+    }
   }
 
   // Notify managers (owner/admin/manager) so they can action the request.

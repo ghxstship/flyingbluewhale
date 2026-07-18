@@ -1,79 +1,37 @@
-"use client";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { hasSupabase } from "@/lib/env";
+import { POForm } from "./POForm";
 
-import { useActionState } from "react";
-import Link from "next/link";
-import { KIcon } from "@/components/mobile/kit";
-import { createFieldRequisition, type State } from "../actions";
+export const dynamic = "force-dynamic";
 
 /**
- * COMPVSS · Request A Purchase.
+ * COMPVSS · Purchase Order Request.
  *
- * The scenario: a gel frame snaps at 18:00 and the replacement costs £40.
- * Until now the person holding the broken frame could not raise that — RLS
- * excluded the crew persona from `requisitions` entirely — so it travelled
- * by text message to someone with a laptop, or didn't travel at all.
- *
- * Four fields. Anything more is procurement's job, not the field's: no
- * vendor selection, no cost centre, no approval routing. Get the need
- * recorded before it's forgotten; the console does the rest.
+ * Kit 31 (live-test resolution #20): the four-field quick requisition grew
+ * into the kit `po` form spec — product-link auto-import, qty/total, needed-by,
+ * Auto-Code vs Manual budget coding, purpose, quote attach. Same store
+ * (`requisitions`); the server half injects the org's real cost codes so
+ * Manual coding offers live records, never seed strings. PO records surface
+ * in /m/finance via `listFieldPurchaseRequests`.
  */
-export default function NewRequisitionPage() {
-  const [state, formAction, pending] = useActionState<State, FormData>(createFieldRequisition, null);
+export default async function NewRequisitionPage() {
+  let costCodeOptions: string[] = [];
 
-  return (
-    <div className="screen screen-anim">
-      <div className="scr-eye">Purchase Requests</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        Request A Purchase
-      </h1>
+  if (hasSupabase) {
+    const session = await requireSession();
+    const supabase = await createClient();
+    const { data: codes } = await supabase
+      .from("cost_centers")
+      .select("code, name")
+      .eq("org_id", session.orgId)
+      .eq("active", true)
+      .order("code", { ascending: true })
+      .limit(100);
+    costCodeOptions = ((codes ?? []) as { code: string; name: string }[]).map(
+      (c) => `${c.code} · ${c.name}`,
+    );
+  }
 
-      {state?.error && (
-        <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
-          {state.error}
-        </div>
-      )}
-
-      <form action={formAction}>
-        <div className="fld">
-          <label htmlFor="title">What do you need?</label>
-          <input id="title" name="title" required maxLength={200} placeholder="e.g. Gel frame, 6&quot; — 2 off" />
-          {state?.fieldErrors?.title && <div className="hint">{state.fieldErrors.title}</div>}
-        </div>
-
-        <div className="fld">
-          <label htmlFor="estimated">Rough cost</label>
-          {/* decimal keypad, not the full keyboard — one hand, gloves on. */}
-          <input id="estimated" name="estimated" inputMode="decimal" placeholder="40.00" />
-          <div className="hint">Optional. A guess is more useful than nothing.</div>
-        </div>
-
-        <div className="fld">
-          <label htmlFor="description">Why / where</label>
-          <textarea
-            id="description"
-            name="description"
-            placeholder="What broke, where it's needed, when it's needed by…"
-          />
-        </div>
-
-        <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-          <Link
-            href="/m/requisitions"
-            className="ps-btn ps-btn--tertiary ps-btn--lg"
-            style={{ flex: 1, justifyContent: "center" }}
-          >
-            Cancel
-          </Link>
-          <button
-            type="submit"
-            className="ps-btn ps-btn--cta ps-btn--lg"
-            style={{ flex: 2, justifyContent: "center" }}
-            disabled={pending}
-          >
-            <KIcon name="Send" size={15} /> {pending ? "Sending…" : "Raise Request"}
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+  return <POForm costCodeOptions={costCodeOptions} />;
 }

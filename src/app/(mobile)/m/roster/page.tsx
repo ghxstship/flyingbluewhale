@@ -1,14 +1,18 @@
 import Link from "next/link";
 import { FolderOpen } from "lucide-react";
 import { can, requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { listOfferLetters } from "@/lib/offer-letters/queries";
 import { STATUS_LABEL } from "@/lib/offer-letters/types";
 import { listOnboardingByProject } from "@/lib/db/onboarding";
+import { formatFeeRange } from "@/lib/marketplace";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { RosterLock } from "./RosterLock";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { RosterList, type RosterRow } from "./RosterList";
+import { OpenRoles, type OpenRoleRow } from "./OpenRoles";
 import { LETTER_STATE_TONE, initialsFor, resolveActiveProject } from "./shared";
 
 export const dynamic = "force-dynamic";
@@ -76,11 +80,60 @@ export default async function RosterPage() {
   }
 
   const fmt = await getRequestFormatters();
-  const [letters, onboarding] = await Promise.all([
+  const supabase = await createClient();
+  const [letters, onboarding, { data: openings }] = await Promise.all([
     listOfferLetters(session.orgId, project.id),
     listOnboardingByProject(session.orgId, project.id),
+    // Kit 31 #18 — the project's Open Roles: roster-pinned job postings that
+    // are still open (draft = roster-only, published = on the network/board).
+    supabase
+      .from("job_postings")
+      .select("id, title, openings, day_rate_min_cents, day_rate_max_cents, currency, publish_scope, job_posting_phase")
+      .eq("org_id", session.orgId)
+      .eq("project_id", project.id)
+      .in("job_posting_phase", ["draft", "published"])
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(50),
   ]);
   const docsByLetter = new Map(onboarding.map((o) => [o.letter_id, o]));
+
+  // Filled = booked applications per posting (one batched read).
+  type OpeningRow = {
+    id: string;
+    title: string;
+    openings: number;
+    day_rate_min_cents: number | null;
+    day_rate_max_cents: number | null;
+    currency: string;
+    publish_scope: string;
+    job_posting_phase: string;
+  };
+  const openingRows = (openings ?? []) as OpeningRow[];
+  const bookedByJob = new Map<string, number>();
+  if (openingRows.length > 0) {
+    const { data: booked } = await supabase
+      .from("job_applications")
+      .select("job_posting_id")
+      .eq("org_id", session.orgId)
+      .eq("job_application_state", "booked")
+      .in("job_posting_id", openingRows.map((o) => o.id));
+    for (const b of (booked ?? []) as { job_posting_id: string }[]) {
+      bookedByJob.set(b.job_posting_id, (bookedByJob.get(b.job_posting_id) ?? 0) + 1);
+    }
+  }
+  const openRoles: OpenRoleRow[] = openingRows.map((o) => ({
+    id: o.id,
+    role: fmtPosition(o.title),
+    openings: o.openings ?? 1,
+    filled: bookedByJob.get(o.id) ?? 0,
+    rate:
+      o.day_rate_min_cents != null || o.day_rate_max_cents != null
+        ? `${formatFeeRange(o.day_rate_min_cents, o.day_rate_max_cents, o.currency)}/day`
+        : "",
+    scope: o.publish_scope,
+    published: o.job_posting_phase === "published",
+  }));
 
   const mmmD = (d: string | null) => (d ? fmt.dateParts(d, { month: "short", day: "numeric" }) : null);
 
@@ -95,7 +148,7 @@ export default async function RosterPage() {
         id: l.id,
         name: l.recipient_name,
         initials: initialsFor(l.recipient_name),
-        sub: `${l.role_title} · ${range}`,
+        sub: `${fmtPosition(l.role_title)} · ${range}`,
         docs:
           docs && docs.total > 0
             ? t("m.roster.docsCount", { done: docs.done, total: docs.total }, `Docs ${docs.done}/${docs.total}`)
@@ -119,6 +172,7 @@ export default async function RosterPage() {
         {title}
       </h1>
       <RosterList rows={rows} />
+      <OpenRoles rows={openRoles} />
       <div style={{ marginTop: 16 }}>
         <Link href="/m/roster/reporting" className="s" style={{ color: "var(--p-accent-text)", fontWeight: 600 }}>
           {t("m.roster.reportingLink", undefined, "Reporting Structure")}

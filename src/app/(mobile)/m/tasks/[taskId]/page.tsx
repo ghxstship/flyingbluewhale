@@ -111,6 +111,37 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
   const assignee = row.assigned_to ? nameFor(row.assigned_to) : unassigned;
   const canTransition = isManagerPlus(session) || row.assigned_to === session.userId;
 
+  // Kit 31 #14 — resolve the construction facets' display strings (cost
+  // center code · name, vendor name) in two scoped lookups.
+  let costCode: string | null = null;
+  if (row.cost_center_id) {
+    const { data: cc } = await supabase
+      .from("cost_centers")
+      .select("code, name")
+      .eq("id", row.cost_center_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (cc) costCode = `${cc.code} · ${cc.name}`;
+  }
+  let company: string | null = null;
+  if (row.vendor_id) {
+    // soft-delete-exempt: resolving the display name of a historical FK —
+    // the task still references the vendor even after it's archived.
+    const { data: vendor } = await supabase
+      .from("vendors")
+      .select("name")
+      .eq("id", row.vendor_id)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    if (vendor) company = vendor.name;
+  }
+  const checklist = (Array.isArray(row.checklist) ? row.checklist : [])
+    .map((item) => {
+      const it = item as { label?: unknown; done?: unknown };
+      return { label: String(it.label ?? ""), done: !!it.done };
+    })
+    .filter((item) => item.label);
+
   const task = {
     id: row.id,
     title: row.title,
@@ -121,6 +152,14 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
     assignee,
     created: fmt.date(row.created_at),
     updated: fmt.date(row.updated_at),
+    trade: row.trade ?? null,
+    costCode,
+    company,
+    location: row.location ?? null,
+    ppe: (row.ppe ?? []) as string[],
+    permitRequired: !!row.permit_required,
+    percentComplete: row.percent_complete ?? null,
+    checklist,
   };
 
   const commentItems: CommentItem[] = comments.map((c) => ({
@@ -194,6 +233,16 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
     actUpdated: t("m.tasks.detail.actUpdated", undefined, "Last Updated"),
     permWarn: t("m.tasks.detail.permWarn", undefined, "You don't have permission to change this task."),
     updated_toast: t("m.tasks.detail.updatedToast", undefined, "Task Updated"),
+    trade: t("m.tasks.detail.trade", undefined, "Trade"),
+    costCode: t("m.tasks.detail.costCode", undefined, "Cost Code"),
+    company: t("m.tasks.detail.company", undefined, "Company / Sub"),
+    location: t("m.tasks.detail.location", undefined, "Location / Zone"),
+    ppe: t("m.tasks.detail.ppe", undefined, "PPE Requirements"),
+    permit: t("m.tasks.detail.permit", undefined, "Permit / Hot Work"),
+    permitYes: t("m.tasks.detail.permitYes", undefined, "Required"),
+    progress: t("m.tasks.detail.progress", undefined, "Progress"),
+    checklist: t("m.tasks.detail.checklist", undefined, "Checklist"),
+    checklistEmpty: t("m.tasks.detail.checklistEmpty", undefined, "No checklist items."),
   };
 
   return (

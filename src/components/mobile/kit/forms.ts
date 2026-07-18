@@ -65,8 +65,12 @@ export const FORMS: Forms = {
     fields: [
       { id: "cat", label: "Category", type: "select", required: true, options: ["Credential", "Radio", "Earpiece", "Meal Voucher", "Parking", "Other"] },
       { id: "type", label: "Item / Type", type: "text", placeholder: "e.g. Motorola R7", required: true },
-      { id: "qty", label: "Quantity", type: "number", default: "1", half: true },
-      { id: "needed", label: "Needed By", type: "date", half: true },
+      { id: "qty", label: "Quantity", type: "number", default: "1" },
+      // Kit 31 (live-test resolution #4): every advance line carries the
+      // window it covers — Start required, End required, end >= start
+      // (validated server-side too).
+      { id: "start", label: "Start Date", type: "date", half: true, required: true },
+      { id: "end", label: "End Date", type: "date", half: true, required: true },
       { id: "special", label: "Special Requests", type: "textarea", placeholder: "Sizing, channel, dietary, etc." },
       { id: "purpose", label: "Operational Purpose", type: "textarea", placeholder: "Why is this needed for the operation?", requiredFor: ["Credential", "Radio", "Other"] },
       { id: "notes", label: "Additional Notes", type: "textarea", placeholder: "Anything else ops should know…" },
@@ -142,18 +146,27 @@ export const FORMS: Forms = {
     ],
   },
   task: {
-    // Prototype debris cleaned out when this was finally mounted at
-    // /m/tasks/new: the assignee select offered "Cy R." / "Lo M." /
-    // "Load-out crew" — invented people, not a real roster read — and
-    // `due` was typed `time`, so a due DATE could only ever be an hour.
-    // Field tasks assign to the caller (see createFieldTask); reassignment
-    // is a console concern.
+    // Kit 31 (live-test resolution #14): construction-grade tasks — trade,
+    // cost code, company/sub, location, permit flag, PPE. The costCode and
+    // company selects ship EMPTY here and are injected at mount from the
+    // real stores (cost_centers, vendors) — static seed codes would be a
+    // fabrication. Deliberate divergences kept from the earlier cleanup:
+    // `due` stays a DATE (the kit's `time` type cannot express a due date)
+    // and there is no assignee select — field tasks assign to the caller
+    // (see createFieldTask); reassignment is a console concern. The kit's
+    // drawing select and photo field await a real backing store (flagged).
     title: "New Task", icon: "ListPlus", submit: "Create Task",
     intro: "Assigned to you. Reassign from the console if it belongs to someone else.",
     fields: [
       { id: "title", label: "Task", type: "text", placeholder: "What needs doing?", required: true },
       { id: "priority", label: "Priority", type: "seg", options: ["High", "Medium", "Low"], default: "Medium" },
+      { id: "trade", label: "Trade / Discipline", type: "select", half: true, options: ["Gate & Access", "Staging", "Rigging", "Audio", "Lighting", "Video", "Power", "Site Ops", "Logistics"] },
+      { id: "costCode", label: "Cost Code", type: "select", half: true, options: [] },
       { id: "due", label: "Due", type: "date" },
+      { id: "company", label: "Company / Sub", type: "select", options: [] },
+      { id: "location", label: "Location / Zone", type: "text", placeholder: "e.g. Stage L · NE corner" },
+      { id: "permit", label: "Permit / Hot Work Required", type: "switch" },
+      { id: "ppe", label: "PPE Requirements", type: "text", placeholder: "e.g. Hard hat, hi-vis, harness" },
       { id: "notes", label: "Details", type: "textarea", placeholder: "Anything the next person needs to know…" },
     ],
   },
@@ -255,13 +268,62 @@ export const FORMS: Forms = {
     ],
   },
   job: {
-    title: "Post A Job", icon: "Briefcase", submit: "Post Job",
+    // Kit 31 (live-test resolution #18): full assignment-flow field parity
+    // + the publish-scope segment (Roster Only / Org Network / Job Board)
+    // + the add-to-roster switch. Maps onto job_postings.publish_scope /
+    // openings / shift_starts_at / shift_ends_at (see postJob).
+    title: "Post A Job", icon: "Briefcase", submit: "Publish",
+    intro: "Same fields as the roster job-assignment flow — publish once, share anywhere. Also adds the opening to the project roster.",
     fields: [
-      { id: "role", label: "Role", type: "text", placeholder: "e.g. Stagehand", required: true },
-      { id: "rate", label: "Rate", type: "text", placeholder: "$/hr", half: true },
-      { id: "when", label: "Date", type: "date", half: true },
-      { id: "loc", label: "Location", type: "text", placeholder: "Venue / area" },
+      { id: "role", label: "Role", type: "text", placeholder: "e.g. Stagehand · Load-Out", required: true },
+      { id: "type", label: "Engagement Type", type: "seg", options: ["Shift", "Supervisor", "Contract"], default: "Shift", required: true },
+      { id: "openings", label: "Openings", type: "number", default: "1", half: true, required: true },
+      { id: "rate", label: "Rate", type: "text", placeholder: "$/hr", half: true, required: true },
+      { id: "date", label: "Date", type: "date", required: true },
+      { id: "start", label: "Start", type: "time", half: true, required: true },
+      { id: "end", label: "End", type: "time", half: true },
+      { id: "loc", label: "Location", type: "text", placeholder: "Venue / area", required: true },
+      { id: "certs", label: "Required Certifications", type: "text", placeholder: "e.g. OSHA-10, Forklift Cert" },
+      { id: "gear", label: "What To Bring", type: "text", placeholder: "e.g. Steel-toe boots, hi-vis" },
+      { id: "tags", label: "Tags", type: "text", placeholder: "Load-out, Overnight, Physical" },
       { id: "desc", label: "Description", type: "textarea", required: true },
+      { id: "roster", label: "Add To Project Roster Openings", type: "switch", default: "1" },
+      { id: "publish", label: "Publish To", type: "seg", options: ["Roster Only", "Org Network", "Job Board"], default: "Job Board", required: true },
+    ],
+  },
+  po: {
+    // Kit 31 (live-test resolution #20): field PO Request → requisitions.
+    // The cost-code select ships EMPTY and is injected at mount from the
+    // real cost_centers store; `code` becomes required when coding is
+    // Manual (requiredFor checks vals.coding). The product link auto-fills
+    // item/vendor client-side from the URL itself — honest parsing, no
+    // scraping (see POForm.onFieldChange).
+    title: "Purchase Order Request", icon: "FileBox", submit: "Submit PO",
+    intro: "Request a purchase against the project budget. A product link auto-imports item, price & vendor; coding lands in the budget on approval (managed in ATLVS).",
+    fields: [
+      { id: "link", label: "Product Link", type: "text", placeholder: "https:// — auto-imports item, price & vendor", hint: "Paste a product URL to auto-fill the fields below." },
+      { id: "item", label: "Item", type: "text", placeholder: "What are you buying?", required: true },
+      { id: "vendor", label: "Vendor / Merchant", type: "text", placeholder: "e.g. Harbor Supply Co.", required: true },
+      { id: "qty", label: "Quantity", type: "number", default: "1", half: true, required: true },
+      { id: "amount", label: "Est. Total (USD)", type: "text", placeholder: "0.00", half: true, required: true },
+      { id: "needed", label: "Needed By", type: "date", required: true },
+      { id: "coding", label: "Budget Coding", type: "seg", options: ["Auto-Code", "Manual"], default: "Auto-Code", required: true },
+      { id: "code", label: "Cost Code", type: "select", options: [], requiredFor: ["Manual"], hint: "Required when coding manually — otherwise finance auto-codes on approval." },
+      { id: "purpose", label: "Operational Purpose", type: "textarea", placeholder: "Why is this needed?", required: true },
+      { id: "quote", label: "Quote / Screenshot", type: "photo" },
+    ],
+  },
+  template: {
+    // Kit 31 (live-test resolution #15) — the Templates library New Template
+    // form, verbatim from runtime/forms.jsx.
+    title: "New Template", icon: "LayoutTemplate", submit: "Save Template",
+    intro: "Save anything repeatable — roster, advance, checklist, contract, schedule — as a reusable template at the org or project level.",
+    fields: [
+      { id: "name", label: "Template Name", type: "text", placeholder: "e.g. Festival Gate Crew · Roster", required: true },
+      { id: "cat", label: "Category", type: "select", required: true, options: ["Roster", "Advance", "Checklist", "Contract", "Task List", "Schedule", "Onboarding", "Budget"] },
+      { id: "scope", label: "Library", type: "seg", options: ["Project", "Org"], default: "Project", required: true },
+      { id: "source", label: "Create From", type: "select", options: ["Blank", "Current Project Data", "Duplicate Existing Template"], default: "Current Project Data" },
+      { id: "notes", label: "Notes", type: "textarea", placeholder: "What's included, when to use it…" },
     ],
   },
   listing: {

@@ -54,6 +54,7 @@ type LineRow = {
   fulfillment_state: FulfillmentState;
   title: string | null;
   deadline: string | null;
+  data: Record<string, unknown> | null;
   catalog_item: { name: string | null } | null;
 };
 
@@ -87,7 +88,7 @@ export default async function AdvancePage({ params }: { params: Promise<{ engage
 
   const { data, error } = await supabase
     .from("assignments")
-    .select("id, catalog_kind, fulfillment_state, title, deadline, catalog_item:catalog_item_id(name)")
+    .select("id, catalog_kind, fulfillment_state, title, deadline, data, catalog_item:catalog_item_id(name)")
     .eq("org_id", session.orgId)
     .eq("project_id", letter.raw.project_id)
     .eq("party_crew_id", letter.raw.crew_member_id)
@@ -169,8 +170,18 @@ export default async function AdvancePage({ params }: { params: Promise<{ engage
           const cateringRange = catering
             ? [mmmD(catering.starts_on), mmmD(catering.ends_on)].filter(Boolean).join(" → ")
             : "";
+          // Kit 31 #4 — every line carries data.starts_on/ends_on now; the
+          // per-line window outranks the deadline/contract fallbacks.
+          const extra = (l.data ?? {}) as Record<string, unknown>;
+          const lineRange = [
+            typeof extra.starts_on === "string" ? mmmD(extra.starts_on) : null,
+            typeof extra.ends_on === "string" ? mmmD(extra.ends_on) : null,
+          ]
+            .filter(Boolean)
+            .join(" → ");
           const dates =
             cateringRange ||
+            lineRange ||
             (l.deadline
               ? t("m.roster.advance.due", { date: mmmD(l.deadline) ?? "" }, `Due ${mmmD(l.deadline) ?? ""}`)
               : contractRange);

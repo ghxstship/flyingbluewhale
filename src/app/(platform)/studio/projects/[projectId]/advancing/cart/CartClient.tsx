@@ -221,9 +221,12 @@ export function CartClient({
                   <div className="mt-3 flex flex-wrap items-end gap-3">
                     <label className="text-[11px] font-medium text-[var(--p-text-2)]">
                       {t("console.projects.advancing.cart.startLabel", undefined, "Start")}
+                      {/* Kit 31 #4: Start is required on every advance line. */}
                       <input
                         type="date"
                         value={line.startsOn}
+                        required
+                        aria-required="true"
                         onChange={(e) => patchLine(line.key, { startsOn: e.target.value })}
                         className="ps-input ps-input--sm mt-1 block"
                       />
@@ -298,7 +301,14 @@ export function CartClient({
                 {state.error}
               </span>
             )}
-            <Button type="submit" disabled={pending || !person || lines.length === 0} loading={pending}>
+            {/* Kit 31 #4: a line without a Start Date can't submit — the date
+                inputs live outside this <form>, so the gate is here, mirrored
+                by the server action. */}
+            <Button
+              type="submit"
+              disabled={pending || !person || lines.length === 0 || lines.some((l) => !l.startsOn)}
+              loading={pending}
+            >
               {t("console.projects.advancing.cart.submit", undefined, "Review & Submit Advance")}
             </Button>
           </div>

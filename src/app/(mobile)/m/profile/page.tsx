@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -68,11 +69,12 @@ export default async function MobileProfilePage() {
     { data: skills },
     { data: awards },
     { data: reviews },
+    { data: personalDocs },
   ] = await Promise.all([
     supabase.from("users").select("id, name, email").eq("id", session.userId).maybeSingle(),
     supabase
       .from("user_profiles")
-      .select("display_name, tagline, bio, pronouns, role_title, dietary_restrictions, phone, location_city, location_region, country")
+      .select("display_name, tagline, bio, pronouns, role_title, dietary_restrictions, phone, location_city, location_region, country, avatar_url")
       .eq("user_id", session.userId)
       .maybeSingle(),
     supabase.from("user_social_links").select("platform, url").eq("user_id", session.userId),
@@ -105,6 +107,13 @@ export default async function MobileProfilePage() {
       .not("released_at", "is", null)
       .order("created_at", { ascending: false })
       .limit(5),
+    // Kit 31 #12 — the ID & Tax step counts real personal_documents rows.
+    supabase
+      .from("personal_documents")
+      .select("id")
+      .eq("user_id", session.userId)
+      .is("deleted_at", null)
+      .limit(1),
   ]);
 
   const u = (user as { name: string | null; email: string } | null) ?? null;
@@ -122,6 +131,7 @@ export default async function MobileProfilePage() {
     .map((a) => a.badge)
     .filter((b): b is { name: string; description: string | null; icon: string | null } => !!b);
   const revs = (reviews ?? []) as { rating: number; body: string | null; created_at: string; reviewer_user_id: string }[];
+  const hasPersonalDocs = (personalDocs ?? []).length > 0;
 
   // Reviewer display names (one extra query, only when there are reviews).
   const reviewerNames = new Map<string, string>();
@@ -153,7 +163,7 @@ export default async function MobileProfilePage() {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t" style={{ fontSize: 17 }}>{name}</div>
           <div className="s" style={{ marginTop: 3 }}>
-            {[p?.role_title, p?.pronouns].filter(Boolean).join(" · ") || u?.email}
+            {[fmtPosition(p?.role_title) || null, p?.pronouns].filter(Boolean).join(" · ") || u?.email}
           </div>
           {p?.tagline ? <div className="s" style={{ marginTop: 2, color: "var(--p-text-2)" }}>{p.tagline}</div> : null}
         </div>
@@ -167,6 +177,119 @@ export default async function MobileProfilePage() {
           <KIcon name="QrCode" size={16} /> {t("m.profile.rose", undefined, "My Rose")}
         </Link>
       </div>
+
+      {/* Kit 31 (live-test resolution #12): completion stepper — 8 steps
+          bound to the real profile stores, % bar, and every incomplete step
+          stays visible with an Add action until the profile hits 100%.
+          Steps mirror the kit's STEPS list (runtime/app.jsx profile). */}
+      {(() => {
+        const steps: { id: string; label: string; done: boolean; href: string }[] = [
+          {
+            id: "photo",
+            label: t("m.profile.steps.photo", undefined, "Add A Profile Photo"),
+            done: !!p?.avatar_url,
+            // The avatar editor lives in the personal shell's profile editor.
+            href: urlFor("personal", "/me/profile"),
+          },
+          {
+            id: "bio",
+            label: t("m.profile.steps.bio", undefined, "Write A Short Bio"),
+            done: !!p?.bio,
+            href: "/m/settings",
+          },
+          {
+            id: "contact",
+            label: t("m.profile.steps.contact", undefined, "Add Contact Details"),
+            done: !!(p?.phone && u?.email),
+            href: "/m/settings",
+          },
+          {
+            id: "emergency",
+            label: t("m.profile.steps.emergency", undefined, "Add An Emergency Contact"),
+            done: ecs.length > 0,
+            href: "/m/settings",
+          },
+          {
+            id: "travel",
+            label: t("m.profile.steps.travel", undefined, "Complete Travel Profile"),
+            done: !!travel?.passport_number,
+            href: "/m/settings",
+          },
+          {
+            id: "uniform",
+            label: t("m.profile.steps.uniform", undefined, "Set Uniform Sizes"),
+            done: !!uniform?.shirt,
+            href: "/m/settings",
+          },
+          {
+            id: "certs",
+            label: t("m.profile.steps.certs", undefined, "Upload Certifications"),
+            done: certList.length > 0,
+            href: "/m/settings",
+          },
+          {
+            id: "docs",
+            label: t("m.profile.steps.docs", undefined, "Attach ID & Tax Documents"),
+            done: hasPersonalDocs,
+            href: "/m/documents/new",
+          },
+        ];
+        const doneN = steps.filter((s) => s.done).length;
+        if (doneN === steps.length) return null;
+        const pct = Math.round((doneN / steps.length) * 100);
+        return (
+          <div className="item" style={{ display: "block", margin: "6px 0 4px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span className="s" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontWeight: 700, color: "var(--p-text-1)" }}>
+                <KIcon name="UserCheck" size={12} />
+                {t("m.profile.steps.title", undefined, "Complete Your Profile")}
+              </span>
+              <span className="time">{pct}%</span>
+            </div>
+            <div
+              role="progressbar"
+              aria-valuenow={pct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={t("m.profile.steps.title", undefined, "Complete Your Profile")}
+              style={{ height: 6, borderRadius: 999, background: "var(--p-border)", overflow: "hidden", margin: "10px 0 4px" }}
+            >
+              <span style={{ display: "block", height: "100%", width: `${pct}%`, background: "var(--p-accent)" }} />
+            </div>
+            <div className="s" style={{ marginBottom: 6 }}>
+              {t(
+                "m.profile.steps.summary",
+                { done: doneN, total: steps.length },
+                `${doneN} of ${steps.length} — a complete profile auto-imports into every project you join.`,
+              )}
+            </div>
+            {steps
+              .filter((s) => !s.done)
+              .map((s) => (
+                <Link
+                  key={s.id}
+                  href={s.href}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 9,
+                    width: "100%",
+                    padding: "8px 0",
+                    borderTop: "1px solid var(--p-border)",
+                    color: "var(--p-text-1)",
+                    textDecoration: "none",
+                  }}
+                >
+                  <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: "50%", border: "2px dashed var(--p-border)", flex: "none" }} />
+                  <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{s.label}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "var(--p-accent-text)" }}>
+                    {t("m.profile.steps.add", undefined, "Add")}
+                  </span>
+                </Link>
+              ))}
+          </div>
+        );
+      })()}
 
       {/* About. */}
       {p?.bio ? (

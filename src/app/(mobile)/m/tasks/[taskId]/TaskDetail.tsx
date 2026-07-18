@@ -9,7 +9,9 @@ import {
   stateTone,
   type TaskState,
 } from "../_shared";
-import { addTaskComment, setTaskState } from "./actions";
+import { addTaskComment, setTaskState, toggleChecklistItem } from "./actions";
+
+export type ChecklistEntry = { label: string; done: boolean };
 
 type DetailTask = {
   id: string;
@@ -21,6 +23,15 @@ type DetailTask = {
   assignee: string;
   created: string;
   updated: string;
+  // Kit 31 (live-test resolution #14) — construction-grade facets.
+  trade: string | null;
+  costCode: string | null;
+  company: string | null;
+  location: string | null;
+  ppe: string[];
+  permitRequired: boolean;
+  percentComplete: number | null;
+  checklist: ChecklistEntry[];
 };
 
 export type CommentItem = {
@@ -66,6 +77,16 @@ type Labels = {
   actUpdated: string;
   permWarn: string;
   updated_toast: string;
+  trade: string;
+  costCode: string;
+  company: string;
+  location: string;
+  ppe: string;
+  permit: string;
+  permitYes: string;
+  progress: string;
+  checklist: string;
+  checklistEmpty: string;
 };
 
 export function TaskDetail({
@@ -202,29 +223,127 @@ export function TaskDetail({
 
   const timeline = events.map((e) => ({ icon: e.icon, txt: e.txt, time: e.time }));
 
+  // Kit 31 #14 — construction facets render as record fields when present.
+  const fields = [
+    { k: labels.priority, v: task.priority },
+    { k: labels.due, v: task.due },
+    { k: labels.assignee, v: task.assignee },
+    { k: labels.created, v: task.created },
+  ];
+  if (task.trade) fields.push({ k: labels.trade, v: task.trade });
+  if (task.costCode) fields.push({ k: labels.costCode, v: task.costCode });
+  if (task.company) fields.push({ k: labels.company, v: task.company });
+  if (task.location) fields.push({ k: labels.location, v: task.location });
+  if (task.permitRequired) fields.push({ k: labels.permit, v: labels.permitYes });
+  if (task.percentComplete != null) fields.push({ k: labels.progress, v: `${task.percentComplete}%` });
+
+  const toggleItem = (index: number, done: boolean) => {
+    if (pending || !canTransition) return;
+    setErr(null);
+    startTransition(async () => {
+      const res = await toggleChecklistItem(task.id, index, done);
+      if (res?.error) {
+        setErr(res.error);
+        return;
+      }
+      router.refresh();
+    });
+  };
+
+  // Checklist section — real jsonb sub-items; toggles are RBAC-gated the
+  // same as a state change and recompute percent_complete server-side.
+  const checklistNode =
+    task.checklist.length === 0 ? null : (
+      <div>
+        {task.checklist.map((item, i) => (
+          <button
+            key={`${item.label}-${i}`}
+            type="button"
+            disabled={!canTransition || pending}
+            onClick={() => toggleItem(i, !item.done)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 9,
+              width: "100%",
+              textAlign: "left",
+              background: "none",
+              border: "none",
+              padding: "8px 0",
+              borderTop: i === 0 ? "none" : "1px solid var(--p-border)",
+              cursor: canTransition ? "pointer" : "default",
+              color: "var(--p-text-1)",
+              font: "inherit",
+            }}
+            aria-pressed={item.done}
+          >
+            <span
+              aria-hidden="true"
+              style={{
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                flex: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: item.done ? "none" : "2px dashed var(--p-border)",
+                background: item.done ? "var(--p-success)" : "transparent",
+                color: "#fff",
+              }}
+            >
+              {item.done ? <KIcon name="Check" size={12} /> : null}
+            </span>
+            <span
+              style={{
+                flex: 1,
+                fontSize: 13,
+                fontWeight: 600,
+                textDecoration: item.done ? "line-through" : "none",
+                color: item.done ? "var(--p-text-3)" : "var(--p-text-1)",
+              }}
+            >
+              {item.label}
+            </span>
+          </button>
+        ))}
+      </div>
+    );
+
+  // PPE chips render inside their own section when the task carries any.
+  const ppeNode =
+    task.ppe.length === 0 ? null : (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {task.ppe.map((p) => (
+          <span key={p} className="ps-tag">
+            {p}
+          </span>
+        ))}
+      </div>
+    );
+
+  const sections = [
+    { h: labels.status, node: lifecycle },
+    {
+      h: labels.description,
+      text: task.description || labels.descriptionEmpty,
+    },
+    ...(ppeNode ? [{ h: labels.ppe, node: ppeNode }] : []),
+    ...(checklistNode ? [{ h: labels.checklist, node: checklistNode }] : []),
+    { h: labels.photos, node: photosNode },
+    timeline.length
+      ? { h: labels.activity, timeline }
+      : { h: labels.activity, text: labels.activityEmpty },
+  ];
+
   return (
     <RecordDetail
       eyebrow={labels.eyebrow}
       title={task.title}
       icon="ClipboardCheck"
       status={{ tone: stateTone(state), label: stateLabel[state] }}
-      fields={[
-        { k: labels.priority, v: task.priority },
-        { k: labels.due, v: task.due },
-        { k: labels.assignee, v: task.assignee },
-        { k: labels.created, v: task.created },
-      ]}
-      sections={[
-        { h: labels.status, node: lifecycle },
-        {
-          h: labels.description,
-          text: task.description || labels.descriptionEmpty,
-        },
-        { h: labels.photos, node: photosNode },
-        timeline.length
-          ? { h: labels.activity, timeline }
-          : { h: labels.activity, text: labels.activityEmpty },
-      ]}
+      fields={fields}
+      sections={sections}
       comments={comments}
       people={[]}
       onComment={onComment}

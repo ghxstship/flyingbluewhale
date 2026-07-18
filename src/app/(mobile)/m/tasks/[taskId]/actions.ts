@@ -129,3 +129,63 @@ export async function addTaskComment(
   revalidatePath(`/m/tasks/${v.taskId}`);
   return null;
 }
+
+const ChecklistInput = z.object({
+  taskId: z.string().uuid(),
+  index: z.coerce.number().int().min(0).max(199),
+  done: z.boolean(),
+});
+
+/**
+ * Kit 31 (live-test resolution #14): toggle a checklist item.
+ *
+ * `tasks.checklist` is jsonb `[{label, done}]`; `percent_complete` derives
+ * from the checklist whenever one exists, so the two can't disagree. Same
+ * RBAC band as a state change: manager+ OR the assignee.
+ */
+export async function toggleChecklistItem(taskId: string, index: number, done: boolean): Promise<State> {
+  const session = await requireSession();
+  const parsed = ChecklistInput.safeParse({ taskId, index, done });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input." };
+  }
+  const v = parsed.data;
+
+  const supabase = await createClient();
+  const { data: task, error: loadErr } = await supabase
+    .from("tasks")
+    .select("checklist, assigned_to")
+    .eq("id", v.taskId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (loadErr) return { error: `Could not load task: ${loadErr.message}` };
+  if (!task) return { error: "Task not found." };
+
+  if (!isManagerPlus(session) && task.assigned_to !== session.userId) {
+    return { error: "You don't have permission to change this task." };
+  }
+
+  const checklist = (Array.isArray(task.checklist) ? task.checklist : []) as Array<{
+    label?: unknown;
+    done?: unknown;
+  }>;
+  if (v.index >= checklist.length) return { error: "That checklist item no longer exists." };
+  // Normalize every entry — the jsonb column wants clean {label, done} rows.
+  const next = checklist.map((item, i) => ({
+    label: String(item.label ?? ""),
+    done: i === v.index ? v.done : !!item.done,
+  }));
+  const doneCount = next.filter((i) => i.done).length;
+  const percent = next.length ? Math.round((doneCount / next.length) * 100) : null;
+
+  const { error } = await supabase
+    .from("tasks")
+    .update({ checklist: next, percent_complete: percent })
+    .eq("id", v.taskId)
+    .eq("org_id", session.orgId);
+  if (error) return { error: `Could not update checklist: ${error.message}` };
+
+  revalidatePath(`/m/tasks/${v.taskId}`);
+  revalidatePath("/m/tasks");
+  return null;
+}

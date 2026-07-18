@@ -79,6 +79,10 @@ export default async function AdvanceDetailPage({ params }: { params: Promise<{ 
     qty: typeof extra.qty === "number" ? extra.qty : null,
     special: typeof extra.special === "string" ? extra.special : null,
     purpose: typeof extra.purpose === "string" ? extra.purpose : null,
+    // Kit 31 #4 — the advance window (data.starts_on/ends_on, the same
+    // contract the ATLVS cart writes).
+    startsOn: typeof extra.starts_on === "string" && extra.starts_on ? fmt.date(extra.starts_on) : null,
+    endsOn: typeof extra.ends_on === "string" && extra.ends_on ? fmt.date(extra.ends_on) : null,
   };
 
   // Manager fulfillment: the legal next states from the current one.

@@ -48,7 +48,9 @@ export default async function CatalogPage() {
           back: t("m.catalog.back", undefined, "More"),
           title: t("m.catalog.title", undefined, "Catalog"),
           search: t("m.catalog.search", undefined, "Search the catalog…"),
-          request: t("m.catalog.request", undefined, "Request"),
+          // Kit 31 (live-test resolution #3): the CTA is "Add To Request" and
+          // opens the advance Add Item editor prefilled with this SKU.
+          request: t("m.catalog.addToRequest", undefined, "Add To Request"),
           empty: t("m.catalog.empty", undefined, "No items"),
           emptyHint: t("m.catalog.emptyHint", undefined, "Nothing matches."),
         }}

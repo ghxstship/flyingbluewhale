@@ -49,6 +49,10 @@ export async function submitAdvanceCart(projectId: string, _prev: CartSubmitStat
   if (!parsed.success) return { error: "Invalid Cart Payload" };
 
   for (const line of parsed.data.lines) {
+    // Kit 31 (live-test resolution #4): Start Date is required on every line.
+    if (!line.starts_on) {
+      return { error: "Every Line Needs A Start Date" };
+    }
     if (line.starts_on && line.ends_on && line.ends_on < line.starts_on) {
       return { error: "A Line's End Date Precedes Its Start Date" };
     }

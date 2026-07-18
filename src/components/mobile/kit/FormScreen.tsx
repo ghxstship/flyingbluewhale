@@ -572,12 +572,18 @@ export function FormScreen({
   initial,
   onClose,
   onSubmit,
+  onFieldChange,
 }: {
   formId?: string;
   def?: FormDef;
   initial?: Record<string, unknown>;
   onClose: () => void;
   onSubmit: (def: FormDef, vals: Record<string, unknown>) => void;
+  /** Optional per-field derivation hook — called after a field commits, with
+   *  a patch writer so a wrapper can prefill siblings (the PO form derives
+   *  item/vendor from a pasted product URL). Defs stay serializable; the
+   *  behavior lives in the mounting client component. */
+  onFieldChange?: (id: string, value: unknown, vals: Record<string, unknown>, patch: (updates: Record<string, unknown>) => void) => void;
 }) {
   const def = customDef || (formId ? FORMS[formId] : undefined);
   const [vals, setVals] = useState<Record<string, unknown>>(() => {
@@ -589,8 +595,18 @@ export function FormScreen({
     return init;
   });
   if (!def) return null;
-  const setV = (id: string, v: unknown) => setVals((p) => ({ ...p, [id]: v }));
-  const isReq = (f: FormField) => f.required || (f.requiredFor && f.requiredFor.includes(vals.cat as string));
+  const setV = (id: string, v: unknown) => {
+    setVals((p) => ({ ...p, [id]: v }));
+    // Outside the updater — an updater must stay pure (strict mode runs it
+    // twice). The snapshot passed down is close-enough-current for derivation.
+    onFieldChange?.(id, v, { ...vals, [id]: v }, (updates) => setVals((q) => ({ ...q, ...updates })));
+  };
+  // requiredFor keys off the discriminating segment the def uses — the
+  // advance form's Category (`cat`) or the PO form's Budget Coding
+  // (`coding`), matching the kit runtime exactly.
+  const isReq = (f: FormField) =>
+    f.required ||
+    (f.requiredFor && (f.requiredFor.includes(vals.cat as string) || f.requiredFor.includes(vals.coding as string)));
   // `!value` is wrong for the file fields: an empty array is truthy, so a
   // required photo field would satisfy itself with zero photos. Treat an
   // empty array as absent.

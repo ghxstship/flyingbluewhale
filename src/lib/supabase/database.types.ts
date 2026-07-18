@@ -6445,6 +6445,8 @@ export type Database = {
       }
       chat_room_members: {
         Row: {
+          archived_at: string | null
+          flagged_at: string | null
           joined_at: string
           last_read_at: string | null
           member_role: string
@@ -6454,6 +6456,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          archived_at?: string | null
+          flagged_at?: string | null
           joined_at?: string
           last_read_at?: string | null
           member_role?: string
@@ -6463,6 +6467,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          archived_at?: string | null
+          flagged_at?: string | null
           joined_at?: string
           last_read_at?: string | null
           member_role?: string
@@ -13656,6 +13662,72 @@ export type Database = {
         }
         Relationships: []
       }
+      field_templates: {
+        Row: {
+          category: string
+          config: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          last_used_at: string | null
+          name: string
+          org_id: string
+          project_id: string | null
+          source: string
+          summary: string | null
+          updated_at: string
+          use_count: number
+        }
+        Insert: {
+          category: string
+          config?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          last_used_at?: string | null
+          name: string
+          org_id: string
+          project_id?: string | null
+          source?: string
+          summary?: string | null
+          updated_at?: string
+          use_count?: number
+        }
+        Update: {
+          category?: string
+          config?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          last_used_at?: string | null
+          name?: string
+          org_id?: string
+          project_id?: string | null
+          source?: string
+          summary?: string | null
+          updated_at?: string
+          use_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "field_templates_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "field_templates_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       file_access_log: {
         Row: {
           access_kind: string
@@ -17177,12 +17249,16 @@ export type Database = {
           id: string
           job_posting_phase: Database["public"]["Enums"]["job_posting_status"]
           lodging_provided: boolean
+          openings: number
           org_id: string
           posting_type: Database["public"]["Enums"]["job_posting_type"]
           project_id: string | null
           public_slug: string
+          publish_scope: string
           published_at: string | null
           region: string | null
+          shift_ends_at: string | null
+          shift_starts_at: string | null
           role_taxonomy: string[]
           screening_questions: Json
           title: string
@@ -17211,12 +17287,16 @@ export type Database = {
           id?: string
           job_posting_phase?: Database["public"]["Enums"]["job_posting_status"]
           lodging_provided?: boolean
+          openings?: number
           org_id: string
           posting_type?: Database["public"]["Enums"]["job_posting_type"]
           project_id?: string | null
           public_slug: string
+          publish_scope?: string
           published_at?: string | null
           region?: string | null
+          shift_ends_at?: string | null
+          shift_starts_at?: string | null
           role_taxonomy?: string[]
           screening_questions?: Json
           title: string
@@ -17245,12 +17325,16 @@ export type Database = {
           id?: string
           job_posting_phase?: Database["public"]["Enums"]["job_posting_status"]
           lodging_provided?: boolean
+          openings?: number
           org_id?: string
           posting_type?: Database["public"]["Enums"]["job_posting_type"]
           project_id?: string | null
           public_slug?: string
+          publish_scope?: string
           published_at?: string | null
           region?: string | null
+          shift_ends_at?: string | null
+          shift_starts_at?: string | null
           role_taxonomy?: string[]
           screening_questions?: Json
           title?: string
@@ -20870,6 +20954,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           done_at: string | null
+          flagged_at: string | null
           href: string | null
           id: string
           kind: string
@@ -20890,6 +20975,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           done_at?: string | null
+          flagged_at?: string | null
           href?: string | null
           id?: string
           kind?: string
@@ -20910,6 +20996,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           done_at?: string | null
+          flagged_at?: string | null
           href?: string | null
           id?: string
           kind?: string
@@ -28336,45 +28423,69 @@ export type Database = {
       requisitions: {
         Row: {
           approval_instance_id: string | null
+          auto_code: boolean
+          cost_center_id: string | null
           created_at: string
           description: string | null
           estimated_cents: number | null
           id: string
+          needed_by: string | null
           org_id: string
+          product_url: string | null
           project_id: string | null
+          purpose: string | null
+          qty: number | null
+          quote_path: string | null
           requester_id: string | null
           requisition_state: Database["public"]["Enums"]["req_status"]
           state: Database["public"]["Enums"]["upo_state"]
           title: string
           updated_at: string
+          vendor_name: string | null
         }
         Insert: {
           approval_instance_id?: string | null
+          auto_code?: boolean
+          cost_center_id?: string | null
           created_at?: string
           description?: string | null
           estimated_cents?: number | null
           id?: string
+          needed_by?: string | null
           org_id: string
+          product_url?: string | null
           project_id?: string | null
+          purpose?: string | null
+          qty?: number | null
+          quote_path?: string | null
           requester_id?: string | null
           requisition_state?: Database["public"]["Enums"]["req_status"]
           state?: Database["public"]["Enums"]["upo_state"]
           title: string
           updated_at?: string
+          vendor_name?: string | null
         }
         Update: {
           approval_instance_id?: string | null
+          auto_code?: boolean
+          cost_center_id?: string | null
           created_at?: string
           description?: string | null
           estimated_cents?: number | null
           id?: string
+          needed_by?: string | null
           org_id?: string
+          product_url?: string | null
           project_id?: string | null
+          purpose?: string | null
+          qty?: number | null
+          quote_path?: string | null
           requester_id?: string | null
           requisition_state?: Database["public"]["Enums"]["req_status"]
           state?: Database["public"]["Enums"]["upo_state"]
           title?: string
           updated_at?: string
+          vendor_name?: string | null
         }
         Relationships: [
           {
@@ -28403,6 +28514,13 @@ export type Database = {
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "requisitions_cost_center_id_fkey"
+            columns: ["cost_center_id"]
+            isOneToOne: false
+            referencedRelation: "cost_centers"
             referencedColumns: ["id"]
           },
         ]
@@ -36230,56 +36348,86 @@ export type Database = {
       tasks: {
         Row: {
           assigned_to: string | null
+          checklist: Json
+          cost_center_id: string | null
           created_at: string
           created_by: string | null
+          archived_at: string | null
           description: string | null
           due_at: string | null
           effort: number | null
+          flagged_at: string | null
           id: string
           kind: string
+          location: string | null
           org_id: string
+          percent_complete: number | null
           period_id: string | null
+          permit_required: boolean
+          ppe: string[]
           priority: number
           project_id: string | null
           task_state: Database["public"]["Enums"]["task_status"]
           title: string
+          trade: string | null
           updated_at: string
+          vendor_id: string | null
           xpms_atom_id: string | null
         }
         Insert: {
           assigned_to?: string | null
+          checklist?: Json
+          cost_center_id?: string | null
           created_at?: string
           created_by?: string | null
+          archived_at?: string | null
           description?: string | null
           due_at?: string | null
           effort?: number | null
+          flagged_at?: string | null
           id?: string
           kind?: string
+          location?: string | null
           org_id: string
+          percent_complete?: number | null
           period_id?: string | null
+          permit_required?: boolean
+          ppe?: string[]
           priority?: number
           project_id?: string | null
           task_state?: Database["public"]["Enums"]["task_status"]
           title: string
+          trade?: string | null
           updated_at?: string
+          vendor_id?: string | null
           xpms_atom_id?: string | null
         }
         Update: {
           assigned_to?: string | null
+          checklist?: Json
+          cost_center_id?: string | null
           created_at?: string
           created_by?: string | null
+          archived_at?: string | null
           description?: string | null
           due_at?: string | null
           effort?: number | null
+          flagged_at?: string | null
           id?: string
           kind?: string
+          location?: string | null
           org_id?: string
+          percent_complete?: number | null
           period_id?: string | null
+          permit_required?: boolean
+          ppe?: string[]
           priority?: number
           project_id?: string | null
           task_state?: Database["public"]["Enums"]["task_status"]
           title?: string
+          trade?: string | null
           updated_at?: string
+          vendor_id?: string | null
           xpms_atom_id?: string | null
         }
         Relationships: [
@@ -36337,6 +36485,20 @@ export type Database = {
             columns: ["xpms_atom_id"]
             isOneToOne: false
             referencedRelation: "xpms_atoms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_cost_center_id_fkey"
+            columns: ["cost_center_id"]
+            isOneToOne: false
+            referencedRelation: "cost_centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
         ]
@@ -45311,6 +45473,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      checkin_my_assignment: {
+        Args: { p_assignment_id: string }
+        Returns: undefined
+      }
       audit_log_pii_pending_count: {
         Args: { p_max_age_days?: number }
         Returns: number
@@ -46584,6 +46750,10 @@ export type Database = {
           table_name: string
         }
         Returns: string
+      }
+      use_field_template: {
+        Args: { p_template_id: string }
+        Returns: number
       }
       verify_certification: {
         Args: { p_holder_id: string }

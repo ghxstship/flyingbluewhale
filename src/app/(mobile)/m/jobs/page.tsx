@@ -20,6 +20,9 @@ const EMPLOYMENT_LABEL: Record<string, string> = {
   "1099": "1099",
   volunteer: "Volunteer",
   contract: "Contract",
+  // Kit 31 #18 — engagement types from the field Post-a-Job segment.
+  shift: "Shift",
+  supervisor: "Supervisor",
 };
 
 export default async function MobileJobsPage() {

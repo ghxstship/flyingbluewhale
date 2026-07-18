@@ -14,6 +14,13 @@ const Input = z.object({
   notes: z.string().optional(),
   due: z.string().optional(),
   priority: z.string().optional(),
+  // Kit 31 (live-test resolution #14) — construction-grade facets.
+  trade: z.string().max(80).optional(),
+  costCode: z.string().max(160).optional(),
+  company: z.string().max(160).optional(),
+  location: z.string().max(200).optional(),
+  permit: z.string().optional(),
+  ppe: z.string().max(400).optional(),
   projectId: z.string().uuid().optional().or(z.literal("")),
 });
 
@@ -59,6 +66,41 @@ export async function createFieldTask(_prev: State, fd: FormData): Promise<State
     if (!project) return { error: "Project not found in your organization." };
   }
 
+  // Kit 31 #14: resolve the display strings back to real records — the
+  // cost-code select renders "0000 · Executive" (code · name, unique code
+  // per org) and the company select renders the vendor's name. A string
+  // that no longer resolves is dropped, never guessed.
+  let costCenterId: string | null = null;
+  if (v.costCode) {
+    const code = v.costCode.split("·")[0]?.trim();
+    if (code) {
+      const { data: cc } = await supabase
+        .from("cost_centers")
+        .select("id")
+        .eq("org_id", session.orgId)
+        .eq("code", code)
+        .limit(1)
+        .maybeSingle();
+      costCenterId = (cc?.id as string | undefined) ?? null;
+    }
+  }
+  let vendorId: string | null = null;
+  if (v.company) {
+    const { data: vendor } = await supabase
+      .from("vendors")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("name", v.company)
+      .is("deleted_at", null)
+      .limit(1)
+      .maybeSingle();
+    vendorId = (vendor?.id as string | undefined) ?? null;
+  }
+  const ppe = (v.ppe ?? "")
+    .split(/[·,;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   const { error } = await supabase.from("tasks").insert({
     org_id: session.orgId,
     title: v.title.slice(0, 200),
@@ -69,6 +111,12 @@ export async function createFieldTask(_prev: State, fd: FormData): Promise<State
     created_by: session.userId,
     assigned_to: session.userId,
     task_state: "todo",
+    trade: v.trade || null,
+    cost_center_id: costCenterId,
+    vendor_id: vendorId,
+    location: v.location || null,
+    permit_required: v.permit === "1" || v.permit === "true",
+    ppe,
   });
   if (error) return { error: error.message };
 

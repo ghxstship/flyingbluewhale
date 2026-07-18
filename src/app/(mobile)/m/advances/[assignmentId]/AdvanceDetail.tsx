@@ -23,6 +23,9 @@ export type AdvanceDetailData = {
   qty: number | null;
   special: string | null;
   purpose: string | null;
+  /** Kit 31 #4 — the advance window every line carries. */
+  startsOn: string | null;
+  endsOn: string | null;
 };
 
 function stateLabel(s: string): string {
@@ -99,6 +102,8 @@ export function AdvanceDetail({
   ];
   if (data.project) fields.push({ k: t("m.advances.detail.project", undefined, "Project"), v: data.project });
   if (data.qty != null) fields.push({ k: t("m.advances.detail.qty", undefined, "Quantity"), v: String(data.qty) });
+  if (data.startsOn) fields.push({ k: t("m.advances.detail.start", undefined, "Start Date"), v: data.startsOn });
+  if (data.endsOn) fields.push({ k: t("m.advances.detail.end", undefined, "End Date"), v: data.endsOn });
   if (data.deadline) fields.push({ k: t("m.advances.detail.due", undefined, "Due"), v: data.deadline });
   if (data.issuedAt) fields.push({ k: t("m.advances.detail.issued", undefined, "Issued"), v: data.issuedAt });
   if (data.fulfilledAt) fields.push({ k: t("m.advances.detail.fulfilled", undefined, "Fulfilled"), v: data.fulfilledAt });

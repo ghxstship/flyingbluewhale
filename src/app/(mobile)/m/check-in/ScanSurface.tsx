@@ -4,7 +4,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
 import { CheckInScanner, type RecentScan } from "./CheckInScanner";
 import type { BindableCatalogItem } from "./ProductMatchCard";
-import { ScannerCapture, type CostCodeOpt, type ExpenseDraft } from "./ScannerCapture";
+import type { CostCodeOpt, ExpenseDraft } from "./ScannerCapture";
 import { WillSyncChip } from "@/components/mobile/WillSyncChip";
 
 /**
@@ -176,14 +176,12 @@ export async function ScanSurface({
         canBind={canBind}
         canMoveCustody={canMoveCustody}
         catalogItems={catalogItems}
-        scannerNode={
-          <ScannerCapture
-            costCodes={costCodes}
-            canImportInvoice={canFulfill}
-            initialKind={expenseDraft ? "invoice" : scannerKind}
-            expenseDraft={expenseDraft}
-          />
-        }
+        scannerProps={{
+          costCodes,
+          canImportInvoice: canFulfill,
+          initialKind: expenseDraft ? "invoice" : scannerKind,
+          expenseDraft,
+        }}
         productLabels={{
           match: t("m.checkin.product.match", undefined, "Match"),
           matchedCatalog: t("m.checkin.product.matchedCatalog", undefined, "Matched Catalog"),

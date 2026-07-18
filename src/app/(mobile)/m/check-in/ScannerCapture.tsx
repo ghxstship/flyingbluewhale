@@ -46,19 +46,16 @@ type Draft = {
   expenseId?: string;
 };
 
-export function ScannerCapture({
-  costCodes,
-  canImportInvoice,
-  initialKind,
-  expenseDraft,
-}: {
+export type ScannerCaptureProps = {
   costCodes: CostCodeOpt[];
   /** Manager band — the kit gates invoice capture on `approve`. */
   canImportInvoice: boolean;
   initialKind?: DocKind;
   /** Prefill from an existing uncoded expense (the Finance "Code It" row). */
   expenseDraft?: ExpenseDraft | null;
-}) {
+};
+
+export function ScannerCapture({ costCodes, canImportInvoice, initialKind, expenseDraft }: ScannerCaptureProps) {
   const t = useT();
   const toast = useToast();
   const router = useRouter();

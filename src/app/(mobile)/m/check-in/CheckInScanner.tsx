@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
@@ -8,6 +9,12 @@ import { formatsForMode } from "@/lib/scan/formats";
 import { posGtinCandidate } from "@/lib/scan/product";
 import { BindGtinCard, ProductMatchCard, type BindableCatalogItem, type ProductLabels } from "./ProductMatchCard";
 import { AssetQuickLook, type ScannedAsset } from "./AssetQuickLook";
+import type { ScannerCaptureProps } from "./ScannerCapture";
+
+// The Scanner segment's camera/PDF/image capture (ScannerCapture + image-pdf)
+// is heavy and only used after the user taps into the Scanner tab. Load it on
+// demand instead of shipping it in the /m/check-in + /m/scan route chunks.
+const ScannerCapture = dynamic(() => import("./ScannerCapture").then((m) => m.ScannerCapture), { ssr: false });
 
 export type RecentScan = {
   id: string;
@@ -91,7 +98,7 @@ export function CheckInScanner({
   canBind = false,
   canMoveCustody = false,
   catalogItems = [],
-  scannerNode,
+  scannerProps,
 }: {
   recent: RecentScan[];
   labels: CheckInLabels;
@@ -117,7 +124,7 @@ export function CheckInScanner({
    * Receipt capture flow, rendered in place of the code scanner when the
    * Scanner segment is active. Server mounts pass `<ScannerCapture …>`.
    */
-  scannerNode?: ReactNode;
+  scannerProps?: ScannerCaptureProps | null;
 }) {
   const [mode, setMode] = useState<Mode>(initialMode ?? "access");
   const [code, setCode] = useState("");
@@ -134,9 +141,9 @@ export function CheckInScanner({
         ["access", labels.access],
         ["asset", labels.asset],
         ["pos", labels.pos],
-        ...(scannerNode ? ([["scanner", labels.scanner ?? "Scanner"]] as Array<[Mode, string]>) : []),
+        ...(scannerProps ? ([["scanner", labels.scanner ?? "Scanner"]] as Array<[Mode, string]>) : []),
       ] as Array<[Mode, string]>,
-    [labels, scannerNode],
+    [labels, scannerProps],
   );
 
   const cta = mode === "access" ? labels.ctaAccess : mode === "asset" ? labels.ctaAsset : labels.ctaPos;
@@ -188,7 +195,7 @@ export function CheckInScanner({
       </div>
 
       {mode === "scanner" ? (
-        scannerNode
+        scannerProps ? <ScannerCapture {...scannerProps} /> : null
       ) : (
         <>
           <GatedCameraScanner

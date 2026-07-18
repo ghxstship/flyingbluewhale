@@ -18,8 +18,31 @@ const PATTERNS: Record<Pattern, number | number[]> = {
   error: [60, 40, 60],
 };
 
+// Kit 32 B4 — the /m/settings Haptics toggle. Device-level preference (vibration
+// support is per-device, not per-account), so it lives in localStorage rather
+// than user_preferences. Default ON; every `haptic()` call site respects it.
+const HAPTICS_PREF_KEY = "compvss.haptics";
+
+export function hapticsEnabled(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(HAPTICS_PREF_KEY) !== "0";
+  } catch {
+    return true;
+  }
+}
+
+export function setHapticsEnabled(on: boolean) {
+  try {
+    window.localStorage.setItem(HAPTICS_PREF_KEY, on ? "1" : "0");
+  } catch {
+    /* private mode — the toggle is a convenience, not state */
+  }
+}
+
 export function haptic(pattern: Pattern) {
   if (typeof navigator === "undefined") return;
+  if (!hapticsEnabled()) return;
   const nav = navigator as Navigator & { vibrate?: (p: number | number[]) => boolean };
   if (typeof nav.vibrate !== "function") return;
   try {
@@ -27,6 +50,22 @@ export function haptic(pattern: Pattern) {
   } catch {
     /* ignore */
   }
+}
+
+/** Kit 32 B4 — action-tone haptics map (ok/info/warn/danger, the SwipeRow
+ * tone vocabulary). ok=success blip, warn=double, danger=long, info/neutral=tap. */
+export type ActionTone = "ok" | "info" | "warn" | "danger" | "neutral";
+
+const TONE_PATTERN: Record<ActionTone, Pattern> = {
+  ok: "success",
+  info: "tap",
+  warn: "warning",
+  danger: "error",
+  neutral: "tap",
+};
+
+export function actionHaptic(tone: ActionTone) {
+  haptic(TONE_PATTERN[tone]);
 }
 
 // One shared, lazily-created context — creating a context per beep leaks

@@ -61,18 +61,17 @@ export default async function HandoverPage() {
     .limit(60);
   const handovers = (data ?? []) as HandoverRow[];
 
-  // Sign every handover's photos in one pass — the state of the post you're
-  // being handed is the thing the next crew most needs to SEE, not read.
-  const photosById = await signPhotoRefsFor(supabase, HANDOVER_PHOTO_BUCKET, handovers, (h) => h.photos);
-
-  // Resolve who handed off each report.
+  // Sign every handover's photos (the state of the post you're being handed is
+  // the thing the next crew most needs to SEE, not read) and resolve who handed
+  // off each report in one round trip — both depend only on the handover rows.
   const userIds = Array.from(new Set(handovers.map((h) => h.from_user_id).filter(Boolean) as string[]));
+  const [photosById, usersRes] = await Promise.all([
+    signPhotoRefsFor(supabase, HANDOVER_PHOTO_BUCKET, handovers, (h) => h.photos),
+    userIds.length ? supabase.from("users").select("id, name, email").in("id", userIds) : null,
+  ]);
   const nameMap = new Map<string, string>();
-  if (userIds.length) {
-    const { data: users } = await supabase.from("users").select("id, name, email").in("id", userIds);
-    for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
-      nameMap.set(u.id, u.name ?? u.email ?? "");
-    }
+  for (const u of (usersRes?.data ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+    nameMap.set(u.id, u.name ?? u.email ?? "");
   }
 
   const STATE_LABEL: Record<string, string> = {

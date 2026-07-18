@@ -41,21 +41,18 @@ export default async function MarketPage() {
 
   const rows = data ?? [];
 
-  // Hydrate seller names.
+  // Hydrate seller names and sign listing photos in one round trip — both
+  // depend only on the listing rows, not on each other. Signing happens here
+  // rather than in MarketView because the bucket is private and the client
+  // view can't reach storage; a listing photographed but never shown is a
+  // listing nobody answers.
   const sellerIds = [...new Set(rows.map((r) => r.seller_user_id))];
+  const [usersRes, photosById] = await Promise.all([
+    sellerIds.length > 0 ? supabase.from("users").select("id, name, email").in("id", sellerIds) : null,
+    signPhotoRefsFor(supabase, LISTING_PHOTO_BUCKET, rows, (r) => r.photos),
+  ]);
   const nameById = new Map<string, string>();
-  if (sellerIds.length > 0) {
-    const { data: users } = await supabase
-      .from("users")
-      .select("id, name, email")
-      .in("id", sellerIds);
-    for (const u of users ?? []) nameById.set(u.id, u.name || u.email || "Member");
-  }
-
-  // Sign here rather than in MarketView: the bucket is private, and the view
-  // is a client component that can't reach storage. A listing photographed
-  // but never shown is a listing nobody answers.
-  const photosById = await signPhotoRefsFor(supabase, LISTING_PHOTO_BUCKET, rows, (r) => r.photos);
+  for (const u of usersRes?.data ?? []) nameById.set(u.id, u.name || u.email || "Member");
 
   const listings: Listing[] = rows.map((r) => ({
     id: r.id,

@@ -31,26 +31,25 @@ export default async function MobileWalletPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
-  // The holder's display identity for the card face.
-  const { data: userRow } = await supabase
-    .from("users")
-    .select("name, email")
-    .eq("id", session.userId)
-    .maybeSingle();
+  // The holder's display identity (card face) and their credential assignments
+  // are independent reads — one round trip. The detail-sibling lookups below
+  // need the assignment ids, so they stay a second round.
+  const [{ data: userRow }, { data: assignments }] = await Promise.all([
+    supabase.from("users").select("name, email").eq("id", session.userId).maybeSingle(),
+    supabase
+      .from("assignments")
+      .select("id, title, fulfillment_state, catalog_item_id")
+      .eq("org_id", session.orgId)
+      .eq("party_user_id", session.userId)
+      .eq("catalog_kind", "credential")
+      .is("deleted_at", null)
+      .order("updated_at", { ascending: false })
+      .limit(50),
+  ]);
   const holderName =
     ((userRow as { name: string | null; email: string | null } | null)?.name ??
       (userRow as { name: string | null; email: string | null } | null)?.email?.split("@")[0]) ||
     null;
-
-  const { data: assignments } = await supabase
-    .from("assignments")
-    .select("id, title, fulfillment_state, catalog_item_id")
-    .eq("org_id", session.orgId)
-    .eq("party_user_id", session.userId)
-    .eq("catalog_kind", "credential")
-    .is("deleted_at", null)
-    .order("updated_at", { ascending: false })
-    .limit(50);
 
   type AssignmentRow = {
     id: string;

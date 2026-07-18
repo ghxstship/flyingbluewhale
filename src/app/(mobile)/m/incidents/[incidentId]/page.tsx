@@ -75,8 +75,13 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
       at: (row.occurred_at as string) ?? null,
     },
   ];
-  {
-    const { data: auditRows } = await supabase
+  // Private bucket — the paths are useless without a signature. Failure to
+  // sign degrades to "no preview" rather than a broken image, because a
+  // broken <img> reads as "the evidence is gone". The status chain read and
+  // the photo signing are independent, so they run in one round trip.
+  const svc = photos.length && isServiceClientAvailable() ? createServiceClient() : null;
+  const [auditRes, signedResults] = await Promise.all([
+    supabase
       .from("audit_log")
       .select("action, metadata, at")
       .eq("org_id", session.orgId)
@@ -84,8 +89,18 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
       .eq("target_id", incidentId)
       .in("action", ["incident.state_changed", "incident.follow_up_filed"])
       .order("at", { ascending: true })
-      .limit(30);
-    for (const a of (auditRows ?? []) as Array<{ action: string | null; metadata: unknown; at: string | null }>) {
+      .limit(30),
+    svc
+      ? Promise.all(
+          photos.map(async (p) => {
+            const { data } = await svc.storage.from("incident-photos").createSignedUrl(p, 300);
+            return data?.signedUrl ?? null;
+          }),
+        )
+      : Promise.resolve([] as (string | null)[]),
+  ]);
+  {
+    for (const a of (auditRes.data ?? []) as Array<{ action: string | null; metadata: unknown; at: string | null }>) {
       const meta = (a.metadata ?? {}) as { fromState?: string; toState?: string; summary?: string };
       if (a.action === "incident.state_changed" && meta.toState) {
         chain.push({
@@ -112,20 +127,7 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
     }
   }
 
-  // Private bucket — the paths are useless without a signature. Failure to
-  // sign degrades to "no preview" rather than a broken image, because a
-  // broken <img> reads as "the evidence is gone".
-  let signed: string[] = [];
-  if (photos.length && isServiceClientAvailable()) {
-    const svc = createServiceClient();
-    const results = await Promise.all(
-      photos.map(async (p) => {
-        const { data } = await svc.storage.from("incident-photos").createSignedUrl(p, 300);
-        return data?.signedUrl ?? null;
-      }),
-    );
-    signed = results.filter((u): u is string => !!u);
-  }
+  const signed: string[] = signedResults.filter((u): u is string => !!u);
 
   return (
     <div className="screen screen-anim">

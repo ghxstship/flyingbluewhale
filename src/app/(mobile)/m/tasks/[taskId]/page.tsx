@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
 
   // Real collaboration rows — comments (newest list, oldest-first for thread),
   // append-only events, photo/file attachments.
-  const [{ data: commentRows }, { data: eventRows }, { data: attachmentRows }] = await Promise.all([
+  const [{ data: commentRows }, { data: eventRows }, { data: attachmentRows }, ccRes, vendorRes] = await Promise.all([
     supabase
       .from("task_comments")
       .select("id, body, mentions, author_id, created_at")
@@ -59,6 +59,27 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .limit(50),
+    // Kit 31 #14 — the construction facet display strings (cost center code ·
+    // name, vendor name) depend only on the task row, not on the collaboration
+    // rows, so they resolve in the same round trip.
+    row.cost_center_id
+      ? supabase
+          .from("cost_centers")
+          .select("code, name")
+          .eq("id", row.cost_center_id)
+          .eq("org_id", session.orgId)
+          .maybeSingle()
+      : null,
+    row.vendor_id
+      // soft-delete-exempt: resolving the display name of a historical FK —
+      // the task still references the vendor even after it's archived.
+      ? supabase
+          .from("vendors")
+          .select("name")
+          .eq("id", row.vendor_id)
+          .eq("org_id", session.orgId)
+          .maybeSingle()
+      : null,
   ]);
 
   const comments = (commentRows ?? []) as Array<{
@@ -111,30 +132,14 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
   const assignee = row.assigned_to ? nameFor(row.assigned_to) : unassigned;
   const canTransition = isManagerPlus(session) || row.assigned_to === session.userId;
 
-  // Kit 31 #14 — resolve the construction facets' display strings (cost
-  // center code · name, vendor name) in two scoped lookups.
+  // Kit 31 #14 — the construction facets' display strings, resolved in the
+  // batched round trip above.
   let costCode: string | null = null;
-  if (row.cost_center_id) {
-    const { data: cc } = await supabase
-      .from("cost_centers")
-      .select("code, name")
-      .eq("id", row.cost_center_id)
-      .eq("org_id", session.orgId)
-      .maybeSingle();
-    if (cc) costCode = `${cc.code} · ${cc.name}`;
-  }
+  const cc = ccRes?.data;
+  if (cc) costCode = `${cc.code} · ${cc.name}`;
   let company: string | null = null;
-  if (row.vendor_id) {
-    // soft-delete-exempt: resolving the display name of a historical FK —
-    // the task still references the vendor even after it's archived.
-    const { data: vendor } = await supabase
-      .from("vendors")
-      .select("name")
-      .eq("id", row.vendor_id)
-      .eq("org_id", session.orgId)
-      .maybeSingle();
-    if (vendor) company = vendor.name;
-  }
+  const vendor = vendorRes?.data;
+  if (vendor) company = vendor.name;
   const checklist = (Array.isArray(row.checklist) ? row.checklist : [])
     .map((item) => {
       const it = item as { label?: unknown; done?: unknown };

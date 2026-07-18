@@ -42,18 +42,22 @@ export default async function ReferralsPage({
   const { job } = await searchParams;
   const jobContext = typeof job === "string" ? job.slice(0, 120) : undefined;
 
-  const ref = await getOrCreateReferral();
+  // The referral code (get-or-created) and the caller's invitations are
+  // independent — the invitations key off session.userId, not the code — so
+  // they resolve in one round trip.
+  const [ref, { data: invites }] = await Promise.all([
+    getOrCreateReferral(),
+    supabase
+      .from("referral_invitations")
+      .select("id, invitee_contact, invite_state, reward_points, created_at")
+      .eq("referrer_user_id", session.userId)
+      .order("created_at", { ascending: false })
+      .limit(50),
+  ]);
   // The apex signup surface is the canonical join target; the referral code
   // rides as a `?ref=` query param. There is no `/r/[code]` redemption route,
   // and the link MUST resolve, so it points at the real `/signup` page.
   const link = urlFor("auth", `/signup?ref=${ref.code.toLowerCase()}`);
-
-  const { data: invites } = await supabase
-    .from("referral_invitations")
-    .select("id, invitee_contact, invite_state, reward_points, created_at")
-    .eq("referrer_user_id", session.userId)
-    .order("created_at", { ascending: false })
-    .limit(50);
 
   const invitations = invites ?? [];
   const ceiling = TIER_CEILING[ref.tier] ?? 100;

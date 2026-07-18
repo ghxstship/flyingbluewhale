@@ -51,39 +51,42 @@ export default async function MobileOnboardingPage() {
   const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
-  const { data: assignments } = await supabase
-    .from("new_hire_assignments")
-    .select("id, flow_id, assignment_phase, assigned_at, completed_at")
-    .eq("org_id", session.orgId)
-    .eq("assignee_id", session.userId)
-    .order("assigned_at", { ascending: false })
-    .limit(100);
+  // The new-hire assignments and the caller's advancing assignments are
+  // independent reads — fire them together. Their dependent lookups (flow
+  // names · live packets) then resolve in a second parallel round.
+  const [{ data: assignments }, myAssignments] = await Promise.all([
+    supabase
+      .from("new_hire_assignments")
+      .select("id, flow_id, assignment_phase, assigned_at, completed_at")
+      .eq("org_id", session.orgId)
+      .eq("assignee_id", session.userId)
+      .order("assigned_at", { ascending: false })
+      .limit(100),
+    listMyAssignments(session.orgId, session.userId),
+  ]);
   const rows = (assignments ?? []) as Assignment[];
 
   const flowIds = rows.map((r) => r.flow_id);
-  const { data: flows } = flowIds.length
-    ? await supabase.from("new_hire_flows").select("id, name, description").in("id", flowIds)
-    : { data: [] as Flow[] };
-  const flowMap = new Map(((flows ?? []) as Flow[]).map((f) => [f.id, f]));
-
-  // Kit 27 — surface the project advance when one is live on a project the
-  // caller is assigned to; the packet card itself renders on /m/advances.
-  const myAssignments = await listMyAssignments(session.orgId, session.userId);
   const myProjectIds = Array.from(new Set(myAssignments.map((a) => a.project_id)));
-  let livePacketProjects: string[] = [];
-  if (myProjectIds.length) {
-    const { data: livePackets } = await supabase
-      .from("advance_packets")
-      .select("project_id, projects(name)")
-      .eq("org_id", session.orgId)
-      .eq("packet_state", "live")
-      .in("project_id", myProjectIds)
-      .is("deleted_at", null)
-      .limit(20);
-    livePacketProjects = ((livePackets ?? []) as Array<{ projects: { name: string } | null }>)
-      .map((p) => p.projects?.name)
-      .filter((n): n is string => Boolean(n));
-  }
+  const [flowsRes, livePacketsRes] = await Promise.all([
+    flowIds.length ? supabase.from("new_hire_flows").select("id, name, description").in("id", flowIds) : null,
+    // Kit 27 — surface the project advance when one is live on a project the
+    // caller is assigned to; the packet card itself renders on /m/advances.
+    myProjectIds.length
+      ? supabase
+          .from("advance_packets")
+          .select("project_id, projects(name)")
+          .eq("org_id", session.orgId)
+          .eq("packet_state", "live")
+          .in("project_id", myProjectIds)
+          .is("deleted_at", null)
+          .limit(20)
+      : null,
+  ]);
+  const flowMap = new Map(((flowsRes?.data ?? []) as Flow[]).map((f) => [f.id, f]));
+  const livePacketProjects: string[] = ((livePacketsRes?.data ?? []) as Array<{ projects: { name: string } | null }>)
+    .map((p) => p.projects?.name)
+    .filter((n): n is string => Boolean(n));
 
   return (
     <div className="screen screen-anim">

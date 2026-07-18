@@ -93,29 +93,18 @@ export default async function MobileFeedPage() {
   const kudosRows = (kudos ?? []) as KudosRow[];
   const annRows = (announcements ?? []) as AnnouncementRow[];
 
-  // Hydrate author display names in one round-trip.
+  // Author display names + real like state per post (kit 32 A5) all derive
+  // from the two row sets and are independent — one round trip. Kudos
+  // reactions live in recognition_reactions; announcement reactions in the
+  // kit-32 twin; count the "like" emoji per subject and mark the ones the
+  // caller has liked. RLS scopes each read to the caller's org.
   const userIds = Array.from(
     new Set([...kudosRows.map((k) => k.from_user_id), ...annRows.map((a) => a.author_id).filter(Boolean) as string[]]),
   );
-  const userMap = new Map<string, { name: string | null; email: string }>();
-  if (userIds.length) {
-    const { data: users } = await supabase.from("users").select("id, name, email").in("id", userIds);
-    for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string }>) {
-      userMap.set(u.id, { name: u.name, email: u.email });
-    }
-  }
-
-  // Kit 32 A5 — resolve real like state per post. Kudos reactions live in
-  // recognition_reactions; announcement reactions in the kit-32 twin. Count the
-  // "like" emoji per subject and mark the ones the caller has liked. RLS scopes
-  // both reads to the caller's org.
   const kudosIds = kudosRows.map((k) => k.id);
   const annIds = annRows.map((a) => a.id);
-  const kudosLikeCount = new Map<string, number>();
-  const kudosLikedByMe = new Set<string>();
-  const annLikeCount = new Map<string, number>();
-  const annLikedByMe = new Set<string>();
-  const [kudosReactions, annReactions] = await Promise.all([
+  const [usersRes, kudosReactions, annReactions] = await Promise.all([
+    userIds.length ? supabase.from("users").select("id, name, email").in("id", userIds) : null,
     kudosIds.length
       ? supabase
           .from("recognition_reactions")
@@ -131,6 +120,14 @@ export default async function MobileFeedPage() {
           .in("announcement_id", annIds)
       : Promise.resolve({ data: [] as Array<{ announcement_id: string; user_id: string }> }),
   ]);
+  const userMap = new Map<string, { name: string | null; email: string }>();
+  for (const u of (usersRes?.data ?? []) as Array<{ id: string; name: string | null; email: string }>) {
+    userMap.set(u.id, { name: u.name, email: u.email });
+  }
+  const kudosLikeCount = new Map<string, number>();
+  const kudosLikedByMe = new Set<string>();
+  const annLikeCount = new Map<string, number>();
+  const annLikedByMe = new Set<string>();
   for (const r of (kudosReactions.data ?? []) as Array<{ post_id: string; user_id: string }>) {
     kudosLikeCount.set(r.post_id, (kudosLikeCount.get(r.post_id) ?? 0) + 1);
     if (r.user_id === session.userId) kudosLikedByMe.add(r.post_id);

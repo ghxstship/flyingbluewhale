@@ -56,14 +56,21 @@ export default async function EmergencyPage() {
   if (hasSupabase) {
     const supabase = await createClient();
 
+    // The active-crisis alert and the viewer's own assignments are independent
+    // reads — fire them together (this is the field emergency card, often on a
+    // bad network). The crisis receipts below need the alert id, so they stay a
+    // second round.
     const since = new Date(Date.now() - CRISIS_ACTIVE_WINDOW_MS).toISOString();
-    const { data: alerts } = await supabase
-      .from("crisis_alerts")
-      .select("id, title, body, severity, created_at")
-      .eq("org_id", session.orgId)
-      .gte("created_at", since)
-      .order("created_at", { ascending: false })
-      .limit(1);
+    const [{ data: alerts }, assignments] = await Promise.all([
+      supabase
+        .from("crisis_alerts")
+        .select("id, title, body, severity, created_at")
+        .eq("org_id", session.orgId)
+        .gte("created_at", since)
+        .order("created_at", { ascending: false })
+        .limit(1),
+      listMyAssignments(session.orgId, session.userId),
+    ]);
     const alert = alerts?.[0];
     if (alert) {
       crisis = {
@@ -73,34 +80,41 @@ export default async function EmergencyPage() {
         severity: alert.severity,
         createdAt: alert.created_at,
       };
-      const { data: receipts } = await supabase
-        .from("crisis_alert_receipts")
-        .select("channel, acknowledged_at")
-        .eq("alert_id", alert.id)
-        .eq("user_id", session.userId)
-        .in("channel", ["muster_ack", "self_safe", "need_help"]);
+      // The viewer's own receipts and the ops muster tally (manager band only)
+      // both key off the alert id and are independent — one round trip.
+      const [{ data: receipts }, managerData] = await Promise.all([
+        supabase
+          .from("crisis_alert_receipts")
+          .select("channel, acknowledged_at")
+          .eq("alert_id", alert.id)
+          .eq("user_id", session.userId)
+          .in("channel", ["muster_ack", "self_safe", "need_help"]),
+        // Ops muster count (kit 32 E1). Manager band only — a crew member's
+        // job during a code is their own check-in, not the tally. Receipts are
+        // org-readable by RLS; membership count is the honest denominator.
+        isManagerPlus(session)
+          ? Promise.all([
+              supabase
+                .from("crisis_alert_receipts")
+                .select("user_id, channel, acknowledged_at")
+                .eq("alert_id", alert.id)
+                .in("channel", ["self_safe", "need_help"]),
+              supabase
+                .from("memberships")
+                .select("user_id", { count: "exact", head: true })
+                .eq("org_id", session.orgId)
+                .is("deleted_at", null),
+            ])
+          : null,
+      ]);
       for (const r of receipts ?? []) {
         if (r.channel === "muster_ack") musterAckAt = r.acknowledged_at;
         if (r.channel === "self_safe") safeAt = r.acknowledged_at;
         if (r.channel === "need_help") needHelpAt = r.acknowledged_at;
       }
 
-      // Ops muster count (kit 32 E1). Manager band only — a crew member's
-      // job during a code is their own check-in, not the tally. Receipts are
-      // org-readable by RLS; membership count is the honest denominator.
-      if (isManagerPlus(session)) {
-        const [{ data: allReceipts }, { count: memberCount }] = await Promise.all([
-          supabase
-            .from("crisis_alert_receipts")
-            .select("user_id, channel, acknowledged_at")
-            .eq("alert_id", alert.id)
-            .in("channel", ["self_safe", "need_help"]),
-          supabase
-            .from("memberships")
-            .select("user_id", { count: "exact", head: true })
-            .eq("org_id", session.orgId)
-            .is("deleted_at", null),
-        ]);
+      if (managerData) {
+        const [{ data: allReceipts }, { count: memberCount }] = managerData;
         // Latest-wins per user between safe and help — the newer receipt is
         // that person's current answer.
         const latest = new Map<string, { channel: string; at: string }>();
@@ -123,7 +137,6 @@ export default async function EmergencyPage() {
       }
     }
 
-    const assignments = await listMyAssignments(session.orgId, session.userId);
     const dead = new Set(["voided", "expired", "returned", "rejected"]);
     const active = assignments.find((a) => !dead.has(a.fulfillment_state)) ?? assignments[0];
     if (active) {

@@ -25,50 +25,56 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
   const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
-  // Room must belong to the caller's org.
-  const { data: room } = await supabase
-    .from("chat_rooms")
-    .select("id, name, room_kind")
-    .eq("id", roomId)
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .maybeSingle();
+  // The room lookup, the membership gate, and the latest message page all key
+  // off roomId/userId — none depends on another's result, so they resolve in
+  // one round trip (RLS still scopes chat_messages to members). The notFound
+  // gates are evaluated against the resolved rows.
+  const [{ data: room }, { data: member }, { data: msgs }] = await Promise.all([
+    supabase
+      .from("chat_rooms")
+      .select("id, name, room_kind")
+      .eq("id", roomId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle(),
+    supabase
+      .from("chat_room_members")
+      .select("room_id")
+      .eq("room_id", roomId)
+      .eq("user_id", session.userId)
+      .maybeSingle(),
+    supabase
+      .from("chat_messages")
+      .select("id, author_id, body, created_at")
+      .eq("room_id", roomId)
+      .order("created_at", { ascending: false })
+      .limit(PAGE_SIZE),
+  ]);
+  // Room must belong to the caller's org; only members may read the thread.
   if (!room) notFound();
-
-  // Membership gate — only members may read the thread.
-  const { data: member } = await supabase
-    .from("chat_room_members")
-    .select("room_id")
-    .eq("room_id", roomId)
-    .eq("user_id", session.userId)
-    .maybeSingle();
   if (!member) notFound();
 
   // Newest page first — reversed in memory for chronological display.
-  const { data: msgs } = await supabase
-    .from("chat_messages")
-    .select("id, author_id, body, created_at")
-    .eq("room_id", roomId)
-    .order("created_at", { ascending: false })
-    .limit(PAGE_SIZE);
   const messages = ((msgs ?? []) as ChatMessage[]).slice().reverse();
 
   // Record-ref chips (kit 21 remediation R1) — resolve via the shared SSOT
   // for the mobile shell; console-record chips render unlinked here (no field
-  // route) but keep the "this is a record" affordance.
-  const refs = await resolveRecordRefs(
-    supabase,
-    session.orgId,
-    messages.map((m) => m.body),
-    "mobile",
-  );
-
-  // Mark the room read on render — keeps the inbox unread badge honest.
-  await supabase
-    .from("chat_room_members")
-    .update({ last_read_at: new Date().toISOString() })
-    .eq("room_id", roomId)
-    .eq("user_id", session.userId);
+  // route) but keep the "this is a record" affordance. Resolved alongside the
+  // mark-read write, which doesn't depend on it.
+  const [refs] = await Promise.all([
+    resolveRecordRefs(
+      supabase,
+      session.orgId,
+      messages.map((m) => m.body),
+      "mobile",
+    ),
+    // Mark the room read on render — keeps the inbox unread badge honest.
+    supabase
+      .from("chat_room_members")
+      .update({ last_read_at: new Date().toISOString() })
+      .eq("room_id", roomId)
+      .eq("user_id", session.userId),
+  ]);
 
   const isChannel = (room.room_kind ?? "") === "channel";
   const title = room.name ?? t("m.inbox.directMessage", undefined, "Direct Message");

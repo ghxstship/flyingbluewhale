@@ -51,24 +51,26 @@ export default async function InboxPage() {
   let unreadByRoom = new Map<string, number>();
 
   if (roomIds.length > 0) {
-    const { data: roomData } = await supabase
-      .from("chat_rooms")
-      .select("id, name, room_kind, last_message_at")
-      .in("id", roomIds)
-      .eq("org_id", session.orgId)
-      .is("deleted_at", null)
-      .order("last_message_at", { ascending: false, nullsFirst: false })
-      .limit(200);
+    // The room list and the recent-message page both key off roomIds and are
+    // independent — one round trip. Recent messages are enough to derive a
+    // preview + unread count per room without an N+1 fan-out.
+    const [{ data: roomData }, { data: msgData }] = await Promise.all([
+      supabase
+        .from("chat_rooms")
+        .select("id, name, room_kind, last_message_at")
+        .in("id", roomIds)
+        .eq("org_id", session.orgId)
+        .is("deleted_at", null)
+        .order("last_message_at", { ascending: false, nullsFirst: false })
+        .limit(200),
+      supabase
+        .from("chat_messages")
+        .select("room_id, body, author_id, created_at")
+        .in("room_id", roomIds)
+        .order("created_at", { ascending: false })
+        .limit(400),
+    ]);
     rooms = (roomData ?? []) as RoomRow[];
-
-    // Recent messages across these rooms — enough to derive a preview + unread
-    // count per room without an N+1 fan-out.
-    const { data: msgData } = await supabase
-      .from("chat_messages")
-      .select("room_id, body, author_id, created_at")
-      .in("room_id", roomIds)
-      .order("created_at", { ascending: false })
-      .limit(400);
     const msgs = (msgData ?? []) as Array<LastMsg & { author_id: string | null }>;
 
     for (const m of msgs) {

@@ -115,26 +115,27 @@ export default async function MobileRequestsPage() {
   const orphanPolicyIds = Array.from(
     new Set(rows.filter((r) => r.current_step_id == null).map((r) => r.policy_id)),
   );
-  const firstStepByPolicy = new Map<string, string>();
-  if (manager && orphanPolicyIds.length) {
-    const { data: steps } = await supabase
-      .from("approval_steps")
-      .select("id, policy_id, step_number")
-      .in("policy_id", orphanPolicyIds)
-      .order("step_number", { ascending: true });
-    for (const s of (steps ?? []) as Array<{ id: string; policy_id: string }>) {
-      if (!firstStepByPolicy.has(s.policy_id)) firstStepByPolicy.set(s.policy_id, s.id);
-    }
-  }
-
-  // Hydrate requester names in one round trip (initiated_by is an auth uid).
+  // Hydrate requester names (initiated_by is an auth uid). The orphan-policy
+  // first-step backfill and this name hydration both derive from the instance
+  // rows and are independent — one round trip.
   const userIds = Array.from(new Set(rows.map((r) => r.initiated_by).filter((v): v is string => v != null)));
+  const [stepsRes, usersRes] = await Promise.all([
+    manager && orphanPolicyIds.length
+      ? supabase
+          .from("approval_steps")
+          .select("id, policy_id, step_number")
+          .in("policy_id", orphanPolicyIds)
+          .order("step_number", { ascending: true })
+      : null,
+    userIds.length ? supabase.from("users").select("id, name, email").in("id", userIds) : null,
+  ]);
+  const firstStepByPolicy = new Map<string, string>();
+  for (const s of (stepsRes?.data ?? []) as Array<{ id: string; policy_id: string }>) {
+    if (!firstStepByPolicy.has(s.policy_id)) firstStepByPolicy.set(s.policy_id, s.id);
+  }
   const nameMap = new Map<string, string>();
-  if (userIds.length) {
-    const { data: users } = await supabase.from("users").select("id, name, email").in("id", userIds);
-    for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
-      nameMap.set(u.id, u.name || u.email || t("m.requests.someone", undefined, "Someone"));
-    }
+  for (const u of (usersRes?.data ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+    nameMap.set(u.id, u.name || u.email || t("m.requests.someone", undefined, "Someone"));
   }
   const nameFor = (id: string | null) =>
     (id && nameMap.get(id)) || t("m.requests.someone", undefined, "Someone");

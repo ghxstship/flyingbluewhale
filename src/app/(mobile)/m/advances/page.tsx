@@ -34,12 +34,25 @@ export default async function MobileAdvancesPage() {
   const assignments = await listMyAssignments(session.orgId, session.userId);
 
   const projectIds = Array.from(new Set(assignments.map((r) => r.project_id)));
+  // The project-name hydration and the live-packet lookup both key off
+  // projectIds and are independent — one round trip. The safety-section read
+  // below needs the packet ids, so it stays a second round.
+  const [projectsRes, packetsRes] = projectIds.length
+    ? await Promise.all([
+        supabase.from("projects").select("id, name").in("id", projectIds),
+        supabase
+          .from("advance_packets")
+          .select("id, project_id")
+          .eq("org_id", session.orgId)
+          .eq("packet_state", "live")
+          .in("project_id", projectIds)
+          .is("deleted_at", null)
+          .limit(50),
+      ])
+    : [null, null];
   const projectMap = new Map<string, string>();
-  if (projectIds.length) {
-    const { data: projects } = await supabase.from("projects").select("id, name").in("id", projectIds);
-    for (const p of (projects ?? []) as Array<{ id: string; name: string }>) {
-      projectMap.set(p.id, p.name);
-    }
+  for (const p of (projectsRes?.data ?? []) as Array<{ id: string; name: string }>) {
+    projectMap.set(p.id, p.name);
   }
 
   const rows: AdvanceRow[] = assignments.map((r) => ({
@@ -57,15 +70,7 @@ export default async function MobileAdvancesPage() {
   type PacketCard = { projectId: string; packetId: string; ppe: string | null };
   const packetCards: PacketCard[] = [];
   if (projectIds.length) {
-    const { data: packets } = await supabase
-      .from("advance_packets")
-      .select("id, project_id")
-      .eq("org_id", session.orgId)
-      .eq("packet_state", "live")
-      .in("project_id", projectIds)
-      .is("deleted_at", null)
-      .limit(50);
-    const packetRows = (packets ?? []) as Array<{ id: string; project_id: string }>;
+    const packetRows = (packetsRes?.data ?? []) as Array<{ id: string; project_id: string }>;
     if (packetRows.length) {
       const { data: safetySections } = await supabase
         .from("advance_packet_sections")

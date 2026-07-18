@@ -68,25 +68,19 @@ export default async function SnagsPage() {
     .limit(50);
   const snags = (data ?? []) as SnagRow[];
 
-  // Sign the photos — a snag report you can't look at is a sentence, not
-  // evidence (capture-honesty guard, third link).
-  const photosById = await signPhotoRefsFor(supabase, SNAG_PHOTO_BUCKET, snags, (s) =>
-    s.photo_path ? [s.photo_path] : [],
-  );
-
-  // Project names for context, one batched read.
+  // Sign the photos (a snag report you can't look at is a sentence, not
+  // evidence) and resolve project names in one round trip — both depend only
+  // on the snag rows, not on each other.
   const projectIds = Array.from(new Set(snags.map((s) => s.project_id)));
+  const [photosById, projectsRes] = await Promise.all([
+    signPhotoRefsFor(supabase, SNAG_PHOTO_BUCKET, snags, (s) => (s.photo_path ? [s.photo_path] : [])),
+    projectIds.length
+      ? supabase.from("projects").select("id, name").eq("org_id", session.orgId).in("id", projectIds).is("deleted_at", null)
+      : null,
+  ]);
   const projectName = new Map<string, string>();
-  if (projectIds.length) {
-    const { data: projects } = await supabase
-      .from("projects")
-      .select("id, name")
-      .eq("org_id", session.orgId)
-      .in("id", projectIds)
-      .is("deleted_at", null);
-    for (const p of (projects ?? []) as Array<{ id: string; name: string | null }>) {
-      projectName.set(p.id, p.name ?? "");
-    }
+  for (const p of (projectsRes?.data ?? []) as Array<{ id: string; name: string | null }>) {
+    projectName.set(p.id, p.name ?? "");
   }
 
   const STATE_LABEL: Record<string, string> = {

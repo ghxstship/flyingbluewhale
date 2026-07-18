@@ -64,12 +64,19 @@ export default async function MobileSchedulePage() {
   // was empty for EVERY user: nothing ever set `workforce_members.user_id`
   // (0 of 105 rows). `crew_members.user_id` is populated by /me/crew and, since
   // ADR-0015, by the invite-accept claim — so this lookup can actually succeed.
-  const { data: crew } = await supabase
-    .from("crew_members")
-    .select("id")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .maybeSingle();
+  // The viewer's crew row and the org event list are independent reads — fire
+  // them together. The shift lookup below needs the resolved crew id, so it
+  // stays a second round.
+  const [{ data: crew }, eventRowsRaw] = await Promise.all([
+    supabase
+      .from("crew_members")
+      .select("id")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .maybeSingle(),
+    listOrgScoped("events", session.orgId, { orderBy: "starts_at", ascending: true }),
+  ]);
+  const rows = eventRowsRaw as EventRow[];
 
   let myShifts: MyShift[] = [];
   let reminders: ShiftReminder[] = [];
@@ -131,11 +138,6 @@ export default async function MobileSchedulePage() {
       };
     });
   }
-
-  const rows = (await listOrgScoped("events", session.orgId, {
-    orderBy: "starts_at",
-    ascending: true,
-  })) as EventRow[];
 
   // `events` carries no typed `kind` column — every row is treated as a shift
   // for type-faceting (per the table map). Time/day are derived for display.

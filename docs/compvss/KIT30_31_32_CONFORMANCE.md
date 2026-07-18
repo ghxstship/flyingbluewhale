@@ -46,6 +46,12 @@ Git stash `kit32-unwired-primitives`:
 
 All are P2/P3 polish (the lowest-stakes tier). Core conformance and all field-critical flows are shipped.
 
+## Reconciled 2026-07-18 (repo-side, fixed + pushed `a2ea76eb`)
+
+- **`NEXT_FULFILLMENT_STATES` issued→returned** — added; the tuple, the `checkin_my_assignment` RPC, and the studio transition UI now agree (fsm guard pin updated).
+- **Portal volunteer schedule draft leak** — `/p/[slug]/volunteer/schedule` now filters `publish_state='published'`, so field-scheduler DRAFT seats never surface pre-Publish-Day.
+- **`acknowledgeAlert` user pin** — pinned to `user_id = me` (matches RLS + the swipe actions). Note: 0 broadcast `user_id`-NULL rows exist in prod — the system fans notifications out per-user — so the "broadcast can't be acked" concern is dead in practice, not a live defect.
+
 ## Violations flagged by the build agents (for kit-side remediation per governance rule 3)
 
 - More hub carries ~23 repo-only surfaces the kit's `MORE_LINKS` doesn't list (My Work, Punch List, Mileage, Purchase Requests, Handover, Daily Log, Chain of Custody, etc.). Pre-existing; documented in the More page docblock.

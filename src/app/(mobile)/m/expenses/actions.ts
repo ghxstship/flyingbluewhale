@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { filesFrom } from "@/lib/mobile/photo-upload";
+import { EXPENSE_AUTO_CODE } from "@/components/mobile/kit/forms";
 import { log } from "@/lib/log";
 
 export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
@@ -20,6 +21,9 @@ const Input = z.object({
   category: z.string().min(1, "Pick a category."),
   amount: z.string().min(1, "How much was it?"),
   date: z.string().optional(),
+  // Cost Code (kit 32 v2.8) — a real cost-center label, or the auto-coding
+  // sentinel which must NOT be stored (finance codes it on approval).
+  code: z.string().max(200).optional(),
   merchant: z.string().min(1, "Where was it spent?"),
   billable: z.string().optional(),
   notes: z.string().optional(),
@@ -129,6 +133,10 @@ export async function fileExpense(_prev: State, fd: FormData): Promise<State> {
     description: v.notes ? `${v.merchant} — ${v.notes}` : v.merchant,
     amount_cents: cents,
     category: v.category || null,
+    // Cost coding (kit 32 v2.8): a picked cost center lands in `department`
+    // — the same column the scanner's Import To Budget writes — while the
+    // auto sentinel stores nothing (finance codes it on approval).
+    department: v.code && v.code !== EXPENSE_AUTO_CODE ? v.code : null,
     spent_at: spentAt,
     expense_state: "pending",
     receipt_path: receiptPath,

@@ -1,8 +1,10 @@
-import { requireSession } from "@/lib/auth";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 import { HomeShell, type HomeData, type HomeLabels } from "./HomeShell";
+import type { QuickApproval } from "./ApprovalsQuickSheet";
 import { resolveEmergencyStation } from "@/lib/mobile/emergency-station";
 
 export const dynamic = "force-dynamic";
@@ -32,8 +34,9 @@ export default async function MobileHome() {
   // The four dashboard reads are independent of each other — run them in
   // one parallel round (HP-12); this is the field PWA home, often on a bad
   // network, so serial waterfalls hurt the most here.
+  const manager = isManagerPlus(session);
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: me }, station] =
+  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: me }, station, { data: apRows }] =
     await Promise.all([
     // Open tasks assigned to me (anything not yet done).
     supabase
@@ -72,7 +75,65 @@ export default async function MobileHome() {
       unassigned: t("m.emergency.unassigned", undefined, "Awaiting Assignment"),
       musterTo: (to: string) => t("m.emergency.musterTo", { to }, `Muster: ${to}`),
     }),
+    // Approve quick-action drawer feed (kit 32 drawer canon v2.8) — the
+    // manager band's open instances, oldest first, same store /m/requests
+    // reads. Members get `data: null` → the tile stays a plain link.
+    manager
+      ? supabase
+          .from("approval_instances")
+          .select("id, subject_table, current_step_id, policy_id, initiated_at, initiated_by, policy:approval_policies(name)")
+          .eq("org_id", session.orgId)
+          .in("state", [...OPEN_INSTANCE_STATES])
+          .order("initiated_at", { ascending: true })
+          .limit(20)
+      : Promise.resolve({ data: null }),
   ]);
+
+  // Hydrate the drawer cards: stepless instances fall back to the policy's
+  // first step (the console + /m/requests behavior), requester names resolve
+  // in one round trip. Manager-only work — members skip all of it.
+  let approvals: QuickApproval[] | null = null;
+  if (manager && apRows) {
+    type ApRow = {
+      id: string;
+      subject_table: string;
+      current_step_id: string | null;
+      policy_id: string;
+      initiated_at: string;
+      initiated_by: string | null;
+      policy: { name: string } | null;
+    };
+    const rows = (apRows ?? []) as unknown as ApRow[];
+    const orphanPolicyIds = Array.from(new Set(rows.filter((r) => r.current_step_id == null).map((r) => r.policy_id)));
+    const firstStepByPolicy = new Map<string, string>();
+    if (orphanPolicyIds.length) {
+      const { data: steps } = await supabase
+        .from("approval_steps")
+        .select("id, policy_id, step_number")
+        .in("policy_id", orphanPolicyIds)
+        .order("step_number", { ascending: true });
+      for (const s of (steps ?? []) as Array<{ id: string; policy_id: string }>) {
+        if (!firstStepByPolicy.has(s.policy_id)) firstStepByPolicy.set(s.policy_id, s.id);
+      }
+    }
+    const userIds = Array.from(new Set(rows.map((r) => r.initiated_by).filter((v): v is string => v != null)));
+    const nameMap = new Map<string, string>();
+    if (userIds.length) {
+      const { data: users } = await supabase.from("users").select("id, name, email").in("id", userIds);
+      for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+        nameMap.set(u.id, u.name || u.email || t("m.requests.someone", undefined, "Someone"));
+      }
+    }
+    const humanize = (s: string) => s.replace(/_/g, " ").replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+    approvals = rows.map((r) => ({
+      id: r.id,
+      stepId: r.current_step_id ?? firstStepByPolicy.get(r.policy_id) ?? null,
+      title: r.policy?.name ?? humanize(r.subject_table),
+      kind: humanize(r.subject_table),
+      requester: (r.initiated_by && nameMap.get(r.initiated_by)) || t("m.requests.someone", undefined, "Someone"),
+      age: fmt.relative(r.initiated_at),
+    }));
+  }
 
   const nextShift: HomeData["nextShift"] = ev
     ? {
@@ -111,6 +172,7 @@ export default async function MobileHome() {
       // resolver calls the same fact `position` (their assignment title).
       emergencyRole: station.position,
     },
+    approvals,
   };
 
   // Kit 31 (live-test resolution #10): the Home eyebrow is the FULL date —

@@ -44,6 +44,20 @@ keep new work aligned.
 - **Auth + onboarding:** the kit's own flow (`CompvssOnboarding`) — splash → sign up / in →
   verify (OTP) → profile → join org → permissions → welcome → Rose → first assignment, + forgot
   + account pause/archive. **Not** the web `(auth)` screens.
+- **Drawer system (kit 32, v2.8 · 2026-07-17):** ONE overlay grammar for every bottom sheet —
+  `.sheet` (fixed overlay) + `.sheet-bg` (scrim, tap dismisses) + `.sheet-panel`
+  (bottom-anchored, radius-top) + `.sheet-grip` + **`SheetHead`** (icon · title · optional
+  sub · explicit ✕). No sheet ships without `SheetHead` — scrim-tap alone is not a close
+  affordance. The shared shell is **`Sheet`** (`src/components/mobile/kit/Sheet.tsx`).
+  Four types: **action** (pick-one lists — approvals quick drawer, cost-code picker,
+  language/theme/density pickers; inline decisions allowed but MUST mutate the same store
+  as the full surface, never toast-only), **form** (≤5 fields — anything longer is a
+  full-screen `FormScreen`), **share** (share/export grids), **context** (switcher, record
+  quick-looks — may stack ONE child, the child closes back to its parent). Record detail
+  (`RecordDetail`), `FORMS` and the emergency card stay full-screen surfaces.
+  Rule of thumb: read/edit at length → full screen; pick/confirm in <10s → drawer.
+  Selects with >8 options inside `FormScreen` auto-render as the searchable picker drawer
+  (`PICKER_DRAWER_THRESHOLD`); ≤8 keeps the native select.
 
 ## Naming canon (enforced)
 - **Title Case** for all headers / titles / item names / subtitles.

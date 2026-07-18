@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { KIcon, RoseCard, SheetHead, TOOLS, ToolSheet } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
+import { ApprovalsQuickSheet, type QuickApproval } from "./ApprovalsQuickSheet";
 
 export type HomeData = {
   openTasks: number;
@@ -26,6 +27,13 @@ export type HomeData = {
     assembly: string;
     emergencyRole: string;
   };
+  /**
+   * Manager band: the open approval instances for the Approve quick-action
+   * drawer (kit 32 drawer canon v2.8). `null` for members — their tile stays
+   * a link to /m/requests (read-only submissions view). The badge computes
+   * from the LIVE decidable count, never a hardcoded number.
+   */
+  approvals: QuickApproval[] | null;
 };
 
 export type HomeLabels = {
@@ -57,22 +65,25 @@ export type HomeLabels = {
   esShelter: string;
 };
 
-/** Quick-action tile linking to a destination form/route. */
+/** Quick-action tile linking to a destination form/route — or, with
+ *  `onClick`, opening a drawer in place (the Approve tile's action drawer). */
 function QA({
   href,
   icon,
   tint,
   label,
   badge,
+  onClick,
 }: {
-  href: string;
+  href?: string;
   icon: string;
   tint: string;
   label: string;
   badge?: number;
+  onClick?: () => void;
 }) {
-  return (
-    <Link href={href} style={{ textDecoration: "none" }}>
+  const body = (
+    <>
       <span
         className="qi"
         style={{
@@ -84,6 +95,22 @@ function QA({
         {badge ? <span className="qa-badge">{badge}</span> : null}
       </span>
       <span className="ql">{label}</span>
+    </>
+  );
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        style={{ textDecoration: "none", background: "none", border: "none", padding: 0, cursor: "pointer", font: "inherit" }}
+      >
+        {body}
+      </button>
+    );
+  }
+  return (
+    <Link href={href!} style={{ textDecoration: "none" }}>
+      {body}
     </Link>
   );
 }
@@ -98,7 +125,11 @@ export function HomeShell({
   labels: HomeLabels;
 }) {
   const [qaEdit, setQaEdit] = useState(false);
+  const [approveOpen, setApproveOpen] = useState(false);
   const [activeTool, setActiveTool] = useState<string | null>(null);
+  // Live decidable count — the kit computes the Approve badge from the open
+  // queue (v2.8: "was hardcoded 3"), never from an unrelated tally.
+  const decidable = data.approvals?.filter((a) => a.stepId != null).length ?? 0;
   const t = useToast();
   // Adapt the canonical sonner toast to the kit ToolSheet's {tone,title,message} shape.
   const toolToast = ({ tone, title, message }: { tone: string; title: string; message?: string }) => {
@@ -130,7 +161,22 @@ export function HomeShell({
         <QA href="/m/check-in" icon="ScanLine" tint="accent" label={L.qaScan} />
         <QA href="/m/clock" icon="Timer" tint="info" label={L.qaClock} />
         <QA href="/m/advances" icon="ClipboardList" tint="warning" label={L.qaAdvance} />
-        <QA href="/m/requests" icon="CheckCheck" tint="success" label={L.qaApprove} badge={data.openTasks || undefined} />
+        {/* Approve — kit 32 (drawer canon v2.8): the manager band gets the
+            quick-action APPROVALS drawer (inline ✓/✕ on the same store as
+            /m/requests); members keep the link to their submissions view.
+            Badge = live decidable count, not the open-tasks tally it
+            previously mis-wore. */}
+        {data.approvals ? (
+          <QA
+            onClick={() => setApproveOpen(true)}
+            icon="CheckCheck"
+            tint="success"
+            label={L.qaApprove}
+            badge={decidable || undefined}
+          />
+        ) : (
+          <QA href="/m/requests" icon="CheckCheck" tint="success" label={L.qaApprove} />
+        )}
         {/* Swaps are decided on the Approvals queue — there is no /m/swaps
             route, and this tile 404'd for every role until it was repointed. */}
         <QA href="/m/requests" icon="ArrowLeftRight" tint="info" label={L.qaSwap} />
@@ -265,6 +311,10 @@ export function HomeShell({
 
       {activeTool ? (
         <ToolSheet toolId={activeTool} onClose={() => setActiveTool(null)} toast={toolToast} />
+      ) : null}
+
+      {approveOpen && data.approvals ? (
+        <ApprovalsQuickSheet cards={data.approvals} onClose={() => setApproveOpen(false)} />
       ) : null}
     </div>
   );

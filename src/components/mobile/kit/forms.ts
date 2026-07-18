@@ -2,6 +2,11 @@
    the PWA (advance requests, reports, swaps, time off, jobs, marketplace, etc.).
    Ported verbatim from the prototype's FORMS config map. */
 
+/** The expense form's auto-coding sentinel (kit: the Cost Code select's
+ *  default option). Shared with the server action so "leave it to finance"
+ *  never writes a literal string into `expenses.department`. */
+export const EXPENSE_AUTO_CODE = "Auto-Code On Approval";
+
 export type FormFieldType =
   | "text"
   | "textarea"
@@ -224,6 +229,12 @@ export const FORMS: Forms = {
       // time-of-day picker cannot express it. It was typed "time" while the
       // form was mounted nowhere, so nothing ever surfaced it.
       { id: "date", label: "Date", type: "date", half: true },
+      // Kit 32 (drawer canon v2.8): the kit expense form carries a Cost Code
+      // select defaulting to auto-coding. Ships EMPTY like the PO form's —
+      // the mount injects the org's real cost_centers (static seed codes
+      // would be a lie); past 8 codes the field renders as the searchable
+      // picker drawer.
+      { id: "code", label: "Cost Code", type: "select", options: [], hint: "Leave on auto and finance codes it on approval." },
       { id: "merchant", label: "Merchant", type: "text", placeholder: "Where was it spent?", required: true },
       { id: "receipt", label: "Receipt", type: "photo" },
       { id: "billable", label: "Billable To Client", type: "switch" },

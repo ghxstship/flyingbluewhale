@@ -84,6 +84,10 @@ export async function ScanSurface({
   // policy. The bind picker's catalog list is only fetched when it can render.
   const canFulfill = isManagerPlus(session);
   const canBind = canFulfill || can(session, "people:manage");
+  // Custody band mirrors transitionAssetState's own gate (manager+ OR the
+  // `asset:custody` grant) so the quick-look drawer never offers a button
+  // the server would bounce.
+  const canMoveCustody = canFulfill || can(session, "asset:custody");
   let catalogItems: BindableCatalogItem[] = [];
   if (canBind) {
     const { data: items } = await supabase
@@ -163,6 +167,7 @@ export async function ScanSurface({
         backLabel={backLabel}
         canFulfill={canFulfill}
         canBind={canBind}
+        canMoveCustody={canMoveCustody}
         catalogItems={catalogItems}
         scannerNode={
           <ScannerCapture

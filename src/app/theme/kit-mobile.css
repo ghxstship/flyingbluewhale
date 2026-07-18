@@ -421,6 +421,11 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
    swipe actions, floats above the tab bar. Geometry is the prototype's inline
    style, fixed against the viewport like the repo's tab bar. */
 .mobile-shell .undobar { position: fixed; left: 16px; right: 16px; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 26; display: flex; align-items: center; gap: 10px; background: #0c0e12; color: #fff; border-radius: 13px; padding: 11px 14px; box-shadow: var(--p-elev-2, var(--p-elev-1)); } /* grid-exempt: kit 31 undo-bar geometry, prototype-exact (runtime/app.jsx:4634) — 92px clears the floating tab bar (16 inset + 62 bar + 14 gap) */
+/* Kit 32 (drawer canon v2.8): an undo bar armed from INSIDE a drawer (the
+   approvals quick-action sheet) must stay tappable above the sheet scrim —
+   the sheet root's stacking context is z-40, so within it the bar outranks
+   the scrim; outside a sheet the base z-26 rule holds. */
+.mobile-shell .sheet .undobar { z-index: 45; }
 /* ── swipe-to-action rows ── */
 .mobile-shell .swipe { position: relative; margin-bottom: var(--p-3); }
 .mobile-shell .swipe-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; border-radius: 14px; overflow: hidden; }

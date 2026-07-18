@@ -7,6 +7,7 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
+import { SheetHead } from "./SheetHead";
 import { useDismissable } from "./useDismissable";
 
 // Map prototype Badge tone names → repo kit badge classes.
@@ -225,7 +226,9 @@ export function RecordDetail({
           <button type="button" className="sheet-bg" aria-label="Cancel" onClick={() => setConfirm(null)} />
           <div ref={confirmRef} className="sheet-panel" role="dialog" aria-modal="true" aria-label={`Confirm ${typeof confirm.label === "string" ? confirm.label : "action"}`}>
             <div className="sheet-grip" />
-            <h2 style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 18, margin: "4px 0 8px" }}>{confirm.label}?</h2>
+            {/* Kit 32 (drawer canon v2.8): every sheet carries the canonical
+                SheetHead — icon · title · explicit ✕. */}
+            <SheetHead icon="TriangleAlert" title={`${confirm.label}?`} onClose={() => setConfirm(null)} />
             <p className="form-intro">{confirm.confirmText || "This can't be undone."}</p>
             <div style={{ display: "flex", gap: 10 }}>
               <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={() => setConfirm(null)}>Cancel</button>

@@ -7,6 +7,7 @@ import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
 import { formatsForMode } from "@/lib/scan/formats";
 import { posGtinCandidate } from "@/lib/scan/product";
 import { BindGtinCard, ProductMatchCard, type BindableCatalogItem, type ProductLabels } from "./ProductMatchCard";
+import { AssetQuickLook, type ScannedAsset } from "./AssetQuickLook";
 
 export type RecentScan = {
   id: string;
@@ -88,6 +89,7 @@ export function CheckInScanner({
   productLabels,
   canFulfill = false,
   canBind = false,
+  canMoveCustody = false,
   catalogItems = [],
   scannerNode,
 }: {
@@ -105,6 +107,9 @@ export function CheckInScanner({
   canFulfill?: boolean;
   /** Manager-band (`people:manage`): may bind an unknown GTIN to a catalog item. */
   canBind?: boolean;
+  /** Custody band (manager+ or `asset:custody`): the asset quick-look drawer
+   *  offers Check Out / Check In (kit 32 drawer canon v2.8). */
+  canMoveCustody?: boolean;
   /** Org catalog items for the bind picker. Only sent when `canBind`. */
   catalogItems?: BindableCatalogItem[];
   /**
@@ -116,6 +121,8 @@ export function CheckInScanner({
 }) {
   const [mode, setMode] = useState<Mode>(initialMode ?? "access");
   const [code, setCode] = useState("");
+  // Asset quick-look drawer (kit 32 v2.8): opened by tapping an asset match.
+  const [assetLook, setAssetLook] = useState<ScannedAsset | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   // "scanner" is a capture flow, not a code resolver — park the submit hook
   // on the widest symbology set; it is never invoked from that segment.
@@ -241,6 +248,33 @@ export function CheckInScanner({
           canFulfill={canFulfill}
           labels={productLabels}
         />
+      ) : outcome?.kind === "result" && outcome.result.result === "asset" ? (
+        /* Kit 32 (drawer canon v2.8): the asset match card opens the
+           quick-look CONTEXT drawer — identify, move custody, or jump to
+           the full card. */
+        <button
+          type="button"
+          className="item tap"
+          style={{ marginTop: 14, width: "100%", textAlign: "left", cursor: "pointer" }}
+          onClick={() =>
+            outcome.result.result === "asset" &&
+            setAssetLook({
+              assetId: outcome.result.assetId,
+              displayName: outcome.result.displayName,
+              assetTag: outcome.result.assetTag,
+              state: outcome.result.state,
+            })
+          }
+        >
+          <span className={`ps-badge ps-badge--${RESULT_TONE.asset}`}>{outcome.result.result}</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t">{outcome.result.displayName ?? outcome.result.assetTag ?? labels.logged}</div>
+            {outcome.result.assetTag && (
+              <div className="s" style={{ fontFamily: "var(--p-mono)" }}>{outcome.result.assetTag}</div>
+            )}
+          </div>
+          <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)", flex: "none" }} />
+        </button>
       ) : (
         outcome?.kind === "result" && (
           <div className="item" style={{ marginTop: 14 }}>
@@ -316,6 +350,10 @@ export function CheckInScanner({
             </div>
           );
         })
+      )}
+
+      {assetLook && (
+        <AssetQuickLook asset={assetLook} canMoveCustody={canMoveCustody} onClose={() => setAssetLook(null)} />
       )}
     </>
   );

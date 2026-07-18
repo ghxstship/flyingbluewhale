@@ -1,9 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
-import { KIcon } from "@/components/mobile/kit";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { DensityToggle } from "@/components/ui/DensityToggle";
+import { useActionState, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { KIcon, Sheet } from "@/components/mobile/kit";
+import { useThemeIfAvailable } from "@/app/theme/ThemeProvider";
+import { useLocale, useT } from "@/lib/i18n/LocaleProvider";
+import { SUPPORTED_LOCALES } from "@/lib/i18n/config";
+import { setLocalePreferences } from "@/lib/i18n/actions";
 import { saveProfile, type State } from "./actions";
 
 export type ProfileData = {
@@ -102,6 +105,81 @@ type Labels = {
   signOut: string;
 };
 
+/**
+ * Single-pick settings row + ACTION drawer — kit 32 Drawer System (v2.8):
+ * "Language & appearance pickers in Settings (action drawer, single-pick
+ * with checkmarks)". The row shows the current value; the drawer lists the
+ * options with a checkmark on the active one; picking closes.
+ */
+function PickerRow({
+  icon,
+  title,
+  valueLabel,
+  options,
+  current,
+  closeLabel,
+  onPick,
+}: {
+  icon: string;
+  title: string;
+  valueLabel: string;
+  options: Array<{ key: string; label: string; sub?: string }>;
+  current: string;
+  closeLabel: string;
+  onPick: (key: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        className="item tap"
+        style={{ width: "100%", textAlign: "left", cursor: "pointer" }}
+        onClick={() => setOpen(true)}
+      >
+        <KIcon name={icon} size={18} style={{ color: "var(--p-text-2)", flex: "none" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{title}</div>
+          <div className="s">{valueLabel}</div>
+        </div>
+        <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)", flex: "none" }} />
+      </button>
+      {open && (
+        <Sheet icon={icon} title={title} closeLabel={closeLabel} onClose={() => setOpen(false)}>
+          {options.map((o) => (
+            <button
+              key={o.key}
+              type="button"
+              className="item tap"
+              style={{ width: "100%", textAlign: "left", cursor: "pointer" }}
+              onClick={() => {
+                onPick(o.key);
+                setOpen(false);
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="t" style={{ fontWeight: o.key === current ? 700 : 500 }}>{o.label}</div>
+                {o.sub && <div className="s">{o.sub}</div>}
+              </div>
+              {o.key === current && <KIcon name="Check" size={17} style={{ color: "var(--p-success)", flex: "none" }} />}
+            </button>
+          ))}
+        </Sheet>
+      )}
+    </>
+  );
+}
+
+/** "es" → "Español" — the language named in itself, capitalized. */
+function endonym(code: string): string {
+  try {
+    const name = new Intl.DisplayNames([code], { type: "language" }).of(code) ?? code;
+    return name.charAt(0).toLocaleUpperCase(code) + name.slice(1);
+  } catch {
+    return code;
+  }
+}
+
 function Fld({
   label,
   name,
@@ -133,6 +211,11 @@ function Fld({
 }
 
 export function SettingsView({ data, labels }: { data: ProfileData; labels: Labels }) {
+  const t = useT();
+  const router = useRouter();
+  const { locale } = useLocale();
+  const theme = useThemeIfAvailable();
+  const [, startLocaleTx] = useTransition();
   const [state, formAction, pending] = useActionState<State, FormData>(saveProfile, null);
   const v = (key: keyof ProfileData) => state?.values?.[key] ?? data[key];
   const half = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 } as const;
@@ -282,24 +365,67 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
         </button>
       </form>
 
-      {/* ── Appearance — platform theme + density toggles ── */}
+      {/* ── Appearance — kit 32 (drawer canon v2.8): language + appearance
+           as ACTION drawers, single-pick with checkmarks. ── */}
       <div className="sech">
         <h2>{labels.appearance}</h2>
       </div>
-      <div className="item" style={{ display: "block" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-          <KIcon name="SunMoon" size={18} style={{ color: "var(--p-text-2)" }} />
-          <div className="t">{labels.theme}</div>
-        </div>
-        <ThemeToggle />
-      </div>
-      <div className="item" style={{ display: "block" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-          <KIcon name="Rows3" size={18} style={{ color: "var(--p-text-2)" }} />
-          <div className="t">{labels.density}</div>
-        </div>
-        <DensityToggle />
-      </div>
+      <PickerRow
+        icon="Languages"
+        title={t("m.settings.pickers.language", undefined, "Language")}
+        valueLabel={endonym(locale)}
+        current={locale}
+        closeLabel={t("m.settings.pickers.close", undefined, "Close")}
+        options={SUPPORTED_LOCALES.map((code) => ({ key: code, label: endonym(code), sub: code.toUpperCase() }))}
+        onPick={(code) => {
+          startLocaleTx(async () => {
+            await setLocalePreferences({ locale: code });
+            router.refresh();
+          });
+        }}
+      />
+      {theme && (
+        <PickerRow
+          icon="SunMoon"
+          title={labels.theme}
+          valueLabel={
+            theme.mode === "light"
+              ? t("theme.toggle.light", undefined, "Light")
+              : theme.mode === "dark"
+                ? t("theme.toggle.dark", undefined, "Dark")
+                : t("theme.toggle.system", undefined, "Match system")
+          }
+          current={theme.mode}
+          closeLabel={t("m.settings.pickers.close", undefined, "Close")}
+          options={[
+            { key: "light", label: t("theme.toggle.light", undefined, "Light") },
+            { key: "system", label: t("theme.toggle.system", undefined, "Match system") },
+            { key: "dark", label: t("theme.toggle.dark", undefined, "Dark") },
+          ]}
+          onPick={(m) => theme.setMode(m as "light" | "system" | "dark")}
+        />
+      )}
+      {theme && (
+        <PickerRow
+          icon="Rows3"
+          title={labels.density}
+          valueLabel={
+            theme.density === "compact"
+              ? t("ui.density.compact", undefined, "Compact")
+              : theme.density === "spacious"
+                ? t("ui.density.spacious", undefined, "Spacious")
+                : t("ui.density.cozy", undefined, "Default")
+          }
+          current={theme.density}
+          closeLabel={t("m.settings.pickers.close", undefined, "Close")}
+          options={[
+            { key: "compact", label: t("ui.density.compact", undefined, "Compact") },
+            { key: "cozy", label: t("ui.density.cozy", undefined, "Default") },
+            { key: "spacious", label: t("ui.density.spacious", undefined, "Spacious") },
+          ]}
+          onPick={(d) => theme.setDensity(d as "compact" | "cozy" | "spacious")}
+        />
+      )}
 
       {/* ── Account — links to the dedicated pause / archive lifecycle screen ── */}
       <div className="sech">

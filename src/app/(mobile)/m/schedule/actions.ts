@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestFormatters } from "@/lib/i18n/request";
 
 export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
 
@@ -84,5 +85,54 @@ export async function createScheduleEvent(_prev: State, fd: FormData): Promise<S
 
   revalidatePath("/m/schedule");
   revalidatePath("/m");
+  return null;
+}
+
+const RemindInput = z.object({ eventId: z.string().uuid() });
+
+/**
+ * Event quick-look · Remind — kit 32 Drawer System (v2.8) candidate
+ * ("Remind schedules a notification row").
+ *
+ * Honest scope: there is no deferred-delivery reminder infrastructure on /m
+ * (local shift reminders are a separate native path, and only cover the
+ * viewer's own shifts). So Remind writes a REAL `notifications` row for the
+ * caller — the event pins itself to their bell feed with a deep link back to
+ * the schedule — rather than pretending a timer exists. Never toast-only.
+ */
+export async function remindEvent(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = RemindInput.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+
+  const supabase = await createClient();
+  const { data: ev } = await supabase
+    .from("events")
+    .select("id, name, starts_at")
+    .eq("id", parsed.data.eventId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!ev) return { error: "Event not found." };
+
+  const fmt = await getRequestFormatters();
+  const { error } = await supabase.from("notifications").insert({
+    org_id: session.orgId,
+    user_id: session.userId,
+    kind: "system",
+    title: `Reminder · ${ev.name}`,
+    body: fmt.dateParts(new Date(ev.starts_at as string), {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
+    href: "/m/schedule",
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/m/notifications");
+  revalidatePath("/m/alerts");
   return null;
 }

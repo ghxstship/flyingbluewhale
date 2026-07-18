@@ -27,6 +27,9 @@ export type { CrumbsProps, Crumb } from "./Crumbs";
 export { SheetHead } from "./SheetHead";
 export type { SheetHeadProps } from "./SheetHead";
 
+export { Sheet } from "./Sheet";
+export type { SheetProps } from "./Sheet";
+
 export { EmptySkeleton } from "./EmptySkeleton";
 export type { EmptySkeletonProps } from "./EmptySkeleton";
 
@@ -62,7 +65,7 @@ export type { ActionBarProps } from "./ActionBar";
 export { RoseCard, QR, hashStr } from "./RoseCard";
 export type { RoseCardProps, QRProps } from "./RoseCard";
 
-export { FORMS } from "./forms";
+export { FORMS, EXPENSE_AUTO_CODE } from "./forms";
 export type { Forms, FormDef, FormField, FormFieldType } from "./forms";
 
 export { FormScreen, Field, ComboField, AvatarField, TIER_COLOR } from "./FormScreen";

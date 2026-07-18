@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import {
   ActionBar,
   DataTable,
   GroupedList,
+  KIcon,
+  Sheet,
   type FieldDef,
 } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { EmptySkeleton } from "@/components/mobile/kit";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
+import { requestSwap } from "@/components/workforce/swap-action";
+import { remindEvent } from "./actions";
 
 /** Plain event shape handed down from the server page. */
 export type SchedEvent = {
@@ -63,8 +68,177 @@ function badgeClass(tone: SchedEvent["tone"]): string {
   }
 }
 
-export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels: Labels }) {
+/**
+ * Event quick-look — kit 32 Drawer System (v2.8) candidate: tap an event row
+ * → CONTEXT drawer (title · time · area) with Swap / Remind before any full
+ * detail. Swap routes into the existing shift-swap flow (`requestSwap`)
+ * when the viewer has their OWN shift that day; Remind writes a real
+ * `notifications` row (`remindEvent`) — no reminder infra is faked.
+ */
+function EventQuickLook({
+  ev,
+  typeLabel,
+  swapShiftId,
+  onClose,
+}: {
+  ev: SchedEvent;
+  typeLabel: string;
+  swapShiftId: string | null;
+  onClose: () => void;
+}) {
+  const t = useT();
+  const toast = useToast();
+  const [swapOpen, setSwapOpen] = useState(false);
+  const [reason, setReason] = useState("");
+  const [pending, startTransition] = useTransition();
+
+  const remind = () => {
+    if (pending) return;
+    const fd = new FormData();
+    fd.set("eventId", ev.id);
+    startTransition(async () => {
+      const res = await remindEvent(null, fd);
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+      toast.success(t("m.schedule.quicklook.remindDone", undefined, "Reminder Saved"), {
+        description: t(
+          "m.schedule.quicklook.remindDoneBody",
+          undefined,
+          "Pinned to your notifications with a link back here.",
+        ),
+      });
+      onClose();
+    });
+  };
+
+  const sendSwap = () => {
+    if (pending || !swapShiftId) return;
+    const fd = new FormData();
+    fd.set("shiftId", swapShiftId);
+    fd.set("revalidate", "/m/schedule");
+    if (reason.trim()) fd.set("reason", reason.trim());
+    startTransition(async () => {
+      const res = await requestSwap(null, fd);
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+      toast.success(t("m.schedule.quicklook.swapSent", undefined, "Swap Requested"), {
+        description: t(
+          "m.schedule.quicklook.swapSentBody",
+          undefined,
+          "Your manager sees it on the approvals queue.",
+        ),
+      });
+      onClose();
+    });
+  };
+
+  return (
+    <Sheet
+      icon="CalendarDays"
+      title={ev.name}
+      sub={`${typeLabel} · ${ev.time}`}
+      closeLabel={t("m.schedule.quicklook.close", undefined, "Close")}
+      onClose={onClose}
+    >
+      <div className="item" style={{ marginTop: 0 }}>
+        <KIcon name="Clock" size={17} style={{ color: "var(--p-text-2)", flex: "none" }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{ev.time}</div>
+          <div className="s">{ev.sub}</div>
+        </div>
+        <span className={badgeClass(ev.tone)}>{ev.state}</span>
+      </div>
+
+      {swapOpen && swapShiftId ? (
+        <div className="item" style={{ display: "block" }}>
+          <label className="wl" htmlFor="ql-swap-reason" style={{ display: "block", marginBottom: 6 }}>
+            {t("m.schedule.quicklook.swapReason", undefined, "Why can't you make it?")}
+          </label>
+          <textarea
+            id="ql-swap-reason"
+            className="ps-input"
+            rows={2}
+            maxLength={500}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            style={{ width: "100%", marginBottom: 10 }}
+          />
+          <div style={{ display: "flex", gap: 10 }}>
+            <button
+              type="button"
+              className="ps-btn ps-btn--secondary"
+              style={{ flex: 1, justifyContent: "center" }}
+              onClick={() => setSwapOpen(false)}
+            >
+              {t("m.schedule.quicklook.swapCancel", undefined, "Back")}
+            </button>
+            <button
+              type="button"
+              className="ps-btn ps-btn--cta"
+              style={{ flex: 2, justifyContent: "center" }}
+              disabled={pending}
+              onClick={sendSwap}
+            >
+              <KIcon name="ArrowLeftRight" size={15} />{" "}
+              {pending
+                ? t("m.schedule.quicklook.swapSending", undefined, "Sending…")
+                : t("m.schedule.quicklook.swapSend", undefined, "Request Swap")}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+          {swapShiftId && (
+            <button
+              type="button"
+              className="ps-btn ps-btn--secondary ps-btn--lg"
+              style={{ flex: 1, justifyContent: "center" }}
+              onClick={() => setSwapOpen(true)}
+            >
+              <KIcon name="ArrowLeftRight" size={15} /> {t("m.schedule.quicklook.swap", undefined, "Swap")}
+            </button>
+          )}
+          <button
+            type="button"
+            className="ps-btn ps-btn--cta ps-btn--lg"
+            style={{ flex: 1, justifyContent: "center" }}
+            disabled={pending}
+            onClick={remind}
+          >
+            <KIcon name="BellRing" size={15} /> {t("m.schedule.quicklook.remind", undefined, "Remind")}
+          </button>
+        </div>
+      )}
+      {!swapShiftId && (
+        <p className="hint" style={{ marginTop: 8 }}>
+          {t(
+            "m.schedule.quicklook.noSwapHint",
+            undefined,
+            "Swap appears when one of your own shifts lands on this day.",
+          )}
+        </p>
+      )}
+    </Sheet>
+  );
+}
+
+export function ScheduleView({
+  events,
+  labels,
+  myShiftByDay = {},
+}: {
+  events: SchedEvent[];
+  labels: Labels;
+  /** dateKey → the viewer's own shift id that day — powers the Swap action
+   *  in the event quick-look drawer. */
+  myShiftByDay?: Record<string, string>;
+}) {
   const fmt = useFormatters();
+  const [openEvent, setOpenEvent] = useState<SchedEvent | null>(null);
   const [query, setQuery] = useState("");
   const [view, setView] = useState<View>("list");
   const [group, setGroup] = useState("none");
@@ -130,7 +304,13 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
   const eventRow = (e: SchedEvent) => {
     const m = typeMeta[e.type];
     return (
-      <div className="item" key={e.id}>
+      <button
+        type="button"
+        className="item tap"
+        key={e.id}
+        style={{ width: "100%", textAlign: "left", cursor: "pointer" }}
+        onClick={() => setOpenEvent(e)}
+      >
         <span className="bar" style={{ background: m.c, opacity: e.state === "live" ? 1 : 0.55 }} />
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 3 }}>
@@ -151,7 +331,7 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
             {e.time}
           </div>
         </span>
-      </div>
+      </button>
     );
   };
 
@@ -300,11 +480,17 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
                 return (
                   <div className="dc-row" key={e.id}>
                     <div className="dc-time">{e.time}</div>
-                    <div
+                    <button
+                      type="button"
                       className="dc-ev"
+                      onClick={() => setOpenEvent(e)}
                       style={{
                         borderLeftColor: m.c,
                         background: `color-mix(in oklab, ${m.c} 10%, var(--p-surface))`,
+                        textAlign: "left",
+                        cursor: "pointer",
+                        font: "inherit",
+                        width: "100%",
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
@@ -320,7 +506,7 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
                       </div>
                       <div className="t">{e.name}</div>
                       <div className="s">{e.sub}</div>
-                    </div>
+                    </button>
                   </div>
                 );
               })
@@ -329,6 +515,15 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
             )}
           </div>
         </>
+      )}
+
+      {openEvent && (
+        <EventQuickLook
+          ev={openEvent}
+          typeLabel={typeMeta[openEvent.type].label}
+          swapShiftId={myShiftByDay[openEvent.dateKey] ?? null}
+          onClose={() => setOpenEvent(null)}
+        />
       )}
     </>
   );

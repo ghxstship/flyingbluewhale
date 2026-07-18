@@ -11,7 +11,13 @@ import { getPosition } from "@/lib/geo/position";
 import type { PhotoFix } from "@/lib/mobile/photo-geo";
 import { SignaturePad } from "@/components/ui/SignaturePad";
 import { FORMS } from "./forms";
+import { Sheet } from "./Sheet";
 import type { FormDef, FormField } from "./forms";
+
+/** Above this option count a select renders as a searchable ACTION drawer
+ *  (kit 32 drawer canon v2.8 — the cost-code picker rule: ≤8 keeps the
+ *  native select, >8 gets search). */
+const PICKER_DRAWER_THRESHOLD = 8;
 
 // Severity tiers: High/Urgent = red, Medium = orange, Low = yellow. [bg, text]
 export const TIER_COLOR: Record<string, [string, string]> = {
@@ -88,6 +94,98 @@ function ComboField({
         </>
       )}
     </div>
+  );
+}
+
+/**
+ * Long-enum single-pick as an ACTION drawer — kit 32 Drawer System (v2.8).
+ *
+ * The cost-code case: an org with dozens of cost centers cannot scroll a
+ * native <select> wheel usefully, so past the threshold the field becomes a
+ * trigger that opens a searchable drawer — single-pick, checkmark on the
+ * current value, picking closes. The value contract is identical to the
+ * native select (a plain option string), so form defs and actions see no
+ * difference.
+ */
+function PickerField({
+  f,
+  value,
+  setValue,
+}: {
+  f: FormField;
+  value: unknown;
+  setValue: (v: unknown) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const options = f.options || [];
+  const current = typeof value === "string" ? value : "";
+  const matches = options.filter((o) => o.toLowerCase().includes(q.toLowerCase()));
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        style={{
+          width: "100%",
+          boxSizing: "border-box",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          border: "1px solid var(--p-border)",
+          borderRadius: 11,
+          padding: "var(--p-3)",
+          fontSize: 14,
+          fontFamily: "inherit",
+          background: "var(--p-surface)",
+          color: current ? "var(--p-text-1)" : "var(--p-text-3)",
+          cursor: "pointer",
+        }}
+      >
+        <span style={{ flex: 1, textAlign: "left", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {current || "Choose…"}
+        </span>
+        <KIcon name="ChevronsUpDown" size={15} style={{ color: "var(--p-text-3)", flex: "none" }} />
+      </button>
+      {open && (
+        <Sheet
+          icon="ListChecks"
+          title={f.label}
+          sub={`${options.length} Options`}
+          onClose={() => setOpen(false)}
+        >
+          <div className="searchbar" style={{ marginBottom: 8 }}>
+            <KIcon name="Search" size={16} />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search…"
+              aria-label={`Search ${f.label}`}
+            />
+          </div>
+          {matches.map((o) => (
+            <button
+              key={o}
+              type="button"
+              className="item tap"
+              style={{ width: "100%", textAlign: "left", cursor: "pointer" }}
+              onClick={() => {
+                setValue(o);
+                setQ("");
+                setOpen(false);
+              }}
+            >
+              <div className="t" style={{ flex: 1, minWidth: 0, fontWeight: o === current ? 700 : 500 }}>{o}</div>
+              {o === current && <KIcon name="Check" size={17} style={{ color: "var(--p-success)", flex: "none" }} />}
+            </button>
+          ))}
+          {!matches.length && (
+            <div className="hint" style={{ padding: "10px 2px" }}>No matches.</div>
+          )}
+        </Sheet>
+      )}
+    </>
   );
 }
 
@@ -510,12 +608,15 @@ function Field({
   else if (f.type === "sign") control = <SignField f={f} value={value} setValue={setValue} />;
   else if (f.type === "textarea") control = <textarea {...common} placeholder={f.placeholder} />;
   else if (f.type === "select")
-    control = (
-      <select {...common}>
-        <option value="" disabled>Choose…</option>
-        {(f.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
-      </select>
-    );
+    control =
+      (f.options || []).length > PICKER_DRAWER_THRESHOLD ? (
+        <PickerField f={f} value={value} setValue={setValue} />
+      ) : (
+        <select {...common}>
+          <option value="" disabled>Choose…</option>
+          {(f.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
+      );
   else if (f.type === "combo") control = <ComboField value={value} setValue={setValue} options={f.options || []} placeholder={f.placeholder} />;
   else if (f.type === "seg")
     control = (

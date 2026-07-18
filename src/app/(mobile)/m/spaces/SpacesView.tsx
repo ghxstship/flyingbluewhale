@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, KIcon } from "@/components/mobile/kit";
+import { ActionBar, KIcon, SheetHead } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createSpace } from "./actions";
@@ -166,9 +166,15 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
           <div className="sheet-bg" onClick={() => setCreateOpen(false)} />
           <div className="sheet-panel">
             <div className="sheet-grip" />
-            <div className="sech" style={{ margin: "0 0 8px" }}>
-              <h2>{t("m.spaces.new", undefined, "New Space")}</h2>
-            </div>
+            {/* Kit 32 (drawer canon v2.8): FORM drawer (3 fields ≤ the 5-field
+                cap) with the canonical SheetHead — no sheet ships without an
+                explicit ✕. */}
+            <SheetHead
+              icon="UsersRound"
+              title={t("m.spaces.new", undefined, "New Space")}
+              closeLabel={t("m.spaces.sheetClose", undefined, "Close")}
+              onClose={() => setCreateOpen(false)}
+            />
             {error && (
               <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 10 }}>
                 {error}

@@ -65,6 +65,9 @@ export default async function MobileSchedulePage() {
 
   let myShifts: MyShift[] = [];
   let reminders: ShiftReminder[] = [];
+  // dateKey (UTC day, same slice the events map uses) → the viewer's own
+  // shift id that day — feeds Swap in the event quick-look drawer (kit 32).
+  const myShiftByDay: Record<string, string> = {};
   if (crew?.id) {
     const now = new Date();
     const from = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
@@ -89,6 +92,10 @@ export default async function MobileSchedulePage() {
       endsAt: (s.ends_at as string | null) ?? null,
       venueName: (s.venue as { name: string | null } | null)?.name ?? null,
     }));
+    for (const s of shiftRows ?? []) {
+      const day = (s.starts_at as string).slice(0, 10);
+      if (!myShiftByDay[day]) myShiftByDay[day] = s.id as string;
+    }
     myShifts = (shiftRows ?? []).map((s) => {
       const start = new Date(s.starts_at as string);
       const key = start.toDateString();
@@ -199,7 +206,9 @@ export default async function MobileSchedulePage() {
       <div className="sech">
         <h2>{t("m.schedule.orgCalendar", undefined, "Production Calendar")}</h2>
       </div>
-      <ScheduleView events={events} labels={labels} />
+      {/* dateKey → the viewer's OWN shift that day (first one), so the event
+          quick-look drawer (kit 32 v2.8) can offer the real Swap flow. */}
+      <ScheduleView events={events} labels={labels} myShiftByDay={myShiftByDay} />
       {/* Kit FAB: Schedule Event — manager band only, matching the events
           INSERT policy's EFFECTIVE band (its wider role array names roles
           memberships.role can never hold). */}

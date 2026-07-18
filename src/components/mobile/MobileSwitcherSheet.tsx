@@ -3,6 +3,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Building2, ChevronsUpDown, ChevronUp, ArrowRightLeft, LayoutGrid, Check, Search } from "lucide-react";
+import { SheetHead } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * COMPVSS workspace / project switcher — kit 28 `{switcher && …}`
@@ -51,6 +53,7 @@ export function MobileSwitcherSheet({
   currentProjectId: string | null;
 }) {
   const router = useRouter();
+  const t = useT();
   const [orgListOpen, setOrgListOpen] = React.useState(false);
   const [q, setQ] = React.useState("");
   const [status, setStatus] = React.useState<(typeof STATUSES)[number]>("All");
@@ -105,9 +108,22 @@ export function MobileSwitcherSheet({
       <div className="sheet-panel">
         <div className="sheet-grip" />
 
-        <div className="sech" style={{ margin: "0 0 8px" }}>
-          <h2>Workspace</h2>
-        </div>
+        {/* Kit 32 (drawer canon v2.8): the switcher is a CONTEXT drawer and
+            carries the canonical SheetHead — icon · title · sub · explicit ✕
+            (kit runtime: `<SheetHead icon="Building2" title="Workspace"
+            sub={org · N Projects} …/>`). Scrim-tap alone is not a close
+            affordance. */}
+        <SheetHead
+          icon="Building2"
+          title={t("m.switcher.head", undefined, "Workspace")}
+          sub={t(
+            "m.switcher.headSub",
+            { org: org.name, n: projects.length },
+            `${org.name} · ${projects.length} Projects`,
+          )}
+          closeLabel={t("m.switcher.close", undefined, "Close")}
+          onClose={onClose}
+        />
         <div className="item" style={{ background: "var(--p-surface-2)" }}>
           <span
             style={{

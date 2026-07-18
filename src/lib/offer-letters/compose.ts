@@ -286,6 +286,9 @@ function engagementWindowSummary(letter: OfferLetterResolved): {
   return { onsite, travel, travelLodgingLine: inc ? `${inc} provided / arranged by GHXSTSHIP logistics` : null };
 }
 
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function escapeHtml(s: string | null | undefined): string {
+  // Tolerate nullish input — a letter created via the manual-position path
+  // carries a null role_title (the title lives in expectations_override), and
+  // an escaper that throws on null crashes the whole offer-letter detail page.
+  return (s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }

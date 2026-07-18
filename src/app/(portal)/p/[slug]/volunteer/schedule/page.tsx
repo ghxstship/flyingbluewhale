@@ -75,6 +75,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       )
       .eq("org_id", session.orgId)
       .eq("crew_member_id", me.id)
+      // Only published shifts reach a volunteer — the kit-32 field scheduler
+      // writes DRAFT seats before Publish Day, and a draft assignment must
+      // not surface on the volunteer's own schedule until it's published.
+      .eq("publish_state", "published")
       .order("starts_at", { ascending: true })
       .limit(100);
     shifts = ((data ?? []) as unknown as Shift[]) ?? [];

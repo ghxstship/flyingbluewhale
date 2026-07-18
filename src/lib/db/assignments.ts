@@ -96,7 +96,7 @@ export const NEXT_FULFILLMENT_STATES: Record<FulfillmentState, FulfillmentState[
   approved: ["delivered", "issued"],
   delivered: ["returned"],
   rejected: [],
-  issued: ["transferred", "redeemed", "voided", "expired"],
+  issued: ["transferred", "redeemed", "returned", "voided", "expired"],
   transferred: ["redeemed", "voided", "expired"],
   redeemed: [],
   expired: [],

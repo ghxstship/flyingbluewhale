@@ -46,7 +46,9 @@ describe("fulfillment state machine", () => {
   });
 
   it("pins the physical-asset/ticket arc", () => {
-    expect(NEXT_FULFILLMENT_STATES.issued).toEqual(["transferred", "redeemed", "voided", "expired"]);
+    // issued -> returned closes the field return path (checkin_my_assignment
+    // RPC); the tuple, the RPC, and the studio transition UI now agree.
+    expect(NEXT_FULFILLMENT_STATES.issued).toEqual(["transferred", "redeemed", "returned", "voided", "expired"]);
     expect(NEXT_FULFILLMENT_STATES.transferred).toEqual(["redeemed", "voided", "expired"]);
   });
 

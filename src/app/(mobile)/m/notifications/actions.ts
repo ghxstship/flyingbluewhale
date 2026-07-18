@@ -34,6 +34,11 @@ export async function acknowledgeAlert(_prev: State, fd: FormData): Promise<Stat
     .update({ read_at: new Date().toISOString() })
     .eq("id", parsed.data.alertId)
     .eq("org_id", session.orgId)
+    // Pin to my own row, matching notifications_update RLS and the swipe
+    // actions below. The system fans notifications out per-user (0 broadcast
+    // user_id-NULL rows exist), so this can never no-op a real row; it just
+    // keeps the app-level filter honest with what RLS enforces.
+    .eq("user_id", session.userId)
     .is("read_at", null);
   if (error) return { error: error.message };
 

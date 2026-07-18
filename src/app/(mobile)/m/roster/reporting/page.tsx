@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
+import { displayRoleTitle } from "@/lib/offer-letters/format";
 import { can, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -99,7 +101,7 @@ export default async function ReportingPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("offer_letters_resolved")
-    .select("id, crew_member_id, reports_to_crew_member_id, recipient_name, role_title")
+    .select("id, crew_member_id, reports_to_crew_member_id, recipient_name, role_title, role_slug, expectations_override")
     .eq("org_id", session.orgId)
     .eq("project_id", project.id)
     .in("status", [...LIVE_LETTER_STATES])
@@ -111,6 +113,8 @@ export default async function ReportingPage() {
     reports_to_crew_member_id: string | null;
     recipient_name: string;
     role_title: string;
+    role_slug: string | null;
+    expectations_override: string | null;
   }>;
 
   // One node per person: a crew member holds at most one live letter per
@@ -120,7 +124,7 @@ export default async function ReportingPage() {
     reportsTo: l.reports_to_crew_member_id,
     letterId: l.id,
     name: l.recipient_name,
-    role: l.role_title,
+    role: fmtPosition(displayRoleTitle(l.role_slug, l.role_title, l.expectations_override)),
   }));
 
   const forest = buildReportingBranches(nodes);

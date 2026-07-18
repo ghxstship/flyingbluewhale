@@ -48,17 +48,4 @@ export const LIVE_LETTER_STATES = ["draft", "sent", "viewed", "accepted", "count
  * The custom title itself is stored on the letter (expectations_override)
  * until the kit 30 schema wave lands a dedicated column.
  */
-export const CUSTOM_POSITION_SLUG = "custom-position";
-export const CUSTOM_POSITION_LABEL = "Custom Position";
-
-/** Roster display title for a letter's position. */
-export function displayRoleTitle(
-  roleSlug: string | null | undefined,
-  roleTitle: string | null | undefined,
-  expectationsOverride: string | null | undefined,
-): string {
-  if (roleSlug === CUSTOM_POSITION_SLUG && expectationsOverride && expectationsOverride.trim().length > 0) {
-    return expectationsOverride.trim().split("\n")[0] ?? expectationsOverride.trim();
-  }
-  return roleTitle ?? "—";
-}
+export { CUSTOM_POSITION_SLUG, CUSTOM_POSITION_LABEL, displayRoleTitle } from "@/lib/offer-letters/format";

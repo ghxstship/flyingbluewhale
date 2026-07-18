@@ -2,6 +2,30 @@ import { urlFor } from "@/lib/urls";
 import { formatDateParts, formatMoney } from "@/lib/i18n/format";
 import type { OfferLetterResolved, CompensationBasis } from "./types";
 
+/**
+ * The one per-org system role that manual (non-catalog) positions attach
+ * to (see the console roster's letter-state.ts, which re-exports these).
+ * The custom title itself lives on the letter (expectations_override), so
+ * every position render must prefer it — rendering the role label for a
+ * custom-position letter shows the infrastructure row's "Custom Position"
+ * instead of the actual title (the jack-sparrow mobile leg caught exactly
+ * that on /m/roster's contract screen).
+ */
+export const CUSTOM_POSITION_SLUG = "custom-position";
+export const CUSTOM_POSITION_LABEL = "Custom Position";
+
+/** Display title for a letter's position — the ONE rule, both shells. */
+export function displayRoleTitle(
+  roleSlug: string | null | undefined,
+  roleTitle: string | null | undefined,
+  expectationsOverride: string | null | undefined,
+): string {
+  if (roleSlug === CUSTOM_POSITION_SLUG && expectationsOverride && expectationsOverride.trim().length > 0) {
+    return expectationsOverride.trim().split("\n")[0] ?? expectationsOverride.trim();
+  }
+  return roleTitle ?? "—";
+}
+
 export function offerPublicUrl(token: string): string {
   // Public offer-letter URL — unauthenticated, served by the apex (marketing
   // shell) so signers don't land on an auth-walled subdomain.

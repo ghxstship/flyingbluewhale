@@ -11,6 +11,7 @@ import { formatFeeRange } from "@/lib/marketplace";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { RosterLock } from "./RosterLock";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
+import { displayRoleTitle } from "@/lib/offer-letters/format";
 import { RosterList, type RosterRow } from "./RosterList";
 import { OpenRoles, type OpenRoleRow } from "./OpenRoles";
 import { LETTER_STATE_TONE, initialsFor, resolveActiveProject } from "./shared";
@@ -148,7 +149,7 @@ export default async function RosterPage() {
         id: l.id,
         name: l.recipient_name,
         initials: initialsFor(l.recipient_name),
-        sub: `${fmtPosition(l.role_title)} · ${range}`,
+        sub: `${fmtPosition(displayRoleTitle(l.role_slug, l.role_title, l.expectations_override))} · ${range}`,
         docs:
           docs && docs.total > 0
             ? t("m.roster.docsCount", { done: docs.done, total: docs.total }, `Docs ${docs.done}/${docs.total}`)

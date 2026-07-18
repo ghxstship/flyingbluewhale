@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { UsersRound } from "lucide-react";
 import { can, requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { listCrewMembers, listOfferLetters, listOrgRoles, listRateCardItems } from "@/lib/offer-letters/queries";
-import { formatDollars } from "@/lib/offer-letters/format";
+import { displayRoleTitle, formatDollars } from "@/lib/offer-letters/format";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { RosterLock } from "../RosterLock";
 import { resolveActiveProject } from "../shared";
@@ -84,7 +85,7 @@ export default async function AssignPage() {
   }));
   const managers: ManagerOpt[] = letters
     .filter((l) => l.status !== "withdrawn" && l.status !== "declined")
-    .map((l) => ({ id: l.crew_member_id, label: `${l.recipient_name} · ${l.role_title}` }));
+    .map((l) => ({ id: l.crew_member_id, label: `${l.recipient_name} · ${fmtPosition(displayRoleTitle(l.role_slug, l.role_title, l.expectations_override))}` }));
 
   if (people.length === 0) {
     return (

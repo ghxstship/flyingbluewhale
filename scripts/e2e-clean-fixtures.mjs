@@ -388,6 +388,12 @@ async function purgeLifecycleCast(supabase) {
     }
     if (!ids.length) return;
 
+    // The cart test advances real assignments to the cast, and the
+    // crew_member_has_dependents guard refuses deleting crew with history —
+    // clear the advance residue first (owner-band hard delete; the per-kind
+    // detail siblings and events cascade from assignments).
+    const { error: assignErr } = await supabase.from("assignments").delete().in("party_crew_id", ids);
+    if (assignErr) console.error(`e2e:clean — lifecycle assignments (ignored): ${assignErr.message}`);
     const { error: letterErr } = await supabase.from("offer_letters").delete().in("crew_member_id", ids);
     if (letterErr) console.error(`e2e:clean — lifecycle offer_letters (ignored): ${letterErr.message}`);
     const { data: removed, error } = await supabase.from("crew_members").delete().in("id", ids).select("id");

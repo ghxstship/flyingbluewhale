@@ -45,47 +45,67 @@ async function fillSmart(el: Locator, value: string) {
 
 export async function createInModule(page: Page, route: string, fields: Record<string, string> = {}) {
   await page.goto(route);
-  for (const [name, value] of Object.entries(fields)) {
-    const el = page.locator(`main [name="${name}"]`).first();
-    if (!(await el.count())) continue;
-    // RecordCombobox (audit A-06) renders the named field as a HIDDEN input
-    // beside a cmdk combobox — fillSmart would wait forever on visibility
-    // (this ate the PO chain on prod, 2026-07-17). Drive the combobox: open
-    // the trigger in the same container, type the label, pick the option.
-    if ((await el.getAttribute("type")) === "hidden") {
-      const wrapper = el.locator("xpath=..");
-      await wrapper.locator('button[role="combobox"]').first().click();
-      const search = page.locator('[cmdk-input], input[cmdk-input=""], [role="dialog"] input, [data-radix-popper-content-wrapper] input').first();
-      await search.fill(value);
-      await page
-        .locator('[cmdk-item], [role="option"]')
-        .filter({ hasText: value })
-        .first()
-        .click({ timeout: 15_000 });
-      continue;
+
+  const fillAll = async () => {
+    for (const [name, value] of Object.entries(fields)) {
+      const el = page.locator(`main [name="${name}"]`).first();
+      if (!(await el.count())) continue;
+      // RecordCombobox (audit A-06) renders the named field as a HIDDEN input
+      // beside a cmdk combobox — fillSmart would wait forever on visibility
+      // (this ate the PO chain on prod, 2026-07-17). Drive the combobox: open
+      // the trigger in the same container, type the label, pick the option.
+      if ((await el.getAttribute("type")) === "hidden") {
+        if (await el.inputValue().catch(() => "")) continue; // already picked on a prior attempt
+        const wrapper = el.locator("xpath=..");
+        await wrapper.locator('button[role="combobox"]').first().click();
+        const search = page.locator('[cmdk-input], input[cmdk-input=""], [role="dialog"] input, [data-radix-popper-content-wrapper] input').first();
+        await search.fill(value);
+        await page
+          .locator('[cmdk-item], [role="option"]')
+          .filter({ hasText: value })
+          .first()
+          .click({ timeout: 15_000 });
+        continue;
+      }
+      await fillSmart(el, value);
     }
-    await fillSmart(el, value);
-  }
-  const required = await page.locator("main form [required]").all();
-  for (const el of required) {
-    const current = await el.inputValue().catch(() => "x");
-    if (current) continue;
-    const tag = await el.evaluate((e) => e.tagName);
-    if (tag === "SELECT") {
-      const vals = await el
-        .locator("option")
-        .evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value).filter(Boolean));
-      if (vals[0]) await el.selectOption(vals[0]);
-      continue;
+    const required = await page.locator("main form [required]").all();
+    for (const el of required) {
+      const current = await el.inputValue().catch(() => "x");
+      if (current) continue;
+      const tag = await el.evaluate((e) => e.tagName);
+      if (tag === "SELECT") {
+        const vals = await el
+          .locator("option")
+          .evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value).filter(Boolean));
+        if (vals[0]) await el.selectOption(vals[0]);
+        continue;
+      }
+      const type = (await el.getAttribute("type")) || "text";
+      if (type === "checkbox") await el.check();
+      else await el.fill(TYPE_DEFAULTS[type] ?? "E2E Test");
     }
-    const type = (await el.getAttribute("type")) || "text";
-    if (type === "checkbox") await el.check();
-    else await el.fill(TYPE_DEFAULTS[type] ?? "E2E Test");
+  };
+
+  // A requestSubmit that fires before React attaches the server action does a
+  // NATIVE reload back onto /new — fields wiped, no error, nothing pending
+  // (the known controlled-hydration trap, see compvss-deep-coverage). So each
+  // attempt re-fills and re-submits; a real validation/action error escapes
+  // the loop for the assertions below to report.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await fillAll();
+    await page
+      .locator("main form")
+      .first()
+      .evaluate((f: HTMLFormElement) => f.requestSubmit());
+    const moved = await page
+      .waitForURL((u) => !/\/new(\?|$)/.test(u.pathname), { timeout: 25_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (moved) break;
+    if (await page.getByRole("alert").filter({ hasText: /error|failed|invalid|required/i }).count()) break;
   }
-  await page
-    .locator("main form")
-    .first()
-    .evaluate((f: HTMLFormElement) => f.requestSubmit());
+
   // Redirect-off-/new can be slow on a remote target: the FIRST create against a
   // heavy surface pays a serverless cold-start (observed ~54s for a cold finance
   // invoice create; the same create is ~5s warm). 75s clears the cold case; it's

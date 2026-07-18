@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { notFound } from "next/navigation";
 import { can, requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { BASIS_LABEL } from "@/lib/offer-letters/types";
-import { formatDollars } from "@/lib/offer-letters/format";
+import { displayRoleTitle, formatDollars } from "@/lib/offer-letters/format";
 import { urlFor } from "@/lib/urls";
 import { KIcon } from "@/components/mobile/kit";
 import { RosterLock } from "../../RosterLock";
@@ -89,7 +90,7 @@ export default async function ContractPage({ params }: { params: Promise<{ engag
   ];
 
   const kv: Array<{ k: string; v: string; tone?: string }> = [
-    { k: t("m.roster.contract.role", undefined, "Role"), v: r.role_title },
+    { k: t("m.roster.contract.role", undefined, "Role"), v: fmtPosition(displayRoleTitle(r.role_slug, r.role_title, r.expectations_override)) },
     {
       k: t("m.roster.contract.start", undefined, "Start"),
       v: r.effective_onsite_start ? fmt.date(r.effective_onsite_start, "medium") : t("m.roster.tbd", undefined, "TBD"),
@@ -119,7 +120,7 @@ export default async function ContractPage({ params }: { params: Promise<{ engag
         {t("m.roster.contract.eyebrowFor", { name: r.recipient_name }, `${r.recipient_name} · Contract`)}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {r.role_title}
+        {fmtPosition(displayRoleTitle(r.role_slug, r.role_title, r.expectations_override))}
       </h1>
 
       {negative && (

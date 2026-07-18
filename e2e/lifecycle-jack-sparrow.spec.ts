@@ -14,8 +14,13 @@
  * builds on the previous one's state.
  */
 import { expect, test, type Page } from "./helpers/base";
-import { authedSetup } from "./helpers/auth";
+import { authedSetup, suppressTour } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
+
+// The first-run ConsoleTour scrim intercepts every click on /studio —
+// file-scoped so it lands before any goto (the fulfillment "Approve All"
+// click died under it for 420s).
+test.beforeEach(({ page }) => suppressTour(page));
 
 const RUN = stamp();
 const JACK = `E2E Jack Sparrow ${RUN}`;
@@ -27,12 +32,20 @@ const ERROR_BOUNDARY = /something went wrong|application error|unhandled|digest:
 let projectId = "";
 
 async function resolveFixtureProjectId(page: Page): Promise<string> {
-  const r = await page.request.get("/api/v1/projects");
+  const r = await page.request.get("/api/v1/projects?pageSize=100");
   const body = await r.json();
-  const rows = body?.data?.projects ?? body?.data ?? [];
-  const p = rows.find((x: { name?: string }) => /fixture|e2e/i.test(x.name ?? "")) ?? rows[0];
-  expect(p?.id, "the fixture org must expose at least one project").toBeTruthy();
-  return p.id;
+  type Row = { id: string; name?: string; project_state?: string; start_date?: string | null };
+  const rows: Row[] = body?.data?.projects ?? body?.data ?? [];
+  // MUST mirror the mobile shell's resolveActiveProject (m/roster/shared.ts):
+  // the ACTIVE project with the latest start_date. Matching on /e2e|fixture/
+  // here once picked an "E2E Proposal …" residue project, so the whole web
+  // flow ran on a project the mobile leg never shows.
+  const active = rows
+    .filter((x) => x.project_state === "active")
+    .sort((a, b) => (b.start_date ?? "").localeCompare(a.start_date ?? ""));
+  const p = active[0] ?? rows[0];
+  expect(p?.id, "the fixture org must expose at least one active project").toBeTruthy();
+  return p!.id;
 }
 
 async function assignPerson(page: Page, person: string, title: string, reportsToLabel?: string) {
@@ -119,31 +132,45 @@ test.describe("kit 30 · Jack Sparrow lifecycle", () => {
   });
 
   test("(d) bind the UPC, scan on POS, the vehicle line flips to Fulfilled", async ({ page, browser }) => {
-    // Journal the unknown UPC, then bind it to the vehicle catalog item.
     await authedSetup(page, "manager");
-    const miss = await page.request.post("/api/v1/scan", { data: { code: UPC, mode: "pos" } });
-    expect(miss.status()).toBeLessThan(500);
 
-    await page.goto("/studio/settings/capabilities/scan-misses");
-    const missRow = page.locator("tr,div.item,li").filter({ hasText: /36000291452/ }).first();
-    await expect(missRow, "the unknown UPC must be journaled").toBeVisible({ timeout: 20_000 });
-    const bindSelect = missRow.locator("select").first();
-    await expect(bindSelect).toBeVisible({ timeout: 10_000 });
-    const vehicleValue = await bindSelect
-      .locator("option")
-      .filter({ hasText: /vehicle/i })
-      .first()
-      .getAttribute("value");
-    expect(vehicleValue, "a vehicle catalog item must exist to bind").toBeTruthy();
-    await bindSelect.selectOption(vehicleValue!);
-    await missRow.getByRole("button", { name: /bind/i }).click();
-    await expect(missRow).not.toBeVisible({ timeout: 20_000 });
+    // The GTIN binding is ORG-DURABLE state, not run-scoped — a prior
+    // attempt (or retry) that reached the bind leaves the UPC resolving as
+    // product, the miss row resolved, and nothing left to journal. So the
+    // journal+bind half runs only when the scan still misses; a retry that
+    // finds the binding done skips straight to the fulfillment half.
+    const scanResult = async (): Promise<string | undefined> => {
+      const r = await page.request.post("/api/v1/scan", { data: { code: UPC, mode: "pos" } });
+      const body = await r.json().catch(() => null);
+      return body?.data?.result ?? body?.result;
+    };
 
-    // API-level resolution proof: the bound GTIN now resolves to a product
-    // with Jack's open approved line.
-    const hit = await page.request.post("/api/v1/scan", { data: { code: UPC, mode: "pos" } });
-    const body = await hit.json();
-    expect(body?.data?.result ?? body?.result, "the scan must resolve a product").toBe("product");
+    if ((await scanResult()) !== "product") {
+      // That miss is now journaled — bind it to the vehicle catalog item.
+      await page.goto("/studio/settings/capabilities/scan-misses");
+      const missRow = page.locator("tr").filter({ hasText: /36000291452/ }).first();
+      await expect(missRow, "the unknown UPC must be journaled").toBeVisible({ timeout: 20_000 });
+      // Two-step disclosure: "Bind" opens the inline form, THEN the select.
+      await missRow.getByRole("button", { name: /^bind$/i }).click();
+      const bindSelect = missRow.locator("select").first();
+      await expect(bindSelect).toBeVisible({ timeout: 10_000 });
+      const vehicleValue = await bindSelect
+        .locator("option")
+        .filter({ hasText: /vehicle/i })
+        .first()
+        .getAttribute("value");
+      expect(vehicleValue, "a vehicle catalog item must exist to bind").toBeTruthy();
+      await bindSelect.selectOption(vehicleValue!);
+      await missRow.getByRole("button", { name: /^bind$|^binding/i }).click();
+      // Don't assert the in-place "Bound" swap — the action revalidates the
+      // page and the resolved row can leave the queue before the status
+      // paints. The API poll below is the proof of the binding.
+    }
+
+    // API-level resolution proof: the bound GTIN resolves to a product.
+    await expect
+      .poll(scanResult, { timeout: 20_000, message: "the bound GTIN must resolve to a product" })
+      .toBe("product");
 
     // Field half: manual/wedge entry on the POS segment → Confirm Fulfillment.
     const field = await browser.newContext();

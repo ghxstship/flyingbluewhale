@@ -31,7 +31,7 @@ type AutomationRow = {
   steps: Json;
   enabled: boolean;
   last_run_at: string | null;
-  last_run_status: string | null;
+  last_run_state: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
   const { data } = await supabase
     .from("automations")
     .select(
-      "id, name, description, trigger_kind, trigger_config, steps, enabled, last_run_at, last_run_status, created_at, updated_at, webhook_secret",
+      "id, name, description, trigger_kind, trigger_config, steps, enabled, last_run_at, last_run_state, created_at, updated_at, webhook_secret",
     )
     .eq("id", automationId)
     .eq("org_id", session.orgId)
@@ -185,8 +185,8 @@ export default async function Page({ params }: { params: Promise<{ automationId:
           />
           <MetricCard
             label={t("console.ai.automations.detail.metricLastStatus", undefined, "Last Status")}
-            value={automation.last_run_status ?? "—"}
-            accent={automation.last_run_status === "ok" || automation.last_run_status === "success"}
+            value={automation.last_run_state ?? "—"}
+            accent={automation.last_run_state === "ok" || automation.last_run_state === "success"}
           />
         </div>
 
@@ -240,13 +240,13 @@ export default async function Page({ params }: { params: Promise<{ automationId:
           />
         )}
 
-        {automation.last_run_status && (
+        {automation.last_run_state && (
           <section className="surface p-4">
             <h3 className="text-sm font-semibold">
               {t("console.ai.automations.detail.lastRunHeading", undefined, "Last Run")}
             </h3>
             <div className="mt-2 flex items-center gap-2 text-sm">
-              <Badge variant={toneFor(automation.last_run_status)}>{automation.last_run_status}</Badge>
+              <Badge variant={toneFor(automation.last_run_state)}>{automation.last_run_state}</Badge>
               <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt(automation.last_run_at)}</span>
             </div>
           </section>

@@ -174,7 +174,7 @@ function seedAutomation(rows: Array<Record<string, unknown>>): string {
     enabled: true,
     steps: rows,
     last_run_at: null,
-    last_run_status: null,
+    last_run_state: null,
   });
   return id;
 }

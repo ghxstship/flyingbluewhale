@@ -92,7 +92,7 @@ export async function matchReceiptToPoAction(receiptId: string, _: State, fd: Fo
     p_invoice_id: parsed.data.invoice_id,
   });
   if (error) return actionFail(error.message, fd);
-  const result = data as { match_id: string; match_status: string; variance_minor: number } | null;
+  const result = data as { match_id: string; match_state: string; variance_minor: number } | null;
 
   await emitAudit({
     actorId: session.userId,
@@ -104,7 +104,7 @@ export async function matchReceiptToPoAction(receiptId: string, _: State, fd: Fo
     metadata: {
       receiptId,
       invoiceId: parsed.data.invoice_id,
-      matchStatus: result?.match_status,
+      matchStatus: result?.match_state,
       varianceMinor: result?.variance_minor,
     },
   });

@@ -246,8 +246,8 @@ async function logDocumentTransition(
     org_id: orgId,
     document_kind: "offer_letter",
     document_id: letterId,
-    from_status: fromStatus,
-    to_status: toStatus,
+    from_state: fromStatus,
+    to_state: toStatus,
     reason: actorLabel ? `By ${actorLabel}` : null,
   });
   if (error) {

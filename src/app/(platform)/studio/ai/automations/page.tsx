@@ -19,7 +19,7 @@ type AutomationRow = {
   trigger_kind: string;
   enabled: boolean;
   last_run_at: string | null;
-  last_run_status: string | null;
+  last_run_state: string | null;
   updated_at: string;
 };
 
@@ -66,14 +66,14 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("automations")
-    .select("id, name, description, trigger_kind, enabled, last_run_at, last_run_status, updated_at")
+    .select("id, name, description, trigger_kind, enabled, last_run_at, last_run_state, updated_at")
     .eq("org_id", session.orgId)
     .order("updated_at", { ascending: false })
     .limit(200);
 
   const rows = (data ?? []) as AutomationRow[];
   const enabled = rows.filter((r) => r.enabled).length;
-  const failing = rows.filter((r) => r.last_run_status && ["failed", "error"].includes(r.last_run_status)).length;
+  const failing = rows.filter((r) => r.last_run_state && ["failed", "error"].includes(r.last_run_state)).length;
 
   // Recent Runs (kit 21 W7 · Zapier canon) — the run-history trust surface.
   // One batched query for the org's recent runs, grouped per automation; each
@@ -180,7 +180,7 @@ export default async function Page() {
                       </span>
                     </div>
                   </div>
-                  {r.last_run_status && <Badge variant={toneFor(r.last_run_status)}>{r.last_run_status}</Badge>}
+                  {r.last_run_state && <Badge variant={toneFor(r.last_run_state)}>{r.last_run_state}</Badge>}
                 </Link>
               </li>
             ))}

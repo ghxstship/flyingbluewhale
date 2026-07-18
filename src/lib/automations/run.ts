@@ -315,7 +315,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
     .from("automations")
     .update({
       last_run_at: finishedAtIso,
-      last_run_status: runStatus === "success" ? "ok" : "failed",
+      last_run_state: runStatus === "success" ? "ok" : "failed",
     })
     .eq("id", automation.id);
 

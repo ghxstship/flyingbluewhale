@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     // 3-way match rows for the PO.
     supabase
       .from("po_invoice_matches")
-      .select("id, match_status, variance_minor, resolved_at, created_at, invoice:invoice_id(id, number)")
+      .select("id, match_state, variance_minor, resolved_at, created_at, invoice:invoice_id(id, number)")
       .eq("org_id", session.orgId)
       .eq("po_id", receipt.po_id)
       .order("created_at", { ascending: false }),
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const matches = (matchData ?? []) as unknown as {
     id: string;
-    match_status: string;
+    match_state: string;
     variance_minor: number;
     resolved_at: string | null;
     created_at: string;
@@ -274,7 +274,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         )}
                       </td>
                       <td>
-                        <StatusBadge status={m.match_status} />
+                        <StatusBadge status={m.match_state} />
                       </td>
                       <td className="font-mono">{formatMinor(m.variance_minor, poCurrency)}</td>
                       <td className="font-mono">

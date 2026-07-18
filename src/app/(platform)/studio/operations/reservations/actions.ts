@@ -185,7 +185,7 @@ export async function confirmReservationCreateEventAction(reservationId: string)
       name,
       description: descriptionLines.join("\n"),
       project_state: "active",
-      xpms_phase: "Discovery",
+      xpms_phase: "Discover",
       start_date: eventDate,
       created_by: session.userId,
     })

@@ -27,7 +27,6 @@ const Schema = z.object({
   name: z.string().min(1).max(200),
   amount: z.string().optional().or(z.literal("")),
   amount_cents: moneyCentsString({ allowEmpty: true }).optional(),
-  category: z.string().max(120).optional().or(z.literal("")),
   // XPMS taxonomy
   department: z.enum(XPMS_DEPARTMENTS).optional().or(z.literal("")),
   team: z.string().max(120).optional().or(z.literal("")),
@@ -42,7 +41,7 @@ const Schema = z.object({
   rate: z.string().optional().or(z.literal("")),
   rate_cents: moneyCentsString({ allowEmpty: true }).optional(),
   vendor: z.string().max(160).optional().or(z.literal("")),
-  budget_status: z.string().max(80).optional().or(z.literal("")),
+  budget_state: z.string().max(80).optional().or(z.literal("")),
   event: z.string().max(160).optional().or(z.literal("")),
   location: z.string().max(160).optional().or(z.literal("")),
   activation: z.string().max(160).optional().or(z.literal("")),
@@ -77,7 +76,10 @@ export async function updateBudget(id: string, _: State, fd: FormData): Promise<
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const patch: Record<string, unknown> = {
     name: data.name,
-    category: data.category || null,
+    // `category` is retired on budgets (superseded by XPMS department/discipline;
+    // the legacy text column is dropped by staged migration M3). The edit form
+    // never carried a category field, so writing it here silently NULLed the
+    // column on every save — removed. See docs/schema/enum-ui-enrichment-2026-07-18.md.
     amount_cents,
     department: data.department || null,
     team: data.team || null,
@@ -93,7 +95,7 @@ export async function updateBudget(id: string, _: State, fd: FormData): Promise<
     // as fallback.
     rate_cents: data.rate_cents ? centsOrNull(data.rate_cents) : data.rate ? dollarsToCents(data.rate) : null,
     vendor: data.vendor || null,
-    budget_status: data.budget_status || null,
+    budget_state: data.budget_state || null,
     event: data.event || null,
     location: data.location || null,
     activation: data.activation || null,

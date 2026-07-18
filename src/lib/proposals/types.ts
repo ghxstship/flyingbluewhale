@@ -53,13 +53,14 @@ export type DocDeliverableType =
 // lifecycle they correspond to so workback-schedule seeding stays aligned
 // with the project's `xpms_phase` cursor.
 export type XpmsPhaseKey =
-  | "Discovery"
+  | "Discover"
   | "Design"
   | "Advance"
-  | "Procurement"
+  | "Procure"
   | "Build"
   | "Install"
   | "Operate"
+  | "Amplify"
   | "Close";
 
 // Canonical line-item shape used by investment_table, equipment_manifest,

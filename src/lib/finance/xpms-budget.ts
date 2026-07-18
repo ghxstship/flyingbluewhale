@@ -38,20 +38,39 @@ export const XPMS_DISCIPLINES = [
 export type XpmsDiscipline = (typeof XPMS_DISCIPLINES)[number];
 
 /**
- * The 8-Gate Lifecycle (locked Jun 2026). Order is significant —
- * sequential macro arc per LDP §NAMING DISCIPLINE (`xpms_phase`).
+ * XPMS 2.5 nine-gate lifecycle (verb-consistent + Amplify). Order is
+ * significant — sequential macro arc per LDP §NAMING DISCIPLINE (`xpms_phase`).
  */
 export const XPMS_PHASES = [
-  "Discovery", // 1 — Brief approved, go decision made
+  "Discover", // 1 — Brief approved, go decision made
   "Design", // 2 — Design package approved, scope locked
   "Advance", // 3 — Contracts & POs issued, budget baselined
-  "Procurement", // 4 — PO issued / deposit paid (committed cost)
+  "Procure", // 4 — PO issued / deposit paid (committed cost)
   "Build", // 5 — Fab/construction complete, QC passed
   "Install", // 6 — Installed, commissioned, punch closed, accepted
   "Operate", // 7 — Operating acceptance / struck
-  "Close", // 8 — Reconciled, final cost report filed
+  "Amplify", // 8 — Capture, media/press, broadcast, post-event campaigns
+  "Close", // 9 — Reconciled, final cost report filed
 ] as const;
 export type XpmsPhase = (typeof XPMS_PHASES)[number];
+
+/**
+ * DIM_PHASE — the XPMS 2.5 phase dimension SSOT: gate ordinal + 3-char code +
+ * act (DEPART/SAIL/RETURN). Drives gate-ordered sorting and act-grouping of the
+ * phase axis in the UI. Mirrors `XPMS_2.5_SSOT_Bible.xlsx#dim_phase`.
+ */
+export const DIM_PHASE = [
+  { gate: 1, code: "DIS", phase: "Discover", act: "DEPART" },
+  { gate: 2, code: "DSN", phase: "Design", act: "DEPART" },
+  { gate: 3, code: "ADV", phase: "Advance", act: "DEPART" },
+  { gate: 4, code: "PRC", phase: "Procure", act: "SAIL" },
+  { gate: 5, code: "BLD", phase: "Build", act: "SAIL" },
+  { gate: 6, code: "INS", phase: "Install", act: "SAIL" },
+  { gate: 7, code: "OPR", phase: "Operate", act: "RETURN" },
+  { gate: 8, code: "AMP", phase: "Amplify", act: "RETURN" },
+  { gate: 9, code: "CLS", phase: "Close", act: "RETURN" },
+] as const;
+export type XpmsAct = (typeof DIM_PHASE)[number]["act"];
 
 export const XPMS_TIERS = [
   "01 Social",
@@ -90,7 +109,7 @@ export const XPMS_DEFAULT_DRAW_SCHEDULE: ReadonlyArray<{
   {
     draw_name: "Mobilization deposit",
     trigger_label: "Phase 1 · Discovery / contract",
-    trigger_phase: "Discovery",
+    trigger_phase: "Discover",
     percentage: 0.5,
     sort_order: 1,
   },

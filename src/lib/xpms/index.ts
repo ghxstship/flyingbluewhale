@@ -121,18 +121,30 @@ export const XPMS_TIERS: { id: XpmsTier; num: string; label: string; pair: XpmsT
  * below / `public.xpms_atom_phase`) — see migration
  * 20260605170000_xpms_phase_v08_alignment.
  */
-export type XpmsPhase = "Discovery" | "Design" | "Advance" | "Procurement" | "Build" | "Install" | "Operate" | "Close";
+// XPMS 2.5: verb-consistent nine gates (Discovery→Discover, Procurement→Procure,
+// + Amplify at gate 8, before Close). Mirrors the reconciled `xpms_phase` enum.
+export type XpmsPhase =
+  | "Discover"
+  | "Design"
+  | "Advance"
+  | "Procure"
+  | "Build"
+  | "Install"
+  | "Operate"
+  | "Amplify"
+  | "Close";
 
-/** v08 8-Gate Lifecycle — the project macro-phase. */
+/** XPMS 2.5 nine-gate lifecycle — the project macro-phase. */
 export const XPMS_PHASES: { id: XpmsPhase; num: number; label: string; platform: string }[] = [
-  { id: "Discovery", num: 1, label: "Discovery", platform: "ATLVS" },
+  { id: "Discover", num: 1, label: "Discover", platform: "ATLVS" },
   { id: "Design", num: 2, label: "Design", platform: "ATLVS" },
   { id: "Advance", num: 3, label: "Advance", platform: "ATLVS · COMPVSS" },
-  { id: "Procurement", num: 4, label: "Procurement", platform: "ATLVS" },
+  { id: "Procure", num: 4, label: "Procure", platform: "ATLVS" },
   { id: "Build", num: 5, label: "Build", platform: "COMPVSS" },
   { id: "Install", num: 6, label: "Install", platform: "COMPVSS" },
   { id: "Operate", num: 7, label: "Operate", platform: "COMPVSS · GVTEWAY" },
-  { id: "Close", num: 8, label: "Close", platform: "ATLVS" },
+  { id: "Amplify", num: 8, label: "Amplify", platform: "ATLVS · GVTEWAY" },
+  { id: "Close", num: 9, label: "Close", platform: "ATLVS" },
 ];
 
 /**

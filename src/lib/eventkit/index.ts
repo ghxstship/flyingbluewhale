@@ -21,27 +21,28 @@ export type KitScale = (typeof KIT_SCALES)[number];
 export const KIT_STATES = ["draft", "configured", "advanced", "locked", "archived"] as const;
 export type KitState = (typeof KIT_STATES)[number];
 
-// ── 8-Gate XPMS Lifecycle (v08, locked Jun 2026) ───────────────────────────
+// ── XPMS 2.5 nine-gate lifecycle (verb-consistent + Amplify) ────────────────
 // Matches budgets.xpms_phase CHECK and the Universal Budget Template exactly.
 export const KIT_PHASES = [
-  "Discovery",
+  "Discover",
   "Design",
   "Advance",
-  "Procurement",
+  "Procure",
   "Build",
   "Install",
   "Operate",
+  "Amplify",
   "Close",
 ] as const;
 export type KitPhase = (typeof KIT_PHASES)[number];
 
 export type KitPhaseDef = { id: KitPhase; num: number; absorbs: string; exitGate: string };
 export const KIT_PHASE_DEFS: KitPhaseDef[] = [
-  { id: "Discovery", num: 1, absorbs: "(pre-design / pursuit)", exitGate: "Brief approved, go decision made" },
+  { id: "Discover", num: 1, absorbs: "(pre-design / pursuit)", exitGate: "Brief approved, go decision made" },
   { id: "Design", num: 2, absorbs: "Concept, Develop, Engineering", exitGate: "Design package approved, scope locked" },
   { id: "Advance", num: 3, absorbs: "Pre-Production", exitGate: "Contracts & POs issued, budget baselined" },
   {
-    id: "Procurement",
+    id: "Procure",
     num: 4,
     absorbs: "(long-lead purchasing)",
     exitGate: "PO issued / deposit paid (committed cost)",
@@ -54,7 +55,13 @@ export const KIT_PHASE_DEFS: KitPhaseDef[] = [
     exitGate: "Installed, commissioned, punch closed, accepted",
   },
   { id: "Operate", num: 7, absorbs: "Show, Strike", exitGate: "Operating acceptance / struck" },
-  { id: "Close", num: 8, absorbs: "Wrap", exitGate: "Reconciled, final cost report filed" },
+  {
+    id: "Amplify",
+    num: 8,
+    absorbs: "Capture, Media/Press, Broadcast, Post-Event",
+    exitGate: "Capture delivered, media distributed, campaigns launched",
+  },
+  { id: "Close", num: 9, absorbs: "Wrap", exitGate: "Reconciled, final cost report filed" },
 ];
 
 // ── Budget axes (verbatim from migration 0070 enums) ───────────────────────

@@ -15,13 +15,14 @@ import { getRequestT } from "@/lib/i18n/request";
 
 /** XPMS project macro-phase → spine index (kit ConsoleDashboard SPINE_PHASE_MAP). */
 const SPINE_PHASE_MAP: Record<string, number> = {
-  Discovery: 1,
+  Discover: 1,
   Design: 1,
   Advance: 2,
-  Procurement: 2,
+  Procure: 2,
   Build: 3,
   Install: 3,
   Operate: 5,
+  Amplify: 5,
   Close: 7,
 };
 

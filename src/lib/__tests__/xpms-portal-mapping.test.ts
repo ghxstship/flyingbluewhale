@@ -101,16 +101,17 @@ describe("XPMS portal mapping (ADR-0004)", () => {
     ]);
   });
 
-  it("XPMS_PHASES is the v08 8-gate project lifecycle in macro-arc order", () => {
-    expect(XPMS_PHASES).toHaveLength(8);
+  it("XPMS_PHASES is the XPMS 2.5 nine-gate project lifecycle in macro-arc order", () => {
+    expect(XPMS_PHASES).toHaveLength(9);
     expect(XPMS_PHASES.map((p) => p.id)).toEqual([
-      "Discovery",
+      "Discover",
       "Design",
       "Advance",
-      "Procurement",
+      "Procure",
       "Build",
       "Install",
       "Operate",
+      "Amplify",
       "Close",
     ]);
   });

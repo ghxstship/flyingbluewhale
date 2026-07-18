@@ -215,8 +215,8 @@ export function EditBudgetForm({
         <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Notes</legend>
         <Input
           label={t("console.finance.budgets.edit.status", undefined, "Status")}
-          name="budget_status"
-          defaultValue={get("budget_status")}
+          name="budget_state"
+          defaultValue={get("budget_state")}
           maxLength={80}
         />
         <Input

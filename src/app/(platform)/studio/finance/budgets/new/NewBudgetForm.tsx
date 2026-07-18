@@ -157,7 +157,7 @@ export function NewBudgetForm() {
         <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Notes</legend>
         <Input
           label={t("console.finance.budgets.new.status", undefined, "Status")}
-          name="budget_status"
+          name="budget_state"
           maxLength={80}
         />
         <Input

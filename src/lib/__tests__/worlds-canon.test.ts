@@ -13,7 +13,7 @@ import { XPMS_PHASES } from "@/lib/xpms";
  *  - the locked app one-liners are byte-identical across seo.ts + en.json (GEO)
  */
 const EN = JSON.parse(readFileSync(join(process.cwd(), "src/messages/en.json"), "utf8"));
-const CANON_PHASES = ["Discovery", "Design", "Advance", "Procurement", "Build", "Install", "Operate", "Close"];
+const CANON_PHASES = ["Discover", "Design", "Advance", "Procure", "Build", "Install", "Operate", "Amplify", "Close"];
 
 describe("WORLDS canon", () => {
   it("four apps — SITE.apps + organizationSchema.brand", () => {

@@ -247,7 +247,7 @@ export async function importBudgetCsv(_: State, fd: FormData): Promise<State> {
       quantity: get("quantity").trim() ? Number(get("quantity")) : null,
       rate_cents: parseMoneyCents(get("rate")),
       vendor: nullable(get("vendor")),
-      budget_status: nullable(get("status")),
+      budget_state: nullable(get("status")),
       flag: parseBool(get("flag")),
       event: nullable(get("event")),
       location: nullable(get("location")),

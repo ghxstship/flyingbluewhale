@@ -241,12 +241,30 @@ export function JobsView({
         }
       />
 
-      <div className="composer-cta" style={{ marginBottom: 12 }} role="button" tabIndex={0}>
-        <span className="more-ic">
-          <KIcon name="Plus" size={18} />
-        </span>
-        <span className="cc-box">{t("m.gigs.postJob", undefined, "Post a job…")}</span>
-      </div>
+      {/* Post-a-Job opener. Manager-band only (mirrors the FAB's `canPost`
+          gate + the postJob server re-check), and wired to the same poster —
+          it used to render for everyone with no handler, a dead control that
+          promised a form it never opened. */}
+      {canPost && (
+        <div
+          className="composer-cta"
+          style={{ marginBottom: 12 }}
+          role="button"
+          tabIndex={0}
+          onClick={() => setPostOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setPostOpen(true);
+            }
+          }}
+        >
+          <span className="more-ic">
+            <KIcon name="Plus" size={18} />
+          </span>
+          <span className="cc-box">{t("m.gigs.postJob", undefined, "Post a job…")}</span>
+        </div>
+      )}
 
       {grouped ? (
         <GroupedList<Gig>

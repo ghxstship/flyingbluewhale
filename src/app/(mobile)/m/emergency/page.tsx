@@ -158,7 +158,9 @@ export default async function EmergencyPage() {
         ]}
       />
       <div className="scr-eye">
-        {t("m.emergency.eyebrow", undefined, "Position")} {station.manningId}
+        {station.manningId === NA
+          ? t("m.emergency.eyebrow", undefined, "Position")
+          : t("m.emergency.eyebrowId", { id: station.manningId }, `Position · ${station.manningId}`)}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.emergency.title", undefined, "Emergency Card")}

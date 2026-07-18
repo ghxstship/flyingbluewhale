@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
 import { createInviteAction } from "@/app/(platform)/studio/people/invites/actions";
 
@@ -23,11 +24,12 @@ import { createInviteAction } from "@/app/(platform)/studio/people/invites/actio
  * inventing parallel ones.
  */
 export default function InvitePage() {
+  const t = useT();
   const [state, formAction, pending] = useActionState(createInviteAction, null);
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">Team</div>
+      <div className="scr-eye">{t("m.team.invite.eyebrow", undefined, "Team")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         Invite Someone
       </h1>

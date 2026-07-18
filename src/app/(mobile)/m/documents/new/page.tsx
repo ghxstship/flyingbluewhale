@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { uploadPersonalDoc, type State } from "@/components/workforce/docs-action";
 
 /**
@@ -32,11 +33,12 @@ const DOC_KINDS: { value: string; label: string }[] = [
 ];
 
 export default function NewDocPage() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(uploadPersonalDoc, null);
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">Documents</div>
+      <div className="scr-eye">{t("m.documents.new.eyebrow", undefined, "Documents")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         Upload Document
       </h1>

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { logFieldMileage, type State } from "../actions";
 
 /**
@@ -17,12 +18,13 @@ import { logFieldMileage, type State } from "../actions";
  * ends up logged never.
  */
 export default function NewMileagePage() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(logFieldMileage, null);
   const today = new Date().toISOString().slice(0, 10);
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">Mileage</div>
+      <div className="scr-eye">{t("m.mileage.new.eyebrow", undefined, "Mileage")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         Log A Drive
       </h1>

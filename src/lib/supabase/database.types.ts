@@ -4523,7 +4523,7 @@ export type Database = {
           enabled: boolean
           id: string
           last_run_at: string | null
-          last_run_status: string | null
+          last_run_state: string | null
           name: string
           org_id: string
           steps: Json
@@ -4539,7 +4539,7 @@ export type Database = {
           enabled?: boolean
           id?: string
           last_run_at?: string | null
-          last_run_status?: string | null
+          last_run_state?: string | null
           name: string
           org_id: string
           steps?: Json
@@ -4555,7 +4555,7 @@ export type Database = {
           enabled?: boolean
           id?: string
           last_run_at?: string | null
-          last_run_status?: string | null
+          last_run_state?: string | null
           name?: string
           org_id?: string
           steps?: Json
@@ -5288,8 +5288,8 @@ export type Database = {
           activation: string | null
           actual_cents: number | null
           amount_cents: number
-          budget_status: string | null
-          category: string | null
+          budget_state: string | null
+          category_code: string | null
           class: string | null
           code: string | null
           committed_cents: number
@@ -5328,8 +5328,8 @@ export type Database = {
           activation?: string | null
           actual_cents?: number | null
           amount_cents?: number
-          budget_status?: string | null
-          category?: string | null
+          budget_state?: string | null
+          category_code?: string | null
           class?: string | null
           code?: string | null
           committed_cents?: number
@@ -5368,8 +5368,8 @@ export type Database = {
           activation?: string | null
           actual_cents?: number | null
           amount_cents?: number
-          budget_status?: string | null
-          category?: string | null
+          budget_state?: string | null
+          category_code?: string | null
           class?: string | null
           code?: string | null
           committed_cents?: number
@@ -5405,6 +5405,13 @@ export type Database = {
           xyz?: Database["public"]["Enums"]["budget_xyz"] | null
         }
         Relationships: [
+          {
+            foreignKeyName: "budgets_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "ref_budget_category"
+            referencedColumns: ["code"]
+          },
           {
             foreignKeyName: "budgets_org_id_fkey"
             columns: ["org_id"]
@@ -6101,7 +6108,7 @@ export type Database = {
       }
       certifications: {
         Row: {
-          category: string | null
+          category_code: string | null
           created_at: string
           description: string | null
           id: string
@@ -6112,7 +6119,7 @@ export type Database = {
           validity_months: number | null
         }
         Insert: {
-          category?: string | null
+          category_code?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -6123,7 +6130,7 @@ export type Database = {
           validity_months?: number | null
         }
         Update: {
-          category?: string | null
+          category_code?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -6134,6 +6141,13 @@ export type Database = {
           validity_months?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "certifications_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "ref_certification_category"
+            referencedColumns: ["code"]
+          },
           {
             foreignKeyName: "certifications_org_id_fkey"
             columns: ["org_id"]
@@ -11656,12 +11670,12 @@ export type Database = {
           correlation_id: string | null
           document_id: string
           document_kind: string
-          from_status: string | null
+          from_state: string | null
           id: string
           metadata: Json
           org_id: string
           reason: string | null
-          to_status: string
+          to_state: string
           transitioned_at: string
           transitioned_by: string | null
         }
@@ -11669,12 +11683,12 @@ export type Database = {
           correlation_id?: string | null
           document_id: string
           document_kind: string
-          from_status?: string | null
+          from_state?: string | null
           id?: string
           metadata?: Json
           org_id: string
           reason?: string | null
-          to_status: string
+          to_state: string
           transitioned_at?: string
           transitioned_by?: string | null
         }
@@ -11682,12 +11696,12 @@ export type Database = {
           correlation_id?: string | null
           document_id?: string
           document_kind?: string
-          from_status?: string | null
+          from_state?: string | null
           id?: string
           metadata?: Json
           org_id?: string
           reason?: string | null
-          to_status?: string
+          to_state?: string
           transitioned_at?: string
           transitioned_by?: string | null
         }
@@ -12620,7 +12634,7 @@ export type Database = {
           fulfillment: string
           hero_image: string | null
           id: string
-          listing_state: string
+          listing_state: Database["public"]["Enums"]["event_listing_state"]
           org_id: string
           provider_name: string | null
           seat_map: Json | null
@@ -12640,7 +12654,7 @@ export type Database = {
           fulfillment?: string
           hero_image?: string | null
           id?: string
-          listing_state?: string
+          listing_state?: Database["public"]["Enums"]["event_listing_state"]
           org_id: string
           provider_name?: string | null
           seat_map?: Json | null
@@ -12660,7 +12674,7 @@ export type Database = {
           fulfillment?: string
           hero_image?: string | null
           id?: string
-          listing_state?: string
+          listing_state?: Database["public"]["Enums"]["event_listing_state"]
           org_id?: string
           provider_name?: string | null
           seat_map?: Json | null
@@ -13305,7 +13319,7 @@ export type Database = {
           atom_id: string | null
           base_amount_cents: number | null
           base_currency: string | null
-          category: string | null
+          category_code: string | null
           class: string | null
           confirmation: string | null
           created_at: string
@@ -13342,7 +13356,7 @@ export type Database = {
           atom_id?: string | null
           base_amount_cents?: number | null
           base_currency?: string | null
-          category?: string | null
+          category_code?: string | null
           class?: string | null
           confirmation?: string | null
           created_at?: string
@@ -13379,7 +13393,7 @@ export type Database = {
           atom_id?: string | null
           base_amount_cents?: number | null
           base_currency?: string | null
-          category?: string | null
+          category_code?: string | null
           class?: string | null
           confirmation?: string | null
           created_at?: string
@@ -13432,6 +13446,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "xpms_atoms"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "ref_expense_category"
+            referencedColumns: ["code"]
           },
           {
             foreignKeyName: "expenses_entity_id_fkey"
@@ -13992,7 +14013,7 @@ export type Database = {
           uploaded_at: string
           uploaded_by: string | null
           virus_scan_at: string | null
-          virus_scan_status: string
+          virus_scan_state: string
         }
         Insert: {
           bucket: string
@@ -14010,7 +14031,7 @@ export type Database = {
           uploaded_at?: string
           uploaded_by?: string | null
           virus_scan_at?: string | null
-          virus_scan_status?: string
+          virus_scan_state?: string
         }
         Update: {
           bucket?: string
@@ -14028,7 +14049,7 @@ export type Database = {
           uploaded_at?: string
           uploaded_by?: string | null
           virus_scan_at?: string | null
-          virus_scan_status?: string
+          virus_scan_state?: string
         }
         Relationships: [
           {
@@ -17286,10 +17307,10 @@ export type Database = {
           publish_scope: string
           published_at: string | null
           region: string | null
-          shift_ends_at: string | null
-          shift_starts_at: string | null
           role_taxonomy: string[]
           screening_questions: Json
+          shift_ends_at: string | null
+          shift_starts_at: string | null
           title: string
           tour_legs: Json
           travel_paid: boolean
@@ -17324,10 +17345,10 @@ export type Database = {
           publish_scope?: string
           published_at?: string | null
           region?: string | null
-          shift_ends_at?: string | null
-          shift_starts_at?: string | null
           role_taxonomy?: string[]
           screening_questions?: Json
+          shift_ends_at?: string | null
+          shift_starts_at?: string | null
           title: string
           tour_legs?: Json
           travel_paid?: boolean
@@ -17362,10 +17383,10 @@ export type Database = {
           publish_scope?: string
           published_at?: string | null
           region?: string | null
-          shift_ends_at?: string | null
-          shift_starts_at?: string | null
           role_taxonomy?: string[]
           screening_questions?: Json
+          shift_ends_at?: string | null
+          shift_starts_at?: string | null
           title?: string
           tour_legs?: Json
           travel_paid?: boolean
@@ -19591,8 +19612,8 @@ export type Database = {
           deleted_at: string | null
           description: string | null
           id: string
-          item_condition: string | null
-          listing_state: string
+          item_condition: Database["public"]["Enums"]["item_condition"] | null
+          listing_state: Database["public"]["Enums"]["marketplace_listing_state"]
           org_id: string
           photos: Json
           price_cents: number | null
@@ -19607,8 +19628,8 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           id?: string
-          item_condition?: string | null
-          listing_state?: string
+          item_condition?: Database["public"]["Enums"]["item_condition"] | null
+          listing_state?: Database["public"]["Enums"]["marketplace_listing_state"]
           org_id: string
           photos?: Json
           price_cents?: number | null
@@ -19623,8 +19644,8 @@ export type Database = {
           deleted_at?: string | null
           description?: string | null
           id?: string
-          item_condition?: string | null
-          listing_state?: string
+          item_condition?: Database["public"]["Enums"]["item_condition"] | null
+          listing_state?: Database["public"]["Enums"]["marketplace_listing_state"]
           org_id?: string
           photos?: Json
           price_cents?: number | null
@@ -21423,7 +21444,7 @@ export type Database = {
       }
       onboarding_steps: {
         Row: {
-          category: string | null
+          category_code: string | null
           completed_at: string | null
           completed_by: string | null
           created_at: string
@@ -21442,7 +21463,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          category?: string | null
+          category_code?: string | null
           completed_at?: string | null
           completed_by?: string | null
           created_at?: string
@@ -21461,7 +21482,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          category?: string | null
+          category_code?: string | null
           completed_at?: string | null
           completed_by?: string | null
           created_at?: string
@@ -21480,6 +21501,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "onboarding_steps_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "ref_onboarding_step_category"
+            referencedColumns: ["code"]
+          },
           {
             foreignKeyName: "onboarding_steps_completed_by_fkey"
             columns: ["completed_by"]
@@ -24594,7 +24622,7 @@ export type Database = {
           id: string
           invoice_id: string | null
           invoice_tx_id: string | null
-          match_status: string
+          match_state: string
           org_id: string
           po_id: string
           receipt_id: string | null
@@ -24607,7 +24635,7 @@ export type Database = {
           id?: string
           invoice_id?: string | null
           invoice_tx_id?: string | null
-          match_status: string
+          match_state: string
           org_id: string
           po_id: string
           receipt_id?: string | null
@@ -24620,7 +24648,7 @@ export type Database = {
           id?: string
           invoice_id?: string | null
           invoice_tx_id?: string | null
-          match_status?: string
+          match_state?: string
           org_id?: string
           po_id?: string
           receipt_id?: string | null
@@ -27030,12 +27058,12 @@ export type Database = {
           description: string | null
           due_at: string | null
           id: string
-          item_state: string
+          item_state: Database["public"]["Enums"]["punch_item_state"]
           org_id: string
           photo_path: string | null
           pin_x: number | null
           pin_y: number | null
-          priority: string
+          priority: Database["public"]["Enums"]["work_priority"]
           project_id: string
           punch_list_id: string | null
           show_ready_gate: boolean
@@ -27054,12 +27082,12 @@ export type Database = {
           description?: string | null
           due_at?: string | null
           id?: string
-          item_state?: string
+          item_state?: Database["public"]["Enums"]["punch_item_state"]
           org_id: string
           photo_path?: string | null
           pin_x?: number | null
           pin_y?: number | null
-          priority?: string
+          priority?: Database["public"]["Enums"]["work_priority"]
           project_id: string
           punch_list_id?: string | null
           show_ready_gate?: boolean
@@ -27078,12 +27106,12 @@ export type Database = {
           description?: string | null
           due_at?: string | null
           id?: string
-          item_state?: string
+          item_state?: Database["public"]["Enums"]["punch_item_state"]
           org_id?: string
           photo_path?: string | null
           pin_x?: number | null
           pin_y?: number | null
-          priority?: string
+          priority?: Database["public"]["Enums"]["work_priority"]
           project_id?: string
           punch_list_id?: string | null
           show_ready_gate?: boolean
@@ -28012,6 +28040,186 @@ export type Database = {
           },
         ]
       }
+      ref_budget_category: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_label: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_label: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_label?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ref_certification_category: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_label: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_label: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_label?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ref_expense_category: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_label: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_label: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_label?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ref_onboarding_step_category: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_label: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_label: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_label?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ref_service_request_category: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_label: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_label: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_label?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ref_vendor_category: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_label: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_label: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_label?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       referral_codes: {
         Row: {
           code: string
@@ -28525,6 +28733,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "requisitions_cost_center_id_fkey"
+            columns: ["cost_center_id"]
+            isOneToOne: false
+            referencedRelation: "cost_centers"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "requisitions_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -28543,13 +28758,6 @@ export type Database = {
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "requisitions_cost_center_id_fkey"
-            columns: ["cost_center_id"]
-            isOneToOne: false
-            referencedRelation: "cost_centers"
             referencedColumns: ["id"]
           },
         ]
@@ -31390,6 +31598,7 @@ export type Database = {
           assigned_to: string | null
           cancelled_at: string | null
           category: string
+          category_code: string | null
           created_at: string
           description: string | null
           id: string
@@ -31398,13 +31607,13 @@ export type Database = {
           org_id: string
           photos: Json
           project_id: string | null
-          request_state: string
+          request_state: Database["public"]["Enums"]["service_request_state"]
           requester_email: string | null
           requester_id: string | null
           requester_name: string | null
           resolution_note: string | null
           resolved_at: string | null
-          severity: string
+          severity: Database["public"]["Enums"]["sla_severity"]
           sla_resolution_breached: boolean
           sla_resolution_due: string | null
           sla_response_breached: boolean
@@ -31419,6 +31628,7 @@ export type Database = {
           assigned_to?: string | null
           cancelled_at?: string | null
           category: string
+          category_code?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -31427,13 +31637,13 @@ export type Database = {
           org_id: string
           photos?: Json
           project_id?: string | null
-          request_state?: string
+          request_state?: Database["public"]["Enums"]["service_request_state"]
           requester_email?: string | null
           requester_id?: string | null
           requester_name?: string | null
           resolution_note?: string | null
           resolved_at?: string | null
-          severity?: string
+          severity?: Database["public"]["Enums"]["sla_severity"]
           sla_resolution_breached?: boolean
           sla_resolution_due?: string | null
           sla_response_breached?: boolean
@@ -31448,6 +31658,7 @@ export type Database = {
           assigned_to?: string | null
           cancelled_at?: string | null
           category?: string
+          category_code?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -31456,13 +31667,13 @@ export type Database = {
           org_id?: string
           photos?: Json
           project_id?: string | null
-          request_state?: string
+          request_state?: Database["public"]["Enums"]["service_request_state"]
           requester_email?: string | null
           requester_id?: string | null
           requester_name?: string | null
           resolution_note?: string | null
           resolved_at?: string | null
-          severity?: string
+          severity?: Database["public"]["Enums"]["sla_severity"]
           sla_resolution_breached?: boolean
           sla_resolution_due?: string | null
           sla_response_breached?: boolean
@@ -31473,6 +31684,13 @@ export type Database = {
           zone_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "service_requests_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "ref_service_request_category"
+            referencedColumns: ["code"]
+          },
           {
             foreignKeyName: "service_requests_org_id_fkey"
             columns: ["org_id"]
@@ -31512,7 +31730,7 @@ export type Database = {
           org_id: string
           resolution_minutes: number
           response_minutes: number
-          severity: string
+          severity: Database["public"]["Enums"]["sla_severity"]
           updated_at: string
         }
         Insert: {
@@ -31523,7 +31741,7 @@ export type Database = {
           org_id: string
           resolution_minutes: number
           response_minutes: number
-          severity: string
+          severity: Database["public"]["Enums"]["sla_severity"]
           updated_at?: string
         }
         Update: {
@@ -31534,7 +31752,7 @@ export type Database = {
           org_id?: string
           resolution_minutes?: number
           response_minutes?: number
-          severity?: string
+          severity?: Database["public"]["Enums"]["sla_severity"]
           updated_at?: string
         }
         Relationships: [
@@ -36385,12 +36603,12 @@ export type Database = {
       }
       tasks: {
         Row: {
+          archived_at: string | null
           assigned_to: string | null
           checklist: Json
           cost_center_id: string | null
           created_at: string
           created_by: string | null
-          archived_at: string | null
           description: string | null
           due_at: string | null
           effort: number | null
@@ -36413,12 +36631,12 @@ export type Database = {
           xpms_atom_id: string | null
         }
         Insert: {
+          archived_at?: string | null
           assigned_to?: string | null
           checklist?: Json
           cost_center_id?: string | null
           created_at?: string
           created_by?: string | null
-          archived_at?: string | null
           description?: string | null
           due_at?: string | null
           effort?: number | null
@@ -36441,12 +36659,12 @@ export type Database = {
           xpms_atom_id?: string | null
         }
         Update: {
+          archived_at?: string | null
           assigned_to?: string | null
           checklist?: Json
           cost_center_id?: string | null
           created_at?: string
           created_by?: string | null
-          archived_at?: string | null
           description?: string | null
           due_at?: string | null
           effort?: number | null
@@ -36474,6 +36692,13 @@ export type Database = {
             columns: ["assigned_to"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_cost_center_id_fkey"
+            columns: ["cost_center_id"]
+            isOneToOne: false
+            referencedRelation: "cost_centers"
             referencedColumns: ["id"]
           },
           {
@@ -36505,6 +36730,20 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tasks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "tasks_xpms_atom_id_fkey"
             columns: ["xpms_atom_id"]
             isOneToOne: false
@@ -36523,20 +36762,6 @@ export type Database = {
             columns: ["xpms_atom_id"]
             isOneToOne: false
             referencedRelation: "xpms_atoms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tasks_cost_center_id_fkey"
-            columns: ["cost_center_id"]
-            isOneToOne: false
-            referencedRelation: "cost_centers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tasks_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
         ]
@@ -40076,7 +40301,7 @@ export type Database = {
       vendors: {
         Row: {
           bio: string | null
-          category: string | null
+          category_code: string | null
           coi_expires_at: string | null
           contact_email: string | null
           contact_phone: string | null
@@ -40104,7 +40329,7 @@ export type Database = {
         }
         Insert: {
           bio?: string | null
-          category?: string | null
+          category_code?: string | null
           coi_expires_at?: string | null
           contact_email?: string | null
           contact_phone?: string | null
@@ -40132,7 +40357,7 @@ export type Database = {
         }
         Update: {
           bio?: string | null
-          category?: string | null
+          category_code?: string | null
           coi_expires_at?: string | null
           contact_email?: string | null
           contact_phone?: string | null
@@ -40159,6 +40384,13 @@ export type Database = {
           year_founded?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "vendors_category_code_fkey"
+            columns: ["category_code"]
+            isOneToOne: false
+            referencedRelation: "ref_vendor_category"
+            referencedColumns: ["code"]
+          },
           {
             foreignKeyName: "vendors_org_id_fkey"
             columns: ["org_id"]
@@ -43648,7 +43880,6 @@ export type Database = {
         Row: {
           amount_cents: number | null
           atom_id: string | null
-          category: string | null
           created_at: string | null
           currency: string | null
           description: string | null
@@ -43665,7 +43896,6 @@ export type Database = {
         Insert: {
           amount_cents?: number | null
           atom_id?: string | null
-          category?: string | null
           created_at?: string | null
           currency?: string | null
           description?: string | null
@@ -43682,7 +43912,6 @@ export type Database = {
         Update: {
           amount_cents?: number | null
           atom_id?: string | null
-          category?: string | null
           created_at?: string | null
           currency?: string | null
           description?: string | null
@@ -45511,10 +45740,6 @@ export type Database = {
           isSetofReturn: false
         }
       }
-      checkin_my_assignment: {
-        Args: { p_assignment_id: string }
-        Returns: undefined
-      }
       audit_log_pii_pending_count: {
         Args: { p_max_age_days?: number }
         Returns: number
@@ -45537,6 +45762,10 @@ export type Database = {
       can_record: {
         Args: { p_id: string; p_op: string; p_table: string }
         Returns: boolean
+      }
+      checkin_my_assignment: {
+        Args: { p_assignment_id: string }
+        Returns: undefined
       }
       claim_jobs: {
         Args: { p_batch: number; p_visibility_s: number; p_worker: string }
@@ -45719,7 +45948,6 @@ export type Database = {
         Returns: Json
       }
       effective_capabilities: { Args: { p_org_id: string }; Returns: string[] }
-      ensure_custom_position_role: { Args: { p_org_id: string }; Returns: string }
       emit_notification: {
         Args: {
           p_body?: string
@@ -45733,6 +45961,10 @@ export type Database = {
         Returns: string
       }
       enablelongtransactions: { Args: never; Returns: string }
+      ensure_custom_position_role: {
+        Args: { p_org_id: string }
+        Returns: string
+      }
       equals: { Args: { geom1: unknown; geom2: unknown }; Returns: boolean }
       explode_package: {
         Args: { pkg: string }
@@ -46789,10 +47021,7 @@ export type Database = {
         }
         Returns: string
       }
-      use_field_template: {
-        Args: { p_template_id: string }
-        Returns: number
-      }
+      use_field_template: { Args: { p_template_id: string }; Returns: number }
       verify_certification: {
         Args: { p_holder_id: string }
         Returns: {
@@ -47153,6 +47382,7 @@ export type Database = {
         | "won"
         | "lost"
         | "archived"
+      event_listing_state: "draft" | "published" | "archived"
       event_milestone_kind:
         | "announce"
         | "presale_start"
@@ -47246,6 +47476,7 @@ export type Database = {
         | "leveling"
         | "awarded"
         | "cancelled"
+      item_condition: "new" | "like_new" | "used" | "for_parts"
       job_application_status:
         | "new"
         | "reviewed"
@@ -47297,6 +47528,7 @@ export type Database = {
         | "talent"
         | "rfq"
       marketplace_kind: "rfq" | "gig" | "talent_call" | "audition"
+      marketplace_listing_state: "draft" | "active" | "sold" | "withdrawn"
       meeting_kind:
         | "kickoff"
         | "owner_architect_contractor"
@@ -47378,6 +47610,12 @@ export type Database = {
         | "rejected"
         | "expired"
         | "signed"
+      punch_item_state:
+        | "open"
+        | "in_progress"
+        | "ready_for_review"
+        | "complete"
+        | "void"
       raid_kind: "risk" | "assumption" | "issue" | "dependency"
       rams_state: "draft" | "submitted" | "approved" | "archived"
       reality_capture_source:
@@ -47504,6 +47742,12 @@ export type Database = {
         | "cancelled"
         | "no_show"
       scheduler_location_kind: "call" | "on_site"
+      service_request_state:
+        | "open"
+        | "acknowledged"
+        | "in_progress"
+        | "resolved"
+        | "cancelled"
       settlement_status: "draft" | "reconciling" | "final" | "disputed"
       share_link_role: "viewer" | "commenter"
       sheet_callout_target_type:
@@ -47601,6 +47845,7 @@ export type Database = {
         | "comms_rf"
         | "comms_intercom"
         | "compressed_air"
+      sla_severity: "P1" | "P2" | "P3" | "P4"
       sop_state: "draft" | "published" | "archived"
       spec_format:
         | "masterformat_2026"
@@ -47848,6 +48093,7 @@ export type Database = {
         | "form"
       warranty_state: "active" | "expiring_soon" | "expired" | "voided"
       whiteboard_state: "active" | "archived"
+      work_priority: "low" | "normal" | "high" | "urgent"
       workforce_kind: "paid_staff" | "volunteer" | "contractor" | "official"
       xpms_atom_phase:
         | "discovery"
@@ -47867,13 +48113,14 @@ export type Database = {
         | "produces"
       xpms_geo_scope: "local" | "regional" | "national" | "international"
       xpms_phase:
-        | "Discovery"
+        | "Discover"
         | "Design"
         | "Advance"
-        | "Procurement"
+        | "Procure"
         | "Build"
         | "Install"
         | "Operate"
+        | "Amplify"
         | "Close"
       xpms_production_style:
         | "editorial"
@@ -48399,6 +48646,7 @@ export const Constants = {
         "lost",
         "archived",
       ],
+      event_listing_state: ["draft", "published", "archived"],
       event_milestone_kind: [
         "announce",
         "presale_start",
@@ -48502,6 +48750,7 @@ export const Constants = {
         "awarded",
         "cancelled",
       ],
+      item_condition: ["new", "like_new", "used", "for_parts"],
       job_application_status: [
         "new",
         "reviewed",
@@ -48552,6 +48801,7 @@ export const Constants = {
         "rfq",
       ],
       marketplace_kind: ["rfq", "gig", "talent_call", "audition"],
+      marketplace_listing_state: ["draft", "active", "sold", "withdrawn"],
       meeting_kind: [
         "kickoff",
         "owner_architect_contractor",
@@ -48641,6 +48891,13 @@ export const Constants = {
         "rejected",
         "expired",
         "signed",
+      ],
+      punch_item_state: [
+        "open",
+        "in_progress",
+        "ready_for_review",
+        "complete",
+        "void",
       ],
       raid_kind: ["risk", "assumption", "issue", "dependency"],
       rams_state: ["draft", "submitted", "approved", "archived"],
@@ -48783,6 +49040,13 @@ export const Constants = {
         "no_show",
       ],
       scheduler_location_kind: ["call", "on_site"],
+      service_request_state: [
+        "open",
+        "acknowledged",
+        "in_progress",
+        "resolved",
+        "cancelled",
+      ],
       settlement_status: ["draft", "reconciling", "final", "disputed"],
       share_link_role: ["viewer", "commenter"],
       sheet_callout_target_type: [
@@ -48890,6 +49154,7 @@ export const Constants = {
         "comms_intercom",
         "compressed_air",
       ],
+      sla_severity: ["P1", "P2", "P3", "P4"],
       sop_state: ["draft", "published", "archived"],
       spec_format: [
         "masterformat_2026",
@@ -49163,6 +49428,7 @@ export const Constants = {
       ],
       warranty_state: ["active", "expiring_soon", "expired", "voided"],
       whiteboard_state: ["active", "archived"],
+      work_priority: ["low", "normal", "high", "urgent"],
       workforce_kind: ["paid_staff", "volunteer", "contractor", "official"],
       xpms_atom_phase: [
         "discovery",
@@ -49184,13 +49450,14 @@ export const Constants = {
       ],
       xpms_geo_scope: ["local", "regional", "national", "international"],
       xpms_phase: [
-        "Discovery",
+        "Discover",
         "Design",
         "Advance",
-        "Procurement",
+        "Procure",
         "Build",
         "Install",
         "Operate",
+        "Amplify",
         "Close",
       ],
       xpms_production_style: [

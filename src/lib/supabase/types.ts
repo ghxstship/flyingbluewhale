@@ -219,15 +219,16 @@ export type ProjectMember = {
 };
 
 // Mirrors public.xpms_phase — the XPMS v08 8-Gate Lifecycle (migration
-// 20260605170000). Project macro-phase axis.
+// 20260605170000; reconciled to XPMS 2.5 nine gates 2026-07-18). Project macro-phase axis.
 export type XpmsPhaseEnum =
-  | "Discovery"
+  | "Discover"
   | "Design"
   | "Advance"
-  | "Procurement"
+  | "Procure"
   | "Build"
   | "Install"
   | "Operate"
+  | "Amplify"
   | "Close";
 export type GeographicScope = "local" | "regional" | "national" | "international";
 export type TourStructure = "single_stop" | "multi_stop_sequential" | "simultaneous_multi_city";
@@ -425,7 +426,6 @@ export type Expense = {
   project_id: string | null;
   // Nullable since GDPR purge migration 20260625182657 (ON DELETE SET NULL).
   submitter_id: string | null;
-  category: string | null;
   description: string;
   amount_cents: number;
   currency: string;
@@ -456,7 +456,6 @@ export type Budget = {
   org_id: string;
   project_id: string | null;
   name: string;
-  category: string | null;
   amount_cents: number;
   spent_cents: number;
   created_at: string;
@@ -479,7 +478,7 @@ export type Budget = {
   estimate_cents: number | null;
   actual_cents: number | null;
   vendor: string | null;
-  budget_status: string | null;
+  budget_state: string | null;
   flag: boolean;
   external_notes: string | null;
   internal_notes: string | null;
@@ -527,7 +526,7 @@ export type Vendor = {
   name: string;
   contact_email: string | null;
   contact_phone: string | null;
-  category: string | null;
+  category_code: string | null;
   w9_on_file: boolean;
   coi_expires_at: string | null;
   payout_account_id: string | null;
@@ -796,7 +795,6 @@ export type Risk = {
   kind: RaidKind;
   title: string;
   description: string | null;
-  category: string | null;
   likelihood: RiskLikelihood;
   impact: RiskImpact;
   inherent_score: number;
@@ -1441,7 +1439,7 @@ export type Automation = {
   steps: unknown;
   enabled: boolean;
   last_run_at: string | null;
-  last_run_status: string | null;
+  last_run_state: string | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -1557,7 +1555,6 @@ export type GovernancePolicy = {
   id: string;
   org_id: string;
   name: string;
-  category: string | null;
   body: string | null;
   effective_at: string | null;
   reviewed_at: string | null;
@@ -1757,7 +1754,6 @@ export type Inspection = {
   template_id: string | null;
   code: string;
   name: string;
-  category: string | null;
   inspection_state: "scheduled" | "in_progress" | "passed" | "failed" | "cancelled";
   inspector_id: string | null;
   scheduled_for: string | null;
@@ -1790,7 +1786,6 @@ export type Rfi = {
   code: string;
   subject: string;
   question: string;
-  category: string | null;
   asked_by: string | null;
   ball_in_court_id: string | null;
   rfi_state: "open" | "answered" | "closed" | "void";
@@ -1853,7 +1848,6 @@ export type PunchList = {
   org_id: string;
   project_id: string;
   name: string;
-  category: string | null;
   list_state: "open" | "closed";
   created_by: string | null;
   created_at: string;
@@ -2090,7 +2084,6 @@ export type WorkOrderBroadcast = {
   code: string;
   title: string;
   description: string | null;
-  category: string | null;
   budget_cents: number | null;
   needed_by: string | null;
   broadcast_state: "draft" | "open" | "closed" | "awarded" | "cancelled";

@@ -54,6 +54,7 @@
     "MetricCard": "stable",
     "MoneyInput": "stable",
     "NumberInput": "beta",
+    "OptionSelect": "stable",
     "PagerNav": "beta",
     "PinInput": "beta",
     "Popover": "stable",

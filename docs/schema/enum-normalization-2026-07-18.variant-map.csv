@@ -1,0 +1,35 @@
+domain,table,column,variant_observed,canonical_value,canonical_code,transform,confidence,notes
+category,budgets,category,production,Production,production,casing_collapse,high,"lowercase dup of Production (3 rows); 1 row affected id=4f3fa44f-b088-4a55-9cd7-d1c3b444bab2"
+category,budgets,category,Production,Production,production,identity,high,
+category,budgets,category,Change Order,Change Order,change_order,identity,high,
+category,budgets,category,Fabrication,Fabrication,fabrication,identity,high,
+category,budgets,category,Graphics,Graphics,graphics,identity,high,
+category,budgets,category,Logistics,Logistics,logistics,identity,high,
+category,budgets,category,Materials,Materials,materials,identity,high,
+category,vendors,category,scenic,Scenic,scenic,casing_normalize,high,"1 row affected id=969f0db3-d61e-4c9b-be93-56684bb4db2d"
+category,vendors,category,Staging,Staging,staging,identity,high,
+category,vendors,category,Staging & rigging,Staging & Rigging,staging_rigging,titlecase_normalize,low,"REVIEW: possible near-dup of 'Staging' — kept distinct pending owner decision; do NOT auto-collapse"
+category,vendors,category,Brand Ambassador Staffing,Brand Ambassador Staffing,brand_ambassador_staffing,identity,high,
+category,expenses,category,AV rental,AV Rental,av_rental,titlecase_normalize,high,
+category,expenses,category,Supplies,Supplies,supplies,identity,high,
+category,expenses,category,Travel,Travel,travel,identity,high,
+category,certifications,category,driving,Driving,driving,identity,high,already-clean lowercase code
+category,certifications,category,equipment,Equipment,equipment,identity,high,
+category,certifications,category,food,Food,food,identity,high,
+category,certifications,category,insurance,Insurance,insurance,identity,high,
+category,certifications,category,safety,Safety,safety,identity,high,
+category,onboarding_steps,category,communication,Communication,communication,identity,high,
+category,onboarding_steps,category,paperwork,Paperwork,paperwork,identity,high,
+category,onboarding_steps,category,safety,Safety,safety,identity,high,
+category,onboarding_steps,category,travel,Travel,travel,identity,high,
+category,onboarding_steps,category,venue,Venue,venue,identity,high,
+ldp_naming,budgets,budget_status,-,-,-,rename_column,high,"→ budget_state (LDP); free text, no CHECK. App cutover required."
+ldp_naming,automations,last_run_status,-,-,-,rename_column,high,"→ last_run_state (LDP); free text, no CHECK. App cutover required."
+ldp_naming,files,virus_scan_status,-,-,-,rename_column,high,"→ virus_scan_state (LDP); CHECK + default 'pending' carried over. App cutover required."
+ldp_naming,po_invoice_matches,match_status,-,-,-,rename_column,high,"→ match_state (LDP); CHECK carried over. App cutover required."
+ldp_naming,document_state_transitions,from_status,-,-,-,rename_column,high,"→ from_state (LDP); transition ledger. App cutover required."
+ldp_naming,document_state_transitions,to_status,-,-,-,rename_column,high,"→ to_state (LDP); transition ledger. App cutover required."
+flag_only,notifications,kind,assignment_state|invoice.paid|incident|incident.filed,-,-,none,review,"MIXED CONVENTIONS: snake_case + dotted event names in one column; incident vs incident.filed near-dup. Governed by notification_kind_catalog view + app PushKind — NOT touched. Owner decision needed."
+flag_only,event_guides,classification,12x ALL-CAPS,-,-,none,review,"Free-form ALL-CAPS ('INTERNAL — PRODUCTION CREW ONLY' etc); overlaps guide_persona enum. Owner decision: map to guide_persona or new lookup."
+flag_only,ENUM,production_phase|xpms_phase|xpms_atom_phase,DISCOVERY|Discovery|discovery,-,-,none,review,"Same 8-phase vocabulary in THREE casings across three native enums. Consolidation is app-breaking; flag only."
+flag_only,ENUM,accounting_period_state|subscription_state,UPPERCASE labels,-,-,none,review,"UPPER-case enum labels diverge from the lowercase house convention. Renaming enum values is app-coupled; flag only."

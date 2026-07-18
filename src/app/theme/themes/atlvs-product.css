@@ -380,6 +380,20 @@
   --p-danger: #e5484d;
   --p-info: #2596c4;
 
+  /* Severity tiers (kit 32 DS_ALIGNMENT §3) — the form seg-control fills for
+     High/Urgent · Medium · Low, moved out of the mobile FormScreen's
+     TIER_COLOR literals. Mode-agnostic fills like the semantic signals above;
+     the paired -on inks are the label ON the selected fill (a control fill,
+     not a body-text token — no contrast.pairs entries). High aliases the
+     danger signal so a red tier can never drift from a red alert.
+     Mirrored in tokens.json#color.severity. */
+  --p-sev-high: var(--p-danger);
+  --p-sev-high-on: #fff;
+  --p-sev-med: #ef7d22;
+  --p-sev-med-on: #fff;
+  --p-sev-low: #edc23a;
+  --p-sev-low-on: #241a04;
+
   /* Density token defaults (cozy). Overridden by [data-density="compact"|"spacious"].
      v8.0 grid pass: every *spacing* member snaps to the 4px ramp via var(--p-*)
      (was 9/13/18/14px off-grid — the seed the kit CSS copied as literals). The

@@ -20,11 +20,14 @@ import type { FormDef, FormField } from "./forms";
 const PICKER_DRAWER_THRESHOLD = 8;
 
 // Severity tiers: High/Urgent = red, Medium = orange, Low = yellow. [bg, text]
+// Kit 32 DS_ALIGNMENT §3: the fills live in the token layer now
+// (--p-sev-{high,med,low} + -on inks, atlvs-product.css beside the semantic
+// signals; mirrored in tokens.json#color.severity) — no hex literals here.
 export const TIER_COLOR: Record<string, [string, string]> = {
-  High: ["var(--p-danger)", "#fff"],
-  Urgent: ["var(--p-danger)", "#fff"],
-  Medium: ["#ef7d22", "#fff"],
-  Low: ["#edc23a", "#241a04"],
+  High: ["var(--p-sev-high)", "var(--p-sev-high-on)"],
+  Urgent: ["var(--p-sev-high)", "var(--p-sev-high-on)"],
+  Medium: ["var(--p-sev-med)", "var(--p-sev-med-on)"],
+  Low: ["var(--p-sev-low)", "var(--p-sev-low-on)"],
 };
 
 // The avatar now carries the actual picked File, not a boolean claiming

@@ -120,6 +120,12 @@ const TARGETS = [
   { table: "compliance_rules", column: "code", pattern: "E2E-RULE-%" },
   { table: "opportunities", column: "title", pattern: "E2E Contact %" },
   { table: "partner_integrations", column: "name", pattern: "E2E Integration %" },
+  // COMPVSS field mutations (compvss-field-mutations.spec). field_templates is
+  // standalone (org CASCADE / project SET NULL); archive is soft-delete, so a
+  // hard DELETE by name is needed to clear soft-deleted rows too. shifts are the
+  // draft seats the scheduler create test inserts (no clock-in → free to drop).
+  { table: "field_templates", column: "name", pattern: "E2E Template%" },
+  { table: "shifts", column: "role", pattern: "E2E %" },
   // Shared parents LAST — children above must clear first (ON DELETE RESTRICT).
   { table: "events", column: "name", pattern: "E2E Event %" },
   { table: "events", column: "name", pattern: "E2E Activity%" },
@@ -376,6 +382,11 @@ const LIFECYCLE_CAST_PATTERNS = [
   "E2E Captain America%",
   "E2E Spiderman%",
   "E2E Wonder Woman%",
+  // roster-engagement-lifecycle.spec + compvss-field-mutations mobile assign:
+  // each assigned person carries an offer_letter (crew_member_id RESTRICT), so
+  // they MUST purge letters-first via this cast block, not the bare crew TARGET.
+  "E2E Recruit%",
+  "E2E Skipper%",
 ];
 
 async function purgeLifecycleCast(supabase) {

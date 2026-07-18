@@ -15,9 +15,13 @@ import { log } from "@/lib/log";
  * RPC so the usage counter can move without a manager-band row UPDATE.
  */
 
-export type State = { error?: string; fieldErrors?: Record<string, string> } | null;
+// A "use server" module may export ONLY async functions — exporting a value
+// (or even a type) makes Next throw "A 'use server' file can only export async
+// functions, found object." at runtime, 500-ing EVERY action in the file. These
+// three are used only inside this module, so they stay module-local.
+type State = { error?: string; fieldErrors?: Record<string, string> } | null;
 
-export const TEMPLATE_CATEGORIES = [
+const TEMPLATE_CATEGORIES = [
   "roster",
   "advance",
   "checklist",
@@ -27,7 +31,7 @@ export const TEMPLATE_CATEGORIES = [
   "onboarding",
   "budget",
 ] as const;
-export type TemplateCategory = (typeof TEMPLATE_CATEGORIES)[number];
+type TemplateCategory = (typeof TEMPLATE_CATEGORIES)[number];
 
 /** Kit form option label → stored category slug. */
 const CATEGORY_BY_LABEL: Record<string, TemplateCategory> = {

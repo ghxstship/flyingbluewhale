@@ -81,6 +81,16 @@ const LIFECYCLE_SPECS = [
   "auth-edges.spec.ts",
 ];
 
+// The kit 30–33 behavioral tier: the mutating workflows that shipped AFTER the
+// original coverage program (roster engagement accept/edit-reports FSM; the
+// COMPVSS field-mutation flows the render-tier kit specs only navigate). Added
+// by the 2026-07-18 coverage-gap remediation — deleting one silently reopens
+// the gap the sweep found.
+const KIT_BEHAVIORAL_SPECS = [
+  "roster-engagement-lifecycle.spec.ts",
+  "compvss-field-mutations.spec.ts",
+];
+
 describe("e2e coverage manifest — every surface stays covered", () => {
   it("keeps all three render-tier crawlers", () => {
     for (const f of RENDER_SPECS) {
@@ -117,6 +127,12 @@ describe("e2e coverage manifest — every surface stays covered", () => {
   it("keeps the lifecycle tier — the destructive identity paths", () => {
     for (const f of LIFECYCLE_SPECS) {
       expect(existsSync(e2ePath(f)), `missing lifecycle spec e2e/${f}`).toBe(true);
+    }
+  });
+
+  it("keeps the kit 30–33 behavioral tier — the post-program mutating workflows", () => {
+    for (const f of KIT_BEHAVIORAL_SPECS) {
+      expect(existsSync(e2ePath(f)), `missing kit-behavioral spec e2e/${f}`).toBe(true);
     }
   });
 });

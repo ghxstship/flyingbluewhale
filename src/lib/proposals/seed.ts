@@ -185,7 +185,6 @@ export async function seedFromBlocks(input: SeedFromBlocksInput): Promise<SeedFr
     org_id: string;
     project_id: string;
     name: string;
-    category: string;
     department: string | null;
     line_type: "Scope" | "Fee" | "Contingency" | "Allowance" | "Markup";
     amount_cents: number;
@@ -214,7 +213,6 @@ export async function seedFromBlocks(input: SeedFromBlocksInput): Promise<SeedFr
         org_id: orgId,
         project_id: projectId,
         name: group.label,
-        category,
         department,
         line_type: "Scope",
         amount_cents: groupTotalCents,

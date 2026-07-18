@@ -225,7 +225,7 @@ type CategoryRow = { name: string; value: number };
 function topCategories(expenses: Expense[], limit: number): CategoryRow[] {
   const totals = new Map<string, number>();
   for (const e of expenses) {
-    const key = e.category ?? "Uncategorized";
+    const key = (e as unknown as { department?: string | null }).department ?? "Uncategorized";
     totals.set(key, (totals.get(key) ?? 0) + e.amount_cents / 100);
   }
   return Array.from(totals.entries())

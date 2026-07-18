@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         .order("created_at", { ascending: false }),
       supabase
         .from("expenses")
-        .select("id, description, category, amount_cents, expense_state, spent_at")
+        .select("id, description, amount_cents, expense_state, spent_at")
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("spent_at", { ascending: false }),

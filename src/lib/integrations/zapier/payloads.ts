@@ -99,7 +99,7 @@ export type ZapierTask = {
 export type ZapierExpense = {
   id: string;
   description: string;
-  category: string | null;
+
   status: string;
   amount_cents: number;
   amount: number;
@@ -287,7 +287,6 @@ type ExpenseRow = Pick<
   Expense,
   | "id"
   | "description"
-  | "category"
   | "expense_state"
   | "amount_cents"
   | "currency"
@@ -302,7 +301,6 @@ export function toZapierExpense(row: ExpenseRow): ZapierExpense {
   return {
     id: row.id,
     description: row.description,
-    category: row.category,
     status: row.expense_state,
     amount_cents: row.amount_cents,
     amount: row.amount_cents / 100,
@@ -409,7 +407,6 @@ export const ZAPIER_SAMPLES = {
   expense: {
     id: "00000000-0000-0000-0000-000000000009",
     description: "Rental van — Day 1 load-in",
-    category: "transport",
     status: "submitted",
     amount_cents: 28400,
     amount: 284,

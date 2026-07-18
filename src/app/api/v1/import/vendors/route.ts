@@ -67,7 +67,6 @@ export async function POST(req: NextRequest) {
         name: r.name,
         contact_email: r.contact_email ?? null,
         contact_phone: r.contact_phone ?? null,
-        category: r.category ?? null,
         notes: r.notes ?? null,
       }));
       const { error, data } = await supabase.from("vendors").insert(rowsForDb).select("id");

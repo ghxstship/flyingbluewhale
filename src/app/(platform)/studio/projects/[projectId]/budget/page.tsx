@@ -24,9 +24,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .maybeSingle(),
     supabase
       .from("budgets")
-      .select("id, name, category, amount_cents, spent_cents")
+      .select("id, name, amount_cents, spent_cents")
       .eq("project_id", projectId)
-      .order("category"),
+      .order("name"),
   ]);
   const total = (budgets ?? []).reduce((s, b) => s + (b.amount_cents ?? 0), 0);
   const spent = (budgets ?? []).reduce((s, b) => s + (b.spent_cents ?? 0), 0);
@@ -76,9 +76,6 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-sm font-medium">{b.name}</div>
-                    {b.category && (
-                      <div className="text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{b.category}</div>
-                    )}
                   </div>
                   <div className="text-right text-xs">
                     <div className="font-mono">

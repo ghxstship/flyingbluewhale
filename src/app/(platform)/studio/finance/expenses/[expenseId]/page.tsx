@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
   const { data: row } = await supabase
     .from("expenses")
     .select(
-      "id, description, amount_cents, currency, category, expense_state, spent_at, receipt_path, project_id, department, discipline, xpms_phase, item, vendor",
+      "id, description, amount_cents, currency, expense_state, spent_at, receipt_path, project_id, department, discipline, xpms_phase, item, vendor",
     )
     .eq("org_id", session.orgId)
     .eq("id", expenseId)
@@ -28,10 +28,8 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
       eyebrow={t("console.finance.expenses.detail.eyebrow", undefined, "Finance")}
       title={(r) => r.description}
       subtitle={(r) => {
-        // Prefer XPMS department; fall back to legacy category text.
         const dept =
           (r as unknown as { department?: string | null }).department ??
-          r.category ??
           t("console.finance.expenses.detail.uncategorized", undefined, "uncategorized");
         return `${money(r.amount_cents)} · ${dept}`;
       }}
@@ -57,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
               },
               {
                 label: t("console.finance.expenses.detail.fields.department", undefined, "Department"),
-                value: (row as { department?: string | null }).department ?? row.category ?? "—",
+                value: (row as { department?: string | null }).department ?? "—",
               },
               {
                 label: t("console.finance.expenses.detail.fields.discipline", undefined, "Discipline"),

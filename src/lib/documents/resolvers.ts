@@ -183,7 +183,7 @@ const resolvers: Record<string, DocResolver> = {
     // first line as the example row, plus the column totals (plumb-line DOC-3).
     const { data: rows } = await db
       .from("budgets")
-      .select("name, category, amount_cents, committed_cents, spent_cents, currency")
+      .select("name, amount_cents, committed_cents, spent_cents, currency")
       .eq("org_id", orgId)
       .eq("project_id", projectId);
     if (!rows || rows.length === 0) return null;
@@ -196,7 +196,7 @@ const resolvers: Record<string, DocResolver> = {
     return {
       budget: {
         "0": {
-          phase: first.category ?? first.name,
+          phase: (first as { department?: string | null }).department ?? first.name,
           budget: money(first.amount_cents, cur),
           committed: money(first.committed_cents, cur),
           actual: money(first.spent_cents, cur),

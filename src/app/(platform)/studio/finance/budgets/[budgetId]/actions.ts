@@ -24,7 +24,7 @@ export async function reconcileBudget(formData: FormData) {
   const supabase = await createClient();
   const { data: budget } = await supabase
     .from("budgets")
-    .select("id, project_id, category, department, amount_cents")
+    .select("id, project_id, department, amount_cents")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
@@ -33,7 +33,6 @@ export async function reconcileBudget(formData: FormData) {
     orgId: session.orgId,
     projectId: budget.project_id,
     department: (budget as { department?: string | null }).department ?? null,
-    category: budget.category,
   });
   // Dual-write so both XPMS readers (actual_cents) and legacy readers
   // (spent_cents) see the reconciliation result. The expenses trigger
@@ -51,17 +50,15 @@ export async function reconcileBudget(formData: FormData) {
 
 export async function computeBudgetSpend(
   supabase: Awaited<ReturnType<typeof createClient>>,
-  args: { orgId: string; projectId: string | null; department: string | null; category: string | null },
+  args: { orgId: string; projectId: string | null; department: string | null },
 ): Promise<number> {
   // Expenses (any status — operators reconcile on actuals, not approvals).
   let q = supabase.from("expenses").select("amount_cents").eq("org_id", args.orgId);
   if (args.projectId) q = q.eq("project_id", args.projectId);
-  // Prefer the XPMS department enum; fall back to legacy category text
-  // for budget rows that haven't been migrated to the new taxonomy.
+  // Match on the XPMS department enum (the legacy category-text bridge was
+  // dropped with the category columns — see enum-normalization M3).
   if (args.department) {
     q = q.eq("department", args.department);
-  } else if (args.category) {
-    q = q.eq("category", args.category);
   }
   const { data: expenses } = await q;
   const expensesTotal = (expenses ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);

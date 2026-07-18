@@ -142,7 +142,6 @@ export async function ensureLifecyclePacket(orgId: string, letterId: string): Pr
       offer_letter_id: letterId,
       step_key: d.step_key,
       title: d.title,
-      category: d.category,
       critical_path: d.critical_path,
       sort_order: d.sort_order,
       step_state: d.blocked_by ? ("blocked" as const) : ("pending" as const),

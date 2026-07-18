@@ -58,7 +58,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const [{ data: expenses }, { data: times }, { data: miles }, { data: org }] = await Promise.all([
     supabase
       .from("expenses")
-      .select("description, category, spent_at, amount_cents, currency")
+      .select("description, spent_at, amount_cents, currency")
       .eq("project_id", project.id)
       .gte("spent_at", rangeFrom)
       .lte("spent_at", rangeTo),
@@ -80,7 +80,6 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
 
   const expensesOut = (expenses ?? []).map((e) => ({
     description: e.description,
-    category: e.category ?? null,
     date: e.spent_at ? String(e.spent_at).slice(0, 10) : null,
     amount_cents: Number(e.amount_cents),
   }));

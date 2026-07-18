@@ -44,7 +44,7 @@ export function ExpenseReportPdf({
   project: { name: string };
   rangeFrom: string;
   rangeTo: string;
-  expenses: Array<{ description: string; category: string | null; date: string | null; amount_cents: number }>;
+  expenses: Array<{ description: string; date: string | null; amount_cents: number }>;
   time: Array<{ user_name: string | null; hours: number; rate_cents: number | null; date: string | null }>;
   mileage: Array<{ user_name: string | null; miles: number; rate_per_mile_cents: number | null; date: string | null }>;
   totalCents: number;
@@ -76,14 +76,12 @@ export function ExpenseReportPdf({
         <PdfTable
           columns={[
             { key: "date", label: t("pdf.reports.expense.colDate", undefined, "Date"), width: 1.5 },
-            { key: "description", label: t("pdf.reports.expense.colDescription", undefined, "Description"), width: 4 },
-            { key: "category", label: t("pdf.reports.expense.colCategory", undefined, "Category"), width: 2 },
+            { key: "description", label: t("pdf.reports.expense.colDescription", undefined, "Description"), width: 6 },
             { key: "amount", label: t("pdf.reports.expense.colAmount", undefined, "Amount"), width: 2, align: "right" },
           ]}
           rows={expenses.map((e) => ({
             date: e.date ?? "",
             description: e.description,
-            category: e.category ?? "",
             amount: money(e.amount_cents),
           }))}
         />

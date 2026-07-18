@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   const { data: budget } = await supabase
     .from("budgets")
     .select(
-      "id, name, amount_cents, spent_cents, actual_cents, forecast_cents, category, department, discipline, xpms_phase, tier, xyz, line_type, vendor, project_id, created_at",
+      "id, name, amount_cents, spent_cents, actual_cents, forecast_cents, department, discipline, xpms_phase, tier, xyz, line_type, vendor, project_id, created_at",
     )
     .eq("org_id", session.orgId)
     .eq("id", budgetId)
@@ -47,20 +47,17 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
     orgId: session.orgId,
     projectId: budget.project_id,
     department: xpmsDepartment,
-    category: budget.category,
   });
 
   let expensesQ = supabase
     .from("expenses")
-    .select("id, description, amount_cents, spent_at, category, department")
+    .select("id, description, amount_cents, spent_at, department")
     .eq("org_id", session.orgId);
   if (budget.project_id) expensesQ = expensesQ.eq("project_id", budget.project_id);
-  // Prefer XPMS department filter; fall back to legacy category text
-  // for budget rows not yet migrated to the new taxonomy.
+  // Match linked expenses on the XPMS department (the legacy category-text
+  // bridge was dropped with the category columns — enum-normalization M3).
   if (xpmsDepartment) {
     expensesQ = expensesQ.eq("department", xpmsDepartment);
-  } else if (budget.category) {
-    expensesQ = expensesQ.eq("category", budget.category);
   }
   const { data: expenses } = await expensesQ.order("spent_at", { ascending: false }).limit(50);
 
@@ -85,7 +82,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
         title={budget.name}
         subtitle={
-          xpmsDepartment ?? (budget as { discipline?: string | null }).discipline ?? budget.category ?? undefined
+          xpmsDepartment ?? (budget as { discipline?: string | null }).discipline ?? undefined
         }
         breadcrumbs={[
           { label: t("console.finance.eyebrow", undefined, "Finance"), href: "/studio/finance" },
@@ -227,12 +224,12 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
                   ? t(
                       "console.finance.budgets.detail.expensesCountOne",
                       { count: (expenses ?? []).length },
-                      `${(expenses ?? []).length} entry matching project + category`,
+                      `${(expenses ?? []).length} entry matching project + department`,
                     )
                   : t(
                       "console.finance.budgets.detail.expensesCountMany",
                       { count: (expenses ?? []).length },
-                      `${(expenses ?? []).length} entries matching project + category`,
+                      `${(expenses ?? []).length} entries matching project + department`,
                     )}
               </p>
             </header>

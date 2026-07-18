@@ -120,7 +120,6 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
               {s.critical_path ? <span className="font-bold text-[var(--p-danger)]">★</span> : null}
               <span className="font-medium">{s.title}</span>
               <Badge variant={STATE_VARIANT[s.step_state]}>{stateLabel(t, s.step_state)}</Badge>
-              {s.category ? <span className="text-xs text-(--p-text-2) uppercase">{s.category}</span> : null}
             </div>
             {s.description ? <p className="text-sm text-(--p-text-2)">{s.description}</p> : null}
             <div className="mt-1 flex gap-3 text-xs text-(--p-text-2)">

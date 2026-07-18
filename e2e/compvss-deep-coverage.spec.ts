@@ -74,6 +74,13 @@ async function submitRadioAdvance(page: Page): Promise<string> {
     await form.locator("input[type='number']").first().fill("2");
     // Operational Purpose is textarea #2 (Special Requests is #1); requiredFor Radio.
     await form.locator("textarea").nth(1).fill("E2E ops coverage");
+    // Kit 31 (#24): BOTH Start and End Date are REQUIRED on every advance line
+    // (end >= start, validated server-side too). Neither filled → CTA never arms.
+    const dates = form.locator("input[type='date']");
+    if (await dates.count()) {
+      await dates.nth(0).fill("2030-01-01");
+      await dates.nth(1).fill("2030-01-05");
+    }
     await expect(cta).toHaveCSS("opacity", "1", { timeout: 2_000 });
   }).toPass({ timeout: 20_000 });
   await cta.click();

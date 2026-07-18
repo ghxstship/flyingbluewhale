@@ -92,11 +92,9 @@ export function NewExpenseForm({
         />
         <Input label={t("console.finance.expenses.new.item", undefined, "Item")} name="item" maxLength={120} />
         <Input label={t("console.finance.expenses.new.vendor", undefined, "Vendor")} name="vendor" maxLength={160} />
-        <Input
-          label={t("console.finance.expenses.new.category", undefined, "Category (Legacy)")}
-          name="category"
-          placeholder={t("console.finance.expenses.new.categoryPlaceholder", undefined, "Travel, meals, equipment…")}
-        />
+        {/* `category` retired on studio expenses — superseded by XPMS
+            department/discipline (above). Mobile field capture keeps a
+            lookup-backed category; see docs/schema/enum-ui-enrichment-2026-07-18.md. */}
       </div>
       {projects.length > 0 && (
         <div>

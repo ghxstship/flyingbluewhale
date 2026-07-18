@@ -15,7 +15,6 @@ export const dynamic = "force-dynamic";
 type VendorRow = {
   id: string;
   name: string;
-  category: string | null;
   w9_on_file: boolean;
   coi_expires_at: string | null;
 };
@@ -52,7 +51,7 @@ export default async function Page() {
   const [{ data: vendorData }, { data: poData }] = await Promise.all([
     supabase
       .from("vendors")
-      .select("id, name, category, w9_on_file, coi_expires_at")
+      .select("id, name, w9_on_file, coi_expires_at")
       .eq("org_id", session.orgId)
       .order("name", { ascending: true })
       .limit(500),
@@ -98,7 +97,6 @@ export default async function Page() {
   type ScorecardRow = {
     id: string;
     name: string;
-    category: string | null;
     poCount: number;
     spend: number;
     fulfilledPct: number | null;
@@ -110,7 +108,6 @@ export default async function Page() {
     return {
       id: v.id,
       name: v.name,
-      category: v.category,
       poCount: agg.count,
       spend: agg.total,
       fulfilledPct: agg.count > 0 ? Math.round((agg.fulfilled / agg.count) * 100) : null,
@@ -181,13 +178,6 @@ export default async function Page() {
               header: t("console.procurement.scorecards.col.vendor", undefined, "Vendor"),
               render: (v) => <span className="font-medium">{v.name}</span>,
               accessor: (v) => v.name,
-            },
-            {
-              key: "category",
-              header: t("console.procurement.scorecards.col.category", undefined, "Category"),
-              render: (v) => v.category ?? "—",
-              accessor: (v) => v.category ?? null,
-              filterable: true,
             },
             {
               key: "pos",

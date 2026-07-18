@@ -1,9 +1,11 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { FilterBar } from "@/components/ui/FilterBar";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
+import { fetchLookupOptions, fetchLookupLabelMap } from "@/lib/enum-lookup";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -12,7 +14,11 @@ import { bulkDeleteVendors } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export default async function VendorsPage() {
+export default async function VendorsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -26,12 +32,22 @@ export default async function VendorsPage() {
       </>
     );
   const session = await requireSession();
+  const sp = await searchParams;
+  // Category is lookup-backed (ref_vendor_category). Facet options carry the
+  // FULL domain incl. inactive (historical rows stay findable); the list column
+  // renders the display_label off the stored `category_code`.
+  const [categoryOptions, categoryLabels] = await Promise.all([
+    fetchLookupOptions("ref_vendor_category", { includeInactive: true }),
+    fetchLookupLabelMap("ref_vendor_category"),
+  ]);
   // Newest-first (the listOrgScoped default): a name-asc sort + the 100-row cap
   // buries a just-created vendor past the loaded set. The DataTable is still
   // client-sortable by name, so alphabetical browsing is one click away.
   // Exact count alongside the capped window (F-01) — `vendors` is in
   // SOFT_DELETABLE_TABLES, so both the rows and the count exclude archived.
-  const { rows, totalCount } = await listOrgScopedWithCount("vendors", session.orgId);
+  const { rows, totalCount } = await listOrgScopedWithCount("vendors", session.orgId, {
+    filters: sp.category ? [{ column: "category_code", op: "eq", value: sp.category }] : undefined,
+  });
   return (
     <>
       <ModuleHeader
@@ -49,6 +65,17 @@ export default async function VendorsPage() {
         }
       />
       <div className="page-content">
+        <FilterBar
+          facets={[
+            {
+              param: "category",
+              label: t("console.procurement.vendors.columns.category", undefined, "Category"),
+              options: categoryOptions,
+              allLabel: t("console.procurement.vendors.filter.allCategories", undefined, "All categories"),
+            },
+          ]}
+          resultCount={totalCount}
+        />
         <DataTable<Vendor>
           rows={rows}
           totalCount={totalCount}
@@ -82,10 +109,11 @@ export default async function VendorsPage() {
             {
               key: "category",
               header: t("console.procurement.vendors.columns.category", undefined, "Category"),
-              render: (r) => r.category ?? "—",
-              className: "font-mono text-xs",
-              accessor: (r) => r.category ?? null,
-              filterable: true,
+              // Render the lookup display_label off `category_code`, falling back
+              // to the legacy text for any not-yet-migrated row. Filtering is the
+              // lookup-driven FilterBar above; grouping keys on the label.
+              render: (r) => categoryLabels[r.category_code ?? ""] ?? "—",
+              accessor: (r) => categoryLabels[r.category_code ?? ""] ?? null,
               groupable: true,
             },
             {

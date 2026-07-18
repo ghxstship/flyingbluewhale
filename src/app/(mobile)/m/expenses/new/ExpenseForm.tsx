@@ -14,7 +14,13 @@ import { fileExpense } from "../actions";
  * cost centers (mirroring the PO form); past 8 codes the shared FormScreen
  * renders the field as the searchable action-drawer picker.
  */
-export function ExpenseForm({ costCodeOptions }: { costCodeOptions: string[] }) {
+export function ExpenseForm({
+  costCodeOptions,
+  categoryOptions,
+}: {
+  costCodeOptions: string[];
+  categoryOptions: string[];
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -23,11 +29,15 @@ export function ExpenseForm({ costCodeOptions }: { costCodeOptions: string[] }) 
   const base = FORMS.expense!;
   const def: FormDef = {
     ...base,
-    fields: base.fields.map((f) =>
-      f.id === "code"
-        ? { ...f, options: [EXPENSE_AUTO_CODE, ...costCodeOptions], default: EXPENSE_AUTO_CODE }
-        : f,
-    ),
+    fields: base.fields.map((f) => {
+      if (f.id === "code")
+        return { ...f, options: [EXPENSE_AUTO_CODE, ...costCodeOptions], default: EXPENSE_AUTO_CODE };
+      // Category options come from the ref_expense_category lookup (SSOT),
+      // not the kit's hardcoded list. Fall back to the spec options if the
+      // lookup is empty (e.g. Supabase not configured).
+      if (f.id === "category" && categoryOptions.length) return { ...f, options: categoryOptions };
+      return f;
+    }),
   };
 
   function onSubmit(_def: FormDef, vals: Record<string, unknown>) {

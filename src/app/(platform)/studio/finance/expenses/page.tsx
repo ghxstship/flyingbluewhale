@@ -2,9 +2,11 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { FilterBar } from "@/components/ui/FilterBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
+import { enumOptions } from "@/lib/enum-options";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { formatMoney } from "@/lib/i18n/format";
@@ -24,7 +26,11 @@ async function expenseAmounts(orgId: string) {
 
 const PAGE_SIZE = 100;
 
-export default async function ExpensesPage({ searchParams }: { searchParams: Promise<{ cursor?: string }> }) {
+export default async function ExpensesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cursor?: string; state?: string; discipline?: string }>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -43,11 +49,18 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
   // the table rows below are cursor-paginated (SC-2), but reducing over
   // a capped list silently truncated the totals once an org passed the
   // cap, so the aggregate stays on its own narrow query.
+  // Enum-driven facets: expense_state (native `expense_status`) + discipline
+  // (native `budget_discipline`), server-filtered.
+  const expenseFilters = [
+    sp?.state ? { column: "expense_state", op: "eq" as const, value: sp.state } : null,
+    sp?.discipline ? { column: "discipline", op: "eq" as const, value: sp.discipline } : null,
+  ].filter((f): f is NonNullable<typeof f> => f !== null);
   const [page, amounts] = await Promise.all([
     listOrgScopedPage("expenses", session.orgId, {
       orderBy: "spent_at",
       pageSize: PAGE_SIZE,
       cursor: sp?.cursor ?? null,
+      filters: expenseFilters.length ? expenseFilters : undefined,
     }),
     expenseAmounts(session.orgId),
   ]);
@@ -68,6 +81,23 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
         }
       />
       <div className="page-content space-y-3">
+        <FilterBar
+          facets={[
+            {
+              param: "state",
+              label: t("console.finance.expenses.columns.expense_state", undefined, "Status"),
+              options: enumOptions("expense_status"),
+              allLabel: t("console.finance.expenses.filter.allStates", undefined, "All statuses"),
+            },
+            {
+              param: "discipline",
+              label: t("console.finance.expenses.columns.discipline", undefined, "Discipline"),
+              options: enumOptions("budget_discipline"),
+              allLabel: t("console.finance.expenses.filter.allDisciplines", undefined, "All disciplines"),
+            },
+          ]}
+          resultCount={count}
+        />
         <DataTable<Expense>
           rows={rows}
           totalCount={count}
@@ -110,9 +140,9 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
               // the pre-XPMS fallback display.
               key: "department",
               header: t("console.finance.expenses.columns.department", undefined, "Department"),
-              render: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? "—",
+              render: (r) => (r as unknown as { department?: string | null }).department ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? null,
+              accessor: (r) => (r as unknown as { department?: string | null }).department ?? null,
               filterable: true,
               groupable: true,
             },

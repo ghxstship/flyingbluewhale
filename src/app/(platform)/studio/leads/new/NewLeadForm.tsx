@@ -1,12 +1,13 @@
 "use client";
 
 import { FormShell } from "@/components/FormShell";
-import { toTitle } from "@/lib/format";
 import { Input } from "@/components/ui/Input";
+import { enumOptions } from "@/lib/enum-options";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createLeadAction } from "../actions";
 
-const STAGES = ["new", "qualified", "contacted", "proposal", "won", "lost"] as const;
+// Lead stages come from the `lead_stage` enum SSOT (Constants), not a local copy.
+const STAGE_OPTIONS = enumOptions("lead_stage");
 
 export function NewLeadForm() {
   const t = useT();
@@ -32,9 +33,9 @@ export function NewLeadForm() {
             {t("console.leads.new.stage", undefined, "Stage")}
           </label>
           <select name="stage" defaultValue="new" className="ps-input mt-1.5 w-full">
-            {STAGES.map((s) => (
-              <option key={s} value={s}>
-                {toTitle(s)}
+            {STAGE_OPTIONS.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
               </option>
             ))}
           </select>

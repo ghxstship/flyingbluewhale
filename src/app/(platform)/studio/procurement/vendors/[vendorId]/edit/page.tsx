@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { OptionSelect } from "@/components/ui/OptionSelect";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { fetchLookupOptions } from "@/lib/enum-lookup";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { updateVendor, type State } from "./actions";
@@ -22,6 +24,9 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const row = await getOrgScoped("vendors", session.orgId, p.vendorId);
   if (!row) notFound();
   const { t } = await getRequestT();
+  // Active options + whatever code this record already holds (so an inactive
+  // legacy value stays selected when editing an old vendor).
+  const categoryOptions = await fetchLookupOptions("ref_vendor_category", { ensure: row.category_code });
   const action = updateVendor.bind(null, p.vendorId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
@@ -44,11 +49,12 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             required
             maxLength={200}
           />
-          <Input
+          <OptionSelect
             label={t("console.procurement.vendors.edit.categoryLabel", undefined, "Category")}
-            name="category"
-            defaultValue={row.category ?? ""}
-            maxLength={120}
+            name="category_code"
+            options={categoryOptions}
+            defaultValue={row.category_code ?? ""}
+            placeholderLabel={t("console.procurement.vendors.edit.categoryNone", undefined, "Select a category")}
           />
           <Input
             label={t("console.procurement.vendors.edit.contactEmailLabel", undefined, "Contact Email")}

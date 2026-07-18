@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { fetchLookupLabelMap } from "@/lib/enum-lookup";
 import { DetailShell, fmtDate } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
@@ -13,18 +14,24 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const session = await requireSession();
   const { t } = await getRequestT();
   const supabase = await createClient();
-  const { data: row } = await supabase
-    .from("vendors")
-    .select("id, name, category, contact_email, contact_phone, coi_expires_at, notes, payout_account_id")
-    .eq("org_id", session.orgId)
-    .eq("id", vendorId)
-    .maybeSingle();
+  const [{ data: row }, categoryLabels] = await Promise.all([
+    supabase
+      .from("vendors")
+      .select("id, name, category_code, contact_email, contact_phone, coi_expires_at, notes, payout_account_id")
+      .eq("org_id", session.orgId)
+      .eq("id", vendorId)
+      .maybeSingle(),
+    fetchLookupLabelMap("ref_vendor_category"),
+  ]);
+  // Category label off the lookup `category_code`.
+  const categoryLabel = (r: { category_code: string | null }) =>
+    categoryLabels[r.category_code ?? ""] ?? undefined;
   return (
     <DetailShell
       row={row}
       eyebrow={t("console.procurement.vendors.detail.eyebrow", undefined, "Procurement")}
       title={(r) => r.name}
-      subtitle={(r) => r.category}
+      subtitle={(r) => categoryLabel(r)}
       breadcrumbs={[
         { label: t("console.procurement.vendors.detail.breadcrumbs.procurement", undefined, "Procurement") },
         {
@@ -38,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
           ? [
               {
                 label: t("console.procurement.vendors.detail.fields.category", undefined, "Category"),
-                value: row.category ?? "—",
+                value: categoryLabel(row) ?? "—",
               },
               {
                 label: t("console.procurement.vendors.detail.fields.contactEmail", undefined, "Contact Email"),

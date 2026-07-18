@@ -9,7 +9,6 @@ export type ExpenseRow = {
   id: string;
   description: string;
   amount: string;
-  category: string | null;
   state: string;
   spent: string;
   hasReceipt: boolean;
@@ -76,7 +75,6 @@ export function ExpensesView({
                 <div className="t">{r.description}</div>
                 <div className="s">
                   {r.spent}
-                  {r.category ? ` · ${r.category}` : ""}
                   {/* Say it plainly when the receipt is missing: finance will
                       ask, and the person can still fix it today. */}
                   {r.hasReceipt ? "" : ` · ${t("m.expenses.noReceipt", undefined, "No receipt")}`}

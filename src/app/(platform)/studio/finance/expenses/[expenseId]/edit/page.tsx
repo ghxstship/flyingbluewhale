@@ -123,12 +123,8 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
               defaultValue={(row as { vendor?: string | null }).vendor ?? ""}
               maxLength={160}
             />
-            <Input
-              label={t("console.finance.expenses.edit.categoryLabel", undefined, "Category (Legacy)")}
-              name="category"
-              defaultValue={row.category ?? ""}
-              maxLength={120}
-            />
+            {/* `category` retired on studio expenses (XPMS department/discipline
+                is SSOT); the legacy text column is dropped by staged migration M3. */}
           </div>
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">

@@ -16,7 +16,6 @@ const Schema = z.object({
   // MoneyInput's hidden field — do NOT run this through dollarsToCents
   // (100× trap).
   amount_cents: moneyCentsString({ allowZero: false }),
-  category: z.string().max(80).optional().or(z.literal("")),
   spent_at: z.string().date(),
   project_id: z.string().uuid().optional().or(z.literal("")),
   notes: z.string().max(2000).optional(),
@@ -75,7 +74,7 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
     submitter_id: session.userId,
     description: parsed.data.description,
     amount_cents: Number(parsed.data.amount_cents),
-    category: parsed.data.category || null,
+    // `category` retired on studio expenses (XPMS department/discipline is SSOT).
     spent_at: parsed.data.spent_at,
     project_id: parsed.data.project_id || null,
     atom_id: atomId,

@@ -11,7 +11,7 @@ const Schema = z.object({
   name: z.string().min(1).max(120),
   contact_email: z.string().email().optional().or(z.literal("")),
   contact_phone: z.string().optional().or(z.literal("")),
-  category: z.string().optional().or(z.literal("")),
+  category_code: z.string().optional().or(z.literal("")),
   coi_expires_at: z.string().date().optional().or(z.literal("")),
   w9: z.string().optional(),
 });
@@ -29,12 +29,13 @@ export async function createVendorAction(_: State, fd: FormData): Promise<State>
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
+  // Category is lookup-backed (ref_vendor_category) — store only the FK `category_code`.
   const { error } = await supabase.from("vendors").insert({
     org_id: session.orgId,
     name: parsed.data.name,
     contact_email: parsed.data.contact_email || null,
     contact_phone: parsed.data.contact_phone || null,
-    category: parsed.data.category || null,
+    category_code: parsed.data.category_code || null,
     coi_expires_at: parsed.data.coi_expires_at || null,
     w9_on_file: parsed.data.w9 === "on",
   });

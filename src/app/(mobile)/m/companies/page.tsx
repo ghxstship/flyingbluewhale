@@ -1,5 +1,6 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { fetchLookupLabelMap } from "@/lib/enum-lookup";
 import { getRequestT } from "@/lib/i18n/request";
 import { ChevronLeft } from "lucide-react";
 import { CompaniesView, type Vendor } from "./CompaniesView";
@@ -24,12 +25,13 @@ export default async function CompaniesPage() {
   const { data } = await supabase
     .from("vendors")
     .select(
-      "id, name, category, trade_categories, contact_email, contact_phone, tagline, bio, website_url, rating_avg, rating_count, logo_url",
+      "id, name, category_code, trade_categories, contact_email, contact_phone, tagline, bio, website_url, rating_avg, rating_count, logo_url",
     )
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("name", { ascending: true })
     .limit(200);
+  const categoryLabels = await fetchLookupLabelMap("ref_vendor_category");
 
   const initials = (name: string) =>
     name
@@ -44,7 +46,10 @@ export default async function CompaniesPage() {
     return {
       id: v.id as string,
       name: (v.name as string) ?? t("m.companies.unnamed", undefined, "Unnamed Vendor"),
-      trade: (v.category as string) ?? trades[0] ?? t("m.companies.general", undefined, "General"),
+      trade:
+        categoryLabels[(v.category_code as string) ?? ""] ??
+        trades[0] ??
+        t("m.companies.general", undefined, "General"),
       trades,
       logo: initials((v.name as string) ?? "?"),
       scope: (v.tagline as string) || (v.bio as string) || "",

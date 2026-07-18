@@ -27,7 +27,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
 
   const { data } = await supabase
     .from("expenses")
-    .select("id, description, amount_cents, currency, category, expense_state, spent_at, receipt_path")
+    .select("id, description, amount_cents, currency, expense_state, spent_at, receipt_path")
     .eq("org_id", session.orgId)
     .eq("submitter_id", session.userId)
     .order("spent_at", { ascending: false })
@@ -38,7 +38,6 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
       id: string;
       description: string;
       amount_cents: number;
-      category: string | null;
       expense_state: string;
       spent_at: string;
       receipt_path: string | null;
@@ -47,7 +46,6 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
     id: e.id,
     description: e.description,
     amount: fmt.money(e.amount_cents),
-    category: e.category,
     state: e.expense_state,
     spent: fmt.date(e.spent_at),
     hasReceipt: Boolean(e.receipt_path),

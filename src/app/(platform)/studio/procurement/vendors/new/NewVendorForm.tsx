@@ -1,10 +1,12 @@
 "use client";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { OptionSelect } from "@/components/ui/OptionSelect";
+import type { Option } from "@/lib/enum-options";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createVendorAction } from "../actions";
 
-export function NewVendorForm() {
+export function NewVendorForm({ categoryOptions }: { categoryOptions: Option[] }) {
   const t = useT();
   return (
     <FormShell
@@ -22,14 +24,11 @@ export function NewVendorForm() {
         <Input label={t("console.procurement.vendors.new.phone", undefined, "Phone")} name="contact_phone" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input
+        <OptionSelect
           label={t("console.procurement.vendors.new.category", undefined, "Category")}
-          name="category"
-          placeholder={t(
-            "console.procurement.vendors.new.categoryPlaceholder",
-            undefined,
-            "Staging, lighting, catering…",
-          )}
+          name="category_code"
+          options={categoryOptions}
+          placeholderLabel={t("console.procurement.vendors.new.categoryNone", undefined, "Select a category")}
         />
         <Input
           label={t("console.procurement.vendors.new.coiExpires", undefined, "COI expires")}

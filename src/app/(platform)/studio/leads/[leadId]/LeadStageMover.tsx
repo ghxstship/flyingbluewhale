@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { moveLeadStageAction } from "../actions";
 import type { LeadStage } from "@/lib/supabase/types";
+import { Constants } from "@/lib/supabase/database.types";
 
-const ORDER: LeadStage[] = ["new", "qualified", "contacted", "proposal", "won", "lost"];
+// Progression order comes from the `lead_stage` enum SSOT (declared order).
+const ORDER = Constants.public.Enums.lead_stage;
 
 export function LeadStageMover({ leadId, stage }: { leadId: string; stage: LeadStage }) {
   const t = useT();

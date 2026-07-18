@@ -124,6 +124,14 @@ export async function fileExpense(_prev: State, fd: FormData): Promise<State> {
 
   const spentAt = v.date && /^\d{4}-\d{2}-\d{2}$/.test(v.date) ? v.date : new Date().toISOString().slice(0, 10);
 
+  // Category is lookup-backed (ref_expense_category): the form posts the display
+  // label; resolve it to the FK `category_code` and mirror the label into the
+  // legacy text column (dropped by staged migration M3).
+  const { data: catRows } = await supabase.from("ref_expense_category").select("code, display_label");
+  const categoryCode =
+    ((catRows ?? []) as { code: string; display_label: string }[]).find((r) => r.display_label === v.category)
+      ?.code ?? null;
+
   const { error } = await supabase.from("expenses").insert({
     org_id: session.orgId,
     project_id: v.projectId ?? null,
@@ -132,7 +140,7 @@ export async function fileExpense(_prev: State, fd: FormData): Promise<State> {
     // notes are the context finance asked for.
     description: v.notes ? `${v.merchant} — ${v.notes}` : v.merchant,
     amount_cents: cents,
-    category: v.category || null,
+    category_code: categoryCode,
     // Cost coding (kit 32 v2.8): a picked cost center lands in `department`
     // — the same column the scanner's Import To Budget writes — while the
     // auto sentinel stores nothing (finance codes it on approval).

@@ -1,9 +1,12 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
+import { FilterBar } from "@/components/ui/FilterBar";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
-import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
+import { listOrgScopedWithCount } from "@/lib/db/resource";
+import { enumOptions } from "@/lib/enum-options";
+import { XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -11,7 +14,11 @@ import type { Budget } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function BudgetsPage() {
+export default async function BudgetsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ discipline?: string; tier?: string; phase?: string }>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
@@ -25,12 +32,20 @@ export default async function BudgetsPage() {
       </>
     );
   const session = await requireSession();
+  const sp = await searchParams;
+  // Lookup-/enum-driven facets: discipline + tier are native enums (SSOT via
+  // Constants); phase is the XPMS 8-gate CHECK vocabulary ordered by gate.
+  const filters = [
+    sp.discipline ? { column: "discipline", op: "eq" as const, value: sp.discipline } : null,
+    sp.tier ? { column: "tier", op: "eq" as const, value: sp.tier } : null,
+    sp.phase ? { column: "xpms_phase", op: "eq" as const, value: sp.phase } : null,
+  ].filter((f): f is NonNullable<typeof f> => f !== null);
   // Exact count for the header — rows below stay on the capped default,
   // but rows.length under-reported the total past 100 budgets.
-  const [rows, count] = await Promise.all([
-    listOrgScoped("budgets", session.orgId, { orderBy: "created_at" }),
-    countOrgScoped("budgets", session.orgId),
-  ]);
+  const { rows, totalCount: count } = await listOrgScopedWithCount("budgets", session.orgId, {
+    orderBy: "created_at",
+    filters: filters.length ? filters : undefined,
+  });
   return (
     <>
       <ModuleHeader
@@ -52,6 +67,30 @@ export default async function BudgetsPage() {
         }
       />
       <div className="page-content">
+        <FilterBar
+          facets={[
+            {
+              param: "discipline",
+              label: t("console.finance.budgets.col.discipline", undefined, "Discipline"),
+              options: enumOptions("budget_discipline"),
+              allLabel: t("console.finance.budgets.filter.allDisciplines", undefined, "All disciplines"),
+            },
+            {
+              param: "tier",
+              label: t("console.finance.budgets.col.tier", undefined, "Tier"),
+              options: enumOptions("budget_tier"),
+              allLabel: t("console.finance.budgets.filter.allTiers", undefined, "All tiers"),
+            },
+            {
+              param: "phase",
+              label: t("console.finance.budgets.col.phase", undefined, "Phase"),
+              // XPMS 8-gate phase vocabulary, in gate order (not alphabetical).
+              options: XPMS_PHASES.map((p) => ({ value: p, label: p })),
+              allLabel: t("console.finance.budgets.filter.allPhases", undefined, "All phases"),
+            },
+          ]}
+          resultCount={count}
+        />
         <DataTable<Budget>
           rows={rows}
           rowHref={(r) => `/studio/finance/budgets/${r.id}`}
@@ -68,9 +107,9 @@ export default async function BudgetsPage() {
               // for rows that haven't been migrated yet.
               key: "department",
               header: t("console.finance.budgets.col.department", undefined, "Department"),
-              render: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? "—",
+              render: (r) => (r as unknown as { department?: string | null }).department ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? null,
+              accessor: (r) => (r as unknown as { department?: string | null }).department ?? null,
               filterable: true,
               groupable: true,
             },

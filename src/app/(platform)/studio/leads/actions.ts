@@ -9,6 +9,10 @@ import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
+import { Constants } from "@/lib/supabase/database.types";
+
+// Single source of truth for lead stages — the `lead_stage` enum.
+const LEAD_STAGES = Constants.public.Enums.lead_stage;
 
 // Leads live in the merged CRM store (`opportunities`, kind='lead' — ADR-0014
 // Phase A amendment). The form vocabulary is unchanged; fields map onto the
@@ -18,7 +22,7 @@ const Schema = z.object({
   email: z.string().email().optional().or(z.literal("")),
   phone: z.string().max(40).optional().or(z.literal("")),
   source: z.string().max(80).optional().or(z.literal("")),
-  stage: z.enum(["new", "qualified", "contacted", "proposal", "won", "lost"]).default("new"),
+  stage: z.enum(LEAD_STAGES).default("new"),
   // Sea Trial R3 FINDING-019: estimated_value optional but rejected if
   // negative or non-numeric.
   estimated_value: moneyDollarsString({ allowEmpty: true }),
@@ -155,8 +159,6 @@ export async function createProposalFromLeadAction(leadId: string): Promise<Crea
   revalidatePath("/studio/leads");
   redirect(`/studio/proposals/${proposal.id}`);
 }
-
-const LEAD_STAGES = ["new", "qualified", "contacted", "proposal", "won", "lost"] as const;
 
 const BulkIds = z.array(z.string().uuid()).min(1).max(200);
 

@@ -10,7 +10,7 @@ import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
-  category: z.string().max(120).optional().or(z.literal("")),
+  category_code: z.string().max(120).optional().or(z.literal("")),
   contact_email: z.string().email().optional().or(z.literal("")),
   contact_phone: z.string().max(40).optional().or(z.literal("")),
   coi_expires_at: z.string().optional().or(z.literal("")),
@@ -30,9 +30,10 @@ export async function updateVendor(id: string, _: State, fd: FormData): Promise<
   if (!parsed.success) return formFail(parsed.error, fd);
   // Sea Trial FINDING-022: optimistic concurrency.
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
+  // Category is lookup-backed (ref_vendor_category) — store only the FK `category_code`.
   const result = await updateOrgScopedWithCheck("vendors", session.orgId, id, expectedUpdatedAt, {
     name: parsed.data.name,
-    category: parsed.data.category || null,
+    category_code: parsed.data.category_code || null,
     contact_email: parsed.data.contact_email || null,
     contact_phone: parsed.data.contact_phone || null,
     coi_expires_at: parsed.data.coi_expires_at || null,

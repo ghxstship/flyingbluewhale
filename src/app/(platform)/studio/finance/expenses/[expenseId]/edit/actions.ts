@@ -15,7 +15,6 @@ const Schema = z.object({
   // Integer cents from MoneyInput's hidden field — never a dollar string.
   amount_cents: moneyCentsString({ allowEmpty: true }),
   currency: z.string().min(1).max(3),
-  category: z.string().max(120).optional().or(z.literal("")),
   expense_state: z.string(),
   spent_at: z.string().min(1),
   // XPMS taxonomy parity with the create action
@@ -43,7 +42,6 @@ export async function updateExpense(id: string, _: State, fd: FormData): Promise
     description: parsed.data.description,
     amount_cents: parsed.data.amount_cents ? Number(parsed.data.amount_cents) : 0,
     currency: parsed.data.currency,
-    category: parsed.data.category || null,
     expense_state: parsed.data.expense_state as "pending" | "approved" | "rejected" | "reimbursed",
     spent_at: parsed.data.spent_at,
     department: parsed.data.department || null,

@@ -1,5 +1,6 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { fetchLookupOptions } from "@/lib/enum-lookup";
 import { hasSupabase } from "@/lib/env";
 import { ExpenseForm } from "./ExpenseForm";
 
@@ -20,6 +21,10 @@ export const dynamic = "force-dynamic";
  */
 export default async function NewExpensePage() {
   let costCodeOptions: string[] = [];
+  // Category is lookup-backed (ref_expense_category); inject its display labels
+  // in sort_order instead of the kit's hardcoded 7. The action maps the picked
+  // label back to `category_code`. Empty until Supabase is configured.
+  let categoryOptions: string[] = [];
 
   if (hasSupabase) {
     const session = await requireSession();
@@ -34,7 +39,8 @@ export default async function NewExpensePage() {
     costCodeOptions = ((codes ?? []) as { code: string; name: string }[]).map(
       (c) => `${c.code} · ${c.name}`,
     );
+    categoryOptions = (await fetchLookupOptions("ref_expense_category")).map((o) => o.label);
   }
 
-  return <ExpenseForm costCodeOptions={costCodeOptions} />;
+  return <ExpenseForm costCodeOptions={costCodeOptions} categoryOptions={categoryOptions} />;
 }

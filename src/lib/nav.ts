@@ -1642,25 +1642,28 @@ export function portalNav(slug: string, persona: PortalPersona | null): NavGroup
  * Persona-routed tab bars (ADR-0009, deferred) will customize per role
  * for security / driver / medic / admin without changing this default.
  */
-// COMPVSS kit tab model (design kit rebuild 2026-06-21): the field app's primary
-// bar is Home · Calendar · Tasks · Assets · Inbox, then More. Replaced the prior
-// Home·Inbox·Shift·Alerts·Me deskless default. Icons resolve via the
-// MobileTabBar ICONS map (keyed by href).
+// COMPVSS kit tab model (kit 33 v3.0, 2026-07-18): the field app's primary bar
+// is Home · Calendar · Tasks · Inbox · Aurora, then More. The 5th slot was
+// Assets through kit 32; kit 33 swaps it for **Aurora** — the AI agentic-chat
+// surface (`/m/aurora`). Assets moved into the More nav drawer under My Work.
+// Icons resolve via the MobileTabBar ICONS map (keyed by href).
 //
 // Crew-only by construction: the crew entitlement band carries no GVTEWAY reach
 // (`entitlements.json`), so no consumer surface belongs in this bar. The GVTEWAY
 // Onsite tab that shipped here 2026-06-23 was rehomed to `/p/onsite` (the
 // consumer shell its audience actually lands in) 2026-07-15.
-// Order and hrefs are the kit's TABS array verbatim (kit 28,
-// design_handoff_compvss_field/runtime/app.jsx:796). Inbox is 4th and Assets
-// 5th — the repo had them transposed, and "Assets" pointed at /m/inventory,
-// which is the stock-on-hand surface, not the crew member's own assigned gear.
+//
+// Order/hrefs are the kit's TABS array (kit 33,
+// design_handoff_compvss_field/runtime/app.jsx:938). Two slots behave specially
+// in the MobileTabBar client: **Aurora** navigates to the full-screen chat
+// route, and **More** opens the left nav drawer rather than routing (the
+// `/m/more` route stays as a deep-linkable / no-JS fallback of the same IA).
 export const mobileTabs: NavItem[] = [
   { label: "Home", href: "/m" },
   { label: "Calendar", href: "/m/schedule" },
   { label: "Tasks", href: "/m/tasks" },
   { label: "Inbox", href: "/m/inbox" },
-  { label: "Assets", href: "/m/assets" },
+  { label: "Aurora", href: "/m/aurora" },
   { label: "More", href: "/m/more" },
 ];
 
@@ -1688,10 +1691,23 @@ export const mobileTabs: NavItem[] = [
 // labels; middot `·` only inside headers, never here.
 export const mobileSurfaces: NavItem[] = [
   // Tools.
+  // Kit 33 (v3.0): Aurora is the 5th bottom tab — the AI agentic-chat surface.
+  // Listed here so the route is sitemap-navigable; the tab itself routes to it.
+  { label: "Aurora", href: "/m/aurora" },
+  // Assets left the bottom bar (Aurora took its slot) and now lives in the nav
+  // drawer under My Work — still a first-class secondary surface.
+  { label: "Assets", href: "/m/assets" },
   // Kit 29: Global Search is a first-class route (top-bar search button).
   { label: "Search", href: "/m/search" },
   { label: "Catalog", href: "/m/catalog" },
   { label: "Inventory", href: "/m/inventory" },
+  // Kit 33 (v3.0) Operations SSOT ledgers — field-first freight/checklist/
+  // permit/travel/report surfaces under the drawer's Operations group.
+  { label: "Reports", href: "/m/reports" },
+  { label: "Inspections", href: "/m/inspections" },
+  { label: "Logistics", href: "/m/logistics" },
+  { label: "Permits & Compliance", href: "/m/permits" },
+  { label: "Travel & Lodging", href: "/m/travel" },
   { label: "Inventory Scan", href: "/m/inventory/scan" },
   { label: "Scan", href: "/m/check-in" },
   { label: "Quick Scan", href: "/m/scan" },
@@ -1707,9 +1723,11 @@ export const mobileSurfaces: NavItem[] = [
   { label: "File An Expense", href: "/m/expenses/new" },
   { label: "Timesheets", href: "/m/timesheets" },
   { label: "New Message", href: "/m/inbox/new" },
-  { label: "Spaces & Clubs", href: "/m/spaces" },
+  // Kit 33 (v3.0) renames: Spaces & Clubs → Groups, Engagement → Insights,
+  // Reporting Structure → Org Chart.
+  { label: "Groups", href: "/m/spaces" },
   { label: "Knowledge", href: "/m/docs" },
-  { label: "Engagement", href: "/m/engagement" },
+  { label: "Insights", href: "/m/engagement" },
   { label: "Mileage", href: "/m/mileage" },
   { label: "Log A Drive", href: "/m/mileage/new" },
   { label: "Purchase Requests", href: "/m/requisitions" },
@@ -1745,7 +1763,7 @@ export const mobileSurfaces: NavItem[] = [
   // Kit 30 lifecycle suite (manager-gated people:manage surfaces).
   { label: "Project Roster", href: "/m/roster" },
   { label: "Assign To Project", href: "/m/roster/assign" },
-  { label: "Reporting Structure", href: "/m/roster/reporting" },
+  { label: "Org Chart", href: "/m/roster/reporting" },
   { label: "Vendors", href: "/m/companies" },
   { label: "Connections", href: "/m/connections" },
   // Network.
@@ -1777,6 +1795,106 @@ export const mobileSurfaces: NavItem[] = [
   // Kit 29 standalone-app surfaces (app-store requirements).
   { label: "Help & Support", href: "/m/support" },
   { label: "About & Legal", href: "/m/settings/about" },
+];
+
+/**
+ * COMPVSS nav-drawer IA — kit 33 v3.0 SSOT (design_handoff_compvss_field/
+ * runtime/app.jsx:1034 `NAV_GROUPS` × `MORE_LINKS`). Drives BOTH the left
+ * slide-in nav drawer (`MobileNavDrawer`, opened by the More tab) and the
+ * `/m/more` route (its deep-linkable / no-JS fallback), so the two can never
+ * drift. Ordered for every project role, internal + external: the personal /
+ * daily surfaces everyone touches lead, then Workplace, Operations, People,
+ * Opportunities, and finally the perm-gated **Manage** control plane (which
+ * self-hides entirely for crew / external roles).
+ *
+ * `managerOnly` mirrors the kit's per-row `perm` (create/approve/assign/
+ * reports) — the repo collapses those onto the manager band (`isManagerPlus`);
+ * hiding is UX, every gated surface re-checks server-side. `settings`, theme,
+ * and sign-out live in the drawer footer, and profile in the identity header —
+ * none are groups here.
+ */
+export type MoreNavLink = {
+  href: string;
+  label: string;
+  /** KIcon registry key (mobile kit `src/components/mobile/kit/icon.tsx`). */
+  icon: string;
+  sub: string;
+  /** Manager+ gate — hides the row for crew/external (surface re-checks). */
+  managerOnly?: boolean;
+  /** Live badge slot the drawer resolves (currently only pending approvals). */
+  badge?: "approvals";
+};
+export type MoreNavGroup = { key: string; label: string; links: MoreNavLink[] };
+
+export const moreNavGroups: MoreNavGroup[] = [
+  {
+    key: "mywork",
+    label: "My Work",
+    links: [
+      { href: "/m/assets", label: "Assets", icon: "Package", sub: "Gear Assigned To You" },
+      { href: "/m/time", label: "Time", icon: "Timer", sub: "Your Hours & Shift Records" },
+      { href: "/m/documents", label: "Documents", icon: "FolderOpen", sub: "Site Docs, Filtered To You" },
+      { href: "/m/activity", label: "Activity History", icon: "History", sub: "Scans, Access, Reports & More" },
+      { href: "/m/time-off", label: "Time Off", icon: "CalendarOff", sub: "Request PTO & Track Balances" },
+    ],
+  },
+  {
+    key: "workplace",
+    label: "Workplace",
+    links: [
+      { href: "/m/spaces", label: "Groups", icon: "Users2", sub: "Team, Location & Interest Channels" },
+      { href: "/m/feed", label: "Community", icon: "Megaphone", sub: "Your Professional Feed" },
+      { href: "/m/docs", label: "Knowledge", icon: "BookOpen", sub: "Policies, SOPs & How-Tos" },
+    ],
+  },
+  {
+    key: "operations",
+    label: "Operations",
+    links: [
+      { href: "/m/reports", label: "Reports", icon: "FileWarning", sub: "Incident & Daily Log" },
+      { href: "/m/inspections", label: "Inspections", icon: "ClipboardCheck", sub: "Checklists & Safety Walks" },
+      { href: "/m/inventory", label: "Inventory", icon: "PackageSearch", sub: "On-Hand Gear & Stock" },
+      { href: "/m/logistics", label: "Logistics", icon: "Truck", sub: "Deliveries & Freight" },
+      { href: "/m/advances", label: "Advances", icon: "ClipboardList", sub: "Advance Requests & Status" },
+      { href: "/m/catalog", label: "Catalog", icon: "Boxes", sub: "Browse & Request From XPMS" },
+      { href: "/m/expenses", label: "Expenses", icon: "Receipt", sub: "Submitted Spend & Reimbursements" },
+      { href: "/m/permits", label: "Permits & Compliance", icon: "ShieldCheck", sub: "Permits, COIs & Certs" },
+      { href: "/m/travel", label: "Travel & Lodging", icon: "Plane", sub: "Itineraries, Hotels & Per Diem" },
+    ],
+  },
+  {
+    key: "people",
+    label: "People & Teams",
+    links: [
+      { href: "/m/directory", label: "Team Roster", icon: "Users", sub: "Org & Project Crew" },
+      { href: "/m/companies", label: "Vendors", icon: "Building2", sub: "All Orgs On This Project" },
+      { href: "/m/connections", label: "Connections", icon: "Network", sub: "Your ATLVS Network" },
+    ],
+  },
+  {
+    key: "opportunities",
+    label: "Opportunities",
+    links: [
+      { href: "/m/jobs", label: "Jobs", icon: "Briefcase", sub: "Open Shifts & Gigs" },
+      { href: "/m/market", label: "Marketplace", icon: "Tag", sub: "Buy, Sell & Trade Gear" },
+      { href: "/m/referrals", label: "Referrals & Rewards", icon: "Gift", sub: "Refer Crew, Earn Rewards" },
+    ],
+  },
+  {
+    // Control plane — every row manager-gated, so this whole section hides for
+    // crew / external roles and only appears for elevated leads & admins.
+    key: "manage",
+    label: "Manage",
+    links: [
+      { href: "/m/requests", label: "Approvals", icon: "CheckCheck", sub: "Review & Action Requests", managerOnly: true, badge: "approvals" },
+      { href: "/m/scheduler", label: "Shift Scheduler", icon: "CalendarCog", sub: "Build & Publish Crew Shifts", managerOnly: true },
+      { href: "/m/roster", label: "Project Roster", icon: "UserRoundCheck", sub: "Contracts, Onboarding & Advances", managerOnly: true },
+      { href: "/m/finance", label: "Finance", icon: "Banknote", sub: "Budget, POs & Coded Spend", managerOnly: true },
+      { href: "/m/roster/reporting", label: "Org Chart", icon: "Network", sub: "Who Reports To Whom", managerOnly: true },
+      { href: "/m/templates", label: "Templates", icon: "LayoutTemplate", sub: "Org & Project Template Library", managerOnly: true },
+      { href: "/m/engagement", label: "Insights", icon: "ChartNoAxesColumn", sub: "Reach & Adoption Analytics", managerOnly: true },
+    ],
+  },
 ];
 
 /**

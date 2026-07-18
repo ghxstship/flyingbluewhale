@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1247 · **API route handlers:** 157 · **Distinct nav hrefs:** 560
+**Page routes:** 1253 · **API route handlers:** 157 · **Distinct nav hrefs:** 566
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 100 | 76 | 23 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 106 | 82 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1247** | **534** | **670** | **0** | **43** |
+| **TOTAL** | | **1253** | **540** | **670** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1360,7 +1360,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-100 routes — ● 76 nav · ○ 23 linked · ⚠ 0 orphan
+106 routes — ● 82 nav · ○ 23 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1385,6 +1385,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>assets</code> · 1 route</summary>
 
 ● `/m/assets`
+
+</details>
+
+<details><summary><code>aurora</code> · 1 route</summary>
+
+● `/m/aurora`
 
 </details>
 
@@ -1538,6 +1544,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>inspections</code> · 1 route</summary>
+
+● `/m/inspections`
+
+</details>
+
 <details><summary><code>inventory</code> · 2 routes</summary>
 
 ● `/m/inventory`
@@ -1548,6 +1560,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>jobs</code> · 1 route</summary>
 
 ● `/m/jobs`
+
+</details>
+
+<details><summary><code>logistics</code> · 1 route</summary>
+
+● `/m/logistics`
 
 </details>
 
@@ -1603,6 +1621,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>permits</code> · 1 route</summary>
+
+● `/m/permits`
+
+</details>
+
 <details><summary><code>profile</code> · 1 route</summary>
 
 ● `/m/profile`
@@ -1619,6 +1643,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>referrals</code> · 1 route</summary>
 
 ● `/m/referrals`
+
+</details>
+
+<details><summary><code>reports</code> · 1 route</summary>
+
+● `/m/reports`
 
 </details>
 
@@ -1733,6 +1763,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>timesheets</code> · 1 route</summary>
 
 ● `/m/timesheets`
+
+</details>
+
+<details><summary><code>travel</code> · 1 route</summary>
+
+● `/m/travel`
 
 </details>
 

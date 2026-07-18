@@ -18,6 +18,7 @@ import {
   ListChecks,
   Package,
   MessageSquare,
+  Sparkles,
 } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
@@ -25,16 +26,17 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
-  // COMPVSS kit tab model — the kit's TABS array verbatim (kit 28,
-  // design_handoff_compvss_field/runtime/app.jsx:796): Home · Calendar ·
-  // Tasks · Inbox · Assets · More (6 tabs). Icons are the kit's too: Home is
-  // Palmtree, not Home, and More is MoreVertical, not MoreHorizontal.
+  // COMPVSS kit tab model — the kit's TABS array (kit 33 v3.0,
+  // design_handoff_compvss_field/runtime/app.jsx:938): Home · Calendar ·
+  // Tasks · Inbox · Aurora · More (6 tabs). Icons are the kit's too: Home is
+  // Palmtree, Aurora is Sparkles, and More is MoreVertical.
   "/m": Palmtree,
   "/m/schedule": CalendarDays,
   "/m/tasks": ListChecks,
   "/m/inbox": MessageSquare,
-  "/m/assets": Package,
+  "/m/aurora": Sparkles,
   "/m/more": MoreVertical,
+  "/m/assets": Package,
   "/m/inventory": Package,
   // Secondary surfaces — reachable from /m/more and cmd-K (icons used when a
   // surface appears in a bar/list that resolves through this map).
@@ -49,23 +51,42 @@ const ICONS: Record<string, typeof Home> = {
 };
 
 /**
- * Parent-tab ownership — kit 31 (runtime/app.jsx:4643): sub-screens light
- * their parent tab. Home owns the emergency pages, the time clock, and the
- * assign flow; Assets owns the advance cart; More owns every hub surface it
- * links. Routes NOT listed (profile, notifications, search) light no tab —
- * the kit's active map is the fixture, extended only with repo route
- * spellings for the same surfaces.
+ * Parent-tab ownership — kit 33 v3.0 (runtime/app.jsx `TABS` + `NAV_GROUPS`):
+ * sub-screens light their parent tab. Home owns the emergency pages, the time
+ * clock, and the assign flow; **More** owns every nav-drawer hub surface it
+ * links (including Assets + the advance cart, which moved out of the retired
+ * Assets tab, and the new Operations ledgers). Aurora is a leaf — it owns no
+ * sub-surface. Routes NOT listed (profile, notifications, search) light no tab.
  */
 const PARENT_PREFIXES: Record<string, string[]> = {
   "/m": ["/m/emergency", "/m/clock", "/m/assign"],
-  "/m/assets": ["/m/advance", "/m/advances"],
   "/m/more": [
-    // Operations
-    "/m/catalog",
-    "/m/inventory",
+    // My Work
+    "/m/assets",
+    "/m/advance",
+    "/m/advances",
+    "/m/time",
     "/m/documents",
+    "/m/activity",
+    "/m/time-off",
+    // Workplace
+    "/m/feed",
+    "/m/spaces",
+    "/m/docs",
+    "/m/guide",
+    "/m/engagement",
+    // Operations
+    "/m/reports",
+    "/m/inspections",
+    "/m/inventory",
+    "/m/logistics",
+    "/m/catalog",
+    "/m/expenses",
+    "/m/permits",
+    "/m/travel",
     "/m/templates",
     "/m/finance",
+    "/m/scheduler",
     "/m/requests",
     "/m/requisitions",
     "/m/coc",
@@ -78,30 +99,20 @@ const PARENT_PREFIXES: Record<string, string[]> = {
     "/m/incidents",
     "/m/incident",
     "/m/lost-found",
-    // Time & Work
-    "/m/my-work",
-    "/m/time",
-    "/m/timesheets",
-    "/m/time-off",
-    "/m/expenses",
-    "/m/mileage",
-    "/m/activity",
-    // Workplace
-    "/m/feed",
-    "/m/spaces",
-    "/m/docs",
-    "/m/guide",
-    "/m/engagement",
-    // People
+    // People & Teams
     "/m/directory",
     "/m/companies",
     "/m/connections",
     "/m/onboarding",
+    "/m/roster",
     // Opportunities
     "/m/jobs",
     "/m/market",
     "/m/referrals",
-    // Account
+    // Manage / account
+    "/m/my-work",
+    "/m/timesheets",
+    "/m/mileage",
     "/m/pass",
     "/m/settings",
     "/m/support",
@@ -148,14 +159,8 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
         const active = direct || ownsPath(i.href);
         const Icon = ICONS[i.href] ?? Home;
         const badgeCount = badges?.[i.href] ?? 0;
-        return (
-          <Link
-            key={i.href}
-            href={i.href}
-            aria-current={active ? "page" : undefined}
-            className={`tb${active ? " on" : ""}`}
-            style={{ textDecoration: "none" }}
-          >
+        const inner = (
+          <>
             <span className="relative">
               <Icon size={21} aria-hidden="true" />
               {badgeCount > 0 && (
@@ -167,6 +172,35 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
               )}
             </span>
             <span>{t(navItemKey(i), undefined, i.label)}</span>
+          </>
+        );
+        // Kit 33 v3.0: the More tab opens the left nav drawer (a sibling client
+        // island, `MobileNavDrawer`, listening for `compvss:nav-open`) instead
+        // of routing. Every other tab — including Aurora — is a normal Link.
+        if (i.href === "/m/more") {
+          return (
+            <button
+              key={i.href}
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))}
+              aria-current={active ? "page" : undefined}
+              aria-haspopup="menu"
+              className={`tb${active ? " on" : ""}`}
+              style={{ textDecoration: "none", background: "none" }}
+            >
+              {inner}
+            </button>
+          );
+        }
+        return (
+          <Link
+            key={i.href}
+            href={i.href}
+            aria-current={active ? "page" : undefined}
+            className={`tb${active ? " on" : ""}`}
+            style={{ textDecoration: "none" }}
+          >
+            {inner}
           </Link>
         );
       })}

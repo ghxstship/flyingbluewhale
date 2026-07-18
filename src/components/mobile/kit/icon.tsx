@@ -29,6 +29,8 @@ import {
   Ticket, Timer, Toilet, Trash2, TrendingUp, TriangleAlert, Truck, Type, Undo2, Upload, User,
   UserCheck, UserCircle, UserCog, UserPlus, UserRoundPlus, UserX, Users, UsersRound, Utensils,
   UtensilsCrossed, Vibrate, Volume2, Wallet, Weight, Wine, Wrench, XCircle, Zap,
+  // kit 33 v3.0 additions (nav-drawer, ops ledgers, aurora chat).
+  ChartNoAxesColumn, FileWarning, Moon, UserRoundCheck, Users2, X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { CSSProperties, MouseEventHandler } from "react";
@@ -77,6 +79,8 @@ const ICONS: Record<string, LucideIcon> = {
   Ticket, Timer, Toilet, Trash2, TrendingUp, TriangleAlert, Truck, Type, Undo2, Upload, User,
   UserCheck, UserCircle, UserCog, UserPlus, UserRoundPlus, UserX, Users, UsersRound, Utensils,
   UtensilsCrossed, Vibrate, Volume2, Wallet, Weight, Wine, Wrench, XCircle, Zap,
+  // kit 33 v3.0 additions (nav-drawer, ops ledgers, aurora chat).
+  ChartNoAxesColumn, FileWarning, Moon, UserRoundCheck, Users2, X,
 };
 
 export type KIconProps = {

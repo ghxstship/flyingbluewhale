@@ -51,7 +51,7 @@ export function MobileAppBar({
         <button
           type="button"
           className="brandbtn"
-          onClick={() => router.push("/m/inbox")}
+          onClick={() => router.push("/m/aurora")}
           aria-label="Ask Aurora AI"
         >
           <svg viewBox="0 0 128 128" style={{ width: 30, height: 30 }} aria-hidden="true">

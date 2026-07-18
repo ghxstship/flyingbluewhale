@@ -16,8 +16,10 @@ import { ScrollMemory } from "@/components/mobile/ScrollMemory";
 import { StoragePersistence } from "@/components/mobile/StoragePersistence";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { MobileAppBar } from "@/components/mobile/MobileAppBar";
+import { MobileNavDrawer } from "@/components/mobile/MobileNavDrawer";
 import { mobileTabs } from "@/lib/nav";
-import { getSession } from "@/lib/auth";
+import { getSession, isManagerPlus } from "@/lib/auth";
+import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getActiveProject, type ActiveProject } from "@/lib/mobile/active-project";
@@ -84,8 +86,10 @@ export default async function MobileLayout({ children }: { children: React.React
   // (7-day proxy — the inbox surface owns precise per-room unread accounting).
   // Cheap head-only counts; the client mirrors the sum to navigator.setAppBadge.
   const orgLabel = tenant.orgName ?? "Workspace";
+  const canManage = isManagerPlus(session);
   const badges: Record<string, number> = {};
   let bellUnread = 0;
+  let approvalsCount = 0;
   let activeProject: ActiveProject | null = null;
   if (hasSupabase) {
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -114,14 +118,37 @@ export default async function MobileLayout({ children }: { children: React.React
     if (unread) badges["/m/inbox"] = unread;
     bellUnread = notifCount ?? 0;
     activeProject = active;
+
+    // Kit 33 v3.0: the nav drawer's Manage → Approvals row carries a live
+    // pending-approvals badge. Manager+ only (the group is hidden otherwise),
+    // so we skip the read entirely for crew/external.
+    if (canManage) {
+      const { count: pendingApprovals } = await supabase
+        .from("approval_instances")
+        .select("id", { count: "exact", head: true })
+        .eq("org_id", session.orgId)
+        .in("state", [...OPEN_INSTANCE_STATES]);
+      approvalsCount = pendingApprovals ?? 0;
+    }
   }
 
   // Kit avatar is initials, mono, on accent (`JG` for Joshamee Gibbs).
-  const initials = ((session.email ?? "?").split("@")[0] ?? "?")
-    .split(/[._-]+/)
-    .slice(0, 2)
-    .map((s) => s.charAt(0).toUpperCase())
-    .join("") || "?";
+  const nameTokens = ((session.email ?? "there").split("@")[0] ?? "there").split(/[._-]+/);
+  const initials =
+    nameTokens
+      .slice(0, 2)
+      .map((s) => s.charAt(0).toUpperCase())
+      .join("") || "?";
+  // Nav-drawer identity header — display name + humanized platform role. These
+  // are placeholder-tier (derived from the email local part) until a profile
+  // display-name read is wired; the kit shows "Joshamee Gibbs · Gate Lead".
+  const displayName =
+    nameTokens
+      .filter(Boolean)
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(" ") || "Field Crew";
+  const roleLabel =
+    session.role.charAt(0).toUpperCase() + session.role.slice(1).replace(/_/g, " ");
 
   return (
     <TenantShell tenant={tenant}>
@@ -166,6 +193,21 @@ export default async function MobileLayout({ children }: { children: React.React
         <ScrollMemory />
         <StoragePersistence />
         <MobileTabBar items={mobileTabs} badges={badges} />
+        {/* Kit 33 v3.0: the More tab opens this left nav drawer (grouped IA +
+            gated Manage section + footer) rather than routing to a list. It
+            listens for the `compvss:nav-open` event the tab dispatches. */}
+        <MobileNavDrawer
+          name={displayName}
+          roleLabel={roleLabel}
+          initials={initials}
+          orgName={orgLabel}
+          projectName={activeProject?.name ?? null}
+          projectLive={activeProject?.live ?? false}
+          currentOrgId={session.orgId}
+          currentProjectId={activeProject?.id ?? null}
+          canManage={canManage}
+          approvals={approvalsCount}
+        />
         <CommandPalette scope="mobile" />
       </div>
     </TenantShell>

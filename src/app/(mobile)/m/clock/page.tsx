@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon } from "@/components/mobile/kit";
 import { CheckInControls } from "./CheckInControls";
 import { ShiftNoteForm } from "./ShiftNoteForm";
 import { CorrectionRequest } from "./CorrectionRequest";
@@ -142,6 +143,15 @@ export default async function MobileClockPage() {
 
   const onShift = openEntry != null;
 
+  // Kit 32 E4 — shift-fatigue nudge. Honest server read: hours elapsed on the
+  // currently-open entry. A long single shift is a real safety signal (>10h),
+  // so surface a break reminder; nothing is fabricated — no open entry, no
+  // nudge, and the count is the entry's own elapsed time.
+  const FATIGUE_HOURS = 10;
+  const openHours = openEntry ? (Date.now() - new Date(openEntry.started_at).getTime()) / 3_600_000 : 0;
+  const fatigued = openEntry != null && openHours >= FATIGUE_HOURS;
+  const fatigueHours = Math.floor(openHours);
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">
@@ -155,6 +165,23 @@ export default async function MobileClockPage() {
         openSince={openEntry?.started_at ?? null}
         zoneName={zoneNameFor(openEntry?.zone_id ?? null)}
       />
+
+      {fatigued && (
+        <div
+          className="ps-alert ps-alert--warn"
+          role="status"
+          style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12 }}
+        >
+          <KIcon name="Coffee" size={16} style={{ flex: "none" }} />
+          <span>
+            {t(
+              "m.clock.fatigue",
+              { hours: fatigueHours },
+              `You've been clocked in for over ${fatigueHours} hours. Take a break when you can.`,
+            )}
+          </span>
+        </div>
+      )}
 
       <div className="sech">
         <h2>{t("m.clock.recent", undefined, "Recent")}</h2>

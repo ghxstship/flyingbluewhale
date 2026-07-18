@@ -91,6 +91,11 @@ export type AuditAction =
   // surface — proposals, decks, drawings — should emit one of these.
   | "share_link.create"
   | "share_link.revoke"
+  // Document share (kit 32 A7) — a field user sharing a Knowledge doc/SOP.
+  // Attributable because a share carries the doc outside the surface that
+  // enforced who could read it; the row records the RBAC scope that governed
+  // it so a later question ("who could this reach?") has an answer.
+  | "document.shared"
   // Knowledge Base article verification (kit 21 W7) — stamping / clearing the
   // "verified" trust signal on an SOP.
   | "kb.article.verified"

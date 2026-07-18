@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { KIcon, Sheet } from "@/components/mobile/kit";
+import { actionHaptic, hapticsEnabled, setHapticsEnabled } from "@/lib/haptics";
 import { useThemeIfAvailable } from "@/app/theme/ThemeProvider";
 import { useLocale, useT } from "@/lib/i18n/LocaleProvider";
 import { SUPPORTED_LOCALES } from "@/lib/i18n/config";
@@ -167,6 +168,49 @@ function PickerRow({
         </Sheet>
       )}
     </>
+  );
+}
+
+/**
+ * Haptics toggle row — kit 32 B4. Vibration support is per-DEVICE, not
+ * per-account, so the preference lives in localStorage (`src/lib/haptics.ts`),
+ * not `user_preferences`. Read on mount (never during render — the value is
+ * client-only and stamping it in render is a hydration mismatch), default ON.
+ * Flipping it on fires a confirming buzz so the setting demonstrates itself.
+ */
+function HapticsRow({
+  icon,
+  title,
+  sub,
+  ariaLabel,
+}: {
+  icon: string;
+  title: string;
+  sub: string;
+  ariaLabel: string;
+}) {
+  const [on, setOn] = useState(true);
+  useEffect(() => {
+    setOn(hapticsEnabled());
+  }, []);
+  const set = (next: boolean) => {
+    setHapticsEnabled(next);
+    setOn(next);
+    // Confirm with a buzz only when turning ON (turning off should be silent).
+    if (next) actionHaptic("ok");
+  };
+  return (
+    <div className="item" style={{ cursor: "default" }}>
+      <KIcon name={icon} size={18} style={{ color: "var(--p-text-2)", flex: "none" }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="t">{title}</div>
+        <div className="s">{sub}</div>
+      </div>
+      <label className="ps-switch" style={{ cursor: "pointer" }}>
+        <input type="checkbox" checked={on} onChange={(e) => set(e.target.checked)} aria-label={ariaLabel} />
+        <span className="ps-switch-track" aria-hidden />
+      </label>
+    </div>
   );
 }
 
@@ -426,6 +470,13 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
           onPick={(d) => theme.setDensity(d as "compact" | "cozy" | "spacious")}
         />
       )}
+      {/* Kit 32 B4: Haptics toggle — device-level, localStorage-backed. */}
+      <HapticsRow
+        icon="Vibrate"
+        title={t("m.settings.haptics.title", undefined, "Haptics")}
+        sub={t("m.settings.haptics.desc", undefined, "Vibrate On Taps, Scans & Confirmations")}
+        ariaLabel={t("m.settings.haptics.title", undefined, "Haptics")}
+      />
 
       {/* ── Account — links to the dedicated pause / archive lifecycle screen ── */}
       <div className="sech">

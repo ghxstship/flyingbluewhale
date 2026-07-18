@@ -15,16 +15,16 @@ import { hasSupabase } from "@/lib/env";
  * would mean an OpenAPI entry, a scope, and a contract for something the field
  * app talks to directly.
  *
- * App-wide groups per the spec: Tasks · People · Assets · Docs · Spaces
- * (+ Calendar · Jobs, kept from kit 28). `scope` narrows to one group —
- * the spec's scoped filters.
+ * App-wide groups per the spec: Tasks · People · Assets · Docs · Templates ·
+ * Spaces (+ Calendar · Jobs, kept from kit 28). `scope` narrows to one
+ * group — the spec's scoped filters. Kit 32 C2 added the Templates span.
  */
 const Input = z.object({
   q: z.string().trim().min(1).max(120),
-  scope: z.enum(["all", "tasks", "people", "assets", "docs", "spaces"]).default("all"),
+  scope: z.enum(["all", "tasks", "people", "assets", "docs", "templates", "spaces"]).default("all"),
 });
 
-export type SearchScope = "all" | "tasks" | "people" | "assets" | "docs" | "spaces";
+export type SearchScope = "all" | "tasks" | "people" | "assets" | "docs" | "templates" | "spaces";
 export type SearchHit = { icon: string; title: string; sub: string; href: string };
 export type SearchGroup = { label: string; hits: SearchHit[] };
 
@@ -40,7 +40,7 @@ export async function searchMobile(qRaw: string, scopeRaw: SearchScope = "all"):
   const want = (s: Exclude<SearchScope, "all">) => scope === "all" || scope === s;
   const none = Promise.resolve({ data: null });
 
-  const [tasks, people, assets, docs, spaces, events, jobs] = await Promise.all([
+  const [tasks, people, assets, docs, templates, spaces, events, jobs] = await Promise.all([
     want("tasks")
       ? supabase
           .from("tasks")
@@ -78,6 +78,16 @@ export async function searchMobile(qRaw: string, scopeRaw: SearchScope = "all"):
           .eq("sop_state", "published")
           .is("deleted_at", null)
           .ilike("title", like)
+          .limit(LIMIT)
+      : none,
+    // Templates = the org + project template library (`field_templates`).
+    want("templates")
+      ? supabase
+          .from("field_templates")
+          .select("id, name, category")
+          .eq("org_id", session.orgId)
+          .is("deleted_at", null)
+          .ilike("name", like)
           .limit(LIMIT)
       : none,
     want("spaces")
@@ -146,6 +156,15 @@ export async function searchMobile(qRaw: string, scopeRaw: SearchScope = "all"):
         title: d.title,
         sub: String(d.category ?? "Knowledge"),
         href: `/m/docs/${d.id}`,
+      })),
+    },
+    {
+      label: "Templates",
+      hits: ((templates.data ?? []) as Array<{ id: string; name: string; category: string | null }>).map((tpl) => ({
+        icon: "LayoutTemplate",
+        title: tpl.name,
+        sub: String(tpl.category ?? "Template"),
+        href: "/m/templates",
       })),
     },
     {

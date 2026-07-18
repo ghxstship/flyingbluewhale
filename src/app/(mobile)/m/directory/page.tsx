@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireSession, isManagerPlus } from "@/lib/auth";
-import { KIcon } from "@/components/mobile/kit";
+import { KIcon, LockedRow } from "@/components/mobile/kit";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -17,6 +17,14 @@ export const dynamic = "force-dynamic";
  *
  * Design truth: prototype roster tab (app.jsx 2333-2393).
  */
+
+/**
+ * Kit 32 E2 opt-in switch. The permission-denied default across /m stays
+ * hide-when-denied; a surface flips this to trade invisibility for a
+ * discoverable LockedRow ("Ask Your Lead"). Kept a const rather than a prop
+ * because the decision is per-surface, not per-render.
+ */
+const SHOW_LOCKED_WHEN_DENIED = true;
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -99,6 +107,7 @@ export default async function MobileDirectoryPage() {
     message: t("m.directory.action.message", undefined, "Message"),
     call: t("m.directory.action.call", undefined, "Call"),
     email: t("m.directory.action.email", undefined, "Email"),
+    actions: t("m.directory.action.menu", undefined, "Contact Actions"),
   };
 
   return (
@@ -112,11 +121,35 @@ export default async function MobileDirectoryPage() {
       <DirectoryView people={people} labels={labels} />
       {/* Kit FAB: Invite Crew — perm "assign" in the kit's CREATE map, which is
           the manager band here. The gate is UX only; the invite surface
-          re-checks server-side. */}
-      {isManagerPlus(session) && (
+          re-checks server-side. Kit 32 E2: instead of the capability vanishing
+          for the member band, this surface OPTS IN to the LockedRow affordance
+          (lock icon + "Ask Your Lead" sheet). The app-wide default stays
+          hide-when-denied — SHOW_LOCKED_WHEN_DENIED is the per-surface switch. */}
+      {isManagerPlus(session) ? (
         <Link href="/m/settings/team/invite" className="fab" aria-label={t("m.directory.invite", undefined, "Invite Crew")}>
           <KIcon name="Plus" size={24} />
         </Link>
+      ) : (
+        SHOW_LOCKED_WHEN_DENIED && (
+          <>
+            <div className="sech">
+              <h2>{t("m.directory.manage", undefined, "Manage")}</h2>
+            </div>
+            <LockedRow
+              icon="UserPlus"
+              title={t("m.directory.invite", undefined, "Invite Crew")}
+              sub={t("m.directory.invite.sub", undefined, "Add A Teammate To The Roster")}
+              askTitle={t("m.locked.askTitle", undefined, "Ask Your Lead")}
+              askBody={t(
+                "m.directory.invite.locked",
+                undefined,
+                "Inviting crew is a manager action. Ask your lead or an admin to add someone to the roster.",
+              )}
+              closeLabel={t("m.locked.close", undefined, "Close")}
+              lockLabel={t("m.locked.managerAccess", undefined, "Locked · Manager Access")}
+            />
+          </>
+        )
       )}
     </div>
   );

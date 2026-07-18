@@ -20,7 +20,7 @@ export default async function MobileSearchPage() {
         emptyHint={t(
           "m.search.hint",
           undefined,
-          "Search tasks, people, assets, docs, spaces, your calendar and open jobs.",
+          "Search tasks, people, assets, docs, templates, spaces, your calendar and open jobs.",
         )}
         recentsLabel={t("m.search.recents", undefined, "Recent")}
         clearLabel={t("m.search.clear", undefined, "Clear")}

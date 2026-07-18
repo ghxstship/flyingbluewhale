@@ -7,11 +7,19 @@ import { toTitle } from "@/lib/format";
 import type { EventRow } from "@/lib/supabase/types";
 import { ScheduleView, type SchedEvent } from "./ScheduleView";
 import { ScheduleFab } from "./ScheduleFab";
+import { LockedRow } from "@/components/mobile/kit";
 import { MyShifts, type MyShift } from "./MyShifts";
 import { ShiftReminderScheduler } from "@/components/mobile/ShiftReminderScheduler";
 import type { ShiftReminder } from "@/lib/native/shift-reminders";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * Kit 32 E2 opt-in switch (see /m/directory) — the member band gets a
+ * discoverable LockedRow instead of a vanished capability. Default across
+ * /m stays hide-when-denied; this const is the per-surface opt-in.
+ */
+const SHOW_LOCKED_WHEN_DENIED = true;
 
 /**
  * COMPVSS `/m/schedule` — the field calendar. Server component: fetches the
@@ -215,8 +223,33 @@ export default async function MobileSchedulePage() {
       <ScheduleView events={events} labels={labels} myShiftByDay={myShiftByDay} />
       {/* Kit FAB: Schedule Event — manager band only, matching the events
           INSERT policy's EFFECTIVE band (its wider role array names roles
-          memberships.role can never hold). */}
-      {isManagerPlus(session) && <ScheduleFab />}
+          memberships.role can never hold). Kit 32 E2: the member band gets
+          the opt-in LockedRow ("Ask Your Lead") rather than a silently absent
+          capability; the app-wide default stays hide-when-denied. */}
+      {isManagerPlus(session) ? (
+        <ScheduleFab />
+      ) : (
+        SHOW_LOCKED_WHEN_DENIED && (
+          <>
+            <div className="sech">
+              <h2>{t("m.schedule.manage", undefined, "Manage")}</h2>
+            </div>
+            <LockedRow
+              icon="CalendarPlus"
+              title={t("m.schedule.event.add", undefined, "Schedule Event")}
+              sub={t("m.schedule.event.sub", undefined, "Add To The Production Calendar")}
+              askTitle={t("m.locked.askTitle", undefined, "Ask Your Lead")}
+              askBody={t(
+                "m.schedule.event.locked",
+                undefined,
+                "Scheduling events is a manager action. Ask your lead to add it to the production calendar.",
+              )}
+              closeLabel={t("m.locked.close", undefined, "Close")}
+              lockLabel={t("m.locked.managerAccess", undefined, "Locked · Manager Access")}
+            />
+          </>
+        )
+      )}
     </div>
   );
 }

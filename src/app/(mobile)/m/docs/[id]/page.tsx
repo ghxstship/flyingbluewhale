@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
 import { AcknowledgeButton } from "./AcknowledgeButton";
+import { DocShareButton } from "./DocShareButton";
 
 /**
  * COMPVSS · Article Detail — kit 28 `article-detail` (/m/docs/[id]).
@@ -69,9 +70,30 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         <span style={{ fontFamily: "var(--p-mono)" }}>{row.code}</span>
         {row.category ? ` · ${row.category}` : ""}
       </div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {row.title}
-      </h1>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 12 }}>
+        <h1 className="scr-h" style={{ flex: 1, marginBottom: 0 }}>
+          {row.title}
+        </h1>
+        {/* Kit 32 A7 — share the doc within its access scope; the share writes
+            an audit_log row noting the RBAC scope. */}
+        <DocShareButton
+          sopId={row.id}
+          labels={{
+            share: t("m.docs.share", undefined, "Share"),
+            title: t("m.docs.share.title", undefined, "Share Article"),
+            scopeWarning: t(
+              "m.docs.share.scope",
+              undefined,
+              "This link respects access scope. Only members of your organization can open it.",
+            ),
+            shareAction: t("m.docs.share.action", undefined, "Share Link"),
+            copyAction: t("m.docs.share.copy", undefined, "Copy Link"),
+            copied: t("m.docs.share.copied", undefined, "Link Copied"),
+            error: t("m.docs.share.error", undefined, "Could not share. Try again."),
+            close: t("m.docs.share.close", undefined, "Close"),
+          }}
+        />
+      </div>
 
       {row.purpose && (
         <div className="item" style={{ display: "block" }}>

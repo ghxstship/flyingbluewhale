@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CloudOff, RefreshCw } from "lucide-react";
 import { requestQueueDrain } from "@/lib/offline/queue-status";
 import { drainOutboxFromWindow, outboxSize } from "@/lib/offline/outbox";
 import { size as localQueueSize, OUTBOX_EVENT } from "@/lib/offline/queue";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { SyncBadge } from "@/components/mobile/kit";
 
 /**
  * <SyncBanner> — the ONE shell-level sync status line for the COMPVSS
@@ -104,26 +104,12 @@ export function SyncBanner() {
         borderBottom: "1px solid color-mix(in srgb, var(--p-info) 35%, transparent)",
       }}
     >
+      {/* DS_ALIGNMENT §2: the sync/offline PILL is the DS `SyncBadge` kit
+          component; only the tap-to-refresh bar (wrapper + "Sync now") stays
+          app-level here. */}
       <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-        {showQueue ? (
-          <>
-            <RefreshCw size={15} className={online ? "motion-safe:animate-spin" : undefined} aria-hidden="true" />
-            {queueLabel}
-          </>
-        ) : (
-          <CloudOff size={15} aria-hidden="true" />
-        )}
-        {showStale && (
-          <span
-            className="rounded-full px-2 py-0.5 text-xs font-medium"
-            style={{
-              background: "color-mix(in srgb, var(--p-warning) 18%, var(--p-surface))",
-              color: "var(--p-warning-text, var(--p-text-1))",
-            }}
-          >
-            {staleLabel}
-          </span>
-        )}
+        {showQueue && <SyncBadge state={online ? "syncing" : "queued"} label={queueLabel} />}
+        {showStale && <SyncBadge state="stale" label={staleLabel} />}
       </span>
       {online && showQueue && (
         <button

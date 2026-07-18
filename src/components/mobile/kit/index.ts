@@ -12,6 +12,14 @@ export type { PillMenuProps, PopoverProps, TogRowProps, MenuItem } from "./Menu"
 export { GroupedList } from "./GroupedList";
 export type { GroupedListProps } from "./GroupedList";
 
+export { ProgressRing } from "./ProgressRing";
+export type { ProgressRingProps } from "./ProgressRing";
+
+export { RelTime } from "./RelTime";
+export type { RelTimeProps } from "./RelTime";
+
+export { RecentRail } from "./RecentRail";
+
 export { CommentsBlock } from "./CommentsBlock";
 export type { CommentsBlockProps, Comment } from "./CommentsBlock";
 
@@ -29,6 +37,12 @@ export type { SheetHeadProps } from "./SheetHead";
 
 export { Sheet } from "./Sheet";
 export type { SheetProps } from "./Sheet";
+
+export { SyncBadge } from "./SyncBadge";
+export type { SyncBadgeProps, SyncBadgeState } from "./SyncBadge";
+
+export { LockedRow } from "./AskLead";
+export type { LockedRowProps } from "./AskLead";
 
 export { EmptySkeleton } from "./EmptySkeleton";
 export type { EmptySkeletonProps } from "./EmptySkeleton";

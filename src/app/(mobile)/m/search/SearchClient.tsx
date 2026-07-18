@@ -22,6 +22,7 @@ const SCOPES: Array<{ key: SearchScope; label: string }> = [
   { key: "people", label: "People" },
   { key: "assets", label: "Assets" },
   { key: "docs", label: "Docs" },
+  { key: "templates", label: "Templates" },
   { key: "spaces", label: "Spaces" },
 ];
 

@@ -72,6 +72,9 @@ export default async function MorePage() {
       label: t("m.more.groupTimeWork", undefined, "Time & Work"),
       links: [
         { href: "/m/my-work", icon: "ListChecks", labelKey: "m.more.myWork", label: "My Work", subKey: "m.more.myWorkSub", sub: "What You Owe & What Waits On You" },
+        // Kit 32 (v2.9): the Shift Scheduler field window. The kit gates it
+        // on `assign`; the surface re-checks `schedule:write` server-side.
+        { href: "/m/scheduler", icon: "CalendarCog", labelKey: "m.more.scheduler", label: "Shift Scheduler", subKey: "m.more.schedulerSub", sub: "Build & Publish Crew Shifts", managerOnly: true },
         { href: "/m/clock", icon: "Timer", labelKey: "m.more.clock", label: "Time Clock", subKey: "m.more.clockSub", sub: "Clock In, Out & Breaks" },
         { href: "/m/time", icon: "Timer", labelKey: "m.more.time", label: "Time", subKey: "m.more.timeSub", sub: "Your Hours & Shift Records" },
         { href: "/m/timesheets", icon: "Timer", labelKey: "m.more.timesheets", label: "Timesheets", subKey: "m.more.timesheetsSub", sub: "Turn Punches Into Pay" },

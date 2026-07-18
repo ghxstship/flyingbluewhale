@@ -32308,9 +32308,12 @@ export type Database = {
           created_at: string
           crew_member_id: string | null
           ends_at: string
+          hourly_rate_cents: number | null
           id: string
           meal_credit: boolean
+          notes: string | null
           org_id: string
+          publish_state: Database["public"]["Enums"]["shift_publish_state"]
           role: string | null
           roster_id: string | null
           starts_at: string
@@ -32326,9 +32329,12 @@ export type Database = {
           created_at?: string
           crew_member_id?: string | null
           ends_at: string
+          hourly_rate_cents?: number | null
           id?: string
           meal_credit?: boolean
+          notes?: string | null
           org_id: string
+          publish_state?: Database["public"]["Enums"]["shift_publish_state"]
           role?: string | null
           roster_id?: string | null
           starts_at: string
@@ -32344,9 +32350,12 @@ export type Database = {
           created_at?: string
           crew_member_id?: string | null
           ends_at?: string
+          hourly_rate_cents?: number | null
           id?: string
           meal_credit?: boolean
+          notes?: string | null
           org_id?: string
+          publish_state?: Database["public"]["Enums"]["shift_publish_state"]
           role?: string | null
           roster_id?: string | null
           starts_at?: string
@@ -47489,6 +47498,7 @@ export type Database = {
         | "on_break"
         | "checked_out"
         | "no_show"
+      shift_publish_state: "draft" | "published"
       sign_state: "draft" | "published" | "archived"
       signage_category:
         | "prohibition"
@@ -48770,6 +48780,7 @@ export const Constants = {
         "checked_out",
         "no_show",
       ],
+      shift_publish_state: ["draft", "published"],
       sign_state: ["draft", "published", "archived"],
       signage_category: [
         "prohibition",

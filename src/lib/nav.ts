@@ -1698,6 +1698,9 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Door Scanner", href: "/m/door" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Time Clock", href: "/m/clock" },
+  // Kit 32 (v2.9): the Shift Scheduler field window (More · Time & Work,
+  // schedule:write band — the full scheduling engine stays in ATLVS).
+  { label: "Shift Scheduler", href: "/m/scheduler" },
   { label: "My Work", href: "/m/my-work" },
   { label: "Requests", href: "/m/requests" },
   { label: "Expenses", href: "/m/expenses" },

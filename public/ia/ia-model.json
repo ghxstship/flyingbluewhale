@@ -2458,6 +2458,12 @@
               ]
             },
             {
+              "path": "/m/scheduler",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
               "path": "/m/my-work",
               "arch": [
                 "LIST"

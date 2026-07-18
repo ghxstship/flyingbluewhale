@@ -324,6 +324,23 @@ export const FORMS: Forms = {
       { id: "quote", label: "Quote / Screenshot", type: "photo" },
     ],
   },
+  shift: {
+    // Kit 32 (v2.9 Shift Scheduler) — New Shift, verbatim from
+    // runtime/forms.jsx. `area` options are seed data in the kit; the
+    // scheduler passes a def override with the org's real venues/zones.
+    title: "New Shift", icon: "CalendarCog", submit: "Add Shift",
+    intro: "Adds an open shift to the scheduler — assign crew or publish it to the roster.",
+    fields: [
+      { id: "role", label: "Role", type: "text", placeholder: "e.g. Gate Lead", required: true },
+      { id: "area", label: "Area / Zone", type: "select", required: true, options: [] },
+      { id: "date", label: "Date", type: "date", required: true },
+      { id: "start", label: "Start", type: "time", half: true, required: true },
+      { id: "end", label: "End", type: "time", half: true, required: true },
+      { id: "need", label: "Crew Needed", type: "number", default: "1", half: true, required: true },
+      { id: "rate", label: "Rate", type: "text", placeholder: "$/hr", half: true },
+      { id: "notes", label: "Notes", type: "textarea", placeholder: "Call details, PPE, meet point…" },
+    ],
+  },
   template: {
     // Kit 31 (live-test resolution #15) — the Templates library New Template
     // form, verbatim from runtime/forms.jsx.

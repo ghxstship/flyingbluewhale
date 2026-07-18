@@ -77,6 +77,10 @@ export default async function MobileSchedulePage() {
       .select("id, starts_at, ends_at, attendance, role, venue:venue_id(name)")
       .eq("org_id", session.orgId)
       .eq("crew_member_id", crew.id)
+      // Kit 32: the field scheduler drafts shifts before publishing them.
+      // A draft is the planner's business — it reaches the worker's phone
+      // (and their OS reminders) only once published.
+      .eq("publish_state", "published")
       .gte("starts_at", from)
       .lt("starts_at", to)
       .order("starts_at", { ascending: true });

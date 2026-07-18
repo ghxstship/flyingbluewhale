@@ -49,7 +49,7 @@ Recommended order by field stakes (crisis first — on the day it matters nobody
 5. **`onboard.complete`** — branch `step_kind`: `upload` → real file input, `sign` → SignaturePad, `read` → scroll-gate. Remove the blanket self-attest checkbox. Kinds CHECK at `baseline.sql:11103`.
 6. **`punchlist.raise`** — photo-first snag → `/studio/punch` stores. `/m/punch` name is now free of the collision (it's "Punch Clock").
 7. **`org.zones`** — geofence retune from the site it governs; map + drag radius; admin-gated.
-8. **`shift.assign`** — **no writer exists in ANY shell** (only write repo-wide is the check-in attendance patch). Build desktop-first, then mirror; this is a cross-shell feature, not a mobile port.
+8. **`shift.assign`** — **SUPERSEDED by kit 32 (v2.9, 2026-07-18).** The kit now sanctions a field window: `/m/scheduler` (More · Time & Work, `schedule:write` band) builds, assigns and publishes real `shifts` seat rows — day strip, coverage grid, assign drawer over `crew_members`, per-shift/per-day publish (`publish_state`, migration `20260718022624`) with `shift`-kind push fan-out. The console writer (`/studio/workforce/rosters/[rosterId]/shifts`) landed earlier; the "no writer in any shell" premise no longer holds. The full scheduling engine stays in ATLVS.
 
 Console-only by documented decision (not gaps): `org.billing`, `reports.author`.
 
@@ -68,10 +68,11 @@ Deliberately deferred, with reasons — do not read these as skipped-by-neglect:
   incremental pattern (each new capability adopts the outbox, as
   crisis.respond just did) keeps coverage growing without a big-bang risk.
   Schedule as its own cycle with the airplane-mode exit test as the gate.
-- **`shift.assign`** — the backlog itself says build desktop-first ("a
+- **`shift.assign`** — ~~the backlog itself says build desktop-first ("a
   cross-shell feature, not a mobile port") and no writer exists in ANY shell.
   That is a designed feature (rostering UX, conflict rules, notification
-  fan-out), not a gap-fill.
+  fan-out), not a gap-fill.~~ **Closed by kit 32 (v2.9)**: the kit ratified
+  the field window and `/m/scheduler` shipped it (see item 8 above).
 - **`org.zones`** — queued behind the capabilities admin surface (same
   /studio/settings territory, same session would collide); next pass.
 

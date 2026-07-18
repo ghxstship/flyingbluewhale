@@ -32,6 +32,9 @@ export type PushKind =
   | "assignment"
   | "assignment_state"
   | "assignment_scan"
+  // Kit 32 field scheduler: a shift you are rostered on was published or
+  // updated. Distinct from `shift_swap` (swap-request decisions).
+  | "shift"
   | "shift_swap"
   | "time_off"
   | "course"
@@ -373,6 +376,7 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   assignment: "Assignment",
   assignment_state: "Assignment Update",
   assignment_scan: "Assignment Scan",
+  shift: "Shift",
   shift_swap: "Shift Swap",
   time_off: "Time Off",
   course: "Course",

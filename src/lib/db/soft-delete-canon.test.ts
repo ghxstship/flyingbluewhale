@@ -187,7 +187,9 @@ const LEGACY_ALLOWLIST: Record<string, number> = {
   "src/app/(legend)/legend/signage/actions.ts": 1,
   "src/app/(mobile)/m/advances/[assignmentId]/actions.ts": 1,
   "src/app/(mobile)/m/advances/[assignmentId]/page.tsx": 1,
-  "src/app/(mobile)/m/advances/actions.ts": 2,
+  // Ratcheted 2 → 1 (kit 31 #4: the catalog-create insert chain gained its
+  // soft-delete-exempt annotation; only the managers membership read remains).
+  "src/app/(mobile)/m/advances/actions.ts": 1,
   "src/app/(mobile)/m/advances/page.tsx": 1,
   "src/app/(mobile)/m/check-in/batch/actions.ts": 1,
   "src/app/(mobile)/m/clock/page.tsx": 2,

@@ -2556,6 +2556,24 @@
               ]
             },
             {
+              "path": "/m/templates",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/templates/new",
+              "arch": [
+                "FORM"
+              ]
+            },
+            {
+              "path": "/m/finance",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/time",
               "arch": [
                 "LIST"
@@ -2719,6 +2737,30 @@
             },
             {
               "path": "/m/emergency",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/emergency/codes",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/emergency/fire",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/emergency/evacuation",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/emergency/shelter",
               "arch": [
                 "LIST"
               ]

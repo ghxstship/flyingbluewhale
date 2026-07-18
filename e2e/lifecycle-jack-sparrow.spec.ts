@@ -177,7 +177,13 @@ test.describe("kit 30 · Jack Sparrow lifecycle", () => {
     const fieldPage = await field.newPage();
     try {
       await authedSetup(fieldPage, "manager");
-      await fieldPage.goto("/m/check-in?mode=pos");
+      // waitUntil "commit" + one retry: the first goto in this fresh context
+      // intermittently dies ERR_ABORTED (superseded by a straggling
+      // post-login redirect); the .scr-h wait below is the real readiness
+      // gate either way.
+      await fieldPage
+        .goto("/m/check-in?mode=pos", { waitUntil: "commit" })
+        .catch(() => fieldPage.goto("/m/check-in?mode=pos", { waitUntil: "commit" }));
       await expect(fieldPage.locator(".scr-h, h1").first()).toBeVisible({ timeout: 20_000 });
       const manualOpen = fieldPage.getByText(/enter code manually/i).first();
       if (await manualOpen.isVisible({ timeout: 5_000 }).catch(() => false)) await manualOpen.click();

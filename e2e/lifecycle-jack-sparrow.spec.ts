@@ -101,9 +101,12 @@ test.describe("kit 30 · Jack Sparrow lifecycle", () => {
       await add.click();
     }
 
-    // Catering line: Lunch only + Every Contract Day → 20 days × 1 meal.
-    await page.getByRole("button", { name: /^lunch$/i }).first().click();
-    await page.getByText(/every contract day/i).first().click();
+    // Catering line: lunch-only + Every Contract Day are the DEFAULTS on a
+    // new line (clicking would toggle them OFF — the first run of this spec
+    // did exactly that and asserted its way to 0 meals). Assert the defaults
+    // hold, then confirm the derived summary: 20 days × 1 meal.
+    await expect(page.getByRole("button", { name: /^lunch$/i }).first()).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByLabel(/every contract day/i).first()).toBeChecked();
     await expect(page.getByText(/20 Days/i).first()).toBeVisible({ timeout: 10_000 });
     await expect(page.getByText(/20 Meals/i).first()).toBeVisible();
 

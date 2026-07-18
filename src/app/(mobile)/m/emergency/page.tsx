@@ -238,7 +238,16 @@ export default async function EmergencyPage() {
 
       {/* Quick-jump tiles — the dedicated emergency reference PAGES (kit 31
           resolution #9; formerly guide-anchor deep links). */}
-      <div className="qa" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: 6 }}>
+      <div className="qa" style={{ gridTemplateColumns: "repeat(4, 1fr)", marginBottom: 6 }}>
+        <Link href="/m/emergency/codes" style={{ textDecoration: "none" }}>
+          <span
+            className="qi"
+            style={{ background: "color-mix(in oklab, var(--p-danger) 16%, transparent)", color: "var(--p-danger)" }}
+          >
+            <KIcon name="Siren" size={18} />
+          </span>
+          <span className="ql">{t("m.emergency.codesTile", undefined, "Codes")}</span>
+        </Link>
         <Link href="/m/emergency/fire" style={{ textDecoration: "none" }}>
           <span
             className="qi"

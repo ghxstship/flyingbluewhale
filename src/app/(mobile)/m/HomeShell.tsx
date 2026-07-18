@@ -98,12 +98,12 @@ function QA({
     </>
   );
   if (onClick) {
+    // No inline reset here: `.qa button` (kit-mobile.css) already paints the
+    // tile chrome + flex-column layout the anchor tiles get; a background/
+    // border/padding reset would strip exactly that and drop the tile out of
+    // the grid's visual rhythm (the Approve-tile regression).
     return (
-      <button
-        type="button"
-        onClick={onClick}
-        style={{ textDecoration: "none", background: "none", border: "none", padding: 0, cursor: "pointer", font: "inherit" }}
-      >
+      <button type="button" onClick={onClick}>
         {body}
       </button>
     );

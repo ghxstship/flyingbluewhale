@@ -37,18 +37,16 @@ function barColor(status: SwitcherProject["status"]): string {
   return status === "Live" ? "var(--p-success)" : status === "Planning" ? "var(--p-warning)" : "var(--p-border)";
 }
 
+type SwitcherData = { orgs: SwitcherOrg[]; projects: SwitcherProject[] };
+
 export function MobileSwitcherSheet({
   open,
   onClose,
-  orgs,
-  projects,
   currentOrgId,
   currentProjectId,
 }: {
   open: boolean;
   onClose: () => void;
-  orgs: SwitcherOrg[];
-  projects: SwitcherProject[];
   currentOrgId: string;
   currentProjectId: string | null;
 }) {
@@ -58,8 +56,41 @@ export function MobileSwitcherSheet({
   const [q, setQ] = React.useState("");
   const [status, setStatus] = React.useState<(typeof STATUSES)[number]>("All");
   const [pending, setPending] = React.useState(false);
+  // Switcher data is DEFERRED — the org list + project catalog (with client and
+  // venue joins) used to load in the (mobile) layout on every nav just to fill
+  // this drawer. It now loads the first time the sheet opens, so a normal nav
+  // pays nothing for a closed switcher. Fetched once, then cached in state.
+  const [data, setData] = React.useState<SwitcherData | null>(null);
+  const [loading, setLoading] = React.useState(false);
 
-  const org = orgs.find((o) => o.id === currentOrgId) ?? orgs[0];
+  React.useEffect(() => {
+    if (!open || data || loading) return;
+    let cancelled = false;
+    setLoading(true);
+    fetch("/api/v1/me/switcher", { headers: { accept: "application/json" } })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((json) => {
+        if (cancelled) return;
+        const payload = (json?.data ?? {}) as Partial<SwitcherData>;
+        setData({ orgs: payload.orgs ?? [], projects: payload.projects ?? [] });
+      })
+      .catch(() => {
+        // Network/offline: fall back to an empty catalog (the sheet still shows
+        // the current workspace + "All Projects" so it never dead-ends).
+        if (!cancelled) setData({ orgs: [], projects: [] });
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, data, loading]);
+
+  const orgs = data?.orgs ?? [];
+  const projects = data?.projects ?? [];
+  const org =
+    orgs.find((o) => o.id === currentOrgId) ?? orgs[0] ?? { id: currentOrgId, name: "Workspace", sub: "Organization" };
 
   // Esc closes — the sheet is a modal and a keyboard user must be able to
   // leave it without a mouse.
@@ -72,7 +103,7 @@ export function MobileSwitcherSheet({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  if (!open || !org) return null;
+  if (!open) return null;
 
   const switchOrg = async (id: string) => {
     if (pending) return;
@@ -263,7 +294,7 @@ export function MobileSwitcherSheet({
 
         {!visible.length && (
           <div className="s" style={{ padding: "12px 4px", color: "var(--p-text-3)" }}>
-            No projects match these filters.
+            {!data ? "Loading projects…" : "No projects match these filters."}
           </div>
         )}
       </div>

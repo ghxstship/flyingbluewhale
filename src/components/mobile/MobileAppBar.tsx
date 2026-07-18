@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronsUpDown, Search, Bell, Sparkles } from "lucide-react";
-import { MobileSwitcherSheet, type SwitcherOrg, type SwitcherProject } from "./MobileSwitcherSheet";
+import { MobileSwitcherSheet } from "./MobileSwitcherSheet";
 
 /**
  * COMPVSS app bar — kit 28 `.appbar`
@@ -26,8 +26,6 @@ export type MobileAppBarProps = {
   projectLive: boolean;
   initials: string;
   unread: number;
-  orgs: SwitcherOrg[];
-  projects: SwitcherProject[];
   currentOrgId: string;
   currentProjectId: string | null;
 };
@@ -38,8 +36,6 @@ export function MobileAppBar({
   projectLive,
   initials,
   unread,
-  orgs,
-  projects,
   currentOrgId,
   currentProjectId,
 }: MobileAppBarProps) {
@@ -120,8 +116,6 @@ export function MobileAppBar({
       <MobileSwitcherSheet
         open={switcherOpen}
         onClose={() => setSwitcherOpen(false)}
-        orgs={orgs}
-        projects={projects}
         currentOrgId={currentOrgId}
         currentProjectId={currentProjectId}
       />

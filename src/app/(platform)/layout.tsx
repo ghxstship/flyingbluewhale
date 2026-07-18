@@ -1,3 +1,12 @@
+// Shell-split (perf, 2026-07-18): the Documents FORMAT layer + Reports viz
+// layer are /studio-exclusive (studio/documents, studio/reports,
+// studio/finance/sub-invoices). They no longer load on the core path.
+// Order matters: kit-reports' `.doc--report` extends kit-documents' `.doc`
+// base, so documents must import first.
+import "../theme/kit-documents.css";
+import "../theme/kit-reports.css";
+// Global App Rail chrome — mounted here (also legend + portal/p/[slug]).
+import "../theme/kit-rail.css";
 import { PlatformSidebar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ConsoleTour } from "@/components/ConsoleTour";

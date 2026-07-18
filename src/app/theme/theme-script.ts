@@ -100,7 +100,23 @@ export const themeScript = `
     var trend = (trendFromCookie && validTrends.indexOf(trendFromCookie) > -1) ? trendFromCookie
               : (trendStored && validTrends.indexOf(trendStored) > -1) ? trendStored
               : 'none';
-    if (trend !== 'none') document.documentElement.setAttribute('data-trend', trend);
+    // Trend CSS (23KB, kit-trends.css) is NOT on the core path — CLAUDE.md
+    // requires it "never on the core path". It loads as a <link> ONLY when a
+    // non-default trend is active. Injecting it here (pre-hydration, in <head>)
+    // keeps it FOUC-free for users who have already picked a trend; the runtime
+    // add/remove is mirrored in ThemeProvider when the user changes trend. The
+    // stylesheet + its self-hosted display fonts satisfy CSP (style-src/font-src
+    // 'self'); a <link> needs no nonce.
+    if (trend !== 'none') {
+      document.documentElement.setAttribute('data-trend', trend);
+      if (!document.getElementById('atlvs-trend-css')) {
+        var trendLink = document.createElement('link');
+        trendLink.id = 'atlvs-trend-css';
+        trendLink.rel = 'stylesheet';
+        trendLink.href = '/theme/kit-trends.css';
+        document.head.appendChild(trendLink);
+      }
+    }
 
     // colorScheme — atlvs-product is light-family; dark mode overrides
     // come from [data-mode="dark"] selectors in the theme CSS.

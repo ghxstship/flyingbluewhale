@@ -1,3 +1,7 @@
+// Shell-split (perf, 2026-07-18): the LEG3ND signage token layer is used by
+// the portal's gvteway on-site wayfinding (/p/onsite — SignPanel / VenueMap /
+// OnsiteWayfinding). Scoped here so it stays off mobile/marketing/platform.
+import "../theme/kit-signage.css";
 import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {

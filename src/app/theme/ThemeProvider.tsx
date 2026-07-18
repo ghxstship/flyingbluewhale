@@ -76,6 +76,26 @@ function isValidTrend(v: unknown): v is Trend {
   return typeof v === "string" && (TRENDS as string[]).includes(v);
 }
 
+// Trend CSS (kit-trends.css, 23KB) is kept off the core path per CLAUDE.md — it
+// loads as a runtime <link> only when a non-default trend is active. The
+// pre-hydration theme-script injects it on first paint for a persisted trend;
+// this mirrors the add/remove when the user switches trend live. Idempotent.
+const TREND_LINK_ID = "atlvs-trend-css";
+function ensureTrendStylesheet(active: boolean) {
+  if (typeof document === "undefined") return;
+  const existing = document.getElementById(TREND_LINK_ID);
+  if (active) {
+    if (existing) return;
+    const link = document.createElement("link");
+    link.id = TREND_LINK_ID;
+    link.rel = "stylesheet";
+    link.href = "/theme/kit-trends.css";
+    document.head.appendChild(link);
+  } else if (existing) {
+    existing.remove();
+  }
+}
+
 export interface ThemeContextValue {
   theme: ThemeSlug;
   family: ThemeFamily;
@@ -267,6 +287,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = document.documentElement;
     if (trend === "none") root.removeAttribute("data-trend");
     else root.setAttribute("data-trend", trend);
+    // Lazy-load / unload the trend stylesheet to match the active trend.
+    ensureTrendStylesheet(trend !== "none");
   }, [trend, mounted]);
 
   React.useEffect(() => {

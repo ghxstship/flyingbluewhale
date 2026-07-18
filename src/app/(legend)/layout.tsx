@@ -1,5 +1,11 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+// Shell-split (perf, 2026-07-18): the LEG3ND signage token/anatomy layer
+// (SignIcon / SignPanel) is consumed by the /legend signage library (and the
+// portal's gvteway wayfinding). Off the core path now. Plus the App Rail chrome
+// this shell mounts.
+import "../theme/kit-signage.css";
+import "../theme/kit-rail.css";
 import { legendNav } from "@/lib/nav";
 import { LegendSidebar } from "@/components/legend/LegendSidebar";
 import { getSession } from "@/lib/auth";

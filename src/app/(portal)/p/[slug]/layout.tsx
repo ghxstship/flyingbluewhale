@@ -1,4 +1,8 @@
 import { notFound } from "next/navigation";
+// Shell-split (perf, 2026-07-18): the Global App Rail chrome mounts on the
+// per-slug portal (AppRail below). Scoped here rather than root so /p/onsite
+// and the non-rail shells don't ship it.
+import "../../../theme/kit-rail.css";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";

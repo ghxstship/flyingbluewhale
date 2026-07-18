@@ -12,28 +12,37 @@
  * lands on <html>.
  */
 
+/*
+ * SHELL-SPLIT (perf, 2026-07-18): the shell-EXCLUSIVE component layers no
+ * longer load on the core path — every shell used to download every other
+ * shell's CSS (kit-mobile 68KB, kit-reports 18KB, etc.). Each exclusive layer
+ * is now imported from the layout.tsx of the shell(s) that actually render its
+ * classes, so a route only ships the CSS it paints:
+ *
+ *   kit-documents  -> (platform)/layout.tsx            (studio/documents + reports)
+ *   kit-reports    -> (platform)/layout.tsx            (studio/reports + sub-invoices)
+ *   kit-mobile     -> (mobile)/layout.tsx              (.mobile-shell)
+ *   kit-onboarding -> (mobile)/layout.tsx              (.compvss-onboarding)
+ *   kit-signage    -> (legend)/layout.tsx + (portal)/layout.tsx  (SignPanel / gvteway wayfinding)
+ *   kit-rail       -> (platform) + (legend) + (portal)/p/[slug]  (AppRail — never mobile/marketing)
+ *   kit-trends     -> injected as a <link> only when [data-trend] is active
+ *                     (theme-script + ThemeProvider) — never on the core path,
+ *                     per CLAUDE.md. Served from /theme/kit-trends.css.
+ *
+ * What STAYS here is the shared foundation every shell needs: the token seed
+ * (primitives + atlvs-product), the AI surface kit, the layers token ladder,
+ * and the global ENVIRONMENT contract layer (kit-platform — forced-colors /
+ * print / RTL, which must apply in every shell, not just /studio). The
+ * kit-platform and kit-layers @imports are guard-locked to this file
+ * (design-system.test.ts / layers-tokens.test.ts).
+ */
 @import "./primitives.css";
 @import "./themes/atlvs-product.css";
-/* v6 Documents system — token-driven document FORMAT layer (loaded after the
-   product tokens, per the kit contract). SSOT for all 29 doc types. */
-@import "./kit-documents.css";
-/* v6.3 Reports & Analytics viz layer — pairs with kit-documents.css (a report
-   is a brand-aware, contract-bound print/digital artifact). Loaded after it. */
-@import "./kit-reports.css";
-/* LEG3ND signage micro brand kit — airport-wayfinding token layer (ACRP 52 /
-   FAA / AIGA-DOT / ISO 7010). Seeds + function map + legibility/anatomy scales
-   for <SignIcon> / <SignPanel>. SSOT mirrored in tokens.json#signage. */
-@import "./kit-signage.css";
-/* COMPVSS mobile kit — component layer for the field PWA (scoped under
-   .mobile-shell). Ported from the COMPVSS Design System kit. */
-@import "./kit-mobile.css";
-/* COMPVSS mobile auth + onboarding flow — component layer scoped under
-   .compvss-onboarding. Loaded immediately after kit-mobile.css per the kit. */
-@import "./kit-onboarding.css";
 /* v7.1 platform contracts — forced-colors (HCM focus restoration),
    prefers-contrast firming, the print floor, and RTL/logical-property
-   readiness. Ported from the kit tokens/base.css; loaded last so its
-   environment media queries layer over every component surface. */
+   readiness. Ported from the kit tokens/base.css. Despite the "platform" name
+   this is a GLOBAL environment layer (print/HCM/RTL apply in every shell), so
+   it STAYS at root — guard-locked by design-system.test.ts. */
 @import "./kit-platform.css";
 
 /* v8.1 AI-native surface kit — streaming / thinking / citation / confidence
@@ -45,17 +54,6 @@
    Okabe–Ito). Additive + var()-able; resolves the previously-implicit stacking
    order. Guarded by src/lib/theme/layers-tokens.test.ts. */
 @import "./kit-layers.css";
-
-/* v8.1 personalization axis — [data-trend] re-skins shape/elevation/motion/
-   expression over the brand spine (hue-locked off --k-acc; never restates a
-   brand hue). Imported LAST so [data-trend] (0,2,0) wins on ties. The kit's
-   `:not([data-trend])` default-binding is removed in kit-trends.css, so the
-   repo's Monument base stays the default; a trend applies only when chosen. */
-@import "./kit-trends.css";
-
-/* Global App Rail — persistent cross-product switcher chrome (ATLVS Ecosystem
-   kit). Pairs with src/components/workspace-chrome/AppRail.tsx. */
-@import "./kit-rail.css";
 
 /*
  * SSR cold-start fallback — used only when no [data-theme] / [data-ui]

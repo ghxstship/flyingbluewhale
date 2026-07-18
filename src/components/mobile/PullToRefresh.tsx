@@ -91,7 +91,13 @@ export function PullToRefresh({
       </div>
       <div
         style={{
-          transform: reduceMotion ? undefined : `translateY(${pull}px)`,
+          // At rest (pull === 0) apply NO transform. A transform — even
+          // translateY(0) — makes this wrapper the containing block for every
+          // position:fixed descendant, so FABs and .sheet/.drawer overlays
+          // (inset:0) would anchor to this content box instead of the viewport
+          // and mis-position on scrollable pages. Only the live pull gesture
+          // sets a transform; the whole drawer canon depends on this.
+          transform: reduceMotion || pull === 0 ? undefined : `translateY(${pull}px)`,
           transition: pull === 0 ? "transform var(--motion-normal) var(--ease-out)" : "none",
         }}
       >

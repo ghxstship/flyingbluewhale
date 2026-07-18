@@ -157,9 +157,11 @@ export const WORKFLOWS: readonly Workflow[] = [
   {
     id: "timesheet.submit",
     label: "Turn my punches into a timesheet",
-    state: "gap",
+    state: "shipped",
     roles: ALL,
-    note: "G22. BUILT: /m/timesheets lists my periods (party resolved via parties.auth_user_id — no FK is registered to timesheets.party_id) and submits them. The blocker was NOT the surface: `timesheets` RLS lets a worker INSERT and SELECT their own sheet but reserves UPDATE for the manager band (utt_ts_admin_update), and submitting is a state change — so a worker could never submit, and the FSM's whole `open` branch was dead code (its own docblock says the lifecycle was 'unreachable from its own initial state'). Closed with the `submit_timesheet` SECURITY DEFINER RPC (20260715240000), not by widening the UPDATE policy: a row policy has no column-level predicate, so 'let workers submit' would have silently become 'let workers rewrite total_minutes'. The RPC touches state only, re-checks ownership (the sole guard, since DEFINER bypasses RLS — DB-verified refusing a non-owner on all 3 open sheets), and honours SUBMITTABLE_STATES so a corrected rejection can go back. REMAINING for 'shipped': an e2e that punches, submits, and asserts the manager sees it.",
+    provenBy:
+      "e2e/compvss-manifest-proofs.spec.ts · timesheet.submit (green vs prod 2026-07-18: crew punches in/out, manager compiles the covering pay period via POST /api/v1/pay-periods/{id}/compile, crew submits from /m/timesheets). The proof also surfaced two real defects on the way: the global-unique parties_auth_user index blocked party creation for multi-org workers (20260717231335 re-keys it per org) and punches never ensured a party so compile found nobody (clock_in now get-or-creates).",
+    note: "G22. The submit path is the `submit_timesheet` SECURITY DEFINER RPC (20260715240000) — state-only, ownership re-checked, SUBMITTABLE_STATES honoured; worker UPDATE stays RLS-reserved to the manager band so total_minutes can't be rewritten.",
   },
   {
     id: "approval.clear",

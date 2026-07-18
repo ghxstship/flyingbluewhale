@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pushKindForEvent } from "./notify";
 import { NOTIF_KINDS, NOTIF_KIND_FALLBACKS } from "@/components/notifications/kinds";
@@ -76,16 +76,24 @@ describe("notify push-kind map", () => {
   it("keeps the catalog view in lockstep with NOTIF_KINDS", () => {
     // The third leg of the mirror. send.ts <-> kinds.ts is compiler-enforced
     // (`satisfies` + the Exclude assertion); the view is not, so assert it.
-    // Reads the EFFECTIVE view definition: 20260715181012 superseded the
-    // original time-and-pay catalog (which the migration-ledger alignment
-    // also renamed 20260716010000 -> 20260715175152), and it authors the
-    // kind literals in the `::text`-cast form the mirror test requires.
-    const sql = readFileSync(
-      join(process.cwd(), "supabase/migrations/20260715181012_notification_kinds_reconcile.sql"),
-      "utf8",
-    );
+    // Reads the EFFECTIVE view definition dynamically — the LATEST migration
+    // that redefines `notification_kind_catalog` (timestamp-prefixed names
+    // sort chronologically). Hardcoding a path went stale the moment a new
+    // kind (`shift`, 20260718022624) redefined the view in a later migration.
+    const migDir = join(process.cwd(), "supabase/migrations");
+    const latest = readdirSync(migDir)
+      .filter((f) => f.endsWith(".sql"))
+      .sort()
+      .reverse()
+      .find((f) => /create\s+or\s+replace\s+view\s+public\.notification_kind_catalog/i.test(
+        readFileSync(join(migDir, f), "utf8"),
+      ));
+    expect(latest, "no migration defines notification_kind_catalog").toBeTruthy();
+    const sql = readFileSync(join(migDir, latest!), "utf8");
     for (const kind of NOTIF_KINDS) {
-      expect(sql, `${kind} missing from notification_kind_catalog`).toContain(`('${kind}'::text,`);
+      expect(sql, `${kind} missing from the latest notification_kind_catalog (${latest})`).toContain(
+        `('${kind}'::text,`,
+      );
     }
   });
 });

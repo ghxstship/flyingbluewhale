@@ -119,7 +119,11 @@ export default async function MobileHome() {
     const userIds = Array.from(new Set(rows.map((r) => r.initiated_by).filter((v): v is string => v != null)));
     const nameMap = new Map<string, string>();
     if (userIds.length) {
-      const { data: users } = await supabase.from("users").select("id, name, email").in("id", userIds);
+      const { data: users } = await supabase
+        .from("users")
+        .select("id, name, email")
+        .in("id", userIds)
+        .is("deleted_at", null);
       for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
         nameMap.set(u.id, u.name || u.email || t("m.requests.someone", undefined, "Someone"));
       }

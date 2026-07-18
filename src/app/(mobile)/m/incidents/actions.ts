@@ -75,6 +75,8 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
     fixesFrom(fd, "photo", photoFiles.length),
   );
 
+  // soft-delete-exempt: INSERT returning its own row via .select() — the row
+  // was just written, so no archived row can surface.
   const { data: created, error } = await supabase
     .from("incidents")
     .insert({

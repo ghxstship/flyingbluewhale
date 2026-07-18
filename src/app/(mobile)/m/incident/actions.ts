@@ -52,6 +52,8 @@ export async function quickFileIncident(_prev: State, fd: FormData): Promise<Sta
     if (data) parent = { id: data.id as string, summary: data.summary as string };
   }
 
+  // soft-delete-exempt: INSERT returning its own row via .select() — the row
+  // was just written, so no archived row can surface.
   const { data: created, error } = await supabase
     .from("incidents")
     .insert({

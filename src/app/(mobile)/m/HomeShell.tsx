@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-import { KIcon, RoseCard, TOOLS, ToolSheet } from "@/components/mobile/kit";
+import { KIcon, RoseCard, SheetHead, TOOLS, ToolSheet } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 
 export type HomeData = {
@@ -152,9 +152,9 @@ export function HomeShell({
           <div className="sheet-bg" onClick={() => setQaEdit(false)} />
           <div className="sheet-panel">
             <div className="sheet-grip" />
-            <div className="sech" style={{ margin: "0 0 8px" }}>
-              <h2>{L.qaCustomize}</h2>
-            </div>
+            {/* Kit 31 (live-test resolution #8): every sheet carries the
+                canonical SheetHead — icon + title + explicit ✕ close. */}
+            <SheetHead icon="LayoutGrid" title={L.qaCustomize} closeLabel={L.qaCustomizeClose} onClose={() => setQaEdit(false)} />
             {/* Honest placeholder: the kit lets a crew member pick which
                 actions sit on their home. Persisting that needs a
                 user_preferences key and a kit-sanctioned action registry —

@@ -253,6 +253,10 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .fld .req { color: var(--p-danger); }
 .mobile-shell .fld input, .mobile-shell .fld textarea, .mobile-shell .fld select { width: 100%; box-sizing: border-box; border: 1px solid var(--p-border); border-radius: 11px; padding: var(--p-3) var(--p-3); font-size: 14px; font-family: inherit; background: var(--p-surface); color: var(--p-text-1); }
 .mobile-shell .fld input:focus, .mobile-shell .fld textarea:focus, .mobile-shell .fld select:focus { outline: none; border-color: var(--p-accent); }
+/* Kit 31 (live-test resolution #11): date/time inputs get the responsive
+   treatment — WebKit gives them an intrinsic min-width that overflows narrow
+   field rows, and the native chrome undercuts the 44px touch floor. */
+.mobile-shell .fld input[type="date"], .mobile-shell .fld input[type="time"] { min-width: 0; -webkit-appearance: none; appearance: none; min-height: 44px; }
 .mobile-shell .fld textarea { min-height: 84px; resize: vertical; }
 .mobile-shell .fld .hint { font-size: 11px; color: var(--p-text-3); margin-top: var(--p-2); }
 .mobile-shell .seg2 { display: flex; gap: var(--p-2); }
@@ -403,9 +407,20 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .item .sp { flex: 1; }
 .mobile-shell .item .time { font-family: var(--p-mono); font-size: 12px; font-weight: 700; color: var(--p-text-2); }
 .mobile-shell .tabbar { position: fixed; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 12px; right: 12px; height: 62px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 20px; display: flex; z-index: 15; box-shadow: var(--p-elev-2, var(--p-elev-1)); }
+/* The kit's z ladder (tabbar 15 < sheets 40) only works if sheets escape
+   `main`. The shell's `animate-fade-in` runs with `fill: both`, and a
+   filled-forward opacity animation keeps `main` a stacking context forever —
+   which trapped every z-40 sheet BELOW the z-15 tab bar. The keyframe ends at
+   opacity 1 (the specified value), so dropping the fill is render-identical
+   and frees the sheets to cover the bar like the prototype. */
+.mobile-shell main.animate-fade-in { animation-fill-mode: none; }
 .mobile-shell .tb { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--p-text-3); cursor: pointer; border-radius: 20px; }
 .mobile-shell .tb.on { color: var(--p-accent-text); }
 .mobile-shell .tb .badge { position: absolute; }
+/* Kit 31 undo bar (runtime/app.jsx:4633) — 5s revert bar for destructive
+   swipe actions, floats above the tab bar. Geometry is the prototype's inline
+   style, fixed against the viewport like the repo's tab bar. */
+.mobile-shell .undobar { position: fixed; left: 16px; right: 16px; bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 26; display: flex; align-items: center; gap: 10px; background: #0c0e12; color: #fff; border-radius: 13px; padding: 11px 14px; box-shadow: var(--p-elev-2, var(--p-elev-1)); } /* grid-exempt: kit 31 undo-bar geometry, prototype-exact (runtime/app.jsx:4634) — 92px clears the floating tab bar (16 inset + 62 bar + 14 gap) */
 /* ── swipe-to-action rows ── */
 .mobile-shell .swipe { position: relative; margin-bottom: var(--p-3); }
 .mobile-shell .swipe-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; border-radius: 14px; overflow: hidden; }

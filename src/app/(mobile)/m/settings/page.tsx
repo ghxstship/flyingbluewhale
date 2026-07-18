@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { KIcon } from "@/components/mobile/kit";
 import { SettingsView, type ProfileData } from "./SettingsView";
 
 export const dynamic = "force-dynamic";
@@ -179,6 +181,11 @@ export default async function MobileSettingsPage() {
 
   return (
     <div className="screen screen-anim">
+      {/* Kit 31 (live-test resolution #13): Settings lives under More — the
+          back control returns there (runtime/app.jsx:4226). */}
+      <Link href="/m/more" className="backbtn" style={{ textDecoration: "none" }}>
+        <KIcon name="ChevronLeft" size={17} /> {t("m.more.title", undefined, "More")}
+      </Link>
       <div className="scr-eye">{t("m.settings.eyebrow", undefined, "Account")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.settings.title", undefined, "Settings")}

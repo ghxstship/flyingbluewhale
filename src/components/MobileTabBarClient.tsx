@@ -48,6 +48,66 @@ const ICONS: Record<string, typeof Home> = {
   "/m/pass": ShieldCheck,
 };
 
+/**
+ * Parent-tab ownership — kit 31 (runtime/app.jsx:4643): sub-screens light
+ * their parent tab. Home owns the emergency pages, the time clock, and the
+ * assign flow; Assets owns the advance cart; More owns every hub surface it
+ * links. Routes NOT listed (profile, notifications, search) light no tab —
+ * the kit's active map is the fixture, extended only with repo route
+ * spellings for the same surfaces.
+ */
+const PARENT_PREFIXES: Record<string, string[]> = {
+  "/m": ["/m/emergency", "/m/clock", "/m/assign"],
+  "/m/assets": ["/m/advance", "/m/advances"],
+  "/m/more": [
+    // Operations
+    "/m/catalog",
+    "/m/inventory",
+    "/m/documents",
+    "/m/templates",
+    "/m/finance",
+    "/m/requests",
+    "/m/requisitions",
+    "/m/coc",
+    "/m/handover",
+    "/m/daily-log",
+    "/m/punch",
+    "/m/check-in",
+    "/m/scan",
+    "/m/door",
+    "/m/incidents",
+    "/m/incident",
+    "/m/lost-found",
+    // Time & Work
+    "/m/my-work",
+    "/m/time",
+    "/m/timesheets",
+    "/m/time-off",
+    "/m/expenses",
+    "/m/mileage",
+    "/m/activity",
+    // Workplace
+    "/m/feed",
+    "/m/spaces",
+    "/m/docs",
+    "/m/guide",
+    "/m/engagement",
+    // People
+    "/m/directory",
+    "/m/companies",
+    "/m/connections",
+    "/m/onboarding",
+    // Opportunities
+    "/m/jobs",
+    "/m/market",
+    "/m/referrals",
+    // Account
+    "/m/pass",
+    "/m/settings",
+    "/m/support",
+  ],
+};
+
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {
   const pathname = usePathname();
   const t = useT();
@@ -65,62 +125,51 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
     else void nav.clearAppBadge?.().catch(() => {});
   }, [totalBadge]);
 
-  // Root tabs match exactly only — the shell root (/m) and role homes
-  // (/m/medic, /m/crew, …) are prefixes of every sibling tab's href, so
-  // a startsWith match would light Home on every route.
+  // Root tabs match exactly only — the shell root (/m) is a prefix of every
+  // sibling tab's href, so a startsWith match would light Home on every route.
   const isRootHref = (href: string) =>
     href === "/m" || items.some((other) => other.href !== href && other.href.startsWith(`${href}/`));
+
+  const ownsPath = (href: string) =>
+    (PARENT_PREFIXES[href] ?? []).some((p) => pathname === p || pathname?.startsWith(`${p}/`));
 
   return (
     <nav
       role="navigation"
       aria-label={t("marketing.header.primaryAriaLabel", undefined, "Primary")}
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--p-border)] bg-[var(--p-bg)]/95 backdrop-blur"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      // Kit 31 `.tabbar` — floating (inset 12/16px, radius 20, elevated);
+      // geometry lives in kit-mobile.css, not here.
+      className="tabbar"
     >
-      <ul className="grid" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
-        {items.map((i) => {
-          const active = isRootHref(i.href)
-            ? pathname === i.href
-            : pathname === i.href || pathname?.startsWith(`${i.href}/`);
-          const Icon = ICONS[i.href] ?? Home;
-          const badgeCount = badges?.[i.href] ?? 0;
-          return (
-            <li key={i.href} className="relative">
-              <Link
-                href={i.href}
-                aria-current={active ? "page" : undefined}
-                // 0.6875rem = 11px — the MONUMENT type floor (no UI text below 11px).
-                className="relative flex flex-col items-center justify-center gap-1 py-2.5 text-[0.6875rem] font-medium tracking-wide uppercase transition-colors"
-              >
-                {active && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-x-6 top-0 h-0.5 rounded-b-full bg-[var(--p-accent)]"
-                  />
-                )}
-                <span className="relative">
-                  <Icon
-                    size={18}
-                    className={active ? "text-[var(--p-accent)]" : "text-[var(--p-text-2)]"}
-                    aria-hidden="true"
-                  />
-                  {badgeCount > 0 && (
-                    <span className="absolute -end-2 -top-1.5">
-                      <Badge variant="error" shape="count" aria-label={`${badgeCount} unread`}>
-                        {badgeCount > 99 ? "99+" : badgeCount}
-                      </Badge>
-                    </span>
-                  )}
+      {items.map((i) => {
+        const direct = isRootHref(i.href)
+          ? pathname === i.href
+          : pathname === i.href || pathname?.startsWith(`${i.href}/`);
+        const active = direct || ownsPath(i.href);
+        const Icon = ICONS[i.href] ?? Home;
+        const badgeCount = badges?.[i.href] ?? 0;
+        return (
+          <Link
+            key={i.href}
+            href={i.href}
+            aria-current={active ? "page" : undefined}
+            className={`tb${active ? " on" : ""}`}
+            style={{ textDecoration: "none" }}
+          >
+            <span className="relative">
+              <Icon size={21} aria-hidden="true" />
+              {badgeCount > 0 && (
+                <span className="absolute -end-2 -top-1.5">
+                  <Badge variant="error" shape="count" aria-label={`${badgeCount} unread`}>
+                    {badgeCount > 99 ? "99+" : badgeCount}
+                  </Badge>
                 </span>
-                <span className={active ? "text-[var(--p-accent)]" : "text-[var(--p-text-2)]"}>
-                  {t(navItemKey(i), undefined, i.label)}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+              )}
+            </span>
+            <span>{t(navItemKey(i), undefined, i.label)}</span>
+          </Link>
+        );
+      })}
     </nav>
   );
 }

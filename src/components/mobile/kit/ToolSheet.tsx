@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
+import { SheetHead } from "./SheetHead";
 import { useDismissable } from "./useDismissable";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
@@ -317,10 +318,9 @@ export function ToolSheet({ toolId, onClose, toast }: { toolId: string; onClose:
       <button type="button" className="sheet-bg" aria-label="Close" onClick={onClose} />
       <div ref={panelRef} className="sheet-panel" role="dialog" aria-modal="true" aria-label={tool.label}>
         <div className="sheet-grip" />
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <span className="form-ic"><KIcon name={tool.icon} size={20} /></span>
-          <h2 style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 19, margin: 0 }}>{tool.label}</h2>
-        </div>
+        {/* Kit 31 (live-test resolution #8): canonical SheetHead — icon +
+            title + explicit ✕ close on every sheet. */}
+        <SheetHead icon={tool.icon} title={tool.label} onClose={onClose} />
         {toolId === "unit" && <UnitTool />}
         {toolId === "ops" && <OpsTool />}
         {toolId === "osha" && <OshaTool toast={toast} />}

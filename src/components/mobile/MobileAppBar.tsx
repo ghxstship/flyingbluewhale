@@ -13,7 +13,7 @@ import { MobileSwitcherSheet, type SwitcherOrg, type SwitcherProject } from "./M
  * header: a different structure, different controls, and no COMPVSS context
  * row at all. The kit's bar is five things in one line:
  *
- *   brand mark (opens Copilot) · org + project switcher · spacer ·
+ *   brand mark (opens Aurora AI · ATLVS field intelligence) · org + project switcher · spacer ·
  *   search · bell (unread) · avatar (profile)
  *
  * The brand mark is the kit's own SVG — an accent rounded-rect with a white
@@ -51,12 +51,12 @@ export function MobileAppBar({
   return (
     <>
       <div className="appbar">
-        {/* Brand mark = the Copilot entry point (kit: `.brandbtn` → setCopilot). */}
+        {/* Brand mark = the Aurora AI entry point (kit 31: `.brandbtn` → "Ask Aurora AI"). */}
         <button
           type="button"
           className="brandbtn"
           onClick={() => router.push("/m/inbox")}
-          aria-label="Ask COMPVSS AI"
+          aria-label="Ask Aurora AI"
         >
           <svg viewBox="0 0 128 128" style={{ width: 30, height: 30 }} aria-hidden="true">
             <rect width="128" height="128" rx="28" fill="var(--p-accent)" />

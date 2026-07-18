@@ -181,7 +181,10 @@ export default async function EngagementPage() {
       </div>
 
       <div className="sech">
-        <h2>{t("m.engagement.opsSummary", undefined, "Ops Summary")}</h2>
+        {/* Kit 31 (live-test resolution #17): the AI surface is Aurora — the
+            summary card carries the Aurora name (fresh key so a stale catalog
+            entry can't shadow the rename). */}
+        <h2>{t("m.engagement.auroraOpsSummary", undefined, "Aurora Ops Summary")}</h2>
       </div>
       <div className="item" style={{ display: "block" }}>
         <div className="s">{summary}</div>

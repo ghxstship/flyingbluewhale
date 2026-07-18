@@ -186,7 +186,7 @@ export default async function MobileLayout({ children }: { children: React.React
       >
         <ConnectivityBanner />
         <SyncBanner />
-        {/* The kit's own app bar (kit 28 `.appbar`): brand/Copilot · org +
+        {/* The kit's own app bar (kit 28 `.appbar`): brand/Aurora AI · org +
             project context · search · bell · avatar. This shell used to render
             WorkspaceChrome, which is the CONSOLE's header — different
             structure, different controls, and no COMPVSS context row at all.

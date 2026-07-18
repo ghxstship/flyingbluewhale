@@ -113,10 +113,13 @@ export default async function MobileHome() {
     },
   };
 
+  // Kit 31 (live-test resolution #10): the Home eyebrow is the FULL date —
+  // weekday, month, day AND year ("Friday, July 17, 2026").
   const greeting = fmt.dateParts(new Date(), {
     weekday: "long",
-    month: "short",
+    month: "long",
     day: "numeric",
+    year: "numeric",
   });
 
   const labels: HomeLabels = {

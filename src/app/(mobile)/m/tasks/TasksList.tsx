@@ -3,8 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, GroupedList, KIcon, SwipeRow } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { ActionBar, EmptySkeleton, GroupedList, KIcon, SwipeRow } from "@/components/mobile/kit";
 import {
   PRI_COLOR,
   TASK_STATES,
@@ -347,7 +346,12 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
         </div>
       )}
 
-      {!entries.length && <EmptyState title={L.empty} description={L.emptyBody} />}
+      {/* Kit 31 (live-test resolution #16): empty states keep the view's
+          structure visible — column headers + ghost rows (EmptySkeleton).
+          Exemplar adoption; the remaining lists convert in the follow-up. */}
+      {!entries.length && (
+        <EmptySkeleton cols={[L.colTask, L.groupStatus, L.colDue]} title={L.empty} hint={L.emptyBody} />
+      )}
       {/* Kit FAB: New Task (CREATE map, runtime/app.jsx). */}
       <Link href="/m/tasks/new" className="fab" aria-label={L.newTask}>
         <KIcon name="Plus" size={24} />

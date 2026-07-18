@@ -159,13 +159,12 @@ export default async function MobileProfilePage() {
         </div>
       </div>
 
-      {/* Primary actions. */}
+      {/* Primary actions. Kit 31 (live-test resolution #13): Profile no
+          longer links Settings — Settings is reached from More, and profile
+          editing arrives with the completion stepper (resolution #12). */}
       <div style={{ display: "flex", gap: 10, margin: "8px 0 6px" }}>
         <Link href="/m/pass" className="ps-btn ps-btn--cta ps-btn--lg" style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}>
           <KIcon name="QrCode" size={16} /> {t("m.profile.rose", undefined, "My Rose")}
-        </Link>
-        <Link href="/m/settings" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}>
-          <KIcon name="Pencil" size={16} /> {t("m.profile.edit", undefined, "Edit")}
         </Link>
       </div>
 

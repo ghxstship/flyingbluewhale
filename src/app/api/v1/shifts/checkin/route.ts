@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { log } from "@/lib/log";
 import { evaluatePunch } from "@/lib/time/policy";
 import { loadPunchPolicyContext } from "@/lib/time/server";
 import { resolveZoneForPunch } from "@/lib/workforce";
@@ -134,7 +135,12 @@ export async function POST(req: NextRequest) {
       const { settings, zones } = await loadPunchPolicyContext(supabase, session.orgId);
       const verdict = evaluatePunch({ fix, zones, settings });
 
-      await supabase.from("time_entries").insert({
+      // The FSM has already advanced to checked_in, so a failed insert here
+      // silently loses the shift's hours — capture + log it rather than
+      // swallowing (found by the 2026-07-18 optimization re-audit). The
+      // open-punch index is deliberately NON-unique (20260718130000) so a
+      // concurrent personal punch can't collide with this shift entry.
+      const { error: entryErr } = await supabase.from("time_entries").insert({
         org_id: session.orgId,
         user_id: session.userId,
         shift_id: shift.id,
@@ -149,6 +155,14 @@ export async function POST(req: NextRequest) {
         enforcement_state: verdict.enforcementState,
         enforcement_reason: verdict.enforcementState === "clean" ? null : verdict.reason,
       });
+      if (entryErr) {
+        log.error("shifts.checkin.time_entry_insert_failed", {
+          shift_id: shift.id,
+          user_id: session.userId,
+          err: entryErr.message,
+          code: entryErr.code,
+        });
+      }
     } else if (input.action === "check_out") {
       // Close the open time_entries row for this shift (ended_at is null).
       const { data: open } = await supabase

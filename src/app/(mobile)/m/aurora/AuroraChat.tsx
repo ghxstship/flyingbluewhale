@@ -31,15 +31,15 @@ const FOLLOWUPS = ["Set a reminder", "Notify my team", "Show on schedule"];
 function answerFor(q: string): string {
   const t = q.toLowerCase();
   if (/next shift|when.*work|schedule/.test(t))
-    return "Your next shift is Stage L — Changeover at 19:30 at the Black Pearl Stage. Want me to set a reminder?";
+    return "Your next shift is Stage L Changeover at 19:30 at the Black Pearl Stage. Want me to set a reminder?";
   if (/incident|report|injur|hazard/.test(t))
     return "Open Tasks then File a Report, or tap Report in Quick Actions. Pick Incident, set severity, add a photo, and it routes to Ops as #214.";
   if (/convert|ft|feet|meter|metre|lb|kg/.test(t))
-    return "Use the Unit Converter in your Toolbox — it handles length, weight and temperature. 50 ft is about 15.24 m.";
+    return "Use the Unit Converter in your Toolbox. It handles length, weight and temperature. 50 ft is about 15.24 m.";
   if (/cater|food|meal|eat/.test(t))
     return "Crew catering is at the BOH commissary, dinner service 20:00 to 22:00. Your meal voucher is on your Rose (Meal Voucher · Crew).";
   if (/radio|channel/.test(t))
-    return "You're on Channel 4 — Gate & Access. The full channel list is in the Toolbox under Radio Channels.";
+    return "You're on Channel 4 (Gate & Access). The full channel list is in the Toolbox under Radio Channels.";
   if (/pass|credential|access|rose/.test(t))
     return "Your Rose is Active (ID 0731). Check Access & Permissions on your credential to see what's granted or request more.";
   if (/feed|summar|catch up|what.*happen|announce/.test(t))
@@ -132,7 +132,7 @@ export function AuroraChat({ firstName }: { firstName: string }) {
             {greeting}, {firstName}
           </div>
           <div className="aurora-sub">
-            Ask about your shifts, crew, access or the venue — or let me take an action for you.
+            Ask about your shifts, crew, access or the venue, or let me take an action for you.
           </div>
           <div className="aurora-cards">
             {PROMPT_CARDS.map(([ic, p]) => (

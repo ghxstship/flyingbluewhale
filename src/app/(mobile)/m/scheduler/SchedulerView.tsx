@@ -15,7 +15,7 @@ import {
   useUndo,
   type FormDef,
 } from "@/components/mobile/kit";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { toFormData } from "@/lib/mobile/form-data";
@@ -114,10 +114,6 @@ function groupHours(g: { start: string; end: string }): number {
   if (dur <= 0) dur += 24;
   return dur;
 }
-function money(n: number): string {
-  return `$${Math.round(n).toLocaleString()}`;
-}
-
 export function SchedulerView({
   eyebrow,
   days,
@@ -132,6 +128,7 @@ export function SchedulerView({
   areaOptions: string[];
 }) {
   const t = useT();
+  const fmt = useFormatters();
   const router = useRouter();
   const toast = useToast();
   const [, startTransition] = useTransition();
@@ -162,7 +159,6 @@ export function SchedulerView({
     for (const s of live) if (s.dayKey === day && s.crewId) set.add(s.crewId);
     return set;
   }, [live, day]);
-  const poolFree = pool.filter((p) => !busyToday.has(p.id)).length;
 
   // Est. labor for the day = Σ (filled seat hours × rate).
   const dayCost = useMemo(
@@ -183,16 +179,14 @@ export function SchedulerView({
   // Coverage-by-hour across the day's span.
   const coverage = useMemo(() => {
     if (!dayGroups.length) return [] as { hh: number; need: number; have: number }[];
-    let minH = 24;
-    let maxH = 0;
     const ranges = dayGroups.map((g) => {
       const s = Math.floor(hourOf(g.start));
-      let e = Math.ceil(hourOf(g.end));
-      if (e <= s) e += 24;
-      minH = Math.min(minH, s);
-      maxH = Math.max(maxH, e);
+      const eRaw = Math.ceil(hourOf(g.end));
+      const e = eRaw <= s ? eRaw + 24 : eRaw;
       return { s, e, seats: g.seats.length, filled: g.crew.length };
     });
+    const minH = Math.min(...ranges.map((r) => r.s));
+    const maxH = Math.max(...ranges.map((r) => r.e));
     const rows: { hh: number; need: number; have: number }[] = [];
     for (let hh = minH; hh < maxH; hh++) {
       let nd = 0;
@@ -444,7 +438,7 @@ export function SchedulerView({
             </div>
             <div className="rec-cell">
               <div className="rec-k">{t("m.scheduler.stat.labor", undefined, "Est. Labor")}</div>
-              <div className="rec-v">{money(dayCost)}</div>
+              <div className="rec-v">{fmt.money(Math.round(dayCost * 100))}</div>
             </div>
             <div className="rec-cell">
               <div className="rec-k">{t("m.scheduler.stat.ot", undefined, "OT Flags")}</div>

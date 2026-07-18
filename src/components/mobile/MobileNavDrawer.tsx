@@ -60,27 +60,31 @@ export function MobileNavDrawer({
   const [switcherOpen, setSwitcherOpen] = React.useState(false);
   const [q, setQ] = React.useState("");
 
+  // Plain function — the React Compiler memoizes; a manual useCallback here
+  // can't be preserved (setters are stable, so the closure is trivially safe).
+  const close = () => {
+    setOpen(false);
+    setQ("");
+  };
+
   React.useEffect(() => {
     const onOpen = () => setOpen(true);
     window.addEventListener("compvss:nav-open", onOpen);
     return () => window.removeEventListener("compvss:nav-open", onOpen);
   }, []);
 
-  // Lock body scroll + close on Escape while open.
+  // Close on Escape while open (setters are stable, so no dep on `close`).
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") {
+        setOpen(false);
+        setQ("");
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
-
-  const close = React.useCallback(() => {
-    setOpen(false);
-    setQ("");
-  }, []);
 
   const query = q.trim().toLowerCase();
   const match = (l: MoreNavLink) =>
@@ -104,7 +108,7 @@ export function MobileNavDrawer({
   return (
     <>
       <div className="navdrawer" role="dialog" aria-modal="true" aria-label="Menu">
-        <div className="nav-scrim" onClick={close} />
+        <button type="button" className="nav-scrim" aria-label="Close menu" onClick={close} />
         <div className="nav-panel">
           <div className="nav-head">
             <Link href="/m/profile" className="nav-id" onClick={close}>

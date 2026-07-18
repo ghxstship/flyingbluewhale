@@ -42,7 +42,7 @@ type AlertRow = {
   created_at: string;
 };
 
-type MyReceipts = { musterAckAt: string | null; safeAt: string | null };
+type MyReceipts = { musterAckAt: string | null; safeAt: string | null; needHelpAt: string | null };
 
 export default async function CrisisAlertsPage() {
   const session = await requireSession();
@@ -67,11 +67,13 @@ export default async function CrisisAlertsPage() {
         .select("alert_id, channel, acknowledged_at")
         .in("alert_id", alerts.map((a) => a.id))
         .eq("user_id", session.userId)
-        .in("channel", ["muster_ack", "self_safe"]);
+        .in("channel", ["muster_ack", "self_safe", "need_help"]);
       for (const r of receipts ?? []) {
-        const entry = receiptsByAlert.get(r.alert_id) ?? { musterAckAt: null, safeAt: null };
+        const entry =
+          receiptsByAlert.get(r.alert_id) ?? { musterAckAt: null, safeAt: null, needHelpAt: null };
         if (r.channel === "muster_ack") entry.musterAckAt = r.acknowledged_at;
         if (r.channel === "self_safe") entry.safeAt = r.acknowledged_at;
+        if (r.channel === "need_help") entry.needHelpAt = r.acknowledged_at;
         receiptsByAlert.set(r.alert_id, entry);
       }
     }
@@ -134,6 +136,7 @@ export default async function CrisisAlertsPage() {
           alert={active}
           initialMusterAckAt={activeReceipts?.musterAckAt ?? null}
           initialSafeAt={activeReceipts?.safeAt ?? null}
+          initialNeedHelpAt={activeReceipts?.needHelpAt ?? null}
         />
       ) : (
         <div className="item">

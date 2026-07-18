@@ -306,7 +306,9 @@ export function AlertsList({ items }: { items: AlertItem[] }) {
             { id: "title", label: colNotification, type: "text", get: (a) => a.title },
             { id: "type", label: colType, type: "text", get: (a) => a.typeLabel },
             { id: "body", label: t("m.alerts.col.detail", undefined, "Detail"), type: "text", get: (a) => a.body },
-            { id: "when", label: colTime, type: "text", get: (a) => a.when },
+            // Sort on the real timestamp; display the humanized string —
+            // sorting "2h" as text would order 10h before 2h (kit 32 D1).
+            { id: "when", label: colTime, type: "text", get: (a) => a.sortAt, cell: (a) => a.when },
           ]}
           items={visible}
           onRow={openDetail}

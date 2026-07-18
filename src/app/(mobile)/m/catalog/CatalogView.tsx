@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ActionBar, GroupedList, KIcon } from "@/components/mobile/kit";
+import { ActionBar, Crumbs, GroupedList, KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { CatalogKind } from "@/lib/db/assignments";
 import { formatMoney } from "@/lib/i18n/format";
@@ -76,9 +76,9 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
 
   return (
     <>
-      <Link href="/m/more" className="backbtn">
-        <KIcon name="ChevronLeft" size={17} /> {labels.back}
-      </Link>
+      {/* Kit 32 C1: crumb trail on the catalog path (More → Catalog); the
+          item leg continues on the prefilled request form. */}
+      <Crumbs items={[{ label: labels.back, href: "/m/more" }, { label: labels.title }]} />
       <h1 className="scr-h" style={{ marginBottom: 12 }}>{labels.title}</h1>
       <ActionBar<CatalogEntry>
         k="ct"

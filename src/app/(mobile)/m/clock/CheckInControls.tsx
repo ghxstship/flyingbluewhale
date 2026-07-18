@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { KIcon } from "@/components/mobile/kit";
 import { useClockPunch } from "@/components/mobile/useClockPunch";
+import { WillSyncChip } from "@/components/mobile/WillSyncChip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /** Format an elapsed millisecond span as HH:MM:SS. */
@@ -84,6 +85,9 @@ export function CheckInControls({
         {zoneName ?? t("m.clock.noZone", undefined, "No Zone Set")}
       </div>
       <div className="tcv">{now}</div>
+      {/* Kit 32 B2: pending punches sitting in the durable outbox — survives
+          a reload, clears only when the queue really drains. */}
+      <WillSyncChip endpoints={["/api/v1/time/clock"]} align="center" />
       {outcome?.kind === "error" && (
         <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
           {outcome.message}

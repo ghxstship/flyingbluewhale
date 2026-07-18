@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { FormScreen } from "@/components/mobile/kit";
+import { Crumbs, FormScreen } from "@/components/mobile/kit";
 import type { FormDef } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { requestAdvance } from "../actions";
@@ -16,11 +16,14 @@ export function AdvanceForm({
   initial,
   catalogItemId,
   fromCatalog = false,
+  catalogItemName,
 }: {
   initial?: Record<string, unknown>;
   /** Kit 31 #3 — the concrete SKU the catalog CTA handed through. */
   catalogItemId?: string;
   fromCatalog?: boolean;
+  /** Kit 32 C1 — the SKU name for the More → Catalog → Item crumb trail. */
+  catalogItemName?: string;
 }) {
   const t = useT();
   const router = useRouter();
@@ -51,6 +54,16 @@ export function AdvanceForm({
 
   return (
     <div className="screen screen-anim">
+      {/* Kit 32 C1: the catalog-item path gets its full trail. */}
+      {fromCatalog && (
+        <Crumbs
+          items={[
+            { label: t("m.catalog.back", undefined, "More"), href: "/m/more" },
+            { label: t("m.catalog.title", undefined, "Catalog"), href: "/m/catalog" },
+            { label: catalogItemName ?? t("m.advances.new.crumbItem", undefined, "Item") },
+          ]}
+        />
+      )}
       {error && (
         <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
           {error}

@@ -3,6 +3,8 @@ import { MobileTabBar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { SyncBanner } from "@/components/mobile/SyncBanner";
+import { SyncStampBar } from "@/components/mobile/SyncStampBar";
+import { RefreshShell } from "@/components/mobile/RefreshShell";
 import { InstallPrompt } from "@/components/mobile/InstallPrompt";
 import { StoragePersistence } from "@/components/mobile/StoragePersistence";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
@@ -202,8 +204,13 @@ export default async function MobileLayout({ children }: { children: React.React
           currentOrgId={session.orgId}
           currentProjectId={activeProject?.id ?? null}
         />
+        {/* Kit 32 B1: the online sync stamp ("Updated HH:MM · Tap To
+            Refresh") rides under the app bar, and the pull-to-refresh
+            gesture wraps the whole screen subtree — one shell-level pair,
+            not per-screen copies. */}
+        <SyncStampBar />
         <main id="main" tabIndex={-1} className="animate-fade-in">
-          {children}
+          <RefreshShell>{children}</RefreshShell>
         </main>
         <InstallPrompt />
         <StoragePersistence />

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -48,6 +48,10 @@ export default async function EmergencyPage() {
   let crisis: ActiveCrisis | null = null;
   let musterAckAt: string | null = null;
   let safeAt: string | null = null;
+  let needHelpAt: string | null = null;
+  // Kit 32 E1 — the ops-side muster count (manager band only): safe / help /
+  // unresponsive tallies computed from the alert's REAL receipt rows.
+  let muster: { safe: number; help: number; unresponsive: number } | null = null;
 
   if (hasSupabase) {
     const supabase = await createClient();
@@ -74,10 +78,48 @@ export default async function EmergencyPage() {
         .select("channel, acknowledged_at")
         .eq("alert_id", alert.id)
         .eq("user_id", session.userId)
-        .in("channel", ["muster_ack", "self_safe"]);
+        .in("channel", ["muster_ack", "self_safe", "need_help"]);
       for (const r of receipts ?? []) {
         if (r.channel === "muster_ack") musterAckAt = r.acknowledged_at;
         if (r.channel === "self_safe") safeAt = r.acknowledged_at;
+        if (r.channel === "need_help") needHelpAt = r.acknowledged_at;
+      }
+
+      // Ops muster count (kit 32 E1). Manager band only — a crew member's
+      // job during a code is their own check-in, not the tally. Receipts are
+      // org-readable by RLS; membership count is the honest denominator.
+      if (isManagerPlus(session)) {
+        const [{ data: allReceipts }, { count: memberCount }] = await Promise.all([
+          supabase
+            .from("crisis_alert_receipts")
+            .select("user_id, channel, acknowledged_at")
+            .eq("alert_id", alert.id)
+            .in("channel", ["self_safe", "need_help"]),
+          supabase
+            .from("memberships")
+            .select("user_id", { count: "exact", head: true })
+            .eq("org_id", session.orgId)
+            .is("deleted_at", null),
+        ]);
+        // Latest-wins per user between safe and help — the newer receipt is
+        // that person's current answer.
+        const latest = new Map<string, { channel: string; at: string }>();
+        for (const r of (allReceipts ?? []) as Array<{ user_id: string; channel: string; acknowledged_at: string | null }>) {
+          const at = r.acknowledged_at ?? "";
+          const cur = latest.get(r.user_id);
+          if (!cur || at >= cur.at) latest.set(r.user_id, { channel: r.channel, at });
+        }
+        let safe = 0;
+        let help = 0;
+        for (const v of latest.values()) {
+          if (v.channel === "need_help") help += 1;
+          else safe += 1;
+        }
+        muster = {
+          safe,
+          help,
+          unresponsive: Math.max(0, (memberCount ?? 0) - latest.size),
+        };
       }
     }
 
@@ -127,7 +169,39 @@ export default async function EmergencyPage() {
           stated, not implied — an empty space reads as "not wired", not
           "nothing happening". */}
       {crisis ? (
-        <CrisisPanel alert={crisis} initialMusterAckAt={musterAckAt} initialSafeAt={safeAt} />
+        <>
+          <CrisisPanel
+            alert={crisis}
+            initialMusterAckAt={musterAckAt}
+            initialSafeAt={safeAt}
+            initialNeedHelpAt={needHelpAt}
+          />
+          {muster && (
+            <>
+              <div className="sech">
+                <h2>{t("m.muster.title", undefined, "Muster Count")}</h2>
+              </div>
+              <div className="rec-grid" style={{ marginBottom: 12 }}>
+                <div className="rec-cell">
+                  <div className="rec-k">{t("m.muster.safe", undefined, "Safe")}</div>
+                  <div className="rec-v" style={{ color: "var(--p-success)" }}>{muster.safe}</div>
+                </div>
+                <div className="rec-cell">
+                  <div className="rec-k">{t("m.muster.help", undefined, "Need Help")}</div>
+                  <div className="rec-v" style={{ color: muster.help > 0 ? "var(--p-danger)" : undefined }}>
+                    {muster.help}
+                  </div>
+                </div>
+                <div className="rec-cell">
+                  <div className="rec-k">{t("m.muster.unresponsive", undefined, "Unresponsive")}</div>
+                  <div className="rec-v" style={{ color: muster.unresponsive > 0 ? "var(--p-warning)" : undefined }}>
+                    {muster.unresponsive}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </>
       ) : (
         <div className="item">
           <span className="bar" style={{ background: "var(--p-success)" }} />

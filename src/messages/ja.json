@@ -4012,7 +4012,8 @@
       },
       "new": {
         "prefilled": "前回のリクエストから自動入力しました。変更点があれば編集してください。",
-        "submitting": "送信中…"
+        "submitting": "送信中…",
+        "crumbItem": "アイテム"
       },
       "offline": {
         "body": "オンラインに戻ると、アドバンシングが読み込まれ、変更が同期されます。",
@@ -4133,6 +4134,13 @@
         "cat": "カテゴリ",
         "name": "名前",
         "updated": "更新日"
+      },
+      "viewer": {
+        "loading": "開いています…",
+        "noFile": "この文書にはファイルが添付されていません。",
+        "hint": "プレビューが表示されない場合はダウンロードを使ってください。",
+        "download": "ダウンロード",
+        "share": "共有"
       }
     },
     "error": {
@@ -4283,9 +4291,22 @@
         "label": "何が起きたか",
         "placeholder": "インシデントを記述…",
         "submit": "インシデントを提出",
-        "title": "クイック提出"
+        "title": "クイック提出",
+        "followUpIntro": "「{summary}」のフォローアップ。1行でOpsに同じチェーンで届きます。"
       },
-      "untitled": "名称未設定のインシデント"
+      "untitled": "名称未設定のインシデント",
+      "chain": {
+        "title": "ステータス履歴",
+        "filed": "報告済み",
+        "stateChanged": "{from} → {to}",
+        "followUp": "フォローアップ報告済み",
+        "followUpNamed": "フォローアップ報告済み · {summary}"
+      },
+      "crumbHome": "ホーム",
+      "crumbIncidents": "インシデント",
+      "crumbReport": "報告 · {id}",
+      "addFollowUp": "フォローアップを追加",
+      "openTasks": "タスクを開く"
     },
     "incidents": {
       "eyebrow": "現場",
@@ -4831,7 +4852,9 @@
       "templates": "テンプレート",
       "templatesSub": "組織とプロジェクトのテンプレート",
       "finance": "ファイナンス",
-      "financeSub": "予算・発注・コスト計上"
+      "financeSub": "予算・発注・コスト計上",
+      "scheduler": "シフトスケジューラー",
+      "schedulerSub": "クルーのシフトを作成・公開"
     },
     "scan": {
       "eyebrow": "クイックスキャン",
@@ -4997,7 +5020,12 @@
       "shelterTitle": "屋内退避",
       "shelterIntro": "悪天候や外部の脅威の際は、最寄りの頑丈な建物へ誘導し、報告以外の無線使用は控えてください。",
       "shelterLocations": "退避場所",
-      "shelterNoLocations": "このプロジェクトの退避場所はまだ公開されていません。運営がイベントガイドのリソースセクションに追加します。"
+      "shelterNoLocations": "このプロジェクトの退避場所はまだ公開されていません。運営がイベントガイドのリソースセクションに追加します。",
+      "crisis": {
+        "imSafe": "無事です",
+        "needHelp": "助けが必要",
+        "helpSent": "リーダーに通知しました。安全であればその場に留まってください。"
+      }
     },
     "market": {
       "by": "出品者",
@@ -5045,6 +5073,51 @@
         "shift": "シフト",
         "training": "トレーニング"
       }
+    },
+    "scheduler": {
+      "eyebrow": "スケジュール管理は ATLVS で",
+      "title": "シフトスケジューラー",
+      "lock": {
+        "body": "シフトの作成と公開には次の権限が必要です",
+        "back": "その他に戻る"
+      },
+      "back": "その他",
+      "areaTbd": "エリア未定",
+      "untitledRole": "クルー",
+      "stat": {
+        "shifts": "シフト",
+        "coverage": "充足",
+        "unpublished": "未公開",
+        "poolFree": "空き人員"
+      },
+      "assign": "割り当て",
+      "publish": "公開",
+      "remove": "削除",
+      "badge": {
+        "published": "公開済み",
+        "draft": "下書き"
+      },
+      "open": "{count} 枠",
+      "openSeats": "{count} 枠",
+      "assigned": "割り当て · {name} → {role}",
+      "published": "公開済み · クルーに通知しました",
+      "dayPublished": "1日分を公開 · 全クルーに通知しました",
+      "removed": "削除 · {role}",
+      "added": "シフトを追加しました",
+      "colShift": "シフト",
+      "colCrew": "クルー",
+      "colStatus": "状態",
+      "emptyTitle": "この日はシフトがありません",
+      "emptyHint": "ここでシフトを作成するか、スケジュールテンプレートを適用してください。",
+      "newShift": "新規シフト",
+      "publishDay": "1日分を公開",
+      "jobBoardHint": "空きシフトは次からジョブボードにも公開できます:",
+      "jobBoardHintLink": "プロジェクトロスター",
+      "assignTitle": "クルーを割り当て",
+      "assignClose": "閉じる",
+      "onShift": "勤務中",
+      "poolEmpty": "割り当て可能なメンバーがいません。プロジェクトロスターから追加してください。",
+      "undo": "元に戻す"
     },
     "profile": {
       "about": "概要",
@@ -5195,6 +5268,21 @@
       "importedTitle": "予算へ取り込みました",
       "importedBody": "{code} · ATLVS で管理",
       "importedUncoded": "コード未設定で保存しました。後でファイナンスがコード付与できます。"
+    },
+    "sync": {
+      "updatedTap": "更新 {time} · タップして更新"
+    },
+    "outbox": {
+      "willSync": "同期待ち · {n}"
+    },
+    "muster": {
+      "title": "点呼状況",
+      "safe": "安全",
+      "help": "要救助",
+      "unresponsive": "未応答"
+    },
+    "reqs": {
+      "crumbMore": "その他"
     }
   },
   "avatarMenu": {

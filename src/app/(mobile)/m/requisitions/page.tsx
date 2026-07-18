@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { Crumbs, KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +47,14 @@ export default async function RequisitionsPage() {
 
   return (
     <div className="screen screen-anim">
+      {/* Kit 32 C1: the finance → PO record path gets its trail. */}
+      <Crumbs
+        items={[
+          { label: t("m.reqs.crumbMore", undefined, "More"), href: "/m/more" },
+          { label: t("m.finance.title", undefined, "Finance"), href: "/m/finance" },
+          { label: t("m.reqs.title", undefined, "Purchase Requests") },
+        ]}
+      />
       <div className="scr-eye">
         {rows.length === 1
           ? t("m.reqs.eyebrowOne", undefined, "1 Request")

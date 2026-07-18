@@ -75,25 +75,29 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
     fixesFrom(fd, "photo", photoFiles.length),
   );
 
-  const { error } = await supabase.from("incidents").insert({
-    org_id: session.orgId,
-    project_id: v.projectId ?? null,
-    reporter_id: session.userId,
-    summary: v.what.slice(0, 140),
-    description,
-    severity,
-    incident_state: "open",
-    location: v.where || null,
-    occurred_at: new Date().toISOString(),
-    // Store refs, not bare paths: where a photo was taken is often the whole
-    // question on a safety claim, and the coordinates are worthless if they
-    // aren't attached to the specific image they belong to.
-    photos: upload.refs,
-    injury_type: injuryType,
-    // This intake is the safety intake. Lost property comes through the
-    // lost & found intake, which sets `lost_property`.
-    report_kind: "safety",
-  });
+  const { data: created, error } = await supabase
+    .from("incidents")
+    .insert({
+      org_id: session.orgId,
+      project_id: v.projectId ?? null,
+      reporter_id: session.userId,
+      summary: v.what.slice(0, 140),
+      description,
+      severity,
+      incident_state: "open",
+      location: v.where || null,
+      occurred_at: new Date().toISOString(),
+      // Store refs, not bare paths: where a photo was taken is often the whole
+      // question on a safety claim, and the coordinates are worthless if they
+      // aren't attached to the specific image they belong to.
+      photos: upload.refs,
+      injury_type: injuryType,
+      // This intake is the safety intake. Lost property comes through the
+      // lost & found intake, which sets `lost_property`.
+      report_kind: "safety",
+    })
+    .select("id")
+    .single();
   if (error) return { error: error.message };
 
   const managers = await managerUserIds(session.orgId, session.userId);
@@ -103,7 +107,10 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
       {
         title: "New Incident Filed",
         body: v.what.slice(0, 120),
-        url: "/m/incidents",
+        // Kit 32 A2: the notification deep-links the REAL report record —
+        // the bell row, the notification detail's related link, and the
+        // activity timeline all resolve through this href.
+        url: `/m/incidents/${(created as { id: string }).id}`,
         kind: "incident",
         scope: "mobile",
         orgId: session.orgId,

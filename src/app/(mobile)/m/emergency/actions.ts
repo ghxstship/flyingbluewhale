@@ -5,6 +5,8 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { managerUserIds } from "@/lib/db/managers";
+import { sendPushBulk } from "@/lib/push/send";
 
 /**
  * COMPVSS · Emergency — the field half of the crisis loop (crisis.respond).
@@ -18,9 +20,12 @@ import { hasSupabase } from "@/lib/env";
  * (alert_id, user_id, channel) makes every response an idempotent upsert —
  * an offline replay or a double tap cannot double-write.
  *
- * No push is sent from here: a mark-safe is a row the console reads, not an
- * alarm, and the unsilenceable channel is reserved for the declaration
- * itself.
+ * Kit 32 E1 adds the third channel, `need_help` (documented in migration
+ * 20260718030000_crisis_need_help_channel): the one response that IS an
+ * alarm — it pushes an ops alert to the manager band on the `crisis` kind
+ * so the muster desk hears it immediately. `muster_ack` / `self_safe` stay
+ * silent: those are rows the console reads, not alarms; the unsilenceable
+ * channel is reserved for the declaration and the call for help.
  *
  * Called programmatically by the offline queue's `send` (kit 21 W8), not by
  * useActionState — hence a plain-object input rather than FormData.
@@ -29,7 +34,7 @@ import { hasSupabase } from "@/lib/env";
 /** channel values on crisis_alert_receipts — see migration 20260717130103. */
 const Input = z.object({
   alertId: z.string().uuid(),
-  response: z.enum(["muster_ack", "self_safe"]),
+  response: z.enum(["muster_ack", "self_safe", "need_help"]),
 });
 
 export type RespondState = { error?: string; ok?: true } | null;
@@ -50,7 +55,7 @@ export async function respondToCrisisAction(input: {
   // and a queued response can replay days later, after the alert was deleted.
   const { data: alert } = await supabase
     .from("crisis_alerts")
-    .select("id")
+    .select("id, title")
     .eq("id", parsed.data.alertId)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -70,6 +75,24 @@ export async function respondToCrisisAction(input: {
     { onConflict: "alert_id,user_id,channel" },
   );
   if (error) return { error: error.message };
+
+  // Kit 32 E1: "Need Help" is the one field response that must reach ops as
+  // an alarm — push the manager band on the crisis kind (exempt from the
+  // opt-out matrix, same as the declaration). The receipt row above is the
+  // muster count's source of truth; this is the pager.
+  if (parsed.data.response === "need_help") {
+    const managers = await managerUserIds(session.orgId, session.userId);
+    if (managers.length) {
+      await sendPushBulk(managers, {
+        title: "Safety Check-In · Needs Help",
+        body: `${session.email ?? "A crew member"} · ${(alert as { title: string | null }).title ?? "Active crisis"}`,
+        url: "/m/emergency",
+        kind: "crisis",
+        scope: "mobile",
+        orgId: session.orgId,
+      });
+    }
+  }
 
   // Both crisis surfaces render the caller's receipts: the Emergency card's
   // panel and the /m/alerts crisis log (kit 29).

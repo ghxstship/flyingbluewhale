@@ -147,6 +147,7 @@ export type AuditAction =
   | "shift_swap.declined"
   | "incident.filed"
   | "incident.state_changed"
+  | "incident.follow_up_filed"
   | "onboarding.assigned"
   | "onboarding.completed"
   | "personal_document.uploaded"

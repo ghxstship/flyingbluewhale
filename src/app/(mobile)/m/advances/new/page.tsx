@@ -40,6 +40,7 @@ export default async function NewAdvancePage({
   let initial: Record<string, unknown> | undefined;
   let boundCatalogItemId: string | undefined;
   let fromCatalog = false;
+  let catalogItemName: string | undefined;
 
   if (hasSupabase) {
     const supabase = await createClient();
@@ -55,6 +56,7 @@ export default async function NewAdvancePage({
       if (item) {
         boundCatalogItemId = item.id as string;
         fromCatalog = true;
+        catalogItemName = (item.name as string) || undefined;
         initial = {
           cat: KIND_TO_CATEGORY[(item.kind as string) ?? ""] ?? "Other",
           type: (item.name as string) ?? "",
@@ -89,5 +91,12 @@ export default async function NewAdvancePage({
     }
   }
 
-  return <AdvanceForm initial={initial} catalogItemId={boundCatalogItemId} fromCatalog={fromCatalog} />;
+  return (
+    <AdvanceForm
+      initial={initial}
+      catalogItemId={boundCatalogItemId}
+      fromCatalog={fromCatalog}
+      catalogItemName={catalogItemName}
+    />
+  );
 }

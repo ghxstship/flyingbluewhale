@@ -2,8 +2,9 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { ActionBar, EmptySkeleton, GroupedList, KIcon, SwipeRow, TogRow } from "@/components/mobile/kit";
+import { ActionBar, EmptySkeleton, GroupedList, KIcon, SheetHead, SwipeRow, TogRow } from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
+import { useDismissable } from "@/components/mobile/kit/useDismissable";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { DocDownloadLink } from "./DocDownloadLink";
@@ -93,6 +94,35 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
     });
   };
 
+  // Kit 32 A1 — the in-app viewer sheet: title bar, page area over the
+  // signed URL, Download/Share footer. The URL is minted on open through
+  // the caller's own session (same path as Save), so RBAC scope applies and
+  // nothing renders that the viewer could not download.
+  const [viewerDoc, setViewerDoc] = useState<DocItem | null>(null);
+  const [viewerUrl, setViewerUrl] = useState<string | null>(null);
+  const [viewerLoading, setViewerLoading] = useState(false);
+  const closeViewer = () => {
+    setViewerDoc(null);
+    setViewerUrl(null);
+  };
+  const viewerRef = useDismissable<HTMLDivElement>(viewerDoc != null, closeViewer);
+
+  const openViewer = (d: DocItem) => {
+    setViewerDoc(d);
+    setViewerUrl(null);
+    setViewerLoading(true);
+    startTransition(async () => {
+      try {
+        const url = await mintUrl(d);
+        setViewerUrl(url);
+      } catch {
+        setViewerUrl(null);
+      } finally {
+        setViewerLoading(false);
+      }
+    });
+  };
+
   const shareDoc = (d: DocItem) => {
     startTransition(async () => {
       try {
@@ -118,6 +148,7 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
   const row = (d: DocItem) => (
     <SwipeRow
       key={d.id}
+      onClick={() => openViewer(d)}
       actions={[
         { icon: "Download", label: t("m.docs.swipe.save", undefined, "Save"), tone: "info", on: () => saveDoc(d) },
         { icon: "Share2", label: t("m.docs.swipe.share", undefined, "Share"), tone: "neutral", on: () => shareDoc(d) },
@@ -228,6 +259,74 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
         />
       ) : (
         filtered.map(row)
+      )}
+
+      {/* Kit 32 A1 — in-app document viewer sheet. */}
+      {viewerDoc && (
+        <div className="sheet">
+          <button type="button" className="sheet-bg" aria-label={t("common.close", undefined, "Close")} onClick={closeViewer} />
+          <div ref={viewerRef} className="sheet-panel" role="dialog" aria-modal="true" aria-label={viewerDoc.title}>
+            <div className="sheet-grip" />
+            <SheetHead
+              icon={viewerDoc.kind === "personal" ? "FileText" : "File"}
+              title={viewerDoc.title}
+              sub={viewerDoc.cat}
+              closeLabel={t("common.close", undefined, "Close")}
+              onClose={closeViewer}
+            />
+            <div
+              style={{
+                border: "1px solid var(--p-border)",
+                borderRadius: 12,
+                overflow: "hidden",
+                background: "var(--p-surface-2, var(--p-surface))",
+                marginBottom: 12,
+                minHeight: 220,
+                display: "flex",
+                alignItems: "stretch",
+              }}
+            >
+              {viewerLoading ? (
+                <div className="hint" style={{ margin: "auto", padding: 24 }}>
+                  {t("m.docs.viewer.loading", undefined, "Opening…")}
+                </div>
+              ) : viewerUrl ? (
+                <iframe
+                  src={viewerUrl}
+                  title={viewerDoc.title}
+                  style={{ width: "100%", height: "52vh", border: "none", display: "block" }}
+                />
+              ) : (
+                <div className="hint" style={{ margin: "auto", padding: 24, textAlign: "center" }}>
+                  {t("m.docs.viewer.noFile", undefined, "No file attached to this document.")}
+                </div>
+              )}
+            </div>
+            {viewerUrl && (
+              <div className="hint" style={{ marginBottom: 10 }}>
+                {t("m.docs.viewer.hint", undefined, "If the preview doesn't load on this device, use Download.")}
+              </div>
+            )}
+            <div style={{ display: "flex", gap: 8 }}>
+              <button
+                type="button"
+                className="ps-btn ps-btn--cta ps-btn--lg"
+                style={{ flex: 1, justifyContent: "center" }}
+                onClick={() => saveDoc(viewerDoc)}
+              >
+                <KIcon name="Download" size={15} /> {t("m.docs.viewer.download", undefined, "Download")}
+              </button>
+              <button
+                type="button"
+                className="ps-btn ps-btn--secondary ps-btn--lg"
+                style={{ flex: 1, justifyContent: "center" }}
+                onClick={() => shareDoc(viewerDoc)}
+              >
+                <KIcon name="Share2" size={15} /> {t("m.docs.viewer.share", undefined, "Share")}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

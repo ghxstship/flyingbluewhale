@@ -15,6 +15,7 @@ import { join } from "node:path";
 const ROOT = process.cwd();
 const HERE = "src/app/(mobile)/m/emergency";
 const MIGRATION = "supabase/migrations/20260717130103_crisis_field_response.sql";
+const NEED_HELP_MIGRATION = "supabase/migrations/20260718023356_crisis_need_help_channel.sql";
 
 const read = (p: string) => readFileSync(join(ROOT, p), "utf8");
 
@@ -39,6 +40,32 @@ describe("crisis.respond field loop", () => {
       expect(sql, `migration must document channel '${channel}'`).toContain(channel);
       expect(action, `action must accept channel '${channel}'`).toContain(channel);
     }
+    // Kit 32 E1 — the third channel is documented by its own migration.
+    const needHelpSql = read(NEED_HELP_MIGRATION);
+    expect(needHelpSql, "need_help migration must document the channel").toContain("need_help");
+    expect(action, "action must accept channel 'need_help'").toContain("need_help");
+  });
+
+  it("pushes the manager band when the holder calls for help (kit 32 E1)", () => {
+    const action = read(`${HERE}/actions.ts`);
+    // "Need Help" is the one response that is an alarm — the manager band
+    // gets a crisis-kind push; safe/muster stay silent rows.
+    expect(action).toMatch(/need_help/);
+    expect(action).toMatch(/managerUserIds/);
+    expect(action).toMatch(/sendPushBulk/);
+    expect(action).toMatch(/kind:\s*"crisis"/);
+  });
+
+  it("renders the check-in pair with 52px targets and persisted selection", () => {
+    const panel = read(`${HERE}/CrisisPanel.tsx`);
+    expect(panel).toMatch(/minHeight:\s*52/);
+    expect(panel).toContain("initialNeedHelpAt");
+    expect(panel).toContain('"need_help"');
+    const page = read(`${HERE}/page.tsx`);
+    // Selection persists as real receipt rows — the page rehydrates all
+    // three channels, and the manager band sees the muster tallies.
+    expect(page).toContain("need_help");
+    expect(page).toMatch(/m\.muster\.title/);
   });
 
   it("writes responses as idempotent upserts on the baseline unique key", () => {

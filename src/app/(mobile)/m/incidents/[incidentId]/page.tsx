@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { KIcon } from "@/components/mobile/kit";
+import { Crumbs, KIcon } from "@/components/mobile/kit";
 import { INCIDENT_STATE_LABEL, INCIDENT_TRANSITIONS, type IncidentState } from "@/lib/db/incident-fsm";
 import { TriageRow } from "./TriageRow";
 
@@ -62,6 +63,55 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
   const state = row.incident_state as IncidentState;
   const photos = Array.isArray(row.photos) ? (row.photos as string[]) : [];
 
+  // Kit 32 A2 — the status chain is REAL: the filing moment plus every
+  // FSM transition and follow-up the audit ledger recorded for this row
+  // (`transitionIncident` / `quickFileIncident` write these events).
+  // audit_log reads are org-member-scoped by RLS.
+  type ChainEntry = { icon: string; txt: string; at: string | null };
+  const chain: ChainEntry[] = [
+    {
+      icon: "TriangleAlert",
+      txt: t("m.incident.chain.filed", undefined, "Report Filed"),
+      at: (row.occurred_at as string) ?? null,
+    },
+  ];
+  {
+    const { data: auditRows } = await supabase
+      .from("audit_log")
+      .select("action, metadata, at")
+      .eq("org_id", session.orgId)
+      .eq("target_table", "incidents")
+      .eq("target_id", incidentId)
+      .in("action", ["incident.state_changed", "incident.follow_up_filed"])
+      .order("at", { ascending: true })
+      .limit(30);
+    for (const a of (auditRows ?? []) as Array<{ action: string | null; metadata: unknown; at: string | null }>) {
+      const meta = (a.metadata ?? {}) as { fromState?: string; toState?: string; summary?: string };
+      if (a.action === "incident.state_changed" && meta.toState) {
+        chain.push({
+          icon: meta.toState === "closed" ? "CheckCheck" : "Eye",
+          txt: t(
+            "m.incident.chain.stateChanged",
+            {
+              from: INCIDENT_STATE_LABEL[meta.fromState as IncidentState] ?? meta.fromState ?? "—",
+              to: INCIDENT_STATE_LABEL[meta.toState as IncidentState] ?? meta.toState,
+            },
+            `${INCIDENT_STATE_LABEL[meta.fromState as IncidentState] ?? meta.fromState ?? "—"} → ${INCIDENT_STATE_LABEL[meta.toState as IncidentState] ?? meta.toState}`,
+          ),
+          at: a.at,
+        });
+      } else if (a.action === "incident.follow_up_filed") {
+        chain.push({
+          icon: "MessageSquarePlus",
+          txt: meta.summary
+            ? t("m.incident.chain.followUpNamed", { summary: meta.summary }, `Follow-Up Filed · ${meta.summary}`)
+            : t("m.incident.chain.followUp", undefined, "Follow-Up Filed"),
+          at: a.at,
+        });
+      }
+    }
+  }
+
   // Private bucket — the paths are useless without a signature. Failure to
   // sign degrades to "no preview" rather than a broken image, because a
   // broken <img> reads as "the evidence is gone".
@@ -79,6 +129,13 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
 
   return (
     <div className="screen screen-anim">
+      <Crumbs
+        items={[
+          { label: t("m.incident.crumbHome", undefined, "Home"), href: "/m" },
+          { label: t("m.incident.crumbIncidents", undefined, "Incidents"), href: "/m/incidents" },
+          { label: t("m.incident.crumbReport", { id: (row.id as string).slice(0, 5).toUpperCase() }, `Report · ${(row.id as string).slice(0, 5).toUpperCase()}`) },
+        ]}
+      />
       <div className="scr-eye">
         {row.report_kind === "lost_property"
           ? t("m.incident.eyebrowLost", undefined, "Lost & Found")
@@ -132,14 +189,51 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
         </>
       )}
 
+      {/* Kit 32 A2 — the status chain: filed → every FSM transition and
+          follow-up the audit ledger really recorded. */}
+      <div className="sech">
+        <h2>{t("m.incident.chain.title", undefined, "Status Chain")}</h2>
+      </div>
+      <div className="tl">
+        {chain.map((c, i) => (
+          <div className="tl-row" key={i}>
+            <span className="tdot">
+              <KIcon name={c.icon} size={7} />
+            </span>
+            <div style={{ minWidth: 0 }}>
+              <div className="ttxt">{c.txt}</div>
+              {c.at && <div className="ttime">{fmt.dateTime(c.at)}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <div className="sech">
         <h2>{t("m.incident.triage", undefined, "Triage")}</h2>
       </div>
       <TriageRow id={row.id as string} current={state} allowed={INCIDENT_TRANSITIONS[state] ?? []} />
 
-      <a href="/m/incidents" className="ps-btn ps-btn--tertiary ps-btn--lg" style={{ width: "100%", justifyContent: "center", marginTop: 16, textDecoration: "none" }}>
+      {/* Kit 32 A2 — follow-up + related-task actions. */}
+      <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+        <Link
+          href={`/m/incident/new?followUpOf=${row.id as string}`}
+          className="ps-btn ps-btn--cta ps-btn--lg"
+          style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}
+        >
+          <KIcon name="MessageSquarePlus" size={15} /> {t("m.incident.addFollowUp", undefined, "Add Follow-Up")}
+        </Link>
+        <Link
+          href="/m/tasks"
+          className="ps-btn ps-btn--secondary ps-btn--lg"
+          style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}
+        >
+          <KIcon name="ListChecks" size={15} /> {t("m.incident.openTasks", undefined, "Open Tasks")}
+        </Link>
+      </div>
+
+      <Link href="/m/incidents" className="ps-btn ps-btn--tertiary ps-btn--lg" style={{ width: "100%", justifyContent: "center", marginTop: 8, textDecoration: "none" }}>
         <KIcon name="ChevronLeft" size={15} /> {t("m.incident.back", undefined, "All Incidents")}
-      </a>
+      </Link>
     </div>
   );
 }

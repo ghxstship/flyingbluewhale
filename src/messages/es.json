@@ -16476,7 +16476,8 @@
       },
       "new": {
         "prefilled": "Rellenado a partir de tu última solicitud: edita lo que haya cambiado.",
-        "submitting": "Enviando…"
+        "submitting": "Enviando…",
+        "crumbItem": "Artículo"
       },
       "offline": {
         "body": "Tus avances se cargarán, y los cambios se sincronizarán, cuando vuelvas a estar en línea.",
@@ -16619,6 +16620,13 @@
         "cat": "Categoría",
         "name": "Nombre",
         "updated": "Actualizado"
+      },
+      "viewer": {
+        "loading": "Abriendo…",
+        "noFile": "Este documento no tiene archivo adjunto.",
+        "hint": "Si la vista previa no carga en este dispositivo, usa Descargar.",
+        "download": "Descargar",
+        "share": "Compartir"
       }
     },
     "error": {
@@ -16769,9 +16777,22 @@
         "label": "Qué ocurrió",
         "placeholder": "Describe el incidente…",
         "submit": "Presentar incidente",
-        "title": "Presentación rápida"
+        "title": "Presentación rápida",
+        "followUpIntro": "Seguimiento de \"{summary}\". Una línea, enviada a Operaciones en la misma cadena."
       },
-      "untitled": "Incidente sin título"
+      "untitled": "Incidente sin título",
+      "chain": {
+        "title": "Cadena de estado",
+        "filed": "Informe presentado",
+        "stateChanged": "{from} → {to}",
+        "followUp": "Seguimiento presentado",
+        "followUpNamed": "Seguimiento presentado · {summary}"
+      },
+      "crumbHome": "Inicio",
+      "crumbIncidents": "Incidentes",
+      "crumbReport": "Informe · {id}",
+      "addFollowUp": "Añadir seguimiento",
+      "openTasks": "Abrir tareas"
     },
     "incidents": {
       "eyebrow": "Campo",
@@ -17317,7 +17338,9 @@
       "templates": "Plantillas",
       "templatesSub": "Biblioteca De Plantillas De Org Y Proyecto",
       "finance": "Finanzas",
-      "financeSub": "Presupuesto, POs Y Gasto Codificado"
+      "financeSub": "Presupuesto, POs Y Gasto Codificado",
+      "scheduler": "Programador de turnos",
+      "schedulerSub": "Crea y publica turnos del equipo"
     },
     "scan": {
       "eyebrow": "Escaneo rápido",
@@ -17483,7 +17506,12 @@
       "shelterTitle": "Refugio En El Lugar",
       "shelterIntro": "Ante pausas por clima o amenazas externas, dirige a las personas a la estructura reforzada más cercana y no uses la radio salvo para reportar.",
       "shelterLocations": "Ubicaciones De Refugio",
-      "shelterNoLocations": "Tu proyecto aún no publica ubicaciones de refugio. Ops las agrega en la sección de recursos de la guía del evento."
+      "shelterNoLocations": "Tu proyecto aún no publica ubicaciones de refugio. Ops las agrega en la sección de recursos de la guía del evento.",
+      "crisis": {
+        "imSafe": "Estoy a salvo",
+        "needHelp": "Necesito ayuda",
+        "helpSent": "Se ha avisado a tu responsable. Quédate donde estás si es seguro."
+      }
     },
     "market": {
       "by": "por",
@@ -17531,6 +17559,51 @@
         "shift": "Turno",
         "training": "Capacitación"
       }
+    },
+    "scheduler": {
+      "eyebrow": "Motor de programación en ATLVS",
+      "title": "Programador de turnos",
+      "lock": {
+        "body": "Crear y publicar turnos requiere la capacidad",
+        "back": "Volver a Más"
+      },
+      "back": "Más",
+      "areaTbd": "Zona por definir",
+      "untitledRole": "Equipo",
+      "stat": {
+        "shifts": "Turnos",
+        "coverage": "Cobertura",
+        "unpublished": "Sin publicar",
+        "poolFree": "Disponibles"
+      },
+      "assign": "Asignar",
+      "publish": "Publicar",
+      "remove": "Eliminar",
+      "badge": {
+        "published": "Publicado",
+        "draft": "Borrador"
+      },
+      "open": "{count} libres",
+      "openSeats": "{count} libres",
+      "assigned": "Asignado · {name} → {role}",
+      "published": "Publicado · Equipo notificado",
+      "dayPublished": "Día publicado · Todo el equipo notificado",
+      "removed": "Eliminado · {role}",
+      "added": "Turno añadido",
+      "colShift": "Turno",
+      "colCrew": "Equipo",
+      "colStatus": "Estado",
+      "emptyTitle": "Sin turnos este día",
+      "emptyHint": "Crea turnos aquí o aplica una plantilla de horario.",
+      "newShift": "Nuevo turno",
+      "publishDay": "Publicar día",
+      "jobBoardHint": "Los turnos abiertos también pueden publicarse en la bolsa de empleo desde el",
+      "jobBoardHintLink": "Roster del proyecto",
+      "assignTitle": "Asignar equipo",
+      "assignClose": "Cerrar",
+      "onShift": "En turno",
+      "poolEmpty": "No queda nadie por asignar. Añade equipo desde el roster del proyecto.",
+      "undo": "Deshacer"
     },
     "profile": {
       "about": "Acerca de",
@@ -17681,6 +17754,21 @@
       "importedTitle": "Importado Al Presupuesto",
       "importedBody": "{code} · gestionado en ATLVS",
       "importedUncoded": "Guardado sin código. Finanzas puede codificarlo después."
+    },
+    "sync": {
+      "updatedTap": "Actualizado {time} · Toca para actualizar"
+    },
+    "outbox": {
+      "willSync": "Se sincronizará · {n}"
+    },
+    "muster": {
+      "title": "Recuento de reunión",
+      "safe": "A salvo",
+      "help": "Necesita ayuda",
+      "unresponsive": "Sin respuesta"
+    },
+    "reqs": {
+      "crumbMore": "Más"
     }
   },
   "me": {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 import { KIcon } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
@@ -12,7 +12,7 @@ import { crisisSeverityTone } from "./crisis";
 /** Queue channel — one constant so enqueue and drain agree (kit 21 W8). */
 const QUEUE_KIND = "crisis-respond";
 
-type Response = "muster_ack" | "self_safe";
+type Response = "muster_ack" | "self_safe" | "need_help";
 
 export type ActiveCrisis = {
   id: string;
@@ -25,37 +25,54 @@ export type ActiveCrisis = {
 /**
  * COMPVSS · Active Crisis panel — the field's answer to a declared code.
  *
- * Two full-width thumb targets: acknowledge the muster instruction, mark
- * myself safe. Both queue offline (the whole point of a crisis surface is
- * that the network is the first casualty): a submit with no signal is
- * enqueued with a STABLE id per (alert, response), so replays and double
- * taps collapse into the same idempotent upsert the server action performs.
+ * Kit 32 E1: the one-tap safety check-in pair — "I'm Safe" / "Need Help"
+ * (52px targets) — leads the panel; the muster acknowledgement rides below.
+ * Every response is a real `crisis_alert_receipts` row keyed
+ * (alert, user, channel), so selection persists across reloads and devices;
+ * "Need Help" additionally pushes an ops alert to the manager band (server
+ * action, `crisis` kind). The current status is whichever of safe/help was
+ * recorded LAST — a worker who called for help and then reached the muster
+ * point taps "I'm Safe" and the count moves.
  *
- * The buttons flip optimistically on "sent" AND "queued" — a crew member
- * standing at a muster point must not be told their acknowledgement failed
- * just because the cell site is down; the queued state is surfaced by the
- * sync banner and the per-row "will sync" hint instead.
+ * All responses queue offline (the whole point of a crisis surface is that
+ * the network is the first casualty): a submit with no signal is enqueued
+ * with a STABLE id per (alert, response), so replays and double taps
+ * collapse into the same idempotent upsert the server action performs. The
+ * buttons flip optimistically on "sent" AND "queued" — a crew member
+ * standing at a muster point must not be told their check-in failed just
+ * because the cell site is down; the queued state is surfaced by the sync
+ * banner and the per-row "will sync" hint instead.
  */
 export function CrisisPanel({
   alert,
   initialMusterAckAt,
   initialSafeAt,
+  initialNeedHelpAt,
 }: {
   alert: ActiveCrisis;
   initialMusterAckAt: string | null;
   initialSafeAt: string | null;
+  initialNeedHelpAt: string | null;
 }) {
   const t = useT();
+  const fmt = useFormatters();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<Record<Response, boolean>>({
-    muster_ack: initialMusterAckAt != null,
-    self_safe: initialSafeAt != null,
-  });
-  const [queuedLocal, setQueuedLocal] = useState<Record<Response, boolean>>({
-    muster_ack: false,
-    self_safe: false,
-  });
+  // Latest-wins between the two safety statuses: both may exist as receipt
+  // rows; the newer acknowledged_at is the holder's current answer.
+  const initialStatus: "safe" | "help" | null =
+    initialSafeAt && initialNeedHelpAt
+      ? initialSafeAt >= initialNeedHelpAt
+        ? "safe"
+        : "help"
+      : initialSafeAt
+        ? "safe"
+        : initialNeedHelpAt
+          ? "help"
+          : null;
+  const [safeStatus, setSafeStatus] = useState<"safe" | "help" | null>(initialStatus);
+  const [musterDone, setMusterDone] = useState(initialMusterAckAt != null);
+  const [queuedLocal, setQueuedLocal] = useState<Partial<Record<Response, boolean>>>({});
   const [busy, setBusy] = useState<Response | null>(null);
 
   const { online, pending, syncing, submit } = useOfflineQueue<{ alertId: string; response: Response }>(
@@ -83,7 +100,9 @@ export function CrisisPanel({
         response,
       });
       if (outcome === "failed") return; // error already surfaced by send
-      setDone((d) => ({ ...d, [response]: true }));
+      if (response === "muster_ack") setMusterDone(true);
+      if (response === "self_safe") setSafeStatus("safe");
+      if (response === "need_help") setSafeStatus("help");
       setQueuedLocal((q) => ({ ...q, [response]: outcome === "queued" }));
       if (outcome === "sent") router.refresh();
     } finally {
@@ -100,9 +119,25 @@ export function CrisisPanel({
         : t("m.emergency.crisis.info", undefined, "Info");
 
   const declared = new Date(alert.createdAt);
-  const declaredLabel = Number.isNaN(declared.getTime())
-    ? ""
-    : declared.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  const declaredLabel = Number.isNaN(declared.getTime()) ? "" : fmt.time(declared);
+
+  /** Shared 52px check-in target (kit 32 E1 grammar). */
+  const pairStyle = (on: boolean, tone: string): React.CSSProperties => ({
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    minHeight: 52,
+    borderRadius: 14,
+    cursor: "pointer",
+    fontFamily: "inherit",
+    fontWeight: 800,
+    fontSize: 14,
+    border: on ? `2px solid ${tone}` : "1px solid var(--p-border)",
+    background: on ? `color-mix(in oklab, ${tone} 14%, var(--p-surface))` : "var(--p-surface)",
+    color: tone,
+  });
 
   return (
     <section aria-label={t("m.emergency.crisis.section", undefined, "Active Crisis")}>
@@ -120,6 +155,45 @@ export function CrisisPanel({
       <div className="sech">
         <h2>{t("m.emergency.crisis.section", undefined, "Active Crisis")}</h2>
       </div>
+
+      {/* Kit 32 E1 — the one-tap safety check-in pair leads the panel. */}
+      <div style={{ display: "flex", gap: 10, margin: "2px 0 12px" }}>
+        <button
+          type="button"
+          onClick={() => respond("self_safe")}
+          disabled={busy != null}
+          aria-pressed={safeStatus === "safe"}
+          style={pairStyle(safeStatus === "safe", "var(--p-success)")}
+        >
+          <KIcon name="ShieldCheck" size={18} />
+          {busy === "self_safe"
+            ? t("m.emergency.crisis.sending", undefined, "Sending…")
+            : t("m.emergency.crisis.imSafe", undefined, "I'm Safe")}
+          {safeStatus === "safe" && busy !== "self_safe" && <KIcon name="Check" size={15} />}
+        </button>
+        <button
+          type="button"
+          onClick={() => respond("need_help")}
+          disabled={busy != null}
+          aria-pressed={safeStatus === "help"}
+          style={pairStyle(safeStatus === "help", "var(--p-danger)")}
+        >
+          <KIcon name="Siren" size={18} />
+          {busy === "need_help"
+            ? t("m.emergency.crisis.sending", undefined, "Sending…")
+            : t("m.emergency.crisis.needHelp", undefined, "Need Help")}
+        </button>
+      </div>
+      {safeStatus === "help" && !queuedLocal.need_help && (
+        <div className="hint" style={{ textAlign: "center", marginBottom: 10 }}>
+          {t("m.emergency.crisis.helpSent", undefined, "Your lead has been alerted. Stay where you are if it's safe to.")}
+        </div>
+      )}
+      {((safeStatus === "safe" && queuedLocal.self_safe) || (safeStatus === "help" && queuedLocal.need_help)) && (
+        <div className="hint" style={{ textAlign: "center", marginBottom: 10 }}>
+          {t("m.emergency.crisis.willSync", undefined, "Saved to this device. Will sync when you're back online.")}
+        </div>
+      )}
 
       {/* The declaration — kit .item row, severity riding the bar. */}
       <div className="item" role="alert" style={{ borderColor: `color-mix(in oklab, ${sevTone} 40%, var(--p-border))` }}>
@@ -145,16 +219,16 @@ export function CrisisPanel({
         </div>
       )}
 
-      {/* Full-width thumb targets. Muster first: get to the point, then report. */}
+      {/* Full-width muster acknowledgement below the pair. */}
       <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
         <button
           type="button"
-          className={`ps-btn ps-btn--lg ${done.muster_ack ? "ps-btn--secondary" : "ps-btn--cta"}`}
+          className={`ps-btn ps-btn--lg ${musterDone ? "ps-btn--secondary" : "ps-btn--cta"}`}
           style={{ width: "100%", justifyContent: "center" }}
-          disabled={done.muster_ack || busy === "muster_ack"}
+          disabled={musterDone || busy === "muster_ack"}
           onClick={() => respond("muster_ack")}
         >
-          {done.muster_ack ? (
+          {musterDone ? (
             <>
               <KIcon name="Check" size={16} /> {t("m.emergency.crisis.mustered", undefined, "Muster Acknowledged")}
             </>
@@ -164,30 +238,7 @@ export function CrisisPanel({
             t("m.emergency.crisis.ackMuster", undefined, "Acknowledge Muster")
           )}
         </button>
-        {done.muster_ack && queuedLocal.muster_ack && (
-          <div className="hint" style={{ textAlign: "center" }}>
-            {t("m.emergency.crisis.willSync", undefined, "Saved to this device. Will sync when you're back online.")}
-          </div>
-        )}
-
-        <button
-          type="button"
-          className={`ps-btn ps-btn--lg ${done.self_safe ? "ps-btn--secondary" : "ps-btn--cta"}`}
-          style={{ width: "100%", justifyContent: "center" }}
-          disabled={done.self_safe || busy === "self_safe"}
-          onClick={() => respond("self_safe")}
-        >
-          {done.self_safe ? (
-            <>
-              <KIcon name="ShieldCheck" size={16} /> {t("m.emergency.crisis.safeDone", undefined, "Marked Safe")}
-            </>
-          ) : busy === "self_safe" ? (
-            t("m.emergency.crisis.sending", undefined, "Sending…")
-          ) : (
-            t("m.emergency.crisis.markSafe", undefined, "Mark Myself Safe")
-          )}
-        </button>
-        {done.self_safe && queuedLocal.self_safe && (
+        {musterDone && queuedLocal.muster_ack && (
           <div className="hint" style={{ textAlign: "center" }}>
             {t("m.emergency.crisis.willSync", undefined, "Saved to this device. Will sync when you're back online.")}
           </div>

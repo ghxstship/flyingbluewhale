@@ -22,10 +22,25 @@ export function PullToRefresh({
   const [pull, setPull] = React.useState(0);
   const [refreshing, setRefreshing] = React.useState(false);
   const startY = React.useRef<number | null>(null);
+  // prefers-reduced-motion: the gesture still works, but the content does
+  // not translate — only the indicator fades in (kit 32 B1).
+  const [reduceMotion, setReduceMotion] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   function onTouchStart(e: React.TouchEvent) {
     if (disabled || refreshing) return;
     if (window.scrollY > 0) return;
+    // Never hijack a drag that starts inside an overlay (sheet, dialog,
+    // drawer) — those own their touch surface. Shell-level mount means this
+    // wrapper sees every touch in the app.
+    const target = e.target as Element | null;
+    if (target?.closest('[role="dialog"], .sheet, [data-overlay]')) return;
     startY.current = e.touches[0]?.clientY ?? null;
   }
 
@@ -76,7 +91,7 @@ export function PullToRefresh({
       </div>
       <div
         style={{
-          transform: `translateY(${pull}px)`,
+          transform: reduceMotion ? undefined : `translateY(${pull}px)`,
           transition: pull === 0 ? "transform var(--motion-normal) var(--ease-out)" : "none",
         }}
       >

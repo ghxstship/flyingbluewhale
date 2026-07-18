@@ -9,8 +9,10 @@ import { quickFileIncident } from "../actions";
 /**
  * Express one-field incident quick-file. A single textarea + amber CTA — the
  * fastest path to logging a hazard from the field. Routes back on success.
+ * Kit 32 A2: when opened as a follow-up (`followUpOf`), the form names the
+ * parent report and the action chains the two records.
  */
-export function QuickFileForm() {
+export function QuickFileForm({ followUpOf }: { followUpOf?: { id: string; summary: string } | null }) {
   const router = useRouter();
   const t = useT();
   const [pending, startTransition] = useTransition();
@@ -40,10 +42,17 @@ export function QuickFileForm() {
         {t("m.incident.quick.title", undefined, "Quick File")}
       </h1>
       <p className="form-intro">
-        {t("m.incident.quick.intro", undefined, "One line. We'll route it to Ops and you can add detail later.")}
+        {followUpOf
+          ? t(
+              "m.incident.quick.followUpIntro",
+              { summary: followUpOf.summary },
+              `Follow-up to "${followUpOf.summary}". One line, routed to Ops on the same chain.`,
+            )
+          : t("m.incident.quick.intro", undefined, "One line. We'll route it to Ops and you can add detail later.")}
       </p>
 
       <form action={onSubmit}>
+        {followUpOf && <input type="hidden" name="followUpOf" value={followUpOf.id} />}
         <div className="fld">
           <label>
             {t("m.incident.quick.label", undefined, "What Happened")}

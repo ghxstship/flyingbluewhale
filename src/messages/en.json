@@ -4038,7 +4038,8 @@
    },
    "new": {
     "submitting": "Submitting…",
-    "prefilled": "Prefilled from your last request. Edit anything that's changed."
+    "prefilled": "Prefilled from your last request. Edit anything that's changed.",
+    "crumbItem": "Item"
    },
    "offline": {
     "title": "You're offline",
@@ -4167,6 +4168,13 @@
     "name": "Name",
     "cat": "Category",
     "updated": "Updated"
+   },
+   "viewer": {
+    "loading": "Opening…",
+    "noFile": "No file attached to this document.",
+    "hint": "If the preview doesn't load on this device, use Download.",
+    "download": "Download",
+    "share": "Share"
    }
   },
   "gigs": {
@@ -4248,11 +4256,24 @@
     "placeholder": "Describe the incident…",
     "cancel": "Cancel",
     "filing": "Filing…",
-    "submit": "File Incident"
+    "submit": "File Incident",
+    "followUpIntro": "Follow-up to \"{summary}\". One line, routed to Ops on the same chain."
    },
    "emptyBody": "You haven't filed any incident reports.",
    "untitled": "Untitled Incident",
-   "emptyTitle": "Nothing Filed"
+   "emptyTitle": "Nothing Filed",
+   "chain": {
+    "title": "Status Chain",
+    "filed": "Report Filed",
+    "stateChanged": "{from} → {to}",
+    "followUp": "Follow-Up Filed",
+    "followUpNamed": "Follow-Up Filed · {summary}"
+   },
+   "crumbHome": "Home",
+   "crumbIncidents": "Incidents",
+   "crumbReport": "Report · {id}",
+   "addFollowUp": "Add Follow-Up",
+   "openTasks": "Open Tasks"
   },
   "incidents": {
    "eyebrow": "Field",
@@ -4844,6 +4865,51 @@
     "sent": "Swap requested. Your manager has been notified."
    }
   },
+  "scheduler": {
+   "eyebrow": "Scheduling Engine In ATLVS",
+   "title": "Shift Scheduler",
+   "lock": {
+    "body": "Building and publishing shifts requires the capability",
+    "back": "Back To More"
+   },
+   "back": "More",
+   "areaTbd": "Area TBD",
+   "untitledRole": "Crew",
+   "stat": {
+    "shifts": "Shifts",
+    "coverage": "Coverage",
+    "unpublished": "Unpublished",
+    "poolFree": "Pool Free"
+   },
+   "assign": "Assign",
+   "publish": "Publish",
+   "remove": "Remove",
+   "badge": {
+    "published": "Published",
+    "draft": "Draft"
+   },
+   "open": "{count} Open",
+   "openSeats": "{count} Open",
+   "assigned": "Assigned · {name} → {role}",
+   "published": "Published · Crew Notified",
+   "dayPublished": "Day Published · All Crew Notified",
+   "removed": "Removed · {role}",
+   "added": "Shift Added",
+   "colShift": "Shift",
+   "colCrew": "Crew",
+   "colStatus": "Status",
+   "emptyTitle": "No Shifts This Day",
+   "emptyHint": "Build shifts here or apply a Schedule template.",
+   "newShift": "New Shift",
+   "publishDay": "Publish Day",
+   "jobBoardHint": "Open shifts can also be pushed to the Job Board from the",
+   "jobBoardHintLink": "Project Roster",
+   "assignTitle": "Assign Crew",
+   "assignClose": "Close",
+   "onShift": "On Shift",
+   "poolEmpty": "Nobody left to assign. Add crew from the Project Roster.",
+   "undo": "Undo"
+  },
   "checkin": {
    "gate": {
     "eyebrow": "Gate · {slug}"
@@ -4923,7 +4989,9 @@
    "templates": "Templates",
    "templatesSub": "Org & Project Template Library",
    "finance": "Finance",
-   "financeSub": "Budget, POs & Coded Spend"
+   "financeSub": "Budget, POs & Coded Spend",
+   "scheduler": "Shift Scheduler",
+   "schedulerSub": "Build & Publish Crew Shifts"
   },
   "activity": {
    "count": "{n} Events",
@@ -5000,7 +5068,12 @@
    "shelterTitle": "Shelter In Place",
    "shelterIntro": "For weather holds or external threats, direct people to the nearest hardened structure and stay off the radio unless reporting.",
    "shelterLocations": "Shelter Locations",
-   "shelterNoLocations": "No shelter locations published for your project yet. Ops adds them to the event guide's resources section."
+   "shelterNoLocations": "No shelter locations published for your project yet. Ops adds them to the event guide's resources section.",
+   "crisis": {
+    "imSafe": "I'm Safe",
+    "needHelp": "Need Help",
+    "helpSent": "Your lead has been alerted. Stay where you are if it's safe to."
+   }
   },
   "profile": {
    "eyebrow": "You",
@@ -5157,7 +5230,8 @@
    "eyebrowOne": "1 Request",
    "new": "Request A Purchase",
    "emptyTitle": "Nothing Requested",
-   "emptyBody": "Need something bought for the job? Raise it here and your manager picks it up."
+   "emptyBody": "Need something bought for the job? Raise it here and your manager picks it up.",
+   "crumbMore": "More"
   },
   "mileage": {
    "title": "Mileage",
@@ -5280,6 +5354,18 @@
    "importedTitle": "Imported To Budget",
    "importedBody": "{code} · managed in ATLVS",
    "importedUncoded": "Saved uncoded. Finance can code it later."
+  },
+  "sync": {
+   "updatedTap": "Updated {time} · Tap To Refresh"
+  },
+  "outbox": {
+   "willSync": "Will Sync · {n}"
+  },
+  "muster": {
+   "title": "Muster Count",
+   "safe": "Safe",
+   "help": "Need Help",
+   "unresponsive": "Unresponsive"
   }
  },
  "me": {

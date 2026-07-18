@@ -52,7 +52,7 @@ export default async function ActivityPage() {
       .limit(60),
     supabase
       .from("notifications")
-      .select("id, title, body, kind, created_at")
+      .select("id, title, body, kind, href, created_at")
       .eq("org_id", session.orgId)
       .eq("user_id", session.userId)
       .is("deleted_at", null)
@@ -104,6 +104,11 @@ export default async function ActivityPage() {
 
   for (const n of notifs ?? []) {
     const type = NOTIF_KIND_TYPE[(n.kind as string) ?? ""] ?? "Update";
+    // Kit 32 A2: a report/notification entry opens its REAL record — the
+    // row's stored payload ref (same-app paths only, matching the
+    // notification detail's own guard). Incident pushes carry
+    // /m/incidents/[id], so "Report" rows land on the report record.
+    const href = typeof n.href === "string" && n.href.startsWith("/") ? (n.href as string) : null;
     rows.push({
       id: `nt-${n.id}`,
       type,
@@ -111,7 +116,7 @@ export default async function ActivityPage() {
       title: (n.title as string) ?? "",
       detail: (n.body as string) ?? "",
       at: (n.created_at as string) ?? "",
-      href: null,
+      href,
     });
   }
 

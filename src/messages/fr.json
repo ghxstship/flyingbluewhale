@@ -16425,7 +16425,8 @@
       },
       "new": {
         "prefilled": "Pré-rempli à partir de votre dernière demande ; modifiez ce qui a changé.",
-        "submitting": "Envoi…"
+        "submitting": "Envoi…",
+        "crumbItem": "Article"
       },
       "offline": {
         "body": "Vos avancements se chargeront, et toute modification se synchronisera, dès votre retour en ligne.",
@@ -16568,6 +16569,13 @@
         "cat": "Catégorie",
         "name": "Nom",
         "updated": "Mise à jour"
+      },
+      "viewer": {
+        "loading": "Ouverture…",
+        "noFile": "Aucun fichier joint à ce document.",
+        "hint": "Si l'aperçu ne se charge pas sur cet appareil, utilisez Télécharger.",
+        "download": "Télécharger",
+        "share": "Partager"
       }
     },
     "error": {
@@ -16718,9 +16726,22 @@
         "label": "Que s'est-il passé",
         "placeholder": "Décrivez l'incident…",
         "submit": "Déposer l'incident",
-        "title": "Dépôt rapide"
+        "title": "Dépôt rapide",
+        "followUpIntro": "Suivi de \"{summary}\". Une ligne, transmise aux opérations sur la même chaîne."
       },
-      "untitled": "Incident sans titre"
+      "untitled": "Incident sans titre",
+      "chain": {
+        "title": "Chaîne de statut",
+        "filed": "Rapport déposé",
+        "stateChanged": "{from} → {to}",
+        "followUp": "Suivi déposé",
+        "followUpNamed": "Suivi déposé · {summary}"
+      },
+      "crumbHome": "Accueil",
+      "crumbIncidents": "Incidents",
+      "crumbReport": "Rapport · {id}",
+      "addFollowUp": "Ajouter un suivi",
+      "openTasks": "Ouvrir les tâches"
     },
     "incidents": {
       "eyebrow": "Terrain",
@@ -17266,7 +17287,9 @@
       "templates": "Modèles",
       "templatesSub": "Bibliothèque De Modèles Org Et Projet",
       "finance": "Finances",
-      "financeSub": "Budget, POs Et Dépenses Codées"
+      "financeSub": "Budget, POs Et Dépenses Codées",
+      "scheduler": "Planificateur de shifts",
+      "schedulerSub": "Créer et publier les shifts de l'équipe"
     },
     "scan": {
       "eyebrow": "Scan rapide",
@@ -17432,7 +17455,12 @@
       "shelterTitle": "Confinement Sur Place",
       "shelterIntro": "En cas d'arrêt météo ou de menace externe, dirigez les personnes vers la structure renforcée la plus proche et libérez la radio sauf pour signaler.",
       "shelterLocations": "Lieux De Confinement",
-      "shelterNoLocations": "Aucun lieu de confinement publié pour votre projet. Les ops les ajoutent dans la section ressources du guide de l'événement."
+      "shelterNoLocations": "Aucun lieu de confinement publié pour votre projet. Les ops les ajoutent dans la section ressources du guide de l'événement.",
+      "crisis": {
+        "imSafe": "Je suis en sécurité",
+        "needHelp": "Besoin d'aide",
+        "helpSent": "Votre responsable a été alerté. Restez où vous êtes si c'est sans danger."
+      }
     },
     "market": {
       "by": "par",
@@ -17480,6 +17508,51 @@
         "shift": "Shift",
         "training": "Formation"
       }
+    },
+    "scheduler": {
+      "eyebrow": "Moteur de planification dans ATLVS",
+      "title": "Planificateur de shifts",
+      "lock": {
+        "body": "Créer et publier des shifts requiert la capacité",
+        "back": "Retour à Plus"
+      },
+      "back": "Plus",
+      "areaTbd": "Zone à définir",
+      "untitledRole": "Équipe",
+      "stat": {
+        "shifts": "Shifts",
+        "coverage": "Couverture",
+        "unpublished": "Non publiés",
+        "poolFree": "Disponibles"
+      },
+      "assign": "Assigner",
+      "publish": "Publier",
+      "remove": "Retirer",
+      "badge": {
+        "published": "Publié",
+        "draft": "Brouillon"
+      },
+      "open": "{count} ouverts",
+      "openSeats": "{count} ouverts",
+      "assigned": "Assigné · {name} → {role}",
+      "published": "Publié · Équipe notifiée",
+      "dayPublished": "Journée publiée · Toute l'équipe notifiée",
+      "removed": "Retiré · {role}",
+      "added": "Shift ajouté",
+      "colShift": "Shift",
+      "colCrew": "Équipe",
+      "colStatus": "Statut",
+      "emptyTitle": "Aucun shift ce jour",
+      "emptyHint": "Créez des shifts ici ou appliquez un modèle de planning.",
+      "newShift": "Nouveau shift",
+      "publishDay": "Publier la journée",
+      "jobBoardHint": "Les shifts ouverts peuvent aussi être publiés sur le tableau d'offres depuis le",
+      "jobBoardHintLink": "Roster du projet",
+      "assignTitle": "Assigner l'équipe",
+      "assignClose": "Fermer",
+      "onShift": "En service",
+      "poolEmpty": "Personne à assigner. Ajoutez des membres depuis le roster du projet.",
+      "undo": "Annuler"
     },
     "profile": {
       "about": "À propos",
@@ -17630,6 +17703,21 @@
       "importedTitle": "Importé Au Budget",
       "importedBody": "{code} · géré dans ATLVS",
       "importedUncoded": "Enregistré non codé. Les finances pourront le coder plus tard."
+    },
+    "sync": {
+      "updatedTap": "Mis à jour {time} · Touchez pour actualiser"
+    },
+    "outbox": {
+      "willSync": "À synchroniser · {n}"
+    },
+    "muster": {
+      "title": "Comptage au rassemblement",
+      "safe": "En sécurité",
+      "help": "Besoin d'aide",
+      "unresponsive": "Sans réponse"
+    },
+    "reqs": {
+      "crumbMore": "Plus"
     }
   },
   "me": {

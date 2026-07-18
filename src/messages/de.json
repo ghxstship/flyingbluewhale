@@ -18437,7 +18437,8 @@
       },
       "new": {
         "prefilled": "Aus Ihrer letzten Anfrage vorausgefüllt. Passen Sie alles Geänderte an.",
-        "submitting": "Wird gesendet…"
+        "submitting": "Wird gesendet…",
+        "crumbItem": "Artikel"
       },
       "offline": {
         "body": "Ihre Advancing-Daten werden geladen und Änderungen synchronisiert, sobald Sie wieder online sind.",
@@ -18580,6 +18581,13 @@
         "cat": "Kategorie",
         "name": "Name",
         "updated": "Aktualisiert"
+      },
+      "viewer": {
+        "loading": "Wird geöffnet…",
+        "noFile": "Diesem Dokument ist keine Datei angehängt.",
+        "hint": "Wenn die Vorschau auf diesem Gerät nicht lädt, nutze Herunterladen.",
+        "download": "Herunterladen",
+        "share": "Teilen"
       }
     },
     "error": {
@@ -18730,9 +18738,22 @@
         "label": "Was ist passiert",
         "placeholder": "Beschreiben Sie den Vorfall…",
         "submit": "Vorfall melden",
-        "title": "Schnellmeldung"
+        "title": "Schnellmeldung",
+        "followUpIntro": "Nachtrag zu \"{summary}\". Eine Zeile, läuft auf derselben Kette an die Einsatzleitung."
       },
-      "untitled": "Unbenannter Vorfall"
+      "untitled": "Unbenannter Vorfall",
+      "chain": {
+        "title": "Statuskette",
+        "filed": "Meldung eingereicht",
+        "stateChanged": "{from} → {to}",
+        "followUp": "Nachtrag eingereicht",
+        "followUpNamed": "Nachtrag eingereicht · {summary}"
+      },
+      "crumbHome": "Start",
+      "crumbIncidents": "Vorfälle",
+      "crumbReport": "Meldung · {id}",
+      "addFollowUp": "Nachtrag hinzufügen",
+      "openTasks": "Aufgaben öffnen"
     },
     "incidents": {
       "eyebrow": "Feld",
@@ -19278,7 +19299,9 @@
       "templates": "Vorlagen",
       "templatesSub": "Vorlagenbibliothek Für Org Und Projekt",
       "finance": "Finanzen",
-      "financeSub": "Budget, POs Und Codierte Ausgaben"
+      "financeSub": "Budget, POs Und Codierte Ausgaben",
+      "scheduler": "Schichtplaner",
+      "schedulerSub": "Schichten erstellen und veröffentlichen"
     },
     "scan": {
       "eyebrow": "Schnellscan",
@@ -19444,7 +19467,12 @@
       "shelterTitle": "Schutz Vor Ort",
       "shelterIntro": "Bei Wetterunterbrechungen oder externen Bedrohungen führe die Personen zur nächsten gesicherten Struktur und halte den Funk frei, außer für Meldungen.",
       "shelterLocations": "Schutzorte",
-      "shelterNoLocations": "Für dein Projekt sind noch keine Schutzorte veröffentlicht. Ops pflegt sie im Ressourcen-Abschnitt des Event-Guides."
+      "shelterNoLocations": "Für dein Projekt sind noch keine Schutzorte veröffentlicht. Ops pflegt sie im Ressourcen-Abschnitt des Event-Guides.",
+      "crisis": {
+        "imSafe": "Ich bin in Sicherheit",
+        "needHelp": "Brauche Hilfe",
+        "helpSent": "Deine Leitung wurde alarmiert. Bleib, wo du bist, wenn es sicher ist."
+      }
     },
     "market": {
       "by": "von",
@@ -19492,6 +19520,51 @@
         "shift": "Schicht",
         "training": "Schulung"
       }
+    },
+    "scheduler": {
+      "eyebrow": "Planungs-Engine in ATLVS",
+      "title": "Schichtplaner",
+      "lock": {
+        "body": "Schichten erstellen und veröffentlichen erfordert die Berechtigung",
+        "back": "Zurück zu Mehr"
+      },
+      "back": "Mehr",
+      "areaTbd": "Bereich offen",
+      "untitledRole": "Crew",
+      "stat": {
+        "shifts": "Schichten",
+        "coverage": "Besetzung",
+        "unpublished": "Unveröffentlicht",
+        "poolFree": "Verfügbar"
+      },
+      "assign": "Zuweisen",
+      "publish": "Veröffentlichen",
+      "remove": "Entfernen",
+      "badge": {
+        "published": "Veröffentlicht",
+        "draft": "Entwurf"
+      },
+      "open": "{count} offen",
+      "openSeats": "{count} offen",
+      "assigned": "Zugewiesen · {name} → {role}",
+      "published": "Veröffentlicht · Crew benachrichtigt",
+      "dayPublished": "Tag veröffentlicht · Gesamte Crew benachrichtigt",
+      "removed": "Entfernt · {role}",
+      "added": "Schicht hinzugefügt",
+      "colShift": "Schicht",
+      "colCrew": "Crew",
+      "colStatus": "Status",
+      "emptyTitle": "Keine Schichten an diesem Tag",
+      "emptyHint": "Erstelle hier Schichten oder wende eine Planvorlage an.",
+      "newShift": "Neue Schicht",
+      "publishDay": "Tag veröffentlichen",
+      "jobBoardHint": "Offene Schichten lassen sich auch über das Jobboard veröffentlichen, vom",
+      "jobBoardHintLink": "Projekt-Roster",
+      "assignTitle": "Crew zuweisen",
+      "assignClose": "Schließen",
+      "onShift": "Im Dienst",
+      "poolEmpty": "Niemand mehr zuzuweisen. Füge Crew über den Projekt-Roster hinzu.",
+      "undo": "Rückgängig"
     },
     "profile": {
       "about": "Über",
@@ -19642,6 +19715,21 @@
       "importedTitle": "Ins Budget Importiert",
       "importedBody": "{code} · verwaltet in ATLVS",
       "importedUncoded": "Ohne Code gespeichert. Finance kann später codieren."
+    },
+    "sync": {
+      "updatedTap": "Aktualisiert {time} · Zum Aktualisieren tippen"
+    },
+    "outbox": {
+      "willSync": "Wird synchronisiert · {n}"
+    },
+    "muster": {
+      "title": "Sammelplatz-Zählung",
+      "safe": "In Sicherheit",
+      "help": "Braucht Hilfe",
+      "unresponsive": "Keine Rückmeldung"
+    },
+    "reqs": {
+      "crumbMore": "Mehr"
     }
   },
   "me": {

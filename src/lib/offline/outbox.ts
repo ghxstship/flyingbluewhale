@@ -90,6 +90,26 @@ export async function enqueueOutbox(endpoint: string, body: string): Promise<voi
   }
 }
 
+/** Queued rows per endpoint (kit 32 B2 — per-mutation pending visibility).
+ * Read directly from IndexedDB so a surface can show "Will Sync · N" for
+ * exactly the writes it owns — never a fabricated pending state. */
+export async function outboxCounts(): Promise<Record<string, number>> {
+  if (typeof indexedDB === "undefined") return {};
+  try {
+    const db = await openQueueDb();
+    const rows = await getAllRows(db).catch(() => [] as OutboxRow[]);
+    db.close();
+    const counts: Record<string, number> = {};
+    for (const row of rows) {
+      const ep = row.endpoint || "/api/v1/shifts/checkin";
+      counts[ep] = (counts[ep] ?? 0) + 1;
+    }
+    return counts;
+  } catch {
+    return {};
+  }
+}
+
 /** Total queued rows (all endpoints) — read directly from IndexedDB so the
  * count is available even without a controlling service worker. */
 export async function outboxSize(): Promise<number> {

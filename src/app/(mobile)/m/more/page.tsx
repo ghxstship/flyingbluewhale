@@ -47,6 +47,10 @@ export default async function MorePage() {
         { href: "/m/catalog", icon: "Boxes", labelKey: "m.more.catalog", label: "Catalog", subKey: "m.more.catalogSub", sub: "Browse & Request From XPMS" },
         { href: "/m/inventory", icon: "PackageSearch", labelKey: "m.more.inventory", label: "Inventory", subKey: "m.more.inventorySub", sub: "On-Hand Gear & Stock" },
         { href: "/m/documents", icon: "FolderOpen", labelKey: "m.more.documents", label: "Documents", subKey: "m.more.documentsSub", sub: "Site Docs, Filtered To You" },
+        // Kit 31: Templates + Finance join the Operations group (resolution
+        // #15/#23). Finance carries the kit's `approve` gate (manager band).
+        { href: "/m/templates", icon: "LayoutTemplate", labelKey: "m.more.templates", label: "Templates", subKey: "m.more.templatesSub", sub: "Org & Project Template Library" },
+        { href: "/m/finance", icon: "Banknote", labelKey: "m.more.finance", label: "Finance", subKey: "m.more.financeSub", sub: "Budget, POs & Coded Spend", managerOnly: true },
         { href: "/m/requests", icon: "CheckCheck", labelKey: "m.more.approvals", label: "Approvals", subKey: "m.more.approvalsSub", sub: "Review & Action Requests", managerOnly: true },
         { href: "/m/advances", icon: "ClipboardList", labelKey: "m.more.advances", label: "Advancing", subKey: "m.more.advancesSub", sub: "What You've Been Issued" },
         { href: "/m/requisitions", icon: "ShoppingCart", labelKey: "m.more.reqs", label: "Purchase Requests", subKey: "m.more.reqsSub", sub: "Ask The Org To Buy Something" },

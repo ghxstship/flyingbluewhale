@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { GatedCameraScanner, useScanSubmit } from "@/components/scanners";
@@ -21,6 +21,8 @@ export type CheckInLabels = {
   access: string;
   asset: string;
   pos: string;
+  /** Scanner (document/invoice/receipt capture) segment label — kit 31. */
+  scanner?: string;
   qr: string;
   scanHintCamera: string;
   scanHintAccess: string;
@@ -42,7 +44,7 @@ export type CheckInLabels = {
   queuedBody?: string;
 };
 
-type Mode = "access" | "asset" | "pos";
+type Mode = "access" | "asset" | "pos" | "scanner";
 
 const RESULT_TONE: Record<string, "ok" | "warn" | "danger" | "neutral"> = {
   accepted: "ok",
@@ -87,6 +89,7 @@ export function CheckInScanner({
   canFulfill = false,
   canBind = false,
   catalogItems = [],
+  scannerNode,
 }: {
   recent: RecentScan[];
   labels: CheckInLabels;
@@ -104,11 +107,19 @@ export function CheckInScanner({
   canBind?: boolean;
   /** Org catalog items for the bind picker. Only sent when `canBind`. */
   catalogItems?: BindableCatalogItem[];
+  /**
+   * Scanner-mode body (kit 31 resolutions #21/#22) — the Document / Invoice /
+   * Receipt capture flow, rendered in place of the code scanner when the
+   * Scanner segment is active. Server mounts pass `<ScannerCapture …>`.
+   */
+  scannerNode?: ReactNode;
 }) {
   const [mode, setMode] = useState<Mode>(initialMode ?? "access");
   const [code, setCode] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const { submit, pending, outcome } = useScanSubmit(mode);
+  // "scanner" is a capture flow, not a code resolver — park the submit hook
+  // on the widest symbology set; it is never invoked from that segment.
+  const { submit, pending, outcome } = useScanSubmit(mode === "scanner" ? "any" : mode);
 
   const modes = useMemo(
     () =>
@@ -116,8 +127,9 @@ export function CheckInScanner({
         ["access", labels.access],
         ["asset", labels.asset],
         ["pos", labels.pos],
+        ...(scannerNode ? ([["scanner", labels.scanner ?? "Scanner"]] as Array<[Mode, string]>) : []),
       ] as Array<[Mode, string]>,
-    [labels],
+    [labels, scannerNode],
   );
 
   const cta = mode === "access" ? labels.ctaAccess : mode === "asset" ? labels.ctaAsset : labels.ctaPos;
@@ -154,7 +166,7 @@ export function CheckInScanner({
         {gateSlug ? `${labels.title} · ${gateSlug}` : labels.title}
       </h1>
 
-      <div className="seg2" style={{ marginBottom: 14, display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
+      <div className="seg2" style={{ marginBottom: 14, display: "grid", gridTemplateColumns: `repeat(${modes.length}, 1fr)` }}>
         {modes.map(([id, label]) => (
           <button
             key={id}
@@ -168,15 +180,19 @@ export function CheckInScanner({
         ))}
       </div>
 
-      <GatedCameraScanner
-        onScan={(scanned) => void submit(scanned.value, scanned.format)}
-        formats={formatsForMode(mode)}
-        enableLabel={labels.enableCamera ?? "Enable Camera"}
-        deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
-      />
-      <div className="scanhint">
-        <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {scanHint}
-      </div>
+      {mode === "scanner" ? (
+        scannerNode
+      ) : (
+        <>
+          <GatedCameraScanner
+            onScan={(scanned) => void submit(scanned.value, scanned.format)}
+            formats={formatsForMode(mode)}
+            enableLabel={labels.enableCamera ?? "Enable Camera"}
+            deniedLabel={labels.cameraDenied ?? "Camera Unavailable, Use Manual Entry"}
+          />
+          <div className="scanhint">
+            <KIcon name="QrCode" size={14} /> <KIcon name="Barcode" size={14} /> {scanHint}
+          </div>
 
       {/* Manual code entry — the always-available resolver path, and the
           Bluetooth-sled (HID keyboard-wedge) input surface. Same submit path as
@@ -266,6 +282,8 @@ export function CheckInScanner({
           <KIcon name="TriangleAlert" size={15} style={{ color: "var(--p-danger)" }} />
           <span style={{ fontSize: 12 }}>{outcome.message}</span>
         </div>
+      )}
+        </>
       )}
 
       <div className="sech">

@@ -4,6 +4,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
 import { CheckInScanner, type RecentScan } from "./CheckInScanner";
 import type { BindableCatalogItem } from "./ProductMatchCard";
+import { ScannerCapture, type CostCodeOpt, type ExpenseDraft } from "./ScannerCapture";
 
 /**
  * The ONE shared Scan surface (kit 29 §C route policy, directive 2026-07-17).
@@ -21,18 +22,26 @@ import type { BindableCatalogItem } from "./ProductMatchCard";
  * latest `assignment_events` scan rows.
  */
 
-export type ScanSurfaceMode = "access" | "asset" | "pos";
+export type ScanSurfaceMode = "access" | "asset" | "pos" | "scanner";
 
 /**
  * Normalize a `?mode=` deep-link value onto a segmented scanner mode.
  * `inventory` is the §C-sanctioned spelling for the Asset preset
- * (`/m/check-in?mode=inventory`); anything unrecognized falls back to the
- * default Access segment.
+ * (`/m/check-in?mode=inventory`); `scanner` is the kit 31 document/invoice/
+ * receipt capture segment; anything unrecognized falls back to the default
+ * Access segment.
  */
 export function parseScanMode(raw: string | string[] | undefined): ScanSurfaceMode | undefined {
   const v = Array.isArray(raw) ? raw[0] : raw;
-  if (v === "access" || v === "asset" || v === "pos") return v;
+  if (v === "access" || v === "asset" || v === "pos" || v === "scanner") return v;
   if (v === "inventory") return "asset";
+  return undefined;
+}
+
+/** Normalize the `?kind=` deep link for the Scanner segment. */
+export function parseScannerKind(raw: string | string[] | undefined): "document" | "invoice" | "receipt" | undefined {
+  const v = Array.isArray(raw) ? raw[0] : raw;
+  if (v === "document" || v === "invoice" || v === "receipt") return v;
   return undefined;
 }
 
@@ -41,6 +50,8 @@ export async function ScanSurface({
   gateSlug,
   backHref,
   backLabel,
+  scannerKind,
+  expenseId,
 }: {
   /** Preset segment (deep-link or preset route); defaults to Access. */
   initialMode?: ScanSurfaceMode;
@@ -49,6 +60,10 @@ export async function ScanSurface({
   /** Optional back link (the Inventory preset points back to /m/inventory). */
   backHref?: string;
   backLabel?: string;
+  /** Scanner-segment preset (kit 31): document / invoice / receipt. */
+  scannerKind?: "document" | "invoice" | "receipt";
+  /** Code an existing uncoded expense (the Finance "Code It" deep link). */
+  expenseId?: string;
 }) {
   const session = await requireSession();
   const supabase = await createClient();
@@ -85,6 +100,45 @@ export async function ScanSurface({
     }));
   }
 
+  // Scanner segment (kit 31 resolutions #21/#22): real cost-code options —
+  // the org's cost centers plus every department already carried by budget
+  // lines (the strings `expenses.department` stores). Plus, when the caller
+  // arrived from a Finance "Code It" row, the uncoded expense as a draft.
+  const [{ data: ccRows }, { data: deptRows }] = await Promise.all([
+    supabase.from("cost_centers").select("code, name").eq("org_id", session.orgId).eq("active", true).order("code").limit(50),
+    supabase.from("budgets").select("department").eq("org_id", session.orgId).not("department", "is", null).limit(500),
+  ]);
+  const codeSet = new Map<string, string>();
+  for (const r of (deptRows ?? []) as Array<{ department: string | null }>) {
+    if (r.department) codeSet.set(r.department, r.department);
+  }
+  for (const r of (ccRows ?? []) as Array<{ code: string; name: string }>) {
+    const label = `${r.code} · ${r.name}`;
+    if (!codeSet.has(label)) codeSet.set(label, label);
+  }
+  const costCodes: CostCodeOpt[] = Array.from(codeSet.keys())
+    .sort()
+    .map((v) => ({ value: v, label: v }));
+
+  let expenseDraft: ExpenseDraft | null = null;
+  if (expenseId && /^[0-9a-f-]{36}$/i.test(expenseId) && isManagerPlus(session)) {
+    const { data: exp } = await supabase
+      .from("expenses")
+      .select("id, vendor, description, amount_cents, spent_at")
+      .eq("id", expenseId)
+      .eq("org_id", session.orgId)
+      .maybeSingle();
+    const e = exp as { id: string; vendor: string | null; description: string; amount_cents: number; spent_at: string } | null;
+    if (e) {
+      expenseDraft = {
+        id: e.id,
+        vendor: e.vendor ?? e.description,
+        amount: (e.amount_cents / 100).toFixed(2),
+        date: e.spent_at,
+      };
+    }
+  }
+
   const recent: RecentScan[] = (
     (data ?? []) as Array<{
       id: string;
@@ -110,6 +164,14 @@ export async function ScanSurface({
         canFulfill={canFulfill}
         canBind={canBind}
         catalogItems={catalogItems}
+        scannerNode={
+          <ScannerCapture
+            costCodes={costCodes}
+            canImportInvoice={canFulfill}
+            initialKind={expenseDraft ? "invoice" : scannerKind}
+            expenseDraft={expenseDraft}
+          />
+        }
         productLabels={{
           match: t("m.checkin.product.match", undefined, "Match"),
           matchedCatalog: t("m.checkin.product.matchedCatalog", undefined, "Matched Catalog"),
@@ -139,6 +201,7 @@ export async function ScanSurface({
           access: t("m.checkin.access", undefined, "Access"),
           asset: t("m.checkin.asset", undefined, "Asset"),
           pos: t("m.checkin.pos", undefined, "POS"),
+          scanner: t("m.checkin.scanner", undefined, "Scanner"),
           qr: t("m.checkin.qr", undefined, "QR Code"),
           scanHintCamera: t("m.checkin.scanHintCamera", undefined, "Reads QR & barcodes automatically"),
           scanHintAccess: t("m.checkin.scanHintAccess", undefined, "Scan the QR on the credential"),

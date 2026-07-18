@@ -1714,6 +1714,11 @@ export const mobileSurfaces: NavItem[] = [
   { label: "New Task", href: "/m/tasks/new" },
   { label: "Documents", href: "/m/documents" },
   { label: "Upload Document", href: "/m/documents/new" },
+  // Kit 31 (2026-07-17): the universal template library + the field finance
+  // window (More · Operations group; finance is manager-gated on-surface).
+  { label: "Templates", href: "/m/templates" },
+  { label: "New Template", href: "/m/templates/new" },
+  { label: "Finance", href: "/m/finance" },
   { label: "Time", href: "/m/time" },
   { label: "Handover", href: "/m/handover" },
   { label: "Daily Log", href: "/m/daily-log" },
@@ -1751,6 +1756,12 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Activity History", href: "/m/activity" },
   { label: "Referrals & Rewards", href: "/m/referrals" },
   { label: "Emergency", href: "/m/emergency" },
+  // Kit 31 (live-test resolution #9): the emergency quick actions are real
+  // PAGES under the Emergency Card, not modals. Home-tab-owned sub-pages.
+  { label: "Emergency Codes", href: "/m/emergency/codes" },
+  { label: "Fire Safety", href: "/m/emergency/fire" },
+  { label: "Evacuation Routes", href: "/m/emergency/evacuation" },
+  { label: "Shelter In Place", href: "/m/emergency/shelter" },
   // Kit 29: mass-notify crisis alert log with acknowledge actions. Distinct
   // from Notifications (the bell), which carries the routine per-person feed.
   { label: "Crisis Alerts", href: "/m/alerts" },

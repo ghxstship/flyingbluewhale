@@ -5,9 +5,10 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { listMyAssignments } from "@/lib/db/assignments";
 import type { GuideConfig } from "@/lib/guides/types";
-import { KIcon } from "@/components/mobile/kit";
+import { Crumbs, KIcon } from "@/components/mobile/kit";
 import { CrisisPanel, type ActiveCrisis } from "./CrisisPanel";
 import { CRISIS_ACTIVE_WINDOW_MS } from "./crisis";
+import { EMERGENCY_CODES, chipBg, chipFg } from "./data";
 
 export const dynamic = "force-dynamic";
 
@@ -19,27 +20,14 @@ export const dynamic = "force-dynamic";
  * routes). When the holder has no active assignment, the card renders an honest
  * "awaiting assignment" state rather than a placeholder station.
  *
- * The emergency CODES below are the standard universal venue code set (industry
- * reference, not project data) — correctly static, like the OSHA list. The kit
- * authors per-code hex chips; we map each code to a `--p-*` semantic token (no
- * literal colors per the kit token rule) keeping the same code → trigger pairing.
+ * Kit 31 (live-test resolution #9): the emergency quick actions are PAGES,
+ * not modals — this hub links the four dedicated reference surfaces
+ * (/m/emergency/{codes,fire,evacuation,shelter}), each with breadcrumbs and
+ * the Home tab highlight. The code set (reference data + per-code plans)
+ * lives in ./data.ts, shared with the Codes page.
  */
 
 const NA = "—";
-
-/** Code → semantic token tint + dark-ink flag, mapped off the kit colorway. */
-const CODES: { code: string; trigger: string; tint: string; ink?: "dark" }[] = [
-  { code: "Red", trigger: "Fire, Lightning Strike, High Winds or Weather", tint: "danger" },
-  { code: "Orange", trigger: "Crowd Surge", tint: "warning" },
-  { code: "Yellow", trigger: "Structural Damage or Severe Equipment Failure", tint: "warning", ink: "dark" },
-  { code: "Green", trigger: "Burglary or Theft", tint: "success" },
-  { code: "Blue", trigger: "Medical Emergency", tint: "info" },
-  { code: "Purple", trigger: "Cultural Sensitivity Issue", tint: "accent" },
-  { code: "Pink", trigger: "Drug or Illegal Substance Trafficking", tint: "danger", ink: "dark" },
-  { code: "Indigo", trigger: "Missing Talent", tint: "info" },
-  { code: "White", trigger: "ICE Raid or Government Agency Intervention", tint: "neutral", ink: "dark" },
-  { code: "Black", trigger: "Acts of Terror, Active Shooter or Bomb Threat", tint: "text-1" },
-];
 
 export default async function EmergencyPage() {
   const session = await requireSession();
@@ -119,20 +107,14 @@ export default async function EmergencyPage() {
     }
   }
 
-  const chipBg = (tint: string) =>
-    tint === "text-1"
-      ? "var(--p-text-1)"
-      : tint === "neutral"
-        ? "var(--p-surface)"
-        : `var(--p-${tint})`;
-  const chipFg = (tint: string, ink?: "dark") =>
-    tint === "neutral" ? "var(--p-text-1)" : ink ? "var(--p-bg)" : "var(--p-accent-contrast, #fff)";
-
   return (
     <div className="screen screen-anim">
-      <Link href="/m" className="backbtn">
-        <KIcon name="ChevronLeft" size={17} /> {t("m.emergency.back", undefined, "Home")}
-      </Link>
+      <Crumbs
+        items={[
+          { label: t("m.emergency.back", undefined, "Home"), href: "/m" },
+          { label: t("m.emergency.title", undefined, "Emergency Card") },
+        ]}
+      />
       <div className="scr-eye">
         {t("m.emergency.eyebrow", undefined, "Position")} {station.manningId}
       </div>
@@ -180,11 +162,10 @@ export default async function EmergencyPage() {
         </div>
       </div>
 
-      {/* Quick-jump tiles — deep-link into the guide's semantic section
-          anchors (GuideView stamps `#guide-<type>` on the first section of
-          each type; a missing section degrades to the guide top). */}
+      {/* Quick-jump tiles — the dedicated emergency reference PAGES (kit 31
+          resolution #9; formerly guide-anchor deep links). */}
       <div className="qa" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: 6 }}>
-        <Link href="/m/guide#guide-fire_safety" style={{ textDecoration: "none" }}>
+        <Link href="/m/emergency/fire" style={{ textDecoration: "none" }}>
           <span
             className="qi"
             style={{ background: "color-mix(in oklab, var(--p-warning) 16%, transparent)", color: "var(--p-warning)" }}
@@ -193,7 +174,7 @@ export default async function EmergencyPage() {
           </span>
           <span className="ql">{t("m.emergency.fire", undefined, "Fire Safety")}</span>
         </Link>
-        <Link href="/m/guide#guide-evacuation" style={{ textDecoration: "none" }}>
+        <Link href="/m/emergency/evacuation" style={{ textDecoration: "none" }}>
           <span
             className="qi"
             style={{ background: "color-mix(in oklab, var(--p-info) 14%, transparent)", color: "var(--p-info)" }}
@@ -202,7 +183,7 @@ export default async function EmergencyPage() {
           </span>
           <span className="ql">{t("m.emergency.evac", undefined, "Evacuate")}</span>
         </Link>
-        <Link href="/m/guide#guide-sops" style={{ textDecoration: "none" }}>
+        <Link href="/m/emergency/shelter" style={{ textDecoration: "none" }}>
           <span
             className="qi"
             style={{ background: "color-mix(in oklab, var(--p-success) 14%, transparent)", color: "var(--p-success)" }}
@@ -213,13 +194,22 @@ export default async function EmergencyPage() {
         </Link>
       </div>
 
-      {/* Emergency codes list (static reference data). */}
+      {/* Emergency codes list (static reference data) — rows open the Codes
+          page, where each code carries its department/team/individual plan. */}
       <div className="sech">
         <h2>{t("m.emergency.codes", undefined, "Emergency Codes")}</h2>
+        <Link href="/m/emergency/codes" style={{ fontSize: 12, fontWeight: 700, color: "var(--p-accent-text)" }}>
+          {t("m.emergency.openCodes", undefined, "Open Page")}
+        </Link>
       </div>
       <div className="emerg-list">
-        {CODES.map((e) => (
-          <div className="emerg-row" key={e.code}>
+        {EMERGENCY_CODES.map((e) => (
+          <Link
+            className="emerg-row"
+            key={e.code}
+            href={`/m/emergency/codes#code-${e.code.toLowerCase()}`}
+            style={{ textDecoration: "none" }}
+          >
             <span
               className="emerg-chip"
               style={{
@@ -232,7 +222,7 @@ export default async function EmergencyPage() {
             </span>
             <span className="emerg-trig">{e.trigger}</span>
             <KIcon name="ChevronRight" size={15} style={{ color: "var(--p-text-3)", flex: "none" }} />
-          </div>
+          </Link>
         ))}
       </div>
     </div>

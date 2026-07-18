@@ -5236,7 +5236,8 @@
    "uncoded": "Uncoded Spend",
    "uncodedCode": "Uncoded",
    "noUncoded": "Nothing waiting on a cost code.",
-   "codeIt": "Code It"
+   "codeIt": "Code It",
+   "autoCode": "Auto-Code"
   },
   "scanner": {
    "document": "Document",

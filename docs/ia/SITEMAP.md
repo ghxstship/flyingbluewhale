@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1238 · **API route handlers:** 156 · **Distinct nav hrefs:** 552
+**Page routes:** 1246 · **API route handlers:** 156 · **Distinct nav hrefs:** 559
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 91 | 68 | 22 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 99 | 75 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1238** | **526** | **669** | **0** | **43** |
+| **TOTAL** | | **1246** | **533** | **670** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1360,7 +1360,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-91 routes — ● 68 nav · ○ 22 linked · ⚠ 0 orphan
+99 routes — ● 75 nav · ○ 23 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1467,9 +1467,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>emergency</code> · 1 route</summary>
+<details><summary><code>emergency</code> · 5 routes</summary>
 
 ● `/m/emergency`
+● `/m/emergency/codes`
+● `/m/emergency/evacuation`
+● `/m/emergency/fire`
+● `/m/emergency/shelter`
 
 </details>
 
@@ -1489,6 +1493,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>feed</code> · 1 route</summary>
 
 ● `/m/feed`
+
+</details>
+
+<details><summary><code>finance</code> · 1 route</summary>
+
+● `/m/finance`
 
 </details>
 
@@ -1573,9 +1583,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>notifications</code> · 1 route</summary>
+<details><summary><code>notifications</code> · 2 routes</summary>
 
 ● `/m/notifications`
+○ `/m/notifications/[id]`
 
 </details>
 
@@ -1690,6 +1701,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/m/tasks`
 ○ `/m/tasks/[taskId]`
 ● `/m/tasks/new`
+
+</details>
+
+<details><summary><code>templates</code> · 2 routes</summary>
+
+● `/m/templates`
+● `/m/templates/new`
 
 </details>
 

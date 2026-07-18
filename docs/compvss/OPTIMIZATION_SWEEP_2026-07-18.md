@@ -25,8 +25,14 @@ The open-punch index was first shipped as a partial **UNIQUE** (to also close th
 - **SW enqueue store-scan (FE L8.1)** — `enqueueRequest` does an O(n) full-store IndexedDB read to enforce the per-endpoint cap. Adding an `endpoint` index would need a store version bump, and legacy queued rows carry no `endpoint` field (treated as the punch endpoint) — an index would not capture them under that value, so index-based eviction could mishandle **un-synced field punches**. Bounded by the 500-row/endpoint cap and runs once per offline write. **Deferred:** the marginal win doesn't justify a subtly-incorrect change to delicate offline-data code.
 - **`force-dynamic` redundancy (FE L1a)** — 98 `/m` pages carry `export const dynamic = "force-dynamic"`; each already reads cookies/session so is dynamic regardless. Cosmetic, no perf delta. Left as-is.
 
-### Pending
-- A fresh `get_advisors` confirmation of the DB-tier claims is pending the Supabase MCP reconnecting; the DB changes were verified at apply time (0 remaining `FOR ALL` on the 12 tables, 3 new indexes, both RLS wraps) and via the Management API (index now non-unique).
+### DB-tier confirmed by a fresh advisor (MCP reconnected, same day)
+Re-ran `get_advisors(performance)` after the Supabase MCP came back — the findings cleared, comparing to the original run:
+- **Unindexed foreign keys: 2 → 0** — the category is gone; both `catalog_item_gtins(bound_by)` and `parties(auth_user_id)` are now indexed.
+- **Auth RLS Initialization Plan: 4 → 2** — both `chat_message_reactions` policies cleared (the 2 remaining are non-COMPVSS).
+- **Multiple Permissive Policies: 1095 → 1063** — −32, the findings across the 12 split COMPVSS tables.
+- The 3 new indexes correctly appear in the (still ~1,771) "unused" list — expected on a pre-traffic DB; do NOT drop them.
+
+A direct post-DDL safety check confirmed all 13 touched tables keep RLS enabled with exactly ONE SELECT policy + full write coverage (the two reaction tables intentionally have no UPDATE). No security lint introduced by the policy splits.
 
 ## Do NOT
 Mass-drop the 177 "unused" indexes the advisor lists — on this pre-traffic DB they are overwhelmingly FK/predicate-covering indexes that will be used under load; re-run the advisor after real traffic before pruning any.

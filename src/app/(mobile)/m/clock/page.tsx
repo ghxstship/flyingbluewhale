@@ -42,47 +42,29 @@ export default async function MobileClockPage() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
-  // The currently-open entry drives the running counter.
-  const { data: open } = await supabase
-    .from("time_entries")
-    .select("id, started_at, ended_at, duration_minutes, zone_id")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .is("ended_at", null)
-    .order("started_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  // The open entry (running counter) and the recent history are independent
+  // reads — run them in parallel rather than two serial round trips.
+  const [{ data: open }, { data: recent }] = await Promise.all([
+    supabase
+      .from("time_entries")
+      .select("id, started_at, ended_at, duration_minutes, zone_id")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .is("ended_at", null)
+      .order("started_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("time_entries")
+      .select("id, started_at, ended_at, duration_minutes, zone_id")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .order("started_at", { ascending: false })
+      .limit(20),
+  ]);
   const openEntry = (open ?? null) as EntryRow | null;
-
-  // Recent history (closed + open), newest first.
-  const { data: recent } = await supabase
-    .from("time_entries")
-    .select("id, started_at, ended_at, duration_minutes, zone_id")
-    .eq("org_id", session.orgId)
-    .eq("user_id", session.userId)
-    .order("started_at", { ascending: false })
-    .limit(20);
   const history = (recent ?? []) as EntryRow[];
 
-  // Resolve zone names for everything we'll show.
-  const zoneIds = Array.from(
-    new Set([openEntry?.zone_id, ...history.map((e) => e.zone_id)].filter(Boolean) as string[]),
-  );
-  const zoneMap = new Map<string, string>();
-  if (zoneIds.length) {
-    const { data: zones } = await supabase
-      .from("time_clock_zones")
-      .select("id, name")
-      .eq("org_id", session.orgId)
-      .in("id", zoneIds);
-    for (const z of (zones ?? []) as Array<{ id: string; name: string | null }>) {
-      if (z.name) zoneMap.set(z.id, z.name);
-    }
-  }
-  const zoneNameFor = (id: string | null) => (id ? (zoneMap.get(id) ?? null) : null);
-
-  // Shift notes for the visible entries — real `shift_notes` rows, grouped
-  // by time entry, with author names hydrated from `users`.
   type NoteRow = {
     id: string;
     time_entry_id: string;
@@ -91,54 +73,70 @@ export default async function MobileClockPage() {
     as_manager: boolean;
     created_at: string;
   };
+  const zoneIds = Array.from(
+    new Set([openEntry?.zone_id, ...history.map((e) => e.zone_id)].filter(Boolean) as string[]),
+  );
   const entryIds = history.map((e) => e.id);
+
+  // Zone names, shift notes, and open corrections all depend only on the
+  // entries above and are independent of one another — fire them as one
+  // parallel batch instead of three serial round trips.
+  const [zonesRes, notesRes, corrRes] = await Promise.all([
+    zoneIds.length
+      ? supabase.from("time_clock_zones").select("id, name").eq("org_id", session.orgId).in("id", zoneIds)
+      : null,
+    entryIds.length
+      ? supabase
+          .from("shift_notes")
+          .select("id, time_entry_id, author_id, body, as_manager, created_at")
+          .eq("org_id", session.orgId)
+          .in("time_entry_id", entryIds)
+          .is("deleted_at", null)
+          .order("created_at", { ascending: true })
+          .limit(500)
+      : null,
+    entryIds.length
+      ? supabase
+          .from("time_entry_corrections")
+          .select("time_entry_id, correction_kind")
+          .eq("org_id", session.orgId)
+          .eq("requester_id", session.userId)
+          .eq("correction_state", "requested")
+          .in("time_entry_id", entryIds)
+      : null,
+  ]);
+
+  const zoneMap = new Map<string, string>();
+  for (const z of (zonesRes?.data ?? []) as Array<{ id: string; name: string | null }>) {
+    if (z.name) zoneMap.set(z.id, z.name);
+  }
+  const zoneNameFor = (id: string | null) => (id ? (zoneMap.get(id) ?? null) : null);
+
+  // Shift notes, grouped by entry, with author names hydrated from `users`
+  // (the only genuinely dependent read — it needs the note authors first).
+  const noteRows = (notesRes?.data ?? []) as NoteRow[];
   const notesByEntry = new Map<string, NoteRow[]>();
-  if (entryIds.length) {
-    const { data: notes } = await supabase
-      .from("shift_notes")
-      .select("id, time_entry_id, author_id, body, as_manager, created_at")
-      .eq("org_id", session.orgId)
-      .in("time_entry_id", entryIds)
-      .is("deleted_at", null)
-      .order("created_at", { ascending: true })
-      .limit(500);
-    const noteRows = (notes ?? []) as NoteRow[];
-    const authorIds = Array.from(new Set(noteRows.map((n) => n.author_id).filter(Boolean) as string[]));
-    const authorMap = new Map<string, string>();
-    if (authorIds.length) {
-      const { data: users } = await supabase.from("users").select("id, name, email").in("id", authorIds);
-      for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
-        authorMap.set(u.id, u.name ?? u.email ?? "");
-      }
+  const authorIds = Array.from(new Set(noteRows.map((n) => n.author_id).filter(Boolean) as string[]));
+  const authorMap = new Map<string, string>();
+  if (authorIds.length) {
+    const { data: users } = await supabase.from("users").select("id, name, email").in("id", authorIds);
+    for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+      authorMap.set(u.id, u.name ?? u.email ?? "");
     }
-    for (const n of noteRows) {
-      const list = notesByEntry.get(n.time_entry_id) ?? [];
-      list.push(n);
-      notesByEntry.set(n.time_entry_id, list);
-    }
-    // attach resolved author name for render
-    for (const list of notesByEntry.values()) {
-      for (const n of list) {
-        (n as NoteRow & { authorName?: string }).authorName = n.author_id ? authorMap.get(n.author_id) ?? "" : "";
-      }
-    }
+  }
+  for (const n of noteRows) {
+    const list = notesByEntry.get(n.time_entry_id) ?? [];
+    list.push(n);
+    notesByEntry.set(n.time_entry_id, list);
+    (n as NoteRow & { authorName?: string }).authorName = n.author_id ? (authorMap.get(n.author_id) ?? "") : "";
   }
 
   // Open correction requests for the visible entries, so a shift already
   // under review shows that instead of offering a second request (the DB's
   // partial unique index would refuse it anyway).
   const pendingCorrectionByEntry = new Map<string, string>();
-  if (entryIds.length) {
-    const { data: corrections } = await supabase
-      .from("time_entry_corrections")
-      .select("time_entry_id, correction_kind")
-      .eq("org_id", session.orgId)
-      .eq("requester_id", session.userId)
-      .eq("correction_state", "requested")
-      .in("time_entry_id", entryIds);
-    for (const c of (corrections ?? []) as Array<{ time_entry_id: string | null; correction_kind: string }>) {
-      if (c.time_entry_id) pendingCorrectionByEntry.set(c.time_entry_id, c.correction_kind);
-    }
+  for (const c of (corrRes?.data ?? []) as Array<{ time_entry_id: string | null; correction_kind: string }>) {
+    if (c.time_entry_id) pendingCorrectionByEntry.set(c.time_entry_id, c.correction_kind);
   }
 
   const onShift = openEntry != null;

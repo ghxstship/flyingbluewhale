@@ -6,6 +6,9 @@
 export { KIcon } from "./icon";
 export type { KIconProps } from "./icon";
 
+export { Fab } from "./Fab";
+export type { FabProps } from "./Fab";
+
 export { PillMenu, Popover, TogRow, mkItems } from "./Menu";
 export type { PillMenuProps, PopoverProps, TogRowProps, MenuItem } from "./Menu";
 

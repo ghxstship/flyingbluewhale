@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab, KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
@@ -93,9 +93,7 @@ export default async function MileagePage() {
       )}
 
       {/* Kit-29 spec: FAB = New Mileage. */}
-      <Link href="/m/mileage/new" className="fab" aria-label={t("m.mileage.newCta", undefined, "Log A Drive")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/mileage/new" label={t("m.mileage.newCta", undefined, "Log A Drive")} />
     </div>
   );
 }

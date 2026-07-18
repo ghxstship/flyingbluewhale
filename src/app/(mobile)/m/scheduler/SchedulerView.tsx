@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import {
   EmptySkeleton,
+  Fab,
   FORMS,
   FormScreen,
   KIcon,
@@ -447,14 +448,7 @@ export function SchedulerView({
         </Sheet>
       )}
 
-      <button
-        type="button"
-        className="fab"
-        aria-label={t("m.scheduler.newShift", undefined, "New Shift")}
-        onClick={() => setFormOpen(true)}
-      >
-        <KIcon name="Plus" size={24} />
-      </button>
+      <Fab label={t("m.scheduler.newShift", undefined, "New Shift")} onClick={() => setFormOpen(true)} />
 
       {formOpen && (
         <>

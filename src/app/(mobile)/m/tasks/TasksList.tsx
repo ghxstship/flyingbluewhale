@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ActionBar,
   EmptySkeleton,
+  Fab,
   GroupedList,
   KIcon,
   ProgressRing,
@@ -507,9 +507,7 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
       <UndoBar undo={undo} onUndo={clearUndo} undoLabel={L.undo} />
 
       {/* Kit FAB: New Task (CREATE map, runtime/app.jsx). */}
-      <Link href="/m/tasks/new" className="fab" aria-label={L.newTask}>
-        <KIcon name="Plus" size={24} />
-      </Link>
+      <Fab href="/m/tasks/new" label={L.newTask} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Crumbs, KIcon } from "@/components/mobile/kit";
+import { Crumbs, Fab, KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
@@ -111,13 +111,7 @@ export default async function RequisitionsPage() {
       )}
 
       {/* Kit-29 spec: FAB = New Requisition. */}
-      <Link
-        href="/m/requisitions/new"
-        className="fab"
-        aria-label={t("m.requisitions.newCta", undefined, "Request A Purchase")}
-      >
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/requisitions/new" label={t("m.requisitions.newCta", undefined, "Request A Purchase")} />
     </div>
   );
 }

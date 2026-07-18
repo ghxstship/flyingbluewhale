@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { ChevronLeft } from "lucide-react";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab } from "@/components/mobile/kit";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
@@ -171,9 +170,7 @@ export default async function ConnectionsPage() {
       />
       {/* Kit FAB: Add Connection — the kit routes it to the invite form, which
           is the referrals surface here (invite by link / email). */}
-      <Link href="/m/referrals" className="fab" aria-label={t("m.connections.add", undefined, "Add Connection")}>
-        <KIcon name="Plus" size={24} />
-      </Link>
+      <Fab href="/m/referrals" label={t("m.connections.add", undefined, "Add Connection")} />
     </div>
   );
 }

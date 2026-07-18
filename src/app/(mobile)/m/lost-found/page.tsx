@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { PackageSearch } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab, KIcon } from "@/components/mobile/kit";
 import { PhotoStrip } from "@/components/media/PhotoStrip";
 import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
 
@@ -105,9 +104,7 @@ export default async function LostFoundPage() {
       )}
 
       {/* Kit-29 spec: FAB = Log Item. */}
-      <Link href="/m/lost-found/new" className="fab" aria-label={t("m.lostfound.newCta", undefined, "Log Item")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/lost-found/new" label={t("m.lostfound.newCta", undefined, "Log Item")} />
     </div>
   );
 }

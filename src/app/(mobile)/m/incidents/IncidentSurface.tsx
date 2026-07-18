@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab, KIcon } from "@/components/mobile/kit";
 import { IncidentsList, type IncidentItem } from "./IncidentsList";
 
 /**
@@ -114,9 +114,7 @@ export async function IncidentSurface({ initialMine = false }: { initialMine?: b
 
       <IncidentsList items={items} initialMine={initialMine} />
 
-      <Link href="/m/incidents/new" className="fab" aria-label={t("m.incidents.file", undefined, "File Report")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/incidents/new" label={t("m.incidents.file", undefined, "File Report")} />
     </div>
   );
 }

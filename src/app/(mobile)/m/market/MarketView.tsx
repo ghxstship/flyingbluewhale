@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
+import { ActionBar, Fab, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
@@ -286,9 +286,7 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
           so the FormScreen below was unreachable and nobody could sell
           anything (found by the deployed-target e2e waiting 300s for this
           button). Kit CREATE map: Marketplace → FAB. */}
-      <button type="button" className="fab" aria-label={labels.listItem} onClick={() => setFormOpen(true)}>
-        <KIcon name="Plus" size={22} />
-      </button>
+      <Fab label={labels.listItem} onClick={() => setFormOpen(true)} />
     </>
   );
 }

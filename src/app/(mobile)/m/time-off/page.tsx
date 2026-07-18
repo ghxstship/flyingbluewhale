@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab } from "@/components/mobile/kit";
 import { TimeOffList, type TimeOffItem } from "./TimeOffList";
 
 export const dynamic = "force-dynamic";
@@ -105,9 +104,7 @@ export default async function TimeOffPage() {
         })}
       />
 
-      <Link href="/m/time-off/new" className="fab" aria-label={t("m.timeOff.newCta", undefined, "Request Time Off")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/time-off/new" label={t("m.timeOff.newCta", undefined, "Request Time Off")} />
     </div>
   );
 }

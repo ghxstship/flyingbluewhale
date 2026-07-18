@@ -2,7 +2,7 @@
 
 import { useActionState, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, EmptySkeleton, FormScreen, GroupedList, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
+import { ActionBar, EmptySkeleton, Fab, FormScreen, GroupedList, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
@@ -274,9 +274,7 @@ export function JobsView({
       {/* Kit FAB: Post Job — perm `approve` in the kit's CREATE map, the
           manager band here. The action re-checks server-side. */}
       {canPost && (
-        <button type="button" className="fab" aria-label="Post Job" onClick={() => setPostOpen(true)}>
-          <KIcon name="Plus" size={24} />
-        </button>
+        <Fab label="Post Job" onClick={() => setPostOpen(true)} />
       )}
       {postOpen && (
         <>

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { UsersRound } from "lucide-react";
-import { ActionBar, KIcon } from "@/components/mobile/kit";
+import { ActionBar, Fab, KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -54,9 +54,7 @@ export function RosterList({ rows }: { rows: RosterRow[] }) {
             </Link>
           }
         />
-        <Link href="/m/roster/assign" className="fab" aria-label={t("m.roster.fab", undefined, "Assign Person")}>
-          <KIcon name="UserRoundPlus" size={22} />
-        </Link>
+        <Fab href="/m/roster/assign" icon="UserRoundPlus" label={t("m.roster.fab", undefined, "Assign Person")} />
       </>
     );
   }
@@ -108,9 +106,7 @@ export function RosterList({ rows }: { rows: RosterRow[] }) {
         ))
       )}
 
-      <Link href="/m/roster/assign" className="fab" aria-label={t("m.roster.fab", undefined, "Assign Person")}>
-        <KIcon name="UserRoundPlus" size={22} />
-      </Link>
+      <Fab href="/m/roster/assign" icon="UserRoundPlus" label={t("m.roster.fab", undefined, "Assign Person")} />
     </>
   );
 }

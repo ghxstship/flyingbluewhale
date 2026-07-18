@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { requireSession } from "@/lib/auth";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab } from "@/components/mobile/kit";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 import { CATALOG_KIND_LABEL, CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
@@ -56,9 +55,7 @@ export default async function CatalogPage() {
         }}
       />
       {/* Kit FAB: Request Advance (CREATE map — catalog shares Assets' target). */}
-      <Link href="/m/advances/new" className="fab" aria-label={t("m.catalog.requestAdvance", undefined, "Request Advance")}>
-        <KIcon name="Plus" size={24} />
-      </Link>
+      <Fab href="/m/advances/new" label={t("m.catalog.requestAdvance", undefined, "Request Advance")} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab, KIcon } from "@/components/mobile/kit";
 import { PhotoStrip } from "@/components/media/PhotoStrip";
 import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
 
@@ -146,9 +146,7 @@ export default async function HandoverPage() {
       )}
 
       {/* Kit-29 spec: FAB = New Handover (FormScreen). */}
-      <Link href="/m/handover/new" className="fab" aria-label={t("m.handover.newCta", undefined, "New Handover")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/handover/new" label={t("m.handover.newCta", undefined, "New Handover")} />
     </div>
   );
 }

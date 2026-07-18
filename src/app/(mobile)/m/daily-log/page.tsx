@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { SubmitLogButton } from "./SubmitLogButton";
 import { NotebookPen } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
 
@@ -91,9 +90,7 @@ export default async function DailyLogPage() {
         })
       )}
 
-      <Link href="/m/daily-log/new" className="fab" aria-label={t("m.dailyLog.newCta", undefined, "New Log")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/daily-log/new" label={t("m.dailyLog.newCta", undefined, "New Log")} />
     </div>
   );
 }

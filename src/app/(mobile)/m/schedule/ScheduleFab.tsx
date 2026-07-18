@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { FormScreen, KIcon, type FormDef } from "@/components/mobile/kit";
+import { Fab, FormScreen, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createScheduleEvent } from "./actions";
@@ -36,14 +36,7 @@ export function ScheduleFab() {
 
   return (
     <>
-      <button
-        type="button"
-        className="fab"
-        aria-label={t("m.schedule.newEvent", undefined, "Schedule Event")}
-        onClick={() => setOpen(true)}
-      >
-        <KIcon name="Plus" size={24} />
-      </button>
+      <Fab label={t("m.schedule.newEvent", undefined, "Schedule Event")} onClick={() => setOpen(true)} />
       {open && (
         <>
           {/* FormScreen is its own fixed z-30 overlay — the error must float

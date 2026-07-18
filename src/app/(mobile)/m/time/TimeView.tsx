@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, EmptySkeleton, GroupedList, KIcon, SheetHead, SwipeRow } from "@/components/mobile/kit";
+import { ActionBar, EmptySkeleton, Fab, GroupedList, KIcon, SheetHead, SwipeRow } from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -257,9 +257,7 @@ export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: s
       )}
 
       {/* Kit FAB: Add Note. */}
-      <Link href="/m/handover/new" className="fab" aria-label={t("m.time.addNote", undefined, "Add Note")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/handover/new" label={t("m.time.addNote", undefined, "Add Note")} />
     </div>
   );
 }

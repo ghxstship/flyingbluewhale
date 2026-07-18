@@ -1,13 +1,12 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ActionBar,
   EmptySkeleton,
+  Fab,
   GroupedList,
-  KIcon,
   SwipeRow,
   TogRow,
 } from "@/components/mobile/kit";
@@ -245,9 +244,7 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
       )}
 
       {/* Kit FAB: Request Advance. */}
-      <Link href="/m/advances/new" className="fab" aria-label={t("m.assets.request", undefined, "Request Advance")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/advances/new" label={t("m.assets.request", undefined, "Request Advance")} />
     </div>
   );
 }

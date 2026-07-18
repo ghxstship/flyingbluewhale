@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { KIcon } from "@/components/mobile/kit";
+import { Fab, KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -96,9 +96,7 @@ export function ExpensesView({
       )}
 
       {/* Kit-29 spec: FAB = New Expense. */}
-      <Link href="/m/expenses/new" className="fab" aria-label={t("m.expenses.new", undefined, "File An Expense")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/expenses/new" label={t("m.expenses.new", undefined, "File An Expense")} />
     </div>
   );
 }

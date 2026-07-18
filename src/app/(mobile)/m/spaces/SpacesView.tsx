@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, KIcon, SheetHead } from "@/components/mobile/kit";
+import { ActionBar, Fab, KIcon, SheetHead } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createSpace } from "./actions";
@@ -157,9 +157,7 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
       )}
 
       {/* Kit FAB: New Space. */}
-      <button type="button" className="fab" aria-label={t("m.spaces.new", undefined, "New Space")} onClick={() => setCreateOpen(true)}>
-        <KIcon name="Plus" size={24} />
-      </button>
+      <Fab label={t("m.spaces.new", undefined, "New Space")} onClick={() => setCreateOpen(true)} />
 
       {createOpen && (
         <div className="sheet" role="dialog" aria-modal="true" aria-label={t("m.spaces.new", undefined, "New Space")}>

@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { requireSession, isManagerPlus } from "@/lib/auth";
-import { KIcon, LockedRow } from "@/components/mobile/kit";
+import { Fab, LockedRow } from "@/components/mobile/kit";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -126,9 +125,7 @@ export default async function MobileDirectoryPage() {
           (lock icon + "Ask Your Lead" sheet). The app-wide default stays
           hide-when-denied — SHOW_LOCKED_WHEN_DENIED is the per-surface switch. */}
       {isManagerPlus(session) ? (
-        <Link href="/m/settings/team/invite" className="fab" aria-label={t("m.directory.invite", undefined, "Invite Crew")}>
-          <KIcon name="Plus" size={24} />
-        </Link>
+        <Fab href="/m/settings/team/invite" label={t("m.directory.invite", undefined, "Invite Crew")} />
       ) : (
         SHOW_LOCKED_WHEN_DENIED && (
           <>

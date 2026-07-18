@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, KIcon, SwipeRow, UndoBar, useUndo } from "@/components/mobile/kit";
+import { ActionBar, Fab, KIcon, SwipeRow, UndoBar, useUndo } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -281,9 +281,7 @@ export function InboxView({ rows, eyebrow, title }: { rows: InboxRow[]; eyebrow:
       <UndoBar undo={undo} onUndo={clearUndo} undoLabel={t("m.undo", undefined, "Undo")} />
 
       {/* Kit FAB: New Message. */}
-      <Link href="/m/inbox/new" className="fab" aria-label={t("m.inbox.new", undefined, "New Message")}>
-        <KIcon name="Plus" size={22} />
-      </Link>
+      <Fab href="/m/inbox/new" label={t("m.inbox.new", undefined, "New Message")} />
     </div>
   );
 }

@@ -83,6 +83,10 @@ export async function createScheduleEvent(_prev: State, fd: FormData): Promise<S
   });
   if (error) return { error: error.message };
 
+  // Scope the bust to the two surfaces this insert actually changes: the
+  // field calendar, and the /m home (which lists upcoming events —
+  // src/app/(mobile)/m/page.tsx reads `events` with starts_at >= now). Both
+  // are `page`-type revalidations, so neither cascades to the rest of the tree.
   revalidatePath("/m/schedule");
   revalidatePath("/m");
   return null;

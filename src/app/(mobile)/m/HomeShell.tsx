@@ -1,11 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
-import { KIcon, RoseCard, SheetHead, TOOLS, ToolSheet } from "@/components/mobile/kit";
+import { KIcon, RoseCard, SheetHead, TOOLS } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import { ApprovalsQuickSheet, type QuickApproval } from "./ApprovalsQuickSheet";
+
+// The field toolbox (unit/ops/OSHA/weather/radio/checklists) carries a large
+// block of static OSHA / ops-calc reference data. It only renders after the
+// first Toolbox tap, so defer its chunk with next/dynamic instead of shipping
+// it on the Home first paint.
+const ToolSheet = dynamic(() => import("@/components/mobile/kit/ToolSheet").then((m) => m.ToolSheet));
 
 export type HomeData = {
   openTasks: number;

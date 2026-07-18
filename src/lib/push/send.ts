@@ -216,10 +216,18 @@ async function bumpFailure(id: string, current: number): Promise<void> {
   }
 }
 
-async function bumpLastSeen(id: string): Promise<void> {
+/**
+ * Bump `last_seen_at` for every subscription that just delivered — in ONE
+ * UPDATE (`... where id = any($ids)`) instead of one round-trip per device.
+ * The per-send batch collects the successful subscription ids and calls this
+ * once after the `Promise.allSettled` fan-out. Best-effort: a failure here
+ * never fails the push.
+ */
+async function bumpLastSeenBulk(ids: string[]): Promise<void> {
+  if (ids.length === 0) return;
   try {
     const svc = createServiceClient();
-    await svc.from("push_subscriptions").update({ last_seen_at: new Date().toISOString() }).eq("id", id);
+    await svc.from("push_subscriptions").update({ last_seen_at: new Date().toISOString() }).in("id", ids);
   } catch {
     // last_seen is best-effort; never fail a push because we couldn't bump it.
   }
@@ -322,7 +330,8 @@ async function sendOne(
       },
       serialized,
     );
-    void bumpLastSeen(sub.id);
+    // last_seen is bumped in one batched UPDATE by the caller (bumpLastSeenBulk)
+    // once the whole fan-out settles — not one round-trip per device here.
     return "sent";
   } catch (err) {
     const status = (err as { statusCode?: number }).statusCode;
@@ -342,27 +351,48 @@ async function sendOne(
   }
 }
 
-/** Read the caller's notification_preferences.matrix and return the
- *  set of user_ids who have toggled `kind` to false on the `push`
- *  channel. Default-on: if a user has no prefs row, or no entry for the
- *  kind, or push is undefined for the kind, we include them in delivery.
- *  Only an explicit `push:false` excludes a user. */
-async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined): Promise<Set<string>> {
-  // No kind → broadcast to everyone (system-level pings).
-  if (!kind || userIds.length === 0) return new Set();
-  // Safety-critical kinds ignore the opt-out matrix entirely.
+/** One row of the per-user delivery matrix. `matrix` is JSONB keyed by
+ *  PushKind, each cell carrying the per-channel toggles. */
+type PrefRow = { user_id: string; matrix: Record<string, { push?: boolean; email?: boolean }> | null };
+
+/**
+ * Fetch the `notification_preferences.matrix` rows for `userIds` in ONE read.
+ * Both delivery gates (push opt-out + email opt-in) derive from these same
+ * rows, so the send path reads the table once per fan-out instead of twice.
+ *
+ * A supabase query error resolves `data: null` (not a throw), which yields an
+ * empty set — the same fail-open behavior the two prior readers had (push
+ * gate excluded nobody, email gate opted nobody in). The try/catch guards the
+ * exotic case where the client itself throws; the push pipeline never blocks
+ * the originating request on a prefs read.
+ */
+async function fetchPrefRows(userIds: string[]): Promise<PrefRow[]> {
+  if (userIds.length === 0) return [];
+  try {
+    const supabase = createServiceClient();
+    const { data } = await supabase
+      .from("notification_preferences")
+      .select("user_id, matrix")
+      .in("user_id", userIds)
+      .returns<PrefRow[]>();
+    return data ?? [];
+  } catch (err) {
+    log.warn("push.prefs_fetch_exception", { err: (err as Error).message });
+    return [];
+  }
+}
+
+/** The set of user_ids who toggled `kind` to false on the `push` channel.
+ *  Default-on: no prefs row, no entry for the kind, or an undefined `push`
+ *  cell all include the user; only an explicit `push:false` excludes. No
+ *  kind → nobody excluded (system-level pings); safety-critical kinds ignore
+ *  the opt-out matrix entirely. */
+function pushExcludedFrom(rows: PrefRow[], kind: PushKind | undefined): Set<string> {
+  if (!kind) return new Set();
   if (UNSILENCEABLE_KINDS.has(kind)) return new Set();
-  const supabase = createServiceClient();
-  const { data } = await supabase
-    .from("notification_preferences")
-    .select("user_id, matrix")
-    .in("user_id", userIds)
-    // `matrix` is JSONB keyed by PushKind — shape to the prefs contract.
-    .returns<Array<{ user_id: string; matrix: Record<string, { push?: boolean }> | null }>>();
   const excluded = new Set<string>();
-  for (const row of data ?? []) {
-    const cell = row.matrix?.[kind];
-    if (cell?.push === false) excluded.add(row.user_id);
+  for (const row of rows) {
+    if (row.matrix?.[kind]?.push === false) excluded.add(row.user_id);
   }
   return excluded;
 }
@@ -388,56 +418,41 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
 };
 
 /**
- * F-03 — the email channel of the per-kind delivery matrix. The
- * `/m/notifications` matrix has always offered an Email column; this is
- * the fan-out that makes it real. OPT-IN semantics: a user is emailed
- * only when their `notification_preferences.matrix[kind].email` is
- * explicitly true (the matrix UI renders email default-off, so a missing
- * cell means "never opted in"). Kind-less system pings never email.
- * Returns the opted-in subset.
+ * F-03 — the email channel of the per-kind delivery matrix. OPT-IN semantics:
+ * a user is emailed only when their `notification_preferences.matrix[kind].email`
+ * is explicitly true (the matrix UI renders email default-off, so a missing
+ * cell means "never opted in"). Kind-less system pings never email. Derived
+ * from the shared `PrefRow[]` read — no second query. Returns the opted-in subset.
  */
-async function filterByEmailOptIn(userIds: string[], kind: PushKind | undefined): Promise<string[]> {
-  if (!kind || userIds.length === 0) return [];
-  try {
-    const supabase = createServiceClient();
-    const { data } = await supabase
-      .from("notification_preferences")
-      .select("user_id, matrix")
-      .in("user_id", userIds)
-      .returns<Array<{ user_id: string; matrix: Record<string, { email?: boolean }> | null }>>();
-    const optedIn: string[] = [];
-    for (const row of data ?? []) {
-      if (row.matrix?.[kind]?.email === true) optedIn.push(row.user_id);
-    }
-    return optedIn;
-  } catch (err) {
-    log.warn("push.email_optin_fetch_exception", { err: (err as Error).message });
-    return [];
+function emailOptedInFrom(rows: PrefRow[], kind: PushKind | undefined): string[] {
+  if (!kind) return [];
+  const optedIn: string[] = [];
+  for (const row of rows) {
+    if (row.matrix?.[kind]?.email === true) optedIn.push(row.user_id);
   }
+  return optedIn;
 }
 
 /**
  * Fire-and-forget email fan-out for a push payload — one kit-templated
- * notification email per opted-in recipient. Never blocks or fails the
- * push path.
+ * notification email per opted-in recipient. The opt-in list is derived from
+ * the already-fetched `prefRows` (the same read the push gate uses), so only
+ * the email SEND is async. Never blocks or fails the push path.
  */
-function fanOutEmail(userIds: string[], payload: PushPayload): void {
+function fanOutEmail(userIds: string[], payload: PushPayload, prefRows: PrefRow[]): void {
   if (!payload.kind || userIds.length === 0) return;
   const kind = payload.kind;
-  void filterByEmailOptIn(userIds, kind)
-    .then((optedIn) => {
-      if (optedIn.length === 0) return;
-      return sendNotificationEmailToUsers({
-        userIds: optedIn,
-        title: payload.title,
-        body: payload.body,
-        url: payload.url ?? null,
-        eyebrow: KIND_EMAIL_LABEL[kind],
-      });
-    })
-    .catch((err: unknown) => {
-      log.warn("push.email_fanout_failed", { kind, err: (err as Error).message });
-    });
+  const optedIn = emailOptedInFrom(prefRows, kind);
+  if (optedIn.length === 0) return;
+  void sendNotificationEmailToUsers({
+    userIds: optedIn,
+    title: payload.title,
+    body: payload.body,
+    url: payload.url ?? null,
+    eyebrow: KIND_EMAIL_LABEL[kind],
+  }).catch((err: unknown) => {
+    log.warn("push.email_fanout_failed", { kind, err: (err as Error).message });
+  });
 }
 
 export async function sendPushTo(
@@ -450,13 +465,17 @@ export async function sendPushTo(
   // the user has push delivery enabled for this kind. Bell on every
   // shell reads from here; push is the optional channel.
   if (opts?.recordBell !== false) await recordNotifications([userId], payload);
+  // One matrix read feeds both delivery gates below (email opt-in + push
+  // opt-out). Skipped entirely when the payload carries no kind — a
+  // system-level ping neither emails nor honors the mute matrix.
+  const prefRows = payload.kind ? await fetchPrefRows([userId]) : [];
   // F-03 email channel — independent of push availability (VAPID) and of
   // the push pref gate below; gated on its own matrix column. Fire-and-forget.
-  fanOutEmail([userId], payload);
+  fanOutEmail([userId], payload, prefRows);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: if the user has toggled this kind off, short-circuit
   // (push channel only — the notifications row above is already written).
-  const excluded = await filterByPushPrefs([userId], payload.kind);
+  const excluded = pushExcludedFrom(prefRows, payload.kind);
   if (excluded.has(userId)) return { sent: 0, failed: 0, disabled: 0 };
   const subs = await fetchActiveSubs(userId);
   if (subs.length === 0) return { sent: 0, failed: 0, disabled: 0 };
@@ -465,15 +484,21 @@ export async function sendPushTo(
   let sent = 0;
   let failed = 0;
   let disabled = 0;
-  for (const r of results) {
+  const sentIds: string[] = [];
+  results.forEach((r, i) => {
     if (r.status !== "fulfilled") {
       failed += 1;
-      continue;
+      return;
     }
-    if (r.value === "sent") sent += 1;
-    else if (r.value === "disabled") disabled += 1;
+    if (r.value === "sent") {
+      sent += 1;
+      const id = subs[i]?.id;
+      if (id) sentIds.push(id);
+    } else if (r.value === "disabled") disabled += 1;
     else failed += 1;
-  }
+  });
+  // One batched last_seen bump for every device that delivered.
+  void bumpLastSeenBulk(sentIds);
   return { sent, failed, disabled };
 }
 
@@ -487,13 +512,16 @@ export async function sendPushBulk(
   // before the push-pref gate. Single batch insert; bell on every shell
   // reads from here regardless of push delivery state.
   if (opts?.recordBell !== false) await recordNotifications(userIds, payload);
+  // One matrix read for the whole recipient set feeds both delivery gates
+  // (email opt-in + push opt-out). Skipped when the payload carries no kind.
+  const prefRows = payload.kind ? await fetchPrefRows(userIds) : [];
   // F-03 email channel — independent of push availability (VAPID) and of
   // the push pref gate below; gated on its own matrix column. Fire-and-forget.
-  fanOutEmail(userIds, payload);
+  fanOutEmail(userIds, payload, prefRows);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: drop users who've toggled this kind off before we hit
   // the push_subscriptions read (push channel only).
-  const excluded = await filterByPushPrefs(userIds, payload.kind);
+  const excluded = pushExcludedFrom(prefRows, payload.kind);
   const allowed = userIds.filter((u) => !excluded.has(u));
   if (allowed.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const byUser = await fetchActiveSubsBulk(allowed);
@@ -512,14 +540,20 @@ export async function sendPushBulk(
   let sent = 0;
   let failed = 0;
   let disabled = 0;
-  for (const r of results) {
+  const sentIds: string[] = [];
+  results.forEach((r, i) => {
     if (r.status !== "fulfilled") {
       failed += 1;
-      continue;
+      return;
     }
-    if (r.value === "sent") sent += 1;
-    else if (r.value === "disabled") disabled += 1;
+    if (r.value === "sent") {
+      sent += 1;
+      const id = subsWithUser[i]?.sub.id;
+      if (id) sentIds.push(id);
+    } else if (r.value === "disabled") disabled += 1;
     else failed += 1;
-  }
+  });
+  // One batched last_seen bump for every device that delivered.
+  void bumpLastSeenBulk(sentIds);
   return { sent, failed, disabled };
 }

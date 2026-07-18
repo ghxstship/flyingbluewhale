@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
 
@@ -22,8 +23,10 @@ import { log } from "@/lib/log";
  * write to the database.
  */
 
-/** The caller's `parties.id` in `orgId`, or null when none exists. Read-only. */
-export async function getMyPartyId(orgId: string, authUserId: string): Promise<string | null> {
+/** The raw, un-memoized party read. The get-or-create write paths below use
+ *  this directly so their reads always see the latest state (a memoized read
+ *  could return a pre-insert `null` and defeat the post-race re-read). */
+async function readMyPartyId(orgId: string, authUserId: string): Promise<string | null> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("parties")
@@ -36,6 +39,16 @@ export async function getMyPartyId(orgId: string, authUserId: string): Promise<s
 }
 
 /**
+ * The caller's `parties.id` in `orgId`, or null when none exists. Read-only.
+ *
+ * `React.cache`-wrapped: a single render can resolve the caller's party from
+ * several surfaces, and this dedupes those repeated reads to one query per
+ * request. Only the READ path is cached — the get-or-create helpers below run
+ * the uncached `readMyPartyId` so a write path never observes a stale value.
+ */
+export const getMyPartyId = cache(readMyPartyId);
+
+/**
  * The caller's `parties.id` in `orgId`, creating the row if they don't have
  * one. Being an org member IS the authority to hold a party there — exactly
  * what the `uis_parties_org` RLS policy says — and this creates the caller's
@@ -43,7 +56,7 @@ export async function getMyPartyId(orgId: string, authUserId: string): Promise<s
  * the post-race re-read fail (e.g. the caller isn't a member of `orgId`).
  */
 export async function ensureMyPartyId(orgId: string, authUserId: string, email: string): Promise<string | null> {
-  const existing = await getMyPartyId(orgId, authUserId);
+  const existing = await readMyPartyId(orgId, authUserId);
   if (existing) return existing;
 
   const supabase = await createClient();
@@ -64,8 +77,9 @@ export async function ensureMyPartyId(orgId: string, authUserId: string, email: 
     .single();
   if (error) {
     // Lost a race against a concurrent create (or another surface made one
-    // first) — re-read rather than fail the caller's actual work.
-    return getMyPartyId(orgId, authUserId);
+    // first) — re-read rather than fail the caller's actual work. Uncached:
+    // the memoized read may still hold the pre-insert null.
+    return readMyPartyId(orgId, authUserId);
   }
   return data.id;
 }

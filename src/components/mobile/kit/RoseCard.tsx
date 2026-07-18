@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { create as createQrSymbol } from "qrcode";
+import { useEffect, useState } from "react";
 import { KIcon } from "./icon";
 
 /**
@@ -37,17 +36,41 @@ export type QRProps = {
   bg?: string;
 };
 
+/** The `qrcode` BitMatrix shape we consume (size + per-cell getter). */
+type QrMatrix = { size: number; get: (y: number, x: number) => boolean };
+
 /** Scannable QR symbol as inline SVG. Encoding failures (empty value)
- * render nothing rather than a decorative fake. */
+ * render nothing rather than a decorative fake.
+ *
+ * The `qrcode` encoder (~232K) is a DEFERRED dependency: it is dynamically
+ * imported inside the effect, so the chunk loads only when a QR actually
+ * renders (the Rose card's flip-to-reveal back, a briefing sign-in), never on
+ * first paint of the surfaces that merely might show one. The matrix therefore
+ * resolves asynchronously — one frame of nothing before it paints, same as the
+ * prior empty-until-ready path. */
 export function QR({ value, size = 184, fg = "#0c0e12", bg = "#fff" }: QRProps) {
-  const matrix = useMemo(() => {
-    if (!value) return null;
-    try {
-      const symbol = createQrSymbol(value, { errorCorrectionLevel: "M" });
-      return symbol.modules;
-    } catch {
-      return null;
+  const [matrix, setMatrix] = useState<QrMatrix | null>(null);
+  useEffect(() => {
+    if (!value) {
+      setMatrix(null);
+      return;
     }
+    let live = true;
+    void import("qrcode")
+      .then(({ create }) => {
+        if (!live) return;
+        try {
+          setMatrix(create(value, { errorCorrectionLevel: "M" }).modules as unknown as QrMatrix);
+        } catch {
+          setMatrix(null);
+        }
+      })
+      .catch(() => {
+        if (live) setMatrix(null);
+      });
+    return () => {
+      live = false;
+    };
   }, [value]);
 
   if (!matrix) return null;

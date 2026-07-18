@@ -62,6 +62,16 @@ const config: NextConfig = {
     root: workspaceRoot,
   },
 
+  // Tree-shake barrel imports. `lucide-react` is a ~1,600-icon barrel and the
+  // COMPVSS mobile kit (`@/components/mobile/kit`) is a re-export barrel; both
+  // are consumed by named import across /m. optimizePackageImports rewrites the
+  // barrel imports to per-file deep imports at build time so only the icons /
+  // primitives actually used are bundled (KIcon already resolves from an
+  // explicit registry — this shakes the kit barrel + the lucide named imports).
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@/components/mobile/kit"],
+  },
+
   // Remote image optimization — user-generated imagery (org logos, portal
   // branding, incident photos, avatars) lives in Supabase storage. Without
   // remotePatterns, next/image can't serve those hosts and surfaces fell

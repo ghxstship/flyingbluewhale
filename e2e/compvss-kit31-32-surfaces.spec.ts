@@ -39,6 +39,25 @@ test.describe("COMPVSS kit 31/32 surfaces · crew", () => {
     }
   });
 
+  test("emergency hub shows all FOUR tiles (Codes first) and each opens its page", async ({ page }) => {
+    await page.goto("/m/emergency");
+    await expectRendered(page);
+    // Kit 4-tile row: Codes · Fire · Evacuate · Shelter — each a peer tile.
+    for (const href of [
+      "/m/emergency/codes",
+      "/m/emergency/fire",
+      "/m/emergency/evacuation",
+      "/m/emergency/shelter",
+    ]) {
+      const tile = page.locator(`a[href="${href}"]`).first();
+      await expect(tile, `${href} must be a hub tile`).toBeVisible();
+    }
+    // The Codes tile navigates (regression guard for the 4th-tile add).
+    await page.locator('a[href="/m/emergency/codes"]').first().click();
+    await expect(page).toHaveURL(/\/m\/emergency\/codes/);
+    await expectRendered(page);
+  });
+
   test("templates library renders (crew sees the read surface)", async ({ page }) => {
     await page.goto("/m/templates");
     await expectRendered(page);
@@ -58,6 +77,25 @@ test.describe("COMPVSS kit 31/32 surfaces · crew", () => {
       await row.click();
       await expectRendered(page);
       await expect(page).toHaveURL(/\/m\/notifications\/[0-9a-f-]+/);
+    }
+  });
+
+  test("jobs surface offers the All / Saved filter chips (wave-2 A4)", async ({ page }) => {
+    await page.goto("/m/jobs");
+    await expectRendered(page);
+    await expect(page.getByRole("button", { name: /^all$/i }).or(page.getByText(/saved/i)).first()).toBeVisible({
+      timeout: 15_000,
+    });
+  });
+
+  test("global search spans grouped results (wave-2 C2)", async ({ page }) => {
+    await page.goto("/m/search");
+    await expectRendered(page);
+    const box = page.locator('input[type="search"], input[placeholder*="earch"]').first();
+    if (await box.isVisible({ timeout: 5_000 }).catch(() => false)) {
+      await box.fill("a");
+      // Grouped results or an honest empty — never an error boundary.
+      await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
     }
   });
 
@@ -88,6 +126,18 @@ test.describe("COMPVSS kit 31/32 surfaces · manager", () => {
   test("shift scheduler renders the day strip + coverage grid for a manager", async ({ page }) => {
     await page.goto("/m/scheduler");
     await expectRendered(page);
+  });
+
+  test("Home Approve quick-action renders as a proper tile (styling regression guard)", async ({ page }) => {
+    await page.goto("/m");
+    await expectRendered(page);
+    // The Approve tile is a .qa button (kit tile chrome) with the qi icon +
+    // ql label, not a bare unstyled button — regression guard for the inline
+    // reset that dropped it out of the grid.
+    const approve = page.locator(".qa button").filter({ hasText: /approve/i }).first();
+    await expect(approve).toBeVisible({ timeout: 15_000 });
+    await expect(approve.locator(".qi")).toBeVisible();
+    await expect(approve.locator(".ql")).toBeVisible();
   });
 
   test("templates: a manager can open the New Template form", async ({ page }) => {

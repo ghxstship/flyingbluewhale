@@ -47,12 +47,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     if (!iso) return "—";
     return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   }
-  // Cases = service requests filed by anyone in this delegation, severity high or urgent
+  // Cases = service requests filed by anyone in this delegation, high severity.
+  // severity is the P1–P4 SLA scale (P1 = most severe); "high/urgent" = P1 + P2.
+  // (Pre-enum this filtered on 'high'/'urgent', which never matched the P-scale.)
   const { data } = await supabase
     .from("service_requests")
     .select("id, category, description, severity, status:request_state, opened_at, resolved_at")
     .eq("org_id", session.orgId)
-    .in("severity", ["high", "urgent"])
+    .in("severity", ["P1", "P2"])
     .order("opened_at", { ascending: false })
     .limit(100);
 

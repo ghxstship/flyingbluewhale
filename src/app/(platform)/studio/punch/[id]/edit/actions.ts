@@ -7,14 +7,15 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { Constants } from "@/lib/supabase/database.types";
 
 const Schema = z.object({
   id: z.string().uuid(),
   title: z.string().min(1).max(200),
   description: z.string().max(4000).optional(),
   project_id: z.string().uuid(),
-  priority: z.enum(["low", "normal", "high", "urgent"]),
-  status: z.enum(["open", "in_progress", "ready_for_review", "complete", "void"]),
+  priority: z.enum(Constants.public.Enums.work_priority),
+  status: z.enum(Constants.public.Enums.punch_item_state),
   assignee_id: z.string().uuid().optional().or(z.literal("")),
   vendor_id: z.string().uuid().optional().or(z.literal("")),
   due_at: z.string().optional(),

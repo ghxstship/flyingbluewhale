@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { Constants } from "@/lib/supabase/database.types";
 import { updatePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -13,8 +14,9 @@ export const dynamic = "force-dynamic";
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
-const STATUSES = ["open", "in_progress", "ready_for_review", "complete", "void"] as const;
-const PRIORITIES = ["low", "normal", "high", "urgent"] as const;
+// Sourced from the promoted native enums (enum-normalization 2026-07-18), not a local copy.
+const STATUSES = Constants.public.Enums.punch_item_state;
+const PRIORITIES = Constants.public.Enums.work_priority;
 
 type PunchItem = {
   id: string;

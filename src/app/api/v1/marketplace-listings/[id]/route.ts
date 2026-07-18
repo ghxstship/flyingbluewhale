@@ -4,12 +4,14 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertScope, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
+import { Constants } from "@/lib/supabase/database.types";
 
 type MarketplaceListingUpdate = Database["public"]["Tables"]["marketplace_listings"]["Update"];
 
 /** /api/v1/marketplace-listings/[id] — detail + update + soft-delete. */
 
-const LISTING_STATES = ["draft", "active", "sold", "withdrawn"] as const;
+// Enum SSOT (native enum promoted from CHECK, enum-normalization 2026-07-18).
+const LISTING_STATES = Constants.public.Enums.marketplace_listing_state;
 
 const PatchSchema = z.object({
   title: z.string().min(1).max(200).optional(),

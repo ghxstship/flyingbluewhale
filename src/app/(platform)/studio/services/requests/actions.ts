@@ -6,10 +6,11 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { Constants } from "@/lib/supabase/database.types";
 
 const CreateSchema = z.object({
   category: z.enum(["AV", "cleaning", "repair", "IT", "hospitality", "security", "other"]),
-  severity: z.enum(["P1", "P2", "P3", "P4"]).default("P3"),
+  severity: z.enum(Constants.public.Enums.sla_severity).default("P3"),
   summary: z.string().min(1).max(200),
   description: z.string().max(4000).optional(),
   project_id: z.string().uuid().optional().or(z.literal("")),
@@ -112,7 +113,7 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
     .maybeSingle();
   if (!existing) throw new Error("Service request not found");
 
-  const current = existing.request_state as string;
+  const current = existing.request_state;
   const allowed = REQUEST_TRANSITIONS[current] ?? [];
   if (!allowed.includes(parsed.data.to)) {
     throw new Error(`Cannot move ${current} → ${parsed.data.to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);

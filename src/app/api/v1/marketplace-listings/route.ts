@@ -5,11 +5,13 @@ import { assertScope, withAuth } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
 import { withIdempotency } from "@/lib/idempotency";
 import { createClient } from "@/lib/supabase/server";
+import { Constants } from "@/lib/supabase/database.types";
 
 /** /api/v1/marketplace-listings — crew buy/sell/trade gear, org-scoped. */
 
-const LISTING_STATES = ["draft", "active", "sold", "withdrawn"] as const;
-const ITEM_CONDITIONS = ["new", "like_new", "used", "for_parts"] as const;
+// Enum SSOT (native enums promoted from CHECK, enum-normalization 2026-07-18).
+const LISTING_STATES = Constants.public.Enums.marketplace_listing_state;
+const ITEM_CONDITIONS = Constants.public.Enums.item_condition;
 
 const CreateSchema = z.object({
   title: z.string().min(1).max(200),

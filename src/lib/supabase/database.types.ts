@@ -45515,6 +45515,7 @@ export type Database = {
         Returns: Json
       }
       effective_capabilities: { Args: { p_org_id: string }; Returns: string[] }
+      ensure_custom_position_role: { Args: { p_org_id: string }; Returns: string }
       emit_notification: {
         Args: {
           p_body?: string

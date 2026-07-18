@@ -11,7 +11,7 @@ import { BASIS_LABEL, type CompensationBasis } from "@/lib/offer-letters/types";
 import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { wouldCreateReportingCycle } from "./reporting/cycle";
-import { CUSTOM_POSITION_LABEL, CUSTOM_POSITION_SLUG, LIVE_LETTER_STATES } from "./letter-state";
+import { CUSTOM_POSITION_SLUG, LIVE_LETTER_STATES } from "./letter-state";
 
 const BASES = Object.keys(BASIS_LABEL) as [CompensationBasis, ...CompensationBasis[]];
 
@@ -44,6 +44,12 @@ const AssignSchema = z
  * Resolve the org's fixed system role for manual positions, creating it once
  * per org if missing. The custom TITLE is never written to org_roles — only
  * this single infrastructure row exists (see letter-state.ts).
+ *
+ * Goes through the `ensure_custom_position_role` SECURITY DEFINER RPC
+ * (migration 20260718004914): org_roles writes are admin-band RLS, but this
+ * assign flow is manager-gated — a direct insert crashed for managers. The
+ * RPC may materialize exactly this hardcoded system row (manager-band
+ * checked in SQL), so catalog authoring itself stays admin-only.
  */
 async function ensureCustomPositionRole(orgId: string): Promise<string> {
   const supabase = await createClient();
@@ -54,13 +60,9 @@ async function ensureCustomPositionRole(orgId: string): Promise<string> {
     .eq("slug", CUSTOM_POSITION_SLUG)
     .maybeSingle();
   if (existing) return existing.id;
-  const { data, error } = await supabase
-    .from("org_roles")
-    .insert({ org_id: orgId, slug: CUSTOM_POSITION_SLUG, label: CUSTOM_POSITION_LABEL, is_system: true })
-    .select("id")
-    .single();
+  const { data, error } = await supabase.rpc("ensure_custom_position_role", { p_org_id: orgId });
   if (error) throw new Error(error.message);
-  return data.id;
+  return data as string;
 }
 
 export async function assignPersonAction(projectId: string, _prev: FormState, fd: FormData): Promise<FormState> {
@@ -99,7 +101,13 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
   let roleId: string;
   let expectationsOverride: string | null = null;
   if (input.positionMode === "manual") {
-    roleId = await ensureCustomPositionRole(session.orgId);
+    try {
+      roleId = await ensureCustomPositionRole(session.orgId);
+    } catch (e) {
+      // A denied/failed RPC is a form error, not a page crash — the RSC
+      // error boundary is how the org_roles RLS gap first surfaced.
+      return actionFail(e instanceof Error ? e.message : "Could not resolve the manual-position role.", fd);
+    }
     expectationsOverride = input.manualTitle!.trim();
   } else {
     const { data: role } = await supabase

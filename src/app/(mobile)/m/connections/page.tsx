@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
 import { ChevronLeft } from "lucide-react";
 import { KIcon } from "@/components/mobile/kit";
 import { requireSession } from "@/lib/auth";
@@ -62,7 +63,7 @@ export default async function ConnectionsPage() {
       const prof = profById.get(u.id);
       nameById.set(u.id, {
         name: prof?.display_name || u.name || u.email || t("m.connections.unnamed", undefined, "Member"),
-        role: prof?.role_title || t("m.connections.crew", undefined, "Crew"),
+        role: fmtPosition(prof?.role_title) || t("m.connections.crew", undefined, "Crew"),
       });
     }
   }

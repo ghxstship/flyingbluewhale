@@ -40,6 +40,54 @@ export async function setRoomRead(_prev: State, fd: FormData): Promise<State> {
   return null;
 }
 
+const ToggleSchema = z.object({
+  roomId: z.string().uuid(),
+  on: z.enum(["1", ""]),
+});
+
+/**
+ * Kit 31 swipe canon · Inbox Flag (danger). Stamps/clears `flagged_at` on my
+ * membership row. Own-row only — same RLS shape as the read cursor.
+ */
+export async function setRoomFlag(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = ToggleSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("chat_room_members")
+    .update({ flagged_at: parsed.data.on === "1" ? new Date().toISOString() : null })
+    .eq("room_id", parsed.data.roomId)
+    .eq("user_id", session.userId);
+  if (error) return { error: error.message };
+
+  revalidatePath("/m/inbox");
+  return null;
+}
+
+/**
+ * Kit 31 swipe canon · Inbox Archive (neutral). Stamps/clears `archived_at`
+ * on my membership row; the list drops archived rooms and the 5s undo bar
+ * calls back with `on=""` to restore. Membership (and history) is untouched.
+ */
+export async function setRoomArchived(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = ToggleSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("chat_room_members")
+    .update({ archived_at: parsed.data.on === "1" ? new Date().toISOString() : null })
+    .eq("room_id", parsed.data.roomId)
+    .eq("user_id", session.userId);
+  if (error) return { error: error.message };
+
+  revalidatePath("/m/inbox");
+  return null;
+}
+
 const ChannelSchema = z.object({ name: z.string().trim().min(1).max(80) });
 
 /** New channel (the compose screen's Channel segment). */

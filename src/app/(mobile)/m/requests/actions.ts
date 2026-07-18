@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession, isManagerPlus } from "@/lib/auth";
+import { requireSession, isManagerPlus, MANAGER_BAND_ROLES } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { sendPushBulk } from "@/lib/push/send";
 import { log } from "@/lib/log";
 
 /**
@@ -53,6 +54,17 @@ export async function decideApprovalAction(input: {
   if (!hasSupabase) return { error: "Not configured." };
 
   const supabase = await createClient();
+
+  // Who asked, and for what — read BEFORE the RPC so the submitter can be
+  // notified after it lands (kit 31 swipe canon: "decided items leave the
+  // queue + notify submitter").
+  const { data: instance } = await supabase
+    .from("approval_instances")
+    .select("initiated_by, subject_table, policy:approval_policies(name)")
+    .eq("id", parsed.data.instanceId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+
   const { error } = await supabase.rpc("record_approval_decision", {
     p_instance_id: parsed.data.instanceId,
     p_step_id: parsed.data.stepId,
@@ -76,8 +88,109 @@ export async function decideApprovalAction(input: {
     return { error: error.message };
   }
 
+  // Notify the submitter: a bell-feed row (own row → the swipe canon applies
+  // to it downstream) plus a push. Best-effort — the decision already landed.
+  const requester = (instance?.initiated_by as string | null) ?? null;
+  if (requester && requester !== session.userId) {
+    const policyName =
+      (instance as { policy?: { name?: string | null } | null } | null)?.policy?.name ??
+      instance?.subject_table ??
+      "Request";
+    const verdict = parsed.data.decision === "approved" ? "Approved" : "Denied";
+    await supabase.from("notifications").insert({
+      org_id: session.orgId,
+      user_id: requester,
+      kind: "approval",
+      title: `${verdict} · ${policyName}`,
+      body: parsed.data.notes || null,
+      href: "/m/requests",
+    });
+    await sendPushBulk([requester], {
+      title: `${verdict} · ${policyName}`,
+      body: parsed.data.notes || "Your request was decided.",
+      url: "/m/requests",
+      scope: "mobile",
+      orgId: session.orgId,
+    });
+  }
+
   revalidatePath("/m/requests");
   revalidatePath("/m/my-work");
+  revalidatePath("/m/notifications");
   revalidatePath("/studio/governance/approvals");
+  return { ok: true };
+}
+
+const EscalateInput = z.object({ instanceId: z.string().uuid() });
+
+export type EscalateState = { error?: string; ok?: true } | null;
+
+/**
+ * Kit 31 swipe canon · Escalate (warn) — for instances the caller cannot
+ * decide (stepless policies, or a member nudging their own submission).
+ * Mutates real state: a bell notification lands on every org admin/owner
+ * (plus a push), so the escalation exists after the toast fades. Instance
+ * state itself is untouched — `record_approval_decision` stays the one
+ * sanctioned write path to the engine.
+ */
+export async function escalateApprovalAction(_prev: EscalateState, fd: FormData): Promise<EscalateState> {
+  const session = await requireSession();
+  const parsed = EscalateInput.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+  if (!hasSupabase) return { error: "Not configured." };
+  const supabase = await createClient();
+
+  const { data: instance } = await supabase
+    .from("approval_instances")
+    .select("id, state, subject_table, initiated_by, policy:approval_policies(name)")
+    .eq("id", parsed.data.instanceId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!instance) return { error: "Approval not found." };
+  if (!["initiated", "in_review", "escalated"].includes(String(instance.state))) {
+    return { error: "This approval is already decided." };
+  }
+  // Members may escalate their own submissions; managers may escalate anything.
+  if (!isManagerPlus(session) && instance.initiated_by !== session.userId) {
+    return { error: "You can only escalate your own requests." };
+  }
+
+  const { data: admins } = await supabase
+    .from("memberships")
+    .select("user_id, role")
+    .eq("org_id", session.orgId)
+    .in("role", [...MANAGER_BAND_ROLES])
+    .is("deleted_at", null);
+  const targets = Array.from(
+    new Set((admins ?? []).map((m) => m.user_id as string).filter((u) => u && u !== session.userId)),
+  );
+  if (targets.length === 0) return { error: "No one to escalate to." };
+
+  const policyName =
+    (instance as { policy?: { name?: string | null } | null }).policy?.name ??
+    String(instance.subject_table);
+  const rows = targets.map((userId) => ({
+    org_id: session.orgId,
+    user_id: userId,
+    kind: "approval",
+    title: `Escalated · ${policyName}`,
+    body: "An approval needs attention.",
+    href: "/m/requests",
+  }));
+  const { error: insErr } = await supabase.from("notifications").insert(rows);
+  if (insErr) {
+    log.error("m.requests.escalate_failed", { err: insErr.message });
+    return { error: insErr.message };
+  }
+  await sendPushBulk(targets, {
+    title: `Escalated · ${policyName}`,
+    body: "An approval needs attention.",
+    url: "/m/requests",
+    scope: "mobile",
+    orgId: session.orgId,
+  });
+
+  revalidatePath("/m/requests");
+  revalidatePath("/m/notifications");
   return { ok: true };
 }

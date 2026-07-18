@@ -1,9 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, EmptySkeleton, GroupedList, KIcon, SwipeRow } from "@/components/mobile/kit";
+import {
+  ActionBar,
+  EmptySkeleton,
+  GroupedList,
+  KIcon,
+  SwipeRow,
+  UndoBar,
+  useUndo,
+} from "@/components/mobile/kit";
+import { useToast } from "@/lib/hooks/useToast";
 import {
   PRI_COLOR,
   TASK_STATES,
@@ -11,6 +20,8 @@ import {
   type KitTask,
   type TaskState,
 } from "./_shared";
+import { setTaskArchived, setTaskFlag } from "./actions";
+import { setTaskState } from "./[taskId]/actions";
 
 export type TasksLabels = {
   eyebrow: string;
@@ -26,9 +37,20 @@ export type TasksLabels = {
   sortDue: string;
   sortPriority: string;
   sortName: string;
+  sortStatus: string;
+  sortAssignee: string;
   filterStatus: string;
   showCompleted: string;
+  showArchived: string;
   reset: string;
+  done: string;
+  reopen: string;
+  flag: string;
+  unflag: string;
+  archive: string;
+  archivedTag: string;
+  archivedUndo: string;
+  undo: string;
   stateOpen: string;
   stateProgress: string;
   stateBlocked: string;
@@ -68,14 +90,85 @@ const STATE_DOT: Record<TaskState, string> = {
 
 export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: TasksLabels }) {
   const router = useRouter();
+  const toast = useToast();
+  const [, startTransition] = useTransition();
   const [query, setQuery] = useState("");
   const [view, setView] = useState<View>("list");
   const [group, setGroup] = useState("none");
   const [sort, setSort] = useState("due");
   const [states, setStates] = useState<Set<TaskState>>(new Set());
   const [showCompleted, setShowCompleted] = useState(true);
+  const [showArchived, setShowArchived] = useState(false);
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  // Kit 31 swipe canon — optimistic row state over the server stores.
+  const [stateOverride, setStateOverride] = useState<Map<string, TaskState>>(new Map());
+  const [flagOverride, setFlagOverride] = useState<Map<string, boolean>>(new Map());
+  const [archOverride, setArchOverride] = useState<Map<string, boolean>>(new Map());
+  const { undo, withUndo, clearUndo } = useUndo();
+
+  const stateOf = (t: KitTask): TaskState => stateOverride.get(t.id) ?? t.state;
+  const isFlagged = (t: KitTask) => flagOverride.get(t.id) ?? t.flagged;
+  const isArchived = (t: KitTask) => archOverride.get(t.id) ?? t.archived;
+
+  const toggleDone = (t: KitTask) => {
+    const cur = stateOf(t);
+    const next: TaskState = cur === "done" ? "todo" : "done";
+    setStateOverride((m) => new Map(m).set(t.id, next));
+    const fd = new FormData();
+    fd.set("taskId", t.id);
+    fd.set("next", next);
+    startTransition(async () => {
+      const res = await setTaskState(null, fd);
+      if (res?.error) {
+        setStateOverride((m) => new Map(m).set(t.id, cur));
+        toast.error(res.error);
+        return;
+      }
+      router.refresh();
+    });
+  };
+
+  const toggleFlag = (t: KitTask) => {
+    const next = !isFlagged(t);
+    setFlagOverride((m) => new Map(m).set(t.id, next));
+    const fd = new FormData();
+    fd.set("taskId", t.id);
+    fd.set("on", next ? "1" : "");
+    startTransition(async () => {
+      const res = await setTaskFlag(null, fd);
+      if (res?.error) {
+        setFlagOverride((m) => new Map(m).set(t.id, !next));
+        toast.error(res.error);
+        return;
+      }
+      router.refresh();
+    });
+  };
+
+  const setArchived = (t: KitTask, on: boolean, onError: () => void) => {
+    const fd = new FormData();
+    fd.set("taskId", t.id);
+    fd.set("on", on ? "1" : "");
+    startTransition(async () => {
+      const res = await setTaskArchived(null, fd);
+      if (res?.error) {
+        onError();
+        toast.error(res.error);
+        return;
+      }
+      router.refresh();
+    });
+  };
+
+  const archiveTask = (t: KitTask) => {
+    setArchOverride((m) => new Map(m).set(t.id, true));
+    setArchived(t, true, () => setArchOverride((m) => new Map(m).set(t.id, false)));
+    withUndo(`${L.archivedUndo} · ${t.title}`, () => {
+      setArchOverride((m) => new Map(m).set(t.id, false));
+      setArchived(t, false, () => setArchOverride((m) => new Map(m).set(t.id, true)));
+    });
+  };
 
   const stateLabel: Record<TaskState, string> = useMemo(
     () => ({
@@ -90,45 +183,85 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
 
   const entries = useMemo(() => {
     return tasks
-      .filter((t) => states.size === 0 || states.has(t.state))
-      .filter((t) => showCompleted || t.state !== "done")
+      .filter((t) => states.size === 0 || states.has(stateOverride.get(t.id) ?? t.state))
+      .filter((t) => showCompleted || (stateOverride.get(t.id) ?? t.state) !== "done")
+      .filter((t) => showArchived || !(archOverride.get(t.id) ?? t.archived))
       .filter((t) => !query || (t.title + " " + t.sub).toLowerCase().includes(query.toLowerCase()))
       .slice()
       .sort((a, b) => {
         if (sort === "name") return a.title.localeCompare(b.title);
         if (sort === "priority") return PRI_RANK[a.priority] - PRI_RANK[b.priority];
+        if (sort === "status") return (stateOverride.get(a.id) ?? a.state).localeCompare(stateOverride.get(b.id) ?? b.state);
+        if (sort === "assignee") return a.assignee.localeCompare(b.assignee);
         return a.due.localeCompare(b.due);
       });
-  }, [tasks, states, showCompleted, query, sort]);
+  }, [tasks, states, showCompleted, showArchived, query, sort, stateOverride, archOverride]);
 
-  const filterActive = states.size + (showCompleted ? 0 : 1);
+  const filterActive = states.size + (showCompleted ? 0 : 1) + (showArchived ? 1 : 0);
 
   const open = (id: string) => router.push(`/m/tasks/${id}`);
 
-  const row = (t: KitTask) => (
-    <SwipeRow
-      key={t.id}
-      onClick={() => open(t.id)}
-      actions={[{ icon: "ArrowRight", label: L.colTask, tone: "info", on: () => open(t.id) }]}
-    >
-      <div className="item" style={{ width: "100%" }}>
-        <span
-          style={{ width: 8, height: 8, borderRadius: 2, background: PRI_COLOR[t.priority], flex: "none" }}
-        />
-        <div style={{ minWidth: 0, flex: 1 }}>
-          <div className="t">{t.title}</div>
-          <div className="s">{t.sub || t.assignee}</div>
-        </div>
-        <span className="sp" />
-        <span style={{ textAlign: "right" }}>
-          <span className={badgeClass(t.state)}>{stateLabel[t.state]}</span>
-          <div className="time" style={{ marginTop: 6, color: "var(--p-text-3)" }}>
-            {t.due}
+  // Kit 31 (v2.7 swipe canon): Done/Reopen (ok) · Flag/Unflag (warn) ·
+  // Archive (neutral, hidden until "Show Archived", 5s undo).
+  const row = (t: KitTask) => {
+    const st = stateOf(t);
+    const done = st === "done";
+    return (
+      <SwipeRow
+        key={t.id}
+        onClick={() => open(t.id)}
+        actions={[
+          {
+            icon: done ? "RotateCcw" : "Check",
+            label: done ? L.reopen : L.done,
+            tone: "ok",
+            on: () => toggleDone(t),
+          },
+          {
+            icon: "Flag",
+            label: isFlagged(t) ? L.unflag : L.flag,
+            tone: "warn",
+            on: () => toggleFlag(t),
+          },
+          { icon: "Archive", label: L.archive, tone: "neutral", on: () => archiveTask(t) },
+        ]}
+      >
+        <div className="item" style={{ width: "100%", margin: 0 }}>
+          <span
+            style={{ width: 8, height: 8, borderRadius: 2, background: PRI_COLOR[t.priority], flex: "none" }}
+          />
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div
+              className="t"
+              style={{ textDecoration: done ? "line-through" : "none", opacity: done ? 0.55 : 1 }}
+            >
+              {isFlagged(t) && (
+                <KIcon
+                  name="Flag"
+                  size={12}
+                  style={{ color: "var(--p-warning)", marginRight: 5, verticalAlign: "-1px" }}
+                />
+              )}
+              {t.title}
+              {isArchived(t) && (
+                <span className="time" style={{ marginLeft: 6, color: "var(--p-text-3)" }}>
+                  · {L.archivedTag}
+                </span>
+              )}
+            </div>
+            <div className="s">{t.sub || t.assignee}</div>
           </div>
-        </span>
-      </div>
-    </SwipeRow>
-  );
+          <span className="sp" />
+          <span style={{ textAlign: "right" }}>
+            <span className={badgeClass(st)}>{stateLabel[st]}</span>
+            <div className="time" style={{ marginTop: 6, color: "var(--p-text-3)" }}>
+              {t.due}
+            </div>
+          </span>
+        </div>
+      </SwipeRow>
+    );
+  };
 
   const bcard = (t: KitTask) => (
     <div
@@ -216,6 +349,8 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
           ["due", L.sortDue],
           ["priority", L.sortPriority],
           ["name", L.sortName],
+          ["status", L.sortStatus],
+          ["assignee", L.sortAssignee],
         ]}
         filterActive={filterActive}
         menuOpen={menuOpen}
@@ -254,6 +389,16 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
               />
               <span className="wl">{L.showCompleted}</span>
             </label>
+            <label
+              style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, cursor: "pointer" }}
+            >
+              <input
+                type="checkbox"
+                checked={showArchived}
+                onChange={() => setShowArchived((v) => !v)}
+              />
+              <span className="wl">{L.showArchived}</span>
+            </label>
             <button
               type="button"
               className="pill"
@@ -261,6 +406,7 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
               onClick={() => {
                 setStates(new Set());
                 setShowCompleted(true);
+                setShowArchived(false);
               }}
             >
               {L.reset}
@@ -286,7 +432,7 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
         <>
           <div className="board">
             {TASK_STATES.map((s) => {
-              const es = entries.filter((t) => t.state === s);
+              const es = entries.filter((t) => stateOf(t) === s);
               return (
                 <div className="bcol" key={s}>
                   <div className="bcol-h">
@@ -352,6 +498,9 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
       {!entries.length && (
         <EmptySkeleton cols={[L.colTask, L.groupStatus, L.colDue]} title={L.empty} hint={L.emptyBody} />
       )}
+
+      <UndoBar undo={undo} onUndo={clearUndo} undoLabel={L.undo} />
+
       {/* Kit FAB: New Task (CREATE map, runtime/app.jsx). */}
       <Link href="/m/tasks/new" className="fab" aria-label={L.newTask}>
         <KIcon name="Plus" size={24} />

@@ -1,11 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { ActionBar, GroupedList, KIcon, TogRow } from "@/components/mobile/kit";
+import { useRouter } from "next/navigation";
+import {
+  ActionBar,
+  EmptySkeleton,
+  GroupedList,
+  KIcon,
+  SwipeRow,
+  TogRow,
+} from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { checkinMyAssignment, reportAssignmentLost } from "./actions";
 
 export type AssetRow = {
   id: string;
@@ -18,13 +27,20 @@ export type AssetRow = {
 };
 
 /**
- * Kit 28 `tab === "assets"` verbatim: eyebrow count, "My Assets", the shared
- * ActionBar (list/table · group None|Category · sort Name|Status|Tag · category
- * filter chips), `.item.tap` rows with a leading `.bar`, mono tag in the
- * sub-line, and a tone Badge carrying the return state. FAB = Request Advance.
+ * Kit 28 `tab === "assets"` + the kit 31 (v2.7) swipe canon: eyebrow count,
+ * "My Assets", the shared ActionBar (list/table · group None|Category|Status ·
+ * sort Name|Status|Tag · category filter chips), `.item.tap` rows with a
+ * leading `.bar`, mono tag in the sub-line, and a tone Badge carrying the
+ * return state. Swipe: Check In (ok, ONLY while the unit is Out — flips
+ * `fulfillment_state → returned` through the party self check-in RPC) and
+ * Lost (danger — journals `Reported lost` + pushes the ops alert to the
+ * manager band). FAB = Request Advance.
  */
 export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow: string; title: string }) {
   const t = useT();
+  const toast = useToast();
+  const router = useRouter();
+  const [, startTransition] = useTransition();
   const [query, setQuery] = useState("");
   const [view, setView] = useState<ViewMode>("list");
   const [group, setGroup] = useState("none");
@@ -32,6 +48,9 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
   const [cats, setCats] = useState<Set<string>>(new Set());
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  // Optimistic: tags checked back in via swipe this session.
+  const [backIn, setBackIn] = useState<Set<string>>(new Set());
+  const [lost, setLost] = useState<Set<string>>(new Set());
 
   const catList = useMemo(() => Array.from(new Set(rows.map((r) => r.cat))).sort(), [rows]);
 
@@ -53,26 +72,113 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
       return next;
     });
 
-  const row = (r: AssetRow) => (
-    <Link className="item tap" key={r.id} href={`/m/advances/${r.id}`} style={{ cursor: "pointer", textDecoration: "none" }}>
-      <span className="bar" />
-      <div>
-        <div className="t">{r.title}</div>
-        <div className="s">
-          {r.sub} · <span style={{ fontFamily: "var(--p-mono)" }}>{r.tag}</span>
+  const checkIn = (r: AssetRow) => {
+    setBackIn((s) => new Set(s).add(r.id));
+    const fd = new FormData();
+    fd.set("assignmentId", r.id);
+    startTransition(async () => {
+      const res = await checkinMyAssignment(null, fd);
+      if (res?.error) {
+        setBackIn((s) => {
+          const n = new Set(s);
+          n.delete(r.id);
+          return n;
+        });
+        toast.error(res.error);
+        return;
+      }
+      toast.success(t("m.assets.checkedIn", undefined, "Checked In"), { description: `${r.title} · ${r.tag}` });
+      router.refresh();
+    });
+  };
+
+  const reportLost = (r: AssetRow) => {
+    setLost((s) => new Set(s).add(r.id));
+    const fd = new FormData();
+    fd.set("assignmentId", r.id);
+    startTransition(async () => {
+      const res = await reportAssignmentLost(null, fd);
+      if (res?.error) {
+        setLost((s) => {
+          const n = new Set(s);
+          n.delete(r.id);
+          return n;
+        });
+        toast.error(res.error);
+        return;
+      }
+      toast.warning(t("m.assets.reportedLost", undefined, "Reported Lost"), {
+        description: t("m.assets.opsNotified", undefined, "Ops has been alerted"),
+      });
+      router.refresh();
+    });
+  };
+
+  const row = (r: AssetRow) => {
+    const returned = backIn.has(r.id);
+    const out = r.time === "Out" && !returned;
+    return (
+      <SwipeRow
+        key={r.id}
+        onClick={() => router.push(`/m/advances/${r.id}`)}
+        actions={[
+          ...(out
+            ? [
+                {
+                  icon: "PackageCheck",
+                  label: t("m.assets.checkIn", undefined, "Check In"),
+                  tone: "ok" as const,
+                  on: () => checkIn(r),
+                },
+              ]
+            : []),
+          {
+            icon: "TriangleAlert",
+            label: t("m.assets.lost", undefined, "Lost"),
+            tone: "danger" as const,
+            on: () => reportLost(r),
+          },
+        ]}
+      >
+        <div className="item tap" style={{ margin: 0, cursor: "pointer" }}>
+          <span className="bar" />
+          <div>
+            <div className="t">{r.title}</div>
+            <div className="s">
+              {returned ? t("m.assets.returnedSub", undefined, "Returned · Checked In") : r.sub}
+              {" · "}
+              <span style={{ fontFamily: "var(--p-mono)" }}>{r.tag}</span>
+              {lost.has(r.id) && (
+                <span style={{ color: "var(--p-danger)" }}> · {t("m.assets.lostTag", undefined, "Reported Lost")}</span>
+              )}
+            </div>
+          </div>
+          <span className="sp" />
+          <span className={`ps-badge ps-badge--${returned ? "ok" : r.tone}`}>{returned ? "✓" : r.time}</span>
         </div>
-      </div>
-      <span className="sp" />
-      <span className={`ps-badge ps-badge--${r.tone}`}>{r.time}</span>
-    </Link>
-  );
+      </SwipeRow>
+    );
+  };
 
   const groups = useMemo(() => {
-    if (group !== "cat") return null;
-    const m = new Map<string, AssetRow[]>();
-    items.forEach((r) => m.set(r.cat, [...(m.get(r.cat) ?? []), r]));
-    return catList.filter((c) => m.has(c)).map((c) => [c, m.get(c) ?? []] as [string, AssetRow[]]);
-  }, [group, items, catList]);
+    if (group === "cat") {
+      const m = new Map<string, AssetRow[]>();
+      items.forEach((r) => m.set(r.cat, [...(m.get(r.cat) ?? []), r]));
+      return catList.filter((c) => m.has(c)).map((c) => [c, m.get(c) ?? []] as [string, AssetRow[]]);
+    }
+    if (group === "status") {
+      // Kit: "Checked Out" vs "Assigned" buckets by the unit's Out marker.
+      const outLabel = t("m.assets.group.checkedOut", undefined, "Checked Out");
+      const inLabel = t("m.assets.group.assigned", undefined, "Assigned");
+      const m = new Map<string, AssetRow[]>();
+      items.forEach((r) => {
+        const k = r.time === "Out" && !backIn.has(r.id) ? outLabel : inLabel;
+        m.set(k, [...(m.get(k) ?? []), r]);
+      });
+      return Array.from(m.entries());
+    }
+    return null;
+  }, [group, items, catList, backIn, t]);
 
   return (
     <div className="screen screen-anim">
@@ -94,6 +200,7 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
         groupOpts={[
           ["none", t("m.assets.group.none", undefined, "None")],
           ["cat", t("m.assets.group.cat", undefined, "Category")],
+          ["status", t("m.assets.group.status", undefined, "Status")],
         ]}
         sort={sort}
         setSort={setSort}
@@ -118,10 +225,14 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
       />
 
       {!items.length ? (
-        <EmptyState
-          size="compact"
+        <EmptySkeleton
+          cols={[
+            t("m.assets.col.asset", undefined, "Asset"),
+            t("m.assets.col.tag", undefined, "Tag"),
+            t("m.assets.col.status", undefined, "Status"),
+          ]}
           title={t("m.assets.empty.title", undefined, "No Assets")}
-          description={t(
+          hint={t(
             "m.assets.empty.body",
             undefined,
             "Gear, credentials and vouchers issued to you land here. Request what you need from the catalog.",

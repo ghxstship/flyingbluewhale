@@ -12,7 +12,7 @@ import {
   type Unit as KitUnit,
   type ViewMode,
 } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { EmptySkeleton } from "@/components/mobile/kit";
 import type { CatalogKind } from "@/lib/db/assignments";
 import { formatMoney } from "@/lib/i18n/format";
 import { CustodySheet, type CustodyTarget } from "./CustodySheet";
@@ -282,7 +282,13 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
       ) : (
         filtered.map(row)
       )}
-      {!filtered.length && <EmptyState title={labels.empty} description={labels.emptyHint} />}
+      {!filtered.length && (
+        <EmptySkeleton
+          cols={[labels.colItem, labels.colQty, labels.colCost]}
+          title={labels.empty}
+          hint={labels.emptyHint}
+        />
+      )}
       <Link
         href="/m/inventory/scan"
         className="ps-btn ps-btn--cta ps-btn--lg"

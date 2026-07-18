@@ -3,11 +3,11 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, KIcon, SwipeRow } from "@/components/mobile/kit";
+import { ActionBar, KIcon, SwipeRow, UndoBar, useUndo } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { setRoomRead } from "./actions";
+import { setRoomArchived, setRoomFlag, setRoomRead } from "./actions";
 
 export type InboxRow = {
   id: string;
@@ -19,6 +19,8 @@ export type InboxRow = {
   stamp: number;
   unread: number;
   initials: string;
+  /** Kit 31 swipe canon — my membership row's flagged_at is set. */
+  flagged: boolean;
 };
 
 /**
@@ -32,14 +34,14 @@ export type InboxRow = {
  * Read/Unread, and the New Message FAB.
  *
  * Two deliberate divergences, both flagged rather than faked:
- *  - The kit's swipe row also carries Flag and Archive, which in the
- *    prototype only fire a toast — there is no flag or archive store in
- *    either the kit or the repo. A toast saying "Archived" over a row that
- *    stays put is a placebo, so the two actions are omitted until the kit
- *    gives them a store.
  *  - The kit's DM avatars carry an online dot. The repo has no presence
  *    store; a hardcoded dot would claim someone is reachable when nobody
  *    knows. Omitted for the same reason.
+ *
+ * Kit 31 (v2.7 swipe canon) closed the other divergence: Flag and Archive now
+ * have a real store — `chat_room_members.flagged_at` / `archived_at`
+ * (20260718013348) — so the full kit row is live: Flag (danger) · Read/Unread
+ * (info) · Archive (neutral, optimistic removal + 5s undo bar).
  */
 export function InboxView({ rows, eyebrow, title }: { rows: InboxRow[]; eyebrow: string; title: string }) {
   const t = useT();
@@ -50,16 +52,74 @@ export function InboxView({ rows, eyebrow, title }: { rows: InboxRow[]; eyebrow:
   const [sort, setSort] = useState("recent");
   const [kinds, setKinds] = useState<Set<string>>(new Set());
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  // Optimistic swipe state — archive removes the row immediately (5s undo
+  // restores it); flag toggles the row marker without waiting on the refresh.
+  const [gone, setGone] = useState<Set<string>>(new Set());
+  const [flagOverride, setFlagOverride] = useState<Map<string, boolean>>(new Map());
+  const { undo, withUndo, clearUndo } = useUndo();
 
   const items = useMemo(() => {
     const q = query.toLowerCase();
     return rows
+      .filter((r) => !gone.has(r.id))
       .filter((r) => kinds.size === 0 || kinds.has(r.kind))
       .filter((r) => !q || `${r.name} ${r.last}`.toLowerCase().includes(q))
       .sort((a, b) =>
         sort === "unread" ? b.unread - a.unread : sort === "name" ? a.name.localeCompare(b.name) : b.stamp - a.stamp,
       );
-  }, [rows, query, kinds, sort]);
+  }, [rows, query, kinds, sort, gone]);
+
+  const isFlagged = (r: InboxRow) => flagOverride.get(r.id) ?? r.flagged;
+
+  const flagRoom = (r: InboxRow) => {
+    const next = !isFlagged(r);
+    setFlagOverride((m) => new Map(m).set(r.id, next));
+    const fd = new FormData();
+    fd.set("roomId", r.id);
+    fd.set("on", next ? "1" : "");
+    startTransition(async () => {
+      const res = await setRoomFlag(null, fd);
+      if (res?.error) {
+        setFlagOverride((m) => new Map(m).set(r.id, !next));
+        toast.error(res.error);
+        return;
+      }
+      router.refresh();
+    });
+  };
+
+  const archiveRoom = (r: InboxRow) => {
+    setGone((s) => new Set(s).add(r.id));
+    const send = (on: boolean, revert: () => void) => {
+      const fd = new FormData();
+      fd.set("roomId", r.id);
+      fd.set("on", on ? "1" : "");
+      startTransition(async () => {
+        const res = await setRoomArchived(null, fd);
+        if (res?.error) {
+          revert();
+          toast.error(res.error);
+          return;
+        }
+        router.refresh();
+      });
+    };
+    send(true, () =>
+      setGone((s) => {
+        const n = new Set(s);
+        n.delete(r.id);
+        return n;
+      }),
+    );
+    withUndo(t("m.inbox.archived", { name: r.name }, `Archived · ${r.name}`), () => {
+      setGone((s) => {
+        const n = new Set(s);
+        n.delete(r.id);
+        return n;
+      });
+      send(false, () => setGone((s) => new Set(s).add(r.id)));
+    });
+  };
 
   const markRead = (r: InboxRow, read: boolean) => {
     const fd = new FormData();
@@ -84,10 +144,22 @@ export function InboxView({ rows, eyebrow, title }: { rows: InboxRow[]; eyebrow:
       key={r.id}
       actions={[
         {
+          icon: "Flag",
+          label: isFlagged(r) ? t("m.inbox.unflag", undefined, "Unflag") : t("m.inbox.flag", undefined, "Flag"),
+          tone: "danger",
+          on: () => flagRoom(r),
+        },
+        {
           icon: r.unread > 0 ? "MailOpen" : "Mail",
           label: r.unread > 0 ? t("m.inbox.read", undefined, "Read") : t("m.inbox.unreadAction", undefined, "Unread"),
           tone: "info",
           on: () => markRead(r, r.unread > 0),
+        },
+        {
+          icon: "Archive",
+          label: t("m.inbox.archive", undefined, "Archive"),
+          tone: "neutral",
+          on: () => archiveRoom(r),
         },
       ]}
     >
@@ -98,7 +170,16 @@ export function InboxView({ rows, eyebrow, title }: { rows: InboxRow[]; eyebrow:
       >
         {r.kind === "channel" ? <span className="chan">#</span> : <span className="avatar-sm">{r.initials}</span>}
         <div style={{ minWidth: 0, flex: 1 }}>
-          <div className="t">{r.name}</div>
+          <div className="t">
+            {isFlagged(r) && (
+              <KIcon
+                name="Flag"
+                size={12}
+                style={{ color: "var(--p-danger)", marginRight: 5, verticalAlign: "-1px" }}
+              />
+            )}
+            {r.name}
+          </div>
           <div className="s" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {r.last}
           </div>
@@ -196,6 +277,8 @@ export function InboxView({ rows, eyebrow, title }: { rows: InboxRow[]; eyebrow:
       ) : (
         items.map(chatRow)
       )}
+
+      <UndoBar undo={undo} onUndo={clearUndo} undoLabel={t("m.undo", undefined, "Undo")} />
 
       {/* Kit FAB: New Message. */}
       <Link href="/m/inbox/new" className="fab" aria-label={t("m.inbox.new", undefined, "New Message")}>

@@ -1,13 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { KIcon } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  ActionBar,
+  EmptySkeleton,
+  GroupedList,
+  KIcon,
+  SwipeRow,
+  UndoBar,
+  useUndo,
+} from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
+import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { decideApprovalAction } from "./actions";
+import { decideApprovalAction, escalateApprovalAction } from "./actions";
 
 /** Queue channel — one constant so enqueue and drain agree (kit 21 W8). */
 const QUEUE_KIND = "approval-clear";
@@ -19,7 +27,7 @@ export type DeckCard = {
   id: string;
   /** The step the decision lands on (current_step_id, or the policy's first
    *  step). Null = stepless policy — undecidable ANYWHERE (the RPC requires
-   *  a step belonging to the policy); rendered read-only with a hint. */
+   *  a step belonging to the policy); swipe offers Escalate instead. */
   stepId: string | null;
   /** Policy name (the console's title for the same instance). */
   title: string;
@@ -36,32 +44,47 @@ export type DeckCard = {
 
 type Payload = { instanceId: string; stepId: string; decision: Decision; notes?: string };
 
+/** Undo window before a swipe decision commits (matches the kit's undo bar). */
+const COMMIT_MS = 5000;
+
 /**
- * COMPVSS · Approval deck — one card, one decision.
+ * COMPVSS · Approvals queue — kit 31 (v2.7) swipe canon.
  *
- * The manager band's clear-the-queue flow over `approval_instances`: the
- * oldest open instance is the top card; Approve / Decline are two large
- * thumb targets (no swipe lib exists in the repo, and buttons are the
- * honest UX — a swipe you can't take back is a decision you didn't mean);
- * "Decide Later" rotates the card to the back without deciding.
+ * The manager band's clear-the-queue list over `approval_instances`: kit
+ * ActionBar (search · group None/Type/Submitter · sort Recent/Type/Submitter),
+ * kit `.item` rows, and the swipe zone — Approve (ok) / Deny (danger) when the
+ * decision is decidable by you, Escalate (warn) on stepless instances that
+ * cannot take a decision anywhere yet.
  *
- * Decisions queue offline (CrisisPanel precedent): a stable id per instance
- * means a double tap or an offline reload re-enqueues onto the same slot,
- * and the server RPC rejects terminal instances so a stale replay after
- * someone else decided resolves as superseded, not as a duplicate write.
- * The card clears optimistically on "sent" AND "queued" — the queued state
- * is surfaced by the sync banner, not by pretending the tap failed.
+ * A swiped decision leaves the queue immediately and arms the 5s undo bar;
+ * the RPC write happens when the undo window lapses (an RPC decision is
+ * terminal — committing first would make Undo a lie). The write itself rides
+ * the offline queue (CrisisPanel precedent): a stable id per instance means a
+ * double swipe or an offline reload re-enqueues onto the same slot, and the
+ * server RPC rejects terminal instances so a stale replay after someone else
+ * decided resolves as superseded, not as a duplicate write. On decision the
+ * server notifies the submitter (bell row + push).
  */
 export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
   const t = useT();
+  const toast = useToast();
   const router = useRouter();
+  const [, startTransition] = useTransition();
+  const [query, setQuery] = useState("");
+  const [group, setGroup] = useState("none");
+  const [sort, setSort] = useState("recent");
+  const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [cleared, setCleared] = useState<ReadonlySet<string>>(new Set());
-  const [deferred, setDeferred] = useState<readonly string[]>([]);
-  const [note, setNote] = useState("");
-  const [busy, setBusy] = useState<Decision | null>(null);
+  const [escalated, setEscalated] = useState<ReadonlySet<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  const { undo, withUndo, clearUndo } = useUndo();
+  // Decisions waiting out their undo window: instanceId → armed commit.
+  const pending = useRef<
+    Map<string, { timer: ReturnType<typeof setTimeout>; card: DeckCard; decision: Decision }>
+  >(new Map());
 
-  const { online, pending, syncing, submit } = useOfflineQueue<Payload>(QUEUE_KIND, async (payload) => {
+  const { online, pending: queued, syncing, submit } = useOfflineQueue<Payload>(QUEUE_KIND, async (payload) => {
     const res = await decideApprovalAction(payload);
     if (res?.error) {
       setError(res.error);
@@ -70,58 +93,172 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
     return true;
   });
 
-  const decidable = useMemo(() => cards.filter((c) => c.stepId != null), [cards]);
-  const stepless = useMemo(() => cards.filter((c) => c.stepId == null), [cards]);
-
-  // Deck order: server order (oldest first), minus cleared, with deferred
-  // cards rotated to the back in the order they were skipped.
-  const remaining = useMemo(() => {
-    const open = decidable.filter((c) => !cleared.has(c.id));
-    const deferredSet = new Set(deferred);
-    const front = open.filter((c) => !deferredSet.has(c.id));
-    const back = deferred
-      .map((id) => open.find((c) => c.id === id))
-      .filter((c): c is DeckCard => c != null);
-    return [...front, ...back];
-  }, [decidable, cleared, deferred]);
-
-  const card = remaining[0] ?? null;
-  const clearedCount = decidable.length - remaining.length;
-
-  async function decide(target: DeckCard, decision: Decision) {
-    if (busy || !target.stepId) return;
-    setError(null);
-    setBusy(decision);
-    try {
-      // Stable id: one queue slot per instance — the last decision made
-      // while offline is the one that replays.
+  const commit = (target: DeckCard, decision: Decision) => {
+    void (async () => {
       const outcome = await submit(`${QUEUE_KIND}-${target.id}`, {
         instanceId: target.id,
-        stepId: target.stepId,
+        stepId: target.stepId!,
         decision,
-        notes: note.trim() || undefined,
       });
-      if (outcome === "failed") return; // error already surfaced by send
-      setCleared((prev) => new Set(prev).add(target.id));
-      setDeferred((prev) => prev.filter((id) => id !== target.id));
-      setNote("");
       if (outcome === "sent") router.refresh();
-    } finally {
-      setBusy(null);
-    }
-  }
+    })();
+  };
+  const commitRef = useRef(commit);
+  commitRef.current = commit;
 
-  function defer(target: DeckCard) {
-    if (busy) return;
-    setNote("");
-    setDeferred((prev) => [...prev.filter((id) => id !== target.id), target.id]);
-  }
+  // Flush still-pending commits if the list unmounts mid-window — the
+  // decision was taken; navigating away must not silently drop it.
+  useEffect(() => {
+    const armed = pending.current;
+    return () => {
+      armed.forEach(({ timer, card, decision }) => {
+        clearTimeout(timer);
+        commitRef.current(card, decision);
+      });
+      armed.clear();
+    };
+  }, []);
+
+  const decide = (target: DeckCard, decision: Decision) => {
+    if (!target.stepId || pending.current.has(target.id)) return;
+    setError(null);
+    setCleared((prev) => new Set(prev).add(target.id));
+    const timer = setTimeout(() => {
+      pending.current.delete(target.id);
+      commit(target, decision);
+    }, COMMIT_MS);
+    pending.current.set(target.id, { timer, card: target, decision });
+    const verdict =
+      decision === "approved"
+        ? t("m.requests.swipe.approved", undefined, "Approved")
+        : t("m.requests.swipe.denied", undefined, "Denied");
+    withUndo(`${verdict} · ${target.title}`, () => {
+      const armed = pending.current.get(target.id);
+      if (armed) {
+        clearTimeout(armed.timer);
+        pending.current.delete(target.id);
+      }
+      setCleared((prev) => {
+        const n = new Set(prev);
+        n.delete(target.id);
+        return n;
+      });
+    });
+  };
+
+  const escalate = (target: DeckCard) => {
+    setEscalated((prev) => new Set(prev).add(target.id));
+    const fd = new FormData();
+    fd.set("instanceId", target.id);
+    startTransition(async () => {
+      const res = await escalateApprovalAction(null, fd);
+      if (res?.error) {
+        setEscalated((prev) => {
+          const n = new Set(prev);
+          n.delete(target.id);
+          return n;
+        });
+        toast.error(res.error);
+        return;
+      }
+      toast.warning(t("m.requests.swipe.escalatedToast", undefined, "Escalated"), { description: target.title });
+    });
+  };
+
+  const remaining = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return cards
+      .filter((c) => !cleared.has(c.id))
+      .filter((c) => !q || `${c.title} ${c.kind} ${c.requester} ${c.summary ?? ""}`.toLowerCase().includes(q))
+      .sort((a, b) =>
+        sort === "type"
+          ? a.kind.localeCompare(b.kind)
+          : sort === "submitter"
+            ? a.requester.localeCompare(b.requester)
+            : 0,
+      );
+  }, [cards, cleared, query, sort]);
+
+  const row = (c: DeckCard) => {
+    const mine = c.stepId != null;
+    return (
+      <SwipeRow
+        key={c.id}
+        actions={
+          mine
+            ? [
+                {
+                  icon: "Check",
+                  label: t("m.requests.approve", undefined, "Approve"),
+                  tone: "ok",
+                  on: () => decide(c, "approved"),
+                },
+                {
+                  icon: "X",
+                  label: t("m.requests.swipe.deny", undefined, "Deny"),
+                  tone: "danger",
+                  on: () => decide(c, "rejected"),
+                },
+              ]
+            : [
+                {
+                  icon: "TrendingUp",
+                  label: t("m.requests.swipe.escalate", undefined, "Escalate"),
+                  tone: "warn",
+                  on: () => escalate(c),
+                },
+              ]
+        }
+      >
+        <div className="item" style={{ margin: 0 }}>
+          <span className="bar" style={{ background: mine ? "var(--p-warning)" : "var(--p-border)" }} />
+          <KIcon name="CheckCheck" size={18} style={{ color: "var(--p-text-2)", flex: "none" }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t">{c.title}</div>
+            <div className="s">
+              {c.kind} · {c.requester} · {c.age}
+              {c.summary ? ` · ${c.summary}` : ""}
+              {c.amount ? ` · ${c.amount}` : ""}
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+            {mine ? (
+              <span className="ps-badge ps-badge--warn">{t("m.requests.yourAction", undefined, "Your Action")}</span>
+            ) : (
+              <span className="ps-badge ps-badge--neutral">
+                {t("m.requests.deck.steplessBadge", undefined, "No Steps")}
+              </span>
+            )}
+            {escalated.has(c.id) && (
+              <span
+                className="s"
+                style={{ fontSize: 10, color: "var(--p-danger)", display: "flex", alignItems: "center", gap: 3 }}
+              >
+                <KIcon name="TrendingUp" size={10} /> {t("m.requests.escalatedTag", undefined, "Escalated")}
+              </span>
+            )}
+          </div>
+        </div>
+      </SwipeRow>
+    );
+  };
+
+  const grouped = useMemo(() => {
+    if (group === "none") return null;
+    const keyF = group === "type" ? (c: DeckCard) => c.kind : (c: DeckCard) => c.requester;
+    const m = new Map<string, DeckCard[]>();
+    remaining.forEach((c) => {
+      const k = keyF(c);
+      m.set(k, [...(m.get(k) ?? []), c]);
+    });
+    return Array.from(m.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [group, remaining]);
 
   return (
-    <section aria-label={t("m.requests.deck.section", undefined, "Approval Deck")}>
+    <section aria-label={t("m.requests.deck.section", undefined, "Approvals Queue")}>
       <OfflineSyncBanner
         online={online}
-        pending={pending}
+        pending={queued}
         syncing={syncing}
         labels={{
           offline: t(
@@ -140,138 +277,115 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
         </div>
       )}
 
-      {card == null ? (
-        <EmptyState
-          size="compact"
+      <ActionBar
+        k="ap"
+        query={query}
+        setQuery={setQuery}
+        placeholder={t("m.requests.search", undefined, "Search Approvals…")}
+        group={group}
+        setGroup={setGroup}
+        groupOpts={[
+          ["none", t("m.requests.group.none", undefined, "None")],
+          ["type", t("m.requests.group.type", undefined, "Type")],
+          ["submitter", t("m.requests.group.submitter", undefined, "Submitter")],
+        ]}
+        sort={sort}
+        setSort={setSort}
+        sortOpts={[
+          ["recent", t("m.requests.sort.recent", undefined, "Recent")],
+          ["type", t("m.requests.sort.type", undefined, "Type")],
+          ["submitter", t("m.requests.sort.submitter", undefined, "Submitter")],
+        ]}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+      />
+
+      {remaining.length === 0 ? (
+        <EmptySkeleton
+          cols={[
+            t("m.requests.col.request", undefined, "Request"),
+            t("m.requests.col.type", undefined, "Type"),
+            t("m.requests.col.stage", undefined, "Stage"),
+          ]}
           title={t("m.requests.empty.title", undefined, "All Clear")}
-          description={
-            clearedCount > 0
-              ? t("m.requests.deck.clearedAll", undefined, "Queue cleared. Nothing waits on your decision.")
-              : t("m.requests.deck.emptyBody", undefined, "Nothing waits on your decision right now.")
-          }
+          hint={t("m.requests.deck.emptyBody", undefined, "Nothing waits on your decision right now.")}
+        />
+      ) : grouped ? (
+        <GroupedList<DeckCard>
+          skey="ap"
+          groups={grouped}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          renderRow={row}
         />
       ) : (
-        <>
-          {/* Deck position — how much queue is left, not a pager. */}
-          <div className="sech">
-            <h2>
-              {remaining.length === 1
-                ? t("m.requests.deck.oneLeft", undefined, "1 To Clear")
-                : t("m.requests.deck.left", { n: remaining.length }, `${remaining.length} To Clear`)}
-            </h2>
-          </div>
-
-          <div className="item" style={{ display: "block" }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <KIcon
-                name="CheckCheck"
-                size={18}
-                style={{ color: "var(--p-text-2)", flex: "none", marginTop: 2 }}
-              />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{card.title}</div>
-                <div className="s">
-                  {card.kind} · {card.requester} · {card.age}
-                </div>
-              </div>
-            </div>
-
-            {(card.summary || card.amount) && (
-              <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 10 }}>
-                {card.summary && (
-                  <div className="s" style={{ flex: 1, minWidth: 0 }}>
-                    {card.summary}
-                  </div>
-                )}
-                {card.amount && (
-                  <div className="t" style={{ flex: "none" }}>
-                    {card.amount}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <textarea
-              className="ps-input"
-              rows={2}
-              maxLength={2000}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder={t("m.requests.deck.notePlaceholder", undefined, "Add a note (optional)")}
-              style={{ width: "100%", marginTop: 10 }}
-            />
-
-            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-              <button
-                type="button"
-                className="ps-btn ps-btn--cta ps-btn--lg"
-                style={{ flex: 1, justifyContent: "center" }}
-                disabled={busy != null}
-                onClick={() => decide(card, "approved")}
-              >
-                <KIcon name="Check" size={15} />{" "}
-                {busy === "approved"
-                  ? t("m.requests.deck.sending", undefined, "Sending…")
-                  : t("m.requests.approve", undefined, "Approve")}
-              </button>
-              <button
-                type="button"
-                className="ps-btn ps-btn--danger ps-btn--lg"
-                style={{ flex: 1, justifyContent: "center" }}
-                disabled={busy != null}
-                onClick={() => decide(card, "rejected")}
-              >
-                <KIcon name="X" size={15} />{" "}
-                {busy === "rejected"
-                  ? t("m.requests.deck.sending", undefined, "Sending…")
-                  : t("m.requests.decline", undefined, "Decline")}
-              </button>
-            </div>
-
-            {remaining.length > 1 && (
-              <button
-                type="button"
-                className="ps-btn ps-btn--ghost"
-                style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
-                disabled={busy != null}
-                onClick={() => defer(card)}
-              >
-                {t("m.requests.deck.later", undefined, "Decide Later")}
-              </button>
-            )}
-          </div>
-        </>
+        remaining.map(row)
       )}
 
-      {/* Stepless policies: the RPC (and the console) can only land a
-          decision on a policy step, so these are undecidable everywhere
-          until the policy gains steps. Shown, not hidden — an invisible
-          queue item is how something waits forever. */}
-      {stepless.length > 0 && (
-        <>
-          <div className="sech">
-            <h2>{t("m.requests.deck.steplessHead", undefined, "Waiting On Policy Setup")}</h2>
-          </div>
-          {stepless.map((c) => (
-            <div className="item" key={c.id}>
-              <span className="bar" style={{ background: "var(--p-warning)" }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{c.title}</div>
-                <div className="s">
-                  {c.kind} · {c.requester} · {c.age}
-                </div>
-              </div>
-            </div>
-          ))}
-          <p className="hint" style={{ marginTop: 4 }}>
-            {t(
-              "m.requests.deck.steplessHint",
-              undefined,
-              "These policies have no review steps yet, so no decision can be recorded. Add steps under Governance · Approvals in the console.",
-            )}
-          </p>
-        </>
+      {remaining.some((c) => c.stepId == null) && (
+        <p className="hint" style={{ marginTop: 4 }}>
+          {t(
+            "m.requests.deck.steplessHint",
+            undefined,
+            "Instances marked No Steps have no review steps yet, so no decision can be recorded. Escalate pings the org admins; steps are added under Governance · Approvals in the console.",
+          )}
+        </p>
       )}
+
+      <UndoBar undo={undo} onUndo={clearUndo} undoLabel={t("m.undo", undefined, "Undo")} />
     </section>
+  );
+}
+
+/**
+ * Member-side swipe: the decision is NOT yours, so the canon offers Escalate
+ * (warn) — a real nudge (bell rows + push to the manager band) on your own
+ * still-open submission. Decided rows render plain.
+ */
+export function EscalateSwipe({
+  instanceId,
+  title,
+  open,
+  children,
+}: {
+  instanceId: string;
+  title: string;
+  open: boolean;
+  children: ReactNode;
+}) {
+  const t = useT();
+  const toast = useToast();
+  const [, startTransition] = useTransition();
+  const [done, setDone] = useState(false);
+  if (!open) return <>{children}</>;
+  return (
+    <SwipeRow
+      actions={[
+        {
+          icon: "TrendingUp",
+          label: t("m.requests.swipe.escalate", undefined, "Escalate"),
+          tone: "warn",
+          on: () => {
+            if (done) {
+              toast.info(t("m.requests.escalatedTag", undefined, "Escalated"), { description: title });
+              return;
+            }
+            const fd = new FormData();
+            fd.set("instanceId", instanceId);
+            startTransition(async () => {
+              const res = await escalateApprovalAction(null, fd);
+              if (res?.error) {
+                toast.error(res.error);
+                return;
+              }
+              setDone(true);
+              toast.warning(t("m.requests.swipe.escalatedToast", undefined, "Escalated"), { description: title });
+            });
+          },
+        },
+      ]}
+    >
+      {children}
+    </SwipeRow>
   );
 }

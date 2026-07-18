@@ -45,7 +45,7 @@ export default async function ActivityPage() {
   const [{ data: events }, { data: notifs }] = await Promise.all([
     supabase
       .from("assignment_events")
-      .select("id, event_kind, from_state, to_state, body, at")
+      .select("id, event_kind, from_state, to_state, body, at, assignment_id")
       .eq("org_id", session.orgId)
       .eq("actor_user_id", session.userId)
       .order("at", { ascending: false })
@@ -62,6 +62,24 @@ export default async function ActivityPage() {
 
   const rows: ActivityRow[] = [];
 
+  // Kit 31 resolution #19b (openAssetLink): asset events deep-link to the
+  // assignment's record card, Airtable-linked-record style. One round trip
+  // hydrates the asset names for the timeline titles.
+  const assignmentIds = Array.from(
+    new Set((events ?? []).map((e) => e.assignment_id as string | null).filter((v): v is string => v != null)),
+  );
+  const assignmentTitle = new Map<string, string>();
+  if (assignmentIds.length) {
+    const { data: assignments } = await supabase
+      .from("assignments")
+      .select("id, title")
+      .in("id", assignmentIds)
+      .is("deleted_at", null);
+    for (const a of (assignments ?? []) as Array<{ id: string; title: string | null }>) {
+      if (a.title) assignmentTitle.set(a.id, a.title);
+    }
+  }
+
   for (const e of events ?? []) {
     const meta = EVENT_KIND_META[(e.event_kind as string) ?? ""] ?? {
       type: "Activity",
@@ -71,13 +89,16 @@ export default async function ActivityPage() {
       e.event_kind === "state_change" && e.to_state
         ? `${e.from_state ?? "—"} → ${e.to_state}`
         : ((e.body as string) ?? "");
+    const assignmentId = (e.assignment_id as string | null) ?? null;
+    const assetName = assignmentId ? assignmentTitle.get(assignmentId) : undefined;
     rows.push({
       id: `ev-${e.id}`,
       type: meta.type,
       icon: meta.icon,
-      title: detail || meta.type,
+      title: assetName ? `${assetName} · ${detail || meta.type}` : detail || meta.type,
       detail,
       at: (e.at as string) ?? "",
+      href: assignmentId ? `/m/advances/${assignmentId}` : null,
     });
   }
 
@@ -90,6 +111,7 @@ export default async function ActivityPage() {
       title: (n.title as string) ?? "",
       detail: (n.body as string) ?? "",
       at: (n.created_at as string) ?? "",
+      href: null,
     });
   }
 

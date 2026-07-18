@@ -55,6 +55,7 @@ export default async function TimePage() {
     // An entry with no end is the shift you are standing in right now. Say so
     // rather than rendering a 0h duration.
     duration: e.ended_at ? formatMinutes(e.duration_minutes) : t("m.time.running", undefined, "Running"),
+    durationMin: e.duration_minutes ?? 0,
     open: !e.ended_at,
     category: e.activity_category,
     note: e.description,

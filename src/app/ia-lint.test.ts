@@ -180,7 +180,15 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
         .filter((l) => !/^\s*(\/\/|\/\*|\*)/.test(l))
         .join("\n");
       if (!EMPTY_COPY_RE.test(stripped)) continue;
-      if (!/from\s+["']@\/components\/ui\/EmptyState["']/.test(stripped)) {
+      // Two sanctioned primitives: <EmptyState> (the app-wide zero state) and
+      // the COMPVSS kit's <EmptySkeleton> (kit 31 resolution #16 — data-view
+      // empty states keep the view's column headers + ghost rows). A mobile
+      // list that renders its void through EmptySkeleton is compliant.
+      const importsEmptyState = /from\s+["']@\/components\/ui\/EmptyState["']/.test(stripped);
+      const importsEmptySkeleton =
+        /\bEmptySkeleton\b[\s\S]{0,200}?from\s+["']@\/components\/mobile\/kit["']/.test(stripped) ||
+        (/\bEmptySkeleton\b/.test(stripped) && /from\s+["']@\/components\/mobile\/kit["']/.test(stripped));
+      if (!importsEmptyState && !importsEmptySkeleton) {
         offenders.push(rel);
       }
     }

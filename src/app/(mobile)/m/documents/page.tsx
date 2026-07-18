@@ -104,9 +104,10 @@ export default async function MobileDocsPage() {
       cat: toTitle(d.type),
       scope: scopeFor(d.scope, d.submitted_by === session.userId),
       kind: "deliverable",
-      // Deliverable file delivery rides its own signed-URL endpoint, not
-      // the personal-document DocDownloadLink — so no inline download here.
-      downloadable: false,
+      // Deliverable file delivery rides its own signed-URL endpoint
+      // (/api/v1/deliverables/{id}/download) — the swipe Save opens it when a
+      // file exists.
+      downloadable: d.file_path != null,
       updated: d.updated_at,
     })),
     ...personal.map<DocItem>((p) => ({

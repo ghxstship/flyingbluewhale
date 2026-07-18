@@ -5,7 +5,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
-import { ApprovalDeck, type DeckCard } from "./ApprovalDeck";
+import { ApprovalDeck, EscalateSwipe, type DeckCard } from "./ApprovalDeck";
 
 export const dynamic = "force-dynamic";
 
@@ -182,24 +182,29 @@ export default async function MobileRequestsPage() {
           {rows.map((r) => {
             const card = cards.find((c) => c.id === r.id);
             const tone = STATE_TONE[r.state] ?? "neutral";
+            // Kit 31 swipe canon: the decision is not yours → Escalate (warn)
+            // on still-open submissions (bell + push to the manager band).
+            const open = ["initiated", "in_review", "escalated"].includes(r.state);
             return (
-              <div className="item" key={r.id}>
-                <KIcon
-                  name="FileCheck"
-                  size={18}
-                  style={{ color: "var(--p-text-2)", flex: "none" }}
-                />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="t">{card?.title}</div>
-                  <div className="s">
-                    {card?.kind} · {card?.age}
-                    {card?.amount ? ` · ${card.amount}` : ""}
+              <EscalateSwipe key={r.id} instanceId={r.id} title={card?.title ?? ""} open={open}>
+                <div className="item" style={{ margin: 0 }}>
+                  <KIcon
+                    name="FileCheck"
+                    size={18}
+                    style={{ color: "var(--p-text-2)", flex: "none" }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="t">{card?.title}</div>
+                    <div className="s">
+                      {card?.kind} · {card?.age}
+                      {card?.amount ? ` · ${card.amount}` : ""}
+                    </div>
                   </div>
+                  <span className={`ps-badge ps-badge--${tone}`}>
+                    {t(`m.requests.state.${r.state}`, undefined, stateLabel(r.state))}
+                  </span>
                 </div>
-                <span className={`ps-badge ps-badge--${tone}`}>
-                  {t(`m.requests.state.${r.state}`, undefined, stateLabel(r.state))}
-                </span>
-              </div>
+              </EscalateSwipe>
             );
           })}
         </>

@@ -34,7 +34,10 @@ export function stateTone(s: TaskState): "ok" | "warn" | "info" | "neutral" {
  * reachable from `in_progress`/`review`/`blocked`.
  */
 export const NEXT_TASK_STATES: Record<TaskState, TaskState[]> = {
-  todo: ["in_progress", "blocked"],
+  // `todo → done` is legal: the kit 31 swipe canon's Done/Reopen toggle marks
+  // small field tasks done straight from Open, without a ceremonial pass
+  // through in_progress.
+  todo: ["in_progress", "blocked", "done"],
   in_progress: ["review", "blocked", "done", "todo"],
   blocked: ["in_progress", "todo"],
   review: ["done", "in_progress", "blocked"],
@@ -68,4 +71,8 @@ export type KitTask = {
   priority: "High" | "Medium" | "Low";
   due: string;
   assignee: string;
+  /** Kit 31 swipe canon — `tasks.flagged_at` is set. */
+  flagged: boolean;
+  /** Kit 31 swipe canon — `tasks.archived_at` is set (hidden by default). */
+  archived: boolean;
 };

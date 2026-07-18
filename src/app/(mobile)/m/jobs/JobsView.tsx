@@ -2,7 +2,7 @@
 
 import { useActionState, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
+import { ActionBar, EmptySkeleton, FormScreen, GroupedList, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { applyToJob, postJob, type State } from "./actions";
@@ -71,8 +71,10 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
   const t = useT();
   const [q, setQ] = useState("");
   const [sort, setSort] = useState("recent");
+  const [group, setGroup] = useState("none");
   const [types, setTypes] = useState<Set<string>>(new Set());
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const typeList = useMemo(() => Array.from(new Set(gigs.map((g) => g.employmentType))).sort(), [gigs]);
   const toggleType = (ty: string) =>
@@ -90,45 +92,27 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
         (!needle || (g.role + " " + g.org + " " + g.tags.join(" ")).toLowerCase().includes(needle)) &&
         (types.size === 0 || types.has(g.employmentType)),
     );
+    const rate = (s: string) => parseFloat(String(s).replace(/[^0-9.]/g, "")) || 0;
     if (sort === "role") return filtered.slice().sort((a, b) => a.role.localeCompare(b.role));
+    if (sort === "rate") return filtered.slice().sort((a, b) => rate(b.rate) - rate(a.rate));
+    if (sort === "date") return filtered.slice().sort((a, b) => String(a.when).localeCompare(String(b.when)));
     if (sort === "applicants") return filtered.slice().sort((a, b) => b.applicants - a.applicants);
     return filtered;
   }, [gigs, q, sort, types]);
 
-  return (
-    <>
-      <ActionBar
-        k="gigs"
-        query={q}
-        setQuery={setQ}
-        placeholder={t("m.gigs.search", undefined, "Search jobs…")}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["recent", t("m.gigs.sort.recent", undefined, "Recent")],
-          ["role", t("m.gigs.sort.role", undefined, "Role")],
-          ["applicants", t("m.gigs.sort.applicants", undefined, "Applicants")],
-        ]}
-        filterActive={types.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <div>
-            {typeList.map((ty) => (
-              <TogRow key={ty} label={ty} on={types.has(ty)} set={() => toggleType(ty)} />
-            ))}
-          </div>
-        }
-      />
+  // Kit 31 resolution #5 — group enum (None / Organization / Type).
+  const grouped = useMemo<[string, Gig[]][] | null>(() => {
+    if (group === "none") return null;
+    const keyF = group === "org" ? (g: Gig) => g.org : (g: Gig) => g.employmentType;
+    const m = new Map<string, Gig[]>();
+    items.forEach((g) => {
+      const k = keyF(g);
+      m.set(k, [...(m.get(k) ?? []), g]);
+    });
+    return Array.from(m.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [group, items]);
 
-      <div className="composer-cta" style={{ marginBottom: 12 }} role="button" tabIndex={0}>
-        <span className="more-ic">
-          <KIcon name="Plus" size={18} />
-        </span>
-        <span className="cc-box">{t("m.gigs.postJob", undefined, "Post a job…")}</span>
-      </div>
-
-      {items.map((g) => (
+  const gigCard = (g: Gig) => (
         <div className="item tap" key={g.id} style={{ display: "block" }}>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 6 }}>
             <span className="job-logo">{g.logo}</span>
@@ -161,12 +145,72 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
             <ApplyButton gig={g} />
           </div>
         </div>
-      ))}
+  );
+
+  return (
+    <>
+      <ActionBar
+        k="gigs"
+        query={q}
+        setQuery={setQ}
+        placeholder={t("m.gigs.search", undefined, "Search jobs…")}
+        group={group}
+        setGroup={setGroup}
+        groupOpts={[
+          ["none", t("m.gigs.group.none", undefined, "None")],
+          ["org", t("m.gigs.group.org", undefined, "Organization")],
+          ["type", t("m.gigs.group.type", undefined, "Type")],
+        ]}
+        sort={sort}
+        setSort={setSort}
+        sortOpts={[
+          ["recent", t("m.gigs.sort.recent", undefined, "Recent")],
+          ["rate", t("m.gigs.sort.rate", undefined, "Rate")],
+          ["role", t("m.gigs.sort.role", undefined, "Role")],
+          ["date", t("m.gigs.sort.date", undefined, "Date")],
+          ["applicants", t("m.gigs.sort.applicants", undefined, "Applicants")],
+        ]}
+        filterActive={types.size}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        filterChildren={
+          <div>
+            {typeList.map((ty) => (
+              <TogRow key={ty} label={ty} on={types.has(ty)} set={() => toggleType(ty)} />
+            ))}
+          </div>
+        }
+      />
+
+      <div className="composer-cta" style={{ marginBottom: 12 }} role="button" tabIndex={0}>
+        <span className="more-ic">
+          <KIcon name="Plus" size={18} />
+        </span>
+        <span className="cc-box">{t("m.gigs.postJob", undefined, "Post a job…")}</span>
+      </div>
+
+      {grouped ? (
+        <GroupedList<Gig>
+          skey="gigs"
+          groups={grouped}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          renderRow={gigCard}
+        />
+      ) : (
+        items.map(gigCard)
+      )}
 
       {!items.length && (
-        <div className="s" style={{ color: "var(--p-text-3)", padding: "16px 4px" }}>
-          {t("m.gigs.noMatch", undefined, "Nothing matches your search.")}
-        </div>
+        <EmptySkeleton
+          cols={[
+            t("m.gigs.col.role", undefined, "Role"),
+            t("m.gigs.col.rate", undefined, "Rate"),
+            t("m.gigs.col.when", undefined, "When"),
+          ]}
+          title={t("m.gigs.empty.title", undefined, "No Jobs")}
+          hint={t("m.gigs.empty.hint", undefined, "Open shifts and gigs from orgs on your network land here.")}
+        />
       )}
       {/* Kit FAB: Post Job — perm `approve` in the kit's CREATE map, the
           manager band here. The action re-checks server-side. */}

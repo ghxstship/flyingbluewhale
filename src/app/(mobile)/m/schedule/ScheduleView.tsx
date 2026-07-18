@@ -8,6 +8,7 @@ import {
   type FieldDef,
 } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { EmptySkeleton } from "@/components/mobile/kit";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 /** Plain event shape handed down from the server page. */
@@ -96,19 +97,34 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
       .filter((e) => !query || (e.name + " " + e.sub).toLowerCase().includes(query.toLowerCase()))
       .slice()
       .sort((a, b) =>
-        sort === "name" ? a.name.localeCompare(b.name) : String(a.time).localeCompare(String(b.time)),
+        sort === "name"
+          ? a.name.localeCompare(b.name)
+          : sort === "type"
+            ? a.type.localeCompare(b.type)
+            : String(a.time).localeCompare(String(b.time)),
       );
   }, [events, types, query, sort]);
 
   const grouped = useMemo(() => {
-    if (group !== "type") return null;
-    const m: Record<string, SchedEvent[]> = {};
-    evs.forEach((e) => {
-      (m[e.type] = m[e.type] || []).push(e);
-    });
-    return (Object.keys(typeMeta) as Array<keyof typeof typeMeta>)
-      .filter((k) => m[k])
-      .map((k) => [typeMeta[k].label, m[k]!] as [string, SchedEvent[]]);
+    if (group === "type") {
+      const m: Record<string, SchedEvent[]> = {};
+      evs.forEach((e) => {
+        (m[e.type] = m[e.type] || []).push(e);
+      });
+      return (Object.keys(typeMeta) as Array<keyof typeof typeMeta>)
+        .filter((k) => m[k])
+        .map((k) => [typeMeta[k].label, m[k]!] as [string, SchedEvent[]]);
+    }
+    if (group === "state") {
+      const m: Record<string, SchedEvent[]> = {};
+      evs.forEach((e) => {
+        (m[e.state] = m[e.state] || []).push(e);
+      });
+      return Object.keys(m)
+        .sort()
+        .map((k) => [k, m[k]!] as [string, SchedEvent[]]);
+    }
+    return null;
   }, [evs, group, typeMeta]);
 
   const eventRow = (e: SchedEvent) => {
@@ -179,12 +195,14 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
         groupOpts={[
           ["none", labels.groupNone],
           ["type", labels.groupType],
+          ["state", labels.colStatus],
         ]}
         sort={sort}
         setSort={setSort}
         sortOpts={[
           ["time", labels.sortTime],
           ["name", labels.sortName],
+          ["type", labels.colType],
         ]}
         filterActive={types.size}
         menuOpen={menuOpen}
@@ -240,7 +258,7 @@ export function ScheduleView({ events, labels }: { events: SchedEvent[]; labels:
           evs.map((e) => eventRow(e))
         ))}
       {view === "list" && !evs.length && (
-        <EmptyState title={labels.empty} description={labels.emptyBody} />
+        <EmptySkeleton cols={[labels.colEvent, labels.colType, labels.colTime]} title={labels.empty} hint={labels.emptyBody} />
       )}
 
       {view === "calendar" && (

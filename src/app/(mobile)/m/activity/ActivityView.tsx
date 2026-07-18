@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
@@ -12,6 +13,8 @@ export type ActivityRow = {
   title: string;
   detail: string;
   at: string;
+  /** Kit 31 resolution #19b — linked asset records open their detail card. */
+  href: string | null;
 };
 
 type Labels = { search: string; emptyTitle: string; emptyBody: string };
@@ -86,7 +89,14 @@ export function ActivityView({ rows, labels }: { rows: ActivityRow[]; labels: La
                 <KIcon name={r.icon} size={8} />
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="ttxt">{r.title}</div>
+                {r.href ? (
+                  <Link href={r.href} className="ttxt" style={{ display: "flex", alignItems: "center", gap: 5, color: "inherit", textDecoration: "none" }}>
+                    <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>{r.title}</span>
+                    <KIcon name="ChevronRight" size={13} style={{ color: "var(--p-text-3)", flex: "none" }} />
+                  </Link>
+                ) : (
+                  <div className="ttxt">{r.title}</div>
+                )}
                 {/* rel() uses the runtime-default locale + timezone, which
                     differs between the SSR server (UTC) and the browser, so the
                     formatted text mismatches on hydration → React #418. The row

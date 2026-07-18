@@ -75,7 +75,7 @@ export default async function MobileAlertsPage() {
   // Own notifications + org-wide broadcasts (user_id null), org-pinned.
   const { data } = await supabase
     .from("notifications")
-    .select("id, kind, title, body, created_at, read_at, user_id")
+    .select("id, kind, title, body, created_at, read_at, flagged_at, user_id")
     .eq("org_id", session.orgId)
     .or(`user_id.eq.${session.userId},user_id.is.null`)
     .is("deleted_at", null)
@@ -89,6 +89,8 @@ export default async function MobileAlertsPage() {
     body: string | null;
     created_at: string;
     read_at: string | null;
+    flagged_at: string | null;
+    user_id: string | null;
   };
   const rows = (data ?? []) as AlertRow[];
   const unread = rows.filter((a) => a.read_at == null).length;
@@ -100,10 +102,15 @@ export default async function MobileAlertsPage() {
       title: a.title,
       body: a.body || toTitle(a.kind),
       tone,
+      typeLabel: toTitle(a.kind),
       color: TONE_VAR[tone] ?? "var(--p-text-3)",
       iconName: TONE_ICON[tone] ?? "Bell",
       when: relativeTime(a.created_at),
       read: a.read_at != null,
+      flagged: a.flagged_at != null,
+      // Broadcast rows (user_id NULL) have no per-user row state — RLS only
+      // allows own-row updates, so the swipe writes are gated to own rows.
+      own: a.user_id === session.userId,
       sortAt: a.created_at,
     };
   });

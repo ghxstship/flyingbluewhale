@@ -98,6 +98,7 @@ export const OPS_CALCS: OpsCalcDef[] = [
   { id: "throughput", name: "Gate Throughput", icon: "ScanLine", desc: "Entry time for a crowd" },
   { id: "power", name: "Power Load", icon: "Zap", desc: "Watts to amps · breaker size" },
   { id: "barstock", name: "Bar Stock", icon: "Wine", desc: "Servings & cases needed" },
+  { id: "restroom", name: "Restroom Count", icon: "Toilet", desc: "Standard · VIP · ADA units" },
 ];
 
 function OpsCalc({ id, back }: { id: string; back: () => void }) {
@@ -168,6 +169,27 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
     unit = "cases (24/ea)";
     hint = isNaN(servings) ? "" : `~${fmt.number(servings)} servings. Adjust drinks/guest for the crowd.`;
     body = <div className="frow"><div className="fld"><label htmlFor="bs-guests">Guests</label><input id="bs-guests" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="bs-drinks">Drinks / Guest</label><input id="bs-drinks" type="number" value={b} placeholder="2" onChange={(e) => setB(e.target.value)} /></div></div>;
+  }
+  if (id === "restroom") {
+    // Kit 31: Standard 1:100 · VIP 1:50 · ADA = 5% of standard (min 1, per
+    // ADAAG) · +25% units for events longer than 6 hours.
+    const hrs = n2 || 6;
+    const durF = hrs > 6 ? 1.25 : 1;
+    const std = isNaN(n1) ? NaN : Math.ceil((n1 / 100) * durF);
+    const vip = isNaN(n1) ? NaN : Math.ceil((n1 / 50) * durF);
+    const ada = isNaN(std) ? NaN : Math.max(1, Math.ceil(std * 0.05));
+    const sel = ratio === 50 ? vip : ratio === 20 ? ada : std;
+    result = isNaN(sel) ? "—" : fmt.number(sel);
+    unit = ratio === 50 ? "VIP units" : ratio === 20 ? "ADA units" : "standard units";
+    hint = isNaN(std)
+      ? "Add attendance to size the compound."
+      : `Full compound: ${std} standard · ${vip} VIP (all-VIP zone) · ${ada} ADA. ADA = 5% of standard, min 1, on accessible routes.`;
+    body = (
+      <>
+        <div className="frow"><div className="fld"><label htmlFor="rr-att">Attendance</label><input id="rr-att" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div><div className="fld"><label htmlFor="rr-hrs">Event Hours</label><input id="rr-hrs" type="number" value={b} placeholder="6" onChange={(e) => setB(e.target.value)} /></div></div>
+        <div className="fld"><span className="fld-label" id="rr-tier-label">Tier</span><div className="seg2" role="group" aria-labelledby="rr-tier-label">{([["Standard 1:100", 100], ["VIP 1:50", 50], ["ADA 5%", 20]] as [string, number][]).map(([l, r]) => <button key={r} type="button" className={ratio === r ? "on" : ""} onClick={() => setRatio(r)}>{l}</button>)}</div></div>
+      </>
+    );
   }
   return (
     <div>

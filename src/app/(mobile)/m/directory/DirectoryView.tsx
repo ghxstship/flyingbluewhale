@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ActionBar, DataTable, GroupedList, SwipeRow } from "@/components/mobile/kit";
+import { useRouter } from "next/navigation";
+import { ActionBar, DataTable, EmptySkeleton, GroupedList, SwipeRow } from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { fmtPosition } from "@/lib/mobile/fmt-position";
 
 export type RosterPerson = {
   id: string;
@@ -47,6 +48,7 @@ type Labels = {
 };
 
 export function DirectoryView({ people, labels }: { people: RosterPerson[]; labels: Labels }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [view, setView] = useState<ViewMode>("list");
   const [group, setGroup] = useState("none");
@@ -79,7 +81,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
       key={p.id}
       onClick={() => {}}
       actions={[
-        { icon: "MessageSquare", label: labels.message, tone: "info", on: () => {} },
+        { icon: "MessageSquare", label: labels.message, tone: "info", on: () => router.push("/m/inbox") },
         {
           icon: "Phone",
           label: labels.call,
@@ -106,7 +108,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
         <div style={{ minWidth: 0 }}>
           <div className="t">{p.name}</div>
           <div className="s">
-            {p.role} · {p.team}
+            {fmtPosition(p.role)} · {p.team}
           </div>
         </div>
         <span className="sp" />
@@ -122,6 +124,23 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
       (mp[p.team] = mp[p.team] || []).push(p);
     });
     groups = allTeams.filter((k) => mp[k]).map((k) => [k, mp[k]] as [string, RosterPerson[]]);
+  } else if (group === "status") {
+    const mp: Record<string, RosterPerson[]> = {};
+    items.forEach((p) => {
+      (mp[p.status] = mp[p.status] || []).push(p);
+    });
+    groups = Object.keys(mp)
+      .sort()
+      .map((k) => [k, mp[k]] as [string, RosterPerson[]]);
+  } else if (group === "role") {
+    const mp: Record<string, RosterPerson[]> = {};
+    items.forEach((p) => {
+      const k = fmtPosition(p.role);
+      (mp[k] = mp[k] || []).push(p);
+    });
+    groups = Object.keys(mp)
+      .sort()
+      .map((k) => [k, mp[k]] as [string, RosterPerson[]]);
   }
 
   return (
@@ -139,6 +158,8 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
         groupOpts={[
           ["none", "None"],
           ["team", "Team"],
+          ["status", "Status"],
+          ["role", "Position"],
         ]}
         sort={sort}
         setSort={setSort}
@@ -196,7 +217,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
                 {p.name}
               </div>
               <div className="s" style={{ fontSize: 10.5, textAlign: "center" }}>
-                {p.role}
+                {fmtPosition(p.role)}
               </div>
               <MBadge t={tone(p.status)}>{p.status}</MBadge>
             </div>
@@ -206,7 +227,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
         <DataTable
           fields={[
             { id: "name", label: "Name", type: "text", get: (x: RosterPerson) => x.name },
-            { id: "role", label: "Role", type: "text", get: (x: RosterPerson) => x.role },
+            { id: "role", label: "Role", type: "text", get: (x: RosterPerson) => fmtPosition(x.role) },
             { id: "team", label: "Team", type: "text", get: (x: RosterPerson) => x.team },
             { id: "status", label: "Status", type: "text", get: (x: RosterPerson) => x.status },
           ]}
@@ -224,7 +245,9 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
         items.map(row)
       )}
 
-      {!items.length && <EmptyState title={labels.emptyTitle} description={labels.emptyBody} />}
+      {!items.length && (
+        <EmptySkeleton cols={["Name", "Position", "Status"]} title={labels.emptyTitle} hint={labels.emptyBody} />
+      )}
     </>
   );
 }

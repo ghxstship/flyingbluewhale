@@ -27,16 +27,24 @@ export default async function InboxPage() {
   const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
-  // Rooms the caller belongs to + their per-room read cursor.
+  // Rooms the caller belongs to + their per-room read cursor and the kit 31
+  // swipe stores (flag + archive live on the membership row). Archived rooms
+  // leave the list entirely — the swipe's 5s undo bar is the way back.
   const { data: memberships } = await supabase
     .from("chat_room_members")
-    .select("room_id, last_read_at")
+    .select("room_id, last_read_at, flagged_at, archived_at")
     .eq("user_id", session.userId)
     .limit(200);
 
-  const memberRows = (memberships ?? []) as Array<{ room_id: string; last_read_at: string | null }>;
-  const roomIds = memberRows.map((m) => m.room_id);
+  const memberRows = (memberships ?? []) as Array<{
+    room_id: string;
+    last_read_at: string | null;
+    flagged_at: string | null;
+    archived_at: string | null;
+  }>;
+  const roomIds = memberRows.filter((m) => m.archived_at == null).map((m) => m.room_id);
   const lastReadByRoom = new Map(memberRows.map((m) => [m.room_id, m.last_read_at]));
+  const flaggedRooms = new Set(memberRows.filter((m) => m.flagged_at != null).map((m) => m.room_id));
 
   let rooms: RoomRow[] = [];
   let lastByRoom = new Map<string, LastMsg>();
@@ -92,6 +100,7 @@ export default async function InboxPage() {
       stamp: stampIso ? new Date(stampIso).getTime() : 0,
       unread: unreadByRoom.get(r.id) ?? 0,
       initials: initials(r.name),
+      flagged: flaggedRooms.has(r.id),
     };
   });
 

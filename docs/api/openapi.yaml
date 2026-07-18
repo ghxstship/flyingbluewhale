@@ -979,6 +979,14 @@ paths:
         "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
+  /api/v1/me/switcher:
+    get:
+      summary: "COMPVSS workspace/project switcher catalog — the session user's orgs, the active org's projects, and their client/venue labels. Fetched lazily by the /m switcher sheet on first open (deferred off the mobile layout's per-nav reads)."
+      operationId: getMeSwitcher
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
   /api/v1/me/export:
     get:
       summary: Download a GDPR JSON export of the session's data.

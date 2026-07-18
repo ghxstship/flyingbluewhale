@@ -5,7 +5,9 @@ import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { SyncBanner } from "@/components/mobile/SyncBanner";
 import { SyncStampBar } from "@/components/mobile/SyncStampBar";
 import { RefreshShell } from "@/components/mobile/RefreshShell";
-import { InstallPrompt } from "@/components/mobile/InstallPrompt";
+import { InstallVisitBeacon } from "@/components/mobile/InstallCard";
+import { SwUpdateToast } from "@/components/mobile/SwUpdateToast";
+import { ScrollMemory } from "@/components/mobile/ScrollMemory";
 import { StoragePersistence } from "@/components/mobile/StoragePersistence";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { MobileAppBar } from "@/components/mobile/MobileAppBar";
@@ -212,7 +214,14 @@ export default async function MobileLayout({ children }: { children: React.React
         <main id="main" tabIndex={-1} className="animate-fade-in">
           <RefreshShell>{children}</RefreshShell>
         </main>
-        <InstallPrompt />
+        {/* Kit 32 F5: A2HS is now a CARD on /m/more (the kit's hub owns the
+            affordance); the shell only runs the visit-count beacon that
+            gates it + captures beforeinstallprompt. F4: the service-worker
+            update toast ("New Version · Tap To Reload"). B6: per-tab scroll
+            restore. */}
+        <InstallVisitBeacon />
+        <SwUpdateToast />
+        <ScrollMemory />
         <StoragePersistence />
         <MobileTabBar items={mobileTabs} badges={badges} />
         <CommandPalette scope="mobile" />

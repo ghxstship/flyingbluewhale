@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireSession, isManagerPlus, isAdmin } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
+import { InstallCard } from "@/components/mobile/InstallCard";
 
 export const dynamic = "force-dynamic";
 
@@ -157,6 +158,10 @@ export default async function MorePage() {
           </div>
         );
       })}
+
+      {/* Kit 32 F5 — the A2HS install card (shown from the 2nd visit, once
+          the shell beacon has counted; dismissible for good). */}
+      <InstallCard />
     </div>
   );
 }

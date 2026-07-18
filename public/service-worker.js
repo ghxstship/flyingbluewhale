@@ -7,7 +7,7 @@
 // the next reconnect via the background-sync event (or an explicit
 // QUEUE_DRAIN message from a client, for browsers without sync).
 
-const VERSION = "v6";
+const VERSION = "v7";
 const STATIC_CACHE = `atlvs-static-${VERSION}`;
 const RUNTIME_CACHE = `atlvs-runtime-${VERSION}`;
 const QUEUE_DB = "atlvs-punch-queue";
@@ -253,6 +253,11 @@ self.addEventListener("message", (event) => {
     );
   } else if (data.type === "QUEUE_DRAIN") {
     event.waitUntil(drainQueue().catch(() => {}));
+  } else if (data.type === "SKIP_WAITING") {
+    // Kit 32 F4 — the update toast ("New Version · Tap To Reload") posts
+    // this to the WAITING worker; activating hands it the page on the
+    // client's controllerchange-driven reload.
+    self.skipWaiting();
   }
 });
 

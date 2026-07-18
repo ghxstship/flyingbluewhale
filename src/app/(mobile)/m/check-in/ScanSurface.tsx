@@ -5,6 +5,7 @@ import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignme
 import { CheckInScanner, type RecentScan } from "./CheckInScanner";
 import type { BindableCatalogItem } from "./ProductMatchCard";
 import { ScannerCapture, type CostCodeOpt, type ExpenseDraft } from "./ScannerCapture";
+import { WillSyncChip } from "@/components/mobile/WillSyncChip";
 
 /**
  * The ONE shared Scan surface (kit 29 §C route policy, directive 2026-07-17).
@@ -159,6 +160,12 @@ export async function ScanSurface({
 
   return (
     <div className="screen screen-anim">
+      {/* Kit 32 B2: scans queued in the durable outbox while offline —
+          honest count read straight from the queue store. */}
+      <WillSyncChip
+        endpoints={["/api/v1/scan", "/api/v1/shifts/checkin", "/api/v1/accreditation/scan", "/api/v1/equipment/scan"]}
+        align="center"
+      />
       <CheckInScanner
         recent={recent}
         gateSlug={gateSlug}

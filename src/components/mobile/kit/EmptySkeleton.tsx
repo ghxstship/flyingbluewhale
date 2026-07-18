@@ -15,9 +15,18 @@ export type EmptySkeletonProps = {
   hint: string;
   /** Optional CTA (e.g. a permission-gated New button). */
   action?: ReactNode;
+  /**
+   * Kit 32 B5 — first-load variant. Applies the `.ps-skel` shimmer to the
+   * ghost bars so the same primitive that fronts a zero-data view also fronts
+   * a loading view (mounted from a route `loading.tsx` under Suspense).
+   */
+  shimmer?: boolean;
 };
 
-export function EmptySkeleton({ cols, title, hint, action }: EmptySkeletonProps) {
+export function EmptySkeleton({ cols, title, hint, action, shimmer }: EmptySkeletonProps) {
+  // Loading rows shimmer; empty-state rows are static tint.
+  const barBg = shimmer ? undefined : "var(--p-border)";
+  const barClass = shimmer ? "ps-skel" : undefined;
   return (
     <div>
       <div className="dtbl" aria-hidden="true">
@@ -32,27 +41,30 @@ export function EmptySkeleton({ cols, title, hint, action }: EmptySkeletonProps)
           <div className="dtbl-row" key={r} style={{ cursor: "default" }}>
             <div style={{ flex: 1 }}>
               <div
+                className={barClass}
                 style={{
                   height: 12,
                   width: `${64 - r * 9}%`,
                   borderRadius: 6,
-                  background: "var(--p-border)",
-                  opacity: 0.55,
+                  background: barBg,
+                  opacity: shimmer ? 1 : 0.55,
                 }}
               />
               <div
+                className={barClass}
                 style={{
                   height: 9,
                   width: `${40 - r * 5}%`,
                   borderRadius: 5,
-                  background: "var(--p-border)",
-                  opacity: 0.35,
+                  background: barBg,
+                  opacity: shimmer ? 1 : 0.35,
                   marginTop: 7,
                 }}
               />
             </div>
             <div
-              style={{ width: 56, height: 20, borderRadius: 999, background: "var(--p-border)", opacity: 0.4, flex: "none" }}
+              className={barClass}
+              style={{ width: 56, height: 20, borderRadius: 999, background: barBg, opacity: shimmer ? 1 : 0.4, flex: "none" }}
             />
           </div>
         ))}

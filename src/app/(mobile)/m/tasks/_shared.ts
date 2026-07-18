@@ -75,4 +75,6 @@ export type KitTask = {
   flagged: boolean;
   /** Kit 31 swipe canon — `tasks.archived_at` is set (hidden by default). */
   archived: boolean;
+  /** Kit 32 D4 — `tasks.percent_complete` (0..100) when set; a ring renders. */
+  percent: number | null;
 };

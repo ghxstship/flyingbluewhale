@@ -1,4 +1,4 @@
-import { ChevronLeft, Gift, Send, Ticket, UserCheck } from "lucide-react";
+import { Briefcase, ChevronLeft, Gift, Send, Ticket, UserCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
@@ -29,10 +29,18 @@ const INVITE_STATE_LABEL: Record<string, string> = {
  * invitations; "Invite" posts through `sendReferralInvite` (owner column set
  * to the session user so RLS WITH CHECK passes).
  */
-export default async function ReferralsPage() {
+export default async function ReferralsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ job?: string }>;
+}) {
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+  // Kit 32 A4 — Job Share routes here with the role as context so the invite
+  // is framed around the opening being shared.
+  const { job } = await searchParams;
+  const jobContext = typeof job === "string" ? job.slice(0, 120) : undefined;
 
   const ref = await getOrCreateReferral();
   // The apex signup surface is the canonical join target; the referral code
@@ -119,7 +127,19 @@ export default async function ReferralsPage() {
         </div>
       </div>
 
-      <ReferralInvite shareLabel={t("m.referrals.share", undefined, "Share")} />
+      {jobContext && (
+        <div className="item" style={{ alignItems: "center" }}>
+          <span className="more-ic" style={{ color: "var(--p-accent-text)" }}>
+            <Briefcase size={18} />
+          </span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="es-k">{t("m.referrals.jobContext", undefined, "Sharing Job")}</div>
+            <div className="t">{jobContext}</div>
+          </div>
+        </div>
+      )}
+
+      <ReferralInvite shareLabel={t("m.referrals.share", undefined, "Share")} autoOpen={!!jobContext} />
 
       <div className="sech">
         <h2>{t("m.referrals.how", undefined, "How It Works")}</h2>

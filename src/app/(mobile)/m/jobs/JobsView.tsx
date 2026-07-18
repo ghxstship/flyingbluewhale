@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ActionBar, EmptySkeleton, FormScreen, GroupedList, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { applyToJob, postJob, type State } from "./actions";
 
 /**
@@ -47,11 +48,36 @@ function ApplyButton({ gig }: { gig: Gig }) {
   );
 }
 
-export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) {
+export function JobsView({
+  gigs,
+  canPost,
+  initialSaved = [],
+}: {
+  gigs: Gig[];
+  canPost?: boolean;
+  initialSaved?: string[];
+}) {
   const router = useRouter();
+  const { prefs, setPrefs } = useUserPreferences();
   const [postOpen, setPostOpen] = useState(false);
   const [postPending, startPost] = useTransition();
   const [postError, setPostError] = useState<string | null>(null);
+
+  // Kit 32 A4 — saved jobs. Seeded from the server (SSR) and reconciled with
+  // the shared preferences cache once it loads; toggling persists to
+  // user_preferences.ui_state so the Saved set survives across sessions.
+  const [savedOnly, setSavedOnly] = useState(false);
+  const saved = useMemo(
+    () => new Set(prefs.saved_jobs ?? initialSaved),
+    [prefs.saved_jobs, initialSaved],
+  );
+  const toggleSave = (id: string) => {
+    const next = new Set(saved);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    void setPrefs({ saved_jobs: Array.from(next) });
+  };
+  const shareJob = (g: Gig) => router.push(`/m/referrals?job=${encodeURIComponent(g.role)}`);
 
   function onPost(_def: FormDef, vals: Record<string, unknown>) {
     if (postPending) return;
@@ -90,7 +116,8 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
     const filtered = gigs.filter(
       (g) =>
         (!needle || (g.role + " " + g.org + " " + g.tags.join(" ")).toLowerCase().includes(needle)) &&
-        (types.size === 0 || types.has(g.employmentType)),
+        (types.size === 0 || types.has(g.employmentType)) &&
+        (!savedOnly || saved.has(g.id)),
     );
     const rate = (s: string) => parseFloat(String(s).replace(/[^0-9.]/g, "")) || 0;
     if (sort === "role") return filtered.slice().sort((a, b) => a.role.localeCompare(b.role));
@@ -98,7 +125,9 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
     if (sort === "date") return filtered.slice().sort((a, b) => String(a.when).localeCompare(String(b.when)));
     if (sort === "applicants") return filtered.slice().sort((a, b) => b.applicants - a.applicants);
     return filtered;
-  }, [gigs, q, sort, types]);
+  }, [gigs, q, sort, types, savedOnly, saved]);
+
+  const savedCount = useMemo(() => gigs.filter((g) => saved.has(g.id)).length, [gigs, saved]);
 
   // Kit 31 resolution #5 — group enum (None / Organization / Type).
   const grouped = useMemo<[string, Gig[]][] | null>(() => {
@@ -142,6 +171,25 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
               {g.when} · {t("m.gigs.applicants", { count: g.applicants }, `${g.applicants} applied`)}
             </span>
             <span style={{ flex: 1 }} />
+            {/* Kit 32 A4 — bookmark toggle (persisted) + Job Share to referrals. */}
+            <button
+              type="button"
+              className="sec-act"
+              aria-label={saved.has(g.id) ? t("m.gigs.unsave", undefined, "Unsave") : t("m.gigs.save", undefined, "Save")}
+              aria-pressed={saved.has(g.id)}
+              onClick={() => toggleSave(g.id)}
+              style={saved.has(g.id) ? { color: "var(--p-accent-text)" } : undefined}
+            >
+              <KIcon name="Bookmark" size={15} />
+            </button>
+            <button
+              type="button"
+              className="sec-act"
+              aria-label={t("m.gigs.share", undefined, "Share Job")}
+              onClick={() => shareJob(g)}
+            >
+              <KIcon name="UserPlus" size={15} />
+            </button>
             <ApplyButton gig={g} />
           </div>
         </div>
@@ -149,6 +197,17 @@ export function JobsView({ gigs, canPost }: { gigs: Gig[]; canPost?: boolean }) 
 
   return (
     <>
+      {/* Kit 32 A4 — All / Saved filter chips (Saved shows a live count). */}
+      <div className="chips" style={{ paddingBottom: 8 }}>
+        <button type="button" className={`chip ${!savedOnly ? "on" : ""}`} onClick={() => setSavedOnly(false)}>
+          {t("m.gigs.all", undefined, "All")}
+        </button>
+        <button type="button" className={`chip ${savedOnly ? "on" : ""}`} onClick={() => setSavedOnly(true)}>
+          <KIcon name="Bookmark" size={12} /> {t("m.gigs.saved", undefined, "Saved")}
+          {savedCount > 0 ? ` · ${savedCount}` : ""}
+        </button>
+      </div>
+
       <ActionBar
         k="gigs"
         query={q}

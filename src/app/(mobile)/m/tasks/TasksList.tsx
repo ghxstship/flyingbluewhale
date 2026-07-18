@@ -8,6 +8,7 @@ import {
   EmptySkeleton,
   GroupedList,
   KIcon,
+  ProgressRing,
   SwipeRow,
   UndoBar,
   useUndo,
@@ -252,6 +253,10 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
             <div className="s">{t.sub || t.assignee}</div>
           </div>
           <span className="sp" />
+          {/* Kit 32 D4 — completion ring when a real % exists (not done). */}
+          {t.percent != null && !done && (
+            <ProgressRing value={t.percent} size={26} style={{ marginRight: 4 }} />
+          )}
           <span style={{ textAlign: "right" }}>
             <span className={badgeClass(st)}>{stateLabel[st]}</span>
             <div className="time" style={{ marginTop: 6, color: "var(--p-text-3)" }}>

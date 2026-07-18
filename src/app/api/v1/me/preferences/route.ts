@@ -37,6 +37,8 @@ const PatchSchema = z.object({
   // Kit 20 fixture 01 — Show-Day Mode: flips the console home into the
   // live-ops strip (countdown, scans, incidents, crew on site).
   show_day_mode: z.boolean().optional(),
+  // Kit 32 A4 — COMPVSS saved jobs (job_postings ids bookmarked on /m/jobs).
+  saved_jobs: z.array(z.string().uuid()).max(200).optional(),
 });
 
 const UI_STATE_KEYS = [
@@ -49,6 +51,7 @@ const UI_STATE_KEYS = [
   "mobile_role",
   "last_portal_slug",
   "show_day_mode",
+  "saved_jobs",
 ] as const;
 
 export async function GET() {

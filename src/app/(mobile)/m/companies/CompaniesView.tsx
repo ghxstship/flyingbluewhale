@@ -25,7 +25,16 @@ type Labels = {
   emptyBody: string;
   call: string;
   email: string;
+  website: string;
+  actions: string;
 };
+
+/** Normalize a stored site value into an https URL for a real anchor. */
+function siteHref(site: string): string {
+  const s = site.trim();
+  if (!s) return "";
+  return /^https?:\/\//i.test(s) ? s : `https://${s}`;
+}
 
 export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: Labels }) {
   const [query, setQuery] = useState("");
@@ -51,27 +60,18 @@ export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: 
       );
   }, [vendors, trades, query, sort]);
 
+  // Kit 32 A6 — real contact intents: tel:/mailto:/https anchors (SwipeRow
+  // renders actions with an `href` as native links so devices dial/compose/open
+  // directly), included only when the vendor carries that detail.
   const row = (v: Vendor) => (
     <SwipeRow
       key={v.id}
       onClick={() => {}}
+      menuTitle={labels.actions}
       actions={[
-        {
-          icon: "Phone",
-          label: labels.call,
-          tone: "ok",
-          on: () => {
-            if (v.phone) window.location.href = `tel:${v.phone}`;
-          },
-        },
-        {
-          icon: "Mail",
-          label: labels.email,
-          tone: "info",
-          on: () => {
-            if (v.email) window.location.href = `mailto:${v.email}`;
-          },
-        },
+        ...(v.phone ? [{ icon: "Phone", label: labels.call, tone: "ok" as const, href: `tel:${v.phone}` }] : []),
+        ...(v.email ? [{ icon: "Mail", label: labels.email, tone: "info" as const, href: `mailto:${v.email}` }] : []),
+        ...(v.site ? [{ icon: "Globe", label: labels.website, tone: "neutral" as const, href: siteHref(v.site) }] : []),
       ]}
     >
       <div className="item tap" style={{ margin: 0, cursor: "pointer" }}>

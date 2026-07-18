@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireSession, isManagerPlus, isAdmin } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
-import { KIcon } from "@/components/mobile/kit";
+import { KIcon, RecentRail } from "@/components/mobile/kit";
 import { InstallCard } from "@/components/mobile/InstallCard";
 
 export const dynamic = "force-dynamic";
@@ -133,6 +133,9 @@ export default async function MorePage() {
       <h1 className="scr-h" style={{ marginBottom: 8 }}>
         {t("m.more.title", undefined, "More")}
       </h1>
+
+      {/* Kit 32 C3 — jump back into the last records you opened. */}
+      <RecentRail heading={t("m.more.recent", undefined, "Recently Viewed")} />
 
       {groups.map((g) => {
         const links = g.links.filter((l) => (!l.managerOnly || canApprove) && (!l.adminOnly || canAdmin));

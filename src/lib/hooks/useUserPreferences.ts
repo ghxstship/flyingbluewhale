@@ -27,6 +27,8 @@ export type UserPreferences = {
   /** v7.8 Role Lens — persona preset over the platform rail groups
    *  (All · Produce · Ops · Crew · Finance · Safety). */
   nav_lens?: string;
+  /** Kit 32 A4 — COMPVSS saved jobs: bookmarked `job_postings` ids. */
+  saved_jobs?: string[];
 };
 
 let cache: UserPreferences | null = null;

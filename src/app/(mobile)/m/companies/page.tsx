@@ -75,6 +75,8 @@ export default async function CompaniesPage() {
           emptyBody: t("m.companies.emptyBody", undefined, "No organizations match."),
           call: t("m.companies.call", undefined, "Call"),
           email: t("m.companies.email", undefined, "Email"),
+          website: t("m.companies.website", undefined, "Website"),
+          actions: t("m.companies.actions", undefined, "Vendor Actions"),
         }}
       />
     </div>

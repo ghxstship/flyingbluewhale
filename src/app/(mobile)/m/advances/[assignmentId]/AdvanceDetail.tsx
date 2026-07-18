@@ -116,6 +116,11 @@ export function AdvanceDetail({
         eyebrow={t("m.advances.detail.eyebrow", undefined, "Advance · Item")}
         title={data.title ?? data.catalogKindLabel}
         icon={data.catalogKindIcon}
+        recent={{
+          href: `/m/advances/${data.id}`,
+          title: data.title ?? data.catalogKindLabel,
+          kind: data.catalogKindIcon,
+        }}
         status={{ tone: data.stateTone, label: stateLabel(data.fulfillmentState) }}
         fields={fields}
         actions={manageActions}

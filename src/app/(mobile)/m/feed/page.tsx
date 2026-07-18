@@ -1,9 +1,12 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { FeedView, type FeedPost } from "./FeedView";
+
+/** Kit 32 A5 — the single "like" reaction emoji stored per user per post. */
+const LIKE_EMOJI = "👍";
 
 export const dynamic = "force-dynamic";
 
@@ -51,6 +54,7 @@ export default async function MobileFeedPage() {
 
   const session = await requireSession();
   const supabase = await createClient();
+  const fmt = await getRequestFormatters();
 
   const [{ data: kudos }, { data: announcements }] = await Promise.all([
     supabase
@@ -101,6 +105,41 @@ export default async function MobileFeedPage() {
     }
   }
 
+  // Kit 32 A5 — resolve real like state per post. Kudos reactions live in
+  // recognition_reactions; announcement reactions in the kit-32 twin. Count the
+  // "like" emoji per subject and mark the ones the caller has liked. RLS scopes
+  // both reads to the caller's org.
+  const kudosIds = kudosRows.map((k) => k.id);
+  const annIds = annRows.map((a) => a.id);
+  const kudosLikeCount = new Map<string, number>();
+  const kudosLikedByMe = new Set<string>();
+  const annLikeCount = new Map<string, number>();
+  const annLikedByMe = new Set<string>();
+  const [kudosReactions, annReactions] = await Promise.all([
+    kudosIds.length
+      ? supabase
+          .from("recognition_reactions")
+          .select("post_id, user_id")
+          .eq("emoji", LIKE_EMOJI)
+          .in("post_id", kudosIds)
+      : Promise.resolve({ data: [] as Array<{ post_id: string; user_id: string }> }),
+    annIds.length
+      ? supabase
+          .from("announcement_reactions")
+          .select("announcement_id, user_id")
+          .eq("emoji", LIKE_EMOJI)
+          .in("announcement_id", annIds)
+      : Promise.resolve({ data: [] as Array<{ announcement_id: string; user_id: string }> }),
+  ]);
+  for (const r of (kudosReactions.data ?? []) as Array<{ post_id: string; user_id: string }>) {
+    kudosLikeCount.set(r.post_id, (kudosLikeCount.get(r.post_id) ?? 0) + 1);
+    if (r.user_id === session.userId) kudosLikedByMe.add(r.post_id);
+  }
+  for (const r of (annReactions.data ?? []) as Array<{ announcement_id: string; user_id: string }>) {
+    annLikeCount.set(r.announcement_id, (annLikeCount.get(r.announcement_id) ?? 0) + 1);
+    if (r.user_id === session.userId) annLikedByMe.add(r.announcement_id);
+  }
+
   const kudosLabel = t("m.feed.tag.kudos", undefined, "Kudos");
   const updateLabel = t("m.feed.tag.update", undefined, "Update");
   const announcerLabel = t("m.feed.announcerRole", undefined, "Announcement");
@@ -119,7 +158,12 @@ export default async function MobileFeedPage() {
         tag: kudosLabel,
         tagTone: "ok",
         when: t("m.feed.ago", { time: relativeTime(k.created_at) }, `${relativeTime(k.created_at)} ago`),
+        absWhen: fmt.dateTime(k.created_at),
         sortAt: k.created_at,
+        likeKind: "kudos",
+        refId: k.id,
+        likeCount: kudosLikeCount.get(k.id) ?? 0,
+        liked: kudosLikedByMe.has(k.id),
       };
     }),
     ...annRows.map((a): FeedPost => {
@@ -135,7 +179,12 @@ export default async function MobileFeedPage() {
         tag: updateLabel,
         tagTone: "info",
         when: t("m.feed.ago", { time: relativeTime(at) }, `${relativeTime(at)} ago`),
+        absWhen: fmt.dateTime(at),
         sortAt: at,
+        likeKind: "ann",
+        refId: a.id,
+        likeCount: annLikeCount.get(a.id) ?? 0,
+        liked: annLikedByMe.has(a.id),
       };
     }),
   ].sort((x, y) => y.sortAt.localeCompare(x.sortAt));

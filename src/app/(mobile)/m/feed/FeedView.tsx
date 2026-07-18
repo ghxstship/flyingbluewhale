@@ -1,9 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useMemo, useRef, useState } from "react";
-import { ActionBar, KIcon, TogRow } from "@/components/mobile/kit";
+import { useActionState, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { ActionBar, KIcon, RelTime, TogRow } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { createPost, type State } from "./actions";
+import { createPost, toggleFeedLike, type State } from "./actions";
 
 /**
  * FeedView — the COMPVSS Community client leaf. Renders the `.composer-cta`
@@ -23,7 +23,14 @@ export type FeedPost = {
   tag: string;
   tagTone: "ok" | "info" | "neutral";
   when: string;
+  /** Kit 32 D3 — absolute stamp for the relative→absolute flip. */
+  absWhen: string;
   sortAt: string;
+  /** Kit 32 A5 — like store binding. */
+  likeKind: "kudos" | "ann";
+  refId: string;
+  likeCount: number;
+  liked: boolean;
 };
 
 const TONE_CLASS: Record<FeedPost["tagTone"], string> = {
@@ -43,7 +50,9 @@ export function FeedView({
 }) {
   const t = useT();
   const [open, setOpen] = useState(false);
-  const [liked, setLiked] = useState<Set<string>>(new Set());
+  // Kit 32 A5 — optimistic like override over the server reaction store.
+  const [likeOverride, setLikeOverride] = useState<Map<string, boolean>>(new Map());
+  const [, startLike] = useTransition();
   const [state, formAction, pending] = useActionState<State, FormData>(createPost, null);
   const formRef = useRef<HTMLFormElement>(null);
   // createPost's success value is `null` — the same as useActionState's INITIAL
@@ -86,6 +95,30 @@ export function FeedView({
       setOpen(false);
     }
   }, [pending, state, open]);
+
+  const isLiked = (p: FeedPost) => likeOverride.get(p.id) ?? p.liked;
+  const likeCount = (p: FeedPost) => {
+    const override = likeOverride.get(p.id);
+    if (override === undefined) return p.likeCount;
+    // base = server count minus the server's own liked flag, plus the override.
+    const base = p.likeCount - (p.liked ? 1 : 0);
+    return base + (override ? 1 : 0);
+  };
+  const toggleLike = (p: FeedPost) => {
+    const next = !isLiked(p);
+    setLikeOverride((m) => new Map(m).set(p.id, next));
+    const fd = new FormData();
+    fd.set("kind", p.likeKind);
+    fd.set("id", p.refId);
+    fd.set("on", next ? "1" : "0");
+    startLike(async () => {
+      const res = await toggleFeedLike(null, fd);
+      if (res?.error) {
+        // Roll back on failure so the count never lies.
+        setLikeOverride((m) => new Map(m).set(p.id, !next));
+      }
+    });
+  };
 
   return (
     <>
@@ -163,7 +196,7 @@ export function FeedView({
       )}
       {!eyebrowEmpty &&
         visible.map((p) => {
-          const isLiked = liked.has(p.id);
+          const liked = isLiked(p);
           return (
             <div className="post" key={p.id}>
               <div className="post-head">
@@ -176,21 +209,19 @@ export function FeedView({
               </div>
               <div className="post-body">{p.body}</div>
               <div className="post-foot">
-                <span className="time" style={{ color: "var(--p-text-3)" }}>{p.when}</span>
+                {/* Kit 32 D3 — relative stamp flips to absolute on tap. */}
+                <RelTime relative={p.when} absolute={p.absWhen} className="time" style={{ color: "var(--p-text-3)" }} />
                 <span style={{ flex: 1 }} />
+                {/* Kit 32 A5 — real like toggle + count; accent when liked. */}
                 <button
                   type="button"
                   className="pa"
-                  onClick={() =>
-                    setLiked((s) => {
-                      const n = new Set(s);
-                      n.has(p.id) ? n.delete(p.id) : n.add(p.id);
-                      return n;
-                    })
-                  }
-                  aria-pressed={isLiked}
+                  onClick={() => toggleLike(p)}
+                  aria-pressed={liked}
+                  aria-label={t("m.feed.like", undefined, "Like")}
+                  style={liked ? { color: "var(--p-accent-text)", fontWeight: 700 } : undefined}
                 >
-                  <KIcon name="ThumbsUp" size={15} /> {isLiked ? 1 : 0}
+                  <KIcon name="ThumbsUp" size={15} /> {likeCount(p)}
                 </button>
                 <button type="button" className="pa" aria-label={t("m.feed.comment", undefined, "Comment")}>
                   <KIcon name="MessageCircle" size={15} /> 0

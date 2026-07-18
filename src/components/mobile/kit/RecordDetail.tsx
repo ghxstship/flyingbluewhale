@@ -4,11 +4,12 @@
    a CRUD/contextual action bar (RBAC-filtered by the caller), and an inline
    confirm for destructive actions. Ported from the prototype RecordDetail. */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
 import { SheetHead } from "./SheetHead";
 import { useDismissable } from "./useDismissable";
+import { pushRecentRecord } from "@/lib/mobile/recent-records";
 
 // Map prototype Badge tone names → repo kit badge classes.
 function badgeClass(tone?: string): string {
@@ -79,6 +80,12 @@ export type RecordDetailProps = {
   people?: string[];
   onComment?: (text: string, tagged: string[]) => void;
   onClose: () => void;
+  /**
+   * Kit 32 C3 — when set, this record is pushed to the recently-viewed store
+   * (surfaced as the /m/more rail). Route-based detail surfaces pass their own
+   * href/title/kind; overlay surfaces pass the record's canonical href.
+   */
+  recent?: { href: string; title: string; kind: string };
 };
 
 export function RecordDetail({
@@ -94,7 +101,18 @@ export function RecordDetail({
   people = [],
   onComment,
   onClose,
+  recent,
 }: RecordDetailProps) {
+  // Kit 32 C3 — record the visit once per mount for the recently-viewed rail.
+  const recentHref = recent?.href;
+  const recentTitle = recent?.title;
+  const recentKind = recent?.kind;
+  useEffect(() => {
+    if (recentHref && recentTitle) {
+      pushRecentRecord({ href: recentHref, title: recentTitle, kind: recentKind ?? "FileText" });
+    }
+  }, [recentHref, recentTitle, recentKind]);
+
   const [confirm, setConfirm] = useState<RecordAction | null>(null); // pending destructive action
   const confirmRef = useDismissable<HTMLDivElement>(!!confirm, () => setConfirm(null));
   const [draft, setDraft] = useState("");

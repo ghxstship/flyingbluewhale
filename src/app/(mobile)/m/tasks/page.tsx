@@ -69,6 +69,7 @@ export default async function MobileTasks() {
     assignee: r.assigned_to ? (nameMap.get(r.assigned_to) ?? unassigned) : unassigned,
     flagged: r.flagged_at != null,
     archived: r.archived_at != null,
+    percent: r.percent_complete != null ? Number(r.percent_complete) : null,
   }));
 
   const doneCount = tasks.filter((x) => x.state === "done").length;

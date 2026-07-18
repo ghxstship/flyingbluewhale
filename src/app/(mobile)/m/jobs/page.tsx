@@ -40,7 +40,7 @@ export default async function MobileJobsPage() {
   const session = await requireSession();
   const supabase = await createClient();
 
-  const [{ data: postings }, { data: applications }] = await Promise.all([
+  const [{ data: postings }, { data: applications }, { data: prefs }] = await Promise.all([
     supabase
       .from("job_postings")
       .select(
@@ -55,7 +55,13 @@ export default async function MobileJobsPage() {
       .from("job_applications")
       .select("job_posting_id")
       .eq("applicant_user_id", session.userId),
+    // Kit 32 A4 — saved jobs live in user_preferences.ui_state, so the Saved
+    // filter + bookmark state survive across sessions and devices.
+    supabase.from("user_preferences").select("ui_state").eq("user_id", session.userId).maybeSingle(),
   ]);
+
+  const savedJobs =
+    ((prefs?.ui_state as Record<string, unknown> | null)?.saved_jobs as string[] | undefined) ?? [];
 
   type PostingRow = {
     id: string;
@@ -107,7 +113,7 @@ export default async function MobileJobsPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.gigs.title", undefined, "Jobs")}
       </h1>
-      <JobsView gigs={gigs} canPost={isManagerPlus(session)} />
+      <JobsView gigs={gigs} canPost={isManagerPlus(session)} initialSaved={savedJobs} />
     </div>
   );
 }

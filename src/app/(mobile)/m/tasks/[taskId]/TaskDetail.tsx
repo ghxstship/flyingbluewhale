@@ -341,6 +341,7 @@ export function TaskDetail({
       eyebrow={labels.eyebrow}
       title={task.title}
       icon="ClipboardCheck"
+      recent={{ href: `/m/tasks/${task.id}`, title: task.title, kind: "ClipboardCheck" }}
       status={{ tone: stateTone(state), label: stateLabel[state] }}
       fields={fields}
       sections={sections}

@@ -10,10 +10,11 @@ import { sendReferralInvite } from "./actions";
  * Inline referral invite composer. Opens on the "Invite" CTA, posts the
  * contact to `sendReferralInvite`, and refreshes the list on success.
  */
-export function ReferralInvite({ shareLabel }: { shareLabel: string }) {
+export function ReferralInvite({ shareLabel, autoOpen = false }: { shareLabel: string; autoOpen?: boolean }) {
   const t = useT();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  // Kit 32 A4 — Job Share deep-links here (?job=…), so the composer opens ready.
+  const [open, setOpen] = useState(autoOpen);
   const [contact, setContact] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTx] = useTransition();

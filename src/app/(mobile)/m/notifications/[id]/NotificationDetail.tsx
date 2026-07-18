@@ -70,6 +70,7 @@ export function NotificationDetail({
         eyebrow={`${toneLabel} · ${receivedRelative}`}
         title={title}
         icon="Bell"
+        recent={{ href: `/m/notifications/${id}`, title, kind: "Bell" }}
         status={{ tone, label: toneLabel }}
         fields={[
           { k: t("m.alerts.detail.type", undefined, "Type"), v: kindLabel },

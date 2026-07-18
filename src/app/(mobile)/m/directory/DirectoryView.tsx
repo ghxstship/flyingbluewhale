@@ -45,6 +45,7 @@ type Labels = {
   message: string;
   call: string;
   email: string;
+  actions: string;
 };
 
 export function DirectoryView({ people, labels }: { people: RosterPerson[]; labels: Labels }) {
@@ -76,28 +77,18 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
       );
   }, [people, teams, query, sort]);
 
+  // Kit 32 A6 — Call/Email render as real tel:/mailto: anchors (native dial /
+  // compose), included only when the person carries that detail. Message stays
+  // an in-app route.
   const row = (p: RosterPerson) => (
     <SwipeRow
       key={p.id}
       onClick={() => {}}
+      menuTitle={labels.actions}
       actions={[
         { icon: "MessageSquare", label: labels.message, tone: "info", on: () => router.push("/m/inbox") },
-        {
-          icon: "Phone",
-          label: labels.call,
-          tone: "ok",
-          on: () => {
-            if (p.phone) window.location.href = `tel:${p.phone}`;
-          },
-        },
-        {
-          icon: "Mail",
-          label: labels.email,
-          tone: "info",
-          on: () => {
-            if (p.email) window.location.href = `mailto:${p.email}`;
-          },
-        },
+        ...(p.phone ? [{ icon: "Phone", label: labels.call, tone: "ok" as const, href: `tel:${p.phone}` }] : []),
+        ...(p.email ? [{ icon: "Mail", label: labels.email, tone: "info" as const, href: `mailto:${p.email}` }] : []),
       ]}
     >
       <div className="item tap" style={{ margin: 0, cursor: "pointer" }}>

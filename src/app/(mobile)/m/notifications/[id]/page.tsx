@@ -58,7 +58,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   let projectName: string | null = null;
   if (row.project_id) {
-    const { data: proj } = await supabase.from("projects").select("name").eq("id", row.project_id).maybeSingle();
+    const { data: proj } = await supabase
+      .from("projects")
+      .select("name")
+      .eq("id", row.project_id)
+      .is("deleted_at", null)
+      .maybeSingle();
     projectName = (proj as { name: string } | null)?.name ?? null;
   }
 

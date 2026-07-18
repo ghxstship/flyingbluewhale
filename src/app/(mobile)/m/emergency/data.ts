@@ -154,8 +154,8 @@ export async function getEmergencyContext(session: Session): Promise<EmergencyCo
 
   ctx.projectId = active.project_id;
   const [{ data: proj }, { data: guides }] = await Promise.all([
-    supabase.from("projects").select("name").eq("id", active.project_id).maybeSingle(),
-    supabase.from("event_guides").select("config").eq("project_id", active.project_id).limit(8),
+    supabase.from("projects").select("name").eq("id", active.project_id).is("deleted_at", null).maybeSingle(),
+    supabase.from("event_guides").select("config").eq("project_id", active.project_id).is("deleted_at", null).limit(8),
   ]);
   ctx.projectName = (proj as { name: string } | null)?.name ?? null;
 

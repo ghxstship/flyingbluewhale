@@ -15,7 +15,7 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 | v3.1 | Operations hubs (MetricBar + viewseg) | ✅ hub model + `MetricBar`/`ViewSeg`/`HubChrome`; Operations·Logistics landings |
 | v3.2 | Hubs as top-level IA · Projects hub · pill filters | ✅ 6 hubs SSOT (`mobileHubs`); Projects hub (Timeline·Milestones·Calendar·Tasks); pills on every normalized surface |
 | v3.3 | Airtable-plus view engine (bottom-sheet filter/sort/group) | ✅ `viewengine.tsx` — nested AND/OR `FilterGroups` (typed incl. `date`), multi-key `SortReorder`, multi-level `GroupBuilder`, `ViewSheet` drawer |
-| v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **8 of 24 surfaces migrated** — remainder tracked below |
+| v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **11 of 24 surfaces migrated** (Reports · Inspections · Permits · Travel · Shipments · Docks · Gate · Delivery · Project Tasks · Project Calendar · Milestones) — remainder tracked below |
 | v3.5 | Fixed-order screen skeleton (`ScreenHeader`) | ✅ `ScreenHeader` primitive; used by hub members + standalone screens |
 | v3.6 | Scope-partitioned IA + XPMS project surfaces | ✅ My Work vs Project split; XPMS-compliant `project_tasks`/`project_events`/`project_milestones` (real migration) |
 | v3.7 | Deployment-ready polish (Daily Report, exports, real forms, details) | ⏳ **remaining** (Wave 5) — see below |
@@ -48,11 +48,11 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 
 ## Remaining (tracked for follow-up waves)
 
-### Wave 4 (part 2) — the other normalized surfaces (~16 of 24)
+### Wave 4 (part 2) — the other normalized surfaces (~13 of 24)
 Migrate onto `NormalizedList` (schema + drawers + DataView) to match the standard: **Advances · Expenses · Assets · Inventory · Documents · Templates · Approvals · Notifications · Activity · Roster · Vendors · Connections · Jobs · Marketplace · Calendar · Tasks · Knowledge**. Several have bespoke client views today (AdvancesView, ExpensesView, …) that predate the engine.
 
-### Wave 4 — Logistics hub members
-Build **Docks · Gate · Delivery** surfaces (currently `pending` in `mobileHubs`) from the `DOCK_SLOTS`/`GATE_QUEUE`/`DELIVERIES` seed shapes; then un-`pending` them.
+### Wave 4 — Logistics hub members — ✅ DONE
+**Docks · Gate · Delivery** built as normalized ledgers (`DOCK_SLOTS`/`GATE_QUEUE`/`DELIVERIES` seed + tones); members un-`pending`ed. The Logistics hub is complete.
 
 ### Wave 5 — details, forms, handoff exports (v3.7)
 - Record-detail views + real forms for former toast-only leaves (project task/event, timesheet, milestone, advance, expense, permit, inspection, travel, report, credential, personal doc) via `RecordDetail`/`FormScreen`.

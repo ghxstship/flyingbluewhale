@@ -43,7 +43,7 @@ create table if not exists public.project_tasks (
   title         text not null,
   sub           text,
   priority      text not null check (priority in ('High','Medium','Low')),
-  status        text not null default 'Open' check (status in ('Open','In progress','Blocked','Done')),
+  task_state    text not null default 'Open' check (task_state in ('Open','In progress','Blocked','Done')),
   assignee      text,
   assignee_id   uuid references auth.users(id) on delete set null,
   location      text,
@@ -80,7 +80,7 @@ create table if not exists public.project_events (
   event_date    text not null,
   event_iso     date not null,
   owner         text,
-  status        text not null default 'Scheduled' check (status in ('Scheduled','Upcoming','Done')),
+  event_state   text not null default 'Scheduled' check (event_state in ('Scheduled','Upcoming','Done')),
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
@@ -101,7 +101,7 @@ create table if not exists public.project_milestones (
   phase          text not null check (phase in ('Advance','Load-In','Show Days','Load-Out')),
   milestone_date text not null,
   owner          text,
-  status         text not null default 'Upcoming' check (status in ('Done','At Risk','On Track','Upcoming')),
+  milestone_state text not null default 'Upcoming' check (milestone_state in ('Done','At Risk','On Track','Upcoming')),
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
@@ -122,7 +122,7 @@ begin
   select id into v_proj from public.projects where org_id = v_org order by created_at limit 1;
   if v_proj is null then return; end if;
 
-  insert into public.project_tasks (id,org_id,project_id,xpms_atom_id,urid,department,discipline,category,phase,coordinate,title,sub,priority,status,assignee,location,trade,company,due,logged) values
+  insert into public.project_tasks (id,org_id,project_id,xpms_atom_id,urid,department,discipline,category,phase,coordinate,title,sub,priority,task_state,assignee,location,trade,company,due,logged) values
    ('PT-014',v_org,v_proj,'2000.10.05-014','2000.10.05','Technical','Audio','Line Array','Install','2000×INS','Fly Main PA · House Left','Rig + ring-out before soundcheck','High','In progress','Will Turner','Stage L · SL Wing','Audio','Clair Global','14:00','1:20'),
    ('PT-021',v_org,v_proj,'2000.20.03-021','2000.20.03','Technical','Lighting','Moving Head','Install','2000×INS','Focus Front Truss','Channel check + focus positions','Medium','Open','Joshamee Gibbs','Stage L · FOH Truss','Lighting','PRG','16:30','0:00'),
    ('PT-033',v_org,v_proj,'3000.40.02-033','3000.40.02','Site & Ops','Barricade','Bike Rack','Build','3000×BLD','Set FOS Barricade Line','80 sections · mag runs to Gate 3','High','Blocked','Scrum','Front of Stage','Site','In-House','12:00','0:45'),
@@ -131,7 +131,7 @@ begin
    ('PT-060',v_org,v_proj,'5000.20.02-060','5000.20.02','Hospitality','Catering','Crew Meal','Operate','5000×OPR','Crew Meal Push · Dinner','Serve 320 · BOH tent','Medium','Done','Scarlett','Catering Tent','Hospitality','Faithful Bride','18:00','2:00')
   on conflict (id) do nothing;
 
-  insert into public.project_events (id,org_id,project_id,xpms_atom_id,urid,department,dept_code,phase,title,sub,event_date,event_iso,owner,status) values
+  insert into public.project_events (id,org_id,project_id,xpms_atom_id,urid,department,dept_code,phase,title,sub,event_date,event_iso,owner,event_state) values
    ('PE-01',v_org,v_proj,'2000.00.00-901','2000.00.00','Technical','2000','Install','All-Systems Soundcheck','Full PA + LED + lighting','Jun 20 · 14:00','2026-06-20','Will Turner','Scheduled'),
    ('PE-02',v_org,v_proj,'3000.00.00-902','3000.00.00','Site & Ops','3000','Operate','Doors · Show Day 1','Gates open to public','Jun 20 · 18:00','2026-06-20','Scrum','Scheduled'),
    ('PE-03',v_org,v_proj,'1000.00.00-903','1000.00.00','Production','1000','Operate','Headliner Set','Black Pearl Stage','Jun 20 · 21:30','2026-06-20','Elizabeth Swann','Scheduled'),
@@ -139,7 +139,7 @@ begin
    ('PE-05',v_org,v_proj,'6000.00.00-905','6000.00.00','Safety','6000','Advance','Site Safety Walk','AHJ joint inspection','Jun 19 · 09:00','2026-06-19','James Norrington','Done')
   on conflict (id) do nothing;
 
-  insert into public.project_milestones (id,org_id,project_id,title,phase,milestone_date,owner,status) values
+  insert into public.project_milestones (id,org_id,project_id,title,phase,milestone_date,owner,milestone_state) values
    ('MS-1',v_org,v_proj,'Advance Packet Locked','Advance','Jun 15','Elizabeth Swann','Done'),
    ('MS-2',v_org,v_proj,'Site Survey & CAD Sign-Off','Advance','Jun 16','James Norrington','Done'),
    ('MS-3',v_org,v_proj,'Stage L Structure Signed Off','Load-In','Jun 19','Will Turner','At Risk'),

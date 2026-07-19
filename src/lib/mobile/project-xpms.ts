@@ -105,7 +105,7 @@ export async function listProjectTasks(orgId: string, projectId: string): Promis
   const { data } = await supabase
     .from("project_tasks")
     .select(
-      "id, xpms_atom_id, urid, department, discipline, category, phase, coordinate, title, sub, priority, status, assignee, assignee_id, location, trade, company, due, logged, archived",
+      "id, xpms_atom_id, urid, department, discipline, category, phase, coordinate, title, sub, priority, status:task_state, assignee, assignee_id, location, trade, company, due, logged, archived",
     )
     .eq("org_id", orgId)
     .eq("project_id", projectId)
@@ -118,7 +118,7 @@ export async function listProjectEvents(orgId: string, projectId: string): Promi
   const supabase = await createClient();
   const { data } = await supabase
     .from("project_events")
-    .select("id, xpms_atom_id, urid, department, dept_code, phase, title, sub, event_date, event_iso, owner, status")
+    .select("id, xpms_atom_id, urid, department, dept_code, phase, title, sub, event_date, event_iso, owner, status:event_state")
     .eq("org_id", orgId)
     .eq("project_id", projectId)
     .order("event_iso", { ascending: true });
@@ -129,7 +129,7 @@ export async function listProjectMilestones(orgId: string, projectId: string): P
   const supabase = await createClient();
   const { data } = await supabase
     .from("project_milestones")
-    .select("id, title, phase, milestone_date, owner, status")
+    .select("id, title, phase, milestone_date, owner, status:milestone_state")
     .eq("org_id", orgId)
     .eq("project_id", projectId)
     .order("id", { ascending: true });

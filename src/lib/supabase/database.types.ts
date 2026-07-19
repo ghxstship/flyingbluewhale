@@ -25557,12 +25557,12 @@ export type Database = {
           dept_code: string
           event_date: string
           event_iso: string
+          event_state: string
           id: string
           org_id: string
           owner: string | null
           phase: string
           project_id: string
-          status: string
           sub: string | null
           title: string
           updated_at: string
@@ -25575,12 +25575,12 @@ export type Database = {
           dept_code: string
           event_date: string
           event_iso: string
+          event_state?: string
           id: string
           org_id: string
           owner?: string | null
           phase: string
           project_id: string
-          status?: string
           sub?: string | null
           title: string
           updated_at?: string
@@ -25593,12 +25593,12 @@ export type Database = {
           dept_code?: string
           event_date?: string
           event_iso?: string
+          event_state?: string
           id?: string
           org_id?: string
           owner?: string | null
           phase?: string
           project_id?: string
-          status?: string
           sub?: string | null
           title?: string
           updated_at?: string
@@ -25683,11 +25683,11 @@ export type Database = {
           created_at: string
           id: string
           milestone_date: string
+          milestone_state: string
           org_id: string
           owner: string | null
           phase: string
           project_id: string
-          status: string
           title: string
           updated_at: string
         }
@@ -25695,11 +25695,11 @@ export type Database = {
           created_at?: string
           id: string
           milestone_date: string
+          milestone_state?: string
           org_id: string
           owner?: string | null
           phase: string
           project_id: string
-          status?: string
           title: string
           updated_at?: string
         }
@@ -25707,11 +25707,11 @@ export type Database = {
           created_at?: string
           id?: string
           milestone_date?: string
+          milestone_state?: string
           org_id?: string
           owner?: string | null
           phase?: string
           project_id?: string
-          status?: string
           title?: string
           updated_at?: string
         }
@@ -25886,8 +25886,8 @@ export type Database = {
           phase: string
           priority: string
           project_id: string
-          status: string
           sub: string | null
+          task_state: string
           title: string
           trade: string | null
           updated_at: string
@@ -25913,8 +25913,8 @@ export type Database = {
           phase: string
           priority: string
           project_id: string
-          status?: string
           sub?: string | null
+          task_state?: string
           title: string
           trade?: string | null
           updated_at?: string
@@ -25940,8 +25940,8 @@ export type Database = {
           phase?: string
           priority?: string
           project_id?: string
-          status?: string
           sub?: string | null
+          task_state?: string
           title?: string
           trade?: string | null
           updated_at?: string

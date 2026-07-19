@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Fab, KIcon } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { Fab, KIcon, NormalizedList, ScreenHeader, type FieldDef } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type ExpenseRow = {
@@ -22,25 +21,59 @@ const STATE_TONE: Record<string, string> = {
   cancelled: "neutral",
 };
 
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+/** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
+ *  + schema DataView list/table/board + receipt pills). Board columns = the
+ *  reimbursement lifecycle. Keeps the coding-warning banner + File-Expense FAB. */
 export function ExpensesView({
   rows,
   warning,
-  eyebrow,
   title,
 }: {
   rows: ExpenseRow[];
   warning: string | null;
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
 }) {
   const t = useT();
 
+  const states = [...new Set(rows.map((r) => cap(r.state)))];
+  const boardTone: Record<string, string> = {};
+  for (const r of rows) boardTone[cap(r.state)] = STATE_TONE[r.state] ?? "neutral";
+
+  const FIELDS: FieldDef<ExpenseRow>[] = [
+    { id: "description", label: "Expense", type: "text", get: (r) => r.description },
+    { id: "state", label: "Status", type: "select", options: states, get: (r) => cap(r.state) },
+    { id: "receipt", label: "Receipt", type: "select", options: ["Has Receipt", "No Receipt"], get: (r) => (r.hasReceipt ? "Has Receipt" : "No Receipt") },
+    { id: "amount", label: "Amount", type: "text", get: (r) => r.amount },
+    { id: "spent", label: "Spent", type: "text", get: (r) => r.spent },
+  ];
+
+  const row = (r: ExpenseRow) => (
+    <div className="item" key={r.id} style={{ display: "block" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+        <KIcon name="Receipt" size={18} style={{ color: "var(--p-text-2)", flex: "none", marginTop: 2 }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="t">{r.description}</div>
+          <div className="s">
+            {r.spent}
+            {r.hasReceipt ? "" : ` · ${t("m.expenses.noReceipt", undefined, "No receipt")}`}
+          </div>
+        </div>
+        <div style={{ textAlign: "right", flex: "none" }}>
+          <div className="t" style={{ fontVariantNumeric: "tabular-nums" }}>
+            {r.amount}
+          </div>
+          <span className={`ps-badge ps-badge--${STATE_TONE[r.state] ?? "neutral"}`}>{cap(r.state)}</span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">{eyebrow}</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {title}
-      </h1>
+      <ScreenHeader onBack={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))} title={title} />
 
       {warning && (
         <div className="ps-alert ps-alert--warning" role="status" style={{ marginBottom: 12 }}>
@@ -56,42 +89,28 @@ export function ExpensesView({
         <KIcon name="Receipt" size={16} /> {t("m.expenses.new", undefined, "File An Expense")}
       </Link>
 
-      {rows.length === 0 ? (
-        <EmptyState
-          size="compact"
-          title={t("m.expenses.empty.title", undefined, "No Expenses Yet")}
-          description={t(
+      <NormalizedList
+        k="ex"
+        items={rows}
+        fields={FIELDS}
+        search={(r) => `${r.description} ${r.state} ${r.amount}`}
+        searchPlaceholder={t("m.expenses.search", undefined, "Search Expenses…")}
+        renderRow={row}
+        views={["list", "table", "board"]}
+        statusField="state"
+        statusOrder={states}
+        boardTone={boardTone}
+        pill={{ get: (r) => (r.hasReceipt ? "Has Receipt" : "No Receipt"), order: ["Has Receipt", "No Receipt"] }}
+        empty={{
+          cols: ["Expense", "Amount", "Status"],
+          title: t("m.expenses.empty.title", undefined, "No Expenses Yet"),
+          hint: t(
             "m.expenses.empty.body",
             undefined,
             "Photograph the receipt while you still have it. Your expenses and their status live here.",
-          )}
-        />
-      ) : (
-        rows.map((r) => (
-          <div className="item" key={r.id} style={{ display: "block" }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <KIcon name="Receipt" size={18} style={{ color: "var(--p-text-2)", flex: "none", marginTop: 2 }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{r.description}</div>
-                <div className="s">
-                  {r.spent}
-                  {/* Say it plainly when the receipt is missing: finance will
-                      ask, and the person can still fix it today. */}
-                  {r.hasReceipt ? "" : ` · ${t("m.expenses.noReceipt", undefined, "No receipt")}`}
-                </div>
-              </div>
-              <div style={{ textAlign: "right", flex: "none" }}>
-                <div className="t" style={{ fontVariantNumeric: "tabular-nums" }}>
-                  {r.amount}
-                </div>
-                <span className={`ps-badge ps-badge--${STATE_TONE[r.state] ?? "neutral"}`}>
-                  {r.state.charAt(0).toUpperCase() + r.state.slice(1)}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
+          ),
+        }}
+      />
 
       {/* Kit-29 spec: FAB = New Expense. */}
       <Fab href="/m/expenses/new" label={t("m.expenses.new", undefined, "File An Expense")} />

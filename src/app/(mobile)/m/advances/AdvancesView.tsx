@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, GroupedList, KIcon, TogRow } from "@/components/mobile/kit";
-import type { ViewMode } from "@/components/mobile/kit";
+import { KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -85,16 +84,12 @@ function stateLabel(s: string): string {
     .join(" ");
 }
 
+/** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
+ *  + schema DataView list/table/board + kind pills). Board columns = the
+ *  fulfillment lifecycle. Keeps the offline empty state. */
 export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
   const t = useT();
   const router = useRouter();
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<ViewMode>("list");
-  const [group, setGroup] = useState("kind");
-  const [sort, setSort] = useState("deadline");
-  const [kinds, setKinds] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [online, setOnline] = useState(true);
 
   useEffect(() => {
@@ -109,33 +104,22 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
     };
   }, []);
 
-  const kindList = useMemo(() => Array.from(new Set(rows.map((r) => r.catalogKind))).sort(), [rows]);
+  const kindLabels = useMemo(() => [...new Set(rows.map((r) => KIND_LABEL[r.catalogKind] ?? r.catalogKind))], [rows]);
+  const stateInfo = useMemo(() => {
+    const states = [...new Set(rows.map((r) => r.fulfillmentState))];
+    const order = states.map(stateLabel);
+    const tones: Record<string, string> = {};
+    for (const s of states) tones[stateLabel(s)] = STATE_TONE[s] ?? "neutral";
+    return { order, tones };
+  }, [rows]);
 
-  const filtered = useMemo(() => {
-    const q = query.toLowerCase();
-    return rows
-      .filter((r) => kinds.size === 0 || kinds.has(r.catalogKind))
-      .filter(
-        (r) =>
-          !q ||
-          ((r.title ?? "") + " " + KIND_LABEL[r.catalogKind] + " " + (r.project ?? "")).toLowerCase().includes(q),
-      )
-      .sort((a, b) =>
-        sort === "kind"
-          ? a.catalogKind.localeCompare(b.catalogKind)
-          : sort === "title"
-            ? (a.title ?? "").localeCompare(b.title ?? "")
-            : (a.deadline ?? "~").localeCompare(b.deadline ?? "~"),
-      );
-  }, [rows, query, kinds, sort]);
-
-  const toggleKind = (k: string) =>
-    setKinds((prev) => {
-      const next = new Set(prev);
-      if (next.has(k)) next.delete(k);
-      else next.add(k);
-      return next;
-    });
+  const FIELDS: FieldDef<AdvanceRow>[] = [
+    { id: "title", label: t("m.advances.sort.title", undefined, "Name"), type: "text", get: (r) => r.title ?? KIND_LABEL[r.catalogKind] ?? r.catalogKind },
+    { id: "kind", label: t("m.advances.group.kind", undefined, "Type"), type: "select", options: kindLabels, get: (r) => KIND_LABEL[r.catalogKind] ?? r.catalogKind },
+    { id: "state", label: "Status", type: "select", options: stateInfo.order, get: (r) => stateLabel(r.fulfillmentState) },
+    { id: "deadline", label: t("m.advances.sort.deadline", undefined, "Due"), type: "text", get: (r) => r.deadline ?? "" },
+    { id: "project", label: "Project", type: "text", get: (r) => r.project ?? "" },
+  ];
 
   const row = (r: AdvanceRow) => (
     <div
@@ -167,68 +151,36 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
     </div>
   );
 
-  return (
-    <>
-      <ActionBar
-        k="adv"
-        query={query}
-        setQuery={setQuery}
-        placeholder={t("m.advances.search", undefined, "Search Advances…")}
-        view={view}
-        setView={setView}
-        views={["list"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", t("m.advances.group.none", undefined, "None")],
-          ["kind", t("m.advances.group.kind", undefined, "Type")],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["deadline", t("m.advances.sort.deadline", undefined, "Due")],
-          ["kind", t("m.advances.sort.kind", undefined, "Type")],
-          ["title", t("m.advances.sort.title", undefined, "Name")],
-        ]}
-        filterActive={kinds.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <div>
-            {kindList.map((k) => (
-              <TogRow key={k} label={KIND_LABEL[k] ?? k} on={kinds.has(k)} set={() => toggleKind(k)} />
-            ))}
-          </div>
-        }
+  // Offline with nothing cached — the one non-standard empty (the queue promise).
+  if (rows.length === 0 && !online) {
+    return (
+      <EmptyState
+        variant="offline"
+        title={t("m.advances.offline.title", undefined, "You're offline")}
+        description={t("m.advances.offline.body", undefined, "Your advances will load — and any changes will sync — once you're back online.")}
       />
+    );
+  }
 
-      {filtered.length === 0 ? (
-        rows.length === 0 && !online ? (
-          <EmptyState
-            variant="offline"
-            title={t("m.advances.offline.title", undefined, "You're offline")}
-            description={t("m.advances.offline.body", undefined, "Your advances will load — and any changes will sync — once you're back online.")}
-          />
-        ) : (
-          <EmptyState
-            size="compact"
-            title={t("m.advances.empty.title", undefined, "No Advances")}
-            description={t("m.advances.empty.body", undefined, "Gear, credentials and services assigned to you appear here.")}
-          />
-        )
-      ) : group === "kind" ? (
-        <GroupedList
-          skey="adv"
-          groups={kindList
-            .filter((k) => filtered.some((r) => r.catalogKind === k))
-            .map((k) => [KIND_LABEL[k] ?? k, filtered.filter((r) => r.catalogKind === k)])}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={row}
-        />
-      ) : (
-        filtered.map(row)
-      )}
-    </>
+  return (
+    <NormalizedList
+      k="adv"
+      items={rows}
+      fields={FIELDS}
+      search={(r) => `${r.title ?? ""} ${KIND_LABEL[r.catalogKind] ?? r.catalogKind} ${r.project ?? ""}`}
+      searchPlaceholder={t("m.advances.search", undefined, "Search Advances…")}
+      renderRow={row}
+      onRow={(r) => router.push(`/m/advances/${r.id}`)}
+      views={["list", "table", "board"]}
+      statusField="state"
+      statusOrder={stateInfo.order}
+      boardTone={stateInfo.tones}
+      pill={{ get: (r) => KIND_LABEL[r.catalogKind] ?? r.catalogKind, order: kindLabels }}
+      empty={{
+        cols: ["Name", "Type", "Status"],
+        title: t("m.advances.empty.title", undefined, "No Advances"),
+        hint: t("m.advances.empty.body", undefined, "Gear, credentials and services assigned to you appear here."),
+      }}
+    />
   );
 }

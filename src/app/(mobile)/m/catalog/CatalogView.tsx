@@ -1,10 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ActionBar, Crumbs, GroupedList, KIcon } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
-import type { CatalogKind } from "@/lib/db/assignments";
+import { KIcon, NormalizedList, ScreenHeader, type FieldDef } from "@/components/mobile/kit";
+import type { CatalogKind } from "@/lib/db/catalog-kinds";
 import { formatMoney } from "@/lib/i18n/format";
 
 export type CatalogEntry = {
@@ -30,27 +28,18 @@ function money(cents: number | null): string {
   return formatMoney(cents, { fractionDigits: 0 });
 }
 
+/** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
+ *  + schema DataView list/table + kind pills). Each row prefills the advance
+ *  request form for that catalog item. */
 export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: CatalogLabels }) {
-  const [q, setQ] = useState("");
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const kinds = [...new Set(items.map((it) => it.kindLabel))];
 
-  const groups = useMemo<[string, CatalogEntry[]][]>(() => {
-    const ql = q.toLowerCase();
-    const matched = items.filter(
-      (it) => !ql || (it.name + " " + (it.code ?? "")).toLowerCase().includes(ql),
-    );
-    const order: string[] = [];
-    const map = new Map<string, CatalogEntry[]>();
-    for (const it of matched) {
-      if (!map.has(it.kindLabel)) {
-        map.set(it.kindLabel, []);
-        order.push(it.kindLabel);
-      }
-      map.get(it.kindLabel)!.push(it);
-    }
-    return order.map((k) => [k, map.get(k)!]);
-  }, [items, q]);
+  const FIELDS: FieldDef<CatalogEntry>[] = [
+    { id: "name", label: labels.title, type: "text", get: (it) => it.name },
+    { id: "kindLabel", label: "Kind", type: "select", options: kinds, get: (it) => it.kindLabel },
+    { id: "code", label: "Code", type: "text", get: (it) => it.code ?? "" },
+    { id: "cost", label: "Unit Cost", type: "num", get: (it) => it.unitCostCents ?? 0 },
+  ];
 
   const row = (it: CatalogEntry) => (
     <div className="item tap" key={it.id} style={{ alignItems: "center" }}>
@@ -61,7 +50,12 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
         <div className="t">{it.name}</div>
         <div className="s">
           {money(it.unitCostCents)}
-          {it.code ? <> · <span style={{ fontFamily: "var(--p-mono)" }}>{it.code}</span></> : null}
+          {it.code ? (
+            <>
+              {" "}
+              · <span style={{ fontFamily: "var(--p-mono)" }}>{it.code}</span>
+            </>
+          ) : null}
         </div>
       </div>
       <Link
@@ -75,27 +69,21 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
   );
 
   return (
-    <>
-      {/* Kit 32 C1: crumb trail on the catalog path (More → Catalog); the
-          item leg continues on the prefilled request form. */}
-      <Crumbs items={[{ label: labels.back, href: "/m/more" }, { label: labels.title }]} />
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>{labels.title}</h1>
-      <ActionBar<CatalogEntry>
+    <div className="screen screen-anim">
+      {/* Kit 32 C1: crumb trail on the catalog path (More → Catalog); the item
+          leg continues on the prefilled request form. */}
+      <ScreenHeader crumbs={[{ label: labels.back, href: "/m/more" }, { label: labels.title }]} title={labels.title} />
+      <NormalizedList
         k="ct"
-        query={q}
-        setQuery={setQ}
-        placeholder={labels.search}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-      />
-      <GroupedList<CatalogEntry>
-        skey="cat"
-        groups={groups}
-        collapsed={collapsed}
-        setCollapsed={setCollapsed}
+        items={items}
+        fields={FIELDS}
+        search={(it) => `${it.name} ${it.code ?? ""} ${it.kindLabel}`}
+        searchPlaceholder={labels.search}
         renderRow={row}
+        views={["list", "table"]}
+        pill={{ get: (it) => it.kindLabel, order: kinds }}
+        empty={{ cols: [labels.title, "Kind", "Unit Cost"], title: labels.empty, hint: labels.emptyHint }}
       />
-      {!groups.length && <EmptyState title={labels.empty} description={labels.emptyHint} />}
-    </>
+    </div>
   );
 }

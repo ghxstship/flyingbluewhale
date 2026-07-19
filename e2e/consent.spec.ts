@@ -13,7 +13,7 @@ test.describe("cookie consent", () => {
   test("banner appears on first visit", async ({ page }) => {
     await page.goto("/");
     // Defer 600ms in component
-    await expect(page.getByRole("heading", { name: "Cookies & privacy" })).toBeVisible({
+    await expect(page.getByRole("region", { name: "Cookies & privacy" })).toBeVisible({
       timeout: 5000,
     });
     // Button labels are Title Case ("Accept All" / "Reject All").
@@ -24,7 +24,7 @@ test.describe("cookie consent", () => {
   test("accept all sets consent cookie and dismisses", async ({ page, context }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Accept All" }).click();
-    await expect(page.getByRole("heading", { name: "Cookies & privacy" })).not.toBeVisible({
+    await expect(page.getByRole("region", { name: "Cookies & privacy" })).not.toBeVisible({
       timeout: 5000,
     });
     const cookies = await context.cookies();
@@ -36,7 +36,7 @@ test.describe("cookie consent", () => {
   test("reject all stores essential-only consent", async ({ page, context }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Reject All" }).click();
-    await expect(page.getByRole("heading", { name: "Cookies & privacy" })).not.toBeVisible({
+    await expect(page.getByRole("region", { name: "Cookies & privacy" })).not.toBeVisible({
       timeout: 5000,
     });
     const cookies = await context.cookies();
@@ -48,7 +48,7 @@ test.describe("cookie consent", () => {
 
   test("customize panel exposes individual toggles", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Customize" }).click();
+    await page.getByRole("button", { name: "Manage settings" }).click();
     await expect(page.getByRole("checkbox", { name: /toggle analytics/i })).toBeVisible();
     await expect(page.getByRole("checkbox", { name: /toggle marketing/i })).toBeVisible();
   });

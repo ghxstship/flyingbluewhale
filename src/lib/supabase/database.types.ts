@@ -46992,10 +46992,6 @@ export type Database = {
           isSetofReturn: false
         }
       }
-      sync_budget_for_bucket: {
-        Args: { p_category: string; p_org_id: string; p_project_id: string }
-        Returns: undefined
-      }
       text2ltree: { Args: { "": string }; Returns: unknown }
       uap_emit: {
         Args: {

@@ -1,16 +1,8 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ActionBar,
-  EmptySkeleton,
-  Fab,
-  GroupedList,
-  SwipeRow,
-  TogRow,
-} from "@/components/mobile/kit";
-import type { ViewMode } from "@/components/mobile/kit";
+import { Fab, NormalizedList, ScreenHeader, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { checkinMyAssignment, reportAssignmentLost } from "./actions";
@@ -26,50 +18,29 @@ export type AssetRow = {
 };
 
 /**
- * Kit 28 `tab === "assets"` + the kit 31 (v2.7) swipe canon: eyebrow count,
- * "My Assets", the shared ActionBar (list/table · group None|Category|Status ·
- * sort Name|Status|Tag · category filter chips), `.item.tap` rows with a
- * leading `.bar`, mono tag in the sub-line, and a tone Badge carrying the
- * return state. Swipe: Check In (ok, ONLY while the unit is Out — flips
- * `fulfillment_state → returned` through the party self check-in RPC) and
- * Lost (danger — journals `Reported lost` + pushes the ops alert to the
- * manager band). FAB = Request Advance.
+ * Kit 28 `tab === "assets"` (My Gear) / kit 34 v3.4 — normalized onto
+ * NormalizedList (search + View Options/Share drawers + schema DataView
+ * list/table + category pills). Keeps the kit 31 swipe canon: Check In (ok,
+ * only while Out — flips `fulfillment_state → returned` via the party self
+ * check-in RPC) + Lost (danger — journals + alerts the manager band), the
+ * optimistic session overlays, and the Request-Advance FAB.
  */
-export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow: string; title: string }) {
+export function AssetsView({ rows, title }: { rows: AssetRow[]; eyebrow?: string; title: string }) {
   const t = useT();
   const toast = useToast();
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<ViewMode>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("name");
-  const [cats, setCats] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
-  // Optimistic: tags checked back in via swipe this session.
+  // Optimistic: tags checked back in / reported lost via swipe this session.
   const [backIn, setBackIn] = useState<Set<string>>(new Set());
   const [lost, setLost] = useState<Set<string>>(new Set());
 
-  const catList = useMemo(() => Array.from(new Set(rows.map((r) => r.cat))).sort(), [rows]);
-
-  const items = useMemo(() => {
-    const q = query.toLowerCase();
-    return rows
-      .filter((r) => cats.size === 0 || cats.has(r.cat))
-      .filter((r) => !q || `${r.title} ${r.sub} ${r.tag}`.toLowerCase().includes(q))
-      .sort((x, y) =>
-        sort === "status" ? x.time.localeCompare(y.time) : sort === "tag" ? x.tag.localeCompare(y.tag) : x.title.localeCompare(y.title),
-      );
-  }, [rows, query, cats, sort]);
-
-  const toggleCat = (c: string) =>
-    setCats((prev) => {
-      const next = new Set(prev);
-      if (next.has(c)) next.delete(c);
-      else next.add(c);
-      return next;
-    });
+  const catList = Array.from(new Set(rows.map((r) => r.cat))).sort();
+  const statusOf = (r: AssetRow) =>
+    backIn.has(r.id)
+      ? t("m.assets.returnedSub", undefined, "Returned")
+      : r.time === "Out"
+        ? t("m.assets.group.checkedOut", undefined, "Checked Out")
+        : t("m.assets.group.assigned", undefined, "Assigned");
 
   const checkIn = (r: AssetRow) => {
     setBackIn((s) => new Set(s).add(r.id));
@@ -113,6 +84,13 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
     });
   };
 
+  const FIELDS: FieldDef<AssetRow>[] = [
+    { id: "title", label: t("m.assets.col.asset", undefined, "Asset"), type: "text", get: (r) => r.title },
+    { id: "cat", label: t("m.assets.group.cat", undefined, "Category"), type: "select", options: catList, get: (r) => r.cat },
+    { id: "tag", label: t("m.assets.col.tag", undefined, "Tag"), type: "text", get: (r) => r.tag },
+    { id: "status", label: t("m.assets.col.status", undefined, "Status"), type: "select", get: (r) => statusOf(r) },
+  ];
+
   const row = (r: AssetRow) => {
     const returned = backIn.has(r.id);
     const out = r.time === "Out" && !returned;
@@ -122,21 +100,9 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
         onClick={() => router.push(`/m/advances/${r.id}`)}
         actions={[
           ...(out
-            ? [
-                {
-                  icon: "PackageCheck",
-                  label: t("m.assets.checkIn", undefined, "Check In"),
-                  tone: "ok" as const,
-                  on: () => checkIn(r),
-                },
-              ]
+            ? [{ icon: "PackageCheck", label: t("m.assets.checkIn", undefined, "Check In"), tone: "ok" as const, on: () => checkIn(r) }]
             : []),
-          {
-            icon: "TriangleAlert",
-            label: t("m.assets.lost", undefined, "Lost"),
-            tone: "danger" as const,
-            on: () => reportLost(r),
-          },
+          { icon: "TriangleAlert", label: t("m.assets.lost", undefined, "Lost"), tone: "danger" as const, on: () => reportLost(r) },
         ]}
       >
         <div className="item tap" style={{ margin: 0, cursor: "pointer" }}>
@@ -159,89 +125,33 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
     );
   };
 
-  const groups = useMemo(() => {
-    if (group === "cat") {
-      const m = new Map<string, AssetRow[]>();
-      items.forEach((r) => m.set(r.cat, [...(m.get(r.cat) ?? []), r]));
-      return catList.filter((c) => m.has(c)).map((c) => [c, m.get(c) ?? []] as [string, AssetRow[]]);
-    }
-    if (group === "status") {
-      // Kit: "Checked Out" vs "Assigned" buckets by the unit's Out marker.
-      const outLabel = t("m.assets.group.checkedOut", undefined, "Checked Out");
-      const inLabel = t("m.assets.group.assigned", undefined, "Assigned");
-      const m = new Map<string, AssetRow[]>();
-      items.forEach((r) => {
-        const k = r.time === "Out" && !backIn.has(r.id) ? outLabel : inLabel;
-        m.set(k, [...(m.get(k) ?? []), r]);
-      });
-      return Array.from(m.entries());
-    }
-    return null;
-  }, [group, items, catList, backIn, t]);
-
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">{eyebrow}</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {title}
-      </h1>
+      <ScreenHeader onBack={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))} title={title} />
 
-      <ActionBar
+      <NormalizedList
         k="as"
-        query={query}
-        setQuery={setQuery}
-        placeholder={t("m.assets.search", undefined, "Search Assets…")}
-        view={view}
-        setView={setView}
+        items={rows}
+        fields={FIELDS}
+        search={(r) => `${r.title} ${r.sub} ${r.tag}`}
+        searchPlaceholder={t("m.assets.search", undefined, "Search Assets…")}
+        renderRow={row}
         views={["list", "table"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", t("m.assets.group.none", undefined, "None")],
-          ["cat", t("m.assets.group.cat", undefined, "Category")],
-          ["status", t("m.assets.group.status", undefined, "Status")],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["name", t("m.assets.sort.name", undefined, "Name")],
-          ["status", t("m.assets.sort.status", undefined, "Status")],
-          ["tag", t("m.assets.sort.tag", undefined, "Tag")],
-        ]}
-        filterActive={cats.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <div>
-            <div className="wl" style={{ marginBottom: 8 }}>
-              {t("m.assets.category", undefined, "Category")}
-            </div>
-            {catList.map((c) => (
-              <TogRow key={c} label={c} on={cats.has(c)} set={() => toggleCat(c)} />
-            ))}
-          </div>
-        }
-      />
-
-      {!items.length ? (
-        <EmptySkeleton
-          cols={[
+        pill={{ get: (r) => r.cat, order: catList }}
+        empty={{
+          cols: [
             t("m.assets.col.asset", undefined, "Asset"),
             t("m.assets.col.tag", undefined, "Tag"),
             t("m.assets.col.status", undefined, "Status"),
-          ]}
-          title={t("m.assets.empty.title", undefined, "No Assets")}
-          hint={t(
+          ],
+          title: t("m.assets.empty.title", undefined, "No Assets"),
+          hint: t(
             "m.assets.empty.body",
             undefined,
             "Gear, credentials and vouchers issued to you land here. Request what you need from the catalog.",
-          )}
-        />
-      ) : groups ? (
-        <GroupedList<AssetRow> skey="as" groups={groups} collapsed={collapsed} setCollapsed={setCollapsed} renderRow={row} />
-      ) : (
-        items.map(row)
-      )}
+          ),
+        }}
+      />
 
       {/* Kit FAB: Request Advance. */}
       <Fab href="/m/advances/new" label={t("m.assets.request", undefined, "Request Advance")} />

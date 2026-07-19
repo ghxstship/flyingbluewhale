@@ -1,9 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ActionBar, DataTable, GroupedList, SwipeRow, TogRow } from "@/components/mobile/kit";
-import type { ViewMode } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { NormalizedList, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 
 export type Vendor = {
   id: string;
@@ -36,33 +33,19 @@ function siteHref(site: string): string {
   return /^https?:\/\//i.test(s) ? s : `https://${s}`;
 }
 
+/** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
+ *  + schema DataView list/gallery/table + trade pills). Keeps the kit 32 A6
+ *  real contact intents (tel:/mailto:/https swipe actions). */
 export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: Labels }) {
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<ViewMode>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("name");
-  const [trades, setTrades] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const allTrades = [...new Set(vendors.map((v) => v.trade))];
 
-  const allTrades = useMemo(() => [...new Set(vendors.map((v) => v.trade))], [vendors]);
+  const FIELDS: FieldDef<Vendor>[] = [
+    { id: "name", label: "Vendor", type: "text", get: (x) => x.name },
+    { id: "trade", label: "Trade", type: "select", options: allTrades, get: (x) => x.trade },
+    { id: "scope", label: "Scope Of Work", type: "text", get: (x) => x.scope },
+    { id: "rating", label: "Rating", type: "num", get: (x) => x.ratingAvg ?? 0 },
+  ];
 
-  const items = useMemo(() => {
-    return vendors
-      .filter((v) => trades.size === 0 || trades.has(v.trade))
-      .filter(
-        (v) =>
-          !query ||
-          (v.name + " " + v.trade + " " + v.scope).toLowerCase().includes(query.toLowerCase()),
-      )
-      .sort((a, b) =>
-        sort === "trade" ? a.trade.localeCompare(b.trade) : a.name.localeCompare(b.name),
-      );
-  }, [vendors, trades, query, sort]);
-
-  // Kit 32 A6 — real contact intents: tel:/mailto:/https anchors (SwipeRow
-  // renders actions with an `href` as native links so devices dial/compose/open
-  // directly), included only when the vendor carries that detail.
   const row = (v: Vendor) => (
     <SwipeRow
       key={v.id}
@@ -85,100 +68,30 @@ export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: 
     </SwipeRow>
   );
 
-  let groups: [string, Vendor[]][] | null = null;
-  if (group === "trade") {
-    const mp: Record<string, Vendor[]> = {};
-    items.forEach((v) => {
-      (mp[v.trade] = mp[v.trade] || []).push(v);
-    });
-    groups = allTrades.filter((k) => mp[k]).map((k) => [k, mp[k]] as [string, Vendor[]]);
-  }
+  const gallery = (v: Vendor) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <span className="logo-tile" style={{ width: 48, height: 48, borderRadius: 13, fontSize: 16 }}>
+        {v.logo}
+      </span>
+      <div className="t" style={{ fontSize: 12, textAlign: "center", marginTop: 8 }}>
+        {v.name}
+      </div>
+      <span className="vchip">{v.trade}</span>
+    </div>
+  );
 
   return (
-    <>
-      <ActionBar
-        k="co"
-        query={query}
-        setQuery={setQuery}
-        placeholder={labels.search}
-        view={view}
-        setView={setView}
-        views={["list", "gallery", "table"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", "None"],
-          ["trade", "Trade"],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["name", "Name"],
-          ["trade", "Trade"],
-        ]}
-        filterActive={trades.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <div>
-            {allTrades.map((tr) => (
-              <TogRow
-                key={tr}
-                label={tr}
-                on={trades.has(tr)}
-                set={() =>
-                  setTrades((p) => {
-                    const n = new Set(p);
-                    n.has(tr) ? n.delete(tr) : n.add(tr);
-                    return n;
-                  })
-                }
-              />
-            ))}
-          </div>
-        }
-      />
-
-      {view === "gallery" ? (
-        <div className="gal-grid">
-          {items.map((v) => (
-            <div className="gal-card" key={v.id}>
-              <span
-                className="logo-tile"
-                style={{ width: 48, height: 48, borderRadius: 13, fontSize: 16 }}
-              >
-                {v.logo}
-              </span>
-              <div className="t" style={{ fontSize: 12, textAlign: "center", marginTop: 8 }}>
-                {v.name}
-              </div>
-              <span className="vchip">{v.trade}</span>
-            </div>
-          ))}
-        </div>
-      ) : view === "table" ? (
-        <DataTable
-          fields={[
-            { id: "name", label: "Vendor", type: "text", get: (x: Vendor) => x.name },
-            { id: "trade", label: "Trade", type: "text", get: (x: Vendor) => x.trade },
-            { id: "scope", label: "Scope Of Work", type: "text", get: (x: Vendor) => x.scope },
-            { id: "rating", label: "Rating", type: "num", get: (x: Vendor) => x.ratingAvg ?? 0 },
-          ]}
-          items={items}
-        />
-      ) : groups ? (
-        <GroupedList
-          skey="ve"
-          groups={groups}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={(x) => row(x as Vendor)}
-        />
-      ) : (
-        items.map(row)
-      )}
-
-      {!items.length && <EmptyState title={labels.emptyTitle} description={labels.emptyBody} />}
-    </>
+    <NormalizedList
+      k="co"
+      items={vendors}
+      fields={FIELDS}
+      search={(v) => `${v.name} ${v.trade} ${v.scope}`}
+      searchPlaceholder={labels.search}
+      renderRow={row}
+      gallery={gallery}
+      views={["list", "gallery", "table"]}
+      pill={{ get: (v) => v.trade, order: allTrades }}
+      empty={{ cols: ["Vendor", "Trade", "Scope Of Work"], title: labels.emptyTitle, hint: labels.emptyBody }}
+    />
   );
 }

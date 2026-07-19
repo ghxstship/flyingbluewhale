@@ -180,15 +180,17 @@ describe("EmptyState enforcement (IA spec §7 #9)", () => {
         .filter((l) => !/^\s*(\/\/|\/\*|\*)/.test(l))
         .join("\n");
       if (!EMPTY_COPY_RE.test(stripped)) continue;
-      // Two sanctioned primitives: <EmptyState> (the app-wide zero state) and
-      // the COMPVSS kit's <EmptySkeleton> (kit 31 resolution #16 — data-view
-      // empty states keep the view's column headers + ghost rows). A mobile
-      // list that renders its void through EmptySkeleton is compliant.
+      // Sanctioned empty-state treatments: <EmptyState> (the app-wide zero
+      // state), the COMPVSS kit's <EmptySkeleton> (kit 31 resolution #16 —
+      // data-view empty states keep the view's column headers + ghost rows),
+      // and <NormalizedList> (kit 34 v3.4 — the normalized record-list surface,
+      // which always renders its void through EmptySkeleton internally). A
+      // mobile list that renders through any of these is compliant.
+      const fromKit = /from\s+["']@\/components\/mobile\/kit["']/.test(stripped);
       const importsEmptyState = /from\s+["']@\/components\/ui\/EmptyState["']/.test(stripped);
-      const importsEmptySkeleton =
-        /\bEmptySkeleton\b[\s\S]{0,200}?from\s+["']@\/components\/mobile\/kit["']/.test(stripped) ||
-        (/\bEmptySkeleton\b/.test(stripped) && /from\s+["']@\/components\/mobile\/kit["']/.test(stripped));
-      if (!importsEmptyState && !importsEmptySkeleton) {
+      const importsEmptySkeleton = /\bEmptySkeleton\b/.test(stripped) && fromKit;
+      const importsNormalizedList = /\bNormalizedList\b/.test(stripped) && fromKit;
+      if (!importsEmptyState && !importsEmptySkeleton && !importsNormalizedList) {
         offenders.push(rel);
       }
     }

@@ -37,6 +37,15 @@ export const OPS_TONE: Record<string, OpsTone> = {
   Loaded: "info",
   Active: "ok",
   Expiring: "warn",
+  // Logistics — Docks · Gate · Delivery (kit 34 v3.4).
+  "At Dock": "ok",
+  Waiting: "info",
+  Cleared: "ok",
+  Held: "warn",
+  "In Transit": "info",
+  Delivered: "ok",
+  Staged: "neutral",
+  Requested: "warn",
 };
 
 export type OpsReport = {
@@ -120,4 +129,60 @@ export const OPS_PERMITS: OpsPermit[] = [
   { id: "pm3", t: "COI · Black Pearl Co.", auth: "Insurer", exp: "On file · exp Dec 31", status: "Active", icon: "ShieldCheck" },
   { id: "pm4", t: "Noise Variance · After 23:00", auth: "City", exp: "Pending renewal", status: "Expiring", icon: "Volume2" },
   { id: "pm5", t: "Rigging Cert · Will Turner", auth: "IATSE", exp: "Exp Jul 2 · renew soon", status: "Expiring", icon: "BadgeCheck" },
+];
+
+// ── Logistics hub members — Docks · Gate · Delivery (kit 34 v3.4). The
+// marshaling board (dock slots), the gate/vehicle check-in queue, and on-site
+// delivery/chain-of-custody tickets. Shipments live in OPS_LOGISTICS above.
+export type DockSlot = {
+  id: string;
+  dock: string;
+  time: string;
+  dur: string;
+  label: string;
+  dir: "in" | "out";
+  status: string;
+};
+export const DOCK_SLOTS: DockSlot[] = [
+  { id: "ds1", dock: "Dock B", time: "14:00", dur: "90m", label: "Headliner Backline", dir: "in", status: "Arrived" },
+  { id: "ds2", dock: "Dock B", time: "16:30", dur: "30m", label: "SFX Consumables", dir: "in", status: "En Route" },
+  { id: "ds3", dock: "Dock B", time: "23:45", dur: "60m", label: "Load-Out · Count Pallets", dir: "out", status: "Scheduled" },
+  { id: "ds4", dock: "Dock A", time: "19:30", dur: "90m", label: "LED Wall", dir: "in", status: "En Route" },
+  { id: "ds5", dock: "BOH", time: "20:00", dur: "45m", label: "Catering Resupply", dir: "in", status: "Delayed" },
+];
+
+export type GateEntry = {
+  id: string;
+  vehicle: string;
+  carrier: string;
+  driver: string;
+  dock: string;
+  cred: string;
+  status: string;
+  eta: string;
+};
+export const GATE_QUEUE: GateEntry[] = [
+  { id: "gt1", vehicle: "53' Reefer · FL-88 4471", carrier: "Rock-It Cargo", driver: "Bootstrap Bill", dock: "Dock B", cred: "COI on file · verified", status: "At Dock", eta: "Arrived 13:52" },
+  { id: "gt2", vehicle: "48' Dry Van · GA-20 8830", carrier: "Clair Global", driver: "Marty Brace", dock: "Dock A", cred: "COI on file · verified", status: "Waiting", eta: "ETA 19:20" },
+  { id: "gt3", vehicle: "Sprinter · FL-90 1188", carrier: "Dutchman Freight", driver: "Cotton", dock: "Dock B", cred: "Day pass · verified", status: "Cleared", eta: "On site 16:05" },
+  { id: "gt4", vehicle: "Box Truck · FL-14 2201", carrier: "Tortuga F&B", driver: "Scarlett", dock: "BOH", cred: "COI expired · flag", status: "Held", eta: "Delayed" },
+];
+
+export type DeliveryTicket = {
+  id: string;
+  ref: string;
+  t: string;
+  from: string;
+  to: string;
+  pieces: number;
+  runner: string;
+  need: string;
+  status: string;
+  eta: string;
+};
+export const DELIVERIES: DeliveryTicket[] = [
+  { id: "dl1", ref: "MOV-318", t: "Amp Racks → Stage L", from: "Dock B", to: "Stage L · SR Wing", pieces: 4, runner: "Cotton", need: "Forklift", status: "In Transit", eta: "~5 min" },
+  { id: "dl2", ref: "MOV-317", t: "Comms Kits → VIP", from: "Comms Cage · Dock B", to: "VIP · Crow's Nest", pieces: 6, runner: "Anamaria", need: "Cart", status: "Delivered", eta: "Confirmed 15:20" },
+  { id: "dl3", ref: "MOV-319", t: "Catering Resupply → BOH Kitchen", from: "BOH", to: "Catering Tent", pieces: 9, runner: "Marty", need: "Pallet jack", status: "Staged", eta: "Awaiting dock" },
+  { id: "dl4", ref: "MOV-316", t: "LED Panels → Stage L Deck", from: "Dock A", to: "Stage L · Deck", pieces: 24, runner: "Ragetti", need: "4 pax + carts", status: "Requested", eta: "On truck arrival" },
 ];

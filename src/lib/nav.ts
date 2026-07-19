@@ -1702,6 +1702,9 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Operations", href: "/m/operations" },
   { label: "Workforce", href: "/m/workforce" },
   { label: "Assets & Equipment", href: "/m/equipment" },
+  { label: "Docks", href: "/m/logistics/docks" },
+  { label: "Gate", href: "/m/logistics/gate" },
+  { label: "Delivery", href: "/m/logistics/delivery" },
   // Kit 33 (v3.0): Aurora is the 5th bottom tab — the AI agentic-chat surface.
   // Listed here so the route is sitemap-navigable; the tab itself routes to it.
   { label: "Aurora", href: "/m/aurora" },
@@ -1958,9 +1961,9 @@ export const mobileHubs: MobileHub[] = [
     landing: "/m/logistics",
     members: [
       { key: "shipments", label: "Shipments", icon: "Truck", href: "/m/logistics" },
-      { key: "docks", label: "Docks", icon: "Warehouse", href: "/m/logistics/docks", pending: true },
-      { key: "gate", label: "Gate", icon: "ScanLine", href: "/m/logistics/gate", pending: true },
-      { key: "delivery", label: "Delivery", icon: "PackageCheck", href: "/m/logistics/delivery", pending: true },
+      { key: "docks", label: "Docks", icon: "Warehouse", href: "/m/logistics/docks" },
+      { key: "gate", label: "Gate", icon: "ScanLine", href: "/m/logistics/gate" },
+      { key: "delivery", label: "Delivery", icon: "PackageCheck", href: "/m/logistics/delivery" },
     ],
   },
   {

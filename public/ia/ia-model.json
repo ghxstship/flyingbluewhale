@@ -2452,6 +2452,24 @@
               ]
             },
             {
+              "path": "/m/logistics/docks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/logistics/gate",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/logistics/delivery",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/aurora",
               "arch": [
                 "LIST"

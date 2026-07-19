@@ -152,8 +152,8 @@
 .mobile-shell .tl-row .ttime { font-family: var(--p-mono); font-size: 11px; color: var(--p-text-3); margin-top: 1px; }
 /* ── list controls shared across Tasks / Assets / Schedule ── */
 .mobile-shell .viewseg { display: flex; gap: 4px; background: var(--p-bg); border: 1px solid var(--p-border); border-radius: 12px; padding: var(--p-1); margin-bottom: var(--p-3); }
-.mobile-shell .viewseg button { flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--p-1); padding: 8px 4px; border: none; background: none; border-radius: 9px; font-size: 12px; font-weight: 700; color: var(--p-text-3); cursor: pointer; }
-.mobile-shell .viewseg button.on { background: var(--p-surface); color: var(--p-text-1); box-shadow: var(--p-elev-1); }
+.mobile-shell .viewseg button, .mobile-shell .viewseg a { flex: 1; display: flex; align-items: center; justify-content: center; gap: var(--p-1); padding: 8px 4px; border: none; background: none; border-radius: 9px; font-size: 12px; font-weight: 700; color: var(--p-text-3); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.mobile-shell .viewseg button.on, .mobile-shell .viewseg a.on { background: var(--p-surface); color: var(--p-text-1); box-shadow: var(--p-elev-1); }
 .mobile-shell .searchbar { display: flex; align-items: center; gap: 8px; background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 11px; padding: var(--p-2) 12px; margin-bottom: var(--p-3); color: var(--p-text-3); }
 .mobile-shell .searchbar input { border: none; background: none; outline: none; flex: 1; font-size: 14px; font-family: inherit; color: var(--p-text-1); min-width: 0; }
 .mobile-shell .searchbar input::placeholder { color: var(--p-text-3); }

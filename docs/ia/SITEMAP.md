@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1253 · **API route handlers:** 157 · **Distinct nav hrefs:** 566
+**Page routes:** 1256 · **API route handlers:** 157 · **Distinct nav hrefs:** 569
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 106 | 82 | 23 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 109 | 85 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1253** | **540** | **670** | **0** | **43** |
+| **TOTAL** | | **1256** | **543** | **670** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1360,7 +1360,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-106 routes — ● 82 nav · ○ 23 linked · ⚠ 0 orphan
+109 routes — ● 85 nav · ○ 23 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1489,6 +1489,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>equipment</code> · 1 route</summary>
+
+● `/m/equipment`
+
+</details>
+
 <details><summary><code>expenses</code> · 2 routes</summary>
 
 ● `/m/expenses`
@@ -1612,6 +1618,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/m/onboarding`
 ○ `/m/onboarding/[assignmentId]`
+
+</details>
+
+<details><summary><code>operations</code> · 1 route</summary>
+
+● `/m/operations`
 
 </details>
 
@@ -1769,6 +1781,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>travel</code> · 1 route</summary>
 
 ● `/m/travel`
+
+</details>
+
+<details><summary><code>workforce</code> · 1 route</summary>
+
+● `/m/workforce`
 
 </details>
 

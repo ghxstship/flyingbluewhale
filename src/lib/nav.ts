@@ -1691,6 +1691,12 @@ export const mobileTabs: NavItem[] = [
 // labels; middot `·` only inside headers, never here.
 export const mobileSurfaces: NavItem[] = [
   // Tools.
+  // Kit 34 (v3.1/v3.2): Field-Operations HUB landing screens (MetricBar +
+  // member launcher). Drawer's Field Operations group points here; each hub's
+  // members are the individual routes below. SSOT: `mobileHubs`.
+  { label: "Operations", href: "/m/operations" },
+  { label: "Workforce", href: "/m/workforce" },
+  { label: "Assets & Equipment", href: "/m/equipment" },
   // Kit 33 (v3.0): Aurora is the 5th bottom tab — the AI agentic-chat surface.
   // Listed here so the route is sitemap-navigable; the tab itself routes to it.
   { label: "Aurora", href: "/m/aurora" },
@@ -1831,42 +1837,41 @@ export const moreNavGroups: MoreNavGroup[] = [
     key: "mywork",
     label: "My Work",
     links: [
-      { href: "/m/assets", label: "Assets", icon: "Package", sub: "Gear Assigned To You" },
-      { href: "/m/time", label: "Time", icon: "Timer", sub: "Your Hours & Shift Records" },
-      { href: "/m/documents", label: "Documents", icon: "FolderOpen", sub: "Site Docs, Filtered To You" },
-      { href: "/m/activity", label: "Activity History", icon: "History", sub: "Scans, Access, Reports & More" },
-      { href: "/m/time-off", label: "Time Off", icon: "CalendarOff", sub: "Request PTO & Track Balances" },
+      { href: "/m/tasks", label: "My Tasks", icon: "ListChecks", sub: "Work Assigned To You" },
+      { href: "/m/schedule", label: "My Calendar", icon: "CalendarDays", sub: "Your Shifts & Events" },
+      { href: "/m/time", label: "My Time", icon: "Timer", sub: "Clock In/Out & My Timesheets" },
+      { href: "/m/assets", label: "My Gear", icon: "Package", sub: "Gear Assigned To You" },
+      { href: "/m/documents", label: "My Documents", icon: "FolderOpen", sub: "Docs Shared With You" },
+      { href: "/m/activity", label: "My Activity", icon: "History", sub: "Scans, Access, Reports & More" },
+    ],
+  },
+  {
+    // Field Operations — each row is a HUB (one screen = MetricBar + viewseg of
+    // sub-tabs), not a loose page. See `mobileHubs` for each hub's members.
+    key: "fieldops",
+    label: "Field Operations",
+    links: [
+      // Projects hub arrives with the XPMS wave (kit 34 v3.2 / v3.6).
+      { href: "/m/operations", label: "Operations", icon: "ClipboardList", sub: "Daily Report, Reports, Inspections, Permits & Travel" },
+      { href: "/m/logistics", label: "Logistics", icon: "Truck", sub: "Shipments, Docks, Gate & Delivery" },
+      { href: "/m/workforce", label: "Workforce", icon: "CalendarClock", sub: "Schedule, Time Sheets, Roster & Time Off", managerOnly: true },
+      { href: "/m/equipment", label: "Assets & Equipment", icon: "Boxes", sub: "Inventory, Catalog & Requests" },
+      { href: "/m/finance", label: "Finance", icon: "Banknote", sub: "Budget & Expenses", managerOnly: true },
     ],
   },
   {
     key: "workplace",
     label: "Workplace",
     links: [
-      { href: "/m/spaces", label: "Groups", icon: "Users2", sub: "Team, Location & Interest Channels" },
       { href: "/m/feed", label: "Community", icon: "Megaphone", sub: "Your Professional Feed" },
+      { href: "/m/spaces", label: "Groups", icon: "Users2", sub: "Team, Location & Interest Channels" },
       { href: "/m/docs", label: "Knowledge", icon: "BookOpen", sub: "Policies, SOPs & How-Tos" },
     ],
   },
   {
-    key: "operations",
-    label: "Operations",
+    key: "network",
+    label: "Network",
     links: [
-      { href: "/m/reports", label: "Reports", icon: "FileWarning", sub: "Incident & Daily Log" },
-      { href: "/m/inspections", label: "Inspections", icon: "ClipboardCheck", sub: "Checklists & Safety Walks" },
-      { href: "/m/inventory", label: "Inventory", icon: "PackageSearch", sub: "On-Hand Gear & Stock" },
-      { href: "/m/logistics", label: "Logistics", icon: "Truck", sub: "Deliveries & Freight" },
-      { href: "/m/advances", label: "Advances", icon: "ClipboardList", sub: "Advance Requests & Status" },
-      { href: "/m/catalog", label: "Catalog", icon: "Boxes", sub: "Browse & Request From XPMS" },
-      { href: "/m/expenses", label: "Expenses", icon: "Receipt", sub: "Submitted Spend & Reimbursements" },
-      { href: "/m/permits", label: "Permits & Compliance", icon: "ShieldCheck", sub: "Permits, COIs & Certs" },
-      { href: "/m/travel", label: "Travel & Lodging", icon: "Plane", sub: "Itineraries, Hotels & Per Diem" },
-    ],
-  },
-  {
-    key: "people",
-    label: "People & Teams",
-    links: [
-      { href: "/m/directory", label: "Team Roster", icon: "Users", sub: "Org & Project Crew" },
       { href: "/m/companies", label: "Vendors", icon: "Building2", sub: "All Orgs On This Project" },
       { href: "/m/connections", label: "Connections", icon: "Network", sub: "Your ATLVS Network" },
     ],
@@ -1887,15 +1892,97 @@ export const moreNavGroups: MoreNavGroup[] = [
     label: "Manage",
     links: [
       { href: "/m/requests", label: "Approvals", icon: "CheckCheck", sub: "Review & Action Requests", managerOnly: true, badge: "approvals" },
-      { href: "/m/scheduler", label: "Shift Scheduler", icon: "CalendarCog", sub: "Build & Publish Crew Shifts", managerOnly: true },
       { href: "/m/roster", label: "Project Roster", icon: "UserRoundCheck", sub: "Contracts, Onboarding & Advances", managerOnly: true },
-      { href: "/m/finance", label: "Finance", icon: "Banknote", sub: "Budget, POs & Coded Spend", managerOnly: true },
       { href: "/m/roster/reporting", label: "Org Chart", icon: "Network", sub: "Who Reports To Whom", managerOnly: true },
       { href: "/m/templates", label: "Templates", icon: "LayoutTemplate", sub: "Org & Project Template Library", managerOnly: true },
       { href: "/m/engagement", label: "Insights", icon: "ChartNoAxesColumn", sub: "Reach & Adoption Analytics", managerOnly: true },
     ],
   },
 ];
+
+/**
+ * Field-Operations HUBS — kit 34 v3.1/v3.2 (design_handoff_compvss_field
+ * `HUBS`). Each hub is ONE screen: back · title · MetricBar · `viewseg` of
+ * 3–5 members (no hub-of-hub). Rule: a surface that needs its own sub-tabs IS
+ * its own hub. Every member resolves to exactly one home — no surface is both a
+ * hub member and a standalone drawer row.
+ *
+ * `managerOnly` members self-hide from the viewseg for crew/external (the
+ * surface re-checks server-side), so lower-privilege crew see a shorter hub.
+ * `landing` is the hub's route; the drawer's Field Operations rows point here.
+ */
+export type MobileHubMember = {
+  key: string;
+  label: string;
+  icon: string;
+  href: string;
+  managerOnly?: boolean;
+  /** Route not built yet (later wave) — kept here as SSOT truth, but HubChrome
+   *  omits it from the viewseg so no dead link ships. */
+  pending?: boolean;
+};
+export type MobileHub = { key: string; label: string; landing: string; members: MobileHubMember[] };
+
+export const mobileHubs: MobileHub[] = [
+  {
+    key: "operations",
+    label: "Operations",
+    landing: "/m/operations",
+    members: [
+      { key: "dailyreport", label: "Daily Report", icon: "SunMedium", href: "/m/daily-log" },
+      { key: "reports", label: "Reports", icon: "TriangleAlert", href: "/m/reports" },
+      { key: "inspections", label: "Inspections", icon: "ClipboardCheck", href: "/m/inspections" },
+      { key: "permits", label: "Permits", icon: "ShieldCheck", href: "/m/permits" },
+      { key: "travel", label: "Travel", icon: "Plane", href: "/m/travel" },
+    ],
+  },
+  {
+    key: "logistics",
+    label: "Logistics",
+    landing: "/m/logistics",
+    members: [
+      { key: "shipments", label: "Shipments", icon: "Truck", href: "/m/logistics" },
+      { key: "docks", label: "Docks", icon: "Warehouse", href: "/m/logistics/docks", pending: true },
+      { key: "gate", label: "Gate", icon: "ScanLine", href: "/m/logistics/gate", pending: true },
+      { key: "delivery", label: "Delivery", icon: "PackageCheck", href: "/m/logistics/delivery", pending: true },
+    ],
+  },
+  {
+    key: "workforce",
+    label: "Workforce",
+    landing: "/m/workforce",
+    members: [
+      { key: "schedule", label: "Schedule", icon: "CalendarDays", href: "/m/scheduler", managerOnly: true },
+      { key: "timesheets", label: "Time Sheets", icon: "ClipboardList", href: "/m/timesheets", managerOnly: true },
+      { key: "roster", label: "Roster", icon: "Users", href: "/m/directory" },
+      { key: "timeoff", label: "Time Off", icon: "CalendarOff", href: "/m/time-off" },
+    ],
+  },
+  {
+    key: "equipment",
+    label: "Assets & Equipment",
+    landing: "/m/equipment",
+    members: [
+      { key: "inventory", label: "Inventory", icon: "Boxes", href: "/m/inventory" },
+      { key: "catalog", label: "Catalog", icon: "BookOpen", href: "/m/catalog" },
+      { key: "requests", label: "Requests", icon: "ClipboardList", href: "/m/advances" },
+    ],
+  },
+  {
+    key: "finance",
+    label: "Finance",
+    landing: "/m/finance",
+    members: [
+      { key: "budget", label: "Budget", icon: "ChartNoAxesColumn", href: "/m/finance", managerOnly: true },
+      { key: "expenses", label: "Expenses", icon: "Receipt", href: "/m/expenses" },
+    ],
+  },
+];
+
+/** Resolve a hub by key, or the hub that owns a member href. */
+export function hubByKey(key: string): MobileHub | undefined {
+  return mobileHubs.find((h) => h.key === key);
+}
 
 /**
  * ADR-0005 — phase-aware ordering of `mobileSurfaces`. Field operators

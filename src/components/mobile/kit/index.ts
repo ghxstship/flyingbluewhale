@@ -76,8 +76,47 @@ export type {
 export { ViewToggle, VIEW_ICON } from "./ViewToggle";
 export type { ViewToggleProps, ViewMode } from "./ViewToggle";
 
+export {
+  DataView,
+  GroupedTree,
+  ViewSheet,
+  ShareSheet,
+  FilterGroups,
+  SortReorder,
+  GroupBuilder,
+  applyModel,
+  groupTree,
+  evalFilterModel,
+  evalRuleModel,
+  emptyFilterModel,
+  countFilterRules,
+  dataPills,
+  advBar,
+  emptyViewCtl,
+  MODEL_FILTER_OPS,
+  NOW_ISO,
+} from "./viewengine";
+export type {
+  FilterModel,
+  FilterGroup,
+  ModelRule,
+  ModelFilterOp,
+  GroupNode,
+  ViewCtl,
+  Conj,
+} from "./viewengine";
+
+export { MetricBar, ViewSeg } from "./MetricBar";
+export type { MetricBarItem, ViewSegItem } from "./MetricBar";
+
+export { ScreenHeader } from "./ScreenHeader";
+export type { ScreenHeaderProps } from "./ScreenHeader";
+
+export { Block, ListRow, MetricGrid, MeterRow } from "./blocks";
+export type { MetricCell } from "./blocks";
+
 export { ActionBar } from "./ActionBar";
-export type { ActionBarProps } from "./ActionBar";
+export type { ActionBarProps, ActionBarPill } from "./ActionBar";
 
 export { RoseCard, QR, hashStr } from "./RoseCard";
 export type { RoseCardProps, QRProps } from "./RoseCard";

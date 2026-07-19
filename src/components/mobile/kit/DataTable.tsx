@@ -22,6 +22,11 @@ export type FieldDef<T> = {
   get?: (item: T) => unknown;
   /** Optional custom cell renderer for the table view (defaults to `get`). */
   cell?: (item: T) => ReactNode;
+  /** For `type:"date"` fields — the item's `YYYY-MM-DD` for date filters and
+   *  the calendar view (kit 34 v3.3 view engine). */
+  iso?: (item: T) => string | null;
+  /** Optional group key override for grouping (defaults to `get`). */
+  group?: (item: T) => string;
 };
 
 export type FilterOp =

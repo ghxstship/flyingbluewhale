@@ -31,6 +31,8 @@ import {
   UtensilsCrossed, Vibrate, Volume2, Wallet, Weight, Wine, Wrench, XCircle, Zap,
   // kit 33 v3.0 additions (nav-drawer, ops ledgers, aurora chat).
   ChartNoAxesColumn, FileWarning, Moon, UserRoundCheck, Users2, X,
+  // kit 34 additions (view engine drawers, hub chrome).
+  Share, Printer, Sheet, Braces, Webhook, Code, Stamp, Settings2, Waypoints, Fence, SunMedium, CarFront,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { CSSProperties, MouseEventHandler } from "react";
@@ -81,6 +83,8 @@ const ICONS: Record<string, LucideIcon> = {
   UtensilsCrossed, Vibrate, Volume2, Wallet, Weight, Wine, Wrench, XCircle, Zap,
   // kit 33 v3.0 additions (nav-drawer, ops ledgers, aurora chat).
   ChartNoAxesColumn, FileWarning, Moon, UserRoundCheck, Users2, X,
+  // kit 34 additions (view engine drawers, hub chrome).
+  Share, Printer, Sheet, Braces, Webhook, Code, Stamp, Settings2, Waypoints, Fence, SunMedium, CarFront,
 };
 
 export type KIconProps = {

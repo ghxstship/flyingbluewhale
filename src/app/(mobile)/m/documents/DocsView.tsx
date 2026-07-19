@@ -2,8 +2,14 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { ActionBar, EmptySkeleton, GroupedList, KIcon, SheetHead, SwipeRow, TogRow } from "@/components/mobile/kit";
-import type { ViewMode } from "@/components/mobile/kit";
+import {
+  KIcon,
+  NormalizedList,
+  ScreenHeader,
+  SheetHead,
+  SwipeRow,
+  type FieldDef,
+} from "@/components/mobile/kit";
 import { useDismissable } from "@/components/mobile/kit/useDismissable";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -36,37 +42,12 @@ function badgeClass(tone: string) {
   return `ps-badge ps-badge--${tone}`;
 }
 
-export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow: string; title: string }) {
+export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string; title: string }) {
   const t = useT();
   const toast = useToast();
   const [, startTransition] = useTransition();
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<ViewMode>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("name");
-  const [scopes, setScopes] = useState<Set<DocScope>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const cats = useMemo(() => Array.from(new Set(items.map((d) => d.cat))).sort(), [items]);
-
-  const filtered = useMemo(() => {
-    const q = query.toLowerCase();
-    return items
-      .filter((d) => scopes.size === 0 || scopes.has(d.scope))
-      .filter((d) => !q || (d.title + " " + d.cat).toLowerCase().includes(q))
-      .sort((a, b) =>
-        sort === "cat" ? a.cat.localeCompare(b.cat) : sort === "updated" ? (b.updated ?? "").localeCompare(a.updated ?? "") : a.title.localeCompare(b.title),
-      );
-  }, [items, query, scopes, sort]);
-
-  const toggleScope = (s: DocScope) =>
-    setScopes((prev) => {
-      const next = new Set(prev);
-      if (next.has(s)) next.delete(s);
-      else next.add(s);
-      return next;
-    });
 
   // Kit 31 (v2.7 swipe canon): Save (info, signed-URL download) · Share
   // (neutral). Both mint the URL through the caller's own session, so the
@@ -145,6 +126,13 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
     });
   };
 
+  const FIELDS: FieldDef<DocItem>[] = [
+    { id: "title", label: t("m.docs.col.title", undefined, "Title"), type: "text", get: (d) => d.title },
+    { id: "cat", label: t("m.docs.group.cat", undefined, "Category"), type: "select", options: cats, get: (d) => d.cat },
+    { id: "scope", label: t("m.docs.col.access", undefined, "Access"), type: "select", options: SCOPES, get: (d) => d.scope },
+    { id: "updated", label: t("m.docs.col.updated", undefined, "Updated"), type: "text", get: (d) => d.updated ?? "" },
+  ];
+
   const row = (d: DocItem) => (
     <SwipeRow
       key={d.id}
@@ -172,94 +160,44 @@ export function DocsView({ items, eyebrow, title }: { items: DocItem[]; eyebrow:
     </SwipeRow>
   );
 
+  const uploadCta = (
+    <Link
+      href="/m/documents/new"
+      className="ps-btn ps-btn--cta ps-btn--lg"
+      style={{ width: "100%", justifyContent: "center", marginTop: 10, textDecoration: "none" }}
+    >
+      <KIcon name="Upload" size={15} /> {t("m.docs.upload", undefined, "Upload Document")}
+    </Link>
+  );
+
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">{eyebrow}</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>{title}</h1>
+      <ScreenHeader onBack={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))} title={title} />
 
-      <Link
-        href="/m/documents/new"
-        className="ps-btn ps-btn--cta ps-btn--lg"
-        style={{ width: "100%", justifyContent: "center", marginBottom: 12 }}
-      >
-        <KIcon name="Upload" size={15} /> {t("m.docs.upload", undefined, "Upload Document")}
-      </Link>
-
-      <ActionBar
+      <NormalizedList
         k="dc"
-        query={query}
-        setQuery={setQuery}
-        placeholder={t("m.docs.search", undefined, "Search Documents…")}
-        view={view}
-        setView={setView}
-        views={["list"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", t("m.docs.group.none", undefined, "None")],
-          ["cat", t("m.docs.group.cat", undefined, "Category")],
-          ["scope", t("m.docs.group.scope", undefined, "Access")],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["name", t("m.docs.sort.name", undefined, "Name")],
-          ["cat", t("m.docs.sort.cat", undefined, "Category")],
-          ["updated", t("m.docs.sort.updated", undefined, "Updated")],
-        ]}
-        filterActive={scopes.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <div>
-            {SCOPES.map((s) => (
-              <TogRow key={s} label={s} on={scopes.has(s)} set={() => toggleScope(s)} />
-            ))}
-          </div>
-        }
-      />
-
-      {filtered.length === 0 ? (
-        <EmptySkeleton
-          cols={[
+        items={items}
+        fields={FIELDS}
+        search={(d) => `${d.title} ${d.cat} ${d.scope}`}
+        searchPlaceholder={t("m.docs.search", undefined, "Search Documents…")}
+        renderRow={row}
+        views={["list", "table"]}
+        pill={{ get: (d) => d.scope, order: SCOPES }}
+        empty={{
+          cols: [
             t("m.docs.col.title", undefined, "Title"),
             t("m.docs.col.access", undefined, "Access"),
             t("m.docs.col.updated", undefined, "Updated"),
-          ]}
-          title={t("m.docs.empty.title", undefined, "No Documents")}
-          hint={t(
+          ],
+          title: t("m.docs.empty.title", undefined, "No Documents"),
+          hint: t(
             "m.docs.empty.body",
             undefined,
             "Project documents you can access land here. Upload your own tickets, licenses and certifications to keep them on you.",
-          )}
-          action={
-            <Link href="/m/documents/new" className="ps-btn ps-btn--cta">
-              <KIcon name="Upload" size={15} /> {t("m.docs.upload", undefined, "Upload Document")}
-            </Link>
-          }
-        />
-      ) : group === "cat" ? (
-        <GroupedList
-          skey="dc"
-          groups={cats.filter((c) => filtered.some((d) => d.cat === c)).map((c) => [c, filtered.filter((d) => d.cat === c)])}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={row}
-        />
-      ) : group === "scope" ? (
-        <GroupedList
-          skey="dc"
-          groups={SCOPES.filter((s) => filtered.some((d) => d.scope === s)).map((s) => [
-            s,
-            filtered.filter((d) => d.scope === s),
-          ])}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={row}
-        />
-      ) : (
-        filtered.map(row)
-      )}
+          ),
+        }}
+        footer={uploadCta}
+      />
 
       {/* Kit 32 A1 — in-app document viewer sheet. */}
       {viewerDoc && (

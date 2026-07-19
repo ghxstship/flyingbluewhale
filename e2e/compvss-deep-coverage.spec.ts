@@ -47,9 +47,12 @@ async function expectRendered(page: Page) {
 }
 
 /**
- * Fill + submit the kit `advance` FormScreen for a Radio item. Shared by the
- * create-and-read-back journey and the prefill journey. Returns the unique
- * item title so the caller can assert the row.
+ * Fill + submit the advance FormScreen for a Radio item via the SPECIAL-ORDER
+ * path. The item is now a catalog lookup filtered by Category, so a free-text
+ * item only exists behind the "special order" switch — which is also the
+ * seed-independent path (no active Radio SKU needs to exist in the demo org).
+ * The action mints an inactive SKU + a briefed radio assignment either way.
+ * Returns the unique item title so the caller can assert the row.
  */
 async function submitRadioAdvance(page: Page): Promise<string> {
   const itemTitle = `Motorola R7 E2E-${Date.now()}`;
@@ -66,13 +69,17 @@ async function submitRadioAdvance(page: Page): Promise<string> {
   // value), THEN click.
   const cta = page.getByRole("button", { name: /submit request/i });
   await expect(async () => {
-    // Category (select) value === option label "Radio".
-    await form.locator("select").first().selectOption("Radio");
-    // Item / Type (first text input).
+    // Category (select) value === kind label "Radios".
+    await form.locator("select").first().selectOption("Radios");
+    // Flip Special order ON so the free-text Custom Item field renders (the
+    // default Item field is a strict catalog select).
+    const swtch = form.getByRole("switch", { name: /special order/i });
+    if ((await swtch.getAttribute("aria-checked")) !== "true") await swtch.click();
+    // Custom Item (the only text input once special-order is on).
     await form.locator("input[type='text']").first().fill(itemTitle);
     // Quantity (the lone number input).
     await form.locator("input[type='number']").first().fill("2");
-    // Operational Purpose is textarea #2 (Special Requests is #1); requiredFor Radio.
+    // Operational Purpose is textarea #2 (Special Requests is #1); requiredFor Radios.
     await form.locator("textarea").nth(1).fill("E2E ops coverage");
     // Kit 31 (#24): BOTH Start and End Date are REQUIRED on every advance line
     // (end >= start, validated server-side too). Neither filled → CTA never arms.

@@ -47,6 +47,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     created_at: string;
   };
 
+  // A field-minted special order: inactive + `SPECIAL-` code, awaiting a
+  // manager's approval into the standard catalog (see the mobile advance intake).
+  const isPendingSpecialOrder = !item.active && item.code.startsWith("SPECIAL-");
+
   // Roll-up: how many active assignments reference this catalog item.
   const { count: usageCount } = await supabase
     .from("assignments")
@@ -63,10 +67,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant="muted">{toTitle(item.kind)}</Badge>
-            <Badge variant={item.active ? "success" : "muted"}>
-              {item.active
-                ? t("console.settings.catalog.detail.statusActive", undefined, "Active")
-                : t("console.settings.catalog.detail.statusInactive", undefined, "Inactive")}
+            <Badge variant={isPendingSpecialOrder ? "warning" : item.active ? "success" : "muted"}>
+              {isPendingSpecialOrder
+                ? t("console.settings.catalog.detail.statusPending", undefined, "Pending Approval")
+                : item.active
+                  ? t("console.settings.catalog.detail.statusActive", undefined, "Active")
+                  : t("console.settings.catalog.detail.statusInactive", undefined, "Inactive")}
             </Badge>
             <span className="font-mono text-xs">{item.code}</span>
             <span className="font-mono text-xs">
@@ -89,10 +95,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={item.id} />
               <input type="hidden" name="next" value={item.active ? "false" : "true"} />
-              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
-                {item.active
-                  ? t("console.settings.catalog.detail.deactivate", undefined, "Deactivate")
-                  : t("console.settings.catalog.detail.reactivate", undefined, "Reactivate")}
+              <button
+                type="submit"
+                className={
+                  isPendingSpecialOrder ? "ps-btn ps-btn--cta ps-btn--sm" : "ps-btn ps-btn--ghost ps-btn--sm"
+                }
+              >
+                {isPendingSpecialOrder
+                  ? t("console.settings.catalog.detail.approve", undefined, "Approve")
+                  : item.active
+                    ? t("console.settings.catalog.detail.deactivate", undefined, "Deactivate")
+                    : t("console.settings.catalog.detail.reactivate", undefined, "Reactivate")}
               </button>
             </form>
             <DeleteForm
@@ -108,6 +121,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
       />
       <div className="page-content max-w-2xl space-y-3">
+        {isPendingSpecialOrder && (
+          <section className="ps-alert ps-alert--warning text-sm">
+            {t(
+              "console.settings.catalog.detail.pendingNote",
+              undefined,
+              "A field crew requested this as a special order because it wasn't in the catalog. Approve it to add it to the standard catalog and make it pickable, or remove it if it shouldn't be stocked.",
+            )}
+          </section>
+        )}
         {item.description && <section className="surface p-4 text-sm whitespace-pre-wrap">{item.description}</section>}
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>

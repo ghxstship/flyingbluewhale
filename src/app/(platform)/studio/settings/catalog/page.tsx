@@ -1,5 +1,6 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
@@ -42,15 +43,21 @@ const KIND_LABEL: Record<string, string> = {
   vehicle: "Vehicles",
 };
 
+// A special-order SKU is one the field (COMPVSS advance intake) minted for an
+// item that wasn't in the catalog: it lands INACTIVE with a `SPECIAL-` code,
+// waiting for a manager to approve it into the standard catalog.
+const isPendingSpecialOrder = (r: Row) => !r.active && r.code.startsWith("SPECIAL-");
+
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string }>;
+  searchParams: Promise<{ view?: string; filter?: string }>;
 }) {
   const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const view = resolveDataView<CatalogView>(sp, CATALOG_VIEWS, "table");
+  const pendingLens = sp.filter === "pending";
   if (!hasSupabase) {
     return (
       <>
@@ -76,7 +83,14 @@ export default async function Page({
     .is("deleted_at", null)
     .order("kind")
     .order("name");
-  const rows = (data ?? []) as Row[];
+  const allRows = (data ?? []) as Row[];
+  const pendingCount = allRows.filter(isPendingSpecialOrder).length;
+  const rows = pendingLens ? allRows.filter(isPendingSpecialOrder) : allRows;
+
+  // Lens links preserve the active view so switching lens doesn't reset it.
+  const viewQs = view !== "table" ? `view=${view}` : "";
+  const allHref = `/studio/settings/catalog${viewQs ? `?${viewQs}` : ""}`;
+  const pendingHref = `/studio/settings/catalog?filter=pending${viewQs ? `&${viewQs}` : ""}`;
 
   const KIND_LABEL_I18N: Record<string, string> = {
     credential: t("console.settings.catalog.kind.credential", undefined, "Credentials"),
@@ -90,9 +104,24 @@ export default async function Page({
     vehicle: t("console.settings.catalog.kind.vehicle", undefined, "Vehicles"),
   };
   const itemWord =
-    rows.length === 1
+    allRows.length === 1
       ? t("console.settings.catalog.itemSingular", undefined, "Item")
       : t("console.settings.catalog.itemPlural", undefined, "Items");
+
+  const emptyTitle = pendingLens
+    ? t("console.settings.catalog.pendingEmptyTitle", undefined, "No special orders waiting")
+    : t("console.settings.catalog.emptyLabel", undefined, "No catalog items yet");
+  const emptyDescription = pendingLens
+    ? t(
+        "console.settings.catalog.pendingEmptyDescription",
+        undefined,
+        "When a field crew requests an item that isn't in the catalog, it lands here for you to review and approve.",
+      )
+    : t(
+        "console.settings.catalog.emptyDescription",
+        undefined,
+        "Define reusable credentials, uniforms, radios, vehicles, etc. so admins can pick from a dropdown when assigning to people.",
+      );
   return (
     <>
       <ModuleHeader
@@ -100,11 +129,33 @@ export default async function Page({
         title={t("console.settings.catalog.title", undefined, "Master Catalog")}
         subtitle={t(
           "console.settings.catalog.subtitle",
-          { count: rows.length, itemWord },
-          `${rows.length} ${itemWord} · the assignable inventory for advancing surfaces`,
+          { count: allRows.length, itemWord },
+          `${allRows.length} ${itemWord} · the assignable inventory for advancing surfaces`,
         )}
         action={
           <div className="flex items-center gap-3">
+            {/* Lens: All ↔ Pending Approval (special orders awaiting a manager). */}
+            <div className="flex items-center gap-1" role="group" aria-label={t("console.settings.catalog.lensAria", undefined, "Catalog lens")}>
+              <Link
+                href={allHref}
+                aria-current={pendingLens ? undefined : "page"}
+                className={buttonVariants({ variant: pendingLens ? "ghost" : "soft", size: "sm" })}
+              >
+                {t("console.settings.catalog.lensAll", undefined, "All")}
+              </Link>
+              <Link
+                href={pendingHref}
+                aria-current={pendingLens ? "page" : undefined}
+                className={buttonVariants({ variant: pendingLens ? "soft" : "ghost", size: "sm" })}
+              >
+                {t("console.settings.catalog.lensPending", { count: pendingCount }, "Pending Approval")}
+                {pendingCount > 0 && (
+                  <Badge variant="warning" className="ml-2">
+                    {pendingCount}
+                  </Badge>
+                )}
+              </Link>
+            </div>
             <DataViewSwitcher
               current={view}
               allowed={CATALOG_VIEWS}
@@ -125,29 +176,21 @@ export default async function Page({
               title: r.name,
               eyebrow: KIND_LABEL_I18N[r.kind] ?? KIND_LABEL[r.kind] ?? r.kind,
               subtitle: r.code,
-              state: r.active ? "active" : "inactive",
+              state: isPendingSpecialOrder(r) ? "pending" : r.active ? "active" : "inactive",
               href: `/studio/settings/catalog/${r.id}`,
               unitCostCents: r.unit_cost_cents,
               currency: r.currency,
               inventoryQty: r.inventory_qty,
             }))}
-            emptyTitle={t("console.settings.catalog.emptyLabel", undefined, "No catalog items yet")}
-            emptyDescription={t(
-              "console.settings.catalog.emptyDescription",
-              undefined,
-              "Define reusable credentials, uniforms, radios, vehicles, etc. so admins can pick from a dropdown when assigning to people.",
-            )}
+            emptyTitle={emptyTitle}
+            emptyDescription={emptyDescription}
           />
         ) : (
           <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/studio/settings/catalog/${r.id}`}
-          emptyLabel={t("console.settings.catalog.emptyLabel", undefined, "No catalog items yet")}
-          emptyDescription={t(
-            "console.settings.catalog.emptyDescription",
-            undefined,
-            "Define reusable credentials, uniforms, radios, vehicles, etc. so admins can pick from a dropdown when assigning to people.",
-          )}
+          emptyLabel={emptyTitle}
+          emptyDescription={emptyDescription}
           columns={[
             {
               key: "kind",
@@ -181,7 +224,11 @@ export default async function Page({
               key: "active",
               header: t("console.settings.catalog.columns.status", undefined, "Status"),
               render: (r) =>
-                r.active ? (
+                isPendingSpecialOrder(r) ? (
+                  <Badge variant="warning">
+                    {t("console.settings.catalog.statusPending", undefined, "Pending Approval")}
+                  </Badge>
+                ) : r.active ? (
                   <Badge variant="success">{t("console.settings.catalog.statusActive", undefined, "Active")}</Badge>
                 ) : (
                   <Badge variant="muted">{t("console.settings.catalog.statusInactive", undefined, "Inactive")}</Badge>

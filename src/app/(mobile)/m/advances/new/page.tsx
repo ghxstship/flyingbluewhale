@@ -1,30 +1,21 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { AdvanceForm } from "./AdvanceForm";
+import { CATALOG_KIND_LABEL, type CatalogKind } from "@/lib/db/assignments";
+import { AdvanceForm, type CatalogPick } from "./AdvanceForm";
 
 export const dynamic = "force-dynamic";
 
-// Reverse of the action's CATEGORY_TO_KIND — pick a representative category
-// label per catalog kind so the prior request's kind prefills the select.
-const KIND_TO_CATEGORY: Record<string, string> = {
-  credential: "Credential",
-  radio: "Radio",
-  catering: "Meal Voucher",
-  vehicle: "Parking",
-  equipment: "Other",
-};
-
 /**
  * Request an advance — the kit `advance` FormScreen wired to the
- * `requestAdvance` server action, which authors a `master_catalog_items`
- * SKU (find-or-create) + an `assignments` row in `fulfillment_state`
- * "briefed" and push-notifies managers.
+ * `requestAdvance` server action. The item is a catalog lookup filtered by
+ * the selected Category (real `catalog_kind` families); the action binds the
+ * assignment to the chosen `master_catalog_items` SKU, or mints an inactive
+ * SKU for a flagged special order.
  *
  * Kit 31 (live-test resolution #3): the catalog's "Add To Request" CTA
- * arrives here as `?catalogItemId=` + `&kind=` — the Add Item editor opens
- * prefilled with the concrete SKU (category + item), and the action binds
- * the assignment to that catalog row directly.
+ * arrives here as `?catalogItemId=` + `&kind=` — the form opens with the
+ * concrete SKU preselected (category + item) and binds to it directly.
  *
  * Otherwise, prefills the recurring fields from the requester's most recent
  * advance (WCAG 2.2 SC 3.3.7 Redundant Entry) so they aren't re-typed.
@@ -37,6 +28,7 @@ export default async function NewAdvancePage({
   const session = await requireSession();
   const { catalogItemId } = await searchParams;
 
+  let catalog: CatalogPick[] = [];
   let initial: Record<string, unknown> | undefined;
   let boundCatalogItemId: string | undefined;
   let fromCatalog = false;
@@ -45,26 +37,27 @@ export default async function NewAdvancePage({
   if (hasSupabase) {
     const supabase = await createClient();
 
+    const { data: items } = await supabase
+      .from("master_catalog_items")
+      .select("id, kind, code, name")
+      .eq("org_id", session.orgId)
+      .eq("active", true)
+      .is("deleted_at", null)
+      .order("kind", { ascending: true })
+      .order("name", { ascending: true })
+      .limit(1000);
+    catalog = (items ?? []) as CatalogPick[];
+
     if (catalogItemId && /^[0-9a-f-]{36}$/i.test(catalogItemId)) {
-      const { data: item } = await supabase
-        .from("master_catalog_items")
-        .select("id, kind, name")
-        .eq("id", catalogItemId)
-        .eq("org_id", session.orgId)
-        .is("deleted_at", null)
-        .maybeSingle();
-      if (item) {
-        boundCatalogItemId = item.id as string;
+      const bound = catalog.find((c) => c.id === catalogItemId);
+      if (bound) {
+        boundCatalogItemId = bound.id;
         fromCatalog = true;
-        catalogItemName = (item.name as string) || undefined;
-        initial = {
-          cat: KIND_TO_CATEGORY[(item.kind as string) ?? ""] ?? "Other",
-          type: (item.name as string) ?? "",
-        };
+        catalogItemName = bound.name || undefined;
       }
     }
 
-    if (!initial) {
+    if (!fromCatalog) {
       const { data: prior } = await supabase
         .from("assignments")
         .select("catalog_kind, data")
@@ -78,9 +71,9 @@ export default async function NewAdvancePage({
       if (prior) {
         const data = (prior.data ?? {}) as Record<string, unknown>;
         const seed: Record<string, unknown> = {};
-        const cat = KIND_TO_CATEGORY[(prior.catalog_kind as string) ?? ""];
-        if (cat) seed.cat = cat;
-        // Recurring contextual fields — NOT item-specific (`type`) or
+        const label = CATALOG_KIND_LABEL[prior.catalog_kind as CatalogKind];
+        if (label) seed.cat = label;
+        // Recurring contextual fields — NOT item-specific (`item`/`type`) or
         // window-specific (`start`/`end`), which are entered fresh each time.
         if (data.qty != null) seed.qty = String(data.qty);
         if (typeof data.special === "string" && data.special) seed.special = data.special;
@@ -93,6 +86,7 @@ export default async function NewAdvancePage({
 
   return (
     <AdvanceForm
+      catalog={catalog}
       initial={initial}
       catalogItemId={boundCatalogItemId}
       fromCatalog={fromCatalog}

@@ -64,6 +64,11 @@ export type Forms = Record<string, FormDef>;
 
 // Field types: text, textarea, select, seg, switch, date, time, number, photo, file
 export const FORMS: Forms = {
+  // SUPERSEDED at the render layer: /m/advances/new builds its own dynamic
+  // def (AdvanceForm) so the item is a catalog lookup filtered by the selected
+  // Category (real catalog_kind families) instead of the free-text field
+  // below. Kept here as the historical kit reference only — do NOT re-mount
+  // `formId="advance"`; the free-text item would silently spawn SKUs.
   advance: {
     title: "Advance Request", icon: "ClipboardList", submit: "Submit Request",
     intro: "Request gear, credentials or services for an upcoming shift.",

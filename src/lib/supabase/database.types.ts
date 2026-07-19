@@ -11410,6 +11410,21 @@ export type Database = {
           },
         ]
       }
+      dim_department: {
+        Row: {
+          code: string
+          label: string
+        }
+        Insert: {
+          code: string
+          label: string
+        }
+        Update: {
+          code?: string
+          label?: string
+        }
+        Relationships: []
+      }
       dim_metric: {
         Row: {
           confidence: string | null
@@ -11461,6 +11476,27 @@ export type Database = {
           name?: string
           permit_id?: string
           trigger_type?: string | null
+        }
+        Relationships: []
+      }
+      dim_phase: {
+        Row: {
+          act: string
+          code: string
+          gate: number
+          phase: string
+        }
+        Insert: {
+          act: string
+          code: string
+          gate: number
+          phase: string
+        }
+        Update: {
+          act?: string
+          code?: string
+          gate?: number
+          phase?: string
         }
         Relationships: []
       }
@@ -25514,6 +25550,92 @@ export type Database = {
           },
         ]
       }
+      project_events: {
+        Row: {
+          created_at: string
+          department: string
+          dept_code: string
+          event_date: string
+          event_iso: string
+          id: string
+          org_id: string
+          owner: string | null
+          phase: string
+          project_id: string
+          status: string
+          sub: string | null
+          title: string
+          updated_at: string
+          urid: string
+          xpms_atom_id: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          dept_code: string
+          event_date: string
+          event_iso: string
+          id: string
+          org_id: string
+          owner?: string | null
+          phase: string
+          project_id: string
+          status?: string
+          sub?: string | null
+          title: string
+          updated_at?: string
+          urid: string
+          xpms_atom_id: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          dept_code?: string
+          event_date?: string
+          event_iso?: string
+          id?: string
+          org_id?: string
+          owner?: string | null
+          phase?: string
+          project_id?: string
+          status?: string
+          sub?: string | null
+          title?: string
+          updated_at?: string
+          urid?: string
+          xpms_atom_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_events_dept_code_fkey"
+            columns: ["dept_code"]
+            isOneToOne: false
+            referencedRelation: "dim_department"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "project_events_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_events_phase_fkey"
+            columns: ["phase"]
+            isOneToOne: false
+            referencedRelation: "dim_phase"
+            referencedColumns: ["phase"]
+          },
+          {
+            foreignKeyName: "project_events_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_members: {
         Row: {
           created_at: string
@@ -25552,6 +25674,60 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_milestones: {
+        Row: {
+          created_at: string
+          id: string
+          milestone_date: string
+          org_id: string
+          owner: string | null
+          phase: string
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          milestone_date: string
+          org_id: string
+          owner?: string | null
+          phase: string
+          project_id: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          milestone_date?: string
+          org_id?: string
+          owner?: string | null
+          phase?: string
+          project_id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_milestones_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_milestones_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -25687,6 +25863,126 @@ export type Database = {
             columns: ["taken_by"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_tasks: {
+        Row: {
+          archived: boolean
+          assignee: string | null
+          assignee_id: string | null
+          category: string
+          company: string | null
+          coordinate: string
+          created_at: string
+          department: string
+          discipline: string
+          due: string | null
+          id: string
+          location: string | null
+          logged: string | null
+          org_id: string
+          phase: string
+          priority: string
+          project_id: string
+          status: string
+          sub: string | null
+          title: string
+          trade: string | null
+          updated_at: string
+          urid: string
+          vendor_id: string | null
+          xpms_atom_id: string
+        }
+        Insert: {
+          archived?: boolean
+          assignee?: string | null
+          assignee_id?: string | null
+          category: string
+          company?: string | null
+          coordinate: string
+          created_at?: string
+          department: string
+          discipline: string
+          due?: string | null
+          id: string
+          location?: string | null
+          logged?: string | null
+          org_id: string
+          phase: string
+          priority: string
+          project_id: string
+          status?: string
+          sub?: string | null
+          title: string
+          trade?: string | null
+          updated_at?: string
+          urid: string
+          vendor_id?: string | null
+          xpms_atom_id: string
+        }
+        Update: {
+          archived?: boolean
+          assignee?: string | null
+          assignee_id?: string | null
+          category?: string
+          company?: string | null
+          coordinate?: string
+          created_at?: string
+          department?: string
+          discipline?: string
+          due?: string | null
+          id?: string
+          location?: string | null
+          logged?: string | null
+          org_id?: string
+          phase?: string
+          priority?: string
+          project_id?: string
+          status?: string
+          sub?: string | null
+          title?: string
+          trade?: string | null
+          updated_at?: string
+          urid?: string
+          vendor_id?: string | null
+          xpms_atom_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tasks_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_tasks_phase_fkey"
+            columns: ["phase"]
+            isOneToOne: false
+            referencedRelation: "dim_phase"
+            referencedColumns: ["phase"]
+          },
+          {
+            foreignKeyName: "project_tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_tasks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_tasks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
         ]

@@ -1694,6 +1694,11 @@ export const mobileSurfaces: NavItem[] = [
   // Kit 34 (v3.1/v3.2): Field-Operations HUB landing screens (MetricBar +
   // member launcher). Drawer's Field Operations group points here; each hub's
   // members are the individual routes below. SSOT: `mobileHubs`.
+  { label: "Projects", href: "/m/projects" },
+  { label: "Project Timeline", href: "/m/projects/timeline" },
+  { label: "Milestones", href: "/m/projects/milestones" },
+  { label: "Project Calendar", href: "/m/projects/calendar" },
+  { label: "Project Tasks", href: "/m/projects/tasks" },
   { label: "Operations", href: "/m/operations" },
   { label: "Workforce", href: "/m/workforce" },
   { label: "Assets & Equipment", href: "/m/equipment" },
@@ -1851,7 +1856,7 @@ export const moreNavGroups: MoreNavGroup[] = [
     key: "fieldops",
     label: "Field Operations",
     links: [
-      // Projects hub arrives with the XPMS wave (kit 34 v3.2 / v3.6).
+      { href: "/m/projects", label: "Projects", icon: "Waypoints", sub: "Timeline, Milestones, Calendar & Tasks" },
       { href: "/m/operations", label: "Operations", icon: "ClipboardList", sub: "Daily Report, Reports, Inspections, Permits & Travel" },
       { href: "/m/logistics", label: "Logistics", icon: "Truck", sub: "Shipments, Docks, Gate & Delivery" },
       { href: "/m/workforce", label: "Workforce", icon: "CalendarClock", sub: "Schedule, Time Sheets, Roster & Time Off", managerOnly: true },
@@ -1924,6 +1929,17 @@ export type MobileHubMember = {
 export type MobileHub = { key: string; label: string; landing: string; members: MobileHubMember[] };
 
 export const mobileHubs: MobileHub[] = [
+  {
+    key: "projects",
+    label: "Projects",
+    landing: "/m/projects",
+    members: [
+      { key: "timeline", label: "Timeline", icon: "Waypoints", href: "/m/projects/timeline" },
+      { key: "milestones", label: "Milestones", icon: "Flag", href: "/m/projects/milestones" },
+      { key: "calendar", label: "Calendar", icon: "CalendarDays", href: "/m/projects/calendar" },
+      { key: "tasks", label: "Tasks", icon: "ListChecks", href: "/m/projects/tasks" },
+    ],
+  },
   {
     key: "operations",
     label: "Operations",

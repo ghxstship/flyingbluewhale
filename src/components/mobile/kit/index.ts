@@ -112,8 +112,11 @@ export type { MetricBarItem, ViewSegItem } from "./MetricBar";
 export { ScreenHeader } from "./ScreenHeader";
 export type { ScreenHeaderProps } from "./ScreenHeader";
 
-export { Block, ListRow, MetricGrid, MeterRow } from "./blocks";
+export { Block, ListRow, MetricGrid, MeterRow, pressable } from "./blocks";
 export type { MetricCell } from "./blocks";
+
+export { NormalizedList } from "./NormalizedList";
+export type { NormalizedListProps } from "./NormalizedList";
 
 export { ActionBar } from "./ActionBar";
 export type { ActionBarProps, ActionBarPill } from "./ActionBar";

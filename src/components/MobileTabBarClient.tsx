@@ -76,6 +76,7 @@ const PARENT_PREFIXES: Record<string, string[]> = {
     "/m/guide",
     "/m/engagement",
     // Field Operations — hubs (kit 34) + their members
+    "/m/projects",
     "/m/operations",
     "/m/workforce",
     "/m/equipment",

@@ -5,12 +5,15 @@
  * its detail page, drives a transition, and asserts the new state.
  */
 import { expect, test } from "./helpers/base";
-import { authedSetup } from "./helpers/auth";
+import { authedSetup, suppressTour } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 
 test.describe("console — state-machine transitions", () => {
   test.describe.configure({ timeout: 120000 });
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("Master catalog SKU · deactivate → reactivate", async ({ page }) => {
     const s = stamp();

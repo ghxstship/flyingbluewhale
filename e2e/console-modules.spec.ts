@@ -11,7 +11,7 @@
  * validation without hard-coding every field.
  */
 import { expect, test, type Page, type Locator } from "./helpers/base";
-import { authedSetup } from "./helpers/auth";
+import { authedSetup, suppressTour } from "./helpers/auth";
 
 const stamp = () => `${Date.now()}`;
 
@@ -91,7 +91,10 @@ async function createInModule(page: Page, route: string, fields: Record<string, 
 }
 
 test.describe("console modules — create flows", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("Sales · client create", async ({ page }) => {
     await createInModule(page, "/studio/clients/new", { name: `E2E Client ${stamp()}` });

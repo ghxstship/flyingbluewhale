@@ -246,3 +246,39 @@ step. Those specs are correct; they can only be re-verified green once the enum
 session deploys its app code. Proven green vs prod this run despite the skew:
 mobile roster assign (`compvss-field-mutations`) + the control probe
 `atlvs-sales-crm-coverage`.
+
+# Full-suite rerun triage (2026-07-19, prod `115bc6e3`)
+
+Ran the ENTIRE suite serially vs prod after the enum cutover deployed:
+**1534 passed · 31 failed · 18 flaky · 5 not-run** (3.9h). Isolated re-runs
+(the only reliable signal — a serial run of ~1500 back-to-back creates
+rate-limits itself) resolved every failure to one of three buckets, with
+**zero real app regressions** (no server errors in the Vercel logs throughout):
+
+1. **Missing `suppressTour` → ConsoleTour scrim intercepts `/studio` clicks →
+   120s click-timeout** (the #1 gotcha). Caused ~15 failures across 7 specs that
+   drive the console but never suppressed the first-run tour:
+   `forms-construction-trade`, `console-core-flows`, `console-transitions`,
+   `console-transitions-b2`, `console-modules`, `subcontractor-ops`,
+   `marketplace-canon-actions`. It surfaced now because a fresh deploy
+   re-triggers the tour for the fixture users. **Fixed** — `suppressTour` added
+   to each (before the login goto). `forms-construction-trade` verified 5/5 green
+   (was 5/5 fail, 120s each).
+2. **Stale selectors** (2 specs, both fixed): `consent` — the cookie banner is a
+   `<section aria-label>` (role=region) not a heading, and "Customize" is now
+   "Manage settings" (dba0a2a6 UI audit); `marketplace-canon-actions:323` — the
+   `/me/availability` slot label renders 3× (calendar ×2 + list), so the bare
+   `getByText` was a strict-mode 3-match → `.first()`.
+3. **Contention / cold-start flakiness** (the rest): proven-green specs in the
+   failed list — `atlvs-sales-crm`, `lifecycle-jack-sparrow`, the two new specs,
+   and every RBAC/persona spec (`atlvs-console-personas`, `authz-matrix`,
+   `project-roles`, `atlvs-deep-coverage`) — ALL pass in isolation; *different*
+   tests flake each run. Plus the client-side subdomain-canonicalization nav
+   race (`atlvs.pro/m/docs` → `compvss.atlvs.pro`), harmless (the route is 200).
+
+**Triage method for the next person:** never trust a big serial prod run's raw
+failure count. Re-run each failing spec ALONE (or ≤3 at a time). A proven-green
+spec in the failed list = contention, full stop. A 120s click-timeout on
+`/studio` = missing `suppressTour` before anything else. See
+[[project-prod-migration-app-skew-hazard]] and the coverage-program gotcha
+catalog.

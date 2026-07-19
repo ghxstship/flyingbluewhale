@@ -15,7 +15,7 @@
  * pixel output, so the specs survive copy tweaks.
  */
 import { expect, test, type Page } from "./helpers/base";
-import { authedSetup } from "./helpers/auth";
+import { authedSetup, suppressTour } from "./helpers/auth";
 
 const stamp = () => `${Date.now()}`;
 
@@ -39,7 +39,10 @@ async function submitForm(page: Page) {
 }
 
 test.describe("console core — Projects", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("create a project lands on a detail page", async ({ page }) => {
     await page.goto("/studio/projects/new");
@@ -52,7 +55,10 @@ test.describe("console core — Projects", () => {
 });
 
 test.describe("console core — Tasks", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("create a task appears in the list", async ({ page }) => {
     await page.goto("/studio/tasks/new");
@@ -64,7 +70,10 @@ test.describe("console core — Tasks", () => {
 });
 
 test.describe("console core — Finance invoice receivables lifecycle", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("invoice draft → sent → paid", async ({ page }) => {
     await page.goto("/studio/finance/invoices/new");
@@ -88,7 +97,10 @@ test.describe("console core — Finance invoice receivables lifecycle", () => {
 });
 
 test.describe("console core — Procurement W-9/COI gate", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("compliant vendor → PO binds and Send succeeds", async ({ page }) => {
     // 1. compliant vendor (W-9 on file + future COI)
@@ -115,7 +127,10 @@ test.describe("console core — Procurement W-9/COI gate", () => {
 });
 
 test.describe("console core — Proposals lifecycle", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("proposal draft → sent → approved", async ({ page }) => {
     await page.goto("/studio/proposals/new");
@@ -137,7 +152,10 @@ test.describe("console core — Proposals lifecycle", () => {
 });
 
 test.describe("console core — Comms", () => {
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("announcement create → publish", async ({ page }) => {
     await page.goto("/studio/comms/announcements/new");

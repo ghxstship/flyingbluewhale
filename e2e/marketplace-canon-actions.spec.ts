@@ -18,7 +18,7 @@
  * test-professional org (org_id f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7).
  */
 import { expect, test, type Page } from "./helpers/base";
-import { dismissConsent, loginAndSwitchWorkspace } from "./helpers/auth";
+import { dismissConsent, loginAndSwitchWorkspace, suppressTour } from "./helpers/auth";
 
 // Lock the session to test-professional so fixture UUIDs resolve. The
 // owner is a member of 4 test orgs and the resolver picks the first
@@ -55,6 +55,10 @@ const SLUG = {
 };
 
 async function loginAsOwner(page: Page) {
+  // Suppress the first-run ConsoleTour scrim before any /studio nav — it
+  // otherwise intercepts the create/publish button clicks (visible-but-unstable
+  // → click times out).
+  await suppressTour(page);
   // Switch active workspace to test-professional so fixture UUIDs resolve
   // deterministically. The PATCH writes user_preferences.last_org_id;
   // getSession() honors it on the next request.
@@ -337,7 +341,9 @@ test.describe("Marketplace canon · form actions", () => {
     // is intermittently slow/absent (readiness backlog: availability refresh
     // race) and is tracked separately from the data contract this test owns.
     await page.reload();
-    await expect(page.getByText(label)).toBeVisible({ timeout: 20_000 });
+    // The slot label renders in multiple cells (calendar tile ×2 + list span),
+    // so a bare getByText is a strict-mode 3-match — scope to the first.
+    await expect(page.getByText(label).first()).toBeVisible({ timeout: 20_000 });
 
     // Delete it
     const li = page.locator("li", { hasText: label });

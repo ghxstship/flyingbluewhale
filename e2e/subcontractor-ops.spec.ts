@@ -15,7 +15,7 @@
  * are covered broadly by atlvs-console-personas + rls-boundaries.
  */
 import { expect, test, type Page } from "./helpers/base";
-import { authedSetup, dismissConsent } from "./helpers/auth";
+import { authedSetup, dismissConsent, suppressTour } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 
 const STUDIO_SURFACES: Array<{ path: string; heading: RegExp }> = [
@@ -35,6 +35,7 @@ async function assertNoErrorBoundary(page: Page) {
 
 test.describe("subcontractor-ops — surfaces render (owner)", () => {
   test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
     await authedSetup(page, "owner");
   });
 
@@ -50,6 +51,7 @@ test.describe("subcontractor-ops — surfaces render (owner)", () => {
 
 test.describe("subcontractor-ops — work order lifecycle (owner)", () => {
   test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
     await authedSetup(page, "owner");
   });
 
@@ -69,6 +71,7 @@ test.describe("subcontractor-ops — work order lifecycle (owner)", () => {
 
 test.describe("subcontractor-ops — job templates (owner)", () => {
   test("create a job template", async ({ page }) => {
+    await suppressTour(page);
     await authedSetup(page, "owner");
     const name = `E2E Scope ${stamp()}`;
     await createInModule(page, "/studio/settings/job-templates/new", { name, trade: "rigging" });

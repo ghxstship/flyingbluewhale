@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "./helpers/base";
-import { dismissConsent, loginAs } from "./helpers/auth";
+import { dismissConsent, loginAs, suppressTour } from "./helpers/auth";
 
 /**
  * forms-construction-trade
@@ -49,6 +49,10 @@ test.describe("construction-trade CRUD lifecycles", () => {
   test.setTimeout(120000);
 
   test.beforeEach(async ({ page }) => {
+    // suppressTour BEFORE login: the first-run ConsoleTour scrim (z-tour,
+    // full-viewport) otherwise intercepts every /studio click — here it hung the
+    // "Edit" link click to the 120s cap on all five lifecycles.
+    await suppressTour(page);
     await dismissConsent(page);
     await loginAs(page, "owner");
   });

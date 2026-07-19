@@ -6,12 +6,15 @@
  * server-action transition path, not just the create).
  */
 import { expect, test } from "./helpers/base";
-import { authedSetup } from "./helpers/auth";
+import { authedSetup, suppressTour } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 
 test.describe("console — state-machine transitions (batch 2)", () => {
   test.describe.configure({ timeout: 120000 });
-  test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
+  test.beforeEach(async ({ page }) => {
+    await suppressTour(page);
+    await authedSetup(page, "owner");
+  });
 
   test("Punch item · open → start (lifecycle advances)", async ({ page }) => {
     await createInModule(page, "/studio/punch/new", { title: `E2E Punch ${stamp()}` });

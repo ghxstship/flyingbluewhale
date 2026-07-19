@@ -115,7 +115,14 @@ test.describe("console core — Procurement W-9/COI gate", () => {
     // 2. PO bound to that vendor
     await page.goto("/studio/procurement/purchase-orders/new");
     await fillByName(page, "title", `E2E PO ${stamp()}`);
-    await page.locator('[name="vendor_id"]').selectOption({ label: vendor });
+    // vendor_id is a RecordCombobox (hidden input + cmdk trigger), not a
+    // <select> — drive the combobox instead of selectOption.
+    await page.locator('[name="vendor_id"]').locator("xpath=..").locator('button[role="combobox"]').first().click();
+    await page
+      .locator('[cmdk-input], [role="dialog"] input, [data-radix-popper-content-wrapper] input')
+      .first()
+      .fill(vendor);
+    await page.locator('[cmdk-item], [role="option"]').filter({ hasText: vendor }).first().click({ timeout: 15000 });
     await fillByName(page, "amount", "5000");
     await submitForm(page);
     await expect(page.getByText(/draft/i).first()).toBeVisible({ timeout: 15000 });

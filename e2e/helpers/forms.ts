@@ -57,6 +57,14 @@ export async function createInModule(page: Page, route: string, fields: Record<s
       if ((await el.getAttribute("type")) === "hidden") {
         if (await el.inputValue().catch(() => "")) continue; // already picked on a prior attempt
         const wrapper = el.locator("xpath=..");
+        // MoneyInput (audit: expense/PO/ticket money fields) renders the named
+        // field as a hidden `*_cents` input beside a visible decimal box with NO
+        // name — type the dollar value into that box (it computes the cents).
+        const money = wrapper.locator('input[inputmode="decimal"]').first();
+        if (await money.count()) {
+          await money.fill(value.replace(/[^\d.]/g, "") || "100");
+          continue;
+        }
         await wrapper.locator('button[role="combobox"]').first().click();
         const search = page.locator('[cmdk-input], input[cmdk-input=""], [role="dialog"] input, [data-radix-popper-content-wrapper] input').first();
         await search.fill(value);
@@ -82,7 +90,9 @@ export async function createInModule(page: Page, route: string, fields: Record<s
         continue;
       }
       const type = (await el.getAttribute("type")) || "text";
+      const mode = await el.getAttribute("inputmode");
       if (type === "checkbox") await el.check();
+      else if (mode === "decimal" || mode === "numeric") await el.fill("100");
       else await el.fill(TYPE_DEFAULTS[type] ?? "E2E Test");
     }
   };

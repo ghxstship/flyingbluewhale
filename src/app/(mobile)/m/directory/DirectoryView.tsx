@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, DataTable, EmptySkeleton, GroupedList, SwipeRow } from "@/components/mobile/kit";
-import type { ViewMode } from "@/components/mobile/kit";
+import { NormalizedList, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
 
 export type RosterPerson = {
@@ -48,38 +46,23 @@ type Labels = {
   actions: string;
 };
 
+/** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
+ *  + schema DataView list/gallery/table + team pills). Keeps the kit 32 A6 real
+ *  contact intents (Message route + tel:/mailto: swipe actions). Positions
+ *  always pass through fmtPosition() before rendering. */
 export function DirectoryView({ people, labels }: { people: RosterPerson[]; labels: Labels }) {
   const router = useRouter();
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<ViewMode>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("name");
-  const [teams, setTeams] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const allTeams = [...new Set(people.map((p) => p.team))];
+  const allRoles = [...new Set(people.map((p) => fmtPosition(p.role)))];
+  const allStatuses = [...new Set(people.map((p) => p.status))];
 
-  const allTeams = useMemo(() => [...new Set(people.map((p) => p.team))], [people]);
+  const FIELDS: FieldDef<RosterPerson>[] = [
+    { id: "name", label: "Name", type: "text", get: (p) => p.name },
+    { id: "role", label: "Position", type: "select", options: allRoles, get: (p) => fmtPosition(p.role) },
+    { id: "team", label: "Team", type: "select", options: allTeams, get: (p) => p.team },
+    { id: "status", label: "Status", type: "select", options: allStatuses, get: (p) => p.status },
+  ];
 
-  const items = useMemo(() => {
-    return people
-      .filter((p) => teams.size === 0 || teams.has(p.team))
-      .filter(
-        (p) =>
-          !query ||
-          (p.name + " " + p.role + " " + p.team).toLowerCase().includes(query.toLowerCase()),
-      )
-      .sort((a, b) =>
-        sort === "role"
-          ? a.role.localeCompare(b.role)
-          : sort === "status"
-            ? Number(b.on) - Number(a.on)
-            : a.name.localeCompare(b.name),
-      );
-  }, [people, teams, query, sort]);
-
-  // Kit 32 A6 — Call/Email render as real tel:/mailto: anchors (native dial /
-  // compose), included only when the person carries that detail. Message stays
-  // an in-app route.
   const row = (p: RosterPerson) => (
     <SwipeRow
       key={p.id}
@@ -108,137 +91,36 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
     </SwipeRow>
   );
 
-  let groups: [string, RosterPerson[]][] | null = null;
-  if (group === "team") {
-    const mp: Record<string, RosterPerson[]> = {};
-    items.forEach((p) => {
-      (mp[p.team] = mp[p.team] || []).push(p);
-    });
-    groups = allTeams.filter((k) => mp[k]).map((k) => [k, mp[k]] as [string, RosterPerson[]]);
-  } else if (group === "status") {
-    const mp: Record<string, RosterPerson[]> = {};
-    items.forEach((p) => {
-      (mp[p.status] = mp[p.status] || []).push(p);
-    });
-    groups = Object.keys(mp)
-      .sort()
-      .map((k) => [k, mp[k]] as [string, RosterPerson[]]);
-  } else if (group === "role") {
-    const mp: Record<string, RosterPerson[]> = {};
-    items.forEach((p) => {
-      const k = fmtPosition(p.role);
-      (mp[k] = mp[k] || []).push(p);
-    });
-    groups = Object.keys(mp)
-      .sort()
-      .map((k) => [k, mp[k]] as [string, RosterPerson[]]);
-  }
+  const gallery = (p: RosterPerson) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <span className="gal-av">
+        {p.av}
+        {p.on && <span className="on" />}
+      </span>
+      <div className="t" style={{ fontSize: 12.5, textAlign: "center", marginTop: 8 }}>
+        {p.name}
+      </div>
+      <div className="s" style={{ fontSize: 10.5, textAlign: "center" }}>
+        {fmtPosition(p.role)}
+      </div>
+      <MBadge t={tone(p.status)}>{p.status}</MBadge>
+    </div>
+  );
 
   return (
-    <>
-      <ActionBar
-        k="dr"
-        query={query}
-        setQuery={setQuery}
-        placeholder={labels.search}
-        view={view}
-        setView={setView}
-        views={["list", "gallery", "table"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", "None"],
-          ["team", "Team"],
-          ["status", "Status"],
-          ["role", "Position"],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["name", "Name"],
-          ["role", "Role"],
-          ["status", "Status"],
-        ]}
-        filterActive={teams.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <>
-            <div className="wl" style={{ marginBottom: 8 }}>
-              Team
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 10 }}>
-              {allTeams.map((tm) => (
-                <button
-                  type="button"
-                  key={tm}
-                  className={`chip ${teams.has(tm) ? "on" : ""}`}
-                  onClick={() =>
-                    setTeams((p) => {
-                      const n = new Set(p);
-                      n.has(tm) ? n.delete(tm) : n.add(tm);
-                      return n;
-                    })
-                  }
-                >
-                  {tm}
-                </button>
-              ))}
-            </div>
-            <button type="button"
-              className="pill"
-              style={{ width: "100%", justifyContent: "center", marginTop: 4 }}
-              onClick={() => setTeams(new Set())}
-            >
-              Reset Filters
-            </button>
-          </>
-        }
-      />
-
-      {view === "gallery" ? (
-        <div className="gal-grid">
-          {items.map((p) => (
-            <div className="gal-card" key={p.id}>
-              <span className="gal-av">
-                {p.av}
-                {p.on && <span className="on" />}
-              </span>
-              <div className="t" style={{ fontSize: 12.5, textAlign: "center", marginTop: 8 }}>
-                {p.name}
-              </div>
-              <div className="s" style={{ fontSize: 10.5, textAlign: "center" }}>
-                {fmtPosition(p.role)}
-              </div>
-              <MBadge t={tone(p.status)}>{p.status}</MBadge>
-            </div>
-          ))}
-        </div>
-      ) : view === "table" ? (
-        <DataTable
-          fields={[
-            { id: "name", label: "Name", type: "text", get: (x: RosterPerson) => x.name },
-            { id: "role", label: "Role", type: "text", get: (x: RosterPerson) => fmtPosition(x.role) },
-            { id: "team", label: "Team", type: "text", get: (x: RosterPerson) => x.team },
-            { id: "status", label: "Status", type: "text", get: (x: RosterPerson) => x.status },
-          ]}
-          items={items}
-        />
-      ) : groups ? (
-        <GroupedList
-          skey="ro"
-          groups={groups}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={(x) => row(x as RosterPerson)}
-        />
-      ) : (
-        items.map(row)
-      )}
-
-      {!items.length && (
-        <EmptySkeleton cols={["Name", "Position", "Status"]} title={labels.emptyTitle} hint={labels.emptyBody} />
-      )}
-    </>
+    <NormalizedList
+      k="dr"
+      items={people}
+      fields={FIELDS}
+      search={(p) => `${p.name} ${p.role} ${p.team}`}
+      searchPlaceholder={labels.search}
+      renderRow={row}
+      gallery={gallery}
+      views={["list", "gallery", "table"]}
+      statusField="status"
+      statusOrder={allStatuses}
+      pill={{ get: (p) => p.team, order: allTeams }}
+      empty={{ cols: ["Name", "Position", "Status"], title: labels.emptyTitle, hint: labels.emptyBody }}
+    />
   );
 }

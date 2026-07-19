@@ -53,7 +53,7 @@ export function ProjectCalendarView({ items, canManage }: { items: ProjectEvent[
         views={["calendar", "list", "table"]}
         initialView="calendar"
         dateField="date"
-        pill={{ get: (x) => x.status, order: ["Scheduled", "Upcoming", "Done"] }}
+        pill={{ get: (x) => x.department }}
         empty={{ cols: ["Event", "When", "Status"], title: "No project events", hint: "The project schedule shows here." }}
       />
     </div>

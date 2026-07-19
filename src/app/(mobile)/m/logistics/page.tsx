@@ -19,6 +19,8 @@ const CONFIG: OpsLedgerConfig<OpsLogistics> = {
   sub: (x) => `${x.carrier} · ${x.dock} · ${x.when}`,
   hub: { key: "logistics", active: "shipments" },
   filterStates: ["Arrived", "En Route", "Scheduled", "Delayed"],
+  // Quick pills = freight direction (meaningful context), never the status.
+  pill: { get: (x) => (x.dir === "in" ? "Inbound" : "Outbound"), order: ["Inbound", "Outbound"] },
   tableFields: [
     { id: "t", label: "Shipment", type: "text", get: (x) => x.t },
     { id: "carrier", label: "Carrier", type: "text", get: (x) => x.carrier },

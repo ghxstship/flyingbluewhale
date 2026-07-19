@@ -67,7 +67,7 @@ export function ProjectTasksView({ items, canManage }: { items: ProjectTask[]; c
         views={["list", "table", "board"]}
         statusField="phase"
         statusOrder={PHASE_ORDER}
-        pill={{ get: (x) => x.status, order: ["Open", "In progress", "Blocked", "Done"] }}
+        pill={{ get: (x) => x.priority, order: ["High", "Medium", "Low"] }}
         empty={{ cols: ["Task", "Coordinate", "Status"], title: "No project tasks", hint: "Tasks assigned across the project show here." }}
       />
     </div>

@@ -20,6 +20,8 @@ const CONFIG: OpsLedgerConfig<OpsReport> = {
   sub: (x) => `${x.type}${x.sev ? ` · ${x.sev}` : ""} · ${x.by} · ${x.time}`,
   hub: { key: "operations", active: "reports" },
   filterStates: ["Open", "Under Review", "Filed", "Closed"],
+  // Quick pills = report type (meaningful context), never the status.
+  pill: { get: (x) => x.type },
   tableFields: [
     { id: "t", label: "Report", type: "text", get: (x) => x.t },
     { id: "type", label: "Type", type: "text", get: (x) => x.type },

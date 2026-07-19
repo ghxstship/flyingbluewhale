@@ -24,6 +24,8 @@ const CONFIG: OpsLedgerConfig<OpsInspection> = {
   sub: (x) => `${x.area} · ${x.done}/${x.checks} checks · ${x.by} · ${x.time}`,
   hub: { key: "operations", active: "inspections" },
   filterStates: ["Passed", "In Progress", "Flagged"],
+  // Quick pills = area/location (meaningful context), never the status.
+  pill: { get: (x) => x.area },
   tableFields: [
     { id: "t", label: "Inspection", type: "text", get: (x) => x.t },
     { id: "area", label: "Area", type: "text", get: (x) => x.area },

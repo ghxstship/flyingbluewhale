@@ -42,8 +42,14 @@ export type OpsLedgerConfig<T extends { id: string }> = {
   status: (x: T) => string;
   /** Optional trailing price tag (Expenses-style). */
   price?: (x: T) => string;
-  /** Status values offered as quick pills + board columns (canonical order). */
+  /** Status values offered as board columns (canonical order). Status drives the
+   *  board + the per-row badge — NEVER the quick-filter pills (see `pill`). */
   filterStates: readonly string[];
+  /** The meaningful, context-aware field surfaced as quick-filter pills. This is
+   *  NEVER the status — status is already the board columns + row badge and stays
+   *  filterable via the advanced drawer. Its present values become the pills
+   *  (e.g. Reports→type, Inspections→area, Logistics→direction, Permits→authority). */
+  pill: { get: (x: T) => string; order?: readonly string[] };
   /** The field schema — drives table columns, filter, sort, group AND views. */
   tableFields: FieldDef<T>[];
   emptyCols: string[];
@@ -110,7 +116,7 @@ export function OpsLedgerView<T extends { id: string }>({
         statusField={hasStatusField ? "status" : undefined}
         statusOrder={config.filterStates as string[]}
         boardTone={boardTone}
-        pill={{ get: config.status, order: config.filterStates as string[] }}
+        pill={{ get: config.pill.get, order: config.pill.order as string[] | undefined }}
         empty={{ cols: config.emptyCols, title: config.emptyTitle }}
         footer={
           config.cta ? (

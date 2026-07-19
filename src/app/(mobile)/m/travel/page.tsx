@@ -18,6 +18,8 @@ const CONFIG: OpsLedgerConfig<OpsTravel> = {
   sub: (x) => `${x.detail} · ${x.when}`,
   hub: { key: "operations", active: "travel" },
   filterStates: ["Confirmed", "Pending", "Loaded"],
+  // Quick pills = travel category (Flight/Hotel/Ground/Per Diem), never the status.
+  pill: { get: (x) => x.t.split(" · ")[0] ?? x.t, order: ["Flight", "Hotel", "Ground", "Per Diem"] },
   tableFields: [
     { id: "t", label: "Item", type: "text", get: (x) => x.t },
     { id: "detail", label: "Detail", type: "text", get: (x) => x.detail },

@@ -20,6 +20,8 @@ const CONFIG: OpsLedgerConfig<OpsPermit> = {
   sub: (x) => `${x.auth} · ${x.exp}`,
   hub: { key: "operations", active: "permits" },
   filterStates: ["Active", "Expiring"],
+  // Quick pills = issuing authority (meaningful context), never the status.
+  pill: { get: (x) => x.auth },
   tableFields: [
     { id: "t", label: "Permit", type: "text", get: (x) => x.t },
     { id: "auth", label: "Authority", type: "text", get: (x) => x.auth },

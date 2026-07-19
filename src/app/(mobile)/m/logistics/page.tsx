@@ -17,17 +17,7 @@ const CONFIG: OpsLedgerConfig<OpsLogistics> = {
   titleOf: (x) => x.t,
   status: (x) => x.status,
   sub: (x) => `${x.carrier} · ${x.dock} · ${x.when}`,
-  groupOpts: [
-    ["none", "None"],
-    ["status", "Status"],
-    ["dir", "Direction"],
-  ],
-  groupKey: (g, x) => (g === "dir" ? (x.dir === "in" ? "Inbound" : "Outbound") : x.status),
-  sortOpts: [
-    ["when", "Schedule"],
-    ["carrier", "Carrier"],
-  ],
-  sortCmp: (s, a, b) => (s === "carrier" ? a.carrier.localeCompare(b.carrier) : 0),
+  hub: { key: "logistics", active: "shipments" },
   filterStates: ["Arrived", "En Route", "Scheduled", "Delayed"],
   tableFields: [
     { id: "t", label: "Shipment", type: "text", get: (x) => x.t },

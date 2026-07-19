@@ -16,16 +16,7 @@ const CONFIG: OpsLedgerConfig<OpsTravel> = {
   titleOf: (x) => x.t,
   status: (x) => x.status,
   sub: (x) => `${x.detail} · ${x.when}`,
-  groupOpts: [
-    ["none", "None"],
-    ["status", "Status"],
-  ],
-  groupKey: (_g, x) => x.status,
-  sortOpts: [
-    ["when", "Schedule"],
-    ["name", "Name"],
-  ],
-  sortCmp: (s, a, b) => (s === "name" ? a.t.localeCompare(b.t) : 0),
+  hub: { key: "operations", active: "travel" },
   filterStates: ["Confirmed", "Pending", "Loaded"],
   tableFields: [
     { id: "t", label: "Item", type: "text", get: (x) => x.t },

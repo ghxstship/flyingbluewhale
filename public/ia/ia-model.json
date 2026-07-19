@@ -2404,6 +2404,54 @@
           "label": "Surfaces",
           "routes": [
             {
+              "path": "/m/projects",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/projects/timeline",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/m/projects/milestones",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/projects/calendar",
+              "arch": [
+                "CAL"
+              ]
+            },
+            {
+              "path": "/m/projects/tasks",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/operations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/workforce",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/equipment",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/aurora",
               "arch": [
                 "LIST"

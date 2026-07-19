@@ -18,17 +18,7 @@ const CONFIG: OpsLedgerConfig<OpsReport> = {
   titleOf: (x) => x.t,
   status: (x) => x.status,
   sub: (x) => `${x.type}${x.sev ? ` · ${x.sev}` : ""} · ${x.by} · ${x.time}`,
-  groupOpts: [
-    ["none", "None"],
-    ["type", "Type"],
-    ["status", "Status"],
-  ],
-  groupKey: (g, x) => (g === "type" ? x.type : x.status),
-  sortOpts: [
-    ["recent", "Recent"],
-    ["type", "Type"],
-  ],
-  sortCmp: (s, a, b) => (s === "type" ? a.type.localeCompare(b.type) : 0),
+  hub: { key: "operations", active: "reports" },
   filterStates: ["Open", "Under Review", "Filed", "Closed"],
   tableFields: [
     { id: "t", label: "Report", type: "text", get: (x) => x.t },

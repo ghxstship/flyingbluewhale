@@ -18,16 +18,7 @@ const CONFIG: OpsLedgerConfig<OpsPermit> = {
   titleOf: (x) => x.t,
   status: (x) => x.status,
   sub: (x) => `${x.auth} · ${x.exp}`,
-  groupOpts: [
-    ["none", "None"],
-    ["status", "Status"],
-  ],
-  groupKey: (_g, x) => x.status,
-  sortOpts: [
-    ["status", "Status"],
-    ["name", "Name"],
-  ],
-  sortCmp: (s, a, b) => (s === "name" ? a.t.localeCompare(b.t) : a.status.localeCompare(b.status)),
+  hub: { key: "operations", active: "permits" },
   filterStates: ["Active", "Expiring"],
   tableFields: [
     { id: "t", label: "Permit", type: "text", get: (x) => x.t },

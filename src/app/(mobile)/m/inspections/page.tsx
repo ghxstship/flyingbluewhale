@@ -22,17 +22,7 @@ const CONFIG: OpsLedgerConfig<OpsInspection> = {
   titleOf: (x) => x.t,
   status: (x) => x.status,
   sub: (x) => `${x.area} · ${x.done}/${x.checks} checks · ${x.by} · ${x.time}`,
-  groupOpts: [
-    ["none", "None"],
-    ["status", "Status"],
-    ["area", "Area"],
-  ],
-  groupKey: (g, x) => (g === "area" ? x.area : x.status),
-  sortOpts: [
-    ["recent", "Recent"],
-    ["area", "Area"],
-  ],
-  sortCmp: (s, a, b) => (s === "area" ? a.area.localeCompare(b.area) : 0),
+  hub: { key: "operations", active: "inspections" },
   filterStates: ["Passed", "In Progress", "Flagged"],
   tableFields: [
     { id: "t", label: "Inspection", type: "text", get: (x) => x.t },

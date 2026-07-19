@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const { data } = await supabase
     .from("master_catalog_items")
-    .select("id, kind, code, name, description, unit_cost_cents, currency, inventory_qty, active, created_at")
+    .select("id, kind, code, name, description, unit_cost_cents, currency, inventory_qty, active, is_special_order, created_at")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -44,12 +44,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     currency: string | null;
     inventory_qty: number | null;
     active: boolean;
+    is_special_order: boolean;
     created_at: string;
   };
 
-  // A field-minted special order: inactive + `SPECIAL-` code, awaiting a
-  // manager's approval into the standard catalog (see the mobile advance intake).
-  const isPendingSpecialOrder = !item.active && item.code.startsWith("SPECIAL-");
+  // A field-minted special order (is_special_order) that's still inactive is
+  // awaiting a manager's approval into the standard catalog.
+  const isPendingSpecialOrder = item.is_special_order && !item.active;
 
   // Roll-up: how many active assignments reference this catalog item.
   const { count: usageCount } = await supabase

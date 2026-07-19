@@ -19676,6 +19676,7 @@ export type Database = {
           discipline: string | null
           id: string
           inventory_qty: number | null
+          is_special_order: boolean
           kind: Database["public"]["Enums"]["catalog_kind"]
           name: string
           org_id: string
@@ -19699,6 +19700,7 @@ export type Database = {
           discipline?: string | null
           id?: string
           inventory_qty?: number | null
+          is_special_order?: boolean
           kind: Database["public"]["Enums"]["catalog_kind"]
           name: string
           org_id: string
@@ -19722,6 +19724,7 @@ export type Database = {
           discipline?: string | null
           id?: string
           inventory_qty?: number | null
+          is_special_order?: boolean
           kind?: Database["public"]["Enums"]["catalog_kind"]
           name?: string
           org_id?: string

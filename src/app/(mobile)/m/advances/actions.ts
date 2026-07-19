@@ -110,6 +110,7 @@ export async function requestAdvance(_prev: State, fd: FormData): Promise<State>
         code,
         name: type,
         active: false,
+        is_special_order: true,
         description: special || purpose || notes || null,
       })
       .select("id")

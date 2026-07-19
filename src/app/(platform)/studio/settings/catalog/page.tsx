@@ -28,6 +28,7 @@ type Row = {
   currency: string | null;
   inventory_qty: number | null;
   active: boolean;
+  is_special_order: boolean;
   created_at: string;
 };
 
@@ -44,9 +45,9 @@ const KIND_LABEL: Record<string, string> = {
 };
 
 // A special-order SKU is one the field (COMPVSS advance intake) minted for an
-// item that wasn't in the catalog: it lands INACTIVE with a `SPECIAL-` code,
-// waiting for a manager to approve it into the standard catalog.
-const isPendingSpecialOrder = (r: Row) => !r.active && r.code.startsWith("SPECIAL-");
+// item that wasn't in the catalog. It carries is_special_order and lands
+// INACTIVE; "pending" = still awaiting a manager's approval into the catalog.
+const isPendingSpecialOrder = (r: Row) => r.is_special_order && !r.active;
 
 export default async function Page({
   searchParams,
@@ -77,7 +78,7 @@ export default async function Page({
   const supabase = await createClient();
   const { data } = await supabase
     .from("master_catalog_items")
-    .select("id, kind, code, name, unit_cost_cents, currency, inventory_qty, active, created_at")
+    .select("id, kind, code, name, unit_cost_cents, currency, inventory_qty, active, is_special_order, created_at")
     .limit(1000)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)

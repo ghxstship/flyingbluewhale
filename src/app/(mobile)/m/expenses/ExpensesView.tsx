@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Fab, KIcon, NormalizedList, ScreenHeader, type FieldDef } from "@/components/mobile/kit";
+import { HubChrome } from "@/components/mobile/HubChrome";
+import { Fab, KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type ExpenseRow = {
@@ -29,12 +30,13 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 export function ExpensesView({
   rows,
   warning,
-  title,
+  canManage = false,
 }: {
   rows: ExpenseRow[];
   warning: string | null;
   eyebrow?: string;
-  title: string;
+  title?: string;
+  canManage?: boolean;
 }) {
   const t = useT();
 
@@ -73,7 +75,7 @@ export function ExpensesView({
 
   return (
     <div className="screen screen-anim">
-      <ScreenHeader onBack={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))} title={title} />
+      <HubChrome hubKey="finance" active="expenses" canManage={canManage} />
 
       {warning && (
         <div className="ps-alert ps-alert--warning" role="status" style={{ marginBottom: 12 }}>

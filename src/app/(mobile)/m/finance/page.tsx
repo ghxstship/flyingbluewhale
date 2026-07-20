@@ -6,6 +6,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { listFieldPurchaseRequests } from "@/lib/db/purchase-requests";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { HubChrome } from "@/components/mobile/HubChrome";
 import { KIcon } from "@/components/mobile/kit";
 
 export const dynamic = "force-dynamic";
@@ -144,17 +145,12 @@ export default async function FinancePage() {
 
   return (
     <div className="screen screen-anim">
-      <Link href="/m/more" className="backbtn">
-        <KIcon name="ChevronLeft" size={17} /> {t("m.finance.back", undefined, "More")}
-      </Link>
-      <div className="scr-eye">
+      <HubChrome hubKey="finance" active="budget" canManage />
+      <div className="hint" style={{ marginBottom: 12 }}>
         {project
           ? t("m.finance.eyebrowProject", { project: project.name }, `${project.name} · Managed In ATLVS`)
           : t("m.finance.eyebrowOrg", undefined, "Org Wide · Managed In ATLVS")}
       </div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.finance.title", undefined, "Finance")}
-      </h1>
 
       {/* Totals row. */}
       <div className="rec-grid">

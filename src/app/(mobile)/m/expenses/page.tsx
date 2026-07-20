@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -52,11 +52,6 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
   }));
 
   return (
-    <ExpensesView
-      rows={rows}
-      warning={warn ?? null}
-      eyebrow={t("m.expenses.eyebrow", undefined, "Money")}
-      title={t("m.expenses.title", undefined, "My Expenses")}
-    />
+    <ExpensesView rows={rows} warning={warn ?? null} canManage={isManagerPlus(session)} />
   );
 }

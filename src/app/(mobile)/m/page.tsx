@@ -4,6 +4,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { OPEN_INSTANCE_STATES } from "@/lib/approvals/queries";
 import { HomeShell, type HomeData, type HomeLabels } from "./HomeShell";
+import { resolveQuickActions } from "@/lib/mobile/quick-actions";
 import type { QuickApproval } from "./ApprovalsQuickSheet";
 import { resolveEmergencyStation } from "@/lib/mobile/emergency-station";
 
@@ -36,7 +37,7 @@ export default async function MobileHome() {
   // network, so serial waterfalls hurt the most here.
   const manager = isManagerPlus(session);
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: me }, station, { data: apRows }] =
+  const [{ count: openTasks }, { count: myAdvances }, { count: unread }, { data: ev }, { data: me }, station, { data: apRows }, { data: prefRow }] =
     await Promise.all([
     // Open tasks assigned to me (anything not yet done).
     supabase
@@ -87,7 +88,11 @@ export default async function MobileHome() {
           .order("initiated_at", { ascending: true })
           .limit(20)
       : Promise.resolve({ data: null }),
+    // The caller's customized Home quick-action set (ui_state.quick_actions).
+    supabase.from("user_preferences").select("ui_state").eq("user_id", session.userId).maybeSingle(),
   ]);
+
+  const quickActions = resolveQuickActions((prefRow?.ui_state as Record<string, unknown> | null)?.quick_actions);
 
   // Hydrate the drawer cards: stepless instances fall back to the policy's
   // first step (the console + /m/requests behavior), requester names resolve
@@ -204,13 +209,17 @@ export default async function MobileHome() {
     qaLostFound: t("m.home.qa.lostFound", undefined, "Lost & Found"),
     qaSwap: t("m.home.qa.swap", undefined, "Swap"),
     qaInvite: t("m.home.qa.invite", undefined, "Invite"),
+    qaInspect: t("m.home.qa.inspect", undefined, "Inspect"),
+    qaTimeoff: t("m.home.qa.timeoff", undefined, "Time Off"),
+    qaPo: t("m.home.qa.po", undefined, "PO Request"),
     qaCustomize: t("m.home.qa.customize", undefined, "Customize"),
-    qaCustomizeSoon: t(
-      "m.home.qa.customizeSoon",
+    qaCustomizeHint: t(
+      "m.home.qa.customizeHint",
       undefined,
-      "Choosing which actions live here is coming. For now every crew member gets the same set.",
+      "Reorder with the arrows, tap − to remove, + to add. Saved to your dashboard.",
     ),
-    qaCustomizeClose: t("m.home.qa.customizeClose", undefined, "Got It"),
+    qaAvailable: t("m.home.qa.available", undefined, "Available"),
+    qaCustomizeClose: t("m.home.qa.customizeClose", undefined, "Done"),
     emergencyCard: t("m.home.emergencyCard", undefined, "Emergency Card"),
     esManning: t("m.home.es.manning", undefined, "Manning Position"),
     esAssembly: t("m.home.es.assembly", undefined, "Assembly Point"),
@@ -221,5 +230,5 @@ export default async function MobileHome() {
     esShelter: t("m.home.es.shelter", undefined, "Shelter"),
   };
 
-  return <HomeShell data={data} greeting={greeting} labels={labels} />;
+  return <HomeShell data={data} greeting={greeting} labels={labels} quickActions={quickActions} />;
 }

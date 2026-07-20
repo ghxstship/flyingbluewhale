@@ -29,6 +29,8 @@ export type UserPreferences = {
   nav_lens?: string;
   /** Kit 32 A4 — COMPVSS saved jobs: bookmarked `job_postings` ids. */
   saved_jobs?: string[];
+  /** Kit 34 — COMPVSS Home quick-action customization (ordered registry ids). */
+  quick_actions?: string[];
 };
 
 let cache: UserPreferences | null = null;

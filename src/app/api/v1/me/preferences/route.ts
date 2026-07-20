@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
+import { QUICK_ACTION_IDS } from "@/lib/mobile/quick-actions";
 
 const PatchSchema = z.object({
   // Theme slugs — mirrors src/app/theme/themes.config.ts#ThemeSlug + the
@@ -39,6 +40,8 @@ const PatchSchema = z.object({
   show_day_mode: z.boolean().optional(),
   // Kit 32 A4 — COMPVSS saved jobs (job_postings ids bookmarked on /m/jobs).
   saved_jobs: z.array(z.string().uuid()).max(200).optional(),
+  // Kit 34 — COMPVSS Home quick-action customization (ordered registry ids).
+  quick_actions: z.array(z.enum(QUICK_ACTION_IDS as [string, ...string[]])).max(20).optional(),
 });
 
 const UI_STATE_KEYS = [
@@ -52,6 +55,7 @@ const UI_STATE_KEYS = [
   "last_portal_slug",
   "show_day_mode",
   "saved_jobs",
+  "quick_actions",
 ] as const;
 
 export async function GET() {

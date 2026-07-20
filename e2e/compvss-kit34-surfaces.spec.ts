@@ -118,6 +118,30 @@ test.describe("COMPVSS kit 34 · hubs + view engine · crew", () => {
     await expect(page.locator(".pill").first()).toBeVisible({ timeout: 10_000 });
     await expect(page.locator(".item.tap").first()).toBeVisible();
   });
+
+  test("Home Quick Actions customizer is functional (add ↔ remove, not a stub)", async ({ page }) => {
+    await page.goto("/m");
+    await expectRendered(page);
+    // Open the Customize sheet from the dashed qa-add tile.
+    await page.locator(".qa-add").click();
+    const panel = page.locator(".sheet-panel").first();
+    await expect(panel).toBeVisible({ timeout: 10_000 });
+    // The real editor: active rows carry Remove controls (proves it's not the
+    // old "coming soon" placeholder).
+    const removers = page.getByRole("button", { name: /^Remove / });
+    const adders = page.getByRole("button", { name: /^Add / });
+    const before = await removers.count();
+    expect(before, "the active set renders removable rows").toBeGreaterThan(0);
+    // AVAILABLE pool exists (registry > default), so add the first available →
+    // the active count grows by one; then remove it → back to the start. This
+    // exercises persistence (setPrefs fires) while leaving the fixture clean.
+    expect(await adders.count(), "an AVAILABLE pool is offered").toBeGreaterThan(0);
+    await adders.first().click();
+    await expect(removers).toHaveCount(before + 1);
+    await removers.last().click();
+    await expect(removers).toHaveCount(before);
+    await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

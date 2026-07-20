@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { KIcon, RoseCard, SheetHead, TOOLS } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
+import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
+import { QUICK_ACTIONS, QUICK_ACTION_IDS, type QuickActionId } from "@/lib/mobile/quick-actions";
 import { ApprovalsQuickSheet, type QuickApproval } from "./ApprovalsQuickSheet";
 
 // The field toolbox (unit/ops/OSHA/weather/radio/checklists) carries a large
@@ -59,8 +61,12 @@ export type HomeLabels = {
   qaLostFound: string;
   qaSwap: string;
   qaInvite: string;
+  qaInspect: string;
+  qaTimeoff: string;
+  qaPo: string;
   qaCustomize: string;
-  qaCustomizeSoon: string;
+  qaCustomizeHint: string;
+  qaAvailable: string;
   qaCustomizeClose: string;
   emergencyCard: string;
   esManning: string;
@@ -122,18 +128,89 @@ function QA({
   );
 }
 
+/** Tinted icon chip for a quick action in the Customize sheet. */
+function qaTintStyle(tint: string): CSSProperties {
+  return {
+    width: 30,
+    height: 30,
+    flex: "none",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    background: `color-mix(in oklab, var(--p-${tint}) ${tint === "accent" ? 20 : 14}%, transparent)`,
+    color: tint === "accent" ? "var(--p-accent-text)" : `var(--p-${tint})`,
+  };
+}
+/** Square 32px icon button (reorder / remove / add) in the Customize sheet. */
+function qaEditBtnStyle(disabled: boolean, accent?: string): CSSProperties {
+  return {
+    width: 32,
+    height: 32,
+    flex: "none",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid var(--p-border)",
+    borderRadius: 8,
+    background: "transparent",
+    color: accent ?? "var(--p-text-2)",
+    opacity: disabled ? 0.4 : 1,
+    cursor: disabled ? "default" : "pointer",
+  };
+}
+
 export function HomeShell({
   data,
   greeting,
   labels: L,
+  quickActions,
 }: {
   data: HomeData;
   greeting: string;
   labels: HomeLabels;
+  quickActions: QuickActionId[];
 }) {
   const [qaEdit, setQaEdit] = useState(false);
   const [approveOpen, setApproveOpen] = useState(false);
   const [activeTool, setActiveTool] = useState<string | null>(null);
+  // Quick-action customization — the server-resolved set (page.tsx reads
+  // ui_state.quick_actions) seeds the grid; the Customize sheet mutates this
+  // local set and persists each change back to ui_state.quick_actions.
+  const { setPrefs } = useUserPreferences();
+  const [qaIds, setQaIds] = useState<QuickActionId[]>(quickActions);
+  const QA_LABEL: Record<QuickActionId, string> = {
+    report: L.qaReport,
+    scan: L.qaScan,
+    clock: L.qaClock,
+    advance: L.qaAdvance,
+    approve: L.qaApprove,
+    swap: L.qaSwap,
+    expense: L.qaExpense,
+    "lost-found": L.qaLostFound,
+    invite: L.qaInvite,
+    inspect: L.qaInspect,
+    timeoff: L.qaTimeoff,
+    po: L.qaPo,
+  };
+  const persistQa = (next: QuickActionId[]) => {
+    setQaIds(next);
+    void setPrefs({ quick_actions: next });
+  };
+  const qaMove = (id: QuickActionId, dir: -1 | 1) => {
+    const i = qaIds.indexOf(id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= qaIds.length) return;
+    const next = [...qaIds];
+    [next[i], next[j]] = [next[j]!, next[i]!];
+    persistQa(next);
+  };
+  const qaRemove = (id: QuickActionId) => {
+    if (qaIds.length <= 1) return; // never leave an empty grid
+    persistQa(qaIds.filter((x) => x !== id));
+  };
+  const qaAdd = (id: QuickActionId) => persistQa([...qaIds, id]);
+  const qaAvailable = QUICK_ACTION_IDS.filter((id) => !qaIds.includes(id));
   // Live decidable count — the kit computes the Approve badge from the open
   // queue (v2.8: "was hardcoded 3"), never from an unrelated tally.
   const decidable = data.approvals?.filter((a) => a.stepId != null).length ?? 0;
@@ -164,32 +241,25 @@ export function HomeShell({
         <h2>{L.quickActions}</h2>
       </div>
       <div className="qa">
-        <QA href="/m/incidents/new" icon="TriangleAlert" tint="danger" label={L.qaReport} />
-        <QA href="/m/check-in" icon="ScanLine" tint="accent" label={L.qaScan} />
-        <QA href="/m/clock" icon="Timer" tint="info" label={L.qaClock} />
-        <QA href="/m/advances" icon="ClipboardList" tint="warning" label={L.qaAdvance} />
-        {/* Approve — kit 32 (drawer canon v2.8): the manager band gets the
-            quick-action APPROVALS drawer (inline ✓/✕ on the same store as
-            /m/requests); members keep the link to their submissions view.
-            Badge = live decidable count, not the open-tasks tally it
-            previously mis-wore. */}
-        {data.approvals ? (
-          <QA
-            onClick={() => setApproveOpen(true)}
-            icon="CheckCheck"
-            tint="success"
-            label={L.qaApprove}
-            badge={decidable || undefined}
-          />
-        ) : (
-          <QA href="/m/requests" icon="CheckCheck" tint="success" label={L.qaApprove} />
-        )}
-        {/* Swaps are decided on the Approvals queue — there is no /m/swaps
-            route, and this tile 404'd for every role until it was repointed. */}
-        <QA href="/m/requests" icon="ArrowLeftRight" tint="info" label={L.qaSwap} />
-        <QA href="/m/expenses/new" icon="Receipt" tint="info" label={L.qaExpense} />
-        <QA href="/m/lost-found" icon="Search" tint="warning" label={L.qaLostFound} />
-        <QA href="/m/connections" icon="UserPlus" tint="accent" label={L.qaInvite} />
+        {qaIds.map((id) => {
+          const def = QUICK_ACTIONS[id];
+          // Approve — kit 32 (drawer canon v2.8): the manager band gets the
+          // inline APPROVALS decision drawer (same store as /m/requests) + a
+          // live decidable badge; members keep the link to their submissions.
+          if (id === "approve" && data.approvals) {
+            return (
+              <QA
+                key={id}
+                onClick={() => setApproveOpen(true)}
+                icon={def.icon}
+                tint={def.tint}
+                label={QA_LABEL[id]}
+                badge={decidable || undefined}
+              />
+            );
+          }
+          return <QA key={id} href={def.href} icon={def.icon} tint={def.tint} label={QA_LABEL[id]} />;
+        })}
         {/* Customize — the kit's `.qa-add` tile (dashed icon well). Its CSS was
             ported and rendered by nothing, so the grid ended a tile short. */}
         <button type="button" className="qa-add" onClick={() => setQaEdit(true)}>
@@ -215,13 +285,78 @@ export function HomeShell({
             {/* Kit 31 (live-test resolution #8): every sheet carries the
                 canonical SheetHead — icon + title + explicit ✕ close. */}
             <SheetHead icon="LayoutGrid" title={L.qaCustomize} closeLabel={L.qaCustomizeClose} onClose={() => setQaEdit(false)} />
-            {/* Honest placeholder: the kit lets a crew member pick which
-                actions sit on their home. Persisting that needs a
-                user_preferences key and a kit-sanctioned action registry —
-                neither exists yet, so this says so rather than pretending. */}
-            <p className="form-intro" style={{ margin: "0 0 12px" }}>
-              {L.qaCustomizeSoon}
-            </p>
+            <p className="form-intro" style={{ margin: "0 0 12px" }}>{L.qaCustomizeHint}</p>
+
+            {/* Active set — reorder (▲▼) + remove (−). Persists on every change. */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: "44vh", overflowY: "auto", marginBottom: 12 }}>
+              {qaIds.map((id, i) => {
+                const def = QUICK_ACTIONS[id];
+                return (
+                  <div key={id} className="item" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px" }}>
+                    <span style={qaTintStyle(def.tint)}>
+                      <KIcon name={def.icon} size={16} />
+                    </span>
+                    <span style={{ flex: 1, minWidth: 0, fontWeight: 600 }}>{QA_LABEL[id]}</span>
+                    <button
+                      type="button"
+                      aria-label={`Move ${QA_LABEL[id]} up`}
+                      disabled={i === 0}
+                      onClick={() => qaMove(id, -1)}
+                      style={qaEditBtnStyle(i === 0)}
+                    >
+                      <KIcon name="ChevronUp" size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Move ${QA_LABEL[id]} down`}
+                      disabled={i === qaIds.length - 1}
+                      onClick={() => qaMove(id, 1)}
+                      style={qaEditBtnStyle(i === qaIds.length - 1)}
+                    >
+                      <KIcon name="ChevronDown" size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Remove ${QA_LABEL[id]}`}
+                      disabled={qaIds.length <= 1}
+                      onClick={() => qaRemove(id)}
+                      style={qaEditBtnStyle(qaIds.length <= 1, "var(--p-danger)")}
+                    >
+                      <KIcon name="Minus" size={16} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Available pool = the registry minus the active set. */}
+            {qaAvailable.length > 0 && (
+              <>
+                <div className="eyebrow" style={{ marginBottom: 6 }}>{L.qaAvailable}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
+                  {qaAvailable.map((id) => {
+                    const def = QUICK_ACTIONS[id];
+                    return (
+                      <div key={id} className="item" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 10px" }}>
+                        <span style={qaTintStyle(def.tint)}>
+                          <KIcon name={def.icon} size={16} />
+                        </span>
+                        <span style={{ flex: 1, minWidth: 0, fontWeight: 600 }}>{QA_LABEL[id]}</span>
+                        <button
+                          type="button"
+                          aria-label={`Add ${QA_LABEL[id]}`}
+                          onClick={() => qaAdd(id)}
+                          style={qaEditBtnStyle(false, "var(--p-success)")}
+                        >
+                          <KIcon name="Plus" size={16} />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
             <button
               type="button"
               className="ps-btn ps-btn--cta ps-btn--lg"

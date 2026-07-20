@@ -3,13 +3,12 @@
 import { useEffect, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ActionBar,
-  EmptySkeleton,
-  GroupedList,
   KIcon,
+  NormalizedList,
   SwipeRow,
   UndoBar,
   useUndo,
+  type FieldDef,
 } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
@@ -70,11 +69,6 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
   const toast = useToast();
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const [query, setQuery] = useState("");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("recent");
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [cleared, setCleared] = useState<ReadonlySet<string>>(new Set());
   const [escalated, setEscalated] = useState<ReadonlySet<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
@@ -103,8 +97,12 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
       if (outcome === "sent") router.refresh();
     })();
   };
+  // Keep the ref pointing at the latest `commit` closure (submit/router) —
+  // synced in an effect, not during render (React-compiler safe).
   const commitRef = useRef(commit);
-  commitRef.current = commit;
+  useEffect(() => {
+    commitRef.current = commit;
+  });
 
   // Flush still-pending commits if the list unmounts mid-window — the
   // decision was taken; navigating away must not silently drop it.
@@ -165,19 +163,18 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
     });
   };
 
-  const remaining = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return cards
-      .filter((c) => !cleared.has(c.id))
-      .filter((c) => !q || `${c.title} ${c.kind} ${c.requester} ${c.summary ?? ""}`.toLowerCase().includes(q))
-      .sort((a, b) =>
-        sort === "type"
-          ? a.kind.localeCompare(b.kind)
-          : sort === "submitter"
-            ? a.requester.localeCompare(b.requester)
-            : 0,
-      );
-  }, [cards, cleared, query, sort]);
+  // The undo `cleared` pre-filter; NormalizedList handles search + kind pills +
+  // drawer sort/filter/group over what's left.
+  const remaining = useMemo(() => cards.filter((c) => !cleared.has(c.id)), [cards, cleared]);
+  const kinds = useMemo(() => [...new Set(cards.map((c) => c.kind))], [cards]);
+
+  const FIELDS: FieldDef<DeckCard>[] = [
+    { id: "title", label: t("m.requests.col.request", undefined, "Request"), type: "text", get: (c) => c.title },
+    { id: "kind", label: t("m.requests.col.type", undefined, "Type"), type: "select", options: kinds, get: (c) => c.kind },
+    { id: "requester", label: t("m.requests.group.submitter", undefined, "Submitter"), type: "text", get: (c) => c.requester },
+    { id: "age", label: t("m.requests.col.stage", undefined, "Stage"), type: "text", get: (c) => c.age },
+    { id: "amount", label: "Amount", type: "text", get: (c) => c.amount ?? "" },
+  ];
 
   const row = (c: DeckCard) => {
     const mine = c.stepId != null;
@@ -243,17 +240,6 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
     );
   };
 
-  const grouped = useMemo(() => {
-    if (group === "none") return null;
-    const keyF = group === "type" ? (c: DeckCard) => c.kind : (c: DeckCard) => c.requester;
-    const m = new Map<string, DeckCard[]>();
-    remaining.forEach((c) => {
-      const k = keyF(c);
-      m.set(k, [...(m.get(k) ?? []), c]);
-    });
-    return Array.from(m.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-  }, [group, remaining]);
-
   return (
     <section aria-label={t("m.requests.deck.section", undefined, "Approvals Queue")}>
       <OfflineSyncBanner
@@ -277,50 +263,25 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
         </div>
       )}
 
-      <ActionBar
+      <NormalizedList
         k="ap"
-        query={query}
-        setQuery={setQuery}
-        placeholder={t("m.requests.search", undefined, "Search Approvals…")}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", t("m.requests.group.none", undefined, "None")],
-          ["type", t("m.requests.group.type", undefined, "Type")],
-          ["submitter", t("m.requests.group.submitter", undefined, "Submitter")],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["recent", t("m.requests.sort.recent", undefined, "Recent")],
-          ["type", t("m.requests.sort.type", undefined, "Type")],
-          ["submitter", t("m.requests.sort.submitter", undefined, "Submitter")],
-        ]}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-      />
-
-      {remaining.length === 0 ? (
-        <EmptySkeleton
-          cols={[
+        items={remaining}
+        fields={FIELDS}
+        search={(c) => `${c.title} ${c.kind} ${c.requester} ${c.summary ?? ""}`}
+        searchPlaceholder={t("m.requests.search", undefined, "Search Approvals…")}
+        renderRow={row}
+        views={["list", "table"]}
+        pill={{ get: (c) => c.kind, order: kinds }}
+        empty={{
+          cols: [
             t("m.requests.col.request", undefined, "Request"),
             t("m.requests.col.type", undefined, "Type"),
             t("m.requests.col.stage", undefined, "Stage"),
-          ]}
-          title={t("m.requests.empty.title", undefined, "All Clear")}
-          hint={t("m.requests.deck.emptyBody", undefined, "Nothing waits on your decision right now.")}
-        />
-      ) : grouped ? (
-        <GroupedList<DeckCard>
-          skey="ap"
-          groups={grouped}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={row}
-        />
-      ) : (
-        remaining.map(row)
-      )}
+          ],
+          title: t("m.requests.empty.title", undefined, "All Clear"),
+          hint: t("m.requests.deck.emptyBody", undefined, "Nothing waits on your decision right now."),
+        }}
+      />
 
       {remaining.some((c) => c.stepId == null) && (
         <p className="hint" style={{ marginTop: 4 }}>

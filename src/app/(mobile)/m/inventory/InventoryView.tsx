@@ -3,17 +3,13 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  ActionBar,
-  DataTable,
-  GroupedList,
   ItemUnits,
   KIcon,
+  NormalizedList,
   type FieldDef,
   type Unit as KitUnit,
-  type ViewMode,
 } from "@/components/mobile/kit";
-import { EmptySkeleton } from "@/components/mobile/kit";
-import type { CatalogKind } from "@/lib/db/assignments";
+import type { CatalogKind } from "@/lib/db/catalog-kinds";
 import { formatMoney } from "@/lib/i18n/format";
 import { CustodySheet, type CustodyTarget } from "./CustodySheet";
 
@@ -73,53 +69,23 @@ function qtyTone(qty: number | null): "ok" | "warn" | "neutral" {
 }
 
 export function InventoryView({ items, labels }: { items: InventoryItem[]; labels: InventoryLabels }) {
-  const [q, setQ] = useState("");
   const [custody, setCustody] = useState<CustodyTarget | null>(null);
-  const [view, setView] = useState<ViewMode>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("name");
-  const [cats, setCats] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
-  // Distinct categories present in the data → filter chips.
+  // Distinct categories present in the data → quick-filter pills.
   const allCats = useMemo(() => {
     const seen: string[] = [];
     for (const it of items) if (!seen.includes(it.cat)) seen.push(it.cat);
     return seen.sort((a, b) => a.localeCompare(b));
   }, [items]);
 
-  const filtered = useMemo(() => {
-    const ql = q.toLowerCase();
-    return items
-      .filter((it) => cats.size === 0 || cats.has(it.cat))
-      .filter(
-        (it) => !ql || (it.name + " " + (it.code ?? "")).toLowerCase().includes(ql),
-      )
-      .sort((a, b) =>
-        sort === "code"
-          ? (a.code ?? "").localeCompare(b.code ?? "")
-          : sort === "qty"
-            ? (b.qty ?? -1) - (a.qty ?? -1)
-            : a.name.localeCompare(b.name),
-      );
-  }, [items, q, cats, sort]);
-
-  const tableFields: FieldDef<InventoryItem>[] = [
+  const FIELDS: FieldDef<InventoryItem>[] = [
     { id: "name", label: labels.colItem, type: "text", get: (x) => x.name },
-    { id: "cat", label: labels.colCategory, type: "text", get: (x) => x.cat },
+    { id: "cat", label: labels.colCategory, type: "select", options: allCats, get: (x) => x.cat },
     { id: "code", label: labels.colCode, type: "text", get: (x) => x.code ?? "—" },
     { id: "qty", label: labels.colQty, type: "num", get: (x) => x.qty ?? "—" },
     { id: "cost", label: labels.colCost, type: "text", get: (x) => money(x.unitCostCents) },
   ];
-
-  const toggleCat = (c: string) =>
-    setCats((prev) => {
-      const n = new Set(prev);
-      n.has(c) ? n.delete(c) : n.add(c);
-      return n;
-    });
 
   const row = (x: InventoryItem) => {
     const open = expanded === x.id;
@@ -202,100 +168,45 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
     );
   };
 
-  const grouped =
-    group === "cat"
-      ? allCats
-          .map((c) => [c, filtered.filter((x) => x.cat === c)] as [string, InventoryItem[]])
-          .filter(([, m]) => m.length)
-      : null;
+  const galleryCard = (x: InventoryItem) => (
+    <>
+      <div className="mthumb">
+        <KIcon name="Package" size={30} style={{ color: "var(--p-text-3)" }} />
+        {x.code && <span className="mtag">{x.code}</span>}
+      </div>
+      <div className="t" style={{ fontSize: 13, marginTop: 7 }}>{x.name}</div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
+        <span className="s" style={{ fontSize: 11 }}>{x.qty != null ? `${x.qty} ${labels.onHand}` : labels.untracked}</span>
+        <span className={`ps-badge ps-badge--${qtyTone(x.qty)}`}>{money(x.unitCostCents)}</span>
+      </div>
+    </>
+  );
 
   return (
     <>
       <div className="scr-eye">{labels.eyebrow}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>{labels.title}</h1>
-      <ActionBar<InventoryItem>
+      <NormalizedList
         k="iv"
-        query={q}
-        setQuery={setQ}
-        placeholder={labels.search}
-        view={view}
-        setView={setView}
+        items={items}
+        fields={FIELDS}
+        search={(x) => `${x.name} ${x.code ?? ""} ${x.cat}`}
+        searchPlaceholder={labels.search}
+        renderRow={row}
+        gallery={galleryCard}
         views={["list", "gallery", "table"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[["none", "None"], ["cat", labels.colCategory]]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[["name", "Name"], ["qty", labels.colQty], ["code", labels.colCode]]}
-        filterActive={cats.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <>
-            <div className="wl" style={{ marginBottom: 8 }}>{labels.colCategory}</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 10 }}>
-              {allCats.map((c) => (
-                <button key={c} type="button" className={`chip ${cats.has(c) ? "on" : ""}`} onClick={() => toggleCat(c)}>
-                  {c}
-                </button>
-              ))}
-            </div>
-            <button type="button" className="pill" style={{ width: "100%", justifyContent: "center", marginTop: 4 }} onClick={() => setCats(new Set())}>
-              Reset filters
-            </button>
-          </>
+        pill={{ get: (x) => x.cat, order: allCats }}
+        empty={{ cols: [labels.colItem, labels.colQty, labels.colCost], title: labels.empty, hint: labels.emptyHint }}
+        footer={
+          <Link
+            href="/m/inventory/scan"
+            className="ps-btn ps-btn--cta ps-btn--lg"
+            style={{ width: "100%", justifyContent: "center", marginTop: 12, textDecoration: "none" }}
+          >
+            <KIcon name="ScanLine" size={16} /> {labels.scan}
+          </Link>
         }
       />
-      {view === "gallery" ? (
-        <div className="mkt">
-          {filtered.map((x) => (
-            <div
-              className="mcard"
-              key={x.id}
-              role="button"
-              tabIndex={0}
-              aria-expanded={expanded === x.id}
-              onClick={() => setExpanded(expanded === x.id ? null : x.id)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setExpanded(expanded === x.id ? null : x.id);
-                }
-              }}
-            >
-              <div className="mthumb">
-                <KIcon name="Package" size={30} style={{ color: "var(--p-text-3)" }} />
-                {x.code && <span className="mtag">{x.code}</span>}
-              </div>
-              <div className="t" style={{ fontSize: 13, marginTop: 7 }}>{x.name}</div>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 4 }}>
-                <span className="s" style={{ fontSize: 11 }}>{x.qty != null ? `${x.qty} ${labels.onHand}` : labels.untracked}</span>
-                <span className={`ps-badge ps-badge--${qtyTone(x.qty)}`}>{money(x.unitCostCents)}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : view === "table" ? (
-        <DataTable fields={tableFields} items={filtered} />
-      ) : grouped ? (
-        <GroupedList<InventoryItem> skey="iv" groups={grouped} collapsed={collapsed} setCollapsed={setCollapsed} renderRow={row} />
-      ) : (
-        filtered.map(row)
-      )}
-      {!filtered.length && (
-        <EmptySkeleton
-          cols={[labels.colItem, labels.colQty, labels.colCost]}
-          title={labels.empty}
-          hint={labels.emptyHint}
-        />
-      )}
-      <Link
-        href="/m/inventory/scan"
-        className="ps-btn ps-btn--cta ps-btn--lg"
-        style={{ width: "100%", justifyContent: "center", marginTop: 12, textDecoration: "none" }}
-      >
-        <KIcon name="ScanLine" size={16} /> {labels.scan}
-      </Link>
     </>
   );
 }

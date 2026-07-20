@@ -3,11 +3,17 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import {
   ActionBar,
-  DataTable,
-  GroupedList,
+  DataView,
+  GroupedTree,
   KIcon,
   Sheet,
+  advBar,
+  applyModel,
+  dataPills,
+  emptyViewCtl,
+  groupTree,
   type FieldDef,
+  type ViewCtl,
 } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { EmptySkeleton } from "@/components/mobile/kit";
@@ -50,8 +56,6 @@ type Labels = {
   colDetail: string;
   colStatus: string;
 };
-
-type View = "list" | "calendar" | "table";
 
 function badgeClass(tone: SchedEvent["tone"]): string {
   switch (tone) {
@@ -239,14 +243,11 @@ export function ScheduleView({
 }) {
   const fmt = useFormatters();
   const [openEvent, setOpenEvent] = useState<SchedEvent | null>(null);
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<View>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("time");
-  const [types, setTypes] = useState<Set<string>>(new Set());
+  const [ctl, setCtl] = useState<ViewCtl>(() => emptyViewCtl("list"));
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [calDay, setCalDay] = useState<string | null>(null);
+  const patch = (p: Partial<ViewCtl>) => setCtl((c) => ({ ...c, ...p }));
   // `todayKey` is empty until mount — deriving today from `new Date()` during
   // render runs at different instants on server vs client and flips the
   // "today" highlight, hydration-mismatching (React #418). The highlight is a
@@ -265,41 +266,43 @@ export function ScheduleView({
     [labels],
   );
 
-  const evs = useMemo(() => {
-    return events
-      .filter((e) => types.size === 0 || types.has(e.type))
-      .filter((e) => !query || (e.name + " " + e.sub).toLowerCase().includes(query.toLowerCase()))
-      .slice()
-      .sort((a, b) =>
-        sort === "name"
-          ? a.name.localeCompare(b.name)
-          : sort === "type"
-            ? a.type.localeCompare(b.type)
-            : String(a.time).localeCompare(String(b.time)),
-      );
-  }, [events, types, query, sort]);
+  const typeLabelOf = (e: SchedEvent) => typeMeta[e.type].label;
 
-  const grouped = useMemo(() => {
-    if (group === "type") {
-      const m: Record<string, SchedEvent[]> = {};
-      evs.forEach((e) => {
-        (m[e.type] = m[e.type] || []).push(e);
-      });
-      return (Object.keys(typeMeta) as Array<keyof typeof typeMeta>)
-        .filter((k) => m[k])
-        .map((k) => [typeMeta[k].label, m[k]!] as [string, SchedEvent[]]);
-    }
-    if (group === "state") {
-      const m: Record<string, SchedEvent[]> = {};
-      evs.forEach((e) => {
-        (m[e.state] = m[e.state] || []).push(e);
-      });
-      return Object.keys(m)
-        .sort()
-        .map((k) => [k, m[k]!] as [string, SchedEvent[]]);
-    }
-    return null;
-  }, [evs, group, typeMeta]);
+  const FIELDS = useMemo<FieldDef<SchedEvent>[]>(
+    () => [
+      { id: "name", label: labels.colEvent, type: "text", get: (e) => e.name },
+      { id: "type", label: labels.colType, type: "select", options: Object.values(typeMeta).map((m) => m.label), get: (e) => typeMeta[e.type].label },
+      { id: "time", label: labels.colTime, type: "text", get: (e) => e.time },
+      { id: "sub", label: labels.colDetail, type: "text", get: (e) => e.sub },
+      { id: "state", label: labels.colStatus, type: "select", get: (e) => e.state },
+    ],
+    [labels, typeMeta],
+  );
+
+  // Type pills pre-filter + search; drawer sort/filter/group via the schema.
+  // Default order is by time (the original list default).
+  const filtered = useMemo(() => {
+    const q = ctl.q.trim().toLowerCase();
+    let out = [...events].sort((a, b) => String(a.time).localeCompare(String(b.time)));
+    if (q) out = out.filter((e) => (e.name + " " + e.sub).toLowerCase().includes(q));
+    if (ctl.filters.size) out = out.filter((e) => ctl.filters.has(typeMeta[e.type].label));
+    return applyModel(out, FIELDS, ctl.filterModel, ctl.sortRules);
+  }, [events, ctl.q, ctl.filters, ctl.filterModel, ctl.sortRules, typeMeta, FIELDS]);
+
+  const tree = useMemo(() => groupTree(filtered, FIELDS, ctl.groupLevels), [filtered, ctl.groupLevels, FIELDS]);
+
+  const pills = dataPills(
+    events,
+    typeLabelOf,
+    ctl.filters,
+    (v) => {
+      const n = new Set(ctl.filters);
+      if (n.has(v)) n.delete(v);
+      else n.add(v);
+      patch({ filters: n });
+    },
+    Object.values(typeMeta).map((m) => m.label),
+  );
 
   const eventRow = (e: SchedEvent) => {
     const m = typeMeta[e.type];
@@ -345,107 +348,41 @@ export function ScheduleView({
   const activeDay = calDay ?? days[0] ?? "";
   const dayEvents = useMemo(
     () =>
-      evs
+      filtered
         .filter((e) => e.dateKey === activeDay)
         .slice()
         .sort((a, b) => String(a.time).localeCompare(String(b.time))),
-    [evs, activeDay],
+    [filtered, activeDay],
   );
-
-  const tableFields: FieldDef<SchedEvent>[] = [
-    { id: "name", label: labels.colEvent, type: "text", get: (e) => e.name },
-    { id: "type", label: labels.colType, type: "text", get: (e) => typeMeta[e.type].label },
-    { id: "time", label: labels.colTime, type: "text", get: (e) => e.time },
-    { id: "sub", label: labels.colDetail, type: "text", get: (e) => e.sub },
-    { id: "state", label: labels.colStatus, type: "text", get: (e) => e.state },
-  ];
 
   return (
     <>
       <ActionBar<SchedEvent>
+        {...advBar(ctl, patch, FIELDS, ["list", "calendar", "table"])}
         k="sc"
-        query={query}
-        setQuery={setQuery}
+        query={ctl.q}
+        setQuery={(q) => patch({ q })}
         placeholder={labels.search}
-        view={view}
-        setView={(v) => setView(v as View)}
-        views={["list", "calendar", "table"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", labels.groupNone],
-          ["type", labels.groupType],
-          ["state", labels.colStatus],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["time", labels.sortTime],
-          ["name", labels.sortName],
-          ["type", labels.colType],
-        ]}
-        filterActive={types.size}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
-        filterChildren={
-          <>
-            <div className="wl" style={{ marginBottom: 8 }}>
-              {labels.filterType}
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 10 }}>
-              {(Object.entries(typeMeta) as Array<[string, { label: string }]>).map(([id, m]) => (
-                <button
-                  key={id}
-                  type="button"
-                  className={`chip ${types.has(id) ? "on" : ""}`}
-                  onClick={() =>
-                    setTypes((prev) => {
-                      const n = new Set(prev);
-                      if (n.has(id)) n.delete(id);
-                      else n.add(id);
-                      return n;
-                    })
-                  }
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              className="pill"
-              style={{ width: "100%", justifyContent: "center", marginTop: 4 }}
-              onClick={() => setTypes(new Set())}
-            >
-              {labels.reset}
-            </button>
-          </>
-        }
+        pills={pills}
+        onPillsClear={() => patch({ filters: new Set() })}
       />
 
-      {view === "table" && <DataTable<SchedEvent> fields={tableFields} items={evs} />}
-
-      {view === "list" &&
-        (grouped ? (
-          <GroupedList<SchedEvent>
-            skey="sc"
-            groups={grouped}
-            collapsed={collapsed}
-            setCollapsed={setCollapsed}
-            renderRow={(e) => eventRow(e)}
-          />
+      {ctl.view !== "calendar" &&
+        (filtered.length === 0 ? (
+          <EmptySkeleton cols={[labels.colEvent, labels.colType, labels.colTime]} title={labels.empty} hint={labels.emptyBody} />
+        ) : tree ? (
+          <GroupedTree skey="sc" tree={tree} collapsed={collapsed} setCollapsed={setCollapsed} renderRow={(e) => eventRow(e as SchedEvent)} />
         ) : (
-          evs.map((e) => eventRow(e))
+          <DataView view={ctl.view} items={filtered} fields={FIELDS} renderRow={(e) => eventRow(e)} onRow={setOpenEvent} />
         ))}
-      {view === "list" && !evs.length && (
-        <EmptySkeleton cols={[labels.colEvent, labels.colType, labels.colTime]} title={labels.empty} hint={labels.emptyBody} />
-      )}
 
-      {view === "calendar" && (
+      {ctl.view === "calendar" && (
         <>
           <div className="weekstrip">
             {(days.length ? days : [activeDay]).map((d) => {
-              const cnt = evs.filter((e) => e.dateKey === d).length;
+              const cnt = filtered.filter((e) => e.dateKey === d).length;
               // d is the dateKey; when empty (no event days) fall back to the
               // post-mount today key so the lone strip cell still labels a day.
               const key = d || todayKey;

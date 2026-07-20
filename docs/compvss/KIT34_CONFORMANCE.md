@@ -15,7 +15,7 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 | v3.1 | Operations hubs (MetricBar + viewseg) | ✅ hub model + `MetricBar`/`ViewSeg`/`HubChrome`; Operations·Logistics landings |
 | v3.2 | Hubs as top-level IA · Projects hub · pill filters | ✅ 6 hubs SSOT (`mobileHubs`); Projects hub (Timeline·Milestones·Calendar·Tasks); pills on every normalized surface |
 | v3.3 | Airtable-plus view engine (bottom-sheet filter/sort/group) | ✅ `viewengine.tsx` — nested AND/OR `FilterGroups` (typed incl. `date`), multi-key `SortReorder`, multi-level `GroupBuilder`, `ViewSheet` drawer |
-| v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **25 surfaces migrated** (incl. the core Tasks tab) (Reports · Inspections · Permits · Travel · Shipments · Docks · Gate · Delivery · Project Tasks · Project Calendar · Milestones · Documents · Knowledge · Vendors · My Gear · Catalog · Notifications · Roster · Advances · Expenses · Activity · Jobs · Templates · Inventory) — Marketplace + Connections are documented gallery/feed exceptions — remainder tracked below |
+| v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **26 surfaces migrated** — every record-list surface (incl. the core Tasks tab, Approvals, and Calendar/Schedule which keeps its bespoke real-today weekstrip calendar) (Reports · Inspections · Permits · Travel · Shipments · Docks · Gate · Delivery · Project Tasks · Project Calendar · Milestones · Documents · Knowledge · Vendors · My Gear · Catalog · Notifications · Roster · Advances · Expenses · Activity · Jobs · Templates · Inventory) — Marketplace + Connections are documented gallery/feed exceptions — remainder tracked below |
 | v3.5 | Fixed-order screen skeleton (`ScreenHeader`) | ✅ `ScreenHeader` primitive; used by hub members + standalone screens |
 | v3.6 | Scope-partitioned IA + XPMS project surfaces | ✅ My Work vs Project split; XPMS-compliant `project_tasks`/`project_events`/`project_milestones` (real migration) |
 | v3.7 | Deployment-ready polish (Daily Report, exports, real forms, details) | ⏳ **remaining** (Wave 5) — see below |
@@ -48,12 +48,15 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 
 ## Remaining (tracked for follow-up waves)
 
-### Wave 4 (part 2) — final surface disposition
-**25 surfaces normalized** onto `NormalizedList` (incl. the core **Tasks** tab — list/board/table + priority pills, preserving its optimistic state/flag/archive overrides, show-completed/show-archived toggles, undo bar, and New-Task FAB). Remaining disposition:
+### Wave 4 (part 2) — ✅ COMPLETE
+**Every record-list surface is normalized** onto `NormalizedList`/the view engine — 26 surfaces, including the hardest:
+- **Tasks** (core bottom tab): list/board/table + priority pills, preserving the optimistic state/flag/archive overrides, show-completed/show-archived toggles, undo bar, New-Task FAB.
+- **Approvals**: drawer toolbar + kind pills over the offline-replay decision queue (5s-undo → IndexedDB commit, escalate, flush-on-unmount) — and the pre-existing `commitRef`-in-render lint error was fixed to a `useEffect` in passing.
+- **Calendar/Schedule**: drawer toolbar + type pills + DataView list/table + GroupedTree grouping, while **keeping its bespoke real-today weekstrip calendar** (the generic DataView calendar uses the demo clock, so the bespoke one is retained deliberately) + the swap/remind quick-look.
 
-- **Marketplace** — a browse-and-buy **photo-card grid** (`.mkt`/`.mcard`, per-listing photos + mark-sold/withdraw). Its interaction model is gallery-first, so it's a **documented exception** alongside Community (feed) and Groups/Spaces (join cards) — the kit's own §7 exception category. Forcing it through the list engine would change the grid visual with no gain.
-- **Connections** — a 3-section social surface (Network / Pending / Suggestions), **documented exception** (flattening it into one list would degrade it).
-- **Calendar/Schedule** (~1085-line shift-swap / coverage flow — a scheduler, not a data list; sits alongside the dedicated `/m/scheduler` surface) and **Approvals** (offline-replay decision queue + a pre-existing `commitRef`-in-render lint error not introduced here) keep their **bespoke first-gen stack**. Both already provide search + views + filters via the older popover ActionBar; the delta is only the drawer toolbar, entangled with their custom calendar/offline-queue rendering. These are the two right candidates for a **browser-verification loop** before conversion. The engine + pattern is proven across 25 surfaces incl. the core Tasks tab.
+**Documented exceptions** (the kit's §7 non-grid category — deliberately NOT forced through the list engine):
+- **Marketplace** — a browse-and-buy photo-card grid (`.mkt`/`.mcard` + per-listing photos + mark-sold/withdraw); gallery-first, like Community (feed) and Groups/Spaces (join cards).
+- **Connections** — a 3-section social surface (Network / Pending / Suggestions); flattening it into one list would degrade it.
 
 ### Wave 4 — Logistics hub members — ✅ DONE
 **Docks · Gate · Delivery** built as normalized ledgers (`DOCK_SLOTS`/`GATE_QUEUE`/`DELIVERIES` seed + tones); members un-`pending`ed. The Logistics hub is complete.

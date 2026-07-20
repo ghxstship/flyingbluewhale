@@ -2,7 +2,7 @@
 
 import { useActionState, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, EmptySkeleton, Fab, FormScreen, GroupedList, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
+import { Fab, FormScreen, KIcon, NormalizedList, type FieldDef, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
@@ -95,51 +95,23 @@ export function JobsView({
   }
 
   const t = useT();
-  const [q, setQ] = useState("");
-  const [sort, setSort] = useState("recent");
-  const [group, setGroup] = useState("none");
-  const [types, setTypes] = useState<Set<string>>(new Set());
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const typeList = useMemo(() => Array.from(new Set(gigs.map((g) => g.employmentType))).sort(), [gigs]);
-  const toggleType = (ty: string) =>
-    setTypes((s) => {
-      const n = new Set(s);
-      if (n.has(ty)) n.delete(ty);
-      else n.add(ty);
-      return n;
-    });
+  const rateNum = (s: string) => parseFloat(String(s).replace(/[^0-9.]/g, "")) || 0;
 
-  const items = useMemo(() => {
-    const needle = q.trim().toLowerCase();
-    const filtered = gigs.filter(
-      (g) =>
-        (!needle || (g.role + " " + g.org + " " + g.tags.join(" ")).toLowerCase().includes(needle)) &&
-        (types.size === 0 || types.has(g.employmentType)) &&
-        (!savedOnly || saved.has(g.id)),
-    );
-    const rate = (s: string) => parseFloat(String(s).replace(/[^0-9.]/g, "")) || 0;
-    if (sort === "role") return filtered.slice().sort((a, b) => a.role.localeCompare(b.role));
-    if (sort === "rate") return filtered.slice().sort((a, b) => rate(b.rate) - rate(a.rate));
-    if (sort === "date") return filtered.slice().sort((a, b) => String(a.when).localeCompare(String(b.when)));
-    if (sort === "applicants") return filtered.slice().sort((a, b) => b.applicants - a.applicants);
-    return filtered;
-  }, [gigs, q, sort, types, savedOnly, saved]);
-
+  // The saved-jobs pre-filter (All/Saved chips); NormalizedList handles the rest
+  // (search + type pills + drawer sort/filter/group) via the field schema.
+  const listItems = useMemo(() => (savedOnly ? gigs.filter((g) => saved.has(g.id)) : gigs), [gigs, savedOnly, saved]);
   const savedCount = useMemo(() => gigs.filter((g) => saved.has(g.id)).length, [gigs, saved]);
 
-  // Kit 31 resolution #5 — group enum (None / Organization / Type).
-  const grouped = useMemo<[string, Gig[]][] | null>(() => {
-    if (group === "none") return null;
-    const keyF = group === "org" ? (g: Gig) => g.org : (g: Gig) => g.employmentType;
-    const m = new Map<string, Gig[]>();
-    items.forEach((g) => {
-      const k = keyF(g);
-      m.set(k, [...(m.get(k) ?? []), g]);
-    });
-    return Array.from(m.entries()).sort((a, b) => a[0].localeCompare(b[0]));
-  }, [group, items]);
+  const FIELDS: FieldDef<Gig>[] = [
+    { id: "role", label: t("m.gigs.col.role", undefined, "Role"), type: "text", get: (g) => g.role },
+    { id: "org", label: t("m.gigs.group.org", undefined, "Organization"), type: "select", options: [...new Set(gigs.map((g) => g.org))], get: (g) => g.org },
+    { id: "type", label: t("m.gigs.group.type", undefined, "Type"), type: "select", options: typeList, get: (g) => g.employmentType },
+    { id: "rate", label: t("m.gigs.col.rate", undefined, "Rate"), type: "num", get: (g) => rateNum(g.rate) },
+    { id: "applicants", label: t("m.gigs.sort.applicants", undefined, "Applicants"), type: "num", get: (g) => g.applicants },
+    { id: "when", label: t("m.gigs.col.when", undefined, "When"), type: "text", get: (g) => g.when },
+  ];
 
   const gigCard = (g: Gig) => (
         <div className="item tap" key={g.id} style={{ display: "block" }}>
@@ -208,43 +180,8 @@ export function JobsView({
         </button>
       </div>
 
-      <ActionBar
-        k="gigs"
-        query={q}
-        setQuery={setQ}
-        placeholder={t("m.gigs.search", undefined, "Search jobs…")}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", t("m.gigs.group.none", undefined, "None")],
-          ["org", t("m.gigs.group.org", undefined, "Organization")],
-          ["type", t("m.gigs.group.type", undefined, "Type")],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["recent", t("m.gigs.sort.recent", undefined, "Recent")],
-          ["rate", t("m.gigs.sort.rate", undefined, "Rate")],
-          ["role", t("m.gigs.sort.role", undefined, "Role")],
-          ["date", t("m.gigs.sort.date", undefined, "Date")],
-          ["applicants", t("m.gigs.sort.applicants", undefined, "Applicants")],
-        ]}
-        filterActive={types.size}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <div>
-            {typeList.map((ty) => (
-              <TogRow key={ty} label={ty} on={types.has(ty)} set={() => toggleType(ty)} />
-            ))}
-          </div>
-        }
-      />
-
       {/* Post-a-Job opener. Manager-band only (mirrors the FAB's `canPost`
-          gate + the postJob server re-check), and wired to the same poster —
-          it used to render for everyone with no handler, a dead control that
-          promised a form it never opened. */}
+          gate + the postJob server re-check). */}
       {canPost && (
         <div
           className="composer-cta"
@@ -266,29 +203,26 @@ export function JobsView({
         </div>
       )}
 
-      {grouped ? (
-        <GroupedList<Gig>
-          skey="gigs"
-          groups={grouped}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          renderRow={gigCard}
-        />
-      ) : (
-        items.map(gigCard)
-      )}
-
-      {!items.length && (
-        <EmptySkeleton
-          cols={[
+      <NormalizedList
+        k="gigs"
+        items={listItems}
+        fields={FIELDS}
+        search={(g) => `${g.role} ${g.org} ${g.tags.join(" ")}`}
+        searchPlaceholder={t("m.gigs.search", undefined, "Search jobs…")}
+        renderRow={gigCard}
+        views={["list", "table"]}
+        pill={{ get: (g) => g.employmentType, order: typeList }}
+        empty={{
+          cols: [
             t("m.gigs.col.role", undefined, "Role"),
             t("m.gigs.col.rate", undefined, "Rate"),
             t("m.gigs.col.when", undefined, "When"),
-          ]}
-          title={t("m.gigs.empty.title", undefined, "No Jobs")}
-          hint={t("m.gigs.empty.hint", undefined, "Open shifts and gigs from orgs on your network land here.")}
-        />
-      )}
+          ],
+          title: t("m.gigs.empty.title", undefined, "No Jobs"),
+          hint: t("m.gigs.empty.hint", undefined, "Open shifts and gigs from orgs on your network land here."),
+        }}
+      />
+
       {/* Kit FAB: Post Job — perm `approve` in the kit's CREATE map, the
           manager band here. The action re-checks server-side. */}
       {canPost && (

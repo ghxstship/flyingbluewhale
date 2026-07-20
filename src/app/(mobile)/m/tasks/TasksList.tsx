@@ -3,15 +3,14 @@
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
-  ActionBar,
-  EmptySkeleton,
   Fab,
-  GroupedList,
   KIcon,
+  NormalizedList,
   ProgressRing,
   SwipeRow,
   UndoBar,
   useUndo,
+  type FieldDef,
 } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import {
@@ -63,8 +62,6 @@ export type TasksLabels = {
   swipeHint: string;
 };
 
-type View = "list" | "board" | "table";
-
 function badgeClass(s: TaskState): string {
   switch (stateTone(s)) {
     case "ok":
@@ -78,30 +75,12 @@ function badgeClass(s: TaskState): string {
   }
 }
 
-const PRI_RANK: Record<KitTask["priority"], number> = { High: 0, Medium: 1, Low: 2 };
-
-/** Stable colour per state for the board lane dots. */
-const STATE_DOT: Record<TaskState, string> = {
-  todo: "var(--p-text-3)",
-  in_progress: "var(--p-info)",
-  blocked: "var(--p-warning)",
-  review: "var(--p-info)",
-  done: "var(--p-success)",
-};
-
 export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: TasksLabels }) {
   const router = useRouter();
   const toast = useToast();
   const [, startTransition] = useTransition();
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState<View>("list");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("due");
-  const [states, setStates] = useState<Set<TaskState>>(new Set());
   const [showCompleted, setShowCompleted] = useState(true);
   const [showArchived, setShowArchived] = useState(false);
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   // Kit 31 swipe canon — optimistic row state over the server stores.
   const [stateOverride, setStateOverride] = useState<Map<string, TaskState>>(new Map());
   const [flagOverride, setFlagOverride] = useState<Map<string, boolean>>(new Map());
@@ -182,23 +161,16 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
     [L],
   );
 
-  const entries = useMemo(() => {
-    return tasks
-      .filter((t) => states.size === 0 || states.has(stateOverride.get(t.id) ?? t.state))
-      .filter((t) => showCompleted || (stateOverride.get(t.id) ?? t.state) !== "done")
-      .filter((t) => showArchived || !(archOverride.get(t.id) ?? t.archived))
-      .filter((t) => !query || (t.title + " " + t.sub).toLowerCase().includes(query.toLowerCase()))
-      .slice()
-      .sort((a, b) => {
-        if (sort === "name") return a.title.localeCompare(b.title);
-        if (sort === "priority") return PRI_RANK[a.priority] - PRI_RANK[b.priority];
-        if (sort === "status") return (stateOverride.get(a.id) ?? a.state).localeCompare(stateOverride.get(b.id) ?? b.state);
-        if (sort === "assignee") return a.assignee.localeCompare(b.assignee);
-        return a.due.localeCompare(b.due);
-      });
-  }, [tasks, states, showCompleted, showArchived, query, sort, stateOverride, archOverride]);
-
-  const filterActive = states.size + (showCompleted ? 0 : 1) + (showArchived ? 1 : 0);
+  // The show-completed / show-archived toggles pre-filter (override-aware);
+  // NormalizedList handles search + priority pills + drawer sort/filter/group,
+  // and the board (columns = task state) via the field schema.
+  const baseItems = useMemo(
+    () =>
+      tasks
+        .filter((t) => showCompleted || (stateOverride.get(t.id) ?? t.state) !== "done")
+        .filter((t) => showArchived || !(archOverride.get(t.id) ?? t.archived)),
+    [tasks, showCompleted, showArchived, stateOverride, archOverride],
+  );
 
   const open = (id: string) => router.push(`/m/tasks/${id}`);
 
@@ -268,21 +240,10 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
     );
   };
 
+  // Board card CONTENT only — the DataView board-card wrapper owns the click
+  // (via onRow), so no nested interactive element here.
   const bcard = (t: KitTask) => (
-    <div
-      className="bcard"
-      key={t.id}
-      role="button"
-      tabIndex={0}
-      onClick={() => open(t.id)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          open(t.id);
-        }
-      }}
-      style={{ cursor: "pointer" }}
-    >
+    <>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
         <span style={{ width: 8, height: 8, borderRadius: 2, background: PRI_COLOR[t.priority], flex: "none" }} />
         <span className="time" style={{ color: "var(--p-text-3)" }}>
@@ -295,35 +256,20 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
       </div>
       <div className="t">{t.title}</div>
       <div className="s">{t.sub || t.assignee}</div>
-    </div>
+    </>
   );
 
-  // Grouping.
-  const grouped = useMemo(() => {
-    if (group === "none") return null;
-    const map: Record<string, KitTask[]> = {};
-    if (group === "status") {
-      entries.forEach((t) => {
-        (map[t.state] = map[t.state] || []).push(t);
-      });
-      return TASK_STATES.filter((s) => map[s]).map((s) => [stateLabel[s], map[s]!] as [string, KitTask[]]);
-    }
-    if (group === "priority") {
-      entries.forEach((t) => {
-        (map[t.priority] = map[t.priority] || []).push(t);
-      });
-      return (["High", "Medium", "Low"] as const)
-        .filter((p) => map[p])
-        .map((p) => [p, map[p]!] as [string, KitTask[]]);
-    }
-    // assignee
-    entries.forEach((t) => {
-      (map[t.assignee] = map[t.assignee] || []).push(t);
-    });
-    return Object.keys(map)
-      .sort()
-      .map((a) => [a, map[a]!] as [string, KitTask[]]);
-  }, [entries, group, stateLabel]);
+  const STATE_ORDER = TASK_STATES.map((s) => stateLabel[s]);
+  const boardTone: Record<string, string> = {};
+  for (const s of TASK_STATES) boardTone[stateLabel[s]] = stateTone(s);
+
+  const FIELDS: FieldDef<KitTask>[] = [
+    { id: "title", label: L.colTask, type: "text", get: (t) => t.title },
+    { id: "status", label: L.groupStatus, type: "select", options: STATE_ORDER, get: (t) => stateLabel[stateOf(t)] },
+    { id: "priority", label: L.groupPriority, type: "select", options: ["High", "Medium", "Low"], get: (t) => t.priority },
+    { id: "assignee", label: L.groupAssignee, type: "text", get: (t) => t.assignee },
+    { id: "due", label: L.colDue, type: "text", get: (t) => t.due },
+  ];
 
   return (
     <div className="screen screen-anim">
@@ -332,177 +278,32 @@ export function TasksList({ tasks, labels: L }: { tasks: KitTask[]; labels: Task
         {L.title}
       </h1>
 
-      <ActionBar<KitTask>
+      {/* View toggles the drawer can't model: show-completed / show-archived. */}
+      <div className="chips" style={{ paddingBottom: 8 }}>
+        <button type="button" className={`chip ${showCompleted ? "on" : ""}`} onClick={() => setShowCompleted((v) => !v)}>
+          {L.showCompleted}
+        </button>
+        <button type="button" className={`chip ${showArchived ? "on" : ""}`} onClick={() => setShowArchived((v) => !v)}>
+          {L.showArchived}
+        </button>
+      </div>
+
+      <NormalizedList
         k="tk"
-        query={query}
-        setQuery={setQuery}
-        placeholder={L.search}
-        view={view}
-        setView={(v) => setView(v as View)}
+        items={baseItems}
+        fields={FIELDS}
+        search={(t) => `${t.title} ${t.sub} ${t.assignee}`}
+        searchPlaceholder={L.search}
+        renderRow={(t) => row(t)}
+        gallery={bcard}
+        onRow={(t) => open(t.id)}
         views={["list", "board", "table"]}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", L.groupNone],
-          ["status", L.groupStatus],
-          ["priority", L.groupPriority],
-          ["assignee", L.groupAssignee],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["due", L.sortDue],
-          ["priority", L.sortPriority],
-          ["name", L.sortName],
-          ["status", L.sortStatus],
-          ["assignee", L.sortAssignee],
-        ]}
-        filterActive={filterActive}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        filterChildren={
-          <>
-            <div className="wl" style={{ marginBottom: 8 }}>
-              {L.filterStatus}
-            </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 10 }}>
-              {TASK_STATES.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  className={`chip ${states.has(s) ? "on" : ""}`}
-                  onClick={() =>
-                    setStates((prev) => {
-                      const n = new Set(prev);
-                      if (n.has(s)) n.delete(s);
-                      else n.add(s);
-                      return n;
-                    })
-                  }
-                >
-                  {stateLabel[s]}
-                </button>
-              ))}
-            </div>
-            <label
-              style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, cursor: "pointer" }}
-            >
-              <input
-                type="checkbox"
-                checked={showCompleted}
-                onChange={() => setShowCompleted((v) => !v)}
-              />
-              <span className="wl">{L.showCompleted}</span>
-            </label>
-            <label
-              style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, cursor: "pointer" }}
-            >
-              <input
-                type="checkbox"
-                checked={showArchived}
-                onChange={() => setShowArchived((v) => !v)}
-              />
-              <span className="wl">{L.showArchived}</span>
-            </label>
-            <button
-              type="button"
-              className="pill"
-              style={{ width: "100%", justifyContent: "center", marginTop: 4 }}
-              onClick={() => {
-                setStates(new Set());
-                setShowCompleted(true);
-                setShowArchived(false);
-              }}
-            >
-              {L.reset}
-            </button>
-          </>
-        }
+        statusField="status"
+        statusOrder={STATE_ORDER}
+        boardTone={boardTone}
+        pill={{ get: (t) => t.priority, order: ["High", "Medium", "Low"] }}
+        empty={{ cols: [L.colTask, L.groupStatus, L.colDue], title: L.empty, hint: L.emptyBody }}
       />
-
-      {view === "list" &&
-        (grouped ? (
-          <GroupedList<KitTask>
-            skey="tk"
-            groups={grouped}
-            collapsed={collapsed}
-            setCollapsed={setCollapsed}
-            renderRow={(t) => row(t)}
-          />
-        ) : (
-          entries.map((t) => row(t))
-        ))}
-
-      {view === "board" && (
-        <>
-          <div className="board">
-            {TASK_STATES.map((s) => {
-              const es = entries.filter((t) => stateOf(t) === s);
-              return (
-                <div className="bcol" key={s}>
-                  <div className="bcol-h">
-                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: STATE_DOT[s] }} />
-                    {stateLabel[s]}
-                    <span className="cnt">{es.length}</span>
-                  </div>
-                  <div className="bcol-body">
-                    {es.map(bcard)}
-                    {!es.length && <div className="bcol-empty">{L.noTasksInLane}</div>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="swipehint">
-            <KIcon name="MoveHorizontal" size={13} /> {L.swipeHint}
-          </div>
-        </>
-      )}
-
-      {view === "table" && (
-        <div className="dtbl">
-          <div className="dtbl-head">
-            <span>{L.colTask}</span>
-            <span className="sp" />
-            <span>{L.colDue}</span>
-          </div>
-          {entries.map((t) => (
-            <div
-              className="dtbl-row"
-              key={t.id}
-              role="button"
-              tabIndex={0}
-              onClick={() => open(t.id)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  open(t.id);
-                }
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <span className="pri-dot" style={{ background: PRI_COLOR[t.priority] }} title={t.priority} />
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div className="dt-title">{t.title}</div>
-                <div className="dt-meta">
-                  <span className={badgeClass(t.state)}>{stateLabel[t.state]}</span>
-                </div>
-              </div>
-              <div className="dt-due">
-                {t.due}
-                <KIcon name="ChevronRight" size={15} style={{ color: "var(--p-text-3)" }} />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Kit 31 (live-test resolution #16): empty states keep the view's
-          structure visible — column headers + ghost rows (EmptySkeleton).
-          Exemplar adoption; the remaining lists convert in the follow-up. */}
-      {!entries.length && (
-        <EmptySkeleton cols={[L.colTask, L.groupStatus, L.colDue]} title={L.empty} hint={L.emptyBody} />
-      )}
 
       <UndoBar undo={undo} onUndo={clearUndo} undoLabel={L.undo} />
 

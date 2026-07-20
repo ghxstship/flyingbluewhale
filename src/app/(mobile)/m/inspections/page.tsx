@@ -1,7 +1,12 @@
 "use client";
 
 import { OpsLedgerView, type OpsLedgerConfig } from "../_ops/OpsLedgerView";
-import { OPS_INSPECTIONS, type OpsInspection } from "@/lib/mobile/ops-seed";
+import {
+  OPS_INSPECTIONS,
+  type OpsInspection,
+  INSPECTION_CATEGORY_ORDER,
+  inspectionCategoryLabel,
+} from "@/lib/mobile/ops-seed";
 
 /**
  * COMPVSS · Inspections — the checklists & safety-walks ledger (kit 33 v3.0,
@@ -11,7 +16,7 @@ const CONFIG: OpsLedgerConfig<OpsInspection> = {
   k: "in",
   title: "Inspections",
   searchPlaceholder: "Search inspections…",
-  search: (x) => `${x.t} ${x.area} ${x.by}`,
+  search: (x) => `${x.t} ${inspectionCategoryLabel(x.cat)} ${x.area} ${x.by}`,
   icon: (x) => x.icon,
   iconColor: (x) =>
     x.status === "Flagged"
@@ -24,10 +29,12 @@ const CONFIG: OpsLedgerConfig<OpsInspection> = {
   sub: (x) => `${x.area} · ${x.done}/${x.checks} checks · ${x.by} · ${x.time}`,
   hub: { key: "operations", active: "inspections" },
   filterStates: ["Passed", "In Progress", "Flagged"],
-  // Quick pills = area/location (meaningful context), never the status.
-  pill: { get: (x) => x.area },
+  // Quick pills = inspection domain (canonical category, stable across venues,
+  // unlike area), never the status.
+  pill: { get: (x) => inspectionCategoryLabel(x.cat), order: INSPECTION_CATEGORY_ORDER },
   tableFields: [
     { id: "t", label: "Inspection", type: "text", get: (x) => x.t },
+    { id: "cat", label: "Type", type: "select", get: (x) => inspectionCategoryLabel(x.cat) },
     { id: "area", label: "Area", type: "text", get: (x) => x.area },
     { id: "checks", label: "Checks", type: "text", get: (x) => `${x.done}/${x.checks}` },
     { id: "by", label: "By", type: "text", get: (x) => x.by },

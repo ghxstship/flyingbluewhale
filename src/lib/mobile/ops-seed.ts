@@ -69,6 +69,11 @@ export const OPS_REPORTS: OpsReport[] = [
 export type OpsInspection = {
   id: string;
   t: string;
+  /** Inspection domain — a canonical `inspection_templates.category` code
+   *  (rigging/fire/electrical/ada/food_safety/security/foh/medical/
+   *  sustainability/custom). Stable across venues (unlike `area`); the
+   *  quick-pill field, rendered through the console's CATEGORY_LABEL map. */
+  cat: string;
   area: string;
   done: number;
   checks: number;
@@ -78,11 +83,33 @@ export type OpsInspection = {
   icon: string;
 };
 export const OPS_INSPECTIONS: OpsInspection[] = [
-  { id: "in1", t: "Site Safety Walk · AM", area: "Gate 3", done: 18, checks: 18, by: "Joshamee Gibbs", time: "09:12", status: "Passed", icon: "ClipboardCheck" },
-  { id: "in2", t: "Barricade Load Check", area: "Stage L", done: 9, checks: 12, by: "Scrum", time: "18:30", status: "In Progress", icon: "Construction" },
-  { id: "in3", t: "Egress & Exit Sweep", area: "Fort Charles", done: 20, checks: 20, by: "James Norrington", time: "16:40", status: "Passed", icon: "DoorOpen" },
-  { id: "in4", t: "Rigging Pre-Flight", area: "Stage L", done: 11, checks: 15, by: "Will Turner", time: "12:05", status: "Flagged", icon: "Anchor" },
+  { id: "in1", t: "Site Safety Walk · AM", cat: "security", area: "Gate 3", done: 18, checks: 18, by: "Joshamee Gibbs", time: "09:12", status: "Passed", icon: "ClipboardCheck" },
+  { id: "in2", t: "Barricade Load Check", cat: "foh", area: "Stage L", done: 9, checks: 12, by: "Scrum", time: "18:30", status: "In Progress", icon: "Construction" },
+  { id: "in3", t: "Egress & Exit Sweep", cat: "fire", area: "Fort Charles", done: 20, checks: 20, by: "James Norrington", time: "16:40", status: "Passed", icon: "DoorOpen" },
+  { id: "in4", t: "Rigging Pre-Flight", cat: "rigging", area: "Stage L", done: 11, checks: 15, by: "Will Turner", time: "12:05", status: "Flagged", icon: "Anchor" },
 ];
+
+/**
+ * Canonical inspection-category vocabulary — mirrors the
+ * `inspection_templates.category` CHECK enum (console SSOT:
+ * `/studio/inspections/templates`). Field surfaces render the code through this
+ * map so the mobile ledger and the console stay one vocabulary.
+ */
+export const INSPECTION_CATEGORY_LABEL: Record<string, string> = {
+  rigging: "Rigging",
+  fire: "Fire",
+  electrical: "Electrical",
+  ada: "ADA",
+  food_safety: "Food Safety",
+  security: "Security",
+  foh: "FOH",
+  medical: "Medical",
+  sustainability: "Sustainability",
+  custom: "Custom",
+};
+/** Canonical pill order (enum order); present codes surface in this sequence. */
+export const INSPECTION_CATEGORY_ORDER: readonly string[] = Object.values(INSPECTION_CATEGORY_LABEL);
+export const inspectionCategoryLabel = (code: string): string => INSPECTION_CATEGORY_LABEL[code] ?? code;
 
 export type OpsLogistics = {
   id: string;

@@ -18,8 +18,8 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 | v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **26 surfaces migrated** — every record-list surface (incl. the core Tasks tab, Approvals, and Calendar/Schedule which keeps its bespoke real-today weekstrip calendar) (Reports · Inspections · Permits · Travel · Shipments · Docks · Gate · Delivery · Project Tasks · Project Calendar · Milestones · Documents · Knowledge · Vendors · My Gear · Catalog · Notifications · Roster · Advances · Expenses · Activity · Jobs · Templates · Inventory) — Marketplace + Connections are documented gallery/feed exceptions — remainder tracked below |
 | v3.5 | Fixed-order screen skeleton (`ScreenHeader`) | ✅ `ScreenHeader` primitive; used by hub members + standalone screens |
 | v3.6 | Scope-partitioned IA + XPMS project surfaces | ✅ My Work vs Project split; XPMS-compliant `project_tasks`/`project_events`/`project_milestones` (real migration) |
-| v3.7 | Deployment-ready polish (Daily Report, exports, real forms, details) | ⏳ **remaining** (Wave 5) — see below |
-| v8.0 | Kit export (PWA manifest/SW/offline queue) | 🟡 repo already ships manifest.json + service-worker.js + IndexedDB outbox (kit 31/32); `manifest.ts` route + maskable-icon audit remaining (Wave 6) |
+| v3.7 | Deployment-ready polish (Daily Report, exports, real forms, details) | ✅ Daily Report rollup surface; Time Sheets → Payroll + Finance → ERP handoffs; record-detail sheets across the ops-ledger + Projects surfaces; hub-member chrome on all six hubs |
+| v8.0 | Kit export (PWA manifest/SW/offline queue) | ✅ repo ships manifest.json + service-worker.js + IndexedDB outbox (kit 31/32) + kit-34 first-load skeletons on the async surfaces; a `manifest.ts` route is intentionally NOT adopted (multi-shell app — the conditionally-linked static manifest is correct) |
 
 ---
 
@@ -61,15 +61,15 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 ### Wave 4 — Logistics hub members — ✅ DONE
 **Docks · Gate · Delivery** built as normalized ledgers (`DOCK_SLOTS`/`GATE_QUEUE`/`DELIVERIES` seed + tones); members un-`pending`ed. The Logistics hub is complete.
 
-### Wave 5 — details, forms, handoff exports (v3.7)
-- Record-detail views + real forms for former toast-only leaves (project task/event, timesheet, milestone, advance, expense, permit, inspection, travel, report, credential, personal doc) via `RecordDetail`/`FormScreen`.
-- **Daily Report** rollup surface (Operations hub member — currently points at `/m/daily-log`).
-- Explicit handoff/export surfaces: Time Sheets **Export → Payroll**, Finance **Sync → Accounting/ERP** (bounded; COMPVSS does not run payroll/AP-AR).
-- Hub-member chrome: wire `HubChrome` (member viewseg) into the Workforce/Assets/Finance member pages as they normalize.
+### Wave 5 — details, forms, handoff exports (v3.7) — ✅ COMPLETE
+- **Daily Report** — new Operations hub rollup surface (`/m/daily-report`): shift notes + open-incident/delivery/flag summary, File (→ daily-log) + Export PDF. Repointed the hub member (distinct from the `/m/daily-log` weather log).
+- **Handoff exports** (§5): the new manager-gated **Workforce Time Sheets** surface (`/m/time-sheets`) with approve/flag + **Export → Payroll** (approved hours, CSV/API); **Finance → Accounting/ERP** sync on `/m/finance`. Both carry the explicit "COMPVSS does not run payroll / AP-AR / GL" boundary note.
+- **Record-detail sheets** — no toast-only / dead-end leaves: `OpsLedgerView` rows (Reports · Inspections · Permits · Travel · Docks · Gate · Delivery) + the Projects surfaces (Project Tasks · Calendar · Milestones) open a `RecordDetail`. The DB-backed leaves (advances, notifications, tasks, templates) already had detail routes/sheets.
+- **Hub-member chrome** — `HubChrome` (member viewseg) wired into every hub's members: Operations/Logistics (via `OpsLedgerView`), Assets & Equipment (Inventory/Catalog/Requests), Finance (Budget/Expenses, RBAC-threaded), Workforce (Schedule/Time Sheets/Roster/Time Off, RBAC-threaded). All six hubs are navigable member-to-member.
 
-### Wave 6 — deploy polish (v8.0)
-- `manifest.ts` route + maskable-icon audit (repo already ships `public/manifest.json` + `service-worker.js` + IndexedDB outbox).
-- Loading skeletons + error/retry on async lists; persistent offline banner.
+### Wave 6 — deploy polish (v8.0) — ✅ (repo baseline + kit-34 additions)
+- First-load shimmer skeletons on the async Projects surfaces; the repo already ships the Web App Manifest (`public/manifest.json`), the service worker, and the IndexedDB offline outbox (kit 31/32).
+- A Next `manifest.ts` route is intentionally NOT adopted: this is a multi-shell app and the COMPVSS manifest (scope `/m`) is conditionally linked only on the mobile host, which a root `manifest.ts` would incorrectly make app-wide.
 
 ---
 

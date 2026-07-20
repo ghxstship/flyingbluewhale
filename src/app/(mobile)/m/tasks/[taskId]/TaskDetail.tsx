@@ -289,7 +289,7 @@ export function TaskDetail({
                 justifyContent: "center",
                 border: item.done ? "none" : "2px dashed var(--p-border)",
                 background: item.done ? "var(--p-success)" : "transparent",
-                color: "#fff",
+                color: "var(--p-on-strong)",
               }}
             >
               {item.done ? <KIcon name="Check" size={12} /> : null}

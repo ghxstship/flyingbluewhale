@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { DeleteForm } from "@/components/DeleteForm";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button } from "@/components/ui/Button";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import { addShift, removeShift } from "./shifts/actions";
 
 export type CrewOption = { id: string; name: string; role: string | null };
@@ -16,15 +17,6 @@ export type ShiftRow = {
   checked_in_at: string | null;
   crew_name: string | null;
 };
-
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleString(undefined, {
-    weekday: "short",
-    hour: "numeric",
-    minute: "2-digit",
-    month: "short",
-    day: "numeric",
-  });
 
 /**
  * The roster's shifts, and the form that creates one.
@@ -47,6 +39,15 @@ export function RosterShifts({
   dayOf: string;
   canRoster: boolean;
 }) {
+  const f = useFormatters();
+  const fmt = (iso: string) =>
+    f.dateParts(iso, {
+      weekday: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      month: "short",
+      day: "numeric",
+    });
   // Default both ends to the roster's own day, so the common case is two time
   // edits rather than four date-and-time edits.
   const defaultStart = `${dayOf}T09:00`;

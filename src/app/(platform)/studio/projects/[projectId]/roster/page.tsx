@@ -13,17 +13,14 @@ import { FULFILLMENT_STATES, type FulfillmentState } from "@/lib/db/assignments"
 import { getRequestT } from "@/lib/i18n/request";
 import { listOfferLetters, listOrgRoles, listRateCardItems } from "@/lib/offer-letters/queries";
 import { createClient } from "@/lib/supabase/server";
+import { formatDate } from "@/lib/i18n/format";
 import { AssignDrawer, type PersonOption, type RateOption, type RoleOption } from "./AssignDrawer";
 import { CapabilityLock } from "./CapabilityLock";
 import { CUSTOM_POSITION_SLUG, LETTER_STATE_LABEL, LETTER_STATE_VARIANT, displayRoleTitle } from "./letter-state";
 
 function fmtDate(d: string): string {
-  return new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+  // Date-only value — pin to UTC so a midnight timestamp never shifts a day.
+  return formatDate(`${d}T00:00:00Z`, { timezone: "UTC", dateStyle: "medium" });
 }
 
 function fulfillmentLabel(state: string): string {

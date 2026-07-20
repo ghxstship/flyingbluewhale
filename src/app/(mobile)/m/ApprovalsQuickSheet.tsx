@@ -174,7 +174,7 @@ export function ApprovalsQuickSheet({ cards, onClose }: { cards: QuickApproval[]
               style={{
                 width: 34,
                 height: 34,
-                color: "#fff",
+                color: "var(--p-on-strong)",
                 background: "var(--p-success)",
                 border: "none",
                 borderRadius: 9,

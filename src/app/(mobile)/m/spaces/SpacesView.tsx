@@ -161,7 +161,14 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
 
       {createOpen && (
         <div className="sheet" role="dialog" aria-modal="true" aria-label={t("m.spaces.new", undefined, "New Space")}>
-          <div className="sheet-bg" onClick={() => setCreateOpen(false)} />
+          <button
+            type="button"
+            className="sheet-bg"
+            aria-label={t("m.spaces.sheetClose", undefined, "Close")}
+            tabIndex={-1}
+            style={{ border: "none", padding: 0, cursor: "default" }}
+            onClick={() => setCreateOpen(false)}
+          />
           <div className="sheet-panel">
             <div className="sheet-grip" />
             {/* Kit 32 (drawer canon v2.8): FORM drawer (3 fields ≤ the 5-field

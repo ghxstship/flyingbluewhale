@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { assertCapability, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestLocaleSettings } from "@/lib/i18n/request";
+import { getRequestLocaleSettings, getRequestFormatters } from "@/lib/i18n/request";
 import { sendPushBulk } from "@/lib/push/send";
 import { log } from "@/lib/log";
 import { listAreaOptions } from "./areas";
@@ -204,12 +204,10 @@ export async function publishShifts(shiftIds: string[]): Promise<{ error?: strin
 }
 
 async function notifyCrewUsers(userIds: string[], role: string | null, startsAt: string): Promise<void> {
-  const when = new Date(startsAt);
-  // Push copy renders in the publisher's request timezone — the same wall
-  // clock the scheduler showed when they hit Publish.
-  const { timezone } = await getRequestLocaleSettings();
-  const label = when.toLocaleString("en-US", {
-    timeZone: timezone,
+  // Push copy renders in the publisher's request timezone + locale — the same
+  // wall clock the scheduler showed when they hit Publish.
+  const { dateParts } = await getRequestFormatters();
+  const label = dateParts(startsAt, {
     month: "short",
     day: "numeric",
     hour: "2-digit",

@@ -430,8 +430,11 @@ export function PlatformSidebar({
       </div>
 
       {/* Resize handle — pointer drag OR keyboard: focusable separator with
-          arrow-key width steps (WCAG 2.1.1, A-18). */}
+          arrow-key width steps (WCAG 2.1.1, A-18). This is the ARIA window-
+          splitter pattern: a `separator` made interactive via tabIndex +
+          aria-value*, which jsx-a11y can't model, so the rule is scoped-off. */}
       {!collapsed && (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <div
           role="separator"
           tabIndex={0}

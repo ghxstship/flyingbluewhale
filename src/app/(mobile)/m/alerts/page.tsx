@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
 import { CrisisPanel, type ActiveCrisis } from "../emergency/CrisisPanel";
 import { CRISIS_ACTIVE_WINDOW_MS, crisisSeverityTone } from "../emergency/crisis";
@@ -47,6 +47,7 @@ type MyReceipts = { musterAckAt: string | null; safeAt: string | null; needHelpA
 export default async function CrisisAlertsPage() {
   const session = await requireSession();
   const { t } = await getRequestT();
+  const { dateParts } = await getRequestFormatters();
 
   let alerts: AlertRow[] = [];
   const receiptsByAlert = new Map<string, MyReceipts>();
@@ -103,12 +104,8 @@ export default async function CrisisAlertsPage() {
         ? t("m.crisisAlerts.warn", undefined, "Warning")
         : t("m.crisisAlerts.info", undefined, "Info");
 
-  const when = (iso: string) => {
-    const d = new Date(iso);
-    return Number.isNaN(d.getTime())
-      ? ""
-      : d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-  };
+  const when = (iso: string) =>
+    dateParts(iso, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
     <div className="screen screen-anim">

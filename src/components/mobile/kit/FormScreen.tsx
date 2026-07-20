@@ -497,7 +497,7 @@ function FileField({
                     height: 22,
                     borderRadius: 999,
                     background: "var(--p-danger)",
-                    color: "#fff",
+                    color: "var(--p-on-strong)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

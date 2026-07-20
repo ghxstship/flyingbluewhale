@@ -57,7 +57,7 @@ export function MobileAppBar({
           <svg viewBox="0 0 128 128" style={{ width: 30, height: 30 }} aria-hidden="true">
             <rect width="128" height="128" rx="28" fill="var(--p-accent)" />
             <g transform="translate(28 28) scale(1.125)">
-              <path d="M32 5 L37 27 L59 32 L37 37 L32 59 L27 37 L5 32 L27 27 Z" fill="#fff" />
+              <path d="M32 5 L37 27 L59 32 L37 37 L32 59 L27 37 L5 32 L27 27 Z" fill="var(--p-on-strong)" />
               <circle cx="32" cy="32" r="4.2" fill="var(--p-accent)" />
             </g>
           </svg>

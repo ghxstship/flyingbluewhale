@@ -5,7 +5,7 @@ import Link from "next/link";
 import { X } from "lucide-react";
 import { FormShell } from "@/components/FormShell";
 import { LabeledCheckbox } from "@/components/ui/Checkbox";
-import { useT } from "@/lib/i18n/LocaleProvider";
+import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 import { BASIS_LABEL, type CompensationBasis } from "@/lib/offer-letters/types";
 import { assignPersonAction } from "./actions";
 
@@ -49,6 +49,7 @@ export function AssignDrawer({
   defaultEnd: string | null;
 }) {
   const t = useT();
+  const f = useFormatters();
   const action = assignPersonAction.bind(null, projectId);
   const [manual, setManual] = useState(false);
   const [roleId, setRoleId] = useState("");
@@ -76,7 +77,7 @@ export function AssignDrawer({
     }
   };
 
-  const money = (cents: number) => `$${(cents / 100).toLocaleString("en-US")}`;
+  const money = (cents: number) => f.money(cents);
 
   return (
     <div className="fixed inset-0 z-[var(--p-z-overlay)]">

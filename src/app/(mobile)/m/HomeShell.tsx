@@ -202,7 +202,14 @@ export function HomeShell({
 
       {qaEdit && (
         <div className="sheet" role="dialog" aria-modal="true" aria-label={L.qaCustomize}>
-          <div className="sheet-bg" onClick={() => setQaEdit(false)} />
+          <button
+            type="button"
+            className="sheet-bg"
+            aria-label={L.qaCustomizeClose}
+            tabIndex={-1}
+            style={{ border: "none", padding: 0, cursor: "default" }}
+            onClick={() => setQaEdit(false)}
+          />
           <div className="sheet-panel">
             <div className="sheet-grip" />
             {/* Kit 31 (live-test resolution #8): every sheet carries the

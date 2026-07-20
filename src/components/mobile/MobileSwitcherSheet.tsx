@@ -135,7 +135,14 @@ export function MobileSwitcherSheet({
 
   return (
     <div className="sheet" role="dialog" aria-modal="true" aria-label="Switch workspace or project">
-      <div className="sheet-bg" onClick={onClose} />
+      <button
+        type="button"
+        className="sheet-bg"
+        aria-label={t("m.switcher.close", undefined, "Close")}
+        tabIndex={-1}
+        style={{ border: "none", padding: 0, cursor: "default" }}
+        onClick={onClose}
+      />
       <div className="sheet-panel">
         <div className="sheet-grip" />
 

@@ -1,12 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import {
-  HubChrome,
-} from "@/components/mobile/HubChrome";
-import { NormalizedList, ScreenHeader, KIcon, type FieldDef, type ViewMode } from "@/components/mobile/kit";
+import { HubChrome } from "@/components/mobile/HubChrome";
+import { NormalizedList, RecordDetail, ScreenHeader, KIcon, type FieldDef, type ViewMode } from "@/components/mobile/kit";
 import { OPS_TONE } from "@/lib/mobile/ops-seed";
+
+const TONE_LABEL: Record<string, string> = { ok: "ok", info: "info", warn: "warning", danger: "danger", neutral: "text-3" };
 
 /**
  * OpsLedgerView — the one shared list surface for the Operations + Logistics
@@ -70,11 +70,30 @@ export function OpsLedgerView<T extends { id: string }>({
   const boardTone: Record<string, string> = {};
   for (const s of config.filterStates) boardTone[s] = OPS_TONE[s] ?? "neutral";
 
+  // No former toast-only leaves: a row opens the caller's real route
+  // (`config.onRow`) or, for seed-backed ledgers, a read-only RecordDetail
+  // sheet built from the same field schema.
+  const [detail, setDetail] = useState<T | null>(null);
+  const openRow = config.onRow ?? ((x: T) => setDetail(x));
+
   const row = (x: T, compact?: boolean): ReactNode => {
     const tone = OPS_TONE[config.status(x)] ?? "neutral";
     const color = config.iconColor?.(x);
     return (
-      <div className="item" key={x.id}>
+      <div
+        className="item tap"
+        key={x.id}
+        role="button"
+        tabIndex={0}
+        style={{ cursor: "pointer" }}
+        onClick={() => openRow(x)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openRow(x);
+          }
+        }}
+      >
         <span className="more-ic" style={color ? { color } : undefined}>
           <KIcon name={config.icon(x)} size={17} />
         </span>
@@ -111,7 +130,7 @@ export function OpsLedgerView<T extends { id: string }>({
         search={config.search}
         searchPlaceholder={config.searchPlaceholder}
         renderRow={row}
-        onRow={config.onRow}
+        onRow={openRow}
         views={views}
         statusField={hasStatusField ? "status" : undefined}
         statusOrder={config.filterStates as string[]}
@@ -130,6 +149,19 @@ export function OpsLedgerView<T extends { id: string }>({
           ) : undefined
         }
       />
+
+      {detail && (
+        <RecordDetail
+          title={config.titleOf(detail)}
+          icon={config.icon(detail)}
+          status={{ tone: TONE_LABEL[OPS_TONE[config.status(detail)] ?? "neutral"], label: config.status(detail) }}
+          fields={config.tableFields.map((f) => ({
+            k: f.label,
+            v: f.get ? String(f.get(detail) ?? "—") : "—",
+          }))}
+          onClose={() => setDetail(null)}
+        />
+      )}
     </>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { NormalizedList, ListRow, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, ListRow, RecordDetail, type FieldDef } from "@/components/mobile/kit";
 import type { ProjectMilestone } from "@/lib/mobile/project-xpms";
 
 /**
@@ -30,8 +31,9 @@ function StatusChip({ status }: { status: string }) {
 }
 
 export function ProjectMilestonesView({ items, canManage }: { items: ProjectMilestone[]; canManage: boolean }) {
+  const [detail, setDetail] = useState<ProjectMilestone | null>(null);
   const row = (x: ProjectMilestone) => (
-    <ListRow key={x.id} icon="Flag" title={x.title} sub={`${x.phase} · ${x.milestone_date} · ${x.owner ?? "—"}`} right={<StatusChip status={x.status} />} />
+    <ListRow key={x.id} icon="Flag" title={x.title} sub={`${x.phase} · ${x.milestone_date} · ${x.owner ?? "—"}`} right={<StatusChip status={x.status} />} onClick={() => setDetail(x)} />
   );
   return (
     <div className="screen screen-anim">
@@ -43,6 +45,7 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
         search={(x) => `${x.title} ${x.phase} ${x.owner ?? ""} ${x.milestone_date}`}
         searchPlaceholder="Search milestones…"
         renderRow={row}
+        onRow={setDetail}
         views={["list", "table", "board"]}
         statusField="status"
         statusOrder={["Upcoming", "On Track", "At Risk", "Done"]}
@@ -50,6 +53,19 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
         pill={{ get: (x) => x.phase, order: PHASE_ORDER }}
         empty={{ cols: ["Milestone", "Phase", "Status"], title: "No milestones", hint: "Project milestones roll up here by phase." }}
       />
+      {detail && (
+        <RecordDetail
+          title={detail.title}
+          icon="Flag"
+          status={{ tone: STATUS_TONE[detail.status] ?? "neutral", label: detail.status }}
+          fields={[
+            { k: "Phase", v: detail.phase },
+            { k: "Date", v: detail.milestone_date },
+            { k: "Owner", v: detail.owner ?? "—" },
+          ]}
+          onClose={() => setDetail(null)}
+        />
+      )}
     </div>
   );
 }

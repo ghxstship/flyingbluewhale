@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
+
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { NormalizedList, ListRow, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, ListRow, RecordDetail, type FieldDef } from "@/components/mobile/kit";
 import type { ProjectEvent } from "@/lib/mobile/project-xpms";
 
 /**
@@ -31,6 +33,7 @@ function StatusChip({ status }: { status: string }) {
 }
 
 export function ProjectCalendarView({ items, canManage }: { items: ProjectEvent[]; canManage: boolean }) {
+  const [detail, setDetail] = useState<ProjectEvent | null>(null);
   const row = (x: ProjectEvent, compact?: boolean) => (
     <ListRow
       key={x.id}
@@ -38,6 +41,7 @@ export function ProjectCalendarView({ items, canManage }: { items: ProjectEvent[
       title={x.title}
       sub={compact ? x.event_date : `${x.event_date} · ${x.department} · ${x.owner ?? "—"}`}
       right={<StatusChip status={x.status} />}
+      onClick={() => setDetail(x)}
     />
   );
   return (
@@ -50,12 +54,30 @@ export function ProjectCalendarView({ items, canManage }: { items: ProjectEvent[
         search={(x) => `${x.title} ${x.sub ?? ""} ${x.department} ${x.owner ?? ""} ${x.event_date}`}
         searchPlaceholder="Search project calendar…"
         renderRow={row}
+        onRow={setDetail}
         views={["calendar", "list", "table"]}
         initialView="calendar"
         dateField="date"
         pill={{ get: (x) => x.department }}
         empty={{ cols: ["Event", "When", "Status"], title: "No project events", hint: "The project schedule shows here." }}
       />
+      {detail && (
+        <RecordDetail
+          title={detail.title}
+          icon="CalendarDays"
+          status={{ tone: STATUS_TONE[detail.status] ?? "neutral", label: detail.status }}
+          fields={[
+            { k: "When", v: detail.event_date },
+            { k: "Department", v: detail.department },
+            { k: "Phase", v: detail.phase },
+            { k: "Coordinate", v: `${detail.dept_code}×${detail.phase}` },
+            { k: "XPMS Atom", v: detail.xpms_atom_id },
+            { k: "Owner", v: detail.owner ?? "—" },
+            ...(detail.sub ? [{ k: "Notes", v: detail.sub, full: true }] : []),
+          ]}
+          onClose={() => setDetail(null)}
+        />
+      )}
     </div>
   );
 }

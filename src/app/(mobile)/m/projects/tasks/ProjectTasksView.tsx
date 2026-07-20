@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { NormalizedList, ListRow, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, ListRow, RecordDetail, type FieldDef } from "@/components/mobile/kit";
 import type { ProjectTask } from "@/lib/mobile/project-xpms";
 
 /**
@@ -44,6 +45,7 @@ function StatusChip({ status }: { status: string }) {
 }
 
 export function ProjectTasksView({ items, canManage }: { items: ProjectTask[]; canManage: boolean }) {
+  const [detail, setDetail] = useState<ProjectTask | null>(null);
   const row = (x: ProjectTask, compact?: boolean) => (
     <ListRow
       key={x.id}
@@ -52,6 +54,7 @@ export function ProjectTasksView({ items, canManage }: { items: ProjectTask[]; c
       title={x.title}
       sub={compact ? `${x.coordinate} · ${x.assignee ?? "—"}` : `${x.coordinate} · ${x.department} · ${x.assignee ?? "—"} · Due ${x.due ?? "—"}`}
       right={<StatusChip status={x.status} />}
+      onClick={() => setDetail(x)}
     />
   );
   return (
@@ -64,12 +67,36 @@ export function ProjectTasksView({ items, canManage }: { items: ProjectTask[]; c
         search={(x) => `${x.title} ${x.sub ?? ""} ${x.assignee ?? ""} ${x.department} ${x.discipline} ${x.coordinate} ${x.trade ?? ""} ${x.company ?? ""}`}
         searchPlaceholder="Search project tasks…"
         renderRow={row}
+        onRow={setDetail}
         views={["list", "table", "board"]}
         statusField="phase"
         statusOrder={PHASE_ORDER}
         pill={{ get: (x) => x.priority, order: ["High", "Medium", "Low"] }}
         empty={{ cols: ["Task", "Coordinate", "Status"], title: "No project tasks", hint: "Tasks assigned across the project show here." }}
       />
+      {detail && (
+        <RecordDetail
+          title={detail.title}
+          icon="ListChecks"
+          status={{ tone: STATUS_TONE[detail.status] ?? "neutral", label: detail.status }}
+          fields={[
+            { k: "Coordinate", v: detail.coordinate },
+            { k: "XPMS Atom", v: detail.xpms_atom_id },
+            { k: "Department", v: detail.department },
+            { k: "Discipline", v: detail.discipline },
+            { k: "Category", v: detail.category },
+            { k: "Phase", v: detail.phase },
+            { k: "Priority", v: detail.priority },
+            { k: "Assignee", v: detail.assignee ?? "—" },
+            { k: "Trade", v: detail.trade ?? "—" },
+            { k: "Company", v: detail.company ?? "—" },
+            { k: "Location", v: detail.location ?? "—" },
+            { k: "Due", v: detail.due ?? "—" },
+            ...(detail.sub ? [{ k: "Notes", v: detail.sub, full: true }] : []),
+          ]}
+          onClose={() => setDetail(null)}
+        />
+      )}
     </div>
   );
 }

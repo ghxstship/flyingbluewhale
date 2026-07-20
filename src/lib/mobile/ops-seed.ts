@@ -233,3 +233,34 @@ export const SHIFT_NOTES: ShiftNote[] = [
   { id: "sn4", by: "Cotton", role: "Dock Crew", shift: "Night · Dock B", time: "23:58", txt: "Load-out staged. Missing meal break — noted on my timesheet.", tone: "info" },
   { id: "sn5", by: "Scarlett", role: "Catering", shift: "Day · BOH", time: "18:05", txt: "Crew dinner served 320 covers, no shortfalls.", tone: "ok" },
 ];
+
+// ── Workforce Time Sheets (kit 34 v3.7 · §5 handoff) — crew punches pending
+// review/approval before payroll export. COMPVSS owns capture + approval; it
+// HANDS OFF approved hours to the payroll provider (CSV/API) — it does not run
+// payroll. Distinct from personal "My Timesheets" (/m/timesheets).
+export type CrewTimesheet = {
+  id: string;
+  person: string;
+  role: string;
+  date: string;
+  in: string;
+  out: string;
+  reg: number;
+  ot: number;
+  status: string;
+  note: string;
+};
+export const TIMESHEETS: CrewTimesheet[] = [
+  { id: "TS-01", person: "Will Turner", role: "Audio Lead", date: "Sat Jun 20", in: "07:58", out: "20:12", reg: 8, ot: 4.2, status: "Submitted", note: "" },
+  { id: "TS-02", person: "Joshamee Gibbs", role: "Rigger", date: "Sat Jun 20", in: "08:02", out: "18:30", reg: 8, ot: 2.4, status: "Submitted", note: "" },
+  { id: "TS-03", person: "Scrum", role: "Site Lead", date: "Sat Jun 20", in: "06:30", out: "16:45", reg: 8, ot: 1.8, status: "Approved", note: "Early call" },
+  { id: "TS-04", person: "Cotton", role: "Dock Crew", date: "Sat Jun 20", in: "12:00", out: "23:58", reg: 8, ot: 3.5, status: "Flagged", note: "Missing meal break" },
+  { id: "TS-05", person: "Scarlett", role: "Catering", date: "Sat Jun 20", in: "10:00", out: "19:00", reg: 8, ot: 0.5, status: "Exported", note: "" },
+];
+export const TIMESHEET_TONE: Record<string, OpsTone> = {
+  Submitted: "warn",
+  Approved: "ok",
+  Flagged: "danger",
+  Exported: "info",
+  Draft: "neutral",
+};

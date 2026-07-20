@@ -2410,6 +2410,12 @@
               ]
             },
             {
+              "path": "/m/time-sheets",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/projects",
               "arch": [
                 "LIST"

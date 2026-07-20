@@ -1695,6 +1695,7 @@ export const mobileSurfaces: NavItem[] = [
   // member launcher). Drawer's Field Operations group points here; each hub's
   // members are the individual routes below. SSOT: `mobileHubs`.
   { label: "Daily Report", href: "/m/daily-report" },
+  { label: "Time Sheets", href: "/m/time-sheets" },
   { label: "Projects", href: "/m/projects" },
   { label: "Project Timeline", href: "/m/projects/timeline" },
   { label: "Milestones", href: "/m/projects/milestones" },
@@ -1973,7 +1974,7 @@ export const mobileHubs: MobileHub[] = [
     landing: "/m/workforce",
     members: [
       { key: "schedule", label: "Schedule", icon: "CalendarDays", href: "/m/scheduler", managerOnly: true },
-      { key: "timesheets", label: "Time Sheets", icon: "ClipboardList", href: "/m/timesheets", managerOnly: true },
+      { key: "timesheets", label: "Time Sheets", icon: "ClipboardList", href: "/m/time-sheets", managerOnly: true },
       { key: "roster", label: "Roster", icon: "Users", href: "/m/directory" },
       { key: "timeoff", label: "Time Off", icon: "CalendarOff", href: "/m/time-off" },
     ],

@@ -8,6 +8,7 @@ import { listFieldPurchaseRequests } from "@/lib/db/purchase-requests";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { HubChrome } from "@/components/mobile/HubChrome";
 import { KIcon } from "@/components/mobile/kit";
+import { FinanceSyncButton } from "./FinanceSyncButton";
 
 export const dynamic = "force-dynamic";
 
@@ -337,6 +338,8 @@ export default async function FinancePage() {
           </Link>
         ))
       )}
+
+      <FinanceSyncButton />
     </div>
   );
 }

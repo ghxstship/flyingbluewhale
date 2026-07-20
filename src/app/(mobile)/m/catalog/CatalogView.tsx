@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { KIcon, NormalizedList, ScreenHeader, type FieldDef } from "@/components/mobile/kit";
+import { HubChrome } from "@/components/mobile/HubChrome";
+import { KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
 import type { CatalogKind } from "@/lib/db/catalog-kinds";
 import { formatMoney } from "@/lib/i18n/format";
 
@@ -69,10 +70,8 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
   );
 
   return (
-    <div className="screen screen-anim">
-      {/* Kit 32 C1: crumb trail on the catalog path (More → Catalog); the item
-          leg continues on the prefilled request form. */}
-      <ScreenHeader crumbs={[{ label: labels.back, href: "/m/more" }, { label: labels.title }]} title={labels.title} />
+    <>
+      <HubChrome hubKey="equipment" active="catalog" canManage />
       <NormalizedList
         k="ct"
         items={items}
@@ -84,6 +83,6 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
         pill={{ get: (it) => it.kindLabel, order: kinds }}
         empty={{ cols: [labels.title, "Kind", "Unit Cost"], title: labels.empty, hint: labels.emptyHint }}
       />
-    </div>
+    </>
   );
 }

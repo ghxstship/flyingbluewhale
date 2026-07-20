@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { HubChrome } from "@/components/mobile/HubChrome";
 import {
   ItemUnits,
   KIcon,
@@ -184,8 +185,7 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
 
   return (
     <>
-      <div className="scr-eye">{labels.eyebrow}</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>{labels.title}</h1>
+      <HubChrome hubKey="equipment" active="inventory" canManage />
       <NormalizedList
         k="iv"
         items={items}

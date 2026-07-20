@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { listMyAssignments } from "@/lib/db/assignments";
+import { HubChrome } from "@/components/mobile/HubChrome";
 import { AdvancesView, type AdvanceRow } from "./AdvancesView";
 
 export const dynamic = "force-dynamic";
@@ -104,10 +105,7 @@ export default async function MobileAdvancesPage() {
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">{t("m.advances.eyebrow", undefined, "Field")}</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.advances.title", undefined, "Advances")}
-      </h1>
+      <HubChrome hubKey="equipment" active="requests" canManage />
       {packetCards.length > 0 && (
         <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
           {packetCards.map((card) => (

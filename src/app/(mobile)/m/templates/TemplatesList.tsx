@@ -4,14 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import {
-  ActionBar,
-  EmptySkeleton,
-  GroupedList,
   KIcon,
+  NormalizedList,
   RecordDetail,
   SwipeRow,
   UndoBar,
   useUndo,
+  type FieldDef,
 } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
@@ -52,55 +51,33 @@ export function TemplatesList({ items, canManage }: { items: TemplateItem[]; can
   const toast = useToast();
   const [, startTransition] = useTransition();
 
-  const [query, setQuery] = useState("");
   const [scope, setScope] = useState<"all" | "org" | "project">("all");
-  const [group, setGroup] = useState("none");
-  const [sort, setSort] = useState("recent");
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [gone, setGone] = useState<Set<string>>(new Set());
   const [openId, setOpenId] = useState<string | null>(null);
   const { undo, withUndo, clearUndo } = useUndo();
 
-  const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const filtered = items.filter(
-      (i) =>
-        !gone.has(i.id) &&
-        (scope === "all" || i.scope === scope) &&
-        (!q || `${i.name} ${i.categoryLabel}`.toLowerCase().includes(q)),
-    );
-    if (sort === "name") return filtered.slice().sort((a, b) => a.name.localeCompare(b.name));
-    if (sort === "uses") return filtered.slice().sort((a, b) => b.uses - a.uses);
-    return filtered.slice().sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-  }, [items, gone, scope, query, sort]);
-
   const orgLibLabel = t("m.templates.orgLibrary", undefined, "Organization Library");
   const projLibLabel = t("m.templates.projectLibrary", undefined, "Project Library");
 
-  const groups = useMemo(() => {
-    if (group === "cat") {
-      const mp = new Map<string, TemplateItem[]>();
-      for (const i of visible) {
-        const arr = mp.get(i.category) ?? [];
-        arr.push(i);
-        mp.set(i.category, arr);
-      }
-      return CATEGORY_ORDER.filter((c) => mp.has(c)).map((c) => {
-        const arr = mp.get(c)!;
-        return [arr[0]?.categoryLabel ?? c, arr] as [string, TemplateItem[]];
-      });
-    }
-    if (group === "scope") {
-      const org = visible.filter((i) => i.scope === "org");
-      const proj = visible.filter((i) => i.scope === "project");
-      const out: Array<[string, TemplateItem[]]> = [];
-      if (org.length) out.push([orgLibLabel, org]);
-      if (proj.length) out.push([projLibLabel, proj]);
-      return out;
-    }
-    return null;
-  }, [visible, group, orgLibLabel, projLibLabel]);
+  // The scope seg (All/Org/Project) + archive undo pre-filter; NormalizedList
+  // handles search + category pills + drawer sort/group via the field schema.
+  const scopedItems = useMemo(
+    () => items.filter((i) => !gone.has(i.id) && (scope === "all" || i.scope === scope)),
+    [items, gone, scope],
+  );
+  const catLabels = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const i of items) if (!seen.has(i.category)) seen.set(i.category, i.categoryLabel);
+    return CATEGORY_ORDER.filter((c) => seen.has(c)).map((c) => seen.get(c)!);
+  }, [items]);
+
+  const FIELDS: FieldDef<TemplateItem>[] = [
+    { id: "name", label: t("m.templates.colTemplate", undefined, "Template"), type: "text", get: (i) => i.name },
+    { id: "category", label: t("m.templates.colCategory", undefined, "Category"), type: "select", options: catLabels, get: (i) => i.categoryLabel },
+    { id: "scope", label: t("m.templates.colLibrary", undefined, "Library"), type: "select", options: [orgLibLabel, projLibLabel], get: (i) => (i.scope === "org" ? orgLibLabel : projLibLabel) },
+    { id: "uses", label: t("m.templates.sortUses", undefined, "Most Used"), type: "num", get: (i) => i.uses },
+    { id: "updated", label: t("m.templates.fieldUpdated", undefined, "Updated"), type: "text", get: (i) => i.updated },
+  ];
 
   const run = (fn: () => Promise<{ error?: string } | { error?: string; uses?: number }>, okMsg: string) =>
     startTransition(async () => {
@@ -224,57 +201,25 @@ export function TemplatesList({ items, canManage }: { items: TemplateItem[]; can
         ))}
       </div>
 
-      <ActionBar
+      <NormalizedList
         k="tp"
-        query={query}
-        setQuery={setQuery}
-        placeholder={t("m.templates.search", undefined, "Search templates…")}
-        group={group}
-        setGroup={setGroup}
-        groupOpts={[
-          ["none", t("m.templates.groupNone", undefined, "None")],
-          ["cat", t("m.templates.groupCategory", undefined, "Category")],
-          ["scope", t("m.templates.groupLibrary", undefined, "Library")],
-        ]}
-        sort={sort}
-        setSort={setSort}
-        sortOpts={[
-          ["recent", t("m.templates.sortRecent", undefined, "Recent")],
-          ["name", t("m.templates.sortName", undefined, "Name")],
-          ["uses", t("m.templates.sortUses", undefined, "Most Used")],
-        ]}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-      />
-
-      {groups ? (
-        <GroupedList skey="tp" groups={groups} collapsed={collapsed} setCollapsed={setCollapsed} renderRow={(i) => row(i)} />
-      ) : (
-        visible.map(row)
-      )}
-
-      {visible.length === 0 && (
-        <EmptySkeleton
-          cols={[
+        items={scopedItems}
+        fields={FIELDS}
+        search={(i) => `${i.name} ${i.categoryLabel}`}
+        searchPlaceholder={t("m.templates.search", undefined, "Search templates…")}
+        renderRow={row}
+        views={["list", "table"]}
+        pill={{ get: (i) => i.categoryLabel, order: catLabels }}
+        empty={{
+          cols: [
             t("m.templates.colTemplate", undefined, "Template"),
             t("m.templates.colCategory", undefined, "Category"),
             t("m.templates.colLibrary", undefined, "Library"),
-          ]}
-          title={t("m.templates.emptyTitle", undefined, "No Templates")}
-          hint={t(
-            "m.templates.emptyHint",
-            undefined,
-            "Save rosters, advances, checklists & contracts here to reuse on future projects.",
-          )}
-          action={
-            canManage ? (
-              <Link href="/m/templates/new" className="ps-btn ps-btn--cta ps-btn--sm" style={{ textDecoration: "none" }}>
-                {t("m.templates.new", undefined, "New Template")}
-              </Link>
-            ) : null
-          }
-        />
-      )}
+          ],
+          title: t("m.templates.emptyTitle", undefined, "No Templates"),
+          hint: t("m.templates.emptyHint", undefined, "Save rosters, advances, checklists & contracts here to reuse on future projects."),
+        }}
+      />
 
       {open && (
         <RecordDetail

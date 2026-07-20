@@ -1,5 +1,6 @@
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { HubChrome } from "@/components/mobile/HubChrome";
+import { hubLandingMetrics } from "@/lib/mobile/hub-metrics";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +12,10 @@ export const dynamic = "force-dynamic";
  */
 export default async function OperationsHubPage() {
   const session = await requireSession();
+  const metrics = await hubLandingMetrics("operations", session);
   return (
     <div className="screen screen-anim">
-      <HubChrome hubKey="operations" canManage={isManagerPlus(session)} />
+      <HubChrome hubKey="operations" canManage={isManagerPlus(session)} metrics={metrics} />
     </div>
   );
 }

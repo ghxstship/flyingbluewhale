@@ -21,17 +21,15 @@ import { log } from "@/lib/log";
 // three are used only inside this module, so they stay module-local.
 type State = { error?: string; fieldErrors?: Record<string, string> } | null;
 
-const TEMPLATE_CATEGORIES = [
-  "roster",
-  "advance",
-  "checklist",
-  "contract",
-  "task_list",
-  "schedule",
-  "onboarding",
-  "budget",
-] as const;
-type TemplateCategory = (typeof TEMPLATE_CATEGORIES)[number];
+type TemplateCategory =
+  | "roster"
+  | "advance"
+  | "checklist"
+  | "contract"
+  | "task_list"
+  | "schedule"
+  | "onboarding"
+  | "budget";
 
 /** Kit form option label → stored category slug. */
 const CATEGORY_BY_LABEL: Record<string, TemplateCategory> = {

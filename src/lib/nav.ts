@@ -1694,6 +1694,7 @@ export const mobileSurfaces: NavItem[] = [
   // Kit 34 (v3.1/v3.2): Field-Operations HUB landing screens (MetricBar +
   // member launcher). Drawer's Field Operations group points here; each hub's
   // members are the individual routes below. SSOT: `mobileHubs`.
+  { label: "Daily Report", href: "/m/daily-report" },
   { label: "Projects", href: "/m/projects" },
   { label: "Project Timeline", href: "/m/projects/timeline" },
   { label: "Milestones", href: "/m/projects/milestones" },
@@ -1948,7 +1949,7 @@ export const mobileHubs: MobileHub[] = [
     label: "Operations",
     landing: "/m/operations",
     members: [
-      { key: "dailyreport", label: "Daily Report", icon: "SunMedium", href: "/m/daily-log" },
+      { key: "dailyreport", label: "Daily Report", icon: "SunMedium", href: "/m/daily-report" },
       { key: "reports", label: "Reports", icon: "TriangleAlert", href: "/m/reports" },
       { key: "inspections", label: "Inspections", icon: "ClipboardCheck", href: "/m/inspections" },
       { key: "permits", label: "Permits", icon: "ShieldCheck", href: "/m/permits" },

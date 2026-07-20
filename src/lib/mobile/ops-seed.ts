@@ -213,3 +213,23 @@ export const DELIVERIES: DeliveryTicket[] = [
   { id: "dl3", ref: "MOV-319", t: "Catering Resupply → BOH Kitchen", from: "BOH", to: "Catering Tent", pieces: 9, runner: "Marty", need: "Pallet jack", status: "Staged", eta: "Awaiting dock" },
   { id: "dl4", ref: "MOV-316", t: "LED Panels → Stage L Deck", from: "Dock A", to: "Stage L · Deck", pieces: 24, runner: "Ragetti", need: "4 pax + carts", status: "Requested", eta: "On truck arrival" },
 ];
+
+// ── Daily Report (kit 34 v3.7) — the end-of-day rollup aggregates shift notes
+// from across the day into one filable/exportable record, alongside a summary
+// derived from the ops ledgers (open incidents · deliveries · task progress).
+export type ShiftNote = {
+  id: string;
+  by: string;
+  role: string;
+  shift: string;
+  time: string;
+  txt: string;
+  tone: OpsTone;
+};
+export const SHIFT_NOTES: ShiftNote[] = [
+  { id: "sn1", by: "Joshamee Gibbs", role: "Rigger", shift: "Day · Stage L", time: "15:31", txt: "Perimeter clear. Barricade gap at NE corner flagged to ops, temp fix in place.", tone: "warn" },
+  { id: "sn2", by: "Scrum", role: "Site Lead", shift: "Day · FOS", time: "18:40", txt: "Front-of-stage line needs two more barricade sections before doors.", tone: "warn" },
+  { id: "sn3", by: "Will Turner", role: "Audio Lead", shift: "Day · Stage L", time: "16:10", txt: "PA rung out, house-left array phase-aligned. Ready for soundcheck.", tone: "ok" },
+  { id: "sn4", by: "Cotton", role: "Dock Crew", shift: "Night · Dock B", time: "23:58", txt: "Load-out staged. Missing meal break — noted on my timesheet.", tone: "info" },
+  { id: "sn5", by: "Scarlett", role: "Catering", shift: "Day · BOH", time: "18:05", txt: "Crew dinner served 320 covers, no shortfalls.", tone: "ok" },
+];

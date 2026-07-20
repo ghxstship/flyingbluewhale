@@ -2404,6 +2404,12 @@
           "label": "Surfaces",
           "routes": [
             {
+              "path": "/m/daily-report",
+              "arch": [
+                "RPT"
+              ]
+            },
+            {
               "path": "/m/projects",
               "arch": [
                 "LIST"

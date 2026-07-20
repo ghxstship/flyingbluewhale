@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
 import { transitionAccountingPeriodAction } from "../actions";
 import type { AccountingPeriodState } from "@/lib/accounting-periods";
 
@@ -16,6 +17,7 @@ export function AccountingPeriodStateControls({
   allowedNext: readonly AccountingPeriodState[];
 }) {
   const t = useT();
+  const toast = useToast();
   const [pending, startTransition] = useTransition();
 
   if (allowedNext.length === 0) {
@@ -34,9 +36,9 @@ export function AccountingPeriodStateControls({
           action={() => {
             startTransition(async () => {
               const r = await transitionAccountingPeriodAction(periodId, target);
-              if ("error" in r) {
+              if ("error" in r && r.error) {
                 console.error(r.error);
-                alert(r.error);
+                toast.error(r.error);
               }
             });
           }}

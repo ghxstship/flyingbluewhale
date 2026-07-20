@@ -6,6 +6,7 @@ import { transitionProductionPhaseAction } from "../actions";
 import type { ProductionPhase } from "@/lib/production-phase";
 import { toTitle } from "@/lib/format";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
 
 export function ProductionPhaseControls({
   orderId,
@@ -17,6 +18,7 @@ export function ProductionPhaseControls({
   allowedNext: readonly ProductionPhase[];
 }) {
   const t = useT();
+  const toast = useToast();
   const [pending, startTransition] = useTransition();
 
   if (allowedNext.length === 0) {
@@ -35,9 +37,9 @@ export function ProductionPhaseControls({
           action={() => {
             startTransition(async () => {
               const r = await transitionProductionPhaseAction(orderId, target);
-              if ("error" in r) {
+              if ("error" in r && r.error) {
                 console.error(r.error);
-                alert(r.error);
+                toast.error(r.error);
               }
             });
           }}

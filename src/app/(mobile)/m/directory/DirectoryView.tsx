@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { NormalizedList, SwipeRow, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, RecordDetail, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
 
 export type RosterPerson = {
@@ -52,6 +53,7 @@ type Labels = {
  *  always pass through fmtPosition() before rendering. */
 export function DirectoryView({ people, labels }: { people: RosterPerson[]; labels: Labels }) {
   const router = useRouter();
+  const [detail, setDetail] = useState<RosterPerson | null>(null);
   const allTeams = [...new Set(people.map((p) => p.team))];
   const allRoles = [...new Set(people.map((p) => fmtPosition(p.role)))];
   const allStatuses = [...new Set(people.map((p) => p.status))];
@@ -66,7 +68,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
   const row = (p: RosterPerson) => (
     <SwipeRow
       key={p.id}
-      onClick={() => {}}
+      onClick={() => setDetail(p)}
       menuTitle={labels.actions}
       actions={[
         { icon: "MessageSquare", label: labels.message, tone: "info", on: () => router.push("/m/inbox") },
@@ -108,19 +110,41 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
   );
 
   return (
-    <NormalizedList
-      k="dr"
-      items={people}
-      fields={FIELDS}
-      search={(p) => `${p.name} ${p.role} ${p.team}`}
-      searchPlaceholder={labels.search}
-      renderRow={row}
-      gallery={gallery}
-      views={["list", "gallery", "table"]}
-      statusField="status"
-      statusOrder={allStatuses}
-      pill={{ get: (p) => p.team, order: allTeams }}
-      empty={{ cols: ["Name", "Position", "Status"], title: labels.emptyTitle, hint: labels.emptyBody }}
-    />
+    <>
+      <NormalizedList
+        k="dr"
+        items={people}
+        fields={FIELDS}
+        search={(p) => `${p.name} ${p.role} ${p.team}`}
+        searchPlaceholder={labels.search}
+        renderRow={row}
+        gallery={gallery}
+        views={["list", "gallery", "table"]}
+        statusField="status"
+        statusOrder={allStatuses}
+        pill={{ get: (p) => p.team, order: allTeams }}
+        empty={{ cols: ["Name", "Position", "Status"], title: labels.emptyTitle, hint: labels.emptyBody }}
+      />
+      {detail && (
+        <RecordDetail
+          title={detail.name}
+          icon="User"
+          status={{ tone: tone(detail.status), label: detail.status }}
+          fields={[
+            { k: "Position", v: fmtPosition(detail.role) },
+            { k: "Team", v: detail.team },
+            ...(detail.phone ? [{ k: "Phone", v: detail.phone }] : []),
+            ...(detail.email ? [{ k: "Email", v: detail.email }] : []),
+            ...(detail.certs.length ? [{ k: "Certs", v: detail.certs.join(", "), full: true }] : []),
+          ]}
+          actions={[
+            { label: labels.message, icon: "MessageSquare", on: () => { setDetail(null); router.push("/m/inbox"); } },
+            ...(detail.phone ? [{ label: labels.call, icon: "Phone", on: () => { window.location.href = `tel:${detail.phone}`; } }] : []),
+            ...(detail.email ? [{ label: labels.email, icon: "Mail", on: () => { window.location.href = `mailto:${detail.email}`; } }] : []),
+          ]}
+          onClose={() => setDetail(null)}
+        />
+      )}
+    </>
   );
 }

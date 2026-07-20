@@ -1,6 +1,7 @@
 "use client";
 
-import { NormalizedList, SwipeRow, type FieldDef } from "@/components/mobile/kit";
+import { useState } from "react";
+import { NormalizedList, RecordDetail, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 
 export type Vendor = {
   id: string;
@@ -37,6 +38,7 @@ function siteHref(site: string): string {
  *  + schema DataView list/gallery/table + trade pills). Keeps the kit 32 A6
  *  real contact intents (tel:/mailto:/https swipe actions). */
 export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: Labels }) {
+  const [detail, setDetail] = useState<Vendor | null>(null);
   const allTrades = [...new Set(vendors.map((v) => v.trade))];
 
   const FIELDS: FieldDef<Vendor>[] = [
@@ -49,7 +51,7 @@ export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: 
   const row = (v: Vendor) => (
     <SwipeRow
       key={v.id}
-      onClick={() => {}}
+      onClick={() => setDetail(v)}
       menuTitle={labels.actions}
       actions={[
         ...(v.phone ? [{ icon: "Phone", label: labels.call, tone: "ok" as const, href: `tel:${v.phone}` }] : []),
@@ -81,17 +83,39 @@ export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: 
   );
 
   return (
-    <NormalizedList
-      k="co"
-      items={vendors}
-      fields={FIELDS}
-      search={(v) => `${v.name} ${v.trade} ${v.scope}`}
-      searchPlaceholder={labels.search}
-      renderRow={row}
-      gallery={gallery}
-      views={["list", "gallery", "table"]}
-      pill={{ get: (v) => v.trade, order: allTrades }}
-      empty={{ cols: ["Vendor", "Trade", "Scope Of Work"], title: labels.emptyTitle, hint: labels.emptyBody }}
-    />
+    <>
+      <NormalizedList
+        k="co"
+        items={vendors}
+        fields={FIELDS}
+        search={(v) => `${v.name} ${v.trade} ${v.scope}`}
+        searchPlaceholder={labels.search}
+        renderRow={row}
+        gallery={gallery}
+        views={["list", "gallery", "table"]}
+        pill={{ get: (v) => v.trade, order: allTrades }}
+        empty={{ cols: ["Vendor", "Trade", "Scope Of Work"], title: labels.emptyTitle, hint: labels.emptyBody }}
+      />
+      {detail && (
+        <RecordDetail
+          title={detail.name}
+          icon="Building2"
+          fields={[
+            { k: "Trade", v: detail.trades.length ? detail.trades.join(", ") : detail.trade },
+            ...(detail.scope ? [{ k: "Scope", v: detail.scope, full: true }] : []),
+            ...(detail.ratingAvg != null ? [{ k: "Rating", v: `${detail.ratingAvg.toFixed(1)} (${detail.ratingCount})` }] : []),
+            ...(detail.phone ? [{ k: "Phone", v: detail.phone }] : []),
+            ...(detail.email ? [{ k: "Email", v: detail.email }] : []),
+            ...(detail.site ? [{ k: "Website", v: detail.site }] : []),
+          ]}
+          actions={[
+            ...(detail.phone ? [{ label: labels.call, icon: "Phone", on: () => { window.location.href = `tel:${detail.phone}`; } }] : []),
+            ...(detail.email ? [{ label: labels.email, icon: "Mail", on: () => { window.location.href = `mailto:${detail.email}`; } }] : []),
+            ...(detail.site ? [{ label: labels.website, icon: "Globe", on: () => { window.location.href = siteHref(detail.site); } }] : []),
+          ]}
+          onClose={() => setDetail(null)}
+        />
+      )}
+    </>
   );
 }

@@ -142,6 +142,18 @@ test.describe("COMPVSS kit 34 · hubs + view engine · crew", () => {
     await expect(removers).toHaveCount(before);
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
   });
+
+  test("directory row tap opens a RecordDetail (no dead-tap stub)", async ({ page }) => {
+    await page.goto("/m/directory");
+    await expectRendered(page);
+    const row = page.locator(".item.tap").first();
+    if (await row.count()) {
+      await row.click();
+      // The tap now opens the person's RecordDetail overlay (was onClick={()=>{}}).
+      await expect(page.locator(".formscreen").first()).toBeVisible({ timeout: 10_000 });
+    }
+    await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

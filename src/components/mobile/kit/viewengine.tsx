@@ -727,6 +727,7 @@ export function DataView<T>({
   dateField,
   gallery,
   boardTone,
+  listWrapClassName,
 }: {
   view: ViewMode;
   items: T[];
@@ -738,6 +739,9 @@ export function DataView<T>({
   dateField?: string;
   gallery?: (item: T) => ReactNode;
   boardTone?: Record<string, string>;
+  /** Optional wrapper class for the flat list view (e.g. `"tl"` for a timeline
+   *  rail). Applied only to the ungrouped list layout. */
+  listWrapClassName?: string;
 }) {
   if (view === "table") return <DataTable fields={fields} items={items} onRow={onRow} />;
   if (view === "board") {
@@ -818,6 +822,7 @@ export function DataView<T>({
         ))}
       </div>
     );
+  if (listWrapClassName) return <div className={listWrapClassName}>{items.map((it, i) => <div key={i}>{renderRow(it)}</div>)}</div>;
   return <>{items.map((it, i) => <div key={i}>{renderRow(it)}</div>)}</>;
 }
 

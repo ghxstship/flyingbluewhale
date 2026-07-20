@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
-import { KIcon } from "@/components/mobile/kit";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type ActivityRow = {
@@ -19,97 +17,61 @@ export type ActivityRow = {
 
 type Labels = { search: string; emptyTitle: string; emptyBody: string };
 
+/** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
+ *  + schema DataView + type pills). The list view keeps the timeline rail
+ *  (`listWrapClassName="tl"`); the same schema also offers a table view. */
 export function ActivityView({ rows, labels }: { rows: ActivityRow[]; labels: Labels }) {
   const fmt = useFormatters();
-  const [query, setQuery] = useState("");
-  const [types, setTypes] = useState<Set<string>>(new Set());
-
-  const allTypes = useMemo(() => [...new Set(rows.map((r) => r.type))], [rows]);
-
-  const items = useMemo(
-    () =>
-      rows.filter(
-        (r) =>
-          (types.size === 0 || types.has(r.type)) &&
-          (!query ||
-            (r.title + " " + r.detail + " " + r.type).toLowerCase().includes(query.toLowerCase())),
-      ),
-    [rows, types, query],
-  );
+  const allTypes = [...new Set(rows.map((r) => r.type))];
 
   const rel = (iso: string) => {
     if (!iso) return "";
-    return fmt.dateParts(new Date(iso), {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    return fmt.dateParts(new Date(iso), { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
   };
 
-  return (
-    <>
-      <div className="searchbar" style={{ marginBottom: 8 }}>
-        <KIcon name="Search" size={16} />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={labels.search}
-        />
-        {query && (
-          <KIcon name="X" size={15} style={{ cursor: "pointer" }} />
-        )}
-      </div>
-      <div className="chips" style={{ paddingBottom: 12 }}>
-        {allTypes.map((tp) => (
-          <button
-            type="button"
-            key={tp}
-            className={`chip ${types.has(tp) ? "on" : ""}`}
-            onClick={() =>
-              setTypes((p) => {
-                const n = new Set(p);
-                n.has(tp) ? n.delete(tp) : n.add(tp);
-                return n;
-              })
-            }
-          >
-            {tp}
-          </button>
-        ))}
-      </div>
+  const FIELDS: FieldDef<ActivityRow>[] = [
+    { id: "title", label: "Event", type: "text", get: (r) => r.title },
+    { id: "type", label: "Type", type: "select", options: allTypes, get: (r) => r.type },
+    { id: "at", label: "When", type: "date", get: (r) => r.at, iso: (r) => (r.at ? r.at.slice(0, 10) : null) },
+  ];
 
-      {items.length === 0 ? (
-        <EmptyState title={labels.emptyTitle} description={labels.emptyBody} />
-      ) : (
-        <div className="tl">
-          {items.map((r) => (
-            <div className="tl-row" key={r.id}>
-              <span className="tdot">
-                <KIcon name={r.icon} size={8} />
-              </span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {r.href ? (
-                  <Link href={r.href} className="ttxt" style={{ display: "flex", alignItems: "center", gap: 5, color: "inherit", textDecoration: "none" }}>
-                    <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>{r.title}</span>
-                    <KIcon name="ChevronRight" size={13} style={{ color: "var(--p-text-3)", flex: "none" }} />
-                  </Link>
-                ) : (
-                  <div className="ttxt">{r.title}</div>
-                )}
-                {/* rel() uses the runtime-default locale + timezone, which
-                    differs between the SSR server (UTC) and the browser, so the
-                    formatted text mismatches on hydration → React #418. The row
-                    timestamp is purely informational, so suppress the per-cell
-                    hydration check (the repo pattern, see AuditLogViewer). */}
-                <div className="ttime" suppressHydrationWarning>
-                  {r.type} · {rel(r.at)}
-                </div>
-              </div>
-            </div>
-          ))}
+  const row = (r: ActivityRow) => (
+    <div className="tl-row" key={r.id}>
+      <span className="tdot">
+        <KIcon name={r.icon} size={8} />
+      </span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {r.href ? (
+          <Link href={r.href} className="ttxt" style={{ display: "flex", alignItems: "center", gap: 5, color: "inherit", textDecoration: "none" }}>
+            <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>{r.title}</span>
+            <KIcon name="ChevronRight" size={13} style={{ color: "var(--p-text-3)", flex: "none" }} />
+          </Link>
+        ) : (
+          <div className="ttxt">{r.title}</div>
+        )}
+        {/* rel() uses the runtime-default locale + timezone, which differs
+            between the SSR server (UTC) and the browser, so the formatted text
+            mismatches on hydration → React #418. The row timestamp is purely
+            informational, so suppress the per-cell hydration check. */}
+        <div className="ttime" suppressHydrationWarning>
+          {r.type} · {rel(r.at)}
         </div>
-      )}
-    </>
+      </div>
+    </div>
+  );
+
+  return (
+    <NormalizedList
+      k="ac"
+      items={rows}
+      fields={FIELDS}
+      search={(r) => `${r.title} ${r.detail} ${r.type}`}
+      searchPlaceholder={labels.search}
+      renderRow={row}
+      views={["list", "table"]}
+      listWrapClassName="tl"
+      pill={{ get: (r) => r.type, order: allTypes }}
+      empty={{ cols: ["Event", "Type", "When"], title: labels.emptyTitle, hint: labels.emptyBody }}
+    />
   );
 }

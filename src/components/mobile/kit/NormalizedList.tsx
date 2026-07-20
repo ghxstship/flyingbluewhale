@@ -42,6 +42,8 @@ export type NormalizedListProps<T> = {
   empty: { cols: string[]; title: string; hint?: string };
   /** Full-width primary CTA rendered below the list. */
   footer?: ReactNode;
+  /** Optional wrapper class for the flat list view (e.g. `"tl"` timeline rail). */
+  listWrapClassName?: string;
 };
 
 export function NormalizedList<T>({
@@ -62,6 +64,7 @@ export function NormalizedList<T>({
   pill,
   empty,
   footer,
+  listWrapClassName,
 }: NormalizedListProps<T>) {
   const [ctl, setCtl] = useState<ViewCtl>(() => emptyViewCtl(initialView));
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
@@ -122,6 +125,7 @@ export function NormalizedList<T>({
           boardTone={boardTone}
           dateField={dateField}
           gallery={gallery}
+          listWrapClassName={listWrapClassName}
         />
       )}
       {footer}

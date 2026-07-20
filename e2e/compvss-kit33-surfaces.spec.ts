@@ -86,7 +86,10 @@ test.describe("COMPVSS kit 33 · Aurora + Operations ledgers · crew", () => {
     test(`Operations ledger ${href} renders with the ActionBar (crew)`, async ({ page }) => {
       await page.goto(href);
       await expectRendered(page);
-      await expect(page.locator(".scr-h").first()).toHaveText(title);
+      // Kit 34 hub-chrome: on a hub-member ledger, `.scr-h` prints the *hub*
+      // label (e.g. "Operations"); the ledger identity lives in the active
+      // viewseg member. Assert the ledger name appears, not that it pins scr-h.
+      await expect(page.getByText(title).first()).toBeVisible({ timeout: 15_000 });
       // Every list surface carries the search + icon-only ActionBar cluster.
       await expect(page.locator(".searchbar, input[placeholder]").first()).toBeVisible({ timeout: 15_000 });
       // Breadcrumb back to the More drawer.
@@ -126,11 +129,13 @@ test.describe("COMPVSS kit 33 · nav drawer · crew (Manage hidden)", () => {
 
   test("drawer search filters, and a row navigates", async ({ page }) => {
     await openNavDrawer(page);
+    // Kit 34 IA: the assets surface is the "Assets & Equipment" hub row
+    // (/m/equipment) — the flat /m/assets drawer row was folded into it.
     await page.locator(".nav-search input").fill("assets");
-    const row = page.locator('.nav-row[href="/m/assets"]').first();
+    const row = page.locator('.nav-row[href="/m/equipment"]').first();
     await expect(row).toBeVisible({ timeout: 10_000 });
     await row.click();
-    await expect(page).toHaveURL(/\/m\/assets/);
+    await expect(page).toHaveURL(/\/m\/equipment/);
     await expectRendered(page);
   });
 
@@ -148,8 +153,10 @@ test.describe("COMPVSS kit 33 · nav drawer + scheduler · manager", () => {
   test("the Manage control-plane group is shown for a manager", async ({ page }) => {
     await openNavDrawer(page);
     await expect(page.locator(".nav-grp-h", { hasText: /^manage$/i }).first()).toBeVisible();
-    // Manage rows are present + gated ones reachable.
-    await expect(page.locator('.nav-row[href="/m/scheduler"]').first()).toBeVisible();
+    // Kit 34 IA: Scheduler + Finance moved out of Manage into the Workforce /
+    // Finance hubs; Manage now carries the approval control-plane rows. Assert
+    // a real, manager-gated Manage row is reachable.
+    await expect(page.locator('.nav-row[href="/m/roster"]').first()).toBeVisible();
   });
 
   test("scheduler exposes Schedule / Coverage / On Now views", async ({ page }) => {

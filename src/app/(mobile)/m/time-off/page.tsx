@@ -1,7 +1,8 @@
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { Fab } from "@/components/mobile/kit";
+import { HubChrome } from "@/components/mobile/HubChrome";
 import { TimeOffList, type TimeOffItem } from "./TimeOffList";
 
 export const dynamic = "force-dynamic";
@@ -68,10 +69,7 @@ export default async function TimeOffPage() {
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">{t("m.timeOff.eyebrow", undefined, "You")}</div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.timeOff.title", undefined, "Time Off")}
-      </h1>
+      <HubChrome hubKey="workforce" active="timeoff" canManage={isManagerPlus(session)} />
 
       {balances.length > 0 && (
         <div className="metarow">

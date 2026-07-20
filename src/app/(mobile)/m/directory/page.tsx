@@ -3,6 +3,7 @@ import { Fab, LockedRow } from "@/components/mobile/kit";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { HubChrome } from "@/components/mobile/HubChrome";
 import { DirectoryView, type RosterPerson } from "./DirectoryView";
 
 export const dynamic = "force-dynamic";
@@ -111,12 +112,7 @@ export default async function MobileDirectoryPage() {
 
   return (
     <div className="screen screen-anim">
-      <div className="scr-eye">
-        {t("m.directory.eyebrow", { count: people.length }, `${people.length} On Roster`)}
-      </div>
-      <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        {t("m.directory.title", undefined, "Team Roster")}
-      </h1>
+      <HubChrome hubKey="workforce" active="roster" canManage={isManagerPlus(session)} />
       <DirectoryView people={people} labels={labels} />
       {/* Kit FAB: Invite Crew — perm "assign" in the kit's CREATE map, which is
           the manager band here. The gate is UX only; the invite surface

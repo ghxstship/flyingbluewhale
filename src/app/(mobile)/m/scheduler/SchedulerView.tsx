@@ -15,6 +15,7 @@ import {
   useUndo,
   type FormDef,
 } from "@/components/mobile/kit";
+import { HubChrome } from "@/components/mobile/HubChrome";
 import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
@@ -115,13 +116,13 @@ function groupHours(g: { start: string; end: string }): number {
   return dur;
 }
 export function SchedulerView({
-  eyebrow,
   days,
   slots,
   pool,
   areaOptions,
 }: {
-  eyebrow: string;
+  /** Kept for the server page's call shape; the hub chrome owns the title now. */
+  eyebrow?: string;
   days: SchedDay[];
   slots: SchedSlot[];
   pool: PoolMember[];
@@ -369,16 +370,8 @@ export function SchedulerView({
 
   return (
     <div className="screen screen-anim">
-      <Link href="/m/more" className="backbtn">
-        <KIcon name="ChevronLeft" size={17} /> {t("m.scheduler.back", undefined, "More")}
-      </Link>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="scr-eye">{eyebrow}</div>
-          <h1 className="scr-h" style={{ marginBottom: 0 }}>
-            {t("m.scheduler.title", undefined, "Shift Scheduler")}
-          </h1>
-        </div>
+      <HubChrome hubKey="workforce" active="schedule" canManage />
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 4 }}>
         <button
           type="button"
           className="pill ico"

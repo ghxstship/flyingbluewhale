@@ -359,13 +359,14 @@ test.describe("COMPVSS field deep coverage (crew)", () => {
     // Seed a Radio advance so an assignments row exists for the requester.
     await submitRadioAdvance(page);
 
-    // Second visit: page.tsx seeds `initial` from the most-recent assignment;
-    // KIND_TO_CATEGORY maps radio → "Radio".
+    // Second visit: page.tsx seeds `initial.cat` from the most-recent
+    // assignment via CATALOG_KIND_LABEL[radio] → the plural category label
+    // "Radios" (the same label the category select options carry).
     await page.goto("/m/advances/new");
     await expectRendered(page);
     const select = page.locator(".formscreen select").first();
     await expect(select).toBeVisible({ timeout: 10_000 });
-    await expect(select, "Category is pre-seeded from the last request's catalog_kind").toHaveValue("Radio");
+    await expect(select, "Category is pre-seeded from the last request's catalog_kind").toHaveValue("Radios");
     // Quantity carried forward too (prior request set qty=2).
     await expect(page.locator(".formscreen input[type='number']").first()).toHaveValue("2");
   });

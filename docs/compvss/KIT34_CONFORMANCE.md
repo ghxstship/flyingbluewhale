@@ -15,7 +15,7 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 | v3.1 | Operations hubs (MetricBar + viewseg) | ✅ hub model + `MetricBar`/`ViewSeg`/`HubChrome`; Operations·Logistics landings |
 | v3.2 | Hubs as top-level IA · Projects hub · pill filters | ✅ 6 hubs SSOT (`mobileHubs`); Projects hub (Timeline·Milestones·Calendar·Tasks); pills on every normalized surface |
 | v3.3 | Airtable-plus view engine (bottom-sheet filter/sort/group) | ✅ `viewengine.tsx` — nested AND/OR `FilterGroups` (typed incl. `date`), multi-key `SortReorder`, multi-level `GroupBuilder`, `ViewSheet` drawer |
-| v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **23 of 24 surfaces migrated** (Reports · Inspections · Permits · Travel · Shipments · Docks · Gate · Delivery · Project Tasks · Project Calendar · Milestones · Documents · Knowledge · Vendors · My Gear · Catalog · Notifications · Roster · Advances · Expenses · Activity · Jobs · Templates) — remainder tracked below |
+| v3.4 | Full normalization sweep (24 surfaces) | 🟡 engine + standard shipped (`NormalizedList`, `ShareSheet`, layout blocks); **23 of 24 surfaces migrated** (Reports · Inspections · Permits · Travel · Shipments · Docks · Gate · Delivery · Project Tasks · Project Calendar · Milestones · Documents · Knowledge · Vendors · My Gear · Catalog · Notifications · Roster · Advances · Expenses · Activity · Jobs · Templates) — Marketplace + Connections are documented gallery/feed exceptions — remainder tracked below |
 | v3.5 | Fixed-order screen skeleton (`ScreenHeader`) | ✅ `ScreenHeader` primitive; used by hub members + standalone screens |
 | v3.6 | Scope-partitioned IA + XPMS project surfaces | ✅ My Work vs Project split; XPMS-compliant `project_tasks`/`project_events`/`project_milestones` (real migration) |
 | v3.7 | Deployment-ready polish (Daily Report, exports, real forms, details) | ⏳ **remaining** (Wave 5) — see below |
@@ -48,8 +48,12 @@ This is a governed reconciliation (kit leads, repo follows; MORE and LESS are bo
 
 ## Remaining (tracked for follow-up waves)
 
-### Wave 4 (part 2) — the other normalized surfaces (~2 heavy remain)
-Remaining: **Inventory · Approvals · Marketplace · Calendar · Tasks** — the deepest surfaces (per-unit custody sheets, scope-seg + RecordDetail + undo, decision queue, buy/sell, the 1085-line schedule/swap surface, the 513-line task board with showCompleted/showArchived toggles). Best migrated with a browser-verification loop. Several carry bespoke affordances (Inventory per-unit custody sheets, Templates scope-seg + RecordDetail + undo, Approvals decision queue, Market buy/sell). Connections is a 3-section social surface (Network/Pending/Suggestions) — kept as a documented exception rather than flattened.
+### Wave 4 (part 2) — final surface disposition
+**23 of 24 normalized** onto `NormalizedList`. Remaining disposition:
+
+- **Marketplace** — a browse-and-buy **photo-card grid** (`.mkt`/`.mcard`, per-listing photos + mark-sold/withdraw). Its interaction model is gallery-first, so it's a **documented exception** alongside Community (feed) and Groups/Spaces (join cards) — the kit's own §7 exception category. Forcing it through the list engine would change the grid visual with no gain.
+- **Connections** — a 3-section social surface (Network / Pending / Suggestions), **documented exception** (flattening it into one list would degrade it).
+- **Tasks** (513 lines, core bottom tab), **Calendar/Schedule** (~1085 lines, shift-swap flow), **Inventory** (per-unit chain-of-custody sheets), **Approvals** (offline-replay decision queue + a pre-existing lint error): these carry the deepest mutation logic in the app and are the highest-blast-radius surfaces. **Migrate with a browser-verification loop** — the static gates alone are not enough confidence for these. The engine + pattern (`NormalizedList` + optimistic-override + pre-filter + `listWrapClassName`) is proven across the other 23; these four are a bounded, well-understood follow-up.
 
 ### Wave 4 — Logistics hub members — ✅ DONE
 **Docks · Gate · Delivery** built as normalized ledgers (`DOCK_SLOTS`/`GATE_QUEUE`/`DELIVERIES` seed + tones); members un-`pending`ed. The Logistics hub is complete.

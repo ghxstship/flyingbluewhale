@@ -16,6 +16,7 @@ type EntryRow = {
   ended_at: string | null;
   duration_minutes: number | null;
   zone_id: string | null;
+  break_open_at?: string | null;
 };
 
 /**
@@ -47,9 +48,11 @@ export default async function MobileClockPage() {
   const [{ data: open }, { data: recent }] = await Promise.all([
     supabase
       .from("time_entries")
-      .select("id, started_at, ended_at, duration_minutes, zone_id")
+      .select("id, started_at, ended_at, duration_minutes, zone_id, break_open_at")
       .eq("org_id", session.orgId)
       .eq("user_id", session.userId)
+      // Exclude per-task timer entries — the clock face tracks shift punches.
+      .neq("activity_category", "task")
       .is("ended_at", null)
       .order("started_at", { ascending: false })
       .limit(1)
@@ -59,6 +62,7 @@ export default async function MobileClockPage() {
       .select("id, started_at, ended_at, duration_minutes, zone_id")
       .eq("org_id", session.orgId)
       .eq("user_id", session.userId)
+      .neq("activity_category", "task")
       .order("started_at", { ascending: false })
       .limit(20),
   ]);
@@ -140,6 +144,7 @@ export default async function MobileClockPage() {
   }
 
   const onShift = openEntry != null;
+  const onBreak = openEntry?.break_open_at != null;
 
   // Kit 32 E4 — shift-fatigue nudge. Honest server read: hours elapsed on the
   // currently-open entry. A long single shift is a real safety signal (>10h),
@@ -153,7 +158,11 @@ export default async function MobileClockPage() {
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">
-        {onShift ? t("m.clock.onClock", undefined, "On The Clock") : t("m.clock.offShift", undefined, "Off Shift")}
+        {onBreak
+          ? t("m.clock.onBreak", undefined, "On Break")
+          : onShift
+            ? t("m.clock.onClock", undefined, "On The Clock")
+            : t("m.clock.offShift", undefined, "Off Shift")}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.clock.title", undefined, "Time Clock")}
@@ -161,6 +170,7 @@ export default async function MobileClockPage() {
 
       <CheckInControls
         openSince={openEntry?.started_at ?? null}
+        onBreakSince={openEntry?.break_open_at ?? null}
         zoneName={zoneNameFor(openEntry?.zone_id ?? null)}
       />
 

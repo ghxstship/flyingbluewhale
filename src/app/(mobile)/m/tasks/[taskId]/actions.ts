@@ -189,3 +189,96 @@ export async function toggleChecklistItem(taskId: string, index: number, done: b
   revalidatePath("/m/tasks");
   return null;
 }
+
+const TimerInput = z.object({ taskId: z.string().uuid() });
+
+/**
+ * Start the per-task timer: opens a time_entries row with the task attached and
+ * activity_category='task'. That category isolates it from the shift clock (the
+ * /m/clock face and /api/v1/time/clock exclude 'task', so an open task timer
+ * never reads as "clocked in") and from payroll (compile_timesheets excludes
+ * 'task', so task time doesn't double-count against the shift-of-record). Only
+ * the task's assignee or a manager may log against it; one running timer per
+ * user at a time.
+ */
+export async function startTaskTimer(taskId: string): Promise<State> {
+  const session = await requireSession();
+  const parsed = TimerInput.safeParse({ taskId });
+  if (!parsed.success) return { error: "Invalid task." };
+  const supabase = await createClient();
+
+  const { data: task, error: loadErr } = await supabase
+    .from("tasks")
+    .select("id, assigned_to")
+    .eq("id", taskId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (loadErr) return { error: `Could not load task: ${loadErr.message}` };
+  if (!task) return { error: "Task not found." };
+  if (!isManagerPlus(session) && task.assigned_to !== session.userId) {
+    return { error: "You don't have permission to track time on this task." };
+  }
+
+  // One running task timer per user — stop the current one before starting another.
+  const { data: openTimer } = await supabase
+    .from("time_entries")
+    .select("id, task_id")
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .eq("activity_category", "task")
+    .is("ended_at", null)
+    .limit(1)
+    .maybeSingle();
+  if (openTimer) {
+    return {
+      error: openTimer.task_id === taskId ? "Timer already running." : "Stop your other task timer first.",
+    };
+  }
+
+  const { error } = await supabase.from("time_entries").insert({
+    org_id: session.orgId,
+    user_id: session.userId,
+    task_id: taskId,
+    started_at: new Date().toISOString(),
+    activity_category: "task",
+    billable: false,
+    source_channel: "app",
+  });
+  if (error) return { error: `Could not start timer: ${error.message}` };
+
+  revalidatePath(`/m/tasks/${taskId}`);
+  return null;
+}
+
+/** Stop & log the running per-task timer (closes the open 'task' entry; the
+ *  derive trigger fills duration_minutes). */
+export async function stopTaskTimer(taskId: string): Promise<State> {
+  const session = await requireSession();
+  const parsed = TimerInput.safeParse({ taskId });
+  if (!parsed.success) return { error: "Invalid task." };
+  const supabase = await createClient();
+
+  const { data: openTimer } = await supabase
+    .from("time_entries")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId)
+    .eq("task_id", taskId)
+    .eq("activity_category", "task")
+    .is("ended_at", null)
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!openTimer) return { error: "No running timer to stop." };
+
+  const { error } = await supabase
+    .from("time_entries")
+    .update({ ended_at: new Date().toISOString() })
+    .eq("id", openTimer.id as string)
+    .eq("org_id", session.orgId)
+    .eq("user_id", session.userId);
+  if (error) return { error: `Could not stop timer: ${error.message}` };
+
+  revalidatePath(`/m/tasks/${taskId}`);
+  return null;
+}

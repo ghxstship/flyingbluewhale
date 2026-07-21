@@ -26,7 +26,7 @@ import { resolveZoneForPunch } from "@/lib/workforce";
  */
 
 const PostSchema = z.object({
-  action: z.enum(["clock_in", "clock_out"]),
+  action: z.enum(["clock_in", "clock_out", "break_start", "break_end"]),
   // Strict ISO datetime; past timestamps allowed (offline replay).
   at: z.string().datetime({ offset: true }).optional(),
   lat: z.number().min(-90).max(90).optional(),
@@ -66,9 +66,12 @@ export async function POST(req: NextRequest) {
     // The user's currently-open entry (if any) decides both directions.
     const { data: open, error: readErr } = await supabase
       .from("time_entries")
-      .select("id, started_at")
+      .select("id, started_at, break_open_at, break_minutes")
       .eq("org_id", session.orgId)
       .eq("user_id", session.userId)
+      // Task-timer entries (activity_category='task') are NOT shift punches —
+      // exclude them so an open task timer never reads as "clocked in".
+      .neq("activity_category", "task")
       .is("ended_at", null)
       .order("started_at", { ascending: false })
       .limit(1)
@@ -145,6 +148,45 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Break punches operate WITHIN an open clock-in — no geofence policy
+    // (the worker is already on-site and clocked in). break_minutes accrues
+    // the paused span so net worked = duration_minutes - break_minutes.
+    // Conflicts are terminal (409) so a duplicate offline replay is dropped
+    // by the outbox rather than double-counting break time.
+    if (input.action === "break_start") {
+      if (!open) return apiError("conflict", "You're not clocked in.");
+      if (open.break_open_at) return apiError("conflict", "You're already on a break.");
+      const { data: entry, error } = await supabase
+        .from("time_entries")
+        .update({ break_open_at: nowIso })
+        .eq("id", open.id as string)
+        .eq("org_id", session.orgId)
+        .eq("user_id", session.userId)
+        .select("id, break_open_at, break_minutes")
+        .maybeSingle();
+      if (error) return apiError("internal", error.message);
+      return apiOk({ action: "break_start" as const, entry });
+    }
+
+    if (input.action === "break_end") {
+      if (!open) return apiError("conflict", "You're not clocked in.");
+      if (!open.break_open_at) return apiError("conflict", "You're not on a break.");
+      const elapsedMin = Math.max(
+        0,
+        Math.round((new Date(nowIso).getTime() - new Date(open.break_open_at as string).getTime()) / 60_000),
+      );
+      const { data: entry, error } = await supabase
+        .from("time_entries")
+        .update({ break_open_at: null, break_minutes: (open.break_minutes ?? 0) + elapsedMin })
+        .eq("id", open.id as string)
+        .eq("org_id", session.orgId)
+        .eq("user_id", session.userId)
+        .select("id, break_open_at, break_minutes")
+        .maybeSingle();
+      if (error) return apiError("internal", error.message);
+      return apiOk({ action: "break_end" as const, entry, breakMinutes: entry?.break_minutes ?? null });
+    }
+
     // clock_out. duration_minutes is derived by the
     // tg_compute_time_entry_duration trigger, whose contract is explicit:
     // "Do not set duration_minutes explicitly when ended_at is present."
@@ -159,6 +201,21 @@ export async function POST(req: NextRequest) {
     const zones = fix ? (await loadPunchPolicyContext(supabase, session.orgId)).zones : [];
     const outResolution = resolveZoneForPunch(fix, zones);
 
+    // Clocking out mid-break folds the open break span into break_minutes and
+    // clears it — otherwise break_open_at would strand and the final break go
+    // uncounted.
+    const breakClose = open.break_open_at
+      ? {
+          break_open_at: null,
+          break_minutes:
+            (open.break_minutes ?? 0) +
+            Math.max(
+              0,
+              Math.round((new Date(nowIso).getTime() - new Date(open.break_open_at as string).getTime()) / 60_000),
+            ),
+        }
+      : {};
+
     const { data: entry, error } = await supabase
       .from("time_entries")
       .update({
@@ -168,6 +225,7 @@ export async function POST(req: NextRequest) {
         punch_out_accuracy_m: input.accuracy ?? null,
         geofence_out_state: outResolution.state,
         zone_out_id: outResolution.zone?.id ?? null,
+        ...breakClose,
       })
       .eq("id", open.id as string)
       .eq("org_id", session.orgId)

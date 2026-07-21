@@ -10,6 +10,7 @@ import {
   type TaskState,
 } from "../_shared";
 import { addTaskComment, setTaskState, toggleChecklistItem } from "./actions";
+import { TaskTimer } from "./TaskTimer";
 
 export type ChecklistEntry = { label: string; done: boolean };
 
@@ -87,6 +88,7 @@ type Labels = {
   progress: string;
   checklist: string;
   checklistEmpty: string;
+  timeTracked: string;
 };
 
 export function TaskDetail({
@@ -96,6 +98,8 @@ export function TaskDetail({
   comments,
   events,
   attachments,
+  timerLoggedMinutes,
+  timerOpenSince,
 }: {
   task: DetailTask;
   canTransition: boolean;
@@ -103,6 +107,8 @@ export function TaskDetail({
   comments: CommentItem[];
   events: EventItem[];
   attachments: AttachmentItem[];
+  timerLoggedMinutes: number;
+  timerOpenSince: string | null;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -327,6 +333,17 @@ export function TaskDetail({
     {
       h: labels.description,
       text: task.description || labels.descriptionEmpty,
+    },
+    {
+      h: labels.timeTracked,
+      node: (
+        <TaskTimer
+          taskId={task.id}
+          loggedMinutes={timerLoggedMinutes}
+          openSince={timerOpenSince}
+          canTrack={canTransition}
+        />
+      ),
     },
     ...(ppeNode ? [{ h: labels.ppe, node: ppeNode }] : []),
     ...(checklistNode ? [{ h: labels.checklist, node: checklistNode }] : []),

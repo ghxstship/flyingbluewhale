@@ -1,4 +1,5 @@
-import { requireSession } from "@/lib/auth";
+import { can, requireSession } from "@/lib/auth";
+import { grantedSiteCapabilities } from "@/lib/mobile/site-capabilities";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -107,8 +108,18 @@ export default async function MobileWalletPage() {
     };
   });
 
+  // Real "what you're cleared to do" — the holder's granted field capabilities
+  // (never a denied list; see site-capabilities.ts). Replaces the prototype's
+  // hardcoded PASS_PERMS fiction.
+  const capabilities = grantedSiteCapabilities((c) => can(session, c)).map((c) => ({
+    label: t(c.key, undefined, c.label),
+    icon: c.icon,
+  }));
+
   const labels = {
     accessTitle: t("m.wallet.accessTitle", undefined, "Access & Permissions"),
+    credentialsTitle: t("m.wallet.credentialsTitle", undefined, "Credentials"),
+    capsEmpty: t("m.wallet.capsEmpty", undefined, "No site permissions granted yet."),
     emptyTitle: t("m.wallet.empty.title", undefined, "No Credentials"),
     emptyBody: t(
       "m.wallet.empty.body",
@@ -135,7 +146,13 @@ export default async function MobileWalletPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.wallet.title", undefined, "The COMPVSS Rose")}
       </h1>
-      <RoseView credentials={credentials} holderName={holderName} activeCode={activeCode} labels={labels} />
+      <RoseView
+        credentials={credentials}
+        capabilities={capabilities}
+        holderName={holderName}
+        activeCode={activeCode}
+        labels={labels}
+      />
     </div>
   );
 }

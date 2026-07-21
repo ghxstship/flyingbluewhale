@@ -11,8 +11,12 @@ export type CredentialEntry = {
   expiresOn: string | null;
 };
 
+export type SiteCapEntry = { label: string; icon: string };
+
 type Labels = {
   accessTitle: string;
+  credentialsTitle: string;
+  capsEmpty: string;
   emptyTitle: string;
   emptyBody: string;
   help: string;
@@ -54,11 +58,13 @@ const titleCase = (s: string) =>
  */
 export function RoseView({
   credentials,
+  capabilities,
   holderName,
   activeCode,
   labels,
 }: {
   credentials: CredentialEntry[];
+  capabilities: SiteCapEntry[];
   holderName: string | null;
   activeCode: string | null;
   labels: Labels;
@@ -91,8 +97,40 @@ export function RoseView({
         <EmptyState size="compact" title={labels.noCodeTitle} description={labels.noCodeBody} />
       )}
 
+      {/* Real "what you're cleared to do" — the holder's granted field
+          capabilities (see site-capabilities.ts). Replaces the prototype's
+          hardcoded PASS_PERMS fiction. Cleared-only, never a denied list. */}
       <div className="sech">
         <h2>{labels.accessTitle}</h2>
+        {capabilities.length > 0 && (
+          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--p-text-3)" }}>
+            {capabilities.length}
+          </span>
+        )}
+      </div>
+      {capabilities.length === 0 ? (
+        <div className="s" style={{ color: "var(--p-text-3)" }}>
+          {labels.capsEmpty}
+        </div>
+      ) : (
+        capabilities.map((c) => (
+          <div className="item" key={c.label}>
+            <span className="perm-ic">
+              <KIcon name={c.icon} size={17} />
+            </span>
+            <div style={{ minWidth: 0 }}>
+              <div className="t">{c.label}</div>
+            </div>
+            <span className="sp" />
+            <span className="ps-badge ps-badge--ok">
+              <KIcon name="Check" size={11} />
+            </span>
+          </div>
+        ))
+      )}
+
+      <div className="sech">
+        <h2>{labels.credentialsTitle}</h2>
         {credentials.length > 0 && (
           <span style={{ fontSize: 11, fontWeight: 600, color: "var(--p-text-3)" }}>
             {credentials.length}

@@ -37662,6 +37662,8 @@ export type Database = {
           activity_category: string
           atom_id: string | null
           billable: boolean
+          break_minutes: number
+          break_open_at: string | null
           cost_code_id: string | null
           created_at: string
           description: string | null
@@ -37687,6 +37689,7 @@ export type Database = {
           shift_tags: string[]
           source_channel: string
           started_at: string
+          task_id: string | null
           timesheet_id: string | null
           updated_at: string
           user_id: string | null
@@ -37698,6 +37701,8 @@ export type Database = {
           activity_category?: string
           atom_id?: string | null
           billable?: boolean
+          break_minutes?: number
+          break_open_at?: string | null
           cost_code_id?: string | null
           created_at?: string
           description?: string | null
@@ -37723,6 +37728,7 @@ export type Database = {
           shift_tags?: string[]
           source_channel?: string
           started_at: string
+          task_id?: string | null
           timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null
@@ -37734,6 +37740,8 @@ export type Database = {
           activity_category?: string
           atom_id?: string | null
           billable?: boolean
+          break_minutes?: number
+          break_open_at?: string | null
           cost_code_id?: string | null
           created_at?: string
           description?: string | null
@@ -37759,6 +37767,7 @@ export type Database = {
           shift_tags?: string[]
           source_channel?: string
           started_at?: string
+          task_id?: string | null
           timesheet_id?: string | null
           updated_at?: string
           user_id?: string | null

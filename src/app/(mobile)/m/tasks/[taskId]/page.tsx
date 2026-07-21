@@ -35,7 +35,8 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
 
   // Real collaboration rows — comments (newest list, oldest-first for thread),
   // append-only events, photo/file attachments.
-  const [{ data: commentRows }, { data: eventRows }, { data: attachmentRows }, ccRes, vendorRes] = await Promise.all([
+  const [{ data: commentRows }, { data: eventRows }, { data: attachmentRows }, ccRes, vendorRes, { data: timerRows }] =
+    await Promise.all([
     supabase
       .from("task_comments")
       .select("id, body, mentions, author_id, created_at")
@@ -80,6 +81,16 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
           .eq("org_id", session.orgId)
           .maybeSingle()
       : null,
+    // Per-task timer: this user's own task-timer entries (activity_category
+    // 'task') for the logged-total and running-since counter.
+    supabase
+      .from("time_entries")
+      .select("started_at, ended_at, duration_minutes")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .eq("task_id", taskId)
+      .eq("activity_category", "task")
+      .order("started_at", { ascending: false }),
   ]);
 
   const comments = (commentRows ?? []) as Array<{
@@ -131,6 +142,15 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
 
   const assignee = row.assigned_to ? nameFor(row.assigned_to) : unassigned;
   const canTransition = isManagerPlus(session) || row.assigned_to === session.userId;
+
+  // Per-task timer state: minutes logged (closed entries) + the running entry.
+  const timerEntries = (timerRows ?? []) as Array<{
+    started_at: string;
+    ended_at: string | null;
+    duration_minutes: number | null;
+  }>;
+  const timerLoggedMinutes = timerEntries.reduce((sum, e) => sum + (e.ended_at ? (e.duration_minutes ?? 0) : 0), 0);
+  const timerOpenSince = timerEntries.find((e) => e.ended_at == null)?.started_at ?? null;
 
   // Kit 31 #14 — the construction facets' display strings, resolved in the
   // batched round trip above.
@@ -248,6 +268,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
     progress: t("m.tasks.detail.progress", undefined, "Progress"),
     checklist: t("m.tasks.detail.checklist", undefined, "Checklist"),
     checklistEmpty: t("m.tasks.detail.checklistEmpty", undefined, "No checklist items."),
+    timeTracked: t("m.tasks.detail.timeTracked", undefined, "Time Tracked"),
   };
 
   return (
@@ -258,6 +279,8 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
       comments={commentItems}
       events={eventItems}
       attachments={attachmentItems}
+      timerLoggedMinutes={timerLoggedMinutes}
+      timerOpenSince={timerOpenSince}
     />
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Fab, NormalizedList, ScreenHeader, SwipeRow, type FieldDef } from "@/components/mobile/kit";
+import { Fab, KIcon, NormalizedList, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { checkinMyAssignment, reportAssignmentLost } from "./actions";
@@ -25,7 +25,7 @@ export type AssetRow = {
  * check-in RPC) + Lost (danger — journals + alerts the manager band), the
  * optimistic session overlays, and the Request-Advance FAB.
  */
-export function AssetsView({ rows, title }: { rows: AssetRow[]; eyebrow?: string; title: string }) {
+export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow?: string; title: string }) {
   const t = useT();
   const toast = useToast();
   const router = useRouter();
@@ -127,7 +127,17 @@ export function AssetsView({ rows, title }: { rows: AssetRow[]; eyebrow?: string
 
   return (
     <div className="screen screen-anim">
-      <ScreenHeader onBack={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))} title={title} />
+      <button
+        type="button"
+        className="backbtn"
+        onClick={() => window.dispatchEvent(new CustomEvent("compvss:nav-open"))}
+      >
+        <KIcon name="ChevronLeft" size={17} /> {t("m.more.title", undefined, "More")}
+      </button>
+      {eyebrow && <div className="scr-eye">{eyebrow}</div>}
+      <h1 className="scr-h" style={{ marginBottom: 12 }}>
+        {title}
+      </h1>
 
       <NormalizedList
         k="as"

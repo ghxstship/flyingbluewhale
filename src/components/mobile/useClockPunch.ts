@@ -26,7 +26,7 @@ import { haptic } from "@/lib/haptics";
  * denies a worker a way to record time, it only asks them to say why.
  */
 
-export type ClockAction = "clock_in" | "clock_out";
+export type ClockAction = "clock_in" | "clock_out" | "break_start" | "break_end";
 
 export type GeofenceState = "inside" | "outside" | "unknown";
 export type EnforcementState = "clean" | "warned" | "quarantined" | "overridden";

@@ -10,8 +10,8 @@ import { applyToJob, postJob, type State } from "./actions";
 
 /**
  * JobsView — Jobs client leaf. Search + the job cards with cert/flag chips, rate
- * tag, and an Apply button per row (routes through applyToJob). Includes a
- * Post-a-Job CTA placeholder.
+ * tag, and an Apply button per row (routes through applyToJob). A card tap opens
+ * the gig RecordDetail; the manager-band Post-a-Job FAB writes via postJob.
  *
  * Design truth: prototype jobs tab (app.jsx 2236-2283) + JOBS (830-844).
  */

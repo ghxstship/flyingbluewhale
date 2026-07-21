@@ -187,9 +187,6 @@ export function AuroraChat({ firstName }: { firstName: string }) {
             ask(draft);
           }}
         >
-          <button type="button" className="au-tool-btn" aria-label="Attach">
-            <KIcon name="Plus" size={17} />
-          </button>
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}

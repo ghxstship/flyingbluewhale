@@ -1,13 +1,11 @@
 import Link from "next/link";
-import { ClipboardCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
-import { PhotoStrip } from "@/components/media/PhotoStrip";
 import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
+import { PunchListView, type PunchItem } from "./PunchListView";
 
 export const dynamic = "force-dynamic";
 
@@ -40,23 +38,6 @@ type PunchRow = {
   assignee: { name: string | null; email: string | null } | null;
 };
 
-// Kit 29 semantic-tone convention for this surface: open reads info,
-// in-flight reads warning, closed reads success. Void is a neutral tombstone.
-const STATE_TONE: Record<string, string> = {
-  open: "info",
-  in_progress: "warn",
-  ready_for_review: "warn",
-  complete: "ok",
-  void: "neutral",
-};
-
-const PRIORITY_TONE: Record<string, string> = {
-  low: "neutral",
-  normal: "neutral",
-  high: "warn",
-  urgent: "danger",
-};
-
 export default async function PunchListPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
@@ -82,21 +63,21 @@ export default async function PunchListPage() {
     i.photo_path ? [i.photo_path] : [],
   );
 
-  const STATE_LABEL: Record<string, string> = {
-    open: t("m.punchList.state.open", undefined, "Open"),
-    in_progress: t("m.punchList.state.inProgress", undefined, "In Progress"),
-    ready_for_review: t("m.punchList.state.readyForReview", undefined, "In Review"),
-    complete: t("m.punchList.state.complete", undefined, "Closed"),
-    void: t("m.punchList.state.void", undefined, "Void"),
-  };
-  const PRIORITY_LABEL: Record<string, string> = {
-    low: t("m.punchList.priority.low", undefined, "Low"),
-    normal: t("m.punchList.priority.normal", undefined, "Normal"),
-    high: t("m.punchList.priority.high", undefined, "High"),
-    urgent: t("m.punchList.priority.urgent", undefined, "Urgent"),
-  };
-
   const openCount = items.filter((i) => !["complete", "void"].includes(i.item_state)).length;
+
+  // Flatten to the client view's shape — signed photos + resolved names +
+  // preformatted dates threaded in (the client can't reach storage or the DB).
+  const viewItems: PunchItem[] = items.map((i) => ({
+    id: i.id,
+    code: i.code,
+    title: i.title,
+    item_state: i.item_state,
+    priority: i.priority,
+    projectName: i.project?.name ?? null,
+    assigneeName: i.assignee?.name ?? i.assignee?.email ?? null,
+    createdLabel: fmt.date(i.created_at),
+    photos: photosById.get(i.id) ?? [],
+  }));
 
   return (
     <div className="screen screen-anim">
@@ -108,58 +89,7 @@ export default async function PunchListPage() {
         {t("m.punchList.openCount", { n: openCount }, `${openCount} Open`)}
       </div>
 
-      {items.length === 0 ? (
-        <EmptyState
-          size="compact"
-          icon={<ClipboardCheck size={28} aria-hidden="true" />}
-          title={t("m.punchList.empty.title", undefined, "Nothing On The List")}
-          description={t(
-            "m.punchList.empty.body",
-            undefined,
-            "Inspection items land here as they are raised. Spot something wrong? Raise a snag and it joins the queue.",
-          )}
-        />
-      ) : (
-        items.map((i) => (
-          <Link
-            href={`/m/punch/${i.id}`}
-            className="item tap"
-            key={i.id}
-            style={{ display: "block", textDecoration: "none", color: "inherit" }}
-          >
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{i.title}</div>
-                <div className="s">
-                  {i.code}
-                  {i.project?.name ? ` · ${i.project.name}` : ""}
-                  {` · ${fmt.date(i.created_at)}`}
-                </div>
-                <div className="s">
-                  {i.assignee
-                    ? t(
-                        "m.punchList.assignedTo",
-                        { name: i.assignee.name ?? i.assignee.email ?? "" },
-                        `Assigned · ${i.assignee.name ?? i.assignee.email ?? ""}`,
-                      )
-                    : t("m.punchList.unassigned", undefined, "Unassigned")}
-                </div>
-              </div>
-              <div style={{ textAlign: "right", flex: "none", display: "grid", gap: 4, justifyItems: "end" }}>
-                <span className={`ps-badge ps-badge--${STATE_TONE[i.item_state] ?? "neutral"}`}>
-                  {STATE_LABEL[i.item_state] ?? i.item_state}
-                </span>
-                {(i.priority === "high" || i.priority === "urgent") && (
-                  <span className={`ps-badge ps-badge--${PRIORITY_TONE[i.priority] ?? "neutral"}`}>
-                    {PRIORITY_LABEL[i.priority] ?? i.priority}
-                  </span>
-                )}
-              </div>
-            </div>
-            <PhotoStrip photos={photosById.get(i.id) ?? []} label={i.title} />
-          </Link>
-        ))
-      )}
+      <PunchListView items={viewItems} />
 
       <Link
         href="/m/snags/new"

@@ -1,9 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { NormalizedList, ListRow, RecordDetail, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, ListRow, RecordDetail, KIcon, type FieldDef, type RecordAction } from "@/components/mobile/kit";
+import { useToast } from "@/lib/hooks/useToast";
 import type { ProjectTask } from "@/lib/mobile/project-xpms";
+import { setTaskState, reassignTask, archiveTask, type State } from "../actions";
+
+const TASK_STATES = ["Open", "In progress", "Blocked", "Done"] as const;
 
 /**
  * Project Tasks — the XPMS SSOT field task dataset (all crew). One schema
@@ -46,6 +51,77 @@ function StatusChip({ status }: { status: string }) {
 
 export function ProjectTasksView({ items, canManage }: { items: ProjectTask[]; canManage: boolean }) {
   const [detail, setDetail] = useState<ProjectTask | null>(null);
+  const [reassignOpen, setReassignOpen] = useState(false);
+  const [reassignTo, setReassignTo] = useState("");
+  const [pending, startTx] = useTransition();
+  const router = useRouter();
+  const toast = useToast();
+
+  const fd = (o: Record<string, string>) => {
+    const f = new FormData();
+    for (const [k, v] of Object.entries(o)) f.set(k, v);
+    return f;
+  };
+  const run = (action: (p: State, f: FormData) => Promise<State>, payload: Record<string, string>, closeDetail?: boolean) => {
+    startTx(async () => {
+      const res = await action(null, fd(payload));
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+      setReassignOpen(false);
+      if (closeDetail) setDetail(null);
+      router.refresh();
+    });
+  };
+
+  const detailActions = (x: ProjectTask): RecordAction[] => {
+    if (!canManage) return [];
+    const moves = TASK_STATES.filter((s) => s !== x.status).map((s) => ({
+      label: `Mark ${s}`,
+      icon: s === "Done" ? "Check" : s === "Blocked" ? "Ban" : "ArrowRight",
+      primary: s === "Done",
+      on: () => run(setTaskState, { id: x.id, state: s }),
+    }));
+    return [
+      ...moves,
+      { label: "Archive Task", icon: "Archive", danger: true, confirmText: "Archive this task? It leaves the active list.", on: () => run(archiveTask, { id: x.id }, true) },
+    ];
+  };
+
+  const reassignSection = (x: ProjectTask) =>
+    !canManage
+      ? []
+      : [
+          {
+            h: "Assignee",
+            action: { label: reassignOpen ? "Cancel" : "Reassign", on: () => { setReassignOpen((o) => !o); setReassignTo(x.assignee ?? ""); } },
+            node: reassignOpen ? (
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <input
+                  className="ps-input"
+                  value={reassignTo}
+                  onChange={(e) => setReassignTo(e.target.value)}
+                  placeholder="Assignee name…"
+                  style={{ flex: 1 }}
+                  aria-label="Assignee name"
+                />
+                <button
+                  type="button"
+                  className="ps-btn ps-btn--cta"
+                  disabled={pending}
+                  onClick={() => run(reassignTask, { id: x.id, assignee: reassignTo })}
+                  style={{ flex: "none", justifyContent: "center" }}
+                >
+                  <KIcon name="Check" size={15} /> Save
+                </button>
+              </div>
+            ) : (
+              <div className="s" style={{ color: "var(--p-text-3)" }}>{x.assignee ?? "Unassigned"}</div>
+            ),
+          },
+        ];
+
   const row = (x: ProjectTask, compact?: boolean) => (
     <ListRow
       key={x.id}
@@ -94,7 +170,9 @@ export function ProjectTasksView({ items, canManage }: { items: ProjectTask[]; c
             { k: "Due", v: detail.due ?? "—" },
             ...(detail.sub ? [{ k: "Notes", v: detail.sub, full: true }] : []),
           ]}
-          onClose={() => setDetail(null)}
+          sections={reassignSection(detail)}
+          actions={detailActions(detail)}
+          onClose={() => { setDetail(null); setReassignOpen(false); }}
         />
       )}
     </div>

@@ -1,9 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { NormalizedList, ListRow, RecordDetail, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, ListRow, RecordDetail, type FieldDef, type RecordAction } from "@/components/mobile/kit";
+import { useToast } from "@/lib/hooks/useToast";
 import type { ProjectMilestone } from "@/lib/mobile/project-xpms";
+import { setMilestoneState, type State } from "../actions";
+
+const MILESTONE_STATES = ["Upcoming", "On Track", "At Risk", "Done"] as const;
 
 /**
  * Milestones — deliverables that roll up to each field phase (Advance →
@@ -32,6 +37,30 @@ function StatusChip({ status }: { status: string }) {
 
 export function ProjectMilestonesView({ items, canManage }: { items: ProjectMilestone[]; canManage: boolean }) {
   const [detail, setDetail] = useState<ProjectMilestone | null>(null);
+  const [, startTx] = useTransition();
+  const router = useRouter();
+  const toast = useToast();
+
+  const setState = (x: ProjectMilestone, state: string) => {
+    const f = new FormData();
+    f.set("id", x.id);
+    f.set("state", state);
+    startTx(async () => {
+      const res: State = await setMilestoneState(null, f);
+      if (res?.error) toast.error(res.error);
+      else router.refresh();
+    });
+  };
+  const detailActions = (x: ProjectMilestone): RecordAction[] =>
+    !canManage
+      ? []
+      : MILESTONE_STATES.filter((s) => s !== x.status).map((s) => ({
+          label: `Mark ${s}`,
+          icon: s === "Done" ? "Check" : s === "At Risk" ? "TriangleAlert" : "ArrowRight",
+          primary: s === "Done",
+          on: () => setState(x, s),
+        }));
+
   const row = (x: ProjectMilestone) => (
     <ListRow key={x.id} icon="Flag" title={x.title} sub={`${x.phase} · ${x.milestone_date} · ${x.owner ?? "—"}`} right={<StatusChip status={x.status} />} onClick={() => setDetail(x)} />
   );
@@ -63,6 +92,7 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
             { k: "Date", v: detail.milestone_date },
             { k: "Owner", v: detail.owner ?? "—" },
           ]}
+          actions={detailActions(detail)}
           onClose={() => setDetail(null)}
         />
       )}

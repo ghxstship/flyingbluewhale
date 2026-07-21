@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { NormalizedList, ListRow, RecordDetail, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, ListRow, RecordDetail, type FieldDef, type RecordAction } from "@/components/mobile/kit";
+import { useToast } from "@/lib/hooks/useToast";
 import type { ProjectEvent } from "@/lib/mobile/project-xpms";
+import { setEventState, type State } from "../actions";
+
+const EVENT_STATES = ["Scheduled", "Upcoming", "Done"] as const;
 
 /**
  * Project Calendar — XPMS-keyed events (the field slice of the ATLVS unified
@@ -34,6 +39,30 @@ function StatusChip({ status }: { status: string }) {
 
 export function ProjectCalendarView({ items, canManage }: { items: ProjectEvent[]; canManage: boolean }) {
   const [detail, setDetail] = useState<ProjectEvent | null>(null);
+  const [, startTx] = useTransition();
+  const router = useRouter();
+  const toast = useToast();
+
+  const setState = (x: ProjectEvent, state: string) => {
+    const f = new FormData();
+    f.set("id", x.id);
+    f.set("state", state);
+    startTx(async () => {
+      const res: State = await setEventState(null, f);
+      if (res?.error) toast.error(res.error);
+      else router.refresh();
+    });
+  };
+  const detailActions = (x: ProjectEvent): RecordAction[] =>
+    !canManage
+      ? []
+      : EVENT_STATES.filter((s) => s !== x.status).map((s) => ({
+          label: `Mark ${s}`,
+          icon: s === "Done" ? "Check" : "ArrowRight",
+          primary: s === "Done",
+          on: () => setState(x, s),
+        }));
+
   const row = (x: ProjectEvent, compact?: boolean) => (
     <ListRow
       key={x.id}
@@ -75,6 +104,7 @@ export function ProjectCalendarView({ items, canManage }: { items: ProjectEvent[
             { k: "Owner", v: detail.owner ?? "—" },
             ...(detail.sub ? [{ k: "Notes", v: detail.sub, full: true }] : []),
           ]}
+          actions={detailActions(detail)}
           onClose={() => setDetail(null)}
         />
       )}

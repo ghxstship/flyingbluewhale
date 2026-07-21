@@ -47,18 +47,21 @@ fields, never status (repo canon):
 `connections` (My Network) left as-is — bespoke 3-section view with its own search;
 maps poorly to a single NormalizedList, low value.
 
-## ✅ Marketplace edit — DONE · ▢ buyer-DM remains
+## ✅ Marketplace CRUD — DONE (edit + buyer contact)
 
-- **Edit listing** — `updateListing` added (case-tolerant condition parse; photos
-  only replaced when re-attached; category left untouched since the form doesn't
-  collect it; `.is("deleted_at", null)` guard). "Edit" action on `isMine` in the
+- **Edit listing** — `updateListing` (case-tolerant condition parse; photos only
+  replaced when re-attached; category left untouched since the form doesn't collect
+  it; `.is("deleted_at", null)` guard). "Edit" action on `isMine` in the
   RecordDetail opens the `listing` form pre-filled.
-- **▢ Buyer → seller contact** — the one remaining item. Needs `seller_user_id`
-  threaded + a `contactSeller` action that opens a `chat_rooms` DM. **Blocked on an
-  RLS decision**: the chat_room_members INSERT policy (hardened, ADR-0008 Am.5)
-  forbids self-service member-adds, so a buyer can't add the seller to a new room
-  without a deliberate "marketplace contact" RLS path or a service-role bootstrap.
-  Deliberately NOT shipped as a fake button until that path exists.
+- **Buyer → seller contact** — `contactSeller(listingId)`: resolves the seller
+  server-side from the listing (never trusted from the client), then reuses the
+  existing `findOrCreateDirectRoom` helper — the SAME one `/m/inbox`'s New DM uses,
+  which creates the 2-party room under the **creator-bootstrap** RLS path the
+  hardened `chat_room_members` policy already permits (no RLS change needed; the
+  earlier "blocked" read was over-cautious — the buyer is the room creator, both
+  parties are in the same org, and listings are org-scoped). A "Message Seller"
+  action on non-own listings opens/reuses the DM and navigates to
+  `/m/inbox/[roomId]`; the buyer writes the first message, so nothing is fabricated.
 
 ## Notes
 

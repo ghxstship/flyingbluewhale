@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { filesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
+import { findOrCreateDirectRoom } from "@/lib/db/chat-rooms";
 
 export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
 
@@ -195,4 +196,33 @@ export async function withdrawListing(_prev: State, fd: FormData): Promise<State
 
   revalidatePath("/m/market");
   return null;
+}
+
+/**
+ * Open (or reuse) a direct thread with a listing's seller so a buyer can ask
+ * about it in-app. The seller is resolved server-side from the listing (never
+ * trusted from the client), and `findOrCreateDirectRoom` — the same helper the
+ * inbox's New DM uses — creates the 2-party room under the creator-bootstrap RLS
+ * path (both parties are members of the same org; listings are org-scoped). The
+ * buyer writes the first message in the thread, so no message is fabricated on
+ * their behalf. Returns the room id for the caller to navigate to.
+ */
+export async function contactSeller(listingId: string): Promise<{ error?: string; roomId?: string }> {
+  const session = await requireSession();
+  if (!listingId) return { error: "Invalid request." };
+
+  const supabase = await createClient();
+  const { data: listing } = await supabase
+    .from("marketplace_listings")
+    .select("seller_user_id")
+    .eq("id", listingId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!listing) return { error: "That listing is no longer available." };
+
+  const sellerId = (listing as { seller_user_id: string }).seller_user_id;
+  if (sellerId === session.userId) return { error: "That's your own listing." };
+
+  const res = await findOrCreateDirectRoom(supabase, session, sellerId);
+  return "error" in res ? { error: res.error } : { roomId: res.roomId };
 }

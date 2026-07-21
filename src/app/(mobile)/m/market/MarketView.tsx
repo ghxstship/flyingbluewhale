@@ -8,7 +8,7 @@ import { PhotoStrip, type StripPhoto } from "@/components/media/PhotoStrip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
 import { toFormData } from "@/lib/mobile/form-data";
-import { createListing, updateListing, markSold, withdrawListing } from "./actions";
+import { createListing, updateListing, markSold, withdrawListing, contactSeller } from "./actions";
 
 /** Page condition labels ("Like New"/"For Parts") → the kit `listing` form's
  *  select options ("Like new"/"For parts") so an edit pre-selects correctly. */
@@ -348,7 +348,23 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
                   { label: labels.markSold, icon: "CheckCircle2", on: () => { act(markSold, detail.id); setDetail(null); } },
                   { label: labels.withdraw, icon: "Archive", on: () => { act(withdrawListing, detail.id); setDetail(null); } },
                 ]
-              : []
+              : [
+                  {
+                    label: t("m.market.contact", undefined, "Message Seller"),
+                    icon: "MessageCircle",
+                    primary: true,
+                    on: () => {
+                      const id = detail.id;
+                      setError(null);
+                      startTx(async () => {
+                        const res = await contactSeller(id);
+                        if (res.error) { setError(res.error); return; }
+                        setDetail(null);
+                        if (res.roomId) router.push(`/m/inbox/${res.roomId}`);
+                      });
+                    },
+                  },
+                ]
           }
           onClose={() => setDetail(null)}
         />

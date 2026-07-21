@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { KIcon, QR } from "@/components/mobile/kit";
+import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   requestPermission,
@@ -498,8 +499,14 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             </button>
             <p className="muted" style={{ marginTop: 18 }}>
               {t("m.onboarding.splash.terms", undefined, "By continuing you agree to the")}{" "}
-              <span className="link">{t("m.onboarding.splash.termsLink", undefined, "Terms")}</span> &{" "}
-              <span className="link">{t("m.onboarding.splash.privacyLink", undefined, "Privacy Policy")}</span>.
+              <a className="link" href={urlFor("marketing", "/legal/terms")} target="_blank" rel="noreferrer">
+                {t("m.onboarding.splash.termsLink", undefined, "Terms")}
+              </a>{" "}
+              &{" "}
+              <a className="link" href={urlFor("marketing", "/legal/privacy")} target="_blank" rel="noreferrer">
+                {t("m.onboarding.splash.privacyLink", undefined, "Privacy Policy")}
+              </a>
+              .
             </p>
           </div>
         );
@@ -997,7 +1004,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                   </span>
                   <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.7)" }}>0042 · RT4471</div>
                   <div style={{ fontSize: 10.5, color: "rgba(255,255,255,.45)", textAlign: "center" }}>
-                    {t("m.onboarding.pass.scanNote", undefined, "Scan to verify · single-use, refreshes on open")}
+                    {t("m.onboarding.pass.scanNote", undefined, "Preview · your live gate pass appears here once a credential is issued")}
                   </div>
                 </div>
               )}

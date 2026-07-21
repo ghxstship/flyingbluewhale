@@ -684,7 +684,15 @@ export function ShareSheet({ title, onClose }: { title: string; onClose: () => v
           <div className="sech">
             <h2>Print</h2>
           </div>
-          <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ width: "100%", justifyContent: "center" }} onClick={onClose}>
+          <button
+            type="button"
+            className="ps-btn ps-btn--secondary ps-btn--lg"
+            style={{ width: "100%", justifyContent: "center" }}
+            onClick={() => {
+              onClose();
+              window.print();
+            }}
+          >
             <KIcon name="Printer" size={15} /> Print Current View
           </button>
         </div>

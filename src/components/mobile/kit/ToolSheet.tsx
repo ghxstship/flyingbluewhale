@@ -348,6 +348,9 @@ export function ToolSheet({ toolId, onClose, toast }: { toolId: string; onClose:
         {toolId === "osha" && <OshaTool toast={toast} />}
         {toolId === "weather" && (
           <div>
+            <div className="hint" style={{ marginBottom: 10 }}>
+              Sample conditions · connect a weather source for live venue data.
+            </div>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <KIcon name="Sun" size={40} style={{ color: "var(--p-warning)" }} />
               <div><div style={{ fontFamily: "var(--p-heading)", fontSize: 40, lineHeight: 1 }}>82°</div><div className="s">Clear · feels 85°</div></div>
@@ -372,9 +375,9 @@ export function ToolSheet({ toolId, onClose, toast }: { toolId: string; onClose:
         )}
         {toolId === "radio" && (
           <>
-            <div className="hint" style={{ marginBottom: 10 }}>Zone 1 · {CHANNELS.length} channels · you&apos;re on Ch 4</div>
+            <div className="hint" style={{ marginBottom: 10 }}>Radio channel plan · {CHANNELS.length} channels</div>
             {CHANNELS.map(([ch, label]) => (
-              <div className="item" key={ch} style={{ borderColor: ch === "4" ? "var(--p-accent)" : undefined }}><span className="tool-code">CH {ch}</span><div><div className="t">{label}</div></div>{ch === "4" && <><span className="sp" /><span className="ps-badge ps-badge--ok">Yours</span></>}</div>
+              <div className="item" key={ch}><span className="tool-code">CH {ch}</span><div><div className="t">{label}</div></div></div>
             ))}
           </>
         )}

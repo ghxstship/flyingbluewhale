@@ -59,3 +59,27 @@
 - The codebase is **exceptionally clean** — the guards (`capture-honesty`, `self-sufficiency-manifest`, voice/type/spacing/soft-delete CI tests) actively enforce anti-fabrication, and no machine-checkable antipattern survives.
 - The dominant real theme is **`ops-seed.ts` mock-as-real** (documented roadmap, ~9 surfaces) and a handful of **genuine persist-nothing stubs** (P0.2, P1 ShareSheet/ToolSheet/templates/finance) that *look* functional but write nothing — those, plus the **notification-matrix key mismatch (P0.1)**, are the highest-value remediations.
 - Per-source counts: ~91 findings (0 machine-sweep; ~30 antipattern, ~22 3NF/SSOT, ~24 stub, remainder cosmetic). Full per-file detail in the 10 auditor transcripts.
+
+---
+
+## Remediation status (2026-07-21)
+
+Fixed + validated (tsc 0 · full vitest 1772/1772), across 4 commits:
+
+**All genuine functional defects + fabricated-data surfaces:**
+- ✅ **P0.1** Notification preferences re-keyed by real `PushKind` (toggles now gate push).
+- ✅ **P0.2** Manager Time Sheets: real `timesheets` read + the shared `decideTimesheet` FSM (approve/flag) + real CSV export — no more seed/local-Map/fake-toast.
+- ✅ **P0.3** Daily Report: real today's `shift_notes` + real open-incident count — no fabricated safety data.
+- ✅ KIcon Bluetooth/Infinity/DollarSign registered (were degrading to HelpCircle).
+- ✅ SSOT: AdvancesView → `catalog-kinds` SSOT; connections dead-dup query removed; notifications → `fmt.relative`.
+- ✅ Dead affordances: feed Comment/Share removed; referrals Share → `navigator.share`; FinanceSync honest.
+- ✅ Antipatterns: mileage `#418` date; scheduler money → `fmt.money`; ShareSheet Print → real `window.print()`.
+- ✅ Fabrication tells: ToolSheet weather flagged sample, radio drops fake "you're on Ch 4"; onboarding dead Terms/Privacy → real `/legal/*` anchors, pass-QR caption no longer claims false single-use rotation.
+- ✅ ~8 UI em-dashes → middot/periods.
+
+**Remaining — scoped feature-builds, not quick fixes (documented kit roadmap):**
+- **`ops-seed.ts` ledgers (8 surfaces)** — Reports/Inspections/Logistics/Docks/Gate/Delivery/Travel/Permits render seed rows. Real fix = 8 backing tables + resolvers + seed (a feature comparable to the reports/documents systems); emptying them instead would break the kit-34 e2e (which asserts rows). Documented ("render the seed VERBATIM until backing tables land").
+- **forms.ts demo selects** (swap/access/message/handover/reassign/invite) — need real org-scoped option injection at mount (like cost-code fields).
+- **ShareSheet Export/Advanced** — real export needs the view's data threaded through every caller + an export/share-token backend.
+- **onboarding `DEMO_OFFER`** — the null-offer path needs an empty-state restructure. **Aurora** canned responses — pending the heybrio agent runtime.
+- **Cosmetic** (sub-11px fonts, off-grid px, non-token bespoke card gradients, i18n label gaps) — prototype-fidelity choices, not test-failing; changing font/spacing blindly risks visual regressions, so deferred to a browser-verified pass.

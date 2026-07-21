@@ -4,26 +4,31 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { CATEGORIES, CHANNELS } from "./constants";
+import { NOTIF_ROWS, NOTIF_ROW_LABELS, CHANNELS } from "./constants";
 
 export type State = { error?: string; ok?: true } | null;
 
 const Toggle = z.object({
-  category: z.enum(CATEGORIES),
+  row: z.enum(NOTIF_ROW_LABELS),
   channel: z.enum(CHANNELS),
   on: z.enum(["0", "1"]),
 });
 
 /**
- * Persist a single matrix cell toggle into `notification_preferences.matrix`
- * (jsonb keyed `matrix[category][channel] = boolean`). One cell per call keeps
- * the optimistic UI simple and avoids clobbering concurrent edits.
+ * Persist a matrix-row toggle into `notification_preferences.matrix`, keyed by
+ * canonical `PushKind` (jsonb `matrix[kind][channel] = boolean`) — the exact
+ * shape `src/lib/push/send.ts` reads to gate delivery. One toggle writes every
+ * kind the display row owns (e.g. "Shifts" → shift + shift_swap), so the switch
+ * actually silences push, not just a dead title-case bucket.
  */
 export async function toggleNotifPref(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Toggle.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid toggle." };
-  const { category, channel, on } = parsed.data;
+  const { row, channel, on } = parsed.data;
+  const kinds = NOTIF_ROWS.find((r) => r.label === row)?.kinds ?? [];
+  if (kinds.length === 0) return { error: "Unknown preference." };
+  const value = on === "1";
 
   const supabase = await createClient();
   const { data: existing } = await supabase
@@ -32,12 +37,11 @@ export async function toggleNotifPref(_prev: State, fd: FormData): Promise<State
     .eq("user_id", session.userId)
     .maybeSingle();
 
-  const matrix =
-    ((existing?.matrix as Record<string, Record<string, boolean>> | null) ?? {}) ;
-  const nextMatrix = {
-    ...matrix,
-    [category]: { ...(matrix[category] ?? {}), [channel]: on === "1" },
-  };
+  const matrix = (existing?.matrix as Record<string, Record<string, boolean>> | null) ?? {};
+  const nextMatrix = { ...matrix };
+  for (const kind of kinds) {
+    nextMatrix[kind] = { ...(matrix[kind] ?? {}), [channel]: value };
+  }
 
   const { error } = await (
     supabase.from("notification_preferences") as unknown as {

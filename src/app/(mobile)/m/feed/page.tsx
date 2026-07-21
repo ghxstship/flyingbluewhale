@@ -172,7 +172,7 @@ export default async function MobileFeedPage() {
         who: name,
         av: initials(u?.name ?? null, u?.email ?? "AN"),
         role: announcerLabel,
-        body: a.title + (a.body ? ` — ${a.body}` : ""),
+        body: a.title + (a.body ? ` · ${a.body}` : ""),
         tag: updateLabel,
         tagTone: "info",
         when: t("m.feed.ago", { time: relativeTime(at) }, `${relativeTime(at)} ago`),

@@ -223,12 +223,6 @@ export function FeedView({
                 >
                   <KIcon name="ThumbsUp" size={15} /> {likeCount(p)}
                 </button>
-                <button type="button" className="pa" aria-label={t("m.feed.comment", undefined, "Comment")}>
-                  <KIcon name="MessageCircle" size={15} /> 0
-                </button>
-                <button type="button" className="pa" aria-label={t("m.feed.share", undefined, "Share")}>
-                  <KIcon name="Share2" size={15} />
-                </button>
               </div>
             </div>
           );

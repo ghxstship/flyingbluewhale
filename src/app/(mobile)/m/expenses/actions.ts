@@ -138,7 +138,7 @@ export async function fileExpense(_prev: State, fd: FormData): Promise<State> {
     submitter_id: session.userId,
     // The kit form has no free-text "what" — the merchant IS the what, and
     // notes are the context finance asked for.
-    description: v.notes ? `${v.merchant} — ${v.notes}` : v.merchant,
+    description: v.notes ? `${v.merchant} · ${v.notes}` : v.merchant,
     amount_cents: cents,
     category_code: categoryCode,
     // Cost coding (kit 32 v2.8): a picked cost center lands in `department`

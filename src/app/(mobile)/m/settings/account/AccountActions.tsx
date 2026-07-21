@@ -39,7 +39,7 @@ export function AccountActions({
         {t(
           "m.account.pause.intro",
           undefined,
-          "Stepping away for a bit? Pausing hides you from scheduling and rosters and mutes notifications. Your Rose, history and connections stay intact — reactivate anytime.",
+          "Stepping away for a bit? Pausing hides you from scheduling and rosters and mutes notifications. Your Rose, history and connections stay intact. Reactivate anytime.",
         )}
       </p>
       <div className="item" style={{ display: "block" }}>
@@ -122,7 +122,7 @@ export function AccountActions({
         {t(
           "m.account.delete.intro",
           undefined,
-          "Deletes your account: your profile is anonymized and all access is revoked immediately. You can restore it by signing back in within 30 days — after that it's permanent.",
+          "Deletes your account: your profile is anonymized and all access is revoked immediately. You can restore it by signing back in within 30 days. After that it's permanent.",
         )}
       </p>
       <div

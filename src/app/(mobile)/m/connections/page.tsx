@@ -92,21 +92,14 @@ export default async function ConnectionsPage() {
   // Any user id already in a connection row (any state) is excluded from suggestions.
   const linkedIds = new Set<string>(counterpartIds);
 
-  // 3. Suggestions: org crew + workforce who have a platform user_id I'm not linked to.
-  const [{ data: crew }, { data: workforce }] = await Promise.all([
-    supabase
-      .from("crew_members")
-      .select("user_id, name, role, certifications")
-      .eq("org_id", session.orgId)
-      .not("user_id", "is", null)
-      .limit(80),
-    supabase
-      .from("crew_members")
-      .select("user_id, full_name:name, role")
-      .eq("org_id", session.orgId)
-      .not("user_id", "is", null)
-      .limit(80),
-  ]);
+  // 3. Suggestions: org crew who have a platform user_id I'm not linked to.
+  // (crew_members absorbed the old workforce table per ADR-0015, so one read.)
+  const { data: crew } = await supabase
+    .from("crew_members")
+    .select("user_id, name, role, certifications")
+    .eq("org_id", session.orgId)
+    .not("user_id", "is", null)
+    .limit(80);
 
   const suggestionMap = new Map<string, Suggestion>();
   for (const c of crew ?? []) {
@@ -119,17 +112,6 @@ export default async function ConnectionsPage() {
       av: initials(c.name ?? "?"),
       role: c.role ?? t("m.connections.crew", undefined, "Crew"),
       tags: certs.slice(0, 4),
-    });
-  }
-  for (const w of workforce ?? []) {
-    const uid = w.user_id as string | null;
-    if (!uid || uid === session.userId || linkedIds.has(uid) || suggestionMap.has(uid)) continue;
-    suggestionMap.set(uid, {
-      userId: uid,
-      name: w.full_name ?? t("m.connections.unnamed", undefined, "Member"),
-      av: initials(w.full_name ?? "?"),
-      role: w.role ?? t("m.connections.crew", undefined, "Crew"),
-      tags: [],
     });
   }
   const suggestions = [...suggestionMap.values()].sort((a, b) => a.name.localeCompare(b.name));

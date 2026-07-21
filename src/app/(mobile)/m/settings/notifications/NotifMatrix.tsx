@@ -40,7 +40,7 @@ export function NotifMatrix({
     setState((s) => ({ ...s, [cat]: { ...(s[cat] ?? {}), [ch]: next } }));
     startTransition(async () => {
       const fd = new FormData();
-      fd.set("category", cat);
+      fd.set("row", cat);
       fd.set("channel", ch);
       fd.set("on", next ? "1" : "0");
       const res = await toggleNotifPref(null, fd);

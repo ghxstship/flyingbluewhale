@@ -1,11 +1,11 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { KIcon } from "@/components/mobile/kit";
 import { NotifMatrix, type MatrixState } from "./NotifMatrix";
-import { CATEGORIES, CHANNELS } from "./constants";
+import { NOTIF_ROWS, CHANNELS } from "./constants";
 
 export const dynamic = "force-dynamic";
 
@@ -19,20 +19,9 @@ export const dynamic = "force-dynamic";
  * Design truth: prototype settings notif-matrix (app.jsx 3306-3704).
  */
 
-function relativeTime(iso: string): string {
-  const ms = Date.now() - new Date(iso).getTime();
-  const min = Math.floor(ms / 60_000);
-  if (min < 1) return "now";
-  if (min < 60) return `${min}m`;
-  const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h`;
-  const day = Math.floor(hr / 24);
-  if (day < 7) return `${day}d`;
-  return `${Math.floor(day / 7)}w`;
-}
-
 export default async function MobileNotificationsPage() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <div className="screen screen-anim">
@@ -62,16 +51,21 @@ export default async function MobileNotificationsPage() {
       .limit(20),
   ]);
 
-  // Seed the matrix UI with the persisted prefs, defaulting any missing cell
-  // to a sensible on/off (push on, email/text off) so the grid is never empty.
+  // Seed the matrix UI from the persisted prefs, keyed by canonical PushKind.
+  // A display row is ON for a channel unless one of the kinds it owns is
+  // explicitly off; missing cells default to push-on, email/text-off.
   const stored = (prefs?.matrix as Record<string, Record<string, boolean>> | null) ?? {};
   const initial: MatrixState = {};
-  for (const cat of CATEGORIES) {
-    initial[cat] = {};
+  for (const r of NOTIF_ROWS) {
+    const cells: Record<string, boolean> = {};
     for (const ch of CHANNELS) {
-      initial[cat][ch] = stored[cat]?.[ch] ?? ch === "push";
+      const anyStored = r.kinds.some((k) => stored[k]?.[ch] !== undefined);
+      const anyOff = r.kinds.some((k) => stored[k]?.[ch] === false);
+      cells[ch] = anyStored ? !anyOff : ch === "push";
     }
+    initial[r.label] = cells;
   }
+  const rowLabels = NOTIF_ROWS.map((r) => r.label);
 
   type NotifRow = {
     id: string;
@@ -100,7 +94,7 @@ export default async function MobileNotificationsPage() {
         {t("m.settings.notifications.title", undefined, "Notification Preferences")}
       </h1>
 
-      <NotifMatrix categories={CATEGORIES} channels={CHANNELS} initial={initial} labels={labels} />
+      <NotifMatrix categories={rowLabels} channels={CHANNELS} initial={initial} labels={labels} />
 
       <div className="sech">
         <h2>{t("m.notifications.recentHeading", undefined, "Recent")}</h2>
@@ -126,7 +120,7 @@ export default async function MobileNotificationsPage() {
               <div className="s">{n.body || toTitle(n.kind)}</div>
             </div>
             <span className="sp" />
-            <span className="time">{relativeTime(n.created_at)}</span>
+            <span className="time">{fmt.relative(n.created_at, { compact: true })}</span>
           </div>
         ))
       )}

@@ -143,7 +143,7 @@ export default async function ReferralsPage({
         </div>
       )}
 
-      <ReferralInvite shareLabel={t("m.referrals.share", undefined, "Share")} autoOpen={!!jobContext} />
+      <ReferralInvite shareLabel={t("m.referrals.share", undefined, "Share")} shareUrl={link} autoOpen={!!jobContext} />
 
       <div className="sech">
         <h2>{t("m.referrals.how", undefined, "How It Works")}</h2>
@@ -177,7 +177,7 @@ export default async function ReferralsPage({
           description={t(
             "m.referrals.emptyBody",
             undefined,
-            "Share your code — referrals and rewards show up here.",
+            "Share your code. Referrals and rewards show up here.",
           )}
         />
       ) : (

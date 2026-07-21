@@ -18,15 +18,15 @@ export function FinanceSyncButton() {
         className="ps-btn ps-btn--secondary ps-btn--lg"
         style={{ width: "100%", justifyContent: "center" }}
         onClick={() =>
-          toast.success("Synced To Accounting/ERP", {
-            description: "Committed budget + actuals pushed to your ledger",
+          toast.info("Accounting Sync Not Connected", {
+            description: "Committed budget + actuals are ready to hand off. Connect an accounting/ERP integration to enable auto-sync.",
           })
         }
       >
         <KIcon name="RefreshCw" size={16} /> Sync → Accounting/ERP
       </button>
       <p className="hint" style={{ marginTop: 8 }}>
-        COMPVSS syncs committed budget + actuals to your accounting/ERP system — it doesn&apos;t run AP/AR or the general
+        COMPVSS hands committed budget + actuals to your accounting/ERP system. It doesn&apos;t run AP/AR or the general
         ledger.
       </p>
     </div>

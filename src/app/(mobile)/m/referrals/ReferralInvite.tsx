@@ -4,15 +4,44 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Send, UserPlus } from "lucide-react";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
 import { sendReferralInvite } from "./actions";
 
 /**
- * Inline referral invite composer. Opens on the "Invite" CTA, posts the
- * contact to `sendReferralInvite`, and refreshes the list on success.
+ * Inline referral invite composer. "Share" fires the native share sheet (or
+ * copies the referral link as a fallback); "Invite" opens the composer, posts
+ * the contact to `sendReferralInvite`, and refreshes the list on success.
  */
-export function ReferralInvite({ shareLabel, autoOpen = false }: { shareLabel: string; autoOpen?: boolean }) {
+export function ReferralInvite({
+  shareLabel,
+  shareUrl,
+  autoOpen = false,
+}: {
+  shareLabel: string;
+  shareUrl: string;
+  autoOpen?: boolean;
+}) {
   const t = useT();
   const router = useRouter();
+  const toast = useToast();
+
+  const share = async () => {
+    const shareText = t("m.referrals.shareText", undefined, "Join me on ATLVS");
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: "ATLVS", text: shareText, url: shareUrl });
+      } catch {
+        // User cancelled or the sheet is unavailable — no-op.
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success(t("m.referrals.linkCopied", undefined, "Link Copied"));
+    } catch {
+      toast.error(t("m.referrals.shareFailed", undefined, "Couldn't copy the link"));
+    }
+  };
   // Kit 32 A4 — Job Share deep-links here (?job=…), so the composer opens ready.
   const [open, setOpen] = useState(autoOpen);
   const [contact, setContact] = useState("");
@@ -39,7 +68,12 @@ export function ReferralInvite({ shareLabel, autoOpen = false }: { shareLabel: s
   return (
     <>
       <div style={{ display: "flex", gap: 10, margin: "2px 0 6px" }}>
-        <button type="button" className="ps-btn ps-btn--cta" style={{ flex: 1, justifyContent: "center" }}>
+        <button
+          type="button"
+          className="ps-btn ps-btn--cta"
+          style={{ flex: 1, justifyContent: "center" }}
+          onClick={share}
+        >
           <Send size={16} /> {shareLabel}
         </button>
         <button

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/catalog-kinds";
 
 export type AdvanceRow = {
   id: string;
@@ -15,21 +16,9 @@ export type AdvanceRow = {
   project: string | null;
 };
 
-// Local label/tone maps — the canonical tuples live in the server-only
-// `@/lib/db/assignments`, which can't be imported into a client component.
-const KIND_LABEL: Record<string, string> = {
-  ticket: "Ticket",
-  credential: "Credential",
-  catering: "Catering",
-  radio: "Radio",
-  tool: "Tool",
-  equipment: "Equipment",
-  uniform: "Uniform",
-  travel: "Travel",
-  lodging: "Lodging",
-  vehicle: "Vehicle",
-  labor: "Labor",
-};
+// Kind labels read from the client-safe catalog-kinds SSOT (never re-declared —
+// a local copy drifted here before). The icon/tone maps stay local (presentation).
+const kindLabel = (k: string): string => CATALOG_KIND_LABEL_SINGULAR[k as CatalogKind] ?? k;
 
 const KIND_ICON: Record<string, string> = {
   ticket: "Ticket",
@@ -104,7 +93,7 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
     };
   }, []);
 
-  const kindLabels = useMemo(() => [...new Set(rows.map((r) => KIND_LABEL[r.catalogKind] ?? r.catalogKind))], [rows]);
+  const kindLabels = useMemo(() => [...new Set(rows.map((r) => kindLabel(r.catalogKind)))], [rows]);
   const stateInfo = useMemo(() => {
     const states = [...new Set(rows.map((r) => r.fulfillmentState))];
     const order = states.map(stateLabel);
@@ -114,8 +103,8 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
   }, [rows]);
 
   const FIELDS: FieldDef<AdvanceRow>[] = [
-    { id: "title", label: t("m.advances.sort.title", undefined, "Name"), type: "text", get: (r) => r.title ?? KIND_LABEL[r.catalogKind] ?? r.catalogKind },
-    { id: "kind", label: t("m.advances.group.kind", undefined, "Type"), type: "select", options: kindLabels, get: (r) => KIND_LABEL[r.catalogKind] ?? r.catalogKind },
+    { id: "title", label: t("m.advances.sort.title", undefined, "Name"), type: "text", get: (r) => r.title ?? kindLabel(r.catalogKind) },
+    { id: "kind", label: t("m.advances.group.kind", undefined, "Type"), type: "select", options: kindLabels, get: (r) => kindLabel(r.catalogKind) },
     { id: "state", label: "Status", type: "select", options: stateInfo.order, get: (r) => stateLabel(r.fulfillmentState) },
     { id: "deadline", label: t("m.advances.sort.deadline", undefined, "Due"), type: "text", get: (r) => r.deadline ?? "" },
     { id: "project", label: "Project", type: "text", get: (r) => r.project ?? "" },
@@ -139,9 +128,9 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
       <span className="bar" style={{ background: toneVar(STATE_TONE[r.fulfillmentState]) }} />
       <KIcon name={KIND_ICON[r.catalogKind] ?? "Package"} size={18} style={{ color: "var(--p-text-2)", flex: "none" }} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div className="t">{r.title ?? KIND_LABEL[r.catalogKind] ?? r.catalogKind}</div>
+        <div className="t">{r.title ?? kindLabel(r.catalogKind)}</div>
         <div className="s">
-          {KIND_LABEL[r.catalogKind] ?? r.catalogKind}
+          {kindLabel(r.catalogKind)}
           {r.project ? ` · ${r.project}` : ""}
         </div>
       </div>
@@ -167,7 +156,7 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
       k="adv"
       items={rows}
       fields={FIELDS}
-      search={(r) => `${r.title ?? ""} ${KIND_LABEL[r.catalogKind] ?? r.catalogKind} ${r.project ?? ""}`}
+      search={(r) => `${r.title ?? ""} ${kindLabel(r.catalogKind)} ${r.project ?? ""}`}
       searchPlaceholder={t("m.advances.search", undefined, "Search Advances…")}
       renderRow={row}
       onRow={(r) => router.push(`/m/advances/${r.id}`)}
@@ -175,7 +164,7 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
       statusField="state"
       statusOrder={stateInfo.order}
       boardTone={stateInfo.tones}
-      pill={{ get: (r) => KIND_LABEL[r.catalogKind] ?? r.catalogKind, order: kindLabels }}
+      pill={{ get: (r) => kindLabel(r.catalogKind), order: kindLabels }}
       empty={{
         cols: ["Name", "Type", "Status"],
         title: t("m.advances.empty.title", undefined, "No Advances"),

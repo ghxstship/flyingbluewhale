@@ -2,12 +2,12 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ActionBar, Fab, FormScreen, KIcon, TogRow, type FormDef } from "@/components/mobile/kit";
+import { ActionBar, Fab, FormScreen, KIcon, RecordDetail, TogRow, type FormDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PhotoStrip, type StripPhoto } from "@/components/media/PhotoStrip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
 import { toFormData } from "@/lib/mobile/form-data";
-import type { StripPhoto } from "@/components/media/PhotoStrip";
 import { createListing, markSold, withdrawListing } from "./actions";
 
 export type Listing = {
@@ -60,6 +60,7 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
   const t = useT();
   const router = useRouter();
   const [formOpen, setFormOpen] = useState(false);
+  const [detail, setDetail] = useState<Listing | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTx] = useTransition();
@@ -215,7 +216,14 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
       ) : (
         <div className="mkt">
           {visible.map((l) => (
-            <div className="mcard" key={l.id}>
+            <div
+              className="mcard"
+              key={l.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => setDetail(l)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setDetail(l); } }}
+            >
               {/* The thumb slot always rendered a Package glyph, because a
                   listing's photos were dropped before they reached the
                   server. Now it shows the thing being sold. */}
@@ -261,7 +269,7 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
                     className="ps-btn ps-btn--secondary ps-btn--sm"
                     disabled={pending}
                     style={{ flex: 1, justifyContent: "center" }}
-                    onClick={() => act(markSold, l.id)}
+                    onClick={(e) => { e.stopPropagation(); act(markSold, l.id); }}
                   >
                     {labels.markSold}
                   </button>
@@ -270,7 +278,7 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
                     className="ps-btn ps-btn--ghost ps-btn--sm"
                     disabled={pending}
                     style={{ flex: 1, justifyContent: "center" }}
-                    onClick={() => act(withdrawListing, l.id)}
+                    onClick={(e) => { e.stopPropagation(); act(withdrawListing, l.id); }}
                   >
                     {labels.withdraw}
                   </button>
@@ -287,6 +295,35 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
           anything (found by the deployed-target e2e waiting 300s for this
           button). Kit CREATE map: Marketplace → FAB. */}
       <Fab label={labels.listItem} onClick={() => setFormOpen(true)} />
+
+      {detail && (
+        <RecordDetail
+          title={detail.title}
+          icon="Store"
+          status={detail.isMine ? { tone: "accent", label: labels.mine } : undefined}
+          fields={[
+            { k: t("m.market.price", undefined, "Price"), v: money(detail.priceCents, detail.currency) },
+            ...(detail.condition ? [{ k: t("m.market.condition", undefined, "Condition"), v: detail.condition }] : []),
+            ...(detail.category ? [{ k: t("m.market.category", undefined, "Category"), v: detail.category }] : []),
+            { k: t("m.market.seller", undefined, "Seller"), v: detail.isMine ? labels.mine : detail.seller },
+            ...(detail.description ? [{ k: t("m.market.desc", undefined, "Description"), v: detail.description, full: true }] : []),
+          ]}
+          sections={
+            detail.photos.length > 0
+              ? [{ h: t("m.market.photos", undefined, "Photos"), node: <PhotoStrip photos={detail.photos} /> }]
+              : []
+          }
+          actions={
+            detail.isMine
+              ? [
+                  { label: labels.markSold, icon: "CheckCircle2", primary: true, on: () => { act(markSold, detail.id); setDetail(null); } },
+                  { label: labels.withdraw, icon: "Archive", on: () => { act(withdrawListing, detail.id); setDetail(null); } },
+                ]
+              : []
+          }
+          onClose={() => setDetail(null)}
+        />
+      )}
     </>
   );
 }

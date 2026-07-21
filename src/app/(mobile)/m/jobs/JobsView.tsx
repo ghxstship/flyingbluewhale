@@ -2,7 +2,7 @@
 
 import { useActionState, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Fab, FormScreen, KIcon, NormalizedList, type FieldDef, type FormDef } from "@/components/mobile/kit";
+import { Fab, FormScreen, KIcon, NormalizedList, RecordDetail, type FieldDef, type FormDef } from "@/components/mobile/kit";
 import { toFormData } from "@/lib/mobile/form-data";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
@@ -62,6 +62,7 @@ export function JobsView({
   const [postOpen, setPostOpen] = useState(false);
   const [postPending, startPost] = useTransition();
   const [postError, setPostError] = useState<string | null>(null);
+  const [detail, setDetail] = useState<Gig | null>(null);
 
   // Kit 32 A4 — saved jobs. Seeded from the server (SSR) and reconciled with
   // the shared preferences cache once it loads; toggling persists to
@@ -114,7 +115,15 @@ export function JobsView({
   ];
 
   const gigCard = (g: Gig) => (
-        <div className="item tap" key={g.id} style={{ display: "block" }}>
+        <div
+          className="item tap"
+          key={g.id}
+          style={{ display: "block" }}
+          role="button"
+          tabIndex={0}
+          onClick={() => setDetail(g)}
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setDetail(g); } }}
+        >
           <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 6 }}>
             <span className="job-logo">{g.logo}</span>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -149,7 +158,7 @@ export function JobsView({
               className="sec-act"
               aria-label={saved.has(g.id) ? t("m.gigs.unsave", undefined, "Unsave") : t("m.gigs.save", undefined, "Save")}
               aria-pressed={saved.has(g.id)}
-              onClick={() => toggleSave(g.id)}
+              onClick={(e) => { e.stopPropagation(); toggleSave(g.id); }}
               style={saved.has(g.id) ? { color: "var(--p-accent-text)" } : undefined}
             >
               <KIcon name="Bookmark" size={15} />
@@ -158,11 +167,16 @@ export function JobsView({
               type="button"
               className="sec-act"
               aria-label={t("m.gigs.share", undefined, "Share Job")}
-              onClick={() => shareJob(g)}
+              onClick={(e) => { e.stopPropagation(); shareJob(g); }}
             >
               <KIcon name="UserPlus" size={15} />
             </button>
-            <ApplyButton gig={g} />
+            {/* Propagation guard so tapping Apply doesn't also open the card
+                detail; the interactive element is the ApplyButton within. */}
+            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
+            <span onClick={(e) => e.stopPropagation()}>
+              <ApplyButton gig={g} />
+            </span>
           </div>
         </div>
   );
@@ -241,6 +255,34 @@ export function JobsView({
           )}
           <FormScreen formId="job" onClose={() => setPostOpen(false)} onSubmit={onPost} />
         </>
+      )}
+
+      {detail && (
+        <RecordDetail
+          eyebrow={detail.org}
+          title={detail.role}
+          icon="Briefcase"
+          status={detail.applied ? { tone: "success", label: t("m.gigs.applied", undefined, "Applied") } : undefined}
+          tags={[...detail.certs, ...detail.tags]}
+          fields={[
+            { k: t("m.gigs.group.org", undefined, "Organization"), v: detail.org },
+            { k: t("m.gigs.group.type", undefined, "Type"), v: detail.employmentType },
+            { k: t("m.gigs.col.rate", undefined, "Rate"), v: detail.rate },
+            { k: t("m.gigs.col.when", undefined, "When"), v: detail.when },
+            { k: t("m.gigs.sort.applicants", undefined, "Applicants"), v: t("m.gigs.applicants", { count: detail.applicants }, `${detail.applicants} applied`) },
+          ]}
+          sections={[
+            {
+              h: t("m.gigs.apply", undefined, "Apply"),
+              node: (
+                <div style={{ marginTop: 8 }}>
+                  <ApplyButton gig={detail} />
+                </div>
+              ),
+            },
+          ]}
+          onClose={() => setDetail(null)}
+        />
       )}
     </>
   );

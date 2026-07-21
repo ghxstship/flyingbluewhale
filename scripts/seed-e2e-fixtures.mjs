@@ -181,11 +181,28 @@ async function ensureMemberships(userId, role) {
   for (const orgId of TEST_ORGS) {
     const { data: existing } = await admin
       .from("memberships")
-      .select("id")
+      .select("id, role, persona")
       .eq("user_id", userId)
       .eq("org_id", orgId)
       .maybeSingle();
-    if (existing) continue;
+    if (existing) {
+      // Reconcile, don't skip. A membership row seeded before the persona
+      // column existed (or by the demo-org auto-add trigger) sits at
+      // persona=null and resolves via personaForRole(role) → the coarse
+      // platform role. That silently downgrades e.g. persona=viewer to
+      // "member", which then picks up member's check-in:* floor + the legacy
+      // scan blanket — the exact prod/local split behind the viewer scan-gate
+      // failure. Keeping role/persona in lockstep with the ROLES map makes the
+      // capability-gate specs test the persona their login suffix names.
+      if (existing.role !== platformRole || existing.persona !== persona) {
+        const { error } = await admin
+          .from("memberships")
+          .update({ role: platformRole, persona })
+          .eq("id", existing.id);
+        if (error) throw new Error(`membership reconcile ${role}@${orgId}: ${error.message}`);
+      }
+      continue;
+    }
     const { error } = await admin
       .from("memberships")
       .insert({ user_id: userId, org_id: orgId, role: platformRole, persona });

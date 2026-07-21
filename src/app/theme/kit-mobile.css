@@ -1,6 +1,15 @@
 /* COMPVSS mobile kit — ported from the COMPVSS Design System kit (index.html <style>), 2026-06-21. Scoped under .mobile-shell. Uses only --p-* tokens; dark mode + accent come from the repo theme + data-product="compvss".
    Type floor (2026-07-10, MONUMENT canon): every font-size below 11px was raised to 11px — no UI text under 11px, sunlight legibility for the field audience. Keep new rules at >= 11px. */
 
+/* COMPVSS "Rose" credential-card brand gradients — SSOT for the rose-gold script
+   wordmark + the dark card field, shared by RoseCard.tsx and the onboarding
+   RoseCard clone (was duplicated inline hex in both). Bespoke brand marks for the
+   credential aesthetic, deliberately NOT --p-* accents (like signage/identity). */
+:root {
+  --rose-gold: linear-gradient(135deg, #f4cdbf, #d9a08e 45%, #b76e79);
+  --rose-card-field: linear-gradient(140deg, #2a1a09 0%, #36230d 38%, #120d08 100%);
+}
+
 /* NFT / digital-wallet style pass card */
 .mobile-shell .pass-wallet { position: relative; border-radius: 22px; overflow: hidden; padding: 20px; margin-bottom: var(--p-4); min-height: 196px; display: flex; flex-direction: column; justify-content: space-between; color: #fff; background: linear-gradient(140deg, #241606 0%, #2c1c0b 42%, #0c0e12 100%); border: 1px solid rgba(255,255,255,.09); box-shadow: var(--p-elev-2, var(--p-elev-1)); cursor: pointer; }
 .mobile-shell .pass-wallet::before { content: ""; position: absolute; inset: 0; background: radial-gradient(130% 90% at 100% 0%, color-mix(in oklab, var(--p-accent) 60%, transparent), transparent 58%); pointer-events: none; }

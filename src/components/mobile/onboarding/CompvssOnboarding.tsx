@@ -951,7 +951,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                 flexDirection: "column",
                 justifyContent: "space-between",
                 color: "#fff",
-                background: "linear-gradient(140deg, #2a1a09 0%, #36230d 38%, #120d08 100%)",
+                background: "var(--rose-card-field)",
                 border: "1px solid rgba(255,255,255,.1)",
                 boxShadow: "var(--p-elev-2, var(--p-elev-1))",
                 marginBottom: 8,
@@ -989,7 +989,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                     position: "absolute",
                     inset: 0,
                     zIndex: 2,
-                    background: "linear-gradient(140deg, #2a1a09 0%, #36230d 38%, #120d08 100%)",
+                    background: "var(--rose-card-field)",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -1013,7 +1013,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                   <div className="wm" style={{ fontSize: 13, color: "rgba(255,255,255,.85)", paddingTop: 2 }}>
                     COMPVSS
                   </div>
-                  <span style={{ fontFamily: "var(--font-pinyon), 'Pinyon Script', cursive", fontSize: 44, lineHeight: 1, marginLeft: -26, marginTop: -2, background: "linear-gradient(135deg, #f4cdbf, #d9a08e 45%, #b76e79)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
+                  <span style={{ fontFamily: "var(--font-pinyon), 'Pinyon Script', cursive", fontSize: 44, lineHeight: 1, marginLeft: -26, marginTop: -2, background: "var(--rose-gold)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
                     Rose
                   </span>
                 </div>

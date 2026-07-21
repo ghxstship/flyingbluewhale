@@ -80,7 +80,11 @@
 .mobile-shell .w .wl:last-child { margin-top: var(--p-2); }
 .mobile-shell .w .wv { font-family: var(--p-heading); text-transform: uppercase; font-size: 26px; line-height: 1; margin-top: 8px; font-variant-numeric: tabular-nums; }
 .mobile-shell .w .wsub { font-size: 11.5px; color: var(--p-text-2); margin-top: var(--p-1); }
-.mobile-shell .chips { display: flex; gap: var(--p-2); overflow-x: auto; padding: 2px 0 12px; margin: 0 -2px; scrollbar-width: none; }
+.mobile-shell .chips { display: flex; align-items: center; gap: var(--p-2); overflow-x: auto; padding: 2px 0 12px; margin: 0 -2px; scrollbar-width: none; }
+/* Quick-filter chips keep their natural height in the scroll row — align-items:center
+   (matching .actionbar / .pillrow) stops the flex default `stretch` from vertically
+   distorting a chip next to a taller sibling (the same fix the ActionBar buttons got). */
+.mobile-shell .chips > .chip { flex: none; align-self: center; }
 .mobile-shell .chips::-webkit-scrollbar { display: none; }
 .mobile-shell .chip { flex: none; font-size: 12px; font-weight: 600; padding: var(--p-2) var(--p-3); border-radius: 999px; border: 1px solid var(--p-border); background: var(--p-surface); color: var(--p-text-2); cursor: pointer; white-space: nowrap; }
 .mobile-shell .chip.on { background: var(--p-text-1); border-color: var(--p-text-1); color: var(--p-bg); }

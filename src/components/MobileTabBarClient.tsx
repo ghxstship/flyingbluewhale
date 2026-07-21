@@ -75,13 +75,11 @@ const PARENT_PREFIXES: Record<string, string[]> = {
     "/m/docs",
     "/m/guide",
     "/m/engagement",
-    // Field Operations — hubs (kit 34) + their members
+    // Field Operations — hub members (kit 34 v3.x removed the launcher routes;
+    // the drawer lands straight on a member, so only members are listed here).
     "/m/daily-report",
     "/m/time-sheets",
-    "/m/projects",
-    "/m/operations",
-    "/m/workforce",
-    "/m/equipment",
+    "/m/projects/timeline",
     "/m/reports",
     "/m/inspections",
     "/m/inventory",

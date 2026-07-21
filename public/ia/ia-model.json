@@ -2416,12 +2416,6 @@
               ]
             },
             {
-              "path": "/m/projects",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
               "path": "/m/projects/timeline",
               "arch": [
                 "CAL"
@@ -2441,24 +2435,6 @@
             },
             {
               "path": "/m/projects/tasks",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/m/operations",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/m/workforce",
-              "arch": [
-                "LIST"
-              ]
-            },
-            {
-              "path": "/m/equipment",
               "arch": [
                 "LIST"
               ]

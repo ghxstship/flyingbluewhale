@@ -25,13 +25,15 @@ import { authedSetup, suppressTour } from "./helpers/auth";
 
 const ERROR_BOUNDARY = /something went wrong|application error|unhandled|digest:/i;
 
-// The six kit-34 hubs, by landing route + the label the HubChrome header prints.
-const HUBS: { key: string; landing: string; title: RegExp }[] = [
-  { key: "projects", landing: "/m/projects", title: /projects/i },
-  { key: "operations", landing: "/m/operations", title: /operations/i },
-  { key: "logistics", landing: "/m/logistics", title: /logistics/i },
-  { key: "workforce", landing: "/m/workforce", title: /workforce/i },
-  { key: "equipment", landing: "/m/equipment", title: /assets|equipment/i },
+// Kit 34 v3.x: hubs have NO launcher route — the drawer lands straight on the
+// hub's first role-visible member (whose HubChrome prints the hub label). These
+// are the all-crew-visible hubs' first members; Workforce (managerOnly, Schedule
+// first) is covered by the RBAC test below.
+const HUBS: { landing: string; title: RegExp }[] = [
+  { landing: "/m/projects/timeline", title: /projects/i },
+  { landing: "/m/daily-report", title: /operations/i },
+  { landing: "/m/logistics", title: /logistics/i },
+  { landing: "/m/inventory", title: /assets|equipment/i },
 ];
 
 // Seed-backed normalized ledgers (Operations + Logistics) — always have rows, so
@@ -77,23 +79,27 @@ test.describe("COMPVSS kit 34 · hubs + view engine · crew", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "crew"));
 
   for (const hub of HUBS) {
-    test(`hub landing ${hub.landing} renders its HubChrome launcher`, async ({ page }) => {
+    test(`hub ${hub.landing} lands directly on its first member (no launcher step)`, async ({ page }) => {
       await page.goto(hub.landing);
       await expectRendered(page);
+      // Kit 34 v3.x removed the redundant launcher: the landing routes straight
+      // to the first member, whose HubChrome prints the hub label + the member
+      // viewseg (so switching between members stays one tap, with no extra step).
       await expect(page.locator(".scr-h").first()).toContainText(hub.title);
+      await expect(page.locator(".viewseg a").first()).toBeVisible({ timeout: 10_000 });
       await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
     });
   }
 
-  test("Workforce hub hides the managerOnly members (Schedule · Time Sheets) for crew", async ({ page }) => {
-    await page.goto("/m/workforce");
+  test("Workforce viewseg hides the managerOnly members (Schedule · Time Sheets) for crew", async ({ page }) => {
+    // Crew reach the Workforce hub via its open member Roster (/m/directory) — the
+    // managerOnly Schedule + Time Sheets self-hide from the hub viewseg.
+    await page.goto("/m/directory");
     await expectRendered(page);
-    // Launcher rows are `.item.tap` with the member label in `.t`.
-    const labels = await page.locator(".item.tap .t").allInnerTexts();
-    const joined = labels.join(" | ").toLowerCase();
-    expect(joined, "crew must still see the open members").toContain("roster");
-    expect(joined, "Schedule is managerOnly — hidden for crew").not.toContain("schedule");
-    expect(joined, "Time Sheets is managerOnly — hidden for crew").not.toContain("time sheets");
+    const labels = (await page.locator(".viewseg a").allInnerTexts()).join(" | ").toLowerCase();
+    expect(labels, "crew must still see the open members").toContain("roster");
+    expect(labels, "Schedule is managerOnly — hidden for crew").not.toContain("schedule");
+    expect(labels, "Time Sheets is managerOnly — hidden for crew").not.toContain("time sheets");
   });
 
   test("Finance hub is gated to Manager Access Only for crew", async ({ page }) => {

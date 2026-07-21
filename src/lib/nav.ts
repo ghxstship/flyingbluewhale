@@ -1696,14 +1696,13 @@ export const mobileSurfaces: NavItem[] = [
   // members are the individual routes below. SSOT: `mobileHubs`.
   { label: "Daily Report", href: "/m/daily-report" },
   { label: "Time Sheets", href: "/m/time-sheets" },
-  { label: "Projects", href: "/m/projects" },
+  // Kit 34 v3.x: the hub launcher routes (/m/projects, /m/operations, /m/workforce,
+  // /m/equipment) were removed — the drawer/hub now lands straight on the first
+  // member. Only the member routes below are navigable surfaces.
   { label: "Project Timeline", href: "/m/projects/timeline" },
   { label: "Milestones", href: "/m/projects/milestones" },
   { label: "Project Calendar", href: "/m/projects/calendar" },
   { label: "Project Tasks", href: "/m/projects/tasks" },
-  { label: "Operations", href: "/m/operations" },
-  { label: "Workforce", href: "/m/workforce" },
-  { label: "Assets & Equipment", href: "/m/equipment" },
   { label: "Docks", href: "/m/logistics/docks" },
   { label: "Gate", href: "/m/logistics/gate" },
   { label: "Delivery", href: "/m/logistics/delivery" },
@@ -1861,11 +1860,14 @@ export const moreNavGroups: MoreNavGroup[] = [
     key: "fieldops",
     label: "Field Operations",
     links: [
-      { href: "/m/projects", label: "Projects", icon: "Waypoints", sub: "Timeline, Milestones, Calendar & Tasks" },
-      { href: "/m/operations", label: "Operations", icon: "ClipboardList", sub: "Daily Report, Reports, Inspections, Permits & Travel" },
+      // Kit 34 v3.x: hubs have NO launcher screen — the drawer row routes straight
+      // to the hub's first (role-visible) member; every member carries the hub
+      // viewseg to switch. Workforce is managerOnly, so Schedule is its first member.
+      { href: "/m/projects/timeline", label: "Projects", icon: "Waypoints", sub: "Timeline, Milestones, Calendar & Tasks" },
+      { href: "/m/daily-report", label: "Operations", icon: "ClipboardList", sub: "Daily Report, Reports, Inspections, Permits & Travel" },
       { href: "/m/logistics", label: "Logistics", icon: "Truck", sub: "Shipments, Docks, Gate & Delivery" },
-      { href: "/m/workforce", label: "Workforce", icon: "CalendarClock", sub: "Schedule, Time Sheets, Roster & Time Off", managerOnly: true },
-      { href: "/m/equipment", label: "Assets & Equipment", icon: "Boxes", sub: "Inventory, Catalog & Requests" },
+      { href: "/m/scheduler", label: "Workforce", icon: "CalendarClock", sub: "Schedule, Time Sheets, Roster & Time Off", managerOnly: true },
+      { href: "/m/inventory", label: "Assets & Equipment", icon: "Boxes", sub: "Inventory, Catalog & Requests" },
       { href: "/m/finance", label: "Finance", icon: "Banknote", sub: "Budget & Expenses", managerOnly: true },
     ],
   },
@@ -1937,7 +1939,7 @@ export const mobileHubs: MobileHub[] = [
   {
     key: "projects",
     label: "Projects",
-    landing: "/m/projects",
+    landing: "/m/projects/timeline",
     members: [
       { key: "timeline", label: "Timeline", icon: "Waypoints", href: "/m/projects/timeline" },
       { key: "milestones", label: "Milestones", icon: "Flag", href: "/m/projects/milestones" },
@@ -1948,7 +1950,7 @@ export const mobileHubs: MobileHub[] = [
   {
     key: "operations",
     label: "Operations",
-    landing: "/m/operations",
+    landing: "/m/daily-report",
     members: [
       { key: "dailyreport", label: "Daily Report", icon: "SunMedium", href: "/m/daily-report" },
       { key: "reports", label: "Reports", icon: "TriangleAlert", href: "/m/reports" },
@@ -1971,7 +1973,7 @@ export const mobileHubs: MobileHub[] = [
   {
     key: "workforce",
     label: "Workforce",
-    landing: "/m/workforce",
+    landing: "/m/scheduler",
     members: [
       { key: "schedule", label: "Schedule", icon: "CalendarDays", href: "/m/scheduler", managerOnly: true },
       { key: "timesheets", label: "Time Sheets", icon: "ClipboardList", href: "/m/time-sheets", managerOnly: true },
@@ -1982,7 +1984,7 @@ export const mobileHubs: MobileHub[] = [
   {
     key: "equipment",
     label: "Assets & Equipment",
-    landing: "/m/equipment",
+    landing: "/m/inventory",
     members: [
       { key: "inventory", label: "Inventory", icon: "Boxes", href: "/m/inventory" },
       { key: "catalog", label: "Catalog", icon: "BookOpen", href: "/m/catalog" },
@@ -2004,6 +2006,7 @@ export const mobileHubs: MobileHub[] = [
 export function hubByKey(key: string): MobileHub | undefined {
   return mobileHubs.find((h) => h.key === key);
 }
+
 
 /**
  * ADR-0005 — phase-aware ordering of `mobileSurfaces`. Field operators

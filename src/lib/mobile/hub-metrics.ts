@@ -2,7 +2,12 @@ import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
 import type { MetricBarItem } from "@/components/mobile/kit";
-import { OPS_REPORTS, OPS_INSPECTIONS, OPS_PERMITS, OPS_LOGISTICS } from "@/lib/mobile/ops-seed";
+import {
+  listFieldReports,
+  listFieldInspections,
+  listFieldPermits,
+  listFieldShipments,
+} from "@/lib/mobile/ops-ledgers";
 import { resolveProjectContext, listProjectTasks, listProjectMilestones } from "@/lib/mobile/project-xpms";
 
 /**
@@ -29,9 +34,9 @@ export async function hubLandingMetrics(hubKey: string, session: MetricSession):
   try {
     switch (hubKey) {
       case "operations":
-        return operationsMetrics();
+        return await operationsMetrics(session.orgId);
       case "logistics":
-        return logisticsMetrics();
+        return await logisticsMetrics(session.orgId);
       case "projects":
         return await projectsMetrics(session.orgId);
       case "equipment":
@@ -47,11 +52,17 @@ export async function hubLandingMetrics(hubKey: string, session: MetricSession):
   }
 }
 
-/** Operations members (Reports · Inspections · Permits · Travel) are ops-seed. */
-export function operationsMetrics(): MetricBarItem[] {
-  const open = OPS_REPORTS.filter((r) => r.status === "Open").length;
-  const insp = OPS_INSPECTIONS.filter((i) => i.status === "In Progress" || i.status === "Flagged").length;
-  const expiring = OPS_PERMITS.filter((p) => p.status === "Expiring").length;
+/** Operations members (Reports · Inspections · Permits · Travel) from the real
+ *  org-scoped field_* ledgers. */
+export async function operationsMetrics(orgId: string): Promise<MetricBarItem[]> {
+  const [reports, inspections, permits] = await Promise.all([
+    listFieldReports(orgId),
+    listFieldInspections(orgId),
+    listFieldPermits(orgId),
+  ]);
+  const open = reports.filter((r) => r.status === "Open").length;
+  const insp = inspections.filter((i) => i.status === "In Progress" || i.status === "Flagged").length;
+  const expiring = permits.filter((p) => p.status === "Expiring").length;
   return [
     { short: "Open Reports", v: open, tone: open ? "danger" : "success" },
     { short: "Inspections", v: insp, tone: insp ? "warning" : "success" },
@@ -59,11 +70,13 @@ export function operationsMetrics(): MetricBarItem[] {
   ];
 }
 
-/** Logistics members (Shipments · Docks · Gate · Delivery) are ops-seed. */
-export function logisticsMetrics(): MetricBarItem[] {
-  const enRoute = OPS_LOGISTICS.filter((l) => l.status === "En Route").length;
-  const delayed = OPS_LOGISTICS.filter((l) => l.status === "Delayed").length;
-  const inbound = OPS_LOGISTICS.filter((l) => l.dir === "in").length;
+/** Logistics members (Shipments · Docks · Gate · Delivery) from the real
+ *  org-scoped field_shipments ledger. */
+export async function logisticsMetrics(orgId: string): Promise<MetricBarItem[]> {
+  const shipments = await listFieldShipments(orgId);
+  const enRoute = shipments.filter((l) => l.status === "En Route").length;
+  const delayed = shipments.filter((l) => l.status === "Delayed").length;
+  const inbound = shipments.filter((l) => l.dir === "in").length;
   return [
     { short: "En Route", v: enRoute, tone: "info" },
     { short: "Delayed", v: delayed, tone: delayed ? "danger" : "success" },

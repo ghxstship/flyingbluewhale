@@ -1,0 +1,54 @@
+"use client";
+
+import { OpsLedgerView, type OpsLedgerConfig } from "../_ops/OpsLedgerView";
+import {
+  type OpsInspection,
+  INSPECTION_CATEGORY_ORDER,
+  inspectionCategoryLabel,
+} from "@/lib/mobile/ops-seed";
+
+/**
+ * COMPVSS · Inspections — the checklists & safety-walks ledger (kit 33 v3.0,
+ * Operations). Rows are the real org-scoped `field_inspections`. Start
+ * Inspection routes to the punch-list surface.
+ */
+const CONFIG: OpsLedgerConfig<OpsInspection> = {
+  k: "in",
+  title: "Inspections",
+  searchPlaceholder: "Search inspections…",
+  search: (x) => `${x.t} ${inspectionCategoryLabel(x.cat)} ${x.area} ${x.by}`,
+  icon: (x) => x.icon,
+  iconColor: (x) =>
+    x.status === "Flagged"
+      ? "var(--p-warning)"
+      : x.status === "Passed"
+        ? "var(--p-success)"
+        : undefined,
+  titleOf: (x) => x.t,
+  status: (x) => x.status,
+  sub: (x) => `${x.area} · ${x.done}/${x.checks} checks · ${x.by} · ${x.time}`,
+  hub: { key: "operations", active: "inspections" },
+  filterStates: ["Passed", "In Progress", "Flagged"],
+  // Quick pills = inspection domain (canonical category, stable across venues,
+  // unlike area), never the status.
+  pill: { get: (x) => inspectionCategoryLabel(x.cat), order: INSPECTION_CATEGORY_ORDER },
+  tableFields: [
+    { id: "t", label: "Inspection", type: "text", get: (x) => x.t },
+    { id: "cat", label: "Type", type: "select", get: (x) => inspectionCategoryLabel(x.cat) },
+    { id: "area", label: "Area", type: "text", get: (x) => x.area },
+    { id: "checks", label: "Checks", type: "text", get: (x) => `${x.done}/${x.checks}` },
+    { id: "by", label: "By", type: "text", get: (x) => x.by },
+    { id: "status", label: "Status", type: "text", get: (x) => x.status },
+  ],
+  emptyCols: ["Inspection", "Area", "Status"],
+  emptyTitle: "No inspections",
+  cta: { label: "Start Inspection", href: "/m/punch" },
+};
+
+export function InspectionsLedger({ items }: { items: OpsInspection[] }) {
+  return (
+    <div className="screen screen-anim">
+      <OpsLedgerView items={items} config={CONFIG} />
+    </div>
+  );
+}

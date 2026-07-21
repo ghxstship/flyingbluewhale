@@ -1,10 +1,8 @@
-import { SubmitLogButton } from "./SubmitLogButton";
-import { NotebookPen } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { Fab } from "@/components/mobile/kit";
+import { DailyLogView, type DailyLogItem } from "./DailyLogView";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +10,9 @@ export const dynamic = "force-dynamic";
  * COMPVSS · Daily Logs — the org's per-day site logs (weather + notes). Reads
  * `daily_logs` org-scoped; the FAB routes to the new-log form which upserts a
  * row keyed by (project, date).
+ *
+ * Kit 34: the list renders through the shared view engine (`DailyLogView` →
+ * `NormalizedList`, calendar default). The DB read below is unchanged.
  */
 type LogRow = {
   id: string;
@@ -21,12 +22,6 @@ type LogRow = {
   weather_temp_low_f: number | null;
   notes: string | null;
   log_state: string | null;
-};
-
-const STATE_TONE: Record<string, string> = {
-  draft: "neutral",
-  submitted: "info",
-  approved: "ok",
 };
 
 export default async function DailyLogPage() {
@@ -39,6 +34,25 @@ export default async function DailyLogPage() {
     .slice()
     .sort((a, b) => String(b.log_date ?? "").localeCompare(String(a.log_date ?? "")));
 
+  const items: DailyLogItem[] = logs.map((r) => {
+    const temps =
+      r.weather_temp_high_f != null || r.weather_temp_low_f != null
+        ? `${r.weather_temp_high_f ?? "—"}° / ${r.weather_temp_low_f ?? "—"}°`
+        : null;
+    const summary =
+      [r.weather_summary, temps].filter(Boolean).join(" · ") ||
+      (r.notes ? r.notes.slice(0, 60) : t("m.dailyLog.noWeather", undefined, "No weather logged"));
+    return {
+      id: r.id,
+      logIso: r.log_date,
+      dateLabel: r.log_date
+        ? fmt.dateParts(new Date(r.log_date + "T00:00:00"), { weekday: "short", month: "short", day: "numeric" })
+        : t("m.dailyLog.untitled", undefined, "Untitled Log"),
+      log_state: r.log_state,
+      summary,
+    };
+  });
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.dailyLog.eyebrow", undefined, "Site")}</div>
@@ -46,49 +60,7 @@ export default async function DailyLogPage() {
         {t("m.dailyLog.title", undefined, "Daily Log")}
       </h1>
 
-      {logs.length === 0 ? (
-        <EmptyState
-          icon={<NotebookPen size={28} aria-hidden="true" />}
-          title={t("m.dailyLog.emptyTitle", undefined, "No Logs Yet")}
-          description={t("m.dailyLog.emptyBody", undefined, "Start the day's log with weather and notes.")}
-        />
-      ) : (
-        logs.map((r) => {
-          const tone = STATE_TONE[r.log_state ?? ""] ?? "neutral";
-          const temps =
-            r.weather_temp_high_f != null || r.weather_temp_low_f != null
-              ? `${r.weather_temp_high_f ?? "—"}° / ${r.weather_temp_low_f ?? "—"}°`
-              : null;
-          return (
-            <div className="item" key={r.id}>
-              <span className="bar" style={{ background: "var(--p-info)" }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">
-                  {r.log_date
-                    ? fmt.dateParts(new Date(r.log_date + "T00:00:00"), {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : t("m.dailyLog.untitled", undefined, "Untitled Log")}
-                </div>
-                <div className="s">
-                  {[r.weather_summary, temps].filter(Boolean).join(" · ") ||
-                    (r.notes ? r.notes.slice(0, 60) : t("m.dailyLog.noWeather", undefined, "No weather logged"))}
-                </div>
-              </div>
-              <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
-                {r.log_state ?? "—"}
-              </span>
-              {/* Only a draft is the field's to move. submitted → approved
-                  is the console's step, per the shared FSM. */}
-              {r.log_state === "draft" && (
-                <SubmitLogButton id={r.id} label={t("m.dailyLog.submit", undefined, "Submit")} />
-              )}
-            </div>
-          );
-        })
-      )}
+      <DailyLogView items={items} />
 
       <Fab href="/m/daily-log/new" label={t("m.dailyLog.newCta", undefined, "New Log")} />
     </div>

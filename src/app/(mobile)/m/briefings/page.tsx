@@ -1,10 +1,8 @@
-import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { BriefingsListView, type BriefingItem } from "./BriefingsListView";
 
 /**
  * COMPVSS · Safety Briefings — today's toolbox talks, plus the coming week.
@@ -15,6 +13,10 @@ import { EmptyState } from "@/components/ui/EmptyState";
  * attendee by hand, which is exactly the attendance record a safety audit
  * throws out. This list is the deliverer's way in ("what am I running
  * today?") and the crew's way in when they didn't scan the QR.
+ *
+ * Kit 34 view engine: the same org-wide window now renders through
+ * NormalizedList (list/table/board/calendar). The calendar view — driven by
+ * `scheduled_for` — replaces the old hand-rolled Today / This-Week grouping.
  *
  * Org-scoped read (safety_briefings RLS is org-member SELECT) — a briefing
  * is a site-wide event, not a personal record, so unlike /m/expenses there
@@ -29,12 +31,6 @@ type BriefingRow = {
   scheduled_for: string;
   conducted_at: string | null;
   project: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<string, string> = {
-  scheduled: "info",
-  conducted: "ok",
-  cancelled: "neutral",
 };
 
 export default async function BriefingsPage() {
@@ -63,36 +59,18 @@ export default async function BriefingsPage() {
     .limit(50);
 
   const rows = (data ?? []) as unknown as BriefingRow[];
-  const endOfToday = new Date(startOfToday.getTime() + 24 * 60 * 60 * 1000);
-  const today = rows.filter((r) => new Date(r.scheduled_for) < endOfToday);
-  const upcoming = rows.filter((r) => new Date(r.scheduled_for) >= endOfToday);
 
-  const stateLabel = (s: string) =>
-    s === "scheduled"
-      ? t("m.briefings.state.scheduled", undefined, "Scheduled")
-      : s === "conducted"
-        ? t("m.briefings.state.conducted", undefined, "Conducted")
-        : s === "cancelled"
-          ? t("m.briefings.state.cancelled", undefined, "Cancelled")
-          : s;
-
-  const renderRow = (r: BriefingRow, withDate: boolean) => (
-    <Link key={r.id} href={`/m/briefings/${r.id}`} className="item" style={{ display: "block" }}>
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-        <ShieldCheck size={18} aria-hidden="true" style={{ color: "var(--p-text-2)", flex: "none", marginTop: 2 }} />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="t">{r.topic}</div>
-          <div className="s">
-            {withDate ? fmt.dateTime(r.scheduled_for) : fmt.time(r.scheduled_for)}
-            {r.project?.name ? ` · ${r.project.name}` : ""}
-          </div>
-        </div>
-        <span className={`ps-badge ps-badge--${STATE_TONE[r.briefing_state] ?? "neutral"}`} style={{ flex: "none" }}>
-          {stateLabel(r.briefing_state)}
-        </span>
-      </div>
-    </Link>
-  );
+  // Flatten to the client view's shape — resolved project name + preformatted
+  // date (the client can't reach the DB or the request formatters) + the ISO
+  // day for the calendar view.
+  const items: BriefingItem[] = rows.map((r) => ({
+    id: r.id,
+    topic: r.topic,
+    briefing_state: r.briefing_state,
+    scheduledLabel: fmt.dateTime(r.scheduled_for),
+    scheduledIso: r.scheduled_for ? r.scheduled_for.slice(0, 10) : "",
+    projectName: r.project?.name ?? null,
+  }));
 
   return (
     <div className="screen screen-anim">
@@ -101,38 +79,7 @@ export default async function BriefingsPage() {
         {t("m.briefings.title", undefined, "Safety Briefings")}
       </h1>
 
-      {rows.length === 0 ? (
-        <EmptyState
-          size="compact"
-          title={t("m.briefings.empty.title", undefined, "No Briefings This Week")}
-          description={t(
-            "m.briefings.empty.body",
-            undefined,
-            "Toolbox talks scheduled for your org show up here. Crew sign in from this screen when the talk runs.",
-          )}
-        />
-      ) : (
-        <>
-          <div className="scr-eye" style={{ marginBottom: 8 }}>
-            {t("m.briefings.today", undefined, "Today")}
-          </div>
-          {today.length === 0 ? (
-            <div className="ps-caption" style={{ color: "var(--p-text-3)", marginBottom: 12 }}>
-              {t("m.briefings.noneToday", undefined, "Nothing scheduled today.")}
-            </div>
-          ) : (
-            today.map((r) => renderRow(r, false))
-          )}
-          {upcoming.length > 0 && (
-            <>
-              <div className="scr-eye" style={{ marginTop: 16, marginBottom: 8 }}>
-                {t("m.briefings.upcoming", undefined, "This Week")}
-              </div>
-              {upcoming.map((r) => renderRow(r, true))}
-            </>
-          )}
-        </>
-      )}
+      <BriefingsListView items={items} />
     </div>
   );
 }

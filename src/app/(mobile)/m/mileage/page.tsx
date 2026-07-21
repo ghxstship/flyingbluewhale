@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Fab, KIcon } from "@/components/mobile/kit";
+import { Fab } from "@/components/mobile/kit";
+import { MileageView, type MileageItem } from "./MileageView";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +13,9 @@ export const dynamic = "force-dynamic";
  * Scoped to the viewer. RLS on `mileage_logs` is org-level, so it is no
  * backstop for a personal surface (same shape as D6/D16). A manager
  * reviewing the org's mileage does that on the console.
+ *
+ * Kit 34: the list renders through the shared view engine (`MileageView` →
+ * `NormalizedList`, table default). The DB read below is unchanged.
  */
 export default async function MileagePage() {
   const { t } = await getRequestT();
@@ -36,6 +38,24 @@ export default async function MileagePage() {
   const rows = data ?? [];
   const totalMiles = rows.reduce((sum, r) => sum + Number(r.miles ?? 0), 0);
 
+  const items: MileageItem[] = rows.map((r) => {
+    // The reimbursement is derived, never stored per-row from the form:
+    // rate_cents is the column default, not the driver's input.
+    const value = Math.round(Number(r.miles ?? 0) * Number(r.rate_cents ?? 0));
+    return {
+      id: r.id as string,
+      origin: r.origin as string,
+      destination: r.destination as string,
+      route: `${r.origin as string} → ${r.destination as string}`,
+      miles: Number(r.miles ?? 0),
+      milesLabel: fmt.number(Number(r.miles ?? 0)),
+      loggedIso: (r.logged_on as string | null) ?? null,
+      dateLabel: fmt.date(r.logged_on as string),
+      valueLabel: fmt.money(value),
+      notes: (r.notes as string | null) ?? null,
+    };
+  });
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">
@@ -45,52 +65,7 @@ export default async function MileagePage() {
         {t("m.mileage.title", undefined, "Mileage")}
       </h1>
 
-      <Link
-        href="/m/mileage/new"
-        className="ps-btn ps-btn--cta ps-btn--lg"
-        style={{ width: "100%", justifyContent: "center", marginBottom: 12, textDecoration: "none" }}
-      >
-        <KIcon name="Plus" size={16} /> {t("m.mileage.new", undefined, "Log A Drive")}
-      </Link>
-
-      {rows.length === 0 ? (
-        <EmptyState
-          size="compact"
-          title={t("m.mileage.emptyTitle", undefined, "No Drives Logged")}
-          description={t(
-            "m.mileage.emptyBody",
-            undefined,
-            "Log a trip while you remember it. Your manager approves it later.",
-          )}
-        />
-      ) : (
-        rows.map((r) => {
-          // The reimbursement is derived, never stored per-row from the
-          // form: rate_cents is the column default, not the driver's input.
-          const value = Math.round(Number(r.miles ?? 0) * Number(r.rate_cents ?? 0));
-          return (
-            <div className="item" key={r.id as string} style={{ display: "block" }}>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                <KIcon name="Truck" size={18} style={{ color: "var(--p-text-2)", flex: "none", marginTop: 2 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="t">
-                    {r.origin as string} → {r.destination as string}
-                  </div>
-                  <div className="s">
-                    {fmt.number(Number(r.miles))} mi · {fmt.date(r.logged_on as string)}
-                  </div>
-                </div>
-                <span className="ps-badge ps-badge--neutral">{fmt.money(value)}</span>
-              </div>
-              {r.notes ? (
-                <p className="form-intro" style={{ margin: "8px 0 0" }}>
-                  {r.notes as string}
-                </p>
-              ) : null}
-            </div>
-          );
-        })
-      )}
+      <MileageView items={items} />
 
       {/* Kit-29 spec: FAB = New Mileage. */}
       <Fab href="/m/mileage/new" label={t("m.mileage.newCta", undefined, "Log A Drive")} />

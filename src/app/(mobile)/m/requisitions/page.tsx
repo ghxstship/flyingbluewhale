@@ -1,20 +1,11 @@
-import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Crumbs, Fab, KIcon } from "@/components/mobile/kit";
+import { Crumbs, Fab } from "@/components/mobile/kit";
+import { RequisitionsView, type RequisitionItem } from "./RequisitionsView";
 
 export const dynamic = "force-dynamic";
-
-const STATE_TONE: Record<string, string> = {
-  draft: "neutral",
-  submitted: "warn",
-  approved: "ok",
-  rejected: "danger",
-  ordered: "info",
-};
 
 /**
  * COMPVSS · Requisitions — what you've asked the org to buy.
@@ -24,6 +15,10 @@ const STATE_TONE: Record<string, string> = {
  * where "My Tasks" showed 201 tasks of which 2 were the viewer's. A manager
  * reviewing the org's requisitions does that on the console, which is built
  * for it.
+ *
+ * Kit 34: the list renders through the shared view engine (`RequisitionsView`
+ * → `NormalizedList`) — search + View Options / Share & Export + list/table/
+ * board. The DB read below is unchanged (same table/columns/scope).
  */
 export default async function RequisitionsPage() {
   const { t } = await getRequestT();
@@ -45,6 +40,16 @@ export default async function RequisitionsPage() {
 
   const rows = data ?? [];
 
+  const items: RequisitionItem[] = rows.map((r) => ({
+    id: r.id as string,
+    title: r.title as string,
+    description: (r.description as string | null) ?? null,
+    requisition_state: r.requisition_state as string,
+    estimatedCents: r.estimated_cents != null ? (r.estimated_cents as number) : null,
+    estimatedLabel: r.estimated_cents != null ? fmt.money(r.estimated_cents as number) : null,
+    createdLabel: fmt.relative(r.created_at as string),
+  }));
+
   return (
     <div className="screen screen-anim">
       {/* Kit 32 C1: the finance → PO record path gets its trail. */}
@@ -64,51 +69,7 @@ export default async function RequisitionsPage() {
         {t("m.reqs.title", undefined, "Purchase Requests")}
       </h1>
 
-      <Link
-        href="/m/requisitions/new"
-        className="ps-btn ps-btn--cta ps-btn--lg"
-        style={{ width: "100%", justifyContent: "center", marginBottom: 12, textDecoration: "none" }}
-      >
-        <KIcon name="Plus" size={16} /> {t("m.reqs.new", undefined, "Request A Purchase")}
-      </Link>
-
-      {rows.length === 0 ? (
-        <EmptyState
-          size="compact"
-          title={t("m.reqs.emptyTitle", undefined, "Nothing Requested")}
-          description={t(
-            "m.reqs.emptyBody",
-            undefined,
-            "Need something bought for the job? Raise it here and your manager picks it up.",
-          )}
-        />
-      ) : (
-        rows.map((r) => (
-          <div className="item" key={r.id as string} style={{ display: "block" }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{r.title as string}</div>
-                <div className="s">
-                  {[
-                    r.estimated_cents != null ? fmt.money(r.estimated_cents as number) : null,
-                    fmt.relative(r.created_at as string),
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </div>
-              </div>
-              <span className={`ps-badge ps-badge--${STATE_TONE[r.requisition_state as string] ?? "neutral"}`}>
-                {r.requisition_state as string}
-              </span>
-            </div>
-            {r.description ? (
-              <p className="form-intro" style={{ margin: "8px 0 0" }}>
-                {r.description as string}
-              </p>
-            ) : null}
-          </div>
-        ))
-      )}
+      <RequisitionsView items={items} />
 
       {/* Kit-29 spec: FAB = New Requisition. */}
       <Fab href="/m/requisitions/new" label={t("m.requisitions.newCta", undefined, "Request A Purchase")} />

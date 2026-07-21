@@ -8,7 +8,16 @@ import { PhotoStrip, type StripPhoto } from "@/components/media/PhotoStrip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
 import { toFormData } from "@/lib/mobile/form-data";
-import { createListing, markSold, withdrawListing } from "./actions";
+import { createListing, updateListing, markSold, withdrawListing } from "./actions";
+
+/** Page condition labels ("Like New"/"For Parts") → the kit `listing` form's
+ *  select options ("Like new"/"For parts") so an edit pre-selects correctly. */
+const CONDITION_TO_FORM: Record<string, string> = {
+  "New": "New",
+  "Like New": "Like new",
+  "Used": "Used",
+  "For Parts": "For parts",
+};
 
 export type Listing = {
   id: string;
@@ -60,6 +69,7 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
   const t = useT();
   const router = useRouter();
   const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<Listing | null>(null);
   const [detail, setDetail] = useState<Listing | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -118,21 +128,25 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
     // out of this object — the File[] had nowhere to go, so a listing's
     // photos were dropped here, before the network, while the form said
     // "2 photos attached". A listing with no picture is one nobody answers.
-    const payload = toFormData({
+    const base = {
       title: vals.item ?? "",
       price: vals.price ?? "",
       condition: vals.cond ?? "",
       description: vals.desc ?? "",
       photo: vals.photo,
-    });
+    };
+    const editingId = editing?.id;
     startTx(async () => {
-      const res = await createListing(null, payload);
+      const res = editingId
+        ? await updateListing(null, toFormData({ ...base, id: editingId }))
+        : await createListing(null, toFormData(base));
       if (res?.error) {
         setError(res.error);
         return;
       }
       setFormOpen(false);
-      flash(labels.listed);
+      setEditing(null);
+      flash(editingId ? t("m.market.updated", undefined, "Listing updated") : labels.listed);
       router.refresh();
     });
   };
@@ -146,7 +160,7 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
     });
   };
 
-  if (formOpen) {
+  if (formOpen || editing) {
     return (
       <>
         {error && (
@@ -154,7 +168,21 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
             {error}
           </div>
         )}
-        <FormScreen formId="listing" onClose={() => setFormOpen(false)} onSubmit={onSubmit} />
+        <FormScreen
+          formId="listing"
+          initial={
+            editing
+              ? {
+                  item: editing.title,
+                  price: editing.priceCents != null ? String(Math.round(editing.priceCents / 100)) : "",
+                  cond: editing.condition ? (CONDITION_TO_FORM[editing.condition] ?? editing.condition) : "",
+                  desc: editing.description ?? "",
+                }
+              : undefined
+          }
+          onClose={() => { setFormOpen(false); setEditing(null); }}
+          onSubmit={onSubmit}
+        />
       </>
     );
   }
@@ -316,7 +344,8 @@ export function MarketView({ listings, labels }: { listings: Listing[]; labels: 
           actions={
             detail.isMine
               ? [
-                  { label: labels.markSold, icon: "CheckCircle2", primary: true, on: () => { act(markSold, detail.id); setDetail(null); } },
+                  { label: t("m.market.edit", undefined, "Edit"), icon: "Pencil", primary: true, on: () => { setEditing(detail); setDetail(null); } },
+                  { label: labels.markSold, icon: "CheckCircle2", on: () => { act(markSold, detail.id); setDetail(null); } },
                   { label: labels.withdraw, icon: "Archive", on: () => { act(withdrawListing, detail.id); setDetail(null); } },
                 ]
               : []

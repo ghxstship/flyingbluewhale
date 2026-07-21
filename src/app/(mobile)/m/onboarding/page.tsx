@@ -1,18 +1,19 @@
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 import { listMyAssignments } from "@/lib/db/assignments";
+import { OnboardingView, type OnboardingItem } from "./OnboardingView";
 
 export const dynamic = "force-dynamic";
 
 /**
  * COMPVSS · Onboarding — the caller's new-hire flows, rebuilt to the kit.
- * Reads `new_hire_assignments` (+ flow name) for this user; each card links to
- * the `[assignmentId]` detail where steps are completed and the flow finalized.
+ * Reads `new_hire_assignments` (+ flow name) for this user; each row opens the
+ * `[assignmentId]` detail where steps are completed and the flow finalized.
+ * The list is rendered by `OnboardingView` on the kit view engine; the
+ * live-packet banner stays above it (a one-off, not a list row).
  */
 type Assignment = {
   id: string;
@@ -23,27 +24,6 @@ type Assignment = {
 };
 
 type Flow = { id: string; name: string | null; description: string | null };
-
-const PHASE_TONE: Record<string, string> = {
-  assigned: "warn",
-  in_progress: "info",
-  completed: "ok",
-  abandoned: "neutral",
-};
-
-const PHASE_LABEL: Record<string, string> = {
-  assigned: "To Do",
-  in_progress: "In Progress",
-  completed: "Done",
-  abandoned: "Abandoned",
-};
-
-const TONE_VAR: Record<string, string> = {
-  warn: "var(--p-warning)",
-  info: "var(--p-info)",
-  ok: "var(--p-success)",
-  neutral: "var(--p-border)",
-};
 
 export default async function MobileOnboardingPage() {
   const session = await requireSession();
@@ -88,6 +68,22 @@ export default async function MobileOnboardingPage() {
     .map((p) => p.projects?.name)
     .filter((n): n is string => Boolean(n));
 
+  // Flatten to the client view's shape — resolved flow names + a preformatted
+  // assigned date threaded in (the client can't reach the DB).
+  const viewItems: OnboardingItem[] = rows.map((a) => {
+    const flow = flowMap.get(a.flow_id);
+    return {
+      id: a.id,
+      phase: a.assignment_phase ?? "assigned",
+      flowName: flow?.name ?? null,
+      flowDescription: flow?.description ?? null,
+      assignedLabel: a.assigned_at
+        ? fmt.dateParts(new Date(a.assigned_at), { month: "short", day: "numeric" })
+        : "",
+      assignedIso: a.assigned_at ? a.assigned_at.slice(0, 10) : null,
+    };
+  });
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.onboarding.eyebrow", undefined, "You")}</div>
@@ -109,37 +105,7 @@ export default async function MobileOnboardingPage() {
         </Link>
       )}
 
-      {rows.length === 0 ? (
-        <EmptyState
-          icon={<GraduationCap size={28} aria-hidden="true" />}
-          title={t("m.onboarding.emptyTitle", undefined, "All Caught Up")}
-          description={t("m.onboarding.emptyBody", undefined, "New-hire journeys assigned to you appear here.")}
-        />
-      ) : (
-        rows.map((a) => {
-          const phase = a.assignment_phase ?? "assigned";
-          const tone = PHASE_TONE[phase] ?? "neutral";
-          const flow = flowMap.get(a.flow_id);
-          return (
-            <Link href={`/m/onboarding/${a.id}`} key={a.id} className="item" style={{ textDecoration: "none" }}>
-              <span className="bar" style={{ background: TONE_VAR[tone] ?? "var(--p-accent)" }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{flow?.name ?? t("m.onboarding.untitled", undefined, "Onboarding")}</div>
-                {flow?.description && <div className="s">{flow.description}</div>}
-                <div className="s">
-                  {a.assigned_at
-                    ? fmt.dateParts(new Date(a.assigned_at), { month: "short", day: "numeric" })
-                    : ""}
-                </div>
-              </div>
-              <span className={`ps-badge ps-badge--${tone}`} style={{ flex: "none" }}>
-                {PHASE_LABEL[phase] ?? phase}
-              </span>
-              <KIcon name="ChevronRight" size={16} style={{ color: "var(--p-text-3)", flex: "none" }} />
-            </Link>
-          );
-        })
-      )}
+      <OnboardingView items={viewItems} />
     </div>
   );
 }

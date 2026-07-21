@@ -1,18 +1,17 @@
-import { ScanLine } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 import { formatDateParts } from "@/lib/i18n/format";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { CocView, type CocEvent } from "./CocView";
 
 export const dynamic = "force-dynamic";
 
 /**
  * COMPVSS · Chain of Custody — a custody timeline for assets, read from
  * `assignment_events` (scan + state_change kinds). Each event is one handoff,
- * scan, or status move on an assignment; rendered newest-first as a `.tl`
- * timeline. Empty state when nothing's been scanned/transitioned yet.
+ * scan, or status move on an assignment. Migrated onto the kit view engine
+ * (see `CocView`): the newest-first `.tl` timeline is preserved, plus search,
+ * the View Options / Share & Export drawers, and a catalog-kind context pill.
  */
 type EventRow = {
   id: string;
@@ -41,6 +40,27 @@ export default async function CocPage() {
     .limit(100);
   const events = (data ?? []) as unknown as EventRow[];
 
+  // Flatten to the client view's shape — the client can't reach the DB, so
+  // resolved asset titles + preformatted (UTC) dates are threaded in here.
+  const items: CocEvent[] = events.map((e) => ({
+    id: e.id,
+    title: e.assignment?.title ?? t("m.coc.asset", undefined, "Asset"),
+    event_kind: e.event_kind ?? "state_change",
+    catalog_kind: e.assignment?.catalog_kind ?? null,
+    result: e.result,
+    from_state: e.from_state,
+    to_state: e.to_state,
+    body: e.body,
+    dateLabel: e.at
+      ? formatDateParts(
+          new Date(e.at),
+          { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" },
+          { timezone: "UTC" },
+        )
+      : "",
+    iso: e.at ? e.at.slice(0, 10) : null,
+  }));
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.coc.eyebrow", undefined, "Assets")}</div>
@@ -48,52 +68,7 @@ export default async function CocPage() {
         {t("m.coc.title", undefined, "Chain of Custody")}
       </h1>
 
-      {events.length === 0 ? (
-        <EmptyState
-          icon={<ScanLine size={28} aria-hidden="true" />}
-          title={t("m.coc.emptyTitle", undefined, "No Custody Events")}
-          description={t("m.coc.emptyBody", undefined, "Scans and asset handoffs will appear here as a timeline.")}
-        />
-      ) : (
-        <div className="tl">
-          {events.map((e) => {
-            const isScan = e.event_kind === "scan";
-            const title = e.assignment?.title ?? t("m.coc.asset", undefined, "Asset");
-            const detail = isScan
-              ? `${t("m.coc.scan", undefined, "Scan")} · ${e.result ?? "—"}`
-              : `${e.from_state ?? "—"} → ${e.to_state ?? "—"}`;
-            return (
-              <div className="tl-row" key={e.id}>
-                <span className="tdot" aria-hidden="true">
-                  <KIcon name={isScan ? "ScanLine" : "ArrowRight"} size={9} />
-                </span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="ttxt">{title}</div>
-                  <div className="ttime">
-                    {detail}
-                    {e.assignment?.catalog_kind ? ` · ${e.assignment.catalog_kind}` : ""}
-                  </div>
-                  {e.body && <div className="hint">{e.body}</div>}
-                  <div className="ttime">
-                    {e.at
-                      ? formatDateParts(
-                          new Date(e.at),
-                          {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          },
-                          { timezone: "UTC" },
-                        )
-                      : ""}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <CocView items={items} />
     </div>
   );
 }

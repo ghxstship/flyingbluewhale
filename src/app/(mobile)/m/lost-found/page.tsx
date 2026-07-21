@@ -1,18 +1,17 @@
-import { PackageSearch } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { Fab, KIcon } from "@/components/mobile/kit";
-import { PhotoStrip } from "@/components/media/PhotoStrip";
+import { Fab } from "@/components/mobile/kit";
 import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
+import { LostFoundListView, type LostFoundItem } from "./LostFoundListView";
 
 export const dynamic = "force-dynamic";
 
 /**
  * /m/lost-found — COMPVSS · Lost & Found (kit-29 Conformance Spec, ratified
  * 2026-07-17: "Log + claim lost items. Photo, location found, status.
- * FAB = Log Item.").
+ * FAB = Log Item."). Migrated onto the kit view engine (NormalizedList) via
+ * <LostFoundListView>.
  *
  * This surface was intake-ONLY (the FormScreen now lives at
  * /m/lost-found/new behind the FAB); the list half is the point — a finder
@@ -52,6 +51,18 @@ export default async function LostFoundPage() {
 
   const photosById = await signPhotoRefsFor(supabase, "incident-photos", items, (i) => i.photos ?? []);
 
+  // Flatten to the client view's shape — signed photos + preformatted dates
+  // threaded in (the client can't reach storage).
+  const viewItems: LostFoundItem[] = items.map((i) => ({
+    id: i.id,
+    summary: i.summary,
+    description: i.description,
+    location: i.location,
+    incident_state: i.incident_state,
+    dateLabel: i.occurred_at ? fmt.date(new Date(i.occurred_at), "medium") : null,
+    photos: photosById.get(i.id) ?? [],
+  }));
+
   return (
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.lostfound.eyebrow", undefined, "Site")}</div>
@@ -59,49 +70,7 @@ export default async function LostFoundPage() {
         {t("m.lostfound.title", undefined, "Lost & Found")}
       </h1>
 
-      {items.length === 0 ? (
-        <EmptyState
-          icon={<PackageSearch size={28} aria-hidden="true" />}
-          title={t("m.lostfound.emptyTitle", undefined, "Nothing Logged")}
-          description={t(
-            "m.lostfound.emptyBody",
-            undefined,
-            "Lost or found property logged from the field shows up here for the whole org.",
-          )}
-        />
-      ) : (
-        items.map((i) => {
-          const held = i.incident_state !== "closed";
-          const lost = (i.summary ?? "").startsWith("Lost");
-          return (
-            <div className="item" key={i.id} style={{ display: "block" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <KIcon
-                  name={lost ? "SearchX" : "PackageCheck"}
-                  size={18}
-                  style={{ color: "var(--p-text-2)", flex: "none" }}
-                />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="t">{i.summary ?? t("m.lostfound.item", undefined, "Property Report")}</div>
-                  <div className="s">
-                    {i.location ?? ""}
-                    {i.occurred_at ? ` · ${fmt.date(new Date(i.occurred_at), "medium")}` : ""}
-                  </div>
-                </div>
-                <span className={`ps-badge ps-badge--${held ? "warn" : "ok"}`} style={{ flex: "none" }}>
-                  {held ? t("m.lostfound.held", undefined, "Held") : t("m.lostfound.claimed", undefined, "Claimed")}
-                </span>
-              </div>
-              {i.description ? (
-                <p className="form-intro" style={{ margin: "8px 0 0" }}>
-                  {i.description}
-                </p>
-              ) : null}
-              <PhotoStrip photos={photosById.get(i.id) ?? []} label={i.summary ?? "Property"} />
-            </div>
-          );
-        })
-      )}
+      <LostFoundListView items={viewItems} />
 
       {/* Kit-29 spec: FAB = Log Item. */}
       <Fab href="/m/lost-found/new" label={t("m.lostfound.newCta", undefined, "Log Item")} />

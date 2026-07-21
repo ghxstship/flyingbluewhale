@@ -24,41 +24,41 @@ precise spec for the remainder.
   **This is the migration template for the remainder below.**
 - **Aurora** dead "Attach" button removed; **Jobs** stale "placeholder" comment fixed.
 
-## ▢ Remaining — view-engine migration (mirror `PunchListView.tsx`)
+## ✅ View-engine migration — DONE (all 10 surfaces)
 
-Each is a flat list rendered with plain `.item`/`.mcard` markup and no toolbar.
-Pattern: split into a server `page.tsx` (fetch + sign photos + resolve names +
-preformat dates) and a client `*View.tsx` (`NormalizedList` with `fields`,
-`search`, `renderRow`, `onRow`, `statusField`+`statusOrder` for board, and a
-context `pill` — **never status** per repo canon). Ranked by impact:
+All migrated onto `NormalizedList` (search + View Options / Share & Export drawers
++ context pill + list/table/board/calendar/gallery), server page signs photos +
+resolves names + preformats dates → client `*View.tsx`. Pills are all **context**
+fields, never status (repo canon):
 
-| Surface | File | statusField | pill (context) | notes |
+| Surface | View | statusField | pill | detail-tap |
 |---|---|---|---|---|
-| **Snags** (My) | `snags/page.tsx` | item_state | project | shares Punch's schema/FieldDefs (self-scoped twin) |
-| **Lost & Found** | `lost-found/page.tsx` | incident_state (Held/Claimed) | location | gallery view fits (photos); add a search box |
-| **Safety Briefings** | `briefings/page.tsx` | briefing_state | project | calendar view natural (scheduled_for) |
-| **Shift Handover** | `handover/page.tsx` | post_state (all_clear/watch/issues) | severity | board by post_state |
-| **Purchase Requests** | `requisitions/page.tsx` | requisition_state | (none/project) | numeric estimate sortable |
-| **Daily Log** | `daily-log/page.tsx` | log_state | — | calendar default (log_date); keep inline draft-submit in renderRow |
-| **Mileage** | `mileage/page.tsx` | — | — | table view (numeric); date=logged_on |
-| **Chain of Custody** | `coc/page.tsx` | — | catalog_kind | timeline — pass `listWrapClassName="tl"`, keep the `.tl` renderRow |
-| **Onboarding** | `onboarding/page.tsx` | assignment_phase | — | keep the live-packet banner outside the list |
-| **Timesheets** (`/m/timesheets`) | `timesheets/TimesheetsView.tsx` | state | — | **naming collision** with the migrated `time-sheets/` — confirm both are intended before migrating |
+| **Snags** | SnagsListView | item_state | project | → /m/punch/[id] (shared store, org-scoped) |
+| **Lost & Found** | LostFoundListView | incident_state (Held/Claimed) | location | none (no detail route — faithful) + gallery view |
+| **Safety Briefings** | BriefingsListView | briefing_state | project | → /m/briefings/[briefingId] + calendar view |
+| **Shift Handover** | HandoverListView | post_state | author | none (rows were static) — photos signed |
+| **Purchase Requests** | RequisitionsView | requisition_state | none | none; numeric estimate sortable |
+| **Daily Log** | DailyLogView | log_state | none | calendar default; inline draft-submit kept |
+| **Mileage** | MileageView | — | none | table default; numeric miles sortable |
+| **Chain of Custody** | CocView | — | catalog_kind | timeline preserved via `listWrapClassName="tl"` |
+| **Onboarding** | OnboardingView | assignment_phase | none | → /m/onboarding/[assignmentId]; live-packet banner kept above |
+| **Timesheets** (`/m/timesheets`) | TimesheetsView | state | none | confirmed distinct from `/m/time-sheets`; inline submit kept |
 
-`connections` (My Network) is a bespoke 3-section view with its own search box +
-per-section actions; it maps poorly to a single NormalizedList (low value — its
-inline search already covers the main need). Leave as-is or split per-section later.
+`connections` (My Network) left as-is — bespoke 3-section view with its own search;
+maps poorly to a single NormalizedList, low value.
 
-## ▢ Remaining — Marketplace CRUD (beyond detail)
+## ✅ Marketplace edit — DONE · ▢ buyer-DM remains
 
-- **Edit listing** — add `updateListing(prev, fd)` (mirror `markSold`) patching
-  title/price/condition/description/category/photos; an "Edit" action on `isMine`
-  in the new RecordDetail opening the `listing` FormScreen pre-filled.
-- **Buyer → seller contact** — thread `seller_user_id` into the `Listing` type,
-  add a `contactSeller(listingId)` action that finds/creates a `chat_rooms` DM
-  (buyer+seller members) and returns the room id → `router.push('/m/inbox/<id>')`.
-  Deliberately NOT shipped as a stub — no fake "Contact" button ships until the DM
-  is real.
+- **Edit listing** — `updateListing` added (case-tolerant condition parse; photos
+  only replaced when re-attached; category left untouched since the form doesn't
+  collect it; `.is("deleted_at", null)` guard). "Edit" action on `isMine` in the
+  RecordDetail opens the `listing` form pre-filled.
+- **▢ Buyer → seller contact** — the one remaining item. Needs `seller_user_id`
+  threaded + a `contactSeller` action that opens a `chat_rooms` DM. **Blocked on an
+  RLS decision**: the chat_room_members INSERT policy (hardened, ADR-0008 Am.5)
+  forbids self-service member-adds, so a buyer can't add the seller to a new room
+  without a deliberate "marketplace contact" RLS path or a service-role bootstrap.
+  Deliberately NOT shipped as a fake button until that path exists.
 
 ## Notes
 

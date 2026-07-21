@@ -93,6 +93,74 @@ export async function createListing(_prev: State, fd: FormData): Promise<State> 
   return upload.error ? { warning: `Listing posted. ${upload.error}` } : null;
 }
 
+/** Case/spacing-tolerant map from any condition label → the enum value. */
+function conditionFromLabel(raw: string | undefined): ItemCondition | null {
+  if (!raw) return null;
+  const n = raw.trim().toLowerCase();
+  if (n.startsWith("like")) return "like_new";
+  if (n.startsWith("for")) return "for_parts";
+  if (n.startsWith("used")) return "used";
+  if (n.startsWith("new")) return "new";
+  return CONDITION_FROM_LABEL[raw] ?? null;
+}
+
+const UpdateInput = z.object({
+  id: z.string().uuid(),
+  title: z.string().trim().min(1, "A title is required."),
+  description: z.string().trim().optional(),
+  price: z.string().trim().optional(),
+  condition: z.string().trim().optional(),
+  category: z.string().trim().optional(),
+});
+
+/**
+ * Edit an existing listing. RLS gates the update to the seller (or org
+ * owner/admin). Photos are only replaced when new files are attached — an edit
+ * that doesn't re-upload keeps the existing gallery rather than blanking it.
+ */
+export async function updateListing(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const photoFiles = filesFrom(fd, "photo");
+  const parsed = UpdateInput.safeParse(
+    Object.fromEntries(Array.from(fd.entries()).filter(([, v]) => typeof v === "string")),
+  );
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
+    return { error: "Please fix the errors below.", fieldErrors };
+  }
+
+  const supabase = await createClient();
+
+  // Only replace photos when new files are attached — an edit that doesn't
+  // re-upload keeps the existing gallery.
+  const upload =
+    photoFiles.length > 0
+      ? await uploadFieldPhotos(supabase, LISTING_PHOTO_BUCKET, session.orgId, session.userId, photoFiles)
+      : null;
+
+  // NOTE: the kit `listing` form collects item/price/cond/desc/photo — NOT
+  // category — so category is intentionally left untouched here (patching it
+  // from an absent field would blank an existing category).
+  const { data, error } = await supabase
+    .from("marketplace_listings")
+    .update({
+      title: parsed.data.title,
+      description: parsed.data.description || null,
+      price_cents: parsePriceCents(parsed.data.price),
+      item_condition: conditionFromLabel(parsed.data.condition),
+      ...(upload ? { photos: upload.refs } : {}),
+    })
+    .eq("id", parsed.data.id)
+    .is("deleted_at", null)
+    .select("id");
+  if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "You can only edit your own listing." };
+
+  revalidatePath("/m/market");
+  return upload?.error ? { warning: `Listing updated. ${upload.error}` } : null;
+}
+
 const IdInput = z.object({ id: z.string().uuid() });
 
 /** Mark a listing sold. RLS gates the update to the seller (or org owner/admin). */

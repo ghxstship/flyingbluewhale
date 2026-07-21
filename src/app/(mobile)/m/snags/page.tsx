@@ -1,13 +1,11 @@
 import Link from "next/link";
-import { ClipboardList } from "lucide-react";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
-import { PhotoStrip } from "@/components/media/PhotoStrip";
 import { signPhotoRefsFor } from "@/lib/mobile/photo-sign";
+import { SnagsListView, type SnagItem } from "./SnagsListView";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +14,8 @@ const SNAG_PHOTO_BUCKET = "procore-parity";
 
 /**
  * COMPVSS · My Snags — the snags I raised, newest first, into the console
- * punch-list store (`punch_items`).
+ * punch-list store (`punch_items`). Migrated onto the kit view engine
+ * (NormalizedList) via <SnagsListView>; rows open /m/punch/[id].
  *
  * Deliberately self-scoped with an explicit `created_by` filter, the same
  * defensive shape as /m/expenses: punch_items RLS is org-member-readable, so
@@ -33,21 +32,6 @@ type SnagRow = {
   photo_path: string | null;
   project_id: string;
   created_at: string;
-};
-
-const STATE_TONE: Record<string, string> = {
-  open: "warn",
-  in_progress: "info",
-  ready_for_review: "info",
-  complete: "ok",
-  void: "neutral",
-};
-
-const PRIORITY_TONE: Record<string, string> = {
-  low: "neutral",
-  normal: "neutral",
-  high: "warn",
-  urgent: "danger",
 };
 
 export default async function SnagsPage() {
@@ -83,19 +67,18 @@ export default async function SnagsPage() {
     projectName.set(p.id, p.name ?? "");
   }
 
-  const STATE_LABEL: Record<string, string> = {
-    open: t("m.snags.state.open", undefined, "Open"),
-    in_progress: t("m.snags.state.inProgress", undefined, "In Progress"),
-    ready_for_review: t("m.snags.state.readyForReview", undefined, "Ready For Review"),
-    complete: t("m.snags.state.complete", undefined, "Complete"),
-    void: t("m.snags.state.void", undefined, "Void"),
-  };
-  const PRIORITY_LABEL: Record<string, string> = {
-    low: t("m.snags.priority.low", undefined, "Low"),
-    normal: t("m.snags.priority.normal", undefined, "Normal"),
-    high: t("m.snags.priority.high", undefined, "High"),
-    urgent: t("m.snags.priority.urgent", undefined, "Urgent"),
-  };
+  // Flatten to the client view's shape — signed photos + resolved project +
+  // preformatted dates threaded in (the client can't reach storage or the DB).
+  const viewItems: SnagItem[] = snags.map((s) => ({
+    id: s.id,
+    code: s.code,
+    title: s.title,
+    item_state: s.item_state,
+    priority: s.priority,
+    projectName: projectName.get(s.project_id) ?? null,
+    createdLabel: fmt.date(s.created_at),
+    photos: photosById.get(s.id) ?? [],
+  }));
 
   return (
     <div className="screen screen-anim">
@@ -104,52 +87,15 @@ export default async function SnagsPage() {
         {t("m.snags.title", undefined, "My Snags")}
       </h1>
 
+      <SnagsListView items={viewItems} />
+
       <Link
         href="/m/snags/new"
         className="ps-btn ps-btn--cta ps-btn--lg"
-        style={{ width: "100%", justifyContent: "center", marginBottom: 12 }}
+        style={{ width: "100%", justifyContent: "center", marginTop: 16 }}
       >
         <KIcon name="Camera" size={16} /> {t("m.snags.new", undefined, "Raise A Snag")}
       </Link>
-
-      {snags.length === 0 ? (
-        <EmptyState
-          size="compact"
-          icon={<ClipboardList size={28} aria-hidden="true" />}
-          title={t("m.snags.empty.title", undefined, "No Snags Yet")}
-          description={t(
-            "m.snags.empty.body",
-            undefined,
-            "Spot something broken, unsafe or unfinished? Photograph it and it lands on the punch list.",
-          )}
-        />
-      ) : (
-        snags.map((s) => (
-          <div className="item" key={s.id} style={{ display: "block" }}>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="t">{s.title}</div>
-                <div className="s">
-                  {s.code}
-                  {projectName.get(s.project_id) ? ` · ${projectName.get(s.project_id)}` : ""}
-                  {` · ${fmt.date(s.created_at)}`}
-                </div>
-              </div>
-              <div style={{ textAlign: "right", flex: "none", display: "grid", gap: 4, justifyItems: "end" }}>
-                <span className={`ps-badge ps-badge--${STATE_TONE[s.item_state] ?? "neutral"}`}>
-                  {STATE_LABEL[s.item_state] ?? s.item_state}
-                </span>
-                {(s.priority === "high" || s.priority === "urgent") && (
-                  <span className={`ps-badge ps-badge--${PRIORITY_TONE[s.priority] ?? "neutral"}`}>
-                    {PRIORITY_LABEL[s.priority] ?? s.priority}
-                  </span>
-                )}
-              </div>
-            </div>
-            <PhotoStrip photos={photosById.get(s.id) ?? []} label={s.title} />
-          </div>
-        ))
-      )}
     </div>
   );
 }

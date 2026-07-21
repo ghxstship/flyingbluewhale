@@ -17,7 +17,7 @@ const CHANGELOG: Release[] = [
     tag: "Latest",
     tone: "ok",
     notes: [
-      ["new", "Asset Catalog module — browse & request from the XPMS catalog"],
+      ["new", "Asset Catalog module · browse & request from the XPMS catalog"],
       ["new", "Advance requests now use a cart/checkout flow with item photos"],
       ["imp", "Bespoke report forms (Incident, Lost & Found, Maintenance)"],
       ["imp", "Severity tiers reordered most-urgent-first with color coding"],
@@ -28,7 +28,7 @@ const CHANGELOG: Release[] = [
     date: "Jun 4, 2026",
     notes: [
       ["new", "Team Roster & Company Directory split into separate modules"],
-      ["new", "Badges & kudos — tiered recognition on your profile"],
+      ["new", "Badges & kudos · tiered recognition on your profile"],
       ["imp", "Context-aware event detail pages (shift / meeting / training / run of show)"],
       ["fix", "NFC scan frame sizing on Access & POS modes"],
     ],
@@ -37,7 +37,7 @@ const CHANGELOG: Release[] = [
     v: "2.2.0",
     date: "May 21, 2026",
     notes: [
-      ["new", "My Pass — universal credential with access, catering & shuttle linking"],
+      ["new", "My Pass · universal credential with access, catering & shuttle linking"],
       ["new", "Offline sync mode with queued-change tracking"],
       ["imp", "Schedule calendar view with type filters"],
     ],

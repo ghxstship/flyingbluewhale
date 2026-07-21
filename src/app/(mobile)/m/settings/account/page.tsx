@@ -72,7 +72,7 @@ export default async function MobileAccountPage() {
         {t(
           "m.account.intro2",
           undefined,
-          "Manage your account — pause for a while, export your data, or delete it.",
+          "Manage your account: pause for a while, export your data, or delete it.",
         )}
       </p>
 
@@ -127,7 +127,7 @@ export default async function MobileAccountPage() {
         {t(
           "m.account.export.intro",
           undefined,
-          "Download everything we hold about you — profile, time logs, submissions, messages — as a single JSON bundle. Do this before deleting your account.",
+          "Download everything we hold about you (profile, time logs, submissions, messages) as a single JSON bundle. Do this before deleting your account.",
         )}
       </p>
       <a

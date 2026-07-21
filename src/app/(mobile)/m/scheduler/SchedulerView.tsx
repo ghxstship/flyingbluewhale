@@ -509,7 +509,7 @@ export function SchedulerView({
                     </span>
                     {g.rateCents != null && (
                       <span className="sched-meta">
-                        <KIcon name="Banknote" size={11} /> ${(g.rateCents / 100).toFixed(0)}/hr
+                        <KIcon name="Banknote" size={11} /> {fmt.money(g.rateCents)}/hr
                       </span>
                     )}
                     {g.published && g.crew.length > 0 && (

@@ -3,26 +3,28 @@
 import Link from "next/link";
 import { HubChrome } from "@/components/mobile/HubChrome";
 import { Block, KIcon, ListRow, MetricGrid } from "@/components/mobile/kit";
-import { SHIFT_NOTES, OPS_REPORTS, DELIVERIES } from "@/lib/mobile/ops-seed";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Daily Report (kit 34 v3.7) — the end-of-day rollup, an Operations hub member.
- * Aggregates the day's shift notes with a summary derived from the ops ledgers
- * (open incidents · deliveries · flags) into one filable/exportable record.
- * File routes to the real daily-log form; Export prints the current view.
+ * Renders the day's REAL shift notes + the org's open-incident count (the page
+ * does the org-scoped reads). File routes to the real daily-log form; Export
+ * prints the current view. No fabricated ops-seed data.
  */
-const TONE_COLOR: Record<string, string> = {
-  ok: "var(--p-success)",
-  info: "var(--p-info)",
-  warn: "var(--p-warning)",
-  danger: "var(--p-danger)",
-  neutral: "var(--p-text-3)",
-};
+export type ReportNote = { id: string; author: string; asManager: boolean; body: string; when: string };
 
-export function DailyReportView({ canManage }: { canManage: boolean }) {
-  const openIncidents = OPS_REPORTS.filter((r) => r.type === "Incident" && r.status === "Open").length;
-  const deliveries = DELIVERIES.length;
-  const flags = SHIFT_NOTES.filter((n) => n.tone === "warn").length;
+export function DailyReportView({
+  canManage,
+  notes,
+  openIncidents,
+  managerNotes,
+}: {
+  canManage: boolean;
+  notes: ReportNote[];
+  openIncidents: number;
+  managerNotes: number;
+}) {
+  const t = useT();
 
   return (
     <div className="screen screen-anim">
@@ -30,27 +32,39 @@ export function DailyReportView({ canManage }: { canManage: boolean }) {
 
       <MetricGrid
         cells={[
-          { k: "Shift Notes", v: SHIFT_NOTES.length },
-          { k: "Open Incidents", v: openIncidents, color: openIncidents ? "var(--p-danger)" : undefined },
-          { k: "Deliveries", v: deliveries },
-          { k: "Flags", v: flags, color: flags ? "var(--p-warning)" : undefined },
+          { k: t("m.dailyReport.notes", undefined, "Shift Notes"), v: notes.length },
+          {
+            k: t("m.dailyReport.openIncidents", undefined, "Open Incidents"),
+            v: openIncidents,
+            color: openIncidents ? "var(--p-danger)" : undefined,
+          },
+          { k: t("m.dailyReport.managerNotes", undefined, "Manager Notes"), v: managerNotes },
         ]}
       />
 
-      <Block title="Shift Notes" meta={`${SHIFT_NOTES.length} filed`}>
-        {SHIFT_NOTES.map((n) => (
-          <ListRow
-            key={n.id}
-            icon="StickyNote"
-            iconColor={TONE_COLOR[n.tone]}
-            title={`${n.by} · ${n.role}`}
-            sub={`${n.shift} · ${n.time}`}
-          >
-            <div className="s" style={{ marginTop: 4, color: "var(--p-text-2)" }}>
-              {n.txt}
-            </div>
-          </ListRow>
-        ))}
+      <Block
+        title={t("m.dailyReport.notes", undefined, "Shift Notes")}
+        meta={t("m.dailyReport.filed", { count: notes.length }, `${notes.length} filed`)}
+      >
+        {notes.length === 0 ? (
+          <div className="s" style={{ color: "var(--p-text-3)", padding: "8px 0" }}>
+            {t("m.dailyReport.empty", undefined, "No shift notes filed today.")}
+          </div>
+        ) : (
+          notes.map((n) => (
+            <ListRow
+              key={n.id}
+              icon="StickyNote"
+              iconColor={n.asManager ? "var(--p-warning)" : "var(--p-text-3)"}
+              title={n.author}
+              sub={n.when}
+            >
+              <div className="s" style={{ marginTop: 4, color: "var(--p-text-2)" }}>
+                {n.body}
+              </div>
+            </ListRow>
+          ))
+        )}
       </Block>
 
       <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
@@ -59,7 +73,7 @@ export function DailyReportView({ canManage }: { canManage: boolean }) {
           className="ps-btn ps-btn--cta ps-btn--lg"
           style={{ flex: 1, justifyContent: "center", textDecoration: "none" }}
         >
-          <KIcon name="Check" size={16} /> File Report
+          <KIcon name="Check" size={16} /> {t("m.dailyReport.file", undefined, "File Report")}
         </Link>
         <button
           type="button"
@@ -67,13 +81,16 @@ export function DailyReportView({ canManage }: { canManage: boolean }) {
           style={{ flex: 1, justifyContent: "center" }}
           onClick={() => window.print()}
         >
-          <KIcon name="Printer" size={16} /> Export PDF
+          <KIcon name="Printer" size={16} /> {t("m.dailyReport.export", undefined, "Export PDF")}
         </button>
       </div>
 
       <p className="hint" style={{ marginTop: 10 }}>
-        The Daily Report rolls up shift notes, incidents and deliveries for handoff to leads. Filing saves it to the
-        project&apos;s daily log; export prints a PDF for email.
+        {t(
+          "m.dailyReport.hint",
+          undefined,
+          "The Daily Report rolls up today's shift notes and open incidents for handoff to leads. Filing saves it to the project's daily log; export prints a PDF for email.",
+        )}
       </p>
     </div>
   );

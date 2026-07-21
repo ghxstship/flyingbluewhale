@@ -1045,7 +1045,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                 [
                   ["Scan", t("m.onboarding.pass.use1", undefined, "Tap or scan to enter job sites, access amenities, track assets & dispatch services")],
                   ["RefreshCw", t("m.onboarding.pass.use2", undefined, "Access updates remotely — granted, revoked or upgraded in real time")],
-                  ["Infinity", t("m.onboarding.pass.use3", undefined, "Issued once, carried for life — only your access ever changes")],
+                  ["Infinity", t("m.onboarding.pass.use3", undefined, "Issued once, carried for life. Only your access ever changes")],
                 ] as Array<[string, string]>
               ).map(([ic, text]) => (
                 <div key={text} style={{ display: "flex", gap: 10, alignItems: "center", padding: "6px 0" }}>

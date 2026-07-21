@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
 import { KIcon } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -20,7 +20,10 @@ import { logFieldMileage, type State } from "../actions";
 export default function NewMileagePage() {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(logFieldMileage, null);
-  const today = new Date().toISOString().slice(0, 10);
+  // Seed "today" AFTER mount — computing new Date() in render straddles the
+  // SSR/hydration boundary at UTC midnight and mismatches (React #418).
+  const [today, setToday] = useState("");
+  useEffect(() => setToday(new Date().toISOString().slice(0, 10)), []);
 
   return (
     <div className="screen screen-anim">
@@ -57,7 +60,14 @@ export default function NewMileagePage() {
           </div>
           <div className="fld" style={{ width: "100%" }}>
             <label htmlFor="logged_on">Date</label>
-            <input id="logged_on" name="logged_on" type="date" required defaultValue={today} />
+            <input
+              id="logged_on"
+              name="logged_on"
+              type="date"
+              required
+              value={today}
+              onChange={(e) => setToday(e.target.value)}
+            />
           </div>
         </div>
 

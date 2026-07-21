@@ -47,7 +47,7 @@ export function AccountActions({
           [
             ["Eye", t("m.account.pause.hide", undefined, "Hidden from crew scheduling and rosters")],
             ["BellOff", t("m.account.pause.mute", undefined, "Notifications paused")],
-            ["RotateCcw", t("m.account.pause.reverse", undefined, "Reactivate anytime — nothing is lost")],
+            ["RotateCcw", t("m.account.pause.reverse", undefined, "Reactivate anytime. Nothing is lost")],
           ] as const
         ).map(([icon, label]) => (
           <div

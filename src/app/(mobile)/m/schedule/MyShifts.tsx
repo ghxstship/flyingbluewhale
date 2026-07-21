@@ -76,7 +76,7 @@ export function MyShifts({
                 justifyContent: "center",
                 color: "rgba(255,255,255,.6)",
                 fontFamily: "var(--p-mono)",
-                fontSize: 9.5,
+                fontSize: 11,
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
               }}

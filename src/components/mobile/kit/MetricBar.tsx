@@ -71,7 +71,7 @@ export function MetricBar({ items }: { items: MetricBarItem[] }) {
                 {k.v}
               </span>
             </div>
-            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", color: "var(--p-text-3)", whiteSpace: "nowrap" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", color: "var(--p-text-3)", whiteSpace: "nowrap" }}>
               {k.short}
             </div>
           </button>

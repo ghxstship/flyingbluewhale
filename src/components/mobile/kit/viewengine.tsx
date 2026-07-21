@@ -305,7 +305,7 @@ export function FilterGroups<T>({
                           type="button"
                           className="conj-tog"
                           onClick={() => setGroup(gi, { conj: g.conj === "and" ? "or" : "and" })}
-                          style={{ border: "1px solid var(--p-border)", borderRadius: 6, background: "var(--p-surface)", color: "var(--p-accent)", fontSize: 10.5, fontWeight: 800, padding: "2px 5px", cursor: "pointer" }}
+                          style={{ border: "1px solid var(--p-border)", borderRadius: 6, background: "var(--p-surface)", color: "var(--p-accent)", fontSize: 11, fontWeight: 800, padding: "2px 5px", cursor: "pointer" }}
                         >
                           {g.conj.toUpperCase()}
                         </button>
@@ -819,7 +819,7 @@ export function DataView<T>({
             <div key={day} style={{ marginBottom: 12 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "2px 0 8px" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 10, background: isToday ? "var(--p-accent)" : "var(--p-surface-2, var(--p-surface))", border: "1px solid var(--p-border)", color: isToday ? "var(--p-accent-contrast)" : "var(--p-text-1)", flex: "none" }}>
-                  <span style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", opacity: 0.8 }}>{MON[d.getMonth()]}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", opacity: 0.8 }}>{MON[d.getMonth()]}</span>
                   <span style={{ fontSize: 16, fontWeight: 800, lineHeight: 1 }}>{d.getDate()}</span>
                 </div>
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--p-text-2)" }}>

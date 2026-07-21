@@ -221,7 +221,7 @@ export function TaskDetail({
             }}
           >
             <KIcon name={a.kind === "file" ? "FileText" : "Image"} size={20} />
-            <div className="s" style={{ fontSize: 10, wordBreak: "break-word" }}>{a.name}</div>
+            <div className="s" style={{ fontSize: 11, wordBreak: "break-word" }}>{a.name}</div>
           </div>
         ))}
       </div>

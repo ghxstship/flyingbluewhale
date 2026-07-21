@@ -358,7 +358,7 @@ export function ToolSheet({ toolId, onClose, toast }: { toolId: string; onClose:
             <div className="chips" style={{ paddingBottom: 12, justifyContent: "space-between" }}>
               {HOURLY.map(([h, t, ic], i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, flex: "none", minWidth: 52 }}>
-                  <span className="s" style={{ fontSize: 10 }}>{h}</span><KIcon name={ICON_FOR[ic] || "Sun"} size={18} style={{ color: "var(--p-text-2)" }} /><span style={{ fontWeight: 700, fontSize: 12 }}>{t}</span>
+                  <span className="s" style={{ fontSize: 11 }}>{h}</span><KIcon name={ICON_FOR[ic] || "Sun"} size={18} style={{ color: "var(--p-text-2)" }} /><span style={{ fontWeight: 700, fontSize: 12 }}>{t}</span>
                 </div>
               ))}
             </div>

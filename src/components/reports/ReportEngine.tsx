@@ -78,7 +78,7 @@ function KpiTile({ metricId, mv }: { metricId: string; mv: MetricValue | undefin
             <span
               className="kpi-conf"
               title={`Confidence grade: ${def.confidence}`}
-              style={{ fontSize: "9px", letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.65 }}
+              style={{ fontSize: "11px", letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.65 }}
             >
               {def.confidence}
             </span>

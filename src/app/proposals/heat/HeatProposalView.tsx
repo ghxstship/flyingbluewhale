@@ -426,7 +426,7 @@ function Detail({ label, value }: { label: string; value: string }) {
           fontWeight: 700,
           letterSpacing: "0.08em",
           textTransform: "uppercase",
-          fontSize: 10,
+          fontSize: 11,
         }}
       >
         {label}
@@ -630,7 +630,7 @@ function ScopeColumn({ title, nodes }: { title: string; nodes: typeof HEAT_TAXON
           <div
             style={{
               marginTop: 8,
-              fontSize: 10,
+              fontSize: 11,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
               color: "var(--heat-red)",

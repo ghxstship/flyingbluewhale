@@ -58,7 +58,7 @@ export function PhotoStrip({
                   height: "100%",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: 9,
+                  fontSize: 11,
                   color: "var(--p-text-3)",
                   textAlign: "center",
                   padding: 2,

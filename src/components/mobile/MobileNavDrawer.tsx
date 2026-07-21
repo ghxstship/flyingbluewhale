@@ -216,7 +216,7 @@ export function MobileNavDrawer({
               <KIcon name="RefreshCw" size={15} style={{ color: "var(--p-success)" }} />
               Synced
               <span style={{ flex: 1 }} />
-              <span style={{ fontFamily: "var(--p-mono)", fontSize: 10, color: "var(--p-text-3)" }}>
+              <span style={{ fontFamily: "var(--p-mono)", fontSize: 11, color: "var(--p-text-3)" }}>
                 TAP TO REFRESH
               </span>
             </button>

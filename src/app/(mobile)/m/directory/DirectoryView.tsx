@@ -102,7 +102,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
       <div className="t" style={{ fontSize: 12.5, textAlign: "center", marginTop: 8 }}>
         {p.name}
       </div>
-      <div className="s" style={{ fontSize: 10.5, textAlign: "center" }}>
+      <div className="s" style={{ fontSize: 11, textAlign: "center" }}>
         {fmtPosition(p.role)}
       </div>
       <MBadge t={tone(p.status)}>{p.status}</MBadge>

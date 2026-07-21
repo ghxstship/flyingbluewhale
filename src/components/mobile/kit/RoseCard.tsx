@@ -201,7 +201,7 @@ export function RoseCard({
             </div>
           ) : null}
           {credentialLabel ? (
-            <div style={{ fontFamily: "var(--p-mono)", fontSize: 10, letterSpacing: "0.14em", color: "rgba(255,255,255,.6)", marginTop: 5 }}>
+            <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.14em", color: "rgba(255,255,255,.6)", marginTop: 5 }}>
               {credentialLabel}
             </div>
           ) : null}
@@ -339,7 +339,7 @@ export function RoseCard({
           <KIcon name="User" size={28} />
         </span>
         <div style={{ minWidth: 0, flex: 1 }}>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 7.5, letterSpacing: "0.22em", color: "rgba(244,205,191,.6)" }}>
+          <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.22em", color: "rgba(244,205,191,.6)" }}>
             MEMBER
           </div>
           {holderName ? (
@@ -352,7 +352,7 @@ export function RoseCard({
             <span
               style={{
                 fontFamily: "var(--p-mono)",
-                fontSize: 9.5,
+                fontSize: 11,
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,.82)",
@@ -374,7 +374,7 @@ export function RoseCard({
         }}
       >
         <div>
-          <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
+          <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
             CREDENTIAL ID
           </div>
           <div style={{ fontFamily: "var(--p-mono)", fontSize: 15, letterSpacing: "0.2em", marginTop: 3 }}>
@@ -383,7 +383,7 @@ export function RoseCard({
         </div>
         {memberSince ? (
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
+            <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>
               MEMBER SINCE
             </div>
             <div style={{ fontFamily: "var(--p-mono)", fontSize: 12, marginTop: 3 }}>{memberSince}</div>

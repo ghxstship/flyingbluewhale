@@ -229,7 +229,7 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
             {escalated.has(c.id) && (
               <span
                 className="s"
-                style={{ fontSize: 10, color: "var(--p-danger)", display: "flex", alignItems: "center", gap: 3 }}
+                style={{ fontSize: 11, color: "var(--p-danger)", display: "flex", alignItems: "center", gap: 3 }}
               >
                 <KIcon name="TrendingUp" size={10} /> {t("m.requests.escalatedTag", undefined, "Escalated")}
               </span>

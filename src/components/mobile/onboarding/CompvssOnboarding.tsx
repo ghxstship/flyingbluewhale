@@ -111,7 +111,7 @@ const soonRibbon: CSSProperties = {
   right: -30,
   transform: "rotate(45deg)",
   fontFamily: "var(--p-mono)",
-  fontSize: 8,
+  fontSize: 11,
   fontWeight: 700,
   letterSpacing: "0.1em",
   textTransform: "uppercase",
@@ -713,7 +713,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
               <div style={{ borderTop: "1px solid var(--p-border)", paddingTop: 12 }}>
                 {(() => {
                   const GH = ({ children }: { children: ReactNode }) => (
-                    <div style={{ fontFamily: "var(--p-mono)", fontSize: 9.5, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--p-text-3)", margin: "14px 0 8px" }}>
+                    <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--p-text-3)", margin: "14px 0 8px" }}>
                       {children}
                     </div>
                   );
@@ -1003,7 +1003,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                     <QRCode value={passToken} size={100} />
                   </span>
                   <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.7)" }}>0042 · RT4471</div>
-                  <div style={{ fontSize: 10.5, color: "rgba(255,255,255,.45)", textAlign: "center" }}>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,.45)", textAlign: "center" }}>
                     {t("m.onboarding.pass.scanNote", undefined, "Preview · your live gate pass appears here once a credential is issued")}
                   </div>
                 </div>
@@ -1023,11 +1023,11 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
                   <KIcon name="User" size={28} />
                 </span>
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontFamily: "var(--p-mono)", fontSize: 7.5, letterSpacing: "0.22em", color: "rgba(244,205,191,.6)" }}>MEMBER</div>
+                  <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.22em", color: "rgba(244,205,191,.6)" }}>MEMBER</div>
                   <div style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 24, lineHeight: 1, marginTop: 3, letterSpacing: "0.01em", textShadow: "0 1px 1px rgba(0,0,0,.3)" }}>{displayName}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 9 }}>
                     <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--p-accent)" }} />
-                    <span style={{ fontFamily: "var(--p-mono)", fontSize: 9.5, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,.82)" }}>
+                    <span style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,.82)" }}>
                       {t("m.onboarding.pass.freeAgent", undefined, "Free Agent")}
                     </span>
                   </div>
@@ -1035,17 +1035,17 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
               </div>
               <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "flex-end", borderTop: "1px solid rgba(255,255,255,.1)", paddingTop: 11 }}>
                 <div>
-                  <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>CREDENTIAL ID</div>
+                  <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>CREDENTIAL ID</div>
                   <div style={{ fontFamily: "var(--p-mono)", fontSize: 15, letterSpacing: "0.2em", marginTop: 3 }}>0042 · RT4471</div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontFamily: "var(--p-mono)", fontSize: 8, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>MEMBER SINCE</div>
+                  <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.16em", color: "rgba(255,255,255,.5)" }}>MEMBER SINCE</div>
                   <div style={{ fontFamily: "var(--p-mono)", fontSize: 12, letterSpacing: "0.1em", marginTop: 3 }}>06 / 26</div>
                 </div>
               </div>
             </div>
             <div className="card" style={{ marginBottom: 4 }}>
-              <div style={{ fontFamily: "var(--p-mono)", fontSize: 9.5, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--p-text-3)", marginBottom: 8 }}>
+              <div style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--p-text-3)", marginBottom: 8 }}>
                 {t("m.onboarding.pass.howTo", undefined, "How to Use Your Rose")}
               </div>
               {(

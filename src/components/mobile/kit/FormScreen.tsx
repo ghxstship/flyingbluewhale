@@ -724,7 +724,7 @@ export function FormScreen({
   return (
     <div className="formscreen">
       <div className="form-top" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontFamily: "var(--p-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--p-text-3)" }}>{def.kicker || "New"}</span>
+        <span style={{ fontFamily: "var(--p-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--p-text-3)" }}>{def.kicker || "New"}</span>
         <button type="button" className="modal-x" onClick={onClose} aria-label="Close"><KIcon name="X" size={18} /></button>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>

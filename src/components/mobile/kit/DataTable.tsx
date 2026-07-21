@@ -311,7 +311,7 @@ export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>)
       )}
       {(rules || []).map((r, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
-          <span style={{ fontSize: 10, color: "var(--p-text-3)", width: 26 }}>{i === 0 ? "Sort" : "then"}</span>
+          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 26 }}>{i === 0 ? "Sort" : "then"}</span>
           <select
             value={r.field}
             onChange={(e) => upd(i, { field: e.target.value })}

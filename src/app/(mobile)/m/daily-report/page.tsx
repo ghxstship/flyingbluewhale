@@ -49,6 +49,8 @@ export default async function DailyReportPage() {
   const authorIds = [...new Set(notes.map((n) => n.author_id).filter(Boolean) as string[])];
   const nameMap = new Map<string, string>();
   if (authorIds.length) {
+    // soft-delete-exempt: resolving author display names by id — an archived
+    // user's name should still label their historical shift note.
     const { data: users } = await supabase.from("users").select("id, name, email").in("id", authorIds);
     for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
       nameMap.set(u.id, u.name ?? u.email ?? "");

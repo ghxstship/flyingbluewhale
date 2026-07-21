@@ -67,6 +67,8 @@ export default async function TimeSheetsPage() {
   const partyIds = [...new Set(sheets.map((s) => s.party_id))];
   const nameById = new Map<string, string>();
   if (partyIds.length) {
+    // soft-delete-exempt: resolving worker display names by id — an archived
+    // party's name should still label their historical timesheet.
     const { data: parties } = await supabase
       .from("parties")
       .select("id, display_name")

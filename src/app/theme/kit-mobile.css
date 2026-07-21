@@ -557,7 +557,7 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .aurora-screen { display: flex; flex-direction: column; flex: 1; overflow-y: auto; padding: var(--p-2) var(--p-4) calc(158px + env(safe-area-inset-bottom, 0px)); /* grid-exempt: bottom pad clears the fixed composer + floating tab bar */ }
 .mobile-shell .aurora-head { display: flex; align-items: center; gap: var(--p-2); padding: 2px 0 var(--p-3); margin-bottom: var(--p-2); border-bottom: 1px solid var(--p-border); }
 .mobile-shell .aurora-head .cop-spark { width: 30px; height: 30px; border-radius: 9px; flex: none; display: flex; align-items: center; justify-content: center; color: #1f0e03; background: linear-gradient(135deg, var(--p-accent), color-mix(in oklab, var(--p-accent) 60%, #fff)); }
-.mobile-shell .aurora-head .aurora-head-t { font-family: var(--p-heading); text-transform: uppercase; font-size: 16px; line-height: 1; }
+.mobile-shell .aurora-head .aurora-head-t { font-family: var(--p-heading); text-transform: uppercase; font-size: 16px; line-height: 1; margin: 0; }
 .mobile-shell .aurora-head .aurora-head-s { font-size: 11px; color: var(--p-text-3); margin-top: 2px; }
 .mobile-shell .aurora-hello { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 32px 8px 0; }
 .mobile-shell .aurora-orb { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: #1f0e03; background: linear-gradient(135deg, var(--p-accent), color-mix(in oklab, var(--p-accent) 55%, #fff)); box-shadow: var(--p-elev-2, var(--p-elev-1)); margin-bottom: 16px; }

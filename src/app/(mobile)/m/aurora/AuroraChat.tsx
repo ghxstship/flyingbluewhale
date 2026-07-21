@@ -107,7 +107,7 @@ export function AuroraChat({ firstName }: { firstName: string }) {
           <KIcon name="Sparkles" size={16} />
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="aurora-head-t">Aurora AI</div>
+          <h1 className="aurora-head-t">Aurora AI</h1>
           <div className="aurora-head-s">Field intelligence · {online ? "online" : "offline"}</div>
         </div>
         {msgs.length > 0 && (

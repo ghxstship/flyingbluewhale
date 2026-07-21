@@ -20,11 +20,17 @@ test.describe("COMPVSS purchase requests", () => {
     await page.getByRole("link", { name: /request a purchase/i }).first().click();
     await expect(page).toHaveURL(/\/m\/requisitions\/new$/, { timeout: 20_000 });
 
+    // Kit 31: the PO Request is the shared `FormScreen` (state-keyed controls,
+    // no native name= attributes) — locate by placeholder. requisitions.title
+    // is set from `item`. Required: item, vendor, amount, needed, purpose
+    // (qty + coding carry defaults). Submit label is "Submit PO".
     const title = `E2E req ${Date.now()}`;
-    await page.locator('input[name="title"]').fill(title);
-    await page.locator('input[name="estimated"]').fill("40.00");
-    await page.locator('textarea[name="description"]').fill("Gel frame snapped during focus.");
-    await page.getByRole("button", { name: /raise request/i }).click();
+    await page.getByPlaceholder("What are you buying?").fill(title);
+    await page.getByPlaceholder("e.g. Harbor Supply Co.").fill("Harbor Supply Co.");
+    await page.getByPlaceholder("0.00").fill("40.00");
+    await page.locator('input[type="date"]').first().fill("2026-12-31");
+    await page.getByPlaceholder("Why is this needed?").fill("Gel frame snapped during focus.");
+    await page.getByRole("button", { name: /submit po/i }).click();
 
     // Redirects to the list, and the request is the caller's own.
     await expect(page).toHaveURL(/\/m\/requisitions$/, { timeout: 20_000 });

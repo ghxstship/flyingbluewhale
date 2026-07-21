@@ -26,11 +26,8 @@ async function handler(req: Request) {
     // only... with one carve-out: a payer settling an invoice issued TO them.
     // Without `invoices:write`, the caller falls into payer mode — they can
     // only start checkout on an RLS-readable, open, outbound (AR) invoice.
-    // Gate BEFORE the Stripe env check so an unprivileged caller never gets
-    // to probe whether secrets are configured on invoices they can't see.
     const denial = assertCapability(session, "invoices:write");
     const payerMode = denial !== null;
-    if (!env.STRIPE_SECRET_KEY) return apiError("service_unavailable", "STRIPE_SECRET_KEY is not configured");
     const supabase = await createClient();
     const { data: invoice } = await supabase
       .from("invoices")
@@ -44,6 +41,11 @@ async function handler(req: Request) {
       // settled invoices still require the billing capability.
       return denial!;
     }
+    // Config check AFTER the visibility + authorization gates — an unprivileged
+    // caller who can't see or settle this invoice has already gotten 404/403
+    // above, so they never learn whether billing secrets are configured. Only a
+    // caller who WOULD be allowed to check out reaches this.
+    if (!env.STRIPE_SECRET_KEY) return apiError("service_unavailable", "STRIPE_SECRET_KEY is not configured");
 
     const returnBase = input.portalSlug
       ? { shell: "portal" as const, path: `/${input.portalSlug}/client/invoices` }

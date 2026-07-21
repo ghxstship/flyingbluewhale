@@ -398,7 +398,9 @@ export function DataTable<T>({ fields, items, onRow, sortable = true }: DataTabl
 
   return (
     <div className="dt-wrap">
-      <table className="dt">
+      {/* `dt--tap` gates the row pointer-cursor/hover/onClick on a real onRow —
+          without it, table rows looked clickable but did nothing (dead tap). */}
+      <table className={onRow ? "dt dt--tap" : "dt"}>
         <thead>
           <tr>
             {fields.map((f) => {
@@ -437,7 +439,7 @@ export function DataTable<T>({ fields, items, onRow, sortable = true }: DataTabl
         </thead>
         <tbody>
           {rows.map((it, i) => (
-            <tr key={i} onClick={() => onRow?.(it)}>
+            <tr key={i} onClick={onRow ? () => onRow(it) : undefined}>
               {fields.map((f) => {
                 const v: ReactNode = f.cell ? f.cell(it) : (readValue(f, it) as ReactNode);
                 return (

@@ -246,7 +246,9 @@ export default function GanttClient({ activities, dependencies }: Props) {
               key={a.id}
               onMouseEnter={() => setHoveredId(a.id)}
               onMouseLeave={() => setHoveredId(null)}
-              style={{ cursor: "pointer" }}
+              /* Hover-only (reveals the activity tooltip) — no click target on a
+                 read-only baseline snapshot, so keep the default cursor rather
+                 than a pointer that promises a tap that does nothing. */
             >
               {/* Float bar (only if non-critical) */}
               {showFloat && !a.is_critical && a.total_float_days != null && Number(a.total_float_days) > 0 && (

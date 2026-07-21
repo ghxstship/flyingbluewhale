@@ -43,7 +43,9 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
   ];
 
   const row = (it: CatalogEntry) => (
-    <div className="item tap" key={it.id} style={{ alignItems: "center" }}>
+    // Plain `.item` (not `.item tap`): the row body isn't a navigation target —
+    // "Request" is the action. A pressable row here would be a dead tap.
+    <div className="item" key={it.id} style={{ alignItems: "center" }}>
       <span className="cart-thumb" style={{ width: 40, height: 40 }}>
         <KIcon name="Package" size={16} style={{ color: "var(--p-text-3)" }} />
       </span>

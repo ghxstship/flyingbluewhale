@@ -207,8 +207,10 @@
 .mobile-shell .dt th { text-align: left; font-family: var(--p-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--p-text-3); padding: var(--p-2) 12px; border-bottom: 1px solid var(--p-border); white-space: nowrap; background: var(--p-surface); }
 .mobile-shell .dt td { padding: var(--p-3) 12px; border-bottom: 1px solid var(--p-border); white-space: nowrap; color: var(--p-text-1); }
 .mobile-shell .dt tbody tr:last-child td { border-bottom: none; }
-.mobile-shell .dt tbody tr { cursor: pointer; }
-.mobile-shell .dt tbody tr:hover td { background: var(--p-bg); }
+/* Row tap affordance only when the table has an onRow handler (.dt--tap) — a
+   plain data table (no detail to open) must not show a pointer/hover it can't act on. */
+.mobile-shell .dt--tap tbody tr { cursor: pointer; }
+.mobile-shell .dt--tap tbody tr:hover td { background: var(--p-bg); }
 .mobile-shell .dt th.num, .mobile-shell .dt td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .mobile-shell .dt td:first-child { font-weight: 600; }
 .mobile-shell .board { display: flex; gap: 12px; overflow-x: auto; margin: 0 -18px; padding: 2px var(--p-4) var(--p-3); scroll-snap-type: x mandatory; scrollbar-width: none; }

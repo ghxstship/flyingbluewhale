@@ -576,18 +576,6 @@ function ShareToggle({ on, set, label }: { on: boolean; set: (v: boolean) => voi
   );
 }
 
-function Seg2({ value, set, opts }: { value: string; set: (v: string) => void; opts: [string, string][] }) {
-  return (
-    <div className="seg2">
-      {opts.map(([v, l]) => (
-        <button key={v} type="button" className={value === v ? "on" : ""} onClick={() => set(v)}>
-          {l}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 function ShareRow({ icon, t, s, right, onClick }: { icon: string; t: string; s?: string; right?: ReactNode; onClick?: () => void }) {
   return (
     <div className={`item${onClick ? " tap" : ""}`} style={onClick ? { cursor: "pointer" } : undefined} {...pressable(onClick)}>
@@ -603,15 +591,35 @@ function ShareRow({ icon, t, s, right, onClick }: { icon: string; t: string; s?:
   );
 }
 
-/** Share & Export bottom sheet — link sharing, exports, print, advanced. */
-export function ShareSheet({ title, onClose }: { title: string; onClose: () => void }) {
+/**
+ * Share & Export bottom sheet — a REAL shareable link (this view's live URL) +
+ * genuine client-side row exports (CSV / JSON) + print. No fabricated share-token
+ * service or automation backend: permissioned/expiring public links, scheduled
+ * delivery, webhooks and embeds are provisioned in the ATLVS web console, so they
+ * are not shown here rather than faked. Export rows are the caller's current
+ * filtered set (`rows` + `fields`); absent them, only Print is offered.
+ */
+export function ShareSheet<T>({
+  title,
+  onClose,
+  rows,
+  fields,
+}: {
+  title: string;
+  onClose: () => void;
+  rows?: readonly T[];
+  fields?: readonly FieldDef<T>[];
+}) {
   const [seg, setSeg] = useState("share");
-  const [access, setAccess] = useState("view");
-  const [scope, setScope] = useState("filtered");
   const [linkOn, setLinkOn] = useState(true);
-  const [expiry, setExpiry] = useState("never");
   const [copied, setCopied] = useState(false);
-  const link = `atlvs.pro/s/${(title || "view").toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 18)}-8f2a1`;
+  // Honest link: the live URL of the current view — copy/share what resolves.
+  const link = typeof window !== "undefined" ? window.location.href : "";
+  const slug =
+    (title || "view").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "view";
+  const cols = fields ?? [];
+  const canExport = rows != null && rows.length > 0 && cols.length > 0;
+
   const copy = () => {
     try {
       navigator.clipboard?.writeText(link);
@@ -621,10 +629,46 @@ export function ShareSheet({ title, onClose }: { title: string; onClose: () => v
     setCopied(true);
     setTimeout(() => setCopied(false), 1600);
   };
+
+  const cellValue = (r: T, f: FieldDef<T>): string => {
+    const v = f.get ? f.get(r) : (r as Record<string, unknown>)[f.id];
+    return v == null ? "" : String(v);
+  };
+  const download = (data: string, mime: string, ext: string) => {
+    try {
+      const blob = new Blob([data], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${slug}.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      /* download unavailable in this context */
+    }
+    onClose();
+  };
+  const exportCsv = () => {
+    if (!rows) return;
+    const esc = (s: string) => (/[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
+    const head = cols.map((f) => esc(f.label)).join(",");
+    const body = rows.map((r) => cols.map((f) => esc(cellValue(r, f))).join(",")).join("\n");
+    download(`${head}\n${body}`, "text/csv;charset=utf-8", "csv");
+  };
+  const exportJson = () => {
+    if (!rows) return;
+    const data = rows.map((r) =>
+      Object.fromEntries(cols.map((f) => [f.id, f.get ? f.get(r) : (r as Record<string, unknown>)[f.id]])),
+    );
+    download(JSON.stringify(data, null, 2), "application/json", "json");
+  };
+
   return (
     <Sheet icon="Share" title="Share & Export" onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
       <div className="viewseg" style={{ marginBottom: 14 }}>
-        {([["share", "Share", "Link"], ["export", "Export", "Download"], ["advanced", "Advanced", "Settings2"]] as [string, string, string][]).map(([id, lab, ic]) => (
+        {([["share", "Share", "Link"], ["export", "Export", "Download"]] as [string, string, string][]).map(([id, lab, ic]) => (
           <button key={id} type="button" className={seg === id ? "on" : ""} onClick={() => setSeg(id)}>
             <KIcon name={ic} size={14} /> {lab}
           </button>
@@ -637,50 +681,47 @@ export function ShareSheet({ title, onClose }: { title: string; onClose: () => v
             <ShareToggle on={linkOn} set={setLinkOn} label="Shareable link" />
           </div>
           {linkOn && (
-            <>
-              <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-                <div className="searchbar" style={{ flex: 1, margin: 0 }}>
-                  <KIcon name="Link" size={15} />
-                  <input readOnly value={link} style={{ fontFamily: "var(--p-mono)", fontSize: 12 }} />
-                </div>
-                <button type="button" className={`ps-btn ${copied ? "ps-btn--secondary" : "ps-btn--cta"} ps-btn--lg`} onClick={copy} style={{ flex: "none", justifyContent: "center" }}>
-                  <KIcon name={copied ? "Check" : "Copy"} size={15} /> {copied ? "Copied" : "Copy"}
-                </button>
+            <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+              <div className="searchbar" style={{ flex: 1, margin: 0 }}>
+                <KIcon name="Link" size={15} />
+                <input readOnly value={link} style={{ fontFamily: "var(--p-mono)", fontSize: 12 }} />
               </div>
-              <div className="fld" style={{ marginBottom: 12 }}>
-                <div className="fld-label">Anyone with the link can</div>
-                <Seg2 value={access} set={setAccess} opts={[["view", "View"], ["comment", "Comment"], ["edit", "Edit"]]} />
-              </div>
-              <div className="fld" style={{ marginBottom: 4 }}>
-                <div className="fld-label">Link expires</div>
-                <Seg2 value={expiry} set={setExpiry} opts={[["never", "Never"], ["7d", "7 days"], ["30d", "30 days"]]} />
-              </div>
-            </>
+              <button type="button" className={`ps-btn ${copied ? "ps-btn--secondary" : "ps-btn--cta"} ps-btn--lg`} onClick={copy} style={{ flex: "none", justifyContent: "center" }}>
+                <KIcon name={copied ? "Check" : "Copy"} size={15} /> {copied ? "Copied" : "Copy"}
+              </button>
+            </div>
           )}
+          <p className="s" style={{ color: "var(--p-text-3)", margin: "0 0 12px", lineHeight: 1.4 }}>
+            Opens this view for teammates already on ATLVS. Permissioned public links and expiring
+            links are set up in the ATLVS web console.
+          </p>
           <div className="sech">
             <h2>Invite People</h2>
           </div>
-          <div className="searchbar" style={{ margin: "0 0 10px" }}>
-            <KIcon name="UserPlus" size={15} />
-            <input placeholder="Email or name on ATLVS…" />
-          </div>
-          <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ width: "100%", justifyContent: "center" }} onClick={onClose}>
-            <KIcon name="Send" size={15} /> Send Invite
-          </button>
+          <a
+            className="ps-btn ps-btn--secondary ps-btn--lg"
+            style={{ width: "100%", justifyContent: "center" }}
+            href={`mailto:?subject=${encodeURIComponent(title || "ATLVS view")}&body=${encodeURIComponent(link)}`}
+          >
+            <KIcon name="Send" size={15} /> Share via Email
+          </a>
         </div>
       )}
       {seg === "export" && (
         <div>
-          <div className="fld" style={{ marginBottom: 12 }}>
-            <div className="fld-label">Rows to export</div>
-            <Seg2 value={scope} set={setScope} opts={[["filtered", "Filtered"], ["all", "All rows"], ["selected", "Selected"]]} />
-          </div>
           <div className="sech" style={{ marginTop: 0 }}>
-            <h2>Format</h2>
+            <h2>Export{canExport ? ` · ${rows!.length} ${rows!.length === 1 ? "row" : "rows"}` : ""}</h2>
           </div>
-          {([["Sheet", "CSV Spreadsheet", "Rows & columns as filtered"], ["FileText", "Excel Workbook", "Formatted .xlsx with headers"], ["FileText", "PDF Document", "Print-ready, current view"], ["Braces", "JSON", "Raw records for developers"], ["CalendarDays", "iCal Feed", "Date fields as calendar events"]] as [string, string, string][]).map(([ic, t, s]) => (
-            <ShareRow key={t} icon={ic} t={t} s={s} right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={onClose} />
-          ))}
+          {canExport ? (
+            <>
+              <ShareRow icon="Sheet" t="CSV Spreadsheet" s="Rows & columns as filtered" right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={exportCsv} />
+              <ShareRow icon="Braces" t="JSON" s="Raw records for developers" right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={exportJson} />
+            </>
+          ) : (
+            <p className="s" style={{ color: "var(--p-text-3)", margin: "0 0 12px", lineHeight: 1.4 }}>
+              Row exports (CSV / JSON) are available from list and table views.
+            </p>
+          )}
           <div className="sech">
             <h2>Print</h2>
           </div>
@@ -695,25 +736,6 @@ export function ShareSheet({ title, onClose }: { title: string; onClose: () => v
           >
             <KIcon name="Printer" size={15} /> Print Current View
           </button>
-        </div>
-      )}
-      {seg === "advanced" && (
-        <div>
-          <div className="sech" style={{ marginTop: 0 }}>
-            <h2>Scheduled Delivery</h2>
-          </div>
-          <ShareRow icon="Clock" t="Email this view" s="Daily · 07:00 to 3 recipients" right={<ShareToggle on={false} set={() => {}} label="Email this view" />} />
-          <ShareRow icon="Webhook" t="Push to webhook" s="On record change" right={<ShareToggle on={false} set={() => {}} label="Push to webhook" />} />
-          <div className="sech">
-            <h2>Embed</h2>
-          </div>
-          <ShareRow icon="Code" t="Embed code" s="iframe for dashboards & wikis" right={<KIcon name="Copy" size={15} style={{ color: "var(--p-text-3)" }} />} onClick={onClose} />
-          <ShareRow icon="Link2" t="API endpoint" s="Read this view as JSON" right={<KIcon name="Copy" size={15} style={{ color: "var(--p-text-3)" }} />} onClick={onClose} />
-          <div className="sech">
-            <h2>Options</h2>
-          </div>
-          <ShareRow icon="EyeOff" t="Hide sensitive fields" s="Mask cost & personal data in shares" right={<ShareToggle on={true} set={() => {}} label="Hide sensitive fields" />} />
-          <ShareRow icon="Stamp" t="Watermark exports" s="Stamp with project & date" right={<ShareToggle on={false} set={() => {}} label="Watermark exports" />} />
         </div>
       )}
     </Sheet>

@@ -1074,7 +1074,9 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
           <div className="scr">
             <h1 className="h1">{t("m.onboarding.assignment.title", undefined, "Your First Assignment")}</h1>
             <p className="sub" style={{ marginBottom: 14 }}>
-              {t("m.onboarding.assignment.sub", undefined, "You've been offered a role on this project. Review the offer and accept, or explore the app as a free agent.")}
+              {offer
+                ? t("m.onboarding.assignment.sub", undefined, "You've been offered a role on this project. Review the offer and accept, or explore the app as a free agent.")
+                : t("m.onboarding.assignment.subNone", undefined, "You have no assignment yet. Here's what one looks like — your first real booking will land in your inbox, and you'll be notified.")}
             </p>
             <div className="card" style={{ marginBottom: 14, padding: 0, overflow: "hidden" }}>
               <div style={{ background: "#0c0e12", color: "#fff", padding: "14px 16px", display: "flex", alignItems: "center", gap: 11 }}>
@@ -1108,11 +1110,16 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             </div>
             <ErrLine msg={err} />
             <button type="button" className="ps-btn ps-btn--cta" disabled={pending} onClick={onComplete} style={{ width: "100%", justifyContent: "center" }}>
-              <KIcon name="Check" size={16} /> {t("m.onboarding.assignment.accept", undefined, "Accept Assignment")}
+              <KIcon name={offer ? "Check" : "Compass"} size={16} />{" "}
+              {offer
+                ? t("m.onboarding.assignment.accept", undefined, "Accept Assignment")
+                : t("m.onboarding.assignment.exploreCta", undefined, "Explore The App")}
             </button>
-            <button type="button" className="sso" disabled={pending} style={{ marginTop: 8 }} onClick={onComplete}>
-              <KIcon name="MessageCircle" size={16} /> {t("m.onboarding.assignment.contact", undefined, "Contact To Discuss")}
-            </button>
+            {offer && (
+              <button type="button" className="sso" disabled={pending} style={{ marginTop: 8 }} onClick={onComplete}>
+                <KIcon name="MessageCircle" size={16} /> {t("m.onboarding.assignment.contact", undefined, "Contact To Discuss")}
+              </button>
+            )}
             <button type="button" className="sso" disabled={pending} style={{ marginTop: 8 }} onClick={onComplete}>
               <KIcon name="Compass" size={16} /> {t("m.onboarding.assignment.explore", undefined, "Explore Platform")}
             </button>

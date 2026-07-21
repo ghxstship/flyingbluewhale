@@ -11,11 +11,12 @@ import { KIcon } from "@/components/mobile/kit";
  * "Consulted <source>" tool-trace line + inline follow-up suggestions, and a
  * rounded pinned composer with a New-Chat reset.
  *
- * Backend is a **canned placeholder** (`answerFor` / `toolFor`, ported from the
- * kit's `copilotAnswer` / `copilotTool`). Per README v3.0 the future agent
- * runtime is heybrio.ai (https://heybrio.ai/) — when it lands, wire the
- * composer, tool-trace, and follow-ups to its API. Until then the responses are
- * deterministic demo copy so the surface is fully explorable offline.
+ * Backend is a **deterministic offline guide** (`answerFor` / `toolFor`) — it
+ * does NOT read the caller's live data or take actions. Every answer is honest
+ * navigational guidance ("your shifts live on the Schedule tab") that points at
+ * a real surface, never a fabricated specific value. Per README v3.0 the future
+ * agent runtime is heybrio.ai (https://heybrio.ai/) — when it lands, wire the
+ * composer, tool-trace, and follow-ups to its API so answers become live.
  */
 
 type Msg = { me: true; txt: string } | { me: false; txt: string; tool: string };
@@ -26,27 +27,27 @@ const PROMPT_CARDS: [string, string][] = [
   ["TriangleAlert", "How do I report an incident?"],
   ["CalendarOff", "How much time off do I have?"],
 ];
-const FOLLOWUPS = ["Set a reminder", "Notify my team", "Show on schedule"];
+const FOLLOWUPS = ["What else can you do?", "How do I report an incident?", "Where's my schedule?"];
 
 function answerFor(q: string): string {
   const t = q.toLowerCase();
   if (/next shift|when.*work|schedule/.test(t))
-    return "Your next shift is Stage L Changeover at 19:30 at the Black Pearl Stage. Want me to set a reminder?";
+    return "Your shifts live on the Schedule tab — open it to see your next call, its location and times. Tap a shift for the full brief.";
   if (/incident|report|injur|hazard/.test(t))
-    return "Open Tasks then File a Report, or tap Report in Quick Actions. Pick Incident, set severity, add a photo, and it routes to Ops as #214.";
+    return "To file an incident: open Tasks then Report It (also under Quick Actions on Home). Pick a type, set severity, add a photo, and it routes to Ops.";
   if (/convert|ft|feet|meter|metre|lb|kg/.test(t))
-    return "Use the Unit Converter in your Toolbox. It handles length, weight and temperature. 50 ft is about 15.24 m.";
+    return "The Unit Converter is in your Toolbox — it handles length, weight and temperature for quick on-site math.";
   if (/cater|food|meal|eat/.test(t))
-    return "Crew catering is at the BOH commissary, dinner service 20:00 to 22:00. Your meal voucher is on your Rose (Meal Voucher · Crew).";
+    return "Meal service times and your meal voucher are on your Rose and in the venue guide — check Access & Rose for the voucher.";
   if (/radio|channel/.test(t))
-    return "You're on Channel 4 (Gate & Access). The full channel list is in the Toolbox under Radio Channels.";
+    return "Radio channel assignments are in the Toolbox under Radio Channels, and on the shift brief for the zone you're working.";
   if (/pass|credential|access|rose/.test(t))
-    return "Your Rose is Active (ID 0731). Check Access & Permissions on your credential to see what's granted or request more.";
+    return "Your Rose (credential) is on the Home tab — open it to see status and access zones, or to request additional permissions.";
   if (/feed|summar|catch up|what.*happen|announce/.test(t))
-    return "Since your last shift: Ops lifted the weather hold (must-read, 82% acknowledged), Gate 3 cleared a barricade gap, and the Tortuga Crew group has 7 new posts. Want me to draft a must-read for your team?";
+    return "The crew feed is on the Community tab — must-reads are pinned at the top. Open it to catch up on everything since your last shift.";
   if (/time off|pto|vacation|day off/.test(t))
-    return "You have 9 PTO days left. Your Jun 22 request is still pending with Elizabeth. Open Time Off to request more or check status.";
-  return "I can help with your schedule, reporting, access, conversions, time off and venue info. Try a suggestion below or ask me anything.";
+    return "Open Time Off to see your balance, request days, or check the status of a pending request.";
+  return "I can point you to your schedule, reporting, access, conversions, time off and venue info. Try a suggestion below or ask me anything.";
 }
 
 function toolFor(q: string): string {
@@ -132,7 +133,7 @@ export function AuroraChat({ firstName }: { firstName: string }) {
             {greeting}, {firstName}
           </div>
           <div className="aurora-sub">
-            Ask about your shifts, crew, access or the venue, or let me take an action for you.
+            Ask about your shifts, crew, access or the venue and I&apos;ll point you to the right screen.
           </div>
           <div className="aurora-cards">
             {PROMPT_CARDS.map(([ic, p]) => (
@@ -158,7 +159,7 @@ export function AuroraChat({ firstName }: { firstName: string }) {
                 <div className="au-ai-body">
                   {m.tool && (
                     <div className="au-tool">
-                      <KIcon name="Wrench" size={11} /> Consulted <b>{m.tool}</b>
+                      <KIcon name="Compass" size={11} /> See <b>{m.tool}</b>
                     </div>
                   )}
                   <div className="au-text">{m.txt}</div>
@@ -201,8 +202,8 @@ export function AuroraChat({ firstName }: { firstName: string }) {
           </button>
         </form>
         <div className="au-foot">
-          <KIcon name="ShieldCheck" size={11} /> Aurora can act on your shifts, roster & assets · powered by
-          heybrio
+          <KIcon name="ShieldCheck" size={11} /> Preview · Aurora guides you to the right screen — live agent
+          coming soon
         </div>
       </div>
     </div>

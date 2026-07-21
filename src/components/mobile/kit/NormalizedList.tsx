@@ -108,6 +108,7 @@ export function NormalizedList<T>({
         setMenuOpen={setMenuOpen}
         pills={pills}
         onPillsClear={() => patch({ filters: new Set() })}
+        exportRows={filtered}
       />
       {filtered.length === 0 ? (
         <EmptySkeleton cols={empty.cols} title={empty.title} hint={empty.hint ?? "No items match these filters."} />

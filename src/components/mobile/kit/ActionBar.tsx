@@ -66,6 +66,9 @@ export type ActionBarProps<T> = {
   onPillsClear?: () => void;
   /** Show the Share & Export button in drawer mode (defaults on). */
   share?: boolean;
+  /** The caller's current filtered rows — enables REAL CSV/JSON export in the
+   *  Share & Export sheet. Omit and the sheet offers Print only. */
+  exportRows?: readonly T[];
 };
 
 export function ActionBar<T>({
@@ -100,6 +103,7 @@ export function ActionBar<T>({
   pills,
   onPillsClear,
   share = true,
+  exportRows,
 }: ActionBarProps<T>) {
   const glab = groupOpts ? Object.fromEntries(groupOpts) : undefined;
   const slab = sortOpts ? Object.fromEntries(sortOpts) : undefined;
@@ -281,6 +285,8 @@ export function ActionBar<T>({
         <ShareSheet
           title={placeholder ? placeholder.replace(/^Search /, "").replace(/…$/, "") : "records"}
           onClose={() => setShareOpen(false)}
+          rows={exportRows}
+          fields={fields}
         />
       )}
     </>

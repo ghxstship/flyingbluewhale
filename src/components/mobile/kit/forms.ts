@@ -140,7 +140,7 @@ export const FORMS: Forms = {
   swap: {
     title: "Request A Swap", icon: "ArrowLeftRight", submit: "Send Request",
     fields: [
-      { id: "shift", label: "Your Shift", type: "select", required: true, options: ["Stage L · Changeover · 19:30", "Gate 3 · Scan & Admit · 16:00", "Load-out Crew · 23:45"] },
+      { id: "shift", label: "Your Shift", type: "text", required: true, placeholder: "Which shift are you swapping?" },
       { id: "reason", label: "Reason", type: "seg", options: ["Personal", "Conflict", "Sick"], default: "Personal" },
       { id: "cover", label: "Suggested Cover", type: "text", placeholder: "Crew member (optional)" },
       { id: "notes", label: "Notes", type: "textarea", placeholder: "Add context for ops…" },
@@ -186,13 +186,13 @@ export const FORMS: Forms = {
     fields: [
       { id: "duration", label: "Duration", type: "seg", options: ["This shift", "This project", "Permanent"], default: "This project" },
       { id: "reason", label: "Reason", type: "textarea", placeholder: "Why do you need this access?", required: true },
-      { id: "supervisor", label: "Approving Lead", type: "select", options: ["Mara Voss", "Ops Desk", "Security Lead"] },
+      { id: "supervisor", label: "Approving Lead", type: "text", placeholder: "Name of the approving lead" },
     ],
   },
   message: {
     title: "New Message", icon: "PenSquare", submit: "Send",
     fields: [
-      { id: "to", label: "To", type: "combo", required: true, placeholder: "Search channel or person…", options: ["# gate-ops", "# all-crew", "# stage-l", "Mara Voss", "Cy Reyes", "Lo Marín", "Ops Desk"] },
+      { id: "to", label: "To", type: "combo", required: true, placeholder: "Channel or person…", options: [] },
       { id: "body", label: "Message", type: "textarea", placeholder: "Write a message…", required: true },
     ],
   },
@@ -200,7 +200,7 @@ export const FORMS: Forms = {
     title: "Shift Handover", icon: "Repeat", submit: "Submit Handover",
     intro: "End-of-shift report. Passes status, open items and assets to the next crew.",
     fields: [
-      { id: "relief", label: "Handing Off To", type: "select", required: true, options: ["Next shift lead", "Priya N. · Crew", "Dane O. · Crew", "Unassigned · Ops to fill"] },
+      { id: "relief", label: "Handing Off To", type: "text", required: true, placeholder: "Who is taking over the shift?" },
       { id: "status", label: "Post Status", type: "seg", options: ["All Clear", "Watch Items", "Issues"], default: "All Clear", required: true },
       { id: "summary", label: "Shift Summary", type: "textarea", placeholder: "What happened, headcounts, incidents…", required: true },
       { id: "open", label: "Open Items For Next Crew", type: "textarea", placeholder: "Anything outstanding to hand off" },
@@ -220,7 +220,7 @@ export const FORMS: Forms = {
     title: "Reassign Approver", icon: "UserCog", submit: "Reassign",
     intro: "Route this approval to a different approver.",
     fields: [
-      { id: "to", label: "Reassign To", type: "select", required: true, options: ["Mara Voss · Ops Manager", "Safety Officer", "Finance", "Security Lead"] },
+      { id: "to", label: "Reassign To", type: "text", required: true, placeholder: "Reassign to whom?" },
       { id: "reason", label: "Reason", type: "textarea", placeholder: "Why reassign?" },
     ],
   },
@@ -267,7 +267,7 @@ export const FORMS: Forms = {
     intro: "Invite someone to an organization or project. They'll get an access code to join.",
     fields: [
       { id: "scope", label: "Invite To", type: "seg", options: ["Organization", "Project"], default: "Project", required: true },
-      { id: "target", label: "Which", type: "select", required: true, options: ["GHXSTSHIP", "Miami Music Week", "Wynwood Main", "Stage L Build"] },
+      { id: "target", label: "Which", type: "text", required: true, placeholder: "Project or event" },
       { id: "role", label: "Role", type: "select", required: true, options: ["Crew", "Lead", "Vendor", "Guest", "Admin"] },
       { id: "method", label: "Send Via", type: "seg", options: ["Email", "Text", "Link"], default: "Email", required: true },
       { id: "recipient", label: "Recipient", type: "text", placeholder: "Email or phone", required: true },

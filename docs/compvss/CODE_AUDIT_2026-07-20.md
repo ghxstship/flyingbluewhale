@@ -64,7 +64,7 @@
 
 ## Remediation status (2026-07-21)
 
-Fixed + validated (tsc 0 · full vitest 1772/1772), across 4 commits:
+Fixed + validated (tsc 0 · full vitest 1772/1772 · eslint 0), across 6 commits.
 
 **All genuine functional defects + fabricated-data surfaces:**
 - ✅ **P0.1** Notification preferences re-keyed by real `PushKind` (toggles now gate push).
@@ -77,9 +77,12 @@ Fixed + validated (tsc 0 · full vitest 1772/1772), across 4 commits:
 - ✅ Fabrication tells: ToolSheet weather flagged sample, radio drops fake "you're on Ch 4"; onboarding dead Terms/Privacy → real `/legal/*` anchors, pass-QR caption no longer claims false single-use rotation.
 - ✅ ~8 UI em-dashes → middot/periods.
 
-**Remaining — scoped feature-builds, not quick fixes (documented kit roadmap):**
-- **`ops-seed.ts` ledgers (8 surfaces)** — Reports/Inspections/Logistics/Docks/Gate/Delivery/Travel/Permits render seed rows. Real fix = 8 backing tables + resolvers + seed (a feature comparable to the reports/documents systems); emptying them instead would break the kit-34 e2e (which asserts rows). Documented ("render the seed VERBATIM until backing tables land").
-- **forms.ts demo selects** (swap/access/message/handover/reassign/invite) — need real org-scoped option injection at mount (like cost-code fields).
-- **ShareSheet Export/Advanced** — real export needs the view's data threaded through every caller + an export/share-token backend.
-- **onboarding `DEMO_OFFER`** — the null-offer path needs an empty-state restructure. **Aurora** canned responses — pending the heybrio agent runtime.
-- **Cosmetic** (sub-11px fonts, off-grid px, non-token bespoke card gradients, i18n label gaps) — prototype-fidelity choices, not test-failing; changing font/spacing blindly risks visual regressions, so deferred to a browser-verified pass.
+**The P1 3NF/SSOT root cause + the remaining stubs (2026-07-21, wave 5–6):**
+- ✅ **`ops-seed.ts` mock-as-real (the #1 finding, ~9 surfaces)** — landed 8 org-scoped `field_*` backing tables (migration `20260721040956`, RLS + LDP `*_state` + seed for 5 orgs) + a server-only `ops-ledgers.ts` resolver; `ops-seed.ts` keeps only the row-shape/tone/category vocab. Reports/Inspections/Logistics/Docks/Gate/Delivery/Travel/Permits + `hub-metrics.ts` now read real rows. Ledger e2e 56/0.
+- ✅ **forms.ts demo selects** — the 6 fabricated dropdowns (swap/access/message/handover/reassign/invite) → free-text/empty-combo inputs (no invented option arrays posing as roster data).
+- ✅ **ShareSheet Export/Advanced** — rewritten to be REAL + honest: a live-URL shareable link (no fabricated `/s/<token>` service), genuine client-side CSV/JSON export threaded from the view's filtered rows (`NormalizedList` → `ActionBar` → `ShareSheet`), real Print. Dropped the dead Excel/iCal rows and the entire fake "Advanced" automation tab (scheduled delivery / webhook / embed / API / watermark — no backend, so not faked); those are honestly noted as ATLVS-console features.
+- ✅ **onboarding `DEMO_OFFER`** — the null-offer path no longer says "you've been offered" over a fake GHXSTSHIP card; it reframes honestly ("here's what one looks like — your first real booking lands in your inbox") and the CTA becomes "Explore The App" (was "Accept Assignment" on fabricated data).
+- ✅ **Aurora canned responses** — every `answerFor` reply reframed from fabricated specifics ("your next shift is Stage L at 19:30", "9 PTO days left", "ID 0731", "Channel 4") to honest navigational guidance that points at a real surface; chrome copy corrected so it no longer claims it can "act on your shifts" / "take an action" (it is a deterministic offline guide, labeled Preview pending the heybrio runtime).
+
+**Remaining — cosmetic micro-typography tail (deliberately deferred):**
+- **Sub-11px type / off-grid px / bespoke gradients** — the surviving sub-11px sizes are deliberate decorative micro-labels (the `RoseCard` mimics a physical credential badge with 7.5–8px mono caps like a real ID; the calendar day-cell month tag; the `MetricBar` eyebrow), NOT body-text accessibility defects. Bulk-bumping them to the 11px floor would visually break the badge/calendar. These need per-instance browser-verified judgment, not a blind sweep, so they stay as the documented tail. No machine-checkable antipattern, fabricated-data surface, or dead affordance remains.

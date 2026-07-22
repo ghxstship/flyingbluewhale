@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -53,7 +53,7 @@ export default async function Page() {
         )}
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.marketing.onsales.emptyLabel", undefined, "No upcoming on-sales")}
           emptyDescription={t(
@@ -81,7 +81,7 @@ export default async function Page() {
               header: t("console.marketing.onsales.col.occurs", undefined, "Occurs"),
               render: (r) => fmt.dateTime(new Date(r.occurs_at)),
               accessor: (r) => r.occurs_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "vis",

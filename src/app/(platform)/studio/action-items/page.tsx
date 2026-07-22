@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -113,7 +113,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
             value={Object.keys(byKind).length.toString()}
           />
         </div>
-        <DataTable<Row & { id: string }>
+        <DataView<Row & { id: string }>
           rows={rows.map((r) => ({ ...r, id: `${r.kind}-${r.record_id}` }))}
           rowHref={(r) => (KIND_HREF[r.kind] ?? ((id) => `#${id}`))(r.record_id)}
           emptyLabel={t("console.actionItems.empty.label", undefined, "Inbox Zero")}

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
@@ -39,7 +39,7 @@ export default async function EventsPage() {
         action={<Button href="/studio/events/new">{t("console.events.newEvent", undefined, "+ New Event")}</Button>}
       />
       <div className="page-content">
-        <DataTable<EventRow>
+        <DataView<EventRow>
           rows={rows}
           totalCount={totalCount}
           rowHref={(row) => (row.event_kind === "meeting" ? `/studio/meetings/${row.id}` : `/studio/events/${row.id}`)}
@@ -82,14 +82,14 @@ export default async function EventsPage() {
               key: "starts",
               header: t("console.events.columns.starts", undefined, "Starts"),
               render: (row) => formatDate(row.starts_at, "long"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => row.starts_at,
             },
             {
               key: "ends",
               header: t("console.events.columns.ends", undefined, "Ends"),
               render: (row) => formatDate(row.ends_at, "long"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => row.ends_at,
             },
             {

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -101,7 +101,7 @@ export default async function Page() {
             value={fmt.number(expiredCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/warranties/${r.id}`}
           emptyLabel={t("console.warranties.emptyLabel", undefined, "No warranties tracked yet")}
@@ -144,7 +144,7 @@ export default async function Page() {
               render: (r) =>
                 fmt.dateParts(r.start_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.start_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "end",
@@ -152,14 +152,14 @@ export default async function Page() {
               render: (r) =>
                 fmt.dateParts(r.end_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.end_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "duration",
               header: t("console.warranties.columns.months", undefined, "Months"),
               render: (r) => (r.duration_months != null ? r.duration_months.toString() : "—"),
               accessor: (r) => r.duration_months,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",

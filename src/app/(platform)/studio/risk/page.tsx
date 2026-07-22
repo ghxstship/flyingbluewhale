@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -118,7 +118,7 @@ export default async function Page() {
             "Per-project, per-category predictive risk. The batch scorer populates rules_v1 from baseline-vs-actual variance, RFI age, daily-log gaps, incident rate, sub-prequal score. Drivers JSONB explains each red flag.",
           )}
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => (r.project ? `/studio/projects/${r.project.id}` : "#")}
           emptyLabel={t("console.risk.empty.label", undefined, "No risk scores yet")}
@@ -150,7 +150,7 @@ export default async function Page() {
               header: t("console.risk.col.score", undefined, "Score"),
               render: (r) => Number(r.score).toFixed(1),
               accessor: (r) => Number(r.score),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "trend_7d",
@@ -166,7 +166,7 @@ export default async function Page() {
                 );
               },
               accessor: (r) => r.trend_7d,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "trend_30d",
@@ -182,7 +182,7 @@ export default async function Page() {
                 );
               },
               accessor: (r) => r.trend_30d,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "severity",
@@ -197,7 +197,7 @@ export default async function Page() {
               header: t("console.risk.col.scored", undefined, "Scored"),
               render: (r) => fmt.dateParts(r.scored_at, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.scored_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
           ]}
         />

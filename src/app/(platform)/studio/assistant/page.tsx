@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -126,7 +126,7 @@ export default async function Page() {
               )}
             </p>
           ) : (
-            <DataTable<ChunkRow>
+            <DataView<ChunkRow>
               rows={corpusRows}
               columns={[
                 {
@@ -141,7 +141,7 @@ export default async function Page() {
                   header: t("console.assistant.columns.chunks", undefined, "Chunks"),
                   render: (r) => fmt.number(r.count),
                   accessor: (r) => r.count,
-                  className: "font-mono text-xs text-right",
+                  numeric: true,
                 },
                 {
                   key: "refreshed",
@@ -151,7 +151,7 @@ export default async function Page() {
                       ? fmt.dateParts(r.refreshed_at, { month: "short", day: "numeric", year: "2-digit" })
                       : "—",
                   accessor: (r) => r.refreshed_at,
-                  className: "font-mono text-xs",
+                  mono: true,
                 },
               ]}
             />
@@ -167,7 +167,7 @@ export default async function Page() {
               {t("console.assistant.newConversation", undefined, "+ New Conversation")}
             </Button>
           </div>
-          <DataTable<ConversationRow>
+          <DataView<ConversationRow>
             rows={conversationRows}
             rowHref={(r) => `/studio/assistant/${r.id}`}
             emptyLabel={t("console.assistant.emptyConversations", undefined, "No conversations yet")}
@@ -209,14 +209,14 @@ export default async function Page() {
                 header: t("console.assistant.columns.msgs", undefined, "Msgs"),
                 render: (r) => fmt.number(r.message_count),
                 accessor: (r) => r.message_count,
-                className: "font-mono text-xs text-right",
+                numeric: true,
               },
               {
                 key: "created",
                 header: t("console.assistant.columns.created", undefined, "Created"),
                 render: (r) => fmt.dateParts(r.created_at, { month: "short", day: "numeric", year: "2-digit" }),
                 accessor: (r) => r.created_at,
-                className: "font-mono text-xs",
+                mono: true,
               },
             ]}
           />

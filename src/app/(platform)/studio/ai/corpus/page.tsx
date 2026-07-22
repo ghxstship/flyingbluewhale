@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
 import { Alert } from "@/components/ui/Alert";
@@ -66,7 +66,7 @@ export default async function Page() {
 
         <section className="space-y-3">
           <h2 className="text-sm font-semibold">Indexed sources</h2>
-          <DataTable<CorpusSourceRow>
+          <DataView<CorpusSourceRow>
             rows={rows}
             emptyLabel="No sources indexed yet"
             emptyDescription="Run Reindex to walk deliverables, submittals, and RFIs into the RAG corpus."
@@ -92,14 +92,14 @@ export default async function Page() {
                 header: "Documents",
                 render: (r) => fmt.number(r.document_count),
                 accessor: (r) => r.document_count,
-                className: "font-mono text-xs text-right",
+                numeric: true,
               },
               {
                 key: "chunks",
                 header: "Chunks",
                 render: (r) => fmt.number(r.chunk_count),
                 accessor: (r) => r.chunk_count,
-                className: "font-mono text-xs text-right",
+                numeric: true,
               },
               {
                 key: "refreshed",
@@ -109,7 +109,7 @@ export default async function Page() {
                     ? fmt.dateParts(r.refreshed_at, { month: "short", day: "numeric", year: "2-digit" })
                     : "—",
                 accessor: (r) => r.refreshed_at,
-                className: "font-mono text-xs",
+                mono: true,
               },
             ]}
           />

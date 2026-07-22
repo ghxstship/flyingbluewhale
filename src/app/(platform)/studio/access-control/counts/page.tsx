@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -107,7 +107,7 @@ export default async function Page() {
             value={fmt.number(rows.length)}
           />
         </div>
-        <DataTable<LocationCount>
+        <DataView<LocationCount>
           rows={rows}
           emptyLabel={t("console.crowdCounts.emptyLabel", undefined, "No scans in the last 24 hours")}
           emptyDescription={t(
@@ -131,21 +131,21 @@ export default async function Page() {
               key: "accepted",
               header: t("console.crowdCounts.column.accepted", undefined, "Accepted"),
               render: (r) => fmt.number(r.accepted),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.accepted,
             },
             {
               key: "rejected",
               header: t("console.crowdCounts.column.rejected", undefined, "Rejected"),
               render: (r) => fmt.number(r.rejected),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.rejected,
             },
             {
               key: "last",
               header: t("console.crowdCounts.column.last", undefined, "Last Scan"),
               render: (r) => fmt.relative(r.lastScan),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.lastScan,
             },
           ]}

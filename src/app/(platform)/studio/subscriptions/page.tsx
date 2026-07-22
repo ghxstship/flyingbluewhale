@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -47,7 +47,7 @@ export default async function SubscriptionsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Subscription>
+        <DataView<Subscription>
           rows={rows}
           rowHref={(r) => `/studio/subscriptions/${r.id}`}
           columns={[
@@ -73,7 +73,7 @@ export default async function SubscriptionsPage() {
               key: "cadence",
               header: t("console.subscriptions.columns.cadence", undefined, "Cadence"),
               render: (r) => (r.renewal_cadence_months ? `${r.renewal_cadence_months}mo` : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.renewal_cadence_months ?? null,
             },
             {

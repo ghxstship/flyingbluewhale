@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
@@ -76,7 +76,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable<Campaign>
+        <DataView<Campaign>
           rows={rows}
           totalCount={total}
           emptyLabel={t("console.campaigns.emptyLabel", undefined, "No campaigns")}
@@ -117,14 +117,14 @@ export default async function Page({
               key: "window",
               header: t("console.campaigns.columns.window", undefined, "Window"),
               render: (r) => `${r.starts_on ?? "?"} → ${r.ends_on ?? "?"}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_on ?? null,
             },
             {
               key: "budget",
               header: t("console.campaigns.columns.budget", undefined, "Budget"),
               render: (r) => formatMoney(r.budget_cents),
-              className: "font-mono text-xs",
+              tabular: true,
               accessor: (r) => Number(r.budget_cents ?? 0),
             },
             {

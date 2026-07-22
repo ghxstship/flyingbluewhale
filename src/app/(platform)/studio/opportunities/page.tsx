@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -89,7 +89,7 @@ export default async function OpportunitiesPage() {
           <MetricCard label={t("console.opportunities.metric.won", undefined, "Won")} value={String(won)} />
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/pipeline/${r.id}`}
           emptyLabel={t("console.opportunities.emptyLabel", undefined, "No opportunities yet")}

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -104,7 +104,7 @@ export default async function Page() {
             value={fmt.number(draftCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/transmittals/${r.id}`}
           emptyLabel={t("console.transmittals.empty.label", undefined, "No transmittals yet")}
@@ -124,7 +124,7 @@ export default async function Page() {
               header: t("console.transmittals.columns.code", undefined, "Code"),
               render: (r) => r.code,
               accessor: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "subject",
@@ -145,7 +145,7 @@ export default async function Page() {
               header: t("console.transmittals.columns.sent", undefined, "Sent"),
               render: (r) => fmtDate(r.sent_at),
               accessor: (r) => r.sent_at ?? null,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "due",
@@ -165,7 +165,7 @@ export default async function Page() {
                 </span>
               ),
               accessor: (r) => r.due_at ?? null,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

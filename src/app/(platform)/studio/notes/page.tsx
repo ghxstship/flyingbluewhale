@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
@@ -75,7 +75,7 @@ export default async function NotesPage() {
             action={newNote}
           />
         ) : (
-          <DataTable<NoteRow>
+          <DataView<NoteRow>
             rows={rows}
             rowHref={(r) => `/studio/notes/${r.id}`}
             columns={[

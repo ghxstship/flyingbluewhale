@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ModuleHeader, PageSkeleton } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -116,7 +116,7 @@ async function InspectionsBody() {
             value={fmtIntl.number(failed30)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/inspections/${r.id}`}
           emptyLabel={t("console.inspections.emptyLabel", undefined, "No inspections yet")}
@@ -135,7 +135,7 @@ async function InspectionsBody() {
               key: "code",
               header: t("console.inspections.col.code", undefined, "Code"),
               render: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.code,
             },
             {
@@ -154,7 +154,7 @@ async function InspectionsBody() {
               key: "scheduled",
               header: t("console.inspections.col.scheduled", undefined, "Scheduled"),
               render: (r) => fmt(r.scheduled_for),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.scheduled_for ?? null,
             },
             {

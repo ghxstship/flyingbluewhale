@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -92,7 +92,7 @@ export default async function Page() {
 
         <CarbonCharts byMonth={byMonth} byScope={byScope} target={target} />
 
-        <DataTable<SustainabilityMetric>
+        <DataView<SustainabilityMetric>
           rows={rows}
           rowHref={(r) => `/studio/sustainability/carbon/${r.id}`}
           emptyLabel={t("console.sustainability.carbon.emptyLabel", undefined, "No measurements yet")}
@@ -111,10 +111,11 @@ export default async function Page() {
               key: "period",
               header: t("console.sustainability.carbon.col.period", undefined, "Period"),
               render: (r) => (
-                <span className="font-mono text-xs">
+                <span>
                   {r.period_start.slice(0, 10)} → {r.period_end.slice(0, 10)}
                 </span>
               ),
+              mono: true,
               accessor: (r) => r.period_start ?? null,
             },
             {
@@ -132,7 +133,8 @@ export default async function Page() {
             {
               key: "kg_co2e",
               header: t("console.sustainability.carbon.col.kgCo2e", undefined, "kg CO₂e"),
-              render: (r) => <span className="font-mono text-xs">{fmt.number(r.kg_co2e)}</span>,
+              render: (r) => fmt.number(r.kg_co2e),
+              tabular: true,
               accessor: (r) => r.kg_co2e.toLocaleString ?? null,
             },
             {

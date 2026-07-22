@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -118,7 +118,7 @@ export default async function Page() {
             value={fmt.number(processingCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/captures/${r.id}`}
           emptyLabel={t("console.captures.emptyLabel", undefined, "No captures registered yet")}
@@ -164,21 +164,21 @@ export default async function Page() {
                   ? fmt.dateParts(r.capture_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" })
                   : "—",
               accessor: (r) => r.capture_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "panos",
               header: t("console.captures.columns.panos", undefined, "Panos"),
               render: (r) => (r.panorama_count != null ? fmt.number(r.panorama_count) : "—"),
               accessor: (r) => r.panorama_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "sqft",
               header: t("console.captures.columns.sqft", undefined, "Sq Ft"),
               render: (r) => (r.approximate_sqft != null ? fmt.number(r.approximate_sqft) : "—"),
               accessor: (r) => r.approximate_sqft,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",

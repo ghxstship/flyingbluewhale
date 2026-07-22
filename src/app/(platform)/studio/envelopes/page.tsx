@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -154,7 +154,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.envelopes.metric.total", undefined, "Total")} value={fmt.number(rows.length)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/envelopes/${r.id}`}
           emptyLabel={t("console.envelopes.emptyLabel", undefined, "No e-sign envelopes yet")}
@@ -206,7 +206,7 @@ export default async function Page() {
               header: t("console.envelopes.column.signers", undefined, "Signers"),
               render: (r) => `${r.signed_count} / ${r.signer_count}`,
               accessor: (r) => r.signer_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "sent",
@@ -214,7 +214,7 @@ export default async function Page() {
               render: (r) =>
                 r.sent_at ? fmt.dateParts(r.sent_at, { month: "short", day: "numeric", year: "2-digit" }) : "—",
               accessor: (r) => r.sent_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

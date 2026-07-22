@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -95,7 +95,7 @@ export default async function Page() {
             value={fmtIntl.number(rejected)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/submittals/${r.id}`}
           emptyLabel={t("console.submittals.emptyLabel", undefined, "No submittals yet")}
@@ -114,7 +114,7 @@ export default async function Page() {
               key: "code",
               header: t("console.submittals.columns.code", undefined, "Code"),
               render: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.code,
             },
             {
@@ -141,14 +141,14 @@ export default async function Page() {
               key: "round",
               header: t("console.submittals.columns.round", undefined, "Round"),
               render: (r) => `#${r.current_round}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.current_round ?? null,
             },
             {
               key: "due",
               header: t("console.submittals.columns.due", undefined, "Due"),
               render: (r) => fmt(r.due_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.due_at ?? null,
             },
             {

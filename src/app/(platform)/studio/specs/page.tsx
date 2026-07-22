@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -99,7 +99,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.specs.metric.draft", undefined, "Draft")} value={fmt.number(draftCount)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/specs/${r.id}`}
           emptyLabel={t("console.specs.empty.label", undefined, "No spec sections yet")}
@@ -119,7 +119,7 @@ export default async function Page() {
               header: t("console.specs.column.number", undefined, "Number"),
               render: (r) => r.section_number,
               accessor: (r) => r.section_number,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "title",

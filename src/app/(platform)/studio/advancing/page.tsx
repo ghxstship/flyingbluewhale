@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -151,7 +151,7 @@ export default async function Page() {
           <h2 className="text-base font-semibold">
             {t("console.advancing.deliverables", undefined, "Document Deliverables")}
           </h2>
-          <DataTable<DeliverableRow>
+          <DataView<DeliverableRow>
             rows={docRows}
             rowHref={(r) => `/studio/advancing/deliverables/${r.id}`}
             emptyLabel={t("console.advancing.docs.emptyLabel", undefined, "No deliverables yet")}
@@ -218,7 +218,7 @@ export default async function Page() {
                 key: "deadline",
                 header: t("console.advancing.column.deadline", undefined, "Deadline"),
                 render: (r) => (r.deadline ? fmt.dateParts(r.deadline, { month: "short", day: "numeric" }) : "—"),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.deadline,
               },
             ]}
@@ -237,7 +237,7 @@ export default async function Page() {
               {t("console.advancing.scanCodes", undefined, "Bind Scan Codes")}
             </Link>
           </div>
-          <DataTable<AssignmentRow>
+          <DataView<AssignmentRow>
             rows={asgRows}
             rowHref={(r) =>
               r.project ? `/studio/projects/${r.project.id}/advancing/assignments/${r.id}` : "/studio/projects"
@@ -287,7 +287,7 @@ export default async function Page() {
                 key: "created",
                 header: t("console.advancing.column.created", undefined, "Created"),
                 render: (r) => fmt.dateParts(r.created_at, { month: "short", day: "numeric" }),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.created_at,
               },
             ]}

@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -87,7 +87,7 @@ export default async function Page() {
             value={fmt.number(new Set(rows.map((r) => r.ahj_default).filter(Boolean)).size)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.permits.emptyLabel", undefined, "No permit types in the register")}
           emptyDescription={t(
@@ -121,7 +121,7 @@ export default async function Page() {
               key: "lead",
               header: t("console.permits.column.lead", undefined, "Lead Time"),
               render: (r) => r.lead_time ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.lead_time ?? null,
             },
             {

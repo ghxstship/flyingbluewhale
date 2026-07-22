@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -84,7 +84,7 @@ export default async function Page() {
           <MetricCard label={t("console.rfis.metric.overdue", undefined, "Overdue")} value={fmt.number(overdue)} />
           <MetricCard label={t("console.rfis.metric.answered", undefined, "Answered")} value={fmt.number(answered)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/rfis/${r.id}`}
           emptyLabel={t("console.rfis.emptyLabel", undefined, "No RFIs yet")}
@@ -103,7 +103,7 @@ export default async function Page() {
               key: "code",
               header: t("console.rfis.column.code", undefined, "Code"),
               render: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.code,
             },
             {
@@ -128,7 +128,7 @@ export default async function Page() {
               key: "due",
               header: t("console.rfis.column.due", undefined, "Due"),
               render: (r) => fmtDate(r.due_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.due_at ?? null,
             },
             {

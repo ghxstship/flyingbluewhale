@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -106,7 +106,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
             <TasksKanban rows={rows} />
           </>
         ) : (
-          <DataTable<Task>
+          <DataView<Task>
             rows={rows}
             totalCount={total}
             rowHref={(r) => `/studio/tasks/${r.id}`}

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -154,7 +154,7 @@ export default async function Page() {
           <h3 className="pb-3 text-base font-semibold">
             {t("console.dashboards.perProjectKpis", undefined, "Per-Project KPIs")}
           </h3>
-          <DataTable<ProjectKpi>
+          <DataView<ProjectKpi>
             rows={kpis}
             rowHref={(k) => `/studio/projects/${k.id}`}
             emptyLabel={t("console.dashboards.empty.noActiveProjects", undefined, "No Active Projects")}

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -107,7 +107,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.estimates.won", undefined, "Won")} value={fmt.number(wonCount)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/estimates/${r.id}`}
           emptyLabel={t("console.estimates.emptyLabel", undefined, "No estimates yet")}
@@ -141,21 +141,21 @@ export default async function Page() {
               header: t("console.estimates.columns.markup", undefined, "Markup"),
               render: (r) => `${(Number(r.default_markup_pct) * 100).toFixed(1)}%`,
               accessor: (r) => Number(r.default_markup_pct),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "subtotal",
               header: t("console.estimates.columns.subtotal", undefined, "Subtotal"),
               render: (r) => fmtMoney(Number(r.subtotal_cost)),
               accessor: (r) => Number(r.subtotal_cost),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "total",
               header: t("console.estimates.columns.total", undefined, "Total"),
               render: (r) => fmtMoney(Number(r.total_with_markup)),
               accessor: (r) => Number(r.total_with_markup),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",

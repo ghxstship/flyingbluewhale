@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -95,7 +95,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.bim.failed", undefined, "Failed")} value={fmt.number(failedCount)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/bim/${r.id}`}
           emptyLabel={t("console.bim.emptyLabel", undefined, "No BIM models registered yet")}
@@ -127,7 +127,8 @@ export default async function Page() {
             {
               key: "type",
               header: t("console.bim.columns.type", undefined, "Type"),
-              render: (r) => <span className="font-mono text-xs uppercase">{r.source_type}</span>,
+              render: (r) => <span className="uppercase">{r.source_type}</span>,
+              mono: true,
               accessor: (r) => r.source_type,
               filterable: true,
               groupable: true,
@@ -146,14 +147,14 @@ export default async function Page() {
               header: t("console.bim.columns.size", undefined, "Size"),
               render: (r) => fmtBytes(r.size_bytes),
               accessor: (r) => r.size_bytes,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "version",
               header: t("console.bim.columns.version", undefined, "Version"),
               render: (r) => r.version_label ?? "—",
               accessor: (r) => r.version_label,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

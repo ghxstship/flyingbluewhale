@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
@@ -93,7 +93,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
         {view === "kanban" ? (
           <TasksKanban rows={rows as Array<Task & { task_state: TaskStatus }>} />
         ) : (
-          <DataTable<Task>
+          <DataView<Task>
             rows={rows}
             totalCount={totalCount}
             rowHref={(r) => `/studio/tasks/${r.id}`}
@@ -136,7 +136,8 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
               {
                 key: "priority",
                 header: t("console.tasks.columns.priority", undefined, "P"),
-                render: (r) => <span className="font-mono text-xs">P{r.priority}</span>,
+                render: (r) => `P${r.priority}`,
+                mono: true,
                 filterable: true,
                 groupable: true,
                 accessor: (r) => r.priority ?? null,
@@ -150,14 +151,14 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
                     <DueDateBadge dueAt={r.due_at} status={r.task_state} iconOnly size="sm" />
                   </span>
                 ),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.due_at,
               },
               {
                 key: "created",
                 header: t("console.tasks.columns.created", undefined, "Created"),
                 render: (r) => timeAgo(r.created_at),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.created_at,
               },
             ]}

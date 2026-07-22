@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge, type BadgeVariant } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -75,7 +75,7 @@ export default async function CrmPage() {
         action={<Button href="/studio/leads/new">{t("console.crm.newLead", undefined, "+ New Lead")}</Button>}
       />
       <div className="page-content">
-        <DataTable<CrmRow>
+        <DataView<CrmRow>
           rows={rows}
           rowHref={(row) => (row.kind === "lead" ? `/studio/leads/${row.id}` : `/studio/pipeline/${row.id}`)}
           columns={[
@@ -106,14 +106,14 @@ export default async function CrmPage() {
               key: "value",
               header: t("console.crm.columns.value", undefined, "Value"),
               render: (row) => formatMoney(row.estimated_value_minor, row.estimated_value_currency ?? undefined),
-              className: "font-mono text-xs",
+              tabular: true,
               accessor: (row) => Number(row.estimated_value_minor ?? 0),
             },
             {
               key: "source",
               header: t("console.crm.columns.source", undefined, "Source"),
               render: (row) => row.source ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => row.source ?? null,
               filterable: true,
             },
@@ -121,7 +121,7 @@ export default async function CrmPage() {
               key: "updated",
               header: t("console.crm.columns.updated", undefined, "Updated"),
               render: (row) => timeAgo(row.updated_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => row.updated_at,
             },
           ]}

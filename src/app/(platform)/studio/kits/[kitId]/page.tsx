@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ kitId: string
           {kit.phaseGates.length === 0 ? (
             <EmptyState size="compact" title={t("console.kits.detail.noPhaseGates", undefined, "No phase gates")} />
           ) : (
-            <DataTable<KitPhaseGate>
+            <DataView<KitPhaseGate>
               rows={kit.phaseGates}
               searchable={false}
               columns={[
@@ -100,7 +100,7 @@ export default async function Page({ params }: { params: Promise<{ kitId: string
           {kit.zones.length === 0 ? (
             <EmptyState size="compact" title={t("console.kits.detail.noZones", undefined, "No zones")} />
           ) : (
-            <DataTable<KitZone>
+            <DataView<KitZone>
               rows={kit.zones}
               searchable={false}
               columns={[
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ kitId: string
           {kit.touchpoints.length === 0 ? (
             <EmptyState size="compact" title={t("console.kits.detail.noTouchpoints", undefined, "No touchpoints")} />
           ) : (
-            <DataTable<KitTouchpoint>
+            <DataView<KitTouchpoint>
               rows={kit.touchpoints}
               searchable={false}
               columns={[
@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ kitId: string
           {kit.lines.length === 0 ? (
             <EmptyState size="compact" title={t("console.kits.detail.noLines", undefined, "No line items")} />
           ) : (
-            <DataTable<KitLine>
+            <DataView<KitLine>
               rows={kit.lines}
               searchable={false}
               columns={[
@@ -216,7 +216,7 @@ export default async function Page({ params }: { params: Promise<{ kitId: string
                   tabular: true,
                   accessor: (r) => r.estimate_cents,
                   total: "sum",
-                  totalFormat: (n) => formatCents(n),
+                  totalFormat: { style: "money" },
                 },
               ]}
             />

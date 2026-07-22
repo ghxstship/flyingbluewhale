@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -93,7 +93,7 @@ export default async function Page() {
             "Inbound emails captured at {slug}@in.atlvs.pro. The router (separate worker) processes incoming messages; a human promotes each to an RFI / submittal / transmittal / note. Schema + RLS + admin view are live.",
           )}
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/email-inbox/${r.id}`}
           emptyLabel={t("console.emailInbox.emptyLabel", undefined, "No inbound emails yet")}
@@ -108,7 +108,7 @@ export default async function Page() {
               header: t("console.emailInbox.column.received", undefined, "Received"),
               render: (r) => fmt.dateParts(r.received_at, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.received_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "from",

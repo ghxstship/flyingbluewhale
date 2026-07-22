@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { listEventTypes, listBookings } from "@/lib/db/scheduler";
@@ -75,7 +75,7 @@ export default async function SchedulerPage() {
             value={String(bookings.length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/scheduler/${r.id}`}
           emptyLabel={t("console.scheduler.emptyLabel", undefined, "No Event Types Yet")}
@@ -114,7 +114,8 @@ export default async function SchedulerPage() {
             {
               key: "timezone",
               header: t("console.scheduler.columns.timezone", undefined, "Timezone"),
-              render: (r) => <span className="font-mono text-xs">{r.timezone}</span>,
+              render: (r) => r.timezone,
+              mono: true,
             },
             {
               key: "is_active",

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
@@ -53,7 +53,7 @@ export default async function AnnotationsPage() {
         )}
       />
       <div className="page-content">
-        <DataTable<Annotation>
+        <DataView<Annotation>
           rows={rows}
           rowHref={(r) => `/studio/annotations/${r.id}`}
           columns={[
@@ -72,7 +72,8 @@ export default async function AnnotationsPage() {
             {
               key: "kind",
               header: t("console.annotations.col.kind", undefined, "Kind"),
-              render: (r) => <span className="font-mono text-xs uppercase">{r.kind}</span>,
+              render: (r) => <span className="uppercase">{r.kind}</span>,
+              mono: true,
               accessor: (r) => r.kind,
               filterable: true,
               groupable: true,
@@ -94,10 +95,11 @@ export default async function AnnotationsPage() {
               key: "target",
               header: t("console.annotations.col.target", undefined, "Target"),
               render: (r) => (
-                <span className="font-mono text-xs">
+                <span>
                   {r.target_table}/{r.target_id.slice(0, 8)}
                 </span>
               ),
+              mono: true,
               accessor: (r) => r.target_table,
               filterable: true,
               groupable: true,
@@ -114,7 +116,7 @@ export default async function AnnotationsPage() {
               key: "due",
               header: t("console.annotations.col.due", undefined, "Due"),
               render: (r) => (r.due_at ? formatDate(r.due_at, "medium") : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.due_at,
             },
             {
@@ -136,7 +138,7 @@ export default async function AnnotationsPage() {
               key: "created",
               header: t("console.annotations.col.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.created_at,
             },
           ]}

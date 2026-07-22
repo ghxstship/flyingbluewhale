@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { LineChart, AreaChart } from "@/components/charts/LineChart";
 import { DonutChart } from "@/components/charts/DonutChart";
@@ -14,7 +14,7 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 export const dynamic = "force-dynamic";
 
 type Row = {
-  id: string; // synthetic — pool view has no PK; build one for DataTable<Row>
+  id: string; // synthetic — pool view has no PK; build one for DataView<Row>
   month: string;
   genre: string;
   show_count: number;
@@ -116,7 +116,7 @@ export default async function Page() {
           );
         })()}
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.insights.emptyLabel", undefined, "No aggregates yet")}
           emptyDescription={t(
@@ -130,7 +130,7 @@ export default async function Page() {
               header: t("console.insights.columns.month", undefined, "Month"),
               render: (r) => r.month,
               accessor: (r) => r.month,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "genre",
@@ -145,28 +145,28 @@ export default async function Page() {
               header: t("console.insights.columns.shows", undefined, "Shows"),
               render: (r) => r.show_count,
               accessor: (r) => Number(r.show_count),
-              className: "font-mono text-xs tabular-nums",
+              tabular: true,
             },
             {
               key: "gross",
               header: t("console.insights.columns.avgGross", undefined, "Avg Gross"),
               render: (r) => formatMoney(r.avg_gross_cents),
               accessor: (r) => Number(r.avg_gross_cents),
-              className: "font-mono text-xs",
+              tabular: true,
             },
             {
               key: "att",
               header: t("console.insights.columns.avgAttendance", undefined, "Avg Attendance"),
               render: (r) => r.avg_attendance,
               accessor: (r) => Number(r.avg_attendance),
-              className: "font-mono text-xs tabular-nums",
+              tabular: true,
             },
             {
               key: "artist",
               header: t("console.insights.columns.avgArtistPayout", undefined, "Avg Artist Payout"),
               render: (r) => formatMoney(r.avg_artist_payout_cents),
               accessor: (r) => Number(r.avg_artist_payout_cents),
-              className: "font-mono text-xs",
+              tabular: true,
             },
           ]}
         />

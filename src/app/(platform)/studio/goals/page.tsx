@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -76,7 +76,7 @@ export default async function GoalsHubPage() {
             action={<Button href="/studio/goals/new">+ New Goal</Button>}
           />
         ) : (
-          <DataTable<GoalRow>
+          <DataView<GoalRow>
             rows={rows}
             rowHref={(g) => `/studio/goals/${g.id}`}
             emptyLabel="No goals yet"

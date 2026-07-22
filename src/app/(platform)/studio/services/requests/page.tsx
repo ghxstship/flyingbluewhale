@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -108,7 +108,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/studio/services/requests/${r.id}`}
           emptyLabel={t("console.services.requests.emptyLabel", undefined, "No service requests")}
@@ -136,7 +136,8 @@ export default async function Page() {
             {
               key: "category",
               header: t("console.services.requests.columns.category", undefined, "Category"),
-              render: (r) => <span className="font-mono text-xs">{String(r.category)}</span>,
+              render: (r) => String(r.category),
+              mono: true,
               filterable: true,
               groupable: true,
               accessor: (r) => r.category ?? null,
@@ -171,7 +172,8 @@ export default async function Page() {
             {
               key: "opened",
               header: t("console.services.requests.columns.opened", undefined, "Opened"),
-              render: (r) => <span className="font-mono text-xs">{fmt.dateTime(String(r.opened_at))}</span>,
+              render: (r) => fmt.dateTime(String(r.opened_at)),
+              mono: true,
               accessor: (r) => r.opened_at ?? null,
             },
           ]}

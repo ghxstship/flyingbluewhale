@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -120,7 +120,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.sitePlans.draft", undefined, "Draft")} value={fmt.number(draftCount)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/site-plans/${r.id}`}
           emptyLabel={t("console.sitePlans.emptyLabel", undefined, "No site plans yet")}
@@ -145,7 +145,7 @@ export default async function Page() {
                   </span>
                 ),
               accessor: (r) => r.atom_id,
-              className: "font-mono text-[11px]",
+              mono: true,
             },
             {
               key: "title",
@@ -165,11 +165,8 @@ export default async function Page() {
               key: "class",
               header: t("console.sitePlans.columns.class", undefined, "Class"),
               render: (r) =>
-                r.primary_class != null ? (
-                  <span className="font-mono text-[11px]">{XPMS_CLASS_LABEL[r.primary_class]}</span>
-                ) : (
-                  "—"
-                ),
+                r.primary_class != null ? XPMS_CLASS_LABEL[r.primary_class] : "—",
+              mono: true,
               accessor: (r) => (r.primary_class != null ? XPMS_CLASS_LABEL[r.primary_class] : null),
               filterable: true,
               groupable: true,
@@ -186,7 +183,7 @@ export default async function Page() {
               key: "rev",
               header: t("console.sitePlans.columns.rev", undefined, "Rev"),
               render: (r) => r.revision_letter ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.revision_letter,
             },
             {

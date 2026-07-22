@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -425,7 +425,7 @@ async function RecentProjects({ orgId }: { orgId: string }) {
           />
         </div>
       ) : (
-        <DataTable
+        <DataView
           rows={projects.slice(0, 8)}
           rowHref={(p) => `/studio/projects/${p.id}`}
           tableId="t:/studio:recent-projects"

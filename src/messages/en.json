@@ -358,6 +358,11 @@
     "cta": {
      "title": "ATLVS Is Open.",
      "subtitle": "Free for small teams. Aurora AI included on Crew and up."
+    },
+    "auroraLink": {
+     "cta": "Meet Aurora AI",
+     "eyebrow": "Aurora AI · Powered by Brio",
+     "title": "The assistant behind every draft has a name."
     }
    },
    "alternatives": {
@@ -918,8 +923,11 @@
      },
      "actions": {
       "signupInstead": "Start building free",
-      "submit": "Send to the Studio"
-     }
+      "submit": "Send to the Studio",
+      "submitting": "Sending…"
+     },
+     "successTitle": "Got it. We'll be in touch.",
+     "walkthroughHeading": "Request a walkthrough"
     },
     "faqs": {
      "heading": "Contact FAQ",
@@ -985,7 +993,8 @@
     "landingSoon": {
      "title": "Landing Soon.",
      "count": "{count} stories in production",
-     "body": "Anonymized for NDA. Hard metrics already captured; the full narrative + permission-cleared logo + PDF publish on the date below."
+     "body": "Anonymized for NDA. Hard metrics already captured; the full narrative + permission-cleared logo + PDF publish on the date below.",
+     "metricsOnPublish": "Verified numbers publish with the story"
     },
     "cta": {
      "title": "Want To Be Profiled?",
@@ -1006,7 +1015,8 @@
      "demo": "Demo"
     },
     "hero": {
-     "eyebrowPrefix": "Demo ·"
+     "eyebrowPrefix": "Demo ·",
+     "walkthroughCta": "Request a walkthrough"
     },
     "outcomes": {
      "heading": "What You'll See."
@@ -1036,7 +1046,8 @@
     "hero": {
      "eyebrow": "Demo",
      "title": "Walk The Ecosystem.",
-     "subtitle": "Forty minutes, wired to a live production. Pick the walkthrough that matches your room, or sign up free first and bring questions later."
+     "subtitle": "Forty minutes, wired to a live production. Pick the walkthrough that matches your room, or sign up free first and bring questions later.",
+     "walkthroughCta": "Request a walkthrough"
     },
     "personas": {
      "title": "Walkthroughs By Operation.",
@@ -1522,6 +1533,9 @@
      "store": {
       "title": "Store",
       "blurb": "Shop official merch, gear, and event goods from producers across the ecosystem."
+     },
+     "workOrders": {
+      "title": "Trade Work Orders"
      }
     },
     "operators": {
@@ -1649,6 +1663,21 @@
      "card": {
       "established": "Est. {year}"
      }
+    },
+    "crumbs": {
+     "home": "Home",
+     "marketplace": "Marketplace"
+    },
+    "workOrders": {
+     "budget": "Budget guide",
+     "crumb": "Work Orders",
+     "dates": "Dates",
+     "empty": "No open work orders right now",
+     "meta": {
+      "title": "Open trade work orders"
+     },
+     "site": "Site",
+     "title": "Open Trade Work Orders"
     }
    },
    "marketplace-crew-handle": {
@@ -2136,7 +2165,8 @@
        "upTo10Users": "Up to 10 users",
        "upTo2kCredentials": "Up to 2,000 portal credentials per project",
        "emailSupport": "Email support"
-      }
+      },
+      "ctaStart": "Start with Crew"
      },
      "production": {
       "name": "Production",
@@ -2151,7 +2181,8 @@
        "kbygGuides": "KBYG event guides",
        "unlimitedUsers": "Unlimited users",
        "priorityConcierge": "Priority support + onboarding"
-      }
+      },
+      "ctaStart": "Start with Production"
      },
      "festival": {
       "name": "Festival",
@@ -2898,12 +2929,16 @@
     "hero": {
      "eyebrow": "Status",
      "title": "All Systems Operational.",
-     "body": "Real-time ecosystem health across ATLVS, GVTEWAY, COMPVSS, LEG3ND, and the marketing surface. Subscribe for incident alerts via email or webhook."
+     "body": "Real-time ecosystem health across ATLVS, GVTEWAY, COMPVSS, LEG3ND, and the marketing surface. Subscribe for incident alerts via email or webhook.",
+     "badgeChecked": "Monitored components responding normally",
+     "badgeDegraded": "Degraded performance detected",
+     "badgeOutage": "Service disruption detected"
     },
     "stateLabel": {
      "operational": "Operational",
      "degraded": "Degraded",
-     "outage": "Major Outage"
+     "outage": "Major Outage",
+     "unknown": "Not yet monitored"
     },
     "comingSoon": {
      "cta": "Get notified at launch"
@@ -2911,6 +2946,21 @@
     "cta": {
      "title": "ATLVS Is Open.",
      "subtitle": "Free for small teams. Per-org pricing the rest of the way up."
+    },
+    "incidents": {
+     "eyebrow": "Incident History",
+     "title": "No published incidents yet"
+    },
+    "probes": {
+     "db": {
+      "name": "Database & platform API"
+     },
+     "integrations": {
+      "name": "Payments, webhooks & Aurora AI"
+     },
+     "web": {
+      "name": "Web application"
+     }
     }
    },
    "teams": {
@@ -3013,6 +3063,15 @@
      "capacity": {
       "title": "Venue Capacity Calculator",
       "short": "Estimate maximum occupancy from square footage and use type."
+     },
+     "crewSize": {
+      "title": "Crew size calculator"
+     },
+     "generator": {
+      "title": "Generator size calculator"
+     },
+     "restroom": {
+      "title": "Restroom & ADA calculator"
      }
     },
     "card": {
@@ -3068,6 +3127,464 @@
      "coverNote": "Cover Note",
      "portfolioUrl": "Portfolio URL",
      "phone": "Phone"
+    }
+   },
+   "atlvsTeaser": {
+    "breadcrumbs": {
+     "home": "Home"
+    },
+    "cta": {
+     "title": "Meanwhile, The Ecosystem Is Open."
+    },
+    "faq": {
+     "waitlist": {
+      "q": "What does joining the waitlist get me?"
+     },
+     "what": {
+      "q": "What is ATLVS?"
+     },
+     "when": {
+      "q": "When does it launch?"
+     }
+    },
+    "hero": {
+     "cta": "Join the waitlist",
+     "eyebrow": "ATLVS · Coming soon",
+     "title": "The Operator Console Is On The Bench"
+    },
+    "honest": {
+     "eyebrow": "Where it stands",
+     "title": "Being built now. No fake launch date."
+    },
+    "metadata": {
+     "ogImageEyebrow": "Coming Soon",
+     "ogImageTitle": "ATLVS: The Operator Console",
+     "title": "ATLVS: The Operator Console, Coming Soon"
+    },
+    "pillars": {
+     "advancing": {
+      "name": "Advancing packets"
+     },
+     "matrix": {
+      "name": "The Coordinate Matrix task lens"
+     },
+     "records": {
+      "name": "Finance and procurement on one record store"
+     },
+     "spine": {
+      "name": "The Sell to Settle spine"
+     }
+    },
+    "pillarsSection": {
+     "auroraCta": "Meet Aurora →",
+     "eyebrow": "What we're building",
+     "title": "ERP, CRM, and PM on one record store"
+    },
+    "waitlist": {
+     "eyebrow": "Waitlist",
+     "title": "Be First Through The Door"
+    }
+   },
+   "developers": {
+    "apiSection": {
+     "eyebrow": "The API",
+     "title": "What's Open To Third Parties Today"
+    },
+    "breadcrumbs": {
+     "developers": "Developers",
+     "home": "Home"
+    },
+    "buildSection": {
+     "eyebrow": "Ship with us",
+     "integration": {
+      "cta": "Submit an integration",
+      "title": "List an integration"
+     },
+     "partner": {
+      "cta": "Partner program",
+      "ctaDirectory": "Agency directory",
+      "title": "Join the partner program"
+     },
+     "title": "Two Ways In"
+    },
+    "cta": {
+     "title": "The Spec Is The Pitch."
+    },
+    "docsSection": {
+     "docs": "Product and platform documentation",
+     "eyebrow": "Reading",
+     "spec": "OpenAPI 3 spec, generated from the live routes",
+     "title": "The Paper Trail",
+     "tokens": "Mint a personal access token in API settings",
+     "tokensCta": "Get a token"
+    },
+    "domains": {
+     "advancing": {
+      "name": "Advancing"
+     },
+     "documents": {
+      "name": "Documents"
+     },
+     "reports": {
+      "name": "Reports and metrics"
+     }
+    },
+    "faq": {
+     "live": {
+      "q": "Is the API live today?"
+     },
+     "sdk": {
+      "q": "Is there an SDK?"
+     },
+     "token": {
+      "q": "How do I get a token?"
+     }
+    },
+    "hero": {
+     "ctaSpec": "Read the OpenAPI spec",
+     "ctaSubmit": "Submit an integration",
+     "eyebrow": "Developers and partners",
+     "title": "Build On The Record Store"
+    },
+    "metadata": {
+     "ogImageEyebrow": "Developers",
+     "ogImageTitle": "Build On The Record Store",
+     "title": "Developers: Build On The Record Store"
+    },
+    "scopesSection": {
+     "eyebrow": "Access",
+     "title": "Tokens Carry Only What You Grant"
+    },
+    "scopesTable": {
+     "grants": "What it grants",
+     "scope": "Scope"
+    }
+   },
+   "gvtewayTeaser": {
+    "breadcrumbs": {
+     "home": "Home"
+    },
+    "coming": {
+     "portals": {
+      "name": "Stakeholder portals"
+     },
+     "ticketing": {
+      "name": "Ticketing"
+     }
+    },
+    "comingSection": {
+     "eyebrow": "In the shop",
+     "title": "Ticketing And Portals Are Next"
+    },
+    "cta": {
+     "secondary": "Browse the marketplace",
+     "title": "Don't Wait At The Gate."
+    },
+    "faq": {
+     "live": {
+      "q": "What can I use right now?"
+     },
+     "what": {
+      "q": "What is GVTEWAY?"
+     },
+     "when": {
+      "q": "When do ticketing and portals launch?"
+     }
+    },
+    "hero": {
+     "ctaMarketplace": "Browse the live marketplace",
+     "ctaWaitlist": "Join the waitlist",
+     "eyebrow": "GVTEWAY · Coming soon",
+     "title": "Every World Needs A Way In"
+    },
+    "live": {
+     "gigs": {
+      "name": "Gigs and jobs"
+     },
+     "rfqs": {
+      "name": "RFQs and vendors"
+     },
+     "talent": {
+      "name": "Talent and crew"
+     }
+    },
+    "liveSection": {
+     "eyebrow": "Open today",
+     "linkLabel": "See it live",
+     "title": "The Marketplace Is Already Open"
+    },
+    "metadata": {
+     "ogImageEyebrow": "Coming Soon",
+     "ogImageTitle": "GVTEWAY: The Public Interface",
+     "title": "GVTEWAY: The Public Interface, Coming Soon"
+    },
+    "waitlist": {
+     "eyebrow": "Waitlist",
+     "title": "Hear It First"
+    }
+   },
+   "aurora": {
+    "meta": {
+     "title": "Aurora AI, Powered by Brio: One Assistant Across the Ecosystem",
+     "description": "Aurora AI answers from your workspace records with citations and a confidence grade. Live in the COMPVSS field app today; the console workflows arrive with ATLVS. Powered by Brio.",
+     "ogImageTitle": "Ask Aurora."
+    },
+    "crumbs": {
+     "home": "Home"
+    },
+    "status": {
+     "live": "Live today",
+     "preview": "In preview",
+     "coming": "Coming with {product}"
+    },
+    "products": {
+     "compvss": {
+      "role": "The field app. Live now.",
+      "scan": {
+       "title": "Scan-to-draft capture",
+       "body": "Point the phone camera at a receipt or an invoice. Aurora reads the vendor, the total, and the date into a draft, suggests a cost code from your own spending history, and waits for you to confirm. Nothing writes itself into the books."
+      },
+      "chat": {
+       "title": "Aurora field chat",
+       "body": "The Aurora tab ships in the field app today as a guided assistant. Ask where your next shift is and it walks you to the right surface; it will not fake a number it cannot see. The conversational runtime arrives with Brio."
+      }
+     },
+     "legend": {
+      "role": "Where the organization lives.",
+      "knowledge": {
+       "title": "Knowledge that answers back",
+       "body": "Your standards, SOPs, and event guides become the corpus Aurora answers from, synced per event. The answer at the gate matches the binder in the production office because it is the same document."
+      }
+     },
+     "atlvs": {
+      "role": "The producer's console. In active development, and Aurora is already wired into it.",
+      "copilot": {
+       "title": "Grounded Copilot",
+       "body": "Ask a question and get an answer built only from your org's indexed documents, with each claim cited by source number and a confidence grade on the whole answer. When no source matches, it says so instead of guessing."
+      },
+      "assistant": {
+       "title": "Workspace assistant",
+       "body": "Streaming chat with conversation history, kept inside your tenant. Claude Sonnet for the day-to-day, Claude Opus when a question deserves the long think."
+      },
+      "suggests": {
+       "title": "Copilot Suggests",
+       "body": "A rail of next actions computed from real org data: blocked tasks, approvals waiting, open incidents. It never applies anything on its own. Every card deep-links to the surface that clears it, and you do the clearing."
+      },
+      "drafting": {
+       "title": "Paperwork drafting",
+       "body": "Client-ready proposal drafts from the record's own metadata plus your instructions. You accept or discard; a draft never publishes itself."
+      },
+      "intake": {
+       "title": "Document intake",
+       "body": "AP invoices, COIs, and W-9s read into structured fields with a confidence score on every extraction. Anything under the bar routes to a human review queue instead of the ledger."
+      },
+      "recaps": {
+       "title": "Meeting recaps and field agents",
+       "body": "A transcript in, a tight recap and concrete action items out, saved on the meeting note. Field agents keep a derived column fresh from a record's own values whenever the record changes, against a whitelist of tables you control."
+      }
+     },
+     "gvteway": {
+      "role": "Where the world is experienced.",
+      "concierge": {
+       "title": "Guest and crew concierge",
+       "body": "Aurora answers the phone. Box office questions, parking, lost and found, credential lookups, over voice, SMS, or web chat, around the clock, with a human paged the moment a conversation needs one. This is the Brio channel layer end to end."
+      }
+     }
+    },
+    "faq": {
+     "what": {
+      "q": "What is Aurora AI?",
+      "a": "Aurora is the one AI assistant across the ATLVS ecosystem: the producer's console, the field app, the public portals, and the knowledge layer. One agent identity everywhere, so the crew asks Aurora at the gate and the producer asks Aurora in the console, and both get answers grounded in the same records."
+     },
+     "brio": {
+      "q": "What is Brio?",
+      "a": "Brio (heybrio.ai) is the conversational runtime that powers Aurora: the chat, voice, and SMS channels it answers on. Brio runs the conversation; ATLVS stays the system of record and supplies the live data and knowledge Aurora answers from. You will never hand your records to a black box."
+     },
+     "today": {
+      "q": "What can Aurora do today?",
+      "a": "Two things are on phones right now. Scan-to-draft capture in COMPVSS reads receipts and invoices into confirmed-by-you drafts, and the Aurora tab runs as a guided assistant in preview. The console workflows, from the grounded Copilot to document intake, are built and arrive with ATLVS."
+     },
+     "grounding": {
+      "q": "How is Aurora grounded, and what happens to our data?",
+      "a": "Aurora reads through the same row-level security your team does, so your tenant is walled off in the database itself. Grounded answers cite their sources and carry a confidence grade. We do not train models on your data; Aurora runs on Anthropic Claude, and your conversations stay inside your tenant."
+     },
+     "when": {
+      "q": "When does the full conversational runtime arrive?",
+      "a": "We will not dress a roadmap up as a promise, so no date until it is a real one. The COMPVSS preview is on phones now, scan capture is live, and the console workflows ship with ATLVS. Waitlist members hear first when each surface opens."
+     },
+     "title": "Aurora AI, asked and answered"
+    },
+    "jsonLd": {
+     "description": "Aurora AI, powered by Brio: the assistant across the ATLVS ecosystem. Answers grounded in your workspace records with citations and a confidence grade."
+    },
+    "hero": {
+     "eyebrow": "Aurora AI · Powered by Brio",
+     "titlePrefix": "Ask ",
+     "titleSuffix": ". It already read the run-of-show.",
+     "body": "Aurora is the one assistant across the whole ecosystem. It answers from your workspace: the projects, schedules, invoices, and call sheets your team already keeps here. Grounded answers, cited sources, and a human holding the publish key.",
+     "attribution": "Powered by Brio, the conversational runtime that gives Aurora its chat, voice, and SMS channels. Brio runs the conversation; your org's records supply the truth.",
+     "secondaryCta": "Join the Aurora waitlist"
+    },
+    "where": {
+     "heading": "Where Aurora works",
+     "body": "Every item below carries its real state. Live means shipping, preview means a deliberately limited surface you can touch today, and coming means built for a product that has not opened yet."
+    },
+    "trust": {
+     "eyebrow": "Grounded by design",
+     "heading": "It shows its work.",
+     "rls": {
+      "title": "Walled per organization",
+      "body": "Aurora reads through the same row-level security your team does. Your tenant is separated in the database itself, and another org's data is unreachable by construction."
+     },
+     "citations": {
+      "title": "Citations and a confidence grade",
+      "body": "Grounded answers come only from your indexed corpus, cite each claim by source number, and grade how well the sources support the answer. No matching sources means it says so instead of guessing."
+     },
+     "hitl": {
+      "title": "A human holds the publish key",
+      "body": "Drafts stay drafts until someone accepts them, and suggestions never apply themselves. Extractions below 90 percent confidence route to a review queue."
+     },
+     "training": {
+      "title": "No training on your data",
+      "body": "We do not train models. Aurora runs on Anthropic Claude, and your conversations are logged inside your own tenant where you can query and export them."
+     },
+     "metered": {
+      "title": "Metered and capped",
+      "body": "Every call is rate-limited before it reaches the model and usage is metered per org, so a runaway script cannot run up your bill."
+     },
+     "kit": {
+      "title": "One AI surface language",
+      "body": "Streaming, thinking, citations, and confidence share one design language across every product, so you always know when Aurora is generating, what it consulted, and how sure it is."
+     }
+    },
+    "waitlist": {
+     "eyebrow": "Waitlist",
+     "heading": "First in line when the lights come up.",
+     "body": "The conversational runtime lands surface by surface, and waitlist members hear about each one before anyone else. One email per opening. No drip campaign."
+    },
+    "cta": {
+     "title": "Bring Aurora to the next build.",
+     "subtitle": "Start free, scan a receipt tonight, and let the rest of Aurora meet you where the work is."
+    }
+   },
+   "compvssHome": {
+    "meta": {
+     "title": "COMPVSS: Site & Venue Operations for Deskless Crews",
+     "description": "Shifts, gate scan, incidents, punch lists, asset custody. Offline-first PWA that installs from the browser in one tap. Per-org pricing, never per seat.",
+     "ogImageTitle": "The Field Runs on It."
+    },
+    "crumbs": {
+     "home": "Home"
+    },
+    "hero": {
+     "title": "The gate does not wait for the spreadsheet.",
+     "body": "Call times on paper, scans on a rented gun, incident reports written from memory two days later. COMPVSS puts the shift clock, the gate scanner, incident filing, and the punch list on the crew's own phones, and it keeps working when the signal quits.",
+     "secondaryCta": "See pricing"
+    },
+    "stats": {
+     "scan": {
+      "value": "Sub-100ms",
+      "label": "Gate scan, server-side"
+     },
+     "night": {
+      "value": "15,000",
+      "label": "Scans in one night"
+     },
+     "install": {
+      "value": "One tap",
+      "label": "Install from the browser"
+     },
+     "pricing": {
+      "value": "Per org",
+      "label": "Never per seat"
+     }
+    },
+    "features": {
+     "heading": "What the field runs on it.",
+     "body": "Every surface below is live today. None of it is a roadmap slide.",
+     "shifts": {
+      "title": "Shifts and time clock",
+      "body": "Geo-verified clock-in against your time-clock zones, with breaks, meal credits, and a manual fallback for the corner of the lot where GPS gives up."
+     },
+     "gateScan": {
+      "title": "Gate scan, offline-first",
+      "body": "QR and barcode, sub-100ms server-side. Accepted, duplicate, voided, not found, expired, wrong zone: each result is its own state, readable at arm's length."
+     },
+     "incidents": {
+      "title": "Incidents",
+      "body": "File with photos, location, and witnesses. File anonymously if that is what it takes to get the report. Closing an injury or a major incident takes a manager sign-off."
+     },
+     "punch": {
+      "title": "Punch lists, daily logs, handovers",
+      "body": "Walk the site, snag what is wrong, close it with photos. Daily logs and shift handovers leave the next crew a written trail instead of a hallway rumor."
+     },
+     "assets": {
+      "title": "Asset custody and GTIN scan",
+      "body": "Scan the barcode already printed on the case. Check gear out to a person, see who holds what right now, and get it all back at load-out."
+     },
+     "advancing": {
+      "title": "Advancing and credentials",
+      "body": "Tickets, credentials, radios, lodging: every assignment lands on the holder's own phone, with the scan code to prove it at the door."
+     },
+     "auroraNote": "One more tab is already in the bar: Aurora AI, powered by Brio, the assistant we are building into the whole ecosystem. The seat is there today; the assistant is still in build, and we will say so until it is not.",
+     "auroraCta": "Meet Aurora →"
+    },
+    "offline": {
+     "eyebrow": "Offline-first",
+     "heading": "Built for the venue with one bar of LTE.",
+     "body1": "COMPVSS is an installable web app. Open the link, tap Install, and it lives on the home screen as a full-screen launcher. No App Store review, no fleet update the morning of the show.",
+     "body2": "The scanner and the day's call sheet cache on the device. When the network drops, scans queue locally and replay in order the moment signal returns. Duplicates the device cannot confirm during an offline window are flagged pending, and the server reconciles them on sync.",
+     "bullets": {
+      "install": "Installs from the browser in one tap",
+      "queue": "Offline scan queue replays in order, nothing drops",
+      "states": "Distinct scan states: accepted, duplicate, voided, not found, expired, wrong zone",
+      "geo": "Geo-verified clock-in with accuracy bounds and a manual fallback",
+      "permissions": "Camera and GPS requested only when a surface needs them",
+      "contrast": "High-contrast screens, readable in daylight at the gate"
+     }
+    },
+    "recordStore": {
+     "eyebrow": "One record store",
+     "heading": "The field writes. Everyone reads.",
+     "col1": "A scan at the gate is a row in the same org-scoped record store the production office reads. No export at midnight, no re-keying into a second system, no morning-after sync.",
+     "col2": "Clock punches land as the time entries payroll settles from. An incident filed at the barricade pages the console the moment it is saved. The punch list a crew closes tonight is the one the office reviews tomorrow.",
+     "col3": "Access is walled per organization at the database, and every stakeholder portal reads its own slice of the same rows. One truth, viewed from wherever you stand."
+    },
+    "pricingTeaser": {
+     "heading": "Per org. Never per seat.",
+     "body": "Free forever for small teams, per-org pricing the whole way up. Invite the entire gate team in week one; the bill holds.",
+     "cta": "See pricing"
+    },
+    "faq": {
+     "title": "COMPVSS, asked and answered",
+     "join": {
+      "q": "How do crew join?",
+      "a": "Crew join an existing organization by invite or by org code, straight from the phone. Organizations themselves are created and configured in LEG3ND on the web, so the org is set up before the first crew member signs in."
+     },
+     "native": {
+      "q": "Is COMPVSS a native iOS or Android app?",
+      "a": "No. It is an installable web app: open the URL, tap Install, and it runs full-screen from the home screen. No App Store review and no version drift across a 400-person gate team."
+     },
+     "signal": {
+      "q": "What happens when the venue has no signal?",
+      "a": "The scanner and the day's call sheet cache on the device. Scans queue locally and replay in order when signal returns; duplicates the device could not confirm are flagged pending and reconciled by the server on sync."
+     },
+     "gateSpeed": {
+      "q": "How fast is the gate scan?",
+      "a": "Sub-100ms server-side; a US cell connection adds roughly 200 to 400ms of round trip. Offline scans resolve instantly on the device."
+     },
+     "anonymous": {
+      "q": "Can crew report incidents anonymously?",
+      "a": "Yes. A reporter can file without attaching their identity to the record. Closing an injury or a major or critical incident still requires a manager sign-off, so anonymity never lowers the bar on follow-through."
+     },
+     "cost": {
+      "q": "What does it cost?",
+      "a": "Pricing is per organization, never per seat, with a free tier for small teams. Adding crew never raises the bill, which matters when your headcount triples the week of the show."
+     }
+    },
+    "cta": {
+     "title": "Put it on their phones.",
+     "subtitle": "Installs from the browser in one tap. No App Store, no fleet update, ready before soundcheck."
     }
    }
   },
@@ -3271,7 +3788,87 @@
      "title": "Skip The Math.",
      "subtitle": "Per-diem auto-calculates on every show in ATLVS, tied to your roster."
     }
-   }
+   },
+   "crewSize": {
+    "crumbsLabel": "Crew Size Calculator",
+    "cta": {
+     "primary": "See COMPVSS",
+     "title": "Staff It In COMPVSS."
+    },
+    "faq": {
+     "compliant": {
+      "q": "Is this code-compliant staffing advice?"
+     },
+     "how": {
+      "q": "How is the crew size calculated?"
+     },
+     "source": {
+      "q": "Where do the ratios come from?"
+     }
+    },
+    "how": {
+     "heading": "How staffing ratios work."
+    },
+    "meta": {
+     "title": "Crew Size Calculator: Security, Stewards, Medical"
+    },
+    "schemaName": "ATLVS Crew Size Calculator",
+    "title": "Crew Size Calculator."
+   },
+   "generator": {
+    "crumbsLabel": "Generator Size Calculator",
+    "cta": {
+     "primary": "See COMPVSS",
+     "title": "Power Runs Through COMPVSS."
+    },
+    "faq": {
+     "compliant": {
+      "q": "Is this code-compliant electrical advice?"
+     },
+     "how": {
+      "q": "How is the generator size calculated?"
+     },
+     "source": {
+      "q": "Where do the defaults come from?"
+     }
+    },
+    "how": {
+     "heading": "How generator sizing works."
+    },
+    "meta": {
+     "title": "Generator Size Calculator: kVA for Event Power"
+    },
+    "schemaName": "ATLVS Generator Size Calculator",
+    "title": "Generator Size Calculator."
+   },
+   "legendLink": "Explore LEG3ND",
+   "restroom": {
+    "crumbsLabel": "Restroom & ADA Calculator",
+    "cta": {
+     "primary": "See COMPVSS",
+     "title": "Site Ops Live In COMPVSS."
+    },
+    "faq": {
+     "compliant": {
+      "q": "Is this code-compliant sanitation advice?"
+     },
+     "how": {
+      "q": "How is the restroom count calculated?"
+     },
+     "source": {
+      "q": "Where do the numbers come from?"
+     }
+    },
+    "how": {
+     "heading": "How sanitation counts work."
+    },
+    "meta": {
+     "title": "Restroom & ADA Calculator: Portable Units for Events"
+    },
+    "schemaName": "ATLVS Restroom & ADA Calculator",
+    "title": "Restroom & ADA Calculator."
+   },
+   "xpmsGlossaryLink": "What is XPMS?"
   },
   "marketplace": {
    "crumbsLabel": "Marketplace",
@@ -3813,6 +4410,18 @@
     "title": "ATLVS Logo Kit · The Waypoint",
     "description": "The ATLVS mark is the Waypoint: an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't."
    }
+  },
+  "waitlist": {
+   "actions": {
+    "submit": "Join the waitlist",
+    "submitting": "Adding you…"
+   },
+   "fields": {
+    "company": "Company (optional)",
+    "email": "Work email",
+    "name": "Name (optional)"
+   },
+   "successTitle": "You're on the list."
   }
  },
  "auth": {

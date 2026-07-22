@@ -7,7 +7,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
 import { PhotoStrip } from "@/components/media/PhotoStrip";
 import { signPhotoRefs } from "@/lib/mobile/photo-sign";
-import { transitionPunchItem } from "@/app/(platform)/studio/punch/[id]/actions";
+import { advancePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -169,7 +169,7 @@ export default async function PunchItemPage({ params }: { params: Promise<{ item
       )}
 
       {canTransition && nextStep && (
-        <form action={transitionPunchItem.bind(null, item.id, nextStep.to)} style={{ marginTop: 16 }}>
+        <form action={advancePunchItem.bind(null, item.id, nextStep.to)} style={{ marginTop: 16 }}>
           <button className="ps-btn ps-btn--cta ps-btn--lg" style={{ width: "100%", justifyContent: "center" }} type="submit">
             <KIcon name="ArrowRight" size={16} /> {nextStep.label}
           </button>

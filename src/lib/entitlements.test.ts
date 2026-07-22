@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import raw from "./entitlements.json";
 import {
+  EXTENSIONS_VISIBLE,
   ECOSYSTEM_APPS,
   APP_BY_ID,
   RAIL_ORDER,
@@ -78,14 +79,22 @@ describe("resolveEntitledApps", () => {
     expect(byId.gvteway!.access).toBe("full"); // portal footing
   });
 
-  it("always surfaces the extensions as coming soon (never reachable)", () => {
+  it("hides the extensions entirely while EXTENSIONS_VISIBLE is off (owner directive 2026-07-22)", () => {
     const apps = resolveEntitledApps({ role: "owner", persona: "owner", isDeveloper: false, hasPortal: false });
-    for (const id of EXTENSIONS) {
-      const a = apps.find((x) => x.id === id)!;
-      expect(a.comingSoon, id).toBe(true);
-      expect(a.access, id).toBeNull();
+    if (EXTENSIONS_VISIBLE) {
+      // Future pass: when the toggle flips back, extensions surface as
+      // coming-soon and never reachable.
+      for (const id of EXTENSIONS) {
+        const a = apps.find((x) => x.id === id)!;
+        expect(a.comingSoon, id).toBe(true);
+        expect(a.access, id).toBeNull();
+      }
+    } else {
+      for (const id of EXTENSIONS) {
+        expect(apps.find((x) => x.id === id), id).toBeUndefined();
+      }
     }
-    // An owner reaches ≥ 2 products → the rail shows.
+    // An owner reaches >= 2 products regardless → the rail shows.
     expect(shouldShowRail(apps)).toBe(true);
   });
 

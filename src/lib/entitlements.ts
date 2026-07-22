@@ -201,8 +201,20 @@ function productAccess(id: AppId, o: ResolveOpts): Access | null {
  * access (or coming-soon flag). The rail component decides what to show; the
  * gate (`shouldShowRail`) keys off the reachable-product count.
  */
+/**
+ * Extensions toggle (owner directive 2026-07-22): the seven extension apps
+ * (OPVS, CVRGO, Vault, MVNIFEST, GVLLEY, Social, Email) are hidden from every
+ * surface until their own marketing/product pass, much later. Flip to true to
+ * bring the coming-soon rail entries back; the registry entries, accents and
+ * theme tokens stay (they are infrastructure, not copy).
+ */
+export const EXTENSIONS_VISIBLE = false;
+
 export function resolveEntitledApps(o: ResolveOpts): ResolvedApp[] {
-  return RAIL_ORDER.map((id) => {
+  const order = EXTENSIONS_VISIBLE
+    ? RAIL_ORDER
+    : RAIL_ORDER.filter((id) => APP_BY_ID[id].tier !== "extension");
+  return order.map((id) => {
     const app = APP_BY_ID[id];
     const comingSoon = !AVAILABLE[id];
     const access = comingSoon ? null : productAccess(id, o);

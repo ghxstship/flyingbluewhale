@@ -165,6 +165,32 @@ describe("Voice guard — no em-dashes in (platform) console copy", () => {
   });
 });
 
+// ── Voice: GH-4 scope extension — components/ + ALL shells (pinned) ─────────
+// The em-dash guard covered messages + (platform) only; src/components/** —
+// the layer that renders on every shell — and the other route groups were
+// unscanned (lane-F GH-4). Several component t() fallbacks had already
+// drifted from their cleaned catalog twins. This ratchet extends the same
+// line scanner to src/components + every src/app route group. The existing
+// debt (W3's sweep, not W1's) is pinned at the 2026-07-22 count; the pin may
+// ONLY SHRINK — new dashes fail immediately, and W3 drives the pin to 0.
+const LEGACY_DASH_PIN = 433;
+const VOICE_EXT_SCOPES = [join(REPO_ROOT, "src", "components"), join(REPO_ROOT, "src", "app")];
+const VOICE_EXT_SRC = VOICE_EXT_SCOPES.flatMap((d) => walk(d)).filter(
+  (f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f) && !f.startsWith(PLATFORM),
+);
+
+describe("Voice guard — em-dash scope extension to components/ + all shells (GH-4)", () => {
+  it(`dash lines may only shrink below the pinned legacy count (${LEGACY_DASH_PIN})`, () => {
+    const offenders = VOICE_EXT_SRC.flatMap(platformDashOffenders);
+    expect(
+      offenders.length,
+      `Em/en-dash lines outside (platform) grew past the pinned legacy count (${LEGACY_DASH_PIN}). ` +
+        `New copy must not use dashes (standing rule); if you cleaned lines, shrink the pin. Sample:\n` +
+        offenders.slice(0, 40).join("\n"),
+    ).toBeLessThanOrEqual(LEGACY_DASH_PIN);
+  });
+});
+
 // ── Voice: no AI-slop lexicon ────────────────────────────────────────────────
 const SLOP =
   /\b(synerg\w*|streamlines?|streamlining|seamless\w*|leverages?|leveraging|empowers?|empowering|best-in-class|enterprise-grade|cutting-edge|game-?chang\w*|revolutioniz\w*)\b/i;
@@ -215,6 +241,35 @@ describe("Type guard — marketing uses the .eyebrow class", () => {
         });
     }
     expect(offenders, `Use class "eyebrow" / "eyebrow eyebrow-accent" instead:\n${offenders.join("\n")}`).toEqual([]);
+  });
+});
+
+// ── Type: GH-6 heading-ramp bypass ratchet (repo-wide, pinned) ───────────────
+// "A bare heading lands on the ramp" (Type v8.0) — but nothing guarded h1-h4
+// elements hand-setting display sizes outside (marketing) (lane-F GH-6:
+// ModuleHeader's own h1 + 15 shared components). This flags any h1-h4 that
+// sets a text-xl..text-6xl utility in the same tag — those must be a bare
+// heading (the element wiring sizes it) or a .hed-* ramp class. Existing debt
+// is W2's sweep; pinned, shrink-only.
+const LEGACY_HEADING_BYPASS_PIN = 121;
+const HEADING_BYPASS = /<h[1-4][^>]*className="[^"]*\btext-(xl|2xl|3xl|4xl|5xl|6xl)\b/;
+
+describe("Type guard — h1-h4 heading-ramp bypass may only shrink (GH-6)", () => {
+  it(`heading-size bypass lines stay at or below the pin (${LEGACY_HEADING_BYPASS_PIN})`, () => {
+    const offenders: string[] = [];
+    for (const f of ALL_TSX) {
+      readFileSync(f, "utf8")
+        .split("\n")
+        .forEach((line, i) => {
+          if (HEADING_BYPASS.test(line)) offenders.push(`${rel(f)}:${i + 1}`);
+        });
+    }
+    expect(
+      offenders.length,
+      `h1-h4 elements hand-setting display sizes grew past the pin (${LEGACY_HEADING_BYPASS_PIN}). ` +
+        `Use a bare heading (the ramp sizes it) or a .hed-* class; if you cleaned spots, shrink the pin. Sample:\n` +
+        offenders.slice(0, 40).join("\n"),
+    ).toBeLessThanOrEqual(LEGACY_HEADING_BYPASS_PIN);
   });
 });
 

@@ -1,4 +1,35 @@
+/*
+ * CASCADE LAYER ORDER — the one explicit declaration (W1, UI/UX canon audit
+ * 2026-07). Declared BEFORE the tailwindcss import so OUR order wins the
+ * first-declaration rule; Tailwind's own `@layer theme, base, components,
+ * utilities;` statement then merely re-references existing names.
+ *
+ *   theme      — Tailwind @theme tokens (utility var wiring)
+ *   base       — Tailwind preflight
+ *   tokens     — SSR cold-start token seeds + primitives.css (the pre-kit
+ *                :root fallbacks; must LOSE to the kit's [data-ui] blocks)
+ *   kit        — the ATLVS kit proper (atlvs-product.css + kit-platform/
+ *                kit-ai/kit-layers): every --p-* definition and .ps-* rule
+ *   components — globals.css component classes (.hed-N, .eyebrow, etc.)
+ *   utilities  — Tailwind utilities + the RTL flip block
+ *
+ * Anything UNLAYERED (page-level CSS, shell-exclusive kit-*.css files,
+ * the kit-trends <link>) beats all six layers, so a page-level single-class
+ * override always wins over a kit component rule without a specificity
+ * fight (the /aurora ghost-button class of bug, lane-F F-27).
+ */
+@layer theme, base, tokens, kit, components, utilities;
+
 @import "tailwindcss";
+
+/* Tailwind v4 auto source detection scans EVERY non-gitignored file for
+   utility candidates — including markdown. The audit reports quote broken
+   class strings verbatim (e.g. an invalid var() utility in lane-c), which
+   Tailwind extracts as candidates and emits as unparsable CSS, killing the
+   dev compile. Reports and docs are documentation, not source — exclude them
+   from the scan. (W1 hotfix, 2026-07-22.) */
+@source not "../../reports";
+@source not "../../docs";
 
 /* ═══════════════════════════════════════════════════════════════════
    ATLVS Technologies · design system
@@ -81,7 +112,12 @@
  * volcanic-red house accent (cold-start default — the non-product /
  * ecosystem-marketing default; house green is retired for UI per v8.0
  * palette-lock) so the un-attributed flash matches the canonical kit surface.
+ *
+ * Lives in @layer tokens so the kit's [data-ui] blocks (@layer kit, later in
+ * the order) always beat it once the theme attribute lands — previously this
+ * relied on import order alone.
  */
+@layer tokens {
 :root {
   --p-bg: #f7f8fa;
   --p-surface: #ffffff;
@@ -107,6 +143,7 @@
   --p-info: #2596c4;
   --sidebar-width: 16rem;
 }
+} /* end @layer tokens */
 
 /* ───── Base ───── */
 
@@ -591,7 +628,7 @@ pre,
    * plus a flat tier. `elevation-0` = flat; `-xs` hairline; `-1`/`-2`/`-3`
    * = resting → hover → popover/modal; `-2xl` = drawers / large overlays.
    * The dark scope re-tunes -1/-2/-3 (stronger alpha + 1px top highlight) in
-   * atlvs-product.css. `elevation-4`/`-float` alias `-2xl` for back-compat. */
+   * atlvs-product.css. */
   .elevation-0 {
     box-shadow: none;
   }
@@ -610,13 +647,9 @@ pre,
   .elevation-2xl {
     box-shadow: var(--p-elev-2xl);
   }
-  /* Back-compat aliases → -2xl (was -3 before the 5-step scale landed). */
-  .elevation-4 {
-    box-shadow: var(--p-elev-2xl);
-  }
-  .elevation-float {
-    box-shadow: var(--p-elev-2xl);
-  }
+  /* The back-compat aliases .elevation-4 / .elevation-float (→ -2xl) were
+     removed in W1 (2026-07-22): zero consumers (lane-F F-29). Use
+     .elevation-2xl directly. */
 
   /* ───── Glass ───── */
 
@@ -1176,24 +1209,17 @@ pre,
   /* v8.0 · REC 02 — body & label text utilities. The display scale had .hed-*
      but paragraph/secondary text was hand-set everywhere (drifting between
      15 / 15.5 / 16 / 17px). These read the same --p-fs-* ramp so body copy is
-     systematized too. .ps-lead is the one intro paragraph that may run larger. */
+     systematized too. */
   .ps-body {
     font-family: var(--p-font);
     font-size: var(--p-fs-body);
     line-height: var(--p-lh-body, 1.55);
     color: var(--p-text-2);
   }
-  .ps-lead {
-    font-family: var(--p-font);
-    font-size: clamp(0.9375rem, 0.85rem + 0.4vw, 1.0625rem);
-    line-height: 1.55;
-    color: var(--p-text-2);
-  }
-  .ps-small {
-    font-size: var(--p-fs-small);
-    line-height: 1.5;
-    color: var(--p-text-2);
-  }
+  /* .ps-lead and .ps-small were removed in W1 (2026-07-22): zero consumers
+     (lane-F F-29). Body copy uses .ps-body; secondary text uses .ps-caption
+     or the --p-fs-small ramp step. (CLAUDE.md still names them in the
+     §Typography copy-utility list — doc drift flagged in the W1 report.) */
   .ps-caption {
     font-size: var(--p-fs-eyebrow);
     line-height: 1.45;

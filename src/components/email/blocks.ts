@@ -35,8 +35,10 @@ import { BRAND } from "@/lib/brand";
 export const PALETTE = {
   /** House / primary accent — ATLVS volcanic red. */
   accent: "#E23414",
-  /** Darker red for pressed/hover affordances and link emphasis. */
-  accentHover: "#B7270D",
+  /** Darker red for pressed/hover affordances and link emphasis.
+      (Re-seeded W1 2026-07-22: #B7270D had drifted from the tokens.json
+      accent-hover canon.) */
+  accentHover: "#C92C10",
   /** Foreground that sits on the accent fill (white passes AA on #E23414). */
   onAccent: "#FFFFFF",
 
@@ -44,8 +46,10 @@ export const PALETTE = {
   bg: "#F7F8FA",
   /** Card / content surface. */
   surface: "#FFFFFF",
-  /** Subtle inset surface (footer band, code chips). */
-  surfaceInset: "#F2F4F7",
+  /** Subtle inset surface (footer band, code chips).
+      (Re-seeded W1 2026-07-22: #F2F4F7 had drifted from the tokens.json
+      surface-2 canon.) */
+  surfaceInset: "#F1F3F6",
 
   /** Primary body + heading ink. */
   text: "#181B23",

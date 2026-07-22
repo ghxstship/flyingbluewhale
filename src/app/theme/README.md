@@ -61,7 +61,7 @@ Defined in `themes/atlvs-product.css`. The full set:
 - **Feedback** `.ps-banner` (+ `--info --ok --warn --danger`) `.ps-toast` `.ps-tip` `.ps-modal` `.ps-empty` `.ps-skel` `.ps-spinner`
 - **Type** `.ps-eyebrow` `.ps-mono` `.ps-id` `.ps-h` `.ps-muted`
 
-Every selector matches BOTH `[data-ui="saas"]` (kit canon) AND `[data-theme="atlvs-product"]` (codebase convention). All shells set both attributes.
+Every selector targets `[data-ui="saas"]` — the one load-bearing theme attribute (W1 collapse, 2026-07-22; the former `[data-theme="atlvs-product"]` twin arms were removed as dead weight). `data-theme` is still stamped on `<html>` for the theme registry/localStorage plumbing, but no selector reads it. Per-product accents compound `[data-ui="saas"]` with `data-product` (kit canon) or `data-platform` (codebase convention) on the same element. The whole theme stack loads inside `@layer` (tokens → kit, below Tailwind's components/utilities and below all unlayered page CSS) so page-level overrides win without specificity fights.
 
 ## Wordmark
 

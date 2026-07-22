@@ -42,7 +42,7 @@
 /* ---- Shared trend hooks (read by components; default = no-op so non-trend
    surfaces are unchanged). --trend-rotate is the off-grid tilt collage/maximal
    lean on; --trend-overlay flags atmospheric backdrops (synthwave grid). ---- */
-[data-ui="saas"], [data-theme="atlvs-product"] {
+[data-ui="saas"] {
   --trend-rotate: 0deg;       /* @kind other */
   --trend-overlay: none;      /* @kind other */
   --trend-press-translate: 0; /* @kind other */
@@ -51,7 +51,7 @@
 /* ===========================================================================
    1 — IMMERSIVE  ·  3D & depth, glass, layered ambient shadow
    ========================================================================= */
-[data-ui="saas"][data-trend="immersive"], [data-theme="atlvs-product"][data-trend="immersive"] {
+[data-ui="saas"][data-trend="immersive"] {
   --p-r-sm: 12px; /* @kind radius */ --p-r: 16px; /* @kind radius */ --p-r-md: 18px; /* @kind radius */ --p-r-lg: 24px; /* @kind radius */ --p-r-xl: 28px; /* @kind radius */
   --glass-blur: blur(22px) saturate(1.3); /* @kind other */
   --p-elev-1: 0 2px 6px rgba(10,12,24,.14), 0 1px 0 rgba(255,255,255,.06) inset;
@@ -76,7 +76,7 @@
    the default (rounded radii, Anton headings, the v8.1 elevation recipe); this
    flat skin applies ONLY when a user explicitly picks data-trend="experimental".
    Do not re-add the `:not([data-trend])` selectors. ---- */
-[data-ui="saas"][data-trend="experimental"], [data-theme="atlvs-product"][data-trend="experimental"] {
+[data-ui="saas"][data-trend="experimental"] {
   --p-r-sm: 0; /* @kind radius */ --p-r: 0; /* @kind radius */ --p-r-md: 0; /* @kind radius */ --p-r-lg: 0; /* @kind radius */ --p-r-xl: 0; /* @kind radius */ --p-r-pill: 0; /* @kind radius */
   --p-elev-1: none; --p-elev-2: 0 0 0 1px var(--p-border); --p-elev-3: 0 0 0 1px var(--p-border-2);
   --p-shadow-sm: none; --p-shadow: none; --p-shadow-lg: var(--p-elev-3);
@@ -89,7 +89,7 @@
 /* ===========================================================================
    3 — DOPAMINE  ·  vibrant, pill controls, flat offset COLOR shadow
    ========================================================================= */
-[data-ui="saas"][data-trend="dopamine"], [data-theme="atlvs-product"][data-trend="dopamine"] {
+[data-ui="saas"][data-trend="dopamine"] {
   --p-r-sm: 14px; /* @kind radius */ --p-r: 18px; /* @kind radius */ --p-r-md: 20px; /* @kind radius */ --p-r-lg: 26px; /* @kind radius */ --p-r-xl: 30px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
   /* offset shadow tinted by the brand accent — hue preserved */
   --p-elev-1: 4px 4px 0 var(--p-accent-weak);
@@ -107,7 +107,7 @@
 /* ===========================================================================
    4 — BOLD TYPE  ·  type is the page; flat, hard edges, colossal display
    ========================================================================= */
-[data-ui="saas"][data-trend="bold-type"], [data-theme="atlvs-product"][data-trend="bold-type"] {
+[data-ui="saas"][data-trend="bold-type"] {
   --p-r-sm: 0; /* @kind radius */ --p-r: 0; /* @kind radius */ --p-r-md: 0; /* @kind radius */ --p-r-lg: 0; /* @kind radius */ --p-r-xl: 2px; /* @kind radius */ --p-r-pill: 0; /* @kind radius */
   --p-elev-1: none; --p-elev-2: 0 0 0 1px var(--p-border); --p-elev-3: 0 8px 24px rgba(10,12,24,.12);
   --p-shadow-sm: none; --p-shadow: none; --p-shadow-lg: var(--p-elev-3);
@@ -122,7 +122,7 @@
    5 — DARK  ·  the dual-theme showcase; border-led elevation, GitHub-calm radii
    (the studio also pins [data-mode="dark"] when this trend is chosen)
    ========================================================================= */
-[data-ui="saas"][data-trend="dark"], [data-theme="atlvs-product"][data-trend="dark"] {
+[data-ui="saas"][data-trend="dark"] {
   --p-r-sm: 6px; /* @kind radius */ --p-r: 8px; /* @kind radius */ --p-r-md: 8px; /* @kind radius */ --p-r-lg: 12px; /* @kind radius */ --p-r-xl: 14px; /* @kind radius */
   --p-elev-1: 0 0 0 1px var(--p-border); --p-elev-2: 0 1px 2px rgba(0,0,0,.4), 0 0 0 1px var(--p-border);
   --p-elev-3: 0 12px 36px rgba(0,0,0,.5), 0 0 0 1px var(--p-border);
@@ -137,7 +137,7 @@
    6 — MOTION  ·  clean base, spring eases, generous hover lift (durations stay
    tokenized → reduced-motion still zeroes them, see guard at end)
    ========================================================================= */
-[data-ui="saas"][data-trend="motion"], [data-theme="atlvs-product"][data-trend="motion"] {
+[data-ui="saas"][data-trend="motion"] {
   --p-r-md: 10px; /* @kind radius */ --p-r-lg: 14px; /* @kind radius */
   --motion-normal: 240ms; /* @kind other */ --motion-slow: 400ms; /* @kind other */ --motion-hover: 160ms; /* @kind other */
   --p-ease: var(--motion-hover) var(--ease-spring); /* @kind other */
@@ -150,7 +150,7 @@
 /* ===========================================================================
    7 — GAMIFIED  ·  friendly rounded, soft shadow, vivid accent, springy
    ========================================================================= */
-[data-ui="saas"][data-trend="gamified"], [data-theme="atlvs-product"][data-trend="gamified"] {
+[data-ui="saas"][data-trend="gamified"] {
   --p-r-sm: 12px; /* @kind radius */ --p-r: 16px; /* @kind radius */ --p-r-md: 18px; /* @kind radius */ --p-r-lg: 22px; /* @kind radius */ --p-r-xl: 26px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
   --p-elev-1: 0 2px 6px rgba(10,12,24,.08); --p-elev-2: 0 6px 18px rgba(10,12,24,.12);
   --p-elev-3: 0 16px 40px rgba(10,12,24,.18);
@@ -167,7 +167,7 @@
 /* ===========================================================================
    8 — NEUMORPHIC  ·  soft UI; dual extruded/inset shadow derived off the surface
    ========================================================================= */
-[data-ui="saas"][data-trend="neumorphic"], [data-theme="atlvs-product"][data-trend="neumorphic"] {
+[data-ui="saas"][data-trend="neumorphic"] {
   --p-r-sm: 12px; /* @kind radius */ --p-r: 16px; /* @kind radius */ --p-r-md: 18px; /* @kind radius */ --p-r-lg: 20px; /* @kind radius */ --p-r-xl: 24px; /* @kind radius */
   --p-elev-1: 5px 5px 12px color-mix(in srgb, var(--p-text-1) 14%, transparent), -5px -5px 12px color-mix(in srgb, var(--p-neutral-0) 70%, transparent);
   --p-elev-2: 8px 8px 18px color-mix(in srgb, var(--p-text-1) 16%, transparent), -8px -8px 18px color-mix(in srgb, var(--p-neutral-0) 80%, transparent);
@@ -185,7 +185,7 @@
 /* ===========================================================================
    9 — SYNTHWAVE  ·  neon glow (from accent), sharp corners, futuristic display
    ========================================================================= */
-[data-ui="saas"][data-trend="synthwave"], [data-theme="atlvs-product"][data-trend="synthwave"] {
+[data-ui="saas"][data-trend="synthwave"] {
   --p-r-sm: 2px; /* @kind radius */ --p-r: 4px; /* @kind radius */ --p-r-md: 4px; /* @kind radius */ --p-r-lg: 6px; /* @kind radius */ --p-r-xl: 8px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
   --p-elev-1: 0 0 0 1px color-mix(in oklab, var(--k-acc) 55%, transparent), 0 0 14px color-mix(in oklab, var(--k-acc) 35%, transparent);
   --p-elev-2: 0 0 0 1px color-mix(in oklab, var(--k-acc) 60%, transparent), 0 0 24px color-mix(in oklab, var(--k-acc) 45%, transparent);
@@ -202,7 +202,7 @@
 /* ===========================================================================
    10 — MAXIMALIST  ·  visible borders, mixed radii, dense, loud display
    ========================================================================= */
-[data-ui="saas"][data-trend="maximalist"], [data-theme="atlvs-product"][data-trend="maximalist"] {
+[data-ui="saas"][data-trend="maximalist"] {
   --p-r-sm: 0; /* @kind radius */ --p-r: 4px; /* @kind radius */ --p-r-md: 4px; /* @kind radius */ --p-r-lg: 24px; /* @kind radius */ --p-r-xl: 28px; /* @kind radius */ --p-r-pill: 999px; /* @kind radius */
   --p-elev-1: 0 0 0 2px var(--p-text-1); --p-elev-2: 4px 4px 0 var(--p-text-1), 0 0 0 2px var(--p-text-1);
   --p-elev-3: 8px 8px 0 var(--p-text-1), 0 0 0 2px var(--p-text-1);
@@ -217,7 +217,7 @@
 /* ===========================================================================
    11 — COLLAGE  ·  paper drop shadow, slight off-grid tilt, editorial display
    ========================================================================= */
-[data-ui="saas"][data-trend="collage"], [data-theme="atlvs-product"][data-trend="collage"] {
+[data-ui="saas"][data-trend="collage"] {
   --p-r-sm: 2px; /* @kind radius */ --p-r: 3px; /* @kind radius */ --p-r-md: 3px; /* @kind radius */ --p-r-lg: 4px; /* @kind radius */ --p-r-xl: 6px; /* @kind radius */
   --p-elev-1: 2px 3px 6px rgba(10,12,24,.16); --p-elev-2: 3px 5px 12px rgba(10,12,24,.20);
   --p-elev-3: 6px 10px 24px rgba(10,12,24,.26);
@@ -231,7 +231,7 @@
 /* ===========================================================================
    12 — BRUTALIST  ·  raw, thick black borders, HARD offset shadow, slam-press
    ========================================================================= */
-[data-ui="saas"][data-trend="brutalist"], [data-theme="atlvs-product"][data-trend="brutalist"] {
+[data-ui="saas"][data-trend="brutalist"] {
   --p-r-sm: 0; /* @kind radius */ --p-r: 0; /* @kind radius */ --p-r-md: 0; /* @kind radius */ --p-r-lg: 0; /* @kind radius */ --p-r-xl: 0; /* @kind radius */ --p-r-pill: 0; /* @kind radius */
   --p-elev-1: 3px 3px 0 var(--p-text-1); --p-elev-2: 5px 5px 0 var(--p-text-1); --p-elev-3: 8px 8px 0 var(--p-text-1);
   --p-shadow-sm: var(--p-elev-1); --p-shadow: var(--p-elev-2); --p-shadow-lg: var(--p-elev-3);
@@ -249,7 +249,7 @@
    13 — SUSTAINABLE  ·  lean; system fonts (zero webfont), hairline borders,
    near-zero motion. The restraint is the aesthetic.
    ========================================================================= */
-[data-ui="saas"][data-trend="sustainable"], [data-theme="atlvs-product"][data-trend="sustainable"] {
+[data-ui="saas"][data-trend="sustainable"] {
   --p-r-sm: 4px; /* @kind radius */ --p-r: 6px; /* @kind radius */ --p-r-md: 8px; /* @kind radius */ --p-r-lg: 8px; /* @kind radius */ --p-r-xl: 10px; /* @kind radius */
   --p-elev-1: none; --p-elev-2: 0 0 0 1px var(--p-border); --p-elev-3: 0 0 0 1px var(--p-border-2);
   --p-shadow-sm: none; --p-shadow: none; --p-shadow-lg: var(--p-elev-3);
@@ -268,7 +268,7 @@
    (0,1,0) no longer reaches them. Re-assert it here, last, at matching
    specificity so prefers-reduced-motion always wins over any trend timing. */
 @media (prefers-reduced-motion: reduce) {
-  [data-ui="saas"][data-trend], [data-theme="atlvs-product"][data-trend] {
+  [data-ui="saas"][data-trend] {
     --motion-fast: 0ms; /* @kind other */ --motion-normal: 0ms; /* @kind other */ --motion-slow: 0ms; /* @kind other */
     --motion-hover: 0ms; /* @kind other */ --motion-skeleton: 0ms; /* @kind other */ --vt-dur: 0ms; /* @kind other */
     --hover-lift-y: 0; /* @kind other */ --hover-scale: 1; /* @kind other */ --press-scale: 1; /* @kind other */ --trend-press-translate: 0; /* @kind other */

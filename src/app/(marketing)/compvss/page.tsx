@@ -27,8 +27,9 @@ import { getStaticEnT } from "../_lib/static-t";
 import { Wordmark } from "@/components/brand/Wordmark";
 
 // COMPVSS accent (signal yellow) comes from the theme: the wrapper sets
-// `data-theme="atlvs-product" data-platform="compvss"`, so `--p-accent*`
-// resolve to the COMPVSS ramp for this subtree — no inline hexes.
+// `data-ui="saas" data-platform="compvss"` (same element — the accent scope
+// is a compound selector), so `--p-accent*` resolve to the COMPVSS ramp for
+// this subtree — no inline hexes.
 const K = "marketing.pages.compvssHome";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,7 +67,7 @@ export default async function CompvssHomePage() {
   ];
 
   return (
-    <div data-theme="atlvs-product" data-platform="compvss">
+    <div data-ui="saas" data-theme="atlvs-product" data-platform="compvss">
       <JsonLd
         data={[
           softwareApplicationSchema({

@@ -80,11 +80,11 @@
 .doc-cover--accent .brandrow .mk{background:var(--p-accent-contrast)}
 .doc-cover .wm{font-family:var(--p-font);font-weight:600;letter-spacing:.04em}
 .doc-cover .doctype{font-family:var(--p-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin:0 0 12px}
-/* Cover h1 MUST set an explicit light color: the `@layer base`
-   `[data-theme="atlvs-product"] h1{color:var(--p-text-1)}` element rule
-   otherwise wins over the inherited `.doc-cover{color:var(--p-bg)}` and renders
-   the title dark-on-dark. Any heading on a dark/accent block sets color the same
-   way (see `.doc-sec--ink h2` below). */
+/* Cover h1 MUST set an explicit light color: the kit's
+   `[data-ui="saas"] h1{color:var(--p-text-1)}` element rule (kit layer, base
+   sub-layer) otherwise wins over the inherited `.doc-cover{color:var(--p-bg)}`
+   and renders the title dark-on-dark. Any heading on a dark/accent block sets
+   color the same way (see `.doc-sec--ink h2` below). */
 .doc-cover h1{color:var(--p-bg);font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);letter-spacing:var(--p-heading-ls);text-transform:var(--p-display-case);font-size:48px;line-height:.96;margin:0 0 var(--p-3)}
 .doc-cover--accent h1{color:var(--p-accent-contrast)}
 .doc-cover .sub{font-size:15px;opacity:.82;margin:0 0 28px;max-width:480px;line-height:1.5}

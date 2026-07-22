@@ -79,6 +79,7 @@ export default async function PortalSlugLayout({
   return (
     <div
       data-portal-slug={slug}
+      data-ui="saas"
       data-theme="atlvs-product"
       data-platform="gvteway"
       style={style}

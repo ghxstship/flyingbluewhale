@@ -98,8 +98,9 @@ test.describe("theme system", () => {
     await dismissConsent(page);
     await page.goto("/");
     // The per-product overlay is scoped to
-    // [data-theme="atlvs-product"][data-platform="gvteway"]; activate it on
-    // <html> (already data-theme="atlvs-product") and read the resolved token.
+    // [data-ui="saas"][data-platform="gvteway"] (W1 collapse: data-ui is the
+    // one load-bearing theme attribute); activate it on <html> (already
+    // data-ui="saas") and read the resolved token.
     //
     // v8.1: the accent is authored in OKLCH + light-dark(), so the computed
     // value is an oklch/lab color string, NOT a hex literal. Resolve it (and the

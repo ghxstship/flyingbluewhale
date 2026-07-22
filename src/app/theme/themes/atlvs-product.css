@@ -10,15 +10,22 @@
  *   - kit.css :root       → --brand-* identity tokens (for "show all three"
  *                           surfaces) + Jost wordmark base
  *
- * Selector model:
+ * Selector model (W1 collapse, 2026-07-22):
  *
- *   Every kit selector targets [data-ui="saas"] in the source. We accept
- *   EITHER [data-ui="saas"] or [data-theme="atlvs-product"] so existing
- *   shells (which set data-theme) and kit-canon authoring (which uses
- *   data-ui) both paint identically. App shells set both.
+ *   Every kit selector targets [data-ui="saas"] — the ONE load-bearing theme
+ *   attribute (doc/report stages set only it; <html> + every shell set it).
+ *   The former [data-theme="atlvs-product"] twin arms (237 dual-scoped rules)
+ *   were dead weight — data-theme is still stamped on <html> for the theme
+ *   registry/localStorage plumbing, but no selector reads it anymore. Do NOT
+ *   reintroduce twin scoping; scope new rules to [data-ui="saas"] only.
+ *
+ *   The whole file loads inside `@layer kit` (see theme/index.css) so
+ *   page-level unlayered CSS and Tailwind utilities always win over kit
+ *   rules regardless of specificity.
  *
  *   Per-product accent reads data-product (kit canon) OR data-platform
- *   (existing codebase convention). Core: atlvs · compvss · gvteway · legend;
+ *   (existing codebase convention) — both compound with [data-ui="saas"] on
+ *   the SAME element. Core: atlvs · compvss · gvteway · legend;
  *   extensions: cvrgo · opvs · gvlley · vault. Two theming systems only
  *   (ratified 2026-07-17): the ATLVS Ecosystem default + Full System
  *   Whitelabel. GHXSTSHIP is an identity mark (logo/skull), never a theme —
@@ -208,10 +215,9 @@
 
 /* ============================================================================
    BASE TYPE + RADII + SPACE + ELEVATION + MOTION
-   Applies to [data-ui="saas"] OR [data-theme="atlvs-product"].
+   Applies to [data-ui="saas"] (the one load-bearing theme attribute).
    ========================================================================== */
-[data-ui="saas"],
-[data-theme="atlvs-product"] {
+[data-ui="saas"] {
   /* Type — "MONUMENT" (kit v3, RATIFIED 2026-06-13, supersedes "Industrial Wide").
      - Display & metrics: Anton — an ultra-condensed grotesque set ALL-CAPS for
        poster-scale headlines + tabular metrics. Single black weight, no width
@@ -426,14 +432,13 @@
    color-scheme (declared per mode below) drives light-dark(); [data-mode] pins
    it, otherwise it follows the OS. Authored once for both modes. ---------- */
 :root { color-scheme: light dark; }
-[data-ui="saas"], [data-theme="atlvs-product"] { color-scheme: light dark; }
-[data-ui="saas"][data-mode="light"], [data-theme="atlvs-product"][data-mode="light"],
-[data-mode="light"] [data-ui="saas"], [data-mode="light"] [data-theme="atlvs-product"] { color-scheme: light; }
-[data-ui="saas"][data-mode="dark"], [data-theme="atlvs-product"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"], [data-mode="dark"] [data-theme="atlvs-product"] { color-scheme: dark; }
+[data-ui="saas"] { color-scheme: light dark; }
+[data-ui="saas"][data-mode="light"],
+[data-mode="light"] [data-ui="saas"] { color-scheme: light; }
+[data-ui="saas"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"] { color-scheme: dark; }
 
-[data-ui="saas"],
-[data-theme="atlvs-product"] {
+[data-ui="saas"] {
   --p-neutral-0:    light-dark(var(--neutral-l-0),    var(--neutral-d-0));
   --p-neutral-50:   light-dark(var(--neutral-l-50),   var(--neutral-d-50));
   --p-neutral-100:  light-dark(var(--neutral-l-100),  var(--neutral-d-100));
@@ -475,7 +480,7 @@
    COMPVSS/LEGEND/GVLLEY use dark-ink-on-fill (focus = the AA cta). ---------- */
 /* ATLVS — volcanic red */
 [data-ui="saas"][data-product="atlvs"],
-[data-theme="atlvs-product"][data-platform="atlvs"] {
+[data-ui="saas"][data-platform="atlvs"] {
   --p-accent:          light-dark(var(--brand-atlvs),      var(--brand-atlvs-lift));
   --p-accent-hover:    var(--brand-atlvs-hover);
   --p-accent-text:     light-dark(var(--brand-atlvs-text), var(--brand-atlvs-lift-text));
@@ -486,7 +491,7 @@
 }
 /* COMPVSS — signal yellow */
 [data-ui="saas"][data-product="compvss"],
-[data-theme="atlvs-product"][data-platform="compvss"] {
+[data-ui="saas"][data-platform="compvss"] {
   --p-accent:          light-dark(var(--brand-compvss),      var(--brand-compvss-lift));
   --p-accent-hover:    var(--brand-compvss-hover);
   --p-accent-text:     light-dark(var(--brand-compvss-text), var(--brand-compvss-lift-text));
@@ -498,7 +503,7 @@
 }
 /* GVTEWAY — blue */
 [data-ui="saas"][data-product="gvteway"],
-[data-theme="atlvs-product"][data-platform="gvteway"] {
+[data-ui="saas"][data-platform="gvteway"] {
   --p-accent:          light-dark(var(--brand-gvteway),      var(--brand-gvteway-lift));
   --p-accent-hover:    var(--brand-gvteway-hover);
   --p-accent-text:     light-dark(var(--brand-gvteway-text), var(--brand-gvteway-lift-text));
@@ -509,7 +514,7 @@
 }
 /* LEG3ND — molten orange */
 [data-ui="saas"][data-product="legend"],
-[data-theme="atlvs-product"][data-platform="legend"] {
+[data-ui="saas"][data-platform="legend"] {
   --p-accent:          light-dark(var(--brand-legend),      var(--brand-legend-lift));
   --p-accent-hover:    var(--brand-legend-hover);
   --p-accent-text:     light-dark(var(--brand-legend-text), var(--brand-legend-lift-text));
@@ -521,7 +526,7 @@
 }
 /* CVRGO — cargo cyan (extension product) */
 [data-ui="saas"][data-product="cvrgo"],
-[data-theme="atlvs-product"][data-platform="cvrgo"] {
+[data-ui="saas"][data-platform="cvrgo"] {
   --p-accent:          light-dark(var(--brand-cvrgo),      var(--brand-cvrgo-lift));
   --p-accent-hover:    var(--brand-cvrgo-hover);
   --p-accent-text:     light-dark(var(--brand-cvrgo-text), var(--brand-cvrgo-lift-text));
@@ -533,7 +538,7 @@
 }
 /* OPVS — studio violet (extension product) */
 [data-ui="saas"][data-product="opvs"],
-[data-theme="atlvs-product"][data-platform="opvs"] {
+[data-ui="saas"][data-platform="opvs"] {
   --p-accent:          light-dark(var(--brand-opvs),      var(--brand-opvs-lift));
   --p-accent-hover:    var(--brand-opvs-hover);
   --p-accent-text:     light-dark(var(--brand-opvs-text), var(--brand-opvs-lift-text));
@@ -544,7 +549,7 @@
 }
 /* GVLLEY — galley magenta (extension product) */
 [data-ui="saas"][data-product="gvlley"],
-[data-theme="atlvs-product"][data-platform="gvlley"] {
+[data-ui="saas"][data-platform="gvlley"] {
   --p-accent:          light-dark(var(--brand-gvlley),      var(--brand-gvlley-lift));
   --p-accent-hover:    var(--brand-gvlley-hover);
   --p-accent-text:     light-dark(var(--brand-gvlley-text), var(--brand-gvlley-lift-text));
@@ -555,7 +560,7 @@
 }
 /* Vault — ATLVS extension, inherits volcanic red */
 [data-ui="saas"][data-product="vault"],
-[data-theme="atlvs-product"][data-platform="vault"] {
+[data-ui="saas"][data-platform="vault"] {
   --p-accent:          light-dark(var(--brand-vault),      var(--brand-vault-lift));
   --p-accent-hover:    var(--brand-vault-hover);
   --p-accent-text:     light-dark(var(--brand-vault-text), var(--brand-vault-lift-text));
@@ -568,28 +573,28 @@
 /* ---------- Accent-intensity sources — --k-acc / --k-acc-text feed the accent
    ramp + the soft/vivid axis. One light-dark() pair per product (incl the four
    extension products). ---------- */
-[data-ui="saas"][data-product="atlvs"], [data-theme="atlvs-product"][data-platform="atlvs"] {
+[data-ui="saas"][data-product="atlvs"], [data-ui="saas"][data-platform="atlvs"] {
   --k-acc: var(--brand-atlvs); --k-acc-text: light-dark(var(--brand-atlvs-text), var(--brand-atlvs-lift-text));
 }
-[data-ui="saas"][data-product="compvss"], [data-theme="atlvs-product"][data-platform="compvss"] {
+[data-ui="saas"][data-product="compvss"], [data-ui="saas"][data-platform="compvss"] {
   --k-acc: var(--brand-compvss); --k-acc-text: light-dark(var(--brand-compvss-text), var(--brand-compvss-lift-text));
 }
-[data-ui="saas"][data-product="gvteway"], [data-theme="atlvs-product"][data-platform="gvteway"] {
+[data-ui="saas"][data-product="gvteway"], [data-ui="saas"][data-platform="gvteway"] {
   --k-acc: var(--brand-gvteway); --k-acc-text: light-dark(var(--brand-gvteway-text), var(--brand-gvteway-lift-text));
 }
-[data-ui="saas"][data-product="legend"], [data-theme="atlvs-product"][data-platform="legend"] {
+[data-ui="saas"][data-product="legend"], [data-ui="saas"][data-platform="legend"] {
   --k-acc: var(--brand-legend); --k-acc-text: light-dark(var(--brand-legend-text), var(--brand-legend-lift-text));
 }
-[data-ui="saas"][data-product="cvrgo"], [data-theme="atlvs-product"][data-platform="cvrgo"] {
+[data-ui="saas"][data-product="cvrgo"], [data-ui="saas"][data-platform="cvrgo"] {
   --k-acc: var(--brand-cvrgo); --k-acc-text: light-dark(var(--brand-cvrgo-text), var(--brand-cvrgo-lift-text));
 }
-[data-ui="saas"][data-product="opvs"], [data-theme="atlvs-product"][data-platform="opvs"] {
+[data-ui="saas"][data-product="opvs"], [data-ui="saas"][data-platform="opvs"] {
   --k-acc: var(--brand-opvs); --k-acc-text: light-dark(var(--brand-opvs-text), var(--brand-opvs-lift-text));
 }
-[data-ui="saas"][data-product="gvlley"], [data-theme="atlvs-product"][data-platform="gvlley"] {
+[data-ui="saas"][data-product="gvlley"], [data-ui="saas"][data-platform="gvlley"] {
   --k-acc: var(--brand-gvlley); --k-acc-text: light-dark(var(--brand-gvlley-text), var(--brand-gvlley-lift-text));
 }
-[data-ui="saas"][data-product="vault"], [data-theme="atlvs-product"][data-platform="vault"] {
+[data-ui="saas"][data-product="vault"], [data-ui="saas"][data-platform="vault"] {
   --k-acc: var(--brand-vault); --k-acc-text: light-dark(var(--brand-vault-text), var(--brand-vault-lift-text));
 }
 
@@ -606,8 +611,7 @@
    accent; 600 ≡ hover (parity); shades (700→900) mix in OKLAB toward text-1.
    Mode-aware (surface/text-1 follow the mode). Reference named steps for tint
    backgrounds / borders / pressed states instead of inline math. */
-[data-ui="saas"],
-[data-theme="atlvs-product"] {
+[data-ui="saas"] {
   --p-accent-50: color-mix(in oklch, var(--k-acc, var(--p-accent)) 8%, oklch(from var(--p-surface) l 0 none));
   --p-accent-100: color-mix(in oklch, var(--k-acc, var(--p-accent)) 16%, oklch(from var(--p-surface) l 0 none));
   --p-accent-200: color-mix(in oklch, var(--k-acc, var(--p-accent)) 30%, oklch(from var(--p-surface) l 0 none));
@@ -624,8 +628,7 @@
    (kit-29 alignment: collapses the former light-scope + dark-scope + OS-dark
    hex triplication; the seeds are the OKLCH equivalents of those hexes, so
    there is zero visual change and the modes can never desync). */
-[data-ui="saas"],
-[data-theme="atlvs-product"] {
+[data-ui="saas"] {
   --p-success-text: light-dark(var(--sem-success-text), var(--sem-success-text-dark));
   --p-warning-text: light-dark(var(--sem-warning-text), var(--sem-warning-text-dark));
   --p-danger-text: light-dark(var(--sem-danger-text), var(--sem-danger-text-dark));
@@ -636,16 +639,14 @@
    the mode scopes + the OS mirror below). */
 [data-ui="saas"],
 [data-ui="saas"][data-mode="light"],
-[data-theme="atlvs-product"],
-[data-mode="light"] [data-theme="atlvs-product"] {
+[data-mode="light"] [data-ui="saas"] {
   /* Filled-button hover — darken in light mode. */
   --p-btn-hover-filter: brightness(0.92);
 }
 
 /* §7 button-hover filter + §5 elevation — DARK scope. */
 [data-ui="saas"][data-mode="dark"],
-[data-mode="dark"] [data-ui="saas"],
-[data-mode="dark"] [data-theme="atlvs-product"] {
+[data-mode="dark"] [data-ui="saas"] {
   /* Filled-button hover — lighten in dark mode (darkening reads as "disabled"). */
   --p-btn-hover-filter: brightness(1.12);
   /* §5 · Dark elevation — DS recipe (kit-29). Neutral light-mode shadows are
@@ -660,8 +661,7 @@
    they need this media mirror to follow OS-dark too. Skips surfaces explicitly
    pinned to light, so [data-mode="light"] stays light even on an OS-dark host. */
 @media (prefers-color-scheme: dark) {
-  [data-ui="saas"]:not([data-mode="light"]),
-  [data-theme="atlvs-product"]:not([data-mode="light"]) {
+  [data-ui="saas"]:not([data-mode="light"]) {
     --p-btn-hover-filter: brightness(1.12);
     --p-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
     --p-elev-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -708,8 +708,7 @@
   font-style: normal;
   font-display: swap;
 }
-[data-ui="saas"][data-type="legend"],
-[data-theme="atlvs-product"][data-type="legend"] {
+[data-ui="saas"][data-type="legend"] {
   --p-font: "Frutiger", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Arial, sans-serif;
   --p-heading: "Frutiger", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* v8.0 · REC 06 — legend keeps ONE signage face across the whole stack: the
@@ -766,8 +765,7 @@
    kit's own namespace (they're consumed by the .ps-* primitives + by app
    chrome that needs motion or workspace-color hash buckets).
    ========================================================================== */
-[data-ui="saas"],
-[data-theme="atlvs-product"] {
+[data-ui="saas"] {
   /* Font shortcuts — Tailwind utility classes (font-sans / font-mono / etc.)
      resolve through these. MONUMENT: display = Anton, body = Hanken Grotesk. */
   --font-sans: var(--font-hanken-grotesk);
@@ -870,8 +868,7 @@
 
 /* Filled primary buttons + brand badges — use AA-safe CTA fill, not the
    bright display accent. */
-[data-ui="saas"] .ps-btn--cta,
-[data-theme="atlvs-product"] .ps-btn--cta {
+[data-ui="saas"] .ps-btn--cta {
   background: var(--p-accent-cta);
   color: var(--p-accent-cta-contrast);
   border-color: var(--p-accent-cta);
@@ -888,9 +885,7 @@
    lands on the ramp; a class wins." */
 @layer base {
   [data-ui="saas"] h1,
-  [data-ui="saas"] h2,
-  [data-theme="atlvs-product"] h1,
-  [data-theme="atlvs-product"] h2 {
+  [data-ui="saas"] h2 {
     text-transform: var(--p-display-case, uppercase);
     font-family: var(--p-heading);
     font-stretch: var(--p-heading-stretch);
@@ -899,20 +894,16 @@
     line-height: var(--p-lh-heading);
     color: var(--p-text-1);
   }
-  [data-ui="saas"] h1,
-  [data-theme="atlvs-product"] h1 {
+  [data-ui="saas"] h1 {
     font-size: var(--p-fs-h1);
     line-height: var(--p-lh-tight);
   }
-  [data-ui="saas"] h2,
-  [data-theme="atlvs-product"] h2 {
+  [data-ui="saas"] h2 {
     font-size: var(--p-fs-h2);
   }
   /* h3 / h4 — Hanken Grotesk 700, sentence case, snug leading; on the ramp. */
   [data-ui="saas"] h3,
-  [data-ui="saas"] h4,
-  [data-theme="atlvs-product"] h3,
-  [data-theme="atlvs-product"] h4 {
+  [data-ui="saas"] h4 {
     font-family: var(--p-font);
     font-weight: 700;
     text-transform: none;
@@ -920,21 +911,17 @@
     line-height: var(--p-lh-snug);
     color: var(--p-text-1);
   }
-  [data-ui="saas"] h3,
-  [data-theme="atlvs-product"] h3 {
+  [data-ui="saas"] h3 {
     font-size: var(--p-fs-h3);
   }
-  [data-ui="saas"] h4,
-  [data-theme="atlvs-product"] h4 {
+  [data-ui="saas"] h4 {
     font-size: var(--p-fs-h4);
   }
   /* v8.0 · REC 06 — legend axis keeps ONE face (Airport) across the whole
      stack: h3/h4 ride the signage heading face here, not the Hanken fallback
      the default axis uses, so a hierarchy never spans two unrelated faces. */
   [data-ui="saas"][data-type="legend"] h3,
-  [data-ui="saas"][data-type="legend"] h4,
-  [data-theme="atlvs-product"][data-type="legend"] h3,
-  [data-theme="atlvs-product"][data-type="legend"] h4 {
+  [data-ui="saas"][data-type="legend"] h4 {
     font-family: var(--p-heading);
     font-weight: 700;
     text-transform: none;
@@ -947,8 +934,7 @@
    ========================================================================== */
 
 /* ---- card ---- */
-[data-ui="saas"] .ps-card,
-[data-theme="atlvs-product"] .ps-card {
+[data-ui="saas"] .ps-card {
   background: var(--p-surface);
   border: 1px solid var(--p-border);
   /* Corner canon (kit-29): containers ride --p-r-lg (6px); controls stay on
@@ -959,15 +945,13 @@
     box-shadow var(--p-ease),
     transform var(--p-ease);
 }
-[data-ui="saas"] .ps-card--hover:hover,
-[data-theme="atlvs-product"] .ps-card--hover:hover {
+[data-ui="saas"] .ps-card--hover:hover {
   box-shadow: var(--p-elev-2);
   transform: translateY(-2px);
 }
 
 /* ---- button + variants ---- */
-[data-ui="saas"] .ps-btn,
-[data-theme="atlvs-product"] .ps-btn {
+[data-ui="saas"] .ps-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -987,60 +971,49 @@
   transition: filter 0.15s ease;
   white-space: nowrap;
 }
-[data-ui="saas"] .ps-btn:hover,
-[data-theme="atlvs-product"] .ps-btn:hover {
+[data-ui="saas"] .ps-btn:hover {
   /* v7.0 — mode-aware hover (darken light / lighten dark) via token. */
   filter: var(--p-btn-hover-filter, brightness(0.92));
 }
 /* v7.0 — built-in press + focus ring on every .ps-btn. */
-[data-ui="saas"] .ps-btn:active,
-[data-theme="atlvs-product"] .ps-btn:active {
+[data-ui="saas"] .ps-btn:active {
   transform: translateY(0.5px) scale(0.985);
 }
-[data-ui="saas"] .ps-btn:focus-visible,
-[data-theme="atlvs-product"] .ps-btn:focus-visible {
+[data-ui="saas"] .ps-btn:focus-visible {
   outline: 2px solid var(--p-focus, var(--p-accent));
   outline-offset: 2px;
 }
-[data-ui="saas"] .ps-btn--sm,
-[data-theme="atlvs-product"] .ps-btn--sm {
+[data-ui="saas"] .ps-btn--sm {
   padding: var(--p-1) var(--p-3);
   font-size: 12px;
 }
-[data-ui="saas"] .ps-btn--lg,
-[data-theme="atlvs-product"] .ps-btn--lg {
+[data-ui="saas"] .ps-btn--lg {
   padding: 12px var(--p-6);
   font-size: 15px;
 }
-[data-ui="saas"] .ps-btn--ghost,
-[data-theme="atlvs-product"] .ps-btn--ghost {
+[data-ui="saas"] .ps-btn--ghost {
   background-color: transparent;
   color: var(--p-text-2);
   border: 1px solid var(--p-border-2);
 }
-[data-ui="saas"] .ps-btn--ghost:hover,
-[data-theme="atlvs-product"] .ps-btn--ghost:hover {
+[data-ui="saas"] .ps-btn--ghost:hover {
   background-color: var(--p-surface-2);
   color: var(--p-text-1);
   filter: none;
 }
-[data-ui="saas"] .ps-btn--soft,
-[data-theme="atlvs-product"] .ps-btn--soft {
+[data-ui="saas"] .ps-btn--soft {
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
 }
-[data-ui="saas"] .ps-btn--soft:hover,
-[data-theme="atlvs-product"] .ps-btn--soft:hover {
+[data-ui="saas"] .ps-btn--soft:hover {
   filter: none;
   background: color-mix(in oklab, var(--p-accent-weak), var(--p-accent) 8%);
 }
-[data-ui="saas"] .ps-btn--danger,
-[data-theme="atlvs-product"] .ps-btn--danger {
+[data-ui="saas"] .ps-btn--danger {
   background: var(--p-danger);
   color: var(--p-on-strong);
 }
-[data-ui="saas"] .ps-btn--icon,
-[data-theme="atlvs-product"] .ps-btn--icon {
+[data-ui="saas"] .ps-btn--icon {
   padding: 0;
   width: 36px;
   height: 36px;
@@ -1049,58 +1022,49 @@
   color: var(--p-text-2);
   border: 1px solid var(--p-border-2);
 }
-[data-ui="saas"] .ps-btn--icon:hover,
-[data-theme="atlvs-product"] .ps-btn--icon:hover {
+[data-ui="saas"] .ps-btn--icon:hover {
   filter: none;
   background: var(--p-surface-2);
   color: var(--p-text-1);
 }
 [data-ui="saas"] .ps-btn:disabled,
-[data-ui="saas"] .ps-btn[aria-disabled="true"],
-[data-theme="atlvs-product"] .ps-btn:disabled,
-[data-theme="atlvs-product"] .ps-btn[aria-disabled="true"] {
+[data-ui="saas"] .ps-btn[aria-disabled="true"] {
   opacity: 0.45;
   cursor: not-allowed;
   filter: none;
 }
 /* v7.0 — tertiary: text-only, low-emphasis action (lighter than ghost). */
-[data-ui="saas"] .ps-btn--tertiary,
-[data-theme="atlvs-product"] .ps-btn--tertiary {
+[data-ui="saas"] .ps-btn--tertiary {
   background-color: transparent;
   color: var(--p-text-2);
   border: 0;
 }
-[data-ui="saas"] .ps-btn--tertiary:hover,
-[data-theme="atlvs-product"] .ps-btn--tertiary:hover {
+[data-ui="saas"] .ps-btn--tertiary:hover {
   filter: none;
   background-color: var(--p-surface-2);
   color: var(--p-text-1);
 }
 /* v7.0 — link: inline accent-text action, no fill/padding. */
-[data-ui="saas"] .ps-btn--link,
-[data-theme="atlvs-product"] .ps-btn--link {
+[data-ui="saas"] .ps-btn--link {
   background-color: transparent;
   color: var(--p-accent-text);
   border: 0;
   padding: 0;
   height: auto;
 }
-[data-ui="saas"] .ps-btn--link:hover,
-[data-theme="atlvs-product"] .ps-btn--link:hover {
+[data-ui="saas"] .ps-btn--link:hover {
   filter: none;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 /* v7.0 — loading: inert + spinner. Pair with aria-busy + disabled in markup. */
-[data-ui="saas"] .ps-btn--loading,
-[data-theme="atlvs-product"] .ps-btn--loading {
+[data-ui="saas"] .ps-btn--loading {
   cursor: progress;
   pointer-events: none;
   position: relative;
   color: transparent !important;
 }
-[data-ui="saas"] .ps-btn--loading::after,
-[data-theme="atlvs-product"] .ps-btn--loading::after {
+[data-ui="saas"] .ps-btn--loading::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1113,15 +1077,13 @@
   animation: ps-spin 0.7s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-ui="saas"] .ps-btn--loading::after,
-  [data-theme="atlvs-product"] .ps-btn--loading::after {
+  [data-ui="saas"] .ps-btn--loading::after {
     animation-duration: 0s;
   }
 }
 
 /* ---- input + group ---- */
-[data-ui="saas"] .ps-input,
-[data-theme="atlvs-product"] .ps-input {
+[data-ui="saas"] .ps-input {
   width: 100%;
   font-family: var(--p-font);
   /* v8.0 grid pass: read the shared control tokens so inputs are density-aware
@@ -1136,33 +1098,28 @@
      vertical shares --k-ctl-py so inputs and buttons keep equal height. */
   padding: var(--k-ctl-py) var(--k-input-px);
 }
-[data-ui="saas"] .ps-input::placeholder,
-[data-theme="atlvs-product"] .ps-input::placeholder {
+[data-ui="saas"] .ps-input::placeholder {
   color: var(--p-text-3);
 }
-[data-ui="saas"] .ps-input:focus,
-[data-theme="atlvs-product"] .ps-input:focus {
+[data-ui="saas"] .ps-input:focus {
   outline: none;
   border-color: var(--p-accent);
   box-shadow: 0 0 0 3px var(--p-accent-weak);
 }
 /* v7.0 — explicit disabled affordance (was relying on browser default). */
-[data-ui="saas"] .ps-input:disabled,
-[data-theme="atlvs-product"] .ps-input:disabled {
+[data-ui="saas"] .ps-input:disabled {
   background: var(--p-surface-2);
   color: var(--p-text-3);
   cursor: not-allowed;
   opacity: 0.7;
 }
 /* v7.0 — explicit size variants (independent of the density axis). */
-[data-ui="saas"] .ps-input--sm,
-[data-theme="atlvs-product"] .ps-input--sm {
+[data-ui="saas"] .ps-input--sm {
   padding: var(--p-2) var(--p-3);
   font-size: 13px;
   border-radius: var(--p-r-sm);
 }
-[data-ui="saas"] .ps-input--lg,
-[data-theme="atlvs-product"] .ps-input--lg {
+[data-ui="saas"] .ps-input--lg {
   padding: 12px var(--p-4);
   font-size: 15px;
 }
@@ -1170,14 +1127,12 @@
   padding: var(--p-2) var(--p-3);
   font-size: 13px;
 }
-[data-ui="saas"] textarea.ps-input,
-[data-theme="atlvs-product"] textarea.ps-input {
+[data-ui="saas"] textarea.ps-input {
   min-height: 84px;
   resize: vertical;
   font-family: var(--p-font);
 }
-[data-ui="saas"] select.ps-input,
-[data-theme="atlvs-product"] select.ps-input {
+[data-ui="saas"] select.ps-input {
   appearance: none;
   /* Chevron stroke uses the accessible tertiary gray #656d7a (AA, matches
      --p-text-3); SVG data URIs can't read CSS vars, so the hex is kept in
@@ -1187,8 +1142,7 @@
   background-position: right 11px center;
   padding-right: var(--p-8);
 }
-[data-ui="saas"] .ps-inputgrp,
-[data-theme="atlvs-product"] .ps-inputgrp {
+[data-ui="saas"] .ps-inputgrp {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1197,13 +1151,11 @@
   border-radius: var(--p-r-sm);
   padding: 0 var(--k-input-px); /* density-aware, matches .ps-input (was fixed 12px) */
 }
-[data-ui="saas"] .ps-inputgrp:focus-within,
-[data-theme="atlvs-product"] .ps-inputgrp:focus-within {
+[data-ui="saas"] .ps-inputgrp:focus-within {
   border-color: var(--p-accent);
   box-shadow: 0 0 0 3px var(--p-accent-weak);
 }
-[data-ui="saas"] .ps-inputgrp input,
-[data-theme="atlvs-product"] .ps-inputgrp input {
+[data-ui="saas"] .ps-inputgrp input {
   flex: 1;
   border: 0;
   background: none;
@@ -1215,39 +1167,32 @@
 }
 
 /* ---- field / label / hint ---- */
-[data-ui="saas"] .ps-field,
-[data-theme="atlvs-product"] .ps-field {
+[data-ui="saas"] .ps-field {
   display: flex;
   flex-direction: column;
   gap: var(--p-2);
 }
-[data-ui="saas"] .ps-label,
-[data-theme="atlvs-product"] .ps-label {
+[data-ui="saas"] .ps-label {
   font-size: 12px;
   font-weight: 600;
   color: var(--p-text-2);
 }
-[data-ui="saas"] .ps-hint,
-[data-theme="atlvs-product"] .ps-hint {
+[data-ui="saas"] .ps-hint {
   font-size: 12px;
   color: var(--p-text-3);
 }
-[data-ui="saas"] .ps-hint--err,
-[data-theme="atlvs-product"] .ps-hint--err {
+[data-ui="saas"] .ps-hint--err {
   color: var(--p-danger);
 }
-[data-ui="saas"] .ps-input--err,
-[data-theme="atlvs-product"] .ps-input--err {
+[data-ui="saas"] .ps-input--err {
   border-color: var(--p-danger);
 }
-[data-ui="saas"] .ps-input--err:focus,
-[data-theme="atlvs-product"] .ps-input--err:focus {
+[data-ui="saas"] .ps-input--err:focus {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--p-danger) 22%, transparent);
 }
 
 /* ---- check / radio / toggle ---- */
-[data-ui="saas"] .ps-check,
-[data-theme="atlvs-product"] .ps-check {
+[data-ui="saas"] .ps-check {
   appearance: none;
   width: 18px;
   height: 18px;
@@ -1258,13 +1203,11 @@
   position: relative;
   flex: none;
 }
-[data-ui="saas"] .ps-check:checked,
-[data-theme="atlvs-product"] .ps-check:checked {
+[data-ui="saas"] .ps-check:checked {
   background: var(--p-accent);
   border-color: var(--p-accent);
 }
-[data-ui="saas"] .ps-check:checked::after,
-[data-theme="atlvs-product"] .ps-check:checked::after {
+[data-ui="saas"] .ps-check:checked::after {
   content: "";
   position: absolute;
   left: var(--p-1);
@@ -1275,17 +1218,14 @@
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-[data-ui="saas"] .ps-check--radio,
-[data-theme="atlvs-product"] .ps-check--radio {
+[data-ui="saas"] .ps-check--radio {
   border-radius: 50%;
 }
-[data-ui="saas"] .ps-check--radio:checked,
-[data-theme="atlvs-product"] .ps-check--radio:checked {
+[data-ui="saas"] .ps-check--radio:checked {
   background: var(--p-surface);
   border-color: var(--p-accent);
 }
-[data-ui="saas"] .ps-check--radio:checked::after,
-[data-theme="atlvs-product"] .ps-check--radio:checked::after {
+[data-ui="saas"] .ps-check--radio:checked::after {
   content: "";
   left: var(--p-1);
   top: var(--p-1);
@@ -1296,8 +1236,7 @@
   background: var(--p-accent);
   transform: none;
 }
-[data-ui="saas"] .ps-toggle,
-[data-theme="atlvs-product"] .ps-toggle {
+[data-ui="saas"] .ps-toggle {
   width: 42px;
   height: 24px;
   border-radius: 999px;
@@ -1310,13 +1249,10 @@
   padding: 0;
 }
 [data-ui="saas"] .ps-toggle.on,
-[data-ui="saas"] .ps-toggle[aria-checked="true"],
-[data-theme="atlvs-product"] .ps-toggle.on,
-[data-theme="atlvs-product"] .ps-toggle[aria-checked="true"] {
+[data-ui="saas"] .ps-toggle[aria-checked="true"] {
   background: var(--p-accent);
 }
-[data-ui="saas"] .ps-toggle::after,
-[data-theme="atlvs-product"] .ps-toggle::after {
+[data-ui="saas"] .ps-toggle::after {
   content: "";
   position: absolute;
   top: 2px;
@@ -1329,15 +1265,12 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 [data-ui="saas"] .ps-toggle.on::after,
-[data-ui="saas"] .ps-toggle[aria-checked="true"]::after,
-[data-theme="atlvs-product"] .ps-toggle.on::after,
-[data-theme="atlvs-product"] .ps-toggle[aria-checked="true"]::after {
+[data-ui="saas"] .ps-toggle[aria-checked="true"]::after {
   left: 20px;
 }
 
 /* ---- segmented control ---- */
-[data-ui="saas"] .ps-seg,
-[data-theme="atlvs-product"] .ps-seg {
+[data-ui="saas"] .ps-seg {
   display: inline-flex;
   gap: var(--p-1);
   background: var(--p-surface-2);
@@ -1345,8 +1278,7 @@
   border-radius: var(--p-r);
   padding: var(--p-1);
 }
-[data-ui="saas"] .ps-seg button,
-[data-theme="atlvs-product"] .ps-seg button {
+[data-ui="saas"] .ps-seg button {
   font-family: var(--p-font);
   font-size: 13px;
   font-weight: 600;
@@ -1358,17 +1290,14 @@
   cursor: pointer;
 }
 [data-ui="saas"] .ps-seg button.on,
-[data-ui="saas"] .ps-seg button[aria-selected="true"],
-[data-theme="atlvs-product"] .ps-seg button.on,
-[data-theme="atlvs-product"] .ps-seg button[aria-selected="true"] {
+[data-ui="saas"] .ps-seg button[aria-selected="true"] {
   background: var(--p-surface);
   color: var(--p-text-1);
   box-shadow: var(--p-elev-1);
 }
 
 /* ---- slider ---- */
-[data-ui="saas"] .ps-slider,
-[data-theme="atlvs-product"] .ps-slider {
+[data-ui="saas"] .ps-slider {
   appearance: none;
   width: 100%;
   height: 6px;
@@ -1376,8 +1305,7 @@
   background: var(--p-surface-2);
   outline: none;
 }
-[data-ui="saas"] .ps-slider::-webkit-slider-thumb,
-[data-theme="atlvs-product"] .ps-slider::-webkit-slider-thumb {
+[data-ui="saas"] .ps-slider::-webkit-slider-thumb {
   appearance: none;
   width: 18px;
   height: 18px;
@@ -1387,8 +1315,7 @@
   border: 2px solid var(--p-surface);
   box-shadow: var(--p-elev-1);
 }
-[data-ui="saas"] .ps-slider::-moz-range-thumb,
-[data-theme="atlvs-product"] .ps-slider::-moz-range-thumb {
+[data-ui="saas"] .ps-slider::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -1398,8 +1325,7 @@
 }
 
 /* ---- chip / tag / badge / dot ---- */
-[data-ui="saas"] .ps-chip,
-[data-theme="atlvs-product"] .ps-chip {
+[data-ui="saas"] .ps-chip {
   display: inline-flex;
   align-items: center;
   gap: var(--p-2);
@@ -1410,8 +1336,7 @@
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
 }
-[data-ui="saas"] .ps-tag,
-[data-theme="atlvs-product"] .ps-tag {
+[data-ui="saas"] .ps-tag {
   display: inline-flex;
   align-items: center;
   gap: var(--p-2);
@@ -1427,36 +1352,29 @@
    (often removable), selectable chip = interactive filter. Shared --sm sizing. */
 [data-ui="saas"] .ps-badge--sm,
 [data-ui="saas"] .ps-chip--sm,
-[data-ui="saas"] .ps-tag--sm,
-[data-theme="atlvs-product"] .ps-badge--sm,
-[data-theme="atlvs-product"] .ps-chip--sm,
-[data-theme="atlvs-product"] .ps-tag--sm {
+[data-ui="saas"] .ps-tag--sm {
   font-size: 10px;
   padding: 2px var(--p-2);
   gap: 4px;
 }
 /* Selectable chip — interactive filter toggle. Drive with aria-pressed; the
    pressed state paints the accent tint. */
-[data-ui="saas"] .ps-chip--selectable,
-[data-theme="atlvs-product"] .ps-chip--selectable {
+[data-ui="saas"] .ps-chip--selectable {
   cursor: pointer;
   background: var(--p-surface-2);
   color: var(--p-text-2);
   border: 1px solid var(--p-border);
 }
-[data-ui="saas"] .ps-chip--selectable:hover,
-[data-theme="atlvs-product"] .ps-chip--selectable:hover {
+[data-ui="saas"] .ps-chip--selectable:hover {
   color: var(--p-text-1);
   border-color: var(--p-border-2);
 }
-[data-ui="saas"] .ps-chip--selectable[aria-pressed="true"],
-[data-theme="atlvs-product"] .ps-chip--selectable[aria-pressed="true"] {
+[data-ui="saas"] .ps-chip--selectable[aria-pressed="true"] {
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
   border-color: color-mix(in oklab, var(--p-accent) 40%, var(--p-border));
 }
-[data-ui="saas"] .ps-badge,
-[data-theme="atlvs-product"] .ps-badge {
+[data-ui="saas"] .ps-badge {
   display: inline-flex;
   align-items: center;
   gap: var(--p-2);
@@ -1470,28 +1388,23 @@
 }
 /* v7.0 — toned badges keep the semantic TINT fill but read their text from the
    AA --p-{semantic}-text inks (the base semantic hexes fail 4.5:1 as small text). */
-[data-ui="saas"] .ps-badge--ok,
-[data-theme="atlvs-product"] .ps-badge--ok {
+[data-ui="saas"] .ps-badge--ok {
   background: color-mix(in oklab, var(--p-success) 16%, transparent);
   color: var(--p-success-text);
 }
-[data-ui="saas"] .ps-badge--warn,
-[data-theme="atlvs-product"] .ps-badge--warn {
+[data-ui="saas"] .ps-badge--warn {
   background: color-mix(in oklab, var(--p-warning) 18%, transparent);
   color: var(--p-warning-text);
 }
-[data-ui="saas"] .ps-badge--danger,
-[data-theme="atlvs-product"] .ps-badge--danger {
+[data-ui="saas"] .ps-badge--danger {
   background: color-mix(in oklab, var(--p-danger) 15%, transparent);
   color: var(--p-danger-text);
 }
-[data-ui="saas"] .ps-badge--info,
-[data-theme="atlvs-product"] .ps-badge--info {
+[data-ui="saas"] .ps-badge--info {
   background: color-mix(in oklab, var(--p-info) 15%, transparent);
   color: var(--p-info-text);
 }
-[data-ui="saas"] .ps-badge--neutral,
-[data-theme="atlvs-product"] .ps-badge--neutral {
+[data-ui="saas"] .ps-badge--neutral {
   background: var(--p-surface-2);
   color: var(--p-text-2);
   border: 1px solid var(--p-border);
@@ -1499,13 +1412,11 @@
 /* Brand-tinted badge — same accent paint as the bare .ps-badge base, exposed
    as an explicit modifier so the React <Badge variant="brand"|"brand-soft">
    binds to a concrete class (parity item 5). */
-[data-ui="saas"] .ps-badge--accent,
-[data-theme="atlvs-product"] .ps-badge--accent {
+[data-ui="saas"] .ps-badge--accent {
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
 }
-[data-ui="saas"] .ps-dot,
-[data-theme="atlvs-product"] .ps-dot {
+[data-ui="saas"] .ps-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -1513,30 +1424,24 @@
   flex: none;
   display: inline-block;
 }
-[data-ui="saas"] .ps-dot--ok,
-[data-theme="atlvs-product"] .ps-dot--ok {
+[data-ui="saas"] .ps-dot--ok {
   background: var(--p-success);
 }
-[data-ui="saas"] .ps-dot--warn,
-[data-theme="atlvs-product"] .ps-dot--warn {
+[data-ui="saas"] .ps-dot--warn {
   background: var(--p-warning);
 }
-[data-ui="saas"] .ps-dot--danger,
-[data-theme="atlvs-product"] .ps-dot--danger {
+[data-ui="saas"] .ps-dot--danger {
   background: var(--p-danger);
 }
-[data-ui="saas"] .ps-dot--info,
-[data-theme="atlvs-product"] .ps-dot--info {
+[data-ui="saas"] .ps-dot--info {
   background: var(--p-info);
 }
-[data-ui="saas"] .ps-dot--muted,
-[data-theme="atlvs-product"] .ps-dot--muted {
+[data-ui="saas"] .ps-dot--muted {
   background: var(--p-text-3);
 }
 
 /* ---- avatar + stack ---- */
-[data-ui="saas"] .ps-av,
-[data-theme="atlvs-product"] .ps-av {
+[data-ui="saas"] .ps-av {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -1549,57 +1454,47 @@
   flex: none;
   font-family: var(--p-font);
 }
-[data-ui="saas"] .ps-av--sq,
-[data-theme="atlvs-product"] .ps-av--sq {
+[data-ui="saas"] .ps-av--sq {
   border-radius: 9px;
 }
-[data-ui="saas"] .ps-av--sm,
-[data-theme="atlvs-product"] .ps-av--sm {
+[data-ui="saas"] .ps-av--sm {
   width: 24px;
   height: 24px;
   font-size: 10px;
 }
-[data-ui="saas"] .ps-av--lg,
-[data-theme="atlvs-product"] .ps-av--lg {
+[data-ui="saas"] .ps-av--lg {
   width: 48px;
   height: 48px;
   font-size: 16px;
 }
-[data-ui="saas"] .ps-av--ghost,
-[data-theme="atlvs-product"] .ps-av--ghost {
+[data-ui="saas"] .ps-av--ghost {
   background: var(--p-surface-2);
   color: var(--p-text-2);
   border: 1px solid var(--p-border);
 }
-[data-ui="saas"] .ps-avstack,
-[data-theme="atlvs-product"] .ps-avstack {
+[data-ui="saas"] .ps-avstack {
   display: inline-flex;
 }
-[data-ui="saas"] .ps-avstack .ps-av,
-[data-theme="atlvs-product"] .ps-avstack .ps-av {
+[data-ui="saas"] .ps-avstack .ps-av {
   box-shadow: 0 0 0 2px var(--p-surface);
   margin-left: -8px;
 }
-[data-ui="saas"] .ps-avstack .ps-av:first-child,
-[data-theme="atlvs-product"] .ps-avstack .ps-av:first-child {
+[data-ui="saas"] .ps-avstack .ps-av:first-child {
   margin-left: 0;
 }
 
 /* ---- eyebrow / mono label / record id ---- */
-[data-ui="saas"] .ps-eyebrow,
-[data-theme="atlvs-product"] .ps-eyebrow {
+[data-ui="saas"] .ps-eyebrow {
   font-family: var(--p-eyebrow);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: var(--p-case-eyebrow, uppercase);
   color: var(--p-text-3);
 }
-[data-ui="saas"] .ps-mono,
-[data-theme="atlvs-product"] .ps-mono {
+[data-ui="saas"] .ps-mono {
   font-family: var(--p-mono);
 }
-[data-ui="saas"] .ps-id,
-[data-theme="atlvs-product"] .ps-id {
+[data-ui="saas"] .ps-id {
   /* v7.0 — record IDs ride the DATA mono (IBM Plex Mono), not the Space Mono
      eyebrow voice. v8.0 · REC 05 — tabular figures so ID columns align. */
   font-family: var(--p-mono-data);
@@ -1612,14 +1507,12 @@
 }
 
 /* ---- tabs / breadcrumb / pagination ---- */
-[data-ui="saas"] .ps-tabs,
-[data-theme="atlvs-product"] .ps-tabs {
+[data-ui="saas"] .ps-tabs {
   display: flex;
   gap: 2px;
   border-bottom: 1px solid var(--p-border);
 }
-[data-ui="saas"] .ps-tabs button,
-[data-theme="atlvs-product"] .ps-tabs button {
+[data-ui="saas"] .ps-tabs button {
   font-family: var(--p-font);
   font-size: 14px;
   font-weight: 600;
@@ -1631,49 +1524,39 @@
   cursor: pointer;
   margin-bottom: -1px;
 }
-[data-ui="saas"] .ps-tabs button:hover,
-[data-theme="atlvs-product"] .ps-tabs button:hover {
+[data-ui="saas"] .ps-tabs button:hover {
   color: var(--p-text-1);
 }
 [data-ui="saas"] .ps-tabs button.on,
-[data-ui="saas"] .ps-tabs button[aria-selected="true"],
-[data-theme="atlvs-product"] .ps-tabs button.on,
-[data-theme="atlvs-product"] .ps-tabs button[aria-selected="true"] {
+[data-ui="saas"] .ps-tabs button[aria-selected="true"] {
   color: var(--p-accent-text);
   border-bottom-color: var(--p-accent);
 }
-[data-ui="saas"] .ps-crumb,
-[data-theme="atlvs-product"] .ps-crumb {
+[data-ui="saas"] .ps-crumb {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
   color: var(--p-text-3);
 }
-[data-ui="saas"] .ps-crumb a,
-[data-theme="atlvs-product"] .ps-crumb a {
+[data-ui="saas"] .ps-crumb a {
   color: var(--p-text-3);
 }
-[data-ui="saas"] .ps-crumb a:hover,
-[data-theme="atlvs-product"] .ps-crumb a:hover {
+[data-ui="saas"] .ps-crumb a:hover {
   color: var(--p-text-1);
 }
-[data-ui="saas"] .ps-crumb .sep,
-[data-theme="atlvs-product"] .ps-crumb .sep {
+[data-ui="saas"] .ps-crumb .sep {
   opacity: 0.5;
 }
-[data-ui="saas"] .ps-crumb b,
-[data-theme="atlvs-product"] .ps-crumb b {
+[data-ui="saas"] .ps-crumb b {
   color: var(--p-text-1);
   font-weight: 600;
 }
-[data-ui="saas"] .ps-page,
-[data-theme="atlvs-product"] .ps-page {
+[data-ui="saas"] .ps-page {
   display: inline-flex;
   gap: 4px;
 }
-[data-ui="saas"] .ps-page button,
-[data-theme="atlvs-product"] .ps-page button {
+[data-ui="saas"] .ps-page button {
   min-width: 32px;
   height: 32px;
   border-radius: var(--p-r-sm);
@@ -1686,22 +1569,18 @@
   cursor: pointer;
 }
 [data-ui="saas"] .ps-page button.on,
-[data-ui="saas"] .ps-page button[aria-current="page"],
-[data-theme="atlvs-product"] .ps-page button.on,
-[data-theme="atlvs-product"] .ps-page button[aria-current="page"] {
+[data-ui="saas"] .ps-page button[aria-current="page"] {
   background: var(--p-accent);
   color: var(--p-accent-contrast);
   border-color: var(--p-accent);
 }
-[data-ui="saas"] .ps-page button:disabled,
-[data-theme="atlvs-product"] .ps-page button:disabled {
+[data-ui="saas"] .ps-page button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 
 /* ---- menu / dropdown ---- */
-[data-ui="saas"] .ps-menu,
-[data-theme="atlvs-product"] .ps-menu {
+[data-ui="saas"] .ps-menu {
   background: var(--p-surface);
   border: 1px solid var(--p-border);
   border-radius: var(--p-r);
@@ -1709,8 +1588,7 @@
   padding: var(--p-2);
   min-width: 200px;
 }
-[data-ui="saas"] .ps-menu .mi,
-[data-theme="atlvs-product"] .ps-menu .mi {
+[data-ui="saas"] .ps-menu .mi {
   display: flex;
   align-items: center;
   gap: var(--p-3);
@@ -1720,23 +1598,19 @@
   color: var(--p-text-1);
   cursor: pointer;
 }
-[data-ui="saas"] .ps-menu .mi:hover,
-[data-theme="atlvs-product"] .ps-menu .mi:hover {
+[data-ui="saas"] .ps-menu .mi:hover {
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
 }
-[data-ui="saas"] .ps-menu .mi--danger,
-[data-theme="atlvs-product"] .ps-menu .mi--danger {
+[data-ui="saas"] .ps-menu .mi--danger {
   color: var(--p-danger);
 }
-[data-ui="saas"] .ps-menu .sep,
-[data-theme="atlvs-product"] .ps-menu .sep {
+[data-ui="saas"] .ps-menu .sep {
   height: 1px;
   background: var(--p-border);
   margin: var(--p-2) 0;
 }
-[data-ui="saas"] .ps-menu .lbl,
-[data-theme="atlvs-product"] .ps-menu .lbl {
+[data-ui="saas"] .ps-menu .lbl {
   font-family: var(--p-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
@@ -1744,8 +1618,7 @@
   color: var(--p-text-3);
   padding: var(--p-2) var(--p-3) 4px;
 }
-[data-ui="saas"] .ps-kbd,
-[data-theme="atlvs-product"] .ps-kbd {
+[data-ui="saas"] .ps-kbd {
   font-family: var(--p-mono);
   font-size: 11px;
   color: var(--p-text-3);
@@ -1757,8 +1630,7 @@
 }
 
 /* ---- data table ---- */
-[data-ui="saas"] .ps-table,
-[data-theme="atlvs-product"] .ps-table {
+[data-ui="saas"] .ps-table {
   width: 100%;
   border-collapse: collapse;
   background: var(--p-surface);
@@ -1767,8 +1639,7 @@
   border-radius: var(--p-r-lg);
   overflow: hidden;
 }
-[data-ui="saas"] .ps-table thead th,
-[data-theme="atlvs-product"] .ps-table thead th {
+[data-ui="saas"] .ps-table thead th {
   text-align: left;
   font-size: 11px;
   font-weight: 600;
@@ -1780,8 +1651,7 @@
   background: var(--p-surface-2);
   white-space: nowrap;
 }
-[data-ui="saas"] .ps-table tbody td,
-[data-theme="atlvs-product"] .ps-table tbody td {
+[data-ui="saas"] .ps-table tbody td {
   padding: var(--k-row-py) var(--k-row-px);
   border-bottom: 1px solid var(--p-border);
   font-size: var(--k-cell-fs);
@@ -1791,60 +1661,49 @@
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
 }
-[data-ui="saas"] .ps-table tbody tr:last-child td,
-[data-theme="atlvs-product"] .ps-table tbody tr:last-child td {
+[data-ui="saas"] .ps-table tbody tr:last-child td {
   border-bottom: 0;
 }
-[data-ui="saas"] .ps-table tbody tr:hover,
-[data-theme="atlvs-product"] .ps-table tbody tr:hover {
+[data-ui="saas"] .ps-table tbody tr:hover {
   background: var(--p-surface-2);
 }
-[data-ui="saas"] .ps-table tbody tr.sel,
-[data-theme="atlvs-product"] .ps-table tbody tr.sel {
+[data-ui="saas"] .ps-table tbody tr.sel {
   background: var(--p-accent-weak);
 }
-[data-ui="saas"] .ps-table b,
-[data-theme="atlvs-product"] .ps-table b {
+[data-ui="saas"] .ps-table b {
   color: var(--p-text-1);
   font-weight: 600;
 }
 /* v7.0 table upgrades — numeric columns, sticky head, sortable headers, zebra. */
 /* .num — right-aligned tabular figures (data face) for money / counts. */
-[data-ui="saas"] .ps-table .num,
-[data-theme="atlvs-product"] .ps-table .num {
+[data-ui="saas"] .ps-table .num {
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-family: var(--p-mono-data);
 }
-[data-ui="saas"] .ps-table th.num,
-[data-theme="atlvs-product"] .ps-table th.num {
+[data-ui="saas"] .ps-table th.num {
   text-align: right;
 }
 /* --sticky — pin the header on vertical scroll. */
-[data-ui="saas"] .ps-table--sticky thead th,
-[data-theme="atlvs-product"] .ps-table--sticky thead th {
+[data-ui="saas"] .ps-table--sticky thead th {
   position: sticky;
   top: 0;
   z-index: 1;
 }
 /* --zebra — alternating row tint for dense grids. */
-[data-ui="saas"] .ps-table--zebra tbody tr:nth-child(even) td,
-[data-theme="atlvs-product"] .ps-table--zebra tbody tr:nth-child(even) td {
+[data-ui="saas"] .ps-table--zebra tbody tr:nth-child(even) td {
   background: color-mix(in oklab, var(--p-surface-2) 50%, transparent);
 }
 /* Sortable headers — a button-like th that exposes its direction via aria-sort
    and a caret. th[aria-sort="ascending|descending|none"]. */
-[data-ui="saas"] .ps-table th[aria-sort],
-[data-theme="atlvs-product"] .ps-table th[aria-sort] {
+[data-ui="saas"] .ps-table th[aria-sort] {
   cursor: pointer;
   user-select: none;
 }
-[data-ui="saas"] .ps-table th[aria-sort]:hover,
-[data-theme="atlvs-product"] .ps-table th[aria-sort]:hover {
+[data-ui="saas"] .ps-table th[aria-sort]:hover {
   color: var(--p-text-1);
 }
-[data-ui="saas"] .ps-table th[aria-sort]::after,
-[data-theme="atlvs-product"] .ps-table th[aria-sort]::after {
+[data-ui="saas"] .ps-table th[aria-sort]::after {
   content: "";
   display: inline-block;
   width: 0;
@@ -1854,43 +1713,37 @@
   border-inline: 3px solid transparent;
   opacity: 0.3;
 }
-[data-ui="saas"] .ps-table th[aria-sort="ascending"]::after,
-[data-theme="atlvs-product"] .ps-table th[aria-sort="ascending"]::after {
+[data-ui="saas"] .ps-table th[aria-sort="ascending"]::after {
   border-bottom: 4px solid currentColor;
   opacity: 1;
 }
-[data-ui="saas"] .ps-table th[aria-sort="descending"]::after,
-[data-theme="atlvs-product"] .ps-table th[aria-sort="descending"]::after {
+[data-ui="saas"] .ps-table th[aria-sort="descending"]::after {
   border-top: 4px solid currentColor;
   opacity: 1;
 }
 
 /* ---- progress / meter ---- */
-[data-ui="saas"] .ps-progress,
-[data-theme="atlvs-product"] .ps-progress {
+[data-ui="saas"] .ps-progress {
   height: 6px;
   background: var(--p-surface-2);
   border-radius: 999px;
   overflow: hidden;
   width: 100%;
 }
-[data-ui="saas"] .ps-progress > i,
-[data-theme="atlvs-product"] .ps-progress > i {
+[data-ui="saas"] .ps-progress > i {
   display: block;
   height: 100%;
   background: var(--p-accent);
   border-radius: 999px;
 }
-[data-ui="saas"] .ps-meter,
-[data-theme="atlvs-product"] .ps-meter {
+[data-ui="saas"] .ps-meter {
   display: inline-block;
   width: 90px;
   vertical-align: middle;
 }
 
 /* ---- banner / toast / tip ---- */
-[data-ui="saas"] .ps-banner,
-[data-theme="atlvs-product"] .ps-banner {
+[data-ui="saas"] .ps-banner {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -1901,32 +1754,26 @@
   font-size: 13px;
   color: var(--p-text-2);
 }
-[data-ui="saas"] .ps-banner b,
-[data-theme="atlvs-product"] .ps-banner b {
+[data-ui="saas"] .ps-banner b {
   color: var(--p-text-1);
 }
-[data-ui="saas"] .ps-banner--info,
-[data-theme="atlvs-product"] .ps-banner--info {
+[data-ui="saas"] .ps-banner--info {
   background: color-mix(in oklab, var(--p-info) 9%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-info) 35%, var(--p-border));
 }
-[data-ui="saas"] .ps-banner--ok,
-[data-theme="atlvs-product"] .ps-banner--ok {
+[data-ui="saas"] .ps-banner--ok {
   background: color-mix(in oklab, var(--p-success) 10%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-success) 35%, var(--p-border));
 }
-[data-ui="saas"] .ps-banner--warn,
-[data-theme="atlvs-product"] .ps-banner--warn {
+[data-ui="saas"] .ps-banner--warn {
   background: color-mix(in oklab, var(--p-warning) 12%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-warning) 38%, var(--p-border));
 }
-[data-ui="saas"] .ps-banner--danger,
-[data-theme="atlvs-product"] .ps-banner--danger {
+[data-ui="saas"] .ps-banner--danger {
   background: color-mix(in oklab, var(--p-danger) 9%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-danger) 35%, var(--p-border));
 }
-[data-ui="saas"] .ps-toast,
-[data-theme="atlvs-product"] .ps-toast {
+[data-ui="saas"] .ps-toast {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1947,8 +1794,7 @@
    v7.0 tone convention: tint fill from the semantic color, text from the
    AA --p-{semantic}-text ink. Both --warn and --warning appear at call
    sites; both are honored. Container radius per the kit-29 corner canon. */
-[data-ui="saas"] .ps-alert,
-[data-theme="atlvs-product"] .ps-alert {
+[data-ui="saas"] .ps-alert {
   display: flex;
   align-items: flex-start;
   gap: var(--p-2);
@@ -1960,41 +1806,33 @@
   line-height: var(--p-lh-snug, 1.4);
   color: var(--p-text-1);
 }
-[data-ui="saas"] .ps-alert--danger,
-[data-theme="atlvs-product"] .ps-alert--danger {
+[data-ui="saas"] .ps-alert--danger {
   background: color-mix(in oklab, var(--p-danger) 10%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-danger) 35%, var(--p-border));
   color: var(--p-danger-text);
 }
 [data-ui="saas"] .ps-alert--warn,
-[data-ui="saas"] .ps-alert--warning,
-[data-theme="atlvs-product"] .ps-alert--warn,
-[data-theme="atlvs-product"] .ps-alert--warning {
+[data-ui="saas"] .ps-alert--warning {
   background: color-mix(in oklab, var(--p-warning) 10%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-warning) 35%, var(--p-border));
   color: var(--p-warning-text);
 }
 [data-ui="saas"] .ps-alert--ok,
-[data-ui="saas"] .ps-alert--success,
-[data-theme="atlvs-product"] .ps-alert--ok,
-[data-theme="atlvs-product"] .ps-alert--success {
+[data-ui="saas"] .ps-alert--success {
   background: color-mix(in oklab, var(--p-success) 10%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-success) 35%, var(--p-border));
   color: var(--p-success-text);
 }
-[data-ui="saas"] .ps-alert--info,
-[data-theme="atlvs-product"] .ps-alert--info {
+[data-ui="saas"] .ps-alert--info {
   background: color-mix(in oklab, var(--p-info) 10%, var(--p-surface));
   border-color: color-mix(in oklab, var(--p-info) 35%, var(--p-border));
   color: var(--p-info-text);
 }
-[data-ui="saas"] .ps-tip,
-[data-theme="atlvs-product"] .ps-tip {
+[data-ui="saas"] .ps-tip {
   position: relative;
   display: inline-flex;
 }
-[data-ui="saas"] .ps-tip .bub,
-[data-theme="atlvs-product"] .ps-tip .bub {
+[data-ui="saas"] .ps-tip .bub {
   position: absolute;
   bottom: calc(100% + 8px);
   left: 50%;
@@ -2008,8 +1846,7 @@
   white-space: nowrap;
   box-shadow: var(--p-elev-2);
 }
-[data-ui="saas"] .ps-tip .bub::after,
-[data-theme="atlvs-product"] .ps-tip .bub::after {
+[data-ui="saas"] .ps-tip .bub::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -2020,16 +1857,14 @@
 }
 
 /* ---- stat / steps / empty / skel / spinner / modal ---- */
-[data-ui="saas"] .ps-stat,
-[data-theme="atlvs-product"] .ps-stat {
+[data-ui="saas"] .ps-stat {
   background: var(--p-surface);
   border: 1px solid var(--p-border);
   border-radius: var(--p-r);
   padding: var(--k-card-pad);
   box-shadow: var(--p-elev-1);
 }
-[data-ui="saas"] .ps-stat .k,
-[data-theme="atlvs-product"] .ps-stat .k {
+[data-ui="saas"] .ps-stat .k {
   font-size: 12px;
   color: var(--p-text-2);
   font-weight: 500;
@@ -2037,8 +1872,7 @@
 /* A4 · Metrics — v7.0 Hanken Grotesk 800 with TABULAR figures. Anton ships no
    tnum, so KPI grids misalign digit columns; the body face's tabular-nums locks
    numbers into columns while the heavy weight keeps the structural register. */
-[data-ui="saas"] .ps-stat .v,
-[data-theme="atlvs-product"] .ps-stat .v {
+[data-ui="saas"] .ps-stat .v {
   font-family: var(--p-font);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
@@ -2048,28 +1882,23 @@
   letter-spacing: var(--p-tracking-heading);
   line-height: var(--p-lh-tight);
 }
-[data-ui="saas"] .ps-stat .d,
-[data-theme="atlvs-product"] .ps-stat .d {
+[data-ui="saas"] .ps-stat .d {
   font-size: 11px;
   margin-top: 4px;
   font-weight: 600;
   color: var(--p-success);
 }
-[data-ui="saas"] .ps-stat .d--down,
-[data-theme="atlvs-product"] .ps-stat .d--down {
+[data-ui="saas"] .ps-stat .d--down {
   color: var(--p-danger);
 }
-[data-ui="saas"] .ps-stat .d--flat,
-[data-theme="atlvs-product"] .ps-stat .d--flat {
+[data-ui="saas"] .ps-stat .d--flat {
   color: var(--p-text-3);
 }
-[data-ui="saas"] .ps-steps,
-[data-theme="atlvs-product"] .ps-steps {
+[data-ui="saas"] .ps-steps {
   display: flex;
   align-items: center;
 }
-[data-ui="saas"] .ps-steps .s,
-[data-theme="atlvs-product"] .ps-steps .s {
+[data-ui="saas"] .ps-steps .s {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2077,8 +1906,7 @@
   color: var(--p-text-3);
   font-weight: 600;
 }
-[data-ui="saas"] .ps-steps .n,
-[data-theme="atlvs-product"] .ps-steps .n {
+[data-ui="saas"] .ps-steps .n {
   width: 26px;
   height: 26px;
   border-radius: 50%;
@@ -2090,43 +1918,36 @@
   color: var(--p-text-3);
   flex: none;
 }
-[data-ui="saas"] .ps-steps .s.done .n,
-[data-theme="atlvs-product"] .ps-steps .s.done .n {
+[data-ui="saas"] .ps-steps .s.done .n {
   background: var(--p-accent);
   border-color: var(--p-accent);
   color: var(--p-accent-contrast);
 }
-[data-ui="saas"] .ps-steps .s.on .n,
-[data-theme="atlvs-product"] .ps-steps .s.on .n {
+[data-ui="saas"] .ps-steps .s.on .n {
   border-color: var(--p-accent);
   color: var(--p-accent-text);
 }
-[data-ui="saas"] .ps-steps .s.on,
-[data-theme="atlvs-product"] .ps-steps .s.on {
+[data-ui="saas"] .ps-steps .s.on {
   color: var(--p-text-1);
 }
-[data-ui="saas"] .ps-steps .ln,
-[data-theme="atlvs-product"] .ps-steps .ln {
+[data-ui="saas"] .ps-steps .ln {
   width: 46px;
   height: 2px;
   background: var(--p-border-2);
   margin: 0 var(--p-3);
   flex: none;
 }
-[data-ui="saas"] .ps-steps .s.done + .ln,
-[data-theme="atlvs-product"] .ps-steps .s.done + .ln {
+[data-ui="saas"] .ps-steps .s.done + .ln {
   background: var(--p-accent);
 }
-[data-ui="saas"] .ps-empty,
-[data-theme="atlvs-product"] .ps-empty {
+[data-ui="saas"] .ps-empty {
   text-align: center;
   padding: 40px 24px;
   border: 1px dashed var(--p-border-2);
   border-radius: var(--p-r);
   background: var(--p-surface);
 }
-[data-ui="saas"] .ps-empty .ic,
-[data-theme="atlvs-product"] .ps-empty .ic {
+[data-ui="saas"] .ps-empty .ic {
   width: 48px;
   height: 48px;
   border-radius: 12px;
@@ -2137,23 +1958,20 @@
   font-size: 24px;
   margin: 0 auto var(--p-4);
 }
-[data-ui="saas"] .ps-empty h4,
-[data-theme="atlvs-product"] .ps-empty h4 {
+[data-ui="saas"] .ps-empty h4 {
   font-size: 15px;
   font-weight: 700;
   color: var(--p-text-1);
   margin: 0 0 4px;
 }
-[data-ui="saas"] .ps-empty p,
-[data-theme="atlvs-product"] .ps-empty p {
+[data-ui="saas"] .ps-empty p {
   font-size: 13px;
   color: var(--p-text-2);
   margin: 0 auto var(--p-4);
   max-width: 320px;
   line-height: 1.5;
 }
-[data-ui="saas"] .ps-skel,
-[data-theme="atlvs-product"] .ps-skel {
+[data-ui="saas"] .ps-skel {
   background: linear-gradient(
     90deg,
     var(--p-surface-2) 25%,
@@ -2173,13 +1991,11 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-ui="saas"] .ps-skel,
-  [data-theme="atlvs-product"] .ps-skel {
+  [data-ui="saas"] .ps-skel {
     animation: none;
   }
 }
-[data-ui="saas"] .ps-spinner,
-[data-theme="atlvs-product"] .ps-spinner {
+[data-ui="saas"] .ps-spinner {
   width: 20px;
   height: 20px;
   border: 2.5px solid var(--p-surface-2);
@@ -2193,8 +2009,7 @@
     transform: rotate(360deg);
   }
 }
-[data-ui="saas"] .ps-modal,
-[data-theme="atlvs-product"] .ps-modal {
+[data-ui="saas"] .ps-modal {
   background: var(--p-surface);
   border: 1px solid var(--p-border);
   border-radius: var(--p-r-lg);
@@ -2202,26 +2017,22 @@
   max-width: 440px;
   overflow: hidden;
 }
-[data-ui="saas"] .ps-modal .mh,
-[data-theme="atlvs-product"] .ps-modal .mh {
+[data-ui="saas"] .ps-modal .mh {
   padding: var(--p-4) 20px 0;
 }
-[data-ui="saas"] .ps-modal .mh h3,
-[data-theme="atlvs-product"] .ps-modal .mh h3 {
+[data-ui="saas"] .ps-modal .mh h3 {
   font-size: 17px;
   font-weight: 700;
   color: var(--p-text-1);
   margin: 0;
 }
-[data-ui="saas"] .ps-modal .mb,
-[data-theme="atlvs-product"] .ps-modal .mb {
+[data-ui="saas"] .ps-modal .mb {
   padding: var(--p-3) 20px var(--p-4);
   font-size: 13px;
   color: var(--p-text-2);
   line-height: 1.55;
 }
-[data-ui="saas"] .ps-modal .mf,
-[data-theme="atlvs-product"] .ps-modal .mf {
+[data-ui="saas"] .ps-modal .mf {
   display: flex;
   justify-content: flex-end;
   gap: var(--p-3);
@@ -2231,15 +2042,13 @@
 }
 
 /* ---- helpers ---- */
-[data-ui="saas"] .ps-divider,
-[data-theme="atlvs-product"] .ps-divider {
+[data-ui="saas"] .ps-divider {
   height: 1px;
   background: var(--p-border);
   border: 0;
   margin: 0;
 }
-[data-ui="saas"] .ps-kbar,
-[data-theme="atlvs-product"] .ps-kbar {
+[data-ui="saas"] .ps-kbar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -2258,8 +2067,7 @@
 
 /* Base display heading — wrap arbitrary text in <span class="ps-h"> or apply
    to an explicit h-element to inherit the kit's MONUMENT register. */
-[data-ui="saas"] .ps-h,
-[data-theme="atlvs-product"] .ps-h {
+[data-ui="saas"] .ps-h {
   font-family: var(--p-heading);
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
@@ -2273,14 +2081,12 @@
 /* A2 · Everyday page header — accent left-bar + live mono kicker + title.
    Pair with workspace breadcrumbs and a pulsing live-dot for the canonical
    app-chrome treatment per design_handoff_atlvs_kit/patterns.html. */
-[data-ui="saas"] .ps-pagehead,
-[data-theme="atlvs-product"] .ps-pagehead {
+[data-ui="saas"] .ps-pagehead {
   display: flex;
   flex-direction: column;
   gap: var(--p-2);
 }
-[data-ui="saas"] .ps-pagehead .kick,
-[data-theme="atlvs-product"] .ps-pagehead .kick {
+[data-ui="saas"] .ps-pagehead .kick {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2292,8 +2098,7 @@
   color: var(--p-accent-text);
   margin: 0;
 }
-[data-ui="saas"] .ps-pagehead .kick .ps-livedot,
-[data-theme="atlvs-product"] .ps-pagehead .kick .ps-livedot {
+[data-ui="saas"] .ps-pagehead .kick .ps-livedot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -2301,8 +2106,7 @@
   flex: none;
   display: inline-block;
 }
-[data-ui="saas"] .ps-pagehead .t,
-[data-theme="atlvs-product"] .ps-pagehead .t {
+[data-ui="saas"] .ps-pagehead .t {
   font-family: var(--p-heading);
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
@@ -2316,14 +2120,12 @@
   padding-left: var(--p-4);
 }
 /* Drop the accent bar (some embedded contexts already provide their own affordance). */
-[data-ui="saas"] .ps-pagehead--plain .t,
-[data-theme="atlvs-product"] .ps-pagehead--plain .t {
+[data-ui="saas"] .ps-pagehead--plain .t {
   border-left: 0;
   padding-left: 0;
 }
 @media (prefers-reduced-motion: no-preference) {
-  [data-ui="saas"] .ps-pagehead .ps-livedot,
-  [data-theme="atlvs-product"] .ps-pagehead .ps-livedot {
+  [data-ui="saas"] .ps-pagehead .ps-livedot {
     animation: ps-livedot 1.6s ease-in-out infinite;
   }
   @keyframes ps-livedot {
@@ -2340,8 +2142,7 @@
 /* A3 · Hero title — two-tone accent word via .pop. Headlines self-brand:
    "Run the <span class="pop">show</span>." pulls product accent into the word
    under .pop while the rest stays on --p-text-1. */
-[data-ui="saas"] .ps-hero,
-[data-theme="atlvs-product"] .ps-hero {
+[data-ui="saas"] .ps-hero {
   /* v8.0 — .ps-hero is a DISPLAY treatment → Anton (--p-display), not the
      semantic heading face; size reads the --p-fs-hero ramp. */
   font-family: var(--p-display);
@@ -2355,31 +2156,23 @@
   margin: 0;
   text-wrap: balance;
 }
-[data-ui="saas"] .ps-hero .pop,
-[data-theme="atlvs-product"] .ps-hero .pop {
+[data-ui="saas"] .ps-hero .pop {
   color: var(--p-accent-text);
 }
 
-[data-ui="saas"] .ps-muted,
-[data-theme="atlvs-product"] .ps-muted {
+[data-ui="saas"] .ps-muted {
   color: var(--p-text-2);
 }
 
 /* Plain anchor color — kit canon. Specificity-collapsed so any utility wins. */
 @layer components {
-  :where(
-    [data-ui="saas"] a,
-    [data-theme="atlvs-product"] a,
-    [data-ui="saas"] .ps-link,
-    [data-theme="atlvs-product"] .ps-link
-  ) {
+  :where([data-ui="saas"] a, [data-ui="saas"] .ps-link) {
     color: var(--p-accent-text);
     text-decoration: none;
   }
 }
 
-[data-ui="saas"] *:focus-visible,
-[data-theme="atlvs-product"] *:focus-visible {
+[data-ui="saas"] *:focus-visible {
   /* AX-3 — ring routes through --p-focus (per product × mode), not the raw
      accent: COMPVSS amber / LEG3ND orange are <3:1 on light, so those
      products repoint --p-focus at their AA-grade --p-accent-cta. */

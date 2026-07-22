@@ -36,24 +36,35 @@
  * kit-platform and kit-layers @imports are guard-locked to this file
  * (design-system.test.ts / layers-tokens.test.ts).
  */
-@import "./primitives.css";
-@import "./themes/atlvs-product.css";
+/* CASCADE LAYERS (W1, UI/UX canon audit 2026-07): the core theme stack now
+   participates in the explicit layer order declared in globals.css
+   (theme < base < tokens < kit < components < utilities < UNLAYERED).
+   Restated here so a standalone load of this chunk establishes the same
+   order. `layer(tokens)` = pre-kit seeds; `layer(kit)` = the kit proper.
+   Page-level CSS and the shell-exclusive kit-*.css files stay UNLAYERED and
+   therefore always win over the kit without specificity fights. */
+@layer theme, base, tokens, kit, components, utilities;
+
+@import "./primitives.css" layer(tokens);
+@import "./themes/atlvs-product.css" layer(kit);
 /* v7.1 platform contracts — forced-colors (HCM focus restoration),
    prefers-contrast firming, the print floor, and RTL/logical-property
    readiness. Ported from the kit tokens/base.css. Despite the "platform" name
    this is a GLOBAL environment layer (print/HCM/RTL apply in every shell), so
    it STAYS at root — guard-locked by design-system.test.ts. */
-@import "./kit-platform.css";
+@import "./kit-platform.css" layer(kit);
 
 /* v8.1 AI-native surface kit — streaming / thinking / citation / confidence
-   primitives, all resolving from --p-* so they theme per product for free. */
-@import "./kit-ai.css";
+   primitives, all resolving from --p-* so they theme per product for free.
+   ADOPTED canon (owner ruling 3, 2026-07-22) — consumer wiring lands in W5;
+   this import keeps the vocabulary loading on the core path. */
+@import "./kit-ai.css" layer(kit);
 
 /* kit v8 "layers" — a named z-index ladder (--p-z-*), an opacity scale
    (--p-o-*), and an opt-in colorblind-safe chart palette ([data-chart="safe"],
    Okabe–Ito). Additive + var()-able; resolves the previously-implicit stacking
    order. Guarded by src/lib/theme/layers-tokens.test.ts. */
-@import "./kit-layers.css";
+@import "./kit-layers.css" layer(kit);
 
 /*
  * SSR cold-start fallback — used only when no [data-theme] / [data-ui]
@@ -63,7 +74,9 @@
  * deleted in the v6.4 alignment (audit T-3) — --p-* is the only token set.
  * Mirrors the unconditional :root cold-start in globals.css so the
  * un-attributed flash matches the canonical kit surface.
+ * @layer tokens — must lose to the kit's [data-ui] blocks (@layer kit).
  */
+@layer tokens {
 :root:not([data-theme]) {
   --p-bg: #f7f8fa;
   --p-surface: #ffffff;
@@ -83,3 +96,4 @@
   --p-focus: #e23414;
   color-scheme: light;
 }
+} /* end @layer tokens */

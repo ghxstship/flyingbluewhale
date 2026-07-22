@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { join, relative } from "node:path";
 
 /**
  * Overlay audit (kit 21 wave W0) — every overlay primitive sits on the
@@ -87,5 +87,67 @@ describe("overlay audit — z-index ladder + scrim SSOT (W0)", () => {
     const src = readFileSync(join(ROOT, "src/components/ui/Sheet.tsx"), "utf8");
     expect(src).toContain("max-width: 719px");
     expect(src).toContain("responsive");
+  });
+});
+
+/**
+ * GH-2 (lane-F, W1 2026-07-22) — the guard above audits a FIXED file list, so
+ * fixed-position overlays outside the 12 files rode literal z-indexes into
+ * prod unchecked (F-23). This repo-wide sweep flags any line that positions an
+ * element `fixed` AND assigns a literal z utility on the same line — new
+ * overlays must ride the --p-z-* ladder from kit-layers.css.
+ *
+ * The four known offenders are GRANDFATHERED (their sweep is scheduled debt,
+ * not W1's). The set may only shrink: a NEW offender fails immediately, and a
+ * grandfathered file that gets cleaned must be removed from the set.
+ */
+describe("overlay audit — repo-wide fixed + literal-z ratchet (GH-2)", () => {
+  const GRANDFATHERED = new Set<string>([
+    "src/components/DataTableInteractive.tsx", // bulk-action bar
+    "src/components/home/CopilotSuggests.tsx", // fixed suggests panel
+    "src/components/marketing/StickyCTABar.tsx", // sticky CTA bar
+    "src/components/ui/GlobalBanner.tsx", // global banner
+  ]);
+
+  function walk(dir: string): string[] {
+    const out: string[] = [];
+    for (const name of readdirSync(dir)) {
+      const full = join(dir, name);
+      const st = statSync(full);
+      if (st.isDirectory()) {
+        if (name === "node_modules" || name.startsWith(".")) continue;
+        out.push(...walk(full));
+      } else if (st.isFile()) {
+        out.push(full);
+      }
+    }
+    return out;
+  }
+
+  it("no NEW fixed-position element carries a literal z utility", () => {
+    const offenders: string[] = [];
+    const clean: string[] = [];
+    const offendingFiles = new Set<string>();
+    for (const file of walk(join(ROOT, "src")).filter((f) => f.endsWith(".tsx") && !/\.test\.tsx?$/.test(f))) {
+      const rel = relative(ROOT, file);
+      const src = stripComments(readFileSync(file, "utf8"));
+      const lines = src.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]!;
+        if (/\bfixed\b/.test(line) && LITERAL_Z.test(line)) {
+          offendingFiles.add(rel);
+          if (!GRANDFATHERED.has(rel)) offenders.push(`${rel}:${i + 1}`);
+        }
+      }
+    }
+    for (const g of GRANDFATHERED) if (!offendingFiles.has(g)) clean.push(g);
+    expect(
+      offenders,
+      `New fixed overlays with literal z-index — ride the --p-z-* ladder (kit-layers.css) instead:\n${offenders.join("\n")}`,
+    ).toEqual([]);
+    expect(
+      clean,
+      `Grandfathered overlay-z entries no longer offend — remove them from GRANDFATHERED so the ratchet stays tight:\n${clean.join("\n")}`,
+    ).toEqual([]);
   });
 });

@@ -31,6 +31,56 @@ function walk(dir: string): string[] {
 
 const ALL_FILES = walk(SRC_DIR).filter((f) => /\.(tsx?)$/.test(f));
 
+/** String-aware comment stripper — comment bodies blanked, newlines kept so
+ *  reported line numbers stay true; string literals (which may contain `//`,
+ *  e.g. URLs) are never treated as comment openers. */
+function stripCommentsPreservingLines(src: string): string {
+  let out = "";
+  let i = 0;
+  let mode: "code" | "line" | "block" | '"' | "'" | "`" = "code";
+  while (i < src.length) {
+    const ch = src[i]!;
+    const next = src[i + 1];
+    if (mode === "code") {
+      if (ch === "/" && next === "/") {
+        mode = "line";
+        i += 2;
+      } else if (ch === "/" && next === "*") {
+        mode = "block";
+        i += 2;
+      } else {
+        if (ch === '"' || ch === "'" || ch === "`") mode = ch;
+        out += ch;
+        i++;
+      }
+    } else if (mode === "line") {
+      if (ch === "\n") {
+        mode = "code";
+        out += ch;
+      }
+      i++;
+    } else if (mode === "block") {
+      if (ch === "*" && next === "/") {
+        mode = "code";
+        i += 2;
+      } else {
+        if (ch === "\n") out += ch;
+        i++;
+      }
+    } else {
+      if (ch === "\\") {
+        out += ch + (next ?? "");
+        i += 2;
+      } else {
+        if (ch === mode) mode = "code";
+        out += ch;
+        i++;
+      }
+    }
+  }
+  return out;
+}
+
 describe("Design system — component primitive adoption", () => {
   it("no hand-rolled brand buttons (`bg-[var(--p-accent)]` + `text-white`)", () => {
     const ALLOW = new Set<string>([
@@ -455,6 +505,49 @@ describe("Design system — component primitive adoption", () => {
       railTxt.includes("hidden w-56") && railTxt.includes("md:flex"),
       "PortalRail (PortalRail.tsx) must hide below md — add `hidden md:flex` to the outer <aside>",
     ).toBe(true);
+  });
+
+  it("GH-1 — raw hex colors in TSX may only shrink (pinned legacy debt)", () => {
+    // The palette guard above matches Tailwind CLASS literals only; raw hex in
+    // JSX props, SVG attributes, and inline TS constants sailed past it (lane-F
+    // GH-1: StagePlotCanvas slate hexes, MapShell fallback blue). This ratchet
+    // scans every non-test TSX line for hex color literals.
+    //
+    // Sanctioned media that genuinely cannot consume CSS variables are EXEMPT:
+    //   - src/lib/pdf/**            (@react-pdf/renderer)
+    //   - src/app/og/** + opengraph-image (satori image generation)
+    //   - */print/page.tsx          (print-sheet palettes, W7 consolidates)
+    //   - email/social/OAuth mirrors (guarded for tokens.json containment by
+    //     coldstart-fallback-tokens.test.ts instead)
+    //
+    // Everything else is legacy debt pinned at the 2026-07-22 count. The pin
+    // may ONLY SHRINK — new raw hexes fail immediately; when you fix a spot,
+    // lower the pin. Target: 0 (remediation waves W2/W5 + owner ruling 4
+    // re-seeds the branding/proposal seed hexes).
+    const LEGACY_HEX_PIN = 90;
+    const HEX_RE = /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![0-9a-fA-F])/;
+    const EXEMPT_RE = [/^src\/lib\/pdf\//, /^src\/app\/og\//, /^src\/app\/opengraph-image/, /print\/page\.tsx$/];
+    const ALLOW = new Set<string>([
+      "src/components/email/blocks.ts",
+      "src/components/social/SocialCard.tsx",
+      "src/components/auth/OAuthButtons.tsx",
+    ]);
+    const offenders: string[] = [];
+    for (const file of ALL_FILES) {
+      const relPath = relative(REPO_ROOT, file);
+      if (!relPath.endsWith(".tsx")) continue;
+      if (ALLOW.has(relPath) || EXEMPT_RE.some((re) => re.test(relPath))) continue;
+      const lines = stripCommentsPreservingLines(readFileSync(file, "utf8")).split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (HEX_RE.test(lines[i]!)) offenders.push(`${relPath}:${i + 1}`);
+      }
+    }
+    expect(
+      offenders.length,
+      `Raw hex color literals in TSX grew past the pinned legacy count (${LEGACY_HEX_PIN}). ` +
+        `New paint must route through var(--p-*) / var(--chart-*). If you cleaned spots, shrink the pin.\n` +
+        offenders.join("\n"),
+    ).toBeLessThanOrEqual(LEGACY_HEX_PIN);
   });
 
   it("kit v7.1 — platform contracts (forced-colors / prefers-contrast / print / RTL) are present + imported", () => {

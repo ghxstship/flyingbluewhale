@@ -64,3 +64,33 @@ describe("cold-start fallback accents are contained in tokens.json", () => {
     });
   }
 });
+
+/**
+ * GH-3 (lane-F, W1 2026-07-22) — mirror containment for the sanctioned
+ * raw-hex surfaces that can't consume CSS variables. The email kit palette
+ * (email clients strip <style> and can't read var()) and the social/OG card
+ * inks inline literal hexes by necessity — but every one of those literals
+ * MUST exist among tokens.json's string values, or the mirror has silently
+ * forked from the SSOT (exactly what happened to email accentHover +
+ * surfaceInset before W1 re-seeded them).
+ */
+const MIRROR_SOURCES = ["src/components/email/blocks.ts", "src/components/social/SocialCard.tsx"];
+
+describe("email/social palette mirrors are contained in tokens.json (GH-3)", () => {
+  for (const file of MIRROR_SOURCES) {
+    it(`${file} hex literals all appear in tokens.json values`, () => {
+      // Strip comments so prose hex mentions don't count; scan string-literal hexes.
+      const src = readFileSync(join(ROOT, file), "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/^\s*\/\/.*$/gm, "");
+      const hexes = [...src.matchAll(/["'`](#[0-9a-fA-F]{3,8})["'`]/g)].map((m) => m[1]!);
+      expect(hexes.length, `No hex literals found in ${file} — has the mirror moved?`).toBeGreaterThan(0);
+      const orphans = [...new Set(hexes)].filter((h) => !TOKEN_VALUES.has(h.toLowerCase()));
+      expect(
+        orphans,
+        `Hex literal(s) in ${file} not found among tokens.json values — the mirror drifted from the SSOT. ` +
+          `Re-seed to the canonical value (or, if canon changed, update the mirror):\n${orphans.join("\n")}`,
+      ).toEqual([]);
+    });
+  }
+});

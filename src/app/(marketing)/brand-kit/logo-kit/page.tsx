@@ -71,7 +71,7 @@ const TECHNOLOGIES = "TECHNOLOGIES".split("");
 export default async function LogoKitPage() {
   const { t } = await getRequestT();
   return (
-    <div className="lk-root" data-theme="atlvs-product">
+    <div className="lk-root" data-ui="saas" data-theme="atlvs-product">
       <div className="lk-wrap">
         <header className="lk-head">
           <p className="lk-eb">{t("marketing.logoKit.eyebrow", undefined, "ATLVS Technologies · Brand")}</p>

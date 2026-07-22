@@ -301,6 +301,18 @@ export default async function AuroraPage() {
           .aurora-band::before { animation: none; }
         }
         .aurora-eyebrow-hero { color: #86efac; }
+        /* The stock ghost button is inked for light surfaces via a
+           [data-theme] .ps-btn--ghost rule; on the dark band this needs the
+           extra specificity to win, in BOTH themes. */
+        .aurora-band .ps-btn.aurora-btn-ghost,
+        .aurora-band .ps-btn.aurora-btn-ghost:hover {
+          color: #ecfdf5;
+          border-color: rgba(236, 253, 245, 0.55);
+          background-color: rgba(236, 253, 245, 0.08);
+        }
+        .aurora-band .ps-btn.aurora-btn-ghost:hover {
+          background-color: rgba(236, 253, 245, 0.16);
+        }
         .aurora-accent-ink { color: light-dark(#0f766e, #5eead4); }
         .aurora-ink { color: #ecfdf5; }
         .aurora-ink-2 { color: rgba(236, 253, 245, 0.78); }
@@ -386,7 +398,7 @@ export default async function AuroraPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
-              <Button href="#waitlist" variant="secondary">
+              <Button href="#waitlist" variant="secondary" className="aurora-btn-ghost">
                 {t(`${K}.hero.secondaryCta`, undefined, "Join the Aurora waitlist")}
               </Button>
             </div>

@@ -20,29 +20,47 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     return { rules: [{ userAgent: "*", disallow: "/" }] };
   }
 
+  // Token-gated confidential flows (/proposals /sign /msa /share /offer
+  // /forms) are disallowed alongside the auth-walled shells — a leaked
+  // signing or share link must never enter an index (E-03).
+  const CONFIDENTIAL = [
+    "/studio",
+    "/api",
+    "/auth",
+    "/m",
+    "/me",
+    "/p",
+    "/proposals",
+    "/sign",
+    "/msa",
+    "/share",
+    "/offer",
+    "/forms",
+  ];
+
+  // GEO: AI crawlers and assistant user-agents are explicitly welcome on the
+  // marketing surface (llms.txt + /compare/comparisons.json exist for them),
+  // under the same confidential-path boundaries as everyone else. Named so a
+  // future catch-all tightening can't silently drop them.
+  const AI_CRAWLERS = [
+    "GPTBot",
+    "OAI-SearchBot",
+    "ChatGPT-User",
+    "ClaudeBot",
+    "Claude-User",
+    "Claude-SearchBot",
+    "PerplexityBot",
+    "Perplexity-User",
+    "Google-Extended",
+    "Applebot-Extended",
+    "cohere-ai",
+    "meta-externalagent",
+  ];
+
   return {
     rules: [
-      {
-        userAgent: "*",
-        allow: ["/"],
-        // Token-gated confidential flows (/proposals /sign /msa /share /offer
-        // /forms) are disallowed alongside the auth-walled shells — a leaked
-        // signing or share link must never enter an index (E-03).
-        disallow: [
-          "/studio",
-          "/api",
-          "/auth",
-          "/m",
-          "/me",
-          "/p",
-          "/proposals",
-          "/sign",
-          "/msa",
-          "/share",
-          "/offer",
-          "/forms",
-        ],
-      },
+      { userAgent: "*", allow: ["/"], disallow: CONFIDENTIAL },
+      ...AI_CRAWLERS.map((userAgent) => ({ userAgent, allow: ["/"], disallow: CONFIDENTIAL })),
     ],
     sitemap: `${base}/sitemap.xml`,
   };

@@ -8,7 +8,7 @@ import type { GuideConfig } from "@/lib/guides/types";
 import { Crumbs, KIcon } from "@/components/mobile/kit";
 import { CrisisPanel, type ActiveCrisis } from "./CrisisPanel";
 import { CRISIS_ACTIVE_WINDOW_MS } from "./crisis";
-import { EMERGENCY_CODES, chipBg, chipFg } from "./data";
+import { getEmergencyCodes, chipBg, chipFg } from "./data";
 
 export const dynamic = "force-dynamic";
 
@@ -301,11 +301,11 @@ export default async function EmergencyPage() {
         </Link>
       </div>
       <div className="emerg-list">
-        {EMERGENCY_CODES.map((e) => (
+        {getEmergencyCodes(t).map((e) => (
           <Link
             className="emerg-row"
-            key={e.code}
-            href={`/m/emergency/codes#code-${e.code.toLowerCase()}`}
+            key={e.key}
+            href={`/m/emergency/codes#code-${e.key}`}
             style={{ textDecoration: "none" }}
           >
             <span

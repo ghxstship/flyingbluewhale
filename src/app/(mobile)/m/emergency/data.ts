@@ -21,6 +21,8 @@ import type { Session } from "@/lib/auth";
 export const NA = "—";
 
 export type EmergencyCode = {
+  /** Stable kebab identity (anchor ids, React keys, i18n key segment) — never displayed. */
+  key: string;
   code: string;
   trigger: string;
   tint: string;
@@ -33,92 +35,110 @@ export type EmergencyCode = {
   indiv: string;
 };
 
-/** Code → semantic token tint + dark-ink flag, mapped off the kit colorway. */
-export const EMERGENCY_CODES: EmergencyCode[] = [
-  {
-    code: "Red",
-    trigger: "Fire, Lightning Strike, High Winds or Weather",
-    tint: "danger",
-    dept: "Halt all activity; initiate the evacuation sequence per zone marshals.",
-    team: "Open and hold your egress lanes; suppress re-entry.",
-    indiv: "Direct patrons to the nearest exit, sweep your sector, report headcount to your lead.",
-  },
-  {
-    code: "Orange",
-    trigger: "Crowd Surge",
-    tint: "warning",
-    dept: "Pause the stage program; activate the crowd-density protocol.",
-    team: "Form a relief lane; ease pressure toward your gate.",
-    indiv: "Hold the barricade line, call the surge level on your radio channel, assist anyone down.",
-  },
-  {
-    code: "Yellow",
-    trigger: "Structural Damage or Severe Equipment Failure",
-    tint: "warning",
-    ink: "dark",
-    dept: "Cordon the affected structure; dispatch rigging and engineering.",
-    team: "Establish a 15m exclusion zone around the hazard.",
-    indiv: "Block access to the area, keep patrons clear, await the engineering all-clear.",
-  },
-  {
-    code: "Green",
-    trigger: "Burglary or Theft",
-    tint: "success",
-    dept: "Lock down the affected zone; preserve the scene for security.",
-    team: "Control your gate exits; log anyone leaving.",
-    indiv: "Note descriptions, do not pursue, report to security on your radio channel.",
-  },
-  {
-    code: "Blue",
-    trigger: "Medical Emergency",
-    tint: "info",
-    dept: "Dispatch the medical team; clear an access route.",
-    team: "Open a lane from your gate to the medical post.",
-    indiv: "Flag the medic in, hold a clear path, keep bystanders back.",
-  },
-  {
-    code: "Purple",
-    trigger: "Cultural Sensitivity Issue",
-    tint: "accent",
-    dept: "Notify guest relations and the duty manager; de-escalate.",
-    team: "Provide a calm buffer; route to guest services.",
-    indiv: "Stay neutral and respectful, summon a lead, do not engage further.",
-  },
-  {
-    code: "Pink",
-    trigger: "Drug or Illegal Substance Trafficking",
-    tint: "danger",
-    ink: "dark",
-    dept: "Alert security and the law-enforcement liaison discreetly.",
-    team: "Contain the area without alarming the crowd.",
-    indiv: "Observe and report only, do not confront, mark the location on your radio channel.",
-  },
-  {
-    code: "Indigo",
-    trigger: "Missing Talent",
-    tint: "info",
-    dept: "Activate lockdown of BOH egress; brief all leads.",
-    team: "Hold your gate; verify credentials on all exits.",
-    indiv: "Watch your exit, check passing credentials, report sightings immediately.",
-  },
-  {
-    code: "White",
-    trigger: "ICE Raid or Government Agency Intervention",
-    tint: "neutral",
-    ink: "dark",
-    dept: "Engage legal and compliance; direct all inquiries to command.",
-    team: "Maintain calm, do not obstruct, document at your gate.",
-    indiv: "Refer agents to the duty manager, stay calm, take no independent action.",
-  },
-  {
-    code: "Black",
-    trigger: "Acts of Terror, Active Shooter or Bomb Threat",
-    tint: "text-1",
-    dept: "Initiate Run-Hide-Fight; full evacuation; notify authorities.",
-    team: "Drive egress through your gate; do not re-admit.",
-    indiv: "Run / Hide / Fight. Move patrons out fast, take cover, call your location in.",
-  },
-];
+type TFn = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/**
+ * Code → semantic token tint + dark-ink flag, mapped off the kit colorway.
+ * Factory (not module-scope) so every user-visible string resolves through the
+ * caller's per-request `t` — `key`/`tint`/`ink` are locale-invariant identity.
+ */
+export function getEmergencyCodes(t: TFn): EmergencyCode[] {
+  return [
+    {
+      key: "red",
+      code: t("m.emergency.code.red.code", undefined, "Red"),
+      trigger: t("m.emergency.code.red.trigger", undefined, "Fire, Lightning Strike, High Winds or Weather"),
+      tint: "danger",
+      dept: t("m.emergency.code.red.dept", undefined, "Halt all activity; initiate the evacuation sequence per zone marshals."),
+      team: t("m.emergency.code.red.team", undefined, "Open and hold your egress lanes; suppress re-entry."),
+      indiv: t("m.emergency.code.red.indiv", undefined, "Direct patrons to the nearest exit, sweep your sector, report headcount to your lead."),
+    },
+    {
+      key: "orange",
+      code: t("m.emergency.code.orange.code", undefined, "Orange"),
+      trigger: t("m.emergency.code.orange.trigger", undefined, "Crowd Surge"),
+      tint: "warning",
+      dept: t("m.emergency.code.orange.dept", undefined, "Pause the stage program; activate the crowd-density protocol."),
+      team: t("m.emergency.code.orange.team", undefined, "Form a relief lane; ease pressure toward your gate."),
+      indiv: t("m.emergency.code.orange.indiv", undefined, "Hold the barricade line, call the surge level on your radio channel, assist anyone down."),
+    },
+    {
+      key: "yellow",
+      code: t("m.emergency.code.yellow.code", undefined, "Yellow"),
+      trigger: t("m.emergency.code.yellow.trigger", undefined, "Structural Damage or Severe Equipment Failure"),
+      tint: "warning",
+      ink: "dark",
+      dept: t("m.emergency.code.yellow.dept", undefined, "Cordon the affected structure; dispatch rigging and engineering."),
+      team: t("m.emergency.code.yellow.team", undefined, "Establish a 15m exclusion zone around the hazard."),
+      indiv: t("m.emergency.code.yellow.indiv", undefined, "Block access to the area, keep patrons clear, await the engineering all-clear."),
+    },
+    {
+      key: "green",
+      code: t("m.emergency.code.green.code", undefined, "Green"),
+      trigger: t("m.emergency.code.green.trigger", undefined, "Burglary or Theft"),
+      tint: "success",
+      dept: t("m.emergency.code.green.dept", undefined, "Lock down the affected zone; preserve the scene for security."),
+      team: t("m.emergency.code.green.team", undefined, "Control your gate exits; log anyone leaving."),
+      indiv: t("m.emergency.code.green.indiv", undefined, "Note descriptions, do not pursue, report to security on your radio channel."),
+    },
+    {
+      key: "blue",
+      code: t("m.emergency.code.blue.code", undefined, "Blue"),
+      trigger: t("m.emergency.code.blue.trigger", undefined, "Medical Emergency"),
+      tint: "info",
+      dept: t("m.emergency.code.blue.dept", undefined, "Dispatch the medical team; clear an access route."),
+      team: t("m.emergency.code.blue.team", undefined, "Open a lane from your gate to the medical post."),
+      indiv: t("m.emergency.code.blue.indiv", undefined, "Flag the medic in, hold a clear path, keep bystanders back."),
+    },
+    {
+      key: "purple",
+      code: t("m.emergency.code.purple.code", undefined, "Purple"),
+      trigger: t("m.emergency.code.purple.trigger", undefined, "Cultural Sensitivity Issue"),
+      tint: "accent",
+      dept: t("m.emergency.code.purple.dept", undefined, "Notify guest relations and the duty manager; de-escalate."),
+      team: t("m.emergency.code.purple.team", undefined, "Provide a calm buffer; route to guest services."),
+      indiv: t("m.emergency.code.purple.indiv", undefined, "Stay neutral and respectful, summon a lead, do not engage further."),
+    },
+    {
+      key: "pink",
+      code: t("m.emergency.code.pink.code", undefined, "Pink"),
+      trigger: t("m.emergency.code.pink.trigger", undefined, "Drug or Illegal Substance Trafficking"),
+      tint: "danger",
+      ink: "dark",
+      dept: t("m.emergency.code.pink.dept", undefined, "Alert security and the law-enforcement liaison discreetly."),
+      team: t("m.emergency.code.pink.team", undefined, "Contain the area without alarming the crowd."),
+      indiv: t("m.emergency.code.pink.indiv", undefined, "Observe and report only, do not confront, mark the location on your radio channel."),
+    },
+    {
+      key: "indigo",
+      code: t("m.emergency.code.indigo.code", undefined, "Indigo"),
+      trigger: t("m.emergency.code.indigo.trigger", undefined, "Missing Talent"),
+      tint: "info",
+      dept: t("m.emergency.code.indigo.dept", undefined, "Activate lockdown of BOH egress; brief all leads."),
+      team: t("m.emergency.code.indigo.team", undefined, "Hold your gate; verify credentials on all exits."),
+      indiv: t("m.emergency.code.indigo.indiv", undefined, "Watch your exit, check passing credentials, report sightings immediately."),
+    },
+    {
+      key: "white",
+      code: t("m.emergency.code.white.code", undefined, "White"),
+      trigger: t("m.emergency.code.white.trigger", undefined, "ICE Raid or Government Agency Intervention"),
+      tint: "neutral",
+      ink: "dark",
+      dept: t("m.emergency.code.white.dept", undefined, "Engage legal and compliance; direct all inquiries to command."),
+      team: t("m.emergency.code.white.team", undefined, "Maintain calm, do not obstruct, document at your gate."),
+      indiv: t("m.emergency.code.white.indiv", undefined, "Refer agents to the duty manager, stay calm, take no independent action."),
+    },
+    {
+      key: "black",
+      code: t("m.emergency.code.black.code", undefined, "Black"),
+      trigger: t("m.emergency.code.black.trigger", undefined, "Acts of Terror, Active Shooter or Bomb Threat"),
+      tint: "text-1",
+      dept: t("m.emergency.code.black.dept", undefined, "Initiate Run-Hide-Fight; full evacuation; notify authorities."),
+      team: t("m.emergency.code.black.team", undefined, "Drive egress through your gate; do not re-admit."),
+      indiv: t("m.emergency.code.black.indiv", undefined, "Run / Hide / Fight. Move patrons out fast, take cover, call your location in."),
+    },
+  ];
+}
 
 export const chipBg = (tint: string) =>
   tint === "text-1" ? "var(--p-text-1)" : tint === "neutral" ? "var(--p-surface)" : `var(--p-${tint})`;

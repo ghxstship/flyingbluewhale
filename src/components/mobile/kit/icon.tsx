@@ -97,12 +97,16 @@ export type KIconProps = {
 };
 
 export function KIcon({ name, size = 20, stroke = 2, style, className, onClick }: KIconProps) {
+  // Kit icons are decorative by default — labels live on the wrapping control
+  // (button aria-label / adjacent text). Hide from AT unless the icon itself
+  // is the interactive element (legacy onClick usage).
+  const hidden = onClick ? undefined : true;
   const Cmp = ICONS[name];
   if (!Cmp) {
     if (process.env.NODE_ENV !== "production") {
       console.warn(`[KIcon] no registry entry for "${name}" — add it to src/components/mobile/kit/icon.tsx`);
     }
-    return <HelpCircle size={size} strokeWidth={stroke} style={style} className={className} onClick={onClick} />;
+    return <HelpCircle size={size} strokeWidth={stroke} style={style} className={className} onClick={onClick} aria-hidden={hidden} />;
   }
-  return <Cmp size={size} strokeWidth={stroke} style={style} className={className} onClick={onClick} />;
+  return <Cmp size={size} strokeWidth={stroke} style={style} className={className} onClick={onClick} aria-hidden={hidden} />;
 }

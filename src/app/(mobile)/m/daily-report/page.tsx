@@ -1,6 +1,6 @@
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { DailyReportView, type ReportNote } from "./DailyReportView";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 export default async function DailyReportPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
   // End-of-day rollup: today's notes (server-local midnight boundary).
@@ -57,9 +58,10 @@ export default async function DailyReportPage() {
     }
   }
 
+  const crewLabel = t("m.dailyReport.crew", undefined, "Crew");
   const reportNotes: ReportNote[] = notes.map((n) => ({
     id: n.id,
-    author: n.author_id ? nameMap.get(n.author_id) || "Crew" : "Crew",
+    author: n.author_id ? nameMap.get(n.author_id) || crewLabel : crewLabel,
     asManager: n.as_manager,
     body: n.body,
     when: fmt.relative(n.created_at, { compact: true }),

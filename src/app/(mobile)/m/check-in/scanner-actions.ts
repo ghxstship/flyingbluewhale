@@ -141,6 +141,14 @@ export async function importScanToBudget(fd: FormData): Promise<ImportResult> {
   const v = parsed.data;
   const manager = isManagerPlus(session);
 
+  // The receipt path round-trips through the client between parse and import.
+  // Only accept the shape THIS flow produces, pinned to the caller's own
+  // org+user prefix — otherwise a crafted path could point the expense record
+  // at another tenant's stored evidence.
+  if (v.receiptPath && !v.receiptPath.startsWith(`field-scans/${session.orgId}/${session.userId}/`)) {
+    return { error: "Invalid capture reference. Rescan the page." };
+  }
+
   const supabase = await createClient();
 
   // Coding an EXISTING uncoded expense (the Finance "Code It" flow) — a

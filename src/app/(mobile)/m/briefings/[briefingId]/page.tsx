@@ -66,7 +66,7 @@ export default async function BriefingDetailPage({ params }: { params: Promise<{
       .eq("briefing_id", briefingId)
       .eq("org_id", session.orgId)
       .order("acknowledged_at", { ascending: true, nullsFirst: true }),
-    supabase.from("crew_members").select("id, name").eq("org_id", session.orgId).order("name", { ascending: true }),
+    supabase.from("crew_members").select("id, name").eq("org_id", session.orgId).order("name", { ascending: true }).limit(500),
   ]);
 
   const attendeeRecords = (attendeesData ?? []) as unknown as AttendeeRecord[];

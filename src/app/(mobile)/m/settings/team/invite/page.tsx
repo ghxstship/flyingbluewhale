@@ -31,7 +31,7 @@ export default function InvitePage() {
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.team.invite.eyebrow", undefined, "Team")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        Invite Someone
+        {t("m.team.invite", undefined, "Invite Someone")}
       </h1>
 
       {state?.error && (
@@ -42,7 +42,7 @@ export default function InvitePage() {
 
       <form action={formAction}>
         <div className="fld">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">{t("m.team.invite.email", undefined, "Email")}</label>
           <input
             id="email"
             name="email"
@@ -58,7 +58,7 @@ export default function InvitePage() {
         </div>
 
         <div className="fld">
-          <label htmlFor="role">Role</label>
+          <label htmlFor="role">{t("m.team.invite.role", undefined, "Role")}</label>
           <select id="role" name="role" defaultValue={state?.values?.role ?? "member"}>
             {PLATFORM_ROLES.map((r) => (
               <option key={r} value={r}>
@@ -67,7 +67,11 @@ export default function InvitePage() {
             ))}
           </select>
           <div className="hint">
-            Most people are a member. Managers can approve; admins can invite and change roles.
+            {t(
+              "m.team.invite.roleHint",
+              undefined,
+              "Most people are a member. Managers can approve; admins can invite and change roles.",
+            )}
           </div>
         </div>
 
@@ -77,7 +81,7 @@ export default function InvitePage() {
             className="ps-btn ps-btn--tertiary ps-btn--lg"
             style={{ flex: 1, justifyContent: "center" }}
           >
-            Cancel
+            {t("common.cancel", undefined, "Cancel")}
           </Link>
           <button
             type="submit"
@@ -85,7 +89,10 @@ export default function InvitePage() {
             style={{ flex: 2, justifyContent: "center" }}
             disabled={pending}
           >
-            <KIcon name="Send" size={15} /> {pending ? "Sending…" : "Send Invite"}
+            <KIcon name="Send" size={15} />{" "}
+            {pending
+              ? t("m.team.invite.sending", undefined, "Sending…")
+              : t("m.team.invite.send", undefined, "Send Invite")}
           </button>
         </div>
       </form>

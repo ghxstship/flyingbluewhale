@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { NormalizedList, RecordDetail, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, RecordDetail, type FieldDef, toneToBadge } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { SubmitLogButton } from "./SubmitLogButton";
 
@@ -25,22 +25,17 @@ export type DailyLogItem = {
   weather: string | null;
 };
 
+/** Tone keyed by the RAW state — the display label is locale-dependent. */
 const STATE_TONE: Record<string, string> = {
-  Draft: "text-3",
-  Submitted: "info",
-  Approved: "success",
+  draft: "text-3",
+  submitted: "info",
+  approved: "success",
 };
-const STATE_ORDER = ["Draft", "Submitted", "Approved"];
+const RAW_STATE_ORDER = ["draft", "submitted", "approved"];
 
 function Badge({ tone, children }: { tone: string; children: React.ReactNode }) {
-  return (
-    <span
-      className={`ps-badge ps-badge--${tone === "warning" ? "warn" : tone === "text-3" ? "neutral" : tone === "success" ? "ok" : tone}`}
-      style={{ flex: "none" }}
-    >
-      {children}
-    </span>
-  );
+  // Tone → class mapping is the kit's toneToBadge SSOT (was a per-surface ternary).
+  return <span className={toneToBadge(tone)}>{children}</span>;
 }
 
 export function DailyLogView({ items }: { items: DailyLogItem[] }) {
@@ -53,6 +48,13 @@ export function DailyLogView({ items }: { items: DailyLogItem[] }) {
     approved: t("m.dailyLog.state.approved", undefined, "Approved"),
   };
   const stateOf = (x: DailyLogItem) => (x.log_state ? (stateLabel[x.log_state] ?? x.log_state) : "—");
+
+  // Board columns + tones keyed by the TRANSLATED label the field emits —
+  // keying them by the English label broke both in any other locale.
+  const STATE_ORDER = RAW_STATE_ORDER.map((s) => stateLabel[s] ?? s);
+  const boardTone: Record<string, string> = Object.fromEntries(
+    RAW_STATE_ORDER.map((s) => [stateLabel[s] ?? s, STATE_TONE[s] ?? "text-3"]),
+  );
 
   const fields: FieldDef<DailyLogItem>[] = [
     {
@@ -91,7 +93,7 @@ export function DailyLogView({ items }: { items: DailyLogItem[] }) {
         <div className="t">{x.dateLabel}</div>
         <div className="s">{x.summary}</div>
       </div>
-      <Badge tone={STATE_TONE[stateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
+      <Badge tone={(x.log_state ? STATE_TONE[x.log_state] : undefined) ?? "neutral"}>{stateOf(x)}</Badge>
       {/* Only a draft is the field's to move. submitted → approved is the
           console's step, per the shared FSM. Stop the tap here so submitting
           doesn't also open the record. */}
@@ -119,7 +121,7 @@ export function DailyLogView({ items }: { items: DailyLogItem[] }) {
         dateField="date"
         statusField="log_state"
         statusOrder={STATE_ORDER}
-        boardTone={STATE_TONE}
+        boardTone={boardTone}
         empty={{
           cols: [
             t("m.dailyLog.col.date", undefined, "Date"),
@@ -134,7 +136,7 @@ export function DailyLogView({ items }: { items: DailyLogItem[] }) {
         <RecordDetail
           title={detail.dateLabel}
           icon="NotebookPen"
-          status={{ tone: STATE_TONE[stateOf(detail)] ?? "neutral", label: stateOf(detail) }}
+          status={{ tone: (detail.log_state ? STATE_TONE[detail.log_state] : undefined) ?? "neutral", label: stateOf(detail) }}
           fields={[
             ...(detail.weather ? [{ k: t("m.dailyLog.weather", undefined, "Weather"), v: detail.weather }] : []),
             {

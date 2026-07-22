@@ -83,9 +83,13 @@ export async function respondToCrisisAction(input: {
   if (parsed.data.response === "need_help") {
     const managers = await managerUserIds(session.orgId, session.userId);
     if (managers.length) {
+      // Name the caller by display name, falling back to email only when no
+      // name is on file — the ops pager is a name-expected context.
+      const { data: me } = await supabase.from("users").select("name").eq("id", session.userId).is("deleted_at", null).maybeSingle();
+      const who = (me as { name: string | null } | null)?.name || session.email || "A crew member";
       await sendPushBulk(managers, {
         title: "Safety Check-In · Needs Help",
-        body: `${session.email ?? "A crew member"} · ${(alert as { title: string | null }).title ?? "Active crisis"}`,
+        body: `${who} · ${(alert as { title: string | null }).title ?? "Active crisis"}`,
         url: "/m/emergency",
         kind: "crisis",
         scope: "mobile",

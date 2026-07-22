@@ -120,6 +120,7 @@ export function SchedulerView({
   slots,
   pool,
   areaOptions,
+  canManage = true,
 }: {
   /** Kept for the server page's call shape; the hub chrome owns the title now. */
   eyebrow?: string;
@@ -127,6 +128,10 @@ export function SchedulerView({
   slots: SchedSlot[];
   pool: PoolMember[];
   areaOptions: string[];
+  /** Role band for the hub chrome's managerOnly members — capability
+   *  (schedule:write) gates THIS surface, but a granted member should not
+   *  see manager-only hub links they'd bounce off. */
+  canManage?: boolean;
 }) {
   const t = useT();
   const fmt = useFormatters();
@@ -370,7 +375,7 @@ export function SchedulerView({
 
   return (
     <div className="screen screen-anim">
-      <HubChrome hubKey="workforce" active="schedule" canManage />
+      <HubChrome hubKey="workforce" active="schedule" canManage={canManage} />
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 4 }}>
         <button
           type="button"

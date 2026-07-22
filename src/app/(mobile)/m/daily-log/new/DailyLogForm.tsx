@@ -197,8 +197,16 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
         } catch (err) {
           setError(
             err instanceof PhotoBudgetExceededError
-              ? "Too many photos are already waiting to sync. Reconnect to clear them, or remove the photos to save this log now."
-              : "You're offline and this device can't store photos. Reconnect to submit, or remove the photos to save the log now.",
+              ? t(
+                  "m.dailyLog.new.photoBudget",
+                  undefined,
+                  "Too many photos are already waiting to sync. Reconnect to clear them, or remove the photos to save this log now.",
+                )
+              : t(
+                  "m.dailyLog.new.photoStoreBlocked",
+                  undefined,
+                  "You're offline and this device can't store photos. Reconnect to submit, or remove the photos to save the log now.",
+                ),
           );
           return false;
         }
@@ -273,11 +281,11 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
       ) : (
         <form action={onSubmit}>
           <div className="fld">
-            <label>
+            <label htmlFor="dl-project">
               {t("m.dailyLog.new.project", undefined, "Project")}
               <span className="req"> *</span>
             </label>
-            <select name="projectId" defaultValue={projects[0]?.id} required>
+            <select id="dl-project" name="projectId" defaultValue={projects[0]?.id} required>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -286,15 +294,16 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
             </select>
           </div>
           <div className="fld">
-            <label>
+            <label htmlFor="dl-date">
               {t("m.dailyLog.new.date", undefined, "Date")}
               <span className="req"> *</span>
             </label>
-            <input type="date" name="log_date" defaultValue={today} required />
+            <input id="dl-date" type="date" name="log_date" defaultValue={today} required />
           </div>
           <div className="fld">
-            <label>{t("m.dailyLog.new.weather", undefined, "Weather")}</label>
+            <label htmlFor="dl-weather">{t("m.dailyLog.new.weather", undefined, "Weather")}</label>
             <input
+              id="dl-weather"
               type="text"
               name="weather_summary"
               placeholder={t("m.dailyLog.new.weatherPh", undefined, "e.g. Clear · light wind")}
@@ -302,17 +311,18 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
           </div>
           <div className="frow">
             <div className="fld" style={{ width: "100%" }}>
-              <label>{t("m.dailyLog.new.high", undefined, "High °F")}</label>
-              <input type="number" name="weather_temp_high_f" placeholder="88" />
+              <label htmlFor="dl-high">{t("m.dailyLog.new.high", undefined, "High °F")}</label>
+              <input id="dl-high" type="number" name="weather_temp_high_f" placeholder="88" />
             </div>
             <div className="fld" style={{ width: "100%" }}>
-              <label>{t("m.dailyLog.new.low", undefined, "Low °F")}</label>
-              <input type="number" name="weather_temp_low_f" placeholder="74" />
+              <label htmlFor="dl-low">{t("m.dailyLog.new.low", undefined, "Low °F")}</label>
+              <input id="dl-low" type="number" name="weather_temp_low_f" placeholder="74" />
             </div>
           </div>
           <div className="fld">
-            <label>{t("m.dailyLog.new.notes", undefined, "Notes")}</label>
+            <label htmlFor="dl-notes">{t("m.dailyLog.new.notes", undefined, "Notes")}</label>
             <textarea
+              id="dl-notes"
               name="notes"
               placeholder={t("m.dailyLog.new.notesPh", undefined, "Headcounts, deliveries, blockers, incidents…")}
             />

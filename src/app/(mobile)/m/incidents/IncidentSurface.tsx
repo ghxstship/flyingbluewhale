@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { Fab, KIcon } from "@/components/mobile/kit";
 import { IncidentsList, type IncidentItem } from "./IncidentsList";
+import { INCIDENT_STATE_TONE, INCIDENT_SEVERITY_TONE } from "@/lib/db/incident-states";
 
 /**
  * The ONE shared Incident Report surface (kit 29 §C route policy, directive
@@ -30,20 +31,6 @@ type IncidentRow = {
   reporter_id: string | null;
 };
 
-const SEV_TONE: Record<string, string> = {
-  critical: "danger",
-  major: "danger",
-  minor: "warn",
-  near_miss: "info",
-};
-
-const STATE_TONE: Record<string, string> = {
-  open: "danger",
-  investigating: "warn",
-  resolved: "ok",
-  closed: "neutral",
-};
-
 /** Map a ps-badge tone → a CSS color token for the `.item .bar` accent. */
 const TONE_VAR: Record<string, string> = {
   danger: "var(--p-danger)",
@@ -65,14 +52,15 @@ export async function IncidentSurface({ initialMine = false }: { initialMine?: b
     .select("id, summary, severity, incident_state, occurred_at, location, photos, reporter_id")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
-    .order("occurred_at", { ascending: false });
+    .order("occurred_at", { ascending: false })
+    .limit(200);
   const rows = (data ?? []) as IncidentRow[];
   const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
 
   const items: IncidentItem[] = rows.map((r) => {
-    const sevTone = SEV_TONE[r.severity ?? ""] ?? "neutral";
-    const stTone = STATE_TONE[r.incident_state ?? ""] ?? "neutral";
+    const sevTone = INCIDENT_SEVERITY_TONE[r.severity ?? ""] ?? "neutral";
+    const stTone = INCIDENT_STATE_TONE[(r.incident_state ?? "") as never] ?? "neutral";
     const pc = photoCount(r.photos);
     const when = r.occurred_at
       ? fmt.dateParts(new Date(r.occurred_at), {

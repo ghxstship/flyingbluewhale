@@ -109,6 +109,7 @@ export async function decideApprovalAction(input: {
       title: `${verdict} · ${policyName}`,
       body: parsed.data.notes || "Your request was decided.",
       url: "/m/requests",
+      kind: "approval",
       scope: "mobile",
       orgId: session.orgId,
     });
@@ -186,7 +187,8 @@ export async function escalateApprovalAction(_prev: EscalateState, fd: FormData)
     title: `Escalated · ${policyName}`,
     body: "An approval needs attention.",
     url: "/m/requests",
-    scope: "mobile",
+    kind: "approval",
+      scope: "mobile",
     orgId: session.orgId,
   });
 

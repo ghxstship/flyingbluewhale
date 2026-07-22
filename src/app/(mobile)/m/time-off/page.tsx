@@ -86,20 +86,36 @@ export default async function TimeOffPage() {
         <h2>{t("m.timeOff.requests", undefined, "Your Requests")}</h2>
       </div>
       <TimeOffList
-        items={requests.map((r): TimeOffItem => {
+        items={(() => {
+          // Raw enum values never reach the screen — translated labels with
+          // the raw value as fallback for any state outside the map.
+          const stateLabels: Record<string, string> = {
+            pending: t("m.timeOff.state.pending", undefined, "Pending"),
+            submitted: t("m.timeOff.state.submitted", undefined, "Submitted"),
+            approved: t("m.timeOff.state.approved", undefined, "Approved"),
+            denied: t("m.timeOff.state.denied", undefined, "Denied"),
+            rejected: t("m.timeOff.state.rejected", undefined, "Rejected"),
+            cancelled: t("m.timeOff.state.cancelled", undefined, "Cancelled"),
+          };
+          return requests.map((r): TimeOffItem => {
           const tone = STATE_TONE[r.request_state ?? ""] ?? "neutral";
           const fmt = (d: string | null) =>
             d ? i18nFmt.dateParts(new Date(d + "T00:00:00"), { month: "short", day: "numeric" }) : "—";
           return {
             id: r.id,
-            range: `${fmt(r.starts_on)} to ${fmt(r.ends_on)}`,
+            range: t(
+              "m.timeOff.range",
+              { start: fmt(r.starts_on), end: fmt(r.ends_on) },
+              `${fmt(r.starts_on)} to ${fmt(r.ends_on)}`,
+            ),
             meta: `${r.hours_requested != null ? `${r.hours_requested}h` : ""}${r.reason ? ` · ${r.reason}` : ""}`,
-            state: r.request_state ?? "—",
+            state: r.request_state ? (stateLabels[r.request_state] ?? r.request_state) : "—",
             tone,
             barColor: TONE_VAR[tone] ?? "var(--p-accent)",
             sortAt: r.starts_on ?? "",
           };
-        })}
+          });
+        })()}
       />
 
       <Fab href="/m/time-off/new" label={t("m.timeOff.newCta", undefined, "Request Time Off")} />

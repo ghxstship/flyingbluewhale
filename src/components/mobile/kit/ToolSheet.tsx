@@ -9,28 +9,10 @@ import type { ReactNode } from "react";
 import { KIcon } from "./icon";
 import { SheetHead } from "./SheetHead";
 import { useDismissable } from "./useDismissable";
+import { toneToBadge } from "./badge";
 import { useFormatters } from "@/lib/i18n/LocaleProvider";
 
 export type Toast = (t: { tone: string; title: string; message?: string }) => void;
-
-function badgeClass(tone?: string): string {
-  switch (tone) {
-    case "ok":
-    case "success":
-      return "ps-badge ps-badge--ok";
-    case "warn":
-    case "warning":
-      return "ps-badge ps-badge--warn";
-    case "info":
-      return "ps-badge ps-badge--info";
-    case "danger":
-      return "ps-badge ps-badge--danger";
-    case "accent":
-      return "ps-badge ps-badge--accent";
-    default:
-      return "ps-badge ps-badge--neutral";
-  }
-}
 
 export type Tool = { id: string; label: string; icon: string; tint: string };
 
@@ -197,7 +179,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
       <div style={{ fontWeight: 700, fontSize: 15, margin: "2px 0 12px" }}>{def.name}</div>
       {body}
       <div className="tool-out">{result}<span> {unit}</span></div>
-      {flag && <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}><span className={badgeClass(flag.tone)}>{flag.t}</span></div>}
+      {flag && <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}><span className={toneToBadge(flag.tone)}>{flag.t}</span></div>}
       <div className="hint" style={{ textAlign: "center" }}>{hint}</div>
     </div>
   );

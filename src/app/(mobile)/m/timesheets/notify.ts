@@ -1,5 +1,6 @@
 import "server-only";
 import type { Session } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
 import { log } from "@/lib/log";
@@ -19,9 +20,19 @@ export async function notifyManagersOfSubmission(session: Session, timesheetId: 
   try {
     const managers = await managerUserIds(session.orgId, session.userId);
     if (!managers.length) return;
+    // Name over email: the push lands on managers' lock screens — show the
+    // worker's display name, falling back to the email only when unset.
+    const supabase = await createClient();
+    const { data: user } = await supabase
+      .from("users")
+      .select("name")
+      .eq("id", session.userId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    const who = (user?.name as string | null)?.trim() || session.email;
     await sendPushBulk(managers, {
       title: "Timesheet Submitted",
-      body: `${session.email} submitted a timesheet for approval.`,
+      body: `${who} submitted a timesheet for approval.`,
       url: "/studio/finance/timesheets",
       kind: "timesheet",
       scope: "mobile",

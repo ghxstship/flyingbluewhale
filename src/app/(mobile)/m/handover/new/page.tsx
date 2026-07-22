@@ -24,6 +24,12 @@ export default function NewHandoverPage() {
         setError(res.error);
         return;
       }
+      if (res?.warning) {
+        // Some photo evidence failed to upload. The handover is submitted —
+        // don't navigate away silently as if everything landed.
+        setError(res.warning);
+        return;
+      }
       router.push("/m/handover");
       router.refresh();
     });

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { KIcon, MetricBar, type MetricBarItem } from "@/components/mobile/kit";
 import { hubByKey } from "@/lib/nav";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Hub chrome — kit 34 v3.1/v3.2 (design_handoff_compvss_field: `HUBS` +
@@ -31,6 +32,7 @@ export function HubChrome({
   canManage: boolean;
   metrics?: MetricBarItem[];
 }) {
+  const t = useT();
   const hub = hubByKey(hubKey);
   if (!hub) return null;
   const members = hub.members.filter((m) => !m.pending && (!m.managerOnly || canManage));
@@ -38,7 +40,7 @@ export function HubChrome({
   return (
     <>
       <button type="button" className="backbtn" onClick={openNav}>
-        <KIcon name="ChevronLeft" size={17} /> More
+        <KIcon name="ChevronLeft" size={17} /> {t("m.more.title", undefined, "More")}
       </button>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {hub.label}
@@ -48,7 +50,7 @@ export function HubChrome({
         members.length > 1 && (
           <div className="viewseg" style={{ marginBottom: 14 }}>
             {members.map((m) => (
-              <Link key={m.key} href={m.href} className={active === m.key ? "on" : ""}>
+              <Link key={m.key} href={m.href} className={active === m.key ? "on" : ""} aria-current={active === m.key ? "page" : undefined}>
                 <KIcon name={m.icon} size={14} /> {m.label}
               </Link>
             ))}

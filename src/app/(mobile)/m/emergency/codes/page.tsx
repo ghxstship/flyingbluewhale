@@ -1,7 +1,7 @@
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 import { Crumbs, KIcon } from "@/components/mobile/kit";
-import { EMERGENCY_CODES, chipBg, chipFg } from "../data";
+import { getEmergencyCodes, chipBg, chipFg } from "../data";
 
 export const dynamic = "force-dynamic";
 
@@ -34,8 +34,8 @@ export default async function EmergencyCodesPage() {
         {t("m.emergency.codesHint", undefined, "Tap a code for the department, team and individual plan.")}
       </div>
 
-      {EMERGENCY_CODES.map((e) => (
-        <details className="item" key={e.code} id={`code-${e.code.toLowerCase()}`} style={{ display: "block" }}>
+      {getEmergencyCodes(t).map((e) => (
+        <details className="item" key={e.key} id={`code-${e.key}`} style={{ display: "block" }}>
           <summary
             style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", listStyle: "none" }}
           >

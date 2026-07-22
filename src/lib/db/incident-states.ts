@@ -88,4 +88,25 @@ export const INCIDENT_STATE_LABEL: Record<IncidentState, string> = {
   closed: "Closed",
 };
 
+/**
+ * Canonical badge tones (SSOT). The list and the detail carried private copies
+ * that DISAGREED — the same incident painted resolved=ok/closed=neutral on the
+ * list and resolved=info/closed=ok on the detail. One vocabulary, matching the
+ * sign-off model: `resolved` reads as in-flight (info — it awaits the manager
+ * close), `closed` as settled (ok).
+ */
+export const INCIDENT_STATE_TONE: Record<IncidentState, string> = {
+  open: "danger",
+  investigating: "warn",
+  resolved: "info",
+  closed: "ok",
+};
+
+export const INCIDENT_SEVERITY_TONE: Record<string, string> = {
+  critical: "danger",
+  major: "danger",
+  minor: "warn",
+  near_miss: "neutral",
+};
+
 export type IncidentTransitionResult = { ok: true } | { ok: false; error: string };

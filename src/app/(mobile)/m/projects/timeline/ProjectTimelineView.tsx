@@ -2,6 +2,7 @@
 
 import { HubChrome } from "@/components/mobile/HubChrome";
 import { Block, ListRow, MeterRow, MetricGrid } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { ProjectMilestone } from "@/lib/mobile/project-xpms";
 
 /**
@@ -24,6 +25,7 @@ export function ProjectTimelineView({
   xpmsPhase: string | null;
   canManage: boolean;
 }) {
+  const t = useT();
   const byPhase = (p: string) => milestones.filter((m) => m.phase === p);
   const done = milestones.filter((m) => m.status === "Done").length;
   const atRisk = milestones.filter((m) => m.status === "At Risk").length;
@@ -34,10 +36,10 @@ export function ProjectTimelineView({
 
       <MetricGrid
         cells={[
-          { k: "Project", v: projectName ?? "—" },
-          { k: "XPMS Gate", v: xpmsPhase ?? "—" },
-          { k: "Milestones Done", v: `${done}/${milestones.length}` },
-          { k: "At Risk", v: atRisk, color: atRisk ? "var(--p-danger)" : undefined },
+          { k: t("m.projects.tl.project", undefined, "Project"), v: projectName ?? "—" },
+          { k: t("m.projects.tl.gate", undefined, "XPMS Gate"), v: xpmsPhase ?? "—" },
+          { k: t("m.projects.tl.done", undefined, "Milestones Done"), v: `${done}/${milestones.length}` },
+          { k: t("m.projects.tl.atRisk", undefined, "At Risk"), v: atRisk, color: atRisk ? "var(--p-danger)" : undefined },
         ]}
       />
 
@@ -48,7 +50,15 @@ export function ProjectTimelineView({
         const pct = total ? Math.round((completed / total) * 100) : 0;
         const tone = ms.some((m) => m.status === "At Risk") ? "danger" : pct === 100 ? "success" : pct > 0 ? "accent" : "text-3";
         return (
-          <Block key={phase} title={phase} meta={total ? `${completed}/${total} done` : "No milestones"}>
+          <Block
+            key={phase}
+            title={phase}
+            meta={
+              total
+                ? t("m.projects.tl.phaseDone", { completed, total }, `${completed}/${total} done`)
+                : t("m.projects.tl.phaseEmpty", undefined, "No milestones")
+            }
+          >
             <MeterRow label={phase} pct={pct} tone={tone} />
             {ms.map((m) => (
               <ListRow

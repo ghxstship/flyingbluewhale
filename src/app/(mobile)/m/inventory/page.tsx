@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
@@ -6,18 +6,8 @@ import { InventoryView, type AssetUnit, type InventoryItem } from "./InventoryVi
 
 export const dynamic = "force-dynamic";
 
-// `assets.state` (ual_state) → display label + ItemUnits tone.
-const ASSET_STATE_LABEL: Record<string, string> = {
-  acquired: "Acquired",
-  available: "Available",
-  reserved: "Reserved",
-  in_transit: "In Transit",
-  in_use: "In Use",
-  returned: "Returned",
-  in_maintenance: "Maintenance",
-  retired: "Retired",
-  lost: "Lost",
-};
+// `assets.state` (ual_state) → ItemUnits tone. Display labels are built
+// per-request inside the page so they route through t().
 const ASSET_STATE_TONE: Record<string, AssetUnit["tone"]> = {
   available: "ok",
   acquired: "ok",
@@ -43,6 +33,19 @@ export default async function InventoryPage() {
   const session = await requireSession();
   const supabase = await createClient();
   const { t } = await getRequestT();
+
+  // `assets.state` (ual_state) → display label.
+  const ASSET_STATE_LABEL: Record<string, string> = {
+    acquired: t("m.inventory.state.acquired", undefined, "Acquired"),
+    available: t("m.inventory.state.available", undefined, "Available"),
+    reserved: t("m.inventory.state.reserved", undefined, "Reserved"),
+    in_transit: t("m.inventory.state.inTransit", undefined, "In Transit"),
+    in_use: t("m.inventory.state.inUse", undefined, "In Use"),
+    returned: t("m.inventory.state.returned", undefined, "Returned"),
+    in_maintenance: t("m.inventory.state.inMaintenance", undefined, "Maintenance"),
+    retired: t("m.inventory.state.retired", undefined, "Retired"),
+    lost: t("m.inventory.state.lost", undefined, "Lost"),
+  };
 
   const [{ data }, { data: assetRows }] = await Promise.all([
     supabase
@@ -108,6 +111,7 @@ export default async function InventoryPage() {
     <div className="screen screen-anim">
       <InventoryView
         items={items}
+        canManage={isManagerPlus(session)}
         labels={{
           eyebrow: t("m.inventory.eyebrow", undefined, "On-Hand Catalog"),
           title: t("m.inventory.title", undefined, "Inventory"),

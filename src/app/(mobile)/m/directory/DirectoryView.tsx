@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { NormalizedList, RecordDetail, SwipeRow, type FieldDef } from "@/components/mobile/kit";
 import { fmtPosition } from "@/lib/mobile/fmt-position";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type RosterPerson = {
   id: string;
@@ -52,17 +53,23 @@ type Labels = {
  *  contact intents (Message route + tel:/mailto: swipe actions). Positions
  *  always pass through fmtPosition() before rendering. */
 export function DirectoryView({ people, labels }: { people: RosterPerson[]; labels: Labels }) {
+  const t = useT();
   const router = useRouter();
   const [detail, setDetail] = useState<RosterPerson | null>(null);
   const allTeams = [...new Set(people.map((p) => p.team))];
   const allRoles = [...new Set(people.map((p) => fmtPosition(p.role)))];
   const allStatuses = [...new Set(people.map((p) => p.status))];
 
+  const colName = t("m.directory.col.name", undefined, "Name");
+  const colPosition = t("m.directory.col.position", undefined, "Position");
+  const colTeam = t("m.directory.col.team", undefined, "Team");
+  const colStatus = t("m.directory.col.status", undefined, "Status");
+
   const FIELDS: FieldDef<RosterPerson>[] = [
-    { id: "name", label: "Name", type: "text", get: (p) => p.name },
-    { id: "role", label: "Position", type: "select", options: allRoles, get: (p) => fmtPosition(p.role) },
-    { id: "team", label: "Team", type: "select", options: allTeams, get: (p) => p.team },
-    { id: "status", label: "Status", type: "select", options: allStatuses, get: (p) => p.status },
+    { id: "name", label: colName, type: "text", get: (p) => p.name },
+    { id: "role", label: colPosition, type: "select", options: allRoles, get: (p) => fmtPosition(p.role) },
+    { id: "team", label: colTeam, type: "select", options: allTeams, get: (p) => p.team },
+    { id: "status", label: colStatus, type: "select", options: allStatuses, get: (p) => p.status },
   ];
 
   const row = (p: RosterPerson) => (
@@ -123,7 +130,7 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
         statusField="status"
         statusOrder={allStatuses}
         pill={{ get: (p) => p.team, order: allTeams }}
-        empty={{ cols: ["Name", "Position", "Status"], title: labels.emptyTitle, hint: labels.emptyBody }}
+        empty={{ cols: [colName, colPosition, colStatus], title: labels.emptyTitle, hint: labels.emptyBody }}
       />
       {detail && (
         <RecordDetail
@@ -131,11 +138,13 @@ export function DirectoryView({ people, labels }: { people: RosterPerson[]; labe
           icon="User"
           status={{ tone: tone(detail.status), label: detail.status }}
           fields={[
-            { k: "Position", v: fmtPosition(detail.role) },
-            { k: "Team", v: detail.team },
-            ...(detail.phone ? [{ k: "Phone", v: detail.phone }] : []),
-            ...(detail.email ? [{ k: "Email", v: detail.email }] : []),
-            ...(detail.certs.length ? [{ k: "Certs", v: detail.certs.join(", "), full: true }] : []),
+            { k: colPosition, v: fmtPosition(detail.role) },
+            { k: colTeam, v: detail.team },
+            ...(detail.phone ? [{ k: t("m.directory.detail.phone", undefined, "Phone"), v: detail.phone }] : []),
+            ...(detail.email ? [{ k: t("m.directory.detail.email", undefined, "Email"), v: detail.email }] : []),
+            ...(detail.certs.length
+              ? [{ k: t("m.directory.detail.certs", undefined, "Certs"), v: detail.certs.join(", "), full: true }]
+              : []),
           ]}
           actions={[
             { label: labels.message, icon: "MessageSquare", on: () => { setDetail(null); router.push("/m/inbox"); } },

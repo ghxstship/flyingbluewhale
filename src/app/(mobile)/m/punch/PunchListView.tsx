@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { NormalizedList, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, type FieldDef, toneToBadge } from "@/components/mobile/kit";
 import { PhotoStrip, type StripPhoto } from "@/components/media/PhotoStrip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -23,18 +23,21 @@ export type PunchItem = {
   photos: StripPhoto[];
 };
 
+/** Tones keyed by the RAW state/priority — the display label is locale-dependent. */
 const STATE_TONE: Record<string, string> = {
-  Open: "info",
-  "In Progress": "warning",
-  "In Review": "warning",
-  Closed: "success",
-  Void: "text-3",
+  open: "info",
+  in_progress: "warning",
+  ready_for_review: "warning",
+  complete: "success",
+  void: "text-3",
 };
-const PRIORITY_TONE: Record<string, string> = { Low: "text-3", Normal: "text-3", High: "warning", Urgent: "danger" };
-const STATE_ORDER = ["Open", "In Progress", "In Review", "Closed", "Void"];
+const PRIORITY_TONE: Record<string, string> = { low: "text-3", normal: "text-3", high: "warning", urgent: "danger" };
+const RAW_STATE_ORDER = ["open", "in_progress", "ready_for_review", "complete", "void"];
+const RAW_PRIORITY_ORDER = ["urgent", "high", "normal", "low"];
 
 function Badge({ tone, children }: { tone: string; children: React.ReactNode }) {
-  return <span className={`ps-badge ps-badge--${tone === "warning" ? "warn" : tone === "text-3" ? "neutral" : tone === "success" ? "ok" : tone}`}>{children}</span>;
+  // Tone → class mapping is the kit's toneToBadge SSOT (was a per-surface ternary).
+  return <span className={toneToBadge(tone)}>{children}</span>;
 }
 
 export function PunchListView({ items }: { items: PunchItem[] }) {
@@ -57,11 +60,18 @@ export function PunchListView({ items }: { items: PunchItem[] }) {
   const stateOf = (x: PunchItem) => stateLabel[x.item_state] ?? x.item_state;
   const prioOf = (x: PunchItem) => priorityLabel[x.priority] ?? x.priority;
 
+  // Board columns + tones keyed by the TRANSLATED label the field emits —
+  // keying them by the English label broke both in any other locale.
+  const STATE_ORDER = RAW_STATE_ORDER.map((s) => stateLabel[s] ?? s);
+  const boardTone: Record<string, string> = Object.fromEntries(
+    RAW_STATE_ORDER.map((s) => [stateLabel[s] ?? s, STATE_TONE[s] ?? "text-3"]),
+  );
+
   const fields: FieldDef<PunchItem>[] = [
     { id: "title", label: t("m.punchList.col.item", undefined, "Item"), type: "text", get: (x) => x.title },
     { id: "code", label: t("m.punchList.col.code", undefined, "Code"), type: "text", get: (x) => x.code },
     { id: "item_state", label: t("m.punchList.col.status", undefined, "Status"), type: "select", options: STATE_ORDER, get: stateOf },
-    { id: "priority", label: t("m.punchList.col.priority", undefined, "Priority"), type: "select", options: ["Urgent", "High", "Normal", "Low"], get: prioOf },
+    { id: "priority", label: t("m.punchList.col.priority", undefined, "Priority"), type: "select", options: RAW_PRIORITY_ORDER.map((p) => priorityLabel[p] ?? p), get: prioOf },
     { id: "project", label: t("m.punchList.col.project", undefined, "Project"), type: "select", get: (x) => x.projectName ?? "" },
     { id: "assignee", label: t("m.punchList.col.assignee", undefined, "Assignee"), type: "text", get: (x) => x.assigneeName ?? "" },
   ];
@@ -93,8 +103,8 @@ export function PunchListView({ items }: { items: PunchItem[] }) {
           </div>
         </div>
         <div style={{ textAlign: "right", flex: "none", display: "grid", gap: 4, justifyItems: "end" }}>
-          <Badge tone={STATE_TONE[stateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
-          {(x.priority === "high" || x.priority === "urgent") && <Badge tone={PRIORITY_TONE[prioOf(x)] ?? "neutral"}>{prioOf(x)}</Badge>}
+          <Badge tone={STATE_TONE[x.item_state] ?? "neutral"}>{stateOf(x)}</Badge>
+          {(x.priority === "high" || x.priority === "urgent") && <Badge tone={PRIORITY_TONE[x.priority] ?? "neutral"}>{prioOf(x)}</Badge>}
         </div>
       </div>
       {!compact && <PhotoStrip photos={x.photos} label={x.title} />}
@@ -113,9 +123,17 @@ export function PunchListView({ items }: { items: PunchItem[] }) {
       views={["list", "table", "board"]}
       statusField="item_state"
       statusOrder={STATE_ORDER}
-      boardTone={STATE_TONE}
+      boardTone={boardTone}
       pill={{ get: (x) => x.projectName ?? "—" }}
-      empty={{ cols: ["Item", "Status", "Priority"], title: t("m.punchList.empty.title", undefined, "Nothing On The List"), hint: t("m.punchList.empty.body", undefined, "Inspection items land here as they are raised.") }}
+      empty={{
+        cols: [
+          t("m.punchList.col.item", undefined, "Item"),
+          t("m.punchList.col.status", undefined, "Status"),
+          t("m.punchList.col.priority", undefined, "Priority"),
+        ],
+        title: t("m.punchList.empty.title", undefined, "Nothing On The List"),
+        hint: t("m.punchList.empty.body", undefined, "Inspection items land here as they are raised."),
+      }}
     />
   );
 }

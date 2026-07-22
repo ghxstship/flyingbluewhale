@@ -78,19 +78,22 @@ export default async function TemplatesPage() {
       use_count: number;
       updated_at: string;
     }>
-  ).map((r) => ({
-    id: r.id,
-    name: r.name,
-    category: r.category,
-    categoryLabel: CATEGORY_LABEL[r.category] ?? r.category,
-    icon: CATEGORY_ICON[r.category] ?? "LayoutTemplate",
-    scope: r.project_id ? ("project" as const) : ("org" as const),
-    projectName: r.project_id ? (projectName.get(r.project_id) ?? null) : null,
-    summary: r.summary,
-    uses: r.use_count,
-    updated: fmt.date(r.updated_at),
-    updatedAt: r.updated_at,
-  }));
+  ).map((r) => {
+    const catFallback = CATEGORY_LABEL[r.category];
+    return {
+      id: r.id,
+      name: r.name,
+      category: r.category,
+      categoryLabel: catFallback ? t(`m.templates.cat.${r.category}`, undefined, catFallback) : r.category,
+      icon: CATEGORY_ICON[r.category] ?? "LayoutTemplate",
+      scope: r.project_id ? ("project" as const) : ("org" as const),
+      projectName: r.project_id ? (projectName.get(r.project_id) ?? null) : null,
+      summary: r.summary,
+      uses: r.use_count,
+      updated: fmt.date(r.updated_at),
+      updatedAt: r.updated_at,
+    };
+  });
 
   return <TemplatesList items={items} canManage={isManagerPlus(session)} />;
 }

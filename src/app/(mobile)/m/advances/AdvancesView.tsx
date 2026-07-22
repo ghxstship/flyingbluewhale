@@ -6,6 +6,7 @@ import { KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/catalog-kinds";
+import { KIND_ICON, STATE_TONE, fulfillmentStateLabels, prettyState } from "./_shared";
 
 export type AdvanceRow = {
   id: string;
@@ -17,39 +18,9 @@ export type AdvanceRow = {
 };
 
 // Kind labels read from the client-safe catalog-kinds SSOT (never re-declared —
-// a local copy drifted here before). The icon/tone maps stay local (presentation).
+// a local copy drifted here before). The icon/tone maps live in ./_shared
+// (also consumed by the detail page).
 const kindLabel = (k: string): string => CATALOG_KIND_LABEL_SINGULAR[k as CatalogKind] ?? k;
-
-const KIND_ICON: Record<string, string> = {
-  ticket: "Ticket",
-  credential: "BadgeCheck",
-  catering: "Utensils",
-  radio: "RadioTower",
-  tool: "Wrench",
-  equipment: "Package",
-  uniform: "Shirt",
-  travel: "Plane",
-  lodging: "BedDouble",
-  vehicle: "Car",
-  labor: "Users",
-};
-
-const STATE_TONE: Record<string, string> = {
-  briefed: "neutral",
-  draft: "neutral",
-  submitted: "info",
-  in_review: "info",
-  revision_requested: "warn",
-  approved: "ok",
-  rejected: "danger",
-  delivered: "ok",
-  issued: "ok",
-  transferred: "info",
-  redeemed: "ok",
-  expired: "neutral",
-  voided: "danger",
-  returned: "neutral",
-};
 
 function toneVar(tone: string | undefined): string {
   switch (tone) {
@@ -64,13 +35,6 @@ function toneVar(tone: string | undefined): string {
     default:
       return "var(--p-border)";
   }
-}
-
-function stateLabel(s: string): string {
-  return s
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
 }
 
 /** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
@@ -93,21 +57,24 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
     };
   }, []);
 
+  const stateLabels = useMemo(() => fulfillmentStateLabels(t), [t]);
+  const stateLabel = (s: string) => stateLabels[s] ?? prettyState(s);
+
   const kindLabels = useMemo(() => [...new Set(rows.map((r) => kindLabel(r.catalogKind)))], [rows]);
   const stateInfo = useMemo(() => {
     const states = [...new Set(rows.map((r) => r.fulfillmentState))];
-    const order = states.map(stateLabel);
+    const order = states.map((s) => stateLabels[s] ?? prettyState(s));
     const tones: Record<string, string> = {};
-    for (const s of states) tones[stateLabel(s)] = STATE_TONE[s] ?? "neutral";
+    for (const s of states) tones[stateLabels[s] ?? prettyState(s)] = STATE_TONE[s] ?? "neutral";
     return { order, tones };
-  }, [rows]);
+  }, [rows, stateLabels]);
 
   const FIELDS: FieldDef<AdvanceRow>[] = [
     { id: "title", label: t("m.advances.sort.title", undefined, "Name"), type: "text", get: (r) => r.title ?? kindLabel(r.catalogKind) },
     { id: "kind", label: t("m.advances.group.kind", undefined, "Type"), type: "select", options: kindLabels, get: (r) => kindLabel(r.catalogKind) },
-    { id: "state", label: "Status", type: "select", options: stateInfo.order, get: (r) => stateLabel(r.fulfillmentState) },
+    { id: "state", label: t("m.advances.col.status", undefined, "Status"), type: "select", options: stateInfo.order, get: (r) => stateLabel(r.fulfillmentState) },
     { id: "deadline", label: t("m.advances.sort.deadline", undefined, "Due"), type: "text", get: (r) => r.deadline ?? "" },
-    { id: "project", label: "Project", type: "text", get: (r) => r.project ?? "" },
+    { id: "project", label: t("m.advances.col.project", undefined, "Project"), type: "text", get: (r) => r.project ?? "" },
   ];
 
   const row = (r: AdvanceRow) => (
@@ -166,7 +133,11 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
       boardTone={stateInfo.tones}
       pill={{ get: (r) => kindLabel(r.catalogKind), order: kindLabels }}
       empty={{
-        cols: ["Name", "Type", "Status"],
+        cols: [
+          t("m.advances.sort.title", undefined, "Name"),
+          t("m.advances.group.kind", undefined, "Type"),
+          t("m.advances.col.status", undefined, "Status"),
+        ],
         title: t("m.advances.empty.title", undefined, "No Advances"),
         hint: t("m.advances.empty.body", undefined, "Gear, credentials and services assigned to you appear here."),
       }}

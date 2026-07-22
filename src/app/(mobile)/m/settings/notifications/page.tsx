@@ -63,9 +63,13 @@ export default async function MobileNotificationsPage() {
       const anyOff = r.kinds.some((k) => stored[k]?.[ch] === false);
       cells[ch] = anyStored ? !anyOff : ch === "push";
     }
-    initial[r.label] = cells;
+    initial[r.id] = cells;
   }
-  const rowLabels = NOTIF_ROWS.map((r) => r.label);
+  // Stable id on the wire, translated label for display only.
+  const categories = NOTIF_ROWS.map((r) => ({
+    id: r.id,
+    label: t(`m.settings.notif.row.${r.id}`, undefined, r.label),
+  }));
 
   type NotifRow = {
     id: string;
@@ -94,7 +98,7 @@ export default async function MobileNotificationsPage() {
         {t("m.settings.notifications.title", undefined, "Notification Preferences")}
       </h1>
 
-      <NotifMatrix categories={rowLabels} channels={CHANNELS} initial={initial} labels={labels} />
+      <NotifMatrix categories={categories} channels={CHANNELS} initial={initial} labels={labels} />
 
       <div className="sech">
         <h2>{t("m.notifications.recentHeading", undefined, "Recent")}</h2>

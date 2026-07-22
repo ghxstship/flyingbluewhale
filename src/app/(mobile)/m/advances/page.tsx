@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -105,13 +105,15 @@ export default async function MobileAdvancesPage() {
 
   return (
     <div className="screen screen-anim">
-      <HubChrome hubKey="equipment" active="requests" canManage />
+      <HubChrome hubKey="equipment" active="requests" canManage={isManagerPlus(session)} />
       {packetCards.length > 0 && (
         <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
           {packetCards.map((card) => (
             <div key={card.packetId} className="item" style={{ flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span className="t">{projectMap.get(card.projectId) ?? "Project"}</span>
+                <span className="t">
+                  {projectMap.get(card.projectId) ?? t("m.advances.packet.project", undefined, "Project")}
+                </span>
                 <span className="ps-badge ps-badge--ok" style={{ flex: "none" }}>
                   {t("m.advances.packet.live", undefined, "Advance Live")}
                 </span>

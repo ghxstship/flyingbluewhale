@@ -1,4 +1,4 @@
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { Fab } from "@/components/mobile/kit";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
@@ -21,6 +21,9 @@ export default async function CatalogPage() {
     .from("master_catalog_items")
     .select("id, kind, code, name, unit_cost_cents")
     .eq("org_id", session.orgId)
+    // Requestable = active: the advance intake binds only to active SKUs, so
+    // an inactive (e.g. pending special-order) SKU here would be a dead CTA.
+    .eq("active", true)
     .is("deleted_at", null)
     .order("kind", { ascending: true })
     .order("name", { ascending: true })
@@ -43,6 +46,7 @@ export default async function CatalogPage() {
     <div className="screen screen-anim">
       <CatalogView
         items={items}
+        canManage={isManagerPlus(session)}
         labels={{
           back: t("m.catalog.back", undefined, "More"),
           title: t("m.catalog.title", undefined, "Catalog"),
@@ -52,6 +56,9 @@ export default async function CatalogPage() {
           request: t("m.catalog.addToRequest", undefined, "Add To Request"),
           empty: t("m.catalog.empty", undefined, "No items"),
           emptyHint: t("m.catalog.emptyHint", undefined, "Nothing matches."),
+          kind: t("m.catalog.col.kind", undefined, "Kind"),
+          code: t("m.catalog.col.code", undefined, "Code"),
+          unitCost: t("m.catalog.col.unitCost", undefined, "Unit Cost"),
         }}
       />
       {/* Kit FAB: Request Advance (CREATE map — catalog shares Assets' target). */}

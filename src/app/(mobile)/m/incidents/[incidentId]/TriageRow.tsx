@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { KIcon } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { INCIDENT_STATE_LABEL, type IncidentState } from "@/lib/db/incident-states";
 import { moveIncident } from "./actions";
 
@@ -24,6 +25,7 @@ export function TriageRow({
   current: IncidentState;
   allowed: readonly IncidentState[];
 }) {
+  const t = useT();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -47,7 +49,7 @@ export function TriageRow({
   if (allowed.length === 0) {
     return (
       <div className="hint" style={{ marginTop: 8 }}>
-        This incident is closed. Nothing further to do here.
+        {t("m.incident.closedHint", undefined, "This incident is closed. Nothing further to do here.")}
       </div>
     );
   }
@@ -60,7 +62,7 @@ export function TriageRow({
         </div>
       )}
       <div className="wl" style={{ marginTop: 12, marginBottom: 6 }}>
-        Move to
+        {t("m.incident.moveTo", undefined, "Move to")}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {allowed.map((to) => (
@@ -78,7 +80,11 @@ export function TriageRow({
         ))}
       </div>
       <div className="hint" style={{ marginTop: 6 }}>
-        Currently {INCIDENT_STATE_LABEL[current].toLowerCase()}.
+        {t(
+          "m.incident.currently",
+          { state: INCIDENT_STATE_LABEL[current].toLowerCase() },
+          `Currently ${INCIDENT_STATE_LABEL[current].toLowerCase()}.`,
+        )}
       </div>
     </>
   );

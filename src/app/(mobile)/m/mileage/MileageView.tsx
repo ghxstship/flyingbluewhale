@@ -115,7 +115,7 @@ export function MileageView({ items }: { items: MileageItem[] }) {
             {x.origin} → {x.destination}
           </div>
           <div className="s">
-            {x.milesLabel} mi · {x.dateLabel}
+            {t("m.mileage.miShort", { miles: x.milesLabel }, `${x.milesLabel} mi`)} · {x.dateLabel}
           </div>
         </div>
         <span className="ps-badge ps-badge--neutral">{x.valueLabel}</span>

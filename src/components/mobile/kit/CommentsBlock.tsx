@@ -140,6 +140,7 @@ export function CommentsBlock({ comments = [], people = [], onComment }: Comment
             if (e.key === "Enter") post();
           }}
           placeholder="Add a comment…"
+          aria-label="Add a comment"
           style={{
             flex: 1,
             border: "1px solid var(--p-border)",

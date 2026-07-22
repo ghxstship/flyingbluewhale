@@ -1,4 +1,5 @@
 import { requireSession } from "@/lib/auth";
+import { getRequestT } from "@/lib/i18n/request";
 import { listMyAssignments, CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
 import { BatchCheckIn, type BatchAsset } from "./BatchCheckIn";
 
@@ -10,18 +11,24 @@ export const dynamic = "force-dynamic";
  */
 export default async function BatchCheckInPage() {
   const session = await requireSession();
+  const { t } = await getRequestT();
 
   const mine = await listMyAssignments(session.orgId, session.userId);
   const returnable = mine.filter((a) =>
     ["issued", "transferred", "delivered"].includes(a.fulfillment_state),
   );
 
+  const stateLabel: Record<string, string> = {
+    issued: t("m.batch.state.issued", undefined, "Issued"),
+    transferred: t("m.batch.state.transferred", undefined, "Transferred"),
+    delivered: t("m.batch.state.delivered", undefined, "Delivered"),
+  };
   const assets: BatchAsset[] = returnable.map((a) => {
     const cat = CATALOG_KIND_LABEL_SINGULAR[a.catalog_kind as CatalogKind] ?? a.catalog_kind;
     return {
       id: a.id,
       name: a.title ? `${cat} · ${a.title}` : cat,
-      sub: `${a.fulfillment_state}`,
+      sub: stateLabel[a.fulfillment_state] ?? a.fulfillment_state,
     };
   });
 

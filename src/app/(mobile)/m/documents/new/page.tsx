@@ -23,13 +23,14 @@ import { uploadPersonalDoc, type State } from "@/components/workforce/docs-actio
  * `capture` is honoured by the OS picker, so "take a photo of it" works
  * without any custom camera code.
  */
-const DOC_KINDS: { value: string; label: string }[] = [
-  { value: "id", label: "ID" },
-  { value: "license", label: "License Or Certification" },
-  { value: "tax", label: "Tax Form" },
-  { value: "contract", label: "Contract" },
-  { value: "medical", label: "Medical" },
-  { value: "other", label: "Other" },
+/** value → English fallback; display labels resolve through t() per kind. */
+const DOC_KINDS: { value: string; fallback: string }[] = [
+  { value: "id", fallback: "ID" },
+  { value: "license", fallback: "License Or Certification" },
+  { value: "tax", fallback: "Tax Form" },
+  { value: "contract", fallback: "Contract" },
+  { value: "medical", fallback: "Medical" },
+  { value: "other", fallback: "Other" },
 ];
 
 export default function NewDocPage() {
@@ -40,7 +41,7 @@ export default function NewDocPage() {
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.documents.new.eyebrow", undefined, "Documents")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        Upload Document
+        {t("m.documents.new.title", undefined, "Upload Document")}
       </h1>
 
       {state?.error && (
@@ -58,7 +59,7 @@ export default function NewDocPage() {
 
         <div className="fld">
           <label className="lbl" htmlFor="label">
-            Label
+            {t("m.documents.new.label", undefined, "Label")}
           </label>
           <input
             id="label"
@@ -66,7 +67,7 @@ export default function NewDocPage() {
             className="ps-input"
             required
             maxLength={200}
-            placeholder="e.g. Forklift ticket"
+            placeholder={t("m.documents.new.labelPh", undefined, "e.g. Forklift ticket")}
             defaultValue={state?.values?.label ?? ""}
           />
           {state?.fieldErrors?.label && <div className="fld-err">{state.fieldErrors.label}</div>}
@@ -74,12 +75,12 @@ export default function NewDocPage() {
 
         <div className="fld">
           <label className="lbl" htmlFor="doc_kind">
-            Type
+            {t("m.documents.new.type", undefined, "Type")}
           </label>
           <select id="doc_kind" name="doc_kind" className="ps-input" defaultValue={state?.values?.doc_kind ?? "other"}>
             {DOC_KINDS.map((k) => (
               <option key={k.value} value={k.value}>
-                {k.label}
+                {t(`m.documents.kind.${k.value}`, undefined, k.fallback)}
               </option>
             ))}
           </select>
@@ -88,7 +89,7 @@ export default function NewDocPage() {
 
         <div className="fld">
           <label className="lbl" htmlFor="file">
-            File
+            {t("m.documents.new.file", undefined, "File")}
           </label>
           {/* No `capture` attribute: this accepts a camera shot OR a file
               from the device, and letting the OS picker decide is what makes
@@ -104,13 +105,17 @@ export default function NewDocPage() {
             style={{ paddingTop: 11, paddingBottom: 11 }}
           />
           <div className="s" style={{ marginTop: 6 }}>
-            Photo or PDF, up to 20 MB. Only you and your managers can see it.
+            {t(
+              "m.documents.new.fileHint",
+              undefined,
+              "Photo or PDF, up to 20 MB. Only you and your managers can see it.",
+            )}
           </div>
         </div>
 
         <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
           <Link href="/m/documents" className="ps-btn ps-btn--tertiary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }}>
-            Cancel
+            {t("common.cancel", undefined, "Cancel")}
           </Link>
           <button
             type="submit"
@@ -118,7 +123,10 @@ export default function NewDocPage() {
             style={{ flex: 2, justifyContent: "center" }}
             disabled={pending}
           >
-            <KIcon name="Upload" size={15} /> {pending ? "Uploading…" : "Upload"}
+            <KIcon name="Upload" size={15} />{" "}
+            {pending
+              ? t("m.documents.new.uploading", undefined, "Uploading…")
+              : t("m.documents.new.upload", undefined, "Upload")}
           </button>
         </div>
       </form>

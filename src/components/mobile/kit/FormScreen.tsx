@@ -34,17 +34,35 @@ export const TIER_COLOR: Record<string, [string, string]> = {
 // one exists. `img: boolean` was the whole bug.
 type AvatarValue = { file: File; zoom: number; pos: number } | null;
 
+/** Visually-hidden but still focusable — `display:none` removed the file
+ *  inputs from the tab order entirely, so keyboard/AT users could never open
+ *  the picker. The paired `<label htmlFor>` remains the pointer affordance. */
+const SR_ONLY: CSSProperties = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clip: "rect(0 0 0 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+};
+
 // Type-to-search combobox: filter a list of options as you type.
 function ComboField({
   value,
   setValue,
   options,
   placeholder,
+  inputId,
 }: {
   value: unknown;
   setValue: (v: unknown) => void;
   options: string[];
   placeholder?: string;
+  /** Optional id so a field `<label htmlFor>` can associate with the input. */
+  inputId?: string;
 }) {
   const initial = typeof value === "string" ? value : "";
   const [q, setQ] = useState(initial);
@@ -57,6 +75,7 @@ function ComboField({
     <div style={{ position: "relative" }}>
       <div className="inwrap" style={{ position: "relative", display: "flex", alignItems: "center" }}>
         <input
+          id={inputId}
           value={q}
           placeholder={placeholder || "Type to search…"}
           onChange={(e) => {
@@ -65,6 +84,12 @@ function ComboField({
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape" && open) {
+              e.stopPropagation();
+              setOpen(false);
+            }
+          }}
           style={{ width: "100%" }}
         />
         <KIcon name={open ? "ChevronUp" : "Search"} size={16} style={{ position: "absolute", right: 13, color: "var(--p-text-3)", pointerEvents: "none" }} />
@@ -128,6 +153,7 @@ function PickerField({
     <>
       <button
         type="button"
+        id={`fs-${f.id}`}
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         style={{
@@ -218,7 +244,22 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
     return () => URL.revokeObjectURL(url);
   }, [pending]);
 
-  const currentUrl = pendingUrl ?? (av?.file ? URL.createObjectURL(av.file) : null);
+  // The saved file's preview URL is created once per file in an effect (and
+  // revoked on change/unmount) — creating it inline in render leaked a new
+  // object URL every render.
+  const savedFile = av?.file ?? null;
+  const [savedUrl, setSavedUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!savedFile) {
+      setSavedUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(savedFile);
+    setSavedUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [savedFile]);
+
+  const currentUrl = pendingUrl ?? savedUrl;
 
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -274,7 +315,7 @@ function AvatarField({ value, setValue }: { value: unknown; setValue: (v: unknow
   }
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-      <input id="avatar-pick" type="file" accept="image/*" onChange={onPick} style={{ display: "none" }} />
+      <input id="avatar-pick" type="file" accept="image/*" onChange={onPick} style={SR_ONLY} />
       <label className="avatar-up" htmlFor="avatar-pick" aria-label={has ? "Change photo" : "Upload photo"} style={{ cursor: "pointer" }}>
         {has && currentUrl ? (
           <span
@@ -411,7 +452,7 @@ function FileField({
         accept={isPhoto ? "image/*" : "image/*,application/pdf"}
         multiple
         onChange={onPick}
-        style={{ display: "none" }}
+        style={SR_ONLY}
       />
       <label htmlFor={inputId} className="dropz" style={{ width: "100%", cursor: "pointer", display: "flex" }}>
         <KIcon name={isPhoto ? "Camera" : "Paperclip"} size={22} />
@@ -602,10 +643,24 @@ function Field({
    *  to carry per-file geotags, which have nowhere to live on a File. */
   setSibling?: (suffix: string, v: unknown) => void;
 }) {
+  // One id per field so the wrapper <label htmlFor> genuinely associates with
+  // its control (input/textarea/select/combo/picker trigger). File controls
+  // keep their own established ids.
+  const cid = `fs-${f.id}`;
   const common = {
+    id: cid,
+    "aria-required": f.required || undefined,
     value: (value as string | number | undefined) ?? "",
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setValue(e.target.value),
   };
+  const labelFor =
+    f.type === "avatar"
+      ? "avatar-pick"
+      : f.type === "photo" || f.type === "file"
+        ? `ff-${f.id}`
+        : f.type === "sign" || f.type === "seg" || f.type === "switch"
+          ? undefined
+          : cid;
   let control: React.ReactNode;
   if (f.type === "avatar") control = <AvatarField value={value} setValue={setValue} />;
   else if (f.type === "sign") control = <SignField f={f} value={value} setValue={setValue} />;
@@ -620,16 +675,16 @@ function Field({
           {(f.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
         </select>
       );
-  else if (f.type === "combo") control = <ComboField value={value} setValue={setValue} options={f.options || []} placeholder={f.placeholder} />;
+  else if (f.type === "combo") control = <ComboField value={value} setValue={setValue} options={f.options || []} placeholder={f.placeholder} inputId={cid} />;
   else if (f.type === "seg")
     control = (
-      <div className="seg2">
+      <div className="seg2" role="group" aria-label={f.label}>
         {(f.options || []).map((o) => {
           const tc = TIER_COLOR[o];
           const on = value === o;
           const style: CSSProperties | undefined = on && tc ? { background: tc[0], borderColor: tc[0], color: tc[1] } : undefined;
           return (
-            <button key={o} type="button" className={on ? "on" : ""} style={style} onClick={() => setValue(o)}>{o}</button>
+            <button key={o} type="button" className={on ? "on" : ""} aria-pressed={on} style={style} onClick={() => setValue(o)}>{o}</button>
           );
         })}
       </div>
@@ -663,7 +718,7 @@ function Field({
   }
   return (
     <div className="fld" style={f.half ? { width: "100%" } : undefined}>
-      <label>{f.label}{f.required && <span className="req"> *</span>}</label>
+      <label htmlFor={labelFor}>{f.label}{f.required && <span className="req" aria-hidden="true"> *</span>}</label>
       {control}
       {f.hint && <div className="hint">{f.hint}</div>}
     </div>
@@ -756,7 +811,7 @@ export function FormScreen({
       })()}
       <div className="form-actions">
         <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={onClose}>Cancel</button>
-        <button type="button" className="ps-btn ps-btn--cta ps-btn--lg" style={{ flex: 2, justifyContent: "center", opacity: missing.length ? 0.5 : 1 }} onClick={submit}>{def.submit}</button>
+        <button type="button" className="ps-btn ps-btn--cta ps-btn--lg" aria-disabled={missing.length > 0 || undefined} style={{ flex: 2, justifyContent: "center", opacity: missing.length ? 0.5 : 1 }} onClick={submit}>{def.submit}</button>
       </div>
     </div>
   );

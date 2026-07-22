@@ -29,7 +29,7 @@ export default function NewMileagePage() {
     <div className="screen screen-anim">
       <div className="scr-eye">{t("m.mileage.new.eyebrow", undefined, "Mileage")}</div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
-        Log A Drive
+        {t("m.mileage.new.title", undefined, "Log A Drive")}
       </h1>
 
       {state?.error && (
@@ -40,26 +40,26 @@ export default function NewMileagePage() {
 
       <form action={formAction}>
         <div className="fld">
-          <label htmlFor="origin">From</label>
-          <input id="origin" name="origin" required maxLength={160} placeholder="e.g. Yard" />
+          <label htmlFor="origin">{t("m.mileage.from", undefined, "From")}</label>
+          <input id="origin" name="origin" required maxLength={160} placeholder={t("m.mileage.new.fromHint", undefined, "e.g. Yard")} />
           {state?.fieldErrors?.origin && <div className="hint">{state.fieldErrors.origin}</div>}
         </div>
 
         <div className="fld">
-          <label htmlFor="destination">To</label>
-          <input id="destination" name="destination" required maxLength={160} placeholder="e.g. Hialeah venue" />
+          <label htmlFor="destination">{t("m.mileage.to", undefined, "To")}</label>
+          <input id="destination" name="destination" required maxLength={160} placeholder={t("m.mileage.new.toHint", undefined, "e.g. Hialeah venue")} />
           {state?.fieldErrors?.destination && <div className="hint">{state.fieldErrors.destination}</div>}
         </div>
 
         <div className="frow">
           <div className="fld" style={{ width: "100%" }}>
-            <label htmlFor="miles">Miles</label>
+            <label htmlFor="miles">{t("m.mileage.col.miles", undefined, "Miles")}</label>
             {/* decimal keypad — one hand, engine running. */}
             <input id="miles" name="miles" inputMode="decimal" required placeholder="12.4" />
             {state?.fieldErrors?.miles && <div className="hint">{state.fieldErrors.miles}</div>}
           </div>
           <div className="fld" style={{ width: "100%" }}>
-            <label htmlFor="logged_on">Date</label>
+            <label htmlFor="logged_on">{t("m.mileage.col.date", undefined, "Date")}</label>
             <input
               id="logged_on"
               name="logged_on"
@@ -72,8 +72,8 @@ export default function NewMileagePage() {
         </div>
 
         <div className="fld">
-          <label htmlFor="notes">Notes</label>
-          <textarea id="notes" name="notes" placeholder="Purpose of the trip…" />
+          <label htmlFor="notes">{t("m.mileage.notes", undefined, "Notes")}</label>
+          <textarea id="notes" name="notes" placeholder={t("m.mileage.new.notesHint", undefined, "Purpose of the trip…")} />
         </div>
 
         <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
@@ -82,7 +82,7 @@ export default function NewMileagePage() {
             className="ps-btn ps-btn--tertiary ps-btn--lg"
             style={{ flex: 1, justifyContent: "center" }}
           >
-            Cancel
+            {t("m.mileage.new.cancel", undefined, "Cancel")}
           </Link>
           <button
             type="submit"
@@ -90,7 +90,10 @@ export default function NewMileagePage() {
             style={{ flex: 2, justifyContent: "center" }}
             disabled={pending}
           >
-            <KIcon name="Truck" size={15} /> {pending ? "Saving…" : "Log Drive"}
+            <KIcon name="Truck" size={15} />{" "}
+            {pending
+              ? t("m.mileage.new.saving", undefined, "Saving…")
+              : t("m.mileage.new.submit", undefined, "Log Drive")}
           </button>
         </div>
       </form>

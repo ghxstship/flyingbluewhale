@@ -103,17 +103,31 @@ export function ExpensesView({
     });
   };
 
-  const states = [...new Set(rows.map((r) => cap(r.state)))];
+  // Translated state labels — raw enum values must not reach the screen.
+  const STATE_LABEL: Record<string, string> = {
+    pending: t("m.expenses.state.pending", undefined, "Pending"),
+    approved: t("m.expenses.state.approved", undefined, "Approved"),
+    rejected: t("m.expenses.state.rejected", undefined, "Rejected"),
+    reimbursed: t("m.expenses.state.reimbursed", undefined, "Reimbursed"),
+    cancelled: t("m.expenses.state.cancelled", undefined, "Cancelled"),
+  };
+  const stateLabel = (s: string) => STATE_LABEL[s] ?? cap(s);
+  const hasReceiptLabel = t("m.expenses.hasReceipt", undefined, "Has Receipt");
+  const noReceiptLabel = t("m.expenses.noReceiptPill", undefined, "No Receipt");
+  const billableLabel = t("m.expenses.billableShort", undefined, "Billable");
+  const nonBillableLabel = t("m.expenses.nonBillable", undefined, "Non-Billable");
+
+  const states = [...new Set(rows.map((r) => stateLabel(r.state)))];
   const boardTone: Record<string, string> = {};
-  for (const r of rows) boardTone[cap(r.state)] = STATE_TONE[r.state] ?? "neutral";
+  for (const r of rows) boardTone[stateLabel(r.state)] = STATE_TONE[r.state] ?? "neutral";
 
   const FIELDS: FieldDef<ExpenseRow>[] = [
-    { id: "description", label: "Expense", type: "text", get: (r) => r.description },
-    { id: "state", label: "Status", type: "select", options: states, get: (r) => cap(r.state) },
-    { id: "receipt", label: "Receipt", type: "select", options: ["Has Receipt", "No Receipt"], get: (r) => (r.hasReceipt ? "Has Receipt" : "No Receipt") },
-    { id: "billable", label: "Billable", type: "select", options: ["Billable", "Non-Billable"], get: (r) => (r.billable ? "Billable" : "Non-Billable") },
-    { id: "amount", label: "Amount", type: "text", get: (r) => r.amount },
-    { id: "spent", label: "Spent", type: "text", get: (r) => r.spent },
+    { id: "description", label: t("m.expenses.col.expense", undefined, "Expense"), type: "text", get: (r) => r.description },
+    { id: "state", label: t("m.expenses.col.status", undefined, "Status"), type: "select", options: states, get: (r) => stateLabel(r.state) },
+    { id: "receipt", label: t("m.expenses.receipt", undefined, "Receipt"), type: "select", options: [hasReceiptLabel, noReceiptLabel], get: (r) => (r.hasReceipt ? hasReceiptLabel : noReceiptLabel) },
+    { id: "billable", label: billableLabel, type: "select", options: [billableLabel, nonBillableLabel], get: (r) => (r.billable ? billableLabel : nonBillableLabel) },
+    { id: "amount", label: t("m.expenses.amount", undefined, "Amount"), type: "text", get: (r) => r.amount },
+    { id: "spent", label: t("m.expenses.spent", undefined, "Spent"), type: "text", get: (r) => r.spent },
   ];
 
   const row = (r: ExpenseRow) => (
@@ -139,7 +153,7 @@ export function ExpensesView({
           <div className="t" style={{ fontVariantNumeric: "tabular-nums" }}>
             {r.amount}
           </div>
-          <span className={`ps-badge ps-badge--${STATE_TONE[r.state] ?? "neutral"}`}>{cap(r.state)}</span>
+          <span className={`ps-badge ps-badge--${STATE_TONE[r.state] ?? "neutral"}`}>{stateLabel(r.state)}</span>
         </div>
       </div>
     </div>
@@ -186,9 +200,13 @@ export function ExpensesView({
         statusField="state"
         statusOrder={states}
         boardTone={boardTone}
-        pill={{ get: (r) => (r.hasReceipt ? "Has Receipt" : "No Receipt"), order: ["Has Receipt", "No Receipt"] }}
+        pill={{ get: (r) => (r.hasReceipt ? hasReceiptLabel : noReceiptLabel), order: [hasReceiptLabel, noReceiptLabel] }}
         empty={{
-          cols: ["Expense", "Amount", "Status"],
+          cols: [
+            t("m.expenses.col.expense", undefined, "Expense"),
+            t("m.expenses.amount", undefined, "Amount"),
+            t("m.expenses.col.status", undefined, "Status"),
+          ],
           title: t("m.expenses.empty.title", undefined, "No Expenses Yet"),
           hint: t(
             "m.expenses.empty.body",
@@ -202,7 +220,7 @@ export function ExpensesView({
         <RecordDetail
           title={detail.description}
           icon="Receipt"
-          status={{ tone: STATE_TONE[detail.state] ?? "neutral", label: cap(detail.state) }}
+          status={{ tone: STATE_TONE[detail.state] ?? "neutral", label: stateLabel(detail.state) }}
           fields={[
             { k: t("m.expenses.amount", undefined, "Amount"), v: detail.amount },
             { k: t("m.expenses.spent", undefined, "Spent"), v: detail.spent },

@@ -164,35 +164,43 @@ export async function updateListing(_prev: State, fd: FormData): Promise<State> 
 
 const IdInput = z.object({ id: z.string().uuid() });
 
-/** Mark a listing sold. RLS gates the update to the seller (or org owner/admin). */
+/** Mark a listing sold. RLS gates the update to the seller (or org owner/admin);
+ *  the read-back turns a silent RLS no-op into an honest error. */
 export async function markSold(_prev: State, fd: FormData): Promise<State> {
   await requireSession();
   const parsed = IdInput.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid request." };
 
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("marketplace_listings")
     .update({ listing_state: "sold" })
-    .eq("id", parsed.data.id);
+    .eq("id", parsed.data.id)
+    .is("deleted_at", null)
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "You can only update your own listing." };
 
   revalidatePath("/m/market");
   return null;
 }
 
-/** Withdraw a listing. RLS gates the update to the seller (or org owner/admin). */
+/** Withdraw a listing. RLS gates the update to the seller (or org owner/admin);
+ *  the read-back turns a silent RLS no-op into an honest error. */
 export async function withdrawListing(_prev: State, fd: FormData): Promise<State> {
   await requireSession();
   const parsed = IdInput.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid request." };
 
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("marketplace_listings")
     .update({ listing_state: "withdrawn" })
-    .eq("id", parsed.data.id);
+    .eq("id", parsed.data.id)
+    .is("deleted_at", null)
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "You can only update your own listing." };
 
   revalidatePath("/m/market");
   return null;

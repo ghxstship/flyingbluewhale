@@ -142,6 +142,16 @@ export default async function FinancePage() {
   };
   const uncoded = (uncodedRows ?? []) as UncodedRow[];
 
+  // Translated labels for the requisition states this list can carry (same
+  // keys the /m/requisitions view uses); toTitle stays the fallback.
+  const REQ_STATE_LABEL: Record<string, string> = {
+    draft: t("m.reqs.state.draft", undefined, "Draft"),
+    submitted: t("m.reqs.state.submitted", undefined, "Submitted"),
+    approved: t("m.reqs.state.approved", undefined, "Approved"),
+    rejected: t("m.reqs.state.rejected", undefined, "Rejected"),
+    ordered: t("m.reqs.state.ordered", undefined, "Ordered"),
+  };
+
   const na = "—";
 
   return (
@@ -302,7 +312,7 @@ export default async function FinancePage() {
               </div>
             </div>
             <span className={`ps-badge ps-badge--${PO_TONE[p.requisitionState] ?? "neutral"}`}>
-              {toTitle(p.requisitionState)}
+              {REQ_STATE_LABEL[p.requisitionState] ?? toTitle(p.requisitionState)}
             </span>
           </Link>
         ))

@@ -206,6 +206,13 @@ export default async function MobileSchedulePage() {
           noneBody: t("m.schedule.noShiftBody", undefined, "Nothing rostered for you today. Check upcoming below."),
           clockIn: t("m.schedule.clockIn", undefined, "Clock In"),
           upcoming: t("m.schedule.upcomingShifts", undefined, "Your Next 7 Days"),
+          attendance: {
+            scheduled: t("m.schedule.att.scheduled", undefined, "Scheduled"),
+            checked_in: t("m.schedule.att.checkedIn", undefined, "Checked In"),
+            on_break: t("m.schedule.att.onBreak", undefined, "On Break"),
+            checked_out: t("m.schedule.att.checkedOut", undefined, "Checked Out"),
+            no_show: t("m.schedule.att.noShow", undefined, "No Show"),
+          },
           swap: {
             cta: t("m.schedule.swap.cta", undefined, "Can't Make It"),
             reason: t("m.schedule.swap.reason", undefined, "Why?"),

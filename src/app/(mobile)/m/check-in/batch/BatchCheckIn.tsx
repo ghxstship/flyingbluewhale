@@ -28,7 +28,7 @@ export function BatchCheckIn({ assets }: { assets: BatchAsset[] }) {
         <KIcon name="ChevronLeft" size={17} /> {t("m.batch.back", undefined, "Check-In")}
       </Link>
       <div className="scr-eye">
-        {sel.size} {t("m.batch.of", undefined, "of")} {assets.length} {t("m.batch.selected", undefined, "selected")}
+        {t("m.batch.count", { n: sel.size, total: assets.length }, `${sel.size} of ${assets.length} selected`)}
       </div>
       <h1 className="scr-h" style={{ marginBottom: 12 }}>{t("m.batch.title", undefined, "Batch Check-In")}</h1>
       <div className="hint" style={{ marginBottom: 10 }}>

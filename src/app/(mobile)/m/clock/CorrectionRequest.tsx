@@ -48,6 +48,10 @@ export function CorrectionRequest({
   pendingKind?: string | null;
 }) {
   const t = useT();
+  // Translated overlay on the lib's English label SSOT (CORRECTION_KIND_LABEL
+  // stays the canonical vocabulary; this is display-tier only).
+  const kindLabel = (k: keyof typeof CORRECTION_KIND_LABEL) =>
+    t(`m.clock.correctionKind.${k}`, undefined, CORRECTION_KIND_LABEL[k]);
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [kind, setKind] = useState<CorrectionKind>("edit_out");
@@ -131,7 +135,7 @@ export function CorrectionRequest({
       >
         {KINDS.map((k) => (
           <option key={k} value={k}>
-            {CORRECTION_KIND_LABEL[k]}
+            {kindLabel(k)}
           </option>
         ))}
       </select>

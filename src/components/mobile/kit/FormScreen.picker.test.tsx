@@ -47,9 +47,12 @@ describe("FormScreen select → picker drawer threshold (kit 32 v2.8)", () => {
     const onSubmit = vi.fn();
     render(<FormScreen def={def} onClose={vi.fn()} onSubmit={onSubmit} />);
 
-    // Trigger carries dialog semantics and the empty-state placeholder.
-    const trigger = screen.getByRole("button", { name: /Choose…/ });
+    // Trigger carries dialog semantics; its accessible name is the field
+    // label (the wrapper <label htmlFor> now genuinely associates), while the
+    // empty-state placeholder stays the visible text.
+    const trigger = screen.getByRole("button", { name: "Cost Code" });
     expect(trigger.getAttribute("aria-haspopup")).toBe("dialog");
+    expect(trigger.textContent).toContain("Choose…");
 
     // Open the drawer: SheetHead title + option count + search box.
     fireEvent.click(trigger);
@@ -65,7 +68,7 @@ describe("FormScreen select → picker drawer threshold (kit 32 v2.8)", () => {
     // Picking closes the drawer and lands the value on the trigger…
     fireEvent.click(screen.getByText("9000 · Technology"));
     expect(screen.queryByRole("dialog", { name: "Cost Code" })).toBeNull();
-    expect(screen.getByRole("button", { name: /9000 · Technology/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Cost Code" }).textContent).toContain("9000 · Technology");
 
     // …and the submitted values carry it exactly like a native select would.
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));

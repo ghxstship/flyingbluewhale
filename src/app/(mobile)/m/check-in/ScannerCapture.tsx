@@ -286,8 +286,9 @@ export function ScannerCapture({ costCodes, canImportInvoice, initialKind, expen
           </div>
 
           <div className="fld">
-            <label className="wl">{t("m.scanner.vendor", undefined, "Vendor")}</label>
+            <label className="wl" htmlFor="scan-vendor">{t("m.scanner.vendor", undefined, "Vendor")}</label>
             <input
+              id="scan-vendor"
               className="ps-input"
               value={draft.vendor}
               onChange={(e) => setDraft((d) => (d ? { ...d, vendor: e.target.value } : d))}
@@ -297,8 +298,9 @@ export function ScannerCapture({ costCodes, canImportInvoice, initialKind, expen
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <div className="fld">
-              <label className="wl">{t("m.scanner.amount", undefined, "Amount (USD)")}</label>
+              <label className="wl" htmlFor="scan-amount">{t("m.scanner.amount", undefined, "Amount (USD)")}</label>
               <input
+                id="scan-amount"
                 className="ps-input"
                 inputMode="decimal"
                 value={draft.amount}
@@ -308,8 +310,9 @@ export function ScannerCapture({ costCodes, canImportInvoice, initialKind, expen
               />
             </div>
             <div className="fld">
-              <label className="wl">{t("m.scanner.date", undefined, "Date")}</label>
+              <label className="wl" htmlFor="scan-date">{t("m.scanner.date", undefined, "Date")}</label>
               <input
+                id="scan-date"
                 className="ps-input"
                 type="date"
                 value={draft.date}
@@ -321,10 +324,11 @@ export function ScannerCapture({ costCodes, canImportInvoice, initialKind, expen
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <span className="wl" style={{ flex: "none" }}>
+            <label className="wl" htmlFor="scan-cost-code" style={{ flex: "none" }}>
               {t("m.scanner.costCode", undefined, "Cost Code")}
-            </span>
+            </label>
             <select
+              id="scan-cost-code"
               className="ps-input"
               style={{ flex: 1 }}
               value={draft.code}

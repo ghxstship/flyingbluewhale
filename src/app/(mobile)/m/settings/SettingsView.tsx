@@ -241,10 +241,11 @@ function Fld({
   placeholder?: string;
   required?: boolean;
 }) {
+  const id = `sv-${name}`;
   return (
     <div className="fld">
-      <label>{label}</label>
-      <input name={name} type={type} defaultValue={defaultValue} placeholder={placeholder} required={required} />
+      <label htmlFor={id}>{label}</label>
+      <input id={id} name={name} type={type} defaultValue={defaultValue} placeholder={placeholder} required={required} />
       {error && (
         <div className="s" style={{ color: "var(--p-danger)" }}>
           {error}
@@ -295,8 +296,8 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
         </div>
         <Fld label={labels.tagline} name="tagline" defaultValue={v("tagline")} />
         <div className="fld">
-          <label>{labels.bio}</label>
-          <textarea name="bio" rows={3} defaultValue={v("bio")} />
+          <label htmlFor="sv-bio">{labels.bio}</label>
+          <textarea id="sv-bio" name="bio" rows={3} defaultValue={v("bio")} />
         </div>
 
         {/* ── Contact ── */}
@@ -304,8 +305,8 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
           <h2>{labels.contact}</h2>
         </div>
         <div className="fld">
-          <label>{labels.email}</label>
-          <input value={data.email} disabled readOnly />
+          <label htmlFor="sv-email">{labels.email}</label>
+          <input id="sv-email" value={data.email} disabled readOnly />
         </div>
         <Fld label={labels.phone} name="phone" type="tel" defaultValue={v("phone")} placeholder="+1 (305) 555-0199" />
         <div style={half}>
@@ -385,15 +386,15 @@ export function SettingsView({ data, labels }: { data: ProfileData; labels: Labe
           <h2>{labels.credentials}</h2>
         </div>
         <div className="fld">
-          <label>{labels.certs}</label>
-          <input name="certifications" defaultValue={v("certifications")} placeholder="SIA · OSHA-30 · First Aid" />
+          <label htmlFor="sv-certifications">{labels.certs}</label>
+          <input id="sv-certifications" name="certifications" defaultValue={v("certifications")} placeholder="SIA · OSHA-30 · First Aid" />
           <div className="s" style={{ color: "var(--p-text-3)" }}>
             {labels.setHint}
           </div>
         </div>
         <div className="fld">
-          <label>{labels.skills}</label>
-          <input name="skills" defaultValue={v("skills")} placeholder="Crowd mgmt · radios · forklift" />
+          <label htmlFor="sv-skills">{labels.skills}</label>
+          <input id="sv-skills" name="skills" defaultValue={v("skills")} placeholder="Crowd mgmt · radios · forklift" />
           <div className="s" style={{ color: "var(--p-text-3)" }}>
             {labels.setHint}
           </div>

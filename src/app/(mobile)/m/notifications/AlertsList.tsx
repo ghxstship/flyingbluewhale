@@ -184,11 +184,13 @@ export function AlertsList({ items }: { items: AlertItem[] }) {
   const colNotification = t("m.alerts.col.notification", undefined, "Notification");
   const colType = t("m.alerts.col.type", undefined, "Type");
   const colTime = t("m.alerts.col.time", undefined, "Time");
+  const readLabel = t("m.alerts.read", undefined, "Read");
+  const unreadLabel = t("m.alerts.unread", undefined, "Unread");
 
   const FIELDS: FieldDef<AlertItem>[] = [
     { id: "title", label: colNotification, type: "text", get: (a) => a.title },
     { id: "type", label: colType, type: "select", options: typeList, get: (a) => a.typeLabel },
-    { id: "read", label: t("m.alerts.filter.unread", undefined, "Read State"), type: "select", options: ["Read", "Unread"], get: (a) => (isRead(a) ? "Read" : "Unread") },
+    { id: "read", label: t("m.alerts.filter.unread", undefined, "Read State"), type: "select", options: [readLabel, unreadLabel], get: (a) => (isRead(a) ? readLabel : unreadLabel) },
     // Sort on the real timestamp; display the humanized string (kit 32 D1).
     { id: "when", label: colTime, type: "text", get: (a) => a.sortAt, cell: (a) => a.when },
   ];

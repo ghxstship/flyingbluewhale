@@ -22,6 +22,9 @@ export type CatalogLabels = {
   request: string;
   empty: string;
   emptyHint: string;
+  kind: string;
+  code: string;
+  unitCost: string;
 };
 
 function money(cents: number | null): string {
@@ -32,14 +35,22 @@ function money(cents: number | null): string {
 /** Kit 34 v3.4 — normalized (NormalizedList: search + View Options/Share drawers
  *  + schema DataView list/table + kind pills). Each row prefills the advance
  *  request form for that catalog item. */
-export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: CatalogLabels }) {
+export function CatalogView({
+  items,
+  labels,
+  canManage = false,
+}: {
+  items: CatalogEntry[];
+  labels: CatalogLabels;
+  canManage?: boolean;
+}) {
   const kinds = [...new Set(items.map((it) => it.kindLabel))];
 
   const FIELDS: FieldDef<CatalogEntry>[] = [
     { id: "name", label: labels.title, type: "text", get: (it) => it.name },
-    { id: "kindLabel", label: "Kind", type: "select", options: kinds, get: (it) => it.kindLabel },
-    { id: "code", label: "Code", type: "text", get: (it) => it.code ?? "" },
-    { id: "cost", label: "Unit Cost", type: "num", get: (it) => it.unitCostCents ?? 0 },
+    { id: "kindLabel", label: labels.kind, type: "select", options: kinds, get: (it) => it.kindLabel },
+    { id: "code", label: labels.code, type: "text", get: (it) => it.code ?? "" },
+    { id: "cost", label: labels.unitCost, type: "num", get: (it) => it.unitCostCents ?? 0 },
   ];
 
   const row = (it: CatalogEntry) => (
@@ -73,7 +84,7 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
 
   return (
     <>
-      <HubChrome hubKey="equipment" active="catalog" canManage />
+      <HubChrome hubKey="equipment" active="catalog" canManage={canManage} />
       <NormalizedList
         k="ct"
         items={items}
@@ -83,7 +94,7 @@ export function CatalogView({ items, labels }: { items: CatalogEntry[]; labels: 
         renderRow={row}
         views={["list", "table"]}
         pill={{ get: (it) => it.kindLabel, order: kinds }}
-        empty={{ cols: [labels.title, "Kind", "Unit Cost"], title: labels.empty, hint: labels.emptyHint }}
+        empty={{ cols: [labels.title, labels.kind, labels.unitCost], title: labels.empty, hint: labels.emptyHint }}
       />
     </>
   );

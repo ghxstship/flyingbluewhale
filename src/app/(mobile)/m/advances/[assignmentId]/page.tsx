@@ -9,40 +9,10 @@ import {
   type CatalogKind,
   type FulfillmentState,
 } from "@/lib/db/assignments";
+import { KIND_ICON, STATE_TONE } from "../_shared";
 import { AdvanceDetail, type AdvanceDetailData } from "./AdvanceDetail";
 
 export const dynamic = "force-dynamic";
-
-const KIND_ICON: Record<string, string> = {
-  ticket: "Ticket",
-  credential: "BadgeCheck",
-  catering: "Utensils",
-  radio: "RadioTower",
-  tool: "Wrench",
-  equipment: "Package",
-  uniform: "Shirt",
-  travel: "Plane",
-  lodging: "BedDouble",
-  vehicle: "Car",
-  labor: "Users",
-};
-
-const STATE_TONE: Record<string, string> = {
-  briefed: "neutral",
-  draft: "neutral",
-  submitted: "info",
-  in_review: "info",
-  revision_requested: "warn",
-  approved: "ok",
-  rejected: "danger",
-  delivered: "ok",
-  issued: "ok",
-  transferred: "info",
-  redeemed: "ok",
-  expired: "neutral",
-  voided: "danger",
-  returned: "neutral",
-};
 
 export default async function AdvanceDetailPage({ params }: { params: Promise<{ assignmentId: string }> }) {
   const { assignmentId } = await params;

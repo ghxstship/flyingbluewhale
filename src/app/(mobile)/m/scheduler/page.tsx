@@ -1,4 +1,4 @@
-import { can, requireSession } from "@/lib/auth";
+import { can, isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -142,6 +142,7 @@ export default async function SchedulerPage() {
       slots={slots}
       pool={pool}
       areaOptions={areas.map((a) => a.label)}
+      canManage={isManagerPlus(session)}
     />
   );
 }

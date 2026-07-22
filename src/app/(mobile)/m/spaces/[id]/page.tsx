@@ -19,7 +19,9 @@ import { SpaceMembership } from "./SpaceMembership";
  */
 export const dynamic = "force-dynamic";
 
-const KIND_LABEL: Record<string, string> = {
+/** English fallbacks — display labels resolve through t() per kind (same
+ *  `m.spaces.kindLabel.*` keys the SpacesView list uses). */
+const KIND_FALLBACK: Record<string, string> = {
   team: "Team",
   trade: "Trade",
   location: "Location",
@@ -49,7 +51,8 @@ export default async function SpaceDetailPage({ params }: { params: Promise<{ id
   const members = (memberRows ?? []) as Array<{ user_id: string }>;
   const joined = members.some((m) => m.user_id === session.userId);
 
-  const kind = KIND_LABEL[(room as { space_kind: string | null }).space_kind ?? ""] ?? "Team";
+  const kindKey = (room as { space_kind: string | null }).space_kind ?? "team";
+  const kind = t(`m.spaces.kindLabel.${kindKey}`, undefined, KIND_FALLBACK[kindKey] ?? "Team");
   const name = (room as { name: string | null }).name ?? t("m.spaces.unnamed", undefined, "Unnamed Space");
   const about = (room as { about: string | null }).about;
 

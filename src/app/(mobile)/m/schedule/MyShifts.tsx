@@ -21,7 +21,8 @@ const ATT_TONE: Record<string, string> = {
   no_show: "danger",
 };
 
-function attLabel(a: string): string {
+/** Fallback prettifier for an attendance value with no translated label. */
+function attFallback(a: string): string {
   return a.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
@@ -50,9 +51,12 @@ export function MyShifts({
     noneBody: string;
     clockIn: string;
     upcoming: string;
+    /** Translated label per `shifts.attendance` value (optional; prettified fallback). */
+    attendance?: Record<string, string>;
     swap: { cta: string; reason: string; placeholder: string; send: string; cancel: string; sent: string };
   };
 }) {
+  const attLabel = (a: string) => labels.attendance?.[a] ?? attFallback(a);
   const today = shifts.filter((s) => s.isToday);
   const upcoming = shifts.filter((s) => !s.isToday);
 

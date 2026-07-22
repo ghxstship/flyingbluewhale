@@ -14,17 +14,33 @@ export const dynamic = "force-dynamic";
  * assignment — honest empty state when the guide has none.
  */
 
-const EXTINGUISHER_TYPES: Array<{ t: string; s: string; tint: string }> = [
-  { t: "ABC Dry Chemical", s: "Most fires — wood, liquids, electrical", tint: "danger" },
-  { t: "CO₂", s: "Electrical & equipment — leaves no residue", tint: "info" },
-  { t: "Class K", s: "Kitchen / catering grease fires", tint: "warning" },
-  { t: "Water Mist", s: "Ordinary combustibles only", tint: "info" },
-];
-
 export default async function EmergencyFirePage() {
   const session = await requireSession();
   const { t } = await getRequestT();
   const ctx = await getEmergencyContext(session);
+
+  const EXTINGUISHER_TYPES: Array<{ t: string; s: string; tint: string }> = [
+    {
+      t: t("m.emergency.ext.abc", undefined, "ABC Dry Chemical"),
+      s: t("m.emergency.ext.abcUse", undefined, "Most fires: wood, liquids, electrical"),
+      tint: "danger",
+    },
+    {
+      t: t("m.emergency.ext.co2", undefined, "CO₂"),
+      s: t("m.emergency.ext.co2Use", undefined, "Electrical & equipment, leaves no residue"),
+      tint: "info",
+    },
+    {
+      t: t("m.emergency.ext.classK", undefined, "Class K"),
+      s: t("m.emergency.ext.classKUse", undefined, "Kitchen / catering grease fires"),
+      tint: "warning",
+    },
+    {
+      t: t("m.emergency.ext.waterMist", undefined, "Water Mist"),
+      s: t("m.emergency.ext.waterMistUse", undefined, "Ordinary combustibles only"),
+      tint: "info",
+    },
+  ];
 
   return (
     <div className="screen screen-anim">

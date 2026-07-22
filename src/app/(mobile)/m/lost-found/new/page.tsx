@@ -27,6 +27,12 @@ export default function LostFoundPage() {
         setError(res.error);
         return;
       }
+      if (res?.warning) {
+        // Some photo evidence failed to upload. The report is filed — don't
+        // navigate away silently as if everything landed.
+        setError(res.warning);
+        return;
+      }
       router.push("/m/lost-found");
       router.refresh();
     });

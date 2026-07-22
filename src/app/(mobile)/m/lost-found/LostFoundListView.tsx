@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { NormalizedList, KIcon, RecordDetail, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, KIcon, RecordDetail, type FieldDef, toneToBadge } from "@/components/mobile/kit";
 import { PhotoStrip, type StripPhoto } from "@/components/media/PhotoStrip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
@@ -30,15 +30,18 @@ export type LostFoundItem = {
   photos: StripPhoto[];
 };
 
-const STATE_TONE: Record<string, string> = { Held: "warning", Claimed: "success" };
-const STATE_ORDER = ["Held", "Claimed"];
+/**
+ * Tone keyed by the RAW condition (held/claimed, derived from incident_state)
+ * — the display label is locale-dependent.
+ */
+const STATE_TONE: Record<string, string> = { held: "warning", claimed: "success" };
+const RAW_STATE_ORDER = ["held", "claimed"];
+/** The raw condition the Held/Claimed label derives from. */
+const rawStateOf = (x: LostFoundItem) => (x.incident_state !== "closed" ? "held" : "claimed");
 
 function Badge({ tone, children }: { tone: string; children: React.ReactNode }) {
-  return (
-    <span className={`ps-badge ps-badge--${tone === "warning" ? "warn" : tone === "success" ? "ok" : tone}`}>
-      {children}
-    </span>
-  );
+  // Tone → class mapping is the kit's toneToBadge SSOT (was a per-surface ternary).
+  return <span className={toneToBadge(tone)}>{children}</span>;
 }
 
 export function LostFoundListView({ items }: { items: LostFoundItem[] }) {
@@ -60,11 +63,20 @@ export function LostFoundListView({ items }: { items: LostFoundItem[] }) {
     });
   };
 
-  const heldLabel = t("m.lostfound.held", undefined, "Held");
-  const claimedLabel = t("m.lostfound.claimed", undefined, "Claimed");
-  const stateOf = (x: LostFoundItem) => (x.incident_state !== "closed" ? heldLabel : claimedLabel);
+  const stateLabel: Record<string, string> = {
+    held: t("m.lostfound.held", undefined, "Held"),
+    claimed: t("m.lostfound.claimed", undefined, "Claimed"),
+  };
+  const stateOf = (x: LostFoundItem) => stateLabel[rawStateOf(x)] ?? rawStateOf(x);
   const labelOf = (x: LostFoundItem) => x.summary ?? t("m.lostfound.item", undefined, "Property Report");
   const isLost = (x: LostFoundItem) => (x.summary ?? "").startsWith("Lost");
+
+  // Board columns + tones keyed by the TRANSLATED label the field emits —
+  // keying them by the English label broke both in any other locale.
+  const STATE_ORDER = RAW_STATE_ORDER.map((s) => stateLabel[s] ?? s);
+  const boardTone: Record<string, string> = Object.fromEntries(
+    RAW_STATE_ORDER.map((s) => [stateLabel[s] ?? s, STATE_TONE[s] ?? "text-3"]),
+  );
 
   const fields: FieldDef<LostFoundItem>[] = [
     { id: "summary", label: t("m.lostfound.col.item", undefined, "Item"), type: "text", get: labelOf },
@@ -117,7 +129,7 @@ export function LostFoundListView({ items }: { items: LostFoundItem[] }) {
             {x.dateLabel ? ` · ${x.dateLabel}` : ""}
           </div>
         </div>
-        <Badge tone={STATE_TONE[stateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
+        <Badge tone={STATE_TONE[rawStateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
       </div>
       {!compact && x.description ? (
         <p className="form-intro" style={{ margin: "8px 0 0" }}>
@@ -138,7 +150,7 @@ export function LostFoundListView({ items }: { items: LostFoundItem[] }) {
         {x.location ?? ""}
         {x.dateLabel ? ` · ${x.dateLabel}` : ""}
       </div>
-      <Badge tone={STATE_TONE[stateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
+      <Badge tone={STATE_TONE[rawStateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
     </div>
   );
 
@@ -156,10 +168,14 @@ export function LostFoundListView({ items }: { items: LostFoundItem[] }) {
         views={["list", "gallery", "board", "table"]}
         statusField="incident_state"
         statusOrder={STATE_ORDER}
-        boardTone={STATE_TONE}
+        boardTone={boardTone}
         pill={{ get: (x) => x.location ?? "—" }}
         empty={{
-          cols: ["Item", "Status", "Location"],
+          cols: [
+            t("m.lostfound.col.item", undefined, "Item"),
+            t("m.lostfound.col.status", undefined, "Status"),
+            t("m.lostfound.col.location", undefined, "Location"),
+          ],
           title: t("m.lostfound.emptyTitle", undefined, "Nothing Logged"),
           hint: t(
             "m.lostfound.emptyBody",
@@ -172,7 +188,7 @@ export function LostFoundListView({ items }: { items: LostFoundItem[] }) {
         <RecordDetail
           title={labelOf(detail)}
           icon="PackageSearch"
-          status={{ tone: STATE_TONE[stateOf(detail)] ?? "neutral", label: stateOf(detail) }}
+          status={{ tone: STATE_TONE[rawStateOf(detail)] ?? "neutral", label: stateOf(detail) }}
           fields={[
             ...(detail.location
               ? [{ k: t("m.lostfound.col.location", undefined, "Location"), v: detail.location }]

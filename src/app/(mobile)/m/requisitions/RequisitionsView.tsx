@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { NormalizedList, KIcon, RecordDetail, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, KIcon, RecordDetail, type FieldDef, toneToBadge } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
 import { toFormData } from "@/lib/mobile/form-data";
@@ -29,25 +29,21 @@ export type RequisitionItem = {
   createdLabel: string;
 };
 
+/** Tone keyed by the RAW state — the display label is locale-dependent. */
 const STATE_TONE: Record<string, string> = {
-  Draft: "text-3",
-  Submitted: "warning",
-  Approved: "success",
-  Rejected: "danger",
-  Ordered: "info",
+  draft: "text-3",
+  submitted: "warning",
+  approved: "success",
+  rejected: "danger",
+  ordered: "info",
 };
-const STATE_ORDER = ["Draft", "Submitted", "Approved", "Rejected", "Ordered"];
+const RAW_STATE_ORDER = ["draft", "submitted", "approved", "rejected", "ordered"];
 /** Raw states the requester may still withdraw (mirrors the server guard). */
 const WITHDRAWABLE = new Set(["draft", "submitted", "rejected"]);
 
 function Badge({ tone, children }: { tone: string; children: React.ReactNode }) {
-  return (
-    <span
-      className={`ps-badge ps-badge--${tone === "warning" ? "warn" : tone === "text-3" ? "neutral" : tone === "success" ? "ok" : tone}`}
-    >
-      {children}
-    </span>
-  );
+  // Tone → class mapping is the kit's toneToBadge SSOT (was a per-surface ternary).
+  return <span className={toneToBadge(tone)}>{children}</span>;
 }
 
 export function RequisitionsView({ items }: { items: RequisitionItem[] }) {
@@ -77,6 +73,13 @@ export function RequisitionsView({ items }: { items: RequisitionItem[] }) {
     ordered: t("m.reqs.state.ordered", undefined, "Ordered"),
   };
   const stateOf = (x: RequisitionItem) => stateLabel[x.requisition_state] ?? x.requisition_state;
+
+  // Board columns + tones keyed by the TRANSLATED label the field emits —
+  // keying them by the English label broke both in any other locale.
+  const STATE_ORDER = RAW_STATE_ORDER.map((s) => stateLabel[s] ?? s);
+  const boardTone: Record<string, string> = Object.fromEntries(
+    RAW_STATE_ORDER.map((s) => [stateLabel[s] ?? s, STATE_TONE[s] ?? "text-3"]),
+  );
 
   const fields: FieldDef<RequisitionItem>[] = [
     { id: "title", label: t("m.reqs.col.title", undefined, "Request"), type: "text", get: (x) => x.title },
@@ -116,7 +119,7 @@ export function RequisitionsView({ items }: { items: RequisitionItem[] }) {
           <div className="t">{x.title}</div>
           <div className="s">{[x.estimatedLabel, x.createdLabel].filter(Boolean).join(" · ")}</div>
         </div>
-        <Badge tone={STATE_TONE[stateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
+        <Badge tone={STATE_TONE[x.requisition_state] ?? "neutral"}>{stateOf(x)}</Badge>
       </div>
       {x.description ? (
         <p className="form-intro" style={{ margin: "8px 0 0" }}>
@@ -139,7 +142,7 @@ export function RequisitionsView({ items }: { items: RequisitionItem[] }) {
         views={["list", "table", "board"]}
         statusField="requisition_state"
         statusOrder={STATE_ORDER}
-        boardTone={STATE_TONE}
+        boardTone={boardTone}
         empty={{
           cols: [
             t("m.reqs.col.title", undefined, "Request"),
@@ -167,7 +170,7 @@ export function RequisitionsView({ items }: { items: RequisitionItem[] }) {
         <RecordDetail
           title={detail.title}
           icon="ShoppingCart"
-          status={{ tone: STATE_TONE[stateOf(detail)] ?? "neutral", label: stateOf(detail) }}
+          status={{ tone: STATE_TONE[detail.requisition_state] ?? "neutral", label: stateOf(detail) }}
           fields={[
             { k: t("m.reqs.col.estimate", undefined, "Estimate"), v: detail.estimatedLabel ?? "—" },
             { k: t("m.reqs.col.raised", undefined, "Raised"), v: detail.createdLabel },

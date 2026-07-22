@@ -242,7 +242,7 @@ export function JobsView({
       {/* Kit FAB: Post Job — perm `approve` in the kit's CREATE map, the
           manager band here. The action re-checks server-side. */}
       {canPost && (
-        <Fab label="Post Job" onClick={() => setPostOpen(true)} />
+        <Fab label={t("m.gigs.postJobFab", undefined, "Post Job")} onClick={() => setPostOpen(true)} />
       )}
       {postOpen && (
         <>

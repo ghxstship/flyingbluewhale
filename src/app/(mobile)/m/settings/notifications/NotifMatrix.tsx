@@ -16,7 +16,8 @@ type Labels = {
 /**
  * The `.notif-matrix` toggle grid (kit settings, app.jsx 3336-3346). Optimistic:
  * flips the cell locally, persists via `toggleNotifPref` (one cell per call),
- * and reverts on error.
+ * and reverts on error. State + wire payload key off the stable row `id`; the
+ * `label` (translated server-side) is display-only.
  */
 export function NotifMatrix({
   categories,
@@ -24,7 +25,7 @@ export function NotifMatrix({
   initial,
   labels,
 }: {
-  categories: readonly string[];
+  categories: readonly { id: string; label: string }[];
   channels: readonly string[];
   initial: MatrixState;
   labels: Labels;
@@ -64,18 +65,18 @@ export function NotifMatrix({
           ))}
         </div>
         {categories.map((cat) => (
-          <div className="nm-row" key={cat}>
-            <span className="nm-cat">{cat}</span>
+          <div className="nm-row" key={cat.id}>
+            <span className="nm-cat">{cat.label}</span>
             {channels.map((ch) => {
-              const on = Boolean(state[cat]?.[ch]);
+              const on = Boolean(state[cat.id]?.[ch]);
               return (
                 <button
                   type="button"
                   key={ch}
                   className="nm-cell"
                   data-on={on ? "1" : undefined}
-                  onClick={() => flip(cat, ch)}
-                  aria-label={`${cat} ${channelLabel(ch)}`}
+                  onClick={() => flip(cat.id, ch)}
+                  aria-label={`${cat.label} ${channelLabel(ch)}`}
                   aria-pressed={on}
                 >
                   {on && <KIcon name="Check" size={13} stroke={3} />}

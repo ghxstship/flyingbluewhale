@@ -162,9 +162,12 @@ export function SwipeRow({ actions = [], onClick, menuTitle, children }: SwipeRo
       <div
         className="swipe-face"
         style={{ transform: `translateX(${tx}px)` }}
+        /* No aria-label here: on role="button" a label REPLACES the content
+           for AT, so every row used to read as the same generic string instead
+           of its own text. The row content is the accessible name; Enter/Space
+           and long-press/ContextMenu stay the non-swipe action paths. */
         role="button"
         tabIndex={0}
-        aria-label={actions.length ? "Row · press to reveal actions" : "Open"}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}

@@ -68,15 +68,22 @@ export async function respondConnection(_prev: State, fd: FormData): Promise<Sta
   return null;
 }
 
-/** Remove a connection (either party). RLS gates the delete to the two parties. */
+/** Remove a connection (either party). RLS gates the delete to the two parties;
+ *  the explicit party pin + read-back turn a silent RLS no-op into an honest error. */
 export async function removeConnection(_prev: State, fd: FormData): Promise<State> {
-  await requireSession();
+  const session = await requireSession();
   const parsed = IdInput.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid request." };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("connections").delete().eq("id", parsed.data.id);
+  const { data, error } = await supabase
+    .from("connections")
+    .delete()
+    .eq("id", parsed.data.id)
+    .or(`requester_user_id.eq.${session.userId},addressee_user_id.eq.${session.userId}`)
+    .select("id");
   if (error) return { error: error.message };
+  if (!data || data.length === 0) return { error: "You can only remove your own connections." };
 
   revalidatePath("/m/connections");
   return null;

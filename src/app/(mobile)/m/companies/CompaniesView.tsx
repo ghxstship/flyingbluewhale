@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { NormalizedList, RecordDetail, SwipeRow, type FieldDef } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type Vendor = {
   id: string;
@@ -40,14 +41,19 @@ function siteHref(site: string): string {
  *  + schema DataView list/gallery/table + trade pills). Keeps the kit 32 A6
  *  real contact intents (tel:/mailto:/https swipe actions). */
 export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: Labels }) {
+  const t = useT();
   const [detail, setDetail] = useState<Vendor | null>(null);
   const allTrades = [...new Set(vendors.map((v) => v.trade))];
 
+  const colVendor = t("m.companies.col.vendor", undefined, "Vendor");
+  const colTrade = t("m.companies.col.trade", undefined, "Trade");
+  const colScope = t("m.companies.col.scope", undefined, "Scope Of Work");
+
   const FIELDS: FieldDef<Vendor>[] = [
-    { id: "name", label: "Vendor", type: "text", get: (x) => x.name },
-    { id: "trade", label: "Trade", type: "select", options: allTrades, get: (x) => x.trade },
-    { id: "scope", label: "Scope Of Work", type: "text", get: (x) => x.scope },
-    { id: "rating", label: "Rating", type: "num", get: (x) => x.ratingAvg ?? 0 },
+    { id: "name", label: colVendor, type: "text", get: (x) => x.name },
+    { id: "trade", label: colTrade, type: "select", options: allTrades, get: (x) => x.trade },
+    { id: "scope", label: colScope, type: "text", get: (x) => x.scope },
+    { id: "rating", label: t("m.companies.col.rating", undefined, "Rating"), type: "num", get: (x) => x.ratingAvg ?? 0 },
   ];
 
   const row = (v: Vendor) => (
@@ -106,19 +112,21 @@ export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: 
         gallery={gallery}
         views={["list", "gallery", "table"]}
         pill={{ get: (v) => v.trade, order: allTrades }}
-        empty={{ cols: ["Vendor", "Trade", "Scope Of Work"], title: labels.emptyTitle, hint: labels.emptyBody }}
+        empty={{ cols: [colVendor, colTrade, colScope], title: labels.emptyTitle, hint: labels.emptyBody }}
       />
       {detail && (
         <RecordDetail
           title={detail.name}
           icon="Building2"
           fields={[
-            { k: "Trade", v: detail.trades.length ? detail.trades.join(", ") : detail.trade },
-            ...(detail.scope ? [{ k: "Scope", v: detail.scope, full: true }] : []),
-            ...(detail.ratingAvg != null ? [{ k: "Rating", v: `${detail.ratingAvg.toFixed(1)} (${detail.ratingCount})` }] : []),
-            ...(detail.phone ? [{ k: "Phone", v: detail.phone }] : []),
-            ...(detail.email ? [{ k: "Email", v: detail.email }] : []),
-            ...(detail.site ? [{ k: "Website", v: detail.site }] : []),
+            { k: colTrade, v: detail.trades.length ? detail.trades.join(", ") : detail.trade },
+            ...(detail.scope ? [{ k: t("m.companies.detail.scope", undefined, "Scope"), v: detail.scope, full: true }] : []),
+            ...(detail.ratingAvg != null
+              ? [{ k: t("m.companies.col.rating", undefined, "Rating"), v: `${detail.ratingAvg.toFixed(1)} (${detail.ratingCount})` }]
+              : []),
+            ...(detail.phone ? [{ k: t("m.companies.detail.phone", undefined, "Phone"), v: detail.phone }] : []),
+            ...(detail.email ? [{ k: t("m.companies.detail.email", undefined, "Email"), v: detail.email }] : []),
+            ...(detail.site ? [{ k: labels.website, v: detail.site }] : []),
           ]}
           actions={[
             ...(detail.phone ? [{ label: labels.call, icon: "Phone", on: () => { window.location.href = `tel:${detail.phone}`; } }] : []),

@@ -2,6 +2,7 @@
 
 import { KIcon } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Share the holder's COMPVSS profile via the native share sheet (Web Share API
@@ -9,6 +10,7 @@ import { useToast } from "@/lib/hooks/useToast";
  * to the clipboard. Client-only — `navigator.share`/`clipboard` are browser APIs.
  */
 export function ShareProfileButton({ url, name, label }: { url: string; name: string; label: string }) {
+  const t = useT();
   const toast = useToast();
 
   const share = async () => {
@@ -20,7 +22,7 @@ export function ShareProfileButton({ url, name, label }: { url: string; name: st
       }
       if (typeof navigator !== "undefined" && navigator.clipboard) {
         await navigator.clipboard.writeText(url);
-        toast.success("Link copied", { description: url });
+        toast.success(t("m.profile.linkCopied", undefined, "Link copied"), { description: url });
         return;
       }
     } catch {

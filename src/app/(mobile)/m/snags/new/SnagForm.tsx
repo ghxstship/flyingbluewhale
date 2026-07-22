@@ -89,11 +89,11 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
             )}
           </div>
           <div className="fld">
-            <label>
+            <label htmlFor="snag-project">
               {t("m.snags.new.project", undefined, "Project")}
               <span className="req"> *</span>
             </label>
-            <select name="projectId" defaultValue={projects[0]?.id} required>
+            <select id="snag-project" name="projectId" defaultValue={projects[0]?.id} required>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -102,11 +102,12 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
             </select>
           </div>
           <div className="fld">
-            <label>
+            <label htmlFor="snag-area">
               {t("m.snags.new.area", undefined, "Where Is It")}
               <span className="req"> *</span>
             </label>
             <input
+              id="snag-area"
               type="text"
               name="area"
               required
@@ -120,11 +121,12 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
             )}
           </div>
           <div className="fld">
-            <label>
+            <label htmlFor="snag-title">
               {t("m.snags.new.what", undefined, "What's Wrong")}
               <span className="req"> *</span>
             </label>
             <input
+              id="snag-title"
               type="text"
               name="title"
               required
@@ -138,8 +140,8 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
             )}
           </div>
           <div className="fld">
-            <label>{t("m.snags.new.severity", undefined, "Severity")}</label>
-            <select name="severity" defaultValue="normal">
+            <label htmlFor="snag-severity">{t("m.snags.new.severity", undefined, "Severity")}</label>
+            <select id="snag-severity" name="severity" defaultValue="normal">
               <option value="low">{t("m.snags.new.severity.low", undefined, "Low")}</option>
               <option value="normal">{t("m.snags.new.severity.normal", undefined, "Normal")}</option>
               <option value="high">{t("m.snags.new.severity.high", undefined, "High")}</option>
@@ -147,8 +149,9 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
             </select>
           </div>
           <div className="fld">
-            <label>{t("m.snags.new.details", undefined, "Details")}</label>
+            <label htmlFor="snag-details">{t("m.snags.new.details", undefined, "Details")}</label>
             <textarea
+              id="snag-details"
               name="details"
               maxLength={4000}
               placeholder={t("m.snags.new.detailsPh", undefined, "Anything the fixer needs to know")}

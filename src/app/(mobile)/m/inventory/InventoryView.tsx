@@ -69,7 +69,16 @@ function qtyTone(qty: number | null): "ok" | "warn" | "neutral" {
   return "ok";
 }
 
-export function InventoryView({ items, labels }: { items: InventoryItem[]; labels: InventoryLabels }) {
+export function InventoryView({
+  items,
+  labels,
+  canManage,
+}: {
+  items: InventoryItem[];
+  labels: InventoryLabels;
+  /** Manager band — gates the hub chrome's managerOnly member links. */
+  canManage: boolean;
+}) {
   const [custody, setCustody] = useState<CustodyTarget | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -185,7 +194,7 @@ export function InventoryView({ items, labels }: { items: InventoryItem[]; label
 
   return (
     <>
-      <HubChrome hubKey="equipment" active="inventory" canManage />
+      <HubChrome hubKey="equipment" active="inventory" canManage={canManage} />
       <NormalizedList
         k="iv"
         items={items}

@@ -203,6 +203,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                   <select
                     value={conj}
                     onChange={(e) => setConj(e.target.value as Conjunction)}
+                    aria-label="And / or"
                     style={{ ...selStyle, padding: "3px 4px", width: 44 }}
                   >
                     <option value="and">And</option>
@@ -217,6 +218,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                   const nops = nf ? FILTER_OPS[opBucket(nf.type)] : FILTER_OPS.text;
                   upd(i, { field: e.target.value, op: nops[0]?.[0] ?? "contains", value: "" });
                 }}
+                aria-label="Filter field"
                 style={{ ...selStyle, flex: 1 }}
               >
                 {fields.map((x) => (
@@ -228,6 +230,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
               <button
                 type="button"
                 onClick={() => del(i)}
+                aria-label="Remove condition"
                 style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}
               >
                 <KIcon name="X" size={14} />
@@ -237,6 +240,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
               <select
                 value={r.op}
                 onChange={(e) => upd(i, { op: e.target.value as FilterOp })}
+                aria-label="Operator"
                 style={{ ...selStyle, flex: "0 0 auto" }}
               >
                 {ops.map(([id, lbl]) => (
@@ -250,6 +254,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                   <select
                     value={r.value}
                     onChange={(e) => upd(i, { value: e.target.value })}
+                    aria-label="Filter value"
                     style={{ ...selStyle, flex: 1 }}
                   >
                     <option value="">Choose…</option>
@@ -264,6 +269,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                     value={r.value}
                     onChange={(e) => upd(i, { value: e.target.value })}
                     placeholder="value"
+                    aria-label="Filter value"
                     type={f.type === "num" ? "number" : "text"}
                     style={{ ...selStyle, flex: 1 }}
                   />
@@ -315,6 +321,7 @@ export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>)
           <select
             value={r.field}
             onChange={(e) => upd(i, { field: e.target.value })}
+            aria-label="Sort field"
             style={{ ...selStyle, flex: 1 }}
           >
             {fields.map((x) => (
@@ -334,6 +341,7 @@ export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>)
           <button
             type="button"
             onClick={() => del(i)}
+            aria-label="Remove sort"
             style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}
           >
             <KIcon name="X" size={14} />
@@ -407,7 +415,7 @@ export function DataTable<T>({ fields, items, onRow, sortable = true }: DataTabl
               const active = headerSort?.field === f.id ? headerSort.dir : null;
               const ariaSort = active === "asc" ? "ascending" : active === "desc" ? "descending" : undefined;
               return (
-                <th key={f.id} className={f.type === "num" ? "num" : ""} aria-sort={ariaSort}>
+                <th key={f.id} scope="col" className={f.type === "num" ? "num" : ""} aria-sort={ariaSort}>
                   {canSort(f) ? (
                     <button
                       type="button"
@@ -439,7 +447,24 @@ export function DataTable<T>({ fields, items, onRow, sortable = true }: DataTabl
         </thead>
         <tbody>
           {rows.map((it, i) => (
-            <tr key={i} onClick={onRow ? () => onRow(it) : undefined}>
+            <tr
+              key={i}
+              onClick={onRow ? () => onRow(it) : undefined}
+              // Keyboard parity with the pointer row-tap. tabIndex without a
+              // role keeps table semantics intact for AT while making the row
+              // focusable; Enter/Space mirror the click.
+              tabIndex={onRow ? 0 : undefined}
+              onKeyDown={
+                onRow
+                  ? (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onRow(it);
+                      }
+                    }
+                  : undefined
+              }
+            >
               {fields.map((f) => {
                 const v: ReactNode = f.cell ? f.cell(it) : (readValue(f, it) as ReactNode);
                 return (

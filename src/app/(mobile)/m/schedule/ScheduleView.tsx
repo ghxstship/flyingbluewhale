@@ -314,7 +314,10 @@ export function ScheduleView({
         style={{ width: "100%", textAlign: "left", cursor: "pointer" }}
         onClick={() => setOpenEvent(e)}
       >
-        <span className="bar" style={{ background: m.c, opacity: e.state === "live" ? 1 : 0.55 }} />
+        {/* `state` is the display label (title-cased, locale-translated later);
+            tone is the stable signal — "ok" is the live mapping. Comparing the
+            label to the raw enum ("live") never matched. */}
+        <span className="bar" style={{ background: m.c, opacity: e.tone === "ok" ? 1 : 0.55 }} />
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 3 }}>
             <span

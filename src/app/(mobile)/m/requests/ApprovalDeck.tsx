@@ -173,7 +173,7 @@ export function ApprovalDeck({ cards }: { cards: DeckCard[] }) {
     { id: "kind", label: t("m.requests.col.type", undefined, "Type"), type: "select", options: kinds, get: (c) => c.kind },
     { id: "requester", label: t("m.requests.group.submitter", undefined, "Submitter"), type: "text", get: (c) => c.requester },
     { id: "age", label: t("m.requests.col.stage", undefined, "Stage"), type: "text", get: (c) => c.age },
-    { id: "amount", label: "Amount", type: "text", get: (c) => c.amount ?? "" },
+    { id: "amount", label: t("m.requests.col.amount", undefined, "Amount"), type: "text", get: (c) => c.amount ?? "" },
   ];
 
   const row = (c: DeckCard) => {

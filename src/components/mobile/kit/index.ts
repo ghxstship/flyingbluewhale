@@ -6,6 +6,8 @@
 export { KIcon } from "./icon";
 export type { KIconProps } from "./icon";
 
+export { toneToBadge } from "./badge";
+
 export { Fab } from "./Fab";
 export type { FabProps } from "./Fab";
 

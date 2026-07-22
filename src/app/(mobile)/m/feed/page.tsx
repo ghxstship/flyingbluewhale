@@ -141,11 +141,12 @@ export default async function MobileFeedPage() {
   const updateLabel = t("m.feed.tag.update", undefined, "Update");
   const announcerLabel = t("m.feed.announcerRole", undefined, "Announcement");
   const memberLabel = t("m.feed.memberRole", undefined, "Crew");
+  const memberNameFallback = t("m.feed.memberName", undefined, "Crew Member");
 
   const posts: FeedPost[] = [
     ...kudosRows.map((k): FeedPost => {
       const u = userMap.get(k.from_user_id);
-      const name = u?.name ?? u?.email ?? "Crew Member";
+      const name = u?.name ?? u?.email ?? memberNameFallback;
       return {
         id: `kudos:${k.id}`,
         who: name,

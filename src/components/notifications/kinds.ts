@@ -31,6 +31,7 @@ export const NOTIF_KINDS = [
   "time_off",
   "course",
   "incident",
+  "approval",
   "timesheet",
   "payroll",
   "time_correction",
@@ -71,6 +72,7 @@ export const NOTIF_KIND_FALLBACKS: NotifKindRow[] = [
   { kind: "time_off", label: "Time Off", description: "Time-off request decisions" },
   { kind: "course", label: "Courses", description: "Course assignments + pass results" },
   { kind: "incident", label: "Incidents", description: "Field incident updates (manager+ only)" },
+  { kind: "approval", label: "Approvals", description: "Decisions and escalations on approval requests" },
   // Covers both directions: the worker's own sheet events (notify(), via
   // NOTIFY_EVENT_PUSH_KIND) and the manager-band submission alert
   // (/m/timesheets/notify.ts, sendPushBulk). One kind, one switch.

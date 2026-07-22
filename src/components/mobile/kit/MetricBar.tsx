@@ -101,7 +101,7 @@ export function ViewSeg({
   return (
     <div className="viewseg" style={style}>
       {members.map((m) => (
-        <button key={m.id} type="button" className={active === m.id ? "on" : ""} onClick={() => onSelect(m.id)}>
+        <button key={m.id} type="button" className={active === m.id ? "on" : ""} aria-pressed={active === m.id} onClick={() => onSelect(m.id)}>
           <KIcon name={m.icon} size={14} /> {m.label}
         </button>
       ))}

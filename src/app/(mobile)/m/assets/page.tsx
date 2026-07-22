@@ -3,6 +3,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { listMyAssignments } from "@/lib/db/assignments";
 import { CATALOG_KIND_LABEL } from "@/lib/db/assignments";
+import { fulfillmentStateLabels, prettyState } from "../advances/_shared";
 import { AssetsView, type AssetRow } from "./AssetsView";
 
 /**
@@ -25,23 +26,25 @@ function titleFor(kind: string, name: string | null): string {
   return name ? `${cat} · ${name}` : cat;
 }
 
-/** Kit tones: issued/held = info ("Out"), delivered/redeemed = ok, else neutral. */
-function toneFor(state: string): { tone: AssetRow["tone"]; time: string } {
+/** Kit tones: issued/held = info ("Out"), delivered/redeemed = ok, else neutral.
+ *  `out` is the data flag AssetsView keys the Check-In swipe off — the display
+ *  string is translated by the caller, never compared. */
+function toneFor(state: string): { tone: AssetRow["tone"]; timeKey: "out" | "ok" | "in" | "gone" | "dot"; out: boolean } {
   switch (state) {
     case "issued":
     case "transferred":
-      return { tone: "info", time: "Out" };
+      return { tone: "info", timeKey: "out", out: true };
     case "delivered":
     case "redeemed":
     case "approved":
-      return { tone: "ok", time: "✓" };
+      return { tone: "ok", timeKey: "ok", out: false };
     case "returned":
-      return { tone: "neutral", time: "In" };
+      return { tone: "neutral", timeKey: "in", out: false };
     case "expired":
     case "voided":
-      return { tone: "danger", time: "—" };
+      return { tone: "danger", timeKey: "gone", out: false };
     default:
-      return { tone: "neutral", time: "·" };
+      return { tone: "neutral", timeKey: "dot", out: false };
   }
 }
 
@@ -53,22 +56,33 @@ export default async function AssetsPage() {
   const session = await requireSession();
   const rows = await listMyAssignments(session.orgId, session.userId, { limit: 200 });
 
+  const stateLabels = fulfillmentStateLabels(t);
+  const timeLabel: Record<"out" | "ok" | "in" | "gone" | "dot", string> = {
+    out: t("m.assets.badge.out", undefined, "Out"),
+    ok: "✓",
+    in: t("m.assets.badge.in", undefined, "In"),
+    gone: "—",
+    dot: "·",
+  };
+
   const assets: AssetRow[] = rows.map((r) => {
     const kind = String(r.catalog_kind ?? "");
     // `title` is the assignment's own label (the catalog SKU name is
     // denormalised onto it at insert). Kit row = `Category · Type`.
     const name = r.title;
-    const { tone, time } = toneFor(String(r.fulfillment_state ?? ""));
+    const state = String(r.fulfillment_state ?? "");
+    const { tone, timeKey, out } = toneFor(state);
     return {
       id: r.id,
       cat: CATALOG_KIND_LABEL[kind as keyof typeof CATALOG_KIND_LABEL] ?? kind,
       title: titleFor(kind, name),
       // Kit sub-line: state + the thing the crew member actually needs, which
       // is when it goes back.
-      sub: String(r.fulfillment_state ?? ""),
+      sub: stateLabels[state] ?? prettyState(state),
       tag: r.id.slice(0, 8).toUpperCase(),
       tone,
-      time,
+      time: timeLabel[timeKey],
+      out,
     };
   });
 

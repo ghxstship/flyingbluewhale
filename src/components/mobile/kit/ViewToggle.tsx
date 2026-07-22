@@ -30,6 +30,7 @@ export function ViewToggle({ value, onChange, views }: ViewToggleProps) {
           key={v}
           type="button"
           className={value === v ? "on" : ""}
+          aria-pressed={value === v}
           onClick={() => onChange(v)}
           title={v[0]!.toUpperCase() + v.slice(1)}
           aria-label={v}

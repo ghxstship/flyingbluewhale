@@ -134,6 +134,67 @@ Post-fix: dead reads 0 · dropped inputs 0 · remaining dead-write candidates ar
 tool false-negatives (FK filter reads, `select("*")` helpers, concatenated
 select constants) — each hand-verified.
 
+## ✅ Normalization / a11y / privacy / security / SSOT wave (2026-07-22)
+
+Six fixer agents + orchestrator swept every `/m` surface, the shared kit, and
+`src/lib/mobile` line by line across six dimensions. 114 files, all violations
+resolved in-wave (nothing deferred). Highlights, by severity:
+
+**Security / privacy**
+- check-in `importScanToBudget` accepted an arbitrary client `receiptPath` into
+  `expenses.receipt_path` (cross-tenant evidence pointer) → prefix-validated to
+  `field-scans/{orgId}/{userId}/`.
+- Approval decision/escalation pushes carried NO `kind` → bypassed the
+  notification opt-out matrix with no switch to find. New `approval` PushKind
+  across all three taxonomy mirrors + catalog migration `20260722230000`.
+- Emergency need-help push and timesheet-submission push identified people by
+  raw email → display name (email fallback only when unset).
+- `removeConnection` deleted by bare id → explicit two-party pin + read-back.
+- Marketplace `markSold`/`withdraw` wrote blind → read-backs (RLS refusal
+  surfaces honestly), `deleted_at`-guarded.
+
+**RBAC display** — `HubChrome canManage` hardcoded `true` on inventory,
+advances, catalog, scheduler (crew saw manager-only hub links; scheduler's
+capability-granted members likewise) → threaded from `isManagerPlus(session)`.
+
+**Correctness** — schedule live-bar dead branch (`e.state === "live"` never
+matched a title-cased value); crew catalog listed inactive SKUs whose Add To
+Request dead-ends (`.eq("active", true)`); notification toggles revalidated the
+surface's OLD route; requisitions quote-upload warning was silently dropped;
+lost-found/handover partial-photo warnings surfaced; kit-switch `"false"`-is-
+truthy hardening; AvatarField `createObjectURL` leaked per render → effect-managed.
+
+**i18n (international)** — the systemic bug: tone/order maps keyed on ENGLISH
+labels while `stateOf()` translates → under any non-en locale badges fell to
+neutral and boards broke. All 8 affected views re-keyed on raw states (en output
+byte-identical). Notification matrix rows re-keyed by stable id so labels can
+translate without breaking the wire contract. Emergency codes converted to a
+`getEmergencyCodes(t)` factory (50 keys; deep-link anchors now locale-stable).
+Hundreds of chrome strings wrapped across projects/*, settings, documents/new,
+companies, directory, mileage/new, finance, advances, plus loading skeletons.
+
+**Accessibility (WCAG 2.1 AA)** — FormScreen: real label↔control association
+(`htmlFor`/`id`) for every field type, keyboard-reachable photo/file/avatar
+pickers (were `display:none`), seg groups + `aria-pressed`, `aria-required`;
+`KIcon` now `aria-hidden` (silences every decorative icon); DataTable
+`scope="col"` + keyboard row-tap parity (tabIndex + Enter/Space, table
+semantics intact); SwipeRow accessible-name fix; ActionBar labeled search/clear;
+~50 form controls associated across snag/daily-log/roster/settings/check-in
+forms; drawers/toggles `aria-expanded`/`aria-pressed` throughout.
+
+**SSOT / 3NF** — `toneToBadge()` kit helper replaces 9 copy-pasted ternaries;
+incident tone canon in `incident-states.ts` (list and detail previously painted
+the SAME state different colors); advances `_shared.ts` (KIND_ICON/STATE_TONE/
+state-prettifier were triplicated); time-sheets quick pill de-statused (pills
+are never status) → worker context.
+
+**Deliberate canon (not violations)** — the kit is i18n-provider-free BY
+CONTRACT (callers pass translated labels; kit-internal English defaults +
+aria-labels remain — wiring `useT` into primitives would break provider-free
+consumers). Push payload copy is server-side English repo-wide. Stored display
+values (`project_tasks.task_state` etc.) are data, not chrome — translating
+them is a data-model decision. `emergency` maps links are fixed-host + escaped.
+
 ## Notes
 
 - No `alert()`, `onClick={() => {}}`, "not implemented", or fabricated-data

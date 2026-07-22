@@ -1,11 +1,13 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestT } from "@/lib/i18n/request";
 import { SnagForm, type ProjectOpt } from "./SnagForm";
 
 export const dynamic = "force-dynamic";
 
 /** COMPVSS · Raise A Snag — server fetches the org's projects → client form. */
 export default async function NewSnagPage() {
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -16,7 +18,7 @@ export default async function NewSnagPage() {
     .order("created_at", { ascending: false })
     .limit(100);
   const projects = ((data ?? []) as Array<{ id: string; name: string | null }>).map(
-    (p): ProjectOpt => ({ id: p.id, name: p.name ?? "Untitled Project" }),
+    (p): ProjectOpt => ({ id: p.id, name: p.name ?? t("m.snags.new.untitledProject", undefined, "Untitled Project") }),
   );
   return <SnagForm projects={projects} />;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { NormalizedList, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, type FieldDef, toneToBadge } from "@/components/mobile/kit";
 import { PhotoStrip, type StripPhoto } from "@/components/media/PhotoStrip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -28,12 +28,13 @@ export type HandoverItem = {
   photos: StripPhoto[];
 };
 
+/** Tone keyed by the RAW state — the display label is locale-dependent. */
 const STATE_TONE: Record<string, string> = {
-  "All Clear": "success",
-  "Watch Items": "warning",
-  Issues: "danger",
+  all_clear: "success",
+  watch_items: "warning",
+  issues: "danger",
 };
-const STATE_ORDER = ["Issues", "Watch Items", "All Clear"];
+const RAW_STATE_ORDER = ["issues", "watch_items", "all_clear"];
 
 const TONE_VAR: Record<string, string> = {
   success: "var(--p-success)",
@@ -42,13 +43,8 @@ const TONE_VAR: Record<string, string> = {
 };
 
 function Badge({ tone, children }: { tone: string; children: React.ReactNode }) {
-  return (
-    <span
-      className={`ps-badge ps-badge--${tone === "warning" ? "warn" : tone === "text-3" ? "neutral" : tone === "success" ? "ok" : tone}`}
-    >
-      {children}
-    </span>
-  );
+  // Tone → class mapping is the kit's toneToBadge SSOT (was a per-surface ternary).
+  return <span className={toneToBadge(tone)}>{children}</span>;
 }
 
 export function HandoverListView({ items }: { items: HandoverItem[] }) {
@@ -61,6 +57,13 @@ export function HandoverListView({ items }: { items: HandoverItem[] }) {
   };
   const stateOf = (x: HandoverItem) => stateLabel[x.post_state] ?? x.post_state;
 
+  // Board columns + tones keyed by the TRANSLATED label the field emits —
+  // keying them by the English label broke both in any other locale.
+  const STATE_ORDER = RAW_STATE_ORDER.map((s) => stateLabel[s] ?? s);
+  const boardTone: Record<string, string> = Object.fromEntries(
+    RAW_STATE_ORDER.map((s) => [stateLabel[s] ?? s, STATE_TONE[s] ?? "text-3"]),
+  );
+
   const fields: FieldDef<HandoverItem>[] = [
     { id: "summary", label: t("m.handover.col.summary", undefined, "Summary"), type: "text", get: (x) => x.summary },
     { id: "post_state", label: t("m.handover.col.status", undefined, "Status"), type: "select", options: STATE_ORDER, get: stateOf },
@@ -68,9 +71,9 @@ export function HandoverListView({ items }: { items: HandoverItem[] }) {
   ];
 
   const row = (x: HandoverItem, compact?: boolean) => {
-    const tone = STATE_TONE[stateOf(x)] ?? "neutral";
+    const tone = STATE_TONE[x.post_state] ?? "neutral";
     const relief = x.reliefLabel
-      ? t("m.handover.handedTo", { relief: x.reliefLabel }, "Handed To {relief}")
+      ? t("m.handover.handedTo", { relief: x.reliefLabel }, `Handed To ${x.reliefLabel}`)
       : "";
     const meta = [x.authorName ?? "", relief, x.createdLabel].filter(Boolean).join(" · ");
     return (
@@ -109,10 +112,14 @@ export function HandoverListView({ items }: { items: HandoverItem[] }) {
       views={["list", "table", "board"]}
       statusField="post_state"
       statusOrder={STATE_ORDER}
-      boardTone={STATE_TONE}
+      boardTone={boardTone}
       pill={{ get: (x) => x.authorName ?? "—" }}
       empty={{
-        cols: ["Summary", "Status", "From"],
+        cols: [
+          t("m.handover.col.summary", undefined, "Summary"),
+          t("m.handover.col.status", undefined, "Status"),
+          t("m.handover.col.author", undefined, "From"),
+        ],
         title: t("m.handover.emptyTitle", undefined, "No Handovers"),
         hint: t("m.handover.emptyBody", undefined, "Submit an end-of-shift handover to start the trail."),
       }}

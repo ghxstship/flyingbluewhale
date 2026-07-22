@@ -5,24 +5,10 @@ import { createClient, createServiceClient, isServiceClientAvailable } from "@/l
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { Crumbs, KIcon } from "@/components/mobile/kit";
-import { INCIDENT_STATE_LABEL, allowedIncidentTransitions, type IncidentState } from "@/lib/db/incident-fsm";
+import { INCIDENT_STATE_LABEL, INCIDENT_STATE_TONE, INCIDENT_SEVERITY_TONE, allowedIncidentTransitions, type IncidentState } from "@/lib/db/incident-fsm";
 import { TriageRow } from "./TriageRow";
 
 export const dynamic = "force-dynamic";
-
-const STATE_TONE: Record<string, string> = {
-  open: "danger",
-  investigating: "warn",
-  resolved: "info",
-  closed: "ok",
-};
-
-const SEVERITY_TONE: Record<string, string> = {
-  critical: "danger",
-  major: "danger",
-  minor: "warn",
-  near_miss: "neutral",
-};
 
 /**
  * COMPVSS · Incident detail.
@@ -167,11 +153,13 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
       </h1>
 
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
-        <span className={`ps-badge ps-badge--${STATE_TONE[state] ?? "neutral"}`}>{INCIDENT_STATE_LABEL[state]}</span>
-        <span className={`ps-badge ps-badge--${SEVERITY_TONE[row.severity as string] ?? "neutral"}`}>
+        <span className={`ps-badge ps-badge--${INCIDENT_STATE_TONE[state] ?? "neutral"}`}>{INCIDENT_STATE_LABEL[state]}</span>
+        <span className={`ps-badge ps-badge--${INCIDENT_SEVERITY_TONE[row.severity as string] ?? "neutral"}`}>
           {(row.severity as string).replace(/_/g, " ")}
         </span>
-        {row.injury_type ? <span className="ps-badge ps-badge--danger">Injury reported</span> : null}
+        {row.injury_type ? (
+          <span className="ps-badge ps-badge--danger">{t("m.incident.injuryReported", undefined, "Injury reported")}</span>
+        ) : null}
       </div>
 
       <div className="item" style={{ display: "block" }}>
@@ -226,7 +214,7 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
                 <img
                   key={i}
                   src={url}
-                  alt={`Evidence ${i + 1}`}
+                  alt={t("m.incident.evidenceAlt", { n: i + 1 }, `Evidence ${i + 1}`)}
                   style={{ width: 104, height: 104, objectFit: "cover", borderRadius: 8, display: "block" }}
                 />
               ))}

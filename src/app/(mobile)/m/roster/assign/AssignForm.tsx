@@ -77,11 +77,11 @@ export function AssignForm({
     <form action={onSubmit}>
       <input type="hidden" name="projectId" value={projectId} />
       <div className="fld">
-        <label>
+        <label htmlFor="af-person">
           {t("m.roster.assign.person", undefined, "Person")}
           <span className="req"> *</span>
         </label>
-        <select name="crewMemberId" defaultValue="" required>
+        <select id="af-person" name="crewMemberId" defaultValue="" required>
           <option value="" disabled>
             {t("m.roster.assign.personPh", undefined, "Search The Org Directory")}
           </option>
@@ -99,11 +99,11 @@ export function AssignForm({
       </div>
 
       <div className="fld">
-        <label>
+        <label htmlFor="af-role">
           {t("m.roster.assign.role", undefined, "Role On Project")}
           <span className="req"> *</span>
         </label>
-        <select name="roleId" value={roleId} onChange={(e) => onRoleChange(e.target.value)} required>
+        <select id="af-role" name="roleId" value={roleId} onChange={(e) => onRoleChange(e.target.value)} required>
           <option value="" disabled>
             {t("m.roster.assign.rolePh", undefined, "Pick From The Position Catalog")}
           </option>
@@ -121,8 +121,9 @@ export function AssignForm({
       </div>
 
       <div className="fld">
-        <label>{t("m.roster.assign.rate", undefined, "Rate Card")}</label>
+        <label htmlFor="af-rate">{t("m.roster.assign.rate", undefined, "Rate Card")}</label>
         <select
+          id="af-rate"
           name="rateCardItemId"
           value={rateId}
           onChange={(e) => {
@@ -145,8 +146,8 @@ export function AssignForm({
       </div>
 
       <div className="fld">
-        <label>{t("m.roster.assign.basis", undefined, "Terms Basis")}</label>
-        <select name="compensationBasis" defaultValue="per_day">
+        <label htmlFor="af-basis">{t("m.roster.assign.basis", undefined, "Terms Basis")}</label>
+        <select id="af-basis" name="compensationBasis" defaultValue="per_day">
           <option value="per_day">{t("m.roster.assign.basis.perDay", undefined, "Per Day")}</option>
           <option value="per_show_day">{t("m.roster.assign.basis.perShowDay", undefined, "Per Show Day")}</option>
           <option value="flat_fee">{t("m.roster.assign.basis.flat", undefined, "Flat Project Fee")}</option>
@@ -157,12 +158,12 @@ export function AssignForm({
 
       <div className="frow">
         <div className="fld">
-          <label>{t("m.roster.assign.start", undefined, "Contract Start")}</label>
-          <input type="date" name="startDate" defaultValue={defaultStart ?? undefined} />
+          <label htmlFor="af-start">{t("m.roster.assign.start", undefined, "Contract Start")}</label>
+          <input id="af-start" type="date" name="startDate" defaultValue={defaultStart ?? undefined} />
         </div>
         <div className="fld">
-          <label>{t("m.roster.assign.end", undefined, "Contract End")}</label>
-          <input type="date" name="endDate" defaultValue={defaultEnd ?? undefined} />
+          <label htmlFor="af-end">{t("m.roster.assign.end", undefined, "Contract End")}</label>
+          <input id="af-end" type="date" name="endDate" defaultValue={defaultEnd ?? undefined} />
           {fieldError("endDate") && (
             <div className="hint" style={{ color: "var(--p-danger)" }}>
               {fieldError("endDate")}
@@ -175,8 +176,8 @@ export function AssignForm({
       </div>
 
       <div className="fld">
-        <label>{t("m.roster.assign.reportsTo", undefined, "Reports To")}</label>
-        <select name="reportsTo" defaultValue="">
+        <label htmlFor="af-reports">{t("m.roster.assign.reportsTo", undefined, "Reports To")}</label>
+        <select id="af-reports" name="reportsTo" defaultValue="">
           <option value="">{t("m.roster.assign.reportsToLater", undefined, "Set Later")}</option>
           {managers.map((m) => (
             <option key={m.id} value={m.id}>

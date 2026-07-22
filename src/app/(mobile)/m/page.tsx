@@ -165,7 +165,7 @@ export default async function MobileHome() {
   const displayName =
     ((me as { name: string | null } | null)?.name ?? "").trim() ||
     ((session.email ?? "").split("@")[0] ?? "").replace(/[._-]+/g, " ").trim() ||
-    "Crew";
+    t("m.home.crewFallback", undefined, "Crew");
 
   const data: HomeData = {
     openTasks: openTasks ?? 0,

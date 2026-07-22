@@ -4,12 +4,13 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { NOTIF_ROWS, NOTIF_ROW_LABELS, CHANNELS } from "./constants";
+import { NOTIF_ROWS, NOTIF_ROW_IDS, CHANNELS } from "./constants";
 
 export type State = { error?: string; ok?: true } | null;
 
 const Toggle = z.object({
-  row: z.enum(NOTIF_ROW_LABELS),
+  // Stable row id (kebab), never the display label — labels are localized.
+  row: z.enum(NOTIF_ROW_IDS),
   channel: z.enum(CHANNELS),
   on: z.enum(["0", "1"]),
 });
@@ -26,7 +27,7 @@ export async function toggleNotifPref(_prev: State, fd: FormData): Promise<State
   const parsed = Toggle.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid toggle." };
   const { row, channel, on } = parsed.data;
-  const kinds = NOTIF_ROWS.find((r) => r.label === row)?.kinds ?? [];
+  const kinds = NOTIF_ROWS.find((r) => r.id === row)?.kinds ?? [];
   if (kinds.length === 0) return { error: "Unknown preference." };
   const value = on === "1";
 
@@ -53,6 +54,7 @@ export async function toggleNotifPref(_prev: State, fd: FormData): Promise<State
   ).upsert({ user_id: session.userId, matrix: nextMatrix }, { onConflict: "user_id" });
   if (error) return { error: error.message };
 
+  revalidatePath("/m/settings/notifications");
   revalidatePath("/m/notifications");
   return { ok: true };
 }

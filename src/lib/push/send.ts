@@ -39,6 +39,10 @@ export type PushKind =
   | "time_off"
   | "course"
   | "incident"
+  // Approval workflow: a request you initiated was decided, or an approval
+  // was escalated to you. Previously sent with NO kind, which bypassed the
+  // /m/settings/notifications opt-out matrix entirely.
+  | "approval"
   // Time & pay. Two paths land on `timesheet`: /m/timesheets/notify.ts calls
   // sendPushBulk with the kind directly, and notify() maps its timesheet/
   // payroll/correction events onto these (NOTIFY_EVENT_PUSH_KIND,
@@ -411,6 +415,7 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   time_off: "Time Off",
   course: "Course",
   incident: "Incident",
+  approval: "Approval",
   timesheet: "Timesheet",
   payroll: "Payroll",
   time_correction: "Time Correction",

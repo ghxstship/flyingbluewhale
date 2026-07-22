@@ -151,7 +151,9 @@ export function TimeSheetsView({ rows }: { rows: TimesheetRow[] }) {
         searchPlaceholder={t("m.timeSheets.search", undefined, "Search Time Sheets…")}
         renderRow={row}
         views={["list", "table"]}
-        pill={{ get: (r) => stateLabel(r.state), order: ["Submitted", "Approved", "Rejected"] }}
+        // Pills = context (worker), never status — status stays on the row
+        // badge + the "state" field in the filter drawer.
+        pill={{ get: (r) => r.worker }}
         empty={{
           cols: [
             t("m.timeSheets.col.worker", undefined, "Worker"),

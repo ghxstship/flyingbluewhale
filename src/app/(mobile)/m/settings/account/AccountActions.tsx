@@ -173,8 +173,11 @@ export function AccountActions({
       ) : (
         <>
           <div className="fld">
-            <label>{t("m.account.delete.confirmLabel", undefined, "Type DELETE to confirm")}</label>
+            <label htmlFor="acct-delete-confirm">
+              {t("m.account.delete.confirmLabel", undefined, "Type DELETE to confirm")}
+            </label>
             <input
+              id="acct-delete-confirm"
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
               placeholder="DELETE"

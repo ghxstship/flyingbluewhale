@@ -3,6 +3,7 @@ import { grantedSiteCapabilities } from "@/lib/mobile/site-capabilities";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { fulfillmentStateLabels } from "../advances/_shared";
 import { RoseView, type CredentialEntry } from "./RoseView";
 
 export const dynamic = "force-dynamic";
@@ -138,6 +139,7 @@ export default async function MobileWalletPage() {
       undefined,
       "Your scannable gate code appears here once a credential with an active scan code is issued to you.",
     ),
+    expires: t("m.wallet.expires", undefined, "Expires"),
   };
 
   return (
@@ -152,6 +154,7 @@ export default async function MobileWalletPage() {
         holderName={holderName}
         activeCode={activeCode}
         labels={labels}
+        stateLabels={fulfillmentStateLabels(t)}
       />
     </div>
   );

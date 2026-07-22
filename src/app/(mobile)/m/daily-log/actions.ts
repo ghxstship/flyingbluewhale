@@ -123,8 +123,9 @@ export async function saveDailyLog(_prev: State, fd: FormData): Promise<State> {
  */
 export async function submitDailyLog(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  const id = String(fd.get("id") ?? "");
-  if (!id) return { error: "Missing log id." };
+  const parsedId = z.string().uuid().safeParse(fd.get("id"));
+  if (!parsedId.success) return { error: "Missing log id." };
+  const id = parsedId.data;
 
   const supabase = await createClient();
   const result = await transitionDailyLogState(supabase, session, id, "submitted");

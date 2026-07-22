@@ -20,11 +20,19 @@ export const dynamic = "force-dynamic";
  * → `NormalizedList`) — search + View Options / Share & Export + list/table/
  * board. The DB read below is unchanged (same table/columns/scope).
  */
-export default async function RequisitionsPage() {
+export default async function RequisitionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ warn?: string }>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return <div className="screen">{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   }
+
+  // The PO form redirects here with ?warn= when the request landed but its
+  // quote didn't — this page dropped that message on the floor.
+  const { warn } = await searchParams;
 
   const session = await requireSession();
   const supabase = await createClient();
@@ -68,6 +76,12 @@ export default async function RequisitionsPage() {
       <h1 className="scr-h" style={{ marginBottom: 12 }}>
         {t("m.reqs.title", undefined, "Purchase Requests")}
       </h1>
+
+      {warn && (
+        <div className="ps-alert ps-alert--warn" role="status" style={{ marginBottom: 12 }}>
+          {warn}
+        </div>
+      )}
 
       <RequisitionsView items={items} />
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { HubChrome } from "@/components/mobile/HubChrome";
 import { NormalizedList, ListRow, RecordDetail, type FieldDef, type RecordAction } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { ProjectMilestone } from "@/lib/mobile/project-xpms";
 import { setMilestoneState, type State } from "../actions";
 
@@ -18,14 +19,6 @@ const MILESTONE_STATES = ["Upcoming", "On Track", "At Risk", "Done"] as const;
 const STATUS_TONE: Record<string, string> = { Done: "success", "At Risk": "danger", "On Track": "info", Upcoming: "text-3" };
 const PHASE_ORDER = ["Advance", "Load-In", "Show Days", "Load-Out"];
 
-const FIELDS: FieldDef<ProjectMilestone>[] = [
-  { id: "title", label: "Milestone", type: "text", get: (x) => x.title },
-  { id: "phase", label: "Phase", type: "select", options: PHASE_ORDER, get: (x) => x.phase },
-  { id: "status", label: "Status", type: "select", options: ["Done", "At Risk", "On Track", "Upcoming"], get: (x) => x.status },
-  { id: "owner", label: "Owner", type: "text", get: (x) => x.owner ?? "" },
-  { id: "milestone_date", label: "Date", type: "text", get: (x) => x.milestone_date },
-];
-
 function StatusChip({ status }: { status: string }) {
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700, color: "var(--p-text-2)", whiteSpace: "nowrap" }}>
@@ -36,10 +29,19 @@ function StatusChip({ status }: { status: string }) {
 }
 
 export function ProjectMilestonesView({ items, canManage }: { items: ProjectMilestone[]; canManage: boolean }) {
+  const t = useT();
   const [detail, setDetail] = useState<ProjectMilestone | null>(null);
   const [, startTx] = useTransition();
   const router = useRouter();
   const toast = useToast();
+
+  const FIELDS: FieldDef<ProjectMilestone>[] = [
+    { id: "title", label: t("m.projects.ms.col.milestone", undefined, "Milestone"), type: "text", get: (x) => x.title },
+    { id: "phase", label: t("m.projects.col.phase", undefined, "Phase"), type: "select", options: PHASE_ORDER, get: (x) => x.phase },
+    { id: "status", label: t("m.projects.col.status", undefined, "Status"), type: "select", options: ["Done", "At Risk", "On Track", "Upcoming"], get: (x) => x.status },
+    { id: "owner", label: t("m.projects.col.owner", undefined, "Owner"), type: "text", get: (x) => x.owner ?? "" },
+    { id: "milestone_date", label: t("m.projects.ms.col.date", undefined, "Date"), type: "text", get: (x) => x.milestone_date },
+  ];
 
   const setState = (x: ProjectMilestone, state: string) => {
     const f = new FormData();
@@ -55,7 +57,7 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
     !canManage
       ? []
       : MILESTONE_STATES.filter((s) => s !== x.status).map((s) => ({
-          label: `Mark ${s}`,
+          label: t("m.projects.markState", { state: s }, `Mark ${s}`),
           icon: s === "Done" ? "Check" : s === "At Risk" ? "TriangleAlert" : "ArrowRight",
           primary: s === "Done",
           on: () => setState(x, s),
@@ -72,7 +74,7 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
         items={items}
         fields={FIELDS}
         search={(x) => `${x.title} ${x.phase} ${x.owner ?? ""} ${x.milestone_date}`}
-        searchPlaceholder="Search milestones…"
+        searchPlaceholder={t("m.projects.ms.search", undefined, "Search milestones…")}
         renderRow={row}
         onRow={setDetail}
         views={["list", "table", "board"]}
@@ -80,7 +82,15 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
         statusOrder={["Upcoming", "On Track", "At Risk", "Done"]}
         boardTone={STATUS_TONE}
         pill={{ get: (x) => x.phase, order: PHASE_ORDER }}
-        empty={{ cols: ["Milestone", "Phase", "Status"], title: "No milestones", hint: "Project milestones roll up here by phase." }}
+        empty={{
+          cols: [
+            t("m.projects.ms.col.milestone", undefined, "Milestone"),
+            t("m.projects.col.phase", undefined, "Phase"),
+            t("m.projects.col.status", undefined, "Status"),
+          ],
+          title: t("m.projects.ms.empty", undefined, "No milestones"),
+          hint: t("m.projects.ms.emptyHint", undefined, "Project milestones roll up here by phase."),
+        }}
       />
       {detail && (
         <RecordDetail
@@ -88,9 +98,9 @@ export function ProjectMilestonesView({ items, canManage }: { items: ProjectMile
           icon="Flag"
           status={{ tone: STATUS_TONE[detail.status] ?? "neutral", label: detail.status }}
           fields={[
-            { k: "Phase", v: detail.phase },
-            { k: "Date", v: detail.milestone_date },
-            { k: "Owner", v: detail.owner ?? "—" },
+            { k: t("m.projects.col.phase", undefined, "Phase"), v: detail.phase },
+            { k: t("m.projects.ms.col.date", undefined, "Date"), v: detail.milestone_date },
+            { k: t("m.projects.col.owner", undefined, "Owner"), v: detail.owner ?? "—" },
           ]}
           actions={detailActions(detail)}
           onClose={() => setDetail(null)}

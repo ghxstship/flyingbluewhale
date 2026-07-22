@@ -14,7 +14,10 @@ export type AssetRow = {
   sub: string;
   tag: string;
   tone: "ok" | "info" | "neutral" | "danger";
+  /** Display badge text (already translated by the server page). */
   time: string;
+  /** Data flag: the item is currently checked out (issued/transferred). */
+  out: boolean;
 };
 
 /**
@@ -38,7 +41,7 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
   const statusOf = (r: AssetRow) =>
     backIn.has(r.id)
       ? t("m.assets.returnedSub", undefined, "Returned")
-      : r.time === "Out"
+      : r.out
         ? t("m.assets.group.checkedOut", undefined, "Checked Out")
         : t("m.assets.group.assigned", undefined, "Assigned");
 
@@ -93,7 +96,7 @@ export function AssetsView({ rows, eyebrow, title }: { rows: AssetRow[]; eyebrow
 
   const row = (r: AssetRow) => {
     const returned = backIn.has(r.id);
-    const out = r.time === "Out" && !returned;
+    const out = r.out && !returned;
     return (
       <SwipeRow
         key={r.id}

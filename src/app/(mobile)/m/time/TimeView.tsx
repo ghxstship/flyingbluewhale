@@ -34,16 +34,15 @@ export type TimeRow = {
  * FAB = Add Note (handover form, the nearest real store for free-standing
  * notes).
  */
-/** Provenance labels for entries the worker did NOT punch live themselves. */
-const SOURCE_LABEL: Record<string, string> = {
-  manager_entry: "Entered By Manager",
-  correction: "Corrected",
-  import: "Imported",
-  offline_replay: "Offline Replay",
-};
-
 export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: string; title: string }) {
   const t = useT();
+  /** Provenance labels for entries the worker did NOT punch live themselves. */
+  const SOURCE_LABEL: Record<string, string> = {
+    manager_entry: t("m.time.source.managerEntry", undefined, "Entered By Manager"),
+    correction: t("m.time.source.correction", undefined, "Corrected"),
+    import: t("m.time.source.import", undefined, "Imported"),
+    offline_replay: t("m.time.source.offlineReplay", undefined, "Offline Replay"),
+  };
   const toast = useToast();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -252,6 +251,7 @@ export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: s
               value={noteBody}
               onChange={(e) => setNoteBody(e.target.value)}
               placeholder={t("m.time.note.placeholder", undefined, "What should the record say?")}
+              aria-label={t("m.time.note.title", undefined, "Shift Note")}
               style={{ width: "100%" }}
             />
             <button

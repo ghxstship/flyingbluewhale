@@ -284,7 +284,7 @@ export function FilterGroups<T>({
             )}
             <div style={{ flex: 1 }} />
             {m.groups.length > 1 && (
-              <button type="button" onClick={() => delGroup(gi)} style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
+              <button type="button" onClick={() => delGroup(gi)} aria-label="Remove condition group" style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
                 <KIcon name="Trash2" size={15} />
               </button>
             )}
@@ -317,6 +317,7 @@ export function FilterGroups<T>({
                         const nf = fields.find((x) => x.id === e.target.value)!;
                         updRule(gi, ri, { field: e.target.value, op: MODEL_FILTER_OPS[bucket(nf.type)][0]![0], value: "", value2: "" });
                       }}
+                      aria-label="Filter field"
                       style={{ ...SEL, flex: 1 }}
                     >
                       {fields.map((x) => (
@@ -325,12 +326,12 @@ export function FilterGroups<T>({
                         </option>
                       ))}
                     </select>
-                    <button type="button" onClick={() => delRule(gi, ri)} style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
+                    <button type="button" onClick={() => delRule(gi, ri)} aria-label="Remove condition" style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
                       <KIcon name="X" size={15} />
                     </button>
                   </div>
                   <div style={{ display: "flex", gap: 6, paddingLeft: 52 }}>
-                    <select value={r.op} onChange={(e) => updRule(gi, ri, { op: e.target.value as ModelFilterOp })} style={{ ...SEL, flex: "0 0 auto" }}>
+                    <select value={r.op} onChange={(e) => updRule(gi, ri, { op: e.target.value as ModelFilterOp })} aria-label="Operator" style={{ ...SEL, flex: "0 0 auto" }}>
                       {ops.map(([id, lbl]) => (
                         <option key={id} value={id}>
                           {lbl}
@@ -339,7 +340,7 @@ export function FilterGroups<T>({
                     </select>
                     {needsVal &&
                       (f.type === "select" || f.type === "bool" ? (
-                        <select value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} style={{ ...SEL, flex: 1 }}>
+                        <select value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label="Filter value" style={{ ...SEL, flex: 1 }}>
                           <option value="">Choose…</option>
                           {(f.options || []).map((o) => (
                             <option key={o} value={o}>
@@ -350,14 +351,14 @@ export function FilterGroups<T>({
                       ) : f.type === "date" ? (
                         r.op === "dbetween" ? (
                           <div style={{ display: "flex", gap: 4, flex: 1 }}>
-                            <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} style={{ ...SEL, flex: 1 }} />
-                            <input type="date" value={r.value2 || ""} onChange={(e) => updRule(gi, ri, { value2: e.target.value })} style={{ ...SEL, flex: 1 }} />
+                            <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label="From date" style={{ ...SEL, flex: 1 }} />
+                            <input type="date" value={r.value2 || ""} onChange={(e) => updRule(gi, ri, { value2: e.target.value })} aria-label="To date" style={{ ...SEL, flex: 1 }} />
                           </div>
                         ) : (
-                          <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} style={{ ...SEL, flex: 1 }} />
+                          <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label="Filter date" style={{ ...SEL, flex: 1 }} />
                         )
                       ) : (
-                        <input value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} placeholder="value" type={f.type === "num" ? "number" : "text"} style={{ ...SEL, flex: 1 }} />
+                        <input value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} placeholder="value" aria-label="Filter value" type={f.type === "num" ? "number" : "text"} style={{ ...SEL, flex: 1 }} />
                       ))}
                   </div>
                 </div>
@@ -413,7 +414,7 @@ export function SortReorder<T>({ fields, rules, setRules }: { fields: FieldDef<T
             </button>
           </div>
           <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 34 }}>{i === 0 ? "Sort" : "then"}</span>
-          <select value={r.field} onChange={(e) => upd(i, { field: e.target.value })} style={{ ...SEL, flex: 1 }}>
+          <select value={r.field} onChange={(e) => upd(i, { field: e.target.value })} aria-label="Sort field" style={{ ...SEL, flex: 1 }}>
             {fields.map((x) => (
               <option key={x.id} value={x.id} disabled={used.has(x.id) && x.id !== r.field}>
                 {x.label}
@@ -458,7 +459,7 @@ export function GroupBuilder<T>({ fields, levels, setLevels }: { fields: FieldDe
       {lv.map((id, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
           <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 60 }}>{i === 0 ? "Group by" : "then by"}</span>
-          <select value={id} onChange={(e) => set(i, e.target.value)} style={{ ...SEL, flex: 1 }}>
+          <select value={id} onChange={(e) => set(i, e.target.value)} aria-label="Group by field" style={{ ...SEL, flex: 1 }}>
             {groupable.map((x) => (
               <option key={x.id} value={x.id} disabled={used.has(x.id) && x.id !== id}>
                 {x.label}
@@ -524,7 +525,7 @@ export function ViewSheet<T>({
     <Sheet icon="SlidersHorizontal" title="View Options" onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
       <div className="viewseg" style={{ marginBottom: 14 }}>
         {SEGS.map(([id, lab, ic, n]) => (
-          <button key={id} type="button" className={seg === id ? "on" : ""} onClick={() => setSeg(id)}>
+          <button key={id} type="button" className={seg === id ? "on" : ""} aria-pressed={seg === id} onClick={() => setSeg(id)}>
             <KIcon name={ic} size={14} /> {lab}
             {n > 0 && <span style={{ marginLeft: 5, fontWeight: 800, color: "var(--p-accent)" }}>{n}</span>}
           </button>
@@ -537,6 +538,7 @@ export function ViewSheet<T>({
               <button
                 key={v}
                 type="button"
+                aria-pressed={view === v}
                 onClick={() => setView(v)}
                 style={{
                   display: "flex", flexDirection: "column", alignItems: "center", gap: 7, padding: "16px 8px", borderRadius: 12, cursor: "pointer",
@@ -669,7 +671,7 @@ export function ShareSheet<T>({
     <Sheet icon="Share" title="Share & Export" onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
       <div className="viewseg" style={{ marginBottom: 14 }}>
         {([["share", "Share", "Link"], ["export", "Export", "Download"]] as [string, string, string][]).map(([id, lab, ic]) => (
-          <button key={id} type="button" className={seg === id ? "on" : ""} onClick={() => setSeg(id)}>
+          <button key={id} type="button" className={seg === id ? "on" : ""} aria-pressed={seg === id} onClick={() => setSeg(id)}>
             <KIcon name={ic} size={14} /> {lab}
           </button>
         ))}
@@ -891,6 +893,7 @@ export function GroupedTree<T>({
             <button
               type="button"
               onClick={toggle}
+              aria-expanded={isOpen}
               style={{
                 display: "flex", alignItems: "center", gap: 7, width: "100%", padding: "6px 2px", background: "none", border: "none",
                 marginLeft: depth * 10, font: "inherit", cursor: "pointer", color: "var(--p-text-2)",

@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { KIcon } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { searchMobile, type SearchGroup, type SearchScope } from "@/app/(mobile)/search-actions";
 
 /**
@@ -16,14 +17,15 @@ import { searchMobile, type SearchGroup, type SearchScope } from "@/app/(mobile)
  * need every store preloaded into the shell.
  */
 
-const SCOPES: Array<{ key: SearchScope; label: string }> = [
-  { key: "all", label: "All" },
-  { key: "tasks", label: "Tasks" },
-  { key: "people", label: "People" },
-  { key: "assets", label: "Assets" },
-  { key: "docs", label: "Docs" },
-  { key: "templates", label: "Templates" },
-  { key: "spaces", label: "Spaces" },
+/** key → English fallback; display labels resolve through t() per scope. */
+const SCOPES: Array<{ key: SearchScope; fallback: string }> = [
+  { key: "all", fallback: "All" },
+  { key: "tasks", fallback: "Tasks" },
+  { key: "people", fallback: "People" },
+  { key: "assets", fallback: "Assets" },
+  { key: "docs", fallback: "Docs" },
+  { key: "templates", fallback: "Templates" },
+  { key: "spaces", fallback: "Spaces" },
 ];
 
 const RECENTS_KEY = "compvss.search.recents";
@@ -63,6 +65,7 @@ export function SearchClient({
   searchingLabel: string;
   noMatchLabel: string;
 }) {
+  const t = useT();
   const router = useRouter();
   const [q, setQ] = React.useState("");
   const [scope, setScope] = React.useState<SearchScope>("all");
@@ -143,7 +146,7 @@ export function SearchClient({
             }
             onClick={() => setScope(s.key)}
           >
-            {s.label}
+            {t(`m.search.scope.${s.key}`, undefined, s.fallback)}
           </button>
         ))}
       </div>

@@ -23,6 +23,8 @@ type Labels = {
   gateBody: string;
   noCodeTitle: string;
   noCodeBody: string;
+  /** "Expires" prefix for the credential expiry meta. */
+  expires: string;
 };
 
 // Fulfillment-state → tone for the access list. Live/usable states read "ok".
@@ -62,13 +64,17 @@ export function RoseView({
   holderName,
   activeCode,
   labels,
+  stateLabels = {},
 }: {
   credentials: CredentialEntry[];
   capabilities: SiteCapEntry[];
   holderName: string | null;
   activeCode: string | null;
   labels: Labels;
+  /** Translated label per fulfillment state (titleCase fallback). */
+  stateLabels?: Record<string, string>;
 }) {
+  const stateLabel = (s: string) => stateLabels[s] ?? titleCase(s);
   return (
     <>
       {/* Full Rose pass — flip-to-QR of the real active scan code. */}
@@ -145,7 +151,7 @@ export function RoseView({
           const tone = STATE_TONE[c.state] ?? "neutral";
           const meta = [
             c.accessLevel,
-            c.expiresOn ? `Expires ${c.expiresOn}` : null,
+            c.expiresOn ? `${labels.expires} ${c.expiresOn}` : null,
           ]
             .filter(Boolean)
             .join(" · ");
@@ -156,10 +162,10 @@ export function RoseView({
               </span>
               <div style={{ minWidth: 0 }}>
                 <div className="t">{c.title}</div>
-                <div className="s">{meta || titleCase(c.state)}</div>
+                <div className="s">{meta || stateLabel(c.state)}</div>
               </div>
               <span className="sp" />
-              <span className={`ps-badge ps-badge--${tone}`}>{titleCase(c.state)}</span>
+              <span className={`ps-badge ps-badge--${tone}`}>{stateLabel(c.state)}</span>
             </div>
           );
         })

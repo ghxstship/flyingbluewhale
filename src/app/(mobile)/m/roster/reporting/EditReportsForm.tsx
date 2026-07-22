@@ -52,11 +52,12 @@ export function EditReportsForm({
         <h2>{t("m.roster.reporting.editTitle", undefined, "Edit Reports")}</h2>
       </div>
       <div className="fld">
-        <label>
+        <label htmlFor="er-person">
           {t("m.roster.reporting.person", undefined, "Person")}
           <span className="req"> *</span>
         </label>
         <select
+          id="er-person"
           name="personCrewId"
           value={personId}
           required
@@ -76,8 +77,8 @@ export function EditReportsForm({
         </select>
       </div>
       <div className="fld">
-        <label>{t("m.roster.reporting.reportsTo", undefined, "Reports To")}</label>
-        <select name="managerCrewId" value={managerId} onChange={(e) => setManagerId(e.target.value)}>
+        <label htmlFor="er-manager">{t("m.roster.reporting.reportsTo", undefined, "Reports To")}</label>
+        <select id="er-manager" name="managerCrewId" value={managerId} onChange={(e) => setManagerId(e.target.value)}>
           <option value="">{t("m.roster.reporting.none", undefined, "None")}</option>
           {people
             .filter((p) => p.crewId !== personId)

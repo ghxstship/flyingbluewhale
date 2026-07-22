@@ -17,12 +17,15 @@ export type SpaceRow = {
   joined: boolean;
 };
 
-const KIND_LABEL: Record<SpaceRow["kind"], string> = {
+/** English fallbacks — display labels resolve through t() per kind. */
+const KIND_FALLBACK: Record<SpaceRow["kind"], string> = {
   team: "Team",
   trade: "Trade",
   location: "Location",
   club: "Club",
 };
+
+const SPACE_KINDS = Object.keys(KIND_FALLBACK) as SpaceRow["kind"][];
 
 const KIND_ICON: Record<SpaceRow["kind"], string> = {
   team: "Users",
@@ -49,6 +52,8 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
   const [name, setName] = useState("");
   const [kind, setKind] = useState<SpaceRow["kind"]>("team");
   const [about, setAbout] = useState("");
+
+  const kindLabel = (k: SpaceRow["kind"]) => t(`m.spaces.kindLabel.${k}`, undefined, KIND_FALLBACK[k]);
 
   const items = useMemo(() => {
     const q = query.toLowerCase();
@@ -101,9 +106,9 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
               {t("m.spaces.kind", undefined, "Kind")}
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 10 }}>
-              {(Object.keys(KIND_LABEL) as SpaceRow["kind"][]).map((k) => (
+              {SPACE_KINDS.map((k) => (
                 <button key={k} type="button" className={`chip ${kinds.has(k) ? "on" : ""}`} onClick={() => toggleKind(k)}>
-                  {KIND_LABEL[k]}
+                  {kindLabel(k)}
                 </button>
               ))}
             </div>
@@ -144,7 +149,7 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
             <div style={{ minWidth: 0, flex: 1 }}>
               <div className="t">{r.name}</div>
               <div className="s" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {KIND_LABEL[r.kind]} · {r.members}{" "}
+                {kindLabel(r.kind)} · {r.members}{" "}
                 {r.members === 1 ? t("m.spaces.member", undefined, "Member") : t("m.spaces.members", undefined, "Members")}
                 {r.about ? ` · ${r.about}` : ""}
               </div>
@@ -201,9 +206,9 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
             <div className="fld">
               <label className="lbl">{t("m.spaces.kind", undefined, "Kind")}</label>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-                {(Object.keys(KIND_LABEL) as SpaceRow["kind"][]).map((k) => (
+                {SPACE_KINDS.map((k) => (
                   <button key={k} type="button" className={`chip ${kind === k ? "on" : ""}`} onClick={() => setKind(k)}>
-                    {KIND_LABEL[k]}
+                    {kindLabel(k)}
                   </button>
                 ))}
               </div>

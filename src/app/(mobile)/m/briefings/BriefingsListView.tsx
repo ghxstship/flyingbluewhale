@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
-import { NormalizedList, type FieldDef } from "@/components/mobile/kit";
+import { NormalizedList, type FieldDef, toneToBadge } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -22,21 +22,17 @@ export type BriefingItem = {
   projectName: string | null;
 };
 
+/** Tone keyed by the RAW state — the display label is locale-dependent. */
 const STATE_TONE: Record<string, string> = {
-  Scheduled: "info",
-  Conducted: "success",
-  Cancelled: "text-3",
+  scheduled: "info",
+  conducted: "success",
+  cancelled: "text-3",
 };
-const STATE_ORDER = ["Scheduled", "Conducted", "Cancelled"];
+const RAW_STATE_ORDER = ["scheduled", "conducted", "cancelled"];
 
 function Badge({ tone, children }: { tone: string; children: React.ReactNode }) {
-  return (
-    <span
-      className={`ps-badge ps-badge--${tone === "warning" ? "warn" : tone === "text-3" ? "neutral" : tone === "success" ? "ok" : tone}`}
-    >
-      {children}
-    </span>
-  );
+  // Tone → class mapping is the kit's toneToBadge SSOT (was a per-surface ternary).
+  return <span className={toneToBadge(tone)}>{children}</span>;
 }
 
 export function BriefingsListView({ items }: { items: BriefingItem[] }) {
@@ -49,6 +45,13 @@ export function BriefingsListView({ items }: { items: BriefingItem[] }) {
     cancelled: t("m.briefings.state.cancelled", undefined, "Cancelled"),
   };
   const stateOf = (x: BriefingItem) => stateLabel[x.briefing_state] ?? x.briefing_state;
+
+  // Board columns + tones keyed by the TRANSLATED label the field emits —
+  // keying them by the English label broke both in any other locale.
+  const STATE_ORDER = RAW_STATE_ORDER.map((s) => stateLabel[s] ?? s);
+  const boardTone: Record<string, string> = Object.fromEntries(
+    RAW_STATE_ORDER.map((s) => [stateLabel[s] ?? s, STATE_TONE[s] ?? "text-3"]),
+  );
 
   const fields: FieldDef<BriefingItem>[] = [
     { id: "topic", label: t("m.briefings.col.topic", undefined, "Topic"), type: "text", get: (x) => x.topic },
@@ -85,7 +88,7 @@ export function BriefingsListView({ items }: { items: BriefingItem[] }) {
           </div>
         </div>
         <div style={{ flex: "none" }}>
-          <Badge tone={STATE_TONE[stateOf(x)] ?? "neutral"}>{stateOf(x)}</Badge>
+          <Badge tone={STATE_TONE[x.briefing_state] ?? "neutral"}>{stateOf(x)}</Badge>
         </div>
       </div>
     </div>
@@ -103,11 +106,15 @@ export function BriefingsListView({ items }: { items: BriefingItem[] }) {
       views={["list", "table", "board", "calendar"]}
       statusField="briefing_state"
       statusOrder={STATE_ORDER}
-      boardTone={STATE_TONE}
+      boardTone={boardTone}
       dateField="scheduled_for"
       pill={{ get: (x) => x.projectName ?? "—" }}
       empty={{
-        cols: ["Topic", "Status", "Scheduled"],
+        cols: [
+          t("m.briefings.col.topic", undefined, "Topic"),
+          t("m.briefings.col.status", undefined, "Status"),
+          t("m.briefings.col.scheduled", undefined, "Scheduled"),
+        ],
         title: t("m.briefings.empty.title", undefined, "No Briefings This Week"),
         hint: t(
           "m.briefings.empty.body",

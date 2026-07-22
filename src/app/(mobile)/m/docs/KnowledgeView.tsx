@@ -23,11 +23,14 @@ export function KnowledgeView({ rows, title }: { rows: ArticleRow[]; eyebrow?: s
 
   const catList = Array.from(new Set(rows.map((r) => r.category))).sort();
 
+  const mustReadLabel = t("m.docs.mustRead", undefined, "Must Read");
+  const ackedLabel = t("m.docs.acked", undefined, "Read");
+
   const FIELDS: FieldDef<ArticleRow>[] = [
     { id: "title", label: t("m.docs.col.title", undefined, "Title"), type: "text", get: (r) => r.title },
-    { id: "code", label: "Code", type: "text", get: (r) => r.code },
+    { id: "code", label: t("m.docs.col.code", undefined, "Code"), type: "text", get: (r) => r.code },
     { id: "category", label: t("m.docs.category", undefined, "Category"), type: "select", options: catList, get: (r) => r.category },
-    { id: "mustRead", label: t("m.docs.mustRead", undefined, "Must Read"), type: "bool", options: ["Must Read", "Read", "—"], get: (r) => (r.mustRead ? (r.acked ? "Read" : "Must Read") : "—") },
+    { id: "mustRead", label: mustReadLabel, type: "bool", options: [mustReadLabel, ackedLabel, "—"], get: (r) => (r.mustRead ? (r.acked ? ackedLabel : mustReadLabel) : "—") },
   ];
 
   const row = (r: ArticleRow) => (

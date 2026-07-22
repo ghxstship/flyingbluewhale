@@ -131,8 +131,17 @@ export function ActionBar<T>({
       <div className="actionbar">
         <div className="searchbar">
           <KIcon name="Search" size={16} />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={placeholder} />
-          {query && <KIcon name="X" size={15} style={{ cursor: "pointer" }} onClick={() => setQuery("")} />}
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={placeholder} aria-label={placeholder || "Search"} />
+          {query && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => setQuery("")}
+              style={{ border: "none", background: "none", padding: 0, cursor: "pointer", display: "inline-flex", color: "inherit" }}
+            >
+              <KIcon name="X" size={15} />
+            </button>
+          )}
         </div>
         <div className="clusters">
           {views && view && setView && !drawer && (
@@ -254,11 +263,11 @@ export function ActionBar<T>({
       </div>
       {pills && pills.length > 0 && (
         <div className="chips" style={{ paddingBottom: 10, marginTop: -2 }}>
-          <button type="button" className={`chip ${anyPill ? "" : "on"}`} onClick={() => onPillsClear?.()}>
+          <button type="button" className={`chip ${anyPill ? "" : "on"}`} aria-pressed={!anyPill} onClick={() => onPillsClear?.()}>
             All
           </button>
           {pills.map((p) => (
-            <button key={p.label} type="button" className={`chip ${p.active ? "on" : ""}`} onClick={p.on}>
+            <button key={p.label} type="button" className={`chip ${p.active ? "on" : ""}`} aria-pressed={p.active} onClick={p.on}>
               {p.label}
               {p.count != null && <span style={{ marginLeft: 5, fontWeight: 800, opacity: 0.6 }}>{p.count}</span>}
             </button>

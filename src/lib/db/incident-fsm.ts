@@ -31,6 +31,8 @@ export {
   INCIDENT_STATES,
   INCIDENT_TRANSITIONS,
   INCIDENT_STATE_LABEL,
+  INCIDENT_STATE_TONE,
+  INCIDENT_SEVERITY_TONE,
   incidentCloseNeedsManager,
   allowedIncidentTransitions,
   type IncidentAuthzFacts,

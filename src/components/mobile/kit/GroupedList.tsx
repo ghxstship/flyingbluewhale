@@ -48,7 +48,7 @@ export function GroupedList<T>({ skey, groups, collapsed, setCollapsed, renderRo
         const c = collapsed.has(k);
         return (
           <div key={name}>
-            <button type="button" className="grph grph-c" onClick={() => toggle(k)}>
+            <button type="button" className="grph grph-c" aria-expanded={!c} onClick={() => toggle(k)}>
               <KIcon name={c ? "ChevronRight" : "ChevronDown"} size={14} style={{ flex: "none" }} />
               <span style={{ flex: 1, textAlign: "left" }}>{name}</span>
               <span className="gc">{items.length}</span>

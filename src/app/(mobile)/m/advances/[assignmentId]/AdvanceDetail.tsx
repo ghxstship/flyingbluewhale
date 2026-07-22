@@ -6,6 +6,7 @@ import { RecordDetail } from "@/components/mobile/kit";
 import type { RecordAction, RecordField } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
+import { fulfillmentStateLabels, prettyState } from "../_shared";
 import { fulfillAssignment } from "./actions";
 
 export type AdvanceDetailData = {
@@ -28,29 +29,6 @@ export type AdvanceDetailData = {
   endsOn: string | null;
 };
 
-function stateLabel(s: string): string {
-  return s
-    .split("_")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-// Manager-facing label for the lifecycle action that lands each next state.
-const TRANSITION_LABEL: Record<string, string> = {
-  submitted: "Submit",
-  in_review: "Send to Review",
-  approved: "Approve",
-  rejected: "Reject",
-  revision_requested: "Request Revision",
-  issued: "Issue",
-  delivered: "Mark Delivered",
-  transferred: "Transfer",
-  redeemed: "Fulfill",
-  returned: "Mark Returned",
-  expired: "Mark Expired",
-  voided: "Void",
-};
-
 export function AdvanceDetail({
   data,
   canManage = false,
@@ -65,6 +43,25 @@ export function AdvanceDetail({
   const toast = useToast();
   const [pending, startTransition] = useTransition();
   const [busy, setBusy] = useState<string | null>(null);
+
+  const stateLabels = fulfillmentStateLabels(t);
+  const stateLabel = (s: string) => stateLabels[s] ?? prettyState(s);
+
+  // Manager-facing label for the lifecycle action that lands each next state.
+  const TRANSITION_LABEL: Record<string, string> = {
+    submitted: t("m.advances.transition.submit", undefined, "Submit"),
+    in_review: t("m.advances.transition.review", undefined, "Send to Review"),
+    approved: t("m.advances.transition.approve", undefined, "Approve"),
+    rejected: t("m.advances.transition.reject", undefined, "Reject"),
+    revision_requested: t("m.advances.transition.revise", undefined, "Request Revision"),
+    issued: t("m.advances.transition.issue", undefined, "Issue"),
+    delivered: t("m.advances.transition.deliver", undefined, "Mark Delivered"),
+    transferred: t("m.advances.transition.transfer", undefined, "Transfer"),
+    redeemed: t("m.advances.transition.fulfill", undefined, "Fulfill"),
+    returned: t("m.advances.transition.return", undefined, "Mark Returned"),
+    expired: t("m.advances.transition.expire", undefined, "Mark Expired"),
+    voided: t("m.advances.transition.void", undefined, "Void"),
+  };
 
   const transition = (nextState: string) => {
     setBusy(nextState);

@@ -54,11 +54,12 @@ export function QuickFileForm({ followUpOf }: { followUpOf?: { id: string; summa
       <form action={onSubmit}>
         {followUpOf && <input type="hidden" name="followUpOf" value={followUpOf.id} />}
         <div className="fld">
-          <label>
+          <label htmlFor="qf-summary">
             {t("m.incident.quick.label", undefined, "What Happened")}
             <span className="req"> *</span>
           </label>
           <textarea
+            id="qf-summary"
             name="summary"
             required
             autoFocus

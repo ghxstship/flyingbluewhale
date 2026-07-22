@@ -1,6 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -99,7 +100,7 @@ export default async function Page() {
           </section>
         )}
 
-        <DataTable<CredentialRow>
+        <DataView<CredentialRow>
           rows={rows}
           rowHref={(r) => `/studio/people/credentials/${r.id}`}
           emptyLabel={t("console.workforce.training.emptyLabel", undefined, "No training credentials tracked")}
@@ -125,14 +126,15 @@ export default async function Page() {
             {
               key: "number",
               header: t("console.workforce.training.columns.number", undefined, "Number"),
-              render: (r) => <span className="font-mono text-xs">{r.number ?? "—"}</span>,
+              render: (r) => r.number ?? "—",
+              mono: true,
               accessor: (r) => r.number ?? null,
             },
             {
               key: "issued",
               header: t("console.workforce.training.columns.issued", undefined, "Issued"),
               render: (r) => formatDate(r.issued_on, "medium"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.issued_on,
             },
             {
@@ -159,7 +161,7 @@ export default async function Page() {
                   return (
                     <Badge variant="muted">{t("console.workforce.training.daysShort", { days }, `${days}d`)}</Badge>
                   );
-                return <span className="font-mono text-xs">{formatDate(r.expires_on, "medium")}</span>;
+                return <span className={MONO_CELL_CLASS}>{formatDate(r.expires_on, "medium")}</span>;
               },
               accessor: (r) => r.expires_on ?? null,
             },

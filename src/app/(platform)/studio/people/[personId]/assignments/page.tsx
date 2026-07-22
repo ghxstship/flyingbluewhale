@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
         subtitle={t("console.people.assignments.subtitle", undefined, "Crew records linked to this person.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.people.assignments.emptyLabel", undefined, "No Assignments")}
           emptyDescription={t(
@@ -69,17 +69,14 @@ export default async function Page({ params }: { params: Promise<{ personId: str
               header: t("console.people.assignments.columns.dayRate", undefined, "Day Rate"),
               render: (r) => (r.day_rate_cents != null ? formatMoney(r.day_rate_cents) : "—"),
               accessor: (r) => r.day_rate_cents ?? 0,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
             {
               key: "contact",
               header: t("console.people.assignments.columns.contact", undefined, "Contact"),
               render: (r) => r.email ?? r.phone ?? "—",
               accessor: (r) => r.email ?? r.phone ?? "",
-              mono: true,
             },
           ]}
         />

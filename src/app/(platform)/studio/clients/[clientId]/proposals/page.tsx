@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
         subtitle={t("console.clients.proposals.subtitle", undefined, "Proposals sent to this client.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/proposals/${r.id}`}
           emptyLabel={t("console.clients.proposals.emptyLabel", undefined, "No Proposals")}
@@ -87,10 +87,8 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
               header: t("console.clients.proposals.col.amount", undefined, "Amount"),
               render: (r) => (r.amount_cents != null ? formatMoney(r.amount_cents) : "—"),
               accessor: (r) => r.amount_cents ?? 0,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
           ]}
         />

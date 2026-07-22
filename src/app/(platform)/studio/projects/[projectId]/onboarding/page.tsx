@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -11,8 +12,8 @@ import type { Project } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
-// DataTable<T> requires `T extends { id: string }`; map letter_id→id at the
-// row level so DataTable can use the offer-letter id as the row identity.
+// DataView<T> requires `T extends { id: string }`; map letter_id→id at the
+// row level so DataView can use the offer-letter id as the row identity.
 type Row = {
   id: string;
   letter_id: string;
@@ -52,7 +53,7 @@ export default async function ProjectOnboardingPage({ params }: { params: Promis
         subtitle={subtitle}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/people/offer-letters/${r.letter_id}/onboarding`}
           columns={[
@@ -66,7 +67,7 @@ export default async function ProjectOnboardingPage({ params }: { params: Promis
               key: "progress",
               header: t("console.projects.onboarding.col.progress", undefined, "Progress"),
               render: (r) => (
-                <span className="font-mono text-xs">
+                <span className={MONO_CELL_CLASS}>
                   {r.done}/{r.total}{" "}
                   {r.total > 0 && r.done === r.total ? (
                     <Badge variant="success">{t("console.projects.onboarding.done", undefined, "Done")}</Badge>

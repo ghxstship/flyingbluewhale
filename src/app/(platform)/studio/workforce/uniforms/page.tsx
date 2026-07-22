@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
@@ -78,7 +78,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable<UniformRow>
+        <DataView<UniformRow>
           rows={rows}
           totalCount={total}
           rowHref={(r) => `/studio/logistics/ratecard/${r.id}`}
@@ -97,7 +97,8 @@ export default async function Page({
             {
               key: "sku",
               header: t("console.workforce.uniforms.columns.sku", undefined, "SKU"),
-              render: (r) => <span className="font-mono text-xs">{r.sku}</span>,
+              render: (r) => r.sku,
+              mono: true,
               accessor: (r) => r.sku ?? null,
             },
             {
@@ -116,7 +117,7 @@ export default async function Page({
               key: "unit_price_cents",
               header: t("console.workforce.uniforms.columns.unitCost", undefined, "Unit Cost"),
               render: (r) => formatMoney(r.unit_price_cents, r.currency),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.unit_price_cents ?? null,
             },
             {

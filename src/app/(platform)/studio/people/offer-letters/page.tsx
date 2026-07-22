@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -46,7 +46,7 @@ export default async function OfferLettersPage() {
         subtitle={`${rows.length} ${rows.length === 1 ? t("console.people.offerLetters.letterSingular", undefined, "Letter") : t("console.people.offerLetters.letterPlural", undefined, "Letters")} · ${counts["accepted"] ?? 0} ${t("console.people.offerLetters.acceptedLabel", undefined, "Accepted")} · ${counts["draft"] ?? 0} ${t("console.people.offerLetters.draftLabel", undefined, "Draft")}`}
       />
       <div className="page-content">
-        <DataTable<OfferLetterResolved>
+        <DataView<OfferLetterResolved>
           rows={rows}
           rowHref={(r) => `/studio/people/offer-letters/${r.id}`}
           emptyLabel={t("console.people.offerLetters.emptyLabel", undefined, "No Offer Letters Yet")}
@@ -62,7 +62,7 @@ export default async function OfferLettersPage() {
               render: (r) => (
                 <div>
                   <div className="text-sm font-medium">{r.recipient_name}</div>
-                  <div className="font-mono text-xs text-[var(--p-text-2)]">{r.recipient_email}</div>
+                  <div className="text-xs text-[var(--p-text-2)]">{r.recipient_email}</div>
                 </div>
               ),
               accessor: (r) => r.recipient_name ?? null,
@@ -97,13 +97,13 @@ export default async function OfferLettersPage() {
               header: t("console.people.offerLetters.columns.comp", undefined, "Compensation"),
               render: (r) =>
                 r.effective_compensation_cents > 0 ? (
-                  <span className="font-mono text-xs">{formatDollars(r.effective_compensation_cents)}</span>
+                  formatDollars(r.effective_compensation_cents)
                 ) : (
                   <span className="text-xs text-[var(--p-text-2)]">
                     {t("console.people.offerLetters.tbd", undefined, "TBD")}
                   </span>
                 ),
-              className: "text-end",
+              numeric: true,
               accessor: (r) => Number(r.effective_compensation_cents ?? 0),
             },
             {
@@ -117,7 +117,8 @@ export default async function OfferLettersPage() {
             {
               key: "code",
               header: t("console.people.offerLetters.columns.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs tracking-wider">{r.access_code}</span>,
+              render: (r) => <span className="tracking-wider">{r.access_code}</span>,
+              mono: true,
               accessor: (r) => r.access_code ?? null,
             },
             {

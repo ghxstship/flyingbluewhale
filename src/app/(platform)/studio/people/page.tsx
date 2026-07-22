@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
@@ -91,7 +91,7 @@ export default async function PeoplePage() {
         }
       />
       <div className="page-content">
-        <DataTable<MemberRow>
+        <DataView<MemberRow>
           rows={rows}
           rowHref={(r) => (r.users?.id ? `/studio/people/${r.users.id}` : undefined)}
           emptyLabel={t("console.people.emptyLabel", undefined, "No members yet")}
@@ -116,7 +116,7 @@ export default async function PeoplePage() {
                   <Avatar name={r.users?.name ?? r.users?.email ?? "?"} />
                   <div>
                     <div className="text-sm font-medium">{r.users?.name ?? "—"}</div>
-                    <div className="font-mono text-xs text-[var(--p-text-2)]">{r.users?.email}</div>
+                    <div className="text-xs text-[var(--p-text-2)]">{r.users?.email}</div>
                   </div>
                 </div>
               ),
@@ -134,7 +134,7 @@ export default async function PeoplePage() {
               key: "since",
               header: t("console.people.columns.memberSince", undefined, "Member Since"),
               render: (r) => timeAgo(r.created_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.created_at,
             },
           ]}

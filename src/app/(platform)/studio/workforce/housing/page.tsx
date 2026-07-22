@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -92,7 +92,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<BlockRow>
+        <DataView<BlockRow>
           rows={rows}
           rowHref={(r) => `/studio/accommodation/blocks/${r.id}`}
           emptyLabel={t("console.workforce.housing.emptyLabel", undefined, "No workforce housing booked")}
@@ -123,7 +123,7 @@ export default async function Page() {
               key: "city",
               header: t("console.workforce.housing.columns.city", undefined, "City"),
               render: (r) => r.city ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.city ?? null,
             },
             {
@@ -136,18 +136,15 @@ export default async function Page() {
             {
               key: "rooms",
               header: t("console.workforce.housing.columns.rooms", undefined, "Rooms"),
-              render: (r) => (
-                <span className="font-mono text-xs">
-                  {r.rooms_confirmed ?? 0} / {r.rooms_reserved ?? 0}
-                </span>
-              ),
+              render: (r) => `${r.rooms_confirmed ?? 0} / ${r.rooms_reserved ?? 0}`,
+              mono: true,
               accessor: (r) => Number(r.rooms_confirmed ?? 0),
             },
             {
               key: "dates",
               header: t("console.workforce.housing.columns.dates", undefined, "Dates"),
               render: (r) => `${r.starts_on ?? "?"} → ${r.ends_on ?? "?"}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_on ?? null,
             },
           ]}

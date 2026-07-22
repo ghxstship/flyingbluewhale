@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -126,7 +126,7 @@ export default async function Page() {
             "Cross-project capacity vs demand at 30-day / 90-day / 1-year / 5-year horizons (Bridgit Bench equivalent). Negative surplus = staffing or equipment gap. contributing_projects[] surfaces what is driving demand.",
           )}
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/workforce/forecast/${r.id}`}
           emptyLabel={t("console.workforce.forecast.emptyLabel", undefined, "No resource forecasts yet")}
@@ -161,14 +161,14 @@ export default async function Page() {
               render: (r) =>
                 fmt.dateParts(r.baseline_at + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.baseline_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "lines",
               header: t("console.workforce.forecast.columns.lines", undefined, "Lines"),
               render: (r) => fmt.number(r.line_count),
               accessor: (r) => r.line_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "gaps",
@@ -180,14 +180,14 @@ export default async function Page() {
                   <span className="text-[var(--p-text-2)]">{fmt.number(r.gap_count)}</span>
                 ),
               accessor: (r) => r.gap_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "created",
               header: t("console.workforce.forecast.columns.created", undefined, "Created"),
               render: (r) => fmt.dateParts(r.created_at, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.created_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
           ]}
         />

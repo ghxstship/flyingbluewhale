@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -152,7 +152,7 @@ export default async function Page() {
             value={fmt.number(rows.length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           tableId="workforce.shift_swaps"
           rows={rows}
           emptyLabel={t("console.workforce.shiftSwaps.empty.label", undefined, "No swap requests")}
@@ -181,7 +181,7 @@ export default async function Page() {
               header: t("console.workforce.shiftSwaps.column.shift", undefined, "Shift"),
               render: (r) => r.shift_window,
               accessor: (r) => r.shift_window,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "role",

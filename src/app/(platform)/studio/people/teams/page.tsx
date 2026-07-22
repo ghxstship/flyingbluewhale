@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Avatar } from "@/components/ui/Avatar";
@@ -99,7 +100,7 @@ export default async function TeamsPage() {
             }
           />
         ) : (
-          <DataTable<TeamListRow>
+          <DataView<TeamListRow>
             rows={rows}
             rowHref={(r) => `/studio/people/teams/${r.id}`}
             emptyLabel={t("console.people.teams.table.emptyLabel", undefined, "No teams")}
@@ -112,7 +113,7 @@ export default async function TeamsPage() {
                     <Avatar name={r.name} />
                     <div>
                       <div className="text-sm font-medium">{r.name}</div>
-                      <div className="font-mono text-xs text-[var(--p-text-2)]">@team-{r.slug}</div>
+                      <div className={`${MONO_CELL_CLASS} text-[var(--p-text-2)]`}>@team-{r.slug}</div>
                     </div>
                   </div>
                 ),
@@ -136,7 +137,7 @@ export default async function TeamsPage() {
                 key: "updated",
                 header: t("console.people.teams.table.columnUpdated", undefined, "Updated"),
                 render: (r) => timeAgo(r.updatedAt),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.updatedAt,
                 sortable: true,
               },

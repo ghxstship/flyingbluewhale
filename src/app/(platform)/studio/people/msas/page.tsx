@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -56,7 +56,7 @@ export default async function MsasPage() {
         }
       />
       <div className="page-content">
-        <DataTable<IndependentContractorMsaResolved>
+        <DataView<IndependentContractorMsaResolved>
           rows={rows}
           rowHref={(r) => `/studio/people/msas/${r.id}`}
           emptyLabel={t("console.people.msas.emptyLabel", undefined, "No MSAs yet")}
@@ -72,7 +72,7 @@ export default async function MsasPage() {
               render: (r) => (
                 <div>
                   <div className="text-sm font-medium">{r.crew_member_name}</div>
-                  <div className="font-mono text-xs text-[var(--p-text-2)]">{r.crew_member_email ?? "—"}</div>
+                  <div className="text-xs text-[var(--p-text-2)]">{r.crew_member_email ?? "—"}</div>
                 </div>
               ),
               accessor: (r) => r.crew_member_name ?? null,
@@ -88,7 +88,8 @@ export default async function MsasPage() {
             {
               key: "version",
               header: t("console.people.msas.col.version", undefined, "Version"),
-              render: (r) => <span className="font-mono text-xs">v{r.version}</span>,
+              render: (r) => <>v{r.version}</>,
+              mono: true,
               accessor: (r) => r.version ?? null,
             },
             {
@@ -103,17 +104,15 @@ export default async function MsasPage() {
               key: "signed_at",
               header: t("console.people.msas.col.signed", undefined, "Signed"),
               render: (r) =>
-                r.signed_at ? (
-                  <span className="font-mono text-xs">{fmt.date(new Date(r.signed_at))}</span>
-                ) : (
-                  <span className="text-xs text-[var(--p-text-2)]">—</span>
-                ),
+                r.signed_at ? fmt.date(new Date(r.signed_at)) : <span className="text-[var(--p-text-2)]">—</span>,
+              mono: true,
               accessor: (r) => r.signed_at ?? null,
             },
             {
               key: "code",
               header: t("console.people.msas.col.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs tracking-wider">{r.access_code}</span>,
+              render: (r) => <span className="tracking-wider">{r.access_code}</span>,
+              mono: true,
               accessor: (r) => r.access_code ?? null,
             },
             {

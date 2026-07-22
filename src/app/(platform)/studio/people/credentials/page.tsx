@@ -1,6 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -54,7 +55,7 @@ export default async function CredentialsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Credential>
+        <DataView<Credential>
           rows={rows}
           rowHref={(r) => `/studio/people/credentials/${r.id}`}
           emptyLabel={t("console.people.credentials.emptyLabel", undefined, "No credentials tracked")}
@@ -81,14 +82,14 @@ export default async function CredentialsPage() {
               key: "number",
               header: t("console.people.credentials.col.number", undefined, "Number"),
               render: (r) => r.number ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.number ?? null,
             },
             {
               key: "issued",
               header: t("console.people.credentials.col.issued", undefined, "Issued"),
               render: (r) => formatDate(r.issued_on, "medium"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.issued_on,
             },
             {
@@ -105,7 +106,7 @@ export default async function CredentialsPage() {
                       {t("console.people.credentials.daysShort", { count: daysUntil }, `${daysUntil}d`)}
                     </Badge>
                   );
-                return <span className="font-mono text-xs">{formatDate(r.expires_on, "medium")}</span>;
+                return <span className={MONO_CELL_CLASS}>{formatDate(r.expires_on, "medium")}</span>;
               },
               accessor: (r) => r.expires_on ?? null,
             },

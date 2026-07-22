@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/finance/invoices/${r.id}`}
           emptyLabel={t("console.clients.invoices.emptyLabel", undefined, "No Invoices")}
@@ -108,10 +108,8 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
               header: t("console.clients.invoices.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents),
               accessor: (r) => r.amount_cents,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
           ]}
         />

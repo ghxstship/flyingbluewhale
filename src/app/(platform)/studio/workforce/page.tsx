@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
@@ -138,7 +138,7 @@ export default async function Page({
   // Deskless staff now live in crew_members (the person SSOT) — see ADR-0015
   // Addendum 2. listOrgScopedPage selects "*", so PostgREST aliasing isn't
   // available here; alias on the way out instead, keeping the row shape below
-  // (and the DataTable keys) unchanged.
+  // (and the DataView keys) unchanged.
   const rows = (result.rows as unknown as Array<Record<string, unknown>>).map((r): Row => {
     const { name, workforce_kind, ...rest } = r;
     return { ...rest, full_name: name as string, kind: workforce_kind as string } as Row;
@@ -198,7 +198,7 @@ export default async function Page({
           })}
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           totalCount={filteredTotal}
           emptyLabel={
@@ -243,7 +243,6 @@ export default async function Page({
               header: t("console.workforce.column.contact", undefined, "Contact"),
               render: (r) => r.email ?? r.phone ?? "—",
               accessor: (r) => r.email ?? r.phone ?? "",
-              mono: true,
             },
           ]}
         />

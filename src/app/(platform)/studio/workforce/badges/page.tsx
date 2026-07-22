@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -63,7 +63,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/workforce/badges/${r.id}`}
           emptyLabel="No badges yet"
@@ -83,7 +83,7 @@ export default async function Page() {
             {
               key: "awards",
               header: "Awarded",
-              render: (r) => <span className="font-mono">{awardCount.get(r.id) ?? 0}</span>,
+              render: (r) => awardCount.get(r.id) ?? 0,
               mono: true,
             },
           ]}

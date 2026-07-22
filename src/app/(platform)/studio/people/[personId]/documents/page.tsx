@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge, type BadgeVariant } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
         subtitle={t("console.people.documents.subtitle", undefined, "Offer letters and signed agreements.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.people.documents.emptyLabel", undefined, "No Documents")}
           emptyDescription={t(

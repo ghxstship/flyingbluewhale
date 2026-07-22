@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.people.time.emptyLabel", undefined, "No Time Entries")}
           emptyDescription={t(
@@ -83,10 +83,8 @@ export default async function Page({ params }: { params: Promise<{ personId: str
               header: t("console.people.time.column.duration", undefined, "Duration"),
               render: (r) => (r.duration_minutes != null ? `${(r.duration_minutes / 60).toFixed(2)}h` : "—"),
               accessor: (r) => r.duration_minutes ?? 0,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
             {
               key: "billable",

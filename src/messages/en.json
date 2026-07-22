@@ -155,7 +155,11 @@
      "label": "Guides",
      "description": "Long-form for producers"
     },
-    "docs": {
+    "developers": {
+      "label": "Developers",
+      "description": "Build on the record store: the API, scopes, and partner program."
+     },
+     "docs": {
      "label": "Docs",
      "description": "Ecosystem reference + API"
     },
@@ -1776,9 +1780,9 @@
       "body": "Where the world is experienced: ticketing, portals, marketplace. A way in for every persona."
      },
      "legend": {
-      "audience": "For knowledge · training · compliance",
+      "audience": "For the organization · brand · knowledge",
       "tag": "Enrich the World",
-      "body": "The knowledge the world is built on: the Standard, courses, certifications, the catalog, and the compliance engine."
+      "body": "Where the organization lives: brand, org chart, cost codes, locations, catalogs, templates, knowledge, and the academy. Configure once, every world inherits it."
      }
     },
     "industries": {
@@ -2808,7 +2812,7 @@
      "legend": {
       "tier": "KNOWLEDGE",
       "title": "The body of knowledge",
-      "body": "The Standard, courses, certifications, the priced catalog, and the compliance engine, all on the XPMS 2.0 protocol. The knowledge the world is built on.",
+      "body": "Brand studio, org chart, cost codes, locations, catalogs, and templates beside the Standard, courses, and certifications, all on XPMS 2.5. Where the organization lives.",
       "bullets": {
        "0": "The Standard: one versioned knowledge base",
        "1": "Courses & LMS with quizzes + certifications",
@@ -3107,6 +3111,7 @@
     "resources": {
      "heading": "Resources",
      "docs": "Docs",
+     "developers": "Developers",
      "guides": "Guides",
      "glossary": "Glossary",
      "templates": "Templates",

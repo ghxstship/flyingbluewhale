@@ -113,7 +113,7 @@ export const SITE = {
     legend: {
       name: "LEG3ND",
       tagline:
-        "The knowledge the world is built on: the Standard, courses, certifications, the catalog, and the compliance engine.",
+        "Where the organization lives: brand, org chart, cost codes, locations, catalogs, templates, knowledge, and the academy. Configure once, every world inherits it.",
       color: PRODUCT_ACCENTS.legend,
     },
   },

@@ -24,7 +24,7 @@ export function GET(): Response {
     `## Products`,
     ``,
     `- [COMPVSS](${base}/compvss): ${apps.compvss.tagline} Available today.`,
-    `- [LEG3ND](${base}/legend): ${apps.legend.tagline} The organization hub where every org is created and configured.`,
+    `- [LEG3ND](${base}/legend): ${apps.legend.tagline} New organizations are created and onboarded here, on the web.`,
     `- [ATLVS](${base}/atlvs): ${apps.atlvs.tagline} Coming soon.`,
     `- [GVTEWAY](${base}/gvteway): ${apps.gvteway.tagline} Coming soon; the public marketplace is live at ${base}/marketplace.`,
     ``,

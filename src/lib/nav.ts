@@ -2089,22 +2089,22 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
       },
       {
         labelKey: "marketing.header.product.atlvs.label",
-        href: "/solutions/atlvs",
+        href: "/atlvs",
         descriptionKey: "marketing.header.product.atlvs.description",
       },
       {
         labelKey: "marketing.header.product.compvss.label",
-        href: "/solutions/compvss",
+        href: "/compvss",
         descriptionKey: "marketing.header.product.compvss.description",
       },
       {
         labelKey: "marketing.header.product.gvteway.label",
-        href: "/solutions/gvteway",
+        href: "/gvteway",
         descriptionKey: "marketing.header.product.gvteway.description",
       },
       {
         labelKey: "marketing.header.product.legend.label",
-        href: "/solutions/legend",
+        href: "/legend",
         descriptionKey: "marketing.header.product.legend.description",
       },
       {
@@ -2146,6 +2146,11 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
         descriptionKey: "marketing.header.resources.guides.description",
       },
       {
+        labelKey: "marketing.header.resources.developers.label",
+        href: "/developers",
+        descriptionKey: "marketing.header.resources.developers.description",
+      },
+      {
         labelKey: "marketing.header.resources.docs.label",
         href: "/docs",
         descriptionKey: "marketing.header.resources.docs.description",
@@ -2183,10 +2188,10 @@ export const marketingFooterGroups: MarketingNavGroup[] = [
   {
     labelKey: "marketing.layout.footer.product.heading",
     items: [
-      { labelKey: "marketing.layout.footer.product.atlvs", href: "/solutions/atlvs" },
-      { labelKey: "marketing.layout.footer.product.gvteway", href: "/solutions/gvteway" },
-      { labelKey: "marketing.layout.footer.product.compvss", href: "/solutions/compvss" },
-      { labelKey: "marketing.layout.footer.product.legend", href: "/solutions/legend" },
+      { labelKey: "marketing.layout.footer.product.atlvs", href: "/atlvs" },
+      { labelKey: "marketing.layout.footer.product.gvteway", href: "/gvteway" },
+      { labelKey: "marketing.layout.footer.product.compvss", href: "/compvss" },
+      { labelKey: "marketing.layout.footer.product.legend", href: "/legend" },
       { labelKey: "marketing.layout.footer.product.features", href: "/features" },
       { labelKey: "marketing.layout.footer.product.ai", href: "/ai" },
       { labelKey: "marketing.layout.footer.product.integrations", href: "/integrations" },
@@ -2225,6 +2230,7 @@ export const marketingFooterGroups: MarketingNavGroup[] = [
     labelKey: "marketing.layout.footer.resources.heading",
     items: [
       { labelKey: "marketing.layout.footer.resources.docs", href: "/docs" },
+      { labelKey: "marketing.layout.footer.resources.developers", href: "/developers" },
       { labelKey: "marketing.layout.footer.resources.guides", href: "/guides" },
       { labelKey: "marketing.layout.footer.resources.glossary", href: "/glossary" },
       { labelKey: "marketing.layout.footer.resources.templates", href: "/templates" },

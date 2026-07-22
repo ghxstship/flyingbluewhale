@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1262 · **API route handlers:** 157 · **Distinct nav hrefs:** 575
+**Page routes:** 1263 · **API route handlers:** 157 · **Distinct nav hrefs:** 575
 
 ## Legend
 
@@ -29,10 +29,10 @@
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 115 | 91 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 94 | 34 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1262** | **549** | **670** | **0** | **43** |
+| **TOTAL** | | **1263** | **550** | **670** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -2266,7 +2266,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — Public / Marketing
 
-93 routes — ● 33 nav · ○ 51 linked · ⚠ 0 orphan
+94 routes — ● 34 nav · ○ 51 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2285,6 +2285,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/alternatives`
 ○ `/alternatives/[competitor]`
+
+</details>
+
+<details><summary><code>atlvs</code> · 1 route</summary>
+
+● `/atlvs`
 
 </details>
 
@@ -2329,6 +2335,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>compvss</code> · 1 route</summary>
+
+● `/compvss`
+
+</details>
+
 <details><summary><code>contact</code> · 1 route</summary>
 
 ● `/contact`
@@ -2346,6 +2358,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 · `/demo`
 · `/demo/[persona]`
+
+</details>
+
+<details><summary><code>developers</code> · 1 route</summary>
+
+● `/developers`
 
 </details>
 
@@ -2391,6 +2409,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>gvteway</code> · 1 route</summary>
+
+● `/gvteway`
+
+</details>
+
 <details><summary><code>help</code> · 1 route</summary>
 
 ● `/help`
@@ -2414,6 +2438,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/legal/privacy`
 ● `/legal/sla`
 ● `/legal/terms`
+
+</details>
+
+<details><summary><code>legend</code> · 1 route</summary>
+
+● `/legend`
 
 </details>
 
@@ -2486,14 +2516,10 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>solutions</code> · 6 routes</summary>
+<details><summary><code>solutions</code> · 2 routes</summary>
 
 ● `/solutions`
 ○ `/solutions/[industry]`
-● `/solutions/atlvs`
-● `/solutions/compvss`
-● `/solutions/gvteway`
-● `/solutions/legend`
 
 </details>
 

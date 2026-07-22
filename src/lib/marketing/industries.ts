@@ -77,7 +77,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Yes, on Enterprise. Custom branding and custom domains. Most clubs and promoters white-label their guest-facing portal.",
       },
     ],
-    related: ["concerts", "festivals-tours", "brand-activations"],
+    related: ["concerts", "festivals-tours", "brand-activations", "weddings-private-events"],
   },
 
   concerts: {
@@ -124,7 +124,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Yes. CSV bulk imports, webhook from the major ticketing systems, or manual upload. The mobile scanner works offline and syncs when it reconnects.",
       },
     ],
-    related: ["festivals-tours", "live-events", "theatrical-performances"],
+    related: ["festivals-tours", "live-events", "theatrical-performances", "venues-arenas"],
   },
 
   "festivals-tours": {
@@ -172,7 +172,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "The field app is offline-first. Scans queue on the device and reconcile cleanly when the phone reconnects. No dropped entries.",
       },
     ],
-    related: ["concerts", "live-events", "theatrical-performances"],
+    related: ["concerts", "live-events", "theatrical-performances", "sports-events", "government-municipal"],
   },
 
   "immersive-experiences": {
@@ -272,7 +272,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Yes. Proposals adopt the client's brand kit — logo, fonts, colors — automatically once the agency team sets it in settings.",
       },
     ],
-    related: ["corporate-events", "immersive-experiences", "live-events"],
+    related: ["corporate-events", "immersive-experiences", "live-events", "trade-shows-exhibitions", "weddings-private-events"],
   },
 
   "corporate-events": {
@@ -318,7 +318,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Yes. Create a separate internal review link from the client link. Annotate and revise. Send the final version when you're ready. Version history tracks every edit.",
       },
     ],
-    related: ["brand-activations", "theatrical-performances", "broadcast-tv-film"],
+    related: ["brand-activations", "theatrical-performances", "broadcast-tv-film", "conferences", "trade-shows-exhibitions", "weddings-private-events"],
   },
 
   "theatrical-performances": {
@@ -365,7 +365,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Every rundown edit is versioned — who, when, before, after. The stage manager can roll back a bad revision in one click, and the audit log satisfies legal review.",
       },
     ],
-    related: ["immersive-experiences", "concerts", "broadcast-tv-film"],
+    related: ["immersive-experiences", "concerts", "broadcast-tv-film", "venues-arenas", "education-campus"],
   },
 
   "broadcast-tv-film": {
@@ -421,6 +421,419 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
         a: "Yes. Time card exports in the standard formats those providers consume. Two-way sync is Enterprise. Export-only is available on every tier.",
       },
     ],
-    related: ["theatrical-performances", "corporate-events", "concerts"],
+    related: ["theatrical-performances", "corporate-events", "concerts", "sports-events"],
+  },
+
+  "sports-events": {
+    name: "Sports Events",
+    tagline: "Game days, tournaments, championship weekends",
+    description:
+      "Game day runs on COMPVSS, the field app your event staff carries today. Crew scheduling by gate and section, credential scans at every checkpoint, one-tap incident reports that reach command in seconds, and a daily log that holds up in the post-game debrief.",
+    hero: {
+      eyebrow: "Sports Events",
+      title: "Game Day Lives on the Field App.",
+      body: "A stadium event day is hundreds of staff across dozens of positions with a kickoff that will not wait. COMPVSS puts the schedule, the gate scans, and the incident channel on every worker's phone, and it keeps working when the concourse kills the signal.",
+    },
+    stats: [
+      { value: "< 100ms", label: "credential scan" },
+      { value: "1 tap", label: "incident filed" },
+      { value: "GPS", label: "verified clock-in" },
+      { value: "0", label: "paper sign-in sheets" },
+    ],
+    outcomes: [
+      "Post the game-day schedule by position and gate; crews confirm from their phones",
+      "Scan staff credentials at every checkpoint, offline included",
+      "File incidents from the stands with photo and GPS attached automatically",
+      "Clock in with geo-verification at the employee gate",
+      "Check radios and scanners out to workers and back in at wrap",
+      "Box-office and settlement reporting arrive with the ATLVS console (coming soon)",
+    ],
+    modules: [
+      {
+        name: "Crew Scheduling",
+        body: "Shifts by position, gate, and section. Coverage view shows the holes before doors.",
+      },
+      {
+        name: "Gate & Credential Scan",
+        body: "Staff credentials scan on any phone. Offline queue reconciles when the device reconnects.",
+      },
+      {
+        name: "Incidents",
+        body: "One-tap filing from anywhere in the bowl. Reports route to command with location and photo.",
+      },
+      {
+        name: "Asset Custody",
+        body: "Radios, scanners, and keys checked out per worker. The wrap report shows what is still out.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Does the app work inside a concrete stadium bowl?",
+        a: "Yes. COMPVSS is offline-first. Scans, incident reports, and clock punches queue on the device and sync when the phone finds signal again. Nothing is lost in a dead zone.",
+      },
+      {
+        q: "Can staffing agencies and third-party vendors work off the same schedule?",
+        a: "Yes. External crews join the project with their own scoped access. They see their shifts and check-in points, and their scans and time punches land in the same record as your house staff.",
+      },
+      {
+        q: "Can we reuse a setup across a whole home season?",
+        a: "Yes. Build the event-day template once, then clone it per game and change only what differs. Schedules, checkpoints, and incident routing carry over.",
+      },
+    ],
+    related: ["venues-arenas", "festivals-tours", "broadcast-tv-film"],
+  },
+
+  "venues-arenas": {
+    name: "Venues & Arenas",
+    tagline: "House teams running hundreds of shows a year",
+    description:
+      "Built for the house team that turns the building over night after night. COMPVSS runs the crew schedule across a heavy calendar, changeover punch lists, recurring inspections, and an incident log scoped per event, all from the phones your staff already carry.",
+    hero: {
+      eyebrow: "Venues & Arenas",
+      title: "Two Hundred Event Days. One House System.",
+      body: "A busy building hosts a concert, a game, and a corporate buyout in the same week. COMPVSS keeps the house crew scheduled across all of it and logs every changeover, inspection, and incident against the right event.",
+    },
+    stats: [
+      { value: "24/7", label: "building coverage" },
+      { value: "1 tap", label: "punch item logged" },
+      { value: "Offline", label: "back-of-house ready" },
+      { value: "0", label: "paper checklists" },
+    ],
+    outcomes: [
+      "Schedule the house crew across the full event calendar with coverage gaps visible",
+      "Run changeover punch lists with photos; items close before doors",
+      "Recurring inspections per room and per system, with a record of every pass",
+      "Incident and lost-and-found logs scoped to the event they happened at",
+      "Shift handover notes so the night crew knows what the day crew left open",
+      "House inventory custody: who has the lift key, and since when",
+    ],
+    modules: [
+      {
+        name: "Scheduling & Coverage",
+        body: "Calendar-wide crew scheduling with a coverage view per event day. Swaps and confirmations from the phone.",
+      },
+      {
+        name: "Punch Lists",
+        body: "Changeover and maintenance punches with photo evidence, assignment, and closure tracking.",
+      },
+      {
+        name: "Inspections",
+        body: "Recurring checklists per space. Every completed inspection is timestamped and attributable.",
+      },
+      {
+        name: "Incidents & Lost and Found",
+        body: "One log for the building, filtered per event. Lost items tracked from intake to return.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Can we run multiple events in the building on the same day?",
+        a: "Yes. Each event is its own project with its own schedule, checklists, and incident log. The house crew works across all of them from one app, and reports stay separated per event.",
+      },
+      {
+        q: "Can a touring production see our house schedule?",
+        a: "Only what you share. Touring and promoter reps can be invited into a single event with scoped access. They never see the rest of your calendar or another promoter's event.",
+      },
+      {
+        q: "How does shift handover work?",
+        a: "The outgoing lead logs a handover note against the shift, with open punch items attached. The incoming crew opens the app and sees exactly what is unresolved. No whiteboard required.",
+      },
+    ],
+    related: ["sports-events", "concerts", "theatrical-performances"],
+  },
+
+  "trade-shows-exhibitions": {
+    name: "Trade Shows & Exhibitions",
+    tagline: "Exhibit halls, booth builds, show-floor operations",
+    description:
+      "Move-in to move-out on one field app. COMPVSS schedules labor calls per hall, runs booth punch lists to zero before show open, scans crew at the dock, and tracks every cart and lift checked out on the floor.",
+    hero: {
+      eyebrow: "Trade Shows & Exhibitions",
+      title: "Move-In to Move-Out, On the Floor.",
+      body: "An exhibit hall build is dozens of crews from different companies working the same floor against the same deadline. COMPVSS gives every crew its call time, its punch list, and its dock access from a phone, and gives you the whole floor in one view.",
+    },
+    stats: [
+      { value: "1 tap", label: "booth punch filed" },
+      { value: "< 100ms", label: "dock credential scan" },
+      { value: "Offline", label: "in the hall, by design" },
+      { value: "0", label: "clipboard walk-throughs" },
+    ],
+    outcomes: [
+      "Schedule labor calls per hall and per booth block; crews confirm from their phones",
+      "Booth punch lists with photos, assigned and closed before show open",
+      "Scan crew credentials at the dock and the floor entrance",
+      "Track carts, lifts, and tools checked out to each crew",
+      "Daily log per hall for the general contractor record",
+      "Exhibitor billing lands with the ATLVS console (coming soon)",
+    ],
+    modules: [
+      {
+        name: "Labor Scheduling",
+        body: "Calls per hall, per day, per crew. Confirmations and no-shows visible before the shift starts.",
+      },
+      {
+        name: "Punch Lists",
+        body: "Per-booth punches with photo evidence. Filter by hall, aisle, or contractor and drive to zero.",
+      },
+      {
+        name: "Dock & Floor Access",
+        body: "Credential scan at the dock and the hall doors. Offline queue for the loading bays.",
+      },
+      {
+        name: "Asset Custody",
+        body: "Every lift, cart, and tool checked out per crew. Move-out shows what has not come back.",
+      },
+    ],
+    faqs: [
+      {
+        q: "We are a general contractor with subs from six companies. Can they all work in one system?",
+        a: "Yes. Each subcontractor joins the project with scoped access. They see their own calls, punches, and dock windows. You see the whole floor rolled up by hall and by company.",
+      },
+      {
+        q: "Does the app work in the middle of a convention hall?",
+        a: "Yes. COMPVSS is offline-first. Punches, scans, and time punches queue on the device and sync when signal returns, which matters when ten thousand exhibitors are sharing one access point.",
+      },
+      {
+        q: "Can we run union labor calls through the platform?",
+        a: "Yes. Calls are scheduled per crew with call times, positions, and confirmations. Time punches are geo-verified and export for payroll, and the daily log preserves who worked which hall.",
+      },
+    ],
+    related: ["conferences", "corporate-events", "brand-activations"],
+  },
+
+  conferences: {
+    name: "Conferences",
+    tagline: "Summits, multi-track programs, general sessions",
+    description:
+      "For the production teams behind multi-track conferences: room turnovers on punch lists, AV crews scheduled per session block, check-in scanning at registration and session doors, and briefings that reach every crew phone before the first keynote.",
+    hero: {
+      eyebrow: "Conferences",
+      title: "Forty Sessions a Day. Every Room Turn Logged.",
+      body: "A conference is a production that resets itself every ninety minutes. COMPVSS runs the turn schedule, the room-set punch lists, and the door scans from the phones your crew already carries, so the 2 p.m. breakout looks as sharp as the opening keynote.",
+    },
+    stats: [
+      { value: "1 tap", label: "room punch closed" },
+      { value: "< 100ms", label: "badge scan at doors" },
+      { value: "GPS", label: "verified crew clock-in" },
+      { value: "0", label: "printed run sheets" },
+    ],
+    outcomes: [
+      "Schedule AV and room crews per session block across every track",
+      "Room-set punch lists per turnover, with photos, closed before doors open",
+      "Scan attendee check-ins at registration and at session doors",
+      "Session briefings and day-of guides delivered to every crew phone",
+      "Mid-day schedule changes push to affected crews instantly",
+      "Incidents filed from any room route straight to the floor manager",
+    ],
+    modules: [
+      {
+        name: "Room Turnovers",
+        body: "Punch list per turn: set, AV check, signage, reset. Photo evidence and closure tracking per room.",
+      },
+      {
+        name: "Crew Scheduling",
+        body: "AV, rigging, and floor crews scheduled per session block. Changes reach the right phones immediately.",
+      },
+      {
+        name: "Check-In Scan",
+        body: "Registration and session-door scanning on any phone, with offline queue for crowded ballroom corridors.",
+      },
+      {
+        name: "Briefings & Guides",
+        body: "Per-persona day-of guides: crew sees run notes and escalations, staff sees the attendee-facing script.",
+      },
+    ],
+    faqs: [
+      {
+        q: "How is this different from your Corporate Events coverage?",
+        a: "Corporate Events covers the broader client-side program: proposals, stakeholder portals, compliance. Conferences is the production floor itself: session turns, AV crews, door scans, briefings. Many teams use both angles on the same project.",
+      },
+      {
+        q: "Can we handle a campus spread across three hotels?",
+        a: "Yes. Locations and rooms are modeled per venue, crews are scheduled per building, and the schedule view shows travel gaps between properties so a crew is never booked in two hotels at once.",
+      },
+      {
+        q: "What happens when the program changes at 11 a.m.?",
+        a: "Update the session block once and the change pushes to every affected crew phone. The old time disappears from their schedule, the new one appears, and the turn punch list moves with it.",
+      },
+    ],
+    related: ["corporate-events", "trade-shows-exhibitions", "education-campus"],
+  },
+
+  "weddings-private-events": {
+    name: "Weddings & Private Events",
+    tagline: "High-end private productions, estates, destination builds",
+    description:
+      "For private-event production companies building tented estates and destination weekends. COMPVSS schedules the build crew day by day, checks vendors in at the gate, walks the punch list before the client walk-through, and keeps a daily log of every build day.",
+    hero: {
+      eyebrow: "Weddings & Private Events",
+      title: "The Client Sees the Room. You See the Punch List.",
+      body: "A high-end private build is a week of load-ins on a site with no loading dock and a client walk-through that cannot slip. COMPVSS runs the build schedule, the vendor arrivals, and the final punch from your crew's phones, even where the estate has no signal.",
+    },
+    stats: [
+      { value: "1 tap", label: "punch item filed" },
+      { value: "GPS", label: "verified crew clock-in" },
+      { value: "Offline", label: "works at remote estates" },
+      { value: "0", label: "binder run sheets" },
+    ],
+    outcomes: [
+      "Build-week crew schedules per day and per zone, confirmed from the phone",
+      "Vendor arrival check-in at the gate, timestamped against the delivery window",
+      "Punch list walk with photos before every client walk-through",
+      "Rental custody: what arrived, who has it, what goes back on which truck",
+      "Daily log per build day, from first truck to last light focus",
+      "Client proposals and invoicing arrive with the ATLVS console (coming soon)",
+    ],
+    modules: [
+      {
+        name: "Build Schedule",
+        body: "Crew calls per build day and zone. The week view shows every trade's window on the site.",
+      },
+      {
+        name: "Vendor Check-In",
+        body: "Every arrival scanned at the gate. Late deliveries are visible the moment the window passes.",
+      },
+      {
+        name: "Punch Lists",
+        body: "Photo punches per zone, assigned to a crew, closed before the client walks the room.",
+      },
+      {
+        name: "Daily Logs",
+        body: "One log per build day: weather, arrivals, progress, issues. The record your team wishes it had kept.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Our clients expect discretion. Who can see event data?",
+        a: "Only the people you invite, at the access level you give them. Each event is walled off, external vendors see only their own scope, and the audit log records every view and change.",
+      },
+      {
+        q: "Does this work at a remote estate with no cell coverage?",
+        a: "Yes. COMPVSS is offline-first. Check-ins, punches, and time punches queue on the device and sync when crews get back into coverage. The build does not pause for the signal.",
+      },
+      {
+        q: "We are a twelve-person company. Is this built for teams our size?",
+        a: "Yes. Most private-event production companies run lean and hire in per build. The core team lives in the app, and per-event crew and vendors join with scoped access for just that project.",
+      },
+    ],
+    related: ["corporate-events", "live-events", "brand-activations"],
+  },
+
+  "government-municipal": {
+    name: "Government & Municipal",
+    tagline: "Civic events, public festivals, emergency coordination",
+    description:
+      "For city event offices, parks departments, and the agencies behind public festivals. COMPVSS schedules staff and volunteers per zone, tracks permits against the event record, files incidents with time and location for the after-action report, and puts emergency procedures on every worker's phone.",
+    hero: {
+      eyebrow: "Government & Municipal",
+      title: "A Public Event Is a Public Record.",
+      body: "A street festival answers to more agencies than any private show: permits, public safety, after-action review. COMPVSS documents the operation as it happens, from volunteer check-in to the last incident report, so the record writes itself.",
+    },
+    stats: [
+      { value: "1 tap", label: "incident documented" },
+      { value: "GPS", label: "on every field report" },
+      { value: "Offline", label: "works on the parade route" },
+      { value: "100%", label: "of changes in the audit log" },
+    ],
+    outcomes: [
+      "Schedule staff and volunteers per zone with check-in at the perimeter",
+      "Permit records tracked against the event, visible to every lead",
+      "Incident reports carry timestamp, GPS, photo, and reporter for the after-action file",
+      "Emergency procedures published to every worker's phone before gates",
+      "Daily logs that stand up as the operational record",
+      "Every change lands in an immutable audit log, exportable for records requests",
+    ],
+    modules: [
+      {
+        name: "Staff & Volunteer Scheduling",
+        body: "Zone-based shifts for employees and volunteers alike, with confirmations and coverage view.",
+      },
+      {
+        name: "Permits",
+        body: "Permit register tied to the event: issuer, window, conditions, and expiry visible to every lead.",
+      },
+      {
+        name: "Incidents",
+        body: "Field reports with automatic time, location, and photo capture. Routing per severity and zone.",
+      },
+      {
+        name: "Emergency Guides",
+        body: "Evacuation routes, contact trees, and procedures delivered per role. Updated once, current everywhere.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Can volunteers who are not city employees use the app?",
+        a: "Yes. Volunteers join the event with scoped access: their shift, their zone, their check-in, and the emergency guide. They never touch staff scheduling or internal records.",
+      },
+      {
+        q: "Will the records satisfy an after-action review or a records request?",
+        a: "The operational record is built for exactly that. Incident reports carry timestamp, GPS, photo, and reporter. Every change is in an immutable audit log, and logs export cleanly.",
+      },
+      {
+        q: "Can we pilot this on a single event before a wider procurement?",
+        a: "Yes. Most agencies start with one festival or one season. A single-event pilot exercises the full system, and the data carries forward if you expand. Contact us about procurement paperwork; we have done it before.",
+      },
+    ],
+    related: ["festivals-tours", "sports-events", "education-campus"],
+  },
+
+  "education-campus": {
+    name: "Education & Campus",
+    tagline: "University events, campus productions, student crews",
+    description:
+      "For campus events offices and student production crews: commencement, orientation week, athletics support, performing arts. COMPVSS schedules student workers around class blocks, verifies clock-ins at venues across campus, and turns the day-of guide into training a first-timer can follow.",
+    hero: {
+      eyebrow: "Education & Campus",
+      title: "Your Crew Graduates Every Four Years.",
+      body: "A campus events office rebuilds its workforce every semester. COMPVSS gives student crews a schedule on their phone, a guide that teaches the job, and a clock-in that proves they showed up, so institutional knowledge stops walking out at commencement.",
+    },
+    stats: [
+      { value: "GPS", label: "verified clock-in, campus-wide" },
+      { value: "1 tap", label: "incident to campus safety" },
+      { value: "Offline", label: "works in the field house" },
+      { value: "0", label: "paper timesheets" },
+    ],
+    outcomes: [
+      "Schedule student crews around class blocks, with swaps handled in the app",
+      "Geo-verified clock-in at venues across campus",
+      "Day-of guides double as training for first-time crew members",
+      "Incident reports route to campus safety with location attached",
+      "Equipment checkout from the campus inventory, tracked per student",
+      "Room-turn punch lists for the spaces that host four events a day",
+    ],
+    modules: [
+      {
+        name: "Student Crew Scheduling",
+        body: "Shifts that respect class schedules. Swap requests and confirmations happen in the app.",
+      },
+      {
+        name: "Time & Attendance",
+        body: "Geo-verified punches at every campus venue. Timesheets export for student payroll.",
+      },
+      {
+        name: "Asset Checkout",
+        body: "Cameras, radios, and AV gear checked out per student. End of semester shows what is still out.",
+      },
+      {
+        name: "Guides",
+        body: "Per-role day-of guides written once, reused every semester. The training is in the pocket.",
+      },
+    ],
+    faqs: [
+      {
+        q: "Half our crew is new every semester. How fast can they start?",
+        a: "A student joins from an invite, sees their shifts, and reads the role guide on their phone. Most crews are working their first event the same week. The guide carries the training load a veteran used to.",
+      },
+      {
+        q: "Can we run many small events at once across campus?",
+        a: "Yes. Each event is its own project with its own schedule and log. One office view rolls up coverage across every venue, from the black box theater to the field house.",
+      },
+      {
+        q: "How do student hours get to payroll?",
+        a: "Punches are geo-verified per venue, supervisors approve timesheets in the app, and approved hours export in formats campus payroll systems accept. No paper cards to chase down at month end.",
+      },
+    ],
+    related: ["conferences", "government-municipal", "theatrical-performances"],
   },
 };

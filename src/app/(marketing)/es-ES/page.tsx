@@ -59,22 +59,22 @@ const APPS_ES = [
   {
     name: "ATLVS",
     body: "Desarrolla y construye el mundo: proyectos, advancing, finanzas, compras y una IA que redacta el papeleo. La cabina de mando del productor.",
-    href: "/solutions/atlvs",
+    href: "/atlvs",
   },
   {
     name: "COMPVSS",
     body: "Opéralo sobre el terreno: turnos, certificaciones, escaneo en puerta, incidentes. Offline-first y veloz en la puerta aunque la señal no acompañe.",
-    href: "/solutions/compvss",
+    href: "/compvss",
   },
   {
     name: "GVTEWAY",
     body: "Donde se vive el mundo: entradas, portales, marketplace. Cada perfil, con su propia puerta de entrada.",
-    href: "/solutions/gvteway",
+    href: "/gvteway",
   },
   {
     name: "LEG3ND",
     body: "El conocimiento sobre el que se levanta el mundo: el Standard, los cursos, las certificaciones, el catálogo y el motor de cumplimiento.",
-    href: "/solutions/legend",
+    href: "/legend",
   },
 ];
 

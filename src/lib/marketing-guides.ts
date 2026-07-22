@@ -94,7 +94,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
           "Every project in ATLVS has a deliverables module with the 16 standard types available out of the box. You can add custom types per org.",
           "Each deliverable has a status workflow, comments (threaded), file attachments stored in Supabase Storage, and a full deliverable_history row per state change.",
           "Artists and vendors see only the deliverables assigned to them, via GVTEWAY portals. They can upload responses, mark their end complete, and comment — all writing back into the shared history.",
-          "Read more at /solutions/atlvs or /features/advancing.",
+          "Read more at /atlvs or /features/advancing.",
         ],
       },
     ],
@@ -175,7 +175,7 @@ export const MARKETING_GUIDES: Record<string, MarketingGuide> = {
         body: [
           "The Boarding Pass pattern — popularized by Black Coffee's 2025 tour KBYG (github.com/ghxstship/boardingpass) — treats the KBYG as an interactive, role-scoped, mobile-first website rather than a PDF.",
           "Key innovations: tier 1–5 classification banners for venue zones, role-specific timelines, embedded radio channel allocations, offline-accessible on the crew phone.",
-          "The ATLVS Technologies suite adopts this pattern as the event guides module. One authoring flow in ATLVS CMS; six persona renders on portal + mobile, shared by <GuideView>. See /solutions/atlvs#guides.",
+          "The ATLVS Technologies suite adopts this pattern as the event guides module. One authoring flow in ATLVS CMS; six persona renders on portal + mobile, shared by <GuideView>. See /atlvs.",
         ],
       },
       {

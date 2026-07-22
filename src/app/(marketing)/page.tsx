@@ -1,7 +1,16 @@
-// Marketing home — ATLVS ecosystem (ATLVS · COMPVSS · GVTEWAY · LEG3ND).
+// Marketing home — COMPVSS-first (MARKETING_ONBOARDING_REBUILD_PLAN §0/§2/§3).
+// The site sells the product you can use TODAY (COMPVSS, field/venue workforce
+// ops), positions LEG3ND as the organization foundation, and frames ATLVS +
+// GVTEWAY as coming soon with honest teasers. "The World Builder's Ecosystem"
+// identity line is retained; the hero sells COMPVSS.
+//
 // SaaS skin (Hanken Grotesk body, Anton display, neutral surfaces, soft
 // elevation) inherited from (marketing)/layout.tsx data-theme="atlvs-product".
-// Copy leads with the platform — production-ops vernacular, no voyage metaphor.
+//
+// i18n: preserved sections keep their existing catalog keys. New COMPVSS-first
+// copy lives under `marketing.pages.home.worlds.*` with call-site fallbacks
+// (the sanctioned rollout pattern in src/lib/i18n/t.ts) so the page ships
+// before the catalogs are populated and the i18n sweep can fill them later.
 
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -13,7 +22,6 @@ import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSc
 import { getRequestT } from "@/lib/i18n/request";
 import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { Wordmark } from "@/components/brand/Wordmark";
-import { XPMS_PHASES } from "@/lib/xpms";
 import { POST_LIST } from "@/lib/blog";
 import { CHANGELOG_ENTRIES } from "@/lib/changelog";
 
@@ -33,265 +41,164 @@ const TRUST_LOGOS: TrustLogo[] = [
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
-    title: t("marketing.pages.home.metadata.title"),
-    description: t("marketing.pages.home.metadata.description"),
+    title: t(
+      "marketing.pages.home.worlds.metadata.title",
+      undefined,
+      "COMPVSS by ATLVS Technologies · Field and venue operations for crews who build worlds",
+    ),
+    description: t(
+      "marketing.pages.home.worlds.metadata.description",
+      undefined,
+      "COMPVSS runs site and venue operations from the crew's own phones: shifts, gate scans, incidents, daily logs, gear custody. Offline-first, priced per organization, live today. Part of the ATLVS ecosystem.",
+    ),
     path: "/",
     languages: {
       "es-ES": `${SITE.baseUrl}/es-ES`,
       "pt-BR": `${SITE.baseUrl}/pt-BR`,
     },
     keywords: [
+      "COMPVSS",
       "ATLVS",
       "ATLVS Technologies",
-      "COMPVSS",
       "GVTEWAY",
-      "production management software",
-      "event operations platform",
+      "LEG3ND",
+      "field workforce app",
+      "deskless workforce software",
+      "venue operations software",
+      "event crew scheduling software",
       "crew management software",
-      "live event software",
-      "festival operations platform",
-      "experiential production platform",
-      "concert tour management",
-      "brand activation software",
-      "production scheduling",
-      "event ticketing platform",
+      "gate scanning app",
+      "incident reporting app",
+      "geofenced time clock",
       "offline-first crew app",
+      "site operations platform",
+      "production crew app",
     ],
-    ogImageTitle: t("marketing.pages.home.metadata.ogImageTitle"),
+    ogImageTitle: t(
+      "marketing.pages.home.worlds.metadata.ogImageTitle",
+      undefined,
+      "Field and venue ops for crews who build worlds",
+    ),
   });
 }
 
 export default async function Home() {
   const { t } = await getRequestT();
+  // Shorthand for the new-copy namespace: catalog key + call-site fallback.
+  const w = (key: string, fallback: string) => t(`marketing.pages.home.worlds.${key}`, undefined, fallback);
 
-  const INDUSTRIES: Array<{ title: string; body: string; href: string }> = [
+  // §3 — COMPVSS proof: every claim below is true of the live repo.
+  // gate scan journal: assignment_scan_codes/assignment_events (+ occupancy at
+  //   /studio/access-control/counts); incidents: /m/incident(s) + close
+  //   sign-off (20260722140000_incident_close_signoff); punch/daily-log/
+  //   handover: /m/punch, /m/daily-log, /m/handover; shifts + geofence:
+  //   /m/schedule + shift_swaps + time_clock_zones/classifyPunch (flagged
+  //   off-site punches); custody: transitionAssetState → asset_movements;
+  //   offline queue: public/service-worker.js QUEUEABLE_ENDPOINTS.
+  const PROOF = [
     {
-      title: t("marketing.pages.home.industries.items.festivals.title"),
-      body: t("marketing.pages.home.industries.items.festivals.body"),
-      href: "/solutions/festivals-tours",
+      title: w("proof.items.gateScan.title", "Gate scan with a journal"),
+      body: w(
+        "proof.items.gateScan.body",
+        "Scan credentials and tickets at the door. Every read lands in the scan journal as accepted, duplicate, or wrong zone, and occupancy counts come straight from it.",
+      ),
     },
     {
-      title: t("marketing.pages.home.industries.items.concertsTours.title"),
-      body: t("marketing.pages.home.industries.items.concertsTours.body"),
-      href: "/solutions/concerts",
+      title: w("proof.items.incidents.title", "Incidents that close properly"),
+      body: w(
+        "proof.items.incidents.body",
+        "File an incident from the floor with photos attached. Closing one takes a named sign-off, and the record keeps who filed it and who signed it.",
+      ),
     },
     {
-      title: t("marketing.pages.home.industries.items.brandActivations.title"),
-      body: t("marketing.pages.home.industries.items.brandActivations.body"),
-      href: "/solutions/brand-activations",
+      title: w("proof.items.fieldRecords.title", "Punch lists, daily logs, handovers"),
+      body: w(
+        "proof.items.fieldRecords.body",
+        "The records that usually live in someone's head get written where the work happens, and they survive the shift change.",
+      ),
     },
     {
-      title: t("marketing.pages.home.industries.items.immersiveExperiences.title"),
-      body: t("marketing.pages.home.industries.items.immersiveExperiences.body"),
-      href: "/solutions/immersive-experiences",
+      title: w("proof.items.shifts.title", "Shifts and geofenced punches"),
+      body: w(
+        "proof.items.shifts.body",
+        "Shift schedules with swaps, and clock punches checked against the site geofence. An off-site punch gets flagged for a manager instead of silently counting.",
+      ),
     },
     {
-      title: t("marketing.pages.home.industries.items.sportingEvents.title"),
-      body: t("marketing.pages.home.industries.items.sportingEvents.body"),
-      href: "/solutions/live-events",
+      title: w("proof.items.custody.title", "Gear custody"),
+      body: w(
+        "proof.items.custody.body",
+        "Check equipment out and back in. Every move writes a custody record, so the question of who has the drill has exactly one answer.",
+      ),
     },
     {
-      title: t("marketing.pages.home.industries.items.tvFilmBroadcast.title"),
-      body: t("marketing.pages.home.industries.items.tvFilmBroadcast.body"),
-      href: "/solutions/broadcast-tv-film",
-    },
-    {
-      title: t("marketing.pages.home.industries.items.corporateAgm.title"),
-      body: t("marketing.pages.home.industries.items.corporateAgm.body"),
-      href: "/solutions/corporate-events",
-    },
-    {
-      title: t("marketing.pages.home.industries.items.theatrical.title"),
-      body: t("marketing.pages.home.industries.items.theatrical.body"),
-      href: "/solutions/theatrical-performances",
+      title: w("proof.items.offline.title", "Built for dead zones"),
+      body: w(
+        "proof.items.offline.body",
+        "Clock punches and scans queue on the device when the network drops and replay in order when it comes back. No lost punches, no double reads.",
+      ),
     },
   ];
 
-  const TIERS = [
-    {
-      name: t("marketing.pages.home.adopt.tiers.fullPlatform.name"),
-      tag: t("marketing.pages.home.adopt.tiers.fullPlatform.tag"),
-      body: t("marketing.pages.home.adopt.tiers.fullPlatform.body"),
-    },
-    {
-      name: t("marketing.pages.home.adopt.tiers.singleApp.name"),
-      tag: t("marketing.pages.home.adopt.tiers.singleApp.tag"),
-      body: t("marketing.pages.home.adopt.tiers.singleApp.body"),
-    },
-    {
-      name: t("marketing.pages.home.adopt.tiers.modulesOnly.name"),
-      tag: t("marketing.pages.home.adopt.tiers.modulesOnly.tag"),
-      body: t("marketing.pages.home.adopt.tiers.modulesOnly.body"),
-    },
+  // §2 — LEG3ND foundation: the org-level datasets every project inherits.
+  const FOUNDATION = [
+    w("foundation.items.brandStudio", "Brand studio"),
+    w("foundation.items.orgChart", "Org chart"),
+    w("foundation.items.glCodes", "GL codes"),
+    w("foundation.items.locations", "Locations"),
+    w("foundation.items.catalogs", "Catalogs"),
+    w("foundation.items.templates", "Templates"),
+    w("foundation.items.knowledge", "Knowledge"),
+    w("foundation.items.academy", "Academy"),
   ];
 
-  // Canonical XPMS production lifecycle (8-gate) — single source of truth is
-  // XPMS_PHASES (src/lib/xpms). Names + descriptions are aligned to the
-  // Discovery → Design → Advance → Procurement → Build → Install → Operate →
-  // Close arc so this marketing copy can never drift from the protocol.
-  const PHASE_SUBS: Record<string, string> = {
-    Discovery: "Brief approved, go decision made.",
-    Design: "Design package approved, scope locked.",
-    Advance: "Contracts & POs issued, budget baselined.",
-    Procurement: "Deposits paid, long-leads committed.",
-    Build: "Fabrication & construction complete, QC passed.",
-    Install: "Installed, commissioned, punch list closed.",
-    Operate: "Show live; operating acceptance.",
-    Close: "Reconciled, final cost report filed.",
-  };
-  const PHASES: Array<{ n: string; name: string; sub: string }> = XPMS_PHASES.map((p) => ({
-    n: String(p.num).padStart(2, "0"),
-    name: p.label,
-    sub: PHASE_SUBS[p.label] ?? "",
-  }));
-
-  // `color` is the bright brand fill (decorative accent bars / large display).
-  // `textColor` is the per-product AA-deepened text variant (matches the
-  // theme's --p-accent-text) so brand-colored text on white surfaces still
-  // clears WCAG 1.4.3 4.5:1; the bright fills (COMPVSS #FFC400, ATLVS #E23414,
-  // etc.) only reach ~2.2-3.5:1 as text. Same hue, darker value; brand mark
-  // colors unchanged.
-  const PRODUCTS = [
-    {
-      slug: "atlvs",
-      title: "ATLVS",
-      audience: t("marketing.pages.home.products.atlvs.audience"),
-      tag: t("marketing.pages.home.products.atlvs.tag"),
-      body: t("marketing.pages.home.products.atlvs.body"),
-      href: "/solutions/atlvs",
-      color: PRODUCT_ACCENTS.atlvs,
-    },
-    {
-      slug: "compvss",
-      title: "COMPVSS",
-      audience: t("marketing.pages.home.products.compvss.audience"),
-      tag: t("marketing.pages.home.products.compvss.tag"),
-      body: t("marketing.pages.home.products.compvss.body"),
-      href: "/solutions/compvss",
-      color: PRODUCT_ACCENTS.compvss,
-    },
-    {
-      slug: "gvteway",
-      title: "GVTEWAY",
-      audience: t("marketing.pages.home.products.gvteway.audience"),
-      tag: t("marketing.pages.home.products.gvteway.tag"),
-      body: t("marketing.pages.home.products.gvteway.body"),
-      href: "/solutions/gvteway",
-      color: PRODUCT_ACCENTS.gvteway,
-    },
-    {
-      slug: "legend",
-      title: "LEG3ND",
-      audience: t("marketing.pages.home.products.legend.audience"),
-      tag: t("marketing.pages.home.products.legend.tag"),
-      body: t("marketing.pages.home.products.legend.body"),
-      href: "/solutions/legend",
-      color: PRODUCT_ACCENTS.legend,
-    },
+  // §5 — GEO entity consistency: the four one-liners VERBATIM from SITE.apps
+  // (the locked WORLDS canon), so answer engines see one identical sentence
+  // per app across pages, llms.txt, and schema.
+  const ECOSYSTEM = [
+    { slug: "compvss", app: SITE.apps.compvss, href: "/compvss", note: w("ecosystem.notes.live", "Live today") },
+    { slug: "legend", app: SITE.apps.legend, href: "/legend", note: w("ecosystem.notes.live", "Live today") },
+    { slug: "atlvs", app: SITE.apps.atlvs, href: "/atlvs", note: w("ecosystem.notes.comingSoon", "Coming soon") },
+    { slug: "gvteway", app: SITE.apps.gvteway, href: "/gvteway", note: w("ecosystem.notes.comingSoon", "Coming soon") },
   ];
 
-  const EDGES = [
-    {
-      n: "01",
-      title: t("marketing.pages.home.difference.edges.endToEnd.title"),
-      tag: t("marketing.pages.home.difference.edges.endToEnd.tag"),
-      body: t("marketing.pages.home.difference.edges.endToEnd.body"),
-    },
-    {
-      n: "02",
-      title: t("marketing.pages.home.difference.edges.proprietaryStack.title"),
-      tag: t("marketing.pages.home.difference.edges.proprietaryStack.tag"),
-      body: t("marketing.pages.home.difference.edges.proprietaryStack.body"),
-    },
-    {
-      n: "03",
-      title: t("marketing.pages.home.difference.edges.perOrgNotPerSeat.title"),
-      tag: t("marketing.pages.home.difference.edges.perOrgNotPerSeat.tag"),
-      body: t("marketing.pages.home.difference.edges.perOrgNotPerSeat.body"),
-    },
-  ];
-
-  const PROJECTS = [
-    {
-      code: "RRR 312",
-      title: t("marketing.pages.home.projects.items.rrr312.title"),
-      sub: t("marketing.pages.home.projects.items.rrr312.sub"),
-      year: "2026",
-    },
-    {
-      code: "RRR 226",
-      title: t("marketing.pages.home.projects.items.rrr226.title"),
-      sub: t("marketing.pages.home.projects.items.rrr226.sub"),
-      year: "2026",
-    },
-    {
-      code: "RRR 052",
-      title: t("marketing.pages.home.projects.items.rrr052.title"),
-      sub: t("marketing.pages.home.projects.items.rrr052.sub"),
-      year: "2025",
-    },
-    {
-      code: "RRR 108",
-      title: t("marketing.pages.home.projects.items.rrr108.title"),
-      sub: t("marketing.pages.home.projects.items.rrr108.sub"),
-      year: "2024",
-    },
-    {
-      code: "RRR 023",
-      title: t("marketing.pages.home.projects.items.rrr023.title"),
-      sub: t("marketing.pages.home.projects.items.rrr023.sub"),
-      year: "2024",
-    },
-    {
-      code: "RRR 311",
-      title: t("marketing.pages.home.projects.items.rrr311.title"),
-      sub: t("marketing.pages.home.projects.items.rrr311.sub"),
-      year: "2023",
-    },
-    {
-      code: "RRR 001",
-      title: t("marketing.pages.home.projects.items.rrr001.title"),
-      sub: t("marketing.pages.home.projects.items.rrr001.sub"),
-      year: "2023",
-    },
-  ];
-
+  // §6 — GEO Q&A. Real questions, short honest answers; rendered visibly by
+  // FAQSection which also emits the FAQPage JSON-LD.
   const HOME_FAQ = [
     {
-      q: t("marketing.pages.home.faq.items.whatIsAtlvs.q"),
-      a: t("marketing.pages.home.faq.items.whatIsAtlvs.a"),
+      q: w("faq.items.whatIsCompvss.q", "What is COMPVSS?"),
+      a: w(
+        "faq.items.whatIsCompvss.a",
+        "COMPVSS is the field and venue operations app from ATLVS Technologies. Crews use it on their own phones for shifts, clock punches, gate scans, incidents, daily logs, and gear custody. It installs as a PWA and is live today.",
+      ),
     },
     {
-      q: t("marketing.pages.home.faq.items.whoIsItFor.q"),
-      a: t("marketing.pages.home.faq.items.whoIsItFor.a"),
+      q: w("faq.items.pricing.q", "How is COMPVSS priced?"),
+      a: w(
+        "faq.items.pricing.a",
+        "Per organization. One price covers the whole org with unlimited crew members; seats are never counted. The Access tier is free with no credit card.",
+      ),
     },
     {
-      q: t("marketing.pages.home.faq.items.pricing.q"),
-      a: t("marketing.pages.home.faq.items.pricing.a"),
+      q: w("faq.items.offline.q", "Does COMPVSS work offline?"),
+      a: w(
+        "faq.items.offline.a",
+        "Yes. COMPVSS is an offline-first PWA: the app shell and recently loaded pages stay available without signal, and clock punches, gate scans, and equipment scans queue on the device and replay in order when the network returns. Anything that needs a live server decision tells you plainly instead of pretending it went through.",
+      ),
     },
     {
-      q: t("marketing.pages.home.faq.items.vendorPayouts.q"),
-      a: t("marketing.pages.home.faq.items.vendorPayouts.a"),
+      q: w("faq.items.createOrg.q", "How do organizations get created?"),
+      a: w(
+        "faq.items.createOrg.a",
+        "On the web, in LEG3ND. That is where an organization is born and configured: branding, org chart, GL codes, locations, catalogs, and templates get set up once, and every project inherits them. COMPVSS itself is where crew log in and work.",
+      ),
     },
     {
-      q: t("marketing.pages.home.faq.items.compvssOffline.q"),
-      a: t("marketing.pages.home.faq.items.compvssOffline.a"),
-    },
-    {
-      q: t("marketing.pages.home.faq.items.whoBuilds.q"),
-      a: t("marketing.pages.home.faq.items.whoBuilds.a"),
-    },
-    {
-      q: t("marketing.pages.home.faq.items.dataSecurity.q"),
-      a: t("marketing.pages.home.faq.items.dataSecurity.a"),
-    },
-    {
-      q: t("marketing.pages.home.faq.items.aiAssistant.q"),
-      a: t("marketing.pages.home.faq.items.aiAssistant.a"),
-    },
-    {
-      q: t("marketing.pages.home.faq.items.exportData.q"),
-      a: t("marketing.pages.home.faq.items.exportData.a"),
+      q: w("faq.items.crewJoin.q", "How does crew join?"),
+      a: w(
+        "faq.items.crewJoin.a",
+        "By invitation or org code. A coordinator sends an invite or shares the org code, crew open COMPVSS on their phone and accept, and they are on the roster. Nobody has to create an organization from the field app.",
+      ),
     },
   ];
 
@@ -327,94 +234,86 @@ export default async function Home() {
         data={[
           organizationSchema(),
           websiteSchema(),
+          // COMPVSS is the product this page sells; the app entity carries the
+          // canonical one-liner so schema and visible copy stay identical.
           softwareApplicationSchema({
-            name: "ATLVS Technologies",
-            description: SITE.description,
-            url: SITE.baseUrl,
+            name: "COMPVSS",
+            appName: "COMPVSS",
+            description: SITE.apps.compvss.tagline,
+            url: `${SITE.baseUrl}/compvss`,
             price: "0",
           }),
         ]}
       />
 
-      {/* HERO */}
+      {/* 1 · HERO — COMPVSS, the product you can use today */}
       <section className="relative px-6 pt-16 pb-20 sm:pt-20">
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
             <div>
-              <p className="eyebrow eyebrow-accent">
-                {t("marketing.pages.home.hero.eyebrow")}
-              </p>
+              {/* Identity line retained; the hero itself sells COMPVSS. */}
+              <p className="eyebrow eyebrow-accent">{SITE.tagline}</p>
               <h1 className="hed-3xl mt-5 leading-[1.05]">
-                {t("marketing.pages.home.hero.titleLine1")}
+                {w("hero.titleLine1", "The field app")}
                 <br />
-                {t("marketing.pages.home.hero.titleLine2")}
+                {w("hero.titleLine2", "for crews who")}
                 <br />
-                <span className="text-[var(--p-accent)]">{t("marketing.pages.home.hero.titleLine3")}</span>
+                <span data-platform="compvss" style={{ color: "var(--p-accent-text)" }}>
+                  {w("hero.titleLine3", "build worlds.")}
+                </span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--p-text-2)]">
-                {t("marketing.pages.home.hero.subtitleLead")}
+                {w(
+                  "hero.subtitle",
+                  "COMPVSS runs site and venue operations from the phone already in your pocket: shifts, gate scans, incidents, daily logs, gear custody. It works on a real show site today, including the corners where the signal quits.",
+                )}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Button href="/signup" variant="cta">
-                  {t("marketing.pages.home.hero.ctaPrimary")}
+                <Button href="/compvss" variant="cta">
+                  {w("hero.ctaPrimary", "Explore COMPVSS")}
                 </Button>
                 <Link
                   href="/demo"
                   className="rounded-md border border-[var(--p-border-2)] px-5 py-2.5 text-sm font-semibold text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)]"
                 >
-                  {t("marketing.pages.home.hero.ctaSecondary")}
+                  {w("hero.ctaSecondary", "See it run")}
                 </Link>
               </div>
-              <p className="mt-6 text-xs text-[var(--p-text-3)]">{t("marketing.pages.home.hero.disclaimer")}</p>
-              {/* C1 — the four-app story survives below lg, where the wide
-                  ecosystem rail is hidden. Compact 2-up, plain names (no
-                  letter-spaced Wordmark that overflows narrow tracks). */}
-              <div className="mt-8 grid grid-cols-2 gap-2.5 lg:hidden">
-                {PRODUCTS.map((p) => (
-                  <div key={p.slug} data-platform={p.slug} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-3">
-                    <div className="text-sm font-bold" style={{ color: "var(--p-accent-text)" }}>
-                      {p.title}
-                    </div>
-                    <p className="eyebrow mt-0.5 text-[var(--p-text-3)]">
-                      {p.tag}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <p className="mt-6 text-xs text-[var(--p-text-3)]">
+                {w("hero.disclaimer", "Live today · Free on the Access tier · Priced per organization, every crew member included")}
+              </p>
             </div>
-            {/* lg+ only — the Wordmark letter-row's min-content width (~228px)
-                cannot fit the 768px tablet column and overflowed the viewport
-                (readiness matrix, tablet breakpoint). min-w-0 lets the column
-                shrink to its track. */}
-            <div className="hidden min-w-0 lg:block">
-              {/* C6 — real product imagery: a token-driven console illustration
-                  (not a screenshot) anchors the hero with a glimpse of the
-                  command deck. Themed to the ATLVS accent. */}
+            {/* lg+ only — narrower columns can't fit the preview + wordmarks
+                without overflow (same constraint the previous hero carried). */}
+            <div className="hidden min-w-0 lg:block" data-platform="compvss">
               <div className="mb-4 overflow-hidden rounded-xl border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 shadow-[var(--p-elev-2)]">
-                <ProductPreview accent={PRODUCT_ACCENTS.atlvs} label="ATLVS · Console" />
+                <ProductPreview accent={PRODUCT_ACCENTS.compvss} label="COMPVSS · Field" />
               </div>
               <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-2)]">
                 <div className="eyebrow mb-3 text-[var(--p-text-3)]">
-                  {t("marketing.pages.home.hero.ecosystemLabel")}
+                  {w("hero.liveLabel", "On the crew's phones today")}
                 </div>
-                {PRODUCTS.map((p) => (
-                  <div key={p.slug} data-platform={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
-                    <div className="flex flex-wrap items-baseline justify-between gap-3">
-                      <Wordmark word={p.title} style={{ color: "var(--p-accent-text)", fontSize: 17 }} />
-                      <span className="eyebrow text-[var(--p-text-3)]">
-                        {p.audience.replace(/^For /i, "")}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-xs text-[var(--p-text-2)]">{p.tag}</p>
-                  </div>
-                ))}
+                <ul className="space-y-2 text-sm text-[var(--p-text-2)]">
+                  {[
+                    w("hero.liveItems.schedule", "Shift schedule, swaps, and time off"),
+                    w("hero.liveItems.clock", "Geofenced clock punches"),
+                    w("hero.liveItems.scan", "Gate and equipment scanning"),
+                    w("hero.liveItems.incidents", "Incident filing with sign-off"),
+                    w("hero.liveItems.logs", "Daily logs and handover records"),
+                  ].map((item) => (
+                    <li key={item} className="flex items-baseline gap-2.5">
+                      <span aria-hidden className="inline-block h-1.5 w-1.5 flex-none rounded-full" style={{ background: PRODUCT_ACCENTS.compvss }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* TRUST BAR — sliding customer-logo marquee */}
+      {/* TRUST BAR — sliding customer-logo marquee (preserved social proof) */}
       <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] py-10">
         <div className="mx-auto max-w-6xl px-6">
           <p className="eyebrow text-center text-[var(--p-text-3)]">
@@ -448,218 +347,164 @@ export default async function Home() {
           </div>
         </div>
         <div className="mx-auto mt-6 max-w-6xl px-6 text-center">
-          <Link
-            href="/customers"
-            className="eyebrow eyebrow-accent hover:underline"
-          >
+          <Link href="/customers" className="eyebrow eyebrow-accent hover:underline">
             {t("marketing.pages.home.trustBar.seeWork", undefined, "See the work →")}
           </Link>
         </div>
       </section>
 
-      {/* THE FOUR APPS */}
-      <section id="apps" className="px-6 py-20">
+      {/* 2 · LEG3ND FOUNDATION STRIP */}
+      <section id="foundation" className="px-6 py-20" data-platform="legend">
         <div className="mx-auto max-w-6xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.threeApps.eyebrow")}
-          </p>
-          <h2 className="hed-xl mt-3">
-            {t("marketing.pages.home.threeApps.title")}
-          </h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.threeApps.body")}</p>
-          {/* lg+ for the app grid — at 768px a sub-third-width card is narrower
-              than the Wordmark letter-row's min-content (~228px) and overflows.
-              2-up at lg, 4-up at xl keeps every card above that floor. */}
-          <div className="mt-10 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
-            {PRODUCTS.map((p) => (
-              <Link
-                key={p.slug}
-                href={p.href}
-                data-platform={p.slug}
-                className="group relative block rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-1)] transition-shadow hover:shadow-[var(--p-elev-2)]"
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-x-0 top-0 h-1 rounded-t-xl"
-                  style={{ background: p.color }}
-                />
+          <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-8 shadow-[var(--p-elev-1)] sm:p-10">
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div className="max-w-2xl">
                 <p className="eyebrow" style={{ color: "var(--p-accent-text)" }}>
-                  {p.audience}
+                  {w("foundation.eyebrow", "The foundation")}
                 </p>
-                <h3 className="mt-2">
-                  <Wordmark word={p.title} style={{ color: "var(--p-accent-text)", fontSize: 30 }} />
-                </h3>
-                <p className="mt-1 text-xs font-medium text-[var(--p-text-3)] uppercase">{p.tag}</p>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{p.body}</p>
-                <p className="mt-5 text-xs font-semibold text-[var(--p-text-1)]">
-                  {t("marketing.pages.home.threeApps.readMore")}
+                <h2 className="hed-xl mt-3">{w("foundation.title", "Organizations start in LEG3ND.")}</h2>
+                <p className="mt-4 text-lg text-[var(--p-text-2)]">
+                  {w(
+                    "foundation.body",
+                    "Configure once, and every project inherits it. Your brand, your org chart, your GL codes, your venues, your catalogs, your templates: set up on the web, carried into everything the crew touches in the field.",
+                  )}
                 </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* INDUSTRIES */}
-      <section id="industries" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.industries.eyebrow")}
-          </p>
-          <h2 className="hed-xl mt-3">
-            {t("marketing.pages.home.industries.title")}
-          </h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.industries.body")}</p>
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {INDUSTRIES.map((d) => (
-              <Link
-                key={d.title}
-                href={d.href}
-                className="block rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-5 transition-[border-color,box-shadow] hover:border-[var(--p-accent)] hover:shadow-[var(--p-elev-1)]"
-              >
-                <h3 className="text-base font-semibold tracking-tight text-[var(--p-text-1)]">{d.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-[var(--p-text-2)]">{d.body}</p>
-              </Link>
-            ))}
-          </div>
-          <p className="mt-8 text-sm text-[var(--p-text-2)]">
-            {t("marketing.pages.home.industries.footnote")}{" "}
-            <Link href="/solutions" className="font-semibold text-[var(--p-accent-text)] hover:underline">
-              {t("marketing.pages.home.industries.footnoteLink")}
-            </Link>
-          </p>
-        </div>
-      </section>
-
-      {/* 8-PHASE LIFECYCLE */}
-      <section id="lifecycle" className="px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.lifecycle.eyebrow")}
-          </p>
-          <h2 className="hed-xl mt-3">
-            {t("marketing.pages.home.lifecycle.title")}
-          </h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.lifecycle.body")}</p>
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
-            {PHASES.map((s) => (
-              <div
-                key={s.n}
-                className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-4 shadow-[var(--p-elev-1)]"
-              >
-                <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--p-text-3)]">
-                  {t("marketing.pages.home.lifecycle.phaseLabel")} {s.n}
-                </div>
-                <div className="mt-1.5 text-base font-semibold text-[var(--p-text-1)]">{s.name}</div>
-                <div className="mt-0.5 text-xs text-[var(--p-text-2)]">{s.sub}</div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* THE DIFFERENCE */}
-      <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.difference.eyebrow")}
-          </p>
-          <h2 className="hed-xl mt-3">
-            {t("marketing.pages.home.difference.title")}
-          </h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.difference.body")}</p>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {EDGES.map((e) => (
-              <article
-                key={e.n}
-                className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
-              >
-                <span className="eyebrow eyebrow-accent">
-                  {e.n}
-                </span>
-                <h3 className="hed-lg mt-2 text-[var(--p-text-1)]">{e.title}</h3>
-                <span className="eyebrow mt-1 inline-block text-[var(--p-text-3)]">
-                  {e.tag}
-                </span>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{e.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ADOPT YOUR WAY */}
-      <section id="adopt" className="px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.adopt.eyebrow")}
-          </p>
-          <h2 className="hed-xl mt-3">
-            {t("marketing.pages.home.adopt.title")}
-          </h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.adopt.body")}</p>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {TIERS.map((tier) => (
-              <article
-                key={tier.name}
-                className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
-              >
-                <h3 className="hed-lg text-[var(--p-text-1)]">{tier.name}</h3>
-                <span className="eyebrow mt-1 inline-block text-[var(--p-text-3)]">
-                  {tier.tag}
-                </span>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{tier.body}</p>
-              </article>
-            ))}
-          </div>
-          <p className="mt-8 text-sm text-[var(--p-text-2)]">
-            <Link href="/pricing" className="font-semibold text-[var(--p-accent-text)] hover:underline">
-              {t("marketing.pages.home.adopt.pricingLink")}
-            </Link>
-          </p>
-        </div>
-      </section>
-
-      {/* PROJECTS / RECEIPTS */}
-      <section id="customers" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex flex-wrap items-end justify-between gap-5">
-            <div>
-              <p className="eyebrow eyebrow-accent">
-                {t("marketing.pages.home.projects.eyebrow")}
-              </p>
-              <h2 className="hed-xl mt-3">
-                {t("marketing.pages.home.projects.title")}
-              </h2>
-            </div>
-            <p className="max-w-md text-sm text-[var(--p-text-2)]">{t("marketing.pages.home.projects.body")}</p>
-          </div>
-          <div className="mt-10 overflow-hidden rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
-            <div className="eyebrow grid grid-cols-[110px_1fr_70px] gap-4 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] px-5 py-3 text-[var(--p-text-3)]">
-              <span>{t("marketing.pages.home.projects.tableHeaders.project")}</span>
-              <span>{t("marketing.pages.home.projects.tableHeaders.title")}</span>
-              <span>{t("marketing.pages.home.projects.tableHeaders.year")}</span>
-            </div>
-            {/* C4 — proof is navigable, not a dead table. */}
-            {PROJECTS.map((v) => (
               <Link
-                key={v.code}
-                href="/customers"
-                className="grid grid-cols-[110px_1fr_70px] items-center gap-4 border-b border-[var(--p-border)] px-5 py-4 transition-colors last:border-b-0 hover:bg-[var(--p-surface-2)]"
+                href="/legend"
+                className="rounded-md border border-[var(--p-border-2)] px-5 py-2.5 text-sm font-semibold text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)]"
               >
-                <span className="font-mono text-xs font-semibold text-[var(--p-text-1)]" style={{ fontFamily: "var(--p-mono-data)" }}>{v.code}</span>
-                <div>
-                  <div className="text-sm font-semibold text-[var(--p-text-1)]">{v.title}</div>
-                  <div className="text-xs text-[var(--p-text-3)]">{v.sub}</div>
-                </div>
-                <span className="font-mono text-xs text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{v.year}</span>
+                {w("foundation.cta", "Tour the organization hub")}
+              </Link>
+            </div>
+            <ul className="mt-8 flex flex-wrap gap-2.5">
+              {FOUNDATION.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-4 py-1.5 text-sm font-medium text-[var(--p-text-1)]"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* 3 · COMPVSS PROOF — concrete field capabilities, all live in the product */}
+      <section id="compvss" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20" data-platform="compvss">
+        <div className="mx-auto max-w-6xl">
+          <p className="eyebrow" style={{ color: "var(--p-accent-text)" }}>
+            {w("proof.eyebrow", "COMPVSS, in the field")}
+          </p>
+          <h2 className="hed-xl mt-3">{w("proof.title", "What your crew gets on day one")}</h2>
+          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">
+            {w(
+              "proof.body",
+              "None of this is a roadmap slide. Each of these is running in the product right now, and the demo will show you.",
+            )}
+          </p>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {PROOF.map((p) => (
+              <article
+                key={p.title}
+                className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-1)]"
+              >
+                <span aria-hidden className="inline-block h-1 w-8 rounded-full" style={{ background: PRODUCT_ACCENTS.compvss }} />
+                <h3 className="mt-3 text-base font-semibold text-[var(--p-text-1)]">{p.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--p-text-2)]">{p.body}</p>
+              </article>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Button href="/compvss" variant="cta">
+              {w("proof.ctaPrimary", "Explore COMPVSS")}
+            </Button>
+            <Link href="/demo" className="text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
+              {w("proof.ctaSecondary", "Walk through the demo →")}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 4 · COMING SOON RAIL — ATLVS + GVTEWAY, honest framing, no dates */}
+      <section id="coming-soon" className="px-6 py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="eyebrow eyebrow-accent">{w("comingSoon.eyebrow", "In build")}</p>
+          <h2 className="hed-xl mt-3">{w("comingSoon.title", "The rest of the ecosystem is on its way")}</h2>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <article
+              data-platform="atlvs"
+              className="relative rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
+            >
+              <span aria-hidden className="absolute inset-x-0 top-0 h-1 rounded-t-xl" style={{ background: PRODUCT_ACCENTS.atlvs }} />
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <Wordmark word="ATLVS" style={{ color: "var(--p-accent-text)", fontSize: 24 }} />
+                <span className="eyebrow text-[var(--p-text-3)]">{w("comingSoon.badge", "Coming soon")}</span>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">
+                {w(
+                  "comingSoon.atlvs.body",
+                  "The operator console. Projects, advancing, budgets, procurement, and the paperwork drafted for you, in one place. We are building it in the open, and you can see where it is headed.",
+                )}
+              </p>
+              <Link href="/atlvs" className="mt-5 inline-block text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
+                {w("comingSoon.atlvs.cta", "Preview ATLVS →")}
+              </Link>
+            </article>
+            <article
+              data-platform="gvteway"
+              className="relative rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
+            >
+              <span aria-hidden className="absolute inset-x-0 top-0 h-1 rounded-t-xl" style={{ background: PRODUCT_ACCENTS.gvteway }} />
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <Wordmark word="GVTEWAY" style={{ color: "var(--p-accent-text)", fontSize: 24 }} />
+                <span className="eyebrow text-[var(--p-text-3)]">{w("comingSoon.badge", "Coming soon")}</span>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">
+                {w(
+                  "comingSoon.gvteway.body",
+                  "The public side of the world you build: ticketing, portals, and the marketplace where crews, vendors, and gigs find each other. The marketplace is already live; the full product is coming.",
+                )}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-4">
+                <Link href="/marketplace" className="text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
+                  {w("comingSoon.gvteway.ctaMarketplace", "Browse the live marketplace →")}
+                </Link>
+                <Link href="/gvteway" className="text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
+                  {w("comingSoon.gvteway.cta", "Preview GVTEWAY →")}
+                </Link>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* 5 · ECOSYSTEM STRIP — the four one-liners verbatim from SITE.apps (GEO) */}
+      <section id="ecosystem" className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="eyebrow eyebrow-accent">{w("ecosystem.eyebrow", "One ecosystem")}</p>
+          <h2 className="hed-xl mt-3">{w("ecosystem.title", "Four apps, one record store")}</h2>
+          <div className="mt-10 divide-y divide-[var(--p-border)] rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
+            {ECOSYSTEM.map((e) => (
+              <Link
+                key={e.slug}
+                href={e.href}
+                data-platform={e.slug}
+                className="flex flex-wrap items-baseline gap-x-6 gap-y-2 px-6 py-5 transition-colors hover:bg-[var(--p-surface-2)]"
+              >
+                <span className="w-40 flex-none">
+                  <Wordmark word={e.app.name} style={{ color: "var(--p-accent-text)", fontSize: 18 }} />
+                </span>
+                <span className="min-w-0 flex-1 text-sm leading-relaxed text-[var(--p-text-2)]">{e.app.tagline}</span>
+                <span className="eyebrow flex-none text-[var(--p-text-3)]">{e.note}</span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* RECEIPTS — STATS */}
+      {/* SOCIAL PROOF — STATS (preserved, with attribution) */}
       <section className="px-6 py-20" aria-label={t("marketing.pages.home.stats.ariaLabel")}>
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-6 rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-10 text-center shadow-[var(--p-elev-1)] md:grid-cols-3">
@@ -670,9 +515,7 @@ export default async function Home() {
             ].map((s) => (
               <div key={s.label}>
                 <div className="hed-2xl text-[var(--p-accent)]">{s.big}</div>
-                <div className="eyebrow mt-2 text-[var(--p-text-3)]">
-                  {s.label}
-                </div>
+                <div className="eyebrow mt-2 text-[var(--p-text-3)]">{s.label}</div>
               </div>
             ))}
           </div>
@@ -686,18 +529,58 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* 6 · GEO Q&A — FAQSection renders the FAQPage JSON-LD */}
       <FAQSection title={t("marketing.pages.home.faq.title")} faqs={HOME_FAQ} />
 
-      {/* LATEST */}
-      <section id="latest" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
+      {/* 7 · DEVELOPERS / PARTNERS teaser */}
+      <section id="build-with-us" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.latest.eyebrow")}
-          </p>
-          <h2 className="hed-xl mt-3">
-            {t("marketing.pages.home.latest.title")}
-          </h2>
+          <p className="eyebrow eyebrow-accent">{w("buildWithUs.eyebrow", "Build with us")}</p>
+          <h2 className="hed-xl mt-3">{w("buildWithUs.title", "Developers and partners")}</h2>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <Link
+              href="/developers"
+              className="block rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)] transition-shadow hover:shadow-[var(--p-elev-2)]"
+            >
+              <h3 className="text-base font-semibold text-[var(--p-text-1)]">
+                {w("buildWithUs.developers.title", "Developers")}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--p-text-2)]">
+                {w(
+                  "buildWithUs.developers.body",
+                  "The documents, reports, and advancing APIs are public, scoped, and OpenAPI-described. Build against the same endpoints the product runs on.",
+                )}
+              </p>
+              <span className="mt-4 inline-block text-sm font-semibold text-[var(--p-accent-text)]">
+                {w("buildWithUs.developers.cta", "Read the API docs →")}
+              </span>
+            </Link>
+            <Link
+              href="/partners"
+              className="block rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)] transition-shadow hover:shadow-[var(--p-elev-2)]"
+            >
+              <h3 className="text-base font-semibold text-[var(--p-text-1)]">
+                {w("buildWithUs.partners.title", "Partners")}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--p-text-2)]">
+                {w(
+                  "buildWithUs.partners.body",
+                  "Agencies, resellers, and integration builders who put crews on sites every week. If that is you, we should talk.",
+                )}
+              </p>
+              <span className="mt-4 inline-block text-sm font-semibold text-[var(--p-accent-text)]">
+                {w("buildWithUs.partners.cta", "Explore the partner program →")}
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* LATEST — real content sources (preserved) */}
+      <section id="latest" className="px-6 py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="eyebrow eyebrow-accent">{t("marketing.pages.home.latest.eyebrow")}</p>
+          <h2 className="hed-xl mt-3">{t("marketing.pages.home.latest.title")}</h2>
           <div className="mt-10 divide-y divide-[var(--p-border)] rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
             {POSTS.map((l) => (
               <Link
@@ -717,23 +600,26 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="cta" className="px-6 py-24 text-center">
+      {/* 8 · CLOSING CTA */}
+      <section id="cta" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-24 text-center">
         <div className="mx-auto max-w-3xl">
-          <p className="eyebrow eyebrow-accent">
-            {t("marketing.pages.home.cta.eyebrow")}
+          <p className="eyebrow eyebrow-accent">{w("cta.eyebrow", "Your crew is already carrying the hardware")}</p>
+          <h2 className="hed-2xl mt-3">{w("cta.title", "Put the site in their pocket")}</h2>
+          <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--p-text-2)]">
+            {w(
+              "cta.body",
+              "Start with COMPVSS today. When the operator console and the public side arrive, your org, your people, and your records will already be there waiting.",
+            )}
           </p>
-          <h2 className="hed-2xl mt-3">{t("marketing.pages.home.cta.title")}</h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.cta.body")}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button href="/signup" variant="cta">
-              {t("marketing.pages.home.cta.ctaPrimary")}
+              {t("marketing.pages.home.cta.ctaPrimary", undefined, "Start building free")}
             </Button>
             <Link
               href="/demo"
               className="rounded-md border border-[var(--p-border-2)] px-6 py-3 text-sm font-semibold text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)]"
             >
-              {t("marketing.pages.home.cta.ctaSecondary")}
+              {t("marketing.pages.home.cta.ctaSecondary", undefined, "See it run")}
             </Link>
           </div>
         </div>

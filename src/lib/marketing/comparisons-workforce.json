@@ -82,6 +82,337 @@
         { "q": "Does COMPVSS have shift swaps and availability?", "a": "Yes: swaps with manager decisions, availability, time off with balances, and published-shift notifications with per-kind opt-outs." }
       ],
       "keywords": ["When I Work alternative", "When I Work alternative for events", "COMPVSS vs When I Work", "crew scheduling app", "event staff scheduling software"]
+    },
+    {
+      "slug": "connecteam",
+      "competitor": "Connecteam",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://connecteam.com/features/", "https://connecteam.com/pricing/"],
+      "headline": "COMPVSS vs. Connecteam: production field record vs. all-in-one deskless suite.",
+      "blurb": "Connecteam bundles scheduling, time clocks, forms, chat and training into one broad app for deskless teams. COMPVSS goes narrow and deep on one kind of deskless work: the crew that builds, runs and strikes a production.",
+      "hero": "Connecteam's pitch is breadth: one app that covers scheduling, a time clock, checklists and forms, a company feed, chat, and training courses for any deskless team, from cleaning companies to logistics. It earns that breadth. What a production org hits is the shape underneath: the forms are generic forms, not an incident chain with anonymous filing and manager sign-off; the checklists are lists, not punch lists tied to a site record; there is no gate scan, no asset custody, no advance. COMPVSS carries those as typed records on the same store the operator console reads.",
+      "bottomLine": "If you want one broad app for a general deskless team, Connecteam covers a lot of ground well. If your deskless team is a production crew, COMPVSS models the work itself, not just the workday.",
+      "features": [
+        { "feature": "Shift scheduling + time clock with GPS", "us": true, "them": true },
+        { "feature": "Forms and checklists", "us": "Typed: incidents, punch lists, daily logs", "them": true, "note": "Connecteam's form builder is a core strength" },
+        { "feature": "Company feed + team chat", "us": true, "them": true },
+        { "feature": "Training courses in-app", "us": "Via LEG3ND", "them": true },
+        { "feature": "Payroll integrations", "us": "Via export + API", "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Connecteam prices per user in published tiers" }
+      ],
+      "whyWeWin": [
+        { "title": "Typed records beat generic forms", "body": "A Connecteam form lands as a submission. A COMPVSS incident lands as an incident: anonymous filing if the crew member wants it, manager sign-off, and a record an insurer can follow. Punch items, handovers and custody moves work the same way." },
+        { "title": "The gate is a first-class surface", "body": "Credential and ticket scans resolve offline in under 100ms and journal every result. A general deskless suite has no reason to build that; a production app has no excuse not to." },
+        { "title": "Load-in week costs what load-out week costs", "body": "Per-org pricing absorbs the 300-person surge a festival build is. Per-user tiers bill it." }
+      ],
+      "whenTheyWin": [
+        "You run a general deskless operation, cleaning, security, home care, logistics, and want scheduling, forms, chat and training in one broad app. That breadth is exactly what Connecteam is built for.",
+        "You need in-app course authoring and quizzes for a distributed hourly team as a headline feature of the same app that schedules them.",
+        "Your org is small, stable and generic enough that an all-in-one suite beats a purpose-built tool."
+      ],
+      "migration": [
+        "Export Connecteam users, schedules and timesheets as CSV; they map to COMPVSS crew, shifts and time entries",
+        "Rebuild recurring checklists as COMPVSS punch list and daily log templates; incident history archives as documents"
+      ],
+      "faqs": [
+        { "q": "Does COMPVSS cover the Connecteam basics: schedule, clock, chat?", "a": "Yes: shifts, geofenced punches, timesheets with manager review, time off, swaps, an org feed and channels. The difference is what surrounds them: incidents, punch lists, custody, the gate, all on the production's record." },
+        { "q": "Connecteam has training built in. Where does that live for COMPVSS?", "a": "Courses, certifications and SOPs live in LEG3ND, the knowledge surface of the same platform, on the same org record. Organizations are created and configured there on the web; crew then join by invite or org code." },
+        { "q": "Can COMPVSS do custom forms?", "a": "The high-stakes forms are typed on purpose: incidents, punch items, daily logs, handovers. For everything else the packet and submission machinery in advancing carries structured returns." }
+      ],
+      "keywords": ["Connecteam alternative", "Connecteam alternative for events", "COMPVSS vs Connecteam", "deskless workforce app for production", "event crew operations app"]
+    },
+    {
+      "slug": "sling",
+      "competitor": "Sling",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://getsling.com/features/", "https://getsling.com/pricing/"],
+      "headline": "COMPVSS vs. Sling: the production site record vs. scheduling plus messaging.",
+      "blurb": "Sling pairs a clean shift scheduler with team messaging and labor-cost visibility, and keeps it simple. COMPVSS starts where the schedule ends: what the crew did on site, and the proof of it.",
+      "hero": "Sling's center of gravity is the schedule and the conversation around it: build shifts, catch conflicts, message the team, watch labor cost against the roster. For an hourly team that is most of the job. A production crew's job only starts there. Once the schedule holds, the questions become who scanned in at the gate, which punch items closed before doors, who has custody of the radios, and what the incident record says. COMPVSS answers those on the same org store the operator console and portals read.",
+      "bottomLine": "For a team whose whole coordination problem is the schedule and the group thread, Sling keeps it simple and cheap to run. For crews that have to prove what happened on site, COMPVSS is the record.",
+      "features": [
+        { "feature": "Shift scheduling with conflict warnings", "us": true, "them": true },
+        { "feature": "Team messaging + newsfeed", "us": true, "them": true },
+        { "feature": "Time clock with geofencing", "us": true, "them": true },
+        { "feature": "Labor cost tracking against the schedule", "us": "Via console reporting", "them": true, "note": "A published Sling strength" },
+        { "feature": "Payroll integrations", "us": "Via export + API", "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incidents, punch lists, daily logs, handovers", "us": true, "them": false },
+        { "feature": "Asset custody + GTIN scan-to-fulfil", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Sling prices per user (published pricing)" }
+      ],
+      "whyWeWin": [
+        { "title": "The schedule is the start, not the product", "body": "COMPVSS carries shifts and swaps too, then keeps going: the scan at the gate, the punch item with a photo, the handover at shift change, the custody move on the forklift keys." },
+        { "title": "Built for the compound, not the back office", "body": "Offline-first means punches and scans keep working when the site has no signal, then replay with provenance. A scheduler with a connected app assumes the network." },
+        { "title": "Headcount surges are free", "body": "Per-org pricing means the 250 extra hands for load-in week do not change the bill." }
+      ],
+      "whenTheyWin": [
+        "Your coordination problem is genuinely just shifts plus messaging for a steady hourly team, and you want the lightest tool that solves it.",
+        "You track labor cost against the roster daily and want that math in the scheduler itself, which Sling publishes as a core feature."
+      ],
+      "migration": [
+        "Export Sling employees, shifts and timesheets as CSV; they map to COMPVSS crew, shifts and time entries",
+        "Move the group threads last: run Sling messaging in parallel for a week while crews adopt the COMPVSS feed and channels"
+      ],
+      "faqs": [
+        { "q": "Does COMPVSS have the messaging Sling is known for?", "a": "Yes: an org feed, channels and DMs, with per-kind notification opt-outs. Messages sit on the same record store as shifts and incidents, so a thread can point at the actual record it is about." },
+        { "q": "Is COMPVSS overkill for a small crew?", "a": "A small crew uses the same three screens a big one does: schedule, punch, feed. The site-record surfaces are there the day an incident or a gate makes them matter." }
+      ],
+      "keywords": ["Sling alternative", "Sling alternative for events", "COMPVSS vs Sling", "crew scheduling and messaging app", "event staff scheduling software"]
+    },
+    {
+      "slug": "7shifts",
+      "competitor": "7shifts",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.7shifts.com/features/", "https://www.7shifts.com/pricing/"],
+      "headline": "COMPVSS vs. 7shifts: production crews vs. restaurant teams.",
+      "blurb": "7shifts is restaurant workforce software and proud of it: scheduling against sales forecasts, tip management, POS integrations, labor compliance. COMPVSS is the same depth of purpose-fit, pointed at productions instead of restaurants.",
+      "hero": "7shifts committed to one industry and it shows: schedules built against sales projections, tip pooling and payouts, POS integrations, labor-compliance guardrails for restaurant rules. If you run restaurants, that focus is the product. COMPVSS made the same bet on a different floor. Our equivalents of the POS integration and the tip pool are the gate scan, the credential advance, the incident chain, asset custody and the punch list, because that is what a production crew has to get right.",
+      "bottomLine": "Running restaurants? Use the restaurant tool; 7shifts is a strong one. Running builds, shows and strikes? COMPVSS is the field app with that same purpose-fit.",
+      "features": [
+        { "feature": "Shift scheduling + time clock", "us": true, "them": true },
+        { "feature": "Sales-forecast-driven scheduling", "us": false, "them": true, "note": "Restaurant-specific by design" },
+        { "feature": "Tip management and payouts", "us": false, "them": true, "note": "A published 7shifts strength" },
+        { "feature": "POS integrations", "us": false, "them": true },
+        { "feature": "Labor compliance tooling", "us": "Geofenced punches + timesheet review", "them": true },
+        { "feature": "Team messaging", "us": true, "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incidents, punch lists, daily logs, handovers", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "7shifts prices per location in published tiers" }
+      ],
+      "whyWeWin": [
+        { "title": "Purpose-fit for the site, not the service window", "body": "7shifts models covers, tips and POS flow. COMPVSS models gates, credentials, custody and incidents, because a production's compliance record looks nothing like a restaurant's." },
+        { "title": "One store from field to console", "body": "What crew write on site lands on the same org record the operator console and stakeholder portals read. No export between the floor and the office." },
+        { "title": "Surge headcount without seat math", "body": "A festival build triples headcount for ten days. Per-org pricing treats that as normal, because it is." }
+      ],
+      "whenTheyWin": [
+        "You run restaurants. Sales-projection scheduling, tip management and POS integrations are the daily job, and 7shifts builds directly against them.",
+        "You are a hospitality group standardizing on one restaurant-ops stack across locations, where 7shifts' integrations were chosen for exactly that."
+      ],
+      "migration": [
+        "Export 7shifts employees, schedules and timesheets as CSV; they map to COMPVSS crew, shifts and time entries",
+        "Venue F&B teams often keep 7shifts for restaurant outlets and run the production crew on COMPVSS; the two rosters rarely overlap"
+      ],
+      "faqs": [
+        { "q": "We run venue concessions and a production crew. Which tool?", "a": "Both is a legitimate answer: 7shifts for the F&B outlets it is built for, COMPVSS for the crew that builds and runs the shows. If you consolidate, COMPVSS carries the scheduling and time basics for both, without the restaurant-specific tooling." },
+        { "q": "Does COMPVSS do anything like tip management?", "a": "No. Tips are restaurant machinery and we do not pretend at them. Pay-relevant records on COMPVSS are punches, timesheets and manager review, exported to your payroll." }
+      ],
+      "keywords": ["7shifts alternative", "COMPVSS vs 7shifts", "event crew scheduling software", "workforce app for venues", "production crew time tracking"]
+    },
+    {
+      "slug": "homebase",
+      "competitor": "Homebase",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.joinhomebase.com/features", "https://www.joinhomebase.com/pricing"],
+      "headline": "COMPVSS vs. Homebase: the production field app vs. the small-business hourly toolkit.",
+      "blurb": "Homebase gives main-street businesses scheduling, a time clock, hiring and payroll in one place. COMPVSS assumes a different employer: an org whose workplace is rebuilt every few weeks and whose records have to survive it.",
+      "hero": "Homebase is tuned for the small hourly employer: build the week's schedule, run the time clock from a tablet, post an opening, run payroll from the same place. For a shop or cafe that is the whole stack, and Homebase publishes payroll as a first-class product. A production org's week looks different: the workplace is a site that did not exist last month, the roster surges and shrinks per show, and the valuable record is not just hours but what happened, the incident, the punch item closed at 02:00, the case that left the truck. COMPVSS is built around that record.",
+      "bottomLine": "For a single-location hourly business that wants scheduling through payroll in one simple stack, Homebase is a sensible pick. For crews on temporary sites, COMPVSS is the field record built for the churn.",
+      "features": [
+        { "feature": "Shift scheduling + time clock", "us": true, "them": true },
+        { "feature": "Built-in payroll", "us": "Via export + API", "them": true, "note": "Homebase publishes payroll as a product" },
+        { "feature": "Hiring and applicant tracking", "us": "Not in the field app", "them": true },
+        { "feature": "Team messaging", "us": true, "them": true },
+        { "feature": "GPS/geofenced punches", "us": true, "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Homebase prices per location in published tiers" }
+      ],
+      "whyWeWin": [
+        { "title": "Built for workplaces that move", "body": "Homebase assumes a location; its published pricing is shaped around one. COMPVSS assumes a site that changes per production, with the shifts, gates, custody and incidents scoped to it." },
+        { "title": "The record outlives the site", "body": "When the site is struck, the daily logs, incidents, punch history and custody chain stay on the org record the console reads. That is the part a time clock cannot give you." },
+        { "title": "Crew join in minutes", "body": "Invite or org code, install the PWA, punch. Organizations themselves are set up once in LEG3ND on the web, so the field app stays simple." }
+      ],
+      "whenTheyWin": [
+        "You run a shop, cafe or single-location service business and want scheduling, time and payroll in one inexpensive stack. That is Homebase's published core.",
+        "Hiring is a constant: you want job posting and applicant tracking living beside the schedule.",
+        "You specifically want the built-in payroll product rather than an export to your own provider."
+      ],
+      "migration": [
+        "Export Homebase employees, schedules and timesheets as CSV; they map to COMPVSS crew, shifts and time entries",
+        "Close out the current pay run in Homebase payroll; start the next period on COMPVSS punches exported to your payroll provider"
+      ],
+      "faqs": [
+        { "q": "Does COMPVSS run payroll like Homebase?", "a": "No. COMPVSS produces the payroll-grade inputs: geofenced punches, reviewed timesheets, time off. Payroll itself runs in your provider via export and API." },
+        { "q": "Is COMPVSS priced per location?", "a": "No. Pricing is per org, unlimited users, which matters when your locations are temporary sites and your headcount surges per show." }
+      ],
+      "keywords": ["Homebase alternative", "COMPVSS vs Homebase", "hourly team app for events", "crew time clock app", "event workforce management"]
+    },
+    {
+      "slug": "workyard",
+      "competitor": "Workyard",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.workyard.com/features", "https://www.workyard.com/pricing"],
+      "headline": "COMPVSS vs. Workyard: production site ops vs. construction time tracking with GPS.",
+      "blurb": "Workyard is construction time tracking that takes GPS seriously: precise location records, job costing, payroll-ready hours. COMPVSS shares the jobsite instincts and carries the rest of a production site's record.",
+      "hero": "Workyard picked a hard problem and does it well: GPS time records accurate enough for construction billing, hours coded to jobs and cost codes, payroll-ready output. If your business bills labor to construction projects, that precision is the product. A production crew needs the location-honest time record too, and COMPVSS punches are geofenced for exactly that reason, but the site record does not stop at hours: gates scan credentials offline, incidents carry anonymous filing and manager sign-off, punch lists and daily logs close out the build, and gear moves with a custody chain.",
+      "bottomLine": "For contractors billing GPS-verified hours to construction jobs, Workyard's focus is the right tool. For production sites where hours are one record among many, COMPVSS carries the whole set.",
+      "features": [
+        { "feature": "GPS-verified time tracking", "us": "Geofenced punches", "them": true, "note": "Workyard's published core strength" },
+        { "feature": "Job costing / cost codes on hours", "us": "Via console project records", "them": true },
+        { "feature": "Crew scheduling", "us": true, "them": true },
+        { "feature": "Payroll-ready exports", "us": true, "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Punch lists, daily logs, shift handovers", "us": true, "them": "Not published" },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Workyard prices per user (published pricing)" }
+      ],
+      "whyWeWin": [
+        { "title": "Hours are one record, not the record", "body": "A production closes out on more than a timesheet: the incident chain, the punch list, the daily log, the custody trail on gear. COMPVSS keeps them on one org store with the hours." },
+        { "title": "The gate is part of the site", "body": "Credentialed sites need a gate that scans offline and journals every result. A time tracker has no gate; COMPVSS treats it as a first-class surface." },
+        { "title": "Load-in headcount is not a bill", "body": "Per-user pricing on a 300-hand build week is real money. Per-org pricing is not." }
+      ],
+      "whenTheyWin": [
+        "You are a construction contractor billing labor to jobs and cost codes, where Workyard's published GPS precision and job-costing focus is the product.",
+        "Your payroll and billing dispute defense depends on location-stamped time records above all else, and you want the tool that leads with exactly that."
+      ],
+      "migration": [
+        "Export Workyard workers, hours and job codes as CSV; they map to COMPVSS crew, time entries and project records",
+        "Scenic and fabrication shops often cut over between jobs: bill the running job out of Workyard, open the next production on COMPVSS"
+      ],
+      "faqs": [
+        { "q": "Are COMPVSS punches location-verified like Workyard's?", "a": "Punches are geofenced against the site's configured zones and journaled with provenance. Workyard publishes finer-grained GPS trail tracking than a geofence; if a continuous location trail is your requirement, that is their lane." },
+        { "q": "Does COMPVSS do job costing?", "a": "Hours land on the production's record and the operator console carries budgets and cost reporting per project. Cost-code-level construction billing in the field app itself is not what COMPVSS is." }
+      ],
+      "keywords": ["Workyard alternative", "COMPVSS vs Workyard", "GPS time tracking for event crews", "production site time tracking", "field workforce app"]
+    },
+    {
+      "slug": "jolt",
+      "competitor": "Jolt",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.jolt.com/features", "https://www.jolt.com/pricing"],
+      "headline": "COMPVSS vs. Jolt: the production site record vs. ops checklists and food safety.",
+      "blurb": "Jolt runs daily operations by checklist: task lists, food-safety logging, labeling, audits, with restaurants and food service at the center. COMPVSS runs a production site, where the checklist is one instrument among several.",
+      "hero": "Jolt's conviction is that operations improve when every recurring task is a checklist with a name and a timestamp, and it builds hard on that: daily task lists, food-safety temperature logging, date labeling, audit trails for inspection day. In food service that discipline is the product. A production site needs the same discipline pointed at different objects: punch items with photos before doors, daily logs the console reads, handovers at shift change, incidents with anonymous filing and manager sign-off, custody on the gear. COMPVSS types those records instead of flattening them into generic lists.",
+      "bottomLine": "For restaurant and food-service operations that live and die by checklists and food-safety logs, Jolt is purpose-built. For crews closing out builds and running show days, COMPVSS is the field record with the same discipline.",
+      "features": [
+        { "feature": "Recurring task lists and checklists", "us": "Typed: punch lists, daily logs, handovers", "them": true, "note": "Jolt's published core" },
+        { "feature": "Food-safety logging and labeling", "us": false, "them": true, "note": "Food-service-specific by design" },
+        { "feature": "Shift scheduling + time clock", "us": true, "them": true },
+        { "feature": "Team communication", "us": true, "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Org-configured onboarding (LEG3ND hub)", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Jolt pricing is quote-based (published as contact sales)" }
+      ],
+      "whyWeWin": [
+        { "title": "Typed close-out, not generic lists", "body": "A punch item is a punch item: photo, assignee, sign-off, on the production's record. A daily log is a daily log. Typed records mean the console and the insurer read them without translation." },
+        { "title": "The whole site, not the task layer", "body": "COMPVSS carries the gate, incidents, custody, shifts and time alongside the close-out discipline, one app for the crew instead of a checklist tool plus everything else." },
+        { "title": "Records with provenance", "body": "Offline-first capture means the 02:00 punch-item close on a dead-signal site still lands with who, when and how once signal returns." }
+      ],
+      "whenTheyWin": [
+        "You run restaurants or food service where temperature logs, date labeling and inspection-ready audit trails are the daily discipline. Jolt builds directly for that.",
+        "Your operation is checklist-shaped top to bottom and you want the tool whose whole product is making lists auditable and accountable."
+      ],
+      "migration": [
+        "Export Jolt people and schedules as CSV; they map to COMPVSS crew and shifts",
+        "Rebuild recurring lists as COMPVSS punch list and daily log templates; venue F&B outlets sometimes keep Jolt for food safety while the production crew moves"
+      ],
+      "faqs": [
+        { "q": "Can COMPVSS replace our checklists?", "a": "For site close-out and operations, yes: punch lists with photos and sign-off, daily logs, shift handovers. For food-safety-specific logging like temperature probes and labeling, Jolt's food-service tooling is the specialist." },
+        { "q": "Do checklist completions roll up anywhere?", "a": "Punch items, logs and handovers land on the production's org record, the same store the operator console and reports read, so close-out status is visible without asking." }
+      ],
+      "keywords": ["Jolt alternative", "COMPVSS vs Jolt", "operations checklists for events", "punch list app for productions", "event ops software"]
+    },
+    {
+      "slug": "blink",
+      "competitor": "Blink",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://joinblink.com/product", "https://joinblink.com/pricing"],
+      "headline": "COMPVSS vs. Blink: the production field record vs. the frontline employee app.",
+      "blurb": "Blink is the frontline employee super-app: feed, chat, a content hub and single sign-on into the rest of the stack. COMPVSS puts comms inside the work record instead of in front of it.",
+      "hero": "Blink's bet is that frontline workers deserve one front door: a feed that actually reaches them, chat, a hub for policies and links, and SSO into the systems behind it. For large distributed workforces, hospitals, transit, retail chains, that front door is the product. A production crew needs reaching too, and COMPVSS carries the feed, channels and per-kind notification controls. The difference is what sits under them: on COMPVSS the announcement, the shift, the incident, the punch item and the custody move are rows in one org record, not links out to other systems.",
+      "bottomLine": "If the problem is reaching thousands of distributed frontline employees with one well-built front door, Blink is a strong pick. If the problem is running and proving field work, COMPVSS is the record the comms sit on.",
+      "features": [
+        { "feature": "Employee feed + chat", "us": true, "them": true, "note": "Blink's published core" },
+        { "feature": "Content hub / intranet for frontline teams", "us": "Via LEG3ND knowledge surface", "them": true },
+        { "feature": "SSO front door into other workplace tools", "us": "Not published", "them": true },
+        { "feature": "Shift scheduling + time clock", "us": true, "them": "Not published" },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Punch lists, daily logs, shift handovers", "us": true, "them": false },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Blink prices per user (published pricing)" }
+      ],
+      "whyWeWin": [
+        { "title": "Comms attached to the work", "body": "A feed post about tomorrow's load-in sits on the same record as the shifts, the gate and the punch list it is about. The message and the work are one store, not an app pointing at other apps." },
+        { "title": "The field work itself is native", "body": "Punches, scans, incidents, custody and close-out are COMPVSS primitives, not integrations behind a front door." },
+        { "title": "Offline is the default", "body": "Production sites lose signal. The feed you read, the punch you file and the scan at the gate all work offline and replay with provenance." }
+      ],
+      "whenTheyWin": [
+        "You are a large distributed employer, transit, healthcare, retail, whose core problem is reach and engagement across thousands of frontline employees. That is the product Blink publishes.",
+        "You want one branded front door with SSO into an existing stack of scheduling, HR and ops systems you are keeping."
+      ],
+      "migration": [
+        "Export the employee directory as CSV; it maps to COMPVSS crew, joined by invite or org code",
+        "Move announcements to the COMPVSS feed first; retire the old channels once read rates hold"
+      ],
+      "faqs": [
+        { "q": "Is COMPVSS an intranet like Blink?", "a": "No, and it does not try to be. The feed and channels cover crew comms; policies, courses and SOPs live in LEG3ND on the same platform. What COMPVSS adds that an intranet cannot is the work record itself: shifts, punches, scans, incidents, custody." },
+        { "q": "Can announcements reach crew who are not at a desk?", "a": "That is the only kind of crew COMPVSS knows. Push notifications with per-kind opt-outs, an offline-readable feed, and read tracking on announcements." }
+      ],
+      "keywords": ["Blink alternative", "COMPVSS vs Blink", "frontline app for event crews", "crew communications app", "deskless workforce app for production"]
+    },
+    {
+      "slug": "beekeeper",
+      "competitor": "Beekeeper",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.beekeeper.io/product/", "https://www.beekeeper.io/pricing/"],
+      "headline": "COMPVSS vs. Beekeeper: the production site record vs. frontline communications at industrial scale.",
+      "blurb": "Beekeeper connects non-desk workforces that email never reached: streams, chat, surveys and shift information for factories, hotels and logistics floors. COMPVSS is for a narrower crowd: the crew building the show, and everything they have to prove.",
+      "hero": "Beekeeper starts from a real observation: most frontline workers never had a company login, and it builds the connection layer for them, streams and chat in the worker's own language, surveys, forms, shift info surfaced in the same app, integrations into HR and ops systems. At hotel-chain and factory scale that layer earns its keep. COMPVSS assumes the connection and goes after the work: the geofenced punch, the sub-100ms gate scan, the incident with anonymous filing and manager sign-off, the punch list before doors, the custody chain on the gear, all one org record shared with the operator console.",
+      "bottomLine": "Connecting a factory, hotel group or logistics floor that email never reached? Beekeeper is built for exactly that. Running production crews who must schedule, scan, file and hand over on site? That is COMPVSS.",
+      "features": [
+        { "feature": "Frontline streams + chat", "us": "Feed + channels", "them": true, "note": "Beekeeper's published core" },
+        { "feature": "Surveys and frontline forms", "us": "Typed incident/punch/log records", "them": true },
+        { "feature": "HR and ops system integrations", "us": "Via export + API", "them": true },
+        { "feature": "Shift information in-app", "us": "Full scheduling + swaps + time clock", "them": true, "note": "Beekeeper publishes shift viewing and integrations rather than a native scheduler" },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Punch lists, daily logs, shift handovers", "us": true, "them": false },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Beekeeper pricing is quote-based (published as contact sales)" }
+      ],
+      "whyWeWin": [
+        { "title": "Operations native, not integrated", "body": "Beekeeper connects workers to systems that live elsewhere. On COMPVSS the shift, the punch, the scan and the incident are the system, one record store the console and portals read." },
+        { "title": "Proof is the product", "body": "Anonymous incident filing with manager sign-off, punch items with photos, custody moves with provenance. A comms layer can tell people things; it cannot prove what happened on site." },
+        { "title": "Built for the ten hard days", "body": "Load-in, show, strike: headcount triples, signal dies, everything is time-stamped. Offline-first capture and per-org pricing are shaped for exactly that week." }
+      ],
+      "whenTheyWin": [
+        "You run a factory floor, hotel group or logistics network and the core problem is reaching thousands of non-desk employees, across languages, who never had a company login. That is Beekeeper's published home turf.",
+        "You are keeping your existing HR, scheduling and ops systems and want a connection layer over them rather than a new operational record."
+      ],
+      "migration": [
+        "Export the workforce directory as CSV; it maps to COMPVSS crew, joined by invite or org code",
+        "Run the two feeds in parallel for a transition period; move operational records (shifts, incidents, time) to COMPVSS first, comms follow"
+      ],
+      "faqs": [
+        { "q": "Does COMPVSS handle crew without corporate email, like Beekeeper does?", "a": "Yes. Crew join an existing organization by invite or org code and install the PWA. Organizations are created and configured in LEG3ND on the web beforehand, so joining stays simple." },
+        { "q": "We mostly need comms. Is COMPVSS too much?", "a": "If comms across a huge static workforce is the whole problem, a dedicated platform like Beekeeper is the honest recommendation. COMPVSS earns its place when the same crew also needs shifts, punches, gates, incidents and close-out on one record." }
+      ],
+      "keywords": ["Beekeeper alternative", "COMPVSS vs Beekeeper", "frontline communications for events", "crew comms and operations app", "deskless workforce platform"]
     }
   ]
 }

@@ -44,7 +44,7 @@ export default async function SolutionsIndex() {
         t("marketing.pages.solutions.apps.atlvs.bullets.2"),
         t("marketing.pages.solutions.apps.atlvs.bullets.3"),
       ],
-      href: "/solutions/atlvs",
+      href: "/atlvs",
     },
     {
       slug: "gvteway",
@@ -58,7 +58,7 @@ export default async function SolutionsIndex() {
         t("marketing.pages.solutions.apps.gvteway.bullets.2"),
         t("marketing.pages.solutions.apps.gvteway.bullets.3"),
       ],
-      href: "/solutions/gvteway",
+      href: "/gvteway",
     },
     {
       slug: "compvss",
@@ -72,7 +72,7 @@ export default async function SolutionsIndex() {
         t("marketing.pages.solutions.apps.compvss.bullets.2"),
         t("marketing.pages.solutions.apps.compvss.bullets.3"),
       ],
-      href: "/solutions/compvss",
+      href: "/compvss",
     },
     {
       slug: "legend",
@@ -86,7 +86,7 @@ export default async function SolutionsIndex() {
         t("marketing.pages.solutions.apps.legend.bullets.2"),
         t("marketing.pages.solutions.apps.legend.bullets.3"),
       ],
-      href: "/solutions/legend",
+      href: "/legend",
     },
   ] as const;
 

@@ -3119,27 +3119,27 @@
               ]
             },
             {
-              "path": "/solutions/atlvs",
+              "path": "/atlvs",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/solutions/compvss",
+              "path": "/compvss",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/solutions/gvteway",
+              "path": "/gvteway",
               "arch": [
                 "LIST"
               ]
             },
             {
-              "path": "/solutions/legend",
+              "path": "/legend",
               "arch": [
-                "LIST"
+                "SHELL"
               ]
             },
             {
@@ -3220,6 +3220,12 @@
             },
             {
               "path": "/guides",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/developers",
               "arch": [
                 "LIST"
               ]

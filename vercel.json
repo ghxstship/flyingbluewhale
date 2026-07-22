@@ -6,32 +6,77 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "(www\\.)?flyingbluewhale\\.(app|tech|pro|com)" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?flyingbluewhale\\.(app|tech|pro|com)"
+        }
+      ],
       "destination": "https://atlvs.pro/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "(www\\.)?flytehaus\\.(studio|live|com|app|pro)" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?flytehaus\\.(studio|live|com|app|pro)"
+        }
+      ],
       "destination": "https://atlvs.pro/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "atlvs\\.flytehaus\\.studio" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "atlvs\\.flytehaus\\.studio"
+        }
+      ],
       "destination": "https://app.atlvs.pro/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "gvteway\\.flytehaus\\.studio" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "gvteway\\.flytehaus\\.studio"
+        }
+      ],
       "destination": "https://gvteway.atlvs.pro/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "compvss\\.flytehaus\\.studio" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "compvss\\.flytehaus\\.studio"
+        }
+      ],
       "destination": "https://compvss.atlvs.pro/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/solutions/atlvs",
+      "destination": "/atlvs",
+      "permanent": true
+    },
+    {
+      "source": "/solutions/compvss",
+      "destination": "/compvss",
+      "permanent": true
+    },
+    {
+      "source": "/solutions/gvteway",
+      "destination": "/gvteway",
+      "permanent": true
+    },
+    {
+      "source": "/solutions/legend",
+      "destination": "/legend",
       "permanent": true
     }
   ]

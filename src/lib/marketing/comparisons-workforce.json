@@ -1,0 +1,87 @@
+{
+  "$comment": "COMPVSS-category (deskless workforce) comparison entries. DATA FILE ON PURPOSE: the brand-hygiene guard (src/lib/brand/no-competitor-names.test.ts) bans competitor brand tokens in .ts/.tsx product code; the ratified marketing carve-out (plan 12.1) homes these names in JSON consumed ONLY by the /compare and /alternatives templates. Every entry MUST carry lastVerified + sources; comparison-verification.test.ts enforces both and fails CI at 180 days stale. Claims about a competitor may only assert what its linked public pages state; unknowns say 'Not published'.",
+  "entries": [
+    {
+      "slug": "deputy",
+      "competitor": "Deputy",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.deputy.com/features", "https://www.deputy.com/pricing"],
+      "headline": "COMPVSS vs. Deputy: event-production field ops vs. shift scheduling for shift-based businesses.",
+      "blurb": "Deputy is a mature scheduler for retail, hospitality and healthcare rosters. COMPVSS is built for the site: the gate, the dock, the incident, the punch list, the advance. If your workforce builds shows, the record of the show matters as much as the roster.",
+      "hero": "Deputy does shift-based scheduling well: demand-aware rosters, time clocks, leave, and a deep payroll-integration catalog. What it does not model is a production. There is no gate scan, no credential advance, no incident chain an insurer can read, no punch list, no chain of custody for gear. COMPVSS carries the roster AND the site record, offline-first, on one org-wide store shared with the operator console.",
+      "bottomLine": "Rostering a cafe, a ward or a store? Deputy is a strong pick. Running crews that build, operate and strike productions? COMPVSS is the field app built for that record.",
+      "features": [
+        { "feature": "Shift scheduling + time clock", "us": true, "them": true },
+        { "feature": "Demand-based auto-scheduling", "us": "Coverage-based", "them": true, "note": "Deputy's demand forecasting is a core strength" },
+        { "feature": "Payroll integrations catalog", "us": "Via export + API", "them": true, "note": "Deputy publishes a large integration directory" },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Punch lists, daily logs, shift handovers", "us": true, "them": false },
+        { "feature": "Asset custody, GTIN scan-to-fulfil, chain of custody", "us": true, "them": false },
+        { "feature": "Credential/advance packets tied to the production", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "Deputy prices per user per month (published pricing)" }
+      ],
+      "whyWeWin": [
+        { "title": "The site record, not just the roster", "body": "A shift is one row of the story. COMPVSS keeps the incidents, punch items, handovers, custody moves and daily logs on the same org record the console and portal read." },
+        { "title": "Built for no-signal days", "body": "Offline-first isn't a mode, it's the architecture: punches queue, scans stay sub-100ms at the gate, and everything replays with provenance when the signal returns." },
+        { "title": "Crew aren't seats", "body": "Per-org pricing means a 400-person load-in week costs what a 40-person week costs. Per-user pricing punishes exactly the surge a production is." }
+      ],
+      "whenTheyWin": [
+        "You run a retail, hospitality or care roster where demand-forecast auto-scheduling and award/compliance pay-rule libraries are the daily job. That is Deputy's home turf and it is deep there.",
+        "Your payroll depends on one of Deputy's many published payroll integrations and you want zero-touch export."
+      ],
+      "migration": [
+        "Export Deputy people, shifts and timesheets as CSV; they map to COMPVSS crew, shifts and time entries",
+        "Most production orgs cut over between seasons: run the last payroll cycle out of Deputy while the new season advances in COMPVSS"
+      ],
+      "faqs": [
+        { "q": "Does COMPVSS do time clocks and schedules like Deputy?", "a": "Yes: shifts, punches with geofenced zones, timesheets with manager review, time off, and swaps. The difference is everything around the shift: the same app carries incidents, punch lists, custody and the gate." },
+        { "q": "Can crew use COMPVSS without corporate email?", "a": "Yes. Crew join an existing organization by invite or org code. Organizations themselves are created and configured in LEG3ND on the web, so the org a crew member joins is already set up." }
+      ],
+      "keywords": ["Deputy alternative", "Deputy alternative for events", "COMPVSS vs Deputy", "event crew scheduling software", "deskless workforce app for production"]
+    },
+    {
+      "slug": "when-i-work",
+      "competitor": "When I Work",
+      "category": "workforce",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://wheniwork.com/features", "https://wheniwork.com/pricing"],
+      "headline": "COMPVSS vs. When I Work: production field operations vs. simple team scheduling.",
+      "blurb": "When I Work made small-team scheduling genuinely easy: shifts, swaps, a time clock, team messaging. COMPVSS assumes the harder problem: the schedule is only the start of what a production crew has to prove happened.",
+      "hero": "When I Work is deliberately simple, and for a single-location team that simplicity is the feature: build a schedule, let the team swap, punch in and out, message the group. A production org outgrows that shape fast. Load-ins surge headcount, gates need scans, incidents need records that stand up later, gear needs custody, and the office needs it all on the same record store the field writes. That is the shape COMPVSS is built around.",
+      "bottomLine": "For a small, steady, single-site team, When I Work's simplicity wins on day one. For crews that build and strike shows, COMPVSS is the field record the whole production runs on.",
+      "features": [
+        { "feature": "Shift scheduling, swaps, availability", "us": true, "them": true },
+        { "feature": "Time clock with GPS/geofence", "us": true, "them": true },
+        { "feature": "Team messaging", "us": true, "them": true },
+        { "feature": "Payroll integrations", "us": "Via export + API", "them": true },
+        { "feature": "Offline-first field PWA", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan", "us": true, "them": false },
+        { "feature": "Incidents, punch lists, daily logs, handovers", "us": true, "them": false },
+        { "feature": "Asset custody + scan-to-fulfil", "us": true, "them": false },
+        { "feature": "Org-configured onboarding (LEG3ND hub)", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": false, "note": "When I Work prices per user (published pricing)" }
+      ],
+      "whyWeWin": [
+        { "title": "Surge weeks don't reprice you", "body": "Productions spike from 20 to 400 people for a week. Per-org pricing absorbs the spike; per-user pricing bills it." },
+        { "title": "Proof, not just presence", "body": "Punches, incidents, briefing sign-ins and custody moves all land as records with provenance: who, when, via which channel, signed off by whom." },
+        { "title": "One store, three shells", "body": "What the field writes, the operator console and stakeholder portals read instantly. No sync, no CSV shuffle between the site and the office." }
+      ],
+      "whenTheyWin": [
+        "You schedule one small, steady team at one location and want the least software possible. When I Work's simplicity is real and earned.",
+        "Your whole need is schedule + clock + payroll export at low per-user cost for a stable headcount."
+      ],
+      "migration": [
+        "Export users and schedules from When I Work as CSV; import as COMPVSS crew and shifts",
+        "Keep the last open pay period in the old clock, start the new period on COMPVSS punches"
+      ],
+      "faqs": [
+        { "q": "Is COMPVSS harder to roll out than When I Work?", "a": "Crew onboarding is comparable: invite, install the PWA, punch. The organization setup is deeper on purpose, and it happens once, in LEG3ND on the web, before crew arrive." },
+        { "q": "Does COMPVSS have shift swaps and availability?", "a": "Yes: swaps with manager decisions, availability, time off with balances, and published-shift notifications with per-kind opt-outs." }
+      ],
+      "keywords": ["When I Work alternative", "When I Work alternative for events", "COMPVSS vs When I Work", "crew scheduling app", "event staff scheduling software"]
+    }
+  ]
+}

@@ -17,6 +17,19 @@ export type CompareConfig = {
   migration: string[];
   faqs: Array<{ q: string; a: string }>;
   keywords: string[];
+  /** Comparison category for hub grouping. Legacy entries default to
+   *  "production" at read time; new entries declare theirs. */
+  category?: "production" | "workforce" | "ticketing" | "work-os";
+  /** ISO date the claims on this page were last checked against the
+   *  competitor's public docs/pricing. The verification guard
+   *  (comparison-verification.test.ts) fails CI when this goes stale
+   *  (>180 days). Required on every workforce-category entry; the legacy
+   *  roster backfills in P4 of the marketing rebuild plan. */
+  lastVerified?: string;
+  /** Public sources (docs/pricing URLs) the claims derive from. Unbiased by
+   *  construction: no cell in `features` may assert something about the
+   *  competitor that these pages don't state. */
+  sources?: string[];
 };
 
 export const COMPARE: Record<string, CompareConfig> = {
@@ -1137,4 +1150,23 @@ export const COMPARE: Record<string, CompareConfig> = {
   },
 };
 
+// ── Workforce-category roster (COMPVSS comparisons) ─────────────────────────
+// Lives in JSON, not here: the brand-hygiene guard bans competitor brand
+// tokens in .ts/.tsx product code, and the ratified marketing carve-out
+// (docs/marketing/MARKETING_ONBOARDING_REBUILD_PLAN.md §12.1) homes the
+// deskless-workforce names in a data file consumed only by the /compare and
+// /alternatives templates. Every JSON entry must carry lastVerified + sources;
+// comparison-verification.test.ts enforces it.
+import workforceComparisons from "@/lib/marketing/comparisons-workforce.json";
+
+for (const entry of workforceComparisons.entries as CompareConfig[]) {
+  COMPARE[entry.slug] = entry;
+}
+
 export const COMPARE_LIST = Object.values(COMPARE);
+
+/** Hub grouping: legacy entries predate `category` and are production-suite
+ *  comparisons; new entries declare theirs. */
+export function compareCategory(c: CompareConfig): NonNullable<CompareConfig["category"]> {
+  return c.category ?? "production";
+}

@@ -8,6 +8,15 @@ import { join } from "node:path";
  * code. (Integration connectors live in the integrations marketplace and are
  * exempt; this guard scans application code only.) Distinctive brand tokens
  * only — generic words like "deputy"/"sling" would false-positive.
+ *
+ * RATIFIED CARVE-OUT (marketing rebuild plan §12.1, 2026-07-22): the
+ * bottom-of-funnel comparison surfaces (/compare, /alternatives) may name
+ * competitors. Their entries live in JSON data files
+ * (src/lib/marketing/comparisons-*.json) which this guard deliberately does
+ * not scan (.ts/.tsx only) — that is the designed boundary, not a loophole:
+ * names stay out of application CODE and live only in comparison DATA
+ * consumed by those two templates. comparison-verification.test.ts enforces
+ * the honesty discipline (lastVerified + sources) on every such entry.
  */
 const FORBIDDEN = ["connecteam", "growthbook", "beatgig", "skool"];
 

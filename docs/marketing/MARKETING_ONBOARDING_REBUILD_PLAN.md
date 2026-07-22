@@ -1,6 +1,6 @@
 # ATLVS Ecosystem — Marketing Site + Onboarding Rebuild Plan
 
-Status: **PLAN FOR REVIEW — no code changes yet** · Drafted 2026-07-22
+Status: **EXECUTING — all 7 decisions ratified 2026-07-22** · Drafted 2026-07-22
 Grounding: `XPMS_2.5.zip` (kit + ecosystem bundle, inventoried), the live repo
 (93 marketing routes, 43-route `(legend)` shell, auth/org-creation flow,
 `/studio/settings/*` org-level surfaces), `docs/brand/voice.md`, and the
@@ -326,7 +326,15 @@ RPC + auth guard — sequenced deploy per the migration/app-skew rule).
 
 ---
 
-## 12 · Decisions needed before build
+## 12 · Decisions — RATIFIED 2026-07-22 (all seven approved as recommended)
+
+All recommendations approved by the owner. Two carry a rider: **decision 6**
+(LEG3ND canonical-home migration) and **decision 7** (es-ES/pt-BR locale
+parity) are approved as phased, with the deferred halves added to the backlog
+for **IMMEDIATE execution once this implementation is fully completed** — see
+§14. Original decision text preserved below for the record.
+
+### Original decision list (as reviewed)
 
 1. **Competitor naming carve-out** — ratify marketing-scoped allowlist for the
    brand guard (product copy stays scrubbed). *Recommended: yes.*
@@ -355,3 +363,21 @@ emoji, never trash-talk competitors even on comparison pages), brand marks
 contrast guards, LDP naming for any new tables (`*_state`/`*_phase`), the
 migration/app-skew deploy sequencing, and the standing rule that every claim on
 a comparison page carries a source and a date.
+
+## 14 · POST-COMPLETION BACKLOG — ratified for IMMEDIATE execution after P5
+
+Two items, both owner-ratified 2026-07-22 with explicit "immediate once this
+implementation is fully completed" instruction. Neither is optional and neither
+waits for a future cycle:
+
+1. **LEG3ND canonical-home migration** (decision 6 rider). P3 ships the hub as
+   a MIRROR of the console settings surfaces (branding, catalog, organization,
+   locations, templates). Immediately after P5 closes, the canonical homes MOVE
+   to the LEG3ND hub: console `/studio/settings/{branding,catalog,organization,
+   …}` become deep-links/redirects into the hub, nav/sitemap updated, e2e
+   retargeted. One cycle, no drift window.
+2. **Locale parity for the new marketing surface** (decision 7 rider). All new
+   pages ship en-first with hreflang scaffolding. Immediately after P5 closes,
+   run the i18n sweep pipeline (catalog conventions per repo memory: en=1sp,
+   locales=2sp, no trailing newline) to bring es-ES and pt-BR to parity across
+   home, product pages, industries, personas, and comparisons.

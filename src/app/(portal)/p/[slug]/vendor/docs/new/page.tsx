@@ -15,8 +15,8 @@ export default async function VendorDocsNewPage({ params }: { params: Promise<{ 
 
   return (
     <div className="page-content">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Vendor</div>
-      <h1 className="mt-1 text-2xl font-semibold">Upload Document</h1>
+      <div className="eyebrow eyebrow-accent">Vendor</div>
+      <h1 className="mt-1">Upload Document</h1>
       <div className="mt-6 max-w-2xl">
         <DocUploadForm revalidate={base} backHref={base} />
       </div>

@@ -17,8 +17,8 @@ export default function LegendError({ error, reset }: { error: Error & { digest?
   }, [error]);
   return (
     <div className="surface p-8">
-      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--p-text-3)]">Error</p>
-      <h1 className="mt-1 text-2xl font-semibold text-[var(--p-text-1)]">Something Went Wrong</h1>
+      <p className="eyebrow">Error</p>
+      <h1 className="mt-1 text-[var(--p-text-1)]">Something Went Wrong</h1>
       {error.digest ? <p className="mt-1 font-mono text-xs text-[var(--p-text-3)]">Ref: {error.digest}</p> : null}
       <p className="mt-2 text-sm text-[var(--p-text-2)]">{error.message || "An unexpected error occurred."}</p>
       <div className="mt-4 flex gap-2">

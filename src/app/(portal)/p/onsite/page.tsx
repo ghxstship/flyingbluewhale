@@ -69,14 +69,14 @@ export default async function PortalOnsitePage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">My Night</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>My Night</h1>
         <p className="text-[var(--p-text-2)]">Set times, your people, and your passes — all in one place.</p>
       </header>
 
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          <h2 className="eyebrow flex items-center gap-1.5">
             <ScanLine size={13} aria-hidden="true" /> Live schedule
           </h2>
           {score.achievements.checkIn ? (
@@ -98,12 +98,12 @@ export default async function PortalOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Find your friends</h2>
+        <h2 className="eyebrow">Find your friends</h2>
         <VenueMap zones={zones} sharing={zones.length > 0} />
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="eyebrow flex items-center gap-1.5">
           <Compass size={13} aria-hidden="true" /> Getting around
         </h2>
         {/* Wayfinding speaks the shared AIGA signage language (§3). */}
@@ -111,7 +111,7 @@ export default async function PortalOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="eyebrow flex items-center gap-1.5">
           <UtensilsCrossed size={13} aria-hidden="true" /> Order to your seat
         </h2>
         {menu.length === 0 ? (
@@ -151,7 +151,7 @@ export default async function PortalOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="eyebrow flex items-center gap-1.5">
           <Ticket size={13} aria-hidden="true" /> Your passes
         </h2>
         {passes.length === 0 ? (
@@ -182,7 +182,7 @@ export default async function PortalOnsitePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="eyebrow flex items-center gap-1.5">
           <Trophy size={13} aria-hidden="true" /> Tonight
         </h2>
         {/* Real points ledger (`onsite_points`) → tier + earned achievements. */}
@@ -213,7 +213,7 @@ export default async function PortalOnsitePage() {
 
       {AR_ENABLED && (
         <section className="space-y-3">
-          <h2 className="flex items-center gap-1.5 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          <h2 className="eyebrow flex items-center gap-1.5">
             <Sparkles size={13} aria-hidden="true" /> AR view
           </h2>
           <OnsiteARLauncher />

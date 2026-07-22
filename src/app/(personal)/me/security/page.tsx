@@ -45,10 +45,10 @@ export default async function SecurityPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+      <div className="eyebrow eyebrow-accent">
         {t("me.security.eyebrow", undefined, "Account")}
       </div>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">{t("me.security.title", undefined, "Security")}</h1>
+      <h1 className="mt-3">{t("me.security.title", undefined, "Security")}</h1>
 
       <div className="surface mt-8 divide-y divide-[var(--p-border)]">
         <div className="flex items-center justify-between p-5">
@@ -155,7 +155,7 @@ export default async function SecurityPage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-sm font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+        <h2 className="eyebrow">
           {t("me.security.passkeys.title", undefined, "Passkeys")}
         </h2>
         <p className="mt-2 text-xs text-[var(--p-text-2)]">

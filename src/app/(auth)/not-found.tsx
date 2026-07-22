@@ -9,8 +9,8 @@ export default async function AuthNotFound() {
       {/* Waypoint brand anchor — auth-page 404 still carries the lockup. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/brand/atlvs-mark.svg" alt="" width={32} height={32} aria-hidden="true" className="mx-auto mb-6" />
-      <p className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">404</p>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight">
+      <p className="eyebrow eyebrow-accent">404</p>
+      <h1 className="mt-4">
         {t("auth.notFound.title", undefined, "Auth path not found.")}
       </h1>
       <p className="mt-3 text-sm text-[var(--p-text-2)]">

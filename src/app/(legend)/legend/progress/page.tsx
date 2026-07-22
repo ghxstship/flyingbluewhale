@@ -144,7 +144,7 @@ export default async function ProgressPage() {
       </div>
 
       <section className="mb-8 space-y-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Mastery</h2>
+        <h2 className="eyebrow">Mastery</h2>
         {enrollments.length === 0 ? (
           <EmptyState
             size="compact"
@@ -169,7 +169,7 @@ export default async function ProgressPage() {
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Transcript</h2>
+        <h2 className="eyebrow">Transcript</h2>
         {holders.length === 0 ? (
           <EmptyState
             size="compact"

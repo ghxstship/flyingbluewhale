@@ -106,7 +106,7 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
       <PortalRail group={portalNav(slug, portalPersonaForSession(session.persona))} title={t("p.shared.portal", undefined, "Portal")} />
       <div className="flex-1">
         <div className="page-content">
-          <h1 className="text-2xl font-semibold">{t("p.shared.messages.title", undefined, "Messages")}</h1>
+          <h1>{t("p.shared.messages.title", undefined, "Messages")}</h1>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.shared.messages.subtitle",

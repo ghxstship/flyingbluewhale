@@ -107,7 +107,7 @@ async function Header() {
   const { t } = await getRequestT();
   return (
     <header className="mb-6">
-      <h1 className="text-2xl font-semibold tracking-tight">
+      <h1>
         {t("me.notifications.push.title", undefined, "Push Notifications")}
       </h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">

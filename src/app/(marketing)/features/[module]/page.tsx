@@ -176,7 +176,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
             <div className="eyebrow eyebrow-accent">
               {t("marketing.features.detail.builtFor", undefined, "Built For")}
             </div>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight">
+            <h2 className="mt-3">
               {t("marketing.features.detail.whoRuns", undefined, "Who Runs This Day-To-Day.")}
             </h2>
             <div className="mt-6 flex flex-wrap gap-2">
@@ -199,7 +199,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
             <blockquote className="text-xl leading-relaxed font-medium tracking-tight text-balance sm:text-2xl">
               &ldquo;{config.quote.text}&rdquo;
             </blockquote>
-            <figcaption className="mt-4 text-xs tracking-wide text-[var(--p-text-2)] uppercase">
+            <figcaption className="eyebrow mt-4">
               — {config.quote.attribution}
             </figcaption>
           </figure>
@@ -221,7 +221,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">
+        <h2>
           {t("marketing.features.detail.restOfAtlvs", undefined, "The Rest Of ATLVS.")}
         </h2>
         <p className="mt-3 text-sm text-[var(--p-text-2)]">

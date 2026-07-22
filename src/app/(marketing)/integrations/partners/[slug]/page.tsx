@@ -108,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         {p.capabilities.length > 0 ? (
           <div className="surface mt-6 p-5">
-            <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("marketing.integrations.partnerDetail.capabilities", undefined, "Capabilities")}
             </div>
             <ul className="mt-3 space-y-1.5 text-sm">

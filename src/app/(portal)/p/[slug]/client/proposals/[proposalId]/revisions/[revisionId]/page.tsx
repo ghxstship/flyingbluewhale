@@ -38,7 +38,7 @@ export default async function Page({
           </span>
           <Badge variant={REV_STATE_VARIANT[round.state]}>{REV_STATE_LABEL[round.state]}</Badge>
         </div>
-        <h1 className="mt-2 text-xl font-semibold">{round.title}</h1>
+        <h1 className="mt-2">{round.title}</h1>
         {round.summary && <p className="mt-2 text-sm text-[var(--p-text-2)]">{round.summary}</p>}
         <div className="mt-3 text-xs text-[var(--p-text-2)]">
           {t("p.client.revisions.opened", { when: timeAgo(round.created_at) }, `Opened ${timeAgo(round.created_at)}`)}

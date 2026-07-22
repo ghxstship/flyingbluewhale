@@ -203,7 +203,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
             <blockquote className="text-xl leading-relaxed font-medium tracking-tight text-balance sm:text-2xl">
               &ldquo;{c.quote.text}&rdquo;
             </blockquote>
-            <figcaption className="mt-4 text-xs tracking-wide text-[var(--p-text-2)] uppercase">
+            <figcaption className="eyebrow mt-4">
               — {c.quote.attribution}
             </figcaption>
           </figure>

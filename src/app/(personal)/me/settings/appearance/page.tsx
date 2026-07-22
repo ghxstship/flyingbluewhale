@@ -12,10 +12,10 @@ export default async function AppearancePage() {
   const { t } = await getRequestT();
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
-      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+      <div className="eyebrow eyebrow-accent">
         {t("me.appearance.eyebrow", undefined, "Settings")}
       </div>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">
+      <h1 className="mt-3">
         {t("me.appearance.title", undefined, "Appearance")}
       </h1>
       <p className="mt-3 text-sm text-[var(--p-text-2)]">
@@ -28,7 +28,7 @@ export default async function AppearancePage() {
 
       <section className="mt-10 grid gap-6 sm:grid-cols-2">
         <div className="surface p-5">
-          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+          <div className="eyebrow">
             {t("me.appearance.colorMode.label", undefined, "Color mode")}
           </div>
           <div className="mt-3">
@@ -40,7 +40,7 @@ export default async function AppearancePage() {
         </div>
 
         <div className="surface p-5">
-          <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+          <div className="eyebrow">
             {t("me.appearance.density.label", undefined, "Density")}
           </div>
           <div className="mt-3">

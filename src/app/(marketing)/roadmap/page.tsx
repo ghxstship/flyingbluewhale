@@ -157,7 +157,7 @@ export default async function RoadmapPage() {
             />
             <h2 className="hed-lg">{t(q.labelKey)}</h2>
             <span
-              className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[11px] font-semibold tracking-wider uppercase"
+              className="eyebrow rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5"
               style={{ color: STATUS_COLOR[q.status] }}
             >
               {t(STATUS_LABEL_KEY[q.status])}

@@ -27,7 +27,7 @@ export function QuizRunner({ items, startIndex }: QuizRunnerProps): React.ReactE
   if (done || !item) {
     return (
       <div className="space-y-4 rounded-[var(--p-r-lg,12px)] border border-[var(--p-border)] bg-[var(--p-surface)] p-6 text-center">
-        <p className="font-mono text-xs tracking-[0.12em] text-[var(--p-text-3)] uppercase">Quiz complete</p>
+        <p className="eyebrow">Quiz complete</p>
         <p className="text-2xl font-bold text-[var(--p-text-1)]">
           {score} / {items.length}
         </p>

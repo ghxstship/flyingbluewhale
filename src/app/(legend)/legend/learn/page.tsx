@@ -52,8 +52,8 @@ export default async function LearnCatalogPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <header className="space-y-3">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">LEG3ND · Learn</p>
-        <h1 className="text-4xl font-bold tracking-tight">Courses & LMS</h1>
+        <p className="eyebrow eyebrow-accent">LEG3ND · Learn</p>
+        <h1>Courses & LMS</h1>
         <p className="text-lg text-[var(--p-text-2)]">
           Short courses on the standard, the signage system, and field readiness — on the XPMS 2.0 protocol.
         </p>
@@ -61,7 +61,7 @@ export default async function LearnCatalogPage() {
 
       {real.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Your courses</h2>
+          <h2 className="eyebrow">Your courses</h2>
           <ul className="grid gap-4 sm:grid-cols-2">
             {real.map((c) => {
               const e = enrollments.get(c.id);
@@ -97,7 +97,7 @@ export default async function LearnCatalogPage() {
       )}
 
       <section className="space-y-3">
-        {real.length > 0 && <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Previews</h2>}
+        {real.length > 0 && <h2 className="eyebrow">Previews</h2>}
         <ul className="grid gap-4 sm:grid-cols-2">
           {COURSES.map((c) => (
             <li key={c.slug}>

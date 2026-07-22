@@ -35,7 +35,7 @@ export default async function Page({
           <span className="font-mono text-sm text-[var(--p-text-2)]">#{co.number}</span>
           <Badge variant={CO_STATE_VARIANT[co.state]}>{CO_STATE_LABEL[co.state]}</Badge>
         </div>
-        <h1 className="mt-2 text-xl font-semibold">{co.title}</h1>
+        <h1 className="mt-2">{co.title}</h1>
         <div className="mt-3 grid gap-3 md:grid-cols-3">
           <div className="rounded border border-[var(--p-border)] p-3">
             <div className="eyebrow text-xs text-[var(--p-text-2)]">

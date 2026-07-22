@@ -16,8 +16,8 @@ export default async function CrewTimeOffNewPage({ params }: { params: Promise<{
 
   return (
     <div className="page-content">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Crew</div>
-      <h1 className="mt-1 text-2xl font-semibold">Request Time Off</h1>
+      <div className="eyebrow eyebrow-accent">Crew</div>
+      <h1 className="mt-1">Request Time Off</h1>
       <div className="mt-6 max-w-2xl">
         <TimeOffRequestForm revalidate={base} backHref={base} />
       </div>

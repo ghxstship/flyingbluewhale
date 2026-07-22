@@ -25,7 +25,7 @@ export default async function NotificationsPrefs() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1>
           {t("me.notifications.title", undefined, "Notifications")}
         </h1>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">
@@ -40,7 +40,7 @@ export default async function NotificationsPrefs() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">
+      <h1>
         {t("me.notifications.title", undefined, "Notifications")}
       </h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">

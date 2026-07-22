@@ -28,8 +28,8 @@ export default async function ArchitecturePage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-text-3)] uppercase">Ecosystem · Architecture</p>
-        <h1 className="text-3xl font-bold">ATLVS Ecosystem Map</h1>
+        <p className="eyebrow">Ecosystem · Architecture</p>
+        <h1>ATLVS Ecosystem Map</h1>
         <p className="max-w-2xl text-[var(--p-text-2)]">
           {model.shells.length} shells · {totalRoutes} routes · {Object.keys(model.archetypes).length} archetypes.
           Generated from <code className="font-mono text-sm">nav.ts</code> + the route tree — it re-renders whenever the
@@ -71,7 +71,7 @@ export default async function ArchitecturePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Archetypes</h2>
+        <h2 className="eyebrow">Archetypes</h2>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {Object.entries(model.archetypes).map(([key, a]) => (
             <div key={key} className="rounded-[var(--p-r,8px)] border border-[var(--p-border)] p-3">

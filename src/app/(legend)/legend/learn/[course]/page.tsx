@@ -37,7 +37,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
     if (first) {
       return (
         <div className="mx-auto max-w-2xl space-y-4">
-          <h1 className="text-2xl font-bold text-[var(--p-text-1)]">{sample.title}</h1>
+          <h1 className="text-[var(--p-text-1)]">{sample.title}</h1>
           <p className="text-[var(--p-text-2)]">{sample.summary}</p>
           <Link href={`/legend/learn/${sample.slug}/lesson/${first.id}`} className="ps-btn ps-btn--cta ps-btn--lg" style={{ minHeight: 44 }}>
             Start preview
@@ -162,7 +162,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
 
       <header className="space-y-2">
         <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--p-text-1)]">{course.title}</h1>
+          <h1 className="text-[var(--p-text-1)]">{course.title}</h1>
           {certified && <Badge variant="success">Certified</Badge>}
         </div>
         {course.summary && <p className="text-[var(--p-text-2)]">{course.summary}</p>}
@@ -194,7 +194,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
       </div>
 
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Lessons</h2>
+        <h2 className="eyebrow">Lessons</h2>
         {lessons.length === 0 ? (
           <p className="text-sm text-[var(--p-text-2)]">No lessons published yet.</p>
         ) : (
@@ -231,7 +231,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
 
       <section className="space-y-3">
         <div className="flex items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Reviews</h2>
+          <h2 className="eyebrow">Reviews</h2>
           {reviews.length > 0 && (
             <span className="text-sm text-[var(--p-text-2)]">
               <span className="font-bold tabular-nums text-[var(--p-text-1)]">{avgRating.toFixed(1)}</span> ★ · {reviews.length}{" "}

@@ -88,7 +88,7 @@ export default async function ProfilePage() {
       </div>
 
       <div>
-        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Your tier</h2>
+        <h2 className="eyebrow mb-2">Your tier</h2>
         <LoyaltyTier
           tier={tier.tier}
           tone={tier.tone}

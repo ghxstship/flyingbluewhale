@@ -33,7 +33,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       className="surface space-y-6 p-6"
     >
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+        <h3 className="eyebrow">
           {t("legal.msaSign.exhibitBHeading", undefined, "Exhibit B — Other Clients")}
         </h3>
         <p className="text-xs text-[var(--p-text-2)]">
@@ -67,7 +67,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+        <h3 className="eyebrow">
           {t("legal.msaSign.exhibitCHeading", undefined, "Exhibit C — Capital Investment")}
         </h3>
         <p className="text-xs text-[var(--p-text-2)]">
@@ -97,7 +97,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
 
       {showChapter624 && (
         <div className="space-y-3 rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
-          <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <h3 className="eyebrow">
             {t("legal.msaSign.nscbHeading", undefined, "NSCB License — Chapter 624")}
           </h3>
           <p className="text-xs text-[var(--p-text-2)]">

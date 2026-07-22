@@ -54,7 +54,7 @@ export default async function CustomersHub() {
 
       {PUBLISHED_CUSTOMER_STORIES.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-2xl font-semibold tracking-tight">{t("marketing.pages.customers.published.title")}</h2>
+          <h2>{t("marketing.pages.customers.published.title")}</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {PUBLISHED_CUSTOMER_STORIES.map((s) => (
               <Link key={s.slug} href={`/customers/${s.slug}`} className="surface hover-lift p-5">
@@ -71,7 +71,7 @@ export default async function CustomersHub() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">{t("marketing.pages.customers.landingSoon.title")}</h2>
+          <h2>{t("marketing.pages.customers.landingSoon.title")}</h2>
           <span className="text-xs text-[var(--p-text-2)]">
             {t("marketing.pages.customers.landingSoon.count", { count: IN_PROGRESS_CUSTOMER_STORIES.length })}
           </span>
@@ -96,7 +96,7 @@ export default async function CustomersHub() {
               {/* Metric chips render only on PUBLISHED stories: in-progress
                   metrics are placeholders per the data contract, and unverified
                   numbers never ship on a public surface. */}
-              <p className="mt-4 border-t border-[var(--p-border)] pt-4 text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
+              <p className="eyebrow mt-4 border-t border-[var(--p-border)] pt-4">
                 {t("marketing.pages.customers.landingSoon.metricsOnPublish", undefined, "Verified numbers publish with the story")}
               </p>
             </article>

@@ -70,7 +70,7 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
             const items = byKind.get(kind) ?? [];
             return (
               <section key={kind}>
-                <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+                <h2 className="eyebrow">
                   {CATALOG_KIND_LABEL_SINGULAR[kind]} <span className="text-[var(--p-text-2)]">· {items.length}</span>
                 </h2>
                 <ul className="mt-2 space-y-2">

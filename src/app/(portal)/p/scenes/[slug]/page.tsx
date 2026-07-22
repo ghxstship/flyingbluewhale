@@ -108,8 +108,8 @@ export default async function SceneDetailPage({ params }: { params: Promise<{ sl
       </Link>
 
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY · Scene</p>
-        <h1 className="text-3xl font-bold tracking-tight">{scene.name}</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY · Scene</p>
+        <h1>{scene.name}</h1>
         {scene.description && <p className="text-[var(--p-text-2)]">{scene.description}</p>}
       </header>
 

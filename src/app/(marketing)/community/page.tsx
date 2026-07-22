@@ -41,7 +41,7 @@ export default async function CommunityPage() {
           ].map((m) => (
             <div key={m.label}>
               <div className="hed-lg text-[var(--p-accent)]">{m.value}</div>
-              <div className="mt-1 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{m.label}</div>
+              <div className="eyebrow mt-1">{m.label}</div>
             </div>
           ))}
         </div>
@@ -64,7 +64,7 @@ export default async function CommunityPage() {
                 {c.stats.slice(0, 2).map((s) => (
                   <div key={s.label} className="surface-inset p-3">
                     <div className="text-xl font-semibold tracking-tight text-[var(--p-accent)]">{s.value}</div>
-                    <div className="mt-1 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{s.label}</div>
+                    <div className="eyebrow mt-1">{s.label}</div>
                   </div>
                 ))}
               </div>

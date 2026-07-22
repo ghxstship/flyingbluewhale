@@ -82,7 +82,7 @@ export default async function MePage() {
           <div className="eyebrow">
             {t("me.dashboard.eyebrow", undefined, "My dashboard")}
           </div>
-          <h1 className="mt-1 truncate text-xl font-semibold">{displayName ?? session.email}</h1>
+          <h1 className="mt-1 truncate">{displayName ?? session.email}</h1>
           {displayName && (
             <p className="mt-0.5 truncate font-mono text-xs text-[var(--p-text-2)]">{session.email}</p>
           )}

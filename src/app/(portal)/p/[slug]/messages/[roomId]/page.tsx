@@ -115,7 +115,7 @@ export default async function PortalRoomPage({
           <Link href={`/p/${slug}/messages`} className="text-xs text-[var(--p-text-2)] hover:underline">
             ← {t("p.shared.messages.room.backToMessages", undefined, "All Messages")}
           </Link>
-          <h1 className="mt-2 text-2xl font-semibold">
+          <h1 className="mt-2">
             {room.name ?? t("p.shared.messages.room.directMessage", undefined, "Direct Message")}
           </h1>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">

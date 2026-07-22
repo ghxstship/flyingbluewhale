@@ -37,7 +37,7 @@ export function AssessmentRunner({
     const passed = !!result.passed;
     return (
       <div className="surface space-y-4 p-6 text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.12em] text-[var(--p-text-3)]">Assessment complete</p>
+        <p className="eyebrow">Assessment complete</p>
         <p className="text-3xl font-bold" style={{ color: passed ? "var(--p-success)" : "var(--p-danger)" }}>
           {result.scorePct}%
         </p>

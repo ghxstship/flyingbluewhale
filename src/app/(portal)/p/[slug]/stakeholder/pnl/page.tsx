@@ -79,14 +79,14 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "stakeholder")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">{t("p.stakeholder.pnl.title", undefined, "P&L")}</h1>
+        <h1>{t("p.stakeholder.pnl.title", undefined, "P&L")}</h1>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("p.stakeholder.pnl.subtitle", { projectName: project.name }, `Headline roll-up for ${project.name}.`)}
         </p>
 
         <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <div className="surface p-4">
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.stakeholder.pnl.metrics.budget", undefined, "Budget")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
@@ -94,7 +94,7 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.stakeholder.pnl.metrics.spent", undefined, "Spent")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
@@ -102,13 +102,13 @@ export default async function StakeholderPnL({ params }: { params: Promise<{ slu
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.stakeholder.pnl.metrics.revenuePaid", undefined, "Revenue (Paid)")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(invoiceTotal)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.stakeholder.pnl.metrics.margin", undefined, "Margin")}
             </div>
             <div

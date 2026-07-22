@@ -175,7 +175,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
 
           <div className="flex-1 space-y-3">
             <div>
-              <div className="text-xs font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+              <div className="eyebrow">
                 {t("me.security.twoFactor.enroll.pasteSecret", undefined, "Or paste this secret")}
               </div>
               <div className="mt-2 flex items-center gap-2">
@@ -407,7 +407,7 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
     <div className="surface space-y-5 p-6">
       <div className="flex items-center gap-2">
         <KeyRound size={16} className="text-[var(--p-accent)]" aria-hidden="true" />
-        <h2 className="text-sm font-semibold tracking-[0.18em] uppercase">
+        <h2 className="eyebrow">
           {t("me.security.twoFactor.recovery.panelTitle", undefined, "Save Your Recovery Codes")}
         </h2>
       </div>

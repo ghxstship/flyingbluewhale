@@ -74,7 +74,7 @@ export default async function PromoterSettlements({ params }: { params: Promise<
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">{t("p.promoter.settlements.title", undefined, "Settlements")}</h1>
+        <h1>{t("p.promoter.settlements.title", undefined, "Settlements")}</h1>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {rows.length === 1
             ? t(
@@ -94,19 +94,19 @@ export default async function PromoterSettlements({ params }: { params: Promise<
             <div className="font-mono text-2xl font-semibold">
               {fmt.money(totalGross, rows[0]?.currency ?? "USD")}
             </div>
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.promoter.settlements.metrics.totalGross", undefined, "Total Gross")}
             </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{fmt.number(totalPaid)}</div>
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.promoter.settlements.metrics.paidAttendance", undefined, "Paid Attendance")}
             </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{rows.filter((r) => r.status === "final").length}</div>
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("p.promoter.settlements.metrics.finalized", undefined, "Finalized")}
             </div>
           </div>

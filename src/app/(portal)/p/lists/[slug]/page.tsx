@@ -36,10 +36,10 @@ export default async function ListDetailPage({ params }: { params: Promise<{ slu
 
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="space-y-2">
-          <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">
+          <p className="eyebrow eyebrow-accent">
             GVTEWAY · List · {list.visibility}
           </p>
-          <h1 className="text-3xl font-bold tracking-tight">{list.name}</h1>
+          <h1>{list.name}</h1>
         </div>
         {list.visibility !== "private" && <ShareSheet url={shareUrl} title={list.name} />}
       </header>

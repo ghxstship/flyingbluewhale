@@ -75,7 +75,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           {c.stats.map((s) => (
             <div key={s.label} className="surface p-5">
               <div className="hed-xl text-[var(--p-accent)]">{s.value}</div>
-              <div className="mt-2 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{s.label}</div>
+              <div className="eyebrow mt-2">{s.label}</div>
             </div>
           ))}
         </div>

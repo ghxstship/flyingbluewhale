@@ -143,7 +143,7 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
         />
       ) : (
         <article className="surface prose-sm max-w-none p-5">
-          <h1 className="text-2xl font-bold text-[var(--p-text-1)]">{lesson.title}</h1>
+          <h1 className="text-[var(--p-text-1)]">{lesson.title}</h1>
           {lesson.body_html ? (
             <div className="mt-3 text-[var(--p-text-2)]" dangerouslySetInnerHTML={{ __html: sanitizeHtml(lesson.body_html) }} />
           ) : (

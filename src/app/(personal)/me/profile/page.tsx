@@ -42,7 +42,7 @@ export default async function ProfilePage() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold">{t("me.profile.title", undefined, "Profile")}</h1>
+        <h1>{t("me.profile.title", undefined, "Profile")}</h1>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.profile.configureSupabase", undefined, "Configure Supabase.")}
         </p>
@@ -65,7 +65,7 @@ export default async function ProfilePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">{t("me.profile.title", undefined, "Profile")}</h1>
+      <h1>{t("me.profile.title", undefined, "Profile")}</h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.profile.intro",

@@ -65,7 +65,7 @@ export default async function StorePage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Credit packs</h2>
+          <h2 className="eyebrow">Credit packs</h2>
           {products.length === 0 ? (
             <EmptyState size="compact" title="No packs available" description="Credit packs configured by your org appear here." />
           ) : (
@@ -89,7 +89,7 @@ export default async function StorePage() {
         <aside className="space-y-6">
           <VoucherForm />
           <div>
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Order history</h2>
+            <h2 className="eyebrow mb-2">Order history</h2>
             {orders.length === 0 ? (
               <p className="text-sm text-[var(--p-text-2)]">No orders yet.</p>
             ) : (

@@ -117,7 +117,7 @@ export default async function MyLearningPage() {
         <div className="space-y-8">
           {inProgress.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">In progress</h2>
+              <h2 className="eyebrow">In progress</h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {inProgress.map((e) => (
                   <CourseCard key={e.id} e={e} />
@@ -128,7 +128,7 @@ export default async function MyLearningPage() {
 
           {completed.length > 0 && (
             <section className="space-y-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Completed</h2>
+              <h2 className="eyebrow">Completed</h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {completed.map((e) => (
                   <CourseCard key={e.id} e={e} />

@@ -33,7 +33,7 @@ export function PersonalTabs({ groups }: { groups: PersonalTabGroup[] }) {
               ·
             </span>
           ) : null}
-          <span className="me-0.5 text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <span className="eyebrow me-0.5">
             {group.label}
           </span>
           {group.tabs.map((tab) => {

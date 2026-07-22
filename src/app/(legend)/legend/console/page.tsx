@@ -98,7 +98,7 @@ export default async function TrainingConsolePage() {
         <AssignForm members={members.map((m) => ({ id: m.id, name: m.name }))} courses={courses} />
       </div>
 
-      <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Roster</h2>
+      <h2 className="eyebrow mb-2">Roster</h2>
       {members.length === 0 ? (
         <EmptyState size="compact" title="No members" description="Org members appear here once invited." />
       ) : (

@@ -171,7 +171,7 @@ export default async function CatalogItemDetailPage({ params }: { params: Promis
         {item.description && <section className="surface p-4 text-sm whitespace-pre-wrap">{item.description}</section>}
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("console.settings.catalog.detail.unitCost", undefined, "Unit Cost")}
             </div>
             <div className="mt-1 font-mono">
@@ -179,7 +179,7 @@ export default async function CatalogItemDetailPage({ params }: { params: Promis
             </div>
           </div>
           <div>
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("console.settings.catalog.detail.inventory", undefined, "Inventory")}
             </div>
             <div className="mt-1 font-mono">{item.inventory_qty ?? "—"}</div>
@@ -187,7 +187,7 @@ export default async function CatalogItemDetailPage({ params }: { params: Promis
         </section>
         {gtins.length > 0 && (
           <section className="surface p-4 text-xs">
-            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+            <div className="eyebrow">
               {t("console.settings.catalog.detail.gtins", undefined, "Bound Barcodes (GTIN)")}
             </div>
             <ul className="mt-2 space-y-1">

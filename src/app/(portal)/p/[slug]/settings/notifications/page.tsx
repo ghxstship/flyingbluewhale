@@ -38,7 +38,7 @@ export default async function PortalNotificationSettings({ params }: { params: P
           <div className="text-label text-[var(--p-text-3)]">
             {t("p.shared.notifSettings.eyebrow", undefined, "Settings")}
           </div>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+          <h1 className="mt-1">
             {t("p.shared.notifSettings.title", undefined, "Notifications")}
           </h1>
           <p className="mt-2 max-w-xl text-sm text-[var(--p-text-2)]">

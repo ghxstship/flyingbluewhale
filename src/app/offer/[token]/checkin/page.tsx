@@ -22,7 +22,7 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
   if (!letter) {
     return (
       <div className="space-y-4">
-        <h1 className="text-xl font-semibold">{t("legal.offerCheckin.title", undefined, "Check-in")}</h1>
+        <h1>{t("legal.offerCheckin.title", undefined, "Check-in")}</h1>
         <p>
           {t("legal.offerCheckin.lockedPrefix", undefined, "Open your engagement letter first to unlock check-in —")}{" "}
           <Link href={`/offer/${token}`} className="underline">
@@ -42,10 +42,10 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-xs tracking-widest text-(--p-text-2) uppercase">
+        <div className="eyebrow">
           {t("legal.offerCheckin.dayOneEyebrow", undefined, "Day-1 Check-in")}
         </div>
-        <h1 className="text-3xl font-semibold">
+        <h1>
           {t(
             "legal.offerCheckin.welcome",
             { name: letter.recipient_name.split(" ")[0]! },

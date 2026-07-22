@@ -36,8 +36,8 @@ export default async function SavedPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">Saved</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>Saved</h1>
       </header>
 
       {!session ? (

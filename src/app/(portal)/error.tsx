@@ -15,10 +15,10 @@ export default function PortalError({ error, reset }: { error: Error & { digest?
   }, [error]);
   return (
     <div className="mx-auto max-w-md px-6 py-24 text-center">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
+      <div className="eyebrow text-[var(--p-danger)]">
         {t("p.error.eyebrow", undefined, "Error")}
       </div>
-      <h1 className="mt-3 text-2xl font-semibold">{t("p.error.title", undefined, "Something Went Wrong")}</h1>
+      <h1 className="mt-3">{t("p.error.title", undefined, "Something Went Wrong")}</h1>
       {/* Never surface raw error internals to external portal users —
           the digest below is enough to correlate with Sentry. */}
       <p className="mt-2 text-sm text-[var(--p-text-2)]">

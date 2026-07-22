@@ -32,12 +32,12 @@ export default async function Page({
 
       <header className="surface p-6">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+          <span className="eyebrow">
             {toTitle(approval.kind)}
           </span>
           <Badge variant={APPROVAL_STATE_VARIANT[approval.state]}>{APPROVAL_STATE_LABEL[approval.state]}</Badge>
         </div>
-        <h1 className="mt-2 text-xl font-semibold">{approval.title}</h1>
+        <h1 className="mt-2">{approval.title}</h1>
         {approval.body && <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap">{approval.body}</p>}
       </header>
 

@@ -81,7 +81,7 @@ export default async function Page() {
           submitLabel={t("me.preferences.submit", undefined, "Save Preferences")}
         >
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            <legend className="eyebrow">
               {t("me.preferences.appearance.legend", undefined, "Appearance")}
             </legend>
 
@@ -127,7 +127,7 @@ export default async function Page() {
           </fieldset>
 
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            <legend className="eyebrow">
               {t("me.preferences.locale.legend", undefined, "Locale")}
             </legend>
             <div className="grid grid-cols-2 gap-3">
@@ -151,7 +151,7 @@ export default async function Page() {
           </fieldset>
 
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            <legend className="eyebrow">
               {t("me.preferences.consent.legend", undefined, "Consent")}
             </legend>
 

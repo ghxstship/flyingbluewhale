@@ -63,7 +63,7 @@ export default async function StakeholderPortfolio({ params }: { params: Promise
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "stakeholder")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">{t("p.stakeholder.portfolio.title", undefined, "Portfolio")}</h1>
+        <h1>{t("p.stakeholder.portfolio.title", undefined, "Portfolio")}</h1>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "p.stakeholder.portfolio.summary",
@@ -93,7 +93,7 @@ export default async function StakeholderPortfolio({ params }: { params: Promise
                 const list = byPhase.get(phase) ?? [];
                 return (
                   <section key={phase}>
-                    <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+                    <h2 className="eyebrow">
                       {toTitle(phase)} <span>· {list.length}</span>
                     </h2>
                     <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">

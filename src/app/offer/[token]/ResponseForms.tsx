@@ -56,7 +56,7 @@ export function ResponseForms({
   if (mode === "choose") {
     return (
       <section className="surface space-y-3 p-6">
-        <h3 className="text-sm font-semibold tracking-wider uppercase">
+        <h3 className="eyebrow">
           {t("legal.offer.yourResponseHeading", undefined, "Your Response")}
         </h3>
         <p className="text-sm text-[var(--p-text-2)]">
@@ -94,7 +94,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
     <section className="surface space-y-4 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold tracking-wider uppercase">
+          <h3 className="eyebrow">
             {t("legal.offer.acceptAndSign", undefined, "Accept and Sign")}
           </h3>
           <p className="text-sm text-[var(--p-text-2)]">
@@ -139,7 +139,7 @@ function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void 
     <section className="surface space-y-4 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold tracking-wider uppercase">
+          <h3 className="eyebrow">
             {t("legal.offer.declineHeading", undefined, "Decline This Offer")}
           </h3>
           <p className="text-sm text-[var(--p-text-2)]">

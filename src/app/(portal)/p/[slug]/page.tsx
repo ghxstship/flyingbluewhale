@@ -212,7 +212,7 @@ export default async function PortalGateway({
         ) : null}
         {groups.map((group) => (
           <section key={group.label}>
-            <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{group.label}</h2>
+            <h2 className="eyebrow">{group.label}</h2>
             <div className="mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {group.personas.map((key) => (
                 <Link key={key} href={`/p/${slug}/${key}`} className="card p-6">

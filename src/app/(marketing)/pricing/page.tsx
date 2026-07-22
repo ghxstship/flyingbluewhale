@@ -533,7 +533,10 @@ export default async function PricingPage() {
       <JsonLd data={[faqSchema(faqs)]} />
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-10 text-center">
         <div className="eyebrow eyebrow-accent">{t("marketing.pages.pricing.hero.eyebrow")}</div>
-        <h1 className="kinetic-display mx-auto mt-3 max-w-3xl text-5xl sm:text-6xl">
+        {/* W2 ramp: .kinetic-display read the undefined --font-size-6xl (lane-A
+            T4) and the old text-5xl/6xl utilities papered over it; .hed-2xl is
+            the sanctioned display step (40 to 60px, matching the prior 48/60). */}
+        <h1 className="hed-2xl mx-auto mt-3 max-w-3xl">
           {t("marketing.pages.pricing.hero.title")}
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
@@ -644,7 +647,7 @@ export default async function PricingPage() {
       <FAQSection title={t("marketing.pages.pricing.faqs.title")} faqs={faqs} />
 
       <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="mb-4 text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+        <h2 className="eyebrow mb-4">
           {t("marketing.pages.pricing.billingFaq.title", undefined, "Billing & plans")}
         </h2>
         <Accordion

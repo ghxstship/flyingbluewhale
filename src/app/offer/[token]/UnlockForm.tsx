@@ -26,9 +26,9 @@ export function UnlockForm({
     <div className="mx-auto max-w-md space-y-6 py-12">
       <div className="space-y-2 text-center">
         {orgName && (
-          <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">{orgName}</div>
+          <div className="eyebrow">{orgName}</div>
         )}
-        <h1 className="text-2xl font-semibold">{t("offer.unlock.title", undefined, "Engagement Letter")}</h1>
+        <h1>{t("offer.unlock.title", undefined, "Engagement Letter")}</h1>
         <p className="text-sm text-[var(--p-text-2)]">
           {expired
             ? t(

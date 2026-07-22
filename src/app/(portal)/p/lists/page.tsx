@@ -20,8 +20,8 @@ export default async function ListsPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">Lists</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>Lists</h1>
         <p className="text-[var(--p-text-2)]">Collections of events, scenes, and people, yours to share.</p>
       </header>
 

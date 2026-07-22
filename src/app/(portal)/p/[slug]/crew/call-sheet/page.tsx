@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     >
       {sheets.length > 0 && (
         <div className="mb-5">
-          <p className="mb-2 text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">
+          <p className="eyebrow mb-2">
             {t("p.crew.call-sheet.daySheets", undefined, "Day Sheets")}
           </p>
           <ul className="space-y-2">
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     ] as Array<[string, string]>
                   ).map(([label, value]) => (
                     <div key={label} className="min-w-0">
-                      <div className="text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">{label}</div>
+                      <div className="eyebrow">{label}</div>
                       <div className="truncate font-mono tabular-nums">{value}</div>
                     </div>
                   ))}

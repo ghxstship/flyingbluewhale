@@ -120,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="space-y-6">
             {days.map((day) => (
               <section key={day}>
-                <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{fmtDay(day)}</h3>
+                <h3 className="eyebrow">{fmtDay(day)}</h3>
                 <ul className="mt-3 divide-y divide-[var(--p-border)]">
                   {(byDay.get(day) ?? []).map((e) => (
                     <li key={e.id} className="flex items-start gap-3 py-2">

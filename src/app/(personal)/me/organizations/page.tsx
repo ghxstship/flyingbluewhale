@@ -18,7 +18,7 @@ export default async function OrgsPage() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold">{t("me.organizations.title", undefined, "Organizations")}</h1>
+        <h1>{t("me.organizations.title", undefined, "Organizations")}</h1>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.organizations.configureSupabase", undefined, "Configure Supabase.")}
         </p>
@@ -35,7 +35,7 @@ export default async function OrgsPage() {
   const rows = (data ?? []) as unknown as Row[];
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">
+      <h1>
         {t("me.organizations.title", undefined, "Organizations")}
       </h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">

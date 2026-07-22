@@ -11,10 +11,10 @@ export default async function PrivacyPage() {
   const { t } = await getRequestT();
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+      <div className="eyebrow eyebrow-accent">
         {t("me.privacy.eyebrow", undefined, "Account")}
       </div>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">
+      <h1 className="mt-3">
         {t("me.privacy.title", undefined, "Privacy & data")}
       </h1>
       <p className="mt-3 text-sm text-[var(--p-text-2)]">

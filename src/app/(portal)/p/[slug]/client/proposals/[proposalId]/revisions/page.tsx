@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                         {t("p.client.proposals.revisions.roundLabel", { num: r.round_num }, `Round ${r.round_num}`)}
                       </span>
                       <Badge variant={REV_STATE_VARIANT[r.state]}>{REV_STATE_LABEL[r.state]}</Badge>
-                      <span className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+                      <span className="eyebrow">
                         {r.target_kind}
                       </span>
                     </div>

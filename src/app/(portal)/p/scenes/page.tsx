@@ -18,8 +18,8 @@ export default async function ScenesPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">Scenes</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>Scenes</h1>
         <p className="text-[var(--p-text-2)]">The communities behind the nights. Find yours.</p>
       </header>
 

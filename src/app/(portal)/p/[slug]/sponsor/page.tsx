@@ -83,7 +83,7 @@ export default async function SponsorHome({ params }: { params: Promise<{ slug: 
         <div className="page-content space-y-4">
           {attention.length > 0 && (
             <div className="surface-inset rounded-[var(--p-r-md)] p-4">
-              <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+              <div className="eyebrow">
                 {t("p.shared.home.attention", undefined, "Needs your attention")}
               </div>
               <ul className="mt-2 space-y-1">

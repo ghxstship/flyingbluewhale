@@ -17,7 +17,7 @@ export default async function StakeholderSustainability({ params }: { params: Pr
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "stakeholder")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">{t("p.stakeholder.sustainability.title", undefined, "Sustainability")}</h1>
+        <h1>{t("p.stakeholder.sustainability.title", undefined, "Sustainability")}</h1>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("p.stakeholder.sustainability.subtitle", undefined, "ESG reporting + sustainability posture.")}
         </p>

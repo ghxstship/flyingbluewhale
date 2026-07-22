@@ -15,8 +15,8 @@ export default async function CrewDocsNewPage({ params }: { params: Promise<{ sl
 
   return (
     <div className="page-content">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Crew</div>
-      <h1 className="mt-1 text-2xl font-semibold">Upload Document</h1>
+      <div className="eyebrow eyebrow-accent">Crew</div>
+      <h1 className="mt-1">Upload Document</h1>
       <div className="mt-6 max-w-2xl">
         <DocUploadForm revalidate={base} backHref={base} />
       </div>

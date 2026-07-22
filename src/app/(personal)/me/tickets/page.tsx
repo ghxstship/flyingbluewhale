@@ -20,7 +20,7 @@ export default async function MyTicketsPage() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold">{t("me.tickets.title", undefined, "My Tickets")}</h1>
+        <h1>{t("me.tickets.title", undefined, "My Tickets")}</h1>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.tickets.configureSupabase", undefined, "Configure Supabase.")}
         </p>
@@ -75,7 +75,7 @@ export default async function MyTicketsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">{t("me.tickets.title", undefined, "My Tickets")}</h1>
+      <h1>{t("me.tickets.title", undefined, "My Tickets")}</h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t("me.tickets.subtitle", { email: session.email }, `Tickets issued to ${session.email}`)}
       </p>

@@ -50,7 +50,7 @@ export default async function ProducerReadiness({ params }: { params: Promise<{ 
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">{t("p.producer.readiness.title", undefined, "Readiness")}</h1>
+        <h1>{t("p.producer.readiness.title", undefined, "Readiness")}</h1>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("p.producer.readiness.subtitle", undefined, "Portfolio go/no-go by lifecycle gate.")}
         </p>
@@ -72,7 +72,7 @@ export default async function ProducerReadiness({ params }: { params: Promise<{ 
               .filter((phase) => counts.has(phase))
               .map((phase) => (
                 <div key={phase} className="surface p-4">
-                  <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{toTitle(phase)}</div>
+                  <div className="eyebrow">{toTitle(phase)}</div>
                   <div className="mt-1 font-mono text-2xl font-semibold">{counts.get(phase)}</div>
                 </div>
               ))}

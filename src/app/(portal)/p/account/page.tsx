@@ -51,8 +51,8 @@ export default async function AccountPage() {
     return (
       <div className="mx-auto max-w-3xl space-y-8 px-6 py-8">
         <header className="space-y-2">
-          <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-          <h1 className="text-3xl font-bold tracking-tight">Account</h1>
+          <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+          <h1>Account</h1>
         </header>
         <EmptyState
           title="Sign in to manage your account"
@@ -77,12 +77,12 @@ export default async function AccountPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">Account</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>Account</h1>
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Connected ticketing</h2>
+        <h2 className="eyebrow">Connected ticketing</h2>
         <p className="text-sm text-[var(--p-text-3)]">
           Connect a provider to mirror your passes (read-only) and surface friends&apos; activity.
         </p>
@@ -101,7 +101,7 @@ export default async function AccountPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Linked passes</h2>
+        <h2 className="eyebrow">Linked passes</h2>
         {passes.length === 0 ? (
           <EmptyState
             title="No linked passes"

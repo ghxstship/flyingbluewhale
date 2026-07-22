@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       {cs.challenge && (
         <section className="mt-10">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <h2 className="eyebrow">
             {t("marketing.pages.customers.detail.sections.challenge")}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-1)]">{cs.challenge}</p>
@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       {cs.solution && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <h2 className="eyebrow">
             {t("marketing.pages.customers.detail.sections.solution")}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-1)]">{cs.solution}</p>
@@ -112,7 +112,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       {cs.outcomes && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          <h2 className="eyebrow">
             {t("marketing.pages.customers.detail.sections.outcomes")}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-1)]">{cs.outcomes}</p>

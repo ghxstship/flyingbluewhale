@@ -59,7 +59,7 @@ export default async function LeaderboardPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Ranking</h2>
+          <h2 className="eyebrow">Ranking</h2>
           {ranked.length === 0 ? (
             <EmptyState size="compact" title="No points yet" description="Complete courses and field work to climb the board." />
           ) : (
@@ -81,12 +81,12 @@ export default async function LeaderboardPage() {
 
         <aside className="space-y-6">
           <div>
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Your tier</h2>
+            <h2 className="eyebrow mb-2">Your tier</h2>
             <LoyaltyTier tier={tier.tier} tone={tier.tone} points={myPoints} nextTier={tier.nextTier} nextThreshold={tier.nextThreshold} />
           </div>
 
           <div>
-            <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--p-text-2)]">Achievements</h2>
+            <h2 className="eyebrow mb-2">Achievements</h2>
             {achievements.length === 0 ? (
               <p className="text-sm text-[var(--p-text-2)]">No achievements configured yet.</p>
             ) : (

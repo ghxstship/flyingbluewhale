@@ -5,10 +5,10 @@ export default async function PortalNotFound() {
   const { t } = await getRequestT();
   return (
     <div className="mx-auto max-w-md px-6 py-24 text-center">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
+      <div className="eyebrow eyebrow-accent">
         {t("p.notFound.eyebrow", undefined, "Not Found")}
       </div>
-      <h1 className="mt-3 text-2xl font-semibold">{t("p.notFound.title", undefined, "Project Unavailable")}</h1>
+      <h1 className="mt-3">{t("p.notFound.title", undefined, "Project Unavailable")}</h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "p.notFound.description",

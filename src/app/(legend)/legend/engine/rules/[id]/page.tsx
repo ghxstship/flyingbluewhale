@@ -131,7 +131,7 @@ export default async function RuleDetailPage({ params }: { params: Promise<{ id:
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1">
-      <div className="text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">{label}</div>
+      <div className="eyebrow">{label}</div>
       <div className="text-sm text-[var(--p-text-1)]">{children}</div>
     </div>
   );

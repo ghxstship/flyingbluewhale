@@ -26,13 +26,13 @@ export default async function CommunityPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">Community</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>Community</h1>
         <p className="text-[var(--p-text-2)]">What your people are into, and the scenes you run with.</p>
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Activity</h2>
+        <h2 className="eyebrow">Activity</h2>
         <ActivityTimeline
           items={activity}
           emptyTitle={session ? "No activity yet" : "Sign in to see your friends’ activity"}
@@ -46,7 +46,7 @@ export default async function CommunityPage() {
 
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Scenes</h2>
+          <h2 className="eyebrow">Scenes</h2>
           <Link
             href="/p/scenes"
             className="inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent-text)] hover:underline"

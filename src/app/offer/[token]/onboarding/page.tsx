@@ -43,7 +43,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
   if (!code) {
     return (
       <div className="space-y-4">
-        <h1 className="text-xl font-semibold">{t("legal.offerOnboarding.title", undefined, "Onboarding")}</h1>
+        <h1>{t("legal.offerOnboarding.title", undefined, "Onboarding")}</h1>
         <p>
           {t(
             "legal.offerOnboarding.lockedPrefix",
@@ -71,10 +71,10 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
     <div className="space-y-6">
       <header className="flex items-baseline justify-between border-b border-(--p-border) pb-4">
         <div>
-          <div className="text-xs tracking-widest text-(--p-text-2) uppercase">
+          <div className="eyebrow">
             {t("legal.offerOnboarding.eyebrow", undefined, "Onboarding")}
           </div>
-          <h1 className="text-2xl font-semibold">
+          <h1>
             {t(
               "legal.offerOnboarding.welcome",
               { name: letter.recipient_name.split(" ")[0]! },

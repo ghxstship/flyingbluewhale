@@ -49,14 +49,14 @@ export default async function DiscoverPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 py-8">
       <header className="space-y-2">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">GVTEWAY</p>
-        <h1 className="text-3xl font-bold tracking-tight">Discover</h1>
+        <p className="eyebrow eyebrow-accent">GVTEWAY</p>
+        <h1>Discover</h1>
         <p className="text-[var(--p-text-2)]">Events your scenes are into, and what your friends are saving.</p>
       </header>
 
       <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">From your friends</h2>
+          <h2 className="eyebrow">From your friends</h2>
           <ActivityTimeline
             items={activity}
             emptyTitle={session ? "Quiet for now" : "Sign in to tune your feed"}
@@ -70,7 +70,7 @@ export default async function DiscoverPage() {
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Scenes to follow</h2>
+            <h2 className="eyebrow">Scenes to follow</h2>
             <Link
               href="/p/scenes"
               className="inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent-text)] hover:underline"
@@ -98,7 +98,7 @@ export default async function DiscoverPage() {
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">On sale now</h2>
+        <h2 className="eyebrow">On sale now</h2>
         <p className="max-w-xl text-sm text-[var(--p-text-3)]">
           GVTEWAY never sells you a ticket directly. Every event hands off to the provider that owns it.
         </p>

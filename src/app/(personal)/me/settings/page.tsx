@@ -24,7 +24,7 @@ export default async function PersonalSettings() {
   }
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">{t("me.settings.title", undefined, "Settings")}</h1>
+      <h1>{t("me.settings.title", undefined, "Settings")}</h1>
       <div className="surface mt-6 p-6">
         <div className="text-sm font-semibold">{t("me.settings.appearance.title", undefined, "Appearance")}</div>
         <div className="mt-3">

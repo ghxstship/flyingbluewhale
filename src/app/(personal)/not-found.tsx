@@ -6,10 +6,10 @@ export default async function PersonalNotFound() {
   const { t } = await getRequestT();
   return (
     <main className="mx-auto max-w-md px-6 py-24 text-center">
-      <p className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+      <p className="eyebrow eyebrow-accent">
         {t("me.notFound.eyebrow", undefined, "404")}
       </p>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight">
+      <h1 className="mt-4">
         {t("me.notFound.title", undefined, "Page Not Found.")}
       </h1>
       <p className="mt-3 text-sm text-[var(--p-text-2)]">

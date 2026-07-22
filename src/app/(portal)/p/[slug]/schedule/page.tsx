@@ -44,8 +44,8 @@ export default async function PortalSchedulePage({ params }: { params: Promise<{
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Schedule</div>
-      <h1 className="mt-1 text-2xl font-semibold">{project?.name ?? "Schedule"}</h1>
+      <div className="eyebrow eyebrow-accent">Schedule</div>
+      <h1 className="mt-1">{project?.name ?? "Schedule"}</h1>
       <p className="mt-1 mb-4 text-xs text-[var(--p-text-2)]">Events for this show, in your timezone.</p>
       <CalendarView events={events} initialMode="month" />
     </div>

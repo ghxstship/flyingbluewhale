@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="text-sm font-medium">
                     {f.title ?? t("p.client.files.untitled", undefined, "Untitled")}
                   </div>
-                  <div className="font-mono text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+                  <div className="eyebrow">
                     {f.type}
                   </div>
                 </div>

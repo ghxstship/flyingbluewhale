@@ -67,7 +67,7 @@ export default async function ProducerRisk({ params }: { params: Promise<{ slug:
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">{t("p.producer.risk.title", undefined, "Risk Register")}</h1>
+        <h1>{t("p.producer.risk.title", undefined, "Risk Register")}</h1>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "p.producer.risk.subtitle",

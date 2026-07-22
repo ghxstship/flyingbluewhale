@@ -54,7 +54,7 @@ export default async function PortalInboxPage({ params }: { params: Promise<{ sl
       />
       <div className="flex-1">
         <div className="page-content">
-          <h1 className="text-2xl font-semibold">{t("p.shared.inbox.title", undefined, "Inbox")}</h1>
+          <h1>{t("p.shared.inbox.title", undefined, "Inbox")}</h1>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("p.shared.inbox.unreadOf", { unread, total: rows.length }, `${unread} unread of ${rows.length}.`)}
           </p>

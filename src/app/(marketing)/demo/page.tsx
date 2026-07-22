@@ -79,7 +79,7 @@ export default async function DemoIndex() {
               <div className="eyebrow eyebrow-accent">
                 {p.buyer}
               </div>
-              <h3 className="mt-2 text-xl font-semibold">{p.hero}</h3>
+              <h3 className="mt-2">{p.hero}</h3>
               <p className="mt-2 text-sm text-[var(--p-text-2)]">{p.subhero}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.demo.personas.cta")} <ArrowRight size={12} />

@@ -293,7 +293,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                     {e.actor_label ?? "—"} · {timeAgo(e.occurred_at)}
                   </div>
                 </div>
-                <span className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{e.kind}</span>
+                <span className="eyebrow">{e.kind}</span>
               </li>
             ))}
           </ul>

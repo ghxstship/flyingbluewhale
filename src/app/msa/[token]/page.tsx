@@ -89,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
 
       {!alreadySigned && (
         <div className="space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Sign &amp; Submit</h2>
+          <h2 className="eyebrow">Sign &amp; Submit</h2>
           <p className="text-sm text-[var(--p-text-2)]">
             Once signed, this Agreement applies to every engagement letter we issue you, until revoked or superseded.
             You won&rsquo;t be asked to re-sign this for future productions — just the engagement letter for each one.

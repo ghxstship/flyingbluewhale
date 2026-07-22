@@ -36,8 +36,8 @@ export default function ForInstitutionsPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-10">
       <header className="space-y-3">
-        <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">LEG3ND · For Institutions</p>
-        <h1 className="text-4xl font-bold tracking-tight">Hold the standard for your whole organization.</h1>
+        <p className="eyebrow eyebrow-accent">LEG3ND · For Institutions</p>
+        <h1>Hold the standard for your whole organization.</h1>
         <p className="text-lg text-[var(--p-text-2)]">
           A standalone LMS, knowledge base, and resource hub on the XPMS 2.0 protocol — wired into the same record store
           your field operations run on. Train, certify, and recertify, then let those credentials gate real work.
@@ -56,7 +56,7 @@ export default function ForInstitutionsPage() {
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Common questions</h2>
+        <h2 className="eyebrow">Common questions</h2>
         <Accordion items={FAQ} defaultOpen={[0]} />
       </section>
     </div>

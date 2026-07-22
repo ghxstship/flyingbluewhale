@@ -70,10 +70,10 @@ export default async function PortalSelectPage() {
       className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center gap-6 px-6 py-16"
     >
       <header className="space-y-1">
-        <p className="text-xs font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
+        <p className="eyebrow">
           {t("p.select.eyebrow", undefined, "Portal")}
         </p>
-        <h1 className="text-2xl font-bold">{t("p.select.title", undefined, "Choose a Project")}</h1>
+        <h1>{t("p.select.title", undefined, "Choose a Project")}</h1>
         <p className="text-sm text-[var(--p-text-2)]">
           {t("p.select.subtitle", undefined, "Pick the project portal you want to open.")}
         </p>

@@ -170,3 +170,48 @@ export async function submitPoRequest(_prev: State, fd: FormData): Promise<State
   if (warning) return { warning };
   redirect("/m/requisitions");
 }
+
+/**
+ * The states in which the requester may still withdraw their OWN request.
+ * `req_status` has no `cancelled` value, so a withdrawal removes the row —
+ * which is only safe while nothing downstream has been built on it. Once a
+ * request is `approved` or `converted` (it became a PO), it is procurement's
+ * record, not the requester's, and the field can no longer pull it.
+ */
+const WITHDRAWABLE_REQ_STATES = ["draft", "submitted", "rejected"] as const;
+
+/**
+ * Withdraw my own purchase request.
+ *
+ * Raising one was the only thing the field could do — a request sent in error
+ * (wrong item, duplicate, no longer needed) sat in the approver's queue with
+ * no way for the requester to pull it back, so the fix was a message asking
+ * someone else to reject it.
+ *
+ * Ownership AND state are pinned in the WHERE (`requester_id` matches the RLS
+ * grant `requester_id = auth.uid()`), and the row is read back: a refused
+ * delete returns zero rows rather than an error, so "not yours / already
+ * approved" is surfaced honestly instead of as a silent success.
+ */
+export async function withdrawRequisition(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = z.object({ id: z.string().uuid() }).safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("requisitions")
+    .delete()
+    .eq("id", parsed.data.id)
+    .eq("requester_id", session.userId)
+    .in("requisition_state", [...WITHDRAWABLE_REQ_STATES])
+    .select("id");
+  if (error) return { error: error.message };
+  if (!data || data.length === 0) {
+    return { error: "You can only withdraw your own request before it's approved." };
+  }
+
+  revalidatePath("/m/requisitions");
+  revalidatePath("/m/my-work");
+  return null;
+}

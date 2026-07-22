@@ -50,6 +50,11 @@ export default async function DailyLogPage() {
         : t("m.dailyLog.untitled", undefined, "Untitled Log"),
       log_state: r.log_state,
       summary,
+      // The log's actual content. `summary` above is weather-only (notes were
+      // used just as a 60-char fallback), so the site log everyone writes was
+      // fetched and never shown — the record view is where it lands.
+      notes: r.notes ?? null,
+      weather: [r.weather_summary, temps].filter(Boolean).join(" · ") || null,
     };
   });
 

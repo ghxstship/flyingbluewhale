@@ -95,6 +95,22 @@ Each write reads the row back, so an RLS- or state-refused write surfaces an
 honest message instead of a silent success, and settled records hide their
 actions rather than offering-then-refusing them.
 
+## ✅ P1 — remaining detail views, resolved (2026-07-22)
+
+Checked each against one rule: **a detail that only re-shows the row is
+decoration, not a fix.** Verified per surface against what the page actually
+fetches vs. what the row renders.
+
+| Surface | Finding | Action |
+|---|---|---|
+| **daily-log** | `notes` — the site log everyone writes — was fetched and **never displayed** (the row line is weather-only; notes were used just as a 60-char fallback) | **Built.** Row opens the log: weather + full notes, plus the draft-submit action. Search now covers notes |
+| **handover** | Row already renders the COMPLETE record — full summary (pre-wrap), open items, assets/keys, photos, author, relief, date | **No detail.** Nothing is hidden; an overlay would be decoration |
+| **timesheets** | Row shows everything the page fetches (period, state, total, billable) | **No detail.** The genuinely useful addition would be a per-day *entries breakdown* — a new query and a feature, not a detail gap. Logged as a future idea, not shipped as padding |
+| **connections** | Rows show all fetched data (name, role) and carry explicit accept/decline/connect buttons; plain `.item`, so no false affordance | **No detail.** Directory is the person-record surface; a thin overlay here would duplicate it |
+
+Same standard already applied to `catalog` (Request is the action) and `coc`
+(append-only events where the row *is* the record).
+
 ## Notes
 
 - No `alert()`, `onClick={() => {}}`, "not implemented", or fabricated-data

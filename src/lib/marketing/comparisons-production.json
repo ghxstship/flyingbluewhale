@@ -1,0 +1,504 @@
+{
+  "$comment": "Production-suite and ticketing comparison entries (marketing rebuild P4). DATA FILE ON PURPOSE: the brand-hygiene guard (src/lib/brand/no-competitor-names.test.ts) bans competitor brand tokens in .ts/.tsx product code; the ratified marketing carve-out (plan 12.1) homes these names in JSON consumed ONLY by the /compare and /alternatives templates. Every entry MUST carry lastVerified + sources; comparison-verification.test.ts enforces both and fails CI at 180 days stale. Claims about a competitor may only assert what its linked public pages state; unknowns say 'Not published'. Claims about us stay true of the shipped repo: COMPVSS field, LEG3ND hub and the GVTEWAY marketplace are live; console ERP surfaces are marked coming soon.",
+  "entries": [
+    {
+      "slug": "momentus",
+      "competitor": "Momentus (formerly Ungerboeck)",
+      "category": "production",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://gomomentus.com/venue-management-software", "https://gomomentus.com/pricing"],
+      "headline": "ATLVS Technologies vs. Momentus: the production org's ecosystem vs. the venue's management system.",
+      "blurb": "Momentus (the platform formerly known as Ungerboeck) runs the venue's book of business: space booking, event coordination and the institutional back office for convention centers, stadiums, arenas and campuses. ATLVS is built around the production org itself: the field crew app, the knowledge hub and the public marketplace are live today, with the operator console on the way.",
+      "hero": "Momentus publishes a clear center of gravity: the venue. Enterprise and Elite editions manage the space diary, event coordination and back office for convention centers, stadiums, arenas and performing arts centers; Momentus Ticketing adds white-label enterprise ticketing and WeTrack adds incident, risk and operations tracking. Decades of Ungerboeck heritage sit underneath it. ATLVS starts from the other end of the same show: the crew on the floor. COMPVSS carries shifts, punches, incidents, custody and the gate offline-first today; LEG3ND carries the courses, certifications and SOPs; GVTEWAY carries the public marketplace. The operator console that ties the office side together is coming.",
+      "bottomLine": "If you are a venue whose core problem is the space diary and the institutional back office, Momentus is built for exactly that. If you are a production org whose core problem is the crew, the record and the public side, ATLVS is live there today and the console is coming.",
+      "features": [
+        {
+          "feature": "Venue space booking at institutional scale",
+          "us": false,
+          "them": true,
+          "note": "Momentus' published core"
+        },
+        { "feature": "Event coordination + venue back office", "us": "Console: coming soon", "them": true },
+        { "feature": "White-label enterprise ticketing", "us": false, "them": true, "note": "Momentus Ticketing" },
+        {
+          "feature": "Incident and operations tracking",
+          "us": "Live in COMPVSS",
+          "them": true,
+          "note": "Momentus WeTrack"
+        },
+        { "feature": "Offline-first field crew PWA (shifts, punches, custody)", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": "Not published" },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": "Not published" },
+        { "feature": "Public marketplace (talent, gigs, RFPs)", "us": true, "them": false },
+        {
+          "feature": "Published pricing",
+          "us": true,
+          "them": "Not published",
+          "note": "Momentus directs visitors to a demo for pricing"
+        }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The crew is the customer",
+          "body": "Momentus manages the venue's calendar and back office. COMPVSS is in the pocket of the crew building the show: punches, incidents, custody moves and gate scans land offline-first on one org record."
+        },
+        {
+          "title": "Knowledge and the public side ship native",
+          "body": "LEG3ND keeps courses, certifications and SOPs on the same record the field writes, and GVTEWAY faces the public with talent, gigs and RFPs. A venue management system has no reason to carry either."
+        },
+        {
+          "title": "Per-org pricing, published",
+          "body": "Pricing is public and per org with unlimited users. Surge headcount for a load-in week does not change the bill."
+        }
+      ],
+      "whenTheyWin": [
+        "You operate a convention center, stadium, arena or performing arts center and the core problem is the venue diary, event coordination and the institutional back office. That is Momentus' published home turf, with decades of Ungerboeck heritage behind it.",
+        "You need white-label enterprise ticketing and venue operations in one vendor relationship at institutional scale."
+      ],
+      "migration": [
+        "Export people, events and schedules as CSV; they map to COMPVSS crew, shifts and project records",
+        "Many venues keep the Momentus diary while the production and field crews run on COMPVSS; the console consolidation comes when the ATLVS operator console ships"
+      ],
+      "faqs": [
+        {
+          "q": "Is ATLVS a venue management system today?",
+          "a": "Not today. The live surfaces are the COMPVSS field app, the LEG3ND knowledge hub and the GVTEWAY marketplace. The operator console that covers the office side of a production org is coming; the venue diary at Momentus' institutional depth is not the roadmap's center."
+        },
+        {
+          "q": "Can a venue crew use COMPVSS while the venue stays on Momentus?",
+          "a": "Yes. COMPVSS is org-scoped and offline-first; crews schedule, punch, scan and file incidents on it regardless of which system holds the venue's booking diary."
+        }
+      ],
+      "keywords": [
+        "Momentus alternative",
+        "Ungerboeck alternative",
+        "venue management software alternative",
+        "ATLVS vs Momentus",
+        "venue operations software"
+      ]
+    },
+    {
+      "slug": "flex-rental-solutions",
+      "competitor": "Flex Rental Solutions",
+      "category": "production",
+      "lastVerified": "2026-07-22",
+      "sources": [
+        "https://www.flexrentalsolutions.com/event-rental-software-features/",
+        "https://www.flexrentalsolutions.com/flex-rental-solutions/plan-pricing/"
+      ],
+      "headline": "ATLVS Technologies vs. Flex Rental Solutions: the production org's ecosystem vs. rental inventory operations.",
+      "blurb": "Flex runs the AV and event rental warehouse: inventory, kits, pick lists, barcode and RFID tracking, quoting and invoicing, trucking and manifests. ATLVS is built around the production org: the field crew app, knowledge hub and public marketplace are live today, with the operator console coming.",
+      "hero": "Flex publishes its center of gravity plainly: rental inventory operations for event companies. Equipment kits, reservations and pick lists, barcode and RFID tracking, quoting with e-signatures, invoicing, warehouse logistics and crew scheduling, across multiple locations. If your product is gear going out the door and coming back, that is the desk Flex runs. ATLVS starts from the crew and the record of the show: COMPVSS carries shifts, punches, incidents, asset custody and the gate offline-first today; LEG3ND carries the knowledge; GVTEWAY faces the public. The rental quoting and warehouse desk on the console side is coming.",
+      "bottomLine": "If your product is the rental warehouse, Flex's published depth is exactly that and it is real. If your product is the show and the crew that builds it, ATLVS runs that record today, and the console desk is coming.",
+      "features": [
+        {
+          "feature": "Rental inventory: kits, reservations, pick lists",
+          "us": "Console: coming soon",
+          "them": true,
+          "note": "Flex's published core"
+        },
+        { "feature": "Barcode/RFID warehouse tracking", "us": "Console: coming soon", "them": true },
+        { "feature": "Quoting, contracts, invoicing for rentals", "us": "Console: coming soon", "them": true },
+        { "feature": "Trucking, manifests, warehouse logistics", "us": "Console: coming soon", "them": true },
+        { "feature": "Crew scheduling", "us": true, "them": true },
+        { "feature": "Offline-first field PWA (shifts, punches, incidents)", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Field asset custody with chain of custody", "us": true, "them": "Not published" },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": false },
+        { "feature": "Public marketplace (talent, gigs, RFPs)", "us": true, "them": false },
+        {
+          "feature": "Unlimited users included",
+          "us": true,
+          "them": true,
+          "note": "Flex publishes plans with unlimited users"
+        }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The site record, not the warehouse ledger",
+          "body": "Flex tracks the gear through the warehouse. COMPVSS tracks the show through the site: who took custody of the case, what the incident record says, which punch items closed before doors, who scanned in at the gate."
+        },
+        {
+          "title": "Knowledge and the public side ship native",
+          "body": "Courses, certifications and SOPs live in LEG3ND; talent, gigs and RFPs face the public through GVTEWAY. A rental operations suite carries neither."
+        },
+        {
+          "title": "Offline is the default",
+          "body": "Load-in sites lose signal. Punches, scans and custody moves queue offline and replay with provenance when it returns."
+        }
+      ],
+      "whenTheyWin": [
+        "You are a rental house or AV integrator whose product is the warehouse: kits, pick lists, barcode and RFID tracking, quoting and trucking. Flex publishes deep, purpose-built tooling for exactly that desk.",
+        "You need multi-location rental inventory operations today, in production, with published unlimited-user pricing."
+      ],
+      "migration": [
+        "Export people and schedules as CSV; they map to COMPVSS crew and shifts",
+        "Most rental shops keep Flex on the warehouse desk while crews run the field on COMPVSS; consolidation onto the console is a later step, once it ships"
+      ],
+      "faqs": [
+        {
+          "q": "Can ATLVS run my rental warehouse today?",
+          "a": "Not today. The live ATLVS surfaces are the field app, the knowledge hub and the marketplace. The console's rental and inventory desk is coming; until then Flex is a legitimate answer for the warehouse and many teams will run both."
+        },
+        {
+          "q": "Does COMPVSS track gear?",
+          "a": "In the field, yes: custody moves, GTIN scan-to-fulfil and a chain of custody on the org record. Warehouse-side kitting, reservations and pick lists are console territory and marked coming soon."
+        }
+      ],
+      "keywords": [
+        "Flex Rental Solutions alternative",
+        "AV rental software alternative",
+        "event rental inventory software",
+        "ATLVS vs Flex Rental Solutions",
+        "production inventory management"
+      ]
+    },
+    {
+      "slug": "rentman",
+      "competitor": "Rentman",
+      "category": "production",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://rentman.io/products/rental-management-software", "https://rentman.io/pricing"],
+      "headline": "ATLVS Technologies vs. Rentman: the production org's ecosystem vs. rental and production resource management.",
+      "blurb": "Rentman plans productions from the resource side: equipment inventory, crew scheduling, quoting and invoicing, QR-code tracking, in one platform for AV and event production companies. ATLVS starts from the crew and the record of the show, live today in the field, with the console desk coming.",
+      "hero": "Rentman's published pitch is resource management for the AV and event production industry: plan the gear, schedule the crew, send the quote, track equipment with QR codes, invoice the job. It is a mature suite for the shop that rents and produces. ATLVS approaches the same org from the site: COMPVSS carries the shifts, punches, incidents, custody chain and the gate offline-first today; LEG3ND carries courses, certifications and SOPs; GVTEWAY carries the public marketplace. The console's quoting and inventory desk is coming.",
+      "bottomLine": "For planning gear and crew against jobs from the office, Rentman is a strong, published, purpose-built suite. For the field record of the show and the surfaces around it, ATLVS is live today, with the console on the way.",
+      "features": [
+        {
+          "feature": "Equipment inventory planning",
+          "us": "Console: coming soon",
+          "them": true,
+          "note": "Rentman's published core"
+        },
+        { "feature": "Quoting and invoicing for jobs", "us": "Console: coming soon", "them": true },
+        { "feature": "Crew scheduling with mobile accept/decline", "us": true, "them": true },
+        { "feature": "QR-code equipment tracking", "us": "GTIN scan + custody in the field", "them": true },
+        { "feature": "Offline-first field PWA (shifts, punches, incidents)", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": false },
+        { "feature": "Public marketplace (talent, gigs, RFPs)", "us": true, "them": false },
+        {
+          "feature": "Per-org pricing, unlimited users",
+          "us": true,
+          "them": "Not published",
+          "note": "Rentman publishes flexible per-product licensing; totals require a custom plan"
+        }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The show's record, not just the job's resources",
+          "body": "Rentman plans the gear and the crew against the job. COMPVSS records what actually happened on site: the punch, the incident, the custody move, the scan at the gate, all offline-first with provenance."
+        },
+        {
+          "title": "The org's whole surface",
+          "body": "Knowledge lives in LEG3ND, the public side lives in GVTEWAY, and both read the same org record the field writes. A resource planner stops at the job."
+        },
+        {
+          "title": "Crew surges cost nothing",
+          "body": "Per-org pricing with unlimited users absorbs the load-in week. Licensing that scales with usage bills it."
+        }
+      ],
+      "whenTheyWin": [
+        "You are an AV rental and production company whose daily job is planning equipment and crew against projects from the office. Rentman publishes exactly that suite and it is mature.",
+        "You want quoting, scheduling and inventory in one system today, in production, with a published product catalog to license from."
+      ],
+      "migration": [
+        "Export crew and schedules as CSV; they map to COMPVSS crew and shifts",
+        "Production shops typically keep Rentman on the office planning desk while the field record moves to COMPVSS; the console consolidation comes later"
+      ],
+      "faqs": [
+        {
+          "q": "Does ATLVS replace Rentman today?",
+          "a": "Not on the office planning desk. Equipment planning, quoting and invoicing are console surfaces and marked coming soon. The field side, shifts, punches, incidents, custody and the gate, is live in COMPVSS today."
+        },
+        {
+          "q": "How does equipment tracking compare?",
+          "a": "Rentman publishes QR-code tracking through the warehouse and job lifecycle. COMPVSS tracks field custody: GTIN scans, custody moves and a chain of custody on the org record. They answer different questions and some teams run both."
+        }
+      ],
+      "keywords": [
+        "Rentman alternative",
+        "rental management software alternative",
+        "AV production resource management",
+        "ATLVS vs Rentman",
+        "event production software"
+      ]
+    },
+    {
+      "slug": "current-rms",
+      "competitor": "Current RMS",
+      "category": "production",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://current-rms.com/pricing", "https://current-rms.com/features/inventory-management"],
+      "headline": "ATLVS Technologies vs. Current RMS: the production org's ecosystem vs. cloud rental management.",
+      "blurb": "Current RMS (now part of Klipboard) runs the rental lifecycle in the cloud: CRM, quotes to orders to invoices, inventory with barcode tracking, testing and maintenance, labor and transport. ATLVS is built around the production org: field, knowledge and marketplace live today, console coming.",
+      "hero": "Current RMS publishes an all-in-one cloud rental management system for AV, production, event and party rental businesses: build the customer relationship, turn the quote into the order and the invoice, track the inventory with barcodes, schedule the labor and transport, keep the maintenance record. That is the rental lifecycle desk, and it is the product. ATLVS starts on the other side of the same industry: the crew on site. COMPVSS carries shifts, punches, incidents, custody and the gate today; LEG3ND carries the knowledge; GVTEWAY faces the public. The console desk for quoting and inventory is coming.",
+      "bottomLine": "For the quote-to-invoice rental lifecycle, Current RMS is a published, purpose-built cloud suite. For the record of the show and the crew that builds it, ATLVS is live today.",
+      "features": [
+        {
+          "feature": "Rental CRM: quotes, orders, invoices",
+          "us": "Console: coming soon",
+          "them": true,
+          "note": "Current RMS' published core"
+        },
+        { "feature": "Inventory with barcode tracking", "us": "Console: coming soon", "them": true },
+        { "feature": "Testing and maintenance records on assets", "us": "Console: coming soon", "them": true },
+        { "feature": "Labor and transport scheduling", "us": "Crew scheduling live in COMPVSS", "them": true },
+        { "feature": "Offline-first field PWA (shifts, punches, incidents)", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": false },
+        { "feature": "Field asset custody with chain of custody", "us": true, "them": "Not published" },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": false },
+        { "feature": "Public marketplace (talent, gigs, RFPs)", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": "Not published" }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The site is the record",
+          "body": "Current RMS keeps the rental paperwork straight. COMPVSS keeps the site straight: incidents with anonymous filing and sign-off, punch lists closed before doors, custody moves on the gear, the gate journaled scan by scan."
+        },
+        {
+          "title": "One org record across surfaces",
+          "body": "What the field writes, the knowledge hub and the public marketplace read, and the coming console will read the same store. No export between the site and the office."
+        },
+        {
+          "title": "Built for surge weeks",
+          "body": "Offline-first capture and per-org pricing are shaped for the ten hard days a production actually is."
+        }
+      ],
+      "whenTheyWin": [
+        "You are a rental business whose daily work is quotes becoming orders becoming invoices, with barcode-tracked inventory and maintenance records. That lifecycle is Current RMS' published product.",
+        "You want a proven cloud rental desk today, with the CRM and document flow built in."
+      ],
+      "migration": [
+        "Export people and bookings as CSV; they map to COMPVSS crew and shifts",
+        "Rental businesses keep Current RMS on the lifecycle desk while site crews adopt COMPVSS; console consolidation is a later step"
+      ],
+      "faqs": [
+        {
+          "q": "Is ATLVS a rental management system?",
+          "a": "Not today. The rental lifecycle desk (quotes, orders, invoices, inventory) is console territory and marked coming soon. What is live is the field record: shifts, punches, incidents, custody and the gate in COMPVSS, plus LEG3ND and the GVTEWAY marketplace."
+        },
+        {
+          "q": "We rent gear and also crew shows. Which tool?",
+          "a": "Today, honestly: Current RMS for the rental paperwork, COMPVSS for the crews on site. When the ATLVS console ships, the consolidation question becomes real."
+        }
+      ],
+      "keywords": [
+        "Current RMS alternative",
+        "cloud rental management software",
+        "AV rental lifecycle software",
+        "ATLVS vs Current RMS",
+        "production rental software"
+      ]
+    },
+    {
+      "slug": "eventbooks",
+      "competitor": "EventBooks",
+      "category": "production",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://www.eventbooks.com/", "https://www.eventbooks.com/pricing"],
+      "headline": "ATLVS Technologies vs. EventBooks: the production org's ecosystem vs. the event business back office.",
+      "blurb": "EventBooks consolidates the event-services back office: companies, staff and events managed from one cloud platform for planners, entertainers, production vendors and booking agencies. ATLVS is built around the production org: the field app, knowledge hub and marketplace are live today, with the operator console coming.",
+      "hero": "EventBooks' published pitch is consolidation for event businesses: organize companies, staff and events from anywhere, and fold the administrative programs an event-services company juggles into one affordable platform. For planners, entertainers, photo and video vendors and booking agencies, that back office is the product. ATLVS starts from the site rather than the office: COMPVSS carries shifts, punches, incidents, custody and the gate offline-first today; LEG3ND carries courses, certifications and SOPs; GVTEWAY carries the public marketplace. The console back office is coming.",
+      "bottomLine": "If you want one simple back office for an event-services business today, EventBooks publishes exactly that. If your work is productions and the proof of them, ATLVS runs the field record today and the console is coming.",
+      "features": [
+        {
+          "feature": "Company, staff and event management back office",
+          "us": "Console: coming soon",
+          "them": true,
+          "note": "EventBooks' published core"
+        },
+        { "feature": "Admin consolidation for event-services businesses", "us": "Console: coming soon", "them": true },
+        { "feature": "Published subscription plans", "us": true, "them": true },
+        { "feature": "Offline-first field PWA (shifts, punches, incidents)", "us": true, "them": "Not published" },
+        { "feature": "Ticket/credential gate scan (offline, sub-100ms)", "us": true, "them": "Not published" },
+        { "feature": "Incident reports with anonymous filing + manager sign-off", "us": true, "them": "Not published" },
+        { "feature": "Field asset custody with chain of custody", "us": true, "them": "Not published" },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": "Not published" },
+        { "feature": "Public marketplace (talent, gigs, RFPs)", "us": true, "them": "Not published" },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": "Not published" }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The field record is the product",
+          "body": "A back office tells you what was booked. COMPVSS proves what happened: geofenced punches, incidents with sign-off, punch lists, custody moves and gate scans, all journaled offline-first on the org record."
+        },
+        {
+          "title": "Knowledge and the public side ship native",
+          "body": "LEG3ND keeps the courses, certifications and SOPs; GVTEWAY faces the public with talent, gigs and RFPs. An admin back office carries neither."
+        },
+        {
+          "title": "Built for production scale",
+          "body": "Per-org pricing with unlimited users, offline-first capture and one record store across field, knowledge and marketplace surfaces."
+        }
+      ],
+      "whenTheyWin": [
+        "You run an event-services business, planning, entertainment, photo and video, catering or a booking agency, and want one simple, affordable back office for companies, staff and events today. That consolidation is EventBooks' published pitch.",
+        "Your need is administrative and immediate, and a lightweight all-in-one tool beats waiting on an ecosystem's console."
+      ],
+      "migration": [
+        "Export staff and event lists as CSV; they map to COMPVSS crew and project records",
+        "Service businesses typically keep their back office running while field crews adopt COMPVSS; the console consolidation comes when it ships"
+      ],
+      "faqs": [
+        {
+          "q": "Is ATLVS an event business back office today?",
+          "a": "Not today. The live surfaces are the COMPVSS field app, the LEG3ND knowledge hub and the GVTEWAY marketplace; the operator console that carries the office side is coming. If the back office is the whole need right now, EventBooks is the kind of tool that answers it."
+        },
+        {
+          "q": "What does COMPVSS add that a back office does not?",
+          "a": "The record of the work itself: shifts and geofenced punches, incidents with anonymous filing and manager sign-off, punch lists and daily logs, asset custody, and an offline gate scan that journals every result."
+        }
+      ],
+      "keywords": [
+        "EventBooks alternative",
+        "event business management software",
+        "event company back office software",
+        "ATLVS vs EventBooks",
+        "event staff management"
+      ]
+    },
+    {
+      "slug": "tixr",
+      "competitor": "Tixr",
+      "category": "ticketing",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://creators.tixr.com/products/platform", "https://creators.tixr.com/products/studio"],
+      "headline": "ATLVS Technologies vs. Tixr: the production record vs. large-scale event commerce.",
+      "blurb": "Tixr is a commerce platform for large-scale event organizers: unified fan checkout, payment plans, transfers and resale, and the Studio backend, one system from sale to gate. ATLVS is the production org's record: the field crew, the knowledge and the marketplace, live today, with the console coming.",
+      "hero": "Tixr publishes its center of gravity clearly: event commerce at large scale. One integrated platform where the fan-facing storefront, the management backend (Studio) and the onsite operation share the same data, with payment plans, verified transfers, in-platform resale, upgrades and rewards built in. Festivals, arenas, nightlife and attractions are the roster. ATLVS is not a consumer ticketing company. Our gate is live: COMPVSS scans tickets and credentials offline in under 100ms and journals every result on the production's record, beside the shifts, incidents and custody the crew writes. The console's box-office desk is coming, and GVTEWAY's marketplace carries public discovery for talent, gigs and RFPs today.",
+      "bottomLine": "Selling tickets at commerce scale is Tixr's published product and we do not pretend at it. Running the production behind the on-sale, the crew, the gate, the record, is what ATLVS ships today.",
+      "features": [
+        {
+          "feature": "Consumer ticket commerce at large-event scale",
+          "us": false,
+          "them": true,
+          "note": "Tixr's published core"
+        },
+        { "feature": "Payment plans, transfers, in-platform resale", "us": false, "them": true },
+        {
+          "feature": "Commerce backend + onsite tooling",
+          "us": "Console: coming soon",
+          "them": true,
+          "note": "Tixr Studio"
+        },
+        { "feature": "Offline gate scan (sub-100ms, journaled)", "us": true, "them": "Not published" },
+        { "feature": "Credential advance tied to the production", "us": true, "them": "Not published" },
+        { "feature": "Field crew ops (shifts, incidents, custody)", "us": true, "them": false },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": false },
+        { "feature": "Public marketplace beyond tickets (talent, gigs, RFPs)", "us": true, "them": false },
+        { "feature": "Published pricing", "us": true, "them": "Not published" }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The record behind the on-sale",
+          "body": "A ticketing platform's story ends at the gate. Ours starts before the on-sale and keeps going after doors: the advance, the crew shifts, the incident chain, the custody trail, the scan journal, one org record."
+        },
+        {
+          "title": "The gate works with no signal",
+          "body": "COMPVSS scans offline by architecture, journals every accept, duplicate and void, and replays with provenance when signal returns. Gate throughput does not depend on venue wifi."
+        },
+        {
+          "title": "Crew are not seats and fans are not the only public",
+          "body": "Per-org pricing covers the whole crew, and GVTEWAY's marketplace faces the public with more than tickets: talent, gigs and RFPs."
+        }
+      ],
+      "whenTheyWin": [
+        "You are selling tickets at arena, festival or attraction scale and want commerce features, payment plans, transfers, resale, upgrades, as the product. That is Tixr's published core and we do not compete with it today.",
+        "You want the storefront, backend and onsite scanning from one ticketing vendor with large-event references."
+      ],
+      "migration": [
+        "Ticket batches import to COMPVSS via CSV so the gate can scan them offline regardless of where they were sold",
+        "Most producers keep their ticketer for the on-sale and run the production record, crew and gate on ATLVS"
+      ],
+      "faqs": [
+        {
+          "q": "Can COMPVSS scan tickets sold elsewhere?",
+          "a": "Yes. Import the batch and the gate scans offline, sub-100ms, journaling every result on the production's record."
+        },
+        {
+          "q": "Does ATLVS sell tickets?",
+          "a": "GVTEWAY carries public marketplace surfaces today and the console's box-office desk is coming. Large-scale consumer ticket commerce in the way the big ticketers publish it is not what we ship."
+        }
+      ],
+      "keywords": [
+        "Tixr alternative",
+        "ATLVS vs Tixr",
+        "event ticketing plus production",
+        "gate scanning software",
+        "ticketing operations software"
+      ]
+    },
+    {
+      "slug": "dice",
+      "competitor": "DICE",
+      "category": "ticketing",
+      "lastVerified": "2026-07-22",
+      "sources": ["https://dice.fm/partners", "https://dice.fm/partners/ticketing/live"],
+      "headline": "ATLVS Technologies vs. DICE: the production record vs. fan-first mobile ticketing.",
+      "blurb": "DICE is a fan-first mobile ticketing and discovery platform: tickets at face value held in-app, discovery that sells shows, and partner tools for events, sales and payouts. ATLVS is the record of the production behind those shows: crew, gate, knowledge and marketplace, live today.",
+      "hero": "DICE's published position is the fan side: a mobile app where fans discover shows and buy tickets held securely in-app, a stated no-hidden-fees stance, and partner tooling for venues and promoters to create events, track sales and get paid, with discovery driving a meaningful share of sales. It is a consumer product with a partner console behind it. ATLVS lives behind the listing: COMPVSS runs the crew and the gate offline-first, the incident and custody record, and the credential advance; LEG3ND holds the knowledge; GVTEWAY faces the public for talent, gigs and RFPs. The operator console is coming.",
+      "bottomLine": "Reaching fans and selling out rooms through discovery is DICE's published product. Running and proving the production behind the show is ours, live today in the field.",
+      "features": [
+        {
+          "feature": "Consumer discovery app that sells tickets",
+          "us": false,
+          "them": true,
+          "note": "DICE's published core"
+        },
+        { "feature": "Fan-first ticketing: face value, tickets held in-app", "us": false, "them": true },
+        {
+          "feature": "Partner tools: event setup, sales tracking, payouts",
+          "us": "Console: coming soon",
+          "them": true
+        },
+        { "feature": "Offline gate scan on your own gate (sub-100ms, journaled)", "us": true, "them": "Not published" },
+        { "feature": "Credential advance tied to the production", "us": true, "them": false },
+        { "feature": "Field crew ops (shifts, incidents, custody)", "us": true, "them": false },
+        { "feature": "Knowledge hub: courses, certifications, SOPs", "us": true, "them": false },
+        { "feature": "Public marketplace beyond tickets (talent, gigs, RFPs)", "us": true, "them": false },
+        { "feature": "Per-org pricing, unlimited users", "us": true, "them": "Not published" }
+      ],
+      "whyWeWin": [
+        {
+          "title": "The show behind the listing",
+          "body": "DICE gets the fan to the door. ATLVS runs everything the fan never sees: the advance, the crew shifts, the incident chain, the custody trail and the gate journal, on one org record."
+        },
+        {
+          "title": "Your gate, your record",
+          "body": "COMPVSS scans offline on your own hardware and journals every result. The production's access record belongs to the production."
+        },
+        {
+          "title": "More than the ticket-buying public",
+          "body": "GVTEWAY faces the public with talent, gigs and RFPs, and LEG3ND keeps the org's knowledge. A ticketing platform has no reason to carry either."
+        }
+      ],
+      "whenTheyWin": [
+        "You are a club, promoter or festival in DICE's markets and want discovery reach plus a fan-first brand on the ticket itself. That consumer surface is DICE's published product and nothing in ATLVS replaces it.",
+        "Your audience lives on mobile discovery and the listing is a real sales channel, not just a checkout."
+      ],
+      "migration": [
+        "Keep selling through DICE; import ticket batches to COMPVSS so your own gate can scan offline where that is the operating model",
+        "Run the production record, crew, incidents, custody, advance, on ATLVS alongside the ticketer"
+      ],
+      "faqs": [
+        {
+          "q": "Is ATLVS a DICE competitor?",
+          "a": "Barely. DICE's published product is fan-facing discovery and ticketing; ATLVS ships the production record behind the show. Most orgs that love their ticketer keep it and run the production on ATLVS."
+        },
+        {
+          "q": "Can we use COMPVSS at the gate for a DICE show?",
+          "a": "Where you control the gate hardware and can import the ticket batch, yes: offline scans, journaled results, on the production's record. Where the ticketer's own scanning is contractual, run that and keep the crew record on COMPVSS."
+        }
+      ],
+      "keywords": [
+        "DICE alternative",
+        "ATLVS vs DICE",
+        "fan-first ticketing plus production",
+        "event production software",
+        "gate operations software"
+      ]
+    }
+  ]
+}

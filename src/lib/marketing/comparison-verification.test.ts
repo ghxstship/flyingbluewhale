@@ -12,13 +12,13 @@ import { COMPARE_LIST, compareCategory } from "@/lib/compare";
  *     days — stale pages fail CI rather than quietly rotting into libel.
  *  2. Every entry in a NEW category (anything except the legacy production
  *     roster) must carry BOTH `lastVerified` and at least one source URL.
- *  3. The legacy production roster predates the discipline and backfills in
- *     P4 — its count is pinned here so new entries can't hide in the
- *     grandfather clause. Shrink the pin as entries are backfilled; never
- *     grow it.
+ *  3. The legacy production roster was backfilled in P4 (2026-07-22): every
+ *     entry now carries lastVerified + sources, so the pin is 0 and the
+ *     grandfather clause is closed. It must never grow again — every entry,
+ *     any category, ships with the full discipline.
  */
 const STALE_DAYS = 180;
-const LEGACY_UNVERIFIED_PIN = 24;
+const LEGACY_UNVERIFIED_PIN = 0;
 
 describe("comparison verification discipline", () => {
   const dated = COMPARE_LIST.filter((c) => c.lastVerified);

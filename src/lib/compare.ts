@@ -23,8 +23,8 @@ export type CompareConfig = {
   /** ISO date the claims on this page were last checked against the
    *  competitor's public docs/pricing. The verification guard
    *  (comparison-verification.test.ts) fails CI when this goes stale
-   *  (>180 days). Required on every workforce-category entry; the legacy
-   *  roster backfills in P4 of the marketing rebuild plan. */
+   *  (>180 days). Required on EVERY entry as of the P4 backfill
+   *  (2026-07-22); the guard's legacy pin is 0. */
   lastVerified?: string;
   /** Public sources (docs/pricing URLs) the claims derive from. Unbiased by
    *  construction: no cell in `features` may assert something about the
@@ -33,31 +33,51 @@ export type CompareConfig = {
 };
 
 export const COMPARE: Record<string, CompareConfig> = {
+  // P4 note: the former "onstage" entry was REMOVED in the 2026-07-22 backfill.
+  // No identifiable vendor or public pages exist to source its claims, and the
+  // honesty discipline (lastVerified + sources on every entry) cannot hold for
+  // an unverifiable competitor. Do not reintroduce without real public sources.
   // Live-events-native roster (listed first — the tools a producer actually
   // shortlists): Lasso (crew/ops back office), Lennd (credential advance),
   // Prism.fm (booking & settlement). Source: ATLVS Ecosystem kit handoff.
   lasso: {
     slug: "lasso",
     competitor: "Lasso",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.lasso.io/crew-management/", "https://www.lasso.io/pricing/"],
     headline: "ATLVS Technologies vs. Lasso: production ecosystem vs. crew & ops back office.",
     blurb:
       "Lasso is a strong back office for staffing and AV companies — scheduling, time, gear, payroll, and a crew marketplace. It stops where the audience begins. ATLVS runs that back office plus the advance, the public marketplace, and the knowledge that outlives the show.",
-    hero:
-      "Lasso is built around the people and equipment a company sends to a job: bulk crew calls, time tracking, travel, warehouse gear flow, payroll, and an AI layer over the top. It is excellent at that. What it does not model is the production itself — riders and stage plots, the credential advance, a public-facing marketplace where the rooms get booked, and a knowledge base that survives the season. Those are first-class in ATLVS.",
+    hero: "Lasso is built around the people and equipment a company sends to a job: bulk crew calls, time tracking, travel, warehouse gear flow, payroll, and an AI layer over the top. It is excellent at that. What it does not model is the production itself — riders and stage plots, the credential advance, a public-facing marketplace where the rooms get booked, and a knowledge base that survives the season. Those are first-class in ATLVS.",
     bottomLine:
       "If your product is sending crew and gear to a gig, Lasso runs that desk well. If your product is the show, ATLVS runs the whole arc — and the crew desk is one app inside it.",
     features: [
       { feature: "Crew scheduling, time tracking, travel", us: true, them: true },
-      { feature: "Gear / inventory / warehouse logistics", us: "Production-side", them: true, note: "Lasso's core strength" },
+      {
+        feature: "Gear / inventory / warehouse logistics",
+        us: "Production-side",
+        them: true,
+        note: "Lasso's core strength",
+      },
       { feature: "Payroll + financial management", us: true, them: true },
-      { feature: "Production advancing (riders, stage plots, RFIs)", us: true, them: "Limited", note: "Lasso PM is task-shaped, not advance-shaped" },
-      { feature: "Credentials, passes, accreditation", us: true, them: "Limited" },
-      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: "Limited" },
-      { feature: "Public marketplace (tickets, talent, gigs, RFPs)", us: true, them: false, note: "Lasso has no audience-facing surface" },
+      { feature: "Production advancing (riders, stage plots, RFIs)", us: true, them: "Not published" },
+      { feature: "Credentials, passes, accreditation", us: true, them: "Not published" },
+      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: "Not published" },
+      {
+        feature: "Public marketplace (tickets, talent, gigs, RFPs)",
+        us: true,
+        them: false,
+        note: "Lasso has no audience-facing surface",
+      },
       { feature: "Interactive proposals → live project on accept", us: true, them: "Quotes only" },
       { feature: "Knowledge base · LMS · certifications", us: true, them: false },
-      { feature: "Streaming AI grounded in workspace", us: true, them: "Limited", note: "Lasso Intelligence is reporting-led" },
-      { feature: "Per-org pricing, unlimited users", us: true, them: false, note: "Lasso is a custom quote" },
+      {
+        feature: "Aurora AI grounded in workspace",
+        us: true,
+        them: "Lasso Intelligence",
+        note: "Lasso publishes an AI layer (Lasso Intelligence)",
+      },
+      { feature: "Per-org pricing, unlimited users", us: true, them: "Not published" },
       { feature: "One record store: office · field · public · knowledge", us: true, them: false },
     ],
     whyWeWin: [
@@ -113,21 +133,27 @@ export const COMPARE: Record<string, CompareConfig> = {
   lennd: {
     slug: "lennd",
     competitor: "Lennd",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.lenndapp.com/features/event-credentials", "https://www.lenndapp.com/pricing"],
     headline: "ATLVS Technologies vs. Lennd: production ecosystem vs. credential advance portal.",
     blurb:
       "Lennd is the credential and advance portal big festivals lean on — onboarding, passes, catering and asset requests, scoped portals. ATLVS does the credential advance and the finance, the field gate, the public marketplace, and the record that outlives the show.",
-    hero:
-      "Lennd is excellent at the people-and-paperwork advance: phased credentialing, vendor and group onboarding, catering and asset requests, multi-level approvals, and a custom portal for every constituent. For festivals with thousands of names to collect, it earns its place. What sits outside it is the rest of the production — finance and procurement, an offline gate that scans at 15k, a public marketplace, and a knowledge layer — all of which are first-class in ATLVS.",
+    hero: "Lennd is excellent at the people-and-paperwork advance: phased credentialing, vendor and group onboarding, catering and asset requests, multi-level approvals, and a custom portal for every constituent. For festivals with thousands of names to collect, it earns its place. What sits outside it is the rest of the production — finance and procurement, an offline gate that scans at 15k, a public marketplace, and a knowledge layer — all of which are first-class in ATLVS.",
     bottomLine:
       "If you only need to onboard people and issue passes, Lennd does that cleanly. If credentials are one workflow inside a whole production, ATLVS runs the advance and everything downstream on one manifest.",
     features: [
       { feature: "Credentials, passes, accreditation", us: true, them: true, note: "Lennd's core strength" },
       { feature: "Vendor / group onboarding + scoped portals", us: true, them: true },
       { feature: "Catering & asset requests with approvals", us: true, them: true },
-      { feature: "Production advancing (riders, stage plots, RFIs)", us: true, them: "Partial" },
+      {
+        feature: "Production advancing (riders, stage plots, RFIs)",
+        us: true,
+        them: "Partial",
+        note: "Lennd publishes credential, catering and asset advancing",
+      },
       { feature: "Finance: budgets, invoices, procurement, payouts", us: true, them: false },
       { feature: "Crew ops in the field (clock-in, shifts, offline)", us: true, them: false },
-      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: "Check-in app" },
+      { feature: "Offline gate scan (sub-100ms atomic)", us: true, them: "Not published" },
       { feature: "Public marketplace (tickets, talent, gigs, RFPs)", us: true, them: false },
       { feature: "Interactive proposals → live project on accept", us: true, them: false },
       { feature: "Knowledge base · LMS · certifications", us: true, them: false },
@@ -183,11 +209,12 @@ export const COMPARE: Record<string, CompareConfig> = {
   "prism-fm": {
     slug: "prism-fm",
     competitor: "Prism.fm",
+    lastVerified: "2026-07-22",
+    sources: ["https://prism.fm/product/", "https://prism.fm/why-prism-for-venues-and-promoters/"],
     headline: "ATLVS Technologies vs. Prism.fm: production ecosystem vs. booking & settlement desk.",
     blurb:
       "Prism is the booking calendar and settlement desk for music venues and promoters — holds, offers, co-pro splits, show P&L. ATLVS covers booking through settlement and the production that happens between the offer and the payout.",
-    hero:
-      "Prism is purpose-built for the deal and the payout: a hold-to-confirm calendar, fast offer generation, co-promotion and percentage math, contracts, and show-by-show P&L. For a venue or promoter whose product is the calendar and the settlement, it is sharp. What lives between the offer and the payout — advancing, crew, the credential gate, and the audience — is where ATLVS runs.",
+    hero: "Prism is purpose-built for the deal and the payout: a hold-to-confirm calendar, fast offer generation, co-promotion and percentage math, contracts, and show-by-show P&L. For a venue or promoter whose product is the calendar and the settlement, it is sharp. What lives between the offer and the payout — advancing, crew, the credential gate, and the audience — is where ATLVS runs.",
     bottomLine:
       "Prism for the calendar and the settlement. ATLVS for booking through settlement and the entire production in the middle — advancing, the field, the gate, and the public.",
     features: [
@@ -253,6 +280,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   asana: {
     slug: "asana",
     competitor: "Asana",
+    lastVerified: "2026-07-22",
+    sources: ["https://asana.com/product", "https://asana.com/pricing"],
     headline: "ATLVS Technologies vs. Asana: production-native vs. generic work management.",
     blurb:
       "Asana is great project management software. It isn't event production software. Here's what's missing — and what you stop paying separately for when you switch.",
@@ -264,8 +293,8 @@ export const COMPARE: Record<string, CompareConfig> = {
       {
         feature: "Stakeholder portals (artist / vendor / client / sponsor / guest / crew)",
         us: true,
-        them: false,
-        note: "Asana guest access is read-limited and unsuitable for external stakeholders",
+        them: "Guest access",
+        note: "Asana publishes project guest access, not scoped external portals",
       },
       { feature: "Offline ticket scanning", us: true, them: false },
       { feature: "Race-safe atomic scan (sub-100ms)", us: true, them: false },
@@ -280,16 +309,16 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Interactive proposals (scroll + accept-in-place)", us: true, them: false },
       { feature: "Event guides (role-scoped KBYG)", us: true, them: false },
       {
-        feature: "Streaming AI assistant (Claude)",
+        feature: "Aurora AI assistant",
         us: true,
-        them: "Limited",
-        note: "Asana AI is summary-only; no streaming, no drafting workflows",
+        them: "Asana AI",
+        note: "Asana publishes Asana AI features",
       },
-      { feature: "RLS-enforced multi-tenancy", us: true, them: true },
+      { feature: "RLS-enforced multi-tenancy", us: true, them: "Not published" },
       { feature: "SSO + SCIM on enterprise", us: true, them: true },
       { feature: "Per-org pricing (unlimited users)", us: true, them: false, note: "Asana charges per seat" },
       { feature: "Stripe Connect vendor payouts", us: true, them: false },
-      { feature: "Mobile PWA with service worker", us: true, them: "Native app only" },
+      { feature: "Mobile PWA with service worker", us: true, them: "Native apps" },
     ],
     whyWeWin: [
       {
@@ -348,6 +377,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   monday: {
     slug: "monday",
     competitor: "Monday.com",
+    lastVerified: "2026-07-22",
+    sources: ["https://monday.com/work-management", "https://monday.com/pricing"],
     headline: "ATLVS Technologies vs. Monday.com: typed primitives vs. a pretty spreadsheet.",
     blurb:
       "Monday is a lovely general-purpose board. If your team runs shows, you'll need primitives Monday doesn't have — and portals Monday can't safely expose.",
@@ -359,14 +390,14 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Gantt + timeline views", us: true, them: true },
       { feature: "Typed deliverables (16 standard types)", us: true, them: false },
       { feature: "Offline ticket scanning", us: true, them: false },
-      { feature: "External stakeholder portals (no seats)", us: true, them: "Guest access limited" },
+      { feature: "External stakeholder portals (no seats)", us: true, them: "Guest access" },
       { feature: "Finance primitives", us: true, them: false },
       { feature: "Procurement with COI tracking", us: true, them: false },
       { feature: "Stripe Connect payouts", us: true, them: false },
       { feature: "Interactive proposals", us: true, them: false },
       { feature: "Event guides CMS", us: true, them: false },
-      { feature: "Streaming AI (Claude)", us: true, them: "Limited" },
-      { feature: "RLS multi-tenant by org", us: true, them: true },
+      { feature: "Aurora AI", us: true, them: "monday AI" },
+      { feature: "RLS multi-tenant by org", us: true, them: "Not published" },
       { feature: "Per-org pricing", us: true, them: false },
       { feature: "Mobile PWA with offline scan queue", us: true, them: false },
     ],
@@ -414,6 +445,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   spreadsheets: {
     slug: "spreadsheets",
     competitor: "Spreadsheets",
+    lastVerified: "2026-07-22",
+    sources: ["https://workspace.google.com/products/sheets/", "https://www.microsoft.com/en-us/microsoft-365/excel"],
     headline: "ATLVS Technologies vs. spreadsheets: when the duct tape starts costing more than software.",
     blurb:
       "Every production team starts on spreadsheets. Most stay there too long. Here's the tipping point — and what you gain the day you stop.",
@@ -428,7 +461,7 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Role-scoped access (finance can't see other tabs)", us: true, them: false },
       { feature: "Row-Level Security", us: true, them: false },
       { feature: "Audit log of every change", us: true, them: false },
-      { feature: "Version history beyond 30 days", us: true, them: false },
+      { feature: "Version history beyond 30 days", us: true, them: "Varies" },
       { feature: "External stakeholder portals", us: true, them: false },
       { feature: "Ticket scanning + check-in", us: true, them: false },
       { feature: "Offline PWA", us: true, them: false },
@@ -483,6 +516,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   cvent: {
     slug: "cvent",
     competitor: "Cvent",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.cvent.com/en/event-marketing-management", "https://www.cvent.com/en/pricing"],
     headline: "ATLVS Technologies vs. Cvent: production operations vs. corporate event management.",
     blurb:
       "Cvent owns the corporate meeting and conference space. For producers running festivals, residencies, touring, or experiential — the surface area is wrong and the seat math is hostile.",
@@ -498,8 +533,8 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Gate scan offline-first PWA", us: true, them: false },
       { feature: "Vendor COI tracking + Stripe Connect payouts", us: true, them: false },
       { feature: "Per-org pricing", us: true, them: false, note: "Cvent quotes per-event, per-registration tiers" },
-      { feature: "Stakeholder portals (artist/vendor/sponsor)", us: true, them: "Limited" },
-      { feature: "AI assistant grounded in workspace", us: true, them: false },
+      { feature: "Stakeholder portals (artist/vendor/sponsor)", us: true, them: "Not published" },
+      { feature: "AI assistant grounded in workspace", us: true, them: "Not published" },
     ],
     whyWeWin: [
       {
@@ -540,6 +575,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   bizzabo: {
     slug: "bizzabo",
     competitor: "Bizzabo",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.bizzabo.com/", "https://www.bizzabo.com/pricing"],
     headline: "ATLVS Technologies vs. Bizzabo: production-grade vs. hybrid-event platform.",
     blurb:
       "Bizzabo is great for hybrid conference experiences with deep registration and content streaming. Production-native operations are a different problem with different primitives.",
@@ -551,7 +588,7 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Branded event apps for attendees", us: "Via portals", them: true },
       { feature: "Production advancing (riders, plots)", us: true, them: false },
       { feature: "RFIs · submittals · punch lists", us: true, them: false },
-      { feature: "Offline gate scan", us: true, them: "Limited" },
+      { feature: "Offline gate scan", us: true, them: "Not published" },
       { feature: "Stripe Connect vendor payouts", us: true, them: false },
       { feature: "Per-org pricing (not per-registration)", us: true, them: false },
       { feature: "Stakeholder portals beyond attendees", us: true, them: false },
@@ -587,6 +624,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   eventbrite: {
     slug: "eventbrite",
     competitor: "Eventbrite",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.eventbrite.com/organizer/overview/", "https://www.eventbrite.com/organizer/pricing/"],
     headline: "ATLVS Technologies vs. Eventbrite: production platform vs. ticketing platform.",
     blurb:
       "Eventbrite is excellent ticketing. It is not a production platform. Most teams run both — sell tickets on Eventbrite, run the show on ATLVS.",
@@ -599,8 +638,13 @@ export const COMPARE: Record<string, CompareConfig> = {
         them: true,
         note: "Eventbrite has a marketplace; we don't",
       },
-      { feature: "Ticket fee collection", us: true, them: true, note: "We're cheaper; they're stickier" },
-      { feature: "Offline gate scan sub-100ms", us: true, them: "Variable" },
+      { feature: "Ticket fee collection", us: true, them: true, note: "Eventbrite publishes per-ticket fees" },
+      {
+        feature: "Offline gate scan sub-100ms",
+        us: true,
+        them: "Organizer app",
+        note: "Offline scan performance not published",
+      },
       { feature: "Advancing, RFIs, COIs, daily logs", us: true, them: false },
       { feature: "Vendor portals + payouts", us: true, them: false },
       { feature: "Stage plots + input lists", us: true, them: false },
@@ -647,6 +691,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   procore: {
     slug: "procore",
     competitor: "Procore",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.procore.com/products", "https://www.procore.com/pricing"],
     headline: "ATLVS Technologies vs. Procore: production timelines vs. construction timelines.",
     blurb:
       "Procore is the construction industry standard. Live-event production borrows the same primitives — RFIs, submittals, daily logs, punch — at a different clock speed and with different vocabulary.",
@@ -696,6 +742,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   notion: {
     slug: "notion",
     competitor: "Notion",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.notion.com/product", "https://www.notion.com/pricing"],
     headline: "ATLVS Technologies vs. Notion: typed primitives vs. flexible blocks.",
     blurb:
       "Notion is the best block-editor on the market. Production teams hit its limits at the second show — typed primitives, role-scoped portals, gate scan, vendor payouts aren't in the kit.",
@@ -714,7 +762,7 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Stripe Connect vendor payouts", us: true, them: false },
       { feature: "Per-org pricing", us: true, them: false },
       { feature: "RFIs, submittals, punch lists, daily logs", us: true, them: "DIY" },
-      { feature: "Streaming AI grounded in workspace data", us: true, them: "Limited" },
+      { feature: "Aurora AI grounded in workspace data", us: true, them: "Notion AI" },
     ],
     whyWeWin: [
       {
@@ -742,6 +790,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   airtable: {
     slug: "airtable",
     competitor: "Airtable",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.airtable.com/platform", "https://airtable.com/pricing"],
     headline: "ATLVS Technologies vs. Airtable: production schema vs. flexible base.",
     blurb:
       "Airtable is the platonic flexible database. Production teams either spend a season building it into a platform — or they outgrow it.",
@@ -750,17 +800,17 @@ export const COMPARE: Record<string, CompareConfig> = {
     features: [
       { feature: "Flexible database with views", us: true, them: true, note: "We're typed, they're freeform" },
       { feature: "Automations + scripts", us: true, them: true },
-      { feature: "Stakeholder portals at scale", us: true, them: "Limited" },
+      { feature: "Stakeholder portals at scale", us: true, them: "Shared views + Interfaces" },
       {
         feature: "RLS-enforced multi-tenancy",
         us: true,
-        them: false,
-        note: "Airtable security is permission-based, not row-level",
+        them: "Not published",
+        note: "Airtable publishes permission-based access controls",
       },
       { feature: "Offline gate scan", us: true, them: false },
       { feature: "Stripe Connect payouts", us: true, them: false },
       { feature: "Per-org pricing", us: true, them: false },
-      { feature: "Production templates that work day 1", us: true, them: false },
+      { feature: "Production templates that work day 1", us: true, them: "Generic templates" },
     ],
     whyWeWin: [
       {
@@ -790,6 +840,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   smartsheet: {
     slug: "smartsheet",
     competitor: "Smartsheet",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.smartsheet.com/", "https://www.smartsheet.com/pricing"],
     headline: "ATLVS Technologies vs. Smartsheet: production-native vs. spreadsheet-with-features.",
     blurb:
       "Smartsheet adds workflow over a spreadsheet. Production teams need more than that — typed primitives, portals, scanners, payouts.",
@@ -826,6 +878,11 @@ export const COMPARE: Record<string, CompareConfig> = {
   "ms-project": {
     slug: "ms-project",
     competitor: "Microsoft Project",
+    lastVerified: "2026-07-22",
+    sources: [
+      "https://www.microsoft.com/en-us/microsoft-365/project/project-management-software",
+      "https://www.microsoft.com/en-us/microsoft-365/project/compare-microsoft-project-management-software",
+    ],
     headline: "ATLVS Technologies vs. Microsoft Project: production ops vs. waterfall PM.",
     blurb:
       "MS Project is excellent waterfall scheduling. Live-event production is more than a Gantt chart — and the team that runs shows doesn't live in Project all day.",
@@ -859,6 +916,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   docusign: {
     slug: "docusign",
     competitor: "DocuSign",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.docusign.com/products/electronic-signature", "https://www.docusign.com/pricing"],
     headline: "ATLVS Technologies vs. DocuSign: interactive proposals vs. PDF e-signature.",
     blurb:
       "DocuSign signs PDFs. ATLVS proposals scroll, quantify, and accept in place — and the production starts the moment they sign.",
@@ -875,7 +934,7 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Live pricing computed server-side", us: true, them: false },
       { feature: "Accept buttons with IP + timestamp + version", us: true, them: true },
       { feature: "Proposal → live project on accept", us: true, them: false },
-      { feature: "Revocable share links", us: true, them: "Limited" },
+      { feature: "Revocable share links", us: true, them: "Not published" },
       { feature: "Stripe checkout on accept", us: true, them: false },
     ],
     whyWeWin: [
@@ -905,6 +964,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   pandadoc: {
     slug: "pandadoc",
     competitor: "PandaDoc",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.pandadoc.com/", "https://www.pandadoc.com/pricing/"],
     headline: "ATLVS Technologies vs. PandaDoc: production proposals vs. generic doc automation.",
     blurb:
       "PandaDoc is solid generic proposal automation. ATLVS proposals know what a rider is, what a load-in is, and write the project on accept.",
@@ -939,6 +1000,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   salesforce: {
     slug: "salesforce",
     competitor: "Salesforce",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.salesforce.com/sales/", "https://www.salesforce.com/pricing/"],
     headline: "ATLVS Technologies vs. Salesforce: production CRM vs. enterprise CRM.",
     blurb:
       "Salesforce will run your sales org. It will not run your show. The CRM in ATLVS is production-shaped — clients, gigs, proposals, advancing in one record.",
@@ -963,6 +1026,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   hubspot: {
     slug: "hubspot",
     competitor: "HubSpot",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.hubspot.com/products/marketing", "https://www.hubspot.com/pricing/marketing"],
     headline: "ATLVS Technologies vs. HubSpot: production CRM vs. inbound-marketing CRM.",
     blurb:
       "HubSpot owns inbound marketing CRM. Production teams need a different shape — gigs, riders, advancing, vendor payouts. Use both.",
@@ -989,6 +1054,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   eventbase: {
     slug: "eventbase",
     competitor: "Eventbase",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.eventbase.com/event-technology", "https://www.eventbase.com/custom-event-app"],
     headline: "ATLVS Technologies vs. Eventbase: production platform vs. event mobile app.",
     blurb: "Eventbase makes a beautiful attendee app. ATLVS runs the production behind it. They're different layers.",
     hero: "Eventbase is the gold standard for branded attendee apps at major events. For the production team running the event, the workflow lives somewhere else — and ATLVS is built for that.",
@@ -1014,6 +1081,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   "master-tour": {
     slug: "master-tour",
     competitor: "Master Tour",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.eventric.com/master-tour-pro/", "https://www.eventric.com/pricing/"],
     headline: "ATLVS Technologies vs. Master Tour: modern stack vs. industry-standard tour book.",
     blurb:
       "Master Tour is the industry-default tour book. It's also pre-cloud-era in shape. Modern tour managers want portals, mobile, AI, and per-org pricing.",
@@ -1023,17 +1092,27 @@ export const COMPARE: Record<string, CompareConfig> = {
     features: [
       { feature: "Tour-book day sheets", us: true, them: true },
       { feature: "Advancing per stop", us: true, them: true },
-      { feature: "Cloud-native multi-user", us: true, them: "Partial" },
-      { feature: "Offline mobile (COMPVSS)", us: true, them: false },
-      { feature: "Stakeholder portals (artist/vendor)", us: true, them: false },
-      { feature: "Streaming AI assistant", us: true, them: false },
+      {
+        feature: "Cloud-native multi-user",
+        us: true,
+        them: "Desktop-led + sync",
+        note: "Eventric publishes desktop and mobile apps with offline sync",
+      },
+      {
+        feature: "Offline mobile (COMPVSS)",
+        us: true,
+        them: true,
+        note: "Eventric publishes offline sync in Master Tour",
+      },
+      { feature: "Stakeholder portals (artist/vendor)", us: true, them: "Not published" },
+      { feature: "Aurora AI assistant", us: true, them: "Not published" },
       { feature: "Stripe Connect payouts", us: true, them: false },
       { feature: "Per-org pricing", us: true, them: false },
     ],
     whyWeWin: [
       {
         title: "Cloud-native + offline mobile",
-        body: "Modern tour managers expect both. Master Tour's mobile story is improving but trails.",
+        body: "Modern tour managers expect both. COMPVSS is an installable offline-first PWA on the same record store as the rest of the production.",
       },
       { title: "Portals", body: "Artists, vendors, drivers — all see scoped views. No more emailing day sheets." },
     ],
@@ -1042,7 +1121,7 @@ export const COMPARE: Record<string, CompareConfig> = {
     faqs: [
       {
         q: "Are you a Master Tour replacement?",
-        a: "Yes, for modern touring orgs. We lose to muscle memory; we win on every spec.",
+        a: "Yes, for modern touring orgs. We lose to muscle memory; we win on portals, the shared record store, and per-org pricing.",
       },
     ],
     keywords: ["Master Tour alternative", "modern tour management software", "Master Tour vs ATLVS"],
@@ -1051,6 +1130,8 @@ export const COMPARE: Record<string, CompareConfig> = {
   eventric: {
     slug: "eventric",
     competitor: "Eventric",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.eventric.com/", "https://www.eventric.com/master-tour-pro/"],
     headline: "ATLVS Technologies vs. Eventric: full stack vs. tour-only suite.",
     blurb:
       "Eventric (and its Master Tour product line) cover touring. ATLVS covers touring plus everything around it — fabrication, festivals, activations, broadcast.",
@@ -1061,7 +1142,7 @@ export const COMPARE: Record<string, CompareConfig> = {
       { feature: "Festival + activation surface area", us: true, them: false },
       { feature: "Fabrication shop ops", us: true, them: false },
       { feature: "Broadcast compound ops", us: true, them: false },
-      { feature: "Stakeholder portals + per-org pricing", us: true, them: false },
+      { feature: "Stakeholder portals + per-org pricing", us: true, them: "Not published" },
     ],
     whyWeWin: [
       {
@@ -1080,34 +1161,11 @@ export const COMPARE: Record<string, CompareConfig> = {
     keywords: ["Eventric alternative", "tour management plus production"],
   },
 
-  onstage: {
-    slug: "onstage",
-    competitor: "Onstage",
-    headline: "ATLVS Technologies vs. Onstage: integrated production platform vs. tour management.",
-    blurb: "Onstage handles tour logistics. ATLVS handles touring plus the rest of the production stack the org runs.",
-    hero: "Onstage is a capable tour management suite — schedules, advancing, day sheets, expenses. The trade-off is the same as Eventric: tour-shaped, not org-shaped.",
-    bottomLine: "Onstage for tour-only orgs. ATLVS for orgs running multiple production lines.",
-    features: [
-      { feature: "Tour scheduling + day sheets", us: true, them: true },
-      { feature: "Per-stop advancing", us: true, them: true },
-      { feature: "Festival + activation modules", us: true, them: false },
-      { feature: "Per-org pricing", us: true, them: false },
-    ],
-    whyWeWin: [
-      {
-        title: "One platform across production lines",
-        body: "Tours, festivals, activations, fab — one database, one auth, one audit log.",
-      },
-    ],
-    whenTheyWin: ["Tour-only orgs."],
-    migration: ["Onstage CSV exports map to advancing"],
-    faqs: [],
-    keywords: ["Onstage alternative", "tour management software"],
-  },
-
   "show-co": {
     slug: "show-co",
     competitor: "Show.co",
+    lastVerified: "2026-07-22",
+    sources: ["https://www.show.co/campaigns/", "https://www.show.co/pricing/"],
     headline: "ATLVS Technologies vs. Show.co: production platform vs. fan marketing.",
     blurb:
       "Show.co is for fan-marketing — pre-saves, presales, drops. ATLVS is the production platform that runs the show those fans show up to.",
@@ -1127,6 +1185,11 @@ export const COMPARE: Record<string, CompareConfig> = {
   aconex: {
     slug: "aconex",
     competitor: "Aconex (Oracle)",
+    lastVerified: "2026-07-22",
+    sources: [
+      "https://www.oracle.com/construction-engineering/aconex/",
+      "https://www.oracle.com/construction-engineering/",
+    ],
     headline: "ATLVS Technologies vs. Aconex: production-speed RFIs vs. construction document control.",
     blurb:
       "Aconex is Oracle's enterprise construction document control system. Live-event production borrows the workflow primitives at a different velocity.",
@@ -1158,8 +1221,12 @@ export const COMPARE: Record<string, CompareConfig> = {
 // /alternatives templates. Every JSON entry must carry lastVerified + sources;
 // comparison-verification.test.ts enforces it.
 import workforceComparisons from "@/lib/marketing/comparisons-workforce.json";
+import productionComparisons from "@/lib/marketing/comparisons-production.json";
 
 for (const entry of workforceComparisons.entries as CompareConfig[]) {
+  COMPARE[entry.slug] = entry;
+}
+for (const entry of productionComparisons.entries as CompareConfig[]) {
   COMPARE[entry.slug] = entry;
 }
 

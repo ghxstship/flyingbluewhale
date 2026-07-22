@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -95,7 +95,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<RfqRow>
+        <DataView<RfqRow>
           rows={rows}
           rowHref={(r) => `/studio/procurement/requisitions/${r.id}`}
           emptyLabel={t("console.procurement.rfqs.emptyLabel", undefined, "No open RFQs")}
@@ -126,14 +126,14 @@ export default async function Page() {
               key: "estimate",
               header: t("console.procurement.rfqs.column.estimate", undefined, "Estimate"),
               render: (r) => formatMoney(r.estimated_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.estimated_cents ?? 0),
             },
             {
               key: "created",
               header: t("console.procurement.rfqs.column.created", undefined, "Created"),
               render: (r) => fmtDate(r.created_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.created_at ?? null,
             },
             {

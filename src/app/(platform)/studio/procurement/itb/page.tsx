@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -142,7 +142,7 @@ export default async function Page() {
             value={fmt.number(awardedCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/procurement/rfqs/${r.id}`}
           emptyLabel={t("console.procurement.itb.empty.label", undefined, "No ITBs yet")}
@@ -157,7 +157,7 @@ export default async function Page() {
               header: t("console.procurement.itb.column.code", undefined, "Code"),
               render: (r) => r.code ?? "—",
               accessor: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "title",
@@ -186,14 +186,14 @@ export default async function Page() {
               header: t("console.procurement.itb.column.packages", undefined, "Pkgs"),
               render: (r) => fmt.number(r.package_count),
               accessor: (r) => r.package_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "invites",
               header: t("console.procurement.itb.column.invites", undefined, "Invites"),
               render: (r) => `${r.bid_count} / ${r.invitation_count}`,
               accessor: (r) => r.invitation_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "due",
@@ -203,7 +203,7 @@ export default async function Page() {
                   ? fmt.dateParts(r.itb_bid_due_at, { month: "short", day: "numeric", year: "2-digit" })
                   : "—",
               accessor: (r) => r.itb_bid_due_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
           ]}
         />

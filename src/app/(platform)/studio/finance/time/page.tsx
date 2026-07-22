@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -78,7 +78,7 @@ export default async function TimePage({ searchParams }: { searchParams: Promise
         }
       />
       <div className="page-content space-y-3">
-        <DataTable<TimeEntry>
+        <DataView<TimeEntry>
           rows={rows}
           totalCount={count}
           rowHref={(r) => `/studio/finance/time/${r.id}`}
@@ -104,7 +104,7 @@ export default async function TimePage({ searchParams }: { searchParams: Promise
               key: "duration",
               header: t("console.finance.time.columns.duration", undefined, "Duration"),
               render: (r) => fmtMinutes(r.duration_minutes),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.duration_minutes ?? null,
             },
             {
@@ -122,7 +122,7 @@ export default async function TimePage({ searchParams }: { searchParams: Promise
               key: "started",
               header: t("console.finance.time.columns.started", undefined, "Started"),
               render: (r) => timeAgo(r.started_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.started_at,
             },
           ]}

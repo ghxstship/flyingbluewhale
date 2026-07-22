@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -93,7 +93,7 @@ export default async function Page() {
             value={formatMoney(totalApproved)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/procurement/po-change-orders/${r.id}`}
           emptyLabel={t("console.procurement.poChangeOrders.emptyLabel", undefined, "No change orders")}
@@ -112,14 +112,14 @@ export default async function Page() {
               key: "po",
               header: t("console.procurement.poChangeOrders.col.po", undefined, "PO"),
               render: (r) => r.purchase_order?.number ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.purchase_order?.number ?? null,
             },
             {
               key: "num",
               header: t("console.procurement.poChangeOrders.col.coNumber", undefined, "CO #"),
               render: (r) => `#${r.number}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.number ?? null,
             },
             {
@@ -132,14 +132,14 @@ export default async function Page() {
               key: "amount",
               header: t("console.procurement.poChangeOrders.col.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.amount_cents ?? 0),
             },
             {
               key: "days",
               header: t("console.procurement.poChangeOrders.col.scheduleDelta", undefined, "Schedule Δ (Days)"),
               render: (r) => r.schedule_impact_days.toString(),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.schedule_impact_days.toString ?? null,
             },
             {

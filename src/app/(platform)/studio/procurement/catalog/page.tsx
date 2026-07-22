@@ -5,7 +5,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { money } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -56,7 +56,7 @@ export default async function CatalogPage() {
         )}
       />
       <div className="page-content max-w-5xl">
-        <DataTable<CatalogRow>
+        <DataView<CatalogRow>
           rows={rows}
           tableId="console:procurement:catalog"
           rowHref={(i) => `/studio/assets/${i.id}`}

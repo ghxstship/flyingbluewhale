@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -68,7 +68,7 @@ export default async function TaxCalculationsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<TaxCalculation>
+        <DataView<TaxCalculation>
           rows={rows}
           emptyLabel={t("console.finance.tax.calculations.empty", undefined, "No tax calculations yet")}
           emptyDescription={t(

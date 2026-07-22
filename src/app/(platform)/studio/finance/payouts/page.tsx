@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import type { Vendor } from "@/lib/supabase/types";
 import { getRequestT } from "@/lib/i18n/request";
@@ -34,7 +34,7 @@ export default async function PayoutsPage() {
         subtitle={t("console.finance.payouts.subtitle", undefined, "Stripe Connect onboarding status per vendor")}
       />
       <div className="page-content">
-        <DataTable<Vendor>
+        <DataView<Vendor>
           rows={vendors}
           totalCount={totalCount}
           columns={[
@@ -49,10 +49,11 @@ export default async function PayoutsPage() {
               header: t("console.finance.payouts.columns.connectAccount", undefined, "Connect Account"),
               render: (r) =>
                 r.payout_account_id ? (
-                  <span className="font-mono text-xs">{r.payout_account_id}</span>
+                  r.payout_account_id
                 ) : (
                   <Badge variant="muted">{t("console.finance.payouts.notOnboarded", undefined, "Not Onboarded")}</Badge>
                 ),
+              mono: true,
               accessor: (r) => r.payout_account_id ?? null,
             },
             {
@@ -70,7 +71,7 @@ export default async function PayoutsPage() {
               key: "coi",
               header: t("console.finance.payouts.columns.coiExpires", undefined, "COI Expires"),
               render: (r) => r.coi_expires_at ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.coi_expires_at ?? null,
             },
           ]}

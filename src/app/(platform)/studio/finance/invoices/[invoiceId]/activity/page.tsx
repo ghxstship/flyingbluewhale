@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
         subtitle={t("console.finance.invoices.activity.subtitle", undefined, "Audit trail for this invoice.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.finance.invoices.activity.emptyLabel", undefined, "No Activity Yet")}
           emptyDescription={t(

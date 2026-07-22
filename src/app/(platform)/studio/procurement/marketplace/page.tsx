@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable, type Column } from "@/components/DataTable";
+import { DataView, type DataViewColumn } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -38,7 +38,7 @@ export default async function MarketplacePage() {
   const published = rows.filter((r) => r.visibility === "public" && ["posted", "bids-in"].includes(r.work_order_state));
   const draftPrivate = rows.filter((r) => r.visibility === "private").length;
 
-  const columns: Column<Row>[] = [
+  const columns: DataViewColumn<Row>[] = [
     { key: "title", header: t("console.procurement.marketplace.col.title", undefined, "Work order"), render: (r) => r.title },
     { key: "trade", header: t("console.procurement.marketplace.col.trade", undefined, "Trade"), render: (r) => r.trade },
     {
@@ -56,7 +56,8 @@ export default async function MarketplacePage() {
     {
       key: "budget",
       header: t("console.procurement.marketplace.col.budget", undefined, "Budget"),
-      render: (r) => <span className="font-mono">{formatCents(r.budget_guide_cents)}</span>,
+      render: (r) => formatCents(r.budget_guide_cents),
+      mono: true,
     },
   ];
 
@@ -81,7 +82,7 @@ export default async function MarketplacePage() {
         <MetricCard label={t("console.procurement.marketplace.private", undefined, "Private")} value={String(draftPrivate)} />
         <MetricCard label={t("console.procurement.marketplace.total", undefined, "Total")} value={String(rows.length)} />
       </div>
-      <DataTable
+      <DataView
         rows={rows}
         columns={columns}
         rowHref={(r) => `/studio/production/work-orders/${r.id}`}

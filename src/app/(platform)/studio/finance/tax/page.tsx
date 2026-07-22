@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { CardHeader } from "@/components/ui/Card";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -76,7 +76,7 @@ export default async function TaxHubPage() {
               "Tax authorities by country and region.",
             )}
           />
-          <DataTable<TaxJurisdiction>
+          <DataView<TaxJurisdiction>
             rows={jurisdictions}
             emptyLabel={t("console.finance.tax.jurisdictions.empty", undefined, "No jurisdictions defined")}
             emptyDescription={t(
@@ -124,7 +124,7 @@ export default async function TaxHubPage() {
               "Effective tax rates by jurisdiction and category.",
             )}
           />
-          <DataTable<TaxRate>
+          <DataView<TaxRate>
             rows={rates}
             emptyLabel={t("console.finance.tax.rates.empty", undefined, "No tax rates defined")}
             emptyDescription={t(
@@ -180,7 +180,7 @@ export default async function TaxHubPage() {
               "Backup-withholding and contractor reporting thresholds.",
             )}
           />
-          <DataTable<WithholdingRule>
+          <DataView<WithholdingRule>
             rows={withholding}
             emptyLabel={t("console.finance.tax.withholding.empty", undefined, "No withholding rules defined")}
             emptyDescription={t(

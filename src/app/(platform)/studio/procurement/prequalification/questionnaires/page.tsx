@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -42,7 +42,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           /* No per-row detail route exists yet (only list/new). Rows were
              linking to /questionnaires/[id], which 404s. Keep rows static
@@ -58,7 +58,7 @@ export default async function Page() {
               key: "code",
               header: t("console.procurement.prequalification.questionnaires.columns.code", undefined, "Code"),
               render: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.code,
             },
             {

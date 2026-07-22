@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -67,7 +67,7 @@ export default async function POsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<PurchaseOrder>
+        <DataView<PurchaseOrder>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/procurement/purchase-orders/${r.id}`}
@@ -99,7 +99,8 @@ export default async function POsPage() {
             {
               key: "number",
               header: t("console.procurement.purchaseOrders.col.number", undefined, "Number"),
-              render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+              render: (r) => r.number,
+              mono: true,
               accessor: (r) => r.number ?? null,
             },
             {
@@ -112,7 +113,7 @@ export default async function POsPage() {
               key: "amount",
               header: t("console.procurement.purchaseOrders.col.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents, r.currency),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.amount_cents ?? null,
             },
             {
@@ -127,7 +128,7 @@ export default async function POsPage() {
               key: "created",
               header: t("console.procurement.purchaseOrders.col.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.created_at,
             },
           ]}

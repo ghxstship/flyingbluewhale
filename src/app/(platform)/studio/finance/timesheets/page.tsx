@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -121,7 +121,7 @@ export default async function TimesheetsPage() {
             <CompileControl periods={periods} />
           </section>
         )}
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           totalCount={rows.length}
           rowHref={(r) => `/studio/finance/timesheets/${r.id}`}
@@ -144,21 +144,21 @@ export default async function TimesheetsPage() {
               key: "period",
               header: t("console.finance.timesheets.columns.period", undefined, "Period"),
               render: (r) => `${fmtDate(r.period_start)} – ${fmtDate(r.period_end)}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.period_start,
             },
             {
               key: "hours",
               header: t("console.finance.timesheets.columns.hours", undefined, "Hours"),
               render: (r) => formatMinutes(r.total_minutes),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.total_minutes,
             },
             {
               key: "amount",
               header: t("console.finance.timesheets.columns.amount", undefined, "Amount"),
               render: (r) => money(r.total_amount_minor),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.total_amount_minor,
             },
             {

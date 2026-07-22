@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
@@ -91,7 +91,7 @@ export default async function BudgetsPage({
           ]}
           resultCount={count}
         />
-        <DataTable<Budget>
+        <DataView<Budget>
           rows={rows}
           rowHref={(r) => `/studio/finance/budgets/${r.id}`}
           columns={[
@@ -108,7 +108,7 @@ export default async function BudgetsPage({
               key: "department",
               header: t("console.finance.budgets.col.department", undefined, "Department"),
               render: (r) => (r as unknown as { department?: string | null }).department ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => (r as unknown as { department?: string | null }).department ?? null,
               filterable: true,
               groupable: true,
@@ -124,7 +124,7 @@ export default async function BudgetsPage({
                 const v = (r as unknown as { actual_cents?: number | null }).actual_cents ?? r.spent_cents;
                 return formatMoney(v);
               },
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) =>
                 Number((r as unknown as { actual_cents?: number | null }).actual_cents ?? r.spent_cents ?? 0),
             },
@@ -132,7 +132,7 @@ export default async function BudgetsPage({
               key: "amount",
               header: t("console.finance.budgets.col.budget", undefined, "Budget"),
               render: (r) => formatMoney(r.amount_cents),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.amount_cents ?? 0),
             },
             {

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
         }
       />
       <div className="page-content">
-        <DataTable<ResponseRow>
+        <DataView<ResponseRow>
           rows={all as unknown as ResponseRow[]}
           emptyLabel={t("console.procurement.requisitions.leveling.emptyLabel", undefined, "No Bid Responses")}
           emptyDescription={t(
@@ -106,10 +106,8 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
               header: t("console.procurement.requisitions.leveling.columns.total", undefined, "Total"),
               render: (r) => (r.total_cents != null ? formatMoney(Number(r.total_cents)) : "—"),
               accessor: (r) => (r.total_cents != null ? Number(r.total_cents) : 0),
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
             {
               key: "delta",
@@ -123,10 +121,8 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
                 const total = r.total_cents == null ? null : Number(r.total_cents);
                 return total != null && lowest != null ? total - lowest : 0;
               },
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
             {
               key: "submitted_at",

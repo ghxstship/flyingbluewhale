@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -84,7 +84,7 @@ export default async function Page() {
             value={fmtIntl.number(rows.length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/procurement/wo-broadcasts/${r.id}`}
           emptyLabel={t("console.procurement.woBroadcasts.emptyLabel", undefined, "No broadcasts yet")}
@@ -103,7 +103,7 @@ export default async function Page() {
               key: "code",
               header: t("console.procurement.woBroadcasts.columns.code", undefined, "Code"),
               render: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.code,
             },
             {
@@ -122,14 +122,14 @@ export default async function Page() {
               key: "budget",
               header: t("console.procurement.woBroadcasts.columns.budget", undefined, "Budget"),
               render: (r) => (r.budget_cents ? formatMoney(r.budget_cents) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.budget_cents ?? 0),
             },
             {
               key: "needed",
               header: t("console.procurement.woBroadcasts.columns.neededBy", undefined, "Needed By"),
               render: (r) => fmt(r.needed_by),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.needed_by ?? null,
             },
             {

@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -98,7 +98,7 @@ export default async function Page() {
             value={t("console.autoInvoicing.metric.termsValue", undefined, "Deposit / Balance")}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/proposals/${r.id}`}
           emptyLabel={t("console.autoInvoicing.emptyLabel", undefined, "No signed proposals to bill")}
@@ -141,7 +141,7 @@ export default async function Page() {
                 const d = depositCents(r);
                 return d != null ? `${fmt.money(d)} · ${r.deposit_percent ?? 50}%` : "—";
               },
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => depositCents(r),
             },
             {
@@ -151,14 +151,14 @@ export default async function Page() {
                 const b = balanceCents(r);
                 return b != null ? fmt.money(b) : "—";
               },
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => balanceCents(r),
             },
             {
               key: "signed",
               header: t("console.autoInvoicing.column.signed", undefined, "Signed"),
               render: (r) => (r.signed_at ? fmt.dateParts(r.signed_at, { month: "short", day: "numeric" }) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.signed_at,
             },
           ]}

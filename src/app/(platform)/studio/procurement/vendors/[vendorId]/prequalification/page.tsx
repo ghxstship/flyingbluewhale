@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge, type BadgeVariant } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
         )}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/procurement/vendors/${vendorId}/prequalification/${r.id}`}
           emptyLabel={t("console.procurement.vendors.prequalification.emptyLabel", undefined, "No Prequalifications")}
@@ -111,10 +111,8 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
               header: t("console.procurement.vendors.prequalification.columns.score", undefined, "Score"),
               render: (r) => (r.score != null ? r.score : "—"),
               accessor: (r) => r.score ?? 0,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
           ]}
         />

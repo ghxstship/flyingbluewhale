@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import Link from "next/link";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -122,7 +122,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
           />
         </div>
 
-        <DataTable<ResponseRow>
+        <DataView<ResponseRow>
           rows={responses}
           emptyLabel={t("console.procurement.rfqs.responses.emptyLabel", undefined, "No Responses Yet")}
           emptyDescription={t(
@@ -157,7 +157,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
               mono: true,
               tabular: true,
               total: "min",
-              totalFormat: (n) => (n > 0 ? formatMoney(n) : "—"),
+              totalFormat: { style: "money", dashWhenNotPositive: true },
             },
             {
               key: "submitted",

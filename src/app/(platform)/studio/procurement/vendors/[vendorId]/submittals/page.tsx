@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -43,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
         )}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/submittals/${r.id}`}
           emptyLabel={t("console.procurement.vendors.submittals.emptyLabel", undefined, "No Submittals")}

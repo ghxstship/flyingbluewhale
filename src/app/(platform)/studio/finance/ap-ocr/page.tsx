@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -110,7 +110,7 @@ export default async function Page() {
           </p>
           <UploadInvoiceClient />
         </section>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/finance/ap-ocr/${r.id}`}
           emptyLabel={t("console.finance.apOcr.empty.label", undefined, "No extractions yet")}
@@ -139,7 +139,7 @@ export default async function Page() {
               header: t("console.finance.apOcr.column.invoice", undefined, "Invoice #"),
               render: (r) => r.invoice_number ?? "—",
               accessor: (r) => r.invoice_number,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "date",
@@ -149,21 +149,21 @@ export default async function Page() {
                   ? fmt.dateParts(r.invoice_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" })
                   : "—",
               accessor: (r) => r.invoice_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "amount",
               header: t("console.finance.apOcr.column.amount", undefined, "Amount"),
               render: (r) => (r.total_amount_cents != null ? fmt.money(Number(r.total_amount_cents)) : "—"),
               accessor: (r) => Number(r.total_amount_cents ?? 0),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "confidence",
               header: t("console.finance.apOcr.column.confidence", undefined, "Conf"),
               render: (r) => (r.confidence != null ? `${(Number(r.confidence) * 100).toFixed(0)}%` : "—"),
               accessor: (r) => Number(r.confidence ?? 0),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",

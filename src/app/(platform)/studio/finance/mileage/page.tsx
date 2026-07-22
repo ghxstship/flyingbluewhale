@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -60,7 +60,7 @@ export default async function MileagePage() {
         }
       />
       <div className="page-content">
-        <DataTable<MileageLog>
+        <DataView<MileageLog>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/finance/mileage/${r.id}`}
@@ -92,21 +92,21 @@ export default async function MileagePage() {
               key: "miles",
               header: t("console.finance.mileage.columns.miles", undefined, "Miles"),
               render: (r) => Number(r.miles).toFixed(1),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.miles ?? null,
             },
             {
               key: "reimbursement",
               header: t("console.finance.mileage.columns.reimbursement", undefined, "Reimbursement"),
               render: (r) => formatMoney(Math.round(Number(r.miles) * Number(r.rate_cents))),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Math.round(Number(r.miles ?? 0) * Number(r.rate_cents ?? 0)),
             },
             {
               key: "date",
               header: t("console.finance.mileage.columns.date", undefined, "Date"),
               render: (r) => r.logged_on,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.logged_on,
             },
           ]}

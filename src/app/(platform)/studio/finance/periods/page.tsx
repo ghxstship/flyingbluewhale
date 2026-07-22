@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -47,7 +47,7 @@ export default async function FinancePeriodsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<AccountingPeriod>
+        <DataView<AccountingPeriod>
           rows={rows}
           rowHref={(r) => `/studio/finance/periods/${r.id}`}
           columns={[
@@ -61,7 +61,7 @@ export default async function FinancePeriodsPage() {
               key: "range",
               header: t("console.finance.periods.cols.range", undefined, "Range"),
               render: (r) => `${r.starts_on} → ${r.ends_on}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_on,
             },
             {

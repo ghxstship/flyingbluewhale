@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -41,7 +41,7 @@ export default async function VendorsPage({
     fetchLookupLabelMap("ref_vendor_category"),
   ]);
   // Newest-first (the listOrgScoped default): a name-asc sort + the 100-row cap
-  // buries a just-created vendor past the loaded set. The DataTable is still
+  // buries a just-created vendor past the loaded set. The DataView is still
   // client-sortable by name, so alphabetical browsing is one click away.
   // Exact count alongside the capped window (F-01) — `vendors` is in
   // SOFT_DELETABLE_TABLES, so both the rows and the count exclude archived.
@@ -76,7 +76,7 @@ export default async function VendorsPage({
           ]}
           resultCount={totalCount}
         />
-        <DataTable<Vendor>
+        <DataView<Vendor>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/procurement/vendors/${r.id}`}
@@ -120,7 +120,6 @@ export default async function VendorsPage({
               key: "email",
               header: t("console.procurement.vendors.columns.email", undefined, "Email"),
               render: (r) => r.contact_email ?? "—",
-              className: "font-mono text-xs",
               accessor: (r) => r.contact_email ?? null,
             },
             {
@@ -138,7 +137,7 @@ export default async function VendorsPage({
               key: "coi",
               header: t("console.procurement.vendors.columns.coiExpires", undefined, "COI expires"),
               render: (r) => formatDate(r.coi_expires_at, "medium"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.coi_expires_at,
             },
           ]}

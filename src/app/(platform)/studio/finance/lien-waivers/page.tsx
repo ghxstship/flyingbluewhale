@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -122,7 +122,7 @@ export default async function Page() {
             value={fmt.number(releasedCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/finance/lien-waivers/${r.id}`}
           emptyLabel={t("console.finance.lienWaivers.empty.label", undefined, "No lien waivers yet")}
@@ -170,7 +170,7 @@ export default async function Page() {
               header: t("console.finance.lienWaivers.column.amount", undefined, "Amount"),
               render: (r) => fmt.money(Math.round(Number(r.amount) * 100)),
               accessor: (r) => Number(r.amount),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "through",
@@ -178,7 +178,7 @@ export default async function Page() {
               render: (r) =>
                 r.through_date ? fmt.dateParts(r.through_date + "T00:00:00", { month: "short", day: "numeric" }) : "—",
               accessor: (r) => r.through_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

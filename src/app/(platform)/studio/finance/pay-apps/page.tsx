@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -94,7 +94,7 @@ export default async function Page() {
             value={formatMoney(totalCompleted)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/finance/pay-apps/${r.id}`}
           emptyLabel={t("console.finance.payApps.emptyLabel", undefined, "No pay apps yet")}
@@ -113,14 +113,14 @@ export default async function Page() {
               key: "num",
               header: t("console.finance.payApps.columns.application", undefined, "Application"),
               render: (r) => `#${r.application_number}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.application_number ?? null,
             },
             {
               key: "po",
               header: t("console.finance.payApps.columns.po", undefined, "PO"),
               render: (r) => r.purchase_order?.number ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.purchase_order?.number ?? null,
             },
             {
@@ -135,21 +135,21 @@ export default async function Page() {
               key: "period",
               header: t("console.finance.payApps.columns.period", undefined, "Period"),
               render: (r) => `${fmtDate(r.period_start)} — ${fmtDate(r.period_end)}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.period_start ?? null,
             },
             {
               key: "completed",
               header: t("console.finance.payApps.columns.completed", undefined, "Completed"),
               render: (r) => formatMoney(r.total_completed_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.total_completed_cents ?? 0),
             },
             {
               key: "due",
               header: t("console.finance.payApps.columns.due", undefined, "Due"),
               render: (r) => formatMoney(r.total_due_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.total_due_cents ?? 0),
             },
             {

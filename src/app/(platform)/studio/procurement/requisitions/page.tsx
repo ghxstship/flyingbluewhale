@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
@@ -46,7 +46,7 @@ export default async function RequisitionsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Requisition>
+        <DataView<Requisition>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/procurement/requisitions/${r.id}`}
@@ -85,7 +85,7 @@ export default async function RequisitionsPage() {
               key: "estimated",
               header: t("console.procurement.requisitions.col.estimated", undefined, "Estimated"),
               render: (r) => formatMoney(r.estimated_cents),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.estimated_cents ?? 0),
             },
             {
@@ -100,7 +100,7 @@ export default async function RequisitionsPage() {
               key: "created",
               header: t("console.procurement.requisitions.col.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.created_at,
             },
           ]}

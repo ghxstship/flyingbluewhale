@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -154,7 +154,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             value={fmtMoney(underBilled)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.finance.wip.emptyLabel", undefined, "No WIP snapshots yet")}
           emptyDescription={t(
@@ -182,35 +182,35 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
               render: (r) =>
                 fmt.dateParts(r.snapshot_date + "T00:00:00", { year: "numeric", month: "short", day: "numeric" }),
               accessor: (r) => r.snapshot_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "contract",
               header: t("console.finance.wip.col.contract", undefined, "Contract (Incl. CO)"),
               render: (r) => fmtMoney(Number(r.revised_contract_amount)),
               accessor: (r) => Number(r.revised_contract_amount),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "pct",
               header: t("console.finance.wip.col.pctComp", undefined, "% Comp"),
               render: (r) => `${Number(r.percent_complete).toFixed(1)}%`,
               accessor: (r) => Number(r.percent_complete),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "earned",
               header: t("console.finance.wip.col.earned", undefined, "Earned"),
               render: (r) => fmtMoney(Number(r.earned_revenue)),
               accessor: (r) => Number(r.earned_revenue),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "billed",
               header: t("console.finance.wip.col.billed", undefined, "Billed"),
               render: (r) => fmtMoney(Number(r.billed_to_date)),
               accessor: (r) => Number(r.billed_to_date),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "ou",
@@ -228,7 +228,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
                 );
               },
               accessor: (r) => Number(r.over_under_billed),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
           ]}
         />

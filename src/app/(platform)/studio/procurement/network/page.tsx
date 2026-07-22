@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable, type Column } from "@/components/DataTable";
+import { DataView, type DataViewColumn } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -48,7 +48,7 @@ export default async function NetworkPage() {
   const eligible = withTrades.filter((r) => r.worst === "eligible").length;
   const blocked = withTrades.filter((r) => r.worst === "blocked").length;
 
-  const columns: Column<NetRow>[] = [
+  const columns: DataViewColumn<NetRow>[] = [
     { key: "name", header: t("console.procurement.network.col.sub", undefined, "Subcontractor"), render: (r) => r.name },
     {
       key: "trades",
@@ -89,7 +89,7 @@ export default async function NetworkPage() {
         <MetricCard label={t("console.procurement.network.eligible", undefined, "Eligible")} value={String(eligible)} />
         <MetricCard label={t("console.procurement.network.blocked", undefined, "Blocked")} value={String(blocked)} />
       </div>
-      <DataTable
+      <DataView
         rows={rows}
         columns={columns}
         rowHref={(r) => `/studio/procurement/vendors/${r.id}`}

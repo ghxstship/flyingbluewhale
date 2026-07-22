@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.finance.invoices.lineItems.emptyLabel", undefined, "No Line Items")}
           emptyDescription={t(
@@ -77,30 +77,24 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
               header: t("console.finance.invoices.lineItems.columns.qty", undefined, "Qty"),
               render: (r) => r.quantity,
               accessor: (r) => r.quantity,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
             {
               key: "unit_price_cents",
               header: t("console.finance.invoices.lineItems.columns.unitPrice", undefined, "Unit Price"),
               render: (r) => (r.unit_price_cents != null ? formatMoney(r.unit_price_cents) : "—"),
               accessor: (r) => r.unit_price_cents ?? 0,
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
             {
               key: "amount",
               header: t("console.finance.invoices.lineItems.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(lineAmount(r)),
               accessor: (r) => lineAmount(r),
-              tabular: true,
+              numeric: true,
               sortable: true,
-              className: "text-right",
-              headerClassName: "text-right",
             },
           ]}
         />

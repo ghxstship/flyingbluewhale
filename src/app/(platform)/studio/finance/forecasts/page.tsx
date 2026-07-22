@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -128,7 +128,7 @@ export default async function Page() {
             value={fmt.number(overrunCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/finance/forecasts/${r.id}`}
           emptyLabel={t("console.finance.forecasts.empty.label", undefined, "No cost forecasts yet")}
@@ -170,14 +170,14 @@ export default async function Page() {
               header: t("console.finance.forecasts.column.lines", undefined, "Lines"),
               render: (r) => fmt.number(r.line_count),
               accessor: (r) => r.line_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "eac",
               header: t("console.finance.forecasts.column.eac", undefined, "EAC"),
               render: (r) => fmtMoney(r.total_eac),
               accessor: (r) => r.total_eac,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "variance",
@@ -193,7 +193,7 @@ export default async function Page() {
                 );
               },
               accessor: (r) => r.total_variance,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
           ]}
         />

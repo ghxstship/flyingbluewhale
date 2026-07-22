@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -104,7 +104,7 @@ export default async function Page() {
             value={fmt.number(rows.filter((r) => r.parent_entity_id).length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/finance/entities/${r.id}`}
           emptyLabel={t("console.finance.entities.emptyLabel", undefined, "No legal entities yet")}
@@ -127,12 +127,14 @@ export default async function Page() {
             {
               key: "short_code",
               header: t("console.finance.entities.colCode", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{r.short_code}</span>,
+              render: (r) => r.short_code,
+              mono: true,
             },
             {
               key: "base_currency",
               header: t("console.finance.entities.colBaseCcy", undefined, "Base CCY"),
-              render: (r) => <span className="font-mono text-xs">{r.base_currency}</span>,
+              render: (r) => r.base_currency,
+              mono: true,
             },
             {
               key: "jurisdiction",

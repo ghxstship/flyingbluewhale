@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -97,7 +97,7 @@ export default async function Page() {
             value={fmtIntl.number(expiringSoon)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/procurement/prequalification/${r.id}`}
           emptyLabel={t("console.procurement.prequalification.empty.label", undefined, "No prequalifications yet")}
@@ -130,14 +130,14 @@ export default async function Page() {
               key: "score",
               header: t("console.procurement.prequalification.col.score", undefined, "Score"),
               render: (r) => (r.score != null ? Number(r.score).toFixed(1) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.score ?? null,
             },
             {
               key: "exp",
               header: t("console.procurement.prequalification.col.expires", undefined, "Expires"),
               render: (r) => fmt(r.expires_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.expires_at ?? null,
             },
             {

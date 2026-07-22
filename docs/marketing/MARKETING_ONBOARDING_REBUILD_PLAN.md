@@ -68,6 +68,29 @@ the story becomes *one org hub (LEG3ND) + the field app you can use today
 
 ---
 
+## 2a · App ownership of the XPMS department classes (owner canon, 2026-07-22)
+
+How the ecosystem splits workflows across the apps, by XPMS class:
+
+| App | Department classes |
+|---|---|
+| **LEG3ND** | 0000 Executive (the org level itself) |
+| **ATLVS** | 1000 Creative · 2000 Talent · 3000 Marketing |
+| **COMPVSS** | 4000 Build · 5000 Production · 6000 Operations |
+| **GVTEWAY** | 7000 · 8000 (Hospitality/Experience) · 9000 Technology |
+
+**7000/8000 note (owner-stated):** the current deployed canon (SSOT Bible +
+live cost centers) reads 7000 Experience / 8000 Hospitality; the numbering
+flip (Hospitality to 7000, Experience to 8000) arrives in the NEXT XPMS
+version. **Leave the deployed data as is** until that version lands; both
+classes are GVTEWAY-owned either way, so app ownership is unaffected. Do not
+"fix" the ordering prematurely.
+
+Implications: LEG3ND owning 0000 confirms the Organization-Hub framing (the
+executive/org tier IS the hub); the P4 dim_department reconciliation should
+carry an `app` ownership annotation alongside the Bible labels; marketing
+copy may tell the split story (each app owns its classes' workflows).
+
 ## 3 · New marketing IA (route map)
 
 Kept routes are marked (keep); everything else is new or rebuilt content on an

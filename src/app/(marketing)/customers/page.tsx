@@ -93,14 +93,12 @@ export default async function CustomersHub() {
               </div>
               <h3 className="mt-2 text-base font-semibold">{s.displayName}</h3>
               <p className="mt-2 text-sm text-[var(--p-text-2)]">{s.teaser}</p>
-              <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-[var(--p-border)] pt-4">
-                {s.metrics.map((m) => (
-                  <div key={m.label}>
-                    <dt className="text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">{m.label}</dt>
-                    <dd className="mt-1 font-mono text-base font-semibold">{m.value}</dd>
-                  </div>
-                ))}
-              </dl>
+              {/* Metric chips render only on PUBLISHED stories: in-progress
+                  metrics are placeholders per the data contract, and unverified
+                  numbers never ship on a public surface. */}
+              <p className="mt-4 border-t border-[var(--p-border)] pt-4 text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
+                {t("marketing.pages.customers.landingSoon.metricsOnPublish", undefined, "Verified numbers publish with the story")}
+              </p>
             </article>
           ))}
         </div>

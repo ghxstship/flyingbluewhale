@@ -37,7 +37,7 @@ export function FindingsTable({ runId, findings }: { runId: string; findings: Fi
 
   return (
     <div className="surface overflow-hidden">
-      <table className="data-table w-full">
+      <table className="ps-table w-full">
         <thead>
           <tr>
             <th>Rule</th>

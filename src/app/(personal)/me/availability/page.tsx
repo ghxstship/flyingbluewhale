@@ -114,7 +114,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
     `${kindLabel(t, s.kind)}${s.label ? ` · ${s.label}` : ""} · ${fmt.dateTime(s.starts_at)}`;
 
   const slotRow = (s: Slot) => (
-    <li key={s.id} className="card-elevated flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
+    <li key={s.id} className="surface-raised flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
       <div className="flex min-w-0 flex-wrap items-center gap-3">
         <Badge variant={kindTone(s.kind)}>{kindLabel(t, s.kind)}</Badge>
         <span className="font-mono text-xs">
@@ -132,11 +132,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="eyebrow">
           {t("me.availability.eyebrow", undefined, "Availability")}
         </div>
-        <h1 className="text-display mt-1 text-3xl">{t("me.availability.title", undefined, "Booking Calendar")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <h1 className="mt-1">{t("me.availability.title", undefined, "Booking Calendar")}</h1>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t(
             "me.availability.plainSubtitle",
             undefined,
@@ -145,7 +145,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
         </p>
       </header>
 
-      <section className="card-elevated p-4" aria-label={monthTitle}>
+      <section className="surface-raised p-4" aria-label={monthTitle}>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold">{monthTitle}</h2>
           <div className="flex items-center gap-1">
@@ -225,8 +225,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
         </div>
       </section>
 
-      <section className="card-elevated p-4">
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+      <section className="surface-raised p-4">
+        <h2 className="eyebrow mb-3">
           {t("me.availability.addSlot", undefined, "Add slot")}
         </h2>
         <FormShell action={addAvailabilityAction} submitLabel={t("common.add", undefined, "Add")}>
@@ -267,11 +267,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+        <h2 className="eyebrow mb-3">
           {t("me.availability.upcoming", undefined, "Upcoming")}
         </h2>
         {upcoming.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+          <div className="surface-raised p-6 text-sm text-[var(--p-text-2)]">
             {t("me.availability.emptyUpcoming", undefined, "Nothing coming up. Add a slot above to mark your calendar.")}
           </div>
         ) : (
@@ -281,7 +281,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
 
       {past.length > 0 && (
         <section>
-          <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          <h2 className="eyebrow mb-3">
             {t("me.availability.past", undefined, "Past")}
           </h2>
           <ul className="space-y-2 opacity-70">{past.map(slotRow)}</ul>

@@ -69,11 +69,11 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">
+      <div className="eyebrow">
         {t("me.offers.eyebrow", undefined, "My offers")}
       </div>
-      <h1 className="text-display mt-1 text-3xl">{t("me.offers.title", undefined, "Booking Offers")}</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+      <h1 className="mt-1">{t("me.offers.title", undefined, "Booking Offers")}</h1>
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.offers.subtitle",
           undefined,
@@ -106,15 +106,15 @@ export default async function Page() {
               "long",
             );
             return (
-              <li key={o.id} className="card-elevated flex items-center justify-between gap-3 p-4">
+              <li key={o.id} className="surface-raised flex items-center justify-between gap-3 p-4">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-semibold">
                     {t("me.offers.cardTitle", { actName, dateLabel }, `${actName} · ${dateLabel}`)}
                   </p>
-                  <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+                  <p className="mt-1 text-xs text-[var(--p-text-2)]">
                     {t("me.offers.fromBuyer", { buyerName }, `From ${buyerName}`)}
                   </p>
-                  <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+                  <p className="mt-1 text-xs text-[var(--p-text-2)]">
                     {t(
                       "me.offers.feeDepositTerms",
                       { fee: feeLabel, pct: o.deposit_pct, balance: balanceLabel(o.balance_terms) },

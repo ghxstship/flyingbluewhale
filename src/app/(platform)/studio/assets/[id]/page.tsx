@@ -316,7 +316,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           ) : (
             <div className="surface overflow-x-auto">
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th className="text-start">{t("console.assets.detail.dep.method", undefined, "Method")}</th>
@@ -398,7 +398,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           ) : (
             <div className="surface overflow-x-auto">
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th className="text-start">{t("console.assets.detail.maint.date", undefined, "Performed")}</th>

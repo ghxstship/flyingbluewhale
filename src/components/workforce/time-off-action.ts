@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
+import { urlFor } from "@/lib/urls";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 
 /**
@@ -108,7 +109,9 @@ export async function requestTimeOff(_prev: State, fd: FormData): Promise<State>
     await sendPushBulk(managers, {
       title: "Time Off Request",
       body: `${v.from} – ${v.to}`,
-      url: "/studio/workforce/time-off",
+      // Absolute via urlFor: pushes open on the compvss service-worker
+      // origin, where a relative /studio/... path lands on the wrong host.
+      url: urlFor("platform", "/workforce/time-off"),
       kind: "time_off",
       scope: "all",
       orgId: session.orgId,

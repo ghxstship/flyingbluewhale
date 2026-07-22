@@ -44,7 +44,7 @@ export function LetterDocument({
 
   return (
     <article className="surface mx-auto max-w-3xl space-y-8 p-10 print:p-0 print:shadow-none">
-      <header className="flex items-start justify-between border-b border-[var(--border-default)] pb-6">
+      <header className="flex items-start justify-between border-b border-[var(--p-border)] pb-6">
         <div>
           <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
             {EMPLOYER_LABEL[letter.employer]}
@@ -127,7 +127,7 @@ export function LetterDocument({
           <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
             {t("legal.letterDocument.engagementWindow", undefined, "Engagement Window")}
           </div>
-          <div className="overflow-hidden rounded border border-[var(--border-default)]">
+          <div className="overflow-hidden rounded border border-[var(--p-border)]">
             <table className="w-full text-xs">
               <tbody>
                 <EngagementRow
@@ -243,7 +243,7 @@ export function LetterDocument({
               "Project production schedule milestones. Dates and activities are subject to revision based on production circumstances; we'll let you know about material changes through standard production channels.",
             )}
           </p>
-          <div className="overflow-hidden rounded border border-[var(--border-default)]">
+          <div className="overflow-hidden rounded border border-[var(--p-border)]">
             <table className="w-full text-xs">
               <thead className="bg-[var(--p-surface-2)] text-[var(--p-text-2)]">
                 <tr>
@@ -263,7 +263,7 @@ export function LetterDocument({
               </thead>
               <tbody>
                 {letter.schedule_items.map((d, i) => (
-                  <tr key={i} className="border-t border-[var(--border-default)] align-top">
+                  <tr key={i} className="border-t border-[var(--p-border)] align-top">
                     <td className="px-3 py-2">
                       <div className="font-medium">{d.day_label}</div>
                       <div className="font-mono text-[11px] text-[var(--p-text-2)]" style={{ fontFamily: "var(--p-mono-data)" }}>{d.date}</div>
@@ -334,7 +334,7 @@ export function LetterDocument({
               <li key={item.key} className="flex items-baseline gap-3">
                 <span
                   aria-hidden
-                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-default)] text-[11px]"
+                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--p-border)] text-[11px]"
                 >
                   {item.order}
                 </span>
@@ -372,7 +372,7 @@ export function LetterDocument({
             <li className="flex items-baseline gap-3">
               <span
                 aria-hidden
-                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-default)] text-[11px]"
+                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--p-border)] text-[11px]"
               >
                 ★
               </span>
@@ -394,7 +394,7 @@ export function LetterDocument({
         </ol>
       </section>
 
-      <section className="border-t border-[var(--border-default)] pt-6">
+      <section className="border-t border-[var(--p-border)] pt-6">
         {letter.status === "accepted" && letter.accepted_signature ? (
           <div className="space-y-2">
             <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">
@@ -448,7 +448,7 @@ export function LetterDocument({
         </div>
       </section>
 
-      <footer className="space-y-3 border-t border-[var(--border-default)] pt-6 text-xs text-[var(--p-text-2)]">
+      <footer className="space-y-3 border-t border-[var(--p-border)] pt-6 text-xs text-[var(--p-text-2)]">
         {msaOnFile && activeMsa ? (
           <p>
             {t(
@@ -536,7 +536,7 @@ function DefinitionList({ rows }: { rows: Array<[string, string]> }) {
 function EngagementRow({ label, date, bold = false }: { label: string; date: string | null; bold?: boolean }) {
   const display = date ? formatDate(date, "long") : "—";
   return (
-    <tr className="border-t border-[var(--border-default)] first:border-t-0">
+    <tr className="border-t border-[var(--p-border)] first:border-t-0">
       <td className="w-44 px-3 py-2 text-xs tracking-wider text-[var(--p-text-2)] uppercase">{label}</td>
       <td className={`px-3 py-2 text-sm ${bold ? "font-medium" : ""}`}>{display}</td>
     </tr>

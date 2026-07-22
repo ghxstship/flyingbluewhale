@@ -47,13 +47,13 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="eyebrow">
           {t("me.crew.eyebrow", undefined, "My crew profile")}
         </div>
-        <h1 className="text-display mt-1 text-3xl">{t("me.crew.title", undefined, "Crew Profile")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <h1 className="mt-1">{t("me.crew.title", undefined, "Crew Profile")}</h1>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.crew.discoveredVia", undefined, "Public when toggled. Discovered via")}{" "}
-          <Link className="text-[var(--brand-color)]" href="/marketplace/crew">
+          <Link className="text-[var(--p-accent-text)]" href="/marketplace/crew">
             /marketplace/crew
           </Link>
           .
@@ -61,7 +61,7 @@ export default async function Page() {
             <>
               {" "}
               {t("me.crew.liveAt", undefined, "Live at")}{" "}
-              <Link className="font-mono text-[var(--brand-color)]" href={`/marketplace/crew/${c.public_handle}`}>
+              <Link className="font-mono text-[var(--p-accent-text)]" href={`/marketplace/crew/${c.public_handle}`}>
                 /marketplace/crew/{c.public_handle}
               </Link>
             </>
@@ -70,9 +70,9 @@ export default async function Page() {
       </header>
 
       {c?.is_public_profile && (
-        <div className="card-elevated p-3">
+        <div className="surface-raised p-3">
           <Badge variant="success">{t("me.crew.badge.live", undefined, "live")}</Badge>
-          <span className="ms-3 text-sm text-[var(--color-text-secondary)]">
+          <span className="ms-3 text-sm text-[var(--p-text-2)]">
             {t("me.crew.profilePublished", undefined, "Profile published.")}
           </span>
         </div>

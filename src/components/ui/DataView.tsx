@@ -72,7 +72,7 @@ export function DataView<T>({
 
       {view === "table" ? (
         <div className="surface overflow-x-auto">
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 {columns.map((c) => (

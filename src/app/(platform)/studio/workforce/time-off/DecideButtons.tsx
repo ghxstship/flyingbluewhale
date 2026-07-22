@@ -49,12 +49,12 @@ export function DecideTimeOffButtons({
           className="ps-input ps-input--sm w-40"
           autoFocus
         />
-        <button type="submit" className="ps-btn btn-xs" disabled={pending}>
+        <button type="submit" className="ps-btn ps-btn--sm" disabled={pending}>
           {confirmDenyLabel ?? denyLabel}
         </button>
         <button
           type="button"
-          className="ps-btn ps-btn--ghost btn-xs"
+          className="ps-btn ps-btn--ghost ps-btn--sm"
           onClick={() => setDenying(false)}
           disabled={pending}
         >
@@ -69,11 +69,11 @@ export function DecideTimeOffButtons({
       <form action={formAction}>
         <input type="hidden" name="id" value={requestId} />
         <input type="hidden" name="decision" value="approved" />
-        <button type="submit" className="ps-btn btn-xs" disabled={pending}>
+        <button type="submit" className="ps-btn ps-btn--sm" disabled={pending}>
           {approveLabel}
         </button>
       </form>
-      <button type="button" className="ps-btn ps-btn--ghost btn-xs" onClick={() => setDenying(true)} disabled={pending}>
+      <button type="button" className="ps-btn ps-btn--ghost ps-btn--sm" onClick={() => setDenying(true)} disabled={pending}>
         {denyLabel}
       </button>
     </div>

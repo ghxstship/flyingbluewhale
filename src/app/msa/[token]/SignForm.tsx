@@ -96,7 +96,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       </div>
 
       {showChapter624 && (
-        <div className="space-y-3 rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4">
+        <div className="space-y-3 rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
           <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("legal.msaSign.nscbHeading", undefined, "NSCB License — Chapter 624")}
           </h3>
@@ -132,7 +132,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
         </div>
       )}
 
-      <label className="flex items-start gap-3 rounded border border-[var(--border-default)] p-4 text-sm">
+      <label className="flex items-start gap-3 rounded border border-[var(--p-border)] p-4 text-sm">
         <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="mt-1" />
         <span>
           {t(

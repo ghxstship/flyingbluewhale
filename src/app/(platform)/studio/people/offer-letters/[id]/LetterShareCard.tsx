@@ -58,7 +58,7 @@ export function LetterShareCard({
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-        <div className="rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] px-3 py-2 font-mono text-xs break-all">
+        <div className="rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 font-mono text-xs break-all">
           {publicUrl}
         </div>
         <Button variant="secondary" size="sm" onClick={() => copy("url")}>
@@ -69,7 +69,7 @@ export function LetterShareCard({
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-        <div className="rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] px-3 py-2 text-center font-mono text-2xl tracking-[0.4em]">
+        <div className="rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 text-center font-mono text-2xl tracking-[0.4em]">
           {accessCode}
         </div>
         <div className="flex gap-2">

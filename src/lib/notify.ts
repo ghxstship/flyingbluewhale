@@ -4,6 +4,7 @@ import { ADMIN_BAND_ROLES } from "./auth";
 import { log } from "./log";
 import { bulkShouldNotify, shouldNotify } from "./notify-resolver";
 import { sendPushTo, type PushKind } from "./push/send";
+import { resolveNotificationHref } from "./urls";
 import { sendNotificationEmailToUsers } from "./email";
 import { emitDomainEvent } from "./automations/dispatch";
 import type { WebhookEvent } from "./webhooks/events";
@@ -115,7 +116,10 @@ export async function notify(args: {
         {
           title: args.title,
           body: args.body ?? "",
-          url: args.href ?? undefined,
+          // Stored hrefs are internal route-group paths (/studio/..., /m/...).
+          // The push opens on the compvss service-worker origin, so resolve to
+          // the owning shell's absolute URL — same rule as the email channel.
+          url: args.href ? resolveNotificationHref(args.href) : undefined,
           tag: args.eventType,
           kind: pushKind,
           data: { event: args.eventType, ...(args.data ?? {}) },
@@ -130,7 +134,6 @@ export async function notify(args: {
     }
 
     if (args.userId) {
-
       // F-03 — email channel. The /me/notifications matrix has always
       // offered an Email column (default ON); this closes the loop.
       // Fire-and-forget, gated per (event, email) on the same matrix.
@@ -272,7 +275,8 @@ export async function notifyOrgAdmins(args: {
         {
           title: args.title,
           body: args.body ?? "",
-          url: args.href ?? undefined,
+          // Same cross-shell resolution as the single-user path above.
+          url: args.href ? resolveNotificationHref(args.href) : undefined,
           tag: args.eventType,
           kind: adminPushKind,
           data: { event: args.eventType, ...(args.data ?? {}) },

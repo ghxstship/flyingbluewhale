@@ -69,7 +69,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
 
   return (
     <div className="space-y-6">
-      <header className="flex items-baseline justify-between border-b border-(--border-default) pb-4">
+      <header className="flex items-baseline justify-between border-b border-(--p-border) pb-4">
         <div>
           <div className="text-xs tracking-widest text-(--p-text-2) uppercase">
             {t("legal.offerOnboarding.eyebrow", undefined, "Onboarding")}

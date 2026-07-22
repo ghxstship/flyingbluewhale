@@ -15,9 +15,9 @@ export function BeoLineRow({ line, beoId }: { line: BeoLineItem; beoId: string }
         <div className="font-medium">{line.name}</div>
         {line.description && <div className="text-xs text-[var(--p-text-2)]">{line.description}</div>}
       </td>
-      <td className="text-right tabular-nums">{line.quantity}</td>
-      <td className="text-right tabular-nums">{formatMoney(line.unit_price_cents)}</td>
-      <td className="text-right tabular-nums">{formatMoney(lineTotalCents(line))}</td>
+      <td className="num">{line.quantity}</td>
+      <td className="num">{formatMoney(line.unit_price_cents)}</td>
+      <td className="num">{formatMoney(lineTotalCents(line))}</td>
       <td className="text-right">
         <Button
           variant="ghost"

@@ -24,8 +24,8 @@ export default async function MePage() {
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">{t("me.dashboard.title", undefined, "My Dashboard")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <h1>{t("me.dashboard.title", undefined, "My Dashboard")}</h1>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.dashboard.configureSupabase", undefined, "Configure Supabase to sign in.")}
         </p>
       </div>
@@ -79,7 +79,7 @@ export default async function MePage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-label text-[var(--p-text-3)]">
+          <div className="eyebrow">
             {t("me.dashboard.eyebrow", undefined, "My dashboard")}
           </div>
           <h1 className="mt-1 truncate text-xl font-semibold">{displayName ?? session.email}</h1>
@@ -95,24 +95,24 @@ export default async function MePage() {
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--p-text-3)]">
+        <div className="surface-raised p-4">
+          <div className="eyebrow">
             {t("me.dashboard.role", undefined, "Role")}
           </div>
           <div className="mt-2">
             <Badge variant="info">{toTitle(session.role)}</Badge>
           </div>
         </div>
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--p-text-3)]">
+        <div className="surface-raised p-4">
+          <div className="eyebrow">
             {t("me.dashboard.tier", undefined, "Tier")}
           </div>
           <div className="mt-2">
             <Badge variant="cyan">{toTitle(session.tier)}</Badge>
           </div>
         </div>
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--p-text-3)]">
+        <div className="surface-raised p-4">
+          <div className="eyebrow">
             {t("me.dashboard.organization", undefined, "Organization")}
           </div>
           <div className="text-mono mt-2 text-xs">
@@ -123,12 +123,12 @@ export default async function MePage() {
 
       {isManagerPlus && (
         <div className="mt-8">
-          <Link href={urlFor("platform")} className="card flex items-center justify-between p-6">
+          <Link href={urlFor("platform")} className="surface-raised flex items-center justify-between p-6">
             <div>
-              <div className="text-label text-[var(--brand-color)]">
+              <div className="eyebrow eyebrow-accent">
                 {t("me.dashboard.openConsole", undefined, "Open console →")}
               </div>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">
                 {t("me.dashboard.consoleBlurb", undefined, "Projects, finance, procurement, production, people, AI.")}
               </p>
             </div>
@@ -137,7 +137,7 @@ export default async function MePage() {
         </div>
       )}
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--p-text-3)]">
+      <h2 className="eyebrow mt-10 mb-3">
         {t("me.dashboard.marketplaceHeading", undefined, "Marketplace")}
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -183,7 +183,7 @@ export default async function MePage() {
         />
       </div>
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--p-text-3)]">
+      <h2 className="eyebrow mt-10 mb-3">
         {t("me.dashboard.accountHeading", undefined, "Account")}
       </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -236,15 +236,15 @@ function MeCard({
   badge?: string;
 }) {
   return (
-    <Link href={href} className="card-elevated flex flex-col gap-2 p-4">
+    <Link href={href} className="surface-raised flex flex-col gap-2 p-4">
       <div className="flex items-start justify-between gap-2">
-        <span className="text-sm font-semibold text-[var(--brand-color)]">{label} →</span>
+        <span className="text-sm font-semibold text-[var(--p-accent-text)]">{label} →</span>
         {typeof count === "number" && <Badge variant="muted">{count}</Badge>}
         {badge && (
           <Badge variant={badge === "live" ? "success" : badge === "draft" ? "warning" : "muted"}>{badge}</Badge>
         )}
       </div>
-      <p className="text-xs text-[var(--color-text-secondary)]">{blurb}</p>
+      <p className="text-xs text-[var(--p-text-2)]">{blurb}</p>
     </Link>
   );
 }

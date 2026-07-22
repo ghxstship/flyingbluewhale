@@ -64,7 +64,7 @@ export default async function StakeholderAudit({ params }: { params: Promise<{ s
           </div>
         ) : (
           <div className="surface mt-5 overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th className="px-3 py-2 text-left">{t("p.stakeholder.audit.col.when", undefined, "When")}</th>

@@ -75,8 +75,8 @@ export default async function FinanceAccountsPage() {
             }
           />
         ) : (
-          <div className="data-table surface overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="surface overflow-hidden">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--p-border)] text-left text-xs text-[var(--p-text-2)]">
                   <th className="px-4 py-2.5 font-medium">

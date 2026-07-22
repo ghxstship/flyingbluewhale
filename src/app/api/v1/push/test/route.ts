@@ -4,6 +4,7 @@ import { withAuth } from "@/lib/auth";
 import { sendPushTo } from "@/lib/push/send";
 import { hasVapid } from "@/lib/push/vapid";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
+import { urlFor } from "@/lib/urls";
 
 /**
  * Send a test push to the calling user's registered devices (Phase 2.3).
@@ -28,7 +29,9 @@ export async function POST(req: NextRequest) {
     const result = await sendPushTo(session.userId, {
       title: "Hello from ATLVS",
       body: "Push notifications are working on this device.",
-      url: "/me/notifications/inbox",
+      // Absolute via urlFor: the push opens on the compvss service-worker
+      // origin, where a relative /me/... path would resolve to the wrong host.
+      url: urlFor("personal", "/me/notifications/inbox"),
       tag: "atlvs-test",
       data: { event: "push.test" },
     });

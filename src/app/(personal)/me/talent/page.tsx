@@ -49,17 +49,17 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="eyebrow">
           {t("me.talent.eyebrow", undefined, "My talent profile")}
         </div>
-        <h1 className="text-display mt-1 text-3xl">{t("me.talent.title", undefined, "EPK")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <h1 className="mt-1">{t("me.talent.title", undefined, "EPK")}</h1>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t(
             "me.talent.humanDescription",
             undefined,
             "Your electronic press kit. When published, buyers can find you in the",
           )}{" "}
-          <Link className="text-[var(--brand-color)] underline" href="/marketplace/talent">
+          <Link className="text-[var(--p-accent-text)] underline" href="/marketplace/talent">
             {t("me.talent.marketplaceLink", undefined, "talent marketplace")}
           </Link>
           .
@@ -67,7 +67,7 @@ export default async function Page() {
             <>
               {" "}
               <Link
-                className="font-medium text-[var(--brand-color)] underline"
+                className="font-medium text-[var(--p-accent-text)] underline"
                 href={`/marketplace/talent/${talent.public_handle}`}
               >
                 {t("me.talent.viewPublicPage", undefined, "View your public page")}
@@ -78,9 +78,9 @@ export default async function Page() {
       </header>
 
       {talent?.is_public && (
-        <div className="card-elevated p-3">
+        <div className="surface-raised p-3">
           <Badge variant="success">{t("me.talent.liveBadge", undefined, "live")}</Badge>
-          <span className="ms-3 text-sm text-[var(--color-text-secondary)]">
+          <span className="ms-3 text-sm text-[var(--p-text-2)]">
             {t("me.talent.publishedNotice", undefined, "Your EPK is published.")}
           </span>
         </div>

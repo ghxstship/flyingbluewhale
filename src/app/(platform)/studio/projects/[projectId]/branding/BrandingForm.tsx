@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { brandingToCssVars, type Branding } from "@/lib/branding";
+import { BRAND_FALLBACK, brandingToCssVars, type Branding } from "@/lib/branding";
 import { LogoUploader } from "@/components/branding/LogoUploader";
 import { saveBrandingAction } from "./actions";
 
@@ -18,9 +18,9 @@ export function BrandingForm({
   projectName: string;
 }) {
   const t = useT();
-  const [accent, setAccent] = useState(initial.accentColor ?? "#DC2626");
-  const [accentFg, setAccentFg] = useState(initial.accentForeground ?? "#FFFFFF");
-  const [secondary, setSecondary] = useState(initial.secondaryColor ?? "#6D4A2A");
+  const [accent, setAccent] = useState(initial.accentColor ?? BRAND_FALLBACK.accent);
+  const [accentFg, setAccentFg] = useState(initial.accentForeground ?? BRAND_FALLBACK.accentFg);
+  const [secondary, setSecondary] = useState(initial.secondaryColor ?? BRAND_FALLBACK.secondary);
   const [logo, setLogo] = useState(initial.logoUrl ?? "");
   const [favicon, setFavicon] = useState(initial.faviconUrl ?? "");
   const [hero, setHero] = useState(initial.heroImageUrl ?? "");
@@ -48,9 +48,9 @@ export function BrandingForm({
           hint={t(
             "console.projects.branding.accentColor.hint",
             undefined,
-            "Hex like #DC2626. Overrides --p-accent in portals.",
+            "Hex like #E23414. Overrides --p-accent in portals.",
           )}
-          placeholder="#DC2626"
+          placeholder="#E23414"
         />
         <Input
           label={t("console.projects.branding.accentForeground.label", undefined, "Accent Foreground")}

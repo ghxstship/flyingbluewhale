@@ -279,7 +279,7 @@ export function LetterEditor({
                   defaultValue={raw.override_per_diem_cents != null ? raw.override_per_diem_cents / 100 : ""}
                 />
               </FormField>
-              <div className="self-end rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] px-3 py-2 text-xs">
+              <div className="self-end rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 text-xs">
                 <div className="text-[var(--p-text-2)]">
                   {t("console.people.offerLetters.editor.compensation.effective", undefined, "Effective compensation")}
                 </div>

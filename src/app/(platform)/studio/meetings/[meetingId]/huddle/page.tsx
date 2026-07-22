@@ -173,7 +173,7 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
 
             {/* Full roster */}
             <div className="surface overflow-hidden">
-              <table className="data-table w-full">
+              <table className="ps-table w-full">
                 <thead>
                   <tr>
                     <th>Participant</th>

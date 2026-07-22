@@ -206,7 +206,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="flex flex-wrap items-center gap-3 text-xs">
           <Link
             href={`/studio/documents/offerletter?recordId=${raw.id}`}
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
+            className="rounded border border-[var(--p-border)] px-3 py-1.5 hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
           >
             {t("console.people.offerLetters.detail.openAsDocument", undefined, "Document")}
           </Link>
@@ -214,7 +214,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             href={printUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
+            className="rounded border border-[var(--p-border)] px-3 py-1.5 hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
           >
             {t("console.people.offerLetters.detail.printLink", undefined, "Print / Save as PDF →")}
           </a>
@@ -303,7 +303,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               ) : (
                 <ul className="space-y-3 text-xs">
                   {activity.map((a) => (
-                    <li key={a.id} className="border-s-2 border-[var(--border-default)] ps-3">
+                    <li key={a.id} className="border-s-2 border-[var(--p-border)] ps-3">
                       <div className="tracking-wider text-[var(--p-text-2)] uppercase">{toTitle(a.kind)}</div>
                       <div className="text-[var(--p-text-1)]">{a.summary}</div>
                       <div className="text-[var(--p-text-2)]">

@@ -103,7 +103,7 @@ export default async function TrainingConsolePage() {
         <EmptyState size="compact" title="No members" description="Org members appear here once invited." />
       ) : (
         <div className="surface overflow-x-auto">
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr className="text-left text-[var(--p-text-2)]">
                 <th className="px-3 py-2 font-medium">Member</th>

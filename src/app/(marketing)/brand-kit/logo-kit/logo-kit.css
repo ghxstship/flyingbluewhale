@@ -259,7 +259,7 @@
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--p-accent-text, #147d1c);
+  color: var(--p-accent-text, #971a05);
   text-decoration: none;
 }
 .lk-link:hover {

@@ -10,8 +10,8 @@ import { createReview } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--color-text-secondary)]";
+const INPUT = "ps-input";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -43,12 +43,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
     return (
       <div className="max-w-2xl space-y-6">
         <header>
-          <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="eyebrow">
             {t("me.reviews.new.eyebrow", undefined, "My reviews")}
           </div>
-          <h1 className="text-display mt-1 text-3xl">{t("me.reviews.new.title", undefined, "Write A Review")}</h1>
+          <h1 className="mt-1">{t("me.reviews.new.title", undefined, "Write A Review")}</h1>
         </header>
-        <div className="card-elevated space-y-3 p-6 text-sm text-[var(--color-text-secondary)]">
+        <div className="surface-raised space-y-3 p-6 text-sm text-[var(--p-text-2)]">
           <p>
             {t(
               "me.reviews.new.explainer.anchored",
@@ -87,11 +87,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
   return (
     <div className="max-w-2xl space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="eyebrow">
           {t("me.reviews.new.eyebrow", undefined, "My reviews")}
         </div>
-        <h1 className="text-display mt-1 text-3xl">{t("me.reviews.new.title", undefined, "Write A Review")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <h1 className="mt-1">{t("me.reviews.new.title", undefined, "Write A Review")}</h1>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t(
             "me.reviews.new.subtitle",
             undefined,
@@ -110,7 +110,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
         action={createReview}
         cancelHref="/me/reviews"
         submitLabel={t("me.reviews.new.form.submit", undefined, "Post Review")}
-        className="card-elevated space-y-4 p-6"
+        className="surface-raised space-y-4 p-6"
       >
         <input type="hidden" name="transaction_type" value={transactionType} />
         <input type="hidden" name="transaction_id" value={transactionId} />

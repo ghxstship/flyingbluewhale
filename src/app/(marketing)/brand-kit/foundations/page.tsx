@@ -241,7 +241,7 @@ export default async function FoundationsPage() {
         {/* ===== APP ICONS ===== */}
         <section className="kf-sec" id="appicons">
           <h2 style={{ fontSize: 20 }}>
-            {t("marketing.brandKit.foundations.appIcons.heading", undefined, "One mark, three accents")}
+            {t("marketing.brandKit.foundations.appIcons.heading", undefined, "One mark, four accents")}
           </h2>
           <p className="lead">
             {t(
@@ -256,18 +256,23 @@ export default async function FoundationsPage() {
                 {[
                   {
                     tile: "var(--brand-atlvs)",
-                    title: "ATLVS · pink",
+                    title: "ATLVS · red",
                     role: t("marketing.brandKit.foundations.appIcons.roleAtlvs", undefined, "Producer / Internal"),
                   },
                   {
                     tile: "var(--brand-compvss)",
-                    title: "COMPVSS · amber",
+                    title: "COMPVSS · yellow",
                     role: t("marketing.brandKit.foundations.appIcons.roleCompvss", undefined, "Crew / Vendor / Talent"),
                   },
                   {
                     tile: "var(--brand-gvteway)",
                     title: "GVTEWAY · blue",
                     role: t("marketing.brandKit.foundations.appIcons.roleGvteway", undefined, "Guest / Client"),
+                  },
+                  {
+                    tile: "var(--brand-legend)",
+                    title: "LEG3ND · orange",
+                    role: t("marketing.brandKit.foundations.appIcons.roleLegend", undefined, "Knowledge / Learning"),
                   },
                   {
                     tile: "var(--p-text-1)",
@@ -518,7 +523,7 @@ export default async function FoundationsPage() {
                 accentOn: "var(--brand-atlvs-on)",
                 weakBg: "color-mix(in oklab,var(--brand-atlvs) 12%,var(--p-surface))",
                 inkText: "var(--brand-atlvs-ink)",
-                accentText: "accent-text #147D1C (light) · #6EE176 (dark)",
+                accentText: "accent-text #971A05 (light) · #FF7C5A (dark)",
               },
               {
                 name: "COMPVSS",
@@ -528,7 +533,7 @@ export default async function FoundationsPage() {
                 accentOn: "var(--brand-compvss-on)",
                 weakBg: "color-mix(in oklab,var(--brand-compvss) 14%,var(--p-surface))",
                 inkText: "var(--brand-compvss-ink)",
-                accentText: "accent-text #147D1C (light) · #6EE176 (dark)",
+                accentText: "accent-text #996600 (light) · #F6C755 (dark)",
               },
               {
                 name: "GVTEWAY",
@@ -538,7 +543,17 @@ export default async function FoundationsPage() {
                 accentOn: "var(--brand-gvteway-on)",
                 weakBg: "color-mix(in oklab,var(--brand-gvteway) 14%,var(--p-surface))",
                 inkText: "var(--brand-gvteway-ink)",
-                accentText: "accent-text #147D1C (light) · #6EE176 (dark)",
+                accentText: "accent-text #1D4ED8 (light) · #88AAF6 (dark)",
+              },
+              {
+                name: "LEG3ND",
+                role: t("marketing.brandKit.foundations.appIcons.roleLegend", undefined, "Knowledge / Learning"),
+                hex: PRODUCT_ACCENTS.legend,
+                accentBg: "var(--brand-legend)",
+                accentOn: "var(--brand-legend-on)",
+                weakBg: "color-mix(in oklab,var(--brand-legend) 12%,var(--p-surface))",
+                inkText: "var(--brand-legend-ink)",
+                accentText: "accent-text #C2520A (light) · #DC7847 (dark)",
               },
             ].map((p) => (
               <div key={p.name} className="kf-idrow">

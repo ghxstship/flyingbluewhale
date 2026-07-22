@@ -36,11 +36,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">
+      <div className="eyebrow">
         {t("me.submissions.eyebrow", undefined, "My submissions")}
       </div>
-      <h1 className="text-display mt-1 text-3xl">{t("me.submissions.title", undefined, "Submissions")}</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+      <h1 className="mt-1">{t("me.submissions.title", undefined, "Submissions")}</h1>
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t("me.submissions.subtitle", undefined, "Open-call submissions you've made.")}
       </p>
 
@@ -75,12 +75,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       ) : (
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
-            <li key={r.id} className="card-elevated flex items-center justify-between p-4">
+            <li key={r.id} className="surface-raised flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/submissions/${r.id}`} className="text-sm font-semibold">
                   {r.open_call?.title ?? t("me.submissions.deletedCall", undefined, "(deleted call)")}
                 </Link>
-                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+                <p className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
                     "me.submissions.submittedOn",
                     { date: fmt.date(new Date(r.submitted_at)) },

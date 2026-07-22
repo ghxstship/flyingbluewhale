@@ -195,7 +195,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {t("console.finance.apOcr.detail.noLineItems", undefined, "No line items extracted.")}
             </p>
           ) : (
-            <table className="data-table w-full text-xs">
+            <table className="ps-table w-full text-xs">
               <thead>
                 <tr>
                   <th className="text-left">

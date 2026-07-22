@@ -50,8 +50,8 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
               --p-surface-2: #f5f5f3;
               --p-text-1: #0a0a0a;
               --p-text-2: #1a1a1a;
-              --p-text-2: #6b6b6b;
-              --border-default: #d4d4d4;
+              --p-text-3: #6b6b6b;
+              --p-border: #d4d4d4;
               --p-accent: #1a4dbb;
               color: #0a0a0a;
             }

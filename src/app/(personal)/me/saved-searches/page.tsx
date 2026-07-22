@@ -37,11 +37,11 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="eyebrow">
           {t("me.savedSearches.eyebrow", undefined, "Saved searches")}
         </div>
-        <h1 className="text-display mt-1 text-3xl">{t("me.savedSearches.title", undefined, "Saved Searches")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        <h1 className="mt-1">{t("me.savedSearches.title", undefined, "Saved Searches")}</h1>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t(
             "me.savedSearches.subtitle",
             undefined,
@@ -50,8 +50,8 @@ export default async function Page() {
         </p>
       </header>
 
-      <section className="card-elevated p-4">
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+      <section className="surface-raised p-4">
+        <h2 className="eyebrow mb-3">
           {t("me.savedSearches.add.title", undefined, "Add subscription")}
         </h2>
         <FormShell action={createSavedSearchAction} submitLabel={t("common.save", undefined, "Save")}>
@@ -100,17 +100,17 @@ export default async function Page() {
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+        <h2 className="eyebrow mb-3">
           {t("me.savedSearches.active.title", undefined, "Active subscriptions")}
         </h2>
         {rows.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+          <div className="surface-raised p-6 text-sm text-[var(--p-text-2)]">
             {t("me.savedSearches.empty", undefined, "No saved searches yet.")}
           </div>
         ) : (
           <ul className="space-y-2">
             {rows.map((r) => (
-              <li key={r.id} className="card-elevated flex items-center justify-between p-3 text-sm">
+              <li key={r.id} className="surface-raised flex items-center justify-between p-3 text-sm">
                 <div className="flex items-center gap-3">
                   <Badge variant="muted">{toTitle(r.kind)}</Badge>
                   <span className="font-semibold">{r.name}</span>
@@ -118,7 +118,7 @@ export default async function Page() {
                     <Badge variant="info">{t("me.savedSearches.badge.email", undefined, "email")}</Badge>
                   )}
                   {r.alert_push && <Badge variant="info">{t("me.savedSearches.badge.push", undefined, "push")}</Badge>}
-                  <span className="font-mono text-xs text-[var(--color-text-secondary)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {t("me.savedSearches.matches", { count: r.match_count }, `${r.match_count} matches`)}
                   </span>
                 </div>

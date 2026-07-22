@@ -1,6 +1,38 @@
 # UI/UX Canonization Audit — Master Inventory + Remediation Strategy
 
-**Date:** 2026-07-22 · **Status: AWAITING OWNER REVIEW — no remediation executed.**
+**Date:** 2026-07-22 · **Status: RATIFIED 2026-07-22 — remediation IN PROGRESS.**
+
+**Owner rulings (2026-07-22):**
+1. State.error mechanism: APPROVED as recommended — error CODES returned from
+   server actions, client-side t() mapping renders them.
+2. DataView vs DataTable: **OPTION B RATIFIED (2026-07-22)** — bless
+   `views/DataView` as the one canonical collection surface (ADR-0006
+   affirmed) and migrate all DataTable importers to it. Executed as a
+   phased program (risk containment for the 268-site refactor):
+   **B0 · Harden**: absorb/retire the same-named `ui/DataView` trap; bring
+   `views/DataView` to full API parity with DataTable (columns, numeric/
+   sticky/zebra, sorting, rowHref, skeleton/empty states, i18n-routed
+   defaults, a11y) and apply the W2 root-cause fixes (IBM Plex data face +
+   tabular-nums) natively so migrated surfaces land correct-by-default.
+   **B1 · Pilot**: migrate a representative ~12-surface slice (finance +
+   projects + people; numeric/sticky/zebra + record-tab cases), e2e + visual
+   verification, harvest API gaps back into B0.
+   **B2..n · Fan-out**: batch by module tree, one agent per tree, per-batch
+   gates (tsc · vitest · render-e2e for that tree).
+   **B-final · Ratchet**: guard forbids new DataTable imports; DataTable
+   deleted when importers hit zero. Interim: the DataTable.tsx:305 mono-face
+   bug still gets fixed NOW in W2 (the migration is long; the live bug
+   doesn't ride).
+3. Zero-consumer primitives: identified + confidently dispositioned below —
+   ADOPT Divider (absorb AuthDivider) and ADOPT kit-ai.css (it is ratified
+   v8.1 canon and Aurora AI is now a first-class identity; wire
+   CopilotPanel/ConversationPanel/AuroraChat onto it); DELETE the other 14
+   (ButtonGroup, Carousel, DatePicker, DescriptionList, MediaCard, Meter,
+   NumberInput, PinInput, RadioGroup, RecordHeader, RoleControl, Slider,
+   TimePicker, UploadZone) — native-control canon covers date/time/number/
+   radio inputs, ProgressBar covers Meter, git history is the registry.
+4. Stale seed hexes: RE-SEED to current canon.
+5. UI label: "Status" everywhere in copy; LDP keeps governing schema names.
 
 Six read-only lane audits walked 100% of the UI-bearing codebase (~2,106
 files) against the shared checklist (CHECKLIST.md — 9 canon classes). Lane

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { LogoUploader } from "@/components/branding/LogoUploader";
+import { BRAND_FALLBACK } from "@/lib/branding";
 import { bestInk, contrastRatio, wcagLevel } from "@/lib/theme/contrast-util";
 import { updateBrandingAction, type BrandingState } from "./actions";
 
@@ -30,9 +31,9 @@ export function BrandingForm({ initial }: { initial: Initial }) {
     return result;
   }, null);
 
-  const [accent, setAccent] = useState(initial.accentColor || "#DC2626");
-  const [foreground, setForeground] = useState(initial.accentForeground || "#ffffff");
-  const [secondary, setSecondary] = useState(initial.secondaryColor || "#6D4A2A");
+  const [accent, setAccent] = useState(initial.accentColor || BRAND_FALLBACK.accent);
+  const [foreground, setForeground] = useState(initial.accentForeground || BRAND_FALLBACK.accentFg);
+  const [secondary, setSecondary] = useState(initial.secondaryColor || BRAND_FALLBACK.secondary);
   const [productName, setProductName] = useState(initial.productName);
 
   return (

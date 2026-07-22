@@ -58,6 +58,12 @@ function writeConsent(c: Consent) {
  * Dismissing (X or Escape) is an explicit essential-only decision and is
  * PERSISTED — the banner never re-opens on the next navigation. "Manage
  * settings" opens the detailed dialog with per-category toggles.
+ *
+ * Stacking (P0-8): the banner rides the --p-z-* ladder at the nav step —
+ * shell-level chrome that nothing below the ladder can bury (it mounts last
+ * in the root layout, so it also paints over the nav at an equal step),
+ * while dropdowns (300), the modal scrim (400), and its own settings Dialog
+ * (500) correctly stack above it.
  */
 export function CookieConsent() {
   const t = useT();
@@ -101,7 +107,7 @@ export function CookieConsent() {
     <>
       <section
         aria-label={t("cookieConsent.title", undefined, "Cookies & privacy")}
-        className="fixed inset-x-0 bottom-0 z-[60] border-t border-[var(--p-border)] bg-[var(--p-surface)] p-4 shadow-[var(--p-elev-xl,0_-4px_24px_rgba(0,0,0,0.12))] print:hidden"
+        className="fixed inset-x-0 bottom-0 z-[var(--p-z-nav)] border-t border-[var(--p-border)] bg-[var(--p-surface)] p-4 shadow-[var(--p-elev-xl,0_-4px_24px_rgba(0,0,0,0.12))] print:hidden"
       >
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
           <div className="min-w-0 flex-1 basis-72">

@@ -30,6 +30,9 @@ const OVERLAY_FILES = [
   "src/components/ui/ConfirmDialog.tsx",
   "src/components/CommandPalette.tsx",
   "src/components/NotificationsBell.tsx",
+  // P0-8 (audit 2026-07, lane F F-23/GH-2): the consent banner is a fixed
+  // page-level overlay — it must ride the ladder (--p-z-nav), never a literal.
+  "src/components/compliance/CookieConsent.tsx",
 ];
 
 /** Matches literal z utilities (z-50, z-[60]) but not the ladder-token form

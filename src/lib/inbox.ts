@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient, createServiceClient, isServiceClientAvailable } from "./supabase/server";
 import { sendPushTo, sendPushBulk, type PushKind, type PushPayload } from "./push/send";
+import { resolveNotificationHref } from "./urls";
 import { log } from "./log";
 
 /**
@@ -89,7 +90,10 @@ export async function writeInbox(entry: InboxEntry): Promise<{ inboxed: boolean;
     const payload: PushPayload = {
       title: entry.title,
       body: (entry.body ?? "").slice(0, 200),
-      url: entry.href ?? "/me/notifications/inbox",
+      // Stored hrefs are internal route-group paths; the push opens on the
+      // compvss service-worker origin, so resolve to the owning shell's
+      // absolute URL (same rule as the email channel).
+      url: resolveNotificationHref(entry.href ?? "/me/notifications/inbox"),
       tag: `${entry.sourceType}:${entry.sourceId}`,
       kind: pushKind,
     };
@@ -147,7 +151,8 @@ export async function writeInboxBulk(
     const payload: PushPayload = {
       title: entry.title,
       body: (entry.body ?? "").slice(0, 200),
-      url: entry.href ?? "/me/notifications/inbox",
+      // Same cross-shell resolution as the single-recipient path above.
+      url: resolveNotificationHref(entry.href ?? "/me/notifications/inbox"),
       tag: `${entry.sourceType}:${entry.sourceId}`,
       kind: pushKind,
     };

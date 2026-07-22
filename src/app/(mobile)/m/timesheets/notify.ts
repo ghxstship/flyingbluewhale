@@ -3,6 +3,7 @@ import type { Session } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { managerUserIds } from "@/lib/db/managers";
+import { urlFor } from "@/lib/urls";
 import { log } from "@/lib/log";
 
 /**
@@ -33,7 +34,10 @@ export async function notifyManagersOfSubmission(session: Session, timesheetId: 
     await sendPushBulk(managers, {
       title: "Timesheet Submitted",
       body: `${who} submitted a timesheet for approval.`,
-      url: "/studio/finance/timesheets",
+      // Absolute, via the canonical cross-shell helper: the push lands on the
+      // compvss service-worker origin, where a relative /studio/... path would
+      // open the console under the wrong host.
+      url: urlFor("platform", "/finance/timesheets"),
       kind: "timesheet",
       scope: "mobile",
       orgId: session.orgId,

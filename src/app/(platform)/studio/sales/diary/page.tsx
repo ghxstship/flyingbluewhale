@@ -136,7 +136,7 @@ export default async function DiaryPage({
           />
         ) : (
           <div className="surface overflow-x-auto">
-            <table className="data-table w-full">
+            <table className="ps-table w-full">
               <thead>
                 <tr>
                   <th className="text-left">{t("console.diary.col.space", undefined, "Space")}</th>

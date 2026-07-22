@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
             href={`/msa/${token}/print`}
             target="_blank"
             rel="noreferrer"
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-[var(--p-text-2)] hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
+            className="rounded border border-[var(--p-border)] px-3 py-1.5 text-[var(--p-text-2)] hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
           >
             Download PDF / Print
           </a>

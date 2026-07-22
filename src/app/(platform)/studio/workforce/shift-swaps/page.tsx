@@ -222,14 +222,14 @@ export default async function Page() {
                     <form action={decideSwap}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="approved" />
-                      <button type="submit" className="ps-btn btn-xs">
+                      <button type="submit" className="ps-btn ps-btn--sm">
                         {t("console.workforce.shiftSwaps.action.approve", undefined, "Approve")}
                       </button>
                     </form>
                     <form action={decideSwap}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="declined" />
-                      <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
+                      <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                         {t("console.workforce.shiftSwaps.action.decline", undefined, "Decline")}
                       </button>
                     </form>

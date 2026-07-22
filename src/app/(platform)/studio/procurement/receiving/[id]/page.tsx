@@ -163,7 +163,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           ) : (
             <div className="surface overflow-hidden">
-              <table className="data-table w-full">
+              <table className="ps-table w-full">
                 <thead>
                   <tr>
                     <th>{t("console.procurement.receiving.detail.colItem", undefined, "Line item")}</th>
@@ -252,7 +252,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           ) : (
             <div className="surface overflow-hidden">
-              <table className="data-table w-full">
+              <table className="ps-table w-full">
                 <thead>
                   <tr>
                     <th>{t("console.procurement.receiving.detail.colInvoice", undefined, "Invoice")}</th>

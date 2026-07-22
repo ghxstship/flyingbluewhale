@@ -213,7 +213,7 @@ export default async function ProfilePage() {
               )}
             />
             <label className="block text-sm">
-              <span className="text-label">{t("me.profile.public.bio.label", undefined, "Bio")}</span>
+              <span className="eyebrow">{t("me.profile.public.bio.label", undefined, "Bio")}</span>
               <textarea
                 name="bio"
                 rows={5}
@@ -253,7 +253,7 @@ export default async function ProfilePage() {
               )}
             />
             <label className="block text-sm">
-              <span className="text-label">{t("me.profile.public.links.label", undefined, "Links")}</span>
+              <span className="eyebrow">{t("me.profile.public.links.label", undefined, "Links")}</span>
               <textarea
                 name="links"
                 rows={4}

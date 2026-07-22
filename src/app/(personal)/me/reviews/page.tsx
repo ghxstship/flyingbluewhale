@@ -50,11 +50,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
     <div className="space-y-6">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="eyebrow">
             {t("me.reviews.eyebrow", undefined, "My reviews")}
           </div>
-          <h1 className="text-display mt-1 text-3xl">{t("me.reviews.title", undefined, "Reviews")}</h1>
-          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+          <h1 className="mt-1">{t("me.reviews.title", undefined, "Reviews")}</h1>
+          <p className="mt-2 text-sm text-[var(--p-text-2)]">
             {t(
               "me.reviews.subtitle",
               undefined,
@@ -76,11 +76,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
       )}
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+        <h2 className="eyebrow mb-3">
           {t("me.reviews.received", undefined, "Received")}
         </h2>
         {received.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+          <div className="surface-raised p-6 text-sm text-[var(--p-text-2)]">
             {t("me.reviews.emptyReceived", undefined, "No public reviews yet.")}
           </div>
         ) : (
@@ -93,11 +93,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+        <h2 className="eyebrow mb-3">
           {t("me.reviews.written", undefined, "Written")}
         </h2>
         {written.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+          <div className="surface-raised p-6 text-sm text-[var(--p-text-2)]">
             {t("me.reviews.emptyWritten", undefined, "You haven't written any reviews yet.")}
           </div>
         ) : (
@@ -120,7 +120,7 @@ function ReviewLi({
   t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 }) {
   return (
-    <li className="card-elevated p-4">
+    <li className="surface-raised p-4">
       <div className="flex items-center gap-2 text-sm">
         <span className="font-mono">★ {r.rating}</span>
         <Badge variant="muted">{r.subject_kind}</Badge>
@@ -132,7 +132,7 @@ function ReviewLi({
         )}
       </div>
       {r.body && <p className="mt-2 text-sm whitespace-pre-wrap">{r.body}</p>}
-      <p className="mt-2 text-xs text-[var(--color-text-secondary)]">{formatDateTime(new Date(r.created_at))}</p>
+      <p className="mt-2 text-xs text-[var(--p-text-2)]">{formatDateTime(new Date(r.created_at))}</p>
     </li>
   );
 }

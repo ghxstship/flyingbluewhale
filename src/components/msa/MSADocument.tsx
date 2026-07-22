@@ -34,7 +34,7 @@ export function MSADocument({
 
   return (
     <article className="surface mx-auto max-w-3xl space-y-8 p-10 print:p-0 print:shadow-none">
-      <header className="flex items-start justify-between border-b border-[var(--border-default)] pb-6">
+      <header className="flex items-start justify-between border-b border-[var(--p-border)] pb-6">
         <div>
           <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">{orgName}</div>
           <h1 className="mt-2 text-2xl leading-tight font-semibold">
@@ -164,7 +164,7 @@ export function MSADocument({
         </p>
       </section>
 
-      <section className="break-inside-avoid space-y-3 border-t border-[var(--border-default)] pt-6">
+      <section className="break-inside-avoid space-y-3 border-t border-[var(--p-border)] pt-6">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("legal.msaDocument.exhibitBHeading", undefined, "Exhibit B — Other Clients")}
         </h2>
@@ -206,7 +206,7 @@ export function MSADocument({
           ]}
         />
         {(msa.nscb_license_number || msa.nscb_classification) && (
-          <div className="mt-2 rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-3 text-xs leading-relaxed">
+          <div className="mt-2 rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 text-xs leading-relaxed">
             <div className="mb-1 font-medium tracking-wider text-[var(--p-text-2)] uppercase">
               {t("legal.msaDocument.nscbLicenseHeading", undefined, "NSCB License · Chapter 624")}
             </div>
@@ -226,7 +226,7 @@ export function MSADocument({
         )}
       </section>
 
-      <section className="border-t border-[var(--border-default)] pt-6">
+      <section className="border-t border-[var(--p-border)] pt-6">
         {msa.msa_state === "signed" && msa.signed_signature ? (
           <div className="space-y-2">
             <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">
@@ -287,7 +287,7 @@ function ExhibitTable({
   const display =
     rows.length > 0 ? rows : Array.from({ length: fallbackRows }).map(() => ({}) as Record<string, string>);
   return (
-    <div className="overflow-hidden rounded border border-[var(--border-default)]">
+    <div className="overflow-hidden rounded border border-[var(--p-border)]">
       <table className="w-full text-xs">
         <thead className="bg-[var(--p-surface-2)] text-[var(--p-text-2)]">
           <tr>
@@ -300,7 +300,7 @@ function ExhibitTable({
         </thead>
         <tbody>
           {display.map((row, i) => (
-            <tr key={i} className="border-t border-[var(--border-default)]">
+            <tr key={i} className="border-t border-[var(--p-border)]">
               {columns.map((c) => {
                 const v = row[c.key];
                 return (
@@ -308,7 +308,7 @@ function ExhibitTable({
                     {v ? (
                       <span className="text-sm">{v}</span>
                     ) : (
-                      <div className="h-4 border-b border-dashed border-[var(--border-default)]" />
+                      <div className="h-4 border-b border-dashed border-[var(--p-border)]" />
                     )}
                   </td>
                 );

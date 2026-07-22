@@ -40,14 +40,14 @@ export default async function Page({ params }: { params: Promise<{ applicationId
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">
+      <div className="eyebrow">
         {t("me.applications.detail.eyebrow", undefined, "Application")}
       </div>
       <div className="mt-1 flex items-center gap-2">
-        <h1 className="text-display text-3xl">{a.id.slice(0, 8)}</h1>
+        <h1>{a.id.slice(0, 8)}</h1>
         <Badge variant={STATUS_TONE[a.job_application_state] ?? "muted"}>{toTitle(a.job_application_state)}</Badge>
       </div>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.applications.detail.appliedAt",
           { when: fmt.dateTime(new Date(a.applied_at)) },
@@ -56,15 +56,15 @@ export default async function Page({ params }: { params: Promise<{ applicationId
       </p>
 
       <div className="mt-6 space-y-4">
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="surface-raised p-4">
+          <div className="eyebrow">
             {t("me.applications.detail.coverNote", undefined, "Cover note")}
           </div>
           <div className="mt-1 text-sm whitespace-pre-wrap">{a.cover_note ?? "—"}</div>
         </div>
         {a.day_rate_proposed_cents && (
-          <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="surface-raised p-4">
+            <div className="eyebrow">
               {t("me.applications.detail.proposedDayRate", undefined, "Proposed day rate")}
             </div>
             <div className="mt-1 font-mono text-sm">
@@ -77,12 +77,12 @@ export default async function Page({ params }: { params: Promise<{ applicationId
           </div>
         )}
         {a.job_application_state === "booked" && (
-          <div className="card-elevated flex items-center justify-between p-4">
+          <div className="surface-raised flex items-center justify-between p-4">
             <div>
-              <div className="text-label text-[var(--color-text-tertiary)]">
+              <div className="eyebrow">
                 {t("me.applications.detail.review.label", undefined, "Booked and wrapped?")}
               </div>
-              <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
+              <div className="mt-1 text-sm text-[var(--p-text-2)]">
                 {t(
                   "me.applications.detail.review.body",
                   undefined,
@@ -98,12 +98,12 @@ export default async function Page({ params }: { params: Promise<{ applicationId
           </div>
         )}
         {a.resume_url && (
-          <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="surface-raised p-4">
+            <div className="eyebrow">
               {t("me.applications.detail.resume", undefined, "Resume")}
             </div>
             <a
-              className="mt-1 block text-sm text-[var(--brand-color)]"
+              className="mt-1 block text-sm text-[var(--p-accent-text)]"
               href={a.resume_url}
               target="_blank"
               rel="noopener"

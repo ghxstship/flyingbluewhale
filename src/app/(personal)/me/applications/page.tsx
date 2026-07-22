@@ -27,7 +27,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">{t("me.applications.title", undefined, "My Applications")}</h1>
+        <h1>{t("me.applications.title", undefined, "My Applications")}</h1>
         <p className="mt-2 text-sm">{t("me.applications.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
@@ -47,11 +47,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">
+      <div className="eyebrow">
         {t("me.applications.eyebrow", undefined, "My applications")}
       </div>
-      <h1 className="text-display mt-1 text-3xl">{t("me.applications.heading", undefined, "Applications")}</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+      <h1 className="mt-1">{t("me.applications.heading", undefined, "Applications")}</h1>
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.applications.intro",
           undefined,
@@ -88,12 +88,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
       ) : (
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
-            <li key={r.id} className="card-elevated flex items-center justify-between p-4">
+            <li key={r.id} className="surface-raised flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/applications/${r.id}`} className="text-sm font-semibold">
                   {r.posting?.title ?? t("me.applications.deletedPosting", undefined, "Deleted Posting")}
                 </Link>
-                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+                <p className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
                     "me.applications.appliedOn",
                     { date: fmt.date(new Date(r.applied_at)) },

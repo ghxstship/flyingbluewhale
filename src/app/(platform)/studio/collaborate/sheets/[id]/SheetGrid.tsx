@@ -258,7 +258,7 @@ export function SheetGrid({
         />
       ) : (
         <div className="surface overflow-x-auto">
-          <table className="data-table w-full">
+          <table className="ps-table w-full">
             <thead>
               {table.getHeaderGroups().map((hg) => (
                 <tr key={hg.id}>

@@ -166,7 +166,7 @@ export default async function TimeOffAdminPage({ searchParams }: { searchParams:
             )}
             className="ps-input ps-input--sm min-w-64 flex-1"
           />
-          <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
+          <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
             {t("console.workforce.timeOff.bulkNote.apply", undefined, "Set note")}
           </button>
           {bulkDenyNote && (

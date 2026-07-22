@@ -40,14 +40,14 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">
+      <div className="eyebrow">
         {t("me.submissions.detail.eyebrow", undefined, "Submission")}
       </div>
       <div className="mt-1 flex items-center gap-2">
-        <h1 className="text-display text-3xl">#{s.id.slice(0, 8)}</h1>
+        <h1>#{s.id.slice(0, 8)}</h1>
         <Badge variant={STATUS_TONE[s.submission_state] ?? "muted"}>{toTitle(s.submission_state)}</Badge>
       </div>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.submissions.detail.submittedAt",
           { when: fmt.dateTime(new Date(s.submitted_at)) },
@@ -56,27 +56,27 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
       </p>
 
       <div className="mt-6 space-y-4">
-        <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">
+        <div className="surface-raised p-4">
+          <div className="eyebrow">
             {t("me.submissions.detail.coverNote", undefined, "Cover note")}
           </div>
           <div className="mt-1 text-sm whitespace-pre-wrap">{s.cover_note ?? "—"}</div>
         </div>
         {s.fee_proposed_cents && (
-          <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">
+          <div className="surface-raised p-4">
+            <div className="eyebrow">
               {t("me.submissions.detail.proposedFee", undefined, "Proposed fee")}
             </div>
             <div className="mt-1 font-mono text-sm">{formatMoney(s.fee_proposed_cents)}</div>
           </div>
         )}
         {s.submission_state === "awarded" && (
-          <div className="card-elevated flex items-center justify-between p-4">
+          <div className="surface-raised flex items-center justify-between p-4">
             <div>
-              <div className="text-label text-[var(--color-text-tertiary)]">
+              <div className="eyebrow">
                 {t("me.submissions.detail.review.label", undefined, "Awarded and wrapped?")}
               </div>
-              <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
+              <div className="mt-1 text-sm text-[var(--p-text-2)]">
                 {t(
                   "me.submissions.detail.review.body",
                   undefined,

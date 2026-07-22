@@ -46,7 +46,7 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
         </div>
         <a
           href={email.mailto}
-          className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
+          className="rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
         >
           {t("console.people.offerLetters.letterEmailComposer.openInMailClient", undefined, "Open in mail client →")}
         </a>
@@ -69,7 +69,7 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
         </Button>
       </div>
 
-      <div className="flex items-center gap-2 border-b border-[var(--border-default)] pb-2 text-xs">
+      <div className="flex items-center gap-2 border-b border-[var(--p-border)] pb-2 text-xs">
         <button
           type="button"
           onClick={() => setTab("preview")}
@@ -112,17 +112,17 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
 
       {tab === "preview" && (
         <div
-          className="prose-sm max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-white p-4 text-black"
+          className="prose-sm max-h-[480px] overflow-auto rounded border border-[var(--p-border)] bg-white p-4 text-black"
           dangerouslySetInnerHTML={{ __html: email.html }}
         />
       )}
       {tab === "plaintext" && (
-        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4 text-xs whitespace-pre-wrap">
+        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4 text-xs whitespace-pre-wrap">
           {email.plaintext}
         </pre>
       )}
       {tab === "html" && (
-        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4 font-mono text-[11px] whitespace-pre-wrap">
+        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4 font-mono text-[11px] whitespace-pre-wrap">
           {email.html}
         </pre>
       )}

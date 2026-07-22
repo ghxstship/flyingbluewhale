@@ -29,7 +29,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">{t("me.inquiries.title", undefined, "My Inquiries")}</h1>
+        <h1>{t("me.inquiries.title", undefined, "My Inquiries")}</h1>
         <p className="mt-2 text-sm">{t("me.inquiries.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
@@ -47,11 +47,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">
+      <div className="eyebrow">
         {t("me.inquiries.eyebrow", undefined, "My inquiries")}
       </div>
-      <h1 className="text-display mt-1 text-3xl">{t("me.inquiries.heading", undefined, "Inquiries")}</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+      <h1 className="mt-1">{t("me.inquiries.heading", undefined, "Inquiries")}</h1>
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.inquiries.intro",
           undefined,
@@ -84,7 +84,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       ) : (
         <ul className="mt-6 space-y-2">
           {rows.map((r) => (
-            <li key={r.id} className="card-elevated flex items-start justify-between gap-4 p-4">
+            <li key={r.id} className="surface-raised flex items-start justify-between gap-4 p-4">
               <div className="min-w-0">
                 <Link
                   href={`${INQUIRY_SUBJECT_PATHS[r.subject_kind]}/${r.subject_handle}`}
@@ -92,7 +92,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
                 >
                   {r.subject_name}
                 </Link>
-                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+                <p className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
                     "me.inquiries.sentOn",
                     { date: fmt.date(new Date(r.created_at)) },
@@ -107,7 +107,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
                       )
                     : ""}
                 </p>
-                <p className="mt-1 line-clamp-2 text-xs text-[var(--color-text-secondary)]">{r.message}</p>
+                <p className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.message}</p>
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <Badge variant="muted">{toTitle(r.subject_kind)}</Badge>

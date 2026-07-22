@@ -194,7 +194,7 @@ export default async function DevelopersPage() {
         )}
       >
         <div className="surface overflow-x-auto p-2">
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th className="px-4 py-3 text-left">

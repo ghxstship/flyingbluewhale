@@ -104,13 +104,13 @@ export default async function BeoDetail({ params }: { params: Promise<{ id: stri
                 <h3 className="text-base font-semibold">{s.label}</h3>
                 <span className="text-sm font-medium tabular-nums">{formatMoney(s.subtotal_cents)}</span>
               </div>
-              <table className="data-table mt-3 w-full">
+              <table className="ps-table mt-3 w-full">
                 <thead>
                   <tr>
                     <th className="text-left">Item</th>
-                    <th className="text-right">Qty</th>
-                    <th className="text-right">Unit</th>
-                    <th className="text-right">Total</th>
+                    <th className="num">Qty</th>
+                    <th className="num">Unit</th>
+                    <th className="num">Total</th>
                     <th />
                   </tr>
                 </thead>

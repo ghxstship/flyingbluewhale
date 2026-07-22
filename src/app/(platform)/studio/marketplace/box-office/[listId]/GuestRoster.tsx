@@ -54,7 +54,7 @@ export function GuestRoster({ listId, entries }: { listId: string; entries: Entr
         />
       ) : (
         <div className="overflow-x-auto">
-          <table className="data-table w-full">
+          <table className="ps-table w-full">
             <thead>
               <tr>
                 <th className="text-left">{t("console.boxOffice.roster.guest", undefined, "Guest")}</th>

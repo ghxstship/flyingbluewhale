@@ -114,7 +114,7 @@
           "description": "Cada módulo, cada fase"
         },
         "solutions": {
-          "label": "Soluciones",
+          "label": "Productos",
           "description": "ATLVS · COMPVSS · GVTEWAY · LEG3ND"
         },
         "atlvs": {
@@ -133,13 +133,13 @@
           "label": "LEG3ND: Conocimiento",
           "description": "Conocimiento, LMS y cumplimiento"
         },
-        "ai": {
-          "label": "AI",
-          "description": "Drafts the paperwork, scoped to your tenant"
+        "aurora": {
+          "label": "Aurora AI",
+          "description": "Cada función de IA del ecosistema, con tecnología de Brio"
         },
         "integrations": {
-          "label": "Integrations",
-          "description": "Connect the tools you already run"
+          "label": "Integraciones",
+          "description": "Conecta las herramientas que ya usas"
         }
       },
       "resources": {
@@ -152,6 +152,10 @@
           "label": "Guías",
           "description": "Contenido extenso para productores"
         },
+        "developers": {
+          "label": "Desarrolladores",
+          "description": "Construye sobre el almacén de registros: la API, los scopes y el programa de partners."
+        },
         "docs": {
           "label": "Documentación",
           "description": "Referencia del ecosistema y API"
@@ -161,12 +165,12 @@
           "description": "Cada versión, con fecha"
         },
         "compare": {
-          "label": "Compare",
-          "description": "How ATLVS stacks up"
+          "label": "Comparar",
+          "description": "Cómo se compara ATLVS"
         }
       },
       "solutions": {
-        "label": "Solutions"
+        "label": "Soluciones"
       }
     },
     "industries": {
@@ -187,7 +191,8 @@
           "gvteway": "GVTEWAY",
           "compvss": "COMPVSS",
           "features": "Funciones",
-          "ai": "IA",
+          "aurora": "Aurora AI",
+          "ai": "Guías de Aurora AI",
           "integrations": "Integraciones",
           "pricing": "Precios",
           "changelog": "Registro de cambios",
@@ -219,6 +224,7 @@
         "resources": {
           "heading": "Recursos",
           "docs": "Documentación",
+          "developers": "Desarrolladores",
           "guides": "Guías",
           "glossary": "Glosario",
           "templates": "Plantillas",
@@ -443,6 +449,11 @@
         "cta": {
           "title": "ATLVS Está Abierto.",
           "subtitle": "Gratis para equipos pequeños. IA incluida en Crew y superiores."
+        },
+        "auroraLink": {
+          "cta": "Conoce a Aurora AI",
+          "eyebrow": "Aurora AI · Con tecnología de Brio",
+          "title": "El asistente detrás de cada borrador tiene nombre."
         }
       },
       "alternatives": {
@@ -1003,8 +1014,11 @@
           },
           "actions": {
             "signupInstead": "Empieza a construir gratis",
-            "submit": "Enviar al estudio"
-          }
+            "submit": "Enviar al estudio",
+            "submitting": "Enviando…"
+          },
+          "successTitle": "Recibido. Te contactaremos pronto.",
+          "walkthroughHeading": "Solicita un recorrido guiado"
         },
         "faqs": {
           "heading": "Preguntas frecuentes de contacto",
@@ -1070,7 +1084,8 @@
         "landingSoon": {
           "title": "Próximamente.",
           "count": "{count} historias en producción",
-          "body": "Anonimizadas por NDA. Las métricas duras ya están capturadas; la narrativa completa + el logo con permiso aprobado + el PDF se publican en la fecha de abajo."
+          "body": "Anonimizadas por NDA. Las métricas duras ya están capturadas; la narrativa completa + el logo con permiso aprobado + el PDF se publican en la fecha de abajo.",
+          "metricsOnPublish": "Las cifras verificadas se publican con la historia"
         },
         "cta": {
           "title": "¿Quieres aparecer en un caso?",
@@ -1091,7 +1106,8 @@
           "demo": "Demostración"
         },
         "hero": {
-          "eyebrowPrefix": "Demostración ·"
+          "eyebrowPrefix": "Demostración ·",
+          "walkthroughCta": "Solicita un recorrido guiado"
         },
         "outcomes": {
           "heading": "Lo que verás."
@@ -1121,7 +1137,8 @@
         "hero": {
           "eyebrow": "Demostración",
           "title": "Recorre el ecosistema.",
-          "subtitle": "Cuarenta minutos, conectados a una producción en vivo. Elige el recorrido que encaje con tu sala, o regístrate gratis primero y trae tus preguntas después."
+          "subtitle": "Cuarenta minutos, conectados a una producción en vivo. Elige el recorrido que encaje con tu sala, o regístrate gratis primero y trae tus preguntas después.",
+          "walkthroughCta": "Solicita un recorrido guiado"
         },
         "personas": {
           "title": "Recorridos por operación.",
@@ -1607,6 +1624,9 @@
           "store": {
             "title": "Tienda",
             "blurb": "Compra merch oficial, equipamiento y productos de evento de productores de todo el ecosistema."
+          },
+          "workOrders": {
+            "title": "Órdenes de trabajo por oficio"
           }
         },
         "operators": {
@@ -1734,6 +1754,21 @@
           "card": {
             "established": "Desde {year}"
           }
+        },
+        "crumbs": {
+          "home": "Inicio",
+          "marketplace": "Marketplace"
+        },
+        "workOrders": {
+          "budget": "Presupuesto de referencia",
+          "crumb": "Órdenes de trabajo",
+          "dates": "Fechas",
+          "empty": "No hay órdenes de trabajo abiertas por ahora",
+          "meta": {
+            "title": "Órdenes de trabajo por oficio abiertas"
+          },
+          "site": "Sitio",
+          "title": "Órdenes de trabajo por oficio abiertas"
         }
       },
       "marketplace-crew-handle": {
@@ -2221,7 +2256,8 @@
               "upTo10Users": "Hasta 10 usuarios",
               "upTo2kCredentials": "Hasta 2.000 credenciales de portal por proyecto",
               "emailSupport": "Soporte por correo"
-            }
+            },
+            "ctaStart": "Empieza con Equipo"
           },
           "production": {
             "name": "Producción",
@@ -2236,7 +2272,8 @@
               "kbygGuides": "Guías de evento KBYG",
               "unlimitedUsers": "Usuarios ilimitados",
               "priorityConcierge": "Concierge prioritario y onboarding"
-            }
+            },
+            "ctaStart": "Empieza con Producción"
           },
           "festival": {
             "name": "Festival",
@@ -2983,12 +3020,16 @@
         "hero": {
           "eyebrow": "Estado",
           "title": "Todos los sistemas operativos.",
-          "body": "Salud del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete para recibir alertas de incidencias por correo o webhook."
+          "body": "Salud del ecosistema en tiempo real para ATLVS, GVTEWAY, COMPVSS, LEG3ND y la superficie de marketing. Suscríbete para recibir alertas de incidencias por correo o webhook.",
+          "badgeChecked": "Los componentes monitoreados responden con normalidad",
+          "badgeDegraded": "Se detectó rendimiento degradado",
+          "badgeOutage": "Se detectó una interrupción del servicio"
         },
         "stateLabel": {
           "operational": "Operativo",
           "degraded": "Degradado",
-          "outage": "Interrupción mayor"
+          "outage": "Interrupción mayor",
+          "unknown": "Aún sin monitorear"
         },
         "comingSoon": {
           "cta": "Recibe aviso en el lanzamiento"
@@ -2996,6 +3037,21 @@
         "cta": {
           "title": "ATLVS está abierto.",
           "subtitle": "Gratis para equipos pequeños. Precio por organización de ahí en adelante."
+        },
+        "incidents": {
+          "eyebrow": "Historial de incidentes",
+          "title": "Aún no hay incidentes publicados"
+        },
+        "probes": {
+          "db": {
+            "name": "Base de datos y API de la plataforma"
+          },
+          "integrations": {
+            "name": "Pagos, webhooks y Aurora AI"
+          },
+          "web": {
+            "name": "Aplicación web"
+          }
         }
       },
       "teams": {
@@ -3098,6 +3154,15 @@
           "capacity": {
             "title": "Calculadora de aforo de recinto",
             "short": "Estima la ocupación máxima a partir de los metros cuadrados y el tipo de uso."
+          },
+          "crewSize": {
+            "title": "Calculadora de tamaño del equipo"
+          },
+          "generator": {
+            "title": "Calculadora de tamaño de generador"
+          },
+          "restroom": {
+            "title": "Calculadora de sanitarios y ADA"
           }
         },
         "card": {
@@ -3132,6 +3197,464 @@
         "hero": {
           "eyebrow": "Postular",
           "perDay": " / día"
+        }
+      },
+      "atlvsTeaser": {
+        "breadcrumbs": {
+          "home": "Inicio"
+        },
+        "cta": {
+          "title": "Mientras tanto, el ecosistema está abierto."
+        },
+        "faq": {
+          "waitlist": {
+            "q": "¿Qué gano al unirme a la lista de espera?"
+          },
+          "what": {
+            "q": "¿Qué es ATLVS?"
+          },
+          "when": {
+            "q": "¿Cuándo se lanza?"
+          }
+        },
+        "hero": {
+          "cta": "Únete a la lista de espera",
+          "eyebrow": "ATLVS · Próximamente",
+          "title": "La consola del operador está en el banco de trabajo"
+        },
+        "honest": {
+          "eyebrow": "En qué punto está",
+          "title": "Se está construyendo ahora. Sin fechas de lanzamiento inventadas."
+        },
+        "metadata": {
+          "ogImageEyebrow": "Próximamente",
+          "ogImageTitle": "ATLVS: la consola del operador",
+          "title": "ATLVS: la consola del operador, próximamente"
+        },
+        "pillars": {
+          "advancing": {
+            "name": "Paquetes de advancing"
+          },
+          "matrix": {
+            "name": "La lente de tareas Coordinate Matrix"
+          },
+          "records": {
+            "name": "Finanzas y compras sobre un mismo almacén de registros"
+          },
+          "spine": {
+            "name": "El eje Sell to Settle"
+          }
+        },
+        "pillarsSection": {
+          "auroraCta": "Conoce a Aurora →",
+          "eyebrow": "Lo que estamos construyendo",
+          "title": "ERP, CRM y PM sobre un mismo almacén de registros"
+        },
+        "waitlist": {
+          "eyebrow": "Lista de espera",
+          "title": "Sé el primero en entrar"
+        }
+      },
+      "developers": {
+        "apiSection": {
+          "eyebrow": "La API",
+          "title": "Lo que está abierto a terceros hoy"
+        },
+        "breadcrumbs": {
+          "developers": "Desarrolladores",
+          "home": "Inicio"
+        },
+        "buildSection": {
+          "eyebrow": "Lanza con nosotros",
+          "integration": {
+            "cta": "Envía una integración",
+            "title": "Publica una integración"
+          },
+          "partner": {
+            "cta": "Programa de partners",
+            "ctaDirectory": "Directorio de agencias",
+            "title": "Únete al programa de partners"
+          },
+          "title": "Dos formas de entrar"
+        },
+        "cta": {
+          "title": "La especificación es el pitch."
+        },
+        "docsSection": {
+          "docs": "Documentación del producto y la plataforma",
+          "eyebrow": "Lectura",
+          "spec": "Especificación OpenAPI 3, generada desde las rutas en producción",
+          "title": "El rastro documental",
+          "tokens": "Genera un token de acceso personal en la configuración de la API",
+          "tokensCta": "Obtén un token"
+        },
+        "domains": {
+          "advancing": {
+            "name": "Advancing"
+          },
+          "documents": {
+            "name": "Documentos"
+          },
+          "reports": {
+            "name": "Reportes y métricas"
+          }
+        },
+        "faq": {
+          "live": {
+            "q": "¿La API está disponible hoy?"
+          },
+          "sdk": {
+            "q": "¿Hay un SDK?"
+          },
+          "token": {
+            "q": "¿Cómo obtengo un token?"
+          }
+        },
+        "hero": {
+          "ctaSpec": "Lee la especificación OpenAPI",
+          "ctaSubmit": "Envía una integración",
+          "eyebrow": "Desarrolladores y partners",
+          "title": "Construye sobre el almacén de registros"
+        },
+        "metadata": {
+          "ogImageEyebrow": "Desarrolladores",
+          "ogImageTitle": "Construye sobre el almacén de registros",
+          "title": "Desarrolladores: construye sobre el almacén de registros"
+        },
+        "scopesSection": {
+          "eyebrow": "Acceso",
+          "title": "Los tokens llevan solo lo que tú otorgas"
+        },
+        "scopesTable": {
+          "grants": "Qué otorga",
+          "scope": "Scope"
+        }
+      },
+      "gvtewayTeaser": {
+        "breadcrumbs": {
+          "home": "Inicio"
+        },
+        "coming": {
+          "portals": {
+            "name": "Portales de stakeholders"
+          },
+          "ticketing": {
+            "name": "Ticketing"
+          }
+        },
+        "comingSection": {
+          "eyebrow": "En el taller",
+          "title": "Ticketing y portales son lo próximo"
+        },
+        "cta": {
+          "secondary": "Explora el marketplace",
+          "title": "No esperes en la puerta."
+        },
+        "faq": {
+          "live": {
+            "q": "¿Qué puedo usar ahora mismo?"
+          },
+          "what": {
+            "q": "¿Qué es GVTEWAY?"
+          },
+          "when": {
+            "q": "¿Cuándo se lanzan el ticketing y los portales?"
+          }
+        },
+        "hero": {
+          "ctaMarketplace": "Explora el marketplace en vivo",
+          "ctaWaitlist": "Únete a la lista de espera",
+          "eyebrow": "GVTEWAY · Próximamente",
+          "title": "Cada mundo necesita una entrada"
+        },
+        "live": {
+          "gigs": {
+            "name": "Gigs y empleos"
+          },
+          "rfqs": {
+            "name": "RFQs y proveedores"
+          },
+          "talent": {
+            "name": "Talento y equipo"
+          }
+        },
+        "liveSection": {
+          "eyebrow": "Abierto hoy",
+          "linkLabel": "Míralo en vivo",
+          "title": "El marketplace ya está abierto"
+        },
+        "metadata": {
+          "ogImageEyebrow": "Próximamente",
+          "ogImageTitle": "GVTEWAY: la interfaz pública",
+          "title": "GVTEWAY: la interfaz pública, próximamente"
+        },
+        "waitlist": {
+          "eyebrow": "Lista de espera",
+          "title": "Entérate primero"
+        }
+      },
+      "aurora": {
+        "meta": {
+          "title": "Aurora AI, con tecnología de Brio: un asistente para todo el ecosistema",
+          "description": "Aurora AI responde desde los registros de tu espacio de trabajo con citas y una calificación de confianza. Disponible hoy en la app de campo COMPVSS; los flujos de la consola llegan con ATLVS. Con tecnología de Brio.",
+          "ogImageTitle": "Pregúntale a Aurora."
+        },
+        "crumbs": {
+          "home": "Inicio"
+        },
+        "status": {
+          "live": "Disponible hoy",
+          "preview": "En vista previa",
+          "coming": "Llega con {product}"
+        },
+        "products": {
+          "compvss": {
+            "role": "La app de campo. Disponible ya.",
+            "scan": {
+              "title": "Del escaneo al borrador",
+              "body": "Apunta la cámara del teléfono a un recibo o una factura. Aurora lee el proveedor, el total y la fecha en un borrador, sugiere un código de costos a partir de tu propio historial de gastos y espera a que confirmes. Nada se escribe solo en los libros."
+            },
+            "chat": {
+              "title": "Chat de campo de Aurora",
+              "body": "La pestaña de Aurora ya está en la app de campo como asistente guiado. Pregunta dónde es tu próximo turno y te lleva a la superficie correcta; no va a inventar un número que no puede ver. El runtime conversacional llega con Brio."
+            }
+          },
+          "legend": {
+            "role": "Donde vive la organización.",
+            "knowledge": {
+              "title": "Conocimiento que responde",
+              "body": "Tus estándares, SOPs y guías de evento se convierten en el corpus desde el que Aurora responde, sincronizado por evento. La respuesta en la puerta coincide con la carpeta de la oficina de producción porque es el mismo documento."
+            }
+          },
+          "atlvs": {
+            "role": "La consola del productor. En desarrollo activo, y Aurora ya está integrada en ella.",
+            "copilot": {
+              "title": "Copilot fundamentado",
+              "body": "Haz una pregunta y recibe una respuesta construida solo desde los documentos indexados de tu organización, con cada afirmación citada por número de fuente y una calificación de confianza sobre la respuesta completa. Cuando ninguna fuente coincide, lo dice en lugar de adivinar."
+            },
+            "assistant": {
+              "title": "Asistente del espacio de trabajo",
+              "body": "Chat en streaming con historial de conversaciones, guardado dentro de tu tenant. Claude Sonnet para el día a día, Claude Opus cuando una pregunta merece pensarse a fondo."
+            },
+            "suggests": {
+              "title": "Copilot Suggests",
+              "body": "Un carril de próximas acciones calculadas desde datos reales de tu organización: tareas bloqueadas, aprobaciones en espera, incidentes abiertos. Nunca aplica nada por su cuenta. Cada tarjeta enlaza directo a la superficie que lo resuelve, y tú haces la resolución."
+            },
+            "drafting": {
+              "title": "Redacción de papeleo",
+              "body": "Borradores de propuestas listos para el cliente a partir de los metadatos del propio registro más tus instrucciones. Tú aceptas o descartas; un borrador nunca se publica solo."
+            },
+            "intake": {
+              "title": "Ingesta de documentos",
+              "body": "Facturas por pagar, COIs y W-9 leídos en campos estructurados con un puntaje de confianza en cada extracción. Todo lo que quede por debajo del umbral se envía a una cola de revisión humana en lugar del libro contable."
+            },
+            "recaps": {
+              "title": "Resúmenes de reuniones y agentes de campo",
+              "body": "Entra una transcripción y sale un resumen conciso con acciones concretas, guardado en la nota de la reunión. Los agentes de campo mantienen actualizada una columna derivada a partir de los valores del propio registro cada vez que este cambia, contra una lista aprobada de tablas que tú controlas."
+            }
+          },
+          "gvteway": {
+            "role": "Donde se vive el mundo.",
+            "concierge": {
+              "title": "Concierge de invitados y equipo",
+              "body": "Aurora contesta el teléfono. Preguntas de boletería, estacionamiento, objetos perdidos, consultas de credenciales, por voz, SMS o chat web, a toda hora, con un humano avisado en el momento en que una conversación lo necesita. Esta es la capa de canales de Brio de punta a punta."
+            }
+          }
+        },
+        "faq": {
+          "what": {
+            "q": "¿Qué es Aurora AI?",
+            "a": "Aurora es el único asistente de IA en todo el ecosistema ATLVS: la consola del productor, la app de campo, los portales públicos y la capa de conocimiento. Una sola identidad de agente en todas partes, así el equipo le pregunta a Aurora en la puerta y el productor le pregunta a Aurora en la consola, y ambos reciben respuestas fundamentadas en los mismos registros."
+          },
+          "brio": {
+            "q": "¿Qué es Brio?",
+            "a": "Brio (heybrio.ai) es el runtime conversacional que impulsa a Aurora: los canales de chat, voz y SMS donde responde. Brio lleva la conversación; ATLVS sigue siendo el sistema de registro y aporta los datos en vivo y el conocimiento desde los que Aurora responde. Nunca vas a entregar tus registros a una caja negra."
+          },
+          "today": {
+            "q": "¿Qué puede hacer Aurora hoy?",
+            "a": "Dos cosas están en los teléfonos ahora mismo. La captura del escaneo al borrador en COMPVSS lee recibos y facturas en borradores que tú confirmas, y la pestaña de Aurora funciona como asistente guiado en vista previa. Los flujos de la consola, desde el Copilot fundamentado hasta la ingesta de documentos, están construidos y llegan con ATLVS."
+          },
+          "grounding": {
+            "q": "¿Cómo se fundamenta Aurora y qué pasa con nuestros datos?",
+            "a": "Aurora lee a través de la misma seguridad a nivel de fila que tu equipo, así que tu tenant queda aislado en la propia base de datos. Las respuestas fundamentadas citan sus fuentes y llevan una calificación de confianza. No entrenamos modelos con tus datos; Aurora funciona con Anthropic Claude y tus conversaciones se quedan dentro de tu tenant."
+          },
+          "when": {
+            "q": "¿Cuándo llega el runtime conversacional completo?",
+            "a": "No vamos a disfrazar un roadmap de promesa, así que no habrá fecha hasta que sea una de verdad. La vista previa de COMPVSS ya está en los teléfonos, la captura por escaneo está disponible y los flujos de la consola llegan con ATLVS. Los miembros de la lista de espera se enteran primero cuando cada superficie se abre."
+          },
+          "title": "Aurora AI, preguntas y respuestas"
+        },
+        "jsonLd": {
+          "description": "Aurora AI, con tecnología de Brio: el asistente de todo el ecosistema ATLVS. Respuestas fundamentadas en los registros de tu espacio de trabajo, con citas y una calificación de confianza."
+        },
+        "hero": {
+          "eyebrow": "Aurora AI · Con tecnología de Brio",
+          "titlePrefix": "Pregúntale a ",
+          "titleSuffix": ". Ya se leyó el run of show.",
+          "body": "Aurora es el único asistente en todo el ecosistema. Responde desde tu espacio de trabajo: los proyectos, cronogramas, facturas y call sheets que tu equipo ya guarda aquí. Respuestas fundamentadas, fuentes citadas y un humano con la llave de publicación.",
+          "attribution": "Con tecnología de Brio, el runtime conversacional que le da a Aurora sus canales de chat, voz y SMS. Brio lleva la conversación; los registros de tu organización aportan la verdad.",
+          "secondaryCta": "Únete a la lista de espera de Aurora"
+        },
+        "where": {
+          "heading": "Dónde trabaja Aurora",
+          "body": "Cada elemento de abajo muestra su estado real. Disponible hoy significa que ya funciona en producción, en vista previa señala una superficie deliberadamente limitada que puedes probar hoy, y llega con marca lo construido para un producto que todavía no abre."
+        },
+        "trust": {
+          "eyebrow": "Fundamentado por diseño",
+          "heading": "Muestra su trabajo.",
+          "rls": {
+            "title": "Aislado por organización",
+            "body": "Aurora lee a través de la misma seguridad a nivel de fila que tu equipo. Tu tenant está separado en la propia base de datos, y los datos de otra organización son inalcanzables por construcción."
+          },
+          "citations": {
+            "title": "Citas y una calificación de confianza",
+            "body": "Las respuestas fundamentadas salen solo de tu corpus indexado, citan cada afirmación por número de fuente y califican qué tan bien las fuentes respaldan la respuesta. Si no hay fuentes que coincidan, lo dice en lugar de adivinar."
+          },
+          "hitl": {
+            "title": "Un humano tiene la llave de publicación",
+            "body": "Los borradores siguen siendo borradores hasta que alguien los acepta, y las sugerencias nunca se aplican solas. Las extracciones con menos de 90 por ciento de confianza pasan a una cola de revisión."
+          },
+          "training": {
+            "title": "Sin entrenamiento con tus datos",
+            "body": "No entrenamos modelos. Aurora funciona con Anthropic Claude, y tus conversaciones se registran dentro de tu propio tenant, donde puedes consultarlas y exportarlas."
+          },
+          "metered": {
+            "title": "Medido y con tope",
+            "body": "Cada llamada pasa por límites de velocidad antes de llegar al modelo y el uso se mide por organización, así que un script fuera de control no puede inflar tu factura."
+          },
+          "kit": {
+            "title": "Un solo lenguaje de superficie de IA",
+            "body": "El streaming, el pensamiento, las citas y la confianza comparten un mismo lenguaje de diseño en todos los productos, así siempre sabes cuándo Aurora está generando, qué consultó y qué tan segura está."
+          }
+        },
+        "waitlist": {
+          "eyebrow": "Lista de espera",
+          "heading": "Primero en la fila cuando se enciendan las luces.",
+          "body": "El runtime conversacional aterriza superficie por superficie, y los miembros de la lista de espera se enteran de cada una antes que nadie. Un correo por apertura. Sin campañas de goteo."
+        },
+        "cta": {
+          "title": "Lleva a Aurora a tu próximo montaje.",
+          "subtitle": "Empieza gratis, escanea un recibo esta noche y deja que el resto de Aurora te encuentre donde está el trabajo."
+        }
+      },
+      "compvssHome": {
+        "meta": {
+          "title": "COMPVSS: operaciones de sitio y venue para equipos sin escritorio",
+          "description": "Turnos, escaneo en puerta, incidentes, punch lists, custodia de activos. PWA offline-first que se instala desde el navegador en un toque. Precio por organización, nunca por usuario.",
+          "ogImageTitle": "El campo corre sobre esto."
+        },
+        "crumbs": {
+          "home": "Inicio"
+        },
+        "hero": {
+          "title": "La puerta no espera a la hoja de cálculo.",
+          "body": "Horarios de llamado en papel, escaneos en una pistola rentada, reportes de incidentes escritos de memoria dos días después. COMPVSS pone el reloj de turnos, el escáner de puerta, el registro de incidentes y la punch list en los teléfonos del propio equipo, y sigue funcionando cuando la señal se corta.",
+          "secondaryCta": "Ver precios"
+        },
+        "stats": {
+          "scan": {
+            "value": "Menos de 100 ms",
+            "label": "Escaneo en puerta, del lado del servidor"
+          },
+          "night": {
+            "value": "15,000",
+            "label": "Escaneos en una sola noche"
+          },
+          "install": {
+            "value": "Un toque",
+            "label": "Se instala desde el navegador"
+          },
+          "pricing": {
+            "value": "Por organización",
+            "label": "Nunca por usuario"
+          }
+        },
+        "features": {
+          "heading": "Lo que el campo opera aquí.",
+          "body": "Cada superficie de abajo está disponible hoy. Nada de esto es una diapositiva de roadmap.",
+          "shifts": {
+            "title": "Turnos y reloj de tiempo",
+            "body": "Registro de entrada geoverificado contra tus zonas de reloj, con descansos, créditos de comida y un respaldo manual para la esquina del lote donde el GPS se rinde."
+          },
+          "gateScan": {
+            "title": "Escaneo en puerta, offline-first",
+            "body": "QR y código de barras, menos de 100 ms del lado del servidor. Aceptado, duplicado, anulado, no encontrado, vencido, zona equivocada: cada resultado es su propio estado, legible con el brazo estirado."
+          },
+          "incidents": {
+            "title": "Incidentes",
+            "body": "Reporta con fotos, ubicación y testigos. Hazlo de forma anónima si eso es lo que hace falta para recibir el reporte. Cerrar una lesión o un incidente mayor requiere la firma de un gerente."
+          },
+          "punch": {
+            "title": "Punch lists, bitácoras diarias, relevos",
+            "body": "Recorre el sitio, marca lo que está mal, ciérralo con fotos. Las bitácoras diarias y los relevos de turno le dejan al siguiente equipo un rastro escrito en lugar de un rumor de pasillo."
+          },
+          "assets": {
+            "title": "Custodia de activos y escaneo GTIN",
+            "body": "Escanea el código de barras que ya viene impreso en el case. Asigna el equipo a una persona, mira quién tiene qué en este momento y recupéralo todo en el load-out."
+          },
+          "advancing": {
+            "title": "Advancing y credenciales",
+            "body": "Boletos, credenciales, radios, hospedaje: cada asignación aterriza en el teléfono del propio titular, con el código de escaneo para demostrarlo en la puerta."
+          },
+          "auroraNote": "Hay una pestaña más en la barra: Aurora AI, con tecnología de Brio, el asistente que estamos construyendo para todo el ecosistema. El lugar ya está ahí; el asistente sigue en construcción, y lo diremos así hasta que deje de estarlo.",
+          "auroraCta": "Conoce a Aurora →"
+        },
+        "offline": {
+          "eyebrow": "Offline-first",
+          "heading": "Hecho para el venue con una sola barra de LTE.",
+          "body1": "COMPVSS es una aplicación web instalable. Abre el enlace, toca Instalar y queda en la pantalla de inicio como un lanzador de pantalla completa. Sin revisión de App Store, sin actualizar la flota la mañana del show.",
+          "body2": "El escáner y el call sheet del día se guardan en caché en el dispositivo. Cuando la red se cae, los escaneos se encolan localmente y se reproducen en orden en cuanto vuelve la señal. Los duplicados que el dispositivo no pudo confirmar durante la ventana sin conexión quedan marcados como pendientes, y el servidor los reconcilia al sincronizar.",
+          "bullets": {
+            "install": "Se instala desde el navegador en un toque",
+            "queue": "La cola de escaneos sin conexión se reproduce en orden, nada se pierde",
+            "states": "Estados de escaneo diferenciados: aceptado, duplicado, anulado, no encontrado, vencido, zona equivocada",
+            "geo": "Registro de entrada geoverificado con márgenes de precisión y respaldo manual",
+            "permissions": "La cámara y el GPS se solicitan solo cuando una superficie los necesita",
+            "contrast": "Pantallas de alto contraste, legibles a plena luz del día en la puerta"
+          }
+        },
+        "recordStore": {
+          "eyebrow": "Un solo almacén de registros",
+          "heading": "El campo escribe. Todos leen.",
+          "col1": "Un escaneo en la puerta es una fila en el mismo almacén de registros por organización que lee la oficina de producción. Sin exportar a medianoche, sin recapturar en un segundo sistema, sin sincronizar a la mañana siguiente.",
+          "col2": "Las marcas del reloj aterrizan como las entradas de tiempo desde las que nómina liquida. Un incidente reportado en la valla avisa a la consola en el momento en que se guarda. La punch list que un equipo cierra esta noche es la que la oficina revisa mañana.",
+          "col3": "El acceso está aislado por organización en la base de datos, y cada portal de stakeholders lee su propia porción de las mismas filas. Una sola verdad, vista desde donde estés parado."
+        },
+        "pricingTeaser": {
+          "heading": "Por organización. Nunca por usuario.",
+          "body": "Gratis para siempre para equipos chicos, precio por organización hasta arriba. Invita a todo el equipo de puerta en la primera semana; la factura no se mueve.",
+          "cta": "Ver precios"
+        },
+        "faq": {
+          "title": "COMPVSS, preguntas y respuestas",
+          "join": {
+            "q": "¿Cómo se une el equipo?",
+            "a": "El equipo se une a una organización existente por invitación o con el código de la organización, directo desde el teléfono. Las organizaciones se crean y configuran en LEG3ND en la web, así que la organización queda lista antes de que el primer miembro inicie sesión."
+          },
+          "native": {
+            "q": "¿COMPVSS es una app nativa de iOS o Android?",
+            "a": "No. Es una aplicación web instalable: abre la URL, toca Instalar y corre a pantalla completa desde la pantalla de inicio. Sin revisión de App Store y sin desfase de versiones en un equipo de puerta de 400 personas."
+          },
+          "signal": {
+            "q": "¿Qué pasa cuando el venue no tiene señal?",
+            "a": "El escáner y el call sheet del día se guardan en caché en el dispositivo. Los escaneos se encolan localmente y se reproducen en orden cuando vuelve la señal; los duplicados que el dispositivo no pudo confirmar quedan marcados como pendientes y el servidor los reconcilia al sincronizar."
+          },
+          "gateSpeed": {
+            "q": "¿Qué tan rápido es el escaneo en puerta?",
+            "a": "Menos de 100 ms del lado del servidor; una conexión celular en EE. UU. agrega entre 200 y 400 ms de ida y vuelta. Los escaneos sin conexión se resuelven al instante en el dispositivo."
+          },
+          "anonymous": {
+            "q": "¿El equipo puede reportar incidentes de forma anónima?",
+            "a": "Sí. Quien reporta puede hacerlo sin vincular su identidad al registro. Cerrar una lesión o un incidente mayor o crítico sigue requiriendo la firma de un gerente, así que el anonimato nunca baja la vara del seguimiento."
+          },
+          "cost": {
+            "q": "¿Cuánto cuesta?",
+            "a": "El precio es por organización, nunca por usuario, con un nivel gratuito para equipos chicos. Sumar personal nunca sube la factura, y eso importa cuando tu plantilla se triplica la semana del show."
+          }
+        },
+        "cta": {
+          "title": "Ponlo en sus teléfonos.",
+          "subtitle": "Se instala desde el navegador en un toque. Sin App Store, sin actualizar la flota, listo antes de la prueba de sonido."
         }
       },
       "marketplace-inquire": {
@@ -3265,7 +3788,87 @@
           "title": "Olvídate de las cuentas.",
           "subtitle": "Los viáticos se calculan automáticamente en cada show dentro de ATLVS, vinculados a tu plantilla."
         }
-      }
+      },
+      "crewSize": {
+        "crumbsLabel": "Calculadora de tamaño del equipo",
+        "cta": {
+          "primary": "Conoce COMPVSS",
+          "title": "Arma tu equipo en COMPVSS."
+        },
+        "faq": {
+          "compliant": {
+            "q": "¿Esto es asesoría de personal conforme a normativa?"
+          },
+          "how": {
+            "q": "¿Cómo se calcula el tamaño del equipo?"
+          },
+          "source": {
+            "q": "¿De dónde salen las proporciones?"
+          }
+        },
+        "how": {
+          "heading": "Cómo funcionan las proporciones de personal."
+        },
+        "meta": {
+          "title": "Calculadora de tamaño del equipo: seguridad, stewards, médicos"
+        },
+        "schemaName": "Calculadora de tamaño del equipo de ATLVS",
+        "title": "Calculadora de tamaño del equipo."
+      },
+      "generator": {
+        "crumbsLabel": "Calculadora de tamaño de generador",
+        "cta": {
+          "primary": "Conoce COMPVSS",
+          "title": "La energía pasa por COMPVSS."
+        },
+        "faq": {
+          "compliant": {
+            "q": "¿Esto es asesoría eléctrica conforme a normativa?"
+          },
+          "how": {
+            "q": "¿Cómo se calcula el tamaño del generador?"
+          },
+          "source": {
+            "q": "¿De dónde salen los valores predeterminados?"
+          }
+        },
+        "how": {
+          "heading": "Cómo funciona el dimensionamiento de generadores."
+        },
+        "meta": {
+          "title": "Calculadora de tamaño de generador: kVA para energía de eventos"
+        },
+        "schemaName": "Calculadora de tamaño de generador de ATLVS",
+        "title": "Calculadora de tamaño de generador."
+      },
+      "legendLink": "Explora LEG3ND",
+      "restroom": {
+        "crumbsLabel": "Calculadora de sanitarios y ADA",
+        "cta": {
+          "primary": "Conoce COMPVSS",
+          "title": "Las operaciones de sitio viven en COMPVSS."
+        },
+        "faq": {
+          "compliant": {
+            "q": "¿Esto es asesoría sanitaria conforme a normativa?"
+          },
+          "how": {
+            "q": "¿Cómo se calcula la cantidad de sanitarios?"
+          },
+          "source": {
+            "q": "¿De dónde salen los números?"
+          }
+        },
+        "how": {
+          "heading": "Cómo funcionan los conteos sanitarios."
+        },
+        "meta": {
+          "title": "Calculadora de sanitarios y ADA: unidades portátiles para eventos"
+        },
+        "schemaName": "Calculadora de sanitarios y ADA de ATLVS",
+        "title": "Calculadora de sanitarios y ADA."
+      },
+      "xpmsGlossaryLink": "¿Qué es XPMS?"
     },
     "marketplace": {
       "crumbsLabel": "Marketplace",
@@ -3807,6 +4410,18 @@
         "title": "Kit de logo ATLVS · El Waypoint",
         "description": "La marca ATLVS es el Waypoint: una estrella de navegación de 8 puntas con un vacío central. Lockup principal, iconos de app por producto, espacio libre, aval y sí/no."
       }
+    },
+    "waitlist": {
+      "actions": {
+        "submit": "Únete a la lista de espera",
+        "submitting": "Agregándote…"
+      },
+      "fields": {
+        "company": "Empresa (opcional)",
+        "email": "Correo de trabajo",
+        "name": "Nombre (opcional)"
+      },
+      "successTitle": "Ya estás en la lista."
     }
   },
   "auth": {

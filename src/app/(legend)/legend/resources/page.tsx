@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -99,7 +99,8 @@ export default async function ResourcesHubPage() {
                   {group.resources.length === 1 ? "1 item" : `${group.resources.length} items`}
                 </Badge>
               </div>
-              <DataTable<Resource>
+              <DataView<Resource>
+                tableId={`t:/legend/resources:${group.collection?.id ?? "ungrouped"}`}
                 rows={group.resources}
                 rowHref={(r) => `/legend/resources/${r.id}`}
                 emptyLabel="No resources in this collection"

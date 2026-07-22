@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </section>
         )}
 
-        <DataTable<Block>
+        <DataView<Block>
           rows={blocks}
           emptyLabel={t("p.delegation.accommodation.emptyLabel", undefined, "No accommodation blocks")}
           emptyDescription={t(
@@ -146,21 +146,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "rooms",
               header: t("p.delegation.accommodation.colRooms", undefined, "Rooms"),
-              render: (r) => (
-                <span className="font-mono text-xs">
-                  {r.rooms_confirmed}/{r.rooms_reserved}
-                </span>
-              ),
+              render: (r) => `${r.rooms_confirmed}/${r.rooms_reserved}`,
+              mono: true,
               accessor: (r) => Number(r.rooms_confirmed ?? 0),
             },
             {
               key: "window",
               header: t("p.delegation.accommodation.colWindow", undefined, "Window"),
-              render: (r) => (
-                <span className="font-mono text-[11px]">
-                  {fmt(r.starts_on)} – {fmt(r.ends_on)}
-                </span>
-              ),
+              render: (r) => `${fmt(r.starts_on)} – ${fmt(r.ends_on)}`,
+              mono: true,
               accessor: (r) => r.starts_on ?? null,
             },
             {

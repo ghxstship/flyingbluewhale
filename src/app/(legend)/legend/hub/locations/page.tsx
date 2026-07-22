@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -78,7 +78,7 @@ export default async function LocationsPillarPage() {
             action={<Button href="/legend/hub/locations/new">+ Add Location</Button>}
           />
         ) : (
-          <DataTable<LocationRow>
+          <DataView<LocationRow>
             rows={rows}
             rowHref={(l) => `/legend/hub/locations/${l.id}`}
             emptyLabel="No locations"

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -123,7 +123,7 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
 
         <div>
           <h3 className="mb-3 text-sm font-semibold">Placements</h3>
-          <DataTable<SignagePlacement>
+          <DataView<SignagePlacement>
             rows={placements}
             emptyLabel="No placements yet"
             emptyDescription="Record where this sign is planned, installed, or has been removed."

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PortalSubpage } from "@/components/PortalSubpage";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       title={t("p.client.proposals.title", undefined, "Proposals")}
       subtitle={t("p.client.proposals.subtitle", undefined, "Review, approve, e-sign")}
     >
-      <DataTable<Proposal>
+      <DataView<Proposal>
         rows={rows}
         emptyLabel={t("p.client.proposals.empty", undefined, "No Proposals to Review")}
         emptyDescription={t(
@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             key: "amount",
             header: t("p.client.proposals.col.amount", undefined, "Amount"),
             render: (r) => formatMoney(r.amount_cents ?? 0),
-            className: "font-mono text-xs",
+            mono: true,
             accessor: (r) => Number(r.amount_cents ?? 0),
           },
           {
@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             key: "sent",
             header: t("p.client.proposals.col.sent", undefined, "Sent"),
             render: (r) => (r.sent_at ? timeAgo(r.sent_at) : "—"),
-            className: "font-mono text-xs",
+            mono: true,
             accessor: (r) => r.sent_at ?? null,
           },
           {

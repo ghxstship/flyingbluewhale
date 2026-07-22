@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
@@ -120,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </section>
         )}
 
-        <DataTable<EntitlementRow>
+        <DataView<EntitlementRow>
           rows={rows}
           emptyLabel={t("p.sponsor.entitlements.empty.label", undefined, "No entitlements on file")}
           emptyDescription={t(
@@ -138,17 +138,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "qty",
               header: t("p.sponsor.entitlements.col.quantity", undefined, "Quantity"),
-              render: (r) => (
-                <span className="font-mono text-xs">
-                  {r.delivered}/{r.quantity}
-                </span>
-              ),
+              render: (r) => `${r.delivered}/${r.quantity}`,
+              mono: true,
               accessor: (r) => Number(r.delivered ?? 0),
             },
             {
               key: "due",
               header: t("p.sponsor.entitlements.col.due", undefined, "Due"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_by)}</span>,
+              render: (r) => fmtDate(r.due_by),
+              mono: true,
               accessor: (r) => r.due_by ?? null,
             },
             {
@@ -164,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               header: t("p.sponsor.entitlements.col.evidence", undefined, "Evidence"),
               render: (r) =>
                 r.evidence_path ? (
-                  <span className="font-mono text-[11px] text-[var(--p-accent)]">
+                  <span className="text-[11px] text-[var(--p-accent)]">
                     {t("p.sponsor.entitlements.attached", undefined, "attached")}
                   </span>
                 ) : (

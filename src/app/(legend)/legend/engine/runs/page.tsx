@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { AccessDenied } from "@/components/ui/AccessDenied";
@@ -58,7 +58,7 @@ export default async function RunsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<ComplianceRunRow>
+        <DataView<ComplianceRunRow>
           rows={rows}
           rowHref={(r) => `/legend/engine/runs/${r.id}`}
           emptyLabel="No compliance runs yet"

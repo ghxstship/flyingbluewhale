@@ -1,5 +1,5 @@
 import { PortalSubpage } from "@/components/PortalSubpage";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { listDeliverables, projectIdFromSlug, labelForType } from "@/lib/db/advancing";
 import { timeAgo } from "@/lib/format";
@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       title={t("p.client.deliverables.title", undefined, "Deliverables")}
       subtitle={t("p.client.deliverables.subtitle", undefined, "Documents and assets for this project")}
     >
-      <DataTable<Deliverable>
+      <DataView<Deliverable>
         rows={rows}
         emptyLabel={t("p.client.deliverables.empty", undefined, "No Deliverables Yet")}
         emptyDescription={t(
@@ -38,7 +38,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {
             key: "type",
             header: t("p.client.deliverables.col.type", undefined, "Type"),
-            render: (r) => <span className="font-mono text-xs">{labelForType(r.type)}</span>,
+            render: (r) => labelForType(r.type),
+            mono: true,
             filterable: true,
             groupable: true,
             accessor: (r) => r.type ?? null,
@@ -55,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             key: "updated",
             header: t("p.client.deliverables.col.updated", undefined, "Updated"),
             render: (r) => timeAgo(r.updated_at),
-            className: "font-mono text-xs",
+            mono: true,
             accessor: (r) => r.updated_at,
           },
         ]}

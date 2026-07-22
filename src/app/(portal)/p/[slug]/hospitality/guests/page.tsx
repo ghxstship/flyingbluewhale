@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           />
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={guests}
           emptyLabel={t("p.hospitality.guests.emptyLabel", undefined, "No guests yet")}
           emptyDescription={t(
@@ -168,13 +168,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "code",
               header: t("p.hospitality.guests.column.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-[11px]">{r.code ? r.code.slice(-8) : "—"}</span>,
+              render: (r) => (r.code ? r.code.slice(-8) : "—"),
+              mono: true,
               accessor: (r) => r.code,
             },
             {
               key: "scanned",
               header: t("p.hospitality.guests.column.checkedIn", undefined, "Checked in"),
-              render: (r) => <span className="font-mono text-xs">{fmt(r.fulfilled_at)}</span>,
+              render: (r) => fmt(r.fulfilled_at),
+              mono: true,
               accessor: (r) => r.fulfilled_at ?? null,
             },
             {

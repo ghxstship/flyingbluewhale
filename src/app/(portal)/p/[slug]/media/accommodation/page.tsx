@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           />
         </div>
 
-        <DataTable<Block>
+        <DataView<Block>
           rows={blocks}
           emptyLabel={t("p.media.accommodation.empty.label", undefined, "No media accommodation blocks")}
           emptyDescription={t(
@@ -123,21 +123,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "rooms",
               header: t("p.media.accommodation.columns.rooms", undefined, "Rooms"),
-              render: (r) => (
-                <span className="font-mono text-xs">
-                  {r.rooms_confirmed}/{r.rooms_reserved}
-                </span>
-              ),
+              render: (r) => `${r.rooms_confirmed}/${r.rooms_reserved}`,
+              mono: true,
               accessor: (r) => Number(r.rooms_confirmed ?? 0),
             },
             {
               key: "window",
               header: t("p.media.accommodation.columns.window", undefined, "Window"),
-              render: (r) => (
-                <span className="font-mono text-[11px]">
-                  {fmt(r.starts_on)} – {fmt(r.ends_on)}
-                </span>
-              ),
+              render: (r) => `${fmt(r.starts_on)} – ${fmt(r.ends_on)}`,
+              mono: true,
               accessor: (r) => r.starts_on ?? null,
             },
             {

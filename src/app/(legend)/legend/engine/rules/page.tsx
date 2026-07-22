@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { AccessDenied } from "@/components/ui/AccessDenied";
 import { requireSession, isManagerPlus } from "@/lib/auth";
@@ -46,7 +46,7 @@ export default async function RulesPage() {
         action={<Button href="/legend/engine/rules/new">+ New Rule</Button>}
       />
       <div className="page-content">
-        <DataTable<ComplianceRuleRow>
+        <DataView<ComplianceRuleRow>
           rows={rows}
           rowHref={(r) => `/legend/engine/rules/${r.id}`}
           emptyLabel="No compliance rules yet"

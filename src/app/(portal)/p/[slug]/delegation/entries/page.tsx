@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           />
         </div>
 
-        <DataTable<Entry>
+        <DataView<Entry>
           rows={rows}
           emptyLabel={t("p.delegation.entries.empty.label", undefined, "No entries yet")}
           emptyDescription={t(

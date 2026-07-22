@@ -1,7 +1,7 @@
 import QRCode from "qrcode";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { timeAgo } from "@/lib/format";
 import { listMyAssignments, type AssignmentListRow } from "@/lib/db/assignments";
@@ -80,15 +80,16 @@ export default async function MyTicketsPage() {
         {t("me.tickets.subtitle", { email: session.email }, `Tickets issued to ${session.email}`)}
       </p>
       <div className="mt-6">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("me.tickets.empty", undefined, "No tickets yet")}
           columns={[
             {
               key: "code",
               header: t("me.tickets.columns.pass", undefined, "Pass"),
+              mono: true,
               render: (r) => {
-                if (!r.scan_code) return <span className="font-mono text-xs">—</span>;
+                if (!r.scan_code) return <span className="text-xs">—</span>;
                 const qr = qrByCode.get(r.scan_code);
                 return (
                   <div className="flex flex-col items-start gap-1 py-1">
@@ -100,7 +101,7 @@ export default async function MyTicketsPage() {
                         className="h-20 w-20 rounded bg-white p-0.5"
                       />
                     )}
-                    <span className="font-mono text-[11px] text-[var(--p-text-2)]">{r.scan_code}</span>
+                    <span className="text-[11px] text-[var(--p-text-2)]">{r.scan_code}</span>
                   </div>
                 );
               },
@@ -126,14 +127,14 @@ export default async function MyTicketsPage() {
               key: "issued",
               header: t("me.tickets.columns.issued", undefined, "Issued"),
               render: (r) => (r.issued_at ? timeAgo(r.issued_at) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.issued_at,
             },
             {
               key: "redeemed",
               header: t("me.tickets.columns.redeemed", undefined, "Redeemed"),
               render: (r) => (r.fulfilled_at ? timeAgo(r.fulfilled_at) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.fulfilled_at ?? null,
             },
           ]}

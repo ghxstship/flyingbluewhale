@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -114,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           />
         </div>
 
-        <DataTable<Visa>
+        <DataView<Visa>
           rows={cases}
           emptyLabel={t("p.delegation.visa.empty.label", undefined, "No visa cases")}
           emptyDescription={t(
@@ -138,7 +138,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "passport",
               header: t("p.delegation.visa.col.passport", undefined, "Passport"),
-              render: (r) => <span className="font-mono text-[11px]">{maskPassport(r.passport_no)}</span>,
+              render: (r) => maskPassport(r.passport_no),
+              mono: true,
               accessor: (r) => r.passport_no ?? null,
             },
             {
@@ -152,7 +153,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               header: t("p.delegation.visa.col.letter", undefined, "Letter"),
               render: (r) =>
                 r.letter_path ? (
-                  <span className="font-mono text-[11px] text-[var(--p-accent)]">
+                  <span className="text-[11px] text-[var(--p-accent)]">
                     {t("p.delegation.visa.letter.onFile", undefined, "on file")}
                   </span>
                 ) : (

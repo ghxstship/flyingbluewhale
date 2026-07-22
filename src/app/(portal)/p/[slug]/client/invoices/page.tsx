@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FileDown } from "lucide-react";
 import { PortalSubpage } from "@/components/PortalSubpage";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       title={t("p.client.invoices.title", undefined, "Invoices")}
       subtitle={t("p.client.invoices.subtitle", undefined, "Pay invoices and download receipts")}
     >
-      <DataTable<Invoice>
+      <DataView<Invoice>
         rows={rows}
         emptyLabel={t("p.client.invoices.empty", undefined, "No Invoices Yet")}
         emptyDescription={t(
@@ -50,7 +50,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {
             key: "number",
             header: t("p.client.invoices.col.number", undefined, "Number"),
-            render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+            render: (r) => r.number,
+            mono: true,
             accessor: (r) => r.number ?? null,
           },
           {
@@ -63,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             key: "amount",
             header: t("p.client.invoices.col.amount", undefined, "Amount"),
             render: (r) => formatMoney(r.amount_cents, r.currency),
-            className: "font-mono text-xs",
+            mono: true,
             accessor: (r) => r.amount_cents ?? null,
           },
           {
@@ -78,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             key: "due",
             header: t("p.client.invoices.col.due", undefined, "Due"),
             render: (r) => r.due_at ?? "—",
-            className: "font-mono text-xs",
+            mono: true,
             accessor: (r) => r.due_at ?? null,
           },
           {

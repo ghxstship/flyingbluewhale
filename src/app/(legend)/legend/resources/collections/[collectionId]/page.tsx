@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -84,7 +84,7 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
               + New Resource
             </Button>
           </div>
-          <DataTable<Resource>
+          <DataView<Resource>
             rows={resources}
             rowHref={(r) => `/legend/resources/${r.id}`}
             emptyLabel="No resources in this collection"

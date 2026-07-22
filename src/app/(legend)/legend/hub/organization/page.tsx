@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -99,7 +99,8 @@ export default async function OrganizationPillarPage() {
                   {group.rows.length === 1 ? "1 position" : `${group.rows.length} positions`}
                 </Badge>
               </div>
-              <DataTable<Position>
+              <DataView<Position>
+                tableId={`t:/legend/hub/organization:${group.key}`}
                 rows={group.rows}
                 rowHref={(p) => `/legend/hub/organization/${p.id}`}
                 emptyLabel="No positions in this department"

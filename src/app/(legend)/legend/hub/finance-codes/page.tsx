@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -78,7 +78,7 @@ export default async function FinanceCodesPage() {
             action={<Button href="/legend/hub/finance-codes/new">+ New Cost Center</Button>}
           />
         ) : (
-          <DataTable<CostCenter>
+          <DataView<CostCenter>
             rows={rows}
             rowHref={(c) => `/legend/hub/finance-codes/${c.id}`}
             emptyLabel="No cost centers"

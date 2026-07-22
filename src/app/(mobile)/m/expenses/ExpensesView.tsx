@@ -20,6 +20,10 @@ export type ExpenseRow = {
   state: string;
   spent: string;
   hasReceipt: boolean;
+  /** The filer's "Billable To Client" declaration. */
+  billable: boolean;
+  /** Intake provenance (e.g. the scanner import) — null for hand-filed. */
+  expenseType: string | null;
 };
 
 /** A claim is the submitter's to change only until finance settles it. */
@@ -107,6 +111,7 @@ export function ExpensesView({
     { id: "description", label: "Expense", type: "text", get: (r) => r.description },
     { id: "state", label: "Status", type: "select", options: states, get: (r) => cap(r.state) },
     { id: "receipt", label: "Receipt", type: "select", options: ["Has Receipt", "No Receipt"], get: (r) => (r.hasReceipt ? "Has Receipt" : "No Receipt") },
+    { id: "billable", label: "Billable", type: "select", options: ["Billable", "Non-Billable"], get: (r) => (r.billable ? "Billable" : "Non-Billable") },
     { id: "amount", label: "Amount", type: "text", get: (r) => r.amount },
     { id: "spent", label: "Spent", type: "text", get: (r) => r.spent },
   ];
@@ -207,6 +212,13 @@ export function ExpensesView({
                 ? t("m.expenses.receiptOn", undefined, "Attached")
                 : t("m.expenses.noReceipt", undefined, "No receipt"),
             },
+            {
+              k: t("m.expenses.billable", undefined, "Billable To Client"),
+              v: detail.billable ? t("m.expenses.yes", undefined, "Yes") : t("m.expenses.no", undefined, "No"),
+            },
+            ...(detail.expenseType
+              ? [{ k: t("m.expenses.type", undefined, "Type"), v: detail.expenseType }]
+              : []),
           ]}
           // Once finance approves or reimburses, the claim is settled — the
           // actions disappear rather than being offered and then refused.

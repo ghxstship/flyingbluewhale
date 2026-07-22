@@ -1,7 +1,7 @@
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { formatFeeRange } from "@/lib/marketplace";
 import { JobsView, type Gig } from "./JobsView";
 
@@ -27,6 +27,7 @@ const EMPLOYMENT_LABEL: Record<string, string> = {
 
 export default async function MobileJobsPage() {
   const { t } = await getRequestT();
+  const fmt = await getRequestFormatters();
   if (!hasSupabase) {
     return (
       <div className="screen screen-anim">
@@ -44,7 +45,7 @@ export default async function MobileJobsPage() {
     supabase
       .from("job_postings")
       .select(
-        "id, title, employment_type, role_taxonomy, certs_required, region, city, day_rate_min_cents, day_rate_max_cents, currency, applicant_count, published_at, created_at",
+        "id, title, employment_type, role_taxonomy, certs_required, region, city, day_rate_min_cents, day_rate_max_cents, currency, applicant_count, published_at, created_at, shift_starts_at, shift_ends_at, gear_required",
       )
       .eq("org_id", session.orgId)
       .eq("job_posting_phase", "published")
@@ -75,6 +76,9 @@ export default async function MobileJobsPage() {
     day_rate_max_cents: number | null;
     currency: string;
     applicant_count: number;
+    shift_starts_at: string | null;
+    shift_ends_at: string | null;
+    gear_required: string | null;
   };
 
   const appliedSet = new Set(
@@ -96,7 +100,13 @@ export default async function MobileJobsPage() {
               `${formatFeeRange(p.day_rate_min_cents, p.day_rate_max_cents, p.currency)}/day`,
             )
           : t("m.gigs.rateTbd", undefined, "Rate TBD"),
-      when: t("m.gigs.openNow", undefined, "Open now"),
+      // The posting's real shift window when the poster set one — those columns
+      // were written by postJob and never read, so every card said "Open now"
+      // regardless of when the shift actually is.
+      when: p.shift_starts_at
+        ? `${fmt.dateParts(p.shift_starts_at, { month: "short", day: "numeric" })} · ${fmt.time(p.shift_starts_at)}${p.shift_ends_at ? `–${fmt.time(p.shift_ends_at)}` : ""}`
+        : t("m.gigs.openNow", undefined, "Open now"),
+      gear: (p.gear_required as string | null) ?? null,
       certs: (p.certs_required ?? []).slice(0, 3),
       tags: (p.role_taxonomy ?? []).slice(0, 3),
       employmentType: EMPLOYMENT_LABEL[p.employment_type] ?? p.employment_type,

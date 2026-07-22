@@ -29,7 +29,7 @@ export default async function TimePage() {
 
   const { data } = await supabase
     .from("time_entries")
-    .select("id, started_at, ended_at, duration_minutes, description, activity_category, billable, shift_id")
+    .select("id, started_at, ended_at, duration_minutes, description, activity_category, billable, shift_id, source_channel")
     .eq("org_id", session.orgId)
     .eq("user_id", session.userId)
     .order("started_at", { ascending: false })
@@ -44,6 +44,7 @@ export default async function TimePage() {
     activity_category: string | null;
     billable: boolean;
     shift_id: string | null;
+    source_channel: string | null;
   };
 
   const rows: TimeRow[] = ((data ?? []) as Row[]).map((e) => ({
@@ -61,6 +62,10 @@ export default async function TimePage() {
     note: e.description,
     billable: e.billable,
     fromShift: Boolean(e.shift_id),
+    // Provenance worth the worker's eye: an entry a manager keyed, corrected,
+    // imported, or that replayed from offline — 'app' (their own live punch)
+    // stays quiet.
+    source: e.source_channel && e.source_channel !== "app" ? e.source_channel : null,
   }));
 
   const totalMinutes = ((data ?? []) as Row[]).reduce((n, e) => n + (e.duration_minutes ?? 0), 0);

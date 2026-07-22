@@ -98,6 +98,22 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   ]);
   const detail = (detailResult as { data: Record<string, unknown> | null }).data;
 
+  // Fulfillment provenance — who confirmed it and via which channel. The
+  // check-in scan + the holder's fulfil action write these; the org detail is
+  // where they read.
+  let fulfilledByName: string | null = null;
+  if (a.fulfilled_by) {
+    const { data: fb } = await supabase
+      // soft-delete-exempt: resolving the fulfiller's name by id — a since-offboarded user must still be named on the record
+      .from("users")
+      .select("name, email")
+      .eq("id", a.fulfilled_by)
+      .maybeSingle();
+    fulfilledByName = (fb as { name: string | null; email: string | null } | null)?.name
+      ?? (fb as { email: string | null } | null)?.email
+      ?? null;
+  }
+
   const partyLabel =
     a.party_kind === "user"
       ? ((party as { name: string | null; email: string } | null)?.name ??
@@ -202,6 +218,19 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   "console.projects.assignments.detail.due",
                   { date: fmt.date(a.deadline) },
                   `due ${fmt.date(a.deadline)}`,
+                )}
+              </span>
+            )}
+            {a.fulfilled_at && (
+              <span className="font-mono text-xs">
+                {t(
+                  "console.projects.assignments.detail.fulfilledVia",
+                  {
+                    date: fmt.date(a.fulfilled_at),
+                    via: a.fulfilled_via ?? "manual",
+                    by: fulfilledByName ?? "—",
+                  },
+                  `fulfilled ${fmt.date(a.fulfilled_at)} · ${a.fulfilled_via ?? "manual"} · ${fulfilledByName ?? "—"}`,
                 )}
               </span>
             )}

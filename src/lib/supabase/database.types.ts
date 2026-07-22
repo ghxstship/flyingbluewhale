@@ -13352,6 +13352,7 @@ export type Database = {
       expenses: {
         Row: {
           amount_cents: number
+          billable: boolean
           atom_id: string | null
           base_amount_cents: number | null
           base_currency: string | null
@@ -13389,6 +13390,7 @@ export type Database = {
         }
         Insert: {
           amount_cents: number
+          billable?: boolean
           atom_id?: string | null
           base_amount_cents?: number | null
           base_currency?: string | null
@@ -13426,6 +13428,7 @@ export type Database = {
         }
         Update: {
           amount_cents?: number
+          billable?: boolean
           atom_id?: string | null
           base_amount_cents?: number | null
           base_currency?: string | null
@@ -15681,7 +15684,7 @@ export type Database = {
           photos: Json
           project_id: string | null
           report_kind: string
-          reporter_id: string
+          reporter_id: string | null
           severity: Database["public"]["Enums"]["incident_severity"]
           summary: string
           updated_at: string
@@ -15708,7 +15711,7 @@ export type Database = {
           photos?: Json
           project_id?: string | null
           report_kind?: string
-          reporter_id: string
+          reporter_id: string | null
           severity?: Database["public"]["Enums"]["incident_severity"]
           summary: string
           updated_at?: string
@@ -15735,7 +15738,7 @@ export type Database = {
           photos?: Json
           project_id?: string | null
           report_kind?: string
-          reporter_id?: string
+          reporter_id?: string | null
           severity?: Database["public"]["Enums"]["incident_severity"]
           summary?: string
           updated_at?: string

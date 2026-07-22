@@ -52,13 +52,41 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
   const severity = SEVERITY_MAP[v.severity ?? "Medium"] ?? "minor";
   const description = [v.what, v.action ? `Immediate action: ${v.action}` : null].filter(Boolean).join("\n\n");
 
+  // Kit switches serialize as STRINGS ("true"/"false"), so a truthy check on
+  // the raw value treats a toggled-then-untoggled switch ("false") as ON.
+  const switchOn = (raw: string | undefined) => raw === "true" || raw === "on" || raw === "1";
+
   // The injury switch has to reach a column, not just prose. It used to
   // only append "Injuries involved." to the description, which meant
   // injury_type stayed null — and the Lost & Found lens (which keyed off
   // exactly that) swallowed every field-filed injury. `reported` is the
   // honest value the intake can assert; the specific injury type is
   // classified downstream on the console.
-  const injuryType = v.injury ? "reported" : null;
+  const injuryType = switchOn(v.injury) ? "reported" : null;
+
+  // "Submit Anonymously" — the form has always offered it, the action has
+  // always dropped it: the switch was parsed and reporter_id stamped anyway,
+  // so the UI promised an anonymity the row never had. NULL means the
+  // identity is not recorded on the record at all (migration 20260722210000
+  // made the column nullable). Known limit, on purpose: photo evidence is
+  // uploaded under the caller's own storage prefix (the org-scoped upload
+  // policy requires it), so an admin reading raw storage paths could infer
+  // the uploader — the report row itself carries no identity.
+  const anonymous = switchOn(v.anon);
+
+  // "Time Of Incident" — the form asks when it HAPPENED; the action used to
+  // write the filing moment, discarding the answer. On a safety record the
+  // gap matters (incident at 14:00, filed at 22:00). The field is time-only,
+  // so compose it onto today's date; a result in the future means the
+  // incident straddled midnight, so it belongs to yesterday.
+  let occurredAt = new Date();
+  const hhmm = v.when?.match(/^([01]\d|2[0-3]):([0-5]\d)/);
+  if (hhmm) {
+    const candidate = new Date();
+    candidate.setHours(Number(hhmm[1]), Number(hhmm[2]), 0, 0);
+    if (candidate.getTime() > Date.now()) candidate.setDate(candidate.getDate() - 1);
+    occurredAt = candidate;
+  }
 
   const supabase = await createClient();
 
@@ -82,13 +110,13 @@ export async function fileIncident(_prev: State, fd: FormData): Promise<State> {
     .insert({
       org_id: session.orgId,
       project_id: v.projectId ?? null,
-      reporter_id: session.userId,
+      reporter_id: anonymous ? null : session.userId,
       summary: v.what.slice(0, 140),
       description,
       severity,
       incident_state: "open",
       location: v.where || null,
-      occurred_at: new Date().toISOString(),
+      occurred_at: occurredAt.toISOString(),
       // Store refs, not bare paths: where a photo was taken is often the whole
       // question on a safety claim, and the coordinates are worthless if they
       // aren't attached to the specific image they belong to.

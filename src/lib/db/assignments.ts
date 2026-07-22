@@ -104,6 +104,11 @@ export type AssignmentDetailRow = AssignmentListRow & {
   atom_id: string | null;
   created_at: string;
   created_by: string | null;
+  /** Fulfillment provenance — who confirmed it and through which channel
+   *  (scan/manual). Written by check-in + fulfillAssignment; the detail is
+   *  where it reads. */
+  fulfilled_by: string | null;
+  fulfilled_via: string | null;
 };
 
 // ──────────────────────────────────────────────────────────────
@@ -113,7 +118,7 @@ export type AssignmentDetailRow = AssignmentListRow & {
 const LIST_SELECT =
   "id, project_id, catalog_item_id, catalog_kind, party_kind, party_user_id, party_crew_id, party_external_id, fulfillment_state, title, deadline, issued_at, fulfilled_at, version, updated_at";
 
-const DETAIL_SELECT = LIST_SELECT + ", org_id, notes, data, atom_id, created_at, created_by";
+const DETAIL_SELECT = LIST_SELECT + ", org_id, notes, data, atom_id, created_at, created_by, fulfilled_by, fulfilled_via";
 
 export async function listProjectAssignments(
   orgId: string,

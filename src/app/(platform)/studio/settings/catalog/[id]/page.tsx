@@ -60,6 +60,30 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .eq("catalog_item_id", item.id)
     .is("deleted_at", null);
 
+  // GTIN bindings — the barcodes the field's scan-to-fulfil flow bound to this
+  // SKU, with their provenance (who bound them, when). Written by the check-in
+  // binder; this is where they read.
+  const { data: gtinRows } = await supabase
+    .from("catalog_item_gtins")
+    .select("gtin14, bound_at, bound_by")
+    .eq("org_id", session.orgId)
+    .eq("catalog_item_id", item.id)
+    .order("bound_at", { ascending: false })
+    .limit(20);
+  const gtins = (gtinRows ?? []) as { gtin14: string; bound_at: string; bound_by: string | null }[];
+  const binderIds = [...new Set(gtins.map((g) => g.bound_by).filter(Boolean))] as string[];
+  const binderName = new Map<string, string>();
+  if (binderIds.length) {
+    const { data: binders } = await supabase
+      // soft-delete-exempt: resolving binder names by id — a since-offboarded user must still be named on the binding
+      .from("users")
+      .select("id, name, email")
+      .in("id", binderIds);
+    for (const u of (binders ?? []) as { id: string; name: string | null; email: string | null }[]) {
+      binderName.set(u.id, u.name || u.email || "Member");
+    }
+  }
+
   return (
     <>
       <ModuleHeader
@@ -148,6 +172,27 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="mt-1 font-mono">{item.inventory_qty ?? "—"}</div>
           </div>
         </section>
+        {gtins.length > 0 && (
+          <section className="surface p-4 text-xs">
+            <div className="text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
+              {t("console.settings.catalog.detail.gtins", undefined, "Bound Barcodes (GTIN)")}
+            </div>
+            <ul className="mt-2 space-y-1">
+              {gtins.map((g) => (
+                <li key={g.gtin14} className="flex items-center justify-between gap-3">
+                  <span className="font-mono">{g.gtin14}</span>
+                  <span className="text-[var(--p-text-3)]">
+                    {t(
+                      "console.settings.catalog.detail.boundBy",
+                      { date: fmt.date(g.bound_at), name: g.bound_by ? (binderName.get(g.bound_by) ?? "—") : "—" },
+                      `${fmt.date(g.bound_at)} · ${g.bound_by ? (binderName.get(g.bound_by) ?? "—") : "—"}`,
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </>
   );

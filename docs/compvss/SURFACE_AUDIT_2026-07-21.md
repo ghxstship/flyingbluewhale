@@ -111,6 +111,29 @@ fetches vs. what the row renders.
 Same standard already applied to `catalog` (Request is the action) and `coc`
 (append-only events where the row *is* the record).
 
+## ✅ Data-point lifecycle audit — dead WRITES + dropped INPUTS (2026-07-22)
+
+The inverse of the dead-read pass: every column a /m action writes was checked
+for a read path, and every zod-parsed form input for a write path. Findings, all
+built out (never deleted):
+
+| Data point | Was | Now |
+|---|---|---|
+| incidents `anon` (Submit Anonymously) | **parsed and dropped — reporter_id stamped anyway.** The UI promised an anonymity the NOT NULL column made impossible | migration `20260722210000`: reporter_id nullable; anon filing records NO identity on the row. Known limit (in-code): photo storage paths still carry the uploader's prefix |
+| incidents `when` (Time Of Incident) | dropped — occurred_at = filing moment | composed onto the stated time; straddles midnight → yesterday |
+| incidents `injury` switch | latent bug: switches serialize `"false"` (truthy) → toggled-then-untoggled read as ON | strict string match (shared `switchOn`) |
+| expenses `billable` (Billable To Client) | parsed and dropped — no column existed | column added, written, filterable field + detail row |
+| expenses `expense_type` (scanner intake) | written, never read | shown as Type on the record |
+| job_postings `shift_starts_at/ends_at` | written by postJob, every card hardcoded "Open now" | cards show the real shift window |
+| job_postings `gear_required` | written, never read | Gear Required on the gig detail |
+| assignments `fulfilled_by/via` | written by check-in scan, never selected | in DETAIL_SELECT + provenance chip on the console assignment detail |
+| catalog_item_gtins `bound_by/at` | written by the GTIN binder, never read | Bound Barcodes section (code · when · who) on the console catalog detail |
+| time_entries `source_channel` | written, never read | non-`app` provenance badged on /m/time (Entered By Manager / Corrected / Imported / Offline Replay) |
+
+Post-fix: dead reads 0 · dropped inputs 0 · remaining dead-write candidates are
+tool false-negatives (FK filter reads, `select("*")` helpers, concatenated
+select constants) — each hand-verified.
+
 ## Notes
 
 - No `alert()`, `onClick={() => {}}`, "not implemented", or fabricated-data

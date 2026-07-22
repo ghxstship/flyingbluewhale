@@ -148,6 +148,10 @@ export async function fileExpense(_prev: State, fd: FormData): Promise<State> {
     spent_at: spentAt,
     expense_state: "pending",
     receipt_path: receiptPath,
+    // "Billable To Client" — the switch was parsed and dropped for want of a
+    // column (added 20260722210000). Switches serialize as strings, so match
+    // exactly rather than truthy-checking "false".
+    billable: v.billable === "true" || v.billable === "on" || v.billable === "1",
   });
   if (error) {
     log.error("m.expenses.insert_failed", { err: error.message });

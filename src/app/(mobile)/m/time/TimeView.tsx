@@ -21,6 +21,8 @@ export type TimeRow = {
   note: string | null;
   billable: boolean;
   fromShift: boolean;
+  /** Non-'app' provenance (manager_entry/correction/import/offline_replay). */
+  source: string | null;
 };
 
 /**
@@ -32,6 +34,14 @@ export type TimeRow = {
  * FAB = Add Note (handover form, the nearest real store for free-standing
  * notes).
  */
+/** Provenance labels for entries the worker did NOT punch live themselves. */
+const SOURCE_LABEL: Record<string, string> = {
+  manager_entry: "Entered By Manager",
+  correction: "Corrected",
+  import: "Imported",
+  offline_replay: "Offline Replay",
+};
+
 export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: string; title: string }) {
   const t = useT();
   const toast = useToast();
@@ -127,6 +137,7 @@ export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: s
             <div className="s">
               {r.category ?? t("m.time.uncategorised", undefined, "Uncategorised")}
               {r.fromShift ? ` · ${t("m.time.fromShift", undefined, "From A Shift")}` : ""}
+              {r.source ? ` · ${SOURCE_LABEL[r.source] ?? r.source}` : ""}
               {r.billable ? ` · ${t("m.time.billable", undefined, "Billable")}` : ""}
             </div>
             {r.note && (

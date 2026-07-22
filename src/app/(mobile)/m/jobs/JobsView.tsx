@@ -28,6 +28,8 @@ export type Gig = {
   employmentType: string;
   applicants: number;
   applied: boolean;
+  /** Gear the poster requires — written by postJob, previously never read. */
+  gear?: string | null;
 };
 
 function ApplyButton({ gig }: { gig: Gig }) {
@@ -270,6 +272,7 @@ export function JobsView({
             { k: t("m.gigs.col.rate", undefined, "Rate"), v: detail.rate },
             { k: t("m.gigs.col.when", undefined, "When"), v: detail.when },
             { k: t("m.gigs.sort.applicants", undefined, "Applicants"), v: t("m.gigs.applicants", { count: detail.applicants }, `${detail.applicants} applied`) },
+            ...(detail.gear ? [{ k: t("m.gigs.gear", undefined, "Gear Required"), v: detail.gear, full: true }] : []),
           ]}
           sections={[
             {

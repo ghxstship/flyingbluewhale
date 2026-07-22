@@ -27,7 +27,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
 
   const { data } = await supabase
     .from("expenses")
-    .select("id, description, amount_cents, currency, expense_state, spent_at, receipt_path")
+    .select("id, description, amount_cents, currency, expense_state, spent_at, receipt_path, billable, expense_type")
     .eq("org_id", session.orgId)
     .eq("submitter_id", session.userId)
     .order("spent_at", { ascending: false })
@@ -40,6 +40,8 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
       amount_cents: number;
       currency: string | null;
       expense_state: string;
+      billable: boolean;
+      expense_type: string | null;
       spent_at: string;
       receipt_path: string | null;
     }[]
@@ -57,6 +59,10 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
     state: e.expense_state,
     spent: fmt.date(e.spent_at),
     hasReceipt: Boolean(e.receipt_path),
+    billable: e.billable === true,
+    // Provenance facet the scanner import writes (e.g. product-scan intake);
+    // shown on the record so an imported expense is distinguishable.
+    expenseType: e.expense_type ?? null,
   }));
 
   return (

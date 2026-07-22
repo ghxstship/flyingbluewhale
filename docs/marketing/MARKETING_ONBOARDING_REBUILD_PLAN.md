@@ -378,6 +378,26 @@ RPC + auth guard — sequenced deploy per the migration/app-skew rule).
 
 ---
 
+## 11b · P5 CWV/static audit — finding + disposition (2026-07-22)
+
+**Finding:** the full marketing surface (139 routes) is server-rendered per
+request (`ƒ`); only the metadata routes (`/llms.txt`, `/sitemap.xml`,
+`/compare/comparisons.json`, `/changelog.rss`, icons/OG) are static. Root
+cause is the ROOT layout (`src/app/layout.tsx`): it reads `headers()` for the
+CSP **nonce** (`x-nonce`) and `cookies()` for theme + locale, which opts every
+descendant route out of static rendering. Page-level `revalidate` hints
+(`getStaticEnT`) cannot override a dynamic root layout.
+
+**Disposition:** deliberate architecture, not a defect. The per-request nonce
+CSP is a security posture (next.config headers), and cookie-based locale is
+the current i18n mechanism. Making marketing static requires ONE refactor
+with two halves that are already scheduled together in the post-completion
+backlog (§14): locale moves from cookie to URL segment (es-ES/pt-BR parity +
+hreflang emission), and the marketing tree either adopts a hash-based CSP or
+isolates the nonce read out of the shared root layout. Do them as one pass.
+Until then CWV exposure is TTFB-only (Vercel edge SSR); payloads are already
+lean (no client-side data fetching on marketing pages).
+
 ## 12 · Decisions — RATIFIED 2026-07-22 (all seven approved as recommended)
 
 All recommendations approved by the owner. Two carry a rider: **decision 6**

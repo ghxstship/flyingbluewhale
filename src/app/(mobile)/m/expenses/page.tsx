@@ -46,6 +46,10 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
     id: e.id,
     description: e.description,
     amount: fmt.money(e.amount_cents),
+    // Raw values so the owner's edit form can prefill losslessly (the
+    // formatted `amount`/`spent` above are display-only).
+    amountInput: (e.amount_cents / 100).toFixed(2),
+    spentIso: e.spent_at ? String(e.spent_at).slice(0, 10) : "",
     state: e.expense_state,
     spent: fmt.date(e.spent_at),
     hasReceipt: Boolean(e.receipt_path),

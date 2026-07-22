@@ -158,3 +158,102 @@ export async function fileExpense(_prev: State, fd: FormData): Promise<State> {
   revalidatePath("/m/my-work");
   return warning ? { warning } : null;
 }
+
+/**
+ * An edit patches ONLY the amount and the date.
+ *
+ * Deliberately narrow: `description` is stored COMPOSED (`merchant · notes`),
+ * so the kit form's two fields can't reconstruct it faithfully, and
+ * `category_code` is resolved server-side from `ref_expense_category` — a
+ * round-trip that misses would silently blank the coding finance relies on.
+ * Amount and date are stored losslessly and are exactly what gets typo'd, so
+ * they're the honest edit surface. Re-coding a claim stays with finance.
+ */
+const EditInput = z.object({
+  id: z.string().uuid(),
+  amount: z.string().min(1, "How much was it?"),
+  date: z.string().optional(),
+});
+const IdOnly = z.object({ id: z.string().uuid() });
+
+/**
+ * The states in which a submitter may still change their OWN claim.
+ * `rejected` is included on purpose — a rejection the submitter can't correct
+ * is a dead end. Once finance has approved or reimbursed it, the claim is
+ * settled and the field can no longer move the number.
+ */
+const MUTABLE_EXPENSE_STATES = ["pending", "rejected"] as const;
+
+/**
+ * Correct the amount/date on my own expense while it is still pending (or was
+ * rejected).
+ *
+ * Filing was the only thing the field could do — a wrong amount was permanent,
+ * and the workaround (file a second claim) double-counts the spend that budget
+ * rollups read.
+ *
+ * Ownership AND settle-state are both pinned in the WHERE, and the row is read
+ * back: an RLS- or state-refused write returns zero rows rather than an error,
+ * so "not yours / already approved" is surfaced instead of a silent success.
+ * `receipt_path`, `description` and `category_code` are deliberately NOT
+ * patched (see EditInput) — an edit must not blank a receipt or the coding.
+ */
+export async function updateExpense(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = EditInput.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const i of parsed.error.issues) if (i.path[0]) fieldErrors[String(i.path[0])] = i.message;
+    return { error: "Please fix the errors below.", fieldErrors };
+  }
+  const v = parsed.data;
+
+  const cents = parseCents(v.amount);
+  if (cents == null) {
+    return { error: "Please fix the errors below.", fieldErrors: { amount: "Enter an amount like 12.34" } };
+  }
+  const spentAt = v.date && /^\d{4}-\d{2}-\d{2}$/.test(v.date) ? v.date : undefined;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("expenses")
+    .update({ amount_cents: cents, ...(spentAt ? { spent_at: spentAt } : {}) })
+    .eq("id", v.id)
+    .eq("submitter_id", session.userId)
+    .in("expense_state", [...MUTABLE_EXPENSE_STATES])
+    .select("id");
+  if (error) return { error: error.message };
+  if (!data || data.length === 0) {
+    return { error: "You can only edit your own expense while it's still pending." };
+  }
+
+  revalidatePath("/m/expenses");
+  revalidatePath("/m/my-work");
+  return null;
+}
+
+/** Withdraw my own expense while it is still pending (or was rejected).
+ *  `expenses` carries no soft-delete column, so this is a real delete —
+ *  scoped to the submitter AND to the unsettled states. */
+export async function deleteExpense(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = IdOnly.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("expenses")
+    .delete()
+    .eq("id", parsed.data.id)
+    .eq("submitter_id", session.userId)
+    .in("expense_state", [...MUTABLE_EXPENSE_STATES])
+    .select("id");
+  if (error) return { error: error.message };
+  if (!data || data.length === 0) {
+    return { error: "You can only withdraw your own expense while it's still pending." };
+  }
+
+  revalidatePath("/m/expenses");
+  revalidatePath("/m/my-work");
+  return null;
+}

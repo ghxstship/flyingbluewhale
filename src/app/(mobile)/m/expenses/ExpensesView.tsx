@@ -1,18 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { HubChrome } from "@/components/mobile/HubChrome";
-import { Fab, KIcon, NormalizedList, type FieldDef } from "@/components/mobile/kit";
+import { Fab, KIcon, NormalizedList, RecordDetail, FormScreen, type FieldDef, type FormDef } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useToast } from "@/lib/hooks/useToast";
+import { toFormData } from "@/lib/mobile/form-data";
+import { updateExpense, deleteExpense, type State } from "./actions";
 
 export type ExpenseRow = {
   id: string;
   description: string;
   amount: string;
+  /** Raw editable values (display strings above are formatted). */
+  amountInput: string;
+  spentIso: string;
   state: string;
   spent: string;
   hasReceipt: boolean;
 };
+
+/** A claim is the submitter's to change only until finance settles it. */
+const MUTABLE = new Set(["pending", "rejected"]);
 
 const STATE_TONE: Record<string, string> = {
   pending: "warn",
@@ -39,6 +50,54 @@ export function ExpensesView({
   canManage?: boolean;
 }) {
   const t = useT();
+  const router = useRouter();
+  const toast = useToast();
+  const [detail, setDetail] = useState<ExpenseRow | null>(null);
+  const [editing, setEditing] = useState<ExpenseRow | null>(null);
+  const [, startTx] = useTransition();
+
+  const editForm: FormDef = {
+    title: t("m.expenses.edit", undefined, "Correct Expense"),
+    icon: "Receipt",
+    submit: t("m.expenses.save", undefined, "Save Changes"),
+    // Amount + date only: the description is stored composed and the category
+    // is a finance-owned code, so neither is safe to round-trip from here.
+    intro: t("m.expenses.editIntro", undefined, "Correct the amount or the date. Re-coding a claim stays with finance."),
+    fields: [
+      { id: "amount", label: t("m.expenses.amount", undefined, "Amount"), type: "text", required: true },
+      { id: "date", label: t("m.expenses.date", undefined, "Date"), type: "date" },
+    ],
+  };
+
+  const onEditSubmit = (_def: FormDef, vals: Record<string, unknown>) => {
+    const target = editing;
+    if (!target) return;
+    startTx(async () => {
+      const res: State = await updateExpense(
+        null,
+        toFormData({ id: target.id, amount: String(vals.amount ?? ""), date: String(vals.date ?? "") }),
+      );
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+      setEditing(null);
+      setDetail(null);
+      router.refresh();
+    });
+  };
+
+  const onWithdraw = (r: ExpenseRow) => {
+    startTx(async () => {
+      const res: State = await deleteExpense(null, toFormData({ id: r.id }));
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
+      setDetail(null);
+      router.refresh();
+    });
+  };
 
   const states = [...new Set(rows.map((r) => cap(r.state)))];
   const boardTone: Record<string, string> = {};
@@ -53,7 +112,15 @@ export function ExpensesView({
   ];
 
   const row = (r: ExpenseRow) => (
-    <div className="item" key={r.id} style={{ display: "block" }}>
+    <div
+      className="item tap"
+      key={r.id}
+      style={{ display: "block" }}
+      role="button"
+      tabIndex={0}
+      onClick={() => setDetail(r)}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setDetail(r); } }}
+    >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
         <KIcon name="Receipt" size={18} style={{ color: "var(--p-text-2)", flex: "none", marginTop: 2 }} />
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -72,6 +139,17 @@ export function ExpensesView({
       </div>
     </div>
   );
+
+  if (editing) {
+    return (
+      <FormScreen
+        def={editForm}
+        initial={{ amount: editing.amountInput, date: editing.spentIso }}
+        onClose={() => setEditing(null)}
+        onSubmit={onEditSubmit}
+      />
+    );
+  }
 
   return (
     <div className="screen screen-anim">
@@ -98,6 +176,7 @@ export function ExpensesView({
         search={(r) => `${r.description} ${r.state} ${r.amount}`}
         searchPlaceholder={t("m.expenses.search", undefined, "Search Expenses…")}
         renderRow={row}
+        onRow={setDetail}
         views={["list", "table", "board"]}
         statusField="state"
         statusOrder={states}
@@ -113,6 +192,41 @@ export function ExpensesView({
           ),
         }}
       />
+
+      {detail && (
+        <RecordDetail
+          title={detail.description}
+          icon="Receipt"
+          status={{ tone: STATE_TONE[detail.state] ?? "neutral", label: cap(detail.state) }}
+          fields={[
+            { k: t("m.expenses.amount", undefined, "Amount"), v: detail.amount },
+            { k: t("m.expenses.spent", undefined, "Spent"), v: detail.spent },
+            {
+              k: t("m.expenses.receipt", undefined, "Receipt"),
+              v: detail.hasReceipt
+                ? t("m.expenses.receiptOn", undefined, "Attached")
+                : t("m.expenses.noReceipt", undefined, "No receipt"),
+            },
+          ]}
+          // Once finance approves or reimburses, the claim is settled — the
+          // actions disappear rather than being offered and then refused.
+          actions={
+            MUTABLE.has(detail.state)
+              ? [
+                  { label: t("m.expenses.edit", undefined, "Correct Expense"), icon: "Pencil", primary: true, on: () => setEditing(detail) },
+                  {
+                    label: t("m.expenses.withdraw", undefined, "Withdraw Claim"),
+                    icon: "Trash2",
+                    danger: true,
+                    confirmText: t("m.expenses.withdrawConfirm", undefined, "Withdraw this claim? It's removed from your expenses."),
+                    on: () => onWithdraw(detail),
+                  },
+                ]
+              : []
+          }
+          onClose={() => setDetail(null)}
+        />
+      )}
 
       {/* Kit-29 spec: FAB = New Expense. */}
       <Fab href="/m/expenses/new" label={t("m.expenses.new", undefined, "File An Expense")} />

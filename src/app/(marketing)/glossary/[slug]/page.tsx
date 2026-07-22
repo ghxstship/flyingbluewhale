@@ -14,7 +14,8 @@ import {
   CONTENT_REVISED,
   SITE,
 } from "@/lib/seo";
-import { GLOSSARY, GLOSSARY_BY_SLUG } from "@/lib/marketing/glossary";
+import { GLOSSARY } from "@/lib/marketing/glossary";
+import { localizeGlossaryCategoryToken, localizeGlossaryTerm } from "@/lib/marketing/glossary.i18n";
 import { MODULES } from "@/lib/marketing/modules";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -24,8 +25,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const entry = GLOSSARY_BY_SLUG[slug];
   const { t } = await getRequestT();
+  const entry = localizeGlossaryTerm(slug, t);
   if (!entry) {
     return buildMetadata({
       title: t("marketing.glossary.detail.fallbackTitle", undefined, "Glossary"),
@@ -50,9 +51,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function GlossaryDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const entry = GLOSSARY_BY_SLUG[slug];
-  if (!entry) notFound();
   const { t, locale } = await getRequestT();
+  const entry = localizeGlossaryTerm(slug, t);
+  if (!entry) notFound();
 
   const crumbs = [
     { label: t("common.home", undefined, "Home"), href: "/" },
@@ -84,7 +85,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
         <div className="eyebrow eyebrow-brand">
           {t(
             "marketing.glossary.detail.eyebrow",
-            { category: entry.category.replace(/-/g, " ") },
+            { category: localizeGlossaryCategoryToken(entry.category, t) ?? entry.category.replace(/-/g, " ") },
             "Glossary · {category}",
           )}
         </div>
@@ -129,7 +130,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
           <h2 className="eyebrow">{t("marketing.glossary.detail.relatedTerms", undefined, "Related terms")}</h2>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {entry.related
-              .map((r) => GLOSSARY_BY_SLUG[r])
+              .map((r) => localizeGlossaryTerm(r, t))
               .filter((r): r is NonNullable<typeof r> => Boolean(r))
               .map((r) => (
                 <Link

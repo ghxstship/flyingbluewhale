@@ -6,7 +6,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { PUBLISHED_CUSTOMER_STORIES, IN_PROGRESS_CUSTOMER_STORIES } from "@/lib/marketing/customers";
-import { INDUSTRIES } from "@/lib/marketing/industries";
+import { localizeIndustry } from "@/lib/marketing/industries.i18n";
 import { getRequestT } from "@/lib/i18n/request";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -59,7 +59,7 @@ export default async function CustomersHub() {
             {PUBLISHED_CUSTOMER_STORIES.map((s) => (
               <Link key={s.slug} href={`/customers/${s.slug}`} className="surface hover-lift p-5">
                 <div className="eyebrow eyebrow-accent">
-                  {INDUSTRIES[s.industry]?.name ?? s.industry}
+                  {localizeIndustry(s.industry, t)?.name ?? s.industry}
                 </div>
                 <h3 className="mt-2 text-base font-semibold">{s.displayName}</h3>
                 <p className="mt-2 text-sm text-[var(--p-text-2)]">{s.teaser}</p>
@@ -84,7 +84,7 @@ export default async function CustomersHub() {
             <article key={s.slug} className="surface p-6">
               <div className="flex items-center justify-between">
                 <div className="eyebrow eyebrow-accent">
-                  {INDUSTRIES[s.industry]?.name ?? s.industry}
+                  {localizeIndustry(s.industry, t)?.name ?? s.industry}
                 </div>
                 <div className="inline-flex items-center gap-1 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[11px] font-medium text-[var(--p-text-2)]">
                   <Clock size={10} aria-hidden="true" />

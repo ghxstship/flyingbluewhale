@@ -28,7 +28,7 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "tour-managers",
     role: "Tour Managers",
-    blurb: "The single accountable owner of an entire touring run — advancing, finance, logistics, crew, settlement.",
+    blurb: "The single accountable owner of an entire touring run: advancing, finance, logistics, crew, settlement.",
     hero: {
       eyebrow: "For Tour Managers",
       title: "Tour Management, On Modern Rails.",
@@ -53,11 +53,11 @@ export const TEAMS: TeamRole[] = [
       },
       {
         title: "Ground Transport",
-        body: "Vehicle runs with driver, vehicle, manifest, POD. Drivers see their runs in a portal — no app to install.",
+        body: "Vehicle runs with driver, vehicle, manifest, POD. Drivers see their runs in a portal with no app to install.",
       },
       {
         title: "Crisis Comms",
-        body: "Weather hold, security incident, evacuation — pre-approved templates publish in one tap from the road.",
+        body: "Weather hold, security incident, evacuation: pre-approved templates publish in one tap from the road.",
       },
     ],
     modules: ["advancing", "logistics", "schedule", "finance", "portals", "safety"],
@@ -86,11 +86,11 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "production-managers",
     role: "Production Managers",
-    blurb: "The build owner — RFIs, submittals, daily logs, punch, inspections, show-ready.",
+    blurb: "The build owner: RFIs, submittals, daily logs, punch, inspections, show-ready.",
     hero: {
       eyebrow: "For Production Managers",
       title: "Run The Build Like A Build. Just Faster.",
-      body: "The PM stack borrows from construction — ball-in-court RFIs, submittals, daily logs, punch lists, change orders — at show-day velocity, built for the production calendar.",
+      body: "The PM stack borrows from construction (ball-in-court RFIs, submittals, daily logs, punch lists, change orders) at show-day velocity, built for the production calendar.",
     },
     workflows: [
       {
@@ -140,11 +140,11 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "stage-managers",
     role: "Stage Managers",
-    blurb: "The show caller — ROS, comms, cue books, real-time direction.",
+    blurb: "The show caller: ROS, comms, cue books, real-time direction.",
     hero: {
       eyebrow: "For Stage Managers",
       title: "Run-Of-Show, To The Minute.",
-      body: "The SM lives on the ROS. ATLVS gives you cue numbers, departments, departmental notes — the cue book shape, with everything else on the production hanging off it.",
+      body: "The SM lives on the ROS. ATLVS gives you cue numbers, departments, departmental notes: the cue book shape, with everything else on the production hanging off it.",
     },
     workflows: [
       {
@@ -182,7 +182,7 @@ export const TEAMS: TeamRole[] = [
     faqs: [
       {
         q: "Does it replace our cue-call software?",
-        a: "For the call book itself — usually yes. For comms intercom — no, we don't replace Clear-Com or Riedel. We're the canonical schedule and notes layer that lives above the comms hardware.",
+        a: "For the call book itself, usually yes. For comms intercom, no: we don't replace dedicated intercom hardware. We're the canonical schedule and notes layer that lives above the comms hardware.",
       },
     ],
   },
@@ -206,7 +206,7 @@ export const TEAMS: TeamRole[] = [
       },
       {
         title: "Per-Persona KBYG",
-        body: "Guest, crew, artist, vendor, sponsor — each sees their version. One source, scoped renders.",
+        body: "Guest, crew, artist, vendor, sponsor: each sees their version. One source, scoped renders.",
       },
       {
         title: "Vendor Compliance",
@@ -242,11 +242,11 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "site-managers",
     role: "Site Managers",
-    blurb: "Build site ownership — load-in, inspections, daily logs, strike.",
+    blurb: "Build site ownership: load-in, inspections, daily logs, strike.",
     hero: {
       eyebrow: "For Site Managers",
       title: "The Build Site, Documented.",
-      body: "Site managers own the build site from load-in through strike. ATLVS captures the day — weather, manpower, inspections, photos, punch, change orders — and turns it into the post-show wrap automatically.",
+      body: "Site managers own the build site from load-in through strike. ATLVS captures the day (weather, manpower, inspections, photos, punch, change orders) and turns it into the post-show wrap automatically.",
     },
     workflows: [
       {
@@ -299,11 +299,11 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "technical-directors",
     role: "Technical Directors",
-    blurb: "Tech ownership across audio, lighting, video, scenic — specs through show-day.",
+    blurb: "Tech ownership across audio, lighting, video, scenic, from specs through show-day.",
     hero: {
       eyebrow: "For Technical Directors",
       title: "Tech Specs Live On The Record.",
-      body: "TDs own the technical spine — system design, gear list, power, rigging, signal flow. ATLVS captures specs as typed records that survive into the season, the next show, and the post-mortem.",
+      body: "TDs own the technical spine: system design, gear list, power, rigging, signal flow. ATLVS captures specs as typed records that survive into the season, the next show, and the post-mortem.",
     },
     workflows: [
       {
@@ -356,7 +356,7 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "talent-buyers",
     role: "Talent Buyers",
-    blurb: "Lead-to-booking pipeline — offers, contracts, advancing handoff.",
+    blurb: "Lead-to-booking pipeline: offers, contracts, advancing handoff.",
     hero: {
       eyebrow: "For Talent Buyers",
       title: "From Offer To Advancing. One Record.",
@@ -413,7 +413,7 @@ export const TEAMS: TeamRole[] = [
   {
     slug: "hse-leads",
     role: "EHS / Safety Leads",
-    blurb: "Safety + medical + crisis ownership — incidents, OSHA, daily briefings.",
+    blurb: "Safety + medical + crisis ownership: incidents, OSHA, daily briefings.",
     hero: {
       eyebrow: "For EHS Leads",
       title: "Safety Isn't A Binder. It's A System.",

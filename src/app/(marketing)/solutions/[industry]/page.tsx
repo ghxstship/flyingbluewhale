@@ -14,14 +14,15 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { StatStrip } from "@/components/marketing/StatStrip";
 import { buildMetadata } from "@/lib/seo";
 import { INDUSTRIES } from "@/lib/marketing/industries";
+import { localizeIndustry } from "@/lib/marketing/industries.i18n";
 import { getRequestT } from "@/lib/i18n/request";
 
 type Props = { params: Promise<{ industry: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { industry } = await params;
-  const info = INDUSTRIES[industry];
   const { t } = await getRequestT();
+  const info = localizeIndustry(industry, t);
   if (!info)
     return buildMetadata({
       title: t("marketing.solutions.detail.fallbackTitle", undefined, "Solution"),
@@ -48,9 +49,9 @@ export async function generateStaticParams() {
 
 export default async function IndustryPage({ params }: Props) {
   const { industry } = await params;
-  const info = INDUSTRIES[industry];
-  if (!info) notFound();
   const { t } = await getRequestT();
+  const info = localizeIndustry(industry, t);
+  if (!info) notFound();
 
   const crumbs = [
     { label: t("common.home", undefined, "Home"), href: "/" },
@@ -109,7 +110,7 @@ export default async function IndustryPage({ params }: Props) {
         <h2 className="hed-lg">{t("marketing.solutions.detail.related", undefined, "Related Industries")}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {info.related.map((r) => {
-            const rel = INDUSTRIES[r];
+            const rel = localizeIndustry(r, t);
             if (!rel) return null;
             return (
               <Link key={r} href={`/solutions/${r}`} className="surface hover-lift p-4">

@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { TEAMS } from "@/lib/marketing/teams";
+import { localizeTeam } from "@/lib/marketing/teams.i18n";
 import { getRequestT } from "@/lib/i18n/request";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -45,7 +46,7 @@ export default async function TeamsHub() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-          {TEAMS.map((team) => (
+          {TEAMS.map((entry) => localizeTeam(entry.slug, t) ?? entry).map((team) => (
             <Link key={team.slug} href={`/teams/${team.slug}`} className="surface hover-lift p-6">
               <div className="eyebrow eyebrow-brand">{team.hero.eyebrow}</div>
               <h3 className="hed-lg mt-3">{team.role}</h3>

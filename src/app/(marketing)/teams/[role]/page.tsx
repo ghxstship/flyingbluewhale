@@ -8,9 +8,10 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, faqSchema, CANONICAL_CTAS, SITE } from "@/lib/seo";
-import { TEAMS, TEAMS_BY_SLUG } from "@/lib/marketing/teams";
+import { TEAMS } from "@/lib/marketing/teams";
+import { localizeTeam } from "@/lib/marketing/teams.i18n";
 import { MODULES } from "@/lib/marketing/modules";
-import { INDUSTRIES } from "@/lib/marketing/industries";
+import { localizeIndustry } from "@/lib/marketing/industries.i18n";
 import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
@@ -19,8 +20,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ role: string }> }): Promise<Metadata> {
   const { role } = await params;
-  const cfg = TEAMS_BY_SLUG[role];
   const { t } = await getRequestT();
+  const cfg = localizeTeam(role, t);
   if (!cfg) {
     return buildMetadata({
       title: t("marketing.teams.detail.fallbackTitle", undefined, "Teams"),
@@ -45,9 +46,9 @@ export async function generateMetadata({ params }: { params: Promise<{ role: str
 
 export default async function TeamRolePage({ params }: { params: Promise<{ role: string }> }) {
   const { role } = await params;
-  const cfg = TEAMS_BY_SLUG[role];
-  if (!cfg) notFound();
   const { t } = await getRequestT();
+  const cfg = localizeTeam(role, t);
+  if (!cfg) notFound();
 
   const crumbs = [
     { label: t("common.home", undefined, "Home"), href: "/" },
@@ -55,7 +56,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
     { label: cfg.role, href: `/teams/${cfg.slug}` },
   ];
 
-  const sibling = TEAMS.filter((o) => o.slug !== cfg.slug);
+  const sibling = TEAMS.filter((o) => o.slug !== cfg.slug).map((o) => localizeTeam(o.slug, t) ?? o);
 
   return (
     <div>
@@ -133,8 +134,10 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
           </h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {cfg.industries
-              .map((s) => ({ slug: s, info: INDUSTRIES[s] }))
-              .filter((x): x is { slug: string; info: NonNullable<(typeof INDUSTRIES)[string]> } => Boolean(x.info))
+              .map((s) => ({ slug: s, info: localizeIndustry(s, t) }))
+              .filter((x): x is { slug: string; info: NonNullable<ReturnType<typeof localizeIndustry>> } =>
+                Boolean(x.info),
+              )
               .map((x) => (
                 <Link
                   key={x.slug}

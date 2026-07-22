@@ -63,7 +63,10 @@ const RE_T_CALL = new RegExp(
     `'((?:\\\\.|[^'\\\\])*)'` +
     `|` +
     "`((?:\\\\.|[^`\\\\])*)`" +
-    `)\\s*\\)`,
+    // Optional trailing comma: prettier ("trailingComma": "all") emits
+    // `t(\n  "key",\n  undefined,\n  "fallback",\n)` whenever the call
+    // wraps — without `,?` every wrapped call site was silently skipped.
+    `)\\s*,?\\s*\\)`,
   "g",
 );
 

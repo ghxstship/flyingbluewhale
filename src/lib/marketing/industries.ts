@@ -23,11 +23,11 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Live Events",
     tagline: "Venue residencies, club nights, one-offs",
     description:
-      "ATLVS Technologies is the production platform for Live Events — club residencies, brand-hosted nights, album release parties, rooftop pop-ups. Ticketing with on-site scan, artist advancing, direct vendor payouts, and per-role Know Before You Go guides — all connected on day one.",
+      "ATLVS Technologies is the production platform for Live Events: club residencies, brand-hosted nights, album release parties, rooftop pop-ups. Ticketing with on-site scan, artist advancing, direct vendor payouts, and per-role Know Before You Go guides, all connected on day one.",
     hero: {
       eyebrow: "Live Events",
       title: "From Pitch to Wrap. One Platform.",
-      body: "Replace the stack most venue teams run — Asana for tasks, DocuSign for contracts, QuickBooks for invoices, spreadsheets for advancing. ATLVS Technologies runs all of it in one place.",
+      body: "Replace the stack most venue teams run: task apps, e-sign tools, accounting software, spreadsheets for advancing. ATLVS Technologies runs all of it in one place.",
     },
     stats: [
       { value: "15k+", label: "guests / night" },
@@ -36,10 +36,10 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       { value: "25%", label: "fewer invoice errors" },
     ],
     outcomes: [
-      "Scan tickets on any phone — no rental scanner kits",
+      "Scan tickets on any phone, no rental scanner kits",
       "Ship artist advancing through the portal, not PDF chains",
       "Route vendor payouts directly on approval",
-      "Publish one KBYG — guest, crew, artist each see their version",
+      "Publish one KBYG and guest, crew, and artist each see their version",
       "Signed proposals turn into live projects on signature",
       "Crew clock in through COMPVSS with geo-verification",
     ],
@@ -50,11 +50,11 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       },
       {
         name: "Artist Advancing",
-        body: "Riders, input lists, stage plots, catering, travel, schedule — all through the portal.",
+        body: "Riders, input lists, stage plots, catering, travel, schedule: all through the portal.",
       },
       {
         name: "Vendor Payouts",
-        body: "Vendors onboard a payout account. Direct payout on PO fulfillment — ACH, card, or wire.",
+        body: "Vendors onboard a payout account. Direct payout on PO fulfillment by ACH, card, or wire.",
       },
       {
         name: "KBYG Guides",
@@ -66,7 +66,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     faqs: [
       {
         q: "How many guests can the platform handle?",
-        a: "We've scanned 15,000+ guests per event without a blip. Every ticket scans exactly once under concurrent load — the bottleneck is your network, not us.",
+        a: "We've scanned 15,000+ guests per event without a blip. Every ticket scans exactly once under concurrent load. The bottleneck is your network, not us.",
       },
       {
         q: "Can I use my existing ticketing vendor?",
@@ -84,11 +84,11 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Concerts",
     tagline: "Single-night shows, amphitheatres, arenas",
     description:
-      "Purpose-built for Concerts — single-night shows to stadium-scale runs. Canonical rider, per-venue overrides, shared crew pool, venue advancing, real-time box office metrics, and a field app the house staff actually wants to use.",
+      "Purpose-built for Concerts, from single-night shows to stadium-scale runs. Canonical rider, per-venue overrides, shared crew pool, venue advancing, real-time box office metrics, and a field app the house staff actually wants to use.",
     hero: {
       eyebrow: "Concerts",
       title: "One Rider. Every Venue.",
-      body: "Concert touring operations live in forty spreadsheets. We keep the canonical rider in one place and scope per-venue variants on top — no copy-paste, no lost revisions.",
+      body: "Concert touring operations live in forty spreadsheets. We keep the canonical rider in one place and scope per-venue variants on top. No copy-paste, no lost revisions.",
     },
     stats: [
       { value: "1×", label: "rider edit" },
@@ -97,7 +97,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       { value: "99.9%", label: "scan uptime" },
     ],
     outcomes: [
-      "Canonical rider with per-venue overrides — edits cascade correctly",
+      "Canonical rider with per-venue overrides, and edits cascade correctly",
       "Shared crew pool with per-show scheduling and day rates",
       "Per-diem and emergency advances payout on approval",
       "Box-office metrics and seat-map deltas in real time",
@@ -131,7 +131,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Festivals & Tours",
     tagline: "Multi-day, multi-stage, multi-city",
     description:
-      "Festivals and Tours are the hardest shape in live production — dozens of artists, multiple stages, multi-day windows, traveling crew, and a calendar that looks like a subway map. Built for that scale from day one.",
+      "Festivals and Tours are the hardest shape in live production: dozens of artists, multiple stages, multi-day windows, traveling crew, and a calendar that looks like a subway map. Built for that scale from day one.",
     hero: {
       eyebrow: "Festivals & Tours",
       title: "Run the Festival. Not the Spreadsheet.",
@@ -145,7 +145,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     ],
     outcomes: [
       "Per-artist advancing with a set-time grid and stage assignments",
-      "Per-city project cloning — edit only what's different",
+      "Per-city project cloning where you edit only what's different",
       "Credential manifest with RFID and NFC wristband integration",
       "Direct vendor payouts on approval",
       "Real-time stage-side decision board visible to promoter and site ops",
@@ -179,11 +179,11 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Immersive Experiences",
     tagline: "Installations, walk-throughs, pop-ups",
     description:
-      "Immersive Experiences demand operations software that respects narrative pacing — timed-entry scheduling, per-zone staffing, capacity ceilings, role-specific guides, and an advancing system that treats every act as its own discipline.",
+      "Immersive Experiences demand operations software that respects narrative pacing: timed-entry scheduling, per-zone staffing, capacity ceilings, role-specific guides, and an advancing system that treats every act as its own discipline.",
     hero: {
       eyebrow: "Immersive Experiences",
       title: "The Show Runs You. We Run the Show.",
-      body: "Immersive runs live or die by seconds. We handle the operations — timed entries, per-zone capacity, cast and crew scheduling — so your team stays in the experience, not the spreadsheet.",
+      body: "Immersive runs live or die by seconds. We handle the operations (timed entries, per-zone capacity, cast and crew scheduling) so your team stays in the experience, not the spreadsheet.",
     },
     stats: [
       { value: "< 15s", label: "entry gap drift" },
@@ -229,11 +229,11 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Brand Activations",
     tagline: "Pop-ups, product launches, experiential marketing",
     description:
-      "Brand Activations turn marketing dollars into memorable moments. We handle the operations — agency-to-client proposals, vendor COIs, RSVP flow, on-site capture, post-event analytics — so the creative team stays creative.",
+      "Brand Activations turn marketing dollars into memorable moments. We handle the operations (agency-to-client proposals, vendor COIs, RSVP flow, on-site capture, post-event analytics) so the creative team stays creative.",
     hero: {
       eyebrow: "Brand Activations",
       title: "From RFP to Recap. Same Platform.",
-      body: "Activations live or die by the speed of the hand-off — agency to client, creative to production, production to vendors. ATLVS Technologies shortens every hand-off to zero.",
+      body: "Activations live or die by the speed of the hand-off: agency to client, creative to production, production to vendors. ATLVS Technologies shortens every hand-off to zero.",
     },
     stats: [
       { value: "< 1 day", label: "proposal → signed project" },
@@ -269,7 +269,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       },
       {
         q: "Is there a branded proposal template?",
-        a: "Yes. Proposals adopt the client's brand kit — logo, fonts, colors — automatically once the agency team sets it in settings.",
+        a: "Yes. Proposals adopt the client's brand kit (logo, fonts, colors) automatically once the agency team sets it in settings.",
       },
     ],
     related: ["corporate-events", "immersive-experiences", "live-events", "trade-shows-exhibitions", "weddings-private-events"],
@@ -279,7 +279,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Corporate Events",
     tagline: "Conferences, AGMs, summits, internal events",
     description:
-      "ATLVS Technologies for Corporate Events — conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
+      "ATLVS Technologies for Corporate Events: conferences, shareholder meetings, executive summits, internal kickoffs. Client-facing proposals, vendor COI tracking, stakeholder portals, and executive-grade guest experiences.",
     hero: {
       eyebrow: "Corporate Events",
       title: "Executive Grade. Field Ready.",
@@ -295,7 +295,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       "Signed proposals convert to a live project on signature",
       "Client portal open 24/7 for proposals, deliverables, invoices, files, and messages",
       "Vendor COI and W-9 tracking with expiry alerts",
-      "Per-persona KBYG — executives, VIPs, staff, crew",
+      "Per-persona KBYG for executives, VIPs, staff, and crew",
       "Card or ACH invoicing with deposit and balance splits",
       "Immutable audit log on every change, for compliance and legal",
     ],
@@ -311,7 +311,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     faqs: [
       {
         q: "Does the platform support SOC 2 or ISO compliance?",
-        a: "The controls SOC 2 attests to — access control, change management, audit logging, encryption, monitoring — are already in production. SOC 2 Type II is in progress for Enterprise customers. Contact sales for current status.",
+        a: "The controls SOC 2 attests to (access control, change management, audit logging, encryption, monitoring) are already in production. SOC 2 Type II is in progress for Enterprise customers. Contact sales for current status.",
       },
       {
         q: "Can we route proposals through legal?",
@@ -325,11 +325,11 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Theatrical Performances",
     tagline: "Residencies, touring productions, galas",
     description:
-      "Theatrical Performances — Broadway runs, off-Broadway limited engagements, regional residencies, gala productions. Cast and crew scheduling, cue notes, understudy tracking, per-house advancing, and compliance-ready audit trails.",
+      "Theatrical Performances: Broadway runs, off-Broadway limited engagements, regional residencies, gala productions. Cast and crew scheduling, cue notes, understudy tracking, per-house advancing, and compliance-ready audit trails.",
     hero: {
       eyebrow: "Theatrical Performances",
       title: "Eight Shows a Week. Zero Drift.",
-      body: "Long-running productions live or die by consistency. Cast changes, understudies, rider tweaks, venue quirks — we keep the canonical production in one place and log every deviation.",
+      body: "Long-running productions live or die by consistency. Cast changes, understudies, rider tweaks, venue quirks: we keep the canonical production in one place and log every deviation.",
     },
     stats: [
       { value: "8", label: "shows / week" },
@@ -343,7 +343,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       "Canonical rider with per-venue overrides for touring productions",
       "Equity and union-compliant scheduling with break enforcement",
       "Front-of-house and back-of-house guides per persona",
-      "Full audit trail — who changed what, when — for legal and compliance",
+      "Full audit trail (who changed what, when) for legal and compliance",
     ],
     modules: [
       { name: "Rundown", body: "Per-show cue list, blocking revisions, understudy assignments, version history." },
@@ -362,7 +362,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
       },
       {
         q: "How is cue-note revision history handled?",
-        a: "Every rundown edit is versioned — who, when, before, after. The stage manager can roll back a bad revision in one click, and the audit log satisfies legal review.",
+        a: "Every rundown edit is versioned: who, when, before, after. The stage manager can roll back a bad revision in one click, and the audit log satisfies legal review.",
       },
     ],
     related: ["immersive-experiences", "concerts", "broadcast-tv-film", "venues-arenas", "education-campus"],
@@ -372,7 +372,7 @@ export const INDUSTRIES: Record<string, IndustryConfig> = {
     name: "Broadcast, TV & Film",
     tagline: "Studio, remote, location-based production",
     description:
-      "Broadcast, TV & Film — multi-camera studio broadcasts, remote productions, location shoots, episodic series. Call sheets, day-of logistics, vendor management, union-compliant time tracking, and per-production financial reporting.",
+      "Broadcast, TV & Film: multi-camera studio broadcasts, remote productions, location shoots, episodic series. Call sheets, day-of logistics, vendor management, union-compliant time tracking, and per-production financial reporting.",
     hero: {
       eyebrow: "Broadcast, TV & Film",
       title: "Prep to Wrap. One Platform.",

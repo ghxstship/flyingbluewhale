@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/Button";
 import { buildMetadata, softwareApplicationSchema, breadcrumbSchema, faqSchema, CANONICAL_CTAS, SITE } from "@/lib/seo";
 import { MODULES, type ModuleConfig } from "@/lib/marketing/modules";
 import { INDUSTRIES, type IndustryConfig } from "@/lib/marketing/industries";
+import { localizeIndustry } from "@/lib/marketing/industries.i18n";
 import { getRequestT } from "@/lib/i18n/request";
 
 type Params = { module: string; industry: string };
@@ -42,8 +43,8 @@ export function generateStaticParams(): Params[] {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { module, industry } = await params;
   const mod = MODULES[module];
-  const ind = INDUSTRIES[industry];
   const { t } = await getRequestT();
+  const ind = localizeIndustry(industry, t);
   if (!mod || !ind) {
     return buildMetadata({
       title: t("marketing.features.industry.fallbackTitle", undefined, "Feature × Industry"),
@@ -95,9 +96,9 @@ function buildUseCases(
 export default async function FeatureIndustryPage({ params }: { params: Promise<Params> }) {
   const { module, industry } = await params;
   const mod = MODULES[module];
-  const ind = INDUSTRIES[industry];
-  if (!mod || !ind) notFound();
   const { t } = await getRequestT();
+  const ind = localizeIndustry(industry, t);
+  if (!mod || !ind) notFound();
 
   const path = `/features/${mod.slug}/${industry}`;
   const crumbs = [
@@ -122,7 +123,8 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
   // other direction of the farm.
   const siblingIndustries = Object.entries(INDUSTRIES)
     .filter(([slug]) => slug !== industry)
-    .slice(0, 7);
+    .slice(0, 7)
+    .map(([slug, sib]) => [slug, localizeIndustry(slug, t) ?? sib] as const);
 
   const useCases = buildUseCases(mod, ind, t);
 

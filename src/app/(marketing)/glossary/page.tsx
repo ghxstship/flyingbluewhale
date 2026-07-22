@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { GLOSSARY, GLOSSARY_CATEGORIES, type GlossaryTerm } from "@/lib/marketing/glossary";
+import { localizeGlossaryCategoryLabel, localizeGlossaryTerm } from "@/lib/marketing/glossary.i18n";
 import { getRequestT } from "@/lib/i18n/request";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -32,8 +33,9 @@ export default async function GlossaryIndex() {
     { label: t("marketing.pages.glossary.breadcrumbs.glossary"), href: "/glossary" },
   ];
 
+  const terms = GLOSSARY.map((entry) => localizeGlossaryTerm(entry.slug, t) ?? entry);
   const byCategory = new Map<GlossaryTerm["category"], GlossaryTerm[]>();
-  for (const term of GLOSSARY) {
+  for (const term of terms) {
     const list = byCategory.get(term.category) ?? [];
     list.push(term);
     byCategory.set(term.category, list);
@@ -48,7 +50,7 @@ export default async function GlossaryIndex() {
             "@context": "https://schema.org",
             "@type": "DefinedTermSet",
             name: t("marketing.pages.glossary.jsonLd.name"),
-            hasDefinedTerm: GLOSSARY.map((t) => ({
+            hasDefinedTerm: terms.map((t) => ({
               "@type": "DefinedTerm",
               name: t.term,
               description: t.short,
@@ -65,7 +67,7 @@ export default async function GlossaryIndex() {
 
       {GLOSSARY_CATEGORIES.filter((cat) => byCategory.has(cat.slug)).map((cat) => (
         <section key={cat.slug} className="mx-auto max-w-6xl px-6 py-8">
-          <div className="eyebrow eyebrow-brand">{cat.label}</div>
+          <div className="eyebrow eyebrow-brand">{localizeGlossaryCategoryLabel(cat.slug, t) ?? cat.label}</div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {(byCategory.get(cat.slug) ?? []).map((t) => (
               <Link key={t.slug} href={`/glossary/${t.slug}`} className="surface hover-lift p-4">

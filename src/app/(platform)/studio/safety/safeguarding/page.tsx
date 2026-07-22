@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -54,7 +54,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/safety/safeguarding/${r.id}`}
@@ -81,7 +81,8 @@ export default async function Page({
             {
               key: "created_at",
               header: t("console.safety.safeguarding.columnFiled", undefined, "Filed"),
-              render: (r) => <span className="font-mono text-xs">{String(r.created_at ?? "—")}</span>,
+              render: (r) => String(r.created_at ?? "—"),
+              mono: true,
               accessor: (r) => r.created_at ?? null,
             },
           ]}

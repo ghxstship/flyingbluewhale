@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { FormShell } from "@/components/FormShell";
@@ -226,7 +226,7 @@ export default async function BoxOfficeConsolePage({
               description="Orders land here as buyers check out."
             />
           ) : (
-            <DataTable<RevenueOrder>
+            <DataView<RevenueOrder>
               rows={orders}
               columns={[
                 {

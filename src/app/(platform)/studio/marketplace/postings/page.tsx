@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -97,7 +97,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<PostingRow>
+        <DataView<PostingRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/postings/${r.id}`}
           emptyLabel={t("console.marketplace.postings.emptyLabel", undefined, "No postings yet")}
@@ -137,14 +137,14 @@ export default async function Page() {
               header: t("console.marketplace.postings.col.dayRate", undefined, "Day Rate"),
               render: (r) => formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency),
               accessor: (r) => Number(r.day_rate_max_cents ?? r.day_rate_min_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "applicants",
               header: t("console.marketplace.postings.col.applicants", undefined, "Applicants"),
               render: (r) => fmt.number(r.applicant_count),
               accessor: (r) => Number(r.applicant_count ?? 0),
-              className: "font-mono text-xs tabular-nums",
+              numeric: true,
             },
             {
               key: "job_posting_phase",

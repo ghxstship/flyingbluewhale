@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         )}
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/calls/${call.id}/submissions/${r.id}`}
           emptyLabel={t("console.marketplace.calls.submissions.emptyLabel", undefined, "No submissions yet")}
@@ -76,12 +76,13 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               header: t("console.marketplace.calls.submissions.col.submitted", undefined, "Submitted"),
               render: (r) => fmt.date(new Date(r.submitted_at)),
               accessor: (r) => r.submitted_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "submitter",
               header: t("console.marketplace.calls.submissions.col.submitter", undefined, "Submitter"),
-              render: (r) => <span className="font-mono text-xs">{r.submitter_user_id.slice(0, 8)}</span>,
+              render: (r) => r.submitter_user_id.slice(0, 8),
+              mono: true,
               accessor: (r) => r.submitter_user_id,
             },
             {
@@ -99,14 +100,14 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               header: t("console.marketplace.calls.submissions.col.score", undefined, "Score"),
               render: (r) => (r.score == null ? "—" : `${r.score}`),
               accessor: (r) => Number(r.score ?? 0),
-              className: "font-mono text-xs tabular-nums",
+              numeric: true,
             },
             {
               key: "fee",
               header: t("console.marketplace.calls.submissions.col.proposedFee", undefined, "Proposed Fee"),
               render: (r) => (r.fee_proposed_cents ? formatMoney(r.fee_proposed_cents) : "—"),
               accessor: (r) => Number(r.fee_proposed_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "cover",

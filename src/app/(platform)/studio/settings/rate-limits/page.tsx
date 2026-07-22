@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -120,7 +120,7 @@ export default async function Page() {
         ]}
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={overrides}
           emptyLabel={t(
             "console.settings.rateLimits.empty.label",
@@ -152,7 +152,7 @@ export default async function Page() {
               key: "limit_count",
               header: t("console.settings.rateLimits.column.limit", undefined, "Limit"),
               render: (r) => (
-                <span className="font-mono text-sm">
+                <span>
                   {fmt.number(r.limit_count)}{" "}
                   <span className="text-[var(--p-text-2)]">
                     {t("console.settings.rateLimits.unit.req", undefined, "req")}
@@ -165,15 +165,12 @@ export default async function Page() {
             {
               key: "window_ms",
               header: t("console.settings.rateLimits.column.window", undefined, "Window"),
-              render: (r) => (
-                <span className="font-mono text-sm">
-                  {t(
-                    "console.settings.rateLimits.window.per",
-                    { window: humanWindow(r.window_ms) },
-                    `per ${humanWindow(r.window_ms)}`,
-                  )}
-                </span>
-              ),
+              render: (r) =>
+                t(
+                  "console.settings.rateLimits.window.per",
+                  { window: humanWindow(r.window_ms) },
+                  `per ${humanWindow(r.window_ms)}`,
+                ),
               accessor: (r) => r.window_ms,
               mono: true,
             },
@@ -183,11 +180,12 @@ export default async function Page() {
               render: (r) => {
                 const perSecond = r.limit_count / (r.window_ms / 1000);
                 return (
-                  <span className="font-mono text-xs text-[var(--p-text-2)]">
+                  <span className="text-[var(--p-text-2)]">
                     {perSecond >= 1 ? `${perSecond.toFixed(1)}/sec` : `${(perSecond * 60).toFixed(1)}/min`}
                   </span>
                 );
               },
+              mono: true,
             },
             {
               key: "actions",

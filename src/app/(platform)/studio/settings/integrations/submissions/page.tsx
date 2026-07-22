@@ -3,7 +3,7 @@ import { urlFor } from "@/lib/urls";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -141,7 +141,7 @@ export default async function Page() {
             value={counts.rejected}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/settings/integrations/submissions/${r.id}`}
           emptyLabel={t(
@@ -190,7 +190,7 @@ export default async function Page() {
             {
               key: "email",
               header: t("console.settings.integrations.submissions.col.contact", undefined, "Contact"),
-              render: (r) => <span className="font-mono text-xs">{r.partner_contact_email}</span>,
+              render: (r) => r.partner_contact_email,
             },
             {
               key: "submitted",

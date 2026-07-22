@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -101,7 +101,7 @@ export default async function Page() {
             value={fmt.number(rows.length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/operations/incidents/${r.id}`}
           emptyLabel={t("console.lostFound.emptyLabel", undefined, "No property reports")}
@@ -142,7 +142,7 @@ export default async function Page() {
               key: "occurred",
               header: t("console.lostFound.column.reported", undefined, "Reported"),
               render: (r) => fmt.dateParts(r.occurred_at, { month: "short", day: "numeric" }),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.occurred_at,
             },
           ]}

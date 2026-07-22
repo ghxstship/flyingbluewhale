@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
@@ -63,7 +63,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable<Threat>
+        <DataView<Threat>
           rows={rows}
           totalCount={total}
           emptyLabel={t("console.safety.threats.emptyLabel", undefined, "No threats logged")}
@@ -81,7 +81,8 @@ export default async function Page({
             {
               key: "code",
               header: t("console.safety.threats.col.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              render: (r) => r.code,
+              mono: true,
               accessor: (r) => r.code ?? null,
             },
             {

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -64,7 +64,7 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/settings/integrations/ticketing/${r.id}`}
           emptyLabel={t("console.settings.integrations.ticketing.emptyLabel", undefined, "No ticketing connections")}
@@ -95,8 +95,8 @@ export default async function Page() {
             {
               key: "evt",
               header: t("console.settings.integrations.ticketing.col.eventId", undefined, "Event ID"),
-              render: (r) =>
-                r.external_event_id ? <span className="font-mono text-xs">{r.external_event_id}</span> : "—",
+              render: (r) => r.external_event_id ?? "—",
+              mono: true,
               accessor: (r) => r.external_event_id ?? null,
             },
             {
@@ -104,7 +104,7 @@ export default async function Page() {
               header: t("console.settings.integrations.ticketing.col.lastSync", undefined, "Last Sync"),
               render: (r) => (r.last_synced_at ? fmt.dateTime(new Date(r.last_synced_at)) : "—"),
               accessor: (r) => r.last_synced_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "active",

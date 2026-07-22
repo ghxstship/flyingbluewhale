@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         )}
       />
       <div className="page-content space-y-5">
-        <DataTable<AppRow>
+        <DataView<AppRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/postings/${posting.id}/applicants/${r.id}`}
           emptyLabel={t("console.marketplace.postings.applicants.emptyLabel", undefined, "No applicants yet")}
@@ -76,12 +76,13 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               header: t("console.marketplace.postings.applicants.columns.applied", undefined, "Applied"),
               render: (r) => fmtDate(r.applied_at),
               accessor: (r) => r.applied_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "applicant",
               header: t("console.marketplace.postings.applicants.columns.applicant", undefined, "Applicant"),
-              render: (r) => <span className="font-mono text-xs">{r.applicant_user_id.slice(0, 8)}</span>,
+              render: (r) => r.applicant_user_id.slice(0, 8),
+              mono: true,
               accessor: (r) => r.applicant_user_id,
             },
             {
@@ -101,14 +102,14 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               header: t("console.marketplace.postings.applicants.columns.score", undefined, "Score"),
               render: (r) => (r.score == null ? "—" : `${r.score}`),
               accessor: (r) => Number(r.score ?? 0),
-              className: "font-mono text-xs tabular-nums",
+              numeric: true,
             },
             {
               key: "rate",
               header: t("console.marketplace.postings.applicants.columns.proposedRate", undefined, "Proposed Rate"),
               render: (r) => (r.day_rate_proposed_cents ? `$${(r.day_rate_proposed_cents / 100).toFixed(0)}` : "—"),
               accessor: (r) => Number(r.day_rate_proposed_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "cover",

@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -109,7 +109,7 @@ export default async function BoxOfficePage() {
           />
         </div>
 
-        <DataTable<(typeof rows)[number]>
+        <DataView<(typeof rows)[number]>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/box-office/${r.id}`}
           columns={[

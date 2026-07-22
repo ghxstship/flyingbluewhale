@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
@@ -78,7 +78,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           emptyLabel={t("console.safety.guardTours.emptyLabel", undefined, "No guard tours scheduled")}
@@ -110,7 +110,7 @@ export default async function Page({
                       `every ${r.cadence_minutes}m`,
                     )
                   : t("console.safety.guardTours.cadence.adhoc", undefined, "ad-hoc"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.cadence_minutes ?? null,
             },
             {
@@ -125,7 +125,7 @@ export default async function Page({
                       minute: "2-digit",
                     })
                   : "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.next_run_at ?? null,
             },
             {

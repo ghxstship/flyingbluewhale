@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -54,7 +54,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/safety/major-incident/${r.id}`}
@@ -87,13 +87,15 @@ export default async function Page({
             {
               key: "opened_at",
               header: t("console.safety.majorIncident.columns.opened", undefined, "Opened"),
-              render: (r) => <span className="font-mono text-xs">{String(r.opened_at ?? "—")}</span>,
+              render: (r) => String(r.opened_at ?? "—"),
+              mono: true,
               accessor: (r) => r.opened_at ?? null,
             },
             {
               key: "closed_at",
               header: t("console.safety.majorIncident.columns.closed", undefined, "Closed"),
-              render: (r) => <span className="font-mono text-xs">{String(r.closed_at ?? "—")}</span>,
+              render: (r) => String(r.closed_at ?? "—"),
+              mono: true,
               accessor: (r) => r.closed_at ?? null,
             },
           ]}

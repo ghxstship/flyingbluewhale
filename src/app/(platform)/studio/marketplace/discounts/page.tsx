@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -60,14 +60,15 @@ export default async function DiscountsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<DiscountRow>
+        <DataView<DiscountRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/discounts/${r.id}`}
           columns={[
             {
               key: "code",
               header: "Code",
-              render: (r) => <span className="font-mono">{r.code}</span>,
+              render: (r) => r.code,
+              mono: true,
               accessor: (r) => r.code,
             },
             {

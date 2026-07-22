@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -70,7 +70,7 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
-        <DataTable<TalentRow>
+        <DataView<TalentRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/talent/${r.id}`}
           emptyLabel={t("console.marketplace.talent.emptyLabel", undefined, "No talent profiles yet")}
@@ -94,7 +94,8 @@ export default async function Page() {
             {
               key: "handle",
               header: t("console.marketplace.talent.col.handle", undefined, "Handle"),
-              render: (r) => (r.public_handle ? <span className="font-mono text-xs">@{r.public_handle}</span> : "—"),
+              render: (r) => (r.public_handle ? `@${r.public_handle}` : "—"),
+              mono: true,
               accessor: (r) => r.public_handle ?? null,
             },
             {
@@ -119,14 +120,14 @@ export default async function Page() {
               header: t("console.marketplace.talent.col.feeBand", undefined, "Fee Band"),
               render: (r) => formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
               accessor: (r) => Number(r.fee_max_cents ?? r.fee_min_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "rating",
               header: t("console.marketplace.talent.col.rating", undefined, "Rating"),
               render: (r) => (r.rating_avg == null ? "—" : `★ ${r.rating_avg} (${r.rating_count})`),
               accessor: (r) => Number(r.rating_avg ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "verified",

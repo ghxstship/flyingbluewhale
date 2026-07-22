@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ModuleHeader, PageSkeleton } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -128,7 +128,7 @@ async function OshaBody({ year }: { year: number }) {
             · {t("console.safety.osha.fatalityNotice", undefined, "OSHA notification required within 8 hours.")}
           </div>
         )}
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/safety/incidents/${r.id}`}
           emptyLabel={t("console.safety.osha.emptyLabel", { year }, `No recordable incidents for ${year}.`)}
@@ -137,7 +137,7 @@ async function OshaBody({ year }: { year: number }) {
               key: "date",
               header: t("console.safety.osha.columns.date", undefined, "Date"),
               render: (r) => fmt(r.occurred_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.occurred_at ?? null,
             },
             {
@@ -174,14 +174,14 @@ async function OshaBody({ year }: { year: number }) {
               key: "away",
               header: t("console.safety.osha.columns.daysAway", undefined, "Days Away"),
               render: (r) => r.days_away.toString(),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.days_away.toString ?? null,
             },
             {
               key: "rest",
               header: t("console.safety.osha.columns.daysRestricted", undefined, "Days Restr."),
               render: (r) => r.days_restricted.toString(),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.days_restricted.toString ?? null,
             },
           ]}

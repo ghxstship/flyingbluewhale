@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -106,7 +106,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<EventRow>
+        <DataView<EventRow>
           rows={rows}
           rowHref={(r) => `/studio/events/${r.id}`}
           emptyLabel={t("console.programs.schedule.emptyLabel", undefined, "No events in window")}
@@ -131,14 +131,14 @@ export default async function Page() {
               key: "starts",
               header: t("console.programs.schedule.colStarts", undefined, "Starts"),
               render: (r) => fmt(r.starts_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_at ?? null,
             },
             {
               key: "ends",
               header: t("console.programs.schedule.colEnds", undefined, "Ends"),
               render: (r) => fmt(r.ends_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.ends_at ?? null,
             },
             {

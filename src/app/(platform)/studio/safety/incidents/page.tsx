@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -184,7 +184,7 @@ export default async function Page() {
           </ul>
         </section>
 
-        <DataTable<IncidentRow>
+        <DataView<IncidentRow>
           rows={rows}
           totalCount={totalThirtyDay}
           rowHref={(r) => `/studio/operations/incidents/${r.id}`}
@@ -210,7 +210,7 @@ export default async function Page() {
               key: "occurred",
               header: t("console.safety.incidents.column.occurred", undefined, "Occurred"),
               render: (r) => fmt(r.occurred_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.occurred_at ?? null,
             },
             {

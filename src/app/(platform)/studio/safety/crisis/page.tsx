@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -62,7 +62,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/safety/crisis/${r.id}`}
@@ -94,7 +94,8 @@ export default async function Page({
             {
               key: "sent_at",
               header: t("console.safety.crisis.col.sent", undefined, "Sent"),
-              render: (r) => <span className="font-mono text-xs">{String(r.sent_at ?? "—")}</span>,
+              render: (r) => String(r.sent_at ?? "—"),
+              mono: true,
               accessor: (r) => r.sent_at ?? null,
             },
           ]}

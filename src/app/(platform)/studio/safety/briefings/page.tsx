@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -85,7 +85,7 @@ export default async function Page() {
             value={fmtIntl.number(rows.length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/safety/briefings/${r.id}`}
           emptyLabel={t("console.safety.briefings.emptyLabel", undefined, "No briefings scheduled")}
@@ -122,7 +122,7 @@ export default async function Page() {
               key: "scheduled",
               header: t("console.safety.briefings.columns.scheduled", undefined, "Scheduled"),
               render: (r) => fmt(r.scheduled_for),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.scheduled_for ?? null,
             },
             {

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -84,7 +84,7 @@ export default async function Page() {
           </section>
         )}
 
-        <DataTable<Playbook>
+        <DataView<Playbook>
           rows={rows}
           emptyLabel={t("console.safety.playbooks.emptyLabel", undefined, "No playbooks authored")}
           emptyDescription={t(
@@ -107,7 +107,8 @@ export default async function Page() {
             {
               key: "slug",
               header: t("console.safety.playbooks.col.slug", undefined, "Slug"),
-              render: (r) => <span className="font-mono text-xs">{r.slug}</span>,
+              render: (r) => r.slug,
+              mono: true,
               accessor: (r) => r.slug ?? null,
             },
             {
@@ -121,7 +122,8 @@ export default async function Page() {
             {
               key: "version",
               header: t("console.safety.playbooks.col.version", undefined, "Version"),
-              render: (r) => <span className="font-mono text-xs">v{r.version}</span>,
+              render: (r) => `v${r.version}`,
+              mono: true,
               accessor: (r) => r.version ?? null,
             },
             {
@@ -135,7 +137,8 @@ export default async function Page() {
             {
               key: "updated_at",
               header: t("console.safety.playbooks.col.updated", undefined, "Updated"),
-              render: (r) => <span className="font-mono text-xs">{r.updated_at?.slice(0, 10)}</span>,
+              render: (r) => r.updated_at?.slice(0, 10),
+              mono: true,
               accessor: (r) => r.updated_at?.slice ?? null,
             },
           ]}

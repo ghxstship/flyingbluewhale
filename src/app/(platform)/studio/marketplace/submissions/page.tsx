@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -93,7 +93,7 @@ export default async function Page() {
             value={fmt.number(awarded)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => (r.open_call ? `/studio/marketplace/calls/${r.open_call.id}` : "/studio/marketplace/calls")}
           emptyLabel={t("console.submissions.emptyLabel", undefined, "No submissions yet")}
@@ -134,21 +134,21 @@ export default async function Page() {
               key: "score",
               header: t("console.submissions.column.score", undefined, "Score"),
               render: (r) => (r.score != null ? fmt.number(r.score) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.score,
             },
             {
               key: "fee",
               header: t("console.submissions.column.fee", undefined, "Proposed Fee"),
               render: (r) => (r.fee_proposed_cents != null ? fmt.money(r.fee_proposed_cents) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.fee_proposed_cents,
             },
             {
               key: "submitted",
               header: t("console.submissions.column.submitted", undefined, "Submitted"),
               render: (r) => fmt.dateParts(r.submitted_at, { month: "short", day: "numeric" }),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.submitted_at,
             },
           ]}

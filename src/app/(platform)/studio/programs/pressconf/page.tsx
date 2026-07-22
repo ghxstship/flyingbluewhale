@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -81,7 +81,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<EventRow>
+        <DataView<EventRow>
           rows={rows}
           rowHref={(r) => `/studio/events/${r.id}`}
           emptyLabel={t("console.programs.pressconf.emptyLabel", undefined, "No press conferences")}
@@ -106,14 +106,14 @@ export default async function Page() {
               key: "starts",
               header: t("console.programs.pressconf.col.starts", undefined, "Starts"),
               render: (r) => fmt(r.starts_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_at ?? null,
             },
             {
               key: "ends",
               header: t("console.programs.pressconf.col.ends", undefined, "Ends"),
               render: (r) => fmt(r.ends_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.ends_at ?? null,
             },
             {

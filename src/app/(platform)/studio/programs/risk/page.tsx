@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -80,7 +81,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         <RiskHeatmap cells={cells} likelihood={LIKELIHOOD} impact={IMPACT} />
 
-        <DataTable
+        <DataView
           rows={rows as Array<Risk & { id: string }>}
           rowHref={(r) => `/studio/programs/risk/${r.id}`}
           columns={[
@@ -101,11 +102,8 @@ export default async function Page() {
             {
               key: "matrix",
               header: t("console.programs.risk.columns.matrix", undefined, "L × I"),
-              render: (r) => (
-                <span className="font-mono text-xs">
-                  {r.likelihood} × {r.impact}
-                </span>
-              ),
+              render: (r) => `${r.likelihood} × ${r.impact}`,
+              mono: true,
               accessor: (r) => Number(r.likelihood ?? 0) * Number(r.impact ?? 0),
             },
             {
@@ -113,7 +111,7 @@ export default async function Page() {
               header: t("console.programs.risk.columns.score", undefined, "Score"),
               render: (r) => (
                 <span
-                  className={`font-mono text-xs ${
+                  className={`${MONO_CELL_CLASS} ${
                     r.inherent_score >= 20
                       ? "text-[var(--p-danger)]"
                       : r.inherent_score >= 12
@@ -137,7 +135,8 @@ export default async function Page() {
             {
               key: "due_on",
               header: t("console.programs.risk.columns.due", undefined, "Due"),
-              render: (r) => <span className="font-mono text-xs">{r.due_on ?? "—"}</span>,
+              render: (r) => r.due_on ?? "—",
+              mono: true,
               accessor: (r) => r.due_on ?? null,
             },
           ]}

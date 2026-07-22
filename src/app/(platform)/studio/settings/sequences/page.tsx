@@ -1,7 +1,8 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -13,7 +14,7 @@ import { resetSequence, upsertSequence } from "./actions";
 export const dynamic = "force-dynamic";
 
 // org_sequences PK is (org_id, scope) — no surrogate id. Synthesize one
-// per row so DataTable can key on it; scope is unique within the org's
+// per row so DataView can key on it; scope is unique within the org's
 // view so it serves cleanly as the stable identity.
 type Row = {
   id: string;
@@ -112,7 +113,7 @@ export default async function Page() {
             <code className="font-mono">{"{MM}"}</code>, <code className="font-mono">{"{DD}"}</code>,{" "}
             <code className="font-mono">{"{ORG}"}</code>.
           </p>
-          <DataTable<Row>
+          <DataView<Row>
             rows={existing}
             emptyLabel={t("console.settings.sequences.emptyLabel", undefined, "No sequences allocated yet")}
             emptyDescription={t(
@@ -124,27 +125,25 @@ export default async function Page() {
               {
                 key: "scope",
                 header: t("console.settings.sequences.columnScope", undefined, "Scope"),
-                render: (r) => <code className="font-mono text-xs">{r.scope}</code>,
+                render: (r) => <code className={MONO_CELL_CLASS}>{r.scope}</code>,
               },
               {
                 key: "format",
                 header: t("console.settings.sequences.columnFormat", undefined, "Format"),
-                render: (r) => <code className="font-mono text-xs">{r.format}</code>,
+                render: (r) => <code className={MONO_CELL_CLASS}>{r.format}</code>,
               },
               {
                 key: "current_val",
                 header: t("console.settings.sequences.columnCurrent", undefined, "Current"),
-                render: (r) => <span className="font-mono text-xs">{fmt.number(r.current_val)}</span>,
+                render: (r) => fmt.number(r.current_val),
+                mono: true,
                 accessor: (r) => r.current_val,
               },
               {
                 key: "next",
                 header: t("console.settings.sequences.columnNext", undefined, "Next identifier"),
-                render: (r) => (
-                  <span className="font-mono text-xs">
-                    {formatSequencePreview(r.format, { seq: r.current_val + 1, orgSlug })}
-                  </span>
-                ),
+                render: (r) => formatSequencePreview(r.format, { seq: r.current_val + 1, orgSlug }),
+                mono: true,
               },
               {
                 key: "actions",

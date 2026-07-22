@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -75,7 +75,7 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
-        <DataTable<OfferRow>
+        <DataView<OfferRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/offers/${r.id}`}
           emptyLabel={t("console.marketplace.offers.emptyLabel", undefined, "No offers yet")}
@@ -107,21 +107,21 @@ export default async function Page() {
               header: t("console.marketplace.offers.columns.performance", undefined, "Performance"),
               render: (r) => r.performance_date,
               accessor: (r) => r.performance_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "fee",
               header: t("console.marketplace.offers.columns.fee", undefined, "Fee"),
               render: (r) => formatMoney(r.fee_cents),
               accessor: (r) => Number(r.fee_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "deposit",
               header: t("console.marketplace.offers.columns.deposit", undefined, "Deposit"),
               render: (r) => `${r.deposit_pct}%`,
               accessor: (r) => Number(r.deposit_pct ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "talent_offer_state",

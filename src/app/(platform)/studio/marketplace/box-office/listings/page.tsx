@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
@@ -90,7 +90,7 @@ export default async function BoxOfficeListingsPage() {
             description="Self-fulfilled ticketed events show up here once you create a first-party listing."
           />
         ) : (
-          <DataTable<ListingRow>
+          <DataView<ListingRow>
             rows={rows}
             columns={[
               {

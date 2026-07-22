@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/safety/environmental/${r.id}`}
@@ -93,13 +93,15 @@ export default async function Page({
             {
               key: "started_at",
               header: t("console.safety.environmental.columns.started", undefined, "Started"),
-              render: (r) => <span className="font-mono text-xs">{String(r.started_at ?? "—")}</span>,
+              render: (r) => String(r.started_at ?? "—"),
+              mono: true,
               accessor: (r) => r.started_at ?? null,
             },
             {
               key: "ended_at",
               header: t("console.safety.environmental.columns.ended", undefined, "Ended"),
-              render: (r) => <span className="font-mono text-xs">{String(r.ended_at ?? "—")}</span>,
+              render: (r) => String(r.ended_at ?? "—"),
+              mono: true,
               accessor: (r) => r.ended_at ?? null,
             },
           ]}

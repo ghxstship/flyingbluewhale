@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -111,7 +111,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<IncidentRow>
+        <DataView<IncidentRow>
           rows={rows}
           rowHref={(r) => `/studio/operations/incidents/${r.id}`}
           emptyLabel={t("console.safety.cyberIr.emptyLabel", undefined, "No cyber incidents flagged")}
@@ -131,7 +131,7 @@ export default async function Page() {
               key: "occurred",
               header: t("console.safety.cyberIr.columnOccurred", undefined, "Occurred"),
               render: (r) => fmt(r.occurred_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.occurred_at ?? null,
             },
             {

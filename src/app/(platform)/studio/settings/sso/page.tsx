@@ -1,7 +1,8 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -71,7 +72,7 @@ export default async function Page() {
         ]}
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={providers}
           emptyLabel={t("console.settings.sso.emptyLabel", undefined, "No SSO providers")}
           emptyDescription={t(
@@ -105,7 +106,7 @@ export default async function Page() {
                 ) : (
                   <span className="flex flex-wrap gap-1">
                     {r.email_domains.map((d) => (
-                      <code key={d} className="font-mono text-xs text-[var(--p-text-2)]">
+                      <code key={d} className={`${MONO_CELL_CLASS} text-[var(--p-text-2)]`}>
                         @{d}
                       </code>
                     ))}
@@ -118,7 +119,7 @@ export default async function Page() {
               header: t("console.settings.sso.col.supabaseId", undefined, "Supabase ID"),
               render: (r) =>
                 r.supabase_id ? (
-                  <code className="font-mono text-xs">{r.supabase_id}</code>
+                  <code className={MONO_CELL_CLASS}>{r.supabase_id}</code>
                 ) : (
                   <span className="text-xs text-[var(--p-text-2)]">
                     {t("console.settings.sso.unlinked", undefined, "unlinked")}

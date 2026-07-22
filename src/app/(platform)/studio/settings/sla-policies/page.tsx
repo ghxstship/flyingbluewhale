@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -86,7 +86,7 @@ export default async function Page() {
         ]}
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={policies}
           emptyLabel={t("console.settings.slaPolicies.empty.label", undefined, "No SLA policies configured yet")}
           emptyDescription={t(
@@ -105,16 +105,16 @@ export default async function Page() {
             {
               key: "response_minutes",
               header: t("console.settings.slaPolicies.col.response", undefined, "Response"),
-              render: (r) => <span className="font-mono text-xs">{humanMinutes(r.response_minutes)}</span>,
-              accessor: (r) => r.response_minutes,
+              render: (r) => humanMinutes(r.response_minutes),
               mono: true,
+              accessor: (r) => r.response_minutes,
             },
             {
               key: "resolution_minutes",
               header: t("console.settings.slaPolicies.col.resolution", undefined, "Resolution"),
-              render: (r) => <span className="font-mono text-xs">{humanMinutes(r.resolution_minutes)}</span>,
-              accessor: (r) => r.resolution_minutes,
+              render: (r) => humanMinutes(r.resolution_minutes),
               mono: true,
+              accessor: (r) => r.resolution_minutes,
             },
             {
               key: "business_hours_only",

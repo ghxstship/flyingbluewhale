@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -123,7 +123,7 @@ export default async function Page() {
             "Connect QuickBooks Online, Sage 300 CRE / 100 Contractor, Foundation, Viewpoint Vista / Spectrum, Acumatica, or Xero. The OAuth + sync worker is a separate service. This surface manages connection rows + field mapping rules.",
           )}
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/settings/integrations/accounting/${r.id}`}
           emptyLabel={t(
@@ -161,7 +161,7 @@ export default async function Page() {
               header: t("console.settings.integrations.accounting.column.tenant", undefined, "Tenant"),
               render: (r) => r.tenant_id,
               accessor: (r) => r.tenant_id,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "last_sync",
@@ -171,7 +171,7 @@ export default async function Page() {
                   ? fmt.dateParts(r.last_sync_at, { month: "short", day: "numeric", year: "2-digit" })
                   : "—",
               accessor: (r) => r.last_sync_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

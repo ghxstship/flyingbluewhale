@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -64,7 +64,7 @@ export default async function Page() {
         )}
       />
       <div className="page-content space-y-5">
-        <DataTable<ReviewRow>
+        <DataView<ReviewRow>
           rows={rows}
           emptyLabel={t("console.marketplace.reviews.emptyLabel", undefined, "No reviews yet")}
           emptyDescription={t(
@@ -78,7 +78,7 @@ export default async function Page() {
               header: t("console.marketplace.reviews.col.created", undefined, "Created"),
               render: (r) => fmtDate(r.created_at),
               accessor: (r) => r.created_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "subject",
@@ -100,7 +100,7 @@ export default async function Page() {
               header: t("console.marketplace.reviews.col.rating", undefined, "Rating"),
               render: (r) => `★ ${r.rating}`,
               accessor: (r) => Number(r.rating),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "body",

@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -56,7 +56,7 @@ export default async function PromotersPage() {
         action={<Button href="/studio/marketplace/discounts/promoters/new">+ New Promoter</Button>}
       />
       <div className="page-content">
-        <DataTable<PromoterRow>
+        <DataView<PromoterRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/discounts/promoters/${r.id}`}
           columns={[
@@ -75,7 +75,8 @@ export default async function PromotersPage() {
             {
               key: "ref",
               header: "Ref Code",
-              render: (r) => (r.ref_code ? <span className="font-mono">{r.ref_code}</span> : "—"),
+              render: (r) => r.ref_code ?? "—",
+              mono: true,
               accessor: (r) => r.ref_code ?? null,
             },
             {

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -107,7 +107,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<CallRow>
+        <DataView<CallRow>
           rows={rows}
           rowHref={(r) => `/studio/marketplace/calls/${r.id}`}
           emptyLabel={t("console.marketplace.calls.empty.label", undefined, "No open calls yet")}
@@ -147,21 +147,21 @@ export default async function Page() {
               header: t("console.marketplace.calls.col.feeBand", undefined, "Fee Band"),
               render: (r) => formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
               accessor: (r) => Number(r.fee_max_cents ?? r.fee_min_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "deadline",
               header: t("console.marketplace.calls.col.deadline", undefined, "Deadline"),
               render: (r) => fmtDate(r.deadline_at),
               accessor: (r) => r.deadline_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "subs",
               header: t("console.marketplace.calls.col.submissions", undefined, "Submissions"),
               render: (r) => fmt.number(r.submission_count ?? 0),
               accessor: (r) => Number(r.submission_count ?? 0),
-              className: "font-mono text-xs tabular-nums",
+              numeric: true,
             },
             {
               key: "open_call_phase",

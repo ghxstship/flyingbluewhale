@@ -25,7 +25,9 @@ const STUDIO_SURFACES: Array<{ path: string; heading: RegExp }> = [
   { path: "/studio/procurement/scorecard", heading: /Vendor Scorecard/i },
   { path: "/studio/production/work-orders", heading: /Work Orders/i },
   { path: "/studio/finance/sub-invoices", heading: /Sub Invoices/i },
-  { path: "/studio/settings/job-templates", heading: /Job Templates/i },
+  // Canonical home moved to the LEG3ND hub (decision 6 rider); the console
+  // URL is now a redirect into it.
+  { path: "/legend/hub/templates/job-templates", heading: /Job Templates/i },
 ];
 
 async function assertNoErrorBoundary(page: Page) {
@@ -74,8 +76,8 @@ test.describe("subcontractor-ops — job templates (owner)", () => {
     await suppressTour(page);
     await authedSetup(page, "owner");
     const name = `E2E Scope ${stamp()}`;
-    await createInModule(page, "/studio/settings/job-templates/new", { name, trade: "rigging" });
-    await page.waitForURL(/\/studio\/settings\/job-templates(\?|$)/, { timeout: 15_000 });
+    await createInModule(page, "/legend/hub/templates/job-templates/new", { name, trade: "rigging" });
+    await page.waitForURL(/\/legend\/hub\/templates\/job-templates(\?|$)/, { timeout: 15_000 });
     await expect(page.getByText(name).first()).toBeVisible({ timeout: 10_000 });
   });
 });

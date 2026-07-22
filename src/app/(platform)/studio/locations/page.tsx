@@ -1,92 +1,12 @@
-import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
-import { requireSession } from "@/lib/auth";
-import { listOrgScopedWithCount } from "@/lib/db/resource";
-import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
-import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
-import type { Location } from "@/lib/supabase/types";
+import { redirect } from "next/navigation";
+import { urlFor } from "@/lib/urls";
 
-export const dynamic = "force-dynamic";
-
-export default async function LocationsPage() {
-  const { t } = await getRequestT();
-  if (!hasSupabase)
-    return (
-      <>
-        <ModuleHeader title={t("console.locations.title", undefined, "Locations")} />
-        <ConfigureSupabase />
-      </>
-    );
-  const session = await requireSession();
-  // Exact count alongside the capped window (F-01) — subtitle + truncation
-  // indicator stay honest past the 100-row cap.
-  const { rows, totalCount } = await listOrgScopedWithCount("locations", session.orgId, {
-    orderBy: "name",
-    ascending: true,
-  });
-  return (
-    <>
-      <ModuleHeader
-        eyebrow={t("console.locations.eyebrow", undefined, "Work")}
-        title={t("console.locations.title", undefined, "Locations")}
-        subtitle={
-          totalCount === 1
-            ? t("console.locations.subtitle.one", { count: totalCount }, `${totalCount} location`)
-            : t("console.locations.subtitle.other", { count: totalCount }, `${totalCount} locations`)
-        }
-        action={
-          <Button href="/studio/locations/new">{t("console.locations.add", undefined, "+ Add location")}</Button>
-        }
-      />
-      <div className="page-content">
-        <DataTable<Location>
-          rows={rows}
-          totalCount={totalCount}
-          rowHref={(row) => `/studio/locations/${row.id}`}
-          emptyLabel={t("console.locations.emptyLabel", undefined, "No locations yet")}
-          emptyDescription={t(
-            "console.locations.emptyDescription",
-            undefined,
-            "Add the addresses your operations reference: venues, hotels, warehouses, depots.",
-          )}
-          emptyAction={
-            <Button href="/studio/locations/new" size="sm">
-              {t("console.locations.add", undefined, "+ Add location")}
-            </Button>
-          }
-          columns={[
-            {
-              key: "name",
-              header: t("console.locations.columns.name", undefined, "Name"),
-              render: (row) => row.name,
-              accessor: (row) => row.name,
-            },
-            {
-              key: "address",
-              header: t("console.locations.columns.address", undefined, "Address"),
-              render: (row) => row.address ?? "—",
-              className: "font-mono text-xs",
-              accessor: (row) => row.address ?? null,
-            },
-            {
-              key: "city",
-              header: t("console.locations.columns.city", undefined, "City"),
-              render: (row) => [row.city, row.region].filter(Boolean).join(", ") || "—",
-              className: "font-mono text-xs",
-              accessor: (row) => row.city ?? null,
-            },
-            {
-              key: "country",
-              header: t("console.locations.columns.country", undefined, "Country"),
-              render: (row) => row.country ?? "—",
-              className: "font-mono text-xs",
-              accessor: (row) => row.country ?? null,
-            },
-          ]}
-        />
-      </div>
-    </>
-  );
+/**
+ * Canonical home moved to the LEG3ND Organization Hub (decision 6 rider).
+ * The space registry's read/write surface is /legend/hub/locations; this
+ * URL stays alive as a redirect. The picker demo at ./picker is a developer
+ * reference for the async Combobox, not a locations surface, and stays.
+ */
+export default function LocationsRedirect() {
+  redirect(urlFor("legend", "/hub/locations"));
 }

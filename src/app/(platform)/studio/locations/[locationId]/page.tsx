@@ -1,73 +1,11 @@
-export const dynamic = "force-dynamic";
+import { redirect } from "next/navigation";
+import { urlFor } from "@/lib/urls";
 
-import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
-import { DetailShell } from "@/components/detail/DetailShell";
-import { Button } from "@/components/ui/Button";
-import { DeleteForm } from "@/components/DeleteForm";
-import { getRequestT } from "@/lib/i18n/request";
-import { deleteLocation } from "./edit/actions";
-
-export default async function Page({ params }: { params: Promise<{ locationId: string }> }) {
+/**
+ * Canonical home moved to the LEG3ND Organization Hub (decision 6 rider).
+ * Deep links to a location land on the hub detail.
+ */
+export default async function LocationRedirect({ params }: { params: Promise<{ locationId: string }> }) {
   const { locationId } = await params;
-  const session = await requireSession();
-  const { t } = await getRequestT();
-  const supabase = await createClient();
-  const { data: row } = await supabase
-    .from("locations")
-    .select("id, name, address, city, country, postcode, lat, lng, notes")
-    .eq("org_id", session.orgId)
-    .eq("id", locationId)
-    .maybeSingle();
-  return (
-    <DetailShell
-      row={row}
-      eyebrow={t("console.locations.detail.eyebrow", undefined, "Operations")}
-      title={(r) => r.name}
-      subtitle={(r) => r.address}
-      breadcrumbs={[
-        { label: t("console.locations.detail.breadcrumb.operations", undefined, "Operations") },
-        {
-          label: t("console.locations.detail.breadcrumb.locations", undefined, "Locations"),
-          href: "/studio/locations",
-        },
-        { label: row?.name ?? t("console.locations.detail.breadcrumb.fallback", undefined, "Location") },
-      ]}
-      fields={
-        row
-          ? [
-              { label: t("console.locations.detail.fields.address", undefined, "Address"), value: row.address ?? "—" },
-              { label: t("console.locations.detail.fields.city", undefined, "City"), value: row.city ?? "—" },
-              {
-                label: t("console.locations.detail.fields.postcode", undefined, "Postcode"),
-                value: row.postcode ?? "—",
-              },
-              { label: t("console.locations.detail.fields.country", undefined, "Country"), value: row.country ?? "—" },
-              {
-                label: t("console.locations.detail.fields.coordinates", undefined, "Coordinates"),
-                value: row.lat != null && row.lng != null ? `${row.lat}, ${row.lng}` : "—",
-              },
-              { label: t("console.locations.detail.fields.notes", undefined, "Notes"), value: row.notes ?? "—" },
-            ]
-          : undefined
-      }
-      action={
-        row ? (
-          <div className="flex items-center gap-2">
-            <Button href={`/studio/locations/${locationId}/edit`} size="sm" variant="secondary">
-              {t("common.edit", undefined, "Edit")}
-            </Button>
-            <DeleteForm
-              action={deleteLocation.bind(null, locationId)}
-              confirm={t(
-                "console.locations.detail.deleteConfirm",
-                { name: row.name },
-                `Delete location "${row.name}"? This cannot be undone.`,
-              )}
-            />
-          </div>
-        ) : undefined
-      }
-    />
-  );
+  redirect(urlFor("legend", `/hub/locations/${locationId}`));
 }

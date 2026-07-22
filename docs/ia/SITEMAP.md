@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1276 · **API route handlers:** 157 · **Distinct nav hrefs:** 584
+**Page routes:** 1286 · **API route handlers:** 157 · **Distinct nav hrefs:** 584
 
 ## Legend
 
@@ -28,11 +28,11 @@
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 115 | 91 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
-| LEG3ND — Knowledge Shell | legendNav rail | 53 | 29 | 24 | 0 | 0 |
+| LEG3ND — Knowledge Shell | legendNav rail | 63 | 29 | 34 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1276** | **558** | **675** | **0** | **43** |
+| **TOTAL** | | **1286** | **558** | **685** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -2119,7 +2119,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-53 routes — ● 29 nav · ○ 24 linked · ⚠ 0 orphan
+63 routes — ● 29 nav · ○ 34 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -2185,17 +2185,27 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>hub</code> · 9 routes</summary>
+<details><summary><code>hub</code> · 19 routes</summary>
 
 ● `/legend/hub`
 ● `/legend/hub/brand`
 ● `/legend/hub/catalogs`
+○ `/legend/hub/catalogs/[id]`
+○ `/legend/hub/catalogs/[id]/edit`
+○ `/legend/hub/catalogs/new`
 ● `/legend/hub/finance-codes`
+○ `/legend/hub/finance-codes/[costCenterId]`
+○ `/legend/hub/finance-codes/new`
 ● `/legend/hub/locations`
+○ `/legend/hub/locations/[locationId]`
+○ `/legend/hub/locations/[locationId]/edit`
+○ `/legend/hub/locations/new`
 ● `/legend/hub/organization`
 ○ `/legend/hub/organization/[positionId]`
 ○ `/legend/hub/organization/new`
 ● `/legend/hub/templates`
+○ `/legend/hub/templates/job-templates`
+○ `/legend/hub/templates/job-templates/new`
 
 </details>
 

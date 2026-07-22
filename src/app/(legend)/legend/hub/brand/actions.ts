@@ -7,6 +7,11 @@ import { safeBranding } from "@/lib/branding";
 
 export type BrandingState = { error?: string; ok?: true } | null;
 
+/**
+ * Brand Studio write path (canonical-home migration, decision 6 rider).
+ * Moved verbatim from /studio/settings/branding/actions.ts — the hub is now
+ * the ONLY write surface for org branding; the console URL redirects here.
+ */
 export async function updateBrandingAction(_prev: BrandingState, fd: FormData): Promise<BrandingState> {
   const session = await requireSession();
   // Defense-in-depth on top of RLS: gate at the application layer so a
@@ -35,7 +40,8 @@ export async function updateBrandingAction(_prev: BrandingState, fd: FormData): 
     .maybeSingle();
   if (error) return { error: error.message };
   if (!data) return { error: "Org not found in your session" };
-  revalidatePath("/studio/settings/branding");
+  revalidatePath("/legend/hub/brand");
+  revalidatePath("/legend/hub");
   revalidatePath("/studio");
   return { ok: true };
 }

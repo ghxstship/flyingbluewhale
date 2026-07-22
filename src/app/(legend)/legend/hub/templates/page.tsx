@@ -11,9 +11,12 @@ import { DOC_TEMPLATES } from "@/lib/documents/registry";
 export const dynamic = "force-dynamic";
 
 /**
- * Templates pillar (MIRROR): one place to see every template family the org
- * configures. Counts are live; each family deep-links to its editing home
- * (console or field app) until the canonical-home move.
+ * Templates pillar: one place to see every template family the org
+ * configures. Counts are live. Job templates are hub-native (canonical home,
+ * decision 6 rider); the remaining families deep-link to their editing homes
+ * (doc templates ride the code-defined registry via the console documents
+ * hub, field templates are COMPVSS-native for offline use, advance-packet
+ * presets are advancing-engine config).
  */
 export default async function TemplatesPillarPage() {
   if (!hasSupabase) {
@@ -61,16 +64,16 @@ export default async function TemplatesPillarPage() {
       linkLabel: "Open in console",
     },
     {
-      href: urlFor("platform", "/settings/job-templates"),
+      href: "/legend/hub/templates/job-templates",
       title: "Job templates",
       count:
         jobTemplateCount == null
-          ? "In console"
+          ? "In the hub"
           : jobTemplateCount === 1
             ? "1 template"
             : `${jobTemplateCount} templates`,
       blurb: "Reusable job shapes for dispatch and subcontractor work orders.",
-      linkLabel: "Open in console",
+      linkLabel: "Open in the hub",
     },
     {
       href: urlFor("mobile", "/templates"),

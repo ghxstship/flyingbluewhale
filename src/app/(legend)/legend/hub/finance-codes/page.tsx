@@ -13,9 +13,11 @@ import { urlFor } from "@/lib/urls";
 export const dynamic = "force-dynamic";
 
 /**
- * Finance Codes pillar (MIRROR): the org's cost centers on the XPMS
- * department canon (0000 Executive through 9000 Technology). Read-only here;
- * finance workflows stay in the console.
+ * Finance Codes pillar (canonical home, decision 6 rider): the org's cost
+ * centers on the XPMS department canon (0000 Executive through 9000
+ * Technology). Full CRUD lives here — cost_centers has no console surface;
+ * finance WORKFLOWS (budgets, requisitions) stay in the console and code
+ * against these.
  */
 
 type CostCenter = {
@@ -58,9 +60,14 @@ export default async function FinanceCodesPage() {
           { label: "Finance Codes" },
         ]}
         action={
-          <Button href={urlFor("platform", "/finance")} size="sm" variant="secondary">
-            Finance in console
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href={urlFor("platform", "/finance")} size="sm" variant="secondary">
+              Finance in console
+            </Button>
+            <Button href="/legend/hub/finance-codes/new" size="sm">
+              + New Cost Center
+            </Button>
+          </div>
         }
       />
       <div className="page-content">
@@ -68,10 +75,12 @@ export default async function FinanceCodesPage() {
           <EmptyState
             title="No cost centers yet"
             description="New organizations start with the 10 XPMS department classes, 0000 Executive through 9000 Technology."
+            action={<Button href="/legend/hub/finance-codes/new">+ New Cost Center</Button>}
           />
         ) : (
           <DataTable<CostCenter>
             rows={rows}
+            rowHref={(c) => `/legend/hub/finance-codes/${c.id}`}
             emptyLabel="No cost centers"
             columns={[
               {

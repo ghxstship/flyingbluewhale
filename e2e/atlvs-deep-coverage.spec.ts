@@ -228,7 +228,8 @@ test.describe("ATLVS console deep coverage (manager)", () => {
 
   test("Advancing: author an assignment + advanceState (briefed→draft)", async ({ page }) => {
     // A SKU must exist or the new-assignment form shows an empty state (no select).
-    await createInModule(page, "/studio/settings/catalog/new", {
+    // Catalog canonical home moved to the LEG3ND hub (decision 6 rider).
+    await createInModule(page, "/legend/hub/catalogs/new", {
       name: `E2E SKU ${stamp()}`,
       code: `e2e-cred-${stamp()}`,
       kind: "credential",
@@ -331,7 +332,9 @@ test.describe("ATLVS console deep coverage (collaborator authz)", () => {
   test("Master Catalog create is blocked (settings layout gate)", async ({ page }) => {
     // /studio/settings/catalog is unlisted in settingsNav, so the settings layout
     // defaults it to the manager floor and denies a member BEFORE the manager+
-    // action string is reached.
+    // action string is reached. The page itself is now a redirect into the
+    // LEG3ND hub (decision 6 rider), but the layout gate still fires first for
+    // an under-ranked role — the redirect only runs for manager+.
     await page.goto("/studio/settings/catalog/new");
     await expect(page.getByText(ACCESS_DENIED).first()).toBeVisible({ timeout: 20_000 });
   });

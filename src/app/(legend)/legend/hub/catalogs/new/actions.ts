@@ -8,6 +8,11 @@ import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { CATALOG_KINDS } from "@/lib/db/assignments";
 
+/**
+ * Master-catalog create (canonical home, decision 6 rider). Moved verbatim
+ * from /studio/settings/catalog/new/actions.ts — one write path, in the hub.
+ */
+
 const Schema = z.object({
   kind: z.enum(CATALOG_KINDS),
   code: z
@@ -42,6 +47,7 @@ export async function createCatalogItem(_: State, fd: FormData): Promise<State> 
   if (qty != null && !Number.isFinite(qty)) return { error: "Bad inventory quantity" };
 
   const { data, error } = await supabase
+    // soft-delete-exempt: insert-returning
     .from("master_catalog_items")
     .insert({
       org_id: session.orgId,
@@ -56,6 +62,7 @@ export async function createCatalogItem(_: State, fd: FormData): Promise<State> 
     .single();
   if (error) return actionFail(error.message, fd);
 
-  revalidatePath("/studio/settings/catalog");
-  redirect(`/studio/settings/catalog/${data.id}`);
+  revalidatePath("/legend/hub/catalogs");
+  revalidatePath("/legend/hub");
+  redirect(`/legend/hub/catalogs/${data.id}`);
 }

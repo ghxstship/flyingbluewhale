@@ -17,7 +17,8 @@ test.describe("console — state-machine transitions", () => {
 
   test("Master catalog SKU · deactivate → reactivate", async ({ page }) => {
     const s = stamp();
-    await createInModule(page, "/studio/settings/catalog/new", {
+    // Canonical home moved to the LEG3ND hub (decision 6 rider).
+    await createInModule(page, "/legend/hub/catalogs/new", {
       name: `E2E SKU ${s}`,
       code: `E2E-${s}`,
       kind: "credential",

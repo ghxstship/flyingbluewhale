@@ -5,6 +5,11 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * Master-catalog toggle + soft-delete (canonical home, decision 6 rider).
+ * Moved verbatim from /studio/settings/catalog/[id]/actions.ts.
+ */
+
 const ToggleSchema = z.object({
   id: z.string().uuid(),
   next: z.enum(["true", "false"]),
@@ -22,8 +27,8 @@ export async function toggleActive(fd: FormData): Promise<void> {
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not update master catalog item: ${error.message}`);
-  revalidatePath(`/studio/settings/catalog/${parsed.data.id}`);
-  revalidatePath("/studio/settings/catalog");
+  revalidatePath(`/legend/hub/catalogs/${parsed.data.id}`);
+  revalidatePath("/legend/hub/catalogs");
 }
 
 export async function deleteItem(id: string): Promise<void> {
@@ -36,7 +41,7 @@ export async function deleteItem(id: string): Promise<void> {
     .eq("id", id)
     .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not update master catalog item: ${error.message}`);
-  revalidatePath("/studio/settings/catalog");
+  revalidatePath("/legend/hub/catalogs");
   // No redirect — DeleteForm's undo flow navigates client-side after
   // showing the "Deleted" toast with its Undo action (REC-14).
 }

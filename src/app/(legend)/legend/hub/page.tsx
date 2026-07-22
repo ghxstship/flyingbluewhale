@@ -10,14 +10,16 @@ import { DOC_TEMPLATES } from "@/lib/documents/registry";
 export const dynamic = "force-dynamic";
 
 /**
- * Organization Hub landing (marketing rebuild P3, decision 6: MIRROR mode).
+ * Organization Hub landing (marketing rebuild P3 + the decision 6 rider's
+ * canonical-home migration).
  *
  * LEG3ND is where an org's constants live: identity, structure, money codes,
  * places, things, knowledge, templates, and training. The hub surfaces each
- * pillar with a live summary. Pillars whose canonical home is still the
- * console (Brand Studio, Finance Codes, Locations, Catalogs, Templates)
- * render as mirrors with console deep links; the canonical-home move is the
- * post-P5 backlog item.
+ * pillar with a live summary, and the pillars are the CANONICAL read/write
+ * homes: Brand Studio, Organization, Finance Codes, Locations, Catalogs, and
+ * Job Templates carry full CRUD here; the console counterparts
+ * (/studio/settings/{branding,catalog,job-templates}, /studio/locations)
+ * redirect in.
  */
 export default async function OrganizationHubPage() {
   if (!hasSupabase) {

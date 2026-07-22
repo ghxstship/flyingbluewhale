@@ -82,7 +82,8 @@ test.describe("v7.7 — ThemeStudio WCAG guard", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("branding surface renders with the live contrast guard", async ({ page }) => {
-    const res = await gotoResilient(page, "/studio/settings/branding");
+    // Branding canonical home moved to the LEG3ND hub (decision 6 rider).
+    const res = await gotoResilient(page, "/legend/hub/brand");
     expect(res?.status() ?? 0).toBeLessThan(500);
     await expect(page.locator("h1").first()).toBeVisible({ timeout: 15000 });
     // The WcagGuard is a role=status region announcing the contrast level.

@@ -5,6 +5,14 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { urlFor } from "@/lib/urls";
+
+/**
+ * Job-template CRUD (canonical home, decision 6 rider). Moved verbatim from
+ * /studio/settings/job-templates/actions.ts — one write path, in the hub.
+ * The Create Work Order record action still lands on the console work
+ * order it drafts (cross-shell via urlFor).
+ */
 
 export type State = { error?: string; ok?: true; fieldErrors?: Record<string, string>; values?: Record<string, string> } | null;
 
@@ -44,8 +52,9 @@ export async function createJobTemplateAction(_: State, fd: FormData): Promise<S
     const { error: stepErr } = await supabase.from("job_template_steps").insert(steps);
     if (stepErr) return actionFail(stepErr.message, fd);
   }
-  revalidatePath("/studio/settings/job-templates");
-  redirect("/studio/settings/job-templates");
+  revalidatePath("/legend/hub/templates/job-templates");
+  revalidatePath("/legend/hub/templates");
+  redirect("/legend/hub/templates/job-templates");
 }
 
 /**
@@ -86,6 +95,6 @@ export async function createWorkOrderFromTemplate(templateId: string): Promise<v
     .eq("id", templateId)
     .eq("org_id", session.orgId);
 
-  revalidatePath("/studio/settings/job-templates");
-  redirect(`/studio/production/work-orders/${(wo as { id: string }).id}`);
+  revalidatePath("/legend/hub/templates/job-templates");
+  redirect(urlFor("platform", `/production/work-orders/${(wo as { id: string }).id}`));
 }

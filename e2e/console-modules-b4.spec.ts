@@ -79,7 +79,8 @@ test.describe("console modules — create flows (batch 4)", () => {
   });
 
   test("Locations · create", async ({ page }) => {
-    await createInModule(page, "/studio/locations/new", { name: `E2E Location ${stamp()}` });
+    // Canonical home moved to the LEG3ND hub (decision 6 rider).
+    await createInModule(page, "/legend/hub/locations/new", { name: `E2E Location ${stamp()}` });
   });
 
   test("Logistics · rate card create", async ({ page }) => {

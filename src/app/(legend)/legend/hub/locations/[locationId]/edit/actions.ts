@@ -8,6 +8,11 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 
+/**
+ * Location update + delete (canonical home, decision 6 rider). Moved
+ * verbatim from /studio/locations/[locationId]/edit/actions.ts.
+ */
+
 const Schema = z.object({
   name: z.string().min(1, "Name is required").max(200),
   address: z.string().max(300).optional().or(z.literal("")),
@@ -47,9 +52,9 @@ export async function updateLocation(id: string, _: State, fd: FormData): Promis
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Location not found." };
   }
-  revalidatePath(`/studio/locations/${id}`);
-  revalidatePath("/studio/locations");
-  redirect(`/studio/locations/${id}`);
+  revalidatePath(`/legend/hub/locations/${id}`);
+  revalidatePath("/legend/hub/locations");
+  redirect(`/legend/hub/locations/${id}`);
 }
 
 export async function deleteLocation(id: string): Promise<void> {
@@ -57,6 +62,6 @@ export async function deleteLocation(id: string): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase.from("locations").delete().eq("id", id).eq("org_id", session.orgId);
   if (error) throw new Error(`Could not delete location: ${error.message}`);
-  revalidatePath("/studio/locations");
-  redirect("/studio/locations");
+  revalidatePath("/legend/hub/locations");
+  redirect("/legend/hub/locations");
 }

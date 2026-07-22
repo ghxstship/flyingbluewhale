@@ -79,7 +79,8 @@ const NEW_ROUTES: string[] = [
   "/studio/legal/insurance/new",
   "/studio/legal/ip/new",
   "/studio/legal/privacy/dsar/new",
-  "/studio/locations/new",
+  // Locations canonical home moved to the LEG3ND hub (decision 6 rider).
+  "/legend/hub/locations/new",
   "/studio/logistics/ratecard/new",
   "/studio/operations/daily-log/new",
   "/studio/operations/incidents/new",

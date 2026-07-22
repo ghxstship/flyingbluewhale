@@ -51,7 +51,8 @@ export default async function LegendHubPage() {
       blurb: t("console.legend.tiles.resources.blurb", undefined, "Curated documents, links, templates, and references."),
     },
     {
-      href: urlFor("platform", "/settings/catalog"),
+      // Canonical home moved to the hub (decision 6 rider) — no console hop.
+      href: "/legend/hub/catalogs",
       title: t("console.legend.tiles.catalog.title", undefined, "Catalog"),
       blurb: t("console.legend.tiles.catalog.blurb", undefined, "The priced atom / URID master catalog."),
     },

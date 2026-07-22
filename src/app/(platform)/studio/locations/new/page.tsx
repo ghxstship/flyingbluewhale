@@ -1,18 +1,10 @@
-import { ModuleHeader } from "@/components/Shell";
-import { getRequestT } from "@/lib/i18n/request";
-import { NewLocationForm } from "./NewLocationForm";
+import { redirect } from "next/navigation";
+import { urlFor } from "@/lib/urls";
 
-export default async function NewLocationPage() {
-  const { t } = await getRequestT();
-  return (
-    <>
-      <ModuleHeader
-        eyebrow={t("console.locations.new.eyebrow", undefined, "Work")}
-        title={t("console.locations.new.title", undefined, "Add Location")}
-      />
-      <div className="page-content max-w-xl">
-        <NewLocationForm />
-      </div>
-    </>
-  );
+/**
+ * Canonical home moved to the LEG3ND Organization Hub (decision 6 rider).
+ * The single write path is /legend/hub/locations/new.
+ */
+export default function NewLocationRedirect() {
+  redirect(urlFor("legend", "/hub/locations/new"));
 }

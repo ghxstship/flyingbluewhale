@@ -9,7 +9,7 @@ export function NewLocationForm() {
   return (
     <FormShell
       action={createLocationAction}
-      cancelHref="/studio/locations"
+      cancelHref="/legend/hub/locations"
       submitLabel={t("console.locations.new.submit", undefined, "Save Location")}
     >
       <Input label={t("console.locations.new.name", undefined, "Name")} name="name" required />

@@ -343,7 +343,6 @@ const LEGACY_ALLOWLIST: Record<string, number> = {
   "src/app/(platform)/studio/schedule/baselines/new/actions.ts": 1,
   "src/app/(platform)/studio/settings/account-managers/[id]/page.tsx": 2,
   "src/app/(platform)/studio/settings/account-managers/page.tsx": 2,
-  "src/app/(platform)/studio/settings/catalog/new/actions.ts": 1,
   "src/app/(platform)/studio/settings/integrations/submissions/[id]/actions.ts": 1,
   "src/app/(platform)/studio/settings/time-clock-zones/new/actions.ts": 1,
   "src/app/(platform)/studio/site-plans/[id]/edit/actions.ts": 2,

@@ -6,6 +6,12 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
+/**
+ * Location create (canonical home, decision 6 rider). Moved verbatim from
+ * /studio/locations/actions.ts — the hub is now the space registry's only
+ * write surface; the console URLs redirect here.
+ */
+
 const Schema = z.object({
   name: z.string().min(1),
   address: z.string().optional(),
@@ -39,6 +45,7 @@ export async function createLocationAction(_: State, fd: FormData): Promise<Stat
     notes: parsed.data.notes || null,
   });
   if (error) return actionFail(error.message, fd);
-  revalidatePath("/studio/locations");
-  redirect("/studio/locations");
+  revalidatePath("/legend/hub/locations");
+  revalidatePath("/legend/hub");
+  redirect("/legend/hub/locations");
 }

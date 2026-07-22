@@ -7,13 +7,12 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Locations pillar (MIRROR): the canonical space registry. Read-only here;
- * editing stays in the console at /studio/locations.
+ * Locations pillar (canonical home, decision 6 rider): the canonical space
+ * registry with full CRUD. /studio/locations redirects here.
  */
 
 type LocationRow = {
@@ -66,8 +65,8 @@ export default async function LocationsPillarPage() {
           { label: "Locations" },
         ]}
         action={
-          <Button href={urlFor("platform", "/locations")} size="sm" variant="secondary">
-            Edit in console
+          <Button href="/legend/hub/locations/new" size="sm">
+            + Add Location
           </Button>
         }
       />
@@ -75,16 +74,13 @@ export default async function LocationsPillarPage() {
         {rows.length === 0 ? (
           <EmptyState
             title="No locations yet"
-            description="Register your offices, venues, and yards in the console. Projects, shifts, and time-clock zones all point at these."
-            action={
-              <Button href={urlFor("platform", "/locations")} variant="secondary">
-                Open the registry
-              </Button>
-            }
+            description="Register your offices, venues, and yards. Projects, shifts, and time-clock zones all point at these."
+            action={<Button href="/legend/hub/locations/new">+ Add Location</Button>}
           />
         ) : (
           <DataTable<LocationRow>
             rows={rows}
+            rowHref={(l) => `/legend/hub/locations/${l.id}`}
             emptyLabel="No locations"
             columns={[
               {

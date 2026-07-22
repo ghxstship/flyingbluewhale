@@ -199,5 +199,13 @@ them is a data-model decision. `emergency` maps links are fixed-host + escaped.
 
 - No `alert()`, `onClick={() => {}}`, "not implemented", or fabricated-data
   surfaces remain in `/m` (the two dead card-taps — Market, Jobs — are fixed).
-- The migrations are mechanical but each needs a verified server/client split;
-  they're batched here so a focused follow-up can land them against this spec.
+- ~~The migrations are mechanical but each needs a verified server/client split;
+  they're batched here so a focused follow-up can land them against this spec.~~
+  **RESOLVED (2026-07-22):** all 11 migrations (the 10 batched + punch, the
+  template) landed and the split is mechanically verified per surface — every
+  `page.tsx` is a server component owning the fetch (session + query + photo
+  signing + name resolution + date preformatting), every `*View.tsx` is a
+  `"use client"` leaf wrapping `NormalizedList`. Each landing passed the full
+  gate (tsc · vitest · eslint), and the normalization wave above re-audited
+  all of them line-by-line afterward (a11y, i18n raw-state keying, SSOT).
+  Nothing from this note remains outstanding.

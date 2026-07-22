@@ -831,6 +831,23 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
               <KIcon name="Info" size={15} style={{ color: "var(--p-info)", flex: "none", marginTop: 1 }} />
               <span>{t("m.onboarding.join.note", undefined, "No code? You can request to join from an org admin, or continue and join a project later.")}</span>
             </div>
+            {/* Plan §10 (decision 4): COMPVSS is login/join-only. The no-org
+                landing teaches the LEG3ND web flow instead of offering any
+                create-org affordance here. */}
+            <div className="note" style={{ marginTop: 8 }}>
+              <KIcon name="Globe" size={15} style={{ color: "var(--p-text-3)", flex: "none", marginTop: 1 }} />
+              <span>
+                {t(
+                  "m.onboarding.join.legendNote",
+                  undefined,
+                  "Organizations are created in LEG3ND on the web. From COMPVSS you can sign in or join an existing organization.",
+                )}{" "}
+                <a className="link" href={urlFor("legend", "/start")} target="_blank" rel="noreferrer">
+                  {t("m.onboarding.join.legendCta", undefined, "Create your organization in LEG3ND")}
+                </a>{" "}
+                {t("m.onboarding.join.legendDesktop", undefined, "(requires a desktop browser).")}
+              </span>
+            </div>
             <p className="muted" style={{ textAlign: "center", marginTop: 14 }}>
               <button type="button" className="link" onClick={() => go("permissions")} style={{ background: "none", border: "none", padding: 0, font: "inherit" }}>
                 {t("m.onboarding.join.skip", undefined, "Skip for Now")}

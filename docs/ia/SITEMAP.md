@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1263 · **API route handlers:** 157 · **Distinct nav hrefs:** 575
+**Page routes:** 1272 · **API route handlers:** 157 · **Distinct nav hrefs:** 583
 
 ## Legend
 
@@ -28,11 +28,11 @@
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 115 | 91 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
-| LEG3ND — Knowledge Shell | legendNav rail | 43 | 21 | 22 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 94 | 34 | 51 | 0 | 9 |
+| LEG3ND — Knowledge Shell | legendNav rail | 53 | 29 | 24 | 0 | 0 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 93 | 33 | 51 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1263** | **550** | **670** | **0** | **43** |
+| **TOTAL** | | **1272** | **557** | **672** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -2119,7 +2119,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-43 routes — ● 21 nav · ○ 22 linked · ⚠ 0 orphan
+53 routes — ● 29 nav · ○ 24 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -2182,6 +2182,20 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>for-institutions</code> · 1 route</summary>
 
 ● `/legend/for-institutions`
+
+</details>
+
+<details><summary><code>hub</code> · 9 routes</summary>
+
+● `/legend/hub`
+● `/legend/hub/brand`
+● `/legend/hub/catalogs`
+● `/legend/hub/finance-codes`
+● `/legend/hub/locations`
+● `/legend/hub/organization`
+○ `/legend/hub/organization/[positionId]`
+○ `/legend/hub/organization/new`
+● `/legend/hub/templates`
 
 </details>
 
@@ -2252,6 +2266,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>start</code> · 1 route</summary>
+
+● `/legend/start`
+
+</details>
+
 <details><summary><code>store</code> · 1 route</summary>
 
 ● `/legend/store`
@@ -2266,7 +2286,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## GVTEWAY — Public / Marketing
 
-94 routes — ● 34 nav · ○ 51 linked · ⚠ 0 orphan
+93 routes — ● 33 nav · ○ 51 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2438,12 +2458,6 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/legal/privacy`
 ● `/legal/sla`
 ● `/legal/terms`
-
-</details>
-
-<details><summary><code>legend</code> · 1 route</summary>
-
-● `/legend`
 
 </details>
 

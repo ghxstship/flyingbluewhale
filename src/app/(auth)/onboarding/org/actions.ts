@@ -5,6 +5,7 @@ import { z, type ZodIssue } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { FormState } from "@/components/FormShell";
+import { isCompvssChannel, ORG_CREATE_CHANNEL_MESSAGE } from "./channel";
 
 const Schema = z.object({
   name: z.string().min(1, "Workspace name is required").max(120),
@@ -21,6 +22,15 @@ function fieldErrors(issues: ZodIssue[]): Record<string, string> {
 
 export async function createOrgAction(_: FormState, formData: FormData): Promise<FormState> {
   if (!hasSupabase) return { error: "Supabase not configured." };
+
+  // Channel guard (plan §10, decision 4 — app-tier only): organizations are
+  // born in LEG3ND on the web. Requests arriving through the COMPVSS shell
+  // are refused here, at the one server-side org-create action; the
+  // create_org_with_owner RPC stays open for console/admin/e2e paths.
+  if (await isCompvssChannel()) {
+    return { error: ORG_CREATE_CHANNEL_MESSAGE };
+  }
+
   const parsed = Schema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
     return { error: "Check the field below", fieldErrors: fieldErrors(parsed.error.issues) };

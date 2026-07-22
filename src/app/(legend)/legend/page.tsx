@@ -6,16 +6,30 @@ import { urlFor } from "@/lib/urls";
 export const dynamic = "force-dynamic";
 
 /**
- * LEG3ND hub (kit v5) — the Knowledge · LMS · Resources product landing.
- * Tiles link to The Standard / Courses / Certifications / Resources / Catalog
- * / Signage / Compliance Engine / Safety. The /legend subtree is
- * re-skinned to Production Orange + airport-signage type by layout.tsx.
+ * LEG3ND landing — the Organization Hub product surface (public).
+ *
+ * Repositioned 2026-07-22 (marketing rebuild §9 + the app ownership canon:
+ * LEG3ND owns 0000 Executive, the org level itself). The hub tile leads;
+ * knowledge/LMS/resources remain first-class tiles beneath it. This page also
+ * serves the apex /legend marketing URL (the (marketing)/legend page was
+ * removed: route groups share one path space, so two pages at /legend are a
+ * fatal Next collision — found the hard way in commit 9d13d2d3).
  */
 export default async function LegendHubPage() {
   const { t } = await getRequestT();
   // Cross-shell tiles route through `urlFor("platform", …)` (URL canon) so
   // the subdomain/path-prefix decision stays in one place.
   const tiles = [
+    {
+      href: "/legend/hub",
+      title: t("console.legend.tiles.hub.title", undefined, "Organization Hub"),
+      blurb: t("console.legend.tiles.hub.blurb", undefined, "Brand, org chart, cost codes, locations, catalogs, templates. Configure once, every project inherits it."),
+    },
+    {
+      href: "/legend/start",
+      title: t("console.legend.tiles.start.title", undefined, "Start Your Organization"),
+      blurb: t("console.legend.tiles.start.blurb", undefined, "New organizations begin here: the guided setup that installs the XPMS 2.5 base kit."),
+    },
     {
       href: urlFor("platform", "/knowledge"),
       title: t("console.legend.tiles.standard.title", undefined, "The Standard"),
@@ -24,7 +38,7 @@ export default async function LegendHubPage() {
     {
       href: "/legend/learn",
       title: t("console.legend.tiles.courses.title", undefined, "Courses"),
-      blurb: t("console.legend.tiles.courses.blurb", undefined, "LMS — learn, assess, certify on the XPMS 2.0 protocol."),
+      blurb: t("console.legend.tiles.courses.blurb", undefined, "LMS — learn, assess, certify on the XPMS 2.5 protocol."),
     },
     {
       href: "/legend/certifications",
@@ -83,7 +97,7 @@ export default async function LegendHubPage() {
       <ModuleHeader
         eyebrow={t("console.legend.eyebrow", undefined, "LEG3ND")}
         title={t("console.legend.title", undefined, "Knowledge")}
-        subtitle={t("console.legend.subtitle", undefined, "Knowledge · LMS · Resources — on the XPMS 2.0 protocol.")}
+        subtitle={t("console.legend.subtitle", undefined, "Knowledge · LMS · Resources — on the XPMS 2.5 protocol.")}
       />
       <div className="page-content">
         <div className="section-grid">

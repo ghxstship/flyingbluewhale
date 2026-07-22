@@ -2937,6 +2937,59 @@
       "routeGroup": "/legend",
       "groups": [
         {
+          "label": "Organization",
+          "routes": [
+            {
+              "path": "/legend/hub",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/hub/brand",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/hub/organization",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/hub/finance-codes",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/hub/locations",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/hub/catalogs",
+              "arch": [
+                "SHOP"
+              ]
+            },
+            {
+              "path": "/legend/hub/templates",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/start",
+              "arch": [
+                "LIST"
+              ]
+            }
+          ]
+        },
+        {
           "label": "Learn",
           "routes": [
             {

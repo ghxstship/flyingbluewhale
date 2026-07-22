@@ -983,6 +983,22 @@ export const NAV_LENS_ORDER: NavLens[] = ["All", "Produce", "Ops", "Crew", "Fina
  */
 export const legendNav: NavGroup[] = [
   {
+    // ORGANIZATION — the hub (marketing rebuild P3; app ownership canon:
+    // LEG3ND owns 0000 Executive, the org level itself). Where organizations
+    // are configured once and every project inherits it.
+    label: "Organization",
+    items: [
+      { label: "Hub", href: "/legend/hub", icon: "LayoutDashboard" },
+      { label: "Brand Studio", href: "/legend/hub/brand", icon: "Stamp" },
+      { label: "Positions", href: "/legend/hub/organization", icon: "Users" },
+      { label: "Finance Codes", href: "/legend/hub/finance-codes", icon: "Receipt" },
+      { label: "Locations", href: "/legend/hub/locations", icon: "MapPin" },
+      { label: "Catalogs", href: "/legend/hub/catalogs", icon: "Boxes" },
+      { label: "Templates", href: "/legend/hub/templates", icon: "FileStack" },
+      { label: "Start Your Organization", href: "/legend/start", icon: "Compass" },
+    ],
+  },
+  {
     // LEARN — the LMS spine (reference app: Learning Path → My Learning →
     // Catalog → Live → Progress), plus the credential wallet.
     label: "Learn",

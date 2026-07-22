@@ -314,6 +314,18 @@ sequence mode, so there is no second data model.
 - **P3 · LEG3ND hub + onboarding:** hub shell IA in `(legend)`; `/start`
   onboarding sequence (8 steps); XPMS 2.5 delta migration + org-seeding
   function; auth flow branching; COMPVSS join-only changes; e2e suite.
+- **P4 addendum (found during P3 recon, in-scope for THIS implementation):**
+  `dim_department` (kit-34) diverges from the XPMS 2.5 SSOT Bible's 10 classes
+  (Bible: 0000 Executive, 1000 Creative, 2000 Talent, 3000 Marketing, 4000
+  Build, 5000 Production, 6000 Operations, 7000 Experience, 8000 Hospitality,
+  9000 Technology — exactly the cost-center canon; kit-34 shipped 1000
+  Production, 2000 Technical, 3000 Site & Ops, 4000 Talent, 5000 Hospitality,
+  6000 Safety, 7000 Logistics, 8000 Commercial, 9000 Admin). The CODES collide
+  at different meanings (1000 Production vs 1000 Creative), and live
+  project_tasks/events coordinates embed kit-34 codes, so relabeling is an
+  ATOMIC data migration (dim labels + coordinate/department remap on seeded
+  project data + field-app verification) — scheduled here, not silently
+  grandfathered. P3 added only the missing 0000 Executive (additive-safe).
 - **P4 · Comparison completion + content:** remaining 14 competitors,
   customers/case-study template, tools expansion (XMCE calculators),
   blog/guides seeding cadence.

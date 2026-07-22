@@ -24743,6 +24743,54 @@ export type Database = {
           },
         ]
       }
+      positions: {
+        Row: {
+          active: boolean
+          created_at: string
+          department_code: string | null
+          id: string
+          org_id: string
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          department_code?: string | null
+          id?: string
+          org_id: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          department_code?: string | null
+          id?: string
+          org_id?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "positions_department_code_fkey"
+            columns: ["department_code"]
+            isOneToOne: false
+            referencedRelation: "dim_department"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "positions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       po_line_items: {
         Row: {
           atom_id: string | null
@@ -47267,6 +47315,10 @@ export type Database = {
           p_subject_kind: string
         }
         Returns: string
+      }
+      seed_org_xpms_defaults: {
+        Args: { p_org_id: string }
+        Returns: undefined
       }
       submit_timesheet: {
         Args: { p_timesheet_id: string }

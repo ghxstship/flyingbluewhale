@@ -9,7 +9,7 @@ import { getRequestT } from "@/lib/i18n/request";
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
-    title: t("marketing.tools.perDiem.meta.title", undefined, "Per-Diem Calculator — Crew & Talent Travel Allowance"),
+    title: t("marketing.tools.perDiem.meta.title", undefined, "Per-Diem Calculator: Crew & Talent Travel Allowance"),
     description: t(
       "marketing.tools.perDiem.meta.description",
       undefined,
@@ -81,7 +81,7 @@ export default async function PerDiemCalculatorPage() {
           {t(
             "marketing.tools.perDiem.how.body1",
             undefined,
-            "Per-diem is the daily allowance paid to a traveler — typically crew, talent, or contractors — for meals and incidentals while away from their home base. The US General Services Administration (GSA) publishes city-by-city per-diem rates for federal travel; most production budgets use these as a defensible baseline. International rates come from the State Department's DSSR tables.",
+            "Per-diem is the daily allowance paid to a traveler (typically crew, talent, or contractors) for meals and incidentals while away from their home base. The US General Services Administration (GSA) publishes city-by-city per-diem rates for federal travel; most production budgets use these as a defensible baseline. International rates come from the State Department's DSSR tables.",
           )}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">

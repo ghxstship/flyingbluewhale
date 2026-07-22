@@ -28,7 +28,7 @@ function gsaTierPresets(t: Translator): Array<{ label: string; rate: number; hin
       hint: t("marketing.perDiemCalculator.presets.tier2Hint", undefined, "Major regional cities"),
     },
     {
-      label: t("marketing.perDiemCalculator.presets.intlLabel", undefined, "International — avg"),
+      label: t("marketing.perDiemCalculator.presets.intlLabel", undefined, "International average"),
       rate: 145,
       hint: t("marketing.perDiemCalculator.presets.intlHint", undefined, "DSSR baseline"),
     },
@@ -109,7 +109,7 @@ export function PerDiemCalculator() {
               </div>
               <div className="sm:col-span-2">
                 <label className="eyebrow">
-                  {t("marketing.perDiemCalculator.dailyRate", undefined, "Daily Rate — USD")}
+                  {t("marketing.perDiemCalculator.dailyRate", undefined, "Daily Rate (USD)")}
                 </label>
                 <input
                   type="number"

@@ -6,23 +6,23 @@ import { useFormatters } from "@/lib/i18n/LocaleProvider";
 const USE_TYPES: Array<{ slug: string; label: string; sqftPerPerson: number; hint: string }> = [
   {
     slug: "standing",
-    label: "Assembly — Standing",
+    label: "Assembly, Standing",
     sqftPerPerson: 5,
-    hint: "Concert floor, dance, GA standing — IBC 5 sf net",
+    hint: "Concert floor, dance, GA standing. IBC 5 sf net.",
   },
   {
     slug: "concentrated",
-    label: "Assembly — Concentrated",
+    label: "Assembly, Concentrated",
     sqftPerPerson: 7,
-    hint: "Fixed seating, chair rows — IBC 7 sf net",
+    hint: "Fixed seating, chair rows. IBC 7 sf net.",
   },
   {
     slug: "unconcentrated",
-    label: "Assembly — Unconcentrated (tables)",
+    label: "Assembly, Unconcentrated (tables)",
     sqftPerPerson: 15,
-    hint: "Banquet seating, gala dining — IBC 15 sf net",
+    hint: "Banquet seating, gala dining. IBC 15 sf net.",
   },
-  { slug: "waiting", label: "Waiting / Queueing", sqftPerPerson: 3, hint: "Lobby, queue line — IBC 3 sf net" },
+  { slug: "waiting", label: "Waiting / Queueing", sqftPerPerson: 3, hint: "Lobby, queue line. IBC 3 sf net." },
   { slug: "dance", label: "Dance Floor (no chairs)", sqftPerPerson: 5, hint: "Standing/dance only" },
   {
     slug: "reception",
@@ -72,7 +72,7 @@ export function CapacityCalculator() {
           >
             {USE_TYPES.map((u) => (
               <option key={u.slug} value={u.slug}>
-                {u.label} — {u.sqftPerPerson} sf/person
+                {u.label} ({u.sqftPerPerson} sf/person)
               </option>
             ))}
           </select>

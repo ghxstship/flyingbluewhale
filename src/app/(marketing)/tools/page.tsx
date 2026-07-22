@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, Calculator, Ruler } from "lucide-react";
+import { Accessibility, ArrowRight, Calculator, Ruler, Users, Zap } from "lucide-react";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -39,6 +39,36 @@ export default async function ToolsIndex() {
       title: t("marketing.pages.tools.items.capacity.title"),
       short: t("marketing.pages.tools.items.capacity.short"),
       icon: Ruler,
+    },
+    {
+      slug: "crew-size-calculator",
+      title: t("marketing.pages.tools.items.crewSize.title", undefined, "Crew size calculator"),
+      short: t(
+        "marketing.pages.tools.items.crewSize.short",
+        undefined,
+        "Security, stewards, and medical tiers from attendance and event type. Honest rule-of-thumb ratios, labeled inline.",
+      ),
+      icon: Users,
+    },
+    {
+      slug: "generator-size-calculator",
+      title: t("marketing.pages.tools.items.generator.title", undefined, "Generator size calculator"),
+      short: t(
+        "marketing.pages.tools.items.generator.short",
+        undefined,
+        "kVA required, the next standard rental size up, and a fuel estimate from your load schedule.",
+      ),
+      icon: Zap,
+    },
+    {
+      slug: "restroom-ada-calculator",
+      title: t("marketing.pages.tools.items.restroom.title", undefined, "Restroom & ADA calculator"),
+      short: t(
+        "marketing.pages.tools.items.restroom.short",
+        undefined,
+        "Portable units, ADA-accessible counts per the 2010 ADA 5 percent rule, and handwash stations.",
+      ),
+      icon: Accessibility,
     },
   ];
 

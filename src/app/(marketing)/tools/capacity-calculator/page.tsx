@@ -9,7 +9,7 @@ import { getRequestT } from "@/lib/i18n/request";
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
-    title: t("marketing.tools.capacity.meta.title", undefined, "Venue Capacity Calculator — Maximum Occupancy by Use"),
+    title: t("marketing.tools.capacity.meta.title", undefined, "Venue Capacity Calculator: Maximum Occupancy by Use"),
     description: t(
       "marketing.tools.capacity.meta.description",
       undefined,
@@ -81,14 +81,14 @@ export default async function CapacityCalculatorPage() {
           {t(
             "marketing.tools.capacity.how.body1",
             undefined,
-            "Occupant load is the maximum number of people permitted in a space, set by the International Building Code (IBC) and adopted (with modifications) by most US jurisdictions. The IBC sets per-occupant area factors by use type — 7 sq ft per person standing, 15 sq ft for unconcentrated assembly with tables, 5 sq ft for waiting areas. Multiply usable floor area by the appropriate factor (and divide) to land on a load.",
+            "Occupant load is the maximum number of people permitted in a space, set by the International Building Code (IBC) and adopted (with modifications) by most US jurisdictions. The IBC sets per-occupant area factors by use type: 7 sq ft per person standing, 15 sq ft for unconcentrated assembly with tables, 5 sq ft for waiting areas. Multiply usable floor area by the appropriate factor (and divide) to land on a load.",
           )}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
           {t(
             "marketing.tools.capacity.how.body2",
             undefined,
-            "Real-world capacity is the lower of the IBC load and what the venue's egress capacity supports — exit width, fixed seating layout, sprinkler coverage, and AHJ judgement all play in. Use this calculator as a starting estimate; confirm with the local Authority Having Jurisdiction before publishing capacity.",
+            "Real-world capacity is the lower of the IBC load and what the venue's egress capacity supports: exit width, fixed seating layout, sprinkler coverage, and AHJ judgement all play in. Use this calculator as a starting estimate; confirm with the local Authority Having Jurisdiction before publishing capacity.",
           )}
         </p>
       </section>
@@ -98,7 +98,7 @@ export default async function CapacityCalculatorPage() {
         subtitle={t(
           "marketing.tools.capacity.cta.subtitle",
           undefined,
-          "Per-venue capacity, ticket allocations, and gate-scan limits — one record.",
+          "Per-venue capacity, ticket allocations, and gate-scan limits in one record.",
         )}
       />
     </div>

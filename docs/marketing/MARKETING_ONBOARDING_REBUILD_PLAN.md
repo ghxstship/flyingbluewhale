@@ -442,6 +442,17 @@ Two items, both owner-ratified 2026-07-22 with explicit "immediate once this
 implementation is fully completed" instruction. Neither is optional and neither
 waits for a future cycle:
 
+> **§14.2 execution note (2026-07-22):** catalog parity landed in three
+> stages: (a) the new surface's inline t() fallbacks were merged into en.json
+> (287 keys, incl. the extractor-invisible template-literal namespaces), (b)
+> es/pt translated to 0-missing with placeholder verification, (c) the
+> industries/personas/glossary data-file content is being t()-wrapped at
+> render sites so it can localize. **Open owner decision:** the COMPARISON
+> claim tables stay source-language (English) in es/pt for now — translating
+> verified competitive claims multiplies the 180-day verification surface per
+> language and risks meaning drift in legally sensitive copy. Localize the
+> comparison page CHROME only, unless the owner rules otherwise.
+
 1. **LEG3ND canonical-home migration** (decision 6 rider). P3 ships the hub as
    a MIRROR of the console settings surfaces (branding, catalog, organization,
    locations, templates). Immediately after P5 closes, the canonical homes MOVE

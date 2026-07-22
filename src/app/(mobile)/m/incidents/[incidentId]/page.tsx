@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireSession } from "@/lib/auth";
+import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { Crumbs, KIcon } from "@/components/mobile/kit";
-import { INCIDENT_STATE_LABEL, INCIDENT_TRANSITIONS, type IncidentState } from "@/lib/db/incident-fsm";
+import { INCIDENT_STATE_LABEL, allowedIncidentTransitions, type IncidentState } from "@/lib/db/incident-fsm";
 import { TriageRow } from "./TriageRow";
 
 export const dynamic = "force-dynamic";
@@ -213,7 +213,20 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
       <div className="sech">
         <h2>{t("m.incident.triage", undefined, "Triage")}</h2>
       </div>
-      <TriageRow id={row.id as string} current={state} allowed={INCIDENT_TRANSITIONS[state] ?? []} />
+      {/* Only the moves this caller may actually make — closing an injury or
+          major/critical report is a manager sign-off, and reopening a closed
+          record is manager-only, so those simply don't render for crew rather
+          than being offered and then refused. */}
+      <TriageRow
+        id={row.id as string}
+        current={state}
+        allowed={allowedIncidentTransitions(state, {
+          reportKind: row.report_kind as string | null,
+          severity: row.severity as string | null,
+          hasInjury: row.injury_type != null,
+          isManager: isManagerPlus(session),
+        })}
+      />
 
       {/* Kit 32 A2 — follow-up + related-task actions. */}
       <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
